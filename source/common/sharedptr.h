@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
 
 // Wrap u_atomic_int32_t in a UMemory so that we allocate them in the same
 // way we allocate all other ICU objects.
-struct _AtomicInt : public UMemory {
+struct AtomicInt : public UMemory {
     u_atomic_int32_t value;
 };
 
@@ -59,7 +59,7 @@ public:
      */
     explicit SharedPtr(T *adopted=NULL) : ptr(adopted), refPtr(NULL) {
         if (ptr != NULL) {
-            refPtr = new _AtomicInt();
+            refPtr = new AtomicInt();
             if (refPtr == NULL) {
                 delete ptr;
                 ptr = NULL;
@@ -70,8 +70,7 @@ public:
     }
 
     /**
-     * Non-templated copy constructor. Needed to keep compiler from
-     * creating its own.
+     * Copy constructor.
      */
     SharedPtr(const SharedPtr<T> &other) :
             ptr(other.ptr), refPtr(other.refPtr) {
@@ -81,33 +80,9 @@ public:
     }
 
     /**
-     * Templated copy constructor.
-     */
-    template<typename U>
-    SharedPtr(const SharedPtr<U> &other) :
-            ptr(other.ptr), refPtr(other.refPtr) {
-        if (refPtr != NULL) {
-            umtx_atomic_inc(&refPtr->value);
-        }
-    }
-
-    /**
-     * Non-templated assignment operator. Needed to keep compiler
-     * from creating its own.
+     * assignment operator.
      */
     SharedPtr<T> &operator=(const SharedPtr<T> &other) {
-        if (ptr != other.ptr) {
-            SharedPtr<T> newValue(other);
-            swap(newValue);
-        }
-        return *this;
-    }
-
-    /**
-     * Templated assignment operator.
-     */
-    template<typename U>
-    SharedPtr<T> &operator=(const SharedPtr<U> &other) {
         if (ptr != other.ptr) {
             SharedPtr<T> newValue(other);
             swap(newValue);
@@ -128,11 +103,11 @@ public:
     }
 
     /**
-     * adoptInstead adopts a new pointer. On success, returns TRUE.
+     * reset adopts a new pointer. On success, returns TRUE.
      * On memory allocation error creating reference counter for adopted
      * pointer, returns FALSE while leaving this instance unchanged.
      */
-    bool adoptInstead(T *adopted) {
+    bool reset(T *adopted) {
         SharedPtr<T> newValue(adopted);
         if (adopted != NULL && newValue.ptr == NULL) {
             // We couldn't allocate ref counter.
@@ -143,10 +118,10 @@ public:
     }
 
     /**
-     * release makes this instance refer to no object.
+     * reset makes this instance refer to no object.
      */
-    void release() {
-        adoptInstead(NULL);
+    void reset() {
+        reset(NULL);
     }
 
     /**
@@ -162,12 +137,11 @@ public:
     }
 
     /**
-     * Swaps this instance with other. a.swap(b) is equivalent to the
-     * following though more efficient: temp = a; a = b; b = temp.
+     * Swaps this instance with other.
      */
     void swap(SharedPtr<T> &other) {
         T *tempPtr = other.ptr;
-        _AtomicInt *tempRefPtr = other.refPtr;
+        AtomicInt *tempRefPtr = other.refPtr;
         other.ptr = ptr;
         other.refPtr = refPtr;
         ptr = tempPtr;
@@ -202,7 +176,23 @@ public:
      * readWrite returns a writable pointer to its T object copying it first
      * using its clone() method if it is shared.
      * On memory allocation error or if this instance refers to no object,
-     * returns NULL leaving this instance unchanged.
+     * this method returns NULL leaving this instance unchanged.
+     * <p>
+     * If readWrite() returns a non NULL pointer, it guarantees that this
+     * object holds the only reference to its T object enabling the caller to
+     * perform mutations using the returned pointer without affecting other
+     * SharedPtr objects. However, the non-constness of readWrite continues as
+     * long as the returned pointer is in scope. Therefore it is an API
+     * violation to call readWrite() on A; perform B = A; and then proceed to
+     * mutate A via its writeable pointer as that would be the same as setting
+     * B = A while A is changing. The returned pointer is guaranteed to be
+     * valid only while this object is in scope because this object maintains
+     * ownership of its T object. Therefore, callers must never attempt to
+     * delete the returned writeable pointer. The best practice with readWrite
+     * is this: callers should use the returned pointer from readWrite() only
+     * within the same scope as that call to readWrite, and that scope should
+     * be made as small as possible avoiding overlap with other operatios on
+     * this object.
      */
     T *readWrite() {
         int32_t refCount = count();
@@ -214,21 +204,20 @@ public:
             // Memory allocation error
             return NULL;
         }
-        if (!adoptInstead(result)) {
+        if (!reset(result)) {
             return NULL;
         }
         return ptr;
     }
 private:
     T *ptr;
-    _AtomicInt *refPtr;
+    AtomicInt *refPtr;
     // No heap allocation. Use only stack.
     static void * U_EXPORT2 operator new(size_t size);
     static void * U_EXPORT2 operator new[](size_t size);
 #if U_HAVE_PLACEMENT_NEW
     static void * U_EXPORT2 operator new(size_t, void *ptr);
 #endif
-    template<typename U> friend class SharedPtr;
 };
 
 U_NAMESPACE_END

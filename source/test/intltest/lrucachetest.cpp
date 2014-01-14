@@ -55,7 +55,7 @@ LRUCacheForTesting::LRUCacheForTesting(
     if (U_FAILURE(status)) {
         return;
     }
-    defaultFormatStr.adoptInstead(new UnicodeString(dfs));
+    defaultFormatStr.reset(new UnicodeString(dfs));
 }
 
 SharedObject *LRUCacheForTesting::create(const char *localeId, UErrorCode &status) {
@@ -64,7 +64,7 @@ SharedObject *LRUCacheForTesting::create(const char *localeId, UErrorCode &statu
         return NULL;
     }
     CopyOnWriteForTesting *result = new CopyOnWriteForTesting;
-    result->localeNamePtr.adoptInstead(new UnicodeString(localeId));
+    result->localeNamePtr.reset(new UnicodeString(localeId));
     result->formatStrPtr = defaultFormatStr;
     result->length = 5;
     return result;
