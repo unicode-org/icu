@@ -247,7 +247,7 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
       fNumberFormatters(NULL),
       fOverrideList(NULL)
 {
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    initializeBooleanAttributes();
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
     initializeDefaultCentury();
 }
@@ -265,7 +265,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 {
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    initializeBooleanAttributes();
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -285,7 +285,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 {
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    initializeBooleanAttributes();
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -308,7 +308,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    initializeBooleanAttributes();
 
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
@@ -330,7 +330,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    initializeBooleanAttributes();
 
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
@@ -355,7 +355,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    initializeBooleanAttributes();
 
     initializeCalendar(NULL,fLocale,status);
     initialize(fLocale, status);
@@ -377,7 +377,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    initializeBooleanAttributes();
 
     initializeCalendar(NULL, fLocale, status);
     initialize(fLocale, status);
@@ -397,7 +397,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
     fNumberFormatters(NULL),
     fOverrideList(NULL)
 {
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    initializeBooleanAttributes();
     construct(timeStyle, dateStyle, fLocale, status);
     if(U_SUCCESS(status)) {
       initializeDefaultCentury();
@@ -421,6 +421,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     fOverrideList(NULL)
 {
     if (U_FAILURE(status)) return;
+    initializeBooleanAttributes();
     initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
     if (U_FAILURE(status))
     {
@@ -437,7 +438,6 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
 
     initialize(fLocale, status);
     if(U_SUCCESS(status)) {
@@ -456,7 +456,7 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
     fOverrideList(NULL)
 {
     UErrorCode status = U_ZERO_ERROR;
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    initializeBooleanAttributes();
     *this = other;
 }
 
@@ -789,6 +789,18 @@ void SimpleDateFormat::initializeDefaultCentury()
       fDefaultCenturyStartYear = -1;
     }
   }
+}
+
+/*
+ * Initialize the boolean attributes. Separate so we can call it from all constructors.
+ */
+void SimpleDateFormat::initializeBooleanAttributes()
+{
+    UErrorCode status = U_ZERO_ERROR;
+
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
 }
 
 /* Define one-century window into which to disambiguate dates using

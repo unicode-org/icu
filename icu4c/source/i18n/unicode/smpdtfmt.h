@@ -1151,6 +1151,8 @@ private:
 
     void initializeDefaultCentury(void);
 
+    void initializeBooleanAttributes(void);
+
     SimpleDateFormat(); // default constructor not implemented
 
     /**

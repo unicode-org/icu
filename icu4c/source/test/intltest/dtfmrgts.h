@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -54,6 +54,7 @@ public:
     void Test9237(void);
     void TestParsing(void);
     void TestT10334(void);
+    void TestT10619(void);
  };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
