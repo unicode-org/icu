@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,6 +18,7 @@ import java.util.Locale;
 
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.util.ULocale;
 
 /**
  * API Test the RuleBasedBreakIterator class
@@ -375,6 +376,41 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
         wordIter2.setText(testString1);
         int bounds2[] = {0, 5, 6, 10, 11, 12, 16, 17, 22, 23, 26};
         doBoundaryTest(wordIter2, testString1, bounds2);
+    }
+    
+    /**
+     *  Tests the rule status return value constants
+     */
+    public void TestRuleStatus() {
+        BreakIterator bi = BreakIterator.getWordInstance(ULocale.ENGLISH);
+        
+        bi.setText("# ");
+        assertEquals(null, bi.next(), 1);
+        assertTrue(null, bi.getRuleStatus() >= RuleBasedBreakIterator.WORD_NONE);
+        assertTrue(null, bi.getRuleStatus() < RuleBasedBreakIterator.WORD_NONE_LIMIT);
+        
+        bi.setText("3 ");
+        assertEquals(null, bi.next(), 1);
+        assertTrue(null, bi.getRuleStatus() >= RuleBasedBreakIterator.WORD_NUMBER);
+        assertTrue(null, bi.getRuleStatus() < RuleBasedBreakIterator.WORD_NUMBER_LIMIT);
+        
+        bi.setText("a ");
+        assertEquals(null, bi.next(), 1);
+        assertTrue(null, bi.getRuleStatus() >= RuleBasedBreakIterator.WORD_LETTER );
+        assertTrue(null, bi.getRuleStatus() < RuleBasedBreakIterator.WORD_LETTER_LIMIT);
+
+        
+        bi.setText("イ  ");
+        assertEquals(null, bi.next(), 1);
+        assertTrue(null, bi.getRuleStatus() >= RuleBasedBreakIterator.WORD_KANA );
+        // TODO: ticket #10261, Kana is not returning the correct status.
+        // assertTrue(null, bi.getRuleStatus() < RuleBasedBreakIterator.WORD_KANA_LIMIT);
+        // System.out.println("\n" + bi.getRuleStatus());
+        
+        bi.setText("退 ");
+        assertEquals(null, bi.next(), 1);
+        assertTrue(null, bi.getRuleStatus() >= RuleBasedBreakIterator.WORD_IDEO );
+        assertTrue(null, bi.getRuleStatus() < RuleBasedBreakIterator.WORD_IDEO_LIMIT);
     }
     
     //---------------------------------------------
