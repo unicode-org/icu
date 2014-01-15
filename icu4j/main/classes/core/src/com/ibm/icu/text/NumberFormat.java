@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,6 +22,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -496,6 +497,34 @@ public abstract class NumberFormat extends UFormat {
      */
     public boolean isParseStrict() {
         return parseStrict;
+    }
+
+    /**
+     * {@icu} Set a particular DisplayContext value in the formatter,
+     * such as CAPITALIZATION_FOR_STANDALONE. 
+     * 
+     * @param context The DisplayContext value to set. 
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setContext(DisplayContext context) {
+        if (context.type() == DisplayContext.Type.CAPITALIZATION) {
+            capitalizationSetting = context;
+        }
+    }
+
+    /**
+     * {@icu} Get the formatter's DisplayContext value for the specified DisplayContext.Type,
+     * such as CAPITALIZATION.
+     * 
+     * @param type the DisplayContext.Type whose value to return
+     * @return the current DisplayContext setting for the specified type
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public DisplayContext getContext(DisplayContext.Type type) {
+        return (type == DisplayContext.Type.CAPITALIZATION && capitalizationSetting != null)?
+                capitalizationSetting: DisplayContext.CAPITALIZATION_NONE;
     }
 
     //============== Locale Stuff =====================
@@ -1686,7 +1715,7 @@ public abstract class NumberFormat extends UFormat {
     private static final long serialVersionUID = -2308460125733713944L;
 
     /**
-     * Empty constructor.  Public for compatibily with JDK which lets the
+     * Empty constructor.  Public for compatibility with JDK which lets the
      * compiler generate a default public constructor even though this is
      * an abstract class.
      * @stable ICU 2.6
@@ -1696,6 +1725,11 @@ public abstract class NumberFormat extends UFormat {
 
     // new in ICU4J 3.6
     private boolean parseStrict;
+
+    /*
+     *  Capitalization setting, new in ICU 53
+     */
+    private transient DisplayContext capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
 
     /**
      * The instances of this inner class are used as attribute keys and values
