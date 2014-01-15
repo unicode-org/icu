@@ -493,6 +493,12 @@ icu4c/source/test/perf/collperf/debug
 icu4c/source/test/perf/collperf/release
 icu4c/source/test/perf/collperf/x64
 icu4c/source/test/perf/collperf/x86
+icu4c/source/test/perf/collperf2/*.vcxproj.user
+icu4c/source/test/perf/collperf2/Makefile
+icu4c/source/test/perf/collperf2/collperf2
+icu4c/source/test/perf/collperf2/collperf2.d
+icu4c/source/test/perf/collperf2/x64
+icu4c/source/test/perf/collperf2/x86
 icu4c/source/test/perf/convperf/*.vcxproj.user
 icu4c/source/test/perf/convperf/Makefile
 icu4c/source/test/perf/convperf/convperf.vcproj.*.*.user
