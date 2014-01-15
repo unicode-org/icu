@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -29,6 +29,7 @@ import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
@@ -3567,6 +3568,20 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             } else {
                 errln("FAIL: NumberFormat.getInstance for locale " + item.locale);
             }
+        }
+    }
+
+    public void TestContext() {
+        // just a minimal sanity check for now
+        NumberFormat nfmt = NumberFormat.getInstance();
+        DisplayContext context = nfmt.getContext(DisplayContext.Type.CAPITALIZATION);
+        if (context != DisplayContext.CAPITALIZATION_NONE) {
+            errln("FAIL: Initial NumberFormat.getContext() is not CAPITALIZATION_NONE");
+        }
+        nfmt.setContext(DisplayContext.CAPITALIZATION_FOR_STANDALONE);
+        context = nfmt.getContext(DisplayContext.Type.CAPITALIZATION);
+        if (context != DisplayContext.CAPITALIZATION_FOR_STANDALONE) {
+            errln("FAIL: NumberFormat.getContext() does not return the value set, CAPITALIZATION_FOR_STANDALONE");
         }
     }
 }
