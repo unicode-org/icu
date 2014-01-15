@@ -222,7 +222,8 @@ NumberFormat::NumberFormat()
     fMaxFractionDigits(3), // invariant, >= minFractionDigits
     fMinFractionDigits(0),
     fParseIntegerOnly(FALSE),
-    fLenient(FALSE)
+    fLenient(FALSE),
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     fCurrency[0] = 0;
 }
