@@ -55,6 +55,7 @@ static void TestMaxInt(void);
 static void TestNoExponent(void);
 static void TestUFormattable(void);
 static void TestUNumberingSystem(void);
+static void TestContext(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -79,6 +80,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestNoExponent);
     TESTCASE(TestUFormattable);
     TESTCASE(TestUNumberingSystem);
+    TESTCASE(TestContext);
 }
 
 /* test Parse int 64 */
@@ -2376,6 +2378,27 @@ static void TestUNumberingSystem(void) {
         }
     } else {
         log_data_err("unumsys_openAvailableNames fails with status %s\n", myErrorName(status));
+    }
+}
+
+static void TestContext(void) {
+    /* just a minimal sanity check for now */
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat *unum = unum_open(UNUM_SPELLOUT, NULL, 0, "en", NULL, &status);
+    if ( U_SUCCESS(status) ) {
+        UDisplayContext context = unum_getContext(unum, UDISPCTX_TYPE_CAPITALIZATION, &status);
+        if ( U_FAILURE(status) || context != UDISPCTX_CAPITALIZATION_NONE) {
+            log_err("FAIL: Initial unum_getContext is not UDISPCTX_CAPITALIZATION_NONE\n");
+            status = U_ZERO_ERROR;
+        }
+        unum_setContext(unum, UDISPCTX_CAPITALIZATION_FOR_STANDALONE, &status);
+        context = unum_getContext(unum, UDISPCTX_TYPE_CAPITALIZATION, &status);
+        if ( U_FAILURE(status) || context != UDISPCTX_CAPITALIZATION_FOR_STANDALONE) {
+            log_err("FAIL: unum_getContext does not return the value set, UDISPCTX_CAPITALIZATION_FOR_STANDALONE\n");
+        }
+        unum_close(unum);
+    } else {
+        log_data_err("unum_open UNUM_SPELLOUT for en fails with status %s\n", myErrorName(status));
     }
 }
 
