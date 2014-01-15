@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,7 +14,10 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -102,12 +105,55 @@ public class RelativeDateFormat extends DateFormat {
             FieldPosition fieldPosition) {
 
         String relativeDayString = null;
+        DisplayContext capitalizationContext = getContext(DisplayContext.Type.CAPITALIZATION);
+
         if (fDateStyle != DateFormat.NONE) {
             // calculate the difference, in days, between 'cal' and now.
             int dayDiff = dayDifference(cal);
 
             // look up string
             relativeDayString = getStringForDay(dayDiff);
+        }
+
+        if ( relativeDayString != null && fDatePattern != null &&
+                (fTimePattern == null || fCombinedFormat == null || combinedFormatHasDateAtStart) ) {
+            // capitalize relativeDayString according to context for tense, set formatter no context
+            if ( capitalizationContext == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+                    (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForRelativeUnitsListOrMenu) ||
+                    (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_STANDALONE && capitalizationForRelativeUnitsStandAlone) ) {
+                // titlecase first word of relativeDayString, do like LocaleDisplayNamesImpl.adjustForUsageAndContext
+                // Note that for languages that *have* case, using the word break properties here works reasonably
+                // well (CLDR word break tailoring is for non-casing languages, and the POSIX locale).
+                int stopPos, stopPosLimit = 8, len = relativeDayString.length();
+                if ( stopPosLimit > len ) {
+                    stopPosLimit = len;
+                }
+                for ( stopPos = 0; stopPos < stopPosLimit; stopPos++ ) {
+                    int ch = relativeDayString.codePointAt(stopPos);
+                    int wb = UCharacter.getIntPropertyValue(ch, UProperty.WORD_BREAK);
+                    if ( !(UCharacter.isLowerCase(ch) || wb==UCharacter.WordBreak.EXTEND || wb==UCharacter.WordBreak.SINGLE_QUOTE ||
+                            wb==UCharacter.WordBreak.MIDNUMLET || wb==UCharacter.WordBreak.MIDLETTER) ) {
+                        break;
+                    }
+                    if (ch >= 0x10000) {
+                        stopPos++;
+                    }
+                }
+                if ( stopPos > 0 && stopPos < len ) {
+                    String firstWord = relativeDayString.substring(0, stopPos);
+                    firstWord = UCharacter.toTitleCase(fLocale, firstWord, null,
+                            UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+                    relativeDayString = firstWord.concat(relativeDayString.substring(stopPos));
+                } else {
+                    // no stopPos, titlecase the whole text
+                    relativeDayString = UCharacter.toTitleCase(fLocale, relativeDayString, null,
+                            UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+                }
+            }
+            fDateTimeFormat.setContext(DisplayContext.CAPITALIZATION_NONE);
+        } else {
+            // set our context for the formatter
+            fDateTimeFormat.setContext(capitalizationContext);
         }
 
         if (fDateTimeFormat != null && (fDatePattern != null || fTimePattern != null)) {
@@ -169,6 +215,10 @@ public class RelativeDateFormat extends DateFormat {
     
     private transient URelativeString fDates[] = null; // array of strings
     
+    private transient boolean capitalizationForRelativeUnitsListOrMenu = false;
+    private transient boolean capitalizationForRelativeUnitsStandAlone = false;
+    private transient boolean combinedFormatHasDateAtStart = false;
+   
     
     /**
      * Get the string at a specific offset.
@@ -216,6 +266,17 @@ public class RelativeDateFormat extends DateFormat {
             datesSet.add(rs);
         }
         fDates = datesSet.toArray(new URelativeString[0]);
+
+        try {
+            rdb = rb.getWithFallback("contextTransforms/tense");
+            int[] intVector = rdb.getIntVector();
+            if (intVector.length >= 2) {
+                capitalizationForRelativeUnitsListOrMenu = (intVector[0] != 0);
+                capitalizationForRelativeUnitsStandAlone = (intVector[1] != 0);
+            }
+        } catch (MissingResourceException e) {
+            // use default
+        }
     }
     
     /**
@@ -284,6 +345,7 @@ public class RelativeDateFormat extends DateFormat {
         } catch (MissingResourceException e) {
             // use default
         }
+        combinedFormatHasDateAtStart = pattern.startsWith("{1}");
         fCombinedFormat = new MessageFormat(pattern, locale);
         return fCombinedFormat;
     }
