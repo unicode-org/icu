@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2007-2013, Google, International Business Machines Corporation *
+ * Copyright (C) 2007-2014, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -35,9 +35,10 @@ import com.ibm.icu.util.ULocale;
 
 public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
-	private static boolean JDKTZ = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
+    private static boolean JDKTZ = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
+    private static final Pattern EXCL_TZ_PATTERN = Pattern.compile(".*/Riyadh8[7-9]");
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         new TimeZoneFormatTest().run(args);
     }
 
@@ -133,6 +134,9 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 SimpleDateFormat sdf = new SimpleDateFormat(PATTERNS[patidx], LOCALES[locidx]);
 
                 for (int tzidx = 0; tzidx < tzids.length; tzidx++) {
+                    if (EXCL_TZ_PATTERN.matcher(tzids[tzidx]).matches()) {
+                        continue;
+                    }
                     TimeZone tz = TimeZone.getTimeZone(tzids[tzidx]);
 
                     for (int datidx = 0; datidx < DATES.length; datidx++) {
@@ -359,16 +363,19 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 Set<String> ids = null;
                 if (JDKTZ) {
-                	ids = new TreeSet<String>();
-                	String[] jdkIDs = java.util.TimeZone.getAvailableIDs();
-                	for (String jdkID : jdkIDs) {
-                		String tmpID = TimeZone.getCanonicalID(jdkID);
-                		if (tmpID != null) {
-                			ids.add(tmpID);
-                		}
-                	}
+                    ids = new TreeSet<String>();
+                    String[] jdkIDs = java.util.TimeZone.getAvailableIDs();
+                    for (String jdkID : jdkIDs) {
+                        if (EXCL_TZ_PATTERN.matcher(jdkID).matches()) {
+                            continue;
+                        }
+                        String tmpID = TimeZone.getCanonicalID(jdkID);
+                        if (tmpID != null) {
+                            ids.add(tmpID);
+                        }
+                    }
                 } else {
-                	ids = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, null, null);                	
+                    ids = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, null, null);
                 }
 
                 for (String id : ids) {
