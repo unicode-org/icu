@@ -28,6 +28,7 @@ import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.util.BasicTimeZone;
@@ -713,7 +714,7 @@ public class SimpleDateFormat extends DateFormat {
     // the internal serial version which says which version was written
     // - 0 (default) for version up to JDK 1.1.3
     // - 1 for version from JDK 1.1.4, which includes a new field
-    // - 2 we write additional int for capitalizationContext
+    // - 2 we write additional int for capitalizationSetting
     static final int currentSerialVersion = 2;
 
     static boolean DelayedHebrewMonthCheck = false;
@@ -772,7 +773,7 @@ public class SimpleDateFormat extends DateFormat {
      * <li><b>1</b> JDK 1.1.4 or later.  This version adds
      * <code>defaultCenturyStart</code>.
      * <li><b>2</b> This version writes an additional int for
-     * <code>capitalizationContext</code>.
+     * <code>capitalizationSetting</code>.
      * </ul>
      * When streaming out this class, the most recent format
      * and the highest allowable <code>serialVersionOnStream</code>
@@ -861,8 +862,11 @@ public class SimpleDateFormat extends DateFormat {
     /*
      *  Capitalization setting, introduced in ICU 50
      *  Special serialization, see writeObject & readObject below
+     *
+     *  Hoisted to DateFormat in ICU 53, get value with
+     *  getContext(DisplayContext.Type.CAPITALIZATION)
      */
-    private transient DisplayContext capitalizationSetting;
+    // private transient DisplayContext capitalizationSetting;
 
     /*
      *  Old defaultCapitalizationContext field
@@ -1048,9 +1052,6 @@ public class SimpleDateFormat extends DateFormat {
         if (override != null) {
            initNumberFormatters(locale);
         }
-        
-        capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
-
     }
 
     /**
@@ -1212,7 +1213,7 @@ public class SimpleDateFormat extends DateFormat {
             calendar.setTimeZone(cal.getTimeZone());
             cal = calendar;
         }
-        StringBuffer result = format(cal, capitalizationSetting, toAppendTo, pos, null);
+        StringBuffer result = format(cal, getContext(DisplayContext.Type.CAPITALIZATION), toAppendTo, pos, null);
         if (backupTZ != null) {
             // Restore the original time zone
             calendar.setTimeZone(backupTZ);
@@ -3393,34 +3394,6 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * {@icu} Set a particular DisplayContext value in the formatter,
-     * such as CAPITALIZATION_FOR_STANDALONE. 
-     * 
-     * @param context The DisplayContext value to set. 
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
-     */
-    public void setContext(DisplayContext context) {
-        if (context.type() == DisplayContext.Type.CAPITALIZATION) {
-            capitalizationSetting = context;
-        }
-    }
-
-    /**
-     * {@icu} Get the formatter's DisplayContext value for the specified DisplayContext.Type,
-     * such as CAPITALIZATION.
-     * 
-     * @param type the DisplayContext.Type whose value to return
-     * @return the current DisplayContext setting for the specified type
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
-     */
-    public DisplayContext getContext(DisplayContext.Type type) {
-        return (type == DisplayContext.Type.CAPITALIZATION && capitalizationSetting != null)?
-                capitalizationSetting: DisplayContext.CAPITALIZATION_NONE;
-    }
-
-    /**
      * Overrides Cloneable
      * @stable ICU 2.0
      */
@@ -3465,7 +3438,7 @@ public class SimpleDateFormat extends DateFormat {
         }
         initializeTimeZoneFormat(false);
         stream.defaultWriteObject();
-        stream.writeInt(capitalizationSetting.value());
+        stream.writeInt(getContext(DisplayContext.Type.CAPITALIZATION).value());
     }
 
     /**
@@ -3498,11 +3471,11 @@ public class SimpleDateFormat extends DateFormat {
 
         initLocalZeroPaddingNumberFormat();
 
-        capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+        setContext(DisplayContext.CAPITALIZATION_NONE);
         if (capitalizationSettingValue >= 0) {
             for (DisplayContext context: DisplayContext.values()) {
                 if (context.value() == capitalizationSettingValue) {
-                    capitalizationSetting = context;
+                    setContext(context);
                     break;
                 }
             }
@@ -3532,7 +3505,7 @@ public class SimpleDateFormat extends DateFormat {
         StringBuffer toAppendTo = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         List<FieldPosition> attributes = new ArrayList<FieldPosition>();
-        format(cal, capitalizationSetting, toAppendTo, pos, attributes);
+        format(cal, getContext(DisplayContext.Type.CAPITALIZATION), toAppendTo, pos, attributes);
 
         AttributedString as = new AttributedString(toAppendTo.toString());
 
@@ -3752,6 +3725,7 @@ public class SimpleDateFormat extends DateFormat {
         // Initialize
         pos.setBeginIndex(0);
         pos.setEndIndex(0);
+        DisplayContext capSetting = getContext(DisplayContext.Type.CAPITALIZATION);
 
         // formatting date 1
         for (int i = 0; i <= diffEnd; i++) {
@@ -3761,10 +3735,10 @@ public class SimpleDateFormat extends DateFormat {
                 PatternItem item = (PatternItem)items[i];
                 if (useFastFormat) {
                     subFormat(appendTo, item.type, item.length, appendTo.length(),
-                              i, capitalizationSetting, pos, fromCalendar);
+                              i, capSetting, pos, fromCalendar);
                 } else {
                     appendTo.append(subFormat(item.type, item.length, appendTo.length(),
-                                              i, capitalizationSetting, pos, fromCalendar));
+                                              i, capSetting, pos, fromCalendar));
                 }
             }
         }
@@ -3779,10 +3753,10 @@ public class SimpleDateFormat extends DateFormat {
                 PatternItem item = (PatternItem)items[i];
                 if (useFastFormat) {
                     subFormat(appendTo, item.type, item.length, appendTo.length(),
-                              i, capitalizationSetting, pos, toCalendar);
+                              i, capSetting, pos, toCalendar);
                 } else {
                     appendTo.append(subFormat(item.type, item.length, appendTo.length(),
-                                              i, capitalizationSetting, pos, toCalendar));
+                                              i, capSetting, pos, toCalendar));
                 }
             }
         }

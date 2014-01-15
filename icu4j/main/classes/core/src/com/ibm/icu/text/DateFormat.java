@@ -19,6 +19,7 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.RelativeDateFormat;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
@@ -473,6 +474,12 @@ public abstract class DateFormat extends UFormat {
      * boolean attributes for this instance. Inclusion in this is indicates a true condition.
      */
     private EnumSet<BooleanAttribute> booleanAttributes = EnumSet.allOf(BooleanAttribute.class); 
+
+    /*
+     *  Capitalization setting, hoisted to DateFormat ICU 53
+     *  Special serialization, see writeObject & readObject below
+     */
+    private transient DisplayContext capitalizationSetting;
 
     // Proclaim serial compatibility with 1.1 FCS
     private static final long serialVersionUID = 7218322306649953788L;
@@ -1547,6 +1554,34 @@ public abstract class DateFormat extends UFormat {
     
     
     /**
+     * {@icu} Set a particular DisplayContext value in the formatter,
+     * such as CAPITALIZATION_FOR_STANDALONE. 
+     * 
+     * @param context The DisplayContext value to set. 
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setContext(DisplayContext context) {
+        if (context.type() == DisplayContext.Type.CAPITALIZATION) {
+            capitalizationSetting = context;
+        }
+    }
+
+    /**
+     * {@icu} Get the formatter's DisplayContext value for the specified DisplayContext.Type,
+     * such as CAPITALIZATION.
+     * 
+     * @param type the DisplayContext.Type whose value to return
+     * @return the current DisplayContext setting for the specified type
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public DisplayContext getContext(DisplayContext.Type type) {
+        return (type == DisplayContext.Type.CAPITALIZATION && capitalizationSetting != null)?
+                capitalizationSetting: DisplayContext.CAPITALIZATION_NONE;
+    }
+
+    /**
      * Overrides hashCode.
      * @stable ICU 2.0
      */
@@ -1622,7 +1657,9 @@ public abstract class DateFormat extends UFormat {
      * Creates a new date format.
      * @stable ICU 2.0
      */
-    protected DateFormat() {}
+    protected DateFormat() {
+        capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+    }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
