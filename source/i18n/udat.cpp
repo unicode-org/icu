@@ -991,7 +991,7 @@ udat_setContext(UDateFormat* fmt, UDisplayContext value, UErrorCode* status)
 }
 
 U_CAPI UDisplayContext U_EXPORT2
-udat_getContext(UDateFormat* fmt, UDisplayContextType type, UErrorCode* status)
+udat_getContext(const UDateFormat* fmt, UDisplayContextType type, UErrorCode* status)
 {
     if (U_FAILURE(*status)) {
         return (UDisplayContext)0;
