@@ -498,14 +498,14 @@ utrans_toRules(     const UTransliterator* trans,
                     UBool escapeUnprintable,
                     UChar* result, int32_t resultLength,
                     UErrorCode* status) {
-    utrans_ENTRY(status) -1;
+    utrans_ENTRY(status) 0;
+    if ( (result==NULL)? resultLength!=0: resultLength<0 ) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 
     UnicodeString res;
-    if (!(result==NULL && resultLength==0)) {
-        // NULL destination for pure preflighting: empty dummy string
-        // otherwise, alias the destination buffer
-        res.setTo(result, 0, resultLength);
-    }
+    res.setTo(result, 0, resultLength);
     ((Transliterator*) trans)->toRules(res, escapeUnprintable);
     return res.extract(result, resultLength, *status);
 }
