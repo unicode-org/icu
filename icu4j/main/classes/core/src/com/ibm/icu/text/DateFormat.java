@@ -477,9 +477,10 @@ public abstract class DateFormat extends UFormat {
 
     /*
      *  Capitalization setting, hoisted to DateFormat ICU 53
-     *  Special serialization, see writeObject & readObject below
+     *  Currently no serialization in DateFormat, but SimpleDateFormat serialization
+     *  may call getContext/setContext to read/write this for compatibility
      */
-    private transient DisplayContext capitalizationSetting;
+    private transient DisplayContext capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
 
     // Proclaim serial compatibility with 1.1 FCS
     private static final long serialVersionUID = 7218322306649953788L;
@@ -1657,9 +1658,7 @@ public abstract class DateFormat extends UFormat {
      * Creates a new date format.
      * @stable ICU 2.0
      */
-    protected DateFormat() {
-        capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
-    }
+    protected DateFormat() {}
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
