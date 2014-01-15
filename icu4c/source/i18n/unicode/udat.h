@@ -1343,10 +1343,10 @@ udat_setContext(UDateFormat* fmt, UDisplayContext value, UErrorCode* status);
  * @param type The UDisplayContextType whose value to return
  * @param status A pointer to an UErrorCode to receive any errors
  * @return The UDisplayContextValue for the specified type.
- * @draft ICU 51
+ * @draft ICU 53
  */
 U_DRAFT UDisplayContext U_EXPORT2
-udat_getContext(UDateFormat* fmt, UDisplayContextType type, UErrorCode* status);
+udat_getContext(const UDateFormat* fmt, UDisplayContextType type, UErrorCode* status);
 
 #endif  /* U_HIDE_DRAFT_API */
 
