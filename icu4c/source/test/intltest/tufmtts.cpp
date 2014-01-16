@@ -377,7 +377,11 @@ void TimeUnitTest::testGreekWithSanitization() {
 
 void TimeUnitTest::test10219Plurals() {
     Locale usLocale("en_US");
-    UnicodeString expected[3] = {"1 minute", "1.5 minutes", "1.58 minutes"};
+    double values[2] = {1.588, 1.011};
+    UnicodeString expected[2][3] = {
+        {"1 minute", "1.5 minutes", "1.58 minutes"},
+        {"1 minute", "1.0 minutes", "1.01 minutes"}
+    };
     UErrorCode status = U_ZERO_ERROR;
     TimeUnitFormat tuf(usLocale, status);
     if (U_FAILURE(status)) {
@@ -389,29 +393,32 @@ void TimeUnitTest::test10219Plurals() {
         dataerrln("generating NumberFormat Object failed: %s", u_errorName(status));
         return;
     }
-    for (int32_t i = 0; i < LENGTHOF(expected); ++i) {
-        nf->setMaximumFractionDigits(i);
-        nf->setRoundingMode(DecimalFormat::kRoundDown);
-        tuf.setNumberFormat(*nf, status);
-        if (U_FAILURE(status)) {
-            dataerrln("setting NumberFormat failed: %s", u_errorName(status));
-            return;
-        }
-        UnicodeString actual;
-        Formattable fmt;
-        LocalPointer<TimeUnitAmount> tamt(new TimeUnitAmount(1.588, TimeUnit::UTIMEUNIT_MINUTE, status));
-        if (U_FAILURE(status)) {
-            dataerrln("generating TimeUnitAmount Object failed: %s", u_errorName(status));
-            return;
-        }
-        fmt.adoptObject(tamt.orphan());
-        tuf.format(fmt, actual, status);
-        if (U_FAILURE(status)) {
-            dataerrln("Actual formatting failed: %s", u_errorName(status));
-            return;
-        }
-        if (expected[i] != actual) {
-            errln("Expected " + expected[i] + ", got " + actual);
+    for (int32_t j = 0; j < LENGTHOF(values); ++j) {
+        for (int32_t i = 0; i < LENGTHOF(expected[j]); ++i) {
+            nf->setMinimumFractionDigits(i);
+            nf->setMaximumFractionDigits(i);
+            nf->setRoundingMode(DecimalFormat::kRoundDown);
+            tuf.setNumberFormat(*nf, status);
+            if (U_FAILURE(status)) {
+                dataerrln("setting NumberFormat failed: %s", u_errorName(status));
+                return;
+            }
+            UnicodeString actual;
+            Formattable fmt;
+            LocalPointer<TimeUnitAmount> tamt(new TimeUnitAmount(values[j], TimeUnit::UTIMEUNIT_MINUTE, status));
+            if (U_FAILURE(status)) {
+                dataerrln("generating TimeUnitAmount Object failed: %s", u_errorName(status));
+                return;
+            }
+            fmt.adoptObject(tamt.orphan());
+            tuf.format(fmt, actual, status);
+            if (U_FAILURE(status)) {
+                dataerrln("Actual formatting failed: %s", u_errorName(status));
+                return;
+            }
+            if (expected[j][i] != actual) {
+                errln("Expected " + expected[j][i] + ", got " + actual);
+            }
         }
     }
 
