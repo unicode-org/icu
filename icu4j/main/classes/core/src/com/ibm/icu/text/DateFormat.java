@@ -19,7 +19,6 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.RelativeDateFormat;
-import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;

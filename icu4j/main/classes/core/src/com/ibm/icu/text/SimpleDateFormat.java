@@ -28,7 +28,6 @@ import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.util.BasicTimeZone;

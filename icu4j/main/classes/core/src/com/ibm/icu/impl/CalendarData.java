@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,7 +9,6 @@ package com.ibm.icu.impl;
 import java.util.ArrayList;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
