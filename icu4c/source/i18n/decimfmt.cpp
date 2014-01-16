@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and    *
+* Copyright (C) 1997-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -37,7 +37,6 @@
 ********************************************************************************
 */
 
-#include <iostream>
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -73,12 +72,6 @@
 #include "dcfmtimp.h"
 #include "plurrule_impl.h"
 #include "decimalformatpattern.h"
-
-#define COMPLAIN(W, X, Y) (std::cout << (W) << ": " << (X) << ", got: " << (Y) << std::endl)
-
-#define CHECK_COMPLAIN(W, X, Y) if ((X) != (Y)) COMPLAIN(W, X, Y)
-
-#define CHECK_STRING(W, X, Y) if (((X) == NULL && !(Y).isBogus()) || ((X) != NULL && (Y) != *(X))) COMPLAIN(W, "EXPECTED", "ACTUAL")
 
 /*
  * On certain platforms, round is a macro defined in math.h
@@ -296,11 +289,11 @@ static const UChar fgTripleCurrencySign[] = {0xA4, 0xA4, 0xA4, 0};
 inline int32_t _min(int32_t a, int32_t b) { return (a<b) ? a : b; }
 inline int32_t _max(int32_t a, int32_t b) { return (a<b) ? b : a; }
 
-static void copyString(const UnicodeString& src, UnicodeString *& dest, UErrorCode &status) {
+static void copyString(const UnicodeString& src, UBool isBogus, UnicodeString *& dest, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (src.isBogus()) {
+    if (isBogus) {
         delete dest;
         dest = NULL;
     } else {
@@ -4908,10 +4901,10 @@ DecimalFormat::applyPatternWithoutExpandAffix(const UnicodeString& pattern,
             fPadPosition = kPadAfterSuffix;
             break;
     }
-    copyString(out.fNegPrefixPattern, fNegPrefixPattern, status);
-    copyString(out.fNegSuffixPattern, fNegSuffixPattern, status);
-    copyString(out.fPosPrefixPattern, fPosPrefixPattern, status);
-    copyString(out.fPosSuffixPattern, fPosSuffixPattern, status);
+    copyString(out.fNegPrefixPattern, out.fNegPatternsBogus, fNegPrefixPattern, status);
+    copyString(out.fNegSuffixPattern, out.fNegPatternsBogus, fNegSuffixPattern, status);
+    copyString(out.fPosPrefixPattern, out.fPosPatternsBogus, fPosPrefixPattern, status);
+    copyString(out.fPosSuffixPattern, out.fPosPatternsBogus, fPosSuffixPattern, status);
 }
 
 

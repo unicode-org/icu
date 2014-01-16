@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and    *
+* Copyright (C) 1997-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -71,6 +71,37 @@ static void syntaxError(const UnicodeString& pattern,
     parseError.postContext[stop-start]= 0;
 }
 
+DecimalFormatPattern::DecimalFormatPattern()
+        : fMinimumIntegerDigits(1),
+          fMaximumIntegerDigits(gDefaultMaxIntegerDigits),
+          fMinimumFractionDigits(0),
+          fMaximumFractionDigits(3),
+          fUseSignificantDigits(FALSE),
+          fMinimumSignificantDigits(1),
+          fMaximumSignificantDigits(6),
+          fUseExponentialNotation(FALSE),
+          fMinExponentDigits(0),
+          fExponentSignAlwaysShown(FALSE),
+          fCurrencySignCount(fgCurrencySignCountZero),
+          fGroupingUsed(TRUE),
+          fGroupingSize(0),
+          fGroupingSize2(0),
+          fMultiplier(1),
+          fDecimalSeparatorAlwaysShown(FALSE),
+          fFormatWidth(0),
+          fRoundingIncrementUsed(FALSE),
+          fRoundingIncrement(),
+          fPad(kPatternPadEscape),
+          fNegPatternsBogus(TRUE),
+          fPosPatternsBogus(TRUE),
+          fNegPrefixPattern(),
+          fNegSuffixPattern(),
+          fPosPrefixPattern(),
+          fPosSuffixPattern(),
+          fPadPosition(DecimalFormatPattern::kPadBeforePrefix) {
+}
+
+
 DecimalFormatPatternParser::DecimalFormatPatternParser() :
     fZeroDigit(kPatternZeroDigit),
     fSigDigit(kPatternSignificantDigit),
@@ -124,32 +155,7 @@ DecimalFormatPatternParser::applyPatternWithoutExpandAffix(
     {
         return;
     }
-
-    out.fMinimumIntegerDigits = 1;
-    out.fMaximumIntegerDigits = gDefaultMaxIntegerDigits;
-    out.fMinimumFractionDigits = 0;
-    out.fMaximumFractionDigits = 3;
-    out.fUseSignificantDigits = FALSE;
-    out.fMinimumSignificantDigits = 1;
-    out.fMaximumSignificantDigits = 6;
-    out.fUseExponentialNotation = FALSE;
-    out.fMinExponentDigits = 0;
-    out.fExponentSignAlwaysShown = FALSE;
-    out.fCurrencySignCount = fgCurrencySignCountZero;
-    out.fGroupingUsed = TRUE;
-    out.fGroupingSize = 0;
-    out.fGroupingSize2 = 0;
-    out.fMultiplier = 1;
-    out.fDecimalSeparatorAlwaysShown = FALSE;
-    out.fFormatWidth = 0;
-    out.fRoundingIncrementUsed = FALSE;
-    out.fPad = 0;
-    out.fNegPrefixPattern.setToBogus();
-    out.fNegSuffixPattern.setToBogus();
-    out.fPosPrefixPattern.setToBogus();
-    out.fPosSuffixPattern.setToBogus();
-    out.fPadPosition = DecimalFormatPattern::kPadBeforePrefix;
-    out.fPad = kPatternPadEscape;
+    out = DecimalFormatPattern();
 
     // Clear error struct
     parseError.offset = -1;
@@ -542,10 +548,12 @@ DecimalFormatPatternParser::applyPatternWithoutExpandAffix(
         }
 
         if (part == 0) {
+            out.fPosPatternsBogus = FALSE;
             out.fPosPrefixPattern = prefix;
             out.fPosSuffixPattern = suffix;
-            out.fNegPrefixPattern.setToBogus();
-            out.fNegSuffixPattern.setToBogus();
+            out.fNegPatternsBogus = TRUE;
+            out.fNegPrefixPattern.remove();
+            out.fNegSuffixPattern.remove();
 
             out.fUseExponentialNotation = (expDigits >= 0);
             if (out.fUseExponentialNotation) {
@@ -601,14 +609,17 @@ DecimalFormatPatternParser::applyPatternWithoutExpandAffix(
                 out.fRoundingIncrementUsed = FALSE;
             }
         } else {
+            out.fNegPatternsBogus = FALSE;
             out.fNegPrefixPattern = prefix;
             out.fNegSuffixPattern = suffix;
         }
     }
 
     if (pattern.length() == 0) {
-        out.fNegPrefixPattern.setToBogus();
-        out.fNegSuffixPattern.setToBogus();
+        out.fNegPatternsBogus = TRUE;
+        out.fNegPrefixPattern.remove();
+        out.fNegSuffixPattern.remove();
+        out.fPosPatternsBogus = FALSE;
         out.fPosPrefixPattern.remove();
         out.fPosSuffixPattern.remove();
 
@@ -631,11 +642,11 @@ DecimalFormatPatternParser::applyPatternWithoutExpandAffix(
     // If there was no negative pattern, or if the negative pattern is
     // identical to the positive pattern, then prepend the minus sign to the
     // positive pattern to form the negative pattern.
-    if (out.fNegPrefixPattern.isBogus() ||
+    if (out.fNegPatternsBogus ||
         (out.fNegPrefixPattern == out.fPosPrefixPattern
          && out.fNegSuffixPattern == out.fPosSuffixPattern)) {
+        out.fNegPatternsBogus = FALSE;
         out.fNegSuffixPattern = out.fPosSuffixPattern;
-        out.fNegPrefixPattern.remove();
         out.fNegPrefixPattern.append(kQuote).append(kPatternMinus)
             .append(out.fPosPrefixPattern);
     }
