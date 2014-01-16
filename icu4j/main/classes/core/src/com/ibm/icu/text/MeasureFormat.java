@@ -343,7 +343,7 @@ public class MeasureFormat extends UFormat {
             T appendable, FieldPosition fieldPosition, Measure... measures) {
         // fast track for trivial cases
         if (measures.length == 0) {
-            return (T) appendable;
+            return appendable;
         }
         if (measures.length == 1) {
             return formatMeasure(measures[0], appendable, fieldPosition);
