@@ -800,7 +800,7 @@ unum_getContext(const UNumberFormat *fmt, UDisplayContextType type, UErrorCode* 
     if (U_FAILURE(*status)) {
         return (UDisplayContext)0;
     }
-    return ((NumberFormat*)fmt)->getContext(type, *status);
+    return ((const NumberFormat*)fmt)->getContext(type, *status);
 }
 
 U_INTERNAL UFormattable * U_EXPORT2
