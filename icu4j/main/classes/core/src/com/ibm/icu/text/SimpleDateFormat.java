@@ -2685,6 +2685,7 @@ public class SimpleDateFormat extends DateFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @SuppressWarnings("fallthrough")
     private int subParse(String text, int start, char ch, int count,
                            boolean obeyCount, boolean allowNegative,
                            boolean[] ambiguousYear, Calendar cal, MessageFormat numericLeapMonthFormatter)

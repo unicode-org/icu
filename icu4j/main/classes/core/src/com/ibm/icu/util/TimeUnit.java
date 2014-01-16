@@ -1,6 +1,6 @@
 /*
  **************************************************************************
- * Copyright (C) 2008-2013, Google, International Business Machines
+ * Copyright (C) 2008-2014, Google, International Business Machines
  * Corporation and others. All Rights Reserved.
  **************************************************************************
  */
@@ -35,16 +35,9 @@ public class TimeUnit extends MeasureUnit {
      * @stable ICU 4.0
      */
     public static TimeUnit[] values() {
-        return new TimeUnit[] {
-                (TimeUnit) SECOND,
-                (TimeUnit) MINUTE,
-                (TimeUnit) HOUR,
-                (TimeUnit) DAY,
-                (TimeUnit) WEEK,
-                (TimeUnit) MONTH,
-                (TimeUnit) YEAR};
+        return new TimeUnit[] { SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR };
     }
-    
+
     private Object writeReplace() throws ObjectStreamException {
         return new MeasureUnitProxy(type, subType);
     }
