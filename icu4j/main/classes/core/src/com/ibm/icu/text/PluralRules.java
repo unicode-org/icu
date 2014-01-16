@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2013, International Business Machines Corporation and
+ * Copyright (C) 2007-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -780,7 +780,18 @@ public class PluralRules implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public enum SampleType {INTEGER, DECIMAL}
+    public enum SampleType {
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        INTEGER,
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        DECIMAL
+    }
 
     /**
      * A range of NumberInfo that includes all values with the same visibleFractionDigitCount.
@@ -1656,11 +1667,35 @@ public class PluralRules implements Serializable {
      * @internal
      */
     public enum StandardPluralCategories {
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         zero,
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         one,
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         two,
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         few,
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         many,
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         other;
         static StandardPluralCategories forString(String s) {
             StandardPluralCategories a;
