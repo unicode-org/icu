@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2013, Google Inc, International Business Machines        *
+ * Copyright (C) 2004-2014, Google Inc, International Business Machines        *
  * Corporation and others. All Rights Reserved.                                *
  *******************************************************************************
  */
@@ -67,7 +67,7 @@ public class MeasureUnit implements Serializable {
      * Get the type, such as "length"
      * 
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public String getType() {
         return type;
@@ -78,7 +78,7 @@ public class MeasureUnit implements Serializable {
      * Get the subType, such as “foot”.
      *
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public String getSubtype() {
         return subType;
@@ -88,7 +88,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public int hashCode() {
@@ -97,7 +97,7 @@ public class MeasureUnit implements Serializable {
     
     /**
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public boolean equals(Object rhs) {
@@ -113,7 +113,7 @@ public class MeasureUnit implements Serializable {
     
     /**
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public String toString() {
@@ -124,7 +124,7 @@ public class MeasureUnit implements Serializable {
      * Get all of the available units' types. Returned set is unmodifiable.
      * 
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public synchronized static Set<String> getAvailableTypes() {
         return Collections.unmodifiableSet(cache.keySet());
@@ -135,7 +135,7 @@ public class MeasureUnit implements Serializable {
      * @param type the type
      * @return the available units for type. Returned set is unmodifiable.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public synchronized static Set<MeasureUnit> getAvailable(String type) {
         Map<String, MeasureUnit> units = cache.get(type);
@@ -149,7 +149,7 @@ public class MeasureUnit implements Serializable {
      * Get all of the available units. Returned set is unmodifiable.
      *
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public synchronized static Set<MeasureUnit> getAvailable() {
         Set<MeasureUnit> result = new HashSet<MeasureUnit>();
@@ -291,111 +291,327 @@ public class MeasureUnit implements Serializable {
         return unit;
     }
 
-   
 
-
-    /** 
+    /*
      * Useful constants. Not necessarily complete: see {@link #getAvailable()}.
-     * @draft ICU 53
-     * @provisional
      */
-    public static final MeasureUnit
-    /** Constant for unit of acceleration: g-force */
-    G_FORCE = MeasureUnit.internalGetInstance("acceleration", "g-force"),
-    /** Constant for unit of angle: degree */
-    DEGREE = MeasureUnit.internalGetInstance("angle", "degree"),
-    /** Constant for unit of angle: minute */
-    ARC_MINUTE = MeasureUnit.internalGetInstance("angle", "arc-minute"),
-    /** Constant for unit of angle: second */
-    ARC_SECOND = MeasureUnit.internalGetInstance("angle", "arc-second"),
-    /** Constant for unit of area: acre */
-    ACRE = MeasureUnit.internalGetInstance("area", "acre"),
-    /** Constant for unit of area: hectare */
-    HECTARE = MeasureUnit.internalGetInstance("area", "hectare"),
-    /** Constant for unit of area: square-foot */
-    SQUARE_FOOT = MeasureUnit.internalGetInstance("area", "square-foot"),
-    /** Constant for unit of area: square-kilometer */
-    SQUARE_KILOMETER = MeasureUnit.internalGetInstance("area", "square-kilometer"),
-    /** Constant for unit of area: square-meter */
-    SQUARE_METER = MeasureUnit.internalGetInstance("area", "square-meter"),
-    /** Constant for unit of area: square-mile */
-    SQUARE_MILE = MeasureUnit.internalGetInstance("area", "square-mile"),
-    /** Constant for unit of duration: millisecond */
-    MILLISECOND = MeasureUnit.internalGetInstance("duration", "millisecond"),
-    /** Constant for unit of length: centimeter */
-    CENTIMETER = MeasureUnit.internalGetInstance("length", "centimeter"),
-    /** Constant for unit of length: foot */
-    FOOT = MeasureUnit.internalGetInstance("length", "foot"),
-    /** Constant for unit of length: inch */
-    INCH = MeasureUnit.internalGetInstance("length", "inch"),
-    /** Constant for unit of length: kilometer */
-    KILOMETER = MeasureUnit.internalGetInstance("length", "kilometer"),
-    /** Constant for unit of length: light-year */
-    LIGHT_YEAR = MeasureUnit.internalGetInstance("length", "light-year"),
-    /** Constant for unit of length: meter */
-    METER = MeasureUnit.internalGetInstance("length", "meter"),
-    /** Constant for unit of length: mile */
-    MILE = MeasureUnit.internalGetInstance("length", "mile"),
-    /** Constant for unit of length: millimeter */
-    MILLIMETER = MeasureUnit.internalGetInstance("length", "millimeter"),
-    /** Constant for unit of length: picometer */
-    PICOMETER = MeasureUnit.internalGetInstance("length", "picometer"),
-    /** Constant for unit of length: yard */
-    YARD = MeasureUnit.internalGetInstance("length", "yard"),
-    /** Constant for unit of mass: gram */
-    GRAM = MeasureUnit.internalGetInstance("mass", "gram"),
-    /** Constant for unit of mass: kilogram */
-    KILOGRAM = MeasureUnit.internalGetInstance("mass", "kilogram"),
-    /** Constant for unit of mass: ounce */
-    OUNCE = MeasureUnit.internalGetInstance("mass", "ounce"),
-    /** Constant for unit of mass: pound */
-    POUND = MeasureUnit.internalGetInstance("mass", "pound"),
-    /** Constant for unit of power: horsepower */
-    HORSEPOWER = MeasureUnit.internalGetInstance("power", "horsepower"),
-    /** Constant for unit of power: kilowatt */
-    KILOWATT = MeasureUnit.internalGetInstance("power", "kilowatt"),
-    /** Constant for unit of power: watt */
-    WATT = MeasureUnit.internalGetInstance("power", "watt"),
-    /** Constant for unit of pressure: hectopascal */
-    HECTOPASCAL = MeasureUnit.internalGetInstance("pressure", "hectopascal"),
-    /** Constant for unit of pressure: inch-hg */
-    INCH_HG = MeasureUnit.internalGetInstance("pressure", "inch-hg"),
-    /** Constant for unit of pressure: millibar */
-    MILLIBAR = MeasureUnit.internalGetInstance("pressure", "millibar"),
-    /** Constant for unit of speed: kilometer-per-hour */
-    KILOMETER_PER_HOUR = MeasureUnit.internalGetInstance("speed", "kilometer-per-hour"),
-    /** Constant for unit of speed: meter-per-second */
-    METER_PER_SECOND = MeasureUnit.internalGetInstance("speed", "meter-per-second"),
-    /** Constant for unit of speed: mile-per-hour */
-    MILE_PER_HOUR = MeasureUnit.internalGetInstance("speed", "mile-per-hour"),
-    /** Constant for unit of temperature: celsius */
-    CELSIUS = MeasureUnit.internalGetInstance("temperature", "celsius"),
-    /** Constant for unit of temperature: fahrenheit */
-    FAHRENHEIT = MeasureUnit.internalGetInstance("temperature", "fahrenheit"),
-    /** Constant for unit of volume: cubic-kilometer */
-    CUBIC_KILOMETER = MeasureUnit.internalGetInstance("volume", "cubic-kilometer"),
-    /** Constant for unit of volume: cubic-mile */
-    CUBIC_MILE = MeasureUnit.internalGetInstance("volume", "cubic-mile"),
-    /** Constant for unit of volume: liter */
-    LITER = MeasureUnit.internalGetInstance("volume", "liter");
-    
-    public static TimeUnit
-    /** Constant for unit of duration: year */
-    YEAR = (TimeUnit) MeasureUnit.internalGetInstance("duration", "year"),
-    /** Constant for unit of duration: month */
-    MONTH = (TimeUnit) MeasureUnit.internalGetInstance("duration", "month"),
-    /** Constant for unit of duration: week */
-    WEEK = (TimeUnit) MeasureUnit.internalGetInstance("duration", "week"),
-    /** Constant for unit of duration: day */
-    DAY = (TimeUnit) MeasureUnit.internalGetInstance("duration", "day"),
-    /** Constant for unit of duration: hour */
-    HOUR = (TimeUnit) MeasureUnit.internalGetInstance("duration", "hour"),
-    /** Constant for unit of duration: minute */
-    MINUTE = (TimeUnit) MeasureUnit.internalGetInstance("duration", "minute"),
-    /** Constant for unit of duration: second */
-    SECOND = (TimeUnit) MeasureUnit.internalGetInstance("duration", "second");
 
-    /** Private **/
+    /**
+     * Constant for unit of acceleration: g-force
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit G_FORCE = MeasureUnit.internalGetInstance("acceleration", "g-force");
+
+    /**
+     * Constant for unit of angle: degree
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit DEGREE = MeasureUnit.internalGetInstance("angle", "degree");
+
+    /**
+     * Constant for unit of angle: minute
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit ARC_MINUTE = MeasureUnit.internalGetInstance("angle", "arc-minute");
+
+    /**
+     * Constant for unit of angle: second
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit ARC_SECOND = MeasureUnit.internalGetInstance("angle", "arc-second");
+
+    /**
+     * Constant for unit of area: acre
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit ACRE = MeasureUnit.internalGetInstance("area", "acre");
+
+    /**
+     * Constant for unit of area: hectare
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit HECTARE = MeasureUnit.internalGetInstance("area", "hectare");
+
+    /**
+     * Constant for unit of area: square-foot
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit SQUARE_FOOT = MeasureUnit.internalGetInstance("area", "square-foot");
+
+    /**
+     * Constant for unit of area: square-kilometer
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit SQUARE_KILOMETER = MeasureUnit.internalGetInstance("area", "square-kilometer");
+
+    /**
+     * Constant for unit of area: square-meter
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit SQUARE_METER = MeasureUnit.internalGetInstance("area", "square-meter");
+
+    /**
+     * Constant for unit of area: square-mile
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit SQUARE_MILE = MeasureUnit.internalGetInstance("area", "square-mile");
+
+    /**
+     * Constant for unit of duration: millisecond
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILLISECOND = MeasureUnit.internalGetInstance("duration", "millisecond");
+
+    /**
+     * Constant for unit of length: centimeter
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit CENTIMETER = MeasureUnit.internalGetInstance("length", "centimeter");
+
+    /**
+     * Constant for unit of length: foot
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit FOOT = MeasureUnit.internalGetInstance("length", "foot");
+
+    /**
+     * Constant for unit of length: inch
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit INCH = MeasureUnit.internalGetInstance("length", "inch");
+
+    /**
+     * Constant for unit of length: kilometer
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit KILOMETER = MeasureUnit.internalGetInstance("length", "kilometer");
+
+    /**
+     * Constant for unit of length: light-year
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit LIGHT_YEAR = MeasureUnit.internalGetInstance("length", "light-year");
+
+    /**
+     * Constant for unit of length: meter
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit METER = MeasureUnit.internalGetInstance("length", "meter");
+
+    /**
+     * Constant for unit of length: mile
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILE = MeasureUnit.internalGetInstance("length", "mile");
+
+    /**
+     * Constant for unit of length: millimeter
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILLIMETER = MeasureUnit.internalGetInstance("length", "millimeter");
+
+    /**
+     * Constant for unit of length: picometer
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit PICOMETER = MeasureUnit.internalGetInstance("length", "picometer");
+
+    /**
+     * Constant for unit of length: yard
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit YARD = MeasureUnit.internalGetInstance("length", "yard");
+
+    /**
+     * Constant for unit of mass: gram
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit GRAM = MeasureUnit.internalGetInstance("mass", "gram");
+
+    /**
+     * Constant for unit of mass: kilogram
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit KILOGRAM = MeasureUnit.internalGetInstance("mass", "kilogram");
+
+    /**
+     * Constant for unit of mass: ounce
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit OUNCE = MeasureUnit.internalGetInstance("mass", "ounce");
+
+    /**
+     * Constant for unit of mass: pound
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit POUND = MeasureUnit.internalGetInstance("mass", "pound");
+
+    /**
+     * Constant for unit of power: horsepower
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit HORSEPOWER = MeasureUnit.internalGetInstance("power", "horsepower");
+
+    /**
+     * Constant for unit of power: kilowatt
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit KILOWATT = MeasureUnit.internalGetInstance("power", "kilowatt");
+
+    /**
+     * Constant for unit of power: watt
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit WATT = MeasureUnit.internalGetInstance("power", "watt");
+
+    /**
+     * Constant for unit of pressure: hectopascal
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit HECTOPASCAL = MeasureUnit.internalGetInstance("pressure", "hectopascal");
+
+    /**
+     * Constant for unit of pressure: inch-hg
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit INCH_HG = MeasureUnit.internalGetInstance("pressure", "inch-hg");
+
+    /**
+     * Constant for unit of pressure: millibar
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILLIBAR = MeasureUnit.internalGetInstance("pressure", "millibar");
+
+    /**
+     * Constant for unit of speed: kilometer-per-hour
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit KILOMETER_PER_HOUR = MeasureUnit.internalGetInstance("speed", "kilometer-per-hour");
+
+    /**
+     * Constant for unit of speed: meter-per-second
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit METER_PER_SECOND = MeasureUnit.internalGetInstance("speed", "meter-per-second");
+
+    /**
+     * Constant for unit of speed: mile-per-hour
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILE_PER_HOUR = MeasureUnit.internalGetInstance("speed", "mile-per-hour");
+
+    /**
+     * Constant for unit of temperature: celsius
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit CELSIUS = MeasureUnit.internalGetInstance("temperature", "celsius");
+
+    /**
+     * Constant for unit of temperature: fahrenheit
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit FAHRENHEIT = MeasureUnit.internalGetInstance("temperature", "fahrenheit");
+
+    /**
+     * Constant for unit of volume: cubic-kilometer
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit CUBIC_KILOMETER = MeasureUnit.internalGetInstance("volume", "cubic-kilometer");
+
+    /**
+     * Constant for unit of volume: cubic-mile
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit CUBIC_MILE = MeasureUnit.internalGetInstance("volume", "cubic-mile");
+
+    /**
+     * Constant for unit of volume: liter
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit LITER = MeasureUnit.internalGetInstance("volume", "liter");    
+
+    /**
+     * Constant for unit of duration: year
+     * @stable ICU 4.0
+     */
+    public static TimeUnit YEAR = (TimeUnit) MeasureUnit.internalGetInstance("duration", "year");
+
+    /**
+     * Constant for unit of duration: month
+     * @stable ICU 4.0
+     */
+    public static TimeUnit MONTH = (TimeUnit) MeasureUnit.internalGetInstance("duration", "month");
+
+    /**
+     * Constant for unit of duration: week
+     * @stable ICU 4.0
+     */
+    public static TimeUnit WEEK = (TimeUnit) MeasureUnit.internalGetInstance("duration", "week");
+
+    /**
+     * Constant for unit of duration: day
+     * @stable ICU 4.0
+     */
+    public static TimeUnit DAY = (TimeUnit) MeasureUnit.internalGetInstance("duration", "day");
+
+    /**
+     * Constant for unit of duration: hour
+     * @stable ICU 4.0
+     */
+    public static TimeUnit HOUR = (TimeUnit) MeasureUnit.internalGetInstance("duration", "hour");
+
+    /**
+     * Constant for unit of duration: minute
+     * @stable ICU 4.0
+     */
+    public static TimeUnit MINUTE = (TimeUnit) MeasureUnit.internalGetInstance("duration", "minute");
+
+    /**
+     * Constant for unit of duration: second
+     * @stable ICU 4.0
+     */
+    public static TimeUnit SECOND = (TimeUnit) MeasureUnit.internalGetInstance("duration", "second");
+
+    /* Private */
 
     private Object writeReplace() throws ObjectStreamException {
         return new MeasureUnitProxy(type, subType);

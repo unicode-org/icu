@@ -264,7 +264,7 @@ public class MeasureFormat extends UFormat {
      * 
      * @param obj must be a Collection<? extends Measure>, Measure[], or Measure object.
      * @param toAppendTo Formatted string appended here.
-     * @pram pos Identifies a field in the formatted text.
+     * @param pos Identifies a field in the formatted text.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
      * 
      * @draft ICU53
