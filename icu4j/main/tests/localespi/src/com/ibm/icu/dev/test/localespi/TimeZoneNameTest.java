@@ -1,12 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.localespi;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -15,6 +17,22 @@ import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.ULocale;
 
 public class TimeZoneNameTest extends TestFmwk {
+
+    private static final Set<String> ProblematicZones = new HashSet<String>();
+    static {
+        // Since tzdata2013e, Pacific/Johnston is defined as below:
+        //
+        //     Link Pacific/Honolulu Pacific/Johnston
+        //
+        // JDK TimeZone.getDisplayName no longer passes Pacific/Johnston to a
+        // TimeZoneNameProvider implementation. As of CLDR 25M1, Pacific/Johnston
+        // has a different set of names from Pacific/Honolulu. This test case
+        // expects JRE calls a TimeZoneNameProvider without such normalization
+        // (and I believe it's a JDK bug). For now, we ignore the test failure
+        // caused by Pacific/Johnston with this the JDK problem.
+        ProblematicZones.add("Pacific/Johnston");
+    }
+
     public static void main(String[] args) throws Exception {
         new TimeZoneNameTest().run(args);
     }
@@ -40,8 +58,8 @@ public class TimeZoneNameTest extends TestFmwk {
                 String icuDstShort = getIcuDisplayName(tzid, true, TimeZone.SHORT, loc);
 
                 if (icuStdLong != null && icuDstLong != null && icuStdShort != null && icuDstShort != null) {
-                    checkDisplayNamePair(TimeZone.SHORT, tzid, loc, warningOnly);
-                    checkDisplayNamePair(TimeZone.LONG, tzid, loc, warningOnly);
+                    checkDisplayNamePair(TimeZone.SHORT, tzid, loc, warningOnly || ProblematicZones.contains(tzid));
+                    checkDisplayNamePair(TimeZone.LONG, tzid, loc, warningOnly || ProblematicZones.contains(tzid));
                 } else {
                     logln("Localized long standard name is not available for "
                             + tzid + " in locale " + loc + " in ICU");
