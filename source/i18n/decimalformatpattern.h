@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and    *
+* Copyright (C) 1997-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -35,6 +35,8 @@ struct DecimalFormatPattern : UMemory {
       kPadAfterSuffix
   };
 
+  DecimalFormatPattern();
+
   int32_t fMinimumIntegerDigits;
   int32_t fMaximumIntegerDigits;
   int32_t fMinimumFractionDigits;
@@ -55,10 +57,8 @@ struct DecimalFormatPattern : UMemory {
   UBool fRoundingIncrementUsed;
   DigitList fRoundingIncrement;
   UChar32 fPad;
-
-  // These next four can be set to empty or bogus as
-  // there is a difference between having an empty
-  // pattern and having an unspecified pattern.
+  UBool fNegPatternsBogus;
+  UBool fPosPatternsBogus;
   UnicodeString fNegPrefixPattern;
   UnicodeString fNegSuffixPattern;
   UnicodeString fPosPrefixPattern;
