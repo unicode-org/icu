@@ -996,7 +996,7 @@ udat_getContext(const UDateFormat* fmt, UDisplayContextType type, UErrorCode* st
     if (U_FAILURE(*status)) {
         return (UDisplayContext)0;
     }
-    return ((DateFormat*)fmt)->getContext(type, *status);
+    return ((const DateFormat*)fmt)->getContext(type, *status);
 }
 
 
