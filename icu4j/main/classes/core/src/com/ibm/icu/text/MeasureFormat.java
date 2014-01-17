@@ -40,6 +40,7 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 
+// If you update the examples in the doc, don't forget to update MesaureUnitTest.TestExamplesInDocs too.
 /**
  * A formatter for Measure objects.
  *
@@ -63,16 +64,23 @@ import com.ibm.icu.util.UResourceBundle;
  *     
  *      MeasureFormat fmtFrFull = MeasureFormat.getInstance(
  *              ULocale.FRENCH, FormatWidth.WIDE);
- *      // Output: 70 pieds, 5,3 pouces
+ *      // Output: 70 pieds et 5,3 pouces
  *      System.out.println(fmtFrFull.formatMeasures(
  *              new Measure(70, MeasureUnit.FOOT),
  *              new Measure(5.3, MeasureUnit.INCH)));
  *              
- *      // Output: 1 pied, 1 pouce
+ *      // Output: 1 pied et 1 pouce
  *      System.out.println(fmtFrFull.formatMeasures(
  *              new Measure(1, MeasureUnit.FOOT),
  *              new Measure(1, MeasureUnit.INCH)));
- *      }
+ *  
+ *      MeasureFormat fmtFrNarrow = MeasureFormat.getInstance(
+                ULocale.FRENCH, FormatWidth.NARROW);
+ *      // Output: 1′ 1″
+ *      System.out.println(fmtFrNarrow.formatMeasures(
+ *              new Measure(1, MeasureUnit.FOOT),
+ *              new Measure(1, MeasureUnit.INCH)));
+ *      
  *      
  *      MeasureFormat fmtEn = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
  *      
@@ -85,8 +93,8 @@ import com.ibm.icu.util.UResourceBundle;
  * This class does not do conversions from one unit to another. It simply formats
  * whatever units it is given
  * <p>
- * This class is immutable and thread-safe so long as its subclasses TimeUnitFormat and
- * CurrencyFormat are never used. Neither subclass is thread-safe, and TimeUnitFormat is
+ * This class is immutable and thread-safe so long as its deprecated subclass,
+ * TimeUnitFormat, is never used. TimeUnitFormat is not thread-safe, and is
  * mutable. Although this class has existing subclasses, this class does not support new
  * sub-classes.   
  *
@@ -166,7 +174,7 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        NARROW("unitsNarrow", ListFormatter.Style.DURATION_SHORT, NumberFormat.CURRENCYSTYLE),
+        NARROW("unitsNarrow", ListFormatter.Style.DURATION_NARROW, NumberFormat.CURRENCYSTYLE),
         
         /**
          * Identical to NARROW except when formatMeasures is called with
@@ -176,7 +184,7 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        NUMERIC("unitsNarrow", ListFormatter.Style.DURATION_SHORT, NumberFormat.CURRENCYSTYLE);
+        NUMERIC("unitsNarrow", ListFormatter.Style.DURATION_NARROW, NumberFormat.CURRENCYSTYLE);
         
         // Be sure to update the toFormatWidth and fromFormatWidth() functions
         // when adding an enum value.
