@@ -416,27 +416,6 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("Wide currency", "1.00 \u7C73\u30C9\u30EB", mf.format(USD_1));
         assertEquals("Wide currency", "2.00 \u7C73\u30C9\u30EB", mf.format(USD_2));
     }
-
-    public void testExamples() {
-        MeasureFormat fmtFr = MeasureFormat.getInstance(ULocale.FRENCH, FormatWidth.SHORT);
-        Measure measure = new Measure(23, MeasureUnit.CELSIUS);
-        assertEquals("", "23 °C", fmtFr.format(measure));
-
-        Measure measureF = new Measure(70, MeasureUnit.FAHRENHEIT);
-        assertEquals("", "70 °F", fmtFr.format(measureF));
-
-        MeasureFormat fmtFrFull = MeasureFormat.getInstance(ULocale.FRENCH, FormatWidth.WIDE);
-        if (!logKnownIssue("8474", "needs latest CLDR data")) {
-            assertEquals("", "70 pieds, 5,3 pouces", fmtFrFull.formatMeasures(new Measure(70, MeasureUnit.FOOT),
-                    new Measure(5.3, MeasureUnit.INCH)));
-            assertEquals("", "1 pied, 1 pouce", fmtFrFull.formatMeasures(new Measure(1, MeasureUnit.FOOT),
-                    new Measure(1, MeasureUnit.INCH)));
-        }
-        // Degenerate case
-        MeasureFormat fmtEn = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
-        assertEquals("", "1 inch, 2 feet", fmtEn.formatMeasures(new Measure(1, MeasureUnit.INCH),
-                new Measure(2, MeasureUnit.FOOT)));
-    }
     
     public void testFieldPosition() {
         MeasureFormat fmt = MeasureFormat.getInstance(
