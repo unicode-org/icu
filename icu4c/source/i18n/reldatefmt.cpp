@@ -88,10 +88,11 @@ struct UnitPattern {
             appendTo.append(pattern);
             return appendTo;
         }
-        appendTo.append(pattern.tempSubStringBetween(0, offset));
+        appendTo.append(pattern, 0, offset);
         nf.format(quantity, appendTo);
-        appendTo.append(pattern.tempSubStringBetween(
-                offset + LENGTHOF(gPlaceholder)));
+        appendTo.append(pattern,
+                offset + LENGTHOF(gPlaceholder),
+                0x7fffffff);
         return appendTo;
     }
 };

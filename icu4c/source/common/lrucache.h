@@ -22,8 +22,6 @@ U_NAMESPACE_BEGIN
  * LRUCache keyed by locale ID.
  */
 
-class SharedObject;
-
 class U_COMMON_API LRUCache : public UObject {
 public:
     template<typename T>

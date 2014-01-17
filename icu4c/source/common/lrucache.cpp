@@ -41,9 +41,7 @@ void LRUCache::CacheEntry::unlink() {
 void LRUCache::CacheEntry::reset() {
     SharedObject::clearPtr(cachedData);
     status = U_ZERO_ERROR;
-    if (localeId != NULL) {
-        uprv_free(localeId);
-    }
+    uprv_free(localeId);
     localeId = NULL;
 }
 
@@ -55,7 +53,7 @@ void LRUCache::CacheEntry::init(
     status = err;
 }
 
-void LRUCache::moveToMostRecent(LRUCache::CacheEntry *entry) {
+void LRUCache::moveToMostRecent(CacheEntry *entry) {
     if (entry->moreRecent == mostRecentlyUsedMarker) {
         return;
     }
@@ -66,7 +64,7 @@ void LRUCache::moveToMostRecent(LRUCache::CacheEntry *entry) {
     mostRecentlyUsedMarker->lessRecent = entry;
 }
 
-void LRUCache::init(char *adoptedLocId, LRUCache::CacheEntry *entry) {
+void LRUCache::init(char *adoptedLocId, CacheEntry *entry) {
     UErrorCode status = U_ZERO_ERROR;
     SharedObject *result = create(adoptedLocId, status);
     entry->init(adoptedLocId, result, status);
@@ -79,14 +77,17 @@ UBool LRUCache::contains(const char *localeId) const {
 
 const SharedObject *LRUCache::_get(const char *localeId, UErrorCode &status) {
     // TODO (Travis Keep): Consider stripping irrelevant locale keywords.
-    LRUCache::CacheEntry *entry = (LRUCache::CacheEntry *) uhash_get(
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    CacheEntry *entry = (CacheEntry *) uhash_get(
             localeIdToEntries, localeId);
     if (entry == NULL) {
         // Its a cache miss.
 
         if (uhash_count(localeIdToEntries) < maxSize) {
             // Cache not full. There is room for a new entry.
-            entry = new LRUCache::CacheEntry;
+            entry = new CacheEntry;
             if (entry == NULL) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
@@ -134,8 +135,8 @@ LRUCache::LRUCache(int32_t size, UErrorCode &status) :
     if (U_FAILURE(status)) {
         return;
     }
-    mostRecentlyUsedMarker = new LRUCache::CacheEntry;
-    leastRecentlyUsedMarker = new LRUCache::CacheEntry;
+    mostRecentlyUsedMarker = new CacheEntry;
+    leastRecentlyUsedMarker = new CacheEntry;
     if (mostRecentlyUsedMarker == NULL || leastRecentlyUsedMarker == NULL) {
         delete mostRecentlyUsedMarker;
         delete leastRecentlyUsedMarker;
@@ -160,8 +161,8 @@ LRUCache::LRUCache(int32_t size, UErrorCode &status) :
 
 LRUCache::~LRUCache() {
     uhash_close(localeIdToEntries);
-    for (LRUCache::CacheEntry *i = mostRecentlyUsedMarker; i != NULL;) {
-        LRUCache::CacheEntry *next = i->lessRecent;
+    for (CacheEntry *i = mostRecentlyUsedMarker; i != NULL;) {
+        CacheEntry *next = i->lessRecent;
         delete i;
         i = next;
     }
