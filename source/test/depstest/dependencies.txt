@@ -1,10 +1,12 @@
-# Copyright (C) 2011-2013, International Business Machines
+# Copyright (C) 2011-2014, International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # file name: dependencies.txt
 #
 # created on: 2011may26
 # created by: Markus W. Scherer
+#
+# See http://site.icu-project.org/processes/release/tasks/healthy-code#TOC-Check-library-dependencies
 
 # Standard library symbols used by ICU --------------------------------------- #
 
@@ -148,6 +150,7 @@ library: common
     messagepattern
     icu_utility icu_utility_with_props
     ustr_wcs
+    lrucache
     ucharstriebuilder ucharstrieiterator
     bytestriebuilder bytestrieiterator
     hashtable uhash uvector uvector32 uvector64 ulist
@@ -572,6 +575,12 @@ group: udata
     uhash charstr stringpiece platform stubdata
     file_io mmap_functions
 
+group: lrucache
+    lrucache.o
+  deps
+    uhash
+    platform
+
 group: ucharstriebuilder
     ucharstriebuilder.o
   deps
@@ -736,7 +745,7 @@ group: platform
     ucln_cmn.o  # for putil.o which calls ucln_common_registerCleanup
     udataswp.o  # for uinvchar.o; TODO: move uinvchar.o swapper functions to udataswp.o?
     umath.o
-    umutex.o
+    umutex.o sharedobject.o
     utrace.o
   deps
     # The "platform" group has no ICU dependencies.
@@ -810,7 +819,7 @@ group: formatting
     # currencyformat
     curramt.o currfmt.o currpinf.o currunit.o
     # decimalformat
-    dcfmtsym.o decfmtst.o decimfmt.o compactdecimalformat.o
+    dcfmtsym.o decfmtst.o decimfmt.o decimalformatpattern.o compactdecimalformat.o
     numfmt.o numsys.o unumsys.o unum.o winnmfmt.o
     # rbnf
     nfrs.o nfrule.o nfsubs.o rbnf.o
@@ -823,7 +832,7 @@ group: formatting
     basictz.o olsontz.o rbtz.o simpletz.o timezone.o tzrule.o tztrans.o
     vtzone.o vzone.o wintzimpl.o zonemeta.o zrule.o ztrans.o
     tzfmt.o tzgnames.o tznames.o tznames_impl.o
-    datefmt.o dtfmtsym.o dtitvfmt.o dtitvinf.o dtptngen.o dtrule.o reldtfmt.o
+    datefmt.o dtfmtsym.o dtitvfmt.o dtitvinf.o dtptngen.o dtrule.o reldtfmt.o reldatefmt.o
     smpdtfmt.o smpdtfst.o udateintervalformat.o udatpg.o windtfmt.o
     udat.o
     tmunit.o tmutamt.o tmutfmt.o
