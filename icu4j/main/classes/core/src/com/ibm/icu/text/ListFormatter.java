@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2013, Google, International Business Machines Corporation and
+ * Copyright (C) 2012-2014, Google, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -59,7 +59,13 @@ final public class ListFormatter {
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        DURATION_SHORT("unit-short");
+        DURATION_SHORT("unit-short"),
+        /**
+         * Style for durations in narrow form
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        DURATION_NARROW("unit-narrow");
         
         private final String name;
         

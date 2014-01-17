@@ -1,6 +1,6 @@
 /*
  **************************************************************************
- * Copyright (C) 2008-2013, Google, International Business Machines
+ * Copyright (C) 2008-2014, Google, International Business Machines
  * Corporation and others. All Rights Reserved.
  **************************************************************************
  */
@@ -54,8 +54,9 @@ import com.ibm.icu.util.UResourceBundle;
  * </pre>
  *
  * <P>
+ * @deprecated use {@link MeasureFormat} instead.
  * @see TimeUnitAmount
- * @see TimeUnitFormat
+ * @see MeasureFormat
  * @author markdavis
  * @stable ICU 4.0
  */

@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTest;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberFormat;
@@ -48,6 +49,44 @@ public class MeasureUnitTest extends TestFmwk {
     public static void main(String[] args) {
         //generateConstants(); if (true) return;
         new MeasureUnitTest().run(args);
+    }
+    
+    public void TestExamplesInDocs() {
+        MeasureFormat fmtFr = MeasureFormat.getInstance(
+                ULocale.FRENCH, FormatWidth.SHORT);
+        Measure measure = new Measure(23, MeasureUnit.CELSIUS);
+        assertEquals("23 °C", "23 °C", fmtFr.format(measure));                
+        Measure measureF = new Measure(70, MeasureUnit.FAHRENHEIT);
+        assertEquals("70 °F", "70 °F", fmtFr.format(measureF));
+        MeasureFormat fmtFrFull = MeasureFormat.getInstance(
+                ULocale.FRENCH, FormatWidth.WIDE);
+        assertEquals(
+                "70 pied et 5,3 pouces",
+                "70 pieds et 5,3 pouces",
+                fmtFrFull.formatMeasures(
+                        new Measure(70, MeasureUnit.FOOT),
+                        new Measure(5.3, MeasureUnit.INCH)));
+        assertEquals(
+                "1 pied et 1 pouce",
+                "1 pied et 1 pouce",
+                fmtFrFull.formatMeasures(
+                        new Measure(1, MeasureUnit.FOOT),
+                        new Measure(1, MeasureUnit.INCH)));
+        MeasureFormat fmtFrNarrow = MeasureFormat.getInstance(
+                ULocale.FRENCH, FormatWidth.NARROW);
+        assertEquals(
+                "1′ 1″",
+                "1′ 1″",
+                fmtFrNarrow.formatMeasures(
+                        new Measure(1, MeasureUnit.FOOT),
+                        new Measure(1, MeasureUnit.INCH)));
+        MeasureFormat fmtEn = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
+        assertEquals(
+                "1 inch, 2 feet",
+                "1 inch, 2 feet",
+                fmtEn.formatMeasures(
+                        new Measure(1, MeasureUnit.INCH),
+                        new Measure(2, MeasureUnit.FOOT)));
     }
     
     public void TestFormatPeriodEn() {
@@ -102,12 +141,12 @@ public class MeasureUnitTest extends TestFmwk {
                 {_1h_0m_23s, "1 hr, 0 mins, 23 secs"},
                 {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"}};
         Object[][] narrowData = {
-                {_1m_59_9996s, "1m, 59.9996s"},
+                {_1m_59_9996s, "1m 59.9996s"},
                 {_19m, "19m"},
-                {_1h_23_5s, "1h, 23.5s"},
-                {_1h_23_5m, "1h, 23.5m"},
-                {_1h_0m_23s, "1h, 0m, 23s"},
-                {_2y_5M_3w_4d, "2y, 5m, 3w, 4d"}};
+                {_1h_23_5s, "1h 23.5s"},
+                {_1h_23_5m, "1h 23.5m"},
+                {_1h_0m_23s, "1h 0m 23s"},
+                {_2y_5M_3w_4d, "2y 5m 3w 4d"}};
         
         
         Object[][] numericData = {
@@ -118,10 +157,10 @@ public class MeasureUnitTest extends TestFmwk {
                 {_1h_23_5m, "1:23.5"},
                 {_5h_17m, "5:17"},
                 {_19m_28s, "19:28"},
-                {_2y_5M_3w_4d, "2y, 5m, 3w, 4d"},
+                {_2y_5M_3w_4d, "2y 5m 3w 4d"},
                 {_0h_0m_17s, "0:00:17"},
                 {_6h_56_92m, "6:56.92"},
-                {_3h_5h, "3h, 5h"}};
+                {_3h_5h, "3h 5h"}};
         Object[][] fullDataDe = {
                 {_1m_59_9996s, "1 Minute und 59,9996 Sekunden"},
                 {_19m, "19 Minuten"},
@@ -160,8 +199,6 @@ public class MeasureUnitTest extends TestFmwk {
         verifyFormatPeriod("de NUMERIC", mf, numericDataDe);
     }
     
-
-    
     private void verifyFormatPeriod(String desc, MeasureFormat mf, Object[][] testData) {
         StringBuilder builder = new StringBuilder();
         boolean failure = false;
@@ -174,6 +211,116 @@ public class MeasureUnitTest extends TestFmwk {
         }
         if (failure) {
             errln(builder.toString());
+        }
+    }
+    
+    public void Test10219FractionalPlurals() {
+        double[] values = {1.588, 1.011};
+        String[][] expected = {
+                {"1 minute", "1.5 minutes", "1.58 minutes"},
+                {"1 minute", "1.0 minutes", "1.01 minutes"}
+        };
+        for (int j = 0; j < values.length; j++) {
+            for (int i = 0; i < expected[j].length; i++) {
+                NumberFormat nf = NumberFormat.getNumberInstance(ULocale.ENGLISH);
+                nf.setRoundingMode(BigDecimal.ROUND_DOWN);
+                nf.setMinimumFractionDigits(i);
+                nf.setMaximumFractionDigits(i);
+                MeasureFormat mf = MeasureFormat.getInstance(
+                        ULocale.ENGLISH, FormatWidth.WIDE, nf);
+                assertEquals("Test10219", expected[j][i], mf.format(new Measure(values[j], MeasureUnit.MINUTE)));
+            }
+        }   
+    }
+    
+    public void TestGreek() {
+        String[] locales = {"el_GR", "el"};
+        final MeasureUnit[] units = new MeasureUnit[]{
+                MeasureUnit.SECOND,
+                MeasureUnit.MINUTE,
+                MeasureUnit.HOUR,
+                MeasureUnit.DAY,
+                MeasureUnit.WEEK,
+                MeasureUnit.MONTH,
+                MeasureUnit.YEAR};
+        FormatWidth[] styles = new FormatWidth[] {FormatWidth.WIDE, FormatWidth.SHORT};
+        int[] numbers = new int[] {1, 7};
+        String[] expected = {
+                "1 δευτερόλεπτο",
+                "1 λεπτό",
+                "1 ώρα",
+                "1 ημέρα",
+                "1 εβδομάδα",
+                "1 μήνας",
+                "1 έτος",
+                "1 δευτ.",
+                "1 λεπ.",
+                "1 ώρα",
+                "1 ημέρα",
+                "1 εβδ.",
+                "1 μήν.",
+                "1 έτος",
+                "7 δευτερόλεπτα",
+                "7 λεπτά",
+                "7 ώρες",
+                "7 ημέρες",
+                "7 εβδομάδες",
+                "7 μήνες",
+                "7 έτη",
+                "7 δευτ.",
+                "7 λεπ.",
+                "7 ώρες",
+                "7 ημέρες",
+                "7 εβδ.",
+                "7 μήν.",
+                "7 έτη",
+                "1 δευτερόλεπτο",
+                "1 λεπτό",
+                "1 ώρα",
+                "1 ημέρα",
+                "1 εβδομάδα",
+                "1 μήνας",
+                "1 έτος",
+                "1 δευτ.",
+                "1 λεπ.",
+                "1 ώρα",
+                "1 ημέρα",
+                "1 εβδ.",
+                "1 μήν.",
+                "1 έτος",
+                "7 δευτερόλεπτα",
+                "7 λεπτά",
+                "7 ώρες",
+                "7 ημέρες",
+                "7 εβδομάδες",
+                "7 μήνες",
+                "7 έτη",
+                "7 δευτ.",
+                "7 λεπ.",
+                "7 ώρες",
+                "7 ημέρες",
+                "7 εβδ.",
+                "7 μήν.",
+                "7 έτη"};
+        int counter = 0;
+        String formatted;
+        for ( int locIndex = 0; locIndex < locales.length; ++locIndex ) {
+            for( int numIndex = 0; numIndex < numbers.length; ++numIndex ) {
+                for ( int styleIndex = 0; styleIndex < styles.length; ++styleIndex ) {
+                    for ( int unitIndex = 0; unitIndex < units.length; ++unitIndex ) {
+                        Measure m = new Measure(numbers[numIndex], units[unitIndex]);
+                        MeasureFormat fmt = MeasureFormat.getInstance(new ULocale(locales[locIndex]), styles[styleIndex]);
+                        formatted = fmt.format(m);
+                        assertEquals(
+                                "locale: " + locales[locIndex]
+                                        + ", style: " + styles[styleIndex]
+                                                + ", units: " + units[unitIndex]
+                                                        + ", value: " + numbers[numIndex],
+                                                expected[counter], formatted);
+                        ++counter;
+                    }
+                }
+            }
         }
     }
 
@@ -213,10 +360,10 @@ public class MeasureUnitTest extends TestFmwk {
         Object[][] data = new Object[][] {
                 {ULocale.ENGLISH, FormatWidth.WIDE, "2 miles, 1 foot, 2.3 inches"},
                 {ULocale.ENGLISH, FormatWidth.SHORT, "2 mi, 1 ft, 2.3 in"},
-                {ULocale.ENGLISH, FormatWidth.NARROW, "2mi, 1′, 2.3″"},
+                {ULocale.ENGLISH, FormatWidth.NARROW, "2mi 1′ 2.3″"},
                 {russia, FormatWidth.WIDE, "2 мили, 1 фут и 2,3 дюйма"},
                 {russia, FormatWidth.SHORT, "2 мили 1 фут 2,3 дюйма"},
-                {russia, FormatWidth.NARROW, "2 мили 1 фут 2,3 дюйма"},
+                {russia, FormatWidth.NARROW, "2 мили, 1 фут, 2,3 дюйма"},
         };
         for (Object[] row : data) {
             MeasureFormat mf = MeasureFormat.getInstance(
@@ -410,6 +557,23 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("", ULocale.GERMAN, mf.getLocale(ULocale.VALID_LOCALE));
     }
     
+    public void TestSerial() {
+        checkStreamingEquality(MeasureUnit.CELSIUS);
+        checkStreamingEquality(MeasureFormat.getInstance(ULocale.FRANCE, FormatWidth.NARROW));
+        checkStreamingEquality(Currency.getInstance("EUR"));
+        checkStreamingEquality(MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.SHORT));
+        checkStreamingEquality(MeasureFormat.getCurrencyFormat(ULocale.ITALIAN));
+    }
+    
+    public void TestSerialFormatWidthEnum() {
+        // FormatWidth enum values must map to the same ordinal values for all time in order for
+        // serialization to work.
+        assertEquals("FormatWidth.WIDE", 0, FormatWidth.WIDE.ordinal());
+        assertEquals("FormatWidth.SHORT", 1, FormatWidth.SHORT.ordinal());
+        assertEquals("FormatWidth.NARROW", 2, FormatWidth.NARROW.ordinal());
+        assertEquals("FormatWidth.NUMERIC", 3, FormatWidth.NUMERIC.ordinal());
+    }
+    
     static void generateCXXHConstants() {
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
         TreeMap<String, List<MeasureUnit>> allUnits = new TreeMap<String, List<MeasureUnit>>();
@@ -486,7 +650,7 @@ public class MeasureUnitTest extends TestFmwk {
         System.out.printf("    %d\n", index);
         System.out.println("};");
         System.out.println();
-        System.out.println("static const char *gTypes[] = {");
+        System.out.println("static const char * const gTypes[] = {");
         boolean first = true;
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
             if (!first) {
@@ -498,7 +662,7 @@ public class MeasureUnitTest extends TestFmwk {
         System.out.println();
         System.out.println("};");
         System.out.println();
-        System.out.println("static const char *gSubTypes[] = {");
+        System.out.println("static const char * const gSubTypes[] = {");
         first = true;
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
             for (MeasureUnit unit : entry.getValue()) {
@@ -540,14 +704,21 @@ public class MeasureUnitTest extends TestFmwk {
     }
 
     private static String toCamelCase(String type, String code) {
-        String result = code.replace("-", "");
-        result = result.substring(0, 1).toUpperCase(Locale.ENGLISH) + result.substring(1);
-        if (type.equals("angle")) {
-            if (code.equals("minute") || code.equals("second")) {
-                return "Arc" + result;
+        StringBuilder result = new StringBuilder();
+        boolean caps = true;
+        int len = code.length();
+        for (int i = 0; i < len; i++) {
+            char ch = code.charAt(i);
+            if (ch == '-') {
+                caps = true;
+            } else if (caps) {
+                result.append(Character.toUpperCase(ch));
+                caps = false;
+            } else {
+                result.append(ch);
             }
         }
-        return result;
+        return result.toString();
     }
 
     static void generateConstants() {
@@ -597,23 +768,6 @@ public class MeasureUnitTest extends TestFmwk {
             }
             System.out.println(";");
         }
-    }
-    
-    public void TestSerial() {
-        checkStreamingEquality(MeasureUnit.CELSIUS);
-        checkStreamingEquality(MeasureFormat.getInstance(ULocale.FRANCE, FormatWidth.NARROW));
-        checkStreamingEquality(Currency.getInstance("EUR"));
-        checkStreamingEquality(MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.SHORT));
-        checkStreamingEquality(MeasureFormat.getCurrencyFormat(ULocale.ITALIAN));
-    }
-    
-    public void TestSerialFormatWidthEnum() {
-        // FormatWidth enum values must map to the same ordinal values for all time in order for
-        // serialization to work.
-        assertEquals("FormatWidth.WIDE", 0, FormatWidth.WIDE.ordinal());
-        assertEquals("FormatWidth.SHORT", 1, FormatWidth.SHORT.ordinal());
-        assertEquals("FormatWidth.NARROW", 2, FormatWidth.NARROW.ordinal());
-        assertEquals("FormatWidth.NUMERIC", 3, FormatWidth.NUMERIC.ordinal());
     }
     
     public <T extends Serializable> void checkStreamingEquality(T item) {
