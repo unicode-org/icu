@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2013, International Business Machines
+*   Copyright (C) 2001-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -99,7 +99,7 @@ final class BidiLine {
         }
         /* go backwards across all WS, BN, explicit codes */
         while (start > 0 &&
-                (Bidi.DirPropFlag(Bidi.PureDirProp(dirProps[start - 1])) & Bidi.MASK_WS) != 0) {
+                (Bidi.DirPropFlag(dirProps[start - 1]) & Bidi.MASK_WS) != 0) {
             --start;
         }
 
