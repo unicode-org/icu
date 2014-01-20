@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2002-2013, International Business Machines
+*   Copyright (C) 2002-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -1156,6 +1156,7 @@
 #define unum_formatUFormattable U_ICU_ENTRY_POINT_RENAME(unum_formatUFormattable)
 #define unum_getAttribute U_ICU_ENTRY_POINT_RENAME(unum_getAttribute)
 #define unum_getAvailable U_ICU_ENTRY_POINT_RENAME(unum_getAvailable)
+#define unum_getContext U_ICU_ENTRY_POINT_RENAME(unum_getContext)
 #define unum_getDoubleAttribute U_ICU_ENTRY_POINT_RENAME(unum_getDoubleAttribute)
 #define unum_getLocaleByType U_ICU_ENTRY_POINT_RENAME(unum_getLocaleByType)
 #define unum_getSymbol U_ICU_ENTRY_POINT_RENAME(unum_getSymbol)
@@ -1168,6 +1169,7 @@
 #define unum_parseInt64 U_ICU_ENTRY_POINT_RENAME(unum_parseInt64)
 #define unum_parseToUFormattable U_ICU_ENTRY_POINT_RENAME(unum_parseToUFormattable)
 #define unum_setAttribute U_ICU_ENTRY_POINT_RENAME(unum_setAttribute)
+#define unum_setContext U_ICU_ENTRY_POINT_RENAME(unum_setContext)
 #define unum_setDoubleAttribute U_ICU_ENTRY_POINT_RENAME(unum_setDoubleAttribute)
 #define unum_setSymbol U_ICU_ENTRY_POINT_RENAME(unum_setSymbol)
 #define unum_setTextAttribute U_ICU_ENTRY_POINT_RENAME(unum_setTextAttribute)
@@ -1722,6 +1724,7 @@
 #define utrans_countAvailableIDs U_ICU_ENTRY_POINT_RENAME(utrans_countAvailableIDs)
 #define utrans_getAvailableID U_ICU_ENTRY_POINT_RENAME(utrans_getAvailableID)
 #define utrans_getID U_ICU_ENTRY_POINT_RENAME(utrans_getID)
+#define utrans_getSourceSet U_ICU_ENTRY_POINT_RENAME(utrans_getSourceSet)
 #define utrans_getUnicodeID U_ICU_ENTRY_POINT_RENAME(utrans_getUnicodeID)
 #define utrans_open U_ICU_ENTRY_POINT_RENAME(utrans_open)
 #define utrans_openIDs U_ICU_ENTRY_POINT_RENAME(utrans_openIDs)
@@ -1731,6 +1734,7 @@
 #define utrans_rep_caseContextIterator U_ICU_ENTRY_POINT_RENAME(utrans_rep_caseContextIterator)
 #define utrans_setFilter U_ICU_ENTRY_POINT_RENAME(utrans_setFilter)
 #define utrans_stripRules U_ICU_ENTRY_POINT_RENAME(utrans_stripRules)
+#define utrans_toRules U_ICU_ENTRY_POINT_RENAME(utrans_toRules)
 #define utrans_trans U_ICU_ENTRY_POINT_RENAME(utrans_trans)
 #define utrans_transIncremental U_ICU_ENTRY_POINT_RENAME(utrans_transIncremental)
 #define utrans_transIncrementalUChars U_ICU_ENTRY_POINT_RENAME(utrans_transIncrementalUChars)
