@@ -31,7 +31,7 @@ def run(args=None):
 
     def lusage():
         print "Please make your message match /%s/\n and use an open ticket (One of these: %s)" % (ticket_pattern, str(okstatus))
-        print "See %s/wiki/TracCheck for more details."  % env.project_url
+        print "See %s/wiki/TracCheck for more details."  % env.base_url
 
     try:
         ticket_match = re.compile(ticket_pattern)
