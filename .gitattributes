@@ -5327,6 +5327,7 @@ tools/trac/IcuCodeTools/0.12/icucodetools/templates/nothing.html -text svneol=un
 tools/trac/IcuCodeTools/0.12/icucodetools/templates/review.html -text svneol=unset#text/html
 tools/trac/IcuCodeTools/0.12/icucodetools/ticketmgr.py -text
 tools/trac/IcuCodeTools/0.12/icucodetools/tktlist.py -text
+tools/trac/IcuCodeTools/0.12/icucodetools/traccheck.py -text
 tools/trac/IcuCodeTools/0.12/license.html -text svneol=unset#text/html
 tools/trac/IcuCodeTools/0.12/readme.txt -text
 tools/trac/IcuCodeTools/0.12/setup.cfg -text

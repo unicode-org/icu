@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2007-2012 IBM and Others. All Rights Reserved.
+# Copyright (C) 2007-2014 IBM and Others. All Rights Reserved.
 # All rights reserved.
 #
 
@@ -30,6 +30,9 @@ setup(
             'icucodetools.review = icucodetools.review',
             'icucodetools.tktlist = icucodetools.tktlist',
             'icucodetools.dcut = icucodetools.dcut'
+        ],
+        'console_scripts': [
+            'traccheck = icucodetools.traccheck:run'
         ]
     }
 )
