@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and    *
+* Copyright (C) 1997-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -1365,6 +1365,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
             <src path="${icu4j.core-tests.dir}/src"/>
+            <src path="${icu4j.testall.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
             <include name="com/ibm/icu/dev/test/rbbi/**/*.java"/>
@@ -1422,6 +1423,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
             <src path="${icu4j.core-tests.dir}/src"/>
+            <src path="${icu4j.testall.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
             <include name="com/ibm/icu/dev/test/calendar/**/*.java" />
@@ -1480,6 +1482,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
             <src path="${icu4j.collate-tests.dir}/src"/>
+            <src path="${icu4j.testall.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
             <include name="com/ibm/icu/dev/test/TestAllCollate.java"/>
@@ -1529,6 +1532,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
             <src path="${icu4j.core-tests.dir}/src"/>
+            <src path="${icu4j.testall.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
             <include name="com/ibm/icu/dev/test/compression/**/*.java"/>
@@ -1593,6 +1597,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
             <src path="${icu4j.core-tests.dir}/src"/>
+            <src path="${icu4j.testall.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
             <include name="com/ibm/icu/dev/test/format/**/*.java"/>
@@ -1655,6 +1660,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
             <src path="${icu4j.core-tests.dir}/src"/>
+            <src path="${icu4j.testall.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
             <include name="com/ibm/icu/dev/test/normalizer/**/*.java"/>
@@ -1745,6 +1751,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
             <src path="${icu4j.core-tests.dir}/src"/>
+            <src path="${icu4j.testall.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
             <include name="com/ibm/icu/dev/test/lang/**/*.java"/>
@@ -1816,6 +1823,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
             <src path="${icu4j.translit-tests.dir}/src"/>
+            <src path="${icu4j.testall.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
             <include name="com/ibm/icu/dev/test/TestAllTranslit.java"/>
@@ -1865,6 +1873,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
             <src path="${icu4j.core-tests.dir}/src"/>
+            <src path="${icu4j.testall.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
             <include name="com/ibm/icu/dev/test/stringprep/**/*.java"/>
