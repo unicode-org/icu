@@ -4,6 +4,8 @@ Copyright (C) 2010-2014 IBM Corporation and Others. All Rights Reserved.
 See license.html for the license file. This file is part of the
 ICU project and is under the same license.
 
+Docs:  https://sites.google.com/site/icucodetools/home
+
 Requirements:
 	Trac (0.11 or 0.12+?)
 	Repository
@@ -71,19 +73,4 @@ RESTRICT CHECKINS
  not the 'traccheck.py' source file.
 
 FILING BUGS/FEATURE REQUESTS:
- - Use ICU's trac repository at http://bugs.icu-project.org/trac
- - Use the 'infrastructure' component and clearly identify the 'ICU Code Tools
-   for Trac' when you file the bug.
-
-
-
-
-
-
-
-
-
-
-
-
-
+ - See https://sites.google.com/site/icucodetools/home to file or view bugs.
