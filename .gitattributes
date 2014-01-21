@@ -3931,7 +3931,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/CharacterIteratorWrapper.java svneo
 icu4j/main/classes/core/src/com/ibm/icu/impl/CurrencyData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/DateNumberFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Differ.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/DontCareFieldPosition.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/DontCareFieldPosition.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Grego.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICUBinary.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICUBinaryStream.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4158,7 +4158,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/PluralRules.java svneol=native#text
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralRulesSerialProxy.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralSamples.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/Quantifier.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/QuantityFormatter.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/QuantityFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RBBIDataWrapper.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RBBINode.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RBBIRuleBuilder.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4171,7 +4171,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/RBNFChinesePostProcessor.java svneo
 icu4j/main/classes/core/src/com/ibm/icu/text/RBNFPostProcessor.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RbnfLenientScanner.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RbnfLenientScannerProvider.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/RelativeDateTimeFormatter.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/RelativeDateTimeFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/Replaceable.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ReplaceableContextIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ReplaceableString.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4580,7 +4580,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralRulesTest.java svneo
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RBNFParseTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RbnfRoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RbnfTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RelativeDateTimeFormatterTest.java -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RelativeDateTimeFormatterTest.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/SelectFormatAPITest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/SelectFormatUnitTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -5008,7 +5008,6 @@ icu4j/main/tests/testall/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/testall/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/testall/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/testall/build.properties -text
-icu4j/main/tests/testall/build.xml -text
 icu4j/main/tests/testall/manifest.stub -text
 icu4j/main/tests/testall/src/com/ibm/icu/dev/test/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/.externalToolBuilders/copy-translit-test-data.launch -text
@@ -5084,6 +5083,14 @@ icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/UnicodeSetPerf.java svneol=native
 icu4j/readme.html svneol=native#text/html
 icu4j/samples/build.properties -text
 icu4j/samples/manifest.stub -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/PopulationData.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/iuc/Sample13_Hello.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/iuc/Sample20_Message.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/iuc/Sample30_ResHello.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/iuc/Sample40_PopMsg.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/iuc/Sample50_PopSort.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/iuc/Sample55_PopTranslit.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/iuc/SupplementalUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/es.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/res_index.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/root.res -text
@@ -5091,6 +5098,7 @@ icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/es.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/mt.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/res_index.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/root.res -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/package-info.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/dateintervalformat/DateIntervalFormatSample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/datetimepatterngenerator/DateTimePatternGeneratorSample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MessagePatternDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
