@@ -33,44 +33,44 @@ typedef enum UDateRelativeUnit {
 
     /**
      * Seconds
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_RELATIVE_SECONDS,
 
     /**
      * Minutes
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_RELATIVE_MINUTES,
 
     /**
      * Hours
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_RELATIVE_HOURS,
 
     /**
      * Days
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_RELATIVE_DAYS,
 
     /**
      * Weeks
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_RELATIVE_WEEKS,
 
     /**
      * Months
-     * @draft ICU 53
-     */
-    UDAT_RELATIVE_MONTHS, 
+     * @draft ICU 53
+     */
+    UDAT_RELATIVE_MONTHS,
 
     /**
      * Years
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_RELATIVE_YEARS,
 
     /**
@@ -90,68 +90,68 @@ typedef enum UDateAbsoluteUnit {
     // Saturday.
     /**
      * Sunday
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_SUNDAY,
 
     /**
      * Monday
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_MONDAY,
 
     /**
      * Tuesday
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_TUESDAY,
 
     /**
      * Wednesday
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_WEDNESDAY,
 
     /**
      * Thursday
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_THURSDAY,
 
     /**
      * Friday
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_FRIDAY,
 
     /**
      * Saturday
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_SATURDAY,
 
     /**
      * Day
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_DAY,
 
     /**
      * Week
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_WEEK,
 
     /**
      * Month
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_MONTH,
 
     /**
      * Year
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_ABSOLUTE_YEAR,
 
     /**
@@ -176,38 +176,38 @@ typedef enum UDateDirection {
 
     /**
      * Two before. Not fully supported in every locale.
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_DIRECTION_LAST_2,
 
     /**
      * Last
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_DIRECTION_LAST,
 
     /**
      * This
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_DIRECTION_THIS,
 
     /**
      * Next
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_DIRECTION_NEXT,
 
     /**
      * Two after. Not fully supported in every locale.
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_DIRECTION_NEXT_2,
 
     /**
      * Plain, which means the absence of a qualifier.
-     * @draft ICU 53
-     */
+     * @draft ICU 53
+     */
     UDAT_DIRECTION_PLAIN,
 
     /**
@@ -218,7 +218,7 @@ typedef enum UDateDirection {
 } UDateDirection;
 
 
-U_NAMESPACE_BEGIN 
+U_NAMESPACE_BEGIN
 
 class RelativeDateTimeData;
 class NumberFormat;
@@ -271,7 +271,7 @@ class NumberFormat;
  * fmt.format(UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_SUNDAY, appendTo, status);
  * // Appends "Sunday"
  * fmt.format(UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_SUNDAY, appendTo, status);
- * 
+ *
  * // Appends "yesterday"
  * fmt.format(UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_DAY, appendTo, status);
  * // Appends "today"
@@ -288,7 +288,7 @@ class NumberFormat;
  * (3 secs ago), and relative day periods ("yesterday afternoon"), etc.
  *
  * The RelativeDateTimeFormatter class is not intended for public subclassing.
- * 
+ *
  * @draft ICU 53
  */
 
@@ -310,7 +310,7 @@ public:
 
     /**
      * Create RelativeDateTimeFormatter with given locale and NumberFormat.
-     * 
+     *
      * @param locale the locale
      * @param nfToAdopt Constructed object takes ownership of this pointer.
      *   It is an error for caller to delete this pointer or change its
