@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2013, International Business Machines Corporation and
+ * Copyright (C) 2007-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -51,8 +51,6 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis (Mark Davis) [for fractional support]
  */
 public class PluralRulesTest extends TestFmwk {
-
-    static boolean USE_ALT = System.getProperty("alt_plurals") != null;
 
     PluralRulesFactory factory = PluralRulesFactory.NORMAL;
 
