@@ -186,8 +186,10 @@ typedef enum UDateFormatStyle {
      */
     UDAT_PATTERN = -2,
 
+#ifndef U_HIDE_INTERNAL_API
     /** @internal alias to UDAT_PATTERN */
     UDAT_IGNORE = UDAT_PATTERN
+#endif /* U_HIDE_INTERNAL_API */
 } UDateFormatStyle;
 
 /* Skeletons for dates. */
@@ -835,13 +837,15 @@ U_STABLE void U_EXPORT2
 udat_close(UDateFormat* format);
 
 
+/* Dont hide UDateFormatBooleanAttribute type with #ifndef U_HIDE_DRAFT_API, needed by virtual methods */
 /**
  * DateFormat boolean attributes
  * 
  * @draft ICU 53
  */
 typedef enum UDateFormatBooleanAttribute {
-    /**
+ #ifndef U_HIDE_DRAFT_API
+   /**
      * indicates whether whitespace is allowed. Includes trailing dot tolerance.
      * @draft ICU 53
      */
@@ -862,9 +866,10 @@ typedef enum UDateFormatBooleanAttribute {
      * @draft ICU 53
      */
     UDAT_BOOLEAN_ATTRIBUTE_COUNT
+#endif /* U_HIDE_DRAFT_API */
 } UDateFormatBooleanAttribute;
 
-#ifndef U_HIDE_INTERNAL_API
+#ifndef U_HIDE_DRAFT_API
 /**
  * Get a boolean attribute associated with a UDateFormat.
  * An example would be a true value for a key of UDAT_PARSE_ALLOW_WHITESPACE indicating allowing whitespace leniency.
@@ -875,7 +880,7 @@ typedef enum UDateFormatBooleanAttribute {
  * @return The value of attr.
  * @draft ICU 53
  */
-U_INTERNAL UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 udat_getBooleanAttribute(const UDateFormat* fmt, UDateFormatBooleanAttribute attr, UErrorCode* status);
 
 /**
@@ -888,10 +893,10 @@ udat_getBooleanAttribute(const UDateFormat* fmt, UDateFormatBooleanAttribute att
  * @param status A pointer to an UErrorCode to receive any errors
  * @draft ICU 53
  */
-U_INTERNAL void U_EXPORT2
+U_DRAFT void U_EXPORT2
 udat_setBooleanAttribute(UDateFormat *fmt, UDateFormatBooleanAttribute attr, UBool, UErrorCode* status);
 
-#endif  /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_DRAFT_API */
 
 
 
