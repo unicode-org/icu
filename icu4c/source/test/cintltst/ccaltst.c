@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2013, International Business Machines
+ * Copyright (c) 1997-2014, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *
@@ -259,7 +259,7 @@ static void TestCalendar()
     resultlength = ucal_getCanonicalTimeZoneID(PST, -1,
         canonicalID, sizeof(canonicalID)/sizeof(UChar), &isSystemID, &status);
     if (U_FAILURE(status)) {
-        log_err("FAIL: error in ucal_getCanonicalTimeZoneID : %s\n", u_errorName(status));
+        log_data_err("FAIL: error in ucal_getCanonicalTimeZoneID : %s\n", u_errorName(status));
     } else {
         if (u_strcmp(AMERICA_LOS_ANGELES, canonicalID) != 0) {
             log_data_err("FAIL: ucal_getCanonicalTimeZoneID(%s) returned %s : expected - %s (Are you missing data?)\n",

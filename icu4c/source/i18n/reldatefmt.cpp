@@ -691,7 +691,9 @@ RelativeDateTimeFormatter& RelativeDateTimeFormatter::operator=(
 }
 
 RelativeDateTimeFormatter::~RelativeDateTimeFormatter() {
-    ptr->removeRef();
+    if (ptr != NULL) {
+        ptr->removeRef();
+    }
 }
 
 const NumberFormat& RelativeDateTimeFormatter::getNumberFormat() const {

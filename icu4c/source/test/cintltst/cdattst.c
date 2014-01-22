@@ -1476,7 +1476,7 @@ static void TestContext(void) {
             }
             udatpg_close(udtpg);
         } else {
-            log_err("FAIL: udatpg_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
+            log_data_err("FAIL: udatpg_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
         }
     }
     for (textRelContextItemPtr = textContextRelativeItems; textRelContextItemPtr->locale != NULL; ++textRelContextItemPtr) {
