@@ -7326,6 +7326,11 @@ void NumberFormatTest::Test10468ApplyPattern() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat fmt("'I''ll'*a###.##", status);
 
+    if (U_FAILURE(status)) {
+        errcheckln(status, "DecimalFormat constructor failed - %s", u_errorName(status));
+        return;
+    }
+
     if (fmt.getPadCharacterString() != UnicodeString("a")) {
         errln("Padding character should be 'a'.");
         return;
@@ -7344,6 +7349,10 @@ void NumberFormatTest::Test10468ApplyPattern() {
 void NumberFormatTest::TestRoundingScientific10542() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat format("0.00E0", status);
+    if (U_FAILURE(status)) {
+        errcheckln(status, "DecimalFormat constructor failed - %s", u_errorName(status));
+        return;
+    }
         
     DecimalFormat::ERoundingMode roundingModes[] = {
             DecimalFormat::kRoundCeiling,

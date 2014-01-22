@@ -1961,10 +1961,10 @@ void TimeZoneTest::TestCanonicalIDAPI() {
     canonicalID.setToBogus();
     ec = U_ZERO_ERROR;
     pResult = &TimeZone::getCanonicalID(berlin, canonicalID, ec);
-    assertSuccess("TimeZone::getCanonicalID(bogus dest) should succeed", ec);
+    assertSuccess("TimeZone::getCanonicalID(bogus dest) should succeed", ec, TRUE);
     assertTrue("TimeZone::getCanonicalID(bogus dest) should return the dest string", pResult == &canonicalID);
     assertFalse("TimeZone::getCanonicalID(bogus dest) should un-bogus the dest string", canonicalID.isBogus());
-    assertEquals("TimeZone::getCanonicalID(bogus dest) unexpected result", canonicalID, berlin);
+    assertEquals("TimeZone::getCanonicalID(bogus dest) unexpected result", canonicalID, berlin, TRUE);
 }
 
 void TimeZoneTest::TestCanonicalID() {

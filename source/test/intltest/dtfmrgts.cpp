@@ -1534,17 +1534,22 @@ void DateFormatRegressionTest::TestT10334(void) {
     UnicodeString text("--mon-02-march-2011");
     SimpleDateFormat format(pattern, status);
 
+    if (U_FAILURE(status)) {
+        dataerrln("Fail creating SimpleDateFormat object - %s", u_errorName(status));
+        return;
+    }
+
     format.setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, FALSE, status);
     format.parse(text, status);
     if (!U_FAILURE(status)) {
-        errln("parse partial match did NOT fail in strict mode", u_errorName(status));
+        errln("parse partial match did NOT fail in strict mode - %s", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     format.setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, TRUE, status);
     format.parse(text, status);
     if (U_FAILURE(status)) {
-        errln("parse partial match failure in lenient mode", u_errorName(status));
+        errln("parse partial match failure in lenient mode - %s", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
