@@ -17,12 +17,11 @@
 
 #include "unicode/utypes.h"
 
-#ifndef U_HIDE_INTERNAL_API
-
 #if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
+/* Can't use #ifndef U_HIDE_INTERNAL_API for the entire EnumSet class, needed in .h file declarations */
 /**
  * enum bitset for boolean fields. Similar to Java EnumSet<>. 
  * Needs to range check. Used for private instance variables.
@@ -34,6 +33,7 @@ public:
     inline EnumSet() : fBools(0) {}
     inline EnumSet(const EnumSet<T,minValue,limitValue>& other) : fBools(other.fBools) {}
     inline ~EnumSet() {}
+#ifndef U_HIDE_INTERNAL_API
     inline void clear() { fBools=0; }
     inline void add(T toAdd) { set(toAdd, 1); }
     inline void remove(T toRemove) { set(toRemove, 0); }
@@ -50,6 +50,7 @@ public:
     inline uint32_t getAll() const {
         return fBools; 
     }
+#endif /* U_HIDE_INTERNAL_API */
 
 private:
     inline uint32_t flag(T toCheck) const { return (1<<(toCheck-minValue)); }
@@ -60,5 +61,4 @@ private:
 U_NAMESPACE_END
 
 #endif /* U_SHOW_CPLUSPLUS_API */
-#endif /* U_HIDE_INTERNAL_API */
 #endif /* ENUMSET_H */
