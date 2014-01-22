@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2012, International Business Machines
+*   Copyright (C) 2012,2014 International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -17,13 +17,15 @@
 
 #include "unicode/utypes.h"
 
+#ifndef U_HIDE_INTERNAL_API
+
 #if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
 /**
  * enum bitset for boolean fields. Similar to Java EnumSet<>. 
- * Needs to range check.
+ * Needs to range check. Used for private instance variables.
  * @internal
  */
 template<typename T, uint32_t minValue, uint32_t limitValue>
@@ -58,4 +60,5 @@ private:
 U_NAMESPACE_END
 
 #endif /* U_SHOW_CPLUSPLUS_API */
+#endif /* U_HIDE_INTERNAL_API */
 #endif /* ENUMSET_H */

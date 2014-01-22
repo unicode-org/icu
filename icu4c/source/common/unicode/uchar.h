@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2013, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -2740,7 +2740,7 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
  *
  * @deprecated ICU 49
  */
-U_STABLE int32_t U_EXPORT2
+U_DEPRECATED int32_t U_EXPORT2
 u_getISOComment(UChar32 c,
                 char *dest, int32_t destCapacity,
                 UErrorCode *pErrorCode);

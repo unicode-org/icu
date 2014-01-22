@@ -806,6 +806,7 @@ U_STABLE int32_t U_EXPORT2
 unum_countAvailable(void);
 
 #if UCONFIG_HAVE_PARSEALLINPUT
+#ifndef U_HIDE_INTERNAL_API
 /**
  * @internal
  */
@@ -817,6 +818,7 @@ typedef enum UNumberFormatAttributeValue {
   /** @internal */
   UNUM_MAYBE = 2
 } UNumberFormatAttributeValue;
+#endif /* U_HIDE_INTERNAL_API */
 #endif
 
 /** The possible UNumberFormat numeric attributes @stable ICU 2.0 */

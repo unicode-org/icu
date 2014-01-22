@@ -1,6 +1,6 @@
 /*  
 ********************************************************************************
-*   Copyright (C) 1997-2013, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -505,6 +505,7 @@ public:
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Constants for capitalization context usage types.
      * @internal
@@ -527,6 +528,7 @@ public:
         kCapContextUsageMetazoneShort,
         kCapContextUsageTypeCount
     };
+#endif /* U_HIDE_INTERNAL_API */
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.

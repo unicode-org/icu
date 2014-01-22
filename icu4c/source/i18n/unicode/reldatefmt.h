@@ -23,6 +23,7 @@
 
 #include "unicode/locid.h"
 
+#ifndef U_HIDE_DRAFT_API
 
 /**
  * Represents the unit for formatting a relative date. e.g "in 5 days"
@@ -411,6 +412,8 @@ private:
 };
 
 U_NAMESPACE_END
+
+#endif /* U_HIDE_DRAFT_API */
 
 #endif /* !UCONFIG_NO_FORMATTING */
 #endif
