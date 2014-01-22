@@ -838,35 +838,36 @@ udat_close(UDateFormat* format);
 
 
 /* Dont hide UDateFormatBooleanAttribute type with #ifndef U_HIDE_DRAFT_API, needed by virtual methods */
+/* Also don't hide UDAT_BOOLEAN_ATTRIBUTE_COUNT, needed by template class EnumSet<UDateFormatBooleanAttribute,...> */
 /**
  * DateFormat boolean attributes
  * 
  * @draft ICU 53
  */
 typedef enum UDateFormatBooleanAttribute {
- #ifndef U_HIDE_DRAFT_API
+#ifndef U_HIDE_DRAFT_API
    /**
      * indicates whether whitespace is allowed. Includes trailing dot tolerance.
      * @draft ICU 53
      */
-    UDAT_PARSE_ALLOW_WHITESPACE,
+    UDAT_PARSE_ALLOW_WHITESPACE = 0,
     /**
      * indicates tolerance of numeric data when String data may be assumed. eg: UDAT_YEAR_NAME_FIELD,
      * 		UDAT_STANDALONE_MONTH_FIELD, UDAT_DAY_OF_WEEK_FIELD
      * @draft ICU 53
      */
-    UDAT_PARSE_ALLOW_NUMERIC,
+    UDAT_PARSE_ALLOW_NUMERIC = 1,
     /**
      * indicates tolerance of a partial literal match
      * @draft ICU 53
      */
-    UDAT_PARSE_PARTIAL_MATCH,
+    UDAT_PARSE_PARTIAL_MATCH = 2,
+#endif /* U_HIDE_DRAFT_API */
     /**
      * count boolean date format constants
      * @draft ICU 53
      */
-    UDAT_BOOLEAN_ATTRIBUTE_COUNT
-#endif /* U_HIDE_DRAFT_API */
+    UDAT_BOOLEAN_ATTRIBUTE_COUNT = 3
 } UDateFormatBooleanAttribute;
 
 #ifndef U_HIDE_DRAFT_API

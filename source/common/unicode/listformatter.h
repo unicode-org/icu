@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2012-2013, International Business Machines
+*   Copyright (C) 2012-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,7 +29,7 @@ U_NAMESPACE_BEGIN
 /** @internal */
 class Hashtable;
 
-#ifndef U_HIDE_INTERNAL_API
+/* The following can't be #ifndef U_HIDE_INTERNAL_API, needed for other .h file declarations */
 /** @internal */
 struct ListFormatData : public UMemory {
     UnicodeString twoPattern;
@@ -40,7 +40,6 @@ struct ListFormatData : public UMemory {
   ListFormatData(const UnicodeString& two, const UnicodeString& start, const UnicodeString& middle, const UnicodeString& end) :
       twoPattern(two), startPattern(start), middlePattern(middle), endPattern(end) {}
 };
-#endif  /* U_HIDE_INTERNAL_API */
 
 
 /**
