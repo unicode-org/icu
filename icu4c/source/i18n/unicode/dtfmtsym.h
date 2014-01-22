@@ -505,14 +505,16 @@ public:
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
-#ifndef U_HIDE_INTERNAL_API
+    /* The following type and kCapContextUsageTypeCount cannot be #ifndef U_HIDE_INTERNAL_API,
+       they are needed for .h file declarations. */ 
     /**
      * Constants for capitalization context usage types.
      * @internal
      */
     enum ECapitalizationContextUsageType
     {
-        kCapContextUsageOther,
+#ifndef U_HIDE_INTERNAL_API
+        kCapContextUsageOther = 0,
         kCapContextUsageMonthFormat,     /* except narrow */
         kCapContextUsageMonthStandalone, /* except narrow */
         kCapContextUsageMonthNarrow,
@@ -526,9 +528,9 @@ public:
         kCapContextUsageZoneShort,
         kCapContextUsageMetazoneLong,
         kCapContextUsageMetazoneShort,
-        kCapContextUsageTypeCount
-    };
 #endif /* U_HIDE_INTERNAL_API */
+        kCapContextUsageTypeCount = 14
+    };
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.

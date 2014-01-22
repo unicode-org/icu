@@ -806,19 +806,20 @@ U_STABLE int32_t U_EXPORT2
 unum_countAvailable(void);
 
 #if UCONFIG_HAVE_PARSEALLINPUT
-#ifndef U_HIDE_INTERNAL_API
+/* The UNumberFormatAttributeValue type cannot be #ifndef U_HIDE_INTERNAL_API, needed for .h variable declaration */
 /**
  * @internal
  */
 typedef enum UNumberFormatAttributeValue {
+#ifndef U_HIDE_INTERNAL_API
   /** @internal */
   UNUM_NO = 0,
   /** @internal */
   UNUM_YES = 1,
   /** @internal */
   UNUM_MAYBE = 2
-} UNumberFormatAttributeValue;
 #endif /* U_HIDE_INTERNAL_API */
+} UNumberFormatAttributeValue;
 #endif
 
 /** The possible UNumberFormat numeric attributes @stable ICU 2.0 */
@@ -892,12 +893,13 @@ typedef enum UNumberFormatAttribute {
   /** Count of "regular" numeric attributes.
    * @internal */
   UNUM_NUMERIC_ATTRIBUTE_COUNT = UNUM_LENIENT_PARSE + 3,
+#endif  /* U_HIDE_INTERNAL_API */
 
+  /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
   /** One below the first bitfield-boolean item.
    * All items after this one are stored in boolean form.
    * @internal */
   UNUM_MAX_NONBOOLEAN_ATTRIBUTE = 0x0FFF,
-#endif  /* U_HIDE_INTERNAL_API */
 
   /** If 1, specifies that if setting the "max integer digits" attribute would truncate a value, set an error status rather than silently truncating.
    * For example,  formatting the value 1234 with 4 max int digits would succeed, but formatting 12345 would fail. There is no effect on parsing.
@@ -913,11 +915,10 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_PARSE_NO_EXPONENT,
 
-#ifndef U_HIDE_INTERNAL_API
+  /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
   /** Limit of boolean attributes.
    * @internal */
   UNUM_LIMIT_BOOLEAN_ATTRIBUTE
-#endif  /* U_HIDE_INTERNAL_API */
 } UNumberFormatAttribute;
 
 /**
