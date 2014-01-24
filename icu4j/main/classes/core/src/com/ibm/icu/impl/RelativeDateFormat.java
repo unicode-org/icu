@@ -54,8 +54,11 @@ public class RelativeDateFormat extends DateFormat {
      * @param timeStyle The time style for the date and time.
      * @param dateStyle The date style for the date and time.
      * @param locale The locale for the date.
+     * @param cal The calendar to be used
      */
-    public RelativeDateFormat(int timeStyle, int dateStyle, ULocale locale) {
+    public RelativeDateFormat(int timeStyle, int dateStyle, ULocale locale, Calendar cal) {
+        calendar = cal;
+
         fLocale = locale;
         fTimeStyle = timeStyle;
         fDateStyle = dateStyle;
@@ -92,7 +95,7 @@ public class RelativeDateFormat extends DateFormat {
         loadDates();
         initializeCombinedFormat(calendar, fLocale);
     }
-    
+
     /**
      * serial version (generated)
      */
