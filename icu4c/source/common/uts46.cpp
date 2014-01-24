@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2012, International Business Machines
+*   Copyright (C) 2010-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  uts46.cpp
@@ -382,8 +382,7 @@ UTS46::process(const UnicodeString &src,
                     break;
                 }
                 if(toASCII) {
-                    // Permit an empty label at the end but not elsewhere.
-                    if(i==labelStart && i<(srcLength-1)) {
+                    if(i==labelStart) {
                         info.labelErrors|=UIDNA_ERROR_EMPTY_LABEL;
                     } else if((i-labelStart)>63) {
                         info.labelErrors|=UIDNA_ERROR_LABEL_TOO_LONG;
@@ -484,8 +483,7 @@ UTS46::processUTF8(const StringPiece &src,
                         break;  // Replacing with U+FFFD can be complicated for toASCII.
                     }
                     if(toASCII) {
-                        // Permit an empty label at the end but not elsewhere.
-                        if(i==labelStart && i<(srcLength-1)) {
+                        if(i==labelStart) {
                             info.labelErrors|=UIDNA_ERROR_EMPTY_LABEL;
                         } else if((i-labelStart)>63) {
                             info.labelErrors|=UIDNA_ERROR_LABEL_TOO_LONG;
