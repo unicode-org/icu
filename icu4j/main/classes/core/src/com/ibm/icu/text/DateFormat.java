@@ -1165,7 +1165,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getTimeInstance()
     {
-        return get(-1, DEFAULT, ULocale.getDefault(Category.FORMAT));
+        return get(-1, DEFAULT, ULocale.getDefault(Category.FORMAT), null);
     }
 
     /**
@@ -1180,7 +1180,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getTimeInstance(int style)
     {
-        return get(-1, style, ULocale.getDefault(Category.FORMAT));
+        return get(-1, style, ULocale.getDefault(Category.FORMAT), null);
     }
 
     /**
@@ -1196,7 +1196,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getTimeInstance(int style,
                                                  Locale aLocale)
     {
-        return get(-1, style, ULocale.forLocale(aLocale));
+        return get(-1, style, ULocale.forLocale(aLocale), null);
     }
 
     /**
@@ -1212,7 +1212,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getTimeInstance(int style,
                                                  ULocale locale)
     {
-        return get(-1, style, locale);
+        return get(-1, style, locale, null);
     }
 
     /**
@@ -1224,7 +1224,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getDateInstance()
     {
-        return get(DEFAULT, -1, ULocale.getDefault(Category.FORMAT));
+        return get(DEFAULT, -1, ULocale.getDefault(Category.FORMAT), null);
     }
 
     /**
@@ -1242,7 +1242,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getDateInstance(int style)
     {
-        return get(style, -1, ULocale.getDefault(Category.FORMAT));
+        return get(style, -1, ULocale.getDefault(Category.FORMAT), null);
     }
 
     /**
@@ -1261,7 +1261,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getDateInstance(int style,
                                                  Locale aLocale)
     {
-        return get(style, -1, ULocale.forLocale(aLocale));
+        return get(style, -1, ULocale.forLocale(aLocale), null);
     }
 
     /**
@@ -1280,7 +1280,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getDateInstance(int style,
                                                  ULocale locale)
     {
-        return get(style, -1, locale);
+        return get(style, -1, locale, null);
     }
 
     /**
@@ -1292,7 +1292,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getDateTimeInstance()
     {
-        return get(DEFAULT, DEFAULT, ULocale.getDefault(Category.FORMAT));
+        return get(DEFAULT, DEFAULT, ULocale.getDefault(Category.FORMAT), null);
     }
 
     /**
@@ -1314,7 +1314,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getDateTimeInstance(int dateStyle,
                                                        int timeStyle)
     {
-        return get(dateStyle, timeStyle, ULocale.getDefault(Category.FORMAT));
+        return get(dateStyle, timeStyle, ULocale.getDefault(Category.FORMAT), null);
     }
 
     /**
@@ -1334,7 +1334,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getDateTimeInstance(
         int dateStyle, int timeStyle, Locale aLocale)
     {
-        return get(dateStyle, timeStyle, ULocale.forLocale(aLocale));
+        return get(dateStyle, timeStyle, ULocale.forLocale(aLocale), null);
     }
 
     /**
@@ -1354,7 +1354,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getDateTimeInstance(
         int dateStyle, int timeStyle, ULocale locale)
     {
-        return get(dateStyle, timeStyle, locale);
+        return get(dateStyle, timeStyle, locale, null);
     }
 
     /**
@@ -1625,22 +1625,27 @@ public abstract class DateFormat extends UFormat {
      * @param timeStyle a value from 0 to 3 indicating the time format,
      * or -1 to indicate no time
      * @param loc the locale for the format
+     * @param cal the calendar to be used, or null
      */
-    private static DateFormat get(int dateStyle, int timeStyle, ULocale loc) {
-        if((timeStyle != -1 && (timeStyle & RELATIVE)>0) ||
-           (dateStyle != -1 && (dateStyle & RELATIVE)>0)) {
-            RelativeDateFormat r = new RelativeDateFormat(timeStyle, dateStyle /* offset? */, loc);
+    private static DateFormat get(int dateStyle, int timeStyle, ULocale loc, Calendar cal) {
+        if((timeStyle != DateFormat.NONE && (timeStyle & RELATIVE)>0) ||
+           (dateStyle != DateFormat.NONE && (dateStyle & RELATIVE)>0)) {
+            RelativeDateFormat r = new RelativeDateFormat(timeStyle, dateStyle /* offset? */, loc, cal);
             return r;
         }
 
-        if (timeStyle < -1 || timeStyle > 3) {
+        if (timeStyle < DateFormat.NONE || timeStyle > DateFormat.SHORT) {
             throw new IllegalArgumentException("Illegal time style " + timeStyle);
         }
-        if (dateStyle < -1 || dateStyle > 3) {
+        if (dateStyle < DateFormat.NONE || dateStyle > DateFormat.SHORT) {
             throw new IllegalArgumentException("Illegal date style " + dateStyle);
         }
+
+        if (cal == null) {
+            cal = Calendar.getInstance(loc);
+        }
+
         try {
-            Calendar cal = Calendar.getInstance(loc);
             DateFormat result = cal.getDateTimeFormat(dateStyle, timeStyle, loc);
             result.setLocale(cal.getLocale(ULocale.VALID_LOCALE),
                  cal.getLocale(ULocale.ACTUAL_LOCALE));
@@ -1773,7 +1778,7 @@ public abstract class DateFormat extends UFormat {
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
                                                  int timeStyle, Locale locale)
     {
-        return cal.getDateTimeFormat(dateStyle, timeStyle, ULocale.forLocale(locale));
+        return getDateTimeInstance(dateStyle, timeStyle, ULocale.forLocale(locale));
     }
 
     /**
@@ -1801,7 +1806,10 @@ public abstract class DateFormat extends UFormat {
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
                                                  int timeStyle, ULocale locale)
     {
-        return cal.getDateTimeFormat(dateStyle, timeStyle, locale);
+        if (cal == null) {
+            throw new IllegalArgumentException("Calendar must be supplied");
+        }
+        return get(dateStyle, timeStyle, locale, cal);
     }
 
     /**

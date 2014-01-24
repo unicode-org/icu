@@ -4391,5 +4391,49 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
+    // A regression test case for ticket#10632.
+    // Make sure RELATIVE style works for getInstance overloads taking
+    // Calendar instance.
+    public void Test10632() {
+        Date[] testDates = new Date[3];
+        Calendar cal = Calendar.getInstance();
+
+        // today
+        testDates[0] = cal.getTime();
+
+        // tomorrow
+        cal.add(Calendar.DATE, 1);
+        testDates[1] = cal.getTime();
+
+        // yesterday
+        cal.add(Calendar.DATE, -2);
+        testDates[2] = cal.getTime();
+
+
+        // Relative styles for testing
+        int[] dateStylesList = {
+                DateFormat.RELATIVE_FULL,
+                DateFormat.RELATIVE_LONG,
+                DateFormat.RELATIVE_MEDIUM,
+                DateFormat.RELATIVE_SHORT
+        };
+
+        Calendar fmtCal = DateFormat.getInstance().getCalendar();
+
+        for (int i = 0; i < dateStylesList.length; i++) {
+            DateFormat fmt0 = DateFormat.getDateTimeInstance(dateStylesList[i], DateFormat.DEFAULT);
+            DateFormat fmt1 = DateFormat.getDateTimeInstance(fmtCal, dateStylesList[i], DateFormat.DEFAULT);
+
+            for (int j = 0; j < testDates.length; j++) {
+                String s0 = fmt0.format(testDates[j]);
+                String s1 = fmt1.format(testDates[j]);
+
+                if (!s0.equals(s1)) {
+                    errln("FAIL: Different results returned by two equivalent relative formatters: s0="
+                            + s0 + ", s1=" + s1);
+                }
+            }
+        }
+    }
 }

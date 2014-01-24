@@ -3461,6 +3461,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     static private DateFormat formatHelper(Calendar cal, ULocale loc, int dateStyle,
                                            int timeStyle) {
+        if (timeStyle < DateFormat.NONE || timeStyle > DateFormat.SHORT) {
+            throw new IllegalArgumentException("Illegal time style " + timeStyle);
+        }
+        if (dateStyle < DateFormat.NONE || dateStyle > DateFormat.SHORT) {
+            throw new IllegalArgumentException("Illegal date style " + dateStyle);
+        }
+
         PatternData patternData = PatternData.make(cal, loc);
         String override = null;
 
