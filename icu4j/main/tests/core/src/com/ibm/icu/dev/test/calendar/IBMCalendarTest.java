@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2013, International Business Machines Corporation and
+ * Copyright (C) 2000-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1642,4 +1642,43 @@ public class IBMCalendarTest extends CalendarTest {
         }
     }
 
+    public void TestWeekData() {
+        // Each line contains two locales using the same set of week rule data.
+        final String LOCALE_PAIRS[] = {
+            "en",       "en_US",
+            "de",       "de_DE",
+            "de_DE",    "en_DE",
+            "en_GB",    "und_GB",
+            "ar_EG",    "en_EG",
+            "ar_SA",    "fr_SA",
+        };
+
+        for (int i = 0; i < LOCALE_PAIRS.length; i += 2) {
+            Calendar cal1 = Calendar.getInstance(new ULocale(LOCALE_PAIRS[i]));
+            Calendar cal2 = Calendar.getInstance(new ULocale(LOCALE_PAIRS[i + 1]));
+
+            // First day of week
+            int dow1 = cal1.getFirstDayOfWeek();
+            int dow2 = cal2.getFirstDayOfWeek();
+            if (dow1 != dow2) {
+                errln("getFirstDayOfWeek: " + LOCALE_PAIRS[i] + "->" + dow1 + ", " + LOCALE_PAIRS[i + 1] + "->" + dow2);
+            }
+
+            // Minimum days in first week
+            int minDays1 = cal1.getMinimalDaysInFirstWeek();
+            int minDays2 = cal2.getMinimalDaysInFirstWeek();
+            if (minDays1 != minDays2) {
+                errln("getMinimalDaysInFirstWeek: " + LOCALE_PAIRS[i] + "->" + minDays1 + ", " + LOCALE_PAIRS[i + 1] + "->" + minDays2);
+            }
+
+            // Weekdays and Weekends
+            for (int d = Calendar.SUNDAY; d <= Calendar.SATURDAY; d++) {
+                int wdt1 = cal1.getDayOfWeekType(d);
+                int wdt2 = cal2.getDayOfWeekType(d);
+                if (wdt1 != wdt2) {
+                    errln("getDayOfWeekType(" + d + "): " + LOCALE_PAIRS[i] + "->" + wdt1 + ", " + LOCALE_PAIRS[i + 1] + "->" + wdt2);
+                }
+            }
+        }
+    }
 }

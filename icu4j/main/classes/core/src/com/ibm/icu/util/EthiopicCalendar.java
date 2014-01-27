@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2012, International Business Machines Corporation and
+ * Copyright (C) 2005-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -9,6 +9,9 @@ package com.ibm.icu.util;
 
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.impl.CalendarUtil;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * Implement the Ethiopic calendar system.
@@ -150,7 +153,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.4
      */
     public EthiopicCalendar() {
-        super();
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -161,7 +164,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.4
      */
     public EthiopicCalendar(TimeZone zone) {
-        super(zone);
+        this(zone, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -172,7 +175,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.4
      */
     public EthiopicCalendar(Locale aLocale) {
-        super(aLocale);
+        this(TimeZone.getDefault(), aLocale);
     }
 
     /**
@@ -183,7 +186,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.4
      */
     public EthiopicCalendar(ULocale locale) {
-        super(locale);
+        this(TimeZone.getDefault(), locale);
     }
 
     /**
@@ -195,7 +198,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.4
      */
     public EthiopicCalendar(TimeZone zone, Locale aLocale) {
-        super(zone, aLocale);
+        this(zone, ULocale.forLocale(aLocale));
     }
     
     /**
@@ -208,8 +211,9 @@ public final class EthiopicCalendar extends CECalendar
      */
     public EthiopicCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);
+        setCalcTypeForLocale(locale);
     }
-    
+
     /**
      * Constructs a <code>EthiopicCalendar</code> with the given date set
      * in the default time zone with the default locale.
@@ -383,6 +387,18 @@ public final class EthiopicCalendar extends CECalendar
     // removed in future.  2008-03-21 yoshito
     public static int EthiopicToJD(long year, int month, int date) {
         return ceToJD(year, month, date, JD_EPOCH_OFFSET_AMETE_MIHRET);
+    }
+
+    /**
+     * set type based on locale
+     */
+    private void setCalcTypeForLocale(ULocale locale) {
+        String localeCalType = CalendarUtil.getCalendarType(locale);
+        if("ethiopic-amete-alem".equals(localeCalType)) { 
+            setAmeteAlemEra(true);
+        } else {
+            setAmeteAlemEra(false); // default - Amete Mihret
+        }
     }
 }
 
