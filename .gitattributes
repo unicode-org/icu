@@ -4200,7 +4200,6 @@ icu4j/main/classes/core/src/com/ibm/icu/util/BytesTrie.java svneol=native#text/p
 icu4j/main/classes/core/src/com/ibm/icu/util/BytesTrieBuilder.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/CECalendar.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/Calendar.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/util/CalendarServiceShim.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/CaseInsensitiveString.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/CharsTrie.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/CharsTrieBuilder.java svneol=native#text/plain%3Bcharset%3Dutf-8
