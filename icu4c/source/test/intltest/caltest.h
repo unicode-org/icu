@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2013, International Business Machines Corporation
+ * Copyright (c) 1997-2014, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -248,6 +248,7 @@ public: // package
     void setAndTestCalendar(Calendar* cal, int32_t initMonth, int32_t initDay, int32_t initYear, UErrorCode& status);
     void setAndTestWholeYear(Calendar* cal, int32_t startYear, UErrorCode& status);
 
+    void TestWeekData(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

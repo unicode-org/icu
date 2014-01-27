@@ -305,6 +305,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             TestHebrewMonthValidation();
           }
           break;
+        case 34:
+          name = "TestWeekData";
+          if(exec) {
+            logln("TestWeekData---"); logln("");
+            TestWeekData();
+          }
+          break;
         default: name = ""; break;
     }
 }
@@ -2917,6 +2924,48 @@ void CalendarTest::TestHebrewMonthValidation() {
         logln("Info: U_ILLEGAL_ARGUMENT_ERROR, because 5777 Adar I 1 is not a valid date.");
     } else {
         errln("Fail: U_ILLEGAL_ARGUMENT_ERROR should be set for input date 5777 Adar I 1.");
+    }
+}
+
+void CalendarTest::TestWeekData() {
+    // Each line contains two locales using the same set of week rule data.
+    const char* LOCALE_PAIRS[] = {
+        "en",       "en_US",
+        "de",       "de_DE",
+        "de_DE",    "en_DE",
+        "en_GB",    "und_GB",
+        "ar_EG",    "en_EG",
+        "ar_SA",    "fr_SA",
+        0
+    };
+
+    UErrorCode status;
+
+    for (int32_t i = 0; LOCALE_PAIRS[i] != 0; i += 2) {
+        status = U_ZERO_ERROR;
+        LocalPointer<Calendar>  cal1(Calendar::createInstance(LOCALE_PAIRS[i], status));
+        LocalPointer<Calendar>  cal2(Calendar::createInstance(LOCALE_PAIRS[i + 1], status));
+        TEST_CHECK_STATUS;
+
+        // First day of week
+        UCalendarDaysOfWeek dow1 = cal1->getFirstDayOfWeek(status);
+        UCalendarDaysOfWeek dow2 = cal2->getFirstDayOfWeek(status);
+        TEST_CHECK_STATUS;
+        TEST_ASSERT(dow1 == dow2);
+
+        // Minimum days in first week
+        uint8_t minDays1 = cal1->getMinimalDaysInFirstWeek();
+        uint8_t minDays2 = cal2->getMinimalDaysInFirstWeek();
+        TEST_ASSERT(minDays1 == minDays2);
+
+        // Weekdays and Weekends
+        for (int32_t d = UCAL_SUNDAY; d <= UCAL_SATURDAY; d++) {
+            status = U_ZERO_ERROR;
+            UCalendarWeekdayType wdt1 = cal1->getDayOfWeekType((UCalendarDaysOfWeek)d, status);
+            UCalendarWeekdayType wdt2 = cal2->getDayOfWeekType((UCalendarDaysOfWeek)d, status);
+            TEST_CHECK_STATUS;
+            TEST_ASSERT(wdt1 == wdt2);
+        }
     }
 }
 
