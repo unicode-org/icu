@@ -1699,9 +1699,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     UBool ambiguousYear[] = { FALSE };
     int32_t saveHebrewMonth = -1;
     int32_t count = 0;
-
-    // hack, reset tztype, cast away const
-    ((SimpleDateFormat*)this)->tztype = UTZFMT_TIME_TYPE_UNKNOWN;
+    UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
 
     // For parsing abutting numeric fields. 'abutPat' is the
     // offset into 'pattern' of the first of 2 or more abutting
@@ -1795,7 +1793,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 }
 
                 pos = subParse(text, pos, ch, count,
-                               TRUE, FALSE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter);
+                               TRUE, FALSE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter, &tzTimeType);
 
                 // If the parse fails anywhere in the run, back up to the
                 // start of the run and retry.
@@ -1810,7 +1808,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // fields.
             else if (ch != 0x6C) { // pattern char 'l' (SMALL LETTER L) just gets ignored
                 int32_t s = subParse(text, pos, ch, count,
-                               FALSE, TRUE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter);
+                               FALSE, TRUE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter, &tzTimeType);
 
                 if (s == -pos-1) {
                     // era not present, in special cases allow this to continue
@@ -1890,7 +1888,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     // when the two-digit year is equal to the start year, and thus might fall at the
     // front or the back of the default century.  This only works because we adjust
     // the year correctly to start with in other cases -- see subParse().
-    if (ambiguousYear[0] || tztype != UTZFMT_TIME_TYPE_UNKNOWN) // If this is true then the two-digit year == the default start year
+    if (ambiguousYear[0] || tzTimeType != UTZFMT_TIME_TYPE_UNKNOWN) // If this is true then the two-digit year == the default start year
     {
         // We need a copy of the fields, and we need to avoid triggering a call to
         // complete(), which will recalculate the fields.  Since we can't access
@@ -1913,7 +1911,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             delete copy;
         }
 
-        if (tztype != UTZFMT_TIME_TYPE_UNKNOWN) {
+        if (tzTimeType != UTZFMT_TIME_TYPE_UNKNOWN) {
             copy = cal.clone();
             // Check for failed cloning.
             if (copy == NULL) {
@@ -1939,7 +1937,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // matches the rule used by the parsed time zone.
             int32_t raw, dst;
             if (btz != NULL) {
-                if (tztype == UTZFMT_TIME_TYPE_STANDARD) {
+                if (tzTimeType == UTZFMT_TIME_TYPE_STANDARD) {
                     btz->getOffsetFromLocal(localMillis,
                         BasicTimeZone::kStandard, BasicTimeZone::kStandard, raw, dst, status);
                 } else {
@@ -1954,7 +1952,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
             // Now, compare the results with parsed type, either standard or daylight saving time
             int32_t resolvedSavings = dst;
-            if (tztype == UTZFMT_TIME_TYPE_STANDARD) {
+            if (tzTimeType == UTZFMT_TIME_TYPE_STANDARD) {
                 if (dst != 0) {
                     // Override DST_OFFSET = 0 in the result calendar
                     resolvedSavings = 0;
@@ -2402,16 +2400,10 @@ SimpleDateFormat::set2DigitYearStart(UDate d, UErrorCode& status)
 /**
  * Private member function that converts the parsed date strings into
  * timeFields. Returns -start (for ParsePosition) if failed.
- * @param text the time text to be parsed.
- * @param start where to start parsing.
- * @param ch the pattern character for the date field text to be parsed.
- * @param count the count of a pattern character.
- * @return the new start position if matching succeeded; a negative number
- * indicating matching failure, otherwise.
  */
 int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
                            UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
-                           int32_t patLoc, MessageFormat * numericLeapMonthFormatter) const
+                           int32_t patLoc, MessageFormat * numericLeapMonthFormatter, UTimeZoneFormatTimeType *tzTimeType) const
 {
     Formattable number;
     int32_t value = 0;
@@ -2607,22 +2599,22 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             && u_isdigit(text.charAt(start))
             && u_isdigit(text.charAt(start+1)))
         {
-        	// only adjust year for patterns less than 3.
-        	if(count < 3) {
-        		// Assume for example that the defaultCenturyStart is 6/18/1903.
-        		// This means that two-digit years will be forced into the range
-        		// 6/18/1903 to 6/17/2003.  As a result, years 00, 01, and 02
-        		// correspond to 2000, 2001, and 2002.  Years 04, 05, etc. correspond
-        		// to 1904, 1905, etc.  If the year is 03, then it is 2003 if the
-        		// other fields specify a date before 6/18, or 1903 if they specify a
-        		// date afterwards.  As a result, 03 is an ambiguous year.  All other
-        		// two-digit years are unambiguous.
-        		if(fHaveDefaultCentury) { // check if this formatter even has a pivot year
-        			int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
-        			ambiguousYear[0] = (value == ambiguousTwoDigitYear);
-        			value += (fDefaultCenturyStartYear/100)*100 +
-        					(value < ambiguousTwoDigitYear ? 100 : 0);
-        		}
+            // only adjust year for patterns less than 3.
+            if(count < 3) {
+                // Assume for example that the defaultCenturyStart is 6/18/1903.
+                // This means that two-digit years will be forced into the range
+                // 6/18/1903 to 6/17/2003.  As a result, years 00, 01, and 02
+                // correspond to 2000, 2001, and 2002.  Years 04, 05, etc. correspond
+                // to 1904, 1905, etc.  If the year is 03, then it is 2003 if the
+                // other fields specify a date before 6/18, or 1903 if they specify a
+                // date afterwards.  As a result, 03 is an ambiguous year.  All other
+                // two-digit years are unambiguous.
+                if(fHaveDefaultCentury) { // check if this formatter even has a pivot year
+                    int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
+                    ambiguousYear[0] = (value == ambiguousTwoDigitYear);
+                    value += (fDefaultCenturyStartYear/100)*100 +
+                            (value < ambiguousTwoDigitYear ? 100 : 0);
+                }
             }
         }
         cal.set(UCAL_YEAR, value);
@@ -2889,11 +2881,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
 
     case UDAT_TIMEZONE_FIELD: // 'z'
         {
-            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
             UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_SPECIFIC_SHORT : UTZFMT_STYLE_SPECIFIC_LONG;
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
             if (tz != NULL) {
-                ((SimpleDateFormat*)this)->tztype = tzTimeType;
                 cal.adoptTimeZone(tz);
                 return pos.getIndex();
             }
@@ -2901,12 +2891,10 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         break;
     case UDAT_TIMEZONE_RFC_FIELD: // 'Z'
         {
-            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
             UTimeZoneFormatStyle style = (count < 4) ?
                 UTZFMT_STYLE_ISO_BASIC_LOCAL_FULL : ((count == 5) ? UTZFMT_STYLE_ISO_EXTENDED_FULL: UTZFMT_STYLE_LOCALIZED_GMT);
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
             if (tz != NULL) {
-                ((SimpleDateFormat*)this)->tztype = tzTimeType;
                 cal.adoptTimeZone(tz);
                 return pos.getIndex();
             }
@@ -2914,11 +2902,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         }
     case UDAT_TIMEZONE_GENERIC_FIELD: // 'v'
         {
-            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
             UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_GENERIC_SHORT : UTZFMT_STYLE_GENERIC_LONG;
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
             if (tz != NULL) {
-                ((SimpleDateFormat*)this)->tztype = tzTimeType;
                 cal.adoptTimeZone(tz);
                 return pos.getIndex();
             }
@@ -2926,7 +2912,6 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         }
     case UDAT_TIMEZONE_SPECIAL_FIELD: // 'V'
         {
-            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
             UTimeZoneFormatStyle style;
             switch (count) {
             case 1:
@@ -2942,9 +2927,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 style = UTZFMT_STYLE_GENERIC_LOCATION;
                 break;
             }
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
             if (tz != NULL) {
-                ((SimpleDateFormat*)this)->tztype = tzTimeType;
                 cal.adoptTimeZone(tz);
                 return pos.getIndex();
             }
@@ -2952,11 +2936,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         }
     case UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD: // 'O'
         {
-            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
             UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_LOCALIZED_GMT_SHORT : UTZFMT_STYLE_LOCALIZED_GMT;
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
             if (tz != NULL) {
-                ((SimpleDateFormat*)this)->tztype = tzTimeType;
                 cal.adoptTimeZone(tz);
                 return pos.getIndex();
             }
@@ -2964,7 +2946,6 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         }
     case UDAT_TIMEZONE_ISO_FIELD: // 'X'
         {
-            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
             UTimeZoneFormatStyle style;
             switch (count) {
             case 1:
@@ -2983,9 +2964,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 style = UTZFMT_STYLE_ISO_EXTENDED_FULL;
                 break;
             }
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
             if (tz != NULL) {
-                ((SimpleDateFormat*)this)->tztype = tzTimeType;
                 cal.adoptTimeZone(tz);
                 return pos.getIndex();
             }
@@ -2993,7 +2973,6 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         }
     case UDAT_TIMEZONE_ISO_LOCAL_FIELD: // 'x'
         {
-            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
             UTimeZoneFormatStyle style;
             switch (count) {
             case 1:
@@ -3012,9 +2991,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 style = UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FULL;
                 break;
             }
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
             if (tz != NULL) {
-                ((SimpleDateFormat*)this)->tztype = tzTimeType;
                 cal.adoptTimeZone(tz);
                 return pos.getIndex();
             }

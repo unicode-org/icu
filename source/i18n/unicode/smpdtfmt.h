@@ -35,6 +35,7 @@
 
 #include "unicode/datefmt.h"
 #include "unicode/udisplaycontext.h"
+#include "unicode/tzfmt.h"  /* for UTimeZoneFormatTimeType */
 
 U_NAMESPACE_BEGIN
 
@@ -1341,12 +1342,14 @@ private:
      *            into a date/time string.
      * @param patLoc
      * @param numericLeapMonthFormatter If non-null, used to parse numeric leap months.
+     * @param tzTimeType the type of parsed time zone - standard, daylight or unknown (output).
+     *      This parameter can be NULL if caller does not need the information.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
                      UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
-                     int32_t patLoc, MessageFormat * numericLeapMonthFormatter) const;
+                     int32_t patLoc, MessageFormat * numericLeapMonthFormatter, UTimeZoneFormatTimeType *tzTimeType) const;
 
     void parseInt(const UnicodeString& text,
                   Formattable& number,
@@ -1501,8 +1504,6 @@ private:
      * See documentation for defaultCenturyStart.
      */
     /*transient*/ int32_t   fDefaultCenturyStartYear;
-
-    int32_t tztype; // here to avoid api change
 
     typedef struct NSOverride {
         NumberFormat *nf;
