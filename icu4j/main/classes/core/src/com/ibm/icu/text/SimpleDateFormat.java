@@ -832,10 +832,6 @@ public class SimpleDateFormat extends DateFormat {
     // and may be used for calculating defaultCenturyStart when needed.
     private transient long defaultCenturyBase;
 
-    // We need to preserve time zone type when parsing specific
-    // time zone text (xxx Standard Time vs xxx Daylight Time)
-    private transient TimeType tztype = TimeType.UNKNOWN;
-
     private static final int millisPerHour = 60 * 60 * 1000;
 
     // When possessing ISO format, the ERA may be ommitted is the
@@ -2056,8 +2052,7 @@ public class SimpleDateFormat extends DateFormat {
         int pos = parsePos.getIndex();
         int start = pos;
 
-        // Reset tztype
-        tztype = TimeType.UNKNOWN;
+        Output<TimeType> tzTimeType = new Output<TimeType>(TimeType.UNKNOWN);
         boolean[] ambiguousYear = { false };
 
         // item index for the first numeric field within a contiguous numeric run
@@ -2107,7 +2102,7 @@ public class SimpleDateFormat extends DateFormat {
 
                     // Parse a numeric field
                     pos = subParse(text, pos, field.type, len,
-                            true, false, ambiguousYear, cal, numericLeapMonthFormatter);
+                            true, false, ambiguousYear, cal, numericLeapMonthFormatter, tzTimeType);
 
                     if (pos < 0) {
                         // If the parse fails anywhere in the numeric run, back up to the
@@ -2134,7 +2129,7 @@ public class SimpleDateFormat extends DateFormat {
 
                     int s = pos;
                     pos = subParse(text, pos, field.type, field.length,
-                            false, true, ambiguousYear, cal, numericLeapMonthFormatter);
+                            false, true, ambiguousYear, cal, numericLeapMonthFormatter, tzTimeType);
                     
                     if (pos < 0) {
                         if (pos == ISOSpecialEra) {
@@ -2144,7 +2139,7 @@ public class SimpleDateFormat extends DateFormat {
                             if (i+1 < items.length) { 
                                 
                                 String patl = null;
-                                // if it will cause a class cast exception to String, we can't use it                                
+                                // if it will cause a class cast exception to String, we can't use it
                                 try {
                                     patl = (String)items[i+1];
                                 } catch(ClassCastException cce) {
@@ -2249,6 +2244,7 @@ public class SimpleDateFormat extends DateFormat {
         // front or the back of the default century.  This only works because we adjust
         // the year correctly to start with in other cases -- see subParse().
         try {
+            TimeType tztype = tzTimeType.value;
             if (ambiguousYear[0] || tztype != TimeType.UNKNOWN) {
                 // We need a copy of the fields, and we need to avoid triggering a call to
                 // complete(), which will recalculate the fields.  Since we can't access
@@ -2659,7 +2655,7 @@ public class SimpleDateFormat extends DateFormat {
                            boolean obeyCount, boolean allowNegative,
                            boolean[] ambiguousYear, Calendar cal)
     {
-        return subParse(text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal, null);
+        return subParse(text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal, null, null);
     }
 
     /**
@@ -2676,7 +2672,9 @@ public class SimpleDateFormat extends DateFormat {
      * @param ambiguousYear return parameter; upon return, if ambiguousYear[0]
      * is true, then a two-digit year was parsed and may need to be readjusted.
      * @param cal
-     * @param numericLeapMonthFormatter if non-null, used to parse numeric leap months. 
+     * @param numericLeapMonthFormatter if non-null, used to parse numeric leap months.
+     * @param tzTimeType the type of parsed time zone - standard, daylight or unknown (output).
+     *      This parameter can be null if caller does not need the information.
      * @return the new start position if matching succeeded; a negative
      * number indicating matching failure, otherwise.  As a side effect,
      * set the appropriate field of <code>cal</code> with the parsed
@@ -2687,7 +2685,8 @@ public class SimpleDateFormat extends DateFormat {
     @SuppressWarnings("fallthrough")
     private int subParse(String text, int start, char ch, int count,
                            boolean obeyCount, boolean allowNegative,
-                           boolean[] ambiguousYear, Calendar cal, MessageFormat numericLeapMonthFormatter)
+                           boolean[] ambiguousYear, Calendar cal,
+                           MessageFormat numericLeapMonthFormatter, Output<TimeType> tzTimeType)
     {
         Number number = null;
         NumberFormat currentNumberFormat = null;
@@ -2983,11 +2982,9 @@ public class SimpleDateFormat extends DateFormat {
                 return pos.getIndex();
             case 17: // 'z' - ZONE_OFFSET
             {
-                Output<TimeType> tzTimeType = new Output<TimeType>();
                 Style style = (count < 4) ? Style.SPECIFIC_SHORT : Style.SPECIFIC_LONG;
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
@@ -2995,11 +2992,9 @@ public class SimpleDateFormat extends DateFormat {
             }
             case 23: // 'Z' - TIMEZONE_RFC
             {
-                Output<TimeType> tzTimeType = new Output<TimeType>();
                 Style style = (count < 4) ? Style.ISO_BASIC_LOCAL_FULL : ((count == 5) ? Style.ISO_EXTENDED_FULL : Style.LOCALIZED_GMT);
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                     }
@@ -3007,12 +3002,10 @@ public class SimpleDateFormat extends DateFormat {
                 }
             case 24: // 'v' - TIMEZONE_GENERIC
             {
-                Output<TimeType> tzTimeType = new Output<TimeType>();
                 // Note: 'v' only supports count 1 and 4
                 Style style = (count < 4) ? Style.GENERIC_SHORT : Style.GENERIC_LONG;
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
@@ -3020,7 +3013,6 @@ public class SimpleDateFormat extends DateFormat {
             }
             case 29: // 'V' - TIMEZONE_SPECIAL
             {
-                Output<TimeType> tzTimeType = new Output<TimeType>();
                 Style style = null;
                 switch (count) {
                 case 1:
@@ -3038,7 +3030,6 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
@@ -3046,11 +3037,9 @@ public class SimpleDateFormat extends DateFormat {
             }
             case 31: // 'O' - TIMEZONE_LOCALIZED_GMT_OFFSET
             {
-                Output<TimeType> tzTimeType = new Output<TimeType>();
                 Style style = (count < 4) ? Style.LOCALIZED_GMT_SHORT : Style.LOCALIZED_GMT;
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
@@ -3058,7 +3047,6 @@ public class SimpleDateFormat extends DateFormat {
             }
             case 32: // 'X' - TIMEZONE_ISO
             {
-                Output<TimeType> tzTimeType = new Output<TimeType>();
                 Style style;
                 switch (count) {
                 case 1:
@@ -3079,7 +3067,6 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
@@ -3087,7 +3074,6 @@ public class SimpleDateFormat extends DateFormat {
             }
             case 33: // 'x' - TIMEZONE_ISO_LOCAL
             {
-                Output<TimeType> tzTimeType = new Output<TimeType>();
                 Style style;
                 switch (count) {
                 case 1:
@@ -3108,7 +3094,6 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
