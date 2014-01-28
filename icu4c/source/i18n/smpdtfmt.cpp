@@ -455,7 +455,6 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
     fNumberFormatters(NULL),
     fOverrideList(NULL)
 {
-    UErrorCode status = U_ZERO_ERROR;
     initializeBooleanAttributes();
     *this = other;
 }
