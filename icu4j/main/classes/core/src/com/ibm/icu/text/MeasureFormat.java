@@ -291,11 +291,11 @@ public class MeasureFormat extends UFormat {
                 }
                 measures[idx++] = (Measure) o;
             }
-            return formatMeasures(toAppendTo, pos, measures);
+            return toAppendTo.append(formatMeasures(new StringBuilder(), pos, measures));
         } else if (obj instanceof Measure[]) {
-            return formatMeasures(toAppendTo, pos, (Measure[]) obj);
+            return toAppendTo.append(formatMeasures(new StringBuilder(), pos, (Measure[]) obj));
         } else if (obj instanceof Measure){
-            return this.formatMeasure((Measure) obj, toAppendTo, pos);
+            return toAppendTo.append(formatMeasure((Measure) obj, new StringBuilder(), pos));
         } else {
             throw new IllegalArgumentException(obj.toString());            
         }
@@ -339,22 +339,22 @@ public class MeasureFormat extends UFormat {
      * then its indices are set to the beginning and end of the first such field
      * encountered. MeasureFormat itself does not supply any fields.
      * 
-     * @param appendable the formatted string appended here.
+     * @param appendTo the formatted string appended here.
      * @param fieldPosition Identifies a field in the formatted text.
      * @param measures the measures to format.
-     * @return appendable.
+     * @return appendTo.
      * @see MeasureFormat#formatMeasures(Measure...)
      * @draft ICU 53
      * @provisional
      */
-    public <T extends Appendable> T formatMeasures(
-            T appendable, FieldPosition fieldPosition, Measure... measures) {
+    public StringBuilder formatMeasures(
+            StringBuilder appendTo, FieldPosition fieldPosition, Measure... measures) {
         // fast track for trivial cases
         if (measures.length == 0) {
-            return appendable;
+            return appendTo;
         }
         if (measures.length == 1) {
-            return formatMeasure(measures[0], appendable, fieldPosition);
+            return formatMeasure(measures[0], appendTo, fieldPosition);
         }
         
         if (formatWidth == FormatWidth.NUMERIC) {
@@ -362,21 +362,21 @@ public class MeasureFormat extends UFormat {
             // track.
             Number[] hms = toHMS(measures);
             if (hms != null) {
-                return formatNumeric(hms, appendable);
+                return formatNumeric(hms, appendTo);
             }
         }
         
         ListFormatter listFormatter = ListFormatter.getInstance(
                 getLocale(), formatWidth.getListFormatterStyle());
         if (fieldPosition != DontCareFieldPosition.INSTANCE) {
-            return append(formatMeasuresSlowTrack(listFormatter, fieldPosition, measures), appendable);
+            return appendTo.append(formatMeasuresSlowTrack(listFormatter, fieldPosition, measures));
         }
         // Fast track: No field position.
         String[] results = new String[measures.length];
         for (int i = 0; i < measures.length; i++) {
             results[i] = formatMeasure(measures[i]);
         }
-        return append(listFormatter.format((Object[]) results), appendable);                 
+        return appendTo.append(listFormatter.format((Object[]) results));                 
        
     }   
     
@@ -620,15 +620,14 @@ public class MeasureFormat extends UFormat {
                 DontCareFieldPosition.INSTANCE).toString();
     }
     
-    private <T extends Appendable> T formatMeasure(
-            Measure measure, T appendable, FieldPosition fieldPosition) {
+    private StringBuilder formatMeasure(
+            Measure measure, StringBuilder appendTo, FieldPosition fieldPosition) {
         if (measure.getUnit() instanceof Currency) {
-            return append(
+            return appendTo.append(
                     currencyFormat.format(
                     new CurrencyAmount(measure.getNumber(), (Currency) measure.getUnit()),
                     new StringBuffer(),
-                    fieldPosition),
-                    appendable);
+                    fieldPosition));
             
         }
         Number n = measure.getNumber();
@@ -640,17 +639,17 @@ public class MeasureFormat extends UFormat {
         Map<FormatWidth, Map<String, PatternData>> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
         Map<String, PatternData> countToFormat = styleToCountToFormat.get(formatWidth);
         PatternData messagePatternData = countToFormat.get(keyword);
-        append(messagePatternData.prefix, appendable);
+        appendTo.append(messagePatternData.prefix);
         if (messagePatternData.suffix != null) { // there is a number (may not happen with, say, Arabic dual)
             // Fix field position
             if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
                 fieldPosition.setBeginIndex(fpos.getBeginIndex() + messagePatternData.prefix.length());
                 fieldPosition.setEndIndex(fpos.getEndIndex() + messagePatternData.prefix.length());
             }
-            append(formattedNumber, appendable);
-            append(messagePatternData.suffix, appendable);
+            appendTo.append(formattedNumber);
+            appendTo.append(messagePatternData.suffix);
         }
-        return appendable;
+        return appendTo;
     }
     
     // Wrapper around NumberFormat that provides immutability and thread-safety.
@@ -766,7 +765,7 @@ public class MeasureFormat extends UFormat {
         return result;
     }
     
-    private <T extends Appendable> T formatNumeric(Number[] hms, T appendable) {
+    private StringBuilder formatNumeric(Number[] hms, StringBuilder appendable) {
         int startIndex = -1;
         int endIndex = -1;
         for (int i = 0; i < hms.length; i++) {
@@ -810,12 +809,12 @@ public class MeasureFormat extends UFormat {
         throw new IllegalStateException();
     }
     
-    private <T extends Appendable> T formatNumeric(
+    private StringBuilder formatNumeric(
             Date duration,
             DateFormat formatter,
             DateFormat.Field smallestField,
             Number smallestAmount,
-            T appendable) {
+            StringBuilder appendTo) {
         // Format the smallest amount ahead of time.
         String smallestAmountFormatted;
         smallestAmountFormatted = numberFormat.format(smallestAmount);
@@ -829,23 +828,14 @@ public class MeasureFormat extends UFormat {
         // 'smallestAmountFormatted' to the builder instead.
         for (iterator.first(); iterator.getIndex() < iterator.getEndIndex();) {
             if (iterator.getAttributes().containsKey(smallestField)) {
-                append(smallestAmountFormatted, appendable);
+                appendTo.append(smallestAmountFormatted);
                 iterator.setIndex(iterator.getRunLimit(smallestField));
             } else {
-                append(iterator.current(), appendable);
+                appendTo.append(iterator.current());
                 iterator.next();
             }
         }
-        return appendable;
-    }
-    
-    private static <T extends Appendable> T append(Object o, T appendable) {
-        try {
-            appendable.append(o.toString());
-            return appendable;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } 
+        return appendTo;
     }
     
     private Object writeReplace() throws ObjectStreamException {
