@@ -3,7 +3,7 @@
 * Copyright (C) 2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
-* template.h
+* simplepatternformatter.h
 */
 
 #ifndef __TEMPLATE_H__
@@ -17,9 +17,9 @@
 U_NAMESPACE_BEGIN
 
 /**
- * Compiled version of a template such as "{1} was born in {0}".
+ * Compiled version of a pattern string such as "{1} was born in {0}".
  * <p>
- * Using Template objects is both faster and safer than adhoc replacement.
+ * Using SimplePatternFormatter is both faster and safer than adhoc replacement.
  * They are faster because they are precompiled; they are safer because they
  * account for curly braces escaped by apostrophe (').
  * 
@@ -27,49 +27,42 @@ U_NAMESPACE_BEGIN
  * by a single quote, it becomes a curly brace instead of the start of a
  * placeholder. Two single quotes resolve to one single quote. 
  * <p>
- * Concurrent calls only to const methods on a Template object are safe,
- * but concurrent const and non-const method calls on a Template object
- * are not safe and require synchronization.
- * <p>
  * Example:
  * <pre>
- * Template template("{1} '{born} in {0}");
- * UnicodeString england("england");
- * UnicodeString paul("paul"); 
- * UnicodeString *params[] = {&england, &paul};
+ * SimplePatternFormatter fmt("{1} '{born} in {0}");
  * UnicodeString result;
  * UErrorCode status = U_ZERO_ERROR;
  * // Evaluates to: "paul {born} in england"
- * template.evaluate(params, 2, result, status);
+ * fmt.format("englad", "paul", result, status);
  * </pre>
  */
-class U_COMMON_API Template : public UMemory {
+class U_COMMON_API SimplePatternFormatter : public UMemory {
 public:
     /**
      * Default constructor
      */
-    Template();
+    SimplePatternFormatter();
 
     /**
      * Construct from a pattern. Will never fail if pattern has three or
      * fewer placeholders in it.
      */
-    explicit Template(const UnicodeString& pattern);
+    explicit SimplePatternFormatter(const UnicodeString& pattern);
 
     /**
      * Copy constructor.
      */
-    Template(const Template& other);
+    SimplePatternFormatter(const SimplePatternFormatter& other);
 
     /**
      * Assignment operator
      */
-    Template &operator=(const Template& other);
+    SimplePatternFormatter &operator=(const SimplePatternFormatter& other);
 
     /**
      * Destructor.
      */
-    ~Template();
+    ~SimplePatternFormatter();
 
     /**
      * Compiles pattern and makes this object represent pattern.
@@ -82,34 +75,44 @@ public:
 
     /**
      * Returns (maxPlaceholderId + 1). For example
-     * <code>Template("{0} {2}").getPlaceholderCount() evaluates to 3.
-     * Callers use this function to find out how many values are needed
-     * to evaluate this template.
+     * <code>SimplePatternFormatter("{0} {2}").getPlaceholderCount()
+     * evaluates to 3.
+     * Callers use this function to find out how many values this object
+     * expects when formatting.
      */
     int32_t getPlaceholderCount() const {
         return placeholderCount;
-     }
+    }
 
     /**
-     * Evaluates this template according to the given placeholder values.
-     *
-     * The caller retains ownership of all pointers.
-     * @param placeholderValues 1st one corresponds to {0}; 2nd to {1};
-     *  3rd to {2} etc.
-     * @param placeholderValueCount the number of placeholder values
-     *  must be at least large enough to provide values for all placeholders
-     *  in this object. Otherwise status set to U_ILLEGAL_ARGUMENT_ERROR.
-     * @param appendTo resulting string appended here.
-     * @param status any error stored here.
+     * Formats given value.
      */
-    UnicodeString &evaluate(
-            const UnicodeString * const *placeholderValues,
-            int32_t placeholderValueCount,
+    UnicodeString &format(
+            const UnicodeString &args0,
             UnicodeString &appendTo,
             UErrorCode &status) const;
-
+    
     /**
-     * Evaluates this template according to the given placeholder values.
+     * Formats given values.
+     */
+    UnicodeString &format(
+            const UnicodeString &args0,
+            const UnicodeString &args1,
+            UnicodeString &appendTo,
+            UErrorCode &status) const;
+    
+    /**
+     * Formats given values.
+     */
+    UnicodeString &format(
+            const UnicodeString &args0,
+            const UnicodeString &args1,
+            const UnicodeString &args2,
+            UnicodeString &appendTo,
+            UErrorCode &status) const;
+    
+    /**
+     * Formats given values.
      *
      * The caller retains ownership of all pointers.
      * @param placeholderValues 1st one corresponds to {0}; 2nd to {1};
@@ -127,7 +130,7 @@ public:
      *  placeholderValueCount.
      * @param status any error stored here.
      */
-    UnicodeString &evaluate(
+    UnicodeString &format(
             const UnicodeString * const *placeholderValues,
             int32_t placeholderValueCount,
             UnicodeString &appendTo,

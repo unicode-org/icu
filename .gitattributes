@@ -53,8 +53,8 @@ icu4c/source/aclocal.m4 -text
 icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
-icu4c/source/common/template.cpp -text
-icu4c/source/common/template.h -text
+icu4c/source/common/simplepatternformatter.cpp -text
+icu4c/source/common/simplepatternformatter.h -text
 icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/coll/invuca.icu -text
 icu4c/source/data/in/coll/ucadata.icu -text
@@ -146,7 +146,7 @@ icu4c/source/test/cintltst/cintltst.vcxproj -text
 icu4c/source/test/cintltst/cintltst.vcxproj.filters -text
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
-icu4c/source/test/intltest/templatetest.cpp -text
+icu4c/source/test/intltest/simplepatternformattertest.cpp -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/iotest/iotest.vcxproj.filters -text
 icu4c/source/test/letest/cletest.vcxproj -text

@@ -6,7 +6,7 @@
 * quantityformatter.cpp
 */
 #include "quantityformatter.h"
-#include "template.h"
+#include "simplepatternformatter.h"
 #include "uassert.h"
 #include "unicode/unistr.h"
 #include "unicode/decimfmt.h"
@@ -35,17 +35,17 @@ static int32_t getPluralIndex(const char *pluralForm) {
 }
 
 QuantityFormatter::QuantityFormatter() {
-    for (int32_t i = 0; i < LENGTHOF(templates); ++i) {
-        templates[i] = NULL;
+    for (int32_t i = 0; i < LENGTHOF(formatters); ++i) {
+        formatters[i] = NULL;
     }
 }
 
 QuantityFormatter::QuantityFormatter(const QuantityFormatter &other) {
-    for (int32_t i = 0; i < LENGTHOF(templates); ++i) {
-        if (other.templates[i] == NULL) {
-            templates[i] = NULL;
+    for (int32_t i = 0; i < LENGTHOF(formatters); ++i) {
+        if (other.formatters[i] == NULL) {
+            formatters[i] = NULL;
         } else {
-            templates[i] = new Template(*other.templates[i]);
+            formatters[i] = new SimplePatternFormatter(*other.formatters[i]);
         }
     }
 }
@@ -55,27 +55,27 @@ QuantityFormatter &QuantityFormatter::operator=(
     if (this == &other) {
         return *this;
     }
-    for (int32_t i = 0; i < LENGTHOF(templates); ++i) {
-        delete templates[i];
-        if (other.templates[i] == NULL) {
-            templates[i] = NULL;
+    for (int32_t i = 0; i < LENGTHOF(formatters); ++i) {
+        delete formatters[i];
+        if (other.formatters[i] == NULL) {
+            formatters[i] = NULL;
         } else {
-            templates[i] = new Template(*other.templates[i]);
+            formatters[i] = new SimplePatternFormatter(*other.formatters[i]);
         }
     }
     return *this;
 }
 
 QuantityFormatter::~QuantityFormatter() {
-    for (int32_t i = 0; i < LENGTHOF(templates); ++i) {
-        delete templates[i];
+    for (int32_t i = 0; i < LENGTHOF(formatters); ++i) {
+        delete formatters[i];
     }
 }
 
 void QuantityFormatter::reset() {
-    for (int32_t i = 0; i < LENGTHOF(templates); ++i) {
-        delete templates[i];
-        templates[i] = NULL;
+    for (int32_t i = 0; i < LENGTHOF(formatters); ++i) {
+        delete formatters[i];
+        formatters[i] = NULL;
     }
 }
 
@@ -91,18 +91,19 @@ UBool QuantityFormatter::add(
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
-    Template *newTemplate = new Template(rawPattern);
-    if (newTemplate == NULL) {
+    SimplePatternFormatter *newFmt =
+            new SimplePatternFormatter(rawPattern);
+    if (newFmt == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FALSE;
     }
-    if (newTemplate->getPlaceholderCount() > 1) {
-        delete newTemplate;
+    if (newFmt->getPlaceholderCount() > 1) {
+        delete newFmt;
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
-    delete templates[pluralIndex];
-    templates[pluralIndex] = newTemplate;
+    delete formatters[pluralIndex];
+    formatters[pluralIndex] = newFmt;
     return TRUE;
 }
 
@@ -144,9 +145,9 @@ UnicodeString &QuantityFormatter::format(
     if (pluralIndex == -1) {
         pluralIndex = 0;
     }
-    const Template *pattern = templates[pluralIndex];
+    const SimplePatternFormatter *pattern = formatters[pluralIndex];
     if (pattern == NULL) {
-        pattern = templates[0];
+        pattern = formatters[0];
     }
     if (pattern == NULL) {
         status = U_INVALID_STATE_ERROR;
@@ -155,8 +156,7 @@ UnicodeString &QuantityFormatter::format(
     UnicodeString formattedNumber;
     FieldPosition pos(0);
     fmt.format(quantity, formattedNumber, pos, status);
-    UnicodeString *params[] = {&formattedNumber};
-    return pattern->evaluate(params, LENGTHOF(params), appendTo, status);
+    return pattern->format(formattedNumber, appendTo, status);
 }
 
 U_NAMESPACE_END

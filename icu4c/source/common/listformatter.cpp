@@ -15,7 +15,7 @@
 */
 
 #include "unicode/listformatter.h"
-#include "template.h"
+#include "simplepatternformatter.h"
 #include "mutex.h"
 #include "hash.h"
 #include "cstring.h"
@@ -29,10 +29,10 @@
 U_NAMESPACE_BEGIN
 
 struct ListFormatInternal : public UMemory {
-    Template twoPattern;
-    Template startPattern;
-    Template middlePattern;
-    Template endPattern;
+    SimplePatternFormatter twoPattern;
+    SimplePatternFormatter startPattern;
+    SimplePatternFormatter middlePattern;
+    SimplePatternFormatter endPattern;
 
 ListFormatInternal(
         const UnicodeString& two,
@@ -255,7 +255,7 @@ ListFormatter::~ListFormatter() {
  * Joins first and second using the pattern pat.
  */
 static void joinStrings(
-        const Template& pat,
+        const SimplePatternFormatter& pat,
         const UnicodeString& first,
         const UnicodeString& second,
         UnicodeString &result,
@@ -267,7 +267,7 @@ static void joinStrings(
     }
     const UnicodeString *params[2] = {&first, &second};
     int32_t offsets[2];
-    pat.evaluate(
+    pat.format(
             params,
             LENGTHOF(params),
             result,
