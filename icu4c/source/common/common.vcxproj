@@ -446,7 +446,7 @@
     <ClCompile Include="schriter.cpp" />
     <ClCompile Include="stringpiece.cpp" />
     <ClCompile Include="stringtriebuilder.cpp" />
-    <ClCompile Include="template.cpp" />
+    <ClCompile Include="simplepatternformatter.cpp" />
     <ClCompile Include="ucasemap.cpp" />
     <ClCompile Include="ucasemap_titlecase_brkiter.cpp" />
     <ClCompile Include="ucharstrie.cpp" />
@@ -1088,7 +1088,7 @@
     <ClInclude Include="sharedobject.h" />
     <ClCompile Include="sharedobject.cpp" />
     <ClInclude Include="sharedptr.h" />
-    <ClInclude Include="template.h" />
+    <ClInclude Include="simplepatternformatter.h" />
     <CustomBuild Include="unicode\ucat.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>

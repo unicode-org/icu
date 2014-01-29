@@ -14,14 +14,14 @@
 
 U_NAMESPACE_BEGIN
 
-class Template;
+class SimplePatternFormatter;
 class UnicodeString;
 class PluralRules;
 class NumberFormat;
 class Formattable;
 
 /**
- * A plural aware template that is good for expressing a single quantity and
+ * A plural aware formatter that is good for expressing a single quantity and
  * a unit.
  * <p>
  * First use the add() methods to add a pattern for each plural variant.
@@ -94,7 +94,7 @@ public:
             UErrorCode &status) const;
 
 private:
-    Template *templates[6];
+    SimplePatternFormatter *formatters[6];
 };
 
 U_NAMESPACE_END

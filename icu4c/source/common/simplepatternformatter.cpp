@@ -3,24 +3,26 @@
 * Copyright (C) 2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
-* template.cpp
+* simplepatternformatter.cpp
 */
-#include "template.h"
+#include "simplepatternformatter.h"
 #include "cstring.h"
 #include "uassert.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
+
 U_NAMESPACE_BEGIN
 
-typedef enum TemplateCompileState {
+typedef enum SimplePatternFormatterCompileState {
     INIT,
     APOSTROPHE,
     PLACEHOLDER
-} TemplateCompileState;
+} SimplePatternFormatterCompileState;
 
-class TemplateIdBuilder {
+class SimplePatternFormatterIdBuilder {
 public:
-    TemplateIdBuilder() : id(0), idLen(0) { }
-    ~TemplateIdBuilder() { }
+    SimplePatternFormatterIdBuilder() : id(0), idLen(0) { }
+    ~SimplePatternFormatterIdBuilder() { }
     void reset() { id = 0; idLen = 0; }
     int32_t getId() const { return id; }
     void appendTo(UChar *buffer, int32_t *len) const;
@@ -29,11 +31,14 @@ public:
 private:
     int32_t id;
     int32_t idLen;
-    TemplateIdBuilder(const TemplateIdBuilder &other);
-    TemplateIdBuilder &operator=(const TemplateIdBuilder &other);
+    SimplePatternFormatterIdBuilder(
+            const SimplePatternFormatterIdBuilder &other);
+    SimplePatternFormatterIdBuilder &operator=(
+            const SimplePatternFormatterIdBuilder &other);
 };
 
-void TemplateIdBuilder::appendTo(UChar *buffer, int32_t *len) const {
+void SimplePatternFormatterIdBuilder::appendTo(
+        UChar *buffer, int32_t *len) const {
     int32_t origLen = *len;
     int32_t kId = id;
     for (int32_t i = origLen + idLen - 1; i >= origLen; i--) {
@@ -44,12 +49,12 @@ void TemplateIdBuilder::appendTo(UChar *buffer, int32_t *len) const {
     *len = origLen + idLen;
 }
 
-void TemplateIdBuilder::add(UChar ch) {
+void SimplePatternFormatterIdBuilder::add(UChar ch) {
     id = id * 10 + (ch - 0x30);
     idLen++;
 }
 
-Template::Template() :
+SimplePatternFormatter::SimplePatternFormatter() :
         noPlaceholders(),
         placeholdersByOffset(placeholderBuffer),
         placeholderSize(0),
@@ -57,7 +62,7 @@ Template::Template() :
         placeholderCount(0) {
 }
 
-Template::Template(const UnicodeString &pattern) :
+SimplePatternFormatter::SimplePatternFormatter(const UnicodeString &pattern) :
         noPlaceholders(),
         placeholdersByOffset(placeholderBuffer),
         placeholderSize(0),
@@ -67,7 +72,8 @@ Template::Template(const UnicodeString &pattern) :
     compile(pattern, status);
 }
 
-Template::Template(const Template &other) :
+SimplePatternFormatter::SimplePatternFormatter(
+        const SimplePatternFormatter &other) :
         noPlaceholders(other.noPlaceholders),
         placeholdersByOffset(placeholderBuffer),
         placeholderSize(0),
@@ -80,7 +86,8 @@ Template::Template(const Template &other) :
             placeholderSize * 2 * sizeof(int32_t));
 }
 
-Template &Template::operator=(const Template& other) {
+SimplePatternFormatter &SimplePatternFormatter::operator=(
+        const SimplePatternFormatter& other) {
     if (this == &other) {
         return *this;
     }
@@ -94,13 +101,14 @@ Template &Template::operator=(const Template& other) {
     return *this;
 }
 
-Template::~Template() {
+SimplePatternFormatter::~SimplePatternFormatter() {
     if (placeholdersByOffset != placeholderBuffer) {
         uprv_free(placeholdersByOffset);
     }
 }
 
-UBool Template::compile(const UnicodeString &pattern, UErrorCode &status) {
+UBool SimplePatternFormatter::compile(
+        const UnicodeString &pattern, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -110,8 +118,8 @@ UBool Template::compile(const UnicodeString &pattern, UErrorCode &status) {
     int32_t len = 0;
     placeholderSize = 0;
     placeholderCount = 0;
-    TemplateCompileState state = INIT;
-    TemplateIdBuilder idBuilder;
+    SimplePatternFormatterCompileState state = INIT;
+    SimplePatternFormatterIdBuilder idBuilder;
     for (int32_t i = 0; i < patternLength; ++i) {
         UChar ch = patternBuffer[i];
         switch (state) {
@@ -175,14 +183,45 @@ UBool Template::compile(const UnicodeString &pattern, UErrorCode &status) {
     return TRUE;
 }
 
-UnicodeString& Template::evaluate(
-        const UnicodeString * const *placeholderValues,
-        int32_t placeholderValueCount,
+UnicodeString& SimplePatternFormatter::format(
+        const UnicodeString &arg0,
         UnicodeString &appendTo,
         UErrorCode &status) const {
-    return evaluate(
-            placeholderValues,
-            placeholderValueCount,
+    const UnicodeString *params[] = {&arg0};
+    return format(
+            params,
+            LENGTHOF(params),
+            appendTo,
+            NULL,
+            0,
+            status);
+}
+
+UnicodeString& SimplePatternFormatter::format(
+        const UnicodeString &arg0,
+        const UnicodeString &arg1,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    const UnicodeString *params[] = {&arg0, &arg1};
+    return format(
+            params,
+            LENGTHOF(params),
+            appendTo,
+            NULL,
+            0,
+            status);
+}
+
+UnicodeString& SimplePatternFormatter::format(
+        const UnicodeString &arg0,
+        const UnicodeString &arg1,
+        const UnicodeString &arg2,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    const UnicodeString *params[] = {&arg0, &arg1, &arg2};
+    return format(
+            params,
+            LENGTHOF(params),
             appendTo,
             NULL,
             0,
@@ -207,7 +246,7 @@ static void appendRange(
     dest.append(src, start, end - start);
 }
 
-UnicodeString& Template::evaluate(
+UnicodeString& SimplePatternFormatter::format(
         const UnicodeString * const *placeholderValues,
         int32_t placeholderValueCount,
         UnicodeString &appendTo,
@@ -260,7 +299,7 @@ UnicodeString& Template::evaluate(
     return appendTo;
 }
 
-int32_t Template::ensureCapacity(int32_t atLeast) {
+int32_t SimplePatternFormatter::ensureCapacity(int32_t atLeast) {
     if (atLeast <= placeholderCapacity) {
         return atLeast;
     }
@@ -287,7 +326,7 @@ int32_t Template::ensureCapacity(int32_t atLeast) {
     return atLeast;
 }
 
-UBool Template::addPlaceholder(int32_t id, int32_t offset) {
+UBool SimplePatternFormatter::addPlaceholder(int32_t id, int32_t offset) {
     if (ensureCapacity(placeholderSize + 1) < placeholderSize + 1) {
         return FALSE;
     }
