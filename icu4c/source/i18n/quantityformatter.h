@@ -33,7 +33,7 @@ class Formattable;
  * object are not safe and require synchronization.
  * 
  */
-class U_COMMON_API QuantityFormatter : public UMemory {
+class U_I18N_API QuantityFormatter : public UMemory {
 // TODO(Travis Keep): Add test for copy constructor, assignment, and reset.
 public:
     /**

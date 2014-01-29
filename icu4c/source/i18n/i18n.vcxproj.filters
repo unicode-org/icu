@@ -228,6 +228,9 @@
     <ClCompile Include="plurrule.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="quantityformatter.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="rbnf.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -630,6 +633,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="plurrule_impl.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="quantityformatter.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="reldtfmt.h">
