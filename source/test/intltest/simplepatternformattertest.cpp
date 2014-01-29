@@ -41,20 +41,14 @@ void SimplePatternFormatterTest::TestNoPlaceholders() {
     assertEquals(
             "Evaluate",
             "This doesn't have templates {0}", 
-            fmt.format(
-                    "unused",
-                    appendTo,
-                    status));
+            fmt.format("unused", appendTo, status));
     appendTo.remove();
     fmt.compile("This has {} bad {012d placeholders", status);
     assertEquals("PlaceholderCount", 0, fmt.getPlaceholderCount());
     assertEquals(
             "Evaluate",
             "This has {} bad {012d placeholders", 
-            fmt.format(
-                    "unused",
-                    appendTo,
-                    status));
+            fmt.format("unused", appendTo, status));
     appendTo.remove();
     assertSuccess("Status", status);
 }
@@ -68,10 +62,7 @@ void SimplePatternFormatterTest::TestOnePlaceholder() {
     assertEquals(
             "Evaluate",
             "1 meter",
-            fmt.format(
-                    "1",
-                    appendTo,
-                    status));
+            fmt.format("1", appendTo, status));
     appendTo.remove();
     assertSuccess("Status", status);
 
@@ -81,10 +72,7 @@ void SimplePatternFormatterTest::TestOnePlaceholder() {
     assertEquals(
             "Assignment",
             "1 meter",
-            s.format(
-                    "1",
-                    appendTo,
-                    status));
+            s.format("1", appendTo, status));
     appendTo.remove();
 
     // Copy constructor
@@ -92,10 +80,7 @@ void SimplePatternFormatterTest::TestOnePlaceholder() {
     assertEquals(
             "Copy constructor",
             "1 meter",
-            r.format(
-                    "1",
-                    appendTo,
-                    status));
+            r.format("1", appendTo, status));
     appendTo.remove();
     assertSuccess("Status", status);
 }
@@ -111,11 +96,11 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
     UnicodeString *params[] = {
            &values[0], &values[1], &values[2], &values[3], &values[4], &values[5]}; 
     int32_t offsets[6];
-    int32_t expectedOffsets[6] = {-1, 14, 10, -1, 27, 19};
-    UnicodeString appendTo;
+    int32_t expectedOffsets[6] = {-1, 22, 18, -1, 35, 27};
+    UnicodeString appendTo("Prefix: ");
     assertEquals(
             "Evaluate",
-            "Templates frogtommy{0} and leg are out of order.",
+            "Prefix: Templates frogtommy{0} and leg are out of order.",
             fmt.format(
                     params,
                     LENGTHOF(params),
@@ -185,10 +170,21 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
     assertEquals(
             "Replace with new compile",
             "freddy meter",
-            r.format(
-                    "freddy",
-                    appendTo,
-                    status));
+            r.format("freddy", appendTo, status));
+    appendTo.remove();
+    r.compile("{0}, {1}", status);
+    assertEquals("PlaceholderCount", 2, r.getPlaceholderCount());
+    assertEquals(
+            "2 arg",
+            "foo, bar",
+            r.format("foo", "bar", appendTo, status));
+    appendTo.remove();
+    r.compile("{0}, {1} and {2}", status);
+    assertEquals("PlaceholderCount", 3, r.getPlaceholderCount());
+    assertEquals(
+            "3 arg",
+            "foo, bar and baz",
+            r.format("foo", "bar", "baz", appendTo, status));
     appendTo.remove();
     assertSuccess("Status", status);
 }
