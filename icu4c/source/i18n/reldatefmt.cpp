@@ -13,6 +13,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/localpointer.h"
+#include "quantityformatter.h"
 #include "unicode/plurrule.h"
 #include "unicode/msgfmt.h"
 #include "unicode/decimfmt.h"
@@ -48,12 +49,6 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-// other must always be first.
-static const char * const gPluralForms[] = {
-        "other", "zero", "one", "two", "few", "many"};
-
-static const UChar gPlaceholder[] = { 0x7b, 0x30, 0x7d}; /* {0} */
-
 class QualitativeUnits : public UMemory {
 public:
     QualitativeUnits() { }
@@ -63,44 +58,10 @@ private:
     QualitativeUnits &operator=(const QualitativeUnits& other);
 };
 
-struct UnitPattern {
-    UnicodeString pattern;
-    int32_t offset;  // Offset of "{0}". -1 means no {0}.
-    UBool valid;  // True if initialize, false otherwise.
-
-    UnitPattern() : pattern(), offset(0), valid(FALSE) {
-    }
-
-    void set(const UnicodeString &patternStr) {
-        pattern = patternStr;
-        offset = patternStr.indexOf(gPlaceholder, LENGTHOF(gPlaceholder), 0);
-        valid = TRUE;
-    }
-
-    UnicodeString& append(
-            double quantity,
-            const NumberFormat &nf,
-            UnicodeString &appendTo) const {
-        if (!valid) {
-            return appendTo;
-        }
-        if (offset == -1) {
-            appendTo.append(pattern);
-            return appendTo;
-        }
-        appendTo.append(pattern, 0, offset);
-        nf.format(quantity, appendTo);
-        appendTo.append(pattern,
-                offset + LENGTHOF(gPlaceholder),
-                0x7fffffff);
-        return appendTo;
-    }
-};
-
 class QuantitativeUnits : public UMemory {
 public:
     QuantitativeUnits() { }
-    UnitPattern data[UDAT_RELATIVE_UNIT_COUNT][2][LENGTHOF(gPluralForms)];
+    QuantityFormatter data[UDAT_RELATIVE_UNIT_COUNT][2];
 private:
     QuantitativeUnits(const QuantitativeUnits &other);
     QuantitativeUnits &operator=(const QuantitativeUnits& other);
@@ -172,21 +133,6 @@ static UBool getString(
     return TRUE;
 }
 
-static UBool getUnitPattern(
-        const UResourceBundle *resource, 
-        UnitPattern &result,
-        UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return FALSE;
-    }
-    UnicodeString rawPattern;
-    if (!getString(resource, rawPattern, status)) {
-        return FALSE;
-    }
-    result.set(rawPattern);
-    return TRUE;
-}
-
 static UBool getStringByIndex(
         const UResourceBundle *resource, 
         int32_t idx,
@@ -236,16 +182,6 @@ static void addQualitativeUnit(
     qualitativeUnits.data[absoluteUnit][UDAT_DIRECTION_PLAIN] = unitName;
 }
 
-static int32_t getPluralIndex(const char *pluralForm) {
-    int32_t len = LENGTHOF(gPluralForms);
-    for (int32_t i = 0; i < len; ++i) {
-        if (uprv_strcmp(pluralForm, gPluralForms[i]) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 static void addTimeUnit(
         const UResourceBundle *resource,
         UDateRelativeUnit relativeUnit,
@@ -262,15 +198,16 @@ static void addTimeUnit(
         if (U_FAILURE(status)) {
             return;
         }
-        int32_t pluralIndex = getPluralIndex(
-                ures_getKey(pluralBundle.getAlias()));
-        if (pluralIndex != -1) {
-            if (!getUnitPattern(
-                    pluralBundle.getAlias(),
-                    quantitativeUnits.data[relativeUnit][pastOrFuture][pluralIndex],
-                    status)) {
-                return;
-            }
+        UnicodeString rawPattern;
+        if (!getString(pluralBundle.getAlias(), rawPattern, status)) {
+            return;
+        }
+        if (!quantitativeUnits.data[relativeUnit][pastOrFuture]
+                .add(
+                        ures_getKey(pluralBundle.getAlias()),
+                        rawPattern,
+                        status)) {
+            return;
         }
     }
 }
@@ -710,28 +647,13 @@ UnicodeString& RelativeDateTimeFormatter::format(
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return appendTo;
     }
-    FixedDecimal dec(quantity);
-    const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(
-            ptr->numberFormat.readOnly());
-    if (decFmt != NULL) {
-        dec = decFmt->getFixedDecimal(quantity, status);
-    }
-    CharString buffer;
-    buffer.appendInvariantChars(ptr->pluralRules->select(dec), status);
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-
-    int32_t pluralIndex = getPluralIndex(buffer.data());
-    if (pluralIndex == -1) {
-        pluralIndex = 0;
-    }
     int32_t bFuture = direction == UDAT_DIRECTION_NEXT ? 1 : 0;
-    const UnitPattern *pattern = &ptr->quantitativeUnits->data[unit][bFuture][pluralIndex];
-    if (!pattern->valid) {
-        pattern = &ptr->quantitativeUnits->data[unit][bFuture][0];
-    }
-    return pattern->append(quantity, *ptr->numberFormat, appendTo);
+    return ptr->quantitativeUnits->data[unit][bFuture].format(
+            quantity,
+            *ptr->numberFormat,
+            *ptr->pluralRules,
+            appendTo,
+            status);
 }
 
 UnicodeString& RelativeDateTimeFormatter::format(

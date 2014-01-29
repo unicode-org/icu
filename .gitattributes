@@ -8,6 +8,8 @@ icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
+icu4c/source/common/template.cpp -text
+icu4c/source/common/template.h -text
 icu4c/source/data/brkitr/char.txt svneol=native#text/plain
 icu4c/source/data/brkitr/cjdict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/el.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3482,6 +3484,8 @@ icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
+icu4c/source/i18n/quantityformatter.cpp -text
+icu4c/source/i18n/quantityformatter.h -text
 icu4c/source/i18n/regexcst.txt svneol=native#text/plain
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
@@ -3583,6 +3587,7 @@ icu4c/source/test/hdrtst/dfiles.txt svneol=native#text/plain
 icu4c/source/test/hdrtst/pfiles.txt svneol=native#text/plain
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
+icu4c/source/test/intltest/templatetest.cpp -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/iotest/iotest.vcxproj.filters -text
 icu4c/source/test/letest/cletest.vcxproj -text
