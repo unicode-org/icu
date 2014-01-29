@@ -323,6 +323,7 @@
     <ClCompile Include="sdtfmtts.cpp" />
     <ClCompile Include="selfmts.cpp" />
     <ClCompile Include="tchcfmt.cpp" />
+    <ClCompile Include="templatetest.cpp" />
     <ClCompile Include="tfsmalls.cpp" />
     <ClCompile Include="tmsgfmt.cpp" />
     <ClCompile Include="tsdate.cpp" />
