@@ -18,6 +18,7 @@ import java.util.MissingResourceException;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.Template;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -30,10 +31,10 @@ import com.ibm.icu.util.UResourceBundle;
  * @provisional This API might change or be removed in a future release.
  */
 final public class ListFormatter {
-    private final String two;
-    private final String start;
-    private final String middle;
-    private final String end;
+    private final Template two;
+    private final Template start;
+    private final Template middle;
+    private final Template end;
     private final ULocale locale;
     
     /**
@@ -102,10 +103,16 @@ final public class ListFormatter {
      * @deprecated This API is ICU internal only.
      */
     public ListFormatter(String two, String start, String middle, String end) {
-        this(two, start, middle, end, null);
+        this(
+                Template.compile(two),
+                Template.compile(start),
+                Template.compile(middle),
+                Template.compile(end),
+                null);
+        
     }
     
-    private ListFormatter(String two, String start, String middle, String end, ULocale locale) {
+    private ListFormatter(Template two, Template start, Template middle, Template end, ULocale locale) {
         this.two = two;
         this.start = start;
         this.middle = middle;
@@ -189,22 +196,30 @@ final public class ListFormatter {
         // TODO optimize this for the common case that the patterns are all of the
         // form {0}<sometext>{1}.
         // We avoid MessageFormat, because there is no "sub" formatting.
+        return format(items, -1).toString();
+    }
+    
+    // Formats a collection of objects and returns the formatted string plus the offset
+    // in the string where the index th element appears. index is zero based. If index is
+    // negative or greater than or equal to the size of items then this function returns -1 for
+    // the offset.
+    FormattedListBuilder format(Collection<?> items, int index) {
         Iterator<?> it = items.iterator();
         int count = items.size();
         switch (count) {
         case 0:
-            return "";
+            return new FormattedListBuilder("", false);
         case 1:
-            return it.next().toString();
+            return new FormattedListBuilder(it.next(), index == 0);
         case 2:
-            return format2(two, it.next(), it.next());
+            return new FormattedListBuilder(it.next(), index == 0).append(two, it.next(), index == 1);
         }
-        String result = it.next().toString();
-        result = format2(start, result, it.next());
-        for (count -= 3; count > 0; --count) {
-            result = format2(middle, result, it.next());
+        FormattedListBuilder builder = new FormattedListBuilder(it.next(), index == 0);
+        builder.append(start, it.next(), index == 1);
+        for (int idx = 2; idx < count - 1; ++idx) {
+            builder.append(middle, it.next(), index == idx);
         }
-        return format2(end, result, it.next());
+        return builder.append(end, it.next(), index == count - 1);
     }
     
     /**
@@ -235,17 +250,58 @@ final public class ListFormatter {
     public ULocale getLocale() {
         return locale;
     }
-
-    private String format2(String pattern, Object a, Object b) {
-        int i0 = pattern.indexOf("{0}");
-        int i1 = pattern.indexOf("{1}");
-        if (i0 < 0 || i1 < 0) {
-            throw new IllegalArgumentException("Missing {0} or {1} in pattern " + pattern);
+    
+    // Builds a formatted list
+    static class FormattedListBuilder {
+        private String current;
+        private int offset;
+        
+        // Start is the first object in the list; If recordOffset is true, records the offset of
+        // this first object.
+        public FormattedListBuilder(Object start, boolean recordOffset) {
+            this.current = start.toString();
+            this.offset = recordOffset ? 0 : -1;
         }
-        if (i0 < i1) {
-            return pattern.substring(0, i0) + a + pattern.substring(i0+3, i1) + b + pattern.substring(i1+3);
-        } else {
-            return pattern.substring(0, i1) + b + pattern.substring(i1+3, i0) + a + pattern.substring(i0+3);
+        
+        // Appends additional object. pattern is a template indicating where the new object gets
+        // added in relation to the rest of the list. {0} represents the rest of the list; {1}
+        // represents the new object in pattern. next is the object to be added. If recordOffset
+        // is true, records the offset of next in the formatted string.
+        public FormattedListBuilder append(Template pattern, Object next, boolean recordOffset) {
+            if (pattern.getPlaceholderCount() != 2) {
+                throw new IllegalArgumentException("Need {0} and {1} only in pattern " + pattern);
+            }
+            if (recordOffset || offsetRecorded()) {
+                Template.Evaluation evaluation = pattern.evaluateFull(current, next);
+                int oneOffset = evaluation.getOffset(1);
+                int zeroOffset = evaluation.getOffset(0);
+                if (zeroOffset == -1 || oneOffset == -1) {
+                    throw new IllegalArgumentException("{0} or {1} missing from pattern " + pattern);
+                }
+                if (recordOffset) {
+                    offset = oneOffset;
+                } else {
+                    offset += zeroOffset;
+                }
+                current = evaluation.toString();
+            } else {
+                current = pattern.evaluate(current, next);
+            }
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return current;
+        }
+        
+        // Gets the last recorded offset or -1 if no offset recorded.
+        public int getOffset() {
+            return offset;
+        }
+        
+        private boolean offsetRecorded() {
+            return offset >= 0;
         }
     }
 
@@ -280,17 +336,17 @@ final public class ListFormatter {
             // for listPattern/duration and listPattern/duration-narrow in root.txt.
             try {
                 return new ListFormatter(
-                    r.getWithFallback("listPattern/" + style + "/2").getString(),
-                    r.getWithFallback("listPattern/" + style + "/start").getString(),
-                    r.getWithFallback("listPattern/" + style + "/middle").getString(),
-                    r.getWithFallback("listPattern/" + style + "/end").getString(),
+                    Template.compile(r.getWithFallback("listPattern/" + style + "/2").getString()),
+                    Template.compile(r.getWithFallback("listPattern/" + style + "/start").getString()),
+                    Template.compile(r.getWithFallback("listPattern/" + style + "/middle").getString()),
+                    Template.compile(r.getWithFallback("listPattern/" + style + "/end").getString()),
                     ulocale);
             } catch (MissingResourceException e) {
                 return new ListFormatter(
-                        r.getWithFallback("listPattern/standard/2").getString(),
-                        r.getWithFallback("listPattern/standard/start").getString(),
-                        r.getWithFallback("listPattern/standard/middle").getString(),
-                        r.getWithFallback("listPattern/standard/end").getString(),
+                        Template.compile(r.getWithFallback("listPattern/standard/2").getString()),
+                        Template.compile(r.getWithFallback("listPattern/standard/start").getString()),
+                        Template.compile(r.getWithFallback("listPattern/standard/middle").getString()),
+                        Template.compile(r.getWithFallback("listPattern/standard/end").getString()),
                         ulocale);
             }
         }
