@@ -322,6 +322,7 @@
     <ClCompile Include="persncal.cpp" />
     <ClCompile Include="plurfmt.cpp" />
     <ClCompile Include="plurrule.cpp" />
+    <ClCompile Include="quantityformatter.cpp" />
     <ClCompile Include="rbnf.cpp" />
     <ClCompile Include="rbtz.cpp" />
     <ClCompile Include="reldatefmt.cpp">
@@ -1112,6 +1113,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="plurrule_impl.h" />
+    <ClInclude Include="quantityformatter.h" />
     <CustomBuild Include="unicode\rbnf.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
