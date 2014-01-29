@@ -277,6 +277,9 @@
     <ClCompile Include="selfmts.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="simplepatternformattertest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="tchcfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
