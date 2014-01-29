@@ -19,6 +19,7 @@ import java.io.ObjectStreamException;
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumMap;
@@ -346,7 +347,6 @@ public class MeasureFormat extends UFormat {
      * @draft ICU 53
      * @provisional
      */
-    @SuppressWarnings("unchecked")
     public <T extends Appendable> T formatMeasures(
             T appendable, FieldPosition fieldPosition, Measure... measures) {
         // fast track for trivial cases
@@ -368,26 +368,16 @@ public class MeasureFormat extends UFormat {
         
         ListFormatter listFormatter = ListFormatter.getInstance(
                 getLocale(), formatWidth.getListFormatterStyle());
-        String[] results = null;
-        if (fieldPosition == DontCareFieldPosition.INSTANCE) {
-            
-            // Fast track: No field position.
-            results = new String[measures.length];
-            for (int i = 0; i < measures.length; i++) {
-                results[i] = formatMeasure(measures[i]);
-            }
-        } else {
-            
-            // Slow track: Have to calculate field position.
-            results = formatMeasuresSlowTrack(listFormatter, fieldPosition, measures);            
+        if (fieldPosition != DontCareFieldPosition.INSTANCE) {
+            return append(formatMeasuresSlowTrack(listFormatter, fieldPosition, measures), appendable);
         }
-                 
-        // This is safe because appendable is of type T.
-        try {
-            return (T) appendable.append(listFormatter.format((Object[]) results));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        // Fast track: No field position.
+        String[] results = new String[measures.length];
+        for (int i = 0; i < measures.length; i++) {
+            results[i] = formatMeasure(measures[i]);
         }
+        return append(listFormatter.format((Object[]) results), appendable);                 
+       
     }   
     
     /**
@@ -633,16 +623,13 @@ public class MeasureFormat extends UFormat {
     private <T extends Appendable> T formatMeasure(
             Measure measure, T appendable, FieldPosition fieldPosition) {
         if (measure.getUnit() instanceof Currency) {
-            try {
-                appendable.append(
-                        currencyFormat.format(
-                                new CurrencyAmount(measure.getNumber(), (Currency) measure.getUnit()),
-                                new StringBuffer(),
-                                fieldPosition));
-                return appendable;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            return append(
+                    currencyFormat.format(
+                    new CurrencyAmount(measure.getNumber(), (Currency) measure.getUnit()),
+                    new StringBuffer(),
+                    fieldPosition),
+                    appendable);
+            
         }
         Number n = measure.getNumber();
         MeasureUnit unit = measure.getUnit(); 
@@ -653,21 +640,17 @@ public class MeasureFormat extends UFormat {
         Map<FormatWidth, Map<String, PatternData>> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
         Map<String, PatternData> countToFormat = styleToCountToFormat.get(formatWidth);
         PatternData messagePatternData = countToFormat.get(keyword);
-        try {
-            appendable.append(messagePatternData.prefix);
-            if (messagePatternData.suffix != null) { // there is a number (may not happen with, say, Arabic dual)
-                // Fix field position
-                if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
-                    fieldPosition.setBeginIndex(fpos.getBeginIndex() + messagePatternData.prefix.length());
-                    fieldPosition.setEndIndex(fpos.getEndIndex() + messagePatternData.prefix.length());
-                }
-                appendable.append(formattedNumber);
-                appendable.append(messagePatternData.suffix);
+        append(messagePatternData.prefix, appendable);
+        if (messagePatternData.suffix != null) { // there is a number (may not happen with, say, Arabic dual)
+            // Fix field position
+            if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
+                fieldPosition.setBeginIndex(fpos.getBeginIndex() + messagePatternData.prefix.length());
+                fieldPosition.setEndIndex(fpos.getEndIndex() + messagePatternData.prefix.length());
             }
-            return appendable;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            append(formattedNumber, appendable);
+            append(messagePatternData.suffix, appendable);
         }
+        return appendable;
     }
     
     // Wrapper around NumberFormat that provides immutability and thread-safety.
@@ -724,7 +707,7 @@ public class MeasureFormat extends UFormat {
         return new MeasureProxy(getLocale(), formatWidth, numberFormat.get(), CURRENCY_FORMAT);
     }
     
-    private String[] formatMeasuresSlowTrack(ListFormatter listFormatter, FieldPosition fieldPosition,
+    private String formatMeasuresSlowTrack(ListFormatter listFormatter, FieldPosition fieldPosition,
             Measure... measures) {
         String[] results = new String[measures.length];
         
@@ -742,23 +725,15 @@ public class MeasureFormat extends UFormat {
                 results[i] = formatMeasure(measures[i]);
             }
         }
+        ListFormatter.FormattedListBuilder builder =
+                listFormatter.format(Arrays.asList(results), fieldPositionFoundIndex);
         
         // Fix up FieldPosition indexes if our field is found.
-        if (fieldPositionFoundIndex != -1) {
-            String listPattern = listFormatter.getPatternForNumItems(measures.length);
-            int positionInPattern = listPattern.indexOf("{" + fieldPositionFoundIndex + "}");
-            if (positionInPattern == -1) {
-                throw new IllegalStateException("Can't find position with ListFormatter.");
-            }
-            // Now we have to adjust our position in pattern
-            // based on the previous values.
-            for (int i = 0; i < fieldPositionFoundIndex; i++) {
-                positionInPattern += (results[i].length() - ("{" + i + "}").length());
-            }
-            fieldPosition.setBeginIndex(fpos.getBeginIndex() + positionInPattern);
-            fieldPosition.setEndIndex(fpos.getEndIndex() + positionInPattern);
+        if (builder.getOffset() != -1) {
+            fieldPosition.setBeginIndex(fpos.getBeginIndex() + builder.getOffset());
+            fieldPosition.setEndIndex(fpos.getEndIndex() + builder.getOffset());
         }
-        return results;
+        return builder.toString();
     }
     
     // type is one of "hm", "ms" or "hms"
@@ -853,19 +828,24 @@ public class MeasureFormat extends UFormat {
         // When we get to the smallest amount, skip over it and copy
         // 'smallestAmountFormatted' to the builder instead.
         for (iterator.first(); iterator.getIndex() < iterator.getEndIndex();) {
-            try {
-                if (iterator.getAttributes().containsKey(smallestField)) {
-                    appendable.append(smallestAmountFormatted);
-                    iterator.setIndex(iterator.getRunLimit(smallestField));
-                } else {
-                    appendable.append(iterator.current());
-                    iterator.next();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (iterator.getAttributes().containsKey(smallestField)) {
+                append(smallestAmountFormatted, appendable);
+                iterator.setIndex(iterator.getRunLimit(smallestField));
+            } else {
+                append(iterator.current(), appendable);
+                iterator.next();
             }
         }
         return appendable;
+    }
+    
+    private static <T extends Appendable> T append(Object o, T appendable) {
+        try {
+            appendable.append(o.toString());
+            return appendable;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } 
     }
     
     private Object writeReplace() throws ObjectStreamException {

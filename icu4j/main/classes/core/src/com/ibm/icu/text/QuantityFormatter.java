@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013, International Business Machines Corporation and         *
+ * Copyright (C) 2013-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,6 +8,8 @@ package com.ibm.icu.text;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.ibm.icu.impl.Template;
 
 /**
  * QuantityFormatter represents an unknown quantity of something and formats a known quantity
@@ -25,6 +27,7 @@ class QuantityFormatter {
     
     static {
         int idx = 0;
+        // Other must be first.
         INDEX_MAP.put("other", idx++);
         INDEX_MAP.put("zero", idx++);
         INDEX_MAP.put("one", idx++);
@@ -42,7 +45,7 @@ class QuantityFormatter {
      */
     static class Builder {
         
-        private String[] templates;
+        private Template[] templates;
 
         /**
          * Adds a template.
@@ -51,16 +54,27 @@ class QuantityFormatter {
          * example, in English, the template for the "one" variant may be "{0} apple" while the
          * template for the "other" variant may be "{0} apples"
          * @return a reference to this Builder for chaining.
+         * @throws IllegalArgumentException if variant is not recognized or
+         *  if template has more than just the {0} placeholder.
          */
         public Builder add(String variant, String template) {
             ensureCapacity();
-            templates[INDEX_MAP.get(variant)] = template;
+            Integer idx = INDEX_MAP.get(variant);
+            if (idx == null) {
+                throw new IllegalArgumentException(variant);
+            }
+            Template newT = Template.compile(template);
+            if (newT.getPlaceholderCount() > 1) {
+                throw new IllegalArgumentException(
+                        "Extra placeholders: " + template);
+            }
+            templates[idx.intValue()] = newT;
             return this;
         }
 
         private void ensureCapacity() {
             if (templates == null) {
-                templates = new String[MAX_INDEX];
+                templates = new Template[MAX_INDEX];
             }
         }
 
@@ -83,9 +97,9 @@ class QuantityFormatter {
 
     }
 
-    private final String[] templates;
+    private final Template[] templates;
 
-    private QuantityFormatter(String[] templates) {
+    private QuantityFormatter(Template[] templates) {
         this.templates = templates;
     }
 
@@ -105,11 +119,12 @@ class QuantityFormatter {
         } else {
             variant = pluralRules.select(quantity);
         }
-        return getByVariant(variant).replace("{0}", formatStr);
+        return getByVariant(variant).evaluate(formatStr);
     }
 
-    private String getByVariant(String variant) {
-        String template = templates[INDEX_MAP.get(variant)];
+    private Template getByVariant(String variant) {
+        Integer idxObj = INDEX_MAP.get(variant);
+        Template template = templates[idxObj == null ? 0 : idxObj.intValue()];
         return template == null ? templates[0] : template;
     }
 }
