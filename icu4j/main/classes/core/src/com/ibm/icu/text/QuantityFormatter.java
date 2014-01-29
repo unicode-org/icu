@@ -9,7 +9,7 @@ package com.ibm.icu.text;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ibm.icu.impl.Template;
+import com.ibm.icu.impl.SimplePatternFormatter;
 
 /**
  * QuantityFormatter represents an unknown quantity of something and formats a known quantity
@@ -45,7 +45,7 @@ class QuantityFormatter {
      */
     static class Builder {
         
-        private Template[] templates;
+        private SimplePatternFormatter[] templates;
 
         /**
          * Adds a template.
@@ -63,7 +63,7 @@ class QuantityFormatter {
             if (idx == null) {
                 throw new IllegalArgumentException(variant);
             }
-            Template newT = Template.compile(template);
+            SimplePatternFormatter newT = SimplePatternFormatter.compile(template);
             if (newT.getPlaceholderCount() > 1) {
                 throw new IllegalArgumentException(
                         "Extra placeholders: " + template);
@@ -74,7 +74,7 @@ class QuantityFormatter {
 
         private void ensureCapacity() {
             if (templates == null) {
-                templates = new Template[MAX_INDEX];
+                templates = new SimplePatternFormatter[MAX_INDEX];
             }
         }
 
@@ -97,9 +97,9 @@ class QuantityFormatter {
 
     }
 
-    private final Template[] templates;
+    private final SimplePatternFormatter[] templates;
 
-    private QuantityFormatter(Template[] templates) {
+    private QuantityFormatter(SimplePatternFormatter[] templates) {
         this.templates = templates;
     }
 
@@ -119,12 +119,12 @@ class QuantityFormatter {
         } else {
             variant = pluralRules.select(quantity);
         }
-        return getByVariant(variant).evaluate(formatStr);
+        return getByVariant(variant).format(formatStr);
     }
 
-    private Template getByVariant(String variant) {
+    private SimplePatternFormatter getByVariant(String variant) {
         Integer idxObj = INDEX_MAP.get(variant);
-        Template template = templates[idxObj == null ? 0 : idxObj.intValue()];
+        SimplePatternFormatter template = templates[idxObj == null ? 0 : idxObj.intValue()];
         return template == null ? templates[0] : template;
     }
 }

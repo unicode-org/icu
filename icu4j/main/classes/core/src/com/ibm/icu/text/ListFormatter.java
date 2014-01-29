@@ -18,7 +18,7 @@ import java.util.MissingResourceException;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
-import com.ibm.icu.impl.Template;
+import com.ibm.icu.impl.SimplePatternFormatter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -31,10 +31,10 @@ import com.ibm.icu.util.UResourceBundle;
  * @provisional This API might change or be removed in a future release.
  */
 final public class ListFormatter {
-    private final Template two;
-    private final Template start;
-    private final Template middle;
-    private final Template end;
+    private final SimplePatternFormatter two;
+    private final SimplePatternFormatter start;
+    private final SimplePatternFormatter middle;
+    private final SimplePatternFormatter end;
     private final ULocale locale;
     
     /**
@@ -104,15 +104,15 @@ final public class ListFormatter {
      */
     public ListFormatter(String two, String start, String middle, String end) {
         this(
-                Template.compile(two),
-                Template.compile(start),
-                Template.compile(middle),
-                Template.compile(end),
+                SimplePatternFormatter.compile(two),
+                SimplePatternFormatter.compile(start),
+                SimplePatternFormatter.compile(middle),
+                SimplePatternFormatter.compile(end),
                 null);
         
     }
     
-    private ListFormatter(Template two, Template start, Template middle, Template end, ULocale locale) {
+    private ListFormatter(SimplePatternFormatter two, SimplePatternFormatter start, SimplePatternFormatter middle, SimplePatternFormatter end, ULocale locale) {
         this.two = two;
         this.start = start;
         this.middle = middle;
@@ -267,14 +267,14 @@ final public class ListFormatter {
         // added in relation to the rest of the list. {0} represents the rest of the list; {1}
         // represents the new object in pattern. next is the object to be added. If recordOffset
         // is true, records the offset of next in the formatted string.
-        public FormattedListBuilder append(Template pattern, Object next, boolean recordOffset) {
+        public FormattedListBuilder append(SimplePatternFormatter pattern, Object next, boolean recordOffset) {
             if (pattern.getPlaceholderCount() != 2) {
                 throw new IllegalArgumentException("Need {0} and {1} only in pattern " + pattern);
             }
             if (recordOffset || offsetRecorded()) {
-                Template.Evaluation evaluation = pattern.evaluateFull(current, next);
-                int oneOffset = evaluation.getOffset(1);
-                int zeroOffset = evaluation.getOffset(0);
+                SimplePatternFormatter.Formatted formatted = pattern.formatValues(new Object[]{current, next});
+                int oneOffset = formatted.getOffset(1);
+                int zeroOffset = formatted.getOffset(0);
                 if (zeroOffset == -1 || oneOffset == -1) {
                     throw new IllegalArgumentException("{0} or {1} missing from pattern " + pattern);
                 }
@@ -283,9 +283,9 @@ final public class ListFormatter {
                 } else {
                     offset += zeroOffset;
                 }
-                current = evaluation.toString();
+                current = formatted.toString();
             } else {
-                current = pattern.evaluate(current, next);
+                current = pattern.format(current, next);
             }
             return this;
         }
@@ -336,17 +336,17 @@ final public class ListFormatter {
             // for listPattern/duration and listPattern/duration-narrow in root.txt.
             try {
                 return new ListFormatter(
-                    Template.compile(r.getWithFallback("listPattern/" + style + "/2").getString()),
-                    Template.compile(r.getWithFallback("listPattern/" + style + "/start").getString()),
-                    Template.compile(r.getWithFallback("listPattern/" + style + "/middle").getString()),
-                    Template.compile(r.getWithFallback("listPattern/" + style + "/end").getString()),
+                    SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/2").getString()),
+                    SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/start").getString()),
+                    SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/middle").getString()),
+                    SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/end").getString()),
                     ulocale);
             } catch (MissingResourceException e) {
                 return new ListFormatter(
-                        Template.compile(r.getWithFallback("listPattern/standard/2").getString()),
-                        Template.compile(r.getWithFallback("listPattern/standard/start").getString()),
-                        Template.compile(r.getWithFallback("listPattern/standard/middle").getString()),
-                        Template.compile(r.getWithFallback("listPattern/standard/end").getString()),
+                        SimplePatternFormatter.compile(r.getWithFallback("listPattern/standard/2").getString()),
+                        SimplePatternFormatter.compile(r.getWithFallback("listPattern/standard/start").getString()),
+                        SimplePatternFormatter.compile(r.getWithFallback("listPattern/standard/middle").getString()),
+                        SimplePatternFormatter.compile(r.getWithFallback("listPattern/standard/end").getString()),
                         ulocale);
             }
         }

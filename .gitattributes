@@ -3966,11 +3966,11 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/ResourceBundleWrapper.java svneol=n
 icu4j/main/classes/core/src/com/ibm/icu/impl/Row.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/RuleCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SimpleCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/SimplePatternFormatter.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/SoftCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SortedSetRelation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringPrepDataReader.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/Template.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/TextTrieMap.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneAdapter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneGenericNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4911,8 +4911,8 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleDataTest.java svneol=n
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleMatcherTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocalePriorityListTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/RegionTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/SimplePatternFormatterTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/StringTokenizerTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TemplateTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TextTrieMapTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.java svneol=native#text/plain%3Bcharset%3Dutf-8

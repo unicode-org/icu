@@ -22,7 +22,7 @@ public class TestAll extends TestGroup {
                   "ICUServiceTest",
                   "ICUServiceThreadTest",
                   "ICUBinaryTest",
-                  "TemplateTest",
+                  "SimplePatternFormatterTest",
                   "TextTrieMapTest"
               },
               "Test miscellaneous implementation utilities");
