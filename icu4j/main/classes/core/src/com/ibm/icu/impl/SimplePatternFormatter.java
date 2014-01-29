@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Compiled version of a template such as "{1} was born in {0}".
+ * Compiled version of a pattern such as "{1} was born in {0}".
  * <p>
- * Using Template objects is both faster and safer than adhoc replacement 
+ * Using SimplePatternFormatter objects is both faster and safer than adhoc replacement 
  * such as <code>pattern.replace("{0}", "Colorado").replace("{1} "Fred");</code>.
  * They are faster because they are precompiled; they are safer because they
  * account for curly braces escaped by apostrophe (').
@@ -21,17 +21,17 @@ import java.util.List;
  * by a single quote, it becomes a curly brace instead of the start of a
  * placeholder. Two single quotes resolve to one single quote. 
  * <p>
- * Template objects are immutable and can be safely cached like strings.
+ * SimplePatternFormatter objects are immutable and can be safely cached like strings.
  * <p>
  * Example:
  * <pre>
- * Template template = Template.compile("{1} '{born} in {0}");
+ * SimplePatternFormatter fmt = SimplePatternFormatter.compile("{1} '{born} in {0}");
  * 
  * // Output: "paul {born} in england"
- * System.out.println(template.evaluate("england", "paul"));
+ * System.out.println(fmt.format("england", "paul"));
  * </pre>
  */
-public class Template {
+public class SimplePatternFormatter {
     private final String patternWithoutPlaceholders;
     private final int placeholderCount;
     
@@ -39,7 +39,7 @@ public class Template {
     // [3] second placeholderId etc.
     private final int[] placeholderIdsOrderedByOffset;
 
-    private Template(String pattern, PlaceholdersBuilder builder) {
+    private SimplePatternFormatter(String pattern, PlaceholdersBuilder builder) {
         this.patternWithoutPlaceholders = pattern;
         this.placeholderIdsOrderedByOffset =
                 builder.getPlaceholderIdsOrderedByOffset();
@@ -47,11 +47,11 @@ public class Template {
     }
 
     /**
-     * Compiles a string into a template.
+     * Compiles a string.
      * @param pattern The string.
-     * @return the new template object.
+     * @return the new SimplePatternFormatter object.
      */
-    public static Template compile(String pattern) {
+    public static SimplePatternFormatter compile(String pattern) {
         PlaceholdersBuilder placeholdersBuilder = new PlaceholdersBuilder();
         PlaceholderIdBuilder idBuilder =  new PlaceholderIdBuilder();
         StringBuilder newPattern = new StringBuilder();
@@ -110,35 +110,59 @@ public class Template {
         default:
             throw new IllegalStateException();
         }
-        return new Template(newPattern.toString(), placeholdersBuilder);
+        return new SimplePatternFormatter(newPattern.toString(), placeholdersBuilder);
         
     }
     
     /**
-     * Evaluates this template with given values. The first value
-     * corresponds to {0}; the second to {1} etc.
-     * @param values the values.
-     * @return The result.
-     * @throws IllegalArgumentException if the number of arguments is
-     * insufficient to match all the placeholders.
+     * Formats given value.
+     * @throws UnsupportedOperationException if this object's pattern expects
+     * more than one value
      */
-    public String evaluate(Object... values) {
+    public String format(Object arg0) {
         StringResultBuilder builder = new StringResultBuilder();
-        evaluatePrivate(values, builder);
+        if (!formatPrivate(new Object[] {arg0}, builder)) {
+            throw new UnsupportedOperationException();
+        }
         return builder.build();
     }
     
     /**
-     * Evaluates this template with given values. The first value
-     * corresponds to {0}; the second to {1} etc.
-     * @param values the values.
-     * @return The result of the evaluation.
-     * @throws IllegalArgumentException if the number of arguments is
-     * insufficient to match all the placeholders.
+     * Formats given values.
+     * @throws UnsupportedOperationException if this object's pattern expects more than two
+     *  values.
      */
-    public Evaluation evaluateFull(Object... values) {
-        EvaluationResultBuilder builder = new EvaluationResultBuilder();
-        evaluatePrivate(values, builder);
+    public String format(Object arg0, Object arg1) {
+        StringResultBuilder builder = new StringResultBuilder();
+        if (!formatPrivate(new Object[] {arg0, arg1}, builder)) {
+            throw new UnsupportedOperationException();
+        }
+        return builder.build();
+    }
+    
+    /**
+     * Formats given values.
+     * @throws UnsupportedOperationException if this object's pattern expects more than three
+     *  values.
+     */
+    public String format(Object arg0, Object arg1, Object arg2) {
+        StringResultBuilder builder = new StringResultBuilder();
+        if (!formatPrivate(new Object[] {arg0, arg1, arg2}, builder)) {
+            throw new UnsupportedOperationException();
+        }
+        return builder.build();
+    }
+    
+    /**
+     * Formats given values.
+     * @throws IllegalArgumentException if args.length < this.getPlaceholderCount()
+     *  values.
+     */
+    public Formatted formatValues(Object[] args) {
+        FormattedResultBuilder builder = new FormattedResultBuilder();
+        if (!formatPrivate(args, builder)) {
+            throw new IllegalArgumentException();
+        }
         return builder.build();
     }
     
@@ -150,8 +174,8 @@ public class Template {
     }
     
     /**
-     * Evaluates this template using values {0}, {1} etc. Note that this is
-     * not the same as the original pattern string used to build the template.
+     * Formats this object using values {0}, {1} etc. Note that this is
+     * not the same as the original pattern string used to build this object.
      */
     @Override
     public String toString() {
@@ -159,26 +183,25 @@ public class Template {
         for (int i = 0; i < values.length; i++) {
             values[i] = String.format("{%d}", i);
         }
-        return evaluate((Object[]) values);
+        return formatValues(values).toString();
     }
     
     /**
-     * The immutable evaluation of a template.
+     * The immutable representation of a formatted value.
      */
-    public static class Evaluation {
+    public static class Formatted {
         
         private final String result;
         private final int[] offsets;
 
-        private Evaluation(String result, int[] placeholderOffsets) {
+        private Formatted(String result, int[] placeholderOffsets) {
             this.result = result;
             this.offsets = placeholderOffsets;
         }
 
         /**
-         * Returns the offset of a particular placeholder in the evaluated
-         * string. Returns -1 if the placeholder did not exist in the 
-         * corresponding template.
+         * Returns the offset of a particular placeholder in this formatted
+         * value. Returns -1 if the placeholder does not exist.
          * @throws IndexOutOfBoundsException if placeholderId is negative.
          */
         public int getOffset(int placeholderId) {
@@ -192,7 +215,7 @@ public class Template {
         }
 
         /**
-         * Returns the evaluated string.
+         * Returns the formatted string
          */
         public String toString() {
             return result;
@@ -200,15 +223,14 @@ public class Template {
 
     }
     
-    private void evaluatePrivate(Object[] values, ResultBuilder builder) {
+    private boolean formatPrivate(Object[] values, ResultBuilder builder) {
         if (values.length < placeholderCount) {
-            throw new IllegalArgumentException(
-                    "There must be at least as values as placeholders.");
+            return false;
         }
         builder.setPlaceholderCount(placeholderCount);   
         if (placeholderIdsOrderedByOffset.length == 0) {
             builder.setResult(patternWithoutPlaceholders);
-            return;
+            return true;
         }
         StringBuilder result = new StringBuilder();
         result.append(
@@ -232,6 +254,7 @@ public class Template {
                 placeholderIdsOrderedByOffset[placeholderIdsOrderedByOffset.length - 2],
                 patternWithoutPlaceholders.length());
         builder.setResult(result.toString());
+        return true;
     }
     
     private static enum State {
@@ -319,7 +342,7 @@ public class Template {
         }
     }
     
-    private static class EvaluationResultBuilder implements ResultBuilder {
+    private static class FormattedResultBuilder implements ResultBuilder {
         private int[] placeholderOffsets;
         private String result;
         
@@ -338,8 +361,8 @@ public class Template {
             this.result = result;
         }
         
-        public Evaluation build() {
-            return new Evaluation(this.result, this.placeholderOffsets);
+        public Formatted build() {
+            return new Formatted(this.result, this.placeholderOffsets);
         }
         
     }
