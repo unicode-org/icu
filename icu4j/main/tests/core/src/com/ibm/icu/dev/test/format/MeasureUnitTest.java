@@ -28,6 +28,7 @@ import com.ibm.icu.dev.test.serializable.SerializableTest;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MeasureFormat;
+import com.ibm.icu.text.TimeUnitFormat;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
@@ -560,6 +561,19 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("FormatWidth.SHORT", 1, FormatWidth.SHORT.ordinal());
         assertEquals("FormatWidth.NARROW", 2, FormatWidth.NARROW.ordinal());
         assertEquals("FormatWidth.NUMERIC", 3, FormatWidth.NUMERIC.ordinal());
+    }
+    
+    public void testCurrencyFormatStandInForMeasureFormat() {
+        MeasureFormat mf = MeasureFormat.getCurrencyFormat(ULocale.ENGLISH);
+        assertEquals(
+                "70 feet, 5.3 inches",
+                "70 feet, 5.3 inches",
+                mf.formatMeasures(
+                        new Measure(70, MeasureUnit.FOOT),
+                        new Measure(5.3, MeasureUnit.INCH)));
+        assertEquals("getLocale", ULocale.ENGLISH, mf.getLocale());
+        assertEquals("getNumberFormat", ULocale.ENGLISH, mf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
+        assertEquals("getWidth", MeasureFormat.FormatWidth.WIDE, mf.getWidth());
     }
     
     static void generateCXXHConstants() {
