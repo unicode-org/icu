@@ -44,15 +44,15 @@ public class SimplePatternFormatterTest extends TestFmwk {
                  "toString",
                  "This doesn't have templates {0}",
                  fmt.toString());
-         SimplePatternFormatter.Formatted formatted = fmt.formatValues(new Object[] {});
+         int[] offsets = new int[1];
          assertEquals(
                  "toString2",
                  "This doesn't have templates {0}",
-                 formatted.toString());
+                 fmt.format(new StringBuilder(), offsets).toString());
          assertEquals(
-                 "getOffset(0)",
+                 "offsets[0]",
                  -1,
-                 formatted.getOffset(0));
+                 offsets[0]);
          fmt = SimplePatternFormatter.compile("Some {} messed {12d up stuff.");
          assertEquals(
                  "getPlaceholderCount",
@@ -67,7 +67,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
      public void TestOnePlaceholder() {
         assertEquals("TestOnePlaceholder",
                 "1 meter",
-                SimplePatternFormatter.compile("{0} meter").format(1));
+                SimplePatternFormatter.compile("{0} meter").format("1"));
      }
      
      public void TestWithPlaceholders() {
@@ -78,38 +78,29 @@ public class SimplePatternFormatterTest extends TestFmwk {
                  5,
                  fmt.getPlaceholderCount());
          try {
-             fmt.format("freddy", "tommy", "frog");
+             fmt.format("freddy", "tommy", "frog", "leg");
              fail("Expected UnsupportedOperationException");
-         } catch (UnsupportedOperationException e) {
-             // Expected
-         }
-         try {
-             fmt.formatValues(new String[] {"freddy", "tommy", "frog", "leg"});
-             fail("Expected IllegalArgumentException");
          } catch (IllegalArgumentException e) {
              // Expected
          }
-         String[] args = new String[] {"freddy", "tommy", "frog", "leg", "{0}"};
-        assertEquals(
-                 "evaluate",
-                 "Templates frogtommy and {0} are out of order.",
-                 fmt.formatValues(args).toString());
          assertEquals(
                  "toString",
                  "Templates {2}{1} and {4} are out of order.",
                  fmt.toString());
-         SimplePatternFormatter.Formatted formatted =
-                 fmt.formatValues(args);
-         int[] offsets = {-1, 14, 10, -1, 24, -1};
+        int[] offsets = new int[6]; 
+        assertEquals(
+                 "evaluate",
+                 "123456: Templates frogtommy and {0} are out of order.",
+                 fmt.format(
+                         new StringBuilder("123456: "),
+                         offsets,
+                         "freddy", "tommy", "frog", "leg", "{0}").toString());
+         
+         int[] expectedOffsets = {-1, 22, 18, -1, 32, -1};
          for (int i = 0; i < offsets.length; i++) {
-             if (offsets[i] != formatted.getOffset(i)) {
+             if (offsets[i] != expectedOffsets[i]) {
                  fail("getOffset() returned wrong value for " + i);
              }
          }
-         assertEquals(
-                 "toString2",
-                 "Templates frogtommy and {0} are out of order.",
-                 formatted.toString());
      }
-    
 }

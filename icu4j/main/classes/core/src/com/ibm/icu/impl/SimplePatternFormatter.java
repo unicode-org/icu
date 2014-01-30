@@ -113,64 +113,70 @@ public class SimplePatternFormatter {
         return new SimplePatternFormatter(newPattern.toString(), placeholdersBuilder);
         
     }
-    
-    /**
-     * Formats given value.
-     * @throws UnsupportedOperationException if this object's pattern expects
-     * more than one value
-     */
-    public String format(Object arg0) {
-        StringResultBuilder builder = new StringResultBuilder();
-        if (!formatPrivate(new Object[] {arg0}, builder)) {
-            throw new UnsupportedOperationException();
-        }
-        return builder.build();
-    }
-    
-    /**
-     * Formats given values.
-     * @throws UnsupportedOperationException if this object's pattern expects more than two
-     *  values.
-     */
-    public String format(Object arg0, Object arg1) {
-        StringResultBuilder builder = new StringResultBuilder();
-        if (!formatPrivate(new Object[] {arg0, arg1}, builder)) {
-            throw new UnsupportedOperationException();
-        }
-        return builder.build();
-    }
-    
-    /**
-     * Formats given values.
-     * @throws UnsupportedOperationException if this object's pattern expects more than three
-     *  values.
-     */
-    public String format(Object arg0, Object arg1, Object arg2) {
-        StringResultBuilder builder = new StringResultBuilder();
-        if (!formatPrivate(new Object[] {arg0, arg1, arg2}, builder)) {
-            throw new UnsupportedOperationException();
-        }
-        return builder.build();
-    }
-    
-    /**
-     * Formats given values.
-     * @throws IllegalArgumentException if args.length < this.getPlaceholderCount()
-     *  values.
-     */
-    public Formatted formatValues(Object[] args) {
-        FormattedResultBuilder builder = new FormattedResultBuilder();
-        if (!formatPrivate(args, builder)) {
-            throw new IllegalArgumentException();
-        }
-        return builder.build();
-    }
-    
+      
     /**
      * Returns the max placeholder ID + 1.
      */
     public int getPlaceholderCount() {
         return placeholderCount;
+    }
+    
+    /**
+     * Formats the given values.
+     */
+    public String format(String... values) {
+        return format(new StringBuilder(), null, values).toString();
+    }
+
+    /**
+     * Formats the given values.
+     * 
+     * @param appendTo the result appended here.
+     * @param offsets position of first value in result stored in offfsets[0];
+     *   second in offsets[1]; third in offsets[2] etc.
+     * @param values the values
+     * @return appendTo
+     */
+    public StringBuilder format(
+            StringBuilder appendTo, int[] offsets, String... values) {
+        if (values.length < placeholderCount) {
+            throw new IllegalArgumentException("Too few values.");
+        }
+        int offsetLen = offsets == null ? 0 : offsets.length;
+        for (int i = 0; i < offsetLen; i++) {
+            offsets[i] = -1;
+        }
+        if (placeholderIdsOrderedByOffset.length == 0) {
+            appendTo.append(patternWithoutPlaceholders);
+            return appendTo;
+        }
+        appendTo.append(
+                patternWithoutPlaceholders,
+                0,
+                placeholderIdsOrderedByOffset[0]);
+        setPlaceholderOffset(
+                placeholderIdsOrderedByOffset[1],
+                appendTo.length(),
+                offsets,
+                offsetLen);
+        appendTo.append(values[placeholderIdsOrderedByOffset[1]]);
+        for (int i = 2; i < placeholderIdsOrderedByOffset.length; i += 2) {
+            appendTo.append(
+                    patternWithoutPlaceholders,
+                    placeholderIdsOrderedByOffset[i - 2],
+                    placeholderIdsOrderedByOffset[i]);
+            setPlaceholderOffset(
+                    placeholderIdsOrderedByOffset[i + 1],
+                    appendTo.length(),
+                    offsets,
+                    offsetLen);
+            appendTo.append(values[placeholderIdsOrderedByOffset[i + 1]]);
+        }
+        appendTo.append(
+                patternWithoutPlaceholders,
+                placeholderIdsOrderedByOffset[placeholderIdsOrderedByOffset.length - 2],
+                patternWithoutPlaceholders.length());
+        return appendTo;
     }
     
     /**
@@ -183,80 +189,16 @@ public class SimplePatternFormatter {
         for (int i = 0; i < values.length; i++) {
             values[i] = String.format("{%d}", i);
         }
-        return formatValues(values).toString();
+        return format(new StringBuilder(), null, values).toString();
     }
     
-    /**
-     * The immutable representation of a formatted value.
-     */
-    public static class Formatted {
-        
-        private final String result;
-        private final int[] offsets;
-
-        private Formatted(String result, int[] placeholderOffsets) {
-            this.result = result;
-            this.offsets = placeholderOffsets;
+    private static void setPlaceholderOffset(
+            int placeholderId, int offset, int[] offsets, int offsetLen) {
+        if (placeholderId < offsetLen) {
+            offsets[placeholderId] = offset;
         }
-
-        /**
-         * Returns the offset of a particular placeholder in this formatted
-         * value. Returns -1 if the placeholder does not exist.
-         * @throws IndexOutOfBoundsException if placeholderId is negative.
-         */
-        public int getOffset(int placeholderId) {
-            if (placeholderId < 0) {
-                throw new IndexOutOfBoundsException();
-            }
-            if (placeholderId >= offsets.length) {
-                return -1;
-            }
-            return offsets[placeholderId];
-        }
-
-        /**
-         * Returns the formatted string
-         */
-        public String toString() {
-            return result;
-        }
-
     }
-    
-    private boolean formatPrivate(Object[] values, ResultBuilder builder) {
-        if (values.length < placeholderCount) {
-            return false;
-        }
-        builder.setPlaceholderCount(placeholderCount);   
-        if (placeholderIdsOrderedByOffset.length == 0) {
-            builder.setResult(patternWithoutPlaceholders);
-            return true;
-        }
-        StringBuilder result = new StringBuilder();
-        result.append(
-                patternWithoutPlaceholders,
-                0,
-                placeholderIdsOrderedByOffset[0]);
-        builder.setPlaceholderOffset(
-                placeholderIdsOrderedByOffset[1], result.length());
-        result.append(values[placeholderIdsOrderedByOffset[1]]);
-        for (int i = 2; i < placeholderIdsOrderedByOffset.length; i += 2) {
-            result.append(
-                    patternWithoutPlaceholders,
-                    placeholderIdsOrderedByOffset[i - 2],
-                    placeholderIdsOrderedByOffset[i]);
-            builder.setPlaceholderOffset(
-                    placeholderIdsOrderedByOffset[i + 1], result.length());
-            result.append(values[placeholderIdsOrderedByOffset[i + 1]]);
-        }
-        result.append(
-                patternWithoutPlaceholders,
-                placeholderIdsOrderedByOffset[placeholderIdsOrderedByOffset.length - 2],
-                patternWithoutPlaceholders.length());
-        builder.setResult(result.toString());
-        return true;
-    }
-    
+
     private static enum State {
         INIT,
         APOSTROPHE,
@@ -316,55 +258,4 @@ public class SimplePatternFormatter {
             return result;
         }
     }
-    
-    private static interface ResultBuilder {
-        void setPlaceholderCount(int length);
-        void setPlaceholderOffset(int i, int length);
-        void setResult(String patternWithoutPlaceholders);
-    }
-    
-    private static class StringResultBuilder implements ResultBuilder {
-
-        private String result;
-        
-        public void setPlaceholderCount(int count) {
-        }
-
-        public void setPlaceholderOffset(int placeholderId, int offset) {
-        }
-
-        public void setResult(String result) {
-            this.result = result;    
-        }
-        
-        public String build() {
-            return result;
-        }
-    }
-    
-    private static class FormattedResultBuilder implements ResultBuilder {
-        private int[] placeholderOffsets;
-        private String result;
-        
-        public void setPlaceholderCount(int count) {
-            placeholderOffsets = new int[count];
-            for (int i = 0; i < count; i++) {
-                placeholderOffsets[i] = -1;
-            }
-        }
-
-        public void setPlaceholderOffset(int placeholderId, int offset) {
-            placeholderOffsets[placeholderId] = offset;
-        }
-
-        public void setResult(String result) {
-            this.result = result;
-        }
-        
-        public Formatted build() {
-            return new Formatted(this.result, this.placeholderOffsets);
-        }
-        
-    }
-
 }
