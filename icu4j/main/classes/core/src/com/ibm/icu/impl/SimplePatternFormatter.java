@@ -132,8 +132,10 @@ public class SimplePatternFormatter {
      * Formats the given values.
      * 
      * @param appendTo the result appended here.
-     * @param offsets position of first value in result stored in offfsets[0];
-     *   second in offsets[1]; third in offsets[2] etc.
+     * @param offsets position of first value in appendTo stored in offfsets[0];
+     *   second in offsets[1]; third in offsets[2] etc. An offset of -1 means that the
+     *   corresponding value is not in appendTo. offsets.length and values.length may
+     *   differ. If caller is not interested in offsets, caller may pass null here.
      * @param values the values
      * @return appendTo
      */
