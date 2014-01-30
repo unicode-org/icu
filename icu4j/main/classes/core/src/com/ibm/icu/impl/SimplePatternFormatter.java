@@ -51,7 +51,7 @@ public class SimplePatternFormatter {
      * @param pattern The string.
      * @return the new SimplePatternFormatter object.
      */
-    public static SimplePatternFormatter compile(String pattern) {
+    public static SimplePatternFormatter compile(CharSequence pattern) {
         PlaceholdersBuilder placeholdersBuilder = new PlaceholdersBuilder();
         PlaceholderIdBuilder idBuilder =  new PlaceholderIdBuilder();
         StringBuilder newPattern = new StringBuilder();
@@ -124,7 +124,7 @@ public class SimplePatternFormatter {
     /**
      * Formats the given values.
      */
-    public String format(String... values) {
+    public String format(CharSequence... values) {
         return format(new StringBuilder(), null, values).toString();
     }
 
@@ -140,7 +140,7 @@ public class SimplePatternFormatter {
      * @return appendTo
      */
     public StringBuilder format(
-            StringBuilder appendTo, int[] offsets, String... values) {
+            StringBuilder appendTo, int[] offsets, CharSequence... values) {
         if (values.length < placeholderCount) {
             throw new IllegalArgumentException("Too few values.");
         }

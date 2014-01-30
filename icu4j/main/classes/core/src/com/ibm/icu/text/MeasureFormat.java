@@ -628,7 +628,7 @@ public class MeasureFormat extends UFormat {
         QuantityFormatter countToFormat = styleToCountToFormat.get(formatWidth);
         SimplePatternFormatter formatter = countToFormat.getByVariant(keyword);
         int[] offsets = new int[1];
-        formatter.format(appendTo, offsets, formattedNumber.toString());
+        formatter.format(appendTo, offsets, formattedNumber);
         if (offsets[0] != -1) { // there is a number (may not happen with, say, Arabic dual)
             // Fix field position
             if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
