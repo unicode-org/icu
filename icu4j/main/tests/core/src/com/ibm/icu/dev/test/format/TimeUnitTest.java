@@ -15,6 +15,8 @@ import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.TimeUnitFormat;
+import com.ibm.icu.util.Measure;
+import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
@@ -377,6 +379,22 @@ public class TimeUnitTest extends TestFmwk {
         TimeUnitFormat tuf1 = new TimeUnitFormat();
         tuf1.setNumberFormat(NumberFormat.getInstance());
         tuf1.parseObject("", new ParsePosition(0));
+    }
+    
+    public void TestStandInForMeasureFormat() {
+        TimeUnitFormat tuf = new TimeUnitFormat(ULocale.FRENCH, TimeUnitFormat.ABBREVIATED_NAME);
+        Measure measure = new Measure(23, MeasureUnit.CELSIUS);
+        assertEquals("23 °C", "23 °C", tuf.format(measure));
+        tuf = new TimeUnitFormat(ULocale.FRENCH, TimeUnitFormat.FULL_NAME);
+        assertEquals(
+                "70 pied et 5,3 pouces",
+                "70 pieds et 5,3 pouces",
+                tuf.formatMeasures(
+                        new Measure(70, MeasureUnit.FOOT),
+                        new Measure(5.3, MeasureUnit.INCH)));
+        assertEquals("getLocale", ULocale.FRENCH, tuf.getLocale());
+        assertEquals("getNumberFormat", ULocale.FRENCH, tuf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
+        assertEquals("getWidth", MeasureFormat.FormatWidth.WIDE, tuf.getWidth());
     }
     
     private void verifyEqualsHashCode(Object o, Object eq, Object ne) {
