@@ -25,13 +25,13 @@ import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.SimplePatternFormatter;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
@@ -117,14 +117,14 @@ public class MeasureFormat extends UFormat {
     private final transient PluralRules rules;
     
     // Measure unit -> format width -> plural form -> pattern ("{0} meters")
-    private final transient Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat;
+    private final transient Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat;
     
     private final transient NumericFormatters numericFormatters;
     
     private final transient ImmutableNumberFormat currencyFormat;
 
-    private static final SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>>> localeToUnitToStyleToCountToFormat
-            = new SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>>>();
+    private static final SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>> localeToUnitToStyleToCountToFormat
+            = new SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>>();
   
     private static final SimpleCache<ULocale, NumericFormatters> localeToNumericDurationFormatters
             = new SimpleCache<ULocale,NumericFormatters>();
@@ -234,7 +234,7 @@ public class MeasureFormat extends UFormat {
      */
     public static MeasureFormat getInstance(ULocale locale, FormatWidth formatWidth, NumberFormat format) {
         PluralRules rules = PluralRules.forLocale(locale);
-        Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat;
+        Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat;
         NumericFormatters formatters = null;
         unitToStyleToCountToFormat = localeToUnitToStyleToCountToFormat.get(locale);
         if (unitToStyleToCountToFormat == null) {
@@ -482,7 +482,7 @@ public class MeasureFormat extends UFormat {
             FormatWidth formatWidth,
             ImmutableNumberFormat format,
             PluralRules rules,
-            Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat,
+            Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat,
             NumericFormatters formatters,
             ImmutableNumberFormat currencyFormat) {
         setLocale(locale, locale);
@@ -536,56 +536,38 @@ public class MeasureFormat extends UFormat {
     /**
      * Returns formatting data for all MeasureUnits except for currency ones.
      */
-    private static Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> loadLocaleData(
+    private static Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> loadLocaleData(
             ULocale locale, PluralRules rules) {
-        Set<String> keywords = rules.getKeywords();
-        Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat
-                = new HashMap<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>>();
+        QuantityFormatter.Builder builder = new QuantityFormatter.Builder();
+        Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat
+                = new HashMap<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>();
         ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
         for (MeasureUnit unit : MeasureUnit.getAvailable()) {
             // Currency data cannot be found here. Skip.
             if (unit instanceof Currency) {
                 continue;
             }
-            EnumMap<FormatWidth, Map<String, PatternData>> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
+            EnumMap<FormatWidth, QuantityFormatter> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
             if (styleToCountToFormat == null) {
-                unitToStyleToCountToFormat.put(unit, styleToCountToFormat = new EnumMap<FormatWidth, Map<String, PatternData>>(FormatWidth.class));
+                unitToStyleToCountToFormat.put(unit, styleToCountToFormat = new EnumMap<FormatWidth, QuantityFormatter>(FormatWidth.class));
             }
             for (FormatWidth styleItem : FormatWidth.values()) {
                 try {
                     ICUResourceBundle unitTypeRes = resource.getWithFallback(styleItem.resourceKey);
                     ICUResourceBundle unitsRes = unitTypeRes.getWithFallback(unit.getType());
                     ICUResourceBundle oneUnitRes = unitsRes.getWithFallback(unit.getSubtype());
-                    Map<String, PatternData> countToFormat = styleToCountToFormat.get(styleItem);
-                    if (countToFormat == null) {
-                        styleToCountToFormat.put(styleItem, countToFormat = new HashMap<String, PatternData>());
-                    }
-                    // TODO(rocketman): Seems like we should be iterating over the bundles in
-                    // oneUnitRes instead of all the plural key words since most languages have
-                    // just 1 or 2 forms.
-                    for (String keyword : keywords) {
+                    builder.reset();
+                    int len = oneUnitRes.getSize();
+                    for (int i = 0; i < len; i++) {
                         UResourceBundle countBundle;
                         try {
-                            countBundle = oneUnitRes.get(keyword);
+                            countBundle = oneUnitRes.get(i);
                         } catch (MissingResourceException e) {
                             continue;
                         }
-                        String pattern = countBundle.getString();
-                        //                        System.out.println(styleItem.resourceKey + "/" 
-                        //                                + unit.getType() + "/" 
-                        //                                + unit.getCode() + "/" 
-                        //                                + keyword + "=" + pattern);
-                        PatternData format = new PatternData(pattern);
-                        countToFormat.put(keyword, format);
-                        //                        System.out.println(styleToCountToFormat);
+                        builder.add(countBundle.getKey(), countBundle.getString());
                     }
-                    // fill in 'other' for any missing values
-                    PatternData other = countToFormat.get("other");
-                    for (String keyword : keywords) {
-                        if (!countToFormat.containsKey(keyword)) {
-                            countToFormat.put(keyword, other);
-                        }
-                    }
+                    styleToCountToFormat.put(styleItem, builder.build());
                 } catch (MissingResourceException e) {
                     continue;
                 }
@@ -593,7 +575,7 @@ public class MeasureFormat extends UFormat {
             // now fill in the holes
             fillin:
                 if (styleToCountToFormat.size() != FormatWidth.values().length) {
-                    Map<String, PatternData> fallback = styleToCountToFormat.get(FormatWidth.SHORT);
+                    QuantityFormatter fallback = styleToCountToFormat.get(FormatWidth.SHORT);
                     if (fallback == null) {
                         fallback = styleToCountToFormat.get(FormatWidth.WIDE);
                     }
@@ -601,12 +583,9 @@ public class MeasureFormat extends UFormat {
                         break fillin; // TODO use root
                     }
                     for (FormatWidth styleItem : FormatWidth.values()) {
-                        Map<String, PatternData> countToFormat = styleToCountToFormat.get(styleItem);
+                        QuantityFormatter countToFormat = styleToCountToFormat.get(styleItem);
                         if (countToFormat == null) {
-                            styleToCountToFormat.put(styleItem, countToFormat = new HashMap<String, PatternData>());
-                            for (Entry<String, PatternData> entry : fallback.entrySet()) {
-                                countToFormat.put(entry.getKey(), entry.getValue());
-                            }
+                            styleToCountToFormat.put(styleItem, fallback);
                         }
                     }
                 }
@@ -636,18 +615,18 @@ public class MeasureFormat extends UFormat {
         StringBuffer formattedNumber = numberFormat.format(n, new StringBuffer(), fpos);
         String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
 
-        Map<FormatWidth, Map<String, PatternData>> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
-        Map<String, PatternData> countToFormat = styleToCountToFormat.get(formatWidth);
-        PatternData messagePatternData = countToFormat.get(keyword);
-        appendTo.append(messagePatternData.prefix);
-        if (messagePatternData.suffix != null) { // there is a number (may not happen with, say, Arabic dual)
+        Map<FormatWidth, QuantityFormatter> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
+        QuantityFormatter countToFormat = styleToCountToFormat.get(formatWidth);
+        SimplePatternFormatter formatter = countToFormat.getByVariant(keyword);
+        SimplePatternFormatter.Formatted result = formatter.formatValues(new Object[] {formattedNumber});
+        appendTo.append(result.toString());
+        int offset = result.getOffset(0);
+        if (offset != -1) { // there is a number (may not happen with, say, Arabic dual)
             // Fix field position
             if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
-                fieldPosition.setBeginIndex(fpos.getBeginIndex() + messagePatternData.prefix.length());
-                fieldPosition.setEndIndex(fpos.getEndIndex() + messagePatternData.prefix.length());
+                fieldPosition.setBeginIndex(fpos.getBeginIndex() + offset);
+                fieldPosition.setEndIndex(fpos.getEndIndex() + offset);
             }
-            appendTo.append(formattedNumber);
-            appendTo.append(messagePatternData.suffix);
         }
         return appendTo;
     }

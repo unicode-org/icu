@@ -82,17 +82,24 @@ class QuantityFormatter {
          * Builds the new QuantityFormatter and resets this Builder to its initial state.
          * @return the new QuantityFormatter object.
          * @throws IllegalStateException if no template is specified for the "other" variant.
-         *   When throwing this exception, build() still resets this Builder to its initial
-         *   state.
+         *  When throwing this exception, build leaves this builder in its current state.
          */
         public QuantityFormatter build() {
             if (templates == null || templates[0] == null) {
-                templates = null;
                 throw new IllegalStateException("At least other variant must be set.");
             }
             QuantityFormatter result = new QuantityFormatter(templates);
             templates = null;
             return result;          
+        }
+
+        /**
+         * Resets this builder to its intitial state.
+         */
+        public Builder reset() {
+            templates = null;
+            return this;
+            
         }
 
     }
@@ -113,18 +120,27 @@ class QuantityFormatter {
      */
     public String format(double quantity, NumberFormat numberFormat, PluralRules pluralRules) {
         String formatStr = numberFormat.format(quantity);
-        String variant;
-        if (numberFormat instanceof DecimalFormat) {
-            variant = pluralRules.select(((DecimalFormat) numberFormat).getFixedDecimal(quantity));            
-        } else {
-            variant = pluralRules.select(quantity);
-        }
+        String variant = computeVariant(quantity, numberFormat, pluralRules);
         return getByVariant(variant).format(formatStr);
     }
-
-    private SimplePatternFormatter getByVariant(String variant) {
+    
+    /**
+     * Gets the SimplePatternFormatter for a particular variant.
+     * @param variant "zero", "one", "two", "few", "many", "other"
+     * @return the SimplePatternFormatter
+     */
+    public SimplePatternFormatter getByVariant(String variant) {
         Integer idxObj = INDEX_MAP.get(variant);
         SimplePatternFormatter template = templates[idxObj == null ? 0 : idxObj.intValue()];
         return template == null ? templates[0] : template;
     }
+ 
+    private String computeVariant(double quantity, NumberFormat numberFormat, PluralRules pluralRules) {
+        if (numberFormat instanceof DecimalFormat) {
+            return pluralRules.select(((DecimalFormat) numberFormat).getFixedDecimal(quantity));            
+        }
+        return pluralRules.select(quantity);
+    }
+
+ 
 }
