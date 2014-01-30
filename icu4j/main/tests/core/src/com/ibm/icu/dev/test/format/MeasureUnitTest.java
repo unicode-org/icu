@@ -421,9 +421,9 @@ public class MeasureUnitTest extends TestFmwk {
         MeasureFormat fmt = MeasureFormat.getInstance(
                 ULocale.ENGLISH, FormatWidth.SHORT);
         FieldPosition pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
-        fmt.format(new Measure(43.5, MeasureUnit.FOOT), new StringBuffer(), pos);
-        assertEquals("beginIndex", 2, pos.getBeginIndex());
-        assertEquals("endIndex", 3, pos.getEndIndex());
+        fmt.format(new Measure(43.5, MeasureUnit.FOOT), new StringBuffer("123456: "), pos);
+        assertEquals("beginIndex", 10, pos.getBeginIndex());
+        assertEquals("endIndex", 11, pos.getEndIndex());
         
         pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
         fmt.format(new Measure(43, MeasureUnit.FOOT), new StringBuffer(), pos);
@@ -450,14 +450,14 @@ public class MeasureUnitTest extends TestFmwk {
         
         pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
         result = fmt.formatMeasures(
-                new StringBuilder(),
+                new StringBuilder("123456: "),
                 pos,
                 new Measure(354, MeasureUnit.METER),
                 new Measure(23, MeasureUnit.CENTIMETER),
                 new Measure(5.4, MeasureUnit.MILLIMETER)).toString();
-        assertEquals("result", "354 m, 23 cm, 5.4 mm", result);
-        assertEquals("beginIndex", 15, pos.getBeginIndex());
-        assertEquals("endIndex", 16, pos.getEndIndex());
+        assertEquals("result", "123456: 354 m, 23 cm, 5.4 mm", result);
+        assertEquals("beginIndex", 23, pos.getBeginIndex());
+        assertEquals("endIndex", 24, pos.getEndIndex());
         
         result = fmt.formatMeasures(
                 new StringBuilder(),
@@ -471,14 +471,23 @@ public class MeasureUnitTest extends TestFmwk {
         
         pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
         result = fmt.formatMeasures(
-                new StringBuilder(),
+                new StringBuilder("123456: "),
                 pos,
                 new Measure(3, MeasureUnit.METER),
                 new Measure(23, MeasureUnit.CENTIMETER),
                 new Measure(5, MeasureUnit.MILLIMETER)).toString();
-        assertEquals("result", "3 m, 23 cm, 5 mm", result);
+        assertEquals("result", "123456: 3 m, 23 cm, 5 mm", result);
         assertEquals("beginIndex", 0, pos.getBeginIndex());
         assertEquals("endIndex", 0, pos.getEndIndex());
+        
+        pos = new FieldPosition(NumberFormat.Field.INTEGER);
+        result = fmt.formatMeasures(
+                new StringBuilder("123456: "),
+                pos,
+                new Measure(57, MeasureUnit.MILLIMETER)).toString();
+        assertEquals("result", "123456: 57 mm", result);
+        assertEquals("beginIndex", 8, pos.getBeginIndex());
+        assertEquals("endIndex", 10, pos.getEndIndex());
         
     }
     

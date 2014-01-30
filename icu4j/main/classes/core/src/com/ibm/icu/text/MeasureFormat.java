@@ -281,6 +281,9 @@ public class MeasureFormat extends UFormat {
      */
     @Override
     public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+        int prevLength = toAppendTo.length();
+        FieldPosition fpos =
+                new FieldPosition(pos.getFieldAttribute(), pos.getField());
         if (obj instanceof Collection) {
             Collection<?> coll = (Collection<?>) obj;
             Measure[] measures = new Measure[coll.size()];
@@ -291,14 +294,19 @@ public class MeasureFormat extends UFormat {
                 }
                 measures[idx++] = (Measure) o;
             }
-            return toAppendTo.append(formatMeasures(new StringBuilder(), pos, measures));
+            toAppendTo.append(formatMeasures(new StringBuilder(), fpos, measures));
         } else if (obj instanceof Measure[]) {
-            return toAppendTo.append(formatMeasures(new StringBuilder(), pos, (Measure[]) obj));
+            toAppendTo.append(formatMeasures(new StringBuilder(), fpos, (Measure[]) obj));
         } else if (obj instanceof Measure){
-            return toAppendTo.append(formatMeasure((Measure) obj, new StringBuilder(), pos));
+            toAppendTo.append(formatMeasure((Measure) obj, new StringBuilder(), fpos));
         } else {
             throw new IllegalArgumentException(obj.toString());            
         }
+        if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
+            pos.setBeginIndex(fpos.getBeginIndex() + prevLength);
+            pos.setEndIndex(fpos.getEndIndex() + prevLength);
+        }
+        return toAppendTo;
     }
     
     /**
@@ -326,14 +334,15 @@ public class MeasureFormat extends UFormat {
      * @draft ICU 53
      * @provisional
      */
-    public String formatMeasures(Measure... measures) {
-        StringBuilder result = this.formatMeasures(
-                new StringBuilder(), DontCareFieldPosition.INSTANCE, measures);
-        return result.toString();
+    public final String formatMeasures(Measure... measures) {
+        return formatMeasures(
+                new StringBuilder(),
+                DontCareFieldPosition.INSTANCE,
+                measures).toString();
     }
     
     /**
-     * Formats a sequence of measures and adds to appendable.
+     * Formats a sequence of measures.
      * 
      * If the fieldPosition argument identifies a NumberFormat field,
      * then its indices are set to the beginning and end of the first such field
@@ -369,7 +378,7 @@ public class MeasureFormat extends UFormat {
         ListFormatter listFormatter = ListFormatter.getInstance(
                 getLocale(), formatWidth.getListFormatterStyle());
         if (fieldPosition != DontCareFieldPosition.INSTANCE) {
-            return appendTo.append(formatMeasuresSlowTrack(listFormatter, fieldPosition, measures));
+            return formatMeasuresSlowTrack(listFormatter, appendTo, fieldPosition, measures);
         }
         // Fast track: No field position.
         String[] results = new String[measures.length];
@@ -426,7 +435,7 @@ public class MeasureFormat extends UFormat {
      * @draft ICU 53
      * @provisional
      */
-    public ULocale getLocale() {
+    public final ULocale getLocale() {
         return getLocale(ULocale.VALID_LOCALE);
     }
     
@@ -618,14 +627,13 @@ public class MeasureFormat extends UFormat {
         Map<FormatWidth, QuantityFormatter> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
         QuantityFormatter countToFormat = styleToCountToFormat.get(formatWidth);
         SimplePatternFormatter formatter = countToFormat.getByVariant(keyword);
-        SimplePatternFormatter.Formatted result = formatter.formatValues(new Object[] {formattedNumber});
-        appendTo.append(result.toString());
-        int offset = result.getOffset(0);
-        if (offset != -1) { // there is a number (may not happen with, say, Arabic dual)
+        int[] offsets = new int[1];
+        formatter.format(appendTo, offsets, formattedNumber.toString());
+        if (offsets[0] != -1) { // there is a number (may not happen with, say, Arabic dual)
             // Fix field position
             if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
-                fieldPosition.setBeginIndex(fpos.getBeginIndex() + offset);
-                fieldPosition.setEndIndex(fpos.getEndIndex() + offset);
+                fieldPosition.setBeginIndex(fpos.getBeginIndex() + offsets[0]);
+                fieldPosition.setEndIndex(fpos.getEndIndex() + offsets[0]);
             }
         }
         return appendTo;
@@ -685,12 +693,16 @@ public class MeasureFormat extends UFormat {
         return new MeasureProxy(getLocale(), formatWidth, numberFormat.get(), CURRENCY_FORMAT);
     }
     
-    private String formatMeasuresSlowTrack(ListFormatter listFormatter, FieldPosition fieldPosition,
+    private StringBuilder formatMeasuresSlowTrack(
+            ListFormatter listFormatter,
+            StringBuilder appendTo,
+            FieldPosition fieldPosition,
             Measure... measures) {
         String[] results = new String[measures.length];
         
         // Zero out our field position so that we can tell when we find our field.
-        FieldPosition fpos = new FieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
+        FieldPosition fpos = new FieldPosition(
+                fieldPosition.getFieldAttribute(), fieldPosition.getField());
         
         int fieldPositionFoundIndex = -1;
         for (int i = 0; i < measures.length; ++i) {
@@ -708,10 +720,10 @@ public class MeasureFormat extends UFormat {
         
         // Fix up FieldPosition indexes if our field is found.
         if (builder.getOffset() != -1) {
-            fieldPosition.setBeginIndex(fpos.getBeginIndex() + builder.getOffset());
-            fieldPosition.setEndIndex(fpos.getEndIndex() + builder.getOffset());
+            fieldPosition.setBeginIndex(fpos.getBeginIndex() + builder.getOffset() + appendTo.length());
+            fieldPosition.setEndIndex(fpos.getEndIndex() + builder.getOffset() + appendTo.length());
         }
-        return builder.toString();
+        return appendTo.append(builder.toString());
     }
     
     // type is one of "hm", "ms" or "hms"

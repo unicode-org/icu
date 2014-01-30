@@ -272,20 +272,20 @@ final public class ListFormatter {
                 throw new IllegalArgumentException("Need {0} and {1} only in pattern " + pattern);
             }
             if (recordOffset || offsetRecorded()) {
-                SimplePatternFormatter.Formatted formatted = pattern.formatValues(new Object[]{current, next});
-                int oneOffset = formatted.getOffset(1);
-                int zeroOffset = formatted.getOffset(0);
-                if (zeroOffset == -1 || oneOffset == -1) {
-                    throw new IllegalArgumentException("{0} or {1} missing from pattern " + pattern);
+                int[] offsets = new int[2];
+                current = pattern.format(
+                        new StringBuilder(), offsets, current, next.toString()).toString();
+                if (offsets[0] == -1 || offsets[1] == -1) {
+                    throw new IllegalArgumentException(
+                            "{0} or {1} missing from pattern " + pattern);
                 }
                 if (recordOffset) {
-                    offset = oneOffset;
+                    offset = offsets[1];
                 } else {
-                    offset += zeroOffset;
+                    offset += offsets[0];
                 }
-                current = formatted.toString();
             } else {
-                current = pattern.format(current, next);
+                current = pattern.format(current, next.toString());
             }
             return this;
         }

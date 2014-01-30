@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2013, International Business Machines
+* Copyright (c) 2004-2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -86,18 +86,9 @@ class CurrencyFormat extends MeasureFormat {
      * @provisional
      */
     @Override
-    public String formatMeasures(Measure... measures) {
-        return mf.formatMeasures(measures);
-    }
-    
-    /**
-     * @draft ICU 53
-     * @provisional
-     */
-    @Override
-    public <T extends Appendable> T formatMeasures(
-            T appendable, FieldPosition fieldPosition, Measure... measures) {
-        return mf.formatMeasures(appendable, fieldPosition, measures);
+    public StringBuilder formatMeasures(
+            StringBuilder appendTo, FieldPosition fieldPosition, Measure... measures) {
+        return mf.formatMeasures(appendTo, fieldPosition, measures);
     }
     
     /**
@@ -107,15 +98,6 @@ class CurrencyFormat extends MeasureFormat {
     @Override
     public MeasureFormat.FormatWidth getWidth() {
         return mf.getWidth();
-    }
-    
-    /**
-     * @draft ICU 53
-     * @provisional
-     */
-    @Override
-    public ULocale getLocale() {
-        return mf.getLocale();
     }
     
     /**

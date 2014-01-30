@@ -517,23 +517,15 @@ if ( searchPluralCount.equals("other") ) {
     // boilerplate code to make TimeUnitFormat otherwise follow the contract of
     // MeasureFormat
 
-    /**
-     * @draft ICU 53
-     * @provisional
-     */
-    @Override
-    public String formatMeasures(Measure... measures) {
-        return mf.formatMeasures(measures);
-    }
     
     /**
      * @draft ICU 53
      * @provisional
      */
     @Override
-    public <T extends Appendable> T formatMeasures(
-            T appendable, FieldPosition fieldPosition, Measure... measures) {
-        return mf.formatMeasures(appendable, fieldPosition, measures);
+    public StringBuilder formatMeasures(
+            StringBuilder appendTo, FieldPosition fieldPosition, Measure... measures) {
+        return mf.formatMeasures(appendTo, fieldPosition, measures);
     }
     
     /**
@@ -544,16 +536,6 @@ if ( searchPluralCount.equals("other") ) {
     public MeasureFormat.FormatWidth getWidth() {
         return mf.getWidth();
     }
-    
-    /**
-     * @draft ICU 53
-     * @provisional
-     */
-    @Override
-    public ULocale getLocale() {
-        return mf.getLocale();
-    }
-    
     
     /**
      * @draft ICU 53
