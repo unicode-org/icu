@@ -5,7 +5,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2013, International Business Machines Corporation and    *
+* Copyright (C) 2005-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -81,6 +81,18 @@
             </ant>
             <!--<ant target='trnsfiles'></ant> Not ANT-built - see
             note below. -->
+          </sequential>
+          <sequential>
+          	<ant target='keyTypeData'/>
+          </sequential>
+          <sequential>
+          	<ant target='genderList'/>
+          </sequential>
+          <sequential>
+          	<ant target='postalCodeData'/>
+          </sequential>
+          <sequential>
+          	<ant target='dayPeriods'/>
           </sequential>
         </parallel>
      </target>
