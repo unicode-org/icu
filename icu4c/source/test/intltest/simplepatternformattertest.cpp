@@ -42,14 +42,13 @@ void SimplePatternFormatterTest::TestNoPlaceholders() {
             "Evaluate",
             "This doesn't have templates {0}", 
             fmt.format("unused", appendTo, status));
-    appendTo.remove();
     fmt.compile("This has {} bad {012d placeholders", status);
     assertEquals("PlaceholderCount", 0, fmt.getPlaceholderCount());
+    appendTo.remove();
     assertEquals(
             "Evaluate",
             "This has {} bad {012d placeholders", 
             fmt.format("unused", appendTo, status));
-    appendTo.remove();
     assertSuccess("Status", status);
 }
 
@@ -63,25 +62,24 @@ void SimplePatternFormatterTest::TestOnePlaceholder() {
             "Evaluate",
             "1 meter",
             fmt.format("1", appendTo, status));
-    appendTo.remove();
     assertSuccess("Status", status);
 
     // assignment
     SimplePatternFormatter s;
     s = fmt;
+    appendTo.remove();
     assertEquals(
             "Assignment",
             "1 meter",
             s.format("1", appendTo, status));
-    appendTo.remove();
 
     // Copy constructor
     SimplePatternFormatter r(fmt);
+    appendTo.remove();
     assertEquals(
             "Copy constructor",
             "1 meter",
             r.format("1", appendTo, status));
-    appendTo.remove();
     assertSuccess("Status", status);
 }
 
@@ -108,13 +106,13 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
                     offsets,
                     LENGTHOF(offsets),
                     status));
-    appendTo.remove();
     assertSuccess("Status", status);
     for (int32_t i = 0; i < LENGTHOF(expectedOffsets); ++i) {
         if (expectedOffsets[i] != offsets[i]) {
             errln("Expected %d, got %d", expectedOffsets[i], offsets[i]);
         }
     }
+    appendTo.remove();
     fmt.format(
             params,
             LENGTHOF(params) - 1,
@@ -127,6 +125,7 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
     }
     status = U_ZERO_ERROR;
     offsets[LENGTHOF(offsets) - 1] = 289;
+    appendTo.remove();
     fmt.format(
             params,
             LENGTHOF(params),
@@ -134,12 +133,12 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
             offsets,
             LENGTHOF(offsets) - 1,
             status);
-    appendTo.remove();
     assertEquals("Offsets buffer length", 289, offsets[LENGTHOF(offsets) - 1]);
 
     // Test assignment
     SimplePatternFormatter s;
     s = fmt;
+    appendTo.remove();
     assertEquals(
             "Assignment",
             "Templates frogtommy{0} and leg are out of order.",
@@ -150,10 +149,10 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
                     NULL,
                     0,
                     status));
-    appendTo.remove();
 
     // Copy constructor
     SimplePatternFormatter r(fmt);
+    appendTo.remove();
     assertEquals(
             "Copy constructor",
             "Templates frogtommy{0} and leg are out of order.",
@@ -164,28 +163,27 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
                     NULL,
                     0,
                     status));
-    appendTo.remove();
     r.compile("{0} meter", status);
     assertEquals("PlaceholderCount", 1, r.getPlaceholderCount());
+    appendTo.remove();
     assertEquals(
             "Replace with new compile",
             "freddy meter",
             r.format("freddy", appendTo, status));
-    appendTo.remove();
     r.compile("{0}, {1}", status);
     assertEquals("PlaceholderCount", 2, r.getPlaceholderCount());
+    appendTo.remove();
     assertEquals(
             "2 arg",
             "foo, bar",
             r.format("foo", "bar", appendTo, status));
-    appendTo.remove();
     r.compile("{0}, {1} and {2}", status);
     assertEquals("PlaceholderCount", 3, r.getPlaceholderCount());
+    appendTo.remove();
     assertEquals(
             "3 arg",
             "foo, bar and baz",
             r.format("foo", "bar", "baz", appendTo, status));
-    appendTo.remove();
     assertSuccess("Status", status);
 }
 
