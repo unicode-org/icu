@@ -18,7 +18,6 @@ import com.ibm.icu.impl.SimplePatternFormatter;
  * <p>
  * QuanitityFormatter appears here instead of in com.ibm.icu.impl because it depends on
  * PluralRules and DecimalFormat. It is package-protected as it is not meant for public use.
- * @author rocketman
  */
 class QuantityFormatter {
     
@@ -72,12 +71,6 @@ class QuantityFormatter {
             return this;
         }
 
-        private void ensureCapacity() {
-            if (templates == null) {
-                templates = new SimplePatternFormatter[MAX_INDEX];
-            }
-        }
-
         /**
          * Builds the new QuantityFormatter and resets this Builder to its initial state.
          * @return the new QuantityFormatter object.
@@ -94,12 +87,17 @@ class QuantityFormatter {
         }
 
         /**
-         * Resets this builder to its intitial state.
+         * Resets this builder to its initial state.
          */
         public Builder reset() {
             templates = null;
             return this;
-            
+        }
+        
+        private void ensureCapacity() {
+            if (templates == null) {
+                templates = new SimplePatternFormatter[MAX_INDEX];
+            }
         }
 
     }
