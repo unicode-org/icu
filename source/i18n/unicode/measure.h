@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2006, International Business Machines
+* Copyright (c) 2004-2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -74,7 +74,7 @@ class U_I18N_API Measure: public UObject {
      * have the same class as returned by getDynamicClassID().
      * @stable ICU 3.0
      */
-    virtual UObject* clone() const = 0;
+    virtual UObject* clone() const;
 
     /**
      * Destructor

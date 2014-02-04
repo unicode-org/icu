@@ -19,6 +19,7 @@ class UnicodeString;
 class PluralRules;
 class NumberFormat;
 class Formattable;
+class FieldPosition;
 
 /**
  * A plural aware formatter that is good for expressing a single quantity and
@@ -75,6 +76,11 @@ public:
             UErrorCode &status);
 
     /**
+     * returns TRUE if this object has at least the "other" variant.
+     */
+    UBool isValid() const;
+
+    /**
      * Formats a quantity with this object appending the result to appendTo.
      * At least the "other" variant must be added to this object for this
      * method to work.
@@ -91,6 +97,7 @@ public:
             const NumberFormat &fmt,
             const PluralRules &rules,
             UnicodeString &appendTo,
+            FieldPosition &pos,
             UErrorCode &status) const;
 
 private:

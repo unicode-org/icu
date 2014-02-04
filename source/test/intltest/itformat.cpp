@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines
+ * Copyright (c) 1997-2014, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -62,6 +62,7 @@
 extern IntlTest *createCompactDecimalFormatTest();
 extern IntlTest *createGenderInfoTest();
 extern IntlTest *createRelativeDateTimeFormatterTest();
+extern IntlTest *createMeasureFormatTest();
 
 #define TESTCLASS(id, TestClass)          \
     case id:                              \
@@ -164,6 +165,15 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             logln("RelativeDateTimeFormatterTest test---");
             logln((UnicodeString)"");
             LocalPointer<IntlTest> test(createRelativeDateTimeFormatterTest());
+            callTest(*test, par);
+          }
+          break;
+        case 47:
+          name = "MeasureFormatTest";
+          if (exec) {
+            logln("MeasureFormatTest test---");
+            logln((UnicodeString)"");
+            LocalPointer<IntlTest> test(createMeasureFormatTest());
             callTest(*test, par);
           }
           break;

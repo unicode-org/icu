@@ -15,6 +15,7 @@
 #include "unicode/plurrule.h"
 #include "charstr.h"
 #include "unicode/fmtable.h"
+#include "unicode/fieldpos.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
 
@@ -107,11 +108,16 @@ UBool QuantityFormatter::add(
     return TRUE;
 }
 
+UBool QuantityFormatter::isValid() const {
+    return formatters[0] != NULL;
+}
+
 UnicodeString &QuantityFormatter::format(
             const Formattable& quantity,
             const NumberFormat &fmt,
             const PluralRules &rules,
             UnicodeString &appendTo,
+            FieldPosition &pos,
             UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return appendTo;
@@ -154,9 +160,18 @@ UnicodeString &QuantityFormatter::format(
         return appendTo;
     }
     UnicodeString formattedNumber;
-    FieldPosition pos(0);
-    fmt.format(quantity, formattedNumber, pos, status);
-    return pattern->format(formattedNumber, appendTo, status);
+    FieldPosition fpos(pos.getField());
+    fmt.format(quantity, formattedNumber, fpos, status);
+    const UnicodeString *params[1] = {&formattedNumber};
+    int32_t offsets[1];
+    pattern->format(params, LENGTHOF(params), appendTo, offsets, LENGTHOF(offsets), status);
+    if (offsets[0] != -1) {
+        if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
+            pos.setBeginIndex(fpos.getBeginIndex() + offsets[0]);
+            pos.setEndIndex(fpos.getEndIndex() + offsets[0]);
+        }
+    }
+    return appendTo;
 }
 
 U_NAMESPACE_END
