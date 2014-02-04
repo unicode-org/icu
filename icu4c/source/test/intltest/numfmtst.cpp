@@ -1896,6 +1896,8 @@ void NumberFormatTest::TestCurrencyNames(void) {
 void NumberFormatTest::TestCurrencyUnit(void){
     UErrorCode ec = U_ZERO_ERROR;
     static const UChar USD[] = {85, 83, 68, 0}; /*USD*/
+    static const UChar BAD[] = {63, 63, 63, 0}; /*???*/
+    static const UChar BAD2[] = {63, 63, 65, 0}; /*???*/
     CurrencyUnit cu(USD, ec);
     assertSuccess("CurrencyUnit", ec);
 
@@ -1910,6 +1912,23 @@ void NumberFormatTest::TestCurrencyUnit(void){
     CurrencyUnit * cu3 = (CurrencyUnit *)cu.clone();
     if (!(*cu3 == cu)){
         errln("CurrencyUnit cloned object should be same");
+    }
+    CurrencyUnit bad(BAD, ec);
+    assertSuccess("CurrencyUnit", ec);
+    if (cu.getIndex() == bad.getIndex()) {
+        errln("Indexes of different currencies should differ.");
+    }
+    CurrencyUnit bad2(BAD2, ec);
+    assertSuccess("CurrencyUnit", ec);
+    if (bad2.getIndex() != bad.getIndex()) {
+        errln("Indexes of unrecognized currencies should be the same.");
+    }
+    if (bad == bad2) {
+        errln("Different unrecognized currencies should not be equal.");
+    }
+    bad = bad2;
+    if (bad != bad2) {
+        errln("Currency unit assignment should be the same.");
     }
     delete cu3;
 }

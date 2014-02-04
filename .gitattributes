@@ -77,6 +77,7 @@ icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
+icu4c/source/i18n/measunit.cpp -text
 icu4c/source/i18n/quantityformatter.cpp -text
 icu4c/source/i18n/quantityformatter.h -text
 icu4c/source/io/io.vcxproj -text
@@ -146,6 +147,7 @@ icu4c/source/test/cintltst/cintltst.vcxproj -text
 icu4c/source/test/cintltst/cintltst.vcxproj.filters -text
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
+icu4c/source/test/intltest/measfmttest.cpp -text
 icu4c/source/test/intltest/simplepatternformattertest.cpp -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/iotest/iotest.vcxproj.filters -text

@@ -22,7 +22,6 @@
 #include "uresimp.h"
 #include "unicode/ures.h"
 #include "cstring.h"
-#include "plurrule_impl.h"
 #include "ucln_in.h"
 #include "mutex.h"
 #include "charstr.h"
@@ -648,11 +647,13 @@ UnicodeString& RelativeDateTimeFormatter::format(
         return appendTo;
     }
     int32_t bFuture = direction == UDAT_DIRECTION_NEXT ? 1 : 0;
+    FieldPosition pos(FieldPosition::DONT_CARE);
     return ptr->quantitativeUnits->data[unit][bFuture].format(
             quantity,
             *ptr->numberFormat,
             *ptr->pluralRules,
             appendTo,
+            pos,
             status);
 }
 
