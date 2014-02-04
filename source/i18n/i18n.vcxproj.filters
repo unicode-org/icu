@@ -195,6 +195,9 @@
     <ClCompile Include="measfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="measunit.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="measure.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
