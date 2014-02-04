@@ -253,6 +253,10 @@ ListFormatter::~ListFormatter() {
 
 /**
  * Joins first and second using the pattern pat.
+ * On entry offset is an offset into first or -1 if offset unspecified.
+ * On exit offset is offset of second in result if recordOffset was set
+ * Otherwise if it was >=0 it is set to point into result where it used
+ * to point into first.
  */
 static void joinStrings(
         const SimplePatternFormatter& pat,
@@ -260,7 +264,7 @@ static void joinStrings(
         const UnicodeString& second,
         UnicodeString &result,
         UBool recordOffset,
-        int32_t offset,
+        int32_t &offset,
         UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
@@ -375,7 +379,9 @@ UnicodeString& ListFormatter::format(
             offset,
             errorCode);
     if (U_SUCCESS(errorCode)) {
-        offset += appendTo.length();
+        if (offset >= 0) {
+            offset += appendTo.length();
+        }
         appendTo += temp[npos];
     }
     return appendTo;

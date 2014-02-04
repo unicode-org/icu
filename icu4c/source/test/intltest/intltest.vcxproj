@@ -308,6 +308,7 @@
     <ClCompile Include="lrucachetest.cpp">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
+    <ClCompile Include="measfmttest.cpp" />
     <ClCompile Include="miscdtfm.cpp" />
     <ClCompile Include="msfmrgts.cpp" />
     <ClCompile Include="nmfmapts.cpp" />

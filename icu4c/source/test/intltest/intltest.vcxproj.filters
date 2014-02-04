@@ -241,6 +241,9 @@
     <ClCompile Include="locnmtst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="measfmttest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="miscdtfm.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

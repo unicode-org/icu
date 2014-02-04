@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2013, Google, International Business Machines Corporation
+ * Copyright (C) 2008-2014, Google, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -125,16 +125,6 @@ public:
      */
     TimeUnitFormat& operator=(const TimeUnitFormat& other);
 
-
-    /**
-     * Return true if the given Format objects are semantically equal. Objects
-     * of different subclasses are considered unequal.
-     * @param other    the object to be compared with.
-     * @return         true if the given Format objects are semantically equal.
-     * @stable ICU 4.2
-     */
-    virtual UBool operator==(const Format& other) const;
-
     /**
      * Return true if the given Format objects are not semantically equal.
      * Objects of different subclasses are considered unequal.
@@ -160,22 +150,6 @@ public:
      * @stable ICU 4.2
      */
     void setNumberFormat(const NumberFormat& format, UErrorCode& status);
-
-
-    using MeasureFormat::format;
-
-    /**
-     * Format a TimeUnitAmount.
-     * If the formattable object is not a time unit amount object,
-     * or the number in time unit amount is not a double type or long type
-     * numeric, it returns a failing status: U_ILLEGAL_ARGUMENT_ERROR.
-     * @see Format#format(const Formattable&, UnicodeString&, FieldPosition&,  UErrorCode&) const
-     * @stable ICU 4.2
-     */
-    virtual UnicodeString& format(const Formattable& obj,
-                                  UnicodeString& toAppendTo,
-                                  FieldPosition& pos,
-                                  UErrorCode& status) const;
 
     /**
      * Parse a TimeUnitAmount.
@@ -213,13 +187,10 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 
 private:
-    NumberFormat* fNumberFormat;
-    Locale        fLocale;
     Hashtable*    fTimeUnitToCountToPatterns[TimeUnit::UTIMEUNIT_FIELD_COUNT];
-    PluralRules*  fPluralRules;
     UTimeUnitFormatStyle fStyle;
 
-    void create(const Locale& locale, UTimeUnitFormatStyle style, UErrorCode& status);
+    void create(UTimeUnitFormatStyle style, UErrorCode& status);
 
     // it might actually be simpler to make them Decimal Formats later.
     // initialize all private data members
