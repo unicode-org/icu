@@ -311,6 +311,7 @@
     <ClCompile Include="japancal.cpp" />
     <ClCompile Include="locdspnm.cpp" />
     <ClCompile Include="measfmt.cpp" />
+    <ClCompile Include="measunit.cpp" />
     <ClCompile Include="measure.cpp" />
     <ClCompile Include="msgfmt.cpp" />
     <ClCompile Include="nfrs.cpp" />
