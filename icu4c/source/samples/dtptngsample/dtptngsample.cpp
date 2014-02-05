@@ -67,6 +67,7 @@ static void getBestPatternExample() {
 	/* close the file resource */
 	u_fclose(f);
 	delete cal;
+	//! [getBestPatternExample]
 }
 
 static void addPatternExample() {
@@ -150,7 +151,7 @@ static void replaceFieldTypesExample() {
 		delete zone;
 		delete cal;
 		u_fclose(out);
-
+	//! [replaceFieldTypesExample]
     }
 
 int main (int argc, char* argv[])

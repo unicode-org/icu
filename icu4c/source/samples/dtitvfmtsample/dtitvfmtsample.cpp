@@ -70,6 +70,7 @@ static void dtitvfmtPreDefined() {
          i++;
         }
 	u_fclose(out);
+	//! [dtitvfmtPreDefined]
 }
 
 static void dtitvfmtCustomized() {
@@ -129,6 +130,7 @@ static void dtitvfmtCustomized() {
             }
        }
 	u_fclose(out);
+	//! [dtitvfmtCustomized]
 }
 
 int main (int argc, char* argv[])
