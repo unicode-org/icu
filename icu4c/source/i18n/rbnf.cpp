@@ -5,6 +5,7 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
 #include "utypeinfo.h"  // for 'typeid' to work
 
 #include "unicode/rbnf.h"
@@ -21,6 +22,8 @@
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
 #include "unicode/udata.h"
+#include "unicode/udisplaycontext.h"
+#include "unicode/brkiter.h"
 #include "nfrs.h"
 
 #include "cmemory.h"
@@ -660,6 +663,10 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , capitalizationInfoSet(FALSE)
+  , capitalizationForUIListMenu(FALSE)
+  , capitalizationForStandAlone(FALSE)
+  , capitalizationBrkIter(NULL)
 {
   LocalizationInfo* locinfo = StringLocalizationInfo::create(locs, perror, status);
   init(description, locinfo, perror, status);
@@ -678,6 +685,10 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , capitalizationInfoSet(FALSE)
+  , capitalizationForUIListMenu(FALSE)
+  , capitalizationForStandAlone(FALSE)
+  , capitalizationBrkIter(NULL)
 {
   LocalizationInfo* locinfo = StringLocalizationInfo::create(locs, perror, status);
   init(description, locinfo, perror, status);
@@ -696,6 +707,10 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , capitalizationInfoSet(FALSE)
+  , capitalizationForUIListMenu(FALSE)
+  , capitalizationForStandAlone(FALSE)
+  , capitalizationBrkIter(NULL)
 {
   init(description, info, perror, status);
 }
@@ -713,6 +728,10 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , capitalizationInfoSet(FALSE)
+  , capitalizationForUIListMenu(FALSE)
+  , capitalizationForStandAlone(FALSE)
+  , capitalizationBrkIter(NULL)
 {
     init(description, NULL, perror, status);
 }
@@ -731,6 +750,10 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , capitalizationInfoSet(FALSE)
+  , capitalizationForUIListMenu(FALSE)
+  , capitalizationForStandAlone(FALSE)
+  , capitalizationBrkIter(NULL)
 {
     init(description, NULL, perror, status);
 }
@@ -746,6 +769,10 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , capitalizationInfoSet(FALSE)
+  , capitalizationForUIListMenu(FALSE)
+  , capitalizationForStandAlone(FALSE)
+  , capitalizationBrkIter(NULL)
 {
     if (U_FAILURE(status)) {
         return;
@@ -806,6 +833,10 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs)
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , capitalizationInfoSet(FALSE)
+  , capitalizationForUIListMenu(FALSE)
+  , capitalizationForStandAlone(FALSE)
+  , capitalizationBrkIter(NULL)
 {
     this->operator=(rhs);
 }
@@ -828,6 +859,12 @@ RuleBasedNumberFormat::operator=(const RuleBasedNumberFormat& rhs)
     init(rhs.originalDescription, rhs.localizations ? rhs.localizations->ref() : NULL, perror, status);
     setDecimalFormatSymbols(*rhs.getDecimalFormatSymbols());
     setDefaultRuleSet(rhs.getDefaultRuleSetName(), status);
+
+    capitalizationInfoSet = rhs.capitalizationInfoSet;
+    capitalizationForUIListMenu = rhs.capitalizationForUIListMenu;
+    capitalizationForStandAlone = rhs.capitalizationForStandAlone;
+    capitalizationBrkIter = (rhs.capitalizationBrkIter!=NULL)? rhs.capitalizationBrkIter->clone(): NULL;
+
     return *this;
 }
 
@@ -851,6 +888,9 @@ RuleBasedNumberFormat::operator==(const Format& other) const
 
     if (typeid(*this) == typeid(other)) {
         const RuleBasedNumberFormat& rhs = (const RuleBasedNumberFormat&)other;
+        // test for capitalization info equality is adequately handled
+        // by the NumberFormat test for fCapitalizationContext equality;
+        // the info here is just derived from that.
         if (locale == rhs.locale &&
             lenient == rhs.lenient &&
             (localizations == NULL 
@@ -1022,7 +1062,11 @@ RuleBasedNumberFormat::format(int32_t number,
                               UnicodeString& toAppendTo,
                               FieldPosition& /* pos */) const
 {
-    if (defaultRuleSet) defaultRuleSet->format((int64_t)number, toAppendTo, toAppendTo.length());
+    if (defaultRuleSet) {
+        int32_t startPos = toAppendTo.length();
+        defaultRuleSet->format((int64_t)number, toAppendTo, toAppendTo.length());
+        adjustForCapitalizationContext(startPos, toAppendTo);
+    }
     return toAppendTo;
 }
 
@@ -1032,7 +1076,11 @@ RuleBasedNumberFormat::format(int64_t number,
                               UnicodeString& toAppendTo,
                               FieldPosition& /* pos */) const
 {
-    if (defaultRuleSet) defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
+    if (defaultRuleSet) {
+        int32_t startPos = toAppendTo.length();
+        defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
+        adjustForCapitalizationContext(startPos, toAppendTo);
+    }
     return toAppendTo;
 }
 
@@ -1042,6 +1090,7 @@ RuleBasedNumberFormat::format(double number,
                               UnicodeString& toAppendTo,
                               FieldPosition& /* pos */) const
 {
+    int32_t startPos = toAppendTo.length();
     // Special case for NaN; adapted from what DecimalFormat::_format( double number,...) does.
     if (uprv_isNaN(number)) {
         DecimalFormatSymbols* decFmtSyms = getDecimalFormatSymbols(); // RuleBasedNumberFormat internal
@@ -1051,7 +1100,7 @@ RuleBasedNumberFormat::format(double number,
     } else if (defaultRuleSet) {
         defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
     }
-    return toAppendTo;
+    return adjustForCapitalizationContext(startPos, toAppendTo);
 }
 
 
@@ -1070,7 +1119,9 @@ RuleBasedNumberFormat::format(int32_t number,
         } else {
             NFRuleSet *rs = findRuleSet(ruleSetName, status);
             if (rs) {
+                int32_t startPos = toAppendTo.length();
                 rs->format((int64_t)number, toAppendTo, toAppendTo.length());
+                adjustForCapitalizationContext(startPos, toAppendTo);
             }
         }
     }
@@ -1092,7 +1143,9 @@ RuleBasedNumberFormat::format(int64_t number,
         } else {
             NFRuleSet *rs = findRuleSet(ruleSetName, status);
             if (rs) {
+                int32_t startPos = toAppendTo.length();
                 rs->format(number, toAppendTo, toAppendTo.length());
+                adjustForCapitalizationContext(startPos, toAppendTo);
             }
         }
     }
@@ -1114,12 +1167,38 @@ RuleBasedNumberFormat::format(double number,
         } else {
             NFRuleSet *rs = findRuleSet(ruleSetName, status);
             if (rs) {
+                int32_t startPos = toAppendTo.length();
                 rs->format(number, toAppendTo, toAppendTo.length());
+                adjustForCapitalizationContext(startPos, toAppendTo);
             }
         }
     }
     return toAppendTo;
 }
+
+UnicodeString&
+RuleBasedNumberFormat::adjustForCapitalizationContext(int32_t startPos,
+                                                      UnicodeString& currentResult) const
+{
+#if !UCONFIG_NO_BREAK_ITERATION
+    if (startPos==0 && currentResult.length() > 0) {
+        // capitalize currentResult according to context
+        UChar32 ch = currentResult.char32At(0);
+        UErrorCode status = U_ZERO_ERROR;
+        UDisplayContext capitalizationContext = getContext(UDISPCTX_TYPE_CAPITALIZATION, status);
+        if ( u_islower(ch) && U_SUCCESS(status) && capitalizationBrkIter!= NULL &&
+              ( capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+                (capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForUIListMenu) ||
+                (capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone)) ) {
+            // titlecase first word of currentResult, here use sentence iterator unlike current implementations
+            // in LocaleDisplayNamesImpl::adjustForUsageAndContext and RelativeDateFormat::format
+            currentResult.toTitle(capitalizationBrkIter, locale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
+        }
+    }
+#endif
+    return currentResult;
+}
+
 
 void
 RuleBasedNumberFormat::parse(const UnicodeString& text,
@@ -1422,6 +1501,52 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     originalDescription = rules;
 }
 
+// override the NumberFormat implementation in order to
+// lazily initialize relevant items
+void
+RuleBasedNumberFormat::setContext(UDisplayContext value, UErrorCode& status)
+{
+    NumberFormat::setContext(value, status);
+    if (U_SUCCESS(status)) {
+    	if (!capitalizationInfoSet &&
+    	        (value==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU || value==UDISPCTX_CAPITALIZATION_FOR_STANDALONE)) {
+    	    initCapitalizationContextInfo(locale);
+    	    capitalizationInfoSet = TRUE;
+        }
+#if !UCONFIG_NO_BREAK_ITERATION
+        if ( capitalizationBrkIter == NULL && (value==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+                (value==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForUIListMenu) ||
+                (value==UDISPCTX_CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone)) ) {
+            UErrorCode status = U_ZERO_ERROR;
+            capitalizationBrkIter = BreakIterator::createSentenceInstance(locale, status);
+        }
+#endif
+    }
+}
+
+void
+RuleBasedNumberFormat::initCapitalizationContextInfo(const Locale& thelocale)
+{
+#if !UCONFIG_NO_BREAK_ITERATION
+    const char * localeID = (thelocale != NULL)? thelocale.getBaseName(): NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *rb = ures_open(NULL, localeID, &status);
+    rb = ures_getByKeyWithFallback(rb, "contextTransforms", rb, &status);
+    // Have't got a good contextTransforms type for RBNF number spellout,
+    // fix that with CLDR #6857. In the meantime use "symbol".
+    rb = ures_getByKeyWithFallback(rb, "symbol", rb, &status);
+    if (U_SUCCESS(status) && rb != NULL) {
+        int32_t len = 0;
+        const int32_t * intVector = ures_getIntVector(rb, &len, &status);
+        if (U_SUCCESS(status) && intVector != NULL && len >= 2) {
+            capitalizationForUIListMenu = intVector[0];
+            capitalizationForStandAlone = intVector[1];
+        }
+    }
+    ures_close(rb);
+#endif
+}
+
 void
 RuleBasedNumberFormat::stripWhitespace(UnicodeString& description)
 {
@@ -1488,6 +1613,9 @@ RuleBasedNumberFormat::dispose()
 
     delete lenientParseRules;
     lenientParseRules = NULL;
+
+   delete capitalizationBrkIter;
+   capitalizationBrkIter = NULL;
 
     if (localizations) localizations = localizations->unref();
 }
