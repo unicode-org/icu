@@ -260,6 +260,7 @@ NumberFormat::operator=(const NumberFormat& rhs)
         fParseIntegerOnly = rhs.fParseIntegerOnly;
         u_strncpy(fCurrency, rhs.fCurrency, 4);
         fLenient = rhs.fLenient;
+        fCapitalizationContext = rhs.fCapitalizationContext;
     }
     return *this;
 }
@@ -306,6 +307,10 @@ NumberFormat::operator==(const Format& that) const
         if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
         debug("fLenient != ");
     }
+    if (!(fCapitalizationContext == other->fCapitalizationContext)) {
+        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        debug("fCapitalizationContext != ");
+    }
     if (!first) { printf(" ]"); }
 #endif
 
@@ -318,7 +323,8 @@ NumberFormat::operator==(const Format& that) const
               fGroupingUsed == other->fGroupingUsed &&
               fParseIntegerOnly == other->fParseIntegerOnly &&
               u_strcmp(fCurrency, other->fCurrency) == 0 &&
-              fLenient == other->fLenient)));
+              fLenient == other->fLenient &&
+              fCapitalizationContext == other->fCapitalizationContext)));
 }
 
 // -------------------------------------

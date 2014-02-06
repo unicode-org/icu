@@ -34,6 +34,7 @@
 #include "unicode/numfmt.h"
 #include "unicode/unistr.h"
 #include "unicode/strenum.h"
+#include "unicode/brkiter.h"
 
 U_NAMESPACE_BEGIN
 
@@ -894,6 +895,19 @@ public:
    */
   virtual UnicodeString getDefaultRuleSetName() const;
 
+  /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
+  /**
+   * Set a particular UDisplayContext value in the formatter, such as
+   * UDISPCTX_CAPITALIZATION_FOR_STANDALONE. Note: For getContext, see
+   * NumberFormat.
+   * @param value The UDisplayContext value to set.
+   * @param status Input/output status. If at entry this indicates a failure
+   *               status, the function will do nothing; otherwise this will be
+   *               updated with any new status from the function. 
+   * @draft ICU 53
+   */
+  virtual void setContext(UDisplayContext value, UErrorCode& status);
+
 public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -939,6 +953,7 @@ private:
               const Locale& locale, UParseError& perror, UErrorCode& status);
 
     void init(const UnicodeString& rules, LocalizationInfo* localizations, UParseError& perror, UErrorCode& status);
+    void initCapitalizationContextInfo(const Locale& thelocale);
     void dispose();
     void stripWhitespace(UnicodeString& src);
     void initDefaultRuleSet();
@@ -953,6 +968,7 @@ private:
     inline NFRuleSet * getDefaultRuleSet() const;
     Collator * getCollator() const;
     DecimalFormatSymbols * getDecimalFormatSymbols() const;
+    UnicodeString& adjustForCapitalizationContext(int32_t startPos, UnicodeString& currentResult) const;
 
 private:
     NFRuleSet **ruleSets;
@@ -966,6 +982,14 @@ private:
     UnicodeString* lenientParseRules;
     LocalizationInfo* localizations;
     UnicodeString originalDescription;
+    UBool capitalizationInfoSet;
+    UBool capitalizationForUIListMenu;
+    UBool capitalizationForStandAlone;
+#if !UCONFIG_NO_BREAK_ITERATION
+    BreakIterator* capitalizationBrkIter;
+#else
+    void* capitalizationBrkIter;
+#endif
 };
 
 // ---------------

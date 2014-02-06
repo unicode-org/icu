@@ -28,6 +28,7 @@
 #include "unicode/unum.h"
 #include "unicode/unumsys.h"
 #include "unicode/ustring.h"
+#include "unicode/udisplaycontext.h"
 
 #include "cintltst.h"
 #include "cnumtst.h"
@@ -2450,13 +2451,31 @@ static void TestCurrencyIsoPluralFormat(void) {
                         localeString, currencyISOCode, DATA[i][3 + sIndex]);
             }
         }
+        unum_close(unumFmt);
       }
     }  
 }
 
+typedef struct {
+    const char * locale;
+    UNumberFormatStyle style;
+    UDisplayContext context;
+    const char * expectedResult;
+} TestContextItem;
+
+/* currently no locales have contextTransforms data for "symbol" type */
+static const TestContextItem tcItems[] = { /* results for 123.45 */
+    { "sv", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "ett\\u00ADhundra\\u00ADtjugo\\u00ADtre komma fyra fem" },
+    { "sv", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "Ett\\u00ADhundra\\u00ADtjugo\\u00ADtre komma fyra fem" },
+    { "sv", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "ett\\u00ADhundra\\u00ADtjugo\\u00ADtre komma fyra fem" },
+    { "sv", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            "ett\\u00ADhundra\\u00ADtjugo\\u00ADtre komma fyra fem" },
+    { NULL, (UNumberFormatStyle)0, (UDisplayContext)0, NULL }
+};
+
 static void TestContext(void) {
-    /* just a minimal sanity check for now */
     UErrorCode status = U_ZERO_ERROR;
+    const TestContextItem* itemPtr;
+    
     UNumberFormat *unum = unum_open(UNUM_SPELLOUT, NULL, 0, "en", NULL, &status);
     if ( U_SUCCESS(status) ) {
         UDisplayContext context = unum_getContext(unum, UDISPCTX_TYPE_CAPITALIZATION, &status);
@@ -2472,6 +2491,36 @@ static void TestContext(void) {
         unum_close(unum);
     } else {
         log_data_err("unum_open UNUM_SPELLOUT for en fails with status %s\n", myErrorName(status));
+    }
+    
+    for (itemPtr = tcItems; itemPtr->locale != NULL; itemPtr++) {
+        UChar ubufResult[kUBufMax];
+        int32_t ulenRes;
+        
+        status = U_ZERO_ERROR;
+        unum = unum_open(itemPtr->style, NULL, 0, itemPtr->locale, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("FAIL: unum_open, locale %s, style %d - %s\n",
+                        itemPtr->locale, (int)itemPtr->style, myErrorName(status));
+            continue;
+        }
+        unum_setContext(unum, itemPtr->context, &status);
+        ulenRes = unum_formatDouble(unum, 123.45, ubufResult, kUBufMax, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err("FAIL: unum_formatDouble, locale %s, style %d, context %d - %s\n",
+                    itemPtr->locale, (int)itemPtr->style, (int)itemPtr->context, myErrorName(status));
+        } else {
+            UChar ubufExpected[kUBufMax];
+            int32_t ulenExp = u_unescape(itemPtr->expectedResult, ubufExpected, kUBufMax);
+            if (ulenRes != ulenExp || u_strncmp(ubufResult, ubufExpected, ulenExp) != 0) {
+                char bbuf[kUBufMax*2];
+                u_austrncpy(bbuf, ubufResult, sizeof(bbuf)); 
+                log_err("FAIL: unum_formatDouble, locale %s, style %d, context %d, expected %d:\"%s\", got %d:\"%s\"\n",
+                        itemPtr->locale, (int)itemPtr->style, (int)itemPtr->context, ulenExp,
+                        itemPtr->expectedResult, ulenRes, bbuf);
+            }
+        }
+        unum_close(unum);
     }
 }
 
