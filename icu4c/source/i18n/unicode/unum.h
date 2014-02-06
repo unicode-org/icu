@@ -324,7 +324,9 @@ typedef enum UNumberFormatFields {
  * The caller must call {@link #unum_close } when done to release resources
  * used by this object.
  * @param style The type of number format to open: one of
- * UNUM_DECIMAL, UNUM_CURRENCY, UNUM_PERCENT, UNUM_SCIENTIFIC, UNUM_SPELLOUT,
+ * UNUM_DECIMAL, UNUM_CURRENCY, UNUM_PERCENT, UNUM_SCIENTIFIC,
+ * UNUM_CURRENCY_ISO, UNUM_CURRENCY_PLURAL, UNUM_SPELLOUT,
+ * UNUM_ORDINAL, UNUM_DURATION, UNUM_NUMBERING_SYSTEM,
  * UNUM_PATTERN_DECIMAL, UNUM_PATTERN_RULEBASED, or UNUM_DEFAULT.
  * If UNUM_PATTERN_DECIMAL or UNUM_PATTERN_RULEBASED is passed then the
  * number format is opened using the given pattern, which must conform
