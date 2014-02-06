@@ -3134,13 +3134,15 @@ void NumberFormatTest::TestNumberingSystems() {
         ec = U_ZERO_ERROR;
         Locale loc = Locale::createFromName(item->localeName);
 
-        // Clone to test ticket #10682
-        NumberFormat *fmt = (NumberFormat *) NumberFormat::createInstance(loc,ec)->clone();
-
+        NumberFormat *origFmt = NumberFormat::createInstance(loc,ec);
         if (U_FAILURE(ec)) {
             dataerrln("FAIL: getInstance(%s) - %s", item->localeName, u_errorName(ec));
             continue;
         }
+        // Clone to test ticket #10682
+        NumberFormat *fmt = (NumberFormat *) origFmt->clone();
+        delete origFmt;
+
         
         if (item->isRBNF) {
             expect3(*fmt,item->value,CharsToUnicodeString(item->expectedResult));
