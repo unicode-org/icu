@@ -815,15 +815,19 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs)
 RuleBasedNumberFormat&
 RuleBasedNumberFormat::operator=(const RuleBasedNumberFormat& rhs)
 {
+    if (this == &rhs) {
+        return *this;
+    }
+    NumberFormat::operator=(rhs);
     UErrorCode status = U_ZERO_ERROR;
     dispose();
     locale = rhs.locale;
     lenient = rhs.lenient;
 
-    UnicodeString rules = rhs.getRules();
     UParseError perror;
-    init(rules, rhs.localizations ? rhs.localizations->ref() : NULL, perror, status);
-
+    init(rhs.originalDescription, rhs.localizations ? rhs.localizations->ref() : NULL, perror, status);
+    setDecimalFormatSymbols(*rhs.getDecimalFormatSymbols());
+    setDefaultRuleSet(rhs.getDefaultRuleSetName(), status);
     return *this;
 }
 
@@ -835,23 +839,7 @@ RuleBasedNumberFormat::~RuleBasedNumberFormat()
 Format*
 RuleBasedNumberFormat::clone(void) const
 {
-    RuleBasedNumberFormat * result = NULL;
-    UnicodeString rules = getRules();
-    UErrorCode status = U_ZERO_ERROR;
-    UParseError perror;
-    result = new RuleBasedNumberFormat(rules, localizations, locale, perror, status);
-    /* test for NULL */
-    if (result == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return 0;
-    }
-    if (U_FAILURE(status)) {
-        delete result;
-        result = 0;
-    } else {
-        result->lenient = lenient;
-    }
-    return result;
+    return new RuleBasedNumberFormat(*this);
 }
 
 UBool
@@ -1431,6 +1419,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     } else {
         defaultRuleSet = getDefaultRuleSet();
     }
+    originalDescription = rules;
 }
 
 void

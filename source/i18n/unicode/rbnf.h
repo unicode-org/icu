@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and others.
+* Copyright (C) 1997-2014, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -965,6 +965,7 @@ private:
     UBool lenient;
     UnicodeString* lenientParseRules;
     LocalizationInfo* localizations;
+    UnicodeString originalDescription;
 };
 
 // ---------------
