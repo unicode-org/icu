@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009-2013, International Business Machines Corporation and    *
+* Copyright (C) 2009-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -364,12 +364,15 @@
     </target>
 
     <!-- perf -->
-    <path id="javac.classpathref.perf">
+    <path id="javac.classpathref.perf-tests">
         <pathelement location="${icu4j.core.jar}"/>
         <pathelement location="${icu4j.charset.jar}"/>
         <pathelement location="${icu4j.collate.jar}"/>
         <pathelement location="${icu4j.tools.jar}"/>
     </path>
 
+    <target name="_all.perf-tests" depends="_all.core, _all.charset, _all.collate, _all.tools">
+        <ant dir="${icu4j.perf-tests.dir}" inheritAll="false"/>
+    </target>
 
 </project>

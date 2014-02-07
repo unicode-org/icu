@@ -593,7 +593,13 @@ icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/translit/translit-tests-build.launch -text
 icu4j/manifest.stub -text
+icu4j/perf-tests/.classpath -text
+icu4j/perf-tests/.project -text
+icu4j/perf-tests/.settings/org.eclipse.core.resources.prefs -text
+icu4j/perf-tests/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/perf-tests/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/perf-tests/data/icuperf2report.xsl -text
+icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/ServiceObjectCreationPerf.java -text
 icu4j/samples/build.properties -text
 icu4j/samples/manifest.stub -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/es.res -text
