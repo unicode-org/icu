@@ -126,7 +126,7 @@
         <ant dir="${icu4j.tools.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.demos.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.samples.dir}" target="clean" inheritAll="false"/>
-        <ant dir="${icu4j.perf.dir}" target="clean" inheritAll="false"/>
+        <ant dir="${icu4j.perf-tests.dir}" target="clean" inheritAll="false"/>
 
         <!-- delete all .jar files root directory -->
         <delete>
@@ -148,7 +148,7 @@
     </target>
 
     <!-- meta build targets -->
-    <target name="all" depends="info, main, tests, build-tools, tools, demos, samples, perf, jar, docs" description="Build all primary targets"/>
+    <target name="all" depends="info, main, tests, build-tools, tools, demos, samples, perf-tests, jar, docs" description="Build all primary targets"/>
     <target name="main" depends="info, core, collate, charset, currdata, langdata, regiondata, translit, localespi" description="Build ICU4J runtime library classes"/>
     <target name="tests" depends="info, core-tests, charset-tests, collate-tests, packaging-tests, translit-tests, testall, localespi-tests" description="Build ICU4J test classes"/>
 
@@ -392,7 +392,7 @@
         </jar>
     </target>
 
-	<target name="icu4jSrcJar" description="Build icu4j-src.jar">
+    <target name="icu4jSrcJar" description="Build icu4j-src.jar">
         <jar jarfile="${icu4j-src.jar.file}"
                 compress="true">
             <fileset dir="${icu4j.core.dir}/${src.dir}" includes="**/*.java"/>
@@ -405,7 +405,7 @@
                 <include name="license.html"/>
             </fileset>
         </jar>
-	</target>
+    </target>
 
     <target name="icu4jtestsJar" depends="info, tests" description="Build ICU4J all-in-one test jar">
         <jar jarfile="${icu4jtests.jar.file}"
@@ -723,8 +723,9 @@
     <target name="tools" depends="core, core-tests, collate, translit, translit-tests" description="Build tool classes">
         <ant dir="${icu4j.tools.dir}" inheritAll="false"/>
     </target>
-    <target name="perf" depends="core, charset, collate, tools" description="Build performance test classes">
-        <ant dir="${icu4j.perf.dir}" inheritAll="false"/>
+
+    <target name="perf-tests" if="is.java6.plus" depends="core, charset, collate, tools" description="Build performance test classes">
+        <ant dir="${icu4j.perf-tests.dir}" inheritAll="false"/>
     </target>
 
     <!-- doc targets -->

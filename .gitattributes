@@ -5040,6 +5040,11 @@ icu4j/main/tests/translit/src/com/ibm/icu/dev/util/UnicodeProperty.java svneol=n
 icu4j/main/tests/translit/src/com/ibm/icu/dev/util/UnicodePropertySymbolTable.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/translit-tests-build.launch -text
 icu4j/manifest.stub -text
+icu4j/perf-tests/.classpath -text
+icu4j/perf-tests/.project -text
+icu4j/perf-tests/.settings/org.eclipse.core.resources.prefs -text
+icu4j/perf-tests/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/perf-tests/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/perf-tests/README.txt svneol=native#text/plain
 icu4j/perf-tests/data/collation/TestNames_Asian.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/data/collation/TestNames_Chinese.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -5072,6 +5077,7 @@ icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/NormalizerPerformanceTest.java sv
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/PerfTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/RBBIPerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/ResourceBundlePerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/ServiceObjectCreationPerf.java -text
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/UCharacterPerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/UnicodeSetPerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/readme.html svneol=native#text/html

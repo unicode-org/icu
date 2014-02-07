@@ -1681,7 +1681,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return a Calendar.
      * @stable ICU 2.0
      */
-    public static synchronized Calendar getInstance()
+    public static Calendar getInstance()
     {
         return getInstanceInternal(null, null);
     }
@@ -1692,7 +1692,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return a Calendar.
      * @stable ICU 2.0
      */
-    public static synchronized Calendar getInstance(TimeZone zone)
+    public static Calendar getInstance(TimeZone zone)
     {
         return getInstanceInternal(zone, null);
     }
@@ -1703,7 +1703,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return a Calendar.
      * @stable ICU 2.0
      */
-    public static synchronized Calendar getInstance(Locale aLocale)
+    public static Calendar getInstance(Locale aLocale)
     {
         return getInstanceInternal(null, ULocale.forLocale(aLocale));
     }
@@ -1714,7 +1714,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return a Calendar.
      * @stable ICU 3.2
      */
-    public static synchronized Calendar getInstance(ULocale locale)
+    public static Calendar getInstance(ULocale locale)
     {
         return getInstanceInternal(null, locale);
     }
@@ -1726,8 +1726,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return a Calendar.
      * @stable ICU 2.0
      */
-    public static synchronized Calendar getInstance(TimeZone zone,
-                                                    Locale aLocale) {
+    public static Calendar getInstance(TimeZone zone, Locale aLocale) {
         return getInstanceInternal(zone, ULocale.forLocale(aLocale));
     }
 
@@ -1738,8 +1737,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return a Calendar.
      * @stable ICU 3.2
      */
-    public static synchronized Calendar getInstance(TimeZone zone,
-                                                    ULocale locale) {
+    public static Calendar getInstance(TimeZone zone, ULocale locale) {
         return getInstanceInternal(zone, locale);
     }
 
