@@ -79,13 +79,13 @@ static const UChar PLURAL_COUNT_ONE[] = {LOW_O, LOW_N, LOW_E, 0};
 static const UChar PLURAL_COUNT_TWO[] = {LOW_T, LOW_W, LOW_O, 0};
 
 TimeUnitFormat::TimeUnitFormat(UErrorCode& status) {
-    initMeasureFormat(Locale::getDefault(), UMEASFMT_WIDTH_WIDE, status);
+    initMeasureFormat(Locale::getDefault(), UMEASFMT_WIDTH_WIDE, NULL, status);
     create(UTMUTFMT_FULL_STYLE, status);
 }
 
 
 TimeUnitFormat::TimeUnitFormat(const Locale& locale, UErrorCode& status) {
-    initMeasureFormat(locale, UMEASFMT_WIDTH_WIDE, status);
+    initMeasureFormat(locale, UMEASFMT_WIDTH_WIDE, NULL, status);
     create(UTMUTFMT_FULL_STYLE, status);
 }
 
@@ -93,13 +93,13 @@ TimeUnitFormat::TimeUnitFormat(const Locale& locale, UErrorCode& status) {
 TimeUnitFormat::TimeUnitFormat(const Locale& locale, UTimeUnitFormatStyle style, UErrorCode& status) {
     switch (style) {
     case UTMUTFMT_FULL_STYLE:
-        initMeasureFormat(locale, UMEASFMT_WIDTH_WIDE, status);
+        initMeasureFormat(locale, UMEASFMT_WIDTH_WIDE, NULL, status);
         break;
     case UTMUTFMT_ABBREVIATED_STYLE:
-        initMeasureFormat(locale, UMEASFMT_WIDTH_SHORT, status);
+        initMeasureFormat(locale, UMEASFMT_WIDTH_SHORT, NULL, status);
         break;
     default:
-        initMeasureFormat(locale, UMEASFMT_WIDTH_WIDE, status);
+        initMeasureFormat(locale, UMEASFMT_WIDTH_WIDE, NULL, status);
         break;
     }
     create(style, status);
