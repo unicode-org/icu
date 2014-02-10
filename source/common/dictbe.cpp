@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2013, International Business Machines Corporation
+ * Copyright (C) 2006-2014, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -49,6 +49,9 @@ DictionaryBreakEngine::findBreaks( UText *text,
     int32_t result = 0;
 
     // Find the span of characters included in the set.
+    //   The span to break begins at the current position in the text, and
+    //   extends towards the start or end of the text, depending on 'reverse'.
+
     int32_t start = (int32_t)utext_getNativeIndex(text);
     int32_t current;
     int32_t rangeStart;

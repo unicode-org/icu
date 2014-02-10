@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2013, International Business Machines
+* Copyright (C) 2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * dictionarydata.h
@@ -118,7 +118,7 @@ int32_t BytesDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t 
             if (count < limit) {
                 if (values != NULL) {
                     values[count] = bt.getValue();
-            }
+                }
                 lengths[count++] = numChars;
             }
             if (result == USTRINGTRIE_FINAL_VALUE) {

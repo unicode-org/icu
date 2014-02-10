@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2013 International Business Machines Corporation
+*   Copyright (C) 1999-2014 International Business Machines Corporation
 *   and others. All rights reserved.
 ***************************************************************************
 */
@@ -592,6 +592,7 @@ int32_t RuleBasedBreakIterator::next(void) {
     }
 
     int32_t startPos = current();
+    fDictionaryCharCount = 0;
     int32_t result = handleNext(fData->fForwardTable);
     if (fDictionaryCharCount > 0) {
         result = checkDictionary(startPos, result, FALSE);
@@ -646,7 +647,6 @@ int32_t RuleBasedBreakIterator::previous(void) {
     // break position before the current position (we back our internal
     // iterator up one step to prevent handlePrevious() from returning
     // the current position), but not necessarily the last one before
-
     // where we started
 
     int32_t start = current();
@@ -679,11 +679,11 @@ int32_t RuleBasedBreakIterator::previous(void) {
     // the result position that we are to return (in lastResult.)  If
     // the backwards rules overshot and the above loop had to do two or more
     // next()s to move up to the desired return position, we will have a valid
-    // tag value. But, if handlePrevious() took us to exactly the correct result positon,
+    // tag value. But, if handlePrevious() took us to exactly the correct result position,
     // we wont have a tag value for that position, which is only set by handleNext().
 
-    // set the current iteration position to be the last break position
-    // before where we started, and then return that value
+    // Set the current iteration position to be the last break position
+    // before where we started, and then return that value.
     utext_setNativeIndex(fText, lastResult);
     fLastRuleStatusIndex  = lastTag;       // for use by getRuleStatus()
     fLastStatusIndexValid = breakTagValid;
@@ -1703,6 +1703,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     // If we found breaks, build a new break cache. The first and last entries must
     // be the original starting and ending position.
     if (foundBreakCount > 0) {
+        U_ASSERT(foundBreakCount == breaks.size());
         int32_t totalBreaks = foundBreakCount;
         if (startPos < breaks.elementAti(0)) {
             totalBreaks += 1;
