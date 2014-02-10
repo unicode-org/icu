@@ -26,7 +26,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.Set;
 
 import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.ICUResourceBundle;
