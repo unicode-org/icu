@@ -620,6 +620,7 @@ UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
 
 void RelativeDateTimeFormatter::init(
         const Locale &locale, NumberFormat *nfToAdopt, UErrorCode &status) {
+    LocalPointer<NumberFormat> nf(nfToAdopt);
     if (!getFromCache(locale.getName(), cache, status)) {
         return;
     }
@@ -631,7 +632,7 @@ void RelativeDateTimeFormatter::init(
         return;
     }
     pluralRules->removeRef();
-    if (nfToAdopt == NULL) {
+    if (nf.getAlias() == NULL) {
        SharedObject::copyPtr(
                NumberFormat::createSharedInstance(
                        locale, UNUM_DECIMAL, status),
@@ -641,12 +642,12 @@ void RelativeDateTimeFormatter::init(
         }
         numberFormat->removeRef();
     } else {
-        SharedNumberFormat *shared = new SharedNumberFormat(nfToAdopt);
+        SharedNumberFormat *shared = new SharedNumberFormat(nf.getAlias());
         if (shared == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            delete nfToAdopt;
             return;
         }
+        nf.orphan();
         SharedObject::copyPtr(shared, numberFormat);
     }
 }
