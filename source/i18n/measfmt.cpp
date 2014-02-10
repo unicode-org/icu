@@ -579,6 +579,7 @@ void MeasureFormat::initMeasureFormat(
         NumberFormat *nfToAdopt,
         UErrorCode &status) {
     static const char *listStyles[] = {"unit", "unit-short", "unit-narrow"};
+    LocalPointer<NumberFormat> nf(nfToAdopt);
     if (U_FAILURE(status)) {
         return;
     }
@@ -597,7 +598,7 @@ void MeasureFormat::initMeasureFormat(
         return;
     }
     pluralRules->removeRef();
-    if (nfToAdopt == NULL) {
+    if (nf.getAlias() == NULL) {
         SharedObject::copyPtr(
                 NumberFormat::createSharedInstance(
                         locale, UNUM_DECIMAL, status),
@@ -607,7 +608,7 @@ void MeasureFormat::initMeasureFormat(
         }
         numberFormat->removeRef();
     } else {
-        adoptNumberFormat(nfToAdopt, status);
+        adoptNumberFormat(nf.orphan(), status);
         if (U_FAILURE(status)) {
             return;
         }
@@ -623,6 +624,7 @@ void MeasureFormat::initMeasureFormat(
 void MeasureFormat::adoptNumberFormat(
         NumberFormat *nfToAdopt, UErrorCode &status) {
     if (U_FAILURE(status)) {
+        delete nfToAdopt;
         return;
     }
     SharedNumberFormat *shared = new SharedNumberFormat(nfToAdopt);
