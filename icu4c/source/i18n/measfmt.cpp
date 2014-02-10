@@ -623,16 +623,16 @@ void MeasureFormat::initMeasureFormat(
 
 void MeasureFormat::adoptNumberFormat(
         NumberFormat *nfToAdopt, UErrorCode &status) {
+    LocalPointer<NumberFormat> nf(nfToAdopt);
     if (U_FAILURE(status)) {
-        delete nfToAdopt;
         return;
     }
-    SharedNumberFormat *shared = new SharedNumberFormat(nfToAdopt);
+    SharedNumberFormat *shared = new SharedNumberFormat(nf.getAlias());
     if (shared == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        delete nfToAdopt;
         return;
     }
+    nf.orphan();
     SharedObject::copyPtr(shared, numberFormat);
 }
 
