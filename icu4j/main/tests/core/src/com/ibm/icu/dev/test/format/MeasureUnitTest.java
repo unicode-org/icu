@@ -28,7 +28,6 @@ import com.ibm.icu.dev.test.serializable.SerializableTest;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MeasureFormat;
-import com.ibm.icu.text.TimeUnitFormat;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
