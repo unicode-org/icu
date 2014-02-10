@@ -51,6 +51,8 @@
 #include "mutex.h"
 #include "digitlst.h"
 #include <float.h>
+#include "sharednumberformat.h"
+#include "lrucache.h"
 
 //#define FMT_DEBUG
 
@@ -139,6 +141,10 @@ static const char *gFormatKeys[UNUM_FORMAT_STYLE_COUNT] = {
     "currencyFormat"  // UNUM_CURRENCY_PLURAL
 };
 
+static icu::LRUCache *gNumberFormatCache = NULL;
+static UMutex gNumberFormatCacheMutex = U_MUTEX_INITIALIZER;
+static icu::UInitOnce gNumberFormatCacheInitOnce = U_INITONCE_INITIALIZER;
+
 // Static hashtable cache of NumberingSystem objects used by NumberFormat
 static UHashtable * NumberingSystem_cache = NULL;
 static UMutex nscacheMutex = U_MUTEX_INITIALIZER;
@@ -172,7 +178,11 @@ static UBool U_CALLCONV numfmt_cleanup(void) {
         uhash_close(NumberingSystem_cache);
         NumberingSystem_cache = NULL;
     }
-
+    gNumberFormatCacheInitOnce.reset();
+    if (gNumberFormatCache) {
+        delete gNumberFormatCache;
+        gNumberFormatCache = NULL;
+    }
     return TRUE;
 }
 U_CDECL_END
@@ -232,6 +242,10 @@ NumberFormat::NumberFormat()
 
 NumberFormat::~NumberFormat()
 {
+}
+
+SharedNumberFormat::~SharedNumberFormat() {
+    delete ptr;
 }
 
 // -------------------------------------
@@ -1008,8 +1022,8 @@ NumberFormat::getAvailableLocales(void)
 #endif /* UCONFIG_NO_SERVICE */
 // -------------------------------------
 
-NumberFormat* U_EXPORT2
-NumberFormat::createInstance(const Locale& loc, UNumberFormatStyle kind, UErrorCode& status) {
+NumberFormat*
+NumberFormat::internalCreateInstance(const Locale& loc, UNumberFormatStyle kind, UErrorCode& status) {
 #if !UCONFIG_NO_SERVICE
     if (haveService()) {
         return (NumberFormat*)gService->get(loc, kind, status);
@@ -1018,6 +1032,23 @@ NumberFormat::createInstance(const Locale& loc, UNumberFormatStyle kind, UErrorC
     return makeInstance(loc, kind, status);
 }
 
+NumberFormat* U_EXPORT2
+NumberFormat::createInstance(const Locale& loc, UNumberFormatStyle kind, UErrorCode& status) {
+    if (kind != UNUM_DECIMAL) {
+        return internalCreateInstance(loc, kind, status);
+    }
+    const SharedNumberFormat *shared = createSharedInstance(loc, kind, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    NumberFormat *result = (NumberFormat *) (*shared)->clone();
+    shared->removeRef();
+    if (result == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+    
 
 // -------------------------------------
 // Checks if the thousand/10 thousand grouping is used in the
@@ -1203,6 +1234,61 @@ static void U_CALLCONV nscacheInit() {
         return;
     }
     uhash_setValueDeleter(NumberingSystem_cache, deleteNumberingSystem);
+}
+
+static SharedObject *U_CALLCONV createSharedNumberFormat(
+        const char *localeId, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    NumberFormat *nf = NumberFormat::internalCreateInstance(
+            localeId, UNUM_DECIMAL, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    SharedObject *result = new SharedNumberFormat(nf);
+    if (result == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        delete nf;
+        return NULL;
+    }
+    return result;
+}
+
+static void U_CALLCONV numberFormatCacheInit(UErrorCode &status) {
+    U_ASSERT(gNumberFormatCache == NULL);
+    ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, numfmt_cleanup);
+    gNumberFormatCache = new SimpleLRUCache(100, &createSharedNumberFormat, status);
+    if (U_FAILURE(status)) {
+        delete gNumberFormatCache;
+        gNumberFormatCache = NULL;
+    }
+}
+
+static void getSharedNumberFormatFromCache(
+        const char *locale,
+        const SharedNumberFormat *&ptr,
+        UErrorCode &status) {
+    umtx_initOnce(gNumberFormatCacheInitOnce, &numberFormatCacheInit, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    Mutex lock(&gNumberFormatCacheMutex);
+    gNumberFormatCache->get(locale, ptr, status);
+}
+
+const SharedNumberFormat* U_EXPORT2
+NumberFormat::createSharedInstance(const Locale& loc, UNumberFormatStyle kind, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    if (kind != UNUM_DECIMAL) {
+        status = U_UNSUPPORTED_ERROR;
+        return NULL;
+    }
+    const SharedNumberFormat *result = NULL;
+    getSharedNumberFormatFromCache(loc.getName(), result, status);
+    return result;
 }
 
 UBool

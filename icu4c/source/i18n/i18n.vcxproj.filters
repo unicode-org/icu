@@ -644,6 +644,12 @@
     <ClInclude Include="reldtfmt.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="sharednumberformat.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="sharedpluralrules.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <ClInclude Include="smpdtfst.h">
       <Filter>formatting</Filter>
     </ClInclude>

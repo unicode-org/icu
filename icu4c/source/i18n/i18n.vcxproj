@@ -1115,6 +1115,8 @@
     </CustomBuild>
     <ClInclude Include="plurrule_impl.h" />
     <ClInclude Include="quantityformatter.h" />
+    <ClInclude Include="sharednumberformat.h" />
+    <ClInclude Include="sharedpluralrules.h" />
     <CustomBuild Include="unicode\rbnf.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
