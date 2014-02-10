@@ -221,7 +221,9 @@ typedef enum UDateDirection {
 
 U_NAMESPACE_BEGIN
 
-class RelativeDateTimeData;
+class RelativeDateTimeCacheData;
+class SharedNumberFormat;
+class SharedPluralRules;
 class NumberFormat;
 
 /**
@@ -407,8 +409,10 @@ public:
     const NumberFormat& getNumberFormat() const;
 
 private:
-    RelativeDateTimeFormatter();
-    const RelativeDateTimeData* ptr;
+    const RelativeDateTimeCacheData* cache;
+    const SharedNumberFormat *numberFormat;
+    const SharedPluralRules *pluralRules;
+    void init(const Locale &, NumberFormat *nfToAdopt, UErrorCode &status);
 };
 
 U_NAMESPACE_END

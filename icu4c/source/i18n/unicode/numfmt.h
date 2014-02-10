@@ -43,6 +43,8 @@ class NumberFormatTest;
 
 U_NAMESPACE_BEGIN
 
+class SharedNumberFormat;
+
 #if !UCONFIG_NO_SERVICE
 class NumberFormatFactory;
 class StringEnumeration;
@@ -705,6 +707,30 @@ public:
     static NumberFormat* U_EXPORT2 createInstance(const Locale& desiredLocale,
                                                   UNumberFormatStyle style,
                                                   UErrorCode& errorCode);
+
+#ifndef U_HIDE_INTERNAL_API
+
+    /**
+     * ICU use only.
+     * Creates NumberFormat instance without using the cache.
+     * @internal
+     */
+    static NumberFormat* internalCreateInstance(
+            const Locale& desiredLocale,
+            UNumberFormatStyle style,
+            UErrorCode& errorCode);
+
+    /**
+     * ICU use only.
+     * Returns handle to the shared, cached NumberFormat instance for given
+     * locale. On success, caller must call removeRef() on returned value
+     * once it is done with the shared instance.
+     * @internal
+     */
+    static const SharedNumberFormat* U_EXPORT2 createSharedInstance(
+            const Locale& inLocale, UNumberFormatStyle style, UErrorCode& status);
+
+#endif
 
     /**
      * Returns a currency format for the current default locale.

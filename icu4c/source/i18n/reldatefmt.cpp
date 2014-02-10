@@ -27,6 +27,8 @@
 #include "charstr.h"
 
 #include "sharedptr.h"
+#include "sharedpluralrules.h"
+#include "sharednumberformat.h"
 
 // Copied from uscript_props.cpp
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -48,37 +50,35 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-class QualitativeUnits : public UMemory {
+// RelativeDateTimeFormatter specific data for a single locale
+class RelativeDateTimeCacheData: public SharedObject {
 public:
-    QualitativeUnits() { }
-    UnicodeString data[UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT];
+    RelativeDateTimeCacheData() : combinedDateAndTime(NULL) { }
+    virtual ~RelativeDateTimeCacheData();
+
+    // no numbers: e.g Next Tuesday; Yesterday; etc.
+    UnicodeString absoluteUnits[UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT];
+
+    // has numbers: e.g Next Tuesday; Yesterday; etc. For second index, 0
+    // means past e.g 5 days ago; 1 means future e.g in 5 days.
+    QuantityFormatter relativeUnits[UDAT_RELATIVE_UNIT_COUNT][2];
+
+    void adoptCombinedDateAndTime(MessageFormat *mfToAdopt) {
+        delete combinedDateAndTime;
+        combinedDateAndTime = mfToAdopt;
+    }
+    const MessageFormat *getCombinedDateAndTime() const {
+        return combinedDateAndTime;
+    }
 private:
-    QualitativeUnits(const QualitativeUnits &other);
-    QualitativeUnits &operator=(const QualitativeUnits& other);
+    MessageFormat *combinedDateAndTime;
+    RelativeDateTimeCacheData(const RelativeDateTimeCacheData &other);
+    RelativeDateTimeCacheData& operator=(
+            const RelativeDateTimeCacheData &other);
 };
 
-class QuantitativeUnits : public UMemory {
-public:
-    QuantitativeUnits() { }
-    QuantityFormatter data[UDAT_RELATIVE_UNIT_COUNT][2];
-private:
-    QuantitativeUnits(const QuantitativeUnits &other);
-    QuantitativeUnits &operator=(const QuantitativeUnits& other);
-};
-
-class RelativeDateTimeData : public SharedObject {
-public:
-    SharedPtr<QualitativeUnits> qualitativeUnits;
-    SharedPtr<QuantitativeUnits> quantitativeUnits;
-    SharedPtr<MessageFormat> combinedDateAndTime;
-    SharedPtr<PluralRules> pluralRules;
-    SharedPtr<NumberFormat> numberFormat;
-    virtual ~RelativeDateTimeData();
-private:
-    RelativeDateTimeData &operator=(const RelativeDateTimeData& other);
-};
-
-RelativeDateTimeData::~RelativeDateTimeData() {
+RelativeDateTimeCacheData::~RelativeDateTimeCacheData() {
+    delete combinedDateAndTime;
 }
 
 static UBool getStringWithFallback(
@@ -147,45 +147,42 @@ static UBool getStringByIndex(
     return TRUE;
 }
 
-static void addQualitativeUnit(
+static void initAbsoluteUnit(
             const UResourceBundle *resource,
-            UDateAbsoluteUnit absoluteUnit,
             const UnicodeString &unitName,
-            QualitativeUnits &qualitativeUnits,
+            UnicodeString *absoluteUnit,
             UErrorCode &status) {
     getStringWithFallback(
             resource, 
             "-1",
-            qualitativeUnits.data[absoluteUnit][UDAT_DIRECTION_LAST],
+            absoluteUnit[UDAT_DIRECTION_LAST],
             status);
     getStringWithFallback(
             resource, 
             "0",
-            qualitativeUnits.data[absoluteUnit][UDAT_DIRECTION_THIS],
+            absoluteUnit[UDAT_DIRECTION_THIS],
             status);
     getStringWithFallback(
             resource, 
             "1",
-            qualitativeUnits.data[absoluteUnit][UDAT_DIRECTION_NEXT],
+            absoluteUnit[UDAT_DIRECTION_NEXT],
             status);
     getOptionalStringWithFallback(
             resource,
             "-2",
-            qualitativeUnits.data[absoluteUnit][UDAT_DIRECTION_LAST_2],
+            absoluteUnit[UDAT_DIRECTION_LAST_2],
             status);
     getOptionalStringWithFallback(
             resource,
             "2",
-            qualitativeUnits.data[absoluteUnit][UDAT_DIRECTION_NEXT_2],
+            absoluteUnit[UDAT_DIRECTION_NEXT_2],
             status);
-    qualitativeUnits.data[absoluteUnit][UDAT_DIRECTION_PLAIN] = unitName;
+    absoluteUnit[UDAT_DIRECTION_PLAIN] = unitName;
 }
 
-static void addTimeUnit(
+static void initQuantityFormatter(
         const UResourceBundle *resource,
-        UDateRelativeUnit relativeUnit,
-        int32_t pastOrFuture,
-        QuantitativeUnits &quantitativeUnits,
+        QuantityFormatter &formatter,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
@@ -201,20 +198,18 @@ static void addTimeUnit(
         if (!getString(pluralBundle.getAlias(), rawPattern, status)) {
             return;
         }
-        if (!quantitativeUnits.data[relativeUnit][pastOrFuture]
-                .add(
-                        ures_getKey(pluralBundle.getAlias()),
-                        rawPattern,
-                        status)) {
+        if (!formatter.add(
+                ures_getKey(pluralBundle.getAlias()),
+                rawPattern,
+                status)) {
             return;
         }
     }
 }
 
-static void addTimeUnit(
+static void initRelativeUnit(
         const UResourceBundle *resource,
-        UDateRelativeUnit relativeUnit,
-        QuantitativeUnits &quantitativeUnits,
+        QuantityFormatter *relativeUnit,
         UErrorCode &status) {
     LocalUResourceBundlePointer topLevel(
             ures_getByKeyWithFallback(
@@ -227,53 +222,46 @@ static void addTimeUnit(
     if (U_FAILURE(status)) {
         return;
     }
-    addTimeUnit(
+    initQuantityFormatter(
             futureBundle.getAlias(),
-            relativeUnit,
-            1,
-            quantitativeUnits,
+            relativeUnit[1],
             status);
     LocalUResourceBundlePointer pastBundle(ures_getByKeyWithFallback(
             topLevel.getAlias(), "past", NULL, &status));
     if (U_FAILURE(status)) {
         return;
     }
-    addTimeUnit(
+    initQuantityFormatter(
             pastBundle.getAlias(),
-            relativeUnit,
-            0,
-            quantitativeUnits,
+            relativeUnit[0],
             status);
 }
 
-static void addTimeUnit(
+static void initRelativeUnit(
         const UResourceBundle *resource,
         const char *path,
-        UDateRelativeUnit relativeUnit,
-        QuantitativeUnits &quantitativeUnits,
+        QuantityFormatter *relativeUnit,
         UErrorCode &status) {
     LocalUResourceBundlePointer topLevel(
             ures_getByKeyWithFallback(resource, path, NULL, &status));
     if (U_FAILURE(status)) {
         return;
     }
-    addTimeUnit(topLevel.getAlias(), relativeUnit, quantitativeUnits, status);
+    initRelativeUnit(topLevel.getAlias(), relativeUnit, status);
 }
 
 static void addTimeUnit(
         const UResourceBundle *resource,
         const char *path,
-        UDateRelativeUnit relativeUnit,
-        UDateAbsoluteUnit absoluteUnit,
-        QuantitativeUnits &quantitativeUnits,
-        QualitativeUnits &qualitativeUnits,
+        QuantityFormatter *relativeUnit,
+        UnicodeString *absoluteUnit,
         UErrorCode &status) {
     LocalUResourceBundlePointer topLevel(
             ures_getByKeyWithFallback(resource, path, NULL, &status));
     if (U_FAILURE(status)) {
         return;
     }
-    addTimeUnit(topLevel.getAlias(), relativeUnit, quantitativeUnits, status);
+    initRelativeUnit(topLevel.getAlias(), relativeUnit, status);
     UnicodeString unitName;
     if (!getStringWithFallback(topLevel.getAlias(), "dn", unitName, status)) {
         return;
@@ -294,11 +282,10 @@ static void addTimeUnit(
     if (U_FAILURE(status)) {
         return;
     }
-    addQualitativeUnit(
+    initAbsoluteUnit(
             topLevel.getAlias(),
-            absoluteUnit,
             unitName,
-            qualitativeUnits,
+            absoluteUnit,
             status);
 }
 
@@ -329,80 +316,67 @@ static void addWeekDay(
         const char *path,
         const UnicodeString *daysOfWeek,
         UDateAbsoluteUnit absoluteUnit,
-        QualitativeUnits &qualitativeUnits,
+        UnicodeString absoluteUnits[][UDAT_DIRECTION_COUNT],
         UErrorCode &status) {
     LocalUResourceBundlePointer topLevel(
             ures_getByKeyWithFallback(resource, path, NULL, &status));
     if (U_FAILURE(status)) {
         return;
     }
-    addQualitativeUnit(
+    initAbsoluteUnit(
             topLevel.getAlias(),
-            absoluteUnit,
             daysOfWeek[absoluteUnit - UDAT_ABSOLUTE_SUNDAY],
-            qualitativeUnits,
+            absoluteUnits[absoluteUnit],
             status);
 }
 
-static UBool load(
+static UBool loadUnitData(
         const UResourceBundle *resource,
-        QualitativeUnits &qualitativeUnits,
-        QuantitativeUnits &quantitativeUnits,
+        RelativeDateTimeCacheData &cacheData,
         UErrorCode &status) {
     addTimeUnit(
             resource,
             "fields/day",
-            UDAT_RELATIVE_DAYS,
-            UDAT_ABSOLUTE_DAY,
-            quantitativeUnits,
-            qualitativeUnits,
+            cacheData.relativeUnits[UDAT_RELATIVE_DAYS],
+            cacheData.absoluteUnits[UDAT_ABSOLUTE_DAY],
             status);
     addTimeUnit(
             resource,
             "fields/week",
-            UDAT_RELATIVE_WEEKS,
-            UDAT_ABSOLUTE_WEEK,
-            quantitativeUnits,
-            qualitativeUnits,
+            cacheData.relativeUnits[UDAT_RELATIVE_WEEKS],
+            cacheData.absoluteUnits[UDAT_ABSOLUTE_WEEK],
             status);
     addTimeUnit(
             resource,
             "fields/month",
-            UDAT_RELATIVE_MONTHS,
-            UDAT_ABSOLUTE_MONTH,
-            quantitativeUnits,
-            qualitativeUnits,
+            cacheData.relativeUnits[UDAT_RELATIVE_MONTHS],
+            cacheData.absoluteUnits[UDAT_ABSOLUTE_MONTH],
             status);
     addTimeUnit(
             resource,
             "fields/year",
-            UDAT_RELATIVE_YEARS,
-            UDAT_ABSOLUTE_YEAR,
-            quantitativeUnits,
-            qualitativeUnits,
+            cacheData.relativeUnits[UDAT_RELATIVE_YEARS],
+            cacheData.absoluteUnits[UDAT_ABSOLUTE_YEAR],
             status);
-    addTimeUnit(
+    initRelativeUnit(
             resource,
             "fields/second",
-            UDAT_RELATIVE_SECONDS,
-            quantitativeUnits,
+            cacheData.relativeUnits[UDAT_RELATIVE_SECONDS],
             status);
-    addTimeUnit(
+    initRelativeUnit(
             resource,
             "fields/minute",
-            UDAT_RELATIVE_MINUTES,
-            quantitativeUnits,
+            cacheData.relativeUnits[UDAT_RELATIVE_MINUTES],
             status);
-    addTimeUnit(
+    initRelativeUnit(
             resource,
             "fields/hour",
-            UDAT_RELATIVE_HOURS,
-            quantitativeUnits,
+            cacheData.relativeUnits[UDAT_RELATIVE_HOURS],
             status);
     getStringWithFallback(
             resource,
             "fields/second/relative/0",
-            qualitativeUnits.data[UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
+            cacheData.absoluteUnits[UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
             status);
     UnicodeString daysOfWeek[7];
     readDaysOfWeek(
@@ -415,49 +389,49 @@ static UBool load(
             "fields/mon/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_MONDAY,
-            qualitativeUnits,
+            cacheData.absoluteUnits,
             status);
     addWeekDay(
             resource,
             "fields/tue/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_TUESDAY,
-            qualitativeUnits,
+            cacheData.absoluteUnits,
             status);
     addWeekDay(
             resource,
             "fields/wed/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_WEDNESDAY,
-            qualitativeUnits,
+            cacheData.absoluteUnits,
             status);
     addWeekDay(
             resource,
             "fields/thu/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_THURSDAY,
-            qualitativeUnits,
+            cacheData.absoluteUnits,
             status);
     addWeekDay(
             resource,
             "fields/fri/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_FRIDAY,
-            qualitativeUnits,
+            cacheData.absoluteUnits,
             status);
     addWeekDay(
             resource,
             "fields/sat/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_SATURDAY,
-            qualitativeUnits,
+            cacheData.absoluteUnits,
             status);
     addWeekDay(
             resource,
             "fields/sun/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_SUNDAY,
-            qualitativeUnits,
+            cacheData.absoluteUnits,
             status);
     return U_SUCCESS(status);
 }
@@ -494,70 +468,32 @@ static UBool getDateTimePattern(
     return getStringByIndex(topLevel.getAlias(), 8, result, status);
 }
 
+// Creates RelativeDateTimeFormatter specific data for a given locale
 static SharedObject *U_CALLCONV createData(
         const char *localeId, UErrorCode &status) {
     LocalUResourceBundlePointer topLevel(ures_open(NULL, localeId, &status));
     if (U_FAILURE(status)) {
         return NULL;
     }
-    LocalPointer<RelativeDateTimeData> result(new RelativeDateTimeData());
-    LocalPointer<QualitativeUnits> qualitativeUnits(new QualitativeUnits());
-    LocalPointer<QuantitativeUnits> quantitativeUnits(new QuantitativeUnits());
-    if (result.getAlias() == NULL
-            || qualitativeUnits.getAlias() == NULL
-            || quantitativeUnits.getAlias() == NULL) {
+    LocalPointer<RelativeDateTimeCacheData> result(
+            new RelativeDateTimeCacheData());
+    if (result.getAlias() == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    if (!load(
+    if (!loadUnitData(
             topLevel.getAlias(),
-            *qualitativeUnits,
-            *quantitativeUnits,
+            *result,
             status)) {
         return NULL;
     }
-    if (!result->qualitativeUnits.reset(qualitativeUnits.orphan())) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    if (!result->quantitativeUnits.reset(quantitativeUnits.orphan())) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-        
-    
     UnicodeString dateTimePattern;
     if (!getDateTimePattern(topLevel.getAlias(), dateTimePattern, status)) {
         return NULL;
     }
-    LocalPointer<MessageFormat> mf(
+    result->adoptCombinedDateAndTime(
             new MessageFormat(dateTimePattern, localeId, status));
     if (U_FAILURE(status)) {
-        return NULL;
-    }
-    if (mf.getAlias() == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    if (!result->combinedDateAndTime.reset(mf.orphan())) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    LocalPointer<PluralRules> pr(PluralRules::forLocale(localeId, status));
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    if (!result->pluralRules.reset(pr.orphan())) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    LocalPointer<NumberFormat> nf(
-            NumberFormat::createInstance(localeId, status));
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    if (!result->numberFormat.reset(nf.orphan())) {
-        status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
     return result.orphan();
@@ -573,67 +509,70 @@ static void U_CALLCONV cacheInit(UErrorCode &status) {
     }
 }
 
-static void getFromCache(
+static UBool getFromCache(
         const char *locale,
-        const RelativeDateTimeData *&ptr,
+        const RelativeDateTimeCacheData *&ptr,
         UErrorCode &status) {
     umtx_initOnce(gCacheInitOnce, &cacheInit, status);
     if (U_FAILURE(status)) {
-        return;
+        return FALSE;
     }
     Mutex lock(&gCacheMutex);
     gCache->get(locale, ptr, status);
+    return U_SUCCESS(status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(UErrorCode& status)
-        : ptr(NULL) {
-    getFromCache(Locale::getDefault().getName(), ptr, status);
+        : cache(NULL), numberFormat(NULL), pluralRules(NULL) {
+    init(Locale::getDefault(), NULL, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
-        const Locale& locale, UErrorCode& status) : ptr(NULL) {
-    getFromCache(locale.getName(), ptr, status);
+        const Locale& locale, UErrorCode& status)
+        : cache(NULL), numberFormat(NULL), pluralRules(NULL) {
+    init(locale, NULL, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         const Locale& locale, NumberFormat *nfToAdopt, UErrorCode& status)
-        : ptr(NULL) {
-    getFromCache(locale.getName(), ptr, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-    RelativeDateTimeData* wptr = SharedObject::copyOnWrite(ptr);
-    if (wptr == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    if (!wptr->numberFormat.reset(nfToAdopt)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
+        : cache(NULL), numberFormat(NULL), pluralRules(NULL) {
+    init(locale, nfToAdopt, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
-        const RelativeDateTimeFormatter& other) : ptr(other.ptr) {
-    ptr->addRef();
+        const RelativeDateTimeFormatter& other)
+        : cache(other.cache),
+          numberFormat(other.numberFormat),
+          pluralRules(other.pluralRules) {
+    cache->addRef();
+    numberFormat->addRef();
+    pluralRules->addRef();
 }
 
 RelativeDateTimeFormatter& RelativeDateTimeFormatter::operator=(
         const RelativeDateTimeFormatter& other) {
     if (this != &other) {
-        SharedObject::copyPtr(other.ptr, ptr);
+        SharedObject::copyPtr(other.cache, cache);
+        SharedObject::copyPtr(other.numberFormat, numberFormat);
+        SharedObject::copyPtr(other.pluralRules, pluralRules);
     }
     return *this;
 }
 
 RelativeDateTimeFormatter::~RelativeDateTimeFormatter() {
-    if (ptr != NULL) {
-        ptr->removeRef();
+    if (cache != NULL) {
+        cache->removeRef();
+    }
+    if (numberFormat != NULL) {
+        numberFormat->removeRef();
+    }
+    if (pluralRules != NULL) {
+        pluralRules->removeRef();
     }
 }
 
 const NumberFormat& RelativeDateTimeFormatter::getNumberFormat() const {
-    return *ptr->numberFormat;
+    return **numberFormat;
 }
 
 UnicodeString& RelativeDateTimeFormatter::format(
@@ -648,10 +587,10 @@ UnicodeString& RelativeDateTimeFormatter::format(
     }
     int32_t bFuture = direction == UDAT_DIRECTION_NEXT ? 1 : 0;
     FieldPosition pos(FieldPosition::DONT_CARE);
-    return ptr->quantitativeUnits->data[unit][bFuture].format(
+    return cache->relativeUnits[unit][bFuture].format(
             quantity,
-            *ptr->numberFormat,
-            *ptr->pluralRules,
+            **numberFormat,
+            **pluralRules,
             appendTo,
             pos,
             status);
@@ -667,7 +606,7 @@ UnicodeString& RelativeDateTimeFormatter::format(
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return appendTo;
     }
-    return appendTo.append(ptr->qualitativeUnits->data[unit][direction]);
+    return appendTo.append(cache->absoluteUnits[unit][direction]);
 }
 
 UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
@@ -675,8 +614,43 @@ UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
     UnicodeString& appendTo, UErrorCode& status) const {
     Formattable args[2] = {timeString, relativeDateString};
     FieldPosition fpos(0);
-    return ptr->combinedDateAndTime->format(args, 2, appendTo, fpos, status);
+    return cache->getCombinedDateAndTime()->format(
+            args, 2, appendTo, fpos, status);
 }
+
+void RelativeDateTimeFormatter::init(
+        const Locale &locale, NumberFormat *nfToAdopt, UErrorCode &status) {
+    if (!getFromCache(locale.getName(), cache, status)) {
+        return;
+    }
+    SharedObject::copyPtr(
+            PluralRules::createSharedInstance(
+                    locale, UPLURAL_TYPE_CARDINAL, status),
+            pluralRules);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    pluralRules->removeRef();
+    if (nfToAdopt == NULL) {
+       SharedObject::copyPtr(
+               NumberFormat::createSharedInstance(
+                       locale, UNUM_DECIMAL, status),
+               numberFormat);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        numberFormat->removeRef();
+    } else {
+        SharedNumberFormat *shared = new SharedNumberFormat(nfToAdopt);
+        if (shared == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            delete nfToAdopt;
+            return;
+        }
+        SharedObject::copyPtr(shared, numberFormat);
+    }
+}
+
 
 U_NAMESPACE_END
 

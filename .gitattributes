@@ -80,6 +80,8 @@ icu4c/source/i18n/i18n.vcxproj.filters -text
 icu4c/source/i18n/measunit.cpp -text
 icu4c/source/i18n/quantityformatter.cpp -text
 icu4c/source/i18n/quantityformatter.h -text
+icu4c/source/i18n/sharednumberformat.h -text
+icu4c/source/i18n/sharedpluralrules.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text

@@ -72,7 +72,9 @@ U_NAMESPACE_BEGIN
 
 class NumberFormat;
 class PluralRules;
-class MeasureFormatData;
+class MeasureFormatCacheData;
+class SharedNumberFormat;
+class SharedPluralRules;
 class QuantityFormatter;
 class ListFormatter;
 class DateFormat;
@@ -208,10 +210,14 @@ class U_I18N_API MeasureFormat : public Format {
 
     /**
      * ICU use only.
-     * Initialize MeasureFormat class from base class.
+     * Initialize or change MeasureFormat class from subclass.
      * @internal.
      */
-    void initMeasureFormat(const Locale &locale, UMeasureFormatWidth width, UErrorCode &status);
+    void initMeasureFormat(
+            const Locale &locale,
+            UMeasureFormatWidth width,
+            NumberFormat *nfToAdopt,
+            UErrorCode &status);
 
     /**
      * ICU use only.
@@ -256,8 +262,15 @@ class U_I18N_API MeasureFormat : public Format {
 #endif /* U_HIDE_INTERNAL_API */
 
  private:
-    const MeasureFormatData *ptr;
+    const MeasureFormatCacheData *cache;
+    const SharedNumberFormat *numberFormat;
+    const SharedPluralRules *pluralRules;
     UMeasureFormatWidth width;    
+
+    // Declared outside of MeasureFormatSharedData because ListFormatter
+    // objects are relatively cheap to copy; therefore, they don't need to be
+    // shared across instances.
+    ListFormatter *listFormatter;
 
     const QuantityFormatter *getQuantityFormatter(
             int32_t index,
@@ -273,14 +286,14 @@ class U_I18N_API MeasureFormat : public Format {
     UnicodeString &formatMeasuresSlowTrack(
         const Measure *measures,
         int32_t measureCount,
-        const ListFormatter& lf,
         UnicodeString& appendTo,
         FieldPosition& pos,
         UErrorCode& status) const;
 
     UnicodeString &formatNumeric(
-        const Formattable *hms,  // always length 3
-        int32_t bitMap,   // 1=hourset, 2=minuteset, 4=secondset
+        const Formattable *hms,  // always length 3: [0] is hour; [1] is
+                                 // minute; [2] is second.
+        int32_t bitMap,   // 1=hour set, 2=minute set, 4=second set
         UnicodeString &appendTo,
         UErrorCode &status) const;
 
