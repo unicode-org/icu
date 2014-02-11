@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012, International Business Machines Corporation and         *
+ * Copyright (C) 2014, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -43,6 +43,9 @@ class BytesDictionaryMatcher extends DictionaryMatcher {
         UCharacterIterator text = UCharacterIterator.getInstance(text_);
         BytesTrie bt = new BytesTrie(characters, 0);
         int c = text.nextCodePoint();
+        if (c == UCharacterIterator.DONE) {
+            return 0;
+        }
         Result result = bt.first(transform(c));
         // TODO: should numChars count Character.charCount() ?
         int numChars = 1;
@@ -68,6 +71,9 @@ class BytesDictionaryMatcher extends DictionaryMatcher {
             }
 
             c = text.nextCodePoint();
+            if (c == UCharacterIterator.DONE) {
+                break;
+            }
             ++numChars;
             result = bt.next(transform(c));
         }

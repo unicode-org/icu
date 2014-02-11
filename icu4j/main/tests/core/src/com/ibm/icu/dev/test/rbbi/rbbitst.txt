@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2013 International Business Machines
+﻿# Copyright (c) 2001-2014 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -32,9 +32,11 @@
 # TODO:  figure out how to have a single copy of the file for use by both C and Java.
 
 
-#   Temp debugging tests 
-<line>
-<data>•\ufffc•\u30e3\u000c<100>\u1b39\u300a\u002f\u203a\u200b•\ufffc•\uaf64•\udcfb•</data>
+#   Temp debugging tests
+<word>
+# test normalization/dictionary handling of halfwidth katakana: same dictionary phrase in fullwidth and halfwidth
+<data>•芽キャベツ<400>芽キャﾍﾞツ<400></data>
+
 
 ########################################################################################
 #
@@ -176,14 +178,27 @@
 # test normalization/dictionary handling of halfwidth katakana: same dictionary phrase in fullwidth and halfwidth
 <data>•芽キャベツ<400>芽キャﾍﾞツ<400></data>
 
+# more Japanese tests
+# TODO: some script=common characters in the Hiragana and the Katakana block may not be treated correctly
+# (was formerly true for U+30FC); need to check and fix if so.
+#<data>•どー<400>せ<400>日本語<400>を<400>勉強<400>する<400>理由<400>について<400>　•て<400>こと<400>は<400>我<400>でも<400>知<400>ら<400>も<400>い<400>こと<400>なん<400>だ<400>。•</data>
+<data>•日本語<400>を<400>勉強<400>する<400>理由<400>について<400>　•て<400>こと<400>は<400>我<400>でも<400>知<400>ら<400>も<400>い<400>こと<400>なん<400>だ<400>。•</data>
+
 # Testing of word boundary for dictionary word containing both kanji and kana
 <data>•中だるみ<400>蔵王の森<400>ウ離島<400></data>
+
+# Testing of Chinese segmentation (taken from a Chinese news article)
+<data>•400<100>余<400>名<400>中央<400>委员<400>和<400>中央<400>候补<400>委员<400>都<400>领<400>到了<400>“•推荐<400>票<400>”•，•有<400>资格<400>在<400>200<100>多<400>名<400>符合<400>条件<400>的<400>63<100>岁<400>以下<400>中共<400>正<400>部<400>级<400>干部<400>中<400>，•选出<400>他们<400>属意<400>的<400>中央<400>政治局<400>委员<400>以<400>向<400>政治局<400>常委<400>会<400>举荐<400>。•</data>
 
 # Words with interior formatting characters
 <data>•def\N{COMBINING ACUTE ACCENT}\N{SYRIAC ABBREVIATION MARK}ghi<200> •</data>
     
 # to test for bug #4097779
 <data>•aa\N{COMBINING GRAVE ACCENT}a<200> •</data>
+
+# fullwidth numeric, midletter characters etc should be treated like their halfwidth counterparts
+# <data>•ＩＳＮ'Ｔ<200> •１９<100>日<400></data>
+# why was this added with the dbbi stuff?
 
 #      to test for bug #4098467
 #      What follows is a string of Korean characters (I found it in the Yellow Pages
@@ -197,7 +212,8 @@
 # Disable them now because we don't include a Korean dictionary.
 #<data>•\ud55c\uad6d<200>\ub300\ud559\uad50<200>\uc790\uc5f0<200>\uacfc\ud559<200>\ub300\ud559<200>\ubb3c\ub9ac\ud559\uacfc<200></data>
 #<data>•\ud604\uc7ac<200>\ub294<200> •\uac80\ucc30<200>\uc774<200> •\ubd84\uc2dd<200>\ud68c\uacc4<200>\ubb38\uc81c<200>\ub97c<200> •\uc870\uc0ac<200>\ud560<200> •\uac00\ub2a5\uc131<200>\uc740<200> •\uc5c6\ub2e4<200>\u002e•</data>
-#<data>•abc<200>\u4e01<400>\u4e02<400>\u3005<400>\u4e03\u4e03<400>abc<200> •</data>
+
+<data>•abc<200>\u4e01<400>\u4e02<400>\u3005<400>\u4e03\u4e03<400>abc<200> •</data>
 
 <data>•\u06c9<200>\uc799\ufffa•</data>
 
@@ -550,13 +566,14 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 <data>•\ufffc•\u30e3\u000c<100>\u1b39\u300a\u002f\u203a\u200b•\ufffc•\uaf64•\udcfb•</data>
 <data>•\u114d\u31f3•\ube44\u002d•\u0362\u24e2\u276e\u2014\u205f\ufe16•\uc877•\u0fd0\u000a<100>\u20a3•</data>
 <data>•\u080a\u215b\U0001d7d3\u002c•\u2025\U000e012e•\u02df\u118d\u0029\ua8d6\u0085<100>\u6cc4\u2024\u202f\ufffc•</data>
-  
+ 
 # Test for #10176 (in root)
 <line>
 <data>•abc/•s •def•</data>
 <data>•abc/\u05D9 •def•</data>
 <data>•\u05E7\u05D7/\u05D9 •\u05DE\u05E2\u05D9\u05DC•</data>
 <data>•\u05D3\u05E8\u05D5\u05E9\u05D9\u05DD •\u05E9\u05D7\u05E7\u05E0\u05D9\u05DD/\u05D9\u05D5\u05EA•</data>
+
 
 
 ########################################################################################
@@ -637,7 +654,7 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 #
 <line>
 <data>•\u0E1B\u0E35•\
-\u0E1E\u0E38\u0E17\u0E18•\u0E28\u0E31\u0E01\u0E23\u0E32\u0E0A •\
+\u0E1E\u0E38\u0E17\u0E18\u0E28\u0E31\u0E01\u0E23\u0E32\u0E0A •\
 2545 •\
 \u0E40\u0E1B\u0E47\u0E19•\
 \u0E1B\u0E35•\
@@ -648,8 +665,8 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 \u0E1b\u0E35\" •\
 \u0E02\u0E2d\u0E07•\
 \u0E01\u0E23\u0E38\u0E07•\
-\u0E23\u0E31\u0E15\u0E19•\u0E42\u0E01•\u0E2A\u0E34•\u0E19\u0E17\u0E23\u0E4C •\
-(\u0E01\u0E23\u0E38\u0E07\u0E40\u0E17\u0E1e\u0E2F\
+\u0E23\u0E31\u0E15\u0E19\u0E42\u0E01\u0E2A\u0E34\u0E19\u0E17\u0E23\u0E4C •\
+(\u0E01\u0E23\u0E38\u0E07\u0E40\u0E17\u0E1e\u0E2F•\
 \u0E2B\u0E23\u0E37\u0E2D •\
 Bangkok)•</data>
 
@@ -691,6 +708,57 @@ Bangkok)•</data>
 <data>•ເຈົ້າ•ເວົ້າ•ພາສາ•ອັງກິດ•ໄດ້•ບໍ່•</data>
 <data>•ກະລຸນາ•ເວົ້າ•ຊ້າ•ໆ•</data>
 
+##########################################################################################
+#
+#   Khmer Tests
+#
+##########################################################################################
+
+# Test data originally from http://bugs.icu-project.org/trac/search?q=r30327
+#  from the file testdata/wordsegments.txt
+<locale en>
+<word>
+
+<data>•តើ<200>លោក<200>មក<200>ពី<200>ប្រទេស<200>ណា<200></data>
+<data>•សណ្ដូក<200>ក<200>បណ្ដែត<200>ខ្លួន<200></data>
+<data>•ពណ៌ស<200>ម្ដេច<200>ថា<200>ខ្មៅ<200></data>
+#ប្រយោគ|ពី|របៀប|រួបរួម|និង|ភាព|ផ្សេងគ្នា|ដែល|អាច|ចូល<200></data>
+<data>•ប្រយោគ<200>ពី<200>របៀប<200>ដែល<200>និង<200>ភាព<200>ផ្សេងគ្នា<200>ដែល<200>អាច<200>ចូល<200></data>
+#ប្រយោគ|ពី|របៀប|ជា|មួយ|និង|ភាព|ផ្សេងគ្នា|ដែល|អាច|ចូល<200></data>
+<data>•សូម<200>ចំណាយពេល<200>បន្តិច<200>ដើម្បី<200>អធិស្ឋាន<200>អរព្រះគុណ<200>ដល់<200>ព្រះអង្គ<200></data>
+<data>•ការ<200>ថោកទាប<200>បរិប្បូណ៌<200>ដោយ<200></data>
+<data>•ប្រើប្រាស់<200>ស្អាត<200>ទាំង<200>ចិត្ត<200>សិស្ស<200>នោះ<200></data>
+<data>•បើ<200>អ្នក<200>ប្រព្រឺត្ត<200>អំពើអាក្រក់<200>មុខ<200>ជា<200>មាន<200></data>
+<data>•ប្រដាប់<200>ប្រដា<200>រ<200>រៀនសូត្រ<200>បន្ទប់<200>រៀន<200></data>
+<data>•ដើរតួ<200>មនុស្សគ<200>ឥត<200>បញ្ចេញ<200>យោបល់<200>សោះ<200>ឡើយ<200></data>
+<data>•មិន<200>អាច<200>ឲ្យ<200>យើង<200>ធ្វើ<200>កសិកម្ម<200>បាន<200>ឡើយ<200></data>
+<data>•បន្ត<200>សេចក្ត<200>ទៅទៀត<200></data>
+<data>•ក្រុម<200>ប៉ូលិស<200>បណ្តាក់<200>គ្នា<200></data>
+<data>•គ្មាន<200>សុខ<200>សំរាន្ត<200>ដង<200>ណា<200></data>
+<data>•បាន<200>សុខភាព<200>បរិប្បូណ៌<200></data>
+<data>•ជា<200>មេចោរ<200>ខ្ញុំ<200>នឹង<200>ស្លាប់<200>ទៅវិញ<200>ជា<200>មេចោរ<200></data>
+<data>•ឯ<200>ការ<200>វាយ<200>ផ្ចាល<200>ដែល<200>នាំ<200></data>
+<data>•គេ<200>ដឹក<200>ទៅ<200>សំឡាប់<200></data>
+#អ្នក|ដែល|ជា|មន្ត្រី|ធំ|លើ|គាត់|ទេ<200></data>
+<data>•យក<200>ទៅ<200>សម្លាប់ចោល<200>ស្ងាត់<200></data>
+<data>•ត្រូវ<200>បាន<200>គេ<200>សម្លាប់<200></data>
+<data>•នៅក្នុង<200>ស្រុក<200>ខ្ល<200>ងហ្ស៊ុន<200></data>
+
+
+#
+#  Jitterbug 3671 Test Case
+#
+<data>•สวัสดี<200>ครับ<200>สบาย<200>ดี<200>ไหม<200> •ครับ<200></data>
+
+#
+#  Trac ticket 5595 Test Case
+<word>
+<data>•บท<200>ที่๑พายุ<200>ไซโคลน<200>โด<200>โรธี<200>อาศัย<200>อยู่<200>ท่ามกลาง<200>\
+ทุ่งใหญ่<200>ใน<200>แคนซัส<200>กับ<200>ลุง<200>เฮ<200>นรี<200>ชาวไร่<200>และ<200>ป้า<200>เอ็ม<200>\
+ภรรยา<200>ชาวไร่<200>บ้าน<200>ของ<200>พวก<200>เขา<200>หลัง<200>เล็ก<200>เพราะ<200>ไม้<200>\
+สร้าง<200>บ้าน<200>ต้อง<200>ขน<200>มา<200>ด้วย<200>เกวียน<200>เป็น<200>ระยะ<200>ทาง<200>หลาย<200>\
+ไมล์<200></data>
+
 ####################################################################################
 #
 #  Tailored (locale specific) breaking.
@@ -718,7 +786,7 @@ Bangkok)•</data>
 
 <locale ja>
 <word>
-<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈<400>々<400>は<400>ワ<400>ー<400>ドで<400>あ<400>る<400>。•</data>
+<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈々<400>は<400>ワード<400>で<400>ある<400>。•</data>
 
 # Test for #10176 (in ja)
 <line>
@@ -727,11 +795,14 @@ Bangkok)•</data>
 <data>•\u05E7\u05D7/\u05D9 •\u05DE\u05E2\u05D9\u05DC•</data>
 <data>•\u05D3\u05E8\u05D5\u05E9\u05D9\u05DD •\u05E9\u05D7\u05E7\u05E0\u05D9\u05DD/\u05D9\u05D5\u05EA•</data>
 
+
 <locale root>
 <word>
-<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈<400>々<400>は<400>ワ<400>ー<400>ドで<400>あ<400>る<400>。•</data>
+<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈々<400>は<400>ワード<400>で<400>ある<400>。•</data>
 # The following test is for #10300
 <data>•例えば<400>オーストラリア<400>。•</data>
+# The following test is for #10571
+<data>•一部<400>の<400>地域<400>では<400>、<0>ブラジル<400>、<0>インドネシア<400>、<0>オーストリア<400>、<0>ニュージーランド<400>で<400>ある<400>。•</data>
 
 # UBreakIteratorType UBRK_SENTENCE, Locale "el"
 # Add break after Greek question mark (cldrbug #2069).
@@ -774,12 +845,6 @@ Bangkok)•</data>
 # which is "กระท่อมรจนา (สุชาติ-จุฑามาศ) เด็กมีปัญหา "
 
 <locale th>
-<char>
-<data>•\u0E01•\u0E23•\u0E30•\u0E17\u0E48•\u0E2D•\u0E21•\u0E23•\u0E08•\u0E19•\u0E32• •\
-(•\u0E2A\u0E38•\u0E0A•\u0E32•\u0E15\u0E34•-•\u0E08\u0E38•\u0E11•\u0E32•\u0E21•\u0E32•\u0E28•)• •\
-\u0E40•\u0E14\u0E47•\u0E01•\u0E21\u0E35•\u0E1B\u0E31•\u0E0D•\u0E2B•\u0E32• •</data>
-
-<locale root>
 <char>
 <data>•\u0E01•\u0E23•\u0E30•\u0E17\u0E48•\u0E2D•\u0E21•\u0E23•\u0E08•\u0E19•\u0E32• •\
 (•\u0E2A\u0E38•\u0E0A•\u0E32•\u0E15\u0E34•-•\u0E08\u0E38•\u0E11•\u0E32•\u0E21•\u0E32•\u0E28•)• •\
