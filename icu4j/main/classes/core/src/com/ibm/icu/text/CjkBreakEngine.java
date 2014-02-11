@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2013, International Business Machines Corporation and         *
+ * Copyright (C) 2012-2014, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,11 +12,11 @@ import static com.ibm.icu.impl.CharacterIteration.next32;
 
 import java.io.IOException;
 import java.text.CharacterIterator;
-import java.util.Stack;
+import java.util.Deque;
 
 import com.ibm.icu.impl.Assert;
 
-class CjkBreakEngine implements LanguageBreakEngine {
+class CjkBreakEngine extends DictionaryBreakEngine {
     private static final UnicodeSet fHangulWordSet = new UnicodeSet();
     private static final UnicodeSet fHanWordSet = new UnicodeSet();
     private static final UnicodeSet fKatakanaWordSet = new UnicodeSet();
@@ -34,28 +34,37 @@ class CjkBreakEngine implements LanguageBreakEngine {
         fHiraganaWordSet.freeze();
     }
 
-    private final UnicodeSet fWordSet;
     private DictionaryMatcher fDictionary = null;
     
     public CjkBreakEngine(boolean korean) throws IOException {
+        super(BreakIterator.KIND_WORD);
         fDictionary = DictionaryData.loadDictionaryFor("Hira");
         if (korean) {
-            fWordSet = fHangulWordSet;
-        } else {
-            fWordSet = new UnicodeSet();
-            fWordSet.addAll(fHanWordSet);
-            fWordSet.addAll(fKatakanaWordSet);
-            fWordSet.addAll(fHiraganaWordSet);
-            fWordSet.add(0xFF70); // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-            fWordSet.add(0x30FC); // KATAKANA-HIRAGANA PROLONGED SOUND MARK
+            setCharacters(fHangulWordSet);
+        } else { //Chinese and Japanese
+            UnicodeSet cjSet = new UnicodeSet();
+            cjSet = new UnicodeSet();
+            cjSet.addAll(fHanWordSet);
+            cjSet.addAll(fKatakanaWordSet);
+            cjSet.addAll(fHiraganaWordSet);
+            cjSet.add(0xFF70); // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
+            cjSet.add(0x30FC); // KATAKANA-HIRAGANA PROLONGED SOUND MARK
+            setCharacters(cjSet);
         }
     }
 
-    public boolean handles(int c, int breakType) {
-        return (breakType == BreakIterator.KIND_WORD) &&
-                (fWordSet.contains(c));
+    public boolean equals(Object obj) {
+        if (obj instanceof CjkBreakEngine) {
+            CjkBreakEngine other = (CjkBreakEngine)obj;
+            return this.fSet.equals(other.fSet);
+        }
+        return false;
     }
 
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+    
     private static final int kMaxKatakanaLength = 8;
     private static final int kMaxKatakanaGroupLength = 20;
     private static final int maxSnlp = 255;
@@ -70,8 +79,8 @@ class CjkBreakEngine implements LanguageBreakEngine {
                 (value >= 0xFF66 && value <= 0xFF9F);
     }
     
-    public int findBreaks(CharacterIterator inText, int startPos, int endPos,
-            boolean reverse, int breakType, Stack<Integer> foundBreaks) {
+    public int divideUpDictionaryRange(CharacterIterator inText, int startPos, int endPos,
+            Deque<Integer> foundBreaks) {
         if (startPos >= endPos) {
             return 0;
         }
@@ -89,9 +98,10 @@ class CjkBreakEngine implements LanguageBreakEngine {
         String prenormstr = s.toString();
         boolean isNormalized = Normalizer.quickCheck(prenormstr, Normalizer.NFKC) == Normalizer.YES ||
                                Normalizer.isNormalized(prenormstr, Normalizer.NFKC, 0);
-        CharacterIterator text = inText;
+        CharacterIterator text;
         int numChars = 0;
         if (isNormalized) {
+            text = new java.text.StringCharacterIterator(prenormstr);
             int index = 0;
             charPositions[0] = 0;
             while (index < prenormstr.length()) {
@@ -206,16 +216,21 @@ class CjkBreakEngine implements LanguageBreakEngine {
             t_boundary[numBreaks++] = 0;
         }
 
+        int correctedNumBreaks = 0;
         for (int i = numBreaks - 1; i >= 0; i--) {
             int pos = charPositions[t_boundary[i]] + startPos;
-            if (!(foundBreaks.contains(pos) || pos == startPos))
+            if (!(foundBreaks.contains(pos) || pos == startPos)) {
                 foundBreaks.push(charPositions[t_boundary[i]] + startPos);
+                correctedNumBreaks++;
+            }
         }
 
-        if (!foundBreaks.empty() && foundBreaks.peek() == endPos)
+        if (!foundBreaks.isEmpty() && foundBreaks.peek() == endPos) {
             foundBreaks.pop();
-        if (!foundBreaks.empty()) 
+            correctedNumBreaks--;
+        }
+        if (!foundBreaks.isEmpty()) 
             inText.setIndex(foundBreaks.peek());
-        return 0;
+        return correctedNumBreaks;
     }
 }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012, International Business Machines Corporation and         *
+ * Copyright (C) 2014, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,8 +9,7 @@ package com.ibm.icu.text;
 import static com.ibm.icu.impl.CharacterIteration.DONE32;
 
 import java.text.CharacterIterator;
-import java.util.Stack;
-
+import java.util.Deque;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 
@@ -30,7 +29,7 @@ final class UnhandledBreakEngine implements LanguageBreakEngine {
     }
 
     public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            boolean reverse, int breakType, Stack<Integer> foundBreaks) {
+            boolean reverse, int breakType, Deque<Integer> foundBreaks) {
         text.setIndex(endPos);
         return 0;
     }
