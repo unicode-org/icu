@@ -784,6 +784,9 @@ public:
 #if !UCONFIG_NO_SERVICE
     /**
      * Register a new NumberFormatFactory.  The factory will be adopted.
+     * Because ICU may choose to cache NumberFormat objects internally,
+     * this must be called at application startup, prior to any calls to
+     * NumberFormat::createInstance to avoid undefined behavior.
      * @param toAdopt the NumberFormatFactory instance to be adopted
      * @param status the in/out status code, no special meanings are assigned
      * @return a registry key that can be used to unregister this factory
@@ -795,6 +798,9 @@ public:
      * Unregister a previously-registered NumberFormatFactory using the key returned from the
      * register call.  Key becomes invalid after a successful call and should not be used again.
      * The NumberFormatFactory corresponding to the key will be deleted.
+     * Because ICU may choose to cache NumberFormat objects internally,
+     * this should be called during application shutdown, after all calls to
+     * NumberFormat::createInstance to avoid undefined behavior.
      * @param key the registry key returned by a previous call to registerFactory
      * @param status the in/out status code, no special meanings are assigned
      * @return TRUE if the factory for the key was successfully unregistered
