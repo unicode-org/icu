@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1996-2012, International Business Machines                 *
+*   Copyright (C) 1996-2014, International Business Machines                 *
 *   Corporation and others.  All Rights Reserved.                            *
 ******************************************************************************
 */
@@ -811,6 +811,9 @@ public:
 #if !UCONFIG_NO_SERVICE
     /**
      * Register a new Collator.  The collator will be adopted.
+     * Because ICU may choose to cache collators internally, this must be
+     * called at application startup, prior to any calls to
+     * Collator::createInstance to avoid undefined behavior.
      * @param toAdopt the Collator instance to be adopted
      * @param locale the locale with which the collator will be associated
      * @param status the in/out status code, no special meanings are assigned
@@ -821,6 +824,9 @@ public:
 
     /**
      * Register a new CollatorFactory.  The factory will be adopted.
+     * Because ICU may choose to cache collators internally, this must be
+     * called at application startup, prior to any calls to
+     * Collator::createInstance to avoid undefined behavior.
      * @param toAdopt the CollatorFactory instance to be adopted
      * @param status the in/out status code, no special meanings are assigned
      * @return a registry key that can be used to unregister this collator
@@ -833,6 +839,9 @@ public:
      * using the key returned from the register call.  Key becomes
      * invalid after a successful call and should not be used again.
      * The object corresponding to the key will be deleted.
+     * Because ICU may choose to cache collators internally, this should
+     * be called during application shutdown, after all calls to
+     * Collator::createInstance to avoid undefined behavior.
      * @param key the registry key returned by a previous call to registerInstance
      * @param status the in/out status code, no special meanings are assigned
      * @return TRUE if the collator for the key was successfully unregistered
