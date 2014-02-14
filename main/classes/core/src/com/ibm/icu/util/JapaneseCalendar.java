@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010,2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -638,6 +638,15 @@ public class JapaneseCalendar extends GregorianCalendar {
 
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public boolean haveDefaultCentury() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
      * @stable ICU 4.0
      */
     public int getActualMaximum(int field) {
@@ -661,4 +670,5 @@ public class JapaneseCalendar extends GregorianCalendar {
         }
         return super.getActualMaximum(field);
     }
+
 }
