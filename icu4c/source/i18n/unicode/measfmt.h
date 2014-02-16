@@ -279,6 +279,7 @@ class U_I18N_API MeasureFormat : public Format {
 
     UnicodeString &formatMeasure(
         const Measure &measure,
+        const NumberFormat &nf,
         UnicodeString &appendTo,
         FieldPosition &pos,
         UErrorCode &status) const;

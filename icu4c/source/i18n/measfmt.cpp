@@ -99,6 +99,13 @@ public:
     const NumberFormat *getCurrencyFormat(int32_t widthIndex) const {
         return currencyFormats[widthIndex];
     }
+    void adoptIntegerFormat(NumberFormat *nfToAdopt) {
+        delete integerFormat;
+        integerFormat = nfToAdopt;
+    }
+    const NumberFormat *getIntegerFormat() const {
+        return integerFormat;
+    }
     void adoptNumericDateFormatters(NumericDateFormatters *formattersToAdopt) {
         delete numericDateFormatters;
         numericDateFormatters = formattersToAdopt;
@@ -109,6 +116,7 @@ public:
     virtual ~MeasureFormatCacheData();
 private:
     NumberFormat *currencyFormats[WIDTH_INDEX_COUNT];
+    NumberFormat *integerFormat;
     NumericDateFormatters *numericDateFormatters;
     MeasureFormatCacheData(const MeasureFormatCacheData &other);
     MeasureFormatCacheData &operator=(const MeasureFormatCacheData &other);
@@ -118,6 +126,7 @@ MeasureFormatCacheData::MeasureFormatCacheData() {
     for (int32_t i = 0; i < LENGTHOF(currencyFormats); ++i) {
         currencyFormats[i] = NULL;
     }
+    integerFormat = NULL;
     numericDateFormatters = NULL;
 }
 
@@ -125,6 +134,7 @@ MeasureFormatCacheData::~MeasureFormatCacheData() {
     for (int32_t i = 0; i < LENGTHOF(currencyFormats); ++i) {
         delete currencyFormats[i];
     }
+    delete integerFormat;
     delete numericDateFormatters;
 }
 
@@ -322,6 +332,17 @@ static SharedObject *U_CALLCONV createData(
             return NULL;
         }
     }
+    NumberFormat *inf = NumberFormat::createInstance(
+            localeId, UNUM_DECIMAL, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    inf->setMaximumFractionDigits(0);
+    DecimalFormat *decfmt = dynamic_cast<DecimalFormat *>(inf);
+    if (decfmt != NULL) {
+        decfmt->setRoundingMode(DecimalFormat::kRoundDown);
+    }
+    result->adoptIntegerFormat(inf);
     return result.orphan();
 }
 
@@ -520,7 +541,8 @@ UnicodeString &MeasureFormat::format(
         const UObject* formatObj = obj.getObject();
         const Measure* amount = dynamic_cast<const Measure*>(formatObj);
         if (amount != NULL) {
-            return formatMeasure(*amount, appendTo, pos, status);
+            return formatMeasure(
+                    *amount, **numberFormat, appendTo, pos, status);
         }
     }
     status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -547,7 +569,7 @@ UnicodeString &MeasureFormat::formatMeasures(
         return appendTo;
     }
     if (measureCount == 1) {
-        return formatMeasure(measures[0], appendTo, pos, status);
+        return formatMeasure(measures[0], **numberFormat, appendTo, pos, status);
     }
     if (width == UMEASFMT_WIDTH_NUMERIC) {
         Formattable hms[3];
@@ -566,7 +588,16 @@ UnicodeString &MeasureFormat::formatMeasures(
         return appendTo;
     }
     for (int32_t i = 0; i < measureCount; ++i) {
-        formatMeasure(measures[i], results[i], pos, status);
+        const NumberFormat *nf = cache->getIntegerFormat();
+        if (i == measureCount - 1) {
+            nf = numberFormat->get();
+        }
+        formatMeasure(
+                measures[i],
+                *nf,
+                results[i],
+                pos,
+                status);
     }
     listFormatter->format(results, measureCount, appendTo, status);
     delete [] results; 
@@ -662,6 +693,7 @@ const char *MeasureFormat::getLocaleID(UErrorCode &status) const {
 
 UnicodeString &MeasureFormat::formatMeasure(
         const Measure &measure,
+        const NumberFormat &nf,
         UnicodeString &appendTo,
         FieldPosition &pos,
         UErrorCode &status) const {
@@ -686,7 +718,7 @@ UnicodeString &MeasureFormat::formatMeasure(
     }
     return quantityFormatter->format(
             amtNumber,
-            **numberFormat,
+            nf,
             **pluralRules,
             appendTo,
             pos,
@@ -808,8 +840,12 @@ UnicodeString &MeasureFormat::formatMeasuresSlowTrack(
     UnicodeString *results = new UnicodeString[measureCount];
     int32_t fieldPositionFoundIndex = -1;
     for (int32_t i = 0; i < measureCount; ++i) {
+        const NumberFormat *nf = cache->getIntegerFormat();
+        if (i == measureCount - 1) {
+            nf = numberFormat->get();
+        }
         if (fieldPositionFoundIndex == -1) {
-            formatMeasure(measures[i], results[i], fpos, status);
+            formatMeasure(measures[i], *nf, results[i], fpos, status);
             if (U_FAILURE(status)) {
                 delete [] results;
                 return appendTo;
@@ -818,7 +854,7 @@ UnicodeString &MeasureFormat::formatMeasuresSlowTrack(
                 fieldPositionFoundIndex = i;
             }
         } else {
-            formatMeasure(measures[i], results[i], dontCare, status);
+            formatMeasure(measures[i], *nf, results[i], dontCare, status);
         }
     }
     int32_t offset;

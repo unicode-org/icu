@@ -53,6 +53,7 @@ private:
     void TestBadArg();
     void TestEquality();
     void TestBenchmark();
+    void TestDoubleZero();
     void verifyFormat(
         const char *description,
         const MeasureFormat &fmt,
@@ -108,6 +109,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestBadArg);
     TESTCASE_AUTO(TestEquality);
     TESTCASE_AUTO(TestBenchmark);
+    TESTCASE_AUTO(TestDoubleZero);
     TESTCASE_AUTO_END;
 }
 
@@ -846,6 +848,39 @@ void MeasureFormatTest::TestBenchmark() {
     t = clock() - t;
     errln("It took %f seconds.", ((float)t)/CLOCKS_PER_SEC);
 */
+}
+
+void MeasureFormatTest::TestDoubleZero() {
+    UErrorCode status = U_ZERO_ERROR;
+    Measure measures[] = {
+        Measure(4.7, MeasureUnit::createHour(status), status),
+        Measure(23, MeasureUnit::createMinute(status), status),
+        Measure(16, MeasureUnit::createSecond(status), status)};
+    Locale en("en");
+    NumberFormat *nf = NumberFormat::createInstance(en, status);
+    nf->setMinimumFractionDigits(2);
+    nf->setMaximumFractionDigits(2);
+    MeasureFormat fmt("en", UMEASFMT_WIDTH_WIDE, nf, status);
+    UnicodeString appendTo;
+    FieldPosition pos(FieldPosition::DONT_CARE);
+    fmt.formatMeasures(measures, LENGTHOF(measures), appendTo, pos, status);
+    if (!assertSuccess("Error creating formatter and formatting", status)) {
+        return;
+    }
+    assertEquals(
+            "TestDoubleZero",
+            UnicodeString("4 hours, 23 minutes, 16.00 seconds"),
+            appendTo);
+    measures[0] = Measure(-4.7, MeasureUnit::createHour(status), status);
+    appendTo.remove();
+    fmt.formatMeasures(measures, LENGTHOF(measures), appendTo, pos, status);
+    if (!assertSuccess("Error formatting", status)) {
+        return;
+    }
+    assertEquals(
+            "TestDoubleZero",
+            UnicodeString("-4 hours, 23 minutes, 16.00 seconds"),
+            appendTo);
 }
 
 void MeasureFormatTest::verifyFieldPosition(
