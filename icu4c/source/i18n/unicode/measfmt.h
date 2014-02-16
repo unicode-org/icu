@@ -161,8 +161,13 @@ class U_I18N_API MeasureFormat : public Format {
             ParsePosition &pos) const;
 
     /**
-     * Formats measure objects to produce a string.
-     * @param measures measure objects.
+     * Formats measure objects to produce a string. An example of such a
+     * formatted string is 3 meters, 3.5 centimeters. Measure objects appear
+     * in the formatted string in the same order they appear in the "measures"
+     * array. The NumberFormat of this object is used only to format the amount
+     * of the very last measure. The other amounts are formatted with zero
+     * decimal places while rounding toward zero.
+     * @param measures array of measure objects.
      * @param measureCount the number of measure objects.
      * @param appendTo formatted string appended here.
      * @param pos the field position.
