@@ -7,7 +7,8 @@
 package com.ibm.icu.text;
 
 import java.text.CharacterIterator;
-import java.util.Deque;
+
+import com.ibm.icu.impl.Deque;
 
 /**
  * The LanguageBreakEngine interface is to be used to implement any 

@@ -17,14 +17,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.CharacterIterator;
-import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.CharacterIteration;
+import com.ibm.icu.impl.Deque;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -432,7 +433,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
         int    category;
         int    current;
-        ArrayDeque<Integer> breaks = new ArrayDeque<Integer>();
+        Deque<Integer> breaks = new Deque<Integer>();
         int     foundBreakCount = 0;
         int     c = CharacterIteration.current32(fText);
         category = (short)fRData.fTrie.getCodePointValue(c);
