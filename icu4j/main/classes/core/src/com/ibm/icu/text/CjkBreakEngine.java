@@ -12,9 +12,9 @@ import static com.ibm.icu.impl.CharacterIteration.next32;
 
 import java.io.IOException;
 import java.text.CharacterIterator;
-import java.util.Deque;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.Deque;
 
 class CjkBreakEngine extends DictionaryBreakEngine {
     private static final UnicodeSet fHangulWordSet = new UnicodeSet();

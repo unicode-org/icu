@@ -8,9 +8,9 @@ package com.ibm.icu.text;
 
 import java.text.CharacterIterator;
 import java.util.BitSet;
-import java.util.Deque;
 
 import com.ibm.icu.impl.CharacterIteration;
+import com.ibm.icu.impl.Deque;
 
 abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     

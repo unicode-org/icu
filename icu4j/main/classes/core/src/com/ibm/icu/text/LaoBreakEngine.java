@@ -8,8 +8,8 @@ package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.text.CharacterIterator;
-import java.util.Deque;
 
+import com.ibm.icu.impl.Deque;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
