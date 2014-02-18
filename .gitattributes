@@ -51,6 +51,7 @@ README text !eol
 /build.properties -text
 demos/.settings/org.eclipse.core.resources.prefs -text
 demos/manifest.stub -text
+eclipse-build/build-local.properties.template -text
 eclipse-build/features.template/com.ibm.icu.base/.project -text
 eclipse-build/features.template/com.ibm.icu.base/build.properties -text
 eclipse-build/plugins.template/com.ibm.icu.base.tests/.classpath -text
