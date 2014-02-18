@@ -3770,6 +3770,7 @@ icu4j/demos/src/com/ibm/icu/dev/demo/translit/resources/Transliterator_Han_Pinyi
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/resources/Transliterator_Kanji_English.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/resources/Transliterator_Kanji_OnRomaji.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/thai_test.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/eclipse-build/build-local.properties.template -text
 icu4j/eclipse-build/features.template/com.ibm.icu.base/.project -text
 icu4j/eclipse-build/features.template/com.ibm.icu.base/build.properties -text
 icu4j/eclipse-build/misc/about_icu.html svneol=native#text/html
