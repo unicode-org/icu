@@ -1,5 +1,5 @@
 ## Makefile.in for ICU data
-## Copyright (c) 1999-2013, International Business Machines Corporation and
+## Copyright (c) 1999-2014, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -180,9 +180,10 @@ ifeq ($(PKGDATA_MODE),dll)
 endif
 endif
 ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
 ifeq ($(OS390BATCH),1)
-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
+	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) -z $(PKGDATA_LIST)
+else
+	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
 endif
 else
 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(OUTDIR)
@@ -439,7 +440,7 @@ endif
 # General data build rules
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ icupkg.inc
+CLEANFILES = *~ icupkg.inc *.x
 
 ifeq ($(ICUDATA_SOURCE_ARCHIVE),)
 build-local: build-dir $(SO_VERSION_DATA) $(ALL_FILES) $(PKGDATA_LIST) $(OS390LIST)
