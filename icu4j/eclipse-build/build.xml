@@ -1,13 +1,14 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2010-2013, International Business Machines Corporation and    *
+* Copyright (C) 2010-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 -->
 
 <project name="icu4j-eclipse" default="build" basedir=".">
+  <property file="build-local.properties"/>
   <property file="build.properties"/>
 
   <property name="out.dir" value="out"/>
@@ -27,7 +28,7 @@
   </target>
 
   <target name="build"
-          depends="initEnv,icuProjectFiles,icuTestsProjectFiles,icuBaseProjectFiles,icuBaseTestsProjectFiles"
+          depends="checkProps,initEnv,icuProjectFiles,icuTestsProjectFiles,icuBaseProjectFiles,icuBaseTestsProjectFiles"
           description="Build icu4j plug-ins">
 
     <!-- copy OSGi jar file to baseLocation -->
@@ -50,6 +51,36 @@
 
   </target>
 
+  <target name="initEclipseHome"
+          if="env.ECLIPSE_HOME"
+          unless="eclipse.home"
+          description="Initialize the property eclipse.home from the environment variable ECLIPSE_HOME">
+    <property name="eclipse.home" value="${env.ECLIPSE_HOME}"/>
+  </target>
+
+  <target name="checkProps" depends="initEclipseHome">
+      <fail message="Eclipse home (eclipse.home or env.ECLIPSE_HOME) is not set">
+        <condition>
+          <or>
+            <equals arg1="${eclipse.home}" arg2=""/>
+            <not>
+              <isset property="eclipse.home"/>
+            </not>
+          </or>
+        </condition>
+      </fail>
+      <fail message="Java runtime jar path (java.rt) is not set">
+        <condition>
+          <or>
+            <equals arg1="${java.rt}" arg2=""/>
+            <not>
+              <isset property="java.rt"/>
+            </not>
+          </or>
+        </condition>
+      </fail>
+  </target>
+
   <target name="initPluginVersion">
     <tstamp>
       <format property="build.date" pattern="yyyyMMdd"/>
@@ -58,7 +89,7 @@
   </target>
 
   <target name="initEnv"
-          depends="initEclipseHome,initEclipseLauncher,initEclipseOSGiJar,initEclipsePDE"
+          depends="checkProps,initEclipseLauncher,initEclipseOSGiJar,initEclipsePDE"
           description="Initialize eclipse PDE build environment">
     <echo message="[PDE build configuration properties]"/>
     <echo message="    Eclipse home:    ${eclipse.home}"/>
@@ -67,13 +98,6 @@
     <echo message="    Base OS:         ${eclipse.baseos}"/>
     <echo message="    Base WS:         ${eclipse.basews}"/>
     <echo message="    Base ARCH:       ${eclipse.basearch}"/>
-  </target>
-
-  <target name="initEclipseHome"
-          if="env.ECLIPSE_HOME"
-          unless="eclipse.home"
-          description="Initialize the property eclipse.home from the environment variable ECLIPSE_HOME">
-    <property name="eclipse.home" value="${env.ECLIPSE_HOME}"/>
   </target>
 
   <target name="initEclipseLauncher"
@@ -132,6 +156,7 @@
             <filter token="BASE_OS" value="${eclipse.baseos}"/>
             <filter token="BASE_WS" value="${eclipse.basews}"/>
             <filter token="BASE_ARCH" value="${eclipse.basearch}"/>
+            <filter token="JAVA_RT" value="${java.rt}"/>
           </filterset>
       </copy>
 
@@ -268,7 +293,6 @@
       <fileset dir="${icu4j.core-tests.dir}/src"/>
       <fileset dir="${icu4j.collate-tests.dir}/src"/>
       <fileset dir="${icu4j.translit-tests.dir}/src"/>
-      <fileset dir="${icu4j.testall.dir}/src"/>
     </copy>
 
     <!-- icu test data -->
