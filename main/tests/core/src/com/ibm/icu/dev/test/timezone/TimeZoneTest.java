@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1798,7 +1798,8 @@ public class TimeZoneTest extends TestFmwk
             {"Europe/Helsinki",                 "FI"},
             {"Europe/Mariehamn",                "AX"},  // Link Europe/Helsinki, but in zone.tab
             {"Asia/Riyadh",                     "SA"},
-            {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
+            // tz file solar87 was removed from tzdata2013i
+            // {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
             {"Etc/Unknown",                     null},  // CLDR canonical, but not a sysmte zone ID
             {"bogus",                           null},  // bogus
             {"GMT+08:00",                       null},  // a custom ID, not a system zone ID
