@@ -73,7 +73,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 #endif
 
 static int32_t pkg_createWithAssemblyCode(const char *targetDir, const char mode, const char *gencFilePath);
-static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile, char *command = NULL);
+static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile, char *command = NULL, UBool specialHandling=FALSE);
 static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UBool reverseExt);
 static void createFileNames(UPKGOptions *o, const char mode, const char *version_major, const char *version, const char *libName, const UBool reverseExt, UBool noVersion);
 static int32_t initializePkgDataFlags(UPKGOptions *o);
@@ -203,6 +203,9 @@ enum {
     LIB_FILE_CYGWIN_VERSION,
 #elif U_PLATFORM == U_PF_MINGW
     LIB_FILE_MINGW,
+#elif U_PLATFORM == U_PF_OS390
+    LIB_FILE_OS390BATCH_MAJOR,
+    LIB_FILE_OS390BATCH_VERSION,
 #endif
     LIB_FILENAMES_SIZE
 };
@@ -233,7 +236,8 @@ const char options_help[][320]={
     "Add package to all file names if not present",
     "Library name to build (if different than package name)",
     "Quite mode. (e.g. Do not output a readme file for static libraries)",
-    "Build the data without assembly code"
+    "Build the data without assembly code",
+    "Build PDS dataset (zOS build only)"
 };
 
 const char  *progname = "PKGDATA";
@@ -753,9 +757,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 if (!noVersion) {
                     /* Create symbolic links for the final library file. */
 #if U_PLATFORM == U_PF_OS390
-                    if (!o->pdsbuild) {
-                        result = pkg_createSymLinks(targetDir, noVersion);
-                    }
+                    result = pkg_createSymLinks(targetDir, o->pdsbuild);
 #else
                     result = pkg_createSymLinks(targetDir, noVersion);
 #endif
@@ -892,19 +894,19 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
         sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s.%s",
                 libFileNames[LIB_FILE],
                 pkgDataFlags[SOBJ_EXT]);
-#elif U_PLATFROM == U_PF_OS390
-            if (o->pdsbuild) {
-                sprintf(libFileNames[LIB_FILE], "%s",
-                    libName);
-                sprintf(libFileNames[LIB_FILE_VERSION_TMP], "\"%s\"",
-                        libFileNames[LIB_FILE]);
-            } else {
-                sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s.%s",
-                        libFileNames[LIB_FILE],
-                        pkgDataFlags[LIB_EXT_ORDER][0] == '.' ? "." : "",
-                        reverseExt ? version : pkgDataFlags[SOBJ_EXT],
-                        reverseExt ? pkgDataFlags[SOBJ_EXT] : version);
-            }
+#elif U_PLATFORM == U_PF_OS390
+        sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s.%s",
+                    libFileNames[LIB_FILE],
+                    pkgDataFlags[LIB_EXT_ORDER][0] == '.' ? "." : "",
+                    reverseExt ? version : pkgDataFlags[SOBJ_EXT],
+                    reverseExt ? pkgDataFlags[SOBJ_EXT] : version);
+
+        sprintf(libFileNames[LIB_FILE_OS390BATCH_VERSION], "%s%s.x",
+                    libFileNames[LIB_FILE],
+                    version);
+        sprintf(libFileNames[LIB_FILE_OS390BATCH_MAJOR], "%s%s.x",
+                    libFileNames[LIB_FILE],
+                    version_major);
 #else
         if (noVersion && !reverseExt) {
             sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s",
@@ -993,6 +995,41 @@ static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling) 
 #if U_PLATFORM == U_PF_CYGWIN
         sprintf(name1, "%s", libFileNames[LIB_FILE_CYGWIN]);
         sprintf(name2, "%s", libFileNames[LIB_FILE_CYGWIN_VERSION]);
+#elif U_PLATFORM == U_PF_OS390
+        /* Create the symbolic links for the import data */
+        /* Use the cmd buffer to store path to import data file to check its existence */
+        sprintf(cmd, "%s/%s", targetDir, libFileNames[LIB_FILE_OS390BATCH_VERSION]);
+        if (T_FileStream_file_exists(cmd)) {
+            sprintf(cmd, "cd %s && %s %s && %s %s %s",
+                    targetDir,
+                    RM_CMD,
+                    libFileNames[LIB_FILE_OS390BATCH_MAJOR],
+                    LN_CMD,
+                    libFileNames[LIB_FILE_OS390BATCH_VERSION],
+                    libFileNames[LIB_FILE_OS390BATCH_MAJOR]);
+            result = runCommand(cmd);
+            if (result != 0) {
+                fprintf(stderr, "Error creating symbolic links. Failed command: %s\n", cmd);
+                return result;
+            }
+
+            sprintf(cmd, "cd %s && %s %s.x && %s %s %s.x",
+                    targetDir,
+                    RM_CMD,
+                    libFileNames[LIB_FILE],
+                    LN_CMD,
+                    libFileNames[LIB_FILE_OS390BATCH_VERSION],
+                    libFileNames[LIB_FILE]);
+            result = runCommand(cmd);
+            if (result != 0) {
+                fprintf(stderr, "Error creating symbolic links. Failed command: %s\n", cmd);
+                return result;
+            }
+        }
+
+        /* Needs to be set here because special handling skips it */
+        sprintf(name1, "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[SO_EXT]);
+        sprintf(name2, "%s", libFileNames[LIB_FILE_VERSION]);
 #else
         goto normal_symlink_mode;
 #endif
@@ -1060,6 +1097,21 @@ static int32_t pkg_installLibrary(const char *installDir, const char *targetDir,
     if (result != 0) {
         fprintf(stderr, "Error installing library. Failed command: %s\n", cmd);
         return result;
+    }
+
+#elif U_PLATFORM == U_PF_OS390
+    if (T_FileStream_file_exists(libFileNames[LIB_FILE_OS390BATCH_VERSION])) {
+        sprintf(cmd, "%s %s %s",
+                pkgDataFlags[INSTALL_CMD],
+                libFileNames[LIB_FILE_OS390BATCH_VERSION],
+                installDir
+                );
+        result = runCommand(cmd);
+
+        if (result != 0) {
+            fprintf(stderr, "Error installing library. Failed command: %s\n", cmd);
+            return result;
+        }
     }
 #endif
 
@@ -1228,7 +1280,7 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
  * Using the compiler information from the configuration file set by -O option, generate the library file.
  * command may be given to allow for a larger buffer for cmd.
  */
-static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile, char *command) {
+static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile, char *command, UBool specialHandling) {
     int32_t result = 0;
     char *cmd = NULL;
     UBool freeCmd = FALSE;
@@ -1327,18 +1379,22 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
         /* Generate the library file. */
         result = runCommand(cmd);
 
-#if U_PLATFORM == U_PF_OS390 && defined(OS390BATCH)
+#if U_PLATFORM == U_PF_OS390
         char PDS_LibName[512];
-        if (uprv_strcmp(libFileNames[LIB_FILE],"libicudata") == 0) {
+        PDS_LibName[0] = 0;
+        if (specialHandling && uprv_strcmp(libFileNames[LIB_FILE],"libicudata") == 0) {
             sprintf(PDS_LibName,"%s%s%s",
                     "\"//'",
                     getenv("LOADMOD"),
                     "(IXMI" U_ICU_VERSION_SHORT "DA)'\"");
-        } else if (uprv_strcmp(libFileNames[LIB_FILE],"libicudata_stub") == 0) {
+        } else if (!specialHandling && uprv_strcmp(libFileNames[LIB_FILE],"libicudata_stub") == 0) {
            sprintf(PDS_LibName,"%s%s%s",
                    "\"//'",
                    getenv("LOADMOD"),
                    "(IXMI" U_ICU_VERSION_SHORT "D1)'\"");
+        }
+
+        if (PDS_LibName[0]) {
            sprintf(cmd, "%s %s -o %s %s %s%s %s %s",
                    pkgDataFlags[GENLIB],
                    pkgDataFlags[LDICUDTFLAGS],
@@ -1348,8 +1404,9 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
                    pkgDataFlags[LD_SONAME][0] == 0 ? "" : libFileNames[LIB_FILE_VERSION_MAJOR],
                    pkgDataFlags[RPATH_FLAGS],
                    pkgDataFlags[BIR_FLAGS]);
+
+            result = runCommand(cmd);
         }
-        result = runCommand(cmd);
 #endif
     }
 
@@ -1600,11 +1657,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
     if (result == 0) {
         /* Generate the library file. */
 #if U_PLATFORM == U_PF_OS390
-        if (o->pdsbuild && IN_DLL_MODE(mode)) {
-            result = pkg_generateLibraryFile("",mode, buffer, cmd);
-        } else {
-            result = pkg_generateLibraryFile(targetDir,mode, buffer, cmd);
-        }
+        result = pkg_generateLibraryFile(targetDir, mode, buffer, cmd, (o->pdsbuild && IN_DLL_MODE(mode)));
 #else
         result = pkg_generateLibraryFile(targetDir,mode, buffer, cmd);
 #endif
