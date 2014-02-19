@@ -1,8 +1,8 @@
 ﻿# Summary: Whole-Script Confusables
 # File: confusablesWholeScript.txt
-# Version: 3.0-draft
-# Generated: 2012-07-17, 21:27:33 GMT
-# Checkin: $Revision: 1580 $
+# Version: 6.3.0
+# Generated: 2013-11-13, 00:04:56 GMT
+# Checkin: $Revision: 1.32 $
 #
 # For documentation and usage, see http://www.unicode.org/reports/tr39/
 #
@@ -161,6 +161,12 @@
 
 # Total code points: 1
 
+# Bengali; Hebrew: [়]
+
+09BC          ; Beng; Hebr; L #      (়)  BENGALI SIGN NUKTA
+
+# Total code points: 1
+
 # Bengali; Kannada: [ঃ]
 
 0983          ; Beng; Knda; L #      (ঃ)  BENGALI SIGN VISARGA
@@ -284,7 +290,7 @@
 
 # Total code points: 2
 
-# Cyrillic; Latin: [агекмо-ухцъє-іјћҍґғқҟҫҭүұһӎӏӕөԁԑԛԝ]
+# Cyrillic; Latin: [агекмо-ухцъє-іјћҍґғқҟҫҭүұһҽҿӎӏӕәөԁԑԛԝ]
 
 0430          ; Cyrl; Latn; L #      (а)  CYRILLIC SMALL LETTER A
 0433          ; Cyrl; Latn; L #      (г)  CYRILLIC SMALL LETTER GHE
@@ -307,15 +313,18 @@
 04AF          ; Cyrl; Latn; L #      (ү)  CYRILLIC SMALL LETTER STRAIGHT U
 04B1          ; Cyrl; Latn; L #      (ұ)  CYRILLIC SMALL LETTER STRAIGHT U WITH STROKE
 04BB          ; Cyrl; Latn; L #      (һ)  CYRILLIC SMALL LETTER SHHA
+04BD          ; Cyrl; Latn; L #      (ҽ)  CYRILLIC SMALL LETTER ABKHASIAN CHE
+04BF          ; Cyrl; Latn; L #      (ҿ)  CYRILLIC SMALL LETTER ABKHASIAN CHE WITH DESCENDER
 04CE..04CF    ; Cyrl; Latn; L #  [2] (ӎ..ӏ)  CYRILLIC SMALL LETTER EM WITH TAIL..CYRILLIC SMALL LETTER PALOCHKA
 04D5          ; Cyrl; Latn; L #      (ӕ)  CYRILLIC SMALL LIGATURE A IE
+04D9          ; Cyrl; Latn; L #      (ә)  CYRILLIC SMALL LETTER SCHWA
 04E9          ; Cyrl; Latn; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 0501          ; Cyrl; Latn; L #      (ԁ)  CYRILLIC SMALL LETTER KOMI DE
 0511          ; Cyrl; Latn; L #      (ԑ)  CYRILLIC SMALL LETTER REVERSED ZE
 051B          ; Cyrl; Latn; L #      (ԛ)  CYRILLIC SMALL LETTER QA
 051D          ; Cyrl; Latn; L #      (ԝ)  CYRILLIC SMALL LETTER WE
 
-# Total code points: 37
+# Total code points: 40
 
 # Cyrillic; Malayalam: [оө]
 
@@ -406,11 +415,12 @@
 
 # Total code points: 5
 
-# Devanagari; Hebrew: [०]
+# Devanagari; Hebrew: [़०]
 
+093C          ; Deva; Hebr; L #      (़)  DEVANAGARI SIGN NUKTA
 0966          ; Deva; Hebr; L #      (०)  DEVANAGARI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Devanagari; Kannada: [०]
 
@@ -683,11 +693,12 @@
 
 # Total code points: 4
 
-# Gujarati; Hebrew: [૦]
+# Gujarati; Hebrew: [઼૦]
 
+0ABC          ; Gujr; Hebr; L #      (઼)  GUJARATI SIGN NUKTA
 0AE6          ; Gujr; Hebr; L #      (૦)  GUJARATI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gujarati; Kannada: [૦]
 
@@ -797,11 +808,12 @@
 
 # Total code points: 4
 
-# Gurmukhi; Hebrew: [੦]
+# Gurmukhi; Hebrew: [਼੦]
 
+0A3C          ; Guru; Hebr; L #      (਼)  GURMUKHI SIGN NUKTA
 0A66          ; Guru; Hebr; L #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gurmukhi; Kannada: [ਃ੦]
 
@@ -901,17 +913,24 @@
 
 # Total code points: 1
 
+# Hebrew; Bengali: [ִ]
+
+05B4          ; Hebr; Beng; L #      (ִ)  HEBREW POINT HIRIQ
+
+# Total code points: 1
+
 # Hebrew; Cyrillic: [ס]
 
 05E1          ; Hebr; Cyrl; L #      (ס)  HEBREW LETTER SAMEKH
 
 # Total code points: 1
 
-# Hebrew; Devanagari: [ס]
+# Hebrew; Devanagari: [ִס]
 
+05B4          ; Hebr; Deva; L #      (ִ)  HEBREW POINT HIRIQ
 05E1          ; Hebr; Deva; L #      (ס)  HEBREW LETTER SAMEKH
 
-# Total code points: 1
+# Total code points: 2
 
 # Hebrew; Greek: [טס]
 
@@ -920,17 +939,19 @@
 
 # Total code points: 2
 
-# Hebrew; Gujarati: [ס]
+# Hebrew; Gujarati: [ִס]
 
+05B4          ; Hebr; Gujr; L #      (ִ)  HEBREW POINT HIRIQ
 05E1          ; Hebr; Gujr; L #      (ס)  HEBREW LETTER SAMEKH
 
-# Total code points: 1
+# Total code points: 2
 
-# Hebrew; Gurmukhi: [ס]
+# Hebrew; Gurmukhi: [ִס]
 
+05B4          ; Hebr; Guru; L #      (ִ)  HEBREW POINT HIRIQ
 05E1          ; Hebr; Guru; L #      (ס)  HEBREW LETTER SAMEKH
 
-# Total code points: 1
+# Total code points: 2
 
 # Hebrew; Kannada: [ס]
 
@@ -963,6 +984,12 @@
 # Hebrew; Myanmar: [ס]
 
 05E1          ; Hebr; Mymr; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Oriya: [ִ]
+
+05B4          ; Hebr; Orya; L #      (ִ)  HEBREW POINT HIRIQ
 
 # Total code points: 1
 
@@ -1270,7 +1297,7 @@
 
 # Total code points: 12
 
-# Latin; Cyrillic: [a-eh-km-yæçøđħıĸŧơꞓ]
+# Latin; Cyrillic: [a-eh-km-yæçøđħıĸŧơəꞓ]
 
 0061..0065    ; Latn; Cyrl; L #  [5] (a..e)  LATIN SMALL LETTER A..LATIN SMALL LETTER E
 0068..006B    ; Latn; Cyrl; L #  [4] (h..k)  LATIN SMALL LETTER H..LATIN SMALL LETTER K
@@ -1283,9 +1310,10 @@
 0138          ; Latn; Cyrl; L #      (ĸ)  LATIN SMALL LETTER KRA
 0167          ; Latn; Cyrl; L #      (ŧ)  LATIN SMALL LETTER T WITH STROKE
 01A1          ; Latn; Cyrl; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
+0259          ; Latn; Cyrl; L #      (ə)  LATIN SMALL LETTER SCHWA
 A793          ; Latn; Cyrl; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
-# Total code points: 32
+# Total code points: 33
 
 # Latin; Devanagari: [oøơ]
 
@@ -1716,6 +1744,12 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 0B66          ; Orya; Hani; L #      (୦)  ORIYA DIGIT ZERO
 
 # Total code points: 2
+
+# Oriya; Hebrew: [଼]
+
+0B3C          ; Orya; Hebr; L #      (଼)  ORIYA SIGN NUKTA
+
+# Total code points: 1
 
 # Oriya; Malayalam: [ଠ୦]
 
@@ -2349,6 +2383,12 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
 # Total code points: 1
 
+# Bengali; Hebrew: [়]
+
+09BC          ; Beng; Hebr; A #      (়)  BENGALI SIGN NUKTA
+
+# Total code points: 1
+
 # Bengali; Kannada: [ঃ]
 
 0983          ; Beng; Knda; A #      (ঃ)  BENGALI SIGN VISARGA
@@ -2508,7 +2548,7 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
 # Total code points: 2
 
-# Cyrillic; Latin: [Є-ІЈА-ВЕКМ-ОР-ТХЫЬЮагекмо-ухцъє-іјћҌҍґғҚқҞҟҢҪ-ҲһӇӉӍ-ӏӔӕӨөԁԌԑԛ-ԝ]
+# Cyrillic; Latin: [Є-ІЈА-ВЕКМ-ОР-ТХЫЬЮагекмо-ухцъє-іјћҌҍґғҚқҞҟҢҪ-ҲһҽҿӇӉӍ-ӏӔӕәӨөԁԌԑԛ-ԝ]
 
 0404..0406    ; Cyrl; Latn; A #  [3] (Є..І)  CYRILLIC CAPITAL LETTER UKRAINIAN IE..CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
 0408          ; Cyrl; Latn; A #      (Ј)  CYRILLIC CAPITAL LETTER JE
@@ -2539,17 +2579,20 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 04A2          ; Cyrl; Latn; A #      (Ң)  CYRILLIC CAPITAL LETTER EN WITH DESCENDER
 04AA..04B2    ; Cyrl; Latn; A #  [9] (Ҫ..Ҳ)  CYRILLIC CAPITAL LETTER ES WITH DESCENDER..CYRILLIC CAPITAL LETTER HA WITH DESCENDER
 04BB          ; Cyrl; Latn; A #      (һ)  CYRILLIC SMALL LETTER SHHA
+04BD          ; Cyrl; Latn; A #      (ҽ)  CYRILLIC SMALL LETTER ABKHASIAN CHE
+04BF          ; Cyrl; Latn; A #      (ҿ)  CYRILLIC SMALL LETTER ABKHASIAN CHE WITH DESCENDER
 04C7          ; Cyrl; Latn; A #      (Ӈ)  CYRILLIC CAPITAL LETTER EN WITH HOOK
 04C9          ; Cyrl; Latn; A #      (Ӊ)  CYRILLIC CAPITAL LETTER EN WITH TAIL
 04CD..04CF    ; Cyrl; Latn; A #  [3] (Ӎ..ӏ)  CYRILLIC CAPITAL LETTER EM WITH TAIL..CYRILLIC SMALL LETTER PALOCHKA
 04D4..04D5    ; Cyrl; Latn; A #  [2] (Ӕ..ӕ)  CYRILLIC CAPITAL LIGATURE A IE..CYRILLIC SMALL LIGATURE A IE
+04D9          ; Cyrl; Latn; A #      (ә)  CYRILLIC SMALL LETTER SCHWA
 04E8..04E9    ; Cyrl; Latn; A #  [2] (Ө..ө)  CYRILLIC CAPITAL LETTER BARRED O..CYRILLIC SMALL LETTER BARRED O
 0501          ; Cyrl; Latn; A #      (ԁ)  CYRILLIC SMALL LETTER KOMI DE
 050C          ; Cyrl; Latn; A #      (Ԍ)  CYRILLIC CAPITAL LETTER KOMI SJE
 0511          ; Cyrl; Latn; A #      (ԑ)  CYRILLIC SMALL LETTER REVERSED ZE
 051B..051D    ; Cyrl; Latn; A #  [3] (ԛ..ԝ)  CYRILLIC SMALL LETTER QA..CYRILLIC SMALL LETTER WE
 
-# Total code points: 72
+# Total code points: 75
 
 # Cyrillic; Malayalam: [ОоӨө]
 
@@ -2650,11 +2693,12 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
 # Total code points: 5
 
-# Devanagari; Hebrew: [०]
+# Devanagari; Hebrew: [़०]
 
+093C          ; Deva; Hebr; A #      (़)  DEVANAGARI SIGN NUKTA
 0966          ; Deva; Hebr; A #      (०)  DEVANAGARI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Devanagari; Kannada: [०]
 
@@ -2949,11 +2993,12 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
 # Total code points: 4
 
-# Gujarati; Hebrew: [૦]
+# Gujarati; Hebrew: [઼૦]
 
+0ABC          ; Gujr; Hebr; A #      (઼)  GUJARATI SIGN NUKTA
 0AE6          ; Gujr; Hebr; A #      (૦)  GUJARATI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gujarati; Kannada: [૦]
 
@@ -3063,11 +3108,12 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
 # Total code points: 4
 
-# Gurmukhi; Hebrew: [੦]
+# Gurmukhi; Hebrew: [਼੦]
 
+0A3C          ; Guru; Hebr; A #      (਼)  GURMUKHI SIGN NUKTA
 0A66          ; Guru; Hebr; A #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gurmukhi; Kannada: [ਃ੦]
 
@@ -3185,6 +3231,12 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
 # Total code points: 1
 
+# Hebrew; Bengali: [ִ]
+
+05B4          ; Hebr; Beng; A #      (ִ)  HEBREW POINT HIRIQ
+
+# Total code points: 1
+
 # Hebrew; Cyrillic: [ויןסױ]
 
 05D5          ; Hebr; Cyrl; A #      (ו)  HEBREW LETTER VAV
@@ -3195,11 +3247,12 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
 # Total code points: 5
 
-# Hebrew; Devanagari: [ס]
+# Hebrew; Devanagari: [ִס]
 
+05B4          ; Hebr; Deva; A #      (ִ)  HEBREW POINT HIRIQ
 05E1          ; Hebr; Deva; A #      (ס)  HEBREW LETTER SAMEKH
 
-# Total code points: 1
+# Total code points: 2
 
 # Hebrew; Greek: [וטיןסױ]
 
@@ -3211,17 +3264,19 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
 # Total code points: 6
 
-# Hebrew; Gujarati: [ס]
+# Hebrew; Gujarati: [ִס]
 
+05B4          ; Hebr; Gujr; A #      (ִ)  HEBREW POINT HIRIQ
 05E1          ; Hebr; Gujr; A #      (ס)  HEBREW LETTER SAMEKH
 
-# Total code points: 1
+# Total code points: 2
 
-# Hebrew; Gurmukhi: [ס]
+# Hebrew; Gurmukhi: [ִס]
 
+05B4          ; Hebr; Guru; A #      (ִ)  HEBREW POINT HIRIQ
 05E1          ; Hebr; Guru; A #      (ס)  HEBREW LETTER SAMEKH
 
-# Total code points: 1
+# Total code points: 2
 
 # Hebrew; Kannada: [ס]
 
@@ -3254,6 +3309,12 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 # Hebrew; Myanmar: [ס]
 
 05E1          ; Hebr; Mymr; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Oriya: [ִ]
+
+05B4          ; Hebr; Orya; A #      (ִ)  HEBREW POINT HIRIQ
 
 # Total code points: 1
 
@@ -3575,7 +3636,7 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 
 # Total code points: 4
 
-# Latin; Cyrillic: [A-CEG-MOPSTW-Ya-eh-yÆÇØæçøđĦħıĸŁłŦŧƠơǾꞒꞓ]
+# Latin; Cyrillic: [A-CEG-MOPSTW-Ya-eh-yÆÇØæçøđĦħıĸŁłŦŧƠơǾəꞒꞓ]
 
 0041..0043    ; Latn; Cyrl; A #  [3] (A..C)  LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER C
 0045          ; Latn; Cyrl; A #      (E)  LATIN CAPITAL LETTER E
@@ -3597,9 +3658,10 @@ A793          ; Latn; Grek; L #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 0166..0167    ; Latn; Cyrl; A #  [2] (Ŧ..ŧ)  LATIN CAPITAL LETTER T WITH STROKE..LATIN SMALL LETTER T WITH STROKE
 01A0..01A1    ; Latn; Cyrl; A #  [2] (Ơ..ơ)  LATIN CAPITAL LETTER O WITH HORN..LATIN SMALL LETTER O WITH HORN
 01FE          ; Latn; Cyrl; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
+0259          ; Latn; Cyrl; A #      (ə)  LATIN SMALL LETTER SCHWA
 A792..A793    ; Latn; Cyrl; A #  [2] (Ꞓ..ꞓ)  LATIN CAPITAL LETTER C WITH BAR..LATIN SMALL LETTER C WITH BAR
 
-# Total code points: 61
+# Total code points: 62
 
 # Latin; Devanagari: [oøơ]
 
@@ -4082,6 +4144,12 @@ A793          ; Latn; Grek; A #      (ꞓ)  LATIN SMALL LETTER C WITH BAR
 0B66          ; Orya; Hani; A #      (୦)  ORIYA DIGIT ZERO
 
 # Total code points: 2
+
+# Oriya; Hebrew: [଼]
+
+0B3C          ; Orya; Hebr; A #      (଼)  ORIYA SIGN NUKTA
+
+# Total code points: 1
 
 # Oriya; Latin: [ଠ୦]
 
