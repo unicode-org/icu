@@ -20,16 +20,17 @@ U_NAMESPACE_BEGIN
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-static UMutex gInitMutex = U_MUTEX_INITIALIZER;
-static UBool gStaticsAreInitialized = FALSE;
+static UnicodeSet *ASCII;
+static ScriptSet *JAPANESE;
+static ScriptSet *CHINESE;
+static ScriptSet *KOREAN;
+static ScriptSet *CONFUSABLE_WITH_LATIN;
+static UInitOnce gIdentifierInfoInitOnce = U_INITONCE_INITIALIZER;
 
-UnicodeSet *IdentifierInfo::ASCII;
-ScriptSet *IdentifierInfo::JAPANESE;
-ScriptSet *IdentifierInfo::CHINESE;
-ScriptSet *IdentifierInfo::KOREAN;
-ScriptSet *IdentifierInfo::CONFUSABLE_WITH_LATIN;
 
-UBool IdentifierInfo::cleanup() {
+U_CDECL_BEGIN
+static UBool U_CALLCONV
+IdentifierInfo_cleanup(void) {
     delete ASCII;
     ASCII = NULL;
     delete JAPANESE;
@@ -40,14 +41,30 @@ UBool IdentifierInfo::cleanup() {
     KOREAN = NULL;
     delete CONFUSABLE_WITH_LATIN;
     CONFUSABLE_WITH_LATIN = NULL;
-    gStaticsAreInitialized = FALSE;
+    gIdentifierInfoInitOnce.reset(); 
     return TRUE;
 }
 
-U_CDECL_BEGIN
-static UBool U_CALLCONV
-IdentifierInfo_cleanup(void) {
-    return IdentifierInfo::cleanup();
+static void U_CALLCONV
+IdentifierInfo_init(UErrorCode &status) {
+    ASCII    = new UnicodeSet(0, 0x7f);
+    JAPANESE = new ScriptSet();
+    CHINESE  = new ScriptSet();
+    KOREAN   = new ScriptSet();
+    CONFUSABLE_WITH_LATIN = new ScriptSet();
+    if (ASCII == NULL || JAPANESE == NULL || CHINESE == NULL || KOREAN == NULL 
+            || CONFUSABLE_WITH_LATIN == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    ASCII->freeze();
+    JAPANESE->set(USCRIPT_LATIN, status).set(USCRIPT_HAN, status).set(USCRIPT_HIRAGANA, status)
+             .set(USCRIPT_KATAKANA, status);
+    CHINESE->set(USCRIPT_LATIN, status).set(USCRIPT_HAN, status).set(USCRIPT_BOPOMOFO, status);
+    KOREAN->set(USCRIPT_LATIN, status).set(USCRIPT_HAN, status).set(USCRIPT_HANGUL, status);
+    CONFUSABLE_WITH_LATIN->set(USCRIPT_CYRILLIC, status).set(USCRIPT_GREEK, status)
+              .set(USCRIPT_CHEROKEE, status);
+    ucln_i18n_registerCleanup(UCLN_I18N_IDENTIFIER_INFO, IdentifierInfo_cleanup);
 }
 U_CDECL_END
 
@@ -55,33 +72,11 @@ U_CDECL_END
 IdentifierInfo::IdentifierInfo(UErrorCode &status):
          fIdentifier(NULL), fRequiredScripts(NULL), fScriptSetSet(NULL), 
          fCommonAmongAlternates(NULL), fNumerics(NULL), fIdentifierProfile(NULL) {
+    umtx_initOnce(gIdentifierInfoInitOnce, &IdentifierInfo_init, status);
     if (U_FAILURE(status)) {
         return;
     }
-    {
-        Mutex lock(&gInitMutex);
-        if (!gStaticsAreInitialized) {
-            ASCII    = new UnicodeSet(0, 0x7f);
-            JAPANESE = new ScriptSet();
-            CHINESE  = new ScriptSet();
-            KOREAN   = new ScriptSet();
-            CONFUSABLE_WITH_LATIN = new ScriptSet();
-            if (ASCII == NULL || JAPANESE == NULL || CHINESE == NULL || KOREAN == NULL 
-                    || CONFUSABLE_WITH_LATIN == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-            ASCII->freeze();
-            JAPANESE->set(USCRIPT_LATIN, status).set(USCRIPT_HAN, status).set(USCRIPT_HIRAGANA, status)
-                     .set(USCRIPT_KATAKANA, status);
-            CHINESE->set(USCRIPT_LATIN, status).set(USCRIPT_HAN, status).set(USCRIPT_BOPOMOFO, status);
-            KOREAN->set(USCRIPT_LATIN, status).set(USCRIPT_HAN, status).set(USCRIPT_HANGUL, status);
-            CONFUSABLE_WITH_LATIN->set(USCRIPT_CYRILLIC, status).set(USCRIPT_GREEK, status)
-                      .set(USCRIPT_CHEROKEE, status);
-            ucln_i18n_registerCleanup(UCLN_I18N_IDENTIFIER_INFO, IdentifierInfo_cleanup);
-            gStaticsAreInitialized = TRUE;
-        }
-    }
+    
     fIdentifier = new UnicodeString();
     fRequiredScripts = new ScriptSet();
     fScriptSetSet = uhash_open(uhash_hashScriptSet, uhash_compareScriptSet, NULL, &status);
