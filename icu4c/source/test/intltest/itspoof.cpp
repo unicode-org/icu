@@ -682,8 +682,9 @@ void IntlTestSpoof::testRestrictionLevel() {
     };
     char msgBuffer[100];
 
-    URestrictionLevel restrictionLevels[] = { USPOOF_ASCII, USPOOF_HIGHLY_RESTRICTIVE, 
-         USPOOF_MODERATELY_RESTRICTIVE, USPOOF_MINIMALLY_RESTRICTIVE, USPOOF_UNRESTRICTIVE};
+    URestrictionLevel restrictionLevels[] = { USPOOF_ASCII, USPOOF_SINGLE_SCRIPT_RESTRICTIVE, 
+         USPOOF_HIGHLY_RESTRICTIVE, USPOOF_MODERATELY_RESTRICTIVE, USPOOF_MINIMALLY_RESTRICTIVE, 
+         USPOOF_UNRESTRICTIVE};
     
     UErrorCode status = U_ZERO_ERROR;
     IdentifierInfo idInfo(status);
@@ -706,14 +707,30 @@ void IntlTestSpoof::testRestrictionLevel() {
             uspoof_setChecks(sc, USPOOF_RESTRICTION_LEVEL, &status);
             uspoof_setAllowedChars(sc, uspoof_getRecommendedSet(&status), &status);
             uspoof_setRestrictionLevel(sc, levelSetInSpoofChecker);
-            UBool actualValue = uspoof_checkUnicodeString(sc, testString, NULL, &status) != 0;
-
+            int32_t actualValue = uspoof_checkUnicodeString(sc, testString, NULL, &status);
+            
             // we want to fail if the text is (say) MODERATE and the testLevel is ASCII
-            UBool expectedFailure = expectedLevel > levelSetInSpoofChecker ||
-                                    !uspoof_getRecommendedUnicodeSet(&status)->containsAll(testString);
-            sprintf(msgBuffer, "testNum = %d, levelIndex = %d", testNum, levelIndex);
-            TEST_ASSERT_MSG(expectedFailure == actualValue, msgBuffer);
+            int32_t expectedValue = 0;
+            if (expectedLevel > levelSetInSpoofChecker) {
+                expectedValue |= USPOOF_RESTRICTION_LEVEL;
+            }
+            if (!uspoof_getRecommendedUnicodeSet(&status)->containsAll(testString)) {
+                expectedValue |= USPOOF_CHAR_LIMIT;
+            }
+            sprintf(msgBuffer, "testNum = %d, levelIndex = %d, expected = %#x, actual = %#x",
+                    testNum, levelIndex, expectedValue, actualValue);
+            TEST_ASSERT_MSG(expectedValue == actualValue, msgBuffer);
             TEST_ASSERT_SUCCESS(status);
+
+            // Run the same check again, with the Spoof Checker configured to return
+            // the actual restriction level.
+            uspoof_setChecks(sc, USPOOF_AUX_INFO | USPOOF_RESTRICTION_LEVEL, &status);
+            uspoof_setAllowedChars(sc, uspoof_getRecommendedSet(&status), &status);
+            uspoof_setRestrictionLevel(sc, levelSetInSpoofChecker);
+            int32_t result = uspoof_checkUnicodeString(sc, testString, NULL, &status);
+            TEST_ASSERT_SUCCESS(status);
+            TEST_ASSERT_EQ(expectedLevel, result & USPOOF_RESTRICTION_LEVEL_MASK);
+            TEST_ASSERT_EQ(expectedValue, result & USPOOF_ALL_CHECKS);
             uspoof_close(sc);
         }
     }
