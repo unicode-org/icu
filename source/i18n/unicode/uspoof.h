@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 2008-2013, International Business Machines Corporation
+* Copyright (C) 2008-2014, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   file name:  uspoof.h
@@ -276,31 +276,43 @@ typedef enum USpoofChecks {
          */
         USPOOF_ASCII = 0x10000000,
         /**
+          * All characters in each identifier must be from a single script.
+          *
+          * @draft ICU 53
+          */
+        USPOOF_SINGLE_SCRIPT_RESTRICTIVE = 0x20000000,
+        /**
          * All characters in each identifier must be from a single script, or from the combinations: Latin + Han +
          * Hiragana + Katakana; Latin + Han + Bopomofo; or Latin + Han + Hangul. Note that this level will satisfy the
          * vast majority of Latin-script users; also that TR36 has ASCII instead of Latin.
          * 
          * @draft ICU 51
          */
-        USPOOF_HIGHLY_RESTRICTIVE = 0x20000000,
+        USPOOF_HIGHLY_RESTRICTIVE = 0x30000000,
         /**
          * Allow Latin with other scripts except Cyrillic, Greek, Cherokee Otherwise, the same as Highly Restrictive
          * 
          * @draft ICU 51
          */
-        USPOOF_MODERATELY_RESTRICTIVE = 0x30000000,
+        USPOOF_MODERATELY_RESTRICTIVE = 0x40000000,
         /**
          * Allow arbitrary mixtures of scripts. Otherwise, the same as Moderately Restrictive.
          * 
          * @draft ICU 51
          */
-        USPOOF_MINIMALLY_RESTRICTIVE = 0x40000000,
+        USPOOF_MINIMALLY_RESTRICTIVE = 0x50000000,
         /**
          * Any valid identifiers, including characters outside of the Identifier Profile.
          * 
          * @draft ICU 51
          */
-        USPOOF_UNRESTRICTIVE = 0x50000000
+        USPOOF_UNRESTRICTIVE = 0x60000000,
+        /**
+          * Mask for selecting the Restriction Level bits from the return value of uspoof_check().
+          * 
+          * @draft ICU 53
+          */
+         USPOOF_RESTRICTION_LEVEL_MASK = 0x7F000000 
     } URestrictionLevel;
 #endif /* U_HIDE_DRAFT_API */
 
