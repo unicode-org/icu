@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2012-2013, International Business Machines
+*   Copyright (C) 2012-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -247,7 +247,7 @@ URestrictionLevel IdentifierInfo::getRestrictionLevel(UErrorCode &status) const 
     int32_t cardinalityPlus = fRequiredScripts->countMembers() + 
             (fCommonAmongAlternates->countMembers() == 0 ? uhash_count(fScriptSetSet) : 1);
     if (cardinalityPlus < 2) {
-        return USPOOF_HIGHLY_RESTRICTIVE;
+        return USPOOF_SINGLE_SCRIPT_RESTRICTIVE;
     }
     if (containsWithAlternates(*JAPANESE, *fRequiredScripts) || containsWithAlternates(*CHINESE, *fRequiredScripts)
             || containsWithAlternates(*KOREAN, *fRequiredScripts)) {
