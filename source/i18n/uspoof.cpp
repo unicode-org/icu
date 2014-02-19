@@ -198,7 +198,7 @@ uspoof_setChecks(USpoofChecker *sc, int32_t checks, UErrorCode *status) {
 
     // Verify that the requested checks are all ones (bits) that 
     //   are acceptable, known values.
-    if (checks & ~USPOOF_ALL_CHECKS) {
+    if (checks & ~(USPOOF_ALL_CHECKS | USPOOF_AUX_INFO)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR; 
         return;
     }
