@@ -490,7 +490,7 @@ public class SpoofCheckerTest extends TestFmwk {
         Object[][] tests = {
                 {"aγ♥", RestrictionLevel.UNRESTRICTIVE},
                 {"a", RestrictionLevel.ASCII},
-                {"γ", RestrictionLevel.SINGLE_SCRIPT},
+                {"γ", RestrictionLevel.SINGLE_SCRIPT_RESTRICTIVE},
                 {"aアー", RestrictionLevel.HIGHLY_RESTRICTIVE},
                 {"aऄ", RestrictionLevel.MODERATELY_RESTRICTIVE},
                 {"aγ", RestrictionLevel.MINIMALLY_RESTRICTIVE},

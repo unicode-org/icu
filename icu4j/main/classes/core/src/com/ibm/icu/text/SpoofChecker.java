@@ -160,7 +160,7 @@ public class SpoofChecker {
          * 
          * @draft ICU 53
          */
-        SINGLE_SCRIPT,        
+        SINGLE_SCRIPT_RESTRICTIVE,        
          /**
          * All characters in each identifier must be from a single script, or from the combinations: Latin + Han +
          * Hiragana + Katakana; Latin + Han + Bopomofo; or Latin + Han + Hangul. Note that this level will satisfy the
