@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -490,7 +490,7 @@ public class SpoofCheckerTest extends TestFmwk {
         Object[][] tests = {
                 {"aγ♥", RestrictionLevel.UNRESTRICTIVE},
                 {"a", RestrictionLevel.ASCII},
-                {"γ", RestrictionLevel.HIGHLY_RESTRICTIVE},
+                {"γ", RestrictionLevel.SINGLE_SCRIPT},
                 {"aアー", RestrictionLevel.HIGHLY_RESTRICTIVE},
                 {"aऄ", RestrictionLevel.MODERATELY_RESTRICTIVE},
                 {"aγ", RestrictionLevel.MINIMALLY_RESTRICTIVE},
