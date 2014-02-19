@@ -54,14 +54,15 @@ uspoof_cleanup(void) {
 }
 
 static void U_CALLCONV initializeStatics(UErrorCode &status) {
-    gInclusionSet = new UnicodeSet(UNICODE_STRING_SIMPLE(
-                 "[\\u0027\\u002d-\\u002e\\u003A\\u00B7\\u0375\\u058A\\u05F3-\\u05F4"
-                 "\\u06FD-\\u06FE\\u0F0B\\u200C-\\u200D\\u2010\\u2019\\u2027\\u30A0\\u30FB]"),
-             status);
+    static const char *inclusionPat = 
+           "[\\u0027\\u002d-\\u002e\\u003A\\u00B7\\u0375\\u058A\\u05F3-\\u05F4"
+           "\\u06FD-\\u06FE\\u0F0B\\u200C-\\u200D\\u2010\\u2019\\u2027\\u30A0\\u30FB]";
+    gInclusionSet = new UnicodeSet(UnicodeString(inclusionPat, -1, US_INV), status);
     
     // Note: data from http://unicode.org/Public/security/latest/xidmodifications.txt version 6.3.0
-    gRecommendedSet = new UnicodeSet(UNICODE_STRING_SIMPLE("["
-            "\\u0030-\\u0039\\u0041-\\u005A\\u005F\\u0061-\\u007A\\u00C0-\\u00D6\\u00D8-\\u00F6"
+    // Note: concatenated string constants do not work with UNICODE_STRING_SIMPLE on all platforms.
+    static const char *recommendedPat = 
+            "[\\u0030-\\u0039\\u0041-\\u005A\\u005F\\u0061-\\u007A\\u00C0-\\u00D6\\u00D8-\\u00F6"
             "\\u00F8-\\u0131\\u0134-\\u013E\\u0141-\\u0148\\u014A-\\u017E\\u01A0-\\u01A1\\u01AF-\\u01B0"
             "\\u01CD-\\u01DC\\u01DE-\\u01E3\\u01E6-\\u01F0\\u01F4-\\u01F5\\u01F8-\\u021B\\u021E-\\u021F"
             "\\u0226-\\u0233\\u0259\\u02BB-\\u02BC\\u02EC\\u0300-\\u0304\\u0306-\\u030C\\u030F-\\u0311"
@@ -115,7 +116,8 @@ static void U_CALLCONV initializeStatics(UErrorCode &status) {
             "\\uA7A0-\\uA7AA\\uA7FA\\uA9CF\\uAA60-\\uAA76\\uAA7A-\\uAA7B\\uAB01-\\uAB06\\uAB09-\\uAB0E"
             "\\uAB11-\\uAB16\\uAB20-\\uAB26\\uAB28-\\uAB2E\\uAC00-\\uD7A3\\uFA0E-\\uFA0F\\uFA11"
             "\\uFA13-\\uFA14\\uFA1F\\uFA21\\uFA23-\\uFA24\\uFA27-\\uFA29\\U0001B000-\\U0001B001\\U00020000-\\U0002A6D6"
-            "\\U0002A700-\\U0002B734\\U0002B740-\\U0002B81D]"), status);
+            "\\U0002A700-\\U0002B734\\U0002B740-\\U0002B81D]";
+    gRecommendedSet = new UnicodeSet(UnicodeString(recommendedPat, -1, US_INV), status);
     gNfdNormalizer = Normalizer2::getNFDInstance(status);
     ucln_i18n_registerCleanup(UCLN_I18N_SPOOF, uspoof_cleanup);
 }
