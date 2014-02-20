@@ -575,6 +575,29 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("getWidth", MeasureFormat.FormatWidth.WIDE, mf.getWidth());
     }
     
+    public void testDoubleZero() {
+        ULocale en = new ULocale("en");
+        NumberFormat nf = NumberFormat.getInstance(en);
+        nf.setMinimumFractionDigits(2);
+        nf.setMaximumFractionDigits(2);
+        MeasureFormat mf = MeasureFormat.getInstance(en, FormatWidth.WIDE, nf);
+        assertEquals(
+                "Positive Rounding",
+                "4 hours, 23 minutes, 16.00 seconds",
+                mf.formatMeasures(
+                        new Measure(4.7, MeasureUnit.HOUR),
+                        new Measure(23, MeasureUnit.MINUTE),
+                        new Measure(16, MeasureUnit.SECOND)));
+        assertEquals(
+                "Negative Rounding",
+                "-4 hours, 23 minutes, 16.00 seconds",
+                mf.formatMeasures(
+                        new Measure(-4.7, MeasureUnit.HOUR),
+                        new Measure(23, MeasureUnit.MINUTE),
+                        new Measure(16, MeasureUnit.SECOND)));
+        
+    }
+    
     static void generateCXXHConstants() {
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
         TreeMap<String, List<MeasureUnit>> allUnits = new TreeMap<String, List<MeasureUnit>>();
