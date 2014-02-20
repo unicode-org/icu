@@ -385,31 +385,36 @@ static int32_t toHMS(
     if (U_FAILURE(status)) {
         return 0;
     }
-    int32_t count = 0;
     for (int32_t i = 0; i < measureCount; ++i) {
         if (measures[i].getUnit() == *hourUnit) {
-            if ((result & 1) == 0) {
-                ++count;
-            } else {
+            // hour must come first
+            if (result >= 1) {
                 return 0;
             }
             hms[0] = measures[i].getNumber();
+            if (hms[0].getDouble() < 0.0) {
+                return 0;
+            }
             result |= 1;
         } else if (measures[i].getUnit() == *minuteUnit) {
-            if ((result & 2) == 0) {
-                ++count;
-            } else {
+            // minute must come after hour
+            if (result >= 2) {
                 return 0;
             }
             hms[1] = measures[i].getNumber();
+            if (hms[1].getDouble() < 0.0) {
+                return 0;
+            }
             result |= 2;
         } else if (measures[i].getUnit() == *secondUnit) {
-            if ((result & 4) == 0) {
-                ++count;
-            } else {
+            // second must come after hour and minute
+            if (result >= 4) {
                 return 0;
             }
             hms[2] = measures[i].getNumber();
+            if (hms[2].getDouble() < 0.0) {
+                return 0;
+            }
             result |= 4;
         } else {
             return 0;
@@ -734,9 +739,9 @@ UnicodeString &MeasureFormat::formatNumeric(
         return appendTo;
     }
     UDate millis = 
-        (UDate) (((hms[0].getDouble(status) * 60.0
-             + hms[1].getDouble(status)) * 60.0
-                  + hms[2].getDouble(status)) * 1000.0);
+        (UDate) (((uprv_trunc(hms[0].getDouble(status)) * 60.0
+             + uprv_trunc(hms[1].getDouble(status))) * 60.0
+                  + uprv_trunc(hms[2].getDouble(status))) * 1000.0);
     switch (bitMap) {
     case 5: // hs
     case 7: // hms
@@ -774,9 +779,24 @@ UnicodeString &MeasureFormat::formatNumeric(
     return appendTo;
 }
 
+static void appendRange(
+        const UnicodeString &src,
+        int32_t start,
+        int32_t end,
+        UnicodeString &dest) {
+    dest.append(src, start, end - start);
+}
+
+static void appendRange(
+        const UnicodeString &src,
+        int32_t end,
+        UnicodeString &dest) {
+    dest.append(src, end, src.length() - end);
+}
+
 UnicodeString &MeasureFormat::formatNumeric(
-        UDate date,
-        const DateFormat &dateFmt,
+        UDate date, // Time since epoch 1:30:00 would be 5400000
+        const DateFormat &dateFmt, // h:mm, m:ss, or h:mm:ss
         UDateFormatField smallestField,
         const Formattable &smallestAmount,
         UnicodeString &appendTo,
@@ -784,20 +804,53 @@ UnicodeString &MeasureFormat::formatNumeric(
     if (U_FAILURE(status)) {
         return appendTo;
     }
+    // Format the smallest amount with this object's NumberFormat
     UnicodeString smallestAmountFormatted;
+
+    // We keep track of the integer part of smallest amount so that
+    // we can replace it later so that we get '0:00:09.3' instead of
+    // '0:00:9.3'
+    FieldPosition intFieldPosition(UNUM_INTEGER_FIELD);
     (*numberFormat)->format(
-            smallestAmount, smallestAmountFormatted, status);
+            smallestAmount, smallestAmountFormatted, intFieldPosition, status);
+    if (
+            intFieldPosition.getBeginIndex() == 0 &&
+            intFieldPosition.getEndIndex() == 0) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return appendTo;
+    }
+
+    // Format time. draft becomes something like '5:30:45'
     FieldPosition smallestFieldPosition(smallestField);
     UnicodeString draft;
     dateFmt.format(date, draft, smallestFieldPosition, status);
+
+    // If we find field for smallest amount replace it with the formatted
+    // smallest amount from above taking care to replace the integer part
+    // with what is in original time. For example, If smallest amount
+    // is 9.35s and the formatted time is 0:00:09 then 9.35 becomes 09.35
+    // and replacing yields 0:00:09.35
     if (smallestFieldPosition.getBeginIndex() != 0 ||
-        smallestFieldPosition.getEndIndex() != 0) {
-        appendTo.append(draft, 0, smallestFieldPosition.getBeginIndex());
-        appendTo.append(smallestAmountFormatted);
-        appendTo.append(
+            smallestFieldPosition.getEndIndex() != 0) {
+        appendRange(draft, 0, smallestFieldPosition.getBeginIndex(), appendTo);
+        appendRange(
+                smallestAmountFormatted,
+                0,
+                intFieldPosition.getBeginIndex(),
+                appendTo);
+        appendRange(
+                draft,
+                smallestFieldPosition.getBeginIndex(),
+                smallestFieldPosition.getEndIndex(),
+                appendTo);
+        appendRange(
+                smallestAmountFormatted,
+                intFieldPosition.getEndIndex(),
+                appendTo);
+        appendRange(
                 draft,
                 smallestFieldPosition.getEndIndex(),
-                draft.length());
+                appendTo);
     } else {
         appendTo.append(draft);
     }
