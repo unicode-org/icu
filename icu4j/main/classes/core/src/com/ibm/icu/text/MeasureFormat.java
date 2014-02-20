@@ -31,6 +31,7 @@ import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimplePatternFormatter;
+import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
@@ -121,6 +122,8 @@ public class MeasureFormat extends UFormat {
     private final transient NumericFormatters numericFormatters;
     
     private final transient ImmutableNumberFormat currencyFormat;
+    
+    private final transient ImmutableNumberFormat integerFormat;
 
     private static final SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>> localeToUnitToStyleToCountToFormat
             = new SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>>();
@@ -247,7 +250,10 @@ public class MeasureFormat extends UFormat {
                 localeToNumericDurationFormatters.put(locale, formatters);
             }
         }
-        
+        NumberFormat intFormat = NumberFormat.getInstance(locale);
+        intFormat.setMaximumFractionDigits(0);
+        intFormat.setMinimumFractionDigits(0);
+        intFormat.setRoundingMode(BigDecimal.ROUND_DOWN);
         return new MeasureFormat(
                 locale,
                 formatWidth,
@@ -256,7 +262,8 @@ public class MeasureFormat extends UFormat {
                 unitToStyleToCountToFormat,
                 formatters,
                 new ImmutableNumberFormat(
-                        NumberFormat.getInstance(locale, formatWidth.getCurrencyStyle())));
+                        NumberFormat.getInstance(locale, formatWidth.getCurrencyStyle())),
+                new ImmutableNumberFormat(intFormat));
     }
     
     /**
@@ -297,7 +304,7 @@ public class MeasureFormat extends UFormat {
         } else if (obj instanceof Measure[]) {
             toAppendTo.append(formatMeasures(new StringBuilder(), fpos, (Measure[]) obj));
         } else if (obj instanceof Measure){
-            toAppendTo.append(formatMeasure((Measure) obj, new StringBuilder(), fpos));
+            toAppendTo.append(formatMeasure((Measure) obj, numberFormat, new StringBuilder(), fpos));
         } else {
             throw new IllegalArgumentException(obj.toString());            
         }
@@ -362,7 +369,7 @@ public class MeasureFormat extends UFormat {
             return appendTo;
         }
         if (measures.length == 1) {
-            return formatMeasure(measures[0], appendTo, fieldPosition);
+            return formatMeasure(measures[0], numberFormat, appendTo, fieldPosition);
         }
         
         if (formatWidth == FormatWidth.NUMERIC) {
@@ -382,7 +389,9 @@ public class MeasureFormat extends UFormat {
         // Fast track: No field position.
         String[] results = new String[measures.length];
         for (int i = 0; i < measures.length; i++) {
-            results[i] = formatMeasure(measures[i]);
+            results[i] = formatMeasure(
+                    measures[i],
+                    i == measures.length - 1 ? numberFormat : integerFormat);
         }
         return appendTo.append(listFormatter.format((Object[]) results));                 
        
@@ -482,7 +491,8 @@ public class MeasureFormat extends UFormat {
                 this.rules,
                 this.unitToStyleToCountToFormat,
                 this.numericFormatters,
-                this.currencyFormat);
+                this.currencyFormat,
+                this.integerFormat);
     }
     
     private MeasureFormat(
@@ -492,7 +502,8 @@ public class MeasureFormat extends UFormat {
             PluralRules rules,
             Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat,
             NumericFormatters formatters,
-            ImmutableNumberFormat currencyFormat) {
+            ImmutableNumberFormat currencyFormat,
+            ImmutableNumberFormat integerFormat) {
         setLocale(locale, locale);
         this.formatWidth = formatWidth;
         this.numberFormat = format;
@@ -500,6 +511,7 @@ public class MeasureFormat extends UFormat {
         this.unitToStyleToCountToFormat = unitToStyleToCountToFormat;
         this.numericFormatters = formatters;
         this.currencyFormat = currencyFormat;
+        this.integerFormat = integerFormat;
     }
     
     MeasureFormat() {
@@ -510,6 +522,7 @@ public class MeasureFormat extends UFormat {
         this.unitToStyleToCountToFormat = null;
         this.numericFormatters = null;
         this.currencyFormat = null;
+        this.integerFormat = null;
     }
     
     static class NumericFormatters {
@@ -601,14 +614,17 @@ public class MeasureFormat extends UFormat {
         return unitToStyleToCountToFormat;
     }
     
-    private String formatMeasure(Measure measure) {
+    private String formatMeasure(Measure measure, ImmutableNumberFormat nf) {
         return formatMeasure(
-                measure, new StringBuilder(),
+                measure, nf, new StringBuilder(),
                 DontCareFieldPosition.INSTANCE).toString();
     }
     
     private StringBuilder formatMeasure(
-            Measure measure, StringBuilder appendTo, FieldPosition fieldPosition) {
+            Measure measure,
+            ImmutableNumberFormat nf,
+            StringBuilder appendTo,
+            FieldPosition fieldPosition) {
         if (measure.getUnit() instanceof Currency) {
             return appendTo.append(
                     currencyFormat.format(
@@ -620,7 +636,7 @@ public class MeasureFormat extends UFormat {
         Number n = measure.getNumber();
         MeasureUnit unit = measure.getUnit(); 
         UFieldPosition fpos = new UFieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
-        StringBuffer formattedNumber = numberFormat.format(n, new StringBuffer(), fpos);
+        StringBuffer formattedNumber = nf.format(n, new StringBuffer(), fpos);
         String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
 
         Map<FormatWidth, QuantityFormatter> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
@@ -705,13 +721,14 @@ public class MeasureFormat extends UFormat {
         
         int fieldPositionFoundIndex = -1;
         for (int i = 0; i < measures.length; ++i) {
+            ImmutableNumberFormat nf = (i == measures.length - 1 ? numberFormat : integerFormat);
             if (fieldPositionFoundIndex == -1) {
-                results[i] = formatMeasure(measures[i], new StringBuilder(), fpos).toString();
+                results[i] = formatMeasure(measures[i], nf, new StringBuilder(), fpos).toString();
                 if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
                     fieldPositionFoundIndex = i;    
                 }
             } else {
-                results[i] = formatMeasure(measures[i]);
+                results[i] = formatMeasure(measures[i], nf);
             }
         }
         ListFormatter.FormattedListBuilder builder =
