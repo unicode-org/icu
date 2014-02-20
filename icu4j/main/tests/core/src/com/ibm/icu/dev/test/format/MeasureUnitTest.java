@@ -112,15 +112,29 @@ public class MeasureUnitTest extends TestFmwk {
         TimeUnitAmount[] _5h_17m = {
                 new TimeUnitAmount(5.0, TimeUnit.HOUR),
                 new TimeUnitAmount(17.0, TimeUnit.MINUTE)};
+        TimeUnitAmount[] _neg5h_17m = {
+                new TimeUnitAmount(-5.0, TimeUnit.HOUR),
+                new TimeUnitAmount(17.0, TimeUnit.MINUTE)};
         TimeUnitAmount[] _19m_28s = {
                 new TimeUnitAmount(19.0, TimeUnit.MINUTE),
                 new TimeUnitAmount(28.0, TimeUnit.SECOND)};
+        TimeUnitAmount[] _0h_0m_9s = {
+                new TimeUnitAmount(0.0, TimeUnit.HOUR),
+                new TimeUnitAmount(0.0, TimeUnit.MINUTE),
+                new TimeUnitAmount(9.0, TimeUnit.SECOND)};
         TimeUnitAmount[] _0h_0m_17s = {
                 new TimeUnitAmount(0.0, TimeUnit.HOUR),
                 new TimeUnitAmount(0.0, TimeUnit.MINUTE),
                 new TimeUnitAmount(17.0, TimeUnit.SECOND)};
         TimeUnitAmount[] _6h_56_92m = {
                 new TimeUnitAmount(6.0, TimeUnit.HOUR),
+                new TimeUnitAmount(56.92, TimeUnit.MINUTE)};
+        TimeUnitAmount[] _3h_4s_5m = {
+                new TimeUnitAmount(3.0, TimeUnit.HOUR),
+                new TimeUnitAmount(4.0, TimeUnit.SECOND),
+                new TimeUnitAmount(5.0, TimeUnit.MINUTE)};
+        TimeUnitAmount[] _6_7h_56_92m = {
+                new TimeUnitAmount(6.7, TimeUnit.HOUR),
                 new TimeUnitAmount(56.92, TimeUnit.MINUTE)};
         TimeUnitAmount[] _3h_5h = {
                 new TimeUnitAmount(3.0, TimeUnit.HOUR),
@@ -156,10 +170,13 @@ public class MeasureUnitTest extends TestFmwk {
                 {_1h_0m_23s, "1:00:23"},
                 {_1h_23_5m, "1:23.5"},
                 {_5h_17m, "5:17"},
+                {_neg5h_17m, "-5h 17m"},
                 {_19m_28s, "19:28"},
                 {_2y_5M_3w_4d, "2y 5m 3w 4d"},
-                {_0h_0m_17s, "0:00:17"},
+                {_0h_0m_9s, "0:00:09"},
                 {_6h_56_92m, "6:56.92"},
+                {_6_7h_56_92m, "6:56.92"},
+                {_3h_4s_5m, "3h 4s 5m"},
                 {_3h_5h, "3h 5h"}};
         Object[][] fullDataDe = {
                 {_1m_59_9996s, "1 Minute und 59,9996 Sekunden"},

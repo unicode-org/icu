@@ -16,7 +16,6 @@ import java.io.InvalidObjectException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
-import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Arrays;
@@ -754,20 +753,22 @@ public class MeasureFormat extends UFormat {
     
     private static Number[] toHMS(Measure[] measures) {
         Number[] result = new Number[3];
-        int count = 0;
+        int lastIdx = -1;
         for (Measure m : measures) {
-            Integer idx = hmsTo012.get(m.getUnit());
-            if (idx == null) {
+            if (m.getNumber().doubleValue() < 0.0) {
                 return null;
             }
-            if (result[idx.intValue()] != null) {
+            Integer idxObj = hmsTo012.get(m.getUnit());
+            if (idxObj == null) {
                 return null;
             }
-            result[idx.intValue()] = m.getNumber();
-            count++;
-        }
-        if (count < 2) {
-            return null;
+            int idx = idxObj.intValue();
+            if (idx <= lastIdx) {
+                // hour before minute before second
+                return null;
+            }
+            lastIdx = idx;
+            result[idx] = m.getNumber();
         }
         return result;
     }
@@ -785,9 +786,9 @@ public class MeasureFormat extends UFormat {
                 hms[i] = Integer.valueOf(0);
             }
         }
-        long millis = (long) (((hms[0].doubleValue() * 60.0
-                + hms[1].doubleValue()) * 60.0
-                + hms[2].doubleValue()) * 1000.0);
+        long millis = (long) (((Math.floor(hms[0].doubleValue()) * 60.0
+                + Math.floor(hms[1].doubleValue())) * 60.0
+                + Math.floor(hms[2].doubleValue())) * 1000.0);
         Date d = new Date(millis);
         if (startIndex == 0 && endIndex == 2) {
             return formatNumeric(
@@ -824,23 +825,30 @@ public class MeasureFormat extends UFormat {
             StringBuilder appendTo) {
         // Format the smallest amount ahead of time.
         String smallestAmountFormatted;
-        smallestAmountFormatted = numberFormat.format(smallestAmount);
-       
-        // Format the duration using the provided DateFormat object. The smallest
-        // field in this result will be missing the fractional part.
-        AttributedCharacterIterator iterator = formatter.formatToCharacterIterator(duration);
-       
-        // iterate through formatted text copying to 'builder' one character at a time.
-        // When we get to the smallest amount, skip over it and copy
-        // 'smallestAmountFormatted' to the builder instead.
-        for (iterator.first(); iterator.getIndex() < iterator.getEndIndex();) {
-            if (iterator.getAttributes().containsKey(smallestField)) {
-                appendTo.append(smallestAmountFormatted);
-                iterator.setIndex(iterator.getRunLimit(smallestField));
-            } else {
-                appendTo.append(iterator.current());
-                iterator.next();
-            }
+        FieldPosition intFieldPosition = new FieldPosition(NumberFormat.INTEGER_FIELD);
+        smallestAmountFormatted = numberFormat.format(
+                smallestAmount, new StringBuffer(), intFieldPosition).toString();
+        if (intFieldPosition.getBeginIndex() == 0 && intFieldPosition.getEndIndex() == 0) {
+            throw new IllegalStateException();
+        }
+        FieldPosition smallestFieldPosition = new FieldPosition(smallestField);
+        String draft = formatter.format(
+                duration, new StringBuffer(), smallestFieldPosition).toString();
+        if (smallestFieldPosition.getBeginIndex() != 0
+                || smallestFieldPosition.getEndIndex() != 0) {
+            appendTo.append(draft, 0, smallestFieldPosition.getBeginIndex());
+            appendTo.append(smallestAmountFormatted, 0, intFieldPosition.getBeginIndex());
+            appendTo.append(
+                    draft,
+                    smallestFieldPosition.getBeginIndex(),
+                    smallestFieldPosition.getEndIndex());
+            appendTo.append(
+                    smallestAmountFormatted,
+                    intFieldPosition.getEndIndex(),
+                    smallestAmountFormatted.length());
+            appendTo.append(draft, smallestFieldPosition.getEndIndex(), draft.length());
+        } else {
+            appendTo.append(draft);
         }
         return appendTo;
     }
