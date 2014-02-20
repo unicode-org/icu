@@ -314,9 +314,18 @@ void MeasureFormatTest::TestFormatPeriodEn() {
             Measure(5.0, MeasureUnit::createHour(status), status),
             Measure(17.0, MeasureUnit::createMinute(status), status)
     };
+    Measure t_neg5h_17m[] = {
+            Measure(-5.0, MeasureUnit::createHour(status), status),
+            Measure(17.0, MeasureUnit::createMinute(status), status)
+    };
     Measure t_19m_28s[] = {
             Measure(19.0, MeasureUnit::createMinute(status), status),
             Measure(28.0, MeasureUnit::createSecond(status), status)
+    };
+    Measure t_0h_0m_9s[] = {
+            Measure(0.0, MeasureUnit::createHour(status), status),
+            Measure(0.0, MeasureUnit::createMinute(status), status),
+            Measure(9.0, MeasureUnit::createSecond(status), status)
     };
     Measure t_0h_0m_17s[] = {
             Measure(0.0, MeasureUnit::createHour(status), status),
@@ -327,6 +336,16 @@ void MeasureFormatTest::TestFormatPeriodEn() {
             Measure(6.0, MeasureUnit::createHour(status), status),
             Measure(56.92, MeasureUnit::createMinute(status), status)
     };
+    Measure t_3h_4s_5m[] = {
+            Measure(3.0, MeasureUnit::createHour(status), status),
+            Measure(4.0, MeasureUnit::createSecond(status), status),
+            Measure(5.0, MeasureUnit::createMinute(status), status)
+    };
+    Measure t_6_7h_56_92m[] = {
+            Measure(6.7, MeasureUnit::createHour(status), status),
+            Measure(56.92, MeasureUnit::createMinute(status), status)
+    };
+
     Measure t_3h_5h[] = {
             Measure(3.0, MeasureUnit::createHour(status), status),
             Measure(5.0, MeasureUnit::createHour(status), status)
@@ -367,10 +386,13 @@ void MeasureFormatTest::TestFormatPeriodEn() {
             {t_1h_23_5m, LENGTHOF(t_1h_23_5m), "1:23.5"},
             {t_1h_0m_23s, LENGTHOF(t_1h_0m_23s), "1:00:23"},
             {t_5h_17m, LENGTHOF(t_5h_17m), "5:17"},
+            {t_neg5h_17m, LENGTHOF(t_neg5h_17m), "-5h 17m"},
             {t_19m_28s, LENGTHOF(t_19m_28s), "19:28"},
             {t_2y_5M_3w_4d, LENGTHOF(t_2y_5M_3w_4d), "2y 5m 3w 4d"},
-            {t_0h_0m_17s, LENGTHOF(t_0h_0m_17s), "0:00:17"},
+            {t_0h_0m_9s, LENGTHOF(t_0h_0m_9s), "0:00:09"},
             {t_6h_56_92m, LENGTHOF(t_6h_56_92m), "6:56.92"},
+            {t_6_7h_56_92m, LENGTHOF(t_6_7h_56_92m), "6:56.92"},
+            {t_3h_4s_5m, LENGTHOF(t_3h_4s_5m), "3h 4s 5m"},
             {t_3h_5h, LENGTHOF(t_3h_5h), "3h 5h"}};
 
     ExpectedResult fullDataDe[] = {
