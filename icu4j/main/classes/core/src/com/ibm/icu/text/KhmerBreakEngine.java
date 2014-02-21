@@ -9,7 +9,6 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.text.CharacterIterator;
 
-import com.ibm.icu.impl.Deque;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
@@ -89,7 +88,7 @@ class KhmerBreakEngine extends DictionaryBreakEngine {
     }
 
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd, 
-            Deque<Integer> foundBreaks) {
+            DequeI foundBreaks) {
                
         if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
             return 0;  // Not enough characters for word
@@ -219,7 +218,7 @@ class KhmerBreakEngine extends DictionaryBreakEngine {
         }
 
         // Don't return a break for the end of the dictionary range if there is one there
-        if (foundBreaks.peek().intValue() >= rangeEnd) {
+        if (foundBreaks.peek() >= rangeEnd) {
             foundBreaks.pop();
             wordsFound -= 1;
         }

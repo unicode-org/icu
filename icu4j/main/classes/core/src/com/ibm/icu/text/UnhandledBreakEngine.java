@@ -10,7 +10,6 @@ import static com.ibm.icu.impl.CharacterIteration.DONE32;
 
 import java.text.CharacterIterator;
 
-import com.ibm.icu.impl.Deque;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 
@@ -30,7 +29,7 @@ final class UnhandledBreakEngine implements LanguageBreakEngine {
     }
 
     public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            boolean reverse, int breakType, Deque<Integer> foundBreaks) {
+            boolean reverse, int breakType, DictionaryBreakEngine.DequeI foundBreaks) {
         text.setIndex(endPos);
         return 0;
     }

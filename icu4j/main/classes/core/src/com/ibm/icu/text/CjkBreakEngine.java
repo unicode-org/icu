@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.text.CharacterIterator;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.impl.Deque;
 
 class CjkBreakEngine extends DictionaryBreakEngine {
     private static final UnicodeSet fHangulWordSet = new UnicodeSet();
@@ -80,7 +79,7 @@ class CjkBreakEngine extends DictionaryBreakEngine {
     }
     
     public int divideUpDictionaryRange(CharacterIterator inText, int startPos, int endPos,
-            Deque<Integer> foundBreaks) {
+            DequeI foundBreaks) {
         if (startPos >= endPos) {
             return 0;
         }

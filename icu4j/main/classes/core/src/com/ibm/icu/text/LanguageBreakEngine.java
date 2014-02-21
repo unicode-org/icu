@@ -8,8 +8,6 @@ package com.ibm.icu.text;
 
 import java.text.CharacterIterator;
 
-import com.ibm.icu.impl.Deque;
-
 /**
  * The LanguageBreakEngine interface is to be used to implement any 
  * language-specific logic for break iteration.
@@ -37,7 +35,7 @@ interface LanguageBreakEngine {
      * @return the number of words found
      */
     int findBreaks(CharacterIterator text, int startPos, int endPos,
-            boolean reverse, int breakType, Deque<Integer> foundBreaks);
+            boolean reverse, int breakType, DictionaryBreakEngine.DequeI foundBreaks);
 }
     
     
