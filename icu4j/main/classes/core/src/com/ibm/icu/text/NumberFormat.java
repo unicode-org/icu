@@ -207,6 +207,14 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 4.2
      */
     public static final int PLURALCURRENCYSTYLE = 6;
+    /**
+     * {@icu} Constant to specify currency style of format which uses currency symbol
+     * to represent currency for accounting, for example: "($3.00), instead of
+     * "-$3.00" ({@link #CURRENCYSTYLE}).
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int ACCOUNTINGCURRENCYSTYLE = 7;
 
     /**
      * Field constant used to construct a FieldPosition object. Signifies that
@@ -1283,12 +1291,12 @@ public abstract class NumberFormat extends UFormat {
      * @throws IllegalArgumentException  if choice is not one of
      *                                   NUMBERSTYLE, CURRENCYSTYLE,
      *                                   PERCENTSTYLE, SCIENTIFICSTYLE,
-     *                                   INTEGERSTYLE,
-     *                                   ISOCURRENCYSTYLE, PLURALCURRENCYSTYLE,
+     *                                   INTEGERSTYLE, ISOCURRENCYSTYLE,
+     *                                   PLURALCURRENCYSTYLE and ACCOUNTSTYLE.
      * @stable ICU 4.2
      */
     public static NumberFormat getInstance(ULocale desiredLocale, int choice) {
-        if (choice < NUMBERSTYLE || choice > PLURALCURRENCYSTYLE) {
+        if (choice < NUMBERSTYLE || choice > ACCOUNTINGCURRENCYSTYLE) {
             throw new IllegalArgumentException(
                 "choice should be from NUMBERSTYLE to PLURALCURRENCYSTYLE");
         }
@@ -1317,7 +1325,7 @@ public abstract class NumberFormat extends UFormat {
         // This style wont work for currency plural format.
         // For currency plural format, the pattern is get from
         // the locale (from CurrencyUnitPatterns) without override.
-        if(choice == CURRENCYSTYLE || choice == ISOCURRENCYSTYLE){
+        if(choice == CURRENCYSTYLE || choice == ISOCURRENCYSTYLE || choice == ACCOUNTINGCURRENCYSTYLE){
             String temp = symbols.getCurrencyPattern();
             if(temp!=null){
                 pattern = temp;
@@ -1456,20 +1464,41 @@ public abstract class NumberFormat extends UFormat {
          * but by replacing the single currency sign with
          * double currency sign or triple currency sign.
          */
-        int entry = (choice == INTEGERSTYLE) ? NUMBERSTYLE :
-                ((choice == ISOCURRENCYSTYLE || choice == PLURALCURRENCYSTYLE)?
-                CURRENCYSTYLE : choice); //[Richard/GCL]
+        String patternKey = null;
+        switch (choice) {
+        case NUMBERSTYLE:
+        case INTEGERSTYLE:
+            patternKey = "decimalFormat";
+            break;
+        case CURRENCYSTYLE:
+        case ISOCURRENCYSTYLE:
+        case PLURALCURRENCYSTYLE:
+            patternKey = "currencyFormat";
+            break;
+        case PERCENTSTYLE:
+            patternKey = "percentFormat";
+            break;
+        case SCIENTIFICSTYLE:
+            patternKey = "scientificFormat";
+            break;
+        case ACCOUNTINGCURRENCYSTYLE:
+            patternKey = "accountingFormat";
+            break;
+        default:
+            assert false;
+            patternKey = "decimalFormat";
+            break;
+        }
 
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
         getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, forLocale);
-        String[] numberPatternKeys = { "decimalFormat", "currencyFormat", "percentFormat", "scientificFormat" };
         NumberingSystem ns = NumberingSystem.getInstance(forLocale);
 
         String result = null;
         try {
-            result = rb.getStringWithFallback("NumberElements/" + ns.getName() + "/patterns/"+numberPatternKeys[entry]);
+            result = rb.getStringWithFallback("NumberElements/" + ns.getName() + "/patterns/"+ patternKey);
         } catch ( MissingResourceException ex ) {
-            result = rb.getStringWithFallback("NumberElements/latn/patterns/"+numberPatternKeys[entry]);
+            result = rb.getStringWithFallback("NumberElements/latn/patterns/"+ patternKey);
         }
 
         return result;

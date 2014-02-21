@@ -2733,11 +2733,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void TestGetInstance() {
         // Tests "public final static NumberFormat getInstance(int style)"
+        int maxStyle = NumberFormat.ACCOUNTINGCURRENCYSTYLE;
 
         int[] invalid_cases = { NumberFormat.NUMBERSTYLE - 1, NumberFormat.NUMBERSTYLE - 2,
-                NumberFormat.PLURALCURRENCYSTYLE + 1, NumberFormat.PLURALCURRENCYSTYLE + 2 };
+                maxStyle + 1, maxStyle + 2 };
 
-        for (int i = NumberFormat.NUMBERSTYLE; i < NumberFormat.PLURALCURRENCYSTYLE; i++) {
+        for (int i = NumberFormat.NUMBERSTYLE; i < maxStyle; i++) {
             try {
                 NumberFormat.getInstance(i);
             } catch (Exception e) {
@@ -2758,7 +2759,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // Tests "public static NumberFormat getInstance(Locale inLocale, int style)"
         String[] localeCases = { "en_US", "fr_FR", "de_DE", "jp_JP" };
 
-        for (int i = NumberFormat.NUMBERSTYLE; i < NumberFormat.PLURALCURRENCYSTYLE; i++) {
+        for (int i = NumberFormat.NUMBERSTYLE; i < maxStyle; i++) {
             for (int j = 0; j < localeCases.length; j++) {
                 try {
                     NumberFormat.getInstance(new Locale(localeCases[j]), i);
@@ -3582,6 +3583,27 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         context = nfmt.getContext(DisplayContext.Type.CAPITALIZATION);
         if (context != DisplayContext.CAPITALIZATION_FOR_STANDALONE) {
             errln("FAIL: NumberFormat.getContext() does not return the value set, CAPITALIZATION_FOR_STANDALONE");
+        }
+    }
+
+    public void TestAccountingCurrency() {
+        String[][] tests = {
+                {"en_US", "1234.5", "$1,234.50", "true"},
+                {"en_US", "-1234.5", "($1,234.50)", "true"},
+                {"en_US", "0", "$0.00", "true"},
+                {"en_US", "-0.2", "($0.20)", "true"},
+                {"ja_JP", "10000", "￥10,000", "true"},
+                {"ja_JP", "-1000.5", "(￥1,000)", "false"},
+                {"de_DE", "-23456.7", "-23.456,70\u00A0€", "true"},
+        };
+        for (String[] data : tests) {
+            ULocale loc = new ULocale(data[0]);
+            double num = Double.parseDouble(data[1]);
+            String fmt = data[2];
+            boolean rt = Boolean.parseBoolean(data[3]);
+
+            NumberFormat acfmt = NumberFormat.getInstance(loc, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
+            expect(acfmt, num, fmt, rt);
         }
     }
 }
