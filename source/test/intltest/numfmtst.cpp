@@ -7542,12 +7542,6 @@ void NumberFormatTest::TestRoundingScientific10542() {
 
 void NumberFormatTest::TestZeroScientific10547() {
     UErrorCode status = U_ZERO_ERROR;
-    {
-        DecimalFormat fmt("0.00", status);
-        UnicodeString out;
-        fmt.format(-0.0, out);
-        assertEquals("formatFixed", "-0.00", out);
-    }
     DecimalFormat fmt("0.00E0", status);
     if (!assertSuccess("Formt creation", status)) {
         return;
