@@ -287,6 +287,12 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      */
     private String localeID;
 
+    // Cached locale fields.
+    private transient volatile String language_;
+    private transient volatile String script_;
+    private transient volatile String country_;
+    private transient volatile String variant_;
+
     /**
      * Cache the locale data container fields.
      * In future, we want to use them as the primary locale identifier storage.
@@ -892,7 +898,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public String getLanguage() {
-        return getLanguage(localeID);
+        if (language_ == null) {
+            synchronized (this) {
+                if (language_ == null) {
+                    language_ = getLanguage(localeID);
+                }
+            }
+        }
+        return language_;
     }
 
     /**
@@ -914,7 +927,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public String getScript() {
-        return getScript(localeID);
+        if (script_ == null) {
+            synchronized (this) {
+                if (script_ == null) {
+                    script_ = getScript(localeID);
+                }
+            }
+        }
+        return script_;
     }
 
     /**
@@ -936,7 +956,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public String getCountry() {
-        return getCountry(localeID);
+        if (country_ == null) {
+            synchronized (this) {
+                if (country_ == null) {
+                    country_ = getCountry(localeID);
+                }
+            }
+        }
+        return country_;
     }
 
     /**
@@ -958,7 +985,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public String getVariant() {
-        return getVariant(localeID);
+        if (variant_ == null) {
+            synchronized (this) {
+                if (variant_ == null) {
+                    variant_ = getVariant(localeID);
+                }
+            }
+        }
+        return variant_;
     }
 
     /**
