@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010-2011, Google, Inc.; International Business Machines      *
+ * Copyright (C) 2010-2014, Google, Inc.; International Business Machines      *
  * Corporation and others. All Rights Reserved.                                *
  *******************************************************************************
  */
@@ -81,7 +81,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
      * @return internal builder, for chaining
      * @stable ICU 4.4
      */
-    public static Builder add(ULocale languageCode) {
+    public static Builder add(ULocale... languageCode) {
         return new Builder().add(languageCode);
     }
 
