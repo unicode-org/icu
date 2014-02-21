@@ -1643,6 +1643,13 @@ DecimalFormat::_round(const DigitList &number, DigitList &adjustedNum, UBool& is
         int32_t sigDigits = precision();
         if (sigDigits > 0) {
             adjustedNum.round(sigDigits);
+            // Travis Keep (21/2/2014): Calling round on a digitList does not necessarily
+            // preserve the sign of that digit list. Preserving the sign is especially
+            // important when formatting -0.0 for instance. Not preserving the sign seems
+            // like a bug because I cannot think of any case where the sign would actually
+            // have to change when rounding. For now, we preserve the sign by setting the
+            // positive attribute directly.
+            adjustedNum.setPositive(!isNegative);
         }
     } else {
         // Fixed point format.  Round to a set number of fraction digits.

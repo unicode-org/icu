@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines Corporation
+ * Copyright (c) 1997-2014, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -178,6 +178,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test10419RoundingWith0FractionDigits();
     void Test10468ApplyPattern();
     void TestRoundingScientific10542();
+    void TestZeroScientific10547();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
