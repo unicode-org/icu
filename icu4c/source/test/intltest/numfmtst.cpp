@@ -131,6 +131,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test10419RoundingWith0FractionDigits);
   TESTCASE_AUTO(Test10468ApplyPattern);
   TESTCASE_AUTO(TestRoundingScientific10542);
+  TESTCASE_AUTO(TestZeroScientific10547);
   TESTCASE_AUTO_END;
 }
 
@@ -7537,6 +7538,23 @@ void NumberFormatTest::TestRoundingScientific10542() {
                 (int32_t) (sizeof(values) / sizeof(values[0])),
                 (int32_t) (sizeof(roundingModes) / sizeof(roundingModes[0])));
     }
+}
+
+void NumberFormatTest::TestZeroScientific10547() {
+    UErrorCode status = U_ZERO_ERROR;
+    {
+        DecimalFormat fmt("0.00", status);
+        UnicodeString out;
+        fmt.format(-0.0, out);
+        assertEquals("formatFixed", "-0.00", out);
+    }
+    DecimalFormat fmt("0.00E0", status);
+    if (!assertSuccess("Formt creation", status)) {
+        return;
+    }
+    UnicodeString out;
+    fmt.format(-0.0, out);
+    assertEquals("format", "-0.00E0", out);
 }
 
 void NumberFormatTest::verifyRounding(
