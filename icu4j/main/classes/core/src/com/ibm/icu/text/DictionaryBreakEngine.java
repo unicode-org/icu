@@ -10,7 +10,6 @@ import java.text.CharacterIterator;
 import java.util.BitSet;
 
 import com.ibm.icu.impl.CharacterIteration;
-import com.ibm.icu.impl.Deque;
 
 abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     
@@ -82,7 +81,74 @@ abstract class DictionaryBreakEngine implements LanguageBreakEngine {
         }
     }
     
-    
+    /**
+     *  A deque-like structure holding raw ints.
+     *  Partial, limited implementation, only what is needed by the dictionary implementation.
+     *  For internal use only.
+     * @internal
+     */
+    static class DequeI {
+        private int[] data = new int[50];
+        private int lastIdx = 4;   // or base of stack. Index of element.
+        private int firstIdx = 4;  // or Top of Stack. Index of element + 1.
+        
+        int size() {
+            return firstIdx - lastIdx;
+        }
+        
+        boolean isEmpty() {
+            return size() == 0;
+        }
+        
+        private void grow() {
+            int[] newData = new int[data.length * 2];
+            System.arraycopy(data,  0,  newData,  0, data.length);
+            data = newData;
+        }
+        
+        void offer(int v) {
+            // Note that the actual use cases of offer() add at most one element.
+            //   We make no attempt to handle more than a few.
+            assert lastIdx > 0;
+            data[--lastIdx] = v;
+        }
+        
+        void push(int v) {
+            if (firstIdx >= data.length) {
+                grow();
+            }
+            data[firstIdx++] = v;
+        }
+        
+        int pop() {
+            assert size() > 0;
+            return data[--firstIdx];
+        }
+        
+        int peek() {
+            assert size() > 0;
+            return data[firstIdx - 1];
+        }
+        
+        int peekLast() {
+            assert size() > 0;
+            return data[lastIdx];
+        }
+        
+        int pollLast() {
+            assert size() > 0;
+            return data[lastIdx++];
+        }
+        
+        boolean contains(int v) {
+            for (int i=lastIdx; i< firstIdx; i++) {
+                if (data[i] == v) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
     
     UnicodeSet fSet = new UnicodeSet();
     private BitSet fTypes = new BitSet(32);
@@ -103,7 +169,7 @@ abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     }
 
     public int findBreaks(CharacterIterator text, int startPos, int endPos, 
-            boolean reverse, int breakType, Deque<Integer> foundBreaks) {
+            boolean reverse, int breakType, DequeI foundBreaks) {
          int result = 0;
        
          // Find the span of characters included in the set.
@@ -157,5 +223,5 @@ abstract class DictionaryBreakEngine implements LanguageBreakEngine {
      abstract int divideUpDictionaryRange(CharacterIterator text,
                                           int               rangeStart,
                                           int               rangeEnd,
-                                          Deque<Integer>    foundBreaks );
+                                          DequeI            foundBreaks );
 }

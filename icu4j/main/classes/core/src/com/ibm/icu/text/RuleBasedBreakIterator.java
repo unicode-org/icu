@@ -19,13 +19,11 @@ import java.io.OutputStream;
 import java.text.CharacterIterator;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.CharacterIteration;
-import com.ibm.icu.impl.Deque;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -433,7 +431,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
         int    category;
         int    current;
-        Deque<Integer> breaks = new Deque<Integer>();
+        DictionaryBreakEngine.DequeI breaks = new DictionaryBreakEngine.DequeI();
         int     foundBreakCount = 0;
         int     c = CharacterIteration.current32(fText);
         category = (short)fRData.fTrie.getCodePointValue(c);
@@ -537,12 +535,12 @@ public class RuleBasedBreakIterator extends BreakIterator {
             
             // TODO: get rid of this array, use results from the deque directly
             fCachedBreakPositions = new int[breaks.size()];
-            Iterator<Integer> bit = breaks.descendingIterator();
+            
             int i = 0;
-            while (bit.hasNext()) {
-                fCachedBreakPositions[i++] = bit.next();
+            while (breaks.size() > 0) {
+                fCachedBreakPositions[i++] = breaks.pollLast();
             }
-
+            
             // If there are breaks, then by definition, we are replacing the original
             // proposed break by one of the breaks we found. Use following() and
             // preceding() to do the work. They should never recurse in this case.
