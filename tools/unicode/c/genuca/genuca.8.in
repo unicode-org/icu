@@ -2,90 +2,54 @@
 .\"
 .\" genuca.8: manual page for the genuca utility
 .\"
-.\" Copyright (C) 2000-2001 IBM, Inc. and others.
+.\" Copyright (C) 2000-2014 IBM, Inc. and others.
 .\"
-.TH GENUCA 8 "22 February 2001" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH GENUCA 8 "2014-Feb-24" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B genuca
-\- create the UCA data table
+\- create the root collation data file for ICU
 .SH SYNOPSIS
 .B genuca
 [
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 ]
 [
-.BR "\-V\fP, \fB\-\-version"
-]
-[
 .BR "\-v\fP, \fB\-\-verbose"
 ]
 [
 .BI "\-c\fP, \fB\-\-copyright"
 ]
 [
-.BI "\-s\fP, \fB\-\-sourcedir" " source"
-]
-[
-.BI "\-d\fP, \fB\-\-destdir" " destination"
-]
-[
-.IR file
+.IR path/to/ICU/src/root
 ]
 .SH DESCRIPTION
 .B genuca
-compiles the Unicode Collation Algorithm (UCA) data from
-.I file
-(or from
-.B FractionalUCA.txt
-if
-.I file
-is omitted) into its binary form, the files
+reads path/to/ICU/src/root/source/data/unidata/FractionalUCA.txt and
+writes source and binary data files with the collation root data.
+
+The binary file
 .B ucadata.dat
-and
-.BR invuca.dat .
-These binary files can then be read directly by ICU, or used by
+can then be read directly by ICU, or used by
+.BR icupkg (8)
+or
 .BR pkgdata (8)
 for incorporation into a larger archive or library.
+
+See http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Data_Files
 .SH OPTIONS
 .TP
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 Print help about usage and exit.
-.TP
-.BR "\-V\fP, \fB\-\-version"
-Print the version of
-.B genuca
-and exit.
 .TP
 .BR "\-v\fP, \fB\-\-verbose"
 Display extra informative messages during execution.
 .TP
 .BI "\-c\fP, \fB\-\-copyright"
 Include a copyright notice into the binary data.
-.TP
-.BI "\-s\fP, \fB\-\-sourcedir" " source"
-Set the source directory to
-.IR source .
-The default source directory is specified by the environment variable
-.BR ICU_DATA .
-.TP
-.BI "\-d\fP, \fB\-\-destdir" " destination"
-Set the destination directory to
-.IR destination .
-The default destination directory is specified by the environment variable
-.BR ICU_DATA .
-.SH ENVIRONMENT
-.TP 10
-.B ICU_DATA
-Specifies the directory containing ICU data. Defaults to
-.BR @thepkgicudatadir@/@PACKAGE@/@VERSION@/ .
-Some tools in ICU depend on the presence of the trailing slash. It is thus
-important to make sure that it is present if
-.B ICU_DATA
-is set.
 .SH FILES
 .TP 15
 .B FractionalUCA.txt
-Machine-readable file containing data for the Unicode collation algorithm.
+Machine-readable file containing data for the CLDR root collation order.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
