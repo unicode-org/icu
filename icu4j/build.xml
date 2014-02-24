@@ -1242,13 +1242,12 @@
         <!-- utilities.jar -->
         <copy file="${cldr.util.out.dir}/lib/utilities.jar" todir="${cldr.release.dir}"/>
         <!-- utilities-src.jar -->
-        <jar jarfile="${cldr.release.dir}/utilities-src.jar"
-                compress="true">
+        <jar jarfile="${cldr.release.dir}/utilities-src.jar" compress="true">
             <fileset dir="${icu4j.test-framework.dir}/${src.dir}">
-                <filename name="com/ibm/icu/dev/test/TestFmwk.java"/>
-                <filename name="com/ibm/icu/dev/test/*Log*.java"/>
-                <filename name="com/ibm/icu/dev/test/TestUtil.java"/>
-                <filename name="com/ibm/icu/dev/test/UTF16Util.java"/>
+                <include name="com/ibm/icu/dev/test/TestFmwk.java"/>
+                <include name="com/ibm/icu/dev/test/*Log*.java"/>
+                <include name="com/ibm/icu/dev/test/TestUtil.java"/>
+                <include name="com/ibm/icu/dev/test/UTF16Util.java"/>
             </fileset>
             <fileset dir="${icu4j.test-framework.dir}/${src.dir}" includes="com/ibm/icu/dev/util/*.java"/>
             <fileset dir="${icu4j.translit-tests.dir}/${src.dir}" includes="com/ibm/icu/dev/util/*.java"/>
