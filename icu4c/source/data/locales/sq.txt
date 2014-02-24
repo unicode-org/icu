@@ -158,7 +158,7 @@ sq{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.97.28"}
     calendar{
         generic{
             DateTimePatterns{
@@ -320,7 +320,6 @@ sq{
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
-                MMMMdd{"dd MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"dd/MM"}
                 Md{"d/M"}

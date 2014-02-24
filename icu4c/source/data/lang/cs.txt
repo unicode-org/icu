@@ -871,7 +871,7 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.96.24"}
+    Version{"2.0.97.50"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

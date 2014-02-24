@@ -164,7 +164,7 @@ nl{
             }
         }
     }
-    Version{"2.0.95.37"}
+    Version{"2.0.97.50"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -925,6 +925,8 @@ nl{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"12 uur 's middags"}
+            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -2061,7 +2063,7 @@ nl{
             1,
             1,
         }
-        tense:intvector{
+        relative:intvector{
             1,
             1,
         }

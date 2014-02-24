@@ -407,7 +407,7 @@ gl{
             vaii{"Díxitos Vai"}
         }
     }
-    Version{"2.0.96.24"}
+    Version{"2.0.97.28"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

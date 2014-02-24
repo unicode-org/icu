@@ -804,7 +804,7 @@ hi{
         POSIX{"कम्प्यूटर"}
         REVISED{"संशोधित वर्तनी"}
     }
-    Version{"2.0.95.34"}
+    Version{"2.0.97.28"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपि: {0}"}

@@ -308,5 +308,5 @@ de{
         MO{"Macao"}
         PS{"Palästina"}
     }
-    Version{"2.0.96.40"}
+    Version{"2.0.97.28"}
 }

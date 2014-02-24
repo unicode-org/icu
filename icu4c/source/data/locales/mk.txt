@@ -157,7 +157,7 @@ mk{
             }
         }
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.97.28"}
     calendar{
         generic{
             DateTimePatterns{
@@ -350,7 +350,6 @@ mk{
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
-                MMMMdd{"dd MMMM"}
                 MMMd{"d MMM"}
                 Md{"d.M"}
                 Mdd{"dd.M"}

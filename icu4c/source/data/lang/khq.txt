@@ -57,5 +57,5 @@ khq{
         zh{"Sinuwa senni, Mandareŋ"}
         zu{"Julu senni"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.97.28"}
 }

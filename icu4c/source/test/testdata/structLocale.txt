@@ -3880,6 +3880,10 @@ structLocale:table(nofallback){
             2,
             2,
         }
+        currencyName:intvector{  
+            2,
+            2,
+        }
         day-format-except-narrow:intvector{  
             2,
             2,
@@ -3888,15 +3892,15 @@ structLocale:table(nofallback){
             2,
             2,
         }
-        displayName:intvector{  
-            2,
-            2,
-        }
         era-abbr:intvector{  
             2,
             2,
         }
         era-name:intvector{  
+            2,
+            2,
+        }
+        keyValue:intvector{  
             2,
             2,
         }
@@ -3912,15 +3916,15 @@ structLocale:table(nofallback){
             2,
             2,
         }
+        number-spellout:intvector{  
+            2,
+            2,
+        }
+        relative:intvector{  
+            2,
+            2,
+        }
         script:intvector{  
-            2,
-            2,
-        }
-        tense:intvector{  
-            2,
-            2,
-        }
-        type:intvector{  
             2,
             2,
         }
@@ -13323,6 +13327,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -13383,6 +13395,16 @@ structLocale:table(nofallback){
                     M{""}
                     y{""}
                 }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
                 yMMMd{
                     M{""}
                     d{""}
@@ -13394,7 +13416,7 @@ structLocale:table(nofallback){
                     y{""}
                 }
             }
-       }
+        }
         chinese{
             AmPmMarkers{
                 "",
@@ -13574,6 +13596,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -13632,6 +13662,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -13842,6 +13882,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -13900,6 +13948,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -14191,6 +14249,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -14249,6 +14315,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -14460,6 +14536,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -14518,6 +14602,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -14799,6 +14893,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -14857,6 +14959,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -14941,6 +15053,8 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            NoonMarker{""}
+            NoonMarkerNarrow{""}
             appendItems{
                 Day{"{0} ({2}: {1})"}
                 Day-Of-Week{"{0} {1}"}
@@ -15100,6 +15214,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -15158,6 +15280,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -15399,6 +15531,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -15457,6 +15597,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -15662,6 +15812,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -15720,6 +15878,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -15917,6 +16085,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -15975,6 +16151,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -16172,6 +16358,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -16230,6 +16424,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{
@@ -17183,6 +17387,14 @@ structLocale:table(nofallback){
                 MMMM{
                     M{""}
                 }
+                MMMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMMd{
+                    M{""}
+                    d{""}
+                }
                 MMMd{
                     M{""}
                     d{""}
@@ -17241,6 +17453,16 @@ structLocale:table(nofallback){
                 }
                 yMMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMMd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMd{

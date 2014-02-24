@@ -184,7 +184,7 @@ hr{
             }
         }
     }
-    Version{"2.0.95.37"}
+    Version{"2.0.97.50"}
     calendar{
         buddhist{
             eras{
@@ -241,7 +241,6 @@ hr{
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
                 MMMMd{"d. MMMM"}
-                MMMMdd{"dd. MMMM"}
                 MMMd{"d. MMM"}
                 Md{"d. M."}
                 d{"d."}
@@ -377,6 +376,8 @@ hr{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"podne"}
+            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -399,7 +400,6 @@ hr{
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
                 MMMMd{"d. MMMM"}
-                MMMMdd{"dd. MMMM"}
                 MMMd{"d. MMM"}
                 MMdd{"dd. MM."}
                 Md{"d. M."}
@@ -809,7 +809,7 @@ hr{
             1,
             0,
         }
-        tense:intvector{
+        relative:intvector{
             1,
             1,
         }

@@ -156,6 +156,7 @@ chr{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"ᎢᎦ"}
             availableFormats{
                 Gy{"y G"}
                 GyMMM{"MMM y G"}

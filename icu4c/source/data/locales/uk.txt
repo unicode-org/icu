@@ -205,7 +205,7 @@ uk{
             }
         }
     }
-    Version{"2.0.95.37"}
+    Version{"2.0.97.50"}
     calendar{
         coptic{
             monthNames{
@@ -842,7 +842,7 @@ uk{
             1,
             1,
         }
-        tense:intvector{
+        relative:intvector{
             1,
             1,
         }

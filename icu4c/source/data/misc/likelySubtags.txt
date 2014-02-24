@@ -82,6 +82,7 @@ likelySubtags:table(nofallback){
     crk{"crk_Cans_CA"}
     cs{"cs_Latn_CZ"}
     csb{"csb_Latn_PL"}
+    cu{"cu_Cyrl_RU"}
     cv{"cv_Cyrl_RU"}
     cy{"cy_Latn_GB"}
     da{"da_Latn_DK"}
