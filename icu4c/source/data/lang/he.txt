@@ -800,7 +800,7 @@ he{
         POSIX{"מחשב"}
         SCOTLAND{"אנגלית סקוטית סטנדרטית"}
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.97.17"}
     codePatterns{
         language{"שפה:‏ {0}"}
         script{"כתב: {0}"}

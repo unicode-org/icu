@@ -2009,5 +2009,5 @@ zh_Hant{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.96.40"}
+    Version{"2.0.97.32"}
 }

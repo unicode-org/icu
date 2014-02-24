@@ -339,6 +339,7 @@ te{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"సాయంకాలం"}
             appendItems{
                 Timezone{"{0} {1}"}
             }

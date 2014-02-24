@@ -873,6 +873,7 @@ en{
             greklow{"Greek Lowercase Numerals"}
             gujr{"Gujarati Digits"}
             guru{"Gurmukhi Digits"}
+            hanidays{"Chinese Calendar Day-of-Month Numerals"}
             hanidec{"Chinese Decimal Numerals"}
             hans{"Simplified Chinese Numerals"}
             hansfin{"Simplified Chinese Financial Numerals"}
@@ -969,7 +970,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.96.5"}
+    Version{"2.0.97.54"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

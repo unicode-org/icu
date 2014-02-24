@@ -83,6 +83,11 @@ numberingSystems:table(nofallback){
             desc{"੦੧੨੩੪੫੬੭੮੯"}
             radix:int{10}
         }
+        hanidays{
+            algorithmic:int{1}
+            desc{"zh/SpelloutRules/%spellout-numbering-days"}
+            radix:int{10}
+        }
         hanidec{
             algorithmic:int{0}
             desc{"〇一二三四五六七八九"}

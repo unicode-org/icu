@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2008-2013, International Business Machines Corporation and
+ * Copyright (c) 2008-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -269,20 +269,20 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),                                           // 16: JJmm
 
         // zh@calendar=chinese                                            // 10 zh@calendar=chinese
-        CharsToUnicodeString("\\u620A\\u5BC5\\u5E7411\\u6708"),           // 00: yM
-        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u5341\\u4E00\\u6708"),  // 01: yMMM
-        CharsToUnicodeString("\\u620A\\u5BC5\\u5E7411\\u670826\\u65E5"),  // 02: yMd
-        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u5341\\u4E00\\u670826\\u65E5"),  // 03: yMMMd
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u51AC\\u6708"),      // 00: yMMM
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u51AC\\u6708"),      // 01: yMMM
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u51AC\\u670826\\u65E5"), // 02: yMMMd
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u51AC\\u670826\\u65E5"), // 03: yMMMd
         UnicodeString("11-26"),                                           // 04: Md
-        CharsToUnicodeString("\\u5341\\u4E00\\u670826\\u65E5"),           // 05: MMMd
-        CharsToUnicodeString("\\u5341\\u4E00\\u670826\\u65E5"),           // 06: MMMMd
+        CharsToUnicodeString("\\u51AC\\u670826\\u65E5"),                  // 05: MMMd
+        CharsToUnicodeString("\\u51AC\\u670826\\u65E5"),                  // 06: MMMMd
         CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u7b2c\\u56db\\u5B63\\u5EA6"),    // 07: yQQQ
         CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 08: hhmm
         UnicodeString("23:58"),                                           // 09: HHmm
         CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 10: jjmm
         UnicodeString("58:59"),                                           // 11: mmss
-        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u5341\\u4E00\\u6708"), // 12: yyyyMMMM
-        CharsToUnicodeString("\\u5341\\u4E00\\u670826\\u65E5\\u5468\\u4E09"), // 13: MMMEd
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u51AC\\u6708"),      // 12: yyyyMMMM
+        CharsToUnicodeString("\\u51AC\\u670826\\u65E5\\u5468\\u4E09"),    // 13: MMMEd
         CharsToUnicodeString("26\\u65E5\\u5468\\u4E09"),                  // 14: Ed    -> d\u65E5EEE
         CharsToUnicodeString("\\u4E0B\\u534811:58:59.123"),               // 15: jmmssSS
         UnicodeString("11:58"),                                           // 16: JJmm

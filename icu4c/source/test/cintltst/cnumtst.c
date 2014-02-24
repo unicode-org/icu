@@ -2469,6 +2469,10 @@ static const TestContextItem tcItems[] = { /* results for 123.45 */
     { "sv", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "Ett\\u00ADhundra\\u00ADtjugo\\u00ADtre komma fyra fem" },
     { "sv", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "ett\\u00ADhundra\\u00ADtjugo\\u00ADtre komma fyra fem" },
     { "sv", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            "ett\\u00ADhundra\\u00ADtjugo\\u00ADtre komma fyra fem" },
+    { "en", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "one hundred twenty-three point four five" },
+    { "en", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "One hundred twenty-three point four five" },
+    { "en", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "One hundred twenty-three point four five" },
+    { "en", UNUM_SPELLOUT, UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            "One hundred twenty-three point four five" },
     { NULL, (UNumberFormatStyle)0, (UDisplayContext)0, NULL }
 };
 
