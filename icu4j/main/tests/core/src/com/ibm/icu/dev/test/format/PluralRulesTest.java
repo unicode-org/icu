@@ -451,7 +451,7 @@ public class PluralRulesTest extends TestFmwk {
         rules = factory.forLocale(ULocale.createCanonical("ru"));
         assertEquals("ru 0", PluralRules.KEYWORD_MANY, rules.select(0));
         assertEquals("ru 1", PluralRules.KEYWORD_ONE, rules.select(1));
-        assertEquals("ru 2", PluralRules.KEYWORD_OTHER, rules.select(2));
+        assertEquals("ru 2", PluralRules.KEYWORD_FEW, rules.select(2));
     }
 
     public void testFunctionalEquivalent() {
@@ -928,7 +928,7 @@ public class PluralRulesTest extends TestFmwk {
 
         // [one, other]
         "fil,tl; one: 0, 1; other: 0.0, 0.00, 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
-        "ca,de,en,et,fi,gl,it,nl,sw,ur,yi; one: 1; other: 0, 0.0, 0.00, 0.01, 0.1, 0.10, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
+        "ca,de,en,et,fi,fy,gl,it,nl,sw,ur,yi; one: 1; other: 0, 0.0, 0.00, 0.01, 0.1, 0.10, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
         // danish is now: one: n is 1 or t is not 0 and i is 0,1 @integer 1 @decimal 0.1~0.8
         "da; one: 0.01, 0.1, 1, 0.10, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99; other: 0, 0.0, 0.00, 2, 2.2, 2.9, 3",
         // swedish is now: one: i is 1 and v is 0 @integer 1
@@ -938,7 +938,7 @@ public class PluralRulesTest extends TestFmwk {
         "mk; one: 0.1, 0.31, 1, 11, 31; other: 0, 0.0, 0.00, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
         "ak,bh,guw,ln,mg,nso,pa,ti,wa; one: 0, 0.0, 0.00, 1; other: 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
         "tzm; one: 0, 0.0, 0.00, 1, 11, 99; other: 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.11, 3",
-        "af,asa,ast,az,bem,bez,bg,brx,cgg,chr,ckb,dv,ee,el,eo,es,eu,fo,fur,fy,gsw,ha,haw,hu,jgo,jmc,ka,kaj,kcg,kk,kkj,kl,ks,ksb,ku,ky,lb,lg,mas,mgo,ml,mn,nah,nb,nd,ne,nn,nnh,no,nr,ny,nyn,om,or,os,pap,ps,rm,rof,rwk,saq,seh,sn,so,sq,ss,ssy,st,syr,ta,te,teo,tig,tk,tn,tr,ts,ve,vo,vun,wae,xh,xog; one: 1, 1.0, 1.00; other: 0, 0.0, 0.00, 0.01, 0.1, 0.10, 1.03, 1.3, 1.30, 1.99, 2, 3",
+        "af,asa,ast,az,bem,bez,bg,brx,cgg,chr,ckb,dv,ee,el,eo,es,eu,fo,fur,gsw,ha,haw,hu,jgo,jmc,ka,kaj,kcg,kk,kkj,kl,ks,ksb,ku,ky,lb,lg,mas,mgo,ml,mn,nah,nb,nd,ne,nn,nnh,no,nr,ny,nyn,om,or,os,pap,ps,rm,rof,rwk,saq,seh,sn,so,sq,ss,ssy,st,syr,ta,te,teo,tig,tk,tn,tr,ts,ve,vo,vun,wae,xh,xog; one: 1, 1.0, 1.00; other: 0, 0.0, 0.00, 0.01, 0.1, 0.10, 1.03, 1.3, 1.30, 1.99, 2, 3",
         // pt is now: i = 1 and v = 0 or i = 0 and t = 1
         "pt; one:  0.1, 0.01, 0.10, 0.001, 0.010, 0.100, 0.0001, 0.0010, 0.0100, 0.1000, 1; other: 0.0, 0.2, 0.3, 1.6, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0",
         "am,bn,fa,gu,hi,kn,mr,zu; one: 0, 0.0, 0.00, 0.03, 0.1, 0.3, 0.30, 0.5, 1; other: 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
@@ -957,8 +957,8 @@ public class PluralRulesTest extends TestFmwk {
         "bs,hr,sh,sr; one: 0.1, 0.31, 1, 31, 34.31; few: 2, 32, 34; other: 0, 0.0, 0.00, 1.0, 1.00, 1.112, 1.99, 11, 12, 14, 34.0, 34.00, 111, 112, 114, 311, 312, 314",
         "shi; one: 0, 0.0, 0.00, 0.1, 0.12, 0.5, 1; few: 2, 2.0, 2.00, 10; other: 1.99, 2.12, 11, 11.0, 11.00, 11.10, 12",
 
-        // [one, many, other]
-        "ru; one: 1, 31; many: 0, 10, 11, 15, 19, 30, 35, 39, 111, 114, 311, 314; other: 0.0, 0.00, 0.1, 0.31, 1.0, 1.00, 1.30, 1.99, 2, 2.0, 2.00, 2.30, 3",
+        // [one, few, many, other]
+        "ru; one: 1, 31; few: 2, 3; many: 0, 10, 11, 15, 19, 30, 35, 39, 111, 114, 311, 314; other: 0.0, 0.00, 0.1, 0.31, 1.0, 1.00, 1.30, 1.99, 2.0, 2.00, 2.30",
 
         // [one, two, few, other]
         "sl; one: 1, 101, 301; two: 2, 102, 302; few: 0.0, 0.00, 0.1, 0.303, 1.0, 1.00, 1.303, 1.99, 102.0, 102.00, 102.303, 103, 104, 303, 304, 304.0, 304.00, 304.302; other: 0",

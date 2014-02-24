@@ -3416,13 +3416,13 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {"en", "USD", "1.00", "1.00 US dollars"},
                 {"en", "AUD", "1", "1 Australian dollar"},
                 {"en", "AUD", "1.00", "1.00 Australian dollars"},
-                {"sl", "USD", "1", "1 ameriški dolar"},
-                {"sl", "USD", "2", "2 ameriška dolarja"},
-                {"sl", "USD", "3", "3 ameriški dolarji"},
+                {"sl", "USD", "1", "1 ameri\u0161ki dolar"},
+                {"sl", "USD", "2", "2 ameri\u0161ka dolarja"},
+                {"sl", "USD", "3", "3 ameri\u0161ki dolarji"},
                 {"sl", "USD", "5", "5 ameriških dolarjev"},
-                {"ru", "RUB", "1", "1 российский рубль"},
-                {"ru", "RUB", "2", "2 российского рубля"},
-                {"ru", "RUB", "5", "5 российских рублей"},
+                {"ru", "RUB", "1", "1 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0439 \u0440\u0443\u0431\u043B\u044C"},
+                {"ru", "RUB", "2", "2 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u044F"},
+                {"ru", "RUB", "5", "5 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u0435\u0439"},
         };
         for (String test[] : tests) {
             DecimalFormat numberFormat = (DecimalFormat) DecimalFormat.getInstance(new ULocale(test[0]), NumberFormat.PLURALCURRENCYSTYLE);

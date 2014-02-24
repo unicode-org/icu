@@ -271,7 +271,7 @@ public class RelativeDateFormat extends DateFormat {
         fDates = datesSet.toArray(new URelativeString[0]);
 
         try {
-            rdb = rb.getWithFallback("contextTransforms/tense");
+            rdb = rb.getWithFallback("contextTransforms/relative");
             int[] intVector = rdb.getIntVector();
             if (intVector.length >= 2) {
                 capitalizationForRelativeUnitsListOrMenu = (intVector[0] != 0);
