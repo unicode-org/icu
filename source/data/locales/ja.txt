@@ -1217,6 +1217,8 @@ ja{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"正午"}
+            NoonMarkerNarrow{"正午"}
             appendItems{
                 Timezone{"{0} {1}"}
             }

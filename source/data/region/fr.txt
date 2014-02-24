@@ -309,5 +309,5 @@ fr{
         PS{"Palestine"}
         US{"É.-U."}
     }
-    Version{"2.0.96.40"}
+    Version{"2.0.97.9"}
 }

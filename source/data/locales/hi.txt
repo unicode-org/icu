@@ -165,7 +165,7 @@ hi{
         }
         native{"deva"}
     }
-    Version{"2.0.95.34"}
+    Version{"2.0.97.28"}
     calendar{
         ethiopic{
             monthNames{
@@ -380,7 +380,6 @@ hi{
                 MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                MMMdd{"dd MMM"}
                 MMdd{"dd-MM"}
                 Md{"d/M"}
                 d{"d"}

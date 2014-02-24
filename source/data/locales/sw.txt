@@ -156,7 +156,7 @@ sw{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.97.40"}
     calendar{
         generic{
             DateTimePatterns{
@@ -365,13 +365,13 @@ sw{
             dayNames{
                 format{
                     abbreviated{
-                        "J2",
-                        "J3",
-                        "J4",
-                        "J5",
-                        "Alh",
-                        "Ij",
-                        "J1",
+                        "Jumapili",
+                        "Jumatatu",
+                        "Jumanne",
+                        "Jumatano",
+                        "Alhamisi",
+                        "Ijumaa",
+                        "Jumamosi",
                     }
                     short{
                         "Jumapili",

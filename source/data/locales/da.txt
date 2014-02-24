@@ -330,6 +330,8 @@ da{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"middag"}
+            NoonMarkerNarrow{"middag"}
             appendItems{
                 Timezone{"{0} {1}"}
             }

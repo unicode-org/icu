@@ -377,6 +377,7 @@ fa{
                 "{1}،‏ {0}",
                 "{1}،‏ {0}",
             }
+            NoonMarker{"ظهر"}
             appendItems{
                 Day-Of-Week{"{1} {0}"}
                 Timezone{"{0} ({1})"}

@@ -161,7 +161,7 @@ sv{
             }
         }
     }
-    Version{"2.0.95.66"}
+    Version{"2.0.97.50"}
     calendar{
         buddhist{
             eras{
@@ -1425,7 +1425,7 @@ sv{
         }
     }
     contextTransforms{
-        displayName:intvector{
+        currencyName:intvector{
             1,
             1,
         }

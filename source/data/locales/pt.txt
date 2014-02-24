@@ -162,7 +162,7 @@ pt{
         }
         native{"latn"}
     }
-    Version{"2.0.95.37"}
+    Version{"2.0.97.50"}
     calendar{
         buddhist{
             eras{
@@ -581,6 +581,7 @@ pt{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"meio-dia"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -1184,7 +1185,7 @@ pt{
             1,
             1,
         }
-        tense:intvector{
+        relative:intvector{
             1,
             1,
         }

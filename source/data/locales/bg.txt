@@ -157,7 +157,7 @@ bg{
             }
         }
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.97.18"}
     calendar{
         generic{
             DateTimePatterns{
@@ -178,18 +178,23 @@ bg{
             availableFormats{
                 Ed{"E, d"}
                 Gy{"y 'г'. G"}
-                GyMMM{"MMM y 'г'. G"}
-                GyMMMEd{"E, d MMM y 'г'. G"}
-                GyMMMd{"d MMM y 'г'. G"}
+                GyMMM{"MM.y 'г'. G"}
+                GyMMMEd{"E, d.MM.y 'г'. G"}
+                GyMMMM{"MMMM y 'г'. G"}
+                GyMMMMEd{"E, d MMMM y 'г'. G"}
+                GyMMMMd{"d MMMM y 'г'. G"}
+                GyMMMd{"d.MM.y 'г'. G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"M"}
                 MEd{"E, d.MM"}
-                MMM{"MMM"}
-                MMMEd{"E, d MMM"}
+                MMM{"MM"}
+                MMMEd{"E, d.MM"}
+                MMMM{"LLLL"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
+                MMMd{"d.MM"}
                 Md{"d.MM"}
                 d{"d"}
                 h{"h"}
@@ -200,10 +205,12 @@ bg{
                 yyyy{"y 'г'. G"}
                 yyyyM{"M.y 'г'. G"}
                 yyyyMEd{"E, d.MM.y 'г'. G"}
-                yyyyMMM{"MMM y 'г'. G"}
-                yyyyMMMEd{"E, d MMM y 'г'. G"}
+                yyyyMMM{"MM.y 'г'. G"}
+                yyyyMMMEd{"E, d.MM.y 'г'. G"}
                 yyyyMMMM{"MMMM y 'г'. G"}
-                yyyyMMMd{"d MMM y 'г'. G"}
+                yyyyMMMMEd{"E, d MMMM y 'г'. G"}
+                yyyyMMMMd{"d MMMM y 'г'. G"}
+                yyyyMMMd{"d.MM.y 'г'. G"}
                 yyyyMd{"d.MM.y 'г'. G"}
                 yyyyQQQ{"QQQ y 'г'. G"}
                 yyyyQQQQ{"QQQQ y 'г'. G"}
@@ -231,15 +238,26 @@ bg{
                     d{"E, d.MM – E, d.MM"}
                 }
                 MMM{
-                    M{"MMM – MMM"}
+                    M{"MM – MM"}
                 }
                 MMMEd{
-                    M{"E, d MMM – E, d MMM"}
-                    d{"E, d MMM – E, d MMM"}
+                    M{"E, d.MM – E, d.MM"}
+                    d{"E, d.MM – E, d.MM"}
+                }
+                MMMM{
+                    M{"LLLL – LLLL"}
+                }
+                MMMMEd{
+                    M{"E, d MMMM – E, d MMMM"}
+                    d{"E, d MMMM – E, d MMMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
-                    M{"d MMM – d MMM"}
-                    d{"d – d MMM"}
+                    M{"d.MM – d.MM"}
+                    d{"d.MM – d.MM"}
                 }
                 Md{
                     M{"d.MM – d.MM"}
@@ -280,22 +298,32 @@ bg{
                     y{"E, d.MM.y 'г'. – E, d.MM.y 'г'. G"}
                 }
                 yMMM{
-                    M{"MMM – MMM y 'г'. G"}
-                    y{"MMM y 'г'. – MMM y 'г'. G"}
+                    M{"MM – MM.y 'г'. G"}
+                    y{"MM 'г'. – MM.y 'г'. G"}
                 }
                 yMMMEd{
-                    M{"E, d MMM – E, d MMM y 'г'. G"}
-                    d{"E, d MMM – E, d MMM y 'г'. G"}
-                    y{"E, d MMM y 'г'. – E, d MMM y 'г'. G"}
+                    M{"E, d.MM – E, d.MM.y 'г'. G"}
+                    d{"E, d.MM – E, d.MM.y 'г'. G"}
+                    y{"E, d.MM.y 'г'. – E, d.MM.y 'г'. G"}
                 }
                 yMMMM{
                     M{"MMMM – MMMM y 'г'. G"}
                     y{"MMMM y 'г'. – MMMM y 'г'. G"}
                 }
+                yMMMMEd{
+                    M{"E, d MMMM – E, d MMMM y 'г'. G"}
+                    d{"E, d MMMM – E, d MMMM y 'г'. G"}
+                    y{"E, d MMMM y 'г'. – E, d MMMM y 'г'. G"}
+                }
+                yMMMMd{
+                    M{"d MMMM – d MMMM y 'г'. G"}
+                    d{"d – d MMMM y 'г'. G"}
+                    y{"d MMMM y 'г'. – d MMMM y 'г'. G"}
+                }
                 yMMMd{
-                    M{"d MMM – d MMM y 'г'. G"}
-                    d{"d – d MMM y 'г'. G"}
-                    y{"d MMM y 'г'. – d MMM y 'г'. G"}
+                    M{"d.MM – d.MM.y 'г'. G"}
+                    d{"d.MM – d.MM.y 'г'. G"}
+                    y{"d.MM.y 'г'. – d.MM.y 'г'. G"}
                 }
                 yMd{
                     M{"d.MM – d.MM.y 'г'. G"}
@@ -334,19 +362,24 @@ bg{
                 Ehm{"E, h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"y 'г'. G"}
-                GyMMM{"MMM y 'г'. G"}
-                GyMMMEd{"E, d MMM y 'г'. G"}
-                GyMMMd{"d MMM y 'г'. G"}
+                GyMMM{"MM.y 'г'. G"}
+                GyMMMEd{"E, d.MM.y 'г'. G"}
+                GyMMMM{"MMMM y 'г'. G"}
+                GyMMMMEd{"E, d MMMM y 'г'. G"}
+                GyMMMMd{"d MMMM y 'г'. G"}
+                GyMMMd{"d.MM.y 'г'. G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"E, d.MM"}
-                MMM{"LLL"}
-                MMMEd{"E, d MMM"}
+                MMM{"MM"}
+                MMMEd{"E, d.MM"}
+                MMMM{"LLLL"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMMdd{"d MMMM"}
-                MMMd{"d MMM"}
+                MMMd{"d.MM"}
                 Md{"d.MM"}
                 d{"d"}
                 h{"h a"}
@@ -356,10 +389,12 @@ bg{
                 y{"y 'г'."}
                 yM{"M.y 'г'."}
                 yMEd{"E, d.MM.y 'г'."}
-                yMMM{"MMM y 'г'."}
-                yMMMEd{"E, d MMM y 'г'."}
+                yMMM{"MM.y 'г'."}
+                yMMMEd{"E, d.MM.y 'г'."}
                 yMMMM{"MMMM y 'г'."}
-                yMMMd{"d MMM y 'г'."}
+                yMMMMEd{"E, d MMMM y 'г'."}
+                yMMMMd{"d MMMM y 'г'."}
+                yMMMd{"d.MM.y 'г'."}
                 yMd{"d.MM.y 'г'."}
                 yQQQ{"QQQ y 'г'."}
                 yQQQQ{"QQQQ y 'г'."}
@@ -479,15 +514,26 @@ bg{
                     d{"E, d.MM – E, d.MM"}
                 }
                 MMM{
-                    M{"MMM – MMM"}
+                    M{"MM – MM"}
                 }
                 MMMEd{
-                    M{"E, d MMM – E, d MMM"}
-                    d{"E, d MMM – E, d MMM"}
+                    M{"E, d.MM – E, d.MM"}
+                    d{"E, d.MM – E, d.MM"}
+                }
+                MMMM{
+                    M{"LLLL – LLLL"}
+                }
+                MMMMEd{
+                    M{"E, d MMMM – E, d MMMM"}
+                    d{"E, d MMMM – E, d MMMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
-                    M{"d MMM – d MMM"}
-                    d{"d – d MMM"}
+                    M{"d.MM – d.MM"}
+                    d{"d.MM – d.MM"}
                 }
                 Md{
                     M{"d.MM – d.MM"}
@@ -528,22 +574,32 @@ bg{
                     y{"E, d.MM.y 'г'. – E, d.MM.y 'г'."}
                 }
                 yMMM{
-                    M{"MMM – MMM y 'г'."}
-                    y{"MMM y 'г'. – MMM y 'г'."}
+                    M{"MM.y 'г'. – MM.y 'г'."}
+                    y{"MM.y 'г'. – MM.y 'г'."}
                 }
                 yMMMEd{
-                    M{"E, d MMM – E, d MMM y 'г'."}
-                    d{"E, d MMM – E, d MMM y 'г'."}
-                    y{"E, d MMM y 'г'. – E, d MMM y 'г'."}
+                    M{"E, d.MM – E, d.MM.y 'г'."}
+                    d{"E, d.MM – E, d.MM.y 'г'."}
+                    y{"E, d.MM.y 'г'. – E, d.MM.y 'г'."}
                 }
                 yMMMM{
                     M{"MMMM – MMMM y 'г'."}
                     y{"MMMM y 'г'. – MMMM y 'г'."}
                 }
+                yMMMMEd{
+                    M{"E, d MMMM – E, d MMMM y 'г'."}
+                    d{"E, d MMMM – E, d MMMM y 'г'."}
+                    y{"E, d MMMM y 'г'. – E, d MMMM y 'г'."}
+                }
+                yMMMMd{
+                    M{"d MMMM – d MMMM y 'г'."}
+                    d{"d – d MMMM y 'г'."}
+                    y{"d MMMM y 'г'. – d MMMM y 'г'."}
+                }
                 yMMMd{
-                    M{"d MMM – d MMM y 'г'."}
-                    d{"d – d MMM y 'г'."}
-                    y{"d MMM y 'г'. – d MMM y 'г'."}
+                    M{"d.MM – d.MM.y 'г'."}
+                    d{"d.MM – d.MM.y 'г'."}
+                    y{"d.MM.y 'г'. – d.MM.y 'г'."}
                 }
                 yMd{
                     M{"d.MM – d.MM.y 'г'."}

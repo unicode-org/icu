@@ -205,7 +205,7 @@ zh_Hant{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.0.96.40"}
+    Version{"2.0.97.32"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -260,16 +260,16 @@ zh_Hant{
                 "ah:mm:ss",
                 "ah:mm",
                 {
-                    "U年MMMd日EEEE",
-                    "hanidec",
+                    "U年MMMdEEEE",
+                    "d=hanidays",
                 }
                 {
-                    "U年MMMd日",
-                    "hanidec",
+                    "U年MMMd",
+                    "d=hanidays",
                 }
                 {
-                    "U年MMMd日",
-                    "hanidec",
+                    "U年MMMd",
+                    "d=hanidays",
                 }
                 "U/M/d",
                 "{1} {0}",
@@ -291,14 +291,14 @@ zh_Hant{
                 Md{"M/d"}
                 d{"d日"}
                 y{"U年"}
-                yMd{"U年M月d日"}
+                yMd{"U年MMMd日"}
                 yyyy{"U年"}
-                yyyyM{"U年M月"}
-                yyyyMEd{"U年M月d日，E"}
+                yyyyM{"U年MMM"}
+                yyyyMEd{"U年MMMd日，E"}
                 yyyyMMM{"U年MMM"}
                 yyyyMMMEd{"U年MMMd日E"}
                 yyyyMMMd{"U年MMMd日"}
-                yyyyMd{"U年M月d日"}
+                yyyyMd{"U年MMMd日"}
                 yyyyQQQ{"U年QQQQ"}
                 yyyyQQQQ{"U年QQQQ"}
             }
@@ -415,7 +415,7 @@ zh_Hant{
                     H{"HH–HH [v]"}
                 }
                 M{
-                    M{"M月至M月"}
+                    M{"MMM至MMM"}
                 }
                 MEd{
                     M{"M/dE至M/dE"}
@@ -510,8 +510,8 @@ zh_Hant{
                         "八月",
                         "九月",
                         "十月",
-                        "十一月",
-                        "十二月",
+                        "冬月",
+                        "臘月",
                     }
                     narrow{
                         "正",
@@ -524,8 +524,8 @@ zh_Hant{
                         "八",
                         "九",
                         "十",
-                        "十一",
-                        "十二",
+                        "冬",
+                        "臘",
                     }
                     wide{
                         "正月",
@@ -538,8 +538,8 @@ zh_Hant{
                         "八月",
                         "九月",
                         "十月",
-                        "十一月",
-                        "十二月",
+                        "冬月",
+                        "臘月",
                     }
                 }
                 stand-alone{
@@ -554,8 +554,8 @@ zh_Hant{
                         "八月",
                         "九月",
                         "十月",
-                        "十一月",
-                        "十二月",
+                        "冬月",
+                        "臘月",
                     }
                     narrow{
                         "正",
@@ -568,8 +568,8 @@ zh_Hant{
                         "八",
                         "九",
                         "十",
-                        "十一",
-                        "十二",
+                        "冬",
+                        "臘",
                     }
                     wide{
                         "正月",
@@ -582,8 +582,8 @@ zh_Hant{
                         "八月",
                         "九月",
                         "十月",
-                        "十一月",
-                        "十二月",
+                        "冬月",
+                        "臘月",
                     }
                 }
             }
@@ -1181,6 +1181,8 @@ zh_Hant{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"中午"}
+            NoonMarkerNarrow{"中午"}
             appendItems{
                 Timezone{"{0} {1}"}
             }

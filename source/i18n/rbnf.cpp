@@ -1532,9 +1532,7 @@ RuleBasedNumberFormat::initCapitalizationContextInfo(const Locale& thelocale)
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *rb = ures_open(NULL, localeID, &status);
     rb = ures_getByKeyWithFallback(rb, "contextTransforms", rb, &status);
-    // Have't got a good contextTransforms type for RBNF number spellout,
-    // fix that with CLDR #6857. In the meantime use "symbol".
-    rb = ures_getByKeyWithFallback(rb, "symbol", rb, &status);
+    rb = ures_getByKeyWithFallback(rb, "number-spellout", rb, &status);
     if (U_SUCCESS(status) && rb != NULL) {
         int32_t len = 0;
         const int32_t * intVector = ures_getIntVector(rb, &len, &status);

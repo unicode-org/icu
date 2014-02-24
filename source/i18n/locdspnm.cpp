@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010-2013, International Business Machines Corporation and
+* Copyright (C) 2010-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -287,7 +287,7 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
         kCapContextUsageTerritory,
         kCapContextUsageVariant,
         kCapContextUsageKey,
-        kCapContextUsageType,
+        kCapContextUsageKeyValue,
         kCapContextUsageCount
     };
     // Capitalization transforms. For each usage type, the first array element indicates
@@ -422,10 +422,10 @@ LocaleDisplayNamesImpl::initialize(void) {
     const ContextUsageNameToEnum contextUsageTypeMap[] = {
        // Entries must be sorted by usageTypeName; entry with NULL name terminates list.
         { "key",        kCapContextUsageKey },
+        { "keyValue",   kCapContextUsageKeyValue },
         { "languages",  kCapContextUsageLanguage },
         { "script",     kCapContextUsageScript },
         { "territory",  kCapContextUsageTerritory },
-        { "type",       kCapContextUsageType },
         { "variant",    kCapContextUsageVariant },
         { NULL,         (CapContextUsage)0 },
     };
@@ -747,7 +747,7 @@ LocaleDisplayNamesImpl::keyValueDisplayName(const char* key,
                                             const char* value,
                                             UnicodeString& result) const {
     langData.get("Types", key, value, result);
-    return adjustForUsageAndContext(kCapContextUsageType, result);
+    return adjustForUsageAndContext(kCapContextUsageKeyValue, result);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

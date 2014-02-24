@@ -158,7 +158,7 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
 
     if ( relativeDayString.length() > 0 && !fDatePattern.isEmpty() && 
          (fTimePattern.isEmpty() || fCombinedFormat == NULL || fCombinedHasDateAtStart)) {
-        // capitalize relativeDayString according to context for tense, set formatter no context
+        // capitalize relativeDayString according to context for relative, set formatter no context
         if ( capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
              (capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU && fCapitalizationForRelativeUnits[0]) ||
              (capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_STANDALONE && fCapitalizationForRelativeUnits[1]) ) {
@@ -477,7 +477,7 @@ void RelativeDateFormat::loadDates(UErrorCode &status) {
     UResourceBundle *lb = ures_open(NULL, fLocale.getBaseName(), &status);
     tempStatus = status;
     UResourceBundle *rb = ures_getByKeyWithFallback(lb, "contextTransforms", NULL, &tempStatus);
-    UResourceBundle *sb = ures_getByKeyWithFallback(rb, "tense", NULL, &tempStatus);
+    UResourceBundle *sb = ures_getByKeyWithFallback(rb, "relative", NULL, &tempStatus);
     if (U_SUCCESS(tempStatus) && sb != NULL) {
         int32_t len = 0;
         const int32_t * intVector = ures_getIntVector(sb, &len, &tempStatus);

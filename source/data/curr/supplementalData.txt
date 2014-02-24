@@ -4819,6 +4819,12 @@ supplementalData:table(nofallback){
             0,
             0,
         }
+        CZK:intvector{
+            2,
+            0,
+            0,
+            0,
+        }
         DEFAULT:intvector{
             2,
             0,
@@ -5066,6 +5072,12 @@ supplementalData:table(nofallback){
             0,
         }
         UGX:intvector{
+            0,
+            0,
+            0,
+            0,
+        }
+        UYI:intvector{
             0,
             0,
             0,

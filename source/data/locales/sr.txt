@@ -182,7 +182,7 @@ sr{
             }
         }
     }
-    Version{"2.0.96.25"}
+    Version{"2.0.97.28"}
     calendar{
         buddhist{
             eras{
@@ -264,7 +264,6 @@ sr{
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E d. MMMM"}
                 MMMMd{"d. MMMM"}
-                MMMMdd{"dd. MMMM"}
                 MMMd{"d. MMM"}
                 MMMdd{"dd.MMM"}
                 MMdd{"MM-dd"}
@@ -426,7 +425,6 @@ sr{
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E d. MMMM"}
                 MMMMd{"d. MMMM"}
-                MMMMdd{"dd. MMMM"}
                 MMMd{"d. MMM"}
                 MMMdd{"dd.MMM"}
                 MMdd{"MM-dd"}
