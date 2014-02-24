@@ -58,7 +58,7 @@ def run(args=None):
         ticket = Ticket(env, id)
         status = ticket.values['status']
         if status in okstatus:
-            print "Okay! You are committing against ticket #%d which is in state '%s': %s" % (id,status,ticket.values['summary'])
+            # print "Okay! You are committing against ticket #%d which is in state '%s': %s" % (id,status,ticket.values['summary']) # (fails with codec error- and, unneeded. )
             sys.exit(0)
         else:
             print "*** Sorry, ticket #%d is '%s' and is not open for commits: %s" % (id,status,ticket.values['summary'])
