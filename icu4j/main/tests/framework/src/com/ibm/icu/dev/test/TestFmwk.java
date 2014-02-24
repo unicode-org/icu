@@ -1,12 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -64,18 +65,45 @@ public class TestFmwk extends AbstractTestLog {
             super(msg);
         }
     }
+
+    static final class ICUTestError extends RuntimeException {
+        /**
+         * For serialization
+         */
+        private static final long serialVersionUID = 6170003850185143046L;
+
+        ICUTestError(String msg) {
+            super(msg);
+        }
+    }
+
+    // Handling exception thrown during text execution (not including
+    // RuntimeException thrown by errln).
     protected void handleException(Throwable e){
         Throwable ex = e.getCause();
-        if(ex==null){
+        if(ex == null){
             ex = e;
         }
-        if(ex instanceof ExceptionInInitializerError){
+        if (ex instanceof ICUTestError) {
+            // ICUTestError is one produced by errln.
+            // We don't need to include useless stack trace information for
+            // such case.
+            if (!params.nothrow) {
+                throw new RuntimeException(ex);
+            }
+            return;
+        }
+        if (ex instanceof ExceptionInInitializerError){
             ex = ((ExceptionInInitializerError)ex).getException();
         }
-        String msg = ex.getMessage();
-        if(msg==null){
-            msg = "";
-        }
+
+        //Stack trace
+        CharArrayWriter caw = new CharArrayWriter();
+        PrintWriter pw = new PrintWriter(caw);
+        ex.printStackTrace(pw);
+        pw.close();
+        String msg = caw.toString();
+
         //System.err.println("TF handleException msg: " + msg);
         if (ex instanceof MissingResourceException || ex instanceof NoClassDefFoundError ||
                 msg.indexOf("java.util.MissingResourceException") >= 0) {
@@ -83,19 +111,16 @@ public class TestFmwk extends AbstractTestLog {
                 warnln(msg);
             } else if (params.nothrow) {
                 errln(msg);
-                ex.printStackTrace();
             } else {
                 ex.printStackTrace();
-                throw new RuntimeException(msg);
+                throw new RuntimeException(ex);
             }
         } else {
             if (params.nothrow) {
                 errln(msg);
-                ex.printStackTrace();
             } else {
                 errln(msg);
-                ex.printStackTrace();
-                throw new RuntimeException(msg);
+                throw new RuntimeException(ex);
             }
         }
     }
@@ -377,21 +402,10 @@ public class TestFmwk extends AbstractTestLog {
                     testMethod.invoke(TestFmwk.this, NO_ARGS);
                 } catch (IllegalAccessException e) {
                     errln("Can't access test method " + testMethod.getName());
-                }catch (ExceptionInInitializerError e){
-                    handleException(e);
-                } catch (InvocationTargetException e) {
-                    //e.printStackTrace();
-                    handleException(e);
-                }catch (MissingResourceException e) {
-                    handleException(e);
-                }catch (NoClassDefFoundError e) {
-                    handleException(e);
-                }catch (Exception e){
-                    /*errln("Encountered: "+ e.toString());
-                    e.printStackTrace(System.err);
-                    */
+                } catch (Exception e) {
                     handleException(e);
                 }
+                    
             }
             // If non-exhaustive, check if the method target
             // takes excessive time.
@@ -626,9 +640,7 @@ public class TestFmwk extends AbstractTestLog {
             }
         } catch (Exception e) {
             ec++;
-            e.printStackTrace(_params.log);
-            _params.log.println(e.getMessage());
-            _params.log.println("encountered exception, exiting");
+            _params.log.println("encountered a test failure, exiting");
         }
 
         return ec;
@@ -1564,7 +1576,7 @@ public class TestFmwk extends AbstractTestLog {
 
             if (level == ERR) {
                 if (!nothrow) {
-                    throw new RuntimeException(message);
+                    throw new ICUTestError(message);
                 }
                 if (!suppressIndent && errorSummary != null && stack !=null
                         && (errorCount == stack.ec + 1)) {
