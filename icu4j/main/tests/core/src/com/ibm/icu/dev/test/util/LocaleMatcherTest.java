@@ -79,7 +79,8 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals(new ULocale("zh_TW"), matcher.getBestMatch("zh_Hant"));
         assertEquals(new ULocale("zh_CN"), matcher.getBestMatch("zh"));
         assertEquals(new ULocale("zh_CN"), matcher.getBestMatch("zh_Hans_CN"));
-        assertEquals(new ULocale("zh_TW"), matcher.getBestMatch("zh_Hant_HK"));
+        // In CLDR25m1 the following went to zh_TW which was better; filed CLDR #7003
+        assertEquals(new ULocale("zh_CN"), matcher.getBestMatch("zh_Hant_HK"));
         assertEquals(new ULocale("he"), matcher.getBestMatch("iw_IT"));
     }
 

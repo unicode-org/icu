@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -46,7 +46,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         TERRITORY,
         VARIANT, 
         KEY, 
-        TYPE 
+        KEYVALUE 
     }
     /**
      * Capitalization transforms. For each usage type, the first array element indicates
@@ -65,7 +65,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         contextUsageTypeMap.put("territory", CapitalizationContextUsage.TERRITORY);
         contextUsageTypeMap.put("variant",   CapitalizationContextUsage.VARIANT);
         contextUsageTypeMap.put("key",       CapitalizationContextUsage.KEY);
-        contextUsageTypeMap.put("type",      CapitalizationContextUsage.TYPE);
+        contextUsageTypeMap.put("keyValue",  CapitalizationContextUsage.KEYVALUE);
     }
 
     public static LocaleDisplayNames getInstance(ULocale locale, DialectHandling dialectHandling) {
@@ -446,7 +446,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
     @Override
     public String keyValueDisplayName(String key, String value) {
-        return adjustForUsageAndContext(CapitalizationContextUsage.TYPE, langData.get("Types", key, value));
+        return adjustForUsageAndContext(CapitalizationContextUsage.KEYVALUE, langData.get("Types", key, value));
     }
 
     public static class DataTable {
