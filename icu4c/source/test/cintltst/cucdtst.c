@@ -3067,7 +3067,7 @@ TestConsistency() {
 
     U_STRING_DECL(mathBlocksPattern,
         "[[:block=Mathematical Operators:][:block=Miscellaneous Mathematical Symbols-A:][:block=Miscellaneous Mathematical Symbols-B:][:block=Supplemental Mathematical Operators:][:block=Mathematical Alphanumeric Symbols:]]",
-        1+32+46+46+45+43+1+1); /* +1 for NUL */
+        214);
     U_STRING_DECL(mathPattern, "[:Math:]", 8);
     U_STRING_DECL(unassignedPattern, "[:Cn:]", 6);
     U_STRING_DECL(unknownPattern, "[:sc=Unknown:]", 14);
@@ -3081,7 +3081,7 @@ TestConsistency() {
 
     U_STRING_INIT(mathBlocksPattern,
         "[[:block=Mathematical Operators:][:block=Miscellaneous Mathematical Symbols-A:][:block=Miscellaneous Mathematical Symbols-B:][:block=Supplemental Mathematical Operators:][:block=Mathematical Alphanumeric Symbols:]]",
-        1+32+46+46+45+43+1+1); /* +1 for NUL */
+        214);
     U_STRING_INIT(mathPattern, "[:Math:]", 8);
     U_STRING_INIT(unassignedPattern, "[:Cn:]", 6);
     U_STRING_INIT(unknownPattern, "[:sc=Unknown:]", 14);
