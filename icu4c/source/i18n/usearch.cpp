@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2011 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2014 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  07/02/2001   synwee      Creation.
@@ -16,7 +16,6 @@
 #include "unicode/uchar.h"
 #include "unicode/utf16.h"
 #include "normalizer2impl.h"
-#include "ucol_imp.h"
 #include "usrchimp.h"
 #include "cmemory.h"
 #include "ucln_in.h"
@@ -51,17 +50,10 @@ static
 inline void setColEIterOffset(UCollationElements *elems,
                       int32_t             offset)
 {
-    collIterate *ci = &(elems->iteratordata_);
-    ci->pos         = ci->string + offset;
-    ci->CEpos       = ci->toReturn = ci->extendCEs ? ci->extendCEs : ci->CEs;
-    if (ci->flags & UCOL_ITER_INNORMBUF) {
-        ci->flags = ci->origFlags;
-    }
-    ci->fcdPosition = NULL;
-
-    ci->offsetReturn = NULL;
-    ci->offsetStore  = ci->offsetBuffer;
-    ci->offsetRepeatCount = ci->offsetRepeatValue = 0;
+    // Note: Not "fast" any more after the 2013 collation rewrite.
+    // We do not want to expose more internals than necessary.
+    UErrorCode status = U_ZERO_ERROR;
+    ucol_setOffset(elems, offset, &status);
 }
 
 /**
@@ -311,10 +303,7 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
         strsrch->utilIter = coleiter;
     }
     else {
-        uprv_init_collIterate(strsrch->collator, pattern->text,
-                         pattern->textLength,
-                         &coleiter->iteratordata_,
-                         status);
+        ucol_setText(coleiter, pattern->text, pattern->textLength, status);
     }
     if(U_FAILURE(*status)) {
         return 0;
@@ -385,10 +374,7 @@ inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
         // returned.
         strsrch->utilIter = coleiter;
     } else {
-        uprv_init_collIterate(strsrch->collator, pattern->text,
-                              pattern->textLength,
-                              &coleiter->iteratordata_,
-                              status);
+        ucol_setText(coleiter, pattern->text, pattern->textLength, status);
     }
     if(U_FAILURE(*status)) {
         return 0;
@@ -402,12 +388,12 @@ inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
     uint16_t  result = 0;
     int64_t   pce;
 
-    uprv_init_pce(coleiter);
+    icu::UCollationPCE iter(coleiter);
 
     // ** Should processed CEs be signed or unsigned?
     // ** (the rest of the code in this file seems to play fast-and-loose with
     // **  whether a CE is signed or unsigned. For example, look at routine above this one.)
-    while ((pce = ucol_nextProcessed(coleiter, NULL, NULL, status)) != UCOL_PROCESSED_NULLORDER &&
+    while ((pce = iter.nextProcessed(NULL, NULL, status)) != UCOL_PROCESSED_NULLORDER &&
            U_SUCCESS(*status)) {
         int64_t *temp = addTouint64_tArray(pcetable, offset, &pcetablesize,
                               pce,
@@ -446,6 +432,7 @@ inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
 static
 inline int16_t initializePattern(UStringSearch *strsrch, UErrorCode *status)
 {
+    if (U_FAILURE(*status)) { return 0; }
           UPattern   *pattern     = &(strsrch->pattern);
     const UChar      *patterntext = pattern->text;
           int32_t     length      = pattern->textLength;
@@ -2736,6 +2723,7 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
         result->utilIter              = NULL;
         result->textIter              = ucol_openElements(collator, text,
                                                           textlength, status);
+        result->textProcessedIter     = NULL;
         if (U_FAILURE(*status)) {
             usearch_close(result);
             return NULL;
@@ -2772,6 +2760,7 @@ U_CAPI void U_EXPORT2 usearch_close(UStringSearch *strsrch)
             uprv_free(strsrch->pattern.PCE);
         }
 
+        delete strsrch->textProcessedIter;
         ucol_closeElements(strsrch->textIter);
         ucol_closeElements(strsrch->utilIter);
 
@@ -2788,6 +2777,24 @@ U_CAPI void U_EXPORT2 usearch_close(UStringSearch *strsrch)
         uprv_free(strsrch->search);
         uprv_free(strsrch);
     }
+}
+
+namespace {
+
+UBool initTextProcessedIter(UStringSearch *strsrch, UErrorCode *status) {
+    if (U_FAILURE(*status)) { return FALSE; }
+    if (strsrch->textProcessedIter == NULL) {
+        strsrch->textProcessedIter = new icu::UCollationPCE(strsrch->textIter);
+        if (strsrch->textProcessedIter == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return FALSE;
+        }
+    } else {
+        strsrch->textProcessedIter->init(strsrch->textIter);
+    }
+    return TRUE;
+}
+
 }
 
 // set and get methods --------------------------------------------------
@@ -3010,6 +3017,11 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
         }
 
         if (strsrch) {
+            delete strsrch->textProcessedIter;
+            strsrch->textProcessedIter = NULL;
+            ucol_closeElements(strsrch->textIter);
+            ucol_closeElements(strsrch->utilIter);
+            strsrch->textIter = strsrch->utilIter = NULL;
             if (strsrch->ownCollator && (strsrch->collator != collator)) {
                 ucol_close((UCollator *)strsrch->collator);
                 strsrch->ownCollator = FALSE;
@@ -3028,18 +3040,14 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
                                                                 UCOL_SHIFTED;
             // if status is a failure, ucol_getVariableTop returns 0
             strsrch->variableTop = ucol_getVariableTop(collator, status);
-            if (U_SUCCESS(*status)) {
-                initialize(strsrch, status);
-                if (U_SUCCESS(*status)) {
-                    /* free offset buffer to avoid memory leak before initializing. */
-                    ucol_freeOffsetBuffer(&(strsrch->textIter->iteratordata_));
-                    uprv_init_collIterate(collator, strsrch->search->text,
-                                          strsrch->search->textLength,
-                                          &(strsrch->textIter->iteratordata_),
-                                          status);
-                    strsrch->utilIter->iteratordata_.coll = collator;
-                }
-            }
+            strsrch->textIter = ucol_openElements(collator,
+                                      strsrch->search->text,
+                                      strsrch->search->textLength,
+                                      status);
+            strsrch->utilIter = ucol_openElements(
+                    collator, strsrch->pattern.text, strsrch->pattern.textLength, status);
+            // initialize() _after_ setting the iterators for the new collator.
+            initialize(strsrch, status);
         }
 
         // **** are these calls needed?
@@ -3416,11 +3424,8 @@ U_CAPI void U_EXPORT2 usearch_reset(UStringSearch *strsrch)
         if (!sameCollAttribute) {
             initialize(strsrch, &status);
         }
-        /* free offset buffer to avoid memory leak before initializing. */
-        ucol_freeOffsetBuffer(&(strsrch->textIter->iteratordata_));
-        uprv_init_collIterate(strsrch->collator, strsrch->search->text,
+        ucol_setText(strsrch->textIter, strsrch->search->text,
                               strsrch->search->textLength,
-                              &(strsrch->textIter->iteratordata_),
                               &status);
         strsrch->search->matchedLength      = 0;
         strsrch->search->matchedIndex       = USEARCH_DONE;
@@ -3444,7 +3449,7 @@ struct  CEI {
 
 U_NAMESPACE_BEGIN
 
-
+namespace {
 //
 //  CEBuffer   A circular buffer of CEs from the text being searched.
 //
@@ -3496,7 +3501,7 @@ CEBuffer::CEBuffer(UStringSearch *ss, UErrorCode *status) {
     firstIx = 0;
     limitIx = 0;
 
-    uprv_init_pce(ceIter);
+    if (!initTextProcessedIter(ss, status)) { return; }
 
     if (bufSize>DEFAULT_CEBUFFER_SIZE) {
         buf = (CEI *)uprv_malloc(bufSize * sizeof(CEI));
@@ -3550,7 +3555,7 @@ const CEI *CEBuffer::get(int32_t index) {
 
     UErrorCode status = U_ZERO_ERROR;
 
-    buf[i].ce = ucol_nextProcessed(ceIter, &buf[i].lowIndex, &buf[i].highIndex, &status);
+    buf[i].ce = strSearch->textProcessedIter->nextProcessed(&buf[i].lowIndex, &buf[i].highIndex, &status);
 
     return &buf[i];
 }
@@ -3589,9 +3594,11 @@ const CEI *CEBuffer::getPrevious(int32_t index) {
 
     UErrorCode status = U_ZERO_ERROR;
 
-    buf[i].ce = ucol_previousProcessed(ceIter, &buf[i].lowIndex, &buf[i].highIndex, &status);
+    buf[i].ce = strSearch->textProcessedIter->previousProcessed(&buf[i].lowIndex, &buf[i].highIndex, &status);
 
     return &buf[i];
+}
+
 }
 
 U_NAMESPACE_END
@@ -4659,8 +4666,12 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
         } else {
             // move the start position at the end of possible match
             initializePatternPCETable(strsrch, status);
+            if (!initTextProcessedIter(strsrch, status)) {
+                setMatchNotFound(strsrch);
+                return FALSE;
+            }
             for (int32_t nPCEs = 0; nPCEs < strsrch->pattern.PCELength - 1; nPCEs++) {
-                int64_t pce = ucol_nextProcessed(strsrch->textIter, NULL, NULL, status);
+                int64_t pce = strsrch->textProcessedIter->nextProcessed(NULL, NULL, status);
                 if (pce == UCOL_PROCESSED_NULLORDER) {
                     // at the end of the text
                     break;
@@ -4808,8 +4819,12 @@ UBool usearch_handlePreviousCanonical(UStringSearch *strsrch,
         } else {
             // move the start position at the end of possible match
             initializePatternPCETable(strsrch, status);
+            if (!initTextProcessedIter(strsrch, status)) {
+                setMatchNotFound(strsrch);
+                return FALSE;
+            }
             for (int32_t nPCEs = 0; nPCEs < strsrch->pattern.PCELength - 1; nPCEs++) {
-                int64_t pce = ucol_nextProcessed(strsrch->textIter, NULL, NULL, status);
+                int64_t pce = strsrch->textProcessedIter->nextProcessed(NULL, NULL, status);
                 if (pce == UCOL_PROCESSED_NULLORDER) {
                     // at the end of the text
                     break;

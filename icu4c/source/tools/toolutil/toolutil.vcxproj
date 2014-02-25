@@ -246,6 +246,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="collationinfo.cpp" />
     <ClCompile Include="denseranges.cpp" />
     <ClCompile Include="filestrm.c" />
     <ClCompile Include="filetools.cpp" />
@@ -293,6 +294,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="collationinfo.h" />
     <ClInclude Include="denseranges.h" />
     <ClInclude Include="filestrm.h" />
     <ClInclude Include="filetools.h" />

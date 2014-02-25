@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -223,6 +223,8 @@ public:
     // RuleBasedCollator doesn't use getCollationElementIterator internally
     //
     void Test4146160(/* char* par */);
+
+    void Test4179216();
 
     // Ticket 7189
     //

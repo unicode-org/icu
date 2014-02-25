@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrule.cpp
@@ -17,6 +17,7 @@
 
 #if U_HAVE_RBNF
 
+#include "unicode/localpointer.h"
 #include "unicode/rbnf.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
@@ -1136,16 +1137,17 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErr
         // isn't a RuleBasedCollator, because RuleBasedCollator defines
         // the CollationElementIterator protocol.  Hopefully, this
         // will change someday.)
-        RuleBasedCollator* collator = (RuleBasedCollator*)formatter->getCollator();
-        CollationElementIterator* strIter = collator->createCollationElementIterator(str);
-        CollationElementIterator* prefixIter = collator->createCollationElementIterator(prefix);
+        const RuleBasedCollator* collator = formatter->getCollator();
+        if (collator == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+        LocalPointer<CollationElementIterator> strIter(collator->createCollationElementIterator(str));
+        LocalPointer<CollationElementIterator> prefixIter(collator->createCollationElementIterator(prefix));
         // Check for memory allocation error.
-        if (collator == NULL || strIter == NULL || prefixIter == NULL) {
-        	delete collator;
-        	delete strIter;
-        	delete prefixIter;
-        	status = U_MEMORY_ALLOCATION_ERROR;
-        	return 0;
+        if (strIter.isNull() || prefixIter.isNull()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
         }
 
         UErrorCode err = U_ZERO_ERROR;
@@ -1197,8 +1199,6 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErr
             // if skipping over ignorables brought us to the end
             // of the target string, we didn't match and return 0
             if (oStr == CollationElementIterator::NULLORDER) {
-                delete prefixIter;
-                delete strIter;
                 return 0;
             }
 
@@ -1207,8 +1207,6 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErr
             // get a mismatch, dump out and return 0
             if (CollationElementIterator::primaryOrder(oStr)
                 != CollationElementIterator::primaryOrder(oPrefix)) {
-                delete prefixIter;
-                delete strIter;
                 return 0;
 
                 // otherwise, advance to the next character in each string
@@ -1228,9 +1226,6 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErr
 #ifdef RBNF_DEBUG
         fprintf(stderr, "prefix length: %d\n", result);
 #endif
-        delete prefixIter;
-        delete strIter;
-
         return result;
 #if 0
         //----------------------------------------------------------------
@@ -1438,15 +1433,17 @@ NFRule::allIgnorable(const UnicodeString& str, UErrorCode& status) const
     // a collation element iterator and make sure each collation
     // element is 0 (ignorable) at the primary level
     if (formatter->isLenient()) {
-        RuleBasedCollator* collator = (RuleBasedCollator*)(formatter->getCollator());
-        CollationElementIterator* iter = collator->createCollationElementIterator(str);
-        
+        const RuleBasedCollator* collator = formatter->getCollator();
+        if (collator == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return FALSE;
+        }
+        LocalPointer<CollationElementIterator> iter(collator->createCollationElementIterator(str));
+
         // Memory allocation error check.
-        if (collator == NULL || iter == NULL) {
-        	delete collator;
-        	delete iter;
-        	status = U_MEMORY_ALLOCATION_ERROR;
-        	return FALSE;
+        if (iter.isNull()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return FALSE;
         }
 
         UErrorCode err = U_ZERO_ERROR;
@@ -1456,7 +1453,6 @@ NFRule::allIgnorable(const UnicodeString& str, UErrorCode& status) const
             o = iter->next(err);
         }
 
-        delete iter;
         return o == CollationElementIterator::NULLORDER;
     }
 #endif
@@ -1470,5 +1466,3 @@ U_NAMESPACE_END
 
 /* U_HAVE_RBNF */
 #endif
-
-

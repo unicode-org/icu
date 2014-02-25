@@ -79,13 +79,7 @@
     <ClCompile Include="apicoll.cpp">
       <Filter>collation</Filter>
     </ClCompile>
-    <ClCompile Include="cntabcol.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
     <ClCompile Include="currcoll.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="dadrcoll.cpp">
       <Filter>collation</Filter>
     </ClCompile>
     <ClCompile Include="decoll.cpp">
@@ -469,6 +463,9 @@
     <ClCompile Include="regiontst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="collationtest.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
@@ -489,13 +486,7 @@
     <ClInclude Include="apicoll.h">
       <Filter>collation</Filter>
     </ClInclude>
-    <ClInclude Include="cntabcol.h">
-      <Filter>collation</Filter>
-    </ClInclude>
     <ClInclude Include="currcoll.h">
-      <Filter>collation</Filter>
-    </ClInclude>
-    <ClInclude Include="dadrcoll.h">
       <Filter>collation</Filter>
     </ClInclude>
     <ClInclude Include="decoll.h">

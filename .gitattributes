@@ -927,7 +927,6 @@ icu4c/source/data/curr/zh_TW.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/zu.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/icu-config.xml svneol=native#text/xml
 icu4c/source/data/icu4j-readme.txt svneol=native#text/plain
-icu4c/source/data/in/coll/invuca.icu -text
 icu4c/source/data/in/coll/ucadata.icu -text
 icu4c/source/data/in/nfc.nrm -text
 icu4c/source/data/in/nfkc.nrm -text
@@ -3638,7 +3637,6 @@ icu4c/source/test/testdata/BidiTest.txt svneol=native#text/plain
 icu4c/source/test/testdata/CollationTest_NON_IGNORABLE_SHORT.txt svneol=native#text/plain
 icu4c/source/test/testdata/CollationTest_SHIFTED_SHORT.txt svneol=native#text/plain
 icu4c/source/test/testdata/ConverterSelectorTestUTF8.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/test/testdata/DataDrivenCollationTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/GraphemeBreakTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/LineBreakTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/NormalizationTest-3.2.0.txt svneol=native#text/plain
@@ -3648,6 +3646,7 @@ icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/WordBreakTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/calendar.txt svneol=native#text/plain
 icu4c/source/test/testdata/casing.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/test/testdata/collationtest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/confusables.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/conversion.txt svneol=native#text/plain
 icu4c/source/test/testdata/csdetest.xml svneol=native#text/xml

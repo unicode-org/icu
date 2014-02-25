@@ -361,9 +361,6 @@
     <ClCompile Include="unorm.cpp">
       <Filter>normalization</Filter>
     </ClCompile>
-    <ClCompile Include="unorm_it.c">
-      <Filter>normalization</Filter>
-    </ClCompile>
     <ClCompile Include="unormcmp.cpp">
       <Filter>normalization</Filter>
     </ClCompile>
@@ -766,9 +763,6 @@
       <Filter>locales &amp; resources</Filter>
     </ClInclude>
     <ClInclude Include="normalizer2impl.h">
-      <Filter>normalization</Filter>
-    </ClInclude>
-    <ClInclude Include="unorm_it.h">
       <Filter>normalization</Filter>
     </ClInclude>
     <ClInclude Include="unormimp.h">

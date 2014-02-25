@@ -1,11 +1,11 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
 *
-* File CRESTST.C
+* File creststn.c
 *
 * Modification History:
 *        Name              Date               Description
@@ -288,6 +288,7 @@ static void TestErrorCodes(void) {
   ures_close(r);
   ures_close(r2);
 
+#if !UCONFIG_NO_COLLATION
   /** Now, with the collation bundle **/
  
   /* first bundle should return fallback warning */
@@ -326,6 +327,7 @@ static void TestErrorCodes(void) {
   checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
   ures_close(r);
   ures_close(r2);
+#endif  /* !UCONFIG_NO_COLLATION */
 }
 
 static void TestAliasConflict(void) {
@@ -920,11 +922,10 @@ static void TestEmptyBundle(){
 }
 
 static void TestBinaryCollationData(){
+#if !UCONFIG_NO_COLLATION 
     UErrorCode status=U_ZERO_ERROR;
     const char*      locale="te";
-#if !UCONFIG_NO_COLLATION 
     const char* testdatapath;
-#endif
     UResourceBundle *teRes = NULL;
     UResourceBundle *coll=NULL;
     UResourceBundle *binColl = NULL;
@@ -932,7 +933,6 @@ static void TestBinaryCollationData(){
     int32_t len=0;
     const char* action="testing the binary collaton data";
 
-#if !UCONFIG_NO_COLLATION 
     log_verbose("Testing binary collation data resource......\n");
 
     testdatapath=loadTestData(&status);
@@ -1407,6 +1407,7 @@ static void TestGetVersion(){
 
 
 static void TestGetVersionColl(){
+#if !UCONFIG_NO_COLLATION
     UVersionInfo minVersionArray = {0x00, 0x00, 0x00, 0x00};
     UVersionInfo maxVersionArray = {0x50, 0x80, 0xcf, 0xcf};
     UVersionInfo versionArray;
@@ -1460,6 +1461,7 @@ static void TestGetVersionColl(){
         log_err("Err %s testing Collation locales.\n", u_errorName(status));
     }
     uenum_close(locs);
+#endif  /* !UCONFIG_NO_COLLATION */
 }
 
 static void TestResourceBundles()
@@ -2612,6 +2614,7 @@ static void TestGetFunctionalEquivalentOf(const char *path, const char *resName,
 }
 
 static void TestGetFunctionalEquivalent(void) {
+#if !UCONFIG_NO_COLLATION
     static const char * const collCases[] = {
         /*   avail   locale          equiv   */
         "f",    "sv_US_CALIFORNIA",               "sv",
@@ -2655,6 +2658,7 @@ static void TestGetFunctionalEquivalent(void) {
         "f",    "nl_NL_EEXT@collation=stroke",    "root",
         NULL
     };
+#endif  /* !UCONFIG_NO_COLLATION */
 
     static const char *calCases[] = {
         /*   avail   locale                       equiv   */

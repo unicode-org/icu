@@ -70,8 +70,15 @@ nfrs.o nfrule.o nfsubs.o rbnf.o numsys.o unumsys.o ucsdet.o \
 ucal.o calendar.o gregocal.o timezone.o simpletz.o olsontz.o \
 astro.o taiwncal.o buddhcal.o persncal.o islamcal.o japancal.o gregoimp.o hebrwcal.o \
 indiancal.o chnsecal.o cecal.o coptccal.o dangical.o ethpccal.o \
-coleitr.o coll.o tblcoll.o sortkey.o bocsu.o ucoleitr.o \
-ucol.o ucol_res.o ucol_bld.o ucol_sit.o ucol_tok.o ucol_wgt.o ucol_cnt.o ucol_elm.o \
+coleitr.o coll.o sortkey.o bocsu.o ucoleitr.o \
+ucol.o ucol_res.o ucol_sit.o \
+collation.o collationsettings.o collationdata.o collationtailoring.o \
+collationdatareader.o collationdatawriter.o collationfcd.o \
+collationiterator.o utf16collationiterator.o utf8collationiterator.o uitercollationiterator.o \
+collationsets.o \
+collationcompare.o collationfastlatin.o collationkeys.o rulebasedcollator.o collationroot.o \
+collationrootelements.o collationdatabuilder.o collationbasedatabuilder.o \
+collationweights.o collationruleparser.o collationbuilder.o collationfastlatinbuilder.o \
 strmatch.o usearch.o search.o stsearch.o \
 translit.o utrans.o esctrn.o unesctrn.o funcrepl.o strrepl.o tridpars.o \
 cpdtrans.o rbt.o rbt_data.o rbt_pars.o rbt_rule.o rbt_set.o \
