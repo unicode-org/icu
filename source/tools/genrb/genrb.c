@@ -557,7 +557,7 @@ processFile(
         printf("autodetected encoding %s\n", cp);
     }
     /* Parse the data into an SRBRoot */
-    data = parse(ucbuf, inputDir, outputDir,
+    data = parse(ucbuf, inputDir, outputDir, filename,
                  !omitBinaryCollation, options[NO_COLLATION_RULES].doesOccur, status);
 
     if (data == NULL || U_FAILURE(*status)) {

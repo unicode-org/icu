@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2013-2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/collation/ko.xml
@@ -486,23 +486,23 @@ ko{
                 "<<ᇂ"
                 "&ᄀ"
                 "<<ᄁ"
-                "=ᄀᄀ"
+                // patch for v2: removed "=ᄀᄀ"
                 "<<<ㄲ"
                 "&ᄃ"
                 "<<ᄄ"
-                "=ᄃᄃ"
+                // patch for v2: removed "=ᄃᄃ"
                 "<<<ㄸ"
                 "&ᄇ"
                 "<<ᄈ"
-                "=ᄇᄇ"
+                // patch for v2: removed "=ᄇᄇ"
                 "<<<ㅃ"
                 "&ᄉ"
                 "<<ᄊ"
-                "=ᄉᄉ"
+                // patch for v2: removed "=ᄉᄉ"
                 "<<<ㅆ"
                 "&ᄌ"
                 "<<ᄍ"
-                "=ᄌᄌ"
+                // patch for v2: removed "=ᄌᄌ"
                 "<<<ㅉ"
             }
             Version{"24"}

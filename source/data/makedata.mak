@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2013, International Business Machines Corporation
+#* Copyright (C) 1999-2014, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 # nmake file for creating data files on win32
@@ -602,14 +602,13 @@ icu4j-data-install :
 	copy "$(ICUTMP)\$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUTMP)\$(ICUPKG).dat"
 !ELSE
-"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) $(CNV_FILES_SPECIAL) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\nfc.nrm" "$(ICUBLD_PKG)\nfkc.nrm" "$(ICUBLD_PKG)\nfkc_cf.nrm" "$(ICUBLD_PKG)\uts46.nrm" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu" "$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" $(CURR_RES_FILES) $(LANG_RES_FILES) $(REGION_RES_FILES) $(ZONE_RES_FILES) $(BRK_FILES) $(BRK_DICT_FILES) $(BRK_RES_FILES) $(ALL_RES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(SPREP_FILES) "$(ICUBLD_PKG)\confusables.cfu"
+"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) $(CNV_FILES_SPECIAL) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\nfc.nrm" "$(ICUBLD_PKG)\nfkc.nrm" "$(ICUBLD_PKG)\nfkc_cf.nrm" "$(ICUBLD_PKG)\uts46.nrm" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu"  $(CURR_RES_FILES) $(LANG_RES_FILES) $(REGION_RES_FILES) $(ZONE_RES_FILES) $(BRK_FILES) $(BRK_DICT_FILES) $(BRK_RES_FILES) $(ALL_RES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(SPREP_FILES) "$(ICUBLD_PKG)\confusables.cfu"
 	@echo Building icu data
 	cd "$(ICUBLD_PKG)"
 	"$(ICUPBIN)\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) <<"$(ICUTMP)\icudata.lst"
 unames.icu
 confusables.cfu
 $(ICUCOL)\ucadata.icu
-$(ICUCOL)\invuca.icu
 cnvalias.icu
 nfc.nrm
 nfkc.nrm
@@ -974,9 +973,6 @@ res_index:table(nofallback) {
 	"$(ICUPBIN)\icupkg" -tl $? $@
 
 "$(ICUBLD_PKG)\uts46.nrm": $(ICUSRCDATA_RELATIVE_PATH)\in\uts46.nrm
-	"$(ICUPBIN)\icupkg" -tl $? $@
-
-"$(ICUBLD_PKG)\coll\invuca.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\coll\invuca.icu
 	"$(ICUPBIN)\icupkg" -tl $? $@
 
 "$(ICUBLD_PKG)\coll\ucadata.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\coll\ucadata.icu

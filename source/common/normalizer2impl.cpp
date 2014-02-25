@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2013, International Business Machines
+*   Copyright (C) 2009-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -357,7 +357,69 @@ uint8_t Normalizer2Impl::getTrailCCFromCompYesAndZeroCC(const UChar *cpStart, co
     }
 }
 
+namespace {
+
+class LcccContext {
+public:
+    LcccContext(const Normalizer2Impl &ni, UnicodeSet &s) : impl(ni), set(s) {}
+
+    void handleRange(UChar32 start, UChar32 end, uint16_t norm16) {
+        if(impl.isAlgorithmicNoNo(norm16)) {
+            // Range of code points with same-norm16-value algorithmic decompositions.
+            // They might have different non-zero FCD16 values.
+            do {
+                uint16_t fcd16=impl.getFCD16(start);
+                if(fcd16>0xff) { set.add(start); }
+            } while(++start<=end);
+        } else {
+            uint16_t fcd16=impl.getFCD16(start);
+            if(fcd16>0xff) { set.add(start, end); }
+        }
+    }
+
+private:
+    const Normalizer2Impl &impl;
+    UnicodeSet &set;
+};
+
+struct PropertyStartsContext {
+    PropertyStartsContext(const Normalizer2Impl &ni, const USetAdder *adder)
+            : impl(ni), sa(adder) {}
+
+    const Normalizer2Impl &impl;
+    const USetAdder *sa;
+};
+
+}  // namespace
+
 U_CDECL_BEGIN
+
+static UBool U_CALLCONV
+enumLcccRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
+    ((LcccContext *)context)->handleRange(start, end, (uint16_t)value);
+    return TRUE;
+}
+
+static UBool U_CALLCONV
+enumNorm16PropertyStartsRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
+    /* add the start code point to the USet */
+    const PropertyStartsContext *ctx=(const PropertyStartsContext *)context;
+    const USetAdder *sa=ctx->sa;
+    sa->add(sa->set, start);
+    if(start!=end && ctx->impl.isAlgorithmicNoNo((uint16_t)value)) {
+        // Range of code points with same-norm16-value algorithmic decompositions.
+        // They might have different non-zero FCD16 values.
+        uint16_t prevFCD16=ctx->impl.getFCD16(start);
+        while(++start<=end) {
+            uint16_t fcd16=ctx->impl.getFCD16(start);
+            if(fcd16!=prevFCD16) {
+                sa->add(sa->set, start);
+                prevFCD16=fcd16;
+            }
+        }
+    }
+    return TRUE;
+}
 
 static UBool U_CALLCONV
 enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*end*/, uint32_t /*value*/) {
@@ -375,9 +437,17 @@ segmentStarterMapper(const void * /*context*/, uint32_t value) {
 U_CDECL_END
 
 void
+Normalizer2Impl::addLcccChars(UnicodeSet &set) const {
+    /* add the start code point of each same-value range of each trie */
+    LcccContext context(*this, set);
+    utrie2_enum(normTrie, NULL, enumLcccRange, &context);
+}
+
+void
 Normalizer2Impl::addPropertyStarts(const USetAdder *sa, UErrorCode & /*errorCode*/) const {
     /* add the start code point of each same-value range of each trie */
-    utrie2_enum(normTrie, NULL, enumPropertyStartsRange, sa);
+    PropertyStartsContext context(*this, sa);
+    utrie2_enum(normTrie, NULL, enumNorm16PropertyStartsRange, &context);
 
     /* add Hangul LV syllables and LV+1 because of skippables */
     for(UChar c=Hangul::HANGUL_BASE; c<Hangul::HANGUL_LIMIT; c+=Hangul::JAMO_T_COUNT) {
@@ -417,6 +487,38 @@ Normalizer2Impl::copyLowPrefixFromNulTerminated(const UChar *src,
         }
     }
     return src;
+}
+
+UnicodeString &
+Normalizer2Impl::decompose(const UnicodeString &src, UnicodeString &dest,
+                           UErrorCode &errorCode) const {
+    if(U_FAILURE(errorCode)) {
+        dest.setToBogus();
+        return dest;
+    }
+    const UChar *sArray=src.getBuffer();
+    if(&dest==&src || sArray==NULL) {
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        dest.setToBogus();
+        return dest;
+    }
+    decompose(sArray, sArray+src.length(), dest, src.length(), errorCode);
+    return dest;
+}
+
+void
+Normalizer2Impl::decompose(const UChar *src, const UChar *limit,
+                           UnicodeString &dest,
+                           int32_t destLengthEstimate,
+                           UErrorCode &errorCode) const {
+    if(destLengthEstimate<0 && limit!=NULL) {
+        destLengthEstimate=(int32_t)(limit-src);
+    }
+    dest.remove();
+    ReorderingBuffer buffer(*this, dest);
+    if(buffer.init(destLengthEstimate, errorCode)) {
+        decompose(src, limit, &buffer, errorCode);
+    }
 }
 
 // Dual functionality:

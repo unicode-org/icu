@@ -31,6 +31,9 @@
 #include "putilimp.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "ucol_imp.h"
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static void TestAttribute(void);
 static void TestDefault(void);
@@ -310,7 +313,7 @@ void TestProperty()
      * rather than hardcoding (and updating each time) a particular UCA version. */
     u_getUnicodeVersion(versionUCDArray);
     ucol_getUCAVersion(col, versionUCAArray);
-    if (0!=uprv_memcmp(versionUCAArray, versionUCDArray, 4) /*TODO: remove the following once UCA is up to date, ticket:9101*/ && !(versionUCDArray[0]==6 && versionUCDArray[1]==3)) {
+    if (0!=uprv_memcmp(versionUCAArray, versionUCDArray, 4)) {
       log_err("Testing ucol_getUCAVersion() - unexpected result: %hu.%hu.%hu.%hu\n",
               versionUCAArray[0], versionUCAArray[1], versionUCAArray[2], versionUCAArray[3]);
     }
@@ -435,7 +438,6 @@ void TestRuleBasedColl()
     UChar ruleset1[60];
     UChar ruleset2[50];
     UChar teststr[10];
-    UChar teststr2[10];
     const UChar *rule1, *rule2, *rule3, *rule4;
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
@@ -531,17 +533,13 @@ void TestRuleBasedColl()
     ucol_closeElements(iter2);
     ucol_close(col1);
     ucol_close(col2);
-    /* test that we can start a rule without a & or < */
+    /* CLDR 24+ requires a reset before the first relation */
     u_uastrcpy(ruleset1, "< z < a");
     col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &status);
-    if (U_FAILURE(status)) {
-        log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
-        return;
-    }
-    u_uastrcpy(teststr, "z");
-    u_uastrcpy(teststr2, "a");
-    if (ucol_greaterOrEqual(col1, teststr, 1, teststr2, 1)) {
-        log_err("Rule \"z < a\" fails");
+    if (status != U_PARSE_ERROR && status != U_INVALID_FORMAT_ERROR) {
+        log_err("ucol_openRules(without initial reset: '< z < a') "
+                "should fail with U_PARSE_ERROR or U_INVALID_FORMAT_ERROR but yielded %s\n",
+                myErrorName(status));
     }
     ucol_close(col1);
 }
@@ -1179,7 +1177,7 @@ void TestSortKey()
     free(sortkEmpty);
 
     log_verbose("testing passing invalid string\n");
-    sortklen = ucol_getSortKey(col, NULL, 0, NULL, 0);
+    sortklen = ucol_getSortKey(col, NULL, 10, NULL, 0);
     if(sortklen != 0) {
       log_err("Invalid string didn't return sortkey size of 0\n");
     }
@@ -1389,7 +1387,6 @@ void TestGetLocale() {
 
   int32_t i = 0;
 
-  /* Now that the collation tree is separate, actual==valid at all times. [alan] */
   static const struct {
     const char* requestedLocale;
     const char* validLocale;
@@ -1410,8 +1407,12 @@ void TestGetLocale() {
       ucol_close(coll);
       continue;
     }
-   locale = ucol_getLocaleByType(coll, ULOC_REQUESTED_LOCALE, &status);
-    if(strcmp(locale, testStruct[i].requestedLocale) != 0) {
+    /*
+     * The requested locale may be the same as the valid locale,
+     * or may not be supported at all. See ticket #10477.
+     */
+    locale = ucol_getLocaleByType(coll, ULOC_REQUESTED_LOCALE, &status);
+    if(strcmp(locale, testStruct[i].requestedLocale) != 0 && strcmp(locale, testStruct[i].validLocale) != 0) {
       log_err("[Coll %s]: Error in requested locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].requestedLocale, locale);
     }
     locale = ucol_getLocaleByType(coll, ULOC_VALID_LOCALE, &status);
@@ -1430,9 +1431,10 @@ void TestGetLocale() {
     UCollator *defaultColl = ucol_open(NULL, &status);
     coll = ucol_open("blahaha", &status);
     if(U_SUCCESS(status)) {
+      /* See comment above about ticket #10477.
       if(strcmp(ucol_getLocaleByType(coll, ULOC_REQUESTED_LOCALE, &status), "blahaha")) {
         log_err("Nonexisting locale didn't preserve the requested locale\n");
-      }
+      } */
       if(strcmp(ucol_getLocaleByType(coll, ULOC_VALID_LOCALE, &status),
         ucol_getLocaleByType(defaultColl, ULOC_VALID_LOCALE, &status))) {
         log_err("Valid locale for nonexisting locale locale collator differs "
@@ -1835,13 +1837,13 @@ void TestGetTailoredSet() {
   int32_t buffLen = 0;
   USet *set = NULL;
 
-  for(i = 0; i < sizeof(setTest)/sizeof(setTest[0]); i++) {
+  for(i = 0; i < LENGTHOF(setTest); i++) {
     buffLen = u_unescape(setTest[i].rules, buff, 1024);
     coll = ucol_openRules(buff, buffLen, UCOL_DEFAULT, UCOL_DEFAULT, &pError, &status);
     if(U_SUCCESS(status)) {
       set = ucol_getTailoredSet(coll, &status);
-      if(uset_size(set) != setTest[i].testsize) {
-        log_err("Tailored set size different (%d) than expected (%d)\n", uset_size(set), setTest[i].testsize);
+      if(uset_size(set) < setTest[i].testsize) {
+        log_err("Tailored set size smaller (%d) than expected (%d)\n", uset_size(set), setTest[i].testsize);
       }
       for(j = 0; j < setTest[i].testsize; j++) {
         buffLen = u_unescape(setTest[i].tests[j], buff, 1024);
@@ -2004,15 +2006,21 @@ static void TestShortString(void)
         uint32_t   expectedIdentifier;
     } testCases[] = {
         /*
-         * The following expectedOutput contains a collation weight (2700 from UCA 6.0)
-         * which is the primary weight for the T character (U+0041) in the input.
-         * When that character gets a different weight in FractionalUCA.txt,
-         * the expectedOutput needs to be adjusted.
-         * That is, when we upgrade to a new UCA version or change collation
-         * in such a way that the absolute weight for 'A' changes,
-         * we will get a test failure here and need to adjust the test case.
+         * Note: The first test case sets variableTop to the dollar sign '$'.
+         * We have agreed to drop support for variableTop in ucol_getShortDefinitionString(),
+         * related to ticket #10372 "deprecate collation APIs for short definition strings",
+         * and because it did not work for most spaces/punctuation/symbols,
+         * as documented in ticket #10386 "collation short definition strings issues":
+         * The old code wrote only 3 hex digits for primary weights below 0x0FFF,
+         * which is a syntax error, and then failed to normalize the result.
+         *
+         * The "B2700" was removed from the expected result ("B2700_KPHONEBOOK_LDE").
+         *
+         * Previously, this test had to be adjusted for root collator changes because the
+         * primary weight of the variable top character naturally changed
+         * but was baked into the expected result.
          */
-        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2700_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
+        {"LDE_RDE_KPHONEBOOK_T0024_ZLATN","KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
 
         {"LEN_RUS_NO_AS_S4","AS_LROOT_NO_S4", NULL, U_USING_DEFAULT_WARNING, 0, 0 },
         {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
@@ -2084,7 +2092,7 @@ static void TestShortString(void)
 
 static void
 doSetsTest(const char *locale, const USet *ref, USet *set, const char* inSet, const char* outSet, UErrorCode *status) {
-    UChar buffer[512];
+    UChar buffer[65536];
     int32_t bufLen;
 
     uset_clear(set);
@@ -2096,6 +2104,11 @@ doSetsTest(const char *locale, const USet *ref, USet *set, const char* inSet, co
 
     if(!uset_containsAll(ref, set)) {
         log_err("%s: Some stuff from %s is not present in the set\n", locale, inSet);
+        uset_removeAll(set, ref);
+        bufLen = uset_toPattern(set, buffer, LENGTHOF(buffer), TRUE, status);
+        log_info("    missing: %s\n", aescstrdup(buffer, bufLen));
+        bufLen = uset_toPattern(ref, buffer, LENGTHOF(buffer), TRUE, status);
+        log_info("    total: size=%i  %s\n", uset_getItemCount(ref), aescstrdup(buffer, bufLen));
     }
 
     uset_clear(set);
@@ -2150,7 +2163,19 @@ TestGetContractionsAndUnsafes(void)
             "[jabv]"
         },
         { "ja",
-          "[{\\u3053\\u3099\\u309D}{\\u3053\\u3099\\u309D\\u3099}{\\u3053\\u3099\\u309E}{\\u3053\\u3099\\u30FC}{\\u3053\\u309D}{\\u3053\\u309D\\u3099}{\\u3053\\u309E}{\\u3053\\u30FC}{\\u30B3\\u3099\\u30FC}{\\u30B3\\u3099\\u30FD}{\\u30B3\\u3099\\u30FD\\u3099}{\\u30B3\\u3099\\u30FE}{\\u30B3\\u30FC}{\\u30B3\\u30FD}{\\u30B3\\u30FD\\u3099}{\\u30B3\\u30FE}]",
+          /*
+           * The "collv2" builder omits mappings if the collator maps their
+           * character sequences to the same CEs.
+           * For example, it omits Japanese contractions for NFD forms
+           * of the voiced iteration mark (U+309E = U+309D + U+3099), such as
+           * {\\u3053\\u3099\\u309D\\u3099}{\\u3053\\u309D\\u3099}
+           * {\\u30B3\\u3099\\u30FD\\u3099}{\\u30B3\\u30FD\\u3099}.
+           * It does add mappings for the precomposed forms.
+           */
+          "[{\\u3053\\u3099\\u309D}{\\u3053\\u3099\\u309E}{\\u3053\\u3099\\u30FC}"
+           "{\\u3053\\u309D}{\\u3053\\u309E}{\\u3053\\u30FC}"
+           "{\\u30B3\\u3099\\u30FC}{\\u30B3\\u3099\\u30FD}{\\u30B3\\u3099\\u30FE}"
+           "{\\u30B3\\u30FC}{\\u30B3\\u30FD}{\\u30B3\\u30FE}]",
           "[{\\u30FD\\u3099}{\\u309D\\u3099}{\\u3053\\u3099}{\\u30B3\\u3099}{lj}{nj}]",
             "[\\u30FE\\u00e6]",
             "[a]",
@@ -2158,9 +2183,6 @@ TestGetContractionsAndUnsafes(void)
             "[]"
         }
     };
-
-
-
 
     UErrorCode status = U_ZERO_ERROR;
     UCollator *coll = NULL;
@@ -2221,6 +2243,20 @@ TestGetContractionsAndUnsafes(void)
 static void
 TestOpenBinary(void)
 {
+    /*
+     * ucol_openBinary() documents:
+     * "The API also takes a base collator which usually should be UCA."
+     * and
+     * "Currently it cannot be NULL."
+     *
+     * However, the check for NULL was commented out in ICU 3.4 (r18149).
+     * Ticket #4355 requested "Make collation work with minimal data.
+     * Optionally without UCA, with relevant parts of UCA copied into the tailoring table."
+     *
+     * The ICU team agreed with ticket #10517 "require base collator in ucol_openBinary() etc."
+     * to require base!=NULL again.
+     */
+#define OPEN_BINARY_ACCEPTS_NULL_BASE 0
     UErrorCode status = U_ZERO_ERROR;
     /*
     char rule[] = "&h < d < c < b";
@@ -2230,7 +2266,9 @@ TestOpenBinary(void)
     /* we have to use Cyrillic letters because latin-1 always gets copied */
     const char rule[] = "&\\u0452 < \\u0434 < \\u0433 < \\u0432"; /* &dje < d < g < v */
     const char *wUCA[] = { "\\u0430", "\\u0452", "\\u0434", "\\u0433", "\\u0432", "\\u0435" }; /* a, dje, d, g, v, e */
+#if OPEN_BINARY_ACCEPTS_NULL_BASE
     const char *noUCA[] = {"\\u0434", "\\u0433", "\\u0432", "\\u0430", "\\u0435", "\\u0452" }; /* d, g, v, a, e, dje */
+#endif
 
     UChar uRules[256];
     int32_t uRulesLen = u_unescape(rule, uRules, 256);
@@ -2266,11 +2304,18 @@ TestOpenBinary(void)
 
     cloneWUCA = ucol_openBinary(image, imageSize, UCA, &status);
     cloneNOUCA = ucol_openBinary(image, imageSize, NULL, &status);
+#if !OPEN_BINARY_ACCEPTS_NULL_BASE
+    if(status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucol_openBinary(base=NULL) unexpectedly did not fail - %s\n", u_errorName(status));
+    }
+#endif
 
     genericOrderingTest(coll, wUCA, sizeof(wUCA)/sizeof(wUCA[0]));
 
     genericOrderingTest(cloneWUCA, wUCA, sizeof(wUCA)/sizeof(wUCA[0]));
+#if OPEN_BINARY_ACCEPTS_NULL_BASE
     genericOrderingTest(cloneNOUCA, noUCA, sizeof(noUCA)/sizeof(noUCA[0]));
+#endif
 
     if(image != imageBuffer) {
         free(image);

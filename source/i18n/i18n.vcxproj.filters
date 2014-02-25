@@ -39,31 +39,13 @@
     <ClCompile Include="stsearch.cpp">
       <Filter>collation</Filter>
     </ClCompile>
-    <ClCompile Include="tblcoll.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
     <ClCompile Include="ucol.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="ucol_bld.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="ucol_cnt.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="ucol_elm.cpp">
       <Filter>collation</Filter>
     </ClCompile>
     <ClCompile Include="ucol_res.cpp">
       <Filter>collation</Filter>
     </ClCompile>
     <ClCompile Include="ucol_sit.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="ucol_tok.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="ucol_wgt.cpp">
       <Filter>collation</Filter>
     </ClCompile>
     <ClCompile Include="ucoleitr.cpp">
@@ -519,30 +501,87 @@
     <ClCompile Include="uregion.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="bocsu.cpp">
-      <Filter>transforms</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bocsu.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collation.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationbasedatabuilder.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationbuilder.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationcompare.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationdata.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationdatabuilder.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationdatareader.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationdatawriter.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationfastlatin.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationfastlatinbuilder.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationfcd.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationiterator.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationkeys.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationroot.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationrootelements.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationruleparser.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationsets.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationsettings.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationtailoring.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="collationweights.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="rulebasedcollator.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="uitercollationiterator.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="utf8collationiterator.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="utf16collationiterator.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
     <ClInclude Include="bocsu.h">
       <Filter>collation</Filter>
     </ClInclude>
-    <ClInclude Include="ucol_bld.h">
-      <Filter>collation</Filter>
-    </ClInclude>
-    <ClInclude Include="ucol_cnt.h">
-      <Filter>collation</Filter>
-    </ClInclude>
-    <ClInclude Include="ucol_elm.h">
-      <Filter>collation</Filter>
-    </ClInclude>
     <ClInclude Include="ucol_imp.h">
-      <Filter>collation</Filter>
-    </ClInclude>
-    <ClInclude Include="ucol_tok.h">
-      <Filter>collation</Filter>
-    </ClInclude>
-    <ClInclude Include="ucol_wgt.h">
       <Filter>collation</Filter>
     </ClInclude>
     <ClInclude Include="usrchimp.h">
@@ -835,6 +874,75 @@
     </ClInclude>
     <ClInclude Include="region_impl.h">
       <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="collation.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationbasedatabuilder.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationbuilder.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationcompare.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationdata.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationdatabuilder.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationdatareader.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationdatawriter.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationfastlatin.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationfastlatinbuilder.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationfcd.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationiterator.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationkeys.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationroot.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationrootelements.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationruleparser.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationsets.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationsettings.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationtailoring.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="collationweights.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="utf16collationiterator.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="uitercollationiterator.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8collationiterator.h">
+      <Filter>collation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

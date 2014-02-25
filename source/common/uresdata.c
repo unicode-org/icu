@@ -1,9 +1,7 @@
 /*
 *******************************************************************************
-*                                                                             *
-* Copyright (C) 1999-2012, International Business Machines Corporation        *
-*               and others. All Rights Reserved.                              *
-*                                                                             *
+* Copyright (C) 1999-2014, International Business Machines Corporation
+*               and others. All Rights Reserved.
 *******************************************************************************
 *   file name:  uresdata.c
 *   encoding:   US-ASCII
@@ -755,7 +753,7 @@ ures_swapResource(const UDataSwapper *ds,
                 /* its table key string is unknown but it looks like a collation binary */
                 ucol_looksLikeCollationBinary(ds, p+1, count))
         ) {
-            ucol_swapBinary(ds, p+1, count, q+1, pErrorCode);
+            ucol_swap(ds, p+1, count, q+1, pErrorCode);
         }
 #endif
         break;

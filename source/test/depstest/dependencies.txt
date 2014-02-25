@@ -134,7 +134,7 @@ library: common
     date_interval
     breakiterator
     uts46 filterednormalizer2 normalizer2 canonical_iterator
-    normlzr unormcmp unorm_it unorm
+    normlzr unormcmp unorm
     idna2003 stringprep
     stringenumeration
     unistr_core unistr_props unistr_case unistr_case_locale unistr_titlecase_brkiter unistr_cnv
@@ -187,11 +187,6 @@ group: unormcmp  # unorm_compare()
     filterednormalizer2
     uniset_props  # for uniset_getUnicode32Instance()
     ucase
-
-group: unorm_it  # UNormIterator
-    unorm_it.o
-  deps
-    unorm uiter
 
 group: unorm  # old normalization C API
     unorm.o
@@ -723,7 +718,7 @@ group: icuplug
 group: ucol_swp
     ucol_swp.o
   deps
-    platform
+    utrie2  # Format version 4 uses UTrie2.
 
 group: errorcode  # ErrorCode base class
     errorcode.o
@@ -760,7 +755,8 @@ group: platform
 library: i18n
   deps
     region localedata genderinfo charset_detector spoof_detection
-    alphabetic_index collation formatting formattable_cnv regex regex_cnv translit
+    alphabetic_index collation collation_builder string_search
+    formatting formattable_cnv regex regex_cnv translit
     universal_time_scale
     uclean_i18n
 
@@ -803,12 +799,36 @@ group: alphabetic_index
     uclean_i18n
 
 group: collation
-    bocsu.o coleitr.o coll.o sortkey.o tblcoll.o ucol.o
-    ucol_bld.o ucol_cnt.o ucol_elm.o ucol_res.o ucol_sit.o ucol_tok.o ucol_wgt.o ucoleitr.o
+    # The collation "runtime" code should not depend on the collation_builder code.
+    # For example, loading from resource bundles does not fall back to
+    # building from rules.
+    collation.o collationcompare.o collationdata.o
+    collationdatareader.o collationdatawriter.o
+    collationfastlatin.o collationfcd.o collationiterator.o collationkeys.o
+    collationroot.o collationrootelements.o collationsets.o
+    collationsettings.o collationtailoring.o rulebasedcollator.o
+    uitercollationiterator.o utf16collationiterator.o utf8collationiterator.o
+    bocsu.o coleitr.o coll.o sortkey.o ucol.o
+    ucol_res.o ucol_sit.o ucoleitr.o
+  deps
+    bytestream normalizer2 resourcebundle service_registration
+    ucharstrieiterator uiter ulist uset usetiter uvector32 uvector64
+    uclean_i18n
+
+group: collation_builder
+    # The CollationBaseDataBuilder is only called from genuca, and maybe from tests.
+    # It is in the i18n library so that it gets maintained and refactored together with
+    # related code.
+    collationbasedatabuilder.o
+    collationbuilder.o collationdatabuilder.o collationfastlatinbuilder.o
+    collationruleparser.o collationweights.o
+  deps
+    canonical_iterator collation ucharstriebuilder uset_props
+
+group: string_search
     search.o stsearch.o usearch.o
   deps
-    common  # TODO: Could be narrower.
-    uclean_i18n
+    breakiterator collation
 
 group: formatting
     # TODO: Try to subdivide this ball of wax.
@@ -841,7 +861,7 @@ group: formatting
   deps
     digitlist formattable format
     pluralrules
-    collation  # for rbnf
+    collation collation_builder  # for rbnf
     common
     floating_point  # sqrt() for astro.o
     trigonometry  # for astro.o
