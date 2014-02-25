@@ -1097,23 +1097,30 @@ public class IBMCalendarTest extends CalendarTest {
         private int hour;
         private int min;
         private int sec;
+        private int ms;
 
         CalFields(int year, int month, int day, int hour, int min, int sec) {
+            this(year, month, day, hour, min, sec, 0);
+        }
+
+        CalFields(int year, int month, int day, int hour, int min, int sec, int ms) {
             this.year = year;
             this.month = month;
             this.day = day;
             this.hour = hour;
             this.min = min;
             this.sec = sec;
+            this.ms = ms;
         }
 
         void setTo(Calendar cal) {
             cal.clear();
             cal.set(year,  month - 1, day, hour, min, sec);
+            cal.set(Calendar.MILLISECOND, ms);
         }
 
         public String toString() {
-            return String.format("%04d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, min, sec);
+            return String.format("%04d-%02d-%02d %02d:%02d:%02d.%03d", year, month, day, hour, min, sec, ms);
         }
 
         public boolean equals(Object other) {
@@ -1124,11 +1131,22 @@ public class IBMCalendarTest extends CalendarTest {
                         && day == otr.day
                         && hour == otr.hour
                         && min == otr.min
-                        && sec == otr.sec);
+                        && sec == otr.sec
+                        && ms == otr.ms);
             }
             return false;
         }
  
+        boolean isEquivalentTo(Calendar cal) {
+            return year == cal.get(Calendar.YEAR)
+                    && month == cal.get(Calendar.MONTH) + 1
+                    && day == cal.get(Calendar.DAY_OF_MONTH)
+                    && hour == cal.get(Calendar.HOUR_OF_DAY)
+                    && min == cal.get(Calendar.MINUTE)
+                    && sec == cal.get(Calendar.SECOND)
+                    && ms == cal.get(Calendar.MILLISECOND);
+        }
+
         static CalFields createFrom(Calendar cal) {
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH) + 1;
@@ -1678,6 +1696,177 @@ public class IBMCalendarTest extends CalendarTest {
                 if (wdt1 != wdt2) {
                     errln("getDayOfWeekType(" + d + "): " + LOCALE_PAIRS[i] + "->" + wdt1 + ", " + LOCALE_PAIRS[i + 1] + "->" + wdt2);
                 }
+            }
+        }
+    }
+
+    public void TestAddAcrossZoneTransition() {
+        class TestData {
+            String zone;
+            CalFields base;
+            int deltaDays;
+            int skippedWTOpt;
+            CalFields expected;
+
+            TestData(String zone, CalFields base, int deltaDays, int skippedWTOpt, CalFields expected) {
+                this.zone = zone;
+                this.base = base;
+                this.deltaDays = deltaDays;
+                this.skippedWTOpt = skippedWTOpt;
+                this.expected = expected;
+            }
+        }
+
+        TestData[] data = new TestData[] {
+            // Add 1 day, from the date before DST transition
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 1, 59, 59, 999), 1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2014, 3, 9, 1, 59, 59, 999)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 1, 59, 59, 999), 1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2014, 3, 9, 1, 59, 59, 999)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 1, 59, 59, 999), 1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2014, 3, 9, 1, 59, 59, 999)),
+
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 2, 0, 0, 0), 1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2014, 3, 9, 1, 0, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 2, 0, 0, 0), 1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 2, 0, 0, 0), 1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 2, 30, 0, 0), 1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2014, 3, 9, 1, 30, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 2, 30, 0, 0), 1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2014, 3, 9, 3, 30, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 2, 30, 0, 0), 1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 3, 0, 0, 0), 1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 3, 0, 0, 0), 1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 8, 3, 0, 0, 0), 1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+
+            // Subtract 1 day, from one day after DST transition
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 1, 59, 59, 999), -1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2014, 3, 9, 1, 59, 59, 999)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 1, 59, 59, 999), -1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2014, 3, 9, 1, 59, 59, 999)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 1, 59, 59, 999), -1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2014, 3, 9, 1, 59, 59, 999)),
+
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 2, 0, 0, 0), -1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2014, 3, 9, 1, 0, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 2, 0, 0, 0), -1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 2, 0, 0, 0), -1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 2, 30, 0, 0), -1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2014, 3, 9, 1, 30, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 2, 30, 0, 0), -1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2014, 3, 9, 3, 30, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 2, 30, 0, 0), -1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 3, 0, 0, 0), -1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 3, 0, 0, 0), -1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+            new TestData("America/Los_Angeles", new CalFields(2014, 3, 10, 3, 0, 0, 0), -1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2014, 3, 9, 3, 0, 0, 0)),
+
+
+            // Test case for ticket#10544
+            new TestData("America/Santiago",    new CalFields(2013, 4, 27, 0, 0, 0, 0), 134, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2013, 9, 7, 23, 0, 0, 0)),
+
+            new TestData("America/Santiago",    new CalFields(2013, 4, 27, 0, 0, 0, 0), 134, Calendar.WALLTIME_LAST,
+                                                new CalFields(2013, 9, 8, 1, 0, 0, 0)),
+
+            new TestData("America/Santiago",    new CalFields(2013, 4, 27, 0, 0, 0, 0), 134, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2013, 9, 8, 1, 0, 0, 0)),
+
+
+            new TestData("America/Santiago",    new CalFields(2013, 4, 27, 0, 30, 0, 0), 134, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2013, 9, 7, 23, 30, 0, 0)),
+
+            new TestData("America/Santiago",    new CalFields(2013, 4, 27, 0, 30, 0, 0), 134, Calendar.WALLTIME_LAST,
+                                                new CalFields(2013, 9, 8, 1, 30, 0, 0)),
+
+            new TestData("America/Santiago",    new CalFields(2013, 4, 27, 0, 30, 0, 0), 134, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2013, 9, 8, 1, 0, 0, 0)),
+
+
+            // Extreme transition - Pacific/Apia completely skips 2011-12-30
+            new TestData("Pacific/Apia",        new CalFields(2011, 12, 29, 0, 0, 0, 0), 1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2011, 12, 31, 0, 0, 0, 0)),
+
+            new TestData("Pacific/Apia",        new CalFields(2011, 12, 29, 0, 0, 0, 0), 1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2011, 12, 31, 0, 0, 0, 0)),
+
+            new TestData("Pacific/Apia",        new CalFields(2011, 12, 29, 0, 0, 0, 0), 1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2011, 12, 31, 0, 0, 0, 0)),
+
+
+            new TestData("Pacific/Apia",        new CalFields(2011, 12, 31, 12, 0, 0, 0), -1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2011, 12, 29, 12, 0, 0, 0)),
+
+            new TestData("Pacific/Apia",        new CalFields(2011, 12, 31, 12, 0, 0, 0), -1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2011, 12, 29, 12, 0, 0, 0)),
+
+            new TestData("Pacific/Apia",        new CalFields(2011, 12, 31, 12, 0, 0, 0), -1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2011, 12, 29, 12, 0, 0, 0)),
+
+
+            // 30 minutes DST - Australia/Lord_Howe
+            new TestData("Australia/Lord_Howe", new CalFields(2013, 10, 5, 2, 15, 0, 0), 1, Calendar.WALLTIME_FIRST,
+                                                new CalFields(2013, 10, 6, 1, 45, 0, 0)),
+
+            new TestData("Australia/Lord_Howe", new CalFields(2013, 10, 5, 2, 15, 0, 0), 1, Calendar.WALLTIME_LAST,
+                                                new CalFields(2013, 10, 6, 2, 45, 0, 0)),
+
+            new TestData("Australia/Lord_Howe", new CalFields(2013, 10, 5, 2, 15, 0, 0), 1, Calendar.WALLTIME_NEXT_VALID,
+                                                new CalFields(2013, 10, 6, 2, 30, 0, 0)),
+        };
+
+        Calendar cal = Calendar.getInstance();
+        for (TestData d : data) {
+            cal.setTimeZone(TimeZone.getTimeZone(d.zone));
+            cal.setSkippedWallTimeOption(d.skippedWTOpt);
+            d.base.setTo(cal);
+            cal.add(Calendar.DATE, d.deltaDays);
+
+            if (!d.expected.isEquivalentTo(cal)) {
+                CalFields res = CalFields.createFrom(cal);
+                String optDisp = d.skippedWTOpt == Calendar.WALLTIME_FIRST ? "FIRST" :
+                    d.skippedWTOpt == Calendar.WALLTIME_LAST ? "LAST" : "NEXT_VALID";
+                errln("Error: base:" + d.base.toString() + ", tz:" + d.zone
+                        + ", delta:" + d.deltaDays + " day(s), opt:" + optDisp
+                        + ", result:" + res.toString() + " - expected:" + d.expected.toString());
             }
         }
     }
