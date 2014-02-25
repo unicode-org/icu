@@ -1166,6 +1166,7 @@ void CollationRegressionTest::Test4179216() {
                 ", but setOffset() yielded " + setOffsetElements[i]);
         }
     }
+    delete iter;
 }
 
 // Ticket 7189
