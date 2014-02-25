@@ -47,7 +47,7 @@ CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
 
 # from icuinfo
 CPPFLAGS+=  "-DU_BUILD=\"@build@\"" "-DU_HOST=\"@host@\"" "-DU_CC=\"@CC@\"" "-DU_CXX=\"@CXX@\""
-
+CPPFLAGS += -DUNISTR_FROM_CHAR_EXPLICIT=explicit -DUNISTR_FROM_STRING_EXPLICIT=explicit
 
 DEFS += -DU_TOOLUTIL_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSICUTOOLUTIL)

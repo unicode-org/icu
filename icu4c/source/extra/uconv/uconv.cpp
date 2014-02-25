@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-*   Copyright (C) 1999-2013, International Business Machines
+*   Copyright (C) 1999-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -659,9 +659,9 @@ ConvertFile::convertFile(const char *pname,
         parse.line = -1;
 
         if (uprv_strchr(translit, ':') || uprv_strchr(translit, '>') || uprv_strchr(translit, '<') || uprv_strchr(translit, '>')) {
-            t = Transliterator::createFromRules("Uconv", str, UTRANS_FORWARD, parse, err);
+            t = Transliterator::createFromRules(UNICODE_STRING_SIMPLE("Uconv"), str, UTRANS_FORWARD, parse, err);
         } else {
-            t = Transliterator::createInstance(translit, UTRANS_FORWARD, err);
+            t = Transliterator::createInstance(UnicodeString(translit, -1, US_INV), UTRANS_FORWARD, err);
         }
 
         if (U_FAILURE(err)) {
