@@ -3064,10 +3064,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         // a computed amount of millis to the current millis.  The only
         // wrinkle is with DST (and/or a change to the zone's UTC offset, which
         // we'll include with DST) -- for some fields, like the DAY_OF_MONTH,
-        // we don't want the HOUR to shift due to changes in DST.  If the
+        // we don't want the wall time to shift due to changes in DST.  If the
         // result of the add operation is to move from DST to Standard, or
         // vice versa, we need to adjust by an hour forward or back,
-        // respectively.  For such fields we set keepHourInvariant to true.
+        // respectively.  For such fields we set keepWallTimeInvariant to true.
 
         // We only adjust the DST for fields larger than an hour.  For
         // fields smaller than an hour, we cannot adjust for DST without
@@ -3082,7 +3082,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         // <April 30>, rather than <April 31> => <May 1>.
 
         long delta = amount; // delta in ms
-        boolean keepHourInvariant = true;
+        boolean keepWallTimeInvariant = true;
 
         switch (field) {
         case ERA:
@@ -3144,22 +3144,22 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case HOUR_OF_DAY:
         case HOUR:
             delta *= ONE_HOUR;
-            keepHourInvariant = false;
+            keepWallTimeInvariant = false;
             break;
 
         case MINUTE:
             delta *= ONE_MINUTE;
-            keepHourInvariant = false;
+            keepWallTimeInvariant = false;
             break;
 
         case SECOND:
             delta *= ONE_SECOND;
-            keepHourInvariant = false;
+            keepWallTimeInvariant = false;
             break;
 
         case MILLISECOND:
         case MILLISECONDS_IN_DAY:
-            keepHourInvariant = false;
+            keepWallTimeInvariant = false;
             break;
 
         default:
@@ -3167,40 +3167,61 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                                                ") not supported");
         }
 
-        // In order to keep the hour invariant (for fields where this is
+        // In order to keep the wall time invariant (for fields where this is
         // appropriate), check the combined DST & ZONE offset before and
         // after the add() operation. If it changes, then adjust the millis
         // to compensate.
         int prevOffset = 0;
-        int hour = 0;
-        if (keepHourInvariant) {
+        int prevWallTime = 0;
+        if (keepWallTimeInvariant) {
             prevOffset = get(DST_OFFSET) + get(ZONE_OFFSET);
-            hour = internalGet(HOUR_OF_DAY);
+            prevWallTime = get(MILLISECONDS_IN_DAY);
         }
 
         setTimeInMillis(getTimeInMillis() + delta);
 
-        if (keepHourInvariant) {
-            int newOffset = get(DST_OFFSET) + get(ZONE_OFFSET);
-            if (newOffset != prevOffset) {
-                // We have done an hour-invariant adjustment but the
-                // combined offset has changed. We adjust millis to keep
-                // the hour constant. In cases such as midnight after
-                // a DST change which occurs at midnight, there is the
-                // danger of adjusting into a different day. To avoid
-                // this we make the adjustment only if it actually
-                // maintains the hour.
-
-                // When the difference of the previous UTC offset and
-                // the new UTC offset exceeds 1 full day, we do not want
-                // to roll over/back the date. For now, this only happens
-                // in Samoa (Pacific/Apia) on Dec 30, 2011. See ticket:9452.
-                long adjAmount = (prevOffset - newOffset) % ONE_DAY;
-                if (adjAmount != 0) {
-                    long t = time;
-                    setTimeInMillis(time + adjAmount);
-                    if (get(HOUR_OF_DAY) != hour) {
-                        setTimeInMillis(t);
+        if (keepWallTimeInvariant) {
+            int newWallTime = get(MILLISECONDS_IN_DAY);
+            if (newWallTime != prevWallTime) {
+                // There is at least one zone transition between the base
+                // time and the result time. As the result, wall time has
+                // changed.
+                long t = internalGetTimeInMillis();
+                int newOffset = get(DST_OFFSET) + get(ZONE_OFFSET);
+                if (newOffset != prevOffset) {
+                    // When the difference of the previous UTC offset and
+                    // the new UTC offset exceeds 1 full day, we do not want
+                    // to roll over/back the date. For now, this only happens
+                    // in Samoa (Pacific/Apia) on Dec 30, 2011. See ticket:9452.
+                    long adjAmount = (prevOffset - newOffset) % ONE_DAY;
+                    if (adjAmount != 0) {
+                        setTimeInMillis(t + adjAmount);
+                        newWallTime = get(MILLISECONDS_IN_DAY);
+                    }
+                    if (newWallTime != prevWallTime) {
+                        // The result wall time or adjusted wall time was shifted because
+                        // the target wall time does not exist on the result date.
+                        switch (skippedWallTime) {
+                        case WALLTIME_FIRST:
+                            if (adjAmount > 0) {
+                                setTimeInMillis(t);
+                            }
+                            break;
+                        case WALLTIME_LAST:
+                            if (adjAmount < 0) {
+                                setTimeInMillis(t);
+                            }
+                            break;
+                        case WALLTIME_NEXT_VALID:
+                            long tmpT = adjAmount > 0 ? internalGetTimeInMillis() : t;
+                            Long immediatePrevTrans = getImmediatePreviousZoneTransition(tmpT);
+                            if (immediatePrevTrans != null) {
+                                setTimeInMillis(immediatePrevTrans);
+                            } else {
+                                throw new RuntimeException("Could not locate a time zone transition before " + tmpT);
+                            }
+                            break;
+                        }
                     }
                 }
             }
@@ -5047,7 +5068,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * millisecond time value <code>time</code>.
      * @stable ICU 2.0
      */
-   protected void computeTime() {
+    protected void computeTime() {
         if (!isLenient()) {
             validateFields();
         }
@@ -5126,26 +5147,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                     // Adjust time to the next valid wall clock time.
                     // At this point, tmpTime is on or after the zone offset transition causing
                     // the skipped time range.
-                    if (zone instanceof BasicTimeZone) {
-                        TimeZoneTransition transition = ((BasicTimeZone)zone).getPreviousTransition(tmpTime, true);
-                        if (transition == null) {
-                            // Could not find any transitions
-                            throw new RuntimeException("Could not locate previous zone transition");
-                        }
-                        time = transition.getTime();
-                    } else {
-                        // Usually, it is enough to check past one hour because such transition is most
-                        // likely +1 hour shift. However, there is an example jumped +24 hour in the tz database.
-                        Long transitionT = getPreviousZoneTransitionTime(zone, tmpTime, 2*60*60*1000); // check last 2 hours
-                        if (transitionT == null) {
-                            transitionT = getPreviousZoneTransitionTime(zone, tmpTime, 30*60*60*1000); // try last 30 hours
-                            if (transitionT == null) {
-                                // Could not find any transitions in last 30 hours...
-                                throw new RuntimeException("Could not locate previous zone transition within 30 hours from " + tmpTime);
-                            }
-                        }
-                        time = transitionT.longValue();
+                    Long immediatePrevTransition = getImmediatePreviousZoneTransition(tmpTime);
+                    if (immediatePrevTransition == null) {
+                        throw new RuntimeException("Could not locate a time zone transition before " + tmpTime);
                     }
+                    time = immediatePrevTransition;
                 } else {
                     time = tmpTime;
                 }
@@ -5155,16 +5161,40 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
     }
 
+    /**
+     * Find the previous zone transtion near the given time.
+     * 
+     * @param base The base time, inclusive.
+     * @return The time of the previous transition, or null if not found.
+     */
+    private Long getImmediatePreviousZoneTransition(long base) {
+        Long transitionTime = null;
+
+        if (zone instanceof BasicTimeZone) {
+            TimeZoneTransition transition = ((BasicTimeZone) zone).getPreviousTransition(base, true);
+            if (transition != null) {
+                transitionTime = transition.getTime();
+            }
+        } else {
+            // Usually, it is enough to check past one hour because such transition is most
+            // likely +1 hour shift. However, there is an example jumped +24 hour in the tz database.
+            transitionTime = getPreviousZoneTransitionTime(zone, base, 2 * 60 * 60 * 1000); // check last 2 hours
+            if (transitionTime == null) {
+                transitionTime = getPreviousZoneTransitionTime(zone, base, 30 * 60 * 60 * 1000); // try last 30 hours
+            }
+        }
+        return transitionTime;
+    }
+
    /**
     * Find the previous zone transition within the specified duration.
-    * Note: This method should not be used when TimeZone is a BasicTimeZone.
-    * {@link BasicTimeZone#getPreviousTransition(long, boolean)} is much more efficient.
+    * Note: This method is only used when TimeZone is NOT a BasicTimeZone.
     * @param tz The time zone.
     * @param base The base time, inclusive.
     * @param duration The range of time evaluated.
     * @return The time of the previous zone transition, or null if not available.
     */
-   private Long getPreviousZoneTransitionTime(TimeZone tz, long base, long duration) {
+   private static Long getPreviousZoneTransitionTime(TimeZone tz, long base, long duration) {
        assert duration > 0;
 
        long upper = base;
@@ -5196,7 +5226,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     * @param lower The lower bound, exclusive.
     * @return The time of the previous zone transition, or null if not available.
     */
-   private Long findPreviousZoneTransitionTime(TimeZone tz, int upperOffset, long upper, long lower) {
+   private static Long findPreviousZoneTransitionTime(TimeZone tz, int upperOffset, long upper, long lower) {
        boolean onUnitTime = false;
        long mid = 0;
 
