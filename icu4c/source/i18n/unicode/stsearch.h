@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2008 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2014 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.
@@ -492,11 +492,6 @@ private :
 
     // private data members ----------------------------------------------
 
-    /**
-    * RuleBasedCollator, contains exactly the same UCollator * in m_strsrch_
-    * @stable ICU 2.0
-    */
-    RuleBasedCollator  m_collator_;
     /**
     * Pattern text
     * @stable ICU 2.0

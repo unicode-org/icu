@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1095,7 +1095,7 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
     };
     UnicodeString indent(FALSE, indentUChars, 1 + LL_indentlevel);
 
-    char buffer[10000];
+    char buffer[30000];
     int32_t length;
 
     // stream out the indentation string first if necessary
@@ -1110,7 +1110,7 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
     // stream out the message
     length = message.extract(0, message.length(), buffer, sizeof(buffer));
     if (length > 0) {
-        length = length > 10000 ? 10000 : length;
+        length = length > 30000 ? 30000 : length;
         fwrite(buffer, sizeof(*buffer), length, (FILE *)testoutfp);
     }
 

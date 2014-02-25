@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2013, International Business Machines
+*   Copyright (C) 2009-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -34,15 +34,19 @@ U_NAMESPACE_BEGIN
 
 struct CanonIterData;
 
-class Hangul {
+class U_COMMON_API Hangul {
 public:
     /* Korean Hangul and Jamo constants */
     enum {
         JAMO_L_BASE=0x1100,     /* "lead" jamo */
+        JAMO_L_END=0x1112,
         JAMO_V_BASE=0x1161,     /* "vowel" jamo */
+        JAMO_V_END=0x1175,
         JAMO_T_BASE=0x11a7,     /* "trail" jamo */
+        JAMO_T_END=0x11c2,
 
         HANGUL_BASE=0xac00,
+        HANGUL_END=0xd7a3,
 
         JAMO_L_COUNT=19,
         JAMO_V_COUNT=21,
@@ -110,7 +114,7 @@ private:
 
 class Normalizer2Impl;
 
-class ReorderingBuffer : public UMemory {
+class U_COMMON_API ReorderingBuffer : public UMemory {
 public:
     ReorderingBuffer(const Normalizer2Impl &ni, UnicodeString &dest) :
         impl(ni), str(dest),
@@ -222,6 +226,7 @@ public:
 
     void load(const char *packageName, const char *name, UErrorCode &errorCode);
 
+    void addLcccChars(UnicodeSet &set) const;
     void addPropertyStarts(const USetAdder *sa, UErrorCode &errorCode) const;
     void addCanonIterPropertyStarts(const USetAdder *sa, UErrorCode &errorCode) const;
 
@@ -242,6 +247,7 @@ public:
             return UNORM_NO;
         }
     }
+    UBool isAlgorithmicNoNo(uint16_t norm16) const { return limitNoNo<=norm16 && norm16<minMaybeYes; }
     UBool isCompNo(uint16_t norm16) const { return minNoNo<=norm16 && norm16<minMaybeYes; }
     UBool isDecompYes(uint16_t norm16) const { return norm16<minYesNo || minMaybeYes<=norm16; }
 
@@ -415,6 +421,18 @@ public:
     };
 
     // higher-level functionality ------------------------------------------ ***
+
+    // NFD without an NFD Normalizer2 instance.
+    UnicodeString &decompose(const UnicodeString &src, UnicodeString &dest,
+                             UErrorCode &errorCode) const;
+    /**
+     * Decomposes [src, limit[ and writes the result to dest.
+     * limit can be NULL if src is NUL-terminated.
+     * destLengthEstimate is the initial dest buffer capacity and can be -1.
+     */
+    void decompose(const UChar *src, const UChar *limit,
+                   UnicodeString &dest, int32_t destLengthEstimate,
+                   UErrorCode &errorCode) const;
 
     const UChar *decompose(const UChar *src, const UChar *limit,
                            ReorderingBuffer *buffer, UErrorCode &errorCode) const;

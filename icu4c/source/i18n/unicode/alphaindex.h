@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2011-2013 International Business Machines
+*   Copyright (C) 2011-2014 International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -14,8 +14,7 @@
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
 
-
-#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_NORMALIZATION
+#if !UCONFIG_NO_COLLATION
 
 /**
  * \file
@@ -757,5 +756,5 @@ private:
 
 U_NAMESPACE_END
 
-#endif /* UCONFIG_NO_COLLATION / UCONFIG_NO_NORMALIZATION */
+#endif  // !UCONFIG_NO_COLLATION
 #endif

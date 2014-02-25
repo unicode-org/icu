@@ -1012,6 +1012,13 @@ static void TestJB1401(void)
 */
 static void TestVariableTop(void)
 {
+#if 0
+    /*
+     * Starting with ICU 53, setting the variable top via a pseudo relation string
+     * is not supported any more.
+     * It was replaced by the [maxVariable symbol] setting.
+     * See ICU tickets #9958 and #8032.
+     */
     static const char       str[]          = "&z = [variable top]";
           int         len          = strlen(str);
           UChar      rules[sizeof(str)];
@@ -1078,6 +1085,7 @@ static void TestVariableTop(void)
     ucol_close(myCollation);
     enCollation = NULL;
     myCollation = NULL;
+#endif
 }
 
 /**
@@ -1167,13 +1175,13 @@ TestInvalidRules(){
         "& C < ch, cH, & Ch[variable top]"
     };
     static const char* preContextArr[MAX_ERROR_STATES] = {
-        "his should fail",
-        "& C < ch, cH, ",
+        " C < ch, cH, Ch",
+        "& C < ch, cH",
 
     };
     static const char* postContextArr[MAX_ERROR_STATES] = {
-        "<d",
-        " Ch[variable t"
+        "[this should fa",
+        ", & Ch[variable"
     };
     int i;
 
@@ -1194,10 +1202,12 @@ TestInvalidRules(){
         coll = ucol_openRules(rules,u_strlen(rules),UCOL_OFF,UCOL_DEFAULT_STRENGTH,&parseError,&status);
         (void)coll;   /* Suppress set but not used warning. */
         if(u_strcmp(parseError.preContext,preContextExp)!=0){
-            log_err_status(status, "preContext in UParseError for ucol_openRules does not match\n");
+            log_err_status(status, "preContext in UParseError for ucol_openRules does not match: \"%s\"\n",
+                           aescstrdup(parseError.preContext, -1));
         }
         if(u_strcmp(parseError.postContext,postContextExp)!=0){
-            log_err_status(status, "postContext in UParseError for ucol_openRules does not match\n");
+            log_err_status(status, "postContext in UParseError for ucol_openRules does not match: \"%s\"\n",
+                           aescstrdup(parseError.postContext, -1));
         }
     }  
 }

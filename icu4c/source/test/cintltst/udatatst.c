@@ -1,10 +1,10 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2013, International Business Machines Corporation and
+ * Copyright (c) 1998-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
-* File test.c
+* File udatatst.c
 *
 * Modification History:
 *
@@ -1304,7 +1304,10 @@ static const struct {
 #if !UCONFIG_NO_COLLATION
     /* standalone collation data files */
     {"ucadata",                  "icu", ucol_swap},
+#if 0
+    /* Starting with ICU 53, the "inverse UCA" data is integrated into ucadata.icu. */
     {"invuca",                   "icu", ucol_swapInverseUCA},
+#endif
 #endif
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
@@ -1676,12 +1679,11 @@ TestSwapData() {
     }
     errorCode=U_ZERO_ERROR;
 
-    /* Test argument checking. ucol_swapBinary is normally tested via ures_swap, and isn't normally called directly. */
+    /* Test argument checking. ucol_swap is normally tested via ures_swap, and isn't normally called directly. */
 #if !UCONFIG_NO_COLLATION
-    ucol_swapBinary(NULL, NULL, -1, NULL, NULL);
-    ucol_swapBinary(NULL, NULL, -1, NULL, &errorCode);
+    ucol_swap(NULL, NULL, -1, NULL, &errorCode);
     if (errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("ucol_swapBinary did not fail as expected\n", name);
+        log_err("ucol_swap did not fail as expected\n", name);
     }
     errorCode=U_ZERO_ERROR;
 #endif
@@ -1698,11 +1700,13 @@ TestSwapData() {
             pkg=U_ICUDATA_BRKITR;
             nm=swapCases[i].name;
             uprv_strcpy(name, U_ICUDATA_BRKITR);
+#if !UCONFIG_NO_COLLATION
         } else if (uprv_strcmp(swapCases[i].name, "ucadata")==0
             || uprv_strcmp(swapCases[i].name, "invuca")==0) {
             pkg=U_ICUDATA_COLL;
             nm=swapCases[i].name;
             uprv_strcpy(name, U_ICUDATA_COLL);
+#endif  /* !UCONFIG_NO_COLLATION */
         } else {
             pkg=NULL;
             nm=swapCases[i].name;

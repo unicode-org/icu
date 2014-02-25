@@ -36,7 +36,6 @@
 #include "unicode/ucnv.h"
 #include "genrb.h"
 #include "rle.h"
-#include "ucol_tok.h"
 #include "uhash.h"
 #include "uresimp.h"
 #include "unicode/ustring.h"

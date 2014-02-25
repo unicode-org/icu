@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2011, International Business Machines
+#   Copyright (C) 1999-2014, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -54,7 +54,7 @@ LDFLAGS += $(LDFLAGSICUTOOLUTIL)
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS = filestrm.o package.o pkgitems.o swapimpl.o toolutil.o unewdata.o \
-denseranges.o \
+collationinfo.o denseranges.o \
 ucm.o ucmstate.o uoptions.o uparse.o \
 ucbuf.o xmlparser.o writesrc.o \
 pkg_icu.o pkg_genc.o pkg_gencmn.o ppucd.o flagparser.o filetools.o \

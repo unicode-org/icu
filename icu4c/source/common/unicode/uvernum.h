@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2013, International Business Machines
+*   Copyright (C) 2000-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -146,7 +146,7 @@
  * This value may change in subsequent releases of ICU.
  * @stable ICU 2.4
  */
-#define UCOL_RUNTIME_VERSION 7
+#define UCOL_RUNTIME_VERSION 8
 
 /**
  * Collation builder code version.
@@ -155,7 +155,7 @@
  * This value may change in subsequent releases of ICU.
  * @stable ICU 2.4
  */
-#define UCOL_BUILDER_VERSION 8
+#define UCOL_BUILDER_VERSION 9
 
 /**
  * This is the version of collation tailorings.

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2013, International Business Machines
+ *   Copyright (C) 2005-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -11,7 +11,7 @@
 
 #include "cmemory.h"
 #include "cstring.h"
-#include "ucol_imp.h"
+#include "usrchimp.h"
 
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
