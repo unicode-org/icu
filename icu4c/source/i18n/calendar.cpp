@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and    *
+* Copyright (C) 1997-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1894,10 +1894,10 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
     // a computed amount of millis to the current millis.  The only
     // wrinkle is with DST (and/or a change to the zone's UTC offset, which
     // we'll include with DST) -- for some fields, like the DAY_OF_MONTH,
-    // we don't want the HOUR to shift due to changes in DST.  If the
+    // we don't want the wall time to shift due to changes in DST.  If the
     // result of the add operation is to move from DST to Standard, or
     // vice versa, we need to adjust by an hour forward or back,
-    // respectively.  For such fields we set keepHourInvariant to TRUE.
+    // respectively.  For such fields we set keepWallTimeInvariant to TRUE.
 
     // We only adjust the DST for fields larger than an hour.  For
     // fields smaller than an hour, we cannot adjust for DST without
@@ -1912,7 +1912,7 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
     // <April 30>, rather than <April 31> => <May 1>.
 
     double delta = amount; // delta in ms
-    UBool keepHourInvariant = TRUE;
+    UBool keepWallTimeInvariant = TRUE;
 
     switch (field) {
     case UCAL_ERA:
@@ -1974,22 +1974,22 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
     case UCAL_HOUR_OF_DAY:
     case UCAL_HOUR:
         delta *= kOneHour;
-        keepHourInvariant = FALSE;
+        keepWallTimeInvariant = FALSE;
         break;
 
     case UCAL_MINUTE:
         delta *= kOneMinute;
-        keepHourInvariant = FALSE;
+        keepWallTimeInvariant = FALSE;
         break;
 
     case UCAL_SECOND:
         delta *= kOneSecond;
-        keepHourInvariant = FALSE;
+        keepWallTimeInvariant = FALSE;
         break;
 
     case UCAL_MILLISECOND:
     case UCAL_MILLISECONDS_IN_DAY:
-        keepHourInvariant = FALSE;
+        keepWallTimeInvariant = FALSE;
         break;
 
     default:
@@ -2003,41 +2003,61 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
         //                                     ") not supported");
     }
 
-    // In order to keep the hour invariant (for fields where this is
+    // In order to keep the wall time invariant (for fields where this is
     // appropriate), check the combined DST & ZONE offset before and
     // after the add() operation. If it changes, then adjust the millis
     // to compensate.
     int32_t prevOffset = 0;
-    int32_t hour = 0;
-    if (keepHourInvariant) {
+    int32_t prevWallTime = 0;
+    if (keepWallTimeInvariant) {
         prevOffset = get(UCAL_DST_OFFSET, status) + get(UCAL_ZONE_OFFSET, status);
-        hour = internalGet(UCAL_HOUR_OF_DAY);
+        prevWallTime = get(UCAL_MILLISECONDS_IN_DAY, status);
     }
 
     setTimeInMillis(getTimeInMillis(status) + delta, status);
 
-    if (keepHourInvariant) {
-        int32_t newOffset = get(UCAL_DST_OFFSET, status) + get(UCAL_ZONE_OFFSET, status);
-        if (newOffset != prevOffset) {
-            // We have done an hour-invariant adjustment but the
-            // combined offset has changed. We adjust millis to keep
-            // the hour constant. In cases such as midnight after
-            // a DST change which occurs at midnight, there is the
-            // danger of adjusting into a different day. To avoid
-            // this we make the adjustment only if it actually
-            // maintains the hour.
-
-            // When the difference of the previous UTC offset and
-            // the new UTC offset exceeds 1 full day, we do not want
-            // to roll over/back the date. For now, this only happens
-            // in Samoa (Pacific/Apia) on Dec 30, 2011. See ticket:9452.
-            int32_t adjAmount = prevOffset - newOffset;
-            adjAmount = adjAmount >= 0 ? adjAmount % (int32_t)kOneDay : -(-adjAmount % (int32_t)kOneDay);
-            if (adjAmount != 0) {
-                double t = internalGetTime();
-                setTimeInMillis(t + adjAmount, status);
-                if (get(UCAL_HOUR_OF_DAY, status) != hour) {
-                    setTimeInMillis(t, status);
+    if (keepWallTimeInvariant) {
+        int32_t newWallTime = get(UCAL_MILLISECONDS_IN_DAY, status);
+        if (newWallTime != prevWallTime) {
+            // There is at least one zone transition between the base
+            // time and the result time. As the result, wall time has
+            // changed.
+            UDate t = internalGetTime();
+            int32_t newOffset = get(UCAL_DST_OFFSET, status) + get(UCAL_ZONE_OFFSET, status);
+            if (newOffset != prevOffset) {
+                // When the difference of the previous UTC offset and
+                // the new UTC offset exceeds 1 full day, we do not want
+                // to roll over/back the date. For now, this only happens
+                // in Samoa (Pacific/Apia) on Dec 30, 2011. See ticket:9452.
+                int32_t adjAmount = prevOffset - newOffset;
+                adjAmount = adjAmount >= 0 ? adjAmount % (int32_t)kOneDay : -(-adjAmount % (int32_t)kOneDay);
+                if (adjAmount != 0) {
+                    setTimeInMillis(t + adjAmount, status);
+                    newWallTime = get(UCAL_MILLISECONDS_IN_DAY, status);
+                }
+                if (newWallTime != prevWallTime) {
+                    // The result wall time or adjusted wall time was shifted because
+                    // the target wall time does not exist on the result date.
+                    switch (fSkippedWallTime) {
+                    case UCAL_WALLTIME_FIRST:
+                        if (adjAmount > 0) {
+                            setTimeInMillis(t, status);
+                        }
+                        break;
+                    case UCAL_WALLTIME_LAST:
+                        if (adjAmount < 0) {
+                            setTimeInMillis(t, status);
+                        }
+                        break;
+                    case UCAL_WALLTIME_NEXT_VALID:
+                        UDate tmpT = adjAmount > 0 ? internalGetTime() : t;
+                        UDate immediatePrevTrans;
+                        UBool hasTransition = getImmediatePreviousZoneTransition(tmpT, &immediatePrevTrans, status);
+                        if (U_SUCCESS(status) && hasTransition) {
+                            setTimeInMillis(immediatePrevTrans, status);
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -2818,22 +2838,10 @@ void Calendar::computeTime(UErrorCode& status) {
                         // Adjust time to the next valid wall clock time.
                         // At this point, tmpTime is on or after the zone offset transition causing
                         // the skipped time range.
-
-                        BasicTimeZone *btz = getBasicTimeZone();
-                        if (btz) {
-                            TimeZoneTransition transition;
-                            UBool hasTransition = btz->getPreviousTransition(tmpTime, TRUE, transition);
-                            if (hasTransition) {
-                                t = transition.getTime();
-                            } else {
-                                // Could not find any transitions.
-                                // Note: This should never happen.
-                                status = U_INTERNAL_PROGRAM_ERROR;
-                            }
-                        } else {
-                            // If not BasicTimeZone, return unsupported error for now.
-                            // TODO: We may support non-BasicTimeZone in future.
-                            status = U_UNSUPPORTED_ERROR;
+                        UDate immediatePrevTransition;
+                        UBool hasTransition = getImmediatePreviousZoneTransition(tmpTime, &immediatePrevTransition, status);
+                        if (U_SUCCESS(status) && hasTransition) {
+                            t = immediatePrevTransition;
                         }
                     }
                 } else {
@@ -2847,6 +2855,30 @@ void Calendar::computeTime(UErrorCode& status) {
     if (U_SUCCESS(status)) {
         internalSetTime(t);
     }
+}
+
+/**
+ * Find the previous zone transtion near the given time.
+ */
+UBool Calendar::getImmediatePreviousZoneTransition(UDate base, UDate *transitionTime, UErrorCode& status) const {
+    BasicTimeZone *btz = getBasicTimeZone();
+    if (btz) {
+        TimeZoneTransition trans;
+        UBool hasTransition = btz->getPreviousTransition(base, TRUE, trans);
+        if (hasTransition) {
+            *transitionTime = trans.getTime();
+            return TRUE;
+        } else {
+            // Could not find any transitions.
+            // Note: This should never happen.
+            status = U_INTERNAL_PROGRAM_ERROR;
+        }
+    } else {
+        // If not BasicTimeZone, return unsupported error for now.
+        // TODO: We may support non-BasicTimeZone in future.
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return FALSE;
 }
 
 /**
