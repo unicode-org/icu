@@ -1,5 +1,6 @@
 /*
  *******************************************************************************
+
  * Copyright (C) 2001-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
@@ -3414,12 +3415,14 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {"en", "USD", "1", "1 US dollar"},
                 {"en", "USD", "1.0", "1.0 US dollars"},
                 {"en", "USD", "1.00", "1.00 US dollars"},
+                {"en", "USD", "1.99", "1.99 US dollars"},
                 {"en", "AUD", "1", "1 Australian dollar"},
                 {"en", "AUD", "1.00", "1.00 Australian dollars"},
                 {"sl", "USD", "1", "1 ameri\u0161ki dolar"},
                 {"sl", "USD", "2", "2 ameri\u0161ka dolarja"},
                 {"sl", "USD", "3", "3 ameri\u0161ki dolarji"},
                 {"sl", "USD", "5", "5 ameriških dolarjev"},
+                {"fr", "USD", "1.99", "1,99 dollar des États-Unis"},
                 {"ru", "RUB", "1", "1 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0439 \u0440\u0443\u0431\u043B\u044C"},
                 {"ru", "RUB", "2", "2 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u044F"},
                 {"ru", "RUB", "5", "5 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u0435\u0439"},
