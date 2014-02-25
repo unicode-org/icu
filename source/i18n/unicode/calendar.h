@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2013, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -2428,6 +2428,15 @@ private:
      * is not an instance of BasicTimeZone.
      */
     BasicTimeZone* getBasicTimeZone() const;
+
+    /**
+     * Find the previous zone transtion near the given time.
+     * @param base The base time, inclusive
+     * @param transitionTime Receives the result time
+     * @param status The error status
+     * @return TRUE if a transition is found.
+     */
+    UBool getImmediatePreviousZoneTransition(UDate base, UDate *transitionTime, UErrorCode& status) const;
 };
 
 // -------------------------------------

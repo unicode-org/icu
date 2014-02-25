@@ -249,6 +249,8 @@ public: // package
     void setAndTestWholeYear(Calendar* cal, int32_t startYear, UErrorCode& status);
 
     void TestWeekData(void);
+
+    void TestAddAcrossZoneTransition(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
