@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 53.0.1 development</title>
+    <title>ReadMe for ICU 53.1</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2014 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -16,15 +16,15 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br/>
-     <abbr title="International Components for Unicode">ICU</abbr> 53.0.1 development ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 53.1 ReadMe</h1>
 
-    <p><b>Note:</b> This is a development milestone release of ICU4C 53
+    <!--p><b>Note:</b> This is a development milestone release of ICU4C 53
     This milestone is intended for those wishing to get an early look at ICU 53 new features and API changes.
+    It is not recommended for production use.</p-->
+    <p><b>Note:</b> This is a release candidate version of ICU4C 53.
     It is not recommended for production use.</p>
-    <!--<p><b>Note:</b> This is a release candidate version of ICU4C 53.
-    It is not recommended for production use.</p>-->
 
-    <p>Last updated: 2014-Jan-11<br />
+    <p>Last updated: 2014-Feb-26<br />
      Copyright &copy; 1997-2014 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -215,23 +215,40 @@
 
     <p>To see which APIs are new or changed in this release, view the <a href="APIChangeReport.html">ICU4C API Change Report</a>. </p>
 
-    <!-- ICU 53 items -->
-    <h3>A new ICU 53 item</h3>
-    <p>
-      Item description
-    </p>
-
-    <!-- end ICU 53 items -->
-
     <h3></h3><!-- for a horizotal rule matching those at the beginning of each h3 -->
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>.
     For more news about this release, see the
-    <!--
-    <a href="http://site.icu-project.org/download/">ICU download page</a>.
-    -->
-    <a href="http://site.icu-project.org/download/milestone">ICU milestone download page</a>.
-    </p>
+    <a href="http://site.icu-project.org/download/">ICU download page</a>
+    <!--a href="http://site.icu-project.org/download/milestone">ICU milestone download page</a>.
+    </p-->.
+
+    <!-- ICU 53 items -->
+    <h3>Collation code re-implemented</h3>
+    <ul>
+      <li>New, incompatible data format of the binary collation data in
+        coll/*.res and coll/ucadata.icu data files.
+        coll/invuca.icu has been removed.</li>
+      <li>Data loading will not fall back to building from rules any more
+        when the binary data is missing or does not match the current implementation.
+        (This removes the dependency from the "runtime" code on the builder.)</li>
+      <li>Rule syntax and semantics tightened and improved, matching
+        <a href="http://unicode.org/repos/cldr/trunk/specs/ldml/tr35-collation.html#Rules">LDML 25 Collation Rule Syntax</a>
+        (TODO: update link for released LDML 25)
+        <ul>
+          <li>In particular, rule chains now must start with a reset.</li>
+        </ul>
+      </li>
+      <li>Setting of variableTop deprecated, and not supported in rule syntax any more
+        <ul>
+          <li>Replaced by the new maxVariable setting; see
+            <a href="http://unicode.org/repos/cldr/trunk/specs/ldml/tr35-collation.html#Collation_Settings">LDML 25 Collation Settings</a>
+            (TODO: update link for released LDML 25)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- end ICU 53 items -->
 
     <h3>C++ BasicTimeZone subclassing-API breaking changes</h3>
     <p>We have made make some changes to the C++ BasicTimeZone(basictz.h) for ICU 51
@@ -1780,4 +1797,3 @@ gnumake</pre>
      USA</p>
   </body>
 </html>
-
