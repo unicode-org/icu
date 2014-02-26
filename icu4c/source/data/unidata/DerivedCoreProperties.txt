@@ -9240,6 +9240,7 @@ E0100..E01EF  ; Grapheme_Extend
 208E          ; Grapheme_Base
 2090..209C    ; Grapheme_Base
 20A0..20BA    ; Grapheme_Base
+20BD          ; Grapheme_Base
 2100..2101    ; Grapheme_Base
 2102          ; Grapheme_Base
 2103..2106    ; Grapheme_Base

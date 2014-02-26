@@ -2297,7 +2297,9 @@
 # 20B6..20B8  valid                     # 5.2  LIVRE TOURNOIS SIGN..TENGE SIGN
 # 20B9        valid                     # 6.0  INDIAN RUPEE SIGN
 # 20BA        valid                     # 6.2  TURKISH LIRA SIGN
-20BB..20CF    >FFFD                     # NA   <reserved-20BB>..<reserved-20CF>
+20BB..20BC    >FFFD                     # NA   <reserved-20BB>..<reserved-20BC>
+# 20BD        valid                     # 7.0  RUBLE SIGN
+20BE..20CF    >FFFD                     # NA   <reserved-20BE>..<reserved-20CF>
 # 20D0..20E1  valid                     # 1.1  COMBINING LEFT HARPOON ABOVE..COMBINING LEFT RIGHT ARROW ABOVE
 # 20E2..20E3  valid                     # 3.0  COMBINING ENCLOSING SCREEN..COMBINING ENCLOSING KEYCAP
 # 20E4..20EA  valid                     # 3.2  COMBINING ENCLOSING UPWARD POINTING TRIANGLE..COMBINING LEFTWARDS ARROW OVERLAY
