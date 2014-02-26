@@ -604,6 +604,8 @@ public class TestFmwk extends AbstractTestLog {
             }
         }
 
+        localParams.log.flush();
+
         return errorCount;
     }
 
