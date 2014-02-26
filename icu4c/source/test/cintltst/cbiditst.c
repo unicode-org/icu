@@ -3351,22 +3351,22 @@ static void _testPresentationForms(const UChar* in) {
   src[0] = otherChar[GENERIC];
   src[1] = in[GENERIC];
   if (in[FINAL] != 0) {
-  errorCode=U_ZERO_ERROR;
-  length=u_shapeArabic(src, 2,
-                       dst, 2,
-                       U_SHAPE_LETTERS_SHAPE,
-                       &errorCode);
-  if(U_FAILURE(errorCode) || length!=2 || dst[0] != otherChar[INITIAL] || dst[1] != in[FINAL]) {
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(src, 2,
+                         dst, 2,
+                         U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || dst[0] != otherChar[INITIAL] || dst[1] != in[FINAL]) {
       log_err("failure in u_shapeArabic(_testAllForms: shaping final): %x\n", in[GENERIC]);
-  }
-  errorCode=U_ZERO_ERROR;
-  length=u_shapeArabic(dst, 2,
-                       src, 2,
-                       U_SHAPE_LETTERS_UNSHAPE,
-                       &errorCode);
-  if(U_FAILURE(errorCode) || length!=2 || src[0] != otherChar[GENERIC] || src[1] != in[GENERIC]) {
+    }
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(dst, 2,
+                         src, 2,
+                         U_SHAPE_LETTERS_UNSHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || src[0] != otherChar[GENERIC] || src[1] != in[GENERIC]) {
       log_err("failure in u_shapeArabic(_testAllForms: unshaping final): %x\n", in[GENERIC]);
-  }
+    }
   } else {
     errorCode=U_ZERO_ERROR;
     length=u_shapeArabic(src, 2,
@@ -3550,7 +3550,7 @@ doArabicShapingTestForNewCharacters(void) {
     { 0x06CC, 0xFBFC, 0xFBFD, 0xFBFE, 0xFBFF, }, /* FARSI YEH */
     { 0x06D2, 0xFBAE, 0xFBAF, 0, 0, },           /* YEH BARREE */
     { 0x06D3, 0xFBB0, 0xFBB1, 0, 0, }};          /* YEH BARREE WITH HAMZA ABOVE */
-  int i;
+  int32_t i;
   for (i = 0; i < LENGTHOF(letterForms); ++i) {
     _testPresentationForms(letterForms[i]);
   }
