@@ -3550,8 +3550,8 @@ doArabicShapingTestForNewCharacters(void) {
     { 0x06CC, 0xFBFC, 0xFBFD, 0xFBFE, 0xFBFF, }, /* FARSI YEH */
     { 0x06D2, 0xFBAE, 0xFBAF, 0, 0, },           /* YEH BARREE */
     { 0x06D3, 0xFBB0, 0xFBB1, 0, 0, }};          /* YEH BARREE WITH HAMZA ABOVE */
-
-  for (int i = 0; i < LENGTHOF(letterForms); ++i) {
+  int i;
+  for (i = 0; i < LENGTHOF(letterForms); ++i) {
     _testPresentationForms(letterForms[i]);
   }
 }
