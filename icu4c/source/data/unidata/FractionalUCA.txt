@@ -11568,9 +11568,12 @@ FFE6; [0F 35, 05, 20]
 
 20BA; [0F 57, 05, 05]
 
-20A8; [0F 59, 05, 05]
+# Ruble Sign added in ICU 53, cherry-picked from Unicode 7.0.
+20BD; [0F 59, 05, 05]
 
-FDFC; [0F 5B, 05, 05]
+20A8; [0F 5B, 05, 05]
+
+FDFC; [0F 5D, 05, 05]
 
 FDD1 0034;	[10 02 02, 05, 05]	# DIGIT first primary starts reordering group
 
