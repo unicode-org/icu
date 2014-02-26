@@ -80,7 +80,6 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO_CLASS(UCAConformanceTest);
     TESTCASE_AUTO_CLASS(CollationServiceTest);
     TESTCASE_AUTO_CLASS(CollationFinnishTest); // removed by weiv - we have changed Finnish collation
-      //TESTCASE_AUTO_CLASS(RandomCollatorTest); // See ticket 5747 about reenabling this test.
     TESTCASE_AUTO_CLASS(SSearchTest);
 #if !UCONFIG_NO_NORMALIZATION
     TESTCASE_AUTO_CLASS(AlphabeticIndexTest);
