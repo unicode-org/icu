@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.c
@@ -69,6 +69,10 @@ static void doArabicShapingTestForBug5421(void);
 static void doArabicShapingTestForBug8703(void);
 
 static void doArabicShapingTestForBug9024(void);
+
+static void _testPresentationForms(const UChar *in);
+
+static void doArabicShapingTestForNewCharacters(void);
 
 static void testReorder(void);
 
@@ -140,6 +144,7 @@ addComplexTest(TestNode** root) {
     addTest(root, doArabicShapingTestForBug8703, "complex/arabic-shaping/bug-8703");
     addTest(root, testReorderArabicMathSymbols, "complex/bidi/bug-9024");
     addTest(root, doArabicShapingTestForBug9024, "complex/arabic-shaping/bug-9024");
+    addTest(root, doArabicShapingTestForNewCharacters, "complex/arabic-shaping/shaping2");
 }
 
 static void
@@ -3311,6 +3316,244 @@ doArabicShapingTestForBug9024(void) {
         log_err("failure in u_shapeArabic(letters_source6)\n");
     }
 
+}
+
+static void _testPresentationForms(const UChar* in) {
+  enum Forms { GENERIC, ISOLATED, FINAL, INITIAL, MEDIAL };
+  /* This character is used to check whether the in-character is rewritten correctly
+     and whether the surrounding characters are shaped correctly as well. */
+  UChar otherChar[] = {0x0628, 0xfe8f, 0xfe90, 0xfe91, 0xfe92};
+  UChar src[3];
+  UChar dst[3];
+  UErrorCode errorCode;
+  int32_t length;
+
+  /* Testing isolated shaping */
+  src[0] = in[GENERIC];
+  errorCode=U_ZERO_ERROR;
+  length=u_shapeArabic(src, 1,
+                       dst, 1,
+                       U_SHAPE_LETTERS_SHAPE,
+                       &errorCode);
+  if(U_FAILURE(errorCode) || length!=1 || dst[0] != in[ISOLATED]) {
+      log_err("failure in u_shapeArabic(_testAllForms: shaping isolated): %x\n", in[GENERIC]);
+  }
+  errorCode=U_ZERO_ERROR;
+  length=u_shapeArabic(dst, 1,
+                       src, 1,
+                       U_SHAPE_LETTERS_UNSHAPE,
+                       &errorCode);
+  if(U_FAILURE(errorCode) || length!=1 || src[0] != in[GENERIC]) {
+      log_err("failure in u_shapeArabic(_testAllForms: unshaping isolated): %x\n", in[GENERIC]);
+  }
+
+  /* Testing final shaping */
+  src[0] = otherChar[GENERIC];
+  src[1] = in[GENERIC];
+  if (in[FINAL] != 0) {
+  errorCode=U_ZERO_ERROR;
+  length=u_shapeArabic(src, 2,
+                       dst, 2,
+                       U_SHAPE_LETTERS_SHAPE,
+                       &errorCode);
+  if(U_FAILURE(errorCode) || length!=2 || dst[0] != otherChar[INITIAL] || dst[1] != in[FINAL]) {
+      log_err("failure in u_shapeArabic(_testAllForms: shaping final): %x\n", in[GENERIC]);
+  }
+  errorCode=U_ZERO_ERROR;
+  length=u_shapeArabic(dst, 2,
+                       src, 2,
+                       U_SHAPE_LETTERS_UNSHAPE,
+                       &errorCode);
+  if(U_FAILURE(errorCode) || length!=2 || src[0] != otherChar[GENERIC] || src[1] != in[GENERIC]) {
+      log_err("failure in u_shapeArabic(_testAllForms: unshaping final): %x\n", in[GENERIC]);
+  }
+  } else {
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(src, 2,
+                         dst, 2,
+                         U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || dst[0] != otherChar[ISOLATED] || dst[1] != in[ISOLATED]) {
+      log_err("failure in u_shapeArabic(_testAllForms: shaping final): %x\n", in[GENERIC]);
+    }
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(dst, 2,
+                         src, 2,
+                         U_SHAPE_LETTERS_UNSHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || src[0] != otherChar[GENERIC] || src[1] != in[GENERIC]) {
+      log_err("failure in u_shapeArabic(_testAllForms: unshaping final): %x\n", in[GENERIC]);
+    }
+  }
+
+  /* Testing initial shaping */
+  src[0] = in[GENERIC];
+  src[1] = otherChar[GENERIC];
+  if (in[INITIAL] != 0) {
+    /* Testing characters that have an initial form */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(src, 2,
+                         dst, 2,
+                         U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || dst[0] != in[INITIAL] || dst[1] != otherChar[FINAL]) {
+      log_err("failure in u_shapeArabic(_testAllForms: shaping initial): %x\n", in[GENERIC]);
+    }
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(dst, 2,
+                         src, 2,
+                         U_SHAPE_LETTERS_UNSHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || src[0] != in[GENERIC] || src[1] != otherChar[GENERIC]) {
+      log_err("failure in u_shapeArabic(_testAllForms: unshaping initial): %x\n", in[GENERIC]);
+    }
+  } else {
+    /* Testing characters that do not have an initial form */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(src, 2,
+                         dst, 2,
+                         U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || dst[0] != in[ISOLATED] || dst[1] != otherChar[ISOLATED]) {
+      log_err("failure in u_shapeArabic(_testTwoForms: shaping initial): %x\n", in[GENERIC]);
+    }
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(dst, 2,
+                         src, 2,
+                         U_SHAPE_LETTERS_UNSHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || src[0] != in[GENERIC] || src[1] != otherChar[GENERIC]) {
+      log_err("failure in u_shapeArabic(_testTwoForms: unshaping initial): %x\n", in[GENERIC]);
+    }
+  }
+
+  /* Testing medial shaping */
+  src[0] = otherChar[0];
+  src[1] = in[GENERIC];
+  src[2] = otherChar[0];
+  errorCode=U_ZERO_ERROR;
+  if (in[MEDIAL] != 0) {
+    /* Testing characters that have an medial form */
+    length=u_shapeArabic(src, 3,
+                         dst, 3,
+                         U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=3 || dst[0] != otherChar[INITIAL] || dst[1] != in[MEDIAL] || dst[2] != otherChar[FINAL]) {
+      log_err("failure in u_shapeArabic(_testAllForms: shaping medial): %x\n", in[GENERIC]);
+    }
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(dst, 3,
+                         src, 3,
+                         U_SHAPE_LETTERS_UNSHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=3 || src[0] != otherChar[GENERIC] || src[1] != in[GENERIC] || src[2] != otherChar[GENERIC]) {
+      log_err("failure in u_shapeArabic(_testAllForms: unshaping medial): %x\n", in[GENERIC]);
+    }
+  } else {
+    /* Testing characters that do not have an medial form */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(src, 3,
+                         dst, 3,
+                         U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=3 || dst[0] != otherChar[INITIAL] || dst[1] != in[FINAL] || dst[2] != otherChar[ISOLATED]) {
+      log_err("failure in u_shapeArabic(_testTwoForms: shaping medial): %x\n", in[GENERIC]);
+    }
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(dst, 3,
+                         src, 3,
+                         U_SHAPE_LETTERS_UNSHAPE,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=3 || src[0] != otherChar[GENERIC] || src[1] != in[GENERIC] || src[2] != otherChar[GENERIC]) {
+      log_err("failure in u_shapeArabic(_testTwoForms: unshaping medial): %x\n", in[GENERIC]);
+    }
+  }
+}
+
+static void
+doArabicShapingTestForNewCharacters(void) {
+  static const UChar letterForms[][5]={
+    { 0x0679, 0xFB66, 0xFB67, 0xFB68, 0xFB69 },  /* TTEH */
+    { 0x067A, 0xFB5E, 0xFB5F, 0xFB60, 0xFB61 },  /* TTEHEH */
+    { 0x067B, 0xFB52, 0xFB53, 0xFB54, 0xFB55 },  /* BEEH */
+    { 0x0688, 0xFB88, 0xFB89, 0, 0 },            /* DDAL */
+    { 0x068C, 0xFB84, 0xFB85, 0, 0 },            /* DAHAL */
+    { 0x068D, 0xFB82, 0xFB83, 0, 0 },            /* DDAHAL */
+    { 0x068E, 0xFB86, 0xFB87, 0, 0 },            /* DUL */
+    { 0x0691, 0xFB8C, 0xFB8D, 0, 0 },            /* RREH */
+    { 0x06BA, 0xFB9E, 0xFB9F, 0, 0 },            /* NOON GHUNNA */
+    { 0x06BB, 0xFBA0, 0xFBA1, 0xFBA2, 0xFBA3 },  /* RNOON */
+    { 0x06BE, 0xFBAA, 0xFBAB, 0xFBAC, 0xFBAD },  /* HEH DOACHASHMEE */
+    { 0x06C0, 0xFBA4, 0xFBA5, 0, 0 },            /* HEH WITH YEH ABOVE */
+    { 0x06C1, 0xFBA6, 0xFBA7, 0xFBA8, 0xFBA9 },  /* HEH GOAL */
+    { 0x06C5, 0xFBE0, 0xFBE1, 0, 0 },            /* KIRGIHIZ OE */
+    { 0x06C6, 0xFBD9, 0xFBDA, 0, 0 },            /* OE */
+    { 0x06C7, 0xFBD7, 0xFBD8, 0, 0 },            /* U */
+    { 0x06C8, 0xFBDB, 0xFBDC, 0, 0 },            /* YU */
+    { 0x06C9, 0xFBE2, 0xFBE3, 0, 0 },            /* KIRGIZ YU */
+    { 0x06CB, 0xFBDE, 0xFBDF, 0, 0},             /* VE */
+    { 0x06D0, 0xFBE4, 0xFBE5, 0xFBE6, 0xFBE7 },  /* E */
+    { 0x06D2, 0xFBAE, 0xFBAF, 0, 0 },            /* YEH BARREE */
+    { 0x06D3, 0xFBB0, 0xFBB1, 0, 0 },            /* YEH BARREE WITH HAMZA ABOVE */
+    { 0x0622, 0xFE81, 0xFE82, 0, 0, },           /* ALEF WITH MADDA ABOVE */
+    { 0x0623, 0xFE83, 0xFE84, 0, 0, },           /* ALEF WITH HAMZA ABOVE */
+    { 0x0624, 0xFE85, 0xFE86, 0, 0, },           /* WAW WITH HAMZA ABOVE */
+    { 0x0625, 0xFE87, 0xFE88, 0, 0, },           /* ALEF WITH HAMZA BELOW */
+    { 0x0626, 0xFE89, 0xFE8A, 0xFE8B, 0xFE8C, }, /* YEH WITH HAMZA ABOVE */
+    { 0x0627, 0xFE8D, 0xFE8E, 0, 0, },           /* ALEF */
+    { 0x0628, 0xFE8F, 0xFE90, 0xFE91, 0xFE92, }, /* BEH */
+    { 0x0629, 0xFE93, 0xFE94, 0, 0, },           /* TEH MARBUTA */
+    { 0x062A, 0xFE95, 0xFE96, 0xFE97, 0xFE98, }, /* TEH */
+    { 0x062B, 0xFE99, 0xFE9A, 0xFE9B, 0xFE9C, }, /* THEH */
+    { 0x062C, 0xFE9D, 0xFE9E, 0xFE9F, 0xFEA0, }, /* JEEM */
+    { 0x062D, 0xFEA1, 0xFEA2, 0xFEA3, 0xFEA4, }, /* HAH */
+    { 0x062E, 0xFEA5, 0xFEA6, 0xFEA7, 0xFEA8, }, /* KHAH */
+    { 0x062F, 0xFEA9, 0xFEAA, 0, 0, },           /* DAL */
+    { 0x0630, 0xFEAB, 0xFEAC, 0, 0, },           /* THAL */
+    { 0x0631, 0xFEAD, 0xFEAE, 0, 0, },           /* REH */
+    { 0x0632, 0xFEAF, 0xFEB0, 0, 0, },           /* ZAIN */
+    { 0x0633, 0xFEB1, 0xFEB2, 0xFEB3, 0xFEB4, }, /* SEEN */
+    { 0x0634, 0xFEB5, 0xFEB6, 0xFEB7, 0xFEB8, }, /* SHEEN */
+    { 0x0635, 0xFEB9, 0xFEBA, 0xFEBB, 0xFEBC, }, /* SAD */
+    { 0x0636, 0xFEBD, 0xFEBE, 0xFEBF, 0xFEC0, }, /* DAD */
+    { 0x0637, 0xFEC1, 0xFEC2, 0xFEC3, 0xFEC4, }, /* TAH */
+    { 0x0638, 0xFEC5, 0xFEC6, 0xFEC7, 0xFEC8, }, /* ZAH */
+    { 0x0639, 0xFEC9, 0xFECA, 0xFECB, 0xFECC, }, /* AIN */
+    { 0x063A, 0xFECD, 0xFECE, 0xFECF, 0xFED0, }, /* GHAIN */
+    { 0x0641, 0xFED1, 0xFED2, 0xFED3, 0xFED4, }, /* FEH */
+    { 0x0642, 0xFED5, 0xFED6, 0xFED7, 0xFED8, }, /* QAF */
+    { 0x0643, 0xFED9, 0xFEDA, 0xFEDB, 0xFEDC, }, /* KAF */
+    { 0x0644, 0xFEDD, 0xFEDE, 0xFEDF, 0xFEE0, }, /* LAM */
+    { 0x0645, 0xFEE1, 0xFEE2, 0xFEE3, 0xFEE4, }, /* MEEM */
+    { 0x0646, 0xFEE5, 0xFEE6, 0xFEE7, 0xFEE8, }, /* NOON */
+    { 0x0647, 0xFEE9, 0xFEEA, 0xFEEB, 0xFEEC, }, /* HEH */
+    { 0x0648, 0xFEED, 0xFEEE, 0, 0, },           /* WAW */
+    { 0x0649, 0xFEEF, 0xFEF0, 0, 0, },           /* ALEF MAKSURA */
+    { 0x064A, 0xFEF1, 0xFEF2, 0xFEF3, 0xFEF4, }, /* YEH */
+    { 0x064E, 0xFE76, 0, 0, 0xFE77, },           /* FATHA */
+    { 0x064F, 0xFE78, 0, 0, 0xFE79, },           /* DAMMA */
+    { 0x0650, 0xFE7A, 0, 0, 0xFE7B, },           /* KASRA */
+    { 0x0651, 0xFE7C, 0, 0, 0xFE7D, },           /* SHADDA */
+    { 0x0652, 0xFE7E, 0, 0, 0xFE7F, },           /* SUKUN */
+    { 0x0679, 0xFB66, 0xFB67, 0xFB68, 0xFB69, }, /* TTEH */
+    { 0x067E, 0xFB56, 0xFB57, 0xFB58, 0xFB59, }, /* PEH */
+    { 0x0686, 0xFB7A, 0xFB7B, 0xFB7C, 0xFB7D, }, /* TCHEH */
+    { 0x0688, 0xFB88, 0xFB89, 0, 0, },           /* DDAL */
+    { 0x0691, 0xFB8C, 0xFB8D, 0, 0, },           /* RREH */
+    { 0x0698, 0xFB8A, 0xFB8B, 0, 0, },           /* JEH */
+    { 0x06A9, 0xFB8E, 0xFB8F, 0xFB90, 0xFB91, }, /* KEHEH */
+    { 0x06AF, 0xFB92, 0xFB93, 0xFB94, 0xFB95, }, /* GAF */
+    { 0x06BA, 0xFB9E, 0xFB9F, 0, 0, },           /* NOON GHUNNA */
+    { 0x06BE, 0xFBAA, 0xFBAB, 0xFBAC, 0xFBAD, }, /* HEH DOACHASHMEE */
+    { 0x06C0, 0xFBA4, 0xFBA5, 0, 0, },           /* HEH WITH YEH ABOVE */
+    { 0x06C1, 0xFBA6, 0xFBA7, 0xFBA8, 0xFBA9, }, /* HEH GOAL */
+    { 0x06CC, 0xFBFC, 0xFBFD, 0xFBFE, 0xFBFF, }, /* FARSI YEH */
+    { 0x06D2, 0xFBAE, 0xFBAF, 0, 0, },           /* YEH BARREE */
+    { 0x06D3, 0xFBB0, 0xFBB1, 0, 0, }};          /* YEH BARREE WITH HAMZA ABOVE */
+
+  for (int i = 0; i < LENGTHOF(letterForms); ++i) {
+    _testPresentationForms(letterForms[i]);
+  }
 }
 
 /* helpers ------------------------------------------------------------------ */
