@@ -378,7 +378,13 @@ main(int argc, char* argv[]) {
     }
 
     if(options[PDS_BUILD].doesOccur) {
+#if U_PLATFORM == U_PF_OS390
       o.pdsbuild = TRUE;
+#else
+      o.pdsbuild = FALSE;
+      fprintf(stdout, "Warning: You are using the -z option which only works on z/OS.\n");
+
+#endif
     } else {
       o.pdsbuild = FALSE;
     }
@@ -650,7 +656,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             /* Using the base libName and version number, generate the library file names. */
             createFileNames(o, mode, version_major, o->version == NULL ? "" : o->version, o->libName, reverseExt, noVersion);
 
-            if ((o->version!=NULL || IN_STATIC_MODE(mode)) && o->rebuild == FALSE) {
+            if ((o->version!=NULL || IN_STATIC_MODE(mode)) && o->rebuild == FALSE && o->pdsbuild == FALSE) {
                 /* Check to see if a previous built data library file exists and check if it is the latest. */
                 sprintf(checkLibFile, "%s%s", targetDir, libFileNames[LIB_FILE_VERSION]);
                 if (T_FileStream_file_exists(checkLibFile)) {
@@ -1380,22 +1386,52 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
         result = runCommand(cmd);
 
 #if U_PLATFORM == U_PF_OS390
+        char *env_tmp;
         char PDS_LibName[512];
+        char PDS_Name[512];
+
+        PDS_Name[0] = 0;
         PDS_LibName[0] = 0;
         if (specialHandling && uprv_strcmp(libFileNames[LIB_FILE],"libicudata") == 0) {
-            sprintf(PDS_LibName,"%s%s%s",
-                    "\"//'",
-                    getenv("LOADMOD"),
-                    "(IXMI" U_ICU_VERSION_SHORT "DA)'\"");
+            if (env_tmp = getenv("ICU_PDS_NAME")) {
+                sprintf(PDS_Name, "%s%s",
+                        env_tmp,
+                        "DA");
+                strcat(PDS_Name, getenv("ICU_PDS_NAME_SUFFIX"));
+            } else if (env_tmp = getenv("PDS_NAME_PREFIX")) {
+                sprintf(PDS_Name, "%s%s",
+                        env_tmp,
+                        U_ICU_VERSION_SHORT "DA");
+            } else {
+                sprintf(PDS_Name, "%s%s",
+                        "IXMI",
+                        U_ICU_VERSION_SHORT "DA");
+            }
         } else if (!specialHandling && uprv_strcmp(libFileNames[LIB_FILE],"libicudata_stub") == 0) {
-           sprintf(PDS_LibName,"%s%s%s",
-                   "\"//'",
-                   getenv("LOADMOD"),
-                   "(IXMI" U_ICU_VERSION_SHORT "D1)'\"");
+            if (env_tmp = getenv("ICU_PDS_NAME")) {
+                sprintf(PDS_Name, "%s%s",
+                        env_tmp,
+                        "D1");
+                strcat(PDS_Name, getenv("ICU_PDS_NAME_SUFFIX"));
+            } else if (env_tmp = getenv("PDS_NAME_PREFIX")) {
+                sprintf(PDS_Name, "%s%s",
+                        env_tmp,
+                        U_ICU_VERSION_SHORT "D1");
+            } else {
+                sprintf(PDS_Name, "%s%s",
+                        "IXMI",
+                        U_ICU_VERSION_SHORT "D1");
+            }
         }
 
-        if (PDS_LibName[0]) {
-           sprintf(cmd, "%s %s -o %s %s %s%s %s %s",
+        if (PDS_Name[0]) {
+            sprintf(PDS_LibName,"%s%s%s%s%s",
+                    "\"//'",
+                    getenv("LOADMOD"),
+                    "(",
+                    PDS_Name,
+                    ")'\"");
+            sprintf(cmd, "%s %s -o %s %s %s%s %s %s",
                    pkgDataFlags[GENLIB],
                    pkgDataFlags[LDICUDTFLAGS],
                    PDS_LibName,
