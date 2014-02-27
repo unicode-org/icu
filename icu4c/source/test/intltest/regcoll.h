@@ -238,6 +238,8 @@ public:
     //
     void TestCaseFirstCompression();
 
+    void TestTrailingComment();
+
 private:
     //------------------------------------------------------------------------
     // Internal utilities
