@@ -1524,7 +1524,7 @@ cleanupAndReturn:
         }
         delete testString;
     }
-};
+}
 
 
 // Test for ticket #10673, race in cache code in AnyTransliterator.
@@ -1543,7 +1543,7 @@ class TxThread: public SimpleThread {
     void run();
 };
 
-TxThread::~TxThread() {};
+TxThread::~TxThread() {}
 void TxThread::run() {
     UnicodeString greekString("\\u03B4\\u03B9\\u03B1\\u03C6\\u03BF\\u03C1\\u03B5\\u03C4\\u03B9\\u03BA\\u03BF\\u03CD\\u03C2");
     greekString = greekString.unescape();
