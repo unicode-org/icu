@@ -1151,6 +1151,12 @@
 <pre><samp>export _CXX_PSYSIX="CEE.SCEELIB(C128N)":"CBC.SCLBSID(IOSTREAM,COMPLEX)"</samp></pre>
       </li>
       
+      <li>When building ICU data, the heap size may need to be increased with the following
+      environment variable:
+
+<pre><samp>export _CEE_RUNOPTS="HEAPPOOLS(ON),HEAP(4M,1M,ANY,FREE,0K,4080)"</samp></pre>
+      </li>
+      
 
       <li>The rest of the instructions for building and testing ICU on z/OS with
       UNIX System Services are the same as the <a href="#HowToBuildUNIX">How To
