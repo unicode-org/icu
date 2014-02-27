@@ -1,6 +1,6 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2005-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  * *****************************************************************************
  */
@@ -1295,8 +1295,6 @@ public  class ICUResourceBundle extends UResourceBundle {
     /**
      * Returns the resource handle for the given key within the calling resource table.
      * 
-     * @internal
-     * @deprecated This API is ICU internal only and a workaround see ticket #6514.
      * @author Brian Rower
      */
     protected int getTableResource(String resKey) {
@@ -1313,8 +1311,6 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @param index The index of the resource to check
      * @returns True if the resource at 'index' is an alias, false otherwise.
      * 
-     * @internal
-     * @deprecated This API is ICU internal only and part of a work around see ticket #6514
      * @author Brian Rower
      */
     public boolean isAlias(int index)
@@ -1325,9 +1321,6 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     /**
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only and part of a workaround see ticket #6514.
      * @author Brian Rower
      */
     public boolean isAlias()
@@ -1341,9 +1334,6 @@ public  class ICUResourceBundle extends UResourceBundle {
      * is an alias. If it is, returns true
      * 
      * @returns True if the resource with 'key' is an alias, false otherwise.
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only and part of a workaround see ticket #6514.
      * @author Brian Rower
      */
     public boolean isAlias(String k)
@@ -1360,9 +1350,6 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @param index The index where the alias path points to.
      * @return The alias path.
      * @author Brian Rower
-     * @internal
-     * @deprecated This API is ICU internal only.
-     * @author Brian Rower
      */
     public String getAliasPath(int index)
     {
@@ -1370,9 +1357,6 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     /**
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only
      * @author Brian Rower
      */
     public String getAliasPath()
@@ -1382,9 +1366,6 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     /**
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only
      * @author Brian Rower
      */
     public String getAliasPath(String k)
@@ -1406,8 +1387,6 @@ public  class ICUResourceBundle extends UResourceBundle {
      * underlying alias's. For all general purposes of the ICU resource bundle please use getKeys().
      * 
      * @return Keys in this table or array.
-     * @internal
-     * @deprecated This API is ICU internal only and a workaround see ticket #6514.
      * @author Brian Rower
      */
     public Enumeration<String> getKeysSafe()

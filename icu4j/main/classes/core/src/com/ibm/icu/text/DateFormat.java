@@ -1123,36 +1123,42 @@ public abstract class DateFormat extends UFormat {
      * {@icu} Constant for date skeleton with standalone month.
      * @deprecated ICU 50 Use {@link #MONTH} instead.
      */
+    @Deprecated
     public static final String STANDALONE_MONTH = "LLLL";
 
     /**
      * {@icu} Constant for date skeleton with standalone abbreviated month.
      * @deprecated ICU 50 Use {@link #ABBR_MONTH} instead.
      */
+    @Deprecated
     public static final String ABBR_STANDALONE_MONTH = "LLL";
 
     /**
      * {@icu} Constant for date skeleton with hour, minute, and generic timezone.
      * @deprecated ICU 50 Use instead {@link #HOUR_MINUTE}+{@link #ABBR_GENERIC_TZ} or some other timezone presentation.
      */
+    @Deprecated
     public static final String HOUR_MINUTE_GENERIC_TZ = "jmv";
 
     /**
      * {@icu} Constant for date skeleton with hour, minute, and timezone.
      * @deprecated ICU 50 Use instead {@link #HOUR_MINUTE}+{@link #ABBR_SPECIFIC_TZ} or some other timezone presentation.
      */
+    @Deprecated
     public static final String HOUR_MINUTE_TZ = "jmz";
 
     /**
      * {@icu} Constant for date skeleton with hour and generic timezone.
      * @deprecated ICU 50 Use instead {@link #HOUR}+{@link #ABBR_GENERIC_TZ} or some other timezone presentation.
      */
+    @Deprecated
     public static final String HOUR_GENERIC_TZ = "jv";
 
     /**
      * {@icu} Constant for date skeleton with hour and timezone.
      * @deprecated ICU 50 Use instead {@link #HOUR}+{@link #ABBR_SPECIFIC_TZ} or some other timezone presentation.
      */
+    @Deprecated
     public static final String HOUR_TZ = "jz";
 
 

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -339,6 +339,7 @@ public final class RuleBasedCollator extends Collator {
      * @see #isHiraganaQuaternary
      * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
      */
+    @Deprecated
     public void setHiraganaQuaternary(boolean flag) {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify frozen object");
@@ -358,6 +359,7 @@ public final class RuleBasedCollator extends Collator {
      * @see #isHiraganaQuaternary
      * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
      */
+    @Deprecated
     public void setHiraganaQuaternaryDefault() {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify frozen object");
@@ -1209,6 +1211,7 @@ public final class RuleBasedCollator extends Collator {
      * @see #setHiraganaQuaternary(boolean)
      * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
      */
+    @Deprecated
     public boolean isHiraganaQuaternary() {
         return m_isHiragana4_;
     }

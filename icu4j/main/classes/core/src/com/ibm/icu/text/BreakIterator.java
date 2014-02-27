@@ -835,6 +835,7 @@ s     */
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static BreakIterator getBreakInstance(ULocale where, int kind) {
 
         if (iterCache[kind] != null) {

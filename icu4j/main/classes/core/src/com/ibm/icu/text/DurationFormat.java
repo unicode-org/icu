@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -37,6 +37,7 @@ public abstract class DurationFormat extends UFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected DurationFormat() {
     }
     
@@ -45,6 +46,7 @@ public abstract class DurationFormat extends UFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected DurationFormat(ULocale locale) {
         setLocale(locale,locale);
     }

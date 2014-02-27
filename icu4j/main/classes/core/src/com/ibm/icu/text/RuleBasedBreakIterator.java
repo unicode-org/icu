@@ -41,8 +41,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     //=======================================================================
     
     /** 
-     * @internal 
-     * @deprecated This API is ICU internal only.
+     * private constructor
      */
     private RuleBasedBreakIterator() {
         fLastStatusIndexValid = true;
@@ -188,9 +187,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     private CharacterIterator   fText = new java.text.StringCharacterIterator("");
     
     /**
-     * The rule data for this BreakIterator instance
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * The rule data for this BreakIterator instance. Package private.
      */
     RBBIDataWrapper             fRData;
     
@@ -222,8 +219,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
     /**
      * Debugging flag.  Trace operation of state machine when true.
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     private static final boolean TRACE = ICUDebug.enabled(RBBI_DEBUG_ARG)
             && ICUDebug.value(RBBI_DEBUG_ARG).indexOf("trace") >= 0;
@@ -275,6 +270,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public void dump() {
         this.fRData.dump();   
     }
@@ -1043,16 +1039,14 @@ public class RuleBasedBreakIterator extends BreakIterator {
     }
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * package private
      */
     void setBreakType(int type) {
         fBreakType = type;
     }
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * package private
      */
     int getBreakType() {
         return fBreakType;

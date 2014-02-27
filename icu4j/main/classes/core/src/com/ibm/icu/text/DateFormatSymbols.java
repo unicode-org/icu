@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -99,6 +99,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final int DT_CONTEXT_COUNT = 2;
 
     // Constants for width
@@ -133,6 +134,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final int DT_WIDTH_COUNT = 4;
 
      /**
@@ -1274,6 +1276,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     // This API was accidentally marked as @stable ICU 3.0 formerly.
     protected void initializeData(ULocale desiredLocale, CalendarData calData)
     {
@@ -1698,6 +1701,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * this API no longer works as described.  This method always returns null.
      * @deprecated ICU 4.0
      */
+    @Deprecated
     // This API was formerly @stable ICU 2.0
     static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
                                                      Locale locale)
@@ -1719,6 +1723,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * this API no longer works as described.  This method always returns null.
      * @deprecated ICU 4.0
      */
+    @Deprecated
     // This API was formerly @stable ICU 3.2
     static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
                                                      ULocale locale)
@@ -1735,6 +1740,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
      * @deprecated ICU 4.0
      */
+    @Deprecated
     // This API was formerly @stable ICU 2.2
     public static ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
         throws MissingResourceException {
@@ -1750,6 +1756,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
      * @deprecated ICU 4.0
      */
+    @Deprecated
     // This API was formerly @stable ICU 3.2
     public static ResourceBundle getDateFormatBundle(Calendar cal, ULocale locale)
         throws MissingResourceException {

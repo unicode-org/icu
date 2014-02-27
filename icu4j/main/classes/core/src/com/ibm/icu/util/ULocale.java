@@ -1479,9 +1479,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * {@icu} Returns this locale's script localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized script name.
      * @see Category#DISPLAY
-     * @internal ICU 49
+     * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String getDisplayScriptInContext() {
         return getDisplayScriptInContextInternal(this, getDefault(Category.DISPLAY));
     }
@@ -1500,9 +1501,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * {@icu} Returns this locale's script localized for display in the provided locale.
      * @param displayLocale the locale in which to display the name.
      * @return the localized script name.
-     * @internal ICU 49
+     * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String getDisplayScriptInContext(ULocale displayLocale) {
         return getDisplayScriptInContextInternal(this, displayLocale);
     }
@@ -1524,9 +1526,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @param localeID the id of the locale whose script will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
      * @return the localized script name.
-     * @internal ICU 49
+     * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static String getDisplayScriptInContext(String localeID, String displayLocaleID) {
         return getDisplayScriptInContextInternal(new ULocale(localeID), new ULocale(displayLocaleID));
     }
@@ -1546,9 +1549,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @param localeID the id of the locale whose script will be displayed.
      * @param displayLocale the locale in which to display the name.
      * @return the localized script name.
-     * @internal ICU 49
+     * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static String getDisplayScriptInContext(String localeID, ULocale displayLocale) {
         return getDisplayScriptInContextInternal(new ULocale(localeID), displayLocale);
     }

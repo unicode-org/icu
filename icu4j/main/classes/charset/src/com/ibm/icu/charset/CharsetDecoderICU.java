@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2012, International Business Machines Corporation and    *
+* Copyright (C) 2006-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -41,6 +41,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected static final int EXT_MAX_BYTES = 0x1f;
 
     /* store previous UChars/chars to continue partial matches */

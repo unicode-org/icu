@@ -23,6 +23,7 @@ import com.ibm.icu.impl.SimpleCache;
  * @internal
  * @deprecated This API is ICU internal only.
  */
+@Deprecated
 public class GenderInfo {
 
     private final ListGenderStyle style; // set based on locale
@@ -32,21 +33,25 @@ public class GenderInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public enum Gender {
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         MALE,
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         FEMALE,
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         OTHER
     }
 
@@ -56,6 +61,7 @@ public class GenderInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static GenderInfo getInstance(ULocale uLocale) {
         return genderInfoCache.get(uLocale);
     }
@@ -66,6 +72,7 @@ public class GenderInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static GenderInfo getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale));
     }
@@ -77,6 +84,7 @@ public class GenderInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public enum ListGenderStyle {
         /**
          * For an empty list, returns OTHER;
@@ -85,6 +93,7 @@ public class GenderInfo {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         NEUTRAL,
         /**
          * For an empty list, returns OTHER;
@@ -94,6 +103,7 @@ public class GenderInfo {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         MIXED_NEUTRAL,
         /**
          * For an empty list, returns OTHER;
@@ -103,6 +113,7 @@ public class GenderInfo {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         MALE_TAINTS;
 
         private static Map<String, ListGenderStyle> fromNameMap =
@@ -118,6 +129,7 @@ public class GenderInfo {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public static ListGenderStyle fromName(String name) {
             ListGenderStyle result = fromNameMap.get(name);
             if (result == null) {
@@ -134,6 +146,7 @@ public class GenderInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public Gender getListGender(Gender... genders) {
         return getListGender(Arrays.asList(genders));
     }
@@ -145,6 +158,7 @@ public class GenderInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public Gender getListGender(List<Gender> genders) {
         if (genders.size() == 0) {
             return Gender.OTHER; // degenerate case
@@ -196,6 +210,7 @@ public class GenderInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public GenderInfo(ListGenderStyle genderStyle) {
         style = genderStyle;
     }

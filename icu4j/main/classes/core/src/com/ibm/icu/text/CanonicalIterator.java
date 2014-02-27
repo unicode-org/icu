@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -161,6 +161,7 @@ public final class CanonicalIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static void permute(String source, boolean skipZeros, Set<String> output) {
         // TODO: optimize
         //if (PROGRESS) System.out.println("Permute: " + source);

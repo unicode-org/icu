@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -324,6 +324,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static void resetBundleCache() {
         /*
          * A HACK!!!!!
@@ -346,6 +347,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected static UResourceBundle addToCache(ClassLoader cl, String fullName,
                                                 ULocale defaultLocale, UResourceBundle b) {
         synchronized(cacheKey){
@@ -364,6 +366,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected static UResourceBundle loadFromCache(ClassLoader cl, String fullName, 
                                                    ULocale defaultLocale){
         synchronized(cacheKey){
@@ -715,6 +718,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected UResourceBundle findTopLevel(String aKey) {
         // NOTE: this only works for top-level resources.  For resources at lower
         // levels, it fails when you fall back to the parent, since you're now
@@ -782,6 +786,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected UResourceBundle findTopLevel(int index) {
         // NOTE: this _barely_ works for top-level resources.  For resources at lower
         // levels, it fails when you fall back to the parent, since you're now
@@ -816,6 +821,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public Set<String> keySet() {
         if(keys == null) {
             if(isTopLevelResource()) {
@@ -851,6 +857,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected Set<String> handleKeySet() {
         return Collections.emptySet();
     }
@@ -1075,6 +1082,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract void setLoadingStatus(int newStatus);
 
     /**
@@ -1083,6 +1091,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected boolean isTopLevelResource() {
         return true;
     }

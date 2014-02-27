@@ -98,6 +98,7 @@ public class LocaleMatcher {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public LocaleMatcher(LocalePriorityList languagePriorityList, LanguageMatcherData matcherData) {
         this(languagePriorityList, matcherData, DEFAULT_THRESHOLD);
     }
@@ -109,6 +110,7 @@ public class LocaleMatcher {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public LocaleMatcher(LocalePriorityList languagePriorityList, LanguageMatcherData matcherData, double threshold) {
         this.matcherData = matcherData;
         for (final ULocale language : languagePriorityList) {
@@ -213,6 +215,7 @@ public class LocaleMatcher {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public ULocale getBestMatch(ULocale... ulocales) {
         return getBestMatch(LocalePriorityList.add(ulocales).build());
     }
@@ -546,6 +549,7 @@ public class LocaleMatcher {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static class LanguageMatcherData implements Freezable<LanguageMatcherData> {
         ScoreData languageScores = new ScoreData(Level.language);
         ScoreData scriptScores = new ScoreData(Level.script);
@@ -555,6 +559,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public LanguageMatcherData() {
         }
 
@@ -562,6 +567,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public String toString() {
             return languageScores + "\n\t" + scriptScores + "\n\t" + regionScores;
         }
@@ -570,6 +576,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public double match(ULocale a, ULocale aMax, ULocale b, ULocale bMax) {
             double diff = 0;
             diff += languageScores.getScore(a, aMax, a.getLanguage(), aMax.getLanguage(), b, bMax, b.getLanguage(), bMax.getLanguage());
@@ -600,6 +607,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         private LanguageMatcherData addDistance(String desired, String supported, int percent) {
             return addDistance(desired, supported, percent, false, null);
         }
@@ -607,6 +615,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public LanguageMatcherData addDistance(String desired, String supported, int percent, String comment) {
             return addDistance(desired, supported, percent, false, comment);
         }
@@ -614,6 +623,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public LanguageMatcherData addDistance(String desired, String supported, int percent, boolean oneway) {
             return addDistance(desired, supported, percent, oneway, null);
         }
@@ -680,6 +690,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public LanguageMatcherData cloneAsThawed() {
             LanguageMatcherData result;
             try {
@@ -701,6 +712,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public LanguageMatcherData freeze() {
             return this;
         }
@@ -710,6 +722,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public boolean isFrozen() {
             return frozen;
         }
@@ -847,6 +860,7 @@ public class LocaleMatcher {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static ICUResourceBundle getICUSupplementalData() {
         ICUResourceBundle suppData = (ICUResourceBundle) UResourceBundle.getBundleInstance(
                 ICUResourceBundle.ICU_BASE_NAME,
@@ -859,6 +873,7 @@ public class LocaleMatcher {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static double match(ULocale a, ULocale b) {
         final LocaleMatcher matcher = new LocaleMatcher("");
         return matcher.match(a, matcher.addLikelySubtags(a), b, matcher.addLikelySubtags(b));

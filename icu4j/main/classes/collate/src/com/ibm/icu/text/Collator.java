@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and    *
+* Copyright (C) 1996-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -341,6 +341,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public Collator setStrength2(int newStrength)
     {
         setStrength(newStrength);

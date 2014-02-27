@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2013, International Business Machines Corporation and
+ * Copyright (C) 2007-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -653,6 +653,7 @@ public class PluralFormat extends UFormat {
      *             a different kind of PluralRules instance;
      *             use one of the constructors to create a new instance instead.
      */
+    @Deprecated
     public void setLocale(ULocale ulocale) {
         if (ulocale == null) {
             ulocale = ULocale.getDefault(Category.FORMAT);

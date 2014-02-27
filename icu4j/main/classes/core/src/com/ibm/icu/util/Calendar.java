@@ -3474,6 +3474,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static String getDateTimePattern(Calendar cal, ULocale uLocale, int dateStyle) {
         PatternData patternData = PatternData.make(cal, uLocale);
         return patternData.getDateTimePattern(dateStyle);
@@ -3541,6 +3542,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static class FormatConfiguration {
         private String pattern;
         private String override;
@@ -3558,6 +3560,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public String getPatternString() {
             return pattern;
         }
@@ -3566,6 +3569,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public String getOverrideString() {
             return override;
         }
@@ -3576,6 +3580,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public Calendar getCalendar() {
             return cal;
         }
@@ -3586,6 +3591,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public ULocale getLocale() {
             return loc;
         }
@@ -3596,6 +3602,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public DateFormatSymbols getDateFormatSymbols() {
             return formatData;
         }
@@ -6021,6 +6028,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public boolean haveDefaultCentury() {
         return true;
     }

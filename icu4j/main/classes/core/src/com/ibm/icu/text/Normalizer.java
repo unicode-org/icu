@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2012, International Business Machines Corporation and
+ * Copyright (C) 2000-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -225,6 +225,7 @@ public final class Normalizer implements Cloneable {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         protected abstract Normalizer2 getNormalizer2(int options);
     }
 
@@ -318,6 +319,7 @@ public final class Normalizer implements Cloneable {
      * @deprecated ICU 2.8. Use Nomalizer.NONE
      * @see #NONE
      */
+    @Deprecated
     public static final Mode NO_OP = NONE;
 
     /**
@@ -336,6 +338,7 @@ public final class Normalizer implements Cloneable {
      * @deprecated ICU 2.8. Use Normalier.NFC
      * @see #NFC
      */
+    @Deprecated
     public static final Mode COMPOSE = NFC;
 
     /**
@@ -354,6 +357,7 @@ public final class Normalizer implements Cloneable {
      * @deprecated ICU 2.8. Use Normalizer.NFKC
      * @see #NFKC
      */
+    @Deprecated
     public static final Mode COMPOSE_COMPAT = NFKC;
 
     /**
@@ -372,6 +376,7 @@ public final class Normalizer implements Cloneable {
      * @deprecated ICU 2.8. Use Normalizer.NFD
      * @see #NFD
      */
+    @Deprecated
     public static final Mode DECOMP = NFD;
 
     /**
@@ -390,6 +395,7 @@ public final class Normalizer implements Cloneable {
      * @deprecated ICU 2.8. Use Normalizer.NFKD
      * @see #NFKD
      */
+    @Deprecated
     public static final Mode DECOMP_COMPAT = NFKD;
 
     /**
@@ -410,6 +416,7 @@ public final class Normalizer implements Cloneable {
      * @see #setOption
      * @deprecated ICU 2.8. This option is no longer supported.
      */
+    @Deprecated
     public static final int IGNORE_HANGUL = 0x0001;
           
     /**
@@ -1499,6 +1506,7 @@ public final class Normalizer implements Cloneable {
      * @deprecated ICU 3.2
      * @obsolete ICU 3.2
      */
+    @Deprecated
      ///CLOVER:OFF
      public int setIndex(int index) {
          setIndexOnly(index);
@@ -1513,6 +1521,7 @@ public final class Normalizer implements Cloneable {
      * @return The codepoint as an int
      * @see #startIndex
      */
+    @Deprecated
     public int getBeginIndex() {
         return 0;
     }
@@ -1525,6 +1534,7 @@ public final class Normalizer implements Cloneable {
      * @return The codepoint as an int
      * @see #endIndex
      */
+    @Deprecated
     public int getEndIndex() {
         return endIndex();
     }

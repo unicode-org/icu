@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -59,6 +59,7 @@ public abstract class CurrencyDisplayNames {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static boolean hasData() {
         return CurrencyData.provider.hasData();
     }
@@ -127,6 +128,7 @@ public abstract class CurrencyDisplayNames {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected CurrencyDisplayNames() {
     }
 }

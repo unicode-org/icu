@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -58,6 +58,7 @@ public class CurrencyMetaInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static boolean hasData() {
         return hasData;
     }
@@ -67,6 +68,7 @@ public class CurrencyMetaInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected CurrencyMetaInfo() {
     }
 
@@ -104,6 +106,7 @@ public class CurrencyMetaInfo {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public final boolean tenderOnly;
 
         private CurrencyFilter(String region, String currency, long from, long to, boolean tenderOnly) {
@@ -453,7 +456,8 @@ public class CurrencyMetaInfo {
 
         /**
          * @deprecated ICU 51 Use {@link CurrencyMetaInfo#currencyInfo(CurrencyFilter)} instead.
-         */     
+         */
+        @Deprecated
         public CurrencyInfo(String region, String code, long from, long to, int priority) {
             this(region, code, from, to, priority, true);
         }
@@ -464,6 +468,7 @@ public class CurrencyMetaInfo {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public CurrencyInfo(String region, String code, long from, long to, int priority, boolean tender) {
             this.region = region;
             this.code = code;
@@ -548,6 +553,7 @@ public class CurrencyMetaInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected static final CurrencyDigits defaultDigits = new CurrencyDigits(2, 0);
 
     static {

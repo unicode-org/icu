@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011-2012, International Business Machines
+*   Copyright (C) 2011-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2011jan05
@@ -48,12 +48,14 @@ public abstract class StringTrieBuilder {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected StringTrieBuilder() {}
 
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected void addImpl(CharSequence s, int value) {
         if(state!=State.ADDING) {
             // Cannot add elements after building.
@@ -74,6 +76,7 @@ public abstract class StringTrieBuilder {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected final void buildImpl(Option buildOption) {
         switch(state) {
         case ADDING:
@@ -118,6 +121,7 @@ public abstract class StringTrieBuilder {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected void clearImpl() {
         strings.setLength(0);
         nodes.clear();
@@ -814,48 +818,57 @@ public abstract class StringTrieBuilder {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract boolean matchNodesCanHaveValues() /*const*/;
 
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract int getMaxBranchLinearSubNodeLength() /*const*/;
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract int getMinLinearMatch() /*const*/;
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract int getMaxLinearMatchLength() /*const*/;
 
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract int write(int unit);
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract int write(int offset, int length);
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract int writeValueAndFinal(int i, boolean isFinal);
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract int writeValueAndType(boolean hasValue, int value, int node);
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected abstract int writeDeltaTo(int jumpTarget);
 
     private enum State {
@@ -868,6 +881,7 @@ public abstract class StringTrieBuilder {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected StringBuilder strings=new StringBuilder();
     private Node root;
 

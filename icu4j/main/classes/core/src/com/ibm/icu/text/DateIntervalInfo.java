@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -304,6 +304,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public DateIntervalInfo() 
     {
         fIntervalPatterns = new HashMap<String, Map<String, PatternInfo>>();
@@ -985,6 +986,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public Map<String,Set<String>> getPatterns() {
         LinkedHashMap<String,Set<String>> result = new LinkedHashMap<String,Set<String>>();
         for (Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {

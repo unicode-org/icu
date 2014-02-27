@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2013, International Business Machines Corporation and    *
+* Copyright (C) 2006-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -105,6 +105,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @internal
      * @deprecated This API is ICU internal only.
      */
+     @Deprecated
      public static final String getICUCanonicalName(String enc)
                                 throws UnsupportedCharsetException{
         String canonicalName = null;
@@ -164,6 +165,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static String getJavaCanonicalName(String charsetName){
         /*
         If a charset listed in the IANA Charset Registry is supported by an implementation 
@@ -255,6 +257,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     private static final String[] getAliases(String encName)throws IOException{
         String[] ret = null;
         int aliasNum = 0;
@@ -312,6 +315,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
      public static final String[] getAvailableNames(){
         CharsetProviderICU provider = new CharsetProviderICU();
         HashMap<Charset, String> map = new HashMap<Charset, String>();
@@ -325,6 +329,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
      public static final String[] getAllNames(){
         int num = UConverterAlias.countAvailable();
         String[] names = new String[num];

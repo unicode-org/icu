@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -225,6 +225,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public int hashCode() {
         assert false : "hashCode not designed";
         return 42;
@@ -236,6 +237,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     String select(double number) {
         return pluralRules.select(number);
     }
@@ -246,6 +248,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     String select(PluralRules.FixedDecimal numberInfo) {
         return pluralRules.select(numberInfo);
     }
