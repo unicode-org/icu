@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010, International Business Machines Corporation and         *
+ * Copyright (C) 2014, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -59,6 +59,33 @@ public class ThreadTest extends TransliteratorTest {
                 for (String s : WORDS) {
                     count += tx.transliterate(s).length();
                 }                
+            }
+        }
+    }
+    
+    // Test for ticket #10673, race in cache code in AnyTransliterator.
+    // It's difficult to make the original unsafe code actually fail, but
+    // this test will fairly reliably take the code path for races in 
+    // populating the cache.
+    // 
+    public void TestAnyTranslit() {
+        final Transliterator tx = Transliterator.getInstance("Any-Latin");
+        ArrayList<Thread> threads = new ArrayList<Thread>();
+        for (int i=0; i<8; i++) {
+            threads.add(new Thread() {
+                public void run() {
+                    tx.transliterate("διαφορετικούς");
+                }
+            });
+        }
+        for (Thread th:threads) {
+            th.start();
+        }
+        for (Thread th:threads) {
+            try {
+                th.join();
+            } catch (InterruptedException e) {
+                errln("Uexpected exception: " + e);
             }
         }
     }

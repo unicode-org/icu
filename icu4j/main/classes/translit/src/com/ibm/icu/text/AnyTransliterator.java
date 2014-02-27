@@ -1,6 +1,6 @@
 /*
 *****************************************************************
-* Copyright (c) 2002-2011, International Business Machines Corporation
+* Copyright (c) 2002-2014, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
 * Date        Name        Description
@@ -14,9 +14,9 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.lang.UScript;
 /**
@@ -53,7 +53,7 @@ class AnyTransliterator extends Transliterator {
     /**
      * Cache mapping UScriptCode values to Transliterator*.
      */
-    private Map<Integer, Transliterator> cache;
+    private ConcurrentHashMap<Integer, Transliterator> cache;
 
     /**
      * The target or target/variant string.
@@ -135,7 +135,7 @@ class AnyTransliterator extends Transliterator {
                               int theTargetScript) {
         super(id, null);
         targetScript = theTargetScript;
-        cache = new HashMap<Integer, Transliterator>();
+        cache = new ConcurrentHashMap<Integer, Transliterator>();
 
         target = theTarget;
         if (theVariant.length() > 0) {
@@ -153,7 +153,7 @@ class AnyTransliterator extends Transliterator {
      * @param cache2 The Map object for cache.
      */
     public AnyTransliterator(String id, UnicodeFilter filter, String target2,
-            int targetScript2, Transliterator widthFix2, Map<Integer, Transliterator> cache2) {
+            int targetScript2, Transliterator widthFix2, ConcurrentHashMap<Integer, Transliterator> cache2) {
         super(id, filter);
         targetScript = targetScript2;
         cache = cache2;
@@ -202,7 +202,10 @@ class AnyTransliterator extends Transliterator {
                     v.add(t);
                     t = new CompoundTransliterator(v);
                 }
-                cache.put(key, t);
+                Transliterator prevCachedT = cache.putIfAbsent(key, t);
+                if (prevCachedT != null) {
+                    t = prevCachedT;
+                }
             } else if (!isWide(targetScript)) {
                 return widthFix;
             }
