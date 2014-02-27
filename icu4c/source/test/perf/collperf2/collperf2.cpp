@@ -377,10 +377,6 @@ void NextSortKeyPart::call(UErrorCode* status)
             partLen = ucol_nextSortKeyPart(coll, &iter, state, part, bufSize, status);
             events++;
         }
-        // Workaround for #10595
-        if (U_FAILURE(*status)) {
-            *status = U_ZERO_ERROR;
-        }
     }
     free(part);
 }
@@ -447,10 +443,6 @@ void NextSortKeyPartUTF8::call(UErrorCode* status)
         for (int32_t n = 0; U_SUCCESS(*status) && partLen == bufSize && (maxIteration < 0 || n < maxIteration); n++) {
             partLen = ucol_nextSortKeyPart(coll, &iter, state, part, bufSize, status);
             events++;
-        }
-        // Workaround for #10595
-        if (U_FAILURE(*status)) {
-            *status = U_ZERO_ERROR;
         }
     }
     free(part);

@@ -5788,10 +5788,6 @@ static void TestNextSortKeyPartJaIdentical(void)
     while (keyPartLen == KEY_PART_SIZE) {
         keyPartLen = ucol_nextSortKeyPart(coll, &iter, state, keyPart, KEY_PART_SIZE, &status);
         if (U_FAILURE(status)) {
-            if(log_knownIssue("10595", "Ignoring an error returned by ucol_nextSortKeyPart")) {
-                status = U_ZERO_ERROR;
-                continue;
-            }
             log_err_status(status, "ERROR: in iterating next sort key part: %s\n", myErrorName(status));
             break;
         }
