@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -376,6 +376,7 @@ public abstract class Transliterator implements StringTransform  {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public int hashCode() {
             assert false : "hashCode not designed";
             return 42;
@@ -1954,6 +1955,7 @@ public abstract class Transliterator implements StringTransform  {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static void registerAny() {
         AnyTransliterator.register();
     }

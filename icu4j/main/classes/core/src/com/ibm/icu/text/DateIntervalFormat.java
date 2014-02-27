@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2008-2013, International Business Machines
+*   Copyright (C) 2008-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -345,6 +345,7 @@ public class DateIntervalFormat extends UFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public DateIntervalFormat(String skeleton, DateIntervalInfo dtItvInfo,
                                SimpleDateFormat simpleDateFormat)
     {
@@ -610,6 +611,7 @@ public class DateIntervalFormat extends UFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String getPatterns(Calendar fromCalendar,
             Calendar toCalendar, 
             Output<String> part2) {
@@ -833,6 +835,7 @@ public class DateIntervalFormat extends UFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public Object parseObject(String source, ParsePosition parse_pos)
     {
         throw new UnsupportedOperationException("parsing is not supported");

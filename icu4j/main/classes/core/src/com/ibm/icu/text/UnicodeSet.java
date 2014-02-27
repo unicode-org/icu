@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -971,6 +971,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public int matchesAt(CharSequence text, int offset) {
         int lastLen = -1;
         strings:
@@ -1947,6 +1948,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String getRegexEquivalent() {
         if (strings.size() == 0) {
             return toString();
@@ -2327,6 +2329,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public UnicodeSet applyPattern(String pattern,
             ParsePosition pos,
             SymbolTable symbols,
@@ -4311,6 +4314,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static <T extends Comparable<T>> int compare(Iterator<T> first, Iterator<T> other) {
         while (true) {
             if (!first.hasNext()) {
@@ -4383,6 +4387,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static int getSingleCodePoint(CharSequence s) {
         return CharSequences.getSingleCodePoint(s);
     }
@@ -4396,6 +4401,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public UnicodeSet addBridges(UnicodeSet dontCare) {
         UnicodeSet notInInput = new UnicodeSet(this).complement();
         for (UnicodeSetIterator it = new UnicodeSetIterator(notInInput); it.nextRange();) {
@@ -4413,6 +4419,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public int findIn(CharSequence value, int fromIndex, boolean findNot) {
         //TODO add strings, optimize, using ICU4C algorithms
         int cp;
@@ -4433,6 +4440,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public int findLastIn(CharSequence value, int fromIndex, boolean findNot) {
         //TODO add strings, optimize, using ICU4C algorithms
         int cp;
@@ -4454,6 +4462,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String stripFrom(CharSequence source, boolean matches) {
         StringBuilder result = new StringBuilder();
         for (int pos = 0; pos < source.length();) {

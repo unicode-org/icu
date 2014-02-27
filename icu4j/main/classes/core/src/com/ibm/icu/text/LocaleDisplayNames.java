@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -150,6 +150,7 @@ public abstract class LocaleDisplayNames {
      * @internal ICU 49
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String scriptDisplayNameInContext(String script) {
         return scriptDisplayName(script);
     }
@@ -202,6 +203,7 @@ public abstract class LocaleDisplayNames {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected LocaleDisplayNames() {
     }
 }

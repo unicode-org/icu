@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2013, International Business Machines Corporation and
+* Copyright (C) 1996-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -3366,6 +3366,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * defined by java.lang.Character.isSpace.
      * @deprecated ICU 3.4 (Java)
      */
+    @Deprecated
     public static boolean isSpace(int ch) {
         return ch <= 0x20 &&
             (ch == 0x20 || ch == 0x09 || ch == 0x0a || ch == 0x0c || ch == 0x0d);
@@ -3485,6 +3486,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return true if the code point can start a java identifier.
      * @deprecated ICU 3.4 (Java)
      */
+    @Deprecated
     public static boolean isJavaLetter(int cp) {
         return isJavaIdentifierStart(cp);
     }
@@ -3497,6 +3499,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return true if the code point can continue a java identifier.
      * @deprecated ICU 3.4 (Java)
      */
+    @Deprecated
     public static boolean isJavaLetterOrDigit(int cp) {
         return isJavaIdentifierPart(cp);
     }
@@ -4115,6 +4118,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return null
      * @deprecated ICU 49
      */
+    @Deprecated
     public static String getName1_0(int ch)
     {
         return null;
@@ -4168,6 +4172,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return null
      * @deprecated ICU 49
      */
+    @Deprecated
     public static String getISOComment(int ch)
     {
         return null;
@@ -4198,6 +4203,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated ICU 49
      * @see #getName1_0(int)
      */
+    @Deprecated
     public static int getCharFromName1_0(String name){
         return -1;
     }
@@ -5222,6 +5228,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated ICU 49
      * @see #getName1_0(int)
      */
+    @Deprecated
     public static ValueIterator getName1_0Iterator(){
         return new DummyValueIterator();
     }
@@ -5407,6 +5414,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     ///CLOVER:OFF
     public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice) {
         if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT) ||

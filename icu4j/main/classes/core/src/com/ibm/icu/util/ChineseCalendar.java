@@ -336,6 +336,7 @@ public class ChineseCalendar extends Calendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected ChineseCalendar(TimeZone zone, ULocale locale, int epochYear, TimeZone zoneAstroCalc) {
         super(zone, locale);
         this.epochYear = epochYear;
@@ -1022,6 +1023,7 @@ public class ChineseCalendar extends Calendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public boolean haveDefaultCentury() {
         return false;
     }

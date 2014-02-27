@@ -36,6 +36,7 @@ import com.ibm.icu.text.SpoofChecker.RestrictionLevel;
  * @internal
  * @deprecated This API is ICU internal only.
  */
+@Deprecated
 public class IdentifierInfo {
 
     private static final UnicodeSet ASCII = new UnicodeSet(0, 0x7F).freeze();
@@ -53,6 +54,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public IdentifierInfo() {
         super();
     }
@@ -73,6 +75,8 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
+    
     public IdentifierInfo setIdentifierProfile(UnicodeSet identifierProfile) {
         this.identifierProfile.set(identifierProfile);
         return this;
@@ -85,6 +89,8 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
+    
     public UnicodeSet getIdentifierProfile() {
         return new UnicodeSet(identifierProfile);
     }
@@ -97,6 +103,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated    
     public IdentifierInfo setIdentifier(String identifier) {
         this.identifier = identifier;
         clear();
@@ -166,6 +173,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String getIdentifier() {
         return identifier;
     }
@@ -177,6 +185,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public BitSet getScripts() {
         return (BitSet) requiredScripts.clone();
     }
@@ -189,6 +198,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public Set<BitSet> getAlternates() {
         Set<BitSet> result = new HashSet<BitSet>();
         for (BitSet item : scriptSetSet) {
@@ -204,6 +214,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public UnicodeSet getNumerics() {
         return new UnicodeSet(numerics);
     }
@@ -215,6 +226,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public BitSet getCommonAmongAlternates() {
         return (BitSet) commonAmongAlternates.clone();
     }
@@ -235,6 +247,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public RestrictionLevel getRestrictionLevel() {
         if (!identifierProfile.containsAll(identifier) || getNumerics().size() > 1) {
             return RestrictionLevel.UNRESTRICTIVE;
@@ -277,6 +290,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public int getScriptCount() {
         // Note: Common and Inherited scripts were removed by setIdentifier(), and do not appear in fRequiredScripts.
         int count = requiredScripts.cardinality() +
@@ -290,6 +304,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     @Override
     public String toString() {
         return identifier + ", " + identifierProfile.toPattern(false) + ", " + getRestrictionLevel() + ", "
@@ -317,6 +332,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static String displayAlternates(Set<BitSet> alternates) {
         if (alternates.size() == 0) {
             return "";
@@ -339,6 +355,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final Comparator<BitSet> BITSET_COMPARATOR = new Comparator<BitSet>() {
 
         public int compare(BitSet arg0, BitSet arg1) {
@@ -363,6 +380,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static String displayScripts(BitSet scripts) {
         StringBuilder result = new StringBuilder();
         for (int i = scripts.nextSetBit(0); i >= 0; i = scripts.nextSetBit(i + 1)) {
@@ -382,6 +400,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static BitSet parseScripts(String scriptsString) {
         BitSet result = new BitSet();
         for (String item : scriptsString.trim().split(",?\\s+")) {
@@ -400,6 +419,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static Set<BitSet> parseAlternates(String scriptsSetString) {
         Set<BitSet> result = new HashSet<BitSet>();
         for (String item : scriptsSetString.trim().split("\\s*;\\s*")) {
@@ -419,6 +439,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final boolean contains(BitSet container, BitSet containee) {
         for (int i = containee.nextSetBit(0); i >= 0; i = containee.nextSetBit(i + 1)) {
             if (!container.get(i)) {
@@ -437,6 +458,7 @@ public class IdentifierInfo {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final BitSet set(BitSet bitset, int... values) {
         for (int value : values) {
             bitset.set(value);

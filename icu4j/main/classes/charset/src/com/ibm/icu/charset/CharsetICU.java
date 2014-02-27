@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2012, International Business Machines Corporation and    *
+* Copyright (C) 2006-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -70,8 +70,9 @@ public abstract class CharsetICU extends Charset{
        * @internal
        * @deprecated This API is ICU internal only.
        */
+      @Deprecated
       public static final int ROUNDTRIP_AND_FALLBACK_SET =1;
-      
+
     //} UConverterUnicodeSet;
      
     /**

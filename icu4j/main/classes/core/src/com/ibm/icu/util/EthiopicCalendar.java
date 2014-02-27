@@ -294,6 +294,7 @@ public final class EthiopicCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int handleGetExtendedYear() {
         // Ethiopic calendar uses EXTENDED_YEAR aligned to
         // Amelete Mihret year always.
@@ -320,6 +321,7 @@ public final class EthiopicCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected void handleComputeFields(int julianDay) {
         int era, year;
         int[] fields = new int[3];
@@ -355,6 +357,7 @@ public final class EthiopicCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int handleGetLimit(int field, int limitType) {
         if (isAmeteAlemEra() && field == ERA) {
             return 0; // Only one era in this mode, era is always 0
@@ -367,6 +370,7 @@ public final class EthiopicCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int getJDEpochOffset() {
         return JD_EPOCH_OFFSET_AMETE_MIHRET;
     }

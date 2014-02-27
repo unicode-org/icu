@@ -42,30 +42,35 @@ final public class ListFormatter {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public enum Style {
         /**
          * Standard style.
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         STANDARD("standard"),
         /**
          * Style for full durations
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         DURATION("unit"),
         /**
          * Style for durations in abbrevated form
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         DURATION_SHORT("unit-short"),
         /**
          * Style for durations in narrow form
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         DURATION_NARROW("unit-narrow");
         
         private final String name;
@@ -77,6 +82,7 @@ final public class ListFormatter {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public String getName() {
             return name;
         }
@@ -102,6 +108,7 @@ final public class ListFormatter {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public ListFormatter(String two, String start, String middle, String end) {
         this(
                 SimplePatternFormatter.compile(two),
@@ -155,6 +162,7 @@ final public class ListFormatter {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static ListFormatter getInstance(ULocale locale, Style style) {
         return cache.get(locale, style.getName());
     }
@@ -247,6 +255,7 @@ final public class ListFormatter {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public ULocale getLocale() {
         return locale;
     }

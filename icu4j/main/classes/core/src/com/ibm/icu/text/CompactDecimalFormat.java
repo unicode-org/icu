@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, Google, International Business Machines Corporation and
+ * Copyright (C) 1996-2014, Google, International Business Machines Corporation and
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -161,6 +161,7 @@ public class CompactDecimalFormat extends DecimalFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public CompactDecimalFormat(String pattern, DecimalFormatSymbols formatSymbols, 
             CompactStyle style, PluralRules pluralRules,
             long[] divisor, Map<String,String[][]> pluralAffixes, Map<String, String[]> currencyAffixes, 

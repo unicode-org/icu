@@ -54,12 +54,12 @@ import com.ibm.icu.util.UResourceBundle;
  * </pre>
  *
  * <P>
- * @deprecated use {@link MeasureFormat} instead.
  * @see TimeUnitAmount
  * @see MeasureFormat
  * @author markdavis
- * @stable ICU 4.0
+ * @deprecated ICU 53 use {@link MeasureFormat} instead.
  */
+@Deprecated
 public class TimeUnitFormat extends MeasureFormat {
 
     /**

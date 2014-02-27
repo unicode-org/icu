@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005-2013, International Business Machines Corporation and    *
+* Copyright (C) 2005-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -520,6 +520,7 @@ public class CharsetDetector {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String[] getDetectableCharsets() {
         List<String> csnames = new ArrayList<String>(ALL_CS_RECOGNIZERS.size());
         for (int i = 0; i < ALL_CS_RECOGNIZERS.size(); i++) {
@@ -547,6 +548,7 @@ public class CharsetDetector {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public CharsetDetector setDetectableCharset(String encoding, boolean enabled) {
         int modIdx = -1;
         boolean isDefaultVal = false;

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -686,6 +686,7 @@ public class HebrewCalendar extends Calendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static boolean isLeapYear(int year) {
         //return (year * 12 + 17) % 19 >= 12;
         int x = (year*12 + 17) % 19;

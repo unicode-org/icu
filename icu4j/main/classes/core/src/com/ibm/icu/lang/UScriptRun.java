@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2009, International Business Machines
+ *   Copyright (C) 1999-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -49,6 +49,7 @@ import com.ibm.icu.text.UTF16;
  * @internal
  * @deprecated This API is ICU internal only.
  */
+@Deprecated
 public final class UScriptRun
 {
     /**
@@ -58,6 +59,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public UScriptRun()
     {
         char[] nullChars = null;
@@ -74,6 +76,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public UScriptRun(String text)
     {
         reset (text);
@@ -90,6 +93,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public UScriptRun(String text, int start, int count)
     {
         reset(text, start, count);
@@ -104,6 +108,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public UScriptRun(char[] chars)
     {
         reset(chars);
@@ -120,6 +125,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public UScriptRun(char[] chars, int start, int count)
     {
         reset(chars, start, count);
@@ -132,6 +138,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final void reset()
     {
         // empty any old parenStack contents.
@@ -163,6 +170,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final void reset(int start, int count)
     throws IllegalArgumentException
     {
@@ -194,6 +202,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final void reset(char[] chars, int start, int count)
     {
         if (chars == null) {
@@ -214,6 +223,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final void reset(char[] chars)
     {
         int length = 0;
@@ -237,6 +247,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final void reset(String str, int start, int count)
     {
         char[] chars = null;
@@ -257,6 +268,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final void reset(String str)
     {
         int length   = 0;
@@ -278,6 +290,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final int getScriptStart()
     {
         return scriptStart;
@@ -291,6 +304,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final int getScriptLimit()
     {
         return scriptLimit;
@@ -305,6 +319,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final int getScriptCode()
     {
         return scriptCode;
@@ -319,6 +334,7 @@ public final class UScriptRun
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final boolean next()
     {
         // if we've fallen off the end of the text, we're done

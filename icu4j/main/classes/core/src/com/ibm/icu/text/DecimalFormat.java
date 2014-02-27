@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -934,7 +934,7 @@ public class DecimalFormat extends NumberFormat {
      * @return The number rounded to the correct number of significant digits
      * with negative sign stripped off.
      * @internal
-     * @deprecated
+     * @deprecated This API is ICU internal only.
      */
     @Deprecated
     double adjustNumberAsInFormatting(double number) {
@@ -962,7 +962,7 @@ public class DecimalFormat extends NumberFormat {
       * @param number The number to format.
       * @return True if number is negative.
       * @internal
-      * @deprecated
+      * @deprecated This API is ICU internal only.
       */
      @Deprecated
      boolean isNumberNegative(double number) {

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2013 International Business Machines Corporation and
+* Copyright (C) 2001-2014 International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -1009,6 +1009,7 @@ public final class UScript {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final int getCodeFromName(String nameOrAbbr) {
         try {
             return UCharacter.getPropertyValueEnum(UProperty.SCRIPT,

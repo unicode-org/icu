@@ -1331,6 +1331,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @internal
      * @deprecated This API is ICU internal, only for testing.
      */
+    @Deprecated
     public static Collection<String> getFirstCharactersInScripts() {
         return HACK_FIRST_CHARS_IN_SCRIPTS;
     }

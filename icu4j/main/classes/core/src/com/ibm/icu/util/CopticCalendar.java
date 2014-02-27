@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -246,6 +246,7 @@ public final class CopticCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int handleGetExtendedYear() {
         int eyear;
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
@@ -267,6 +268,7 @@ public final class CopticCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected void handleComputeFields(int julianDay) {
         int era, year;
         int[] fields = new int[3];
@@ -297,6 +299,7 @@ public final class CopticCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int getJDEpochOffset() {
         return JD_EPOCH_OFFSET;
     }

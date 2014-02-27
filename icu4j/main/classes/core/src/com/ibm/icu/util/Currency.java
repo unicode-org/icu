@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -611,6 +611,7 @@ public class Currency extends MeasureUnit {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static String parse(ULocale locale, String text, int type, ParsePosition pos) {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = CURRENCY_NAME_CACHE.get(locale);
         if (currencyTrieVec == null) {

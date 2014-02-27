@@ -46,18 +46,21 @@ public class MeasureUnit implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected final String type;
     
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected final String subType;
     
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected MeasureUnit(String type, String subType) {
         this.type = type;
         this.subType = subType;
@@ -173,6 +176,7 @@ public class MeasureUnit implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static MeasureUnit internalGetInstance(String type, String subType) {
         if (type == null || subType == null) {
             throw new NullPointerException("Type and subType must be non-null");
@@ -200,11 +204,13 @@ public class MeasureUnit implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected interface Factory {
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         MeasureUnit create(String type, String subType);
     }
 
@@ -276,6 +282,7 @@ public class MeasureUnit implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected synchronized static MeasureUnit addUnit(String type, String unitName, Factory factory) {
         Map<String, MeasureUnit> tmp = cache.get(type);
         if (tmp == null) {

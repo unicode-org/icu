@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -539,6 +539,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final int LOCAL_STD = 0x01;
 
     /**
@@ -547,6 +548,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final int LOCAL_DST = 0x03;
 
     /**
@@ -555,6 +557,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final int LOCAL_FORMER = 0x04;
 
     /**
@@ -563,6 +566,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final int LOCAL_LATTER = 0x0C;
 
     /**
@@ -571,6 +575,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected static final int STD_DST_MASK = 0x03;
 
     /**
@@ -579,6 +584,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected static final int FORMER_LATTER_MASK = 0x0C;
 
     /**
@@ -586,6 +592,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public void getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         throw new IllegalStateException("Not implemented");
@@ -604,6 +611,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected BasicTimeZone(String ID) {
         super(ID);
     }

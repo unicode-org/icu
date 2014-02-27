@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -273,49 +273,46 @@ import java.util.Map;
  * @internal
  * @deprecated This API is ICU internal only.
  */
+@Deprecated
 public class RuleBasedTransliterator extends Transliterator {
 
     private Data data;
 
-    /**
-     * Constructs a new transliterator from the given rules.
-     * @param rules rules, separated by ';'
-     * @param direction either FORWARD or REVERSE.
-     * @exception IllegalArgumentException if rules are malformed
-     * or direction is invalid.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    /*public RuleBasedTransliterator(String ID, String rules, int direction,
-                                   UnicodeFilter filter) {
-        super(ID, filter);
-        if (direction != FORWARD && direction != REVERSE) {
-            throw new IllegalArgumentException("Invalid direction");
-        }
+//    /**
+//     * Constructs a new transliterator from the given rules.
+//     * @param rules rules, separated by ';'
+//     * @param direction either FORWARD or REVERSE.
+//     * @exception IllegalArgumentException if rules are malformed
+//     * or direction is invalid.
+//     */
+//     public RuleBasedTransliterator(String ID, String rules, int direction,
+//                                   UnicodeFilter filter) {
+//        super(ID, filter);
+//        if (direction != FORWARD && direction != REVERSE) {
+//            throw new IllegalArgumentException("Invalid direction");
+//        }
+//
+//        TransliteratorParser parser = new TransliteratorParser();
+//        parser.parse(rules, direction);
+//        if (parser.idBlockVector.size() != 0 ||
+//            parser.compoundFilter != null) {
+//            throw new IllegalArgumentException("::ID blocks illegal in RuleBasedTransliterator constructor");
+//        }
+//
+//        data = (Data)parser.dataVector.get(0);
+//        setMaximumContextLength(data.ruleSet.getMaximumContextLength());
+//     }
 
-        TransliteratorParser parser = new TransliteratorParser();
-        parser.parse(rules, direction);
-        if (parser.idBlockVector.size() != 0 ||
-            parser.compoundFilter != null) {
-            throw new IllegalArgumentException("::ID blocks illegal in RuleBasedTransliterator constructor");
-        }
-
-        data = (Data)parser.dataVector.get(0);
-        setMaximumContextLength(data.ruleSet.getMaximumContextLength());
-    }*/
-
-    /**
-     * Constructs a new transliterator from the given rules in the
-     * <code>FORWARD</code> direction.
-     * @param rules rules, separated by ';'
-     * @exception IllegalArgumentException if rules are malformed
-     * or direction is invalid.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    /*public RuleBasedTransliterator(String ID, String rules) {
-        this(ID, rules, FORWARD, null);
-    }*/
+//    /**
+//     * Constructs a new transliterator from the given rules in the
+//     * <code>FORWARD</code> direction.
+//     * @param rules rules, separated by ';'
+//     * @exception IllegalArgumentException if rules are malformed
+//     * or direction is invalid.
+//     */
+//    public RuleBasedTransliterator(String ID, String rules) {
+//        this(ID, rules, FORWARD, null);
+//    }
 
     RuleBasedTransliterator(String ID, Data data, UnicodeFilter filter) {
         super(ID, filter);
@@ -328,6 +325,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected void handleTransliterate(Replaceable text,
                                        Position index, boolean incremental) {
         /* We keep start and limit fixed the entire time,
@@ -444,6 +442,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String toRules(boolean escapeUnprintable) {
         return data.ruleSet.toRules(escapeUnprintable);
     }
@@ -451,8 +450,6 @@ public class RuleBasedTransliterator extends Transliterator {
 //    /**
 //     * Return the set of all characters that may be modified by this
 //     * Transliterator, ignoring the effect of our filter.
-//     * @internal
-//     * @deprecated This API is ICU internal only.
 //     */
 //    protected UnicodeSet handleGetSourceSet() {
 //        return data.ruleSet.getSourceTargetSet(false, unicodeFilter);
@@ -461,8 +458,6 @@ public class RuleBasedTransliterator extends Transliterator {
 //    /**
 //     * Returns the set of all characters that may be generated as
 //     * replacement text by this transliterator.
-//     * @internal
-//     * @deprecated This API is ICU internal only.
 //     */
 //    public UnicodeSet getTargetSet() {
 //        return data.ruleSet.getSourceTargetSet(true, unicodeFilter);
@@ -470,7 +465,9 @@ public class RuleBasedTransliterator extends Transliterator {
     
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     @Override
     public void addSourceTargetSet(UnicodeSet filter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         data.ruleSet.addSourceTargetSet(filter, sourceSet, targetSet);
@@ -481,6 +478,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public Transliterator safeClone() {
         UnicodeFilter filter = getFilter();
         if (filter != null && filter instanceof UnicodeSet) {

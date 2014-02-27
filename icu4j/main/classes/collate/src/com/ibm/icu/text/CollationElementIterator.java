@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2013, International Business Machines Corporation and    *
+* Copyright (C) 1996-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -616,6 +616,7 @@ public final class CollationElementIterator
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public int hashCode() {
         assert false : "hashCode not designed";
         return 42;

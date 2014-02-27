@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -235,6 +235,7 @@ public class UnicodeSetIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public UnicodeSet getSet() {
         return set;
     }
@@ -243,11 +244,13 @@ public class UnicodeSetIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int endElement;
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int nextElement;
     private Iterator<String> stringIterator = null;
     
@@ -259,6 +262,7 @@ public class UnicodeSetIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected void loadRange(int aRange) {
         nextElement = set.getRangeStart(aRange);
         endElement = set.getRangeEnd(aRange);

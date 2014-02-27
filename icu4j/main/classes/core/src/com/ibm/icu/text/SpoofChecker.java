@@ -195,7 +195,9 @@ public class SpoofChecker {
      * Security Profile constant from UAX 31 for use in setAllowedChars.
      * Will probably be replaced by UnicodeSet property.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final UnicodeSet INCLUSION = new UnicodeSet("[" +
             "\\u0027\\u002D-\\u002E\\u003A\\u00B7\\u0375\\u058A\\u05F3-\\u05F4"+
             "\\u06FD-\\u06FE\\u0F0B\\u200C-\\u200D\\u2010\\u2019\\u2027\\u30A0\\u30FB]").freeze();
@@ -205,7 +207,9 @@ public class SpoofChecker {
      * Security Profile constant from UAX 31 for use in setAllowedChars.
      * Will probably be replaced by UnicodeSet property.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final UnicodeSet RECOMMENDED = new UnicodeSet("[" +
             "\\u0030-\\u0039\\u0041-\\u005A\\u005F\\u0061-\\u007A\\u00C0-\\u00D6\\u00D8-\\u00F6" + 
             "\\u00F8-\\u0131\\u0134-\\u013E\\u0141-\\u0148\\u014A-\\u017E\\u01A0-\\u01A1\\u01AF-\\u01B0" + 
@@ -321,16 +325,18 @@ public class SpoofChecker {
      * The default if this is not called is HIGHLY_RESTRICTIVE.
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final int RESTRICTION_LEVEL = 16;
 
     /**
      * Check that an identifer contains only characters from a single script (plus chars from the common and inherited
      * scripts.) Applies to checks of a single identifier check only.
      *
-     * @stable ICU 4.6
-     * @deprecated Use RESTRICTION_LEVEL
+     * @deprecated ICU 51 Use RESTRICTION_LEVEL
      */
+    @Deprecated
     public static final int SINGLE_SCRIPT = RESTRICTION_LEVEL;
 
     /**
@@ -354,7 +360,9 @@ public class SpoofChecker {
      * Check that an identifier does not mix numbers.
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final int MIXED_NUMBERS = 128;
 
     /**
@@ -599,7 +607,9 @@ public class SpoofChecker {
          * @param restrictionLevel The loosest restriction level allowed.
          * @return self
          * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public Builder setRestrictionLevel(RestrictionLevel restrictionLevel) {
             fRestrictionLevel = restrictionLevel;
             fChecks |= RESTRICTION_LEVEL;
@@ -1399,7 +1409,9 @@ public class SpoofChecker {
      *
      * @return The restriction level
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public RestrictionLevel getRestrictionLevel() {
         return fRestrictionLevel;
     }
@@ -1465,18 +1477,23 @@ public class SpoofChecker {
          *
          * @deprecated ICU 51. No longer supported. Always set to zero.
          */
+        @Deprecated
         public int position;
         /**
          * The numerics found in the string, if MIXED_NUMBERS was set; otherwise null;
          *
          * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public UnicodeSet numerics;
         /**
          * The restriction level that the text meets, if RESTRICTION_LEVEL is set; otherwise null.
          *
          * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public RestrictionLevel restrictionLevel;
 
         /**
@@ -1795,6 +1812,7 @@ public class SpoofChecker {
      *   @internal
      *   @deprecated This API is ICU internal only.
      */
+    @Deprecated
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof SpoofChecker)) {return false; }
@@ -1826,6 +1844,7 @@ public class SpoofChecker {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     @Override
     public int hashCode() {
         assert false;   // To make sure ICU implementation does not depend on this.

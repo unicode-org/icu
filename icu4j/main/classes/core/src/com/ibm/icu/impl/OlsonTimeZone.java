@@ -1,6 +1,6 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005-2013, International Business Machines Corporation and         *
+  * Copyright (C) 2005-2014, International Business Machines Corporation and    *
   * others. All Rights Reserved.                                                *
   *******************************************************************************
   */
@@ -275,8 +275,6 @@ public class OlsonTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     @Override
     public void getOffsetFromLocal(long date,

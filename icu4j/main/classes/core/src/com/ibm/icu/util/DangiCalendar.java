@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012, International Business Machines Corporation and         *
+ * Copyright (C) 2012-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,6 +17,7 @@ import com.ibm.icu.util.ULocale.Category;
  * @internal
  * @deprecated This API is ICU internal only.
  */
+@Deprecated
 public class DangiCalendar extends ChineseCalendar {
 
     private static final long serialVersionUID = 8156297445349501985L;
@@ -83,6 +84,7 @@ public class DangiCalendar extends ChineseCalendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public DangiCalendar() {
         this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
     }
@@ -95,6 +97,7 @@ public class DangiCalendar extends ChineseCalendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public DangiCalendar(Date date) {
         this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         setTime(date);
@@ -109,6 +112,7 @@ public class DangiCalendar extends ChineseCalendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public DangiCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale, DANGI_EPOCH_YEAR, KOREA_ZONE);
     }
@@ -119,6 +123,7 @@ public class DangiCalendar extends ChineseCalendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String getType() {
         return "dangi";
     }

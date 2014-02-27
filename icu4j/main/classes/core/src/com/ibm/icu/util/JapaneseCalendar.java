@@ -641,6 +641,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public boolean haveDefaultCentury() {
         return false;
     }

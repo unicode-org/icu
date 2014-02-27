@@ -134,6 +134,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected TimeZone(String ID) {
         if (ID == null) {
             throw new NullPointerException();

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -161,6 +161,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final String ICU_DATA_VERSION_PATH = "53b";
     
     /**
@@ -168,6 +169,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final VersionInfo ICU_DATA_VERSION;
 
     /**
@@ -324,6 +326,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static VersionInfo javaVersion() {
         if (javaVersion == null) {
             synchronized(VersionInfo.class) {

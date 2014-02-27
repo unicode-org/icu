@@ -1,5 +1,5 @@
  /*
-*   Copyright (C) 1996-2013, International Business Machines
+*   Copyright (C) 1996-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -660,6 +660,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public int getOffset(int era, int year, int month, int day,
                               int dayOfWeek, int millis,
                               int monthLength)  {
@@ -788,6 +789,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public void getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         offsets[0] = getRawOffset();
