@@ -1307,7 +1307,15 @@ void CollationRegressionTest::caseFirstCompressionSub(Collator *col, UnicodeStri
     }
 }
 
-
+void CollationRegressionTest::TestTrailingComment() {
+    // ICU ticket #8070:
+    // Check that the rule parser handles a comment without terminating end-of-line.
+    IcuTestErrorCode errorCode(*this, "TestTrailingComment");
+    RuleBasedCollator coll(UNICODE_STRING_SIMPLE("&c<b#comment1\n<a#comment2"), errorCode);
+    UnicodeString a((UChar)0x61), b((UChar)0x62), c((UChar)0x63);
+    assertTrue("c<b", coll.compare(c, b) < 0);
+    assertTrue("b<a", coll.compare(b, a) < 0);
+}
 
 void CollationRegressionTest::compareArray(Collator &c,
                                            const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN],
@@ -1446,6 +1454,7 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
     TESTCASE_AUTO(Test4179216);
     TESTCASE_AUTO(TestT7189);
     TESTCASE_AUTO(TestCaseFirstCompression);
+    TESTCASE_AUTO(TestTrailingComment);
     TESTCASE_AUTO_END;
 }
 
