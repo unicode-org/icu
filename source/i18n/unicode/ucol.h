@@ -309,13 +309,22 @@ typedef enum {
       */
      UCOL_HIRAGANA_QUATERNARY_MODE = UCOL_STRENGTH + 1,
 #endif  /* U_HIDE_DEPRECATED_API */
-     /** When turned on, this attribute generates a collation key
-      * for the numeric value of substrings of digits.
+     /**
+      * When turned on, this attribute makes
+      * substrings of digits sort according to their numeric values.
+      *
       * This is a way to get '100' to sort AFTER '2'. Note that the longest
-      * digit substring that can be treated as a single collation element is
+      * digit substring that can be treated as a single unit is
       * 254 digits (not counting leading zeros). If a digit substring is
       * longer than that, the digits beyond the limit will be treated as a
-      * separate digit substring associated with a separate collation element.
+      * separate digit substring.
+      *
+      * A "digit" in this sense is a code point with General_Category=Nd,
+      * which does not include circled numbers, roman numerals, etc.
+      * Only a contiguous digit substring is considered, that is,
+      * non-negative integers without separators.
+      * There is no support for plus/minus signs, decimals, exponents, etc.
+      *
       * @stable ICU 2.8
       */
      UCOL_NUMERIC_COLLATION = UCOL_STRENGTH + 2, 
