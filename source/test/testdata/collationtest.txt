@@ -2275,3 +2275,14 @@
 * compare
 <1 100\u0020a
 <1 101
+
+** test: collation type fallback from unsupported type, ICU ticket 10149
+@ locale fr-CA-u-co-phonebk
+# Expect the same result as with fr-CA, using backwards-secondary order.
+# That is, we should fall back from the unsupported collation type
+# to the locale's default collation type.
+* compare
+<1 cote
+<2 côte
+<2 coté
+<2 côté
