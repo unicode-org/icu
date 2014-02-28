@@ -1317,6 +1317,24 @@ void CollationRegressionTest::TestTrailingComment() {
     assertTrue("b<a", coll.compare(b, a) < 0);
 }
 
+void CollationRegressionTest::TestBeforeWithTooStrongAfter() {
+    // ICU ticket #9959:
+    // Forbid rules with a before-reset followed by a stronger relation.
+    IcuTestErrorCode errorCode(*this, "TestBeforeWithTooStrongAfter");
+    RuleBasedCollator before2(UNICODE_STRING_SIMPLE("&[before 2]x<<q<p"), errorCode);
+    if(errorCode.isSuccess()) {
+        errln("should forbid before-2-reset followed by primary relation");
+    } else {
+        errorCode.reset();
+    }
+    RuleBasedCollator before3(UNICODE_STRING_SIMPLE("&[before 3]x<<<q<<s<p"), errorCode);
+    if(errorCode.isSuccess()) {
+        errln("should forbid before-3-reset followed by primary or secondary relation");
+    } else {
+        errorCode.reset();
+    }
+}
+
 void CollationRegressionTest::compareArray(Collator &c,
                                            const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN],
                                            int32_t testCount)
@@ -1455,6 +1473,7 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
     TESTCASE_AUTO(TestT7189);
     TESTCASE_AUTO(TestCaseFirstCompression);
     TESTCASE_AUTO(TestTrailingComment);
+    TESTCASE_AUTO(TestBeforeWithTooStrongAfter);
     TESTCASE_AUTO_END;
 }
 
