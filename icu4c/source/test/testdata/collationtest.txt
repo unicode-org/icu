@@ -2286,3 +2286,17 @@
 <2 côte
 <2 coté
 <2 côté
+
+** test: @ is equivalent to [backwards 2], ICU ticket 9956
+@ rules
+&b<a @ &v<<w
+* compare
+<1 b
+<1 a
+<1 cote
+<2 côte
+<2 coté
+<2 côté
+<1 v
+<2 w
+<1 x
