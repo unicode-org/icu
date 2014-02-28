@@ -1665,7 +1665,8 @@ ucol_getUnsafeSet( const UCollator *coll,
     USet *contractions = uset_open(0,0);
 
     int32_t i = 0, j = 0;
-    int32_t contsSize = ucol_getContractions(coll, contractions, status);
+    ucol_getContractionsAndExpansions(coll, contractions, NULL, FALSE, status);
+    int32_t contsSize = uset_size(contractions);
     UChar32 c = 0;
     // Contraction set consists only of strings
     // to get unsafe code points, we need to
