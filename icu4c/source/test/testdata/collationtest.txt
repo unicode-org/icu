@@ -2266,3 +2266,12 @@
 <1 y
 <2 w
 <3 x
+
+** test: numeric collation with other settings, ICU ticket 9092
+@ root
+% strength=identical
+% caseFirst=upper
+% numeric=on
+* compare
+<1 100\u0020a
+<1 101
