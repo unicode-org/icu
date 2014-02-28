@@ -2233,3 +2233,36 @@
 =  A\u030A
 =  b
 =  \u212B
+
+** test: reset-before on already-tailored characters, ICU ticket 10108
+@ rules
+&a<w<<x &[before 2]x<<y
+* compare
+<1 a
+<1 w
+<2 y
+<2 x
+
+@ rules
+&a<<w<<<x &[before 2]x<<y
+* compare
+<1 a
+<2 y
+<2 w
+<3 x
+
+@ rules
+&a<w<x &[before 2]x<<y
+* compare
+<1 a
+<1 w
+<1 y
+<2 x
+
+@ rules
+&a<w<<<x &[before 2]x<<y
+* compare
+<1 a
+<1 y
+<2 w
+<3 x
