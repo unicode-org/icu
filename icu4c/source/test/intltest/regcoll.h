@@ -239,6 +239,7 @@ public:
     void TestCaseFirstCompression();
 
     void TestTrailingComment();
+    void TestBeforeWithTooStrongAfter();
 
 private:
     //------------------------------------------------------------------------
