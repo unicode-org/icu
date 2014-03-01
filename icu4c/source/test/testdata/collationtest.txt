@@ -2333,3 +2333,13 @@
 * compare
 <1 aaa
 <3 aaaB
+
+** test: secondary+case ignores secondary ignorables, ICU ticket 9355
+@ rules
+&\u0001<<<b<<<B
+% strength=secondary
+% caseLevel=on
+* compare
+<1 a
+=  ab
+=  aB
