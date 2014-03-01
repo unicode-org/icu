@@ -2300,3 +2300,28 @@
 <1 v
 <2 w
 <1 x
+
+** test: shifted+reordering, ICU ticket 9507
+@ root
+% reorder Grek punct
+% alternate=shifted
+% strength=quaternary
+# Which primaries are "variable" should be determined without script reordering,
+# and then primaries should be reordered whether they are shifted to quaternary or not.
+* compare
+<4 \u0020  # space
+<4 (  # punctuation
+<4 )
+<1 `  # symbol
+<1 ^
+<1 $  # currency symbol
+<1 €
+<1 0  # numbers
+<1 ε  # Greek
+<1 e  # Latin
+<1 e(e
+<4 e)e
+<4 ee
+<3 e(E
+<4 e)E
+<4 eE
