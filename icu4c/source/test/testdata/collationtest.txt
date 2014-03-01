@@ -2325,3 +2325,11 @@
 <3 e(E
 <4 e)E
 <4 eE
+
+** test: "uppercase first" could sort a string before its prefix, ICU ticket 9351
+@ rules
+&\u0001<<<b<<<B
+% caseFirst=upper
+* compare
+<1 aaa
+<3 aaaB
