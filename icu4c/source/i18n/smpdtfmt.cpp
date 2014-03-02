@@ -49,6 +49,7 @@
 #include "unicode/utf16.h"
 #include "unicode/vtzone.h"
 #include "unicode/udisplaycontext.h"
+#include "unicode/brkiter.h"
 #include "olsontz.h"
 #include "patternprops.h"
 #include "fphdlimp.h"
@@ -236,6 +237,8 @@ SimpleDateFormat::~SimpleDateFormat()
         delete cur->nf;
         uprv_free(cur);
     }
+    
+    delete fCapitalizationBrkIter;
 }
 
 //----------------------------------------------------------------------
@@ -245,7 +248,8 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
       fSymbols(NULL),
       fTimeZoneFormat(NULL),
       fNumberFormatters(NULL),
-      fOverrideList(NULL)
+      fOverrideList(NULL),
+      fCapitalizationBrkIter(NULL)
 {
     initializeBooleanAttributes();
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
@@ -261,7 +265,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fCapitalizationBrkIter(NULL)
 {
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
@@ -281,7 +286,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fCapitalizationBrkIter(NULL)
 {
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
@@ -303,7 +309,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fLocale(locale),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fCapitalizationBrkIter(NULL)
 {
 
     fDateOverride.setToBogus();
@@ -325,7 +332,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fLocale(locale),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fCapitalizationBrkIter(NULL)
 {
 
     fDateOverride.setTo(override);
@@ -350,7 +358,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fSymbols(symbolsToAdopt),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fCapitalizationBrkIter(NULL)
 {
 
     fDateOverride.setToBogus();
@@ -372,7 +381,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fSymbols(new DateFormatSymbols(symbols)),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fCapitalizationBrkIter(NULL)
 {
 
     fDateOverride.setToBogus();
@@ -395,7 +405,8 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fCapitalizationBrkIter(NULL)
 {
     initializeBooleanAttributes();
     construct(timeStyle, dateStyle, fLocale, status);
@@ -418,7 +429,8 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fCapitalizationBrkIter(NULL)
 {
     if (U_FAILURE(status)) return;
     initializeBooleanAttributes();
@@ -453,7 +465,8 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fCapitalizationBrkIter(NULL)
 {
     initializeBooleanAttributes();
     *this = other;
@@ -486,6 +499,10 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
         fTimeZoneFormat = NULL; // forces lazy instantiation with the other locale
         fLocale = other.fLocale;
     }
+    
+    if (other.fCapitalizationBrkIter != NULL) {
+        fCapitalizationBrkIter = (other.fCapitalizationBrkIter)->clone();
+    }
 
     return *this;
 }
@@ -504,6 +521,8 @@ UBool
 SimpleDateFormat::operator==(const Format& other) const
 {
     if (DateFormat::operator==(other)) {
+        // The DateFormat::operator== check for fCapitalizationContext equality above
+        //   is sufficient to check equality of all derived context-related data.
         // DateFormat::operator== guarantees following cast is safe
         SimpleDateFormat* that = (SimpleDateFormat*)&other;
         return (fPattern             == that->fPattern &&
@@ -1591,8 +1610,8 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         break;
     }
 #if !UCONFIG_NO_BREAK_ITERATION
-    if (fieldNum == 0) {
-        // first field, check to see whether we need to titlecase it
+    // if first field, check to see whether we need to and are able to titlecase it
+    if (fieldNum == 0 && u_islower(appendTo.char32At(beginOffset)) && fCapitalizationBrkIter != NULL) {
         UBool titlecase = FALSE;
         switch (capitalizationContext) {
             case UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
@@ -1610,7 +1629,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         }
         if (titlecase) {
             UnicodeString firstField(appendTo, beginOffset);
-            firstField.toTitle(NULL, fLocale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
+            firstField.toTitle(fCapitalizationBrkIter, fLocale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
             appendTo.replaceBetween(beginOffset, appendTo.length(), firstField);
         }
     }
@@ -3269,6 +3288,31 @@ void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
   fSymbols=NULL;
   initializeSymbols(fLocale, fCalendar, status);  // we need new symbols
   initializeDefaultCentury();  // we need a new century (possibly)
+}
+
+
+//----------------------------------------------------------------------
+
+
+// override the DateFormat implementation in order to
+// lazily initialize fCapitalizationBrkIter
+void
+SimpleDateFormat::setContext(UDisplayContext value, UErrorCode& status)
+{
+    DateFormat::setContext(value, status);
+#if !UCONFIG_NO_BREAK_ITERATION
+    if (U_SUCCESS(status)) {
+        if ( fCapitalizationBrkIter == NULL && (value==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+                value==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU || value==UDISPCTX_CAPITALIZATION_FOR_STANDALONE) ) {
+            UErrorCode status = U_ZERO_ERROR;
+            fCapitalizationBrkIter = BreakIterator::createSentenceInstance(fLocale, status);
+            if (U_FAILURE(status)) {
+                delete fCapitalizationBrkIter;
+                fCapitalizationBrkIter = NULL;
+            }
+        }
+    }
+#endif
 }
 
 

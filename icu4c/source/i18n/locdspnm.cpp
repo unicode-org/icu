@@ -12,6 +12,7 @@
 #include "unicode/locdspnm.h"
 #include "unicode/msgfmt.h"
 #include "unicode/ures.h"
+#include "unicode/udisplaycontext.h" 
 #include "unicode/brkiter.h"
 
 #include "cmemory.h"
@@ -275,6 +276,7 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
     MessageFormat *format;
     MessageFormat *keyTypeFormat;
     UDisplayContext capitalizationContext;
+    BreakIterator* capitalizationBrkIter; 
     UnicodeString formatOpenParen;
     UnicodeString formatReplaceOpenParen;
     UnicodeString formatCloseParen;
@@ -290,10 +292,9 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
         kCapContextUsageKeyValue,
         kCapContextUsageCount
     };
-    // Capitalization transforms. For each usage type, the first array element indicates
-    // whether to titlecase for uiListOrMenu context, the second indicates whether to
-    // titlecase for stand-alone context.
-     UBool fCapitalization[kCapContextUsageCount][2];
+    // Capitalization transforms. For each usage type, indicates whether to titlecase for
+    // the context specified in capitalizationContext (which we know at construction time)
+     UBool fCapitalization[kCapContextUsageCount];
 
 public:
     // constructor
@@ -341,6 +342,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
     , format(NULL)
     , keyTypeFormat(NULL)
     , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    , capitalizationBrkIter(NULL)
 {
     initialize();
 }
@@ -354,6 +356,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
     , format(NULL)
     , keyTypeFormat(NULL)
     , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    , capitalizationBrkIter(NULL)
 {
     while (length-- > 0) {
         UDisplayContext value = *contexts++;
@@ -429,35 +432,52 @@ LocaleDisplayNamesImpl::initialize(void) {
         { "variant",    kCapContextUsageVariant },
         { NULL,         (CapContextUsage)0 },
     };
-    int32_t len = 0;
-    UResourceBundle *localeBundle = ures_open(NULL, locale.getName(), &status);
-    if (U_SUCCESS(status)) {
-        UResourceBundle *contextTransforms = ures_getByKeyWithFallback(localeBundle, "contextTransforms", NULL, &status);
+    // Only get the context data if we need it! This is a const object so we know now...
+    // Also check whether we will need a break iterator (depends on the data)
+    UBool needBrkIter = FALSE;
+    if (capitalizationContext == UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU || capitalizationContext == UDISPCTX_CAPITALIZATION_FOR_STANDALONE) {
+        int32_t len = 0;
+        UResourceBundle *localeBundle = ures_open(NULL, locale.getName(), &status);
         if (U_SUCCESS(status)) {
-            UResourceBundle *contextTransformUsage;
-            while ( (contextTransformUsage = ures_getNextResource(contextTransforms, NULL, &status)) != NULL ) {
-                const int32_t * intVector = ures_getIntVector(contextTransformUsage, &len, &status);
-                if (U_SUCCESS(status) && intVector != NULL && len >= 2) {
-                    const char* usageKey = ures_getKey(contextTransformUsage);
-                    if (usageKey != NULL) {
-                        const ContextUsageNameToEnum * typeMapPtr = contextUsageTypeMap;
-                        int32_t compResult = 0;
-                        // linear search; list is short and we cannot be sure that bsearch is available
-                        while ( typeMapPtr->usageName != NULL && (compResult = uprv_strcmp(usageKey, typeMapPtr->usageName)) > 0 ) {
-                            ++typeMapPtr;
-                        }
-                        if (typeMapPtr->usageName != NULL && compResult == 0) {
-                            fCapitalization[typeMapPtr->usageEnum][0] = intVector[0];
-                            fCapitalization[typeMapPtr->usageEnum][1] = intVector[1];
+            UResourceBundle *contextTransforms = ures_getByKeyWithFallback(localeBundle, "contextTransforms", NULL, &status);
+            if (U_SUCCESS(status)) {
+                UResourceBundle *contextTransformUsage;
+                while ( (contextTransformUsage = ures_getNextResource(contextTransforms, NULL, &status)) != NULL ) {
+                    const int32_t * intVector = ures_getIntVector(contextTransformUsage, &len, &status);
+                    if (U_SUCCESS(status) && intVector != NULL && len >= 2) {
+                        const char* usageKey = ures_getKey(contextTransformUsage);
+                        if (usageKey != NULL) {
+                            const ContextUsageNameToEnum * typeMapPtr = contextUsageTypeMap;
+                            int32_t compResult = 0;
+                            // linear search; list is short and we cannot be sure that bsearch is available
+                            while ( typeMapPtr->usageName != NULL && (compResult = uprv_strcmp(usageKey, typeMapPtr->usageName)) > 0 ) {
+                                ++typeMapPtr;
+                            }
+                            if (typeMapPtr->usageName != NULL && compResult == 0) {
+                                int32_t titlecaseInt = (capitalizationContext == UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU)? intVector[0]: intVector[1];
+                                if (titlecaseInt != 0) {
+                                    fCapitalization[typeMapPtr->usageEnum] = TRUE;;
+                                    needBrkIter = TRUE;
+                                }
+                            }
                         }
                     }
+                    status = U_ZERO_ERROR;
+                    ures_close(contextTransformUsage);
                 }
-                status = U_ZERO_ERROR;
-                ures_close(contextTransformUsage);
+                ures_close(contextTransforms);
             }
-            ures_close(contextTransforms);
+            ures_close(localeBundle);
         }
-        ures_close(localeBundle);
+    }
+    // Get a sentence break iterator if we will need it
+    if (needBrkIter || capitalizationContext == UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE) {
+        status = U_ZERO_ERROR;
+        capitalizationBrkIter = BreakIterator::createSentenceInstance(locale, status);
+        if (U_FAILURE(status)) {
+            delete capitalizationBrkIter;
+            capitalizationBrkIter = NULL;
+        }
     }
 #endif
 }
@@ -466,6 +486,7 @@ LocaleDisplayNamesImpl::~LocaleDisplayNamesImpl() {
     delete separatorFormat;
     delete format;
     delete keyTypeFormat;
+    delete capitalizationBrkIter;
  }
 
 const Locale&
@@ -496,51 +517,10 @@ LocaleDisplayNamesImpl::adjustForUsageAndContext(CapContextUsage usage,
                                                 UnicodeString& result) const {
 #if !UCONFIG_NO_BREAK_ITERATION
     // check to see whether we need to titlecase result
-    UBool titlecase = FALSE;
-    switch (capitalizationContext) {
-        case UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
-            titlecase = TRUE;
-            break;
-        case UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU:
-            titlecase = fCapitalization[usage][0];
-            break;
-        case UDISPCTX_CAPITALIZATION_FOR_STANDALONE:
-            titlecase = fCapitalization[usage][1];
-            break;
-        default:
-            // titlecase = FALSE;
-            break;
-    }
-    if (titlecase) {
-        // TODO: Fix this titlecase hack when we figure out something better to do.
-        // We don't want to titlecase the whole text, only something like the first word,
-        // of the first segment long enough to have a complete cluster, whichever is
-        // shorter. We could have keep a word break iterator around, but I am not sure
-        // that will do the ight thing for the purposes here. For now we assume that in
-        // languages for which titlecasing makes a difference, we can stop at non-letter
-        // characters in 0x0000-0x00FF and only titlecase up to the first occurrence of
-        // any of those, or to a small number of chars, whichever comes first.
-        int32_t stopPos, stopPosLimit = 8, len = result.length();
-        if ( stopPosLimit > len ) {
-            stopPosLimit = len;
-        }
-        for ( stopPos = 0; stopPos < stopPosLimit; stopPos++ ) {
-            UChar32 ch = result.char32At(stopPos);
-            if ( (ch < 0x41) || (ch > 0x5A && ch < 0x61) || (ch > 0x7A && ch < 0xC0) ) {
-                break;
-            }
-            if (ch >= 0x10000) {
-                stopPos++;
-            }
-        }
-        if ( stopPos > 0 && stopPos < len ) {
-            UnicodeString firstWord(result, 0, stopPos);
-            firstWord.toTitle(NULL, locale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
-            result.replaceBetween(0, stopPos, firstWord);
-        } else {
-            // no stopPos, titlecase the whole text
-            result.toTitle(NULL, locale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
-        }
+    if ( result.length() > 0 && u_islower(result.char32At(0)) && capitalizationBrkIter!= NULL &&
+          ( capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE || fCapitalization[usage] ) ) {
+        // note fCapitalization[usage] won't be set unless capitalizationContext is UI_LIST_OR_MENU or STANDALONE
+        result.toTitle(capitalizationBrkIter, locale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
     }
 #endif
     return result;

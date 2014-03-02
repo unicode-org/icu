@@ -981,11 +981,7 @@ private:
     UBool capitalizationInfoSet;
     UBool capitalizationForUIListMenu;
     UBool capitalizationForStandAlone;
-#if !UCONFIG_NO_BREAK_ITERATION
     BreakIterator* capitalizationBrkIter;
-#else
-    void* capitalizationBrkIter;
-#endif
 };
 
 // ---------------
