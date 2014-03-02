@@ -14,6 +14,7 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.MessageFormat;
@@ -49,11 +50,10 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         KEYVALUE 
     }
     /**
-     * Capitalization transforms. For each usage type, the first array element indicates
-     * whether to titlecase for uiListOrMenu context, the second indicates whether to
-     * titlecase for stand-alone context.
+     * Capitalization transforms. For each usage type, indicates whether to titlecase for
+     * the context specified in capitalization (which we know at construction time).
      */
-    private Map<CapitalizationContextUsage,boolean[]> capitalizationUsage = null;
+    private boolean[] capitalizationUsage = null;
     /**
      * Map from resource key to CapitalizationContextUsage value
      */
@@ -67,6 +67,11 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         contextUsageTypeMap.put("key",       CapitalizationContextUsage.KEY);
         contextUsageTypeMap.put("keyValue",  CapitalizationContextUsage.KEYVALUE);
     }
+    /**
+     * BreakIterator to use for capitalization
+     */
+    private BreakIterator capitalizationBrkIter = null;
+
 
     public static LocaleDisplayNames getInstance(ULocale locale, DialectHandling dialectHandling) {
         synchronized (cache) {
@@ -142,18 +147,12 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         }
         this.keyTypeFormat = new MessageFormat(keyTypePattern);
 
-        // Get values from the contextTransforms data
-        // (copied from DateFormatSymbols)
+        // Get values from the contextTransforms data if we need them
+        // Also check whether we will need a break iterator (depends on the data)
+        boolean needBrkIter = false;
         if (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU ||
                 capitalization == DisplayContext.CAPITALIZATION_FOR_STANDALONE) {
-            capitalizationUsage = new HashMap<CapitalizationContextUsage,boolean[]>();
-            boolean[] noTransforms = new boolean[2];
-            noTransforms[0] = false;
-            noTransforms[1] = false;
-            CapitalizationContextUsage allUsages[] = CapitalizationContextUsage.values();
-            for (CapitalizationContextUsage usage: allUsages) {
-                capitalizationUsage.put(usage, noTransforms);
-            }
+            capitalizationUsage = new boolean[CapitalizationContextUsage.values().length]; // initialized to all false
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
             UResourceBundle contextTransformsBundle = null;
             try {
@@ -171,14 +170,20 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                         String usageKey = contextTransformUsage.getKey();
                         CapitalizationContextUsage usage = contextUsageTypeMap.get(usageKey);
                         if (usage != null) {
-                            boolean[] transforms = new boolean[2];
-                            transforms[0] = (intVector[0] != 0);
-                            transforms[1] = (intVector[1] != 0);
-                            capitalizationUsage.put(usage, transforms);
+                            int titlecaseInt = (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
+                                                        intVector[0]: intVector[1];
+                            if (titlecaseInt != 0) {
+                                capitalizationUsage[usage.ordinal()] = true;
+                                needBrkIter = true;
+                            }
                         }
                     }
                 }
             }
+        }
+        // Get a sentence break iterator if we will need it
+        if (needBrkIter || capitalization == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE) {
+            capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
         }
     }
 
@@ -210,57 +215,16 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     }
 
     private String adjustForUsageAndContext(CapitalizationContextUsage usage, String name) {
-        String result = name;
-        boolean titlecase = false;
-        switch (capitalization) {
-        case CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
-            titlecase = true;
-            break;
-        case CAPITALIZATION_FOR_UI_LIST_OR_MENU:
-        case CAPITALIZATION_FOR_STANDALONE:
-            if (capitalizationUsage != null) {
-                boolean[] transforms = capitalizationUsage.get(usage);
-                titlecase = (capitalization==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
-                        transforms[0]: transforms[1];
-            }
-            break;
-        default:
-            break;
+        if (name != null && name.length() > 0 && UCharacter.isLowerCase(name.codePointAt(0)) &&
+              capitalizationBrkIter != null &&
+              (capitalization==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+                (capitalizationUsage != null && capitalizationUsage[usage.ordinal()]) )) {
+            // Note, won't have capitalizationUsage != null && capitalizationUsage[usage.ordinal()]
+            // unless capitalization is CAPITALIZATION_FOR_UI_LIST_OR_MENU or CAPITALIZATION_FOR_STANDALONE
+            return UCharacter.toTitleCase(locale, name, capitalizationBrkIter,
+                            UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
         }
-        if (titlecase) {
-            // TODO: Fix this titlecase hack when we figure out something better to do.
-            // We don't want to titlecase the whole text, only something like the first word,
-            // of the first segment long enough to have a complete cluster, whichever is
-            // shorter. We could have keep a word break iterator around, but I am not sure
-            // that will do the ight thing for the purposes here. For now we assume that in
-            // languages for which titlecasing makes a difference, we can stop at non-letter
-            // characters in 0x0000-0x00FF and only titlecase up to the first occurrence of
-            // any of those, or to a small number of chars, whichever comes first.
-            int stopPos, stopPosLimit = 8, len = name.length();
-            if ( stopPosLimit > len ) {
-                stopPosLimit = len;
-            }
-            for ( stopPos = 0; stopPos < stopPosLimit; stopPos++ ) {
-                int ch = name.codePointAt(stopPos);
-                if ( (ch < 0x41) || (ch > 0x5A && ch < 0x61) || (ch > 0x7A && ch < 0xC0) ) {
-                    break;
-                }
-                if (ch >= 0x10000) {
-                    stopPos++;
-                }
-            }
-            if ( stopPos > 0 && stopPos < len ) {
-                String firstWord = name.substring(0, stopPos);
-                String firstWordTitleCase = UCharacter.toTitleCase(locale, firstWord, null,
-                        UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
-                result = firstWordTitleCase.concat(name.substring(stopPos));
-            } else {
-                // no stopPos, titlecase the whole text
-                result = UCharacter.toTitleCase(locale, name, null,
-                        UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
-            }
-        }
-        return result;
+        return name;
     }
 
     @Override
