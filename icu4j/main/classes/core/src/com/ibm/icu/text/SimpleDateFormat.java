@@ -28,6 +28,7 @@ import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.util.BasicTimeZone;
@@ -854,6 +855,11 @@ public class SimpleDateFormat extends DateFormat {
      */
     private volatile TimeZoneFormat tzFormat;
 
+    /**
+     * BreakIterator to use for capitalization
+     */
+    private BreakIterator capitalizationBrkIter = null;
+
     /*
      *  Capitalization setting, introduced in ICU 50
      *  Special serialization, see writeObject & readObject below
@@ -1183,6 +1189,25 @@ public class SimpleDateFormat extends DateFormat {
      */
     public Date get2DigitYearStart() {
         return getDefaultCenturyStart();
+    }
+
+    /**
+     * {@icu} Set a particular DisplayContext value in the formatter,
+     * such as CAPITALIZATION_FOR_STANDALONE. Note: For getContext, see 
+     * DateFormat.
+     * 
+     * @param context The DisplayContext value to set. 
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    // Here we override the DateFormat implementation in order to lazily initialize relevant items
+    public void setContext(DisplayContext context) {
+        super.setContext(context);
+        if (capitalizationBrkIter == null && (context==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+              context==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU ||
+              context==DisplayContext.CAPITALIZATION_FOR_STANDALONE)) {
+            capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
+        }
     }
 
     /**
@@ -1759,28 +1784,27 @@ public class SimpleDateFormat extends DateFormat {
             break;
         } // switch (patternCharIndex)
 
-        if (fieldNum == 0) {
+        if (fieldNum == 0 && capitalizationContext != null && UCharacter.isLowerCase(buf.codePointAt(bufstart)) &&
+                capitalizationBrkIter != null) {
             boolean titlecase = false;
-            if (capitalizationContext != null) {
-                switch (capitalizationContext) {
-                    case CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
-                        titlecase = true;
-                        break;
-                    case CAPITALIZATION_FOR_UI_LIST_OR_MENU:
-                    case CAPITALIZATION_FOR_STANDALONE:
-                        if (formatData.capitalization != null) {
-                             boolean[] transforms = formatData.capitalization.get(capContextUsageType);
-                            titlecase = (capitalizationContext==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
-                                        transforms[0]: transforms[1];
-                        }
-                        break;
-                    default:
-                       break;
-                }
+            switch (capitalizationContext) {
+                case CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
+                    titlecase = true;
+                    break;
+                case CAPITALIZATION_FOR_UI_LIST_OR_MENU:
+                case CAPITALIZATION_FOR_STANDALONE:
+                    if (formatData.capitalization != null) {
+                        boolean[] transforms = formatData.capitalization.get(capContextUsageType);
+                        titlecase = (capitalizationContext==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
+                                    transforms[0]: transforms[1];
+                    }
+                    break;
+                default:
+                   break;
             }
             if (titlecase) {
                 String firstField = buf.substring(bufstart); // bufstart or beginOffset, should be the same
-                String firstFieldTitleCase = UCharacter.toTitleCase(locale, firstField, null,
+                String firstFieldTitleCase = UCharacter.toTitleCase(locale, firstField, capitalizationBrkIter,
                                                      UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
                 buf.replace(bufstart, buf.length(), firstFieldTitleCase);
             }
