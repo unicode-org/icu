@@ -2303,15 +2303,15 @@
 
 ** test: shifted+reordering, ICU ticket 9507
 @ root
-% reorder Grek punct
+% reorder Grek punct space
 % alternate=shifted
 % strength=quaternary
 # Which primaries are "variable" should be determined without script reordering,
 # and then primaries should be reordered whether they are shifted to quaternary or not.
 * compare
-<4 \u0020  # space
 <4 (  # punctuation
 <4 )
+<4 \u0020  # space
 <1 `  # symbol
 <1 ^
 <1 $  # currency symbol
@@ -2321,9 +2321,11 @@
 <1 e  # Latin
 <1 e(e
 <4 e)e
+<4 e\u0020e
 <4 ee
 <3 e(E
 <4 e)E
+<4 e\u0020E
 <4 eE
 
 ** test: "uppercase first" could sort a string before its prefix, ICU ticket 9351
