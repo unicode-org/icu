@@ -1519,6 +1519,10 @@ RuleBasedNumberFormat::setContext(UDisplayContext value, UErrorCode& status)
                 (value==UDISPCTX_CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone)) ) {
             UErrorCode status = U_ZERO_ERROR;
             capitalizationBrkIter = BreakIterator::createSentenceInstance(locale, status);
+            if (U_FAILURE(status)) {
+                delete capitalizationBrkIter;
+                capitalizationBrkIter = NULL;
+            }
         }
 #endif
     }
