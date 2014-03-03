@@ -2354,3 +2354,15 @@
 <2 ൌx
 <1 ൗy
 <2 ൌy
+
+** test: quoted apostrophe in compact syntax, ICU ticket 8204
+@ rules
+&q<<*a''c
+* compare
+<1 d
+<1 p
+<1 q
+<2 a
+<2 \u0027
+<2 c
+<1 r
