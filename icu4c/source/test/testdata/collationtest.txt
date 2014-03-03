@@ -2345,3 +2345,12 @@
 <1 a
 =  ab
 =  aB
+
+** test: custom collation rules involving tail of a contraction in Malayalam, ICU ticket 6328
+@ rules
+&[before 2] ൌ << ൗ  # U+0D57 << U+0D4C == 0D46+0D57
+* compare
+<1 ൗx
+<2 ൌx
+<1 ൗy
+<2 ൌy
