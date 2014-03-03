@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -25,6 +25,7 @@ import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
@@ -1228,6 +1229,38 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 actualPattern);
     }
     
+    public void TestGetSetTimeZone(){
+        DateIntervalFormat dtitvfmt = DateIntervalFormat.getInstance("MMMdHHmm", Locale.ENGLISH);
+        long date1 = 1299090600000L; // 2011-Mar-02 1030 in US/Pacific, 2011-Mar-03 0330 in Asia/Tokyo
+        long date2 = 1299115800000L; // 2011-Mar-02 1730 in US/Pacific, 2011-Mar-03 1030 in Asia/Tokyo
+        DateInterval dtitv = new DateInterval(date1, date2);
+        TimeZone tzCalif = TimeZone.getFrozenTimeZone("US/Pacific");
+        TimeZone tzTokyo = TimeZone.getFrozenTimeZone("Asia/Tokyo");
+        String fmtCalif = "Mar 2, 10:30 \u2013 Mar 2, 17:30"; // ICU4C result is "Mar 2, 10:30 \u2013 17:30" (does not duplicate day)
+        String fmtTokyo = "Mar 3, 03:30 \u2013 Mar 3, 10:30"; // ICU4C result is "Mar 3, 03:30 \u2013 10:30" (does not duplicate day)
+        
+        StringBuffer buf = new StringBuffer();
+        FieldPosition pos = new FieldPosition(0);
+        dtitvfmt.setTimeZone(tzCalif);
+        dtitvfmt.format(dtitv, buf, pos);
+        if (!buf.toString().equals(fmtCalif)) {
+            errln("DateIntervalFormat for tzCalif, expect \"" + fmtCalif + "\", get \"" + buf + "\"");
+        }
+        
+        buf.setLength(0);
+        pos.setBeginIndex(0);
+        dtitvfmt.setTimeZone(tzTokyo);
+        dtitvfmt.format(dtitv, buf, pos);
+        if (!buf.toString().equals(fmtTokyo)) {
+            errln("DateIntervalFormat for tzTokyo, expect \"" + fmtTokyo + "\", get \"" + buf + "\"");
+        }
+        
+        if (!dtitvfmt.getTimeZone().equals(tzTokyo)) {
+            errln("DateIntervalFormat.getTimeZone() returns mismatch");
+        }
+    }
+
+
     /* Tests the method
      *      public int hashCode()
      */
