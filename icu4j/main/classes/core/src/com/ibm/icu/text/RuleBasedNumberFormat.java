@@ -20,6 +20,9 @@ import java.util.Set;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternProps;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
@@ -600,6 +603,15 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     private String[] publicRuleSetNames;
 
+    /**
+     * Data for handling context-based capitalization
+     */
+    private boolean capitalizationInfoIsSet = false;
+    private boolean capitalizationForListOrMenu = false;
+    private boolean capitalizationForStandAlone = false;
+    private BreakIterator capitalizationBrkIter = null;
+
+
     private static final boolean DEBUG  =  ICUDebug.enabled("rbnf");
 
     //-----------------------------------------------------------------------
@@ -833,6 +845,9 @@ public class RuleBasedNumberFormat extends NumberFormat {
     public boolean equals(Object that) {
         // if the other object isn't a RuleBasedNumberFormat, that's
         // all we need to know
+        // Test for capitalization info equality is adequately handled
+        // by the NumberFormat test for capitalizationSetting equality;
+        // the info here is just derived from that.
         if (!(that instanceof RuleBasedNumberFormat)) {
             return false;
         } else {
@@ -1061,7 +1076,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         if (ruleSet.startsWith("%%")) {
             throw new IllegalArgumentException("Can't use internal rule set");
         }
-        return format(number, findRuleSet(ruleSet));
+        return adjustForContext(format(number, findRuleSet(ruleSet)));
     }
 
     /**
@@ -1080,7 +1095,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         if (ruleSet.startsWith("%%")) {
             throw new IllegalArgumentException("Can't use internal rule set");
         }
-        return format(number, findRuleSet(ruleSet));
+        return adjustForContext(format(number, findRuleSet(ruleSet)));
     }
 
     /**
@@ -1098,7 +1113,13 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // this is one of the inherited format() methods.  Since it doesn't
         // have a way to select the rule set to use, it just uses the
         // default one
-        toAppendTo.append(format(number, defaultRuleSet));
+        // Note, the BigInteger/BigDecimal methods below currently go through this.
+        if (toAppendTo.length() == 0) {
+            toAppendTo.append(adjustForContext(format(number, defaultRuleSet)));
+        } else {
+            // appending to other text, don't capitalize
+            toAppendTo.append(format(number, defaultRuleSet));
+        }
         return toAppendTo;
     }
 
@@ -1121,7 +1142,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // this is one of the inherited format() methods.  Since it doesn't
         // have a way to select the rule set to use, it just uses the
         // default one
-        toAppendTo.append(format(number, defaultRuleSet));
+        if (toAppendTo.length() == 0) {
+            toAppendTo.append(adjustForContext(format(number, defaultRuleSet)));
+        } else {
+            // appending to other text, don't capitalize
+            toAppendTo.append(format(number, defaultRuleSet));
+        }
         return toAppendTo;
     }
 
@@ -1378,6 +1404,31 @@ public class RuleBasedNumberFormat extends NumberFormat {
             for (int i = 0; i < ruleSets.length; i++) {
                 ruleSets[i].parseRules(ruleSetDescriptions[i], this);
             }
+        }
+    }
+
+    /**
+     * {@icu} Set a particular DisplayContext value in the formatter,
+     * such as CAPITALIZATION_FOR_STANDALONE. Note: For getContext, see 
+     * NumberFormat.
+     * 
+     * @param context The DisplayContext value to set. 
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    // Here we override the NumberFormat implementation in order to
+    // lazily initialize relevant items 
+    public void setContext(DisplayContext context) {
+        super.setContext(context);
+        if (!capitalizationInfoIsSet &&
+              (context==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU || context==DisplayContext.CAPITALIZATION_FOR_STANDALONE)) {
+            initCapitalizationContextInfo(locale);
+            capitalizationInfoIsSet = true;
+        }
+        if (capitalizationBrkIter == null && (context==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+              (context==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForListOrMenu) ||
+              (context==DisplayContext.CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone) )) {
+            capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
         }
     }
 
@@ -1654,6 +1705,23 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
+     * Set capitalizationForListOrMenu, capitalizationForStandAlone 
+     */
+    private void initCapitalizationContextInfo(ULocale theLocale) {
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, theLocale);
+        try {
+            ICUResourceBundle rdb = rb.getWithFallback("contextTransforms/number-spellout");
+            int[] intVector = rdb.getIntVector();
+            if (intVector.length >= 2) {
+                capitalizationForListOrMenu = (intVector[0] != 0);
+                capitalizationForStandAlone = (intVector[1] != 0);
+            }
+        } catch (MissingResourceException e) {
+            // use default
+        }
+    }
+
+    /**
      * This function is used by init() to strip whitespace between rules (i.e.,
      * after semicolons).
      * @param description The formatter description
@@ -1803,6 +1871,23 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
             postProcessor.process(result, ruleSet);
         }
+    }
+
+    /**
+     * Adjust capitalization of formatted result for display context
+     */
+    private String adjustForContext(String result) {
+        if (result != null && result.length() > 0 && UCharacter.isLowerCase(result.codePointAt(0)) &&
+              capitalizationBrkIter != null) {
+            DisplayContext capitalization = getContext(DisplayContext.Type.CAPITALIZATION);
+            if (  capitalization==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+                  (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForListOrMenu) ||
+                  (capitalization == DisplayContext.CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone) ) {
+                return UCharacter.toTitleCase(locale, result, capitalizationBrkIter,
+                                UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+            }
+        }
+        return result;
     }
 
     /**

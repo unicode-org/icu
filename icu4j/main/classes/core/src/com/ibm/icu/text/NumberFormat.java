@@ -1047,7 +1047,8 @@ public abstract class NumberFormat extends UFormat {
             && minimumFractionDigits == other.minimumFractionDigits
             && groupingUsed == other.groupingUsed
             && parseIntegerOnly == other.parseIntegerOnly
-            && parseStrict == other.parseStrict;
+            && parseStrict == other.parseStrict
+            && capitalizationSetting == other.capitalizationSetting;
     }
 
     /**
@@ -1528,6 +1529,10 @@ public abstract class NumberFormat extends UFormat {
             maximumFractionDigits = maxFractionDigits;
             minimumFractionDigits = minFractionDigits;
         }
+        if (serialVersionOnStream < 2) {
+            // Didn't have capitalizationSetting, set it to default
+            capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+        }
         ///CLOVER:ON
         /*Bug 4185761
           Validate the min and max fields [Richard/GCL]
@@ -1714,7 +1719,7 @@ public abstract class NumberFormat extends UFormat {
      */
     private Currency currency;
 
-    static final int currentSerialVersion = 1;
+    static final int currentSerialVersion = 2;
 
     /**
      * Describes the version of <code>NumberFormat</code> present on the stream.
@@ -1729,6 +1734,8 @@ public abstract class NumberFormat extends UFormat {
      *     <code>byte</code> fields such as <code>maxIntegerDigits</code> are ignored,
      *     and the <code>int</code> fields such as <code>maximumIntegerDigits</code>
      *     are used instead.
+     *
+     * <li><b>2</b>: adds capitalizationSetting.
      * </ul>
      * When streaming out a <code>NumberFormat</code>, the most recent format
      * (corresponding to the highest allowable <code>serialVersionOnStream</code>)
@@ -1755,9 +1762,10 @@ public abstract class NumberFormat extends UFormat {
     private boolean parseStrict;
 
     /*
-     *  Capitalization setting, new in ICU 53
+     * Capitalization context setting, new in ICU 53
+     * @serial
      */
-    private transient DisplayContext capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+    private DisplayContext capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
 
     /**
      * The instances of this inner class are used as attribute keys and values
