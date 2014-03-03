@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,6 +15,7 @@ import java.util.Random;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
 
@@ -1302,4 +1303,51 @@ public class RbnfTest extends TestFmwk {
             errln("Format Error - Got: " + result + " Expected: " + expected[1]);
         }
     }
+    
+    public void TestContext() {
+        class TextContextItem {
+            public String locale;
+            public int format;
+            public DisplayContext context;
+            public double value;
+            public String expectedResult;
+             // Simple constructor
+            public TextContextItem(String loc, int fmt, DisplayContext ctxt, double val, String expRes) {
+                locale = loc;
+                format = fmt;
+                context = ctxt;
+                value = val;
+                expectedResult = expRes;
+            }
+        };
+        final TextContextItem[] items = {
+            new TextContextItem( "sv", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    123.45, "ett\u00ADhundra\u00ADtjugo\u00ADtre komma fyra fem" ),
+            new TextContextItem( "sv", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 123.45, "Ett\u00ADhundra\u00ADtjugo\u00ADtre komma fyra fem" ),
+            new TextContextItem( "sv", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       123.45, "ett\u00ADhundra\u00ADtjugo\u00ADtre komma fyra fem" ),
+            new TextContextItem( "sv", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            123.45, "ett\u00ADhundra\u00ADtjugo\u00ADtre komma fyra fem" ),
+            new TextContextItem( "en", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    123.45, "one hundred twenty-three point four five" ),
+            new TextContextItem( "en", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 123.45, "One hundred twenty-three point four five" ),
+            new TextContextItem( "en", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       123.45, "One hundred twenty-three point four five" ),
+            new TextContextItem( "en", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            123.45, "One hundred twenty-three point four five" ),
+        };
+        for (TextContextItem item: items) {
+            ULocale locale = new ULocale(item.locale);
+            RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(locale, item.format);
+            rbnf.setContext(item.context);
+            String result = rbnf.format(item.value, rbnf.getDefaultRuleSetName());
+            if (!result.equals(item.expectedResult)) {
+                errln("Error for locale " + item.locale + ", context " + item.context + ", expected " + item.expectedResult + ", got " + result);
+            }
+            RuleBasedNumberFormat rbnfClone = (RuleBasedNumberFormat)rbnf.clone();
+            if (!rbnfClone.equals(rbnf)) {
+                errln("Error for locale " + item.locale + ", context " + item.context + ", rbnf.clone() != rbnf");
+            } else {
+                result = rbnfClone.format(item.value, rbnfClone.getDefaultRuleSetName());
+                if (!result.equals(item.expectedResult)) {
+                    errln("Error with clone for locale " + item.locale + ", context " + item.context + ", expected " + item.expectedResult + ", got " + result);
+                }
+            }
+        }
+    }
+
 }
