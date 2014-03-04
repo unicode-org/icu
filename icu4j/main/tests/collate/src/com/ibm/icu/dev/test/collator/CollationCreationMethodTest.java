@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2014, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -116,8 +116,8 @@ public class CollationCreationMethodTest extends TestFmwk
             StringBuilder msg = new StringBuilder();
             msg.append("With ").append(localeName).append(" collator\n and input string: ").append(string1).append('\n');
             msg.append(" failed to produce identical keys on both collators\n");
-            msg.append("  localeCollator key: ").append(CollationMiscTest.prettify(k1)).append('\n');
-            msg.append("  ruleCollator   key: ").append(CollationMiscTest.prettify(k2)).append('\n');
+            msg.append("  localeCollator key: ").append(CollationTest.prettify(k1)).append('\n');
+            msg.append("  ruleCollator   key: ").append(CollationTest.prettify(k2)).append('\n');
             errln(msg.toString());
         }
     }

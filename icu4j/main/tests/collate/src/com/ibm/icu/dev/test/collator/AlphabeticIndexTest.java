@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2013, International Business Machines Corporation and
+ * Copyright (C) 2008-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -32,6 +32,7 @@ import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
@@ -243,18 +244,16 @@ public class AlphabeticIndexTest extends TestFmwk {
         AlphabeticIndex alphabeticIndex = new AlphabeticIndex(Locale.ENGLISH);
         RuleBasedCollator collator = alphabeticIndex.getCollator();
         collator.setStrength(Collator.IDENTICAL);
-        Collection<String> firsts = AlphabeticIndex.getFirstCharactersInScripts();
+        Collection<String> firsts = alphabeticIndex.getFirstCharactersInScripts();
         // Verify that each script is represented exactly once.
         UnicodeSet missingScripts = new UnicodeSet("[^[:sc=inherited:][:sc=unknown:][:sc=common:][:Script=Braille:]]");
         String last = "";
         for (String index : firsts) {
-            if (index.equals("\uFFFF")) {
-                continue;
-            }
             if (collator.compare(last,index) >= 0) {
                 errln("Characters not in order: " + last + " !< " + index);
             }
-            int script = UScript.getScript(index.codePointAt(0)); // we actually look at just the first char
+            int script = getFirstRealScript(index);
+            if (script == UScript.UNKNOWN) { continue; }
             UnicodeSet s = new UnicodeSet().applyIntPropertyValue(UProperty.SCRIPT, script);
             if (missingScripts.containsNone(s)) {
                 errln("2nd character in script: " + index + "\t" + new UnicodeSet(missingScripts).retainAll(s).toPattern(false));
@@ -277,6 +276,18 @@ public class AlphabeticIndexTest extends TestFmwk {
             }
             errln("Missing character from:" + missingScriptNames + " -- " + missingScripts);
         }
+    }
+
+    private static final int getFirstRealScript(CharSequence s) {
+        for (int i = 0; i < s.length();) {
+            int c = Character.codePointAt(s, i);
+            int script = UScript.getScript(c);
+            if (script != UScript.UNKNOWN && script != UScript.INHERITED && script != UScript.COMMON) {
+                return script;
+            }
+            i += Character.charCount(c);
+        }
+        return UScript.UNKNOWN;
     }
 
     public void TestBuckets() {
@@ -635,7 +646,8 @@ public class AlphabeticIndexTest extends TestFmwk {
     }
 
     public void TestFirstScriptCharacters() {
-        Collection<String> firstCharacters = AlphabeticIndex.getFirstCharactersInScripts();
+        Collection<String> firstCharacters =
+                new AlphabeticIndex(ULocale.ENGLISH).getFirstCharactersInScripts();
         Collection<String> expectedFirstCharacters = firstStringsInScript((RuleBasedCollator) Collator.getInstance(ULocale.ROOT));
         Collection<String> diff = new TreeSet<String>(firstCharacters);
         diff.removeAll(expectedFirstCharacters);
@@ -654,8 +666,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     private static Collection<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
         String[] results = new String[UScript.CODE_LIMIT];
         for (String current : TO_TRY) {
-            if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not
-                // symbols.
+            if (ruleBasedCollator.compare(current, "a") < 0) { // we only want "real" script characters, not symbols.
                 continue;
             }
             int script = UScript.getScript(current.codePointAt(0));
@@ -674,12 +685,11 @@ public class AlphabeticIndexTest extends TestFmwk {
             if (extras.size() != 0) {
                 Normalizer2 normalizer = Normalizer2.getNFKCInstance();
                 for (String current : extras) {
-                    if (!TO_TRY.containsAll(current))
-                        continue;
-                    if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
+                    if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "9") <= 0) {
                         continue;
                     }
-                    int script = UScript.getScript(current.codePointAt(0));
+                    int script = getFirstRealScript(current);
+                    if (script == UScript.UNKNOWN && !isUnassignedBoundary(current)) { continue; }
                     if (results[script] == null) {
                         results[script] = current;
                     } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
@@ -690,11 +700,8 @@ public class AlphabeticIndexTest extends TestFmwk {
         } catch (Exception e) {
         } // why have a checked exception???
 
-        results[UScript.LATIN] = "A";  // See comment about en_US_POSIX in the implementation.
         // TODO: We should not test that we get the same strings, but that we
         // get strings that sort primary-equal to those from the implementation.
-        // This whole test becomes obsolete when the root collator adds script-first-primary mappings
-        // and the AlphabeticIndex implementation starts using them.
 
         Collection<String> result = new ArrayList<String>();
         for (int i = 0; i < results.length; ++i) {
@@ -702,12 +709,15 @@ public class AlphabeticIndexTest extends TestFmwk {
                 result.add(results[i]);
             }
         }
-        // AlphabeticIndex also has a boundary string for the ultimate overflow bucket,
-        // for unassigned code points and trailing/special primary weights.
-        result.add("\uFFFF");
         return result;
     }
 
+    private static final boolean isUnassignedBoundary(CharSequence s) {
+        // The root collator provides a script-first-primary boundary contraction
+        // for the unassigned-implicit range.
+        return s.charAt(0) == 0xfdd1 &&
+                UScript.getScript(Character.codePointAt(s, 1)) == UScript.UNKNOWN;
+    }
 
     public void TestZZZ() {
         //            int x = 3;
@@ -878,9 +888,9 @@ public class AlphabeticIndexTest extends TestFmwk {
         assertEquals("getBucketIndex(i)", 9, bucketIndex);
         bucketIndex = index.getBucketIndex("\u03B1");
         assertEquals("getBucketIndex(Greek alpha)", 27, bucketIndex);
-        // TODO: Test with an unassigned code point (not just U+FFFF)
-        // when unassigned code points are not in the Hani reordering group any more.
-        // String unassigned = UTF16.valueOf(0x50005);
+        // U+50005 is an unassigned code point which sorts at the end, independent of the Hani group.
+        bucketIndex = index.getBucketIndex(UTF16.valueOf(0x50005));
+        assertEquals("getBucketIndex(U+50005)", 27, bucketIndex);
         bucketIndex = index.getBucketIndex("\uFFFF");
         assertEquals("getBucketIndex(U+FFFF)", 27, bucketIndex);
     }
@@ -892,7 +902,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.CHINESE);
         coll.setReorderCodes(UScript.HAN);
         AlphabeticIndex index = new AlphabeticIndex(coll);
-        assertEquals("getBucketCount()", 1, index.getBucketCount());   // ... (underflow only)
+        assertEquals("getBucketCount()", 28, index.getBucketCount());   // ... A-Z ...
         index.addLabels(ULocale.CHINESE);
         assertEquals("getBucketCount()", 28, index.getBucketCount());  // ... A-Z ...
         int bucketIndex = index.getBucketIndex("\u897f");
@@ -901,9 +911,9 @@ public class AlphabeticIndexTest extends TestFmwk {
         assertEquals("getBucketIndex(i)", 9, bucketIndex);
         bucketIndex = index.getBucketIndex("\u03B1");
         assertEquals("getBucketIndex(Greek alpha)", 27, bucketIndex);
-        // TODO: Test with an unassigned code point (not just U+FFFF)
-        // when unassigned code points are not in the Hani reordering group any more.
-        // String unassigned = UTF16.valueOf(0x50005);
+        // U+50005 is an unassigned code point which sorts at the end, independent of the Hani group.
+        bucketIndex = index.getBucketIndex(UTF16.valueOf(0x50005));
+        assertEquals("getBucketIndex(U+50005)", 27, bucketIndex);
         bucketIndex = index.getBucketIndex("\uFFFF");
         assertEquals("getBucketIndex(U+FFFF)", 27, bucketIndex);
     }
@@ -976,5 +986,31 @@ public class AlphabeticIndexTest extends TestFmwk {
         assertEquals("label 3", "ㄇ", immIndex.getBucket(3).getLabel());
         assertEquals("label 4", "ㄈ", immIndex.getBucket(4).getLabel());
         assertEquals("label 5", "ㄉ", immIndex.getBucket(5).getLabel());
+    }
+
+    public void TestJapaneseKanji() {
+        AlphabeticIndex index = new AlphabeticIndex(ULocale.JAPANESE);
+        AlphabeticIndex.ImmutableIndex immIndex = index.buildImmutableIndex();
+        // There are no index characters for Kanji in the Japanese standard collator.
+        // They should all go into the overflow bucket.
+        final int[] kanji = { 0x4E9C, 0x95C7, 0x4E00, 0x58F1 };
+        int overflowIndex = immIndex.getBucketCount() - 1;
+        for(int i = 0; i < kanji.length; ++i) {
+            String msg = String.format("kanji[%d]=U+%04X in overflow bucket", i, kanji[i]);
+            assertEquals(msg, overflowIndex, immIndex.getBucketIndex(UTF16.valueOf(kanji[i])));
+        }
+    }
+
+    public void TestFrozenCollator() {
+        // Ticket #9472
+        RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(new ULocale("da"));
+        coll.setStrength(Collator.IDENTICAL);
+        coll.freeze();
+        // The AlphabeticIndex constructor used to throw an exception
+        // because it cloned the collator (which preserves frozenness)
+        // and set the clone's strength to PRIMARY.
+        AlphabeticIndex index = new AlphabeticIndex(coll);
+        assertEquals("same strength as input Collator",
+                Collator.IDENTICAL, index.getCollator().getStrength());
     }
 }

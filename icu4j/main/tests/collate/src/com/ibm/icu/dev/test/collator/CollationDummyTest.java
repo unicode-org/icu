@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -25,7 +25,6 @@ import com.ibm.icu.text.RuleBasedCollator;
 public class CollationDummyTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new CollationDummyTest().run(args);
-        // new CollationDummyTest().TestVariableTop();
     }
     
     //testSourceCases[][] and testTargetCases[][], testCases[][] are ported from the file callcoll.c in icu4c
@@ -327,7 +326,8 @@ public class CollationDummyTest extends TestFmwk {
             errln("Failed : non-tailored supplementary characters should have the same value\n");
         }
     }
-    
+
+    private static final boolean SUPPORT_VARIABLE_TOP_RELATION = false;
     //TestVariableTop() is ported from cintltst/callcoll.c
     /**
     * Tests the [variable top] tag in rule syntax. Since the default [alternate]
@@ -335,6 +335,13 @@ public class CollationDummyTest extends TestFmwk {
     * a primary ce of 0.
     */
     public void TestVariableTop() {
+        /*
+         * Starting with ICU 53, setting the variable top via a pseudo relation string
+         * is not supported any more.
+         * It was replaced by the [maxVariable symbol] setting.
+         * See ICU tickets #9958 and #8032.
+         */
+        if(!SUPPORT_VARIABLE_TOP_RELATION) { return; }
         String rule = "&z = [variable top]";
         Collator  myColl;
         Collator  enColl;

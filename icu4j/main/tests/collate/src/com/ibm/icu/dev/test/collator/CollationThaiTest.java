@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -194,8 +194,8 @@ public class CollationThaiTest extends TestFmwk {
                             errln("Fail: getCollationKey returned ");
                             return;
                         }
-                        msg += "key1: " + prettify(k1) + "\n"
-                                    + "key2: " + prettify(k2);
+                        msg += "key1: " + CollationTest.prettify(k1) + "\n"
+                                    + "key2: " + CollationTest.prettify(k2);
                         errln(msg);
                     }
                 }
@@ -307,30 +307,7 @@ public class CollationThaiTest extends TestFmwk {
         }
         compareArray(collator, testcontraction);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-    
-    String prettify(CollationKey sourceKey) {
-        int i;
-        byte[] bytes= sourceKey.toByteArray();
-        String target = "[";
-    
-        for (i = 0; i < bytes.length; i++) {
-            target += Integer.toHexString(bytes[i]);
-            target += " ";
-        }
-        target += "]";
-        return target;
-    }
-    
     // private inner class -------------------------------------------------
     
     private static final class StrCmp implements Comparator<String> 

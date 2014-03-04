@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2012, International Business Machines
+*   Copyright (C) 2009-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -21,10 +21,14 @@ public final class Normalizer2Impl {
     public static final class Hangul {
         /* Korean Hangul and Jamo constants */
         public static final int JAMO_L_BASE=0x1100;     /* "lead" jamo */
+        public static final int JAMO_L_END=0x1112;
         public static final int JAMO_V_BASE=0x1161;     /* "vowel" jamo */
+        public static final int JAMO_V_END=0x1175;
         public static final int JAMO_T_BASE=0x11a7;     /* "trail" jamo */
+        public static final int JAMO_T_END=0x11c2;
 
         public static final int HANGUL_BASE=0xac00;
+        public static final int HANGUL_END=0xd7a3;
 
         public static final int JAMO_L_COUNT=19;
         public static final int JAMO_V_COUNT=21;
@@ -496,13 +500,52 @@ public final class Normalizer2Impl {
         return load(ICUData.getRequiredStream(name));
     }
 
+    private void enumLcccRange(int start, int end, int norm16, UnicodeSet set) {
+        if(isAlgorithmicNoNo(norm16)) {
+            // Range of code points with same-norm16-value algorithmic decompositions.
+            // They might have different non-zero FCD16 values.
+            do {
+                int fcd16=getFCD16(start);
+                if(fcd16>0xff) { set.add(start); }
+            } while(++start<=end);
+        } else {
+            int fcd16=getFCD16(start);
+            if(fcd16>0xff) { set.add(start, end); }
+        }
+    }
+
+    private void enumNorm16PropertyStartsRange(int start, int end, int value, UnicodeSet set) {
+        /* add the start code point to the USet */
+        set.add(start);
+        if(start!=end && isAlgorithmicNoNo(value)) {
+            // Range of code points with same-norm16-value algorithmic decompositions.
+            // They might have different non-zero FCD16 values.
+            int prevFCD16=getFCD16(start);
+            while(++start<=end) {
+                int fcd16=getFCD16(start);
+                if(fcd16!=prevFCD16) {
+                    set.add(start);
+                    prevFCD16=fcd16;
+                }
+            }
+        }
+    }
+
+    public void addLcccChars(UnicodeSet set) {
+        /* add the start code point of each same-value range of each trie */
+        Iterator<Trie2.Range> trieIterator=normTrie.iterator();
+        Trie2.Range range;
+        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
+            enumLcccRange(range.startCodePoint, range.endCodePoint, range.value, set);
+        }
+    }
+
     public void addPropertyStarts(UnicodeSet set) {
         /* add the start code point of each same-value range of each trie */
         Iterator<Trie2.Range> trieIterator=normTrie.iterator();
         Trie2.Range range;
         while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
-            /* add the start code point to the USet */
-            set.add(range.startCodePoint);
+            enumNorm16PropertyStartsRange(range.startCodePoint, range.endCodePoint, range.value, set);
         }
 
         /* add Hangul LV syllables and LV+1 because of skippables */
@@ -640,6 +683,7 @@ public final class Normalizer2Impl {
             return 0;  // no
         }
     }
+    public boolean isAlgorithmicNoNo(int norm16) { return limitNoNo<=norm16 && norm16<minMaybeYes; }
     public boolean isCompNo(int norm16) { return minNoNo<=norm16 && norm16<minMaybeYes; }
     public boolean isDecompYes(int norm16) { return norm16<minYesNo || minMaybeYes<=norm16; }
 
@@ -880,6 +924,26 @@ public final class Normalizer2Impl {
     public static final int COMP_2_TRAIL_MASK=0xffc0;
 
     // higher-level functionality ------------------------------------------ ***
+
+    // NFD without an NFD Normalizer2 instance.
+    public Appendable decompose(CharSequence s, StringBuilder dest) {
+        decompose(s, 0, s.length(), dest, s.length());
+        return dest;
+    }
+    /**
+     * Decomposes s[src, limit[ and writes the result to dest.
+     * limit can be NULL if src is NUL-terminated.
+     * destLengthEstimate is the initial dest buffer capacity and can be -1.
+     */
+    public void decompose(CharSequence s, int src, int limit, StringBuilder dest,
+                   int destLengthEstimate) {
+        if(destLengthEstimate<0) {
+            destLengthEstimate=limit-src;
+        }
+        dest.setLength(0);
+        ReorderingBuffer buffer=new ReorderingBuffer(this, dest, destLengthEstimate);
+        decompose(s, src, limit, buffer);
+    }
 
     // Dual functionality:
     // buffer!=NULL: normalize

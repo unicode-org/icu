@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -125,7 +125,113 @@ import java.text.CharacterIterator;
  */
 public abstract class SearchIterator 
 {
-    
+    /**
+     * The BreakIterator to define the boundaries of a logical match.
+     * This value can be a null.
+     * See class documentation for more information.
+     * @see #setBreakIterator(BreakIterator)
+     * @see #getBreakIterator
+     * @see BreakIterator
+     * @stable ICU 2.0
+     */
+    protected BreakIterator breakIterator; 
+
+    /**
+     * Target text for searching.
+     * @see #setTarget(CharacterIterator)
+     * @see #getTarget
+     * @stable ICU 2.0
+     */
+    protected CharacterIterator targetText;
+    /**
+     * Length of the most current match in target text. 
+     * Value 0 is the default value.
+     * @see #setMatchLength
+     * @see #getMatchLength
+     * @stable ICU 2.0
+     */
+    protected int matchLength;
+
+    /**
+     * Java port of ICU4C struct USearch (usrchimp.h)
+     * 
+     * Note:
+     * 
+     *  ICU4J already exposed some protected members such as
+     * targetText, brekIterator and matchedLength as a part of stable
+     * APIs. In ICU4C, they are exposed through USearch struct, 
+     * although USearch struct itself is internal API.
+     * 
+     *  This class was created for making ICU4J code in parallel to
+     * ICU4C implementation. ICU4J implementation access member
+     * fields like C struct (e.g. search_.isOverlap_) mostly, except
+     * fields already exposed as protected member (e.g. search_.text()).
+     * 
+     */
+    final class Search {
+
+        CharacterIterator text() {
+            return SearchIterator.this.targetText;
+        }
+
+        void setTarget(CharacterIterator text) {
+            SearchIterator.this.targetText = text;
+        }
+
+        /** Flag to indicate if overlapping search is to be done.
+            E.g. looking for "aa" in "aaa" will yield matches at offset 0 and 1. */
+        boolean isOverlap_;
+
+        boolean isCanonicalMatch_;
+
+        ElementComparisonType elementComparisonType_;
+
+        BreakIterator internalBreakIter_;
+
+        BreakIterator breakIter() {
+            return SearchIterator.this.breakIterator;
+        }
+
+        void setBreakIter(BreakIterator breakIter) {
+            SearchIterator.this.breakIterator = breakIter;
+        }
+
+        int matchedIndex_;
+
+        int matchedLength() {
+            return SearchIterator.this.matchLength;
+        }
+
+        void setMatchedLength(int matchedLength) {
+            SearchIterator.this.matchLength = matchedLength;
+        }
+
+        /** Flag indicates if we are doing a forwards search */
+        boolean isForwardSearching_;
+
+        /** Flag indicates if we are at the start of a string search.
+            This indicates that we are in forward search and at the start of m_text. */ 
+        boolean reset_;
+
+        // Convenient methods for accessing begin/end index of the
+        // target text. These are ICU4J only and are not data fields.
+        int beginIndex() {
+            if (targetText == null) {
+                return 0;
+            }
+            return targetText.getBeginIndex();
+        }
+
+        int endIndex() {
+            if (targetText == null) {
+                return 0;
+            }
+            return targetText.getEndIndex();
+        }
+    }
+
+    Search search_ = new Search();
+
     // public data members -------------------------------------------------
     
     /**
@@ -153,15 +259,15 @@ public abstract class SearchIterator
      * @stable ICU 2.8
      */
     public void setIndex(int position) {
-        if (position < targetText.getBeginIndex() 
-            || position > targetText.getEndIndex()) {
+        if (position < search_.beginIndex() 
+            || position > search_.endIndex()) {
             throw new IndexOutOfBoundsException(
                 "setIndex(int) expected position to be between " +
-                targetText.getBeginIndex() + " and " + targetText.getEndIndex());
+                search_.beginIndex() + " and " + search_.endIndex());
         }
-        m_setOffset_ = position;
-        m_reset_ = false;
-        matchLength = 0;
+        search_.reset_ = false;
+        search_.setMatchedLength(0);
+        search_.matchedIndex_ = DONE;
     }
     
     /**
@@ -178,7 +284,7 @@ public abstract class SearchIterator
      */
     public void setOverlapping(boolean allowOverlap)
     {
-        m_isOverlap_ = allowOverlap;
+        search_.isOverlap_ = allowOverlap;
     }
     
     /**
@@ -195,12 +301,16 @@ public abstract class SearchIterator
      */
     public void setBreakIterator(BreakIterator breakiter) 
     {
-        breakIterator = breakiter;
-        if (breakIterator != null) {
-            breakIterator.setText(targetText);
+        search_.setBreakIter(breakiter);
+        if (search_.breakIter() != null) {
+            // Create a clone of CharacterItearator, so it won't
+            // affect the position currently held by search_.text()
+            if (search_.text() != null) {
+                search_.breakIter().setText((CharacterIterator)search_.text().clone());
+            }
         }
     }
-    
+
     /**
      * Set the target text to be searched. Text iteration will then begin at 
       * the start of the text string. This method is useful if you want to 
@@ -216,16 +326,26 @@ public abstract class SearchIterator
         if (text == null || text.getEndIndex() == text.getIndex()) {
             throw new IllegalArgumentException("Illegal null or empty text");
         }
-        
-        targetText = text;
-        targetText.setIndex(targetText.getBeginIndex());
-        matchLength = 0;
-        m_reset_ = true;
-        m_isForwardSearching_ = true;
-        if (breakIterator != null) {
-            breakIterator.setText(targetText);
+
+        text.setIndex(text.getBeginIndex());
+        search_.setTarget(text);
+        search_.matchedIndex_ = DONE;
+        search_.setMatchedLength(0);
+        search_.reset_ = true;
+        search_.isForwardSearching_ = true;
+        if (search_.breakIter() != null) {
+            // Create a clone of CharacterItearator, so it won't
+            // affect the position currently held by search_.text()
+            search_.breakIter().setText((CharacterIterator)text.clone());
+        }
+        if (search_.internalBreakIter_ != null) {
+            search_.internalBreakIter_.setText((CharacterIterator)text.clone());
         }
     }
+
+    //TODO: We should add APIs below to match ICU4C APIs
+    // setCanonicalMatch
+    // setElementComparison
 
     // public getters ----------------------------------------------------
     
@@ -255,7 +375,7 @@ public abstract class SearchIterator
      */
     public int getMatchStart()
     {
-        return m_lastMatchStart_;
+        return search_.matchedIndex_;
     }
 
     /**
@@ -297,7 +417,7 @@ public abstract class SearchIterator
      */
     public int getMatchLength() 
     {
-        return matchLength;
+        return search_.matchedLength();
     }
     
     /**
@@ -313,7 +433,7 @@ public abstract class SearchIterator
      */
     public BreakIterator getBreakIterator() 
     {
-        return breakIterator;
+        return search_.breakIter();
     }
     
     /**
@@ -324,7 +444,7 @@ public abstract class SearchIterator
      */
     public CharacterIterator getTarget() 
     {
-        return targetText;
+        return search_.text();
     }
     
     /**
@@ -345,16 +465,16 @@ public abstract class SearchIterator
      */
     public String getMatchedText() 
     {
-        if (matchLength > 0) {
-            int limit = m_lastMatchStart_ + matchLength;
-            StringBuilder result = new StringBuilder(matchLength);
-            result.append(targetText.current());
-            targetText.next();
-            while (targetText.getIndex() < limit) {
-                result.append(targetText.current());
-                targetText.next();
+        if (search_.matchedLength() > 0) {
+            int limit = search_.matchedIndex_ + search_.matchedLength();
+            StringBuilder result = new StringBuilder(search_.matchedLength());
+            CharacterIterator it = search_.text();
+            it.setIndex(search_.matchedIndex_);
+            while (it.getIndex() < limit) {
+                result.append(it.current());
+                it.next();
             }
-            targetText.setIndex(m_lastMatchStart_);
+            it.setIndex(search_.matchedIndex_);
             return result.toString();
         }
         return null;
@@ -386,50 +506,42 @@ public abstract class SearchIterator
      */
     public int next()
     {
-        int start = targetText.getIndex();
-        if (m_setOffset_ != DONE) {
-            start = m_setOffset_;    
-            m_setOffset_ = DONE;    
-        }
-        if (m_isForwardSearching_) {
-            if (!m_reset_ && 
-                start + matchLength >= targetText.getEndIndex()) {
-                // not enough characters to match
-                matchLength = 0;
-                targetText.setIndex(targetText.getEndIndex());
-                m_lastMatchStart_ = DONE;
-                return DONE; 
+        int index = getIndex(); // offset = getOffset() in ICU4C
+        int matchindex = search_.matchedIndex_;
+        int matchlength = search_.matchedLength();
+        search_.reset_ = false;
+        if (search_.isForwardSearching_) {
+            int endIdx = search_.endIndex();
+            if (index == endIdx || matchindex == endIdx ||
+                    (matchindex != DONE &&
+                    matchindex + matchlength >= endIdx)) {
+                setMatchNotFound();
+                return DONE;
             }
-            m_reset_ = false;
-        }
-        else {
-            // switching direction. 
-            // if matchedIndex == USEARCH_DONE, it means that either a 
-            // setIndex has been called or that previous ran off the text
+        } else {
+            // switching direction.
+            // if matchedIndex == DONE, it means that either a 
+            // setIndex (setOffset in C) has been called or that previous ran off the text
             // string. the iterator would have been set to offset 0 if a 
             // match is not found.
-            m_isForwardSearching_ = true;
-            if (start != DONE) {
+            search_.isForwardSearching_ = true;
+            if (search_.matchedIndex_ != DONE) {
                 // there's no need to set the collation element iterator
                 // the next call to next will set the offset.
-                return start;
+                return matchindex;
             }
         }
-        
-        if (start == DONE) {
-            start = targetText.getBeginIndex();
-        }
-        if (matchLength > 0) {
-            // if match length is 0 we are at the start of the iteration
-            if (m_isOverlap_) {
-                start ++;
-            }
-            else {
-                start += matchLength;
+
+        if (matchlength > 0) {
+            // if matchlength is 0 we are at the start of the iteration
+            if (search_.isOverlap_) {
+                index++;
+            } else {
+                index += matchlength;
             }
         }
-        m_lastMatchStart_ = handleNext(start);
-        return m_lastMatchStart_;
+
+        return handleNext(index);
     }
 
     /**
@@ -456,40 +568,45 @@ public abstract class SearchIterator
      */
     public int previous()
     {
-        int start = targetText.getIndex();
-        if (m_setOffset_ != DONE) {
-            start = m_setOffset_;    
-            m_setOffset_ = DONE;    
+        int index;  // offset in ICU4C
+        if (search_.reset_) {
+            index = search_.endIndex();   // m_search_->textLength in ICU4C
+            search_.isForwardSearching_ = false;
+            search_.reset_ = false;
+            setIndex(index);
+        } else {
+            index = getIndex();
         }
-        if (m_reset_) {
-            m_isForwardSearching_ = false;
-            m_reset_ = false;
-            start = targetText.getEndIndex();
-        }
-        
-        if (m_isForwardSearching_ == true) {
+
+        int matchindex = search_.matchedIndex_;
+        if (search_.isForwardSearching_) {
             // switching direction. 
-            // if matchedIndex == USEARCH_DONE, it means that either a 
-            // setIndex has been called or that next ran off the text
+            // if matchedIndex == DONE, it means that either a 
+            // setIndex (setOffset in C) has been called or that next ran off the text
             // string. the iterator would have been set to offset textLength if 
             // a match is not found.
-            m_isForwardSearching_ = false;
-            if (start != targetText.getEndIndex()) {
-                return start;
+            search_.isForwardSearching_ = false;
+            if (matchindex != DONE) {
+                return matchindex;
             }
-        }
-        else {
-            if (start == targetText.getBeginIndex()) {
+        } else {
+            int startIdx = search_.beginIndex();
+            if (index == startIdx || matchindex == startIdx) {
                 // not enough characters to match
-                matchLength = 0;
-                targetText.setIndex(targetText.getBeginIndex());
-                m_lastMatchStart_ = DONE;
+                setMatchNotFound();
                 return DONE; 
             }
         }
 
-        m_lastMatchStart_ = handlePrevious(start);
-        return m_lastMatchStart_;
+        if (matchindex != DONE) {
+            if (search_.isOverlap_) {
+                matchindex += search_.matchedLength() - 2;
+            }
+
+            return handlePrevious(matchindex);
+        }
+
+        return handlePrevious(index);
     }
 
     /**
@@ -501,9 +618,13 @@ public abstract class SearchIterator
      */
     public boolean isOverlapping() 
     {
-        return m_isOverlap_;
+        return search_.isOverlap_;
     }
-    
+
+    //TODO: We should add APIs below to match ICU4C APIs
+    // isCanonicalMatch
+    // getElementComparison
+
     /** 
      * <p>
      * Resets the search iteration. All properties will be reset to their
@@ -518,13 +639,13 @@ public abstract class SearchIterator
      */
     public void reset()
     {
-        // reset is setting the attributes that are already in string search
-        matchLength = 0;
-        setIndex(targetText.getBeginIndex());
-        m_isOverlap_ = false;
-        m_isForwardSearching_ = true;
-        m_reset_ = true;
-        m_setOffset_ = DONE;
+        setMatchNotFound();
+        setIndex(search_.beginIndex());
+        search_.isOverlap_ = false;
+        search_.isCanonicalMatch_ = false;
+        search_.elementComparisonType_ = ElementComparisonType.STANDARD_ELEMENT_COMPARISON;
+        search_.isForwardSearching_ = true;
+        search_.reset_ = true;
     }
     
     /**
@@ -546,9 +667,9 @@ public abstract class SearchIterator
      */
     public final int first() 
     {
-        m_isForwardSearching_ = true;
-        setIndex(targetText.getBeginIndex());
-        return next();
+        int startIdx = search_.beginIndex();
+        setIndex(startIdx);
+        return handleNext(startIdx);
     }
 
     /**
@@ -571,10 +692,8 @@ public abstract class SearchIterator
      */
     public final int following(int position) 
     {
-        m_isForwardSearching_ = true;
-        // position checked in usearch_setOffset
         setIndex(position);
-        return next();
+        return handleNext(position);
     }
     
     /**
@@ -596,9 +715,9 @@ public abstract class SearchIterator
      */
     public final int last() 
     {
-        m_isForwardSearching_ = false;
-        setIndex(targetText.getEndIndex());
-        return previous();
+        int endIdx = search_.endIndex();
+        setIndex(endIdx);
+        return handlePrevious(endIdx);
     }
      
     /**
@@ -622,41 +741,10 @@ public abstract class SearchIterator
      */
     public final int preceding(int position) 
     {
-        m_isForwardSearching_ = false;
-        // position checked in usearch_setOffset
         setIndex(position);
-        return previous();   
+        return handlePrevious(position);
     }
-    
-    // protected data member ----------------------------------------------
-    
-    /**
-     * The BreakIterator to define the boundaries of a logical match.
-     * This value can be a null.
-     * See class documentation for more information.
-     * @see #setBreakIterator(BreakIterator)
-     * @see #getBreakIterator
-     * @see BreakIterator
-     * @stable ICU 2.0
-     */
-    protected BreakIterator breakIterator; 
 
-    /**
-     * Target text for searching.
-     * @see #setTarget(CharacterIterator)
-     * @see #getTarget
-     * @stable ICU 2.0
-     */
-    protected CharacterIterator targetText;
-    /**
-     * Length of the most current match in target text. 
-     * Value 0 is the default value.
-     * @see #setMatchLength
-     * @see #getMatchLength
-     * @stable ICU 2.0
-     */
-    protected int matchLength;
-    
     // protected constructor ----------------------------------------------
     
     /**
@@ -681,19 +769,21 @@ public abstract class SearchIterator
                                    "Illegal argument target. " +
                                    " Argument can not be null or of length 0");
         }
-        targetText = target;
-        breakIterator = breaker;
-        if (breakIterator != null) {
-            breakIterator.setText(target);
+
+        search_.setTarget(target);
+        search_.setBreakIter(breaker);
+        if (search_.breakIter() != null) {
+            search_.breakIter().setText((CharacterIterator)target.clone());
         }
-        matchLength = 0;
-        m_lastMatchStart_ = DONE;
-        m_isOverlap_ = false;
-        m_isForwardSearching_ = true;
-        m_reset_ = true;
-        m_setOffset_ = DONE;
+        search_.isOverlap_ = false;
+        search_.isCanonicalMatch_ = false;
+        search_.elementComparisonType_ = ElementComparisonType.STANDARD_ELEMENT_COMPARISON;
+        search_.isForwardSearching_ = true;
+        search_.reset_ = true;
+        search_.matchedIndex_ = DONE;
+        search_.setMatchedLength(0);
     }    
-    
+
     // protected methods --------------------------------------------------
 
    
@@ -708,7 +798,7 @@ public abstract class SearchIterator
      */
     protected void setMatchLength(int length)
     {
-        matchLength = length;
+        search_.setMatchedLength(length);
     }
 
     /**
@@ -759,30 +849,92 @@ public abstract class SearchIterator
      * @stable ICU 2.0
      */
     protected abstract int handlePrevious(int startAt);
-    
-    // private data members ------------------------------------------------
-    
+
     /**
-     * Flag indicates if we are doing a forwards search
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    private boolean m_isForwardSearching_;
+    //TODO: This protected method is @stable 2.0 in ICU4C
+    protected void setMatchNotFound() {
+        search_.matchedIndex_ = DONE;
+        search_.setMatchedLength(0);
+    }
+
     /**
-     * Flag to indicate if overlapping search is to be done.
-     * E.g. looking for "aa" in "aaa" will yield matches at offset 0 and 1.
+     * Option to control how collation elements are compared.
+     * The default value will be {@link #STANDARD_ELEMENT_COMPARISON}.
+     * 
+     * @see #setElementComparisonType(ElementComparisonType)
+     * @see #getElementComparisonType()
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
      */
-    private boolean m_isOverlap_;
+    public enum ElementComparisonType {
+        /**
+         * Standard collation element comparison at the specified collator strength.
+         * 
+         * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
+         */
+        STANDARD_ELEMENT_COMPARISON,
+        /**
+         * <p>Collation element comparison is modified to effectively provide behavior
+         * between the specified strength and strength - 1.</p>
+         * 
+         * <p>Collation elements in the pattern that have the base weight for the specified
+         * strength are treated as "wildcards" that match an element with any other
+         * weight at that collation level in the searched text. For example, with a
+         * secondary-strength English collator, a plain 'e' in the pattern will match
+         * a plain e or an e with any diacritic in the searched text, but an e with
+         * diacritic in the pattern will only match an e with the same diacritic in
+         * the searched text.<p>
+         * 
+         * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
+         */
+        PATTERN_BASE_WEIGHT_IS_WILDCARD,
+
+        /**
+         * <p>Collation element comparison is modified to effectively provide behavior
+         * between the specified strength and strength - 1.</p>
+         * 
+         * <p>Collation elements in either the pattern or the searched text that have the
+         * base weight for the specified strength are treated as "wildcards" that match
+         * an element with any other weight at that collation level. For example, with
+         * a secondary-strength English collator, a plain 'e' in the pattern will match
+         * a plain e or an e with any diacritic in the searched text, but an e with
+         * diacritic in the pattern will only match an e with the same diacritic or a
+         * plain e in the searched text.</p>
+         * 
+         * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
+         */
+        ANY_BASE_WEIGHT_IS_WILDCARD
+    }
+
     /**
-     * Flag indicates if we are at the start of a string search.
-     * This indicates that we are in forward search and at the start of m_text.
-     */ 
-    private boolean m_reset_;
-    /**
-     * Data member to store user defined position in setIndex().
-     * If setIndex() is not called, this value will be DONE.
-     */ 
-    private int m_setOffset_;
-    /**
-     * Offset of the beginning of the last match
+     * <p>Sets the collation element comparison type.</p>
+     * 
+     * <p>The default comparison type is {@link ElementComparisonType#STANDARD_ELEMENT_COMPARISON}.</p>
+     * 
+     * @see ElementComparisonType
+     * @see #getElementComparisonType()
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
      */
-    private int m_lastMatchStart_;
+    public void setElementComparisonType(ElementComparisonType type) {
+        search_.elementComparisonType_ = type;
+    }
+
+    /**
+     * <p>Returns the collation element comparison type.</p>
+     * 
+     * @see ElementComparisonType
+     * @see #setElementComparisonType(ElementComparisonType)
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public ElementComparisonType getElementComparisonType() {
+        return search_.elementComparisonType_;
+    }
 }

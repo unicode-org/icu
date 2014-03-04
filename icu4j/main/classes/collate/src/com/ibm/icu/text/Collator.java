@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2014, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 package com.ibm.icu.text;
@@ -16,7 +16,8 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.coll.CollationData;
+import com.ibm.icu.impl.coll.CollationRoot;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
@@ -56,8 +57,8 @@ import com.ibm.icu.util.VersionInfo;
 *     difference between large and small Kana. A tertiary difference is ignored
 *     when there is a primary or secondary difference anywhere in the strings.
 * <li>QUATERNARY strength: When punctuation is ignored
-*     <a href="http://www.icu-project.org/userguide/Collate_Concepts.html#Ignoring_Punctuation">
-*     (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
+*     (see <a href="http://userguide.icu-project.org/collation/concepts#TOC-Ignoring-Punctuation">
+*     Ignoring Punctuations in the User Guide</a>) at PRIMARY to TERTIARY
 *     strength, an additional strength level can
 *     be used to distinguish words with and without punctuation (for example,
 *     "ab" &lt; "a-b" &lt; "aB").
@@ -87,8 +88,7 @@ import com.ibm.icu.util.VersionInfo;
 * a comparison or before getting a CollationKey.</p>
 *
 * <p>For more information about the collation service see the
-* <a href="http://www.icu-project.org/userguide/Collate_Intro.html">users
-* guide</a>.</p>
+* <a href="http://userguide.icu-project.org/collation">User Guide</a>.</p>
 *
 * <p>Examples of use
 * <pre>
@@ -125,7 +125,7 @@ import com.ibm.icu.util.VersionInfo;
 * @author Syn Wee Quek
 * @stable ICU 2.8
 */
-public abstract class Collator implements Comparator<Object>, Freezable<Collator>
+public abstract class Collator implements Comparator<Object>, Freezable<Collator>, Cloneable
 {
     // public data members ---------------------------------------------------
 
@@ -165,8 +165,8 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     /**
      * {@icu} Fourth level collator strength value.
      * When punctuation is ignored
-     * <a href="http://www.icu-project.org/userguide/Collate_Concepts.html#Ignoring_Punctuation">
-     * (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
+     * (see <a href="http://userguide.icu-project.org/collation/concepts#TOC-Ignoring-Punctuation">
+     * Ignoring Punctuation in the User Guide</a>) at PRIMARY to TERTIARY
      * strength, an additional strength level can
      * be used to distinguish words with and without punctuation.
      * See class documentation for more explanation.
@@ -299,15 +299,37 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     
     // public methods --------------------------------------------------------
 
+    /**
+     * Compares the equality of two Collator objects. Collator objects are equal if they have the same
+     * collation (sorting & searching) behavior.
+     *
+     * <p>The base class checks for null and for equal types.
+     * Subclasses should override.
+     *
+     * @param obj the Collator to compare to.
+     * @return true if this Collator has exactly the same collation behavior as obj, false otherwise.
+     * @stable ICU 2.8
+     */
+    @Override
+    public boolean equals(Object obj) {
+        // Subclasses: Call this method and then add more specific checks.
+        return this == obj || (obj != null && getClass() == obj.getClass());
+    }
+
     // public setters --------------------------------------------------------
 
+    private void checkNotFrozen() {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen Collator");
+        }
+    }
+
     /**
-     * Sets this Collator's strength property. The strength property
+     * Sets this Collator's strength attribute. The strength attribute
      * determines the minimum level of difference considered significant
      * during comparison.</p>
      *
-     * <p>The default strength for the Collator is TERTIARY, unless specified
-     * otherwise by the locale used to create the Collator.</p>
+     * <p>The base class method does nothing. Subclasses should override it if appropriate.
      *
      * <p>See the Collator class description for an example of use.</p>
      * @param newStrength the new strength value.
@@ -317,28 +339,17 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see #TERTIARY
      * @see #QUATERNARY
      * @see #IDENTICAL
-     * @throws IllegalArgumentException if the new strength value is not one
-     *                of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
+     * @throws IllegalArgumentException if the new strength value is not valid.
      * @stable ICU 2.8
      */
     public void setStrength(int newStrength)
     {
-        if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify frozen object");
-        }
-
-        if ((newStrength != PRIMARY) &&
-            (newStrength != SECONDARY) &&
-            (newStrength != TERTIARY) &&
-            (newStrength != QUATERNARY) &&
-            (newStrength != IDENTICAL)) {
-            throw new IllegalArgumentException("Incorrect comparison level.");
-        }
-        m_strength_ = newStrength;
+        checkNotFrozen();
     }
-    
+
     /**
-     * @internal
+     * @return this, for chaining
+     * @internal Used in UnicodeTools
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -350,7 +361,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
 
     /**
      * Sets the decomposition mode of this Collator.  Setting this
-     * decomposition property with CANONICAL_DECOMPOSITION allows the
+     * decomposition attribute with CANONICAL_DECOMPOSITION allows the
      * Collator to handle un-normalized text properly, producing the
      * same results as if the text were normalized. If
      * NO_DECOMPOSITION is set, it is the user's responsibility to
@@ -363,9 +374,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * text normalization, most locales set NO_DECOMPOSITION as the
      * default decomposition mode.</p>
      *
-     * The default decompositon mode for the Collator is
-     * NO_DECOMPOSITON, unless specified otherwise by the locale used
-     * to create the Collator.</p>
+     * <p>The base class method does nothing. Subclasses should override it if appropriate.
      *
      * <p>See getDecomposition for a description of decomposition
      * mode.</p>
@@ -380,32 +389,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      */
     public void setDecomposition(int decomposition)
     {
-        if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify frozen object");
-        }
-        internalSetDecomposition(decomposition);
-    }
-
-    /**
-     * Internal set decompostion call to workaround frozen state because of self-modification
-     * in the RuleBasedCollator. This method <b>must</b> only be called by code that has
-     * passed the frozen check already <b>and</b> has the lock if the Collator is frozen.
-     * Better still this method should go away and RuleBasedCollator.getSortKeyBytes()
-     * should be fixed to not self-modify.
-     * @param decomposition
-     * @internal
-     */
-    protected void internalSetDecomposition(int decomposition)
-    {
-        if ((decomposition != NO_DECOMPOSITION) &&
-            (decomposition != CANONICAL_DECOMPOSITION)) {
-            throw new IllegalArgumentException("Wrong decomposition mode.");
-        }
-        m_decomposition_ = decomposition;
-        if (decomposition != NO_DECOMPOSITION) {
-            // ensure the FCD data is initialized
-            Norm2AllModes.getFCDNormalizer2();
-        }
+        checkNotFrozen();
     }
 
     /** 
@@ -441,7 +425,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      */ 
     public void setReorderCodes(int... order) 
     { 
-        throw new UnsupportedOperationException(); 
+        throw new UnsupportedOperationException("Needs to be implemented by the subclass."); 
     } 
 
     // public getters --------------------------------------------------------
@@ -451,7 +435,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * The default locale is determined by java.util.Locale.getDefault().
      * @return the Collator for the default locale (for example, en_US) if it
      *         is created successfully. Otherwise if there is no Collator
-     *         associated with the current locale, the default UCA collator
+     *         associated with the current locale, the root collator
      *         will be returned.
      * @see java.util.Locale#getDefault()
      * @see #getInstance(Locale)
@@ -617,7 +601,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @param locale the desired locale.
      * @return Collator for the desired locale if it is created successfully.
      *         Otherwise if there is no Collator
-     *         associated with the current locale, a default UCA collator will
+     *         associated with the current locale, the root collator will
      *         be returned.
      * @see java.util.Locale
      * @see java.util.ResourceBundle
@@ -635,7 +619,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @param locale the desired locale.
      * @return Collator for the desired locale if it is created successfully.
      *         Otherwise if there is no Collator
-     *         associated with the current locale, a default UCA collator will
+     *         associated with the current locale, the root collator will
      *         be returned.
      * @see java.util.Locale
      * @see java.util.ResourceBundle
@@ -792,7 +776,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         LinkedList<String> values = new LinkedList<String>();
 
         UResourceBundle bundle = UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BASE_NAME + "/coll", baseLoc);
+                ICUResourceBundle.ICU_COLLATION_BASE_NAME, baseLoc);
 
         String defcoll = null;
         while (bundle != null) {
@@ -838,7 +822,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * applications who wish to cache collators, or otherwise reuse
      * collators when possible.  The functional equivalent may change
      * over time.  For more information, please see the <a
-     * href="http://www.icu-project.org/userguide/locale.html#services">
+     * href="http://userguide.icu-project.org/locale#TOC-Locales-and-Services">
      * Locales and Services</a> section of the ICU User Guide.
      * @param keyword a particular keyword as enumerated by
      * getKeywords.
@@ -923,7 +907,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     }
 
     /**
-     * Returns this Collator's strength property. The strength property
+     * Returns this Collator's strength attribute. The strength attribute
      * determines the minimum level of difference considered significant.
      * </p>
      * {@icunote} This can return QUATERNARY strength, which is not supported by the
@@ -931,7 +915,10 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * <p>
      * See the Collator class description for more details.
      * </p>
-     * @return this Collator's current strength property.
+     * <p>The base class method always returns {@link #TERTIARY}.
+     * Subclasses should override it if appropriate.
+     *
+     * @return this Collator's current strength attribute.
      * @see #setStrength
      * @see #PRIMARY
      * @see #SECONDARY
@@ -942,7 +929,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      */
     public int getStrength()
     {
-        return m_strength_;
+        return TERTIARY;
     }
 
     /**
@@ -952,6 +939,9 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * <p>
      * See the Collator class description for more details.
      * </p>
+     * <p>The base class method always returns {@link #NO_DECOMPOSITION}.
+     * Subclasses should override it if appropriate.
+     *
      * @return the decomposition mode
      * @see #setDecomposition
      * @see #NO_DECOMPOSITION
@@ -960,7 +950,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      */
     public int getDecomposition()
     {
-        return m_decomposition_;
+        return NO_DECOMPOSITION;
     }
 
     // public other methods -------------------------------------------------
@@ -986,7 +976,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * in this collator.
      * @return a pointer to a UnicodeSet object containing all the
      *         code points and sequences that may sort differently than
-     *         in the UCA.
+     *         in the root collator.
      * @stable ICU 2.4
      */
     public UnicodeSet getTailoredSet()
@@ -1022,11 +1012,22 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @return Returns an integer value. Value is less than zero if source is
      *         less than target, value is zero if source and target are equal,
      *         value is greater than zero if source is greater than target.
-     * @throws ClassCastException thrown if either arguments cannot be cast to String.
+     * @throws ClassCastException thrown if either arguments cannot be cast to CharSequence.
      * @stable ICU 4.2
      */
     public int compare(Object source, Object target) {
-        return compare((String)source, (String)target);
+        return doCompare((CharSequence)source, (CharSequence)target);
+    }
+
+    /**
+     * Compares two CharSequences.
+     * The base class just calls compare(left.toString(), right.toString()).
+     * Subclasses should instead implement this method and have the String API call this method.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected int doCompare(CharSequence left, CharSequence right) {
+        return compare(left.toString(), right.toString());
     }
 
     /**
@@ -1065,46 +1066,85 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
                                                        RawCollationKey key);
 
     /**
-     * {@icu} Variable top is a two byte primary value which causes all the codepoints
-     * with primary values that are less or equal than the variable top to be
-     * shifted when alternate handling is set to SHIFTED.
-     * </p>
-     * <p>
-     * Sets the variable top to a collation element value of a string supplied.
-     * </p>
+     * {@icu} Sets the variable top to the top of the specified reordering group.
+     * The variable top determines the highest-sorting character
+     * which is affected by the alternate handling behavior.
+     * If that attribute is set to UCOL_NON_IGNORABLE, then the variable top has no effect.
+     *
+     * <p>The base class implementation throws an UnsupportedOperationException.
+     * @param group one of Collator.ReorderCodes.SPACE, Collator.ReorderCodes.PUNCTUATION,
+     *              Collator.ReorderCodes.SYMBOL, Collator.ReorderCodes.CURRENCY;
+     *              or Collator.ReorderCodes.DEFAULT to restore the default max variable group
+     * @return this
+     * @see #getMaxVariable
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Collator setMaxVariable(int group) {
+        throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
+    }
+
+    /**
+     * {@icu} Returns the maximum reordering group whose characters are affected by
+     * the alternate handling behavior.
+     *
+     * <p>The base class implementation returns Collator.ReorderCodes.PUNCTUATION.
+     * @return the maximum variable reordering group.
+     * @see #setMaxVariable
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getMaxVariable() {
+        return Collator.ReorderCodes.PUNCTUATION;
+    }
+
+    /**
+     * {@icu} Sets the variable top to the primary weight of the specified string.
+     *
+     * <p>Beginning with ICU 53, the variable top is pinned to
+     * the top of one of the supported reordering groups,
+     * and it must not be beyond the last of those groups.
+     * See {@link #setMaxVariable(int)}.
+     * 
      * @param varTop one or more (if contraction) characters to which the
      *               variable top should be set
-     * @return a int value containing the value of the variable top in upper 16
-     *         bits. Lower 16 bits are undefined.
-     * @throws IllegalArgumentException is thrown if varTop argument is not
-     *            a valid variable top element. A variable top element is
-     *            invalid when it is a contraction that does not exist in the
-     *            Collation order or when the PRIMARY strength collation
-     *            element for the variable top has more than two bytes
+     * @return variable top primary weight
+     * @exception IllegalArgumentException
+     *                is thrown if varTop argument is not a valid variable top element. A variable top element is
+     *                invalid when
+     *                <ul>
+     *                <li>it is a contraction that does not exist in the Collation order
+     *                <li>the variable top is beyond
+     *                    the last reordering group supported by setMaxVariable()
+     *                <li>when the varTop argument is null or zero in length.
+     *                </ul>
      * @see #getVariableTop
      * @see RuleBasedCollator#setAlternateHandlingShifted
-     * @stable ICU 2.6
+     * @deprecated ICU 53 Call {@link #setMaxVariable(int)} instead.
      */
     public abstract int setVariableTop(String varTop);
 
     /**
-     * {@icu} Returns the variable top value of a Collator.
-     * Lower 16 bits are undefined and should be ignored.
-     * @return the variable top value of a Collator.
-     * @see #setVariableTop
+     * {@icu} Gets the variable top value of a Collator.
+     * 
+     * @return the variable top primary weight
+     * @see #getMaxVariable
      * @stable ICU 2.6
      */
     public abstract int getVariableTop();
 
     /**
-     * {@icu} Sets the variable top to a collation element value supplied.
-     * Variable top is set to the upper 16 bits.
-     * Lower 16 bits are ignored.
-     * @param varTop Collation element value, as returned by setVariableTop or
-     *               getVariableTop
+     * {@icu} Sets the variable top to the specified primary weight.
+     *
+     * <p>Beginning with ICU 53, the variable top is pinned to
+     * the top of one of the supported reordering groups,
+     * and it must not be beyond the last of those groups.
+     * See {@link #setMaxVariable(int)}.
+     * 
+     * @param varTop primary weight, as returned by setVariableTop or getVariableTop
      * @see #getVariableTop
-     * @see #setVariableTop
-     * @stable ICU 2.6
+     * @see #setVariableTop(String)
+     * @deprecated ICU 53 Call setMaxVariable() instead.
      */
     public abstract void setVariableTop(int varTop);
 
@@ -1135,14 +1175,14 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      */ 
     public int[] getReorderCodes() 
     { 
-        throw new UnsupportedOperationException(); 
+        throw new UnsupportedOperationException("Needs to be implemented by the subclass."); 
     }   
 
     /**
      * Retrieves all the reorder codes that are grouped with the given reorder code. Some reorder
      * codes are grouped and must reorder together.
      * 
-     * @param reorderCode code for which equivalents to be retrieved
+     * @param reorderCode The reorder code to determine equivalence for. 
      * @return the set of all reorder codes in the same group as the given reorder code.
      * @see #setReorderCodes
      * @see #getReorderCodes
@@ -1150,9 +1190,9 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see UScript
      * @stable ICU 4.8
      */
-    public static int[] getEquivalentReorderCodes(int reorderCode)
-    { 
-        throw new UnsupportedOperationException(); 
+    public static int[] getEquivalentReorderCodes(int reorderCode) {
+        CollationData baseData = CollationRoot.getData();
+        return baseData.getEquivalentScripts(reorderCode);
     }   
 
 
@@ -1183,8 +1223,6 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
     }
     
-    // protected constructor -------------------------------------------------
-
     /**
      * Empty default constructor to make javadocs happy
      * @stable ICU 2.4
@@ -1193,25 +1231,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     {
     }
 
-    // package private methods -----------------------------------------------
-
-    // private data members --------------------------------------------------
-
-    /**
-     * Collation strength
-     */
-    private int m_strength_ = TERTIARY;
-
-    /**
-     * Decomposition mode
-     */
-    private int m_decomposition_ = CANONICAL_DECOMPOSITION;
-
     private static final boolean DEBUG = ICUDebug.enabled("collator");
-
-    // private methods -------------------------------------------------------
-
-    // end registry stuff
 
     // -------- BEGIN ULocale boilerplate --------
 
@@ -1228,6 +1248,10 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * contains a partial preview implementation.  The * <i>actual</i>
      * locale is returned correctly, but the <i>valid</i> locale is
      * not, in most cases.
+     *
+     * <p>The base class method always returns {@link ULocale#ROOT}.
+     * Subclasses should override it if appropriate.
+     *
      * @param type type of information requested, either {@link
      * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
      * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
@@ -1239,12 +1263,11 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @draft ICU 2.8 (retain)
      * @provisional This API might change or be removed in a future release.
      */
-    public final ULocale getLocale(ULocale.Type type) {
-        return type == ULocale.ACTUAL_LOCALE ?
-            this.actualLocale : this.validLocale;
+    public ULocale getLocale(ULocale.Type type) {
+        return ULocale.ROOT;
     }
 
-    /*
+    /**
      * Set information about the locales that were used to create this
      * object.  If the object was not constructed from locale data,
      * both arguments should be set to null.  Otherwise, neither
@@ -1252,6 +1275,9 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * less specific than the valid locale.  This method is intended
      * for use by factories or other entities that create objects of
      * this class.
+     *
+     * <p>The base class method does nothing. Subclasses should override it if appropriate.
+     *
      * @param valid the most specific locale containing any resource
      * data, or null
      * @param actual the locale containing data used to construct this
@@ -1260,34 +1286,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      */
-    final void setLocale(ULocale valid, ULocale actual) {
-        // Change the following to an assertion later
-        ///CLOVER:OFF
-        // The following would not happen since the method is called
-        //  by other protected functions that checks and makes sure that
-        //  valid and actual are not null before passing
-        if ((valid == null) != (actual == null)) {
-            throw new IllegalArgumentException();
-        }
-        ///CLOVER:ON
-        // Another check we could do is that the actual locale is at
-        // the same level or less specific than the valid locale.
-        this.validLocale = valid;
-        this.actualLocale = actual;
-    }
-
-    /*
-     * The most specific locale containing any resource data, or null.
-     * @see com.ibm.icu.util.ULocale
-     */
-    private ULocale validLocale;
-
-    /*
-     * The locale containing data used to construct this object, or
-     * null.
-     * @see com.ibm.icu.util.ULocale
-     */
-    private ULocale actualLocale;
+    void setLocale(ULocale valid, ULocale actual) {}
 
     // -------- END ULocale boilerplate --------
 }

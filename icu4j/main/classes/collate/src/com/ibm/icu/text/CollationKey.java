@@ -1,10 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and
+* Copyright (C) 1996-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
 package com.ibm.icu.text;
+
+import com.ibm.icu.impl.coll.Collation;
 
 /**
  * <p>A <code>CollationKey</code> represents a <code>String</code>
@@ -223,14 +225,7 @@ public final class CollationKey implements Comparable<CollationKey>
      */
     public byte[] toByteArray() 
     {
-        int length = 0;
-        while (true) {
-            if (m_key_[length] == 0) {
-              break;
-            }
-            length ++;
-        }
-        length ++;
+        int length = getLength() + 1;
         byte result[] = new byte[length];
         System.arraycopy(m_key_, 0, result, 0, length);
         return result;
@@ -433,7 +428,7 @@ public final class CollationKey implements Comparable<CollationKey>
         if (noOfLevels > Collator.PRIMARY) {
             while (offset < m_key_.length && m_key_[offset] != 0) {
                 if (m_key_[offset ++] 
-                        == RuleBasedCollator.SORT_LEVEL_TERMINATOR_) {
+                        == Collation.LEVEL_SEPARATOR_BYTE) {
                     keystrength ++;
                     noOfLevels --;
                     if (noOfLevels == Collator.PRIMARY 
@@ -545,12 +540,12 @@ public final class CollationKey implements Comparable<CollationKey>
     
             // if both sort keys have another level, then add a 01 level 
             // separator and continue
-            if (m_key_[index] == RuleBasedCollator.SORT_LEVEL_TERMINATOR_
+            if (m_key_[index] == Collation.LEVEL_SEPARATOR_BYTE
                 && source.m_key_[sourceindex] 
-                        == RuleBasedCollator.SORT_LEVEL_TERMINATOR_) {
+                        == Collation.LEVEL_SEPARATOR_BYTE) {
                 ++index;
                 ++sourceindex;
-                result[rindex++] = RuleBasedCollator.SORT_LEVEL_TERMINATOR_;
+                result[rindex++] = Collation.LEVEL_SEPARATOR_BYTE;
             }
             else {
                 break;

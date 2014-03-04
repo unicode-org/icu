@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -79,7 +79,7 @@ public class CollationRegressionTest extends TestFmwk {
     // Collator -> rules -> Collator round-trip broken for expanding characters
     //
     public void Test4051866() {
-       String rules = "< o & oe ,o\u3080& oe ,\u1530 ,O& OE ,O\u3080& OE ,\u1520< p ,P";
+       String rules = "&n < o & oe ,o\u3080& oe ,\u1530 ,O& OE ,O\u3080& OE ,\u1520< p ,P";
 
         // Build a collator containing expanding characters
         RuleBasedCollator c1 = null;
@@ -228,8 +228,8 @@ public class CollationRegressionTest extends TestFmwk {
             
             String sExpect = new String("");
             String sResult = new String("");
-            sResult = appendCompareResult(compareResult, sResult);
-            sExpect = appendCompareResult(expectedResult, sExpect);
+            sResult = CollationTest.appendCompareResult(compareResult, sResult);
+            sExpect = CollationTest.appendCompareResult(expectedResult, sExpect);
             if (ok1) {
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
@@ -239,21 +239,21 @@ public class CollationRegressionTest extends TestFmwk {
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
-            sResult = appendCompareResult(keyResult, sResult);
+            sResult = CollationTest.appendCompareResult(keyResult, sResult);
             if (ok2) {
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
                 msg2 = " vs. ";
-                errln(msg1 + prettify(sourceKey) + msg2 + prettify(targetKey));
+                errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
             }
             
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
             msg2 = "\", \"";
             msg3 = "\") returned ";
 
-            sResult = appendCompareResult(incResult, sResult);
+            sResult = CollationTest.appendCompareResult(incResult, sResult);
 
             if (ok3) {
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
@@ -262,34 +262,7 @@ public class CollationRegressionTest extends TestFmwk {
             }                
         }
     }
-    
-    String appendCompareResult(int result, String target) {
-        if (result == -1) {  //LESS
-            target += "LESS";
-        } else if (result == 0) {  //EQUAL
-            target += "EQUAL";
-        } else if (result == 1) {  //GREATER
-            target += "GREATER";
-        } else {
-            String huh = "?";
-            target += huh + result;
-        }
-        return target;
-    }
-    
-    String prettify(CollationKey sourceKey) {
-        int i;
-        byte[] bytes= sourceKey.toByteArray();
-        String target = "[";
-    
-        for (i = 0; i < bytes.length; i++) {
-            target += Integer.toHexString(bytes[i]);
-            target += " ";
-        }
-        target += "]";
-        return target;
-    }
-    
+
     // @bug 4054736
     //
     // Full Decomposition mode not implemented
@@ -341,7 +314,7 @@ public class CollationRegressionTest extends TestFmwk {
     //
     public void Test4059820(/* char* par */) {
         RuleBasedCollator c = null;
-        String rules = "< a < b , c/a < d < z";
+        String rules = "&9 < a < b , c/a < d < z";
         try {
             c = new RuleBasedCollator(rules);
         } catch (Exception e) {
@@ -360,14 +333,14 @@ public class CollationRegressionTest extends TestFmwk {
     // MergeCollation::fixEntry broken for "& H < \u0131, \u0130, i, I"
     //
     public void Test4060154(/* char* par */) {
-        String rules ="< g, G < h, H < i, I < j, J & H < \u0131, \u0130, i, I";
+        String rules ="&f < g, G < h, H < i, I < j, J & H < \u0131, \u0130, i, I";
     
         RuleBasedCollator c = null;
         try {
             c = new RuleBasedCollator(rules);
         } catch (Exception e) {
             //System.out.println(e);
-            errln("failure building collator.");
+            errln("failure building collator:" + e);
             return;
         }
     
@@ -495,7 +468,7 @@ public class CollationRegressionTest extends TestFmwk {
     public void Test4078588(/* char *par */) {
         RuleBasedCollator rbc = null;
         try {
-            rbc = new RuleBasedCollator("< a < bb");
+            rbc = new RuleBasedCollator("&9 < a < bb");
         } catch (Exception e) {
             errln("Failed to create RuleBasedCollator.");
             return;
@@ -561,7 +534,7 @@ public class CollationRegressionTest extends TestFmwk {
         c.setStrength(Collator.SECONDARY);
         String tests[] = {
             "\u007a",       "\u003c", "\u00E6",            // z        < ae
-            "\u0061\u0308", "\u003c", "\u0061\u030A",      // a-unlaut < a-ring
+            "\u0061\u0308", "\u003c", "\u0061\u030A",      // a-umlaut < a-ring
             "\u0059",       "\u003c", "\u0075\u0308",      // Y        < u-umlaut
         };
         compareArray(c, tests);
@@ -627,7 +600,7 @@ public class CollationRegressionTest extends TestFmwk {
     //
     public void Test4101940(/* char* par */) {
         RuleBasedCollator c = null;
-        String rules = "< a < b";
+        String rules = "&9 < a < b";
         String nothing = "";
         try {
             c = new RuleBasedCollator(rules);
@@ -944,9 +917,12 @@ public class CollationRegressionTest extends TestFmwk {
         iter.setOffset(5);
         int elt5 = CollationElementIterator.primaryOrder(iter.next());
 
-        if (elt4 != elt0 || elt5 != elt0)
-            errln("The collation elements at positions 0 (" + elt0 + "), 4 ("
-                    + elt4 + "), and 5 (" + elt5 + ") don't match.");
+        // Compares and prints only 16-bit primary weights.
+        if (elt4 != elt0 || elt5 != elt0) {
+            errln(String.format("The collation elements at positions 0 (0x%04x), " +
+                    "4 (0x%04x), and 5 (0x%04x) don't match.",
+                    elt0, elt4, elt5));
+        }
 
         // test that the "cat" combination works properly
         iter.setOffset(14);
@@ -967,11 +943,14 @@ public class CollationRegressionTest extends TestFmwk {
         iter.setOffset(19);
         int elt19 = CollationElementIterator.primaryOrder(iter.next());
 
+        // Compares and prints only 16-bit primary weights.
         if (elt14 != elt15 || elt14 != elt16 || elt14 != elt17
-                || elt14 != elt18 || elt14 != elt19)
-            errln("\"cat\" elements don't match: elt14 = " + elt14 + ", elt15 = "
-            + elt15 + ", elt16 = " + elt16 + ", elt17 = " + elt17
-            + ", elt18 = " + elt18 + ", elt19 = " + elt19);
+                || elt14 != elt18 || elt14 != elt19) {
+            errln(String.format("\"cat\" elements don't match: elt14 = 0x%04x, " +
+                    "elt15 = 0x%04x, elt16 = 0x%04x, elt17 = 0x%04x, " +
+                    "elt18 = 0x%04x, elt19 = 0x%04x",
+                    elt14, elt15, elt16, elt17, elt18, elt19));
+        }
 
         // now generate a complete list of the collation elements,
         // first using next() and then using setOffset(), and
@@ -1029,7 +1008,7 @@ public class CollationRegressionTest extends TestFmwk {
             throw new Exception("\"a<a\" collation sequence didn't cause parse error!");
         }
 
-        RuleBasedCollator collator = new RuleBasedCollator("<\u00e0=a\u0300");
+        RuleBasedCollator collator = new RuleBasedCollator("&a<\u00e0=a\u0300");
         //commented by Kevin 2003/10/21 
         //for "FULL_DECOMPOSITION is not supported here." in ICU4J DOC
         //collator.setDecomposition(Collator.FULL_DECOMPOSITION);
@@ -1200,6 +1179,29 @@ public class CollationRegressionTest extends TestFmwk {
         // Lower first
         col.setLowerCaseFirst(true);
         caseFirstCompressionSub(col, "lower first");
+    }
+
+    public void TestTrailingComment() throws Exception {
+        // ICU ticket #8070:
+        // Check that the rule parser handles a comment without terminating end-of-line.
+        RuleBasedCollator coll = new RuleBasedCollator("&c<b#comment1\n<a#comment2");
+        assertTrue("c<b", coll.compare("c", "b") < 0);
+        assertTrue("b<a", coll.compare("b", "a") < 0);
+    }
+
+    public void TestBeforeWithTooStrongAfter() {
+        // ICU ticket #9959:
+        // Forbid rules with a before-reset followed by a stronger relation.
+        try {
+            new RuleBasedCollator("&[before 2]x<<q<p");
+            errln("should forbid before-2-reset followed by primary relation");
+        } catch(Exception expected) {
+        }
+        try {
+            new RuleBasedCollator("&[before 3]x<<<q<<s<p");
+            errln("should forbid before-3-reset followed by primary or secondary relation");
+        } catch(Exception expected) {
+        }
     }
 
     /*
