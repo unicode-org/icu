@@ -581,6 +581,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A locale specifying the language of the text to be
      * analyzed.
      * @return An instance of BreakIterator that locates word boundaries.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 2.0
      */
     public static BreakIterator getWordInstance(Locale where)
@@ -593,6 +594,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A locale specifying the language of the text to be
      * analyzed.
      * @return An instance of BreakIterator that locates word boundaries.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 3.2
      */
     public static BreakIterator getWordInstance(ULocale where)
@@ -619,6 +621,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A Locale specifying the language of the text being broken.
      * @return A new instance of BreakIterator that locates legal
      * line-wrapping positions.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 2.0
      */
     public static BreakIterator getLineInstance(Locale where)
@@ -632,6 +635,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A Locale specifying the language of the text being broken.
      * @return A new instance of BreakIterator that locates legal
      * line-wrapping positions.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 3.2
      */
     public static BreakIterator getLineInstance(ULocale where)
@@ -658,6 +662,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates logical-character
      * boundaries.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 2.0
      */
     public static BreakIterator getCharacterInstance(Locale where)
@@ -671,6 +676,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates logical-character
      * boundaries.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 3.2
      */
     public static BreakIterator getCharacterInstance(ULocale where)
@@ -694,6 +700,7 @@ public abstract class BreakIterator implements Cloneable
      * Returns a new instance of BreakIterator that locates sentence boundaries.
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates sentence boundaries.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 2.0
      */
     public static BreakIterator getSentenceInstance(Locale where)
@@ -705,6 +712,7 @@ public abstract class BreakIterator implements Cloneable
      * {@icu} Returns a new instance of BreakIterator that locates sentence boundaries.
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates sentence boundaries.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 3.2
      */
     public static BreakIterator getSentenceInstance(ULocale where)
@@ -733,6 +741,7 @@ public abstract class BreakIterator implements Cloneable
      * please use Word Boundary iterator.{@link #getWordInstance}
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates title boundaries.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 2.0
      */
     public static BreakIterator getTitleInstance(Locale where)
@@ -747,6 +756,7 @@ public abstract class BreakIterator implements Cloneable
      * please use Word Boundary iterator.{@link #getWordInstance}
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates title boundaries.
+     * @throws NullPointerException if <code>where</code> is null.
      * @stable ICU 3.2
 s     */
     public static BreakIterator getTitleInstance(ULocale where)
@@ -837,7 +847,9 @@ s     */
      */
     @Deprecated
     public static BreakIterator getBreakInstance(ULocale where, int kind) {
-
+        if (where == null) {
+            throw new NullPointerException("Specified locale is null");
+        }
         if (iterCache[kind] != null) {
             BreakIteratorCache cache = (BreakIteratorCache)iterCache[kind].get();
             if (cache != null) {
