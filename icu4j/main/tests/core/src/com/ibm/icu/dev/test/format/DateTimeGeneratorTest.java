@@ -1115,9 +1115,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
                   "{Hour:N}{Month:N}{Fractional_Second:N} {Month:N}{Day_Of_Year:N}{Year:N}",
                   "{Hour:N}{Month:N}{Fractional_Second:N} {Month:N}{Day_Of_Year:N}{Year:N}"};
           for(int i=0; i<cases.length; i++){
-              try{
-                  if(!dt.getFields(cases[i]).equals(results[i]));
-              } catch(Exception e){
+              if(!dt.getFields(cases[i]).equals(results[i])) {
                   errln("DateTimePatternGenerator.getFields(String) did not " +
                           "not return an expected result when passing " + cases[i] +
                           ". Got " + dt.getFields(cases[i]) + " but expected " +

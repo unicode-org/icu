@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2013, International Business Machines Corporation and
+* Copyright (C) 1996-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -3324,7 +3324,7 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.codePointCount(reg_text, invalid_startCases[i], 1);
                 errln("UCharacter.codePointCount was suppose to return an exception " +
                         "but got " + UCharacter.codePointCount(reg_text, invalid_startCases[i], 1) +
-                        ". The following passed parameters were Text: " + reg_text.toString() + ", Start: " + 
+                        ". The following passed parameters were Text: " + String.valueOf(reg_text) + ", Start: " + 
                         invalid_startCases[i] + ", Limit: " + 1 + ".");
             } catch(Exception e){
             }
