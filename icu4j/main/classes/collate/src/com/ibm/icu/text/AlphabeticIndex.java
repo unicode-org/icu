@@ -272,7 +272,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     private AlphabeticIndex(ULocale locale, RuleBasedCollator collator) {
         collatorOriginal = collator != null ? collator : (RuleBasedCollator) Collator.getInstance(locale);
         try {
-            collatorPrimaryOnly = (RuleBasedCollator) (collatorOriginal.cloneAsThawed());
+            collatorPrimaryOnly = collatorOriginal.cloneAsThawed();
         } catch (Exception e) {
             // should never happen
             throw new IllegalStateException("Collator cannot be cloned", e);
