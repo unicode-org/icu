@@ -101,6 +101,8 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     */
     TESTCASE_AUTO(TestDotAndAtLeniency);
     TESTCASE_AUTO(TestDateFormatLeniency);
+    TESTCASE_AUTO(TestParseMultiPatternMatch);
+
     TESTCASE_AUTO_END;
 }
 
@@ -4199,7 +4201,7 @@ typedef struct {
     UBool leniency;
     UnicodeString parseString;
     UnicodeString pattern;
-    UnicodeString expectedResult;       // null indicates expected error
+    UnicodeString expectedResult;       // empty string indicates expected error
 } TestDateFormatLeniencyItem;
 
 void DateFormatTest::TestDateFormatLeniency() {
@@ -4251,6 +4253,98 @@ void DateFormatTest::TestDateFormatLeniency() {
        }
     }
 }
+
+
+typedef struct {
+    UBool leniency;
+    UnicodeString parseString;
+    UnicodeString pattern;
+    UnicodeString expectedResult;       // empty string indicates expected error
+} TestMultiPatternMatchItem;
+
+void DateFormatTest::TestParseMultiPatternMatch() {
+        // For details see http://bugs.icu-project.org/trac/ticket/10336 
+ 	 
+    const TestMultiPatternMatchItem items[] = {
+ 	      // leniency    parse String                                 pattern                               expected result 
+            {true,       UnicodeString("2013-Sep 13"),                UnicodeString("yyyy-MMM dd"),         UnicodeString("2013-Sep 13")}, 
+            {true,       UnicodeString("2013-September 14"),          UnicodeString("yyyy-MMM dd"),         UnicodeString("2013-Sep 14")}, 
+            {false,      UnicodeString("2013-September 15"),          UnicodeString("yyyy-MMM dd"),         UnicodeString("")}, 
+            {false,      UnicodeString("2013-September 16"),          UnicodeString("yyyy-MMMM dd"),        UnicodeString("2013-September 16")}, 
+            {true,       UnicodeString("2013-Sep 17"),                UnicodeString("yyyy-LLL dd"),         UnicodeString("2013-Sep 17")}, 
+            {true,       UnicodeString("2013-September 18"),          UnicodeString("yyyy-LLL dd"),         UnicodeString("2013-Sep 18")}, 
+            {false,      UnicodeString("2013-September 19"),          UnicodeString("yyyy-LLL dd"),         UnicodeString("")}, 
+            {false,      UnicodeString("2013-September 20"),          UnicodeString("yyyy-LLLL dd"),        UnicodeString("2013-September 20")}, 
+            {true,       UnicodeString("2013 Sat Sep 21"),            UnicodeString("yyyy EEE MMM dd"),     UnicodeString("2013 Sat Sep 21")}, 
+            {true,       UnicodeString("2013 Sunday Sep 22"),         UnicodeString("yyyy EEE MMM dd"),     UnicodeString("2013 Sun Sep 22")}, 
+            {false,      UnicodeString("2013 Monday Sep 23"),         UnicodeString("yyyy EEE MMM dd"),     UnicodeString("")}, 
+            {false,      UnicodeString("2013 Tuesday Sep 24"),        UnicodeString("yyyy EEEE MMM dd"),    UnicodeString("2013 Tuesday Sep 24")}, 
+            {true,       UnicodeString("2013 Wed Sep 25"),            UnicodeString("yyyy eee MMM dd"),     UnicodeString("2013 Wed Sep 25")}, 
+            {true,       UnicodeString("2013 Thu Sep 26"),            UnicodeString("yyyy eee MMM dd"),     UnicodeString("2013 Thu Sep 26")}, 
+            {false,      UnicodeString("2013 Friday Sep 27"),         UnicodeString("yyyy eee MMM dd"),     UnicodeString("")}, 
+            {false,      UnicodeString("2013 Saturday Sep 28"),       UnicodeString("yyyy eeee MMM dd"),    UnicodeString("2013 Saturday Sep 28")}, 
+            {true,       UnicodeString("2013 Sun Sep 29"),            UnicodeString("yyyy ccc MMM dd"),     UnicodeString("2013 Sun Sep 29")}, 
+            {true,       UnicodeString("2013 Monday Sep 30"),         UnicodeString("yyyy ccc MMM dd"),     UnicodeString("2013 Mon Sep 30")}, 
+            {false,      UnicodeString("2013 Sunday Oct 13"),         UnicodeString("yyyy ccc MMM dd"),     UnicodeString("")}, 
+            {false,      UnicodeString("2013 Monday Oct 14"),         UnicodeString("yyyy cccc MMM dd"),    UnicodeString("2013 Monday Oct 14")}, 
+            {true,       UnicodeString("2013 Oct 15 Q4"),             UnicodeString("yyyy MMM dd QQQ"),     UnicodeString("2013 Oct 15 Q4")}, 
+            {true,       UnicodeString("2013 Oct 16 4th quarter"),    UnicodeString("yyyy MMM dd QQQ"),     UnicodeString("2013 Oct 16 Q4")}, 
+            {false,      UnicodeString("2013 Oct 17 4th quarter"),    UnicodeString("yyyy MMM dd QQQ"),     UnicodeString("")}, 
+            {false,      UnicodeString("2013 Oct 18 Q4"),             UnicodeString("yyyy MMM dd QQQ"),     UnicodeString("2013 Oct 18 Q4")}, 
+            {true,       UnicodeString("2013 Oct 19 Q4"),             UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("2013 Oct 19 4th quarter")}, 
+            {true,       UnicodeString("2013 Oct 20 4th quarter"),    UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("2013 Oct 20 4th quarter")}, 
+            {false,      UnicodeString("2013 Oct 21 Q4"),             UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("")}, 
+            {false,      UnicodeString("2013 Oct 22 4th quarter"),    UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("2013 Oct 22 4th quarter")},
+            {false,      NULL,                                        NULL,                                 NULL},
+ 	};  	
+
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(Calendar::createInstance(status));
+    if (U_FAILURE(status)) {
+        dataerrln(UnicodeString("FAIL: Unable to create Calendar for default timezone and locale."));
+        return;
+    }
+    const TestMultiPatternMatchItem * itemPtr;
+    DateFormat* sdmft = DateFormat::createDateInstance();
+    int32_t cnt = 0;
+    for (itemPtr = items; itemPtr->parseString != NULL; itemPtr++ ) {                                        
+       status = U_ZERO_ERROR;
+       ParsePosition pos(0);
+       ((SimpleDateFormat*) sdmft)->applyPattern(itemPtr->pattern);
+       if (U_FAILURE(status)) {
+           dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
+           continue;
+       }
+       ++cnt;
+       sdmft->setLenient(itemPtr->leniency);
+       sdmft->setBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, itemPtr->leniency, status);
+       UDate d = sdmft->parse(itemPtr->parseString, pos); 
+       
+       if(itemPtr->expectedResult.length() == 0) {
+           if(pos.getErrorIndex() != -1) {
+               continue;
+           } else {
+                errln("error: unexpected parse success - " + itemPtr->parseString + 
+                    " - error index " + pos.getErrorIndex() + 
+                    " - leniency " + itemPtr->leniency);
+                continue;
+           }
+       }
+       if(pos.getErrorIndex() != -1) { 
+ 	        errln("error: parse error for string - " +itemPtr->parseString + " -- idx["+pos.getIndex()+"] errIdx["+pos.getErrorIndex()+"]"); 
+ 	        continue; 
+ 	    }
+
+       UnicodeString formatResult(""); 
+       sdmft->format(d, formatResult);
+       if(formatResult.compare(itemPtr->expectedResult) != 0) { 
+ 	        errln("error: unexpected format result. expected[" + itemPtr->expectedResult + "]  but result was[" + formatResult + "]"); 
+ 	    } else { 
+            logln("formatted results match! - " + formatResult);  
+ 	    } 
+    }
+    delete sdmft;
+ }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

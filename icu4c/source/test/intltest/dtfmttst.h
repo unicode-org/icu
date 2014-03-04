@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -230,6 +230,8 @@ public:
     void TestDotAndAtLeniency();
 
     void TestDateFormatLeniency();
+
+    void TestParseMultiPatternMatch();
 
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);
