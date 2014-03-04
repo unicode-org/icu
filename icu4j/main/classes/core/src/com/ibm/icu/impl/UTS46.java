@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010-2011, International Business Machines
+* Copyright (C) 2010-2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -177,8 +177,7 @@ public final class UTS46 extends IDNA {
                         break;
                     }
                     if(toASCII) {
-                        // Permit an empty label at the end but not elsewhere.
-                        if(i==labelStart && i<(srcLength-1)) {
+                        if(i==labelStart) {
                             addLabelError(info, Error.EMPTY_LABEL);
                         } else if((i-labelStart)>63) {
                             addLabelError(info, Error.LABEL_TOO_LONG);
