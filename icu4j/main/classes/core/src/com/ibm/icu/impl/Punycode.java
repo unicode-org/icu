@@ -14,8 +14,6 @@ import com.ibm.icu.text.UTF16;
  * Ported code from ICU punycode.c 
  * @author ram
  */
-
-/* Package Private class */
 public final class Punycode {
 
     /* Punycode parameters for Bootstring */
