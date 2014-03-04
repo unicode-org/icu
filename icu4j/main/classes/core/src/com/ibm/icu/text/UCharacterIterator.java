@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -198,7 +198,7 @@ public abstract class UCharacterIterator
      * Returns the code point at index, and increments to the next code
      * point (post-increment semantics).  If index does not point to a
      * valid surrogate pair, the behavior is the same as
-     * <code>next()<code>.  Otherwise the iterator is incremented past
+     * <code>next()</code>.  Otherwise the iterator is incremented past
      * the surrogate pair, and the code point represented by the pair
      * is returned.
      * @return the next codepoint in text, or DONE if the index is at
@@ -287,7 +287,7 @@ public abstract class UCharacterIterator
      * Fills the buffer with the underlying text storage of the iterator
      * If the buffer capacity is not enough a exception is thrown. The capacity
      * of the fill in buffer should at least be equal to length of text in the 
-     * iterator obtained by calling <code>getLength()</code).
+     * iterator obtained by calling <code>getLength()</code>).
      * <b>Usage:</b>
      * 
      * <code>
@@ -321,7 +321,7 @@ public abstract class UCharacterIterator
     public abstract int getText(char[] fillIn, int offset); 
 
     /**
-     * Convenience override for <code>getText(char[], int)>/code> that provides
+     * Convenience override for <code>getText(char[], int)</code> that provides
      * an offset of 0.
      * @param fillIn an array of chars to fill with the underlying UTF-16 code 
      *         units.
