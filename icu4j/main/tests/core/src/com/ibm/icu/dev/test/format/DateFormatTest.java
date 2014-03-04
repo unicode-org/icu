@@ -4499,4 +4499,91 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    public void TestParseMultiPatternMatch() {
+        // For details see http://bugs.icu-project.org/trac/ticket/10336
+        
+        class TestMultiPatternMatchItem {
+            public boolean leniency;
+            public String parseString;
+            public String pattern;
+            public String expectedResult;   // null indicates expected error
+             // Simple constructor
+            public TestMultiPatternMatchItem(boolean len, String parString, String patt, String expResult) {
+                leniency = len;
+                pattern = patt;
+                parseString = parString;
+                expectedResult = expResult;
+            }
+        };
+
+        final TestMultiPatternMatchItem[] items = {
+                //                            leniency    parse String                  pattern                 expected result
+                new TestMultiPatternMatchItem(true,       "2013-Sep 13",                "yyyy-MMM dd",          "2013-Sep 13"),
+                new TestMultiPatternMatchItem(true,       "2013-September 14",          "yyyy-MMM dd",          "2013-Sep 14"),
+                new TestMultiPatternMatchItem(false,      "2013-September 15",          "yyyy-MMM dd",          null),
+                new TestMultiPatternMatchItem(false,      "2013-September 16",          "yyyy-MMMM dd",         "2013-September 16"),
+                new TestMultiPatternMatchItem(true,       "2013-Sep 17",                "yyyy-LLL dd",          "2013-Sep 17"),
+                new TestMultiPatternMatchItem(true,       "2013-September 18",          "yyyy-LLL dd",          "2013-Sep 18"),
+                new TestMultiPatternMatchItem(false,      "2013-September 19",          "yyyy-LLL dd",          null),
+                new TestMultiPatternMatchItem(false,      "2013-September 20",          "yyyy-LLLL dd",         "2013-September 20"),
+                new TestMultiPatternMatchItem(true,       "2013 Sat Sep 21",            "yyyy EEE MMM dd",      "2013 Sat Sep 21"),
+                new TestMultiPatternMatchItem(true,       "2013 Sunday Sep 22",         "yyyy EEE MMM dd",      "2013 Sun Sep 22"),
+                new TestMultiPatternMatchItem(false,      "2013 Monday Sep 23",         "yyyy EEE MMM dd",      null),
+                new TestMultiPatternMatchItem(false,      "2013 Tuesday Sep 24",        "yyyy EEEE MMM dd",     "2013 Tuesday Sep 24"),
+                new TestMultiPatternMatchItem(true,       "2013 Wed Sep 25",            "yyyy eee MMM dd",      "2013 Wed Sep 25"),
+                new TestMultiPatternMatchItem(true,       "2013 Thu Sep 26",            "yyyy eee MMM dd",      "2013 Thu Sep 26"),
+                new TestMultiPatternMatchItem(false,      "2013 Friday Sep 27",         "yyyy eee MMM dd",      null),
+                new TestMultiPatternMatchItem(false,      "2013 Saturday Sep 28",       "yyyy eeee MMM dd",    "2013 Saturday Sep 28"),
+                new TestMultiPatternMatchItem(true,       "2013 Sun Sep 29",            "yyyy ccc MMM dd",      "2013 Sun Sep 29"),
+                new TestMultiPatternMatchItem(true,       "2013 Monday Sep 30",         "yyyy ccc MMM dd",      "2013 Mon Sep 30"),
+                new TestMultiPatternMatchItem(false,      "2013 Sunday Oct 13",         "yyyy ccc MMM dd",      null),
+                new TestMultiPatternMatchItem(false,      "2013 Monday Oct 14",         "yyyy cccc MMM dd",     "2013 Monday Oct 14"),
+                new TestMultiPatternMatchItem(true,       "2013 Oct 15 Q4",             "yyyy MMM dd QQQ",      "2013 Oct 15 Q4"),
+                new TestMultiPatternMatchItem(true,       "2013 Oct 16 4th quarter",    "yyyy MMM dd QQQ",      "2013 Oct 16 Q4"),
+                new TestMultiPatternMatchItem(false,      "2013 Oct 17 4th quarter",    "yyyy MMM dd QQQ",      null),
+                new TestMultiPatternMatchItem(false,      "2013 Oct 18 Q4",             "yyyy MMM dd QQQ",      "2013 Oct 18 Q4"),
+                new TestMultiPatternMatchItem(true,       "2013 Oct 19 Q4",             "yyyy MMM dd qqqq",      "2013 Oct 19 4th quarter"),
+                new TestMultiPatternMatchItem(true,       "2013 Oct 20 4th quarter",    "yyyy MMM dd qqqq",      "2013 Oct 20 4th quarter"),
+                new TestMultiPatternMatchItem(false,      "2013 Oct 21 Q4",             "yyyy MMM dd qqqq",      null),
+                new TestMultiPatternMatchItem(false,      "2013 Oct 22 4th quarter",    "yyyy MMM dd qqqq",      "2013 Oct 22 4th quarter"),
+        };
+
+        StringBuffer result = new StringBuffer();
+        Date d = new Date();
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"), Locale.US); 
+        SimpleDateFormat sdfmt = new SimpleDateFormat();
+        ParsePosition p = new ParsePosition(0);
+        for (TestMultiPatternMatchItem item: items) {
+            cal.clear();
+            sdfmt.setCalendar(cal);
+            sdfmt.applyPattern(item.pattern);
+            sdfmt.setLenient(item.leniency);
+            sdfmt.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH, item.leniency);
+            result.setLength(0);
+            p.setIndex(0);
+            p.setErrorIndex(-1);
+            d = sdfmt.parse(item.parseString, p);
+            if(item.expectedResult == null) {
+                if(p.getErrorIndex() != -1)
+                    continue;
+                else
+                    errln("error: unexpected parse success..."+item.parseString + " w/ lenient="+item.leniency+" should have failed");
+            }
+            if(p.getErrorIndex() != -1) {
+                errln("error: parse error for string " +item.parseString + " -- idx["+p.getIndex()+"] errIdx["+p.getErrorIndex()+"]");
+                continue;
+            }
+            cal.setTime(d);
+            result = sdfmt.format(cal, result, new FieldPosition(0));
+            if(!result.toString().equalsIgnoreCase(item.expectedResult)) {
+                errln("error: unexpected format result. expected - " + item.expectedResult + "  but result was - " + result);
+            } else {
+                logln("formatted results match! - " + result.toString()); 
+            }
+        }
+        
+    }
+    
+    
 }
