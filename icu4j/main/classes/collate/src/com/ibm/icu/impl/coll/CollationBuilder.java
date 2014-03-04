@@ -1356,9 +1356,9 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
     private static int indexFromTempCE32(int tempCE32) {
         tempCE32 -= 0x40400620;
         return
-            ((int)(tempCE32 >> 11) & 0xfe000) |
-            ((int)(tempCE32 >> 10) & 0x1fc0) |
-            ((int)(tempCE32 >> 8) & 0x3f);
+            ((tempCE32 >> 11) & 0xfe000) |
+            ((tempCE32 >> 10) & 0x1fc0) |
+            ((tempCE32 >> 8) & 0x3f);
     }
     private static boolean isTempCE32(int ce32) {
         return
