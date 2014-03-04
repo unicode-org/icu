@@ -285,13 +285,17 @@ typedef enum {
      UCOL_DECOMPOSITION_MODE = UCOL_NORMALIZATION_MODE,
      /** The strength attribute. Can be either UCOL_PRIMARY, UCOL_SECONDARY,
       * UCOL_TERTIARY, UCOL_QUATERNARY or UCOL_IDENTICAL. The usual strength
-      * for most locales (except Japanese) is tertiary. Quaternary strength 
+      * for most locales (except Japanese) is tertiary.
+      *
+      * Quaternary strength 
       * is useful when combined with shifted setting for alternate handling
-      * attribute and for JIS x 4061 collation, when it is used to distinguish
-      * between Katakana  and Hiragana (this is achieved by setting the 
-      * UCOL_HIRAGANA_QUATERNARY mode to on. Otherwise, quaternary level
-      * is affected only by the number of non ignorable code points in
-      * the string. Identical strength is rarely useful, as it amounts 
+      * attribute and for JIS X 4061 collation, when it is used to distinguish
+      * between Katakana and Hiragana.
+      * Otherwise, quaternary level
+      * is affected only by the number of non-ignorable code points in
+      * the string.
+      *
+      * Identical strength is rarely useful, as it amounts 
       * to codepoints of the NFD form of the string.
       * @stable ICU 2.0
       */
@@ -301,11 +305,12 @@ typedef enum {
       * non-ignorables on quaternary level This is a sneaky way to produce JIS
       * sort order.
       *
-      * This attribute is an implementation detail of the CLDR Japanese tailoring.
-      * The implementation might change to use a different mechanism
-      * to achieve the same Japanese sort order.
+      * This attribute was an implementation detail of the CLDR Japanese tailoring.
       * Since ICU 50, this attribute is not settable any more via API functions.
-      * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
+      * Since CLDR 25/ICU 53, explicit quaternary relations are used
+      * to achieve the same Japanese sort order.
+      *
+      * @deprecated ICU 50 Implementation detail, cannot be set via API, was removed from implementation.
       */
      UCOL_HIRAGANA_QUATERNARY_MODE = UCOL_STRENGTH + 1,
 #endif  /* U_HIDE_DEPRECATED_API */
