@@ -51,6 +51,12 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
     }
 
     @Override
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42; // any arbitrary constant will do
+    }
+
+    @Override
     public void resetToOffset(int newOffset) {
         reset();
         seq = rawSeq;

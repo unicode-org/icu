@@ -201,6 +201,7 @@ public abstract class CollationIterator {
         // Assume that the caller compares the data.
         // Ignore skipped since that should be unused between calls to nextCE().
         // (It only stays around to avoid another memory allocation.)
+        if(other == null) { return false; }
         if(!this.getClass().equals(other.getClass())) { return false; }
         CollationIterator o = (CollationIterator)other;
         if(!(ceBuffer.length == o.ceBuffer.length &&

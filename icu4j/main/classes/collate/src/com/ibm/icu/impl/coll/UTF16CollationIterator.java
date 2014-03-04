@@ -41,6 +41,12 @@ public class UTF16CollationIterator extends CollationIterator {
     }
 
     @Override
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42; // any arbitrary constant will do
+    }
+
+    @Override
     public void resetToOffset(int newOffset) {
         reset();
         pos = start + newOffset;

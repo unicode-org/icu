@@ -101,6 +101,7 @@ public final class CollationSettings extends SharedObject {
 
     @Override
     public boolean equals(Object other) {
+        if(other == null) { return false; }
         if(!this.getClass().equals(other.getClass())) { return false; }
         CollationSettings o = (CollationSettings)other;
         if(options != o.options) { return false; }
