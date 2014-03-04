@@ -862,12 +862,18 @@ typedef enum UDateFormatBooleanAttribute {
      * @draft ICU 53
      */
     UDAT_PARSE_PARTIAL_MATCH = 2,
+    /**  
+     * indicates tolerance of pattern mismatch between input data and specified format pattern. 
+     * e.g. accepting "September" for a month pattern of MMM ("Sep")   
+     * @draft ICU 53
+     */ 
+    UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH = 3,
 #endif /* U_HIDE_DRAFT_API */
     /**
      * count boolean date format constants
      * @draft ICU 53
      */
-    UDAT_BOOLEAN_ATTRIBUTE_COUNT = 3
+    UDAT_BOOLEAN_ATTRIBUTE_COUNT = 4
 } UDateFormatBooleanAttribute;
 
 #ifndef U_HIDE_DRAFT_API
