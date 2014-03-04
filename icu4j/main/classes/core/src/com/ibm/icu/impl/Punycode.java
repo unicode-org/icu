@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2003-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -28,8 +28,8 @@ public final class Punycode {
     private static final int INITIAL_N      = 0x80;
     
     /* "Basic" Unicode/ASCII code points */
-    private static final int HYPHEN         = 0x2d;
-    private static final int DELIMITER      = HYPHEN;
+    private static final char HYPHEN        = 0x2d;
+    private static final char DELIMITER     = HYPHEN;
     
     private static final int ZERO           = 0x30;
     //private static final int NINE           = 0x39;
@@ -39,10 +39,7 @@ public final class Punycode {
     
     private static final int CAPITAL_A      = 0x41;
     private static final int CAPITAL_Z      = 0x5a;
-    private static final int MAX_CP_COUNT   = 200;
-    //private static final int UINT_MAGIC     = 0x80000000;
-    //private static final long ULONG_MAGIC   = 0x8000000000000000L;
-    
+
     private static int adaptBias(int delta, int length, boolean firstTime){
         if(firstTime){
             delta /=DAMP;
@@ -133,35 +130,22 @@ public final class Punycode {
      * @return An array of ASCII code points.
      */
     public static StringBuilder encode(CharSequence src, boolean[] caseFlags) throws StringPrepParseException{
-        
-        int[] cpBuffer = new int[MAX_CP_COUNT];
-        int n, delta, handledCPCount, basicLength, destLength, bias, j, m, q, k, t, srcCPCount;
+        int n, delta, handledCPCount, basicLength, bias, j, m, q, k, t, srcCPCount;
         char c, c2;
         int srcLength = src.length();
-        int destCapacity = MAX_CP_COUNT;
-        char[] dest = new char[destCapacity];
-        StringBuilder result = new StringBuilder();
+        int[] cpBuffer = new int[srcLength];
+        StringBuilder dest = new StringBuilder(srcLength);
         /*
          * Handle the basic code points and
          * convert extended ones to UTF-32 in cpBuffer (caseFlag in sign bit):
          */
-        srcCPCount=destLength=0;
+        srcCPCount=0;
         
         for(j=0; j<srcLength; ++j) {
-            if(srcCPCount==MAX_CP_COUNT) {
-                /* too many input code points */
-                throw new IndexOutOfBoundsException();
-            }
             c=src.charAt(j);
             if(isBasic(c)) {
-                if(destLength<destCapacity) {
-                    cpBuffer[srcCPCount++]=0;
-                    dest[destLength]=
-                        caseFlags!=null ?
-                            asciiCaseMap(c, caseFlags[j]) :
-                            c;
-                }
-                ++destLength;
+                cpBuffer[srcCPCount++]=0;
+                dest.append(caseFlags!=null ? asciiCaseMap(c, caseFlags[j]) : c);
             } else {
                 n=((caseFlags!=null && caseFlags[j])? 1 : 0)<<31L;
                 if(!UTF16.isSurrogate(c)) {
@@ -179,12 +163,9 @@ public final class Punycode {
         }
 
         /* Finish the basic string - if it is not empty - with a delimiter. */
-        basicLength=destLength;
+        basicLength=dest.length();
         if(basicLength>0) {
-            if(destLength<destCapacity) {
-                dest[destLength]=DELIMITER;
-            }
-            ++destLength;
+            dest.append(DELIMITER);
         }
 
         /*
@@ -215,7 +196,7 @@ public final class Punycode {
              * Increase delta enough to advance the decoder's
              * <n,i> state to <m,0>, but guard against overflow:
              */
-            if(m-n>(0x7fffffff-MAX_CP_COUNT-delta)/(handledCPCount+1)) {
+            if(m-n>(0x7fffffff-delta)/(handledCPCount+1)) {
                 throw new IllegalStateException("Internal program error");
             }
             delta+=(m-n)*(handledCPCount+1);
@@ -251,15 +232,11 @@ public final class Punycode {
                             break;
                         }
 
-                        if(destLength<destCapacity) {
-                            dest[destLength++]=digitToBasic(t+(q-t)%(BASE-t), false);
-                        }
+                        dest.append(digitToBasic(t+(q-t)%(BASE-t), false));
                         q=(q-t)/(BASE-t);
                     }
 
-                    if(destLength<destCapacity) {
-                        dest[destLength++]=digitToBasic(q, (cpBuffer[j]<0));
-                    }
+                    dest.append(digitToBasic(q, (cpBuffer[j]<0)));
                     bias=adaptBias(delta, handledCPCount+1,(handledCPCount==basicLength));
                     delta=0;
                     ++handledCPCount;
@@ -270,7 +247,7 @@ public final class Punycode {
             ++n;
         }
 
-        return result.append(dest, 0, destLength);
+        return dest;
     }
     
     private static boolean isBasic(int ch){
@@ -295,12 +272,10 @@ public final class Punycode {
     public static StringBuilder decode(CharSequence src, boolean[] caseFlags) 
                                throws StringPrepParseException{
         int srcLength = src.length();
-        StringBuilder result = new StringBuilder();
-        int n, destLength, i, bias, basicLength, j, in, oldi, w, k, digit, t,
+        StringBuilder dest = new StringBuilder(src.length());
+        int n, i, bias, basicLength, j, in, oldi, w, k, digit, t,
                 destCPCount, firstSupplementaryIndex, cpLength;
         char b;
-        int destCapacity = MAX_CP_COUNT;
-        char[] dest = new char[destCapacity];
 
         /*
          * Handle the basic code points:
@@ -308,27 +283,24 @@ public final class Punycode {
          * before the last delimiter, or 0 if there is none,
          * then copy the first basicLength code points to the output.
          *
-         * The two following loops iterate backward.
+         * The following loop iterates backward.
          */
         for(j=srcLength; j>0;) {
             if(src.charAt(--j)==DELIMITER) {
                 break;
             }
         }
-        destLength=basicLength=destCPCount=j;
+        basicLength=destCPCount=j;
 
-        while(j>0) {
-            b=src.charAt(--j);
+        for(j=0; j<basicLength; ++j) {
+            b=src.charAt(j);
             if(!isBasic(b)) {
                 throw new StringPrepParseException("Illegal char found", StringPrepParseException.INVALID_CHAR_FOUND);
             }
+            dest.append(b);
 
-            if(j<destCapacity) {
-                dest[j]= b;
-
-                if(caseFlags!=null) {
-                    caseFlags[j]=isBasicUpperCase(b);
-                }
+            if(caseFlags!=null && j<caseFlags.length) {
+                caseFlags[j]=isBasicUpperCase(b);
             }
         }
 
@@ -413,64 +385,53 @@ public final class Punycode {
             }
 
             /* Insert n at position i of the output: */
-            cpLength=UTF16.getCharCount(n);
-            if((destLength+cpLength)<destCapacity) {
-                int codeUnitIndex;
+            cpLength=Character.charCount(n);
+            int codeUnitIndex;
 
-                /*
-                 * Handle indexes when supplementary code points are present.
-                 *
-                 * In almost all cases, there will be only BMP code points before i
-                 * and even in the entire string.
-                 * This is handled with the same efficiency as with UTF-32.
-                 *
-                 * Only the rare cases with supplementary code points are handled
-                 * more slowly - but not too bad since this is an insertion anyway.
-                 */
-                if(i<=firstSupplementaryIndex) {
-                    codeUnitIndex=i;
-                    if(cpLength>1) {
-                        firstSupplementaryIndex=codeUnitIndex;
-                    } else {
-                        ++firstSupplementaryIndex;
-                    }
+            /*
+             * Handle indexes when supplementary code points are present.
+             *
+             * In almost all cases, there will be only BMP code points before i
+             * and even in the entire string.
+             * This is handled with the same efficiency as with UTF-32.
+             *
+             * Only the rare cases with supplementary code points are handled
+             * more slowly - but not too bad since this is an insertion anyway.
+             */
+            if(i<=firstSupplementaryIndex) {
+                codeUnitIndex=i;
+                if(cpLength>1) {
+                    firstSupplementaryIndex=codeUnitIndex;
                 } else {
-                    codeUnitIndex=firstSupplementaryIndex;
-                    codeUnitIndex=UTF16.moveCodePointOffset(dest, 0, destLength, codeUnitIndex, i-codeUnitIndex);
+                    ++firstSupplementaryIndex;
                 }
+            } else {
+                codeUnitIndex=dest.offsetByCodePoints(firstSupplementaryIndex, i-firstSupplementaryIndex);
+            }
 
-                /* use the UChar index codeUnitIndex instead of the code point index i */
-                if(codeUnitIndex<destLength) {
-                    System.arraycopy(dest, codeUnitIndex,
-                                     dest, codeUnitIndex+cpLength,
-                                    (destLength-codeUnitIndex));
-                    if(caseFlags!=null) {
-                        System.arraycopy(caseFlags, codeUnitIndex,
-                                         caseFlags, codeUnitIndex+cpLength,
-                                         destLength-codeUnitIndex);
-                    }
+            /* use the UChar index codeUnitIndex instead of the code point index i */
+            if(caseFlags!=null && (dest.length()+cpLength)<=caseFlags.length) {
+                if(codeUnitIndex<dest.length()) {
+                    System.arraycopy(caseFlags, codeUnitIndex,
+                                     caseFlags, codeUnitIndex+cpLength,
+                                     dest.length()-codeUnitIndex);
                 }
-                if(cpLength==1) {
-                    /* BMP, insert one code unit */
-                    dest[codeUnitIndex]=(char)n;
-                } else {
-                    /* supplementary character, insert two code units */
-                    dest[codeUnitIndex]=UTF16.getLeadSurrogate(n);
-                    dest[codeUnitIndex+1]=UTF16.getTrailSurrogate(n);
-                }
-                if(caseFlags!=null) {
-                    /* Case of last character determines uppercase flag: */
-                    caseFlags[codeUnitIndex]=isBasicUpperCase(src.charAt(in-1));
-                    if(cpLength==2) {
-                        caseFlags[codeUnitIndex+1]=false;
-                    }
+                /* Case of last character determines uppercase flag: */
+                caseFlags[codeUnitIndex]=isBasicUpperCase(src.charAt(in-1));
+                if(cpLength==2) {
+                    caseFlags[codeUnitIndex+1]=false;
                 }
             }
-            destLength+=cpLength;
+            if(cpLength==1) {
+                /* BMP, insert one code unit */
+                dest.insert(codeUnitIndex, (char)n);
+            } else {
+                /* supplementary character, insert two code units */
+                dest.insert(codeUnitIndex, UTF16.getLeadSurrogate(n));
+                dest.insert(codeUnitIndex+1, UTF16.getTrailSurrogate(n));
+            }
             ++i;
         }
-        result.append(dest, 0, destLength);
-        return result;
+        return dest;
     }
 }
-
