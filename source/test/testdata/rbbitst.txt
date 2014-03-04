@@ -593,7 +593,9 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 <data>•123  •Start •with •a •number.•</data>
 
 <data>•'•start •with •a •case-•ignorable •cha'r'a'cter•</data>
-
+<data>•'  '' •start •with •case-•ignorable & •case-•insensitive •cha'r'a'cter•</data>
+<data>•  ''•aaa' •bbb '•ccc' '•ddd''' '''•eee   '''•fff'''   •ggg  ''•</data>
+# Note: apostrophe is case-ignorable. space is not cased.
 
 ##########################################################################################
 #
