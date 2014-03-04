@@ -4295,7 +4295,7 @@ void DateFormatTest::TestParseMultiPatternMatch() {
             {true,       UnicodeString("2013 Oct 20 4th quarter"),    UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("2013 Oct 20 4th quarter")}, 
             {false,      UnicodeString("2013 Oct 21 Q4"),             UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("")}, 
             {false,      UnicodeString("2013 Oct 22 4th quarter"),    UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("2013 Oct 22 4th quarter")},
-            {false,      NULL,                                        NULL,                                 NULL},
+            {false,      (UnicodeString)NULL,                         (UnicodeString)NULL,                  (UnicodeString)NULL},
  	};  	
 
     UErrorCode status = U_ZERO_ERROR;
