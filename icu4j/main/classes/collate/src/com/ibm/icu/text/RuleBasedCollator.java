@@ -384,16 +384,16 @@ public final class RuleBasedCollator extends Collator {
      * positions Hiragana characters before all non-ignorable characters in QUATERNARY strength. This is to produce a
      * correct JIS collation order, distinguishing between Katakana and Hiragana characters.
      *
-     * This attribute is an implementation detail of the CLDR Japanese tailoring.
-     * The implementation might change to use a different mechanism
-     * to achieve the same Japanese sort order.
+     * <p>This attribute was an implementation detail of the CLDR Japanese tailoring.
      * Since ICU 50, this attribute is not settable any more via API functions.
-     * 
+     * Since CLDR 25/ICU 53, explicit quaternary relations are used
+     * to achieve the same Japanese sort order.
+     *
      * @param flag
      *            true if Hiragana Quaternary mode is to be on, false otherwise
      * @see #setHiraganaQuaternaryDefault
      * @see #isHiraganaQuaternary
-     * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
+     * @deprecated ICU 50 Implementation detail, cannot be set via API, was removed from implementation.
      */
     @Deprecated
     public void setHiraganaQuaternary(boolean flag) {
@@ -404,14 +404,14 @@ public final class RuleBasedCollator extends Collator {
      * Sets the Hiragana Quaternary mode to the initial mode set during construction of the RuleBasedCollator. See
      * setHiraganaQuaternary(boolean) for more details.
      *
-     * This attribute is an implementation detail of the CLDR Japanese tailoring.
-     * The implementation might change to use a different mechanism
-     * to achieve the same Japanese sort order.
+     * <p>This attribute was an implementation detail of the CLDR Japanese tailoring.
      * Since ICU 50, this attribute is not settable any more via API functions.
-     * 
+     * Since CLDR 25/ICU 53, explicit quaternary relations are used
+     * to achieve the same Japanese sort order.
+     *
      * @see #setHiraganaQuaternary(boolean)
      * @see #isHiraganaQuaternary
-     * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
+     * @deprecated ICU 50 Implementation detail, cannot be set via API, was removed from implementation.
      */
     @Deprecated
     public void setHiraganaQuaternaryDefault() {
@@ -1373,19 +1373,19 @@ public final class RuleBasedCollator extends Collator {
     /**
      * Checks if the Hiragana Quaternary mode is set on. See setHiraganaQuaternary(boolean) for more details.
      *
-     * This attribute is an implementation detail of the CLDR Japanese tailoring.
-     * The implementation might change to use a different mechanism
-     * to achieve the same Japanese sort order.
+     * <p>This attribute was an implementation detail of the CLDR Japanese tailoring.
      * Since ICU 50, this attribute is not settable any more via API functions.
-     * 
-     * @return flag true if Hiragana Quaternary mode is on, false otherwise
+     * Since CLDR 25/ICU 53, explicit quaternary relations are used
+     * to achieve the same Japanese sort order.
+     *
+     * @return false
      * @see #setHiraganaQuaternaryDefault
      * @see #setHiraganaQuaternary(boolean)
-     * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
+     * @deprecated ICU 50 Implementation detail, cannot be set via API, was removed from implementation.
      */
     @Deprecated
     public boolean isHiraganaQuaternary() {
-        return false;  // TODO: change docs to say always returns false?
+        return false;
     }
 
     /**
