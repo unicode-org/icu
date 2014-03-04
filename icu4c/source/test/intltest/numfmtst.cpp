@@ -133,6 +133,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestRoundingScientific10542);
   TESTCASE_AUTO(TestZeroScientific10547);
   TESTCASE_AUTO(TestAccountingCurrency);
+  TESTCASE_AUTO(TestEquality);
   TESTCASE_AUTO_END;
 }
 
@@ -7598,6 +7599,31 @@ void NumberFormatTest::TestAccountingCurrency() {
         (Formattable)-1000.5, UnicodeString("(\\uFFE51,000)").unescape(), FALSE, status);
     expect(NumberFormat::createInstance("de_DE", style, status),
         (Formattable)-23456.7, UnicodeString("-23.456,70\\u00A0\\u20AC").unescape(), TRUE, status);
+}
+
+// for #5186
+void NumberFormatTest::TestEquality() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols* symbols = new DecimalFormatSymbols(Locale("root"), status);
+    if (U_FAILURE(status)) {
+    	dataerrln("Fail: can't create DecimalFormatSymbols for root");
+    	return;
+    }
+    UnicodeString pattern("#,##0.###");
+    DecimalFormat* fmtBase = new DecimalFormat(pattern, symbols, status);
+    if (U_FAILURE(status)) {
+    	dataerrln("Fail: can't create DecimalFormat using root symbols");
+    	return;
+    }
+
+    DecimalFormat* fmtClone = (DecimalFormat*)fmtBase->clone();
+    fmtClone->setFormatWidth(fmtBase->getFormatWidth() + 32);
+    if (*fmtClone == *fmtBase) {
+        errln("Error: DecimalFormat == does not distinguish objects that differ only in FormatWidth");
+    }
+    delete fmtClone;
+
+    delete fmtBase;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

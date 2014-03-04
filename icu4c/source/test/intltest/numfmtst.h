@@ -180,6 +180,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestRoundingScientific10542();
     void TestZeroScientific10547();
     void TestAccountingCurrency();
+    void TestEquality();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
