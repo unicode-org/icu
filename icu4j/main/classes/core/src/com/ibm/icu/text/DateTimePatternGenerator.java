@@ -29,6 +29,7 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
@@ -1087,7 +1088,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return result;
         } catch (CloneNotSupportedException e) {
             ///CLOVER:OFF
-            throw new IllegalArgumentException("Internal Error");
+            throw new ICUCloneNotSupportedException("Internal Error", e);
             ///CLOVER:ON
         }
     }

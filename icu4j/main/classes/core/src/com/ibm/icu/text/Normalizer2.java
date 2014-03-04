@@ -227,6 +227,9 @@ public abstract class Normalizer2 {
      * Writes the normalized form of the source string to the destination Appendable
      * and returns the destination Appendable.
      * The source and destination strings must be different objects.
+     *
+     * <p>Any {@link java.io.IOException} is wrapped into a {@link com.ibm.icu.util.ICUUncheckedIOException}.
+     *
      * @param src source string
      * @param dest destination Appendable; gets normalized src appended
      * @return dest

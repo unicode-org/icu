@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011-2012, International Business Machines
+*   Copyright (C) 2011-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2011jan06
@@ -920,7 +920,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
         try {
             out.append((char)c);
         } catch(IOException e) {
-            throw new RuntimeException(e);
+            throw new ICUUncheckedIOException(e);
         }
     }
 

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -181,7 +182,7 @@ public final class CollationLoader {
         try {
             CollationDataReader.read(root, inStream, t);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load collation tailoring data for locale:"
+            throw new ICUUncheckedIOException("Failed to load collation tailoring data for locale:"
                     + actualLocale + " type:" + type, e);
         }   // No need to close BAIS.
 

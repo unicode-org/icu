@@ -22,6 +22,7 @@ import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
@@ -748,7 +749,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             // other fields are bit-copied
         } catch (CloneNotSupportedException e) {
             ///CLOVER:OFF
-            throw new IllegalStateException();
+            throw new ICUCloneNotSupportedException(e);
             ///CLOVER:ON
         }
     }

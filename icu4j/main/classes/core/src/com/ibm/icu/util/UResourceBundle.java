@@ -441,7 +441,7 @@ public abstract class UResourceBundle extends ResourceBundle {
                 return super.clone();
             } catch (CloneNotSupportedException e) {
                 //this should never happen
-                throw new IllegalStateException();
+                throw new ICUCloneNotSupportedException(e);
             }
         }
 

@@ -24,6 +24,7 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
@@ -1141,7 +1142,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             return other;
         } catch (CloneNotSupportedException e) {
             ///CLOVER:OFF
-            throw new IllegalStateException();
+            throw new ICUCloneNotSupportedException(e);
             ///CLOVER:ON
         }
     }

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2013, International Business Machines
+*   Copyright (C) 2010-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2010aug21
@@ -15,6 +15,7 @@ import java.util.Locale;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.util.Freezable;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 
 //Note: Minimize ICU dependencies, only use a very small part of the ICU core.
 //In particular, do not depend on *Format classes.
@@ -876,7 +877,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
         try {
             newMsg=(MessagePattern)super.clone();
         } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
+            throw new ICUCloneNotSupportedException(e);
         }
         newMsg.parts=(ArrayList<Part>)parts.clone();
         if(numericValues!=null) {

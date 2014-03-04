@@ -19,6 +19,7 @@ import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.coll.CollationLoader;
 import com.ibm.icu.impl.coll.CollationTailoring;
 import com.ibm.icu.text.Collator.CollatorFactory;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
@@ -42,7 +43,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         }
         catch (CloneNotSupportedException e) {
         ///CLOVER:OFF
-            throw new IllegalStateException(e.getMessage());
+            throw new ICUCloneNotSupportedException(e);
         ///CLOVER:ON
         }
     }

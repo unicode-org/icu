@@ -15,6 +15,7 @@ import com.ibm.icu.impl.Normalizer2Impl.Hangul;
 import com.ibm.icu.impl.Trie2_32;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
+import com.ibm.icu.util.ICUException;
 
 /**
  * Collation element iterator and abstract character iterator.
@@ -443,7 +444,7 @@ public abstract class CollationIterator {
     }
 
     protected int getCE32FromBuilderData(int ce32) {
-        throw new RuntimeException("internal program error: should be unreachable");
+        throw new ICUException("internal program error: should be unreachable");
     }
 
     protected final void appendCEsFromCE32(CollationData d, int c, int ce32,
@@ -452,7 +453,7 @@ public abstract class CollationIterator {
             switch(Collation.tagFromCE32(ce32)) {
             case Collation.FALLBACK_TAG:
             case Collation.RESERVED_TAG_3:
-                throw new RuntimeException("internal program error: should be unreachable");
+                throw new ICUException("internal program error: should be unreachable");
             case Collation.LONG_PRIMARY_TAG:
                 ceBuffer.append(Collation.ceFromLongPrimaryCE32(ce32));
                 return;

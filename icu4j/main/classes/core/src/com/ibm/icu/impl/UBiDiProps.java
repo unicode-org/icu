@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2013, International Business Machines
+*   Copyright (C) 2004-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,6 +28,7 @@ import java.util.Iterator;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ICUUncheckedIOException;
 
 public final class UBiDiProps {
     // constructors etc. --------------------------------------------------- ***
@@ -325,7 +326,7 @@ public final class UBiDiProps {
         try {
             INSTANCE = new UBiDiProps();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ICUUncheckedIOException(e);
         }
     }
 }

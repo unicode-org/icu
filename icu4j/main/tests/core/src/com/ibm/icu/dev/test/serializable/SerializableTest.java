@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  *
  */
@@ -18,6 +18,7 @@ import com.ibm.icu.dev.test.format.PluralRulesTest;
 import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.util.AnnualTimeZoneRule;
@@ -26,6 +27,9 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.util.DateTimeRule;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
+import com.ibm.icu.util.ICUException;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.InitialTimeZoneRule;
 import com.ibm.icu.util.RuleBasedTimeZone;
 import com.ibm.icu.util.SimpleTimeZone;
@@ -640,6 +644,54 @@ public class SerializableTest extends TestFmwk.TestGroup
         }
     }
 
+    private static abstract class ExceptionHandlerBase implements Handler {
+        public boolean hasSameBehavior(Object a, Object b) {
+            return sameThrowable((Exception) a, (Exception) b);
+        }
+
+        // Exception.equals() does not seem to work.
+        private static final boolean sameThrowable(Throwable a, Throwable b) {
+            return a == null ? b == null : 
+                    b == null ? false :
+                            a.getClass().equals(b.getClass()) &&
+                            Utility.objectEquals(a.getMessage(), b.getMessage()) &&
+                            sameThrowable(a.getCause(), b.getCause());
+        }
+    }
+
+    private static class ICUExceptionHandler extends ExceptionHandlerBase {
+        public Object[] getTestObjects() {
+            return new ICUException[] {
+                    new ICUException(),
+                    new ICUException("msg1"),
+                    new ICUException(new RuntimeException("rte1")),
+                    new ICUException("msg2", new RuntimeException("rte2"))
+            };
+        }
+    }
+
+    private static class ICUUncheckedIOExceptionHandler extends ExceptionHandlerBase {
+        public Object[] getTestObjects() {
+            return new ICUUncheckedIOException[] {
+                    new ICUUncheckedIOException(),
+                    new ICUUncheckedIOException("msg1"),
+                    new ICUUncheckedIOException(new RuntimeException("rte1")),
+                    new ICUUncheckedIOException("msg2", new RuntimeException("rte2"))
+            };
+        }
+    }
+
+    private static class ICUCloneNotSupportedExceptionHandler extends ExceptionHandlerBase {
+        public Object[] getTestObjects() {
+            return new ICUCloneNotSupportedException[] {
+                    new ICUCloneNotSupportedException(),
+                    new ICUCloneNotSupportedException("msg1"),
+                    new ICUCloneNotSupportedException(new RuntimeException("rte1")),
+                    new ICUCloneNotSupportedException("msg2", new RuntimeException("rte2"))
+            };
+        }
+    }
+
     private static HashMap map = new HashMap();
     
     static {
@@ -719,6 +771,10 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.util.MeasureUnit", new MeasureUnitTest.MeasureUnitHandler());
         map.put("com.ibm.icu.util.TimeUnit", new MeasureUnitTest.MeasureUnitHandler());
         map.put("com.ibm.icu.text.MeasureFormat", new MeasureUnitTest.MeasureFormatHandler());
+
+        map.put("com.ibm.icu.util.ICUException", new ICUExceptionHandler());
+        map.put("com.ibm.icu.util.ICUUncheckedIOException", new ICUUncheckedIOExceptionHandler());
+        map.put("com.ibm.icu.util.ICUCloneNotSupportedException", new ICUCloneNotSupportedExceptionHandler());
     }
     
     public SerializableTest()

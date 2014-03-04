@@ -15,6 +15,7 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.IDNA;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.StringPrepParseException;
+import com.ibm.icu.util.ICUException;
 
 // Note about tests for IDNA.Error.DOMAIN_NAME_TOO_LONG:
 //
@@ -453,7 +454,7 @@ public final class UTS46 extends IDNA {
                     try {
                         punycode=Punycode.encode(labelString.subSequence(labelStart, labelStart+labelLength), null);
                     } catch (StringPrepParseException e) {
-                        throw new RuntimeException(e);  // unexpected
+                        throw new ICUException(e);  // unexpected
                     }
                     punycode.insert(0, "xn--");
                     if(punycode.length()>63) {
