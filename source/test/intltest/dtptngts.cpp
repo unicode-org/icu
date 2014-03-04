@@ -863,15 +863,28 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
         { "be", "HHmm", "HH.mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
         { "be", "hhmm", "hh.mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
         //
-        { "en",                   "yyyy", "yyyy", UDATPG_MATCH_NO_OPTIONS },
-        { "en",                   "YYYY", "YYYY", UDATPG_MATCH_NO_OPTIONS },
-        { "en",                   "U",    "y",    UDATPG_MATCH_NO_OPTIONS },
-        { "en@calendar=japanese", "yyyy", "y G",  UDATPG_MATCH_NO_OPTIONS },
-        { "en@calendar=japanese", "YYYY", "Y G",  UDATPG_MATCH_NO_OPTIONS },
-        { "en@calendar=japanese", "U",    "y G",  UDATPG_MATCH_NO_OPTIONS },
-        { "en@calendar=chinese",  "yyyy", "U",    UDATPG_MATCH_NO_OPTIONS },
-        { "en@calendar=chinese",  "YYYY", "Y",    UDATPG_MATCH_NO_OPTIONS },
-        { "en@calendar=chinese",  "U",    "U",    UDATPG_MATCH_NO_OPTIONS },
+        { "en",                   "yyyy",  "yyyy",  UDATPG_MATCH_NO_OPTIONS },
+        { "en",                   "YYYY",  "YYYY",  UDATPG_MATCH_NO_OPTIONS },
+        { "en",                   "U",     "y",     UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=japanese", "yyyy",  "y G",   UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=japanese", "YYYY",  "Y G",   UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=japanese", "U",     "y G",   UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "yyyy",  "U",     UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "YYYY",  "Y",     UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "U",     "U",     UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "Gy",    "U",     UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "GU",    "U",     UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "ULLL",  "MMM U", UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "yMMM",  "MMM U", UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "GUMMM", "MMM U", UDATPG_MATCH_NO_OPTIONS },
+        { "zh@calendar=chinese",  "yyyy",  "U\\u5E74",    UDATPG_MATCH_NO_OPTIONS },
+        { "zh@calendar=chinese",  "YYYY",  "Y\\u5E74",    UDATPG_MATCH_NO_OPTIONS },
+        { "zh@calendar=chinese",  "U",     "U\\u5E74",    UDATPG_MATCH_NO_OPTIONS },
+        { "zh@calendar=chinese",  "Gy",    "U\\u5E74",    UDATPG_MATCH_NO_OPTIONS },
+        { "zh@calendar=chinese",  "GU",    "U\\u5E74",    UDATPG_MATCH_NO_OPTIONS },
+        { "zh@calendar=chinese",  "ULLL",  "U\\u5E74MMM", UDATPG_MATCH_NO_OPTIONS },
+        { "zh@calendar=chinese",  "yMMM",  "U\\u5E74MMM", UDATPG_MATCH_NO_OPTIONS },
+        { "zh@calendar=chinese",  "GUMMM", "U\\u5E74MMM", UDATPG_MATCH_NO_OPTIONS },
     };
     
     int count = sizeof(testData) / sizeof(testData[0]);
@@ -882,7 +895,7 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
 
         Locale locale(testDataPtr->locale);
         UnicodeString skel(testDataPtr->skel);
-        UnicodeString expectedPattern(testDataPtr->expectedPattern);
+        UnicodeString expectedPattern(UnicodeString(testDataPtr->expectedPattern).unescape());
         UDateTimePatternMatchOptions options = testDataPtr->options;
 
         DateTimePatternGenerator * dtpgen = DateTimePatternGenerator::createInstance(locale, status);
