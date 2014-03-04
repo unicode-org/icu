@@ -819,6 +819,7 @@ void SimpleDateFormat::initializeBooleanAttributes()
     setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status);
     setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
     setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    setBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, true, status);
 }
 
 /* Define one-century window into which to disambiguate dates using
@@ -2722,17 +2723,25 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             }
             int32_t newStart = 0;
             if (patternCharIndex==UDAT_MONTH_FIELD) {
-                newStart = matchString(text, start, UCAL_MONTH, fSymbols->fMonths, fSymbols->fMonthsCount, wideMonthPat, cal); // try MMMM
-                if (newStart > 0) {
-                    return newStart;
+                if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
+                    newStart = matchString(text, start, UCAL_MONTH, fSymbols->fMonths, fSymbols->fMonthsCount, wideMonthPat, cal); // try MMMM
+                    if (newStart > 0) {
+                        return newStart;
+                    }
                 }
-                newStart = matchString(text, start, UCAL_MONTH, fSymbols->fShortMonths, fSymbols->fShortMonthsCount, shortMonthPat, cal); // try MMM
+                if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 3) {
+                    newStart = matchString(text, start, UCAL_MONTH, fSymbols->fShortMonths, fSymbols->fShortMonthsCount, shortMonthPat, cal); // try MMM
+                }
             } else {
-                newStart = matchString(text, start, UCAL_MONTH, fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount, wideMonthPat, cal); // try LLLL
-                if (newStart > 0) {
-                    return newStart;
+                if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
+                    newStart = matchString(text, start, UCAL_MONTH, fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount, wideMonthPat, cal); // try LLLL
+                    if (newStart > 0) {
+                        return newStart;
+                    }
                 }
-                newStart = matchString(text, start, UCAL_MONTH, fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount, shortMonthPat, cal); // try LLL
+                if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 3) {
+                    newStart = matchString(text, start, UCAL_MONTH, fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount, shortMonthPat, cal); // try LLL
+                }
             }
             if (newStart > 0 || !getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))  // currently we do not try to parse MMMMM/LLLLL: #8860
                 return newStart;
@@ -2784,22 +2793,30 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Want to be able to parse both short and long forms.
             // Try count == 4 (EEEE) wide first:
             int32_t newStart = 0;
-            if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                      fSymbols->fWeekdays, fSymbols->fWeekdaysCount, NULL, cal)) > 0)
-                return newStart;
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
+                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                                          fSymbols->fWeekdays, fSymbols->fWeekdaysCount, NULL, cal)) > 0)
+                    return newStart;
+            }
             // EEEE wide failed, now try EEE abbreviated
-            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                   fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, NULL, cal)) > 0)
-                return newStart;
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 3) {
+                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                                       fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, NULL, cal)) > 0)
+                    return newStart;
+            }
             // EEE abbreviated failed, now try EEEEEE short
-            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                   fSymbols->fShorterWeekdays, fSymbols->fShorterWeekdaysCount, NULL, cal)) > 0)
-                return newStart;
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 6) {
+                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                                       fSymbols->fShorterWeekdays, fSymbols->fShorterWeekdaysCount, NULL, cal)) > 0)
+                    return newStart;
+            }
             // EEEEEE short failed, now try EEEEE narrow
-            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                   fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, NULL, cal)) > 0)
-                return newStart;
-            else if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status) || patternCharIndex == UDAT_DAY_OF_WEEK_FIELD)
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 5) {
+                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                                       fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, NULL, cal)) > 0)
+                    return newStart;
+            }
+            if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status) || patternCharIndex == UDAT_DAY_OF_WEEK_FIELD)
                 return newStart;
             // else we allowing parsing as number, below
         }
@@ -2816,16 +2833,22 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Want to be able to parse both short and long forms.
             // Try count == 4 (cccc) first:
             int32_t newStart = 0;
-            if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
+                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                       fSymbols->fStandaloneWeekdays, fSymbols->fStandaloneWeekdaysCount, NULL, cal)) > 0)
-                return newStart;
-            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                    return newStart;
+            }
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 3) {
+                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                           fSymbols->fStandaloneShortWeekdays, fSymbols->fStandaloneShortWeekdaysCount, NULL, cal)) > 0)
-                return newStart;
-            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                    return newStart;
+            }
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 6) {
+                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                           fSymbols->fStandaloneShorterWeekdays, fSymbols->fStandaloneShorterWeekdaysCount, NULL, cal)) > 0)
-                return newStart;
-            else if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
+                    return newStart;
+            }
+            if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
                 return newStart;
             // else we allowing parsing as number, below
         }
@@ -2859,15 +2882,21 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Try count == 4 first:
             int32_t newStart = 0;
 
-            if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
+                if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
                                       fSymbols->fQuarters, fSymbols->fQuartersCount, cal)) > 0)
-                return newStart;
-            else if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
+                    return newStart;
+            }
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 3) {
+                if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
                                           fSymbols->fShortQuarters, fSymbols->fShortQuartersCount, cal)) > 0)
-                return newStart;
-            else if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
+                    return newStart;
+            }
+            if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
                 return newStart;
             // else we allowing parsing as number, below
+            if(!getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status))
+                return -start;
         }
         break;
 
@@ -2885,15 +2914,21 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Try count == 4 first:
             int32_t newStart = 0;
 
-            if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
+                if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
                                       fSymbols->fStandaloneQuarters, fSymbols->fStandaloneQuartersCount, cal)) > 0)
-                return newStart;
-            else if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
+                    return newStart;
+            }
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 3) {
+                if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
                                           fSymbols->fStandaloneShortQuarters, fSymbols->fStandaloneShortQuartersCount, cal)) > 0)
-                return newStart;
-            else if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
+                    return newStart;
+            }
+            if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
                 return newStart;
             // else we allowing parsing as number, below
+            if(!getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status))
+                return -start;
         }
         break;
 
