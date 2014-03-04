@@ -4148,7 +4148,6 @@ icu4j/main/classes/core/src/com/ibm/icu/text/DateIntervalInfo.java svneol=native
 icu4j/main/classes/core/src/com/ibm/icu/text/DateTimePatternGenerator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/DecimalFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/DecimalFormatSymbols.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/DecompData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/DictionaryBreakEngine.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/DictionaryData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/DictionaryMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
