@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.util.ULocale;
 
 public class BreakIteratorTest extends TestFmwk
 {
@@ -842,5 +843,67 @@ public class BreakIteratorTest extends TestFmwk
         } catch (Exception e) {
             errln("ERR: Failed to create an instance type: " + type + " / locale: " + loc + " / exception: " + e.getMessage());
         }
+    }
+
+    /*
+     * Test case for Ticket#10721. BreakIterator factory method should throw NPE
+     * when specified locale is null.
+     */
+    public void TestNullLocale() {
+        Locale loc = null;
+        ULocale uloc = null;
+
+        @SuppressWarnings("unused")
+        BreakIterator brk;
+
+        // Character
+        try {
+            brk = BreakIterator.getCharacterInstance(loc);
+            errln("getCharacterInstance((Locale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
+        try {
+            brk = BreakIterator.getCharacterInstance(uloc);
+            errln("getCharacterInstance((ULocale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
+
+        // Line
+        try {
+            brk = BreakIterator.getLineInstance(loc);
+            errln("getLineInstance((Locale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
+        try {
+            brk = BreakIterator.getLineInstance(uloc);
+            errln("getLineInstance((ULocale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
+
+        // Sentence
+        try {
+            brk = BreakIterator.getSentenceInstance(loc);
+            errln("getSentenceInstance((Locale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
+        try {
+            brk = BreakIterator.getSentenceInstance(uloc);
+            errln("getSentenceInstance((ULocale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
+
+        // Title
+        try {
+            brk = BreakIterator.getTitleInstance(loc);
+            errln("getTitleInstance((Locale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
+        try {
+            brk = BreakIterator.getTitleInstance(uloc);
+            errln("getTitleInstance((ULocale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
+
+        // Word
+        try {
+            brk = BreakIterator.getWordInstance(loc);
+            errln("getWordInstance((Locale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
+        try {
+            brk = BreakIterator.getWordInstance(uloc);
+            errln("getWordInstance((ULocale)null) did not throw NPE.");
+        } catch (NullPointerException e) { /* OK */ }
     }
 }
