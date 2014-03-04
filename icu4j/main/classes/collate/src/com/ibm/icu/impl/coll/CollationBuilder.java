@@ -839,7 +839,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
             for(;;) {
                 String str = stringIter.next();
                 if(str == null) { break; }
-                if(ignoreString(str) || str == nfdString) { continue; }
+                if(ignoreString(str) || str.contentEquals(nfdString)) { continue; }
                 ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32);
             }
         } else {
@@ -849,11 +849,11 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
                 String prefix = prefixIter.next();
                 if(prefix == null) { break; }
                 if(ignorePrefix(prefix)) { continue; }
-                boolean samePrefix = prefix == nfdPrefix;
+                boolean samePrefix = prefix.contentEquals(nfdPrefix);
                 for(;;) {
                     String str = stringIter.next();
                     if(str == null) { break; }
-                    if(ignoreString(str) || (samePrefix && str == nfdString)) { continue; }
+                    if(ignoreString(str) || (samePrefix && str.contentEquals(nfdString))) { continue; }
                     ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32);
                 }
                 stringIter.reset();
