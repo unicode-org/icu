@@ -612,8 +612,8 @@ public:
      * in the default locale.
      * This method returns the long name, not including daylight savings.
      * If the display name is not available for the locale,
-     * then this method returns a string in the format
-     * <code>GMT[+-]hh:mm</code>.
+     * then this method returns a string in the localized GMT offset format
+     * such as <code>GMT[+-]HH:mm</code>.
      * @param result the human-readable name of this time zone in the default locale.
      * @return       A reference to 'result'.
      * @stable ICU 2.0
@@ -625,8 +625,8 @@ public:
      * in the specified locale.
      * This method returns the long name, not including daylight savings.
      * If the display name is not available for the locale,
-     * then this method returns a string in the format
-     * <code>GMT[+-]hh:mm</code>.
+     * then this method returns a string in the localized GMT offset format
+     * such as <code>GMT[+-]HH:mm</code>.
      * @param locale the locale in which to supply the display name.
      * @param result the human-readable name of this time zone in the given locale
      *               or in the default locale if the given locale is not recognized.
@@ -639,8 +639,8 @@ public:
      * Returns a name of this time zone suitable for presentation to the user
      * in the default locale.
      * If the display name is not available for the locale,
-     * then this method returns a string in the format
-     * <code>GMT[+-]hh:mm</code>.
+     * then this method returns a string in the localized GMT offset format
+     * such as <code>GMT[+-]HH:mm</code>.
      * @param daylight if true, return the daylight savings name.
      * @param style
      * @param result the human-readable name of this time zone in the default locale.
@@ -653,8 +653,8 @@ public:
      * Returns a name of this time zone suitable for presentation to the user
      * in the specified locale.
      * If the display name is not available for the locale,
-     * then this method returns a string in the format
-     * <code>GMT[+-]hh:mm</code>.
+     * then this method returns a string in the localized GMT offset format
+     * such as <code>GMT[+-]HH:mm</code>.
      * @param daylight if true, return the daylight savings name.
      * @param style
      * @param locale the locale in which to supply the display name.
