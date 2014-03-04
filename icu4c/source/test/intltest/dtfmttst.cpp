@@ -4264,7 +4264,6 @@ typedef struct {
 
 void DateFormatTest::TestParseMultiPatternMatch() {
         // For details see http://bugs.icu-project.org/trac/ticket/10336 
- 	 
     const TestMultiPatternMatchItem items[] = {
  	      // leniency    parse String                                 pattern                               expected result 
             {true,       UnicodeString("2013-Sep 13"),                UnicodeString("yyyy-MMM dd"),         UnicodeString("2013-Sep 13")}, 
@@ -4295,7 +4294,7 @@ void DateFormatTest::TestParseMultiPatternMatch() {
             {true,       UnicodeString("2013 Oct 20 4th quarter"),    UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("2013 Oct 20 4th quarter")}, 
             {false,      UnicodeString("2013 Oct 21 Q4"),             UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("")}, 
             {false,      UnicodeString("2013 Oct 22 4th quarter"),    UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("2013 Oct 22 4th quarter")},
-            {false,      (UnicodeString)NULL,                         (UnicodeString)NULL,                  (UnicodeString)NULL},
+            {false,      UnicodeString("--end--"),                    UnicodeString(""),                    UnicodeString("")},
  	};  	
 
     UErrorCode status = U_ZERO_ERROR;
@@ -4306,8 +4305,7 @@ void DateFormatTest::TestParseMultiPatternMatch() {
     }
     const TestMultiPatternMatchItem * itemPtr;
     DateFormat* sdmft = DateFormat::createDateInstance();
-    int32_t cnt = 0;
-    for (itemPtr = items; itemPtr->parseString != NULL; itemPtr++ ) {                                        
+    for (itemPtr = items; itemPtr->parseString != "--end--"; itemPtr++ ) {                                        
        status = U_ZERO_ERROR;
        ParsePosition pos(0);
        ((SimpleDateFormat*) sdmft)->applyPattern(itemPtr->pattern);
@@ -4315,7 +4313,6 @@ void DateFormatTest::TestParseMultiPatternMatch() {
            dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
            continue;
        }
-       ++cnt;
        sdmft->setLenient(itemPtr->leniency);
        sdmft->setBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, itemPtr->leniency, status);
        UDate d = sdmft->parse(itemPtr->parseString, pos); 
