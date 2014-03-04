@@ -123,10 +123,13 @@ public class RelativeDateFormat extends DateFormat {
                 (fTimePattern == null || fCombinedFormat == null || combinedFormatHasDateAtStart) ) {
             // capitalize relativeDayString according to context for relative, set formatter no context
             if ( relativeDayString.length() > 0 && UCharacter.isLowerCase(relativeDayString.codePointAt(0)) &&
-                 capitalizationBrkIter != null &&
                  (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
                     (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationOfRelativeUnitsForListOrMenu) ||
                     (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_STANDALONE && capitalizationOfRelativeUnitsForStandAlone) )) {
+                if (capitalizationBrkIter == null) {
+                    // should only happen when deserializing, etc.
+                    capitalizationBrkIter = BreakIterator.getSentenceInstance(fLocale);
+                }
                 relativeDayString = UCharacter.toTitleCase(fLocale, relativeDayString, capitalizationBrkIter,
                                 UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
             }
@@ -218,7 +221,7 @@ public class RelativeDateFormat extends DateFormat {
     private boolean capitalizationInfoIsSet = false;
     private boolean capitalizationOfRelativeUnitsForListOrMenu = false;
     private boolean capitalizationOfRelativeUnitsForStandAlone = false;
-    private BreakIterator capitalizationBrkIter = null;
+    private transient BreakIterator capitalizationBrkIter = null;
    
     
     /**
