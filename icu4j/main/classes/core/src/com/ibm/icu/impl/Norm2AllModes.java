@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.Normalizer2;
+import com.ibm.icu.util.ICUUncheckedIOException;
 
 public final class Norm2AllModes {
     // Public API dispatch via Normalizer2 subclasses -------------------------- ***
@@ -32,7 +33,7 @@ public final class Norm2AllModes {
                 try {
                     return dest.append(src);
                 } catch(IOException e) {
-                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                    throw new ICUUncheckedIOException(e);  // Avoid declaring "throws IOException".
                 }
             } else {
                 throw new IllegalArgumentException();

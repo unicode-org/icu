@@ -10,6 +10,7 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 
+import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 
 // Java porting note:
@@ -1172,7 +1173,7 @@ public final class StringSearch extends SearchIterator {
             // for this targetIx value, so if it is non-NULL then other ceb.get calls should be OK.
             CEI firstCEI = ceb.get(targetIx);
             if (firstCEI == null) {
-                throw new RuntimeException("CEBuffer.get(" + targetIx + ") returned null.");
+                throw new ICUException("CEBuffer.get(" + targetIx + ") returned null.");
             }
 
             for (patIx = 0; patIx < pattern_.PCELength_; patIx++) {
@@ -1401,7 +1402,7 @@ public final class StringSearch extends SearchIterator {
             // for this targetIx value, so if it is non-NULL then other ceb.getPrevious calls should be OK.
             CEI lastCEI = ceb.getPrevious(targetIx);
             if (lastCEI == null) {
-                throw new RuntimeException("CEBuffer.getPrevious(" + targetIx + ") returned null.");
+                throw new ICUException("CEBuffer.getPrevious(" + targetIx + ") returned null.");
             }
             // Inner loop checks for a match beginning at each
             // position from the outer loop.

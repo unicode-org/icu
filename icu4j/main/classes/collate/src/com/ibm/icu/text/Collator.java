@@ -20,6 +20,7 @@ import com.ibm.icu.impl.coll.CollationData;
 import com.ibm.icu.impl.coll.CollationRoot;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.Freezable;
+import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
@@ -589,7 +590,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
                 if(DEBUG){
                     e.printStackTrace();
                 }
-                throw new RuntimeException(e.getMessage());
+                throw new ICUException(e);
                 ///CLOVER:ON
             }
         }

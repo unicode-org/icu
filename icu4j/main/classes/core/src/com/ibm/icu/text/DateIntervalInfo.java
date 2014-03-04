@@ -23,6 +23,7 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -787,7 +788,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
             return other;
         } catch ( CloneNotSupportedException e ) {
             ///CLOVER:OFF
-            throw new  IllegalStateException("clone is not supported");
+            throw new  ICUCloneNotSupportedException("clone is not supported", e);
             ///CLOVER:ON
         }
     }

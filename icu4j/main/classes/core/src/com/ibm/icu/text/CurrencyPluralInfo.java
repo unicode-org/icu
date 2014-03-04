@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.CurrencyData;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -201,7 +202,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
             }
             return other;
         } catch (CloneNotSupportedException e) {
-            throw new IllegalStateException();
+            throw new ICUCloneNotSupportedException(e);
         }
     }
 

@@ -13,6 +13,8 @@ package com.ibm.icu.impl.coll;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.ibm.icu.util.ICUCloneNotSupportedException;
+
 /**
  * Base class for shared, reference-counted, auto-deleted objects.
  * Java subclasses are mutable and must implement clone().
@@ -110,7 +112,7 @@ public class SharedObject implements Cloneable {
                 c = (Reference<T>)super.clone();
             } catch (CloneNotSupportedException e) {
                 // Should never happen.
-                throw new RuntimeException(e);
+                throw new ICUCloneNotSupportedException(e);
             }
             if(ref != null) {
                 ref.addRef();
@@ -162,7 +164,7 @@ public class SharedObject implements Cloneable {
             c = (SharedObject)super.clone();
         } catch (CloneNotSupportedException e) {
             // Should never happen.
-            throw new RuntimeException(e);
+            throw new ICUCloneNotSupportedException(e);
         }
         c.refCount = new AtomicInteger();
         return c;

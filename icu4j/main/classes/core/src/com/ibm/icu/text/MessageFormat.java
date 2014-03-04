@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2013, International Business Machines
+* Copyright (c) 2004-2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -38,6 +38,7 @@ import com.ibm.icu.text.MessagePattern.ArgType;
 import com.ibm.icu.text.MessagePattern.Part;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.text.PluralRules.PluralType;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -2570,7 +2571,7 @@ public class MessageFormat extends UFormat {
                 app.append(s);
                 length += s.length();
             } catch(IOException e) {
-                throw new RuntimeException(e);
+                throw new ICUUncheckedIOException(e);
             }
         }
 
@@ -2579,7 +2580,7 @@ public class MessageFormat extends UFormat {
                 app.append(s, start, limit);
                 length += limit - start;
             } catch(IOException e) {
-                throw new RuntimeException(e);
+                throw new ICUUncheckedIOException(e);
             }
         }
 
@@ -2600,7 +2601,7 @@ public class MessageFormat extends UFormat {
                 }
                 return length;
             } catch(IOException e) {
-                throw new RuntimeException(e);
+                throw new ICUUncheckedIOException(e);
             }
         }
 

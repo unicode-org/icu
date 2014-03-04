@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.VersionInfo;
 
 public final class Normalizer2Impl {
@@ -75,7 +76,7 @@ public final class Normalizer2Impl {
                 }
             } catch(IOException e) {
                 // Will not occur because we do not write to I/O.
-                throw new RuntimeException(e);
+                throw new ICUUncheckedIOException(e);
             }
         }
 
@@ -98,7 +99,7 @@ public final class Normalizer2Impl {
                 }
             } catch(IOException e) {
                 // Will not occur because we do not write to I/O.
-                throw new RuntimeException(e);
+                throw new ICUUncheckedIOException(e);
             }
         }
     }
@@ -248,7 +249,7 @@ public final class Normalizer2Impl {
                     str.setLength(0);
                     reorderStart=0;
                 } catch(IOException e) {
-                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                    throw new ICUUncheckedIOException(e);  // Avoid declaring "throws IOException".
                 }
             }
             lastCC=0;
@@ -269,7 +270,7 @@ public final class Normalizer2Impl {
                     str.setLength(0);
                     reorderStart=0;
                 } catch(IOException e) {
-                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                    throw new ICUUncheckedIOException(e);  // Avoid declaring "throws IOException".
                 }
             }
             lastCC=0;
@@ -425,7 +426,7 @@ public final class Normalizer2Impl {
             DataInputStream ds=new DataInputStream(bis);
             int indexesLength=ds.readInt()/4;  // inIndexes[IX_NORM_TRIE_OFFSET]/4
             if(indexesLength<=IX_MIN_MAYBE_YES) {
-                throw new IOException("Normalizer2 data: not enough indexes");
+                throw new ICUUncheckedIOException("Normalizer2 data: not enough indexes");
             }
             int[] inIndexes=new int[indexesLength];
             inIndexes[0]=indexesLength*4;
@@ -448,7 +449,7 @@ public final class Normalizer2Impl {
             normTrie=Trie2_16.createFromSerialized(ds);
             int trieLength=normTrie.getSerializedLength();
             if(trieLength>(nextOffset-offset)) {
-                throw new IOException("Normalizer2 data: not enough bytes for normTrie");
+                throw new ICUUncheckedIOException("Normalizer2 data: not enough bytes for normTrie");
             }
             ds.skipBytes((nextOffset-offset)-trieLength);  // skip padding after trie bytes
     
@@ -493,7 +494,7 @@ public final class Normalizer2Impl {
             data.close();
             return this;
         } catch(IOException e) {
-            throw new RuntimeException(e);
+            throw new ICUUncheckedIOException(e);
         }
     }
     public Normalizer2Impl load(String name) {

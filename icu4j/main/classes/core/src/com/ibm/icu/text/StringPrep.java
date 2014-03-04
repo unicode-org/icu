@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2003-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -19,6 +19,7 @@ import com.ibm.icu.impl.StringPrepDataReader;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.VersionInfo;
 
 /**
@@ -344,7 +345,7 @@ public final class StringPrep {
                             stream.close();
                         }
                     } catch (IOException e) {
-                        throw new RuntimeException(e.toString());
+                        throw new ICUUncheckedIOException(e);
                     }
                 }
                 if (instance != null) {

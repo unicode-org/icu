@@ -1261,7 +1261,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
             TimeZone other = (TimeZone) super.clone();
             return other;
         } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
+            throw new ICUCloneNotSupportedException(e);
         }
     }
 

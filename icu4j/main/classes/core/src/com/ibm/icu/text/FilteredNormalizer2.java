@@ -1,12 +1,14 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2013, International Business Machines
+*   Copyright (C) 2009-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
 import java.io.IOException;
+
+import com.ibm.icu.util.ICUUncheckedIOException;
 
 /**
  * Normalization filtered by a UnicodeSet.
@@ -245,7 +247,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
                 prevSpanLimit=spanLimit;
             }
         } catch(IOException e) {
-            throw new RuntimeException(e);
+            throw new ICUUncheckedIOException(e);
         }
         return dest;
     }

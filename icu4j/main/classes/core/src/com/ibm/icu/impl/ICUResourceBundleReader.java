@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
@@ -343,7 +344,7 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate {
 
         } catch (IOException ex) {
             String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
-            throw new RuntimeException("Data file " + fullName + " is corrupt - " + ex.getMessage());
+            throw new ICUUncheckedIOException("Data file " + fullName + " is corrupt - " + ex.getMessage(), ex);
         }
 
         // set pool bundle keys if necessary

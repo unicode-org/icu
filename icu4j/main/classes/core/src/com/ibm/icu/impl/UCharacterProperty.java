@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2013, International Business Machines Corporation and
+* Copyright (C) 1996-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -22,6 +22,7 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.VersionInfo;
 
 /**
@@ -1182,10 +1183,10 @@ public final class UCharacterProperty
     {
         // consistency check
         if(binProps.length!=UProperty.BINARY_LIMIT) {
-            throw new RuntimeException("binProps.length!=UProperty.BINARY_LIMIT");
+            throw new ICUException("binProps.length!=UProperty.BINARY_LIMIT");
         }
         if(intProps.length!=(UProperty.INT_LIMIT-UProperty.INT_START)) {
-            throw new RuntimeException("intProps.length!=(UProperty.INT_LIMIT-UProperty.INT_START)");
+            throw new ICUException("intProps.length!=(UProperty.INT_LIMIT-UProperty.INT_START)");
         }
 
         // jar access

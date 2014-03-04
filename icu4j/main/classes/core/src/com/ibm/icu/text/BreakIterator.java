@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -230,7 +231,7 @@ public abstract class BreakIterator implements Cloneable
         }
         catch (CloneNotSupportedException e) {
             ///CLOVER:OFF
-            throw new IllegalStateException();
+            throw new ICUCloneNotSupportedException(e);
             ///CLOVER:ON
         }
     }

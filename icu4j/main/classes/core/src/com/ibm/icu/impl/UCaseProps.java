@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2012, International Business Machines
+*   Copyright (C) 2004-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,6 +29,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
 
 public final class UCaseProps {
@@ -1434,7 +1435,7 @@ public final class UCaseProps {
         try {
             INSTANCE = new UCaseProps();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ICUUncheckedIOException(e);
         }
     }
 }

@@ -22,6 +22,7 @@ import com.ibm.icu.impl.Trie2_32;
 import com.ibm.icu.impl.USerializedSet;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ICUException;
 
 /**
  * Collation binary data reader.
@@ -99,13 +100,13 @@ final class CollationDataReader /* all static */ {
         BufferedInputStream bis = new BufferedInputStream(inBytes);
         tailoring.version = ICUBinary.readHeaderAndDataVersion(bis, DATA_FORMAT, IS_ACCEPTABLE);
         if(base != null && base.getUCAVersion() != tailoring.getUCAVersion()) {
-            throw new RuntimeException("Tailoring UCA version differs from base data UCA version");
+            throw new ICUException("Tailoring UCA version differs from base data UCA version");
         }
 
         DataInputStream ds = new DataInputStream(bis);
         int indexesLength = ds.readInt();  // inIndexes[IX_INDEXES_LENGTH]
         if(indexesLength < 2) {
-            throw new RuntimeException("not enough indexes");
+            throw new ICUException("not enough indexes");
         }
         int[] inIndexes = new int[IX_TOTAL_SIZE + 1];
         inIndexes[0] = indexesLength;
@@ -138,7 +139,7 @@ final class CollationDataReader /* all static */ {
             if(baseData == null) {
                 // We assume for collation settings that
                 // the base data does not have a reordering.
-                throw new RuntimeException("Collation base data must not reorder scripts");
+                throw new ICUException("Collation base data must not reorder scripts");
             }
             reorderCodes = new int[length / 4];
             for(int i = 0; i < length / 4; ++i) {
@@ -159,7 +160,7 @@ final class CollationDataReader /* all static */ {
         length = inIndexes[index + 1] - offset;
         if(length >= 256) {
             if(reorderCodes.length == 0) {
-                throw new RuntimeException("Reordering table without reordering codes");
+                throw new ICUException("Reordering table without reordering codes");
             }
             reorderTable = new byte[256];
             ds.readFully(reorderTable);
@@ -171,7 +172,7 @@ final class CollationDataReader /* all static */ {
         ds.skipBytes(length);
 
         if(baseData != null && baseData.numericPrimary != (inIndexes[IX_OPTIONS] & 0xff000000L)) {
-            throw new RuntimeException("Tailoring numeric primary weight differs from base data");
+            throw new ICUException("Tailoring numeric primary weight differs from base data");
         }
         CollationData data = null;  // Remains null if there are no mappings.
 
@@ -186,14 +187,14 @@ final class CollationDataReader /* all static */ {
             data.trie = tailoring.trie = Trie2_32.createFromSerialized(ds);
             int trieLength = data.trie.getSerializedLength();
             if(trieLength > length) {
-                throw new RuntimeException("Not enough bytes for the mappings trie");  // No mappings.
+                throw new ICUException("Not enough bytes for the mappings trie");  // No mappings.
             }
             length -= trieLength;
         } else if(baseData != null) {
             // Use the base data. Only the settings are tailored.
             tailoring.data = baseData;
         } else {
-            throw new RuntimeException("Missing collation data mappings");  // No mappings.
+            throw new ICUException("Missing collation data mappings");  // No mappings.
         }
         ds.skipBytes(length);
 
@@ -207,7 +208,7 @@ final class CollationDataReader /* all static */ {
         length = inIndexes[index + 1] - offset;
         if(length >= 8) {
             if(data == null) {
-                throw new RuntimeException("Tailored ces without tailored trie");
+                throw new ICUException("Tailored ces without tailored trie");
             }
             data.ces = new long[length / 8];
             for(int i = 0; i < length / 8; ++i) {
@@ -227,7 +228,7 @@ final class CollationDataReader /* all static */ {
         length = inIndexes[index + 1] - offset;
         if(length >= 4) {
             if(data == null) {
-                throw new RuntimeException("Tailored ce32s without tailored trie");
+                throw new ICUException("Tailored ce32s without tailored trie");
             }
             data.ce32s = new int[length / 4];
             for(int i = 0; i < length / 4; ++i) {
@@ -240,7 +241,7 @@ final class CollationDataReader /* all static */ {
         int jamoCE32sStart = inIndexes[IX_JAMO_CE32S_START];
         if(jamoCE32sStart >= 0) {
             if(data == null || data.ce32s == null) {
-                throw new RuntimeException("JamoCE32sStart index into non-existent ce32s[]");
+                throw new ICUException("JamoCE32sStart index into non-existent ce32s[]");
             }
             data.jamoCE32s = new int[CollationData.JAMO_CE32S_LENGTH];
             System.arraycopy(data.ce32s, jamoCE32sStart, data.jamoCE32s, 0, CollationData.JAMO_CE32S_LENGTH);
@@ -249,7 +250,7 @@ final class CollationDataReader /* all static */ {
         } else if(baseData != null) {
             data.jamoCE32s = baseData.jamoCE32s;
         } else {
-            throw new RuntimeException("Missing Jamo CE32s for Hangul processing");
+            throw new ICUException("Missing Jamo CE32s for Hangul processing");
         }
 
         index = IX_ROOT_ELEMENTS_OFFSET;
@@ -258,10 +259,10 @@ final class CollationDataReader /* all static */ {
         if(length >= 4) {
             int rootElementsLength = length / 4;
             if(data == null) {
-                throw new RuntimeException("Root elements but no mappings");
+                throw new ICUException("Root elements but no mappings");
             }
             if(rootElementsLength <= CollationRootElements.IX_SEC_TER_BOUNDARIES) {
-                throw new RuntimeException("Root elements array too short");
+                throw new ICUException("Root elements array too short");
             }
             data.rootElements = new long[rootElementsLength];
             for(int i = 0; i < rootElementsLength; ++i) {
@@ -269,13 +270,13 @@ final class CollationDataReader /* all static */ {
             }
             long commonSecTer = data.rootElements[CollationRootElements.IX_COMMON_SEC_AND_TER_CE];
             if(commonSecTer != Collation.COMMON_SEC_AND_TER_CE) {
-                throw new RuntimeException("Common sec/ter weights in base data differ from the hardcoded value");
+                throw new ICUException("Common sec/ter weights in base data differ from the hardcoded value");
             }
             long secTerBoundaries = data.rootElements[CollationRootElements.IX_SEC_TER_BOUNDARIES];
             if((secTerBoundaries >>> 24) < CollationKeys.SEC_COMMON_HIGH) {
                 // [fixed last secondary common byte] is too low,
                 // and secondary weights would collide with compressed common secondaries.
-                throw new RuntimeException("[fixed last secondary common byte] is too low");
+                throw new ICUException("[fixed last secondary common byte] is too low");
             }
             length &= 3;
         }
@@ -286,7 +287,7 @@ final class CollationDataReader /* all static */ {
         length = inIndexes[index + 1] - offset;
         if(length >= 2) {
             if(data == null) {
-                throw new RuntimeException("Tailored contexts without tailored trie");
+                throw new ICUException("Tailored contexts without tailored trie");
             }
             StringBuilder sb = new StringBuilder(length / 2);
             for(int i = 0; i < length / 2; ++i) {
@@ -302,7 +303,7 @@ final class CollationDataReader /* all static */ {
         length = inIndexes[index + 1] - offset;
         if(length >= 2) {
             if(data == null) {
-                throw new RuntimeException("Unsafe-backward-set but no mappings");
+                throw new ICUException("Unsafe-backward-set but no mappings");
             }
             if(baseData == null) {
                 // Create the unsafe-backward set for the root collator.
@@ -352,7 +353,7 @@ final class CollationDataReader /* all static */ {
             // No tailoring-specific data: Alias the root collator's set.
             data.unsafeBackwardSet = baseData.unsafeBackwardSet;
         } else {
-            throw new RuntimeException("Missing unsafe-backward-set");
+            throw new ICUException("Missing unsafe-backward-set");
         }
         ds.skipBytes(length);
 
@@ -381,7 +382,7 @@ final class CollationDataReader /* all static */ {
                     }
                     length &= 1;
                     if((header0 >> 8) != CollationFastLatin.VERSION) {
-                        throw new RuntimeException("Fast-Latin table version differs from version in data header");
+                        throw new ICUException("Fast-Latin table version differs from version in data header");
                     }
                 } else if(baseData != null) {
                     data.fastLatinTable = baseData.fastLatinTable;
@@ -396,7 +397,7 @@ final class CollationDataReader /* all static */ {
         length = inIndexes[index + 1] - offset;
         if(length >= 2) {
             if(data == null) {
-                throw new RuntimeException("Script order data but no mappings");
+                throw new ICUException("Script order data but no mappings");
             }
             data.scripts = new char[length / 2];
             for(int i = 0; i < length / 2; ++i) {
@@ -415,7 +416,7 @@ final class CollationDataReader /* all static */ {
         length = inIndexes[index + 1] - offset;
         if(length >= 256) {
             if(data == null) {
-                throw new RuntimeException("Data for compressible primary lead bytes but no mappings");
+                throw new ICUException("Data for compressible primary lead bytes but no mappings");
             }
             data.compressibleBytes = new boolean[256];
             for(int i = 0; i < 256; ++i) {
@@ -427,7 +428,7 @@ final class CollationDataReader /* all static */ {
         } else if(baseData != null) {
             data.compressibleBytes = baseData.compressibleBytes;
         } else {
-            throw new RuntimeException("Missing data for compressible primary lead bytes");
+            throw new ICUException("Missing data for compressible primary lead bytes");
         }
         ds.skipBytes(length);
 
@@ -457,7 +458,7 @@ final class CollationDataReader /* all static */ {
         settings.variableTop = tailoring.data.getLastPrimaryForGroup(
                 Collator.ReorderCodes.FIRST + settings.getMaxVariable());
         if(settings.variableTop == 0) {
-            throw new RuntimeException("The maxVariable could not be mapped to a variableTop");
+            throw new ICUException("The maxVariable could not be mapped to a variableTop");
         }
 
         if(reorderCodes.length == 0 || reorderTable != null) {

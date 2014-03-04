@@ -15,6 +15,8 @@
 package com.ibm.icu.text;
 import java.text.CharacterIterator;
 
+import com.ibm.icu.util.ICUCloneNotSupportedException;
+
 /**
  * <code>StringCharacterIterator</code> implements the
  * <code>CharacterIterater</code> protocol for a <code>String</code>.
@@ -289,7 +291,7 @@ public final class StringCharacterIterator implements CharacterIterator
             return other;
         }
         catch (CloneNotSupportedException e) {
-            throw new IllegalStateException();
+            throw new ICUCloneNotSupportedException(e);
         }
     }
 

@@ -528,7 +528,7 @@ public class LocaleMatcher {
                 result.frozen = false;
                 return result;
             } catch (CloneNotSupportedException e) {
-                throw new IllegalArgumentException(e); // will never happen
+                throw new ICUCloneNotSupportedException(e); // will never happen
             }
 
         }
@@ -701,7 +701,7 @@ public class LocaleMatcher {
                 result.frozen = false;
                 return result;
             } catch (CloneNotSupportedException e) {
-                throw new IllegalArgumentException(e); // will never happen
+                throw new ICUCloneNotSupportedException(e); // will never happen
             }
         }
 

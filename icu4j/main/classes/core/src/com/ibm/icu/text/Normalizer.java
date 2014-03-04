@@ -12,6 +12,7 @@ import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 
 /**
  * Unicode Normalization 
@@ -575,7 +576,7 @@ public final class Normalizer implements Cloneable {
             norm2 = mode.getNormalizer2(options);
             buffer = new StringBuilder();
         } catch (CloneNotSupportedException e) {
-            throw new IllegalStateException(e.toString());
+            throw new ICUCloneNotSupportedException(e);
         }
     }
 
@@ -603,7 +604,7 @@ public final class Normalizer implements Cloneable {
             return copy;
         }
         catch (CloneNotSupportedException e) {
-            throw new IllegalStateException(e);
+            throw new ICUCloneNotSupportedException(e);
         }
     }
 
@@ -1797,7 +1798,7 @@ public final class Normalizer implements Cloneable {
             text = newIter;
             reset();
         }catch(CloneNotSupportedException e) {
-            throw new IllegalStateException("Could not clone the UCharacterIterator");
+            throw new ICUCloneNotSupportedException("Could not clone the UCharacterIterator", e);
         }
     }
 

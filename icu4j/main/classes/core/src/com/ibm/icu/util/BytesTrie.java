@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2012, International Business Machines
+*   Copyright (C) 2010-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2010nov23
@@ -974,7 +974,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
         try {
             out.append((char)c);
         } catch(IOException e) {
-            throw new RuntimeException(e);
+            throw new ICUUncheckedIOException(e);
         }
     }
 
