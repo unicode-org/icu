@@ -1,8 +1,8 @@
 
  /*
  *******************************************************************************
- * Copyright (C) 2002-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -20,7 +20,6 @@ import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ImplicitCEGenerator;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -175,29 +174,54 @@ public class CollationMiscTest extends TestFmwk {
             // have a  code point associated to it anymore
             // "&[before 3][last primary ignorable]<<<k",
             // - all befores here amount to zero
+            /* "you cannot go before ...": The parser now sets an error for such nonsensical rules.
             "&[before 3][first tertiary ignorable]<<<a",
-            "&[before 3][last tertiary ignorable]<<<a",
+            "&[before 3][last tertiary ignorable]<<<a", */
+            /*
+             * However, there is a real secondary ignorable (artificial addition in FractionalUCA.txt),
+             * and it *is* possible to "go before" that.
+             */
             "&[before 3][first secondary ignorable]<<<a",
             "&[before 3][last secondary ignorable]<<<a",
             // 'normal' befores
-            "&[before 3][first primary ignorable]<<<c<<<b &[first primary ignorable]<a",
+            /*
+             * Note: With a "SPACE first primary" boundary CE in FractionalUCA.txt,
+             * it is not possible to tailor &[first primary ignorable]<a or &[last primary ignorable]<a
+             * because there is no tailoring space before that boundary.
+             * Made the tests work by tailoring to a space instead.
+             */
+            "&[before 3][first primary ignorable]<<<c<<<b &' '<a",  /* was &[first primary ignorable]<a */
             // we don't have a code point that corresponds to the last primary
             // ignorable
-            "&[before 3][last primary ignorable]<<<c<<<b &[last primary ignorable]<a",
+            "&[before 3][last primary ignorable]<<<c<<<b &' '<a",  /* was &[last primary ignorable]<a */
             "&[before 3][first variable]<<<c<<<b &[first variable]<a",
             "&[last variable]<a &[before 3][last variable]<<<c<<<b ",
             "&[first regular]<a &[before 1][first regular]<b",
             "&[before 1][last regular]<b &[last regular]<a",
             "&[before 1][first implicit]<b &[first implicit]<a",
-            "&[before 1][last implicit]<b &[last implicit]<a",
-            "&[last variable]<z&[last primary ignorable]<x&[last secondary ignorable]<<y&[last tertiary ignorable]<<<w&[top]<u",
+            /* The current builder does not support tailoring to unassigned-implicit CEs (seems unnecessary, adds complexity).
+            "&[before 1][last implicit]<b &[last implicit]<a", */
+            "&[last variable]<z" +
+            "&' '<x" +  /* was &[last primary ignorable]<x, see above */
+            "&[last secondary ignorable]<<y&[last tertiary ignorable]<<<w&[top]<u",
         };
         String[][] data = {
             // {"k", "\u20e3"},
+            /* "you cannot go before ...": The parser now sets an error for such nonsensical rules.
             {"\\u0000", "a"}, // you cannot go before first tertiary ignorable
-            {"\\u0000", "a"}, // you cannot go before last tertiary ignorable
-            {"\\u0000", "a"}, // you cannot go before first secondary ignorable
-            {"\\u0000", "a"}, // you cannot go before first secondary ignorable
+            {"\\u0000", "a"}, // you cannot go before last tertiary ignorable */
+            /*
+             * However, there is a real secondary ignorable (artificial addition in FractionalUCA.txt),
+             * and it *is* possible to "go before" that.
+             */
+            {"\\u0000", "a"},
+            {"\\u0000", "a"},
+            /*
+             * Note: With a "SPACE first primary" boundary CE in FractionalUCA.txt,
+             * it is not possible to tailor &[first primary ignorable]<a or &[last primary ignorable]<a
+             * because there is no tailoring space before that boundary.
+             * Made the tests work by tailoring to a space instead.
+             */
             {"c", "b", "\\u0332", "a"},
             {"\\u0332", "\\u20e3", "c", "b", "a"},
             {"c", "b", "\\u0009", "a", "\\u000a"},
@@ -210,7 +234,8 @@ public class CollationMiscTest extends TestFmwk {
             // [last regular [CE 27, 05, 05]] # U+1342E EGYPTIAN HIEROGLYPH AA032
             {LAST_REGULAR_CHAR_STRING, "b", /* [last regular] */ "a", "\\u4e00"},
             {"b", "\\u4e00", "a", "\\u4e01"},
-            {"b", "\\U0010FFFD", "a"},
+            /* The current builder does not support tailoring to unassigned-implicit CEs (seems unnecessary, adds complexity).
+            {"b", "\\U0010FFFD", "a"}, */
             {"\ufffb",  "w", "y", "\u20e3", "x", LAST_VARIABLE_CHAR_STRING, "z", "u"},
         };
 
@@ -232,7 +257,7 @@ public class CollationMiscTest extends TestFmwk {
             // logln("Rules starter for " + rules);
             genericOrderingTestWithResult(coll, s, result);
         } catch (Exception e) {
-            warnln("Unable to open collator with rules " + rules);
+            warnln("Unable to open collator with rules " + rules + ": " + e);
         }
     }
 
@@ -279,8 +304,8 @@ public class CollationMiscTest extends TestFmwk {
             String msg4 = "; expected ";
             String sExpect = new String("");
             String sResult = new String("");
-            sResult = appendCompareResult(compareResult, sResult);
-            sExpect = appendCompareResult(expectedResult, sExpect);
+            sResult = CollationTest.appendCompareResult(compareResult, sResult);
+            sExpect = CollationTest.appendCompareResult(expectedResult, sExpect);
             if (ok1) {
                 // logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
@@ -289,55 +314,25 @@ public class CollationMiscTest extends TestFmwk {
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
-            sResult = appendCompareResult(keyResult, sResult);
+            sResult = CollationTest.appendCompareResult(keyResult, sResult);
             if (ok2) {
                 // logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
                 msg2 = " vs. ";
-                errln(msg1 + prettify(sourceKey) + msg2 + prettify(targetKey));
+                errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
             }
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
             msg2 = "\", \"";
             msg3 = "\") returned ";
-            sResult = appendCompareResult(incResult, sResult);
+            sResult = CollationTest.appendCompareResult(incResult, sResult);
             if (ok3) {
                 // logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
         }
-    }
-
-    String appendCompareResult(int result, String target) {
-        if (result == -1) {  //LESS
-            target += "LESS";
-        } else if (result == 0) {  //EQUAL
-            target += "EQUAL";
-        } else if (result == 1) {  //GREATER
-            target += "GREATER";
-        } else {
-            String huh = "?";
-            target += huh + result;
-        }
-        return target;
-    }
-
-    static String prettify(CollationKey sourceKey) {
-        int i;
-        byte[] bytes= sourceKey.toByteArray();
-        StringBuilder target = new StringBuilder("[");
-
-        for (i = 0; i < bytes.length; i++) {
-            String numStr = Integer.toHexString(bytes[i] & 0xff);
-            if (numStr.length() < 2) {
-                target.append('0');
-            }
-            target.append(numStr).append(' ');
-        }
-        target.append(']');
-        return target.toString();
     }
 
     public void TestBeforePrefixFailure() {
@@ -358,6 +353,7 @@ public class CollationMiscTest extends TestFmwk {
     }
 
     public void TestContractionClosure() {
+        // Note: This was also ported to the data-driven test, see collationtest.txt.
         String[] rules = {
             "&b=\u00e4\u00e4",
             "&b=\u00C5",
@@ -825,13 +821,13 @@ public class CollationMiscTest extends TestFmwk {
             };
             // logln("mixed case test");
             // logln("lower first, case level off");
-            genericRulesStarter("[casefirst lower]&H<ch<<<Ch<<<CH", lowerFirst);
+            genericRulesStarter("[caseFirst lower]&H<ch<<<Ch<<<CH", lowerFirst);
             // logln("upper first, case level off");
-            genericRulesStarter("[casefirst upper]&H<ch<<<Ch<<<CH", upperFirst);
+            genericRulesStarter("[caseFirst upper]&H<ch<<<Ch<<<CH", upperFirst);
             // logln("lower first, case level on");
-            genericRulesStarter("[casefirst lower][caselevel on]&H<ch<<<Ch<<<CH", lowerFirst);
+            genericRulesStarter("[caseFirst lower][caseLevel on]&H<ch<<<Ch<<<CH", lowerFirst);
             // logln("upper first, case level on");
-            genericRulesStarter("[casefirst upper][caselevel on]&H<ch<<<Ch<<<CH", upperFirst);
+            genericRulesStarter("[caseFirst upper][caseLevel on]&H<ch<<<Ch<<<CH", upperFirst);
         }
     }
 
@@ -1048,16 +1044,20 @@ public class CollationMiscTest extends TestFmwk {
     }
 
     public void TestImplicitTailoring() {
-        String rules[] = { "&[before 1]\u4e00 < b < c &[before 1]\u4e00 < d < e",
-                           "&\u4e00 < a <<< A < b <<< B",
-                           "&[before 1]\u4e00 < \u4e01 < \u4e02",
-                           "&[before 1]\u4e01 < \u4e02 < \u4e03",
+        String rules[] = {
+            /* Tailor b and c before U+4E00. */
+            "&[before 1]\u4e00 < b < c " +
+            /* Now, before U+4E00 is c; put d and e after that. */
+            "&[before 1]\u4e00 < d < e",
+            "&\u4e00 < a <<< A < b <<< B",
+            "&[before 1]\u4e00 < \u4e01 < \u4e02",
+            "&[before 1]\u4e01 < \u4e02 < \u4e03",
         };
         String cases[][] = {
-            { "d", "e", "b", "c", "\u4e00"},
-            { "\u4e00", "a", "A", "b", "B", "\u4e01"},
-            { "\u4e01", "\u4e02", "\u4e00"},
-            { "\u4e02", "\u4e03", "\u4e01"},
+            { "b", "c", "d", "e", "\u4e00" },
+            { "\u4e00", "a", "A", "b", "B", "\u4e01" },
+            { "\u4e01", "\u4e02", "\u4e00" },
+            { "\u4e02", "\u4e03", "\u4e01" },
         };
 
         int i = 0;
@@ -1065,7 +1065,6 @@ public class CollationMiscTest extends TestFmwk {
         for(i = 0; i < rules.length; i++) {
             genericRulesStarter(rules[i], cases[i]);
         }
-
     }
 
     public void TestFCDProblem() {
@@ -1133,9 +1132,15 @@ public class CollationMiscTest extends TestFmwk {
 
     public void TestJ3087()
     {
-        String rule[] = {"&h<H&CH=\u0427",
-                         "&CH=\u0427&h<H",
-                         "&CH=\u0427"};
+        String rule[] = {
+                "&h<H&CH=\u0427",
+                /*
+                 * The ICU 53 builder adheres to the principle that
+                 * a rule is affected by previous rules but not following ones.
+                 * Therefore, setting CH=\u0427 and then re-tailoring H makes CH != \u0427.
+                "&CH=\u0427&h<H", */
+                "&CH=\u0427"
+        };
         RuleBasedCollator rbc = null;
         CollationElementIterator iter1;
         CollationElementIterator iter2;
@@ -1144,21 +1149,24 @@ public class CollationMiscTest extends TestFmwk {
                 rbc = new RuleBasedCollator(rule[i]);
             } catch (Exception e) {
                 warnln(e.getMessage());
-                return;
+                continue;
             }
             iter1 = rbc.getCollationElementIterator("CH");
             iter2 = rbc.getCollationElementIterator("\u0427");
             int ce1 = CollationElementIterator.IGNORABLE;
             int ce2 = CollationElementIterator.IGNORABLE;
+            // The ICU 53 builder code sets the uppercase flag only on the first CE.
+            int mask = ~0;
             while (ce1 != CollationElementIterator.NULLORDER
                    && ce2 != CollationElementIterator.NULLORDER) {
                 ce1 = iter1.next();
                 ce2 = iter2.next();
-                if (ce1 != ce2) {
+                if ((ce1 & mask) != (ce2 & mask)) {
                     errln("Error generating RuleBasedCollator with the rule "
                           + rule[i]);
                     errln("CH != \\u0427");
                 }
+                mask = ~0xc0;  // mask off case/continuation bits
             }
         }
     }
@@ -1191,120 +1199,6 @@ public class CollationMiscTest extends TestFmwk {
                             + "&u<\u01d6<\u01d8<\u01da<\u01dc<\u00fc", data);
     }
 
-    public void TestRedundantRules() {
-        String[] rules = {
-            //"& a <<< b <<< c << d <<< e& [before 1] e <<< x",
-            "& b <<< c <<< d << e <<< f& [before 3] f <<< x",
-            "& a < b <<< c << d <<< e& [before 1] e <<< x",
-            "& a < b < c < d& [before 1] c < m",
-            "& a < b <<< c << d <<< e& [before 3] e <<< x",
-            "& a < b <<< c << d <<< e& [before 2] e <<< x",
-            "& a < b <<< c << d <<< e <<< f < g& [before 1] g < x",
-            "& a <<< b << c < d& a < m",
-            "&a<b<<b\u0301 &z<b",
-            "&z<m<<<q<<<m",
-            "&z<<<m<q<<<m",
-            "& a < b < c < d& r < c",
-            "& a < b < c < d& r < c",
-            "& a < b < c < d& c < m",
-            "& a < b < c < d& a < m"
-        };
-
-        String[] expectedRules = {
-            //"&\u2089<<<x",
-            "&\u0252<<<x",
-            "& a <<< x < b <<< c << d <<< e",
-            "& a < b < m < c < d",
-            "& a < b <<< c << d <<< x <<< e",
-            "& a < b <<< c <<< x << d <<< e",
-            "& a < b <<< c << d <<< e <<< f < x < g",
-            "& a <<< b << c < m < d",
-            "&a<b\u0301 &z<b",
-            "&z<q<<<m",
-            "&z<q<<<m",
-            "& a < b < d& r < c",
-            "& a < b < d& r < c",
-            "& a < b < c < m < d",
-            "& a < m < b < c < d"
-        };
-
-        String[][] testdata = {
-            //            {"\u2089", "x"},
-            {"\u0252", "x"},
-            {"a", "x", "b", "c", "d", "e"},
-            {"a", "b", "m", "c", "d"},
-            {"a", "b", "c", "d", "x", "e"},
-            {"a", "b", "c", "x", "d", "e"},
-            {"a", "b", "c", "d", "e", "f", "x", "g"},
-            {"a", "b", "c", "m", "d"},
-            {"a", "b\u0301", "z", "b"},
-            {"z", "q", "m"},
-            {"z", "q", "m"},
-            {"a", "b", "d"},
-            {"r", "c"},
-            {"a", "b", "c", "m", "d"},
-            {"a", "m", "b", "c", "d"}
-        };
-
-        String rlz = "";
-        for(int i = 0; i<rules.length; i++) {
-            logln("testing rule " + rules[i] + ", expected to be" + expectedRules[i]);
-            try {
-                rlz = rules[i];
-                Collator credundant = new RuleBasedCollator(rlz);
-                rlz = expectedRules[i];
-                Collator cresulting = new RuleBasedCollator(rlz);
-                logln(" credundant Rule:" + ((RuleBasedCollator)credundant).getRules());
-                logln(" cresulting Rule:" + ((RuleBasedCollator)cresulting).getRules());
-            } catch (Exception e) {
-                warnln("Cannot create RuleBasedCollator");
-            }
-            //testAgainstUCA(cresulting, credundant, "expected", TRUE, &status);
-            // logln("testing using data\n");
-            genericRulesStarter(rules[i], testdata[i]);
-        }
-    }
-
-    public void TestExpansionSyntax() {
-        String[] rules = {
-            "&AE <<< a << b <<< c &d <<< f",
-            "&AE <<< a <<< b << c << d < e < f <<< g",
-            "&AE <<< B <<< C / D <<< F"
-        };
-
-        String[] expectedRules = {
-            "&A <<< a / E << b / E <<< c /E  &d <<< f",
-            "&A <<< a / E <<< b / E << c / E << d / E < e < f <<< g",
-            "&A <<< B / E <<< C / ED <<< F / E"
-        };
-
-        String[][] testdata = {
-            {"AE", "a", "b", "c"},
-            {"AE", "a", "b", "c", "d", "e", "f", "g"},
-            {"AE", "B", "C"} // / ED <<< F / E"},
-        };
-
-        for(int i = 0; i<rules.length; i++) {
-            // logln("testing rule " + rules[i] + ", expected to be " + expectedRules[i]);
-            try {
-                String rlz = rules[i];
-                Collator credundant = new RuleBasedCollator(rlz);
-                rlz = expectedRules[i];
-                Collator cresulting = new RuleBasedCollator(rlz);
-                logln(" credundant Rule:" + ((RuleBasedCollator)credundant).getRules());
-                logln(" cresulting Rule:" + ((RuleBasedCollator)cresulting).getRules());
-            } catch (Exception e) {
-                warnln(e.getMessage());
-            }
-            // testAgainstUCA still doesn't handle expansions correctly, so this is not run
-            // as a hard error test, but only in information mode
-            //testAgainstUCA(cresulting, credundant, "expected", FALSE, &status);
-
-            // logln("testing using data");
-            genericRulesStarter(rules[i], testdata[i]);
-        }
-    }
-
     public void TestHangulTailoring() {
         String[] koreanData = {
             "\uac00", "\u4f3d", "\u4f73", "\u5047", "\u50f9", "\u52a0", "\u53ef", "\u5475",
@@ -1334,11 +1228,6 @@ public class CollationMiscTest extends TestFmwk {
         }
         // logln("Using start of korean rules\n");
         genericOrderingTest(coll, koreanData);
-        // logln("Setting jamoSpecial to TRUE and testing once more\n");
-
-        // can't set jamo in icu4j
-        // ((UCATableHeader *)coll->image)->jamoSpecial = TRUE; // don't try this at home
-        // genericOrderingTest(coll, koreanData);
 
         // no such locale in icu4j
         // logln("Using ko__LOTUS locale\n");
@@ -1509,6 +1398,11 @@ public class CollationMiscTest extends TestFmwk {
             "\u0063\u0068",
             "\u0063\u006C",
         };
+        /*
+         * These pairs of rule strings are not guaranteed to yield the very same mappings.
+         * In fact, LDML 24 recommends an improved way of creating mappings
+         * which always yields different mappings for such pairs. See
+         * http://www.unicode.org/reports/tr35/tr35-33/tr35-collation.html#Orderings
         String[] testrules3 = {
             "&z < xyz &xyzw << B",
             "&z < xyz &xyz << B / w",
@@ -1518,7 +1412,7 @@ public class CollationMiscTest extends TestFmwk {
             "&\ud800\udc00 << B / w",
             "&a\ud800\udc00m << B",
             "&a << B / \ud800\udc00m",
-        };
+        }; */
 
         RuleBasedCollator  coll = null;
         for (int i = 0; i < testrules.length; i ++) {
@@ -1579,7 +1473,7 @@ public class CollationMiscTest extends TestFmwk {
             errln("Expected " + testdata2[1] + " < " + testdata2[2]);
             return;
         }
-        for (int i = 0; i < testrules3.length; i += 2) {
+        /* see above -- for (int i = 0; i < testrules3.length; i += 2) {
             RuleBasedCollator          coll1, coll2;
             CollationElementIterator iter1, iter2;
             char               ch = 0x0042;
@@ -1618,12 +1512,21 @@ public class CollationMiscTest extends TestFmwk {
                 errln("CEs not exhausted\n");
                 return;
             }
-        }
+        } */
     }
 
     public void TestExpansion() {
         String[] testrules = {
+            /*
+             * This seems to have tested that M was not mapped to an expansion.
+             * I believe the old builder just did that because it computed the extension CEs
+             * at the very end, which was a bug.
+             * Among other problems, it violated the core tailoring principle
+             * by making an earlier rule depend on a later one.
+             * And, of course, if M did not get an expansion, then it was primary different from K,
+             * unlike what the rule &K<<M says.
             "&J << K / B & K << M",
+             */
             "&J << K / B << M"
         };
         String[] testdata = {
@@ -1774,15 +1677,15 @@ public class CollationMiscTest extends TestFmwk {
                         >= 0) {
                         errln("Error while comparing prefixed keys @ strength "
                               + strength);
-                        errln(prettify(mergedPrefixKeys[i-1]));
-                        errln(prettify(mergedPrefixKeys[i]));
+                        errln(CollationTest.prettify(mergedPrefixKeys[i-1]));
+                        errln(CollationTest.prettify(mergedPrefixKeys[i]));
                     }
                     if (mergedSuffixKeys[i-1].compareTo(mergedSuffixKeys[i])
                         >= 0) {
                         errln("Error while comparing suffixed keys @ strength "
                               + strength);
-                        errln(prettify(mergedSuffixKeys[i-1]));
-                        errln(prettify(mergedSuffixKeys[i]));
+                        errln(CollationTest.prettify(mergedSuffixKeys[i-1]));
+                        errln(CollationTest.prettify(mergedSuffixKeys[i]));
                     }
                 }
             }
@@ -1797,11 +1700,13 @@ public class CollationMiscTest extends TestFmwk {
 
     public void TestVariableTop()
     {
+        // ICU 53+: The character must be in a supported reordering group,
+        // and the variable top is pinned to the end of that group.
         // parseNextToken is not released as public so i create my own rules
-        String rules = "& a < b < c < de < fg & hi = j";
+        String rules = "& ' ' < b < c < de < fg & hi = j";
         try {
             RuleBasedCollator coll = new RuleBasedCollator(rules);
-            String tokens[] = {"a", "b", "c", "de", "fg", "hi", "j", "ab"};
+            String tokens[] = {" ", "b", "c", "de", "fg", "hi", "j", "ab"};
             coll.setAlternateHandlingShifted(true);
             for (int i = 0; i < tokens.length; i ++) {
                 int varTopOriginal = coll.getVariableTop();
@@ -1859,6 +1764,164 @@ public class CollationMiscTest extends TestFmwk {
             }
         } catch (Exception e) {
             warnln("Error creating RuleBasedCollator");
+        }
+    }
+
+    // ported from cmsccoll.c
+    public void TestVariableTopSetting() {
+        int varTopOriginal = 0, varTop1, varTop2;
+        Collator coll = Collator.getInstance(ULocale.ROOT);
+
+        String empty = "";
+        String space = " ";
+        String dot = ".";  /* punctuation */
+        String degree = "\u00b0";  /* symbol */
+        String dollar = "$";  /* currency symbol */
+        String zero = "0";  /* digit */
+
+        varTopOriginal = coll.getVariableTop();
+        logln(String.format("coll.getVariableTop(root) -> %08x", varTopOriginal));
+        ((RuleBasedCollator)coll).setAlternateHandlingShifted(true);
+
+        varTop1 = coll.setVariableTop(space);
+        varTop2 = coll.getVariableTop();
+        logln(String.format("coll.setVariableTop(space) -> %08x", varTop1));
+        if(varTop1 != varTop2 ||
+                !coll.equals(empty, space) ||
+                coll.equals(empty, dot) ||
+                coll.equals(empty, degree) ||
+                coll.equals(empty, dollar) ||
+                coll.equals(empty, zero) ||
+                coll.compare(space, dot) >= 0) {
+            errln("coll.setVariableTop(space) did not work");
+        }
+
+        varTop1 = coll.setVariableTop(dot);
+        varTop2 = coll.getVariableTop();
+        logln(String.format("coll.setVariableTop(dot) -> %08x", varTop1));
+        if(varTop1 != varTop2 ||
+                !coll.equals(empty, space) ||
+                !coll.equals(empty, dot) ||
+                coll.equals(empty, degree) ||
+                coll.equals(empty, dollar) ||
+                coll.equals(empty, zero) ||
+                coll.compare(dot, degree) >= 0) {
+            errln("coll.setVariableTop(dot) did not work");
+        }
+
+        varTop1 = coll.setVariableTop(degree);
+        varTop2 = coll.getVariableTop();
+        logln(String.format("coll.setVariableTop(degree) -> %08x", varTop1));
+        if(varTop1 != varTop2 ||
+                !coll.equals(empty, space) ||
+                !coll.equals(empty, dot) ||
+                !coll.equals(empty, degree) ||
+                coll.equals(empty, dollar) ||
+                coll.equals(empty, zero) ||
+                coll.compare(degree, dollar) >= 0) {
+            errln("coll.setVariableTop(degree) did not work");
+        }
+
+        varTop1 = coll.setVariableTop(dollar);
+        varTop2 = coll.getVariableTop();
+        logln(String.format("coll.setVariableTop(dollar) -> %08x", varTop1));
+        if(varTop1 != varTop2 ||
+                !coll.equals(empty, space) ||
+                !coll.equals(empty, dot) ||
+                !coll.equals(empty, degree) ||
+                !coll.equals(empty, dollar) ||
+                coll.equals(empty, zero) ||
+                coll.compare(dollar, zero) >= 0) {
+            errln("coll.setVariableTop(dollar) did not work");
+        }
+
+        logln("Testing setting variable top to contractions");
+        try {
+            coll.setVariableTop("@P");
+            errln("Invalid contraction succeded in setting variable top!");
+        } catch(Exception expected) {
+        }
+
+        logln("Test restoring variable top");
+        coll.setVariableTop(varTopOriginal);
+        if(varTopOriginal != coll.getVariableTop()) {
+            errln("Couldn't restore old variable top");
+        }
+    }
+
+    // ported from cmsccoll.c
+    public void TestMaxVariable() {
+        int oldMax, max;
+
+        String empty = "";
+        String space = " ";
+        String dot = ".";  /* punctuation */
+        String degree = "\u00b0";  /* symbol */
+        String dollar = "$";  /* currency symbol */
+        String zero = "0";  /* digit */
+
+        Collator coll = Collator.getInstance(ULocale.ROOT);
+
+        oldMax = coll.getMaxVariable();
+        logln(String.format("coll.getMaxVariable(root) -> %04x", oldMax));
+        ((RuleBasedCollator)coll).setAlternateHandlingShifted(true);
+
+        coll.setMaxVariable(Collator.ReorderCodes.SPACE);
+        max = coll.getMaxVariable();
+        logln(String.format("coll.setMaxVariable(space) -> %04x", max));
+        if(max != Collator.ReorderCodes.SPACE ||
+                !coll.equals(empty, space) ||
+                coll.equals(empty, dot) ||
+                coll.equals(empty, degree) ||
+                coll.equals(empty, dollar) ||
+                coll.equals(empty, zero) ||
+                coll.compare(space, dot) >= 0) {
+            errln("coll.setMaxVariable(space) did not work");
+        }
+
+        coll.setMaxVariable(Collator.ReorderCodes.PUNCTUATION);
+        max = coll.getMaxVariable();
+        logln(String.format("coll.setMaxVariable(punctuation) -> %04x", max));
+        if(max != Collator.ReorderCodes.PUNCTUATION ||
+                !coll.equals(empty, space) ||
+                !coll.equals(empty, dot) ||
+                coll.equals(empty, degree) ||
+                coll.equals(empty, dollar) ||
+                coll.equals(empty, zero) ||
+                coll.compare(dot, degree) >= 0) {
+            errln("coll.setMaxVariable(punctuation) did not work");
+        }
+
+        coll.setMaxVariable(Collator.ReorderCodes.SYMBOL);
+        max = coll.getMaxVariable();
+        logln(String.format("coll.setMaxVariable(symbol) -> %04x", max));
+        if(max != Collator.ReorderCodes.SYMBOL ||
+                !coll.equals(empty, space) ||
+                !coll.equals(empty, dot) ||
+                !coll.equals(empty, degree) ||
+                coll.equals(empty, dollar) ||
+                coll.equals(empty, zero) ||
+                coll.compare(degree, dollar) >= 0) {
+            errln("coll.setMaxVariable(symbol) did not work");
+        }
+
+        coll.setMaxVariable(Collator.ReorderCodes.CURRENCY);
+        max = coll.getMaxVariable();
+        logln(String.format("coll.setMaxVariable(currency) -> %04x", max));
+        if(max != Collator.ReorderCodes.CURRENCY ||
+                !coll.equals(empty, space) ||
+                !coll.equals(empty, dot) ||
+                !coll.equals(empty, degree) ||
+                !coll.equals(empty, dollar) ||
+                coll.equals(empty, zero) ||
+                coll.compare(dollar, zero) >= 0) {
+            errln("coll.setMaxVariable(currency) did not work");
+        }
+
+        logln("Test restoring maxVariable");
+        coll.setMaxVariable(oldMax);
+        if(oldMax != coll.getMaxVariable()) {
+            errln("Couldn't restore old maxVariable");
         }
     }
 
@@ -2031,115 +2094,6 @@ public class CollationMiscTest extends TestFmwk {
         genericLocaleStarter(new Locale("zh", "", "PINYIN"), test);
     }
 
-    static final long topByte = 0xFF000000L;
-    static final long bottomByte = 0xFFL;
-    static final long fourBytes = 0xFFFFFFFFL;
-
-    static final int MAX_INPUT = 0x220001; // 2 * Unicode range + 2
-
-    private void show(int i, ImplicitCEGenerator imp) {
-        if (i >= 0 && i <= MAX_INPUT) {
-            logln(Utility.hex(i) + "\t" + Utility.hex(imp.getImplicitFromRaw(i) & fourBytes));
-        }
-    }
-
-    private void throwError(String title, int cp, ImplicitCEGenerator imp) {
-        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp, 6) + "\t" + Utility.hex(imp.getImplicitFromRaw(cp) & fourBytes));
-    }
-
-    private void throwError(String title, long ce) {
-        errln(title + "\t" + Utility.hex(ce & fourBytes));
-    }
-
-    public void TestImplicitGeneration()
-    {
-        logln("Start");
-        try {
-            ImplicitCEGenerator foo = new ImplicitCEGenerator(0xE0, 0xE4);
-
-            //int x = foo.getRawImplicit(0xF810);
-            foo.getRawFromImplicit(0xE20303E7);
-
-            //int gap4 = foo.getGap4();
-            //logln("Gap4: " + gap4);
-            //int gap3 = foo.getGap3();
-            //int minTrail = foo.getMinTrail();
-            //int maxTrail = foo.getMaxTrail();
-            long last = 0;
-            long current;
-            for (int i = 0; i <= MAX_INPUT; ++i) {
-                current = foo.getImplicitFromRaw(i) & fourBytes;
-
-                // check that it round-trips AND that all intervening ones are illegal
-                int roundtrip = foo.getRawFromImplicit((int)current);
-                if (roundtrip != i) {
-                    throwError("No roundtrip", i, foo);
-                }
-                if (last != 0) {
-                    for (long j = last + 1; j < current; ++j) {
-                        roundtrip = foo.getRawFromImplicit((int)j);
-                        // raise an error if it *doesn't* find an error
-                        if (roundtrip != -1) {
-                            throwError("Fails to recognize illegal", j);
-                        }
-                    }
-                }
-                // now do other consistency checks
-                long lastBottom = last & bottomByte;
-                long currentBottom = current & bottomByte;
-                long lastTop = last & topByte;
-                long currentTop = current & topByte;
-
-                // do some consistency checks
-                /*
-                  long gap = current - last;
-                  if (currentBottom != 0) { // if we are a 4-byte
-                  // gap has to be at least gap4
-                  // and gap from minTrail, maxTrail has to be at least gap4
-                  if (gap <= gap4) foo.throwError("Failed gap4 between", i);
-                  if (currentBottom < minTrail + gap4) foo.throwError("Failed gap4 before", i);
-                  if (currentBottom > maxTrail - gap4) foo.throwError("Failed gap4 after", i);
-                  } else { // we are a three-byte
-                  gap = gap >> 8; // move gap down for comparison.
-                  long current3Bottom = (current >> 8) & bottomByte;
-                  if (gap <= gap3) foo.throwError("Failed gap3 between ", i);
-                  if (current3Bottom < minTrail + gap3) foo.throwError("Failed gap3 before", i);
-                  if (current3Bottom > maxTrail - gap3) foo.throwError("Failed gap3 after", i);
-                  }
-                */
-                // print out some values for spot-checking
-                if (lastTop != currentTop || i == 0x10000 || i == 0x110000) {
-                    show(i-3, foo);
-                    show(i-2, foo);
-                    show(i-1, foo);
-                    if (i == 0) {
-                        // do nothing
-                    } else if (lastBottom == 0 && currentBottom != 0) {
-                        logln("+ primary boundary, 4-byte CE's below");
-                    } else if (lastTop != currentTop) {
-                        logln("+ primary boundary");
-                    }
-                    show(i, foo);
-                    show(i+1, foo);
-                    show(i+2, foo);
-                    logln("...");
-                }
-                last = current;
-                if(foo.getCodePointFromRaw(foo.getRawFromCodePoint(i)) != i) {
-                    errln("No raw <-> code point roundtrip for "+Utility.hex(i));
-                }
-            }
-            show(MAX_INPUT-2, foo);
-            show(MAX_INPUT-1, foo);
-            show(MAX_INPUT, foo);
-        } catch (Exception e) {
-            e.printStackTrace();
-            warnln(e.getMessage());
-        } finally {
-            logln("End");
-        }
-    }
-
     /* supercedes TestJ784 */
     public void TestBeforePinyin() {
         String rules =
@@ -2284,7 +2238,15 @@ public class CollationMiscTest extends TestFmwk {
                 "&a < \u00e2 <<< \u00c2",
                 "&a < \u1FF3 ",  // OMEGA WITH YPOGEGRAMMENI
                 "&s < \u0161 ",  // &s < s with caron
-                "&z < a\u00EA",  // &z < a+e with circumflex
+                /*
+                 * Note: Just tailoring &z<ae^ does not work as expected:
+                 * The UCA spec requires for discontiguous contractions that they
+                 * extend an *existing match* by one combining mark at a time.
+                 * Therefore, ae must be a contraction so that the builder finds
+                 * discontiguous contractions for ae^, for example with an intervening underdot.
+                 * Only then do we get the expected tail closure with a\u1EC7, a\u1EB9\u0302, etc.
+                 */
+                "&x < ae &z < a\u00EA",  // &x < ae &z < a+e with circumflex
         };
         String cases[][] = {
             { "\u1EAC", "A\u0323\u0302", "\u1EA0\u0302", "\u00C2\u0323", },
@@ -2313,9 +2275,9 @@ public class CollationMiscTest extends TestFmwk {
                 CollationKey key = coll.getCollationKey(cases[i][j]);
                 if ( key.compareTo(expectingKey)!=0) {
                     errln("Error! Test case["+i+"]:"+"source:" + key.getSourceString());
-                    errln("expecting:"+prettify(expectingKey)+ "got:"+  prettify(key));
+                    errln("expecting:"+CollationTest.prettify(expectingKey)+ "got:"+  CollationTest.prettify(key));
                 }
-                logln("   Key:"+  prettify(key));
+                logln("   Key:"+  CollationTest.prettify(key));
             }
         }
 
@@ -2333,10 +2295,10 @@ public class CollationMiscTest extends TestFmwk {
                     // errln("source:" + key.getSourceString());
                     // errln("expecting:"+prettify(expectingKey)+ "got:"+  prettify(key));
                     logln("Error!! in Vietnese sort - source:" + key.getSourceString());
-                    logln("expecting:"+prettify(expectingKey)+ "got:"+  prettify(key));
+                    logln("expecting:"+CollationTest.prettify(expectingKey)+ "got:"+  CollationTest.prettify(key));
                 }
                 // logln("source:" + key.getSourceString());
-                logln("   Key:"+  prettify(key));
+                logln("   Key:"+  CollationTest.prettify(key));
             }
         } catch (Exception e) {
             warnln("Error creating Vietnese collator");
@@ -2365,35 +2327,36 @@ public class CollationMiscTest extends TestFmwk {
             try {
                 coll = new RuleBasedCollator(rules[i]);
             } catch (Exception e) {
-                warnln("Unable to open collator with rules " + rules[i]);
+                warnln("Unable to open collator with rules " + rules[i] + ": " + e);
+                return;
             }
 
             logln("Test rule["+i+"]"+rules[i]);
 
             CollationKey keyA = coll.getCollationKey("a");
-            logln("Key for \"a\":"+  prettify(keyA));
+            logln("Key for \"a\":"+  CollationTest.prettify(keyA));
             if (keyA.compareTo(coll.getCollationKey(lastPrimIgn))<=0) {
                 CollationKey key = coll.getCollationKey(lastPrimIgn);
-                logln("Collation key for 0xD800 0xDDFD: "+prettify(key));
+                logln("Collation key for 0xD800 0xDDFD: "+CollationTest.prettify(key));
                 errln("Error! String \"a\" must be greater than \uD800\uDDFD -"+
                       "[Last Primary Ignorable]");
             }
             if (keyA.compareTo(coll.getCollationKey(firstVariable))>=0) {
                 CollationKey key = coll.getCollationKey(firstVariable);
-                logln("Collation key for 0x0009: "+prettify(key));
+                logln("Collation key for 0x0009: "+CollationTest.prettify(key));
                 errln("Error! String \"a\" must be less than 0x0009 - [First Variable]");
             }
             CollationKey keyB = coll.getCollationKey("b");
-            logln("Key for \"b\":"+  prettify(keyB));
+            logln("Key for \"b\":"+  CollationTest.prettify(keyB));
             if (keyB.compareTo(coll.getCollationKey(firstPrimIgn))<=0) {
                 CollationKey key = coll.getCollationKey(firstPrimIgn);
-                logln("Collation key for 0x0332: "+prettify(key));
+                logln("Collation key for 0x0332: "+CollationTest.prettify(key));
                 errln("Error! String \"b\" must be greater than 0x0332 -"+
                       "[First Primary Ignorable]");
             }
             if (keyB.compareTo(coll.getCollationKey(firstVariable))>=0) {
                 CollationKey key = coll.getCollationKey(firstVariable);
-                logln("Collation key for 0x0009: "+prettify(key));
+                logln("Collation key for 0x0009: "+CollationTest.prettify(key));
                 errln("Error! String \"b\" must be less than 0x0009 - [First Variable]");
             }
         }
@@ -2409,7 +2372,7 @@ public class CollationMiscTest extends TestFmwk {
             logln("Test rule["+i+"]"+rules[i]);
 
             CollationKey keyA = coll.getCollationKey("a");
-            logln("Key for \"a\":"+  prettify(keyA));
+            logln("Key for \"a\":"+  CollationTest.prettify(keyA));
             byte[] keyAInBytes = keyA.toByteArray();
             for (int j=0; j<keyAInBytes.length && j<secIgnKey.length; j++) {
                 if (keyAInBytes[j]!=secIgnKey[j]) {
@@ -2422,10 +2385,10 @@ public class CollationMiscTest extends TestFmwk {
             if (keyA.compareTo(coll.getCollationKey(firstVariable))>=0) {
                 errln("Error! String \"a\" must be less than 0x0009 - [First Variable]");
                 CollationKey key = coll.getCollationKey(firstVariable);
-                logln("Collation key for 0x0009: "+prettify(key));
+                logln("Collation key for 0x0009: "+CollationTest.prettify(key));
             }
             CollationKey keyB = coll.getCollationKey("b");
-            logln("Key for \"b\":"+  prettify(keyB));
+            logln("Key for \"b\":"+  CollationTest.prettify(keyB));
             byte[] keyBInBytes = keyB.toByteArray();
             for (int j=0; j<keyBInBytes.length && j<secIgnKey.length; j++) {
                 if (keyBInBytes[j]!=secIgnKey[j]) {
@@ -2437,7 +2400,7 @@ public class CollationMiscTest extends TestFmwk {
             }
             if (keyB.compareTo(coll.getCollationKey(firstVariable))>=0) {
                 CollationKey key = coll.getCollationKey(firstVariable);
-                logln("Collation key for 0x0009: "+prettify(key));
+                logln("Collation key for 0x0009: "+CollationTest.prettify(key));
                 errln("Error! String \"b\" must be less than 0x0009 - [First Variable]");
             }
         }
@@ -2484,7 +2447,7 @@ public class CollationMiscTest extends TestFmwk {
                     errln("expecting:"+prettify(expectingKey)+ "got:"+  prettify(key));
                 }
                 */
-                logln("String:"+cases[j]+"   Key:"+  prettify(key));
+                logln("String:"+cases[j]+"   Key:"+  CollationTest.prettify(key));
             }
         } catch (Exception e) {
             warnln("Error creating English collator");
@@ -2506,7 +2469,7 @@ public class CollationMiscTest extends TestFmwk {
                         " is not >= previous test string.");
                     }
                 }
-                logln("String:"+cases[j]+"   Key:"+  prettify(key));
+                logln("String:"+cases[j]+"   Key:"+  CollationTest.prettify(key));
             }
         } catch (Exception e) {
             warnln("Error creating Japanese collator");
@@ -2540,7 +2503,7 @@ public class CollationMiscTest extends TestFmwk {
                         }
                     }
                 }
-                logln("String:"+cases[j]+"   Key:"+  prettify(key));
+                logln("String:"+cases[j]+"   Key:"+  CollationTest.prettify(key));
             }
         }
     }
@@ -2584,7 +2547,7 @@ public class CollationMiscTest extends TestFmwk {
             try {
                 myCollation = new RuleBasedCollator(rule);
             } catch (Exception e) {
-                warnln("ERROR: in creation of rule based collator");
+                warnln("ERROR: in creation of rule based collator: " + e);
                 return;
             }
 
@@ -2636,14 +2599,14 @@ public class CollationMiscTest extends TestFmwk {
      // are working fine.
     private OneTestCase[] m_rangeTestCasesSupplemental_ = {
         //               Left                Right               Result
-        new OneTestCase( "\ufffe",           "\uffff",             -1 ),
-        new OneTestCase( "\uffff",           "\ud800\udc00",       -1 ),  // U+FFFF < U+10000
+        new OneTestCase( "\u4e00",           "\ufffb",             -1 ),
+        new OneTestCase( "\ufffb",           "\ud800\udc00",       -1 ),  // U+FFFB < U+10000
         new OneTestCase( "\ud800\udc00",    "\ud800\udc01",        -1 ),  // U+10000 < U+10001
 
-        new OneTestCase( "\ufffe",           "\ud800\udc01",       -1 ),  // U+FFFE < U+10001
+        new OneTestCase( "\u4e00",           "\ud800\udc01",       -1 ),  // U+4E00 < U+10001
         new OneTestCase( "\ud800\udc01",    "\ud800\udc02",        -1 ),  // U+10001 < U+10002
         new OneTestCase( "\ud800\udc00",    "\ud840\udc02",        -1 ),  // U+10000 < U+10002
-        new OneTestCase( "\ufffe",           "\u0d840\udc02",      -1 ),  // U+FFFF < U+10002
+        new OneTestCase( "\u4e00",           "\u0d840\udc02",      -1 ),  // U+4E00 < U+10002
 
     };
 
@@ -2707,24 +2670,20 @@ public class CollationMiscTest extends TestFmwk {
     public void TestSameStrengthListWithSupplementalCharacters() {
         String[] rules = new String[] {
             // ** Rule without compact list syntax **
-            // \ufffe < \uffff < \U00010000    < \U00010001  < \U00010002
-            "&'\ufffe'<'\uffff'<'\ud800\udc00'<'\ud800\udc01'<'\ud800\udc02' " +
+            // \u4e00 < \ufffb < \U00010000    < \U00010001  < \U00010002
+            "&\u4e00<\ufffb<'\ud800\udc00'<'\ud800\udc01'<'\ud800\udc02' " +
             // \U00010000    << \U00020001   << \U00020002       \U00020002
             "&'\ud800\udc00'<<'\ud840\udc01'<<'\ud840\udc02'<<'\ud840\udc02'  " +
             // \U00020001   = \U0003001    = \U0004001    = \U0004002
-            "&'\ud840\udc01'='\ud880\udc01'='\ud8c0\udc01'='\ud8c0\udc02'" +
-            // \U00040008   < \U00030008   < \U00020008
-            "&'\ud8c0\udc08'<'\ud880\udc08'<'\ud840\udc08'",
+            "&'\ud840\udc01'='\ud880\udc01'='\ud8c0\udc01'='\ud8c0\udc02'",
 
             // ** Rule with compact list syntax **
-            // \ufffe <* \uffff\U00010000  \U00010001
-            "&'\ufffe'<*'\uffff\ud800\udc00\ud800\udc01\ud800\udc02' " +
+            // \u4e00 <* \ufffb\U00010000  \U00010001
+            "&\u4e00<*'\ufffb\ud800\udc00\ud800\udc01\ud800\udc02' " +
             // \U00010000   <<* \U00020001  \U00020002
             "&'\ud800\udc00'<<*'\ud840\udc01\ud840\udc02\ud840\udc03'  " +
             // \U00020001   =* \U0003001   \U0003002   \U0003003   \U0004001
-            "&'\ud840\udc01'=*'\ud880\udc01\ud880\udc02\ud880\udc03\ud8c0\udc01' " +
-            // \U00040008   <* \U00030008  \U00030009  \U0003000a  \U00020008
-            "&'\ud8c0\udc08'<*'\ud880\udc08\ud880\udc09\ud880\udc0a\ud840\udc08'",
+            "&'\ud840\udc01'=*'\ud880\udc01\ud880\udc02\ud880\udc03\ud8c0\udc01' "
 
         };
         doTestCollation(m_rangeTestCasesSupplemental_, rules);
@@ -2751,14 +2710,12 @@ public class CollationMiscTest extends TestFmwk {
     // Tests the compact range syntax with supplemental codepoints.
     public void TestSameStrengthListRangesWithSupplementalCharacters() {
         String[] rules = new String[] {
-            // \ufffe <* \uffff\U00010000  \U00010001
-            "&'\ufffe'<*'\uffff'-'\ud800\udc02' " +
+            // \u4e00 <* \ufffb\U00010000  \U00010001
+            "&\u4e00<*'\ufffb'\ud800\udc00-'\ud800\udc02' " +
             // \U00010000   <<* \U00020001   - \U00020003
             "&'\ud800\udc00'<<*'\ud840\udc01'-'\ud840\udc03'  " +
             // \U00020001   =* \U0003001   \U0004001
-            "&'\ud840\udc01'=*'\ud880\udc01'-'\ud880\udc03\ud8c0\udc01' " +
-            // \U00040008   <* \U00030008  \U00020008
-            "&'\ud8c0\udc08'<*'\ud880\udc08'-'\ud880\udc0a\ud840\udc08'",
+            "&'\ud840\udc01'=*'\ud880\udc01'-'\ud880\udc03\ud8c0\udc01' "
         };
         doTestCollation(m_rangeTestCasesSupplemental_, rules);
     }
@@ -2794,7 +2751,7 @@ public class CollationMiscTest extends TestFmwk {
     public void TestInvalidListsAndRanges() {
         String[] invalidRules = new String[] {
             // Range not in starred expression
-            "&'\ufffe'<'\uffff'-'\ud800\udc02'",
+            "&\u4e00<\ufffb-'\ud800\udc02'",
             
             // Range without start
             "&a<*-c",
@@ -3004,8 +2961,8 @@ public class CollationMiscTest extends TestFmwk {
             if (sortKey1.compareTo(sortKey2) >= 0) {
                   errln("TestHungarianTailoring getCollationKey(\"" + str1 +"\") was suppose "+
                         "less than getCollationKey(\""+ str2 + "\").");
-                  errln("  getCollationKey(\"ggy\"):" + prettify(sortKey1) +
-                        "  getCollationKey(\"GGY\"):" + prettify(sortKey2));
+                  errln("  getCollationKey(\"ggy\"):" + CollationTest.prettify(sortKey1) +
+                        "  getCollationKey(\"GGY\"):" + CollationTest.prettify(sortKey2));
             }
 
             CollationElementIterator iter1 = coll.getCollationElementIterator(str1);

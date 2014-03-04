@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -153,8 +153,8 @@ import com.ibm.icu.text.Collator;
             
             String sExpect = new String("");
             String sResult = new String("");
-            sResult = appendCompareResult(compareResult, sResult);
-            sExpect = appendCompareResult(expectedResult, sExpect);
+            sResult = CollationTest.appendCompareResult(compareResult, sResult);
+            sExpect = CollationTest.appendCompareResult(expectedResult, sExpect);
             if (ok1) {
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
@@ -164,21 +164,21 @@ import com.ibm.icu.text.Collator;
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
-            sResult = appendCompareResult(keyResult, sResult);
+            sResult = CollationTest.appendCompareResult(keyResult, sResult);
             if (ok2) {
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
                 msg2 = " vs. ";
-                errln(msg1 + prettify(sourceKey) + msg2 + prettify(targetKey));
+                errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
             }
             
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
             msg2 = "\", \"";
             msg3 = "\") returned ";
 
-            sResult = appendCompareResult(incResult, sResult);
+            sResult = CollationTest.appendCompareResult(incResult, sResult);
 
             if (ok3) {
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
@@ -186,40 +186,5 @@ import com.ibm.icu.text.Collator;
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }                
         }
-    }
-    
-    private String appendCompareResult(int result, String target){
-        if (result == -1)   //LESS
-        {
-            target += "LESS";
-        }
-        else if (result == 0)   //EQUAL
-        {
-            target += "EQUAL";
-        }
-        else if (result == 1)   //GREATER
-        {
-            target += "GREATER";
-        }
-        else
-        {
-            String huh = "?";
-
-            target += huh + result;
-        }
-        return target;
-    }
-    
-    String prettify(CollationKey sourceKey) {
-        int i;
-        byte[] bytes= sourceKey.toByteArray();
-        String target = "[";
-    
-        for (i = 0; i < bytes.length; i++) {
-            target += Integer.toHexString(bytes[i]);
-            target += " ";
-        }
-        target += "]";
-        return target;
     }
 }

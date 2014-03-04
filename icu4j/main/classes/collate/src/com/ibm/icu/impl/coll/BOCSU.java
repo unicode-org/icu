@@ -1,15 +1,15 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
-package com.ibm.icu.impl;
+package com.ibm.icu.impl.coll;
 
-import com.ibm.icu.text.UCharacterIterator;
+import com.ibm.icu.util.ByteArrayWrapper;
 
 /**
- * <p>Binary Ordered Compression for Unicode</p>
+ * <p>Binary Ordered Compression Scheme for Unicode</p>
  * 
  * <p>Users are strongly encouraged to read the ICU paper on 
  * <a href="http://www.icu-project.org/docs/papers/binary_ordered_compression_for_unicode.html">
@@ -76,90 +76,70 @@ import com.ibm.icu.text.UCharacterIterator;
  * @author Syn Wee Quek
  * @since release 2.2, May 3rd 2002
  */
-public class BOCU 
+public class BOCSU 
 {      
-    // public constructors --------------------------------------------------
-    
     // public methods -------------------------------------------------------
-        
+
     /**
-     * <p>Encode the code points of a string as a sequence of bytes,
-     * preserving lexical order.</p>
-     * <p>The minimum size of buffer required for the compression can be 
-     * preflighted by getCompressionLength(String).</p>
-     * @param source text source
-     * @param buffer output buffer
-     * @param offset to start writing to
-     * @return end offset where the writing stopped
-     * @see #getCompressionLength(String)
-     * @exception ArrayIndexOutOfBoundsException thrown if size of buffer is 
-     *            too small for the output.
+     * Encode the code points of a string as
+     * a sequence of byte-encoded differences (slope detection),
+     * preserving lexical order.
+     *
+     * <p>Optimize the difference-taking for runs of Unicode text within
+     * small scripts:
+     *
+     * <p>Most small scripts are allocated within aligned 128-blocks of Unicode
+     * code points. Lexical order is preserved if "prev" is always moved
+     * into the middle of such a block.
+     *
+     * <p>Additionally, "prev" is moved from anywhere in the Unihan
+     * area into the middle of that area.
+     * Note that the identical-level run in a sort key is generated from
+     * NFD text - there are never Hangul characters included.
      */
-    public static int compress(String source, byte buffer[], int offset) 
-    {
-        int prev = 0;
-        UCharacterIterator iterator = UCharacterIterator.getInstance(source);
-        int codepoint = iterator.nextCodePoint();
-        while (codepoint != UCharacterIterator.DONE) {
-            if (prev < 0x4e00 || prev >= 0xa000) {
-                prev = (prev & ~0x7f) - SLOPE_REACH_NEG_1_;
-            } 
-            else {
-                // Unihan U+4e00..U+9fa5:
-                // double-bytes down from the upper end
-                prev = 0x9fff - SLOPE_REACH_POS_2_;
+    public static int writeIdenticalLevelRun(int prev, CharSequence s, int i, int length, ByteArrayWrapper sink) {
+        while (i < length) {
+            // We must have capacity>=SLOPE_MAX_BYTES in case writeDiff() writes that much,
+            // but we do not want to force the sink to allocate
+            // for a large min_capacity because we might actually only write one byte.
+            ensureAppendCapacity(sink, 16, s.length() * 2);
+            byte[] buffer = sink.bytes;
+            int capacity = buffer.length;
+            int p = sink.size;
+            int lastSafe = capacity - SLOPE_MAX_BYTES_;
+            while (i < length && p <= lastSafe) {
+                if (prev < 0x4e00 || prev >= 0xa000) {
+                    prev = (prev & ~0x7f) - SLOPE_REACH_NEG_1_;
+                } else {
+                    // Unihan U+4e00..U+9fa5:
+                    // double-bytes down from the upper end
+                    prev = 0x9fff - SLOPE_REACH_POS_2_;
+                }
+
+                int c = Character.codePointAt(s, i);
+                i += Character.charCount(c);
+                if (c == 0xfffe) {
+                    buffer[p++] = 2;  // merge separator
+                    prev = 0;
+                } else {
+                    p = writeDiff(c - prev, buffer, p);
+                    prev = c;
+                }
             }
-        
-            offset = writeDiff(codepoint - prev, buffer, offset);
-            prev = codepoint;
-            codepoint = iterator.nextCodePoint();
+            sink.size = p;
         }
-        return offset;
-    }
-        
-    /** 
-     * Return the number of  bytes that compress() would write.
-     * @param source text source string
-     * @return the length of the BOCU result 
-     * @see #compress(String, byte[], int)
-     */
-    public static int getCompressionLength(String source) 
-    {
-        int prev = 0;
-        int result = 0;
-        UCharacterIterator iterator =  UCharacterIterator.getInstance(source);
-        int codepoint = iterator.nextCodePoint();
-        while (codepoint != UCharacterIterator.DONE) {
-            if (prev < 0x4e00 || prev >= 0xa000) {
-                prev = (prev & ~0x7f) - SLOPE_REACH_NEG_1_;
-            } 
-            else {
-                // Unihan U+4e00..U+9fa5:
-                // double-bytes down from the upper end
-                prev = 0x9fff - SLOPE_REACH_POS_2_;
-            }
-        
-            codepoint = iterator.nextCodePoint();
-            result += lengthOfDiff(codepoint - prev);
-            prev = codepoint;
-        }
-        return result;
+        return prev;
     }
 
-    // public setter methods -------------------------------------------------
-        
-    // public getter methods ------------------------------------------------
-            
-    // public other methods -------------------------------------------------
-    
-    // protected constructor ------------------------------------------------
-      
-    // protected data members ------------------------------------------------
-    
-    // protected methods -----------------------------------------------------
- 
+    private static void ensureAppendCapacity(ByteArrayWrapper sink, int minCapacity, int desiredCapacity) {
+        int remainingCapacity = sink.bytes.length - sink.size;
+        if (remainingCapacity >= minCapacity) { return; }
+        if (desiredCapacity < minCapacity) { desiredCapacity = minCapacity; }
+        sink.ensureCapacity(sink.size + desiredCapacity);
+    }
+
     // private data members --------------------------------------------------
-    
+
     /** 
      * Do not use byte values 0, 1, 2 because they are separators in sort keys.
      */
@@ -167,7 +147,7 @@ public class BOCU
     private static final int SLOPE_MAX_ = 0xff;
     private static final int SLOPE_MIDDLE_ = 0x81;
     private static final int SLOPE_TAIL_COUNT_ = SLOPE_MAX_ - SLOPE_MIN_ + 1;
-    //private static final int SLOPE_MAX_BYTES_ = 4;
+    private static final int SLOPE_MAX_BYTES_ = 4;
 
     /**
      * Number of lead bytes:
@@ -239,7 +219,7 @@ public class BOCU
      * Constructor private to prevent initialization
      */
     ///CLOVER:OFF
-    private BOCU()
+    private BOCSU()
     {
     }            
     ///CLOVER:ON                                                                                       
@@ -266,7 +246,7 @@ public class BOCU
     }
         
     /**
-     * Encode one difference value -0x10ffff..+0x10ffff in 1..3 bytes,
+     * Encode one difference value -0x10ffff..+0x10ffff in 1..4 bytes,
      * preserving lexical order
      * @param diff
      * @param buffer byte buffer to append to
@@ -299,7 +279,7 @@ public class BOCU
                 buffer[offset + 3] = (byte)(SLOPE_MIN_ 
                                             + diff % SLOPE_TAIL_COUNT_);
                 diff /= SLOPE_TAIL_COUNT_;
-                buffer[offset] = (byte)(SLOPE_MIN_ 
+                buffer[offset + 2] = (byte)(SLOPE_MIN_ 
                                         + diff % SLOPE_TAIL_COUNT_);
                 diff /= SLOPE_TAIL_COUNT_;
                 buffer[offset + 1] = (byte)(SLOPE_MIN_ 
@@ -341,38 +321,5 @@ public class BOCU
             }
         }
         return offset;
-    }
-        
-    /**
-     * How many bytes would writeDiff() write? 
-     * @param diff
-     */
-    private static final int lengthOfDiff(int diff) 
-    {
-        if (diff >= SLOPE_REACH_NEG_1_) {
-            if (diff <= SLOPE_REACH_POS_1_) {
-                return 1;
-            } 
-            else if (diff <= SLOPE_REACH_POS_2_) {
-                return 2;
-            } 
-            else if(diff <= SLOPE_REACH_POS_3_) {
-                return 3;
-            } 
-            else {
-                return 4;
-            }
-        } 
-        else {
-            if (diff >= SLOPE_REACH_NEG_2_) {
-                return 2;
-            } 
-            else if (diff >= SLOPE_REACH_NEG_3_) {
-                return 3;
-            } 
-            else {
-                return 4;
-            }
-        }
     }
 }

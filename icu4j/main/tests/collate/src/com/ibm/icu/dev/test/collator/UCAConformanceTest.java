@@ -1,6 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 2002-2012, International Business Machines Corporation and
+ * Copyright (c) 2002-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -13,15 +12,16 @@
 package com.ibm.icu.dev.test.collator;
 
 import java.io.BufferedReader;
-import java.util.Locale;
+import java.io.IOException;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 
 public class UCAConformanceTest extends TestFmwk {
@@ -35,9 +35,9 @@ public class UCAConformanceTest extends TestFmwk {
 
     public UCAConformanceTest() {
     }
-    protected void init()throws Exception{
-        UCA = (RuleBasedCollator)Collator.getInstance(
-                new Locale("root", "", ""));
+    @Override
+    protected void init() throws Exception{
+        UCA = (RuleBasedCollator)Collator.getInstance(ULocale.ROOT);
 
         comparer = new UTF16.StringComparator(true, false, UTF16.StringComparator.FOLD_CASE_DEFAULT);
     }
@@ -60,6 +60,7 @@ public class UCAConformanceTest extends TestFmwk {
     }
 
     public void TestRulesNonIgnorable() {
+        if(logKnownIssue("cldrbug:6745", "UCARules.txt has problems")) { return; }
         initRbUCA();
         if(rbUCA == null) { return; }
 
@@ -87,25 +88,17 @@ public class UCAConformanceTest extends TestFmwk {
         String collationTest = "CollationTest_";
         String ext = ".txt";
         try {
-            if(in != null) {
-                in.close();
-            }
-        } catch (Exception e) {
-            errln("Could not close the opened file!");
-            return;
-        }
-        try {
-            in = TestUtil.getDataReader(collationTest+type+ext);
+            in = TestUtil.getDataReader(collationTest+type+"_SHORT"+ext);
         } catch (Exception e) {
             try {
-                in = TestUtil.getDataReader(collationTest+type+"_SHORT"+ext);
+                in = TestUtil.getDataReader(collationTest+type+ext);
             } catch (Exception e1) {
                 try {
                     in = TestUtil.getDataReader(collationTest+type+"_STUB"+ext);
                     logln( "INFO: Working with the stub file.\n"+
                             "If you need the full conformance test, please\n"+
                             "download the appropriate data files from:\n"+
-                    "http://source.icu-project.org/repos/icu/tools/trunk/unicodetools/com/ibm/text/data/");
+                            "http://unicode.org/cldr/trac/browser/trunk/common/uca");
                 } catch (Exception e11) {
                     errln("ERROR: Could not find any of the test files");
                 }
@@ -178,30 +171,8 @@ public class UCAConformanceTest extends TestFmwk {
     private static final int FROM_RULES = 2;
 
     private static boolean skipLineBecauseOfBug(String s, int flags) {
-        // TODO: Fix ICU ticket #8052
-        if(s.length() >= 3 &&
-                (s.charAt(0) == 0xfb2 || s.charAt(0) == 0xfb3) &&
-                s.charAt(1) == 0x334 &&
-                (s.charAt(2) == 0xf73 || s.charAt(2) == 0xf75 || s.charAt(2) == 0xf81)) {
-            return true;
-        }
-        // TODO: Fix ICU ticket #9361
-        if((flags & IS_SHIFTED) != 0 && s.length() >= 2 && s.charAt(0) == 0xfffe) {
-            return true;
-        }
-        // TODO: Fix ICU ticket #9494
-        int c;
-        if(s.length() >= 2 && 0xe0100 <= (c = s.codePointAt(0)) && c <= 0xe01ef) {
-            return true;
-        }
-        // TODO: Fix ICU ticket #8923
-        if((flags & FROM_RULES) != 0 && 0xac00 <= (c = s.charAt(0)) && c <= 0xd7a3) {
-            return true;
-        }
-        // TODO: Fix tailoring builder, ICU ticket #9593.
-        if((flags & FROM_RULES) != 0 && s.length() >= 2 && ((c = s.charAt(1)) == 0xedc || c == 0xedd)) {
-            return true;
-        }
+        // Add temporary exceptions here if there are ICU bugs, until we can fix them.
+        // For examples see the ICU 52 version of this file.
         return false;
     }
 
@@ -221,10 +192,14 @@ public class UCAConformanceTest extends TestFmwk {
             skipFlags |= FROM_RULES;
         }
 
+        logln("-prop:ucaconfnosortkeys=1 turns off getSortKey() in UCAConformanceTest");
+        boolean withSortKeys = getProperty("ucaconfnosortkeys") == null;
+
         int lineNo = 0;
 
         String line = null, oldLine = null, buffer = null, oldB = null;
-        CollationKey oldSk = null, newSk = null;
+        RawCollationKey sk1 = new RawCollationKey(), sk2 = new RawCollationKey();
+        RawCollationKey oldSk = null, newSk = sk1;
 
         try {
             while ((line = in.readLine()) != null) {
@@ -239,19 +214,28 @@ public class UCAConformanceTest extends TestFmwk {
                     continue;
                 }
 
-                newSk = coll.getCollationKey(buffer);
+                if(withSortKeys) {
+                    coll.getRawCollationKey(buffer, newSk);
+                }
                 if(oldSk != null) {
-                    int skres = oldSk.compareTo(newSk);
+                    boolean ok = true;
+                    int skres = withSortKeys ? oldSk.compareTo(newSk) : 0;
                     int cmpres = coll.compare(oldB, buffer);
                     int cmpres2 = coll.compare(buffer, oldB);
 
                     if(cmpres != -cmpres2) {
-                        errln("Compare result not symmetrical on line "+lineNo);
+                        errln(String.format(
+                                "Compare result not symmetrical on line %i: " +
+                                "previous vs. current (%d) / current vs. previous (%d)",
+                                lineNo, cmpres, cmpres2));
+                        ok = false;
                     }
-                    if(normalizeResult(cmpres) != normalizeResult(skres)) {
+
+                    // TODO: Compare with normalization turned off if the input passes the FCD test.
+
+                    if(withSortKeys && cmpres != normalizeResult(skres)) {
                         errln("Difference between coll.compare (" + cmpres + ") and sortkey compare (" + skres + ") on line " + lineNo);
-                        errln(oldLine);
-                        errln(line);
+                        ok = false;
                     }
 
                     int res = cmpres;
@@ -265,17 +249,36 @@ public class UCAConformanceTest extends TestFmwk {
                     }
                     if(res > 0) {
                         errln("Line " + lineNo + " is not greater or equal than previous line");
-                        errln(oldLine);
-                        errln(line);
+                        ok = false;
+                    }
+
+                    if(!ok) {
+                        errln("  Previous data line " + oldLine);
+                        errln("  Current data line  " + line);
+                        if(withSortKeys) {
+                            errln("  Previous key: " + CollationTest.prettify(oldSk));
+                            errln("  Current key:  " + CollationTest.prettify(newSk));
+                        }
                     }
                 }
 
                 oldSk = newSk;
                 oldB = buffer;
                 oldLine = line;
+                if(oldSk == sk1) {
+                    newSk = sk2;
+                } else {
+                    newSk = sk1;
+                }
             }
         } catch (Exception e) {
             errln("Unexpected exception "+e);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ignored) {
+            }
+            in = null;
         }
     }
 }

@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 2003-2010, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2003-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -16,7 +16,10 @@ import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
+import com.ibm.icu.impl.coll.CollationLoader;
+import com.ibm.icu.impl.coll.CollationTailoring;
 import com.ibm.icu.text.Collator.CollatorFactory;
+import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
 final class CollatorServiceShim extends Collator.ServiceShim {
@@ -35,9 +38,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 throw new MissingResourceException("Could not locate Collator data", "", "");
                 ///CLOVER:ON
             }
-            coll = (Collator) coll.clone();
-            coll.setLocale(actualLoc[0], actualLoc[0]); // services make no distinction between actual & valid
-            return coll;
+            return (Collator) coll.clone();
         }
         catch (CloneNotSupportedException e) {
         ///CLOVER:OFF
@@ -47,6 +48,10 @@ final class CollatorServiceShim extends Collator.ServiceShim {
     }
 
     Object registerInstance(Collator collator, ULocale locale) {
+        // Set the collator locales while registering so that getInstance()
+        // need not guess whether the collator's locales are already set properly
+        // (as they are by the data loader).
+        collator.setLocale(locale, locale);
         return service.registerObject(collator, locale);
     }
 
@@ -119,7 +124,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 }
 
                 protected Object handleCreate(ULocale uloc, int kind, ICUService srvc) {
-                    return new RuleBasedCollator(uloc);
+                    return makeInstance(uloc);
                 }
             }
 
@@ -133,7 +138,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 actualIDReturn[0] = "root";
             }
             try {
-                return new RuleBasedCollator(ULocale.ROOT);
+                return makeInstance(ULocale.ROOT);
             }
             catch (MissingResourceException e) {
                 return null;
@@ -141,5 +146,14 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         }
         ///CLOVER:ON
     }
+
+    // Ported from C++ Collator::makeInstance().
+    private static final Collator makeInstance(ULocale desiredLocale) {
+        Output<ULocale> validLocale = new Output<ULocale>(ULocale.ROOT);
+        CollationTailoring t =
+            CollationLoader.loadTailoring(desiredLocale, validLocale);
+        return new RuleBasedCollator(t, validLocale.value);
+    }
+
     private static ICULocaleService service = new CService();
 }

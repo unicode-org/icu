@@ -1,21 +1,34 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
-
 package com.ibm.icu.text;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 
-import com.ibm.icu.impl.CharacterIteratorWrapper;
-import com.ibm.icu.impl.Norm2AllModes;
-import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
+
+// Java porting note:
+//      ICU4C implementation contains dead code in many places.
+//      While porting ICU4C linear search implementation, these dead codes
+//      were not fully ported. The code block tagged by "// *** Boyer-Moore ***"
+//      are those dead code, still available in ICU4C.
+
+//TODO: ICU4C implementation does not seem to handle UCharacterIterator pointing
+//      a fragment of text properly. ICU4J uses CharacterIterator to navigate through
+//      the input text. We need to carefully review the code ported from ICU4C
+//      assuming the start index is 0.
+
+//TODO: ICU4C implementation initializes pattern.CE and pattern.PCE. It looks
+//      CE is no longer used, except a few places checking CELength. It looks this
+//      is a left over from already disable Boyer-Moore search code. This Java implementation
+//      preserves the code, but we should clean them up later.
+
+//TODO: We need to update document to remove the term "Boyer-Moore search".
 
 /**
  * <p>
@@ -148,11 +161,39 @@ import com.ibm.icu.util.ULocale;
 // internal notes: all methods do not guarantee the correct status of the 
 // characteriterator. the caller has to maintain the original index position
 // if necessary. methods could change the index position as it deems fit
-public final class StringSearch extends SearchIterator
-{
+public final class StringSearch extends SearchIterator {
     
-    // public constructors --------------------------------------------------
-    
+    /**
+     * DONE is returned by previous() and next() after all valid matches have 
+     * been returned, and by first() and last() if there are no matches at all.
+     * @see #previous
+     * @see #next
+     * @stable ICU 2.0
+     */
+    public static final int DONE = -1;
+
+    private Pattern pattern_;
+    private RuleBasedCollator collator_;
+
+    // positions within the collation element iterator is used to determine
+    // if we are at the start of the text.
+    private CollationElementIterator textIter_;
+    private CollationPCE textProcessedIter_;
+
+    // utility collation element, used throughout program for temporary
+    // iteration.
+    private CollationElementIterator utilIter_;
+
+    private int strength_;
+    int ceMask_;
+    int variableTop_;
+
+    private boolean toShift_;
+
+    // *** Boyer-Moore ***
+    // private char[] canonicalPrefixAccents_;
+    // private char[] canonicalSuffixAccents_;
+
     /**
      * Initializes the iterator to use the language-specific rules defined in 
      * the argument collator to search for argument pattern in the argument 
@@ -171,21 +212,46 @@ public final class StringSearch extends SearchIterator
      * @see SearchIterator
      * @stable ICU 2.0
      */
-    public StringSearch(String pattern, CharacterIterator target,
-                        RuleBasedCollator collator, BreakIterator breakiter) 
-    {
+    public StringSearch(String pattern, CharacterIterator target, RuleBasedCollator collator,
+            BreakIterator breakiter) {
+
+        // This implementation is ported from ICU4C usearch_open()
+
         super(target, breakiter);
-        m_textBeginOffset_ = targetText.getBeginIndex();
-        m_textLimitOffset_ = targetText.getEndIndex();
-        m_collator_ = collator;
-        m_colEIter_ = m_collator_.getCollationElementIterator(target);
-        m_utilColEIter_ = collator.getCollationElementIterator("");
-        m_ceMask_ = getMask(m_collator_.getStrength());
-        m_isCanonicalMatch_ = false;
-        m_pattern_ = new Pattern(pattern);
-        m_matchedIndex_ = DONE;
-        m_charBreakIter_ = BreakIterator.getCharacterInstance(/*m_collator_.getLocale(ULocale.ACTUAL_LOCALE)*/);
-        m_charBreakIter_.setText(target);
+
+        // string search does not really work when numeric collation is turned on
+        if (collator.getNumericCollation()) {
+            throw new UnsupportedOperationException("Numeric collation is not supported by StringSearch");
+        }
+
+        collator_ = collator;
+        strength_ = collator.getStrength();
+        ceMask_ = getMask(strength_);
+        toShift_ = collator.isAlternateHandlingShifted();
+        variableTop_ = collator.getVariableTop();
+
+        pattern_ = new Pattern(pattern);
+
+        search_.setMatchedLength(0);
+        search_.matchedIndex_ = DONE;
+
+        utilIter_ = null;
+        textIter_ = new CollationElementIterator(target, collator);
+
+        textProcessedIter_ = null;
+
+        // This is done by super class constructor
+        /*
+        search_.isOverlap_ = false;
+        search_.isCanonicalMatch_ = false;
+        search_.elementComparisonType_ = ElementComparisonType.STANDARD_ELEMENT_COMPARISON;
+        search_.isForwardSearching_ = true;
+        search_.reset_ = true;
+         */
+        ULocale collLocale = collator.getLocale(ULocale.VALID_LOCALE);
+        search_.internalBreakIter_ = BreakIterator.getCharacterInstance(collLocale == null ? ULocale.ROOT : collLocale);
+        search_.internalBreakIter_.setText((CharacterIterator)target.clone());  // We need to create a clone
+
         initialize();
     }
 
@@ -202,10 +268,8 @@ public final class StringSearch extends SearchIterator
      * @see SearchIterator
      * @stable ICU 2.0
      */
-    public StringSearch(String pattern, CharacterIterator target,
-                        RuleBasedCollator collator) 
-    {
-        this(pattern, target, collator, null/*BreakIterator.getCharacterInstance()*/);
+    public StringSearch(String pattern, CharacterIterator target, RuleBasedCollator collator) {
+        this(pattern, target, collator, null);
     }
 
     /**
@@ -225,8 +289,7 @@ public final class StringSearch extends SearchIterator
      * @see SearchIterator
      * @stable ICU 2.0
      */
-    public StringSearch(String pattern, CharacterIterator target, Locale locale)
-    {
+    public StringSearch(String pattern, CharacterIterator target, Locale locale) {
         this(pattern, target, ULocale.forLocale(locale));
     }
 
@@ -247,10 +310,8 @@ public final class StringSearch extends SearchIterator
      * @see SearchIterator
      * @stable ICU 3.2
      */
-    public StringSearch(String pattern, CharacterIterator target, ULocale locale)
-    {
-        this(pattern, target, (RuleBasedCollator)Collator.getInstance(locale),
-             null/*BreakIterator.getCharacterInstance(locale)*/);
+    public StringSearch(String pattern, CharacterIterator target, ULocale locale) {
+        this(pattern, target, (RuleBasedCollator) Collator.getInstance(locale), null);
     }
 
     /**
@@ -269,15 +330,11 @@ public final class StringSearch extends SearchIterator
      * @see SearchIterator
      * @stable ICU 2.0
      */
-    public StringSearch(String pattern, String target) 
-    {
+    public StringSearch(String pattern, String target) {
         this(pattern, new StringCharacterIterator(target),
-             (RuleBasedCollator)Collator.getInstance(),
-             null/*BreakIterator.getCharacterInstance()*/);
+                (RuleBasedCollator) Collator.getInstance(), null);
     }
 
-    // public getters -----------------------------------------------------
-    
     /**
      * <p>
      * Gets the RuleBasedCollator used for the language rules.
@@ -294,54 +351,10 @@ public final class StringSearch extends SearchIterator
      * @see #setCollator
      * @stable ICU 2.0
      */
-    public RuleBasedCollator getCollator() 
-    {
-        return m_collator_;
+    public RuleBasedCollator getCollator() {
+        return collator_;
     }
-    
-    /**
-     * Returns the pattern for which StringSearch is searching for.
-     * @return the pattern searched for
-     * @stable ICU 2.0
-     */
-    public String getPattern() 
-    {
-        return m_pattern_.targetText;
-    }
-    
-    /**
-     * Return the index in the target text where the iterator is currently 
-     * positioned at. 
-     * If the iteration has gone past the end of the target text or past 
-     * the beginning for a backwards search, {@link #DONE} is returned.
-     * @return index in the target text where the iterator is currently 
-     *         positioned at
-     * @stable ICU 2.8
-     */
-    public int getIndex() 
-    {
-        int result = m_colEIter_.getOffset();
-        if (isOutOfBounds(m_textBeginOffset_, m_textLimitOffset_, result)) {
-            return DONE;
-        }
-        return result;
-    }
-    
-    /**
-     * Determines whether canonical matches (option 1, as described in the 
-     * class documentation) is set.
-     * See setCanonical(boolean) for more information.
-     * @see #setCanonical
-     * @return true if canonical matches is set, false otherwise
-     * @stable ICU 2.8
-     */
-    public boolean isCanonical() 
-    {
-        return m_isCanonicalMatch_;
-    }
-    
-    // public setters -----------------------------------------------------
-    
+
     /**
      * <p>
      * Sets the RuleBasedCollator to be used for language-specific searching.
@@ -355,21 +368,35 @@ public final class StringSearch extends SearchIterator
      * @see #getCollator
      * @stable ICU 2.0
      */
-    public void setCollator(RuleBasedCollator collator) 
-    {
+    public void setCollator(RuleBasedCollator collator) {
         if (collator == null) {
             throw new IllegalArgumentException("Collator can not be null");
         }
-        m_collator_ = collator;
-        m_ceMask_ = getMask(m_collator_.getStrength());
-        // if status is a failure, ucol_getAttribute returns UCOL_DEFAULT
+        collator_ = collator;
+        ceMask_ = getMask(collator_.getStrength());
+
+        ULocale collLocale = collator.getLocale(ULocale.VALID_LOCALE);
+        search_.internalBreakIter_ = BreakIterator.getCharacterInstance(collLocale == null ? ULocale.ROOT : collLocale);
+        search_.internalBreakIter_.setText((CharacterIterator)search_.text().clone());  // We need to create a clone
+
+        toShift_ = collator.isAlternateHandlingShifted();
+        variableTop_ = collator.getVariableTop();
+        textIter_ = new CollationElementIterator(pattern_.text_, collator);
+        utilIter_ = new CollationElementIterator(pattern_.text_, collator);
+
+        // initialize() _after_ setting the iterators for the new collator.
         initialize();
-        m_colEIter_.setCollator(m_collator_);
-        m_utilColEIter_.setCollator(m_collator_);
-        m_charBreakIter_ = BreakIterator.getCharacterInstance(/*collator.getLocale(ULocale.VALID_LOCALE)*/);
-        m_charBreakIter_.setText(targetText);
     }
-    
+
+    /**
+     * Returns the pattern for which StringSearch is searching for.
+     * @return the pattern searched for
+     * @stable ICU 2.0
+     */
+    public String getPattern() {
+        return pattern_.text_;
+    }
+
     /**
      * <p>
      * Set the pattern to search for.  
@@ -384,18 +411,44 @@ public final class StringSearch extends SearchIterator
      *               length 0
      * @stable ICU 2.0
      */
-    public void setPattern(String pattern) 
-    {
+    public void setPattern(String pattern) {
         if (pattern == null || pattern.length() <= 0) {
             throw new IllegalArgumentException(
                     "Pattern to search for can not be null or of length 0");
         }
-        m_pattern_.targetText = pattern;
+        pattern_.text_ = pattern;
         initialize();
     }
-    
+
     /**
-      * Set the target text to be searched. Text iteration will hence begin at 
+     * Determines whether canonical matches (option 1, as described in the 
+     * class documentation) is set.
+     * See setCanonical(boolean) for more information.
+     * @see #setCanonical
+     * @return true if canonical matches is set, false otherwise
+     * @stable ICU 2.8
+     */
+    //TODO: hoist this to SearchIterator
+    public boolean isCanonical() {
+        return search_.isCanonicalMatch_;
+    }
+
+    /**
+     * <p>
+     * Set the canonical match mode. See class documentation for details.
+     * The default setting for this property is false.
+     * </p>
+     * @param allowCanonical flag indicator if canonical matches are allowed
+     * @see #isCanonical
+     * @stable ICU 2.8
+     */
+    //TODO: hoist this to SearchIterator
+    public void setCanonical(boolean allowCanonical) {
+        search_.isCanonicalMatch_ = allowCanonical;
+    }
+
+    /**
+     * Set the target text to be searched. Text iteration will hence begin at 
      * the start of the text string. This method is useful if you want to 
      * re-use an iterator to search within a different body of text.
      * @param text new text iterator to look for match, 
@@ -404,15 +457,30 @@ public final class StringSearch extends SearchIterator
      * @see #getTarget
      * @stable ICU 2.8
      */
-    public void setTarget(CharacterIterator text)
-    {
+    @Override
+    public void setTarget(CharacterIterator text) {
         super.setTarget(text);
-        m_textBeginOffset_ = targetText.getBeginIndex();
-        m_textLimitOffset_ = targetText.getEndIndex();
-        m_colEIter_.setText(targetText);
-        m_charBreakIter_.setText(targetText);
+        textIter_.setText(text);
     }
-    
+
+    /**
+     * Return the index in the target text where the iterator is currently 
+     * positioned at. 
+     * If the iteration has gone past the end of the target text or past 
+     * the beginning for a backwards search, {@link #DONE} is returned.
+     * @return index in the target text where the iterator is currently 
+     *         positioned at
+     * @stable ICU 2.8
+     */
+    @Override
+    public int getIndex() {
+        int result = textIter_.getOffset();
+        if (isOutOfBounds(search_.beginIndex(), search_.endIndex(), result)) {
+            return DONE;
+        }
+        return result;
+    }
+
     /**
      * <p>
      * Sets the position in the target text which the next search will start 
@@ -433,45 +501,16 @@ public final class StringSearch extends SearchIterator
      * @see #getIndex
      * @stable ICU 2.8
      */
-    public void setIndex(int position)
-    {
+    @Override
+    public void setIndex(int position) {
+        // Java porting note: This method is equivalent to setOffset() in ICU4C.
+        // ICU4C SearchIterator::setOffset() is a pure virtual method, while
+        // ICU4J SearchIterator.setIndex() is not abstract method.
+
         super.setIndex(position);
-        m_matchedIndex_ = DONE;
-        m_colEIter_.setExactOffset(position);
+        textIter_.setOffset(position);
     }
-    
-    /**
-     * <p>
-     * Set the canonical match mode. See class documentation for details.
-     * The default setting for this property is false.
-     * </p>
-     * @param allowCanonical flag indicator if canonical matches are allowed
-     * @see #isCanonical
-     * @stable ICU 2.8
-     */
-    public void setCanonical(boolean allowCanonical)
-    {
-        m_isCanonicalMatch_ = allowCanonical;
-        if (m_isCanonicalMatch_ == true) {
-            if (m_canonicalPrefixAccents_ == null) {
-                m_canonicalPrefixAccents_ = new StringBuilder();
-            }
-            else {
-                m_canonicalPrefixAccents_.delete(0, 
-                                            m_canonicalPrefixAccents_.length());
-            }
-            if (m_canonicalSuffixAccents_ == null) {
-                m_canonicalSuffixAccents_ = new StringBuilder();
-            }
-            else {
-                m_canonicalSuffixAccents_.delete(0, 
-                                            m_canonicalSuffixAccents_.length());
-            }
-        }
-    }
-    
-    // public miscellaneous methods -----------------------------------------
-    
+
     /** 
      * <p>
      * Resets the search iteration. All properties will be reset to the 
@@ -488,30 +527,65 @@ public final class StringSearch extends SearchIterator
      * </p>
      * @stable ICU 2.8
      */
-    public void reset()
-    {
-        // reset is setting the attributes that are already in string search, 
-        // hence all attributes in the collator should be retrieved without any 
-        // problems
-        super.reset();
-        m_isCanonicalMatch_ = false;
-        m_ceMask_ = getMask(m_collator_.getStrength());
-        // if status is a failure, ucol_getAttribute returns UCOL_DEFAULT
-        initialize();
-        m_colEIter_.setCollator(m_collator_);
-        m_colEIter_.reset();
-        m_utilColEIter_.setCollator(m_collator_);
+    @Override
+    public void reset() {
+        // reset is setting the attributes that are already in
+        // string search, hence all attributes in the collator should
+        // be retrieved without any problems
+
+        boolean sameCollAttribute = true;
+        int ceMask;
+        boolean shift;
+        int varTop;
+
+        // **** hack to deal w/ how processed CEs encode quaternary ****
+        int newStrength = collator_.getStrength();
+        if ((strength_ < Collator.QUATERNARY && newStrength >= Collator.QUATERNARY)
+                || (strength_ >= Collator.QUATERNARY && newStrength < Collator.QUATERNARY)) {
+            sameCollAttribute = false;
+        }
+
+        strength_ = collator_.getStrength();
+        ceMask = getMask(strength_);
+        if (ceMask_ != ceMask) {
+            ceMask_ = ceMask;
+            sameCollAttribute = false;
+        }
+
+        shift = collator_.isAlternateHandlingShifted();
+        if (toShift_ != shift) {
+            toShift_ = shift;
+            sameCollAttribute = false;
+        }
+
+        varTop = collator_.getVariableTop();
+        if (variableTop_ != varTop) {
+            variableTop_ = varTop;
+            sameCollAttribute = false;
+        }
+
+        if (!sameCollAttribute) {
+            initialize();
+        }
+
+        textIter_.setText(search_.text());
+
+        search_.setMatchedLength(0);
+        search_.matchedIndex_ = DONE;
+        search_.isOverlap_ = false;
+        search_.isCanonicalMatch_ = false;
+        search_.elementComparisonType_ = ElementComparisonType.STANDARD_ELEMENT_COMPARISON;
+        search_.isForwardSearching_ = true;
+        search_.reset_ = true;
     }
 
-    // protected methods -----------------------------------------------------
-    
     /**
      * <p>
      * Concrete method to provide the mechanism 
      * for finding the next <b>forwards</b> match in the target text.
      * See super class documentation for its use.
      * </p>  
-     * @param start index in the target text at which the forwards search 
+     * @param position index in the target text at which the forwards search 
      *        should begin.
      * @return the starting index of the next forwards match if found, DONE 
      *         otherwise
@@ -519,74 +593,59 @@ public final class StringSearch extends SearchIterator
      * @see #DONE
      * @stable ICU 2.8
      */
-    protected int handleNext(int start)
-    {
-        if (m_pattern_.m_CELength_ == 0) {
-            matchLength = 0;
-            if (m_matchedIndex_ == DONE && start == m_textBeginOffset_) {
-                m_matchedIndex_ = start;
-                return m_matchedIndex_;
+    @Override
+    protected int handleNext(int position) {
+        if (pattern_.CELength_ == 0) {
+            search_.matchedIndex_ = search_.matchedIndex_ == DONE ?
+                                    getIndex() : search_.matchedIndex_ + 1;
+            search_.setMatchedLength(0);
+            textIter_.setOffset(search_.matchedIndex_);
+            if (search_.matchedIndex_ == search_.endIndex()) {
+                search_.matchedIndex_ = DONE;
             }
-            
-            targetText.setIndex(start);
-            char ch = targetText.current();
-            // ch can never be done, it is handled by next()
-            char ch2 = targetText.next();
-            if (ch2 == CharacterIterator.DONE) {
-                m_matchedIndex_ = DONE;    
+        } else {
+            if (search_.matchedLength() <= 0) {
+                // the flipping direction issue has already been handled
+                // in next()
+                // for boundary check purposes. this will ensure that the
+                // next match will not preceed the current offset
+                // note search_.matchedIndex_ will always be set to something
+                // in the code
+                search_.matchedIndex_ = position - 1;
             }
-            else {
-                m_matchedIndex_ = targetText.getIndex();
+
+            textIter_.setOffset(position);
+
+            // ICU4C comment:
+            // if strsrch_->breakIter is always the same as m_breakiterator_
+            // then we don't need to check the match boundaries here because
+            // usearch_handleNextXXX will already have done it.
+            if (search_.isCanonicalMatch_) {
+                // *could* actually use exact here 'cause no extra accents allowed...
+                handleNextCanonical();
+            } else {
+                handleNextExact();
             }
-            if (UTF16.isLeadSurrogate(ch) && UTF16.isTrailSurrogate(ch2)) {
-                targetText.next();
-                m_matchedIndex_ = targetText.getIndex();
+
+            if (search_.matchedIndex_ == DONE) {
+                textIter_.setOffset(search_.endIndex());
+            } else {
+                textIter_.setOffset(search_.matchedIndex_);
             }
+
+            return search_.matchedIndex_;
         }
-        else {
-            if (matchLength <= 0) {
-                // we must have reversed direction after we reached the start
-                // of the target text
-                // see SearchIterator next(), it checks the bounds and returns
-                // if it exceeds the range. It does not allow setting of
-                // m_matchedIndex
-                if (start == m_textBeginOffset_) {
-                    m_matchedIndex_ = DONE;
-                }
-                else {
-                    // for boundary check purposes. this will ensure that the
-                    // next match will not preceed the current offset
-                    // note search->matchedIndex will always be set to something
-                    // in the code
-                    m_matchedIndex_ = start - 1;
-                }
-            }
-    
-            // status checked below
-            if (m_isCanonicalMatch_) {
-                // can't use exact here since extra accents are allowed.
-                handleNextCanonical(start);
-            }
-            else {
-                handleNextExact(start);
-            }
-        }
-        if (m_matchedIndex_ == DONE) {
-            targetText.setIndex(m_textLimitOffset_);
-        }
-        else {
-            targetText.setIndex(m_matchedIndex_);
-        }
-        return m_matchedIndex_;
+
+        return DONE;
     }
-    
+
     /**
      * <p>
      * Concrete method to provide the mechanism 
      * for finding the next <b>backwards</b> match in the target text.
      * See super class documentation for its use.
      * </p>  
-     * @param start index in the target text at which the backwards search 
+     * @param position index in the target text at which the backwards search 
      *        should begin.
      * @return the starting index of the next backwards match if found, DONE 
      *         otherwise
@@ -594,2591 +653,1459 @@ public final class StringSearch extends SearchIterator
      * @see #DONE
      * @stable ICU 2.8
      */
-    protected int handlePrevious(int start)
-    {
-        if (m_pattern_.m_CELength_ == 0) {
-            matchLength = 0;
-            // start can never be DONE or 0, it is handled in previous
-            targetText.setIndex(start);
-            char ch = targetText.previous();
-            if (ch == CharacterIterator.DONE) {
-                m_matchedIndex_ = DONE;
-            }
-            else {
-                m_matchedIndex_ = targetText.getIndex();
-                if (UTF16.isTrailSurrogate(ch)) {
-                    if (UTF16.isLeadSurrogate(targetText.previous())) {
-                        m_matchedIndex_ = targetText.getIndex();
-                    }
-                }
-            }            
-        }
-        else {
-            if (matchLength == 0) {
-                // we must have reversed direction after we reached the end
-                // of the target text
-                // see SearchIterator next(), it checks the bounds and returns
-                // if it exceeds the range. It does not allow setting of
-                // m_matchedIndex
-                m_matchedIndex_ = DONE;
-            }
-            if (m_isCanonicalMatch_) {
-                // can't use exact here since extra accents are allowed.
-                handlePreviousCanonical(start);
-            }
-            else {
-                handlePreviousExact(start);
-            }
-        }
-
-        if (m_matchedIndex_ == DONE) {
-            targetText.setIndex(m_textBeginOffset_);
-        }
-        else {
-            targetText.setIndex(m_matchedIndex_);
-        }
-        return m_matchedIndex_;
-    }
-
-    // private static inner classes ----------------------------------------
-    
-    private static class Pattern 
-    {
-        // protected methods -----------------------------------------------
-        
-        /**
-         * Pattern string
-         */
-        protected String targetText;
-        /**
-         * Array containing the collation elements of targetText
-         */
-        protected int m_CE_[];
-        /**
-         * Number of collation elements in m_CE_
-         */
-        protected int m_CELength_; 
-        /**
-         * Flag indicator if targetText starts with an accent
-         */
-        protected boolean m_hasPrefixAccents_;
-        /**
-         * Flag indicator if targetText ends with an accent
-         */
-        protected boolean m_hasSuffixAccents_;
-        /**
-         * Default number of characters to shift for Boyer Moore
-         */
-        protected int m_defaultShiftSize_;
-        /**
-         * Number of characters to shift for Boyer Moore, depending on the
-         * source text to search
-         */
-        protected char m_shift_[];
-        /**
-         * Number of characters to shift backwards for Boyer Moore, depending 
-         * on the source text to search
-         */
-        protected char m_backShift_[];
-        
-        // protected constructors ------------------------------------------
-        
-        /**
-         * Empty constructor 
-         */
-        protected Pattern(String pattern) 
-        {
-            targetText = pattern;
-            m_CE_ = new int[INITIAL_ARRAY_SIZE_];    
-            m_CELength_ = 0;
-            m_hasPrefixAccents_ = false;
-            m_hasSuffixAccents_ = false;
-            m_defaultShiftSize_ = 1;        
-            m_shift_ = new char[MAX_TABLE_SIZE_];
-            m_backShift_ = new char[MAX_TABLE_SIZE_];
-        }
-    }
-
-
-    // private data members ------------------------------------------------
-    
-    /**
-     * target text begin offset. Each targetText has a valid contiguous region 
-     * to iterate and this data member is the offset to the first such
-     * character in the region.
-     */
-    private int m_textBeginOffset_;
-    /**
-     * target text limit offset. Each targetText has a valid contiguous region 
-     * to iterate and this data member is the offset to 1 after the last such
-     * character in the region.
-     */
-    private int m_textLimitOffset_;
-    /**
-     * Upon completion of a search, m_matchIndex_ will store starting offset in
-     * m_text for the match. The Value DONE is the default value. 
-     * If we are not at the start of the text or the end of the text and 
-     * m_matchedIndex_ is DONE it means that we can find any more matches in 
-     * that particular direction
-     */
-    private int m_matchedIndex_; 
-    /**
-     * Current pattern to search for
-     */
-    private Pattern m_pattern_;
-    /**
-     * Collator whose rules are used to perform the search
-     */
-    private RuleBasedCollator m_collator_;
-    /** 
-     * The collation element iterator for the text source.
-     */
-    private CollationElementIterator m_colEIter_;
-    /** 
-     * Utility collation element, used throughout program for temporary 
-     * iteration.
-     */
-    private CollationElementIterator m_utilColEIter_;
-    /**
-     * The mask used on the collation elements to retrieve the valid strength
-     * weight 
-     */
-    private int m_ceMask_;
-    /**
-     * Buffer storing accents during a canonical search
-     */
-    private StringBuilder m_canonicalPrefixAccents_;
-    /**
-     * Buffer storing accents during a canonical search
-     */
-    private StringBuilder m_canonicalSuffixAccents_;
-    /**
-     * Flag to indicate if canonical search is to be done.
-     * E.g looking for "a\u0300" in "a\u0318\u0300" will yield the match at 0.
-     */
-    private boolean m_isCanonicalMatch_;
-    /**
-     * Character break iterator for boundary checking.
-     */
-    private BreakIterator m_charBreakIter_;
-    private final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstance().impl;
-    /**
-     * Size of the shift tables
-     */
-    private static final int MAX_TABLE_SIZE_ = 257; 
-    /**
-     * Initial array size
-     */
-    private static final int INITIAL_ARRAY_SIZE_ = 256;
-    /**
-     * Utility mask
-     */
-    private static final int SECOND_LAST_BYTE_SHIFT_ = 8;
-    /**
-     * Utility mask
-     */
-    private static final int LAST_BYTE_MASK_ = 0xff;
-    /**
-     * Utility buffer for return values and temporary storage
-     */
-    private int m_utilBuffer_[] = new int[2];
-    /**
-     *  Unsigned 32-Bit Integer Mask
-     */
-    private static final long UNSIGNED_32BIT_MASK = 0xffffffffL;
-
-    // private methods -------------------------------------------------------
-
-    /**
-     * Hash a collation element from its full size (32 bits) down into a
-     * value that can be used as an index into the shift tables.  Right
-     * now we do a modulus by the size of the hash table.
-     * @param ce collation element
-     * @return collapsed version of the collation element
-     */
-    private static final int hash(int ce) 
-    {
-        // the old value UCOL_PRIMARYORDER(ce) % MAX_TABLE_SIZE_ does not work
-        // well with the new collation where most of the latin 1 characters
-        // are of the value xx000xxx. their hashes will most of the time be 0
-        // to be discussed on the hash algo.
-        return CollationElementIterator.primaryOrder(ce) % MAX_TABLE_SIZE_;
-    }
-
-    private final char getFCD(int c) {
-        return (char)m_nfcImpl_.getFCD16(c);
-    }
-    /**
-     * Gets the fcd value for a character at the argument index.
-     * This method takes into accounts of the supplementary characters.
-     * Note this method changes the offset in the character iterator.
-     * @param str UTF16 string where character for fcd retrieval resides
-     * @param offset position of the character whose fcd is to be retrieved
-     * @return fcd value
-     */
-    private final char getFCD(CharacterIterator str, int offset)
-    {
-        char ch = str.setIndex(offset);
-        if (ch < 0x180) {
-            return (char)m_nfcImpl_.getFCD16FromBelow180(ch);
-        } else if (m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(ch)) {
-            if (!Character.isHighSurrogate(ch)) {
-                return (char)m_nfcImpl_.getFCD16FromNormData(ch);
+    @Override
+    protected int handlePrevious(int position) {
+        if (pattern_.CELength_ == 0) {
+            search_.matchedIndex_ =
+                    search_.matchedIndex_ == DONE ? getIndex() : search_.matchedIndex_;
+            if (search_.matchedIndex_ == search_.beginIndex()) {
+                setMatchNotFound();
             } else {
-                char c2 = str.next();
-                if (Character.isLowSurrogate(c2)) {
-                    return (char)m_nfcImpl_.getFCD16FromNormData(Character.toCodePoint(ch, c2));
-                }
-            }
-        }
-        return 0;
-    }
-    /**
-     * Gets the FCD value for the code point before the input offset.
-     * Modifies the iterator's index.
-     * @param iter text iterator
-     * @param offset index after the character to test
-     * @return FCD value for the character before offset
-     */
-    private final int getFCDBefore(CharacterIterator iter, int offset) {
-        iter.setIndex(offset);
-        char c = iter.previous();
-        if (c < 0x180) {
-            return (char)m_nfcImpl_.getFCD16FromBelow180(c);
-        } else if (!Character.isLowSurrogate(c)) {
-            if (m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(c)) {
-                return (char)m_nfcImpl_.getFCD16FromNormData(c);
+                search_.matchedIndex_--;
+                textIter_.setOffset(search_.matchedIndex_);
+                search_.setMatchedLength(0);
             }
         } else {
-            char lead = iter.previous();
-            if (Character.isHighSurrogate(lead)) {
-                return (char)m_nfcImpl_.getFCD16FromNormData(Character.toCodePoint(lead, c));
+            textIter_.setOffset(position);
+
+            if (search_.isCanonicalMatch_) {
+                // *could* use exact match here since extra accents *not* allowed!
+                handlePreviousCanonical();
+            } else {
+                handlePreviousExact();
             }
         }
-        return 0;
+
+        return search_.matchedIndex_;
     }
+
+    // ------------------ Internal implementation code ---------------------------
+
+    private static final int INITIAL_ARRAY_SIZE_ = 256;
+
+    // *** Boyer-Moore ***
+    // private static final Normalizer2Impl nfcImpl_ = Norm2AllModes.getNFCInstance().impl;
+    // private static final int LAST_BYTE_MASK_ = 0xff;
+    // private static final int SECOND_LAST_BYTE_SHIFT_ = 8;
+
+    private static final int PRIMARYORDERMASK = 0xffff0000;
+    private static final int SECONDARYORDERMASK = 0x0000ff00;
+    private static final int TERTIARYORDERMASK = 0x000000ff;
+
     /**
-     * Gets the fcd value for a character at the argument index.
-     * This method takes into accounts of the supplementary characters.
-     * @param str UTF16 string where character for fcd retrieval resides
-     * @param offset position of the character whose fcd is to be retrieved
-     * @return fcd value
+     * Getting the mask for collation strength
+     * @param strength collation strength
+     * @return collation element mask
      */
-    private final char getFCD(String str, int offset)
-    {
+    private static int getMask(int strength) {
+        switch (strength) {
+        case Collator.PRIMARY:
+            return PRIMARYORDERMASK;
+        case Collator.SECONDARY:
+            return SECONDARYORDERMASK | PRIMARYORDERMASK;
+        default:
+            return TERTIARYORDERMASK | SECONDARYORDERMASK | PRIMARYORDERMASK;
+        }
+    }
+
+
+    // *** Boyer-Moore ***
+    /*
+    private final char getFCD(String str, int offset) {
         char ch = str.charAt(offset);
         if (ch < 0x180) {
-            return (char)m_nfcImpl_.getFCD16FromBelow180(ch);
-        } else if (m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(ch)) {
+            return (char) nfcImpl_.getFCD16FromBelow180(ch);
+        } else if (nfcImpl_.singleLeadMightHaveNonZeroFCD16(ch)) {
             if (!Character.isHighSurrogate(ch)) {
-                return (char)m_nfcImpl_.getFCD16FromNormData(ch);
+                return (char) nfcImpl_.getFCD16FromNormData(ch);
             } else {
                 char c2;
                 if (++offset < str.length() && Character.isLowSurrogate(c2 = str.charAt(offset))) {
-                    return (char)m_nfcImpl_.getFCD16FromNormData(Character.toCodePoint(ch, c2));
+                    return (char) nfcImpl_.getFCD16FromNormData(Character.toCodePoint(ch, c2));
                 }
             }
         }
         return 0;
     }
 
-    /**
-    * Getting the modified collation elements taking into account the collation 
-    * attributes
-    * @param ce 
-    * @return the modified collation element
+    private final char getFCD(int c) {
+        return (char)nfcImpl_.getFCD16(c);
+    }
     */
-    private final int getCE(int ce)
-    {
+
+    /**
+     * Getting the modified collation elements taking into account the collation
+     * attributes.
+     * 
+     * @param sourcece
+     * @return the modified collation element
+     */
+    private int getCE(int sourcece) {
         // note for tertiary we can't use the collator->tertiaryMask, that
         // is a preprocessed mask that takes into account case options. since
         // we are only concerned with exact matches, we don't need that.
-        ce &= m_ceMask_;
-        
-        if (m_collator_.isAlternateHandlingShifted()) {
-            // alternate handling here, since only the 16 most significant 
-            // digits is only used, we can safely do a compare without masking
+        sourcece &= ceMask_;
+
+        if (toShift_) {
+            // alternate handling here, since only the 16 most significant digits
+            // is only used, we can safely do a compare without masking
             // if the ce is a variable, we mask and get only the primary values
             // no shifting to quartenary is required since all primary values
             // less than variabletop will need to be masked off anyway.
-            if (((m_collator_.m_variableTopValue_  << 16) & UNSIGNED_32BIT_MASK) > (ce & UNSIGNED_32BIT_MASK)) {
-                if (m_collator_.getStrength() == Collator.QUATERNARY) {
-                    ce = CollationElementIterator.primaryOrder(ce);
-                }
-                else { 
-                    ce = CollationElementIterator.IGNORABLE;
+            if (variableTop_ > sourcece) {
+                if (strength_ >= Collator.QUATERNARY) {
+                    sourcece &= PRIMARYORDERMASK;
+                } else {
+                    sourcece = CollationElementIterator.IGNORABLE;
                 }
             }
+        } else if (strength_ >= Collator.QUATERNARY && sourcece == CollationElementIterator.IGNORABLE) {
+            sourcece = 0xFFFF;
         }
-    
-        return ce;
+
+        return sourcece;
     }
-    
+
     /**
-     * Appends a int to a int array, increasing the size of the array when 
-     * we are out of space.
-     * @param offset in array to append to
-     * @param value to append
-     * @param array to append to
-     * @return the array appended to, this could be a new and bigger array
+     * Direct port of ICU4C static int32_t * addTouint32_tArray(...) in usearch.cpp.
+     * This is used for appending a PCE to Pattern.PCE_ buffer. We probably should
+     * implement this in Pattern class.
+     * 
+     * @param destination target array
+     * @param offset destination offset to add value
+     * @param destinationlength target array size
+     * @param value to be added
+     * @param increments incremental size expected
+     * @return new destination array, destination if there was no new allocation
      */
-    private static final int[] append(int offset, int value, int array[])
-    {
-        if (offset >= array.length) {
-            int temp[] = new int[offset + INITIAL_ARRAY_SIZE_];
-            System.arraycopy(array, 0, temp, 0, array.length);
-            array = temp;
+    private static int[] addToIntArray(int[] destination, int offset, int destinationlength,
+            int value, int increments) {
+        int newlength = destinationlength;
+        if (offset + 1 == newlength) {
+            newlength += increments;
+            int temp[] = new int[newlength];
+            System.arraycopy(destination, 0, temp, 0, offset);
+            destination = temp;
         }
-        array[offset] = value;
-        return array;
+        destination[offset] = value;
+        return destination;
     }
-    
+
     /**
-     * Initializing the ce table for a pattern. Stores non-ignorable collation 
-     * keys. Table size will be estimated by the size of the pattern text. 
-     * Table expansion will be perform as we go along. Adding 1 to ensure that 
-     * the table size definitely increases.
-     * Internal method, status assumed to be a success.
-     * @return total number of expansions 
+     * Direct port of ICU4C static int64_t * addTouint64_tArray(...) in usearch.cpp.
+     * This is used for appending a PCE to Pattern.PCE_ buffer. We probably should
+     * implement this in Pattern class.
+     * 
+     * @param destination target array
+     * @param offset destination offset to add value
+     * @param destinationlength target array size
+     * @param value to be added
+     * @param increments incremental size expected
+     * @return new destination array, destination if there was no new allocation
      */
-    private final int initializePatternCETable()
-    {
-        m_utilColEIter_.setText(m_pattern_.targetText);
-        
+    private static long[] addToLongArray(long[] destination, int offset, int destinationlength,
+            long value, int increments) {
+        int newlength = destinationlength;
+        if (offset + 1 == newlength) {
+            newlength += increments;
+            long temp[] = new long[newlength];
+            System.arraycopy(destination, 0, temp, 0, offset);
+            destination = temp;
+        }
+        destination[offset] = value;
+        return destination;
+    }
+
+    /**
+     * Initializing the ce table for a pattern.
+     * Stores non-ignorable collation keys.
+     * Table size will be estimated by the size of the pattern text. Table
+     * expansion will be perform as we go along. Adding 1 to ensure that the table
+     * size definitely increases.
+     * @return total number of expansions
+     */
+    // TODO: We probably do not need Pattern CE table.
+    private int initializePatternCETable() {
+        int[] cetable = new int[INITIAL_ARRAY_SIZE_];
+        int cetablesize = cetable.length;
+        int patternlength = pattern_.text_.length();
+        CollationElementIterator coleiter = utilIter_;
+
+        if (coleiter == null) {
+            coleiter = new CollationElementIterator(pattern_.text_, collator_);
+            utilIter_ = coleiter;
+        } else {
+            coleiter.setText(pattern_.text_);
+        }
+
         int offset = 0;
         int result = 0;
-        int ce = m_utilColEIter_.next();
-    
-        while (ce != CollationElementIterator.NULLORDER) {
+        int ce;
+
+        while ((ce = coleiter.next()) != CollationElementIterator.NULLORDER) {
             int newce = getCE(ce);
-            if (newce != CollationElementIterator.IGNORABLE) {
-                m_pattern_.m_CE_ = append(offset, newce, m_pattern_.m_CE_);
-                offset ++;            
+            if (newce != CollationElementIterator.IGNORABLE /* 0 */) {
+                int[] temp = addToIntArray(cetable, offset, cetablesize, newce,
+                        patternlength - coleiter.getOffset() + 1);
+                offset++;
+                cetable = temp;
             }
-            result += m_utilColEIter_.getMaxExpansion(ce) - 1;
-            ce = m_utilColEIter_.next();
+            result += (coleiter.getMaxExpansion(ce) - 1);
         }
-    
-        m_pattern_.m_CE_ = append(offset, 0, m_pattern_.m_CE_);
-        m_pattern_.m_CELength_ = offset;
-    
+
+        cetable[offset] = 0;
+        pattern_.CE_ = cetable;
+        pattern_.CELength_ = offset;
+
         return result;
     }
-    
+
     /**
-     * Initializes the pattern struct.
-     * Internal method, status assumed to be success.
-     * @return expansionsize the total expansion size of the pattern
-     */ 
-    private final int initializePattern()
-    {
-        if (m_collator_.getStrength() == Collator.PRIMARY) {
-            m_pattern_.m_hasPrefixAccents_ = false;
-            m_pattern_.m_hasSuffixAccents_ = false;
+     * Initializing the pce table for a pattern.
+     * Stores non-ignorable collation keys.
+     * Table size will be estimated by the size of the pattern text. Table
+     * expansion will be perform as we go along. Adding 1 to ensure that the table
+     * size definitely increases.
+     * @return total number of expansions
+     */
+    private int initializePatternPCETable() {
+        long[] pcetable = new long[INITIAL_ARRAY_SIZE_];
+        int pcetablesize = pcetable.length;
+        int patternlength = pattern_.text_.length();
+        CollationElementIterator coleiter = utilIter_;
+
+        if (coleiter == null) {
+            coleiter = new CollationElementIterator(pattern_.text_, collator_);
+            utilIter_ = coleiter;
         } else {
-            m_pattern_.m_hasPrefixAccents_ = (getFCD(m_pattern_.targetText, 0) 
-                                                 >> SECOND_LAST_BYTE_SHIFT_) != 0;
-            m_pattern_.m_hasSuffixAccents_ = (getFCD(m_pattern_.targetText.codePointBefore(
-                                                        m_pattern_.targetText.length()))
-                                                & LAST_BYTE_MASK_) != 0;
+            coleiter.setText(pattern_.text_);
         }
-        // since intializePattern is an internal method status is a success.
-        return initializePatternCETable();   
-    }
-    
-    /**
-     * Initializing shift tables, with the default values.
-     * If a corresponding default value is 0, the shift table is not set.
-     * @param shift table for forwards shift 
-     * @param backshift table for backwards shift
-     * @param cetable table containing pattern ce
-     * @param cesize size of the pattern ces
-     * @param expansionsize total size of the expansions
-     * @param defaultforward the default forward value
-     * @param defaultbackward the default backward value
-     */
-     private final void setShiftTable(char shift[], 
-                                                    char backshift[], 
-                                                    int cetable[], int cesize, 
-                                                      int expansionsize,
-                                                    char defaultforward,
-                                                      char defaultbackward)
-    {
-        // estimate the value to shift. to do that we estimate the smallest 
-        // number of characters to give the relevant ces, ie approximately
-        // the number of ces minus their expansion, since expansions can come 
-        // from a character.
-        for (int count = 0; count < MAX_TABLE_SIZE_; count ++) {
-            shift[count] = defaultforward;
-        }
-        cesize --; // down to the last index
-        for (int count = 0; count < cesize; count ++) {
-            // number of ces from right of array to the count
-            int temp = defaultforward - count - 1;
-            shift[hash(cetable[count])] = temp > 1 ? ((char)temp) : 1;
-        }
-        shift[hash(cetable[cesize])] = 1;
-        // for ignorables we just shift by one. see test examples.
-        shift[hash(0)] = 1;
-        
-        for (int count = 0; count < MAX_TABLE_SIZE_; count ++) {
-            backshift[count] = defaultbackward;
-        }
-        for (int count = cesize; count > 0; count --) {
-            // the original value count does not seem to work
-            backshift[hash(cetable[count])] = (char)(count > expansionsize ? 
-                                                      count - expansionsize : 1);
-        }
-        backshift[hash(cetable[0])] = 1;
-        backshift[hash(0)] = 1;
-    }
-    
-    /**
-     * <p>Building of the pattern collation element list and the Boyer Moore 
-     * StringSearch table.</p>
-     * <p>The canonical match will only be performed after the default match 
-     * fails.</p>
-     * <p>For both cases we need to remember the size of the composed and 
-     * decomposed versions of the string. Since the Boyer-Moore shift 
-     * calculations shifts by a number of characters in the text and tries to 
-     * match the pattern from that offset, the shift value can not be too large 
-     * in case we miss some characters. To choose a right shift size, we 
-     * estimate the NFC form of the and use its size as a shift guide. The NFC 
-     * form should be the small possible representation of the pattern. Anyways, 
-     * we'll err on the smaller shift size. Hence the calculation for 
-     * minlength. Canonical match will be performed slightly differently. We'll 
-     * split the pattern into 3 parts, the prefix accents (PA), the middle 
-     * string bounded by the first and last base character (MS), the ending 
-     * accents (EA). Matches will be done on MS first, and only when we match 
-     * MS then some processing will be required for the prefix and end accents 
-     * in order to determine if they match PA and EA. Hence the default shift 
-     * values for the canonical match will take the size of either end's accent 
-     * into consideration. Forwards search will take the end accents into 
-     * consideration for the default shift values and the backwards search will 
-     * take the prefix accents into consideration.</p>
-     * <p>If pattern has no non-ignorable ce, we return a illegal argument 
-     * error.</p>
-     */ 
-    private final void initialize()
-    {
-        int expandlength  = initializePattern();   
-        if (m_pattern_.m_CELength_ > 0) {
-            char minlength = (char)(m_pattern_.m_CELength_ > expandlength 
-                                ? m_pattern_.m_CELength_ - expandlength : 1);
-            m_pattern_.m_defaultShiftSize_ = minlength;
-            setShiftTable(m_pattern_.m_shift_, m_pattern_.m_backShift_, 
-                          m_pattern_.m_CE_, m_pattern_.m_CELength_, 
-                          expandlength, minlength, minlength);
-        }
-        else {
-            m_pattern_.m_defaultShiftSize_ = 0;
-        }
-    }
-    
-    /**
-     * Determine whether the search text bounded by the offset start and end is 
-     * one or more whole units of text as determined by the breakiterator in 
-     * StringSearch.
-     * @param start target text start offset
-     * @param end target text end offset
-     */
-    private final boolean isBreakUnit(int start, int end) 
-    {
-        if (breakIterator != null) {
-            int startindex = breakIterator.first();
-            int endindex   = breakIterator.last();
-            
-            // out-of-range indexes are never boundary positions
-            if (start < startindex || start > endindex || end < startindex 
-                || end > endindex) {
-                return false;
-            }
-            // otherwise, we can use following() on the position before the 
-            // specified one and return true of the position we get back is the 
-            // one the user specified
-            boolean result = (start == startindex 
-                              || breakIterator.following(start - 1) == start) 
-                             && (end == endindex 
-                                  || breakIterator.following(end - 1) == end);
-            if (result) {
-                // iterates the individual ces
-                m_utilColEIter_.setText(
-                    new CharacterIteratorWrapper(targetText), start);
-                for (int count = 0; count < m_pattern_.m_CELength_;
-                     count ++) {
-                    int ce = getCE(m_utilColEIter_.next());
-                    if (ce == CollationElementIterator.IGNORABLE) {
-                        count --;
-                        continue;
-                    }
-                    if (ce != m_pattern_.m_CE_[count]) {
-                        return false;
-                    }
-                }
-                int nextce = m_utilColEIter_.next();
-                while (m_utilColEIter_.getOffset() == end 
-                       && getCE(nextce) == CollationElementIterator.IGNORABLE) {
-                    nextce = m_utilColEIter_.next();       
-                }
-                if (nextce != CollationElementIterator.NULLORDER 
-                    && m_utilColEIter_.getOffset() == end) {
-                    // extra collation elements at the end of the match
-                    return false;
-                }
-            }
-            return result;
-        }
-        return true;
-    }
 
-    /**
-     * Getting the next base character offset if current offset is an accent, 
-     * or the current offset if the current character contains a base character. 
-     * accents the following base character will be returned
-     * @param text string
-     * @param textoffset current offset
-     * @param textlength length of text string
-     * @return the next base character or the current offset
-     *         if the current character is contains a base character.
-     */
-    private final int getNextBaseOffset(CharacterIterator text, int textoffset)
-    {
-        if (textoffset >= text.getEndIndex()) {
-            return textoffset;
-        }
-        // iteration ends with reading CharacterIterator.DONE which has fcd==0
-        char c = text.setIndex(textoffset);
-        for (;;) {
-            if (c < Normalizer2Impl.MIN_CCC_LCCC_CP || !m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(c)) {
-                return textoffset;
-            }
-            char next = text.next();
-            if (Character.isSurrogatePair(c, next)) {
-                int fcd = m_nfcImpl_.getFCD16FromNormData(Character.toCodePoint(c, next));
-                if ((fcd >> SECOND_LAST_BYTE_SHIFT_) == 0) {
-                    return textoffset;
-                }
-                next = text.next();
-                textoffset += 2;
-            } else {
-                int fcd = m_nfcImpl_.getFCD16FromNormData(c);
-                if ((fcd >> SECOND_LAST_BYTE_SHIFT_) == 0) {
-                    return textoffset;
-                }
-                ++textoffset;
-            }
-            c = next;
-        }
-    }
+        int offset = 0;
+        int result = 0;
+        long pce;
 
-    /**
-     * Gets the next base character offset depending on the string search 
-     * pattern data
-     * @param textoffset one offset away from the last character
-     *                   to search for.
-     * @return start index of the next base character or the current offset
-     *         if the current character is contains a base character.
-     */
-    private final int getNextBaseOffset(int textoffset)
-    {
-        if (m_pattern_.m_hasSuffixAccents_ && textoffset < m_textLimitOffset_) {
-            if ((getFCDBefore(targetText, textoffset) & LAST_BYTE_MASK_) != 0) {
-                return getNextBaseOffset(targetText, textoffset);
-            }
-        }
-        return textoffset;
-    }
+        CollationPCE iter = new CollationPCE(coleiter);
 
-    /**
-     * Shifting the collation element iterator position forward to prepare for
-     * a following match. If the last character is a unsafe character, we'll 
-     * only shift by 1 to capture contractions, normalization etc.
-     * Internal method, status assumed to be success.
-     * @param textoffset start text position to do search
-     * @param ce the text ce which failed the match.
-     * @param patternceindex index of the ce within the pattern ce buffer which
-     *        failed the match
-     * @return final offset
-     */
-    private int shiftForward(int textoffset, int ce, int patternceindex)
-                                    
-    {
-        if (ce != CollationElementIterator.NULLORDER) {
-            int shift = m_pattern_.m_shift_[hash(ce)];
-            // this is to adjust for characters in the middle of the 
-            // substring for matching that failed.
-            int adjust = m_pattern_.m_CELength_ - patternceindex;
-            if (adjust > 1 && shift >= adjust) {
-                shift -= adjust - 1;
-            }
-            textoffset += shift;
+        // ** Should processed CEs be signed or unsigned?
+        // ** (the rest of the code in this file seems to play fast-and-loose with
+        // ** whether a CE is signed or unsigned. For example, look at routine above this one.)
+        while ((pce = iter.nextProcessed(null)) != CollationPCE.PROCESSED_NULLORDER) {
+            long[] temp = addToLongArray(pcetable, offset, pcetablesize, pce, patternlength - coleiter.getOffset() + 1);
+            offset++;
+            pcetable = temp;
         }
-        else {
-            textoffset += m_pattern_.m_defaultShiftSize_;
-        }
-         
-        textoffset = getNextBaseOffset(textoffset);
-        // check for unsafe characters
-        // * if it is the start or middle of a contraction: to be done after 
-        //   a initial match is found
-        // * thai or lao base consonant character: similar to contraction
-        // * high surrogate character: similar to contraction
-        // * next character is a accent: shift to the next base character
-        return textoffset;
-    }
-    
-    /**
-     * Gets the offset to the next safe point in text.
-     * ie. not the middle of a contraction, swappable characters or 
-     * supplementary characters.
-     * @param textoffset offset in string
-     * @param end offset in string
-     * @return offset to the next safe character
-     */
-    private final int getNextSafeOffset(int textoffset, int end)
-    {
-        int result = textoffset; // first contraction character
-        targetText.setIndex(result);
-        while (result != end && 
-            m_collator_.isUnsafe(targetText.current())) {
-               result ++;
-               targetText.setIndex(result);
-        }
-        return result; 
-    }
-    
-    /** 
-     * This checks for accents in the potential match started with a composite 
-     * character.
-     * This is really painful... we have to check that composite character do 
-     * not have any extra accents. We have to normalize the potential match and 
-     * find the immediate decomposed character before the match.
-     * The first composite character would have been taken care of by the fcd 
-     * checks in checkForwardExactMatch.
-     * This is the slow path after the fcd of the first character and 
-     * the last character has been checked by checkForwardExactMatch and we 
-     * determine that the potential match has extra non-ignorable preceding
-     * ces.
-     * E.g. looking for \u0301 acute in \u01FA A ring above and acute, 
-     * checkExtraMatchAccent should fail since there is a middle ring in 
-     * \u01FA Note here that accents checking are slow and cautioned in the API 
-     * docs.
-     * Internal method, status assumed to be a success, caller should check 
-     * status before calling this method
-     * @param start index of the potential unfriendly composite character
-     * @param end index of the potential unfriendly composite character
-     * @return true if there is non-ignorable accents before at the beginning
-     *              of the match, false otherwise.
-     */
-    private final boolean checkExtraMatchAccents(int start, int end)
-    {
-        boolean result = false;
-        if (m_pattern_.m_hasPrefixAccents_) {
-            targetText.setIndex(start);
-            
-            if (UTF16.isLeadSurrogate(targetText.next())) {
-                if (!UTF16.isTrailSurrogate(targetText.next())) {
-                    targetText.previous();
-                }
-            }
-            // we are only concerned with the first composite character
-            String str = getString(targetText, start, end);
-            if (Normalizer.quickCheck(str, Normalizer.NFD,0) 
-                                                    == Normalizer.NO) {
-                int safeoffset = getNextSafeOffset(start, end);
-                if (safeoffset != end) {
-                    safeoffset ++;
-                }
-                String decomp = Normalizer.decompose(
-                                str.substring(0, safeoffset - start), false);
-                m_utilColEIter_.setText(decomp);
-                int firstce = m_pattern_.m_CE_[0];
-                boolean ignorable = true;
-                int ce = CollationElementIterator.IGNORABLE;
-                int offset = 0;
-                while (ce != firstce) {
-                    offset = m_utilColEIter_.getOffset();
-                    if (ce != firstce 
-                        && ce != CollationElementIterator.IGNORABLE) {
-                        ignorable = false;
-                    }
-                    ce = m_utilColEIter_.next();
-                }
-                m_utilColEIter_.setExactOffset(offset); // back up 1 to the 
-                m_utilColEIter_.previous();             // right offset
-                offset = m_utilColEIter_.getOffset();
-                result = !ignorable && (UCharacter.getCombiningClass(
-                                            UTF16.charAt(decomp, offset)) != 0);
-            }
-        }
-    
+
+        pcetable[offset] = 0;
+        pattern_.PCE_ = pcetable;
+        pattern_.PCELength_ = offset;
+
         return result;
     }
-    
-    /**
-    * Used by exact matches, checks if there are accents before the match. 
-    * This is really painful... we have to check that composite characters at
-    * the start of the matches have to not have any extra accents. 
-    * We check the FCD of the character first, if it starts with an accent and 
-    * the first pattern ce does not match the first ce of the character, we 
-    * bail.
-    * Otherwise we try normalizing the first composite 
-    * character and find the immediate decomposed character before the match to 
-    * see if it is an non-ignorable accent.
-    * Now normalizing the first composite character is enough because we ensure 
-    * that when the match is passed in here with extra beginning ces, the 
-    * first or last ce that match has to occur within the first character.
-    * E.g. looking for \u0301 acute in \u01FA A ring above and acute, 
-    * checkExtraMatchAccent should fail since there is a middle ring in \u01FA
-    * Note here that accents checking are slow and cautioned in the API docs.
-    * @param start offset 
-    * @param end offset
-    * @return true if there are accents on either side of the match, 
-    *         false otherwise
-    */
-    private final boolean hasAccentsBeforeMatch(int start, int end) 
-    {
-        if (m_pattern_.m_hasPrefixAccents_) {
-            // we have been iterating forwards previously
-            boolean ignorable = true;
-            int firstce = m_pattern_.m_CE_[0];
-            m_colEIter_.setExactOffset(start);
-            int ce  = getCE(m_colEIter_.next());
-            while (ce != firstce) {
-                if (ce != CollationElementIterator.IGNORABLE) {
-                    ignorable = false;
-                }
-                ce = getCE(m_colEIter_.next());
-            }
-            if (!ignorable && m_colEIter_.isInBuffer()) {
-                // within normalization buffer, discontiguous handled here
-                return true;
-            }
-    
-            // within text
-            boolean accent = (getFCD(targetText, start) >> SECOND_LAST_BYTE_SHIFT_)
-                                                        != 0; 
-            if (!accent) {
-                return checkExtraMatchAccents(start, end);
-            }
-            if (!ignorable) {
-                return true;
-            }
-            if (start > m_textBeginOffset_) {
-                targetText.setIndex(start);
-                targetText.previous();
-                if ((getFCD(targetText, targetText.getIndex()) & LAST_BYTE_MASK_) 
-                                                                        != 0) {
-                    m_colEIter_.setExactOffset(start);
-                    ce = m_colEIter_.previous();
-                    if (ce != CollationElementIterator.NULLORDER 
-                        && ce != CollationElementIterator.IGNORABLE) {
-                        return true;
-                    }
-                }
-            }
+
+    // TODO: This method only triggers initializePatternCETable(), which is probably no
+    //      longer needed.
+    private int initializePattern() {
+        // Since the strength is primary, accents are ignored in the pattern.
+
+        // *** Boyer-Moore ***
+        /*
+        if (strength_ == Collator.PRIMARY) {
+            pattern_.hasPrefixAccents_ = false;
+            pattern_.hasSuffixAccents_ = false;
+        } else {
+            pattern_.hasPrefixAccents_ = (getFCD(pattern_.text_, 0) >>> SECOND_LAST_BYTE_SHIFT_) != 0;
+            pattern_.hasSuffixAccents_ = (getFCD(pattern_.text_.codePointBefore(pattern_.text_.length())) & LAST_BYTE_MASK_) != 0;
         }
-      
-        return false;
+        */
+
+        pattern_.PCE_ = null;
+
+        // since intializePattern is an internal method status is a success.
+        return initializePatternCETable();
     }
-    
-    /**
-     * Used by exact matches, checks if there are accents bounding the match.
-     * Note this is the initial boundary check. If the potential match
-     * starts or ends with composite characters, the accents in those
-     * characters will be determined later.
-     * Not doing backwards iteration here, since discontiguos contraction for 
-     * backwards collation element iterator, use up too many characters.
-     * E.g. looking for \u030A ring in \u01FA A ring above and acute, 
-     * should fail since there is a acute at the end of \u01FA
-     * Note here that accents checking are slow and cautioned in the API docs.
-     * @param start offset of match
-     * @param end end offset of the match
-     * @return true if there are accents on either side of the match, 
-     *         false otherwise
+
+    // *** Boyer-Moore ***
+    /*
+     private final void setShiftTable(char shift[], 
+                                         char backshift[], 
+                                         int cetable[], int cesize, 
+                                         int expansionsize,
+                                         int defaultforward,
+                                         int defaultbackward) {
+         // No implementation
+     }
      */
-    private final boolean hasAccentsAfterMatch(int start, int end) 
-    {
-        if (m_pattern_.m_hasSuffixAccents_) {
-            targetText.setIndex(end);
-            if (end > m_textBeginOffset_ 
-                && UTF16.isTrailSurrogate(targetText.previous())) {
-                if (targetText.getIndex() > m_textBeginOffset_ &&
-                    !UTF16.isLeadSurrogate(targetText.previous())) {
-                    targetText.next();
-                }
-            }
-            if ((getFCD(targetText, targetText.getIndex()) & LAST_BYTE_MASK_) != 0) {
-                int firstce  = m_pattern_.m_CE_[0];
-                m_colEIter_.setExactOffset(start);
-                while (getCE(m_colEIter_.next()) != firstce) {
-                }
-                int count = 1;
-                while (count < m_pattern_.m_CELength_) {
-                    if (getCE(m_colEIter_.next()) 
-                        == CollationElementIterator.IGNORABLE) {
-                        count --;
-                    }
-                    count ++;
-                }
-                //int ce = getCE(m_colEIter_.next());
-                int ce = m_colEIter_.next();
-                if (ce != CollationElementIterator.NULLORDER 
-                        && ce != CollationElementIterator.IGNORABLE) {
-                    ce = getCE(ce);
-                }
-                if (ce != CollationElementIterator.NULLORDER 
-                            && ce != CollationElementIterator.IGNORABLE) {
-                    if (m_colEIter_.getOffset() <= end) {
-                        return true;
-                    }
-                    if ((getFCD(targetText, end) >> SECOND_LAST_BYTE_SHIFT_) 
-                        != 0) {
-                        return true;
-                    }
-                }
-            }
+
+    // TODO: This method only triggers initializePattern(), which is probably no
+    //      longer needed.
+    private void initialize() {
+        /* int expandlength = */ initializePattern();
+
+        // *** Boyer-Moore ***
+        /*
+        if (pattern_.CELength_ > 0) {
+            int cesize = pattern_.CELength_;
+            int minlength = cesize > expandlength ? cesize - expandlength : 1;
+            pattern_.defaultShiftSize_ = minlength;
+            setShiftTable(pattern_.shift_, pattern_.backShift_, pattern_.CE_, cesize,
+                    expandlength, minlength, minlength);
+            return;
         }
-        return false;
+        return pattern_.defaultShiftSize_;
+        */
     }
-    
+
     /**
-    * Checks if the offset runs out of the text string range
-    * @param textstart offset of the first character in the range
-    * @param textlimit limit offset of the text string range
-    * @param offset to test
-    * @return true if offset is out of bounds, false otherwise
-    */
-    private static final boolean isOutOfBounds(int textstart, int textlimit, 
-                                                int offset)
-    {
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected void setMatchNotFound() {
+        super.setMatchNotFound();
+        // SearchIterator#setMatchNotFound() does following:
+        //      search_.matchedIndex_ = DONE;
+        //      search_.setMatchedLength(0);
+        if (search_.isForwardSearching_) {
+            textIter_.setOffset(search_.text().getEndIndex());
+        } else {
+            textIter_.setOffset(0);
+        }
+    }
+
+    /**
+     * Checks if the offset runs out of the text string range
+     * @param textstart offset of the first character in the range
+     * @param textlimit limit offset of the text string range
+     * @param offset to test
+     * @return true if offset is out of bounds, false otherwise
+     */
+    private static final boolean isOutOfBounds(int textstart, int textlimit, int offset) {
         return offset < textstart || offset > textlimit;
     }
-    
+
     /**
      * Checks for identical match
-     * @param strsrch string search data
      * @param start offset of possible match
      * @param end offset of possible match
-     * @return true if identical match is found
+     * @return TRUE if identical match is found
      */
-    private final boolean checkIdentical(int start, int end) 
-    {
-        if (m_collator_.getStrength() != Collator.IDENTICAL) {
+    private boolean checkIdentical(int start, int end) {
+        if (strength_ != Collator.IDENTICAL) {
             return true;
         }
-    
+        // Note: We could use Normalizer::compare() or similar, but for short strings
+        // which may not be in FCD it might be faster to just NFD them.
         String textstr = getString(targetText, start, end - start);
-        if (Normalizer.quickCheck(textstr, Normalizer.NFD,0) 
-                                                    == Normalizer.NO) {
+        if (Normalizer.quickCheck(textstr, Normalizer.NFD, 0) == Normalizer.NO) {
             textstr = Normalizer.decompose(textstr, false);
         }
-        String patternstr = m_pattern_.targetText;
-        if (Normalizer.quickCheck(patternstr, Normalizer.NFD,0) 
-                                                    == Normalizer.NO) {
+        String patternstr = pattern_.text_;
+        if (Normalizer.quickCheck(patternstr, Normalizer.NFD, 0) == Normalizer.NO) {
             patternstr = Normalizer.decompose(patternstr, false);
         }
         return textstr.equals(patternstr);
     }
-    
-    /**
-     * Checks to see if the match is repeated
-     * @param start new match start index
-     * @param limit new match limit index
-     * @return true if the the match is repeated, false otherwise
-     */
-    private final boolean checkRepeatedMatch(int start, int limit)
-    {
-        if (m_matchedIndex_ == DONE) {
-            return false;
+
+    private boolean initTextProcessedIter() {
+        if (textProcessedIter_ == null) {
+            textProcessedIter_ = new CollationPCE(textIter_);
+        } else {
+            textProcessedIter_.init(textIter_);
         }
-        int end = limit - 1; // last character in the match
-        int lastmatchend = m_matchedIndex_ + matchLength - 1; 
-        if (!isOverlapping()) {
-            return (start >= m_matchedIndex_ && start <= lastmatchend) 
-                    || (end >= m_matchedIndex_ && end <= lastmatchend)
-                    || (start <= m_matchedIndex_ && end >= lastmatchend);
-                      
-        }
-        return start <= m_matchedIndex_ && end >= lastmatchend;
-    }
-    
-    /**
-     * Checks match for contraction. 
-     * If the match ends with a partial contraction we fail.
-     * If the match starts too far off (because of backwards iteration) we try 
-     * to chip off the extra characters depending on whether a breakiterator 
-     * has been used.
-     * Temporary utility buffer used to return modified start and end.
-     * @param start offset of potential match, to be modified if necessary
-     * @param end offset of potential match, to be modified if necessary
-     * @return true if match passes the contraction test, false otherwise.
-     */
-    private final boolean checkNextExactContractionMatch(int start, int end) 
-    {
-        // This part checks if either ends of the match contains potential 
-        // contraction. If so we'll have to iterate through them
-        char endchar = 0;
-        if (end < m_textLimitOffset_) {
-            targetText.setIndex(end);
-            endchar = targetText.current();
-        }
-        char poststartchar = 0;
-        if (start + 1 < m_textLimitOffset_) {
-            targetText.setIndex(start + 1);
-            poststartchar = targetText.current();
-        }
-        if (m_collator_.isUnsafe(endchar) 
-            || m_collator_.isUnsafe(poststartchar)) {
-            // expansion prefix, what's left to iterate
-            int bufferedCEOffset = m_colEIter_.m_CEBufferOffset_;
-            boolean hasBufferedCE = bufferedCEOffset > 0;
-            m_colEIter_.setExactOffset(start);
-            int temp = start;
-            while (bufferedCEOffset > 0) {
-                // getting rid of the redundant ce, caused by setOffset.
-                // since backward contraction/expansion may have extra ces if 
-                // we are in the normalization buffer, hasAccentsBeforeMatch 
-                // would have taken care of it.
-                // E.g. the character \u01FA will have an expansion of 3, but 
-                // if we are only looking for acute and ring \u030A and \u0301, 
-                // we'll have to skip the first ce in the expansion buffer.
-                m_colEIter_.next();
-                if (m_colEIter_.getOffset() != temp) {
-                    start = temp;
-                    temp  = m_colEIter_.getOffset();
-                }
-                bufferedCEOffset --;
-            }
-    
-            int count = 0;
-            while (count < m_pattern_.m_CELength_) {
-                int ce = getCE(m_colEIter_.next());
-                if (ce == CollationElementIterator.IGNORABLE) {
-                    continue;
-                }
-                if (hasBufferedCE && count == 0 
-                    && m_colEIter_.getOffset() != temp) {
-                    start = temp;
-                    temp   = m_colEIter_.getOffset();
-                }
-                if (ce != m_pattern_.m_CE_[count]) {
-                    end ++;
-                    end = getNextBaseOffset(end);  
-                    m_utilBuffer_[0] = start;
-                    m_utilBuffer_[1] = end;
-                    return false;
-                }
-                count ++;
-            }
-        } 
-        m_utilBuffer_[0] = start;
-        m_utilBuffer_[1] = end;
         return true;
     }
-    
-    
-    /**
-     * Checks and sets the match information if found.
-     * Checks 
-     * <ul>
-     * <li> the potential match does not repeat the previous match
-     * <li> boundaries are correct
-     * <li> exact matches has no extra accents
-     * <li> identical matchesb
-     * <li> potential match does not end in the middle of a contraction
-     * </ul>
-     * Otherwise the offset will be shifted to the next character.
-     * The result m_matchIndex_ and m_matchLength_ will be set to the truncated
-     * more fitting result value.
-     * Uses the temporary utility buffer for storing the modified textoffset.
-     * @param textoffset offset in the collation element text.
-     * @return true if the match is valid, false otherwise
+
+    /*
+     * Find the next break boundary after startIndex. If the UStringSearch object
+     * has an external break iterator, use that. Otherwise use the internal character
+     * break iterator.
      */
-    private final boolean checkNextExactMatch(int textoffset)
-    {
-        int start = m_colEIter_.getOffset();        
-        if (!checkNextExactContractionMatch(start, textoffset)) {
-            // returns the modified textoffset
-            m_utilBuffer_[0] = m_utilBuffer_[1];
-            return false;
+    private int nextBoundaryAfter(int startIndex) {
+        BreakIterator breakiterator = search_.breakIter();
+
+        if (breakiterator == null) {
+            breakiterator = search_.internalBreakIter_;
         }
-    
-        start = m_utilBuffer_[0];
-        textoffset = m_utilBuffer_[1];
-        // this totally matches, however we need to check if it is repeating
-        if (!isBreakUnit(start, textoffset) 
-            || checkRepeatedMatch(start, textoffset) 
-            || hasAccentsBeforeMatch(start, textoffset) 
-            || !checkIdentical(start, textoffset) 
-            || hasAccentsAfterMatch(start, textoffset)) {
-            textoffset ++;
-            textoffset = getNextBaseOffset(textoffset);  
-            m_utilBuffer_[0] = textoffset;
-            return false;
+
+        if (breakiterator != null) {
+            return breakiterator.following(startIndex);
         }
-        
-        if (m_collator_.getStrength() == Collator.PRIMARY) {
-            textoffset = checkBreakBoundary(textoffset);
-        }
-            
-        // totally match, we will get rid of the ending ignorables.
-        m_matchedIndex_  = start;
-        matchLength = textoffset - start;
-        return true;
+
+        return startIndex;
     }
-    
-    /**
-    * Getting the previous base character offset, or the current offset if the 
-    * current character is a base character
-    * @param text the source text to work on
-    * @param textoffset one offset after the current character
-    * @return the offset of the next character after the base character or the 
-    *             first composed character with accents
-    */
-    private final int getPreviousBaseOffset(CharacterIterator text, 
-                                            int textoffset)
-    {
-        if (textoffset > m_textBeginOffset_) {
-            while (true) {
-                int result = textoffset;
-                text.setIndex(result);
-                if (UTF16.isTrailSurrogate(text.previous())) {
-                    if (text.getIndex() != text.getBeginIndex() &&
-                        !UTF16.isLeadSurrogate(text.previous())) {
-                        text.next();
-                    }
-                }
-                textoffset = text.getIndex();
-                char fcd = getFCD(text, textoffset);
-                if ((fcd >> SECOND_LAST_BYTE_SHIFT_) == 0) {
-                    if ((fcd & LAST_BYTE_MASK_) != 0) {
-                        return textoffset;
-                    }
-                    return result;
-                }
-                if (textoffset == m_textBeginOffset_) {
-                    return m_textBeginOffset_;
-                }
-            }
+
+    /*
+     * Returns TRUE if index is on a break boundary. If the UStringSearch
+     * has an external break iterator, test using that, otherwise test
+     * using the internal character break iterator.
+     */
+    private boolean isBreakBoundary(int index) {
+        BreakIterator breakiterator = search_.breakIter();
+
+        if (breakiterator == null) {
+            breakiterator = search_.internalBreakIter_;
         }
-        return textoffset;
+
+        return (breakiterator != null && breakiterator.isBoundary(index));
     }
-    
-    /**
-    * Getting the indexes of the accents that are not blocked in the argument
-    * accent array
-    * @param accents accents in nfd.
-    * @param accentsindex array to store the indexes of accents in accents that 
-    *         are not blocked
-    * @return the length of populated accentsindex
-    */
-    private int getUnblockedAccentIndex(StringBuilder accents, 
-                                        int accentsindex[])
-    {
-        int index = 0;
-        int length = accents.length();
-        int cclass = 0;
-        int result = 0;
-        while (index < length) {
-            int codepoint = UTF16.charAt(accents, index);
-            int tempclass = UCharacter.getCombiningClass(codepoint);
-            if (tempclass != cclass) {
-                cclass = tempclass;
-                accentsindex[result] = index;
-                result ++;
-            }
-            if (UCharacter.isSupplementary(codepoint)) {
-                index += 2;
-            }
-            else {
-                index ++;
-            }
+
+
+    // Java porting note: Followings are corresponding to UCompareCEsResult enum
+    private static final int CE_MATCH = -1;
+    private static final int CE_NO_MATCH = 0;
+    private static final int CE_SKIP_TARG = 1;
+    private static final int CE_SKIP_PATN = 2;
+
+    private static int CE_LEVEL2_BASE = 0x00000005;
+    private static int CE_LEVEL3_BASE = 0x00050000;
+
+    private static int compareCE64s(long targCE, long patCE, ElementComparisonType compareType) {
+        if (targCE == patCE) {
+            return CE_MATCH;
         }
-        accentsindex[result] = length;
-        return result;
+        if (compareType == ElementComparisonType.STANDARD_ELEMENT_COMPARISON) {
+            return CE_NO_MATCH;
+        }
+
+        long targCEshifted = targCE >>> 32;
+        long patCEshifted = patCE >>> 32;
+        long mask;
+
+        mask = 0xFFFF0000L;
+        int targLev1 = (int)(targCEshifted & mask);
+        int patLev1 = (int)(patCEshifted & mask);
+        if (targLev1 != patLev1) {
+            if (targLev1 == 0) {
+                return CE_SKIP_TARG;
+            }
+            if (patLev1 == 0
+                    && compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD) {
+                return CE_SKIP_PATN;
+            }
+            return CE_NO_MATCH;
+        }
+
+        mask = 0x0000FFFFL;
+        int targLev2 = (int)(targCEshifted & mask);
+        int patLev2 = (int)(patCEshifted & mask);
+        if (targLev2 != patLev2) {
+            if (targLev2 == 0) {
+                return CE_SKIP_TARG;
+            }
+            if (patLev2 == 0
+                    && compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD) {
+                return CE_SKIP_PATN;
+            }
+            return (patLev2 == CE_LEVEL2_BASE ||
+                    (compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD &&
+                        targLev2 == CE_LEVEL2_BASE)) ? CE_MATCH : CE_NO_MATCH;
+        }
+
+        mask = 0xFFFF0000L;
+        int targLev3 = (int)(targCE & mask);
+        int patLev3 = (int)(patCE & mask);
+        if (targLev3 != patLev3) {
+            return (patLev3 == CE_LEVEL3_BASE ||
+                    (compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD &&
+                        targLev3 == CE_LEVEL3_BASE) )? CE_MATCH: CE_NO_MATCH;
+        }
+
+        return CE_MATCH;
     }
 
     /**
-     * Appends 3 StringBuilder/CharacterIterator together into a destination 
-     * string buffer.
-     * @param source1 string buffer
-     * @param source2 character iterator
-     * @param start2 start of the character iterator to merge
-     * @param end2 end of the character iterator to merge
-     * @param source3 string buffer
-     * @return appended string buffer
+     * An object used for receiving matched index in search() and
+     * searchBackwards().
      */
-    private static final StringBuilder merge(StringBuilder source1, 
-                                             CharacterIterator source2,
-                                             int start2, int end2,
-                                             StringBuilder source3) 
-    {
-        StringBuilder result = new StringBuilder();    
-        if (source1 != null && source1.length() != 0) {
-            result.append(source1);
-        }
-        source2.setIndex(start2);
-        while (source2.getIndex() < end2) {
-            result.append(source2.current());
-            source2.next();
-        }
-        if (source3 != null && source3.length() != 0) {
-            result.append(source3);
-        }
-        return result;
+    private static class Match {
+        int start_ = -1;
+        int limit_ = -1;
     }
-    
-    /**
-    * Running through a collation element iterator to see if the contents 
-    * matches pattern in string search data
-    * @param coleiter collation element iterator to test
-    * @return true if a match if found, false otherwise
-    */
-    private final boolean checkCollationMatch(CollationElementIterator coleiter)
-    {
-        int patternceindex = m_pattern_.m_CELength_;
-        int offset = 0;
-        while (patternceindex > 0) {
-            int ce = getCE(coleiter.next());
-            if (ce == CollationElementIterator.IGNORABLE) {
+
+    private boolean search(int startIdx, Match m) {
+        // Input parameter sanity check.
+        if (pattern_.CELength_ == 0
+                || startIdx < search_.beginIndex()
+                || startIdx > search_.endIndex()) {
+            throw new IllegalArgumentException("search(" + startIdx + ", m) - expected position to be between " +
+                    search_.beginIndex() + " and " + search_.endIndex());
+        }
+
+        if (pattern_.PCE_ == null) {
+            initializePatternPCETable();
+        }
+
+        textIter_.setOffset(startIdx);
+        CEBuffer ceb = new CEBuffer(this);
+
+        int targetIx = 0;
+        CEI targetCEI = null;
+        int patIx;
+        boolean found;
+
+        int mStart = -1;
+        int mLimit = -1;
+        int minLimit;
+        int maxLimit;
+
+        // Outer loop moves over match starting positions in the
+        //      target CE space.
+        // Here we see the target as a sequence of collation elements, resulting from the following:
+        // 1. Target characters were decomposed, and (if appropriate) other compressions and expansions are applied
+        //    (for example, digraphs such as IJ may be broken into two characters).
+        // 2. An int64_t CE weight is determined for each resulting unit (high 16 bits are primary strength, next
+        //    16 bits are secondary, next 16 (the high 16 bits of the low 32-bit half) are tertiary. Any of these
+        //    fields that are for strengths below that of the collator are set to 0. If this makes the int64_t
+        //    CE weight 0 (as for a combining diacritic with secondary weight when the collator strentgh is primary),
+        //    then the CE is deleted, so the following code sees only CEs that are relevant.
+        // For each CE, the lowIndex and highIndex correspond to where this CE begins and ends in the original text.
+        // If lowIndex==highIndex, either the CE resulted from an expansion/decomposition of one of the original text
+        // characters, or the CE marks the limit of the target text (in which case the CE weight is UCOL_PROCESSED_NULLORDER).
+        for (targetIx = 0; ; targetIx++) {
+            found = true;
+            // Inner loop checks for a match beginning at each
+            // position from the outer loop.
+            int targetIxOffset = 0;
+            long patCE = 0;
+            // For targetIx > 0, this ceb.get gets a CE that is as far back in the ring buffer
+            // (compared to the last CE fetched for the previous targetIx value) as we need to go
+            // for this targetIx value, so if it is non-NULL then other ceb.get calls should be OK.
+            CEI firstCEI = ceb.get(targetIx);
+            if (firstCEI == null) {
+                throw new RuntimeException("CEBuffer.get(" + targetIx + ") returned null.");
+            }
+
+            for (patIx = 0; patIx < pattern_.PCELength_; patIx++) {
+                patCE = pattern_.PCE_[patIx];
+                targetCEI = ceb.get(targetIx + patIx + targetIxOffset);
+                // Compare CE from target string with CE from the pattern.
+                // Note that the target CE will be UCOL_PROCESSED_NULLORDER if we reach the end of input,
+                // which will fail the compare, below.
+                int ceMatch = compareCE64s(targetCEI.ce_, patCE, search_.elementComparisonType_);
+                if (ceMatch == CE_NO_MATCH) {
+                    found = false;
+                    break;
+                } else if (ceMatch > CE_NO_MATCH) {
+                    if (ceMatch == CE_SKIP_TARG) {
+                        // redo with same patCE, next targCE
+                        patIx--;
+                        targetIxOffset++;
+                    } else { // ceMatch == CE_SKIP_PATN
+                        // redo with same targCE, next patCE
+                        targetIxOffset--;
+                    }
+                }
+            }
+            targetIxOffset += pattern_.PCELength_; // this is now the offset in target CE space to end of the match so far
+
+            if (!found && ((targetCEI == null) || (targetCEI.ce_ != CollationPCE.PROCESSED_NULLORDER))) {
+                // No match at this targetIx.  Try again at the next.
                 continue;
             }
-            if (ce != m_pattern_.m_CE_[offset]) {
-                return false;
-            }
-            offset ++;
-            patternceindex --;
-        }
-        return true;
-    }
-    
-    /**
-     * Rearranges the front accents to try matching.
-     * Prefix accents in the text will be grouped according to their combining 
-     * class and the groups will be mixed and matched to try find the perfect 
-     * match with the pattern.
-     * So for instance looking for "\u0301" in "\u030A\u0301\u0325"
-     * step 1: split "\u030A\u0301" into 6 other type of potential accent 
-     *            substrings "\u030A", "\u0301", "\u0325", "\u030A\u0301", 
-     *            "\u030A\u0325", "\u0301\u0325".
-     * step 2: check if any of the generated substrings matches the pattern.
-     * Internal method, status is assumed to be success, caller has to check 
-     * status before calling this method.
-     * @param start first offset of the accents to start searching
-     * @param end start of the last accent set
-     * @return DONE if a match is not found, otherwise return the starting
-     *         offset of the match. Note this start includes all preceding 
-     *            accents.
-     */
-    private int doNextCanonicalPrefixMatch(int start, int end)
-    {
-        if ((getFCD(targetText, start) & LAST_BYTE_MASK_) == 0) {
-            // die... failed at a base character
-            return DONE;
-        }
-    
-        start = targetText.getIndex(); // index changed by fcd
-        int offset = getNextBaseOffset(targetText, start);
-        start = getPreviousBaseOffset(start);
-    
-        StringBuilder accents = new StringBuilder();
-        String accentstr = getString(targetText, start, offset - start);
-        // normalizing the offensive string
-        if (Normalizer.quickCheck(accentstr, Normalizer.NFD,0) 
-                                                    == Normalizer.NO) {
-            accentstr = Normalizer.decompose(accentstr, false);
-        }
-        accents.append(accentstr);
-            
-        int accentsindex[] = new int[INITIAL_ARRAY_SIZE_];      
-        int accentsize = getUnblockedAccentIndex(accents, accentsindex);
-        int count = (2 << (accentsize - 1)) - 1;  
-        while (count > 0) {
-            // copy the base characters
-            m_canonicalPrefixAccents_.delete(0, 
-                                        m_canonicalPrefixAccents_.length());
-            int k = 0;
-            for (; k < accentsindex[0]; k ++) {
-                m_canonicalPrefixAccents_.append(accents.charAt(k));
-            }
-            // forming all possible canonical rearrangement by dropping
-            // sets of accents
-            for (int i = 0; i <= accentsize - 1; i ++) {
-                int mask = 1 << (accentsize - i - 1);
-                if ((count & mask) != 0) {
-                    for (int j = accentsindex[i]; j < accentsindex[i + 1]; 
-                                                                        j ++) {
-                        m_canonicalPrefixAccents_.append(accents.charAt(j));
-                    }
-                }
-            }
-            StringBuilder match = merge(m_canonicalPrefixAccents_,
-                                       targetText, offset, end,
-                                       m_canonicalSuffixAccents_);
-                
-            // if status is a failure, ucol_setText does nothing.
-            // run the collator iterator through this match
-            m_utilColEIter_.setText(match.toString());
-            if (checkCollationMatch(m_utilColEIter_)) {
-                 return start;
-            }
-            count --;
-        }
-        return DONE;
-    }
 
-    /**
-    * Gets the offset to the safe point in text before textoffset.
-    * ie. not the middle of a contraction, swappable characters or 
-    * supplementary characters.
-    * @param start offset in string
-    * @param textoffset offset in string
-    * @return offset to the previous safe character
-    */
-    private final int getPreviousSafeOffset(int start, int textoffset)
-    {
-        int result = textoffset; // first contraction character
-        targetText.setIndex(textoffset);
-        while (result >= start && m_collator_.isUnsafe(targetText.previous())) {
-            result = targetText.getIndex();
-        }
-        if (result != start) {
-            // the first contraction character is consider unsafe here
-            result = targetText.getIndex(); // originally result --;
-        }
-        return result; 
-    }
+            if (!found) {
+                // No match at all, we have run off the end of the target text.
+                break;
+            }
 
-    /**
-     * Take the rearranged end accents and tries matching. If match failed at
-     * a seperate preceding set of accents (seperated from the rearranged on by
-     * at least a base character) then we rearrange the preceding accents and 
-     * tries matching again.
-     * We allow skipping of the ends of the accent set if the ces do not match. 
-     * However if the failure is found before the accent set, it fails.
-     * Internal method, status assumed to be success, caller has to check 
-     * status before calling this method.
-     * @param textoffset of the start of the rearranged accent
-     * @return DONE if a match is not found, otherwise return the starting
-     *         offset of the match. Note this start includes all preceding 
-     *         accents.
-     */
-    private int doNextCanonicalSuffixMatch(int textoffset)
-    {
-        int safelength = 0;
-        StringBuilder safetext;
-        int safeoffset = m_textBeginOffset_; 
-        
-        if (textoffset != m_textBeginOffset_ 
-            && m_canonicalSuffixAccents_.length() > 0
-            && m_collator_.isUnsafe(m_canonicalSuffixAccents_.charAt(0))) {
-            safeoffset     = getPreviousSafeOffset(m_textBeginOffset_, 
-                                                    textoffset);
-            safelength     = textoffset - safeoffset;
-            safetext       = merge(null, targetText, safeoffset, textoffset, 
-                                   m_canonicalSuffixAccents_);
-        }
-        else {
-            safetext = m_canonicalSuffixAccents_;
-        }
-    
-        // if status is a failure, ucol_setText does nothing
-        CollationElementIterator coleiter = m_utilColEIter_;
-        coleiter.setText(safetext.toString());
-        // status checked in loop below
-    
-        int ceindex = m_pattern_.m_CELength_ - 1;
-        boolean isSafe = true; // indication flag for position in safe zone
-        
-        while (ceindex >= 0) {
-            int textce = coleiter.previous();
-            if (textce == CollationElementIterator.NULLORDER) {
-                // check if we have passed the safe buffer
-                if (coleiter == m_colEIter_) {
-                    return DONE;
+            // We have found a match in CE space.
+            // Now determine the bounds in string index space.
+            // There still is a chance of match failure if the CE range not correspond to
+            // an acceptable character range.
+            //
+            CEI lastCEI = ceb.get(targetIx + targetIxOffset -1);
+
+            mStart = firstCEI.lowIndex_;
+            minLimit = lastCEI.lowIndex_;
+
+            // Look at the CE following the match.  If it is UCOL_NULLORDER the match
+            // extended to the end of input, and the match is good.
+
+            // Look at the high and low indices of the CE following the match. If
+            // they are the same it means one of two things:
+            //    1. The match extended to the last CE from the target text, which is OK, or
+            //    2. The last CE that was part of the match is in an expansion that extends
+            //       to the first CE after the match. In this case, we reject the match.
+            CEI nextCEI = null;
+            if (search_.elementComparisonType_ == ElementComparisonType.STANDARD_ELEMENT_COMPARISON) {
+                nextCEI = ceb.get(targetIx + targetIxOffset);
+                maxLimit = nextCEI.lowIndex_;
+                if (nextCEI.lowIndex_ == nextCEI.highIndex_ && nextCEI.ce_ != CollationPCE.PROCESSED_NULLORDER) {
+                    found = false;
                 }
-                coleiter = m_colEIter_;
-                if (safetext != m_canonicalSuffixAccents_) {
-                    safetext.delete(0, safetext.length());
-                }
-                coleiter.setExactOffset(safeoffset);
-                // status checked at the start of the loop
-                isSafe = false;
-                continue;
-            }
-            textce = getCE(textce);
-            if (textce != CollationElementIterator.IGNORABLE 
-                && textce != m_pattern_.m_CE_[ceindex]) {
-                // do the beginning stuff
-                int failedoffset = coleiter.getOffset();
-                if (isSafe && failedoffset >= safelength) {
-                    // alas... no hope. failed at rearranged accent set
-                    return DONE;
-                }
-                else {
-                    if (isSafe) {
-                        failedoffset += safeoffset;
+            } else {
+                for (;; ++targetIxOffset) {
+                    nextCEI = ceb.get(targetIx + targetIxOffset);
+                    maxLimit = nextCEI.lowIndex_;
+                    // If we are at the end of the target too, match succeeds
+                    if (nextCEI.ce_ == CollationPCE.PROCESSED_NULLORDER) {
+                        break;
                     }
-                    
-                    // try rearranging the front accents
-                    int result = doNextCanonicalPrefixMatch(failedoffset, 
-                                                            textoffset);
-                    if (result != DONE) {
-                        // if status is a failure, ucol_setOffset does nothing
-                        m_colEIter_.setExactOffset(result);
-                    }
-                    return result;
-                }
-            }
-            if (textce == m_pattern_.m_CE_[ceindex]) {
-                ceindex --;
-            }
-        }
-        // set offset here
-        if (isSafe) {
-            int result = coleiter.getOffset();
-            // sets the text iterator with the correct expansion and offset
-            int leftoverces = coleiter.m_CEBufferOffset_;
-            if (result >= safelength) { 
-                result = textoffset;
-            }
-            else {
-                result += safeoffset;
-            }
-            m_colEIter_.setExactOffset(result);
-            m_colEIter_.m_CEBufferOffset_ = leftoverces;
-            return result;
-        }
-        
-        return coleiter.getOffset();              
-    }
-    
-    /**
-     * Trying out the substring and sees if it can be a canonical match.
-     * This will try normalizing the end accents and arranging them into 
-     * canonical equivalents and check their corresponding ces with the pattern 
-     * ce.
-     * Suffix accents in the text will be grouped according to their combining 
-     * class and the groups will be mixed and matched to try find the perfect 
-     * match with the pattern.
-     * So for instance looking for "\u0301" in "\u030A\u0301\u0325"
-     * step 1: split "\u030A\u0301" into 6 other type of potential accent 
-     *         substrings
-     *         "\u030A", "\u0301", "\u0325", "\u030A\u0301", "\u030A\u0325", 
-     *         "\u0301\u0325".
-     * step 2: check if any of the generated substrings matches the pattern.
-     * @param textoffset end offset in the collation element text that ends with 
-     *                   the accents to be rearranged
-     * @return true if the match is valid, false otherwise
-     */
-    private boolean doNextCanonicalMatch(int textoffset)
-    {
-        int offset = m_colEIter_.getOffset();
-        targetText.setIndex(textoffset);
-        if (UTF16.isTrailSurrogate(targetText.previous()) 
-            && targetText.getIndex() > m_textBeginOffset_) { 
-            if (!UTF16.isLeadSurrogate(targetText.previous())) {
-                targetText.next();
-            }
-        }
-        if ((getFCD(targetText, targetText.getIndex()) & LAST_BYTE_MASK_) == 0) {
-            if (m_pattern_.m_hasPrefixAccents_) {
-                offset = doNextCanonicalPrefixMatch(offset, textoffset);
-                if (offset != DONE) {
-                    m_colEIter_.setExactOffset(offset);
-                    return true;
-                }
-            }
-            return false;
-        }
-    
-        if (!m_pattern_.m_hasSuffixAccents_) {
-            return false;
-        }
-    
-        StringBuilder accents = new StringBuilder();
-        // offset to the last base character in substring to search
-        int baseoffset = getPreviousBaseOffset(targetText, textoffset);
-        // normalizing the offensive string
-        String accentstr = getString(targetText, baseoffset, 
-                                     textoffset - baseoffset);
-        if (Normalizer.quickCheck(accentstr, Normalizer.NFD,0) 
-                                                    == Normalizer.NO) {
-            accentstr = Normalizer.decompose(accentstr, false);
-        }
-        accents.append(accentstr);
-        // status checked in loop below
-            
-        int accentsindex[] = new int[INITIAL_ARRAY_SIZE_];
-        int size = getUnblockedAccentIndex(accents, accentsindex);
-    
-        // 2 power n - 1 plus the full set of accents
-        int  count = (2 << (size - 1)) - 1;  
-        while (count > 0) {
-            m_canonicalSuffixAccents_.delete(0, 
-                                           m_canonicalSuffixAccents_.length());
-            // copy the base characters
-            for (int k = 0; k < accentsindex[0]; k ++) {
-                m_canonicalSuffixAccents_.append(accents.charAt(k));
-            }
-            // forming all possible canonical rearrangement by dropping
-            // sets of accents
-            for (int i = 0; i <= size - 1; i ++) {
-                int mask = 1 << (size - i - 1);
-                if ((count & mask) != 0) {
-                    for (int j = accentsindex[i]; j < accentsindex[i + 1]; 
-                        j ++) {
-                        m_canonicalSuffixAccents_.append(accents.charAt(j));
-                    }
-                }
-            }
-            offset = doNextCanonicalSuffixMatch(baseoffset);
-            if (offset != DONE) {
-                return true; // match found
-            }
-            count --;
-        }
-        return false;
-    }
-    
-    /**
-     * Gets the previous base character offset depending on the string search 
-     * pattern data
-     * @param strsrch string search data
-     * @param textoffset current offset, current character
-     * @return the offset of the next character after this base character or 
-     *             itself if it is a composed character with accents
-     */
-    private final int getPreviousBaseOffset(int textoffset)
-    {
-        if (m_pattern_.m_hasPrefixAccents_ && textoffset > m_textBeginOffset_) {
-            int offset = textoffset;
-            if ((getFCD(targetText, offset) >> SECOND_LAST_BYTE_SHIFT_) != 0) {
-                return getPreviousBaseOffset(targetText, textoffset);
-            }
-        }
-        return textoffset;
-    }
-    
-    /**
-     * Checks match for contraction. 
-     * If the match ends with a partial contraction we fail.
-     * If the match starts too far off (because of backwards iteration) we try 
-     * to chip off the extra characters.
-     * Uses the temporary util buffer for return values of the modified start
-     * and end.
-     * @param start offset of potential match, to be modified if necessary
-     * @param end offset of potential match, to be modified if necessary
-     * @return true if match passes the contraction test, false otherwise. 
-     */
-    private boolean checkNextCanonicalContractionMatch(int start, int end) 
-    {
-        // This part checks if either ends of the match contains potential 
-        // contraction. If so we'll have to iterate through them
-        char schar = 0;
-        char echar = 0;
-        if (end < m_textLimitOffset_) {
-            targetText.setIndex(end);
-            echar = targetText.current();
-        }
-        if (start < m_textLimitOffset_) {
-            targetText.setIndex(start + 1);
-            schar = targetText.current();
-        }
-        if (m_collator_.isUnsafe(echar) || m_collator_.isUnsafe(schar)) {
-            int expansion  = m_colEIter_.m_CEBufferOffset_;
-            boolean hasExpansion = expansion > 0;
-            m_colEIter_.setExactOffset(start);
-            int temp = start;
-            while (expansion > 0) {
-                // getting rid of the redundant ce, caused by setOffset.
-                // since backward contraction/expansion may have extra ces if 
-                // we are in the normalization buffer, hasAccentsBeforeMatch 
-                // would have taken care of it.
-                // E.g. the character \u01FA will have an expansion of 3, but 
-                // if we are only looking for acute and ring \u030A and \u0301, 
-                // we'll have to skip the first ce in the expansion buffer.
-                m_colEIter_.next();
-                if (m_colEIter_.getOffset() != temp) {
-                    start = temp;
-                    temp  = m_colEIter_.getOffset();
-                }
-                expansion --;
-            }
-    
-            int count = 0;
-            while (count < m_pattern_.m_CELength_) {
-                int ce = getCE(m_colEIter_.next());
-                // status checked below, note that if status is a failure
-                // ucol_next returns UCOL_NULLORDER
-                if (ce == CollationElementIterator.IGNORABLE) {
-                    continue;
-                }
-                if (hasExpansion && count == 0 
-                    && m_colEIter_.getOffset() != temp) {
-                    start = temp;
-                    temp = m_colEIter_.getOffset();
-                }
-    
-                if (count == 0 && ce != m_pattern_.m_CE_[0]) {
-                    // accents may have extra starting ces, this occurs when a 
-                    // pure accent pattern is matched without rearrangement
-                    // text \u0325\u0300 and looking for \u0300
-                    int expected = m_pattern_.m_CE_[0]; 
-                    if ((getFCD(targetText, start) & LAST_BYTE_MASK_) != 0) {
-                        ce = getCE(m_colEIter_.next());
-                        while (ce != expected 
-                               && ce != CollationElementIterator.NULLORDER 
-                               && m_colEIter_.getOffset() <= end) {
-                            ce = getCE(m_colEIter_.next());
+                    // As long as the next CE has primary weight of 0,
+                    // it is part of the last target element matched by the pattern;
+                    // make sure it can be part of a match with the last patCE
+                    if ((((nextCEI.ce_) >>> 32) & 0xFFFF0000L) == 0) {
+                        int ceMatch = compareCE64s(nextCEI.ce_, patCE, search_.elementComparisonType_);
+                        if (ceMatch == CE_NO_MATCH || ceMatch == CE_SKIP_PATN ) {
+                            found = false;
+                            break;
                         }
+                    // If lowIndex == highIndex, this target CE is part of an expansion of the last matched
+                    // target element, but it has non-zero primary weight => match fails
+                    } else if ( nextCEI.lowIndex_ == nextCEI.highIndex_ ) {
+                        found = false;
+                        break;
+                    // Else the target CE is not part of an expansion of the last matched element, match succeeds
+                    } else {
+                        break;
                     }
                 }
-                if (ce != m_pattern_.m_CE_[count]) {
-                    end ++;
-                    end = getNextBaseOffset(end);  
-                    m_utilBuffer_[0] = start;
-                    m_utilBuffer_[1] = end;
-                    return false;
-                }
-                count ++;
             }
-        } 
-        m_utilBuffer_[0] = start;
-        m_utilBuffer_[1] = end;
-        return true;
+
+            // Check for the start of the match being within a combining sequence.
+            // This can happen if the pattern itself begins with a combining char, and
+            // the match found combining marks in the target text that were attached
+            // to something else.
+            // This type of match should be rejected for not completely consuming a
+            // combining sequence.
+            if (!isBreakBoundary(mStart)) {
+                found = false;
+            }
+
+            // Check for the start of the match being within an Collation Element Expansion,
+            // meaning that the first char of the match is only partially matched.
+            // With expansions, the first CE will report the index of the source
+            // character, and all subsequent (expansions) CEs will report the source index of the
+            // _following_ character.
+            int secondIx = firstCEI.highIndex_;
+            if (mStart == secondIx) {
+                found = false;
+            }
+
+            // Advance the match end position to the first acceptable match boundary.
+            // This advances the index over any combining characters.
+            mLimit = maxLimit;
+            if (minLimit < maxLimit) {
+                // When the last CE's low index is same with its high index, the CE is likely
+                // a part of expansion. In this case, the index is located just after the
+                // character corresponding to the CEs compared above. If the index is right
+                // at the break boundary, move the position to the next boundary will result
+                // incorrect match length when there are ignorable characters exist between
+                // the position and the next character produces CE(s). See ticket#8482.
+                if (minLimit == lastCEI.highIndex_ && isBreakBoundary(minLimit)) {
+                    mLimit = minLimit;
+                } else {
+                    int nba = nextBoundaryAfter(minLimit);
+                    if (nba >= lastCEI.highIndex_) {
+                        mLimit = nba;
+                    }
+                }
+            }
+
+            // If advancing to the end of a combining sequence in character indexing space
+            // advanced us beyond the end of the match in CE space, reject this match.
+            if (mLimit > maxLimit) {
+                found = false;
+            }
+
+            if (!isBreakBoundary(mLimit)) {
+                found = false;
+            }
+
+            if (!checkIdentical(mStart, mLimit)) {
+                found = false;
+            }
+
+            if (found) {
+                break;
+            }
+        }
+
+        // All Done.  Store back the match bounds to the caller.
+        //
+        if (found == false) {
+            mLimit = -1;
+            mStart = -1;
+        }
+
+        if (m != null) {
+            m.start_ = mStart;
+            m.limit_ = mLimit;
+        }
+
+        return found;
     }
 
-    /**
-     * Checks and sets the match information if found.
-     * Checks 
-     * <ul>
-     * <li> the potential match does not repeat the previous match
-     * <li> boundaries are correct
-     * <li> potential match does not end in the middle of a contraction
-     * <li> identical matches
-     * </ul>
-     * Otherwise the offset will be shifted to the next character.
-     * The result m_matchIndex_ and m_matchLength_ will be set to the truncated
-     * more fitting result value.
-     * Uses the temporary utility buffer for storing the modified textoffset.
-     * @param textoffset offset in the collation element text.
-     * @return true if the match is valid, false otherwise
-     */
-    private boolean checkNextCanonicalMatch(int textoffset)
-    {
-        // to ensure that the start and ends are not composite characters
-        // if we have a canonical accent match
-        if ((m_pattern_.m_hasSuffixAccents_ 
-                && m_canonicalSuffixAccents_.length() != 0) || 
-            (m_pattern_.m_hasPrefixAccents_ 
-                && m_canonicalPrefixAccents_.length() != 0)) {
-            m_matchedIndex_ = getPreviousBaseOffset(m_colEIter_.getOffset());
-            matchLength = textoffset - m_matchedIndex_;
+    private boolean searchBackwards(int startIdx, Match m) {
+        //ICU4C_TODO comment:  reject search patterns beginning with a combining char.
+
+        // Input parameter sanity check.
+        if (pattern_.CELength_ == 0
+                || startIdx < search_.beginIndex()
+                || startIdx > search_.endIndex()) {
+            throw new IllegalArgumentException("searchBackwards(" + startIdx + ", m) - expected position to be between " +
+                    search_.beginIndex() + " and " + search_.endIndex());
+        }
+
+        if (pattern_.PCE_ == null) {
+            initializePatternPCETable();
+        }
+
+        CEBuffer ceb = new CEBuffer(this);
+        int targetIx = 0;
+
+        /*
+         * Pre-load the buffer with the CE's for the grapheme
+         * after our starting position so that we're sure that
+         * we can look at the CE following the match when we
+         * check the match boundaries.
+         *
+         * This will also pre-fetch the first CE that we'll
+         * consider for the match.
+         */
+        if (startIdx < search_.endIndex()) {
+            BreakIterator bi = search_.internalBreakIter_;
+            int next = bi.following(startIdx);
+
+            textIter_.setOffset(next);
+
+            for (targetIx = 0; ; targetIx++) {
+                if (ceb.getPrevious(targetIx).lowIndex_ < startIdx) {
+                    break;
+                }
+            }
+        } else {
+            textIter_.setOffset(startIdx);
+        }
+
+        CEI targetCEI = null;
+        int patIx;
+        boolean found;
+
+        int limitIx = targetIx;
+        int mStart = -1;
+        int mLimit = -1;
+        int minLimit;
+        int maxLimit;
+
+        // Outer loop moves over match starting positions in the
+        //      target CE space.
+        // Here, targetIx values increase toward the beginning of the base text (i.e. we get the text CEs in reverse order).
+        // But  patIx is 0 at the beginning of the pattern and increases toward the end.
+        // So this loop performs a comparison starting with the end of pattern, and prcessd toward the beginning of the pattern
+        // and the beginning of the base text.
+        for (targetIx = limitIx; ; targetIx++) {
+            found = true;
+            // For targetIx > limitIx, this ceb.getPrevious gets a CE that is as far back in the ring buffer
+            // (compared to the last CE fetched for the previous targetIx value) as we need to go
+            // for this targetIx value, so if it is non-NULL then other ceb.getPrevious calls should be OK.
+            CEI lastCEI = ceb.getPrevious(targetIx);
+            if (lastCEI == null) {
+                throw new RuntimeException("CEBuffer.getPrevious(" + targetIx + ") returned null.");
+            }
+            // Inner loop checks for a match beginning at each
+            // position from the outer loop.
+            int targetIxOffset = 0;
+            for (patIx = pattern_.PCELength_ - 1; patIx >= 0; patIx--) {
+                long patCE = pattern_.PCE_[patIx];
+
+                targetCEI = ceb.getPrevious(targetIx + pattern_.PCELength_ - 1 - patIx + targetIxOffset);
+                // Compare CE from target string with CE from the pattern.
+                // Note that the target CE will be UCOL_NULLORDER if we reach the end of input,
+                // which will fail the compare, below.
+                int ceMatch = compareCE64s(targetCEI.ce_, patCE, search_.elementComparisonType_);
+                if (ceMatch == CE_NO_MATCH) {
+                    found = false;
+                    break;
+                } else if (ceMatch > CE_NO_MATCH) {
+                    if (ceMatch == CE_SKIP_TARG) {
+                        // redo with same patCE, next targCE
+                        patIx++;
+                        targetIxOffset++;
+                    } else { // ceMatch == CE_SKIP_PATN
+                        // redo with same targCE, next patCE
+                        targetIxOffset--;
+                    }
+                }
+            }
+
+            if (!found && ((targetCEI == null) || (targetCEI.ce_ != CollationPCE.PROCESSED_NULLORDER))) {
+                // No match at this targetIx.  Try again at the next.
+                continue;
+            }
+
+            if (!found) {
+                // No match at all, we have run off the end of the target text.
+                break;
+            }
+
+            // We have found a match in CE space.
+            // Now determine the bounds in string index space.
+            // There still is a chance of match failure if the CE range not correspond to
+            // an acceptable character range.
+            //
+            CEI firstCEI = ceb.getPrevious(targetIx + pattern_.PCELength_ - 1 + targetIxOffset);
+            mStart = firstCEI.lowIndex_;
+
+            // Check for the start of the match being within a combining sequence.
+            // This can happen if the pattern itself begins with a combining char, and
+            // the match found combining marks in the target text that were attached
+            // to something else.
+            // This type of match should be rejected for not completely consuming a
+            // combining sequence.
+            if (!isBreakBoundary(mStart)) {
+                found = false;
+            }
+
+            // Look at the high index of the first CE in the match. If it's the same as the
+            // low index, the first CE in the match is in the middle of an expansion.
+            if (mStart == firstCEI.highIndex_) {
+                found = false;
+            }
+
+            minLimit = lastCEI.lowIndex_;
+
+            if (targetIx > 0) {
+                // Look at the CE following the match.  If it is UCOL_NULLORDER the match
+                // extended to the end of input, and the match is good.
+
+                // Look at the high and low indices of the CE following the match. If
+                // they are the same it means one of two things:
+                //    1. The match extended to the last CE from the target text, which is OK, or
+                //    2. The last CE that was part of the match is in an expansion that extends
+                //       to the first CE after the match. In this case, we reject the match.
+                CEI nextCEI  = ceb.getPrevious(targetIx - 1);
+
+                if (nextCEI.lowIndex_ == nextCEI.highIndex_ && nextCEI.ce_ != CollationPCE.PROCESSED_NULLORDER) {
+                    found = false;
+                }
+
+                mLimit = maxLimit = nextCEI.lowIndex_;
+
+                // Advance the match end position to the first acceptable match boundary.
+                // This advances the index over any combining charcters.
+                if (minLimit < maxLimit) {
+                    int nba = nextBoundaryAfter(minLimit);
+
+                    if (nba >= lastCEI.highIndex_) {
+                        mLimit = nba;
+                    }
+                }
+
+                // If advancing to the end of a combining sequence in character indexing space
+                // advanced us beyond the end of the match in CE space, reject this match.
+                if (mLimit > maxLimit) {
+                    found = false;
+                }
+
+                // Make sure the end of the match is on a break boundary
+                if (!isBreakBoundary(mLimit)) {
+                    found = false;
+                }
+
+            } else {
+                // No non-ignorable CEs after this point.
+                // The maximum position is detected by boundary after
+                // the last non-ignorable CE. Combining sequence
+                // across the start index will be truncated.
+                int nba = nextBoundaryAfter(minLimit);
+                mLimit = maxLimit = (nba > 0) && (startIdx > nba) ? nba : startIdx;
+            }
+
+            if (!checkIdentical(mStart, mLimit)) {
+                found = false;
+            }
+
+            if (found) {
+                break;
+            }
+        }
+
+        // All Done.  Store back the match bounds to the caller.
+        //
+        if (found == false) {
+            mLimit = -1;
+            mStart = -1;
+        }
+
+        if (m != null) {
+            m.start_ = mStart;
+            m.limit_ = mLimit;
+        }
+
+        return found;
+    }
+
+    // Java porting note:
+    //
+    // ICU4C usearch_handleNextExact() is identical to usearch_handleNextCanonical()
+    // for the linear search implementation. The differences are addressed in search().
+    // 
+    private boolean handleNextExact() {
+        return handleNextCommonImpl();
+    }
+
+    private boolean handleNextCanonical() {
+        return handleNextCommonImpl();
+    }
+
+    private boolean handleNextCommonImpl() {
+        int textOffset = textIter_.getOffset();
+        Match match = new Match();
+
+        if (search(textOffset, match)) {
+            search_.matchedIndex_ = match.start_;
+            search_.setMatchedLength(match.limit_ - match.start_);
             return true;
-        }
-    
-        int start = m_colEIter_.getOffset();
-        if (!checkNextCanonicalContractionMatch(start, textoffset)) {
-            // return the modified textoffset
-            m_utilBuffer_[0] = m_utilBuffer_[1]; 
+        } else {
+            setMatchNotFound();
             return false;
         }
-        start = m_utilBuffer_[0];
-        textoffset = m_utilBuffer_[1];
-        start = getPreviousBaseOffset(start);
-        // this totally matches, however we need to check if it is repeating
-        if (checkRepeatedMatch(start, textoffset) 
-            || !isBreakUnit(start, textoffset) 
-            || !checkIdentical(start, textoffset)) {
-            textoffset ++;
-            textoffset = getNextBaseOffset(targetText, textoffset);
-            m_utilBuffer_[0] = textoffset;
-            return false;
-        }
-        
-        m_matchedIndex_  = start;
-        matchLength = textoffset - start;
-        return true;
-    }
-    
-    /**
-     * Shifting the collation element iterator position forward to prepare for
-     * a preceding match. If the first character is a unsafe character, we'll 
-     * only shift by 1 to capture contractions, normalization etc.
-     * @param textoffset start text position to do search
-     * @param ce the text ce which failed the match.
-     * @param patternceindex index of the ce within the pattern ce buffer which
-     *        failed the match
-     * @return final offset
-     */
-    private int reverseShift(int textoffset, int ce, int patternceindex)
-    {         
-        if (isOverlapping()) {
-            if (textoffset != m_textLimitOffset_) {
-                textoffset --;
-            }
-            else {
-                textoffset -= m_pattern_.m_defaultShiftSize_;
-            }
-        }
-        else {
-            if (ce != CollationElementIterator.NULLORDER) {
-                int shift = m_pattern_.m_backShift_[hash(ce)];
-                
-                // this is to adjust for characters in the middle of the substring 
-                // for matching that failed.
-                int adjust = patternceindex;
-                if (adjust > 1 && shift > adjust) {
-                    shift -= adjust - 1;
-                }
-                textoffset -= shift;
-            }
-            else {
-                textoffset -= m_pattern_.m_defaultShiftSize_;
-            }
-        }    
-        
-        textoffset = getPreviousBaseOffset(textoffset);
-        return textoffset;
     }
 
-    /**
-     * Checks match for contraction. 
-     * If the match starts with a partial contraction we fail.
-     * Uses the temporary utility buffer to return the modified start and end.
-     * @param start offset of potential match, to be modified if necessary
-     * @param end offset of potential match, to be modified if necessary
-     * @return true if match passes the contraction test, false otherwise.
-     */
-    private boolean checkPreviousExactContractionMatch(int start, int end) 
-    {
-        // This part checks if either ends of the match contains potential 
-        // contraction. If so we'll have to iterate through them
-        char echar = 0;
-        if (end < m_textLimitOffset_) {
-            targetText.setIndex(end);
-            echar = targetText.current();
-        }
-        char schar = 0;
-        if (start + 1 < m_textLimitOffset_) {
-            targetText.setIndex(start + 1);
-            schar = targetText.current();
-        }
-        if (m_collator_.isUnsafe(echar) || m_collator_.isUnsafe(schar)) {
-            // expansion suffix, what's left to iterate
-            int expansion = m_colEIter_.m_CEBufferSize_ 
-                                            - m_colEIter_.m_CEBufferOffset_;
-            boolean hasExpansion = expansion > 0;
-            m_colEIter_.setExactOffset(end);
-            int temp = end;
-            while (expansion > 0) {
-                // getting rid of the redundant ce
-                // since forward contraction/expansion may have extra ces
-                // if we are in the normalization buffer, hasAccentsBeforeMatch
-                // would have taken care of it.
-                // E.g. the character \u01FA will have an expansion of 3, but if
-                // we are only looking for A ring A\u030A, we'll have to skip the 
-                // last ce in the expansion buffer
-                m_colEIter_.previous();
-                if (m_colEIter_.getOffset() != temp) {
-                    end = temp;
-                    temp = m_colEIter_.getOffset();
-                }
-                expansion --;
-            }
-    
-            int count = m_pattern_.m_CELength_;
-            while (count > 0) {
-                int ce = getCE(m_colEIter_.previous());
-                // status checked below, note that if status is a failure
-                // ucol_previous returns UCOL_NULLORDER
-                if (ce == CollationElementIterator.IGNORABLE) {
-                    continue;
-                }
-                if (hasExpansion && count == 0 
-                    && m_colEIter_.getOffset() != temp) {
-                    end = temp;
-                    temp = m_colEIter_.getOffset();
-                }
-                if (ce != m_pattern_.m_CE_[count - 1]) {
-                    start --;
-                    start = getPreviousBaseOffset(targetText, start);
-                    m_utilBuffer_[0] = start;
-                    m_utilBuffer_[1] = end;
-                    return false;
-                }
-                count --;
-            }
-        } 
-        m_utilBuffer_[0] = start;
-        m_utilBuffer_[1] = end;
-        return true;
-    }
-    
-    /**
-     * Checks and sets the match information if found.
-     * Checks 
-     * <ul>
-     * <li> the current match does not repeat the last match
-     * <li> boundaries are correct
-     * <li> exact matches has no extra accents
-     * <li> identical matches
-     * </ul>
-     * Otherwise the offset will be shifted to the preceding character.
-     * Uses the temporary utility buffer to store the modified textoffset.
-     * @param textoffset offset in the collation element text. the returned value
-     *        will be the truncated start offset of the match or the new start 
-     *        search offset.
-     * @return true if the match is valid, false otherwise
-     */
-    private final boolean checkPreviousExactMatch(int textoffset)
-    {
-        // to ensure that the start and ends are not composite characters
-        int end = m_colEIter_.getOffset();        
-        if (!checkPreviousExactContractionMatch(textoffset, end)) {
-            return false;
-        }
-        textoffset = m_utilBuffer_[0];
-        end = m_utilBuffer_[1];
-            
-        // this totally matches, however we need to check if it is repeating
-        // the old match
-        if (checkRepeatedMatch(textoffset, end) 
-            || !isBreakUnit(textoffset, end) 
-            || hasAccentsBeforeMatch(textoffset, end) 
-            || !checkIdentical(textoffset, end) 
-            || hasAccentsAfterMatch(textoffset, end)) {
-            textoffset --;
-            textoffset = getPreviousBaseOffset(targetText, textoffset);
-            m_utilBuffer_[0] = textoffset;
-            return false;
-        }
-        
-        if (m_collator_.getStrength() == Collator.PRIMARY) {
-            end = checkBreakBoundary(end);
-        }
-        
-        m_matchedIndex_ = textoffset;
-        matchLength = end - textoffset;
-        return true;
+    // Java porting note:
+    //
+    // ICU4C usearch_handlePreviousExact() is identical to usearch_handlePreviousCanonical()
+    // for the linear search implementation. The differences are addressed in searchBackwards().
+    //
+    private boolean handlePreviousExact() {
+        return handlePreviousCommonImpl();
     }
 
-    /**
-     * Rearranges the end accents to try matching.
-     * Suffix accents in the text will be grouped according to their combining 
-     * class and the groups will be mixed and matched to try find the perfect 
-     * match with the pattern.
-     * So for instance looking for "\u0301" in "\u030A\u0301\u0325"
-     * step 1: split "\u030A\u0301" into 6 other type of potential accent 
-     *             substrings
-     *         "\u030A", "\u0301", "\u0325", "\u030A\u0301", "\u030A\u0325", 
-     *         "\u0301\u0325".
-     * step 2: check if any of the generated substrings matches the pattern.
-     * @param start offset of the first base character
-     * @param end start of the last accent set
-     * @return DONE if a match is not found, otherwise return the ending
-     *         offset of the match. Note this start includes all following 
-     *         accents.
-     */
-    private int doPreviousCanonicalSuffixMatch(int start, int end)
-    {
-        targetText.setIndex(end);
-        if (UTF16.isTrailSurrogate(targetText.previous()) 
-            && targetText.getIndex() > m_textBeginOffset_) {
-            if (!UTF16.isLeadSurrogate(targetText.previous())) {
-                targetText.next();
-            } 
-        }
-        if ((getFCD(targetText, targetText.getIndex()) & LAST_BYTE_MASK_) == 0) {
-            // die... failed at a base character
-            return DONE;
-        }
-        end = getNextBaseOffset(targetText, end);
-    
-        StringBuilder accents = new StringBuilder();
-        int offset = getPreviousBaseOffset(targetText, end);
-        // normalizing the offensive string
-        String accentstr = getString(targetText, offset, end - offset);
-        if (Normalizer.quickCheck(accentstr, Normalizer.NFD,0) 
-                                                    == Normalizer.NO) {
-            accentstr = Normalizer.decompose(accentstr, false);
-        }
-        accents.append(accentstr);    
-            
-        int accentsindex[] = new int[INITIAL_ARRAY_SIZE_];      
-        int accentsize = getUnblockedAccentIndex(accents, accentsindex);
-        int count = (2 << (accentsize - 1)) - 1;  
-        while (count > 0) {
-            m_canonicalSuffixAccents_.delete(0, 
-                                           m_canonicalSuffixAccents_.length());
-            // copy the base characters
-            for (int k = 0; k < accentsindex[0]; k ++) {
-                 m_canonicalSuffixAccents_.append(accents.charAt(k));
-            }
-            // forming all possible canonical rearrangement by dropping
-            // sets of accents
-            for (int i = 0; i <= accentsize - 1; i ++) {
-                int mask = 1 << (accentsize - i - 1);
-                if ((count & mask) != 0) {
-                    for (int j = accentsindex[i]; j < accentsindex[i + 1]; 
-                                                                        j ++) {
-                        m_canonicalSuffixAccents_.append(accents.charAt(j));
-                    }
-                }
-            }
-            StringBuilder match = merge(m_canonicalPrefixAccents_, targetText,
-                                        start, offset, 
-                                        m_canonicalSuffixAccents_);
-            // run the collator iterator through this match
-            // if status is a failure ucol_setText does nothing
-            m_utilColEIter_.setText(match.toString());
-            if (checkCollationMatch(m_utilColEIter_)) {
-                return end;
-            }
-            count --;
-        }
-        return DONE;
+    private boolean handlePreviousCanonical() {
+        return handlePreviousCommonImpl();
     }
-    
-    /**
-     * Take the rearranged start accents and tries matching. If match failed at
-     * a seperate following set of accents (seperated from the rearranged on by
-     * at least a base character) then we rearrange the preceding accents and 
-     * tries matching again.
-     * We allow skipping of the ends of the accent set if the ces do not match. 
-     * However if the failure is found before the accent set, it fails.
-     * Internal method, status assumed to be success, caller has to check 
-     * status before calling this method.
-     * @param textoffset of the ends of the rearranged accent
-     * @return DONE if a match is not found, otherwise return the ending offset 
-     *             of the match. Note this start includes all following accents.
-     */
-    private int doPreviousCanonicalPrefixMatch(int textoffset)
-    {
-       // int safelength = 0;
-        StringBuilder safetext;
-        int safeoffset = textoffset;
-    
-        if (textoffset > m_textBeginOffset_
-            && m_collator_.isUnsafe(m_canonicalPrefixAccents_.charAt(
-                                    m_canonicalPrefixAccents_.length() - 1))) {
-            safeoffset = getNextSafeOffset(textoffset, m_textLimitOffset_);
-            //safelength = safeoffset - textoffset;
-            safetext = merge(m_canonicalPrefixAccents_, targetText, textoffset, 
-                             safeoffset, null);
-        }
-        else {
-            safetext = m_canonicalPrefixAccents_;
-        }
-    
-        // if status is a failure, ucol_setText does nothing
-        CollationElementIterator coleiter = m_utilColEIter_;
-        coleiter.setText(safetext.toString());
-        // status checked in loop below
-        
-        int ceindex = 0;
-        boolean isSafe = true; // safe zone indication flag for position
-        int prefixlength = m_canonicalPrefixAccents_.length();
-        
-        while (ceindex < m_pattern_.m_CELength_) {
-            int textce = coleiter.next();
-            if (textce == CollationElementIterator.NULLORDER) {
-                // check if we have passed the safe buffer
-                if (coleiter == m_colEIter_) {
-                    return DONE;
-                }
-                if (safetext != m_canonicalPrefixAccents_) {
-                    safetext.delete(0, safetext.length());
-                }
-                coleiter = m_colEIter_;
-                coleiter.setExactOffset(safeoffset);
-                // status checked at the start of the loop
-                isSafe = false;
-                continue;
-            }
-            textce = getCE(textce);
-            if (textce != CollationElementIterator.IGNORABLE 
-                && textce != m_pattern_.m_CE_[ceindex]) {
-                // do the beginning stuff
-                int failedoffset = coleiter.getOffset();
-                if (isSafe && failedoffset <= prefixlength) {
-                    // alas... no hope. failed at rearranged accent set
-                    return DONE;
-                }
-                else {
-                    if (isSafe) {
-                        failedoffset = safeoffset - failedoffset;
-                        if (safetext != m_canonicalPrefixAccents_) {
-                            safetext.delete(0, safetext.length());
-                        }
-                    }
-                    
-                    // try rearranging the end accents
-                    int result = doPreviousCanonicalSuffixMatch(textoffset, 
-                                                                failedoffset);
-                    if (result != DONE) {
-                        // if status is a failure, ucol_setOffset does nothing
-                        m_colEIter_.setExactOffset(result);
-                    }
-                    return result;
-                }
-            }
-            if (textce == m_pattern_.m_CE_[ceindex]) {
-                ceindex ++;
-            }
-        }
-        // set offset here
-        if (isSafe) {
-            int result = coleiter.getOffset();
-            // sets the text iterator here with the correct expansion and offset
-            int leftoverces = coleiter.m_CEBufferSize_ 
-                                                - coleiter.m_CEBufferOffset_;
-            if (result <= prefixlength) { 
-                result = textoffset;
-            }
-            else {
-                result = textoffset + (safeoffset - result);
-            }
-            m_colEIter_.setExactOffset(result);
-            m_colEIter_.m_CEBufferOffset_ = m_colEIter_.m_CEBufferSize_ 
-                                                                - leftoverces;
-            return result;
-        }
-        
-        return coleiter.getOffset();              
-    }
-    
-    /**
-     * Trying out the substring and sees if it can be a canonical match.
-     * This will try normalizing the starting accents and arranging them into 
-     * canonical equivalents and check their corresponding ces with the pattern 
-     * ce.
-     * Prefix accents in the text will be grouped according to their combining 
-     * class and the groups will be mixed and matched to try find the perfect 
-     * match with the pattern.
-     * So for instance looking for "\u0301" in "\u030A\u0301\u0325"
-     * step 1: split "\u030A\u0301" into 6 other type of potential accent 
-     *            substrings
-     *         "\u030A", "\u0301", "\u0325", "\u030A\u0301", "\u030A\u0325", 
-     *         "\u0301\u0325".
-     * step 2: check if any of the generated substrings matches the pattern.
-     * @param textoffset start offset in the collation element text that starts 
-     *                   with the accents to be rearranged
-     * @return true if the match is valid, false otherwise
-     */
-    private boolean doPreviousCanonicalMatch(int textoffset)
-    {
-        int offset = m_colEIter_.getOffset();
-        if ((getFCD(targetText, textoffset) >> SECOND_LAST_BYTE_SHIFT_) == 0) {
-            if (m_pattern_.m_hasSuffixAccents_) {
-                offset = doPreviousCanonicalSuffixMatch(textoffset, offset);
-                if (offset != DONE) {
-                    m_colEIter_.setExactOffset(offset);
-                    return true;
-                }
-            }
-            return false;
-        }
-    
-        if (!m_pattern_.m_hasPrefixAccents_) {
-            return false;
-        }
-    
-        StringBuilder accents = new StringBuilder();
-        // offset to the last base character in substring to search
-        int baseoffset = getNextBaseOffset(targetText, textoffset);
-        // normalizing the offensive string
-        String textstr = getString(targetText, textoffset, 
-                                                    baseoffset - textoffset);
-        if (Normalizer.quickCheck(textstr, Normalizer.NFD,0) 
-                                                    == Normalizer.NO) {
-            textstr = Normalizer.decompose(textstr, false);
-        }
-        accents.append(textstr);
-        // status checked in loop
-            
-        int accentsindex[] = new int[INITIAL_ARRAY_SIZE_];
-        int size = getUnblockedAccentIndex(accents, accentsindex);
-    
-        // 2 power n - 1 plus the full set of accents
-        int count = (2 << (size - 1)) - 1;  
-        while (count > 0) {
-            m_canonicalPrefixAccents_.delete(0, 
-                                        m_canonicalPrefixAccents_.length());
-            // copy the base characters
-            for (int k = 0; k < accentsindex[0]; k ++) {
-                m_canonicalPrefixAccents_.append(accents.charAt(k));
-            }
-            // forming all possible canonical rearrangement by dropping
-            // sets of accents
-            for (int i = 0; i <= size - 1; i ++) {
-                int mask = 1 << (size - i - 1);
-                if ((count & mask) != 0) {
-                    for (int j = accentsindex[i]; j < accentsindex[i + 1]; 
-                         j ++) {
-                        m_canonicalPrefixAccents_.append(accents.charAt(j));
-                    }
-                }
-            }
-            offset = doPreviousCanonicalPrefixMatch(baseoffset);
-            if (offset != DONE) {
-                return true; // match found
-            }
-            count --;
-        }
-        return false;
-    }
-    
-    /**
-     * Checks match for contraction. 
-     * If the match starts with a partial contraction we fail.
-     * Uses the temporary utility buffer to return the modified start and end.
-     * @param start offset of potential match, to be modified if necessary
-     * @param end offset of potential match, to be modified if necessary
-     * @return true if match passes the contraction test, false otherwise.
-     */
-    private boolean checkPreviousCanonicalContractionMatch(int start, int end) 
-    {
-        int temp = end;
-        // This part checks if either ends of the match contains potential 
-        // contraction. If so we'll have to iterate through them
-        char echar = 0;
-        char schar = 0;
-        if (end < m_textLimitOffset_) {
-            targetText.setIndex(end);
-            echar = targetText.current();
-        }
-        if (start + 1 < m_textLimitOffset_) {
-            targetText.setIndex(start + 1);
-            schar = targetText.current();
-        }
-        if (m_collator_.isUnsafe(echar) || m_collator_.isUnsafe(schar)) {
-            int expansion = m_colEIter_.m_CEBufferSize_ 
-                                            - m_colEIter_.m_CEBufferOffset_;
-            boolean hasExpansion = expansion > 0;
-            m_colEIter_.setExactOffset(end);
-            while (expansion > 0) {
-                // getting rid of the redundant ce
-                // since forward contraction/expansion may have extra ces
-                // if we are in the normalization buffer, hasAccentsBeforeMatch
-                // would have taken care of it.
-                // E.g. the character \u01FA will have an expansion of 3, but 
-                // if we are only looking for A ring A\u030A, we'll have to 
-                // skip the last ce in the expansion buffer
-                m_colEIter_.previous();
-                if (m_colEIter_.getOffset() != temp) {
-                    end = temp;
-                    temp = m_colEIter_.getOffset();
-                }
-                expansion --;
-            }
-    
-            int count = m_pattern_.m_CELength_;
-            while (count > 0) {
-                int ce = getCE(m_colEIter_.previous());
-                // status checked below, note that if status is a failure
-                // previous() returns NULLORDER
-                if (ce == CollationElementIterator.IGNORABLE) {
-                    continue;
-                }
-                if (hasExpansion && count == 0 
-                    && m_colEIter_.getOffset() != temp) {
-                    end = temp;
-                    temp = m_colEIter_.getOffset();
-                }
-                if (count == m_pattern_.m_CELength_ 
-                    && ce != m_pattern_.m_CE_[m_pattern_.m_CELength_ - 1]) {
-                    // accents may have extra starting ces, this occurs when a 
-                    // pure accent pattern is matched without rearrangement
-                    int expected = m_pattern_.m_CE_[m_pattern_.m_CELength_ - 1];
-                    targetText.setIndex(end);
-                    if (UTF16.isTrailSurrogate(targetText.previous())) {
-                        if (targetText.getIndex() > m_textBeginOffset_ &&
-                            !UTF16.isLeadSurrogate(targetText.previous())) {
-                            targetText.next();
-                        }
-                    }
-                    end = targetText.getIndex();
-                    if ((getFCD(targetText, end) & LAST_BYTE_MASK_) != 0) {
-                        ce = getCE(m_colEIter_.previous());
-                        while (ce != expected 
-                                && ce != CollationElementIterator.NULLORDER 
-                                && m_colEIter_.getOffset() <= start) {
-                            ce = getCE(m_colEIter_.previous());
-                        }
-                    }
-                }
-                if (ce != m_pattern_.m_CE_[count - 1]) {
-                    start --;
-                    start = getPreviousBaseOffset(start);
-                    m_utilBuffer_[0] = start;
-                    m_utilBuffer_[1] = end;
+
+    private boolean handlePreviousCommonImpl() {
+        int textOffset;
+
+        if (search_.isOverlap_) {
+            if (search_.matchedIndex_ != DONE) {
+                textOffset = search_.matchedIndex_ + search_.matchedLength() - 1;
+            } else {
+                // move the start position at the end of possible match
+                initializePatternPCETable();
+                if (!initTextProcessedIter()) {
+                    setMatchNotFound();
                     return false;
                 }
-                count --;
+                for (int nPCEs = 0; nPCEs < pattern_.PCELength_ - 1; nPCEs++) {
+                    long pce = textProcessedIter_.nextProcessed(null);
+                    if (pce == CollationPCE.PROCESSED_NULLORDER) {
+                        // at the end of the text
+                        break;
+                    }
+                }
+                textOffset = textIter_.getOffset();
             }
-        } 
-        m_utilBuffer_[0] = start;
-        m_utilBuffer_[1] = end;
-        return true;
-    }
-    
-    /**
-     * Checks and sets the match information if found.
-     * Checks 
-     * <ul>
-     * <li> the potential match does not repeat the previous match
-     * <li> boundaries are correct
-     * <li> potential match does not end in the middle of a contraction
-     * <li> identical matches
-     * </ul>
-     * Otherwise the offset will be shifted to the next character.
-     * Uses the temporary utility buffer for storing the modified textoffset.
-     * @param textoffset offset in the collation element text. the returned 
-     *             value will be the truncated start offset of the match or the 
-     *             new start search offset.
-     * @return true if the match is valid, false otherwise
-     */
-    private boolean checkPreviousCanonicalMatch(int textoffset)
-    {
-        // to ensure that the start and ends are not composite characters
-        // if we have a canonical accent match
-        if (m_pattern_.m_hasSuffixAccents_ 
-            && m_canonicalSuffixAccents_.length() != 0 
-            || m_pattern_.m_hasPrefixAccents_ 
-            && m_canonicalPrefixAccents_.length() != 0) {
-            m_matchedIndex_ = textoffset;
-            matchLength = getNextBaseOffset(m_colEIter_.getOffset()) 
-                                                                - textoffset;
+        } else {
+            textOffset = textIter_.getOffset();
+        }
+
+        Match match = new Match();
+        if (searchBackwards(textOffset, match)) {
+            search_.matchedIndex_ = match.start_;
+            search_.setMatchedLength(match.limit_ - match.start_);
             return true;
-        }
-    
-        int end = m_colEIter_.getOffset();
-        if (!checkPreviousCanonicalContractionMatch(textoffset, end)) {
-            // storing the modified textoffset
+        } else {
+            setMatchNotFound();
             return false;
         }
-        textoffset = m_utilBuffer_[0];
-        end = m_utilBuffer_[1];
-        end = getNextBaseOffset(end);
-        // this totally matches, however we need to check if it is repeating
-        if (checkRepeatedMatch(textoffset, end) 
-            || !isBreakUnit(textoffset, end) 
-            || !checkIdentical(textoffset, end)) {
-            textoffset --;
-            textoffset = getPreviousBaseOffset(textoffset);
-            m_utilBuffer_[0] = textoffset;
-            return false;
-        }
-        
-        m_matchedIndex_ = textoffset;
-        matchLength = end - textoffset;
-        return true;
-    }
-    
-    /**
-     * Method that does the next exact match
-     * @param start the offset to start shifting from and performing the 
-     *        next exact match
-     */
-    private void handleNextExact(int start)
-    {
-        int textoffset = shiftForward(start, 
-                                         CollationElementIterator.NULLORDER,
-                                         m_pattern_.m_CELength_);
-        int targetce = CollationElementIterator.IGNORABLE;
-        while (textoffset <= m_textLimitOffset_) {
-            m_colEIter_.setExactOffset(textoffset);
-            int patternceindex = m_pattern_.m_CELength_ - 1;
-            boolean found = false;
-            int lastce = CollationElementIterator.NULLORDER;
-            
-            while (true) {
-                // finding the last pattern ce match, imagine composite 
-                // characters. for example: search for pattern A in text \u00C0
-                // we'll have to skip \u0300 the grave first before we get to A
-                targetce = m_colEIter_.previous();
-                if (targetce == CollationElementIterator.NULLORDER) {
-                    found = false;
-                    break;
-                }
-                targetce = getCE(targetce);
-                if (targetce == CollationElementIterator.IGNORABLE && 
-                    m_colEIter_.isInBuffer()) { 
-                    // this is for the text \u0315\u0300 that requires 
-                    // normalization and pattern \u0300, where \u0315 is ignorable
-                    continue;
-                }
-                if (lastce == CollationElementIterator.NULLORDER 
-                    || lastce == CollationElementIterator.IGNORABLE) {
-                    lastce = targetce;
-                }
-                if (targetce == m_pattern_.m_CE_[patternceindex]) {
-                    // the first ce can be a contraction
-                    found = true;
-                    break;
-                }
-                if (m_colEIter_.m_CEBufferOffset_ <= 0) {
-                    found = false;
-                    break;
-                }
-            }
-    
-            while (found && patternceindex > 0) {
-                lastce = targetce;
-                targetce = m_colEIter_.previous();
-                if (targetce == CollationElementIterator.NULLORDER) {
-                    found = false;
-                    break;
-                }
-                targetce = getCE(targetce);
-                if (targetce == CollationElementIterator.IGNORABLE) {
-                    continue;
-                }
-    
-                patternceindex --;
-                found = found && targetce == m_pattern_.m_CE_[patternceindex]; 
-            }
-            
-            targetce = lastce;
-    
-            if (!found) {
-                textoffset = shiftForward(textoffset, lastce, patternceindex);
-                // status checked at loop.
-                patternceindex = m_pattern_.m_CELength_;
-                continue;
-            }
-            
-            if (checkNextExactMatch(textoffset)) {
-                // status checked in ucol_setOffset
-                return;
-            }
-            textoffset = m_utilBuffer_[0];
-        }
-        setMatchNotFound();
     }
 
-    /**
-     * Method that does the next canonical match
-     * @param start the offset to start shifting from and performing the 
-     *        next canonical match
-     */
-    private void handleNextCanonical(int start)
-    {
-        boolean hasPatternAccents = 
-           m_pattern_.m_hasSuffixAccents_ || m_pattern_.m_hasPrefixAccents_;
-              
-        // shifting it check for setting offset
-        // if setOffset is called previously or there was no previous match, we
-        // leave the offset as it is.
-        int textoffset = shiftForward(start, CollationElementIterator.NULLORDER, 
-                                        m_pattern_.m_CELength_);
-        m_canonicalPrefixAccents_.delete(0, m_canonicalPrefixAccents_.length());
-        m_canonicalSuffixAccents_.delete(0, m_canonicalSuffixAccents_.length());
-        int targetce = CollationElementIterator.IGNORABLE;
-        
-        while (textoffset <= m_textLimitOffset_)
-        {
-            m_colEIter_.setExactOffset(textoffset);
-            int patternceindex = m_pattern_.m_CELength_ - 1;
-            boolean found = false;
-            int lastce = CollationElementIterator.NULLORDER;
-            
-            while (true) {
-                // finding the last pattern ce match, imagine composite characters
-                // for example: search for pattern A in text \u00C0
-                // we'll have to skip \u0300 the grave first before we get to A
-                targetce = m_colEIter_.previous();
-                if (targetce == CollationElementIterator.NULLORDER) {
-                    found = false;
-                    break;
-                }
-                targetce = getCE(targetce);
-                if (lastce == CollationElementIterator.NULLORDER 
-                            || lastce == CollationElementIterator.IGNORABLE) {
-                    lastce = targetce;
-                }
-                if (targetce == m_pattern_.m_CE_[patternceindex]) {
-                    // the first ce can be a contraction
-                    found = true;
-                    break;
-                }
-                if (m_colEIter_.m_CEBufferOffset_ <= 0) {
-                    found = false;
-                    break;
-                }
-            }
-            
-            while (found && patternceindex > 0) {
-                targetce    = m_colEIter_.previous();
-                if (targetce == CollationElementIterator.NULLORDER) {
-                    found = false;
-                    break;
-                }
-                targetce    = getCE(targetce);
-                if (targetce == CollationElementIterator.IGNORABLE) {
-                    continue;
-                }
-    
-                patternceindex --;
-                found = found && targetce == m_pattern_.m_CE_[patternceindex]; 
-            }
-    
-            // initializing the rearranged accent array
-            if (hasPatternAccents && !found) {
-                found = doNextCanonicalMatch(textoffset);
-            }
-    
-            if (!found) {
-                textoffset = shiftForward(textoffset, lastce, patternceindex);
-                // status checked at loop
-                patternceindex = m_pattern_.m_CELength_;
-                continue;
-            }
-            
-            if (checkNextCanonicalMatch(textoffset)) {
-                return;
-            }
-            textoffset = m_utilBuffer_[0];
-        }
-        setMatchNotFound();
-    }
-    
-    /**
-     * Method that does the previous exact match
-     * @param start the offset to start shifting from and performing the 
-     *        previous exact match
-     */
-    private void handlePreviousExact(int start)
-    {
-        int textoffset = reverseShift(start, CollationElementIterator.NULLORDER, 
-                                      m_pattern_.m_CELength_);
-        while (textoffset >= m_textBeginOffset_)
-        {
-            m_colEIter_.setExactOffset(textoffset);
-            int patternceindex = 1;
-            int targetce = CollationElementIterator.IGNORABLE;
-            boolean found = false;
-            int firstce = CollationElementIterator.NULLORDER;
-            
-            while (true) {
-                // finding the first pattern ce match, imagine composite 
-                // characters. for example: search for pattern \u0300 in text 
-                // \u00C0, we'll have to skip A first before we get to 
-                // \u0300 the grave accent
-                targetce = m_colEIter_.next();
-                if (targetce == CollationElementIterator.NULLORDER) {
-                    found = false;
-                    break;
-                }
-                targetce = getCE(targetce);
-                if (firstce == CollationElementIterator.NULLORDER 
-                    || firstce == CollationElementIterator.IGNORABLE) {
-                    firstce = targetce;
-                }
-                if (targetce == CollationElementIterator.IGNORABLE && m_collator_.getStrength() != Collator.PRIMARY) {
-                    continue;
-                }         
-                if (targetce == m_pattern_.m_CE_[0]) {
-                    found = true;
-                    break;
-                }
-                if (m_colEIter_.m_CEBufferOffset_ == -1 
-                    || m_colEIter_.m_CEBufferOffset_ 
-                                            == m_colEIter_.m_CEBufferSize_) {
-                    // checking for accents in composite character
-                    found = false;
-                    break;
-                }
-            }
-    
-            //targetce = firstce;
-            
-            while (found && patternceindex < m_pattern_.m_CELength_) {
-                firstce = targetce;
-                targetce = m_colEIter_.next();
-                if (targetce == CollationElementIterator.NULLORDER) {
-                    found = false;
-                    break;
-                }
-                targetce = getCE(targetce);
-                if (targetce == CollationElementIterator.IGNORABLE) {
-                    continue;
-                }
-    
-                found = found && targetce == m_pattern_.m_CE_[patternceindex]; 
-                patternceindex ++;
-            }
-            
-            targetce = firstce;
-    
-            if (!found) {
-                textoffset = reverseShift(textoffset, targetce, patternceindex);
-                patternceindex = 0;
-                continue;
-            }
-            
-            if (checkPreviousExactMatch(textoffset)) {
-                return;
-            }
-            textoffset = m_utilBuffer_[0];
-        }
-        setMatchNotFound();
-    }
-    
-    /**
-     * Method that does the previous canonical match
-     * @param start the offset to start shifting from and performing the 
-     *        previous canonical match
-     */
-    private void handlePreviousCanonical(int start)
-    {
-        boolean hasPatternAccents = 
-           m_pattern_.m_hasSuffixAccents_ || m_pattern_.m_hasPrefixAccents_;
-              
-        // shifting it check for setting offset
-        // if setOffset is called previously or there was no previous match, we
-        // leave the offset as it is.
-        int textoffset = reverseShift(start, CollationElementIterator.NULLORDER, 
-                                          m_pattern_.m_CELength_);
-        m_canonicalPrefixAccents_.delete(0, m_canonicalPrefixAccents_.length());
-        m_canonicalSuffixAccents_.delete(0, m_canonicalSuffixAccents_.length());
-        
-        while (textoffset >= m_textBeginOffset_)
-        {
-            m_colEIter_.setExactOffset(textoffset);
-            int patternceindex = 1;
-            int targetce = CollationElementIterator.IGNORABLE;
-            boolean found = false;
-            int firstce = CollationElementIterator.NULLORDER;
-            
-            while (true) {
-                // finding the first pattern ce match, imagine composite 
-                // characters. for example: search for pattern \u0300 in text 
-                // \u00C0, we'll have to skip A first before we get to 
-                // \u0300 the grave accent
-                targetce = m_colEIter_.next();
-                if (targetce == CollationElementIterator.NULLORDER) {
-                    found = false;
-                    break;
-                }
-                targetce = getCE(targetce);
-                if (firstce == CollationElementIterator.NULLORDER 
-                    || firstce == CollationElementIterator.IGNORABLE) {
-                    firstce = targetce;
-                }
-                
-                if (targetce == m_pattern_.m_CE_[0]) {
-                    // the first ce can be a contraction
-                    found = true;
-                    break;
-                }
-                if (m_colEIter_.m_CEBufferOffset_ == -1 
-                    || m_colEIter_.m_CEBufferOffset_ 
-                                            == m_colEIter_.m_CEBufferSize_) {
-                    // checking for accents in composite character
-                    found = false;
-                    break;
-                }
-            }
-    
-            targetce = firstce;
-            
-            while (found && patternceindex < m_pattern_.m_CELength_) {
-                targetce = m_colEIter_.next();
-                if (targetce == CollationElementIterator.NULLORDER) {
-                    found = false;
-                    break;
-                }
-                targetce = getCE(targetce);
-                if (targetce == CollationElementIterator.IGNORABLE) {
-                    continue;
-                }
-    
-                found = found && targetce == m_pattern_.m_CE_[patternceindex]; 
-                patternceindex ++;
-            }
-    
-            // initializing the rearranged accent array
-            if (hasPatternAccents && !found) {
-                found = doPreviousCanonicalMatch(textoffset);
-            }
-    
-            if (!found) {
-                textoffset = reverseShift(textoffset, targetce, patternceindex);
-                patternceindex = 0;
-                continue;
-            }
-    
-            if (checkPreviousCanonicalMatch(textoffset)) {
-                return;
-            }
-            textoffset = m_utilBuffer_[0];
-        }
-        setMatchNotFound();
-    }
-    
     /**
      * Gets a substring out of a CharacterIterator
+     * 
+     * Java porting note: Not available in ICU4C
+     * 
      * @param text CharacterIterator
      * @param start start offset
      * @param length of substring
      * @return substring from text starting at start and length length
      */
-    private static final String getString(CharacterIterator text, int start,
-                                            int length)
-    {
+    private static final String getString(CharacterIterator text, int start, int length) {
         StringBuilder result = new StringBuilder(length);
         int offset = text.getIndex();
         text.setIndex(start);
-        for (int i = 0; i < length; i ++) {
+        for (int i = 0; i < length; i++) {
             result.append(text.current());
             text.next();
         }
         text.setIndex(offset);
         return result.toString();
     }
-    
+
     /**
-     * Getting the mask for collation strength
-     * @param strength collation strength
-      * @return collation element mask
+     * Java port of ICU4C struct UPattern (usrchimp.h)
      */
-    private static final int getMask(int strength) 
-    {
-        switch (strength) 
-        {
-            case Collator.PRIMARY:
-                return RuleBasedCollator.CE_PRIMARY_MASK_;
-            case Collator.SECONDARY:
-                return RuleBasedCollator.CE_SECONDARY_MASK_ 
-                       | RuleBasedCollator.CE_PRIMARY_MASK_;
+    private static final class Pattern {
+        /** Pattern string */
+        String text_;
+
+        long[] PCE_;
+        int PCELength_ = 0;
+
+        // TODO: We probably do not need CE_ / CELength_
+        @SuppressWarnings("unused")
+        int[] CE_;
+        int CELength_ = 0;
+
+        // *** Boyer-Moore ***
+        // boolean hasPrefixAccents_ = false;
+        // boolean hasSuffixAccents_ = false;
+        // int defaultShiftSize_;
+        // char[] shift_;
+        // char[] backShift_;
+
+        protected Pattern(String pattern) {
+            text_ = pattern;
+        }
+    }
+
+    /**
+     * Java port of ICU4C UCollationPCE (usrchimp.h)
+     */
+    private static class CollationPCE {
+        public static final long PROCESSED_NULLORDER = -1;
+
+        private static final int DEFAULT_BUFFER_SIZE = 16;
+        private static final int BUFFER_GROW = 8;
+
+        // Note: PRIMARYORDERMASK is also duplicated in StringSearch class
+        private static final int PRIMARYORDERMASK = 0xffff0000;
+        private static final int CONTINUATION_MARKER = 0xc0;
+
+        private PCEBuffer pceBuffer_ = new PCEBuffer();
+        private CollationElementIterator cei_;
+        private int strength_;
+        private boolean toShift_;
+        private boolean isShifted_;
+        private int variableTop_;
+
+        public CollationPCE(CollationElementIterator iter) {
+            init(iter);
+        }
+
+        public void init(CollationElementIterator iter) {
+            cei_ = iter;
+            init(iter.getRuleBasedCollator());
+        }
+
+        private void init(RuleBasedCollator coll) {
+            strength_ = coll.getStrength();
+            toShift_ = coll.isAlternateHandlingShifted();
+            isShifted_ = false;
+            variableTop_ = coll.getVariableTop();
+        }
+
+        @SuppressWarnings("fallthrough")
+        private long processCE(int ce) {
+            long primary = 0, secondary = 0, tertiary = 0, quaternary = 0;
+
+            // This is clean, but somewhat slow...
+            // We could apply the mask to ce and then
+            // just get all three orders...
+            switch (strength_) {
             default:
-                return RuleBasedCollator.CE_TERTIARY_MASK_ 
-                       | RuleBasedCollator.CE_SECONDARY_MASK_ 
-                       | RuleBasedCollator.CE_PRIMARY_MASK_;
+                tertiary = CollationElementIterator.tertiaryOrder(ce);
+                /* note fall-through */
+
+            case Collator.SECONDARY:
+                secondary = CollationElementIterator.secondaryOrder(ce);
+                /* note fall-through */
+
+            case Collator.PRIMARY:
+                primary = CollationElementIterator.primaryOrder(ce);
+            }
+
+            // **** This should probably handle continuations too. ****
+            // **** That means that we need 24 bits for the primary ****
+            // **** instead of the 16 that we're currently using. ****
+            // **** So we can lay out the 64 bits as: 24.12.12.16. ****
+            // **** Another complication with continuations is that ****
+            // **** the *second* CE is marked as a continuation, so ****
+            // **** we always have to peek ahead to know how long ****
+            // **** the primary is... ****
+            if ((toShift_ && variableTop_ > ce && primary != 0) || (isShifted_ && primary == 0)) {
+
+                if (primary == 0) {
+                    return CollationElementIterator.IGNORABLE;
+                }
+
+                if (strength_ >= Collator.QUATERNARY) {
+                    quaternary = primary;
+                }
+
+                primary = secondary = tertiary = 0;
+                isShifted_ = true;
+            } else {
+                if (strength_ >= Collator.QUATERNARY) {
+                    quaternary = 0xFFFF;
+                }
+
+                isShifted_ = false;
+            }
+
+            return primary << 48 | secondary << 32 | tertiary << 16 | quaternary;
+        }
+
+        /**
+         * Get the processed ordering priority of the next collation element in the text.
+         * A single character may contain more than one collation element.
+         * 
+         * Note: This is equivalent to
+         * UCollationPCE::nextProcessed(int32_t *ixLow, int32_t *ixHigh, UErrorCode *status);
+         *
+         * @param range receiving the iterator index before/after fetching the CE.
+         * @return The next collation elements ordering, otherwise returns PROCESSED_NULLORDER 
+         *         if an error has occurred or if the end of string has been reached
+         */
+        public long nextProcessed(Range range) {
+            long result = CollationElementIterator.IGNORABLE;
+            int low = 0, high = 0;
+
+            pceBuffer_.reset();
+
+            do {
+                low = cei_.getOffset();
+                int ce = cei_.next();
+                high = cei_.getOffset();
+
+                if (ce == CollationElementIterator.NULLORDER) {
+                     result = PROCESSED_NULLORDER;
+                     break;
+                }
+
+                result = processCE(ce);
+            } while (result == CollationElementIterator.IGNORABLE);
+
+            if (range != null) {
+                range.ixLow_ = low;
+                range.ixHigh_ = high;
+            }
+
+            return result;
+        }
+
+        /**
+         * Get the processed ordering priority of the previous collation element in the text.
+         * A single character may contain more than one collation element.
+         *
+         * Note: This is equivalent to
+         * UCollationPCE::previousProcessed(int32_t *ixLow, int32_t *ixHigh, UErrorCode *status);
+         *
+         * @param range receiving the iterator index before/after fetching the CE.
+         * @return The previous collation elements ordering, otherwise returns 
+         *         PROCESSED_NULLORDER if an error has occurred or if the start of
+         *         string has been reached.
+         */
+        public long previousProcessed(Range range) {
+            long result = CollationElementIterator.IGNORABLE;
+            int low = 0, high = 0;
+
+            // pceBuffer_.reset();
+
+            while (pceBuffer_.empty()) {
+                // buffer raw CEs up to non-ignorable primary
+                RCEBuffer rceb = new RCEBuffer();
+                int ce;
+
+                boolean finish = false;
+
+                // **** do we need to reset rceb, or will it always be empty at this point ****
+                do {
+                    high = cei_.getOffset();
+                    ce = cei_.previous();
+                    low = cei_.getOffset();
+
+                    if (ce == CollationElementIterator.NULLORDER) {
+                        if (!rceb.empty()) {
+                            break;
+                        }
+
+                        finish = true;
+                        break;
+                    }
+
+                    rceb.put(ce, low, high);
+                } while ((ce & PRIMARYORDERMASK) == 0 || isContinuation(ce));
+
+                if (finish) {
+                    break;
+                }
+
+                // process the raw CEs
+                while (!rceb.empty()) {
+                    RCEI rcei = rceb.get();
+
+                    result = processCE(rcei.ce_);
+
+                    if (result != CollationElementIterator.IGNORABLE) {
+                        pceBuffer_.put(result, rcei.low_, rcei.high_);
+                    }
+                }
+            }
+
+            if (pceBuffer_.empty()) {
+                // **** Is -1 the right value for ixLow, ixHigh? ****
+                if (range != null) {
+                    range.ixLow_ = -1;
+                    range.ixHigh_ = -1;
+                }
+                return CollationElementIterator.NULLORDER;
+            }
+
+            PCEI pcei = pceBuffer_.get();
+
+            if (range != null) {
+                range.ixLow_ = pcei.low_;
+                range.ixHigh_ = pcei.high_;
+            }
+
+            return pcei.ce_;
+        }
+
+        private static boolean isContinuation(int ce) {
+            return ((ce & CONTINUATION_MARKER) == CONTINUATION_MARKER);
+        }
+
+        public static final class Range {
+            int ixLow_;
+            int ixHigh_;
+        }
+
+        /** Processed collation element buffer stuff ported from ICU4C ucoleitr.cpp */
+        private static final class PCEI {
+            long ce_;
+            int low_;
+            int high_;
+        }
+
+        private static final class PCEBuffer {
+            private PCEI[] buffer_ = new PCEI[DEFAULT_BUFFER_SIZE];
+            private int bufferIndex_ = 0;
+
+            void reset() {
+                bufferIndex_ = 0;
+            }
+
+            boolean empty() {
+                return bufferIndex_ <= 0;
+            }
+
+            void put(long ce, int ixLow, int ixHigh)
+            {
+                if (bufferIndex_ >= buffer_.length) {
+                    PCEI[] newBuffer = new PCEI[buffer_.length + BUFFER_GROW];
+                    System.arraycopy(buffer_, 0, newBuffer, 0, buffer_.length);
+                    buffer_ = newBuffer;
+                }
+                buffer_[bufferIndex_] = new PCEI();
+                buffer_[bufferIndex_].ce_ = ce;
+                buffer_[bufferIndex_].low_ = ixLow;
+                buffer_[bufferIndex_].high_ = ixHigh;
+
+                bufferIndex_ += 1;
+            }
+
+            PCEI get() {
+                if (bufferIndex_ > 0) {
+                    return buffer_[--bufferIndex_];
+                }
+                return null;
+            }
+        }
+
+        /** Raw collation element buffer stuff ported from ICU4C ucoleitr.cpp */
+        private static final class RCEI {
+            int ce_;
+            int low_;
+            int high_;
+        }
+
+        private static final class RCEBuffer {
+            private RCEI[] buffer_ = new RCEI[DEFAULT_BUFFER_SIZE];
+            private int bufferIndex_ = 0;
+
+            boolean empty() {
+                return bufferIndex_ <= 0;
+            }
+
+            void put(int ce, int ixLow, int ixHigh) {
+                if (bufferIndex_ >= buffer_.length) {
+                    RCEI[] newBuffer = new RCEI[buffer_.length + BUFFER_GROW];
+                    System.arraycopy(buffer_, 0, newBuffer, 0, buffer_.length);
+                    buffer_ = newBuffer;
+                }
+                buffer_[bufferIndex_] = new RCEI();
+                buffer_[bufferIndex_].ce_ = ce;
+                buffer_[bufferIndex_].low_ = ixLow;
+                buffer_[bufferIndex_].high_ = ixHigh;
+
+                bufferIndex_ += 1;
+            }
+
+            RCEI get() {
+                if (bufferIndex_ > 0) {
+                    return buffer_[--bufferIndex_];
+                }
+                return null;
+            }
         }
     }
-    
+
     /**
-     * Sets match not found 
+     * Java port of ICU4C CEI (usearch.cpp)
+     * 
+     * CEI  Collation Element + source text index.
+     *      These structs are kept in the circular buffer.
      */
-    private void setMatchNotFound() 
-    {
-        // this method resets the match result regardless of the error status.
-        m_matchedIndex_ = DONE;
-        setMatchLength(0);
+    private static class CEI {
+        long ce_;
+        int lowIndex_;
+        int highIndex_;
     }
-    
+
     /**
-     * Check the boundaries of the match.
+     * CEBuffer A circular buffer of CEs from the text being searched
      */
-    private int checkBreakBoundary(int end) {
-        if (!m_charBreakIter_.isBoundary(end)) {
-            end = m_charBreakIter_.following(end);
+    private static class CEBuffer {
+        // Java porting note: ICU4C uses the size for stack buffer
+        // static final int DEFAULT_CEBUFFER_SIZE = 96;
+
+        static final int CEBUFFER_EXTRA = 32;
+        static final int MAX_TARGET_IGNORABLES_PER_PAT_JAMO_L = 8;
+        static final int MAX_TARGET_IGNORABLES_PER_PAT_OTHER = 3;
+
+        CEI[] buf_;
+        int bufSize_;
+        int firstIx_;
+        int limitIx_;
+
+        // Java porting note: No references in ICU4C implementation
+        // CollationElementIterator ceIter_;
+
+        StringSearch strSearch_;
+
+        CEBuffer(StringSearch ss) {
+            strSearch_ = ss;
+            bufSize_ = ss.pattern_.PCELength_ + CEBUFFER_EXTRA;
+            if (ss.search_.elementComparisonType_ != ElementComparisonType.STANDARD_ELEMENT_COMPARISON) {
+                String patText = ss.pattern_.text_;
+                if (patText != null) {
+                    for (int i = 0; i < patText.length(); i++) {
+                        char c = patText.charAt(i);
+                        if (MIGHT_BE_JAMO_L(c)) {
+                            bufSize_ += MAX_TARGET_IGNORABLES_PER_PAT_JAMO_L;
+                        } else {
+                            // No check for surrogates, we might allocate slightly more buffer than necessary.
+                            bufSize_ += MAX_TARGET_IGNORABLES_PER_PAT_OTHER;
+                        }
+                    }
+                }
+            }
+
+            // Not used - see above
+            // ceIter_ = ss.textIter_;
+
+            firstIx_ = 0;
+            limitIx_ = 0;
+
+            if (!ss.initTextProcessedIter()) {
+                return;
+            }
+
+            buf_ = new CEI[bufSize_];
         }
-        return end;
+
+        // Get the CE with the specified index.
+        //   Index must be in the range
+        //             n-history_size < index < n+1
+        //   where n is the largest index to have been fetched by some previous call to this function.
+        //   The CE value will be UCOL__PROCESSED_NULLORDER at end of input.
+        //
+        CEI get(int index) {
+            int i = index % bufSize_;
+
+            if (index >= firstIx_ && index < limitIx_) {
+                // The request was for an entry already in our buffer.
+                // Just return it.
+                return buf_[i];
+            }
+
+            // Caller is requesting a new, never accessed before, CE.
+            // Verify that it is the next one in sequence, which is all
+            // that is allowed.
+            if (index != limitIx_) {
+                assert(false);
+                return null;
+            }
+
+            // Manage the circular CE buffer indexing
+            limitIx_++;
+
+            if (limitIx_ - firstIx_ >= bufSize_) {
+                // The buffer is full, knock out the lowest-indexed entry.
+                firstIx_++;
+            }
+
+            CollationPCE.Range range = new CollationPCE.Range();
+            if (buf_[i] == null) {
+                buf_[i] = new CEI();
+            }
+            buf_[i].ce_ = strSearch_.textProcessedIter_.nextProcessed(range);
+            buf_[i].lowIndex_ = range.ixLow_;
+            buf_[i].highIndex_ = range.ixHigh_;
+
+            return buf_[i];
+        }
+
+        // Get the CE with the specified index.
+        //   Index must be in the range
+        //             n-history_size < index < n+1
+        //   where n is the largest index to have been fetched by some previous call to this function.
+        //   The CE value will be UCOL__PROCESSED_NULLORDER at end of input.
+        //
+        CEI getPrevious(int index) {
+            int i = index % bufSize_;
+
+            if (index >= firstIx_ && index < limitIx_) {
+                // The request was for an entry already in our buffer.
+                // Just return it.
+                return buf_[i];
+            }
+
+            // Caller is requesting a new, never accessed before, CE.
+            // Verify that it is the next one in sequence, which is all
+            // that is allowed.
+            if (index != limitIx_) {
+                assert(false);
+                return null;
+            }
+
+            // Manage the circular CE buffer indexing
+            limitIx_++;
+
+            if (limitIx_ - firstIx_ >= bufSize_) {
+                // The buffer is full, knock out the lowest-indexed entry.
+                firstIx_++;
+            }
+
+            CollationPCE.Range range = new CollationPCE.Range();
+            if (buf_[i] == null) {
+                buf_[i] = new CEI();
+            }
+            buf_[i].ce_ = strSearch_.textProcessedIter_.previousProcessed(range);
+            buf_[i].lowIndex_ = range.ixLow_;
+            buf_[i].highIndex_ = range.ixHigh_;
+
+            return buf_[i];
+        }
+
+        static boolean MIGHT_BE_JAMO_L(char c) {
+            return (c >= 0x1100 && c <= 0x115E)
+                    || (c >= 0x3131 && c <= 0x314E)
+                    || (c >= 0x3165 && c <= 0x3186);
+        }
     }
 }
