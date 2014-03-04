@@ -858,7 +858,7 @@ public class SimpleDateFormat extends DateFormat {
     /**
      * BreakIterator to use for capitalization
      */
-    private BreakIterator capitalizationBrkIter = null;
+    private transient BreakIterator capitalizationBrkIter = null;
 
     /*
      *  Capitalization setting, introduced in ICU 50
@@ -1784,8 +1784,7 @@ public class SimpleDateFormat extends DateFormat {
             break;
         } // switch (patternCharIndex)
 
-        if (fieldNum == 0 && capitalizationContext != null && UCharacter.isLowerCase(buf.codePointAt(bufstart)) &&
-                capitalizationBrkIter != null) {
+        if (fieldNum == 0 && capitalizationContext != null && UCharacter.isLowerCase(buf.codePointAt(bufstart))) {
             boolean titlecase = false;
             switch (capitalizationContext) {
                 case CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
@@ -1803,6 +1802,10 @@ public class SimpleDateFormat extends DateFormat {
                    break;
             }
             if (titlecase) {
+                if (capitalizationBrkIter == null) {
+                    // should only happen when deserializing, etc.
+                    capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
+                }
                 String firstField = buf.substring(bufstart); // bufstart or beginOffset, should be the same
                 String firstFieldTitleCase = UCharacter.toTitleCase(locale, firstField, capitalizationBrkIter,
                                                      UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);

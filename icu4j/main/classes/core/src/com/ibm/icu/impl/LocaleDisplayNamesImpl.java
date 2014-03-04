@@ -70,7 +70,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     /**
      * BreakIterator to use for capitalization
      */
-    private BreakIterator capitalizationBrkIter = null;
+    private transient BreakIterator capitalizationBrkIter = null;
 
 
     public static LocaleDisplayNames getInstance(ULocale locale, DialectHandling dialectHandling) {
@@ -216,11 +216,14 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
     private String adjustForUsageAndContext(CapitalizationContextUsage usage, String name) {
         if (name != null && name.length() > 0 && UCharacter.isLowerCase(name.codePointAt(0)) &&
-              capitalizationBrkIter != null &&
               (capitalization==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
                 (capitalizationUsage != null && capitalizationUsage[usage.ordinal()]) )) {
             // Note, won't have capitalizationUsage != null && capitalizationUsage[usage.ordinal()]
             // unless capitalization is CAPITALIZATION_FOR_UI_LIST_OR_MENU or CAPITALIZATION_FOR_STANDALONE
+            if (capitalizationBrkIter == null) {
+                // should only happen when deserializing, etc.
+                capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
+            }
             return UCharacter.toTitleCase(locale, name, capitalizationBrkIter,
                             UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
         }

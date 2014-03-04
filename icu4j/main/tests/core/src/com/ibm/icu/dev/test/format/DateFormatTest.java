@@ -12,6 +12,11 @@
 
 package com.ibm.icu.dev.test.format;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.AttributedCharacterIterator;
 import java.text.CharacterIterator;
 import java.text.FieldPosition;
@@ -4233,6 +4238,12 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             // now try context & standard format call
             sdfmt.setContext(item.capitalizationContext);
+            SimpleDateFormat sdfmtClone = (SimpleDateFormat)sdfmt.clone();
+            if (!sdfmtClone.equals(sdfmt)) {
+                errln("FAIL: for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
+                        ", sdfmt.clone() != sdfmt (for SimpleDateFormat)");
+            }
+            
             StringBuffer result2 = new StringBuffer();
             FieldPosition fpos2 = new FieldPosition(0);
             sdfmt.format(cal, result2, fpos2);
@@ -4255,6 +4266,49 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             // now try context & standard format call
             dfmt.setContext(relItem.capitalizationContext);
+
+            // write to stream, then read a copy from stream & compare
+            boolean serializeTestFail = false;
+            ByteArrayOutputStream baos = null;
+            DateFormat dfmtFromStream = null;
+            try {
+                baos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(baos);
+                oos.writeObject(dfmt);
+                oos.close();
+            } catch (IOException i) {
+                errln("FAIL: for locale " + relItem.locale +  ", capitalizationContext " + relItem.capitalizationContext +
+                        ", serialization of RELATIVE_LONG DateFormat fails with IOException");
+                serializeTestFail = true;
+            }
+            if (!serializeTestFail) {
+                byte[] buf = baos.toByteArray();
+                try {
+                    ByteArrayInputStream bais = new ByteArrayInputStream(buf);
+                    ObjectInputStream ois = new ObjectInputStream(bais);
+                    dfmtFromStream = (DateFormat)ois.readObject();
+                    ois.close();
+                } catch (IOException i) {
+                    errln("FAIL: for locale " + relItem.locale +  ", capitalizationContext " + relItem.capitalizationContext +
+                            ", deserialization of RELATIVE_LONG DateFormat fails with IOException");
+                    serializeTestFail = true;
+                } catch (ClassNotFoundException c) {
+                    errln("FAIL: for locale " + relItem.locale +  ", capitalizationContext " + relItem.capitalizationContext +
+                            ", deserialization of RELATIVE_LONG DateFormat fails with ClassNotFoundException");
+                    serializeTestFail = true;
+                }
+            }
+            if (!serializeTestFail && dfmtFromStream==null) {
+                errln("FAIL: for locale " + relItem.locale +  ", capitalizationContext " + relItem.capitalizationContext +
+                        ", dfmtFromStream is null (for RELATIVE_LONG)");
+                serializeTestFail = true;
+            }
+            if (!serializeTestFail && !dfmtFromStream.equals(dfmt)) {
+                errln("FAIL: for locale " + relItem.locale +  ", capitalizationContext " + relItem.capitalizationContext +
+                        ", dfmtFromStream != dfmt (for RELATIVE_LONG)");
+                serializeTestFail = true;
+            }
+
             cal.setTime(today);
             StringBuffer result2 = new StringBuffer();
             FieldPosition fpos2 = new FieldPosition(0);
@@ -4263,6 +4317,15 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("FAIL: format today for locale " + relItem.locale +  ", capitalizationContext " + relItem.capitalizationContext +
                         ", expected \"" + relItem.expectedFormatToday + "\", got \"" + result2 + "\"");
             }
+            if (!serializeTestFail) {
+                result2.setLength(0);
+                dfmtFromStream.format(cal, result2, fpos2);
+                if (result2.toString().compareTo(relItem.expectedFormatToday) != 0) {
+                    errln("FAIL: use dfmtFromStream to format today for locale " + relItem.locale +  ", capitalizationContext " +
+                            relItem.capitalizationContext + ", expected \"" + relItem.expectedFormatToday + "\", got \"" + result2 + "\"");
+                }
+            }
+
             cal.add(Calendar.DATE, -1);
             result2.setLength(0);
             dfmt.format(cal, result2, fpos2);

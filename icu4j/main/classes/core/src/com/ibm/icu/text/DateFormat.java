@@ -5,7 +5,9 @@
 
 package com.ibm.icu.text;
 
+import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
@@ -475,11 +477,30 @@ public abstract class DateFormat extends UFormat {
     private EnumSet<BooleanAttribute> booleanAttributes = EnumSet.allOf(BooleanAttribute.class); 
 
     /*
-     *  Capitalization setting, hoisted to DateFormat ICU 53
-     *  Currently no serialization in DateFormat, but SimpleDateFormat serialization
-     *  may call getContext/setContext to read/write this for compatibility
+     * Capitalization setting, hoisted to DateFormat ICU 53
+     * Note that SimpleDateFormat serialization may call getContext/setContext to read/write
+     * this for compatibility with serialization for its old copy of capitalizationSetting.
+     * @serial
      */
-    private transient DisplayContext capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+    private DisplayContext capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+
+    static final int currentSerialVersion = 1;
+
+    /**
+     * Describes the version of <code>DateFormat</code> present on the stream.
+     * Possible values are:
+     * <ul>
+     * <li><b>0</b> (or uninitialized): the pre-ICU-53 version
+     *
+     * <li><b>1</b>: ICU 53, adds serialVersionOnStream and capitalizationSetting
+     * </ul>
+     * When streaming out a <code>DateFormat</code>, the most recent format
+     * (corresponding to the highest allowable <code>serialVersionOnStream</code>)
+     * is always written.
+     *
+     * @serial
+     */
+    private int serialVersionOnStream = currentSerialVersion;
 
     // Proclaim serial compatibility with 1.1 FCS
     private static final long serialVersionUID = 7218322306649953788L;
@@ -1607,8 +1628,11 @@ public abstract class DateFormat extends UFormat {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         DateFormat other = (DateFormat) obj;
-        return (calendar.isEquivalentTo(other.calendar) &&
-                numberFormat.equals(other.numberFormat));
+        return (((calendar==null && other.calendar==null) ||
+                    (calendar!=null && other.calendar!=null && calendar.isEquivalentTo(other.calendar))) &&
+                ((numberFormat==null && other.numberFormat==null) ||
+                    (numberFormat!=null && other.numberFormat!=null && numberFormat.equals(other.numberFormat))) &&
+                capitalizationSetting == other.capitalizationSetting);
     }
 
     /**
@@ -1619,7 +1643,9 @@ public abstract class DateFormat extends UFormat {
     {
         DateFormat other = (DateFormat) super.clone();
         other.calendar = (Calendar) calendar.clone();
-        other.numberFormat = (NumberFormat) numberFormat.clone();
+        if (numberFormat != null) {
+            other.numberFormat = (NumberFormat) numberFormat.clone();
+        }
         return other;
     }
 
@@ -1662,6 +1688,26 @@ public abstract class DateFormat extends UFormat {
             return new SimpleDateFormat("M/d/yy h:mm a");
             ///CLOVER:ON
         }
+    }
+
+    /**
+     * First, read in the default serializable data.
+     *
+     * Then, if <code>serialVersionOnStream</code> is less than 1, indicating that
+     * the stream was written by a pre-ICU-53 version,
+     * set capitalizationSetting to a default value.
+     * Finally, set serialVersionOnStream back to the maximum allowed value so that
+     * default serialization will work properly if this object is streamed out again.
+     */
+    private void readObject(ObjectInputStream stream)
+         throws IOException, ClassNotFoundException
+    {
+        stream.defaultReadObject();
+        if (serialVersionOnStream < 1) {
+            // Didn't have capitalizationSetting, set it to default
+            capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+        }
+        serialVersionOnStream = currentSerialVersion;
     }
 
     /**
