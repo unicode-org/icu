@@ -2230,7 +2230,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
         if (t >= text.length() || literal.charAt(p) != text.charAt(t)) {
             // Ran out of text, or found a non-matching character:
             // OK in lenient mode, an error in strict mode.
-            if (partialMatchLenient) {
+            if (whitespaceLenient) {
                 if (t == textOffset && text.charAt(t) == 0x2e &&
                         isAfterNonNumericField(pattern, patternOffset)) {
                     // Lenient mode and the literal input text begins with a "." and
@@ -2238,9 +2238,16 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
                     ++t;
                     continue;  // Do not update p.
                 }
+                // if it is actual whitespace and we're whitespace lenient it's OK
+                UChar wsc = text.charAt(t);
+                if(PatternProps::isWhiteSpace(wsc))
+                    break;
+            } 
+            // or if we're partial match lenient it's OK
+            if(partialMatchLenient) {                                
                 break;
             }
-            
+
             return FALSE;
         }
         ++p;

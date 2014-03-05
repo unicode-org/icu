@@ -4212,9 +4212,9 @@ void DateFormatTest::TestDateFormatLeniency() {
         //locale    leniency    parse String                    pattern                             expected result
         { "en",     true,       UnicodeString("2008-07 02"),    UnicodeString("yyyy-LLLL dd"),      UnicodeString("2008-July 02") },
         { "en",     false,      UnicodeString("2008-07 02"),    UnicodeString("yyyy-LLLL dd"),      UnicodeString("") },
-        { "en",     true,       UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      UnicodeString("2008-Jan 02") },
+        { "en",     true,       UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      UnicodeString("2008-Jan. 02") },
         { "en",     false,      UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      UnicodeString("") },
-        { "en",     true,       UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("2008-Jan 02") },
+        { "en",     true,       UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("2008-Jan -- 02") },
         { "en",     false,      UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("") },
         // terminator
         { NULL,     true,       UnicodeString(""),              UnicodeString(""),                  UnicodeString("") }                
@@ -4240,17 +4240,39 @@ void DateFormatTest::TestDateFormatLeniency() {
        }
        sdmft->setLenient(itemPtr->leniency);
        sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).
+              setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, itemPtr->leniency, status).
               setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
-       UDate d = sdmft->parse(itemPtr->parseString, pos); 
-       (void)d;
+       UDate d = sdmft->parse(itemPtr->parseString, pos);       
 
-       // TODO: Ticket 10625. Nothing here is checking the expected result when the parse succeeds.
-       
-       if ((pos.getErrorIndex() > -1) && (itemPtr->expectedResult.length() != 0)) {
-           errln("error: unexpected error - " + itemPtr->parseString + 
-                 " - error index " + pos.getErrorIndex() + 
-                 " - leniency " + itemPtr->leniency);
+       if(itemPtr->expectedResult.length() == 0) {
+           if(pos.getErrorIndex() != -1) {
+               continue;
+           } else {
+                errln("error: unexpected parse success - " + itemPtr->parseString + 
+                    " - pattern " + itemPtr->pattern + 
+                    " - error index " + pos.getErrorIndex() + 
+                    " - leniency " + itemPtr->leniency);
+                continue;
+           }
        }
+       if(pos.getErrorIndex() != -1) { 
+           errln("error: parse error for string - "  + itemPtr->parseString + 
+                 " - pattern " + itemPtr->pattern + 
+                 " - idx " + pos.getIndex() + 
+                 " - error index "+pos.getErrorIndex() + 
+                 " - leniency " + itemPtr->leniency); 
+ 	        continue; 
+ 	    }
+
+       UnicodeString formatResult(""); 
+       sdmft->format(d, formatResult);
+       if(formatResult.compare(itemPtr->expectedResult) != 0) { 
+           errln("error: unexpected format result. pattern["+itemPtr->pattern+"] expected[" + itemPtr->expectedResult + "]  but result was[" + formatResult + "]"); 
+           continue;
+ 	    } else { 
+            logln("formatted results match! - " + formatResult);  
+ 	    } 
+
     }
 }
 
