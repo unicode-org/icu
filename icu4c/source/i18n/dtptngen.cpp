@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2013, International Business Machines Corporation and
+* Copyright (C) 2007-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -144,6 +144,7 @@ static const dtTypeElem dtTypes[] = {
     {LOW_Y, UDATPG_YEAR_FIELD, DT_NUMERIC, 1, 20},
     {CAP_Y, UDATPG_YEAR_FIELD, DT_NUMERIC + DT_DELTA, 1, 20},
     {LOW_U, UDATPG_YEAR_FIELD, DT_NUMERIC + 2*DT_DELTA, 1, 20},
+    {LOW_R, UDATPG_YEAR_FIELD, DT_NUMERIC + 3*DT_DELTA, 1, 20},
     {CAP_U, UDATPG_YEAR_FIELD, DT_SHORT, 1, 3},
     {CAP_U, UDATPG_YEAR_FIELD, DT_LONG, 4, 0},
     {CAP_U, UDATPG_YEAR_FIELD, DT_NARROW, 5, 0},
