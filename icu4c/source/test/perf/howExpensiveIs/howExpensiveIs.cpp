@@ -63,7 +63,7 @@ int main(int argc, char * const * argv){
 
 #if U_PLATFORM_IMPLEMENTS_POSIX
   int c;
-  extern int optind;
+  //extern int optind;
   extern char *optarg;
   while((c=getopt(argc,argv,"lf:t:")) != EOF) {
     switch(c) {
@@ -114,7 +114,7 @@ int main(int argc, char * const * argv){
   } else {
     fprintf(stderr, "# (no output)\n");
   }
-  
+
   if(listmode && testName!=NULL) {
     fprintf(stderr, "ERR: no -l mode when specific test with -t\n");
     usage(progname);
@@ -123,7 +123,7 @@ int main(int argc, char * const * argv){
 
 
   runTests();
-  
+
 
   if(out!=NULL) {
 #ifndef SKIP_INFO
@@ -137,7 +137,7 @@ int main(int argc, char * const * argv){
     fprintf(stderr, "Error in tests: %s\n", u_errorName(setupStatus));
     return 1;
   }
-  
+
   return 0;
 }
 
@@ -148,10 +148,10 @@ protected:
   HowExpensiveTest(const char *name, const char *file, int32_t line) : fName(name), fFile(file), fLine(line) {}
 protected:
   /**
-   * @return number of iterations 
+   * @return number of iterations
    */
   virtual int32_t run() = 0;
-  virtual void warmup() {  run(); } 
+  virtual void warmup() {  run(); }
 public:
   virtual const char *getName() { return fName; }
 public:
@@ -201,7 +201,7 @@ void runTestOn(HowExpensiveTest &t) {
   double sieveTime = uprv_getSieveTime(NULL);
   double st;
   double me;
-  
+
   fflush(stdout);
   fflush(stderr);
   int32_t iter = t.runTests(&st,&me);
@@ -211,7 +211,7 @@ void runTestOn(HowExpensiveTest &t) {
   }
   fflush(stdout);
   fflush(stderr);
-  
+
   double stn = st/sieveTime;
 
   printf("%s\t%.9f\t%.9f +/- %.9f,  @ %d iter\n", t.getName(),stn,st,me,iter);
@@ -279,7 +279,7 @@ protected:
     return "NumTest";
   }
 public:
-  NumTest(const char *pat, const char *num, double expect, const char *FILE, int LINE) 
+  NumTest(const char *pat, const char *num, double expect, const char *FILE, int LINE)
     : HowExpensiveTest("(n/a)",FILE, LINE),
       fExpect(expect),
       fFmt(0),
@@ -300,7 +300,7 @@ public:
       double trial = unum_parseDouble(fFmt,fStr,fLen, NULL, &setupStatus);
       if(U_SUCCESS(setupStatus) && trial!=fExpect) {
         setupStatus = U_INTERNAL_PROGRAM_ERROR;
-        printf("%s:%d: warmup() %s got %.8f expected %.8f\n", 
+        printf("%s:%d: warmup() %s got %.8f expected %.8f\n",
                fFile,fLine,getName(),trial,fExpect);
       }
     }
@@ -319,7 +319,7 @@ public:
 #define DO_NumTest(p,n,x) { NumTest t(p,n,x,__FILE__,__LINE__); runTestOn(t); }
 
 
-class AttrNumTest : public NumTest 
+class AttrNumTest : public NumTest
 {
 private:
   UNumberFormatAttribute fAttr;
@@ -331,7 +331,7 @@ protected:
     return name2;
   }
 public:
-  AttrNumTest(const char *pat, const char *num, double expect, const char *FILE, int LINE, UNumberFormatAttribute attr, int32_t newValue) 
+  AttrNumTest(const char *pat, const char *num, double expect, const char *FILE, int LINE, UNumberFormatAttribute attr, int32_t newValue)
     : NumTest(pat,num,expect,FILE,LINE),
       fAttr(attr),
       fAttrValue(newValue)
@@ -347,7 +347,7 @@ public:
 #define DO_AttrNumTest(p,n,x,a,v) { AttrNumTest t(p,n,x,__FILE__,__LINE__,a,v); runTestOn(t); }
 
 
-class NOXNumTest : public NumTest 
+class NOXNumTest : public NumTest
 {
 private:
   UNumberFormatAttribute fAttr;
@@ -359,7 +359,7 @@ protected:
     return name2;
   }
 public:
-  NOXNumTest(const char *pat, const char *num, double expect, const char *FILE, int LINE /*, UNumberFormatAttribute attr, int32_t newValue */) 
+  NOXNumTest(const char *pat, const char *num, double expect, const char *FILE, int LINE /*, UNumberFormatAttribute attr, int32_t newValue */)
     : NumTest(pat,num,expect,FILE,LINE) /* ,
       fAttr(attr),
       fAttrValue(newValue) */
@@ -407,7 +407,7 @@ protected:
     return "NumFmtTest";
   }
 public:
-  NumFmtTest(const char *pat, const char *num, double expect, const char *FILE, int LINE) 
+  NumFmtTest(const char *pat, const char *num, double expect, const char *FILE, int LINE)
     : HowExpensiveTest("(n/a)",FILE, LINE),
       fExpect(expect),
       fFmt(0),
@@ -427,13 +427,13 @@ public:
     UChar buf[100];
     if(U_SUCCESS(setupStatus)) {
       int32_t trial = unum_formatDouble(fFmt,fExpect, buf, 100, NULL, &setupStatus);
-      if(!U_SUCCESS(setupStatus) 
+      if(!U_SUCCESS(setupStatus)
          || trial!=fLen
          ||trial<=0
          || u_strncmp(fStr,buf,trial)  ) {
         char strBuf[200];
         u_strToUTF8(strBuf,200,NULL,buf,trial+1,&setupStatus);
-        printf("%s:%d: warmup() %s got %s expected %s, err %s\n", 
+        printf("%s:%d: warmup() %s got %s expected %s, err %s\n",
                fFile,fLine,getName(),strBuf,fCStr, u_errorName(setupStatus));
         setupStatus = U_INTERNAL_PROGRAM_ERROR;
       }
@@ -484,7 +484,7 @@ protected:
     return "NumFmtInt64Test";
   }
 public:
-  NumFmtInt64Test(const char *pat, const char *num, int64_t expect, const char *FILE, int LINE) 
+  NumFmtInt64Test(const char *pat, const char *num, int64_t expect, const char *FILE, int LINE)
     : HowExpensiveTest("(n/a)",FILE, LINE),
       fExpect(expect),
       fFmt(0),
@@ -504,13 +504,13 @@ public:
     UChar buf[100];
     if(U_SUCCESS(setupStatus)) {
       int32_t trial = unum_formatInt64(fFmt,fExpect, buf, 100, NULL, &setupStatus);
-      if(!U_SUCCESS(setupStatus) 
+      if(!U_SUCCESS(setupStatus)
          || trial!=fLen
          ||trial<=0
          || u_strncmp(fStr,buf,trial)  ) {
         char strBuf[200];
         u_strToUTF8(strBuf,200,NULL,buf,trial+1,&setupStatus);
-        printf("%s:%d: warmup() %s got %s (len %d) expected %s (len %d), err %s\n", 
+        printf("%s:%d: warmup() %s got %s (len %d) expected %s (len %d), err %s\n",
                fFile,fLine,getName(),strBuf,trial,fCStr,fLen, u_errorName(setupStatus));
         setupStatus = U_INTERNAL_PROGRAM_ERROR;
       }
@@ -564,7 +564,7 @@ protected:
     return "NumFmtStringPieceTest";
   }
 public:
-  NumFmtStringPieceTest(const char *pat, const char *num, const StringPiece& expect, const char *FILE, int LINE) 
+  NumFmtStringPieceTest(const char *pat, const char *num, const StringPiece& expect, const char *FILE, int LINE)
     : HowExpensiveTest("(n/a)",FILE, LINE),
       fExpect(expect),
       fFmt(0),
@@ -585,20 +585,22 @@ public:
     if(U_SUCCESS(setupStatus)) {
       buf.remove();
       ((const DecimalFormat*)fFmt)->format(fExpect, buf, NULL, setupStatus);
-      if(!U_SUCCESS(setupStatus) 
+      if(!U_SUCCESS(setupStatus)
          || fString!=buf
          ) {
         char strBuf[200];
         u_strToUTF8(strBuf,200,NULL,buf.getTerminatedBuffer(),buf.length()+1,&setupStatus);
-        printf("%s:%d: warmup() %s got %s (len %d) expected %s (len %d), err %s\n", 
+        printf("%s:%d: warmup() %s got %s (len %d) expected %s (len %d), err %s\n",
                fFile,fLine,getName(),strBuf,buf.length(),fCStr,fLen, u_errorName(setupStatus));
         setupStatus = U_INTERNAL_PROGRAM_ERROR;
       }
     }
   }
-    
+
   int32_t run() {
+#if U_DEBUG
     int32_t trial;
+#endif
     int i=0;
     UnicodeString buf;
     if(U_SUCCESS(setupStatus)) {
@@ -637,7 +639,7 @@ UDate sometime = 100000000.0;
 UChar onekbuf[1024];
 const int32_t onekbuf_len = sizeof(onekbuf)/sizeof(onekbuf[0]);
 
- 
+
 QuickTest(DateFormatTestBasic, \
           { \
             DateFormatTest_fmt = udat_open(UDAT_DEFAULT, UDAT_DEFAULT, NULL, NULL, -1, NULL, -1, &setupStatus); \
@@ -727,8 +729,8 @@ void runTests() {
 
 #ifndef SKIP_NUMFORMAT_TESTS
   // format tests
-  { 
-    
+  {
+
     DO_NumFmtInt64Test("0000","0001",1);
     DO_NumFmtInt64Test("0000","0000",0);
     StringPiece sp3456("3456");
@@ -743,7 +745,7 @@ void runTests() {
     StringPiece spPI("123.456");
     DO_NumFmtStringPieceTest("#.0000","123.4560",spPI);
     DO_NumFmtStringPieceTest("#.00","123.46",spPI);
-    
+
     DO_NumFmtTest("#","0",0.0);
     DO_NumFmtTest("#","12345",12345);
     DO_NumFmtTest("#","-2",-2);
