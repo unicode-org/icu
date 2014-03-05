@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2011-2012,International Business Machines
+ * Copyright (c) 2011-2014,International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -13,6 +13,7 @@
 #include "unicode/ustring.h"
 #include "unicode/decimfmt.h"
 #include "unicode/udat.h"
+U_NAMESPACE_USE
 
 #if U_PLATFORM_IMPLEMENTS_POSIX
 #include <unistd.h>
@@ -750,8 +751,10 @@ void runTests() {
     DO_NumFmtInt64Test("#","-682",-682);
     DO_NumFmtInt64Test("#","0",0);
     DO_NumFmtInt64Test("#","12345",12345);
+    DO_NumFmtInt64Test("#,###","12,345",12345);
     DO_NumFmtInt64Test("#","1234",1234);
     DO_NumFmtInt64Test("#","123",123);
+    DO_NumFmtInt64Test("#,###","123",123);
     DO_NumFmtInt64Test("#","-2",-2);
     DO_NumFmtInt64Test("+#","+2",2);
   }
