@@ -1164,6 +1164,118 @@ Calendar::set(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t m
 }
 
 // -------------------------------------
+// For now the full getRelatedYear implementation is here;
+// per #10752 move the non-default implementation to subclasses
+// (default implementation will do no year adjustment)
+
+int32_t Calendar::getRelatedYear(UErrorCode &status) const
+{
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+	int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    // modify for calendar type
+	ECalType type = getCalendarType(getType());
+	switch (type) {
+        case CALTYPE_PERSIAN:
+            year += 622; break;
+        case CALTYPE_HEBREW:
+            year -= 3760; break;
+        case CALTYPE_CHINESE:
+            year -= 2637; break;
+        case CALTYPE_INDIAN:
+            year += 79; break;
+        case CALTYPE_COPTIC:
+            year += 284; break;
+        case CALTYPE_ETHIOPIC:
+            year += 8; break;
+        case CALTYPE_ETHIOPIC_AMETE_ALEM:
+            year -=5492; break;
+        case CALTYPE_DANGI:
+            year -= 2333; break;
+        case CALTYPE_ISLAMIC_CIVIL:
+        case CALTYPE_ISLAMIC:
+        case CALTYPE_ISLAMIC_UMALQURA:
+        case CALTYPE_ISLAMIC_TBLA:
+        case CALTYPE_ISLAMIC_RGSA:
+            // ad hoc conversion, improve under #10752
+            {
+			    int cycle, offset, shift = 0;
+			    if (year >= 1397) {
+				    cycle = (year - 1397) / 67;
+				    offset = (year - 1397) % 67;
+				    shift = 2*cycle + ((offset >= 33)? 1: 0);
+			    } else {
+				    cycle = (year - 1396) / 67 - 1;
+				    offset = -(year - 1396) % 67;
+				    shift = 2*cycle + ((offset <= 33)? 1: 0);
+			    }
+			    year += 579 - shift;
+			}
+            break;
+        default:
+            // CALTYPE_GREGORIAN
+            // CALTYPE_JAPANESE
+            // CALTYPE_BUDDHIST
+            // CALTYPE_ROC
+            // CALTYPE_ISO8601
+            // do nothing, EXTENDED_YEAR same as Gregorian
+            break;
+	}
+	return year;
+}
+
+// -------------------------------------
+// For now the full setRelatedYear implementation is here;
+// per #10752 move the non-default implementation to subclasses
+// (default implementation will do no year adjustment)
+
+void Calendar::setRelatedYear(int32_t year)
+{
+    // modify for calendar type
+	ECalType type = getCalendarType(getType());
+	switch (type) {
+        case CALTYPE_PERSIAN:
+            year -= 622; break;
+        case CALTYPE_HEBREW:
+            year += 3760; break;
+        case CALTYPE_CHINESE:
+            year += 2637; break;
+        case CALTYPE_INDIAN:
+            year -= 79; break;
+        case CALTYPE_COPTIC:
+            year -= 284; break;
+        case CALTYPE_ETHIOPIC:
+            year -= 8; break;
+        case CALTYPE_ETHIOPIC_AMETE_ALEM:
+            year +=5492; break;
+        case CALTYPE_DANGI:
+            year += 2333; break;
+        case CALTYPE_ISLAMIC_CIVIL:
+        case CALTYPE_ISLAMIC:
+        case CALTYPE_ISLAMIC_UMALQURA:
+        case CALTYPE_ISLAMIC_TBLA:
+        case CALTYPE_ISLAMIC_RGSA:
+            // needs adjustment, will do under #10752
+            year -= 578; // handles current year +/- a few
+            break;
+        default:
+            // CALTYPE_GREGORIAN
+            // CALTYPE_JAPANESE
+            // CALTYPE_BUDDHIST
+            // CALTYPE_ROC
+            // CALTYPE_ISO8601
+            // do nothing, EXTENDED_YEAR same as Gregorian
+            break;
+	}
+	// set extended year
+	set(UCAL_EXTENDED_YEAR, year);
+}
+
+// -------------------------------------
 
 void
 Calendar::clear()

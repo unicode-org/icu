@@ -126,8 +126,9 @@ static const UDateFormatField kDateFields[] = {
     UDAT_STANDALONE_MONTH_FIELD,
     UDAT_QUARTER_FIELD,
     UDAT_STANDALONE_QUARTER_FIELD,
-    UDAT_YEAR_NAME_FIELD };
-static const int8_t kDateFieldsCount = 15;
+    UDAT_YEAR_NAME_FIELD,
+    UDAT_RELATED_YEAR_FIELD };
+static const int8_t kDateFieldsCount = 16;
 
 static const UDateFormatField kTimeFields[] = {
     UDAT_HOUR_OF_DAY1_FIELD,
@@ -203,11 +204,12 @@ static const int32_t gFieldRangeBias[] = {
      1,  // 'L' - UDAT_STANDALONE_MONTH_FIELD
     -1,  // 'Q' - UDAT_QUARTER_FIELD (1-4?)
     -1,  // 'q' - UDAT_STANDALONE_QUARTER_FIELD
-    -1   // 'V' - UDAT_TIMEZONE_SPECIAL_FIELD
+    -1,  // 'V' - UDAT_TIMEZONE_SPECIAL_FIELD
     -1,  // 'U' - UDAT_YEAR_NAME_FIELD
     -1,  // 'O' - UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD
     -1,  // 'X' - UDAT_TIMEZONE_ISO_FIELD
     -1,  // 'x' - UDAT_TIMEZONE_ISO_LOCAL_FIELD
+    -1,  // 'r' - UDAT_RELATED_YEAR_FIELD
 };
 
 // When calendar uses hebr numbering (i.e. he@calendar=hebrew),
@@ -956,10 +958,10 @@ SimpleDateFormat::fgCalendarFieldToLevel[] =
     /*wW*/ 20, 30,
     /*dDEF*/ 30, 20, 30, 30,
     /*ahHm*/ 40, 50, 50, 60,
-    /*sS..*/ 70, 80,
+    /*sS*/ 70, 80,
     /*z?Y*/ 0, 0, 10,
     /*eug*/ 30, 10, 0,
-    /*A*/ 40
+    /*A?.*/ 40, 0, 0
 };
 
 
@@ -976,7 +978,7 @@ SimpleDateFormat::fgPatternCharToLevel[] = {
     //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50, -1, 60, -1, -1,
     //   p   q   r   s   t   u   v   w   x   y   z
-        -1, 20, -1, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1
+        -1, 20, 10, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1
 };
 
 
@@ -1001,6 +1003,7 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     /*U*/   UCAL_YEAR,
     /*O*/   UCAL_ZONE_OFFSET,
     /*Xx*/  UCAL_ZONE_OFFSET, UCAL_ZONE_OFFSET,
+    /*r*/   UCAL_EXTENDED_YEAR,
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -1023,6 +1026,7 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
     /*U*/   UDAT_YEAR_NAME_FIELD,
     /*O*/   UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD,
     /*Xx*/  UDAT_TIMEZONE_ISO_FIELD, UDAT_TIMEZONE_ISO_LOCAL_FIELD,
+    /*r*/   UDAT_RELATED_YEAR_FIELD,
 };
 
 //----------------------------------------------------------------------
@@ -1242,7 +1246,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     }
 
     UCalendarDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
-    int32_t value = cal.get(field, status);
+    int32_t value = (patternCharIndex != UDAT_RELATED_YEAR_FIELD)? cal.get(field, status): cal.getRelatedYear(status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -3127,6 +3131,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         case UDAT_STANDALONE_QUARTER_FIELD:
              cal.set(UCAL_MONTH, (value - 1) * 3);
              break;
+        case UDAT_RELATED_YEAR_FIELD:
+            cal.setRelatedYear(value);
+            break;
         default:
             cal.set(field, value);
             break;
