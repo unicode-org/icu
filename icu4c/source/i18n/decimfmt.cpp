@@ -835,10 +835,12 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
             fPluralAffixesForCurrency = initHashForAffixPattern(status);
             copyHashForAffix(rhs.fPluralAffixesForCurrency, fPluralAffixesForCurrency, status);
         }
-    }
 #if UCONFIG_FORMAT_FASTPATHS_49
-    handleChanged();
+        DecimalFormatInternal &data    = internalData(fReserved);
+        const DecimalFormatInternal &rhsData = internalData(rhs.fReserved);
+        data = rhsData;
 #endif
+    }
     return *this;
 }
 
