@@ -29,6 +29,9 @@ void runTests(void);
 #define ITERATIONS 5
 #endif
 
+#ifndef TEST_LOCALE
+#define TEST_LOCALE "en_US"
+#endif
 
 FILE *out = NULL;
 UErrorCode setupStatus = U_ZERO_ERROR;
@@ -273,7 +276,7 @@ public:
   }
 protected:
   virtual UNumberFormat* initFmt() {
-    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, "en_US", 0, &setupStatus);
+    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, 0, &setupStatus);
   }
   virtual const char *getClassName() {
     return "NumTest";
@@ -401,7 +404,7 @@ public:
   }
 protected:
   virtual UNumberFormat* initFmt() {
-    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, "en_US", 0, &setupStatus);
+    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, 0, &setupStatus);
   }
   virtual const char *getClassName() {
     return "NumFmtTest";
@@ -455,9 +458,17 @@ public:
 
 #define DO_NumFmtTest(p,n,x) { NumFmtTest t(p,n,x,__FILE__,__LINE__); runTestOn(t); }
 
-
 class NumFmtInt64Test : public HowExpensiveTest {
+public:
+  enum EMode {
+    kDefault,
+    kPattern,
+    kApplyPattern,
+    kGroupOff,
+    kApplyGroupOff
+  };
 private:
+  EMode   fMode;
   int64_t fExpect;
   UNumberFormat *fFmt;
   UnicodeString fPat;
@@ -478,14 +489,53 @@ public:
   }
 protected:
   virtual UNumberFormat* initFmt() {
-    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, "en_US", 0, &setupStatus);
+    switch(fMode) {
+    case kPattern:
+      return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, 0, &setupStatus);
+    case kApplyPattern:
+      {
+        UNumberFormat *fmt = unum_open(UNUM_DECIMAL, NULL, -1, TEST_LOCALE, 0, &setupStatus);
+        unum_applyPattern(fmt, FALSE, fPat.getTerminatedBuffer(), -1, NULL, &setupStatus);
+        return fmt;
+      }
+    case kGroupOff:
+      {
+        UNumberFormat *fmt = unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, 0, &setupStatus);
+        unum_setAttribute(fmt, UNUM_GROUPING_USED, UNUM_NO);
+        return fmt;
+      }
+    case kApplyGroupOff:
+      {
+        UNumberFormat *fmt = unum_open(UNUM_DECIMAL, NULL, -1, TEST_LOCALE, 0, &setupStatus);
+        unum_applyPattern(fmt, FALSE, fPat.getTerminatedBuffer(), -1, NULL, &setupStatus);
+        unum_setAttribute(fmt, UNUM_GROUPING_USED, UNUM_NO);
+        return fmt;
+      }
+    default:
+    case kDefault:
+      return unum_open(UNUM_DEFAULT, NULL, -1, TEST_LOCALE, 0, &setupStatus);
+    }
   }
   virtual const char *getClassName() {
-    return "NumFmtInt64Test";
+    switch(fMode) {
+    case EMode::kDefault:
+      return "NumFmtInt64Test (default)";
+    case EMode::kPattern:
+      return "NumFmtInt64Test (pattern)";
+    case EMode::kApplyPattern:
+      return "NumFmtInt64Test (applypattern)";
+    case EMode::kGroupOff:
+      return "NumFmtInt64Test (pattern, group=off)";
+    case EMode::kApplyGroupOff:
+      return "NumFmtInt64Test (applypattern, group=off)";
+    default:
+      return "NumFmtInt64Test (? ? ?)";
+    }
   }
 public:
-  NumFmtInt64Test(const char *pat, const char *num, int64_t expect, const char *FILE, int LINE)
+  NumFmtInt64Test(const char *pat, const char *num, int64_t expect, const char *FILE, int LINE, EMode mode)
     : HowExpensiveTest("(n/a)",FILE, LINE),
+      fMode(mode),
       fExpect(expect),
       fFmt(0),
       fPat(pat, -1, US_INV),
@@ -530,7 +580,18 @@ public:
   virtual ~NumFmtInt64Test(){}
 };
 
-#define DO_NumFmtInt64Test(p,n,x) { NumFmtInt64Test t(p,n,x,__FILE__,__LINE__); runTestOn(t); }
+/**
+ * unum_open .. with pattern, == new DecimalFormat(pattern)
+ */
+#define DO_NumFmtInt64Test(p,n,x) { NumFmtInt64Test t(p,n,x,__FILE__,__LINE__,NumFmtInt64Test::EMode::kPattern); runTestOn(t); }
+/**
+ * unum_open(UNUM_DECIMAL), then 
+ */
+#define DO_NumFmtInt64Test_apply(p,n,x) { NumFmtInt64Test t(p,n,x,__FILE__,__LINE__,NumFmtInt64Test::EMode::kApplyPattern); runTestOn(t); }
+
+#define DO_NumFmtInt64Test_default(p,n,x) { NumFmtInt64Test t(p,n,x,__FILE__,__LINE__,NumFmtInt64Test::EMode::kDefault); runTestOn(t); }
+#define DO_NumFmtInt64Test_gr0(p,n,x) { NumFmtInt64Test t(p,n,x,__FILE__,__LINE__,NumFmtInt64Test::EMode::kGroupOff); runTestOn(t); }
+#define DO_NumFmtInt64Test_applygr0(p,n,x) { NumFmtInt64Test t(p,n,x,__FILE__,__LINE__,NumFmtInt64Test::EMode::kApplyGroupOff); runTestOn(t); }
 
 
 class NumFmtStringPieceTest : public HowExpensiveTest {
@@ -626,13 +687,13 @@ static UChar strbeng[] = {0x09E8,0x09E8,0x09E8,0x09E8, 0 };
 UNumberFormat *NumParseTest_fmt;
 
 // TODO: de-uglify.
-QuickTest(NumParseTest,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    "en_US",                    0,                    &setupStatus);  },{    int32_t i;    static UChar str[] = { 0x31 };double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,str,1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTest,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    static UChar str[] = { 0x31 };double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,str,1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
 
-QuickTest(NumParseTestdot,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    "en_US",                    0,                    &setupStatus);  },{    int32_t i;  double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strdot,1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
-QuickTest(NumParseTestspc,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    "en_US",                    0,                    &setupStatus);  },{    int32_t i;    double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strspc,1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
-QuickTest(NumParseTestgrp,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    "en_US",                    0,                    &setupStatus);  },{    int32_t i;    double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strgrp,-1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTestdot,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;  double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strdot,1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTestspc,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strspc,1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTestgrp,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strgrp,-1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
 
-QuickTest(NumParseTestbeng,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    "en_US",                    0,                    &setupStatus);  },{    int32_t i;    double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strbeng,-1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTestbeng,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    TEST_LOCALE,                    0,                    &setupStatus);  },{    int32_t i;    double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,strbeng,-1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
 
 UDateFormat *DateFormatTest_fmt = NULL;
 UDate sometime = 100000000.0;
@@ -666,8 +727,8 @@ QuickTest(NullTest,{},{int j=U_LOTS_OF_TIMES;while(--j);return U_LOTS_OF_TIMES;}
 QuickTest(RandomTest,{},{timespec ts; ts.tv_sec=rand()%4; int j=U_LOTS_OF_TIMES;while(--j) { ts.tv_nsec=100000+(rand()%10000)*1000000; nanosleep(&ts,NULL); return j;} return U_LOTS_OF_TIMES;},{})
 #endif
 
-OpenCloseTest(pattern,unum,open,{},(UNUM_PATTERN_DECIMAL,pattern,1,"en_US",0,&setupStatus),{})
-OpenCloseTest(default,unum,open,{},(UNUM_DEFAULT,NULL,-1,"en_US",0,&setupStatus),{})
+OpenCloseTest(pattern,unum,open,{},(UNUM_PATTERN_DECIMAL,pattern,1,TEST_LOCALE,0,&setupStatus),{})
+OpenCloseTest(default,unum,open,{},(UNUM_DEFAULT,NULL,-1,TEST_LOCALE,0,&setupStatus),{})
 #if !UCONFIG_NO_CONVERSION
 #include "unicode/ucnv.h"
 OpenCloseTest(gb18030,ucnv,open,{},("gb18030",&setupStatus),{})
@@ -750,6 +811,7 @@ void runTests() {
     DO_NumFmtTest("#","12345",12345);
     DO_NumFmtTest("#","-2",-2);
     DO_NumFmtTest("+#","+2",2);
+
     DO_NumFmtInt64Test("#","-682",-682);
     DO_NumFmtInt64Test("#","0",0);
     DO_NumFmtInt64Test("#","12345",12345);
@@ -757,6 +819,20 @@ void runTests() {
     DO_NumFmtInt64Test("#","1234",1234);
     DO_NumFmtInt64Test("#","123",123);
     DO_NumFmtInt64Test("#,###","123",123);
+    DO_NumFmtInt64Test_apply("#","123",123);
+    DO_NumFmtInt64Test_apply("#","12345",12345);
+    DO_NumFmtInt64Test_apply("#,###","123",123);
+    DO_NumFmtInt64Test_apply("#,###","12,345",12345);
+    DO_NumFmtInt64Test_default("","123",123);
+    DO_NumFmtInt64Test_default("","12,345",12345);
+    DO_NumFmtInt64Test_applygr0("#","123",123);
+    DO_NumFmtInt64Test_applygr0("#","12345",12345);
+    DO_NumFmtInt64Test_applygr0("#,###","123",123);
+    DO_NumFmtInt64Test_applygr0("#,###","12345",12345);
+    DO_NumFmtInt64Test_gr0("#","123",123);
+    DO_NumFmtInt64Test_gr0("#","12345",12345);
+    DO_NumFmtInt64Test_gr0("#,###","123",123);
+    DO_NumFmtInt64Test_gr0("#,###","12345",12345);
     DO_NumFmtInt64Test("#","-2",-2);
     DO_NumFmtInt64Test("+#","+2",2);
   }
