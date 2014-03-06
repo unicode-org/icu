@@ -25,6 +25,7 @@
 #include "cmemory.h"
 #if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
 #include "unicode/filteredbrk.h"
+#include <stdio.h> // for sprintf
 #endif
 /**
  * API Test the RuleBasedBreakIterator class
@@ -1178,6 +1179,7 @@ void RBBIAPITest::TestRefreshInputText() {
 
 }
 
+#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
 static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it) {
   static const UChar PILCROW=0x00B6, CHSTR=0x3010, CHEND=0x3011; // lenticular brackets
   it.logln(UnicodeString("String:'")+ustr+UnicodeString("'"));
@@ -1216,7 +1218,7 @@ static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it)
   it.logln(out);
   delete [] pos;
 }
-
+#endif
 
 void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
 #if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
