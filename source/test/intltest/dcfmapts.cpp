@@ -816,4 +816,4 @@ void IntlTestDecimalFormatAPI::TestBadFastpath() {
     assertEquals("Format 1234 w/ grouping", "1,234", df->format(1234, fmt));
 }
 
-#endif /* #if !UCONFIG_NO_FORMATTING */x
+#endif /* #if !UCONFIG_NO_FORMATTING */
