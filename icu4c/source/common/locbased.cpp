@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -41,6 +41,11 @@ void LocaleBased::setLocaleIDs(const char* validID, const char* actualID) {
     if (actualID != 0) {
         uprv_strcpy(actual, actualID);
     }
+}
+
+void LocaleBased::setLocaleIDs(const Locale& validID, const Locale& actualID) {
+  uprv_strcpy(valid, validID.getName());
+  uprv_strcpy(actual, actualID.getName());
 }
 
 U_NAMESPACE_END
