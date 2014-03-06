@@ -5313,6 +5313,29 @@ DecimalFormat::copyHashForAffixPattern(const Hashtable* source,
     }
 }
 
+// this is only overridden to call handleChanged() for fastpath purposes.
+void
+DecimalFormat::setGroupingUsed(UBool newValue) {
+  NumberFormat::setGroupingUsed(newValue);
+  handleChanged();
+}
+
+// this is only overridden to call handleChanged() for fastpath purposes.
+void
+DecimalFormat::setParseIntegerOnly(UBool newValue) {
+  NumberFormat::setParseIntegerOnly(newValue);
+  handleChanged();
+}
+
+// this is only overridden to call handleChanged() for fastpath purposes.
+// setContext doesn't affect the fastPath right now, but this is called for completeness
+void
+DecimalFormat::setContext(UDisplayContext value, UErrorCode& status) {
+  NumberFormat::setContext(value, status);
+  handleChanged();
+}
+
+
 DecimalFormat& DecimalFormat::setAttribute( UNumberFormatAttribute attr,
                                             int32_t newValue,
                                             UErrorCode &status) {

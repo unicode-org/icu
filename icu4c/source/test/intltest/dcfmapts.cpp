@@ -1,6 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * COPYRIGHT:
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -32,7 +32,7 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
 {
     if (exec) logln((UnicodeString)"TestSuite DecimalFormatAPI");
     switch (index) {
-        case 0: name = "DecimalFormat API test"; 
+        case 0: name = "DecimalFormat API test";
                 if (exec) {
                     logln((UnicodeString)"DecimalFormat API test---"); logln((UnicodeString)"");
                     UErrorCode status = U_ZERO_ERROR;
@@ -73,6 +73,12 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
             if(exec) {
                logln((UnicodeString)"TestFixedDecimal ---");
                TestFixedDecimal();
+            }
+            break;
+         case 6: name = "TestBadFastpath";
+            if(exec) {
+               logln((UnicodeString)"TestBadFastpath ---");
+               TestBadFastpath();
             }
             break;
        default: name = ""; break;
@@ -156,7 +162,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
 
     UnicodeString res1, res2, res3, res4;
     FieldPosition pos1(0), pos2(0), pos3(0), pos4(0);
-    
+
     res1 = def.format(d, res1, pos1);
     logln( (UnicodeString) "" + (int32_t) d + " formatted to " + res1);
 
@@ -287,7 +293,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     if(sn != TRUE) {
         errln((UnicodeString)"ERROR: setScientificNotation() failed");
     }
-    
+
     // Added by Ken Liu testing set/getMinimumExponentDigits
     int8_t MinimumExponentDigits = 0;
     pat.setMinimumExponentDigits(2);
@@ -416,7 +422,7 @@ void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: CurrencyPluralInfo::setLocale");
     }
-    
+
     cpi->setPluralRules("",status);
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: CurrencyPluralInfo::setPluralRules");
@@ -448,7 +454,7 @@ void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)
                         3.0,            -3.0,    //  kRoundUp       3,
                         3.0,            -3.0,    //  kRoundHalfEven 4,
                         3.0,            -3.0,    //  kRoundHalfDown 5,
-                        3.0,            -3.0     //  kRoundHalfUp   6 
+                        3.0,            -3.0     //  kRoundHalfUp   6
     };
     DecimalFormat pat(status);
     if(U_FAILURE(status)) {
@@ -515,11 +521,11 @@ void IntlTestDecimalFormatAPI::testRoundingInc(/*char *par*/)
       return;
     }
 
-    // With rounding now being handled by decNumber, we no longer 
+    // With rounding now being handled by decNumber, we no longer
     // set a rounding increment to enable non-default mode rounding,
     // checking of which was the original point of this test.
 
-    // set rounding mode with zero increment.  Rounding 
+    // set rounding mode with zero increment.  Rounding
     // increment should not be set by this operation
     pat.setRoundingMode((DecimalFormat::ERoundingMode)0);
     roundingInc = pat.getRoundingIncrement();
@@ -566,7 +572,7 @@ void IntlTestDecimalFormatAPI::TestScale()
         }
         pat.setAttribute(UNUM_SCALE,testData[i].inputScale,status);
         pat.format(testData[i].inputValue, resultStr);
-        message = UnicodeString("Unexpected output for ") + testData[i].inputValue + UnicodeString(" and scale ") + 
+        message = UnicodeString("Unexpected output for ") + testData[i].inputValue + UnicodeString(" and scale ") +
                   testData[i].inputScale + UnicodeString(". Got: ");
         exp = testData[i].expectedOutput;
         verifyString(message, resultStr, exp);
@@ -792,5 +798,22 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(FALSE, fd.isNegative);
 
 }
-    
-#endif /* #if !UCONFIG_NO_FORMATTING */
+
+void IntlTestDecimalFormatAPI::TestBadFastpath() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    LocalPointer<DecimalFormat> df(new DecimalFormat("###", status));
+    TEST_ASSERT_STATUS(status);
+
+    UnicodeString fmt;
+    fmt.remove();
+    assertEquals("Format 1234", "1234", df->format(1234, fmt));
+    df->setGroupingUsed(FALSE);
+    fmt.remove();
+    assertEquals("Format 1234", "1234", df->format(1234, fmt));
+    df->setGroupingUsed(TRUE);
+    fmt.remove();
+    assertEquals("Format 1234 w/ grouping", "1,234", df->format(1234, fmt));
+}
+
+#endif /* #if !UCONFIG_NO_FORMATTING */x
