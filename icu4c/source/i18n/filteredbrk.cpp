@@ -358,7 +358,7 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   if(revCount>0) {
     backwardsTrie.adoptInstead(builder->build(USTRINGTRIE_BUILD_FAST, status));
     if(U_FAILURE(status)) {
-      printf("Error %s building backwards\n", u_errorName(status));
+      //printf("Error %s building backwards\n", u_errorName(status));
       return NULL;
     }
   }
@@ -366,7 +366,7 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   if(fwdCount>0) {
     forwardsPartialTrie.adoptInstead(builder2->build(USTRINGTRIE_BUILD_FAST, status));
     if(U_FAILURE(status)) {
-      printf("Error %s building forwards\n", u_errorName(status));
+      //printf("Error %s building forwards\n", u_errorName(status));
       return NULL;
     }
   }
