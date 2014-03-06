@@ -14,150 +14,111 @@ import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 
 // Java porting note:
-//      ICU4C implementation contains dead code in many places.
+//
+//        ICU4C implementation contains dead code in many places.
 //      While porting ICU4C linear search implementation, these dead codes
 //      were not fully ported. The code block tagged by "// *** Boyer-Moore ***"
 //      are those dead code, still available in ICU4C.
 
-//TODO: ICU4C implementation does not seem to handle UCharacterIterator pointing
+//        ICU4C implementation does not seem to handle UCharacterIterator pointing
 //      a fragment of text properly. ICU4J uses CharacterIterator to navigate through
 //      the input text. We need to carefully review the code ported from ICU4C
 //      assuming the start index is 0.
 
-//TODO: ICU4C implementation initializes pattern.CE and pattern.PCE. It looks
+//        ICU4C implementation initializes pattern.CE and pattern.PCE. It looks
 //      CE is no longer used, except a few places checking CELength. It looks this
 //      is a left over from already disable Boyer-Moore search code. This Java implementation
 //      preserves the code, but we should clean them up later.
 
-//TODO: We need to update document to remove the term "Boyer-Moore search".
-
-/**
+/** 
+ *
+ * <tt>StringSearch</tt> is a {@link SearchIterator} that provides
+ * language-sensitive text searching based on the comparison rules defined
+ * in a {@link RuleBasedCollator} object.
+ * StringSearch ensures that language eccentricity can be
+ * handled, e.g. for the German collator, characters &szlig; and SS will be matched
+ * if case is chosen to be ignored.
+ * See the <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
+ * "ICU Collation Design Document"</a> for more information.
  * <p>
- * <code>StringSearch</code> is the concrete subclass of 
- * <code>SearchIterator</code> that provides language-sensitive text searching 
- * based on the comparison rules defined in a {@link RuleBasedCollator} object.
- * </p>
- * <p>
- * <code>StringSearch</code> uses a version of the fast Boyer-Moore search
- * algorithm that has been adapted to work with the large character set of
- * Unicode. Refer to 
- * <a href="http://www.icu-project.org/docs/papers/efficient_text_searching_in_java.html">
- * "Efficient Text Searching in Java"</a>, published in the 
- * <i>Java Report</i> on February, 1999, for further information on the 
- * algorithm.
- * </p>
- * <p>
- * Users are also strongly encouraged to read the section on 
- * <a href="http://www.icu-project.org/userguide/searchString.html">
- * String Search</a> and 
- * <a href="http://www.icu-project.org/userguide/Collate_Intro.html">
- * Collation</a> in the user guide before attempting to use this class.
- * </p>
- * <p>
- * String searching becomes a little complicated when accents are encountered at
- * match boundaries. If a match is found and it has preceding or trailing 
- * accents not part of the match, the result returned will include the 
- * preceding accents up to the first base character, if the pattern searched 
- * for starts an accent. Likewise, 
- * if the pattern ends with an accent, all trailing accents up to the first
- * base character will be included in the result.
- * </p>
- * <p>
- * For example, if a match is found in target text "a&#92;u0325&#92;u0300" for 
- * the pattern
- * "a&#92;u0325", the result returned by StringSearch will be the index 0 and
- * length 3 &lt;0, 3&gt;. If a match is found in the target 
- * "a&#92;u0325&#92;u0300" 
- * for the pattern "&#92;u0300", then the result will be index 1 and length 2 
- * <1, 2>.
- * </p>
- * <p>
- * In the case where the decomposition mode is on for the RuleBasedCollator,
- * all matches that starts or ends with an accent will have its results include 
- * preceding or following accents respectively. For example, if pattern "a" is
- * looked for in the target text "&aacute;&#92;u0325", the result will be
- * index 0 and length 2 &lt;0, 2&gt;.
- * </p>
- * <p>
- * The StringSearch class provides two options to handle accent matching 
- * described below:
- * </p>
- * <p>
- * Let S' be the sub-string of a text string S between the offsets start and 
- * end &lt;start, end&gt;.
+ * There are 2 match options for selection:<br>
+ * Let S' be the sub-string of a text string S between the offsets start and
+ * end [start, end].
  * <br>
- * A pattern string P matches a text string S at the offsets &lt;start, 
- * length&gt; 
- * <br>
+ * A pattern string P matches a text string S at the offsets [start, end]
  * if
  * <pre> 
- * option 1. P matches some canonical equivalent string of S'. Suppose the 
- *           RuleBasedCollator used for searching has a collation strength of 
- *           TERTIARY, all accents are non-ignorable. If the pattern 
- *           "a&#92;u0300" is searched in the target text 
- *           "a&#92;u0325&#92;u0300", 
- *           a match will be found, since the target text is canonically 
- *           equivalent to "a&#92;u0300&#92;u0325"
- * option 2. P matches S' and if P starts or ends with a combining mark, 
- *           there exists no non-ignorable combining mark before or after S' 
- *           in S respectively. Following the example above, the pattern 
- *           "a&#92;u0300" will not find a match in "a&#92;u0325&#92;u0300", 
- *           since
- *           there exists a non-ignorable accent '&#92;u0325' in the middle of 
- *           'a' and '&#92;u0300'. Even with a target text of 
- *           "a&#92;u0300&#92;u0325" a match will not be found because of the 
- *           non-ignorable trailing accent &#92;u0325.
+ * option 1. Some canonical equivalent of P matches some canonical equivalent
+ *           of S'
+ * option 2. P matches S' and if P starts or ends with a combining mark,
+ *           there exists no non-ignorable combining mark before or after S?
+ *           in S respectively.
  * </pre>
- * Option 2. will be the default mode for dealing with boundary accents unless
- * specified via the API setCanonical(boolean).
- * One restriction is to be noted for option 1. Currently there are no 
- * composite characters that consists of a character with combining class > 0 
- * before a character with combining class == 0. However, if such a character 
- * exists in the future, the StringSearch may not work correctly with option 1
- * when such characters are encountered.
- * </p>
+ * Option 2. will be the default.
  * <p>
- * <tt>SearchIterator</tt> provides APIs to specify the starting position 
- * within the text string to be searched, e.g. <tt>setIndex</tt>,
- * <tt>preceding</tt> and <tt>following</tt>. Since the starting position will 
- * be set as it is specified, please take note that there are some dangerous 
- * positions which the search may render incorrect results:
+ * This search has APIs similar to that of other text iteration mechanisms 
+ * such as the break iterators in {@link BreakIterator}. Using these 
+ * APIs, it is easy to scan through text looking for all occurrences of 
+ * a given pattern. This search iterator allows changing of direction by 
+ * calling a {@link #reset} followed by a {@link #next} or {@link #previous}.
+ * Though a direction change can occur without calling {@link #reset} first,
+ * this operation comes with some speed penalty.
+ * Match results in the forward direction will match the result matches in
+ * the backwards direction in the reverse order
+ * <p>
+ * {@link SearchIterator} provides APIs to specify the starting position
+ * within the text string to be searched, e.g. {@link SearchIterator#setIndex setIndex},
+ * {@link SearchIterator#preceding preceding} and {@link SearchIterator#following following}. Since the
+ * starting position will be set as it is specified, please take note that
+ * there are some danger points which the search may render incorrect
+ * results:
  * <ul>
- * <li> The midst of a substring that requires decomposition.
+ * <li> The midst of a substring that requires normalization.
  * <li> If the following match is to be found, the position should not be the
- *      second character which requires to be swapped with the preceding 
- *      character. Vice versa, if the preceding match is to be found, 
- *      position to search from should not be the first character which 
+ *      second character which requires to be swapped with the preceding
+ *      character. Vice versa, if the preceding match is to be found,
+ *      position to search from should not be the first character which
  *      requires to be swapped with the next character. E.g certain Thai and
  *      Lao characters require swapping.
- * <li> If a following pattern match is to be found, any position within a 
- *      contracting sequence except the first will fail. Vice versa if a 
- *      preceding pattern match is to be found, a invalid starting point 
+ * <li> If a following pattern match is to be found, any position within a
+ *      contracting sequence except the first will fail. Vice versa if a
+ *      preceding pattern match is to be found, a invalid starting point
  *      would be any character within a contracting sequence except the last.
  * </ul>
- * </p>
  * <p>
- * Though collator attributes will be taken into consideration while 
- * performing matches, there are no APIs provided in StringSearch for setting 
- * and getting the attributes. These attributes can be set by getting the 
- * collator from <tt>getCollator</tt> and using the APIs in 
- * <tt>com.ibm.icu.text.Collator</tt>. To update StringSearch to the new 
- * collator attributes, <tt>reset()</tt> or 
- * <tt>setCollator(RuleBasedCollator)</tt> has to be called.
- * </p>
+ * A {@link BreakIterator} can be used if only matches at logical breaks are desired.
+ * Using a {@link BreakIterator} will only give you results that exactly matches the
+ * boundaries given by the {@link BreakIterator}. For instance the pattern "e" will
+ * not be found in the string "\u00e9" if a character break iterator is used.
  * <p>
- * Consult the 
- * <a href="http://www.icu-project.org/userguide/searchString.html">
- * String Search</a> user guide and the <code>SearchIterator</code> 
- * documentation for more information and examples of use.
- * </p>
+ * Options are provided to handle overlapping matches.
+ * E.g. In English, overlapping matches produces the result 0 and 2
+ * for the pattern "abab" in the text "ababab", where else mutually
+ * exclusive matches only produce the result of 0.
  * <p>
- * This class is not subclassable
+ * Though collator attributes will be taken into consideration while
+ * performing matches, there are no APIs here for setting and getting the
+ * attributes. These attributes can be set by getting the collator
+ * from {@link #getCollator} and using the APIs in {@link RuleBasedCollator}.
+ * Lastly to update <tt>StringSearch</tt> to the new collator attributes,
+ * {@link #reset} has to be called.
+ * <p> 
+ * Restriction: <br>
+ * Currently there are no composite characters that consists of a
+ * character with combining class > 0 before a character with combining
+ * class == 0. However, if such a character exists in the future,
+ * <tt>StringSearch</tt> does not guarantee the results for option 1.
+ * <p>
+ * Consult the {@link SearchIterator} documentation for information on
+ * and examples of how to use instances of this class to implement text
+ * searching.
+ * <p>
+ * Note, <tt>StringSearch</tt> is not to be subclassed.
  * </p>
  * @see SearchIterator
  * @see RuleBasedCollator
  * @author Laura Werner, synwee
- * @stable ICU 2.0
+ * @since ICU 2.0
  */
 // internal notes: all methods do not guarantee the correct status of the 
 // characteriterator. the caller has to maintain the original index position
@@ -165,8 +126,9 @@ import com.ibm.icu.util.ULocale;
 public final class StringSearch extends SearchIterator {
     
     /**
-     * DONE is returned by previous() and next() after all valid matches have 
-     * been returned, and by first() and last() if there are no matches at all.
+     * DONE is returned by {@link #previous()} and {@link #next()} after all valid matches have 
+     * been returned, and by {@link SearchIterator#first() first()} and
+     * {@link SearchIterator#last() last()} if there are no matches at all.
      * @see #previous
      * @see #next
      * @stable ICU 2.0
@@ -198,19 +160,18 @@ public final class StringSearch extends SearchIterator {
     /**
      * Initializes the iterator to use the language-specific rules defined in 
      * the argument collator to search for argument pattern in the argument 
-     * target text. The argument breakiter is used to define logical matches.
+     * target text. The argument <code>breakiter</code> is used to define logical matches.
      * See super class documentation for more details on the use of the target 
-     * text and BreakIterator.
+     * text and {@link BreakIterator}.
      * @param pattern text to look for.
      * @param target target text to search for pattern. 
-     * @param collator RuleBasedCollator that defines the language rules
+     * @param collator {@link RuleBasedCollator} that defines the language rules
      * @param breakiter A {@link BreakIterator} that is used to determine the 
      *                boundaries of a logical match. This argument can be null.
-     * @exception IllegalArgumentException thrown when argument target is null,
+     * @throws IllegalArgumentException thrown when argument target is null,
      *            or of length 0
      * @see BreakIterator
      * @see RuleBasedCollator
-     * @see SearchIterator
      * @stable ICU 2.0
      */
     public StringSearch(String pattern, CharacterIterator target, RuleBasedCollator collator,
@@ -259,14 +220,13 @@ public final class StringSearch extends SearchIterator {
     /**
      * Initializes the iterator to use the language-specific rules defined in 
      * the argument collator to search for argument pattern in the argument 
-     * target text. No BreakIterators are set to test for logical matches.
+     * target text. No {@link BreakIterator}s are set to test for logical matches.
      * @param pattern text to look for.
      * @param target target text to search for pattern. 
-     * @param collator RuleBasedCollator that defines the language rules
-     * @exception IllegalArgumentException thrown when argument target is null,
+     * @param collator {@link RuleBasedCollator} that defines the language rules
+     * @throws IllegalArgumentException thrown when argument target is null,
      *            or of length 0
      * @see RuleBasedCollator
-     * @see SearchIterator
      * @stable ICU 2.0
      */
     public StringSearch(String pattern, CharacterIterator target, RuleBasedCollator collator) {
@@ -277,17 +237,12 @@ public final class StringSearch extends SearchIterator {
      * Initializes the iterator to use the language-specific rules and 
      * break iterator rules defined in the argument locale to search for 
      * argument pattern in the argument target text. 
-     * See super class documentation for more details on the use of the target 
-     * text and BreakIterator.
      * @param pattern text to look for.
      * @param target target text to search for pattern. 
      * @param locale locale to use for language and break iterator rules
-     * @exception IllegalArgumentException thrown when argument target is null,
+     * @throws IllegalArgumentException thrown when argument target is null,
      *            or of length 0. ClassCastException thrown if the collator for 
      *            the specified locale is not a RuleBasedCollator.
-     * @see BreakIterator
-     * @see RuleBasedCollator
-     * @see SearchIterator
      * @stable ICU 2.0
      */
     public StringSearch(String pattern, CharacterIterator target, Locale locale) {
@@ -299,11 +254,11 @@ public final class StringSearch extends SearchIterator {
      * break iterator rules defined in the argument locale to search for 
      * argument pattern in the argument target text. 
      * See super class documentation for more details on the use of the target 
-     * text and BreakIterator.
+     * text and {@link BreakIterator}.
      * @param pattern text to look for.
      * @param target target text to search for pattern. 
-     * @param locale ulocale to use for language and break iterator rules
-     * @exception IllegalArgumentException thrown when argument target is null,
+     * @param locale locale to use for language and break iterator rules
+     * @throws IllegalArgumentException thrown when argument target is null,
      *            or of length 0. ClassCastException thrown if the collator for 
      *            the specified locale is not a RuleBasedCollator.
      * @see BreakIterator
@@ -318,17 +273,12 @@ public final class StringSearch extends SearchIterator {
     /**
      * Initializes the iterator to use the language-specific rules and 
      * break iterator rules defined in the default locale to search for 
-     * argument pattern in the argument target text. 
-     * See super class documentation for more details on the use of the target 
-     * text and BreakIterator.
+     * argument pattern in the argument target text.
      * @param pattern text to look for.
      * @param target target text to search for pattern. 
-     * @exception IllegalArgumentException thrown when argument target is null,
+     * @throws IllegalArgumentException thrown when argument target is null,
      *            or of length 0. ClassCastException thrown if the collator for 
      *            the default locale is not a RuleBasedCollator.
-     * @see BreakIterator
-     * @see RuleBasedCollator
-     * @see SearchIterator
      * @stable ICU 2.0
      */
     public StringSearch(String pattern, String target) {
@@ -337,17 +287,14 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
+     * Gets the {@link RuleBasedCollator} used for the language rules.
      * <p>
-     * Gets the RuleBasedCollator used for the language rules.
+     * Since <tt>StringSearch</tt> depends on the returned {@link RuleBasedCollator}, any 
+     * changes to the {@link RuleBasedCollator} result should follow with a call to 
+     * either {@link #reset()} or {@link #setCollator(RuleBasedCollator)} to ensure the correct 
+     * search behavior.
      * </p>
-     * <p>
-     * Since StringSearch depends on the returned RuleBasedCollator, any 
-     * changes to the RuleBasedCollator result should follow with a call to 
-     * either StringSearch.reset() or 
-     * StringSearch.setCollator(RuleBasedCollator) to ensure the correct 
-     * search behaviour.
-     * </p>
-     * @return RuleBasedCollator used by this StringSearch
+     * @return {@link RuleBasedCollator} used by this <tt>StringSearch</tt>
      * @see RuleBasedCollator
      * @see #setCollator
      * @stable ICU 2.0
@@ -357,15 +304,11 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
+     * Sets the {@link RuleBasedCollator} to be used for language-specific searching.
      * <p>
-     * Sets the RuleBasedCollator to be used for language-specific searching.
-     * </p>
-     * <p>
-     * This method causes internal data such as Boyer-Moore shift tables
-     * to be recalculated, but the iterator's position is unchanged.
-     * </p>
-     * @param collator to use for this StringSearch
-     * @exception IllegalArgumentException thrown when collator is null
+     * The iterator's position will not be changed by this method.
+     * @param collator to use for this <tt>StringSearch</tt>
+     * @throws IllegalArgumentException thrown when collator is null
      * @see #getCollator
      * @stable ICU 2.0
      */
@@ -390,7 +333,7 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Returns the pattern for which StringSearch is searching for.
+     * Returns the pattern for which <tt>StringSearch</tt> is searching for.
      * @return the pattern searched for
      * @stable ICU 2.0
      */
@@ -399,13 +342,8 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * <p>
      * Set the pattern to search for.  
-     * </p>
-     * <p>
-     * This method causes internal data such as Boyer-Moore shift tables
-     * to be recalculated, but the iterator's position is unchanged.
-     * </p>
+     * The iterator's position will not be changed by this method.
      * @param pattern for searching
      * @see #getPattern
      * @exception IllegalArgumentException thrown if pattern is null or of
@@ -435,10 +373,8 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * <p>
      * Set the canonical match mode. See class documentation for details.
      * The default setting for this property is false.
-     * </p>
      * @param allowCanonical flag indicator if canonical matches are allowed
      * @see #isCanonical
      * @stable ICU 2.8
@@ -449,13 +385,7 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Set the target text to be searched. Text iteration will hence begin at 
-     * the start of the text string. This method is useful if you want to 
-     * re-use an iterator to search within a different body of text.
-     * @param text new text iterator to look for match, 
-     * @exception IllegalArgumentException thrown when text is null or has
-     *            0 length
-     * @see #getTarget
+     * {@inheritDoc}
      * @stable ICU 2.8
      */
     @Override
@@ -465,12 +395,7 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Return the index in the target text where the iterator is currently 
-     * positioned at. 
-     * If the iteration has gone past the end of the target text or past 
-     * the beginning for a backwards search, {@link #DONE} is returned.
-     * @return index in the target text where the iterator is currently 
-     *         positioned at
+     * {@inheritDoc}
      * @stable ICU 2.8
      */
     @Override
@@ -483,23 +408,7 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * <p>
-     * Sets the position in the target text which the next search will start 
-     * from to the argument. This method clears all previous states.
-     * </p>
-     * <p>
-     * This method takes the argument position and sets the position in the 
-     * target text accordingly, without checking if position is pointing to a 
-     * valid starting point to begin searching.
-     * </p>
-     * <p>
-     * Search positions that may render incorrect results are highlighted in 
-     * the class documentation.
-     * </p>
-     * @param position index to start next search from.
-     * @exception IndexOutOfBoundsException thrown if argument position is out
-     *            of the target text range.
-     * @see #getIndex
+     * {@inheritDoc}
      * @stable ICU 2.8
      */
     @Override
@@ -513,19 +422,7 @@ public final class StringSearch extends SearchIterator {
     }
 
     /** 
-     * <p>
-     * Resets the search iteration. All properties will be reset to the 
-     * default value.
-     * </p>
-     * <p>
-     * Search will begin at the start of the target text if a forward iteration 
-     * is initiated before a backwards iteration. Otherwise if a 
-     * backwards iteration is initiated before a forwards iteration, the search 
-     * will begin at the end of the target text.
-     * </p>
-     * <p>
-     * Canonical match option will be reset to false, ie an exact match.
-     * </p>
+     * {@inheritDoc}
      * @stable ICU 2.8
      */
     @Override
@@ -581,17 +478,7 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * <p>
-     * Concrete method to provide the mechanism 
-     * for finding the next <b>forwards</b> match in the target text.
-     * See super class documentation for its use.
-     * </p>  
-     * @param position index in the target text at which the forwards search 
-     *        should begin.
-     * @return the starting index of the next forwards match if found, DONE 
-     *         otherwise
-     * @see #handlePrevious(int)
-     * @see #DONE
+     * {@inheritDoc}
      * @stable ICU 2.8
      */
     @Override
@@ -641,17 +528,7 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * <p>
-     * Concrete method to provide the mechanism 
-     * for finding the next <b>backwards</b> match in the target text.
-     * See super class documentation for its use.
-     * </p>  
-     * @param position index in the target text at which the backwards search 
-     *        should begin.
-     * @return the starting index of the next backwards match if found, DONE 
-     *         otherwise
-     * @see #handleNext(int)
-     * @see #DONE
+     * {@inheritDoc}
      * @stable ICU 2.8
      */
     @Override
