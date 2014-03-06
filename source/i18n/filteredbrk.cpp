@@ -14,6 +14,8 @@
 #include <set>
 #include <string>
 #include <functional>
+#include "uresimp.h"
+#include "ubrkimpl.h"
 
 U_NAMESPACE_BEGIN
 
@@ -230,8 +232,25 @@ SimpleFilteredBreakIteratorBuilder::~SimpleFilteredBreakIteratorBuilder()
 SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder(const Locale &fromLocale, UErrorCode &status)
   : fSet()
 {
-  // TODO: load, set
-  status = U_UNSUPPORTED_ERROR;
+  if(U_SUCCESS(status)) {
+    LocalUResourceBundlePointer b(ures_open(U_ICUDATA_BRKITR, fromLocale.getBaseName(), &status));
+    LocalUResourceBundlePointer exceptions(ures_getByKeyWithFallback(b.getAlias(), "exceptions", NULL, &status));
+    LocalUResourceBundlePointer breaks(ures_getByKeyWithFallback(exceptions.getAlias(), "SentenceBreak", NULL, &status));
+    if(U_FAILURE(status)) return; // leaves the builder empty, if you try to use it.
+
+    LocalUResourceBundlePointer strs;
+    UErrorCode subStatus = status;
+    do {
+      strs.adoptInstead(ures_getNextResource(breaks.getAlias(), strs.orphan(), &subStatus));
+      if(strs.isValid() && U_SUCCESS(subStatus)) {
+        UnicodeString str(ures_getUnicodeString(strs.getAlias(), &status));
+        suppressBreakAfter(str, status); // load the string
+      }
+    } while (strs.isValid() && U_SUCCESS(subStatus));
+    if(U_FAILURE(subStatus)&&subStatus!=U_INDEX_OUTOFBOUNDS_ERROR&&U_SUCCESS(status)) {
+      status = subStatus;
+    }
+  }
 }
 
 SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder()
@@ -339,7 +358,7 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   if(revCount>0) {
     backwardsTrie.adoptInstead(builder->build(USTRINGTRIE_BUILD_FAST, status));
     if(U_FAILURE(status)) {
-      //if(debug) u_printf("Error %s building backwards\n", u_errorName(status));
+      printf("Error %s building backwards\n", u_errorName(status));
       return NULL;
     }
   }
@@ -347,7 +366,7 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   if(fwdCount>0) {
     forwardsPartialTrie.adoptInstead(builder2->build(USTRINGTRIE_BUILD_FAST, status));
     if(U_FAILURE(status)) {
-      //if(debug) u_printf("Error %s building forwards\n", u_errorName(status));
+      printf("Error %s building forwards\n", u_errorName(status));
       return NULL;
     }
   }
