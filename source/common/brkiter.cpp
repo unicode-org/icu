@@ -1,10 +1,10 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and
+* Copyright (C) 1997-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
-* File TXTBDRY.CPP
+* File brkiter.cpp
 *
 * Modification History:
 *
@@ -459,6 +459,11 @@ int32_t BreakIterator::getRuleStatusVec(int32_t *fillInVec, int32_t capacity, UE
     }
     *fillInVec = 0;
     return 1;
+}
+
+BreakIterator::BreakIterator (const Locale& valid, const Locale& actual) {
+  U_LOCALE_BASED(locBased, (*this));
+  locBased.setLocaleIDs(valid, actual);
 }
 
 U_NAMESPACE_END
