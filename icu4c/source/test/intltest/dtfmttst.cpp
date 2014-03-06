@@ -4052,6 +4052,7 @@ void DateFormatTest::TestContext()
 
 // test item for a particular locale + calendar and date format
 typedef struct {
+    int32_t era;
     int32_t year;
     int32_t month;
     int32_t day;
@@ -4064,6 +4065,7 @@ typedef struct {
 typedef struct {
     const char * locale; // with calendar
     DateFormat::EStyle style;
+    UnicodeString pattern; // ignored unless style == DateFormat::kNone
     const CalAndFmtTestItem *caftItems;
 } TestNonGregoItem;
 
@@ -4071,23 +4073,62 @@ void DateFormatTest::TestNonGregoFmtParse()
 {
     // test items for he@calendar=hebrew, long date format
     const CalAndFmtTestItem cafti_he_hebrew_long[] = {
-        { 4999, 12, 29, 12, 0, CharsToUnicodeString("\\u05DB\\u05F4\\u05D8 \\u05D1\\u05D0\\u05DC\\u05D5\\u05DC \\u05D3\\u05F3\\u05EA\\u05EA\\u05E7\\u05E6\\u05F4\\u05D8") },
-        { 5100,  0,  1, 12, 0, CharsToUnicodeString("\\u05D0\\u05F3 \\u05D1\\u05EA\\u05E9\\u05E8\\u05D9 \\u05E7\\u05F3") },
-        { 5774,  5,  1, 12, 0, CharsToUnicodeString("\\u05D0\\u05F3 \\u05D1\\u05D0\\u05D3\\u05E8 \\u05D0\\u05F3 \\u05EA\\u05E9\\u05E2\\u05F4\\u05D3") },
-        { 5999, 12, 29, 12, 0, CharsToUnicodeString("\\u05DB\\u05F4\\u05D8 \\u05D1\\u05D0\\u05DC\\u05D5\\u05DC \\u05EA\\u05EA\\u05E7\\u05E6\\u05F4\\u05D8") },
-        { 6100,  0,  1, 12, 0, CharsToUnicodeString("\\u05D0\\u05F3 \\u05D1\\u05EA\\u05E9\\u05E8\\u05D9 \\u05D5\\u05F3\\u05E7\\u05F3") },
-        {    0,  0,  0,  0, 0, UnicodeString("") } // terminator
+        {  0, 4999, 12, 29, 12, 0, CharsToUnicodeString("\\u05DB\\u05F4\\u05D8 \\u05D1\\u05D0\\u05DC\\u05D5\\u05DC \\u05D3\\u05F3\\u05EA\\u05EA\\u05E7\\u05E6\\u05F4\\u05D8") },
+        {  0, 5100,  0,  1, 12, 0, CharsToUnicodeString("\\u05D0\\u05F3 \\u05D1\\u05EA\\u05E9\\u05E8\\u05D9 \\u05E7\\u05F3") },
+        {  0, 5774,  5,  1, 12, 0, CharsToUnicodeString("\\u05D0\\u05F3 \\u05D1\\u05D0\\u05D3\\u05E8 \\u05D0\\u05F3 \\u05EA\\u05E9\\u05E2\\u05F4\\u05D3") },
+        {  0, 5999, 12, 29, 12, 0, CharsToUnicodeString("\\u05DB\\u05F4\\u05D8 \\u05D1\\u05D0\\u05DC\\u05D5\\u05DC \\u05EA\\u05EA\\u05E7\\u05E6\\u05F4\\u05D8") },
+        {  0, 6100,  0,  1, 12, 0, CharsToUnicodeString("\\u05D0\\u05F3 \\u05D1\\u05EA\\u05E9\\u05E8\\u05D9 \\u05D5\\u05F3\\u05E7\\u05F3") },
+        {  0,    0,  0,  0,  0, 0, UnicodeString("") } // terminator
+    };
+    const CalAndFmtTestItem cafti_zh_chinese_custU[] = {
+        { 78,   31,  0,  1, 12, 0, CharsToUnicodeString("2014\\u7532\\u5348\\u5E74\\u6B63\\u67081") },
+        { 77,   31,  0,  1, 12, 0, CharsToUnicodeString("1954\\u7532\\u5348\\u5E74\\u6B63\\u67081") },
+        {  0,    0,  0,  0,  0, 0, UnicodeString("") } // terminator
+    };
+    const CalAndFmtTestItem cafti_zh_chinese_custNoU[] = {
+        { 78,   31,  0,  1, 12, 0, CharsToUnicodeString("2014\\u5E74\\u6B63\\u67081") },
+        { 77,   31,  0,  1, 12, 0, CharsToUnicodeString("1954\\u5E74\\u6B63\\u67081") },
+        {  0,    0,  0,  0,  0, 0, UnicodeString("") } // terminator
+    };
+    const CalAndFmtTestItem cafti_ja_japanese_custGy[] = {
+        {235,   26,  2,  5, 12, 0, CharsToUnicodeString("2014(\\u5E73\\u621026)\\u5E743\\u67085\\u65E5") },
+        {234,   60,  2,  5, 12, 0, CharsToUnicodeString("1985(\\u662D\\u548C60)\\u5E743\\u67085\\u65E5") },
+        {  0,    0,  0,  0,  0, 0, UnicodeString("") } // terminator
+    };
+    const CalAndFmtTestItem cafti_ja_japanese_custNoGy[] = {
+        {235,   26,  2,  5, 12, 0, CharsToUnicodeString("2014\\u5E743\\u67085\\u65E5") },
+        {234,   60,  2,  5, 12, 0, CharsToUnicodeString("1985\\u5E743\\u67085\\u65E5") },
+        {  0,    0,  0,  0,  0, 0, UnicodeString("") } // terminator
+    };
+    const CalAndFmtTestItem cafti_en_islamic_cust[] = {
+        {  0, 1384,  0,  1, 12, 0, UnicodeString("1 Muh. 1384 AH, 1964") },
+        {  0, 1436,  0,  1, 12, 0, UnicodeString("1 Muh. 1436 AH, 2014") },
+        {  0, 1487,  0,  1, 12, 0, UnicodeString("1 Muh. 1487 AH, 2064") },
+        {  0,    0,  0,  0,  0, 0, UnicodeString("") } // terminator
     };
     // overal test items
     const TestNonGregoItem items[] = {
-        { "he@calendar=hebrew", DateFormat::kLong, cafti_he_hebrew_long },
-        { NULL, DateFormat::kNone, NULL } // terminator
+        { "he@calendar=hebrew",   DateFormat::kLong, UnicodeString(""),                 cafti_he_hebrew_long },
+        { "zh@calendar=chinese",  DateFormat::kNone, CharsToUnicodeString("rU\\u5E74MMMd"),                cafti_zh_chinese_custU },
+        { "zh@calendar=chinese",  DateFormat::kNone, CharsToUnicodeString("r\\u5E74MMMd"),                 cafti_zh_chinese_custNoU },
+        { "ja@calendar=japanese", DateFormat::kNone, CharsToUnicodeString("r(Gy)\\u5E74M\\u6708d\\u65E5"), cafti_ja_japanese_custGy },
+        { "ja@calendar=japanese", DateFormat::kNone, CharsToUnicodeString("r\\u5E74M\\u6708d\\u65E5"),     cafti_ja_japanese_custNoGy },
+        { "en@calendar=islamic",  DateFormat::kNone, UnicodeString("d MMM y G, r"),     cafti_en_islamic_cust },
+        { NULL, DateFormat::kNone, UnicodeString(""), NULL } // terminator
     };
     const TestNonGregoItem * itemPtr;
     for (itemPtr = items; itemPtr->locale != NULL; itemPtr++) {
         Locale locale = Locale::createFromName(itemPtr->locale);
-        DateFormat * dfmt = DateFormat::createDateInstance(itemPtr->style, locale);
-        if (dfmt == NULL) {
+        DateFormat * dfmt = NULL;
+        UErrorCode status = U_ZERO_ERROR;
+        if (itemPtr->style != DateFormat::kNone) {
+            dfmt = DateFormat::createDateInstance(itemPtr->style, locale);
+        } else {
+            dfmt = new SimpleDateFormat(itemPtr->pattern, locale, status);
+        }
+        if (U_FAILURE(status)) {
+            dataerrln("new SimpleDateFormat fails for locale %s", itemPtr->locale);
+        } else  if (dfmt == NULL) {
             dataerrln("DateFormat::createDateInstance fails for locale %s", itemPtr->locale);
         } else {
             Calendar * cal = (dfmt->getCalendar())->clone();
@@ -4097,6 +4138,7 @@ void DateFormatTest::TestNonGregoFmtParse()
                 const CalAndFmtTestItem * caftItemPtr;
                 for (caftItemPtr = itemPtr->caftItems; caftItemPtr->year != 0; caftItemPtr++) {
                     cal->clear();
+                    cal->set(UCAL_ERA,    caftItemPtr->era);
                     cal->set(UCAL_YEAR,   caftItemPtr->year);
                     cal->set(UCAL_MONTH,  caftItemPtr->month);
                     cal->set(UCAL_DATE,   caftItemPtr->day);
@@ -4112,13 +4154,16 @@ void DateFormatTest::TestNonGregoFmtParse()
                         // formatted OK, try parse
                         ParsePosition ppos(0);
                         dfmt->parse(result, *cal, ppos);
-                        UErrorCode status = U_ZERO_ERROR;
+                        status = U_ZERO_ERROR;
+                        int32_t era = cal->get(UCAL_ERA, status);
                         int32_t year = cal->get(UCAL_YEAR, status);
                         int32_t month = cal->get(UCAL_MONTH, status);
                         int32_t day = cal->get(UCAL_DATE, status);
-                        if ( U_FAILURE(status) || ppos.getIndex() < result.length() || year != caftItemPtr->year || month != caftItemPtr->month || day != caftItemPtr->day ) {
-                            errln( UnicodeString("FAIL: date parse for locale ") + UnicodeString(itemPtr->locale) + ", style " + itemPtr->style +
-                                ", string \"" + result + "\", expected " + caftItemPtr->year +"-"+caftItemPtr->month+"-"+caftItemPtr->day + ", got pos " +
+                        if ( U_FAILURE(status) || ppos.getIndex() < result.length() || era != caftItemPtr->era ||
+                                year != caftItemPtr->year || month != caftItemPtr->month || day != caftItemPtr->day ) {
+                            errln( UnicodeString("FAIL: date parse for locale ") + UnicodeString(itemPtr->locale) +
+                                ", style " + itemPtr->style + ", string \"" + result + "\", expected " +
+                                caftItemPtr->era +":"+caftItemPtr->year +"-"+caftItemPtr->month+"-"+caftItemPtr->day + ", got pos " +
                                 ppos.getIndex() + " " + year +"-"+month+"-"+day + " status " + UnicodeString(u_errorName(status)) );
                         }
                     }
