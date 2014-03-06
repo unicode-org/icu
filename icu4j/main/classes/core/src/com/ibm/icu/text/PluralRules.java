@@ -1966,6 +1966,7 @@ public class PluralRules implements Serializable {
      * values is unlimited.
      *
      * @param keyword the keyword
+     * @param type the type of samples requested, INTEGER or DECIMAL
      * @return the values that trigger this keyword, or null.  The returned collection
      * is immutable. It will be empty if the keyword is not defined.
      * 
@@ -1982,7 +1983,7 @@ public class PluralRules implements Serializable {
     }
 
     /**
-     * Returns a list of values for which select() would return that keyword,
+     * Returns a list of integer values for which select() would return that keyword,
      * or null if the keyword is not defined. The returned collection is unmodifiable.
      * The returned list is not complete, and there might be additional values that
      * would return the keyword.
@@ -2004,6 +2005,7 @@ public class PluralRules implements Serializable {
      * IF there are samples for the other sampleType.
      *
      * @param keyword the keyword to test
+     * @param sampleType the type of samples requested, INTEGER or DECIMAL
      * @return a list of values matching the keyword.
      * @internal
      * @deprecated ICU internal only
@@ -2069,6 +2071,7 @@ public class PluralRules implements Serializable {
      * would return the keyword.
      *
      * @param keyword the keyword to test
+     * @param sampleType the type of samples requested, INTEGER or DECIMAL
      * @return a list of values matching the keyword.
      * @internal
      * @deprecated This API is ICU internal only.
@@ -2210,6 +2213,8 @@ public class PluralRules implements Serializable {
      *            checking against the keyword values.
      * @param explicits
      *            a set of Doubles that are used explicitly (eg [=0], "[=1]"). May be empty or null.
+     * @param sampleType
+     *            request KeywordStatus relative to INTEGER or DECIMAL values
      * @param uniqueValue
      *            If non null, set to the unique value.
      * @return the KeywordStatus
