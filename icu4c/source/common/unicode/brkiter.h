@@ -623,7 +623,8 @@ protected:
     BreakIterator();
     /** @internal */
     BreakIterator (const BreakIterator &other) : UObject(other) {}
-
+    /** @internal */
+    BreakIterator (const Locale& valid, const Locale& actual);
 private:
 
     /** @internal */

@@ -10,7 +10,7 @@
 
 #include "unicode/brkiter.h"
 
-#if !UCONFIG_NO_BREAK_ITERATION
+#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
 
 U_NAMESPACE_BEGIN
 
