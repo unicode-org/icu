@@ -21,7 +21,6 @@ U_NAMESPACE_BEGIN
 
 using namespace std;
 
-static const UBool debug = FALSE;
 static const int32_t kPARTIAL = (1<<0); //< partial - need to run through forward trie
 static const int32_t kMATCH   = (1<<1); //< exact match - skip this one.
 static const int32_t kSuppressInReverse = (1<<0);
@@ -261,14 +260,17 @@ SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder()
 UBool
 SimpleFilteredBreakIteratorBuilder::suppressBreakAfter(const UnicodeString& exception, UErrorCode& status)
 {
+  if( U_FAILURE(status) ) return FALSE;
   return fSet.insert(exception).second;
 }
 
 UBool
 SimpleFilteredBreakIteratorBuilder::unsuppressBreakAfter(const UnicodeString& exception, UErrorCode& status)
 {
+  if( U_FAILURE(status) ) return FALSE;
   return ((fSet.erase(exception)) != 0);
 }
+
 BreakIterator *
 SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UErrorCode& status) {
   LocalPointer<BreakIterator> adopt(adoptBreakIterator);
