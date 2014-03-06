@@ -1630,26 +1630,28 @@ void DateFormatRegressionTest::TestT10619(void) {
         const TestDateFormatLeniencyItem * itemPtr;
         for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
                                             
-           Locale locale = Locale::createFromName(itemPtr->locale);
-           status = U_ZERO_ERROR;
-           ParsePosition pos(0);
-           SimpleDateFormat * sdmft = new SimpleDateFormat(itemPtr->pattern, locale, status);
-           if (U_FAILURE(status)) {
-               dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
-               continue;
-           }
-           sdmft->setLenient(itemPtr->leniency);
-           sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
-           /*UDate d = */sdmft->parse(itemPtr->parseString, pos);
+            Locale locale = Locale::createFromName(itemPtr->locale);
+            status = U_ZERO_ERROR;
+            ParsePosition pos(0);
+            SimpleDateFormat * sdmft = new SimpleDateFormat(itemPtr->pattern, locale, status);
+            if (U_FAILURE(status)) {
+                dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
+                continue;
+            }
+            sdmft->setLenient(itemPtr->leniency);
+            sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
+            /*UDate d = */sdmft->parse(itemPtr->parseString, pos);
 
-           delete sdmft;
-           if(pos.getErrorIndex() > -1)
-               if(itemPtr->expectedResult.length() != 0) {
-                 errln("error: unexpected error - " + itemPtr->parseString + " - error index " + pos.getErrorIndex() + " - leniency " + itemPtr->leniency);
-                 continue;
-               } else {
-                 continue;
-               }
+            delete sdmft;
+            if(pos.getErrorIndex() > -1) {
+                if(itemPtr->expectedResult.length() != 0) {
+                   errln("error: unexpected error - " + itemPtr->parseString + " - error index " + pos.getErrorIndex() +
+                           " - leniency " + itemPtr->leniency);
+                   continue;
+                } else {
+                   continue;
+                }
+            }
         }
     }
     delete cal;
