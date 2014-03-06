@@ -1310,6 +1310,84 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
     prtbrks(filteredBI.getAlias(), text, *this);
   }
 
+
+  {
+    logln("Constructing English builder\n");
+    builder.adoptInstead(FilteredBreakIteratorBuilder::createInstance(Locale::getEnglish(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    logln("Constructing base BI\n");
+    baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    logln("unsuppressing 'Capt'");
+    TEST_ASSERT(TRUE == builder->unsuppressBreakAfter(ABBR_CAPT, status));
+
+    logln("Building new BI\n");
+    filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    if(filteredBI.isValid()) {
+      logln("Testing:");
+      filteredBI->setText(text);
+      TEST_ASSERT(84 == filteredBI->next());
+      TEST_ASSERT(90 == filteredBI->next());
+      TEST_ASSERT(278 == filteredBI->next());
+      filteredBI->first();
+      prtbrks(filteredBI.getAlias(), text, *this);
+    }
+  }
+
+
+  {
+    logln("Constructing English builder\n");
+    builder.adoptInstead(FilteredBreakIteratorBuilder::createInstance(Locale::getEnglish(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    logln("Constructing base BI\n");
+    baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    logln("Building new BI\n");
+    filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    if(filteredBI.isValid()) {
+      logln("Testing:");
+      filteredBI->setText(text);
+      TEST_ASSERT(84 == filteredBI->next());
+      TEST_ASSERT(278 == filteredBI->next());
+      filteredBI->first();
+      prtbrks(filteredBI.getAlias(), text, *this);
+    }
+  }
+
+#if 0
+  // reenable once french is in
+  {
+    logln("Constructing French builder");
+    builder.adoptInstead(FilteredBreakIteratorBuilder::createInstance(Locale::getFrench(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    logln("Constructing base BI\n");
+    baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getFrench(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    logln("Building new BI\n");
+    filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    if(filteredBI.isValid()) {
+      logln("Testing:");
+      filteredBI->setText(text);
+      TEST_ASSERT(20 == filteredBI->next());
+      TEST_ASSERT(84 == filteredBI->next());
+      filteredBI->first();
+      prtbrks(filteredBI.getAlias(), text, *this);
+    }
+  }
+#endif
+
 #else
   logln("Skipped- not: !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING");
 #endif
