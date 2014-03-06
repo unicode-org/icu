@@ -892,21 +892,23 @@ public class DateIntervalFormat extends UFormat {
 
     /**
      * Set the TimeZone for the calendar used by this DateIntervalFormat object.
-     * @param zone The new TimeZone to use.
+     * @param zone The new TimeZone, will be cloned for use by this DateIntervalFormat.
      * @draft ICU 53
      */
     public void setTimeZone(TimeZone zone)
     {
+        // zone is cloned once for all three usages below:
+        TimeZone zoneToSet = (TimeZone)zone.clone();
         if (fDateFormat != null) {
-            fDateFormat.setTimeZone(zone);
+            fDateFormat.setTimeZone(zoneToSet);
         }
         // fDateFormat has the master calendar for the DateIntervalFormat;
         // fFromCalendar and fToCalendar are internal work clones of that calendar.
         if (fFromCalendar != null) {
-            fFromCalendar.setTimeZone(zone);
+            fFromCalendar.setTimeZone(zoneToSet);
         }
         if (fToCalendar != null) {
-            fToCalendar.setTimeZone(zone);
+            fToCalendar.setTimeZone(zoneToSet);
         }
     }
 
