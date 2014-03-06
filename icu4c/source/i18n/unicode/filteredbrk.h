@@ -30,7 +30,7 @@ U_NAMESPACE_BEGIN
  *
  * @internal technology preview
  */
-class U_COMMON_API FilteredBreakIteratorBuilder : public UObject {
+class U_I18N_API FilteredBreakIteratorBuilder : public UObject {
  public:
   /**
    *  destructor.

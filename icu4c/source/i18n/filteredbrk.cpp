@@ -11,8 +11,6 @@
 
 #include <unicode/ucharstriebuilder.h>
 
-#include <string.h>
-#include <strings.h>
 #include <set>
 #include <string>
 #include <functional>
@@ -42,7 +40,7 @@ private:
   /* -- subclass interface -- */
 public:
   /* -- cloning and other subclass stuff -- */
-  virtual BreakIterator *  createBufferClone(void */*stackBuffer*/,
+  virtual BreakIterator *  createBufferClone(void * /*stackBuffer*/,
                                              int32_t &/*BufferSize*/,
                                              UErrorCode &status) {
     // for now - always deep clone
@@ -199,6 +197,8 @@ int32_t ULISentenceBreakIterator::next() {
 
 U_NAMESPACE_END
 
+#if 0
+// Would improve performance - but, platform issues.
 // for the 'set'
 namespace std {
   template <> struct hash<icu::UnicodeString> {
@@ -207,6 +207,7 @@ namespace std {
     }
   };
 }
+#endif
 
 U_NAMESPACE_BEGIN
 
