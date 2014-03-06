@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2011 International Business Machines
+*   Copyright (C) 2001-2014 International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *  FILE NAME : ustream.h
@@ -25,6 +25,8 @@
  * operator<< and operator>> for UnicodeString manipulation with the
  * C++ I/O stream API.
  */
+
+namespace std { class type_info; } // WORKAROUND: http://llvm.org/bugs/show_bug.cgi?id=13364 
 
 #if U_IOSTREAM_SOURCE >= 199711
 #if (__GNUC__ == 2)
