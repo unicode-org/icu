@@ -501,6 +501,9 @@
     <ClCompile Include="uregion.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="filteredbrk.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bocsu.cpp">
@@ -1068,9 +1071,6 @@
     <CustomBuild Include="unicode\rbtz.h">
       <Filter>formatting</Filter>
     </CustomBuild>
-    <ClInclude Include="unicode\reldatefmt.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
     <CustomBuild Include="unicode\selfmt.h">
       <Filter>formatting</Filter>
     </CustomBuild>
@@ -1185,5 +1185,16 @@
     <CustomBuild Include="unicode\uregion.h">
       <Filter>misc</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\reldatefmt.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\uformattable.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="unicode\filteredbrk.h">
+      <Filter>misc</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
