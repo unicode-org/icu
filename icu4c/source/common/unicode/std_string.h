@@ -27,7 +27,10 @@
 
 #if U_HAVE_STD_STRING
 
+#if defined(_MSC_VER) && _HAS_EXCEPTIONS == 0
+#else
 namespace std { class type_info; } // WORKAROUND: http://llvm.org/bugs/show_bug.cgi?id=13364
+#endif
 #include <string>
 
 #endif  // U_HAVE_STD_STRING
