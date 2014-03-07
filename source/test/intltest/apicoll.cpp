@@ -1518,7 +1518,9 @@ void CollationAPITest::TestVariableTopSetting() {
 
   UChar vt[256] = { 0 };
 
-  Collator *coll = Collator::createInstance(status);
+  // Use the root collator, not the default collator.
+  // This test fails with en_US_POSIX which tailors the dollar sign after 'A'.
+  Collator *coll = Collator::createInstance(Locale::getRoot(), status);
   if(U_FAILURE(status)) {
     delete coll;
     errcheckln(status, "Collator creation failed with error %s", u_errorName(status));
