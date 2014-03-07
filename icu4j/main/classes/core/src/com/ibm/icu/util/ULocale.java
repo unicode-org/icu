@@ -287,12 +287,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      */
     private String localeID;
 
-    // Cached locale fields.
-    private transient volatile String language_;
-    private transient volatile String script_;
-    private transient volatile String country_;
-    private transient volatile String variant_;
-
     /**
      * Cache the locale data container fields.
      * In future, we want to use them as the primary locale identifier storage.
@@ -898,14 +892,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public String getLanguage() {
-        if (language_ == null) {
-            synchronized (this) {
-                if (language_ == null) {
-                    language_ = getLanguage(localeID);
-                }
-            }
-        }
-        return language_;
+        return base().getLanguage();
     }
 
     /**
@@ -927,14 +914,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public String getScript() {
-        if (script_ == null) {
-            synchronized (this) {
-                if (script_ == null) {
-                    script_ = getScript(localeID);
-                }
-            }
-        }
-        return script_;
+        return base().getScript();
     }
 
     /**
@@ -956,14 +936,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public String getCountry() {
-        if (country_ == null) {
-            synchronized (this) {
-                if (country_ == null) {
-                    country_ = getCountry(localeID);
-                }
-            }
-        }
-        return country_;
+        return base().getRegion();
     }
 
     /**
@@ -985,14 +958,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public String getVariant() {
-        if (variant_ == null) {
-            synchronized (this) {
-                if (variant_ == null) {
-                    variant_ = getVariant(localeID);
-                }
-            }
-        }
-        return variant_;
+        return base().getVariant();
     }
 
     /**
@@ -3675,11 +3641,16 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     private BaseLocale base() {
         if (baseLocale == null) {
-            String language = getLanguage();
-            if (equals(ULocale.ROOT)) {
-                language = "";
+            String language, script, region, variant;
+            language = script = region = variant = "";
+            if (!equals(ULocale.ROOT)) {
+                LocaleIDParser lp = new LocaleIDParser(localeID);
+                language = lp.getLanguage();
+                script = lp.getScript();
+                region = lp.getCountry();
+                variant = lp.getVariant();
             }
-            baseLocale = BaseLocale.getInstance(language, getScript(), getCountry(), getVariant());
+            baseLocale = BaseLocale.getInstance(language, script, region, variant);
         }
         return baseLocale;
     }
