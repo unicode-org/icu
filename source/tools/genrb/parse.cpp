@@ -1839,22 +1839,22 @@ U_STRING_DECL(k_type_plugin_dependency,     "process(dependency)",       19);
 
 typedef enum EResourceType
 {
-    RT_UNKNOWN,
-    RT_STRING,
-    RT_BINARY,
-    RT_TABLE,
-    RT_TABLE_NO_FALLBACK,
-    RT_INTEGER,
-    RT_ARRAY,
-    RT_ALIAS,
-    RT_INTVECTOR,
-    RT_IMPORT,
-    RT_INCLUDE,
-    RT_PROCESS_UCA_RULES,
-    RT_PROCESS_COLLATION,
-    RT_PROCESS_TRANSLITERATOR,
-    RT_PROCESS_DEPENDENCY,
-    RT_RESERVED
+    RESTYPE_UNKNOWN,
+    RESTYPE_STRING,
+    RESTYPE_BINARY,
+    RESTYPE_TABLE,
+    RESTYPE_TABLE_NO_FALLBACK,
+    RESTYPE_INTEGER,
+    RESTYPE_ARRAY,
+    RESTYPE_ALIAS,
+    RESTYPE_INTVECTOR,
+    RESTYPE_IMPORT,
+    RESTYPE_INCLUDE,
+    RESTYPE_PROCESS_UCA_RULES,
+    RESTYPE_PROCESS_COLLATION,
+    RESTYPE_PROCESS_TRANSLITERATOR,
+    RESTYPE_PROCESS_DEPENDENCY,
+    RESTYPE_RESERVED
 } EResourceType;
 
 static struct {
@@ -1902,7 +1902,7 @@ void initParser()
 }
 
 static inline UBool isTable(enum EResourceType type) {
-    return (UBool)(type==RT_TABLE || type==RT_TABLE_NO_FALLBACK);
+    return (UBool)(type==RESTYPE_TABLE || type==RESTYPE_TABLE_NO_FALLBACK);
 }
 
 static enum EResourceType
@@ -1910,33 +1910,33 @@ parseResourceType(ParseState* state, UErrorCode *status)
 {
     struct UString        *tokenValue;
     struct UString        comment;
-    enum   EResourceType  result = RT_UNKNOWN;
+    enum   EResourceType  result = RESTYPE_UNKNOWN;
     uint32_t              line=0;
     ustr_init(&comment);
     expect(state, TOK_STRING, &tokenValue, &comment, &line, status);
 
     if (U_FAILURE(*status))
     {
-        return RT_UNKNOWN;
+        return RESTYPE_UNKNOWN;
     }
 
     *status = U_ZERO_ERROR;
 
     /* Search for normal types */
-    result=RT_UNKNOWN;
-    while ((result=(EResourceType)(result+1)) < RT_RESERVED) {
+    result=RESTYPE_UNKNOWN;
+    while ((result=(EResourceType)(result+1)) < RESTYPE_RESERVED) {
         if (u_strcmp(tokenValue->fChars, gResourceTypes[result].nameUChars) == 0) {
             break;
         }
     }
     /* Now search for the aliases */
     if (u_strcmp(tokenValue->fChars, k_type_int) == 0) {
-        result = RT_INTEGER;
+        result = RESTYPE_INTEGER;
     }
     else if (u_strcmp(tokenValue->fChars, k_type_bin) == 0) {
-        result = RT_BINARY;
+        result = RESTYPE_BINARY;
     }
-    else if (result == RT_RESERVED) {
+    else if (result == RESTYPE_RESERVED) {
         char tokenBuffer[1024];
         u_austrncpy(tokenBuffer, tokenValue->fChars, sizeof(tokenBuffer));
         tokenBuffer[sizeof(tokenBuffer) - 1] = 0;
@@ -1952,7 +1952,7 @@ static struct SResource *
 parseResource(ParseState* state, char *tag, const struct UString *comment, UErrorCode *status)
 {
     enum   ETokenType      token;
-    enum   EResourceType  resType = RT_UNKNOWN;
+    enum   EResourceType  resType = RESTYPE_UNKNOWN;
     ParseResourceFunction *parseFunction = NULL;
     struct UString        *tokenValue;
     uint32_t                 startline;
@@ -2001,7 +2001,7 @@ parseResource(ParseState* state, char *tag, const struct UString *comment, UErro
     }
 
 
-    if (resType == RT_UNKNOWN)
+    if (resType == RESTYPE_UNKNOWN)
     {
         /* No explicit type, so try to work it out.  At this point, we've read the first '{'.
         We could have any of the following:
@@ -2024,7 +2024,7 @@ parseResource(ParseState* state, char *tag, const struct UString *comment, UErro
 
         if (token == TOK_OPEN_BRACE || token == TOK_COLON ||token ==TOK_CLOSE_BRACE )
         {
-            resType = RT_ARRAY;
+            resType = RESTYPE_ARRAY;
         }
         else if (token == TOK_STRING)
         {
@@ -2037,10 +2037,10 @@ parseResource(ParseState* state, char *tag, const struct UString *comment, UErro
 
             switch (token)
             {
-            case TOK_COMMA:         resType = RT_ARRAY;  break;
-            case TOK_OPEN_BRACE:    resType = RT_TABLE;  break;
-            case TOK_CLOSE_BRACE:   resType = RT_STRING; break;
-            case TOK_COLON:         resType = RT_TABLE;  break;
+            case TOK_COMMA:         resType = RESTYPE_ARRAY;  break;
+            case TOK_OPEN_BRACE:    resType = RESTYPE_TABLE;  break;
+            case TOK_CLOSE_BRACE:   resType = RESTYPE_STRING; break;
+            case TOK_COLON:         resType = RESTYPE_TABLE;  break;
             default:
                 *status = U_INVALID_FORMAT_ERROR;
                 error(line, "Unexpected token after string, expected ',', '{' or '}'");
@@ -2055,7 +2055,7 @@ parseResource(ParseState* state, char *tag, const struct UString *comment, UErro
         }
 
         /* printf("Type guessed as %s\n", resourceNames[resType]); */
-    } else if(resType == RT_TABLE_NO_FALLBACK) {
+    } else if(resType == RESTYPE_TABLE_NO_FALLBACK) {
         *status = U_INVALID_FORMAT_ERROR;
         error(startline, "error: %s resource type not valid except on top bundle level", gResourceTypes[resType].nameChars);
         return NULL;
@@ -2141,13 +2141,13 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
         if(token==TOK_OPEN_BRACE)
         {
             *status=U_ZERO_ERROR;
-            bundleType=RT_TABLE;
+            bundleType=RESTYPE_TABLE;
         }
         else
         {
             /* neither colon nor open brace */
             *status=U_PARSE_ERROR;
-            bundleType=RT_UNKNOWN;
+            bundleType=RESTYPE_UNKNOWN;
             error(line, "parse error, did not find open-brace '{' or colon ':', stopped with %s", u_errorName(*status));
         }
     }
@@ -2158,7 +2158,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
         return NULL;
     }
 
-    if(bundleType==RT_TABLE_NO_FALLBACK) {
+    if(bundleType==RESTYPE_TABLE_NO_FALLBACK) {
         /*
          * Parse a top-level table with the table(nofallback) declaration.
          * This is the same as a regular table, but also sets the
