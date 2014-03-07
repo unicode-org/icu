@@ -901,7 +901,9 @@ public class CollationAPITest extends TestFmwk {
     }
 
     public void TestVariableTopSetting() {
-        RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance();
+        // Use the root collator, not the default collator.
+        // This test fails with en_US_POSIX which tailors the dollar sign after 'A'.
+        RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance(ULocale.ROOT);
 
         int oldVarTop = coll.getVariableTop();
 
