@@ -29,8 +29,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#if defined(_MSC_VER) && _HAS_EXCEPTIONS == 0
-#else
+#if !defined(_MSC_VER)
 namespace std { class type_info; } // WORKAROUND: http://llvm.org/bugs/show_bug.cgi?id=13364
 #endif
 
