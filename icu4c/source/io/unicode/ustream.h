@@ -26,7 +26,10 @@
  * C++ I/O stream API.
  */
 
-namespace std { class type_info; } // WORKAROUND: http://llvm.org/bugs/show_bug.cgi?id=13364 
+#if defined(_MSC_VER) && _HAS_EXCEPTIONS == 0
+#else
+namespace std { class type_info; } // WORKAROUND: http://llvm.org/bugs/show_bug.cgi?id=13364
+#endif
 
 #if U_IOSTREAM_SOURCE >= 199711
 #if (__GNUC__ == 2)
