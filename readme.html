@@ -24,7 +24,7 @@
     <p><b>Note:</b> This is a release candidate version of ICU4C 53.
     It is not recommended for production use.</p>
 
-    <p>Last updated: 2014-Feb-26<br />
+    <p>Last updated: 2014-Mar-07<br />
      Copyright &copy; 1997-2014 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -219,11 +219,14 @@
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>.
     For more news about this release, see the
-    <a href="http://site.icu-project.org/download/">ICU download page</a>
-    <!--a href="http://site.icu-project.org/download/milestone">ICU milestone download page</a>.
-    </p-->.
+    <a href="http://site.icu-project.org/download/">ICU download page</a>.
+    <!-- <a href="http://site.icu-project.org/download/milestone">ICU milestone download page</a>. -->
+    </p>
 
     <!-- ICU 53 items -->
+    <h3>ICU4C now requires C99</h3>
+    <p>ICU4C must be built with compilers (or compiler options) that support C99 (ISO/IEC 9899:1999).</p>
+
     <h3>Collation code re-implemented</h3>
     <ul>
       <li>New, incompatible data format of the binary collation data in
@@ -571,7 +574,8 @@
     "RecBuild">Recommended Build Options</a></h3>
 
     <p>Depending on the platform and the type of installation,
-    we recommend a small number of modifications and build options.</p>
+    we recommend a small number of modifications and build options.
+    Note that C99 compatibility is now required.</p>
     <ul>
       <li><b>Namespace:</b> By default, unicode/uversion.h has
         "using namespace icu;" which defeats much of the purpose of the namespace.
