@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2014 - All Rights Reserved
  *
  */
 
@@ -273,7 +273,7 @@ static const IndicClassTable teluClassTable = {0x0C00, 0x0C6F, 3, TELU_SCRIPT_FL
 
 static const IndicClassTable kndaClassTable = {0x0C80, 0x0CEF, 4, KNDA_SCRIPT_FLAGS, kndaCharClasses, kndaSplitTable};
 
-static const IndicClassTable mlymClassTable = {0x0D00, 0x0D6F, 3, MLYM_SCRIPT_FLAGS, mlymCharClasses, mlymSplitTable};
+static const IndicClassTable mlymClassTable = {0x0D00, 0x0D6F, 4, MLYM_SCRIPT_FLAGS, mlymCharClasses, mlymSplitTable};
 
 static const IndicClassTable sinhClassTable = {0x0D80, 0x0DF4, 4, SINH_SCRIPT_FLAGS, sinhCharClasses, sinhSplitTable};
 
