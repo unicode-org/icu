@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/letest
-## Copyright (c) 2001-2013, International Business Machines Corporation and
+## Copyright (c) 2001-2014, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -46,7 +46,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
-distclean distclean-local dist dist-local check check-local
+distclean distclean-local dist dist-local check check-local xcheck xcheck-local
 
 ## Clear suffix list
 .SUFFIXES :
@@ -58,6 +58,7 @@ clean: clean-local
 distclean : distclean-local
 dist: dist-local
 check: all check-local
+xcheck: all xcheck-local
 
 all-local: $(TESTTARGET)
 
@@ -73,7 +74,11 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
-	$(INVOKE) ./$(TESTTARGET)
+	$(INVOKE) ./$(TESTTARGET) $(TEST_OUTPUT_OPTS) $(LETEST_OPTS)
+
+TESTXML=$(top_builddir)/test-$(TESTTARGET).xml
+xcheck-local: all-local
+	$(INVOKE) ./$(TESTTARGET) $(TEST_OUTPUT_OPTS) $(LETEST_OPTS) -x $(TESTXML)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
