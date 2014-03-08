@@ -631,6 +631,9 @@ public:
 
     /**
      * Gets the calendar associated with this date/time formatter.
+     * The calendar is owned by the formatter and must not be modified.
+     * Also, the calendar does not reflect the results of a parse operation.
+     * To parse to a calendar, use {@link #parse(const UnicodeString&, Calendar& cal, ParsePosition&) const parse(const UnicodeString&, Calendar& cal, ParsePosition&)}
      * @return the calendar associated with this date/time formatter.
      * @stable ICU 2.0
      */
