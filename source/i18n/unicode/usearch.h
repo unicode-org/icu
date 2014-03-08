@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2011 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2011,2014 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  06/28/2001   synwee      Creation.
@@ -154,21 +154,35 @@ typedef struct UStringSearch UStringSearch;
 * @stable ICU 2.4
 */
 typedef enum {
-    /** Option for overlapping matches */
-    USEARCH_OVERLAP,
-    /** 
-     * Option for canonical matches. option 1 in header documentation.
-     * The default value will be USEARCH_OFF
+    /** Option for overlapping matches
+     * @stable ICU 2.4
      */
-    USEARCH_CANONICAL_MATCH,
+    USEARCH_OVERLAP = 0,
+#ifndef U_HIDE_DEPRECATED_API
+    /** 
+     * Option for canonical matches; option 1 in header documentation.
+     * The default value will be USEARCH_OFF.
+     * Note: Setting this option to USEARCH_ON currently has no effect on
+     * search behavior, and this option is deprecated. Instead, to control
+     * canonical match behavior, you must set UCOL_NORMALIZATION_MODE
+     * appropriately (to UCOL_OFF or UCOL_ON) in the UCollator used by
+     * the UStringSearch object.
+     * @see usearch_openFromCollator 
+     * @see usearch_getCollator
+     * @see usearch_setCollator
+     * @see ucol_getAttribute
+     * @deprecated ICU 53
+     */
+    USEARCH_CANONICAL_MATCH = 1,
+#endif  /* U_HIDE_DEPRECATED_API */
     /** 
      * Option to control how collation elements are compared.
      * The default value will be USEARCH_STANDARD_ELEMENT_COMPARISON.
      * @stable ICU 4.4
      */
-    USEARCH_ELEMENT_COMPARISON,
+    USEARCH_ELEMENT_COMPARISON = 2,
 
-    USEARCH_ATTRIBUTE_COUNT
+    USEARCH_ATTRIBUTE_COUNT = 3
 } USearchAttribute;
 
 /**
