@@ -127,7 +127,7 @@ public class Deque<E> {
         ListIterator<E> litr = ll.listIterator(ll.size());
         while (litr.hasPrevious()) {
             E e = litr.previous();
-            if ((o == null && e == null) || o.equals(e)) {
+            if ((o == null && e == null) || (o != null && o.equals(e))) {
                 litr.remove();
                 return true;
             }
