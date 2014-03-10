@@ -528,7 +528,7 @@ public:
         kCapContextUsageZoneShort,
         kCapContextUsageMetazoneLong,
         kCapContextUsageMetazoneShort,
-#endif /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_INTERNAL_API */
         kCapContextUsageTypeCount = 14
     };
 

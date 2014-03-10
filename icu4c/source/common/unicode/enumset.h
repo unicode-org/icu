@@ -50,7 +50,7 @@ public:
     inline uint32_t getAll() const {
         return fBools; 
     }
-#endif /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_INTERNAL_API */
 
 private:
     inline uint32_t flag(T toCheck) const { return (1<<(toCheck-minValue)); }

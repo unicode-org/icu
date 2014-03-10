@@ -189,7 +189,7 @@ typedef enum UDateFormatStyle {
 #ifndef U_HIDE_INTERNAL_API
     /** @internal alias to UDAT_PATTERN */
     UDAT_IGNORE = UDAT_PATTERN
-#endif /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_INTERNAL_API */
 } UDateFormatStyle;
 
 /* Skeletons for dates. */
@@ -770,7 +770,7 @@ typedef enum UDateFormatField {
      * @internal ICU 53
      */
     UDAT_RELATED_YEAR_FIELD = 34,
-#endif /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_INTERNAL_API */
 
    /**
      * Number of FieldPosition and UFieldPosition selectors for
