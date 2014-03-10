@@ -826,7 +826,7 @@ typedef enum UNumberFormatAttributeValue {
   UNUM_YES = 1,
   /** @internal */
   UNUM_MAYBE = 2
-#endif /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_INTERNAL_API */
 } UNumberFormatAttributeValue;
 #endif
 
