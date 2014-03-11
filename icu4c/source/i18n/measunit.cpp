@@ -8,7 +8,12 @@
 * Since: ICU 3.0
 **********************************************************************
 */
+#include "utypeinfo.h" // for 'typeid' to work
+
 #include "unicode/measunit.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/uenum.h"
 #include "ustrenum.h"
 #include "cstring.h"
@@ -17,6 +22,8 @@
 #define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
 
 U_NAMESPACE_BEGIN
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MeasureUnit)
 
 static const int32_t gOffsets[] = {
     0,
@@ -606,14 +613,17 @@ const char *MeasureUnit::getSubtype() const {
 }
 
 UBool MeasureUnit::operator==(const UObject& other) const {
-    const MeasureUnit *rhs = dynamic_cast<const MeasureUnit*>(&other);
-    if (rhs == NULL) {
+    if (this == &other) {  // Same object, equal
+        return TRUE;
+    }
+    if (typeid(*this) != typeid(other)) { // Different types, not equal
         return FALSE;
     }
+    const MeasureUnit &rhs = static_cast<const MeasureUnit&>(other);
     return (
-            fTypeId == rhs->fTypeId
-            && fSubTypeId == rhs->fSubTypeId
-            && uprv_strcmp(fCurrency, rhs->fCurrency) == 0);
+            fTypeId == rhs.fTypeId
+            && fSubTypeId == rhs.fSubTypeId
+            && uprv_strcmp(fCurrency, rhs.fCurrency) == 0);
 }
 
 int32_t MeasureUnit::getIndex() const {
@@ -731,4 +741,4 @@ int32_t MeasureUnit::getOffset() const {
 
 U_NAMESPACE_END
 
-
+#endif /* !UNCONFIG_NO_FORMATTING */

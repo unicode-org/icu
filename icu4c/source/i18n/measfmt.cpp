@@ -8,6 +8,7 @@
 * Since: ICU 3.0
 **********************************************************************
 */
+#include "utypeinfo.h"  // for 'typeid' to work
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -53,6 +54,8 @@ static UBool U_CALLCONV measfmt_cleanup() {
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MeasureFormat)
 
 // Used to format durations like 5:47 or 21:35:42.
 class NumericDateFormatters : public UMemory {
@@ -309,7 +312,7 @@ static SharedObject *U_CALLCONV createData(
         return NULL;
     }
     LocalPointer<MeasureFormatCacheData> result(new MeasureFormatCacheData());
-    if (result.getAlias() == NULL) {
+    if (result.isNull()) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
@@ -385,8 +388,11 @@ static int32_t toHMS(
     if (U_FAILURE(status)) {
         return 0;
     }
+    // We use copy constructor to ensure that both sides of equality operator
+    // are instances of MeasureUnit base class and not a subclass. Otherwise,
+    // operator== will immediately return false.
     for (int32_t i = 0; i < measureCount; ++i) {
-        if (measures[i].getUnit() == *hourUnit) {
+        if (MeasureUnit(measures[i].getUnit()) == *hourUnit) {
             // hour must come first
             if (result >= 1) {
                 return 0;
@@ -396,7 +402,7 @@ static int32_t toHMS(
                 return 0;
             }
             result |= 1;
-        } else if (measures[i].getUnit() == *minuteUnit) {
+        } else if (MeasureUnit(measures[i].getUnit()) == *minuteUnit) {
             // minute must come after hour
             if (result >= 2) {
                 return 0;
@@ -406,7 +412,7 @@ static int32_t toHMS(
                 return 0;
             }
             result |= 2;
-        } else if (measures[i].getUnit() == *secondUnit) {
+        } else if (MeasureUnit(measures[i].getUnit()) == *secondUnit) {
             // second must come after hour and minute
             if (result >= 4) {
                 return 0;
@@ -496,28 +502,27 @@ MeasureFormat::~MeasureFormat() {
 }
 
 UBool MeasureFormat::operator==(const Format &other) const {
-    const MeasureFormat *rhs = dynamic_cast<const MeasureFormat *>(&other);
-    if (rhs == NULL) {
+    if (this == &other) { // Same object, equal
+        return TRUE;
+    }
+    if (!Format::operator==(other)) {
         return FALSE;
     }
+    const MeasureFormat &rhs = static_cast<const MeasureFormat &>(other);
 
     // Note: Since the ListFormatter depends only on Locale and width, we
     // don't have to check it here.
 
-    // Same objects are equivalent
-    if (this == rhs) {
-        return TRUE;
-    }
     // differing widths aren't equivalent
-    if (width != rhs->width) {
+    if (width != rhs.width) {
         return FALSE;
     }
     // Width the same check locales.
     // We don't need to check locales if both objects have same cache.
-    if (cache != rhs->cache) {
+    if (cache != rhs.cache) {
         UErrorCode status = U_ZERO_ERROR;
         const char *localeId = getLocaleID(status);
-        const char *rhsLocaleId = rhs->getLocaleID(status);
+        const char *rhsLocaleId = rhs.getLocaleID(status);
         if (U_FAILURE(status)) {
             // On failure, assume not equal
             return FALSE;
@@ -528,8 +533,8 @@ UBool MeasureFormat::operator==(const Format &other) const {
     }
     // Locales same, check NumberFormat if shared data differs.
     return (
-            numberFormat == rhs->numberFormat ||
-            **numberFormat == **rhs->numberFormat);
+            numberFormat == rhs.numberFormat ||
+            **numberFormat == **rhs.numberFormat);
 }
 
 Format *MeasureFormat::clone() const {
@@ -634,7 +639,7 @@ void MeasureFormat::initMeasureFormat(
         return;
     }
     pluralRules->removeRef();
-    if (nf.getAlias() == NULL) {
+    if (nf.isNull()) {
         SharedObject::copyPtr(
                 NumberFormat::createSharedInstance(
                         locale, UNUM_DECIMAL, status),
