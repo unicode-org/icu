@@ -12,6 +12,9 @@
 #define __MEASUREUNIT_H__
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 
 /**
@@ -138,6 +141,32 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static StringEnumeration* getAvailableTypes(UErrorCode &errorCode);
 
+    /**
+     * Return the class ID for this class. This is useful only for comparing to
+     * a return value from getDynamicClassID(). For example:
+     * <pre>
+     * .   Base* polymorphic_pointer = createPolymorphicObject();
+     * .   if (polymorphic_pointer->getDynamicClassID() ==
+     * .       erived::getStaticClassID()) ...
+     * </pre>
+     * @return          The class ID for all objects of this class.
+     * @draft ICU 53
+     */
+    static UClassID U_EXPORT2 getStaticClassID(void);
+
+    /**
+     * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
+     * method is to implement a simple version of RTTI, since not all C++
+     * compilers support genuine RTTI. Polymorphic operator==() and clone()
+     * methods call this method.
+     *
+     * @return          The class ID for this object. All objects of a
+     *                  given class have the same class ID.  Objects of
+     *                  other classes have different class IDs.
+     * @draft ICU 53
+     */
+    virtual UClassID getDynamicClassID(void) const;
+
 #ifndef U_HIDE_INTERNAL_API
 
     /**
@@ -159,142 +188,326 @@ class U_I18N_API MeasureUnit: public UObject {
 
 // Start generated createXXX methods
 
-    /** Constant for unit of acceleration: g-force */
+    /**
+     * Returns unit of acceleration: g-force.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createGForce(UErrorCode &status);
 
-    /** Constant for unit of angle: arc-minute */
+    /**
+     * Returns unit of angle: arc-minute.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createArcMinute(UErrorCode &status);
 
-    /** Constant for unit of angle: arc-second */
+    /**
+     * Returns unit of angle: arc-second.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createArcSecond(UErrorCode &status);
 
-    /** Constant for unit of angle: degree */
+    /**
+     * Returns unit of angle: degree.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createDegree(UErrorCode &status);
 
-    /** Constant for unit of area: acre */
+    /**
+     * Returns unit of area: acre.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createAcre(UErrorCode &status);
 
-    /** Constant for unit of area: hectare */
+    /**
+     * Returns unit of area: hectare.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createHectare(UErrorCode &status);
 
-    /** Constant for unit of area: square-foot */
+    /**
+     * Returns unit of area: square-foot.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createSquareFoot(UErrorCode &status);
 
-    /** Constant for unit of area: square-kilometer */
+    /**
+     * Returns unit of area: square-kilometer.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createSquareKilometer(UErrorCode &status);
 
-    /** Constant for unit of area: square-meter */
+    /**
+     * Returns unit of area: square-meter.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createSquareMeter(UErrorCode &status);
 
-    /** Constant for unit of area: square-mile */
+    /**
+     * Returns unit of area: square-mile.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createSquareMile(UErrorCode &status);
 
-    /** Constant for unit of duration: day */
+    /**
+     * Returns unit of duration: day.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createDay(UErrorCode &status);
 
-    /** Constant for unit of duration: hour */
+    /**
+     * Returns unit of duration: hour.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createHour(UErrorCode &status);
 
-    /** Constant for unit of duration: millisecond */
+    /**
+     * Returns unit of duration: millisecond.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createMillisecond(UErrorCode &status);
 
-    /** Constant for unit of duration: minute */
+    /**
+     * Returns unit of duration: minute.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createMinute(UErrorCode &status);
 
-    /** Constant for unit of duration: month */
+    /**
+     * Returns unit of duration: month.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createMonth(UErrorCode &status);
 
-    /** Constant for unit of duration: second */
+    /**
+     * Returns unit of duration: second.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createSecond(UErrorCode &status);
 
-    /** Constant for unit of duration: week */
+    /**
+     * Returns unit of duration: week.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createWeek(UErrorCode &status);
 
-    /** Constant for unit of duration: year */
+    /**
+     * Returns unit of duration: year.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createYear(UErrorCode &status);
 
-    /** Constant for unit of length: centimeter */
+    /**
+     * Returns unit of length: centimeter.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createCentimeter(UErrorCode &status);
 
-    /** Constant for unit of length: foot */
+    /**
+     * Returns unit of length: foot.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createFoot(UErrorCode &status);
 
-    /** Constant for unit of length: inch */
+    /**
+     * Returns unit of length: inch.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createInch(UErrorCode &status);
 
-    /** Constant for unit of length: kilometer */
+    /**
+     * Returns unit of length: kilometer.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createKilometer(UErrorCode &status);
 
-    /** Constant for unit of length: light-year */
+    /**
+     * Returns unit of length: light-year.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createLightYear(UErrorCode &status);
 
-    /** Constant for unit of length: meter */
+    /**
+     * Returns unit of length: meter.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createMeter(UErrorCode &status);
 
-    /** Constant for unit of length: mile */
+    /**
+     * Returns unit of length: mile.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createMile(UErrorCode &status);
 
-    /** Constant for unit of length: millimeter */
+    /**
+     * Returns unit of length: millimeter.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createMillimeter(UErrorCode &status);
 
-    /** Constant for unit of length: picometer */
+    /**
+     * Returns unit of length: picometer.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createPicometer(UErrorCode &status);
 
-    /** Constant for unit of length: yard */
+    /**
+     * Returns unit of length: yard.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createYard(UErrorCode &status);
 
-    /** Constant for unit of mass: gram */
+    /**
+     * Returns unit of mass: gram.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createGram(UErrorCode &status);
 
-    /** Constant for unit of mass: kilogram */
+    /**
+     * Returns unit of mass: kilogram.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createKilogram(UErrorCode &status);
 
-    /** Constant for unit of mass: ounce */
+    /**
+     * Returns unit of mass: ounce.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createOunce(UErrorCode &status);
 
-    /** Constant for unit of mass: pound */
+    /**
+     * Returns unit of mass: pound.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createPound(UErrorCode &status);
 
-    /** Constant for unit of power: horsepower */
+    /**
+     * Returns unit of power: horsepower.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createHorsepower(UErrorCode &status);
 
-    /** Constant for unit of power: kilowatt */
+    /**
+     * Returns unit of power: kilowatt.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createKilowatt(UErrorCode &status);
 
-    /** Constant for unit of power: watt */
+    /**
+     * Returns unit of power: watt.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createWatt(UErrorCode &status);
 
-    /** Constant for unit of pressure: hectopascal */
+    /**
+     * Returns unit of pressure: hectopascal.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createHectopascal(UErrorCode &status);
 
-    /** Constant for unit of pressure: inch-hg */
+    /**
+     * Returns unit of pressure: inch-hg.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createInchHg(UErrorCode &status);
 
-    /** Constant for unit of pressure: millibar */
+    /**
+     * Returns unit of pressure: millibar.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createMillibar(UErrorCode &status);
 
-    /** Constant for unit of speed: kilometer-per-hour */
+    /**
+     * Returns unit of speed: kilometer-per-hour.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createKilometerPerHour(UErrorCode &status);
 
-    /** Constant for unit of speed: meter-per-second */
+    /**
+     * Returns unit of speed: meter-per-second.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createMeterPerSecond(UErrorCode &status);
 
-    /** Constant for unit of speed: mile-per-hour */
+    /**
+     * Returns unit of speed: mile-per-hour.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createMilePerHour(UErrorCode &status);
 
-    /** Constant for unit of temperature: celsius */
+    /**
+     * Returns unit of temperature: celsius.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createCelsius(UErrorCode &status);
 
-    /** Constant for unit of temperature: fahrenheit */
+    /**
+     * Returns unit of temperature: fahrenheit.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createFahrenheit(UErrorCode &status);
 
-    /** Constant for unit of volume: cubic-kilometer */
+    /**
+     * Returns unit of volume: cubic-kilometer.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createCubicKilometer(UErrorCode &status);
 
-    /** Constant for unit of volume: cubic-mile */
+    /**
+     * Returns unit of volume: cubic-mile.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createCubicMile(UErrorCode &status);
 
-    /** Constant for unit of volume: liter */
+    /**
+     * Returns unit of volume: liter.
+     * Caller owns returned value and must free it.
+     * @draft ICU 53
+     */
     static MeasureUnit *createLiter(UErrorCode &status);
 
  protected:
@@ -329,4 +542,5 @@ private:
 
 U_NAMESPACE_END
 
+#endif // !UNCONFIG_NO_FORMATTING
 #endif // __MEASUREUNIT_H__

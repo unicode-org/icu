@@ -8,8 +8,6 @@
 * Since: ICU 3.0
 **********************************************************************
 */
-#include "utypeinfo.h"  // for 'typeid' to work
-
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING

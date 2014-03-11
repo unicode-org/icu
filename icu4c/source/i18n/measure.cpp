@@ -19,6 +19,8 @@
 
 U_NAMESPACE_BEGIN
 
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Measure)
+
 Measure::Measure() {}
 
 Measure::Measure(const Formattable& _number, MeasureUnit* adoptedUnit,
@@ -53,10 +55,16 @@ Measure::~Measure() {
 }
 
 UBool Measure::operator==(const UObject& other) const {
-    const Measure* m = (const Measure*) &other;
-    return typeid(*this) == typeid(other) &&
-        number == m->getNumber() && 
-        (unit != NULL && *unit == m->getUnit());
+    if (this == &other) {  // Same object, equal
+        return TRUE;
+    }
+    if (typeid(*this) != typeid(other)) { // Different types, not equal
+        return FALSE;
+    }
+    const Measure &m = static_cast<const Measure&>(other);
+    return number == m.number &&
+        ((unit == NULL) == (m.unit == NULL)) &&
+        (unit == NULL || *unit == *m.unit);
 }
 
 U_NAMESPACE_END

@@ -204,6 +204,32 @@ class U_I18N_API MeasureFormat : public Format {
      */
     static MeasureFormat* U_EXPORT2 createCurrencyFormat(UErrorCode& ec);
 
+    /**
+     * Return the class ID for this class. This is useful only for comparing to
+     * a return value from getDynamicClassID(). For example:
+     * <pre>
+     * .   Base* polymorphic_pointer = createPolymorphicObject();
+     * .   if (polymorphic_pointer->getDynamicClassID() ==
+     * .       erived::getStaticClassID()) ...
+     * </pre>
+     * @return          The class ID for all objects of this class.
+     * @draft ICU 53
+     */
+    static UClassID U_EXPORT2 getStaticClassID(void);
+
+    /**
+     * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
+     * method is to implement a simple version of RTTI, since not all C++
+     * compilers support genuine RTTI. Polymorphic operator==() and clone()
+     * methods call this method.
+     *
+     * @return          The class ID for this object. All objects of a
+     *                  given class have the same class ID.  Objects of
+     *                  other classes have different class IDs.
+     * @draft ICU 53
+     */
+    virtual UClassID getDynamicClassID(void) const;
+
  protected:
     /**
      * Default constructor.

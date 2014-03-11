@@ -19,7 +19,7 @@
 #include "unicode/measfmt.h"
 #include "unicode/measure.h"
 #include "unicode/measunit.h"
-#include "unicode/tmutamt.h"
+#include "unicode/tmunit.h"
 #include "charstr.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
@@ -52,7 +52,6 @@ private:
     void TestFieldPositionMultiple();
     void TestBadArg();
     void TestEquality();
-    void TestBenchmark();
     void TestDoubleZero();
     void verifyFormat(
         const char *description,
@@ -108,7 +107,6 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestFieldPositionMultiple);
     TESTCASE_AUTO(TestBadArg);
     TESTCASE_AUTO(TestEquality);
-    TESTCASE_AUTO(TestBenchmark);
     TESTCASE_AUTO(TestDoubleZero);
     TESTCASE_AUTO_END;
 }
@@ -296,9 +294,21 @@ void MeasureFormatTest::TestFormatPeriodEn() {
             Measure(23.5, MeasureUnit::createMinute(status), status)
     };
     Measure t_1h_0m_23s[] = {
-            Measure(1.0, MeasureUnit::createHour(status), status),
-            Measure(0.0, MeasureUnit::createMinute(status), status),
-            Measure(23, MeasureUnit::createSecond(status), status)
+            Measure(
+                    1.0,
+                    TimeUnit::createInstance(
+                            TimeUnit::UTIMEUNIT_HOUR, status),
+                    status),
+            Measure(
+                    0.0,
+                    TimeUnit::createInstance(
+                            TimeUnit::UTIMEUNIT_MINUTE, status),
+                     status),
+            Measure(
+                    23,
+                    TimeUnit::createInstance(
+                            TimeUnit::UTIMEUNIT_SECOND, status),
+                    status)
     };
     Measure t_2y_5M_3w_4d[] = {
             Measure(2.0, MeasureUnit::createYear(status), status),
@@ -847,29 +857,6 @@ void MeasureFormatTest::TestEquality() {
     assertFalse("Not Equal Neg 1", fmt == fmtne1);
     assertTrue("Not Equal 2", fmt != fmtne2);
     assertTrue("Not Equal 3", fmt != fmtne3);
-}
-
-void MeasureFormatTest::TestBenchmark() {
-/*
-    clock_t t;
-    UErrorCode status = U_ZERO_ERROR;
-    Locale en("en");
-    MeasureFormat fmt(en, UMEASFMT_WIDTH_SHORT, status);
-    MeasureFormat fmt2 = fmt;
-    Measure ms[] = {
-            Measure(70, MeasureUnit::createYear(status), status),
-            Measure(5, MeasureUnit::createMonth(status), status),
-            Measure(23, MeasureUnit::createDay(status), status),
-            Measure(15, MeasureUnit::createHour(status), status),
-            Measure(58, MeasureUnit::createMinute(status), status)};
-    FieldPosition pos(FieldPosition::DONT_CARE);
-    t = clock();
-    for (int32_t i = 0; i < 1000000; ++i) {
-        fmt2 = fmt;
-    }
-    t = clock() - t;
-    errln("It took %f seconds.", ((float)t)/CLOCKS_PER_SEC);
-*/
 }
 
 void MeasureFormatTest::TestDoubleZero() {
