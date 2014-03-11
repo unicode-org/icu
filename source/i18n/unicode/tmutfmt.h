@@ -25,27 +25,34 @@
 #include "unicode/numfmt.h"
 #include "unicode/plurrule.h"
 
+#ifndef U_HIDE_DEPRECATED_API
+
 /**
  * Constants for various styles.
  * There are 2 styles: full name and abbreviated name.
  * For example, for English, the full name for hour duration is "3 hours",
  * and the abbreviated name is "3 hrs".
- * @stable ICU 4.8
+ * @deprecated ICU 53 Use MeasureFormat and UMeasureFormatWidth instead.
  */
 enum UTimeUnitFormatStyle {
-    /** @stable ICU 4.8 */
+    /** @deprecated ICU 53 */
     UTMUTFMT_FULL_STYLE,
-    /** @stable ICU 4.8 */
+    /** @deprecated ICU 53 */
     UTMUTFMT_ABBREVIATED_STYLE,
-    /** @stable ICU 4.8 */
+    /** @deprecated ICU 53 */
     UTMUTFMT_FORMAT_STYLE_COUNT
 };
-typedef enum UTimeUnitFormatStyle UTimeUnitFormatStyle; /**< @stable ICU 4.8 */
+typedef enum UTimeUnitFormatStyle UTimeUnitFormatStyle; /**< @deprecated ICU 53 */
+
+#endif
+
 
 U_NAMESPACE_BEGIN
 
 class Hashtable;
 class UVector;
+
+#ifndef U_HIDE_DEPRECATED_API
 
 /**
  * Format or parse a TimeUnitAmount, using plural rules for the units where available.
@@ -75,7 +82,7 @@ class UVector;
  * <P>
  * @see TimeUnitAmount
  * @see TimeUnitFormat
- * @stable ICU 4.2
+ * @deprecated ICU 53 Use the MeasureFormat class instead.
  */
 class U_I18N_API TimeUnitFormat: public MeasureFormat {
 public:
@@ -226,14 +233,12 @@ private:
 
 };
 
-
-
 inline UBool
 TimeUnitFormat::operator!=(const Format& other) const  {
     return !operator==(other);
 }
 
-
+#endif /* U_HIDE_DEPRECATED_API */
 
 U_NAMESPACE_END
 
