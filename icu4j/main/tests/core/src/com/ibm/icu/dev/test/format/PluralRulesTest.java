@@ -58,6 +58,38 @@ public class PluralRulesTest extends TestFmwk {
         new PluralRulesTest().run(args);
     }
 
+    public void testOverUnderflow() {
+        logln(String.valueOf(Long.MAX_VALUE + 1d));
+        for (double[] testDouble : new double[][]{
+                {1E18, 0, 0, 1E18}, // check overflow
+                {10000000000000.1d, 1, 1, 10000000000000d},
+                {-0.00001d, 1, 5, 0},
+                {1d, 0, 0, 1},
+                {1.1d, 1, 1, 1},
+                {12345d, 0, 0, 12345},
+                {12345.678912d, 678912, 6, 12345},
+                {12345.6789123d, 678912, 6, 12345}, // we only go out 6 digits
+                {1E18, 0, 0, 1E18}, // check overflow
+                {1E19, 0, 0, 1E18}, // check overflow
+        }) {
+            FixedDecimal fd = new FixedDecimal(testDouble[0]);
+            assertEquals(testDouble[0] + "=doubleValue()", testDouble[0], fd.doubleValue());
+            assertEquals(testDouble[0] + " decimalDigits", (int)testDouble[1], fd.decimalDigits);
+            assertEquals(testDouble[0] + " visibleDecimalDigitCount", (int)testDouble[2], fd.visibleDecimalDigitCount);
+            assertEquals(testDouble[0] + " decimalDigitsWithoutTrailingZeros", (int)testDouble[1], fd.decimalDigitsWithoutTrailingZeros);
+            assertEquals(testDouble[0] + " visibleDecimalDigitCountWithoutTrailingZeros", (int)testDouble[2], fd.visibleDecimalDigitCountWithoutTrailingZeros);            
+            assertEquals(testDouble[0] + " integerValue", (long)testDouble[3], fd.integerValue);            
+        }
+
+        for (ULocale locale : new ULocale[]{ULocale.ENGLISH, new ULocale("cy"), new ULocale("ar")}) {
+            PluralRules rules = factory.forLocale(locale);
+
+            assertEquals(locale + " NaN", "other", rules.select(Double.NaN));
+            assertEquals(locale + " ∞", "other", rules.select(Double.POSITIVE_INFINITY));
+            assertEquals(locale + " -∞", "other", rules.select(Double.NEGATIVE_INFINITY));
+        }
+    }
+
     public void testSyntaxRestrictions() {
         Object[][] shouldFail = {
                 {"a:n in 3..10,13..19"},
@@ -81,7 +113,7 @@ public class PluralRulesTest extends TestFmwk {
                 {"a: n = 1 .. 3"},
                 {"a: n != 1 .. 3"},
                 {"a: n ! = 1 .. 3"},
-                
+
                 // more complicated
                 {"a:n in 3 .. 10 , 13 .. 19"},
 
@@ -91,7 +123,7 @@ public class PluralRulesTest extends TestFmwk {
                 {"a: n not is 1", ParseException.class}, // hacked to fail
                 {"a: n in 1"},
                 {"a: n not in 1"},
-                
+
                 // multiples also have special exceptions
                 // TODO enable the following once there is an update to CLDR
                 // {"a: n is 1,3", ParseException.class},
@@ -721,7 +753,7 @@ public class PluralRulesTest extends TestFmwk {
                 nf.setMinimumFractionDigits(minFracDigits);
                 String expectedFormat = row[2];
                 String expectedKeyword = row[3];
-                
+
                 UFieldPosition pos = new UFieldPosition();
                 String formatted = nf.format(1.0, new StringBuffer(), pos).toString();
                 int countVisibleFractionDigits = pos.getCountVisibleFractionDigits();
@@ -1019,7 +1051,7 @@ public class PluralRulesTest extends TestFmwk {
         }
         logln("max \tsize:\t" + max);
     }
-    
+
     public static class FixedDecimalHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
