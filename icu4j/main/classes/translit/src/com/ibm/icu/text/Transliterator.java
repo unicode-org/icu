@@ -1712,6 +1712,11 @@ public abstract class Transliterator implements StringTransform  {
     /**
      * Register a factory object with the given ID.  The factory
      * method should return a new instance of the given transliterator.
+     * 
+     * Because ICU may choose to cache Transliterator objects internally, this must
+     * be called at application startup, prior to any calls to
+     * Transliterator.getInstance to avoid undefined behavior.
+     * 
      * @param ID the ID of this transliterator
      * @param factory the factory object
      * @stable ICU 2.0
@@ -1722,6 +1727,11 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Register a Transliterator object with the given ID.
+     * 
+     * Because ICU may choose to cache Transliterator objects internally, this must
+     * be called at application startup, prior to any calls to
+     * Transliterator.getInstance to avoid undefined behavior.
+     * 
      * @param trans the Transliterator object
      * @stable ICU 2.2
      */
@@ -1731,6 +1741,11 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Register a Transliterator object with the given ID.
+     * 
+     * Because ICU may choose to cache Transliterator objects internally, this must
+     * be called at application startup, prior to any calls to
+     * Transliterator.getInstance to avoid undefined behavior.
+     * 
      * @param ID the ID of this transliterator
      * @param trans the Transliterator object
      */
@@ -1742,6 +1757,11 @@ public abstract class Transliterator implements StringTransform  {
      * Register an ID as an alias of another ID.  Instantiating
      * alias ID produces the same result as instantiating the original ID.
      * This is generally used to create short aliases of compound IDs.
+     * 
+     * Because ICU may choose to cache Transliterator objects internally, this must
+     * be called at application startup, prior to any calls to
+     * Transliterator.getInstance to avoid undefined behavior.
+     * 
      * @param aliasID The new ID being registered.
      * @param realID The existing ID that the new ID should be an alias of.
      * @stable ICU 3.6

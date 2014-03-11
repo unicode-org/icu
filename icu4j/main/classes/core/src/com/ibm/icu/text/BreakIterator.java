@@ -769,6 +769,11 @@ s     */
      * {@icu} Registers a new break iterator of the indicated kind, to use in the given
      * locale.  Clones of the iterator will be returned if a request for a break iterator
      * of the given kind matches or falls back to this locale.
+     * 
+     * Because ICU may choose to cache BreakIterator objects internally, this must
+     * be called at application startup, prior to any calls to
+     * BreakIterator.getInstance to avoid undefined behavior.
+     * 
      * @param iter the BreakIterator instance to adopt.
      * @param locale the Locale for which this instance is to be registered
      * @param kind the type of iterator for which this instance is to be registered
@@ -783,6 +788,11 @@ s     */
      * {@icu} Registers a new break iterator of the indicated kind, to use in the given
      * locale.  Clones of the iterator will be returned if a request for a break iterator
      * of the given kind matches or falls back to this locale.
+     * 
+     * Because ICU may choose to cache BreakIterator objects internally, this must
+     * be called at application startup, prior to any calls to
+     * BreakIterator.getInstance to avoid undefined behavior.
+     * 
      * @param iter the BreakIterator instance to adopt.
      * @param locale the Locale for which this instance is to be registered
      * @param kind the type of iterator for which this instance is to be registered
