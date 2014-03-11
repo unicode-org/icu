@@ -751,6 +751,11 @@ public class MeasureFormat extends UFormat {
         return result;
     }
     
+    // Returns hours in [0]; minutes in [1]; seconds in [2] out of measures array. If
+    // unsuccessful, e.g measures has other measurements besides hours, minutes, seconds;
+    // hours, minutes, seconds are out of order; or have negative values, returns null.
+    // If hours, minutes, or seconds is missing from measures the corresponding element in
+    // returned array will be null.
     private static Number[] toHMS(Measure[] measures) {
         Number[] result = new Number[3];
         int lastIdx = -1;
@@ -773,7 +778,12 @@ public class MeasureFormat extends UFormat {
         return result;
     }
     
+    // Formats numeric time duration as 5:00:47 or 3:54. In the process, it replaces any null
+    // values in hms with 0.
     private StringBuilder formatNumeric(Number[] hms, StringBuilder appendable) {
+        
+        // find the start and end of non-nil values in hms array. We have to know if we
+        // have hour-minute; minute-second; or hour-minute-second.
         int startIndex = -1;
         int endIndex = -1;
         for (int i = 0; i < hms.length; i++) {
@@ -783,13 +793,16 @@ public class MeasureFormat extends UFormat {
                     startIndex = endIndex;
                 }
             } else {
+                // Replace nil value with 0.
                 hms[i] = Integer.valueOf(0);
             }
         }
+        // convert hours, minutes, seconds into milliseconds.
         long millis = (long) (((Math.floor(hms[0].doubleValue()) * 60.0
                 + Math.floor(hms[1].doubleValue())) * 60.0
                 + Math.floor(hms[2].doubleValue())) * 1000.0);
         Date d = new Date(millis);
+        // if hour-minute-second
         if (startIndex == 0 && endIndex == 2) {
             return formatNumeric(
                     d, 
@@ -798,6 +811,7 @@ public class MeasureFormat extends UFormat {
                     hms[endIndex],
                     appendable);
         }
+        // if minute-second
         if (startIndex == 1 && endIndex == 2) {
             return formatNumeric(
                     d, 
@@ -806,6 +820,7 @@ public class MeasureFormat extends UFormat {
                     hms[endIndex],
                     appendable);
         }
+        // if hour-minute
         if (startIndex == 0 && endIndex == 1) {
             return formatNumeric(
                     d, 
@@ -817,6 +832,15 @@ public class MeasureFormat extends UFormat {
         throw new IllegalStateException();
     }
     
+    // Formats a duration as 5:00:37 or 23:59.
+    // duration is a particular duration after epoch.
+    // formatter is a hour-minute-second, hour-minute, or minute-second formatter.
+    // smallestField denotes what the smallest field is in duration: either
+    // hour, minute, or second.
+    // smallestAmount is the value of that smallest field. for 5:00:37.3,
+    // smallestAmount is 37.3. This smallest field is formatted with this object's
+    // NumberFormat instead of formatter.
+    // appendTo is where the formatted string is appended.
     private StringBuilder formatNumeric(
             Date duration,
             DateFormat formatter,
@@ -825,29 +849,48 @@ public class MeasureFormat extends UFormat {
             StringBuilder appendTo) {
         // Format the smallest amount ahead of time.
         String smallestAmountFormatted;
+        
+        // Format the smallest amount using this object's number format, but keep track
+        // of the integer portion of this formatted amount. We have to replace just the
+        // integer part with the corresponding value from formatting the date. Otherwise
+        // when formatting 0 minutes 9 seconds, we may get "00:9" instead of "00:09"
         FieldPosition intFieldPosition = new FieldPosition(NumberFormat.INTEGER_FIELD);
         smallestAmountFormatted = numberFormat.format(
                 smallestAmount, new StringBuffer(), intFieldPosition).toString();
+        // Give up if there is no integer field.
         if (intFieldPosition.getBeginIndex() == 0 && intFieldPosition.getEndIndex() == 0) {
             throw new IllegalStateException();
         }
+        // Format our duration as a date, but keep track of where the smallest field is
+        // so that we can use it to replace the integer portion of the smallest value.
         FieldPosition smallestFieldPosition = new FieldPosition(smallestField);
         String draft = formatter.format(
                 duration, new StringBuffer(), smallestFieldPosition).toString();
+        
+        // If we find the smallest field
         if (smallestFieldPosition.getBeginIndex() != 0
                 || smallestFieldPosition.getEndIndex() != 0) {
+            // add everything up to the start of the smallest field in duration.
             appendTo.append(draft, 0, smallestFieldPosition.getBeginIndex());
+            
+            // add everything in the smallest field up to the integer portion
             appendTo.append(smallestAmountFormatted, 0, intFieldPosition.getBeginIndex());
+            
+            // Add the smallest field in formatted duration in lieu of the integer portion
+            // of smallest field
             appendTo.append(
                     draft,
                     smallestFieldPosition.getBeginIndex(),
                     smallestFieldPosition.getEndIndex());
+            
+            // Add the rest of the smallest field
             appendTo.append(
                     smallestAmountFormatted,
                     intFieldPosition.getEndIndex(),
                     smallestAmountFormatted.length());
             appendTo.append(draft, smallestFieldPosition.getEndIndex(), draft.length());
         } else {
+            // As fallback, just use the formatted duration.
             appendTo.append(draft);
         }
         return appendTo;

@@ -645,10 +645,11 @@ public class MeasureUnitTest extends TestFmwk {
                 } else {
                     seen.put(name, unit);
                 }
-                System.out.println("    /** Constant for unit of " + type +
-                        ": " +
-                        code +
-                        " */");
+                System.out.println("    /**");
+                System.out.println("     * Returns unit of " + type + ": " + code + ".");
+                System.out.println("     * Caller owns returned value and must free it.");
+                System.out.println("     * @draft ICU 53");
+                System.out.println("     */");
                 System.out.printf("    static MeasureUnit *create%s(UErrorCode &status);\n\n", name);
             }
         }    
