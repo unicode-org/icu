@@ -398,6 +398,9 @@ static int32_t toHMS(
     // We use copy constructor to ensure that both sides of equality operator
     // are instances of MeasureUnit base class and not a subclass. Otherwise,
     // operator== will immediately return false.
+    // TODO(Travis Keep): Propose
+    // UBool isUnitSame(const MeasureUnit &other) const to address performance
+    // issues around copy constructor.
     for (int32_t i = 0; i < measureCount; ++i) {
         if (MeasureUnit(measures[i].getUnit()) == *hourUnit) {
             // hour must come first
