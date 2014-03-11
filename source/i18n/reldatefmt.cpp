@@ -477,7 +477,7 @@ static SharedObject *U_CALLCONV createData(
     }
     LocalPointer<RelativeDateTimeCacheData> result(
             new RelativeDateTimeCacheData());
-    if (result.getAlias() == NULL) {
+    if (result.isNull()) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
@@ -632,7 +632,7 @@ void RelativeDateTimeFormatter::init(
         return;
     }
     pluralRules->removeRef();
-    if (nf.getAlias() == NULL) {
+    if (nf.isNull()) {
        SharedObject::copyPtr(
                NumberFormat::createSharedInstance(
                        locale, UNUM_DECIMAL, status),

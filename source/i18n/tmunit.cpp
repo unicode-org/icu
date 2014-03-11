@@ -5,8 +5,6 @@
  *******************************************************************************
  */
 
-#include "utypeinfo.h"  // for 'typeid' to work
-
 #include "unicode/tmunit.h"
 #include "uassert.h"
 

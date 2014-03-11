@@ -139,7 +139,7 @@ void TimeUnitTest::testAPI() {
     TimeUnit::UTimeUnitFields field = tmunit_m->getTimeUnitField();
     assertTrue("field of month time unit is month", (field == TimeUnit::UTIMEUNIT_MONTH));
 
-    //===== Interropability with MeasureUnit ======
+    //===== Interopability with MeasureUnit ======
     MeasureUnit **ptrs = new MeasureUnit *[TimeUnit::UTIMEUNIT_FIELD_COUNT];
 
     ptrs[TimeUnit::UTIMEUNIT_YEAR] = MeasureUnit::createYear(status);
@@ -156,9 +156,11 @@ void TimeUnitTest::testAPI() {
             j = (TimeUnit::UTimeUnitFields)(j+1)) {
         MeasureUnit *ptr = TimeUnit::createInstance(j, status);
         if (!assertSuccess("TimeUnit::createInstance", status)) return;
+        // We have to convert *ptr to a MeasureUnit or else == will fail over
+        // differing types (TimeUnit vs. MeasureUnit).
         assertTrue(
                 "Time unit should be equal to corresponding MeasureUnit",
-                *ptr == *ptrs[j]);
+                MeasureUnit(*ptr) == *ptrs[j]);
         delete ptr;
     }
     delete tmunit;

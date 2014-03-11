@@ -5,8 +5,6 @@
  *******************************************************************************
  */
 
-#include "utypeinfo.h"  // for 'typeid' to work
-
 #include "unicode/tmutfmt.h"
 
 #if !UCONFIG_NO_FORMATTING
