@@ -665,7 +665,11 @@ public class PluralRules implements Serializable {
             } else {
                 String buf = String.format(Locale.ENGLISH, "%1.15e", n);
                 int ePos = buf.lastIndexOf('e');
-                String exponentStr = buf.substring(ePos+1);
+                int expNumPos = ePos + 1;
+                if (buf.charAt(expNumPos) == '+') {
+                    expNumPos++;
+                }
+                String exponentStr = buf.substring(expNumPos);
                 int exponent = Integer.parseInt(exponentStr);
                 int numFractionDigits = ePos - 2 - exponent;
                 if (numFractionDigits < 0) {

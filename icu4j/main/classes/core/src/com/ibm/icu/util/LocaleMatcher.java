@@ -46,7 +46,7 @@ import com.ibm.icu.impl.Row.R3;
  */
 public class LocaleMatcher {
     
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
 
     private static final ULocale UNKNOWN_LOCALE = new ULocale("und");
 
@@ -397,14 +397,12 @@ public class LocaleMatcher {
     }
 
     private static class ScoreData implements Freezable<ScoreData> {
-        /**
-         * 
-         */
+        @SuppressWarnings("unused")
         private static final double maxUnequal_changeD_sameS = 0.5;
-        /**
-         * 
-         */
+
+        @SuppressWarnings("unused")
         private static final double maxUnequal_changeEqual = 0.75;
+
         LinkedHashSet<Row.R3<LocalePatternMatcher,LocalePatternMatcher,Double>> scores = new LinkedHashSet<R3<LocalePatternMatcher, LocalePatternMatcher, Double>>();
         final Level level;
 
@@ -448,21 +446,21 @@ public class LocaleMatcher {
             // example: input en-GB, supported en en-GB
             // we want to have a closer match with 
 
-            boolean desiredChange = desiredRaw.equals(desiredMax);
-            boolean supportedChange = supportedRaw.equals(supportedMax);
+//            boolean desiredChange = desiredRaw.equals(desiredMax);
+//            boolean supportedChange = supportedRaw.equals(supportedMax);
             double distance = 0;
             if (!desiredMax.equals(supportedMax)) {
-                //                Map<String, Set<R3<LocalePatternMatcher,LocalePatternMatcher,Double>>> lang_result = scores.get(desiredMax);
-                //                if (lang_result == null) {
-                //                    distance = worst;
-                //                } else {
-                //                    Set<R3<LocalePatternMatcher,LocalePatternMatcher,Double>> result = lang_result.get(supportedMax);
-                //                    skip:
-                //                    if (result == null) {
-                //                        distance = worst;
-                //                    } else {
+//                Map<String, Set<R3<LocalePatternMatcher,LocalePatternMatcher,Double>>> lang_result = scores.get(desiredMax);
+//                if (lang_result == null) {
+//                    distance = worst;
+//                } else {
+//                    Set<R3<LocalePatternMatcher,LocalePatternMatcher,Double>> result = lang_result.get(supportedMax);
+//                    skip:
+//                    if (result == null) {
+//                        distance = worst;
+//                    } else {
                 distance = getRawScore(dMax, sMax);
-                //                }
+//                }
 //                if (desiredChange == supportedChange) {
 //                    distance *= maxUnequal_changeEqual;
 //                    if (DEBUG) {
