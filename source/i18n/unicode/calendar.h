@@ -2348,6 +2348,11 @@ private:
     /**
      * Register a new Calendar factory.  The factory will be adopted.
      * INTERNAL in 2.6
+     *
+     * Because ICU may choose to cache Calendars internally, this must
+     * be called at application startup, prior to any calls to
+     * Calendar::createInstance to avoid undefined behavior.
+     *
      * @param toAdopt the factory instance to be adopted
      * @param status the in/out status code, no special meanings are assigned
      * @return a registry key that can be used to unregister this factory
@@ -2361,6 +2366,10 @@ private:
      * The CalendarFactory corresponding to the key will be deleted.
      * INTERNAL in 2.6
      * @param key the registry key returned by a previous call to registerFactory
+     * Because ICU may choose to cache Calendars internally, this should
+     * be called during application shutdown, after all calls to
+     * Calendar::createInstance to avoid undefined behavior.
+     *
      * @param status the in/out status code, no special meanings are assigned
      * @return TRUE if the factory for the key was successfully unregistered
      * @internal
