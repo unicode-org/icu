@@ -547,6 +547,8 @@ public class PluralRules implements Serializable {
             return baseFactor;
         }
 
+        static final long MAX = (long)1E18;
+
         /**
          * @internal
          * @deprecated This API is ICU internal only.
@@ -561,7 +563,9 @@ public class PluralRules implements Serializable {
             source = isNegative ? -n : n;
             visibleDecimalDigitCount = v;
             decimalDigits = f;
-            integerValue = (long)n;
+            integerValue = n > MAX 
+                    ? MAX 
+                            : (long)n;
             hasIntegerValue = source == integerValue;
             // check values. TODO make into unit test.
             //            
@@ -605,6 +609,9 @@ public class PluralRules implements Serializable {
             if (v == 0) {
                 return 0;
             } else {
+                if (n < 0) {
+                    n = -n;
+                }
                 int baseFactor = (int) Math.pow(10, v);
                 long scaled = Math.round(n * baseFactor);
                 return (int) (scaled % baseFactor);
@@ -629,15 +636,49 @@ public class PluralRules implements Serializable {
             this(n,0);
         }
 
+        private static final long MAX_INTEGER_PART = 1000000000;
         /**
+         * Return a guess as to the number of decimals that would be displayed. This is only a guess; callers should
+         * always supply the decimals explicitly if possible. Currently, it is up to 6 decimals (without trailing zeros).
+         * Returns 0 for infinities and nans.
          * @internal
          * @deprecated This API is ICU internal only.
+         * 
          */
         @Deprecated
         public static int decimals(double n) {
             // Ugly...
-            String temp = String.valueOf(n);
-            return temp.endsWith(".0") ? 0 : temp.length() - temp.indexOf('.') - 1;
+            if (Double.isInfinite(n) || Double.isNaN(n)) {
+                return 0;
+            }
+            if (n < 0) {
+                n = -n;
+            }
+            if (n < MAX_INTEGER_PART) {
+                long temp = (long)(n * 1000000) % 1000000; // get 6 decimals
+                for (int mask = 10, digits = 6; digits > 0; mask *= 10, --digits) {
+                    if ((temp % mask) != 0) {
+                        return digits;
+                    }
+                }
+                return 0;
+            } else {
+                String buf = String.format(Locale.ENGLISH, "%1.15e", n);
+                int ePos = buf.lastIndexOf('e');
+                String exponentStr = buf.substring(ePos+1);
+                int exponent = Integer.parseInt(exponentStr);
+                int numFractionDigits = ePos - 2 - exponent;
+                if (numFractionDigits < 0) {
+                    return 0;
+                }
+                for (int i=ePos-1; numFractionDigits > 0; --i) {
+                    if (buf.charAt(i) != '0') {
+                        break;
+                    }
+                    --numFractionDigits; 
+                }
+                return numFractionDigits;
+            }
         }
 
         /**
@@ -796,7 +837,7 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public double doubleValue() {
-            return source;
+            return isNegative ? -source : source;
         }
 
         /**
@@ -1643,11 +1684,10 @@ public class PluralRules implements Serializable {
         }
 
         public String select(FixedDecimal n) {
+            if (Double.isInfinite(n.source) || Double.isNaN(n.source)) {
+                return KEYWORD_OTHER;
+            }
             Rule r = selectRule(n);
-            // since we have explict 'other', we don't need this.
-            //            if (r == null) {
-            //                return KEYWORD_OTHER;
-            //            }
             return r.getKeyword();
         }
 

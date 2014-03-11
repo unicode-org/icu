@@ -27,6 +27,20 @@ public class LocaleMatcherTest extends TestFmwk {
         new LocaleMatcherTest().run(args);
     }
 
+    public void testChinese() {
+        LocaleMatcher matcher = new LocaleMatcher("zh_CN, zh_TW, iw");
+        ULocale taiwanChinese = new ULocale("zh_TW");
+        ULocale chinaChinese = new ULocale("zh_CN");
+//        assertEquals("zh_CN, zh_TW, iw;", taiwanChinese, matcher.getBestMatch("zh_Hant_TW"));
+//        assertEquals("zh_CN, zh_TW, iw;", taiwanChinese, matcher.getBestMatch("zh_Hant"));
+//        assertEquals("zh_CN, zh_TW, iw;", taiwanChinese, matcher.getBestMatch("zh_TW"));
+//        assertEquals("zh_CN, zh_TW, iw;", chinaChinese, matcher.getBestMatch("zh_Hans_CN"));
+//        assertEquals("zh_CN, zh_TW, iw;", chinaChinese, matcher.getBestMatch("zh_CN"));
+//        assertEquals("zh_CN, zh_TW, iw;", chinaChinese, matcher.getBestMatch("zh"));
+        
+        assertEquals("zh_CN, zh_TW, iw;", taiwanChinese, matcher.getBestMatch("zh_Hant_HK")); 
+    }
+
     public void testenGB() {
         final LocaleMatcher matcher = new LocaleMatcher("fr, en, en_GB, es_MX, es_419, es");
         assertEquals("en_GB", matcher.getBestMatch("en_NZ").toString());
@@ -36,10 +50,9 @@ public class LocaleMatcherTest extends TestFmwk {
     }
 
     public void testFallbacks() {
-        final LocaleMatcher matcher = new LocaleMatcher("en, hi");
-        if (!logKnownIssue("10705", "Need new data from CLDR for languageMatching")) {
-            assertEquals("hi", matcher.getBestMatch("sa").toString());
-        }
+        LocalePriorityList lpl = LocalePriorityList.add("en, hi").build();
+        final LocaleMatcher matcher = new LocaleMatcher(lpl, null, 0.09);
+        assertEquals("hi", matcher.getBestMatch("sa").toString());
     }
 
     public void testOverrideData() {

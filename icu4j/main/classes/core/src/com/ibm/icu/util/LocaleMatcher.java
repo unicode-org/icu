@@ -46,7 +46,7 @@ import com.ibm.icu.impl.Row.R3;
  */
 public class LocaleMatcher {
     
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = true;
 
     private static final ULocale UNKNOWN_LOCALE = new ULocale("und");
 
@@ -112,7 +112,7 @@ public class LocaleMatcher {
      */
     @Deprecated
     public LocaleMatcher(LocalePriorityList languagePriorityList, LanguageMatcherData matcherData, double threshold) {
-        this.matcherData = matcherData;
+        this.matcherData = matcherData == null ? defaultWritten : matcherData;
         for (final ULocale language : languagePriorityList) {
             add(language, languagePriorityList.getWeight(language));
         }
