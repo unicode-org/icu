@@ -373,6 +373,13 @@ static UBool getFromCache(
     return U_SUCCESS(status);
 }
 
+// Converts a composite measure into hours-minutes-seconds and stores at hms
+// array. [0] is hours; [1] is minutes; [2] is seconds. Returns a bit map of
+// units found: 1=hours, 2=minutes, 4=seconds. For example, if measures
+// contains hours-minutes, this function would return 3.
+//
+// If measures cannot be converted into hours, minutes, seconds or if amounts
+// are negative, or if hours, minutes, seconds are out of order, returns 0.
 static int32_t toHMS(
         const Measure *measures,
         int32_t measureCount,
@@ -735,6 +742,7 @@ UnicodeString &MeasureFormat::formatMeasure(
             status);
 }
 
+// Formats hours-minutes-seconds as 5:37:23 or similar.
 UnicodeString &MeasureFormat::formatNumeric(
         const Formattable *hms,  // always length 3
         int32_t bitMap,   // 1=hourset, 2=minuteset, 4=secondset
@@ -799,11 +807,12 @@ static void appendRange(
     dest.append(src, end, src.length() - end);
 }
 
+// Formats time like 5:37:23
 UnicodeString &MeasureFormat::formatNumeric(
         UDate date, // Time since epoch 1:30:00 would be 5400000
         const DateFormat &dateFmt, // h:mm, m:ss, or h:mm:ss
-        UDateFormatField smallestField,
-        const Formattable &smallestAmount,
+        UDateFormatField smallestField, // seconds in 5:37:23.5
+        const Formattable &smallestAmount, // 23.5 for 5:37:23.5
         UnicodeString &appendTo,
         UErrorCode &status) const {
     if (U_FAILURE(status)) {
