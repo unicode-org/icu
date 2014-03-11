@@ -982,6 +982,11 @@ public abstract class NumberFormat extends UFormat {
      * {@icu} Registers a new NumberFormatFactory.  The factory is adopted by
      * the service and must not be modified.  The returned object is a
      * key that can be used to unregister this factory.
+     * 
+     * Because ICU may choose to cache NumberFormat objects internally, this must
+     * be called at application startup, prior to any calls to
+     * NumberFormat.getInstance to avoid undefined behavior.
+     * 
      * @param factory the factory to register
      * @return a key with which to unregister the factory
      * @stable ICU 2.6

@@ -265,6 +265,11 @@ public class Currency extends MeasureUnit {
     /**
      * Registers a new currency for the provided locale.  The returned object
      * is a key that can be used to unregister this currency object.
+     * 
+     * Because ICU may choose to cache Currency objects internally, this must
+     * be called at application startup, prior to any calls to
+     * Currency.getInstance to avoid undefined behavior.
+     * 
      * @param currency the currency to register
      * @param locale the ulocale under which to register the currency
      * @return a registry key that can be used to unregister this currency
