@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -797,8 +797,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales);
         coll = gp.getCollator();
         locStr = coll.getLocale(ULocale.VALID_LOCALE).toString();
-        if (!locStr.equals("fr_FR")) {
-            errln("FAIL: Collator locale is " + locStr + " Expected: fr_FR");
+        if (!locStr.equals("fr")) {
+            errln("FAIL: Collator locale is " + locStr + " Expected: fr");
         }
 
         // Set explicit Collator

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -41,7 +41,7 @@ public class CollationServiceTest extends TestFmwk {
 
             // coverage
             Collator test = Collator.getInstance(ULocale.GERMANY); // CollatorFactory.handleCreate
-            if (!test.getLocale(ULocale.VALID_LOCALE).equals(ULocale.GERMANY)) {
+            if (!test.getLocale(ULocale.VALID_LOCALE).equals(ULocale.GERMAN)) {
                 errln("Collation from Germany is really " + test.getLocale(ULocale.VALID_LOCALE));
             }
 
@@ -355,8 +355,8 @@ public class CollationServiceTest extends TestFmwk {
         if (assertTrue("getFunctionalEquivalent(de_DE)!=null", equiv!=null)) {
             assertEquals("getFunctionalEquivalent(de_DE)", "root", equiv.toString());
         }
-        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==true",
-                   isAvailable[0] == true);
+        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==false",
+                   isAvailable[0] == false);
 
         equiv = Collator.getFunctionalEquivalent(KW[0], new ULocale("zh_Hans"));
         if (assertTrue("getFunctionalEquivalent(zh_Hans)!=null", equiv!=null)) {
@@ -376,25 +376,25 @@ public class CollationServiceTest extends TestFmwk {
                           "sv@collation=standard", "sv@collation=standard", "t",
                           "sv@collation=reformed", "sv", "t",
                           "sv@collation=big5han", "sv", "t",
-                          "sv_FI", "sv", "t",
-                          "sv_FI@collation=direct", "sv", "t",
-                          "sv_FI@collation=traditional", "sv", "t",
-                          "sv_FI@collation=gb2312han", "sv", "t",
-                          "sv_FI@collation=stroke", "sv", "t",
-                          "sv_FI@collation=pinyin", "sv", "t",
-                          "sv_FI@collation=standard", "sv@collation=standard", "t",
-                          "sv_FI@collation=reformed", "sv", "t",
-                          "sv_FI@collation=big5han", "sv", "t",
+                          "sv_FI", "sv", "f",
+                          "sv_FI@collation=direct", "sv", "f",
+                          "sv_FI@collation=traditional", "sv", "f",
+                          "sv_FI@collation=gb2312han", "sv", "f",
+                          "sv_FI@collation=stroke", "sv", "f",
+                          "sv_FI@collation=pinyin", "sv", "f",
+                          "sv_FI@collation=standard", "sv@collation=standard", "f",
+                          "sv_FI@collation=reformed", "sv", "f",
+                          "sv_FI@collation=big5han", "sv", "f",
                           "nl", "root", "t",
                           "nl@collation=direct", "root", "t",
-                          "nl_BE", "root", "t",
-                          "nl_BE@collation=direct", "root", "t",
-                          "nl_BE@collation=traditional", "root", "t",
-                          "nl_BE@collation=gb2312han", "root", "t",
-                          "nl_BE@collation=stroke", "root", "t",
-                          "nl_BE@collation=pinyin", "root", "t",
-                          "nl_BE@collation=big5han", "root", "t",
-                          "nl_BE@collation=phonebook", "root", "t",
+                          "nl_BE", "root", "f",
+                          "nl_BE@collation=direct", "root", "f",
+                          "nl_BE@collation=traditional", "root", "f",
+                          "nl_BE@collation=gb2312han", "root", "f",
+                          "nl_BE@collation=stroke", "root", "f",
+                          "nl_BE@collation=pinyin", "root", "f",
+                          "nl_BE@collation=big5han", "root", "f",
+                          "nl_BE@collation=phonebook", "root", "f",
                           "en_US_VALLEYGIRL","root","f"
                         };
         final int DATA_COUNT=(DATA.length/3);
