@@ -1713,7 +1713,7 @@ public abstract class Transliterator implements StringTransform  {
      * Register a factory object with the given ID.  The factory
      * method should return a new instance of the given transliterator.
      * 
-     * Because ICU may choose to cache Transliterator objects internally, this must
+     * <p>Because ICU may choose to cache Transliterator objects internally, this must
      * be called at application startup, prior to any calls to
      * Transliterator.getInstance to avoid undefined behavior.
      * 
@@ -1728,7 +1728,7 @@ public abstract class Transliterator implements StringTransform  {
     /**
      * Register a Transliterator object with the given ID.
      * 
-     * Because ICU may choose to cache Transliterator objects internally, this must
+     * <p>Because ICU may choose to cache Transliterator objects internally, this must
      * be called at application startup, prior to any calls to
      * Transliterator.getInstance to avoid undefined behavior.
      * 
@@ -1742,7 +1742,7 @@ public abstract class Transliterator implements StringTransform  {
     /**
      * Register a Transliterator object with the given ID.
      * 
-     * Because ICU may choose to cache Transliterator objects internally, this must
+     * <p>Because ICU may choose to cache Transliterator objects internally, this must
      * be called at application startup, prior to any calls to
      * Transliterator.getInstance to avoid undefined behavior.
      * 
@@ -1758,7 +1758,7 @@ public abstract class Transliterator implements StringTransform  {
      * alias ID produces the same result as instantiating the original ID.
      * This is generally used to create short aliases of compound IDs.
      * 
-     * Because ICU may choose to cache Transliterator objects internally, this must
+     * <p>Because ICU may choose to cache Transliterator objects internally, this must
      * be called at application startup, prior to any calls to
      * Transliterator.getInstance to avoid undefined behavior.
      * 
