@@ -7,7 +7,7 @@
 
 #include "unicode/filteredbrk.h"
 
-#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
+#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING && !UCONFIG_NO_FILTERED_BREAK_ITERATION
 
 #include <unicode/ucharstriebuilder.h>
 
@@ -405,4 +405,4 @@ FilteredBreakIteratorBuilder::createInstance(UErrorCode& status) {
 
 U_NAMESPACE_END
 
-#endif //#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
+#endif //#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING && !UCONFIG_NO_FILTERED_BREAK_ITERATION
