@@ -373,6 +373,11 @@ static UBool getFromCache(
     return U_SUCCESS(status);
 }
 
+static UBool isTimeUnit(const MeasureUnit &mu, const char *tu) {
+  return uprv_strcmp(mu.getType(), "duration") == 0 &&
+          uprv_strcmp(mu.getSubtype(), tu) == 0;
+}
+
 // Converts a composite measure into hours-minutes-seconds and stores at hms
 // array. [0] is hours; [1] is minutes; [2] is seconds. Returns a bit map of
 // units found: 1=hours, 2=minutes, 4=seconds. For example, if measures
@@ -389,9 +394,6 @@ static int32_t toHMS(
         return 0;
     }
     int32_t result = 0;
-    LocalPointer<MeasureUnit> hourUnit(MeasureUnit::createHour(status));
-    LocalPointer<MeasureUnit> minuteUnit(MeasureUnit::createMinute(status));
-    LocalPointer<MeasureUnit> secondUnit(MeasureUnit::createSecond(status));
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -402,7 +404,7 @@ static int32_t toHMS(
     // UBool isUnitSame(const MeasureUnit &other) const to address performance
     // issues around copy constructor.
     for (int32_t i = 0; i < measureCount; ++i) {
-        if (MeasureUnit(measures[i].getUnit()) == *hourUnit) {
+        if (isTimeUnit(measures[i].getUnit(), "hour")) {
             // hour must come first
             if (result >= 1) {
                 return 0;
@@ -412,7 +414,7 @@ static int32_t toHMS(
                 return 0;
             }
             result |= 1;
-        } else if (MeasureUnit(measures[i].getUnit()) == *minuteUnit) {
+        } else if (isTimeUnit(measures[i].getUnit(), "minute")) {
             // minute must come after hour
             if (result >= 2) {
                 return 0;
@@ -422,7 +424,7 @@ static int32_t toHMS(
                 return 0;
             }
             result |= 2;
-        } else if (MeasureUnit(measures[i].getUnit()) == *secondUnit) {
+        } else if (isTimeUnit(measures[i].getUnit(), "second")) {
             // second must come after hour and minute
             if (result >= 4) {
                 return 0;
