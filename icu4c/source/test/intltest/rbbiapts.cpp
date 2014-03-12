@@ -1221,7 +1221,7 @@ static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it)
 #endif
 
 void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
-#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
+#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING && !UCONFIG_NO_FILTERED_BREAK_ITERATION
   UErrorCode status = U_ZERO_ERROR;
   LocalPointer<FilteredBreakIteratorBuilder> builder;
   LocalPointer<BreakIterator> baseBI;
@@ -1391,7 +1391,7 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
 #endif
 
 #else
-  logln("Skipped- not: !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING");
+  logln("Skipped- not: !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING && !UCONFIG_NO_FILTERED_BREAK_ITERATION");
 #endif
 }
 
