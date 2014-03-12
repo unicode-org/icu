@@ -154,7 +154,8 @@ typedef struct UStringSearch UStringSearch;
 * @stable ICU 2.4
 */
 typedef enum {
-    /** Option for overlapping matches
+    /**
+     * Option for overlapping matches
      * @stable ICU 2.4
      */
     USEARCH_OVERLAP = 0,
@@ -182,6 +183,10 @@ typedef enum {
      */
     USEARCH_ELEMENT_COMPARISON = 2,
 
+    /**
+     * Count of attribute types
+     * @stable ICU 2.4
+     */
     USEARCH_ATTRIBUTE_COUNT = 3
 } USearchAttribute;
 
@@ -189,11 +194,20 @@ typedef enum {
 * @stable ICU 2.4
 */
 typedef enum {
-    /** Default value for any USearchAttribute */
+    /** 
+     * Default value for any USearchAttribute
+     * @stable ICU 2.4
+     */
     USEARCH_DEFAULT = -1,
-    /** Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH */
+    /**
+     * Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH
+     * @stable ICU 2.4
+     */
     USEARCH_OFF, 
-    /** Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH */
+    /**
+     * Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH
+     * @stable ICU 2.4
+     */
     USEARCH_ON,
     /** 
      * Value (default) for USEARCH_ELEMENT_COMPARISON;
@@ -231,6 +245,10 @@ typedef enum {
      */
     USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD,
 
+    /**
+     * Count of attribute values
+     * @stable ICU 2.4
+     */
     USEARCH_ATTRIBUTE_VALUE_COUNT
 } USearchAttributeValue;
 
