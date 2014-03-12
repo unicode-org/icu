@@ -18,5 +18,5 @@ es_US{
             "dólar estadounidense",
         }
     }
-    Version{"2.0.92.80"}
+    Version{"2.0.98.76"}
 }

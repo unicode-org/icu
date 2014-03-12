@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/sv.xml
  */
 sv{
-    Version{"2.0.97.50"}
+    Version{"2.0.99.20"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -129,9 +129,6 @@ sv{
         "America:Merida"{
             ec{"Mérida"}
         }
-        "America:Montreal"{
-            ec{"Montréal"}
-        }
         "America:Noronha"{
             ec{"Fernando de Noronha"}
         }
@@ -176,9 +173,6 @@ sv{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Amundsen-Scott-basen"}
         }
         "Asia:Almaty"{
             ec{"Alma-Ata"}

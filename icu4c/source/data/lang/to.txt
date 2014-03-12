@@ -22,7 +22,6 @@ to{
         am{"lea fakaʻameliki"}
         ar{"lea fakaʻalepea"}
         ar_001{"lea fakaʻalepea (māmani)"}
-        art{"lea faʻu"}
         as{"lea fakaʻasamia"}
         ay{"lea ʻaimala"}
         az{"lea fakaʻasapaisani"}
@@ -102,7 +101,6 @@ to{
         mg{"lea fakamalakasi"}
         mh{"lea fakamāsolo"}
         mi{"lea fakamauli"}
-        mis{"lea kehekehe"}
         mk{"lea fakamasitōnia"}
         ml{"lea fakaʻinitia-malāialami"}
         mn{"lea fakamongokōlia"}
@@ -144,7 +142,6 @@ to{
         sd{"lea fakasīniti"}
         se{"lea sami fakatokelau"}
         sg{"lea sango"}
-        sgn{"lea fakaʻilonga"}
         sh{"lea sēpia-kuloisia"}
         si{"lea fakasingihala"}
         sk{"lea fakasolāvaki"}
@@ -299,7 +296,7 @@ to{
             tibt{"fika fakatipeti"}
         }
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     codePatterns{
         language{"Lea: {0}"}
         script{"Tohinima Fakaha: {0}"}

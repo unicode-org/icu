@@ -37,53 +37,42 @@ hr{
         ady{"adigejski"}
         ae{"avestan"}
         af{"afrikaans"}
-        afa{"ostali afričko-azijski"}
         afh{"afrihili"}
         agq{"aghem"}
         ain{"ainu"}
         ak{"akanski"}
         akk{"akkadian"}
         ale{"aleutski"}
-        alg{"algonquian"}
         alt{"južni altai"}
         am{"amharski"}
         an{"aragonski"}
         ang{"staroengleski"}
         anp{"angika"}
-        apa{"apaški"}
         ar{"arapski"}
         ar_001{"moderni standardni arapski"}
         arc{"aramejski"}
         arn{"araukanski"}
         arp{"arapaho"}
-        art{"umjetni jezik"}
         arw{"arawak"}
         as{"asamski"}
         asa{"asu"}
         ast{"asturijski"}
-        ath{"athapascan"}
-        aus{"australski"}
         av{"avarski"}
         awa{"awadhi"}
         ay{"aymara"}
         az{"azerbajdžanski"}
         ba{"baškirski"}
-        bad{"banda"}
-        bai{"bamileke"}
         bal{"baluchi"}
         ban{"balinezijski"}
         bas{"basa"}
-        bat{"baltički"}
         bax{"bamunski"}
         bbj{"ghomala"}
         be{"bjeloruski"}
         bej{"beja"}
         bem{"bemba"}
-        ber{"berberski"}
         bez{"bena"}
         bfd{"bafut"}
         bg{"bugarski"}
-        bh{"bihari"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -92,14 +81,12 @@ hr{
         bla{"siksika"}
         bm{"bambara"}
         bn{"bengalski"}
-        bnt{"bantu"}
         bo{"tibetanski"}
         br{"bretonski"}
         bra{"braj"}
         brx{"bodo"}
         bs{"bosanski"}
         bss{"akoose"}
-        btk{"batak"}
         bua{"buriat"}
         bug{"buginski"}
         bum{"bulu"}
@@ -107,14 +94,11 @@ hr{
         byv{"medumba"}
         ca{"katalonski"}
         cad{"caddo"}
-        cai{"jezik srednjoameričkih Indijanaca"}
         car{"karipski"}
-        cau{"kavkaski"}
         cay{"cayuga"}
         cch{"atsam"}
         ce{"čečenski"}
         ceb{"cebuano"}
-        cel{"keltski"}
         cgg{"chiga"}
         ch{"chamorro"}
         chb{"chibcha"}
@@ -127,26 +111,19 @@ hr{
         chr{"čeroki"}
         chy{"čejenski"}
         ckb{"soranski kurdski"}
-        cmc{"chamic"}
         co{"korzički"}
         cop{"koptski"}
-        cpe{"engleski - na osnovi kreolskog ili pidgin"}
-        cpf{"francuski - na osnovi kreolskog ili pidgin"}
-        cpp{"kreolski ili pidgin na osnovi portugalskog"}
         cr{"cree"}
         crh{"krimski turski"}
-        crp{"kreolski ili pidgin"}
         cs{"češki"}
         csb{"kašupski"}
         cu{"crkvenoslavenski"}
-        cus{"kušitski"}
         cv{"chuvash"}
         cy{"velški"}
         da{"danski"}
         dak{"dakota jezik"}
         dar{"dargwa"}
         dav{"taita"}
-        day{"dayak"}
         de{"njemački"}
         de_AT{"austrijski njemački"}
         de_CH{"gornjonjemački (švicarski)"}
@@ -156,7 +133,6 @@ hr{
         din{"dinka"}
         dje{"zarma"}
         doi{"dogri"}
-        dra{"dravidski"}
         dsb{"lužičkosrpski"}
         dua{"duala"}
         dum{"nizozemski, srednji"}
@@ -192,7 +168,6 @@ hr{
         ff{"fulah"}
         fi{"finski"}
         fil{"filipino"}
-        fiu{"ugro-finski jezik"}
         fj{"fidžijski"}
         fo{"ferojski"}
         fon{"fon"}
@@ -210,7 +185,6 @@ hr{
         gay{"gayo"}
         gba{"gbaya"}
         gd{"škotski-galski"}
-        gem{"germanski"}
         gez{"staroetiopski"}
         gil{"gilbertski"}
         gl{"galicijski"}
@@ -233,7 +207,6 @@ hr{
         he{"hebrejski"}
         hi{"hindski"}
         hil{"hiligaynon"}
-        him{"himachali"}
         hit{"hetitski"}
         hmn{"hmong"}
         ho{"hiri motu"}
@@ -251,15 +224,10 @@ hr{
         ie{"interligua"}
         ig{"igbo"}
         ii{"sichuan yi"}
-        ijo{"ijo"}
         ik{"inupiaq"}
         ilo{"iloko"}
-        inc{"indijski"}
-        ine{"indoeuropski"}
         inh{"ingušetski"}
         io{"ido"}
-        ira{"iranski"}
-        iro{"irokeški"}
         is{"islandski"}
         it{"talijanski"}
         iu{"inuktitut"}
@@ -276,7 +244,6 @@ hr{
         kac{"kachin"}
         kaj{"kaje"}
         kam{"kamba"}
-        kar{"karen"}
         kaw{"kawi"}
         kbd{"kabardian"}
         kbl{"kanembu"}
@@ -286,7 +253,6 @@ hr{
         kfo{"koro"}
         kg{"kongo"}
         kha{"khasi"}
-        khi{"kojsanski"}
         kho{"khotanese"}
         khq{"koyra chiini"}
         ki{"kikuyu"}
@@ -305,7 +271,6 @@ hr{
         kr{"kanuri"}
         krc{"karachay-balkar"}
         krl{"karelijski"}
-        kro{"kru"}
         kru{"kuruški"}
         ks{"kašmirski"}
         ksb{"shambala"}
@@ -345,7 +310,6 @@ hr{
         mai{"maithili"}
         mak{"makasar"}
         man{"mandingo"}
-        map{"austronezijski"}
         mas{"masajski"}
         mde{"maba"}
         mdf{"moksha"}
@@ -361,14 +325,11 @@ hr{
         mi{"maorski"}
         mic{"micmac"}
         min{"minangkabau"}
-        mis{"ostali jezici"}
         mk{"makedonski"}
-        mkh{"mon-kmerski"}
         ml{"malajalamski"}
         mn{"mongolski"}
         mnc{"mandžurski"}
         mni{"manipurski"}
-        mno{"manobo"}
         moh{"mohawk"}
         mos{"mossi"}
         mr{"marathski"}
@@ -376,17 +337,13 @@ hr{
         mt{"malteški"}
         mua{"mundang"}
         mul{"više jezika"}
-        mun{"munda"}
         mus{"creek"}
         mwl{"mirandski"}
         mwr{"marwari"}
         my{"burmanski"}
         mye{"myene"}
-        myn{"majanski"}
         myv{"mordvinski"}
         na{"nauru"}
-        nah{"nahuatl"}
-        nai{"jezik sjevernoameričkih Indijanaca"}
         nap{"napolitanski"}
         naq{"nama"}
         nb{"književni norveški"}
@@ -396,7 +353,6 @@ hr{
         new{"newari"}
         ng{"ndonga"}
         nia{"nias"}
-        nic{"nigersko-kordofanski"}
         niu{"niujski"}
         nl{"nizozemski"}
         nl_BE{"flamanski"}
@@ -409,7 +365,6 @@ hr{
         nqo{"n'ko"}
         nr{"južni ndebele"}
         nso{"sjeverni sotho"}
-        nub{"nubijski"}
         nus{"nuer"}
         nv{"navajo"}
         nwc{"klasični newari"}
@@ -425,21 +380,17 @@ hr{
         os{"osetski"}
         osa{"osage"}
         ota{"turski - otomanski"}
-        oto{"otomijski"}
         pa{"pandžapski"}
-        paa{"papuanski"}
         pag{"pangasinan"}
         pal{"pahlavi"}
         pam{"pampanga"}
         pap{"papiamento"}
         pau{"palauanski"}
         peo{"staroperzijski"}
-        phi{"filipinski"}
         phn{"fenički"}
         pi{"pali"}
         pl{"poljski"}
         pon{"pohnpeian"}
-        pra{"prakrit"}
         pro{"staroprovansalski"}
         ps{"paštu"}
         pt{"portugalski"}
@@ -453,7 +404,6 @@ hr{
         rn{"rundi"}
         ro{"rumunjski"}
         ro_MD{"moldavski"}
-        roa{"romanski"}
         rof{"rombo"}
         rom{"romski"}
         root{"korijenski"}
@@ -464,8 +414,6 @@ hr{
         sa{"sanskrtski"}
         sad{"sandawe"}
         sah{"jakutski"}
-        sai{"jezik južnoameričkih Indijanaca"}
-        sal{"salishan"}
         sam{"samarijanski aramejski"}
         saq{"samburu"}
         sas{"sasak"}
@@ -480,25 +428,19 @@ hr{
         see{"seneca"}
         seh{"sena"}
         sel{"selkupski"}
-        sem{"semitic"}
         ses{"koyraboro senni"}
         sg{"sango"}
         sga{"staroirski"}
-        sgn{"znakovni jezik"}
         sh{"srpsko-hrvatski"}
         shi{"tachelhit"}
         shn{"shan"}
         shu{"čadski arapski"}
         si{"sinhaleški"}
         sid{"sidamo"}
-        sio{"siouan"}
-        sit{"sino-tibetski"}
         sk{"slovački"}
         sl{"slovenski"}
-        sla{"slavenski"}
         sm{"samoanski"}
         sma{"sjeverni sami"}
-        smi{"sami"}
         smj{"lule sami"}
         smn{"inari sami"}
         sms{"skolt sami"}
@@ -506,13 +448,11 @@ hr{
         snk{"soninke"}
         so{"somalski"}
         sog{"sogdien"}
-        son{"songhai"}
         sq{"albanski"}
         sr{"srpski"}
         srn{"sranan tongo"}
         srr{"serer"}
         ss{"svati"}
-        ssa{"nilo-saharski"}
         ssy{"saho"}
         st{"sesotski"}
         su{"sundanski"}
@@ -526,7 +466,6 @@ hr{
         syc{"klasični sirski"}
         syr{"sirijski"}
         ta{"tamilski"}
-        tai{"tajski"}
         te{"telugu"}
         tem{"temne"}
         teo{"teso"}
@@ -553,8 +492,6 @@ hr{
         tsi{"tsimshian"}
         tt{"tatarski"}
         tum{"tumbuka"}
-        tup{"tupi"}
-        tut{"altajski"}
         tvl{"tuvaluanski"}
         tw{"twi"}
         twq{"tasawaq"}
@@ -577,11 +514,9 @@ hr{
         vun{"vunjo"}
         wa{"valonski"}
         wae{"walser"}
-        wak{"wakashan"}
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
-        wen{"lužički"}
         wo{"wolof"}
         xal{"kalmyk"}
         xh{"xhosa"}
@@ -592,7 +527,6 @@ hr{
         ybb{"yemba"}
         yi{"jidiš"}
         yo{"joruba"}
-        ypk{"yupik"}
         yue{"kantonski"}
         za{"zhuang"}
         zap{"zapotec"}
@@ -602,7 +536,6 @@ hr{
         zh{"kineski"}
         zh_Hans{"kineski (pojednostavljeni)"}
         zh_Hant{"kineski (tradicionalni)"}
-        znd{"zande"}
         zu{"zulu"}
         zun{"zuni"}
         zxx{"bez jezičnog sadržaja"}
@@ -930,7 +863,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.97.50"}
+    Version{"2.0.98.52"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

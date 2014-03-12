@@ -11,7 +11,7 @@
  */
 bs_Cyrl{
     %%Parent{"root"}
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}
@@ -439,9 +439,6 @@ bs_Cyrl{
         "America:Montevideo"{
             ec{"Монтевидео"}
         }
-        "America:Montreal"{
-            ec{"Монтреал"}
-        }
         "America:Montserrat"{
             ec{"Монтсерат"}
         }
@@ -526,9 +523,6 @@ bs_Cyrl{
         "America:Scoresbysund"{
             ec{"Скорезбисунд"}
         }
-        "America:Shiprock"{
-            ec{"Шипрок"}
-        }
         "America:St_Barthelemy"{
             ec{"Св. Бартоломeј"}
         }
@@ -603,9 +597,6 @@ bs_Cyrl{
         }
         "Antarctica:Rothera"{
             ec{"Ротера"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Јужни пол"}
         }
         "Antarctica:Syowa"{
             ec{"Шова"}

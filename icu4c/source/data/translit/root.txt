@@ -1367,6 +1367,13 @@ root {
             }
         }
 
+        ch-ch_FONIPA {
+            file {
+                resource:process(transliterator) {"ch_ch_FONIPA.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         cs-cs_FONIPA {
             file {
                 resource:process(transliterator) {"cs_cs_FONIPA.txt"}
@@ -1398,6 +1405,13 @@ root {
         cs_FONIPA-ko {
             file {
                 resource:process(transliterator) {"cs_FONIPA_ko.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        dsb-dsb_FONIPA {
+            file {
+                resource:process(transliterator) {"dsb_dsb_FONIPA.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -1521,6 +1535,13 @@ root {
             }
         }
 
+        la-la_FONIPA {
+            file {
+                resource:process(transliterator) {"la_la_FONIPA.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         lt-Lower {
             file {
                 resource:process(transliterator) {"lt_Lower.txt"}
@@ -1622,6 +1643,13 @@ root {
         sk_FONIPA-ja {
             file {
                 resource:process(transliterator) {"sk_FONIPA_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        tlh-tlh_FONIPA {
+            file {
+                resource:process(transliterator) {"tlh_tlh_FONIPA.txt"}
                 direction {"FORWARD"}
             }
         }

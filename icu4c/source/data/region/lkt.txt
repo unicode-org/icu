@@ -24,5 +24,5 @@ lkt{
         MX{"Spayóla Makȟóčhe"}
         US{"Mílahaŋska Tȟamákȟočhe"}
     }
-    Version{"2.0.92.80"}
+    Version{"2.0.98.76"}
 }

@@ -1394,8 +1394,8 @@ void TestGetLocale() {
   } testStruct[] = {
     { "sr_RS", "sr_Cyrl_RS", "sr" },
     { "sh_YU", "sr_Latn_RS", "sr_Latn" }, /* was sh, then aliased to hr, now sr_Latn via import per cldrbug 5647: */
-    { "en_BE_FOO", "en_BE", "root" },
-    { "sv_SE_NONEXISTANT", "sv_SE", "sv" }
+    { "en_BE_FOO", "en", "root" },
+    { "sv_SE_NONEXISTANT", "sv", "sv" }
   };
 
   /* test opening collators for different locales */

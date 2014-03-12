@@ -43,7 +43,7 @@ chr{
             }
         }
     }
-    Version{"2.0.96.22"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -398,6 +398,18 @@ chr{
             year{
                 one{"{0} ᏑᏕᏘᏴᏓ"}
                 other{"{0} ᏧᏕᏘᏴᏓ"}
+            }
+        }
+    }
+    unitsNarrow{
+        temperature{
+            celsius{
+                one{"{0}°C"}
+                other{"{0}°C"}
+            }
+            fahrenheit{
+                one{"{0}°"}
+                other{"{0}°"}
             }
         }
     }

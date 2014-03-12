@@ -157,7 +157,7 @@ zu{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1097,6 +1097,10 @@ zu{
             celsius{
                 one{"{0}°"}
                 other{"{0}°"}
+            }
+            fahrenheit{
+                one{"{0}°F"}
+                other{"{0}°F"}
             }
         }
         volume{

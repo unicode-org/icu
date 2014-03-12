@@ -587,8 +587,8 @@ void CollationServiceTest::TestSeparateTree() {
                                               isAvailable, ec);
     assertSuccess("getFunctionalEquivalent", ec);
     assertEquals("getFunctionalEquivalent(de_DE)", "root", equiv.getName());
-    assertTrue("getFunctionalEquivalent(de_DE).isAvailable==TRUE",
-               isAvailable == TRUE);
+    assertTrue("getFunctionalEquivalent(de_DE).isAvailable==FALSE",
+               isAvailable == FALSE);
 
     equiv = Collator::getFunctionalEquivalent("collation",
                                                      Locale::createFromName("sv"),
@@ -603,8 +603,8 @@ void CollationServiceTest::TestSeparateTree() {
                                               isAvailable, ec);
     assertSuccess("getFunctionalEquivalent", ec);
     assertEquals("getFunctionalEquivalent(sv_SE)", "sv", equiv.getName());
-    assertTrue("getFunctionalEquivalent(sv_SE).isAvailable==TRUE",
-               isAvailable == TRUE);
+    assertTrue("getFunctionalEquivalent(sv_SE).isAvailable==FALSE",
+               isAvailable == FALSE);
 }
 
 #endif

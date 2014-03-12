@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/fa.xml
  */
 fa{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"آبیجان"}
@@ -459,9 +459,6 @@ fa{
         "America:Montevideo"{
             ec{"مونته‌ویدئو"}
         }
-        "America:Montreal"{
-            ec{"مونترئال"}
-        }
         "America:Montserrat"{
             ec{"مونتسرات"}
         }
@@ -552,9 +549,6 @@ fa{
         "America:Scoresbysund"{
             ec{"اسکورسبیسوند"}
         }
-        "America:Shiprock"{
-            ec{"شیپراک"}
-        }
         "America:Sitka"{
             ec{"سیتکا"}
         }
@@ -635,9 +629,6 @@ fa{
         }
         "Antarctica:Rothera"{
             ec{"روترا"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"قطب جنوب"}
         }
         "Antarctica:Syowa"{
             ec{"شووا"}

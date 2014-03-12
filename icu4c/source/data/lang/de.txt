@@ -37,53 +37,42 @@ de{
         ady{"Adygeisch"}
         ae{"Avestisch"}
         af{"Afrikaans"}
-        afa{"Afroasiatisch"}
         afh{"Afrihili"}
         agq{"Aghem"}
         ain{"Ainu-Sprache"}
         ak{"Akan"}
         akk{"Akkadisch"}
         ale{"Aleutisch"}
-        alg{"Algonkin-Sprache"}
         alt{"Süd-Altaisch"}
         am{"Amharisch"}
         an{"Aragonesisch"}
         ang{"Altenglisch"}
         anp{"Angika"}
-        apa{"Apache-Sprache"}
         ar{"Arabisch"}
         ar_001{"Modernes Hocharabisch"}
         arc{"Aramäisch"}
         arn{"Araukanisch"}
         arp{"Arapaho-Sprache"}
-        art{"Kunstsprache"}
         arw{"Arawak-Sprache"}
         as{"Assamesisch"}
         asa{"Pare"}
         ast{"Asturianisch"}
-        ath{"Athapaskisch"}
-        aus{"Australisch"}
         av{"Awarisch"}
         awa{"Awadhi"}
         ay{"Aymara"}
         az{"Aserbaidschanisch"}
         ba{"Baschkirisch"}
-        bad{"Banda-Sprache"}
-        bai{"Bamileke-Sprache"}
         bal{"Belutschisch"}
         ban{"Balinesisch"}
         bas{"Basaa-Sprache"}
-        bat{"Baltisch"}
         bax{"Bamun"}
         bbj{"Ghomala"}
         be{"Weißrussisch"}
         bej{"Bedauye"}
         bem{"Bemba-Sprache"}
-        ber{"Berbersprache"}
         bez{"Bena"}
         bfd{"Bafut"}
         bg{"Bulgarisch"}
-        bh{"Biharisch"}
         bho{"Bhodschpuri"}
         bi{"Bislama"}
         bik{"Bikol-Sprache"}
@@ -92,14 +81,12 @@ de{
         bla{"Blackfoot-Sprache"}
         bm{"Bambara-Sprache"}
         bn{"Bengalisch"}
-        bnt{"Bantusprache"}
         bo{"Tibetisch"}
         br{"Bretonisch"}
         bra{"Braj-Bhakha"}
         brx{"Bodo"}
         bs{"Bosnisch"}
         bss{"Akoose"}
-        btk{"Batak"}
         bua{"Burjatisch"}
         bug{"Buginesisch"}
         bum{"Bulu"}
@@ -107,14 +94,11 @@ de{
         byv{"Medumba"}
         ca{"Katalanisch"}
         cad{"Caddo"}
-        cai{"Zentralamerikanische Indianersprache"}
         car{"Karibisch"}
-        cau{"Kaukasisch"}
         cay{"Cayuga"}
         cch{"Atsam"}
         ce{"Tschetschenisch"}
         ceb{"Cebuano"}
-        cel{"Keltisch"}
         cgg{"Chiga"}
         ch{"Chamorro-Sprache"}
         chb{"Chibcha-Sprache"}
@@ -127,26 +111,19 @@ de{
         chr{"Cherokee"}
         chy{"Cheyenne"}
         ckb{"Sorani"}
-        cmc{"Cham-Sprache"}
         co{"Korsisch"}
         cop{"Koptisch"}
-        cpe{"Kreolisch-Englische Sprache"}
-        cpf{"Kreolisch-Französische Sprache"}
-        cpp{"Kreolisch-Portugiesische Sprache"}
         cr{"Cree"}
         crh{"Krimtatarisch"}
-        crp{"Kreolische Sprache"}
         cs{"Tschechisch"}
         csb{"Kaschubisch"}
         cu{"Kirchenslawisch"}
-        cus{"Kuschitisch"}
         cv{"Tschuwaschisch"}
         cy{"Walisisch"}
         da{"Dänisch"}
         dak{"Dakota-Sprache"}
         dar{"Darginisch"}
         dav{"Taita"}
-        day{"Dajak"}
         de{"Deutsch"}
         de_AT{"Österreichisches Deutsch"}
         de_CH{"Schweizer Hochdeutsch"}
@@ -156,7 +133,6 @@ de{
         din{"Dinka-Sprache"}
         dje{"Zarma"}
         doi{"Dogri"}
-        dra{"Drawidisch"}
         dsb{"Niedersorbisch"}
         dua{"Duala"}
         dum{"Mittelniederländisch"}
@@ -192,7 +168,6 @@ de{
         ff{"Ful"}
         fi{"Finnisch"}
         fil{"Filipino"}
-        fiu{"Finnougrisch"}
         fj{"Fidschianisch"}
         fo{"Färöisch"}
         fon{"Fon-Sprache"}
@@ -210,7 +185,6 @@ de{
         gay{"Gayo"}
         gba{"Gbaya-Sprache"}
         gd{"Schottisches Gälisch"}
-        gem{"Germanisch"}
         gez{"Geez"}
         gil{"Gilbertesisch"}
         gl{"Galizisch"}
@@ -233,7 +207,6 @@ de{
         he{"Hebräisch"}
         hi{"Hindi"}
         hil{"Hiligaynon-Sprache"}
-        him{"Himachali"}
         hit{"Hethitisch"}
         hmn{"Miao-Sprache"}
         ho{"Hiri-Motu"}
@@ -251,15 +224,10 @@ de{
         ie{"Interlingue"}
         ig{"Igbo-Sprache"}
         ii{"Sichuan Yi"}
-        ijo{"Ijo-Sprache"}
         ik{"Inupiak"}
         ilo{"Ilokano-Sprache"}
-        inc{"Indoarisch"}
-        ine{"Indogermanisch"}
         inh{"Inguschisch"}
         io{"Ido-Sprache"}
-        ira{"Iranische Sprache"}
-        iro{"Irokesische Sprache"}
         is{"Isländisch"}
         it{"Italienisch"}
         iu{"Inuktitut"}
@@ -276,7 +244,6 @@ de{
         kac{"Kachin-Sprache"}
         kaj{"Jju"}
         kam{"Kamba"}
-        kar{"Karenisch"}
         kaw{"Kawi"}
         kbd{"Kabardinisch"}
         kbl{"Kanembu"}
@@ -286,7 +253,6 @@ de{
         kfo{"Koro"}
         kg{"Kongolesisch"}
         kha{"Khasi-Sprache"}
-        khi{"Khoisan-Sprache"}
         kho{"Sakisch"}
         khq{"Koyra Chiini"}
         ki{"Kikuyu-Sprache"}
@@ -305,7 +271,6 @@ de{
         kr{"Kanuri-Sprache"}
         krc{"Karatschaiisch-Balkarisch"}
         krl{"Karelisch"}
-        kro{"Kru-Sprache"}
         kru{"Oraon-Sprache"}
         ks{"Kaschmirisch"}
         ksb{"Shambala"}
@@ -346,7 +311,6 @@ de{
         mai{"Maithili"}
         mak{"Makassarisch"}
         man{"Manding-Sprache"}
-        map{"Austronesisch"}
         mas{"Massai-Sprache"}
         mde{"Maba"}
         mdf{"Moksha"}
@@ -362,14 +326,11 @@ de{
         mi{"Maori"}
         mic{"Micmac-Sprache"}
         min{"Minangkabau-Sprache"}
-        mis{"Andere Sprache"}
         mk{"Mazedonisch"}
-        mkh{"Mon-Khmer-Sprache"}
         ml{"Malayalam"}
         mn{"Mongolisch"}
         mnc{"Mandschurisch"}
         mni{"Meithei-Sprache"}
-        mno{"Manobo-Sprache"}
         moh{"Mohawk-Sprache"}
         mos{"Mossi-Sprache"}
         mr{"Marathi"}
@@ -377,17 +338,13 @@ de{
         mt{"Maltesisch"}
         mua{"Mundang"}
         mul{"Mehrsprachig"}
-        mun{"Munda-Sprache"}
         mus{"Muskogee-Sprache"}
         mwl{"Mirandesisch"}
         mwr{"Marwari"}
         my{"Birmanisch"}
         mye{"Myene"}
-        myn{"Maya-Sprache"}
         myv{"Ersja-Mordwinisch"}
         na{"Nauruisch"}
-        nah{"Nahuatl"}
-        nai{"Nordamerikanische Indianersprache"}
         nap{"Neapolitanisch"}
         naq{"Nama"}
         nb{"Norwegisch Bokmål"}
@@ -397,7 +354,6 @@ de{
         new{"Newari"}
         ng{"Ndonga"}
         nia{"Nias-Sprache"}
-        nic{"Nigerkordofanisch"}
         niu{"Niue-Sprache"}
         nl{"Niederländisch"}
         nl_BE{"Flämisch"}
@@ -410,7 +366,6 @@ de{
         nqo{"N’Ko"}
         nr{"Süd-Ndebele-Sprache"}
         nso{"Nord-Sotho-Sprache"}
-        nub{"Nubisch"}
         nus{"Nuer"}
         nv{"Navajo"}
         nwc{"Alt-Newari"}
@@ -426,21 +381,17 @@ de{
         os{"Ossetisch"}
         osa{"Osage-Sprache"}
         ota{"Osmanisch"}
-        oto{"Otomangue-Sprache"}
         pa{"Pandschabisch"}
-        paa{"Papuasprache"}
         pag{"Pangasinan-Sprache"}
         pal{"Mittelpersisch"}
         pam{"Pampanggan-Sprache"}
         pap{"Papiamento"}
         pau{"Palau"}
         peo{"Altpersisch"}
-        phi{"Philippinen-Austronesisch"}
         phn{"Phönikisch"}
         pi{"Pali"}
         pl{"Polnisch"}
         pon{"Ponapeanisch"}
-        pra{"Prakrit"}
         pro{"Altprovenzalisch"}
         ps{"Paschtu"}
         pt{"Portugiesisch"}
@@ -454,7 +405,6 @@ de{
         rn{"Rundi-Sprache"}
         ro{"Rumänisch"}
         ro_MD{"Moldauisch"}
-        roa{"Romanische Sprache"}
         rof{"Rombo"}
         rom{"Romani"}
         root{"Root"}
@@ -465,8 +415,6 @@ de{
         sa{"Sanskrit"}
         sad{"Sandawe-Sprache"}
         sah{"Jakutisch"}
-        sai{"Südamerikanische Indianersprache"}
-        sal{"Salish-Sprache"}
         sam{"Samaritanisch"}
         saq{"Samburu"}
         sas{"Sasak"}
@@ -481,25 +429,19 @@ de{
         see{"Seneca"}
         seh{"Sena"}
         sel{"Selkupisch"}
-        sem{"Semitisch"}
         ses{"Koyra Senni"}
         sg{"Sango"}
         sga{"Altirisch"}
-        sgn{"Gebärdensprache"}
         sh{"Serbo-Kroatisch"}
         shi{"Taschelhit"}
         shn{"Schan-Sprache"}
         shu{"Tschadisch-Arabisch"}
         si{"Singhalesisch"}
         sid{"Sidamo"}
-        sio{"Sioux-Sprache"}
-        sit{"Sinotibetisch"}
         sk{"Slowakisch"}
         sl{"Slowenisch"}
-        sla{"Slawisch"}
         sm{"Samoanisch"}
         sma{"Süd-Samisch"}
-        smi{"Lappisch"}
         smj{"Lule-Lappisch"}
         smn{"Inari-Lappisch"}
         sms{"Skolt-Lappisch"}
@@ -507,13 +449,11 @@ de{
         snk{"Soninke-Sprache"}
         so{"Somali"}
         sog{"Sogdisch"}
-        son{"Songhai-Sprache"}
         sq{"Albanisch"}
         sr{"Serbisch"}
         srn{"Srananisch"}
         srr{"Serer-Sprache"}
         ss{"Swazi"}
-        ssa{"Nilosaharanisch"}
         ssy{"Saho"}
         st{"Süd-Sotho-Sprache"}
         su{"Sundanesisch"}
@@ -527,7 +467,6 @@ de{
         syc{"Altsyrisch"}
         syr{"Syrisch"}
         ta{"Tamilisch"}
-        tai{"Tai-Sprache"}
         te{"Telugu"}
         tem{"Temne"}
         teo{"Teso"}
@@ -554,8 +493,6 @@ de{
         tsi{"Tsimshian-Sprache"}
         tt{"Tatarisch"}
         tum{"Tumbuka-Sprache"}
-        tup{"Tupi-Sprache"}
-        tut{"Altaisch"}
         tvl{"Elliceanisch"}
         tw{"Twi"}
         twq{"Tasawaq"}
@@ -578,11 +515,9 @@ de{
         vun{"Vunjo"}
         wa{"Wallonisch"}
         wae{"Walser-Dialekte"}
-        wak{"Wakashanisch"}
         wal{"Walamo-Sprache"}
         war{"Waray"}
         was{"Washo-Sprache"}
-        wen{"Sorbisch"}
         wo{"Wolof"}
         xal{"Kalmückisch"}
         xh{"Xhosa"}
@@ -593,7 +528,6 @@ de{
         ybb{"Yemba"}
         yi{"Jiddisch"}
         yo{"Yoruba"}
-        ypk{"Yupik-Sprache"}
         yue{"Kantonesisch"}
         za{"Zhuang"}
         zap{"Zapotekisch"}
@@ -603,7 +537,6 @@ de{
         zh{"Chinesisch"}
         zh_Hans{"Chinesisch (vereinfacht)"}
         zh_Hant{"Chinesisch (traditionell)"}
-        znd{"Zande-Sprache"}
         zu{"Zulu"}
         zun{"Zuni-Sprache"}
         zxx{"Keine Sprachinhalte"}
@@ -889,7 +822,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.97.28"}
+    Version{"2.0.98.52"}
     codePatterns{
         language{"Sprache: {0}"}
         script{"Schrift: {0}"}

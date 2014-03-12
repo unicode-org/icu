@@ -2619,42 +2619,42 @@ static void TestGetFunctionalEquivalent(void) {
         /*   avail   locale          equiv   */
         "f",    "sv_US_CALIFORNIA",               "sv",
         "f",    "zh_TW@collation=stroke",         "zh@collation=stroke", /* alias of zh_Hant_TW */
-        "t",    "zh_Hant_TW@collation=stroke",    "zh@collation=stroke",
+        "f",    "zh_Hant_TW@collation=stroke",    "zh@collation=stroke",
         "f",    "sv_CN@collation=pinyin",         "sv",
         "t",    "zh@collation=pinyin",            "zh",
         "f",    "zh_CN@collation=pinyin",         "zh", /* alias of zh_Hans_CN */
-        "t",    "zh_Hans_CN@collation=pinyin",    "zh",
+        "f",    "zh_Hans_CN@collation=pinyin",    "zh",
         "f",    "zh_HK@collation=pinyin",         "zh", /* alias of zh_Hant_HK */
-        "t",    "zh_Hant_HK@collation=pinyin",    "zh",
+        "f",    "zh_Hant_HK@collation=pinyin",    "zh",
         "f",    "zh_HK@collation=stroke",         "zh@collation=stroke", /* alias of zh_Hant_HK */
-        "t",    "zh_Hant_HK@collation=stroke",    "zh@collation=stroke",
+        "f",    "zh_Hant_HK@collation=stroke",    "zh@collation=stroke",
         "f",    "zh_HK",                          "zh@collation=stroke", /* alias of zh_Hant_HK */
-        "t",    "zh_Hant_HK",                     "zh@collation=stroke",
+        "f",    "zh_Hant_HK",                     "zh@collation=stroke",
         "f",    "zh_MO",                          "zh@collation=stroke", /* alias of zh_Hant_MO */
-        "t",    "zh_Hant_MO",                     "zh@collation=stroke",
+        "f",    "zh_Hant_MO",                     "zh@collation=stroke",
         "f",    "zh_TW_STROKE",                   "zh@collation=stroke",
         "f",    "zh_TW_STROKE@collation=big5han", "zh@collation=big5han",
         "f",    "sv_CN@calendar=japanese",        "sv",
         "t",    "sv@calendar=japanese",           "sv",
         "f",    "zh_TW@collation=big5han",        "zh@collation=big5han", /* alias of zh_Hant_TW */
-        "t",    "zh_Hant_TW@collation=big5han",   "zh@collation=big5han",
+        "f",    "zh_Hant_TW@collation=big5han",   "zh@collation=big5han",
         "f",    "zh_TW@collation=gb2312han",      "zh@collation=gb2312han", /* alias of zh_Hant_TW */
-        "t",    "zh_Hant_TW@collation=gb2312han", "zh@collation=gb2312han",
+        "f",    "zh_Hant_TW@collation=gb2312han", "zh@collation=gb2312han",
         "f",    "zh_CN@collation=big5han",        "zh@collation=big5han", /* alias of zh_Hans_CN */
-        "t",    "zh_Hans_CN@collation=big5han",   "zh@collation=big5han",
+        "f",    "zh_Hans_CN@collation=big5han",   "zh@collation=big5han",
         "f",    "zh_CN@collation=gb2312han",      "zh@collation=gb2312han", /* alias of zh_Hans_CN */
-        "t",    "zh_Hans_CN@collation=gb2312han", "zh@collation=gb2312han",
+        "f",    "zh_Hans_CN@collation=gb2312han", "zh@collation=gb2312han",
         "t",    "zh@collation=big5han",           "zh@collation=big5han",
         "t",    "zh@collation=gb2312han",         "zh@collation=gb2312han",
         "t",    "hi@collation=standard",          "hi",
         "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",    "hi",
-        "t",    "sv_SE@collation=pinyin",         "sv", /* bug 4582 tests */
+        "f",    "sv_SE@collation=pinyin",         "sv", /* bug 4582 tests */
         "f",    "sv_SE_BONN@collation=pinyin",    "sv",
         "t",    "nl",                             "root",
-        "t",    "nl_NL",                          "root",
+        "f",    "nl_NL",                          "root",
         "f",    "nl_NL_EEXT",                     "root",
         "t",    "nl@collation=stroke",            "root",
-        "t",    "nl_NL@collation=stroke",         "root",
+        "f",    "nl_NL@collation=stroke",         "root",
         "f",    "nl_NL_EEXT@collation=stroke",    "root",
         NULL
     };

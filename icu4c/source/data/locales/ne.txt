@@ -181,7 +181,7 @@ ne{
         }
         native{"deva"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1009,8 +1009,8 @@ ne{
                 other{"{0} ग्राम"}
             }
             kilogram{
-                one{"{0} किलो"}
-                other{"{0} किलो"}
+                one{"{0} किलोग्राम"}
+                other{"{0} किलोग्राम"}
             }
             ounce{
                 one{"{0} आऊन्स"}
@@ -1059,8 +1059,8 @@ ne{
                 other{"{0} मिटर प्रति सेकेण्ड"}
             }
             mile-per-hour{
-                one{"{0} माईल प्रति सेकेण्ड"}
-                other{"{0} माईल प्रति सेकेण्ड"}
+                one{"{0} माईल प्रति घण्टा"}
+                other{"{0} माईल प्रति घण्टा"}
             }
         }
         temperature{
@@ -1276,8 +1276,8 @@ ne{
         }
         temperature{
             celsius{
-                one{"{0}°से"}
-                other{"{0}°से"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             fahrenheit{
                 one{"{0}°फ"}
@@ -1481,8 +1481,8 @@ ne{
                 other{"{0} मि. प्रति सेकेण्ड"}
             }
             mile-per-hour{
-                one{"{0} माईल प्रति सेकेण्ड"}
-                other{"{0} माईल प्रति सेकेण्ड"}
+                one{"{0} माईल प्रति घण्टा"}
+                other{"{0} माईल प्रति घण्टा"}
             }
         }
         temperature{

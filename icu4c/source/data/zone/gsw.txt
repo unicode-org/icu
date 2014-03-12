@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/gsw.xml
  */
 gsw{
-    Version{"2.0.97.28"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -89,9 +89,6 @@ gsw{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Süüdpol"}
         }
         "Antarctica:Vostok"{
             ec{"Woschtok"}

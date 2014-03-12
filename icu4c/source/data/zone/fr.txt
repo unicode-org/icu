@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/fr.xml
  */
 fr{
-    Version{"2.0.97.9"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis-Abeba"}
@@ -147,9 +147,6 @@ fr{
         "America:Mexico_City"{
             ec{"Mexico"}
         }
-        "America:Montreal"{
-            ec{"Montréal"}
-        }
         "America:North_Dakota:Beulah"{
             ec{"Beulah [Dakota du Nord]"}
         }
@@ -206,9 +203,6 @@ fr{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Pôle Sud"}
         }
         "Antarctica:Syowa"{
             ec{"Showa"}

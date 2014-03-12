@@ -1001,6 +1001,9 @@ CollationAPITest::TestCompare(/* char* par */)
 void
 CollationAPITest::TestGetAll(/* char* par */)
 {
+    if (logKnownIssue("10774","Side effects from utility/LocaleTest/TestGetLocale")) {
+        return;
+    }
     int32_t count1, count2;
     UErrorCode status = U_ZERO_ERROR;
 
@@ -1636,10 +1639,10 @@ void CollationAPITest::TestGetLocale() {
     const char* actualLocale;
   } testStruct[] = {
     // Note: Locale::getRoot().getName() == "" not "root".
-    { "de_DE", "de_DE", "" },
+    { "de_DE", "de", "" },
     { "sr_RS", "sr_Cyrl_RS", "sr" },
     { "en_US_CALIFORNIA", "en_US", "" },
-    { "fr_FR_NONEXISTANT", "fr_FR", "" },
+    { "fr_FR_NONEXISTANT", "fr", "" },
     // pinyin is the default, therefore suppressed.
     { "zh_CN", "zh_Hans_CN", "zh" },
     // zh_Hant has default=stroke but the data is in zh.

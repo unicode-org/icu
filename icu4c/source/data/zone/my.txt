@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/my.xml
  */
 my{
-    Version{"2.0.93.16"}
+    Version{"2.0.98.62"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"အာဘီဂျွန်း"}
@@ -459,9 +459,6 @@ my{
         "America:Montevideo"{
             ec{"မွန်တီဗီဒီအို"}
         }
-        "America:Montreal"{
-            ec{"မွန်ထရီအာ"}
-        }
         "America:Montserrat"{
             ec{"မွန့်(တ်)ဆေးရတ်"}
         }
@@ -552,9 +549,6 @@ my{
         "America:Scoresbysund"{
             ec{"အို့တိုခိုတိုမစ်"}
         }
-        "America:Shiprock"{
-            ec{"ရှီးပ်ရို့ခ်"}
-        }
         "America:Sitka"{
             ec{"စစ်ကာ"}
         }
@@ -635,9 +629,6 @@ my{
         }
         "Antarctica:Rothera"{
             ec{"ရိုသီရာ"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"စောက်သ်ပိုလ်"}
         }
         "Antarctica:Syowa"{
             ec{"ရှိုးဝါ"}

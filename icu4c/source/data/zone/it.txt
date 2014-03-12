@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/it.xml
  */
 it{
-    Version{"2.0.96.39"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -161,9 +161,6 @@ it{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Polo Sud"}
         }
         "Asia:Bahrain"{
             ec{"Bahrein"}

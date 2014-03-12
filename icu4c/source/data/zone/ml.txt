@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ml.xml
  */
 ml{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"അബിദ്‌ജാൻ‌"}
@@ -459,9 +459,6 @@ ml{
         "America:Montevideo"{
             ec{"മൊണ്ടെ‌വീഡിയോ"}
         }
-        "America:Montreal"{
-            ec{"മോൺട്രിയാൽ"}
-        }
         "America:Montserrat"{
             ec{"മൊണ്ടെസരത്ത്"}
         }
@@ -552,9 +549,6 @@ ml{
         "America:Scoresbysund"{
             ec{"സ്കോർസ്ബൈസണ്ട്"}
         }
-        "America:Shiprock"{
-            ec{"ഷിപ്പ്റോക്ക്"}
-        }
         "America:Sitka"{
             ec{"സിറ്റ്‌കാ"}
         }
@@ -635,9 +629,6 @@ ml{
         }
         "Antarctica:Rothera"{
             ec{"റൊതീറ"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"ദക്ഷിണ ധ്രൂവം"}
         }
         "Antarctica:Syowa"{
             ec{"സ്യോവ"}

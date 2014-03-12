@@ -35,13 +35,11 @@ pt_PT{
         am{"amárico"}
         anp{"angika"}
         ar{"árabe"}
-        art{"idioma artifical"}
         as{"assamês"}
         asa{"asu"}
         av{"avaric"}
         az{"azerbaijano"}
         ba{"bashkir"}
-        bai{"bamileke Languages"}
         bal{"balúchi"}
         bax{"bamun"}
         bbj{"ghomala"}
@@ -65,19 +63,14 @@ pt_PT{
         ca{"catalão"}
         cay{"cayuga"}
         ce{"chechene"}
-        cel{"idioma céltico"}
         cgg{"chiga"}
         chm{"mari"}
         chn{"jargão chinook"}
         ckb{"sorani curdo"}
         co{"corso"}
         cop{"copta"}
-        cpe{"crioulo ou pidgin do inglês"}
-        cpf{"crioulo ou pidgin do francês"}
-        cpp{"crioulo ou pidgin do português"}
         crh{"turco da Crimeia"}
         cs{"checo"}
-        cus{"idioma cuchita"}
         cv{"chuvash"}
         cy{"galês"}
         da{"dinamarquês"}
@@ -88,7 +81,6 @@ pt_PT{
         de_CH{"alto alemão suíço"}
         dje{"zarma"}
         doi{"dogri"}
-        dra{"idioma dravítico"}
         dyo{"jola-fonyi"}
         dyu{"diula"}
         dzg{"dazaga"}
@@ -111,7 +103,6 @@ pt_PT{
         fa{"persa"}
         fi{"finlandês"}
         fil{"filipino"}
-        fiu{"idioma ugro-finês"}
         fj{"fijiano"}
         fo{"feroês"}
         fr{"francês"}
@@ -156,7 +147,6 @@ pt_PT{
         kbl{"kanembu"}
         kde{"makonde"}
         kg{"conguês"}
-        khi{"khoisan"}
         khq{"koyra chiini"}
         kk{"cazaque"}
         kkj{"kako"}
@@ -212,13 +202,11 @@ pt_PT{
         my{"birmanês"}
         mye{"myene"}
         myv{"erzya"}
-        nah{"nauatle"}
         naq{"nama"}
         nb{"norueguês bokmål"}
         nds{"baixo alemão"}
         ne{"nepali"}
         new{"newari"}
-        nic{"nigeriano - cordofano"}
         nl{"holandês"}
         nl_BE{"flamengo"}
         nmg{"kwasio"}
@@ -233,7 +221,6 @@ pt_PT{
         pa{"panjabi"}
         pi{"páli"}
         pl{"polaco"}
-        pra{"idioma prácito"}
         pro{"provençal, arcaico"}
         ps{"pastó"}
         pt{"português"}
@@ -247,8 +234,6 @@ pt_PT{
         ru{"russo"}
         sa{"sânscrito"}
         sah{"sakha"}
-        sai{"idioma indígeno sul-americano"}
-        sal{"salishan languages"}
         saq{"samburu"}
         sba{"ngambay"}
         sbp{"sangu"}
@@ -257,7 +242,6 @@ pt_PT{
         seh{"sena"}
         sel{"selkup"}
         ses{"koyraboro senni"}
-        sgn{"linguages de sinais"}
         shi{"tachelhit"}
         shu{"árabe do Chade"}
         si{"cingalês"}
@@ -266,7 +250,6 @@ pt_PT{
         so{"somali"}
         sq{"albanês"}
         sr{"sérvio"}
-        ssa{"idioma nilo-sariano"}
         ssy{"saho"}
         su{"sundanês"}
         sv{"sueco"}
@@ -274,7 +257,6 @@ pt_PT{
         swb{"língua comoriana"}
         swc{"suaili do Congo"}
         ta{"tâmil"}
-        tai{"idioma tailândes"}
         te{"telugu"}
         teo{"teso"}
         tg{"tajique"}
@@ -286,7 +268,6 @@ pt_PT{
         tr{"turco"}
         trv{"taroko"}
         tt{"tatar"}
-        tut{"idioma altaico"}
         twq{"tasawaq"}
         tyv{"tuviniano"}
         tzm{"tamazight de Marrocos Central"}
@@ -298,7 +279,6 @@ pt_PT{
         uz{"usbeque"}
         vi{"vietnamita"}
         vun{"vunjo"}
-        wen{"idioma sórbio"}
         wo{"uólofe"}
         xal{"kalmyk"}
         xh{"xosa"}
@@ -493,7 +473,7 @@ pt_PT{
         SOLBA{"dialecto stolvizza/solbica"}
         WADEGILE{"Romanização Wade-Giles"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.52"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escrita: {0}"}

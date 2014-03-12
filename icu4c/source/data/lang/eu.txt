@@ -42,7 +42,6 @@ eu{
         be{"bielorrusiera"}
         bem{"Bembera"}
         bg{"bulgariera"}
-        bh{"Bihariera"}
         bn{"bengalera"}
         bo{"tibetera"}
         br{"Bretoiera"}
@@ -372,7 +371,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.0.96.25"}
+    Version{"2.0.97.91"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

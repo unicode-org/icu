@@ -349,7 +349,7 @@ ne{
         AREVELA{"पूर्वी आर्मेनियाली"}
         POSIX{"कम्प्युटर"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.76"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

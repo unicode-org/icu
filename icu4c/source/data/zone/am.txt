@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/am.xml
  */
 am{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"አቢጃን"}
@@ -459,9 +459,6 @@ am{
         "America:Montevideo"{
             ec{"ሞንቴቪድዮ"}
         }
-        "America:Montreal"{
-            ec{"ሞንትሪያል"}
-        }
         "America:Montserrat"{
             ec{"ሞንትሴራት"}
         }
@@ -552,9 +549,6 @@ am{
         "America:Scoresbysund"{
             ec{"ስኮርስባይሰንድ"}
         }
-        "America:Shiprock"{
-            ec{"ሺፕሮክ"}
-        }
         "America:Sitka"{
             ec{"ሲትካ"}
         }
@@ -635,9 +629,6 @@ am{
         }
         "Antarctica:Rothera"{
             ec{"ሮቴራ"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"የደቡብ ዋልታ"}
         }
         "Antarctica:Syowa"{
             ec{"ስዮዋ"}

@@ -22,7 +22,6 @@ ga{
         ba{"Baiscíris"}
         be{"Bealarúisis"}
         bg{"Bulgáiris"}
-        bh{"Bihairis"}
         bn{"Beangáilis"}
         bo{"Tibéadais"}
         br{"Briotáinis"}
@@ -156,5 +155,5 @@ ga{
         zh_Hant{"Sínis Thraidisiúnta"}
         zu{"Súlúis"}
     }
-    Version{"2.0.96.25"}
+    Version{"2.0.97.91"}
 }

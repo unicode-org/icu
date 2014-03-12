@@ -309,5 +309,5 @@ sk{
         PS{"Palestína"}
         US{"USA"}
     }
-    Version{"2.0.96.24"}
+    Version{"2.0.98.52"}
 }

@@ -157,7 +157,7 @@ it{
             }
         }
     }
-    Version{"2.0.96.39"}
+    Version{"2.0.98.52"}
     calendar{
         buddhist{
             eras{
@@ -1178,16 +1178,16 @@ it{
         }
         speed{
             kilometer-per-hour{
-                one{"{0} chilometro orario"}
-                other{"{0} chilometri orari"}
+                one{"{0} chilometro all’ora"}
+                other{"{0} chilometri all’ora"}
             }
             meter-per-second{
                 one{"{0} metro al secondo"}
                 other{"{0} metri al secondo"}
             }
             mile-per-hour{
-                one{"{0} miglio orario"}
-                other{"{0} miglia orarie"}
+                one{"{0} miglio all’ora"}
+                other{"{0} miglia all’ora"}
             }
         }
         temperature{

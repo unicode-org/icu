@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/bs.xml
  */
 bs{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -327,9 +327,6 @@ bs{
         "America:Monterrey"{
             ec{"Montrej (Meksiko)"}
         }
-        "America:Montreal"{
-            ec{"Montreal (kanada)"}
-        }
         "America:Montserrat"{
             ec{"Montserat"}
         }
@@ -386,9 +383,6 @@ bs{
         }
         "America:Scoresbysund"{
             ec{"Skorezbisund"}
-        }
-        "America:Shiprock"{
-            ec{"Šiprok (SAD)"}
         }
         "America:St_Johns"{
             ec{"Sv. Džon (Kanada)"}
@@ -452,9 +446,6 @@ bs{
         }
         "Antarctica:Rothera"{
             ec{"Rotera"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Južni pol"}
         }
         "Antarctica:Syowa"{
             ec{"Šova"}

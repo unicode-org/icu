@@ -25,47 +25,36 @@ az{
         ady{"aduge dili"}
         ae{"avestanca"}
         af{"afrikaans"}
-        afa{"afro-aziat dili"}
         afh{"afrihili dili"}
         ain{"aynuca"}
         ak{"akanca"}
         akk{"akadianca"}
         ale{"aleutca"}
-        alg{"algonguyan dili"}
         alt{"cənub altay dili"}
         am{"amhar"}
         an{"aragonca"}
         ang{"qədimi ingiliscə"}
         anp{"angikə dili"}
-        apa{"apaçi dili"}
         ar{"ərəb"}
         ar_001{"Modern Standart Ərəbcə"}
         arc{"aramik dili"}
         arn{"araukanca"}
         arp{"arapaho dili"}
-        art{"suni dil"}
         arw{"aravakça"}
         as{"assam"}
         ast{"asturicə"}
-        ath{"atapaskanca"}
-        aus{"avstraliyca"}
         av{"avarikcə"}
         awa{"avadicə"}
         ay{"aymarca"}
         az{"azərbaycan"}
         ba{"başkir dili"}
-        bad{"banda dili"}
-        bai{"bamilek dili"}
         bal{"baluc dili"}
         ban{"balincə"}
         bas{"basa dili"}
-        bat{"baltik dili"}
         be{"belarus"}
         bej{"beja dili"}
         bem{"bemba dili"}
-        ber{"berber dili"}
         bg{"bolqar"}
-        bh{"biharicə"}
         bho{"bxoçpuri dili"}
         bi{"bislama dili"}
         bik{"bikolca"}
@@ -73,24 +62,19 @@ az{
         bla{"siksikə dili"}
         bm{"bambara dili"}
         bn{"benqal"}
-        bnt{"bantu dili"}
         bo{"tibet"}
         br{"Bretonca"}
         bra{"braj dili"}
         bs{"bosniak"}
-        btk{"batak dili"}
         bua{"buryat dili"}
         bug{"bugin dili"}
         byn{"bilincə"}
         ca{"katalan"}
         cad{"kado dili"}
-        cai{"mərkəzi amerika indus dili"}
         car{"karib dili"}
-        cau{"qavqaz dili"}
         cch{"atsamca"}
         ce{"çeçen dili"}
         ceb{"kebuano dili"}
-        cel{"kelt dili"}
         ch{"çamoro dili"}
         chb{"çibçə dili"}
         chg{"çağatay dili"}
@@ -101,25 +85,18 @@ az{
         chp{"çipevyan dili"}
         chr{"çiroki dili"}
         chy{"çeyen dili"}
-        cmc{"çamik dili"}
         co{"korsikan dili"}
         cop{"kopt dili"}
-        cpe{"inglis kreol dili"}
-        cpf{"fransız kreol dili"}
-        cpp{"portugal kreol dili"}
         cr{"kri dili"}
         crh{"krım türkçə"}
-        crp{"kreol dili"}
         cs{"çex"}
         csb{"kaşubyan dili"}
         cu{"kilsə slav dili"}
-        cus{"kuşitik dili"}
         cv{"çuvaş dili"}
         cy{"uels"}
         da{"danimarka"}
         dak{"dakota dili"}
         dar{"darqva dili"}
-        day{"dayak dili"}
         de{"alman"}
         de_AT{"Avstriya almancası"}
         de_CH{"İsveçrə yüksək almancası"}
@@ -128,7 +105,6 @@ az{
         dgr{"doqrib dili"}
         din{"dinka dili"}
         doi{"doqri dili"}
-        dra{"dravid dili"}
         dsb{"aşağı sorbca"}
         dua{"duala dili"}
         dum{"ortacaq hollandca"}
@@ -161,7 +137,6 @@ az{
         ff{"fula dili"}
         fi{"fin"}
         fil{"filippin"}
-        fiu{"fin-uğri dili"}
         fj{"fici"}
         fo{"farer"}
         fon{"fon dili"}
@@ -178,7 +153,6 @@ az{
         gay{"qayo dili"}
         gba{"qabaya dili"}
         gd{"skot gaelik dili"}
-        gem{"Alman dili"}
         gez{"qez dili"}
         gil{"qilbert gili"}
         gl{"qalisian"}
@@ -200,7 +174,6 @@ az{
         he{"ivrit"}
         hi{"hindi"}
         hil{"hiliqaynon dili"}
-        him{"himaçali dili"}
         hit{"hittit dili"}
         hmn{"monq dili"}
         ho{"hiri motu dili"}
@@ -217,15 +190,10 @@ az{
         ie{"interlingue dili"}
         ig{"iqbo"}
         ii{"siçuan yi dili"}
-        ijo{"ico dili"}
         ik{"inupiaq dili"}
         ilo{"iloko dili"}
-        inc{"diqər hint dili"}
-        ine{"hint-yevropa dili"}
         inh{"inquş dili"}
         io{"ido dili"}
-        ira{"iranca"}
-        iro{"irokuay dili"}
         is{"island"}
         it{"italyan"}
         iu{"inuktikut dili"}
@@ -240,14 +208,12 @@ az{
         kac{"kaçinca"}
         kaj{"ju dili"}
         kam{"kamba dili"}
-        kar{"karen dili"}
         kaw{"kavi dili"}
         kbd{"kabardca"}
         kcg{"tiyap dili"}
         kfo{"koro dili"}
         kg{"konqo dili"}
         kha{"xazi dili"}
-        khi{"xoyzan dili"}
         kho{"xotan dili"}
         ki{"kikuyu dili"}
         kj{"kuanyama dili"}
@@ -263,7 +229,6 @@ az{
         kr{"kanur dili"}
         krc{"qaraçay-balkar dili"}
         krl{"karelyan dili"}
-        kro{"kru dili"}
         kru{"kurux dili"}
         ks{"kaşmir"}
         ku{"kürd"}
@@ -297,7 +262,6 @@ az{
         mai{"maitili dili"}
         mak{"makasar dili"}
         man{"məndinqo dili"}
-        map{"avstronezicə"}
         mas{"masay dili"}
         mdf{"mokşa dili"}
         mdr{"mandar dili"}
@@ -308,30 +272,23 @@ az{
         mi{"maori"}
         mic{"mikmak dili"}
         min{"minanqkaban dili"}
-        mis{"çeşitli diller"}
         mk{"makedon"}
-        mkh{"mon-xmer dili"}
         ml{"malayalam"}
         mn{"monqolca"}
         mnc{"mançu dili"}
         mni{"manipüri dili"}
-        mno{"manobo dili"}
         moh{"moxak dili"}
         mos{"mosi dili"}
         mr{"marati"}
         ms{"malay"}
         mt{"malta"}
         mul{"digər dillər"}
-        mun{"munda dili"}
         mus{"krik dili"}
         mwl{"mirand dili"}
         mwr{"maruari dili"}
         my{"birma"}
-        myn{"maya dili"}
         myv{"erzya dili"}
         na{"nauru dili"}
-        nah{"nahuatl dili"}
-        nai{"şimal amerika yerli dili"}
         nap{"neapolital dili"}
         nb{"bokmal norveç"}
         nd{"şimal ndebele dili"}
@@ -340,7 +297,6 @@ az{
         new{"nevari dili"}
         ng{"nqonka dili"}
         nia{"nyas dili"}
-        nic{"niger-kordofyan dili"}
         niu{"niyuan dili"}
         nl{"holland"}
         nl_BE{"flamand"}
@@ -351,7 +307,6 @@ az{
         nqo{"nqo dili"}
         nr{"cənub ndebele dili"}
         nso{"şimal soto dili"}
-        nub{"nubiy dili"}
         nv{"navayo dili"}
         ny{"nyanca dili"}
         nym{"nyamvezi dili"}
@@ -365,21 +320,17 @@ az{
         os{"osetik dili"}
         osa{"osage dili"}
         ota{"osman dili"}
-        oto{"otomian dili"}
         pa{"pəncab"}
-        paa{"papua dili"}
         pag{"panqasinan dili"}
         pal{"paxlavi dili"}
         pam{"pampanqa dili"}
         pap{"papyamento dili"}
         pau{"palayanca"}
         peo{"qədimi farsca"}
-        phi{"filipin dili"}
         phn{"foyenik dili"}
         pi{"pali dili"}
         pl{"polyak"}
         pon{"ponpeyan dili"}
-        pra{"prakrit dili"}
         pro{"qədimi provensialca"}
         ps{"puştu"}
         pt{"portuqal"}
@@ -401,8 +352,6 @@ az{
         sa{"sanskrit"}
         sad{"sandave dili"}
         sah{"yakut dili"}
-        sai{"cənub amerika yerli dili"}
-        sal{"salişan dili"}
         sam{"samaritan dili"}
         sas{"sasak dili"}
         sat{"santal dili"}
@@ -412,22 +361,16 @@ az{
         sd{"sindhi"}
         se{"şimal sami dili"}
         sel{"selkup dili"}
-        sem{"ivrit dili"}
         sg{"sanqo dili"}
         sga{"qədimi irlandca"}
-        sgn{"işarət dili"}
         sh{"serb-xorvatca"}
         shn{"şan dili"}
         si{"sinhal"}
         sid{"sidamo dili"}
-        sio{"sioyan dili"}
-        sit{"sino-tibet dili"}
         sk{"slovak"}
         sl{"sloven"}
-        sla{"slav dili"}
         sm{"samoa dili"}
         sma{"cənub sami dili"}
-        smi{"səmi dili"}
         smj{"lule sami dili"}
         smn{"inari sami"}
         sms{"skolt dili"}
@@ -435,13 +378,11 @@ az{
         snk{"soninke dili"}
         so{"somali"}
         sog{"soqdiyen dili"}
-        son{"sonqay dili"}
         sq{"alban"}
         sr{"serb"}
         srn{"sranan tonqo dili"}
         srr{"serer dilii"}
         ss{"svati dili"}
-        ssa{"nilo-sahara dili"}
         st{"Sesoto dili"}
         su{"sudan"}
         suk{"sukuma dili"}
@@ -451,7 +392,6 @@ az{
         sw{"suahili"}
         syr{"siryak dili"}
         ta{"tamil"}
-        tai{"tay dili"}
         te{"teluqu"}
         tem{"timne dili"}
         ter{"tereno dili"}
@@ -476,8 +416,6 @@ az{
         tsi{"simşyan dili"}
         tt{"tatar"}
         tum{"tumbuka dili"}
-        tup{"tupi dili"}
-        tut{"altaik dili"}
         tvl{"tuvalu dili"}
         tw{"Tvi dili"}
         ty{"taxiti dili"}
@@ -496,11 +434,9 @@ az{
         vo{"volapük dili"}
         vot{"votik dili"}
         wa{"valun dili"}
-        wak{"vakaşan dili"}
         wal{"valamo dili"}
         war{"varay dili"}
         was{"vaşo dili"}
-        wen{"sorb dili"}
         wo{"volof"}
         xal{"kalmıqca"}
         xh{"xosa"}
@@ -508,7 +444,6 @@ az{
         yap{"yapiz dili"}
         yi{"Yahudi dili"}
         yo{"yoruba"}
-        ypk{"yupik dili"}
         za{"juənq dili"}
         zap{"zapotek dili"}
         zbl{"blisimbols dili"}
@@ -517,7 +452,6 @@ az{
         zh{"çin"}
         zh_Hans{"sadələşmiş çin"}
         zh_Hant{"ənənəvi çin"}
-        znd{"zande dili"}
         zu{"zulu"}
         zun{"zuni dili"}
         zxx{"dil məzmunu yoxdur"}
@@ -676,7 +610,7 @@ az{
             standard{"standart"}
         }
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Skript: {0}"}

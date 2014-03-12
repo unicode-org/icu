@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/pt.xml
  */
 pt{
-    Version{"2.0.97.50"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Acra"}
@@ -242,9 +242,6 @@ pt{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Pólo Sul"}
         }
         "Antarctica:Syowa"{
             ec{"Showa"}

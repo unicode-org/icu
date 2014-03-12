@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013-2014 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/collation/ko.xml
@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/xml/collation/ko.xml
  */
 ko{
-    Version{"2.0.92.44"}
+    Version{"2.0.97.60"}
     collations{
         search{
             Sequence{
@@ -402,7 +402,7 @@ ko{
                 "&ᅩᅣᅵ"
                 "=ᆧ"
             }
-            Version{"24"}
+            Version{"25"}
         }
         searchjl{
             Sequence{
@@ -484,28 +484,19 @@ ko{
                 "<<ᇀ"
                 "<<ᇁ"
                 "<<ᇂ"
-                "&ᄀ"
-                "<<ᄁ"
-                // patch for v2: removed "=ᄀᄀ"
-                "<<<ㄲ"
-                "&ᄃ"
-                "<<ᄄ"
-                // patch for v2: removed "=ᄃᄃ"
-                "<<<ㄸ"
-                "&ᄇ"
-                "<<ᄈ"
-                // patch for v2: removed "=ᄇᄇ"
-                "<<<ㅃ"
-                "&ᄉ"
-                "<<ᄊ"
-                // patch for v2: removed "=ᄉᄉ"
-                "<<<ㅆ"
-                "&ᄌ"
-                "<<ᄍ"
-                // patch for v2: removed "=ᄌᄌ"
-                "<<<ㅉ"
+                "&[first primary ignorable]"
+                "=\u1100|\u1100"
+                "=\u1103|\u1103"
+                "=\u1107|\u1107"
+                "=\u1109|\u1109"
+                "=\u110C|\u110C"
+                "&\u1100\u1100=\u1101<<<\u3132"
+                "&\u1103\u1103=\u1104<<<\u3138"
+                "&\u1107\u1107=\u1108<<<\u3143"
+                "&\u1109\u1109=\u110A<<<\u3146"
+                "&\u110C\u110C=\u110D<<<\u3149"
             }
-            Version{"24"}
+            Version{"25"}
         }
         standard{
             Sequence{
@@ -988,7 +979,7 @@ ko{
                 "&희<<*僖凞喜噫囍姬嬉希憙憘戱晞曦熙熹熺犧禧稀羲咥唏嘻悕戲暿欷燹爔豨餼"
                 "&힐<<*詰犵纈襭頡黠"
             }
-            Version{"24"}
+            Version{"25"}
         }
         unihan{
             Sequence{
@@ -6261,7 +6252,7 @@ ko{
                 "&龟<<<⻳"
                 "&龠<<<⿕"
             }
-            Version{"24"}
+            Version{"25"}
         }
     }
 }

@@ -247,7 +247,7 @@ es_MX{
             tibt{"Dígitos en tibetano"}
         }
     }
-    Version{"2.0.96.40"}
+    Version{"2.0.98.52"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}

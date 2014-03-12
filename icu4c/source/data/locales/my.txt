@@ -136,7 +136,7 @@ my{
         }
         native{"mymr"}
     }
-    Version{"2.0.93.16"}
+    Version{"2.0.98.62"}
     calendar{
         generic{
             DateTimePatterns{
@@ -907,7 +907,7 @@ my{
                 other{"{0} ပေ"}
             }
             inch{
-                other{"{0} လက္မ"}
+                other{"{0} လက်မ"}
             }
             kilometer{
                 other{"{0} ကီလိုမီတာ"}
@@ -961,7 +961,7 @@ my{
                 other{"{0}ဟက်တိုပါစကယ်"}
             }
             inch-hg{
-                other{"ပြဒါး{0}လက္မ"}
+                other{"ပွဒါး{0}လက်မ"}
             }
             millibar{
                 other{"{0}မီလီဘား"}
@@ -1237,7 +1237,7 @@ my{
                 other{"{0} ပေ"}
             }
             inch{
-                other{"{0} လက္မ"}
+                other{"{0} လက်မ"}
             }
             kilometer{
                 other{"{0} km"}

@@ -309,5 +309,5 @@ es{
         PS{"Palestina"}
         US{"EE. UU."}
     }
-    Version{"2.0.97.9"}
+    Version{"2.0.98.52"}
 }

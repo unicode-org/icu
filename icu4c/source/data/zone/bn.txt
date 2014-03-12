@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/bn.xml
  */
 bn{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.62"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"আবিদজান"}
@@ -459,9 +459,6 @@ bn{
         "America:Montevideo"{
             ec{"মন্টেভিডিও"}
         }
-        "America:Montreal"{
-            ec{"মন্ট্রিয়াল"}
-        }
         "America:Montserrat"{
             ec{"মন্তসেরাত"}
         }
@@ -552,9 +549,6 @@ bn{
         "America:Scoresbysund"{
             ec{"ইটকুয়োরটুরমিট"}
         }
-        "America:Shiprock"{
-            ec{"শিপ্রক"}
-        }
         "America:Sitka"{
             ec{"শিটকা"}
         }
@@ -635,9 +629,6 @@ bn{
         }
         "Antarctica:Rothera"{
             ec{"রথেরা"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"দক্ষিণ মেরু"}
         }
         "Antarctica:Syowa"{
             ec{"সিওয়া"}

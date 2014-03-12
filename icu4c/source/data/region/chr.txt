@@ -216,5 +216,5 @@ chr{
     CountriesShort{
         MO{"ᎹᎧᎣ"}
     }
-    Version{"2.0.96.22"}
+    Version{"2.0.98.76"}
 }
