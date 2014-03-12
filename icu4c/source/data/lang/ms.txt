@@ -48,7 +48,6 @@ ms{
         bez{"Bena"}
         bfd{"Bafut"}
         bg{"Bulgaria"}
-        bh{"Bihari"}
         bkm{"Kom"}
         bn{"Benggala"}
         bo{"Tibet"}
@@ -235,7 +234,6 @@ ms{
         sw{"Swahili"}
         swc{"Congo Swahili"}
         ta{"Tamil"}
-        tai{"Bahasa Tai"}
         te{"Telugu"}
         teo{"Teso"}
         tet{"Tetum"}
@@ -441,7 +439,7 @@ ms{
             vaii{"Digit Vai"}
         }
     }
-    Version{"2.0.95.14"}
+    Version{"2.0.97.91"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

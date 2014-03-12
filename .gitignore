@@ -52,12 +52,16 @@ icu4c/source/data/*.vcxproj.user
 icu4c/source/data/Debug
 icu4c/source/data/Makefile
 icu4c/source/data/Release
+icu4c/source/data/build-dir
+icu4c/source/data/build-local
 icu4c/source/data/icupkg.inc
 icu4c/source/data/in
 icu4c/source/data/makedata.vcproj.*.*.user
 icu4c/source/data/obj
 icu4c/source/data/out
+icu4c/source/data/packagedata
 icu4c/source/data/pkgdataMakefile
+icu4c/source/data/uni-core-data
 icu4c/source/data/x64
 icu4c/source/data/x86
 icu4c/source/dist

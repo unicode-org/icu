@@ -160,7 +160,7 @@ mn{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.52"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1078,26 +1078,26 @@ mn{
         }
         speed{
             kilometer-per-hour{
-                one{"{0} километр цаг"}
-                other{"{0} километр цаг"}
+                one{"{0} километр/цаг"}
+                other{"{0} километр/цаг"}
             }
             meter-per-second{
-                one{"{0} метр секунд"}
-                other{"{0} метр секунд"}
+                one{"{0} метр/секунд"}
+                other{"{0} метр/секунд"}
             }
             mile-per-hour{
-                one{"{0} миль цаг"}
-                other{"{0} миль цаг"}
+                one{"{0} миль/цаг"}
+                other{"{0} миль/цаг"}
             }
         }
         temperature{
             celsius{
-                one{"{0} Цельс"}
-                other{"{0} Цельс"}
+                one{"{0} Цельсийн градус"}
+                other{"{0} Цельсийн градус"}
             }
             fahrenheit{
-                one{"{0} Фаренгейт"}
-                other{"{0} Фаренгейт"}
+                one{"{0} Фаренгейт градус"}
+                other{"{0} Фаренгейт градус"}
             }
         }
         volume{

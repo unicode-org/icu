@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/kk.xml
  */
 kk{
-    Version{"2.0.96.38"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -459,9 +459,6 @@ kk{
         "America:Montevideo"{
             ec{"Монтевидео"}
         }
-        "America:Montreal"{
-            ec{"Монреаль"}
-        }
         "America:Montserrat"{
             ec{"Монсеррат"}
         }
@@ -552,9 +549,6 @@ kk{
         "America:Scoresbysund"{
             ec{"Скорсбиссун"}
         }
-        "America:Shiprock"{
-            ec{"Шипрок"}
-        }
         "America:Sitka"{
             ec{"Ситка"}
         }
@@ -635,9 +629,6 @@ kk{
         }
         "Antarctica:Rothera"{
             ec{"Ротера"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Оңтүстік полюс"}
         }
         "Antarctica:Syowa"{
             ec{"Сева"}

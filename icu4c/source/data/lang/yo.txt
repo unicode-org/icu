@@ -19,7 +19,6 @@ yo{
         az{"Èdè Azerbaijani"}
         be{"Èdè Belarusi"}
         bg{"Èdè Bugaria"}
-        bh{"Èdè Bihari"}
         bn{"Èdè Bengali"}
         br{"Èdè Bretoni"}
         bs{"Èdè Bosnia"}
@@ -111,5 +110,5 @@ yo{
         zh{"Èdè Mandari"}
         zu{"Èdè Ṣulu"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.97.91"}
 }

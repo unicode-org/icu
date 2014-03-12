@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/bg.xml
  */
 bg{
-    Version{"2.0.97.18"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -459,9 +459,6 @@ bg{
         "America:Montevideo"{
             ec{"Монтевидео"}
         }
-        "America:Montreal"{
-            ec{"Монреал"}
-        }
         "America:Montserrat"{
             ec{"Монтсерат"}
         }
@@ -552,9 +549,6 @@ bg{
         "America:Scoresbysund"{
             ec{"Сгорсбисон"}
         }
-        "America:Shiprock"{
-            ec{"Шипрок"}
-        }
         "America:Sitka"{
             ec{"Ситка"}
         }
@@ -635,9 +629,6 @@ bg{
         }
         "Antarctica:Rothera"{
             ec{"Ротера"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Южен полюс"}
         }
         "Antarctica:Syowa"{
             ec{"Шова"}

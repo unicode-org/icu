@@ -162,7 +162,7 @@ pt{
         }
         native{"latn"}
     }
-    Version{"2.0.97.50"}
+    Version{"2.0.98.52"}
     calendar{
         buddhist{
             eras{
@@ -1483,8 +1483,8 @@ pt{
                 other{"{0} horas"}
             }
             millisecond{
-                one{"{0} milessegundo"}
-                other{"{0} milessegundos"}
+                one{"{0} milissegundo"}
+                other{"{0} milissegundos"}
             }
             minute{
                 one{"{0} minuto"}
@@ -1602,7 +1602,7 @@ pt{
             }
             meter-per-second{
                 one{"{0} metro por segundo"}
-                other{"{0} metro por segundo"}
+                other{"{0} metros por segundo"}
             }
             mile-per-hour{
                 one{"{0} milha por hora"}

@@ -172,7 +172,7 @@ metadata:table(nofallback){
         mlt{"mt"}
         mnk{"man"}
         mo{"ro_MD"}
-        mol{"ro"}
+        mol{"ro_MD"}
         mon{"mn"}
         mri{"mi"}
         msa{"ms"}

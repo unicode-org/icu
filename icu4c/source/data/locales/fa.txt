@@ -20,10 +20,10 @@ fa{
         word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{
-        "[\u064B \u064D \u064C \u0651 أ ؤ آ ء ا و ئ ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض"
-        " ط ظ ع غ ف ق ک گ ل م ن ه ة \u0654 ی]"
+        "[\u064B \u064D \u064C \u0651 \u0654 آ ا ء أ ؤ ئ ب پ ت ث ج چ ح خ د ذ ر ز ژ س "
+        "ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ة ی]"
     }
-    ExemplarCharactersIndex{"[آ ا و ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن ه ی]"}
+    ExemplarCharactersIndex{"[آ ا ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ی]"}
     ExemplarCharactersPunctuation{"[\\- ‐ ، ٫ ٬ ؛ \\: ! ؟ . … ‹ › « » ( ) \\[ \\] * / \\\\]"}
     LocaleScript{
         "Arab",
@@ -183,7 +183,7 @@ fa{
         }
         native{"arabext"}
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     calendar{
         chinese{
             cyclicNameSets{
@@ -226,6 +226,7 @@ fa{
             }
             appendItems{
                 Day-Of-Week{"{1} {0}"}
+                Timezone{"{0} ({1})"}
             }
             availableFormats{
                 Ed{"E d"}
@@ -870,6 +871,7 @@ fa{
                 GyMMMd{"d MMM y G"}
                 H{"H"}
                 Hm{"H:mm"}
+                HmZ{"HH:mm (Z)"}
                 Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"E M/d"}

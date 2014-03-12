@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/fi.xml
  */
 fi{
-    Version{"2.0.97.50"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -164,9 +164,6 @@ fi{
         }
         "Antarctica:Macquarie"{
             ec{"Macquariensaari"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Etelänapa"}
         }
         "Asia:Aqtau"{
             ec{"Aqtaw"}

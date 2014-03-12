@@ -8,7 +8,7 @@
 // ***************************************************************************
 sv_FI{
     AuxExemplarCharacters{"[ã ç ë í ñ ó š ÿ ü ž]"}
-    Version{"2.0.92.80"}
+    Version{"2.0.98.14"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -87,7 +87,7 @@ sv_FI{
     units{
         temperature{
             celsius{
-                one{"{0} grader Celsius"}
+                one{"{0} grad Celsius"}
                 other{"{0} grader Celsius"}
             }
         }

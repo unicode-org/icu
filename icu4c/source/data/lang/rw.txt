@@ -18,7 +18,6 @@ rw{
         az{"Inyazeribayijani"}
         be{"Ikibelarusiya"}
         bg{"Urunyabuligariya"}
-        bh{"Inyebihari"}
         bn{"Ikibengali"}
         br{"Inyebiritoni"}
         bs{"Inyebosiniya"}
@@ -118,5 +117,5 @@ rw{
         yi{"Inyeyidishi"}
         zu{"Inyezulu"}
     }
-    Version{"2.0.90.61"}
+    Version{"2.0.97.91"}
 }

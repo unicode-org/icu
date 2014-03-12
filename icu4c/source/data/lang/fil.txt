@@ -42,7 +42,6 @@ fil{
         be{"Belarusian"}
         bem{"Bemba"}
         bg{"Bulgarian"}
-        bh{"Bihari"}
         bn{"Bengali"}
         bo{"Tibetan"}
         br{"Breton"}
@@ -379,7 +378,7 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.97.91"}
     codePatterns{
         language{"Wika: {0}"}
         script{"Script: {0}"}

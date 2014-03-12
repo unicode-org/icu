@@ -183,7 +183,7 @@ sr_Latn{
             }
         }
     }
-    Version{"2.0.97.28"}
+    Version{"2.0.98.62"}
     calendar{
         buddhist{
             eras{
@@ -1613,9 +1613,9 @@ sr_Latn{
                 other{"{0} kubnih kilometara"}
             }
             cubic-mile{
-                few{"{0} kubna metra"}
-                one{"{0} kubni metar"}
-                other{"{0} kubnih metara"}
+                few{"{0} kubne milje"}
+                one{"{0} kubni milja"}
+                other{"{0} kubnih milja"}
             }
             liter{
                 few{"{0} litra"}

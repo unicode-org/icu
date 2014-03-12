@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ta.xml
  */
 ta{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"அபிட்ஜான்"}
@@ -459,9 +459,6 @@ ta{
         "America:Montevideo"{
             ec{"மொண்டேவீடியோ"}
         }
-        "America:Montreal"{
-            ec{"மான்ட்ரியல்"}
-        }
         "America:Montserrat"{
             ec{"மான்ஸ்ரேட்"}
         }
@@ -552,9 +549,6 @@ ta{
         "America:Scoresbysund"{
             ec{"ஸ்கோர்ஸ்பீ சண்ட்"}
         }
-        "America:Shiprock"{
-            ec{"ஷிப்ரோக்"}
-        }
         "America:Sitka"{
             ec{"சிட்கா"}
         }
@@ -635,9 +629,6 @@ ta{
         }
         "Antarctica:Rothera"{
             ec{"ரோதேரா"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"தென் துருவம்"}
         }
         "Antarctica:Syowa"{
             ec{"ஸ்யோவா"}

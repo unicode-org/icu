@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/pl.xml
  */
 pl{
-    Version{"2.0.97.50"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidżan"}
@@ -245,9 +245,6 @@ pl{
         }
         "Antarctica:Rothera"{
             ec{"Stacja Naukowa Rothera"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Biegun południowy"}
         }
         "Antarctica:Syowa"{
             ec{"Stacja Syowa"}

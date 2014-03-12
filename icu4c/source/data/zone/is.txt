@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/is.xml
  */
 is{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Algeirsborg"}
@@ -149,9 +149,6 @@ is{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Suðurpóllinn"}
         }
         "Asia:Baghdad"{
             ec{"Bagdad"}

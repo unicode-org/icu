@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/hu.xml
  */
 hu{
-    Version{"2.0.96.25"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addisz-Abeba"}
@@ -170,9 +170,6 @@ hu{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Déli-sark"}
         }
         "Antarctica:Vostok"{
             ec{"Vosztok"}

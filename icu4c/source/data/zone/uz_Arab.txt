@@ -11,7 +11,7 @@
  */
 uz_Arab{
     %%Parent{"root"}
-    Version{"2.0.92.87"}
+    Version{"2.0.99.14"}
     zoneStrings{
         "Asia:Kabul"{
             ec{"کابل"}

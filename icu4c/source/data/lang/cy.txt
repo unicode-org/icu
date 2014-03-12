@@ -19,26 +19,20 @@ cy{
     Languages{
         ab{"Abchaseg"}
         af{"Affricâneg"}
-        afa{"Iaith Affro-Asiaidd"}
         am{"Amhareg"}
         ang{"Hen Saesneg"}
         ar{"Arabeg"}
         ar_001{"Arabeg Modern Safonol"}
         arc{"Aramaeg"}
-        art{"Iaith Artiffisial"}
         as{"Asameg"}
-        ath{"Iaith Athabasgaidd"}
-        aus{"Iaith Awstralaidd"}
         az{"Aserbaijaneg"}
         be{"Belarwseg"}
         bg{"Bwlgareg"}
-        bh{"Bihari"}
         bn{"Bengaleg"}
         bo{"Tibeteg"}
         br{"Llydaweg"}
         bs{"Bosnieg"}
         ca{"Catalaneg"}
-        cel{"Iaith Geltaidd"}
         cs{"Tsieceg"}
         cy{"Cymraeg"}
         da{"Daneg"}
@@ -64,7 +58,6 @@ cy{
         fa{"Perseg"}
         fi{"Ffinneg"}
         fil{"Ffilipineg"}
-        fiu{"Iaith Ffinno-Wgrig"}
         fj{"Ffijïeg"}
         fo{"Ffaröeg"}
         fr{"Ffrangeg"}
@@ -76,7 +69,6 @@ cy{
         fy{"Ffriseg y Gorllewin"}
         ga{"Gwyddeleg"}
         gd{"Gaeleg yr Alban"}
-        gem{"Iaith Germanaidd"}
         gl{"Galisieg"}
         gn{"Guaraní"}
         got{"Gotheg"}
@@ -96,7 +88,6 @@ cy{
         id{"Indoneseg"}
         ie{"Interlingue"}
         ig{"Igbo"}
-        ine{"Iaith Indo-Ewropeaidd"}
         is{"Islandeg"}
         it{"Eidaleg"}
         ja{"Japaneeg"}
@@ -120,7 +111,6 @@ cy{
         mga{"Gwyddeleg Canol"}
         mi{"Maori"}
         mic{"Micmaceg"}
-        mis{"Iaith Amrywiol"}
         mk{"Macedoneg"}
         ml{"Malayalam"}
         mn{"Mongoleg"}
@@ -158,7 +148,6 @@ cy{
         si{"Sinhaleg"}
         sk{"Slofaceg"}
         sl{"Slofeneg"}
-        sla{"Iaith Slafig"}
         so{"Somaleg"}
         sq{"Albaneg"}
         sr{"Serbeg"}
@@ -289,7 +278,7 @@ cy{
             tibt{"Digidau Tibetaidd"}
         }
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     codePatterns{
         language{"Iaith: {0}"}
         script{"Sgript: {0}"}

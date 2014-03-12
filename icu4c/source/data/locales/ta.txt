@@ -166,7 +166,7 @@ ta{
         native{"tamldec"}
         traditional{"taml"}
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     calendar{
         chinese{
             DateTimePatterns{
@@ -1418,8 +1418,8 @@ ta{
         }
         temperature{
             celsius{
-                one{"{0}°செ."}
-                other{"{0}°செ."}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             fahrenheit{
                 one{"{0}°ஃபா."}

@@ -37,7 +37,7 @@ ti{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.97.91"}
     calendar{
         generic{
             DateTimePatterns{

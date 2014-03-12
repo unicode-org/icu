@@ -151,7 +151,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.52"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1129,8 +1129,8 @@ pt_PT{
                 other{"{0} horas"}
             }
             millisecond{
-                one{"{0} milessegundo"}
-                other{"{0} milessegundos"}
+                one{"{0} milissegundo"}
+                other{"{0} milissegundos"}
             }
             minute{
                 one{"{0} minuto"}
@@ -1248,7 +1248,7 @@ pt_PT{
             }
             meter-per-second{
                 one{"{0} metro por segundo"}
-                other{"{0} metro por segundo"}
+                other{"{0} metros por segundo"}
             }
             mile-per-hour{
                 one{"{0} milha por hora"}

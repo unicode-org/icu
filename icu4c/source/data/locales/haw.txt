@@ -23,7 +23,7 @@ haw{
             }
         }
     }
-    Version{"2.0.96.28"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -74,12 +74,12 @@ haw{
                 MMMEd{"E, d MMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
-                yM{"M/yy"}
-                yMEd{"E, d/M/yy"}
+                yM{"M/y"}
+                yMEd{"E, d/M/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMd{"d MMM y"}
-                yMd{"d/M/yy"}
+                yMd{"d/M/y"}
             }
             dayNames{
                 format{
@@ -170,6 +170,18 @@ haw{
             year{
                 one{"{0} makahiki"}
                 other{"{0} makahiki"}
+            }
+        }
+    }
+    unitsNarrow{
+        temperature{
+            celsius{
+                one{"{0}°C"}
+                other{"{0}°C"}
+            }
+            fahrenheit{
+                one{"{0}°"}
+                other{"{0}°"}
             }
         }
     }

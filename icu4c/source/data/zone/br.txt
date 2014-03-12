@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/br.xml
  */
 br{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Adis Abeba"}
@@ -71,9 +71,6 @@ br{
         }
         "America:Miquelon"{
             ec{"Mikelon"}
-        }
-        "America:Montreal"{
-            ec{"Montréal"}
         }
         "America:Panama"{
             ec{"Panamá"}

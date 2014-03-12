@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ee.xml
  */
 ee{
-    Version{"2.0.93.8"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidzan nutomegaƒoƒome"}
@@ -429,9 +429,6 @@ ee{
         "America:Montevideo"{
             ec{"Montevideo nutomegaƒoƒome"}
         }
-        "America:Montreal"{
-            ec{"Montreal nutomegaƒoƒome"}
-        }
         "America:Montserrat"{
             ec{"Montserrat nutomegaƒoƒome"}
         }
@@ -513,9 +510,6 @@ ee{
         "America:Scoresbysund"{
             ec{"Skɔsbisund nutomegaƒoƒome"}
         }
-        "America:Shiprock"{
-            ec{"Tsiprɔk nutomegaƒoƒome"}
-        }
         "America:St_Barthelemy"{
             ec{"St. Barthelemy nutomegaƒoƒome"}
         }
@@ -590,9 +584,6 @@ ee{
         }
         "Antarctica:Rothera"{
             ec{"Rothera nutomegaƒoƒome"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"South Pole nutomegaƒoƒome"}
         }
         "Antarctica:Syowa"{
             ec{"Syowa nutomegaƒoƒome"}

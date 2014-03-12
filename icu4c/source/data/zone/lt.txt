@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/lt.xml
  */
 lt{
-    Version{"2.0.97.28"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžanas"}
@@ -420,9 +420,6 @@ lt{
         "America:Montevideo"{
             ec{"Montevidėjas"}
         }
-        "America:Montreal"{
-            ec{"Monrealis"}
-        }
         "America:Montserrat"{
             ec{"Montseratas"}
         }
@@ -507,9 +504,6 @@ lt{
         "America:Scoresbysund"{
             ec{"Itokortormitas"}
         }
-        "America:Shiprock"{
-            ec{"Šiprokas"}
-        }
         "America:St_Barthelemy"{
             ec{"Sen Bartelemi"}
         }
@@ -584,9 +578,6 @@ lt{
         }
         "Antarctica:Rothera"{
             ec{"Rotera"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Pietų ašigalis"}
         }
         "Antarctica:Syowa"{
             ec{"Siova"}

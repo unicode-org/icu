@@ -157,7 +157,7 @@ bg{
             }
         }
     }
-    Version{"2.0.97.18"}
+    Version{"2.0.98.52"}
     calendar{
         generic{
             DateTimePatterns{

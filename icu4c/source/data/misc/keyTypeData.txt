@@ -20,6 +20,7 @@ keyTypeData:table(nofallback){
         colreorder{"kr"}
         colstrength{"ks"}
         currency{"cu"}
+        kv{"kv"}
         numbers{"nu"}
         timezone{"tz"}
         variabletop{"vt"}

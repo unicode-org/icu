@@ -79,7 +79,7 @@ ee{
             }
         }
     }
-    Version{"2.0.93.8"}
+    Version{"2.0.98.52"}
     calendar{
         generic{
             DateTimePatterns{
@@ -596,18 +596,18 @@ ee{
             dn{"ŋkeke"}
             relative{
                 "-1"{"etsɔ si va yi"}
-                "-2"{"nyitsɔ"}
+                "-2"{"nyitsɔ si va yi"}
                 "0"{"egbe"}
                 "1"{"etsɔ si gbɔna"}
                 "2"{"nyitsɔ si gbɔna"}
             }
             relativeTime{
                 future{
-                    one{"le ŋkeke {0} wo me"}
+                    one{"le ŋkeke {0} me"}
                     other{"le ŋkeke {0} wo me"}
                 }
                 past{
-                    one{"ŋkeke {0} si wo va yi"}
+                    one{"ŋkeke {0} si va yi"}
                     other{"ŋkeke {0} si wo va yi"}
                 }
             }
@@ -618,67 +618,129 @@ ee{
         era{
             dn{"ŋɔli"}
         }
+        fri{
+            relative{
+                "-1"{"fiɖa si va yi"}
+                "0"{"fiɖa sia"}
+                "1"{"fiɖa si gbɔ na"}
+            }
+        }
         hour{
             dn{"gaƒoƒo"}
             relativeTime{
                 future{
-                    one{"le gaƒoƒo {0} wo me"}
+                    one{"le gaƒoƒo {0} me"}
                     other{"le gaƒoƒo {0} wo me"}
                 }
                 past{
-                    one{"gaƒoƒo {0} si wo va yi"}
+                    one{"gaƒoƒo {0} si va yi"}
                     other{"gaƒoƒo {0} si wo va yi"}
                 }
             }
         }
         minute{
-            dn{"Mintigaƒoƒo"}
+            dn{"aɖabaƒoƒo"}
             relativeTime{
                 future{
-                    one{"le aɖabaƒoƒo {0} wo me"}
+                    one{"le aɖabaƒoƒo {0} me"}
                     other{"le aɖabaƒoƒo {0} wo me"}
                 }
                 past{
-                    one{"aɖabaƒoƒo {0} si wo va yi"}
+                    one{"aɖabaƒoƒo {0} si va yi"}
                     other{"aɖabaƒoƒo {0} si wo va yi"}
                 }
             }
         }
+        mon{
+            relative{
+                "-1"{"dzoɖa si va yi"}
+                "0"{"dzoɖa sia"}
+                "1"{"dzoɖa si gbɔ na"}
+            }
+        }
         month{
-            dn{"Xleti"}
+            dn{"ɣleti"}
+            relative{
+                "-1"{"ɣleti si va yi"}
+                "0"{"ɣleti sia"}
+                "1"{"ɣleti si gbɔ na"}
+            }
             relativeTime{
                 future{
-                    one{"le ɣleti {0} wo me"}
+                    one{"le ɣleti {0} me"}
                     other{"le ɣleti {0} wo me"}
                 }
                 past{
-                    one{"ɣleti {0} si wo va yi"}
+                    one{"ɣleti {0} si va yi"}
                     other{"ɣleti {0} si wo va yi"}
                 }
             }
         }
+        sat{
+            relative{
+                "-1"{"memleɖa si va yi"}
+                "0"{"memleɖa sia"}
+                "1"{"memleɖa si gbɔ na"}
+            }
+        }
         second{
             dn{"sekend"}
+            relative{
+                "0"{"fifi"}
+            }
             relativeTime{
                 future{
-                    one{"le sekend {0} wo me"}
+                    one{"le sekend {0} me"}
                     other{"le sekend {0} wo me"}
                 }
                 past{
-                    one{"sekend {0} si wo va yi"}
+                    one{"sekend {0} si va yi"}
                     other{"sekend {0} si wo va yi"}
                 }
             }
         }
+        sun{
+            relative{
+                "-1"{"kɔsiɖa si va yi"}
+                "0"{"kɔsiɖa sia"}
+                "1"{"kɔsiɖa si gbɔ na"}
+            }
+        }
+        thu{
+            relative{
+                "-1"{"yawoɖa si va yi"}
+                "0"{"yawoɖa sia"}
+                "1"{"yawoɖa si gbɔ na"}
+            }
+        }
+        tue{
+            relative{
+                "-1"{"blaɖa si va yi"}
+                "0"{"blaɖa sia"}
+                "1"{"blaɖa si gbɔ na"}
+            }
+        }
+        wed{
+            relative{
+                "-1"{"kuɖa si va yi"}
+                "0"{"kuɖa sia"}
+                "1"{"kuɖa si gbɔ na"}
+            }
+        }
         week{
             dn{"kɔsiɖa ɖeka"}
+            relative{
+                "-1"{"kɔsiɖa si va yi"}
+                "0"{"kɔsiɖa sia"}
+                "1"{"kɔsiɖa si gbɔ na"}
+            }
             relativeTime{
                 future{
-                    one{"le kɔsiɖa {0} wo me"}
+                    one{"le kɔsiɖa {0} me"}
                     other{"le kɔsiɖa {0} wo me"}
                 }
                 past{
-                    one{"kɔsiɖa {0} si wo va yi"}
+                    one{"kɔsiɖa {0} si va yi"}
                     other{"kɔsiɖa {0} si wo va yi"}
                 }
             }
@@ -688,19 +750,24 @@ ee{
         }
         year{
             dn{"ƒe"}
+            relative{
+                "-1"{"ƒe si va yi"}
+                "0"{"ƒe sia"}
+                "1"{"ƒe si gbɔ na"}
+            }
             relativeTime{
                 future{
-                    one{"le ƒe {0} wo me"}
+                    one{"le ƒe {0} me"}
                     other{"le ƒe {0} wo me"}
                 }
                 past{
-                    one{"ƒe {0} si wo va yi"}
+                    one{"ƒe {0} si va yi"}
                     other{"ƒe {0} si wo va yi"}
                 }
             }
         }
         zone{
-            dn{"nutomegaƒoƒome"}
+            dn{"nutomegaƒoƒo"}
         }
     }
     listPattern{

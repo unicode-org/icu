@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_BZ{
     %%Parent{"en_001"}
-    Version{"2.0.92.80"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -64,6 +64,18 @@ en_BZ{
                 yMMMEd{"E dd MMM y"}
                 yMMMd{"dd MMM y"}
                 yMd{"dd/MM/y"}
+            }
+        }
+    }
+    unitsNarrow{
+        temperature{
+            celsius{
+                one{"{0}°C"}
+                other{"{0}°C"}
+            }
+            fahrenheit{
+                one{"{0}°"}
+                other{"{0}°"}
             }
         }
     }

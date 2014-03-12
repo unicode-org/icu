@@ -37,53 +37,42 @@ es{
         ady{"adigeo"}
         ae{"avéstico"}
         af{"afrikáans"}
-        afa{"lengua afroasiática"}
         afh{"afrihili"}
         agq{"aghem"}
         ain{"ainu"}
         ak{"akan"}
         akk{"acadio"}
         ale{"aleutiano"}
-        alg{"lenguas algonquinas"}
         alt{"altái meridional"}
         am{"amárico"}
         an{"aragonés"}
         ang{"inglés antiguo"}
         anp{"angika"}
-        apa{"lenguas apache"}
         ar{"árabe"}
         ar_001{"árabe estándar moderno"}
         arc{"arameo"}
         arn{"araucano"}
         arp{"arapaho"}
-        art{"lengua artificial"}
         arw{"arahuaco"}
         as{"asamés"}
         asa{"asu"}
         ast{"asturiano"}
-        ath{"lenguas atabascas"}
-        aus{"lenguas australianas"}
         av{"avar"}
         awa{"avadhi"}
         ay{"aimara"}
         az{"azerí"}
         ba{"bashkir"}
-        bad{"banda"}
-        bai{"lenguas bamileke"}
         bal{"baluchi"}
         ban{"balinés"}
         bas{"basa"}
-        bat{"lengua báltica"}
         bax{"bamun"}
         bbj{"ghomala"}
         be{"bielorruso"}
         bej{"beja"}
         bem{"bemba"}
-        ber{"bereber"}
         bez{"bena"}
         bfd{"bafut"}
         bg{"búlgaro"}
-        bh{"bihari"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bicol"}
@@ -92,14 +81,12 @@ es{
         bla{"siksika"}
         bm{"bambara"}
         bn{"bengalí"}
-        bnt{"bantú"}
         bo{"tibetano"}
         br{"bretón"}
         bra{"braj"}
         brx{"bodo"}
         bs{"bosnio"}
         bss{"akoose"}
-        btk{"batak"}
         bua{"buriat"}
         bug{"buginés"}
         bum{"bulu"}
@@ -107,14 +94,11 @@ es{
         byv{"medumba"}
         ca{"catalán"}
         cad{"caddo"}
-        cai{"lengua india centroamericana"}
         car{"caribe"}
-        cau{"lengua caucásica"}
         cay{"cayuga"}
         cch{"atsam"}
         ce{"checheno"}
         ceb{"cebuano"}
-        cel{"lengua celta"}
         cgg{"chiga"}
         ch{"chamorro"}
         chb{"chibcha"}
@@ -127,26 +111,19 @@ es{
         chr{"cherokee"}
         chy{"cheyene"}
         ckb{"kurdo central"}
-        cmc{"lenguas chámicas"}
         co{"corso"}
         cop{"copto"}
-        cpe{"lengua criolla o pidgin basada en el inglés"}
-        cpf{"lengua criolla o pidgin basada en el francés"}
-        cpp{"lengua criolla o pidgin basada en el portugués"}
         cr{"cree"}
         crh{"tártaro de Crimea"}
-        crp{"lengua criolla o pidgin"}
         cs{"checo"}
         csb{"casubio"}
         cu{"eslavo eclesiástico"}
-        cus{"lengua cusita"}
         cv{"chuvash"}
         cy{"galés"}
         da{"danés"}
         dak{"dakota"}
         dar{"dargva"}
         dav{"taita"}
-        day{"dayak"}
         de{"alemán"}
         de_AT{"alemán austríaco"}
         de_CH{"alto alemán de Suiza"}
@@ -156,7 +133,6 @@ es{
         din{"dinka"}
         dje{"zarma"}
         doi{"dogri"}
-        dra{"lengua dravídica"}
         dsb{"sorbio inferior"}
         dua{"duala"}
         dum{"neerlandés medieval"}
@@ -191,7 +167,6 @@ es{
         ff{"fula"}
         fi{"finés"}
         fil{"filipino"}
-        fiu{"lengua finoúgria"}
         fj{"fiyiano"}
         fo{"feroés"}
         fon{"fon"}
@@ -209,7 +184,6 @@ es{
         gay{"gayo"}
         gba{"gbaya"}
         gd{"gaélico escocés"}
-        gem{"lengua germánica"}
         gez{"geez"}
         gil{"gilbertés"}
         gl{"gallego"}
@@ -232,7 +206,6 @@ es{
         he{"hebreo"}
         hi{"hindi"}
         hil{"hiligaynon"}
-        him{"himachali"}
         hit{"hitita"}
         hmn{"hmong"}
         ho{"hiri motu"}
@@ -250,15 +223,10 @@ es{
         ie{"interlingue"}
         ig{"igbo"}
         ii{"sichuan yi"}
-        ijo{"ijo"}
         ik{"inupiaq"}
         ilo{"ilocano"}
-        inc{"lengua índica"}
-        ine{"lengua indoeuropea"}
         inh{"ingush"}
         io{"ido"}
-        ira{"lengua irania"}
-        iro{"lenguas iroquesas"}
         is{"islandés"}
         it{"italiano"}
         iu{"inuktitut"}
@@ -275,7 +243,6 @@ es{
         kac{"kachin"}
         kaj{"jju"}
         kam{"kamba"}
-        kar{"karen"}
         kaw{"kawi"}
         kbd{"kabardiano"}
         kbl{"kanembu"}
@@ -285,7 +252,6 @@ es{
         kfo{"koro"}
         kg{"kongo"}
         kha{"khasi"}
-        khi{"lengua joisana"}
         kho{"kotanés"}
         khq{"koyra chiini"}
         ki{"kikuyu"}
@@ -304,7 +270,6 @@ es{
         kr{"kanuri"}
         krc{"karachay-balkar"}
         krl{"carelio"}
-        kro{"kru"}
         kru{"kurukh"}
         ks{"cachemiro"}
         ksb{"shambala"}
@@ -344,7 +309,6 @@ es{
         mai{"maithili"}
         mak{"macasar"}
         man{"mandingo"}
-        map{"lengua austronesia"}
         mas{"masai"}
         mde{"maba"}
         mdf{"moksha"}
@@ -360,14 +324,11 @@ es{
         mi{"maorí"}
         mic{"micmac"}
         min{"minangkabau"}
-        mis{"lenguas varias"}
         mk{"macedonio"}
-        mkh{"lengua mon-jemer"}
         ml{"malayalam"}
         mn{"mongol"}
         mnc{"manchú"}
         mni{"manipuri"}
-        mno{"lenguas manobo"}
         moh{"mohawk"}
         mos{"mossi"}
         mr{"marathi"}
@@ -375,17 +336,13 @@ es{
         mt{"maltés"}
         mua{"mundang"}
         mul{"lenguas múltiples"}
-        mun{"lenguas munda"}
         mus{"creek"}
         mwl{"mirandés"}
         mwr{"marwari"}
         my{"birmano"}
         mye{"myene"}
-        myn{"maya"}
         myv{"erzya"}
         na{"nauruano"}
-        nah{"náhuatl"}
-        nai{"lengua india norteamericana"}
         nap{"napolitano"}
         naq{"nama"}
         nb{"bokmal noruego"}
@@ -395,7 +352,6 @@ es{
         new{"newari"}
         ng{"ndonga"}
         nia{"nias"}
-        nic{"lengua níger-cordofana"}
         niu{"niueano"}
         nl{"neerlandés"}
         nl_BE{"flamenco"}
@@ -408,7 +364,6 @@ es{
         nqo{"n’ko"}
         nr{"ndebele meridional"}
         nso{"sotho septentrional"}
-        nub{"lenguas nubias"}
         nus{"nuer"}
         nv{"navajo"}
         nwc{"newari clásico"}
@@ -424,21 +379,17 @@ es{
         os{"osético"}
         osa{"osage"}
         ota{"turco otomano"}
-        oto{"lenguas otomanas"}
         pa{"punjabí"}
-        paa{"lengua papú"}
         pag{"pangasinán"}
         pal{"pahlavi"}
         pam{"pampanga"}
         pap{"papiamento"}
         pau{"palauano"}
         peo{"persa antiguo"}
-        phi{"lengua filipina"}
         phn{"fenicio"}
         pi{"pali"}
         pl{"polaco"}
         pon{"pohnpeiano"}
-        pra{"lenguas prácritas"}
         pro{"provenzal antiguo"}
         ps{"pastún"}
         pt{"portugués"}
@@ -452,7 +403,6 @@ es{
         rn{"kiroundi"}
         ro{"rumano"}
         ro_MD{"moldavo"}
-        roa{"lengua romance"}
         rof{"rombo"}
         rom{"romaní"}
         root{"raíz"}
@@ -463,8 +413,6 @@ es{
         sa{"sánscrito"}
         sad{"sandawe"}
         sah{"sakha"}
-        sai{"lengua india sudamericana"}
-        sal{"lenguas salish"}
         sam{"arameo samaritano"}
         saq{"samburu"}
         sas{"sasak"}
@@ -479,25 +427,19 @@ es{
         see{"seneca"}
         seh{"sena"}
         sel{"selkup"}
-        sem{"lengua semítica"}
         ses{"koyraboro senni"}
         sg{"sango"}
         sga{"irlandés antiguo"}
-        sgn{"lenguajes de signos"}
         sh{"serbocroata"}
         shi{"tashelhit"}
         shn{"shan"}
         shu{"árabe chadiano"}
         si{"cingalés"}
         sid{"sidamo"}
-        sio{"lenguas sioux"}
-        sit{"lengua sino-tibetana"}
         sk{"eslovaco"}
         sl{"esloveno"}
-        sla{"lengua eslava"}
         sm{"samoano"}
         sma{"sami meridional"}
-        smi{"lengua sami"}
         smj{"sami lule"}
         smn{"sami inari"}
         sms{"sami skolt"}
@@ -505,13 +447,11 @@ es{
         snk{"soninké"}
         so{"somalí"}
         sog{"sogdiano"}
-        son{"songhai"}
         sq{"albanés"}
         sr{"serbio"}
         srn{"sranan tongo"}
         srr{"serer"}
         ss{"siswati"}
-        ssa{"lengua nilo-sahariana"}
         ssy{"saho"}
         st{"sesotho meridional"}
         su{"sundanés"}
@@ -525,7 +465,6 @@ es{
         syc{"siríaco clásico"}
         syr{"siriaco"}
         ta{"tamil"}
-        tai{"lengua tai"}
         te{"telugu"}
         tem{"temne"}
         teo{"teso"}
@@ -552,8 +491,6 @@ es{
         tsi{"tsimshiano"}
         tt{"tártaro"}
         tum{"tumbuka"}
-        tup{"lenguas tupí"}
-        tut{"lengua altaica"}
         tvl{"tuvaluano"}
         tw{"twi"}
         twq{"tasawaq"}
@@ -576,11 +513,9 @@ es{
         vun{"kivunyo"}
         wa{"valón"}
         wae{"walser"}
-        wak{"lenguas wakasha"}
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
-        wen{"lenguas sorbias"}
         wo{"uolof"}
         xal{"kalmyk"}
         xh{"xhosa"}
@@ -591,7 +526,6 @@ es{
         ybb{"yemba"}
         yi{"yídish"}
         yo{"yoruba"}
-        ypk{"lenguas yupik"}
         yue{"cantonés"}
         za{"zhuang"}
         zap{"zapoteco"}
@@ -601,7 +535,6 @@ es{
         zh{"chino"}
         zh_Hans{"chino simplificado"}
         zh_Hant{"chino tradicional"}
-        znd{"zande"}
         zu{"zulú"}
         zun{"zuni"}
         zxx{"sin contenido lingüístico"}
@@ -860,7 +793,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.0.97.9"}
+    Version{"2.0.98.52"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}

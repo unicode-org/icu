@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ur.xml
  */
 ur{
-    Version{"2.0.92.87"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"عابدجان"}
@@ -459,9 +459,6 @@ ur{
         "America:Montevideo"{
             ec{"مونٹی ویڈیو"}
         }
-        "America:Montreal"{
-            ec{"مونٹریال"}
-        }
         "America:Montserrat"{
             ec{"مونٹسیراٹ"}
         }
@@ -552,9 +549,6 @@ ur{
         "America:Scoresbysund"{
             ec{"اسکورز بائی سنڈ"}
         }
-        "America:Shiprock"{
-            ec{"شپراک"}
-        }
         "America:Sitka"{
             ec{"سیٹکا"}
         }
@@ -635,9 +629,6 @@ ur{
         }
         "Antarctica:Rothera"{
             ec{"روتھیرا"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"قطب جنوبی"}
         }
         "Antarctica:Syowa"{
             ec{"سیووا"}

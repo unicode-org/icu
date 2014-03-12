@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/dz.xml
  */
 dz{
-    Version{"2.0.92.87"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Cairo"{
             ec{"ཀཱའི་རོ"}
@@ -89,9 +89,6 @@ dz{
         }
         "America:Moncton"{
             ec{"མཱོངཀ་ཊོན"}
-        }
-        "America:Montreal"{
-            ec{"མཱོནཊ་རི་ཡལ"}
         }
         "America:Nipigon"{
             ec{"ནི་པི་གཱོན"}

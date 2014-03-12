@@ -3227,8 +3227,8 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                                      &isAvailable, &ec);
     if (assertSuccess("getFunctionalEquivalent", &ec)) {
         assertEquals("getFunctionalEquivalent(de_DE)", "root", loc);
-        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==TRUE",
-                   isAvailable == TRUE);
+        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==FALSE",
+                   isAvailable == FALSE);
     }
 }
 

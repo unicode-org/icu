@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/tr.xml
  */
 tr{
-    Version{"2.0.97.50"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abican"}
@@ -161,9 +161,6 @@ tr{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Güney Kutbu"}
         }
         "Asia:Almaty"{
             ec{"Almatı"}
