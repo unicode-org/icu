@@ -814,7 +814,6 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
         fUseSignificantDigits = rhs.fUseSignificantDigits;
         fFormatPattern = rhs.fFormatPattern;
         fStyle = rhs.fStyle;
-        //fCurrencySignCount = rhs.fCurrencySignCount; // duplicates line above 
         _clone_ptr(&fCurrencyPluralInfo, rhs.fCurrencyPluralInfo);
         deleteHashForAffixPattern();
         if (rhs.fAffixPatternsForCurrency) {
@@ -1032,55 +1031,68 @@ DecimalFormat::operator==(const Format& that) const
     }
 #endif
 
-    return (NumberFormat::operator==(that) &&
-            ((fCurrencySignCount == fgCurrencySignCountInPluralFormat) ?
-            (fAffixPatternsForCurrency->equals(*other->fAffixPatternsForCurrency)) :
-            (((fPosPrefixPattern == other->fPosPrefixPattern && // both null
-              fPositivePrefix == other->fPositivePrefix)
-             || (fPosPrefixPattern != 0 && other->fPosPrefixPattern != 0 &&
-                 *fPosPrefixPattern  == *other->fPosPrefixPattern)) &&
-            ((fPosSuffixPattern == other->fPosSuffixPattern && // both null
-              fPositiveSuffix == other->fPositiveSuffix)
-             || (fPosSuffixPattern != 0 && other->fPosSuffixPattern != 0 &&
-                 *fPosSuffixPattern  == *other->fPosSuffixPattern)) &&
-            ((fNegPrefixPattern == other->fNegPrefixPattern && // both null
-              fNegativePrefix == other->fNegativePrefix)
-             || (fNegPrefixPattern != 0 && other->fNegPrefixPattern != 0 &&
-                 *fNegPrefixPattern  == *other->fNegPrefixPattern)) &&
-            ((fNegSuffixPattern == other->fNegSuffixPattern && // both null
-              fNegativeSuffix == other->fNegativeSuffix)
-             || (fNegSuffixPattern != 0 && other->fNegSuffixPattern != 0 &&
-                 *fNegSuffixPattern  == *other->fNegSuffixPattern)))) &&
-            ((fRoundingIncrement == other->fRoundingIncrement) // both null
-             || (fRoundingIncrement != NULL &&
-                 other->fRoundingIncrement != NULL &&
-                 *fRoundingIncrement == *other->fRoundingIncrement)) &&
+    return (
+        NumberFormat::operator==(that) &&
+
+        ((fCurrencySignCount == fgCurrencySignCountInPluralFormat) ?
+        (fAffixPatternsForCurrency->equals(*other->fAffixPatternsForCurrency)) :
+        (((fPosPrefixPattern == other->fPosPrefixPattern && // both null
+          fPositivePrefix == other->fPositivePrefix)
+         || (fPosPrefixPattern != 0 && other->fPosPrefixPattern != 0 &&
+             *fPosPrefixPattern  == *other->fPosPrefixPattern)) &&
+        ((fPosSuffixPattern == other->fPosSuffixPattern && // both null
+          fPositiveSuffix == other->fPositiveSuffix)
+         || (fPosSuffixPattern != 0 && other->fPosSuffixPattern != 0 &&
+             *fPosSuffixPattern  == *other->fPosSuffixPattern)) &&
+        ((fNegPrefixPattern == other->fNegPrefixPattern && // both null
+          fNegativePrefix == other->fNegativePrefix)
+         || (fNegPrefixPattern != 0 && other->fNegPrefixPattern != 0 &&
+             *fNegPrefixPattern  == *other->fNegPrefixPattern)) &&
+        ((fNegSuffixPattern == other->fNegSuffixPattern && // both null
+          fNegativeSuffix == other->fNegativeSuffix)
+         || (fNegSuffixPattern != 0 && other->fNegSuffixPattern != 0 &&
+             *fNegSuffixPattern  == *other->fNegSuffixPattern)))) &&
+
+        ((fRoundingIncrement == other->fRoundingIncrement) // both null
+         || (fRoundingIncrement != NULL &&
+             other->fRoundingIncrement != NULL &&
+             *fRoundingIncrement == *other->fRoundingIncrement)) &&
+
         fRoundingMode == other->fRoundingMode &&
         getMultiplier() == other->getMultiplier() &&
         fGroupingSize == other->fGroupingSize &&
         fGroupingSize2 == other->fGroupingSize2 &&
         fDecimalSeparatorAlwaysShown == other->fDecimalSeparatorAlwaysShown &&
         fUseExponentialNotation == other->fUseExponentialNotation &&
+
         (!fUseExponentialNotation ||
             (fMinExponentDigits == other->fMinExponentDigits && fExponentSignAlwaysShown == other->fExponentSignAlwaysShown)) &&
+
         fBoolFlags.getAll() == other->fBoolFlags.getAll() &&
         *fSymbols == *(other->fSymbols) &&
         fUseSignificantDigits == other->fUseSignificantDigits &&
+
         (!fUseSignificantDigits ||
             (fMinSignificantDigits == other->fMinSignificantDigits && fMaxSignificantDigits == other->fMaxSignificantDigits)) &&
+
         fFormatWidth == other->fFormatWidth &&
         fPad == other->fPad &&
         fPadPosition == other->fPadPosition &&
+
         (fStyle != UNUM_CURRENCY_PLURAL ||
             (fStyle == other->fStyle && fFormatPattern == other->fFormatPattern)) &&
+
         fCurrencySignCount == other->fCurrencySignCount &&
+
         ((fCurrencyPluralInfo == other->fCurrencyPluralInfo &&
           fCurrencyPluralInfo == NULL) ||
          (fCurrencyPluralInfo != NULL && other->fCurrencyPluralInfo != NULL &&
-         *fCurrencyPluralInfo == *(other->fCurrencyPluralInfo))));
+         *fCurrencyPluralInfo == *(other->fCurrencyPluralInfo)))
+
         // depending on other settings we may also need to compare
         // fCurrencyChoice (mostly deprecated?),
         // fAffixesForCurrency & fPluralAffixesForCurrency (only relevant in some cases)
+        );
 }
 
 //------------------------------------------------------------------------------
