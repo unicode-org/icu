@@ -983,7 +983,7 @@ public abstract class NumberFormat extends UFormat {
      * the service and must not be modified.  The returned object is a
      * key that can be used to unregister this factory.
      * 
-     * Because ICU may choose to cache NumberFormat objects internally, this must
+     * <p>Because ICU may choose to cache NumberFormat objects internally, this must
      * be called at application startup, prior to any calls to
      * NumberFormat.getInstance to avoid undefined behavior.
      * 

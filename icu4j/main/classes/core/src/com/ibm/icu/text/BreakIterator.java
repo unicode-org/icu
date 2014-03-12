@@ -770,7 +770,7 @@ s     */
      * locale.  Clones of the iterator will be returned if a request for a break iterator
      * of the given kind matches or falls back to this locale.
      * 
-     * Because ICU may choose to cache BreakIterator objects internally, this must
+     * <p>Because ICU may choose to cache BreakIterator objects internally, this must
      * be called at application startup, prior to any calls to
      * BreakIterator.getInstance to avoid undefined behavior.
      * 
@@ -789,7 +789,7 @@ s     */
      * locale.  Clones of the iterator will be returned if a request for a break iterator
      * of the given kind matches or falls back to this locale.
      * 
-     * Because ICU may choose to cache BreakIterator objects internally, this must
+     * <p>Because ICU may choose to cache BreakIterator objects internally, this must
      * be called at application startup, prior to any calls to
      * BreakIterator.getInstance to avoid undefined behavior.
      * 

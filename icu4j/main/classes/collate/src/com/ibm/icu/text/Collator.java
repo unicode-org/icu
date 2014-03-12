@@ -636,7 +636,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * {@icu} Registers a collator as the default collator for the provided locale.  The
      * collator should not be modified after it is registered.
      *
-     * Because ICU may choose to cache Collator objects internally, this must
+     * <p>Because ICU may choose to cache Collator objects internally, this must
      * be called at application startup, prior to any calls to
      * Collator.getInstance to avoid undefined behavior.
      *
@@ -653,7 +653,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     /**
      * {@icu} Registers a collator factory.
      * 
-     * Because ICU may choose to cache Collator objects internally, this must
+     * <p>Because ICU may choose to cache Collator objects internally, this must
      * be called at application startup, prior to any calls to
      * Collator.getInstance to avoid undefined behavior.
      *
