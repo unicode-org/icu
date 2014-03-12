@@ -410,4 +410,14 @@
 #   define UCONFIG_FORMAT_FASTPATHS_49 1
 #endif
 
+/**
+ * \def UCONFIG_NO_FILTERED_BREAK_ITERATION
+ * This switch turns off filtered break iteration code.
+ *
+ * @internal
+ */
+#ifndef UCONFIG_NO_FILTERED_BREAK_ITERATION
+#   define UCONFIG_NO_FILTERED_BREAK_ITERATION 1
+#endif
+
 #endif
