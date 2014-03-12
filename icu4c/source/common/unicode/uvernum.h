@@ -51,7 +51,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2013, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2014, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** The current ICU major version as an integer.
  *  This value will change in the subsequent releases of ICU
