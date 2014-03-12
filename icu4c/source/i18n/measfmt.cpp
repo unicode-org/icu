@@ -374,8 +374,8 @@ static UBool getFromCache(
 }
 
 static UBool isTimeUnit(const MeasureUnit &mu, const char *tu) {
-  return uprv_strcmp(mu.getType(), "duration") == 0 &&
-          uprv_strcmp(mu.getSubtype(), tu) == 0;
+    return uprv_strcmp(mu.getType(), "duration") == 0 &&
+            uprv_strcmp(mu.getSubtype(), tu) == 0;
 }
 
 // Converts a composite measure into hours-minutes-seconds and stores at hms
@@ -400,9 +400,6 @@ static int32_t toHMS(
     // We use copy constructor to ensure that both sides of equality operator
     // are instances of MeasureUnit base class and not a subclass. Otherwise,
     // operator== will immediately return false.
-    // TODO(Travis Keep): Propose
-    // UBool isUnitSame(const MeasureUnit &other) const to address performance
-    // issues around copy constructor.
     for (int32_t i = 0; i < measureCount; ++i) {
         if (isTimeUnit(measures[i].getUnit(), "hour")) {
             // hour must come first
