@@ -179,7 +179,7 @@ ml{
         }
         native{"mlym"}
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1399,8 +1399,8 @@ ml{
         }
         temperature{
             celsius{
-                one{"{0}°സെ"}
-                other{"{0}°സെ"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             fahrenheit{
                 one{"{0}°ഫാ"}

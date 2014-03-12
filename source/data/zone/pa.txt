@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/pa.xml
  */
 pa{
-    Version{"2.0.92.87"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ਐਬੀਡਜਾਨ"}
@@ -459,9 +459,6 @@ pa{
         "America:Montevideo"{
             ec{"ਮੋਂਟੇਵੀਡੀਓ"}
         }
-        "America:Montreal"{
-            ec{"ਮੋਂਟਰੀਅਲ"}
-        }
         "America:Montserrat"{
             ec{"ਮੋਂਟਸੇਰਾਤ"}
         }
@@ -552,9 +549,6 @@ pa{
         "America:Scoresbysund"{
             ec{"ਇੱਟੋਕੋਰਟੂਰਮੀਟ"}
         }
-        "America:Shiprock"{
-            ec{"ਸ਼ਿਪਰੌਕ"}
-        }
         "America:Sitka"{
             ec{"ਸਿਟਕਾ"}
         }
@@ -635,9 +629,6 @@ pa{
         }
         "Antarctica:Rothera"{
             ec{"ਰੋਥੇਰਾ"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"ਦੱਖਣੀ ਧਰੁੱਵ"}
         }
         "Antarctica:Syowa"{
             ec{"ਸਵੋਯਾ"}

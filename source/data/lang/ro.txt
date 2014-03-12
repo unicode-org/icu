@@ -36,53 +36,42 @@ ro{
         ady{"adyghe"}
         ae{"avestană"}
         af{"afrikaans"}
-        afa{"limbă afro-asiatică"}
         afh{"afrihili"}
         agq{"aghem"}
         ain{"ainu"}
         ak{"akan"}
         akk{"akkadiană"}
         ale{"aleută"}
-        alg{"limbă algonchiană"}
         alt{"altaică meridională"}
         am{"amharică"}
         an{"aragoneză"}
         ang{"engleză veche"}
         anp{"angika"}
-        apa{"limbă apașă"}
         ar{"arabă"}
         ar_001{"arabă standard modernă"}
         arc{"aramaică"}
         arn{"araucaniană"}
         arp{"arapaho"}
-        art{"limbă artificială"}
         arw{"arawak"}
         as{"asameză"}
         asa{"asu"}
         ast{"asturiană"}
-        ath{"limbă athapascană"}
-        aus{"limbă australiană"}
         av{"avară"}
         awa{"awadhi"}
         ay{"aymara"}
         az{"azeră"}
         ba{"bașkiră"}
-        bad{"banda"}
-        bai{"limbă bamileke"}
         bal{"baluchi"}
         ban{"balineză"}
         bas{"basaa"}
-        bat{"limbă baltică"}
         bax{"bamun"}
         bbj{"ghomala"}
         be{"bielorusă"}
         bej{"beja"}
         bem{"bemba"}
-        ber{"berberă"}
         bez{"bena"}
         bfd{"bafut"}
         bg{"bulgară"}
-        bh{"bihari"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -91,14 +80,12 @@ ro{
         bla{"siksika"}
         bm{"bambara"}
         bn{"bengaleză"}
-        bnt{"bantu"}
         bo{"tibetană"}
         br{"bretonă"}
         bra{"braj"}
         brx{"bodo"}
         bs{"bosniacă"}
         bss{"akoose"}
-        btk{"batak"}
         bua{"buriat"}
         bug{"bugineză"}
         bum{"bulu"}
@@ -106,14 +93,11 @@ ro{
         byv{"medumba"}
         ca{"catalană"}
         cad{"caddo"}
-        cai{"limbă central-amerindiană"}
         car{"carib"}
-        cau{"limbă caucaziană"}
         cay{"cayuga"}
         cch{"atsam"}
         ce{"cecenă"}
         ceb{"cebuano"}
-        cel{"limbă celtică"}
         cgg{"chiga"}
         ch{"chamorro"}
         chb{"chibcha"}
@@ -126,26 +110,19 @@ ro{
         chr{"cherokee"}
         chy{"cheyenne"}
         ckb{"kurdă sorani"}
-        cmc{"limbă chamică"}
         co{"corsicană"}
         cop{"coptă"}
-        cpe{"creolă sau pidgin bazată pe engleză"}
-        cpf{"creolă sau pidgin bazată pe franceză"}
-        cpp{"creolă sau pidgin bazată pe portugheză"}
         cr{"cree"}
         crh{"turcă crimeeană"}
-        crp{"creolă sau pidgin"}
         cs{"cehă"}
         csb{"cașubiană"}
         cu{"slavonă"}
-        cus{"limbă cushitică"}
         cv{"ciuvașă"}
         cy{"velșă"}
         da{"daneză"}
         dak{"dakota"}
         dar{"dargwa"}
         dav{"taita"}
-        day{"dayak"}
         de{"germană"}
         de_AT{"germană austriacă"}
         de_CH{"germană standard elvețiană"}
@@ -155,7 +132,6 @@ ro{
         din{"dinka"}
         dje{"zarma"}
         doi{"dogri"}
-        dra{"limbă dravidiană"}
         dsb{"sorabă de jos"}
         dua{"duala"}
         dum{"olandeză mijlocie"}
@@ -191,7 +167,6 @@ ro{
         ff{"fulah"}
         fi{"finlandeză"}
         fil{"filipineză"}
-        fiu{"limbă fino-ugrică"}
         fj{"fijiană"}
         fo{"faroeză"}
         fon{"fon"}
@@ -209,7 +184,6 @@ ro{
         gay{"gayo"}
         gba{"gbaya"}
         gd{"gaelică scoțiană"}
-        gem{"limbă germanică"}
         gez{"geez"}
         gil{"gilbertină"}
         gl{"galiciană"}
@@ -232,7 +206,6 @@ ro{
         he{"ebraică"}
         hi{"hindi"}
         hil{"hiligaynon"}
-        him{"himachali"}
         hit{"hitită"}
         hmn{"hmong"}
         ho{"hiri motu"}
@@ -250,15 +223,10 @@ ro{
         ie{"interlingue"}
         ig{"igbo"}
         ii{"sichuan yi"}
-        ijo{"ijo"}
         ik{"inupiak"}
         ilo{"iloko"}
-        inc{"limbă indiană"}
-        ine{"limbă indo-europeană"}
         inh{"ingușă"}
         io{"ido"}
-        ira{"limbă iraniană"}
-        iro{"limbă irocheză"}
         is{"islandeză"}
         it{"italiană"}
         iu{"inuktitut"}
@@ -275,7 +243,6 @@ ro{
         kac{"kachin"}
         kaj{"jju"}
         kam{"kamba"}
-        kar{"karen"}
         kaw{"kawi"}
         kbd{"kabardian"}
         kbl{"kanembu"}
@@ -285,7 +252,6 @@ ro{
         kfo{"koro"}
         kg{"congoleză"}
         kha{"khasi"}
-        khi{"limbă khoisan"}
         kho{"limbp khotaneză"}
         khq{"koyra chiini"}
         ki{"kikuyu"}
@@ -304,7 +270,6 @@ ro{
         kr{"kanuri"}
         krc{"karaceai-balkar"}
         krl{"kareliană"}
-        kro{"kru"}
         kru{"kurukh"}
         ks{"cașmiră"}
         ksb{"shambala"}
@@ -344,7 +309,6 @@ ro{
         mai{"maithili"}
         mak{"makasar"}
         man{"mandingo"}
-        map{"austroneziană"}
         mas{"masai"}
         mde{"maba"}
         mdf{"moksha"}
@@ -360,14 +324,11 @@ ro{
         mi{"maori"}
         mic{"micmac"}
         min{"minangkabau"}
-        mis{"limbi diverse"}
         mk{"macedoneană"}
-        mkh{"limbă mon-khmeră"}
         ml{"malayalam"}
         mn{"mongolă"}
         mnc{"manciuriană"}
         mni{"manipur"}
-        mno{"limbă manobo"}
         moh{"mohawk"}
         mos{"mossi"}
         mr{"marathi"}
@@ -375,17 +336,13 @@ ro{
         mt{"malteză"}
         mua{"mundang"}
         mul{"limbi multiple"}
-        mun{"limbă munda"}
         mus{"creek"}
         mwl{"mirandeză"}
         mwr{"marwari"}
         my{"birmaneză"}
         mye{"myene"}
-        myn{"limbă mayașă"}
         myv{"erzya"}
         na{"nauru"}
-        nah{"nahuatl"}
-        nai{"limbă nord-amerindiană"}
         nap{"napolitană"}
         naq{"nama"}
         nb{"norvegiană bokmål"}
@@ -395,7 +352,6 @@ ro{
         new{"newari"}
         ng{"ndonga"}
         nia{"nias"}
-        nic{"limbă nigero-kordofaniană"}
         niu{"niueană"}
         nl{"olandeză"}
         nl_BE{"flamandă"}
@@ -408,7 +364,6 @@ ro{
         nqo{"n’ko"}
         nr{"ndebele de sud"}
         nso{"sotho de nord"}
-        nub{"limbă nubiană"}
         nus{"nuer"}
         nv{"navajo"}
         nwc{"newari clasică"}
@@ -424,21 +379,17 @@ ro{
         os{"osetă"}
         osa{"osage"}
         ota{"turcă otomană"}
-        oto{"limbă otomi"}
         pa{"punjabi"}
-        paa{"limbă papuașă"}
         pag{"pangasinan"}
         pal{"pahlavi"}
         pam{"pampanga"}
         pap{"papiamento"}
         pau{"palauană"}
         peo{"persană veche"}
-        phi{"limbă filipineză"}
         phn{"feniciană"}
         pi{"pali"}
         pl{"poloneză"}
         pon{"pohnpeiană"}
-        pra{"limbă prakrit"}
         pro{"provensală veche"}
         ps{"paștună"}
         pt{"portugheză"}
@@ -452,7 +403,6 @@ ro{
         rn{"kirundi"}
         ro{"română"}
         ro_MD{"moldovenească"}
-        roa{"limbă romanică"}
         rof{"rombo"}
         rom{"romani"}
         root{"root"}
@@ -463,8 +413,6 @@ ro{
         sa{"sanscrită"}
         sad{"sandawe"}
         sah{"sakha"}
-        sai{"limbă sud-amerindiană"}
-        sal{"limbă salishan"}
         sam{"aramaică samariteană"}
         saq{"samburu"}
         sas{"sasak"}
@@ -479,25 +427,19 @@ ro{
         see{"seneca"}
         seh{"sena"}
         sel{"selkup"}
-        sem{"limbă semitică"}
         ses{"koyraboro Senni"}
         sg{"sango"}
         sga{"irlandeză veche"}
-        sgn{"limbaj mimico-gestual"}
         sh{"sârbo-croată"}
         shi{"tachelhit"}
         shn{"shan"}
         shu{"arabă ciadiană"}
         si{"singhaleză"}
         sid{"sidamo"}
-        sio{"limbă siouană"}
-        sit{"limbă sino-tibetană"}
         sk{"slovacă"}
         sl{"slovenă"}
-        sla{"limbă slavă"}
         sm{"samoană"}
         sma{"sami de sud"}
-        smi{"limbă sami"}
         smj{"lule sami"}
         smn{"inari sami"}
         sms{"skolt sami"}
@@ -505,13 +447,11 @@ ro{
         snk{"soninke"}
         so{"somaleză"}
         sog{"sogdien"}
-        son{"songhai"}
         sq{"albaneză"}
         sr{"sârbă"}
         srn{"sranan tongo"}
         srr{"serer"}
         ss{"swati"}
-        ssa{"limbă nilo-sahariană"}
         ssy{"saho"}
         st{"sesotho"}
         su{"sundaneză"}
@@ -525,7 +465,6 @@ ro{
         syc{"siriacă clasică"}
         syr{"siriacă"}
         ta{"tamilă"}
-        tai{"limbă thai"}
         te{"telugu"}
         tem{"timne"}
         teo{"teso"}
@@ -552,8 +491,6 @@ ro{
         tsi{"tsimshian"}
         tt{"tătară"}
         tum{"tumbuka"}
-        tup{"limbă tupi"}
-        tut{"limbă altaică"}
         tvl{"tuvalu"}
         tw{"twi"}
         twq{"tasawaq"}
@@ -576,11 +513,9 @@ ro{
         vun{"vunjo"}
         wa{"valonă"}
         wae{"walser"}
-        wak{"limbă wakashan"}
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
-        wen{"limbă sorabă"}
         wo{"wolof"}
         xal{"calmucă"}
         xh{"xhosa"}
@@ -591,7 +526,6 @@ ro{
         ybb{"yemba"}
         yi{"idiș"}
         yo{"yoruba"}
-        ypk{"limbă yupik"}
         yue{"cantoneză"}
         za{"zhuang"}
         zap{"zapotecă"}
@@ -601,7 +535,6 @@ ro{
         zh{"chineză"}
         zh_Hans{"chineză simplificată"}
         zh_Hant{"chineză tradițională"}
-        znd{"zande"}
         zu{"zulu"}
         zun{"zuni"}
         zxx{"fară conținut lingvistic"}
@@ -806,7 +739,7 @@ ro{
         SCOTLAND{"engleză standard scoțiană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.96.24"}
+    Version{"2.0.98.52"}
     codePatterns{
         language{"Limbă: {0}"}
         script{"Scriere: {0}"}

@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2013, International Business Machines Corporation and    *
+* Copyright (C) 2005-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.	                                         *
 *******************************************************************************
 */
@@ -646,6 +646,10 @@
 		<include locales="tzm_Latn"/>
 		<include locales="tzm_Latn_MA"/>
 		<include locales="tzm_MA"/>
+		<include locales="ug"/>
+		<include locales="ug_Arab"/>
+		<include locales="ug_Arab_CN"/>
+		<include locales="ug_CN"/>
 		<include locales="uk"/>
 		<include locales="uk_UA"/>
 		<include locales="ur"/>

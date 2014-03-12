@@ -163,7 +163,7 @@ si{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1287,8 +1287,8 @@ si{
         }
         temperature{
             celsius{
-                one{"සෙල්. {0}°"}
-                other{"සෙල්. {0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             fahrenheit{
                 one{"ෆැර. {0}°"}

@@ -171,7 +171,7 @@ bn{
         }
         native{"beng"}
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.62"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1107,8 +1107,8 @@ bn{
                 other{"{0} ইঞ্চি"}
             }
             kilometer{
-                one{"{0} কিমি"}
-                other{"{0} কিমি"}
+                one{"{0} কিলোমিটার"}
+                other{"{0} কিলোমিটার"}
             }
             light-year{
                 one{"{0} আলোকবর্ষ"}
@@ -1141,8 +1141,8 @@ bn{
                 other{"{0} গ্রাম"}
             }
             kilogram{
-                one{"{0} কেজি"}
-                other{"{0} কেজি"}
+                one{"{0} কিলোগ্রাম"}
+                other{"{0} কিলোগ্রাম"}
             }
             ounce{
                 one{"{0} আউন্স"}

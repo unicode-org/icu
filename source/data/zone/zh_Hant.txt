@@ -11,7 +11,7 @@
  */
 zh_Hant{
     %%Parent{"root"}
-    Version{"2.0.97.32"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比讓"}
@@ -460,9 +460,6 @@ zh_Hant{
         "America:Montevideo"{
             ec{"蒙特維多"}
         }
-        "America:Montreal"{
-            ec{"蒙特婁"}
-        }
         "America:Montserrat"{
             ec{"蒙賽拉特"}
         }
@@ -553,9 +550,6 @@ zh_Hant{
         "America:Scoresbysund"{
             ec{"伊托科爾托米特"}
         }
-        "America:Shiprock"{
-            ec{"船岩峰"}
-        }
         "America:Sitka"{
             ec{"錫特卡"}
         }
@@ -636,9 +630,6 @@ zh_Hant{
         }
         "Antarctica:Rothera"{
             ec{"羅瑟拉"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"南極"}
         }
         "Antarctica:Syowa"{
             ec{"昭和"}

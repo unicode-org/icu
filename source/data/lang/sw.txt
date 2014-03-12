@@ -41,7 +41,6 @@ sw{
         be{"Kibelarusi"}
         bem{"Kibemba"}
         bg{"Kibulgaria"}
-        bh{"Kibihari"}
         bn{"Kibangla"}
         bo{"Kitibeti"}
         br{"Kibretoni"}
@@ -366,7 +365,7 @@ sw{
             vaii{"Dijiti za Vai"}
         }
     }
-    Version{"2.0.97.40"}
+    Version{"2.0.98.13"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -26,7 +26,9 @@ timezoneTypes:table(nofallback){
             "America:Knox_IN"{"America/Indiana/Knox"}
             "America:Porto_Acre"{"America/Rio_Branco"}
             "America:Rosario"{"America/Cordoba"}
+            "America:Shiprock"{"America/Denver"}
             "America:Virgin"{"America/St_Thomas"}
+            "Antarctica:South_Pole"{"Pacific/Auckland"}
             "Asia:Ashkhabad"{"Asia/Ashgabat"}
             "Asia:Chungking"{"Asia/Chongqing"}
             "Asia:Dacca"{"Asia/Dhaka"}
@@ -121,7 +123,7 @@ timezoneTypes:table(nofallback){
             MST{"Etc/GMT+7"}
             NZ{"Pacific/Auckland"}
             NZ-CHAT{"Pacific/Chatham"}
-            Navajo{"America/Shiprock"}
+            Navajo{"America/Denver"}
             PRC{"Asia/Shanghai"}
             Poland{"Europe/Warsaw"}
             Portugal{"Europe/Lisbon"}
@@ -318,7 +320,6 @@ timezoneTypes:table(nofallback){
             "America:Santo_Domingo"{"dosdq"}
             "America:Sao_Paulo"{"brsao"}
             "America:Scoresbysund"{"globy"}
-            "America:Shiprock"{"usnavajo"}
             "America:Sitka"{"ussit"}
             "America:St_Barthelemy"{"gpsbh"}
             "America:St_Johns"{"casjf"}
@@ -346,7 +347,6 @@ timezoneTypes:table(nofallback){
             "Antarctica:McMurdo"{"aqmcm"}
             "Antarctica:Palmer"{"aqplm"}
             "Antarctica:Rothera"{"aqrot"}
-            "Antarctica:South_Pole"{"aqams"}
             "Antarctica:Syowa"{"aqsyw"}
             "Antarctica:Vostok"{"aqvos"}
             "Arctic:Longyearbyen"{"sjlyr"}

@@ -167,7 +167,7 @@ kn{
         }
         native{"knda"}
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1288,8 +1288,8 @@ kn{
         }
         temperature{
             celsius{
-                one{"{0}°ಸೆ"}
-                other{"{0}°ಸೆ"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             fahrenheit{
                 one{"{0}°ಫ್ಯಾ"}

@@ -17,7 +17,6 @@ om{
         az{"Afaan Azerbaijani"}
         be{"Afaan Belarusia"}
         bg{"Afaan Bulgariya"}
-        bh{"Afaan Bihari"}
         bn{"Afaan Baangladeshi"}
         bs{"Afaan Bosniyaa"}
         ca{"Afaan Katalaa"}
@@ -102,5 +101,5 @@ om{
     Scripts{
         Latn{"Latin"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.97.91"}
 }

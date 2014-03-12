@@ -362,6 +362,7 @@ root{
                 }
                 zodiacs{
                     format{
+                        abbreviated:alias{"/LOCALE/calendar/chinese/cyclicNameSets/dayParts/format/abbreviated"}
                         narrow:alias{"/LOCALE/calendar/chinese/cyclicNameSets/zodiacs/format/abbreviated"}
                         wide:alias{"/LOCALE/calendar/chinese/cyclicNameSets/zodiacs/format/abbreviated"}
                     }

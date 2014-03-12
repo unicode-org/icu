@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/si.xml
  */
 si{
-    Version{"2.0.92.87"}
+    Version{"2.0.98.76"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"අබිජාන්"}
@@ -459,9 +459,6 @@ si{
         "America:Montevideo"{
             ec{"මොන්ටෙවිඩියෝ"}
         }
-        "America:Montreal"{
-            ec{"මොන්ට්‍රියල්"}
-        }
         "America:Montserrat"{
             ec{"මොන්ට්සේරාට්"}
         }
@@ -552,9 +549,6 @@ si{
         "America:Scoresbysund"{
             ec{"ඉටොකොර්ටෝමිට්"}
         }
-        "America:Shiprock"{
-            ec{"ශිප්රෝක්"}
-        }
         "America:Sitka"{
             ec{"සිට්කා"}
         }
@@ -635,9 +629,6 @@ si{
         }
         "Antarctica:Rothera"{
             ec{"රොතෙරා"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"දක්ෂිණ ධ්‍රැවය"}
         }
         "Antarctica:Syowa"{
             ec{"සියෝවා"}

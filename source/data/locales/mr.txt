@@ -187,7 +187,7 @@ mr{
         }
         native{"deva"}
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1342,8 +1342,8 @@ mr{
         }
         temperature{
             celsius{
-                one{"{0}°से"}
-                other{"{0}°से"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             fahrenheit{
                 one{"{0}°फॅ"}

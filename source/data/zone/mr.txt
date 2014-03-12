@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/mr.xml
  */
 mr{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.76"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अबिद्जान"}
@@ -459,9 +459,6 @@ mr{
         "America:Montevideo"{
             ec{"मोन्टेव्हिडियो"}
         }
-        "America:Montreal"{
-            ec{"माँट्रियल"}
-        }
         "America:Montserrat"{
             ec{"माँन्टसेरात"}
         }
@@ -552,9 +549,6 @@ mr{
         "America:Scoresbysund"{
             ec{"इट्टोकोर्टूरमिट"}
         }
-        "America:Shiprock"{
-            ec{"शिपरॉक"}
-        }
         "America:Sitka"{
             ec{"सितका"}
         }
@@ -635,9 +629,6 @@ mr{
         }
         "Antarctica:Rothera"{
             ec{"रोथेरा"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"दक्षिण ध्रुव"}
         }
         "Antarctica:Syowa"{
             ec{"स्योवा"}

@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ro.xml
  */
 ro{
-    Version{"2.0.96.24"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -104,9 +104,6 @@ ro{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Polul Sud"}
         }
         "Antarctica:Syowa"{
             ec{"Showa"}

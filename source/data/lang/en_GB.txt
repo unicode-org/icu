@@ -34,5 +34,5 @@ en_GB{
             fullwide{"Full-Width Digits"}
         }
     }
-    Version{"2.0.92.80"}
+    Version{"2.0.98.76"}
 }

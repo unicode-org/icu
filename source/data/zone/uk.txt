@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/uk.xml
  */
 uk{
-    Version{"2.0.97.50"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -459,9 +459,6 @@ uk{
         "America:Montevideo"{
             ec{"Монтевідео"}
         }
-        "America:Montreal"{
-            ec{"Монреаль"}
-        }
         "America:Montserrat"{
             ec{"Монсерат"}
         }
@@ -552,9 +549,6 @@ uk{
         "America:Scoresbysund"{
             ec{"Скорсбисун"}
         }
-        "America:Shiprock"{
-            ec{"Шипрок"}
-        }
         "America:Sitka"{
             ec{"Сітка"}
         }
@@ -635,9 +629,6 @@ uk{
         }
         "Antarctica:Rothera"{
             ec{"Ротера"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Південний полюс"}
         }
         "Antarctica:Syowa"{
             ec{"Сьова"}

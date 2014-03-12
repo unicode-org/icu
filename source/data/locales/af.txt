@@ -162,7 +162,7 @@ af{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.52"}
     calendar{
         generic{
             DateTimePatterns{
@@ -998,12 +998,12 @@ af{
                 other{"{0} sentimeter"}
             }
             foot{
-                one{"{0} vt."}
-                other{"{0} vt."}
+                one{"{0} voet"}
+                other{"{0} voete"}
             }
             inch{
-                one{"{0} dm."}
-                other{"{0} dm."}
+                one{"{0} duim"}
+                other{"{0} duim"}
             }
             kilometer{
                 one{"{0} kilometer"}
@@ -1209,8 +1209,8 @@ af{
                 other{"{0} vt."}
             }
             inch{
-                one{"{0} dm."}
-                other{"{0} dm."}
+                one{"{0} duim"}
+                other{"{0} duim"}
             }
             kilometer{
                 one{"{0}km"}
@@ -1420,8 +1420,8 @@ af{
                 other{"{0} vt."}
             }
             inch{
-                one{"{0} dm."}
-                other{"{0} dm."}
+                one{"{0} duim"}
+                other{"{0} duim"}
             }
             kilometer{
                 one{"{0} km"}

@@ -161,7 +161,7 @@ sv{
             }
         }
     }
-    Version{"2.0.97.50"}
+    Version{"2.0.99.20"}
     calendar{
         buddhist{
             eras{
@@ -405,8 +405,8 @@ sv{
                 MEd{"E d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
-                MMMMEd{"E d:'e' MMMM"}
-                MMMMd{"d:'e' MMMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMd{"d/M"}
                 MMdd{"dd/MM"}
@@ -530,7 +530,7 @@ sv{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE'en' 'den' d:'e' MMMM y",
+                "EEEE d MMMM y",
                 "d MMMM y",
                 "d MMM y",
                 "y-MM-dd",
@@ -560,8 +560,8 @@ sv{
                 MEd{"E d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
-                MMMMEd{"E d:'e' MMMM"}
-                MMMMd{"d:'e' MMMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMd{"d/M"}
                 MMdd{"dd/MM"}

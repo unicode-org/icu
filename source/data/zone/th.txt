@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/th.xml
  */
 th{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"อาบีจาน"}
@@ -459,9 +459,6 @@ th{
         "America:Montevideo"{
             ec{"มอนเตวิเดโอ"}
         }
-        "America:Montreal"{
-            ec{"มอนทรีอัล"}
-        }
         "America:Montserrat"{
             ec{"มอนเซอร์รัต"}
         }
@@ -552,9 +549,6 @@ th{
         "America:Scoresbysund"{
             ec{"สกอเรสไบซันด์"}
         }
-        "America:Shiprock"{
-            ec{"ชิปร็อก"}
-        }
         "America:Sitka"{
             ec{"ซิตกา"}
         }
@@ -635,9 +629,6 @@ th{
         }
         "Antarctica:Rothera"{
             ec{"โรเทรา"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"ขั้วโลกใต้"}
         }
         "Antarctica:Syowa"{
             ec{"เซียวา"}

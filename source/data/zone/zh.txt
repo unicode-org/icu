@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/zh.xml
  */
 zh{
-    Version{"2.0.97.32"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -459,9 +459,6 @@ zh{
         "America:Montevideo"{
             ec{"蒙得维的亚"}
         }
-        "America:Montreal"{
-            ec{"蒙特利尔"}
-        }
         "America:Montserrat"{
             ec{"蒙特塞拉特"}
         }
@@ -552,9 +549,6 @@ zh{
         "America:Scoresbysund"{
             ec{"斯科列斯比桑德"}
         }
-        "America:Shiprock"{
-            ec{"希普罗克"}
-        }
         "America:Sitka"{
             ec{"锡特卡"}
         }
@@ -635,9 +629,6 @@ zh{
         }
         "Antarctica:Rothera"{
             ec{"罗瑟拉"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"南极"}
         }
         "Antarctica:Syowa"{
             ec{"昭和"}

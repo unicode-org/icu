@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/lv.xml
  */
 lv{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžana"}
@@ -396,9 +396,6 @@ lv{
         "America:Monterrey"{
             ec{"Montereja"}
         }
-        "America:Montreal"{
-            ec{"Monreāla"}
-        }
         "America:Montserrat"{
             ec{"Montserrata"}
         }
@@ -483,9 +480,6 @@ lv{
         "America:Scoresbysund"{
             ec{"Skoresbisunda"}
         }
-        "America:Shiprock"{
-            ec{"Šiproka"}
-        }
         "America:St_Barthelemy"{
             ec{"Senbartelmī"}
         }
@@ -557,9 +551,6 @@ lv{
         }
         "Antarctica:Rothera"{
             ec{"Rotera"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Dienvidpols"}
         }
         "Antarctica:Syowa"{
             ec{"Sjova"}

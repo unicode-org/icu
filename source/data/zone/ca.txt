@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ca.xml
  */
 ca{
-    Version{"2.0.96.24"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -132,9 +132,6 @@ ca{
         "America:Mexico_City"{
             ec{"Ciutat de Mèxic"}
         }
-        "America:Montreal"{
-            ec{"Mont-real"}
-        }
         "America:New_York"{
             ec{"Nova York"}
         }
@@ -182,9 +179,6 @@ ca{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"pol sud"}
         }
         "Asia:Anadyr"{
             ec{"Anadyr'"}

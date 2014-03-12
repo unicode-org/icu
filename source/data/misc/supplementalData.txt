@@ -3393,6 +3393,9 @@ supplementalData:table(nofallback){
             primary{
                 scripts{"Latn"}
             }
+            secondary{
+                territories{"UG"}
+            }
         }
         ada{
             primary{
@@ -3715,14 +3718,6 @@ supplementalData:table(nofallback){
                 territories{"IN"}
             }
         }
-        bh{
-            secondary{
-                scripts{
-                    "Deva",
-                    "Kthi",
-                }
-            }
-        }
         bhb{
             primary{
                 scripts{"Deva"}
@@ -3908,6 +3903,11 @@ supplementalData:table(nofallback){
                 territories{"ID"}
             }
         }
+        bum{
+            secondary{
+                territories{"CM"}
+            }
+        }
         bya{
             primary{
                 scripts{"Latn"}
@@ -4076,11 +4076,6 @@ supplementalData:table(nofallback){
                     "Copt",
                     "Grek",
                 }
-            }
-        }
-        cpe{
-            secondary{
-                scripts{"Latn"}
             }
         }
         cr{
@@ -4293,6 +4288,8 @@ supplementalData:table(nofallback){
         efi{
             primary{
                 scripts{"Latn"}
+            }
+            secondary{
                 territories{"NG"}
             }
         }
@@ -4534,9 +4531,7 @@ supplementalData:table(nofallback){
             }
             secondary{
                 territories{
-                    "CM",
                     "GN",
-                    "MR",
                     "SN",
                 }
             }
@@ -4563,11 +4558,6 @@ supplementalData:table(nofallback){
             secondary{
                 scripts{"Tglg"}
                 territories{"US"}
-            }
-        }
-        fiu{
-            secondary{
-                scripts{"Latn"}
             }
         }
         fj{
@@ -4868,10 +4858,12 @@ supplementalData:table(nofallback){
                     "Arab",
                     "Latn",
                 }
-                territories{"NG"}
             }
             secondary{
-                territories{"NE"}
+                territories{
+                    "NE",
+                    "NG",
+                }
             }
         }
         hai{
@@ -5027,6 +5019,9 @@ supplementalData:table(nofallback){
                 scripts{"Armn"}
                 territories{"AM"}
             }
+            secondary{
+                territories{"RU"}
+            }
         }
         hz{
             primary{
@@ -5063,6 +5058,8 @@ supplementalData:table(nofallback){
         ig{
             primary{
                 scripts{"Latn"}
+            }
+            secondary{
                 territories{"NG"}
             }
         }
@@ -5310,6 +5307,11 @@ supplementalData:table(nofallback){
             }
             secondary{
                 territories{"NA"}
+            }
+        }
+        kjg{
+            primary{
+                scripts{"Laoo"}
             }
         }
         kjh{
@@ -5870,6 +5872,14 @@ supplementalData:table(nofallback){
             primary{
                 scripts{"Latn"}
             }
+            secondary{
+                territories{"MZ"}
+            }
+        }
+        mgy{
+            primary{
+                scripts{"Latn"}
+            }
         }
         mh{
             primary{
@@ -6353,6 +6363,14 @@ supplementalData:table(nofallback){
                 territories{"PW"}
             }
         }
+        pcm{
+            primary{
+                scripts{"Latn"}
+            }
+            secondary{
+                territories{"NG"}
+            }
+        }
         peo{
             secondary{
                 scripts{"Xpeo"}
@@ -6385,14 +6403,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{"Latn"}
                 territories{"FM"}
-            }
-        }
-        pra{
-            secondary{
-                scripts{
-                    "Brah",
-                    "Khar",
-                }
             }
         }
         prd{
@@ -6509,6 +6519,9 @@ supplementalData:table(nofallback){
             }
         }
         rmt{
+            primary{
+                scripts{"Arab"}
+            }
             secondary{
                 territories{"IR"}
             }
@@ -6819,11 +6832,6 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
-        smi{
-            secondary{
-                scripts{"Latn"}
-            }
-        }
         smj{
             primary{
                 scripts{"Latn"}
@@ -6869,11 +6877,6 @@ supplementalData:table(nofallback){
                     "DJ",
                     "ET",
                 }
-            }
-        }
-        son{
-            secondary{
-                scripts{"Latn"}
             }
         }
         sou{
@@ -6958,10 +6961,10 @@ supplementalData:table(nofallback){
         su{
             primary{
                 scripts{"Latn"}
-                territories{"ID"}
             }
             secondary{
                 scripts{"Sund"}
+                territories{"ID"}
             }
         }
         suk{
@@ -7016,6 +7019,9 @@ supplementalData:table(nofallback){
         swc{
             primary{
                 scripts{"Latn"}
+            }
+            secondary{
+                territories{"CD"}
             }
         }
         swv{
@@ -7287,11 +7293,6 @@ supplementalData:table(nofallback){
                 territories{"MW"}
             }
         }
-        tut{
-            secondary{
-                scripts{"Cyrl"}
-            }
-        }
         tvl{
             primary{
                 scripts{"Latn"}
@@ -7483,11 +7484,6 @@ supplementalData:table(nofallback){
         }
         wae{
             primary{
-                scripts{"Latn"}
-            }
-        }
-        wak{
-            secondary{
                 scripts{"Latn"}
             }
         }
@@ -7702,6 +7698,11 @@ supplementalData:table(nofallback){
                     "TH",
                     "US",
                 }
+            }
+        }
+        zmi{
+            primary{
+                scripts{"Latn"}
             }
         }
         zu{
@@ -8037,6 +8038,11 @@ supplementalData:table(nofallback){
                 "10",
             }
             {
+                "lb",
+                "de",
+                "96",
+            }
+            {
                 "lg",
                 "en",
                 "10",
@@ -8365,11 +8371,6 @@ supplementalData:table(nofallback){
             {
                 "yo",
                 "en",
-                "10",
-            }
-            {
-                "zh_HK",
-                "zh_TW",
                 "10",
             }
             {
@@ -10177,7 +10178,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49990000}
             }
             territoryF:intvector{
-                57352200,
+                57352600,
                 49990000,
                 52940000,
             }
@@ -10217,7 +10218,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48290000}
             }
             territoryF:intvector{
-                61275800,
+                61269800,
                 49900000,
                 56547397,
             }
@@ -10245,7 +10246,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49430000}
             }
             territoryF:intvector{
-                60342900,
+                60453000,
                 49281000,
                 57311081,
             }
@@ -10270,7 +10271,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48180000}
             }
             territoryF:intvector{
-                59160500,
+                59161000,
                 49990000,
                 54901560,
             }
@@ -10298,7 +10299,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                60265400,
+                60267300,
                 49968000,
                 56301141,
             }
@@ -10315,9 +10316,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{48330000}
             }
             territoryF:intvector{
-                60199700,
+                60206100,
                 49996000,
-                56297418,
+                56306427,
             }
         }
         AO{
@@ -10332,7 +10333,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49670000}
             }
             territoryF:intvector{
-                61130400,
+                61131800,
                 49704000,
                 57185653,
             }
@@ -10342,7 +10343,7 @@ supplementalData:table(nofallback){
         }
         AQ{
             territoryF:intvector{
-                57151000,
+                57158500,
                 49990000,
                 52300000,
             }
@@ -10362,7 +10363,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{46470000}
             }
             territoryF:intvector{
-                61755300,
+                61771000,
                 49979000,
                 57426110,
             }
@@ -10400,7 +10401,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47370000}
             }
             territoryF:intvector{
-                61364900,
+                61361000,
                 49980000,
                 56822165,
             }
@@ -10414,7 +10415,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48190000}
             }
             territoryF:intvector{
-                61986700,
+                61998300,
                 49990000,
                 57222625,
             }
@@ -10464,7 +10465,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47240000}
             }
             territoryF:intvector{
-                60983600,
+                61100400,
                 49998000,
                 56959016,
             }
@@ -10493,7 +10494,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             territoryF:intvector{
-                60324300,
+                60321600,
                 49980000,
                 56387572,
             }
@@ -10504,7 +10505,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                59716900,
+                59700400,
                 49997000,
                 55288725,
             }
@@ -10534,7 +10535,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48500000}
             }
             territoryF:intvector{
-                61311000,
+                61324600,
                 49577000,
                 58163655,
             }
@@ -10556,7 +10557,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49550000}
             }
             territoryF:intvector{
-                61427200,
+                61421700,
                 49990000,
                 57104443,
             }
@@ -10577,7 +10578,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49400000}
             }
             territoryF:intvector{
-                60246900,
+                60265100,
                 49287000,
                 57178130,
             }
@@ -10588,7 +10589,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                61105500,
+                61104600,
                 49984000,
                 56698164,
             }
@@ -10605,7 +10606,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48330000}
             }
             territoryF:intvector{
-                60336300,
+                60349600,
                 49946000,
                 56128133,
             }
@@ -10620,12 +10621,12 @@ supplementalData:table(nofallback){
                 populationShareF:int{49630000}
             }
             sw{
-                populationShareF:int{46580000}
+                populationShareF:int{46630000}
             }
             territoryF:intvector{
-                59557800,
+                59575000,
                 49672000,
-                57108883,
+                57100607,
             }
         }
         BJ{
@@ -10637,7 +10638,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49350000}
             }
             territoryF:intvector{
-                60158400,
+                60166500,
                 49424000,
                 56987729,
             }
@@ -10680,7 +10681,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49930000}
             }
             territoryF:intvector{
-                60220400,
+                60222500,
                 49954000,
                 55415717,
             }
@@ -10705,7 +10706,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49320000}
             }
             territoryF:intvector{
-                60561400,
+                60583400,
                 49912000,
                 57104611,
             }
@@ -10721,7 +10722,7 @@ supplementalData:table(nofallback){
             }
             territoryF:intvector{
                 58386600,
-                49990000,
+                49965000,
                 54200000,
             }
         }
@@ -10749,7 +10750,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49910000}
             }
             territoryF:intvector{
-                62239400,
+                62242200,
                 49904000,
                 58201010,
             }
@@ -10763,7 +10764,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                60112400,
+                60114000,
                 49956000,
                 55319031,
             }
@@ -10780,7 +10781,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49170000}
             }
             territoryF:intvector{
-                59503600,
+                59523500,
                 49528000,
                 55725296,
             }
@@ -10790,7 +10791,7 @@ supplementalData:table(nofallback){
         }
         BV{
             territoryF:intvector{
-                54374600,
+                54375100,
                 49990000,
                 50100000,
             }
@@ -10807,7 +10808,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49810000}
             }
             territoryF:intvector{
-                60320600,
+                60340000,
                 49851000,
                 56212783,
             }
@@ -10826,7 +10827,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49120000}
             }
             territoryF:intvector{
-                61149200,
+                61150400,
                 49996000,
                 56962589,
             }
@@ -10840,7 +10841,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49280000}
             }
             territoryF:intvector{
-                59304800,
+                59308300,
                 49769000,
                 55334297,
             }
@@ -10913,7 +10914,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{45360000}
             }
             territoryF:intvector{
-                62151300,
+                62151800,
                 49990000,
                 57345682,
             }
@@ -10930,7 +10931,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49830000}
             }
             territoryF:intvector{
-                57264200,
+                57267300,
                 49990000,
                 52596000,
             }
@@ -10965,8 +10966,11 @@ supplementalData:table(nofallback){
                 officialStatus{"official_regional"}
                 populationShareF:int{49500000}
             }
+            swc{
+                populationShareF:int{48900000}
+            }
             territoryF:intvector{
-                60280300,
+                60293900,
                 49668000,
                 57755073,
             }
@@ -10984,7 +10988,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49490000}
             }
             territoryF:intvector{
-                59395500,
+                59333600,
                 49566000,
                 56516651,
             }
@@ -10999,9 +11003,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{48240000}
             }
             territoryF:intvector{
-                60194100,
+                60202600,
                 49838000,
-                56449269,
+                56457410,
             }
         }
         CH{
@@ -11034,7 +11038,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47280000}
             }
             territoryF:intvector{
-                61369400,
+                61370300,
                 49990000,
                 56799603,
             }
@@ -11067,7 +11071,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             territoryF:intvector{
-                60410100,
+                60436700,
                 49569000,
                 57224008,
             }
@@ -11089,7 +11093,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49980000}
             }
             territoryF:intvector{
-                61325800,
+                61335400,
                 49986000,
                 57172169,
             }
@@ -11154,6 +11158,10 @@ supplementalData:table(nofallback){
             ha_Arab{
                 populationShareF:int{47140000}
             }
+            jgo{
+                populationShareF:int{47340000}
+                writingShareF:int{49300000}
+            }
             kkj{
                 populationShareF:int{47540000}
             }
@@ -11163,11 +11171,15 @@ supplementalData:table(nofallback){
             maf{
                 populationShareF:int{47740000}
             }
+            mgo{
+                populationShareF:int{47470000}
+                writingShareF:int{48500000}
+            }
             mua{
                 populationShareF:int{48100000}
             }
             nmg{
-                populationShareF:int{46440000}
+                populationShareF:int{46400000}
                 writingShareF:int{49100000}
             }
             nnh{
@@ -11175,12 +11187,12 @@ supplementalData:table(nofallback){
                 writingShareF:int{48800000}
             }
             territoryF:intvector{
-                60516100,
+                60531600,
                 49713000,
-                57205492,
+                57225345,
             }
             yav{
-                populationShareF:int{46110000}
+                populationShareF:int{46100000}
             }
             ybb{
                 populationShareF:int{48160000}
@@ -11231,7 +11243,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{46190000}
             }
             territoryF:intvector{
-                63126100,
+                63133700,
                 49951000,
                 59134959,
             }
@@ -11260,14 +11272,14 @@ supplementalData:table(nofallback){
                 populationShareF:int{49930000}
             }
             territoryF:intvector{
-                61511100,
+                61526500,
                 49936000,
                 57457458,
             }
         }
         CP{
             territoryF:intvector{
-                54347400,
+                54344600,
                 49990000,
                 50100000,
             }
@@ -11281,7 +11293,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49950000}
             }
             territoryF:intvector{
-                60597900,
+                60614300,
                 49963000,
                 56469594,
             }
@@ -11306,7 +11318,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49760000}
             }
             territoryF:intvector{
-                59221400,
+                59222200,
                 49849000,
                 55531046,
             }
@@ -11325,7 +11337,7 @@ supplementalData:table(nofallback){
             }
             territoryF:intvector{
                 59283800,
-                49990000,
+                49965000,
                 55146836,
             }
         }
@@ -11335,7 +11347,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49930000}
             }
             territoryF:intvector{
-                57670600,
+                57678500,
                 49990000,
                 53151300,
             }
@@ -11352,7 +11364,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47230000}
             }
             territoryF:intvector{
-                60240000,
+                60216200,
                 49987000,
                 56118680,
             }
@@ -11373,9 +11385,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{47490000}
             }
             territoryF:intvector{
-                61291700,
+                61286500,
                 49990000,
-                57101629,
+                57106098,
             }
         }
         DE{
@@ -11425,7 +11437,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47440000}
             }
             territoryF:intvector{
-                62325000,
+                62322700,
                 49990000,
                 57811473,
             }
@@ -11439,7 +11451,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49990000}
             }
             territoryF:intvector{
-                57187300,
+                57187600,
                 49990000,
                 52500000,
             }
@@ -11460,7 +11472,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49410000}
             }
             territoryF:intvector{
-                59241800,
+                59250500,
                 49679000,
                 55792198,
             }
@@ -11479,7 +11491,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47130000}
             }
             territoryF:intvector{
-                61213600,
+                61211300,
                 49990000,
                 56555645,
             }
@@ -11490,7 +11502,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49940000}
             }
             territoryF:intvector{
-                59101800,
+                59101500,
                 49940000,
                 54732860,
             }
@@ -11504,7 +11516,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49780000}
             }
             territoryF:intvector{
-                61100400,
+                61101000,
                 49901000,
                 57102196,
             }
@@ -11522,7 +11534,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48780000}
             }
             territoryF:intvector{
-                61277400,
+                61284700,
                 49726000,
                 57380878,
             }
@@ -11533,7 +11545,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49980000}
             }
             territoryF:intvector{
-                59454100,
+                59439800,
                 49977000,
                 55150000,
             }
@@ -11544,7 +11556,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49960000}
             }
             territoryF:intvector{
-                61155800,
+                61157600,
                 49916000,
                 57154394,
             }
@@ -11558,7 +11570,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49300000}
             }
             territoryF:intvector{
-                60295700,
+                60299400,
                 49998000,
                 56126638,
             }
@@ -11572,7 +11584,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{46610000}
             }
             territoryF:intvector{
-                61548800,
+                61551400,
                 49739000,
                 57852944,
             }
@@ -11608,7 +11620,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48360000}
             }
             territoryF:intvector{
-                59446800,
+                59471700,
                 49689000,
                 56623368,
             }
@@ -11645,7 +11657,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48700000}
             }
             territoryF:intvector{
-                62143400,
+                62138900,
                 49977000,
                 57473705,
             }
@@ -11671,7 +11683,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48600000}
             }
             territoryF:intvector{
-                61105000,
+                61118200,
                 49390000,
                 57938770,
             }
@@ -11713,7 +11725,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48570000}
             }
             territoryF:intvector{
-                61200700,
+                61195500,
                 50100000,
                 56526611,
             }
@@ -11731,7 +11743,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49440000}
             }
             territoryF:intvector{
-                59437300,
+                59445000,
                 49937000,
                 55896758,
             }
@@ -11765,7 +11777,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49230000}
             }
             territoryF:intvector{
-                58766400,
+                58754000,
                 49890000,
                 55106104,
             }
@@ -11815,6 +11827,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{47910000}
                 writingShareF:int{48500000}
             }
+            ia{
+                populationShareF:int{44200000}
+            }
             it{
                 populationShareF:int{48170000}
             }
@@ -11829,7 +11844,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48130000}
             }
             territoryF:intvector{
-                62229100,
+                62227300,
                 49990000,
                 57659516,
             }
@@ -11839,14 +11854,11 @@ supplementalData:table(nofallback){
                 officialStatus{"official"}
                 populationShareF:int{49630000}
             }
-            mdt{
-                populationShareF:int{48800000}
-            }
             puu{
                 populationShareF:int{48900000}
             }
             territoryF:intvector{
-                60259100,
+                60300600,
                 49890000,
                 56164029,
             }
@@ -11901,7 +11913,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47510000}
             }
             territoryF:intvector{
-                62237500,
+                62237800,
                 49990000,
                 57633956,
             }
@@ -11918,7 +11930,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49960000}
             }
             territoryF:intvector{
-                59146700,
+                59145800,
                 49960000,
                 55109590,
             }
@@ -11946,9 +11958,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{48900000}
             }
             territoryF:intvector{
-                60271100,
+                60273000,
                 49997000,
-                56455591,
+                56494216,
             }
         }
         GF{
@@ -12006,7 +12018,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{46160000}
             }
             territoryF:intvector{
-                60837400,
+                60904100,
                 49715000,
                 57251996,
             }
@@ -12046,7 +12058,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49290000}
             }
             territoryF:intvector{
-                59345900,
+                59367800,
                 49511000,
                 56188305,
             }
@@ -12069,7 +12081,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49110000}
             }
             territoryF:intvector{
-                60123700,
+                60125600,
                 49410000,
                 57111760,
             }
@@ -12100,11 +12112,8 @@ supplementalData:table(nofallback){
                 officialStatus{"official"}
                 populationShareF:int{48880000}
             }
-            syi{
-                populationShareF:int{48220000}
-            }
             territoryF:intvector{
-                60196000,
+                60196800,
                 49942000,
                 55704001,
             }
@@ -12124,7 +12133,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{46930000}
             }
             territoryF:intvector{
-                61281400,
+                61266000,
                 49973000,
                 57107730,
             }
@@ -12134,7 +12143,7 @@ supplementalData:table(nofallback){
         }
         GS{
             territoryF:intvector{
-                55749300,
+                55750200,
                 49990000,
                 51200000,
             }
@@ -12149,7 +12158,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49930000}
             }
             territoryF:intvector{
-                60799700,
+                60815100,
                 49759000,
                 57143735,
             }
@@ -12175,7 +12184,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                59196300,
+                59200500,
                 49553000,
                 56166087,
             }
@@ -12186,7 +12195,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                59625600,
+                59659300,
                 49918000,
                 55739903,
             }
@@ -12197,9 +12206,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{49510000}
             }
             territoryF:intvector{
-                61375500,
+                61381700,
                 49935000,
-                56718272,
+                56708232,
             }
             zh_Hans{
                 populationShareF:int{48500000}
@@ -12211,7 +12220,7 @@ supplementalData:table(nofallback){
         }
         HM{
             territoryF:intvector{
-                54443200,
+                54448400,
                 49990000,
                 50100000,
             }
@@ -12229,7 +12238,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49780000}
             }
             territoryF:intvector{
-                60384200,
+                60392300,
                 49851000,
                 56844847,
             }
@@ -12244,7 +12253,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48160000}
             }
             territoryF:intvector{
-                60796900,
+                60781500,
                 49989000,
                 56447561,
             }
@@ -12260,7 +12269,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49810000}
             }
             territoryF:intvector{
-                60131500,
+                60134200,
                 49487000,
                 56989393,
             }
@@ -12286,7 +12295,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{46500000}
             }
             territoryF:intvector{
-                61198800,
+                61196600,
                 49990000,
                 56993947,
             }
@@ -12297,7 +12306,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49980000}
             }
             territoryF:intvector{
-                60635300,
+                60615300,
                 49977000,
                 56209859,
             }
@@ -12358,9 +12367,6 @@ supplementalData:table(nofallback){
             mdr{
                 populationShareF:int{46920000}
             }
-            mgy{
-                populationShareF:int{47230000}
-            }
             min{
                 populationShareF:int{48300000}
             }
@@ -12380,14 +12386,13 @@ supplementalData:table(nofallback){
                 populationShareF:int{47960000}
             }
             su{
-                officialStatus{"official"}
                 populationShareF:int{49120000}
             }
             sxn{
                 populationShareF:int{46920000}
             }
             territoryF:intvector{
-                62123700,
+                62128500,
                 49928000,
                 58251160,
             }
@@ -12405,7 +12410,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49110000}
             }
             territoryF:intvector{
-                61195400,
+                61190400,
                 49990000,
                 56477598,
             }
@@ -12441,7 +12446,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49110000}
             }
             territoryF:intvector{
-                61252800,
+                61274500,
                 49971000,
                 56770704,
             }
@@ -12695,7 +12700,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48720000}
             }
             territoryF:intvector{
-                62476100,
+                62496200,
                 49628000,
                 59122080,
             }
@@ -12729,7 +12734,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{50100000}
             }
             territoryF:intvector{
-                58131100,
+                58131300,
                 49990000,
                 53350000,
             }
@@ -12750,7 +12755,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47500000}
             }
             territoryF:intvector{
-                61242500,
+                61248000,
                 49785000,
                 57318585,
             }
@@ -12804,12 +12809,13 @@ supplementalData:table(nofallback){
             }
             rmt{
                 populationShareF:int{48190000}
+                writingShareF:int{48100000}
             }
             sdh{
                 populationShareF:int{48240000}
             }
             territoryF:intvector{
-                62101600,
+                61987100,
                 49850000,
                 57798539,
             }
@@ -12826,7 +12832,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                60130400,
+                60131100,
                 49990000,
                 55315281,
             }
@@ -12871,7 +12877,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47170000}
             }
             territoryF:intvector{
-                62186300,
+                62180500,
                 49990000,
                 57614823,
             }
@@ -12893,7 +12899,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49980000}
             }
             territoryF:intvector{
-                60256200,
+                60251300,
                 49870000,
                 56290971,
             }
@@ -12904,7 +12910,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                60392900,
+                60400200,
                 49959000,
                 56648208,
             }
@@ -12922,7 +12928,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             territoryF:intvector{
-                62470400,
+                62472900,
                 49990000,
                 58127253,
             }
@@ -12996,7 +13002,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47740000}
             }
             territoryF:intvector{
-                60771400,
+                60799000,
                 49874000,
                 57440377,
             }
@@ -13011,7 +13017,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49280000}
             }
             territoryF:intvector{
-                60135000,
+                60143000,
                 49992000,
                 56554804,
             }
@@ -13028,7 +13034,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49890000}
             }
             territoryF:intvector{
-                60372500,
+                60396400,
                 49739000,
                 57152055,
             }
@@ -13043,7 +13049,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49600000}
             }
             territoryF:intvector{
-                58636300,
+                58698000,
                 49900000,
                 55103248,
             }
@@ -13058,7 +13064,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49560000}
             }
             territoryF:intvector{
-                58887400,
+                58911000,
                 49755000,
                 55752288,
             }
@@ -13073,7 +13079,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49980000}
             }
             territoryF:intvector{
-                58946300,
+                58952000,
                 49978000,
                 54511340,
             }
@@ -13095,7 +13101,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                62164000,
+                62166600,
                 49979000,
                 57489552,
             }
@@ -13106,7 +13112,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                61153400,
+                61165800,
                 49939000,
                 56269532,
             }
@@ -13135,7 +13141,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49950000}
             }
             territoryF:intvector{
-                61235600,
+                61243600,
                 49997000,
                 57177369,
             }
@@ -13155,7 +13161,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49690000}
             }
             territoryF:intvector{
-                60195200,
+                60207800,
                 49727000,
                 56669517,
             }
@@ -13178,7 +13184,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48160000}
             }
             territoryF:intvector{
-                60642200,
+                60643100,
                 49896000,
                 56413158,
             }
@@ -13189,7 +13195,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49900000}
             }
             territoryF:intvector{
-                59223300,
+                59221600,
                 49901000,
                 55162781,
             }
@@ -13226,7 +13232,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49150000}
             }
             territoryF:intvector{
-                61128400,
+                61134500,
                 49912000,
                 57216756,
             }
@@ -13243,9 +13249,12 @@ supplementalData:table(nofallback){
                 populationShareF:int{47480000}
             }
             territoryF:intvector{
-                59271900,
+                59289800,
                 49608000,
                 56398970,
+            }
+            vai_Latn{
+                populationShareF:int{0}
             }
             vai_Vaii{
                 populationShareF:int{48260000}
@@ -13264,7 +13273,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49980000}
             }
             territoryF:intvector{
-                59413100,
+                59426500,
                 49896000,
                 56193618,
             }
@@ -13284,7 +13293,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48800000}
             }
             territoryF:intvector{
-                60660800,
+                60674300,
                 49997000,
                 56351586,
             }
@@ -13304,7 +13313,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             territoryF:intvector{
-                60429200,
+                60426700,
                 50100000,
                 55514862,
             }
@@ -13318,7 +13327,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49380000}
             }
             territoryF:intvector{
-                60378800,
+                60388700,
                 49998000,
                 56217844,
             }
@@ -13329,7 +13338,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49740000}
             }
             territoryF:intvector{
-                60786300,
+                60736000,
                 49895000,
                 56600235,
             }
@@ -13356,7 +13365,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48870000}
             }
             territoryF:intvector{
-                61174000,
+                61180000,
                 49671000,
                 57326491,
             }
@@ -13394,7 +13403,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48300000}
             }
             territoryF:intvector{
-                60123600,
+                60126800,
                 49990000,
                 56361993,
             }
@@ -13414,7 +13423,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                59746100,
+                59742900,
                 49985000,
                 55653474,
             }
@@ -13444,7 +13453,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49900000}
             }
             territoryF:intvector{
-                60217600,
+                60220300,
                 49645000,
                 57225991,
             }
@@ -13459,7 +13468,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49730000}
             }
             territoryF:intvector{
-                58481800,
+                58486000,
                 49937000,
                 54697470,
             }
@@ -13474,7 +13483,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49250000}
             }
             territoryF:intvector{
-                60222200,
+                60224000,
                 49974000,
                 56208717,
             }
@@ -13494,9 +13503,6 @@ supplementalData:table(nofallback){
             }
             bze{
                 populationShareF:int{47840000}
-            }
-            bzx{
-                populationShareF:int{47990000}
             }
             dtm{
                 populationShareF:int{48110000}
@@ -13524,7 +13530,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48590000}
             }
             territoryF:intvector{
-                60182800,
+                60189000,
                 49334000,
                 57159689,
             }
@@ -13547,7 +13553,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48640000}
             }
             territoryF:intvector{
-                60909300,
+                61111100,
                 49927000,
                 57551673,
             }
@@ -13561,21 +13567,24 @@ supplementalData:table(nofallback){
                 populationShareF:int{49930000}
             }
             ru{
-                populationShareF:int{47120000}
+                populationShareF:int{47140000}
             }
             territoryF:intvector{
-                60154400,
+                60170300,
                 49974000,
-                56322652,
+                56291219,
             }
             ug_Cyrl{
-                populationShareF:int{46310000}
+                populationShareF:int{46340000}
             }
             zh_Hans{
                 populationShareF:int{48140000}
             }
         }
         MO{
+            en{
+                populationShareF:int{48230000}
+            }
             pt{
                 officialStatus{"official"}
                 populationShareF:int{48500000}
@@ -13630,7 +13639,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49170000}
             }
             territoryF:intvector{
-                59782400,
+                59820400,
                 49586000,
                 56343761,
             }
@@ -13659,7 +13668,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                60114500,
+                60114600,
                 49924000,
                 55411277,
             }
@@ -13683,7 +13692,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48250000}
             }
             territoryF:intvector{
-                60205300,
+                60209500,
                 49888000,
                 56132224,
             }
@@ -13697,7 +13706,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49940000}
             }
             territoryF:intvector{
-                59310600,
+                59307300,
                 49984000,
                 55393988,
             }
@@ -13712,7 +13721,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49630000}
             }
             territoryF:intvector{
-                60145000,
+                60150200,
                 49748000,
                 57167775,
             }
@@ -13741,9 +13750,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{47380000}
             }
             territoryF:intvector{
-                62178800,
+                62184500,
                 49935000,
-                58116221,
+                58118818,
             }
             yua{
                 populationShareF:int{47670000}
@@ -13773,7 +13782,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48420000}
             }
             territoryF:intvector{
-                61506700,
+                61525000,
                 49931000,
                 57296284,
             }
@@ -13785,6 +13794,9 @@ supplementalData:table(nofallback){
             }
         }
         MZ{
+            mgh{
+                populationShareF:int{48450000}
+            }
             ndc{
                 populationShareF:int{48990000}
             }
@@ -13808,7 +13820,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{46380000}
             }
             territoryF:intvector{
-                60266900,
+                60281500,
                 49561000,
                 57240967,
             }
@@ -13848,7 +13860,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49210000}
             }
             territoryF:intvector{
-                60170300,
+                60177900,
                 49888000,
                 56218285,
             }
@@ -13885,7 +13897,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49410000}
             }
             territoryF:intvector{
-                60133400,
+                60139800,
                 49287000,
                 57168993,
             }
@@ -13902,7 +13914,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49770000}
             }
             territoryF:intvector{
-                57973300,
+                57984700,
                 49990000,
                 53219600,
             }
@@ -13921,7 +13933,6 @@ supplementalData:table(nofallback){
                 populationShareF:int{46210000}
             }
             efi{
-                officialStatus{"official"}
                 populationShareF:int{48140000}
             }
             en{
@@ -13932,18 +13943,15 @@ supplementalData:table(nofallback){
                 populationShareF:int{48670000}
             }
             ha_Arab{
-                officialStatus{"official"}
                 populationShareF:int{48100000}
             }
             ha_Latn{
-                officialStatus{"official"}
                 populationShareF:int{49130000}
             }
             ibb{
                 populationShareF:int{48140000}
             }
             ig{
-                officialStatus{"official"}
                 populationShareF:int{49130000}
             }
             kaj{
@@ -13952,8 +13960,11 @@ supplementalData:table(nofallback){
             kcg{
                 populationShareF:int{46930000}
             }
+            pcm{
+                populationShareF:int{49210000}
+            }
             territoryF:intvector{
-                61455500,
+                61478500,
                 49613000,
                 58174508,
             }
@@ -13972,7 +13983,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49780000}
             }
             territoryF:intvector{
-                60271000,
+                60278600,
                 49780000,
                 56578853,
             }
@@ -14003,7 +14014,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48120000}
             }
             territoryF:intvector{
-                61718600,
+                61696300,
                 49990000,
                 57168050,
             }
@@ -14028,9 +14039,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{48330000}
             }
             territoryF:intvector{
-                61281700,
+                61282200,
                 50100000,
-                56472270,
+                56508558,
             }
         }
         NP{
@@ -14100,7 +14111,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47120000}
             }
             territoryF:intvector{
-                60412200,
+                60420600,
                 49574000,
                 57304303,
             }
@@ -14166,7 +14177,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48250000}
             }
             territoryF:intvector{
-                61134200,
+                61136000,
                 49990000,
                 56436511,
             }
@@ -14183,7 +14194,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47940000}
             }
             territoryF:intvector{
-                60915400,
+                60948600,
                 49869000,
                 56315413,
             }
@@ -14197,7 +14208,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49690000}
             }
             territoryF:intvector{
-                60580200,
+                60615400,
                 49941000,
                 56355941,
             }
@@ -14218,7 +14229,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49150000}
             }
             territoryF:intvector{
-                61332000,
+                61344000,
                 49896000,
                 57298493,
             }
@@ -14252,7 +14263,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             territoryF:intvector{
-                60194100,
+                60199600,
                 49624000,
                 56643190,
             }
@@ -14320,7 +14331,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{49360000}
             }
             territoryF:intvector{
-                61431300,
+                61454300,
                 49954000,
                 58105721,
             }
@@ -14400,7 +14411,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48100000}
             }
             territoryF:intvector{
-                61523900,
+                61574100,
                 49549000,
                 58193239,
             }
@@ -14422,7 +14433,7 @@ supplementalData:table(nofallback){
             }
             de{
                 officialStatus{"official_regional"}
-                populationShareF:int{48130000}
+                populationShareF:int{46960000}
             }
             lt{
                 officialStatus{"official_regional"}
@@ -14433,7 +14444,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49960000}
             }
             territoryF:intvector{
-                61814100,
+                61814000,
                 49997000,
                 57383838,
             }
@@ -14458,12 +14469,12 @@ supplementalData:table(nofallback){
         PN{
             en{
                 officialStatus{"official"}
-                populationShareF:int{49960000}
+                populationShareF:int{49710000}
             }
             territoryF:intvector{
-                56179800,
+                56243800,
                 49990000,
-                51480000,
+                51650000,
             }
         }
         PR{
@@ -14478,7 +14489,7 @@ supplementalData:table(nofallback){
             territoryF:intvector{
                 60648400,
                 49903000,
-                56367421,
+                56364565,
             }
         }
         PS{
@@ -14501,7 +14512,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49960000}
             }
             territoryF:intvector{
-                61250600,
+                61243300,
                 49954000,
                 57107993,
             }
@@ -14516,7 +14527,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49740000}
             }
             territoryF:intvector{
-                58221000,
+                58245500,
                 49920000,
                 54211080,
             }
@@ -14534,7 +14545,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49800000}
             }
             territoryF:intvector{
-                60415500,
+                60459000,
                 49939000,
                 56662325,
             }
@@ -14551,7 +14562,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47320000}
             }
             territoryF:intvector{
-                61191000,
+                61198700,
                 49963000,
                 56204244,
             }
@@ -14597,7 +14608,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47120000}
             }
             territoryF:intvector{
-                61277900,
+                61280700,
                 49977000,
                 57217905,
             }
@@ -14635,7 +14646,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             territoryF:intvector{
-                60800200,
+                60804700,
                 49980000,
                 56724301,
             }
@@ -14674,6 +14685,9 @@ supplementalData:table(nofallback){
             chm{
                 populationShareF:int{47370000}
             }
+            cu{
+                populationShareF:int{0}
+            }
             cv{
                 populationShareF:int{48130000}
             }
@@ -14682,6 +14696,10 @@ supplementalData:table(nofallback){
             }
             fi{
                 populationShareF:int{46120000}
+            }
+            hy{
+                populationShareF:int{47840000}
+                writingShareF:int{49500000}
             }
             inh{
                 officialStatus{"official_regional"}
@@ -14747,7 +14765,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{45350000}
             }
             territoryF:intvector{
-                62255500,
+                62255300,
                 49997000,
                 58142500,
             }
@@ -14778,7 +14796,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49770000}
             }
             territoryF:intvector{
-                60157400,
+                60163700,
                 49711000,
                 57120126,
             }
@@ -14789,7 +14807,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                61921700,
+                61927800,
                 49872000,
                 57269396,
             }
@@ -14800,7 +14818,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                59192200,
+                59195800,
                 49841000,
                 55597248,
             }
@@ -14818,7 +14836,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49600000}
             }
             territoryF:intvector{
-                59235500,
+                59240400,
                 49918000,
                 54908460,
             }
@@ -14835,8 +14853,11 @@ supplementalData:table(nofallback){
             ha_Arab{
                 populationShareF:int{48140000}
             }
+            nus{
+                populationShareF:int{48180000}
+            }
             territoryF:intvector{
-                60866700,
+                60899700,
                 49719000,
                 57348479,
             }
@@ -14850,16 +14871,16 @@ supplementalData:table(nofallback){
                 populationShareF:int{47550000}
             }
             ia{
-                populationShareF:int{45110000}
+                populationShareF:int{0}
             }
             rmu{
-                populationShareF:int{47100000}
+                populationShareF:int{46980000}
             }
             se{
                 populationShareF:int{47330000}
             }
             sma{
-                populationShareF:int{45330000}
+                populationShareF:int{45310000}
                 writingShareF:int{49750000}
             }
             smj{
@@ -14870,12 +14891,12 @@ supplementalData:table(nofallback){
                 populationShareF:int{49950000}
             }
             territoryF:intvector{
-                61399400,
+                61393800,
                 49990000,
-                56911942,
+                56964739,
             }
             yi{
-                populationShareF:int{46330000}
+                populationShareF:int{46310000}
             }
         }
         SG{
@@ -14898,7 +14919,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48210000}
             }
             territoryF:intvector{
-                61331900,
+                61339000,
                 49959000,
                 56546030,
             }
@@ -14930,7 +14951,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49870000}
             }
             territoryF:intvector{
-                60589100,
+                60565000,
                 49997000,
                 56199269,
             }
@@ -14944,7 +14965,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49620000}
             }
             territoryF:intvector{
-                58114600,
+                58106600,
                 50100000,
                 53192100,
             }
@@ -14964,7 +14985,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49900000}
             }
             territoryF:intvector{
-                61134100,
+                61133400,
                 49996000,
                 56548834,
             }
@@ -14988,7 +15009,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48600000}
             }
             territoryF:intvector{
-                59841200,
+                59915600,
                 49433000,
                 56561269,
             }
@@ -15002,12 +15023,16 @@ supplementalData:table(nofallback){
                 populationShareF:int{49890000}
             }
             territoryF:intvector{
-                59137100,
+                59130600,
                 49960000,
                 54324480,
             }
         }
         SN{
+            dyo{
+                populationShareF:int{48260000}
+                writingShareF:int{49100000}
+            }
             ff{
                 populationShareF:int{49210000}
             }
@@ -15019,7 +15044,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49110000}
             }
             territoryF:intvector{
-                60270100,
+                60277200,
                 49497000,
                 57133004,
             }
@@ -15060,7 +15085,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{49750000}
             }
             territoryF:intvector{
-                59687400,
+                59712000,
                 49947000,
                 55566846,
             }
@@ -15078,7 +15103,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49270000}
             }
             territoryF:intvector{
-                60106200,
+                60147100,
                 49270000,
                 57110901,
             }
@@ -15089,7 +15114,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49850000}
             }
             territoryF:intvector{
-                58408600,
+                58421000,
                 49695000,
                 55186817,
             }
@@ -15100,7 +15125,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49890000}
             }
             territoryF:intvector{
-                60470900,
+                60474700,
                 49845000,
                 56610859,
             }
@@ -15161,7 +15186,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49580000}
             }
             territoryF:intvector{
-                59634500,
+                59625900,
                 49878000,
                 56140336,
             }
@@ -15177,7 +15202,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49990000}
             }
             territoryF:intvector{
-                57103000,
+                57103200,
                 49990000,
                 52275000,
             }
@@ -15203,7 +15228,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49260000}
             }
             territoryF:intvector{
-                60210000,
+                60280000,
                 49354000,
                 57111935,
             }
@@ -15214,7 +15239,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{50100000}
             }
             territoryF:intvector{
-                56486300,
+                56482500,
                 49990000,
                 52140000,
             }
@@ -15228,7 +15253,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49610000}
             }
             territoryF:intvector{
-                59702400,
+                59734800,
                 49604000,
                 56715424,
             }
@@ -15266,9 +15291,9 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             territoryF:intvector{
-                61662600,
+                61674300,
                 49935000,
-                57674481,
+                57674972,
             }
             th{
                 officialStatus{"official"}
@@ -15291,7 +15316,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47780000}
             }
             territoryF:intvector{
-                60180400,
+                60190000,
                 49997000,
                 56791004,
             }
@@ -15323,7 +15348,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{50100000}
             }
             territoryF:intvector{
-                60112300,
+                60254100,
                 49583000,
                 56117239,
             }
@@ -15340,7 +15365,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49120000}
             }
             territoryF:intvector{
-                60497500,
+                60551600,
                 49996000,
                 56511304,
             }
@@ -15362,7 +15387,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49740000}
             }
             territoryF:intvector{
-                61107100,
+                61108400,
                 49791000,
                 57108359,
             }
@@ -15373,7 +15398,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49280000}
             }
             territoryF:intvector{
-                58801000,
+                58846000,
                 49990000,
                 55106322,
             }
@@ -15430,7 +15455,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             territoryF:intvector{
-                62114200,
+                62116700,
                 49941000,
                 57806945,
             }
@@ -15465,7 +15490,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49100000}
             }
             territoryF:intvector{
-                57376100,
+                57400000,
                 49950000,
                 54106980,
             }
@@ -15476,7 +15501,7 @@ supplementalData:table(nofallback){
         }
         TW{
             territoryF:intvector{
-                61918300,
+                61926400,
                 49961000,
                 57232997,
             }
@@ -15515,6 +15540,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{48150000}
                 writingShareF:int{49500000}
             }
+            mgy{
+                populationShareF:int{48140000}
+            }
             nym{
                 populationShareF:int{48330000}
             }
@@ -15524,6 +15552,10 @@ supplementalData:table(nofallback){
             rwk{
                 populationShareF:int{47220000}
             }
+            sbp{
+                populationShareF:int{47200000}
+                writingShareF:int{48100000}
+            }
             suk{
                 populationShareF:int{48870000}
             }
@@ -15532,7 +15564,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49900000}
             }
             territoryF:intvector{
-                60750700,
+                60792900,
                 49678000,
                 57482619,
             }
@@ -15567,7 +15599,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48120000}
             }
             territoryF:intvector{
-                61340700,
+                61337400,
                 49997000,
                 57445732,
             }
@@ -15583,6 +15615,9 @@ supplementalData:table(nofallback){
             }
         }
         UG{
+            ach{
+                populationShareF:int{48370000}
+            }
             cgg{
                 populationShareF:int{48540000}
             }
@@ -15616,7 +15651,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48390000}
             }
             territoryF:intvector{
-                60512700,
+                60543700,
                 49732000,
                 57347588,
             }
@@ -15633,7 +15668,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                57159100,
+                57167000,
                 49990000,
                 52316000,
             }
@@ -15684,9 +15719,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{47240000}
             }
             territoryF:intvector{
-                63159400,
+                63167200,
                 49990000,
-                58316669,
+                58316439,
             }
             vi{
                 populationShareF:int{47340000}
@@ -15704,7 +15739,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49880000}
             }
             territoryF:intvector{
-                60546700,
+                60562700,
                 49981000,
                 56332446,
             }
@@ -15717,7 +15752,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49140000}
             }
             territoryF:intvector{
-                61106400,
+                61112600,
                 49994000,
                 57286616,
             }
@@ -15742,7 +15777,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49980000}
             }
             territoryF:intvector{
-                57254200,
+                57246300,
                 50100000,
                 52839000,
             }
@@ -15753,7 +15788,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49960000}
             }
             territoryF:intvector{
-                59131200,
+                59132500,
                 49960000,
                 55103220,
             }
@@ -15764,7 +15799,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49820000}
             }
             territoryF:intvector{
-                61408500,
+                61407400,
                 49955000,
                 57284591,
             }
@@ -15797,7 +15832,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{49600000}
             }
             territoryF:intvector{
-                61325900,
+                61358900,
                 49934000,
                 57924779,
             }
@@ -15823,7 +15858,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49500000}
             }
             territoryF:intvector{
-                59125100,
+                59127000,
                 49832000,
                 55261565,
             }
@@ -15855,7 +15890,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
             territoryF:intvector{
-                59114600,
+                59114500,
                 49988000,
                 55195476,
             }
@@ -15874,7 +15909,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48500000}
             }
             territoryF:intvector{
-                60135900,
+                60141100,
                 49919000,
                 56184771,
             }
@@ -15885,9 +15920,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{49740000}
             }
             territoryF:intvector{
-                60600600,
+                60616300,
                 49653000,
-                57254083,
+                57253385,
             }
         }
         YT{
@@ -15950,7 +15985,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{49500000}
             }
             territoryF:intvector{
-                61592000,
+                61595700,
                 49930000,
                 57486011,
             }
@@ -15988,11 +16023,14 @@ supplementalData:table(nofallback){
                 officialStatus{"official"}
                 populationShareF:int{49810000}
             }
+            loz{
+                populationShareF:int{48600000}
+            }
             ny{
                 populationShareF:int{49150000}
             }
             territoryF:intvector{
-                60243600,
+                60254700,
                 49614000,
                 57142222,
             }
@@ -16023,7 +16061,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49810000}
             }
             territoryF:intvector{
-                59736600,
+                59749600,
                 49836000,
                 57131829,
             }
@@ -16393,6 +16431,10 @@ supplementalData:table(nofallback){
             preferred{"h"}
         }
         HR{
+            allowed{"H"}
+            preferred{"H"}
+        }
+        ID{
             allowed{"H"}
             preferred{"H"}
         }

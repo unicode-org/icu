@@ -40,9 +40,9 @@ CURR_SYNTHETIC_ALIAS = az_AZ.txt az_Latn_AZ.txt bs_BA.txt bs_Latn_BA.txt\
  sr_Latn_BA.txt sr_Latn_CS.txt sr_Latn_ME.txt sr_Latn_RS.txt sr_Latn_YU.txt\
  sr_ME.txt sr_RS.txt sr_XK.txt sr_YU.txt th_TH.txt\
  th_TH_TRADITIONAL.txt tl.txt tl_PH.txt tzm_Latn_MA.txt tzm_MA.txt\
- uz_AF.txt uz_Arab_AF.txt uz_Latn_UZ.txt uz_UZ.txt vai_LR.txt\
- vai_Vaii_LR.txt zh_CN.txt zh_HK.txt zh_Hans_CN.txt zh_Hant_TW.txt\
- zh_MO.txt zh_SG.txt zh_TW.txt
+ ug_Arab_CN.txt ug_CN.txt uz_AF.txt uz_Arab_AF.txt uz_Latn_UZ.txt\
+ uz_UZ.txt vai_LR.txt vai_Vaii_LR.txt zh_CN.txt zh_HK.txt\
+ zh_Hans_CN.txt zh_Hant_TW.txt zh_MO.txt zh_SG.txt zh_TW.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.
@@ -119,10 +119,11 @@ CURR_SOURCE = af.txt af_NA.txt agq.txt ak.txt\
  sv.txt sw.txt sw_UG.txt swc.txt ta.txt\
  ta_LK.txt ta_MY.txt ta_SG.txt te.txt teo.txt\
  teo_KE.txt th.txt ti.txt ti_ER.txt to.txt\
- tr.txt twq.txt tzm.txt tzm_Latn.txt uk.txt\
- ur.txt uz.txt uz_Arab.txt uz_Cyrl.txt uz_Latn.txt\
- vai.txt vai_Latn.txt vai_Vaii.txt vi.txt vun.txt\
- xog.txt yav.txt yo.txt yo_BJ.txt zgh.txt\
- zh.txt zh_Hans.txt zh_Hans_HK.txt zh_Hans_MO.txt zh_Hans_SG.txt\
- zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zu.txt
+ tr.txt twq.txt tzm.txt tzm_Latn.txt ug.txt\
+ ug_Arab.txt uk.txt ur.txt uz.txt uz_Arab.txt\
+ uz_Cyrl.txt uz_Latn.txt vai.txt vai_Latn.txt vai_Vaii.txt\
+ vi.txt vun.txt xog.txt yav.txt yo.txt\
+ yo_BJ.txt zgh.txt zh.txt zh_Hans.txt zh_Hans_HK.txt\
+ zh_Hans_MO.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt\
+ zu.txt
 

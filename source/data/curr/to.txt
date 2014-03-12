@@ -19,5 +19,5 @@ to{
     CurrencyUnitPatterns{
         other{"{1} {0}"}
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
 }

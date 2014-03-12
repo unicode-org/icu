@@ -44,17 +44,13 @@ br{
         ay{"aymara"}
         az{"azeri"}
         ba{"bachkir"}
-        bad{"banda"}
         bal{"baloutchi"}
         ban{"balineg"}
         bas{"basaa"}
-        bat{"balteg"}
         be{"belaruseg"}
         bem{"bemba"}
-        ber{"berbereg"}
         bez{"bena"}
         bg{"bulgareg"}
-        bh{"bihari"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -66,7 +62,6 @@ br{
         bra{"braj"}
         brx{"bodo"}
         bs{"bosneg"}
-        btk{"batak"}
         bua{"bouriat"}
         bug{"bugi"}
         byn{"blin"}
@@ -75,7 +70,6 @@ br{
         car{"karibeg"}
         ce{"tchetcheneg"}
         ceb{"cebuano"}
-        cel{"keltieg"}
         ch{"chamorru"}
         chb{"chibcha"}
         chm{"marieg"}
@@ -96,7 +90,6 @@ br{
         da{"daneg"}
         dak{"dakota"}
         dar{"dargwa"}
-        day{"dayak"}
         de{"alamaneg"}
         de_AT{"alamaneg Aostria"}
         de_CH{"alamaneg uhel Suis"}
@@ -133,7 +126,6 @@ br{
         fat{"fanti"}
         fi{"finneg"}
         fil{"filipineg"}
-        fiu{"finneg-ougrieg"}
         fj{"fidjieg"}
         fo{"faeroeg"}
         fon{"fon"}
@@ -151,7 +143,6 @@ br{
         gay{"gayo"}
         gba{"gbaya"}
         gd{"skoseg"}
-        gem{"germaneg"}
         gez{"gezeg"}
         gil{"gilberteg"}
         gl{"galizeg"}
@@ -169,7 +160,6 @@ br{
         he{"hebraeg"}
         hi{"hindi"}
         hil{"hiligaynon"}
-        him{"himachali"}
         hmn{"hmong"}
         ho{"hiri motu"}
         hr{"kroateg"}
@@ -185,9 +175,7 @@ br{
         id{"indonezeg"}
         ie{"interlingue"}
         ig{"igbo"}
-        ijo{"ijo"}
         ik{"inupiaq"}
-        ine{"indezeuropeg"}
         inh{"ingoucheg"}
         io{"ido"}
         is{"islandeg"}
@@ -202,7 +190,6 @@ br{
         kab{"kabileg"}
         kac{"kachin"}
         kam{"kamba"}
-        kar{"karen"}
         kbd{"kabardeg"}
         kea{"kabuverdianu"}
         kg{"kongo"}
@@ -270,10 +257,8 @@ br{
         mul{"yezhoù lies"}
         mus{"muskogi"}
         my{"birmaneg"}
-        myn{"mayaeg"}
         myv{"erza"}
         na{"naurueg"}
-        nah{"nahuatl"}
         nap{"napolitaneg"}
         nb{"norvegeg bokmål"}
         nd{"ndebele an Norzh"}
@@ -338,20 +323,16 @@ br{
         sco{"skoteg"}
         sd{"sindhi"}
         se{"sámi an Norzh"}
-        sem{"semiteg"}
         sg{"sango"}
         sga{"heniwerzhoneg"}
-        sgn{"yezh ar sinoù"}
         sh{"serb-kroateg"}
         shn{"shan"}
         si{"singhaleg"}
         sid{"sidamo"}
         sk{"slovakeg"}
         sl{"sloveneg"}
-        sla{"slaveg"}
         sm{"samoan"}
         sma{"sámi ar Su"}
-        smi{"sámi"}
         smj{"sámi Luleå"}
         smn{"sámi Inari"}
         sms{"sámi Skolt"}
@@ -359,7 +340,6 @@ br{
         snk{"soninke"}
         so{"somali"}
         sog{"sogdieg"}
-        son{"songhai"}
         sq{"albaneg"}
         sr{"serbeg"}
         srr{"serer"}
@@ -396,7 +376,6 @@ br{
         tsi{"tsimshian"}
         tt{"tatar"}
         tum{"tumbuka"}
-        tut{"altaieg"}
         tvl{"tuvalu"}
         tw{"twi"}
         ty{"tahitianeg"}
@@ -628,5 +607,5 @@ br{
         VALLADER{"rannyezh romañchek Vallader"}
         WADEGILE{"romanekadur Wade-Giles"}
     }
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
 }

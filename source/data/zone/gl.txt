@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/gl.xml
  */
 gl{
-    Version{"2.0.97.28"}
+    Version{"2.0.98.76"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Acra"}
@@ -245,9 +245,6 @@ gl{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont-d'Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Polo Sur"}
         }
         "Asia:Aden"{
             ec{"Adén"}

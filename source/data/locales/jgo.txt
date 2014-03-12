@@ -50,7 +50,7 @@ jgo{
         }
         native{"latn"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.97.70"}
     calendar{
         generic{
             DateTimePatterns{
@@ -80,7 +80,7 @@ jgo{
         }
         gregorian{
             AmPmMarkers{
-                "mba’mba’",
+                "mbaꞌmbaꞌ",
                 "ŋka mbɔ́t nji",
             }
             DateTimePatterns{
@@ -166,8 +166,8 @@ jgo{
             }
             eras{
                 abbreviated{
-                    "tsɛttsɛt mɛŋgu’ mi ɛ́ lɛɛnɛ Kɛlísɛtɔ gɔ ńɔ́",
-                    "tsɛttsɛt mɛŋgu’ mi ɛ́ fúnɛ Kɛlísɛtɔ tɔ́ mɔ́",
+                    "tsɛttsɛt mɛŋguꞌ mi ɛ́ lɛɛnɛ Kɛlísɛtɔ gɔ ńɔ́",
+                    "tsɛttsɛt mɛŋguꞌ mi ɛ́ fúnɛ Kɛlísɛtɔ tɔ́ mɔ́",
                 }
             }
             intervalFormats{

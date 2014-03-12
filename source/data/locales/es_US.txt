@@ -8,7 +8,7 @@
 // ***************************************************************************
 es_US{
     %%Parent{"es_419"}
-    Version{"2.0.92.80"}
+    Version{"2.0.98.76"}
     calendar{
         generic{
             DateTimePatterns{
@@ -86,6 +86,18 @@ es_US{
                 yMMMMd{"d 'de' MMMM 'de' y"}
                 yMMMd{"MMM d, y"}
                 yMd{"M/d/y"}
+            }
+        }
+    }
+    unitsNarrow{
+        temperature{
+            celsius{
+                one{"{0}°C"}
+                other{"{0}°C"}
+            }
+            fahrenheit{
+                one{"{0}°"}
+                other{"{0}°"}
             }
         }
     }

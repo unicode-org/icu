@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/gu.xml
  */
 gu{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"આબિદ્જાન"}
@@ -459,9 +459,6 @@ gu{
         "America:Montevideo"{
             ec{"મૉંટેવિડિઓ"}
         }
-        "America:Montreal"{
-            ec{"મોન્ટ્રિયલ"}
-        }
         "America:Montserrat"{
             ec{"મોંટસેરાત"}
         }
@@ -552,9 +549,6 @@ gu{
         "America:Scoresbysund"{
             ec{"સ્કોર્સબાયસન્દ"}
         }
-        "America:Shiprock"{
-            ec{"શિપરોક"}
-        }
         "America:Sitka"{
             ec{"સિટ્કા"}
         }
@@ -635,9 +629,6 @@ gu{
         }
         "Antarctica:Rothera"{
             ec{"રોથેરા"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"દક્ષિણ ધ્રુવ"}
         }
         "Antarctica:Syowa"{
             ec{"સ્યોવા"}

@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/km.xml
  */
 km{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"អាប៊ីដ្យាន"}
@@ -459,9 +459,6 @@ km{
         "America:Montevideo"{
             ec{"ម៉ុងតេវីដេអូ"}
         }
-        "America:Montreal"{
-            ec{"ម៉ុងទ្រីអាល់"}
-        }
         "America:Montserrat"{
             ec{"ម៉ុងស៊ែរ៉ា"}
         }
@@ -552,9 +549,6 @@ km{
         "America:Scoresbysund"{
             ec{"ស្ករ៉េប៊ីសាន់"}
         }
-        "America:Shiprock"{
-            ec{"ស្ស៊ីបរ៉ុក"}
-        }
         "America:Sitka"{
             ec{"ស៊ីតកា"}
         }
@@ -635,9 +629,6 @@ km{
         }
         "Antarctica:Rothera"{
             ec{"រ៉ូធីរ៉ា"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"ប៉ូល​ខាង​ត្បូង"}
         }
         "Antarctica:Syowa"{
             ec{"ស៊ីយ៉ូវ៉ា"}

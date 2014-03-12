@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 pt_PT{
-    Version{"2.0.92.87"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -456,9 +456,6 @@ pt_PT{
         "America:Montevideo"{
             ec{"Montevideu"}
         }
-        "America:Montreal"{
-            ec{"Montreal"}
-        }
         "America:Montserrat"{
             ec{"Montserrat"}
         }
@@ -549,9 +546,6 @@ pt_PT{
         "America:Scoresbysund"{
             ec{"Ittoqqortoormiit"}
         }
-        "America:Shiprock"{
-            ec{"Shiprock"}
-        }
         "America:Sitka"{
             ec{"Sitka"}
         }
@@ -632,9 +626,6 @@ pt_PT{
         }
         "Antarctica:Rothera"{
             ec{"Rothera"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Pólo Sul"}
         }
         "Antarctica:Vostok"{
             ec{"Vostok"}

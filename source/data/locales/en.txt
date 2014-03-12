@@ -154,7 +154,7 @@ en{
             }
         }
     }
-    Version{"2.0.97.54"}
+    Version{"2.0.98.76"}
     calendar{
         buddhist{
             eras{
@@ -1492,8 +1492,8 @@ en{
         }
         temperature{
             celsius{
-                one{"{0}°"}
-                other{"{0}°"}
+                one{"{0}°C"}
+                other{"{0}°C"}
             }
             fahrenheit{
                 one{"{0}°"}

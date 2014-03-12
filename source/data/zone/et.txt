@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/et.xml
  */
 et{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alžiir"}
@@ -98,9 +98,6 @@ et{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"Lõunapoolus"}
         }
         "Asia:Almaty"{
             ec{"Almatõ"}

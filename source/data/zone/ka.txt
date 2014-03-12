@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ka.xml
  */
 ka{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"აბიჯანი"}
@@ -459,9 +459,6 @@ ka{
         "America:Montevideo"{
             ec{"მონტევიდეო"}
         }
-        "America:Montreal"{
-            ec{"მონრეალი"}
-        }
         "America:Montserrat"{
             ec{"მონსერატი"}
         }
@@ -552,9 +549,6 @@ ka{
         "America:Scoresbysund"{
             ec{"სკორსბისუნდი"}
         }
-        "America:Shiprock"{
-            ec{"შიპროკი"}
-        }
         "America:Sitka"{
             ec{"სიტკა"}
         }
@@ -635,9 +629,6 @@ ka{
         }
         "Antarctica:Rothera"{
             ec{"როთერა"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"სამხრეთი პოლუსი"}
         }
         "Antarctica:Syowa"{
             ec{"სიოუა"}

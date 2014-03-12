@@ -304,5 +304,5 @@ pt_PT{
         PS{"Palestina"}
         US{"EUA"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.52"}
 }

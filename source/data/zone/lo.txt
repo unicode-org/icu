@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/lo.xml
  */
 lo{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ອາບິດແຈນ"}
@@ -459,9 +459,6 @@ lo{
         "America:Montevideo"{
             ec{"ມອນເຕດີເວໂອ"}
         }
-        "America:Montreal"{
-            ec{"ມອນທຣຽວ"}
-        }
         "America:Montserrat"{
             ec{"ມອນເຊີຣັດ"}
         }
@@ -552,9 +549,6 @@ lo{
         "America:Scoresbysund"{
             ec{"ສະກໍເຣນໄບຊັນ"}
         }
-        "America:Shiprock"{
-            ec{"ຊີພຣອກ"}
-        }
         "America:Sitka"{
             ec{"ຊິດກາ"}
         }
@@ -635,9 +629,6 @@ lo{
         }
         "Antarctica:Rothera"{
             ec{"ໂຣເທຣາ"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"ຂົ້ວໂລກໃຕ້"}
         }
         "Antarctica:Syowa"{
             ec{"ເຊຍວາ"}

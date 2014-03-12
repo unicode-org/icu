@@ -41,7 +41,6 @@ zu{
         be{"isi-Belarusian"}
         bem{"Isi-Bemba"}
         bg{"isi-Bulgari"}
-        bh{"IsiBhihari"}
         bn{"isi-Bengali"}
         bo{"isi-Tibetan"}
         br{"Isi-Breton"}
@@ -365,7 +364,7 @@ zu{
             vaii{"Izinhlazu Zezinombolo ze-Vai"}
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.98.76"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

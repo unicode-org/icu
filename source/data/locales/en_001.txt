@@ -7,9 +7,13 @@
 // *
 // ***************************************************************************
 en_001{
-    Version{"2.0.91.92"}
+    Version{"2.0.98.76"}
     unitsNarrow{
         temperature{
+            celsius{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             fahrenheit{
                 one{"{0}°F"}
                 other{"{0}°F"}

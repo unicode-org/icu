@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ko.xml
  */
 ko{
-    Version{"2.0.95.33"}
+    Version{"2.0.98.52"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -364,7 +364,7 @@ ko{
             ec{"인디아나주, 텔시티"}
         }
         "America:Indiana:Vevay"{
-            ec{"자포로제"}
+            ec{"비비"}
         }
         "America:Indiana:Vincennes"{
             ec{"인디아나주, 뱅센"}
@@ -459,9 +459,6 @@ ko{
         "America:Montevideo"{
             ec{"몬테비데오"}
         }
-        "America:Montreal"{
-            ec{"몬트리올"}
-        }
         "America:Montserrat"{
             ec{"몬세라트"}
         }
@@ -552,9 +549,6 @@ ko{
         "America:Scoresbysund"{
             ec{"스코레스바이선드"}
         }
-        "America:Shiprock"{
-            ec{"십록"}
-        }
         "America:Sitka"{
             ec{"싯카"}
         }
@@ -635,9 +629,6 @@ ko{
         }
         "Antarctica:Rothera"{
             ec{"로데라"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"남극"}
         }
         "Antarctica:Syowa"{
             ec{"쇼와"}
