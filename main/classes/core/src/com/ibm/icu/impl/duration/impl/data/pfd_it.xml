@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and        *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>PLURAL</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>anni</pluralName>
+            <pluralName>anno</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>mesi</pluralName>
+            <pluralName>mese</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>settimane</pluralName>
+            <pluralName>settimana</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>giorni</pluralName>
+            <pluralName>giorno</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>ore</pluralName>
+            <pluralName>ora</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>minuti</pluralName>
+            <pluralName>minuto</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>secondi</pluralName>
+            <pluralName>secondo</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>millisecondi</pluralName>
+            <pluralName>millisecondo</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <genderList>
+        <gender>M</gender>
+        <gender>M</gender>
+        <gender>F</gender>
+        <gender>M</gender>
+        <gender>F</gender>
+        <gender>M</gender>
+        <gender>M</gender>
+        <gender>M</gender>
+    </genderList>
+    <singularNameList>
+        <singularName>un anno</singularName>
+        <singularName>un mese</singularName>
+        <singularName>una settimana</singularName>
+        <singularName>un giorno</singularName>
+        <singularName>un'ora</singularName>
+        <singularName>un minuto</singularName>
+        <singularName>un secondo</singularName>
+        <singularName>un millisecondo</singularName>
+    </singularNameList>
+    <halfNameList>
+        <halfName>Null</halfName>
+        <halfName>Null</halfName>
+        <halfName>Null</halfName>
+        <halfName>Null</halfName>
+        <halfName>mezz'ora</halfName>
+        <halfName>Null</halfName>
+        <halfName>Null</halfName>
+        <halfName>Null</halfName>
+    </halfNameList>
+    <numberNameList>
+        <numberName>zero</numberName>
+        <numberName>Null</numberName>
+        <numberName>due</numberName>
+        <numberName>tre</numberName>
+        <numberName>quattro</numberName>
+        <numberName>cinque</numberName>
+        <numberName>sei</numberName>
+        <numberName>sette</numberName>
+        <numberName>otto</numberName>
+        <numberName>nove</numberName>
+        <numberName>dieci</numberName>
+    </numberNameList>
+    <mediumNameList>
+        <mediumName>ann.</mediumName>
+        <mediumName>mes.</mediumName>
+        <mediumName>sett.</mediumName>
+        <mediumName>gg.</mediumName>
+        <mediumName>or.</mediumName>
+        <mediumName>min.</mediumName>
+        <mediumName>sec.</mediumName>
+        <mediumName>msec.</mediumName>
+    </mediumNameList>
+    <shortNameList>
+        <shortName>A</shortName>
+        <shortName>M</shortName>
+        <shortName>S</shortName>
+        <shortName>G</shortName>
+        <shortName>H</shortName>
+        <shortName>M</shortName>
+        <shortName>S</shortName>
+        <shortName>Null</shortName>
+    </shortNameList>
+    <halvesList>
+        <halves>mezzo </halves>
+        <halves> e mezzo</halves>
+        <halves>mezza </halves>
+        <halves> e mezza</halves>
+    </halvesList>
+    <halfPlacementList>
+        <halfPlacement>PREFIX</halfPlacement>
+        <halfPlacement>LAST</halfPlacement>
+    </halfPlacementList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep> </countSep>
+    <shortUnitSep> </shortUnitSep>
+    <unitSepList>
+        <unitSep>, </unitSep>
+        <unitSep> e </unitSep>
+        <unitSep>, </unitSep>
+        <unitSep> e </unitSep>
+    </unitSepList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>false</omitDualCount>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL_ANDAHALF</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> fa</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>fra </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>meno di </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>meno di </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> fa</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>fra meno di </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>oltre </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>oltre </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> fa</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>fra oltre </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>
