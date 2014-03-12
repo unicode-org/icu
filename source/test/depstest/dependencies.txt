@@ -147,7 +147,7 @@ library: common
     resourcebundle service_registration resbund_cnv ures_cnv icudataver ucat
     loclikely
     conversion converter_selector ucnv_set ucnvdisp
-    messagepattern
+    messagepattern simplepatternformatter
     icu_utility icu_utility_with_props
     ustr_wcs
     lrucache
@@ -383,6 +383,11 @@ group: messagepattern  # for MessageFormat and tools
   deps
     patternprops unistr_core
 
+group: simplepatternformatter
+    simplepatternformatter.o
+  deps
+    unistr_core
+
 group: patternprops
     patternprops.o
   deps
@@ -504,7 +509,7 @@ group: service_registration
 group: listformatter
     listformatter.o
   deps
-    resourcebundle
+    resourcebundle simplepatternformatter
 
 group: ucat  # message-catalog-like API
     ucat.o
@@ -757,6 +762,7 @@ library: i18n
     region localedata genderinfo charset_detector spoof_detection
     alphabetic_index collation collation_builder string_search
     formatting formattable_cnv regex regex_cnv translit
+    filteredbreakiterator
     universal_time_scale
     uclean_i18n
 
@@ -844,7 +850,7 @@ group: formatting
     # rbnf
     nfrs.o nfrule.o nfsubs.o rbnf.o
     # measureformat
-    measfmt.o
+    measfmt.o measunit.o quantityformatter.o
     # dateformat
     astro.o buddhcal.o calendar.o cecal.o chnsecal.o coptccal.o dangical.o ethpccal.o
     gregocal.o gregoimp.o hebrwcal.o indiancal.o islamcal.o japancal.o persncal.o taiwncal.o
@@ -893,8 +899,9 @@ group: pluralrules
     plurrule.o upluralrules.o
   deps
     digitlist  # plurals depend on decimals
-    patternprops resourcebundle uvector uvector32
+    patternprops resourcebundle uvector uvector32 lrucache
     unistr_case_locale
+    uclean_i18n
 
 group: regex_cnv
     uregexc.o
@@ -918,6 +925,11 @@ group: translit
     common
     formatting  # for Transliterator::getDisplayName()
     uclean_i18n
+
+group: filteredbreakiterator
+    filteredbrk.o
+  deps
+    breakiterator ucharstriebuilder
 
 group: universal_time_scale
     utmscale.o
