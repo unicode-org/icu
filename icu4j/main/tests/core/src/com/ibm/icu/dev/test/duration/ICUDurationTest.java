@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -59,7 +59,7 @@ public class ICUDurationTest extends TestFmwk {
         formatted = df.formatDurationFromNowTo(new Date(0));
         Calendar cal = Calendar.getInstance();
         int years = cal.get(Calendar.YEAR) - 1970; // year of Date(0)
-        expect = "fra " + years + " anni";
+        expect = years + " anni fa";
         if(!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
@@ -260,5 +260,42 @@ public class ICUDurationTest extends TestFmwk {
             errln("DurationFormat.parseObjet(String,ParsePosition) was " +
                     "to return an exception for an unsupported operation.");
         } catch(Exception e){}
+    }
+
+    public void TestFromNowTo() {
+        class TestCase {
+            ULocale locale;
+            int diffInSeconds;
+            String expected;
+            TestCase(ULocale locale, int diffInSeconds, String expected) {
+                this.locale = locale;
+                this.diffInSeconds = diffInSeconds;
+                this.expected = expected;
+            }
+        }
+        TestCase[] testCases = {
+            new TestCase(ULocale.US, 10, "10 seconds from now"),
+            new TestCase(ULocale.US, -10, "10 seconds ago"),
+            new TestCase(ULocale.US, -1800, "30 minutes ago"),
+            new TestCase(ULocale.US, 3600, "1 hour from now"),
+            new TestCase(ULocale.US, 10000, "2 hours from now"),
+            new TestCase(ULocale.US, -20000, "5 hours ago"),
+            new TestCase(ULocale.FRANCE, -1800, "il y a 30 minutes"),
+            new TestCase(ULocale.ITALY, 10000, "fra due ore"),
+        };
+
+        final long delayMS = 10;    // Safe margin - 10 milliseconds
+                                    // See the comments below
+        for (TestCase test : testCases) {
+            DurationFormat df = DurationFormat.getInstance(test.locale);
+            long target = System.currentTimeMillis() + test.diffInSeconds * 1000;
+            // Need some adjustment because time difference is recalculated in
+            // formatDurationFromNowTo method.
+            target = test.diffInSeconds > 0 ? target + delayMS : target - delayMS;
+            Date d = new Date(target);
+            String result = df.formatDurationFromNowTo(d);
+            assertEquals("TestFromNowTo (" + test.locale + ", " + test.diffInSeconds + "sec)",
+                    test.expected, result);
+        }
     }
 }

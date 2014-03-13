@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and   *
+* Copyright (C) 2007-2014, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -52,7 +52,7 @@ class BasicDurationFormatter implements DurationFormatter {
 
   public String formatDurationFromNowTo(Date targetDate) {
     long now = System.currentTimeMillis();
-    long duration = now - targetDate.getTime();
+    long duration = targetDate.getTime() - now;
     return formatDurationFrom(duration, now);
   }
 
