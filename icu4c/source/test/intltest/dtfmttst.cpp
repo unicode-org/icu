@@ -4373,7 +4373,11 @@ void DateFormatTest::TestParseMultiPatternMatch() {
     }
     const TestMultiPatternMatchItem * itemPtr;
     DateFormat* sdmft = DateFormat::createDateInstance();
-    for (itemPtr = items; itemPtr->parseString != "--end--"; itemPtr++ ) {                                        
+    if (sdmft == NULL) {
+        dataerrln(UnicodeString("FAIL: Unable to create DateFormat"));
+        return;
+    }
+    for (itemPtr = items; itemPtr->parseString != "--end--"; itemPtr++ ) {
        status = U_ZERO_ERROR;
        ParsePosition pos(0);
        ((SimpleDateFormat*) sdmft)->applyPattern(itemPtr->pattern);

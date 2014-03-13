@@ -729,8 +729,10 @@ void IntlTestSpoof::testRestrictionLevel() {
             uspoof_setRestrictionLevel(sc, levelSetInSpoofChecker);
             int32_t result = uspoof_checkUnicodeString(sc, testString, NULL, &status);
             TEST_ASSERT_SUCCESS(status);
-            TEST_ASSERT_EQ(expectedLevel, result & USPOOF_RESTRICTION_LEVEL_MASK);
-            TEST_ASSERT_EQ(expectedValue, result & USPOOF_ALL_CHECKS);
+            if (U_SUCCESS(status)) {
+                TEST_ASSERT_EQ(expectedLevel, result & USPOOF_RESTRICTION_LEVEL_MASK);
+                TEST_ASSERT_EQ(expectedValue, result & USPOOF_ALL_CHECKS);
+            }
             uspoof_close(sc);
         }
     }
