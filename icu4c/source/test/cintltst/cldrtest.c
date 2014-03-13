@@ -1024,12 +1024,10 @@ static void VerifyTranslation(void) {
                         log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
                         continue;
                     }
-                    if (uprv_strstr(currLoc, "uz_Arab") != currLoc || !log_knownIssue("10405", "skipping exemplar check: %s", currLoc)) { /* TODO: FIX or REMOVE this test! */
-                        strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, mergedExemplarSet, TRUE, &badChar);
-                        if (strIdx >= 0) {
-                            log_err("getMonthNames(%s, %d) at index %d returned characters not in the exemplar characters: %04X.\n",
-                                currLoc, idx, strIdx, badChar);
-                        }
+                    strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, mergedExemplarSet, TRUE, &badChar);
+                    if (strIdx >= 0) {
+                        log_err("getMonthNames(%s, %d) at index %d returned characters not in the exemplar characters: %04X.\n",
+                            currLoc, idx, strIdx, badChar);
                     }
                 }
                 ures_close(resArray);
