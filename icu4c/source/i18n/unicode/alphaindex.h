@@ -185,22 +185,19 @@ class UVector;
  */
 class U_I18N_API AlphabeticIndex: public UObject {
 public:
-#ifdef U_HIDE_DRAFT_API
-    class Bucket;
-#else
      /**
       * An index "bucket" with a label string and type.
       * It is referenced by getBucketIndex(),
       * and returned by ImmutableIndex.getBucket().
       *
       * The Bucket class is not intended for public subclassing.
-      * @draft ICU 51
+      * @stable ICU 51
       */
      class U_I18N_API Bucket : public UObject {
      public:
         /**
          * Destructor.
-         * @draft ICU 51
+         * @stable ICU 51
          */
         virtual ~Bucket();
 
@@ -208,14 +205,14 @@ public:
          * Returns the label string.
          *
          * @return the label string for the bucket
-         * @draft ICU 51
+         * @stable ICU 51
          */
         const UnicodeString &getLabel() const { return label_; }
         /**
          * Returns whether this bucket is a normal, underflow, overflow, or inflow bucket.
          *
          * @return the bucket label type
-         * @draft ICU 51
+         * @stable ICU 51
          */
         UAlphabeticIndexLabelType getLabelType() const { return labelType_; }
 
@@ -243,13 +240,13 @@ public:
      *
      * The ImmutableIndex class is not intended for public subclassing.
      *
-     * @draft ICU 51
+     * @stable ICU 51
      */
     class U_I18N_API ImmutableIndex : public UObject {
     public:
         /**
          * Destructor.
-         * @draft ICU 51
+         * @stable ICU 51
          */
         virtual ~ImmutableIndex();
 
@@ -257,7 +254,7 @@ public:
          * Returns the number of index buckets and labels, including underflow/inflow/overflow.
          *
          * @return the number of index buckets
-         * @draft ICU 51
+         * @stable ICU 51
          */
         int32_t getBucketCount() const;
 
@@ -267,7 +264,7 @@ public:
          *
          * @param name the string to be sorted into an index bucket
          * @return the bucket number for the name
-         * @draft ICU 51
+         * @stable ICU 51
          */
         int32_t getBucketIndex(const UnicodeString &name, UErrorCode &errorCode) const;
 
@@ -276,7 +273,7 @@ public:
          *
          * @param index bucket number
          * @return the index-th bucket
-         * @draft ICU 51
+         * @stable ICU 51
          */
         const Bucket *getBucket(int32_t index) const;
 
@@ -289,7 +286,6 @@ public:
         BucketList *buckets_;
         Collator *collatorPrimaryOnly_;
     };
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Construct an AlphabeticIndex object for the specified locale.  If the locale's
@@ -305,7 +301,6 @@ public:
      */
      AlphabeticIndex(const Locale &locale, UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
    /** 
      * Construct an AlphabeticIndex that uses a specific collator.
      * 
@@ -318,10 +313,9 @@ public:
      * @param collator The collator to use to order the contents of this index.
      * @param status Error code, will be set with the reason if the 
      *               operation fails.
-     * @draft ICU 51
+     * @stable ICU 51
      */
     AlphabeticIndex(RuleBasedCollator *collator, UErrorCode &status);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Add Labels to this Index.  The labels are additions to those
@@ -356,15 +350,13 @@ public:
       */
     virtual ~AlphabeticIndex();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Builds an immutable, thread-safe version of this instance, without data records.
      *
      * @return an immutable index instance
-     * @draft ICU 51
+     * @stable ICU 51
      */
     ImmutableIndex *buildImmutableIndex(UErrorCode &errorCode);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Get the Collator that establishes the ordering of the items in this index.

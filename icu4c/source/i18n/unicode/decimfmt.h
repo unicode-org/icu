@@ -785,7 +785,7 @@ public:
      * @param newvalue new value
      * @param status the error type
      * @return *this - for chaining (example: format.setAttribute(...).setAttribute(...) )
-     * @draft ICU 51
+     * @stable ICU 51
      */
     virtual DecimalFormat& setAttribute( UNumberFormatAttribute attr,
                                        int32_t newvalue,
@@ -798,7 +798,7 @@ public:
      * @param attr the attribute to set
      * @param status the error type
      * @return the attribute value. Undefined if there is an error.
-     * @draft ICU 51
+     * @stable ICU 51
      */
     virtual int32_t getAttribute( UNumberFormatAttribute attr,
                                   UErrorCode &status) const;
@@ -821,6 +821,7 @@ public:
      */
     virtual void setParseIntegerOnly(UBool value);
 
+    /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Set a particular UDisplayContext value in the formatter, such as
      * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.

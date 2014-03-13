@@ -745,7 +745,6 @@ ucal_setTimeZone(UCalendar*    cal,
                  int32_t       len,
                  UErrorCode*   status);
 
-#ifndef U_HIDE_DRAFT_API
 /** 
  * Get the ID of the UCalendar's time zone. 
  * 
@@ -754,14 +753,13 @@ ucal_setTimeZone(UCalendar*    cal,
  * @param resultLength  The maximum size of result. 
  * @param status        Receives the status. 
  * @return              The total buffer size needed; if greater than resultLength, the output was truncated. 
- * @draft ICU 51 
+ * @stable ICU 51 
  */ 
 U_DRAFT int32_t U_EXPORT2 
 ucal_getTimeZoneID(const UCalendar *cal,
                    UChar *result,
                    int32_t resultLength,
                    UErrorCode *status);
-#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Possible formats for a UCalendar's display name 

@@ -283,13 +283,11 @@ public:
          ABBREVIATED,
          WIDE,
          NARROW,
-#ifndef U_HIDE_DRAFT_API
          /**
           * Short width is currently only supported for weekday names.
-          * @draft ICU 51
+          * @stable ICU 51
           */
          SHORT,
-#endif /* U_HIDE_DRAFT_API */
          /**
           */
          DT_WIDTH_COUNT = 4

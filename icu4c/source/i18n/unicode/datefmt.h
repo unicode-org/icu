@@ -610,6 +610,7 @@ public:
     virtual void setLenient(UBool lenient);
 
 
+    /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Returns whether date/time parsing in the encapsulated Calendar object processing is lenient.
      * @draft ICU 53
@@ -617,6 +618,7 @@ public:
     virtual UBool isCalendarLenient(void) const;
 
 
+    /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Specifies whether encapsulated Calendar date/time parsing is to be lenient.  With
      * lenient parsing, the parser may use heuristics to interpret inputs that
@@ -730,6 +732,7 @@ public:
      */
     virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
 
+   /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
    /**
      * Sets an boolean attribute on this DateFormat.
      * May return U_UNSUPPORTED_ERROR if this instance does not support
@@ -745,6 +748,7 @@ public:
     									UBool newvalue,
     									UErrorCode &status);
 
+    /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Returns a boolean from this DateFormat
      * May return U_UNSUPPORTED_ERROR if this instance does not support

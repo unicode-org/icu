@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2013, International Business Machines
+*   Copyright (C) 1998-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -439,15 +439,13 @@ u_fsetcodepage(const char   *codepage,
 U_STABLE UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_DRAFT_API
 /**
  * Returns an alias to the number formatter being used for this file.
  * @param f The UFILE to get the value from
  * @return alias to the number formatter (The formatter <EM>must not</EM> be modified or closed)
- * @draft ICU 51
+ * @stable ICU 51
 */
- U_DRAFT const UNumberFormat* U_EXPORT2 u_fgetNumberFormat(UFILE *f);
-#endif /* U_HIDE_DRAFT_API */
+ U_STABLE const UNumberFormat* U_EXPORT2 u_fgetNumberFormat(UFILE *f);
 
 /* Output functions */
 
