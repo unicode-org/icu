@@ -24,6 +24,7 @@
  * \brief C++ API: Formatter for measure objects.
  */
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Constants for various widths.
  * There are 3 widths: Wide, Short, Narrow.
@@ -67,6 +68,7 @@ enum UMeasureFormatWidth {
 };
 /** @draft ICU 53 */
 typedef enum UMeasureFormatWidth UMeasureFormatWidth; 
+#endif /* U_HIDE_DRAFT_API */
 
 U_NAMESPACE_BEGIN
 
@@ -92,16 +94,17 @@ class U_I18N_API MeasureFormat : public Format {
     using Format::parseObject;
     using Format::format;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Constructor.
-     * @draft ICU 53.
+     * @draft ICU 53
      */
     MeasureFormat(
             const Locale &locale, UMeasureFormatWidth width, UErrorCode &status);
 
     /**
      * Constructor.
-     * @draft ICU 53.
+     * @draft ICU 53
      */
     MeasureFormat(
             const Locale &locale,
@@ -111,15 +114,17 @@ class U_I18N_API MeasureFormat : public Format {
 
     /**
      * Copy constructor.
-     * @draft ICU 53.
+     * @draft ICU 53
      */
     MeasureFormat(const MeasureFormat &other);
 
     /**
      * Assignment operator.
-     * @draft ICU 53.
+     * @draft ICU 53
      */
     MeasureFormat &operator=(const MeasureFormat &rhs);
+
+#endif /* U_HIDE_DRAFT_API */
     
     /**
      * Destructor.
@@ -160,6 +165,7 @@ class U_I18N_API MeasureFormat : public Format {
             Formattable &reslt,
             ParsePosition &pos) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Formats measure objects to produce a string. An example of such a
      * formatted string is 3 meters, 3.5 centimeters. Measure objects appear
@@ -182,6 +188,7 @@ class U_I18N_API MeasureFormat : public Format {
             UnicodeString &appendTo,
             FieldPosition &pos,
             UErrorCode &status) const;
+#endif  /* U_HIDE_DRAFT_API */
 
 
     /**

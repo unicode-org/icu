@@ -858,6 +858,7 @@ public:
     virtual UColAttributeValue getAttribute(UColAttribute attr,
                                             UErrorCode &status) const = 0;
 
+    /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft methods since they are virtual */
     /**
      * Sets the variable top to the top of the specified reordering group.
      * The variable top determines the highest-sorting character

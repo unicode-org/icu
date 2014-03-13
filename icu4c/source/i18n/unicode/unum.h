@@ -259,19 +259,17 @@ typedef enum UNumberFormatPadPosition {
     UNUM_PAD_AFTER_SUFFIX
 } UNumberFormatPadPosition;
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Constants for specifying short or long format.
- * @draft ICU 51
+ * @stable ICU 51
  */
 typedef enum UNumberCompactStyle {
-  /** @draft ICU 51 */
+  /** @stable ICU 51 */
   UNUM_SHORT,
-  /** @draft ICU 51 */
+  /** @stable ICU 51 */
   UNUM_LONG
-  /** @draft ICU 51 */
+  /** @stable ICU 51 */
 } UNumberCompactStyle;
-#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Constants for specifying currency spacing
@@ -884,7 +882,6 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_PARSE_ALL_INPUT = UNUM_LENIENT_PARSE + 1,
 #endif
-#ifndef U_HIDE_DRAFT_API
   /** 
     * Scale, which adjusts the position of the
     * decimal point when formatting.  Amounts will be multiplied by 10 ^ (scale)
@@ -893,9 +890,8 @@ typedef enum UNumberFormatAttribute {
     * <p>Example: setting the scale to 3, 123 formats as "123,000"
     * <p>Example: setting the scale to -4, 123 formats as "0.0123"
     *
-   * @draft ICU 51 */
+   * @stable ICU 51 */
   UNUM_SCALE = UNUM_LENIENT_PARSE + 2,
-#endif /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
   /** Count of "regular" numeric attributes.

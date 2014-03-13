@@ -338,7 +338,7 @@ public:
      * @param target the second UTF-8 string
      * @param status ICU status
      * @return UCOL_LESS, UCOL_EQUAL or UCOL_GREATER
-     * @draft ICU 51
+     * @stable ICU 51
      */
     virtual UCollationResult compareUTF8(const StringPiece &source,
                                          const StringPiece &target,

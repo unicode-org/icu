@@ -19,8 +19,6 @@
 
 #include "unicode/utypes.h"
 
-#ifndef U_HIDE_DRAFT_API
-
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
 
@@ -59,12 +57,13 @@ struct ListFormatData : public UMemory {
  * as "Alice, Bob, Charlie and Delta" in English.
  *
  * The ListFormatter class is not intended for public subclassing.
- * @draft ICU 50
+ * @stable ICU 50
  */
 class U_COMMON_API ListFormatter : public UObject{
 
   public:
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Copy constructor.
      * @draft ICU 52
@@ -76,6 +75,7 @@ class U_COMMON_API ListFormatter : public UObject{
      * @draft ICU 52
      */
     ListFormatter& operator=(const ListFormatter& other);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Creates a ListFormatter appropriate for the default locale.
@@ -83,7 +83,7 @@ class U_COMMON_API ListFormatter : public UObject{
      * @param errorCode ICU error code, set if no data available for default locale.
      * @return Pointer to a ListFormatter object for the default locale,
      *     created from internal data derived from CLDR data.
-     * @draft ICU 50
+     * @stable ICU 50
      */
     static ListFormatter* createInstance(UErrorCode& errorCode);
 
@@ -94,7 +94,7 @@ class U_COMMON_API ListFormatter : public UObject{
      * @param errorCode ICU error code, set if no data available for the given locale.
      * @return A ListFormatter object created from internal data derived from
      *     CLDR data.
-     * @draft ICU 50
+     * @stable ICU 50
      */
     static ListFormatter* createInstance(const Locale& locale, UErrorCode& errorCode);
 
@@ -115,7 +115,7 @@ class U_COMMON_API ListFormatter : public UObject{
     /**
      * Destructor.
      *
-     * @draft ICU 50
+     * @stable ICU 50
      */
     virtual ~ListFormatter();
 
@@ -128,7 +128,7 @@ class U_COMMON_API ListFormatter : public UObject{
      * @param appendTo The string to which the result should be appended to.
      * @param errorCode ICU error code, set if there is an error.
      * @return Formatted string combining the elements of items, appended to appendTo.
-     * @draft ICU 50
+     * @stable ICU 50
      */
     UnicodeString& format(const UnicodeString items[], int32_t n_items,
         UnicodeString& appendTo, UErrorCode& errorCode) const;
@@ -148,6 +148,9 @@ class U_COMMON_API ListFormatter : public UObject{
      * @internal constructor made public for testing.
      */
     ListFormatter(const ListFormatData &data);
+    /**
+     * @internal constructor made public for testing.
+     */
     ListFormatter(const ListFormatInternal* listFormatterInternal);
 #endif  /* U_HIDE_INTERNAL_API */
 
@@ -163,5 +166,4 @@ class U_COMMON_API ListFormatter : public UObject{
 
 U_NAMESPACE_END
 
-#endif /* U_HIDE_DRAFT_API */
 #endif

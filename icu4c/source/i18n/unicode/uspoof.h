@@ -226,15 +226,13 @@ typedef enum USpoofChecks {
       */
     USPOOF_CHAR_LIMIT               =  64,
 
-#ifndef U_HIDE_DRAFT_API
    /**
      * Check that an identifier does not include decimal digits from
      * more than one numbering system.
      * 
-     * @draft ICU 51
+     * @stable ICU 51
      */
     USPOOF_MIXED_NUMBERS            = 128,
-#endif /* U_HIDE_DRAFT_API */
 
    /**
      * Enable all spoof checks.
@@ -243,7 +241,6 @@ typedef enum USpoofChecks {
      */
     USPOOF_ALL_CHECKS               = 0xFFFF,
 
-#ifndef U_HIDE_DRAFT_API
     /**
       * Enable the return of auxillary (non-error) information in the
       * upper bits of the check results value. 
@@ -254,67 +251,68 @@ typedef enum USpoofChecks {
       * If this "check" is enabled, (uspoof_check() & USPOOF_ALL_CHECKS) will be zero
       * when an identifier passes all checks.
       *
-      * @draft ICU 51
+      * @stable ICU 51
       */
     USPOOF_AUX_INFO                  = 0x40000000
-#endif /* U_HIDE_DRAFT_API */
 
     } USpoofChecks;
     
     
-#ifndef U_HIDE_DRAFT_API
     /**
      * Constants from UAX #39 for use in setRestrictionLevel(), and
      * for returned identifier restriction levels in check results.
-     * @draft ICU 51
+     * @stable ICU 51
      */
     typedef enum URestrictionLevel {
         /**
          * Only ASCII characters: U+0000..U+007F
          * 
-         * @draft ICU 51
+         * @stable ICU 51
          */
         USPOOF_ASCII = 0x10000000,
+#ifndef U_HIDE_DRAFT_API
         /**
           * All characters in each identifier must be from a single script.
           *
           * @draft ICU 53
           */
         USPOOF_SINGLE_SCRIPT_RESTRICTIVE = 0x20000000,
+#endif /* U_HIDE_DRAFT_API */
         /**
          * All characters in each identifier must be from a single script, or from the combinations: Latin + Han +
          * Hiragana + Katakana; Latin + Han + Bopomofo; or Latin + Han + Hangul. Note that this level will satisfy the
          * vast majority of Latin-script users; also that TR36 has ASCII instead of Latin.
          * 
-         * @draft ICU 51
+         * @stable ICU 51
          */
         USPOOF_HIGHLY_RESTRICTIVE = 0x30000000,
         /**
          * Allow Latin with other scripts except Cyrillic, Greek, Cherokee Otherwise, the same as Highly Restrictive
          * 
-         * @draft ICU 51
+         * @stable ICU 51
          */
         USPOOF_MODERATELY_RESTRICTIVE = 0x40000000,
         /**
          * Allow arbitrary mixtures of scripts. Otherwise, the same as Moderately Restrictive.
          * 
-         * @draft ICU 51
+         * @stable ICU 51
          */
         USPOOF_MINIMALLY_RESTRICTIVE = 0x50000000,
         /**
          * Any valid identifiers, including characters outside of the Identifier Profile.
          * 
-         * @draft ICU 51
+         * @stable ICU 51
          */
         USPOOF_UNRESTRICTIVE = 0x60000000,
+#ifndef U_HIDE_DRAFT_API
         /**
           * Mask for selecting the Restriction Level bits from the return value of uspoof_check().
           * 
           * @draft ICU 53
           */
          USPOOF_RESTRICTION_LEVEL_MASK = 0x7F000000 
-    } URestrictionLevel;
 #endif /* U_HIDE_DRAFT_API */
+    } URestrictionLevel;
 
 /**
  *  Create a Unicode Spoof Checker, configured to perform all 
@@ -461,16 +459,15 @@ uspoof_setChecks(USpoofChecker *sc, int32_t checks, UErrorCode *status);
 U_STABLE int32_t U_EXPORT2
 uspoof_getChecks(const USpoofChecker *sc, UErrorCode *status);
 
-#ifndef U_HIDE_DRAFT_API
 /**
   * Set the loosest restriction level allowed. The default if this function 
   * is not called is HIGHLY_RESTRICTIVE.
   * Calling this function also enables the RESTRICTION_LEVEL check.
   * @param restrictionLevel The loosest restriction level allowed.
   * @see URestrictionLevel
-  * @draft ICU 51
+  * @stable ICU 51
   */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uspoof_setRestrictionLevel(USpoofChecker *sc, URestrictionLevel restrictionLevel);
 
 
@@ -479,11 +476,10 @@ uspoof_setRestrictionLevel(USpoofChecker *sc, URestrictionLevel restrictionLevel
   *
   * @return The restriction level
   * @see URestrictionLevel
-  * @draft ICU 51
+  * @stable ICU 51
   */
-U_DRAFT URestrictionLevel U_EXPORT2
+U_STABLE URestrictionLevel U_EXPORT2
 uspoof_getRestrictionLevel(const USpoofChecker *sc);
-#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Limit characters that are acceptable in identifiers being checked to those 
@@ -974,7 +970,6 @@ uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
                                 icu::UnicodeString &dest,
                                 UErrorCode *status);
 #endif   /* U_SHOW_CPLUSPLUS_API */
-
 
 #ifndef U_HIDE_DRAFT_API
 /**

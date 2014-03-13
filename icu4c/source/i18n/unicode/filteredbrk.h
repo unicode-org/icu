@@ -34,6 +34,7 @@ class U_I18N_API FilteredBreakIteratorBuilder : public UObject {
  public:
   /**
    *  destructor.
+   * @internal technology preview
    */
   virtual ~FilteredBreakIteratorBuilder();
 
@@ -47,6 +48,7 @@ class U_I18N_API FilteredBreakIteratorBuilder : public UObject {
    * @param where the locale.
    * @param status The error code.
    * @return the new builder
+   * @internal technology preview
    */
   static FilteredBreakIteratorBuilder *createInstance(const Locale& where, UErrorCode& status);
 
@@ -55,6 +57,7 @@ class U_I18N_API FilteredBreakIteratorBuilder : public UObject {
    * In this state, it will not suppress any segment boundaries.
    * @param status The error code.
    * @return the new builder
+   * @internal technology preview
    */
   static FilteredBreakIteratorBuilder *createInstance(UErrorCode &status);
 
@@ -66,6 +69,7 @@ class U_I18N_API FilteredBreakIteratorBuilder : public UObject {
    * @param status error code
    * @return returns TRUE if the string was not present and now added,
    * FALSE if the call was a no-op because the string was already being suppressed.
+   * @internal technology preview
    */
   virtual UBool suppressBreakAfter(const UnicodeString& string, UErrorCode& status) = 0;
 
@@ -78,6 +82,7 @@ class U_I18N_API FilteredBreakIteratorBuilder : public UObject {
    * @param status error code
    * @return returns TRUE if the string was present and now removed,
    * FALSE if the call was a no-op because the string was not being suppressed.
+   * @internal technology preview
    */
   virtual UBool unsuppressBreakAfter(const UnicodeString& string, UErrorCode& status) = 0;
 
@@ -91,12 +96,14 @@ class U_I18N_API FilteredBreakIteratorBuilder : public UObject {
    * @param adoptBreakIterator the break iterator to adopt
    * @param status error code
    * @return the new BreakIterator, owned by the caller.
+   * @internal technology preview
    */
   virtual BreakIterator *build(BreakIterator* adoptBreakIterator, UErrorCode& status) = 0;
 
  protected:
   /**
    * For subclass use
+   * @internal technology preview
    */
   FilteredBreakIteratorBuilder();
 };
