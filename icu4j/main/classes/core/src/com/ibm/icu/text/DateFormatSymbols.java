@@ -125,8 +125,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * {@icu} Constant for width; only supported for weekdays.
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public static final int SHORT = 3;
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2011-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -121,8 +121,7 @@ public abstract class TimeZoneNames implements Serializable {
         /**
          * Exemplar location name, such as "Los Angeles".
          * 
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         EXEMPLAR_LOCATION,
     }
@@ -309,7 +308,7 @@ public abstract class TimeZoneNames implements Serializable {
      * @return A collection of matches.
      * @see NameType
      * @see MatchInfo
-     * @draft ICU 49
+     * @draft ICU 49 (Retain)
      * @provisional This API might change or be removed in a future release.
      */
     public Collection<MatchInfo> find(CharSequence text, int start, EnumSet<NameType> types) {
@@ -319,7 +318,7 @@ public abstract class TimeZoneNames implements Serializable {
     /**
      * A <code>MatchInfo</code> represents a time zone name match used by
      * {@link TimeZoneNames#find(CharSequence, int, EnumSet)}.
-     * @draft ICU 49
+     * @draft ICU 49 (Retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static class MatchInfo {
@@ -339,7 +338,7 @@ public abstract class TimeZoneNames implements Serializable {
          * or 2) both <code>tzID</code> and <code>mzID</code> are <code>null</code>,
          * or 3) <code>matchLength</code> is 0 or smaller.
          * @see NameType
-         * @draft ICU 49
+         * @draft ICU 49 (Retain)
          * @provisional This API might change or be removed in a future release.
          */
         public MatchInfo(NameType nameType, String tzID, String mzID, int matchLength) {
@@ -366,7 +365,7 @@ public abstract class TimeZoneNames implements Serializable {
          * 
          * @return the time zone ID, or <code>null</code>.
          * @see #mzID()
-         * @draft ICU 49
+         * @draft ICU 49 (Retain)
          * @provisional This API might change or be removed in a future release.
          */
         public String tzID() {
@@ -381,7 +380,7 @@ public abstract class TimeZoneNames implements Serializable {
          * 
          * @return the meta zone ID, or <code>null</code>.
          * @see #tzID()
-         * @draft ICU 49
+         * @draft ICU 49 (Retain)
          * @provisional This API might change or be removed in a future release.
          */
         public String mzID() {
@@ -392,7 +391,7 @@ public abstract class TimeZoneNames implements Serializable {
          * Returns the time zone name type.
          * @return the time zone name type enum.
          * @see NameType
-         * @draft ICU 49
+         * @draft ICU 49 (Retain)
          * @provisional This API might change or be removed in a future release.
          */
         public NameType nameType() {
@@ -402,7 +401,7 @@ public abstract class TimeZoneNames implements Serializable {
         /**
          * Returns the match length.
          * @return the match length.
-         * @draft ICU 49
+         * @draft ICU 49 (Retain)
          * @provisional This API might change or be removed in a future release.
          */
         public int matchLength() {
@@ -413,7 +412,7 @@ public abstract class TimeZoneNames implements Serializable {
     /**
      * Sole constructor for invocation by subclass constructors.
      * 
-     * @draft ICU 49
+     * @draft ICU 49 (Retain)
      * @provisional This API might change or be removed in a future release.
      */
     protected TimeZoneNames() {

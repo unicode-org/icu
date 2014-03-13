@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013, International Business Machines Corporation and         *
+ * Copyright (C) 2013-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -60,7 +60,7 @@ import com.ibm.icu.util.UResourceBundle;
  * (3 secs ago), and relative day periods ("yesterday afternoon"), etc.
  * 
  * @draft ICU 53
- * @provisional
+ * @provisional This API might change or be removed in a future release.
  */
 public final class RelativeDateTimeFormatter {
     
@@ -68,56 +68,56 @@ public final class RelativeDateTimeFormatter {
      * Represents the unit for formatting a relative date. e.g "in 5 days"
      * or "in 3 months"
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public static enum RelativeUnit {
         
         /**
          * Seconds
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         SECONDS,
         
         /**
          * Minutes
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         MINUTES,
         
        /**
         * Hours
         * @draft ICU 53
-        * @provisional
+        * @provisional This API might change or be removed in a future release.
         */
         HOURS,
         
         /**
          * Days
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         DAYS,
         
         /**
          * Weeks
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         WEEKS,
         
         /**
          * Months
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         MONTHS,
         
         /**
          * Years
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         YEARS,
     }
@@ -125,91 +125,91 @@ public final class RelativeDateTimeFormatter {
     /**
      * Represents an absolute unit.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public static enum AbsoluteUnit {
         
        /**
         * Sunday
         * @draft ICU 53
-        * @provisional
+        * @provisional This API might change or be removed in a future release.
         */
         SUNDAY,
         
         /**
          * Monday
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         MONDAY,
         
         /**
          * Tuesday
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         TUESDAY,
         
         /**
          * Wednesday
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         WEDNESDAY,
         
         /**
          * Thursday
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         THURSDAY,
         
         /**
          * Friday
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         FRIDAY,
         
         /**
          * Saturday
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         SATURDAY,
         
         /**
          * Day
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         DAY,
         
         /**
          * Week
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         WEEK,
         
         /**
          * Month
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         MONTH,
         
         /**
          * Year
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         YEAR,
         
         /**
          * Now
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         NOW,
       }
@@ -218,14 +218,14 @@ public final class RelativeDateTimeFormatter {
        * Represents a direction for an absolute unit e.g "Next Tuesday"
        * or "Last Tuesday"
        * @draft ICU 53
-       * @provisional
+       * @provisional This API might change or be removed in a future release.
        */
       public static enum Direction {
           
           /**
            * Two before. Not fully supported in every locale
            * @draft ICU 53
-           * @provisional
+           * @provisional This API might change or be removed in a future release.
            */
           LAST_2,
 
@@ -233,35 +233,35 @@ public final class RelativeDateTimeFormatter {
           /**
            * Last
            * @draft ICU 53
-           * @provisional
+           * @provisional This API might change or be removed in a future release.
            */  
         LAST,
         
         /**
          * This
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         THIS,
         
         /**
          * Next
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         NEXT,
         
         /**
          * Two after. Not fully supported in every locale
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         NEXT_2,
         
         /**
          * Plain, which means the absence of a qualifier
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         PLAIN;
       }
@@ -269,7 +269,7 @@ public final class RelativeDateTimeFormatter {
     /**
      * Returns a RelativeDateTimeFormatter for the default locale.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public static RelativeDateTimeFormatter getInstance() {
         return getInstance(ULocale.getDefault());
@@ -280,7 +280,7 @@ public final class RelativeDateTimeFormatter {
      * 
      * @param locale the locale.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public static RelativeDateTimeFormatter getInstance(ULocale locale) {
         RelativeDateTimeFormatterData data = cache.get(locale);
@@ -300,7 +300,7 @@ public final class RelativeDateTimeFormatter {
      * @param nf the number format object. It is defensively copied to ensure thread-safety
      * and immutability of this class. 
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public static RelativeDateTimeFormatter getInstance(ULocale locale, NumberFormat nf) {
         RelativeDateTimeFormatterData data = cache.get(locale);
@@ -324,7 +324,7 @@ public final class RelativeDateTimeFormatter {
      * @throws IllegalArgumentException if direction is something other than
      * NEXT or LAST.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public String format(double quantity, Direction direction, RelativeUnit unit) {
         if (direction != Direction.LAST && direction != Direction.NEXT) {
@@ -349,7 +349,7 @@ public final class RelativeDateTimeFormatter {
      * @throws IllegalArgumentException if the direction is incompatible with
      * unit this can occur with NOW which can only take PLAIN.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public String format(Direction direction, AbsoluteUnit unit) {
         if (unit == AbsoluteUnit.NOW && direction != Direction.PLAIN) {
@@ -367,7 +367,7 @@ public final class RelativeDateTimeFormatter {
      * @return the date and time concatenated according to the default
      * calendar in this locale e.g 'yesterday, 3:45'
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public String combineDateAndTime(String relativeDateString, String timeString) {
         return this.combinedDateAndTime.format(
@@ -378,7 +378,7 @@ public final class RelativeDateTimeFormatter {
      * Returns a copy of the NumberFormat this object is using.
      * 
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public NumberFormat getNumberFormat() {
         // This class is thread-safe, yet numberFormat is not. To ensure thread-safety of this

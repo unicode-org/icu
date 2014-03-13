@@ -118,22 +118,12 @@ import com.ibm.icu.util.ULocale;
  * @see SearchIterator
  * @see RuleBasedCollator
  * @author Laura Werner, synwee
- * @since ICU 2.0
+ * @stable ICU 2.0
  */
 // internal notes: all methods do not guarantee the correct status of the 
 // characteriterator. the caller has to maintain the original index position
 // if necessary. methods could change the index position as it deems fit
 public final class StringSearch extends SearchIterator {
-    
-    /**
-     * DONE is returned by {@link #previous()} and {@link #next()} after all valid matches have 
-     * been returned, and by {@link SearchIterator#first() first()} and
-     * {@link SearchIterator#last() last()} if there are no matches at all.
-     * @see #previous
-     * @see #next
-     * @stable ICU 2.0
-     */
-    public static final int DONE = -1;
 
     private Pattern pattern_;
     private RuleBasedCollator collator_;

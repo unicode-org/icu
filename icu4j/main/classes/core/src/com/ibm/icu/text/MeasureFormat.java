@@ -148,7 +148,7 @@ public class MeasureFormat extends UFormat {
      * Formatting width enum.
      * 
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     // Be sure to update MeasureUnitTest.TestSerialFormatWidthEnum
     // when adding an enum value.
@@ -158,7 +158,7 @@ public class MeasureFormat extends UFormat {
          * Spell out everything.
          * 
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         WIDE("units", ListFormatter.Style.DURATION, NumberFormat.PLURALCURRENCYSTYLE), 
         
@@ -166,7 +166,7 @@ public class MeasureFormat extends UFormat {
          * Abbreviate when possible.
          * 
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         SHORT("unitsShort", ListFormatter.Style.DURATION_SHORT, NumberFormat.ISOCURRENCYSTYLE), 
         
@@ -174,7 +174,7 @@ public class MeasureFormat extends UFormat {
          * Brief. Use only a symbol for the unit when possible.
          * 
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         NARROW("unitsNarrow", ListFormatter.Style.DURATION_NARROW, NumberFormat.CURRENCYSTYLE),
         
@@ -184,7 +184,7 @@ public class MeasureFormat extends UFormat {
          * In these cases formatMeasures formats as 5:37:23 instead of 5h, 37m, 23s.
          * 
          * @draft ICU 53
-         * @provisional
+         * @provisional This API might change or be removed in a future release.
          */
         NUMERIC("unitsNarrow", ListFormatter.Style.DURATION_NARROW, NumberFormat.CURRENCYSTYLE);
         
@@ -217,7 +217,7 @@ public class MeasureFormat extends UFormat {
      * @param formatWidth hints how long formatted strings should be.
      * @return The new MeasureFormat object.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public static MeasureFormat getInstance(ULocale locale, FormatWidth formatWidth) {
         return getInstance(locale, formatWidth, NumberFormat.getInstance(locale));
@@ -231,7 +231,7 @@ public class MeasureFormat extends UFormat {
      * @param format This is defensively copied.
      * @return The new MeasureFormat object.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public static MeasureFormat getInstance(ULocale locale, FormatWidth formatWidth, NumberFormat format) {
         PluralRules rules = PluralRules.forLocale(locale);
@@ -282,7 +282,7 @@ public class MeasureFormat extends UFormat {
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
      * 
      * @draft ICU53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
@@ -315,10 +315,11 @@ public class MeasureFormat extends UFormat {
     }
     
     /**
+     * Parses text from a string to produce a <code>Measure</code>.
      * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
      * @throws UnsupportedOperationException Not supported.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public Measure parseObject(String source, ParsePosition pos) {
@@ -337,7 +338,7 @@ public class MeasureFormat extends UFormat {
      * @param measures a sequence of one or more measures.
      * @return the formatted string.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public final String formatMeasures(Measure... measures) {
         return formatMeasures(
@@ -359,7 +360,7 @@ public class MeasureFormat extends UFormat {
      * @return appendTo.
      * @see MeasureFormat#formatMeasures(Measure...)
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public StringBuilder formatMeasures(
             StringBuilder appendTo, FieldPosition fieldPosition, Measure... measures) {
@@ -400,7 +401,7 @@ public class MeasureFormat extends UFormat {
      * Two MeasureFormats, a and b, are equal if and only if they have the same formatWidth,
      * locale, and equal number formats.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public final boolean equals(Object other) {
@@ -418,8 +419,9 @@ public class MeasureFormat extends UFormat {
     }
     
     /**
+     * {@inheritDoc}
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public final int hashCode() {
@@ -431,7 +433,7 @@ public class MeasureFormat extends UFormat {
     /**
      * Get the format width this instance is using.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public MeasureFormat.FormatWidth getWidth() {
         return formatWidth;
@@ -440,7 +442,7 @@ public class MeasureFormat extends UFormat {
     /**
      * Get the locale of this instance.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale() {
         return getLocale(ULocale.VALID_LOCALE);
@@ -449,7 +451,7 @@ public class MeasureFormat extends UFormat {
     /**
      * Get a copy of the number format.
      * @draft ICU 53
-     * @provisional
+     * @provisional This API might change or be removed in a future release.
      */
     public NumberFormat getNumberFormat() {
         return numberFormat.get();

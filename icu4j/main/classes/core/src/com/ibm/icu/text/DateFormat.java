@@ -414,8 +414,7 @@ public abstract class DateFormat extends UFormat {
      * corresponding to the {@link Calendar#ZONE_OFFSET} and
      * {@link Calendar#DST_OFFSET} fields.  This displays the
      * localized GMT format.
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public final static int TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD = 31;
 
@@ -424,8 +423,7 @@ public abstract class DateFormat extends UFormat {
      * corresponding to the {@link Calendar#ZONE_OFFSET} and
      * {@link Calendar#DST_OFFSET} fields.  This displays the
      * ISO 8601 local time offset format or UTC indicator ("Z").
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public final static int TIMEZONE_ISO_FIELD = 32;
 
@@ -434,8 +432,7 @@ public abstract class DateFormat extends UFormat {
      * corresponding to the {@link Calendar#ZONE_OFFSET} and
      * {@link Calendar#DST_OFFSET} fields.  This displays the
      * ISO 8601 local time offset format.
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public final static int TIMEZONE_ISO_LOCAL_FIELD = 33;
 
@@ -452,28 +449,33 @@ public abstract class DateFormat extends UFormat {
      * boolean attributes
      * 
      * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
      */
     public enum BooleanAttribute { 
         /** 
          * indicates whitespace tolerance. Also included is trailing dot tolerance. 
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
         PARSE_ALLOW_WHITESPACE,
         /** 
          * indicates tolerance of numeric data when String data may be assumed. 
          * e.g. YEAR_NAME_FIELD 
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
         PARSE_ALLOW_NUMERIC, 
         /** 
          * indicates tolerance of pattern mismatch between input data and specified format pattern.
          * e.g. accepting "September" for a month pattern of MMM ("Sep")  
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
         PARSE_MULTIPLE_PATTERNS_FOR_MATCH, 
         /**
          * indicates tolerance of a partial literal match
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
         PARSE_PARTIAL_MATCH
     };
@@ -1535,7 +1537,8 @@ public abstract class DateFormat extends UFormat {
      * inputs must match this object's format more closely.
      * @param lenient when true, Calendar parsing is lenient 
      * @see com.ibm.icu.util.Calendar#setLenient 
-     * @draft ICU 53 
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
      */ 
     public void setCalendarLenient(boolean lenient)
     {
@@ -1545,7 +1548,8 @@ public abstract class DateFormat extends UFormat {
     
     /** 
      * Returns whether date/time parsing in the encapsulated Calendar object is lenient. 
-     * @draft ICU 53 
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
      */ 
     public boolean isCalendarLenient()
     {
@@ -1558,6 +1562,7 @@ public abstract class DateFormat extends UFormat {
      * 
      * @see BooleanAttribute
      * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
      */
     public DateFormat setBooleanAttribute(BooleanAttribute key, boolean value) 
     {
@@ -1580,6 +1585,7 @@ public abstract class DateFormat extends UFormat {
      * 
      * @see BooleanAttribute
      * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean getBooleanAttribute(BooleanAttribute key) 
     {

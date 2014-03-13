@@ -27,8 +27,7 @@ import com.ibm.icu.util.UResourceBundle;
  * separately). The class is not subclassable.
  *
  * @author Mark Davis
- * @draft ICU 50
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 50
  */
 final public class ListFormatter {
     private final SimplePatternFormatter two;
@@ -133,8 +132,7 @@ final public class ListFormatter {
      * @param locale
      *            the locale in question.
      * @return ListFormatter
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public static ListFormatter getInstance(ULocale locale) {
       return getInstance(locale, Style.STANDARD);
@@ -146,8 +144,7 @@ final public class ListFormatter {
      * @param locale
      *            the locale in question.
      * @return ListFormatter
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public static ListFormatter getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale), Style.STANDARD);
@@ -171,8 +168,7 @@ final public class ListFormatter {
      * Create a list formatter that is appropriate for the default FORMAT locale.
      *
      * @return ListFormatter
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public static ListFormatter getInstance() {
         return getInstance(ULocale.getDefault(ULocale.Category.FORMAT));
@@ -184,8 +180,7 @@ final public class ListFormatter {
      * @param items
      *            items to format. The toString() method is called on each.
      * @return items formatted into a string
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public String format(Object... items) {
         return format(Arrays.asList(items));
@@ -197,8 +192,7 @@ final public class ListFormatter {
      * @param items
      *            items to format. The toString() method is called on each.
      * @return items formatted into a string
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public String format(Collection<?> items) {
         // TODO optimize this for the common case that the patterns are all of the

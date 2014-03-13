@@ -1360,44 +1360,37 @@ public final class UScript {
      * See UAX #31 Unicode Identifier and Pattern Syntax.
      * http://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers
      *
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public enum ScriptUsage {
         /**
          * Not encoded in Unicode.
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         NOT_ENCODED,
         /**
          * Unknown script usage.
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         UNKNOWN,
         /**
          * Candidate for Exclusion from Identifiers.
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         EXCLUDED,
         /**
          * Limited Use script.
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         LIMITED_USE,
         /**
          * Aspirational Use script.
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         ASPIRATIONAL,
         /**
          * Recommended script.
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         RECOMMENDED
     }
@@ -1410,8 +1403,7 @@ public final class UScript {
      *
      * @param script script code
      * @return the sample character string
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public static final String getSampleString(int script) {
         int sampleChar = ScriptMetadata.getScriptProps(script) & 0x1fffff;
@@ -1428,8 +1420,7 @@ public final class UScript {
      * @param script script code
      * @return script usage
      * @see ScriptUsage
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public static final ScriptUsage getUsage(int script) {
         return usageValues[(ScriptMetadata.getScriptProps(script) >> 21) & 7];
@@ -1441,8 +1432,7 @@ public final class UScript {
      *
      * @param script script code
      * @return true if the script is right-to-left
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public static final boolean isRightToLeft(int script) {
         return (ScriptMetadata.getScriptProps(script) & ScriptMetadata.RTL) != 0;
@@ -1455,8 +1445,7 @@ public final class UScript {
      *
      * @param script script code
      * @return true if the script allows line breaks between letters
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public static final boolean breaksBetweenLetters(int script) {
         return (ScriptMetadata.getScriptProps(script) & ScriptMetadata.LB_LETTERS) != 0;
@@ -1468,8 +1457,7 @@ public final class UScript {
      *
      * @param script script code
      * @return true if the script is cased
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public static final boolean isCased(int script) {
         return (ScriptMetadata.getScriptProps(script) & ScriptMetadata.CASED) != 0;

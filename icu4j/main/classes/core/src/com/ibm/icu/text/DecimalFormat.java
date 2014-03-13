@@ -5284,8 +5284,7 @@ public class DecimalFormat extends NumberFormat {
     * If the limit is set too high, an OutOfMemoryException may be triggered.
     * The default value is 1000.
     * @param newValue the new limit
-    * @draft ICU 51
-    * @provisional This API might change or be removed in a future release.
+    * @stable ICU 51
     */
     public void setParseMaxDigits(int newValue) {
         if (newValue > 0) {
@@ -5296,9 +5295,8 @@ public class DecimalFormat extends NumberFormat {
     /**
     * Get the current maximum number of exponent digits when parsing a
     * number.
-    *
-    * @draft ICU 51
-    * @provisional This API might change or be removed in a future release.
+    * @return the maximum number of exponent digits for parsing
+    * @stable ICU 51
     */
     public int getParseMaxDigits() {
         return PARSE_MAX_EXPONENT;
