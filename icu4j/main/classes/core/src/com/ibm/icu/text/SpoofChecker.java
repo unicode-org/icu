@@ -147,32 +147,37 @@ public class SpoofChecker {
     /**
      * Constants from UAX 31 for use in setRestrictionLevel.
      * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
      */
     public enum RestrictionLevel {
         /**
          * Only ASCII characters: U+0000..U+007F
          *
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
         ASCII,
         /**
          * All characters in each identifier must be from a single script.
          * 
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
-        SINGLE_SCRIPT_RESTRICTIVE,        
+        SINGLE_SCRIPT_RESTRICTIVE,
          /**
          * All characters in each identifier must be from a single script, or from the combinations: Latin + Han +
          * Hiragana + Katakana; Latin + Han + Bopomofo; or Latin + Han + Hangul. Note that this level will satisfy the
          * vast majority of Latin-script users; also that TR36 has ASCII instead of Latin.
          *
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
        HIGHLY_RESTRICTIVE,
         /**
          * Allow Latin with other scripts except Cyrillic, Greek, Cherokee Otherwise, the same as Highly Restrictive
          *
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
         MODERATELY_RESTRICTIVE,
         /**
@@ -180,12 +185,14 @@ public class SpoofChecker {
          * Moderately Restrictive
          *
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
         MINIMALLY_RESTRICTIVE,
         /**
          * Any valid identifiers, including characters outside of the Identifier Profile, such as I♥NY.org
          *
          * @draft ICU 53
+         * @provisional This API might change or be removed in a future release.
          */
         UNRESTRICTIVE
     }

@@ -66,20 +66,17 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * Style parameter for CompactDecimalFormat.
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public enum CompactStyle {
         /**
          * Short version, like "1.2T"
-         * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 50
          */
         SHORT,
         /**
          * Longer version, like "1.2 trillion", if available. May return same result as SHORT if not.
-         * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 50
          */
         LONG
     }

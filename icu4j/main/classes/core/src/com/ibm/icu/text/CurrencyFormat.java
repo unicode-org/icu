@@ -45,8 +45,7 @@ class CurrencyFormat extends MeasureFormat {
     }
     
     /**
-     * @draft ICU 53
-     * @provisional
+     * {@inheritDoc}
      */
     @Override
     public Object clone() {
@@ -82,8 +81,7 @@ class CurrencyFormat extends MeasureFormat {
     // MeasureFormat
     
     /**
-     * @draft ICU 53
-     * @provisional
+     * {@inheritDoc}
      */
     @Override
     public StringBuilder formatMeasures(
@@ -92,8 +90,7 @@ class CurrencyFormat extends MeasureFormat {
     }
     
     /**
-     * @draft ICU 53
-     * @provisional
+     * {@inheritDoc}
      */
     @Override
     public MeasureFormat.FormatWidth getWidth() {
@@ -101,8 +98,7 @@ class CurrencyFormat extends MeasureFormat {
     }
     
     /**
-     * @draft ICU 53
-     * @provisional
+     * {@inheritDoc}
      */
     @Override
     public NumberFormat getNumberFormat() {

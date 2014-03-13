@@ -164,8 +164,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      *
      * @param <V> The Record value type is unused. It can be omitted for this class
      * if it was omitted for the AlphabeticIndex that built it.
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public static final class ImmutableIndex<V> implements Iterable<Bucket<V>> {
         private final BucketList<V> buckets;
@@ -180,8 +179,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * Returns the number of index buckets and labels, including underflow/inflow/overflow.
          *
          * @return the number of index buckets
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         public int getBucketCount() {
             return buckets.getBucketCount();
@@ -193,8 +191,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          *
          * @param name the string to be sorted into an index bucket
          * @return the bucket number for the name
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         public int getBucketIndex(CharSequence name) {
             return buckets.getBucketIndex(name, collatorPrimaryOnly);
@@ -205,8 +202,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          *
          * @param index bucket number
          * @return the index-th bucket
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         public Bucket<V> getBucket(int index) {
             if (0 <= index && index < buckets.getBucketCount()) {
@@ -218,8 +214,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 51
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 51
          */
         public Iterator<Bucket<V>> iterator() {
             return buckets.iterator();
@@ -259,8 +254,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * collator provided to the AlphabeticIndex remains unchanged after creation of the index.
      * 
      * @param collator The collator to use to order the contents of this index.
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public AlphabeticIndex(RuleBasedCollator collator) {
         this(null, collator);
@@ -615,8 +609,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Builds an immutable, thread-safe version of this instance, without data records.
      *
      * @return an immutable index instance
-     * @draft ICU 51
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 51
      */
     public ImmutableIndex<V> buildImmutableIndex() {
         // The current AlphabeticIndex Java code never modifies the bucket list once built.

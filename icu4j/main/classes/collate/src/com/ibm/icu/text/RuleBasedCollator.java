@@ -1431,6 +1431,7 @@ public final class RuleBasedCollator extends Collator {
 
     /**
      * {@inheritDoc}
+     * @stable ICU 2.8
      */
     @Override
     public boolean equals(Object obj) {
@@ -1868,6 +1869,8 @@ public final class RuleBasedCollator extends Collator {
 
     /**
      * {@inheritDoc}
+     * @draft ICU 53 (retain)
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public ULocale getLocale(ULocale.Type type) {
