@@ -677,6 +677,7 @@ public class MeasureFormat extends UFormat {
             return nf.format(n, buffer, pos);
         }
 
+        @SuppressWarnings("unused")
         public synchronized String format(Number number) {
             return nf.format(number);
         }
