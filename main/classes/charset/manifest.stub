@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Specification-Title: International Components for Unicode for Java (charset)
+Specification-Version: @SPECVERSION@
+Specification-Vendor: icu-project.org
+Implementation-Title: International Components for Unicode for Java (charset)
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Bundle-ManifestVersion: 2
+Bundle-Name: ICU4J charset
+Bundle-Description: International Components for Unicode for Java (charset)
+Bundle-SymbolicName: com.ibm.icu.charset
+Bundle-Version: @IMPLVERSION@
+Bundle-Vendor: IBM Corporation
+Bundle-Copyright: @COPYRIGHT@
+Bundle-RequiredExecutionEnvironment: @EXECENV@
