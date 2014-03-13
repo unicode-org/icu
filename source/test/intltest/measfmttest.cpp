@@ -428,7 +428,8 @@ void MeasureFormatTest::TestFormatPeriodEn() {
 
     Locale en(Locale::getEnglish());
     LocalPointer<NumberFormat> nf(NumberFormat::createInstance(en, status));
-    if (!assertSuccess("Error creating number format en object", status)) {
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating number format en object - %s", u_errorName(status));
         return;
     }
     nf->setMaximumFractionDigits(4);
@@ -495,7 +496,8 @@ void MeasureFormatTest::Test10219FractionalPlurals() {
         for (int i = 0; i < LENGTHOF(expected[j]); i++) {
             DecimalFormat *df =
                 (DecimalFormat *) NumberFormat::createInstance(en, status);
-            if (!assertSuccess("Error creating Number format", status)) {
+            if (U_FAILURE(status)) {
+                dataerrln("Error creating Number format - %s", u_errorName(status));
                 return;
             }
             df->setRoundingMode(DecimalFormat::kRoundDown);
@@ -844,12 +846,15 @@ void MeasureFormatTest::TestEquality() {
     NumberFormat* nfeq = NumberFormat::createInstance("en", status);
     NumberFormat* nfne = NumberFormat::createInstance("fr", status);
     MeasureFormat fmt("en", UMEASFMT_WIDTH_SHORT, status);
-    MeasureFormat fmtEq(fmt);
     MeasureFormat fmtEq2("en", UMEASFMT_WIDTH_SHORT, nfeq, status);
     MeasureFormat fmtne1("en", UMEASFMT_WIDTH_WIDE, status);
     MeasureFormat fmtne2("fr", UMEASFMT_WIDTH_SHORT, status);
     MeasureFormat fmtne3("en", UMEASFMT_WIDTH_SHORT, nfne, status);
-    assertSuccess("Error creating MeasureFormats", status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating MeasureFormats - %s", u_errorName(status));
+        return;
+    }
+    MeasureFormat fmtEq(fmt);
     assertTrue("Equal", fmt == fmtEq);
     assertTrue("Equal2", fmt == fmtEq2);
     assertFalse("Equal Neg", fmt != fmtEq);
@@ -867,13 +872,17 @@ void MeasureFormatTest::TestDoubleZero() {
         Measure(16, MeasureUnit::createSecond(status), status)};
     Locale en("en");
     NumberFormat *nf = NumberFormat::createInstance(en, status);
-    nf->setMinimumFractionDigits(2);
-    nf->setMaximumFractionDigits(2);
     MeasureFormat fmt("en", UMEASFMT_WIDTH_WIDE, nf, status);
     UnicodeString appendTo;
     FieldPosition pos(FieldPosition::DONT_CARE);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating formatter - %s", u_errorName(status));
+        return;
+    }
+    nf->setMinimumFractionDigits(2);
+    nf->setMaximumFractionDigits(2);
     fmt.formatMeasures(measures, LENGTHOF(measures), appendTo, pos, status);
-    if (!assertSuccess("Error creating formatter and formatting", status)) {
+    if (!assertSuccess("Error formatting", status)) {
         return;
     }
     assertEquals(

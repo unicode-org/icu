@@ -3161,7 +3161,7 @@ void CalendarTest::TestAddAcrossZoneTransition() {
             char buf[32];
             const char *optDisp = AAZTDATA[i].skippedWTOpt == UCAL_WALLTIME_FIRST ? "FIRST" :
                     AAZTDATA[i].skippedWTOpt == UCAL_WALLTIME_LAST ? "LAST" : "NEXT_VALID";
-            errln(UnicodeString("Error: base:") + AAZTDATA[i].base.toString(buf, sizeof(buf)) + ", tz:" + AAZTDATA[i].zone
+            dataerrln(UnicodeString("Error: base:") + AAZTDATA[i].base.toString(buf, sizeof(buf)) + ", tz:" + AAZTDATA[i].zone
                         + ", delta:" + AAZTDATA[i].deltaDays + " day(s), opt:" + optDisp
                         + ", result:" + res.toString(buf, sizeof(buf))
                         + " - expected:" + AAZTDATA[i].expected.toString(buf, sizeof(buf)));
