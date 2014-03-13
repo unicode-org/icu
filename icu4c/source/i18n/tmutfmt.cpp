@@ -284,6 +284,14 @@ TimeUnitFormat::parseObject(const UnicodeString& source,
 
 void
 TimeUnitFormat::create(UTimeUnitFormatStyle style, UErrorCode& status) {
+    // fTimeUnitToCountToPatterns[] must have its elements initialized to NULL first
+    // before checking for failure status.
+    for (TimeUnit::UTimeUnitFields i = TimeUnit::UTIMEUNIT_YEAR;
+         i < TimeUnit::UTIMEUNIT_FIELD_COUNT;
+         i = (TimeUnit::UTimeUnitFields)(i+1)) {
+        fTimeUnitToCountToPatterns[i] = NULL;
+    }
+
     if (U_FAILURE(status)) {
         return;
     }
@@ -292,11 +300,6 @@ TimeUnitFormat::create(UTimeUnitFormatStyle style, UErrorCode& status) {
         return;
     }
     fStyle = style;
-    for (TimeUnit::UTimeUnitFields i = TimeUnit::UTIMEUNIT_YEAR;
-         i < TimeUnit::UTIMEUNIT_FIELD_COUNT;
-         i = (TimeUnit::UTimeUnitFields)(i+1)) {
-        fTimeUnitToCountToPatterns[i] = NULL;
-    }
 
     //TODO: format() and parseObj() are const member functions,
     //so, can not do lazy initialization in C++.

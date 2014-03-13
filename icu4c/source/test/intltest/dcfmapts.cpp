@@ -803,7 +803,10 @@ void IntlTestDecimalFormatAPI::TestBadFastpath() {
     UErrorCode status = U_ZERO_ERROR;
 
     LocalPointer<DecimalFormat> df(new DecimalFormat("###", status));
-    TEST_ASSERT_STATUS(status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating new DecimalFormat - %s", u_errorName(status));
+        return;
+    }
 
     UnicodeString fmt;
     fmt.remove();

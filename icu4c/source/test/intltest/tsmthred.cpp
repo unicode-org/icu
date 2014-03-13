@@ -1558,7 +1558,7 @@ void MultithreadTest::TestAnyTranslit() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Transliterator> tx(Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, status));
     if (U_FAILURE(status)) {
-        errln("File %s, Line %d: Error, status = %s", __FILE__, __LINE__, u_errorName(status));
+        dataerrln("File %s, Line %d: Error, status = %s", __FILE__, __LINE__, u_errorName(status));
         return;
     }
     TxThread * threads[4];

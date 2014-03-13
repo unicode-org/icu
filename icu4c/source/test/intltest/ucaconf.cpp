@@ -50,7 +50,9 @@ UCAConformanceTest::~UCAConformanceTest()
 {
     delete UCA;
     delete rbUCA;
-    fclose(testFile);
+    if (testFile) {
+        fclose(testFile);
+    }
 }
 
 void UCAConformanceTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)

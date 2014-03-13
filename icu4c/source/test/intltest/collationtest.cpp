@@ -192,7 +192,7 @@ void CollationTest::TestImplicits() {
     IcuTestErrorCode errorCode(*this, "TestImplicits");
 
     const CollationData *cd = CollationRoot::getData(errorCode);
-    if(errorCode.logIfFailureAndReset("CollationRoot::getBaseData()")) {
+    if(errorCode.logDataIfFailureAndReset("CollationRoot::getBaseData()")) {
         return;
     }
 
@@ -252,7 +252,7 @@ void CollationTest::TestImplicits() {
 void CollationTest::TestNulTerminated() {
     IcuTestErrorCode errorCode(*this, "TestNulTerminated");
     const CollationData *data = CollationRoot::getData(errorCode);
-    if(errorCode.logIfFailureAndReset("CollationRoot::getData()")) {
+    if(errorCode.logDataIfFailureAndReset("CollationRoot::getData()")) {
         return;
     }
 
@@ -343,24 +343,25 @@ void CollationTest::TestShortFCDData() {
     diff = lccc;
     diff.removeAll(expectedLccc);
     diff.toPattern(diffString, TRUE);
-    assertEquals("CollationFCD::hasLccc() actual-expected", empty, diffString);
+    assertEquals("CollationFCD::hasLccc() actual-expected", empty, diffString, TRUE);
 
     UnicodeSet expectedTccc("[:^tccc=0:]", errorCode);
-    errorCode.assertSuccess();
-    addLeadSurrogatesForSupplementary(expectedLccc, expectedTccc);
-    addLeadSurrogatesForSupplementary(expectedTccc, expectedTccc);
-    UnicodeSet tccc;  // actual
-    for(UChar32 c = 0; c <= 0xffff; ++c) {
-        if(CollationFCD::hasTccc(c)) { tccc.add(c); }
+    if (errorCode.isSuccess()) {
+        addLeadSurrogatesForSupplementary(expectedLccc, expectedTccc);
+        addLeadSurrogatesForSupplementary(expectedTccc, expectedTccc);
+        UnicodeSet tccc;  // actual
+        for(UChar32 c = 0; c <= 0xffff; ++c) {
+            if(CollationFCD::hasTccc(c)) { tccc.add(c); }
+        }
+        diff = expectedTccc;
+        diff.removeAll(tccc);
+        diff.remove(0x10000, 0x10ffff);  // hasTccc() only works for the BMP
+        assertEquals("CollationFCD::hasTccc() expected-actual", empty, diffString);
+        diff = tccc;
+        diff.removeAll(expectedTccc);
+        diff.toPattern(diffString, TRUE);
+        assertEquals("CollationFCD::hasTccc() actual-expected", empty, diffString);
     }
-    diff = expectedTccc;
-    diff.removeAll(tccc);
-    diff.remove(0x10000, 0x10ffff);  // hasTccc() only works for the BMP
-    assertEquals("CollationFCD::hasTccc() expected-actual", empty, diffString);
-    diff = tccc;
-    diff.removeAll(expectedTccc);
-    diff.toPattern(diffString, TRUE);
-    assertEquals("CollationFCD::hasTccc() actual-expected", empty, diffString);
 }
 
 class CodePointIterator {
@@ -432,7 +433,7 @@ void CollationTest::checkFCD(const char *name,
 void CollationTest::TestFCD() {
     IcuTestErrorCode errorCode(*this, "TestFCD");
     const CollationData *data = CollationRoot::getData(errorCode);
-    if(errorCode.logIfFailureAndReset("CollationRoot::getData()")) {
+    if(errorCode.logDataIfFailureAndReset("CollationRoot::getData()")) {
         return;
     }
 
@@ -737,7 +738,7 @@ private:
 void CollationTest::TestRootElements() {
     IcuTestErrorCode errorCode(*this, "TestRootElements");
     const CollationData *root = CollationRoot::getData(errorCode);
-    if(errorCode.logIfFailureAndReset("CollationRoot::getData()")) {
+    if(errorCode.logDataIfFailureAndReset("CollationRoot::getData()")) {
         return;
     }
     CollationRootElements rootElements(root->rootElements, root->rootElementsLength);
@@ -840,7 +841,7 @@ void CollationTest::TestRootElements() {
 void CollationTest::TestTailoredElements() {
     IcuTestErrorCode errorCode(*this, "TestTailoredElements");
     const CollationData *root = CollationRoot::getData(errorCode);
-    if(errorCode.logIfFailureAndReset("CollationRoot::getData()")) {
+    if(errorCode.logDataIfFailureAndReset("CollationRoot::getData()")) {
         return;
     }
     CollationRootElements rootElements(root->rootElements, root->rootElementsLength);
@@ -1712,7 +1713,7 @@ void CollationTest::TestDataDriven() {
 
     fcd = Normalizer2Factory::getFCDInstance(errorCode);
     nfd = Normalizer2Factory::getNFDInstance(errorCode);
-    if(errorCode.logIfFailureAndReset("Normalizer2Factory::getFCDInstance() or getNFDInstance()")) {
+    if(errorCode.logDataIfFailureAndReset("Normalizer2Factory::getFCDInstance() or getNFDInstance()")) {
         return;
     }
 
