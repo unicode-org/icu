@@ -60,13 +60,11 @@ typedef enum UTimeZoneNameType {
      * @stable ICU 50
      */
     UTZNM_SHORT_DAYLIGHT    = 0x20,
-#ifndef U_HIDE_DRAFT_API
     /**
      * Exemplar location name, such as "Los Angeles".
-     * @draft ICU 51
+     * @stable ICU 51
      */
     UTZNM_EXEMPLAR_LOCATION = 0x40
-#endif /* U_HIDE_DRAFT_API */
 } UTimeZoneNameType;
 
 U_CDECL_END

@@ -44,6 +44,7 @@ class U_I18N_API MeasureUnit: public UObject {
         fCurrency[0] = 0;
     }
     
+#ifndef U_HIDE_DRAFT_API
     /**
      * Copy constructor.
      * @draft ICU 53
@@ -52,9 +53,10 @@ class U_I18N_API MeasureUnit: public UObject {
         
     /**
      * Assignment operator.
-     * @draft ICU 53.
+     * @draft ICU 53
      */
     MeasureUnit &operator=(const MeasureUnit &other);
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns a polymorphic clone of this object.  The result will
@@ -76,6 +78,7 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     virtual UBool operator==(const UObject& other) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Inequality operator.  Return true if this object is not equal
      * to the given object.
@@ -140,6 +143,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 53
      */
     static StringEnumeration* getAvailableTypes(UErrorCode &errorCode);
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Return the class ID for this class. This is useful only for comparing to
@@ -189,323 +193,369 @@ class U_I18N_API MeasureUnit: public UObject {
 // Start generated createXXX methods
 
     /**
-     * Returns unit of acceleration: g-force.
+     * Creates a unit of acceleration: g-force.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createGForce(UErrorCode &status);
 
     /**
-     * Returns unit of angle: arc-minute.
+     * Creates a unit of angle: arc-minute.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createArcMinute(UErrorCode &status);
 
     /**
-     * Returns unit of angle: arc-second.
+     * Creates a unit of angle: arc-second.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createArcSecond(UErrorCode &status);
 
     /**
-     * Returns unit of angle: degree.
+     * Creates a unit of angle: degree.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createDegree(UErrorCode &status);
 
     /**
-     * Returns unit of area: acre.
+     * Creates a unit of area: acre.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createAcre(UErrorCode &status);
 
     /**
-     * Returns unit of area: hectare.
+     * Creates a unit of area: hectare.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createHectare(UErrorCode &status);
 
     /**
-     * Returns unit of area: square-foot.
+     * Creates a unit of area: square-foot.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createSquareFoot(UErrorCode &status);
 
     /**
-     * Returns unit of area: square-kilometer.
+     * Creates a unit of area: square-kilometer.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createSquareKilometer(UErrorCode &status);
 
     /**
-     * Returns unit of area: square-meter.
+     * Creates a unit of area: square-meter.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createSquareMeter(UErrorCode &status);
 
     /**
-     * Returns unit of area: square-mile.
+     * Creates a unit of area: square-mile.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createSquareMile(UErrorCode &status);
 
     /**
-     * Returns unit of duration: day.
+     * Creates a unit of duration: day.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createDay(UErrorCode &status);
 
     /**
-     * Returns unit of duration: hour.
+     * Creates a unit of duration: hour.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createHour(UErrorCode &status);
 
     /**
-     * Returns unit of duration: millisecond.
+     * Creates a unit of duration: millisecond.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createMillisecond(UErrorCode &status);
 
     /**
-     * Returns unit of duration: minute.
+     * Creates a unit of duration: minute.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createMinute(UErrorCode &status);
 
     /**
-     * Returns unit of duration: month.
+     * Creates a unit of duration: month.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createMonth(UErrorCode &status);
 
     /**
-     * Returns unit of duration: second.
+     * Creates a unit of duration: second.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createSecond(UErrorCode &status);
 
     /**
-     * Returns unit of duration: week.
+     * Creates a unit of duration: week.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createWeek(UErrorCode &status);
 
     /**
-     * Returns unit of duration: year.
+     * Creates a unit of duration: year.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createYear(UErrorCode &status);
 
     /**
-     * Returns unit of length: centimeter.
+     * Creates a unit of length: centimeter.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createCentimeter(UErrorCode &status);
 
     /**
-     * Returns unit of length: foot.
+     * Creates a unit of length: foot.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createFoot(UErrorCode &status);
 
     /**
-     * Returns unit of length: inch.
+     * Creates a unit of length: inch.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createInch(UErrorCode &status);
 
     /**
-     * Returns unit of length: kilometer.
+     * Creates a unit of length: kilometer.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createKilometer(UErrorCode &status);
 
     /**
-     * Returns unit of length: light-year.
+     * Creates a unit of length: light-year.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createLightYear(UErrorCode &status);
 
     /**
-     * Returns unit of length: meter.
+     * Creates a unit of length: meter.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createMeter(UErrorCode &status);
 
     /**
-     * Returns unit of length: mile.
+     * Creates a unit of length: mile.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createMile(UErrorCode &status);
 
     /**
-     * Returns unit of length: millimeter.
+     * Creates a unit of length: millimeter.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createMillimeter(UErrorCode &status);
 
     /**
-     * Returns unit of length: picometer.
+     * Creates a unit of length: picometer.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createPicometer(UErrorCode &status);
 
     /**
-     * Returns unit of length: yard.
+     * Creates a unit of length: yard.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createYard(UErrorCode &status);
 
     /**
-     * Returns unit of mass: gram.
+     * Creates a unit of mass: gram.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createGram(UErrorCode &status);
 
     /**
-     * Returns unit of mass: kilogram.
+     * Creates a unit of mass: kilogram.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createKilogram(UErrorCode &status);
 
     /**
-     * Returns unit of mass: ounce.
+     * Creates a unit of mass: ounce.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createOunce(UErrorCode &status);
 
     /**
-     * Returns unit of mass: pound.
+     * Creates a unit of mass: pound.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createPound(UErrorCode &status);
 
     /**
-     * Returns unit of power: horsepower.
+     * Creates a unit of power: horsepower.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createHorsepower(UErrorCode &status);
 
     /**
-     * Returns unit of power: kilowatt.
+     * Creates a unit of power: kilowatt.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createKilowatt(UErrorCode &status);
 
     /**
-     * Returns unit of power: watt.
+     * Creates a unit of power: watt.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createWatt(UErrorCode &status);
 
     /**
-     * Returns unit of pressure: hectopascal.
+     * Creates a unit of pressure: hectopascal.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createHectopascal(UErrorCode &status);
 
     /**
-     * Returns unit of pressure: inch-hg.
+     * Creates a unit of pressure: inch-hg.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createInchHg(UErrorCode &status);
 
     /**
-     * Returns unit of pressure: millibar.
+     * Creates a unit of pressure: millibar.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createMillibar(UErrorCode &status);
 
     /**
-     * Returns unit of speed: kilometer-per-hour.
+     * Creates a unit of speed: kilometer-per-hour.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createKilometerPerHour(UErrorCode &status);
 
     /**
-     * Returns unit of speed: meter-per-second.
+     * Creates a unit of speed: meter-per-second.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createMeterPerSecond(UErrorCode &status);
 
     /**
-     * Returns unit of speed: mile-per-hour.
+     * Creates a unit of speed: mile-per-hour.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createMilePerHour(UErrorCode &status);
 
     /**
-     * Returns unit of temperature: celsius.
+     * Creates a unit of temperature: celsius.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createCelsius(UErrorCode &status);
 
     /**
-     * Returns unit of temperature: fahrenheit.
+     * Creates a unit of temperature: fahrenheit.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createFahrenheit(UErrorCode &status);
 
     /**
-     * Returns unit of volume: cubic-kilometer.
+     * Creates a unit of volume: cubic-kilometer.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createCubicKilometer(UErrorCode &status);
 
     /**
-     * Returns unit of volume: cubic-mile.
+     * Creates a unit of volume: cubic-mile.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createCubicMile(UErrorCode &status);
 
     /**
-     * Returns unit of volume: liter.
+     * Creates a unit of volume: liter.
      * Caller owns returned value and must free it.
+     * @param status ICU error code.
      * @draft ICU 53
      */
     static MeasureUnit *createLiter(UErrorCode &status);
