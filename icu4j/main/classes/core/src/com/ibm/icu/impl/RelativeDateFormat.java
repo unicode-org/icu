@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DisplayContext;

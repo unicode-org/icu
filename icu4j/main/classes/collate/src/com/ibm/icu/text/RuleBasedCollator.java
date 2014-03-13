@@ -15,8 +15,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.Normalizer2Impl.ReorderingBuffer;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.coll.BOCSU;
 import com.ibm.icu.impl.coll.Collation;
 import com.ibm.icu.impl.coll.CollationCompare;

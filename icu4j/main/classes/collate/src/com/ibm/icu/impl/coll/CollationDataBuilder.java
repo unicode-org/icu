@@ -17,8 +17,8 @@ import java.util.Iterator;
 
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.Normalizer2Impl.Hangul;
+import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.Trie2Writable;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UnicodeSet;
