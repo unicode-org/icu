@@ -1,0 +1,9 @@
+com.ibm.icu.dev.tool.ime.indic.BengaliInputMethodDescriptor
+com.ibm.icu.dev.tool.ime.indic.DevanagariInputMethodDescriptor
+com.ibm.icu.dev.tool.ime.indic.GujaratiInputMethodDescriptor
+com.ibm.icu.dev.tool.ime.indic.GurmukhiInputMethodDescriptor
+com.ibm.icu.dev.tool.ime.indic.KannadaInputMethodDescriptor
+com.ibm.icu.dev.tool.ime.indic.MalayalamInputMethodDescriptor
+com.ibm.icu.dev.tool.ime.indic.OriyaInputMethodDescriptor
+com.ibm.icu.dev.tool.ime.indic.TamilInputMethodDescriptor
+com.ibm.icu.dev.tool.ime.indic.TeluguInputMethodDescriptor
