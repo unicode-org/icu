@@ -1,0 +1,76 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2014 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/segments/fr.xml ../../xml/brkitr/fr.xml
+// *
+// ***************************************************************************
+fr{
+    Version{"2.0.92.29"}
+    exceptions{
+        SentenceBreak:array{
+            "aux.",
+            "config.",
+            "collab.",
+            "M.",
+            "dim.",
+            "imprim.",
+            "oct.",
+            "syst.",
+            "bull.",
+            "MM.",
+            "doc.",
+            "h\u00F4p.",
+            "quart.",
+            "dir.",
+            "adr.",
+            "symb.",
+            "jeu.",
+            "anc.",
+            "voit.",
+            "graph.",
+            "\u00E9d.",
+            "fig.",
+            "cam.",
+            "\u00E9val.",
+            "juil.",
+            "dict.",
+            "f\u00E9vr.",
+            "\u00E9quiv.",
+            "sept.",
+            "acoust.",
+            "nov.",
+            "anon.",
+            "illustr.",
+            "avr.",
+            "dest.",
+            "P.-D. G.",
+            "ill.",
+            "\u00E9dit.",
+            "encycl.",
+            "mer.",
+            "broch.",
+            "ven.",
+            "lun.",
+            "append.",
+            "r\u00E9f.",
+            "categ.",
+            "sam.",
+            "janv.",
+            "imm.",
+            "coll.",
+            "mar.",
+            "exempl.",
+            "d\u00E9c.",
+            "ann.",
+            "synth.",
+            "indus.",
+            "av. J.-C.",
+            "niv.",
+            "ap. J.-C.",
+            "gouv.",
+            "trav. publ.",
+        }
+    }
+}
