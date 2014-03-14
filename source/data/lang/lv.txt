@@ -763,7 +763,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.0.99.67"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}
