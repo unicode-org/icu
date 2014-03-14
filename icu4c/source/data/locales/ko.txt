@@ -61,7 +61,7 @@ ko{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -161,7 +161,7 @@ ko{
             }
         }
     }
-    Version{"2.0.98.52"}
+    Version{"2.0.99.67"}
     calendar{
         buddhist{
             eras{
