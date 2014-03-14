@@ -808,7 +808,7 @@ public:
      * Set whether or not grouping will be used in this format.
      * @param newValue    True, grouping will be used in this format.
      * @see getGroupingUsed
-     * @stable ICU 2.0
+     * @draft ICU 53
      */
     virtual void setGroupingUsed(UBool newValue);
 
@@ -817,7 +817,7 @@ public:
      * @param value    set True, this format will parse numbers as integers
      *                 only.
      * @see isParseIntegerOnly
-     * @stable ICU 2.0
+     * @draft ICU 53
      */
     virtual void setParseIntegerOnly(UBool value);
 
