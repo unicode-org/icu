@@ -44,7 +44,6 @@ class U_I18N_API MeasureUnit: public UObject {
         fCurrency[0] = 0;
     }
     
-#ifndef U_HIDE_DRAFT_API
     /**
      * Copy constructor.
      * @draft ICU 53
@@ -56,7 +55,6 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 53
      */
     MeasureUnit &operator=(const MeasureUnit &other);
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns a polymorphic clone of this object.  The result will
@@ -172,7 +170,6 @@ class U_I18N_API MeasureUnit: public UObject {
     virtual UClassID getDynamicClassID(void) const;
 
 #ifndef U_HIDE_INTERNAL_API
-
     /**
      * ICU use only.
      * Returns associated array index for this measure unit. Only valid for
@@ -187,11 +184,11 @@ class U_I18N_API MeasureUnit: public UObject {
      * @internal
      */
     static int32_t getIndexCount();
-
 #endif /* U_HIDE_INTERNAL_API */
 
 // Start generated createXXX methods
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a unit of acceleration: g-force.
      * Caller owns returned value and must free it.
@@ -559,6 +556,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 53
      */
     static MeasureUnit *createLiter(UErrorCode &status);
+#endif /* U_HIDE_DRAFT_API */
 
  protected:
 
