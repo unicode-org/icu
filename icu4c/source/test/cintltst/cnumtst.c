@@ -2496,7 +2496,7 @@ static void TestContext(void) {
     } else {
         log_data_err("unum_open UNUM_SPELLOUT for en fails with status %s\n", myErrorName(status));
     }
-    
+#if !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_BREAK_ITERATION
     for (itemPtr = tcItems; itemPtr->locale != NULL; itemPtr++) {
         UChar ubufResult[kUBufMax];
         int32_t ulenRes;
@@ -2526,6 +2526,7 @@ static void TestContext(void) {
         }
         unum_close(unum);
     }
+#endif /* #if !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_BREAK_ITERATION */
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
