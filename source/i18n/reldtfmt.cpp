@@ -62,9 +62,11 @@ RelativeDateFormat::RelativeDateFormat(const RelativeDateFormat& other) :
         fDates = (URelativeString*) uprv_malloc(sizeof(fDates[0])*fDatesLen);
         uprv_memcpy(fDates, other.fDates, sizeof(fDates[0])*fDatesLen);
     }
+#if !UCONFIG_NO_BREAK_ITERATION
     if (other.fCapitalizationBrkIter != NULL) {
         fCapitalizationBrkIter = (other.fCapitalizationBrkIter)->clone();
     }
+#endif
 }
 
 RelativeDateFormat::RelativeDateFormat( UDateFormatStyle timeStyle, UDateFormatStyle dateStyle,
@@ -124,7 +126,9 @@ RelativeDateFormat::~RelativeDateFormat() {
     delete fDateTimeFormatter;
     delete fCombinedFormat;
     uprv_free(fDates);
+#if !UCONFIG_NO_BREAK_ITERATION
     delete fCapitalizationBrkIter;
+#endif
 }
 
 

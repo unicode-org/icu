@@ -239,8 +239,10 @@ SimpleDateFormat::~SimpleDateFormat()
         delete cur->nf;
         uprv_free(cur);
     }
-    
+
+#if !UCONFIG_NO_BREAK_ITERATION
     delete fCapitalizationBrkIter;
+#endif
 }
 
 //----------------------------------------------------------------------
@@ -501,10 +503,12 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
         fTimeZoneFormat = NULL; // forces lazy instantiation with the other locale
         fLocale = other.fLocale;
     }
-    
+
+#if !UCONFIG_NO_BREAK_ITERATION
     if (other.fCapitalizationBrkIter != NULL) {
         fCapitalizationBrkIter = (other.fCapitalizationBrkIter)->clone();
     }
+#endif
 
     return *this;
 }

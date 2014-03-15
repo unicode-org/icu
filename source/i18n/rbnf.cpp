@@ -863,7 +863,9 @@ RuleBasedNumberFormat::operator=(const RuleBasedNumberFormat& rhs)
     capitalizationInfoSet = rhs.capitalizationInfoSet;
     capitalizationForUIListMenu = rhs.capitalizationForUIListMenu;
     capitalizationForStandAlone = rhs.capitalizationForStandAlone;
+#if !UCONFIG_NO_BREAK_ITERATION
     capitalizationBrkIter = (rhs.capitalizationBrkIter!=NULL)? rhs.capitalizationBrkIter->clone(): NULL;
+#endif
 
     return *this;
 }
@@ -1616,8 +1618,10 @@ RuleBasedNumberFormat::dispose()
     delete lenientParseRules;
     lenientParseRules = NULL;
 
+#if !UCONFIG_NO_BREAK_ITERATION
    delete capitalizationBrkIter;
    capitalizationBrkIter = NULL;
+#endif
 
     if (localizations) localizations = localizations->unref();
 }
