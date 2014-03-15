@@ -164,6 +164,7 @@ public:
                     UColAttributeValue decompositionMode,
                     UErrorCode& status);
 
+#ifndef U_HIDE_INTERNAL_API 
     /**
      * TODO: document & propose as public API
      * @internal
@@ -171,6 +172,7 @@ public:
     RuleBasedCollator(const UnicodeString &rules,
                       UParseError &parseError, UnicodeString &reason,
                       UErrorCode &errorCode);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Copy constructor.

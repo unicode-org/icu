@@ -63,7 +63,6 @@ class U_COMMON_API ListFormatter : public UObject{
 
   public:
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Copy constructor.
      * @draft ICU 52
@@ -75,7 +74,6 @@ class U_COMMON_API ListFormatter : public UObject{
      * @draft ICU 52
      */
     ListFormatter& operator=(const ListFormatter& other);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Creates a ListFormatter appropriate for the default locale.

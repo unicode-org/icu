@@ -44,7 +44,7 @@ enum UTimeUnitFormatStyle {
 };
 typedef enum UTimeUnitFormatStyle UTimeUnitFormatStyle; /**< @deprecated ICU 53 */
 
-#endif
+#endif  /* U_HIDE_DEPRECATED_API */
 
 
 U_NAMESPACE_BEGIN
