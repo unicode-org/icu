@@ -19,6 +19,8 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
 
+#if !UCONFIG_NO_FORMATTING
+
 U_NAMESPACE_BEGIN
 
 // other must always be first.
@@ -175,3 +177,5 @@ UnicodeString &QuantityFormatter::format(
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2013, International Business Machines Corporation and
+ * Copyright (c) 2002-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -5209,6 +5209,7 @@ void RegexTest::Bug7029() {
 //   for details on what to do in case of a failure of this test.
 //
 void RegexTest::Bug9283() {
+#if !UCONFIG_NO_NORMALIZATION
     UErrorCode status = U_ZERO_ERROR;
     UnicodeSet supplementalsWithCaseFolding("[[:CWCF:]&[\\U00010000-\\U0010FFFF]]", status);
     REGEX_CHECK_STATUS;
@@ -5222,6 +5223,7 @@ void RegexTest::Bug9283() {
         UnicodeString cf = UnicodeString(c).foldCase();
         REGEX_ASSERT(cf.length() >= 2);
     }
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
 }
 
 
