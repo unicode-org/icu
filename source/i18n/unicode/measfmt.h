@@ -111,6 +111,7 @@ class U_I18N_API MeasureFormat : public Format {
             UMeasureFormatWidth width,
             NumberFormat *nfToAdopt,
             UErrorCode &status);
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Copy constructor.
@@ -124,8 +125,6 @@ class U_I18N_API MeasureFormat : public Format {
      */
     MeasureFormat &operator=(const MeasureFormat &rhs);
 
-#endif /* U_HIDE_DRAFT_API */
-    
     /**
      * Destructor.
      * @stable ICU 3.0
