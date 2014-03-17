@@ -12,7 +12,7 @@ import java.text.CharacterIterator;
 /**
  * <tt>SearchIterator</tt> is an abstract base class that provides 
  * methods to search for a pattern within a text string. Instances of
- * <tt>SearchIterator</tt> maintain a current position and scans over the 
+ * <tt>SearchIterator</tt> maintain a current position and scan over the 
  * target text, returning the indices the pattern is matched and the length 
  * of each match.
  * <p>
@@ -22,12 +22,12 @@ import java.text.CharacterIterator;
  * matching based on the comparison rules defined in a 
  * <tt>RuleBasedCollator</tt> object. 
  * <p> 
- * Other options for searching includes using a BreakIterator to restrict 
+ * Other options for searching include using a BreakIterator to restrict 
  * the points at which matches are detected.
  * <p>
  * <tt>SearchIterator</tt> provides an API that is similar to that of
  * other text iteration classes such as <tt>BreakIterator</tt>. Using 
- * this class, it is easy to scan through text looking for all occurances of 
+ * this class, it is easy to scan through text looking for all occurrences of 
  * a given pattern. The following example uses a <tt>StringSearch</tt> 
  * object to find all instances of "fox" in the target string. Any other 
  * subclass of <tt>SearchIterator</tt> can be used in an identical 
@@ -83,11 +83,11 @@ public abstract class SearchIterator
      * Note:
      * 
      *  ICU4J already exposed some protected members such as
-     * targetText, brekIterator and matchedLength as a part of stable
+     * targetText, breakIterator and matchedLength as a part of stable
      * APIs. In ICU4C, they are exposed through USearch struct, 
      * although USearch struct itself is internal API.
      * 
-     *  This class was created for making ICU4J code in parallel to
+     *  This class was created for making ICU4J code parallel to
      * ICU4C implementation. ICU4J implementation access member
      * fields like C struct (e.g. search_.isOverlap_) mostly, except
      * fields already exposed as protected member (e.g. search_.text()).

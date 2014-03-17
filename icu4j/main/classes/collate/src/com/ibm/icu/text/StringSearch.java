@@ -15,20 +15,20 @@ import com.ibm.icu.util.ULocale;
 
 // Java porting note:
 //
-//        ICU4C implementation contains dead code in many places.
-//      While porting ICU4C linear search implementation, these dead codes
-//      were not fully ported. The code block tagged by "// *** Boyer-Moore ***"
-//      are those dead code, still available in ICU4C.
+//        The ICU4C implementation contains dead code in many places.
+//      While porting the ICU4C linear search implementation, this dead code
+//      was not fully ported. The code blocks tagged by "// *** Boyer-Moore ***"
+//      are those dead code blocks, still available in ICU4C.
 
-//        ICU4C implementation does not seem to handle UCharacterIterator pointing
-//      a fragment of text properly. ICU4J uses CharacterIterator to navigate through
+//        The ICU4C implementation does not seem to handle UCharacterIterator pointing
+//      to a fragment of text properly. ICU4J uses CharacterIterator to navigate through
 //      the input text. We need to carefully review the code ported from ICU4C
 //      assuming the start index is 0.
 
-//        ICU4C implementation initializes pattern.CE and pattern.PCE. It looks
-//      CE is no longer used, except a few places checking CELength. It looks this
-//      is a left over from already disable Boyer-Moore search code. This Java implementation
-//      preserves the code, but we should clean them up later.
+//        ICU4C implementation initializes pattern.CE and pattern.PCE. It looks like
+//      CE is no longer used, except in a few places checking CELength. It looks like this
+//      is a leftover from already-disabled Boyer-Moore search code. This Java implementation
+//      preserves the code, but we should clean this up later.
 
 /** 
  *
@@ -54,7 +54,7 @@ import com.ibm.icu.util.ULocale;
  *           there exists no non-ignorable combining mark before or after S?
  *           in S respectively.
  * </pre>
- * Option 2. will be the default.
+ * Option 2. is the default.
  * <p>
  * This search has APIs similar to that of other text iteration mechanisms 
  * such as the break iterators in {@link BreakIterator}. Using these 
@@ -68,21 +68,21 @@ import com.ibm.icu.util.ULocale;
  * <p>
  * {@link SearchIterator} provides APIs to specify the starting position
  * within the text string to be searched, e.g. {@link SearchIterator#setIndex setIndex},
- * {@link SearchIterator#preceding preceding} and {@link SearchIterator#following following}. Since the
- * starting position will be set as it is specified, please take note that
- * there are some danger points which the search may render incorrect
+ * {@link SearchIterator#preceding preceding} and {@link SearchIterator#following following}.
+ * Since the starting position will be set as it is specified, please take note that
+ * there are some danger points at which the search may render incorrect
  * results:
  * <ul>
- * <li> The midst of a substring that requires normalization.
+ * <li> In the midst of a substring that requires normalization.
  * <li> If the following match is to be found, the position should not be the
- *      second character which requires to be swapped with the preceding
- *      character. Vice versa, if the preceding match is to be found,
+ *      second character which requires swapping with the preceding
+ *      character. Vice versa, if the preceding match is to be found, the
  *      position to search from should not be the first character which
- *      requires to be swapped with the next character. E.g certain Thai and
+ *      requires swapping with the next character. E.g certain Thai and
  *      Lao characters require swapping.
  * <li> If a following pattern match is to be found, any position within a
  *      contracting sequence except the first will fail. Vice versa if a
- *      preceding pattern match is to be found, a invalid starting point
+ *      preceding pattern match is to be found, an invalid starting point
  *      would be any character within a contracting sequence except the last.
  * </ul>
  * <p>
@@ -93,8 +93,8 @@ import com.ibm.icu.util.ULocale;
  * <p>
  * Options are provided to handle overlapping matches.
  * E.g. In English, overlapping matches produces the result 0 and 2
- * for the pattern "abab" in the text "ababab", where else mutually
- * exclusive matches only produce the result of 0.
+ * for the pattern "abab" in the text "ababab", where mutually
+ * exclusive matches only produces the result of 0.
  * <p>
  * Though collator attributes will be taken into consideration while
  * performing matches, there are no APIs here for setting and getting the
