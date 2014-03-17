@@ -19,15 +19,15 @@ class NumberFormat;
 
 class U_I18N_API SharedNumberFormat : public SharedObject {
 public:
-SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-virtual ~SharedNumberFormat();
-const NumberFormat *get() const { return ptr; }
-const NumberFormat *operator->() const { return ptr; }
-const NumberFormat &operator*() const { return *ptr; }
+    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
+    virtual ~SharedNumberFormat();
+    const NumberFormat *get() const { return ptr; }
+    const NumberFormat *operator->() const { return ptr; }
+    const NumberFormat &operator*() const { return *ptr; }
 private:
-NumberFormat *ptr;
-SharedNumberFormat(const SharedNumberFormat &);
-SharedNumberFormat &operator=(const SharedNumberFormat &);
+    NumberFormat *ptr;
+    SharedNumberFormat(const SharedNumberFormat &);
+    SharedNumberFormat &operator=(const SharedNumberFormat &);
 };
 
 U_NAMESPACE_END
