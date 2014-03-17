@@ -308,7 +308,7 @@ public:
 
     /**
      * For ICU use only.
-     * Returns handle to the shared, cached PluralRules isntance.
+     * Returns handle to the shared, cached PluralRules instance.
      * Caller must call removeRef() on returned value once it is done with
      * the shared instance.
      * @internal

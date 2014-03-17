@@ -80,8 +80,8 @@ const SharedObject *LRUCache::_get(const char *localeId, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return NULL;
     }
-    CacheEntry *entry = (CacheEntry *) uhash_get(
-            localeIdToEntries, localeId);
+    CacheEntry *entry = static_cast<CacheEntry *>(uhash_get(
+            localeIdToEntries, localeId));
     if (entry == NULL) {
         // Its a cache miss.
 
