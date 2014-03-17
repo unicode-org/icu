@@ -6,8 +6,8 @@
 * simplepatternformatter.h
 */
 
-#ifndef __TEMPLATE_H__
-#define __TEMPLATE_H__
+#ifndef __SIMPLEPATTERNFORMATTER_H__
+#define __SIMPLEPATTERNFORMATTER_H__ 
 
 #define EXPECTED_PLACEHOLDER_COUNT 3
 
