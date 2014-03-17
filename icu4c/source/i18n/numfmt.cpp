@@ -1046,7 +1046,7 @@ NumberFormat::createInstance(const Locale& loc, UNumberFormatStyle kind, UErrorC
     if (U_FAILURE(status)) {
         return NULL;
     }
-    NumberFormat *result = (NumberFormat *) (*shared)->clone();
+    NumberFormat *result = static_cast<NumberFormat *>((*shared)->clone());
     shared->removeRef();
     if (result == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
