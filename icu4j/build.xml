@@ -1448,6 +1448,7 @@
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.collate.dir}/src"/>
 
+            <include name="com/ibm/icu/impl/coll/*.java"/>
             <include name="com/ibm/icu/impl/data/*Break*.java"/>
             <include name="com/ibm/icu/text/*BreakIterator*.java"/>
             <include name="com/ibm/icu/text/*Collation*.java"/>
@@ -1467,6 +1468,7 @@
                 <include name="**/*.brk"/>
                 <include name="**/*.nrm"/>
                 <include name="**/icudt${icu4j.data.version}b/res_index.res"/>
+                <include name="**/keyTypeData.res"/>
             </patternset>
         </unjar>
     </target>
@@ -1493,15 +1495,9 @@
             <exclude name="com/ibm/icu/dev/test/collator/IndexCharactersTest.java"/>
         </javac>
 
-        <unjar src="${icu4j.testdata.jar}" dest="${module.tests.dir}">
-            <patternset>
-                <include name="**/DataDrivenCollationTest.res"/>
-            </patternset>
-        </unjar>
         <copy todir="${module.tests.dir}">
             <fileset dir="${icu4j.collate-tests.dir}/src">
-                <include name="com/ibm/icu/dev/data/riwords.txt"/>
-                <include name="com/ibm/icu/dev/data/CollationTest_*.txt"/>
+                <include name="com/ibm/icu/dev/data/*.txt"/>
             </fileset>
         </copy>
     </target>
