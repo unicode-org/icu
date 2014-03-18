@@ -96,6 +96,11 @@ import com.ibm.icu.util.ULocale;
  * for the pattern "abab" in the text "ababab", where mutually
  * exclusive matches only produces the result of 0.
  * <p>
+ * Options are also provided to implement "asymmetric search" as described in
+ * <a href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">
+ * UTS #10 Unicode Collation Algorithm</a>, specifically the ElementComparisonType
+ * values.
+ * <p>
  * Though collator attributes will be taken into consideration while
  * performing matches, there are no APIs here for setting and getting the
  * attributes. These attributes can be set by getting the collator

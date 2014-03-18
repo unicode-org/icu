@@ -721,6 +721,13 @@ public abstract class SearchIterator
     /**
      * Option to control how collation elements are compared.
      * The default value will be {@link #STANDARD_ELEMENT_COMPARISON}.
+     * <p>
+     * PATTERN_BASE_WEIGHT_IS_WILDCARD supports "asymmetric search" as described in
+     * <a href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">
+     * UTS #10 Unicode Collation Algorithm</a>, while ANY_BASE_WEIGHT_IS_WILDCARD
+     * supports a related option in which "unmarked" characters in either the
+     * pattern or the searched text are treated as wildcards that match marked or
+     * unmarked versions of the same character.
      * 
      * @see #setElementComparisonType(ElementComparisonType)
      * @see #getElementComparisonType()
