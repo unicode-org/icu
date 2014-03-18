@@ -30,11 +30,11 @@
  * See the <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
  * "ICU Collation Design Document"</a> for more information.
  * <p> 
- * The algorithm implemented is a modified form of the Boyer Moore's search.
- * For more information  see 
+ * The implementation may use a linear search or a modified form of the Boyer-Moore
+ * search; for more information on the latter see 
  * <a href="http://icu-project.org/docs/papers/efficient_text_searching_in_java.html">
  * "Efficient Text Searching in Java"</a>, published in <i>Java Report</i> 
- * in February, 1999, for further information on the algorithm.
+ * in February, 1999.
  * <p>
  * There are 2 match options for selection:<br>
  * Let S' be the sub-string of a text string S between the offsets start and 
@@ -87,6 +87,15 @@
  * not be found in the string "\u00e9" if a character break iterator is used.
  * <p>
  * Options are provided to handle overlapping matches. 
+ * E.g. In English, overlapping matches produces the result 0 and 2 
+ * for the pattern "abab" in the text "ababab", where else mutually 
+ * exclusive matches only produce the result of 0.
+ * <p>
+ * Options are also provided to implement "asymmetric search" as described in
+ * <a href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">
+ * UTS #10 Unicode Collation Algorithm</a>, specifically the USearchAttribute
+ * USEARCH_ELEMENT_COMPARISON and its values.
+ * <p>
  * E.g. In English, overlapping matches produces the result 0 and 2 
  * for the pattern "abab" in the text "ababab", where else mutually 
  * exclusive matches only produce the result of 0.
@@ -227,6 +236,11 @@ typedef enum {
      * the pattern will match a plain e or an e with any diacritic in the
      * searched text, but an e with diacritic in the pattern will only
      * match an e with the same diacritic in the searched text.
+     *
+     * This supports "asymmetric search" as described in
+     * <a href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">
+     * UTS #10 Unicode Collation Algorithm</a>.
+     *
      * @stable ICU 4.4
      */
     USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD,
@@ -241,6 +255,13 @@ typedef enum {
      * in the pattern will match a plain e or an e with any diacritic in the
      * searched text, but an e with diacritic in the pattern will only
      * match an e with the same diacritic or a plain e in the searched text.
+     *
+     * This option is similar to "asymmetric search" as described in
+     * <a href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">
+     * UTS #10 Unicode Collation Algorithm</a, but also allows unmarked
+     * characters in the searched text to match marked or unmarked versions of
+     * that character in the pattern.
+     *
      * @stable ICU 4.4
      */
     USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD,
