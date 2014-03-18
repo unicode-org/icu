@@ -3696,7 +3696,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/CharacterIteration.java svneol=nati
 icu4j/main/classes/core/src/com/ibm/icu/impl/CharacterIteratorWrapper.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CurrencyData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/DateNumberFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/Deque.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/Deque.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Differ.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/DontCareFieldPosition.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Grego.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3742,7 +3742,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/ResourceBundleWrapper.java svneol=n
 icu4j/main/classes/core/src/com/ibm/icu/impl/Row.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/RuleCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SimpleCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/SimplePatternFormatter.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/SimplePatternFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SoftCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SortedSetRelation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringPrepDataReader.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3904,7 +3904,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/DurationFormat.java svneol=native#t
 icu4j/main/classes/core/src/com/ibm/icu/text/FilteredNormalizer2.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/IDNA.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/IdentifierInfo.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/KhmerBreakEngine.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/KhmerBreakEngine.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/LanguageBreakEngine.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/LaoBreakEngine.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ListFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4696,7 +4696,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleDataTest.java svneol=n
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleMatcherTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocalePriorityListTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/RegionTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/SimplePatternFormatterTest.java -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/SimplePatternFormatterTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/StringTokenizerTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TextTrieMapTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4860,7 +4860,7 @@ icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/NormalizerPerformanceTest.java sv
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/PerfTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/RBBIPerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/ResourceBundlePerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/ServiceObjectCreationPerf.java -text
+icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/ServiceObjectCreationPerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/UCharacterPerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/UnicodeSetPerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/readme.html svneol=native#text/html
