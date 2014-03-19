@@ -1,0 +1,205 @@
+<HTML><!-- #BeginTemplate "/Templates/MainTemplate.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>Resource Bundle Reporter</TITLE>
+<!-- #EndEditable --> 
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<STYLE TYPE="TEXT/CSS">
+<!--
+.topicHead {  font-family: "Times New Roman", Times, serif; font-size: 14pt; font-weight: bold; text-align: center; color: #333333}
+.topicList {  font-family: Georgia, "Times New Roman", Times, serif; font-size: 9pt; color: #FF0099; list-style-image:  url(images/diamond_bullet.gif); text-decoration: none; font-weight: bold}
+.mainBlock {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12pt; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; text-align: justify}
+-->
+</STYLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <TR>
+    <TD ROWSPAN="2" COLSPAN="2" BACKGROUND="images/template_ul.gif" HEIGHT="75"><IMG SRC="images/spacer.gif" WIDTH="280" HEIGHT="1" HSPACE="0"></TD>
+		<TD HEIGHT="15"  WIDTH="100%" BACKGROUND="images/template_u.gif"></TD>
+	</TR>
+	<TR>
+		<TD HEIGHT="60" >
+			<CENTER><IMG SRC="images/TitleLogo_transparent.gif" VSPACE="0"></CENTER>
+		</TD>
+	</TR>
+	<TR>
+		
+    <TD WIDTH="200" BACKGROUND="images/template_l.gif" VALIGN="top">
+		<TABLE WIDTH="180" CELLSPACING="0" CELLPADDING="1"> 
+      	<TR>
+			<TD CLASS="topicHead">General</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="system_requirements.html">System Requirements</A></LI>
+              <LI><A HREF="faq.html">FAQ</A></LI>
+              <LI><A HREF="future_features.html">Future Releases</A></LI>
+              <LI CLASS="topicList"><A HREF="future_features.html">Version 
+                History</A></LI>
+            </UL>
+			</TD>
+		</TR>
+      	<TR>
+			<TD CLASS="topicHead">RB Manager</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="index.html">Home</A></LI>
+              <LI><A HREF="tutorial/index.html">Tutorial</A></LI>
+              <LI><A HREF="views/index.html">Functionality and Views</A></LI>
+              <LI><A HREF="lookandfeel.html">Look and Feel</A></LI>
+              <LI><A HREF="menu.html">Menu Items</A></LI>
+              <LI CLASS="topicList"><A HREF="tutorial/step1.html">Preferences</A></LI>
+            </UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicHead">RB Reporter</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	  <UL>
+              <LI><A HREF="RBReporter.html">Home</A></LI>
+        <LI>Report Types</LI>
+              <LI><A HREF="scanfile.html">Code Scanning</A></LI>
+            </UL>
+			</TD>
+		</TR>
+	</TABLE>
+
+      <P>&nbsp; </P>
+      </TD>
+		
+    <TD COLSPAN="2" VALIGN="top" CLASS="mainBlock"><!-- #BeginEditable "Main" --> 
+      <H1 ALIGN="CENTER">Resource Bundle Reporter</H1>
+      <H1 ALIGN="CENTER"><IMG SRC="images/screenshots/RBReporter.gif" WIDTH="600" HEIGHT="600"></H1>
+      <H4 ALIGN="LEFT">What is RBReporter?</H4>
+      <P ALIGN="LEFT">Frequently, managers and developers working on an inernationalized 
+        product request the ability to quickly view the status and progress of 
+        the translation efforts in their project. RBReporter generates such reports 
+        on a periodic basis and stores them to a specified location in a variety 
+        of formats. The information included in the reports includes the names 
+        and meta data associated with each of the resource files, the number or 
+        resources held in each file, the number of untranslated resources in each 
+        file, and, if the detail level is set to 'High,' a list of all of the 
+        untranslated resource keys for each file.</P>
+      <H4 ALIGN="LEFT">How is RBReporter started?</H4>
+      <P ALIGN="LEFT">From the command line, RBReporter is run by typing in the 
+        following command:</P>
+      <P ALIGN="LEFT"><CODE>java com.ibm.rbm.RBReporter</CODE></P>
+      <P ALIGN="LEFT">This will bring up the window seen above. Alternatively, 
+        Windows users can run the batch file RBReporter.bat. RBReporter will also 
+        take command line arguments that will run the program in a variety of 
+        modes. An equivalent command line argument to the one above is:</P>
+      <P ALIGN="LEFT"><CODE>java com.ibm.rbm.RBReporter -gui</CODE></P>
+      <P ALIGN="LEFT">This argument works the same as the first, bringing up the 
+        Graphical User Interface. This is the only way to set the properties of 
+        the reporter, such as the bundle to report on, the types of reports generated, 
+        and the interval between report generation.</P>
+      <P ALIGN="LEFT">Another option is to run the reporter with the following 
+        argument:</P>
+      <P ALIGN="LEFT"><CODE>java com.ibm.rbm.RBReporter -now</CODE></P>
+      <P ALIGN="LEFT">When the -now option is used, the interval setting between 
+        reports is ignored, and the reports are generated immediately according 
+        to the other saved settings. This option does not bring up the window 
+        for changing settings. Using this option is helpful if you would like 
+        to use you operating system instead of RBReporter to schedule the generation 
+        of reports.</P>
+      <P ALIGN="LEFT">The last option is the following:</P>
+      <P ALIGN="LEFT"><code>java com.ibm.rbm.RBReporter -line</CODE></P>
+      <P ALIGN="LEFT">When this option is used, the reporter is run through the 
+        command line only. None of the settings will be accessible for changing. 
+        Whenever it is time for a report to be generated, a message will appear 
+        on the command line. Another message will appear when the reports have 
+        been successfully written. This last message will include the date and 
+        time of the next report generation.</P>
+      <H4 ALIGN="LEFT">What do the settings mean?</H4>
+      <P ALIGN="LEFT">When the graphical user interface is initially brought up, 
+        the reporter may not be active. An indication at the top of the window 
+        indicates whether or not the reporter will report at the time that has 
+        been specified. The 'Started' message does not indicate that report generation 
+        has started; it merely indicates that the reporter has started and will 
+        generate reports according to the other settings. To toggle whether or 
+        not the reporter is running press the 'Start' or 'Stop' button near the 
+        top of the window. To generate a report immediately, press the 'Update 
+        Now' button.</P>
+      <P ALIGN="LEFT">The report interval determines when a report is generated. 
+        There are two main options for determining the interval. Either an amount 
+        of time is specified that must pass in between reports, or a specific 
+        time during the week or day is specified at which time the report is generated 
+        irregardless of when the last report was generated.</P>
+      <P ALIGN="LEFT">The Resource Bundle setting is an indication of the base 
+        file from concerning which the report is generated. To change the base 
+        file, either type in the new file path to a resource bundle, or select 
+        the 'Choose' button immediately to the right to bring up the graphical 
+        file chooser. The output directory is the file directory into which the 
+        reports are saved. Note that the reports are overwritten each time they 
+        are newly generated.</P>
+      <P ALIGN="LEFT">The output format has three options. Any combination of 
+        these options is permissible, though it makes little sense to turn them 
+        all off. The 'Text' format produces a simple text file in English reporting 
+        on the status of each of the resource files. The 'HTML' format produces 
+        a page that is viewable in a web browser. The 'XML' format produces a 
+        well formed XML report that can be imported into a database, transformed 
+        into another format, or used in a variety of other ways.</P>
+      <P ALIGN="LEFT">Each output format has associated with it a file name. This 
+        name can be chosen as appropriate for the project to which the bundle 
+        belongs. Also, these file names can be modified in order to place the 
+        files in a directory other than the one specified in the output directory. 
+        For instance, a UNIX user might change the text file name to '../../log/report.txt'. 
+        A detail level is also associated with each report. The 'High' detail 
+        level merely includes each of the resource keys that are untranslated 
+        or duplicated instead of just reporting the number of such resources.</P>
+      <P ALIGN="LEFT">The last button saves the settings currently being displayed 
+        to a preferences file so that these settings will be in place the next 
+        time the program is run. If the settings are not meant to be saved as 
+        such, do not click this button. The reporter will still run according 
+        to the displayed settings as long as the RBReporter program is running.</P>
+      <H4 ALIGN="LEFT">What is the code scan?</H4>
+      <P ALIGN="LEFT">Starting with version 0.3a, the reporter included a function 
+        that can scan text files looking for instances of resource bundle usage 
+        and compare those instances with the selected resource bundle. This scan 
+        can then report on any resource keys called on by a program but not existing 
+        in a resource bundle, as well as point out resources in the bundle that 
+        are potentially not used at all by the code.</P>
+      <P ALIGN="LEFT">The reporter is turned on by selecting the check box next 
+        to the text 'Scan Code File' and pointing the scan to a properly specified 
+        scan XML file. The report generated is appended to the normal reports 
+        generated in text, HTML, or XML. The report is also sensitive to the detail 
+        level selected for each of these three output formats.</P>
+      <P ALIGN="LEFT">The scan XML file provides the configuration information 
+        for the code scan. In it rules for what directories and files to scan 
+        are set as well as what type of text is looked for to find a resource 
+        key. More <A HREF="scanfile.html">detailed information on setting up a 
+        scan XML file</A> can be found by following the link.</P>
+      <P ALIGN="LEFT">&nbsp;</P>
+      <!-- #EndEditable --></TD>
+	</TR>
+	<TR>
+		<TD BACKGROUND="images/template_ll.gif" HEIGHT="40" WIDTH="200">
+			<!-- Comment -->
+		</TD>
+		<TD WIDTH="80">
+			<!-- Comment -->
+		</TD>
+		<TD>
+			<CENTER><SPAN CLASS="Copyright">Copyright 2000-2001 International Business Machines, All Rights Reserved</SPAN></CENTER>
+		</TD>
+	</TR>
+</TABLE>
+
+</BODY>
+<!-- #EndTemplate --></HTML>
