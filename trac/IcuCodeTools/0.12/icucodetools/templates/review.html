@@ -1,0 +1,143 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+# Copyright (C) 2007-2013 IBM and Others. All Rights Reserved
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="layout.html" />
+  <head>
+    <title>Review for ticket #${ticket_id}</title>
+  </head>
+
+  <body>
+    <div id="ctxtnav" class="nav"></div>
+
+    <div id="content" class="icucodereview">
+
+
+ <h1>Ticket <a href='${href.ticket(ticket_id)}'>#${ticket_id}</a></h1>
+ <p>
+   <span class="icureview_summary">${ticket_summary}</span>
+ </p>
+<py:if test="revcount">
+
+  <h2>${revcount} Changesets</h2>
+  <table id='changesettable' class='icureview'>
+    <thead>
+      <tr>
+	<th>r</th>
+	<th>author</th>
+	<th>section(s)</th>
+	<th>comment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <py:for each="rev in revisions">
+	<tr>
+	  <th>
+	    <a href="${href.changeset(rev.num)}">r${rev.num}</a>
+	  </th>
+	  <td>
+	    ${rev.author}
+	  </td>
+	  <td>
+	    <!-- sections -->
+	    <py:for each="branch in rev.branches">
+	      <b class='branchlist'>
+		<a class='branch-unknown' href="#${branch}">${branch}</a> 
+	      </b>
+	    </py:for>
+	  </td>
+	  <td>
+	    ${rev.comment_wiki}
+	  </td>
+	</tr>
+      </py:for>
+    </tbody>
+  </table>
+  
+<py:if test="branchcount > 1">
+<h2>Files</h2>
+<h3>Jump to Sections</h3>
+<ul>
+<py:for each="branch in branches">
+  <li><a href="#${branch.name}">${branch.name}</a> &mdash; ${branch.len} files</li>
+</py:for>
+</ul>
+</py:if>
+
+<py:for each="branch in branches">
+<hr/>
+<a name="${branch.name}">
+  <h3>
+        <a href="${href.browser(branch.name)}">${branch.name}</a> &mdash; (${branch.len} files changed)
+  </h3>
+</a>
+
+<blockquote>
+
+<table class='icureview'>
+<thead>
+<tr>
+ <th>File</th>
+ <th>Changes</th>
+ <th>Details</th>
+ <py:if test="overall_y > 0"> 
+  <th>Overall<br/><i>(including other changes)</i></th>
+  <th>Details</th>
+ </py:if>
+</tr>
+</thead>
+<tbody>
+<py:for each="file in branch.files">
+ <tr>
+    <th class='name'>${file.name}</th>
+    <td class='changes'>
+      <py:for each="change in file.changes">
+        ${change[0]}<br/>
+      </py:for>
+    </td>
+    <td class='details'>
+      <py:for each="change in file.changes">
+        ${change[1]}<br/>
+      </py:for>
+    </td>
+	  
+    <py:if test="overall_y > 0"> 
+     <py:if test="file.overall_y > 0">
+      <td class='overall'>${file.overall[0]}</td>
+      <td class='overall'>${file.overall[1]}</td>
+     </py:if>
+    </py:if>
+  </tr>
+</py:for>
+</tbody>
+</table>
+
+</blockquote>
+
+</py:for>
+
+<hr/>
+
+<div style='display:none;'>
+<h2>Merge Commands</h2>
+Very experimental.  Change ??? to the top of the tree you want to merge from (icu or icu4j)<br/>
+<textarea>svn merge -c <?cs each:rev = revisions ?><?cs var:rev.num ?>,<?cs /each ?> svn+ssh://source.icu-project.org/repos/icu/???/trunk</textarea>
+
+<hr/>
+</div>
+<hr/>
+<iframe src="http://sites.google.com/site/icucodetools/v1/review" width="100%" height="800px">
+<h1><a href="http://sites.google.com/site/icucodetools/v1/review">Help</a></h1>
+</iframe>
+
+</py:if>
+<hr/>
+<i>$Id: $</i>
+</div>
+</body>
+</html>
