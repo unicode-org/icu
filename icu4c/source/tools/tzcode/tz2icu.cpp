@@ -1,7 +1,7 @@
 
 /*
 **********************************************************************
-* Copyright (c) 2003-2013, International Business Machines
+* Copyright (c) 2003-2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -829,7 +829,7 @@ struct FinalRulePart {
         if (mode != DOM && (dow < 0 || dow >= 7)) {
             os << "Invalid input day of week " << dow;
         }
-        if (offset < 0 || offset > HOUR) {
+        if (offset < 0 || offset > (2 * HOUR)) {
             os << "Invalid input offset " << offset;
         }
         if (isgmt && !isstd) {
