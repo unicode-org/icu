@@ -233,7 +233,7 @@ windowsZones:table(nofallback){
             FI{"Europe/Helsinki"}
             LT{"Europe/Vilnius"}
             LV{"Europe/Riga"}
-            UA{"Europe/Kiev Europe/Simferopol Europe/Uzhgorod Europe/Zaporozhye"}
+            UA{"Europe/Kiev Europe/Uzhgorod Europe/Zaporozhye"}
         }
         "Fiji Standard Time"{
             001{"Pacific/Fiji"}
@@ -355,7 +355,7 @@ windowsZones:table(nofallback){
                 "knife"
             }
             MX{"America/Ojinaga"}
-            US{"America/Denver America/Boise America/Shiprock"}
+            US{"America/Denver America/Boise"}
             ZZ{"MST7MDT"}
         }
         "Myanmar Standard Time"{
@@ -378,7 +378,7 @@ windowsZones:table(nofallback){
         "New Zealand Standard Time"{
             001{"Pacific/Auckland"}
             AQ{"Antarctica/McMurdo"}
-            NZ{"Pacific/Auckland Antarctica/South_Pole"}
+            NZ{"Pacific/Auckland"}
         }
         "Newfoundland Standard Time"{
             001{"America/St_Johns"}
@@ -425,7 +425,7 @@ windowsZones:table(nofallback){
         }
         "Russian Standard Time"{
             001{"Europe/Moscow"}
-            RU{"Europe/Moscow Europe/Samara Europe/Volgograd"}
+            RU{"Europe/Moscow Europe/Samara Europe/Simferopol Europe/Volgograd"}
         }
         "SA Eastern Standard Time"{
             001{"America/Cayenne"}
