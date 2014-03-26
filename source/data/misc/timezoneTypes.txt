@@ -348,6 +348,7 @@ timezoneTypes:table(nofallback){
             "Antarctica:Palmer"{"aqplm"}
             "Antarctica:Rothera"{"aqrot"}
             "Antarctica:Syowa"{"aqsyw"}
+            "Antarctica:Troll"{"aqtrl"}
             "Antarctica:Vostok"{"aqvos"}
             "Arctic:Longyearbyen"{"sjlyr"}
             "Asia:Aden"{"yeade"}
