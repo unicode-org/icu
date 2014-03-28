@@ -924,8 +924,11 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
             res_close(result);
             return NULL;
         }
-
-        if (uprv_strcmp(subtag, "Version") == 0)
+        if (result == NULL)
+        {
+            // Ignore the parsed resources, continue parsing.
+        }
+        else if (uprv_strcmp(subtag, "Version") == 0)
         {
             char     ver[40];
             int32_t length = member->u.fString.fLength;
@@ -939,13 +942,7 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
             u_versionFromString(version, ver);
 
             table_add(result, member, line, status);
-
-        }
-        else if (uprv_strcmp(subtag, "Override") == 0)
-        {
-            // UBool override = (u_strncmp(member->u.fString.fChars, trueValue, u_strlen(trueValue)) == 0);
-            table_add(result, member, line, status);
-
+            member = NULL;
         }
         else if(uprv_strcmp(subtag, "%%CollationBin")==0)
         {
@@ -959,12 +956,17 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
             // all sub-elements of the collation table, including the Version.
             /* in order to achieve smaller data files, we can direct genrb */
             /* to omit collation rules */
-            if(state->omitCollationRules) {
-                bundle_closeString(state->bundle, member);
-            } else {
+            if(!state->omitCollationRules) {
                 table_add(result, member, line, status);
+                member = NULL;
             }
         }
+        else  // Just copy non-special items.
+        {
+            table_add(result, member, line, status);
+            member = NULL;
+        }
+        res_close(member);  // TODO: use LocalPointer
         if (U_FAILURE(*status))
         {
             res_close(result);
@@ -1066,6 +1068,11 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
     return result;
 }
 
+static UBool
+keepCollationType(const char *type) {
+    return gIncludeUnihanColl || uprv_strcmp(type, "unihan") != 0;
+}
+
 static struct SResource *
 parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool newCollation, UErrorCode *status)
 {
@@ -1145,9 +1152,14 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
                 /* then, we cannot handle aliases */
                 if(token == TOK_OPEN_BRACE) {
                     token = getToken(state, &tokenValue, &comment, &line, status);
-                    collationRes = table_open(state->bundle, subtag, NULL, status);
-                    collationRes = addCollation(state, collationRes, subtag, startline, status); /* need to parse the collation data regardless */
-                    if (gIncludeUnihanColl || uprv_strcmp(subtag, "unihan") != 0) {
+                    if (keepCollationType(subtag)) {
+                        collationRes = table_open(state->bundle, subtag, NULL, status);
+                    } else {
+                        collationRes = NULL;
+                    }
+                    // need to parse the collation data regardless
+                    collationRes = addCollation(state, collationRes, subtag, startline, status);
+                    if (collationRes != NULL) {
                         table_add(result, collationRes, startline, status);
                     }
                 } else if(token == TOK_COLON) { /* right now, we'll just try to see if we have aliases */
