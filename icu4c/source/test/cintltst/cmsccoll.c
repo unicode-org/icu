@@ -2818,7 +2818,8 @@ static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCo
             errorNo++;
             return errorNo;
         }
-        if(!ucol_equals(source, target)) {
+        /* Note: The tailoring rule string is an optional data item. */
+        if(!ucol_equals(source, target) && sourceRulesLen != 0) {
             log_err("Collator different from collator that was created from the same rules\n");
             errorNo++;
         }
@@ -2830,7 +2831,7 @@ static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCo
 
 static void TestEquals(void) {
     /* ucol_equals is not currently a public API. There is a chance that it will become
-    * something like this, but currently it is only used by RuleBasedCollator::operator==
+    * something like this.
     */
     /* test whether the two collators instantiated from the same locale are equal */
     UErrorCode status = U_ZERO_ERROR;
@@ -5503,6 +5504,11 @@ static void TestImport(void)
     }
 
     virules = (UChar*) ucol_getRules(vicoll, &viruleslength);
+    if(viruleslength == 0) {
+        log_data_err("missing vi tailoring rule string\n");
+        ucol_close(vicoll);
+        return;
+    }
     escoll = ucol_open("es", &status);
     esrules = (UChar*) ucol_getRules(escoll, &esruleslength);
     viesrules = (UChar*)uprv_malloc((viruleslength+esruleslength+1)*sizeof(UChar*));
@@ -5602,6 +5608,11 @@ static void TestImportWithType(void)
         return;
     }
     virules = ucol_getRules(vicoll, &viruleslength);
+    if(viruleslength == 0) {
+        log_data_err("missing vi tailoring rule string\n");
+        ucol_close(vicoll);
+        return;
+    }
     /* decoll = ucol_open("de@collation=phonebook", &status); */
     decoll = ucol_open("de-u-co-phonebk", &status);
     if(U_FAILURE(status)){
