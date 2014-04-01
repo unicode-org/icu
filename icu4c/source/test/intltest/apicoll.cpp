@@ -164,7 +164,16 @@ CollationAPITest::TestProperty(/* char* par */)
     delete col; col = 0;
     RuleBasedCollator *rcol = (RuleBasedCollator *)Collator::createInstance("da_DK",
                                                                             success);
-    doAssert(rcol->getRules().length() != 0, "da_DK rules does not have length 0");
+    if (U_FAILURE(success)) {
+        errcheckln(success, "Collator::createInstance(\"da_DK\") failed - %s", u_errorName(success));
+        return;
+    }
+    const UnicodeString &daRules = rcol->getRules();
+    if(daRules.isEmpty()) {
+        dataerrln("missing da_DK tailoring rule string");
+    } else {
+        doAssert(daRules.indexOf("aa") >= 0, "da_DK rules do not contain 'aa'");
+    }
     delete rcol;
 
     col = Collator::createInstance(Locale::getFrench(), success);

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -5397,6 +5397,12 @@ static void TestJitterbug981(){
     }
 
     rules = ucol_getRules(myCollator, &rules_length);
+    if(rules_length == 0) {
+        log_data_err("missing zh tailoring rule string\n");
+        ucol_close(myCollator);
+        ucnv_close(utf8cnv);
+        return;
+    }
     buff_size = rules_length * ucnv_getMaxCharSize(utf8cnv);
     buff = malloc(buff_size);
 

@@ -270,6 +270,7 @@ void TestGetDefaultRules(){
 void TestProperty()
 {
     UCollator *col, *ruled;
+    const UChar *rules;
     UChar *disName;
     int32_t len = 0;
     UChar source[12], target[12];
@@ -373,9 +374,20 @@ void TestProperty()
     log_verbose("Default collation getDisplayName ended.\n");
 
     ruled = ucol_open("da_DK", &status);
+    if(U_FAILURE(status)) {
+        log_data_err("ucol_open(\"da_DK\") failed - %s\n", u_errorName(status));
+        ucol_close(col);
+        return;
+    }
     log_verbose("ucol_getRules() testing ...\n");
-    ucol_getRules(ruled, &tempLength);
-    doAssert( tempLength != 0, "getRules() result incorrect" );
+    rules = ucol_getRules(ruled, &tempLength);
+    if(tempLength == 0) {
+        log_data_err("missing da_DK tailoring rule string\n");
+    } else {
+        UChar aa[2] = { 0x61, 0x61 };
+        doAssert(u_strFindFirst(rules, tempLength, aa, 2) != NULL,
+                 "da_DK rules do not contain 'aa'");
+    }
     log_verbose("getRules tests end.\n");
     {
         UChar *buffer = (UChar *)malloc(200000*sizeof(UChar));
@@ -388,8 +400,10 @@ void TestProperty()
 
         log_verbose("ucol_getRulesEx() testing ...\n");
         tempLength=ucol_getRulesEx(col,UCOL_FULL_RULES,buffer,bufLen );
-        doAssert( tempLength != 0, "getRulesEx() result incorrect" );
-        log_verbose("getRules tests end.\n");
+        if(tempLength == 0) {
+            log_data_err("missing *full* rule string\n");
+        }
+        log_verbose("getRulesEx tests end.\n");
         free(buffer);
     }
     ucol_close(ruled);
@@ -964,12 +978,18 @@ void TestOpenVsOpenRules(){
 
         /* grab the rules */
         rules = ucol_getRules(c1, &rulesLength);
+        if (rulesLength == 0) {
+            /* The optional tailoring rule string is either empty (boring) or missing. */
+            ucol_close(c1);
+            continue;
+        }
 
         /* use those rules to create a collator from rules */
         c2 = ucol_openRules(rules, rulesLength, UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &err);
         if (U_FAILURE(err)) {
             log_err("ERROR: Creating collator from rules failed with locale: %s : %s\n", curLoc, myErrorName(err));
-            return;
+            ucol_close(c1);
+            continue;
         }
 
         uld = ulocdata_open(curLoc, &err);
@@ -2366,42 +2386,37 @@ static void TestDefaultKeyword(void) {
     ucol_close(coll);
 }
 
+static UBool uenum_contains(UEnumeration *e, const char *s, UErrorCode *status) {
+    const char *t;
+    uenum_reset(e, status);
+    while(((t = uenum_next(e, NULL, status)) != NULL) && U_SUCCESS(*status)) {
+        if(uprv_strcmp(s, t) == 0) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 static void TestGetKeywordValuesForLocale(void) {
-#define INCLUDE_UNIHAN_COLLATION 0
-#define PREFERRED_SIZE 16
 #define MAX_NUMBER_OF_KEYWORDS 9
-    const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
+    const char *PREFERRED[][MAX_NUMBER_OF_KEYWORDS+1] = {
             { "und",            "standard", "eor", "search", NULL, NULL, NULL, NULL, NULL, NULL },
             { "en_US",          "standard", "eor", "search", NULL, NULL, NULL, NULL, NULL, NULL },
             { "en_029",         "standard", "eor", "search", NULL, NULL, NULL, NULL, NULL, NULL },
             { "de_DE",          "standard", "phonebook", "search", "eor", NULL, NULL, NULL, NULL, NULL },
             { "de_Latn_DE",     "standard", "phonebook", "search", "eor", NULL, NULL, NULL, NULL, NULL },
-#if INCLUDE_UNIHAN_COLLATION
-            { "zh",             "pinyin", "big5han", "gb2312han", "stroke", "unihan", "zhuyin", "eor", "search", "standard" },
-            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "stroke", "unihan", "zhuyin", "eor", "search", "standard" },
-            { "zh_CN",          "pinyin", "big5han", "gb2312han", "stroke", "unihan", "zhuyin", "eor", "search", "standard" },
-            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "unihan", "zhuyin", "eor", "search", "standard" },
-            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "unihan", "zhuyin", "eor", "search", "standard" },
-            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "stroke", "unihan", "zhuyin", "eor", "search", "standard" },
-#else
-            { "zh",             "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard", NULL },
-            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard", NULL },
-            { "zh_CN",          "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard", NULL },
-            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "eor", "search", "standard", NULL },
-            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "eor", "search", "standard", NULL },
-            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard", NULL },
-#endif
+            { "zh",             "pinyin", "stroke", "eor", "search", "standard", NULL },
+            { "zh_Hans",        "pinyin", "stroke", "eor", "search", "standard", NULL },
+            { "zh_CN",          "pinyin", "stroke", "eor", "search", "standard", NULL },
+            { "zh_Hant",        "stroke", "pinyin", "eor", "search", "standard", NULL },
+            { "zh_TW",          "stroke", "pinyin", "eor", "search", "standard", NULL },
+            { "zh__PINYIN",     "pinyin", "stroke", "eor", "search", "standard", NULL },
             { "es_ES",          "standard", "search", "traditional", "eor", NULL, NULL, NULL, NULL, NULL },
             { "es__TRADITIONAL","traditional", "search", "standard", "eor", NULL, NULL, NULL, NULL, NULL },
             { "und@collation=phonebook",    "standard", "eor", "search", NULL, NULL, NULL, NULL, NULL, NULL },
-            { "de_DE@collation=big5han",    "standard", "phonebook", "search", "eor", NULL, NULL, NULL, NULL, NULL },
+            { "de_DE@collation=pinyin",     "standard", "phonebook", "search", "eor", NULL, NULL, NULL, NULL, NULL },
             { "zzz@collation=xxx",          "standard", "eor", "search", NULL, NULL, NULL, NULL, NULL, NULL }
     };
-#if INCLUDE_UNIHAN_COLLATION
-    const int32_t expectedLength[PREFERRED_SIZE] = { 3, 3, 3, 4, 4, 9, 9, 9, 9, 9, 9, 4, 4, 3, 4, 3 };
-#else
-    const int32_t expectedLength[PREFERRED_SIZE] = { 3, 3, 3, 4, 4, 8, 8, 8, 8, 8, 8, 4, 4, 3, 4, 3 };
-#endif
 
     UErrorCode status = U_ZERO_ERROR;
     UEnumeration *keywordValues = NULL;
@@ -2409,7 +2424,7 @@ static void TestGetKeywordValuesForLocale(void) {
     const char *locale = NULL, *value = NULL;
     UBool errorOccurred = FALSE;
 
-    for (i = 0; i < PREFERRED_SIZE; i++) {
+    for (i = 0; i < LENGTHOF(PREFERRED) && !errorOccurred; i++) {
         locale = PREFERRED[i][0];
         value = NULL;
         valueLength = 0;
@@ -2422,34 +2437,21 @@ static void TestGetKeywordValuesForLocale(void) {
         }
         size = uenum_count(keywordValues, &status);
 
-        if (size == expectedLength[i]) {
-            for (n = 0; n < expectedLength[i]; n++) {
-                if ((value = uenum_next(keywordValues, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
-                    if (uprv_strcmp(value, PREFERRED[i][n+1]) != 0) {
-                        log_err("Keyword values differ: Got [%s] Expected [%s] for locale: %s\n", value, PREFERRED[i][n+1], locale);
-                        errorOccurred = TRUE;
-                        break;
-                    }
-
+        for (n = 0; (value = PREFERRED[i][n+1]) != NULL; n++) {
+            if (!uenum_contains(keywordValues, value, &status)) {
+                if (U_SUCCESS(status)) {
+                    log_err("Keyword value \"%s\" missing for locale: %s\n", value, locale);
                 } else {
                     log_err("While getting keyword value from locale: %s got this error: %s\n", locale, u_errorName(status));
                     errorOccurred = TRUE;
                     break;
                 }
             }
-            if (errorOccurred) {
-                break;
-            }
-        } else {
-            log_err("Number of keywords (%d) does not match expected size (%d) for locale: %s\n", size, expectedLength[i], locale);
-            break;
         }
         uenum_close(keywordValues);
         keywordValues = NULL;
     }
-    if (keywordValues != NULL) {
-        uenum_close(keywordValues);
-    }
+    uenum_close(keywordValues);
 }
 
 static void TestStrcollNull(void) {
