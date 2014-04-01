@@ -52,6 +52,7 @@ private:
     void TestFieldPositionMultiple();
     void TestBadArg();
     void TestEquality();
+    void TestGroupingSeparator();
     void TestDoubleZero();
     void verifyFormat(
         const char *description,
@@ -107,6 +108,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestFieldPositionMultiple);
     TESTCASE_AUTO(TestBadArg);
     TESTCASE_AUTO(TestEquality);
+    TESTCASE_AUTO(TestGroupingSeparator);
     TESTCASE_AUTO(TestDoubleZero);
     TESTCASE_AUTO_END;
 }
@@ -862,6 +864,33 @@ void MeasureFormatTest::TestEquality() {
     assertFalse("Not Equal Neg 1", fmt == fmtne1);
     assertTrue("Not Equal 2", fmt != fmtne2);
     assertTrue("Not Equal 3", fmt != fmtne3);
+}
+
+void MeasureFormatTest::TestGroupingSeparator() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale en("en");
+    MeasureFormat fmt(en, UMEASFMT_WIDTH_SHORT, status);
+    if (!assertSuccess("Error creating format object", status)) {
+        return;
+    }
+    Measure ms[] = {
+            Measure(2147483647, MeasureUnit::createYear(status), status),
+            Measure(-2147483648, MeasureUnit::createMonth(status), status),
+            Measure(-987, MeasureUnit::createDay(status), status),
+            Measure(1362, MeasureUnit::createHour(status), status),
+            Measure(987, MeasureUnit::createMinute(status), status)};
+    FieldPosition pos(NumberFormat::kGroupingSeparatorField);
+    UnicodeString appendTo;
+    fmt.formatMeasures(ms, 5, appendTo, pos, status);
+    if (!assertSuccess("Error formatting", status)) {
+        return;
+    }
+    assertEquals(
+            "grouping separator",
+            "2,147,483,647 yrs, -2,147,483,648 mths, -987 days, 1,362 hrs, 987 mins",
+            appendTo);
+    assertEquals("begin index", 9, pos.getBeginIndex());
+    assertEquals("end index", 10, pos.getEndIndex());
 }
 
 void MeasureFormatTest::TestDoubleZero() {
