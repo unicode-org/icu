@@ -977,10 +977,12 @@ UBool IntlTest::logKnownIssue(const char *ticket, const UnicodeString &msg) {
   UBool firstForTicket, firstForWhere;
   knownList = udbg_knownIssue_openU(knownList, ticket, fullpath, msg2.getTerminatedBuffer(), &firstForTicket, &firstForWhere);
 
+  msg2 = UNICODE_STRING_SIMPLE("(Known issue #") +
+      UnicodeString(ticket, -1, US_INV) + UNICODE_STRING_SIMPLE(") ") + msg;
   if(firstForTicket || firstForWhere) {
-    infoln(UnicodeString("(Known issue #","") + UnicodeString(ticket,"")+ UnicodeString(") \"","") + msg);
+    infoln(msg2);
   } else {
-    logln(UnicodeString("(Known issue #","") + UnicodeString(ticket,"")+ UnicodeString(") \"","") + msg);
+    logln(msg2);
   }
 
   return TRUE;

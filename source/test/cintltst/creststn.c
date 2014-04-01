@@ -1419,7 +1419,18 @@ static void TestGetVersionColl(){
     int32_t locLen;
     const UChar* rules =NULL;
     int32_t len = 0;
-    
+
+    /* test NUL termination of UCARules */
+    resB = ures_open(U_ICUDATA_COLL,locName, &status);
+    rules = tres_getString(resB,-1,"UCARules",&len, &status);
+    if(!rules || U_FAILURE(status)) {
+        log_data_err("Could not load UCARules for locale %s\n", locName);
+        status = U_ZERO_ERROR;
+    } else if(u_strlen(rules) != len){
+        log_err("UCARules string not nul terminated! \n");
+    }
+    ures_close(resB);
+
     log_verbose("The ures_getVersion(%s) tests begin : \n", U_ICUDATA_COLL);
     locs = ures_openAvailableLocales(U_ICUDATA_COLL, &status);
     if (U_FAILURE(status)) {
@@ -1427,22 +1438,13 @@ static void TestGetVersionColl(){
        return;
     }
 
-    do{
+    for (;;) {
         log_verbose("Testing version number for locale %s\n", locName);
         resB = ures_open(U_ICUDATA_COLL,locName, &status);
         if (U_FAILURE(status)) {
             log_err("Resource bundle creation for locale %s:%s failed.: %s\n", U_ICUDATA_COLL, locName, myErrorName(status));
             ures_close(resB);
-            return;
-        }
-        /* test NUL termination of UCARules */
-        rules = tres_getString(resB,-1,"UCARules",&len, &status);
-        if(!rules || U_FAILURE(status)) {
-          log_data_err("Could not load UCARules for locale %s\n", locName);
-          continue;
-        }
-        if(u_strlen(rules) != len){
-            log_err("UCARules string not nul terminated! \n");
+            break;
         }
         ures_getVersion(resB, versionArray);
         for (i=0; i<4; ++i) {
@@ -1455,10 +1457,14 @@ static void TestGetVersionColl(){
             }
         }
         ures_close(resB);
-    } while((locName = uenum_next(locs,&locLen,&status))&&U_SUCCESS(status));
-    
-    if(U_FAILURE(status)) {
-        log_err("Err %s testing Collation locales.\n", u_errorName(status));
+        locName = uenum_next(locs, &locLen, &status);
+        if(U_FAILURE(status)) {
+            log_err("uenum_next(locs) error %s\n", u_errorName(status));
+            break;
+        }
+        if(locName == NULL) {
+            break;
+        }
     }
     uenum_close(locs);
 #endif  /* !UCONFIG_NO_COLLATION */
@@ -2633,19 +2639,14 @@ static void TestGetFunctionalEquivalent(void) {
         "f",    "zh_MO",                          "zh@collation=stroke", /* alias of zh_Hant_MO */
         "f",    "zh_Hant_MO",                     "zh@collation=stroke",
         "f",    "zh_TW_STROKE",                   "zh@collation=stroke",
-        "f",    "zh_TW_STROKE@collation=big5han", "zh@collation=big5han",
+        "f",    "zh_TW_STROKE@collation=pinyin",  "zh",
         "f",    "sv_CN@calendar=japanese",        "sv",
         "t",    "sv@calendar=japanese",           "sv",
-        "f",    "zh_TW@collation=big5han",        "zh@collation=big5han", /* alias of zh_Hant_TW */
-        "f",    "zh_Hant_TW@collation=big5han",   "zh@collation=big5han",
-        "f",    "zh_TW@collation=gb2312han",      "zh@collation=gb2312han", /* alias of zh_Hant_TW */
-        "f",    "zh_Hant_TW@collation=gb2312han", "zh@collation=gb2312han",
-        "f",    "zh_CN@collation=big5han",        "zh@collation=big5han", /* alias of zh_Hans_CN */
-        "f",    "zh_Hans_CN@collation=big5han",   "zh@collation=big5han",
-        "f",    "zh_CN@collation=gb2312han",      "zh@collation=gb2312han", /* alias of zh_Hans_CN */
-        "f",    "zh_Hans_CN@collation=gb2312han", "zh@collation=gb2312han",
-        "t",    "zh@collation=big5han",           "zh@collation=big5han",
-        "t",    "zh@collation=gb2312han",         "zh@collation=gb2312han",
+        "f",    "zh_TW@collation=pinyin",         "zh", /* alias of zh_Hant_TW */
+        "f",    "zh_Hant_TW@collation=pinyin",    "zh",
+        "f",    "zh_CN@collation=stroke",         "zh@collation=stroke", /* alias of zh_Hans_CN */
+        "f",    "zh_Hans_CN@collation=stroke",    "zh@collation=stroke",
+        "t",    "de@collation=phonebook",         "de@collation=phonebook",
         "t",    "hi@collation=standard",          "hi",
         "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",    "hi",
         "f",    "sv_SE@collation=pinyin",         "sv", /* bug 4582 tests */
