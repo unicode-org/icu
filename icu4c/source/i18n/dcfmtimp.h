@@ -18,7 +18,7 @@ enum EDecimalFormatFastpathStatus {
   kFastpathNO = 0,
   kFastpathYES = 1,
   kFastpathUNKNOWN = 2, /* not yet set */
-  kFastpathMAYBE = 3, /* depends on value being formatted. */
+  kFastpathMAYBE = 3 /* depends on value being formatted. */
 };
 
 /**
