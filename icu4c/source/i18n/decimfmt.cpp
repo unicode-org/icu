@@ -1320,14 +1320,7 @@ void DecimalFormat::handleChanged() {
     debug("parse fastpath: YES");
   }
   
-  if (fGroupingSize!=0 && isGroupingUsed()) {
-    debug("No format fastpath: fGroupingSize!=0 and grouping is used");
-#ifdef FMT_DEBUG
-    printf("groupingsize=%d\n", fGroupingSize);
-#endif
-  } else if(fGroupingSize2!=0 && isGroupingUsed()) {
-    debug("No format fastpath: fGroupingSize2!=0");
-  } else if(fUseExponentialNotation) {
+  if(fUseExponentialNotation) {
     debug("No format fastpath: fUseExponentialNotation");
   } else if(fFormatWidth!=0) {
     debug("No format fastpath: fFormatWidth!=0");
@@ -1347,6 +1340,17 @@ void DecimalFormat::handleChanged() {
     debug("No format fastpath: fCurrencySignCount != fgCurrencySignCountZero");
   } else if(fRoundingIncrement!=0) {
     debug("No format fastpath: fRoundingIncrement!=0");
+  } else if (fGroupingSize!=0 && isGroupingUsed()) {
+    debug("Maybe format fastpath: fGroupingSize!=0 and grouping is used");
+#ifdef FMT_DEBUG
+    printf("groupingsize=%d\n", fGroupingSize);
+#endif
+    
+    if (getMinimumIntegerDigits() <= fGroupingSize) {
+      data.fFastFormatStatus = kFastpathMAYBE;
+    }
+  } else if(fGroupingSize2!=0 && isGroupingUsed()) {
+    debug("No format fastpath: fGroupingSize2!=0");
   } else {
     data.fFastFormatStatus = kFastpathYES;
     debug("format:kFastpathYES!");
@@ -1410,7 +1414,9 @@ DecimalFormat::_format(int64_t number,
   printf("fastpath? [%d]\n", number);
 #endif
     
-  if( data.fFastFormatStatus==kFastpathYES) {
+  if( data.fFastFormatStatus==kFastpathYES || 
+      data.fFastFormatStatus==kFastpathMAYBE) {
+    int32_t noGroupingThreshold = 0;
 
 #define kZero 0x0030
     const int32_t MAX_IDX = MAX_DIGITS+2;
@@ -1418,6 +1424,9 @@ DecimalFormat::_format(int64_t number,
     int32_t destIdx = MAX_IDX;
     outputStr[--destIdx] = 0;  // term
 
+    if (data.fFastFormatStatus==kFastpathMAYBE) {
+      noGroupingThreshold = destIdx - fGroupingSize;
+    }
     int64_t  n = number;
     if (number < 1) {
       // Negative numbers are slightly larger than positive
@@ -1427,10 +1436,12 @@ DecimalFormat::_format(int64_t number,
     }
     // get any remaining digits
     while (n > 0) {
+      if (destIdx == noGroupingThreshold) {
+        goto slowPath;
+      }
       outputStr[--destIdx] = (n % 10) + kZero;
       n /= 10;
     }
-    
 
         // Slide the number to the start of the output str
     U_ASSERT(destIdx >= 0);
@@ -1472,6 +1483,7 @@ DecimalFormat::_format(int64_t number,
     return appendTo;
   } // end fastpath
 #endif
+  slowPath:
 
   // Else the slow way - via DigitList
     DigitList digits;
