@@ -874,8 +874,8 @@ void MeasureFormatTest::TestGroupingSeparator() {
         return;
     }
     Measure ms[] = {
-            Measure(2147483647, MeasureUnit::createYear(status), status),
-            Measure(1<<31, MeasureUnit::createMonth(status), status),
+            Measure(INT32_MAX, MeasureUnit::createYear(status), status),
+            Measure(INT32_MIN, MeasureUnit::createMonth(status), status),
             Measure(-987, MeasureUnit::createDay(status), status),
             Measure(1362, MeasureUnit::createHour(status), status),
             Measure(987, MeasureUnit::createMinute(status), status)};
