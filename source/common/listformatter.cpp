@@ -355,9 +355,14 @@ UnicodeString& ListFormatter::format(
             errorCode);
     int32_t i;
     int32_t pos = 0;
-    int32_t npos = 1;
+    int32_t npos = 0;
+    UBool startsWithZeroPlaceholder =
+            data->middlePattern.startsWithPlaceholder(0);
     for (i = 2; i < nItems - 1; ++i) {
-         temp[npos].remove();
+         if (!startsWithZeroPlaceholder) {
+             npos = (pos + 1) & 1;
+             temp[npos].remove();
+         }
          joinStrings(
                  data->middlePattern,
                  temp[pos],
@@ -367,9 +372,11 @@ UnicodeString& ListFormatter::format(
                  offset,
                  errorCode);
          pos = npos;
-         npos = (pos + 1) & 1;
     }
-    temp[npos].remove();
+    if (!data->endPattern.startsWithPlaceholder(0)) {
+        npos = (pos + 1) & 1;
+        temp[npos].remove();
+    }
     joinStrings(
             data->endPattern,
             temp[pos],

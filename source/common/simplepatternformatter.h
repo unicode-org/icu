@@ -11,10 +11,16 @@
 
 #define EXPECTED_PLACEHOLDER_COUNT 3
 
+#include "cmemory.h"
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
+
+struct PlaceholderInfo {
+  int32_t id;
+  int32_t offset;
+};
 
 /**
  * Compiled version of a pattern string such as "{1} was born in {0}".
@@ -85,6 +91,12 @@ public:
     }
 
     /**
+     * Returns true if the pattern this object represents starts with
+     * placeholder id; otherwise, returns false.
+     */
+    UBool startsWithPlaceholder(int32_t id) const;
+
+    /**
      * Formats given value.
      */
     UnicodeString &format(
@@ -120,7 +132,12 @@ public:
      * @param placeholderValueCount the number of placeholder values
      *  must be at least large enough to provide values for all placeholders
      *  in this object. Otherwise status set to U_ILLEGAL_ARGUMENT_ERROR.
-     * @param appendTo resulting string appended here.
+     * @param appendTo resulting string appended here. Optimization: If
+     *   the pattern this object represents starts with a placeholder AND
+     *   appendTo references the value of that same placeholder, then that
+     *   placeholder value is not copied to appendTo (Its already there).
+     *   If the value of the starting placeholder is a very large string,
+     *   this optimization can offer huge savings.
      * @param offsetArray The offset of each placeholder value in appendTo
      *  stored here. The first value gets the offset of the value for {0};
      *  the 2nd for {1}; the 3rd for {2} etc. -1 means that the corresponding
@@ -139,12 +156,32 @@ public:
             UErrorCode &status) const;
 private:
     UnicodeString noPlaceholders;
-    int32_t placeholderBuffer[EXPECTED_PLACEHOLDER_COUNT * 2];
-    int32_t *placeholdersByOffset;
+    MaybeStackArray<PlaceholderInfo, 3> placeholders;
     int32_t placeholderSize;
-    int32_t placeholderCapacity;
     int32_t placeholderCount;
-    int32_t ensureCapacity(int32_t size);
+    
+    // ensureCapacity ensures that the capacity of the placeholders array
+    // is desiredCapacity. If ensureCapacity must resize the placeholders
+    // array, the first placeholderSize elements stay in the array. Note
+    // that ensureCapcity NEVER changes the value of placeholderSize only
+    // the capacity of the placeholders array.
+    // If there is no memory allocation error when resizing, this
+    // function returns desiredCapacity. If there is a memory allocation
+    // error, this function leaves the placeholders array unchanged and
+    // returns the smaller, old capacity. ensureCapacity resizes only if
+    // the current capacity of placeholders array is less than desiredCapacity.
+    // Otherwise, it leaves the placeholders array unchanged. If caller
+    // specifies an allocation size, then it must be at least as large as
+    // desiredCapacity. In that case, if ensureCapacity resizes, it will
+    // allocate allocationSize spots instead of desiredCapacity spots in
+    // the array. If caller is calling ensureCapacity in a loop while adding
+    // elements, it is recommended that it use an allocationSize of
+    // approximately twice desiredCapacity to avoid memory allocation with
+    // every call to ensureCapacity.
+    int32_t ensureCapacity(int32_t desiredCapacity, int32_t allocationSize=0);
+
+    // Records the offset of an individual placeholder in the noPlaceholders
+    // string.
     UBool addPlaceholder(int32_t id, int32_t offset);
 };
 

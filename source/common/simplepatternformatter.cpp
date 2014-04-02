@@ -56,17 +56,15 @@ void SimplePatternFormatterIdBuilder::add(UChar ch) {
 
 SimplePatternFormatter::SimplePatternFormatter() :
         noPlaceholders(),
-        placeholdersByOffset(placeholderBuffer),
+        placeholders(),
         placeholderSize(0),
-        placeholderCapacity(EXPECTED_PLACEHOLDER_COUNT),
         placeholderCount(0) {
 }
 
 SimplePatternFormatter::SimplePatternFormatter(const UnicodeString &pattern) :
         noPlaceholders(),
-        placeholdersByOffset(placeholderBuffer),
+        placeholders(),
         placeholderSize(0),
-        placeholderCapacity(EXPECTED_PLACEHOLDER_COUNT),
         placeholderCount(0) {
     UErrorCode status = U_ZERO_ERROR;
     compile(pattern, status);
@@ -75,15 +73,14 @@ SimplePatternFormatter::SimplePatternFormatter(const UnicodeString &pattern) :
 SimplePatternFormatter::SimplePatternFormatter(
         const SimplePatternFormatter &other) :
         noPlaceholders(other.noPlaceholders),
-        placeholdersByOffset(placeholderBuffer),
+        placeholders(),
         placeholderSize(0),
-        placeholderCapacity(EXPECTED_PLACEHOLDER_COUNT),
         placeholderCount(other.placeholderCount) {
     placeholderSize = ensureCapacity(other.placeholderSize);
     uprv_memcpy(
-            placeholdersByOffset,
-            other.placeholdersByOffset,
-            placeholderSize * 2 * sizeof(int32_t));
+            placeholders.getAlias(),
+            other.placeholders.getAlias(),
+            placeholderSize * sizeof(PlaceholderInfo));
 }
 
 SimplePatternFormatter &SimplePatternFormatter::operator=(
@@ -92,19 +89,16 @@ SimplePatternFormatter &SimplePatternFormatter::operator=(
         return *this;
     }
     noPlaceholders = other.noPlaceholders;
-    placeholderCount = other.placeholderCount;
     placeholderSize = ensureCapacity(other.placeholderSize);
+    placeholderCount = other.placeholderCount;
     uprv_memcpy(
-            placeholdersByOffset,
-            other.placeholdersByOffset,
-            placeholderSize * 2 * sizeof(int32_t));
+            placeholders.getAlias(),
+            other.placeholders.getAlias(),
+            placeholderSize * sizeof(PlaceholderInfo));
     return *this;
 }
 
 SimplePatternFormatter::~SimplePatternFormatter() {
-    if (placeholdersByOffset != placeholderBuffer) {
-        uprv_free(placeholdersByOffset);
-    }
 }
 
 UBool SimplePatternFormatter::compile(
@@ -181,6 +175,13 @@ UBool SimplePatternFormatter::compile(
     }
     noPlaceholders.releaseBuffer(len);
     return TRUE;
+}
+
+UBool SimplePatternFormatter::startsWithPlaceholder(int32_t id) const {
+    if (placeholderSize == 0) {
+        return FALSE;
+    }
+    return (placeholders[0].offset == 0 && placeholders[0].id == id);
 }
 
 UnicodeString& SimplePatternFormatter::format(
@@ -267,72 +268,70 @@ UnicodeString& SimplePatternFormatter::format(
         appendTo.append(noPlaceholders);
         return appendTo;
     }
-    appendRange(
-            noPlaceholders,
-            0,
-            placeholdersByOffset[0],
-            appendTo);
-    updatePlaceholderOffset(
-            placeholdersByOffset[1],
-            appendTo.length(),
-            offsetArray,
-            offsetArrayLength);
-    appendTo.append(*placeholderValues[placeholdersByOffset[1]]);
-    for (int32_t i = 1; i < placeholderSize; ++i) {
+    if (placeholders[0].offset > 0 ||
+            placeholderValues[placeholders[0].id] != &appendTo) {
         appendRange(
                 noPlaceholders,
-                placeholdersByOffset[2 * i - 2],
-                placeholdersByOffset[2 * i],
+                0,
+                placeholders[0].offset,
                 appendTo);
         updatePlaceholderOffset(
-                placeholdersByOffset[2 * i + 1],
+                placeholders[0].id,
                 appendTo.length(),
                 offsetArray,
                 offsetArrayLength);
-        appendTo.append(*placeholderValues[placeholdersByOffset[2 * i + 1]]);
+        appendTo.append(*placeholderValues[placeholders[0].id]);
+    } else {
+        updatePlaceholderOffset(
+                placeholders[0].id,
+                0,
+                offsetArray,
+                offsetArrayLength);
+    }
+    for (int32_t i = 1; i < placeholderSize; ++i) {
+        appendRange(
+                noPlaceholders,
+                placeholders[i - 1].offset,
+                placeholders[i].offset,
+                appendTo);
+        updatePlaceholderOffset(
+                placeholders[i].id,
+                appendTo.length(),
+                offsetArray,
+                offsetArrayLength);
+        appendTo.append(*placeholderValues[placeholders[i].id]);
     }
     appendRange(
             noPlaceholders,
-            placeholdersByOffset[2 * placeholderSize - 2],
+            placeholders[placeholderSize - 1].offset,
             noPlaceholders.length(),
             appendTo);
     return appendTo;
 }
 
-int32_t SimplePatternFormatter::ensureCapacity(int32_t atLeast) {
-    if (atLeast <= placeholderCapacity) {
-        return atLeast;
+int32_t SimplePatternFormatter::ensureCapacity(
+        int32_t desiredCapacity, int32_t allocationSize) {
+    if (allocationSize < desiredCapacity) {
+        allocationSize = desiredCapacity;
     }
-    // aim to double capacity each time
-    int32_t newCapacity = 2*atLeast - 2;
-
+    if (desiredCapacity <= placeholders.getCapacity()) {
+        return desiredCapacity;
+    }
     // allocate new buffer
-    int32_t *newBuffer = (int32_t *) uprv_malloc(2 * newCapacity * sizeof(int32_t));
-    if (newBuffer == NULL) {
-        return placeholderCapacity;
+    if (placeholders.resize(allocationSize, placeholderSize) == NULL) {
+        return placeholders.getCapacity();
     }
-
-    // Copy contents of old buffer to new buffer
-    uprv_memcpy(newBuffer, placeholdersByOffset, 2 * placeholderSize * sizeof(int32_t));
-
-    // free old buffer
-    if (placeholdersByOffset != placeholderBuffer) {
-        uprv_free(placeholdersByOffset);
-    }
-
-    // Use new buffer
-    placeholdersByOffset = newBuffer;
-    placeholderCapacity = newCapacity;
-    return atLeast;
+    return desiredCapacity;
 }
 
 UBool SimplePatternFormatter::addPlaceholder(int32_t id, int32_t offset) {
-    if (ensureCapacity(placeholderSize + 1) < placeholderSize + 1) {
+    if (ensureCapacity(placeholderSize + 1, 2 * placeholderSize) < placeholderSize + 1) {
         return FALSE;
     }
     ++placeholderSize;
-    placeholdersByOffset[2 * placeholderSize - 2] = offset;
-    placeholdersByOffset[2 * placeholderSize - 1] = id;
+    PlaceholderInfo *placeholderEnd = &placeholders[placeholderSize - 1];
+    placeholderEnd->offset = offset;
+    placeholderEnd->id = id;
     if (id >= placeholderCount) {
         placeholderCount = id + 1;
     }
