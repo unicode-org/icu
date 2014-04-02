@@ -78,7 +78,7 @@ public:
      * Makes dest an owner of the object pointed to by src while adjusting
      * reference counts and deleting the previous object dest pointed to
      * if necessary. Before this call is made, dest must either be NULL or
-     * own its object. 
+     * be included in the reference count of the object it points to. 
      *
      * T must be a subclass of SharedObject.
      */
@@ -92,7 +92,7 @@ public:
     }
 
     /**
-     * Equivalent to copy(NULL, dest).
+     * Equivalent to copyPtr(NULL, dest).
      */
     template<typename T>
     static void clearPtr(const T *&ptr) {
