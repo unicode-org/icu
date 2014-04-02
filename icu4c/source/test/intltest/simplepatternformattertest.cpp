@@ -21,6 +21,7 @@ public:
     void TestNoPlaceholders();
     void TestOnePlaceholder();
     void TestManyPlaceholders();
+    void TestOptimization();
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 private:
 };
@@ -30,6 +31,7 @@ void SimplePatternFormatterTest::runIndexedTest(int32_t index, UBool exec, const
   TESTCASE_AUTO(TestNoPlaceholders);
   TESTCASE_AUTO(TestOnePlaceholder);
   TESTCASE_AUTO(TestManyPlaceholders);
+  TESTCASE_AUTO(TestOptimization);
   TESTCASE_AUTO_END;
 }
 
@@ -39,14 +41,14 @@ void SimplePatternFormatterTest::TestNoPlaceholders() {
     assertEquals("PlaceholderCount", 0, fmt.getPlaceholderCount());
     UnicodeString appendTo;
     assertEquals(
-            "Evaluate",
+            "format",
             "This doesn't have templates {0}", 
             fmt.format("unused", appendTo, status));
     fmt.compile("This has {} bad {012d placeholders", status);
     assertEquals("PlaceholderCount", 0, fmt.getPlaceholderCount());
     appendTo.remove();
     assertEquals(
-            "Evaluate",
+            "format",
             "This has {} bad {012d placeholders", 
             fmt.format("unused", appendTo, status));
     assertSuccess("Status", status);
@@ -59,7 +61,7 @@ void SimplePatternFormatterTest::TestOnePlaceholder() {
     assertEquals("PlaceholderCount", 1, fmt.getPlaceholderCount());
     UnicodeString appendTo;
     assertEquals(
-            "Evaluate",
+            "format",
             "1 meter",
             fmt.format("1", appendTo, status));
     assertSuccess("Status", status);
@@ -88,6 +90,8 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
     SimplePatternFormatter fmt;
     fmt.compile(
             "Templates {2}{1}{5} and {4} are out of order.", status);
+    assertSuccess("Status", status);
+    assertFalse("startsWithPlaceholder", fmt.startsWithPlaceholder(2));
     assertEquals("PlaceholderCount", 6, fmt.getPlaceholderCount());
     UnicodeString values[] = {
             "freddy", "tommy", "frog", "billy", "leg", "{0}"};
@@ -97,7 +101,7 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
     int32_t expectedOffsets[6] = {-1, 22, 18, -1, 35, 27};
     UnicodeString appendTo("Prefix: ");
     assertEquals(
-            "Evaluate",
+            "format",
             "Prefix: Templates frogtommy{0} and leg are out of order.",
             fmt.format(
                     params,
@@ -185,6 +189,40 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
             "foo, bar and baz",
             r.format("foo", "bar", "baz", appendTo, status));
     assertSuccess("Status", status);
+}
+
+void SimplePatternFormatterTest::TestOptimization() {
+    UErrorCode status = U_ZERO_ERROR;
+    SimplePatternFormatter fmt;
+    fmt.compile("{2}, {0}, {1} and {3}", status);
+    assertSuccess("Status", status);
+    assertTrue("startsWithPlaceholder", fmt.startsWithPlaceholder(2));
+    assertFalse("startsWithPlaceholder", fmt.startsWithPlaceholder(0));
+    UnicodeString values[] = {
+            "freddy", "frog", "leg", "by"};
+    UnicodeString *params[] = {
+           &values[0], &values[1], &values[2], &values[3]}; 
+    int32_t offsets[4];
+    int32_t expectedOffsets[4] = {5, 13, 0, 22};
+
+    // The pattern starts with {2}, so format should append the result of
+    // the rest of the pattern to values[2], the value for {2}.
+    assertEquals(
+            "format",
+            "leg, freddy, frog and by",
+            fmt.format(
+                    params,
+                    LENGTHOF(params),
+                    values[2],
+                    offsets,
+                    LENGTHOF(offsets),
+                    status));
+    assertSuccess("Status", status);
+    for (int32_t i = 0; i < LENGTHOF(expectedOffsets); ++i) {
+        if (expectedOffsets[i] != offsets[i]) {
+            errln("Expected %d, got %d", expectedOffsets[i], offsets[i]);
+        }
+    }
 }
 
 extern IntlTest *createSimplePatternFormatterTest() {
