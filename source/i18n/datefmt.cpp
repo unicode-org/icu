@@ -502,10 +502,10 @@ DateFormat::setLenient(UBool lenient)
 {
     if (fCalendar != NULL) {
         fCalendar->setLenient(lenient);
-        UErrorCode status = U_ZERO_ERROR;
-		setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status);
-        setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
     }
+    UErrorCode status = U_ZERO_ERROR;
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, lenient, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, lenient, status);
 }
 
 //----------------------------------------------------------------------
@@ -513,14 +513,14 @@ DateFormat::setLenient(UBool lenient)
 UBool
 DateFormat::isLenient() const
 {
+    UBool lenient = TRUE;
     if (fCalendar != NULL) {
-        UErrorCode status = U_ZERO_ERROR;
-        return fCalendar->isLenient()
-        	&& getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status)
-        	&& getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status);
+        lenient = fCalendar->isLenient();
     }
-    // fCalendar is rarely null
-    return FALSE;
+    UErrorCode status = U_ZERO_ERROR;
+    return lenient
+        && getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status)
+        && getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status);
 }
 
 void
