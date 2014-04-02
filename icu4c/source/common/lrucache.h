@@ -19,11 +19,32 @@ struct UHashtable;
 U_NAMESPACE_BEGIN
 
 /**
- * LRUCache keyed by locale ID.
+ * A cache of SharedObjects keyed by locale ID.
+ *
+ * LRUCache has one main method, get(), which fetches a SharedObject by
+ * locale ID. If no such SharedObject is cached, get() creates the new
+ * SharedObject and caches it behind the scenes.
+ *
+ * Each LRUCache has a maximum size. Whenever adding a new item to the cache
+ * would exceed this maximum size, LRUCache evicts the SharedObject that was
+ * least recently fetched via the get() method.
+ *
+ * LRUCache is designed to be subclassed. Subclasses must override the create()
+ * method to create a new SharedObject by localeId. If only locale ID is
+ * needed to create the SharedObject, a client can use SimpleLRUCache.
  */
-
 class U_COMMON_API LRUCache : public UObject {
 public:
+    /**
+     * Fetches a SharedObject by locale ID. On success, get() makes ptr point
+     * to the fetched SharedObject while automatically updating reference
+     * counts; on failure, get() leaves ptr unchanged and sets status.
+     * When get() is called, ptr must either be NULL or be included in the
+     * reference count of what it points to. After get() returns successfully,
+     * caller must eventually call removeRef() on ptr to avoid memory leaks.
+     *
+     * T must be a subclass of SharedObject.
+     */ 
     template<typename T>
     void get(const char *localeId, const T *&ptr, UErrorCode &status) {
         const T *value = (const T *) _get(localeId, status);
@@ -32,10 +53,26 @@ public:
         }
         SharedObject::copyPtr(value, ptr);
     }
+    /**
+     * Returns TRUE if a SharedObject for given ID is cached. Used
+     * primarily for testing purposes.
+     */
     UBool contains(const char *localeId) const;
     virtual ~LRUCache();
 protected:
+    /**
+     * Subclasses override to create a new SharedObject for given localeID.
+     * get() calls this to resolve cache misses. create() must either return
+     * a SharedObject with 0 reference count and no error in status or return
+     * NULL and set an error in status.
+     */
     virtual SharedObject *create(const char *localeId, UErrorCode &status)=0;
+
+    /**
+     * Constructor.
+     * @param maxSize the maximum size of the LRUCache
+     * @param status any error is set here.
+     */
     LRUCache(int32_t maxSize, UErrorCode &status);
 private:
     class CacheEntry : public UMemory {
@@ -73,10 +110,25 @@ private:
     const SharedObject *_get(const char *localeId, UErrorCode &status);
 };
 
+/**
+ * A function type that creates a SharedObject from a locale ID. Functions of
+ * this type must return a SharedObject with 0 reference count and no error in
+ * status or return NULL and set an error in status.
+ */
 typedef SharedObject *CreateFunc(const char *localeId, UErrorCode &status);
 
+/**
+ * A concrete subclass of LRUCache that creates SharedObjects using a
+ * function of type CreateFunc.
+ */
 class U_COMMON_API SimpleLRUCache : public LRUCache {
 public:
+    /**
+     * Constructor.
+     * @param maxSize the maximum cache size.
+     * @param cf creates SharedObject on cache miss.
+     * @param status error reported here.
+     */
     SimpleLRUCache(
         int32_t maxSize,
         CreateFunc cf,
