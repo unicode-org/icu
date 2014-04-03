@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2009-2013 International Business Machines
+# Copyright (c) 2009-2014 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #   file name:  preparseucd.py
@@ -46,27 +46,13 @@ _terms_of_use = ""
 # Script codes from ISO 15924 http://www.unicode.org/iso15924/codechanges.html
 # that are not yet in the UCD.
 _scripts_only_in_iso15924 = (
-    "Blis", "Cirt", "Cyrs",
+    "Afak", "Ahom", "Blis", "Cirt", "Cyrs",
     "Egyd", "Egyh", "Geok",
-    "Hans", "Hant", "Hmng", "Hung",
-    "Inds", "Jpan", "Latf", "Latg", "Lina",
-    "Maya", "Moon", "Perm", "Roro",
+    "Hans", "Hant", "Hatr", "Hluw", "Hung",
+    "Inds", "Jpan", "Jurc", "Kore", "Kpel", "Latf", "Latg", "Loma",
+    "Maya", "Moon", "Mult", "Nkgb", "Nshu", "Phlv", "Roro",
     "Sara", "Sgnw", "Syre", "Syrj", "Syrn",
-    "Teng", "Visp", "Zxxx",
-
-    "Kore", "Mani", "Phlp", "Phlv", "Zmth", "Zsym",
-
-    "Nkgb",
-
-    "Bass", "Dupl", "Elba", "Gran",
-    "Kpel", "Loma", "Mend", "Narb", "Nbat",
-    "Palm", "Sind", "Wara",
-
-    "Afak", "Jurc", "Mroo", "Nshu", "Tang", "Wole",
-
-    "Hluw", "Khoj", "Tirh",
-
-    "Aghb", "Mahj"
+    "Tang", "Teng", "Visp", "Wole", "Zmth", "Zsym", "Zxxx"
 )
 
 # Properties --------------------------------------------------------------- ***
@@ -2081,7 +2067,7 @@ def main():
   CompactBlocks()
   # Write the ppucd.txt output file.
   out_path = os.path.join(unidata_path, "ppucd.txt")
-  with open(out_path, "w") as out_file:
+  with codecs.open(out_path, "w", "UTF-8") as out_file:
     WritePreparsedUCD(out_file)
     out_file.flush()
 
