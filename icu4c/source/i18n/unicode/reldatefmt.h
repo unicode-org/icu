@@ -21,8 +21,6 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/locid.h"
-
 #ifndef U_HIDE_DRAFT_API
 
 /**
