@@ -16,6 +16,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/format.h"
+#include "unicode/udat.h"
 
 /**
  * \file 

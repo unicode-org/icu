@@ -13,6 +13,7 @@
 #define __RELDATEFMT_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 
 /**
  * \file
@@ -219,10 +220,12 @@ typedef enum UDateDirection {
 
 U_NAMESPACE_BEGIN
 
+class Locale;
 class RelativeDateTimeCacheData;
 class SharedNumberFormat;
 class SharedPluralRules;
 class NumberFormat;
+class UnicodeString;
 
 /**
  * Formats simple relative dates. There are two types of relative dates that
