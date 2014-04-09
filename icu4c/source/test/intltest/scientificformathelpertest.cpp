@@ -51,14 +51,16 @@ void ScientificFormatHelperTest::TestBasic() {
     FieldPositionIterator fpositer3(fpositer);
     ScientificFormatHelper helper(*decfmt->getDecimalFormatSymbols(), status);
     UnicodeString result;
+    const char *expected = "String: 1.23456\\u00d710<sup>-78</sup>";
     assertEquals(
             "insetMarkup",
-            "String: 1.23456×10<sup>-78</sup>",
+            UnicodeString(expected).unescape(),
             helper.insetMarkup(appendTo, fpositer, "<sup>", "</sup>", result, status));
     result.remove();
+    expected = "String: 1.23456\\u00d710\\u207b\\u2077\\u2078";
     assertEquals(
             "toSuperscriptExponentDigits",
-            "String: 1.23456×10⁻⁷⁸",
+            UnicodeString(expected).unescape(),
             helper.toSuperscriptExponentDigits(appendTo, fpositer2, result, status));
     assertSuccess("", status);
     result.remove();
