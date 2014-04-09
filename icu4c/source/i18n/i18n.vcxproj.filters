@@ -228,6 +228,9 @@
     <ClCompile Include="reldtfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="scientificformathelper.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="selfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -1069,6 +1072,9 @@
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\rbtz.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\scientificformathelper.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\selfmt.h">
