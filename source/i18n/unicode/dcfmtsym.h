@@ -163,6 +163,10 @@ public:
          * @stable ICU 4.6
          */
         kNineDigitSymbol,
+        /** Multiplication sign.
+         * @draft ICU 54
+         */
+        kExponentMultiplicationSymbol,
         /** count symbol constants */
         kFormatSymbolCount
     };
