@@ -1190,8 +1190,14 @@ typedef enum UNumberFormatSymbol {
    * @stable ICU 4.6
    */
   UNUM_NINE_DIGIT_SYMBOL = 26,
+
+  /** Multiplication sign
+   * @draft ICU 54
+   */
+  UNUM_EXPONENT_MULTIPLICATION_SYMBOL = 27,
+
   /** count symbol constants */
-  UNUM_FORMAT_SYMBOL_COUNT = 27
+  UNUM_FORMAT_SYMBOL_COUNT = 28
 } UNumberFormatSymbol;
 
 /**

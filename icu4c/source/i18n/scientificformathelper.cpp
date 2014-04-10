@@ -12,33 +12,38 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/fpositer.h"
 #include "unicode/utf16.h"
+#include "unicode/uniset.h"
+#include "decfmtst.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-// TODO: Add U_DRAFT_API directives.
-// TODO: Add U_FORMATTING directives
-
 U_NAMESPACE_BEGIN
 
-static UChar kExponentDigits[] = {0x2070, 0xB9, 0xB2, 0xB3, 0x2074, 0x2075, 0x2076, 0x2077, 0x2078, 0x2079};
+static UChar kSuperscriptDigits[] = {0x2070, 0xB9, 0xB2, 0xB3, 0x2074, 0x2075, 0x2076, 0x2077, 0x2078, 0x2079};
+
+static UChar kSuperscriptPlusSign = 0x207A;
+static UChar kSuperscriptMinusSign = 0x207B;
 
 static UnicodeString getMultiplicationSymbol(const DecimalFormatSymbols &dfs) {
-    static UChar multSign = 0xD7;
-    return UnicodeString(FALSE, &multSign, 1);
+    return dfs.getConstSymbol(DecimalFormatSymbols::kExponentMultiplicationSymbol);
 }
 
 ScientificFormatHelper::ScientificFormatHelper(
-        const DecimalFormatSymbols &dfs, UErrorCode &status) : fPreExponent() {
+        const DecimalFormatSymbols &dfs, UErrorCode &status)
+        : fPreExponent(), fStaticSets(NULL) {
     if (U_FAILURE(status)) {
         return;
     }
-    fPreExponent.append(getMultiplicationSymbol(dfs));
+    fPreExponent.append(dfs.getConstSymbol(
+            DecimalFormatSymbols::kExponentMultiplicationSymbol));
     fPreExponent.append(dfs.getSymbol(DecimalFormatSymbols::kOneDigitSymbol));
     fPreExponent.append(dfs.getSymbol(DecimalFormatSymbols::kZeroDigitSymbol));
+    fStaticSets = DecimalFormatStaticSets::getStaticSets(status);
 }
 
 ScientificFormatHelper::ScientificFormatHelper(
-        const ScientificFormatHelper &other) : fPreExponent(other.fPreExponent) {
+        const ScientificFormatHelper &other)
+        : fPreExponent(other.fPreExponent), fStaticSets(other.fStaticSets) {
 }
 
 ScientificFormatHelper &ScientificFormatHelper::operator=(const ScientificFormatHelper &other) {
@@ -46,6 +51,7 @@ ScientificFormatHelper &ScientificFormatHelper::operator=(const ScientificFormat
         return *this;
     }
     fPreExponent = other.fPreExponent;
+    fStaticSets = other.fStaticSets;
     return *this;
 }
 
@@ -98,15 +104,10 @@ static UBool copyAsSuperscript(
             status = U_INVALID_CHAR_FOUND;
             return FALSE;
         }
-        result.append(kExponentDigits[digit]);
+        result.append(kSuperscriptDigits[digit]);
         i += U16_LENGTH(c);
     }
     return TRUE;
-}
-
-static UBool isMinusSign(UChar ch) {
-    // TODO: revisit this.
-    return (ch == 0x2D);
 }
 
 UnicodeString &ScientificFormatHelper::toSuperscriptExponentDigits(
@@ -127,9 +128,13 @@ UnicodeString &ScientificFormatHelper::toSuperscriptExponentDigits(
             {
                 int32_t beginIndex = fp.getBeginIndex();
                 int32_t endIndex = fp.getEndIndex();
-                if (endIndex - beginIndex == 1 && isMinusSign(s[beginIndex])) {
+                UChar32 aChar = s.char32At(beginIndex);
+                if (fStaticSets->fMinusSigns->contains(aChar)) {
                     result.append(s, copyFromOffset, beginIndex - copyFromOffset);
-                    result.append(0x207B);
+                    result.append(kSuperscriptMinusSign);
+                } else if (fStaticSets->fPlusSigns->contains(aChar)) {
+                    result.append(s, copyFromOffset, beginIndex - copyFromOffset);
+                    result.append(kSuperscriptPlusSign);
                 } else {
                     status = U_INVALID_CHAR_FOUND;
                     return result;

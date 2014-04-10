@@ -24,6 +24,7 @@ U_NAMESPACE_BEGIN
 
 class DecimalFormatSymbols;
 class FieldPositionIterator;
+class DecimalFormatStaticSets;
 
 /**
  * A helper class for formatting in user-friendly scientific notation.
@@ -121,6 +122,7 @@ class U_I18N_API ScientificFormatHelper : public UObject {
         UErrorCode &status) const;
  private:
     UnicodeString fPreExponent;
+    const DecimalFormatStaticSets *fStaticSets;
 };
 
 U_NAMESPACE_END
