@@ -354,7 +354,7 @@ void TestQuotePattern161()
 /*
  * Testing udat_getBooleanAttribute and  unum_setBooleanAttribute() to make sure basic C wrapper functionality is present
  */
-static void TestBooleanAttributes(void)
+void TestBooleanAttributes(void)
 {
     UDateFormat *en;
     UErrorCode status=U_ZERO_ERROR;
