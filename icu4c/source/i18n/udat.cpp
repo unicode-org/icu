@@ -310,6 +310,26 @@ udat_setLenient(    UDateFormat*    fmt,
     ((DateFormat*)fmt)->setLenient(isLenient);
 }
 
+U_DRAFT UBool U_EXPORT2
+udat_getBooleanAttribute(const UDateFormat* fmt, 
+                         UDateFormatBooleanAttribute attr, 
+                         UErrorCode* status)
+{
+    if(U_FAILURE(*status)) return FALSE;
+    return ((DateFormat*)fmt)->getBooleanAttribute(attr, *status);
+    //return FALSE;
+}
+
+U_DRAFT void U_EXPORT2
+udat_setBooleanAttribute(UDateFormat *fmt, 
+                         UDateFormatBooleanAttribute attr, 
+                         UBool newValue, 
+                         UErrorCode* status)
+{
+    if(U_FAILURE(*status)) return;
+    ((DateFormat*)fmt)->setBooleanAttribute(attr, newValue, *status);
+}
+
 U_CAPI const UCalendar* U_EXPORT2
 udat_getCalendar(const UDateFormat* fmt)
 {
