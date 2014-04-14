@@ -1049,10 +1049,77 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 49 */
         public static final int TAKRI_ID = 220; /*[11680]*/
 
+        /* New blocks in Unicode 7.0 */
+
+        /** @stable ICU 54 */
+        public static final int BASSA_VAH_ID = 221; /*[16AD0]*/
+        /** @stable ICU 54 */
+        public static final int CAUCASIAN_ALBANIAN_ID = 222; /*[10530]*/
+        /** @stable ICU 54 */
+        public static final int COPTIC_EPACT_NUMBERS_ID = 223; /*[102E0]*/
+        /** @stable ICU 54 */
+        public static final int COMBINING_DIACRITICAL_MARKS_EXTENDED_ID = 224; /*[1AB0]*/
+        /** @stable ICU 54 */
+        public static final int DUPLOYAN_ID = 225; /*[1BC00]*/
+        /** @stable ICU 54 */
+        public static final int ELBASAN_ID = 226; /*[10500]*/
+        /** @stable ICU 54 */
+        public static final int GEOMETRIC_SHAPES_EXTENDED_ID = 227; /*[1F780]*/
+        /** @stable ICU 54 */
+        public static final int GRANTHA_ID = 228; /*[11300]*/
+        /** @stable ICU 54 */
+        public static final int KHOJKI_ID = 229; /*[11200]*/
+        /** @stable ICU 54 */
+        public static final int KHUDAWADI_ID = 230; /*[112B0]*/
+        /** @stable ICU 54 */
+        public static final int LATIN_EXTENDED_E_ID = 231; /*[AB30]*/
+        /** @stable ICU 54 */
+        public static final int LINEAR_A_ID = 232; /*[10600]*/
+        /** @stable ICU 54 */
+        public static final int MAHAJANI_ID = 233; /*[11150]*/
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_ID = 234; /*[10AC0]*/
+        /** @stable ICU 54 */
+        public static final int MENDE_KIKAKUI_ID = 235; /*[1E800]*/
+        /** @stable ICU 54 */
+        public static final int MODI_ID = 236; /*[11600]*/
+        /** @stable ICU 54 */
+        public static final int MRO_ID = 237; /*[16A40]*/
+        /** @stable ICU 54 */
+        public static final int MYANMAR_EXTENDED_B_ID = 238; /*[A9E0]*/
+        /** @stable ICU 54 */
+        public static final int NABATAEAN_ID = 239; /*[10880]*/
+        /** @stable ICU 54 */
+        public static final int OLD_NORTH_ARABIAN_ID = 240; /*[10A80]*/
+        /** @stable ICU 54 */
+        public static final int OLD_PERMIC_ID = 241; /*[10350]*/
+        /** @stable ICU 54 */
+        public static final int ORNAMENTAL_DINGBATS_ID = 242; /*[1F650]*/
+        /** @stable ICU 54 */
+        public static final int PAHAWH_HMONG_ID = 243; /*[16B00]*/
+        /** @stable ICU 54 */
+        public static final int PALMYRENE_ID = 244; /*[10860]*/
+        /** @stable ICU 54 */
+        public static final int PAU_CIN_HAU_ID = 245; /*[11AC0]*/
+        /** @stable ICU 54 */
+        public static final int PSALTER_PAHLAVI_ID = 246; /*[10B80]*/
+        /** @stable ICU 54 */
+        public static final int SHORTHAND_FORMAT_CONTROLS_ID = 247; /*[1BCA0]*/
+        /** @stable ICU 54 */
+        public static final int SIDDHAM_ID = 248; /*[11580]*/
+        /** @stable ICU 54 */
+        public static final int SINHALA_ARCHAIC_NUMBERS_ID = 249; /*[111E0]*/
+        /** @stable ICU 54 */
+        public static final int SUPPLEMENTAL_ARROWS_C_ID = 250; /*[1F800]*/
+        /** @stable ICU 54 */
+        public static final int TIRHUTA_ID = 251; /*[11480]*/
+        /** @stable ICU 54 */
+        public static final int WARANG_CITI_ID = 252; /*[118A0]*/
+
         /**
          * @stable ICU 2.4
          */
-        public static final int COUNT = 221;
+        public static final int COUNT = 253;
 
         // blocks objects ---------------------------------------------------
 
@@ -2168,6 +2235,86 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 49 */
         public static final UnicodeBlock TAKRI = new UnicodeBlock("TAKRI", TAKRI_ID); /*[11680]*/
 
+        /* New blocks in Unicode 7.0 */
+
+        /** @stable ICU 54 */
+        public static final UnicodeBlock BASSA_VAH = new UnicodeBlock("BASSA_VAH", BASSA_VAH_ID); /*[16AD0]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock CAUCASIAN_ALBANIAN =
+                new UnicodeBlock("CAUCASIAN_ALBANIAN", CAUCASIAN_ALBANIAN_ID); /*[10530]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock COPTIC_EPACT_NUMBERS =
+                new UnicodeBlock("COPTIC_EPACT_NUMBERS", COPTIC_EPACT_NUMBERS_ID); /*[102E0]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock COMBINING_DIACRITICAL_MARKS_EXTENDED =
+                new UnicodeBlock("COMBINING_DIACRITICAL_MARKS_EXTENDED", COMBINING_DIACRITICAL_MARKS_EXTENDED_ID); /*[1AB0]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock DUPLOYAN = new UnicodeBlock("DUPLOYAN", DUPLOYAN_ID); /*[1BC00]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock ELBASAN = new UnicodeBlock("ELBASAN", ELBASAN_ID); /*[10500]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock GEOMETRIC_SHAPES_EXTENDED =
+                new UnicodeBlock("GEOMETRIC_SHAPES_EXTENDED", GEOMETRIC_SHAPES_EXTENDED_ID); /*[1F780]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock GRANTHA = new UnicodeBlock("GRANTHA", GRANTHA_ID); /*[11300]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock KHOJKI = new UnicodeBlock("KHOJKI", KHOJKI_ID); /*[11200]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock KHUDAWADI = new UnicodeBlock("KHUDAWADI", KHUDAWADI_ID); /*[112B0]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock LATIN_EXTENDED_E =
+                new UnicodeBlock("LATIN_EXTENDED_E", LATIN_EXTENDED_E_ID); /*[AB30]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock LINEAR_A = new UnicodeBlock("LINEAR_A", LINEAR_A_ID); /*[10600]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock MAHAJANI = new UnicodeBlock("MAHAJANI", MAHAJANI_ID); /*[11150]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock MANICHAEAN = new UnicodeBlock("MANICHAEAN", MANICHAEAN_ID); /*[10AC0]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock MENDE_KIKAKUI =
+                new UnicodeBlock("MENDE_KIKAKUI", MENDE_KIKAKUI_ID); /*[1E800]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock MODI = new UnicodeBlock("MODI", MODI_ID); /*[11600]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock MRO = new UnicodeBlock("MRO", MRO_ID); /*[16A40]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock MYANMAR_EXTENDED_B =
+                new UnicodeBlock("MYANMAR_EXTENDED_B", MYANMAR_EXTENDED_B_ID); /*[A9E0]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock NABATAEAN = new UnicodeBlock("NABATAEAN", NABATAEAN_ID); /*[10880]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock OLD_NORTH_ARABIAN =
+                new UnicodeBlock("OLD_NORTH_ARABIAN", OLD_NORTH_ARABIAN_ID); /*[10A80]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock OLD_PERMIC = new UnicodeBlock("OLD_PERMIC", OLD_PERMIC_ID); /*[10350]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock ORNAMENTAL_DINGBATS =
+                new UnicodeBlock("ORNAMENTAL_DINGBATS", ORNAMENTAL_DINGBATS_ID); /*[1F650]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock PAHAWH_HMONG = new UnicodeBlock("PAHAWH_HMONG", PAHAWH_HMONG_ID); /*[16B00]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock PALMYRENE = new UnicodeBlock("PALMYRENE", PALMYRENE_ID); /*[10860]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock PAU_CIN_HAU = new UnicodeBlock("PAU_CIN_HAU", PAU_CIN_HAU_ID); /*[11AC0]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock PSALTER_PAHLAVI =
+                new UnicodeBlock("PSALTER_PAHLAVI", PSALTER_PAHLAVI_ID); /*[10B80]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock SHORTHAND_FORMAT_CONTROLS =
+                new UnicodeBlock("SHORTHAND_FORMAT_CONTROLS", SHORTHAND_FORMAT_CONTROLS_ID); /*[1BCA0]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock SIDDHAM = new UnicodeBlock("SIDDHAM", SIDDHAM_ID); /*[11580]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock SINHALA_ARCHAIC_NUMBERS =
+                new UnicodeBlock("SINHALA_ARCHAIC_NUMBERS", SINHALA_ARCHAIC_NUMBERS_ID); /*[111E0]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock SUPPLEMENTAL_ARROWS_C =
+                new UnicodeBlock("SUPPLEMENTAL_ARROWS_C", SUPPLEMENTAL_ARROWS_C_ID); /*[1F800]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock TIRHUTA = new UnicodeBlock("TIRHUTA", TIRHUTA_ID); /*[11480]*/
+        /** @stable ICU 54 */
+        public static final UnicodeBlock WARANG_CITI = new UnicodeBlock("WARANG_CITI", WARANG_CITI_ID); /*[118A0]*/
+
         /**
          * @stable ICU 2.4
          */
@@ -2695,10 +2842,68 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int NYA = 56;
         /** @stable ICU 49 */
         public static final int ROHINGYA_YEH = 57;
+
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_ALEPH = 58;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_AYIN = 59;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_BETH = 60;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_DALETH = 61;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_DHAMEDH = 62;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_FIVE = 63;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_GIMEL = 64;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_HETH = 65;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_HUNDRED = 66;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_KAPH = 67;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_LAMEDH = 68;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_MEM = 69;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_NUN = 70;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_ONE = 71;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_PE = 72;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_QOPH = 73;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_RESH = 74;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_SADHE = 75;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_SAMEKH = 76;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_TAW = 77;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_TEN = 78;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_TETH = 79;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_THAMEDH = 80;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_TWENTY = 81;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_WAW = 82;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_YODH = 83;
+        /** @stable ICU 54 */
+        public static final int MANICHAEAN_ZAYIN = 84;
+        /** @stable ICU 54 */
+        public static final int STRAIGHT_WAW = 85;
+
         /**
          * @stable ICU 2.4
          */
-        public static final int COUNT = 58;
+        public static final int COUNT = 86;
     }
 
     /**

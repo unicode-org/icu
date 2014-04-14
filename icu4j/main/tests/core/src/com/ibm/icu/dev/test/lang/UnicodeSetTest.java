@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -215,6 +215,7 @@ public class UnicodeSetTest extends TestFmwk {
 
         s.clear();
         s.applyPropertyAlias("nv", "0.5");
+        s.retainAll(new UnicodeSet("[:age=6.0:]"));  // stabilize this test
         expectToPattern(s, "[\\u00BD\\u0B73\\u0D74\\u0F2A\\u2CFD\\uA831\\U00010141\\U00010175\\U00010176\\U00010E7B]", null);
         // Unicode 5.1 adds Malayalam 1/2 (\u0D74)
         // Unicode 5.2 adds U+A831 NORTH INDIC FRACTION ONE HALF and U+10E7B RUMI FRACTION ONE HALF
@@ -1143,7 +1144,7 @@ public class UnicodeSetTest extends TestFmwk {
                 // U+FDF2 has Script=Arabic and also Arab in its Script_Extensions,
                 // so scx-sc is missing U+FDF2.
                 "[[:Script_Extensions=Arabic:]-[:Arab:]]",
-                "\\u0640\\u064B\\u0650\\u0655\\uFDFD",
+                "\\u0640\\u064B\\u0650\\u0655",
                 "\\uFDF2"
         };
 
