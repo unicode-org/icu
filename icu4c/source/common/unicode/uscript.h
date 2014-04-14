@@ -186,7 +186,7 @@ typedef enum UScriptCode {
       /** @stable ICU 3.4 */
       USCRIPT_OLD_PERSIAN   = 61, /* Xpeo */
 
-      /* New script codes from ISO 15924 */
+      /* New script codes from Unicode and ISO 15924 */
       /** @stable ICU 3.6 */
       USCRIPT_BALINESE                      = 62, /* Bali */
       /** @stable ICU 3.6 */
@@ -278,7 +278,6 @@ typedef enum UScriptCode {
       /** @stable ICU 3.6 */
       USCRIPT_UNKNOWN                       = 103,/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
 
-      /* New script codes from ISO 15924 */
       /** @stable ICU 3.8 */
       USCRIPT_CARIAN                        = 104,/* Cari */
       /** @stable ICU 3.8 */
@@ -304,7 +303,6 @@ typedef enum UScriptCode {
       /** @stable ICU 3.8 */
       USCRIPT_MEITEI_MAYEK                  = 115,/* Mtei */
 
-      /* New script codes from ISO 15924 */
       /** @stable ICU 4.0 */
       USCRIPT_IMPERIAL_ARAMAIC              = 116,/* Armi */
       /** @stable ICU 4.0 */
@@ -334,7 +332,6 @@ typedef enum UScriptCode {
       /** @stable ICU 4.0 */
       USCRIPT_SYMBOLS                       = 129,/* Zsym */
 
-      /* New script codes from ISO 15924 */
       /** @stable ICU 4.4 */
       USCRIPT_BAMUM                         = 130,/* Bamu */
       /** @stable ICU 4.4 */
@@ -344,7 +341,6 @@ typedef enum UScriptCode {
       /** @stable ICU 4.4 */
       USCRIPT_OLD_SOUTH_ARABIAN             = 133,/* Sarb */
 
-      /* New script codes from ISO 15924 */
       /** @stable ICU 4.6 */
       USCRIPT_BASSA_VAH                     = 134,/* Bass */
       /** @stable ICU 4.6 */
@@ -357,7 +353,7 @@ typedef enum UScriptCode {
       USCRIPT_KPELLE                        = 138,/* Kpel */
       /** @stable ICU 4.6 */
       USCRIPT_LOMA                          = 139,/* Loma */
-      /** @stable ICU 4.6 */
+      /** Mende Kikakui @stable ICU 4.6 */
       USCRIPT_MENDE                         = 140,/* Mend */
       /** @stable ICU 4.6 */
       USCRIPT_MEROITIC_CURSIVE              = 141,/* Merc */
@@ -367,8 +363,10 @@ typedef enum UScriptCode {
       USCRIPT_NABATAEAN                     = 143,/* Nbat */
       /** @stable ICU 4.6 */
       USCRIPT_PALMYRENE                     = 144,/* Palm */
+      /** @stable ICU 54 */
+      USCRIPT_KHUDAWADI                     = 145,/* Sind */
       /** @stable ICU 4.6 */
-      USCRIPT_SINDHI                        = 145,/* Sind */
+      USCRIPT_SINDHI                        = USCRIPT_KHUDAWADI,
       /** @stable ICU 4.6 */
       USCRIPT_WARANG_CITI                   = 146,/* Wara */
 
@@ -403,10 +401,23 @@ typedef enum UScriptCode {
       /** @stable ICU 52 */
       USCRIPT_MAHAJANI                      = 160,/* Mahj */
 
+      /** @stable ICU 54 */
+      USCRIPT_AHOM                          = 161,/* Ahom */
+      /** @stable ICU 54 */
+      USCRIPT_HATRAN                        = 162,/* Hatr */
+      /** @stable ICU 54 */
+      USCRIPT_MODI                          = 163,/* Modi */
+      /** @stable ICU 54 */
+      USCRIPT_MULTANI                       = 164,/* Mult */
+      /** @stable ICU 54 */
+      USCRIPT_PAU_CIN_HAU                   = 165,/* Pauc */
+      /** @stable ICU 54 */
+      USCRIPT_SIDDHAM                       = 166,/* Sidd */
+
       /* Private use codes from Qaaa - Qabx are not supported */
 
       /** @stable ICU 2.2 */
-      USCRIPT_CODE_LIMIT    = 161
+      USCRIPT_CODE_LIMIT    = 167
 } UScriptCode;
 
 /**

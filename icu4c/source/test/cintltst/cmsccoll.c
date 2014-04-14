@@ -4922,17 +4922,22 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
     ucol_close(myCollation);
 }
 
-static int compareUScriptCodes(const void * a, const void * b)
-{
-  return ( *(int32_t*)a - *(int32_t*)b );
+static UBool containsExpectedScript(const int32_t scripts[], int32_t length, int32_t expectedScript) {
+    int32_t i;
+    for (i = 0; i < length; ++i) {
+        if (expectedScript == scripts[i]) { return TRUE; }
+    }
+    return FALSE;
 }
 
 static void TestEquivalentReorderingScripts(void) {
     UErrorCode status = U_ZERO_ERROR;
-    int32_t equivalentScripts[50];
-    int32_t equivalentScriptsLength;
-    int loopIndex;
-    int32_t equivalentScriptsResult[] = {
+    int32_t equivalentScripts[100];
+    int32_t length;
+    int i;
+    int32_t prevScript;
+    /* At least these scripts are expected to be equivalent. There may be more. */
+    static const int32_t expectedScripts[] = {
         USCRIPT_BOPOMOFO,
         USCRIPT_LISU,
         USCRIPT_LYCIAN,
@@ -4961,46 +4966,49 @@ static void TestEquivalentReorderingScripts(void) {
         USCRIPT_MEROITIC_HIEROGLYPHS
     };
 
-    qsort(equivalentScriptsResult, LEN(equivalentScriptsResult), sizeof(int32_t), compareUScriptCodes);
-    
     /* UScript.GOTHIC */
-    equivalentScriptsLength = ucol_getEquivalentReorderCodes(USCRIPT_GOTHIC, equivalentScripts, LEN(equivalentScripts), &status);
+    length = ucol_getEquivalentReorderCodes(
+            USCRIPT_GOTHIC, equivalentScripts, LEN(equivalentScripts), &status);
     if (U_FAILURE(status)) {
-        log_err_status(status, "ERROR: retrieving equivalent reorder codes: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR/Gothic: retrieving equivalent reorder codes: %s\n", myErrorName(status));
         return;
     }
-    /*
-    fprintf(stdout, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    fprintf(stdout, "equivalentScriptsLength = %d\n", equivalentScriptsLength);
-    for (loopIndex = 0; loopIndex < equivalentScriptsLength; loopIndex++) {
-        fprintf(stdout, "%d = %x\n", loopIndex, equivalentScripts[loopIndex]);
+    if (length < LEN(expectedScripts)) {
+        log_err("ERROR/Gothic: retrieved equivalent script length wrong: "
+                "expected at least %d, was = %d\n",
+                LEN(expectedScripts), length);
     }
-    */
-    if (equivalentScriptsLength != LEN(equivalentScriptsResult)) {
-        log_err_status(status, "ERROR: retrieved equivalent script length wrong: expected = %d, was = %d\n", LEN(equivalentScriptsResult), equivalentScriptsLength);
-        return;
+    prevScript = -1;
+    for (i = 0; i < length; ++i) {
+        int32_t script = equivalentScripts[i];
+        if (script <= prevScript) {
+            log_err("ERROR/Gothic: equivalent scripts out of order at index %d\n", i);
+        }
+        prevScript = script;
     }
-    for (loopIndex = 0; loopIndex < equivalentScriptsLength; loopIndex++) {
-        if (equivalentScriptsResult[loopIndex] != equivalentScripts[loopIndex]) {
-            log_err_status(status, "ERROR: equivalent scripts results don't match: expected = %d, was = %d\n", equivalentScriptsResult[loopIndex], equivalentScripts[loopIndex]);
-            return;
+    for (i = 0; i < LEN(expectedScripts); i++) {
+        if (!containsExpectedScript(equivalentScripts, length, expectedScripts[i])) {
+            log_err("ERROR/Gothic: equivalent scripts do not contain %d\n",
+                    expectedScripts[i]);
         }
     }
 
     /* UScript.SHAVIAN */
-    equivalentScriptsLength = ucol_getEquivalentReorderCodes(USCRIPT_SHAVIAN, equivalentScripts, LEN(equivalentScripts), &status);
+    length = ucol_getEquivalentReorderCodes(
+            USCRIPT_SHAVIAN, equivalentScripts, LEN(equivalentScripts), &status);
     if (U_FAILURE(status)) {
-        log_err_status(status, "ERROR: retrieving equivalent reorder codes: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR/Shavian: retrieving equivalent reorder codes: %s\n", myErrorName(status));
         return;
     }
-    if (equivalentScriptsLength != LEN(equivalentScriptsResult)) {
-        log_err_status(status, "ERROR: retrieved equivalent script length wrong: expected = %d, was = %d\n", LEN(equivalentScriptsResult), equivalentScriptsLength);
-        return;
+    if (length < LEN(expectedScripts)) {
+        log_err("ERROR/Shavian: retrieved equivalent script length wrong: "
+                "expected at least %d, was = %d\n",
+                LEN(expectedScripts), length);
     }
-    for (loopIndex = 0; loopIndex < equivalentScriptsLength; loopIndex++) {
-        if (equivalentScriptsResult[loopIndex] != equivalentScripts[loopIndex]) {
-            log_err_status(status, "ERROR: equivalent scripts results don't match: expected = %d, was = %d\n", equivalentScriptsResult[loopIndex], equivalentScripts[loopIndex]);
-            return;
+    for (i = 0; i < LEN(expectedScripts); i++) {
+        if (!containsExpectedScript(equivalentScripts, length, expectedScripts[i])) {
+            log_err("ERROR/Shavian: equivalent scripts do not contain %d\n",
+                    expectedScripts[i]);
         }
     }
 }
