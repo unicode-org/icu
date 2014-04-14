@@ -304,34 +304,41 @@ void TestUScriptCodeAPI(){
          * Whenever this happens, the long script names here need to be updated.
          */
         static const char* expectedLong[] = {
-            "Balinese", "Batak", "Blis", "Brahmi", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyptian_Hieroglyphs", 
-            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Javanese", "Kayah_Li", "Latf", "Latg", 
-            "Lepcha", "Lina", "Mandaic", "Maya", "Meroitic_Hieroglyphs", "Nko", "Old_Turkic", "Perm", "Phags_Pa", "Phoenician", 
+            "Balinese", "Batak", "Blis", "Brahmi", "Cham", "Cirt", "Cyrs",
+            "Egyd", "Egyh", "Egyptian_Hieroglyphs",
+            "Geok", "Hans", "Hant", "Pahawh_Hmong", "Hung", "Inds",
+            "Javanese", "Kayah_Li", "Latf", "Latg",
+            "Lepcha", "Linear_A", "Mandaic", "Maya", "Meroitic_Hieroglyphs",
+            "Nko", "Old_Turkic", "Old_Permic", "Phags_Pa", "Phoenician", 
             "Miao", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
             "Zxxx", "Unknown",
             "Carian", "Jpan", "Tai_Tham", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
             "Moon", "Meetei_Mayek",
             /* new in ICU 4.0 */
             "Imperial_Aramaic", "Avestan", "Chakma", "Kore",
-            "Kaithi", "Mani", "Inscriptional_Pahlavi", "Phlp", "Phlv", "Inscriptional_Parthian", "Samaritan", "Tai_Viet",
+            "Kaithi", "Manichaean", "Inscriptional_Pahlavi", "Psalter_Pahlavi", "Phlv",
+            "Inscriptional_Parthian", "Samaritan", "Tai_Viet",
             "Zmth", "Zsym",
             /* new in ICU 4.4 */
             "Bamum", "Lisu", "Nkgb", "Old_South_Arabian",
             /* new in ICU 4.6 */
-            "Bass", "Dupl", "Elba", "Gran", "Kpel", "Loma", "Mend", "Meroitic_Cursive",
-            "Narb", "Nbat", "Palm", "Sind", "Wara",
+            "Bassa_Vah", "Duployan", "Elbasan", "Grantha", "Kpel",
+            "Loma", "Mende_Kikakui", "Meroitic_Cursive",
+            "Old_North_Arabian", "Nabataean", "Palmyrene", "Khudawadi", "Warang_Citi",
             /* new in ICU 4.8 */
-            "Afak", "Jurc", "Mroo", "Nshu", "Sharada", "Sora_Sompeng", "Takri", "Tang", "Wole",
+            "Afak", "Jurc", "Mro", "Nshu", "Sharada", "Sora_Sompeng", "Takri", "Tang", "Wole",
             /* new in ICU 49 */
-            "Hluw", "Khoj", "Tirh",
+            "Hluw", "Khojki", "Tirhuta",
             /* new in ICU 52 */
-            "Aghb", "Mahj"
+            "Caucasian_Albanian", "Mahajani",
+            /* new in ICU 54 */
+            "Ahom", "Hatr", "Modi", "Mult", "Pau_Cin_Hau", "Siddham"
         };
         static const char* expectedShort[] = {
-            "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
-            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kali", "Latf", "Latg", 
-            "Lepc", "Lina", "Mand", "Maya", "Mero", "Nkoo", "Orkh", "Perm", "Phag", "Phnx", 
-            "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vaii", "Visp", "Xsux", 
+            "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp",
+            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kali", "Latf", "Latg",
+            "Lepc", "Lina", "Mand", "Maya", "Mero", "Nkoo", "Orkh", "Perm", "Phag", "Phnx",
+            "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vaii", "Visp", "Xsux",
             "Zxxx", "Zzzz",
             "Cari", "Jpan", "Lana", "Lyci", "Lydi", "Olck", "Rjng", "Saur", "Sgnw", "Sund",
             "Moon", "Mtei",
@@ -349,7 +356,9 @@ void TestUScriptCodeAPI(){
             /* new in ICU 49 */
             "Hluw", "Khoj", "Tirh",
             /* new in ICU 52 */
-            "Aghb", "Mahj"
+            "Aghb", "Mahj",
+            /* new in ICU 54 */
+            "Ahom", "Hatr", "Modi", "Mult", "Pauc", "Sidd"
         };
         int32_t j = 0;
         if(LENGTHOF(expectedLong)!=(USCRIPT_CODE_LIMIT-USCRIPT_BALINESE)) {

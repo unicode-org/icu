@@ -369,12 +369,11 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
 //                 verify that it transforms correctly in a skeleton.
 //
 void IntlTestSpoof::testConfData() {
-    UErrorCode status = U_ZERO_ERROR;
-
-    const char *testDataDir = IntlTest::getSourceTestData(status);
-    TEST_ASSERT_SUCCESS(status);
     char buffer[2000];
-    uprv_strcpy(buffer, testDataDir);
+    if (getUnidataPath(buffer) == NULL) {
+        errln("Skipping test spoof/testConfData. Unable to find path to source/data/unidata/.");
+        return;
+    }
     uprv_strcat(buffer, "confusables.txt");
 
     LocalStdioFilePointer f(fopen(buffer, "rb"));
@@ -394,6 +393,7 @@ void IntlTestSpoof::testConfData() {
     }
     UnicodeString confusablesTxt = UnicodeString::fromUTF8(StringPiece(fileBuf.getAlias(), fileSize));
 
+    UErrorCode status = U_ZERO_ERROR;
     LocalUSpoofCheckerPointer sc(uspoof_open(&status));
     TEST_ASSERT_SUCCESS(status);
 

@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1999-2013 International Business Machines Corporation and
+*   Copyright (C) 1999-2014 International Business Machines Corporation and
 *   others. All Rights Reserved.
 ********************************************************************************
 *   Date        Name        Description
@@ -1054,7 +1054,7 @@ void UnicodeSetTest::TestPropertySet() {
         // U+FDF2 has Script=Arabic and also Arab in its Script_Extensions,
         // so scx-sc is missing U+FDF2.
         "[[:Script_Extensions=Arabic:]-[:Arab:]]",
-        "\\u0640\\u064B\\u0650\\u0655\\uFDFD",
+        "\\u0640\\u064B\\u0650\\u0655",
         "\\uFDF2"
     };
 

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2012, International Business Machines
+*   Copyright (C) 2005-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -500,8 +500,10 @@ ubidi_swap(const UDataSwapper *ds,
         ds->swapArray32(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
         offset+=count;
 
-        /* just skip the uint8_t jgArray[] */
+        /* just skip the uint8_t jgArray[] and jgArray2[] */
         count=indexes[UBIDI_IX_JG_LIMIT]-indexes[UBIDI_IX_JG_START];
+        offset+=count;
+        count=indexes[UBIDI_IX_JG_LIMIT2]-indexes[UBIDI_IX_JG_START2];
         offset+=count;
 
         U_ASSERT(offset==size);

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -198,39 +198,22 @@ void UnicodeTest::TestAdditionalProperties() {
         return;
     }
 
-    char newPath[256];
-    char backupPath[256];
+    char path[500];
+    if(getUnidataPath(path) == NULL) {
+        errln("unable to find path to source/data/unidata/");
+        return;
+    }
+    char *basename=strchr(path, 0);
+    strcpy(basename, "DerivedCoreProperties.txt");
+
     char *fields[2][2];
     UErrorCode errorCode=U_ZERO_ERROR;
-
-    /* Look inside ICU_DATA first */
-    strcpy(newPath, pathToDataDirectory());
-    strcat(newPath, "unidata" U_FILE_SEP_STRING "DerivedCoreProperties.txt");
-
-    // As a fallback, try to guess where the source data was located
-    // at the time ICU was built, and look there.
-#   ifdef U_TOPSRCDIR
-        strcpy(backupPath, U_TOPSRCDIR  U_FILE_SEP_STRING "data");
-#   else
-        strcpy(backupPath, loadTestData(errorCode));
-        strcat(backupPath, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
-#   endif
-    strcat(backupPath, U_FILE_SEP_STRING);
-    strcat(backupPath, "unidata" U_FILE_SEP_STRING "DerivedCoreProperties.txt");
-
-    char *path=newPath;
-    u_parseDelimitedFile(newPath, ';', fields, 2, derivedPropsLineFn, this, &errorCode);
-
-    if(errorCode==U_FILE_ACCESS_ERROR) {
-        errorCode=U_ZERO_ERROR;
-        path=backupPath;
-        u_parseDelimitedFile(backupPath, ';', fields, 2, derivedPropsLineFn, this, &errorCode);
-    }
+    u_parseDelimitedFile(path, ';', fields, 2, derivedPropsLineFn, this, &errorCode);
     if(U_FAILURE(errorCode)) {
         errln("error parsing DerivedCoreProperties.txt: %s\n", u_errorName(errorCode));
         return;
     }
-    char *basename=path+strlen(path)-strlen("DerivedCoreProperties.txt");
+
     strcpy(basename, "DerivedNormalizationProps.txt");
     u_parseDelimitedFile(path, ';', fields, 2, derivedPropsLineFn, this, &errorCode);
     if(U_FAILURE(errorCode)) {
