@@ -103,6 +103,8 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestDateFormatLeniency);
     TESTCASE_AUTO(TestParseMultiPatternMatch);
 
+    TESTCASE_AUTO(TestParseLeniencyAPIs);
+
     TESTCASE_AUTO_END;
 }
 
@@ -4284,10 +4286,9 @@ void DateFormatTest::TestDateFormatLeniency() {
            dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
            continue;
        }
-       sdmft->setLenient(itemPtr->leniency);
        sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).
-              setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, itemPtr->leniency, status).
-              setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
+              setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status).
+              setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, itemPtr->leniency, status);
        UDate d = sdmft->parse(itemPtr->parseString, pos);       
 
        if(itemPtr->expectedResult.length() == 0) {
@@ -4307,17 +4308,17 @@ void DateFormatTest::TestDateFormatLeniency() {
                  " - idx " + pos.getIndex() + 
                  " - error index "+pos.getErrorIndex() + 
                  " - leniency " + itemPtr->leniency); 
- 	        continue; 
- 	    }
+            continue; 
+        }
 
        UnicodeString formatResult(""); 
        sdmft->format(d, formatResult);
        if(formatResult.compare(itemPtr->expectedResult) != 0) { 
            errln("error: unexpected format result. pattern["+itemPtr->pattern+"] expected[" + itemPtr->expectedResult + "]  but result was[" + formatResult + "]"); 
            continue;
- 	    } else { 
+        } else { 
             logln("formatted results match! - " + formatResult);  
- 	    } 
+        } 
 
     }
 }
@@ -4333,7 +4334,7 @@ typedef struct {
 void DateFormatTest::TestParseMultiPatternMatch() {
         // For details see http://bugs.icu-project.org/trac/ticket/10336 
     const TestMultiPatternMatchItem items[] = {
- 	      // leniency    parse String                                 pattern                               expected result 
+          // leniency    parse String                                 pattern                               expected result 
             {true,       UnicodeString("2013-Sep 13"),                UnicodeString("yyyy-MMM dd"),         UnicodeString("2013-Sep 13")}, 
             {true,       UnicodeString("2013-September 14"),          UnicodeString("yyyy-MMM dd"),         UnicodeString("2013-Sep 14")}, 
             {false,      UnicodeString("2013-September 15"),          UnicodeString("yyyy-MMM dd"),         UnicodeString("")}, 
@@ -4363,7 +4364,7 @@ void DateFormatTest::TestParseMultiPatternMatch() {
             {false,      UnicodeString("2013 Oct 21 Q4"),             UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("")}, 
             {false,      UnicodeString("2013 Oct 22 4th quarter"),    UnicodeString("yyyy MMM dd qqqq"),    UnicodeString("2013 Oct 22 4th quarter")},
             {false,      UnicodeString("--end--"),                    UnicodeString(""),                    UnicodeString("")},
- 	};  	
+    };
 
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(Calendar::createInstance(status));
@@ -4385,7 +4386,6 @@ void DateFormatTest::TestParseMultiPatternMatch() {
            dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
            continue;
        }
-       sdmft->setLenient(itemPtr->leniency);
        sdmft->setBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, itemPtr->leniency, status);
        UDate d = sdmft->parse(itemPtr->parseString, pos); 
        
@@ -4398,22 +4398,70 @@ void DateFormatTest::TestParseMultiPatternMatch() {
                     " - leniency " + itemPtr->leniency);
                 continue;
            }
-       }
-       if(pos.getErrorIndex() != -1) { 
- 	        errln("error: parse error for string - " +itemPtr->parseString + " -- idx["+pos.getIndex()+"] errIdx["+pos.getErrorIndex()+"]"); 
- 	        continue; 
- 	    }
+        }
+        if(pos.getErrorIndex() != -1) { 
+            errln("error: parse error for string - " +itemPtr->parseString + " -- idx["+pos.getIndex()+"] errIdx["+pos.getErrorIndex()+"]"); 
+            continue; 
+        }
 
-       UnicodeString formatResult(""); 
-       sdmft->format(d, formatResult);
-       if(formatResult.compare(itemPtr->expectedResult) != 0) { 
- 	        errln("error: unexpected format result. expected[" + itemPtr->expectedResult + "]  but result was[" + formatResult + "]"); 
- 	    } else { 
+        UnicodeString formatResult(""); 
+        sdmft->format(d, formatResult);
+        if(formatResult.compare(itemPtr->expectedResult) != 0) { 
+            errln("error: unexpected format result. expected[" + itemPtr->expectedResult + "]  but result was[" + formatResult + "]"); 
+        } else { 
             logln("formatted results match! - " + formatResult);  
- 	    } 
+        } 
     }
     delete sdmft;
- }
+}
+
+void DateFormatTest::TestParseLeniencyAPIs() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DateFormat> dateFormat(DateFormat::createDateInstance());
+    DateFormat *fmt = dateFormat.getAlias();
+
+    assertTrue("isLenient default", fmt->isLenient());
+    assertTrue("isCalendarLenient default", fmt->isCalendarLenient());
+    assertTrue("ALLOW_WHITESPACE default", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status));
+    assertTrue("ALLOW_NUMERIC default", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status));
+    assertTrue("PARTIAL_MATCH default", fmt->getBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, status));
+    assertTrue("MULTIPLE_PATTERNS default", fmt->getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status));
+
+    // Set calendar to strict
+    fmt->setCalendarLenient(FALSE);
+
+    assertFalse("isLeninent after setCalendarLenient(FALSE)", fmt->isLenient());
+    assertFalse("isCalendarLenient after setCalendarLenient(FALSE)", fmt->isCalendarLenient());
+    assertTrue("ALLOW_WHITESPACE after setCalendarLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status));
+    assertTrue("ALLOW_NUMERIC  after setCalendarLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status));
+
+    // Set to strict
+    fmt->setLenient(FALSE);
+
+    assertFalse("isLeninent after setLenient(FALSE)", fmt->isLenient());
+    assertFalse("isCalendarLenient after setLenient(FALSE)", fmt->isCalendarLenient());
+    assertFalse("ALLOW_WHITESPACE after setLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status));
+    assertFalse("ALLOW_NUMERIC  after setLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status));
+    // These two boolean attributes are NOT affected according to the API specification
+    assertTrue("PARTIAL_MATCH after setLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, status));
+    assertTrue("MULTIPLE_PATTERNS after setLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status));
+
+    // Allow white space leniency
+    fmt->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, TRUE, status);
+
+    assertFalse("isLeninent after ALLOW_WHITESPACE/TRUE", fmt->isLenient());
+    assertFalse("isCalendarLenient after ALLOW_WHITESPACE/TRUE", fmt->isCalendarLenient());
+    assertTrue("ALLOW_WHITESPACE after ALLOW_WHITESPACE/TRUE", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status));
+    assertFalse("ALLOW_NUMERIC  after ALLOW_WHITESPACE/TRUE", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status));
+
+    // Set to lenient
+    fmt->setLenient(TRUE);
+
+    assertTrue("isLenient after setLenient(TRUE)", fmt->isLenient());
+    assertTrue("isCalendarLenient after setLenient(TRUE)", fmt->isCalendarLenient());
+    assertTrue("ALLOW_WHITESPACE after setLenient(TRUE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status));
+    assertTrue("ALLOW_NUMERIC after setLenient(TRUE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status));
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
