@@ -21,8 +21,6 @@ import java.util.TreeSet;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
@@ -3309,8 +3307,15 @@ public class CollationMiscTest extends TestFmwk {
                 testSourceCases[0], testSourceCases[1], nonReorderedResults);   
      }
     
+    static boolean containsExpectedScript(int[] scripts, int expectedScript) {
+        for (int i = 0; i < scripts.length; ++i) {
+            if (expectedScript == scripts[i]) { return true; }
+        }
+        return false;
+    }
+
     public void TestEquivalentReorderingScripts() {
-        int[] equivalentScriptsResult = {
+        final int[] expectedScripts = {
                 UScript.BOPOMOFO,               //Bopo
                 UScript.LISU,                   //Lisu
                 UScript.LYCIAN,                 //Lyci
@@ -3338,28 +3343,38 @@ public class CollationMiscTest extends TestFmwk {
                 UScript.MEROITIC_CURSIVE,       //Merc
                 UScript.MEROITIC_HIEROGLYPHS    //Mero
         };
-        Arrays.sort(equivalentScriptsResult);
-        
+
         int[] equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.GOTHIC);
-        Arrays.sort(equivalentScripts);
-        boolean equal = Arrays.equals(equivalentScripts, equivalentScriptsResult);
-        assertTrue("Script Equivalents for Reordering", equal);
-        if (!equal) {
-            StringBuilder s = new StringBuilder("    {");
-            for (int code : equivalentScripts) {
-                s.append(" " + UCharacter.getPropertyValueName(UProperty.SCRIPT, code, UProperty.NameChoice.SHORT));
+        if (equivalentScripts.length < expectedScripts.length) {
+            errln(String.format("ERROR/Gothic: retrieved equivalent script length wrong: " +
+                    "expected at least %d, was = %d",
+                    expectedScripts.length, equivalentScripts.length));
+        }
+        int prevScript = -1;
+        for (int i = 0; i < equivalentScripts.length; ++i) {
+            int script = equivalentScripts[i];
+            if (script <= prevScript) {
+                errln("ERROR/Gothic: equivalent scripts out of order at index " + i);
             }
-            s.append(" } vs. {");
-            for (int code : equivalentScriptsResult) {
-                s.append(" " + UCharacter.getPropertyValueName(UProperty.SCRIPT, code, UProperty.NameChoice.SHORT));
+            prevScript = script;
+        }
+        for (int code : expectedScripts) {
+            if (!containsExpectedScript(equivalentScripts, code)) {
+                errln("ERROR/Gothic: equivalent scripts do not contain " + code);
             }
-            s.append(" }");
-            errln(s.toString());
         }
 
         equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.SHAVIAN);
-        Arrays.sort(equivalentScripts);
-        assertTrue("Script Equivalents for Reordering", Arrays.equals(equivalentScripts, equivalentScriptsResult));
+        if (equivalentScripts.length < expectedScripts.length) {
+            errln(String.format("ERROR/Shavian: retrieved equivalent script length wrong: " +
+                    "expected at least %d, was = %d",
+                    expectedScripts.length, equivalentScripts.length));
+        }
+        for (int code : expectedScripts) {
+            if (!containsExpectedScript(equivalentScripts, code)) {
+                errln("ERROR/Shavian: equivalent scripts do not contain " + code);
+            }
+        }
     }
     
     public void TestGreekFirstReorderCloning() {

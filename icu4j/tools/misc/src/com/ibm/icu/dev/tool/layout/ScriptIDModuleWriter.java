@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2008, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1998-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
@@ -22,8 +22,6 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
     {
         int minScript = scriptData.getMinValue();
         int maxScript = scriptData.getMaxValue();
-        int verMajor  = VersionInfo.ICU_VERSION.getMajor();
-        int verMinor  = VersionInfo.ICU_VERSION.getMinor();
         
         openFile(fileName);
         writeHeader("__LESCRIPTS_H", includeFiles, scriptBrief);
@@ -32,7 +30,7 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         what = "script";
         readFile(ScriptAndLanguages, what);
         String checkICUVersion, previousVersion;
-        int previousMajor, previousMinor, arrayListIndex=0, numberOfScripts;
+        int arrayListIndex=0, numberOfScripts;
         boolean initialheader = false;
         boolean newScripts = false;
         
@@ -45,23 +43,17 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
              checkICUVersion = (String)scriptVersionNumber.get(arrayListIndex);
              checkICUVersion = checkICUVersion.substring(checkICUVersion.indexOf("_")+1);
              previousVersion = checkICUVersion.substring(0, checkICUVersion.indexOf("="));
-             previousMajor = Integer.parseInt(previousVersion.substring(0,previousVersion.indexOf(".")));
-             previousMinor = Integer.parseInt(previousVersion.substring(previousVersion.indexOf(".")+1));
              numberOfScripts = Integer.parseInt(checkICUVersion.substring(checkICUVersion.indexOf("=")+1));
              
-             Object args[] = {new Integer(previousMajor), new Integer(previousMinor)};
+             Object args[] = { previousVersion };
              //Check for the initial header. It should be written only one time
              if(!initialheader){
                  output.println(format.format(args));
                  initialheader = true;
              }else{
-                 if((verMajor-previousMajor)>=1){
-                     format = new MessageFormat(scriptPreambleStable); 
-                     output.println(format.format(args));
-                 }else{
-                     format = new MessageFormat(scriptPreambleDraft); 
-                     output.println(format.format(args));
-                 }
+                 // Unicode API constants are "born stable".
+                 format = new MessageFormat(scriptPreambleStable); 
+                 output.println(format.format(args));
              }
              
              for(int i=0;i<numberOfScripts;i++){
@@ -81,8 +73,8 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         }
         
         if(newScripts){//Processing newly added scripts
-            format = new MessageFormat(scriptPreambleDraft); 
-            Object args[] = {new Integer(verMajor), new Integer(verMinor)};
+            format = new MessageFormat(scriptPreambleStable); 
+            Object args[] = { VersionInfo.ICU_VERSION };
             output.println(format.format(args));
             
             for (int script = previousTotalScripts+1; script <= totalScript; script += 1) {
@@ -112,8 +104,6 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
     {
         int minLanguage = languageData.getMinValue();
         int maxLanguage = languageData.getMaxValue();
-        int verMajor    = VersionInfo.ICU_VERSION.getMajor();
-        int verMinor    = VersionInfo.ICU_VERSION.getMinor();
         
         openFile(fileName);
         writeHeader("__LELANGUAGES_H", includeFiles, languageBrief);
@@ -122,7 +112,7 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         what = "languages";
         readFile(ScriptAndLanguages, what);
         String checkICUVersion, previousVersion;
-        int previousMajor, previousMinor, arrayListIndex=0, numberOfLanguages;
+        int arrayListIndex=0, numberOfLanguages;
         boolean initialheader = false;
         boolean newLanguage = false;
         
@@ -135,24 +125,18 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
              checkICUVersion = (String)languageVersionNumber.get(arrayListIndex);
              checkICUVersion = checkICUVersion.substring(checkICUVersion.indexOf("_")+1);
              previousVersion = checkICUVersion.substring(0, checkICUVersion.indexOf("="));
-             previousMajor = Integer.parseInt(previousVersion.substring(0,previousVersion.indexOf(".")));
-             previousMinor = Integer.parseInt(previousVersion.substring(previousVersion.indexOf(".")+1));
              numberOfLanguages = Integer.parseInt(checkICUVersion.substring(checkICUVersion.indexOf("=")+1));
              
-             Object args[] = {new Integer(previousMajor), new Integer(previousMinor)};
+             Object args[] = { previousVersion };
             
              //Check for the initial header. It should be written only one time
              if(!initialheader){
                  output.println(format.format(args));
                  initialheader = true;
              }else{
-                 if((verMajor-previousMajor)>=1){
-                     format = new MessageFormat(languagePreambleStable); 
-                     output.println(format.format(args));
-                 }else{
-                     format = new MessageFormat(languagePreambleDraft); 
-                     output.println(format.format(args));
-                 }
+                 // Unicode API constants are "born stable".
+                 format = new MessageFormat(languagePreambleStable); 
+                 output.println(format.format(args));
              }
              
              for(int i=0;i<numberOfLanguages;i++){
@@ -172,8 +156,8 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         }
         if(newLanguage){
             //Processing newly added languages
-            format = new MessageFormat(languagePreambleDraft); 
-            Object args[] = {new Integer(verMajor), new Integer(verMinor)};
+            format = new MessageFormat(languagePreambleStable); 
+            Object args[] = { VersionInfo.ICU_VERSION };
             output.println(format.format(args));
             
             for (int langauge = previousTotalLanguages+1; langauge <= totalLanguage; langauge += 1) {
@@ -206,7 +190,7 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
     " * Constants for Unicode script values, generated using\n" +
     " * ICU4J''s <code>UScript</code> class.\n" +
     " *\n" +
-    " * @stable ICU {0}.{1}\n" +
+    " * @stable ICU {0}\n" +
     " */\n" +
     "\n" +
     "enum ScriptCodes '{'";
@@ -225,7 +209,7 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
     " * this is just a list of languages which the LayoutEngine\n" +
     " * supports.\n" +
     " *\n" +
-    " * @stable ICU {0}.{1}\n" +
+    " * @stable ICU {0}\n" +
     " */\n" +
     "\n" +
     "enum LanguageCodes '{'";
@@ -280,25 +264,14 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         
         System.out.println("Done");
     }
-    
-    private static final String scriptPreambleDraft = 
-        "/**\n" +
-        " * @draft ICU {0}.{1}\n" +
-        " */\n";// +
-        
+
     private static final String scriptPreambleStable = 
         "/**\n" +
-        " * @stable ICU {0}.{1}\n" +
+        " * @stable ICU {0}\n" +
         " */\n";// +
-        
-    private static final String languagePreambleDraft = 
-        "/**\n" +
-        " * @draft ICU {0}.{1}\n" +
-        " */\n";// +
-        
+
     private static final String languagePreambleStable = 
         "/**\n" +
-        " * @stable ICU {0}.{1}\n" +
+        " * @stable ICU {0}\n" +
         " */\n";// +
-        
 }

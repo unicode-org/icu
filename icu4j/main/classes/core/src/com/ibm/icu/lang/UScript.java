@@ -786,6 +786,7 @@ public final class UScript {
      */
     public static final int LOMA                          = 139;/* Loma */
     /**
+     * Mende Kikakui
      * ISO 15924 script code
      * @stable ICU 4.6
      */
@@ -812,9 +813,14 @@ public final class UScript {
     public static final int PALMYRENE                     = 144;/* Palm */
     /**
      * ISO 15924 script code
+     * @stable ICU 54
+     */
+    public static final int KHUDAWADI                     = 145;/* Sind */
+    /**
+     * ISO 15924 script code
      * @stable ICU 4.6
      */
-    public static final int SINDHI                        = 145;/* Sind */
+    public static final int SINDHI = KHUDAWADI;
     /**
      * ISO 15924 script code
      * @stable ICU 4.6
@@ -893,6 +899,37 @@ public final class UScript {
      */
     public static final int MAHAJANI = 160; /* Mahj */
 
+    /**
+     * ISO 15924 script code
+     * @stable ICU 54
+     */
+    public static final int AHOM = 161; /* Ahom */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 54
+     */
+    public static final int HATRAN = 162; /* Hatr */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 54
+     */
+    public static final int MODI = 163; /* Modi */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 54
+     */
+    public static final int MULTANI = 164; /* Mult */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 54
+     */
+    public static final int PAU_CIN_HAU = 165; /* Pauc */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 54
+     */
+    public static final int SIDDHAM = 166; /* Sidd */
+
     /* Private use codes from Qaaa - Qabx are not supported */
 
     /**
@@ -901,7 +938,7 @@ public final class UScript {
      * for which integer constants are added above.
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 161;
+    public static final int CODE_LIMIT   = 167;
 
     private static final String kLocaleScript = "LocaleScript";
     
@@ -1257,7 +1294,7 @@ public final class UScript {
             0,
             0x5B57 | RECOMMENDED | LB_LETTERS,  // Hans
             0x5B57 | RECOMMENDED | LB_LETTERS,  // Hant
-            0,
+            0x16B1C | EXCLUSION,  // Hmng
             0,
             0,
             0xA984 | LIMITED_USE | LB_LETTERS,  // Java
@@ -1265,13 +1302,13 @@ public final class UScript {
             0,
             0,
             0x1C00 | LIMITED_USE,  // Lepc
-            0,
+            0x10647 | EXCLUSION,  // Lina
             0x0840 | LIMITED_USE | RTL,  // Mand
             0,
             0x10980 | EXCLUSION | RTL,  // Mero
             0x07CA | LIMITED_USE | RTL,  // Nkoo
             0x10C00 | EXCLUSION | RTL,  // Orkh
-            0,
+            0x1036B | EXCLUSION,  // Perm
             0xA840 | EXCLUSION,  // Phag
             0x10900 | EXCLUSION | RTL,  // Phnx
             0x16F00 | ASPIRATIONAL,  // Plrd
@@ -1303,9 +1340,9 @@ public final class UScript {
             0x11103 | LIMITED_USE,  // Cakm
             0xAC00 | RECOMMENDED,  // Kore
             0x11083 | EXCLUSION,  // Kthi
-            0,
+            0x10AD8 | EXCLUSION | RTL,  // Mani
             0x10B60 | EXCLUSION | RTL,  // Phli
-            0,
+            0x10B8F | EXCLUSION | RTL,  // Phlp
             0,
             0x10B40 | EXCLUSION | RTL,  // Prti
             0x0800 | EXCLUSION | RTL,  // Samr
@@ -1316,22 +1353,22 @@ public final class UScript {
             0xA4D0 | LIMITED_USE,  // Lisu
             0,
             0x10A60 | EXCLUSION | RTL,  // Sarb
+            0x16AE6 | EXCLUSION,  // Bass
+            0x1BC20 | EXCLUSION,  // Dupl
+            0x10500 | EXCLUSION,  // Elba
+            0x11315 | EXCLUSION,  // Gran
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            0x1E802 | EXCLUSION | RTL,  // Mend
             0x109A0 | EXCLUSION | RTL,  // Merc
+            0x10A95 | EXCLUSION | RTL,  // Narb
+            0x10896 | EXCLUSION | RTL,  // Nbat
+            0x10873 | EXCLUSION | RTL,  // Palm
+            0x112BE | EXCLUSION,  // Sind
+            0x118B4 | EXCLUSION | CASED,  // Wara
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            0x16A4F | EXCLUSION,  // Mroo
             0,
             0x11183 | EXCLUSION,  // Shrd
             0x110D0 | EXCLUSION,  // Sora
@@ -1339,10 +1376,16 @@ public final class UScript {
             0,
             0,
             0,
+            0x11208 | EXCLUSION,  // Khoj
+            0x11484 | EXCLUSION,  // Tirh
+            0x10537 | EXCLUSION,  // Aghb
+            0x11152 | EXCLUSION,  // Mahj
             0,
             0,
+            0x1160E | EXCLUSION,  // Modi
             0,
-            0,
+            0x11AC0 | EXCLUSION,  // Pauc
+            0x1158E | EXCLUSION,  // Sidd
             // End copy-paste from parsescriptmetadata.py
         };
 

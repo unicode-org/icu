@@ -86,6 +86,13 @@ public final class UBiDiProps {
         for(i=0; i<count; ++i) {
             jgArray[i]=inputStream.readByte();
         }
+
+        // read jgArray2[]
+        count=indexes[IX_JG_LIMIT2]-indexes[IX_JG_START2];
+        jgArray2=new byte[count];
+        for(i=0; i<count; ++i) {
+            jgArray2[i]=inputStream.readByte();
+        }
     }
 
     // implement ICUBinary.Authenticate
@@ -120,19 +127,30 @@ public final class UBiDiProps {
         /* add the code points from the Joining_Group array where the value changes */
         start=indexes[IX_JG_START];
         limit=indexes[IX_JG_LIMIT];
-        length=limit-start;
-        prev=0;
-        for(i=0; i<length; ++i) {
-            jg=jgArray[i];
-            if(jg!=prev) {
-                set.add(start);
-                prev=jg;
+        byte[] jga=jgArray;
+        for(;;) {
+            length=limit-start;
+            prev=0;
+            for(i=0; i<length; ++i) {
+                jg=jga[i];
+                if(jg!=prev) {
+                    set.add(start);
+                    prev=jg;
+                }
+                ++start;
             }
-            ++start;
-        }
-        if(prev!=0) {
-            /* add the limit code point if the last value was not 0 (it is now start==limit) */
-            set.add(limit);
+            if(prev!=0) {
+                /* add the limit code point if the last value was not 0 (it is now start==limit) */
+                set.add(limit);
+            }
+            if(limit==indexes[IX_JG_LIMIT]) {
+                /* switch to the second Joining_Group range */
+                start=indexes[IX_JG_START2];
+                limit=indexes[IX_JG_LIMIT2];
+                jga=jgArray2;
+            } else {
+                break;
+            }
         }
 
         /* add code points with hardcoded properties, plus the ones following them */
@@ -221,9 +239,13 @@ public final class UBiDiProps {
         limit=indexes[IX_JG_LIMIT];
         if(start<=c && c<limit) {
             return (int)jgArray[c-start]&0xff;
-        } else {
-            return UCharacter.JoiningGroup.NO_JOINING_GROUP;
         }
+        start=indexes[IX_JG_START2];
+        limit=indexes[IX_JG_LIMIT2];
+        if(start<=c && c<limit) {
+            return (int)jgArray2[c-start]&0xff;
+        }
+        return UCharacter.JoiningGroup.NO_JOINING_GROUP;
     }
 
     public final int getPairedBracketType(int c) {
@@ -243,6 +265,7 @@ public final class UBiDiProps {
     private int indexes[];
     private int mirrors[];
     private byte jgArray[];
+    private byte jgArray2[];
 
     private Trie2_16 trie;
 
@@ -262,6 +285,8 @@ public final class UBiDiProps {
 
     private static final int IX_JG_START=4;
     private static final int IX_JG_LIMIT=5;
+    private static final int IX_JG_START2=6;  /* new in format version 2.2, ICU 54 */
+    private static final int IX_JG_LIMIT2=7;
 
     private static final int IX_MAX_VALUES=15;
     private static final int IX_TOP=16;
