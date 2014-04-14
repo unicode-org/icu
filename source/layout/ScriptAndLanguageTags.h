@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2011. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2014. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 11/01/2011 04:08:11 PM PDT
+ * Generated on: 04/08/2014 03:20:04 PM PDT
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -104,7 +104,7 @@ const LETag egypScriptTag = 0x65677970; /* 'egyp' (EGYPTIAN_HIEROGLYPHS) */
 const LETag geokScriptTag = 0x67656F6B; /* 'geok' (GEOK) */
 const LETag hansScriptTag = 0x68616E73; /* 'hans' (HANS) */
 const LETag hantScriptTag = 0x68616E74; /* 'hant' (HANT) */
-const LETag hmngScriptTag = 0x686D6E67; /* 'hmng' (HMNG) */
+const LETag hmngScriptTag = 0x686D6E67; /* 'hmng' (PAHAWH_HMONG) */
 const LETag hungScriptTag = 0x68756E67; /* 'hung' (HUNG) */
 const LETag indsScriptTag = 0x696E6473; /* 'inds' (INDS) */
 const LETag javaScriptTag = 0x6A617661; /* 'java' (JAVANESE) */
@@ -112,13 +112,13 @@ const LETag kaliScriptTag = 0x6B616C69; /* 'kali' (KAYAH_LI) */
 const LETag latfScriptTag = 0x6C617466; /* 'latf' (LATF) */
 const LETag latgScriptTag = 0x6C617467; /* 'latg' (LATG) */
 const LETag lepcScriptTag = 0x6C657063; /* 'lepc' (LEPCHA) */
-const LETag linaScriptTag = 0x6C696E61; /* 'lina' (LINA) */
+const LETag linaScriptTag = 0x6C696E61; /* 'lina' (LINEAR_A) */
 const LETag mandScriptTag = 0x6D616E64; /* 'mand' (MANDAIC) */
 const LETag mayaScriptTag = 0x6D617961; /* 'maya' (MAYA) */
 const LETag meroScriptTag = 0x6D65726F; /* 'mero' (MEROITIC_HIEROGLYPHS) */
 const LETag nkooScriptTag = 0x6E6B6F20; /* 'nko ' (NKO) */
 const LETag orkhScriptTag = 0x6F726B68; /* 'orkh' (OLD_TURKIC) */
-const LETag permScriptTag = 0x7065726D; /* 'perm' (PERM) */
+const LETag permScriptTag = 0x7065726D; /* 'perm' (OLD_PERMIC) */
 const LETag phagScriptTag = 0x70686167; /* 'phag' (PHAGS_PA) */
 const LETag phnxScriptTag = 0x70686E78; /* 'phnx' (PHOENICIAN) */
 const LETag plrdScriptTag = 0x706C7264; /* 'plrd' (MIAO) */
@@ -150,9 +150,9 @@ const LETag avstScriptTag = 0x61767374; /* 'avst' (AVESTAN) */
 const LETag cakmScriptTag = 0x63616B6D; /* 'cakm' (CHAKMA) */
 const LETag koreScriptTag = 0x6B6F7265; /* 'kore' (KORE) */
 const LETag kthiScriptTag = 0x6B746869; /* 'kthi' (KAITHI) */
-const LETag maniScriptTag = 0x6D616E69; /* 'mani' (MANI) */
+const LETag maniScriptTag = 0x6D616E69; /* 'mani' (MANICHAEAN) */
 const LETag phliScriptTag = 0x70686C69; /* 'phli' (INSCRIPTIONAL_PAHLAVI) */
-const LETag phlpScriptTag = 0x70686C70; /* 'phlp' (PHLP) */
+const LETag phlpScriptTag = 0x70686C70; /* 'phlp' (PSALTER_PAHLAVI) */
 const LETag phlvScriptTag = 0x70686C76; /* 'phlv' (PHLV) */
 const LETag prtiScriptTag = 0x70727469; /* 'prti' (INSCRIPTIONAL_PARTHIAN) */
 const LETag samrScriptTag = 0x73616D72; /* 'samr' (SAMARITAN) */
@@ -163,30 +163,39 @@ const LETag bamuScriptTag = 0x62616D75; /* 'bamu' (BAMUM) */
 const LETag lisuScriptTag = 0x6C697375; /* 'lisu' (LISU) */
 const LETag nkgbScriptTag = 0x6E6B6762; /* 'nkgb' (NKGB) */
 const LETag sarbScriptTag = 0x73617262; /* 'sarb' (OLD_SOUTH_ARABIAN) */
-const LETag bassScriptTag = 0x62617373; /* 'bass' (BASS) */
-const LETag duplScriptTag = 0x6475706C; /* 'dupl' (DUPL) */
-const LETag elbaScriptTag = 0x656C6261; /* 'elba' (ELBA) */
-const LETag granScriptTag = 0x6772616E; /* 'gran' (GRAN) */
+const LETag bassScriptTag = 0x62617373; /* 'bass' (BASSA_VAH) */
+const LETag duplScriptTag = 0x6475706C; /* 'dupl' (DUPLOYAN) */
+const LETag elbaScriptTag = 0x656C6261; /* 'elba' (ELBASAN) */
+const LETag granScriptTag = 0x6772616E; /* 'gran' (GRANTHA) */
 const LETag kpelScriptTag = 0x6B70656C; /* 'kpel' (KPEL) */
 const LETag lomaScriptTag = 0x6C6F6D61; /* 'loma' (LOMA) */
-const LETag mendScriptTag = 0x6D656E64; /* 'mend' (MEND) */
+const LETag mendScriptTag = 0x6D656E64; /* 'mend' (MENDE_KIKAKUI) */
 const LETag mercScriptTag = 0x6D657263; /* 'merc' (MEROITIC_CURSIVE) */
-const LETag narbScriptTag = 0x6E617262; /* 'narb' (NARB) */
-const LETag nbatScriptTag = 0x6E626174; /* 'nbat' (NBAT) */
-const LETag palmScriptTag = 0x70616C6D; /* 'palm' (PALM) */
-const LETag sindScriptTag = 0x73696E64; /* 'sind' (SIND) */
-const LETag waraScriptTag = 0x77617261; /* 'wara' (WARA) */
+const LETag narbScriptTag = 0x6E617262; /* 'narb' (OLD_NORTH_ARABIAN) */
+const LETag nbatScriptTag = 0x6E626174; /* 'nbat' (NABATAEAN) */
+const LETag palmScriptTag = 0x70616C6D; /* 'palm' (PALMYRENE) */
+const LETag sindScriptTag = 0x73696E64; /* 'sind' (KHUDAWADI) */
+const LETag waraScriptTag = 0x77617261; /* 'wara' (WARANG_CITI) */
 const LETag afakScriptTag = 0x6166616B; /* 'afak' (AFAK) */
 const LETag jurcScriptTag = 0x6A757263; /* 'jurc' (JURC) */
-const LETag mrooScriptTag = 0x6D726F6F; /* 'mroo' (MROO) */
+const LETag mrooScriptTag = 0x6D726F6F; /* 'mroo' (MRO) */
 const LETag nshuScriptTag = 0x6E736875; /* 'nshu' (NSHU) */
 const LETag shrdScriptTag = 0x73687264; /* 'shrd' (SHARADA) */
 const LETag soraScriptTag = 0x736F7261; /* 'sora' (SORA_SOMPENG) */
 const LETag takrScriptTag = 0x74616B72; /* 'takr' (TAKRI) */
 const LETag tangScriptTag = 0x74616E67; /* 'tang' (TANG) */
 const LETag woleScriptTag = 0x776F6C65; /* 'wole' (WOLE) */
-const LETag khojScriptTag = 0x6B686F6A; /* 'khoj' (KHOJ) */
-const LETag tirhScriptTag = 0x74697268; /* 'tirh' (TIRH) */
+const LETag hluwScriptTag = 0x686C7577; /* 'hluw' (HLUW) */
+const LETag khojScriptTag = 0x6B686F6A; /* 'khoj' (KHOJKI) */
+const LETag tirhScriptTag = 0x74697268; /* 'tirh' (TIRHUTA) */
+const LETag aghbScriptTag = 0x61676862; /* 'aghb' (CAUCASIAN_ALBANIAN) */
+const LETag mahjScriptTag = 0x6D61686A; /* 'mahj' (MAHAJANI) */
+const LETag ahomScriptTag = 0x61686F6D; /* 'ahom' (AHOM) */
+const LETag hatrScriptTag = 0x68617472; /* 'hatr' (HATR) */
+const LETag modiScriptTag = 0x6D6F6469; /* 'modi' (MODI) */
+const LETag multScriptTag = 0x6D756C74; /* 'mult' (MULT) */
+const LETag paucScriptTag = 0x70617563; /* 'pauc' (PAU_CIN_HAU) */
+const LETag siddScriptTag = 0x73696464; /* 'sidd' (SIDDHAM) */
 
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 

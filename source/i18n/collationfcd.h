@@ -125,8 +125,8 @@ private:
 
     static const uint8_t lcccIndex[2048];
     static const uint8_t tcccIndex[2048];
-    static const uint32_t lcccBits[65];
-    static const uint32_t tcccBits[114];
+    static const uint32_t lcccBits[];
+    static const uint32_t tcccBits[];
 };
 
 U_NAMESPACE_END

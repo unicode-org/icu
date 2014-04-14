@@ -1608,6 +1608,48 @@ const char *IntlTest::getSourceTestData(UErrorCode& /*err*/) {
     return srcDataDir;
 }
 
+char *IntlTest::getUnidataPath(char path[]) {
+    const int kUnicodeDataTxtLength = 15;  // strlen("UnicodeData.txt")
+
+    // Look inside ICU_DATA first.
+    strcpy(path, pathToDataDirectory());
+    strcat(path, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
+    FILE *f = fopen(path, "r");
+    if(f != NULL) {
+        fclose(f);
+        *(strchr(path, 0) - kUnicodeDataTxtLength) = 0;  // Remove the basename.
+        return path;
+    }
+
+    // As a fallback, try to guess where the source data was located
+    // at the time ICU was built, and look there.
+#   ifdef U_TOPSRCDIR
+        strcpy(path, U_TOPSRCDIR  U_FILE_SEP_STRING "data");
+#   else
+        UErrorCode errorCode = U_ZERO_ERROR;
+        const char *testDataPath = loadTestData(errorCode);
+        if(U_FAILURE(errorCode)) {
+            it_errln(UnicodeString(
+                        "unable to find path to source/data/unidata/ and loadTestData() failed: ") +
+                    u_errorName(errorCode));
+            return NULL;
+        }
+        strcpy(path, testDataPath);
+        strcat(path, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".."
+                     U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".."
+                     U_FILE_SEP_STRING "data");
+#   endif
+    strcat(path, U_FILE_SEP_STRING);
+    strcat(path, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
+    f = fopen(path, "r");
+    if(f != NULL) {
+        fclose(f);
+        *(strchr(path, 0) - kUnicodeDataTxtLength) = 0;  // Remove the basename.
+        return path;
+    }
+    return NULL;
+}
+
 const char* IntlTest::fgDataDir = NULL;
 
 /* returns the path to icu/source/data */

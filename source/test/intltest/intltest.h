@@ -371,6 +371,7 @@ public:
     static const char* loadTestData(UErrorCode& err);
     virtual const char* getTestDataPath(UErrorCode& err);
     static const char* getSourceTestData(UErrorCode& err);
+    static char *getUnidataPath(char path[]);
 
 // static members
 public:

@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2013. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2014. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 11/01/2011 04:08:09 PM PDT
+ * Generated on: 04/08/2014 03:20:04 PM PDT
  */
 
 #ifndef __LESCRIPTS_H
@@ -233,15 +233,25 @@ enum ScriptCodes {
  * @stable ICU 49
  */
 
-    hluwScriptCode = 156,  /* bump to match current ICU */
+    hluwScriptCode = 156,
     khojScriptCode = 157,
     tirhScriptCode = 158,
-
 /**
  * @stable ICU 52
  */
+
     aghbScriptCode = 159,
     mahjScriptCode = 160,
+/**
+ * @stable ICU 54
+ */
+
+    ahomScriptCode = 161,
+    hatrScriptCode = 162,
+    modiScriptCode = 163,
+    multScriptCode = 164,
+    paucScriptCode = 165,
+    siddScriptCode = 166,
 
 /**
  * @stable ICU 2.2
