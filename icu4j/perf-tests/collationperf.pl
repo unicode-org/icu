@@ -1,6 +1,6 @@
 #/**
 # *******************************************************************************
-# * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+# * Copyright (C) 2002-2014, International Business Machines Corporation and    *
 # * others. All Rights Reserved.                                                *
 # *******************************************************************************
 # */
@@ -16,8 +16,8 @@
 #  2002-09-25 modified by Richard Liang
 
 print "To run this performance test\n";
-print "cd to the ICU4J root directory, one directory below src\n";
-print "run perl src\\com\\ibm\\icu\\dev\\test\\perf\\collationperf.pl\n";
+print "run perl collationperf.pl\n";
+print "Running performance tests...\n";
 
 #
 # Map defines the set of data files to run in each locale
@@ -37,24 +37,29 @@ print "run perl src\\com\\ibm\\icu\\dev\\test\\perf\\collationperf.pl\n";
    "ko_KR",         "TestNames_Latin.txt TestNames_Korean.txt",
    );
 
+if ($^O eq "MSWin32") {
+    $classPath = "out\\lib\\icu4j-perf-tests.jar;..\\icu4j.jar";
+} else {
+    $classPath = "out/lib/icu4j-perf-tests.jar:../icu4j.jar";
+}
 
 #
 #  Outer loop runs through the locales to test
 #     (Edit this list dirctly to make changes)
 #
    foreach $locale (
-	   "en_US",
-	   "da_DK",
-	   "de_DE",
-	   "de__PHONEBOOK",
-	   "fr_FR",
-	   "ja_JP",
+       "en_US",
+       "da_DK",
+       "de_DE",
+       "de__PHONEBOOK",
+       "fr_FR",
+       "ja_JP",
        "zh_CN",
-	   "zh_TW",
-	   "zh__PINYIN",
+       "zh_TW",
+       "zh__PINYIN",
        "ko_KR",
-	   "ru_RU",
-	   "th",
+       "ru_RU",
+       "th",
                    )
        {
        #
@@ -68,9 +73,9 @@ print "run perl src\\com\\ibm\\icu\\dev\\test\\perf\\collationperf.pl\n";
           #
           # Run ICU Test for this (locale, data file) pair.
           #
-          $iStrCol = `java -classpath classes com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file src/com/ibm/icu/dev/test/perf/data/collation/$data -locale $locale -loop 1000 -binsearch`;
+          $iStrCol = `java -classpath $classPath com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -binsearch`;
           $iStrCol =~s/[,\s]*//g;  # whack off the leading "  ," in the returned result.
-          doKeyTimes("java -classpath classes com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file src/com/ibm/icu/dev/test/perf/data/collation/$data -locale $locale -loop 1000 -keygen",
+          doKeyTimes("java -classpath $classPath com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -keygen",
                      $iKeyGen, $iKeyLen);
 
 
@@ -80,9 +85,9 @@ print "run perl src\\com\\ibm\\icu\\dev\\test\\perf\\collationperf.pl\n";
           #    for the locale.
           #
           $wStrCol = $wKeyGen = $wKeyLen = 0;
-          $wStrCol = `java -classpath classes com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file src/com/ibm/icu/dev/test/perf/data/collation/$data -locale $locale -loop 1000 -binsearch -java`;
+          $wStrCol = `java -classpath $classPath com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -binsearch -java`;
           $wStrCol =~s/[,\s]*//g;  # whack off the leading "  ," in the returned result.
-          doKeyTimes("java -classpath classes com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file src/com/ibm/icu/dev/test/perf/data/collation/$data -locale $locale -loop 1000 -keygen -java",
+          doKeyTimes("java -classpath $classPath com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file data/collation/$data -locale $locale -loop 1000 -keygen -java",
                      $wKeyGen, $wKeyLen);
                      
           $collDiff = $keyGenDiff = $keyLenDiff = 0;
