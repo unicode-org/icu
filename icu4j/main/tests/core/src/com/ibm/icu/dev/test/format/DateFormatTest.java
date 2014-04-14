@@ -38,6 +38,7 @@ import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.ChineseDateFormat.Field;
 import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateFormat.BooleanAttribute;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.NumberFormat;
@@ -4397,12 +4398,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // For details see http://bugs.icu-project.org/trac/ticket/10261
         
         class TestDateFormatLeniencyItem {
+            public ULocale locale;
             public boolean leniency;
             public String parseString;
             public String pattern;
             public String expectedResult;   // null indicates expected error
              // Simple constructor
-            public TestDateFormatLeniencyItem(boolean len, String parString, String patt, String expResult) {
+            public TestDateFormatLeniencyItem(ULocale loc, boolean len, String parString, String patt, String expResult) {
+                locale = loc;
                 leniency = len;
                 pattern = patt;
                 parseString = parString;
@@ -4411,46 +4414,42 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         };
 
         final TestDateFormatLeniencyItem[] items = {
-            //                             leniency    parse String       pattern                 expected result
-            new TestDateFormatLeniencyItem(true,       "2008-Jan 02",     "yyyy-LLL. dd",         "2008-Jan. 02"),
-            new TestDateFormatLeniencyItem(false,      "2008-Jan 03",     "yyyy-LLL. dd",         null),
-            new TestDateFormatLeniencyItem(true,       "2008-Jan--04",    "yyyy-MMM' -- 'dd",     "2008-Jan -- 04"),
-            new TestDateFormatLeniencyItem(false,      "2008-Jan--05",    "yyyy-MMM' -- 'dd",     null),
-            new TestDateFormatLeniencyItem(true,       "2008-12-31",      "yyyy-mm-dd",           "2008-12-31")
+            //                             locale               leniency    parse String    pattern             expected result
+            new TestDateFormatLeniencyItem(ULocale.ENGLISH,     true,       "2008-07 02",   "yyyy-LLLL dd",     "2008-July 02"),
+            new TestDateFormatLeniencyItem(ULocale.ENGLISH,     false,      "2008-07 02",   "yyyy-LLLL dd",     null),
+            new TestDateFormatLeniencyItem(ULocale.ENGLISH,     true,       "2008-Jan 02",  "yyyy-LLL. dd",     "2008-Jan. 02"),
+            new TestDateFormatLeniencyItem(ULocale.ENGLISH,     false,      "2008-Jan 02",  "yyyy-LLL. dd",     null),
+            new TestDateFormatLeniencyItem(ULocale.ENGLISH,     true,       "2008-Jan--02", "yyyy-MMM' -- 'dd", "2008-Jan -- 02"),
+            new TestDateFormatLeniencyItem(ULocale.ENGLISH,     false,      "2008-Jan--02", "yyyy-MMM' -- 'dd", null),
         };
 
-        StringBuffer result = new StringBuffer();
-        Date d = new Date();
-        Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US); 
-        SimpleDateFormat sdfmt = new SimpleDateFormat();
-        ParsePosition p = new ParsePosition(0);
-        for (TestDateFormatLeniencyItem item: items) {
-            cal.clear();
-            sdfmt.setCalendar(cal);
-            sdfmt.applyPattern(item.pattern);
-            sdfmt.setLenient(item.leniency);
-            sdfmt.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE, item.leniency);
-            sdfmt.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC, item.leniency);
-            result.setLength(0);
-            p.setIndex(0);
-            p.setErrorIndex(-1);
-            d = sdfmt.parse(item.parseString, p);
-            if(item.expectedResult == null) {
-                if(p.getErrorIndex() != -1)
+        for (TestDateFormatLeniencyItem item : items) {
+            SimpleDateFormat sdfmt = new SimpleDateFormat(item.pattern, item.locale);
+            sdfmt.setBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE, item.leniency)
+                    .setBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC, item.leniency)
+                    .setBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_MATCH, item.leniency);
+
+            ParsePosition p = new ParsePosition(0);
+            Date d = sdfmt.parse(item.parseString, p);
+            if (item.expectedResult == null) {
+                if (p.getErrorIndex() != -1)
                     continue;
                 else
-                    errln("error: unexpected parse success..."+item.parseString + " w/ lenient="+item.leniency+" should have failed");
+                    errln("error: unexpected parse success..." + item.parseString + " w/ lenient=" + item.leniency
+                            + " should have failed");
             }
-            if(p.getErrorIndex() != -1) {
-                errln("error: parse error for string " +item.parseString + " -- idx["+p.getIndex()+"] errIdx["+p.getErrorIndex()+"]");
+            if (p.getErrorIndex() != -1) {
+                errln("error: parse error for string " + item.parseString + " -- idx[" + p.getIndex() + "] errIdx["
+                        + p.getErrorIndex() + "]");
                 continue;
             }
-            cal.setTime(d);
-            result = sdfmt.format(cal, result, new FieldPosition(0));
-            if(!result.toString().equalsIgnoreCase(item.expectedResult)) {
-                errln("error: unexpected format result. expected - " + item.expectedResult + "  but result was - " + result);
+
+            String result = sdfmt.format(d);
+            if (!result.equalsIgnoreCase(item.expectedResult)) {
+                errln("error: unexpected format result. expected - " + item.expectedResult + "  but result was - "
+                        + result);
             } else {
-                logln("formatted results match! - " + result.toString());
+                logln("formatted results match! - " + result);
             }
         }
     }
@@ -4559,7 +4558,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             sdfmt.setCalendar(cal);
             sdfmt.applyPattern(item.pattern);
             sdfmt.setLenient(item.leniency);
-            sdfmt.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH, item.leniency);
+            sdfmt.setBooleanAttribute(BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH, item.leniency);
             result.setLength(0);
             p.setIndex(0);
             p.setErrorIndex(-1);
@@ -4584,6 +4583,51 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         
     }
-    
-    
+
+    public void TestParseLeniencyAPIs() {
+        DateFormat fmt = DateFormat.getInstance();
+
+        assertTrue("isLenient default", fmt.isLenient());
+        assertTrue("isCalendarLenient default", fmt.isCalendarLenient());
+        assertTrue("ALLOW_WHITESPACE default", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
+        assertTrue("ALLOW_NUMERIC default", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
+        assertTrue("PARTIAL_MATCH default", fmt.getBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_MATCH));
+        assertTrue("MULTIPLE_PATTERNS default", fmt.getBooleanAttribute(BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH));
+
+        // Set calendar to strict
+        fmt.setCalendarLenient(false);
+
+        assertFalse("isLeninent after setCalendarLenient(FALSE)", fmt.isLenient());
+        assertFalse("isCalendarLenient after setCalendarLenient(FALSE)", fmt.isCalendarLenient());
+        assertTrue("ALLOW_WHITESPACE after setCalendarLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
+        assertTrue("ALLOW_NUMERIC  after setCalendarLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
+
+        // Set to strict
+        fmt.setLenient(false);
+
+        assertFalse("isLeninent after setLenient(FALSE)", fmt.isLenient());
+        assertFalse("isCalendarLenient after setLenient(FALSE)", fmt.isCalendarLenient());
+        assertFalse("ALLOW_WHITESPACE after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
+        assertFalse("ALLOW_NUMERIC  after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
+        // These two boolean attributes are NOT affected according to the API specification
+        assertTrue("PARTIAL_MATCH after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_MATCH));
+        assertTrue("MULTIPLE_PATTERNS after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH));
+
+        // Allow white space leniency
+        fmt.setBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE, true);
+
+        assertFalse("isLeninent after ALLOW_WHITESPACE/TRUE", fmt.isLenient());
+        assertFalse("isCalendarLenient after ALLOW_WHITESPACE/TRUE", fmt.isCalendarLenient());
+        assertTrue("ALLOW_WHITESPACE after ALLOW_WHITESPACE/TRUE", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
+        assertFalse("ALLOW_NUMERIC  after ALLOW_WHITESPACE/TRUE", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
+
+        // Set to lenient
+        fmt.setLenient(true);
+
+        assertTrue("isLenient after setLenient(TRUE)", fmt.isLenient());
+        assertTrue("isCalendarLenient after setLenient(TRUE)", fmt.isCalendarLenient());
+        assertTrue("ALLOW_WHITESPACE after setLenient(TRUE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
+        assertTrue("ALLOW_NUMERIC after setLenient(TRUE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
+
+    }
 }
