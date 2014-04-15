@@ -601,6 +601,7 @@ icu4j/perf-tests/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/perf-tests/data/icuperf2report.xsl -text
 icu4j/samples/build.properties -text
 icu4j/samples/manifest.stub -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/en.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/es.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/res_index.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/root.res -text
