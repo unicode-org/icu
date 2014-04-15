@@ -4861,12 +4861,11 @@ icu4j/samples/build.properties -text
 icu4j/samples/manifest.stub -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/PopulationData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/iuc/Sample13_Hello.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/samples/src/com/ibm/icu/samples/iuc/Sample20_Message.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/iuc/Sample30_ResHello.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/iuc/Sample40_PopMsg.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/iuc/Sample50_PopSort.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/samples/src/com/ibm/icu/samples/iuc/Sample55_PopTranslit.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/iuc/SupplementalUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/en.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/es.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/res_index.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/root.res -text

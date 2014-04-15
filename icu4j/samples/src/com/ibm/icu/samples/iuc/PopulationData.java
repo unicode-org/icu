@@ -1,14 +1,16 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013, International Business Machines Corporation and         *
+ * Copyright (C) 2013-2014, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.samples.iuc;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
@@ -44,7 +46,7 @@ public class PopulationData {
             return rc;
         }
     };
-    public static Set<TerritoryEntry> getTerritoryEntries(ULocale loc, Set<TerritoryEntry> entries) {
+    public static Set<TerritoryEntry> getTerritoryEntries(Locale loc, Set<TerritoryEntry> entries) {
         // Note: format of supplementalData is NOT STATIC and may change. It is internal to ICU!
         UResourceBundle suppData = SupplementalUtilities.getICUSupplementalData();
         UResourceBundle territoryInfo = suppData.get("territoryInfo");
@@ -58,17 +60,18 @@ public class PopulationData {
             // territoryF = { gdp, literacy, population }
             String terrID = rawEntry.getKey();
             ULocale territory = new ULocale("und", terrID);
-            entries.add(new TerritoryEntry(territory.getDisplayCountry(loc), SupplementalUtilities.ldml2d(vec[2])));
+            entries.add(new TerritoryEntry(territory.getDisplayCountry(ULocale.forLocale(loc)), SupplementalUtilities.ldml2d(vec[2])));
         }
         return entries;
   }
     
   public static void main(String... args) {
+      NumberFormat nf = NumberFormat.getInstance();
       System.out.println("Loading population/territory data from CLDR");
-      Set<TerritoryEntry> territoryEntries = getTerritoryEntries(ULocale.getDefault(), new HashSet<TerritoryEntry>());
-      System.out.println(".. count="+ territoryEntries.size());
+      Set<TerritoryEntry> territoryEntries = getTerritoryEntries(Locale.getDefault(), new HashSet<TerritoryEntry>());
+      System.out.println(".. count="+ nf.format(territoryEntries.size()));
       for(TerritoryEntry te : territoryEntries) {
-          System.out.println(" "+ te.territoryName() + " = " + te.population());
+          System.out.println(" "+ te.territoryName() + " = " + nf.format(te.population()));
       }
   }
 }
