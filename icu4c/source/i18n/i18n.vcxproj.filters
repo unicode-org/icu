@@ -321,7 +321,7 @@
     <ClCompile Include="ztrans.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="ucln_in.c">
+    <ClCompile Include="ucln_in.cpp">
       <Filter>misc</Filter>
     </ClCompile>
     <ClCompile Include="regexcmp.cpp">

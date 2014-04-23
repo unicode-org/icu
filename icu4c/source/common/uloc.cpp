@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2013, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -38,7 +38,6 @@
 #include "umutex.h"
 #include "cstring.h"
 #include "cmemory.h"
-#include "ucln_cmn.h"
 #include "locmap.h"
 #include "uarrsort.h"
 #include "uenumimp.h"

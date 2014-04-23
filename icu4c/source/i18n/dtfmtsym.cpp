@@ -28,7 +28,6 @@
 #include "unicode/msgfmt.h"
 #include "unicode/tznames.h"
 #include "cpputils.h"
-#include "ucln_in.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"

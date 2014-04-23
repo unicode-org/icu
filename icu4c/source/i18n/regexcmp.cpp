@@ -30,7 +30,6 @@
 #include "uvectr32.h"
 #include "uvectr64.h"
 #include "uassert.h"
-#include "ucln_in.h"
 #include "uinvchar.h"
 
 #include "regeximp.h"

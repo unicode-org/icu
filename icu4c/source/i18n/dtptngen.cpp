@@ -26,7 +26,6 @@
 #include "unicode/ustring.h"
 #include "unicode/rep.h"
 #include "cpputils.h"
-#include "ucln_in.h"
 #include "mutex.h"
 #include "cmemory.h"
 #include "cstring.h"
