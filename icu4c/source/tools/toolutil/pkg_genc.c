@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2009-2013, International Business Machines
+ *   Copyright (C) 2009-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -761,7 +761,7 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
 U_CAPI void U_EXPORT2
 writeObjectCode(const char *filename, const char *destdir, const char *optEntryPoint, const char *optMatchArch, const char *optFilename, char *outFilePath) {
     /* common variables */
-    char buffer[4096], entry[40]={ 0 };
+    char buffer[4096], entry[96]={ 0 };
     FileStream *in, *out;
     const char *newSuffix;
     int32_t i, entryLength, length, size, entryOffset=0, entryLengthOffset=0;

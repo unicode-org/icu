@@ -162,7 +162,10 @@ findBasename(const char *filename) {
     const char *basename=uprv_strrchr(filename, U_FILE_SEP_CHAR);
 
 #if U_FILE_ALT_SEP_CHAR!=U_FILE_SEP_CHAR
-    if(basename==NULL) {
+#if !U_PLATFORM_USES_ONLY_WIN32_API && U_PLATFORM != U_PF_CYGWIN
+    if(basename==NULL)
+#endif
+    {
         /* Use lenient matching on Windows, which can accept either \ or /
            This is useful for environments like Win32+CygWin which have both.
         */
