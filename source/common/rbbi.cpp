@@ -1743,8 +1743,6 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     return (reverse ? startPos : endPos);
 }
 
-// defined in ucln_cmn.h
-
 U_NAMESPACE_END
 
 

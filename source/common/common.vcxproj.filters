@@ -247,7 +247,7 @@
     <ClCompile Include="sharedobject.cpp">
       <Filter>data &amp; memory</Filter>
     </ClCompile>
-    <ClCompile Include="ucln_cmn.c">
+    <ClCompile Include="ucln_cmn.cpp">
       <Filter>data &amp; memory</Filter>
     </ClCompile>
     <ClCompile Include="ucmndata.c">

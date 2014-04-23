@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2013, International Business Machines                   *
+* Copyright (C) 2001-2014, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -56,6 +56,7 @@ typedef enum ECleanupCommonType {
 
 /* Main library cleanup registration function. */
 /* See common/ucln.h for details on adding a cleanup function. */
+/* Note: the global mutex must not be held when calling this function. */
 U_CFUNC void U_EXPORT2 ucln_common_registerCleanup(ECleanupCommonType type,
                                                    cleanupFunc *func);
 

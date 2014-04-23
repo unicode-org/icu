@@ -24,7 +24,7 @@
     <ClCompile Include="sscanf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ucln_io.c">
+    <ClCompile Include="ucln_io.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ufile.c">

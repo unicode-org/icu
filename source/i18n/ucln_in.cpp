@@ -5,39 +5,34 @@
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
-*   file name:  ucln_io.c
+*   file name:  ucln_in.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
-*   created on: 2006August11
+*   created on: 2001July05
 *   created by: George Rhoten
 */
 
 #include "ucln.h"
-#include "ucln_io.h"
+#include "ucln_in.h"
 #include "uassert.h"
 
-#ifndef U_IO_IMPLEMENTATION
-#error U_IO_IMPLEMENTATION not set - must be set for all ICU source files in io/ - see http://userguide.icu-project.org/howtouseicu
-#endif
-
-
-/**  Auto-client */
-#define UCLN_TYPE UCLN_IO
+/**  Auto-client for UCLN_I18N **/
+#define UCLN_TYPE UCLN_I18N
 #include "ucln_imp.h"
 
 /* Leave this copyright notice here! It needs to go somewhere in this library. */
 static const char copyright[] = U_COPYRIGHT_STRING;
 
-static cleanupFunc *gCleanupFunctions[UCLN_IO_COUNT];
+static cleanupFunc *gCleanupFunctions[UCLN_I18N_COUNT];
 
-static UBool io_cleanup(void)
+static UBool i18n_cleanup(void)
 {
-    ECleanupIOType libType = UCLN_IO_START;
+    int32_t libType = UCLN_I18N_START;
+    (void)copyright;   /* Suppress unused variable warning with clang. */
 
-    (void)copyright;  // Suppress unused variable warning.
-    while (++libType<UCLN_IO_COUNT) {
+    while (++libType<UCLN_I18N_COUNT) {
         if (gCleanupFunctions[libType])
         {
             gCleanupFunctions[libType]();
@@ -50,16 +45,15 @@ static UBool io_cleanup(void)
     return TRUE;
 }
 
-void ucln_io_registerCleanup(ECleanupIOType type,
+void ucln_i18n_registerCleanup(ECleanupI18NType type,
                                cleanupFunc *func)
 {
-    U_ASSERT(UCLN_IO_START < type && type < UCLN_IO_COUNT);
-    ucln_registerCleanup(UCLN_IO, io_cleanup);
-    if (UCLN_IO_START < type && type < UCLN_IO_COUNT)
+    U_ASSERT(UCLN_I18N_START < type && type < UCLN_I18N_COUNT);
+    ucln_registerCleanup(UCLN_I18N, i18n_cleanup);
+    if (UCLN_I18N_START < type && type < UCLN_I18N_COUNT)
     {
         gCleanupFunctions[type] = func;
     }
-
 #if !UCLN_NO_AUTO_CLEANUP && (defined(UCLN_AUTO_ATEXIT) || defined(UCLN_AUTO_LOCAL))
     ucln_registerAutomaticCleanup();
 #endif
