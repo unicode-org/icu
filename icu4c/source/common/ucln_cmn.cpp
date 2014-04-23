@@ -1,9 +1,9 @@
 /*
 ******************************************************************************
-* Copyright (C) 2001-2013, International Business Machines
+* Copyright (C) 2001-2014, International Business Machines
 *                Corporation and others. All Rights Reserved.
 ******************************************************************************
-*   file name:  ucln_cmn.c
+*   file name:  ucln_cmn.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -84,11 +84,11 @@ ucln_registerCleanup(ECleanupLibraryType type,
 }
 
 U_CFUNC UBool ucln_lib_cleanup(void) {
-    ECleanupLibraryType libType = UCLN_START;
-    ECleanupCommonType commonFunc = UCLN_COMMON_START;
+    int32_t libType = UCLN_START;
+    int32_t commonFunc = UCLN_COMMON_START;
 
     for (libType++; libType<UCLN_COMMON; libType++) {
-        ucln_cleanupOne(libType);
+        ucln_cleanupOne(static_cast<ECleanupLibraryType>(libType));
     }
 
     for (commonFunc++; commonFunc<UCLN_COMMON_COUNT; commonFunc++) {

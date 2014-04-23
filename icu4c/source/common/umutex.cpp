@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2013, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -23,7 +23,6 @@
 #include "unicode/utypes.h"
 #include "uassert.h"
 #include "cmemory.h"
-#include "ucln_cmn.h"
 
 
 // The ICU global mutex. Used when ICU implementation code passes NULL for the mutex pointer.

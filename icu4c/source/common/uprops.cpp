@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2013, International Business Machines
+*   Copyright (C) 2002-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,7 +28,6 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "normalizer2impl.h"
-#include "ucln_cmn.h"
 #include "umutex.h"
 #include "ubidi_props.h"
 #include "uprops.h"
