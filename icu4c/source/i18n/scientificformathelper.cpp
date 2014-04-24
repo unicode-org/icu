@@ -24,10 +24,6 @@ static UChar kSuperscriptDigits[] = {0x2070, 0xB9, 0xB2, 0xB3, 0x2074, 0x2075, 0
 static UChar kSuperscriptPlusSign = 0x207A;
 static UChar kSuperscriptMinusSign = 0x207B;
 
-static UnicodeString getMultiplicationSymbol(const DecimalFormatSymbols &dfs) {
-    return dfs.getConstSymbol(DecimalFormatSymbols::kExponentMultiplicationSymbol);
-}
-
 ScientificFormatHelper::ScientificFormatHelper(
         const DecimalFormatSymbols &dfs, UErrorCode &status)
         : fPreExponent(), fStaticSets(NULL) {
