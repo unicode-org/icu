@@ -1292,6 +1292,9 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
     UBool freeCmd = FALSE;
     int32_t length = 0;
 
+    (void)specialHandling;  // Suppress unused variable compiler warnings on platforms where all usage
+                            // of this parameter is #ifdefed out.
+
     /* This is necessary because if packaging is done without assembly code, objectFile might be extremely large
      * containing many object files and so the calling function should supply a command buffer that is large
      * enough to handle this. Otherwise, use the default size.

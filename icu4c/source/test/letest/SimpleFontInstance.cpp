@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2013, International Business Machines
+ *   Copyright (C) 1999-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -60,6 +60,7 @@ void SimpleFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) cons
         advance.fX = 0;
     }
 #else
+    (void)glyph;  // Suppress unused parameter compiler warning.
     advance.fX = xUnitsToPoints(2048);
 #endif
 

@@ -1179,7 +1179,7 @@ void RBBIAPITest::TestRefreshInputText() {
 
 }
 
-#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
+#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING && !UCONFIG_NO_FILTERED_BREAK_ITERATION
 static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it) {
   static const UChar PILCROW=0x00B6, CHSTR=0x3010, CHEND=0x3011; // lenticular brackets
   it.logln(UnicodeString("String:'")+ustr+UnicodeString("'"));
