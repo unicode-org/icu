@@ -216,7 +216,7 @@ private:
      * anything meaningful.
      */
 
-    static void loadRegionData();
+    static void loadRegionData(UErrorCode &status);
 
 };
 
