@@ -240,10 +240,18 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
                 delete htp;
                 return NULL;
             }
-            // See ticket #10803 
             umtx_lock(NULL);
-            cache->put(bundleID, (void*)htp, status);
-            umtx_unlock(NULL);
+            Hashtable *t = static_cast<Hashtable *>(cache->get(bundleID));
+            if (t != NULL) {
+                // Another thread raced through this code, creating the cache entry first.
+                // Discard ours and return theirs.
+                umtx_unlock(NULL);
+                delete htp;
+                htp = t;
+            } else {
+                cache->put(bundleID, (void*)htp, status);
+                umtx_unlock(NULL);
+            }
         }
     }
     return htp;
