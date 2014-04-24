@@ -162,7 +162,7 @@ findBasename(const char *filename) {
     const char *basename=uprv_strrchr(filename, U_FILE_SEP_CHAR);
 
 #if U_FILE_ALT_SEP_CHAR!=U_FILE_SEP_CHAR
-#if !U_PLATFORM_USES_ONLY_WIN32_API && U_PLATFORM != U_PF_CYGWIN
+#if !(U_PLATFORM == U_PF_CYGWIN && U_PLATFORM_USES_ONLY_WIN32_API)
     if(basename==NULL)
 #endif
     {
