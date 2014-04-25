@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2013 International Business Machines
+﻿# Copyright (c) 2001-2014 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #  file:
@@ -1172,14 +1172,17 @@
 "(?<=a{1,})bc"           E       "aaaa<0>bc</0>def"   # U_REGEX_LOOK_BEHIND_LIMIT error.
 "(?<=(?:){11})bc"                "<0>bc</0>"          # Empty (?:) expression.
 
+# Bug 10844
+
+"^([\w\d:]+)$"                  "<0><1>DiesIst1Beispiel:text</1></0>"
+"^([\w\d:]+)$"           i      "<0><1>DiesIst1Beispiel:text</1></0>"
+"^(\w+\d\w+:\w+)$"              "<0><1>DiesIst1Beispiel:text</1></0>"
+"^(\w+\d\w+:\w+)$"       i      "<0><1>DiesIst1Beispiel:text</1></0>"
 
 #  Random debugging, Temporary
 #
-#"^(?:a?b?)*$"	                  "a--"
 
 "This is a string with (?:one |two |three )endings"   "<0>This is a string with two endings</0>"
-"((?:a|b|c)whoop-dee-do) | [jkl]|zed"             "x"
-"astring|another[bcd]|alpha|a|[a]"    "x"
 
 
 #
