@@ -14,6 +14,7 @@
 *   created by: George Rhoten
 */
 
+#include "mutex.h"
 #include "ucln.h"
 #include "ucln_io.h"
 #include "uassert.h"
@@ -51,13 +52,14 @@ static UBool io_cleanup(void)
 }
 
 void ucln_io_registerCleanup(ECleanupIOType type,
-                               cleanupFunc *func)
-{
+                               cleanupFunc *func) {
     U_ASSERT(UCLN_IO_START < type && type < UCLN_IO_COUNT);
-    ucln_registerCleanup(UCLN_IO, io_cleanup);
-    if (UCLN_IO_START < type && type < UCLN_IO_COUNT)
     {
-        gCleanupFunctions[type] = func;
+        icu::Mutex m;       // See ticket 10295 for discussion.
+        ucln_registerCleanup(UCLN_IO, io_cleanup);
+        if (UCLN_IO_START < type && type < UCLN_IO_COUNT) {
+            gCleanupFunctions[type] = func;
+        }
     }
 
 #if !UCLN_NO_AUTO_CLEANUP && (defined(UCLN_AUTO_ATEXIT) || defined(UCLN_AUTO_LOCAL))
