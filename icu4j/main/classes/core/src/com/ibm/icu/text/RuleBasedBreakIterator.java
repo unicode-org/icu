@@ -17,9 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.CharacterIterator;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.CharTrie;
@@ -251,8 +249,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
     private int fPositionInCache;
 
     
-    private final Map<Integer, LanguageBreakEngine> fBreakEngines = 
-            Collections.synchronizedMap(new HashMap<Integer, LanguageBreakEngine>());
+    private final ConcurrentHashMap<Integer, LanguageBreakEngine> fBreakEngines = 
+            new ConcurrentHashMap<Integer, LanguageBreakEngine>();
     /**
      * Dumps caches and performs other actions associated with a complete change
      * in text or iteration position.
@@ -1064,11 +1062,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
         // We have a dictionary character.
         // Does an already instantiated break engine handle it?
-        synchronized(fBreakEngines) {
-            for (LanguageBreakEngine candidate : fBreakEngines.values()) {
-                if (candidate.handles(c, fBreakType)) {
-                    return candidate;
-                }
+        for (LanguageBreakEngine candidate : fBreakEngines.values()) {
+            if (candidate.handles(c, fBreakType)) {
+                return candidate;
             }
         }
 
@@ -1125,12 +1121,13 @@ public class RuleBasedBreakIterator extends BreakIterator {
         }
 
         if (eng != null && eng != fUnhandledBreakEngine) {
-            fBreakEngines.put(script, eng);
+            LanguageBreakEngine existingEngine = fBreakEngines.putIfAbsent(script, eng);
+            if (existingEngine != null) {
+                // There was a race & another thread was first to register an engine for this script.
+                // Use theirs and discard the one we just created.
+                eng = existingEngine;
+            }
             // assert eng.handles(c, fBreakType);
-            
-            // In the event of a race it's possible that the add() could fail
-            // and that two break engines of the same type will exist.
-            // Should be rare and pretty much harmless.
         }
         return eng;
     }
