@@ -16,6 +16,7 @@
 
 #include "ucln.h"
 #include "ucln_in.h"
+#include "mutex.h"
 #include "uassert.h"
 
 /**  Auto-client for UCLN_I18N **/
@@ -46,13 +47,14 @@ static UBool i18n_cleanup(void)
 }
 
 void ucln_i18n_registerCleanup(ECleanupI18NType type,
-                               cleanupFunc *func)
-{
+                               cleanupFunc *func) {
     U_ASSERT(UCLN_I18N_START < type && type < UCLN_I18N_COUNT);
-    ucln_registerCleanup(UCLN_I18N, i18n_cleanup);
-    if (UCLN_I18N_START < type && type < UCLN_I18N_COUNT)
     {
-        gCleanupFunctions[type] = func;
+        icu::Mutex m;   // See ticket 10295 for discussion.
+        ucln_registerCleanup(UCLN_I18N, i18n_cleanup);
+        if (UCLN_I18N_START < type && type < UCLN_I18N_COUNT) {
+            gCleanupFunctions[type] = func;
+        }
     }
 #if !UCLN_NO_AUTO_CLEANUP && (defined(UCLN_AUTO_ATEXIT) || defined(UCLN_AUTO_LOCAL))
     ucln_registerAutomaticCleanup();

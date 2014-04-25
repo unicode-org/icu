@@ -14,12 +14,13 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uclean.h"
-#include "utracimp.h"
-#include "ucln_cmn.h"
-#include "cmutex.h"
-#include "ucln.h"
 #include "cmemory.h"
+#include "mutex.h"
 #include "uassert.h"
+#include "ucln.h"
+#include "ucln_cmn.h"
+#include "utracimp.h"
+#include "umutex.h"
 
 /**  Auto-client for UCLN_COMMON **/
 #define UCLN_TYPE_IS_COMMON
@@ -65,12 +66,17 @@ ucln_common_registerCleanup(ECleanupCommonType type,
     U_ASSERT(UCLN_COMMON_START < type && type < UCLN_COMMON_COUNT);
     if (UCLN_COMMON_START < type && type < UCLN_COMMON_COUNT)
     {
+        icu::Mutex m;     // See ticket 10295 for discussion.
         gCommonCleanupFunctions[type] = func;
     }
 #if !UCLN_NO_AUTO_CLEANUP && (defined(UCLN_AUTO_ATEXIT) || defined(UCLN_AUTO_LOCAL))
     ucln_registerAutomaticCleanup();
 #endif
 }
+
+// Note: ucln_registerCleanup() is called with the ICU global mutex locked.
+//       Be aware if adding anything to the function.
+//       See ticket 10295 for discussion.
 
 U_CAPI void U_EXPORT2
 ucln_registerCleanup(ECleanupLibraryType type,
