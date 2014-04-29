@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1801,34 +1801,24 @@ IntlTestRBNF::TestAllLocales()
 {
     const char* names[] = {
         " (spellout) ",
-        " (ordinal)  ",
-        " (duration) "
+        " (ordinal)  "
+        // " (duration) " // This is English only, and it's not really supported in CLDR anymore.
     };
     double numbers[] = {45.678, 1, 2, 10, 11, 100, 110, 200, 1000, 1111, -1111};
-
-    // RBNF parse is extremely slow when lenient option is enabled.
-    // For non-exhaustive mode, we only test a few locales.
-    const char* parseLocales[] = {"en_US", "nl_NL", "be", NULL};
-
 
     int32_t count = 0;
     const Locale* locales = Locale::getAvailableLocales(count);
     for (int i = 0; i < count; ++i) {
         const Locale* loc = &locales[i];
-        UBool testParse = TRUE;
-        if (quick) {
-            testParse = FALSE;
-            for (int k = 0; parseLocales[k] != NULL; k++) {
-                if (strcmp(loc->getLanguage(), parseLocales[k]) == 0) {
-                    testParse = TRUE;
-                    break;
-                }
-            }
-        }
 
-        for (int j = 0; j < 3; ++j) {
+        for (int j = 0; j < 2; ++j) {
             UErrorCode status = U_ZERO_ERROR;
             RuleBasedNumberFormat* f = new RuleBasedNumberFormat((URBNFRuleSetTag)j, *loc, status);
+
+            if (status == U_USING_DEFAULT_WARNING || status == U_USING_FALLBACK_WARNING) {
+                // Skip it.
+                break;
+            }
             if (U_FAILURE(status)) {
                 errln(UnicodeString(loc->getName()) + names[j]
                     + "ERROR could not instantiate -> " + u_errorName(status));
@@ -1843,37 +1833,53 @@ IntlTestRBNF::TestAllLocales()
                 logln(UnicodeString(loc->getName()) + names[j]
                     + "success: " + n + " -> " + str);
 
-                if (testParse) {
-                    // We do not validate the result in this test case,
-                    // because there are cases which do not round trip by design.
-                    Formattable num;
+                // We do not validate the result in this test case,
+                // because there are cases which do not round trip by design.
+                Formattable num;
 
-                    // regular parse
-                    status = U_ZERO_ERROR;
-                    f->setLenient(FALSE);
-                    f->parse(str, num, status);
-                    if (U_FAILURE(status)) {
-                        //TODO: We need to fix parse problems - see #6895 / #6896
-                        if (status == U_INVALID_FORMAT_ERROR) {
-                            logln(UnicodeString(loc->getName()) + names[j]
-                                + "WARNING could not parse '" + str + "' -> " + u_errorName(status));
-                        } else {
-                             errln(UnicodeString(loc->getName()) + names[j]
-                                + "ERROR could not parse '" + str + "' -> " + u_errorName(status));
-                       }
+                // regular parse
+                status = U_ZERO_ERROR;
+                f->setLenient(FALSE);
+                f->parse(str, num, status);
+                if (U_FAILURE(status)) {
+                    errln(UnicodeString(loc->getName()) + names[j]
+                        + "ERROR could not parse '" + str + "' -> " + u_errorName(status));
+                }
+                // We only check the spellout. The behavior is undefined for numbers < 1 and fractional numbers.
+                if (j == 0) {
+                    if (num.getType() == Formattable::Type::kLong && num.getLong() != n) {
+                        errln(UnicodeString(loc->getName()) + names[j]
+                            + UnicodeString("ERROR could not roundtrip ") + n
+                            + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
                     }
+                    else if (num.getType() == Formattable::Type::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
+                        // The epsilon difference is too high.
+                        errln(UnicodeString(loc->getName()) + names[j]
+                            + UnicodeString("ERROR could not roundtrip ") + n
+                            + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getDouble());
+                    }
+                }
+                if (!quick && !logKnownIssue("9503") ) {
                     // lenient parse
                     status = U_ZERO_ERROR;
                     f->setLenient(TRUE);
                     f->parse(str, num, status);
                     if (U_FAILURE(status)) {
-                        //TODO: We need to fix parse problems - see #6895 / #6896
-                        if (status == U_INVALID_FORMAT_ERROR) {
-                            logln(UnicodeString(loc->getName()) + names[j]
-                                + "WARNING could not parse(lenient) '" + str + "' -> " + u_errorName(status));
-                        } else {
+                        errln(UnicodeString(loc->getName()) + names[j]
+                            + "ERROR could not parse(lenient) '" + str + "' -> " + u_errorName(status));
+                    }
+                    // We only check the spellout. The behavior is undefined for numbers < 1 and fractional numbers.
+                    if (j == 0) {
+                        if (num.getType() == Formattable::Type::kLong && num.getLong() != n) {
                             errln(UnicodeString(loc->getName()) + names[j]
-                                + "ERROR could not parse(lenient) '" + str + "' -> " + u_errorName(status));
+                                + UnicodeString("ERROR could not roundtrip ") + n
+                                + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
+                        }
+                        else if (num.getType() == Formattable::Type::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
+                            // The epsilon difference is too high.
+                            errln(UnicodeString(loc->getName()) + names[j]
+                                + UnicodeString("ERROR could not roundtrip ") + n
+                                + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getDouble());
                         }
                     }
                 }
