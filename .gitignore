@@ -516,6 +516,7 @@ icu4c/source/test/perf/howExpensiveIs/*.xml
 icu4c/source/test/perf/howExpensiveIs/Makefile
 icu4c/source/test/perf/howExpensiveIs/howExpensiveIs
 icu4c/source/test/perf/ipch
+icu4c/source/test/perf/leperf/Makefile
 icu4c/source/test/perf/normperf/*.d
 icu4c/source/test/perf/normperf/*.o
 icu4c/source/test/perf/normperf/*.vcxproj.user
