@@ -1847,7 +1847,7 @@ IntlTestRBNF::TestAllLocales()
                 }
                 // We only check the spellout. The behavior is undefined for numbers < 1 and fractional numbers.
                 if (j == 0) {
-                    if (num.getType() == Formattable::Type::kLong && num.getLong() != n) {
+                    if (num.getType() == Formattable::kLong && num.getLong() != n) {
                         errln(UnicodeString(loc->getName()) + names[j]
                             + UnicodeString("ERROR could not roundtrip ") + n
                             + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
@@ -1870,7 +1870,7 @@ IntlTestRBNF::TestAllLocales()
                     }
                     // We only check the spellout. The behavior is undefined for numbers < 1 and fractional numbers.
                     if (j == 0) {
-                        if (num.getType() == Formattable::Type::kLong && num.getLong() != n) {
+                        if (num.getType() == Formattable::kLong && num.getLong() != n) {
                             errln(UnicodeString(loc->getName()) + names[j]
                                 + UnicodeString("ERROR could not roundtrip ") + n
                                 + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
