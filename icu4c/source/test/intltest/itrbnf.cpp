@@ -1852,7 +1852,7 @@ IntlTestRBNF::TestAllLocales()
                             + UnicodeString("ERROR could not roundtrip ") + n
                             + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
                     }
-                    else if (num.getType() == Formattable::Type::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
+                    else if (num.getType() == Formattable::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
                         // The epsilon difference is too high.
                         errln(UnicodeString(loc->getName()) + names[j]
                             + UnicodeString("ERROR could not roundtrip ") + n
@@ -1875,7 +1875,7 @@ IntlTestRBNF::TestAllLocales()
                                 + UnicodeString("ERROR could not roundtrip ") + n
                                 + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
                         }
-                        else if (num.getType() == Formattable::Type::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
+                        else if (num.getType() == Formattable::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
                             // The epsilon difference is too high.
                             errln(UnicodeString(loc->getName()) + names[j]
                                 + UnicodeString("ERROR could not roundtrip ") + n
