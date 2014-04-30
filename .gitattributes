@@ -263,6 +263,7 @@ icu4j/main/classes/core/.settings/edu.umd.cs.findbugs.core.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
+icu4j/main/classes/core/src/com/ibm/icu/text/ScientificFormatHelper.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
@@ -323,6 +324,7 @@ icu4j/main/tests/core/manifest.stub -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/testmessages.properties -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/ScientificFormatHelperTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text

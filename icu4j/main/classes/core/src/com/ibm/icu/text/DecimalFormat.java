@@ -2279,7 +2279,7 @@ public class DecimalFormat extends NumberFormat {
                 0xFF0E, 0xFF0E,
                 0xFF61, 0xFF61).freeze();
     
-    private static final UnicodeSet minusSigns =
+    static final UnicodeSet minusSigns =
         new UnicodeSet(
                 0x002D, 0x002D,
                 0x207B, 0x207B,
@@ -2289,7 +2289,7 @@ public class DecimalFormat extends NumberFormat {
                 0xFE63, 0xFE63,
                 0xFF0D, 0xFF0D).freeze();
     
-    private static final UnicodeSet plusSigns =
+    static final UnicodeSet plusSigns =
             new UnicodeSet(
                 0x002B, 0x002B,
                 0x207A, 0x207A,
