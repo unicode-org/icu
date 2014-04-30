@@ -87,14 +87,6 @@
 #   include <qusrjobi.h>
 #   include <qliept.h>      /* EPT_CALL macro  - this include must be after all other "QSYSINCs" */
 #   include <mih/testptr.h> /* For uprv_maximumPtr */
-#elif U_PLATFORM == U_PF_CLASSIC_MACOS
-#   include <Files.h>
-#   include <IntlResources.h>
-#   include <Script.h>
-#   include <Folders.h>
-#   include <MacTypes.h>
-#   include <TextUtils.h>
-#   define ICU_NO_USER_DATA_OVERRIDE 1
 #elif U_PLATFORM == U_PF_OS390
 #   include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
 #elif U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM == U_PF_SOLARIS
@@ -187,7 +179,7 @@ static const BitPatternConversion gInf = { (int64_t) INT64_C(0x7FF0000000000000)
   functions).
   ---------------------------------------------------------------------------*/
 
-#if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_CLASSIC_MACOS || U_PLATFORM == U_PF_OS400
+#if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_OS400
 #   undef U_POSIX_LOCALE
 #else
 #   define U_POSIX_LOCALE    1
@@ -306,21 +298,7 @@ uprv_getUTCtime()
 U_CAPI UDate U_EXPORT2
 uprv_getRawUTCtime()
 {
-#if U_PLATFORM == U_PF_CLASSIC_MACOS
-    time_t t, t1, t2;
-    struct tm tmrec;
-
-    uprv_memset( &tmrec, 0, sizeof(tmrec) );
-    tmrec.tm_year = 70;
-    tmrec.tm_mon = 0;
-    tmrec.tm_mday = 1;
-    t1 = mktime(&tmrec);    /* seconds of 1/1/1970*/
-
-    time(&t);
-    uprv_memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
-    t2 = mktime(&tmrec);    /* seconds of current GMT*/
-    return (UDate)(t2 - t1) * U_MILLIS_PER_SECOND;         /* GMT (or UTC) in seconds since 1970*/
-#elif U_PLATFORM_USES_ONLY_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
 
     FileTimeConversion winTime;
     GetSystemTimeAsFileTime(&winTime.fileTime);
@@ -1297,115 +1275,6 @@ u_getDataDirectory(void) {
     return gDataDirectory;
 }
 
-
-
-
-
-/* Macintosh-specific locale information ------------------------------------ */
-#if U_PLATFORM == U_PF_CLASSIC_MACOS
-
-typedef struct {
-    int32_t script;
-    int32_t region;
-    int32_t lang;
-    int32_t date_region;
-    const char* posixID;
-} mac_lc_rec;
-
-/* Todo: This will be updated with a newer version from www.unicode.org web
-   page when it's available.*/
-#define MAC_LC_MAGIC_NUMBER -5
-#define MAC_LC_INIT_NUMBER -9
-
-static const mac_lc_rec mac_lc_recs[] = {
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 0, "en_US",
-    /* United States*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 1, "fr_FR",
-    /* France*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 2, "en_GB",
-    /* Great Britain*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 3, "de_DE",
-    /* Germany*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 4, "it_IT",
-    /* Italy*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 5, "nl_NL",
-    /* Metherlands*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 6, "fr_BE",
-    /* French for Belgium or Lxembourg*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 7, "sv_SE",
-    /* Sweden*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 9, "da_DK",
-    /* Denmark*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 10, "pt_PT",
-    /* Portugal*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 11, "fr_CA",
-    /* French Canada*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 13, "is_IS",
-    /* Israel*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 14, "ja_JP",
-    /* Japan*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 15, "en_AU",
-    /* Australia*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 16, "ar_AE",
-    /* the Arabic world (?)*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 17, "fi_FI",
-    /* Finland*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 18, "fr_CH",
-    /* French for Switzerland*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 19, "de_CH",
-    /* German for Switzerland*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 20, "el_GR",
-    /* Greece*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 21, "is_IS",
-    /* Iceland ===*/
-    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 22, "",*/
-    /* Malta ===*/
-    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 23, "",*/
-    /* Cyprus ===*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 24, "tr_TR",
-    /* Turkey ===*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 25, "sh_YU",
-    /* Croatian system for Yugoslavia*/
-    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 33, "",*/
-    /* Hindi system for India*/
-    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 34, "",*/
-    /* Pakistan*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 41, "lt_LT",
-    /* Lithuania*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 42, "pl_PL",
-    /* Poland*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 43, "hu_HU",
-    /* Hungary*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 44, "et_EE",
-    /* Estonia*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 45, "lv_LV",
-    /* Latvia*/
-    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 46, "",*/
-    /* Lapland  [Ask Rich for the data. HS]*/
-    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 47, "",*/
-    /* Faeroe Islands*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 48, "fa_IR",
-    /* Iran*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 49, "ru_RU",
-    /* Russia*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 50, "en_IE",
-    /* Ireland*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 51, "ko_KR",
-    /* Korea*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 52, "zh_CN",
-    /* People's Republic of China*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 53, "zh_TW",
-    /* Taiwan*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 54, "th_TH",
-    /* Thailand*/
-
-    /* fallback is en_US*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER,
-    MAC_LC_MAGIC_NUMBER, "en_US"
-};
-
-#endif
-
 #if U_POSIX_LOCALE
 /* A helper function used by uprv_getPOSIXIDForDefaultLocale and
  * uprv_getPOSIXIDForDefaultCodepage. Returns the posix locale id for
@@ -1640,41 +1509,6 @@ The leftmost codepage (.xxx) wins.
         return "en_US";
     }
     return gCorrectedPOSIXLocale;
-
-#elif U_PLATFORM == U_PF_CLASSIC_MACOS
-    int32_t script = MAC_LC_INIT_NUMBER;
-    /* = IntlScript(); or GetScriptManagerVariable(smSysScript);*/
-    int32_t region = MAC_LC_INIT_NUMBER;
-    /* = GetScriptManagerVariable(smRegionCode);*/
-    int32_t lang = MAC_LC_INIT_NUMBER;
-    /* = GetScriptManagerVariable(smScriptLang);*/
-    int32_t date_region = MAC_LC_INIT_NUMBER;
-    const char* posixID = 0;
-    int32_t count = sizeof(mac_lc_recs) / sizeof(mac_lc_rec);
-    int32_t i;
-    Intl1Hndl ih;
-
-    ih = (Intl1Hndl) GetIntlResource(1);
-    if (ih)
-        date_region = ((uint16_t)(*ih)->intl1Vers) >> 8;
-
-    for (i = 0; i < count; i++) {
-        if (   ((mac_lc_recs[i].script == MAC_LC_MAGIC_NUMBER)
-             || (mac_lc_recs[i].script == script))
-            && ((mac_lc_recs[i].region == MAC_LC_MAGIC_NUMBER)
-             || (mac_lc_recs[i].region == region))
-            && ((mac_lc_recs[i].lang == MAC_LC_MAGIC_NUMBER)
-             || (mac_lc_recs[i].lang == lang))
-            && ((mac_lc_recs[i].date_region == MAC_LC_MAGIC_NUMBER)
-             || (mac_lc_recs[i].date_region == date_region))
-            )
-        {
-            posixID = mac_lc_recs[i].posixID;
-            break;
-        }
-    }
-
-    return posixID;
 
 #elif U_PLATFORM == U_PF_OS400
     /* locales are process scoped and are by definition thread safe */
@@ -1956,9 +1790,6 @@ int_getDefaultCodepage()
     codepage[63] = 0; /* NULL terminate */
 
     return codepage;
-
-#elif U_PLATFORM == U_PF_CLASSIC_MACOS
-    return "macintosh"; /* TODO: Macintosh Roman. There must be a better way. fixme! */
 
 #elif U_PLATFORM_USES_ONLY_WIN32_API
     static char codepage[64];
