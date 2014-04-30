@@ -1218,10 +1218,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      */
     @Deprecated
     static public class FormatParser {
+        private static final UnicodeSet SYNTAX_CHARS = new UnicodeSet("[a-zA-Z]").freeze();
+        private static final UnicodeSet QUOTING_CHARS = new UnicodeSet("[[[:script=Latn:][:script=Cyrl:]]&[[:L:][:M:]]]").freeze();
         private transient PatternTokenizer tokenizer = new PatternTokenizer()
-        .setSyntaxCharacters(new UnicodeSet("[a-zA-Z]"))
-        .setExtraQuotingCharacters(new UnicodeSet("[[[:script=Latn:][:script=Cyrl:]]&[[:L:][:M:]]]"))
-        //.setEscapeCharacters(new UnicodeSet("[^\\u0020-\\u007E]")) // WARNING: DateFormat doesn't accept \\uXXXX
+        .setSyntaxCharacters(SYNTAX_CHARS)
+        .setExtraQuotingCharacters(QUOTING_CHARS)
         .setUsingQuote(true);
         private List<Object> items = new ArrayList<Object>();
 
