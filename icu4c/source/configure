@@ -4897,9 +4897,6 @@ else
   icu_cv_host_frag=mh-mingw
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $icu_cv_host_frag" >&5
-$as_echo "$icu_cv_host_frag" >&6; }
 	else
 		icu_cv_host_frag=mh-cygwin-msvc
 	fi ;;
@@ -4931,6 +4928,10 @@ $as_echo "$icu_cv_host_frag" >&6; }
 *) 		icu_cv_host_frag=mh-unknown ;;
 esac
 
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $icu_cv_host_frag" >&5
+$as_echo "$icu_cv_host_frag" >&6; }
 
 
 # Checks for libraries and other host specific stuff
