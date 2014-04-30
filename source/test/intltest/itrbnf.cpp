@@ -1817,6 +1817,7 @@ IntlTestRBNF::TestAllLocales()
 
             if (status == U_USING_DEFAULT_WARNING || status == U_USING_FALLBACK_WARNING) {
                 // Skip it.
+                delete f;
                 break;
             }
             if (U_FAILURE(status)) {
