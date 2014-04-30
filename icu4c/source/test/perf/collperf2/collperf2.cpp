@@ -1315,7 +1315,9 @@ const CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
             continue; // skip empty/comment line
         } else {
             d16->append_one(len);
-            u_memcpy(d16->last(), line, len);
+            UChar *p = d16->last();
+            u_memcpy(p, line, len - 1);  // exclude the CR
+            p[len - 1] = 0;  // NUL-terminate
 
             numData++;
             if (numData >= MAX_NUM_DATA) break;
@@ -1456,8 +1458,9 @@ CA_uchar* CollPerf2Test::sortData16(const CA_uchar* d16,
     // Copy the strings in sorted order into a new array.
     LocalPointer<CA_uchar> newD16(new CA_uchar());
     for (int32_t i = 0; i < d16->count; i++) {
-        const UChar* s = d16->dataOf(i);
-        int32_t len = d16->lengthOf(i);
+        int32_t j = indexes[i];
+        const UChar* s = d16->dataOf(j);
+        int32_t len = d16->lengthOf(j);
         int32_t capacity = len + 1;  // including NULL terminator
         newD16->append_one(capacity);
         u_memcpy(newD16->last(), s, capacity);
