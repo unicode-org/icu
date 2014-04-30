@@ -40,7 +40,7 @@ x86_64-*-cygwin) icu_cv_host_frag=mh-cygwin64 ;;
 #ifndef __MINGW64__
 #error This is not MinGW64
 #endif]])],                        [icu_cv_host_frag=mh-mingw64],
-                                   [icu_cv_host_frag=mh-mingw])])
+                                   [icu_cv_host_frag=mh-mingw])
 	else
 		icu_cv_host_frag=mh-cygwin-msvc
 	fi ;;
