@@ -41,7 +41,7 @@ class DecimalFormatStaticSets;
  * UnicodeString result;
  *
  * // result = "1.23456×10<sup>-78</sup>"
- * helper.insetMarkup(appendTo, fpositer, "<sup>", "</sup>", result, status));
+ * helper.insertMarkup(appendTo, fpositer, "<sup>", "</sup>", result, status));
  * </pre>
  *
  * @see NumberFormat
@@ -92,7 +92,7 @@ class U_I18N_API ScientificFormatHelper : public UObject {
      * @return the value stored in result.
      * @draft ICU 54
      */
-    UnicodeString &insetMarkup(
+    UnicodeString &insertMarkup(
         const UnicodeString &s,
         FieldPositionIterator &fpi,
         const UnicodeString &beginMarkup,
