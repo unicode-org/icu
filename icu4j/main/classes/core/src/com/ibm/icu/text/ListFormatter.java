@@ -256,13 +256,13 @@ final public class ListFormatter {
     
     // Builds a formatted list
     static class FormattedListBuilder {
-        private String current;
+        private StringBuilder current;
         private int offset;
         
         // Start is the first object in the list; If recordOffset is true, records the offset of
         // this first object.
         public FormattedListBuilder(Object start, boolean recordOffset) {
-            this.current = start.toString();
+            this.current = new StringBuilder(start.toString());
             this.offset = recordOffset ? 0 : -1;
         }
         
@@ -274,28 +274,28 @@ final public class ListFormatter {
             if (pattern.getPlaceholderCount() != 2) {
                 throw new IllegalArgumentException("Need {0} and {1} only in pattern " + pattern);
             }
-            if (recordOffset || offsetRecorded()) {
-                int[] offsets = new int[2];
-                current = pattern.format(
-                        new StringBuilder(), offsets, current, next.toString()).toString();
-                if (offsets[0] == -1 || offsets[1] == -1) {
-                    throw new IllegalArgumentException(
-                            "{0} or {1} missing from pattern " + pattern);
-                }
-                if (recordOffset) {
-                    offset = offsets[1];
-                } else {
-                    offset += offsets[0];
-                }
-            } else {
-                current = pattern.format(current, next.toString());
-            }
-            return this;
+           int[] offsets = (recordOffset || offsetRecorded()) ? new int[2] : null;
+           StringBuilder nextBuilder =
+                   pattern.startsWithPlaceholder(0) ? current : new StringBuilder();
+           current = pattern.format(
+                   nextBuilder, offsets, current, next.toString());
+           if (offsets != null) {
+               if (offsets[0] == -1 || offsets[1] == -1) {
+                   throw new IllegalArgumentException(
+                           "{0} or {1} missing from pattern " + pattern);
+               }
+               if (recordOffset) {
+                   offset = offsets[1];
+               } else {
+                   offset += offsets[0];
+               }
+           }
+           return this;
         }
 
         @Override
         public String toString() {
-            return current;
+            return current.toString();
         }
         
         // Gets the last recorded offset or -1 if no offset recorded.

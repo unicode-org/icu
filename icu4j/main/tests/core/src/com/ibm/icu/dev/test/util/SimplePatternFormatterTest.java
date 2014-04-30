@@ -37,7 +37,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
                  0,
                  fmt.getPlaceholderCount());
          assertEquals(
-                 "evaluate",
+                 "format",
                  "This doesn't have templates {0}",
                  fmt.format("unused"));
          assertEquals(
@@ -59,7 +59,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
                  0,
                  fmt.getPlaceholderCount());
          assertEquals(
-                 "evaluate",
+                 "format",
                  "Some {} messed {12d up stuff.",
                  fmt.format("to"));
      }
@@ -73,6 +73,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
      public void TestWithPlaceholders() {
          SimplePatternFormatter fmt = SimplePatternFormatter.compile(
                  "Templates {2}{1} and {4} are out of order.");
+         assertFalse("startsWithPlaceholder", fmt.startsWithPlaceholder(2));
          assertEquals(
                  "getPlaceholderCount",
                  5,
@@ -89,7 +90,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
                  fmt.toString());
         int[] offsets = new int[6]; 
         assertEquals(
-                 "evaluate",
+                 "format",
                  "123456: Templates frogtommy and {0} are out of order.",
                  fmt.format(
                          new StringBuilder("123456: "),
@@ -97,6 +98,28 @@ public class SimplePatternFormatterTest extends TestFmwk {
                          "freddy", "tommy", "frog", "leg", "{0}").toString());
          
          int[] expectedOffsets = {-1, 22, 18, -1, 32, -1};
+         for (int i = 0; i < offsets.length; i++) {
+             if (offsets[i] != expectedOffsets[i]) {
+                 fail("getOffset() returned wrong value for " + i);
+             }
+         }
+     }
+     
+     public void TestOptimization() {
+         SimplePatternFormatter fmt = SimplePatternFormatter.compile("{2}, {0}, {1} and {3}");
+         assertTrue("startsWithPlaceholder", fmt.startsWithPlaceholder(2));
+         assertFalse("startsWithPlaceholder", fmt.startsWithPlaceholder(0));
+         int[] offsets = new int[4];
+         StringBuilder appendTo = new StringBuilder("leg");
+        assertEquals(
+                 "format",
+                 "leg, freddy, frog and by",
+                 fmt.format(
+                         appendTo,
+                         offsets,
+                         "freddy", "frog", appendTo, "by").toString());
+         
+         int[] expectedOffsets = {5, 13, 0, 22};
          for (int i = 0; i < offsets.length; i++) {
              if (offsets[i] != expectedOffsets[i]) {
                  fail("getOffset() returned wrong value for " + i);
