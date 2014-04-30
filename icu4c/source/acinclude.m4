@@ -1,4 +1,4 @@
-# Copyright (c) 1999-2013, International Business Machines Corporation and
+# Copyright (c) 1999-2014, International Business Machines Corporation and
 # others. All Rights Reserved.
 # acinclude.m4 for ICU
 # Don't edit aclocal.m4, do edit acinclude.m4
@@ -32,15 +32,15 @@ powerpc*-*-linux*)
 		icu_cv_host_frag=mh-linux-va
 	fi ;;
 *-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
-*-*-cygwin|*-*-mingw32|*-*-mingw64)
+i[[34567]]86-*-cygwin) icu_cv_host_frag=mh-cygwin ;;
+x86_64-*-cygwin) icu_cv_host_frag=mh-cygwin64 ;;
+*-*-mingw32|*-*-mingw64)
 	if test "$GCC" = yes; then
-		AC_TRY_COMPILE([
-#ifndef __MINGW32__
-#error This is not MinGW
-#endif], [], AC_TRY_COMPILE([
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #ifndef __MINGW64__
 #error This is not MinGW64
-#endif], [], icu_cv_host_frag=mh-mingw64, icu_cv_host_frag=mh-mingw), icu_cv_host_frag=mh-cygwin)
+#endif]])],                        [icu_cv_host_frag=mh-mingw64],
+                                   [icu_cv_host_frag=mh-mingw])])
 	else
 		icu_cv_host_frag=mh-cygwin-msvc
 	fi ;;
