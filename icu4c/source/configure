@@ -4873,24 +4873,11 @@ powerpc*-*-linux*)
 		icu_cv_host_frag=mh-linux-va
 	fi ;;
 *-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
-*-*-cygwin|*-*-mingw32|*-*-mingw64)
+i[34567]86-*-cygwin) icu_cv_host_frag=mh-cygwin ;;
+x86_64-*-cygwin) icu_cv_host_frag=mh-cygwin64 ;;
+*-*-mingw32|*-*-mingw64)
 	if test "$GCC" = yes; then
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#ifndef __MINGW32__
-#error This is not MinGW
-#endif
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 #ifndef __MINGW64__
@@ -4910,10 +4897,9 @@ else
   icu_cv_host_frag=mh-mingw
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-else
-  icu_cv_host_frag=mh-cygwin
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $icu_cv_host_frag" >&5
+$as_echo "$icu_cv_host_frag" >&6; }
 	else
 		icu_cv_host_frag=mh-cygwin-msvc
 	fi ;;
@@ -4945,10 +4931,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 *) 		icu_cv_host_frag=mh-unknown ;;
 esac
 
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $icu_cv_host_frag" >&5
-$as_echo "$icu_cv_host_frag" >&6; }
 
 
 # Checks for libraries and other host specific stuff
