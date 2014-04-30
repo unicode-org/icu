@@ -55,9 +55,9 @@ void ScientificFormatHelperTest::TestBasic() {
     UnicodeString result;
     const char *expected = "String: 1.23456\\u00d710<sup>-78</sup>";
     assertEquals(
-            "insetMarkup",
+            "insertMarkup",
             UnicodeString(expected).unescape(),
-            helper.insetMarkup(appendTo, fpositer, "<sup>", "</sup>", result, status));
+            helper.insertMarkup(appendTo, fpositer, "<sup>", "</sup>", result, status));
     result.remove();
     expected = "String: 1.23456\\u00d710\\u207b\\u2077\\u2078";
     assertEquals(

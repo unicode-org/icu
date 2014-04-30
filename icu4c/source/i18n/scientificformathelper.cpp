@@ -54,7 +54,7 @@ ScientificFormatHelper &ScientificFormatHelper::operator=(const ScientificFormat
 ScientificFormatHelper::~ScientificFormatHelper() {
 }
 
-UnicodeString &ScientificFormatHelper::insetMarkup(
+UnicodeString &ScientificFormatHelper::insertMarkup(
         const UnicodeString &s,
         FieldPositionIterator &fpi,
         const UnicodeString &beginMarkup,
