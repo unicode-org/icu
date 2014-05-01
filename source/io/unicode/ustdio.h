@@ -242,6 +242,29 @@ u_fopen(const char    *filename,
     const char    *codepage);
 
 /**
+ * Open a UFILE with a UChar* filename
+ * A UFILE is a wrapper around a FILE* that is locale and codepage aware.
+ * That is, data written to a UFILE will be formatted using the conventions
+ * specified by that UFILE's Locale; this data will be in the character set
+ * specified by that UFILE's codepage.
+ * @param filename The name of the file to open.
+ * @param perm The read/write permission for the UFILE; one of "r", "w", "rw"
+ * @param locale The locale whose conventions will be used to format
+ * and parse output. If this parameter is NULL, the default locale will
+ * be used.
+ * @param codepage The codepage in which data will be written to and
+ * read from the file. If this paramter is NULL the system default codepage
+ * will be used.
+ * @return A new UFILE, or NULL if an error occurred.
+ * @draft ICU 54
+ */
+U_DRAFT UFILE* U_EXPORT2
+u_fopen_u(const UChar    *filename,
+    const char    *perm,
+    const char    *locale,
+    const char    *codepage);
+
+/**
  * Open a UFILE on top of an existing FILE* stream. The FILE* stream
  * ownership remains with the caller. To have the UFILE take over
  * ownership and responsibility for the FILE* stream, use the
