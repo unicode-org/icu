@@ -519,8 +519,14 @@
 '((((((((((a))))))))))\10' i    "<0><1><2><3><4><5><6><7><8><9><10>A</10></9></8></7></6></5></4></3></2></1>A</0>"
 
 "(?:(?i)a)b"                    "<0>Ab</0>"
-"ab(?i)cd"	                 "<0>abCd</0>"
+"ab(?i)cd"	                    "<0>abCd</0>"
 "ab$cd"                         "abcd"
+
+"ssl"                      i    "abc<0>ßl</0>xyz"
+"ssl"                      i    "abc<0>ẞl</0>xyz"
+"FIND"                     i    "can <0>ﬁnd</0> ?"  # fi ligature, \ufb01
+"ﬁnd"                      i    "can <0>FIND</0> ?"
+"ῧ"                        i    "xxx<0>ῧ</0>xxx"    # Composed char (match string) decomposes when case-folded (pattern)
 
 # White space handling
 "a b"                           "ab"
@@ -1171,6 +1177,13 @@
 "(?<=a{11})bc"                   "aaaaaaaaaabc"
 "(?<=a{1,})bc"           E       "aaaa<0>bc</0>def"   # U_REGEX_LOOK_BEHIND_LIMIT error.
 "(?<=(?:){11})bc"                "<0>bc</0>"          # Empty (?:) expression.
+
+# Bug 10835
+#   Match Start Set not being correctly computed for case insensitive patterns.
+#   (Test here is to dump the compiled pattern & manually check the start set.)
+
+"(private|secret|confidential|classified|restricted)"  i   "hmm, <0><1>Classified</1></0> stuff"
+"(private|secret|confidential|classified|restricted)"      "hmm, Classified stuff"
 
 # Bug 10844
 

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2013, International Business Machines Corporation and
+ * Copyright (c) 2002-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -48,6 +48,7 @@ public:
     virtual void Bug9283();
     virtual void CheckInvBufSize();
     virtual void Bug10459();
+    virtual void TestCaseInsensitiveStarters();
     
     // The following functions are internal to the regexp tests.
     virtual void assertUText(const char *expected, UText *actual, const char *file, int line);

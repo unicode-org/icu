@@ -1,7 +1,7 @@
 //
 //  regexcmp.h
 //
-//  Copyright (C) 2002-2012, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2014, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for the class RegexCompile
@@ -22,6 +22,7 @@
 #include "unicode/parseerr.h"
 #include "uhash.h"
 #include "uvector.h"
+#include "uvectr32.h"
 
 
 
@@ -114,6 +115,10 @@ private:
     void        setPushOp(int32_t op);
     UChar32     scanNamedChar();
     UnicodeSet *createSetForProperty(const UnicodeString &propName, UBool negated);
+
+public:   // Public for testing only.
+    static void findCaseInsensitiveStarters(UChar32 c, UnicodeSet *starterChars);
+private:
 
 
     UErrorCode                    *fStatus;
