@@ -2377,6 +2377,105 @@ UBool RegexCompile::compileInlineInterval() {
 
 //------------------------------------------------------------------------------
 //
+//   caseInsensitiveStart  given a single code point from a pattern string, determine the 
+//                         set of characters that could potentially begin a case-insensitive 
+//                         match of a string beginning with that character, using full Unicode
+//                         case insensitive matching.
+//
+//          This is used in optimizing find().
+//
+//          closeOver(USET_CASE_INSENSITIVE) does most of what is needed, but
+//          misses cases like this:
+//             A string from the pattern begins with 'ss' (although all we know
+//                 in this context is that it begins with 's')
+//             The pattern could match a string beginning with a German sharp-s
+//
+//           To the ordinary case closure for a character c, we add all other
+//           characters cx where the case closure of cx incudes a string form that begins
+//           with the original character c.
+//
+//           This function could be made smarter. The full pattern string is available
+//           and it would be possible to verify that the extra characters being added
+//           to the starting set fully match, rather than having just a first-char of the
+//           folded form match.
+//
+//------------------------------------------------------------------------------
+void  RegexCompile::findCaseInsensitiveStarters(UChar32 c, UnicodeSet *starterChars) {
+
+// Machine Generated below.
+// It may need updating with new versions of Unicode.
+// Intltest test RegexTest::TestCaseInsensitiveStarters will fail if an update is needed.
+// The update tool is here: svn+ssh://source.icu-project.org/repos/icu/tools/trunk/unicode/c/genregexcasing
+
+// Machine Generated Data. Do not hand edit.
+    static const UChar32 RECaseFixCodePoints[] = {
+        0x61, 0x66, 0x68, 0x69, 0x6a, 0x73, 0x74, 0x77, 0x79, 0x2bc, 
+        0x3ac, 0x3ae, 0x3b1, 0x3b7, 0x3b9, 0x3c1, 0x3c5, 0x3c9, 0x3ce, 0x565, 
+        0x574, 0x57e, 0x1f00, 0x1f01, 0x1f02, 0x1f03, 0x1f04, 0x1f05, 0x1f06, 0x1f07, 
+        0x1f20, 0x1f21, 0x1f22, 0x1f23, 0x1f24, 0x1f25, 0x1f26, 0x1f27, 0x1f60, 0x1f61, 
+        0x1f62, 0x1f63, 0x1f64, 0x1f65, 0x1f66, 0x1f67, 0x1f70, 0x1f74, 0x1f7c, 0x110000};
+
+    static const int16_t RECaseFixStringOffsets[] = {
+        0x0, 0x1, 0x6, 0x7, 0x8, 0x9, 0xd, 0xe, 0xf, 0x10, 
+        0x11, 0x12, 0x13, 0x17, 0x1b, 0x20, 0x21, 0x2a, 0x2e, 0x2f, 
+        0x30, 0x34, 0x35, 0x37, 0x39, 0x3b, 0x3d, 0x3f, 0x41, 0x43, 
+        0x45, 0x47, 0x49, 0x4b, 0x4d, 0x4f, 0x51, 0x53, 0x55, 0x57, 
+        0x59, 0x5b, 0x5d, 0x5f, 0x61, 0x63, 0x65, 0x66, 0x67, 0};
+
+    static const int16_t RECaseFixCounts[] = {
+        0x1, 0x5, 0x1, 0x1, 0x1, 0x4, 0x1, 0x1, 0x1, 0x1, 
+        0x1, 0x1, 0x4, 0x4, 0x5, 0x1, 0x9, 0x4, 0x1, 0x1, 
+        0x4, 0x1, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 
+        0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 
+        0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x1, 0x1, 0x1, 0};
+
+    static const UChar RECaseFixData[] = {
+        0x1e9a, 0xfb00, 0xfb01, 0xfb02, 0xfb03, 0xfb04, 0x1e96, 0x130, 0x1f0, 0xdf, 
+        0x1e9e, 0xfb05, 0xfb06, 0x1e97, 0x1e98, 0x1e99, 0x149, 0x1fb4, 0x1fc4, 0x1fb3, 
+        0x1fb6, 0x1fb7, 0x1fbc, 0x1fc3, 0x1fc6, 0x1fc7, 0x1fcc, 0x390, 0x1fd2, 0x1fd3, 
+        0x1fd6, 0x1fd7, 0x1fe4, 0x3b0, 0x1f50, 0x1f52, 0x1f54, 0x1f56, 0x1fe2, 0x1fe3, 
+        0x1fe6, 0x1fe7, 0x1ff3, 0x1ff6, 0x1ff7, 0x1ffc, 0x1ff4, 0x587, 0xfb13, 0xfb14, 
+        0xfb15, 0xfb17, 0xfb16, 0x1f80, 0x1f88, 0x1f81, 0x1f89, 0x1f82, 0x1f8a, 0x1f83, 
+        0x1f8b, 0x1f84, 0x1f8c, 0x1f85, 0x1f8d, 0x1f86, 0x1f8e, 0x1f87, 0x1f8f, 0x1f90, 
+        0x1f98, 0x1f91, 0x1f99, 0x1f92, 0x1f9a, 0x1f93, 0x1f9b, 0x1f94, 0x1f9c, 0x1f95, 
+        0x1f9d, 0x1f96, 0x1f9e, 0x1f97, 0x1f9f, 0x1fa0, 0x1fa8, 0x1fa1, 0x1fa9, 0x1fa2, 
+        0x1faa, 0x1fa3, 0x1fab, 0x1fa4, 0x1fac, 0x1fa5, 0x1fad, 0x1fa6, 0x1fae, 0x1fa7, 
+        0x1faf, 0x1fb2, 0x1fc2, 0x1ff2, 0};
+
+// End of machine generated data.
+
+    if (u_hasBinaryProperty(c, UCHAR_CASE_SENSITIVE)) {
+        UChar32 caseFoldedC  = u_foldCase(c, U_FOLD_CASE_DEFAULT);
+        starterChars->set(caseFoldedC, caseFoldedC);
+
+        int32_t i;
+        for (i=0; RECaseFixCodePoints[i]<c ; i++) {
+            // Simple linear search through the sorted list of interesting code points.
+        }
+
+        if (RECaseFixCodePoints[i] == c) {
+            int32_t dataIndex = RECaseFixStringOffsets[i];
+            int32_t numCharsToAdd = RECaseFixCounts[i];
+            UChar32 cpToAdd = 0;
+            for (int32_t j=0; j<numCharsToAdd; j++) {
+                U16_NEXT_UNSAFE(RECaseFixData, dataIndex, cpToAdd);
+                starterChars->add(cpToAdd);
+            }
+        }
+
+        starterChars->closeOver(USET_CASE_INSENSITIVE);
+        starterChars->removeAllStrings();
+    } else {
+        // Not a cased character. Just return it alone.
+        starterChars->set(c, c);
+    }
+}
+
+
+
+
+//------------------------------------------------------------------------------
+//
 //   matchStartType    Determine how a match can start.
 //                     Used to optimize find() operations.
 //
@@ -2565,17 +2664,12 @@ void   RegexCompile::matchStartType() {
             if (currentLen == 0) {
                 UChar32  c = URX_VAL(op);
                 if (u_hasBinaryProperty(c, UCHAR_CASE_SENSITIVE)) {
-
-                    // Disable optimizations on first char of match.
-                    // TODO: Compute the set of chars that case fold to this char, or to
-                    //       a string that begins with this char.
-                    //       For simple case folding, this code worked:
-                    //   UnicodeSet s(c, c);
-                    //   s.closeOver(USET_CASE_INSENSITIVE);
-                    //   fRXPat->fInitialChars->addAll(s);
-
-                    fRXPat->fInitialChars->clear();
-                    fRXPat->fInitialChars->complement();
+                    UnicodeSet starters(c, c);
+                    starters.closeOver(USET_CASE_INSENSITIVE);
+                    // findCaseInsensitiveStarters(c, &starters);
+                    //   For ONECHAR_I, no need to worry about text chars that expand on folding into strings.
+                    //   The expanded folding can't match the pattern.
+                    fRXPat->fInitialChars->addAll(starters);
                 } else {
                     // Char has no case variants.  Just add it as-is to the
                     //   set of possible starting chars.
@@ -2698,14 +2792,8 @@ void   RegexCompile::matchStartType() {
                     //   characters for this pattern.
                     int32_t stringStartIdx = URX_VAL(op);
                     UChar32  c = fRXPat->fLiteralText.char32At(stringStartIdx);
-                    UnicodeSet s(c, c);
-
-                    // TODO:  compute correct set of starting chars for full case folding.
-                    //        For the moment, say any char can start.
-                    // s.closeOver(USET_CASE_INSENSITIVE);
-                    s.clear();
-                    s.complement();
-
+                    UnicodeSet s;
+                    findCaseInsensitiveStarters(c, &s);
                     fRXPat->fInitialChars->addAll(s);
                     numInitialStrings += 2;  // Matching on an initial string not possible.
                 }

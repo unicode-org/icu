@@ -28,8 +28,10 @@
 #include "unicode/ucnv.h"
 #include "unicode/uniset.h"
 #include "unicode/uregex.h"
+#include "unicode/usetiter.h"
 #include "unicode/ustring.h"
 #include "regextst.h"
+#include "regexcmp.h"
 #include "uvector.h"
 #include "util.h"
 #include <stdlib.h>
@@ -134,6 +136,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
             break;
         case 22: name = "Bug10459";
             if (exec) Bug10459();
+            break;
+        case 23: name = "TestCaseInsensitiveStarters";
+            if (exec) TestCaseInsensitiveStarters();
             break;
 
         default: name = "";
@@ -5266,6 +5271,37 @@ void RegexTest::Bug10459() {
     utext_close(utext_pat);
     utext_close(utext_txt);
 }
+
+void RegexTest::TestCaseInsensitiveStarters() {
+    // Test that the data used by RegexCompile::findCaseInsensitiveStarters() hasn't
+    //  become stale because of new Unicode characters.
+    // If it is stale, rerun the generation tool
+    //    svn+ssh://source.icu-project.org/repos/icu/tools/trunk/unicode/c/genregexcasing
+    // and replace the embedded data in i18n/regexcmp.cpp
+
+    for (UChar32 cp=0; cp<=0x10ffff; cp++) {
+        if (!u_hasBinaryProperty(cp, UCHAR_CASE_SENSITIVE)) {
+            continue;
+        }
+        UnicodeSet s(cp, cp);
+        s.closeOver(USET_CASE_INSENSITIVE);
+        UnicodeSetIterator setIter(s);
+        while (setIter.next()) {
+            if (!setIter.isString()) {
+                continue;
+            }
+            const UnicodeString &str = setIter.getString();
+            UChar32 firstChar = str.char32At(0);
+            UnicodeSet starters;
+            RegexCompile::findCaseInsensitiveStarters(firstChar, &starters);
+            if (!starters.contains(cp)) {
+                errln("CaseInsensitiveStarters for \\u%x is missing character \\u%x.", cp, firstChar);
+                return;
+            }
+        }
+    }
+}
+
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 
