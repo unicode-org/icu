@@ -304,9 +304,9 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
     }
     // skip additional Olson byte version
     file.read(buf, 1);
-    // if '\0', we have just one copy of data, if '2', there is additional
+    // if '\0', we have just one copy of data, if '2' or '3', there is additional
     // 64 bit version at the end.
-    if(buf[0]!=0 && buf[0]!='2') {
+    if(buf[0]!=0 && buf[0]!='2' && buf[0]!='3') {
       throw invalid_argument("Bad Olson version info");
     }
 
