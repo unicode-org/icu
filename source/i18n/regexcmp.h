@@ -38,7 +38,7 @@ struct  RegexTableEl;
 class   RegexPattern;
 
 
-class RegexCompile : public UMemory {
+class U_I18N_API RegexCompile : public UMemory {
 public:
 
     enum {
@@ -117,7 +117,7 @@ private:
     UnicodeSet *createSetForProperty(const UnicodeString &propName, UBool negated);
 
 public:   // Public for testing only.
-    static void findCaseInsensitiveStarters(UChar32 c, UnicodeSet *starterChars);
+    static void U_EXPORT2 findCaseInsensitiveStarters(UChar32 c, UnicodeSet *starterChars);
 private:
 
 
