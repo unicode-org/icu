@@ -1,12 +1,12 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2012, International Business Machines
+*   Copyright (C) 1998-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
 *
-* File uprintf.c
+* File uprintf.cpp
 *
 * Modification History:
 *
@@ -28,14 +28,18 @@
 #include "unicode/udat.h"
 #include "unicode/putil.h"
 
+#include "cmemory.h"
+#include "locbund.h"
+#include "mutex.h"
+#include "uassert.h"
 #include "uprintf.h"
 #include "ufile.h"
 #include "ucln_io.h"
-#include "locbund.h"
 
-#include "cmemory.h"
+U_NAMESPACE_USE
 
 static UFILE *gStdOut = NULL;
+static UInitOnce gStdOutInitOnce = U_INITONCE_INITIALIZER;
 
 static UBool U_CALLCONV uprintf_cleanup(void)
 {
@@ -43,16 +47,20 @@ static UBool U_CALLCONV uprintf_cleanup(void)
         u_fclose(gStdOut);
         gStdOut = NULL;
     }
+    gStdOutInitOnce.reset();
     return TRUE;
+}
+
+static void U_CALLCONV u_stdout_init() {
+    U_ASSERT(gStdOut ==  NULL);
+    gStdOut = u_finit(stdout, NULL, NULL);
+    ucln_io_registerCleanup(UCLN_IO_PRINTF, &uprintf_cleanup);
 }
 
 U_CAPI UFILE * U_EXPORT2
 u_get_stdout()
 {
-    if (gStdOut == NULL) {
-        gStdOut = u_finit(stdout, NULL, NULL);
-        ucln_io_registerCleanup(UCLN_IO_PRINTF, &uprintf_cleanup);
-    }
+    umtx_initOnce(gStdOutInitOnce, &u_stdout_init);
     return gStdOut;
 }
 
@@ -161,7 +169,7 @@ u_vfprintf(    UFILE        *f,
     int32_t count;
     UChar *pattern;
     UChar buffer[UFMT_DEFAULT_BUFFER_SIZE];
-    int32_t size = (int32_t)strlen(patternSpecification) + 1;
+    size_t size = strlen(patternSpecification) + 1;
 
     /* convert from the default codepage to Unicode */
     if (size >= MAX_UCHAR_BUFFER_SIZE(buffer)) {
