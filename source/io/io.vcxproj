@@ -252,7 +252,7 @@
     </ClCompile>
     <ClCompile Include="ufile.c" />
     <ClCompile Include="ufmt_cmn.c" />
-    <ClCompile Include="uprintf.c" />
+    <ClCompile Include="uprintf.cpp" />
     <ClCompile Include="uprntf_p.c" />
     <ClCompile Include="uscanf.c" />
     <ClCompile Include="uscanf_p.c" />
