@@ -26,9 +26,10 @@
 #ifndef U_HIDE_DRAFT_API
 /**
  * Constants for various widths.
- * There are 3 widths: Wide, Short, Narrow.
+ * There are 4 widths: Wide, Short, Narrow, Numeric.
  * For example, for English, when formatting "3 hours"
- * Wide is "3 hours"; short is "3 hrs"; narrow is "3h"
+ * Wide is "3 hours"; short is "3 hrs"; narrow is "3h";
+ * formatting "3 hours 17 minutes" as numeric give "3:17"
  * @draft ICU 53
  */
 enum UMeasureFormatWidth {
