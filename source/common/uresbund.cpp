@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and
+* Copyright (C) 1997-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 *
@@ -36,6 +36,7 @@
 #include "putilimp.h"
 #include "uassert.h"
 
+using namespace icu;
 
 /*
 Static cache for already opened resource bundles - mostly for keeping fallback info
@@ -1732,8 +1733,8 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
         const char* key = inKey;
         if(res == RES_BOGUS) {
             UResourceDataEntry *dataEntry = resB->fData;
-            char path[256];
-            char* myPath = path;
+            CharString path;
+            char *myPath = NULL;
             const char* resPath = resB->fResPath;
             int32_t len = resB->fResPathLen;
             while(res == RES_BOGUS && dataEntry->fParent != NULL) { /* Otherwise, we'll look in parents */
@@ -1741,11 +1742,16 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                 rootRes = dataEntry->fData.rootRes;
 
                 if(dataEntry->fBogus == U_ZERO_ERROR) {
+                    path.clear();
                     if (len > 0) {
-                        uprv_memcpy(path, resPath, len);
+                        path.append(resPath, len, *status);
                     }
-                    uprv_strcpy(path+len, inKey);
-                    myPath = path;
+                    path.append(inKey, *status);
+                    if (U_FAILURE(*status)) {
+                        ures_close(helper);
+                        return fillIn;
+                    }
+                    myPath = path.data();
                     key = inKey;
                     do {
                         res = res_findResource(&(dataEntry->fData), rootRes, &myPath, &key);
