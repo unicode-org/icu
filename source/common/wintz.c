@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2013, International Business Machines
+*   Copyright (C) 2005-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -255,7 +255,8 @@ uprv_detectWindowsTimeZone() {
     int32_t len;
     int id;
     int errorCode;
-    char ISOcode[3]; /* 2 letter iso code */
+    UChar ISOcodeW[3]; /* 2 letter iso code in UTF-16*/
+    char  ISOcodeA[3]; /* 2 letter iso code in ansi */
 
     LONG result;
     TZI tziKey;
@@ -282,7 +283,8 @@ uprv_detectWindowsTimeZone() {
     tmpid[0] = 0;
 
     id = GetUserGeoID(GEOCLASS_NATION);
-    errorCode = GetGeoInfo(id,GEO_ISO2,ISOcode,3,0);
+    errorCode = GetGeoInfoW(id,GEO_ISO2,ISOcodeW,3,0);
+    u_strToUTF8(ISOcodeA, 3, NULL, ISOcodeW, 3, &status);
 
     bundle = ures_openDirect(NULL, "windowsZones", &status);
     ures_getByKey(bundle, "mapTimezones", bundle, &status);
@@ -308,7 +310,7 @@ uprv_detectWindowsTimeZone() {
             if (uprv_memcmp((char *)&tziKey, (char*)&tziReg, sizeof(tziKey)) == 0) {
                 const UChar* icuTZ = NULL;
                 if (errorCode != 0) {
-                    icuTZ = ures_getStringByKey(winTZ, ISOcode, &len, &status);
+                    icuTZ = ures_getStringByKey(winTZ, ISOcodeA, &len, &status);
                 }
                 if (errorCode==0 || icuTZ==NULL) {
                     /* fallback to default "001" and reset status */
