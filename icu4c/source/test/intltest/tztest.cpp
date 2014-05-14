@@ -856,7 +856,7 @@ void TimeZoneTest::TestShortZoneIDs()
         {"ECT", 60, TRUE},    // ICU Link - Europe/Paris
         {"MET", 60, TRUE},    // Olson europe 1:00 C-Eur
         {"CAT", 120, FALSE},  // ICU Link - Africa/Harare
-        {"ART", 120, FALSE},  // ICU Link - Africa/Cairo
+        {"ART", 120, TRUE},   // ICU Link - Africa/Cairo
         {"EET", 120, TRUE},   // Olson europe 2:00 EU
         {"EAT", 180, FALSE},  // ICU Link - Africa/Addis_Ababa
         {"NET", 240, FALSE},  // ICU Link - Asia/Yerevan
