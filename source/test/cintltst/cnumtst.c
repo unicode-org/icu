@@ -59,6 +59,7 @@ static void TestUFormattable(void);
 static void TestUNumberingSystem(void);
 static void TestCurrencyIsoPluralFormat(void);
 static void TestContext(void);
+static void TestCurrencyContext(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -85,6 +86,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestUNumberingSystem);
     TESTCASE(TestCurrencyIsoPluralFormat);
     TESTCASE(TestContext);
+	TESTCASE(TestCurrencyContext);
 }
 
 /* test Parse int 64 */
@@ -2527,6 +2529,84 @@ static void TestContext(void) {
         unum_close(unum);
     }
 #endif /* #if !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_BREAK_ITERATION */
+}
+
+static void TestCurrencyContext(void) {
+	static const char* DATA[][2] = {
+        // the data are:
+        // currency ISO code to be formatted,
+        // format result using CURRENCYSTYLE with CASH purpose,
+
+        {"TWD", "NT$124"},
+        {"CAD", "CA$123.55"},
+        {"USD", "$123.57"},
+    };
+	
+    const char* localeString = "en_US";
+    int32_t i;
+    double numberToBeFormat = atof("123.567");
+    UNumberFormatStyle style = UNUM_CURRENCY;
+    UErrorCode status = U_ZERO_ERROR;
+	UChar *result=NULL;
+	UChar expect[512];
+    UChar currencyCode[4];
+	UNumberFormat* unumFmt; 
+	  
+    unumFmt = unum_open(style, NULL, 0, localeString, NULL, &status);
+    if (U_FAILURE(status)) {
+		 log_data_err("FAIL: unum_open, locale %s, style %d - %s\n", localeString, (int)style, myErrorName(status));
+    }
+
+	unum_setCurrencyPurpose(unumFmt,  UNUM_CURRENCY_CASH, &status);
+     
+    for (i=0; i<LENGTH(DATA); ++i) { 
+
+      const char* currencyISOCode = DATA[i][0];
+      const char* expected = DATA[i][1];
+	  int32_t resultlength;
+      int32_t resultlengthneeded;
+	  UFieldPosition pos;
+	  resultlength=0;
+      pos.field = UNUM_FRACTION_FIELD;
+
+	  u_uastrcpy(expect, expected);
+      u_charsToUChars(currencyISOCode, currencyCode, 4);
+      unum_setTextAttribute(unumFmt, UNUM_CURRENCY_CODE, currencyCode, 3, &status);
+	  
+      if (U_FAILURE(status)) {
+           log_err("FAIL: unum_setTextAttribute, locale %s, UNUM_CURRENCY_CODE %s\n", localeString, currencyISOCode);
+      }
+
+      resultlengthneeded=unum_formatDouble(unumFmt, numberToBeFormat, NULL, resultlength, &pos, &status);
+      if(status==U_BUFFER_OVERFLOW_ERROR)
+      {
+          status=U_ZERO_ERROR;
+          resultlength=resultlengthneeded+1;
+          result=(UChar*)malloc(sizeof(UChar) * resultlength);
+
+          unum_formatDouble(unumFmt, numberToBeFormat, result, resultlength, &pos, &status);
+      }
+	
+      if(U_FAILURE(status))
+      {
+          log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+      }
+      if(u_strcmp(result, expect)==0)
+          log_verbose("Pass: Number Format Currency Purpose using unum_setCurrencyPurpose() successful\n");
+      else{
+		  int32_t resultlength1 = u_strlen(expect);
+		  int32_t resultlength2 = u_strlen(result);
+          log_err("Fail: Error in Number Format Currency Purpose using unum_setCurrencyPurpose() expected: %s, got %s\n",
+				  aescstrdup(expect, u_strlen(expect)), aescstrdup(result, u_strlen(result)));
+	  }
+
+	}
+    
+	if (result)
+        free(result);
+    result = 0;
+
+	unum_close(unumFmt);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

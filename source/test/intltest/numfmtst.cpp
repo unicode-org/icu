@@ -134,6 +134,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestZeroScientific10547);
   TESTCASE_AUTO(TestAccountingCurrency);
   TESTCASE_AUTO(TestEquality);
+  TESTCASE_AUTO(TestCurrencyContext);
   TESTCASE_AUTO_END;
 }
 
@@ -7626,4 +7627,60 @@ void NumberFormatTest::TestEquality() {
     delete fmtBase;
 }
 
+void NumberFormatTest::TestCurrencyContext() {
+	double agent = 123.567;
+
+    // compare the Currency and Currency Cash Digits
+    UNumberFormatStyle k = UNUM_CURRENCY;
+    const char* localeString = "en_US@currency=TWD";
+    Locale locale(localeString);
+    UErrorCode status = U_ZERO_ERROR;
+	NumberFormat* numFmt = NumberFormat::createInstance(locale, k, status);
+		
+	UnicodeString original;
+	numFmt->format(agent,original);
+    UnicodeString original_expected = "NT$123.57";
+	assertEquals("Test Currency Context 1", original_expected, original);
+	
+	numFmt->setCurrencyPurpose(UNUM_CURRENCY_CASH);
+	UnicodeString cash_currency;
+	numFmt->format(agent,cash_currency);
+    UnicodeString cash_currency_expected = "NT$124";
+    assertEquals("Test Currency Context 2", cash_currency_expected, cash_currency);
+	
+    // compare the Currency and Currency Cash Rounding
+    k = UNUM_CURRENCY;
+    localeString = "en_US@currency=CAD";
+    Locale locale2(localeString);
+	NumberFormat* fmt = NumberFormat::createInstance(locale2, k, status);
+
+    UnicodeString original_rounding;
+	fmt->format(agent, original_rounding);
+    UnicodeString original_rounding_expected = "CA$123.57";
+    assertEquals("Test Currency Context 3", original_rounding_expected, original_rounding);
+
+    fmt->setCurrencyPurpose(UNUM_CURRENCY_CASH);
+    UnicodeString cash_rounding_currency;
+	fmt->format(agent, cash_rounding_currency);
+    UnicodeString cash_rounding_currency_expected = "CA$123.55";
+    assertEquals("Test Currency Context 4", cash_rounding_currency_expected, cash_rounding_currency);
+	
+    // Test the currency change
+    k = UNUM_CURRENCY;
+    localeString = "en_US@currency=JPY";
+    Locale locale3(localeString);
+	NumberFormat* fmt2 = NumberFormat::createInstance(locale3, k, status);
+	
+    fmt2->setCurrencyPurpose(UNUM_CURRENCY_CASH);
+        
+    const char* currencyISOCode = "TWD";
+    UChar currencyCode[4];
+    u_charsToUChars(currencyISOCode, currencyCode, 4);
+    fmt2->setCurrency(currencyCode, status);
+
+    UnicodeString TWD_changed;
+	fmt2->format(agent, TWD_changed);
+    UnicodeString TWD_changed_expected = "NT$124";
+    assertEquals("Test Currency Context 5", TWD_changed_expected, TWD_changed);
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */

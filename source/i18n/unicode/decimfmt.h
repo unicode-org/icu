@@ -26,6 +26,7 @@
 #define DECIMFMT_H
 
 #include "unicode/utypes.h"
+#include "ureslocs.h"
 /**
  * \file
  * \brief C++ API: Formats decimal numbers.
@@ -1873,6 +1874,16 @@ public:
     virtual void setCurrency(const UChar* theCurrency);
 
     /**
+     * Sets the <tt>Currency Context</tt> object used to display currency.
+     * This takes effect immediately, if this format is a
+     * currency format.  
+     * @param currencyContext new currency context object to use.  
+     * @stable ICU 53
+     */
+    virtual void setCurrencyPurpose(UCurrencyPurpose newContext);
+
+
+    /**
      * The resource tags we use to retrieve decimal format data from
      * locale resource bundles.
      * @deprecated ICU 3.4. This string has no public purpose. Please don't use it.
@@ -2165,6 +2176,19 @@ private:
                               UBool setupForCurrentPattern,
                               UBool setupForPluralPattern,
                               UErrorCode& status);
+	
+	// get the currency rounding with respect to currency context
+	double getCurrencyRounding(const UChar* currency,
+							   UErrorCode* ec) const;
+	
+	// get the currency fraction with respect to currency context
+	int getCurrencyFractionDigits(const UChar* currency,
+								  UErrorCode* ec) const;
+
+    /**
+     * Sets the rounding/digits with respect to currency context
+     */
+    void setCurrencyWithContext();
 
     // hashtable operations
     Hashtable* initHashForAffixPattern(UErrorCode& status);

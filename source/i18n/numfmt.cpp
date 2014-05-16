@@ -238,7 +238,8 @@ NumberFormat::NumberFormat()
     fMinFractionDigits(0),
     fParseIntegerOnly(FALSE),
     fLenient(FALSE),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE),
+	fCurrencyPurpose(UNUM_CURRENCY_OFFICIAL)
 {
     fCurrency[0] = 0;
 }
@@ -280,6 +281,7 @@ NumberFormat::operator=(const NumberFormat& rhs)
         u_strncpy(fCurrency, rhs.fCurrency, 4);
         fLenient = rhs.fLenient;
         fCapitalizationContext = rhs.fCapitalizationContext;
+        fCurrencyPurpose = rhs.fCurrencyPurpose;
     }
     return *this;
 }
@@ -343,7 +345,8 @@ NumberFormat::operator==(const Format& that) const
               fParseIntegerOnly == other->fParseIntegerOnly &&
               u_strcmp(fCurrency, other->fCurrency) == 0 &&
               fLenient == other->fLenient &&
-              fCapitalizationContext == other->fCapitalizationContext)));
+              fCapitalizationContext == other->fCapitalizationContext &&
+              fCurrencyPurpose == other->fCurrencyPurpose)));
 }
 
 // -------------------------------------
@@ -1178,6 +1181,18 @@ void NumberFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
 
 const UChar* NumberFormat::getCurrency() const {
     return fCurrency;
+}
+
+void NumberFormat::setCurrencyPurpose(UCurrencyPurpose newContext){
+	fCurrencyPurpose = newContext;
+}
+
+    /**
+     * Returns the <tt>Currency Context</tt> object used to display currency
+     * @stable ICU 53
+     */
+const UCurrencyPurpose NumberFormat::getCurrencyPurpose() const {
+	return fCurrencyPurpose;
 }
 
 void NumberFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {

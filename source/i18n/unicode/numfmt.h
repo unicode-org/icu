@@ -948,6 +948,21 @@ public:
      * @stable ICU 2.6
      */
     const UChar* getCurrency() const;
+	
+    /**
+     * Sets the <tt>Currency Context</tt> object used to display currency.
+     * This takes effect immediately, if this format is a
+     * currency format.  
+     * @param currencyContext new currency context object to use.  
+     * @stable ICU 53
+     */
+    virtual void setCurrencyPurpose(UCurrencyPurpose newContext);
+
+    /**
+     * Returns the <tt>Currency Context</tt> object used to display currency
+     * @stable ICU 53
+     */
+    const UCurrencyPurpose getCurrencyPurpose() const;
 
     /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
@@ -1063,9 +1078,11 @@ private:
     int32_t     fMaxFractionDigits;
     int32_t     fMinFractionDigits;
 
+
   protected:
     static const int32_t gDefaultMaxIntegerDigits;
     static const int32_t gDefaultMinIntegerDigits;
+	UCurrencyPurpose fCurrencyPurpose;
  
   private:
     UBool      fParseIntegerOnly;
