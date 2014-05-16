@@ -29,7 +29,6 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/ures.h"
@@ -1723,6 +1722,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     int32_t pos = parsePos.getIndex();
     int32_t start = pos;
 
+
     UBool ambiguousYear[] = { FALSE };
     int32_t saveHebrewMonth = -1;
     int32_t count = 0;
@@ -1872,7 +1872,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
             abutPat = -1; // End of any abutting fields
             
-            if (! matchLiterals(fPattern, i, text, pos, getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status), getBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, status))) {
+            if (! matchLiterals(fPattern, i, text, pos, getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status), getBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, status), isLenient())) {
                 status = U_PARSE_ERROR;
                 goto ExitParse;
             }
@@ -2155,12 +2155,13 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
                                       const UnicodeString &text,
                                       int32_t &textOffset,
                                       UBool whitespaceLenient,
-                                      UBool partialMatchLenient)
+                                      UBool partialMatchLenient,
+                                      UBool oldLeniency)
 {
     UBool inQuote = FALSE;
-    UnicodeString literal;
+    UnicodeString literal;    
     int32_t i = patternOffset;
-    
+	
     // scan pattern looking for contiguous literal characters
     for ( ; i < pattern.length(); i += 1) {
         UChar ch = pattern.charAt(i);
@@ -2234,7 +2235,6 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
                 break;
             }
         }
-        
         if (t >= text.length() || literal.charAt(p) != text.charAt(t)) {
             // Ran out of text, or found a non-matching character:
             // OK in lenient mode, an error in strict mode.
@@ -2246,16 +2246,20 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
                     ++t;
                     continue;  // Do not update p.
                 }
-                // if it is actual whitespace and we're whitespace lenient it's OK
+                // if it is actual whitespace and we're whitespace lenient it's OK                
+                
                 UChar wsc = text.charAt(t);
-                if(PatternProps::isWhiteSpace(wsc))
-                    break;
+                if(PatternProps::isWhiteSpace(wsc)) {
+                    // Lenient mode and it's just whitespace we skip it
+                    ++t;
+                    continue;  // Do not update p.
+                }
             } 
-            // or if we're partial match lenient it's OK
-            if(partialMatchLenient) {                                
+            // hack around oldleniency being a bit of a catch-all bucket and we're just adding support specifically for paritial matches
+            if(partialMatchLenient && oldLeniency) {                             
                 break;
             }
-
+            
             return FALSE;
         }
         ++p;
