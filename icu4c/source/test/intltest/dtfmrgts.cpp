@@ -7,7 +7,6 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-
 #include "dtfmrgts.h"
 
 #include "unicode/timezone.h"
@@ -59,6 +58,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(28,TestParsing)
         CASE(29,TestT10334)
         CASE(30,TestT10619)
+        CASE(31,TestT10855)
         default: name = ""; break;
     }
 }
@@ -1530,9 +1530,11 @@ void DateFormatRegressionTest::TestParsing(void) {
 
 void DateFormatRegressionTest::TestT10334(void) {
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeString pattern("'--: 'EEE-WW-MMMM-yyyy");
+    UnicodeString pattern("--: EEE-WW-MMMM-yyyy");
     UnicodeString text("--mon-02-march-2011");
     SimpleDateFormat format(pattern, status);
+
+    logln("pattern["+pattern+"] text["+text+"]");
 
     if (U_FAILURE(status)) {
         dataerrln("Fail creating SimpleDateFormat object - %s", u_errorName(status));
@@ -1600,24 +1602,15 @@ typedef struct {
 void DateFormatRegressionTest::TestT10619(void) {
     const UDate july022008 = 1215000001979.0;
     const TestDateFormatLeniencyItem items[] = {
-        /*
-            new TestDateFormatLeniencyItem(true,       "2008-Jan 02",     "yyyy-LLL. dd",         "2008-Jan. 02"),
-            new TestDateFormatLeniencyItem(false,      "2008-Jan 03",     "yyyy-LLL. dd",         null),
-            new TestDateFormatLeniencyItem(true,       "2008-Jan--04",    "yyyy-MMM' -- 'dd",     "2008-Jan -- 04"),
-            new TestDateFormatLeniencyItem(false,      "2008-Jan--05",    "yyyy-MMM' -- 'dd",     null),
-            new TestDateFormatLeniencyItem(true,       "2008-12-31",      "yyyy-mm-dd",           "2008-12-31"),
-            new TestDateFormatLeniencyItem(false,      "6 Jan 05 2008",   "eee MMM dd yyyy",      null),
-            new TestDateFormatLeniencyItem(true,       "6 Jan 05 2008",   "eee MMM dd yyyy",      "Sat Jan 05 2008"),
-        */
         //locale    leniency    parse String                    pattern                             expected result
         { "en",     true,       UnicodeString("2008-07 02"),    UnicodeString("yyyy-LLLL dd"),      UnicodeString("2008-July 02") },
-        { "en",     false,      UnicodeString("2008-07 02"),    UnicodeString("yyyy-LLLL dd"),      UnicodeString("") },
-        { "en",     true,       UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      UnicodeString("2008-Jan 02") },
-        { "en",     false,      UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      UnicodeString("") },
-        { "en",     true,       UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("2008-Jan 02") },
-        { "en",     false,      UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("") },
-        { "en",     true,       UnicodeString("6 Jan 05 2008"), UnicodeString("eee MMM dd yyyy"),   UnicodeString("Sat Jan 05 2008") },
-        { "en",     false,      UnicodeString("6 Jan 05 2008"), UnicodeString("eee MMM dd yyyy"),   UnicodeString("") },
+        { "en",     false,      UnicodeString("2008-07 03"),    UnicodeString("yyyy-LLLL dd"),      UnicodeString("") },
+        { "en",     true,       UnicodeString("2008-Jan. 04"),  UnicodeString("yyyy-LLL dd"),       UnicodeString("2008-Jan 04") },
+        { "en",     false,      UnicodeString("2008-Jan. 05"),  UnicodeString("yyyy-LLL dd"),       UnicodeString("") },
+        { "en",     true,       UnicodeString("2008-Jan--06"),  UnicodeString("yyyy-MMM -- dd"),    UnicodeString("2008-Jan 06") },
+        { "en",     false,      UnicodeString("2008-Jan--07"),  UnicodeString("yyyy-MMM -- dd"),    UnicodeString("") },
+        { "en",     true,       UnicodeString("6 Jan 08 2008"), UnicodeString("eee MMM dd yyyy"),   UnicodeString("Sat Jan 08 2008") },
+        { "en",     false,      UnicodeString("6 Jan 09 2008"), UnicodeString("eee MMM dd yyyy"),   UnicodeString("") },
         // terminator
         { NULL,     true,       UnicodeString(""),              UnicodeString(""),                  UnicodeString("") }                
     };
@@ -1638,9 +1631,12 @@ void DateFormatRegressionTest::TestT10619(void) {
                 dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
                 continue;
             }
+            logln("parsing " + itemPtr->parseString);
             sdmft->setLenient(itemPtr->leniency);
-            sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
-            /*UDate d = */sdmft->parse(itemPtr->parseString, pos);
+            sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status);
+            sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
+            sdmft->setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, itemPtr->leniency, status);
+            sdmft->parse(itemPtr->parseString, pos);
 
             delete sdmft;
             if(pos.getErrorIndex() > -1) {
@@ -1657,6 +1653,58 @@ void DateFormatRegressionTest::TestT10619(void) {
     delete cal;
 
 }
+
+
+typedef struct {
+    UnicodeString text;
+    UnicodeString pattern;
+    int initialParsePos;
+} T10855Data;
+    
+void DateFormatRegressionTest::TestT10855(void) {
+    // NOTE: these should NOT parse
+    const T10855Data items[] = {
+        //parse String                          pattern                         initial parse pos
+        { UnicodeString("September 30, 1998"),  UnicodeString("MM-dd-yyyy"),    0},
+        { UnicodeString("123-73-1950"),         UnicodeString("MM-dd-yyyy"),    -1},
+        { UnicodeString("12-23-1950"),          UnicodeString("MM-dd-yyyy"),    -1},
+        // terminator
+        { UnicodeString(""),                    UnicodeString(""),              0}                
+    };
+    UErrorCode status = U_ZERO_ERROR;
+
+    int x = 0;
+    while(items[x].pattern.length() > 0)
+    {
+        status = U_ZERO_ERROR;
+        logln("Date to parse: \""+items[x].text+"\"");
+        logln("Starting Index: %d", items[x].initialParsePos);
+
+        SimpleDateFormat dateFmt(items[x].pattern, status);
+        if(U_FAILURE(status)) { 
+            errln(u_errorName(status)); 
+            ++x;
+            continue;
+        } 
+        status = U_ZERO_ERROR;  
+
+        dateFmt.setLenient(false);
+        dateFmt.setTimeZone(*TimeZone::getGMT());
+
+        ParsePosition position(items[x].initialParsePos);
+        logln("set position is now: %d", position.getIndex());
+        UDate d = dateFmt.parse(items[x].text, position);
+        if (position.getErrorIndex() != -1 || position.getIndex() == items[x].initialParsePos) {
+            logln("Parse Failed. ErrorIndex is %d - Index is %d", position.getErrorIndex(), position.getIndex());
+        } else {
+            errln("Parse Succeeded...should have failed. Index is %d - ErrorIndex is %d", position.getIndex(), position.getErrorIndex());
+        }
+        logln("Parsed date returns %d\n", d);
+
+        ++x;
+    }
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
