@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006,2012-2013, International Business Machines Corporation   *
+ * Copyright (C) 2006-2014, International Business Machines Corporation   *
  * and others. All Rights Reserved.                                            *
  *******************************************************************************
  */
@@ -17,6 +17,7 @@
 U_NAMESPACE_BEGIN
 
 class DictionaryMatcher;
+class Normalizer2;
 
 /*******************************************************************
  * DictionaryBreakEngine
@@ -326,7 +327,8 @@ class CjkBreakEngine : public DictionaryBreakEngine {
   UnicodeSet                fKatakanaWordSet;
   UnicodeSet                fHiraganaWordSet;
 
-  DictionaryMatcher  *fDictionary;
+  DictionaryMatcher        *fDictionary;
+  const Normalizer2        *nfkcNorm2;
 
  public:
 
