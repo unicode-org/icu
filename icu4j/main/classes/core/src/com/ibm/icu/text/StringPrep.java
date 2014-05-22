@@ -519,12 +519,11 @@ public final class StringPrep {
      *
      * @param src           A UCharacterIterator object containing the source string
      * @param options       A bit set of options:
-     *
-     *  - StringPrep.NONE               Prohibit processing of unassigned code points in the input
-     *
-     *  - StringPrep.ALLOW_UNASSIGNED   Treat the unassigned code points are in the input 
-     *                                  as normal Unicode code points.
-     *
+     *   <ul>
+     *     <li>{@link #DEFAULT} Prohibit processing of unassigned code points in the input</li>
+     *     <li>{@link #ALLOW_UNASSIGNED} Treat the unassigned code points are in the input
+     *          as normal Unicode code points.</li>
+     *   </ul>
      * @return StringBuffer A StringBuffer containing the output
      * @throws StringPrepParseException An exception occurs when parsing a string is invalid.
      * @stable ICU 2.8
@@ -603,12 +602,11 @@ public final class StringPrep {
      *
      * @param src           A string
      * @param options       A bit set of options:
-     *
-     *  - StringPrep.NONE               Prohibit processing of unassigned code points in the input
-     *
-     *  - StringPrep.ALLOW_UNASSIGNED   Treat the unassigned code points are in the input 
-     *                                  as normal Unicode code points.
-     *
+     *   <ul>
+     *     <li>{@link #DEFAULT} Prohibit processing of unassigned code points in the input</li>
+     *     <li>{@link #ALLOW_UNASSIGNED} Treat the unassigned code points are in the input
+     *          as normal Unicode code points.</li>
+     *   </ul>
      * @return String A String containing the output
      * @throws StringPrepParseException An exception when parsing or preparing a string is invalid.
      * @stable ICU 4.2
