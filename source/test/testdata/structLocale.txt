@@ -3983,6 +3983,66 @@ structLocale:table(nofallback){
                 }
             }
         }
+        day-narrow{
+            dn{"Day"}
+            relative{
+                "-3"{""}
+                "-2"{""}
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+                "2"{""}
+                "3"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        day-short{
+            dn{"Day"}
+            relative{
+                "-3"{""}
+                "-2"{""}
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+                "2"{""}
+                "3"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
         dayperiod{
             dn{"Dayperiod"}
             relative{
@@ -4006,7 +4066,73 @@ structLocale:table(nofallback){
                 "1"{""}
             }
         }
+        fri-narrow{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
         hour{
+            dn{"Hour"}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"Hour"}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        hour-short{
             dn{"Hour"}
             relative{
                 "-1"{""}
@@ -4058,7 +4184,73 @@ structLocale:table(nofallback){
                 }
             }
         }
+        minute-narrow{
+            dn{"Minute"}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        minute-short{
+            dn{"Minute"}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
         mon{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        mon-short{
             relative{
                 "-1"{""}
                 "0"{""}
@@ -4091,7 +4283,151 @@ structLocale:table(nofallback){
                 }
             }
         }
+        month-narrow{
+            dn{"Month"}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        month-short{
+            dn{"Month"}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        quarter{
+            dn{""}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{""}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        quarter-short{
+            dn{""}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
         sat{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        sat-short{
             relative{
                 "-1"{""}
                 "0"{""}
@@ -4124,7 +4460,73 @@ structLocale:table(nofallback){
                 }
             }
         }
+        second-narrow{
+            dn{"Second"}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        second-short{
+            dn{"Second"}
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
         sun{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        sun-short{
             relative{
                 "-1"{""}
                 "0"{""}
@@ -4138,7 +4540,35 @@ structLocale:table(nofallback){
                 "1"{""}
             }
         }
+        thu-narrow{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
         tue{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        tue-narrow{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        tue-short{
             relative{
                 "-1"{""}
                 "0"{""}
@@ -4152,7 +4582,73 @@ structLocale:table(nofallback){
                 "1"{""}
             }
         }
+        wed-narrow{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+        }
         week{
+            dn{"Week"}                    
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        week-narrow{
+            dn{"Week"}                    
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        week-short{
             dn{"Week"}                    
             relative{
                 "-1"{""}
@@ -4187,6 +4683,58 @@ structLocale:table(nofallback){
             }
         }
         year{
+            dn{"Year"}                    
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        year-narrow{
+            dn{"Year"}                    
+            relative{
+                "-1"{""}
+                "0"{""}
+                "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
+        }
+        year-short{
             dn{"Year"}                    
             relative{
                 "-1"{""}

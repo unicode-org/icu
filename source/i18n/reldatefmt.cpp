@@ -18,6 +18,7 @@
 #include "unicode/msgfmt.h"
 #include "unicode/decimfmt.h"
 #include "unicode/numfmt.h"
+#include "unicode/brkiter.h"
 #include "lrucache.h"
 #include "uresimp.h"
 #include "unicode/ures.h"
@@ -27,14 +28,21 @@
 #include "charstr.h"
 
 #include "sharedptr.h"
+#include "sharedbreakiterator.h"
 #include "sharedpluralrules.h"
 #include "sharednumberformat.h"
+
+#define RELDATE_STYLE_FULL 0
+#define RELDATE_STYLE_SHORT 1
+#define RELDATE_STYLE_NARROW 2
+#define RELDATE_STYLE_COUNT 3 
 
 // Copied from uscript_props.cpp
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static icu::LRUCache *gCache = NULL;
 static UMutex gCacheMutex = U_MUTEX_INITIALIZER;
+static UMutex gBrkIterMutex = U_MUTEX_INITIALIZER;
 static icu::UInitOnce gCacheInitOnce = U_INITONCE_INITIALIZER;
 
 U_CDECL_BEGIN
@@ -50,6 +58,20 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
+static int32_t getStyleIndex(UDateFormatStyle style) {
+    switch (style) {
+        case UDAT_FULL:
+        case UDAT_LONG:
+            return 0;
+        case UDAT_MEDIUM:
+            return 1;
+        case UDAT_SHORT:
+            return 2;
+        default:
+            return 0;
+    }
+}
+
 // RelativeDateTimeFormatter specific data for a single locale
 class RelativeDateTimeCacheData: public SharedObject {
 public:
@@ -57,11 +79,11 @@ public:
     virtual ~RelativeDateTimeCacheData();
 
     // no numbers: e.g Next Tuesday; Yesterday; etc.
-    UnicodeString absoluteUnits[UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT];
+    UnicodeString absoluteUnits[RELDATE_STYLE_COUNT][UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT];
 
     // has numbers: e.g Next Tuesday; Yesterday; etc. For second index, 0
     // means past e.g 5 days ago; 1 means future e.g in 5 days.
-    QuantityFormatter relativeUnits[UDAT_RELATIVE_UNIT_COUNT][2];
+    QuantityFormatter relativeUnits[RELDATE_STYLE_COUNT][UDAT_RELATIVE_UNIT_COUNT][2];
 
     void adoptCombinedDateAndTime(MessageFormat *mfToAdopt) {
         delete combinedDateAndTime;
@@ -330,105 +352,226 @@ static void addWeekDay(
             status);
 }
 
+static void addTimeUnits(
+        const UResourceBundle *resource,
+        const char *path, const char *pathShort, const char *pathNarrow,
+        UDateRelativeUnit relativeUnit,
+        UDateAbsoluteUnit absoluteUnit,
+        RelativeDateTimeCacheData &cacheData,
+        UErrorCode &status) {
+    addTimeUnit(
+        resource,
+        path,
+        cacheData.relativeUnits[0][relativeUnit],
+        cacheData.absoluteUnits[0][absoluteUnit],
+        status);
+    addTimeUnit(
+        resource,
+        pathShort,
+        cacheData.relativeUnits[1][relativeUnit],
+        cacheData.absoluteUnits[1][absoluteUnit],
+        status);
+    addTimeUnit(
+        resource,
+        pathNarrow,
+        cacheData.relativeUnits[2][relativeUnit],
+        cacheData.absoluteUnits[2][absoluteUnit],
+        status);
+}
+
+static void initRelativeUnits(
+        const UResourceBundle *resource,
+        const char *path, const char *pathShort, const char *pathNarrow,
+        UDateRelativeUnit relativeUnit,
+        QuantityFormatter relativeUnits[][UDAT_RELATIVE_UNIT_COUNT][2],
+        UErrorCode &status) {
+    initRelativeUnit(
+            resource,
+            path,
+            relativeUnits[0][relativeUnit],
+            status);
+    initRelativeUnit(
+            resource,
+            pathShort,
+            relativeUnits[1][relativeUnit],
+            status);
+    initRelativeUnit(
+            resource,
+            pathNarrow,
+            relativeUnits[2][relativeUnit],
+            status);
+}
+
+static void addWeekDays(
+        const UResourceBundle *resource,
+        const char *path, const char *pathShort, const char *pathNarrow,
+        const UnicodeString daysOfWeek[][7],
+        UDateAbsoluteUnit absoluteUnit,
+        UnicodeString absoluteUnits[][UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT],
+        UErrorCode &status) {
+    addWeekDay(
+            resource,
+            path,
+            daysOfWeek[0],
+            absoluteUnit,
+            absoluteUnits[0],
+            status);
+    addWeekDay(
+            resource,
+            pathShort,
+            daysOfWeek[1],
+            absoluteUnit,
+            absoluteUnits[1],
+            status);
+    addWeekDay(
+            resource,
+            pathNarrow,
+            daysOfWeek[2],
+            absoluteUnit,
+            absoluteUnits[2],
+            status);
+}
+
 static UBool loadUnitData(
         const UResourceBundle *resource,
         RelativeDateTimeCacheData &cacheData,
         UErrorCode &status) {
-    addTimeUnit(
+    addTimeUnits(
             resource,
-            "fields/day",
-            cacheData.relativeUnits[UDAT_RELATIVE_DAYS],
-            cacheData.absoluteUnits[UDAT_ABSOLUTE_DAY],
+            "fields/day", "fields/day-short", "fields/day-narrow",
+            UDAT_RELATIVE_DAYS,
+            UDAT_ABSOLUTE_DAY,
+            cacheData,
             status);
-    addTimeUnit(
+    addTimeUnits(
             resource,
-            "fields/week",
-            cacheData.relativeUnits[UDAT_RELATIVE_WEEKS],
-            cacheData.absoluteUnits[UDAT_ABSOLUTE_WEEK],
+            "fields/week", "fields/week-short", "fields/week-narrow",
+            UDAT_RELATIVE_WEEKS,
+            UDAT_ABSOLUTE_WEEK,
+            cacheData,
             status);
-    addTimeUnit(
+    addTimeUnits(
             resource,
-            "fields/month",
-            cacheData.relativeUnits[UDAT_RELATIVE_MONTHS],
-            cacheData.absoluteUnits[UDAT_ABSOLUTE_MONTH],
+            "fields/month", "fields/month-short", "fields/month-narrow",
+            UDAT_RELATIVE_MONTHS,
+            UDAT_ABSOLUTE_MONTH,
+            cacheData,
             status);
-    addTimeUnit(
+    addTimeUnits(
             resource,
-            "fields/year",
-            cacheData.relativeUnits[UDAT_RELATIVE_YEARS],
-            cacheData.absoluteUnits[UDAT_ABSOLUTE_YEAR],
+            "fields/year", "fields/year-short", "fields/year-narrow",
+            UDAT_RELATIVE_YEARS,
+            UDAT_ABSOLUTE_YEAR,
+            cacheData,
             status);
-    initRelativeUnit(
+    initRelativeUnits(
             resource,
-            "fields/second",
-            cacheData.relativeUnits[UDAT_RELATIVE_SECONDS],
+            "fields/second", "fields/second-short", "fields/second-narrow",
+            UDAT_RELATIVE_SECONDS,
+            cacheData.relativeUnits,
             status);
-    initRelativeUnit(
+    initRelativeUnits(
             resource,
-            "fields/minute",
-            cacheData.relativeUnits[UDAT_RELATIVE_MINUTES],
+            "fields/minute", "fields/minute-short", "fields/minute-narrow",
+            UDAT_RELATIVE_MINUTES,
+            cacheData.relativeUnits,
             status);
-    initRelativeUnit(
+    initRelativeUnits(
             resource,
-            "fields/hour",
-            cacheData.relativeUnits[UDAT_RELATIVE_HOURS],
+            "fields/hour", "fields/hour-short", "fields/hour-narrow",
+            UDAT_RELATIVE_HOURS,
+            cacheData.relativeUnits,
             status);
     getStringWithFallback(
             resource,
             "fields/second/relative/0",
-            cacheData.absoluteUnits[UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
+            cacheData.absoluteUnits[0][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
             status);
-    UnicodeString daysOfWeek[7];
+    getStringWithFallback(
+            resource,
+            "fields/second-short/relative/0",
+            cacheData.absoluteUnits[1][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
+            status);
+    getStringWithFallback(
+            resource,
+            "fields/second-narrow/relative/0",
+            cacheData.absoluteUnits[2][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
+            status);
+    UnicodeString daysOfWeek[3][7];
     readDaysOfWeek(
             resource,
             "calendar/gregorian/dayNames/stand-alone/wide",
-            daysOfWeek,
+            daysOfWeek[0],
             status);
-    addWeekDay(
+    readDaysOfWeek(
+            resource,
+            "calendar/gregorian/dayNames/stand-alone/short",
+            daysOfWeek[1],
+            status);
+    readDaysOfWeek(
+            resource,
+            "calendar/gregorian/dayNames/stand-alone/narrow",
+            daysOfWeek[2],
+            status);
+    addWeekDays(
             resource,
             "fields/mon/relative",
+            "fields/mon-short/relative",
+            "fields/mon-narrow/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_MONDAY,
             cacheData.absoluteUnits,
             status);
-    addWeekDay(
+    addWeekDays(
             resource,
             "fields/tue/relative",
+            "fields/tue-short/relative",
+            "fields/tue-narrow/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_TUESDAY,
             cacheData.absoluteUnits,
             status);
-    addWeekDay(
+    addWeekDays(
             resource,
             "fields/wed/relative",
+            "fields/wed-short/relative",
+            "fields/wed-narrow/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_WEDNESDAY,
             cacheData.absoluteUnits,
             status);
-    addWeekDay(
+    addWeekDays(
             resource,
             "fields/thu/relative",
+            "fields/thu-short/relative",
+            "fields/thu-narrow/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_THURSDAY,
             cacheData.absoluteUnits,
             status);
-    addWeekDay(
+    addWeekDays(
             resource,
             "fields/fri/relative",
+            "fields/fri-short/relative",
+            "fields/fri-narrow/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_FRIDAY,
             cacheData.absoluteUnits,
             status);
-    addWeekDay(
+    addWeekDays(
             resource,
             "fields/sat/relative",
+            "fields/sat-short/relative",
+            "fields/sat-narrow/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_SATURDAY,
             cacheData.absoluteUnits,
             status);
-    addWeekDay(
+    addWeekDays(
             resource,
             "fields/sun/relative",
+            "fields/sun-short/relative",
+            "fields/sun-narrow/relative",
             daysOfWeek,
             UDAT_ABSOLUTE_SUNDAY,
             cacheData.absoluteUnits,
@@ -522,57 +665,127 @@ static UBool getFromCache(
     return U_SUCCESS(status);
 }
 
-RelativeDateTimeFormatter::RelativeDateTimeFormatter(UErrorCode& status)
-        : cache(NULL), numberFormat(NULL), pluralRules(NULL) {
-    init(Locale::getDefault(), NULL, status);
+RelativeDateTimeFormatter::RelativeDateTimeFormatter(UErrorCode& status) :
+        fCache(NULL),
+        fNumberFormat(NULL),
+        fPluralRules(NULL),
+        fStyle(UDAT_FULL),
+        fContext(UDISPCTX_CAPITALIZATION_NONE),
+        fOptBreakIterator(NULL) {
+    init(NULL, NULL, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
-        const Locale& locale, UErrorCode& status)
-        : cache(NULL), numberFormat(NULL), pluralRules(NULL) {
-    init(locale, NULL, status);
+        const Locale& locale, UErrorCode& status) :
+        fCache(NULL),
+        fNumberFormat(NULL),
+        fPluralRules(NULL),
+        fStyle(UDAT_FULL),
+        fContext(UDISPCTX_CAPITALIZATION_NONE),
+        fOptBreakIterator(NULL),
+        fLocale(locale) {
+    init(NULL, NULL, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
-        const Locale& locale, NumberFormat *nfToAdopt, UErrorCode& status)
-        : cache(NULL), numberFormat(NULL), pluralRules(NULL) {
-    init(locale, nfToAdopt, status);
+        const Locale& locale, NumberFormat *nfToAdopt, UErrorCode& status) :
+        fCache(NULL),
+        fNumberFormat(NULL),
+        fPluralRules(NULL),
+        fStyle(UDAT_FULL),
+        fContext(UDISPCTX_CAPITALIZATION_NONE),
+        fOptBreakIterator(NULL),
+        fLocale(locale) {
+    init(nfToAdopt, NULL, status);
+}
+
+RelativeDateTimeFormatter::RelativeDateTimeFormatter(
+        const Locale& locale,
+        NumberFormat *nfToAdopt,
+        UDateFormatStyle styl,
+        UDisplayContext capitalizationContext,
+        UErrorCode& status) :
+        fCache(NULL),
+        fNumberFormat(NULL),
+        fPluralRules(NULL),
+        fStyle(styl),
+        fContext(capitalizationContext),
+        fOptBreakIterator(NULL),
+        fLocale(locale) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if ((capitalizationContext >> 8) != UDISPCTX_TYPE_CAPITALIZATION) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if (capitalizationContext == UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE) {
+        BreakIterator *bi = BreakIterator::createSentenceInstance(locale, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        init(nfToAdopt, bi, status);
+    } else {
+        init(nfToAdopt, NULL, status);
+    }
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         const RelativeDateTimeFormatter& other)
-        : cache(other.cache),
-          numberFormat(other.numberFormat),
-          pluralRules(other.pluralRules) {
-    cache->addRef();
-    numberFormat->addRef();
-    pluralRules->addRef();
+        : fCache(other.fCache),
+          fNumberFormat(other.fNumberFormat),
+          fPluralRules(other.fPluralRules),
+          fStyle(other.fStyle),
+          fContext(other.fContext),
+          fOptBreakIterator(other.fOptBreakIterator),
+          fLocale(other.fLocale) {
+    fCache->addRef();
+    fNumberFormat->addRef();
+    fPluralRules->addRef();
+    if (fOptBreakIterator != NULL) {
+      fOptBreakIterator->addRef();
+    }
 }
 
 RelativeDateTimeFormatter& RelativeDateTimeFormatter::operator=(
         const RelativeDateTimeFormatter& other) {
     if (this != &other) {
-        SharedObject::copyPtr(other.cache, cache);
-        SharedObject::copyPtr(other.numberFormat, numberFormat);
-        SharedObject::copyPtr(other.pluralRules, pluralRules);
+        SharedObject::copyPtr(other.fCache, fCache);
+        SharedObject::copyPtr(other.fNumberFormat, fNumberFormat);
+        SharedObject::copyPtr(other.fPluralRules, fPluralRules);
+        SharedObject::copyPtr(other.fOptBreakIterator, fOptBreakIterator);
+        fStyle = other.fStyle;
+        fContext = other.fContext;
+        fLocale = other.fLocale;
     }
     return *this;
 }
 
 RelativeDateTimeFormatter::~RelativeDateTimeFormatter() {
-    if (cache != NULL) {
-        cache->removeRef();
+    if (fCache != NULL) {
+        fCache->removeRef();
     }
-    if (numberFormat != NULL) {
-        numberFormat->removeRef();
+    if (fNumberFormat != NULL) {
+        fNumberFormat->removeRef();
     }
-    if (pluralRules != NULL) {
-        pluralRules->removeRef();
+    if (fPluralRules != NULL) {
+        fPluralRules->removeRef();
+    }
+    if (fOptBreakIterator != NULL) {
+        fOptBreakIterator->removeRef();
     }
 }
 
 const NumberFormat& RelativeDateTimeFormatter::getNumberFormat() const {
-    return **numberFormat;
+    return **fNumberFormat;
+}
+
+UDisplayContext RelativeDateTimeFormatter::getCapitalizationContext() const {
+    return fContext;
+}
+
+UDateFormatStyle RelativeDateTimeFormatter::getFormatStyle() const {
+    return fStyle;
 }
 
 UnicodeString& RelativeDateTimeFormatter::format(
@@ -587,13 +800,25 @@ UnicodeString& RelativeDateTimeFormatter::format(
     }
     int32_t bFuture = direction == UDAT_DIRECTION_NEXT ? 1 : 0;
     FieldPosition pos(FieldPosition::DONT_CARE);
-    return cache->relativeUnits[unit][bFuture].format(
+    if (fOptBreakIterator == NULL) {
+        return fCache->relativeUnits[getStyleIndex(fStyle)][unit][bFuture].format(
             quantity,
-            **numberFormat,
-            **pluralRules,
+            **fNumberFormat,
+            **fPluralRules,
             appendTo,
             pos,
             status);
+    }
+    UnicodeString result;
+    fCache->relativeUnits[getStyleIndex(fStyle)][unit][bFuture].format(
+            quantity,
+            **fNumberFormat,
+            **fPluralRules,
+            result,
+            pos,
+            status);
+    adjustForContext(result);
+    return appendTo.append(result);
 }
 
 UnicodeString& RelativeDateTimeFormatter::format(
@@ -606,7 +831,12 @@ UnicodeString& RelativeDateTimeFormatter::format(
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return appendTo;
     }
-    return appendTo.append(cache->absoluteUnits[unit][direction]);
+    if (fOptBreakIterator == NULL) {
+      return appendTo.append(fCache->absoluteUnits[getStyleIndex(fStyle)][unit][direction]);
+    }
+    UnicodeString result(fCache->absoluteUnits[getStyleIndex(fStyle)][unit][direction]);
+    adjustForContext(result);
+    return appendTo.append(result);
 }
 
 UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
@@ -614,33 +844,49 @@ UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
     UnicodeString& appendTo, UErrorCode& status) const {
     Formattable args[2] = {timeString, relativeDateString};
     FieldPosition fpos(0);
-    return cache->getCombinedDateAndTime()->format(
+    return fCache->getCombinedDateAndTime()->format(
             args, 2, appendTo, fpos, status);
 }
 
-void RelativeDateTimeFormatter::init(
-        const Locale &locale, NumberFormat *nfToAdopt, UErrorCode &status) {
-    LocalPointer<NumberFormat> nf(nfToAdopt);
-    if (!getFromCache(locale.getName(), cache, status)) {
+void RelativeDateTimeFormatter::adjustForContext(UnicodeString &str) const {
+    if (fOptBreakIterator == NULL
+        || str.length() == 0 || !u_islower(str.char32At(0))) {
         return;
     }
-    SharedObject::copyPtr(
-            PluralRules::createSharedInstance(
-                    locale, UPLURAL_TYPE_CARDINAL, status),
-            pluralRules);
+
+    // Must guarantee that one thread at a time accesses the shared break
+    // iterator.
+    Mutex lock(&gBrkIterMutex);
+    str.toTitle(
+            fOptBreakIterator->get(),
+            fLocale,
+            U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
+}
+
+void RelativeDateTimeFormatter::init(
+        NumberFormat *nfToAdopt,
+        BreakIterator *biToAdopt,
+        UErrorCode &status) {
+    LocalPointer<NumberFormat> nf(nfToAdopt);
+    LocalPointer<BreakIterator> bi(biToAdopt);
+    if (!getFromCache(fLocale.getName(), fCache, status)) {
+        return;
+    }
+    const SharedPluralRules *pr = PluralRules::createSharedInstance(
+            fLocale, UPLURAL_TYPE_CARDINAL, status);
     if (U_FAILURE(status)) {
         return;
     }
-    pluralRules->removeRef();
+    SharedObject::copyPtr(pr, fPluralRules);
+    pr->removeRef();
     if (nf.isNull()) {
-       SharedObject::copyPtr(
-               NumberFormat::createSharedInstance(
-                       locale, UNUM_DECIMAL, status),
-               numberFormat);
+       const SharedNumberFormat *shared = NumberFormat::createSharedInstance(
+               fLocale, UNUM_DECIMAL, status);
         if (U_FAILURE(status)) {
             return;
         }
-        numberFormat->removeRef();
+        SharedObject::copyPtr(shared, fNumberFormat);
+        shared->removeRef();
     } else {
         SharedNumberFormat *shared = new SharedNumberFormat(nf.getAlias());
         if (shared == NULL) {
@@ -648,7 +894,18 @@ void RelativeDateTimeFormatter::init(
             return;
         }
         nf.orphan();
-        SharedObject::copyPtr(shared, numberFormat);
+        SharedObject::copyPtr(shared, fNumberFormat);
+    }
+    if (bi.isNull()) {
+        SharedObject::clearPtr(fOptBreakIterator);
+    } else {
+        SharedBreakIterator *shared = new SharedBreakIterator(bi.getAlias());
+        if (shared == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        bi.orphan();
+        SharedObject::copyPtr(shared, fOptBreakIterator);
     }
 }
 
