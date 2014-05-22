@@ -30,6 +30,7 @@
 #include "charstr.h"
 #include "unicode/putil.h"
 #include "unicode/smpdtfmt.h"
+#include "uassert.h"
 
 #include "sharednumberformat.h"
 #include "sharedpluralrules.h"

@@ -26,6 +26,7 @@
 #include "ucln_in.h"
 #include "mutex.h"
 #include "charstr.h"
+#include "uassert.h"
 
 #include "sharedbreakiterator.h"
 #include "sharedpluralrules.h"
