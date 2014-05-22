@@ -619,6 +619,7 @@ icu4j/tools/build/icu4j51.api3.gz -text
 icu4j/tools/build/icu4j52.api3.gz -text
 icu4j/tools/build/icu4j53.api3.gz -text
 icu4j/tools/build/manifest.stub -text
+icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/DeprecatedAPIChecker.java -text
 icu4j/tools/misc/.settings/org.eclipse.core.resources.prefs -text
 icu4j/tools/misc/manifest.stub -text
 tools/currency/.classpath -text

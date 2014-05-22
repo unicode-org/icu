@@ -422,6 +422,7 @@ public abstract class TimeZoneNames implements Serializable {
      * The super class of <code>TimeZoneNames</code> service factory classes.
      * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static abstract class Factory {
         /**
@@ -431,8 +432,17 @@ public abstract class TimeZoneNames implements Serializable {
          *            The display locale
          * @return An instance of <code>TimeZoneNames</code>.
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         public abstract TimeZoneNames getTimeZoneNames(ULocale locale);
+
+        /**
+         * Sole constructor
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        protected Factory() {
+        }
     }
 
     /**

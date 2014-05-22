@@ -223,6 +223,14 @@ public final class Normalizer implements Cloneable {
      */
     public static abstract class Mode {
         /**
+         * Sole constructor
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        protected Mode() {
+        }
+
+        /**
          * @internal
          * @deprecated This API is ICU internal only.
          */

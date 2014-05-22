@@ -753,6 +753,7 @@ public class HebrewCalendar extends Calendar {
      * Overrides {@link Calendar#validateField(int)} to provide
      * special handling for month validation for Hebrew calendar.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected void validateField(int field) {
         if (field == MONTH && !isLeapYear(handleGetExtendedYear()) && internalGet(MONTH) == ADAR_1) {

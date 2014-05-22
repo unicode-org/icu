@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2013, International Business Machines Corporation and    *
+* Copyright (C) 2004-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -18,8 +18,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
@@ -61,7 +63,7 @@ public final class APIData {
         }
     }
 
-    static APIData read(File file, boolean internal) {
+    public static APIData read(File file, boolean internal) {
         String fileName = file.getName();
         try {
             InputStream is;
@@ -133,6 +135,10 @@ public final class APIData {
             pw.println();
         }
         pw.println("total apis: " + tt);
+    }
+
+    public Set<APIInfo> getAPIInfoSet() {
+        return Collections.unmodifiableSet(set);
     }
 
     public static void main(String[] args) {

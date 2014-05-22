@@ -197,6 +197,14 @@ public class PluralRules implements Serializable {
     @Deprecated
     public static abstract class Factory {
         /**
+         * Sole constructor
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        protected Factory() {
+        }
+
+        /**
          * Provides access to the predefined <code>PluralRules</code> for a given locale and the plural type.
          * 
          * <p>
@@ -1769,8 +1777,8 @@ public class PluralRules implements Serializable {
     }
 
     /**
-     * @deprecated This API is ICU internal only.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public enum StandardPluralCategories {
@@ -2263,7 +2271,7 @@ public class PluralRules implements Serializable {
      *            If non null, set to the unique value.
      * @return the KeywordStatus
      * @internal
-     * @provisional This API might change or be removed in a future release.
+     * @deprecated This API is ICU internal only.
      */
     public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
             Output<Double> uniqueValue, SampleType sampleType) {

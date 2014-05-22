@@ -1629,6 +1629,7 @@ public abstract class Transliterator implements StringTransform  {
      * @param targetSet TODO
      * @see #getTargetSet
      * @internal
+     * @deprecated  This API is ICU internal only.
      */
     public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
@@ -1649,6 +1650,7 @@ public abstract class Transliterator implements StringTransform  {
      * The externalFilter must be frozen (it is frozen if not).
      * The result may be frozen, so don't attempt to modify.
      * @internal
+     * @deprecated  This API is ICU internal only.
      */
    // TODO change to getMergedFilter
     public UnicodeSet getFilterAsUnicodeSet(UnicodeSet externalFilter) {
