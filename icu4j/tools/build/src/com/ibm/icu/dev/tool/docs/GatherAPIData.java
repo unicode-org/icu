@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -252,11 +252,17 @@ public class GatherAPIData {
     // care if we didn't properly document the draft status of
     // default constructors for abstract classes.
 
+    // Update: We mandate a no-arg synthetic constructor with explicit
+    // javadoc comments by the policy. So, we no longer ignore abstract
+    // class's no-arg constructor blindly. -Yoshito 2014-05-21
+
     private boolean isAbstractClassDefaultConstructor(ProgramElementDoc doc) {
         return doc.isConstructor()
             && doc.containingClass().isAbstract()
             && "()".equals(((ConstructorDoc) doc).signature());
     }
+
+    private static final boolean IGNORE_NO_ARG_ABSTRACT_CTOR = false;
 
     private boolean ignore(ProgramElementDoc doc) {
         if (doc == null) return true;
@@ -268,7 +274,8 @@ public class GatherAPIData {
         if (isIgnoredEnumMethod(doc)) {
             return true;
         }
-        if (isAbstractClassDefaultConstructor(doc)) {
+
+        if (IGNORE_NO_ARG_ABSTRACT_CTOR && isAbstractClassDefaultConstructor(doc)) {
             return true;
         }
 
@@ -445,27 +452,59 @@ public class GatherAPIData {
 
     private int tagStatus(final ProgramElementDoc doc, String[] version) {
         class Result {
+            boolean deprecatedFlag = false;
             int res = -1;
             void set(int val) {
                 if (res != -1) {
+                    boolean isValid = true;
                     if (val == APIInfo.STA_DEPRECATED) {
-                        // ok to have both a 'standard' tag and deprecated
-                        return;
-                    } else if (res != APIInfo.STA_DEPRECATED) {
-                        // if already not deprecated, this is an error
+                        // @internal and @obsolete should be always used along with @deprecated.
+                        // no change for status
+                        isValid = (res == APIInfo.STA_INTERNAL || res == APIInfo.STA_OBSOLETE);
+                        deprecatedFlag = true;
+                    } else if (val == APIInfo.STA_INTERNAL) {
+                        // @deprecated should be always used along with @internal.
+                        // update status
+                        if (res == APIInfo.STA_DEPRECATED) {
+                            res = val;  // APIInfo.STA_INTERNAL
+                        } else {
+                            isValid = false;
+                        }
+                    } else if (val == APIInfo.STA_OBSOLETE) {
+                        // @deprecated should be always used along with @obsolete.
+                        // update status
+                        if (res == APIInfo.STA_DEPRECATED) {
+                            res = val;  // APIInfo.STA_OBSOLETE
+                        } else {
+                            isValid = false;
+                        }
+                    } else {
+                        // two different status tags must not co-exist, except for
+                        // following two cases:
+                        // 1. @internal and @deprecated
+                        // 2. @obsolete and @deprecated
+                        isValid = false;
+                    }
+                    if (!isValid) {
                         System.err.println("bad doc: " + doc + " both: "
                                            + APIInfo.getTypeValName(APIInfo.STA, res) + " and: "
                                            + APIInfo.getTypeValName(APIInfo.STA, val));
                         return;
                     }
+                } else {
+                    // ok to replace with new tag
+                    res = val;
+                    if (val == APIInfo.STA_DEPRECATED) {
+                        deprecatedFlag = true;
+                    }
                 }
-                // ok to replace with new tag
-                res = val;
             }
             int get() {
                 if (res == -1) {
                     System.err.println("warning: no tag for " + doc);
                     return 0;
+                } else if (res == APIInfo.STA_INTERNAL && !deprecatedFlag) {
+                    System.err.println("warning: no @deprecated tag for @internal API: " + doc);
                 }
                 return res;
             }

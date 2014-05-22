@@ -1076,6 +1076,24 @@
         </java>
     </target>
 
+    <target name="checkDeprecated" depends="info, build-tools, gatherapi, main"
+        description="Check consistency between javadoc @deprecated and @Deprecated annotation">
+        <java classname="com.ibm.icu.dev.tool.docs.DeprecatedAPIChecker"
+                failonerror="true">
+            <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
+            <classpath>
+                <pathelement location="${icu4j.build-tools.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.collate.jar}"/>
+                <pathelement location="${icu4j.charset.jar}"/>
+                <pathelement location="${icu4j.currdata.jar}"/>
+                <pathelement location="${icu4j.langdata.jar}"/>
+                <pathelement location="${icu4j.regiondata.jar}"/>
+                <pathelement location="${icu4j.translit.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
     <target name="draftAPIs" depends="info, gatherapi" description="Run API collector tool and generate draft API report">
         <java classname="com.ibm.icu.dev.tool.docs.CollectAPI"
                 classpath="${icu4j.build-tools.jar}"
