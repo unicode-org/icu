@@ -717,6 +717,7 @@ public final class CollationElementIterator
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public int hashCode() {
         assert false : "hashCode not designed";
         return 42;
@@ -726,6 +727,7 @@ public final class CollationElementIterator
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public RuleBasedCollator getRuleBasedCollator() {
         return rbc_;
     }

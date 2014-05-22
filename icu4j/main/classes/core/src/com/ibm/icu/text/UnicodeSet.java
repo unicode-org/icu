@@ -4573,6 +4573,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static XSymbolTable getDefaultXSymbolTable() {
         return XSYMBOL_TABLE;
     }
@@ -4590,6 +4591,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static void setDefaultXSymbolTable(XSymbolTable xSymbolTable) {
         XSYMBOL_TABLE = xSymbolTable;
     }

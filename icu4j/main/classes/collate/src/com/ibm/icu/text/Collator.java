@@ -1035,6 +1035,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int doCompare(CharSequence left, CharSequence right) {
         return compare(left.toString(), right.toString());
     }
@@ -1131,6 +1132,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see RuleBasedCollator#setAlternateHandlingShifted
      * @deprecated ICU 53 Call {@link #setMaxVariable(int)} instead.
      */
+    @Deprecated
     public abstract int setVariableTop(String varTop);
 
     /**
@@ -1155,6 +1157,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see #setVariableTop(String)
      * @deprecated ICU 53 Call setMaxVariable() instead.
      */
+    @Deprecated
     public abstract void setVariableTop(int varTop);
 
     /**

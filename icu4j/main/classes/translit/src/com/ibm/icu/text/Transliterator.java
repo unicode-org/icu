@@ -1631,6 +1631,7 @@ public abstract class Transliterator implements StringTransform  {
      * @internal
      * @deprecated  This API is ICU internal only.
      */
+    @Deprecated
     public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
         UnicodeSet temp = new UnicodeSet(handleGetSourceSet()).retainAll(myFilter);
@@ -1652,6 +1653,7 @@ public abstract class Transliterator implements StringTransform  {
      * @internal
      * @deprecated  This API is ICU internal only.
      */
+    @Deprecated
    // TODO change to getMergedFilter
     public UnicodeSet getFilterAsUnicodeSet(UnicodeSet externalFilter) {
         if (filter == null) {

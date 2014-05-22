@@ -201,6 +201,7 @@ public class PluralRules implements Serializable {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         protected Factory() {
         }
 
@@ -2273,6 +2274,7 @@ public class PluralRules implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
             Output<Double> uniqueValue, SampleType sampleType) {
         if (uniqueValue != null) {

@@ -817,6 +817,7 @@ public final class RuleBasedCollator extends Collator {
      * @deprecated ICU 53 Call {@link #setMaxVariable(int)} instead.
      */
     @Override
+    @Deprecated
     public int setVariableTop(String varTop) {
         checkNotFrozen();
         if (varTop == null || varTop.length() == 0) {
@@ -854,6 +855,7 @@ public final class RuleBasedCollator extends Collator {
      * @deprecated ICU 53 Call setMaxVariable() instead.
      */
     @Override
+    @Deprecated
     public void setVariableTop(int varTop) {
         checkNotFrozen();
         internalSetVariableTop(varTop & 0xffffffffL);
@@ -1236,6 +1238,7 @@ public final class RuleBasedCollator extends Collator {
      * @internal for tests & tools
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public long[] internalGetCEs(CharSequence str) {
         CollationBuffer buffer = null;
         try {
@@ -1659,6 +1662,7 @@ public final class RuleBasedCollator extends Collator {
      * @deprecated This API is ICU internal only.
      */
     @Override
+    @Deprecated
     protected int doCompare(CharSequence left, CharSequence right) {
         if(left == right) {
             return Collation.EQUAL;

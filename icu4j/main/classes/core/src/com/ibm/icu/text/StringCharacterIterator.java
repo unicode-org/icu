@@ -283,6 +283,7 @@ public final class StringCharacterIterator implements CharacterIterator
      * @return A copy of this 
      * @deprecated ICU 2.4. Use java.text.StringCharacterIterator instead.
      */
+    @Deprecated
     public Object clone()
     {
         try {
