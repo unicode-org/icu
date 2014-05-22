@@ -348,6 +348,7 @@
     </ClCompile>
     <ClCompile Include="reldtfmt.cpp" />
     <ClCompile Include="scientificformathelper.cpp" />
+    <ClCompile Include="sharedbreakiterator.cpp" />
     <ClCompile Include="selfmt.cpp" />
     <ClCompile Include="simpletz.cpp" />
     <ClCompile Include="scriptset.cpp" />
@@ -1149,6 +1150,7 @@
     </CustomBuild>
     <ClInclude Include="plurrule_impl.h" />
     <ClInclude Include="quantityformatter.h" />
+    <ClInclude Include="sharedbreakiterator.h" />
     <ClInclude Include="sharednumberformat.h" />
     <ClInclude Include="sharedpluralrules.h" />
     <CustomBuild Include="unicode\rbnf.h">

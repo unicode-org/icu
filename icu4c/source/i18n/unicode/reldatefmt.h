@@ -14,6 +14,9 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "unicode/udisplaycontext.h"
+#include "unicode/udat.h"
+#include "unicode/locid.h"
 
 /**
  * \file
@@ -220,10 +223,10 @@ typedef enum UDateDirection {
 
 U_NAMESPACE_BEGIN
 
-class Locale;
 class RelativeDateTimeCacheData;
 class SharedNumberFormat;
 class SharedPluralRules;
+class SharedBreakIterator;
 class NumberFormat;
 class UnicodeString;
 
@@ -295,8 +298,6 @@ class UnicodeString;
  *
  * @draft ICU 53
  */
-
-
 class U_I18N_API RelativeDateTimeFormatter : public UObject {
 public:
 
@@ -324,6 +325,29 @@ public:
      */
     RelativeDateTimeFormatter(
         const Locale& locale, NumberFormat *nfToAdopt, UErrorCode& status);
+
+    /**
+     * Create RelativeDateTimeFormatter with given locale, NumberFormat,
+     * and capitalization context.
+     *
+     * @param locale the locale
+     * @param nfToAdopt Constructed object takes ownership of this pointer.
+     *   It is an error for caller to delete this pointer or change its
+     *   contents after calling this constructor. Caller may pass NULL for
+     *   this argument if they want default number format behavior.
+     * @param style the format style. The UDAT_RELATIVE bit field has no effect.
+     * @param capitalizationContext The capitalization context must start with
+     *  U_DISPCTX_CAPITALIZATION_. Otherwise status is set to
+     *  U_ILLEGAL_ARGUMENT_ERROR
+     * @status Any error is returned here. 
+     * @draft ICU 53
+     */
+    RelativeDateTimeFormatter(
+            const Locale& locale,
+            NumberFormat *nfToAdopt,
+            UDateFormatStyle style,
+            UDisplayContext capitalizationContext,
+            UErrorCode& status);
 
     /**
      * Copy constructor.
@@ -409,11 +433,32 @@ public:
      */
     const NumberFormat& getNumberFormat() const;
 
+    /**
+     * Returns the capitalization context.
+     *
+     * @draft ICU 54
+     */
+    UDisplayContext getCapitalizationContext() const;
+
+    /**
+     * Returns the format style.
+     *
+     * @draft ICU 54
+     */
+    UDateFormatStyle getFormatStyle() const;
 private:
-    const RelativeDateTimeCacheData* cache;
-    const SharedNumberFormat *numberFormat;
-    const SharedPluralRules *pluralRules;
-    void init(const Locale &, NumberFormat *nfToAdopt, UErrorCode &status);
+    const RelativeDateTimeCacheData* fCache;
+    const SharedNumberFormat *fNumberFormat;
+    const SharedPluralRules *fPluralRules;
+    UDateFormatStyle fStyle;
+    UDisplayContext fContext;
+    const SharedBreakIterator *fOptBreakIterator;
+    Locale fLocale;
+    void init(
+            NumberFormat *nfToAdopt,
+            BreakIterator *brkIter,
+            UErrorCode &status);
+    void adjustForContext(UnicodeString &) const;
 };
 
 U_NAMESPACE_END

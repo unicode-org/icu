@@ -234,6 +234,9 @@
     <ClCompile Include="selfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="sharedbreakiterator.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="simpletz.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -687,6 +690,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="reldtfmt.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="sharedbreakiterator.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="sharednumberformat.h">
