@@ -641,23 +641,21 @@ void MeasureFormat::initMeasureFormat(
         return;
     }
 
-    SharedObject::copyPtr(
-            PluralRules::createSharedInstance(
-                    locale, UPLURAL_TYPE_CARDINAL, status),
-            pluralRules);
+    const SharedPluralRules *pr = PluralRules::createSharedInstance(
+            locale, UPLURAL_TYPE_CARDINAL, status);
     if (U_FAILURE(status)) {
         return;
     }
-    pluralRules->removeRef();
+    SharedObject::copyPtr(pr, pluralRules);
+    pr->removeRef();
     if (nf.isNull()) {
-        SharedObject::copyPtr(
-                NumberFormat::createSharedInstance(
-                        locale, UNUM_DECIMAL, status),
-                numberFormat);
+        const SharedNumberFormat *shared = NumberFormat::createSharedInstance(
+                locale, UNUM_DECIMAL, status);
         if (U_FAILURE(status)) {
             return;
         }
-        numberFormat->removeRef();
+        SharedObject::copyPtr(shared, numberFormat);
+        shared->removeRef();
     } else {
         adoptNumberFormat(nf.orphan(), status);
         if (U_FAILURE(status)) {
