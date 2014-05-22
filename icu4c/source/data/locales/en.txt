@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/en.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/en.xml
- */
 en{
     AuxExemplarCharacters{
         "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ"
@@ -154,7 +151,7 @@ en{
             }
         }
     }
-    Version{"2.0.98.76"}
+    Version{"2.1.3.5"}
     calendar{
         buddhist{
             eras{
@@ -903,6 +900,42 @@ en{
                 }
             }
         }
+        day-narrow{
+            dn{"Day"}
+            relative{
+                "-1"{"yesterday"}
+                "0"{"today"}
+                "1"{"tomorrow"}
+            }
+            relativeTime{
+                future{
+                    one{"+{0} day"}
+                    other{"+{0} days"}
+                }
+                past{
+                    one{"-{0} day"}
+                    other{"-{0} days"}
+                }
+            }
+        }
+        day-short{
+            dn{"Day"}
+            relative{
+                "-1"{"yesterday"}
+                "0"{"today"}
+                "1"{"tomorrow"}
+            }
+            relativeTime{
+                future{
+                    one{"in {0} day"}
+                    other{"in {0} days"}
+                }
+                past{
+                    one{"{0} day ago"}
+                    other{"{0} days ago"}
+                }
+            }
+        }
         dayperiod{
             dn{"AM/PM"}
         }
@@ -916,6 +949,20 @@ en{
                 "1"{"next Friday"}
             }
         }
+        fri-narrow{
+            relative{
+                "-1"{"last F"}
+                "0"{"this F"}
+                "1"{"next F"}
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"last Fri."}
+                "0"{"this Fri."}
+                "1"{"next Fri."}
+            }
+        }
         hour{
             dn{"Hour"}
             relativeTime{
@@ -926,6 +973,32 @@ en{
                 past{
                     one{"{0} hour ago"}
                     other{"{0} hours ago"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"h"}
+            relativeTime{
+                future{
+                    one{"+{0} h"}
+                    other{"+{0} h"}
+                }
+                past{
+                    one{"-{0} h"}
+                    other{"-{0} h"}
+                }
+            }
+        }
+        hour-short{
+            dn{"hr."}
+            relativeTime{
+                future{
+                    one{"in {0} hr."}
+                    other{"in {0} hr."}
+                }
+                past{
+                    one{"{0} hr. ago"}
+                    other{"{0} hr. ago"}
                 }
             }
         }
@@ -942,11 +1015,51 @@ en{
                 }
             }
         }
+        minute-narrow{
+            dn{"m"}
+            relativeTime{
+                future{
+                    one{"+{0} m"}
+                    other{"+{0} m"}
+                }
+                past{
+                    one{"-{0} m"}
+                    other{"-{0} m"}
+                }
+            }
+        }
+        minute-short{
+            dn{"min."}
+            relativeTime{
+                future{
+                    one{"in {0} min."}
+                    other{"in {0} min."}
+                }
+                past{
+                    one{"{0} min. ago"}
+                    other{"{0} min. ago"}
+                }
+            }
+        }
         mon{
             relative{
                 "-1"{"last Monday"}
                 "0"{"this Monday"}
                 "1"{"next Monday"}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"last M"}
+                "0"{"this M"}
+                "1"{"next M"}
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"last Mon."}
+                "0"{"this Mon."}
+                "1"{"next Mon."}
             }
         }
         month{
@@ -967,11 +1080,115 @@ en{
                 }
             }
         }
+        month-narrow{
+            dn{"mo."}
+            relative{
+                "-1"{"last mo."}
+                "0"{"this mo."}
+                "1"{"next mo."}
+            }
+            relativeTime{
+                future{
+                    one{"+{0} mo."}
+                    other{"+{0} mo."}
+                }
+                past{
+                    one{"-{0} mo."}
+                    other{"-{0} mo."}
+                }
+            }
+        }
+        month-short{
+            dn{"mo."}
+            relative{
+                "-1"{"last mo."}
+                "0"{"this mo."}
+                "1"{"next mo."}
+            }
+            relativeTime{
+                future{
+                    one{"in {0} mo."}
+                    other{"in {0} mo."}
+                }
+                past{
+                    one{"{0} mo. ago"}
+                    other{"{0} mo. ago"}
+                }
+            }
+        }
+        quarter{
+            dn{"Quarter"}
+            relative{
+                "-1"{"last quarter"}
+                "0"{"this quarter"}
+                "1"{"next quarter"}
+            }
+            relativeTime{
+                future{
+                    one{"in {0} quarter"}
+                    other{"in {0} quarters"}
+                }
+                past{
+                    one{"{0} quarter ago"}
+                    other{"{0} quarters ago"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"qtr."}
+            relative{
+                "-1"{"last qtr."}
+                "0"{"this qtr."}
+                "1"{"next qtr."}
+            }
+            relativeTime{
+                future{
+                    one{"+{0} Q"}
+                    other{"+{0} Q"}
+                }
+                past{
+                    one{"-{0} Q"}
+                    other{"-{0} Q"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"qtr."}
+            relative{
+                "-1"{"last qtr."}
+                "0"{"this qtr."}
+                "1"{"next qtr."}
+            }
+            relativeTime{
+                future{
+                    one{"in {0} qtr."}
+                    other{"in {0} qtrs."}
+                }
+                past{
+                    one{"{0} qtr. ago"}
+                    other{"{0} qtrs. ago"}
+                }
+            }
+        }
         sat{
             relative{
                 "-1"{"last Saturday"}
                 "0"{"this Saturday"}
                 "1"{"next Saturday"}
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"last Sa"}
+                "0"{"this Sa"}
+                "1"{"next Sa"}
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"last Sat."}
+                "0"{"this Sat."}
+                "1"{"next Sat."}
             }
         }
         second{
@@ -990,11 +1207,57 @@ en{
                 }
             }
         }
+        second-narrow{
+            dn{"s"}
+            relative{
+                "0"{"now"}
+            }
+            relativeTime{
+                future{
+                    one{"+{0} s"}
+                    other{"+{0} s"}
+                }
+                past{
+                    one{"-{0} s"}
+                    other{"-{0} s"}
+                }
+            }
+        }
+        second-short{
+            dn{"sec."}
+            relative{
+                "0"{"now"}
+            }
+            relativeTime{
+                future{
+                    one{"in {0} sec."}
+                    other{"in {0} sec."}
+                }
+                past{
+                    one{"{0} sec. ago"}
+                    other{"{0} sec. ago"}
+                }
+            }
+        }
         sun{
             relative{
                 "-1"{"last Sunday"}
                 "0"{"this Sunday"}
                 "1"{"next Sunday"}
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"last Su"}
+                "0"{"this Su"}
+                "1"{"next Su"}
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"last Sun."}
+                "0"{"this Sun."}
+                "1"{"next Sun."}
             }
         }
         thu{
@@ -1004,6 +1267,20 @@ en{
                 "1"{"next Thursday"}
             }
         }
+        thu-narrow{
+            relative{
+                "-1"{"last Th"}
+                "0"{"this Th"}
+                "1"{"next Th"}
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"last Thu."}
+                "0"{"this Thu."}
+                "1"{"next Thu."}
+            }
+        }
         tue{
             relative{
                 "-1"{"last Tuesday"}
@@ -1011,11 +1288,39 @@ en{
                 "1"{"next Tuesday"}
             }
         }
+        tue-narrow{
+            relative{
+                "-1"{"last Tu"}
+                "0"{"this Tu"}
+                "1"{"next Tu"}
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"last Tue."}
+                "0"{"this Tue."}
+                "1"{"next Tue."}
+            }
+        }
         wed{
             relative{
                 "-1"{"last Wednesday"}
                 "0"{"this Wednesday"}
                 "1"{"next Wednesday"}
+            }
+        }
+        wed-narrow{
+            relative{
+                "-1"{"last W"}
+                "0"{"this W"}
+                "1"{"next W"}
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"last Wed."}
+                "0"{"this Wed."}
+                "1"{"next Wed."}
             }
         }
         week{
@@ -1033,6 +1338,42 @@ en{
                 past{
                     one{"{0} week ago"}
                     other{"{0} weeks ago"}
+                }
+            }
+        }
+        week-narrow{
+            dn{"wk."}
+            relative{
+                "-1"{"last wk."}
+                "0"{"this wk."}
+                "1"{"next wk."}
+            }
+            relativeTime{
+                future{
+                    one{"+{0} wk."}
+                    other{"+{0} wk."}
+                }
+                past{
+                    one{"-{0} wk."}
+                    other{"-{0} wk."}
+                }
+            }
+        }
+        week-short{
+            dn{"wk."}
+            relative{
+                "-1"{"last wk."}
+                "0"{"this wk."}
+                "1"{"next wk."}
+            }
+            relativeTime{
+                future{
+                    one{"in {0} wk."}
+                    other{"in {0} wk."}
+                }
+                past{
+                    one{"{0} wk. ago"}
+                    other{"{0} wk. ago"}
                 }
             }
         }
@@ -1054,6 +1395,42 @@ en{
                 past{
                     one{"{0} year ago"}
                     other{"{0} years ago"}
+                }
+            }
+        }
+        year-narrow{
+            dn{"yr."}
+            relative{
+                "-1"{"last yr."}
+                "0"{"this yr."}
+                "1"{"next yr."}
+            }
+            relativeTime{
+                future{
+                    one{"+{0} yr."}
+                    other{"+{0} yr."}
+                }
+                past{
+                    one{"-{0} yr."}
+                    other{"-{0} yr."}
+                }
+            }
+        }
+        year-short{
+            dn{"yr."}
+            relative{
+                "-1"{"last yr."}
+                "0"{"this yr."}
+                "1"{"next yr."}
+            }
+            relativeTime{
+                future{
+                    one{"in {0} yr."}
+                    other{"in {0} yr."}
+                }
+                past{
+                    one{"{0} yr. ago"}
+                    other{"{0} yr. ago"}
                 }
             }
         }

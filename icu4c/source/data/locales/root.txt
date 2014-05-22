@@ -182,7 +182,7 @@ root{
         }
         native{"latn"}
     }
-    Version{"2.0.97.37"}
+    Version{"2.1.2.21"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -2003,6 +2003,8 @@ root{
                 }
             }
         }
+        day-narrow:alias{"/LOCALE/fields/day-short"}
+        day-short:alias{"/LOCALE/fields/day"}
         dayperiod{
             dn{"Dayperiod"}
         }
@@ -2016,6 +2018,8 @@ root{
                 "1"{"next Friday"}
             }
         }
+        fri-narrow:alias{"/LOCALE/fields/fri-short"}
+        fri-short:alias{"/LOCALE/fields/fri"}
         hour{
             dn{"Hour"}
             relativeTime{
@@ -2027,6 +2031,8 @@ root{
                 }
             }
         }
+        hour-narrow:alias{"/LOCALE/fields/hour-short"}
+        hour-short:alias{"/LOCALE/fields/hour"}
         minute{
             dn{"Minute"}
             relativeTime{
@@ -2038,6 +2044,8 @@ root{
                 }
             }
         }
+        minute-narrow:alias{"/LOCALE/fields/minute-short"}
+        minute-short:alias{"/LOCALE/fields/minute"}
         mon{
             relative{
                 "-1"{"last Monday"}
@@ -2045,6 +2053,8 @@ root{
                 "1"{"next Monday"}
             }
         }
+        mon-narrow:alias{"/LOCALE/fields/mon-short"}
+        mon-short:alias{"/LOCALE/fields/mon"}
         month{
             dn{"Month"}
             relative{
@@ -2061,6 +2071,26 @@ root{
                 }
             }
         }
+        month-narrow:alias{"/LOCALE/fields/month-short"}
+        month-short:alias{"/LOCALE/fields/month"}
+        quarter{
+            dn{"Quarter"}
+            relative{
+                "-1"{"last quarter"}
+                "0"{"this quarter"}
+                "1"{"next quarter"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Q"}
+                }
+                past{
+                    other{"-{0} Q"}
+                }
+            }
+        }
+        quarter-narrow:alias{"/LOCALE/fields/quarter-short"}
+        quarter-short:alias{"/LOCALE/fields/quarter"}
         sat{
             relative{
                 "-1"{"last Saturday"}
@@ -2068,6 +2098,8 @@ root{
                 "1"{"next Saturday"}
             }
         }
+        sat-narrow:alias{"/LOCALE/fields/sat-short"}
+        sat-short:alias{"/LOCALE/fields/sat"}
         second{
             dn{"Second"}
             relative{
@@ -2082,6 +2114,8 @@ root{
                 }
             }
         }
+        second-narrow:alias{"/LOCALE/fields/second-short"}
+        second-short:alias{"/LOCALE/fields/second"}
         sun{
             relative{
                 "-1"{"last Sunday"}
@@ -2089,6 +2123,8 @@ root{
                 "1"{"next Sunday"}
             }
         }
+        sun-narrow:alias{"/LOCALE/fields/sun-short"}
+        sun-short:alias{"/LOCALE/fields/sun"}
         thu{
             relative{
                 "-1"{"last Thursday"}
@@ -2096,6 +2132,8 @@ root{
                 "1"{"next Thursday"}
             }
         }
+        thu-narrow:alias{"/LOCALE/fields/thu-short"}
+        thu-short:alias{"/LOCALE/fields/thu"}
         tue{
             relative{
                 "-1"{"last Tuesday"}
@@ -2103,6 +2141,8 @@ root{
                 "1"{"next Tuesday"}
             }
         }
+        tue-narrow:alias{"/LOCALE/fields/tue-short"}
+        tue-short:alias{"/LOCALE/fields/tue"}
         wed{
             relative{
                 "-1"{"last Wednesday"}
@@ -2110,6 +2150,8 @@ root{
                 "1"{"next Wednesday"}
             }
         }
+        wed-narrow:alias{"/LOCALE/fields/wed-short"}
+        wed-short:alias{"/LOCALE/fields/wed"}
         week{
             dn{"Week"}
             relative{
@@ -2126,6 +2168,8 @@ root{
                 }
             }
         }
+        week-narrow:alias{"/LOCALE/fields/week-short"}
+        week-short:alias{"/LOCALE/fields/week"}
         weekday{
             dn{"Day of the Week"}
         }
@@ -2145,6 +2189,8 @@ root{
                 }
             }
         }
+        year-narrow:alias{"/LOCALE/fields/year-short"}
+        year-short:alias{"/LOCALE/fields/year"}
         zone{
             dn{"Zone"}
         }
