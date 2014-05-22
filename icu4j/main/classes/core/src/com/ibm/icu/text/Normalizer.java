@@ -227,6 +227,7 @@ public final class Normalizer implements Cloneable {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         protected Mode() {
         }
 

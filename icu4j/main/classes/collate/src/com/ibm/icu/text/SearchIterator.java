@@ -712,6 +712,7 @@ public abstract class SearchIterator
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     //TODO: This protected method is @stable 2.0 in ICU4C
     protected void setMatchNotFound() {
         search_.matchedIndex_ = DONE;

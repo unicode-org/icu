@@ -833,6 +833,7 @@ public final class StringSearch extends SearchIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected void setMatchNotFound() {
         super.setMatchNotFound();
         // SearchIterator#setMatchNotFound() does following:

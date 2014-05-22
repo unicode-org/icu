@@ -424,6 +424,7 @@ public abstract class TimeZoneNames implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static abstract class Factory {
         /**
          * The factory method of <code>TimeZoneNames</code>.
@@ -434,6 +435,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public abstract TimeZoneNames getTimeZoneNames(ULocale locale);
 
         /**
@@ -441,6 +443,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         protected Factory() {
         }
     }
