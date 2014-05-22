@@ -27,7 +27,6 @@
 #include "mutex.h"
 #include "charstr.h"
 
-#include "sharedptr.h"
 #include "sharedbreakiterator.h"
 #include "sharedpluralrules.h"
 #include "sharednumberformat.h"
