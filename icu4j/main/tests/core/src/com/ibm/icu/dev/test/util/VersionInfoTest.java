@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
+* Copyright (C) 1996-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -71,7 +71,7 @@ public final class VersionInfoTest extends TestFmwk
                 getInstance(INSTANCE_INVALID_INT_[i]);
                 errln("invalid ints should produce an exception");
             } catch (RuntimeException e) {
-                logln("PASS: \"" + INSTANCE_INVALID_INT_[i] + 
+                logln("PASS: \"" + Arrays.toString(INSTANCE_INVALID_INT_[i]) + 
                       "\" failed as expected");
             }
         }
@@ -103,8 +103,8 @@ public final class VersionInfoTest extends TestFmwk
             VersionInfo v1 = getInstance(COMPARE_NOT_EQUAL_INT_[i]);
             VersionInfo v2 = getInstance(COMPARE_NOT_EQUAL_INT_[i + 1]);
             if (v1.compareTo(v2) == 0) {
-                errln(COMPARE_NOT_EQUAL_INT_[i] + " should not equal " +
-                      COMPARE_NOT_EQUAL_INT_[i + 1]);
+                errln(Arrays.toString(COMPARE_NOT_EQUAL_INT_[i]) + " should not equal " +
+                      Arrays.toString(COMPARE_NOT_EQUAL_INT_[i + 1]));
             }
         }
         for (int i = 0; i < COMPARE_EQUAL_STRING_.length - 1; i ++) {

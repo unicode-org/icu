@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2006-2009, International Business Machines
+ * Copyright (c) 2006-2014, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Created on 2006-4-21
@@ -238,7 +238,8 @@ class ResourceModule implements TestDataModule {
         if (Arrays.binarySearch(expResTypes, type) >= 0) {
             return t;
         } else {
-            throw new DataModuleFormatError(new UResourceTypeMismatchException("Actual type " + t.getType() + " != expected types " + expResTypes + "."));
+            throw new DataModuleFormatError(new UResourceTypeMismatchException("Actual type " + t.getType()
+                    + " != expected types " + Arrays.toString(expResTypes) + "."));
         }
     }
     
