@@ -11,7 +11,6 @@
 
 #include "unicode/utypes.h"
 #include "sharedobject.h"
-#include "sharedptr.h"
 
 U_NAMESPACE_BEGIN
 
