@@ -1,6 +1,6 @@
 # ******************************************************************************
 # *
-# *   Copyright (C) 1995-2013, International Business Machines
+# *   Copyright (C) 1995-2014, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ******************************************************************************
@@ -721,9 +721,11 @@ ibm-5478_P100-1995 { UTR22* } ibm-5478 { IBM* } # This gb_2312_80 DBCS mapping i
                         gb2312-1980
                         GB2312.1980-0   # From X11R6
 
+euc-tw-2014 { UTR22* }                # Updated EUC-TW converter based on ibm-964
+                        EUC-TW
+
 ibm-964_P110-1999 { UTR22* }                # Taiwan EUC. x-euc-tw is a MIME name
                         ibm-964 { IBM* JAVA }
-                        EUC-TW
                         ibm-eucTW
                         cns11643 
                         cp964 { JAVA* }
