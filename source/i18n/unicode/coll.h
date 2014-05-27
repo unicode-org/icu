@@ -292,10 +292,19 @@ public:
     static Collator* U_EXPORT2 createInstance(UErrorCode&  err);
 
     /**
-     * Gets the table-based collation object for the desired locale. The
+     * Gets the collation object for the desired locale. The
      * resource of the desired locale will be loaded.
+     *
      * Locale::getRoot() is the base collation table and all other languages are
      * built on top of it with additional language-specific modifications.
+     *
+     * For some languages, multiple collation types are available;
+     * for example, "de@collation=phonebook".
+     * Starting with ICU 54, collation attributes can be specified via locale keywords as well,
+     * in the old locale extension syntax ("el@colCaseFirst=upper")
+     * or in language tag syntax ("el-u-kf-upper").
+     * See <a href="http://userguide.icu-project.org/collation/api">User Guide: Collation API</a>.
+     *
      * The UErrorCode& err parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
      * the value of U_SUCCESS(err).  If you wish more detailed information, you
@@ -305,6 +314,7 @@ public:
      * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
+     *
      * The caller owns the returned object and is responsible for deleting it.
      * @param loc    The locale ID for which to open a collator.
      * @param err    the error code status.

@@ -175,35 +175,16 @@ RuleBasedCollator::internalBuildTailoring(const UnicodeString &rules,
         }
         return;
     }
-    const CollationSettings &ts = *t->settings;
-    uint16_t fastLatinPrimaries[CollationFastLatin::LATIN_LIMIT];
-    int32_t fastLatinOptions = CollationFastLatin::getOptions(
-            t->data, ts, fastLatinPrimaries, LENGTHOF(fastLatinPrimaries));
-    if((strength != UCOL_DEFAULT && strength != ts.getStrength()) ||
-            (decompositionMode != UCOL_DEFAULT &&
-                decompositionMode != ts.getFlag(CollationSettings::CHECK_FCD)) ||
-            fastLatinOptions != ts.fastLatinOptions ||
-            (fastLatinOptions >= 0 &&
-                uprv_memcmp(fastLatinPrimaries, ts.fastLatinPrimaries,
-                            sizeof(fastLatinPrimaries)) != 0)) {
-        CollationSettings *ownedSettings = SharedObject::copyOnWrite(t->settings);
-        if(ownedSettings == NULL) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        if(strength != UCOL_DEFAULT) {
-            ownedSettings->setStrength(strength, 0, errorCode);
-        }
-        if(decompositionMode != UCOL_DEFAULT) {
-            ownedSettings->setFlag(CollationSettings::CHECK_FCD, decompositionMode, 0, errorCode);
-        }
-        ownedSettings->fastLatinOptions = CollationFastLatin::getOptions(
-            t->data, *ownedSettings,
-            ownedSettings->fastLatinPrimaries, LENGTHOF(ownedSettings->fastLatinPrimaries));
-    }
-    if(U_FAILURE(errorCode)) { return; }
     t->actualLocale.setToBogus();
     adoptTailoring(t.orphan());
+    // Set attributes after building the collator,
+    // to keep the default settings consistent with the rule string.
+    if(strength != UCOL_DEFAULT) {
+        setAttribute(UCOL_STRENGTH, (UColAttributeValue)strength, errorCode);
+    }
+    if(decompositionMode != UCOL_DEFAULT) {
+        setAttribute(UCOL_NORMALIZATION_MODE, decompositionMode, errorCode);
+    }
 }
 
 // CollationBuilder implementation ----------------------------------------- ***
@@ -266,8 +247,8 @@ CollationBuilder::parseAndBuild(const UnicodeString &ruleString,
     variableTop = base->settings->variableTop;
     parser.setSink(this);
     parser.setImporter(importer);
-    parser.parse(ruleString, *SharedObject::copyOnWrite(tailoring->settings),
-                 outParseError, errorCode);
+    CollationSettings &ownedSettings = *SharedObject::copyOnWrite(tailoring->settings);
+    parser.parse(ruleString, ownedSettings, outParseError, errorCode);
     errorReason = parser.getErrorReason();
     if(U_FAILURE(errorCode)) { return NULL; }
     if(dataBuilder->hasMappings()) {
@@ -291,6 +272,9 @@ CollationBuilder::parseAndBuild(const UnicodeString &ruleString,
         tailoring->data = baseData;
     }
     if(U_FAILURE(errorCode)) { return NULL; }
+    ownedSettings.fastLatinOptions = CollationFastLatin::getOptions(
+        tailoring->data, ownedSettings,
+        ownedSettings.fastLatinPrimaries, LENGTHOF(ownedSettings.fastLatinPrimaries));
     tailoring->rules = ruleString;
     tailoring->rules.getTerminatedBuffer();  // ensure NUL-termination
     tailoring->setVersion(base->version, rulesVersion);

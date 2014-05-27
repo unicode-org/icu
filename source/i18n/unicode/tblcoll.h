@@ -115,7 +115,6 @@ public:
      * description for more details on the collation rule syntax.
      * @param rules the collation rules to build the collation table from.
      * @param status reporting a success or an error.
-     * @see Locale
      * @stable ICU 2.0
      */
     RuleBasedCollator(const UnicodeString& rules, UErrorCode& status);
@@ -125,9 +124,8 @@ public:
      * collation table out of them. Please see RuleBasedCollator class
      * description for more details on the collation rule syntax.
      * @param rules the collation rules to build the collation table from.
-     * @param collationStrength default strength for comparison
+     * @param collationStrength strength for comparison
      * @param status reporting a success or an error.
-     * @see Locale
      * @stable ICU 2.0
      */
     RuleBasedCollator(const UnicodeString& rules,
@@ -141,7 +139,6 @@ public:
      * @param rules the collation rules to build the collation table from.
      * @param decompositionMode the normalisation mode
      * @param status reporting a success or an error.
-     * @see Locale
      * @stable ICU 2.0
      */
     RuleBasedCollator(const UnicodeString& rules,
@@ -153,10 +150,9 @@ public:
      * collation table out of them. Please see RuleBasedCollator class
      * description for more details on the collation rule syntax.
      * @param rules the collation rules to build the collation table from.
-     * @param collationStrength default strength for comparison
+     * @param collationStrength strength for comparison
      * @param decompositionMode the normalisation mode
      * @param status reporting a success or an error.
-     * @see Locale
      * @stable ICU 2.0
      */
     RuleBasedCollator(const UnicodeString& rules,
@@ -177,7 +173,6 @@ public:
     /**
      * Copy constructor.
      * @param other the RuleBasedCollator object to be copied
-     * @see Locale
      * @stable ICU 2.0
      */
     RuleBasedCollator(const RuleBasedCollator& other);
