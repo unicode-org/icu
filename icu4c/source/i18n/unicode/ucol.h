@@ -362,6 +362,14 @@ typedef enum {
 
 /**
  * Open a UCollator for comparing strings.
+ *
+ * For some languages, multiple collation types are available;
+ * for example, "de@collation=phonebook".
+ * Starting with ICU 54, collation attributes can be specified via locale keywords as well,
+ * in the old locale extension syntax ("el@colCaseFirst=upper")
+ * or in language tag syntax ("el-u-kf-upper").
+ * See <a href="http://userguide.icu-project.org/collation/api">User Guide: Collation API</a>.
+ *
  * The UCollator pointer is used in all the calls to the Collation 
  * service. After finished, collator must be disposed of by calling
  * {@link #ucol_close }.
