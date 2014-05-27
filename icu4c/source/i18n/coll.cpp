@@ -59,6 +59,8 @@
 #include "uresimp.h"
 #include "ucln_in.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 static icu::Locale* availableLocaleList = NULL;
 static int32_t  availableLocaleListCount;
 static icu::ICULocaleService* gService = NULL;
@@ -256,6 +258,166 @@ static UBool isAvailableLocaleListInitialized(UErrorCode &status) {
 
 // Collator public methods -----------------------------------------------
 
+namespace {
+
+static const struct {
+    const char *name;
+    UColAttribute attr;
+} collAttributes[] = {
+    { "colStrength", UCOL_STRENGTH },
+    { "colBackwards", UCOL_FRENCH_COLLATION },
+    { "colCaseLevel", UCOL_CASE_LEVEL },
+    { "colCaseFirst", UCOL_CASE_FIRST },
+    { "colAlternate", UCOL_ALTERNATE_HANDLING },
+    { "colNormalization", UCOL_NORMALIZATION_MODE },
+    { "colNumeric", UCOL_NUMERIC_COLLATION }
+};
+
+static const struct {
+    const char *name;
+    UColAttributeValue value;
+} collAttributeValues[] = {
+    { "primary", UCOL_PRIMARY },
+    { "secondary", UCOL_SECONDARY },
+    { "tertiary", UCOL_TERTIARY },
+    { "quaternary", UCOL_QUATERNARY },
+    // Note: Not supporting typo "quarternary" because it was never supported in locale IDs.
+    { "identical", UCOL_IDENTICAL },
+    { "no", UCOL_OFF },
+    { "yes", UCOL_ON },
+    { "shifted", UCOL_SHIFTED },
+    { "non-ignorable", UCOL_NON_IGNORABLE },
+    { "lower", UCOL_LOWER_FIRST },
+    { "upper", UCOL_UPPER_FIRST }
+};
+
+static const char *collReorderCodes[UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST] = {
+    "space", "punct", "symbol", "currency", "digit"
+};
+
+int32_t getReorderCode(const char *s) {
+    for (int32_t i = 0; i < LENGTHOF(collReorderCodes); ++i) {
+        if (uprv_stricmp(s, collReorderCodes[i]) == 0) {
+            return UCOL_REORDER_CODE_FIRST + i;
+        }
+    }
+    return -1;
+}
+
+/**
+ * Sets collation attributes according to locale keywords. See
+ * http://www.unicode.org/reports/tr35/tr35-collation.html#Collation_Settings
+ *
+ * Using "alias" keywords and values where defined:
+ * http://www.unicode.org/reports/tr35/tr35.html#Old_Locale_Extension_Syntax
+ * http://unicode.org/repos/cldr/trunk/common/bcp47/collation.xml
+ */
+void setAttributesFromKeywords(const Locale &loc, Collator &coll, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    if (uprv_strcmp(loc.getName(), loc.getBaseName()) == 0) {
+        // No keywords.
+        return;
+    }
+    char value[1024];  // The reordering value could be long.
+    // Check for collation keywords that were already deprecated
+    // before any were supported in createInstance() (except for "collation").
+    int32_t length = loc.getKeywordValue("colHiraganaQuaternary", value, LENGTHOF(value), errorCode);
+    if (U_FAILURE(errorCode)) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if (length != 0) {
+        errorCode = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    length = loc.getKeywordValue("variableTop", value, LENGTHOF(value), errorCode);
+    if (U_FAILURE(errorCode)) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if (length != 0) {
+        errorCode = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    // Parse known collation keywords, ignore others.
+    if (errorCode == U_STRING_NOT_TERMINATED_WARNING) {
+        errorCode = U_ZERO_ERROR;
+    }
+    for (int32_t i = 0; i < LENGTHOF(collAttributes); ++i) {
+        length = loc.getKeywordValue(collAttributes[i].name, value, LENGTHOF(value), errorCode);
+        if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        if (length == 0) { continue; }
+        for (int32_t j = 0;; ++j) {
+            if (j == LENGTHOF(collAttributeValues)) {
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            if (uprv_stricmp(value, collAttributeValues[j].name) == 0) {
+                coll.setAttribute(collAttributes[i].attr, collAttributeValues[j].value, errorCode);
+                break;
+            }
+        }
+    }
+    length = loc.getKeywordValue("colReorder", value, LENGTHOF(value), errorCode);
+    if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if (length != 0) {
+        int32_t codes[ + UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST];
+        int32_t codesLength = 0;
+        char *scriptName = value;
+        for (;;) {
+            if (codesLength == LENGTHOF(codes)) {
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            char *limit = scriptName;
+            char c;
+            while ((c = *limit) != 0 && c != '-') { ++limit; }
+            *limit = 0;
+            int32_t code;
+            if ((limit - scriptName) == 4) {
+                // Strict parsing, accept only 4-letter script codes, not long names.
+                code = u_getPropertyValueEnum(UCHAR_SCRIPT, scriptName);
+            } else {
+                code = getReorderCode(scriptName);
+            }
+            if (code < 0) {
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            codes[codesLength++] = code;
+            if (c == 0) { break; }
+            scriptName = limit + 1;
+        }
+        coll.setReorderCodes(codes, codesLength, errorCode);
+    }
+    length = loc.getKeywordValue("kv", value, LENGTHOF(value), errorCode);
+    if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if (length != 0) {
+        int32_t code = getReorderCode(value);
+        if (code < 0) {
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        coll.setMaxVariable((UColReorderCode)code, errorCode);
+    }
+    if (U_FAILURE(errorCode)) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+}
+
+}  // namespace
+
 Collator* U_EXPORT2 Collator::createInstance(UErrorCode& success) 
 {
     return createInstance(Locale::getDefault(), success);
@@ -266,14 +428,28 @@ Collator* U_EXPORT2 Collator::createInstance(const Locale& desiredLocale,
 {
     if (U_FAILURE(status)) 
         return 0;
-    
+    if (desiredLocale.isBogus()) {
+        // Locale constructed from malformed locale ID or language tag.
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    Collator* coll;
 #if !UCONFIG_NO_SERVICE
     if (hasService()) {
         Locale actualLoc;
-        return (Collator*)gService->get(desiredLocale, &actualLoc, status);
-    }
+        coll = (Collator*)gService->get(desiredLocale, &actualLoc, status);
+    } else
 #endif
-    return makeInstance(desiredLocale, status);
+    {
+        coll = makeInstance(desiredLocale, status);
+    }
+    setAttributesFromKeywords(desiredLocale, *coll, status);
+    if (U_FAILURE(status)) {
+        delete coll;
+        return NULL;
+    }
+    return coll;
 }
 
 

@@ -2411,6 +2411,45 @@ void CollationAPITest::TestIterNumeric() {
     assertEquals("40<72", (int32_t)UCOL_LESS, (int32_t)result);
 }
 
+void CollationAPITest::TestBadKeywords() {
+    // Test locale IDs with errors.
+    // Valid locale IDs are tested via data-driven tests.
+    UErrorCode errorCode = U_ZERO_ERROR;
+    Locale bogusLocale(Locale::getRoot());
+    bogusLocale.setToBogus();
+    LocalPointer<Collator> coll(Collator::createInstance(bogusLocale, errorCode));
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("Collator::createInstance(bogus locale) did not fail as expected - %s",
+              u_errorName(errorCode));
+    }
+
+    // Unknown value.
+    const char *localeID = "it-u-ks-xyz";
+    errorCode = U_ZERO_ERROR;
+    coll.adoptInstead(Collator::createInstance(localeID, errorCode));
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("Collator::createInstance(%s) did not fail as expected - %s",
+              localeID, u_errorName(errorCode));
+    }
+
+    // Unsupported attributes.
+    localeID = "it@colHiraganaQuaternary=true";
+    errorCode = U_ZERO_ERROR;
+    coll.adoptInstead(Collator::createInstance(localeID, errorCode));
+    if(errorCode != U_UNSUPPORTED_ERROR) {
+        errln("Collator::createInstance(%s) did not fail as expected - %s",
+              localeID, u_errorName(errorCode));
+    }
+
+    localeID = "it-u-vt-u24";
+    errorCode = U_ZERO_ERROR;
+    coll.adoptInstead(Collator::createInstance(localeID, errorCode));
+    if(errorCode != U_UNSUPPORTED_ERROR) {
+        errln("Collator::createInstance(%s) did not fail as expected - %s",
+              localeID, u_errorName(errorCode));
+    }
+}
+
  void CollationAPITest::dump(UnicodeString msg, RuleBasedCollator* c, UErrorCode& status) {
     const char* bigone = "One";
     const char* littleone = "one";
@@ -2451,6 +2490,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestClone);
     TESTCASE_AUTO(TestCloneBinary);
     TESTCASE_AUTO(TestIterNumeric);
+    TESTCASE_AUTO(TestBadKeywords);
     TESTCASE_AUTO_END;
 }
 

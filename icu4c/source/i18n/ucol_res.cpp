@@ -176,6 +176,8 @@ CollationLoader::loadTailoring(const Locale &locale, Locale &validLocale, UError
     }
     if(typeLength == 0 || uprv_strcmp(type, "default") == 0) {
         uprv_strcpy(type, defaultType);
+    } else {
+        T_CString_toLowerCase(type);
     }
 
     // Load the collations/type tailoring, with type fallback.

@@ -169,6 +169,7 @@ public:
     void TestClone();
     void TestCloneBinary();
     void TestIterNumeric();
+    void TestBadKeywords();
 
 private:
     // If this is too small for the test data, just increase it.

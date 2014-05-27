@@ -12,6 +12,7 @@
 
 # A collator can be set with "@ root" or "@ locale language-tag",
 # for example "@ locale de-u-co-phonebk".
+# An old-style locale ID can also be used, for example "@ locale de@collation=phonebook".
 
 # A collator can be built with "@ rules".
 # An "@ rules" line is followed by one or more lines with the tailoring rules.
@@ -2366,3 +2367,39 @@
 <2 \u0027
 <2 c
 <1 r
+
+# ICU ticket #8260 "Support all collation-related keywords in Collator.getInstance()"
+** test: locale -u- with collation keywords, ICU ticket 8260
+@ locale de-u-kv-sPace-ka-shifTed-kn-kk-falsE-kf-Upper-kc-tRue-ks-leVel4
+* compare
+<4 \u0020  # space is shifted, strength=quaternary
+<1 !  # punctuation is regular
+<1 2
+<1 12  # numeric sorting
+<1 B
+<c b  # uppercase first on case level
+<1 x\u0301\u0308
+<2 x\u0308\u0301  # normalization off
+
+** test: locale @ with collation keywords, ICU ticket 8260
+@ locale fr@colbAckwards=yes;ColStrength=Quaternary;kv=currencY;colalternate=shifted
+* compare
+<4 $  # currency symbols are shifted, strength=quaternary
+<1 àla
+<2 alà  # backwards secondary level
+
+** test: locale -u- with script reordering, ICU ticket 8260
+@ locale el-u-kr-kana-SYMBOL-Grek
+* compare
+<1 \u0020
+<1 あ
+<1 ☂
+<1 Ω
+<1 L
+
+** test: locale @collation=type should be case-insensitive
+@ locale de@coLLation=PhoneBook
+* compare
+<1 ae
+<2 ä
+<3 Ä

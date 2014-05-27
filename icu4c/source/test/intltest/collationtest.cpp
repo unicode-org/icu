@@ -1234,16 +1234,17 @@ void CollationTest::setRootCollator(IcuTestErrorCode &errorCode) {
 
 void CollationTest::setLocaleCollator(IcuTestErrorCode &errorCode) {
     if(errorCode.isFailure()) { return; }
-    CharString langTag;
-    langTag.appendInvariantChars(fileLine.tempSubString(9), errorCode);
-    char localeID[ULOC_FULLNAME_CAPACITY];
-    int32_t parsedLength;
-    (void)uloc_forLanguageTag(
-        langTag.data(), localeID, LENGTHOF(localeID), &parsedLength, errorCode);
-    Locale locale(localeID);
-    if(fileLine.length() == 9 ||
-            errorCode.isFailure() || errorCode.get() == U_STRING_NOT_TERMINATED_WARNING ||
-            parsedLength != langTag.length() || locale.isBogus()) {
+    int32_t at = fileLine.indexOf((UChar)0x40, 9);  // @ is not invariant
+    if(at >= 0) {
+        fileLine.setCharAt(at, (UChar)0x2a);  // *
+    }
+    CharString localeID;
+    localeID.appendInvariantChars(fileLine.tempSubString(9), errorCode);
+    if(at >= 0) {
+        localeID.data()[at - 9] = '@';
+    }
+    Locale locale(localeID.data());
+    if(fileLine.length() == 9 || errorCode.isFailure() || locale.isBogus()) {
         errln("invalid language tag on line %d", (int)fileLineNumber);
         infoln(fileLine);
         if(errorCode.isSuccess()) { errorCode.set(U_PARSE_ERROR); }
