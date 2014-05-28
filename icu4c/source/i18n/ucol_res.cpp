@@ -104,12 +104,21 @@ UnicodeString *
 CollationLoader::loadRules(const char *localeID, const char *collationType, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
     U_ASSERT(collationType != NULL && *collationType != 0);
+    // Copy the type for lowercasing.
+    char type[16];
+    int32_t typeLength = uprv_strlen(collationType);
+    if(typeLength >= LENGTHOF(type)) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    uprv_memcpy(type, collationType, typeLength + 1);
+    T_CString_toLowerCase(type);
 
     LocalUResourceBundlePointer bundle(ures_open(U_ICUDATA_COLL, localeID, &errorCode));
     LocalUResourceBundlePointer collations(
             ures_getByKey(bundle.getAlias(), "collations", NULL, &errorCode));
     LocalUResourceBundlePointer data(
-            ures_getByKeyWithFallback(collations.getAlias(), collationType, NULL, &errorCode));
+            ures_getByKeyWithFallback(collations.getAlias(), type, NULL, &errorCode));
     int32_t length;
     const UChar *s =  ures_getStringByKey(data.getAlias(), "Sequence", &length, &errorCode);
     if(U_FAILURE(errorCode)) { return NULL; }

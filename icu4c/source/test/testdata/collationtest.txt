@@ -2389,13 +2389,20 @@
 <2 alà  # backwards secondary level
 
 ** test: locale -u- with script reordering, ICU ticket 8260
-@ locale el-u-kr-kana-SYMBOL-Grek
+@ locale el-u-kr-kana-SYMBOL-Grek-hani-cyrl-latn-digit-armn-deva-ethi-thai
 * compare
 <1 \u0020
 <1 あ
 <1 ☂
 <1 Ω
+<1 丂
+<1 ж
 <1 L
+<1 4
+<1 Ձ
+<1 अ
+<1 ሄ
+<1 ฉ
 
 ** test: locale @collation=type should be case-insensitive
 @ locale de@coLLation=PhoneBook

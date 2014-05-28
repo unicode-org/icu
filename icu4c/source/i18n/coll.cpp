@@ -369,7 +369,7 @@ void setAttributesFromKeywords(const Locale &loc, Collator &coll, UErrorCode &er
         return;
     }
     if (length != 0) {
-        int32_t codes[ + UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST];
+        int32_t codes[USCRIPT_CODE_LIMIT + UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST];
         int32_t codesLength = 0;
         char *scriptName = value;
         for (;;) {
