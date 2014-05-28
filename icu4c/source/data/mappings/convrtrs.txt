@@ -671,7 +671,7 @@ ibm-950_P110-1999 { UTR22* }                # Taiwan Big-5 (w/o euro update)
                         cp950 { JAVA* }
                         950 { JAVA }
                         x-IBM950 { JAVA }
-ibm-1375_P100-2007 { UTR22* }   # Big5-HKSCS-2004 with Unicode 3.1 mappings. This uses supplementary characters.
+ibm-1375_P100-2008 { UTR22* }   # Big5-HKSCS-2004 with Unicode 3.1 mappings. This uses supplementary characters.
                         ibm-1375 { IBM* }
                         Big5-HKSCS { IANA* JAVA* }
                         big5hk { JAVA }
