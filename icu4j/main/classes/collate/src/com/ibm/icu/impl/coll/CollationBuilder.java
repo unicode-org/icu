@@ -69,7 +69,8 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
         // In Java, there is only one Importer implementation.
         // In C++, the importer is a parameter for this method.
         parser.setImporter(new BundleImporter());
-        parser.parse(ruleString, tailoring.settings.copyOnWrite());
+        CollationSettings ownedSettings = tailoring.settings.copyOnWrite();
+        parser.parse(ruleString, ownedSettings);
         if(dataBuilder.hasMappings()) {
             makeTailoredCEs();
             closeOverComposites();
@@ -89,6 +90,9 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
         } else {
             tailoring.data = baseData;
         }
+        ownedSettings.fastLatinOptions = CollationFastLatin.getOptions(
+                tailoring.data, ownedSettings,
+                ownedSettings.fastLatinPrimaries);
         tailoring.rules = ruleString;
         // In Java, we do not have a rules version.
         // In C++, the genrb build tool reads and supplies one,

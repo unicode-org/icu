@@ -240,17 +240,6 @@ public final class RuleBasedCollator extends Collator {
         } catch(InvocationTargetException e) {
             throw (Exception)e.getTargetException();
         }
-        CollationSettings ts = t.settings.readOnly();
-        char[] fastLatinPrimaries = new char[CollationFastLatin.LATIN_LIMIT];
-        int fastLatinOptions = CollationFastLatin.getOptions(t.data, ts, fastLatinPrimaries);
-        if(fastLatinOptions != ts.fastLatinOptions ||
-                (fastLatinOptions >= 0 &&
-                    !Arrays.equals(fastLatinPrimaries, ts.fastLatinPrimaries))) {
-            CollationSettings ownedSettings = t.settings.copyOnWrite();
-            ownedSettings.fastLatinOptions = CollationFastLatin.getOptions(
-                t.data, ownedSettings,
-                ownedSettings.fastLatinPrimaries);
-        }
         t.actualLocale = null;
         adoptTailoring(t);
     }

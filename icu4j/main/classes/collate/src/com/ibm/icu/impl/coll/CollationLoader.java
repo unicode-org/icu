@@ -53,10 +53,34 @@ public final class CollationLoader {
         return rootRules;
     }
 
-    static String loadRules(ULocale locale, CharSequence collationType) {
+    /**
+     * Simpler/faster methods for ASCII than ones based on Unicode data.
+     * TODO: There should be code like this somewhere already??
+     */
+    private static final class ASCII {
+        static String toLowerCase(String s) {
+            for (int i = 0; i < s.length(); ++i) {
+                char c = s.charAt(i);
+                if ('A' <= c && c <= 'Z') {
+                    StringBuilder sb = new StringBuilder(s.length());
+                    sb.append(s, 0, i).append((char)(c + 0x20));
+                    while (++i < s.length()) {
+                        c = s.charAt(i);
+                        if ('A' <= c && c <= 'Z') { c += 0x20; }
+                        sb.append(c);
+                    }
+                    return sb.toString();
+                }
+            }
+            return s;
+        }
+    }
+
+    static String loadRules(ULocale locale, String collationType) {
         UResourceBundle bundle = UResourceBundle.getBundleInstance(
                 ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale);
-        UResourceBundle data = ((ICUResourceBundle)bundle).getWithFallback("collations/" + collationType);
+        UResourceBundle data = ((ICUResourceBundle)bundle).getWithFallback(
+                "collations/" + ASCII.toLowerCase(collationType));
         String rules = data.getString("Sequence");
         return rules;
     }
@@ -125,6 +149,8 @@ public final class CollationLoader {
 
         if (type == null || type.equals("default")) {
             type = defaultType;
+        } else {
+            type = ASCII.toLowerCase(type);
         }
 
         // Load the collations/type tailoring, with type fallback.
