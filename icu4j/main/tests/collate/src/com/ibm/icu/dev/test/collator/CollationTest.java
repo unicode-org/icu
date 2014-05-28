@@ -1334,11 +1334,9 @@ public class CollationTest extends TestFmwk {
     private void setLocaleCollator() {
         ULocale locale = null;
         if (fileLine.length() > 9) {
-            String langTag = fileLine.substring(9); // "@ locale <langTag>"
-
-            ULocale.Builder locBld = new ULocale.Builder();
+            String localeID = fileLine.substring(9); // "@ locale <langTag>"
             try {
-                locale = locBld.setLanguageTag(langTag).build();
+                locale = new ULocale(localeID);  // either locale ID or language tag
             } catch (IllformedLocaleException e) {
                 locale = null;
             }

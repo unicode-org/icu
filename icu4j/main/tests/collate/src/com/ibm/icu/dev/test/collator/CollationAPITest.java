@@ -1475,7 +1475,7 @@ public class CollationAPITest extends TestFmwk {
         }
         
         /*
-         * Tests the method gpublic String getDisplayName(Locale objectLocale, Locale displayLocale) using TestCreateCollator1 class
+         * Tests the method public String getDisplayName(Locale objectLocale, Locale displayLocale) using TestCreateCollator1 class
          */
         try {
             TestCreateCollator tcc = new TestCreateCollator();
@@ -1509,6 +1509,41 @@ public class CollationAPITest extends TestFmwk {
                 errln("Collator.getKeywordValues(String) is suppose to return " +
                         "an exception for an invalid keyword.");
             } catch(Exception e){}
+        }
+    }
+
+    public void TestBadKeywords() {
+        // Test locale IDs with errors.
+        // Valid locale IDs are tested via data-driven tests.
+        // Note: ICU4C tests with a bogus Locale. There is no such thing in ICU4J.
+
+        // Unknown value.
+        String localeID = "it-u-ks-xyz";
+        try {
+            Collator.getInstance(new ULocale(localeID));
+            errln("Collator.getInstance(" + localeID + ") did not fail as expected");
+        } catch(IllegalArgumentException expected) {
+        } catch(Exception other) {
+            errln("Collator.getInstance(" + localeID + ") did not fail as expected - " + other);
+        }
+
+        // Unsupported attributes.
+        localeID = "it@colHiraganaQuaternary=true";
+        try {
+            Collator.getInstance(new ULocale(localeID));
+            errln("Collator.getInstance(" + localeID + ") did not fail as expected");
+        } catch(UnsupportedOperationException expected) {
+        } catch(Exception other) {
+            errln("Collator.getInstance(" + localeID + ") did not fail as expected - " + other);
+        }
+
+        localeID = "it-u-vt-u24";
+        try {
+            Collator.getInstance(new ULocale(localeID));
+            errln("Collator.getInstance(" + localeID + ") did not fail as expected");
+        } catch(UnsupportedOperationException expected) {
+        } catch(Exception other) {
+            errln("Collator.getInstance(" + localeID + ") did not fail as expected - " + other);
         }
     }
 }

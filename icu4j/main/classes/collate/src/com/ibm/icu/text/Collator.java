@@ -6,6 +6,7 @@
 */
 package com.ibm.icu.text;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -18,6 +19,8 @@ import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.coll.CollationData;
 import com.ibm.icu.impl.coll.CollationRoot;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ICUException;
@@ -598,7 +601,158 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     }
 
     /**
+     * Simpler/faster methods for ASCII than ones based on Unicode data.
+     * TODO: There should be code like this somewhere already??
+     */
+    private static final class ASCII {
+        static boolean equalIgnoreCase(CharSequence left, CharSequence right) {
+            int length = left.length();
+            if (length != right.length()) { return false; }
+            for (int i = 0; i < length; ++i) {
+                char lc = left.charAt(i);
+                char rc = right.charAt(i);
+                if (lc == rc) { continue; }
+                if ('A' <= lc && lc <= 'Z') {
+                    if ((lc + 0x20) == rc) { continue; }
+                } else if ('A' <= rc && rc <= 'Z') {
+                    if ((rc + 0x20) == lc) { continue; }
+                }
+                return false;
+            }
+            return true;
+        }
+    }
+
+    private static final boolean getYesOrNo(String keyword, String s) {
+        if (ASCII.equalIgnoreCase(s, "yes")) {
+            return true;
+        }
+        if (ASCII.equalIgnoreCase(s, "no")) {
+            return false;
+        }
+        throw new IllegalArgumentException("illegal locale keyword=value: " + keyword + "=" + s);
+    }
+
+    private static final int getIntValue(String keyword, String s, String... values) {
+        for (int i = 0; i < values.length; ++i) {
+            if (ASCII.equalIgnoreCase(s, values[i])) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("illegal locale keyword=value: " + keyword + "=" + s);
+    }
+
+    private static final int getReorderCode(String keyword, String s) {
+        return Collator.ReorderCodes.FIRST +
+                getIntValue(keyword, s, "space", "punct", "symbol", "currency", "digit");
+    }
+
+    /**
+     * Sets collation attributes according to locale keywords. See
+     * http://www.unicode.org/reports/tr35/tr35-collation.html#Collation_Settings
+     *
+     * Using "alias" keywords and values where defined:
+     * http://www.unicode.org/reports/tr35/tr35.html#Old_Locale_Extension_Syntax
+     * http://unicode.org/repos/cldr/trunk/common/bcp47/collation.xml
+     */
+    private static void setAttributesFromKeywords(ULocale loc, RuleBasedCollator coll) {
+        // Check for collation keywords that were already deprecated
+        // before any were supported in createInstance() (except for "collation").
+        String value = loc.getKeywordValue("colHiraganaQuaternary");
+        if (value != null) {
+            throw new UnsupportedOperationException("locale keyword kh/colHiraganaQuaternary");
+        }
+        value = loc.getKeywordValue("variableTop");
+        if (value != null) {
+            throw new UnsupportedOperationException("locale keyword vt/variableTop");
+        }
+        // Parse known collation keywords, ignore others.
+        value = loc.getKeywordValue("colStrength");
+        if (value != null) {
+            // Note: Not supporting typo "quarternary" because it was never supported in locale IDs.
+            int strength = getIntValue("colStrength", value,
+                    "primary", "secondary", "tertiary", "quaternary", "identical");
+            coll.setStrength(strength <= Collator.QUATERNARY ? strength : Collator.IDENTICAL);
+        }
+        value = loc.getKeywordValue("colBackwards");
+        if (value != null) {
+            coll.setFrenchCollation(getYesOrNo("colBackwards", value));
+        }
+        value = loc.getKeywordValue("colCaseLevel");
+        if (value != null) {
+            coll.setCaseLevel(getYesOrNo("colCaseLevel", value));
+        }
+        value = loc.getKeywordValue("colCaseFirst");
+        if (value != null) {
+            int cf = getIntValue("colCaseFirst", value, "no", "lower", "upper");
+            if (cf == 0) {
+                coll.setLowerCaseFirst(false);
+                coll.setUpperCaseFirst(false);
+            } else if (cf == 1) {
+                coll.setLowerCaseFirst(true);
+            } else /* cf == 2 */ {
+                coll.setUpperCaseFirst(true);
+            }
+        }
+        value = loc.getKeywordValue("colAlternate");
+        if (value != null) {
+            coll.setAlternateHandlingShifted(
+                    getIntValue("colAlternate", value, "non-ignorable", "shifted") != 0);
+        }
+        value = loc.getKeywordValue("colNormalization");
+        if (value != null) {
+            coll.setDecomposition(getYesOrNo("colNormalization", value) ?
+                    Collator.CANONICAL_DECOMPOSITION : Collator.NO_DECOMPOSITION);
+        }
+        value = loc.getKeywordValue("colNumeric");
+        if (value != null) {
+            coll.setNumericCollation(getYesOrNo("colNumeric", value));
+        }
+        value = loc.getKeywordValue("colReorder");
+        if (value != null) {
+            int[] codes = new int[UScript.CODE_LIMIT + Collator.ReorderCodes.LIMIT - Collator.ReorderCodes.FIRST];
+            int codesLength = 0;
+            int scriptNameStart = 0;
+            for (;;) {
+                if (codesLength == codes.length) {
+                    throw new IllegalArgumentException(
+                            "too many script code for colReorder locale keyword: " + value);
+                }
+                int limit = scriptNameStart;
+                while (limit < value.length() && value.charAt(limit) != '-') { ++limit; }
+                String scriptName = value.substring(scriptNameStart, limit);
+                int code;
+                if (scriptName.length() == 4) {
+                    // Strict parsing, accept only 4-letter script codes, not long names.
+                    code = UCharacter.getPropertyValueEnum(UProperty.SCRIPT, scriptName);
+                } else {
+                    code = getReorderCode("colReorder", scriptName);
+                }
+                codes[codesLength++] = code;
+                if (limit == value.length()) { break; }
+                scriptNameStart = limit + 1;
+            }
+            if (codesLength == 0) {
+                throw new IllegalArgumentException("no script codes for colReorder locale keyword");
+            }
+            coll.setReorderCodes(Arrays.copyOf(codes, codesLength));
+        }
+        value = loc.getKeywordValue("kv");
+        if (value != null) {
+            coll.setMaxVariable(getReorderCode("kv", value));
+        }
+    }
+
+    /**
      * {@icu} Returns the Collator for the desired locale.
+     *
+     * <p>For some languages, multiple collation types are available;
+     * for example, "de@collation=phonebook".
+     * Starting with ICU 54, collation attributes can be specified via locale keywords as well,
+     * in the old locale extension syntax ("el@colCaseFirst=upper")
+     * or in language tag syntax ("el-u-kf-upper").
+     * See <a href="http://userguide.icu-project.org/collation/api">User Guide: Collation API</a>.
+     *
      * @param locale the desired locale.
      * @return Collator for the desired locale if it is created successfully.
      *         Otherwise if there is no Collator
@@ -612,11 +766,28 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      */
     public static final Collator getInstance(ULocale locale) {
         // fetching from service cache is faster than instantiation
-        return getShim().getInstance(locale);
+        Collator coll = getShim().getInstance(locale);
+        if (coll instanceof RuleBasedCollator) {
+            if (locale == null) {
+                locale = ULocale.getDefault();
+            }
+            if (!locale.getName().equals(locale.getBaseName())) {  // any keywords?
+                setAttributesFromKeywords(locale, (RuleBasedCollator)coll);
+            }
+        }
+        return coll;
     }
 
     /**
      * Returns the Collator for the desired locale.
+     *
+     * <p>For some languages, multiple collation types are available;
+     * for example, "de-u-co-phonebk".
+     * Starting with ICU 54, collation attributes can be specified via locale keywords as well,
+     * in the old locale extension syntax ("el@colCaseFirst=upper", only with {@link ULocale})
+     * or in language tag syntax ("el-u-kf-upper").
+     * See <a href="http://userguide.icu-project.org/collation/api">User Guide: Collation API</a>.
+     *
      * @param locale the desired locale.
      * @return Collator for the desired locale if it is created successfully.
      *         Otherwise if there is no Collator
