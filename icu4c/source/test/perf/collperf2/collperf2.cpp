@@ -1143,136 +1143,13 @@ CollPerf2Test::CollPerf2Test(int32_t argc, const char *argv[], UErrorCode &statu
     }
 
     if (locale == NULL){
-        locale = "en_US";   // set default locale
+        locale = "root";
     }
 
-    //  Set up an ICU collator
+    // Set up an ICU collator.
+    // Starting with ICU 54 (ticket #8260), this supports standard collation locale keywords.
     coll = ucol_open(locale, &status);
     collObj = Collator::createInstance(locale, status);
-
-    // Keyword support should be actually a part of ICU collator, see ICU ticket #8260.
-    char keyBuffer[256];
-    UColAttributeValue val;
-    if (uloc_getKeywordValue(locale, "strength", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        if (strcmp(keyBuffer, "primary") == 0) {
-            val = UCOL_PRIMARY;
-        } else if (strcmp(keyBuffer, "secondary") == 0) {
-            val = UCOL_SECONDARY;
-        } else if (strcmp(keyBuffer, "tertiary") == 0) {
-            val = UCOL_TERTIARY;
-        } else if (strcmp(keyBuffer, "quaternary") == 0) {
-            val = UCOL_QUATERNARY;
-        } else if (strcmp(keyBuffer, "identical") == 0) {
-            val = UCOL_IDENTICAL;
-        } else {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        if (U_SUCCESS(status)) {
-            ucol_setAttribute(coll, UCOL_STRENGTH, val, &status);
-            collObj->setAttribute(UCOL_STRENGTH, val, status);
-        }
-    }
-    if (uloc_getKeywordValue(locale, "alternate", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        if (strcmp(keyBuffer, "non-ignorable") == 0) {
-            val = UCOL_NON_IGNORABLE;
-        } else if (strcmp(keyBuffer, "shifted") == 0) {
-            val = UCOL_SHIFTED;
-        } else {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        if (U_SUCCESS(status)) {
-            ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, val, &status);
-            collObj->setAttribute(UCOL_ALTERNATE_HANDLING, val, status);
-        }
-    }
-    if (uloc_getKeywordValue(locale, "backwards", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        if (strcmp(keyBuffer, "on") == 0) {
-            val = UCOL_ON;
-        } else if (strcmp(keyBuffer, "off") == 0) {
-            val = UCOL_OFF;
-        } else {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        if (U_SUCCESS(status)) {
-            ucol_setAttribute(coll, UCOL_FRENCH_COLLATION, val, &status);
-            collObj->setAttribute(UCOL_FRENCH_COLLATION, val, status);
-        }
-    }
-    if (uloc_getKeywordValue(locale, "normalization", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        if (strcmp(keyBuffer, "on") == 0) {
-            val = UCOL_ON;
-        } else if (strcmp(keyBuffer, "off") == 0) {
-            val = UCOL_OFF;
-        } else {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        if (U_SUCCESS(status)) {
-            ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, val, &status);
-            collObj->setAttribute(UCOL_NORMALIZATION_MODE, val, status);
-        }
-    }
-    if (uloc_getKeywordValue(locale, "caseLevel", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        if (strcmp(keyBuffer, "on") == 0) {
-            val = UCOL_ON;
-        } else if (strcmp(keyBuffer, "off") == 0) {
-            val = UCOL_OFF;
-        } else {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        if (U_SUCCESS(status)) {
-            ucol_setAttribute(coll, UCOL_CASE_LEVEL, val, &status);
-            collObj->setAttribute(UCOL_CASE_LEVEL, val, status);
-        }
-    }
-    if (uloc_getKeywordValue(locale, "caseFirst", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        if (strcmp(keyBuffer, "upper") == 0) {
-            val = UCOL_UPPER_FIRST;
-        } else if (strcmp(keyBuffer, "lower") == 0) {
-            val = UCOL_LOWER_FIRST;
-        } else if (strcmp(keyBuffer, "off") == 0) {
-            val = UCOL_OFF;
-        } else {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        if (U_SUCCESS(status)) {
-            ucol_setAttribute(coll, UCOL_CASE_FIRST, val, &status);
-            collObj->setAttribute(UCOL_CASE_FIRST, val, status);
-        }
-    }
-    if (uloc_getKeywordValue(locale, "hiraganaQuaternary", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        if (strcmp(keyBuffer, "on") == 0) {
-            val = UCOL_ON;
-        } else if (strcmp(keyBuffer, "off") == 0) {
-            val = UCOL_OFF;
-        } else {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        if (U_SUCCESS(status)) {
-            ucol_setAttribute(coll, UCOL_HIRAGANA_QUATERNARY_MODE, val, &status);
-            collObj->setAttribute(UCOL_HIRAGANA_QUATERNARY_MODE, val, status);
-        }
-    }
-    if (uloc_getKeywordValue(locale, "numeric", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        if (strcmp(keyBuffer, "on") == 0) {
-            val = UCOL_ON;
-        } else if (strcmp(keyBuffer, "off") == 0) {
-            val = UCOL_OFF;
-        } else {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        if (U_SUCCESS(status)) {
-            ucol_setAttribute(coll, UCOL_NUMERIC_COLLATION, val, &status);
-            collObj->setAttribute(UCOL_NUMERIC_COLLATION, val, status);
-        }
-    }
-    if (uloc_getKeywordValue(locale, "variableTop", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        // no support for now
-        status = U_UNSUPPORTED_ERROR;
-    }
-    if (uloc_getKeywordValue(locale, "reorder", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
-        // no support for now
-        status = U_UNSUPPORTED_ERROR;
-    }
 }
 
 CollPerf2Test::~CollPerf2Test()
