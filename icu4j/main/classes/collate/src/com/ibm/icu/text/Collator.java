@@ -655,7 +655,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * http://www.unicode.org/reports/tr35/tr35.html#Old_Locale_Extension_Syntax
      * http://unicode.org/repos/cldr/trunk/common/bcp47/collation.xml
      */
-    private static void setAttributesFromKeywords(ULocale loc, RuleBasedCollator coll) {
+    private static void setAttributesFromKeywords(ULocale loc, Collator coll, RuleBasedCollator rbc) {
         // Check for collation keywords that were already deprecated
         // before any were supported in createInstance() (except for "collation").
         String value = loc.getKeywordValue("colHiraganaQuaternary");
@@ -676,28 +676,48 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         }
         value = loc.getKeywordValue("colBackwards");
         if (value != null) {
-            coll.setFrenchCollation(getYesOrNo("colBackwards", value));
+            if (rbc != null) {
+                rbc.setFrenchCollation(getYesOrNo("colBackwards", value));
+            } else {
+                throw new UnsupportedOperationException(
+                        "locale keyword kb/colBackwards only settable for RuleBasedCollator");
+            }
         }
         value = loc.getKeywordValue("colCaseLevel");
         if (value != null) {
-            coll.setCaseLevel(getYesOrNo("colCaseLevel", value));
+            if (rbc != null) {
+                rbc.setCaseLevel(getYesOrNo("colCaseLevel", value));
+            } else {
+                throw new UnsupportedOperationException(
+                        "locale keyword kb/colBackwards only settable for RuleBasedCollator");
+            }
         }
         value = loc.getKeywordValue("colCaseFirst");
         if (value != null) {
-            int cf = getIntValue("colCaseFirst", value, "no", "lower", "upper");
-            if (cf == 0) {
-                coll.setLowerCaseFirst(false);
-                coll.setUpperCaseFirst(false);
-            } else if (cf == 1) {
-                coll.setLowerCaseFirst(true);
-            } else /* cf == 2 */ {
-                coll.setUpperCaseFirst(true);
+            if (rbc != null) {
+                int cf = getIntValue("colCaseFirst", value, "no", "lower", "upper");
+                if (cf == 0) {
+                    rbc.setLowerCaseFirst(false);
+                    rbc.setUpperCaseFirst(false);
+                } else if (cf == 1) {
+                    rbc.setLowerCaseFirst(true);
+                } else /* cf == 2 */ {
+                    rbc.setUpperCaseFirst(true);
+                }
+            } else {
+                throw new UnsupportedOperationException(
+                        "locale keyword kf/colCaseFirst only settable for RuleBasedCollator");
             }
         }
         value = loc.getKeywordValue("colAlternate");
         if (value != null) {
-            coll.setAlternateHandlingShifted(
-                    getIntValue("colAlternate", value, "non-ignorable", "shifted") != 0);
+            if (rbc != null) {
+                rbc.setAlternateHandlingShifted(
+                        getIntValue("colAlternate", value, "non-ignorable", "shifted") != 0);
+            } else {
+                throw new UnsupportedOperationException(
+                        "locale keyword ka/colAlternate only settable for RuleBasedCollator");
+            }
         }
         value = loc.getKeywordValue("colNormalization");
         if (value != null) {
@@ -706,7 +726,12 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         }
         value = loc.getKeywordValue("colNumeric");
         if (value != null) {
-            coll.setNumericCollation(getYesOrNo("colNumeric", value));
+            if (rbc != null) {
+                rbc.setNumericCollation(getYesOrNo("colNumeric", value));
+            } else {
+                throw new UnsupportedOperationException(
+                        "locale keyword kn/colNumeric only settable for RuleBasedCollator");
+            }
         }
         value = loc.getKeywordValue("colReorder");
         if (value != null) {
@@ -716,7 +741,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
             for (;;) {
                 if (codesLength == codes.length) {
                     throw new IllegalArgumentException(
-                            "too many script code for colReorder locale keyword: " + value);
+                            "too many script codes for colReorder locale keyword: " + value);
                 }
                 int limit = scriptNameStart;
                 while (limit < value.length() && value.charAt(limit) != '-') { ++limit; }
@@ -766,14 +791,13 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      */
     public static final Collator getInstance(ULocale locale) {
         // fetching from service cache is faster than instantiation
+        if (locale == null) {
+            locale = ULocale.getDefault();
+        }
         Collator coll = getShim().getInstance(locale);
-        if (coll instanceof RuleBasedCollator) {
-            if (locale == null) {
-                locale = ULocale.getDefault();
-            }
-            if (!locale.getName().equals(locale.getBaseName())) {  // any keywords?
-                setAttributesFromKeywords(locale, (RuleBasedCollator)coll);
-            }
+        if (!locale.getName().equals(locale.getBaseName())) {  // any keywords?
+            setAttributesFromKeywords(locale, coll,
+                    (coll instanceof RuleBasedCollator) ? (RuleBasedCollator)coll : null);
         }
         return coll;
     }
