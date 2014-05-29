@@ -760,7 +760,9 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
             if (codesLength == 0) {
                 throw new IllegalArgumentException("no script codes for colReorder locale keyword");
             }
-            coll.setReorderCodes(Arrays.copyOf(codes, codesLength));
+            int[] args = new int[codesLength];
+            System.arraycopy(codes, 0, args, 0, codesLength);
+            coll.setReorderCodes(args);
         }
         value = loc.getKeywordValue("kv");
         if (value != null) {
