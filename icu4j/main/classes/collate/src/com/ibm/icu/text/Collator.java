@@ -6,7 +6,6 @@
 */
 package com.ibm.icu.text;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
