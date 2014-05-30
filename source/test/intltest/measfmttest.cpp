@@ -38,6 +38,7 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 private:
     void TestBasic();
+    void TestCompatible53_1();
     void TestGetAvailable();
     void TestExamplesInDocs();
     void TestFormatPeriodEn();
@@ -94,6 +95,7 @@ void MeasureFormatTest::runIndexedTest(
     }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(TestBasic);
+    TESTCASE_AUTO(TestCompatible53_1);
     TESTCASE_AUTO(TestGetAvailable);
     TESTCASE_AUTO(TestExamplesInDocs);
     TESTCASE_AUTO(TestFormatPeriodEn);
@@ -111,6 +113,58 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestGroupingSeparator);
     TESTCASE_AUTO(TestDoubleZero);
     TESTCASE_AUTO_END;
+}
+
+void MeasureFormatTest::TestCompatible53_1() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<MeasureUnit> measureUnit;
+    measureUnit.adoptInstead(MeasureUnit::createGForce(status));
+    measureUnit.adoptInstead(MeasureUnit::createArcMinute(status));
+    measureUnit.adoptInstead(MeasureUnit::createArcSecond(status));
+    measureUnit.adoptInstead(MeasureUnit::createDegree(status));
+    measureUnit.adoptInstead(MeasureUnit::createAcre(status));
+    measureUnit.adoptInstead(MeasureUnit::createHectare(status));
+    measureUnit.adoptInstead(MeasureUnit::createSquareFoot(status));
+    measureUnit.adoptInstead(MeasureUnit::createSquareKilometer(status));
+    measureUnit.adoptInstead(MeasureUnit::createSquareMeter(status));
+    measureUnit.adoptInstead(MeasureUnit::createSquareMile(status));
+    measureUnit.adoptInstead(MeasureUnit::createDay(status));
+    measureUnit.adoptInstead(MeasureUnit::createHour(status));
+    measureUnit.adoptInstead(MeasureUnit::createMillisecond(status));
+    measureUnit.adoptInstead(MeasureUnit::createMinute(status));
+    measureUnit.adoptInstead(MeasureUnit::createMonth(status));
+    measureUnit.adoptInstead(MeasureUnit::createSecond(status));
+    measureUnit.adoptInstead(MeasureUnit::createWeek(status));
+    measureUnit.adoptInstead(MeasureUnit::createYear(status));
+    measureUnit.adoptInstead(MeasureUnit::createCentimeter(status));
+    measureUnit.adoptInstead(MeasureUnit::createFoot(status));
+    measureUnit.adoptInstead(MeasureUnit::createInch(status));
+    measureUnit.adoptInstead(MeasureUnit::createKilometer(status));
+    measureUnit.adoptInstead(MeasureUnit::createLightYear(status));
+    measureUnit.adoptInstead(MeasureUnit::createMeter(status));
+    measureUnit.adoptInstead(MeasureUnit::createMile(status));
+    measureUnit.adoptInstead(MeasureUnit::createMillimeter(status));
+    measureUnit.adoptInstead(MeasureUnit::createPicometer(status));
+    measureUnit.adoptInstead(MeasureUnit::createYard(status));
+    measureUnit.adoptInstead(MeasureUnit::createGram(status));
+    measureUnit.adoptInstead(MeasureUnit::createKilogram(status));
+    measureUnit.adoptInstead(MeasureUnit::createOunce(status));
+    measureUnit.adoptInstead(MeasureUnit::createPound(status));
+    measureUnit.adoptInstead(MeasureUnit::createHorsepower(status));
+    measureUnit.adoptInstead(MeasureUnit::createKilowatt(status));
+    measureUnit.adoptInstead(MeasureUnit::createWatt(status));
+    measureUnit.adoptInstead(MeasureUnit::createHectopascal(status));
+    measureUnit.adoptInstead(MeasureUnit::createInchHg(status));
+    measureUnit.adoptInstead(MeasureUnit::createMillibar(status));
+    measureUnit.adoptInstead(MeasureUnit::createKilometerPerHour(status));
+    measureUnit.adoptInstead(MeasureUnit::createMeterPerSecond(status));
+    measureUnit.adoptInstead(MeasureUnit::createMilePerHour(status));
+    measureUnit.adoptInstead(MeasureUnit::createCelsius(status));
+    measureUnit.adoptInstead(MeasureUnit::createFahrenheit(status));
+    measureUnit.adoptInstead(MeasureUnit::createCubicKilometer(status));
+    measureUnit.adoptInstead(MeasureUnit::createCubicMile(status));
+    measureUnit.adoptInstead(MeasureUnit::createLiter(status));
+    assertSuccess("", status);
 }
 
 void MeasureFormatTest::TestBasic() {
