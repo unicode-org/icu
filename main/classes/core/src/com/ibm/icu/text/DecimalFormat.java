@@ -2298,7 +2298,12 @@ public class DecimalFormat extends NumberFormat {
                 0xFB29, 0xFB29,
                 0xFE62, 0xFE62,
                 0xFF0B, 0xFF0B).freeze();
-    
+
+    // equivalent grouping and decimal support
+    static final boolean skipExtendedSeparatorParsing = ICUConfig.get(
+        "com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false")
+        .equals("true");
+
 
     // When parsing a number with big exponential value, it requires to transform the
     // value into a string representation to construct BigInteger instance.  We want to
@@ -2398,11 +2403,6 @@ public class DecimalFormat extends NumberFormat {
             int lastGroup = -1; // where did we last see a grouping separator?
             int digitStart = position; // where did the digit start?
             int gs2 = groupingSize2 == 0 ? groupingSize : groupingSize2;
-
-            // equivalent grouping and decimal support
-            boolean skipExtendedSeparatorParsing = ICUConfig.get(
-                "com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false")
-                .equals("true");
 
             UnicodeSet decimalEquiv = skipExtendedSeparatorParsing ? UnicodeSet.EMPTY :
                 getEquivalentDecimals(decimal, strictParse);
