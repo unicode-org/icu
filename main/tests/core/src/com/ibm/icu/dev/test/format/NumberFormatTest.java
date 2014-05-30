@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
@@ -2893,26 +2894,24 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         expect(fmt, "2\uFF61345.67", 2345.67);
 
-        // Ticket#7218
+        // Ticket#7128
         //
-        // Lenient separator parsing is enabled by default.
-        // A space character below is interpreted as a
-        // group separator, even ',' is used as grouping
-        // separator in the symbols.
         sym.setGroupingSeparator(',');
         fmt.setDecimalFormatSymbols(sym);
 
-        expect(fmt, "12 345", 12345);
-
-        // When the property SkipExtendedSeparatorParsing is true,
-        // DecimalFormat does not use the extended equivalent separator
-        // data and only uses the one in DecimalFormatSymbols.
-        System.setProperty("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "true");
-
-        expect(fmt, "23 456", 23);
-
-        // Set the configuration back to the default
-        System.setProperty("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false");
+        String skipExtSepParse = ICUConfig.get("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false");
+        if (skipExtSepParse.equals("true")) {
+            // When the property SkipExtendedSeparatorParsing is true,
+            // DecimalFormat does not use the extended equivalent separator
+            // data and only uses the one in DecimalFormatSymbols.
+            expect(fmt, "23 456", 23);
+        } else {
+            // Lenient separator parsing is enabled by default.
+            // A space character below is interpreted as a
+            // group separator, even ',' is used as grouping
+            // separator in the symbols.
+            expect(fmt, "12 345", 12345);
+        }
     }
 
     /*
