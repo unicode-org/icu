@@ -51,6 +51,58 @@ public class MeasureUnitTest extends TestFmwk {
         new MeasureUnitTest().run(args);
     }
     
+    public void TestCompatible53_1() {
+        MeasureUnit[] units = {
+                MeasureUnit.G_FORCE,
+                MeasureUnit.DEGREE,
+                MeasureUnit.ARC_MINUTE,
+                MeasureUnit.ARC_SECOND,
+                MeasureUnit.ACRE,
+                MeasureUnit.HECTARE,
+                MeasureUnit.SQUARE_FOOT,
+                MeasureUnit.SQUARE_KILOMETER,
+                MeasureUnit.SQUARE_METER,
+                MeasureUnit.SQUARE_MILE,
+                MeasureUnit.MILLISECOND,
+                MeasureUnit.CENTIMETER,
+                MeasureUnit.FOOT,
+                MeasureUnit.INCH,
+                MeasureUnit.KILOMETER,
+                MeasureUnit.LIGHT_YEAR,
+                MeasureUnit.METER,
+                MeasureUnit.MILE,
+                MeasureUnit.MILLIMETER,
+                MeasureUnit.PICOMETER,
+                MeasureUnit.YARD,
+                MeasureUnit.GRAM,
+                MeasureUnit.KILOGRAM,
+                MeasureUnit.OUNCE,
+                MeasureUnit.POUND,
+                MeasureUnit.HORSEPOWER,
+                MeasureUnit.KILOWATT,
+                MeasureUnit.WATT,
+                MeasureUnit.HECTOPASCAL,
+                MeasureUnit.INCH_HG,
+                MeasureUnit.MILLIBAR,
+                MeasureUnit.KILOMETER_PER_HOUR,
+                MeasureUnit.METER_PER_SECOND,
+                MeasureUnit.MILE_PER_HOUR,
+                MeasureUnit.CELSIUS,
+                MeasureUnit.FAHRENHEIT,
+                MeasureUnit.CUBIC_KILOMETER,
+                MeasureUnit.CUBIC_MILE,
+                MeasureUnit.LITER,
+                MeasureUnit.YEAR,
+                MeasureUnit.MONTH,
+                MeasureUnit.WEEK,
+                MeasureUnit.DAY,
+                MeasureUnit.HOUR,
+                MeasureUnit.MINUTE,
+                MeasureUnit.SECOND,
+        };
+        assertEquals("", 46, units.length);
+    }
+    
     public void TestExamplesInDocs() {
         MeasureFormat fmtFr = MeasureFormat.getInstance(
                 ULocale.FRENCH, FormatWidth.SHORT);
