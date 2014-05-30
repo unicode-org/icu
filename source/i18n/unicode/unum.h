@@ -18,6 +18,7 @@
 
 #include "unicode/localpointer.h"
 #include "unicode/uloc.h"
+#include "unicode/ucurr.h"
 #include "unicode/umisc.h"
 #include "unicode/parseerr.h"
 #include "unicode/uformattable.h"
@@ -288,18 +289,6 @@ enum UCurrencySpacing {
     UNUM_CURRENCY_SPACING_COUNT
 };
 typedef enum UCurrencySpacing UCurrencySpacing; /**< @stable ICU 4.8 */
-
-/**
- * Constants for specifying currency purpose
- * @stable ICU 53
- */
-enum UCurrencyPurpose {
-    /** @stable ICU 51 */
-    UNUM_CURRENCY_OFFICIAL,
-    /** @stable ICU 51 */
-    UNUM_CURRENCY_CASH
-};
-typedef enum UCurrencyPurpose UCurrencyPurpose; /**< @stable ICU 53 */
 
 /**
  * FieldPosition and UFieldPosition selectors for format fields
@@ -935,8 +924,15 @@ typedef enum UNumberFormatAttribute {
   /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
   /** Limit of boolean attributes.
    * @internal */
-  UNUM_LIMIT_BOOLEAN_ATTRIBUTE
-  
+  UNUM_LIMIT_BOOLEAN_ATTRIBUTE,
+
+   /** 
+   * if this attribute is set to 0, it is set to UNUM_CURRENCY_STANDARD purpose, otherwise it is UNUM_CURRENCY_CASH purpose
+   * Default: 0 (UNUM_CURRENCY_STANDARD purpose)
+   * @draft ICU 54
+   */
+   UNUM_CURRENCY_USAGE
+
 } UNumberFormatAttribute;
 
 /**
@@ -1293,28 +1289,6 @@ unum_setContext(UNumberFormat* fmt, UDisplayContext value, UErrorCode* status);
  */
 U_DRAFT UDisplayContext U_EXPORT2
 unum_getContext(const UNumberFormat *fmt, UDisplayContextType type, UErrorCode* status);
-
-/**
- * Set a particular UCurrencyPurpose value in the formatter, such as
- * UNUM_CURRENCY_OFFICIAL.
- * @param fmt The formatter for which to set a UCurrencyPurpose value.
- * @param value The UCurrencyPurpose value to set.
- * @param status A pointer to an UErrorCode to receive any errors
- * @draft ICU 53
- */
-U_CAPI void U_EXPORT2
-unum_setCurrencyPurpose(UNumberFormat* fmt, UCurrencyPurpose value, UErrorCode* status);
-
-/**
- * Get the formatter's UCurrencyPurpose value
- * such as UNUM_CURRENCY_OFFICIAL.
- * @param fmt The formatter to query.
- * @param status A pointer to an UErrorCode to receive any errors
- * @return The UCurrencyPurpose for the specified type.
- * @draft ICU 53
- */
-U_CAPI UCurrencyPurpose U_EXPORT2
-unum_getCurrencyPurpose(const UNumberFormat *fmt, UErrorCode* status);
 
 #endif  /* U_HIDE_DRAFT_API */
 

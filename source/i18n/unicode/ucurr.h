@@ -18,6 +18,22 @@
 #if !UCONFIG_NO_FORMATTING
 
 /**
+ * Constants for specifying currency purpose
+ * @stable ICU 53
+ */
+enum UCurrencyUsage {
+    /** @draft ICU 54 */
+    UCURR_USAGE_STANDARD=0,
+    /** @draft ICU 54 */
+    UCURR_USAGE_CASH=1,
+    /** @draft ICU 54 */
+	UCURR_USAGE_DEFAULT=UCURR_USAGE_STANDARD,
+    /** @draft ICU 54 */
+	UCURR_USAGE_COUNT
+};
+typedef enum UCurrencyUsage UCurrencyUsage; 
+
+/**
  * The ucurr API encapsulates information about a currency, as defined by
  * ISO 4217.  A currency is represented by a 3-character string
  * containing its ISO 4217 code.  This API can return various data
@@ -176,6 +192,21 @@ ucurr_getDefaultFractionDigits(const UChar* currency,
                                UErrorCode* ec);
 
 /**
+ * Returns the number of the number of fraction digits that should
+ * be displayed for the given currency with usage.
+ * @param currency null-terminated 3-letter ISO 4217 code
+ * @param usage enum usage for the currency
+ * @param ec input-output error code
+ * @return a non-negative number of fraction digits to be
+ * displayed, or 0 if there is an error
+ * @draft ICU 54
+ */
+U_DRAFT int32_t U_EXPORT2
+ucurr_getDefaultFractionDigitsWithUsage(const UChar* currency, 
+										const UCurrencyUsage usage,
+										UErrorCode* ec);
+
+/**
  * Returns the rounding increment for the given currency, or 0.0 if no
  * rounding is done by the currency.
  * @param currency null-terminated 3-letter ISO 4217 code
@@ -187,6 +218,21 @@ ucurr_getDefaultFractionDigits(const UChar* currency,
 U_STABLE double U_EXPORT2
 ucurr_getRoundingIncrement(const UChar* currency,
                            UErrorCode* ec);
+
+/**
+ * Returns the rounding increment for the given currency, or 0.0 if no
+ * rounding is done by the currency given usage.
+ * @param currency null-terminated 3-letter ISO 4217 code
+ * @param usage enum usage for the currency
+ * @param ec input-output error code
+ * @return the non-negative rounding increment, or 0.0 if none,
+ * or 0.0 if there is an error
+ * @draft ICU 54
+ */
+U_DRAFT double U_EXPORT2
+ucurr_getRoundingIncrementWithUsage(const UChar* currency,
+									const UCurrencyUsage usage,
+									UErrorCode* ec);
 
 /**
  * Selector constants for ucurr_openCurrencies().

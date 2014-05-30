@@ -420,7 +420,7 @@ DecimalFormat::init() {
     fAffixesForCurrency = NULL;
     fPluralAffixesForCurrency = NULL;
     fCurrencyPluralInfo = NULL;
-	fCurrencyPurpose = UNUM_CURRENCY_OFFICIAL;
+	fCurrencyUsage = UCURR_USAGE_STANDARD;
 #if UCONFIG_HAVE_PARSEALLINPUT
     fParseAllInput = UNUM_MAYBE;
 #endif
@@ -5155,10 +5155,10 @@ void DecimalFormat::setCurrencyInternally(const UChar* theCurrency,
 
     double rounding = 0.0;
     int32_t frac = 0;
-    /*if (fCurrencySignCount != fgCurrencySignCountZero && isCurr) {
-        rounding = ucurr_getRoundingIncrement(theCurrency, &ec);
-        frac = ucurr_getDefaultFractionDigits(theCurrency, &ec);
-    }*/
+    if (fCurrencySignCount != fgCurrencySignCountZero && isCurr) {
+        rounding = ucurr_getRoundingIncrementWithUsage(theCurrency, fCurrencyUsage, &ec);
+        frac = ucurr_getDefaultFractionDigitsWithUsage(theCurrency, fCurrencyUsage, &ec);
+    }
 
     NumberFormat::setCurrency(theCurrency, ec);
     if (U_FAILURE(ec)) return;
@@ -5166,10 +5166,9 @@ void DecimalFormat::setCurrencyInternally(const UChar* theCurrency,
     if (fCurrencySignCount != fgCurrencySignCountZero) {
         // NULL or empty currency is *legal* and indicates no currency.
         if (isCurr) {
-			setCurrencyWithContext();
-            /*setRoundingIncrement(rounding);
+            setRoundingIncrement(rounding);
             setMinimumFractionDigits(frac);
-            setMaximumFractionDigits(frac);*/
+            setMaximumFractionDigits(frac);
         }
         expandAffixes(NULL);
     }
@@ -5194,154 +5193,22 @@ void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
 #endif
 }
 
-// Default currency meta data of last resort.  We try to use the
-// defaults encoded in the meta data resource bundle.  If there is a
-// configuration/build error and these are not available, we use these
-// hard-coded defaults (which should be identical).
-static const int32_t LAST_RESORT_DATA[] = { 2, 0, 2, 0 };
+void DecimalFormat::setCurrencyUsage(UCurrencyUsage newContext){
+	fCurrencyUsage = newContext;
 
-static const char CURRENCY_DATA[] = "supplementalData";
-// Tag for meta-data, in root.
-static const char CURRENCY_META[] = "CurrencyMeta";
-
-#define ISO_CURRENCY_CODE_LENGTH 3
-static const char DEFAULT_META[] = "DEFAULT";
-
-// POW10[i] = 10^i, i=0..MAX_POW10
-static const int32_t POW10[] = { 1, 10, 100, 1000, 10000, 100000,
-                                 1000000, 10000000, 100000000, 1000000000 };
-
-static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
-
-/**
- * Unfortunately, we have to convert the UChar* currency code to char*
- * to use it as a resource key.
- */
-static inline char*
-myUCharsToChars(char* resultOfLen4, const UChar* currency) {
-    u_UCharsToChars(currency, resultOfLen4, ISO_CURRENCY_CODE_LENGTH);
-    resultOfLen4[ISO_CURRENCY_CODE_LENGTH] = 0;
-    return resultOfLen4;
-}
-
-/**
- * Internal function to look up currency data.  Result is an array of
- * four integers.  The first is the fraction digits.  The second is the
- * rounding increment, or 0 if none.  The rounding increment is in
- * units of 10^(-fraction_digits).  The third and fourth are the same
- * except that they are those used in cash transations ( cashDigits
- * and cashRounding ).
- */
-static const int32_t*
-_findMetaData(const UChar* currency, UErrorCode& ec) {
-
-    if (currency == 0 || *currency == 0) {
-        if (U_SUCCESS(ec)) {
-            ec = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        return LAST_RESORT_DATA;
-    }
-
-    // Get CurrencyMeta resource out of root locale file.  [This may
-    // move out of the root locale file later; if it does, update this
-    // code.]
-    UResourceBundle* currencyData = ures_openDirect(U_ICUDATA_CURR, CURRENCY_DATA, &ec);
-    UResourceBundle* currencyMeta = ures_getByKey(currencyData, CURRENCY_META, currencyData, &ec);
-
-    if (U_FAILURE(ec)) {
-        ures_close(currencyMeta);
-        // Config/build error; return hard-coded defaults
-        return LAST_RESORT_DATA;
-    }
-	
-
-    // Look up our currency, or if that's not available, then DEFAULT
-    char buf[ISO_CURRENCY_CODE_LENGTH+1];
-    UErrorCode ec2 = U_ZERO_ERROR; // local error code: soft failure
-    UResourceBundle* rb = ures_getByKey(currencyMeta, myUCharsToChars(buf, currency), NULL, &ec2);
-      if (U_FAILURE(ec2)) {
-        ures_close(rb);
-        rb = ures_getByKey(currencyMeta,DEFAULT_META, NULL, &ec);
-        if (U_FAILURE(ec)) {
-            ures_close(currencyMeta);
-            ures_close(rb);
-            // Config/build error; return hard-coded defaults
-            return LAST_RESORT_DATA;
-        }
-    }
-
-    int32_t len;
-    const int32_t *data = ures_getIntVector(rb, &len, &ec);
-    if (U_FAILURE(ec) || len != 4) {
-        // Config/build error; return hard-coded defaults
-        if (U_SUCCESS(ec)) {
-            ec = U_INVALID_FORMAT_ERROR;
-        }
-        ures_close(currencyMeta);
-        ures_close(rb);
-        return LAST_RESORT_DATA;
-    }
-
-    ures_close(currencyMeta);
-    ures_close(rb);
-    return data;
-}
-
-double DecimalFormat::getCurrencyRounding(const UChar* currency, UErrorCode* ec) const{
-    const int32_t *data = _findMetaData(currency, *ec);
-	
-    // If the meta data is invalid, return 0.0.
-    if (data[2] < 0 || data[2] > MAX_POW10) {
-        if (U_SUCCESS(*ec)) {
-            *ec = U_INVALID_FORMAT_ERROR;
-        }
-        return 0.0;
-    }
-
-    // If there is no rounding, return 0.0 to indicate no rounding.  A
-    // rounding value (data[1]) of 0 or 1 indicates no rounding.
-    if (data[3] < 2) {
-        return 0.0;
-    }
-
-    // Return data[1] / 10^(data[0]).  The only actual rounding data,
-    // as of this writing, is CHF { 2, 5 }.
-    return (double) data[3] / POW10[data[2]];
-}
-
-int DecimalFormat::getCurrencyFractionDigits(const UChar* currency, UErrorCode* ec) const{
-    return (_findMetaData(currency, *ec))[2];
-}
-
-void DecimalFormat::setCurrencyWithContext(){
 	double rounding = 0.0;
 	int32_t frac = 1; 
 	UErrorCode ec = U_ZERO_ERROR;
 	const UChar* theCurrency = getCurrency();
         // We set rounding/digit based on currency context
-        // For Official_Purpose, we use default setting from Currency
-        // For Cash_Purpose, we use local helpers to get rounding/digits
         if(getCurrency()){
-            if(fCurrencyPurpose == UNUM_CURRENCY_CASH){
-                rounding = getCurrencyRounding(theCurrency, &ec);
-				frac = getCurrencyFractionDigits(theCurrency, &ec);
-            }else if(fCurrencyPurpose == UNUM_CURRENCY_OFFICIAL){
-				rounding = ucurr_getRoundingIncrement(theCurrency, &ec);
-				frac = ucurr_getDefaultFractionDigits(theCurrency, &ec);
-            }/*else{
-				rounding = ucurr_getRoundingIncrement(theCurrency, &ec);
-				frac = ucurr_getDefaultFractionDigits(theCurrency, &ec);
-            }*/
+			rounding = ucurr_getRoundingIncrementWithUsage(theCurrency, fCurrencyUsage, &ec);
+			frac = ucurr_getDefaultFractionDigitsWithUsage(theCurrency, fCurrencyUsage, &ec);
             
 			setRoundingIncrement(rounding);
 			setMinimumFractionDigits(frac);
             setMaximumFractionDigits(frac);
-        }
-}
-
-void DecimalFormat::setCurrencyPurpose(UCurrencyPurpose newContext){
-	fCurrencyPurpose = newContext;
-	setCurrencyWithContext();
+		}
 }
 
 // Deprecated variant with no UErrorCode parameter
@@ -5617,6 +5484,10 @@ DecimalFormat& DecimalFormat::setAttribute( UNumberFormatAttribute attr,
         fScale = newValue;
         break;
 
+
+	case UNUM_CURRENCY_USAGE:
+		setCurrencyUsage((UCurrencyUsage)newValue);
+
     default:
       status = U_UNSUPPORTED_ERROR;
       break;
@@ -5694,6 +5565,9 @@ int32_t DecimalFormat::getAttribute( UNumberFormatAttribute attr,
 
     case UNUM_SCALE:
         return fScale;
+
+	case UNUM_CURRENCY_USAGE:
+		return fCurrencyUsage;
 
     default:
         status = U_UNSUPPORTED_ERROR;

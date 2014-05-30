@@ -59,7 +59,7 @@ static void TestUFormattable(void);
 static void TestUNumberingSystem(void);
 static void TestCurrencyIsoPluralFormat(void);
 static void TestContext(void);
-static void TestCurrencyContext(void);
+static void TestCurrencyUsage(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -86,7 +86,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestUNumberingSystem);
     TESTCASE(TestCurrencyIsoPluralFormat);
     TESTCASE(TestContext);
-	TESTCASE(TestCurrencyContext);
+	TESTCASE(TestCurrencyUsage);
 }
 
 /* test Parse int 64 */
@@ -2531,7 +2531,7 @@ static void TestContext(void) {
 #endif /* #if !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_BREAK_ITERATION */
 }
 
-static void TestCurrencyContext(void) {
+static void TestCurrencyUsage(void) {
 	static const char* DATA[][2] = {
         // the data are:
         // currency ISO code to be formatted,
@@ -2556,9 +2556,19 @@ static void TestCurrencyContext(void) {
     if (U_FAILURE(status)) {
 		 log_data_err("FAIL: unum_open, locale %s, style %d - %s\n", localeString, (int)style, myErrorName(status));
     }
-
-	unum_setCurrencyPurpose(unumFmt,  UNUM_CURRENCY_CASH, &status);
+	
+    if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_STANDARD)
+        log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
+    else
+        log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
+	
+	unum_setAttribute(unumFmt, UNUM_CURRENCY_USAGE, UCURR_USAGE_CASH);
      
+    if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_CASH)
+        log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
+    else
+        log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
+	
     for (i=0; i<LENGTH(DATA); ++i) { 
 
       const char* currencyISOCode = DATA[i][0];
@@ -2592,11 +2602,11 @@ static void TestCurrencyContext(void) {
           log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
       }
       if(u_strcmp(result, expect)==0)
-          log_verbose("Pass: Number Format Currency Purpose using unum_setCurrencyPurpose() successful\n");
+          log_verbose("Pass: Number Format Currency Purpose using unum_setAttribute;() successful\n");
       else{
 		  int32_t resultlength1 = u_strlen(expect);
 		  int32_t resultlength2 = u_strlen(result);
-          log_err("Fail: Error in Number Format Currency Purpose using unum_setCurrencyPurpose() expected: %s, got %s\n",
+          log_err("Fail: Error in Number Format Currency Purpose using unum_setAttribute() expected: %s, got %s\n",
 				  aescstrdup(expect, u_strlen(expect)), aescstrdup(result, u_strlen(result)));
 	  }
 

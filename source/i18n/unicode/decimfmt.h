@@ -1877,10 +1877,10 @@ public:
      * Sets the <tt>Currency Context</tt> object used to display currency.
      * This takes effect immediately, if this format is a
      * currency format.  
-     * @param currencyContext new currency context object to use.  
-     * @stable ICU 53
+     * @param newUsage new currency usage object to use.  
+     * @draft ICU 54
      */
-    virtual void setCurrencyPurpose(UCurrencyPurpose newContext);
+    virtual void setCurrencyUsage(UCurrencyUsage newUsage);
 
 
     /**
@@ -2177,18 +2177,13 @@ private:
                               UBool setupForPluralPattern,
                               UErrorCode& status);
 	
-	// get the currency rounding with respect to currency context
+	// get the currency rounding with respect to currency usage
 	double getCurrencyRounding(const UChar* currency,
 							   UErrorCode* ec) const;
 	
-	// get the currency fraction with respect to currency context
+	// get the currency fraction with respect to currency usage
 	int getCurrencyFractionDigits(const UChar* currency,
 								  UErrorCode* ec) const;
-
-    /**
-     * Sets the rounding/digits with respect to currency context
-     */
-    void setCurrencyWithContext();
 
     // hashtable operations
     Hashtable* initHashForAffixPattern(UErrorCode& status);

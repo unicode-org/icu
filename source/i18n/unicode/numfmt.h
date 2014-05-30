@@ -954,15 +954,15 @@ public:
      * This takes effect immediately, if this format is a
      * currency format.  
      * @param currencyContext new currency context object to use.  
-     * @stable ICU 53
+     * @draft ICU 54
      */
-    virtual void setCurrencyPurpose(UCurrencyPurpose newContext);
+    virtual void setCurrencyUsage(UCurrencyUsage newUsage);
 
     /**
      * Returns the <tt>Currency Context</tt> object used to display currency
-     * @stable ICU 53
+     * @draft ICU 54
      */
-    const UCurrencyPurpose getCurrencyPurpose() const;
+    const UCurrencyUsage getCurrencyUsage() const;
 
     /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
@@ -1082,7 +1082,7 @@ private:
   protected:
     static const int32_t gDefaultMaxIntegerDigits;
     static const int32_t gDefaultMinIntegerDigits;
-	UCurrencyPurpose fCurrencyPurpose;
+	UCurrencyUsage fCurrencyUsage;
  
   private:
     UBool      fParseIntegerOnly;

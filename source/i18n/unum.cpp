@@ -806,25 +806,6 @@ unum_getContext(const UNumberFormat *fmt, UDisplayContextType type, UErrorCode* 
     return ((const NumberFormat*)fmt)->getContext(type, *status);
 }
 
-U_CAPI void U_EXPORT2
-unum_setCurrencyPurpose(UNumberFormat* fmt, UCurrencyPurpose value, UErrorCode* status)
-{
-    if (U_FAILURE(*status)) {
-        return;
-    }
-    ((NumberFormat*)fmt)->setCurrencyPurpose(value);
-    return;
-}
-
-U_CAPI UCurrencyPurpose U_EXPORT2
-unum_getCurrencyPurpose(const UNumberFormat *fmt, UErrorCode* status)
-{
-    if (U_FAILURE(*status)) {
-        return (UCurrencyPurpose)0;
-    }
-    return ((const NumberFormat*)fmt)->getCurrencyPurpose();
-}
-
 U_INTERNAL UFormattable * U_EXPORT2
 unum_parseToUFormattable(const UNumberFormat* fmt,
                          UFormattable *result,

@@ -134,7 +134,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestZeroScientific10547);
   TESTCASE_AUTO(TestAccountingCurrency);
   TESTCASE_AUTO(TestEquality);
-  TESTCASE_AUTO(TestCurrencyContext);
+  TESTCASE_AUTO(TestCurrencyUsage);
   TESTCASE_AUTO_END;
 }
 
@@ -7627,7 +7627,7 @@ void NumberFormatTest::TestEquality() {
     delete fmtBase;
 }
 
-void NumberFormatTest::TestCurrencyContext() {
+void NumberFormatTest::TestCurrencyUsage() {
 	double agent = 123.567;
 
     // compare the Currency and Currency Cash Digits
@@ -7642,7 +7642,7 @@ void NumberFormatTest::TestCurrencyContext() {
     UnicodeString original_expected = "NT$123.57";
 	assertEquals("Test Currency Context 1", original_expected, original);
 	
-	numFmt->setCurrencyPurpose(UNUM_CURRENCY_CASH);
+	numFmt->setCurrencyUsage(UCURR_USAGE_CASH);
 	UnicodeString cash_currency;
 	numFmt->format(agent,cash_currency);
     UnicodeString cash_currency_expected = "NT$124";
@@ -7659,7 +7659,7 @@ void NumberFormatTest::TestCurrencyContext() {
     UnicodeString original_rounding_expected = "CA$123.57";
     assertEquals("Test Currency Context 3", original_rounding_expected, original_rounding);
 
-    fmt->setCurrencyPurpose(UNUM_CURRENCY_CASH);
+    fmt->setCurrencyUsage(UCURR_USAGE_CASH);
     UnicodeString cash_rounding_currency;
 	fmt->format(agent, cash_rounding_currency);
     UnicodeString cash_rounding_currency_expected = "CA$123.55";
@@ -7671,7 +7671,7 @@ void NumberFormatTest::TestCurrencyContext() {
     Locale locale3(localeString);
 	NumberFormat* fmt2 = NumberFormat::createInstance(locale3, k, status);
 	
-    fmt2->setCurrencyPurpose(UNUM_CURRENCY_CASH);
+    fmt2->setCurrencyUsage(UCURR_USAGE_CASH);
         
     const char* currencyISOCode = "TWD";
     UChar currencyCode[4];
