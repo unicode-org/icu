@@ -11,10 +11,8 @@
 
 package com.ibm.icu.impl.coll;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import com.ibm.icu.impl.ICUBinary;
@@ -95,29 +93,31 @@ final class CollationDataReader /* all static */ {
     static final int IX_RESERVED18_OFFSET = 18;
     static final int IX_TOTAL_SIZE = 19;
 
-    static void read(CollationTailoring base, InputStream inBytes,
+    static void read(CollationTailoring base, ByteBuffer inBytes,
                      CollationTailoring tailoring) throws IOException {
-        BufferedInputStream bis = new BufferedInputStream(inBytes);
-        tailoring.version = ICUBinary.readHeaderAndDataVersion(bis, DATA_FORMAT, IS_ACCEPTABLE);
+        tailoring.version = ICUBinary.readHeader(inBytes, DATA_FORMAT, IS_ACCEPTABLE);
         if(base != null && base.getUCAVersion() != tailoring.getUCAVersion()) {
             throw new ICUException("Tailoring UCA version differs from base data UCA version");
         }
 
-        DataInputStream ds = new DataInputStream(bis);
-        int indexesLength = ds.readInt();  // inIndexes[IX_INDEXES_LENGTH]
-        if(indexesLength < 2) {
+        int inLength = inBytes.remaining();
+        if(inLength < 8) {
+            throw new ICUException("not enough bytes");
+        }
+        int indexesLength = inBytes.getInt();  // inIndexes[IX_INDEXES_LENGTH]
+        if(indexesLength < 2 || inLength < indexesLength * 4) {
             throw new ICUException("not enough indexes");
         }
         int[] inIndexes = new int[IX_TOTAL_SIZE + 1];
         inIndexes[0] = indexesLength;
         for(int i = 1; i < indexesLength && i < inIndexes.length; ++i) {
-            inIndexes[i] = ds.readInt();
+            inIndexes[i] = inBytes.getInt();
         }
         for(int i = indexesLength; i < inIndexes.length; ++i) {
             inIndexes[i] = -1;
         }
         if(indexesLength > inIndexes.length) {
-            ds.skipBytes((indexesLength - inIndexes.length) * 4);
+            ICUBinary.skipBytes(inBytes, (indexesLength - inIndexes.length) * 4);
         }
 
         // Assume that the tailoring data is in initial state,
@@ -129,6 +129,17 @@ final class CollationDataReader /* all static */ {
         int index;  // one of the indexes[] slots
         int offset;  // byte offset for the index part
         int length;  // number of bytes in the index part
+
+        if(indexesLength > IX_TOTAL_SIZE) {
+            length = inIndexes[IX_TOTAL_SIZE];
+        } else if(indexesLength > IX_REORDER_CODES_OFFSET) {
+            length = inIndexes[indexesLength - 1];
+        } else {
+            length = 0;  // only indexes, and inLength was already checked for them
+        }
+        if(inLength < length) {
+            throw new ICUException("not enough bytes");
+        }
 
         CollationData baseData = base == null ? null : base.data;
         int[] reorderCodes;
@@ -143,13 +154,13 @@ final class CollationDataReader /* all static */ {
             }
             reorderCodes = new int[length / 4];
             for(int i = 0; i < length / 4; ++i) {
-                reorderCodes[i] = ds.readInt();
+                reorderCodes[i] = inBytes.getInt();
             }
             length &= 3;
         } else {
             reorderCodes = new int[0];
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         // There should be a reorder table only if there are reorder codes.
         // However, when there are reorder codes the reorder table may be omitted to reduce
@@ -163,13 +174,13 @@ final class CollationDataReader /* all static */ {
                 throw new ICUException("Reordering table without reordering codes");
             }
             reorderTable = new byte[256];
-            ds.readFully(reorderTable);
+            inBytes.get(reorderTable);
             length -= 256;
         } else {
             // If we have reorder codes, then build the reorderTable at the end,
             // when the CollationData is otherwise complete.
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         if(baseData != null && baseData.numericPrimary != (inIndexes[IX_OPTIONS] & 0xff000000L)) {
             throw new ICUException("Tailoring numeric primary weight differs from base data");
@@ -184,7 +195,7 @@ final class CollationDataReader /* all static */ {
             data = tailoring.ownedData;
             data.base = baseData;
             data.numericPrimary = inIndexes[IX_OPTIONS] & 0xff000000L;
-            data.trie = tailoring.trie = Trie2_32.createFromSerialized(ds);
+            data.trie = tailoring.trie = Trie2_32.createFromSerialized(inBytes);
             int trieLength = data.trie.getSerializedLength();
             if(trieLength > length) {
                 throw new ICUException("Not enough bytes for the mappings trie");  // No mappings.
@@ -196,12 +207,12 @@ final class CollationDataReader /* all static */ {
         } else {
             throw new ICUException("Missing collation data mappings");  // No mappings.
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_RESERVED8_OFFSET;
         offset = inIndexes[index];
         length = inIndexes[index + 1] - offset;
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_CES_OFFSET;
         offset = inIndexes[index];
@@ -212,16 +223,16 @@ final class CollationDataReader /* all static */ {
             }
             data.ces = new long[length / 8];
             for(int i = 0; i < length / 8; ++i) {
-                data.ces[i] = ds.readLong();
+                data.ces[i] = inBytes.getLong();
             }
             length &= 7;
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_RESERVED10_OFFSET;
         offset = inIndexes[index];
         length = inIndexes[index + 1] - offset;
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_CE32S_OFFSET;
         offset = inIndexes[index];
@@ -232,11 +243,11 @@ final class CollationDataReader /* all static */ {
             }
             data.ce32s = new int[length / 4];
             for(int i = 0; i < length / 4; ++i) {
-                data.ce32s[i] = ds.readInt();
+                data.ce32s[i] = inBytes.getInt();
             }
             length &= 3;
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         int jamoCE32sStart = inIndexes[IX_JAMO_CE32S_START];
         if(jamoCE32sStart >= 0) {
@@ -266,7 +277,7 @@ final class CollationDataReader /* all static */ {
             }
             data.rootElements = new long[rootElementsLength];
             for(int i = 0; i < rootElementsLength; ++i) {
-                data.rootElements[i] = ds.readInt() & 0xffffffffL;  // unsigned int -> long
+                data.rootElements[i] = inBytes.getInt() & 0xffffffffL;  // unsigned int -> long
             }
             long commonSecTer = data.rootElements[CollationRootElements.IX_COMMON_SEC_AND_TER_CE];
             if(commonSecTer != Collation.COMMON_SEC_AND_TER_CE) {
@@ -280,7 +291,7 @@ final class CollationDataReader /* all static */ {
             }
             length &= 3;
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_CONTEXTS_OFFSET;
         offset = inIndexes[index];
@@ -291,12 +302,12 @@ final class CollationDataReader /* all static */ {
             }
             StringBuilder sb = new StringBuilder(length / 2);
             for(int i = 0; i < length / 2; ++i) {
-                sb.append(ds.readChar());
+                sb.append(inBytes.getChar());
             }
             data.contexts = sb.toString();
             length &= 1;
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_UNSAFE_BWD_OFFSET;
         offset = inIndexes[index];
@@ -327,7 +338,7 @@ final class CollationDataReader /* all static */ {
             USerializedSet sset = new USerializedSet();
             char[] unsafeData = new char[length / 2];
             for(int i = 0; i < length / 2; ++i) {
-                unsafeData[i] = ds.readChar();
+                unsafeData[i] = inBytes.getChar();
             }
             length &= 1;
             sset.getSet(unsafeData, 0);
@@ -355,7 +366,7 @@ final class CollationDataReader /* all static */ {
         } else {
             throw new ICUException("Missing unsafe-backward-set");
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         // If the fast Latin format version is different,
         // or the version is set to 0 for "no fast Latin table",
@@ -368,17 +379,17 @@ final class CollationDataReader /* all static */ {
             data.fastLatinTableHeader = null;
             if(((inIndexes[IX_OPTIONS] >> 16) & 0xff) == CollationFastLatin.VERSION) {
                 if(length >= 2) {
-                    char header0 = ds.readChar();
+                    char header0 = inBytes.getChar();
                     int headerLength = header0 & 0xff;
                     data.fastLatinTableHeader = new char[headerLength];
                     data.fastLatinTableHeader[0] = header0;
                     for(int i = 1; i < headerLength; ++i) {
-                        data.fastLatinTableHeader[i] = ds.readChar();
+                        data.fastLatinTableHeader[i] = inBytes.getChar();
                     }
                     int tableLength = length / 2 - headerLength;
                     data.fastLatinTable = new char[tableLength];
                     for(int i = 0; i < tableLength; ++i) {
-                        data.fastLatinTable[i] = ds.readChar();
+                        data.fastLatinTable[i] = inBytes.getChar();
                     }
                     length &= 1;
                     if((header0 >> 8) != CollationFastLatin.VERSION) {
@@ -390,7 +401,7 @@ final class CollationDataReader /* all static */ {
                 }
             }
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_SCRIPTS_OFFSET;
         offset = inIndexes[index];
@@ -401,7 +412,7 @@ final class CollationDataReader /* all static */ {
             }
             data.scripts = new char[length / 2];
             for(int i = 0; i < length / 2; ++i) {
-                data.scripts[i] = ds.readChar();
+                data.scripts[i] = inBytes.getChar();
             }
             length &= 1;
         } else if(data == null) {
@@ -409,7 +420,7 @@ final class CollationDataReader /* all static */ {
         } else if(baseData != null) {
             data.scripts = baseData.scripts;
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_COMPRESSIBLE_BYTES_OFFSET;
         offset = inIndexes[index];
@@ -420,7 +431,7 @@ final class CollationDataReader /* all static */ {
             }
             data.compressibleBytes = new boolean[256];
             for(int i = 0; i < 256; ++i) {
-                data.compressibleBytes[i] = ds.readBoolean();
+                data.compressibleBytes[i] = inBytes.get() != 0;
             }
             length -= 256;
         } else if(data == null) {
@@ -430,14 +441,12 @@ final class CollationDataReader /* all static */ {
         } else {
             throw new ICUException("Missing data for compressible primary lead bytes");
         }
-        ds.skipBytes(length);
+        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_RESERVED18_OFFSET;
         offset = inIndexes[index];
         length = inIndexes[index + 1] - offset;
-        ds.skipBytes(length);
-
-        ds.close();
+        ICUBinary.skipBytes(inBytes, length);
 
         CollationSettings ts = tailoring.settings.readOnly();
         int options = inIndexes[IX_OPTIONS] & 0xffff;
@@ -481,7 +490,7 @@ final class CollationDataReader /* all static */ {
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
-    private static final byte DATA_FORMAT[] = { 0x55, 0x43, 0x6f, 0x6c  };  // "UCol"
+    private static final int DATA_FORMAT = 0x55436f6c;  // "UCol"
 
     private CollationDataReader() {}  // no constructor
 }

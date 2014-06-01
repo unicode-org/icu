@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2011, International Business Machines Corporation and
+ * Copyright (C) 2009-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -10,6 +10,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -200,7 +202,7 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
     }
     
     
-     /**
+    /**
      * Get the UTrie version from an InputStream containing the serialized form
      * of either a Trie (version 1) or a Trie2 (version 2).
      *
@@ -242,8 +244,115 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
         }
         return 0;
     }
-    
-    
+
+    /**
+     * Deserializes a Trie2 from a ByteBuffer.
+     * Reads from the current position and leaves the buffer after the end of the trie.
+     */
+    public static Trie2 createFromSerialized(ByteBuffer bytes) throws IOException {
+        ByteOrder outerByteOrder = bytes.order();
+        try {
+            UTrie2Header header = new UTrie2Header();
+
+            /* check the signature */
+            header.signature = bytes.getInt();
+            switch (header.signature) {
+            case 0x54726932:
+                bytes.order(ByteOrder.BIG_ENDIAN);
+                break;
+            case 0x32697254:
+                bytes.order(ByteOrder.LITTLE_ENDIAN);
+                header.signature = 0x54726932;
+                break;
+            default:
+                throw new IllegalArgumentException("Buffer does not contain a serialized UTrie2");
+            }
+
+            header.options = bytes.getChar();
+            header.indexLength = bytes.getChar();
+            header.shiftedDataLength = bytes.getChar();
+            header.index2NullOffset = bytes.getChar();
+            header.dataNullOffset   = bytes.getChar();
+            header.shiftedHighStart = bytes.getChar();
+
+            // Trie2 data width - 0: 16 bits
+            //                    1: 32 bits
+            if ((header.options & UTRIE2_OPTIONS_VALUE_BITS_MASK) > 1) {
+                throw new IllegalArgumentException("UTrie2 serialized format error.");
+            }
+            ValueWidth width;
+            Trie2 This;
+            if ((header.options & UTRIE2_OPTIONS_VALUE_BITS_MASK) == 0) {
+                width = ValueWidth.BITS_16;
+                This = new Trie2_16();
+            } else {
+                width = ValueWidth.BITS_32;
+                This = new Trie2_32();
+            }
+            This.header = header;
+
+            /* get the length values and offsets */
+            This.indexLength      = header.indexLength;
+            This.dataLength       = header.shiftedDataLength << UTRIE2_INDEX_SHIFT;
+            This.index2NullOffset = header.index2NullOffset;
+            This.dataNullOffset   = header.dataNullOffset;
+            This.highStart        = header.shiftedHighStart << UTRIE2_SHIFT_1;
+            This.highValueIndex   = This.dataLength - UTRIE2_DATA_GRANULARITY;
+            if (width == ValueWidth.BITS_16) {
+                This.highValueIndex += This.indexLength;
+            }
+
+            // Allocate the Trie2 index array. If the data width is 16 bits, the array also
+            // includes the space for the data.
+
+            int indexArraySize = This.indexLength;
+            if (width == ValueWidth.BITS_16) {
+                indexArraySize += This.dataLength;
+            }
+            This.index = new char[indexArraySize];
+
+            /* Read in the index */
+            int i;
+            for (i=0; i<This.indexLength; i++) {
+                This.index[i] = bytes.getChar();
+            }
+
+            /* Read in the data. 16 bit data goes in the same array as the index.
+             * 32 bit data goes in its own separate data array.
+             */
+            if (width == ValueWidth.BITS_16) {
+                This.data16 = This.indexLength;
+                for (i=0; i<This.dataLength; i++) {
+                    This.index[This.data16 + i] = bytes.getChar();
+                }
+            } else {
+                This.data32 = new int[This.dataLength];
+                for (i=0; i<This.dataLength; i++) {
+                    This.data32[i] = bytes.getInt();
+                }
+            }
+
+            switch(width) {
+            case BITS_16:
+                This.data32 = null;
+                This.initialValue = This.index[This.dataNullOffset];
+                This.errorValue   = This.index[This.data16+UTRIE2_BAD_UTF8_DATA_OFFSET];
+                break;
+            case BITS_32:
+                This.data16=0;
+                This.initialValue = This.data32[This.dataNullOffset];
+                This.errorValue   = This.data32[UTRIE2_BAD_UTF8_DATA_OFFSET];
+                break;
+            default:
+                throw new IllegalArgumentException("UTrie2 serialized format error.");
+            }
+
+            return This;
+        } finally {
+            bytes.order(outerByteOrder);
+        }
+    }
+
     /**
      * Get the value for a code point as stored in the Trie2.
      *

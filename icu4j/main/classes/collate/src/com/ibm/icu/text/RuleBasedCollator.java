@@ -1817,11 +1817,11 @@ public final class RuleBasedCollator extends Collator {
      */
     @Override
     public VersionInfo getVersion() {
-        VersionInfo version = tailoring.version;
+        int version = tailoring.version;
         int rtVersion = VersionInfo.UCOL_RUNTIME_VERSION.getMajor();
         return VersionInfo.getInstance(
-                version.getMajor() + (rtVersion << 4) + (rtVersion >> 4),
-                version.getMinor(), version.getMilli(), version.getMicro());
+                (version >>> 24) + (rtVersion << 4) + (rtVersion >> 4),
+                ((version >> 16) & 0xff), ((version >> 8) & 0xff), (version & 0xff));
     }
 
     /**

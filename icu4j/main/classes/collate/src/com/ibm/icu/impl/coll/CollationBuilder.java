@@ -23,7 +23,6 @@ import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.VersionInfo;
 
 public final class CollationBuilder extends CollationRuleParser.Sink {
     private static final boolean DEBUG = false;
@@ -97,8 +96,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
         // In Java, we do not have a rules version.
         // In C++, the genrb build tool reads and supplies one,
         // and the rulesVersion is a parameter for this method.
-        VersionInfo rulesVersion = VersionInfo.getInstance(0, 0, 0, 0);
-        tailoring.setVersion(base.version, rulesVersion);
+        tailoring.setVersion(base.version, 0 /* rulesVersion */);
         return tailoring;
     }
 

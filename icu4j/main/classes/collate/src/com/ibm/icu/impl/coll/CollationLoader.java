@@ -13,8 +13,8 @@
 
 package com.ibm.icu.impl.coll;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -203,14 +203,13 @@ public final class CollationLoader {
 
         // deserialize
         UResourceBundle binary = ((ICUResourceBundle)data).get("%%CollationBin");
-        byte[] inBytes = binary.getBinary(null);
-        ByteArrayInputStream inStream = new ByteArrayInputStream(inBytes);
+        ByteBuffer inBytes = binary.getBinary();
         try {
-            CollationDataReader.read(root, inStream, t);
+            CollationDataReader.read(root, inBytes, t);
         } catch (IOException e) {
             throw new ICUUncheckedIOException("Failed to load collation tailoring data for locale:"
                     + actualLocale + " type:" + type, e);
-        }   // No need to close BAIS.
+        }
 
         // Try to fetch the optional rules string.
         try {

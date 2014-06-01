@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and
+ * Copyright (C) 2009-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 /**
  * @author aheninger
@@ -52,6 +53,10 @@ public class Trie2_32 extends Trie2 {
      */
     public static Trie2_32  createFromSerialized(InputStream is) throws IOException {
         return (Trie2_32) Trie2.createFromSerialized(is);
+    }
+
+    public static Trie2_32  createFromSerialized(ByteBuffer bytes) throws IOException {
+        return (Trie2_32) Trie2.createFromSerialized(bytes);
     }
 
     /**
