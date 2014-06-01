@@ -54,16 +54,21 @@ public final class CollationTailoring {
                 ucaVersion.getMilli() << 6,
                 0);
     }
-    void setVersion(VersionInfo baseVersion, VersionInfo rulesVersion) {
-        version = VersionInfo.getInstance(
-                VersionInfo.UCOL_BUILDER_VERSION.getMajor(),
-                baseVersion.getMinor(),
-                (baseVersion.getMilli() & 0xc0) + ((rulesVersion.getMajor() + (rulesVersion.getMajor() >> 6)) & 0x3f),
-                (rulesVersion.getMinor() << 3) + (rulesVersion.getMinor() >> 5) + rulesVersion.getMilli() +
-                        (rulesVersion.getMicro() << 4) + (rulesVersion.getMicro() >> 4));
+    void setVersion(int baseVersion, int rulesVersion) {
+        // See comments for version field.
+        int r = (rulesVersion >> 16) & 0xff00;
+        int s = (rulesVersion >> 16) & 0xff;
+        int t = (rulesVersion >> 8) & 0xff;
+        int q = rulesVersion & 0xff;
+        version = (VersionInfo.UCOL_BUILDER_VERSION.getMajor() << 24) |
+                (baseVersion & 0xffc000) |  // UCA version u.v.w
+                ((r + (r >> 6)) & 0x3f00) |
+                (((s << 3) + (s >> 5) + t + (q << 4) + (q >> 4)) & 0xff);
     }
     int getUCAVersion() {
-        return (version.getMinor() << 4) | (version.getMilli() >> 6);
+        // Version second byte/bits 23..16 to bits 11..4,
+        // third byte/bits 15..14 to bits 1..0.
+        return ((version >> 12) & 0xff0) | ((version >> 14) & 3);
     }
 
     // data for sorting etc.
@@ -78,8 +83,7 @@ public final class CollationTailoring {
     // version[1]: bits 7..3=u, bits 2..0=v
     // version[2]: bits 7..6=w, bits 5..0=r
     // version[3]= (s<<5)+(s>>3)+t+(q<<4)+(q>>4)
-    public VersionInfo version = ZERO_VERSION;
-    private static final VersionInfo ZERO_VERSION = VersionInfo.getInstance(0, 0, 0, 0);
+    public int version = 0;
 
     // owned objects
     CollationData ownedData;

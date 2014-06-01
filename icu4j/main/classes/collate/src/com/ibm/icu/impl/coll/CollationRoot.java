@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 
@@ -42,11 +43,12 @@ public final class CollationRoot {  // purely static
 
     static {  // Corresponds to C++ load() function.
         CollationTailoring t = new CollationTailoring(null);
+        // TODO: Optionally load from a .dat file or stand-alone .icu file.
         String path = ICUResourceBundle.ICU_BUNDLE + "/coll/ucadata.icu";
-        InputStream inBytes = ICUData.getRequiredStream(path);
+        InputStream is = ICUData.getRequiredStream(path);
         RuntimeException e2 = null;
         try {
-            CollationDataReader.read(null, inBytes, t);
+            CollationDataReader.read(null, ICUBinary.getByteBufferFromInputStream(is), t);
         } catch(IOException e) {
             t = null;
             e2 = new MissingResourceException(
