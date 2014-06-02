@@ -302,6 +302,8 @@ public class MeasureUnit implements Serializable {
     /*
      * Useful constants. Not necessarily complete: see {@link #getAvailable()}.
      */
+    
+    // Start generated MeasureUnit constants
 
     /**
      * Constant for unit of acceleration: g-force
@@ -618,6 +620,7 @@ public class MeasureUnit implements Serializable {
      */
     public static TimeUnit SECOND = (TimeUnit) MeasureUnit.internalGetInstance("duration", "second");
 
+    // End generated MeasureUnit constants
     /* Private */
 
     private Object writeReplace() throws ObjectStreamException {

@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTest;
@@ -38,9 +38,84 @@ import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
 
 /**
+ * See https://sites.google.com/site/icusite/processes/release/tasks/standards?pli=1
+ * for information on how to update with each new release.
  * @author markdavis
  */
 public class MeasureUnitTest extends TestFmwk {
+    
+    private static final String[] DRAFT_VERSIONS = {"52", "53"};
+    
+    private static final HashSet<String> DRAFT_VERSION_SET = new HashSet<String>();
+    
+    private static final HashSet<String> TIME_CODES = new HashSet<String>();
+    
+    private static final String[][] JAVA_VERSIONS = {
+        {"G_FORCE", "53"},
+        {"DEGREE", "53"},
+        {"ARC_MINUTE", "53"},
+        {"ARC_SECOND", "53"},
+        {"ACRE", "53"},
+        {"HECTARE", "53"},
+        {"SQUARE_FOOT", "53"},
+        {"SQUARE_KILOMETER", "53"},
+        {"SQUARE_METER", "53"},
+        {"SQUARE_MILE", "53"},
+        {"MILLISECOND", "53"},
+        {"CENTIMETER", "53"},
+        {"FOOT", "53"},
+        {"INCH", "53"},
+        {"KILOMETER", "53"},
+        {"LIGHT_YEAR", "53"},
+        {"METER", "53"},
+        {"MILE", "53"},
+        {"MILLIMETER", "53"},
+        {"PICOMETER", "53"},
+        {"YARD", "53"},
+        {"GRAM", "53"},
+        {"KILOGRAM", "53"},
+        {"OUNCE", "53"},
+        {"POUND", "53"},
+        {"HORSEPOWER", "53"},
+        {"KILOWATT", "53"},
+        {"WATT", "53"},
+        {"HECTOPASCAL", "53"},
+        {"INCH_HG", "53"},
+        {"MILLIBAR", "53"},
+        {"KILOMETER_PER_HOUR", "53"},
+        {"METER_PER_SECOND", "53"},
+        {"MILE_PER_HOUR", "53"},
+        {"CELSIUS", "53"},
+        {"FAHRENHEIT", "53"},
+        {"CUBIC_KILOMETER", "53"},
+        {"CUBIC_MILE", "53"},
+        {"LITER", "53"},
+        {"YEAR", "53"},
+        {"MONTH", "53"},
+        {"WEEK", "53"},
+        {"DAY", "53"},
+        {"HOUR", "53"},
+        {"MINUTE", "53"},
+        {"SECOND", "53"},
+    };
+    
+    private static final HashMap<String, String> JAVA_VERSION_MAP = new HashMap<String, String>();
+    
+    static {
+        TIME_CODES.add("year");
+        TIME_CODES.add("month");
+        TIME_CODES.add("week");
+        TIME_CODES.add("day");
+        TIME_CODES.add("hour");
+        TIME_CODES.add("minute");
+        TIME_CODES.add("second");
+        for (String verNum : DRAFT_VERSIONS) {
+            DRAFT_VERSION_SET.add(verNum);
+        }
+        for (String[] funcNameAndVersion : JAVA_VERSIONS) {
+            JAVA_VERSION_MAP.put(funcNameAndVersion[0], funcNameAndVersion[1]);
+        }
+    }
     
     /**
      * @author markdavis
@@ -667,23 +742,10 @@ public class MeasureUnitTest extends TestFmwk {
         
     }
     
-    static void generateCXXHConstants() {
+    static void generateCXXHConstants(String thisVersion) {
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
-        TreeMap<String, List<MeasureUnit>> allUnits = new TreeMap<String, List<MeasureUnit>>();
-        for (String type : MeasureUnit.getAvailableTypes()) {
-            ArrayList<MeasureUnit> units = new ArrayList<MeasureUnit>(MeasureUnit.getAvailable(type));
-            Collections.sort(
-                    units,
-                    new Comparator<MeasureUnit>() {
-
-                        public int compare(MeasureUnit o1, MeasureUnit o2) {
-                            return o1.getSubtype().compareTo(o2.getSubtype());
-                        }
-                        
-                    });
-            allUnits.put(type, units);
-        }
-        
+        System.out.println();
+        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
             String type = entry.getKey();
             if (type.equals("currency")) {
@@ -691,25 +753,55 @@ public class MeasureUnitTest extends TestFmwk {
             }
             for (MeasureUnit unit : entry.getValue()) {
                 String code = unit.getSubtype();
-                String name = toCamelCase(type, code);
-                if (seen.containsKey(name)) {
-                    System.out.println("\nCollision!!" + unit + ", " + seen.get(name));
-                } else {
-                    seen.put(name, unit);
-                }
+                String name = toCamelCase(unit);
+                String javaName = toJAVAName(unit);
+                checkForDup(seen, name, unit);
                 System.out.println("    /**");
                 System.out.println("     * Returns unit of " + type + ": " + code + ".");
                 System.out.println("     * Caller owns returned value and must free it.");
-                System.out.println("     * @draft ICU 53");
+                System.out.println("     * @param status ICU error code.");
+                if (isDraft(javaName)) {
+                    System.out.println("     * @draft ICU " + getVersion(javaName, thisVersion));
+                } else {
+                    System.out.println("     * @stable ICU " + getVersion(javaName, thisVersion));
+                }
                 System.out.println("     */");
                 System.out.printf("    static MeasureUnit *create%s(UErrorCode &status);\n\n", name);
             }
         }    
     }
     
-    static void generateCXXConstants() {
-        System.out.println("static final MeasureUnit");
+    private static void checkForDup(
+            Map<String, MeasureUnit> seen, String name, MeasureUnit unit) {
+        if (seen.containsKey(name)) {
+            throw new RuntimeException("\nCollision!!" + unit + ", " + seen.get(name));
+        } else {
+            seen.put(name, unit);
+        }
+    }
+
+    
+    
+    static void updateJAVAVersions(String thisVersion) {
+        System.out.println();
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
+        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            String type = entry.getKey();
+            if (type.equals("currency")) {
+                continue;
+            }
+            for (MeasureUnit unit : entry.getValue()) {
+                String javaName = toJAVAName(unit);
+                checkForDup(seen, javaName, unit);
+                if (!JAVA_VERSION_MAP.containsKey(javaName)) {
+                    System.out.printf("        {\"%s\", \"%s\"},\n", javaName, thisVersion);
+                }
+            }
+        }    
+    }
+    
+    static TreeMap<String, List<MeasureUnit>> getAllUnits() {
         TreeMap<String, List<MeasureUnit>> allUnits = new TreeMap<String, List<MeasureUnit>>();
         for (String type : MeasureUnit.getAvailableTypes()) {
             ArrayList<MeasureUnit> units = new ArrayList<MeasureUnit>(MeasureUnit.getAvailable(type));
@@ -724,6 +816,13 @@ public class MeasureUnitTest extends TestFmwk {
                     });
             allUnits.put(type, units);
         }
+        return allUnits;
+    }
+    
+    static void generateCXXConstants() {
+        System.out.println("static final MeasureUnit");
+        Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
+        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
         System.out.println("static const int32_t gOffsets[] = {");
         int index = 0;
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
@@ -780,13 +879,8 @@ public class MeasureUnitTest extends TestFmwk {
                 continue;
             }
             for (MeasureUnit unit : entry.getValue()) {
-                String code = unit.getSubtype();
-                String name = toCamelCase(type, code);
-                if (seen.containsKey(name)) {
-                    System.out.println("\nCollision!!" + unit + ", " + seen.get(name));
-                } else {
-                    seen.put(name, unit);
-                }
+                String name = toCamelCase(unit);
+                checkForDup(seen, name, unit);
                 System.out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
                 System.out.printf("    return MeasureUnit::create(%d, %d, status);\n", typeIdx, subTypeIdx);
                 System.out.println("}");
@@ -797,9 +891,10 @@ public class MeasureUnitTest extends TestFmwk {
         }    
     }
 
-    private static String toCamelCase(String type, String code) {
+    private static String toCamelCase(MeasureUnit unit) {
         StringBuilder result = new StringBuilder();
         boolean caps = true;
+        String code = unit.getSubtype();
         int len = code.length();
         for (int i = 0; i < len; i++) {
             char ch = code.charAt(i);
@@ -814,56 +909,129 @@ public class MeasureUnitTest extends TestFmwk {
         }
         return result.toString();
     }
-
-    static void generateConstants() {
-        System.out.println("static final MeasureUnit");
+    
+    static boolean isTypeHidden(String type) {
+        return "currency".equals(type);
+    }
+    
+    static void generateBackwardCompatibilityTest(String version) {
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
-        boolean first = true;
-        for (String type : new TreeSet<String>(MeasureUnit.getAvailableTypes())) {
-            ArrayList<MeasureUnit> units = new ArrayList<MeasureUnit>(MeasureUnit.getAvailable(type));
-            Collections.sort(
-                    units,
-                    new Comparator<MeasureUnit>() {
-
-                        public int compare(MeasureUnit o1, MeasureUnit o2) {
-                            return o1.getSubtype().compareTo(o2.getSubtype());
-                        }
-                        
-                    });
-            for (MeasureUnit unit : units) {
-                String code = unit.getSubtype();
-                String name = code.toUpperCase(Locale.ENGLISH).replace("-", "_");
-
-                if (type.equals("angle")) {
-                    if (code.equals("minute") || code.equals("second")) {
-                        name = "ARC_" + name;
-                    }
-                }
-                if (first) {
-                    first = false;
-                } else {
-                    System.out.print(",");
-                }
-                if (seen.containsKey(name)) {
-                    System.out.println("\nCollision!!" + unit + ", " + seen.get(name));
-                } else {
-                    seen.put(name, unit);
-                }
-                System.out.println("\n\t/** Constant for unit of " + type +
-                        ": " +
-                        code +
-                        " */");
-
-                System.out.print("\t" + name + " = MeasureUnit.getInstance(\"" +
-                        type +
-                        "\", \"" +
-                        code +
-                        "\")");
+        System.out.println();
+        System.out.printf("    public void TestCompatible%s() {\n", version.replace(".", "_"));
+        System.out.println("        MeasureUnit[] units = {");
+        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+        int count = 0;
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            if (isTypeHidden(entry.getKey())) {
+                continue;
             }
-            System.out.println(";");
+            for (MeasureUnit unit : entry.getValue()) {
+                String javaName = toJAVAName(unit);
+                checkForDup(seen, javaName, unit);
+                System.out.printf("                MeasureUnit.%s,\n", javaName);
+                count++;
+            }
+        }
+        System.out.println("        };");
+        System.out.printf("        assertEquals(\"\",  %d, units.length);\n", count);
+        System.out.println("    }");
+    }
+    
+    static void generateCXXBackwardCompatibilityTest(String version) {
+        System.out.println();
+        Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
+        System.out.printf("void MeasureFormatTest::TestCompatible%s() {\n", version.replace(".", "_"));
+        System.out.println("    UErrorCode status = U_ZERO_ERROR;");
+        System.out.println("    LocalPointer<MeasureUnit> measureUnit;");
+        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            if (isTypeHidden(entry.getKey())) {
+                continue;
+            }
+            for (MeasureUnit unit : entry.getValue()) {
+                String camelCase = toCamelCase(unit);
+                checkForDup(seen, camelCase, unit);
+                System.out.printf("    measureUnit.adoptInstead(MeasureUnit::create%s(status));\n", camelCase);
+            }
+        }
+        System.out.println("    assertSuccess(\"\", status);");
+        System.out.println("}");
+    }
+    
+    static String toJAVAName(MeasureUnit unit) {
+        String code = unit.getSubtype();
+        String type = unit.getType();
+        String name = code.toUpperCase(Locale.ENGLISH).replace("-", "_");
+        if (type.equals("angle")) {
+            if (code.equals("minute") || code.equals("second")) {
+                name = "ARC_" + name;
+            }
+        }
+        return name;
+    }
+
+    static void generateConstants(String thisVersion) {
+        System.out.println();
+        Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
+        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            String type = entry.getKey();
+            if (isTypeHidden(type)) {
+                continue;
+            }
+            for (MeasureUnit unit : entry.getValue()) {
+                String name = toJAVAName(unit);
+                String code = unit.getSubtype();
+                checkForDup(seen, name, unit);
+                System.out.println("    /**");
+                System.out.println("     * Constant for unit of " + type +
+                        ": " +
+                        code);
+                // Special case JAVA had old constants for time from before.
+                if ("duration".equals(type) && TIME_CODES.contains(code)) {
+                    System.out.println("     * @stable ICU 4.0");
+                }
+                else if (isDraft(name)) {
+                    System.out.println("     * @draft ICU " + getVersion(name, thisVersion));
+                    System.out.println("     * @provisional This API might change or be removed in a future release.");
+                } else {
+                    System.out.println("     * @stable ICU " + getVersion(name, thisVersion));
+                }
+                System.out.println("    */");
+                if ("duration".equals(type) && TIME_CODES.contains(code)) {
+                    System.out.println("    public static final TimeUnit " + name + " = (TimeUnit) MeasureUnit.internalGetInstance(\"" +
+                            type +
+                            "\", \"" +
+                            code +
+                            "\");");
+                } else {
+                    System.out.println("    public static final MeasureUnit " + name + " = MeasureUnit.internalGetInstance(\"" +
+                            type +
+                            "\", \"" +
+                            code +
+                            "\");");
+                }
+                System.out.println();
+            }
         }
     }
     
+    private static String getVersion(String javaName, String thisVersion) {
+        String version = JAVA_VERSION_MAP.get(javaName);
+        if (version == null) {
+            return thisVersion;
+        }
+        return version;
+    }
+
+    private static boolean isDraft(String javaName) {
+        String version = JAVA_VERSION_MAP.get(javaName);
+        if (version == null) {
+            return true;
+        }
+        return DRAFT_VERSION_SET.contains(version);
+    }
+
     public <T extends Serializable> void checkStreamingEquality(T item) {
         try {
           ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
