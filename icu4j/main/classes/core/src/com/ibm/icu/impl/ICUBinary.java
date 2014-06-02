@@ -218,13 +218,14 @@ public final class ICUBinary
         try {
             int avail = is.available();
             byte[] bytes = new byte[avail];
-            assert avail == is.read(bytes);
+            int numRead = is.read(bytes);
+            assert numRead == avail; 
             while((avail = is.available()) != 0) {
                 // TODO Java 6 replace new byte[] and arraycopy(): byte[] newBytes = Arrays.copyOf(bytes, bytes.length + avail);
                 byte[] newBytes = new byte[bytes.length + avail];
                 System.arraycopy(bytes, 0, newBytes, 0, bytes.length);
-                int numRead = is.read(newBytes, bytes.length, avail);
-                assert avail == numRead;
+                numRead = is.read(newBytes, bytes.length, avail);
+                assert numRead == avail; 
                 bytes = newBytes;
             }
             return ByteBuffer.wrap(bytes);
