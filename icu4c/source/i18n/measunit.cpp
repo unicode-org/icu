@@ -25,6 +25,8 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MeasureUnit)
 
+// Start generated code
+
 static const int32_t gOffsets[] = {
     0,
     1,
@@ -564,6 +566,8 @@ MeasureUnit *MeasureUnit::createCubicMile(UErrorCode &status) {
 MeasureUnit *MeasureUnit::createLiter(UErrorCode &status) {
     return MeasureUnit::create(11, 2, status);
 }
+
+// End generated code
 
 static int32_t binarySearch(
         const char * const * array, int32_t start, int32_t end, const char * key) {
