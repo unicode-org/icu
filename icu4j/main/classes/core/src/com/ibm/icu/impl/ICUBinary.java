@@ -223,7 +223,8 @@ public final class ICUBinary
                 // TODO Java 6 replace new byte[] and arraycopy(): byte[] newBytes = Arrays.copyOf(bytes, bytes.length + avail);
                 byte[] newBytes = new byte[bytes.length + avail];
                 System.arraycopy(bytes, 0, newBytes, 0, bytes.length);
-                assert avail == is.read(newBytes, bytes.length, avail);
+                int numRead = is.read(newBytes, bytes.length, avail);
+                assert avail == numRead;
                 bytes = newBytes;
             }
             return ByteBuffer.wrap(bytes);

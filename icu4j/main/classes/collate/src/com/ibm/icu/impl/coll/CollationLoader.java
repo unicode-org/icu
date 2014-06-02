@@ -202,7 +202,7 @@ public final class CollationLoader {
         t.actualLocale = actualLocale;
 
         // deserialize
-        UResourceBundle binary = ((ICUResourceBundle)data).get("%%CollationBin");
+        UResourceBundle binary = data.get("%%CollationBin");
         ByteBuffer inBytes = binary.getBinary();
         try {
             CollationDataReader.read(root, inBytes, t);
