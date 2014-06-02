@@ -92,6 +92,9 @@ static const UChar gLastResortPluralCurrencyPat[] = {
 static const UChar gLastResortAccountingCurrencyPat[] =  {
     0xA4, 0xA0, 0x23, 0x2C, 0x23, 0x23, 0x30, 0x2E, 0x30, 0x30, 0 /* "\u00A4\u00A0#,##0.00" */
 };
+static const UChar gLastResortCashCurrencyPat[] =  {
+    0xA4, 0xA0, 0x23, 0x2C, 0x23, 0x23, 0x30, 0x2E, 0x30, 0x30, 0 /* "\u00A4\u00A0#,##0.00" */
+};
 
 static const UChar gSingleCurrencySign[] = {0xA4, 0};
 static const UChar gDoubleCurrencySign[] = {0xA4, 0xA4, 0};
@@ -118,7 +121,8 @@ static const UChar * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = 
     NULL,  // UNUM_PATTERN_RULEBASED
     gLastResortIsoCurrencyPat,  // UNUM_CURRENCY_ISO
     gLastResortPluralCurrencyPat,  // UNUM_CURRENCY_PLURAL
-    gLastResortAccountingCurrencyPat // UNUM_CURRENCY_ACCOUNTING
+    gLastResortAccountingCurrencyPat, // UNUM_CURRENCY_ACCOUNTING
+    gLastResortCashCurrencyPat,  // UNUM_CASH_CURRENCY 
 };
 
 // Keys used for accessing resource bundles
@@ -143,7 +147,8 @@ static const char *gFormatKeys[UNUM_FORMAT_STYLE_COUNT] = {
     // double currency sign or triple currency sign.
     "currencyFormat",  // UNUM_CURRENCY_ISO
     "currencyFormat",  // UNUM_CURRENCY_PLURAL
-    "accountingFormat"  // UNUM_CURRENCY_ACCOUNTING
+    "accountingFormat",  // UNUM_CURRENCY_ACCOUNTING
+    "currencyFormat"  // UNUM_CASH_CURRENCY
 };
 
 static icu::LRUCache *gNumberFormatCache = NULL;
@@ -1191,7 +1196,7 @@ void NumberFormat::setCurrencyUsage(UCurrencyUsage newUsage){
      * Returns the <tt>Currency Context</tt> object used to display currency
      * @stable ICU 53
      */
-const UCurrencyUsage NumberFormat::getCurrencyUsage() const {
+UCurrencyUsage NumberFormat::getCurrencyUsage() const {
 	return fCurrencyUsage;
 }
 
@@ -1365,6 +1370,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             case UNUM_CURRENCY_ISO: // do not support plural formatting here
             case UNUM_CURRENCY_PLURAL:
             case UNUM_CURRENCY_ACCOUNTING:
+			case UNUM_CASH_CURRENCY:
                 f = new Win32NumberFormat(desiredLocale, curr, status);
 
                 if (U_SUCCESS(status)) {
@@ -1399,7 +1405,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         ownedNs.adoptInstead(NumberingSystem::createInstance(desiredLocale,status));
         ns = ownedNs.getAlias();
     }
-
+	
     // check results of getting a numbering system
     if (U_FAILURE(status)) {
         return NULL;
@@ -1437,13 +1443,13 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         UResourceBundle *resource = ownedResource.orphan();
         UResourceBundle *numElements = ures_getByKeyWithFallback(resource, gNumberElements, NULL, &status);
         resource = ures_getByKeyWithFallback(numElements, ns->getName(), resource, &status);
-        resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
+		resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
         ownedResource.adoptInstead(resource);
 
         int32_t patLen = 0;
         const UChar *patResStr = ures_getStringByKeyWithFallback(resource, gFormatKeys[style], &patLen, &status);
 
-        // Didn't find a pattern specific to the numbering system, so fall back to "latn"
+		// Didn't find a pattern specific to the numbering system, so fall back to "latn"
         if ( status == U_MISSING_RESOURCE_ERROR && uprv_strcmp(gLatn,ns->getName())) {  
             status = U_ZERO_ERROR;
             resource = ures_getByKeyWithFallback(numElements, gLatn, resource, &status);
@@ -1459,13 +1465,12 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     if (U_FAILURE(status)) {
         return NULL;
     }
-    if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO || style == UNUM_CURRENCY_ACCOUNTING){
+    if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO || style == UNUM_CURRENCY_ACCOUNTING || style == UNUM_CASH_CURRENCY){
         const UChar* currPattern = symbolsToAdopt->getCurrencyPattern();
         if(currPattern!=NULL){
             pattern.setTo(currPattern, u_strlen(currPattern));
         }
     }
-
 
     NumberFormat *f;
     if (ns->isAlgorithmic()) {
@@ -1519,8 +1524,13 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
+		
+		// if it is cash currency style, setCurrencyUsage with usage
+		if (style == UNUM_CASH_CURRENCY){
+			f->setCurrencyUsage(UCURR_USAGE_CASH);
+		}
     }
-
+	
     f->setLocaleIDs(ures_getLocaleByType(ownedResource.getAlias(), ULOC_VALID_LOCALE, &status),
                     ures_getLocaleByType(ownedResource.getAlias(), ULOC_ACTUAL_LOCALE, &status));
     if (U_FAILURE(status)) {

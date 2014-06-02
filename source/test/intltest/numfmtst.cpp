@@ -7631,56 +7631,96 @@ void NumberFormatTest::TestCurrencyUsage() {
 	double agent = 123.567;
 
     // compare the Currency and Currency Cash Digits
+	// 1st time for getter/setter, 2nd time for factory method
     UNumberFormatStyle k = UNUM_CURRENCY;
     const char* localeString = "en_US@currency=TWD";
     Locale locale(localeString);
     UErrorCode status = U_ZERO_ERROR;
-	NumberFormat* numFmt = NumberFormat::createInstance(locale, k, status);
-		
-	UnicodeString original;
-	numFmt->format(agent,original);
-    UnicodeString original_expected = "NT$123.57";
-	assertEquals("Test Currency Context 1", original_expected, original);
+	NumberFormat* numFmt;
+
+	for(int i=0; i<2; i++){
+		if(i == 0){ 
+			numFmt = NumberFormat::createInstance(locale, k, status);
+			UnicodeString original;
+			numFmt->format(agent,original);
+			UnicodeString original_expected = "NT$123.57";
+			assertEquals("Test Currency Usage 1", original_expected, original);
 	
-	numFmt->setCurrencyUsage(UCURR_USAGE_CASH);
-	UnicodeString cash_currency;
-	numFmt->format(agent,cash_currency);
-    UnicodeString cash_currency_expected = "NT$124";
-    assertEquals("Test Currency Context 2", cash_currency_expected, cash_currency);
+			// test the getter here
+			UCurrencyUsage curUsage = numFmt->getCurrencyUsage();
+			assertEquals("Test usage getter", curUsage, UCURR_USAGE_STANDARD);
+
+			numFmt->setCurrencyUsage(UCURR_USAGE_CASH);
 	
+			// test the getter after change
+			curUsage = numFmt->getCurrencyUsage();
+			assertEquals("Test usage getter", curUsage, UCURR_USAGE_CASH);
+		}else{
+			k = UNUM_CASH_CURRENCY;
+			numFmt = NumberFormat::createInstance(locale, k, status);
+		}
+
+		UnicodeString cash_currency;
+		numFmt->format(agent,cash_currency);
+		UnicodeString cash_currency_expected = "NT$124";
+		assertEquals("Test Currency Usage 2", cash_currency_expected, cash_currency);
+	}
+
     // compare the Currency and Currency Cash Rounding
+	// 1st time for getter/setter, 2nd time for factory method
     k = UNUM_CURRENCY;
     localeString = "en_US@currency=CAD";
+	NumberFormat* fmt;
     Locale locale2(localeString);
-	NumberFormat* fmt = NumberFormat::createInstance(locale2, k, status);
+	for(int i=0; i<2; i++){
+		if(i == 0){
+			fmt = NumberFormat::createInstance(locale2, k, status);
 
-    UnicodeString original_rounding;
-	fmt->format(agent, original_rounding);
-    UnicodeString original_rounding_expected = "CA$123.57";
-    assertEquals("Test Currency Context 3", original_rounding_expected, original_rounding);
+			UnicodeString original_rounding;
+			fmt->format(agent, original_rounding);
+			UnicodeString original_rounding_expected = "CA$123.57";
+			assertEquals("Test Currency Usage 3", original_rounding_expected, original_rounding);
+			fmt->setCurrencyUsage(UCURR_USAGE_CASH);
+		}else{
+			k = UNUM_CASH_CURRENCY;
+			fmt = NumberFormat::createInstance(locale2, k, status); 
+		}
 
-    fmt->setCurrencyUsage(UCURR_USAGE_CASH);
-    UnicodeString cash_rounding_currency;
-	fmt->format(agent, cash_rounding_currency);
-    UnicodeString cash_rounding_currency_expected = "CA$123.55";
-    assertEquals("Test Currency Context 4", cash_rounding_currency_expected, cash_rounding_currency);
-	
+		UnicodeString cash_rounding_currency;
+		fmt->format(agent, cash_rounding_currency);
+		UnicodeString cash_rounding_currency_expected = "CA$123.55";
+		assertEquals("Test Currency Usage 4", cash_rounding_currency_expected, cash_rounding_currency);
+	}
+
     // Test the currency change
+	// 1st time for getter/setter, 2nd time for factory method
     k = UNUM_CURRENCY;
-    localeString = "en_US@currency=JPY";
+    localeString = "en_US@currency=CAD";
     Locale locale3(localeString);
-	NumberFormat* fmt2 = NumberFormat::createInstance(locale3, k, status);
+	NumberFormat* fmt2;
+	for(int i=0; i<2; i++){
+		if(i == 0){
+			fmt2 = NumberFormat::createInstance(locale3, k, status);
+			fmt2->setCurrencyUsage(UCURR_USAGE_CASH);
+		}else{
+			k = UNUM_CASH_CURRENCY;
+			fmt2 = NumberFormat::createInstance(locale3, k, status);
+		}
 	
-    fmt2->setCurrencyUsage(UCURR_USAGE_CASH);
-        
-    const char* currencyISOCode = "TWD";
-    UChar currencyCode[4];
-    u_charsToUChars(currencyISOCode, currencyCode, 4);
-    fmt2->setCurrency(currencyCode, status);
+		UnicodeString cur_original;
+		fmt2->format(agent, cur_original);
+		UnicodeString cur_original_expected = "CA$123.55";
+		assertEquals("Test Currency Usage 5", cur_original_expected, cur_original);
 
-    UnicodeString TWD_changed;
-	fmt2->format(agent, TWD_changed);
-    UnicodeString TWD_changed_expected = "NT$124";
-    assertEquals("Test Currency Context 5", TWD_changed_expected, TWD_changed);
+		const char* currencyISOCode = "TWD";
+		UChar currencyCode[4];
+		u_charsToUChars(currencyISOCode, currencyCode, 4);
+		fmt2->setCurrency(currencyCode, status);
+
+		UnicodeString TWD_changed;
+		fmt2->format(agent, TWD_changed);
+		UnicodeString TWD_changed_expected = "NT$124";
+		assertEquals("Test Currency Usage 6", TWD_changed_expected, TWD_changed);
+	}
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */

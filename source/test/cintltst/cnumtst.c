@@ -2542,34 +2542,48 @@ static void TestCurrencyUsage(void) {
         {"USD", "$123.57"},
     };
 	
-    const char* localeString = "en_US";
-    int32_t i;
-    double numberToBeFormat = atof("123.567");
-    UNumberFormatStyle style = UNUM_CURRENCY;
-    UErrorCode status = U_ZERO_ERROR;
-	UChar *result=NULL;
-	UChar expect[512];
-    UChar currencyCode[4];
-	UNumberFormat* unumFmt; 
+	// 1st time for getter/setter, 2nd for factory method
+	int32_t i;
+	for(i=0; i<2; i++){
+		const char* localeString = "en_US";
+		int32_t j;
+		double numberToBeFormat = atof("123.567");
+		UNumberFormatStyle style = UNUM_CURRENCY;
+		UErrorCode status = U_ZERO_ERROR;
+		UChar *result=NULL;
+		UChar expect[512];
+		UChar currencyCode[4];
+		UNumberFormat* unumFmt; 
 	  
-    unumFmt = unum_open(style, NULL, 0, localeString, NULL, &status);
-    if (U_FAILURE(status)) {
-		 log_data_err("FAIL: unum_open, locale %s, style %d - %s\n", localeString, (int)style, myErrorName(status));
-    }
+		if(i == 1){ // change for factory method
+			style = UNUM_CASH_CURRENCY;
+		}
+
+		unumFmt = unum_open(style, NULL, 0, localeString, NULL, &status);
+		if (U_FAILURE(status)) {
+			 log_data_err("FAIL: unum_open, locale %s, style %d - %s\n", localeString, (int)style, myErrorName(status));
+		}
 	
-    if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_STANDARD)
-        log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
-    else
-        log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
+		if(i == 0){ // this is for the getter/setter
+			if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_STANDARD)
+				log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
+			else
+				log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
 	
-	unum_setAttribute(unumFmt, UNUM_CURRENCY_USAGE, UCURR_USAGE_CASH);
+			unum_setAttribute(unumFmt, UNUM_CURRENCY_USAGE, UCURR_USAGE_CASH);
      
-    if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_CASH)
-        log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
-    else
-        log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
-	
-    for (i=0; i<LENGTH(DATA); ++i) { 
+			if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_CASH)
+				log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
+			else
+				log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
+		}else{
+			if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_CASH)
+				log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
+			else
+				log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
+		}
+
+    for (j=0; j<LENGTH(DATA); ++j) { 
 
       const char* currencyISOCode = DATA[i][0];
       const char* expected = DATA[i][1];
@@ -2617,6 +2631,7 @@ static void TestCurrencyUsage(void) {
     result = 0;
 
 	unum_close(unumFmt);
+	}
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

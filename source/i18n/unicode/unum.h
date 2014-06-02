@@ -206,11 +206,16 @@ typedef enum UNumberFormatStyle {
      */
     UNUM_CURRENCY_ACCOUNTING = UNUM_CURRENCY_PLURAL+1,
 #endif /* U_HIDE_DRAFT_API */
+	/** Additional Value here
+	 * Currency format with a currency symbol given CASH usage, e.g., "NT$3" instead of "NT$3.23".
+	 * @draft ICU 54
+	 */
+	UNUM_CASH_CURRENCY,
     /**
      * One more than the highest number format style constant.
      * @stable ICU 4.8
      */
-    UNUM_FORMAT_STYLE_COUNT = UNUM_CURRENCY_PLURAL+2,
+    UNUM_FORMAT_STYLE_COUNT = UNUM_CURRENCY_PLURAL+3,
     /**
      * Default format
      * @stable ICU 2.0
