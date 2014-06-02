@@ -556,6 +556,9 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 53
      */
     static MeasureUnit *createLiter(UErrorCode &status);
+
+// End generated createXXX methods
+
 #endif /* U_HIDE_DRAFT_API */
 
  protected:
