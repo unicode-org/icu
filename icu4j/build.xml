@@ -1562,6 +1562,7 @@
                 target="${javac.target}"
                 encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
+            <include name="com/ibm/icu/impl/LocaleDisplayNamesImpl.java"/>
             <include name="com/ibm/icu/impl/TimeZoneNames*.java"/>
             <include name="com/ibm/icu/lang/UCharacter.java"/>
             <include name="com/ibm/icu/text/BreakIteratorFactory.java"/>

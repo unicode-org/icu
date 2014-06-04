@@ -11,9 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.impl.Grego;
 
 /**
  * Provides information about currencies that is not specific to a locale.
@@ -567,11 +565,7 @@ public class CurrencyMetaInfo {
         if (date == Long.MAX_VALUE || date == Long.MIN_VALUE) {
             return null;
         }
-        GregorianCalendar gc = new GregorianCalendar();
-        gc.setTimeZone(TimeZone.getTimeZone("GMT"));
-        gc.setTimeInMillis(date);
-        return "" + gc.get(Calendar.YEAR) + '-' + (gc.get(Calendar.MONTH) + 1) + '-' +
-                gc.get(Calendar.DAY_OF_MONTH);
+        return Grego.timeToString(date);
     }
 
     private static String debugString(Object o) {

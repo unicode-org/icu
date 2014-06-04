@@ -1031,13 +1031,9 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      *
      * @stable ICU 3.8
      */
-    public static synchronized String getTZDataVersion() {
-        if (TZDATA_VERSION == null) {
-            UResourceBundle tzbundle = UResourceBundle.getBundleInstance(
-                    "com/ibm/icu/impl/data/icudt" + VersionInfo.ICU_DATA_VERSION_PATH, "zoneinfo64");
-            TZDATA_VERSION = tzbundle.getString("TZVersion");
-        }
-        return TZDATA_VERSION;
+    public static String getTZDataVersion() {
+        // The implementation had been moved to VersionInfo.
+        return VersionInfo.getTZDataVersion();
     }
 
     /**
@@ -1281,11 +1277,6 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * The default time zone, or null if not set.
      */
     private static volatile TimeZone  defaultZone = null;
-
-    /**
-     * The tzdata version
-     */
-    private static String TZDATA_VERSION = null;
 
     /**
      * TimeZone implementation type
