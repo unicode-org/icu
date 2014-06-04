@@ -592,7 +592,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
         System.out.println("Implementation Version: " + ICU_VERSION.getVersionString(2, 4));
         System.out.println("Unicode Data Version:   " + UNICODE_VERSION.getVersionString(2, 4));
         System.out.println("CLDR Data Version:      " + LocaleData.getCLDRVersion().getVersionString(2, 4));
-        System.out.println("Time Zone Data Version: " + TimeZone.getTZDataVersion());
+        System.out.println("Time Zone Data Version: " + getTZDataVersion());
     }
 
     /**
@@ -633,4 +633,21 @@ public final class VersionInfo implements Comparable<VersionInfo>
         return verStr.toString();
     }
     ///CLOVER:ON
+
+
+    // Moved from TimeZone class
+    private static volatile String TZDATA_VERSION = null;
+
+    static String getTZDataVersion() {
+        if (TZDATA_VERSION == null) {
+            synchronized (VersionInfo.class) {
+                if (TZDATA_VERSION == null) {
+                    UResourceBundle tzbundle = UResourceBundle.getBundleInstance("com/ibm/icu/impl/data/icudt"
+                            + VersionInfo.ICU_DATA_VERSION_PATH, "zoneinfo64");
+                    TZDATA_VERSION = tzbundle.getString("TZVersion");
+                }
+            }
+        }
+        return TZDATA_VERSION;
+    }
 }

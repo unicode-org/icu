@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation and
+ * Copyright (C) 2003-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  * Partial port from ICU4C's Grego class in i18n/gregoimp.h.
@@ -16,7 +16,8 @@
 
 package com.ibm.icu.impl;
 
-import com.ibm.icu.util.Calendar;
+import java.util.Locale;
+
 
 /**
  * A utility class providing proleptic Gregorian calendar functions
@@ -105,7 +106,7 @@ public class Grego {
      */
     public static int dayOfWeek(long day) {
         long[] remainder = new long[1];
-        floorDivide(day + Calendar.THURSDAY, 7, remainder);
+        floorDivide(day + 5 /* Calendar.THURSDAY */, 7, remainder);
         int dayOfWeek = (int)remainder[0];
         dayOfWeek = (dayOfWeek == 0) ? 7 : dayOfWeek;
         return dayOfWeek;
@@ -209,5 +210,25 @@ public class Grego {
             weekInMonth = -1;
         }
         return weekInMonth;
+    }
+
+    /**
+     * Convenient method for formatting time to ISO 8601 style
+     * date string.
+     * @param time long time
+     * @return ISO-8601 date string
+     */
+    public static String timeToString(long time) {
+        int[] fields = timeToFields(time, null);
+        int millis = fields[5];
+        int hour = millis / MILLIS_PER_HOUR;
+        millis = millis % MILLIS_PER_HOUR;
+        int min = millis / MILLIS_PER_MINUTE;
+        millis = millis % MILLIS_PER_MINUTE;
+        int sec = millis / MILLIS_PER_SECOND;
+        millis = millis % MILLIS_PER_SECOND;
+
+        return String.format((Locale)null, "%04d-%02d-%02dT%02d:%02d:%02d.%03dZ",
+                fields[0], fields[1] + 1, fields[2], hour, min, sec, millis);
     }
 }
