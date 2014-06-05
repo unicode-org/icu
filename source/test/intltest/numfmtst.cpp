@@ -7629,18 +7629,18 @@ void NumberFormatTest::TestEquality() {
 
 void NumberFormatTest::TestCurrencyUsage() {
 	double agent = 123.567;
-
+	
     // compare the Currency and Currency Cash Digits
 	// 1st time for getter/setter, 2nd time for factory method
     UNumberFormatStyle k = UNUM_CURRENCY;
     const char* localeString = "en_US@currency=TWD";
     Locale locale(localeString);
     UErrorCode status = U_ZERO_ERROR;
-	NumberFormat* numFmt;
+	DecimalFormat* numFmt;
 
 	for(int i=0; i<2; i++){
 		if(i == 0){ 
-			numFmt = NumberFormat::createInstance(locale, k, status);
+			numFmt = (DecimalFormat *) NumberFormat::createInstance(locale, k, status);
 			UnicodeString original;
 			numFmt->format(agent,original);
 			UnicodeString original_expected = "NT$123.57";
@@ -7650,14 +7650,14 @@ void NumberFormatTest::TestCurrencyUsage() {
 			UCurrencyUsage curUsage = numFmt->getCurrencyUsage();
 			assertEquals("Test usage getter", curUsage, UCURR_USAGE_STANDARD);
 
-			numFmt->setCurrencyUsage(UCURR_USAGE_CASH);
+			numFmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
 	
 			// test the getter after change
 			curUsage = numFmt->getCurrencyUsage();
 			assertEquals("Test usage getter", curUsage, UCURR_USAGE_CASH);
 		}else{
 			k = UNUM_CASH_CURRENCY;
-			numFmt = NumberFormat::createInstance(locale, k, status);
+			numFmt = (DecimalFormat *) NumberFormat::createInstance(locale, k, status);
 		}
 
 		UnicodeString cash_currency;
@@ -7670,20 +7670,20 @@ void NumberFormatTest::TestCurrencyUsage() {
 	// 1st time for getter/setter, 2nd time for factory method
     k = UNUM_CURRENCY;
     localeString = "en_US@currency=CAD";
-	NumberFormat* fmt;
+	DecimalFormat* fmt;
     Locale locale2(localeString);
 	for(int i=0; i<2; i++){
 		if(i == 0){
-			fmt = NumberFormat::createInstance(locale2, k, status);
+			fmt = (DecimalFormat *) NumberFormat::createInstance(locale2, k, status);
 
 			UnicodeString original_rounding;
 			fmt->format(agent, original_rounding);
 			UnicodeString original_rounding_expected = "CA$123.57";
 			assertEquals("Test Currency Usage 3", original_rounding_expected, original_rounding);
-			fmt->setCurrencyUsage(UCURR_USAGE_CASH);
+			fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
 		}else{
 			k = UNUM_CASH_CURRENCY;
-			fmt = NumberFormat::createInstance(locale2, k, status); 
+			fmt = (DecimalFormat *) NumberFormat::createInstance(locale2, k, status); 
 		}
 
 		UnicodeString cash_rounding_currency;
@@ -7697,14 +7697,14 @@ void NumberFormatTest::TestCurrencyUsage() {
     k = UNUM_CURRENCY;
     localeString = "en_US@currency=CAD";
     Locale locale3(localeString);
-	NumberFormat* fmt2;
+	DecimalFormat* fmt2;
 	for(int i=0; i<2; i++){
 		if(i == 0){
-			fmt2 = NumberFormat::createInstance(locale3, k, status);
-			fmt2->setCurrencyUsage(UCURR_USAGE_CASH);
+			fmt2 = (DecimalFormat *) NumberFormat::createInstance(locale3, k, status);
+			fmt2->setCurrencyUsage(UCURR_USAGE_CASH, &status);
 		}else{
 			k = UNUM_CASH_CURRENCY;
-			fmt2 = NumberFormat::createInstance(locale3, k, status);
+			fmt2 = (DecimalFormat *) NumberFormat::createInstance(locale3, k, status);
 		}
 	
 		UnicodeString cur_original;

@@ -949,21 +949,6 @@ public:
      */
     const UChar* getCurrency() const;
 	
-    /**
-     * Sets the <tt>Currency Context</tt> object used to display currency.
-     * This takes effect immediately, if this format is a
-     * currency format.  
-     * @param currencyContext new currency context object to use.  
-     * @draft ICU 54
-     */
-    virtual void setCurrencyUsage(UCurrencyUsage newUsage);
-
-    /**
-     * Returns the <tt>Currency Context</tt> object used to display currency
-     * @draft ICU 54
-     */
-    UCurrencyUsage getCurrencyUsage() const;
-
     /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Set a particular UDisplayContext value in the formatter, such as
@@ -1082,7 +1067,6 @@ private:
   protected:
     static const int32_t gDefaultMaxIntegerDigits;
     static const int32_t gDefaultMinIntegerDigits;
-	UCurrencyUsage fCurrencyUsage;
  
   private:
     UBool      fParseIntegerOnly;

@@ -814,6 +814,7 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
         fMaxSignificantDigits = rhs.fMaxSignificantDigits;
         fUseSignificantDigits = rhs.fUseSignificantDigits;
         fFormatPattern = rhs.fFormatPattern;
+		fCurrencyUsage = rhs.fCurrencyUsage;
         fStyle = rhs.fStyle;
         _clone_ptr(&fCurrencyPluralInfo, rhs.fCurrencyPluralInfo);
         deleteHashForAffixPattern();
@@ -1088,7 +1089,9 @@ DecimalFormat::operator==(const Format& that) const
         ((fCurrencyPluralInfo == other->fCurrencyPluralInfo &&
           fCurrencyPluralInfo == NULL) ||
          (fCurrencyPluralInfo != NULL && other->fCurrencyPluralInfo != NULL &&
-         *fCurrencyPluralInfo == *(other->fCurrencyPluralInfo)))
+         *fCurrencyPluralInfo == *(other->fCurrencyPluralInfo))) &&
+
+		 fCurrencyUsage == other->fCurrencyUsage
 
         // depending on other settings we may also need to compare
         // fCurrencyChoice (mostly deprecated?),
@@ -5156,8 +5159,8 @@ void DecimalFormat::setCurrencyInternally(const UChar* theCurrency,
     double rounding = 0.0;
     int32_t frac = 0;
     if (fCurrencySignCount != fgCurrencySignCountZero && isCurr) {
-        rounding = ucurr_getRoundingIncrementWithUsage(theCurrency, fCurrencyUsage, &ec);
-        frac = ucurr_getDefaultFractionDigitsWithUsage(theCurrency, fCurrencyUsage, &ec);
+        rounding = ucurr_getRoundingIncrementForUsage(theCurrency, fCurrencyUsage, &ec);
+        frac = ucurr_getDefaultFractionDigitsForUsage(theCurrency, fCurrencyUsage, &ec);
     }
 
     NumberFormat::setCurrency(theCurrency, ec);
@@ -5193,22 +5196,25 @@ void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
 #endif
 }
 
-void DecimalFormat::setCurrencyUsage(UCurrencyUsage newContext){
+void DecimalFormat::setCurrencyUsage(UCurrencyUsage newContext, UErrorCode* ec){
 	fCurrencyUsage = newContext;
 
 	double rounding = 0.0;
 	int32_t frac = 1; 
-	UErrorCode ec = U_ZERO_ERROR;
 	const UChar* theCurrency = getCurrency();
         // We set rounding/digit based on currency context
         if(getCurrency()){
-			rounding = ucurr_getRoundingIncrementWithUsage(theCurrency, fCurrencyUsage, &ec);
-			frac = ucurr_getDefaultFractionDigitsWithUsage(theCurrency, fCurrencyUsage, &ec);
+			rounding = ucurr_getRoundingIncrementForUsage(theCurrency, fCurrencyUsage, ec);
+			frac = ucurr_getDefaultFractionDigitsForUsage(theCurrency, fCurrencyUsage, ec);
             
 			setRoundingIncrement(rounding);
 			setMinimumFractionDigits(frac);
             setMaximumFractionDigits(frac);
 		}
+}
+
+UCurrencyUsage DecimalFormat::getCurrencyUsage() const {
+	return fCurrencyUsage;
 }
 
 // Deprecated variant with no UErrorCode parameter
@@ -5486,7 +5492,7 @@ DecimalFormat& DecimalFormat::setAttribute( UNumberFormatAttribute attr,
 
 
 	case UNUM_CURRENCY_USAGE:
-		setCurrencyUsage((UCurrencyUsage)newValue);
+		setCurrencyUsage((UCurrencyUsage)newValue, &status);
 
     default:
       status = U_UNSUPPORTED_ERROR;

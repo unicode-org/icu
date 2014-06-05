@@ -1620,7 +1620,7 @@ ucurr_getDefaultFractionDigits(const UChar* currency, UErrorCode* ec) {
 }
 
 U_DRAFT int32_t U_EXPORT2
-ucurr_getDefaultFractionDigitsWithUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
+ucurr_getDefaultFractionDigitsForUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
 	if(usage == UCURR_USAGE_STANDARD){
 		return (_findMetaData(currency, *ec))[0];
 	}else if(usage == UCURR_USAGE_CASH){
@@ -1654,7 +1654,7 @@ ucurr_getRoundingIncrement(const UChar* currency, UErrorCode* ec) {
 }
 	
 U_DRAFT double U_EXPORT2
-ucurr_getRoundingIncrementWithUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
+ucurr_getRoundingIncrementForUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
 	if(usage == UCURR_USAGE_CASH){ 
 		const int32_t *data = _findMetaData(currency, *ec);
 

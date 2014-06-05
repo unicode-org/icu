@@ -1877,10 +1877,16 @@ public:
      * Sets the <tt>Currency Context</tt> object used to display currency.
      * This takes effect immediately, if this format is a
      * currency format.  
-     * @param newUsage new currency usage object to use.  
+     * @param currencyContext new currency context object to use.  
      * @draft ICU 54
      */
-    virtual void setCurrencyUsage(UCurrencyUsage newUsage);
+    void setCurrencyUsage(UCurrencyUsage newUsage, UErrorCode* ec);
+
+    /**
+     * Returns the <tt>Currency Context</tt> object used to display currency
+     * @draft ICU 54
+     */
+    UCurrencyUsage getCurrencyUsage() const;
 
 
     /**
@@ -2374,7 +2380,9 @@ private:
 
     // Decimal Format Static Sets singleton.
     const DecimalFormatStaticSets *fStaticSets;
-
+	
+	// Currency Usage(STANDARD vs CASH)
+	UCurrencyUsage fCurrencyUsage;
 
 protected:
 

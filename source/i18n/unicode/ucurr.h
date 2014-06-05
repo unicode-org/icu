@@ -19,15 +19,13 @@
 
 /**
  * Constants for specifying currency purpose
- * @stable ICU 53
+ * @draft ICU 54
  */
 enum UCurrencyUsage {
-    /** @draft ICU 54 */
+    /** @draft ICU 54, used as DEFAULT value*/
     UCURR_USAGE_STANDARD=0,
     /** @draft ICU 54 */
     UCURR_USAGE_CASH=1,
-    /** @draft ICU 54 */
-	UCURR_USAGE_DEFAULT=UCURR_USAGE_STANDARD,
     /** @draft ICU 54 */
 	UCURR_USAGE_COUNT
 };
@@ -202,7 +200,7 @@ ucurr_getDefaultFractionDigits(const UChar* currency,
  * @draft ICU 54
  */
 U_DRAFT int32_t U_EXPORT2
-ucurr_getDefaultFractionDigitsWithUsage(const UChar* currency, 
+ucurr_getDefaultFractionDigitsForUsage(const UChar* currency, 
 										const UCurrencyUsage usage,
 										UErrorCode* ec);
 
@@ -230,7 +228,7 @@ ucurr_getRoundingIncrement(const UChar* currency,
  * @draft ICU 54
  */
 U_DRAFT double U_EXPORT2
-ucurr_getRoundingIncrementWithUsage(const UChar* currency,
+ucurr_getRoundingIncrementForUsage(const UChar* currency,
 									const UCurrencyUsage usage,
 									UErrorCode* ec);
 

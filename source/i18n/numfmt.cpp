@@ -243,8 +243,7 @@ NumberFormat::NumberFormat()
     fMinFractionDigits(0),
     fParseIntegerOnly(FALSE),
     fLenient(FALSE),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE),
-	fCurrencyUsage(UCURR_USAGE_STANDARD)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     fCurrency[0] = 0;
 }
@@ -286,7 +285,6 @@ NumberFormat::operator=(const NumberFormat& rhs)
         u_strncpy(fCurrency, rhs.fCurrency, 4);
         fLenient = rhs.fLenient;
         fCapitalizationContext = rhs.fCapitalizationContext;
-        fCurrencyUsage = rhs.fCurrencyUsage;
     }
     return *this;
 }
@@ -350,8 +348,7 @@ NumberFormat::operator==(const Format& that) const
               fParseIntegerOnly == other->fParseIntegerOnly &&
               u_strcmp(fCurrency, other->fCurrency) == 0 &&
               fLenient == other->fLenient &&
-              fCapitalizationContext == other->fCapitalizationContext &&
-              fCurrencyUsage == other->fCurrencyUsage)));
+              fCapitalizationContext == other->fCapitalizationContext)));
 }
 
 // -------------------------------------
@@ -1188,18 +1185,6 @@ const UChar* NumberFormat::getCurrency() const {
     return fCurrency;
 }
 
-void NumberFormat::setCurrencyUsage(UCurrencyUsage newUsage){
-	fCurrencyUsage = newUsage;
-}
-
-    /**
-     * Returns the <tt>Currency Context</tt> object used to display currency
-     * @stable ICU 53
-     */
-UCurrencyUsage NumberFormat::getCurrencyUsage() const {
-	return fCurrencyUsage;
-}
-
 void NumberFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {
     const UChar* c = getCurrency();
     if (*c != 0) {
@@ -1518,17 +1503,24 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
 
         // "new DecimalFormat()" does not adopt the symbols if its memory allocation fails.
         DecimalFormatSymbols *syms = symbolsToAdopt.orphan();
-        f = new DecimalFormat(pattern, syms, style, status);
+        DecimalFormat* df = new DecimalFormat(pattern, syms, style, status);
+		
+		// if it is cash currency style, setCurrencyUsage with usage
+		if (style == UNUM_CASH_CURRENCY){
+			df->setCurrencyUsage(UCURR_USAGE_CASH, &status);
+		}
+		
+		if (U_FAILURE(status)) {
+			delete df;
+			return NULL;
+		}
+
+		f = df;
         if (f == NULL) {
             delete syms;
             status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-		
-		// if it is cash currency style, setCurrencyUsage with usage
-		if (style == UNUM_CASH_CURRENCY){
-			f->setCurrencyUsage(UCURR_USAGE_CASH);
-		}
     }
 	
     f->setLocaleIDs(ures_getLocaleByType(ownedResource.getAlias(), ULOC_VALID_LOCALE, &status),
