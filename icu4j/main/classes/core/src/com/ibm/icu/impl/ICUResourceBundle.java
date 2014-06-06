@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import com.ibm.icu.impl.URLHandler.URLVisitor;
+import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
@@ -335,11 +336,10 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @exception MissingResourceException If a resource was not found.
      */
     public ICUResourceBundle getWithFallback(String path) throws MissingResourceException {
-        ICUResourceBundle result = null;
         ICUResourceBundle actualBundle = this;
 
         // now recurse to pick up sub levels of the items
-        result = findResourceWithFallback(path, actualBundle, null);
+        ICUResourceBundle result = findResourceWithFallback(path, actualBundle, null, null);
 
         if (result == null) {
             throw new MissingResourceException(
@@ -348,8 +348,8 @@ public  class ICUResourceBundle extends UResourceBundle {
                 path, getKey());
         }
 
-        if ( result.getType() == ICUResourceBundle.STRING && result.getString().equals(NO_INHERITANCE_MARKER)) {
-            throw new MissingResourceException("Encountered NO_INHERITANCE_MARKER",path,getKey());
+        if (result.getType() == STRING && result.getString().equals(NO_INHERITANCE_MARKER)) {
+            throw new MissingResourceException("Encountered NO_INHERITANCE_MARKER", path, getKey());
         }
 
         return result;
@@ -384,12 +384,33 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @return the resource, or null
      */
     public ICUResourceBundle findWithFallback(String path) {
-        return findResourceWithFallback(path, this, null);
+        return findResourceWithFallback(path, this, null, null);
+    }
+    public String findStringWithFallback(String path) {
+        Output<String> outString = new Output<String>();
+        findResourceWithFallback(path, this, null, outString);
+        return outString.value;
     }
 
     // will throw type mismatch exception if the resource is not a string
     public String getStringWithFallback(String path) throws MissingResourceException {
-        return getWithFallback(path).getString();
+        // Optimized form of getWithFallback(path).getString();
+        ICUResourceBundle actualBundle = this;
+        Output<String> outString = new Output<String>();
+        findResourceWithFallback(path, actualBundle, null, outString);
+        String result = outString.value;
+
+        if (result == null) {
+            throw new MissingResourceException(
+                "Can't find resource for bundle "
+                + this.getClass().getName() + ", key " + getType(),
+                path, getKey());
+        }
+
+        if (result.equals(NO_INHERITANCE_MARKER)) {
+            throw new MissingResourceException("Encountered NO_INHERITANCE_MARKER", path, getKey());
+        }
+        return result;
     }
 
     /**
@@ -776,7 +797,8 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     protected static final ICUResourceBundle findResourceWithFallback(String path,
-            UResourceBundle actualBundle, UResourceBundle requested) {
+            UResourceBundle actualBundle, UResourceBundle requested,
+            Output<String> outString) {
         ICUResourceBundle sub = null;
         if (requested == null) {
             requested = actualBundle;
@@ -788,8 +810,19 @@ public  class ICUResourceBundle extends UResourceBundle {
 
         while (base != null) {
             if (path.indexOf('/') == -1) { // skip the tokenizer
+                if (outString != null && base instanceof ICUResourceBundleImpl.ResourceTable) {
+                    String s = ((ICUResourceBundleImpl.ResourceTable)base).getStringOrNull(path);
+                    if (s != null) {
+                        outString.value = s;
+                        return null;
+                    }
+                }
                 sub = (ICUResourceBundle) base.handleGet(path, null, requested);
                 if (sub != null) {
+                    if (outString != null && sub.getType() == STRING) {
+                        outString.value = sub.getString();  // string from alias handling
+                        return null;
+                    }
                     break;
                 }
             } else {
@@ -797,8 +830,12 @@ public  class ICUResourceBundle extends UResourceBundle {
                 StringTokenizer st = new StringTokenizer(path, "/");
                 while (st.hasMoreTokens()) {
                     String subKey = st.nextToken();
-                    sub = ICUResourceBundle.findResourceWithFallback(subKey, currentBase, requested);
+                    sub = ICUResourceBundle.findResourceWithFallback(subKey, currentBase, requested,
+                            st.hasMoreTokens() ? null : outString);
                     if (sub == null) {
+                        if (outString != null && outString.value != null) {
+                            return null;
+                        }
                         break;
                     }
                     currentBase = sub;
@@ -1182,7 +1219,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             // Get the top bundle of the requested bundle
             bundle = (ICUResourceBundle)getBundleInstance(bundleName, locale, loaderToUse, false);
             if (bundle != null) {
-                sub = ICUResourceBundle.findResourceWithFallback(keyPath, bundle, null);
+                sub = ICUResourceBundle.findResourceWithFallback(keyPath, bundle, null, null);
                 // TODO
                 // The resPath of the resolved bundle should reflect the resource path
                 // requested by caller. However, overwriting resPath here will affect cached

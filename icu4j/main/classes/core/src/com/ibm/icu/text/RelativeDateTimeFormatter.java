@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2013-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -417,9 +417,9 @@ public final class RelativeDateTimeFormatter {
             Direction direction,
             ICUResourceBundle bundle,
             String key) {
-        bundle = bundle.findWithFallback(key);
-        if (bundle != null) {
-            unitStrings.put(direction, bundle.getString());
+        String s = bundle.findStringWithFallback(key);
+        if (s != null) {
+            unitStrings.put(direction, s);
         }
     }
 

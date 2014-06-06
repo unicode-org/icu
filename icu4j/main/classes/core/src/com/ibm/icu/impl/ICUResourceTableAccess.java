@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2011, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -40,23 +40,22 @@ public class ICUResourceTableAccess {
                     table = table.getWithFallback(item);
                     return table.getString(1);
                 } else {
-                    ICUResourceBundle table = lookup(bundle, tableName);
+                    ICUResourceBundle table = bundle.findWithFallback(tableName);
                     if (table == null) {
                         return item;
                     }
                     ICUResourceBundle stable = table;
                     if (subtableName != null) {
-                        stable = lookup(table, subtableName);
+                        stable = table.findWithFallback(subtableName);
                     }
                     if (stable != null) {
-                        ICUResourceBundle sbundle = lookup(stable, item);
-                        if (sbundle != null) {
-                            result = sbundle.getString(); // possible real exception
-                            break;
+                        result = stable.findStringWithFallback(item);
+                        if (result != null) {
+                            break; // possible real exception
                         }
                     }
 
-                    // if we get here, stable was null, or sbundle was null
+                    // if we get here, stable was null, or there was no string for the item
                     if (subtableName == null) {
                         // may be a deprecated code
                         String currentName = null;
@@ -65,20 +64,18 @@ public class ICUResourceTableAccess {
                         } else if (tableName.equals("Languages")) {
                             currentName = LocaleIDs.getCurrentLanguageID(item);
                         }
-                        ICUResourceBundle sbundle = lookup(table, currentName);
-                        if (sbundle != null) {
-                            result = sbundle.getString(); // possible real exception
-                            break;
+                        result = table.findStringWithFallback(currentName);
+                        if (result != null) {
+                            break; // possible real exception
                         }
                     }
 
                     // still can't figure it out? try the fallback mechanism
-                    ICUResourceBundle fbundle = lookup(table, "Fallback");
-                    if (fbundle == null) {
+                    String fallbackLocale = table.findStringWithFallback("Fallback"); // again, possible exception
+                    if (fallbackLocale == null) {
                         return item;
                     }
 
-                    String fallbackLocale = fbundle.getString(); // again, possible exception
                     if (fallbackLocale.length() == 0) {
                         fallbackLocale = "root";
                     }
@@ -98,10 +95,5 @@ public class ICUResourceTableAccess {
 
         // If the result is empty return item instead
         return ((result != null && result.length() > 0) ? result : item);
-    }
-
-    // utility to make the call sites in the above code cleaner
-    private static ICUResourceBundle lookup(ICUResourceBundle bundle, String resName) {
-        return ICUResourceBundle.findResourceWithFallback(resName, bundle, null);
     }
 }
