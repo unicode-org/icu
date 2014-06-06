@@ -452,8 +452,7 @@ ucol_openRules( const UChar        *rules,
  * @see ucol_setVariableTop
  * @see ucol_getShortDefinitionString
  * @see ucol_normalizeShortDefinitionString
- * @stable ICU 3.0
- *
+ * @deprecated ICU 54 Use ucol_open() with language tag collation keywords instead.
  */
 U_STABLE UCollator* U_EXPORT2
 ucol_openFromShortString( const char *definition,
@@ -930,7 +929,7 @@ ucol_getRules(    const    UCollator    *coll,
  *  @return length of the resulting string
  *  @see ucol_openFromShortString
  *  @see ucol_normalizeShortDefinitionString
- *  @stable ICU 3.0
+ *  @deprecated ICU 54
  */
 U_STABLE int32_t U_EXPORT2
 ucol_getShortDefinitionString(const UCollator *coll,
@@ -956,7 +955,7 @@ ucol_getShortDefinitionString(const UCollator *coll,
  *  @see ucol_openFromShortString
  *  @see ucol_getShortDefinitionString
  * 
- *  @stable ICU 3.0
+ *  @deprecated ICU 54
  */
 
 U_STABLE int32_t U_EXPORT2
