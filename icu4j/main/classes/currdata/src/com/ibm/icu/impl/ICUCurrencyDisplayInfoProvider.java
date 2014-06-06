@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -95,17 +95,17 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             if (plurals != null) {
                 ICUResourceBundle pluralsBundle = plurals.findWithFallback(isoCode);
                 if (pluralsBundle != null) {
-                    ICUResourceBundle pluralBundle = pluralsBundle.findWithFallback(pluralKey);
-                    if (pluralBundle == null) {
+                    String pluralName = pluralsBundle.findStringWithFallback(pluralKey);
+                    if (pluralName == null) {
                         if (!fallback) {
                             return null;
                         }
-                        pluralBundle = pluralsBundle.findWithFallback("other");
-                        if (pluralBundle == null) {
+                        pluralName = pluralsBundle.findStringWithFallback("other");
+                        if (pluralName == null) {
                             return getName(isoCode);
                         }
                     }
-                    return pluralBundle.getString();
+                    return pluralName;
                 }
             }
 
@@ -186,12 +186,12 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                 ICUResourceBundle brb = srb.findWithFallback("beforeCurrency");
                 ICUResourceBundle arb = srb.findWithFallback("afterCurrency");
                 if (arb != null && brb != null) {
-                    String beforeCurrencyMatch = brb.findWithFallback("currencyMatch").getString();
-                    String beforeContextMatch = brb.findWithFallback("surroundingMatch").getString();
-                    String beforeInsert = brb.findWithFallback("insertBetween").getString();
-                    String afterCurrencyMatch = arb.findWithFallback("currencyMatch").getString();
-                    String afterContextMatch = arb.findWithFallback("surroundingMatch").getString();
-                    String afterInsert = arb.findWithFallback("insertBetween").getString();
+                    String beforeCurrencyMatch = brb.findStringWithFallback("currencyMatch");
+                    String beforeContextMatch = brb.findStringWithFallback("surroundingMatch");
+                    String beforeInsert = brb.findStringWithFallback("insertBetween");
+                    String afterCurrencyMatch = arb.findStringWithFallback("currencyMatch");
+                    String afterContextMatch = arb.findStringWithFallback("surroundingMatch");
+                    String afterInsert = arb.findStringWithFallback("insertBetween");
 
                     return new CurrencySpacingInfo(
                             beforeCurrencyMatch, beforeContextMatch, beforeInsert,

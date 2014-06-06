@@ -242,6 +242,14 @@ public final class ICUBinary
         }
     }
 
+    /**
+     * Returns a VersionInfo for the bytes in the compact version integer.
+     */
+    public static VersionInfo getVersionInfoFromCompactInt(int version) {
+        return VersionInfo.getInstance(
+                version >>> 24, (version >> 16) & 0xff, (version >> 8) & 0xff, version & 0xff);
+    }
+
     // private variables -------------------------------------------------
   
     /**
