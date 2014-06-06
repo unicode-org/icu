@@ -4066,16 +4066,10 @@ public class Bidi {
          */
         switch (direction) {
         case LTR:
-            /* make sure paraLevel is even */
-            paraLevel = (byte)((paraLevel + 1) & ~1);
-
             /* all levels are implicitly at paraLevel (important for getLevels()) */
             trailingWSStart = 0;
             break;
         case RTL:
-            /* make sure paraLevel is odd */
-            paraLevel |= 1;
-
             /* all levels are implicitly at paraLevel (important for getLevels()) */
             trailingWSStart = 0;
             break;
