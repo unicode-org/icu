@@ -2656,16 +2656,10 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     pBiDi->direction=direction;
     switch(direction) {
     case UBIDI_LTR:
-        /* make sure paraLevel is even */
-        pBiDi->paraLevel=(UBiDiLevel)((pBiDi->paraLevel+1)&~1);
-
         /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
         pBiDi->trailingWSStart=0;
         break;
     case UBIDI_RTL:
-        /* make sure paraLevel is odd */
-        pBiDi->paraLevel|=1;
-
         /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
         pBiDi->trailingWSStart=0;
         break;
