@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -739,7 +739,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
              * CR, CR+LF, LF, NEL, PS, LS or FF as line seperators
              */
             /* Windows CR LF */
-            if(c ==0x0d && temp+1<=buf->bufLimit && *(temp+1) == 0x0a ){
+            if(c ==0x0d && temp <= buf->bufLimit && *temp == 0x0a ){
                 *len = (int32_t)(temp++ - buf->currentPos);
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
@@ -765,7 +765,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                 return NULL; /* end of file is reached return NULL */
             }
             /* Windows CR LF */
-            if(c ==0x0d && temp+1<=buf->bufLimit && *(temp+1) == 0x0a ){
+            if(c ==0x0d && temp <= buf->bufLimit && *temp == 0x0a ){
                 *len = (int32_t)(temp++ - buf->currentPos);
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
