@@ -1,5 +1,5 @@
 # CaseFolding-7.0.0.txt
-# Date: 2014-03-18, 07:28:41 GMT [MD, KW]
+# Date: 2014-04-09, 20:00:56 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2014 Unicode, Inc.
@@ -25,7 +25,7 @@
 #
 # For information on case folding, including how to have case folding 
 # preserve normalization formats, see Section 3.13 Default Case Algorithms in
-# The Unicode Standard, Version 7.0.
+# The Unicode Standard.
 #
 # ================================================================================
 # Format

@@ -453,6 +453,19 @@ void TestHasScript() {
     }
 }
 
+static UBool scriptsContain(int32_t scripts[], int32_t length, int32_t script) {
+    UBool contain=FALSE;
+    int32_t prev=-1;
+    for(int32_t i=0; i<length; ++i) {
+        int32_t s=scripts[i];
+        if(s<=prev) {
+            log_err("uscript_getScriptExtensions() not in sorted order: %d %d\n", (int)prev, (int)s);
+        }
+        if(s==script) { contain=TRUE; }
+    }
+    return contain;
+}
+
 void TestGetScriptExtensions() {
     UScriptCode scripts[20];
     int32_t length;
@@ -479,14 +492,14 @@ void TestGetScriptExtensions() {
     }
     errorCode=U_ZERO_ERROR;
     length=uscript_getScriptExtensions(0x0640, scripts, 0, &errorCode);
-    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=3) {
-        log_err("uscript_getScriptExtensions(U+0640, capacity=0: pure preflighting)=%d != 3 - %s\n",
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length<3) {
+        log_err("uscript_getScriptExtensions(U+0640, capacity=0: pure preflighting)=%d < 3 - %s\n",
               (int)length, u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
     length=uscript_getScriptExtensions(0x0640, scripts, 1, &errorCode);
-    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=3) {
-        log_err("uscript_getScriptExtensions(U+0640, capacity=1: preflighting)=%d != 3 - %s\n",
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length<3) {
+        log_err("uscript_getScriptExtensions(U+0640, capacity=1: preflighting)=%d < 3 - %s\n",
               (int)length, u_errorName(errorCode));
     }
     /* U+063F has only a Script code, no Script_Extensions. */
@@ -520,9 +533,10 @@ void TestGetScriptExtensions() {
     }
     errorCode=U_ZERO_ERROR;
     length=uscript_getScriptExtensions(0x0640, scripts, LENGTHOF(scripts), &errorCode);
-    if(U_FAILURE(errorCode) || length!=3 ||
-       scripts[0]!=USCRIPT_ARABIC || scripts[1]!=USCRIPT_SYRIAC || scripts[2]!=USCRIPT_MANDAIC
-    ) {
+    if(U_FAILURE(errorCode) || length<3 ||
+            !scriptsContain(scripts, length, USCRIPT_ARABIC) ||
+            !scriptsContain(scripts, length, USCRIPT_SYRIAC) ||
+            !scriptsContain(scripts, length, USCRIPT_MANDAIC)) {
         log_err("uscript_getScriptExtensions(U+0640)=%d failed - %s\n",
               (int)length, u_errorName(errorCode));
     }
