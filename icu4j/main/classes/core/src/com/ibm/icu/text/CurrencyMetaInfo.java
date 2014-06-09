@@ -11,10 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.Currency.CurrencyUsage;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.impl.Grego;
 
 /**
  * Provides information about currencies that is not specific to a locale.
@@ -535,23 +532,11 @@ public class CurrencyMetaInfo {
 
     /**
      * Returns the CurrencyDigits for the currency code.
-     * This is equivalent to currencyDigits(isoCode, CurrencyUsage.STANDARD);
      * @param isoCode the currency code
      * @return the CurrencyDigits
      * @stable ICU 4.4
      */
     public CurrencyDigits currencyDigits(String isoCode) {
-        return currencyDigits(isoCode, CurrencyUsage.STANDARD);
-    }
-
-    /**
-     * Returns the CurrencyDigits for the currency code with Context Usage.
-     * @param isoCode the currency code
-     * @param currencyUsage the currency usage
-     * @return the CurrencyDigits
-     * @draft ICU 54
-     */
-    public CurrencyDigits currencyDigits(String isoCode, CurrencyUsage currencyUsage) {
         return defaultDigits;
     }
 
@@ -580,11 +565,7 @@ public class CurrencyMetaInfo {
         if (date == Long.MAX_VALUE || date == Long.MIN_VALUE) {
             return null;
         }
-        GregorianCalendar gc = new GregorianCalendar();
-        gc.setTimeZone(TimeZone.getTimeZone("GMT"));
-        gc.setTimeInMillis(date);
-        return "" + gc.get(Calendar.YEAR) + '-' + (gc.get(Calendar.MONTH) + 1) + '-' +
-                gc.get(Calendar.DAY_OF_MONTH);
+        return Grego.timeToString(date);
     }
 
     private static String debugString(Object o) {
