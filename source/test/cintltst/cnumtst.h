@@ -75,6 +75,10 @@ static void TestParseZero(void);
  **/
 static void TestCloneWithRBNF(void);
 
+/**
+ * Tes the Currency Usage Implementations
+ **/
+static void TestCurrencyUsage(void);
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

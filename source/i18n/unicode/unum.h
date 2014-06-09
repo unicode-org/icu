@@ -206,11 +206,11 @@ typedef enum UNumberFormatStyle {
      */
     UNUM_CURRENCY_ACCOUNTING = UNUM_CURRENCY_PLURAL+1,
 #endif /* U_HIDE_DRAFT_API */
-	/** Additional Value here
-	 * Currency format with a currency symbol given CASH usage, e.g., "NT$3" instead of "NT$3.23".
-	 * @draft ICU 54
-	 */
-	UNUM_CASH_CURRENCY,
+    /** Additional Value here
+     * Currency format with a currency symbol given CASH usage, e.g., "NT$3" instead of "NT$3.23".
+     * @draft ICU 54
+     */
+    UNUM_CASH_CURRENCY,
     /**
      * One more than the highest number format style constant.
      * @stable ICU 4.8
@@ -931,12 +931,12 @@ typedef enum UNumberFormatAttribute {
    * @internal */
   UNUM_LIMIT_BOOLEAN_ATTRIBUTE,
 
-   /** 
+  /** 
    * if this attribute is set to 0, it is set to UNUM_CURRENCY_STANDARD purpose, otherwise it is UNUM_CURRENCY_CASH purpose
    * Default: 0 (UNUM_CURRENCY_STANDARD purpose)
    * @draft ICU 54
    */
-   UNUM_CURRENCY_USAGE
+  UNUM_CURRENCY_USAGE
 
 } UNumberFormatAttribute;
 

@@ -1621,13 +1621,13 @@ ucurr_getDefaultFractionDigits(const UChar* currency, UErrorCode* ec) {
 
 U_DRAFT int32_t U_EXPORT2
 ucurr_getDefaultFractionDigitsForUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
-	if(usage == UCURR_USAGE_STANDARD){
-		return (_findMetaData(currency, *ec))[0];
-	}else if(usage == UCURR_USAGE_CASH){
-		return (_findMetaData(currency, *ec))[2];	
-	}else{
-		return (_findMetaData(currency, *ec))[0];
-	}
+    if(usage == UCURR_USAGE_STANDARD){
+        return (_findMetaData(currency, *ec))[0];
+    }else if(usage == UCURR_USAGE_CASH){
+        return (_findMetaData(currency, *ec))[2];	
+    }else{
+        return (_findMetaData(currency, *ec))[0];
+    }
 }
 
 U_CAPI double U_EXPORT2
@@ -1655,29 +1655,29 @@ ucurr_getRoundingIncrement(const UChar* currency, UErrorCode* ec) {
 	
 U_DRAFT double U_EXPORT2
 ucurr_getRoundingIncrementForUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
-	if(usage == UCURR_USAGE_CASH){ 
-		const int32_t *data = _findMetaData(currency, *ec);
+    if(usage == UCURR_USAGE_CASH){ 
+        const int32_t *data = _findMetaData(currency, *ec);
 
-		// If the meta data is invalid, return 0.0.
-		if (data[2] < 0 || data[2] > MAX_POW10) {
-			if (U_SUCCESS(*ec)) {
-				*ec = U_INVALID_FORMAT_ERROR;
-			}
-			return 0.0;
-		}
+        // If the meta data is invalid, return 0.0.
+        if (data[2] < 0 || data[2] > MAX_POW10) {
+            if (U_SUCCESS(*ec)) {
+	            *ec = U_INVALID_FORMAT_ERROR;
+            }
+            return 0.0;
+        }
 
-		// If there is no rounding, return 0.0 to indicate no rounding.  A
-		// rounding value (data[3]) of 0 or 1 indicates no rounding.
-		if (data[3] < 2) {
-			return 0.0;
-		}
+        // If there is no rounding, return 0.0 to indicate no rounding.  A
+        // rounding value (data[3]) of 0 or 1 indicates no rounding.
+        if (data[3] < 2) {
+            return 0.0;
+        }
 
-		// Return data[3] / 10^(data[2]).  The only actual rounding data,
-		// as of this writing, is CHF { 2, 5 }.
-		return double(data[3]) / POW10[data[2]];
-	}else{
-		return ucurr_getRoundingIncrement(currency, ec);
-	}
+        // Return data[3] / 10^(data[2]).  The only actual rounding data,
+        // as of this writing, is CHF { 2, 5 }.
+        return double(data[3]) / POW10[data[2]];
+    }else{
+        return ucurr_getRoundingIncrement(currency, ec);
+    }
 }
 
 U_CDECL_BEGIN

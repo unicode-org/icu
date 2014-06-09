@@ -1355,7 +1355,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             case UNUM_CURRENCY_ISO: // do not support plural formatting here
             case UNUM_CURRENCY_PLURAL:
             case UNUM_CURRENCY_ACCOUNTING:
-			case UNUM_CASH_CURRENCY:
+            case UNUM_CASH_CURRENCY:
                 f = new Win32NumberFormat(desiredLocale, curr, status);
 
                 if (U_SUCCESS(status)) {
@@ -1428,13 +1428,13 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         UResourceBundle *resource = ownedResource.orphan();
         UResourceBundle *numElements = ures_getByKeyWithFallback(resource, gNumberElements, NULL, &status);
         resource = ures_getByKeyWithFallback(numElements, ns->getName(), resource, &status);
-		resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
+        resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
         ownedResource.adoptInstead(resource);
 
         int32_t patLen = 0;
         const UChar *patResStr = ures_getStringByKeyWithFallback(resource, gFormatKeys[style], &patLen, &status);
 
-		// Didn't find a pattern specific to the numbering system, so fall back to "latn"
+        // Didn't find a pattern specific to the numbering system, so fall back to "latn"
         if ( status == U_MISSING_RESOURCE_ERROR && uprv_strcmp(gLatn,ns->getName())) {  
             status = U_ZERO_ERROR;
             resource = ures_getByKeyWithFallback(numElements, gLatn, resource, &status);
@@ -1505,17 +1505,17 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         DecimalFormatSymbols *syms = symbolsToAdopt.orphan();
         DecimalFormat* df = new DecimalFormat(pattern, syms, style, status);
 		
-		// if it is cash currency style, setCurrencyUsage with usage
-		if (style == UNUM_CASH_CURRENCY){
-			df->setCurrencyUsage(UCURR_USAGE_CASH, &status);
-		}
+        // if it is cash currency style, setCurrencyUsage with usage
+        if (style == UNUM_CASH_CURRENCY){
+            df->setCurrencyUsage(UCURR_USAGE_CASH, &status);
+        }
 		
-		if (U_FAILURE(status)) {
-			delete df;
-			return NULL;
-		}
+        if (U_FAILURE(status)) {
+            delete df;
+            return NULL;
+        }
 
-		f = df;
+        f = df;
         if (f == NULL) {
             delete syms;
             status = U_MEMORY_ALLOCATION_ERROR;
