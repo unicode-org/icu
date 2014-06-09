@@ -2556,7 +2556,7 @@ static void TestCurrencyUsage(void) {
         UNumberFormat* unumFmt; 
 	  
         if(i == 1){ // change for factory method
-	        style = UNUM_CASH_CURRENCY;
+            style = UNUM_CASH_CURRENCY;
         }
 
         unumFmt = unum_open(style, NULL, 0, localeString, NULL, &status);

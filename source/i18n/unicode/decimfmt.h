@@ -2183,13 +2183,13 @@ private:
                               UBool setupForPluralPattern,
                               UErrorCode& status);
 	
-	// get the currency rounding with respect to currency usage
-	double getCurrencyRounding(const UChar* currency,
-							   UErrorCode* ec) const;
+    // get the currency rounding with respect to currency usage
+    double getCurrencyRounding(const UChar* currency,
+                               UErrorCode* ec) const;
 	
-	// get the currency fraction with respect to currency usage
-	int getCurrencyFractionDigits(const UChar* currency,
-								  UErrorCode* ec) const;
+    // get the currency fraction with respect to currency usage
+    int getCurrencyFractionDigits(const UChar* currency,
+                                  UErrorCode* ec) const;
 
     // hashtable operations
     Hashtable* initHashForAffixPattern(UErrorCode& status);
@@ -2381,8 +2381,8 @@ private:
     // Decimal Format Static Sets singleton.
     const DecimalFormatStaticSets *fStaticSets;
 	
-	// Currency Usage(STANDARD vs CASH)
-	UCurrencyUsage fCurrencyUsage;
+    // Currency Usage(STANDARD vs CASH)
+    UCurrencyUsage fCurrencyUsage;
 
 protected:
 

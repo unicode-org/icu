@@ -5215,7 +5215,7 @@ void DecimalFormat::setCurrencyUsage(UCurrencyUsage newContext, UErrorCode* ec){
 }
 
 UCurrencyUsage DecimalFormat::getCurrencyUsage() const {
-	return fCurrencyUsage;
+    return fCurrencyUsage;
 }
 
 // Deprecated variant with no UErrorCode parameter

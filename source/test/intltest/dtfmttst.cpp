@@ -4465,50 +4465,50 @@ void DateFormatTest::TestParseLeniencyAPIs() {
 }
 
 void DateFormatTest::TestNumberFormatOverride() {
-	UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString myDate;
     SimpleDateFormat* fmt;
     fmt = new SimpleDateFormat((UnicodeString)"MM d", status);
 
-	// loop 100 times to test setter/getter
-	for(int i=0; i<100; i++){
-		NumberFormat* check_nf = NumberFormat::createInstance(Locale("en_US"), status);
+    // loop 100 times to test setter/getter
+    for(int i=0; i<100; i++){
+        NumberFormat* check_nf = NumberFormat::createInstance(Locale("en_US"), status);
         fmt->setNumberFormat('M', check_nf, status);
         const NumberFormat* get_nf = fmt->getNumberFormat('M');
         if (get_nf != check_nf)
-			errln("FAIL: getter and setter do not work");
-	}
+        errln("FAIL: getter and setter do not work");
+    }
     if (U_FAILURE(status)) {
         dataerrln("Fail new SimpleDateFormat: %s", u_errorName(status));
         delete fmt;
         return;
     }
-	
-	UDate test_date = date(97, 6 - 1, 15);
+
+    UDate test_date = date(97, 6 - 1, 15);
     NumberFormat * overrideNF = NumberFormat::createInstance(Locale::createFromName("zh@numbers=hanidays"),status);
 
-	// 1st to check 1 field, 2nd is full override
-	for(int i=0; i<2; i++){
-		if(i == 0){
-			fmt->setNumberFormat('M', overrideNF, status);
-		}else{
-			fmt->setNumberFormat(overrideNF, status);
-		}	
+    // 1st to check 1 field, 2nd is full override
+    for(int i=0; i<2; i++){
+        if(i == 0){
+            fmt->setNumberFormat('M', overrideNF, status);
+        }else{
+            fmt->setNumberFormat(overrideNF, status);
+        }
 
-		UnicodeString result;
-		FieldPosition pos(0);
-		fmt->format(test_date,result, pos);
+        UnicodeString result;
+        FieldPosition pos(0);
+        fmt->format(test_date,result, pos);
 
-		UnicodeString expected;
-		if(i == 0){
-			expected = "\u521D\u516D 15";
-		}else{
-			expected = "\u521D\u516D \u5341\u4E94";
-		}
+        UnicodeString expected;
+        if(i == 0){
+            expected = "\u521D\u516D 15";
+        }else{
+            expected = "\u521D\u516D \u5341\u4E94";
+        }
 
-		if(result != expected)
-			errln("FAIL: Expected " + expected + " get: " + result);
-	}
+        if(result != expected)
+            errln("FAIL: Expected " + expected + " get: " + result);
+    }
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
