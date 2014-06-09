@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.ibm.icu.text.CurrencyMetaInfo;
+import com.ibm.icu.util.Currency.CurrencyUsage;
 
 /**
  * ICU's currency meta info data.
@@ -46,14 +47,25 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
 
     @Override
     public CurrencyDigits currencyDigits(String isoCode) {
+        return currencyDigits(isoCode, CurrencyUsage.STANDARD);
+    }
+
+    @Override
+    public CurrencyDigits currencyDigits(String isoCode, CurrencyUsage currencyPurpose) {
         ICUResourceBundle b = digitInfo.findWithFallback(isoCode);
         if (b == null) {
             b = digitInfo.findWithFallback("DEFAULT");
         }
         int[] data = b.getIntVector();
-        return new CurrencyDigits(data[0], data[1]);
+        if (currencyPurpose == CurrencyUsage.CASH) {
+            return new CurrencyDigits(data[2], data[3]);
+        } else if (currencyPurpose == CurrencyUsage.STANDARD) {
+            return new CurrencyDigits(data[0], data[1]);
+        } else {
+            return new CurrencyDigits(data[0], data[1]);
+        }
     }
-
+    
     private <T> List<T> collect(Collector<T> collector, CurrencyFilter filter) {
         // We rely on the fact that the data lists the regions in order, and the
         // priorities in order within region.  This means we don't need

@@ -89,6 +89,28 @@ public class Currency extends MeasureUnit {
             .add("\u20a8", "\u20b9")
             .add("\u00a3", "\u20a4");
 
+    /**
+     * Currency Usage used for Decimal Format
+     * @draft ICU 54
+     */
+    public enum CurrencyUsage{
+        /**
+         * a setting to specify currency usage which determines currency digit and rounding
+         * for official purpose, for example: "50.00 NT$"
+         * @draft ICU 54
+         * @provisional This API might change or be removed in a future release.
+         */
+        STANDARD,
+        
+        /**
+         * a setting to specify currency usage which determines currency digit and rounding
+         * for cash purpose, for example: "50 NT$"
+         * @draft ICU 54
+         * @provisional This API might change or be removed in a future release.
+         */
+        CASH
+    }
+    
     // begin registry stuff
 
     // shim for service code
@@ -729,25 +751,50 @@ public class Currency extends MeasureUnit {
     /**
      * Returns the number of the number of fraction digits that should
      * be displayed for this currency.
+     * This is equivalent to getDefaultFractionDigits(CurrencyUsage.STANDARD);
      * @return a non-negative number of fraction digits to be
      * displayed
      * @stable ICU 2.2
      */
     public int getDefaultFractionDigits() {
+        return getDefaultFractionDigits(CurrencyUsage.STANDARD);
+    }
+
+    /**
+     * Returns the number of the number of fraction digits that should
+     * be displayed for this currency with Usage.
+     * @param Usage the usage of currency(Standard or Cash)
+     * @return a non-negative number of fraction digits to be
+     * displayed
+     * @draft ICU 54
+     */
+    public int getDefaultFractionDigits(CurrencyUsage Usage) {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-        CurrencyDigits digits = info.currencyDigits(subType);
+        CurrencyDigits digits = info.currencyDigits(subType, Usage);
         return digits.fractionDigits;
     }
 
     /**
      * Returns the rounding increment for this currency, or 0.0 if no
      * rounding is done by this currency.
+     * This is equivalent to getRoundingIncrement(CurrencyUsage.STANDARD);
      * @return the non-negative rounding increment, or 0.0 if none
      * @stable ICU 2.2
      */
     public double getRoundingIncrement() {
+        return getRoundingIncrement(CurrencyUsage.STANDARD);
+    }
+
+    /**
+     * Returns the rounding increment for this currency, or 0.0 if no
+     * rounding is done by this currency with the Usage.
+     * @param Usage the usage of currency(Standard or Cash)
+     * @return the non-negative rounding increment, or 0.0 if none
+     * @draft ICU 54
+     */
+    public double getRoundingIncrement(CurrencyUsage Usage) {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-        CurrencyDigits digits = info.currencyDigits(subType);
+        CurrencyDigits digits = info.currencyDigits(subType, Usage);
 
         int data1 = digits.roundingIncrement;
 
@@ -764,7 +811,7 @@ public class Currency extends MeasureUnit {
             return 0.0;
         }
 
-        // Return data[1] / 10^(data[0]).  The only actual rounding data,
+        // Return data[1] / 10^(data[0]). The only actual rounding data,
         // as of this writing, is CHF { 2, 25 }.
         return (double) data1 / POW10[data0];
     }
