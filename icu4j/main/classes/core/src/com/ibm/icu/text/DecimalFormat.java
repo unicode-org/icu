@@ -27,256 +27,262 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.text.CurrencyMetaInfo.CurrencyDigits;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_}
- *
- * <code>DecimalFormat</code> is a concrete subclass of {@link NumberFormat} that formats
- * decimal numbers. It has a variety of features designed to make it possible to parse and
- * format numbers in any locale, including support for Western, Arabic, or Indic digits.
- * It also supports different flavors of numbers, including integers ("123"), fixed-point
- * numbers ("123.4"), scientific notation ("1.23E4"), percentages ("12%"), and currency
- * amounts ("$123.00", "USD123.00", "123.00 US dollars").  All of these flavors can be
- * easily localized.
- *
- * <p>To obtain a {@link NumberFormat} for a specific locale (including the default
- * locale) call one of <code>NumberFormat</code>'s factory methods such as {@link
- * NumberFormat#getInstance}. Do not call the <code>DecimalFormat</code> constructors
- * directly, unless you know what you are doing, since the {@link NumberFormat} factory
- * methods may return subclasses other than <code>DecimalFormat</code>. If you need to
- * customize the format object, do something like this:
- *
- * <blockquote><pre>
+ * 
+ * <code>DecimalFormat</code> is a concrete subclass of {@link NumberFormat} that formats decimal numbers. It has a
+ * variety of features designed to make it possible to parse and format numbers in any locale, including support for
+ * Western, Arabic, or Indic digits. It also supports different flavors of numbers, including integers ("123"),
+ * fixed-point numbers ("123.4"), scientific notation ("1.23E4"), percentages ("12%"), and currency amounts ("$123.00",
+ * "USD123.00", "123.00 US dollars"). All of these flavors can be easily localized.
+ * 
+ * <p>
+ * To obtain a {@link NumberFormat} for a specific locale (including the default locale) call one of
+ * <code>NumberFormat</code>'s factory methods such as {@link NumberFormat#getInstance}. Do not call the
+ * <code>DecimalFormat</code> constructors directly, unless you know what you are doing, since the {@link NumberFormat}
+ * factory methods may return subclasses other than <code>DecimalFormat</code>. If you need to customize the format
+ * object, do something like this:
+ * 
+ * <blockquote>
+ * 
+ * <pre>
  * NumberFormat f = NumberFormat.getInstance(loc);
  * if (f instanceof DecimalFormat) {
  *     ((DecimalFormat) f).setDecimalSeparatorAlwaysShown(true);
- * }</pre></blockquote>
- *
- * <p><strong>Example Usage</strong>
- *
- * Print out a number using the localized number, currency, and percent
- * format for each locale.
- *
- * <blockquote><pre>
+ * }
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * <p>
+ * <strong>Example Usage</strong>
+ * 
+ * Print out a number using the localized number, currency, and percent format for each locale.
+ * 
+ * <blockquote>
+ * 
+ * <pre>
  * Locale[] locales = NumberFormat.getAvailableLocales();
  * double myNumber = -1234.56;
  * NumberFormat format;
- * for (int j=0; j<3; ++j) {
- *     System.out.println("FORMAT");
- *     for (int i = 0; i < locales.length; ++i) {
+ * for (int j = 0; j &lt; 3; ++j) {
+ *     System.out.println(&quot;FORMAT&quot;);
+ *     for (int i = 0; i &lt; locales.length; ++i) {
  *         if (locales[i].getCountry().length() == 0) {
- *            // Skip language-only locales
- *            continue;
+ *             // Skip language-only locales
+ *             continue;
  *         }
  *         System.out.print(locales[i].getDisplayName());
  *         switch (j) {
  *         case 0:
- *             format = NumberFormat.getInstance(locales[i]); break;
+ *             format = NumberFormat.getInstance(locales[i]);
+ *             break;
  *         case 1:
- *             format = NumberFormat.getCurrencyInstance(locales[i]); break;
+ *             format = NumberFormat.getCurrencyInstance(locales[i]);
+ *             break;
  *         default:
- *             format = NumberFormat.getPercentInstance(locales[i]); break;
+ *             format = NumberFormat.getPercentInstance(locales[i]);
+ *             break;
  *         }
  *         try {
  *             // Assume format is a DecimalFormat
- *             System.out.print(": " + ((DecimalFormat) format).toPattern()
- *                              + " -> " + form.format(myNumber));
- *         } catch (Exception e) {}
+ *             System.out.print(&quot;: &quot; + ((DecimalFormat) format).toPattern() + &quot; -&gt; &quot; + form.format(myNumber));
+ *         } catch (Exception e) {
+ *         }
  *         try {
- *             System.out.println(" -> " + format.parse(form.format(myNumber)));
- *         } catch (ParseException e) {}
+ *             System.out.println(&quot; -&gt; &quot; + format.parse(form.format(myNumber)));
+ *         } catch (ParseException e) {
+ *         }
  *     }
- * }</pre></blockquote>
- *
- * <p>Another example use getInstance(style).<br/>
- * Print out a number using the localized number, currency, percent,
- * scientific, integer, iso currency, and plural currency format for each locale.
- *
- * <blockquote><pre>
- * ULocale locale = new ULocale("en_US");
+ * }
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * <p>
+ * Another example use getInstance(style).<br/>
+ * Print out a number using the localized number, currency, percent, scientific, integer, iso currency, and plural
+ * currency format for each locale.
+ * 
+ * <blockquote>
+ * 
+ * <pre>
+ * ULocale locale = new ULocale(&quot;en_US&quot;);
  * double myNumber = 1234.56;
- * for (int j=NumberFormat.NUMBERSTYLE; j<=NumberFormat.PLURALCURRENCYSTYLE; ++j) {
+ * for (int j = NumberFormat.NUMBERSTYLE; j &lt;= NumberFormat.PLURALCURRENCYSTYLE; ++j) {
  *     NumberFormat format = NumberFormat.getInstance(locale, j);
  *     try {
  *         // Assume format is a DecimalFormat
- *         System.out.print(": " + ((DecimalFormat) format).toPattern()
- *                          + " -> " + form.format(myNumber));
- *     } catch (Exception e) {}
+ *         System.out.print(&quot;: &quot; + ((DecimalFormat) format).toPattern() + &quot; -&gt; &quot; + form.format(myNumber));
+ *     } catch (Exception e) {
+ *     }
  *     try {
- *         System.out.println(" -> " + format.parse(form.format(myNumber)));
- *     } catch (ParseException e) {}
- * }</pre></blockquote>
- *
+ *         System.out.println(&quot; -&gt; &quot; + format.parse(form.format(myNumber)));
+ *     } catch (ParseException e) {
+ *     }
+ * }
+ * </pre>
+ * 
+ * </blockquote>
+ * 
  * <h4>Patterns</h4>
- *
- * <p>A <code>DecimalFormat</code> consists of a <em>pattern</em> and a set of
- * <em>symbols</em>.  The pattern may be set directly using {@link #applyPattern}, or
- * indirectly using other API methods which manipulate aspects of the pattern, such as the
- * minimum number of integer digits.  The symbols are stored in a {@link
- * DecimalFormatSymbols} object.  When using the {@link NumberFormat} factory methods, the
- * pattern and symbols are read from ICU's locale data.
- *
+ * 
+ * <p>
+ * A <code>DecimalFormat</code> consists of a <em>pattern</em> and a set of <em>symbols</em>. The pattern may be set
+ * directly using {@link #applyPattern}, or indirectly using other API methods which manipulate aspects of the pattern,
+ * such as the minimum number of integer digits. The symbols are stored in a {@link DecimalFormatSymbols} object. When
+ * using the {@link NumberFormat} factory methods, the pattern and symbols are read from ICU's locale data.
+ * 
  * <h4>Special Pattern Characters</h4>
- *
- * <p>Many characters in a pattern are taken literally; they are matched during parsing
- * and output unchanged during formatting.  Special characters, on the other hand, stand
- * for other characters, strings, or classes of characters.  For example, the '#'
- * character is replaced by a localized digit.  Often the replacement character is the
- * same as the pattern character; in the U.S. locale, the ',' grouping character is
- * replaced by ','.  However, the replacement is still happening, and if the symbols are
- * modified, the grouping character changes.  Some special characters affect the behavior
- * of the formatter by their presence; for example, if the percent character is seen, then
- * the value is multiplied by 100 before being displayed.
- *
- * <p>To insert a special character in a pattern as a literal, that is, without any
- * special meaning, the character must be quoted.  There are some exceptions to this which
- * are noted below.
- *
- * <p>The characters listed here are used in non-localized patterns.  Localized patterns
- * use the corresponding characters taken from this formatter's {@link
- * DecimalFormatSymbols} object instead, and these characters lose their special status.
- * Two exceptions are the currency sign and quote, which are not localized.
- *
+ * 
+ * <p>
+ * Many characters in a pattern are taken literally; they are matched during parsing and output unchanged during
+ * formatting. Special characters, on the other hand, stand for other characters, strings, or classes of characters. For
+ * example, the '#' character is replaced by a localized digit. Often the replacement character is the same as the
+ * pattern character; in the U.S. locale, the ',' grouping character is replaced by ','. However, the replacement is
+ * still happening, and if the symbols are modified, the grouping character changes. Some special characters affect the
+ * behavior of the formatter by their presence; for example, if the percent character is seen, then the value is
+ * multiplied by 100 before being displayed.
+ * 
+ * <p>
+ * To insert a special character in a pattern as a literal, that is, without any special meaning, the character must be
+ * quoted. There are some exceptions to this which are noted below.
+ * 
+ * <p>
+ * The characters listed here are used in non-localized patterns. Localized patterns use the corresponding characters
+ * taken from this formatter's {@link DecimalFormatSymbols} object instead, and these characters lose their special
+ * status. Two exceptions are the currency sign and quote, which are not localized.
+ * 
  * <blockquote>
- * <table border=0 cellspacing=3 cellpadding=0 summary="Chart showing symbol,
- *  location, localized, and meaning.">
- *   <tr bgcolor="#ccccff">
- *     <th align=left>Symbol
- *     <th align=left>Location
- *     <th align=left>Localized?
- *     <th align=left>Meaning
- *   <tr valign=top>
- *     <td><code>0</code>
- *     <td>Number
- *     <td>Yes
- *     <td>Digit
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>1-9</code>
- *     <td>Number
- *     <td>Yes
- *     <td>'1' through '9' indicate rounding.
- *   <tr valign=top>
- *     <td><code>@</code>
- *     <td>Number
- *     <td>No
- *     <td>Significant digit
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>#</code>
- *     <td>Number
- *     <td>Yes
- *     <td>Digit, zero shows as absent
- *   <tr valign=top>
- *     <td><code>.</code>
- *     <td>Number
- *     <td>Yes
- *     <td>Decimal separator or monetary decimal separator
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>-</code>
- *     <td>Number
- *     <td>Yes
- *     <td>Minus sign
- *   <tr valign=top>
- *     <td><code>,</code>
- *     <td>Number
- *     <td>Yes
- *     <td>Grouping separator
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>E</code>
- *     <td>Number
- *     <td>Yes
- *     <td>Separates mantissa and exponent in scientific notation.
- *         <em>Need not be quoted in prefix or suffix.</em>
- *   <tr valign=top>
- *     <td><code>+</code>
- *     <td>Exponent
- *     <td>Yes
- *     <td>Prefix positive exponents with localized plus sign.
- *         <em>Need not be quoted in prefix or suffix.</em>
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>;</code>
- *     <td>Subpattern boundary
- *     <td>Yes
- *     <td>Separates positive and negative subpatterns
- *   <tr valign=top>
- *     <td><code>%</code>
- *     <td>Prefix or suffix
- *     <td>Yes
- *     <td>Multiply by 100 and show as percentage
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>&#92;u2030</code>
- *     <td>Prefix or suffix
- *     <td>Yes
- *     <td>Multiply by 1000 and show as per mille
- *   <tr valign=top>
- *     <td><code>&#164;</code> (<code>&#92;u00A4</code>)
- *     <td>Prefix or suffix
- *     <td>No
- *     <td>Currency sign, replaced by currency symbol.  If
- *         doubled, replaced by international currency symbol.
- *         If tripled, replaced by currency plural names, for example,
- *         "US dollar" or "US dollars" for America.
- *         If present in a pattern, the monetary decimal separator
- *         is used instead of the decimal separator.
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>'</code>
- *     <td>Prefix or suffix
- *     <td>No
- *     <td>Used to quote special characters in a prefix or suffix,
- *         for example, <code>"'#'#"</code> formats 123 to
- *         <code>"#123"</code>.  To create a single quote
- *         itself, use two in a row: <code>"# o''clock"</code>.
- *   <tr valign=top>
- *     <td><code>*</code>
- *     <td>Prefix or suffix boundary
- *     <td>Yes
- *     <td>Pad escape, precedes pad character
+ * <table border=0 cellspacing=3 cellpadding=0 summary="Chart showing symbol, * location, localized, and meaning.">
+ * <tr bgcolor="#ccccff">
+ * <th align=left>Symbol
+ * <th align=left>Location
+ * <th align=left>Localized?
+ * <th align=left>Meaning
+ * <tr valign=top>
+ * <td><code>0</code>
+ * <td>Number
+ * <td>Yes
+ * <td>Digit
+ * <tr valign=top bgcolor="#eeeeff">
+ * <td><code>1-9</code>
+ * <td>Number
+ * <td>Yes
+ * <td>'1' through '9' indicate rounding.
+ * <tr valign=top>
+ * <td><code>@</code>
+ * <td>Number
+ * <td>No
+ * <td>Significant digit
+ * <tr valign=top bgcolor="#eeeeff">
+ * <td><code>#</code>
+ * <td>Number
+ * <td>Yes
+ * <td>Digit, zero shows as absent
+ * <tr valign=top>
+ * <td><code>.</code>
+ * <td>Number
+ * <td>Yes
+ * <td>Decimal separator or monetary decimal separator
+ * <tr valign=top bgcolor="#eeeeff">
+ * <td><code>-</code>
+ * <td>Number
+ * <td>Yes
+ * <td>Minus sign
+ * <tr valign=top>
+ * <td><code>,</code>
+ * <td>Number
+ * <td>Yes
+ * <td>Grouping separator
+ * <tr valign=top bgcolor="#eeeeff">
+ * <td><code>E</code>
+ * <td>Number
+ * <td>Yes
+ * <td>Separates mantissa and exponent in scientific notation. <em>Need not be quoted in prefix or suffix.</em>
+ * <tr valign=top>
+ * <td><code>+</code>
+ * <td>Exponent
+ * <td>Yes
+ * <td>Prefix positive exponents with localized plus sign. <em>Need not be quoted in prefix or suffix.</em>
+ * <tr valign=top bgcolor="#eeeeff">
+ * <td><code>;</code>
+ * <td>Subpattern boundary
+ * <td>Yes
+ * <td>Separates positive and negative subpatterns
+ * <tr valign=top>
+ * <td><code>%</code>
+ * <td>Prefix or suffix
+ * <td>Yes
+ * <td>Multiply by 100 and show as percentage
+ * <tr valign=top bgcolor="#eeeeff">
+ * <td><code>&#92;u2030</code>
+ * <td>Prefix or suffix
+ * <td>Yes
+ * <td>Multiply by 1000 and show as per mille
+ * <tr valign=top>
+ * <td><code>&#164;</code> (<code>&#92;u00A4</code>)
+ * <td>Prefix or suffix
+ * <td>No
+ * <td>Currency sign, replaced by currency symbol. If doubled, replaced by international currency symbol. If tripled,
+ * replaced by currency plural names, for example, "US dollar" or "US dollars" for America. If present in a pattern, the
+ * monetary decimal separator is used instead of the decimal separator.
+ * <tr valign=top bgcolor="#eeeeff">
+ * <td><code>'</code>
+ * <td>Prefix or suffix
+ * <td>No
+ * <td>Used to quote special characters in a prefix or suffix, for example, <code>"'#'#"</code> formats 123 to
+ * <code>"#123"</code>. To create a single quote itself, use two in a row: <code>"# o''clock"</code>.
+ * <tr valign=top>
+ * <td><code>*</code>
+ * <td>Prefix or suffix boundary
+ * <td>Yes
+ * <td>Pad escape, precedes pad character
  * </table>
  * </blockquote>
- *
- * <p>A <code>DecimalFormat</code> pattern contains a postive and negative subpattern, for
- * example, "#,##0.00;(#,##0.00)".  Each subpattern has a prefix, a numeric part, and a
- * suffix.  If there is no explicit negative subpattern, the negative subpattern is the
- * localized minus sign prefixed to the positive subpattern. That is, "0.00" alone is
- * equivalent to "0.00;-0.00".  If there is an explicit negative subpattern, it serves
- * only to specify the negative prefix and suffix; the number of digits, minimal digits,
- * and other characteristics are ignored in the negative subpattern. That means that
- * "#,##0.0#;(#)" has precisely the same result as "#,##0.0#;(#,##0.0#)".
- *
- * <p>The prefixes, suffixes, and various symbols used for infinity, digits, thousands
- * separators, decimal separators, etc. may be set to arbitrary values, and they will
- * appear properly during formatting.  However, care must be taken that the symbols and
- * strings do not conflict, or parsing will be unreliable.  For example, either the
- * positive and negative prefixes or the suffixes must be distinct for {@link #parse} to
- * be able to distinguish positive from negative values.  Another example is that the
- * decimal separator and thousands separator should be distinct characters, or parsing
- * will be impossible.
- *
- * <p>The <em>grouping separator</em> is a character that separates clusters of integer
- * digits to make large numbers more legible.  It commonly used for thousands, but in some
- * locales it separates ten-thousands.  The <em>grouping size</em> is the number of digits
- * between the grouping separators, such as 3 for "100,000,000" or 4 for "1 0000
- * 0000". There are actually two different grouping sizes: One used for the least
- * significant integer digits, the <em>primary grouping size</em>, and one used for all
- * others, the <em>secondary grouping size</em>.  In most locales these are the same, but
- * sometimes they are different. For example, if the primary grouping interval is 3, and
- * the secondary is 2, then this corresponds to the pattern "#,##,##0", and the number
- * 123456789 is formatted as "12,34,56,789".  If a pattern contains multiple grouping
- * separators, the interval between the last one and the end of the integer defines the
- * primary grouping size, and the interval between the last two defines the secondary
- * grouping size. All others are ignored, so "#,##,###,####" == "###,###,####" ==
- * "##,#,###,####".
- *
- * <p>Illegal patterns, such as "#.#.#" or "#.###,###", will cause
- * <code>DecimalFormat</code> to throw an {@link IllegalArgumentException} with a message
- * that describes the problem.
- *
+ * 
+ * <p>
+ * A <code>DecimalFormat</code> pattern contains a postive and negative subpattern, for example, "#,##0.00;(#,##0.00)".
+ * Each subpattern has a prefix, a numeric part, and a suffix. If there is no explicit negative subpattern, the negative
+ * subpattern is the localized minus sign prefixed to the positive subpattern. That is, "0.00" alone is equivalent to
+ * "0.00;-0.00". If there is an explicit negative subpattern, it serves only to specify the negative prefix and suffix;
+ * the number of digits, minimal digits, and other characteristics are ignored in the negative subpattern. That means
+ * that "#,##0.0#;(#)" has precisely the same result as "#,##0.0#;(#,##0.0#)".
+ * 
+ * <p>
+ * The prefixes, suffixes, and various symbols used for infinity, digits, thousands separators, decimal separators, etc.
+ * may be set to arbitrary values, and they will appear properly during formatting. However, care must be taken that the
+ * symbols and strings do not conflict, or parsing will be unreliable. For example, either the positive and negative
+ * prefixes or the suffixes must be distinct for {@link #parse} to be able to distinguish positive from negative values.
+ * Another example is that the decimal separator and thousands separator should be distinct characters, or parsing will
+ * be impossible.
+ * 
+ * <p>
+ * The <em>grouping separator</em> is a character that separates clusters of integer digits to make large numbers more
+ * legible. It commonly used for thousands, but in some locales it separates ten-thousands. The <em>grouping size</em>
+ * is the number of digits between the grouping separators, such as 3 for "100,000,000" or 4 for "1 0000 0000". There
+ * are actually two different grouping sizes: One used for the least significant integer digits, the
+ * <em>primary grouping size</em>, and one used for all others, the <em>secondary grouping size</em>. In most locales
+ * these are the same, but sometimes they are different. For example, if the primary grouping interval is 3, and the
+ * secondary is 2, then this corresponds to the pattern "#,##,##0", and the number 123456789 is formatted as
+ * "12,34,56,789". If a pattern contains multiple grouping separators, the interval between the last one and the end of
+ * the integer defines the primary grouping size, and the interval between the last two defines the secondary grouping
+ * size. All others are ignored, so "#,##,###,####" == "###,###,####" == "##,#,###,####".
+ * 
+ * <p>
+ * Illegal patterns, such as "#.#.#" or "#.###,###", will cause <code>DecimalFormat</code> to throw an
+ * {@link IllegalArgumentException} with a message that describes the problem.
+ * 
  * <h4>Pattern BNF</h4>
- *
+ * 
  * <pre>
  * pattern    := subpattern (';' subpattern)?
  * subpattern := prefix? number exponent? suffix?
@@ -297,325 +303,301 @@ import com.ibm.icu.util.ULocale.Category;
  *   C..D     any character from C up to D, inclusive
  *   S-T      characters in S, except those in T
  * </pre>
- * The first subpattern is for positive numbers. The second (optional)
- * subpattern is for negative numbers.
- *
- * <p>Not indicated in the BNF syntax above:
- *
+ * 
+ * The first subpattern is for positive numbers. The second (optional) subpattern is for negative numbers.
+ * 
+ * <p>
+ * Not indicated in the BNF syntax above:
+ * 
  * <ul>
- *
- * <li>The grouping separator ',' can occur inside the integer and sigDigits
- * elements, between any two pattern characters of that element, as long as the integer or
- * sigDigits element is not followed by the exponent element.
- *
- * <li>Two grouping intervals are recognized: That between the decimal point and the first
- * grouping symbol, and that between the first and second grouping symbols. These
- * intervals are identical in most locales, but in some locales they differ. For example,
- * the pattern &quot;#,##,###&quot; formats the number 123456789 as
- * &quot;12,34,56,789&quot;.
- *
- * <li>The pad specifier <code>padSpec</code> may appear before the prefix, after the
- * prefix, before the suffix, after the suffix, or not at all.
- *
- * <li>In place of '0', the digits '1' through '9' may be used to indicate a rounding
- * increment.
- *
+ * 
+ * <li>The grouping separator ',' can occur inside the integer and sigDigits elements, between any two pattern
+ * characters of that element, as long as the integer or sigDigits element is not followed by the exponent element.
+ * 
+ * <li>Two grouping intervals are recognized: That between the decimal point and the first grouping symbol, and that
+ * between the first and second grouping symbols. These intervals are identical in most locales, but in some locales
+ * they differ. For example, the pattern &quot;#,##,###&quot; formats the number 123456789 as &quot;12,34,56,789&quot;.
+ * 
+ * <li>The pad specifier <code>padSpec</code> may appear before the prefix, after the prefix, before the suffix, after
+ * the suffix, or not at all.
+ * 
+ * <li>In place of '0', the digits '1' through '9' may be used to indicate a rounding increment.
+ * 
  * </ul>
- *
+ * 
  * <h4>Parsing</h4>
- *
- * <p><code>DecimalFormat</code> parses all Unicode characters that represent decimal
- * digits, as defined by {@link UCharacter#digit}.  In addition,
- * <code>DecimalFormat</code> also recognizes as digits the ten consecutive characters
- * starting with the localized zero digit defined in the {@link DecimalFormatSymbols}
- * object.  During formatting, the {@link DecimalFormatSymbols}-based digits are output.
- *
- * <p>During parsing, grouping separators are ignored.
- *
- * <p>For currency parsing, the formatter is able to parse every currency style formats no
- * matter which style the formatter is constructed with.  For example, a formatter
- * instance gotten from NumberFormat.getInstance(ULocale, NumberFormat.CURRENCYSTYLE) can
- * parse formats such as "USD1.00" and "3.00 US dollars".
- *
- * <p>If {@link #parse(String, ParsePosition)} fails to parse a string, it returns
- * <code>null</code> and leaves the parse position unchanged.  The convenience method
- * {@link #parse(String)} indicates parse failure by throwing a {@link
- * java.text.ParseException}.
- *
- * <p>Parsing an extremely large or small absolute value (such as 1.0E10000 or 1.0E-10000)
- * requires huge memory allocation for representing the parsed number. Such input may expose
- * a risk of DoS attacks. To prevent huge memory allocation triggered by such inputs,
- * <code>DecimalFormat</code> internally limits of maximum decimal digits to be 1000. Thus,
- * an input string resulting more than 1000 digits in plain decimal representation (non-exponent)
- * will be treated as either overflow (positive/negative infinite) or underflow (+0.0/-0.0).
- *
+ * 
+ * <p>
+ * <code>DecimalFormat</code> parses all Unicode characters that represent decimal digits, as defined by
+ * {@link UCharacter#digit}. In addition, <code>DecimalFormat</code> also recognizes as digits the ten consecutive
+ * characters starting with the localized zero digit defined in the {@link DecimalFormatSymbols} object. During
+ * formatting, the {@link DecimalFormatSymbols}-based digits are output.
+ * 
+ * <p>
+ * During parsing, grouping separators are ignored.
+ * 
+ * <p>
+ * For currency parsing, the formatter is able to parse every currency style formats no matter which style the formatter
+ * is constructed with. For example, a formatter instance gotten from NumberFormat.getInstance(ULocale,
+ * NumberFormat.CURRENCYSTYLE) can parse formats such as "USD1.00" and "3.00 US dollars".
+ * 
+ * <p>
+ * If {@link #parse(String, ParsePosition)} fails to parse a string, it returns <code>null</code> and leaves the parse
+ * position unchanged. The convenience method {@link #parse(String)} indicates parse failure by throwing a
+ * {@link java.text.ParseException}.
+ * 
+ * <p>
+ * Parsing an extremely large or small absolute value (such as 1.0E10000 or 1.0E-10000) requires huge memory allocation
+ * for representing the parsed number. Such input may expose a risk of DoS attacks. To prevent huge memory allocation
+ * triggered by such inputs, <code>DecimalFormat</code> internally limits of maximum decimal digits to be 1000. Thus, an
+ * input string resulting more than 1000 digits in plain decimal representation (non-exponent) will be treated as either
+ * overflow (positive/negative infinite) or underflow (+0.0/-0.0).
+ * 
  * <h4>Formatting</h4>
- *
- * <p>Formatting is guided by several parameters, all of which can be specified either
- * using a pattern or using the API.  The following description applies to formats that do
- * not use <a href="#sci">scientific notation</a> or <a href="#sigdig">significant
- * digits</a>.
- *
- * <ul><li>If the number of actual integer digits exceeds the <em>maximum integer
- * digits</em>, then only the least significant digits are shown.  For example, 1997 is
- * formatted as "97" if the maximum integer digits is set to 2.
- *
- * <li>If the number of actual integer digits is less than the <em>minimum integer
- * digits</em>, then leading zeros are added.  For example, 1997 is formatted as "01997"
- * if the minimum integer digits is set to 5.
- *
- * <li>If the number of actual fraction digits exceeds the <em>maximum fraction
- * digits</em>, then half-even rounding it performed to the maximum fraction digits.  For
- * example, 0.125 is formatted as "0.12" if the maximum fraction digits is 2.  This
- * behavior can be changed by specifying a rounding increment and a rounding mode.
- *
- * <li>If the number of actual fraction digits is less than the <em>minimum fraction
- * digits</em>, then trailing zeros are added.  For example, 0.125 is formatted as
- * "0.1250" if the mimimum fraction digits is set to 4.
- *
- * <li>Trailing fractional zeros are not displayed if they occur <em>j</em> positions
- * after the decimal, where <em>j</em> is less than the maximum fraction digits. For
- * example, 0.10004 is formatted as "0.1" if the maximum fraction digits is four or less.
- * </ul>
- *
- * <p><strong>Special Values</strong>
- *
- * <p><code>NaN</code> is represented as a single character, typically
- * <code>&#92;uFFFD</code>.  This character is determined by the {@link
- * DecimalFormatSymbols} object.  This is the only value for which the prefixes and
- * suffixes are not used.
- *
- * <p>Infinity is represented as a single character, typically <code>&#92;u221E</code>,
- * with the positive or negative prefixes and suffixes applied.  The infinity character is
- * determined by the {@link DecimalFormatSymbols} object.
- *
- * <a name="sci"><h4>Scientific Notation</h4></a>
- *
- * <p>Numbers in scientific notation are expressed as the product of a mantissa and a
- * power of ten, for example, 1234 can be expressed as 1.234 x 10<sup>3</sup>. The
- * mantissa is typically in the half-open interval [1.0, 10.0) or sometimes [0.0, 1.0),
- * but it need not be.  <code>DecimalFormat</code> supports arbitrary mantissas.
- * <code>DecimalFormat</code> can be instructed to use scientific notation through the API
- * or through the pattern.  In a pattern, the exponent character immediately followed by
- * one or more digit characters indicates scientific notation.  Example: "0.###E0" formats
- * the number 1234 as "1.234E3".
- *
+ * 
+ * <p>
+ * Formatting is guided by several parameters, all of which can be specified either using a pattern or using the API.
+ * The following description applies to formats that do not use <a href="#sci">scientific notation</a> or <a
+ * href="#sigdig">significant digits</a>.
+ * 
  * <ul>
- *
- * <li>The number of digit characters after the exponent character gives the minimum
- * exponent digit count.  There is no maximum.  Negative exponents are formatted using the
- * localized minus sign, <em>not</em> the prefix and suffix from the pattern.  This allows
- * patterns such as "0.###E0 m/s".  To prefix positive exponents with a localized plus
- * sign, specify '+' between the exponent and the digits: "0.###E+0" will produce formats
- * "1E+1", "1E+0", "1E-1", etc.  (In localized patterns, use the localized plus sign
- * rather than '+'.)
- *
- * <li>The minimum number of integer digits is achieved by adjusting the exponent.
- * Example: 0.00123 formatted with "00.###E0" yields "12.3E-4".  This only happens if
- * there is no maximum number of integer digits.  If there is a maximum, then the minimum
- * number of integer digits is fixed at one.
- *
- * <li>The maximum number of integer digits, if present, specifies the exponent grouping.
- * The most common use of this is to generate <em>engineering notation</em>, in which the
- * exponent is a multiple of three, e.g., "##0.###E0".  The number 12345 is formatted
- * using "##0.####E0" as "12.345E3".
- *
- * <li>When using scientific notation, the formatter controls the digit counts using
- * significant digits logic.  The maximum number of significant digits limits the total
- * number of integer and fraction digits that will be shown in the mantissa; it does not
- * affect parsing.  For example, 12345 formatted with "##0.##E0" is "12.3E3".  See the
- * section on significant digits for more details.
- *
- * <li>The number of significant digits shown is determined as follows: If
- * areSignificantDigitsUsed() returns false, then the minimum number of significant digits
- * shown is one, and the maximum number of significant digits shown is the sum of the
- * <em>minimum integer</em> and <em>maximum fraction</em> digits, and is unaffected by the
- * maximum integer digits.  If this sum is zero, then all significant digits are shown.
- * If areSignificantDigitsUsed() returns true, then the significant digit counts are
- * specified by getMinimumSignificantDigits() and getMaximumSignificantDigits().  In this
- * case, the number of integer digits is fixed at one, and there is no exponent grouping.
- *
- * <li>Exponential patterns may not contain grouping separators.
- *
+ * <li>If the number of actual integer digits exceeds the <em>maximum integer
+ * digits</em>, then only the least significant digits are shown. For example, 1997 is formatted as "97" if the maximum
+ * integer digits is set to 2.
+ * 
+ * <li>If the number of actual integer digits is less than the <em>minimum integer
+ * digits</em>, then leading zeros are added. For example, 1997 is formatted as "01997" if the minimum integer digits is
+ * set to 5.
+ * 
+ * <li>If the number of actual fraction digits exceeds the <em>maximum fraction
+ * digits</em>, then half-even rounding it performed to the maximum fraction digits. For example, 0.125 is formatted as
+ * "0.12" if the maximum fraction digits is 2. This behavior can be changed by specifying a rounding increment and a
+ * rounding mode.
+ * 
+ * <li>If the number of actual fraction digits is less than the <em>minimum fraction
+ * digits</em>, then trailing zeros are added. For example, 0.125 is formatted as "0.1250" if the mimimum fraction
+ * digits is set to 4.
+ * 
+ * <li>Trailing fractional zeros are not displayed if they occur <em>j</em> positions after the decimal, where
+ * <em>j</em> is less than the maximum fraction digits. For example, 0.10004 is formatted as "0.1" if the maximum
+ * fraction digits is four or less.
  * </ul>
- *
- * <a name="sigdig"><h4>Significant Digits</h4></a>
- *
- * <code>DecimalFormat</code> has two ways of controlling how many digits are shows: (a)
- * significant digits counts, or (b) integer and fraction digit counts.  Integer and
- * fraction digit counts are described above.  When a formatter is using significant
- * digits counts, the number of integer and fraction digits is not specified directly, and
- * the formatter settings for these counts are ignored.  Instead, the formatter uses
- * however many integer and fraction digits are required to display the specified number
- * of significant digits.  Examples:
- *
+ * 
+ * <p>
+ * <strong>Special Values</strong>
+ * 
+ * <p>
+ * <code>NaN</code> is represented as a single character, typically <code>&#92;uFFFD</code>. This character is
+ * determined by the {@link DecimalFormatSymbols} object. This is the only value for which the prefixes and suffixes are
+ * not used.
+ * 
+ * <p>
+ * Infinity is represented as a single character, typically <code>&#92;u221E</code>, with the positive or negative
+ * prefixes and suffixes applied. The infinity character is determined by the {@link DecimalFormatSymbols} object.
+ * 
+ * <a name="sci">
+ * <h4>Scientific Notation</h4></a>
+ * 
+ * <p>
+ * Numbers in scientific notation are expressed as the product of a mantissa and a power of ten, for example, 1234 can
+ * be expressed as 1.234 x 10<sup>3</sup>. The mantissa is typically in the half-open interval [1.0, 10.0) or sometimes
+ * [0.0, 1.0), but it need not be. <code>DecimalFormat</code> supports arbitrary mantissas. <code>DecimalFormat</code>
+ * can be instructed to use scientific notation through the API or through the pattern. In a pattern, the exponent
+ * character immediately followed by one or more digit characters indicates scientific notation. Example: "0.###E0"
+ * formats the number 1234 as "1.234E3".
+ * 
+ * <ul>
+ * 
+ * <li>The number of digit characters after the exponent character gives the minimum exponent digit count. There is no
+ * maximum. Negative exponents are formatted using the localized minus sign, <em>not</em> the prefix and suffix from the
+ * pattern. This allows patterns such as "0.###E0 m/s". To prefix positive exponents with a localized plus sign, specify
+ * '+' between the exponent and the digits: "0.###E+0" will produce formats "1E+1", "1E+0", "1E-1", etc. (In localized
+ * patterns, use the localized plus sign rather than '+'.)
+ * 
+ * <li>The minimum number of integer digits is achieved by adjusting the exponent. Example: 0.00123 formatted with
+ * "00.###E0" yields "12.3E-4". This only happens if there is no maximum number of integer digits. If there is a
+ * maximum, then the minimum number of integer digits is fixed at one.
+ * 
+ * <li>The maximum number of integer digits, if present, specifies the exponent grouping. The most common use of this is
+ * to generate <em>engineering notation</em>, in which the exponent is a multiple of three, e.g., "##0.###E0". The
+ * number 12345 is formatted using "##0.####E0" as "12.345E3".
+ * 
+ * <li>When using scientific notation, the formatter controls the digit counts using significant digits logic. The
+ * maximum number of significant digits limits the total number of integer and fraction digits that will be shown in the
+ * mantissa; it does not affect parsing. For example, 12345 formatted with "##0.##E0" is "12.3E3". See the section on
+ * significant digits for more details.
+ * 
+ * <li>The number of significant digits shown is determined as follows: If areSignificantDigitsUsed() returns false,
+ * then the minimum number of significant digits shown is one, and the maximum number of significant digits shown is the
+ * sum of the <em>minimum integer</em> and <em>maximum fraction</em> digits, and is unaffected by the maximum integer
+ * digits. If this sum is zero, then all significant digits are shown. If areSignificantDigitsUsed() returns true, then
+ * the significant digit counts are specified by getMinimumSignificantDigits() and getMaximumSignificantDigits(). In
+ * this case, the number of integer digits is fixed at one, and there is no exponent grouping.
+ * 
+ * <li>Exponential patterns may not contain grouping separators.
+ * 
+ * </ul>
+ * 
+ * <a name="sigdig">
+ * <h4>Significant Digits</h4></a>
+ * 
+ * <code>DecimalFormat</code> has two ways of controlling how many digits are shows: (a) significant digits counts, or
+ * (b) integer and fraction digit counts. Integer and fraction digit counts are described above. When a formatter is
+ * using significant digits counts, the number of integer and fraction digits is not specified directly, and the
+ * formatter settings for these counts are ignored. Instead, the formatter uses however many integer and fraction digits
+ * are required to display the specified number of significant digits. Examples:
+ * 
  * <blockquote>
  * <table border=0 cellspacing=3 cellpadding=0>
- *   <tr bgcolor="#ccccff">
- *     <th align=left>Pattern
- *     <th align=left>Minimum significant digits
- *     <th align=left>Maximum significant digits
- *     <th align=left>Number
- *     <th align=left>Output of format()
- *   <tr valign=top>
- *     <td><code>@@@</code>
- *     <td>3
- *     <td>3
- *     <td>12345
- *     <td><code>12300</code>
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>@@@</code>
- *     <td>3
- *     <td>3
- *     <td>0.12345
- *     <td><code>0.123</code>
- *   <tr valign=top>
- *     <td><code>@@##</code>
- *     <td>2
- *     <td>4
- *     <td>3.14159
- *     <td><code>3.142</code>
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>@@##</code>
- *     <td>2
- *     <td>4
- *     <td>1.23004
- *     <td><code>1.23</code>
+ * <tr bgcolor="#ccccff">
+ * <th align=left>Pattern
+ * <th align=left>Minimum significant digits
+ * <th align=left>Maximum significant digits
+ * <th align=left>Number
+ * <th align=left>Output of format()
+ * <tr valign=top>
+ * <td><code>@@@</code>
+ * <td>3
+ * <td>3
+ * <td>12345
+ * <td><code>12300</code>
+ * <tr valign=top bgcolor="#eeeeff">
+ * <td><code>@@@</code>
+ * <td>3
+ * <td>3
+ * <td>0.12345
+ * <td><code>0.123</code>
+ * <tr valign=top>
+ * <td><code>@@##</code>
+ * <td>2
+ * <td>4
+ * <td>3.14159
+ * <td><code>3.142</code>
+ * <tr valign=top bgcolor="#eeeeff">
+ * <td><code>@@##</code>
+ * <td>2
+ * <td>4
+ * <td>1.23004
+ * <td><code>1.23</code>
  * </table>
  * </blockquote>
- *
+ * 
  * <ul>
- *
- * <li>Significant digit counts may be expressed using patterns that specify a minimum and
- * maximum number of significant digits.  These are indicated by the <code>'@'</code> and
- * <code>'#'</code> characters.  The minimum number of significant digits is the number of
- * <code>'@'</code> characters.  The maximum number of significant digits is the number of
- * <code>'@'</code> characters plus the number of <code>'#'</code> characters following on
- * the right.  For example, the pattern <code>"@@@"</code> indicates exactly 3 significant
- * digits.  The pattern <code>"@##"</code> indicates from 1 to 3 significant digits.
- * Trailing zero digits to the right of the decimal separator are suppressed after the
- * minimum number of significant digits have been shown.  For example, the pattern
- * <code>"@##"</code> formats the number 0.1203 as <code>"0.12"</code>.
- *
- * <li>If a pattern uses significant digits, it may not contain a decimal separator, nor
- * the <code>'0'</code> pattern character.  Patterns such as <code>"@00"</code> or
- * <code>"@.###"</code> are disallowed.
- *
- * <li>Any number of <code>'#'</code> characters may be prepended to the left of the
- * leftmost <code>'@'</code> character.  These have no effect on the minimum and maximum
- * significant digits counts, but may be used to position grouping separators.  For
- * example, <code>"#,#@#"</code> indicates a minimum of one significant digits, a maximum
- * of two significant digits, and a grouping size of three.
- *
- * <li>In order to enable significant digits formatting, use a pattern containing the
- * <code>'@'</code> pattern character.  Alternatively, call {@link
- * #setSignificantDigitsUsed setSignificantDigitsUsed(true)}.
- *
- * <li>In order to disable significant digits formatting, use a pattern that does not
- * contain the <code>'@'</code> pattern character. Alternatively, call {@link
- * #setSignificantDigitsUsed setSignificantDigitsUsed(false)}.
- *
+ * 
+ * <li>Significant digit counts may be expressed using patterns that specify a minimum and maximum number of significant
+ * digits. These are indicated by the <code>'@'</code> and <code>'#'</code> characters. The minimum number of
+ * significant digits is the number of <code>'@'</code> characters. The maximum number of significant digits is the
+ * number of <code>'@'</code> characters plus the number of <code>'#'</code> characters following on the right. For
+ * example, the pattern <code>"@@@"</code> indicates exactly 3 significant digits. The pattern <code>"@##"</code>
+ * indicates from 1 to 3 significant digits. Trailing zero digits to the right of the decimal separator are suppressed
+ * after the minimum number of significant digits have been shown. For example, the pattern <code>"@##"</code> formats
+ * the number 0.1203 as <code>"0.12"</code>.
+ * 
+ * <li>If a pattern uses significant digits, it may not contain a decimal separator, nor the <code>'0'</code> pattern
+ * character. Patterns such as <code>"@00"</code> or <code>"@.###"</code> are disallowed.
+ * 
+ * <li>Any number of <code>'#'</code> characters may be prepended to the left of the leftmost <code>'@'</code>
+ * character. These have no effect on the minimum and maximum significant digits counts, but may be used to position
+ * grouping separators. For example, <code>"#,#@#"</code> indicates a minimum of one significant digits, a maximum of
+ * two significant digits, and a grouping size of three.
+ * 
+ * <li>In order to enable significant digits formatting, use a pattern containing the <code>'@'</code> pattern
+ * character. Alternatively, call {@link #setSignificantDigitsUsed setSignificantDigitsUsed(true)}.
+ * 
+ * <li>In order to disable significant digits formatting, use a pattern that does not contain the <code>'@'</code>
+ * pattern character. Alternatively, call {@link #setSignificantDigitsUsed setSignificantDigitsUsed(false)}.
+ * 
  * <li>The number of significant digits has no effect on parsing.
- *
- * <li>Significant digits may be used together with exponential notation. Such patterns
- * are equivalent to a normal exponential pattern with a minimum and maximum integer digit
- * count of one, a minimum fraction digit count of <code>getMinimumSignificantDigits() -
+ * 
+ * <li>Significant digits may be used together with exponential notation. Such patterns are equivalent to a normal
+ * exponential pattern with a minimum and maximum integer digit count of one, a minimum fraction digit count of
+ * <code>getMinimumSignificantDigits() -
  * 1</code>, and a maximum fraction digit count of <code>getMaximumSignificantDigits() -
- * 1</code>. For example, the pattern <code>"@@###E0"</code> is equivalent to
- * <code>"0.0###E0"</code>.
- *
- * <li>If signficant digits are in use, then the integer and fraction digit counts, as set
- * via the API, are ignored.  If significant digits are not in use, then the signficant
- * digit counts, as set via the API, are ignored.
- *
+ * 1</code>. For example, the pattern <code>"@@###E0"</code> is equivalent to <code>"0.0###E0"</code>.
+ * 
+ * <li>If signficant digits are in use, then the integer and fraction digit counts, as set via the API, are ignored. If
+ * significant digits are not in use, then the signficant digit counts, as set via the API, are ignored.
+ * 
  * </ul>
- *
+ * 
  * <h4>Padding</h4>
- *
- * <p><code>DecimalFormat</code> supports padding the result of {@link #format} to a
- * specific width.  Padding may be specified either through the API or through the pattern
- * syntax.  In a pattern the pad escape character, followed by a single pad character,
- * causes padding to be parsed and formatted.  The pad escape character is '*' in
- * unlocalized patterns, and can be localized using {@link
- * DecimalFormatSymbols#setPadEscape}.  For example, <code>"$*x#,##0.00"</code> formats
- * 123 to <code>"$xx123.00"</code>, and 1234 to <code>"$1,234.00"</code>.
- *
+ * 
+ * <p>
+ * <code>DecimalFormat</code> supports padding the result of {@link #format} to a specific width. Padding may be
+ * specified either through the API or through the pattern syntax. In a pattern the pad escape character, followed by a
+ * single pad character, causes padding to be parsed and formatted. The pad escape character is '*' in unlocalized
+ * patterns, and can be localized using {@link DecimalFormatSymbols#setPadEscape}. For example,
+ * <code>"$*x#,##0.00"</code> formats 123 to <code>"$xx123.00"</code>, and 1234 to <code>"$1,234.00"</code>.
+ * 
  * <ul>
- *
- * <li>When padding is in effect, the width of the positive subpattern, including prefix
- * and suffix, determines the format width.  For example, in the pattern <code>"* #0
+ * 
+ * <li>When padding is in effect, the width of the positive subpattern, including prefix and suffix, determines the
+ * format width. For example, in the pattern <code>"* #0
  * o''clock"</code>, the format width is 10.
- *
+ * 
  * <li>The width is counted in 16-bit code units (Java <code>char</code>s).
- *
- * <li>Some parameters which usually do not matter have meaning when padding is used,
- * because the pattern width is significant with padding.  In the pattern "*
- * ##,##,#,##0.##", the format width is 14.  The initial characters "##,##," do not affect
- * the grouping size or maximum integer digits, but they do affect the format width.
- *
- * <li>Padding may be inserted at one of four locations: before the prefix, after the
- * prefix, before the suffix, or after the suffix.  If padding is specified in any other
- * location, {@link #applyPattern} throws an {@link IllegalArgumentException}.  If there
- * is no prefix, before the prefix and after the prefix are equivalent, likewise for the
- * suffix.
- *
- * <li>When specified in a pattern, the 16-bit <code>char</code> immediately following the
- * pad escape is the pad character. This may be any character, including a special pattern
- * character. That is, the pad escape <em>escapes</em> the following character. If there
- * is no character after the pad escape, then the pattern is illegal.
- *
+ * 
+ * <li>Some parameters which usually do not matter have meaning when padding is used, because the pattern width is
+ * significant with padding. In the pattern "* ##,##,#,##0.##", the format width is 14. The initial characters "##,##,"
+ * do not affect the grouping size or maximum integer digits, but they do affect the format width.
+ * 
+ * <li>Padding may be inserted at one of four locations: before the prefix, after the prefix, before the suffix, or
+ * after the suffix. If padding is specified in any other location, {@link #applyPattern} throws an
+ * {@link IllegalArgumentException}. If there is no prefix, before the prefix and after the prefix are equivalent,
+ * likewise for the suffix.
+ * 
+ * <li>When specified in a pattern, the 16-bit <code>char</code> immediately following the pad escape is the pad
+ * character. This may be any character, including a special pattern character. That is, the pad escape <em>escapes</em>
+ * the following character. If there is no character after the pad escape, then the pattern is illegal.
+ * 
  * </ul>
- *
+ * 
  * <p>
  * <strong>Rounding</strong>
- *
- * <p><code>DecimalFormat</code> supports rounding to a specific increment.  For example,
- * 1230 rounded to the nearest 50 is 1250.  1.234 rounded to the nearest 0.65 is 1.3.  The
- * rounding increment may be specified through the API or in a pattern.  To specify a
- * rounding increment in a pattern, include the increment in the pattern itself.  "#,#50"
- * specifies a rounding increment of 50.  "#,##0.05" specifies a rounding increment of
- * 0.05.
- *
+ * 
+ * <p>
+ * <code>DecimalFormat</code> supports rounding to a specific increment. For example, 1230 rounded to the nearest 50 is
+ * 1250. 1.234 rounded to the nearest 0.65 is 1.3. The rounding increment may be specified through the API or in a
+ * pattern. To specify a rounding increment in a pattern, include the increment in the pattern itself. "#,#50" specifies
+ * a rounding increment of 50. "#,##0.05" specifies a rounding increment of 0.05.
+ * 
  * <ul>
- *
- * <li>Rounding only affects the string produced by formatting.  It does not affect
- * parsing or change any numerical values.
- *
- * <li>A <em>rounding mode</em> determines how values are rounded; see the {@link
- * com.ibm.icu.math.BigDecimal} documentation for a description of the modes.  Rounding
- * increments specified in patterns use the default mode, {@link
- * com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN}.
- *
- * <li>Some locales use rounding in their currency formats to reflect the smallest
- * currency denomination.
- *
- * <li>In a pattern, digits '1' through '9' specify rounding, but otherwise behave
- * identically to digit '0'.
- *
+ * 
+ * <li>Rounding only affects the string produced by formatting. It does not affect parsing or change any numerical
+ * values.
+ * 
+ * <li>A <em>rounding mode</em> determines how values are rounded; see the {@link com.ibm.icu.math.BigDecimal}
+ * documentation for a description of the modes. Rounding increments specified in patterns use the default mode,
+ * {@link com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN}.
+ * 
+ * <li>Some locales use rounding in their currency formats to reflect the smallest currency denomination.
+ * 
+ * <li>In a pattern, digits '1' through '9' specify rounding, but otherwise behave identically to digit '0'.
+ * 
  * </ul>
- *
+ * 
  * <h4>Synchronization</h4>
- *
- * <p><code>DecimalFormat</code> objects are not synchronized.  Multiple threads should
- * not access one formatter concurrently.
- *
- * @see          java.text.Format
- * @see          NumberFormat
- * @author       Mark Davis
- * @author       Alan Liu
+ * 
+ * <p>
+ * <code>DecimalFormat</code> objects are not synchronized. Multiple threads should not access one formatter
+ * concurrently.
+ * 
+ * @see java.text.Format
+ * @see NumberFormat
+ * @author Mark Davis
+ * @author Alan Liu
  * @stable ICU 2.0
  */
 public class DecimalFormat extends NumberFormat {
 
     /**
-     * Creates a DecimalFormat using the default pattern and symbols for the default
-     * <code>FORMAT</code> locale. This is a convenient way to obtain a DecimalFormat when
-     * internationalization is not the main concern.
-     *
-     * <p>To obtain standard formats for a given locale, use the factory methods on
-     * NumberFormat such as getNumberInstance.  These factories will return the most
-     * appropriate sub-class of NumberFormat for a given locale.
-     *
+     * Creates a DecimalFormat using the default pattern and symbols for the default <code>FORMAT</code> locale. This is
+     * a convenient way to obtain a DecimalFormat when internationalization is not the main concern.
+     * 
+     * <p>
+     * To obtain standard formats for a given locale, use the factory methods on NumberFormat such as getNumberInstance.
+     * These factories will return the most appropriate sub-class of NumberFormat for a given locale.
+     * 
      * @see NumberFormat#getInstance
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
@@ -640,16 +622,17 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Creates a DecimalFormat from the given pattern and the symbols for the default
-     * <code>FORMAT</code> locale. This is a convenient way to obtain a DecimalFormat when
-     * internationalization is not the main concern.
-     *
-     * <p>To obtain standard formats for a given locale, use the factory methods on
-     * NumberFormat such as getNumberInstance.  These factories will return the most
-     * appropriate sub-class of NumberFormat for a given locale.
-     *
-     * @param pattern A non-localized pattern string.
-     * @throws IllegalArgumentException if the given pattern is invalid.
+     * Creates a DecimalFormat from the given pattern and the symbols for the default <code>FORMAT</code> locale. This
+     * is a convenient way to obtain a DecimalFormat when internationalization is not the main concern.
+     * 
+     * <p>
+     * To obtain standard formats for a given locale, use the factory methods on NumberFormat such as getNumberInstance.
+     * These factories will return the most appropriate sub-class of NumberFormat for a given locale.
+     * 
+     * @param pattern
+     *            A non-localized pattern string.
+     * @throws IllegalArgumentException
+     *             if the given pattern is invalid.
      * @see NumberFormat#getInstance
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
@@ -671,17 +654,20 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Creates a DecimalFormat from the given pattern and symbols. Use this constructor
-     * when you need to completely customize the behavior of the format.
-     *
-     * <p>To obtain standard formats for a given locale, use the factory methods on
-     * NumberFormat such as getInstance or getCurrencyInstance. If you need only minor
-     * adjustments to a standard format, you can modify the format returned by a
-     * NumberFormat factory method.
-     *
-     * @param pattern a non-localized pattern string
-     * @param symbols the set of symbols to be used
-     * @exception IllegalArgumentException if the given pattern is invalid
+     * Creates a DecimalFormat from the given pattern and symbols. Use this constructor when you need to completely
+     * customize the behavior of the format.
+     * 
+     * <p>
+     * To obtain standard formats for a given locale, use the factory methods on NumberFormat such as getInstance or
+     * getCurrencyInstance. If you need only minor adjustments to a standard format, you can modify the format returned
+     * by a NumberFormat factory method.
+     * 
+     * @param pattern
+     *            a non-localized pattern string
+     * @param symbols
+     *            the set of symbols to be used
+     * @exception IllegalArgumentException
+     *                if the given pattern is invalid
      * @see NumberFormat#getInstance
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
@@ -706,33 +692,35 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Creates a DecimalFormat from the given pattern, symbols, information used for
-     * currency plural format, and format style. Use this constructor when you need to
-     * completely customize the behavior of the format.
-     *
-     * <p>To obtain standard formats for a given locale, use the factory methods on
-     * NumberFormat such as getInstance or getCurrencyInstance.
-     *
-     * <p>If you need only minor adjustments to a standard format, you can modify the
-     * format returned by a NumberFormat factory method using the setters.
-     *
-     * <p>If you want to completely customize a decimal format, using your own
-     * DecimalFormatSymbols (such as group separators) and your own information for
-     * currency plural formatting (such as plural rule and currency plural patterns), you
-     * can use this constructor.
-     *
-     * @param pattern a non-localized pattern string
-     * @param symbols the set of symbols to be used
-     * @param infoInput the information used for currency plural format, including
-     * currency plural patterns and plural rules.
-     * @param style the decimal formatting style, it is one of the following values:
-     * NumberFormat.NUMBERSTYLE; NumberFormat.CURRENCYSTYLE; NumberFormat.PERCENTSTYLE;
-     * NumberFormat.SCIENTIFICSTYLE; NumberFormat.INTEGERSTYLE;
-     * NumberFormat.ISOCURRENCYSTYLE; NumberFormat.PLURALCURRENCYSTYLE;
+     * Creates a DecimalFormat from the given pattern, symbols, information used for currency plural format, and format
+     * style. Use this constructor when you need to completely customize the behavior of the format.
+     * 
+     * <p>
+     * To obtain standard formats for a given locale, use the factory methods on NumberFormat such as getInstance or
+     * getCurrencyInstance.
+     * 
+     * <p>
+     * If you need only minor adjustments to a standard format, you can modify the format returned by a NumberFormat
+     * factory method using the setters.
+     * 
+     * <p>
+     * If you want to completely customize a decimal format, using your own DecimalFormatSymbols (such as group
+     * separators) and your own information for currency plural formatting (such as plural rule and currency plural
+     * patterns), you can use this constructor.
+     * 
+     * @param pattern
+     *            a non-localized pattern string
+     * @param symbols
+     *            the set of symbols to be used
+     * @param infoInput
+     *            the information used for currency plural format, including currency plural patterns and plural rules.
+     * @param style
+     *            the decimal formatting style, it is one of the following values: NumberFormat.NUMBERSTYLE;
+     *            NumberFormat.CURRENCYSTYLE; NumberFormat.PERCENTSTYLE; NumberFormat.SCIENTIFICSTYLE;
+     *            NumberFormat.INTEGERSTYLE; NumberFormat.ISOCURRENCYSTYLE; NumberFormat.PLURALCURRENCYSTYLE;
      * @stable ICU 4.2
      */
-    public DecimalFormat(String pattern, DecimalFormatSymbols symbols, CurrencyPluralInfo infoInput,
-                         int style) {
+    public DecimalFormat(String pattern, DecimalFormatSymbols symbols, CurrencyPluralInfo infoInput, int style) {
         CurrencyPluralInfo info = infoInput;
         if (style == NumberFormat.PLURALCURRENCYSTYLE) {
             info = (CurrencyPluralInfo) infoInput.clone();
@@ -740,8 +728,7 @@ public class DecimalFormat extends NumberFormat {
         create(pattern, symbols, info, style);
     }
 
-    private void create(String pattern, DecimalFormatSymbols inputSymbols, CurrencyPluralInfo info,
-                        int inputStyle) {
+    private void create(String pattern, DecimalFormatSymbols inputSymbols, CurrencyPluralInfo info, int inputStyle) {
         if (inputStyle != NumberFormat.PLURALCURRENCYSTYLE) {
             createFromPatternAndSymbols(pattern, inputSymbols);
         } else {
@@ -750,11 +737,10 @@ public class DecimalFormat extends NumberFormat {
             currencyPluralInfo = info;
             // the pattern used in format is not fixed until formatting, in which, the
             // number is known and will be used to pick the right pattern based on plural
-            // count.  Here, set the pattern as the pattern of plural count == "other".
+            // count. Here, set the pattern as the pattern of plural count == "other".
             // For most locale, the patterns are probably the same for all plural
             // count. If not, the right pattern need to be re-applied during format.
-            String currencyPluralPatternForOther =
-                currencyPluralInfo.getCurrencyPluralPattern("other");
+            String currencyPluralPatternForOther = currencyPluralInfo.getCurrencyPluralPattern("other");
             applyPatternWithoutExpandAffix(currencyPluralPatternForOther, false);
             setCurrencyForSymbols();
         }
@@ -762,8 +748,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Creates a DecimalFormat for currency plural format from the given pattern, symbols,
-     * and style.
+     * Creates a DecimalFormat for currency plural format from the given pattern, symbols, and style.
      */
     DecimalFormat(String pattern, DecimalFormatSymbols inputSymbols, int style) {
         CurrencyPluralInfo info = null;
@@ -775,6 +760,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@inheritDoc}
+     * 
      * @stable ICU 2.0
      */
     @Override
@@ -806,10 +792,8 @@ public class DecimalFormat extends NumberFormat {
         // Apply rounding after multiplier
         if (roundingDouble > 0.0) {
             // number = roundingDouble
-            //    * round(number / roundingDouble, roundingMode, isNegative);
-            return round(
-                number, roundingDouble, roundingDoubleReciprocal, roundingMode,
-                isNegative);
+            // * round(number / roundingDouble, roundingMode, isNegative);
+            return round(number, roundingDouble, roundingDoubleReciprocal, roundingMode, isNegative);
         }
         return number;
     }
@@ -825,8 +809,7 @@ public class DecimalFormat extends NumberFormat {
 
     // [Spark/CDL] The actual method to format number. If boolean value
     // parseAttr == true, then attribute information will be recorded.
-    private StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition,
-                                boolean parseAttr) {
+    private StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition, boolean parseAttr) {
         fieldPosition.setBeginIndex(0);
         fieldPosition.setEndIndex(0);
 
@@ -841,8 +824,7 @@ public class DecimalFormat extends NumberFormat {
             // [Spark/CDL] Add attribute for NaN here.
             // result.append(symbols.getNaN());
             if (parseAttr) {
-                addAttribute(Field.INTEGER, result.length() - symbols.getNaN().length(),
-                             result.length());
+                addAttribute(Field.INTEGER, result.length() - symbols.getNaN().length(), result.length());
             }
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setEndIndex(result.length());
@@ -872,8 +854,7 @@ public class DecimalFormat extends NumberFormat {
             // [Spark/CDL] Add attribute for infinity here.
             result.append(symbols.getInfinity());
             if (parseAttr) {
-                addAttribute(Field.INTEGER, result.length() - symbols.getInfinity().length(),
-                             result.length());
+                addAttribute(Field.INTEGER, result.length() - symbols.getInfinity().length(), result.length());
             }
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setEndIndex(result.length());
@@ -886,9 +867,9 @@ public class DecimalFormat extends NumberFormat {
             addPadding(result, fieldPosition, prefixLen, suffixLen);
             return result;
         }
-        
+
         int precision = precision(false);
-        
+
         // This is to fix rounding for scientific notation. See ticket:10542.
         // This code should go away when a permanent fix is done for ticket:9931.
         //
@@ -901,38 +882,34 @@ public class DecimalFormat extends NumberFormat {
         // ROUND_HALF_EVEN behavior of DigitList. For example, if number = 0.003016 and roundingMode =
         // ROUND_DOWN and precision = 3 then after this code executes, number = 0.00301 (3 significant digits)
         if (useExponentialNotation && precision > 0 && number != 0.0 && roundingMode != BigDecimal.ROUND_HALF_EVEN) {
-           int log10RoundingIncr = 1 - precision + (int) Math.floor(Math.log10(Math.abs(number)));
-           double roundingIncReciprocal = 0.0;
-           double roundingInc = 0.0;
-           if (log10RoundingIncr < 0) {
-               roundingIncReciprocal =
-                       BigDecimal.ONE.movePointRight(-log10RoundingIncr).doubleValue();
-           } else {
-               roundingInc =
-                       BigDecimal.ONE.movePointRight(log10RoundingIncr).doubleValue();
-           }
-           number = DecimalFormat.round(number, roundingInc, roundingIncReciprocal, roundingMode, isNegative);
+            int log10RoundingIncr = 1 - precision + (int) Math.floor(Math.log10(Math.abs(number)));
+            double roundingIncReciprocal = 0.0;
+            double roundingInc = 0.0;
+            if (log10RoundingIncr < 0) {
+                roundingIncReciprocal = BigDecimal.ONE.movePointRight(-log10RoundingIncr).doubleValue();
+            } else {
+                roundingInc = BigDecimal.ONE.movePointRight(log10RoundingIncr).doubleValue();
+            }
+            number = DecimalFormat.round(number, roundingInc, roundingIncReciprocal, roundingMode, isNegative);
         }
         // End fix for ticket:10542
 
         // At this point we are guaranteed a nonnegative finite
         // number.
         synchronized (digitList) {
-            digitList.set(number, precision, !useExponentialNotation &&
-                          !areSignificantDigitsUsed());
+            digitList.set(number, precision, !useExponentialNotation && !areSignificantDigitsUsed());
             return subformat(number, result, fieldPosition, isNegative, false, parseAttr);
         }
     }
 
     /**
-     * This is a special function used by the CompactDecimalFormat subclass.
-     * It completes only the rounding portion of the formatting and returns
-     * the resulting double. CompactDecimalFormat uses the result to compute
-     * the plural form to use.
-     *
-     * @param number The number to format.
-     * @return The number rounded to the correct number of significant digits
-     * with negative sign stripped off.
+     * This is a special function used by the CompactDecimalFormat subclass. It completes only the rounding portion of
+     * the formatting and returns the resulting double. CompactDecimalFormat uses the result to compute the plural form
+     * to use.
+     * 
+     * @param number
+     *            The number to format.
+     * @return The number rounded to the correct number of significant digits with negative sign stripped off.
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -947,7 +924,7 @@ public class DecimalFormat extends NumberFormat {
         }
         return toDigitList(number).getDouble();
     }
-    
+
     @Deprecated
     DigitList toDigitList(double number) {
         DigitList result = new DigitList();
@@ -956,29 +933,29 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-      * This is a special function used by the CompactDecimalFormat subclass
-      * to determine if the number to be formatted is negative.
-      *
-      * @param number The number to format.
-      * @return True if number is negative.
-      * @internal
-      * @deprecated This API is ICU internal only.
-      */
-     @Deprecated
-     boolean isNumberNegative(double number) {
-         if (Double.isNaN(number)) {
-             return false;
-         }
-         return isNegative(multiply(number));
-     }
+     * This is a special function used by the CompactDecimalFormat subclass to determine if the number to be formatted
+     * is negative.
+     * 
+     * @param number
+     *            The number to format.
+     * @return True if number is negative.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    boolean isNumberNegative(double number) {
+        if (Double.isNaN(number)) {
+            return false;
+        }
+        return isNegative(multiply(number));
+    }
 
     /**
-     * Round a double value to the nearest multiple of the given rounding increment,
-     * according to the given mode. This is equivalent to rounding value/roundingInc to
-     * the nearest integer, according to the given mode, and returning that integer *
-     * roundingInc. Note this is changed from the version in 2.4, since division of
-     * doubles have inaccuracies. jitterbug 1871.
-     *
+     * Round a double value to the nearest multiple of the given rounding increment, according to the given mode. This
+     * is equivalent to rounding value/roundingInc to the nearest integer, according to the given mode, and returning
+     * that integer * roundingInc. Note this is changed from the version in 2.4, since division of doubles have
+     * inaccuracies. jitterbug 1871.
+     * 
      * @param number
      *            the absolute value of the number to be rounded
      * @param roundingInc
@@ -991,11 +968,10 @@ public class DecimalFormat extends NumberFormat {
      *            true if the number to be rounded is negative
      * @return the absolute value of the rounded result
      */
-    private static double round(double number, double roundingInc, double roundingIncReciprocal,
-                                int mode, boolean isNegative) {
+    private static double round(double number, double roundingInc, double roundingIncReciprocal, int mode,
+            boolean isNegative) {
 
-        double div = roundingIncReciprocal == 0.0 ? number / roundingInc : number *
-            roundingIncReciprocal;
+        double div = roundingIncReciprocal == 0.0 ? number / roundingInc : number * roundingIncReciprocal;
 
         // do the absolute cases first
 
@@ -1022,7 +998,7 @@ public class DecimalFormat extends NumberFormat {
             // Handle complex cases, where the choice depends on the closer value.
 
             // We figure out the distances to the two possible values, ceiling and floor.
-            // We then go for the diff that is smaller.  Only if they are equal does the
+            // We then go for the diff that is smaller. Only if they are equal does the
             // mode matter.
 
             double ceil = Math.ceil(div);
@@ -1034,7 +1010,7 @@ public class DecimalFormat extends NumberFormat {
             // using the roundingInc. I don't have access to the original author of the
             // code but suspect that that was to produce better result in edge cases
             // because of machine precision, rather than simply using the difference
-            // between, say, ceil and div.  However, it didn't work in all cases. Am
+            // between, say, ceil and div. However, it didn't work in all cases. Am
             // trying instead using an epsilon value.
 
             switch (mode) {
@@ -1076,8 +1052,7 @@ public class DecimalFormat extends NumberFormat {
         return format(number, result, fieldPosition, false);
     }
 
-    private StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition,
-                                boolean parseAttr) {
+    private StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition, boolean parseAttr) {
         fieldPosition.setBeginIndex(0);
         fieldPosition.setEndIndex(0);
 
@@ -1109,8 +1084,7 @@ public class DecimalFormat extends NumberFormat {
                 // [Spark/CDL] Use
                 // format_BigInteger_StringBuffer_FieldPosition_boolean instead
                 // parseAttr is used to judge whether to synthesize attributes.
-                return format(BigInteger.valueOf(isNegative ? -number : number), result,
-                              fieldPosition, parseAttr);
+                return format(BigInteger.valueOf(isNegative ? -number : number), result, fieldPosition, parseAttr);
             }
         }
 
@@ -1123,17 +1097,15 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Formats a BigInteger number.
-     *
+     * 
      * @stable ICU 2.0
      */
     @Override
-    public StringBuffer format(BigInteger number, StringBuffer result,
-                               FieldPosition fieldPosition) {
+    public StringBuffer format(BigInteger number, StringBuffer result, FieldPosition fieldPosition) {
         return format(number, result, fieldPosition, false);
     }
 
-    private StringBuffer format(BigInteger number, StringBuffer result, FieldPosition fieldPosition,
-                                boolean parseAttr) {
+    private StringBuffer format(BigInteger number, StringBuffer result, FieldPosition fieldPosition, boolean parseAttr) {
         // If we are to do rounding, we need to move into the BigDecimal
         // domain in order to do divide/multiply correctly.
         if (actualRoundingIncrementICU != null) {
@@ -1148,24 +1120,21 @@ public class DecimalFormat extends NumberFormat {
         // number.
         synchronized (digitList) {
             digitList.set(number, precision(true));
-            return subformat(number.intValue(), result, fieldPosition, number.signum() < 0, true,
-                             parseAttr);
+            return subformat(number.intValue(), result, fieldPosition, number.signum() < 0, true, parseAttr);
         }
     }
 
     /**
      * Formats a BigDecimal number.
-     *
+     * 
      * @stable ICU 2.0
      */
     @Override
-    public StringBuffer format(java.math.BigDecimal number, StringBuffer result,
-                               FieldPosition fieldPosition) {
+    public StringBuffer format(java.math.BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
         return format(number, result, fieldPosition, false);
     }
 
-    private StringBuffer format(java.math.BigDecimal number, StringBuffer result,
-                                FieldPosition fieldPosition,
+    private StringBuffer format(java.math.BigDecimal number, StringBuffer result, FieldPosition fieldPosition,
             boolean parseAttr) {
         if (multiplier != 1) {
             number = number.multiply(java.math.BigDecimal.valueOf(multiplier));
@@ -1176,48 +1145,44 @@ public class DecimalFormat extends NumberFormat {
         }
 
         synchronized (digitList) {
-            digitList.set(number, precision(false), !useExponentialNotation &&
-                          !areSignificantDigitsUsed());
-            return subformat(number.doubleValue(), result, fieldPosition, number.signum() < 0,
-                             false, parseAttr);
+            digitList.set(number, precision(false), !useExponentialNotation && !areSignificantDigitsUsed());
+            return subformat(number.doubleValue(), result, fieldPosition, number.signum() < 0, false, parseAttr);
         }
     }
 
     /**
      * Formats a BigDecimal number.
-     *
+     * 
      * @stable ICU 2.0
      */
     @Override
-    public StringBuffer format(BigDecimal number, StringBuffer result,
-                               FieldPosition fieldPosition) {
-         // This method is just a copy of the corresponding java.math.BigDecimal method
-         // for now. It isn't very efficient since it must create a conversion object to
-         // do math on the rounding increment. In the future we may try to clean this up,
-         // or even better, limit our support to just one flavor of BigDecimal.
+    public StringBuffer format(BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
+        // This method is just a copy of the corresponding java.math.BigDecimal method
+        // for now. It isn't very efficient since it must create a conversion object to
+        // do math on the rounding increment. In the future we may try to clean this up,
+        // or even better, limit our support to just one flavor of BigDecimal.
         if (multiplier != 1) {
             number = number.multiply(BigDecimal.valueOf(multiplier), mathContext);
         }
 
         if (actualRoundingIncrementICU != null) {
-            number = number.divide(actualRoundingIncrementICU, 0, roundingMode)
-                .multiply(actualRoundingIncrementICU, mathContext);
+            number = number.divide(actualRoundingIncrementICU, 0, roundingMode).multiply(actualRoundingIncrementICU,
+                    mathContext);
         }
 
         synchronized (digitList) {
-            digitList.set(number, precision(false), !useExponentialNotation &&
-                          !areSignificantDigitsUsed());
-            return subformat(number.doubleValue(), result, fieldPosition, number.signum() < 0,
-                             false, false);
+            digitList.set(number, precision(false), !useExponentialNotation && !areSignificantDigitsUsed());
+            return subformat(number.doubleValue(), result, fieldPosition, number.signum() < 0, false, false);
         }
     }
 
     /**
-     * Returns true if a grouping separator belongs at the given position, based on whether
-     * grouping is in use and the values of the primary and secondary grouping interval.
-     *
-     * @param pos the number of integer digits to the right of the current position. Zero
-     * indicates the position after the rightmost integer digit.
+     * Returns true if a grouping separator belongs at the given position, based on whether grouping is in use and the
+     * values of the primary and secondary grouping interval.
+     * 
+     * @param pos
+     *            the number of integer digits to the right of the current position. Zero indicates the position after
+     *            the rightmost integer digit.
      * @return true if a grouping character belongs at the current position.
      */
     private boolean isGroupingPosition(int pos) {
@@ -1233,9 +1198,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Return the number of fraction digits to display, or the total
-     * number of digits for significant digit formats and exponential
-     * formats.
+     * Return the number of fraction digits to display, or the total number of digits for significant digit formats and
+     * exponential formats.
      */
     private int precision(boolean isIntegral) {
         if (areSignificantDigitsUsed()) {
@@ -1247,13 +1211,12 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
-    private StringBuffer subformat(int number, StringBuffer result, FieldPosition fieldPosition,
-                                   boolean isNegative, boolean isInteger, boolean parseAttr) {
+    private StringBuffer subformat(int number, StringBuffer result, FieldPosition fieldPosition, boolean isNegative,
+            boolean isInteger, boolean parseAttr) {
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
             // compute the plural category from the digitList plus other settings
-            return subformat(currencyPluralInfo.select(getFixedDecimal(number)),
-                             result, fieldPosition, isNegative,
-                             isInteger, parseAttr);
+            return subformat(currencyPluralInfo.select(getFixedDecimal(number)), result, fieldPosition, isNegative,
+                    isInteger, parseAttr);
         } else {
             return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
         }
@@ -1262,11 +1225,11 @@ public class DecimalFormat extends NumberFormat {
     /**
      * This is ugly, but don't see a better way to do it without major restructuring of the code.
      */
-    /*package*/ FixedDecimal getFixedDecimal(double number) {
+    /* package */FixedDecimal getFixedDecimal(double number) {
         // get the visible fractions and the number of fraction digits.
-       return getFixedDecimal(number, digitList);
+        return getFixedDecimal(number, digitList);
     }
-    
+
     FixedDecimal getFixedDecimal(double number, DigitList dl) {
         int fractionalDigitsInDigitList = dl.count - dl.decimalAt;
         int v;
@@ -1305,14 +1268,12 @@ public class DecimalFormat extends NumberFormat {
         return new FixedDecimal(number, v, f);
     }
 
-    private StringBuffer subformat(double number, StringBuffer result, FieldPosition fieldPosition,
-                                   boolean isNegative,
+    private StringBuffer subformat(double number, StringBuffer result, FieldPosition fieldPosition, boolean isNegative,
             boolean isInteger, boolean parseAttr) {
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
             // compute the plural category from the digitList plus other settings
-            return subformat(currencyPluralInfo.select(getFixedDecimal(number)),
-                             result, fieldPosition, isNegative,
-                             isInteger, parseAttr);
+            return subformat(currencyPluralInfo.select(getFixedDecimal(number)), result, fieldPosition, isNegative,
+                    isInteger, parseAttr);
         } else {
             return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
         }
@@ -1322,10 +1283,10 @@ public class DecimalFormat extends NumberFormat {
             boolean isNegative, boolean isInteger, boolean parseAttr) {
         // There are 2 ways to activate currency plural format: by applying a pattern with
         // 3 currency sign directly, or by instantiate a decimal formatter using
-        // PLURALCURRENCYSTYLE.  For both cases, the number of currency sign in the
-        // pattern is 3.  Even if the number of currency sign in the pattern is 3, it does
-        // not mean we need to reset the pattern.  For 1st case, we do not need to reset
-        // pattern.  For 2nd case, we might need to reset pattern, if the default pattern
+        // PLURALCURRENCYSTYLE. For both cases, the number of currency sign in the
+        // pattern is 3. Even if the number of currency sign in the pattern is 3, it does
+        // not mean we need to reset the pattern. For 1st case, we do not need to reset
+        // pattern. For 2nd case, we might need to reset pattern, if the default pattern
         // (corresponding to plural count 'other') we use is different from the pattern
         // based on 'pluralCount'.
         //
@@ -1338,10 +1299,10 @@ public class DecimalFormat extends NumberFormat {
                 applyPatternWithoutExpandAffix(currencyPluralPattern, false);
             }
         }
-        // Expand the affix to the right name according to the plural rule.  This is only
-        // used for currency plural formatting.  Currency plural name is not a fixed
-        // static one, it is a dynamic name based on the currency plural count.  So, the
-        // affixes need to be expanded here.  For other cases, the affix is a static one
+        // Expand the affix to the right name according to the plural rule. This is only
+        // used for currency plural formatting. Currency plural name is not a fixed
+        // static one, it is a dynamic name based on the currency plural count. So, the
+        // affixes need to be expanded here. For other cases, the affix is a static one
         // based on pattern alone, and it is already expanded during applying pattern, or
         // setDecimalFormatSymbols, or setCurrency.
         expandAffixAdjustWidth(pluralCount);
@@ -1349,11 +1310,10 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Complete the formatting of a finite number. On entry, the
-     * digitList must be filled in with the correct digits.
+     * Complete the formatting of a finite number. On entry, the digitList must be filled in with the correct digits.
      */
-    private StringBuffer subformat(StringBuffer result, FieldPosition fieldPosition,
-                                   boolean isNegative, boolean isInteger, boolean parseAttr) {
+    private StringBuffer subformat(StringBuffer result, FieldPosition fieldPosition, boolean isNegative,
+            boolean isInteger, boolean parseAttr) {
         // NOTE: This isn't required anymore because DigitList takes care of this.
         //
         // // The negative of the exponent represents the number of leading // zeros
@@ -1368,11 +1328,9 @@ public class DecimalFormat extends NumberFormat {
         // digitList.count = 0;
         // }
 
-
-
         // Per bug 4147706, DecimalFormat must respect the sign of numbers which format as
         // zero. This allows sensible computations and preserves relations such as
-        // signum(1/x) = signum(x), where x is +Infinity or -Infinity.  Prior to this fix,
+        // signum(1/x) = signum(x), where x is +Infinity or -Infinity. Prior to this fix,
         // we always formatted zero values as if they were positive. Liu 7/6/98.
         if (digitList.isZero()) {
             digitList.decimalAt = 0; // Normalize
@@ -1392,16 +1350,13 @@ public class DecimalFormat extends NumberFormat {
         return result;
     }
 
-    private void subformatFixed(StringBuffer result,
-            FieldPosition fieldPosition,
-            boolean isInteger,
-            boolean parseAttr) {
-        char [] digits = symbols.getDigitsLocal();
+    private void subformatFixed(StringBuffer result, FieldPosition fieldPosition, boolean isInteger, boolean parseAttr) {
+        char[] digits = symbols.getDigitsLocal();
 
-        char grouping = currencySignCount == CURRENCY_SIGN_COUNT_ZERO ?
-                symbols.getGroupingSeparator(): symbols.getMonetaryGroupingSeparator();
-        char decimal = currencySignCount == CURRENCY_SIGN_COUNT_ZERO ?
-                symbols.getDecimalSeparator() : symbols.getMonetaryDecimalSeparator();
+        char grouping = currencySignCount == CURRENCY_SIGN_COUNT_ZERO ? symbols.getGroupingSeparator() : symbols
+                .getMonetaryGroupingSeparator();
+        char decimal = currencySignCount == CURRENCY_SIGN_COUNT_ZERO ? symbols.getDecimalSeparator() : symbols
+                .getMonetaryDecimalSeparator();
         boolean useSigDig = areSignificantDigitsUsed();
         int maxIntDig = getMaximumIntegerDigits();
         int minIntDig = getMinimumIntegerDigits();
@@ -1447,8 +1402,7 @@ public class DecimalFormat extends NumberFormat {
 
         int sizeBeforeIntegerPart = result.length();
         for (i = count - 1; i >= 0; --i) {
-            if (i < digitList.decimalAt && digitIndex < digitList.count
-                && sigCount < maxSigDig) {
+            if (i < digitList.decimalAt && digitIndex < digitList.count && sigCount < maxSigDig) {
                 // Output a real digit
                 result.append(digits[digitList.getDigitValue(digitIndex++)]);
                 ++sigCount;
@@ -1477,14 +1431,14 @@ public class DecimalFormat extends NumberFormat {
         } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
             fieldPosition.setEndIndex(result.length());
         }
-        
+
         // This handles the special case of formatting 0. For zero only, we count the
         // zero to the left of the decimal point as one signficant digit. Ordinarily we
         // do not count any leading 0's as significant. If the number we are formatting
         // is not zero, then either sigCount or digits.getCount() will be non-zero.
         if (sigCount == 0 && digitList.count == 0) {
-          sigCount = 1;
-        }      
+            sigCount = 1;
+        }
 
         // Determine whether or not there are any printable fractional digits. If
         // we've used up the digits we know there aren't.
@@ -1527,8 +1481,7 @@ public class DecimalFormat extends NumberFormat {
         recordFractionDigits = fieldPosition instanceof UFieldPosition;
 
         count = useSigDig ? Integer.MAX_VALUE : getMaximumFractionDigits();
-        if (useSigDig && (sigCount == maxSigDig ||
-                          (sigCount >= minSigDig && digitIndex == digitList.count))) {
+        if (useSigDig && (sigCount == maxSigDig || (sigCount >= minSigDig && digitIndex == digitList.count))) {
             count = 0;
         }
         for (i = 0; i < count; ++i) {
@@ -1537,8 +1490,7 @@ public class DecimalFormat extends NumberFormat {
             // also stop when we've output the minimum digits and either: we have an
             // integer, so there is no fractional stuff to display, or we're out of
             // significant digits.
-            if (!useSigDig && i >= getMinimumFractionDigits() &&
-                (isInteger || digitIndex >= digitList.count)) {
+            if (!useSigDig && i >= getMinimumFractionDigits() && (isInteger || digitIndex >= digitList.count)) {
                 break;
             }
 
@@ -1575,8 +1527,7 @@ public class DecimalFormat extends NumberFormat {
             // If we reach the maximum number of significant digits, or if we output
             // all the real digits and reach the minimum, then we are done.
             ++sigCount;
-            if (useSigDig && (sigCount == maxSigDig ||
-                              (digitIndex == digitList.count && sigCount >= minSigDig))) {
+            if (useSigDig && (sigCount == maxSigDig || (digitIndex == digitList.count && sigCount >= minSigDig))) {
                 break;
             }
         }
@@ -1597,12 +1548,10 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
-    private void subformatExponential(StringBuffer result,
-            FieldPosition fieldPosition,
-            boolean parseAttr) {
-        char [] digits = symbols.getDigitsLocal();
-        char decimal = currencySignCount == CURRENCY_SIGN_COUNT_ZERO ?
-                symbols.getDecimalSeparator() : symbols.getMonetaryDecimalSeparator();
+    private void subformatExponential(StringBuffer result, FieldPosition fieldPosition, boolean parseAttr) {
+        char[] digits = symbols.getDigitsLocal();
+        char decimal = currencySignCount == CURRENCY_SIGN_COUNT_ZERO ? symbols.getDecimalSeparator() : symbols
+                .getMonetaryDecimalSeparator();
         boolean useSigDig = areSignificantDigitsUsed();
         int maxIntDig = getMaximumIntegerDigits();
         int minIntDig = getMinimumIntegerDigits();
@@ -1619,7 +1568,6 @@ public class DecimalFormat extends NumberFormat {
         } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
             fieldPosition.setBeginIndex(-1);
         }
-
 
         // [Spark/CDL]
         // the begin index of integer part
@@ -1654,7 +1602,7 @@ public class DecimalFormat extends NumberFormat {
         // Maximum integer digits are interpreted as indicating the repeating
         // range. This is useful for engineering notation, in which the exponent is
         // restricted to a multiple of 3. For example, 0.01234 with 3 maximum integer
-        // digits is "12.34e-3".  If maximum integer digits are defined and are larger
+        // digits is "12.34e-3". If maximum integer digits are defined and are larger
         // than minimum integer digits, then minimum integer digits are ignored.
 
         int exponent = digitList.decimalAt;
@@ -1701,8 +1649,7 @@ public class DecimalFormat extends NumberFormat {
                 if (parseAttr) {
                     // Length of decimal separator is 1.
                     int decimalSeparatorBegin = result.length() - 1;
-                    addAttribute(Field.DECIMAL_SEPARATOR, decimalSeparatorBegin,
-                                 result.length());
+                    addAttribute(Field.DECIMAL_SEPARATOR, decimalSeparatorBegin, result.length());
                     fracBegin = result.length();
                 }
                 // Record field information for caller.
@@ -1714,7 +1661,7 @@ public class DecimalFormat extends NumberFormat {
                 recordFractionDigits = fieldPosition instanceof UFieldPosition;
 
             }
-            byte digit = (i < digitList.count) ? digitList.getDigitValue(i) : (byte)0;
+            byte digit = (i < digitList.count) ? digitList.getDigitValue(i) : (byte) 0;
             result.append(digits[digit]);
             if (recordFractionDigits) {
                 ++fractionalDigitsCount;
@@ -1769,8 +1716,8 @@ public class DecimalFormat extends NumberFormat {
         result.append(symbols.getExponentSeparator());
         // [Spark/CDL] For exponent symbol, add an attribute.
         if (parseAttr) {
-            addAttribute(Field.EXPONENT_SYMBOL, result.length() -
-                         symbols.getExponentSeparator().length(), result.length());
+            addAttribute(Field.EXPONENT_SYMBOL, result.length() - symbols.getExponentSeparator().length(),
+                    result.length());
         }
         // For zero values, we force the exponent to zero. We must do this here, and
         // not earlier, because the value is used to determine integer digit count
@@ -1808,8 +1755,7 @@ public class DecimalFormat extends NumberFormat {
                 result.append(digits[0]);
         }
         for (i = 0; i < digitList.decimalAt; ++i) {
-            result.append((i < digitList.count) ? digits[digitList.getDigitValue(i)]
-                          : digits[0]);
+            result.append((i < digitList.count) ? digits[digitList.getDigitValue(i)] : digits[0]);
         }
         // [Spark/CDL] Add attribute for exponent part.
         if (parseAttr) {
@@ -1817,8 +1763,7 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
-    private final void addPadding(StringBuffer result, FieldPosition fieldPosition, int prefixLen,
-                                  int suffixLen) {
+    private final void addPadding(StringBuffer result, FieldPosition fieldPosition, int prefixLen, int suffixLen) {
         if (formatWidth > 0) {
             int len = formatWidth - result.length();
             if (len > 0) {
@@ -1849,21 +1794,20 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Parses the given string, returning a <code>Number</code> object to represent the
-     * parsed value. <code>Double</code> objects are returned to represent non-integral
-     * values which cannot be stored in a <code>BigDecimal</code>. These are
-     * <code>NaN</code>, infinity, -infinity, and -0.0. If {@link #isParseBigDecimal()} is
-     * false (the default), all other values are returned as <code>Long</code>,
-     * <code>BigInteger</code>, or <code>BigDecimal</code> values, in that order of
-     * preference. If {@link #isParseBigDecimal()} is true, all other values are returned
-     * as <code>BigDecimal</code> valuse. If the parse fails, null is returned.
-     *
-     * @param text the string to be parsed
-     * @param parsePosition defines the position where parsing is to begin, and upon
-     * return, the position where parsing left off. If the position has not changed upon
-     * return, then parsing failed.
-     * @return a <code>Number</code> object with the parsed value or
-     * <code>null</code> if the parse failed
+     * Parses the given string, returning a <code>Number</code> object to represent the parsed value.
+     * <code>Double</code> objects are returned to represent non-integral values which cannot be stored in a
+     * <code>BigDecimal</code>. These are <code>NaN</code>, infinity, -infinity, and -0.0. If
+     * {@link #isParseBigDecimal()} is false (the default), all other values are returned as <code>Long</code>,
+     * <code>BigInteger</code>, or <code>BigDecimal</code> values, in that order of preference. If
+     * {@link #isParseBigDecimal()} is true, all other values are returned as <code>BigDecimal</code> valuse. If the
+     * parse fails, null is returned.
+     * 
+     * @param text
+     *            the string to be parsed
+     * @param parsePosition
+     *            defines the position where parsing is to begin, and upon return, the position where parsing left off.
+     *            If the position has not changed upon return, then parsing failed.
+     * @return a <code>Number</code> object with the parsed value or <code>null</code> if the parse failed
      * @stable ICU 2.0
      */
     @Override
@@ -1872,16 +1816,17 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Parses text from the given string as a CurrencyAmount. Unlike the parse() method,
-     * this method will attempt to parse a generic currency name, searching for a match of
-     * this object's locale's currency display names, or for a 3-letter ISO currency
-     * code. This method will fail if this format is not a currency format, that is, if it
-     * does not contain the currency pattern symbol (U+00A4) in its prefix or suffix.
-     *
-     * @param text the text to parse
-     * @param pos input-output position; on input, the position within text to match; must
-     *  have 0 <= pos.getIndex() < text.length(); on output, the position after the last
-     *  matched character. If the parse fails, the position in unchanged upon output.
+     * Parses text from the given string as a CurrencyAmount. Unlike the parse() method, this method will attempt to
+     * parse a generic currency name, searching for a match of this object's locale's currency display names, or for a
+     * 3-letter ISO currency code. This method will fail if this format is not a currency format, that is, if it does
+     * not contain the currency pattern symbol (U+00A4) in its prefix or suffix.
+     * 
+     * @param text
+     *            the text to parse
+     * @param pos
+     *            input-output position; on input, the position within text to match; must have 0 <= pos.getIndex() <
+     *            text.length(); on output, the position after the last matched character. If the parse fails, the
+     *            position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
      * @stable ICU 49
      */
@@ -1893,14 +1838,15 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Parses the given text as either a Number or a CurrencyAmount.
-     *
-     * @param text the string to parse
-     * @param parsePosition input-output position; on input, the position within text to
-     * match; must have 0 <= pos.getIndex() < text.length(); on output, the position after
-     * the last matched character. If the parse fails, the position in unchanged upon
-     * output.
-     * @param currency if non-null, a CurrencyAmount is parsed and returned; otherwise a
-     * Number is parsed and returned
+     * 
+     * @param text
+     *            the string to parse
+     * @param parsePosition
+     *            input-output position; on input, the position within text to match; must have 0 <= pos.getIndex() <
+     *            text.length(); on output, the position after the last matched character. If the parse fails, the
+     *            position in unchanged upon output.
+     * @param currency
+     *            if non-null, a CurrencyAmount is parsed and returned; otherwise a Number is parsed and returned
      * @return a Number or CurrencyAmount or null
      */
     private Object parse(String text, ParsePosition parsePosition, Currency[] currency) {
@@ -1910,15 +1856,13 @@ public class DecimalFormat extends NumberFormat {
         // Handle NaN as a special case:
 
         // Skip padding characters, if around prefix
-        if (formatWidth > 0 &&
-            (padPosition == PAD_BEFORE_PREFIX || padPosition == PAD_AFTER_PREFIX)) {
+        if (formatWidth > 0 && (padPosition == PAD_BEFORE_PREFIX || padPosition == PAD_AFTER_PREFIX)) {
             i = skipPadding(text, i);
         }
         if (text.regionMatches(i, symbols.getNaN(), 0, symbols.getNaN().length())) {
             i += symbols.getNaN().length();
             // Skip padding characters, if around suffix
-            if (formatWidth > 0 && (padPosition == PAD_BEFORE_SUFFIX ||
-                                    padPosition == PAD_AFTER_SUFFIX)) {
+            if (formatWidth > 0 && (padPosition == PAD_BEFORE_SUFFIX || padPosition == PAD_AFTER_SUFFIX)) {
                 i = skipPadding(text, i);
             }
             parsePosition.setIndex(i);
@@ -1934,9 +1878,8 @@ public class DecimalFormat extends NumberFormat {
                 return null;
             }
         } else {
-            if (!subparse(text, parsePosition, digitList, status, currency, negPrefixPattern,
-                          negSuffixPattern, posPrefixPattern, posSuffixPattern,
-                          false, Currency.SYMBOL_NAME)) {
+            if (!subparse(text, parsePosition, digitList, status, currency, negPrefixPattern, negSuffixPattern,
+                    posPrefixPattern, posSuffixPattern, false, Currency.SYMBOL_NAME)) {
                 parsePosition.setIndex(backup);
                 return null;
             }
@@ -1946,8 +1889,7 @@ public class DecimalFormat extends NumberFormat {
 
         // Handle infinity
         if (status[STATUS_INFINITE]) {
-            n = new Double(status[STATUS_POSITIVE] ? Double.POSITIVE_INFINITY :
-                           Double.NEGATIVE_INFINITY);
+            n = new Double(status[STATUS_POSITIVE] ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY);
         }
 
         // Handle underflow
@@ -2006,8 +1948,7 @@ public class DecimalFormat extends NumberFormat {
         return (currency != null) ? (Object) new CurrencyAmount(n, currency[0]) : (Object) n;
     }
 
-    private boolean parseForCurrency(String text, ParsePosition parsePosition,
-            Currency[] currency, boolean[] status) {
+    private boolean parseForCurrency(String text, ParsePosition parsePosition, Currency[] currency, boolean[] status) {
         int origPos = parsePosition.getIndex();
         if (!isReadyForParsing) {
             int savedCurrencySignCount = currencySignCount;
@@ -2032,13 +1973,11 @@ public class DecimalFormat extends NumberFormat {
         DigitList tmpDigitList = new DigitList();
         boolean found;
         if (style == NumberFormat.PLURALCURRENCYSTYLE) {
-            found = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency,
-                             negPrefixPattern, negSuffixPattern, posPrefixPattern, posSuffixPattern,
-                             true, Currency.LONG_NAME);
+            found = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency, negPrefixPattern, negSuffixPattern,
+                    posPrefixPattern, posSuffixPattern, true, Currency.LONG_NAME);
         } else {
-            found = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency,
-                             negPrefixPattern, negSuffixPattern, posPrefixPattern, posSuffixPattern,
-                             true, Currency.SYMBOL_NAME);
+            found = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency, negPrefixPattern, negSuffixPattern,
+                    posPrefixPattern, posSuffixPattern, true, Currency.SYMBOL_NAME);
         }
         if (found) {
             if (tmpPos.getIndex() > maxPosIndex) {
@@ -2049,16 +1988,14 @@ public class DecimalFormat extends NumberFormat {
         } else {
             maxErrorPos = tmpPos.getErrorIndex();
         }
-        // Then, parse against affix patterns.  Those are currency patterns and currency
+        // Then, parse against affix patterns. Those are currency patterns and currency
         // plural patterns defined in the locale.
         for (AffixForCurrency affix : affixPatternsForCurrency) {
             tmpStatus = new boolean[STATUS_LENGTH];
             tmpPos = new ParsePosition(origPos);
             tmpDigitList = new DigitList();
-            boolean result = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency,
-                                      affix.getNegPrefix(), affix.getNegSuffix(),
-                                      affix.getPosPrefix(), affix.getPosSuffix(),
-                                      true, affix.getPatternType());
+            boolean result = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency, affix.getNegPrefix(),
+                    affix.getNegSuffix(), affix.getPosPrefix(), affix.getPosSuffix(), true, affix.getPatternType());
             if (result) {
                 found = true;
                 if (tmpPos.getIndex() > maxPosIndex) {
@@ -2067,14 +2004,13 @@ public class DecimalFormat extends NumberFormat {
                     digitList = tmpDigitList;
                 }
             } else {
-                maxErrorPos = (tmpPos.getErrorIndex() > maxErrorPos) ? tmpPos.getErrorIndex()
-                    : maxErrorPos;
+                maxErrorPos = (tmpPos.getErrorIndex() > maxErrorPos) ? tmpPos.getErrorIndex() : maxErrorPos;
             }
         }
-        // Finally, parse against simple affix to find the match.  For example, in
+        // Finally, parse against simple affix to find the match. For example, in
         // TestMonster suite, if the to-be-parsed text is "-\u00A40,00".
         // complexAffixCompare will not find match, since there is no ISO code matches
-        // "\u00A4", and the parse stops at "\u00A4".  We will just use simple affix
+        // "\u00A4", and the parse stops at "\u00A4". We will just use simple affix
         // comparison (look for exact match) to pass it.
         //
         // TODO: We should parse against simple affix first when
@@ -2087,9 +2023,8 @@ public class DecimalFormat extends NumberFormat {
         tmpDigitList = new DigitList();
 
         // Disable complex currency parsing and try it again.
-        boolean result = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency,
-                                  negativePrefix, negativeSuffix, positivePrefix, positiveSuffix,
-                                  false /* disable complex currency parsing */, Currency.SYMBOL_NAME);
+        boolean result = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency, negativePrefix, negativeSuffix,
+                positivePrefix, positiveSuffix, false /* disable complex currency parsing */, Currency.SYMBOL_NAME);
         if (result) {
             if (tmpPos.getIndex() > maxPosIndex) {
                 maxPosIndex = tmpPos.getIndex();
@@ -2098,8 +2033,7 @@ public class DecimalFormat extends NumberFormat {
             }
             found = true;
         } else {
-            maxErrorPos = (tmpPos.getErrorIndex() > maxErrorPos) ? tmpPos.getErrorIndex() :
-                maxErrorPos;
+            maxErrorPos = (tmpPos.getErrorIndex() > maxErrorPos) ? tmpPos.getErrorIndex() : maxErrorPos;
         }
 
         if (!found) {
@@ -2128,13 +2062,11 @@ public class DecimalFormat extends NumberFormat {
         String savedFormatPattern = formatPattern;
 
         // CURRENCYSTYLE and ISOCURRENCYSTYLE should have the same prefix and suffix, so,
-        // only need to save one of them.  Here, chose onlyApplyPatternWithoutExpandAffix
-        // without saving the actualy pattern in 'pattern' data member.  TODO: is it uloc?
-        applyPatternWithoutExpandAffix(getPattern(symbols.getULocale(), NumberFormat.CURRENCYSTYLE),
-                                       false);
-        AffixForCurrency affixes = new AffixForCurrency(
-            negPrefixPattern, negSuffixPattern, posPrefixPattern, posSuffixPattern,
-            Currency.SYMBOL_NAME);
+        // only need to save one of them. Here, chose onlyApplyPatternWithoutExpandAffix
+        // without saving the actualy pattern in 'pattern' data member. TODO: is it uloc?
+        applyPatternWithoutExpandAffix(getPattern(symbols.getULocale(), NumberFormat.CURRENCYSTYLE), false);
+        AffixForCurrency affixes = new AffixForCurrency(negPrefixPattern, negSuffixPattern, posPrefixPattern,
+                posSuffixPattern, Currency.SYMBOL_NAME);
         affixPatternsForCurrency.add(affixes);
 
         // add plural pattern
@@ -2143,12 +2075,11 @@ public class DecimalFormat extends NumberFormat {
         while (iter.hasNext()) {
             String pluralCount = iter.next();
             String currencyPattern = currencyPluralInfo.getCurrencyPluralPattern(pluralCount);
-            if (currencyPattern != null &&
-                currencyUnitPatternSet.contains(currencyPattern) == false) {
+            if (currencyPattern != null && currencyUnitPatternSet.contains(currencyPattern) == false) {
                 currencyUnitPatternSet.add(currencyPattern);
                 applyPatternWithoutExpandAffix(currencyPattern, false);
-                affixes = new AffixForCurrency(negPrefixPattern, negSuffixPattern, posPrefixPattern,
-                                               posSuffixPattern, Currency.LONG_NAME);
+                affixes = new AffixForCurrency(negPrefixPattern, negSuffixPattern, posPrefixPattern, posSuffixPattern,
+                        Currency.LONG_NAME);
                 affixPatternsForCurrency.add(affixes);
             }
         }
@@ -2168,174 +2099,111 @@ public class DecimalFormat extends NumberFormat {
     private static final int STATUS_LENGTH = 3;
 
     private static final UnicodeSet dotEquivalents = new UnicodeSet(
-            //"[.\u2024\u3002\uFE12\uFE52\uFF0E\uFF61]"
-            0x002E, 0x002E,
-            0x2024, 0x2024,
-            0x3002, 0x3002,
-            0xFE12, 0xFE12,
-            0xFE52, 0xFE52,
-            0xFF0E, 0xFF0E,
-            0xFF61, 0xFF61).freeze();
+            // "[.\u2024\u3002\uFE12\uFE52\uFF0E\uFF61]"
+            0x002E, 0x002E, 0x2024, 0x2024, 0x3002, 0x3002, 0xFE12, 0xFE12, 0xFE52, 0xFE52, 0xFF0E, 0xFF0E, 0xFF61,
+            0xFF61).freeze();
 
     private static final UnicodeSet commaEquivalents = new UnicodeSet(
-            //"[,\u060C\u066B\u3001\uFE10\uFE11\uFE50\uFE51\uFF0C\uFF64]"
-            0x002C, 0x002C,
-            0x060C, 0x060C,
-            0x066B, 0x066B,
-            0x3001, 0x3001,
-            0xFE10, 0xFE11,
-            0xFE50, 0xFE51,
-            0xFF0C, 0xFF0C,
-            0xFF64, 0xFF64).freeze();
+            // "[,\u060C\u066B\u3001\uFE10\uFE11\uFE50\uFE51\uFF0C\uFF64]"
+            0x002C, 0x002C, 0x060C, 0x060C, 0x066B, 0x066B, 0x3001, 0x3001, 0xFE10, 0xFE11, 0xFE50, 0xFE51, 0xFF0C,
+            0xFF0C, 0xFF64, 0xFF64).freeze();
 
-//    private static final UnicodeSet otherGroupingSeparators = new UnicodeSet(
-//            //"[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]"
-//            0x0020, 0x0020,
-//            0x0027, 0x0027,
-//            0x00A0, 0x00A0,
-//            0x066C, 0x066C,
-//            0x2000, 0x200A,
-//            0x2018, 0x2019,
-//            0x202F, 0x202F,
-//            0x205F, 0x205F,
-//            0x3000, 0x3000,
-//            0xFF07, 0xFF07).freeze();
+    // private static final UnicodeSet otherGroupingSeparators = new UnicodeSet(
+    // //"[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]"
+    // 0x0020, 0x0020,
+    // 0x0027, 0x0027,
+    // 0x00A0, 0x00A0,
+    // 0x066C, 0x066C,
+    // 0x2000, 0x200A,
+    // 0x2018, 0x2019,
+    // 0x202F, 0x202F,
+    // 0x205F, 0x205F,
+    // 0x3000, 0x3000,
+    // 0xFF07, 0xFF07).freeze();
 
     private static final UnicodeSet strictDotEquivalents = new UnicodeSet(
-            //"[.\u2024\uFE52\uFF0E\uFF61]"
-            0x002E, 0x002E,
-            0x2024, 0x2024,
-            0xFE52, 0xFE52,
-            0xFF0E, 0xFF0E,
-            0xFF61, 0xFF61).freeze();
+    // "[.\u2024\uFE52\uFF0E\uFF61]"
+            0x002E, 0x002E, 0x2024, 0x2024, 0xFE52, 0xFE52, 0xFF0E, 0xFF0E, 0xFF61, 0xFF61).freeze();
 
     private static final UnicodeSet strictCommaEquivalents = new UnicodeSet(
-            //"[,\u066B\uFE10\uFE50\uFF0C]"
-            0x002C, 0x002C,
-            0x066B, 0x066B,
-            0xFE10, 0xFE10,
-            0xFE50, 0xFE50,
-            0xFF0C, 0xFF0C).freeze();
+    // "[,\u066B\uFE10\uFE50\uFF0C]"
+            0x002C, 0x002C, 0x066B, 0x066B, 0xFE10, 0xFE10, 0xFE50, 0xFE50, 0xFF0C, 0xFF0C).freeze();
 
-//    private static final UnicodeSet strictOtherGroupingSeparators = new UnicodeSet(
-//            //"[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]"
-//            0x0020, 0x0020,
-//            0x0027, 0x0027,
-//            0x00A0, 0x00A0,
-//            0x066C, 0x066C,
-//            0x2000, 0x200A,
-//            0x2018, 0x2019,
-//            0x202F, 0x202F,
-//            0x205F, 0x205F,
-//            0x3000, 0x3000,
-//            0xFF07, 0xFF07).freeze();
+    // private static final UnicodeSet strictOtherGroupingSeparators = new UnicodeSet(
+    // //"[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]"
+    // 0x0020, 0x0020,
+    // 0x0027, 0x0027,
+    // 0x00A0, 0x00A0,
+    // 0x066C, 0x066C,
+    // 0x2000, 0x200A,
+    // 0x2018, 0x2019,
+    // 0x202F, 0x202F,
+    // 0x205F, 0x205F,
+    // 0x3000, 0x3000,
+    // 0xFF07, 0xFF07).freeze();
 
     private static final UnicodeSet defaultGroupingSeparators =
-        // new UnicodeSet(dotEquivalents).addAll(commaEquivalents)
-        //     .addAll(otherGroupingSeparators).freeze();
-        new UnicodeSet(
-                0x0020, 0x0020,
-                0x0027, 0x0027,
-                0x002C, 0x002C,
-                0x002E, 0x002E,
-                0x00A0, 0x00A0,
-                0x060C, 0x060C,
-                0x066B, 0x066C,
-                0x2000, 0x200A,
-                0x2018, 0x2019,
-                0x2024, 0x2024,
-                0x202F, 0x202F,
-                0x205F, 0x205F,
-                0x3000, 0x3002,
-                0xFE10, 0xFE12,
-                0xFE50, 0xFE52,
-                0xFF07, 0xFF07,
-                0xFF0C, 0xFF0C,
-                0xFF0E, 0xFF0E,
-                0xFF61, 0xFF61,
-                0xFF64, 0xFF64).freeze();
+    // new UnicodeSet(dotEquivalents).addAll(commaEquivalents)
+    // .addAll(otherGroupingSeparators).freeze();
+    new UnicodeSet(0x0020, 0x0020, 0x0027, 0x0027, 0x002C, 0x002C, 0x002E, 0x002E, 0x00A0, 0x00A0, 0x060C, 0x060C,
+            0x066B, 0x066C, 0x2000, 0x200A, 0x2018, 0x2019, 0x2024, 0x2024, 0x202F, 0x202F, 0x205F, 0x205F, 0x3000,
+            0x3002, 0xFE10, 0xFE12, 0xFE50, 0xFE52, 0xFF07, 0xFF07, 0xFF0C, 0xFF0C, 0xFF0E, 0xFF0E, 0xFF61, 0xFF61,
+            0xFF64, 0xFF64).freeze();
 
     private static final UnicodeSet strictDefaultGroupingSeparators =
-        // new UnicodeSet(strictDotEquivalents).addAll(strictCommaEquivalents)
-        //     .addAll(strictOtherGroupingSeparators).freeze();
-        new UnicodeSet(
-                0x0020, 0x0020,
-                0x0027, 0x0027,
-                0x002C, 0x002C,
-                0x002E, 0x002E,
-                0x00A0, 0x00A0,
-                0x066B, 0x066C,
-                0x2000, 0x200A,
-                0x2018, 0x2019,
-                0x2024, 0x2024,
-                0x202F, 0x202F,
-                0x205F, 0x205F,
-                0x3000, 0x3000,
-                0xFE10, 0xFE10,
-                0xFE50, 0xFE50,
-                0xFE52, 0xFE52,
-                0xFF07, 0xFF07,
-                0xFF0C, 0xFF0C,
-                0xFF0E, 0xFF0E,
-                0xFF61, 0xFF61).freeze();
-    
-    static final UnicodeSet minusSigns =
-        new UnicodeSet(
-                0x002D, 0x002D,
-                0x207B, 0x207B,
-                0x208B, 0x208B,
-                0x2212, 0x2212,
-                0x2796, 0x2796,
-                0xFE63, 0xFE63,
-                0xFF0D, 0xFF0D).freeze();
-    
-    static final UnicodeSet plusSigns =
-            new UnicodeSet(
-                0x002B, 0x002B,
-                0x207A, 0x207A,
-                0x208A, 0x208A,
-                0x2795, 0x2795,
-                0xFB29, 0xFB29,
-                0xFE62, 0xFE62,
-                0xFF0B, 0xFF0B).freeze();
+    // new UnicodeSet(strictDotEquivalents).addAll(strictCommaEquivalents)
+    // .addAll(strictOtherGroupingSeparators).freeze();
+    new UnicodeSet(0x0020, 0x0020, 0x0027, 0x0027, 0x002C, 0x002C, 0x002E, 0x002E, 0x00A0, 0x00A0, 0x066B, 0x066C,
+            0x2000, 0x200A, 0x2018, 0x2019, 0x2024, 0x2024, 0x202F, 0x202F, 0x205F, 0x205F, 0x3000, 0x3000, 0xFE10,
+            0xFE10, 0xFE50, 0xFE50, 0xFE52, 0xFE52, 0xFF07, 0xFF07, 0xFF0C, 0xFF0C, 0xFF0E, 0xFF0E, 0xFF61, 0xFF61)
+            .freeze();
 
-    // equivalent grouping and decimal support
-    static final boolean skipExtendedSeparatorParsing = ICUConfig.get(
-        "com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false")
-        .equals("true");
+    static final UnicodeSet minusSigns = new UnicodeSet(0x002D, 0x002D, 0x207B, 0x207B, 0x208B, 0x208B, 0x2212, 0x2212,
+            0x2796, 0x2796, 0xFE63, 0xFE63, 0xFF0D, 0xFF0D).freeze();
 
+    static final UnicodeSet plusSigns = new UnicodeSet(0x002B, 0x002B, 0x207A, 0x207A, 0x208A, 0x208A, 0x2795, 0x2795,
+            0xFB29, 0xFB29, 0xFE62, 0xFE62, 0xFF0B, 0xFF0B).freeze();
 
     // When parsing a number with big exponential value, it requires to transform the
-    // value into a string representation to construct BigInteger instance.  We want to
+    // value into a string representation to construct BigInteger instance. We want to
     // set the maximum size because it can easily trigger OutOfMemoryException.
     // PARSE_MAX_EXPONENT is currently set to 1000 (See getParseMaxDigits()),
     // which is much bigger than MAX_VALUE of Double ( See the problem reported by ticket#5698
     private int PARSE_MAX_EXPONENT = 1000;
 
     /**
-     * Parses the given text into a number. The text is parsed beginning at parsePosition,
-     * until an unparseable character is seen.
-     *
-     * @param text the string to parse.
-     * @param parsePosition the position at which to being parsing. Upon return, the first
-     * unparseable character.
-     * @param digits the DigitList to set to the parsed value.
-     * @param status Upon return contains boolean status flags indicating whether the
-     * value was infinite and whether it was positive.
-     * @param currency return value for parsed currency, for generic currency parsing
-     * mode, or null for normal parsing. In generic currency parsing mode, any currency is
-     * parsed, not just the currency that this formatter is set to.
-     * @param negPrefix negative prefix pattern
-     * @param negSuffix negative suffix pattern
-     * @param posPrefix positive prefix pattern
-     * @param negSuffix negative suffix pattern
-     * @param complexCurrencyParsing whether it is complex currency parsing or not.
-     * @param type type of currency to parse against, LONG_NAME only or not.
+     * Parses the given text into a number. The text is parsed beginning at parsePosition, until an unparseable
+     * character is seen.
+     * 
+     * @param text
+     *            the string to parse.
+     * @param parsePosition
+     *            the position at which to being parsing. Upon return, the first unparseable character.
+     * @param digits
+     *            the DigitList to set to the parsed value.
+     * @param status
+     *            Upon return contains boolean status flags indicating whether the value was infinite and whether it was
+     *            positive.
+     * @param currency
+     *            return value for parsed currency, for generic currency parsing mode, or null for normal parsing. In
+     *            generic currency parsing mode, any currency is parsed, not just the currency that this formatter is
+     *            set to.
+     * @param negPrefix
+     *            negative prefix pattern
+     * @param negSuffix
+     *            negative suffix pattern
+     * @param posPrefix
+     *            positive prefix pattern
+     * @param negSuffix
+     *            negative suffix pattern
+     * @param complexCurrencyParsing
+     *            whether it is complex currency parsing or not.
+     * @param type
+     *            type of currency to parse against, LONG_NAME only or not.
      */
-    private final boolean subparse(
-        String text, ParsePosition parsePosition, DigitList digits,
-        boolean status[], Currency currency[], String negPrefix, String negSuffix, String posPrefix,
-        String posSuffix, boolean parseComplexCurrency, int type) {
+    private final boolean subparse(String text, ParsePosition parsePosition, DigitList digits, boolean status[],
+            Currency currency[], String negPrefix, String negSuffix, String posPrefix, String posSuffix,
+            boolean parseComplexCurrency, int type) {
 
         int position = parsePosition.getIndex();
         int oldStart = parsePosition.getIndex();
@@ -2371,23 +2239,22 @@ public class DecimalFormat extends NumberFormat {
 
         // process digits or Inf, find decimal position
         status[STATUS_INFINITE] = false;
-        if (text.regionMatches(position, symbols.getInfinity(), 0,
-                                              symbols.getInfinity().length())) {
+        if (text.regionMatches(position, symbols.getInfinity(), 0, symbols.getInfinity().length())) {
             position += symbols.getInfinity().length();
             status[STATUS_INFINITE] = true;
         } else {
             // We now have a string of digits, possibly with grouping symbols, and decimal
-            // points. We want to process these into a DigitList.  We don't want to put a
+            // points. We want to process these into a DigitList. We don't want to put a
             // bunch of leading zeros into the DigitList though, so we keep track of the
             // location of the decimal point, put only significant digits into the
             // DigitList, and adjust the exponent as needed.
 
             digits.decimalAt = digits.count = 0;
-            char [] digitSymbols = symbols.getDigitsLocal();
-            char decimal = (currencySignCount == CURRENCY_SIGN_COUNT_ZERO) ?
-                    symbols.getDecimalSeparator() : symbols.getMonetaryDecimalSeparator();
-            char grouping = (currencySignCount == CURRENCY_SIGN_COUNT_ZERO) ?
-                    symbols.getGroupingSeparator() : symbols.getMonetaryGroupingSeparator();
+            char[] digitSymbols = symbols.getDigitsLocal();
+            char decimal = (currencySignCount == CURRENCY_SIGN_COUNT_ZERO) ? symbols.getDecimalSeparator() : symbols
+                    .getMonetaryDecimalSeparator();
+            char grouping = (currencySignCount == CURRENCY_SIGN_COUNT_ZERO) ? symbols.getGroupingSeparator() : symbols
+                    .getMonetaryGroupingSeparator();
 
             String exponentSep = symbols.getExponentSeparator();
             boolean sawDecimal = false;
@@ -2404,10 +2271,14 @@ public class DecimalFormat extends NumberFormat {
             int digitStart = position; // where did the digit start?
             int gs2 = groupingSize2 == 0 ? groupingSize : groupingSize2;
 
-            UnicodeSet decimalEquiv = skipExtendedSeparatorParsing ? UnicodeSet.EMPTY :
-                getEquivalentDecimals(decimal, strictParse);
-            UnicodeSet groupEquiv = skipExtendedSeparatorParsing ? UnicodeSet.EMPTY :
-                (strictParse ? strictDefaultGroupingSeparators : defaultGroupingSeparators);
+            // equivalent grouping and decimal support
+            boolean skipExtendedSeparatorParsing = ICUConfig.get(
+                    "com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false").equals("true");
+
+            UnicodeSet decimalEquiv = skipExtendedSeparatorParsing ? UnicodeSet.EMPTY : getEquivalentDecimals(decimal,
+                    strictParse);
+            UnicodeSet groupEquiv = skipExtendedSeparatorParsing ? UnicodeSet.EMPTY
+                    : (strictParse ? strictDefaultGroupingSeparators : defaultGroupingSeparators);
 
             // We have to track digitCount ourselves, because digits.count will pin when
             // the maximum allowable digits is reached.
@@ -2416,8 +2287,7 @@ public class DecimalFormat extends NumberFormat {
             int backup = -1;
             int ch;
             for (; position < text.length(); position += UTF16.getCharCount(ch)) {
-                ch = UTF16.charAt(text,position);
-
+                ch = UTF16.charAt(text, position);
 
                 // We recognize all digit ranges, not only the Latin digit range
                 // '0'..'9'. We do so by using the UCharacter.digit() method, which
@@ -2432,13 +2302,11 @@ public class DecimalFormat extends NumberFormat {
                 if (digit < 0 || digit > 9)
                     digit = UCharacter.digit(ch, 10);
                 if (digit < 0 || digit > 9) {
-                    for ( digit = 0 ; digit < 10 ; digit++) {
-                        if ( ch == digitSymbols[digit] )
+                    for (digit = 0; digit < 10; digit++) {
+                        if (ch == digitSymbols[digit])
                             break;
                     }
                 }
-
-
 
                 if (digit == 0) {
                     // Cancel out backup setting (see grouping handler below)
@@ -2493,8 +2361,8 @@ public class DecimalFormat extends NumberFormat {
                     backup = -1;
                 } else if (ch == decimal) {
                     if (strictParse) {
-                        if (backup != -1 ||
-                            (lastGroup != -1 && countCodePoints(text,lastGroup,position) != groupingSize + 1)) {
+                        if (backup != -1
+                                || (lastGroup != -1 && countCodePoints(text, lastGroup, position) != groupingSize + 1)) {
                             strictFail = true;
                             break;
                         }
@@ -2524,8 +2392,8 @@ public class DecimalFormat extends NumberFormat {
                     sawGrouping = true;
                 } else if (!sawDecimal && decimalEquiv.contains(ch)) {
                     if (strictParse) {
-                        if (backup != -1 ||
-                            (lastGroup != -1 && countCodePoints(text,lastGroup,position) != groupingSize + 1)) {
+                        if (backup != -1
+                                || (lastGroup != -1 && countCodePoints(text, lastGroup, position) != groupingSize + 1)) {
                             strictFail = true;
                             break;
                         }
@@ -2564,7 +2432,7 @@ public class DecimalFormat extends NumberFormat {
                     boolean negExp = false;
                     int pos = position + exponentSep.length();
                     if (pos < text.length()) {
-                        ch = UTF16.charAt(text,pos);
+                        ch = UTF16.charAt(text, pos);
                         if (ch == symbols.getPlusSign()) {
                             ++pos;
                         } else if (ch == symbols.getMinusSign()) {
@@ -2576,16 +2444,16 @@ public class DecimalFormat extends NumberFormat {
                     DigitList exponentDigits = new DigitList();
                     exponentDigits.count = 0;
                     while (pos < text.length()) {
-                        digit = UTF16.charAt(text,pos) - digitSymbols[0];
+                        digit = UTF16.charAt(text, pos) - digitSymbols[0];
                         if (digit < 0 || digit > 9) {
                             // Can't parse "[1E0]" when pattern is "0.###E0;[0.###E0]"
                             // Should update reassign the value of 'ch' in the code: digit
                             // = Character.digit(ch, 10); [Richard/GCL]
-                            digit = UCharacter.digit(UTF16.charAt(text,pos), 10);
+                            digit = UCharacter.digit(UTF16.charAt(text, pos), 10);
                         }
                         if (digit >= 0 && digit <= 9) {
                             exponentDigits.append((char) (digit + '0'));
-                            pos += UTF16.getCharCount(UTF16.charAt(text,pos));
+                            pos += UTF16.getCharCount(UTF16.charAt(text, pos));
                         } else {
                             break;
                         }
@@ -2600,7 +2468,7 @@ public class DecimalFormat extends NumberFormat {
                             }
                         }
 
-                        // Quick overflow check for exponential part.  Actual limit check
+                        // Quick overflow check for exponential part. Actual limit check
                         // will be done later in this code.
                         if (exponentDigits.count > 10 /* maximum decimal digits for int */) {
                             if (negExp) {
@@ -2636,7 +2504,7 @@ public class DecimalFormat extends NumberFormat {
 
             // check for strict parse errors
             if (strictParse && !sawDecimal) {
-                if (lastGroup != -1 && countCodePoints(text,lastGroup,position) != groupingSize + 1) {
+                if (lastGroup != -1 && countCodePoints(text, lastGroup, position) != groupingSize + 1) {
                     strictFail = true;
                 }
             }
@@ -2715,18 +2583,19 @@ public class DecimalFormat extends NumberFormat {
     }
 
     // Utility method used to count the number of codepoints
-    private int countCodePoints(String str,int start, int end) {
+    private int countCodePoints(String str, int start, int end) {
         int count = 0;
         int index = start;
-        while ( index < end ) {
+        while (index < end) {
             count++;
             index += UTF16.getCharCount(UTF16.charAt(str, index));
         }
         return count;
     }
+
     /**
-     * Returns a set of characters equivalent to the given desimal separator used for
-     * parsing number.  This method may return an empty set.
+     * Returns a set of characters equivalent to the given desimal separator used for parsing number. This method may
+     * return an empty set.
      */
     private UnicodeSet getEquivalentDecimals(char decimal, boolean strictParse) {
         UnicodeSet equivSet = UnicodeSet.EMPTY;
@@ -2747,9 +2616,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Starting at position, advance past a run of pad characters, if any. Return the
-     * index of the first character after position that is not a pad character. Result is
-     * >= position.
+     * Starting at position, advance past a run of pad characters, if any. Return the index of the first character after
+     * position that is not a pad character. Result is >= position.
      */
     private final int skipPadding(String text, int position) {
         while (position < text.length() && text.charAt(position) == pad) {
@@ -2759,25 +2627,31 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the length matched by the given affix, or -1 if none. Runs of white space
-     * in the affix, match runs of white space in the input. Pattern white space and input
-     * white space are determined differently; see code.
-     *
-     * @param text input text
-     * @param pos offset into input at which to begin matching
+     * Returns the length matched by the given affix, or -1 if none. Runs of white space in the affix, match runs of
+     * white space in the input. Pattern white space and input white space are determined differently; see code.
+     * 
+     * @param text
+     *            input text
+     * @param pos
+     *            offset into input at which to begin matching
      * @param isNegative
      * @param isPrefix
-     * @param affixPat affix pattern used for currency affix comparison
-     * @param copmplexCurrencyParsing whether it is currency parsing or not
-     * @param type compare against currency type, LONG_NAME only or not.
-     * @param currency return value for parsed currency, for generic currency parsing
-     * mode, or null for normal parsing.  In generic currency parsing mode, any currency
-     * is parsed, not just the currency that this formatter is set to.
+     * @param affixPat
+     *            affix pattern used for currency affix comparison
+     * @param copmplexCurrencyParsing
+     *            whether it is currency parsing or not
+     * @param type
+     *            compare against currency type, LONG_NAME only or not.
+     * @param currency
+     *            return value for parsed currency, for generic currency parsing mode, or null for normal parsing. In
+     *            generic currency parsing mode, any currency is parsed, not just the currency that this formatter is
+     *            set to.
      * @return length of input that matches, or -1 if match failure
      */
-    private int compareAffix(String text, int pos, boolean isNegative, boolean isPrefix,
-                             String affixPat, boolean complexCurrencyParsing, int type, Currency[] currency) {
-        if (currency != null || currencyChoice != null || (currencySignCount != CURRENCY_SIGN_COUNT_ZERO && complexCurrencyParsing)) {
+    private int compareAffix(String text, int pos, boolean isNegative, boolean isPrefix, String affixPat,
+            boolean complexCurrencyParsing, int type, Currency[] currency) {
+        if (currency != null || currencyChoice != null
+                || (currencySignCount != CURRENCY_SIGN_COUNT_ZERO && complexCurrencyParsing)) {
             return compareComplexAffix(affixPat, text, pos, type, currency);
         }
         if (isPrefix) {
@@ -2792,46 +2666,48 @@ public class DecimalFormat extends NumberFormat {
      * Check for bidi marks: LRM, RLM, ALM
      */
     private static boolean isBidiMark(int c) {
-        return (c==0x200E || c==0x200F || c==0x061C);
+        return (c == 0x200E || c == 0x200F || c == 0x061C);
     }
 
     /**
      * Remove bidi marks from affix
      */
-    private static String trimMarksFromAffix(String affix) { 
-        boolean hasBidiMark = false; 
-        int idx = 0; 
-        for (; idx < affix.length(); idx++) { 
-            if (isBidiMark(affix.charAt(idx))) { 
-                hasBidiMark = true; 
-                break; 
-            } 
-        } 
-        if (!hasBidiMark) { 
-            return affix; 
-        } 
+    private static String trimMarksFromAffix(String affix) {
+        boolean hasBidiMark = false;
+        int idx = 0;
+        for (; idx < affix.length(); idx++) {
+            if (isBidiMark(affix.charAt(idx))) {
+                hasBidiMark = true;
+                break;
+            }
+        }
+        if (!hasBidiMark) {
+            return affix;
+        }
 
-        StringBuilder buf = new StringBuilder(); 
-        buf.append(affix, 0, idx); 
-        idx++;  // skip the first Bidi mark 
-        for (; idx < affix.length(); idx++) { 
-            char c = affix.charAt(idx); 
-            if (!isBidiMark(c)) { 
-                buf.append(c); 
-            } 
-        } 
+        StringBuilder buf = new StringBuilder();
+        buf.append(affix, 0, idx);
+        idx++; // skip the first Bidi mark
+        for (; idx < affix.length(); idx++) {
+            char c = affix.charAt(idx);
+            if (!isBidiMark(c)) {
+                buf.append(c);
+            }
+        }
 
-        return buf.toString(); 
-    } 
+        return buf.toString();
+    }
 
     /**
-     * Return the length matched by the given affix, or -1 if none. Runs of white space in
-     * the affix, match runs of white space in the input. Pattern white space and input
-     * white space are determined differently; see code.
-     *
-     * @param affix pattern string, taken as a literal
-     * @param input input text
-     * @param pos offset into input at which to begin matching
+     * Return the length matched by the given affix, or -1 if none. Runs of white space in the affix, match runs of
+     * white space in the input. Pattern white space and input white space are determined differently; see code.
+     * 
+     * @param affix
+     *            pattern string, taken as a literal
+     * @param input
+     *            input text
+     * @param pos
+     *            offset into input at which to begin matching
      * @return length of input that matches, or -1 if match failure
      */
     private static int compareSimpleAffix(String affix, String input, int pos) {
@@ -2839,7 +2715,7 @@ public class DecimalFormat extends NumberFormat {
         // Affixes here might consist of sign, currency symbol and related spacing, etc.
         // For more efficiency we should keep lazily-created trimmed affixes around in
         // instance variables instead of trimming each time they are used (the next step).
-        String trimmedAffix = (affix.length() > 1)? trimMarksFromAffix(affix): affix;
+        String trimmedAffix = (affix.length() > 1) ? trimMarksFromAffix(affix) : affix;
         for (int i = 0; i < trimmedAffix.length();) {
             int c = UTF16.charAt(trimmedAffix, i);
             int len = UTF16.getCharCount(c);
@@ -2881,7 +2757,7 @@ public class DecimalFormat extends NumberFormat {
                     return -1;
                 }
                 // If we skip UWhiteSpace in the input text, we need to skip it in the
-                // pattern.  Otherwise, the previous lines may have skipped over text
+                // pattern. Otherwise, the previous lines may have skipped over text
                 // (such as U+00A0) that is also in the trimmedAffix.
                 i = skipUWhiteSpace(trimmedAffix, i);
             } else {
@@ -2907,8 +2783,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     private static boolean equalWithSignCompatibility(int lhs, int rhs) {
-        return lhs == rhs
-                || (minusSigns.contains(lhs) && minusSigns.contains(rhs))
+        return lhs == rhs || (minusSigns.contains(lhs) && minusSigns.contains(rhs))
                 || (plusSigns.contains(lhs) && plusSigns.contains(rhs));
     }
 
@@ -2940,7 +2815,7 @@ public class DecimalFormat extends NumberFormat {
         return pos;
     }
 
-     /**
+    /**
      * Skips over a run of zero or more bidi marks at pos in text.
      */
     private static int skipBidiMarks(String text, int pos) {
@@ -2954,21 +2829,24 @@ public class DecimalFormat extends NumberFormat {
         return pos;
     }
 
-   /**
+    /**
      * Returns the length matched by the given affix, or -1 if none.
-     *
-     * @param affixPat pattern string
-     * @param text input text
-     * @param pos offset into input at which to begin matching
-     * @param type parse against currency type, LONG_NAME only or not.
-     * @param currency return value for parsed currency, for generic
-     * currency parsing mode, or null for normal parsing.  In generic
-     * currency parsing mode, any currency is parsed, not just the
-     * currency that this formatter is set to.
+     * 
+     * @param affixPat
+     *            pattern string
+     * @param text
+     *            input text
+     * @param pos
+     *            offset into input at which to begin matching
+     * @param type
+     *            parse against currency type, LONG_NAME only or not.
+     * @param currency
+     *            return value for parsed currency, for generic currency parsing mode, or null for normal parsing. In
+     *            generic currency parsing mode, any currency is parsed, not just the currency that this formatter is
+     *            set to.
      * @return position after the matched text, or -1 if match failure
      */
-    private int compareComplexAffix(String affixPat, String text, int pos, int type,
-                                    Currency[] currency) {
+    private int compareComplexAffix(String affixPat, String text, int pos, int type, Currency[] currency) {
         int start = pos;
         for (int i = 0; i < affixPat.length() && pos >= 0;) {
             char c = affixPat.charAt(i++);
@@ -3003,7 +2881,7 @@ public class DecimalFormat extends NumberFormat {
                 // since the currency names in choice format is saved the same way as
                 // other currency names, do not need to do currency choice parsing here.
                 // the general currency parsing parse against all names, including names
-                // in choice format.  assert(currency != null || (getCurrency() != null &&
+                // in choice format. assert(currency != null || (getCurrency() != null &&
                 // currencyChoice != null));
                 boolean intl = i < affixPat.length() && affixPat.charAt(i) == CURRENCY_SIGN;
                 if (intl) {
@@ -3015,8 +2893,8 @@ public class DecimalFormat extends NumberFormat {
                     intl = false;
                 }
                 // Parse generic currency -- anything for which we have a display name, or
-                // any 3-letter ISO code.  Try to parse display name for our locale; first
-                // determine our locale.  TODO: use locale in CurrencyPluralInfo
+                // any 3-letter ISO code. Try to parse display name for our locale; first
+                // determine our locale. TODO: use locale in CurrencyPluralInfo
                 ULocale uloc = getLocale(ULocale.VALID_LOCALE);
                 if (uloc == null) {
                     // applyPattern has been called; use the symbols
@@ -3066,9 +2944,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Matches a single character at text[pos] and return the index of the next character
-     * upon success. Return -1 on failure. If ch is a Pattern_White_Space then match a run of
-     * white space in text.
+     * Matches a single character at text[pos] and return the index of the next character upon success. Return -1 on
+     * failure. If ch is a Pattern_White_Space then match a run of white space in text.
      */
     static final int match(String text, int pos, int ch) {
         if (pos < 0 || pos >= text.length()) {
@@ -3093,9 +2970,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Matches a string at text[pos] and return the index of the next character upon
-     * success. Return -1 on failure. Match a run of white space in str with a run of
-     * white space in text.
+     * Matches a string at text[pos] and return the index of the next character upon success. Return -1 on failure.
+     * Match a run of white space in str with a run of white space in text.
      */
     static final int match(String text, int pos, String str) {
         for (int i = 0; i < str.length() && pos >= 0;) {
@@ -3111,7 +2987,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns a copy of the decimal format symbols used by this format.
-     *
+     * 
      * @return desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
      * @stable ICU 2.0
@@ -3126,10 +3002,10 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the decimal format symbols used by this format. The format uses a copy of the
-     * provided symbols.
-     *
-     * @param newSymbols desired DecimalFormatSymbols
+     * Sets the decimal format symbols used by this format. The format uses a copy of the provided symbols.
+     * 
+     * @param newSymbols
+     *            desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
      * @stable ICU 2.0
      */
@@ -3140,14 +3016,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Update the currency object to match the symbols. This method is used only when the
-     * caller has passed in a symbols object that may not be the default object for its
-     * locale.
+     * Update the currency object to match the symbols. This method is used only when the caller has passed in a symbols
+     * object that may not be the default object for its locale.
      */
     private void setCurrencyForSymbols() {
 
         // Bug 4212072 Update the affix strings according to symbols in order to keep the
-        // affix strings up to date.  [Richard/GCL]
+        // affix strings up to date. [Richard/GCL]
 
         // With the introduction of the Currency object, the currency symbols in the DFS
         // object are ignored. For backward compatibility, we check any explicitly set DFS
@@ -3157,8 +3032,7 @@ public class DecimalFormat extends NumberFormat {
         DecimalFormatSymbols def = new DecimalFormatSymbols(symbols.getULocale());
 
         if (symbols.getCurrencySymbol().equals(def.getCurrencySymbol())
-                && symbols.getInternationalCurrencySymbol()
-                       .equals(def.getInternationalCurrencySymbol())) {
+                && symbols.getInternationalCurrencySymbol().equals(def.getInternationalCurrencySymbol())) {
             setCurrency(Currency.getInstance(symbols.getULocale()));
         } else {
             setCurrency(null);
@@ -3167,8 +3041,10 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the positive prefix.
-     *
-     * <p>Examples: +123, $123, sFr123
+     * 
+     * <p>
+     * Examples: +123, $123, sFr123
+     * 
      * @return the prefix
      * @stable ICU 2.0
      */
@@ -3178,9 +3054,12 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Sets the positive prefix.
-     *
-     * <p>Examples: +123, $123, sFr123
-     * @param newValue the prefix
+     * 
+     * <p>
+     * Examples: +123, $123, sFr123
+     * 
+     * @param newValue
+     *            the prefix
      * @stable ICU 2.0
      */
     public void setPositivePrefix(String newValue) {
@@ -3190,9 +3069,10 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the negative prefix.
-     *
-     * <p>Examples: -123, ($123) (with negative suffix), sFr-123
-     *
+     * 
+     * <p>
+     * Examples: -123, ($123) (with negative suffix), sFr-123
+     * 
      * @return the prefix
      * @stable ICU 2.0
      */
@@ -3202,9 +3082,12 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Sets the negative prefix.
-     *
-     * <p>Examples: -123, ($123) (with negative suffix), sFr-123
-     * @param newValue the prefix
+     * 
+     * <p>
+     * Examples: -123, ($123) (with negative suffix), sFr-123
+     * 
+     * @param newValue
+     *            the prefix
      * @stable ICU 2.0
      */
     public void setNegativePrefix(String newValue) {
@@ -3214,9 +3097,10 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the positive suffix.
-     *
-     * <p>Example: 123%
-     *
+     * 
+     * <p>
+     * Example: 123%
+     * 
      * @return the suffix
      * @stable ICU 2.0
      */
@@ -3226,9 +3110,12 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Sets the positive suffix.
-     *
-     * <p>Example: 123%
-     * @param newValue the suffix
+     * 
+     * <p>
+     * Example: 123%
+     * 
+     * @param newValue
+     *            the suffix
      * @stable ICU 2.0
      */
     public void setPositiveSuffix(String newValue) {
@@ -3238,9 +3125,10 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the negative suffix.
-     *
-     * <p>Examples: -123%, ($123) (with positive suffixes)
-     *
+     * 
+     * <p>
+     * Examples: -123%, ($123) (with positive suffixes)
+     * 
      * @return the suffix
      * @stable ICU 2.0
      */
@@ -3250,9 +3138,12 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Sets the positive suffix.
-     *
-     * <p>Examples: 123%
-     * @param newValue the suffix
+     * 
+     * <p>
+     * Examples: 123%
+     * 
+     * @param newValue
+     *            the suffix
      * @stable ICU 2.0
      */
     public void setNegativeSuffix(String newValue) {
@@ -3261,13 +3152,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the multiplier for use in percent, permill, etc. For a percentage, set the
-     * suffixes to have "%" and the multiplier to be 100. (For Arabic, use arabic percent
-     * symbol). For a permill, set the suffixes to have "\u2031" and the multiplier to be
-     * 1000.
-     *
-     * <p>Examples: with 100, 1.23 -> "123", and "123" -> 1.23
-     *
+     * Returns the multiplier for use in percent, permill, etc. For a percentage, set the suffixes to have "%" and the
+     * multiplier to be 100. (For Arabic, use arabic percent symbol). For a permill, set the suffixes to have "\u2031"
+     * and the multiplier to be 1000.
+     * 
+     * <p>
+     * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * 
      * @return the multiplier
      * @stable ICU 2.0
      */
@@ -3276,14 +3167,15 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the multiplier for use in percent, permill, etc. For a percentage, set the
-     * suffixes to have "%" and the multiplier to be 100. (For Arabic, use arabic percent
-     * symbol). For a permill, set the suffixes to have "\u2031" and the multiplier to be
-     * 1000.
-     *
-     * <p>Examples: with 100, 1.23 -> "123", and "123" -> 1.23
-     *
-     * @param newValue the multiplier
+     * Sets the multiplier for use in percent, permill, etc. For a percentage, set the suffixes to have "%" and the
+     * multiplier to be 100. (For Arabic, use arabic percent symbol). For a permill, set the suffixes to have "\u2031"
+     * and the multiplier to be 1000.
+     * 
+     * <p>
+     * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * 
+     * @param newValue
+     *            the multiplier
      * @stable ICU 2.0
      */
     public void setMultiplier(int newValue) {
@@ -3295,9 +3187,8 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Returns the rounding increment.
-     *
-     * @return A positive rounding increment, or <code>null</code> if a custom rounding
-     * increment is not in effect.
+     * 
+     * @return A positive rounding increment, or <code>null</code> if a custom rounding increment is not in effect.
      * @see #setRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -3310,12 +3201,14 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the rounding increment. In the absence of a rounding increment, numbers
-     * will be rounded to the number of digits displayed.
-     *
-     * @param newValue A positive rounding increment, or <code>null</code> or
-     * <code>BigDecimal(0.0)</code> to use the default rounding increment.
-     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
+     * {@icu} Sets the rounding increment. In the absence of a rounding increment, numbers will be rounded to the number
+     * of digits displayed.
+     * 
+     * @param newValue
+     *            A positive rounding increment, or <code>null</code> or <code>BigDecimal(0.0)</code> to use the default
+     *            rounding increment.
+     * @throws IllegalArgumentException
+     *             if <code>newValue</code> is < 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -3330,12 +3223,14 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the rounding increment. In the absence of a rounding increment, numbers
-     * will be rounded to the number of digits displayed.
-     *
-     * @param newValue A positive rounding increment, or <code>null</code> or
-     * <code>BigDecimal(0.0)</code> to use the default rounding increment.
-     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
+     * {@icu} Sets the rounding increment. In the absence of a rounding increment, numbers will be rounded to the number
+     * of digits displayed.
+     * 
+     * @param newValue
+     *            A positive rounding increment, or <code>null</code> or <code>BigDecimal(0.0)</code> to use the default
+     *            rounding increment.
+     * @throws IllegalArgumentException
+     *             if <code>newValue</code> is < 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -3355,12 +3250,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the rounding increment. In the absence of a rounding increment, numbers
-     * will be rounded to the number of digits displayed.
-     *
-     * @param newValue A positive rounding increment, or 0.0 to use the default
-     * rounding increment.
-     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
+     * {@icu} Sets the rounding increment. In the absence of a rounding increment, numbers will be rounded to the number
+     * of digits displayed.
+     * 
+     * @param newValue
+     *            A positive rounding increment, or 0.0 to use the default rounding increment.
+     * @throws IllegalArgumentException
+     *             if <code>newValue</code> is < 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -3382,9 +3278,8 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the rounding mode.
-     *
-     * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
-     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * 
+     * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code> and <code>BigDecimal.ROUND_UNNECESSARY</code>.
      * @see #setRoundingIncrement
      * @see #getRoundingIncrement
      * @see #setRoundingMode
@@ -3397,12 +3292,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the rounding mode. This has no effect unless the rounding increment is greater
-     * than zero.
-     *
-     * @param roundingMode A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
-     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
-     * @exception IllegalArgumentException if <code>roundingMode</code> is unrecognized.
+     * Sets the rounding mode. This has no effect unless the rounding increment is greater than zero.
+     * 
+     * @param roundingMode
+     *            A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
+     *            <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * @exception IllegalArgumentException
+     *                if <code>roundingMode</code> is unrecognized.
      * @see #setRoundingIncrement
      * @see #getRoundingIncrement
      * @see #getRoundingMode
@@ -3420,9 +3316,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the width to which the output of <code>format()</code> is padded. The width is
-     * counted in 16-bit code units.
-     *
+     * Returns the width to which the output of <code>format()</code> is padded. The width is counted in 16-bit code
+     * units.
+     * 
      * @return the format width, or zero if no padding is in effect
      * @see #setFormatWidth
      * @see #getPadCharacter
@@ -3436,13 +3332,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the width to which the output of <code>format()</code> is
-     * padded. The width is counted in 16-bit code units.  This method
-     * also controls whether padding is enabled.
-     *
-     * @param width the width to which to pad the result of
-     * <code>format()</code>, or zero to disable padding
-     * @exception IllegalArgumentException if <code>width</code> is < 0
+     * Sets the width to which the output of <code>format()</code> is padded. The width is counted in 16-bit code units.
+     * This method also controls whether padding is enabled.
+     * 
+     * @param width
+     *            the width to which to pad the result of <code>format()</code>, or zero to disable padding
+     * @exception IllegalArgumentException
+     *                if <code>width</code> is < 0
      * @see #getFormatWidth
      * @see #getPadCharacter
      * @see #setPadCharacter
@@ -3459,7 +3355,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Returns the character used to pad to the format width. The default is ' '.
-     *
+     * 
      * @return the pad character
      * @see #setFormatWidth
      * @see #getFormatWidth
@@ -3473,10 +3369,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the character used to pad to the format width. If padding is not
-     * enabled, then this will take effect if padding is later enabled.
-     *
-     * @param padChar the pad character
+     * {@icu} Sets the character used to pad to the format width. If padding is not enabled, then this will take effect
+     * if padding is later enabled.
+     * 
+     * @param padChar
+     *            the pad character
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #getPadCharacter
@@ -3489,13 +3386,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Returns the position at which padding will take place. This is the location at
-     * which padding will be inserted if the result of <code>format()</code> is shorter
-     * than the format width.
-     *
-     * @return the pad position, one of <code>PAD_BEFORE_PREFIX</code>,
-     *         <code>PAD_AFTER_PREFIX</code>, <code>PAD_BEFORE_SUFFIX</code>, or
-     *         <code>PAD_AFTER_SUFFIX</code>.
+     * {@icu} Returns the position at which padding will take place. This is the location at which padding will be
+     * inserted if the result of <code>format()</code> is shorter than the format width.
+     * 
+     * @return the pad position, one of <code>PAD_BEFORE_PREFIX</code>, <code>PAD_AFTER_PREFIX</code>,
+     *         <code>PAD_BEFORE_SUFFIX</code>, or <code>PAD_AFTER_SUFFIX</code>.
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
@@ -3512,14 +3407,15 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the position at which padding will take place. This is the location at
-     * which padding will be inserted if the result of <code>format()</code> is shorter
-     * than the format width. This has no effect unless padding is enabled.
-     *
-     * @param padPos the pad position, one of <code>PAD_BEFORE_PREFIX</code>,
-     * <code>PAD_AFTER_PREFIX</code>, <code>PAD_BEFORE_SUFFIX</code>, or
-     * <code>PAD_AFTER_SUFFIX</code>.
-     * @exception IllegalArgumentException if the pad position in unrecognized
+     * {@icu} Sets the position at which padding will take place. This is the location at which padding will be inserted
+     * if the result of <code>format()</code> is shorter than the format width. This has no effect unless padding is
+     * enabled.
+     * 
+     * @param padPos
+     *            the pad position, one of <code>PAD_BEFORE_PREFIX</code>, <code>PAD_AFTER_PREFIX</code>,
+     *            <code>PAD_BEFORE_SUFFIX</code>, or <code>PAD_AFTER_SUFFIX</code>.
+     * @exception IllegalArgumentException
+     *                if the pad position in unrecognized
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
@@ -3540,7 +3436,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Returns whether or not scientific notation is used.
-     *
+     * 
      * @return true if this object formats and parses scientific notation
      * @see #setScientificNotation
      * @see #getMinimumExponentDigits
@@ -3554,13 +3450,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets whether or not scientific notation is used. When scientific notation is
-     * used, the effective maximum number of integer digits is <= 8. If the maximum number
-     * of integer digits is set to more than 8, the effective maximum will be 1. This
-     * allows this call to generate a 'default' scientific number format without
-     * additional changes.
-     *
-     * @param useScientific true if this object formats and parses scientific notation
+     * {@icu} Sets whether or not scientific notation is used. When scientific notation is used, the effective maximum
+     * number of integer digits is <= 8. If the maximum number of integer digits is set to more than 8, the effective
+     * maximum will be 1. This allows this call to generate a 'default' scientific number format without additional
+     * changes.
+     * 
+     * @param useScientific
+     *            true if this object formats and parses scientific notation
      * @see #isScientificNotation
      * @see #getMinimumExponentDigits
      * @see #setMinimumExponentDigits
@@ -3574,7 +3470,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Returns the minimum exponent digits that will be shown.
-     *
+     * 
      * @return the minimum exponent digits that will be shown
      * @see #setScientificNotation
      * @see #isScientificNotation
@@ -3588,12 +3484,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the minimum exponent digits that will be shown. This has no effect
-     * unless scientific notation is in use.
-     *
-     * @param minExpDig a value >= 1 indicating the fewest exponent
-     * digits that will be shown
-     * @exception IllegalArgumentException if <code>minExpDig</code> < 1
+     * {@icu} Sets the minimum exponent digits that will be shown. This has no effect unless scientific notation is in
+     * use.
+     * 
+     * @param minExpDig
+     *            a value >= 1 indicating the fewest exponent digits that will be shown
+     * @exception IllegalArgumentException
+     *                if <code>minExpDig</code> < 1
      * @see #setScientificNotation
      * @see #isScientificNotation
      * @see #getMinimumExponentDigits
@@ -3610,10 +3507,9 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Returns whether the exponent sign is always shown.
-     *
-     * @return true if the exponent is always prefixed with either the localized minus
-     * sign or the localized plus sign, false if only negative exponents are prefixed with
-     * the localized minus sign.
+     * 
+     * @return true if the exponent is always prefixed with either the localized minus sign or the localized plus sign,
+     *         false if only negative exponents are prefixed with the localized minus sign.
      * @see #setScientificNotation
      * @see #isScientificNotation
      * @see #setMinimumExponentDigits
@@ -3626,12 +3522,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets whether the exponent sign is always shown. This has no effect unless
-     * scientific notation is in use.
-     *
-     * @param expSignAlways true if the exponent is always prefixed with either the
-     * localized minus sign or the localized plus sign, false if only negative exponents
-     * are prefixed with the localized minus sign.
+     * {@icu} Sets whether the exponent sign is always shown. This has no effect unless scientific notation is in use.
+     * 
+     * @param expSignAlways
+     *            true if the exponent is always prefixed with either the localized minus sign or the localized plus
+     *            sign, false if only negative exponents are prefixed with the localized minus sign.
      * @see #setScientificNotation
      * @see #isScientificNotation
      * @see #setMinimumExponentDigits
@@ -3644,10 +3539,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the grouping size. Grouping size is the number of digits between grouping
-     * separators in the integer portion of a number. For example, in the number
-     * "123,456.78", the grouping size is 3.
-     *
+     * Returns the grouping size. Grouping size is the number of digits between grouping separators in the integer
+     * portion of a number. For example, in the number "123,456.78", the grouping size is 3.
+     * 
      * @see #setGroupingSize
      * @see NumberFormat#isGroupingUsed
      * @see DecimalFormatSymbols#getGroupingSeparator
@@ -3658,10 +3552,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the grouping size. Grouping size is the number of digits between grouping
-     * separators in the integer portion of a number. For example, in the number
-     * "123,456.78", the grouping size is 3.
-     *
+     * Sets the grouping size. Grouping size is the number of digits between grouping separators in the integer portion
+     * of a number. For example, in the number "123,456.78", the grouping size is 3.
+     * 
      * @see #getGroupingSize
      * @see NumberFormat#setGroupingUsed
      * @see DecimalFormatSymbols#setGroupingSeparator
@@ -3672,14 +3565,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Returns the secondary grouping size. In some locales one grouping interval
-     * is used for the least significant integer digits (the primary grouping size), and
-     * another is used for all others (the secondary grouping size). A formatter
-     * supporting a secondary grouping size will return a positive integer unequal to the
-     * primary grouping size returned by <code>getGroupingSize()</code>. For example, if
-     * the primary grouping size is 4, and the secondary grouping size is 2, then the
-     * number 123456789 formats as "1,23,45,6789", and the pattern appears as "#,##,###0".
-     *
+     * {@icu} Returns the secondary grouping size. In some locales one grouping interval is used for the least
+     * significant integer digits (the primary grouping size), and another is used for all others (the secondary
+     * grouping size). A formatter supporting a secondary grouping size will return a positive integer unequal to the
+     * primary grouping size returned by <code>getGroupingSize()</code>. For example, if the primary grouping size is 4,
+     * and the secondary grouping size is 2, then the number 123456789 formats as "1,23,45,6789", and the pattern
+     * appears as "#,##,###0".
+     * 
      * @return the secondary grouping size, or a value less than one if there is none
      * @see #setSecondaryGroupingSize
      * @see NumberFormat#isGroupingUsed
@@ -3691,10 +3583,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the secondary grouping size. If set to a value less than 1, then
-     * secondary grouping is turned off, and the primary grouping size is used for all
-     * intervals, not just the least significant.
-     *
+     * {@icu} Sets the secondary grouping size. If set to a value less than 1, then secondary grouping is turned off,
+     * and the primary grouping size is used for all intervals, not just the least significant.
+     * 
      * @see #getSecondaryGroupingSize
      * @see NumberFormat#setGroupingUsed
      * @see DecimalFormatSymbols#setGroupingSeparator
@@ -3706,7 +3597,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Returns the MathContext used by this format.
-     *
+     * 
      * @return desired MathContext
      * @see #getMathContext
      * @stable ICU 4.2
@@ -3717,7 +3608,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Returns the MathContext used by this format.
-     *
+     * 
      * @return desired MathContext
      * @see #getMathContext
      * @stable ICU 4.2
@@ -3734,8 +3625,9 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Sets the MathContext used by this format.
-     *
-     * @param newValue desired MathContext
+     * 
+     * @param newValue
+     *            desired MathContext
      * @see #getMathContext
      * @stable ICU 4.2
      */
@@ -3745,21 +3637,23 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Sets the MathContext used by this format.
-     *
-     * @param newValue desired MathContext
+     * 
+     * @param newValue
+     *            desired MathContext
      * @see #getMathContext
      * @stable ICU 4.2
      */
     public void setMathContext(java.math.MathContext newValue) {
         mathContext = new MathContext(newValue.getPrecision(), MathContext.SCIENTIFIC, false,
-                                      (newValue.getRoundingMode()).ordinal());
+                (newValue.getRoundingMode()).ordinal());
     }
 
     /**
-     * Returns the behavior of the decimal separator with integers. (The decimal
-     * separator will always appear with decimals.)  <p> Example: Decimal ON: 12345 ->
-     * 12345.; OFF: 12345 -> 12345
-     *
+     * Returns the behavior of the decimal separator with integers. (The decimal separator will always appear with
+     * decimals.)
+     * <p>
+     * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
+     * 
      * @stable ICU 2.0
      */
     public boolean isDecimalSeparatorAlwaysShown() {
@@ -3767,17 +3661,17 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the behavior of the decimal separator with integers. (The decimal separator
-     * will always appear with decimals.)
-     *
-     * <p>This only affects formatting, and only where there might be no digits after the
-     * decimal point, e.g., if true, 3456.00 -> "3,456." if false, 3456.00 -> "3456" This
-     * is independent of parsing. If you want parsing to stop at the decimal point, use
-     * setParseIntegerOnly.
-     *
+     * Sets the behavior of the decimal separator with integers. (The decimal separator will always appear with
+     * decimals.)
+     * 
+     * <p>
+     * This only affects formatting, and only where there might be no digits after the decimal point, e.g., if true,
+     * 3456.00 -> "3,456." if false, 3456.00 -> "3456" This is independent of parsing. If you want parsing to stop at
+     * the decimal point, use setParseIntegerOnly.
+     * 
      * <p>
      * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
-     *
+     * 
      * @stable ICU 2.0
      */
     public void setDecimalSeparatorAlwaysShown(boolean newValue) {
@@ -3785,12 +3679,10 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Returns a copy of the CurrencyPluralInfo used by this format. It might
-     * return null if the decimal format is not a plural type currency decimal
-     * format. Plural type currency decimal format means either the pattern in the decimal
-     * format contains 3 currency signs, or the decimal format is initialized with
-     * PLURALCURRENCYSTYLE.
-     *
+     * {@icu} Returns a copy of the CurrencyPluralInfo used by this format. It might return null if the decimal format
+     * is not a plural type currency decimal format. Plural type currency decimal format means either the pattern in the
+     * decimal format contains 3 currency signs, or the decimal format is initialized with PLURALCURRENCYSTYLE.
+     * 
      * @return desired CurrencyPluralInfo
      * @see CurrencyPluralInfo
      * @stable ICU 4.2
@@ -3798,18 +3690,17 @@ public class DecimalFormat extends NumberFormat {
     public CurrencyPluralInfo getCurrencyPluralInfo() {
         try {
             // don't allow multiple references
-            return currencyPluralInfo == null ? null :
-                (CurrencyPluralInfo) currencyPluralInfo.clone();
+            return currencyPluralInfo == null ? null : (CurrencyPluralInfo) currencyPluralInfo.clone();
         } catch (Exception foo) {
             return null; // should never happen
         }
     }
 
     /**
-     * {@icu} Sets the CurrencyPluralInfo used by this format. The format uses a copy of
-     * the provided information.
-     *
-     * @param newInfo desired CurrencyPluralInfo
+     * {@icu} Sets the CurrencyPluralInfo used by this format. The format uses a copy of the provided information.
+     * 
+     * @param newInfo
+     *            desired CurrencyPluralInfo
      * @see CurrencyPluralInfo
      * @stable ICU 4.2
      */
@@ -3820,6 +3711,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Overrides clone.
+     * 
      * @stable ICU 2.0
      */
     @Override
@@ -3832,9 +3724,10 @@ public class DecimalFormat extends NumberFormat {
                 other.currencyPluralInfo = (CurrencyPluralInfo) currencyPluralInfo.clone();
             }
             other.attributes = new ArrayList<FieldPosition>(); // #9240
+            other.currencyUsage = currencyUsage;
 
             // TODO: We need to figure out whether we share a single copy of DigitList by
-            // multiple cloned copies.  format/subformat are designed to use a single
+            // multiple cloned copies. format/subformat are designed to use a single
             // instance, but parse/subparse implementation is not.
             return other;
         } catch (Exception e) {
@@ -3844,6 +3737,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Overrides equals.
+     * 
      * @stable ICU 2.0
      */
     @Override
@@ -3858,11 +3752,10 @@ public class DecimalFormat extends NumberFormat {
         // posSuffixPattern, negPrefixPattern, negSuffixPattern. [Richard/GCL]
         // following are added to accomodate changes for currency plural format.
         return currencySignCount == other.currencySignCount
-                && (style != NumberFormat.PLURALCURRENCYSTYLE ||
-                    equals(posPrefixPattern, other.posPrefixPattern)
-                && equals(posSuffixPattern, other.posSuffixPattern)
-                && equals(negPrefixPattern, other.negPrefixPattern)
-                && equals(negSuffixPattern, other.negSuffixPattern))
+                && (style != NumberFormat.PLURALCURRENCYSTYLE || equals(posPrefixPattern, other.posPrefixPattern)
+                        && equals(posSuffixPattern, other.posSuffixPattern)
+                        && equals(negPrefixPattern, other.negPrefixPattern)
+                        && equals(negSuffixPattern, other.negSuffixPattern))
                 && multiplier == other.multiplier
                 && groupingSize == other.groupingSize
                 && groupingSize2 == other.groupingSize2
@@ -3871,9 +3764,9 @@ public class DecimalFormat extends NumberFormat {
                 && (!useExponentialNotation || minExponentDigits == other.minExponentDigits)
                 && useSignificantDigits == other.useSignificantDigits
                 && (!useSignificantDigits || minSignificantDigits == other.minSignificantDigits
-                        && maxSignificantDigits == other.maxSignificantDigits)
-                && symbols.equals(other.symbols)
-                && Utility.objectEquals(currencyPluralInfo, other.currencyPluralInfo);
+                        && maxSignificantDigits == other.maxSignificantDigits) && symbols.equals(other.symbols)
+                && Utility.objectEquals(currencyPluralInfo, other.currencyPluralInfo)
+                && currencyUsage.equals(other.currencyUsage);
     }
 
     // method to unquote the strings and compare
@@ -3906,9 +3799,9 @@ public class DecimalFormat extends NumberFormat {
     // buf.append("posSuffixPattern: '" + posSuffixPattern + "'\n");
     // buf.append("positiveSuffix: '" + positiveSuffix + "'\n");
     // buf.append("negPrefixPattern: '" +
-    //     com.ibm.icu.impl.Utility.format1ForSource(negPrefixPattern) + "'\n");
+    // com.ibm.icu.impl.Utility.format1ForSource(negPrefixPattern) + "'\n");
     // buf.append("negativePrefix: '" +
-    //     com.ibm.icu.impl.Utility.format1ForSource(negativePrefix) + "'\n");
+    // com.ibm.icu.impl.Utility.format1ForSource(negativePrefix) + "'\n");
     // buf.append("negSuffixPattern: '" + negSuffixPattern + "'\n");
     // buf.append("negativeSuffix: '" + negativeSuffix + "'\n");
     // buf.append("multiplier: '" + multiplier + "'\n");
@@ -3925,6 +3818,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Overrides hashCode.
+     * 
      * @stable ICU 2.0
      */
     @Override
@@ -3934,17 +3828,16 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Synthesizes a pattern string that represents the current state of this Format
-     * object.
-     *
+     * Synthesizes a pattern string that represents the current state of this Format object.
+     * 
      * @see #applyPattern
      * @stable ICU 2.0
      */
     public String toPattern() {
         if (style == NumberFormat.PLURALCURRENCYSTYLE) {
             // the prefix or suffix pattern might not be defined yet, so they can not be
-            // synthesized, instead, get them directly.  but it might not be the actual
-            // pattern used in formatting.  the actual pattern used in formatting depends
+            // synthesized, instead, get them directly. but it might not be the actual
+            // pattern used in formatting. the actual pattern used in formatting depends
             // on the formatted number's plural count.
             return formatPattern;
         }
@@ -3952,9 +3845,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Synthesizes a localized pattern string that represents the current state of this
-     * Format object.
-     *
+     * Synthesizes a localized pattern string that represents the current state of this Format object.
+     * 
      * @see #applyPattern
      * @stable ICU 2.0
      */
@@ -3966,15 +3858,12 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Expands the affix pattern strings into the expanded affix strings. If any affix
-     * pattern string is null, do not expand it. This method should be called any time the
-     * symbols or the affix patterns change in order to keep the expanded affix strings up
-     * to date. This method also will be called before formatting if format currency
-     * plural names, since the plural name is not a static one, it is based on the
-     * currency plural count, the affix will be known only after the currency plural count
-     * is know. In which case, the parameter 'pluralCount' will be a non-null currency
-     * plural count. In all other cases, the 'pluralCount' is null, which means it is not
-     * needed.
+     * Expands the affix pattern strings into the expanded affix strings. If any affix pattern string is null, do not
+     * expand it. This method should be called any time the symbols or the affix patterns change in order to keep the
+     * expanded affix strings up to date. This method also will be called before formatting if format currency plural
+     * names, since the plural name is not a static one, it is based on the currency plural count, the affix will be
+     * known only after the currency plural count is know. In which case, the parameter 'pluralCount' will be a non-null
+     * currency plural count. In all other cases, the 'pluralCount' is null, which means it is not needed.
      */
     // Bug 4212072 [Richard/GCL]
     private void expandAffixes(String pluralCount) {
@@ -4003,40 +3892,37 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Expands an affix pattern into an affix string. All characters in the pattern are
-     * literal unless bracketed by QUOTEs. The following characters outside QUOTE are
-     * recognized: PATTERN_PERCENT, PATTERN_PER_MILLE, PATTERN_MINUS, and
-     * CURRENCY_SIGN. If CURRENCY_SIGN is doubled, it is interpreted as an international
-     * currency sign. If CURRENCY_SIGN is tripled, it is interpreted as currency plural
-     * long names, such as "US Dollars". Any other character outside QUOTE represents
-     * itself. Quoted text must be well-formed.
-     *
-     * This method is used in two distinct ways. First, it is used to expand the stored
-     * affix patterns into actual affixes. For this usage, doFormat must be false. Second,
-     * it is used to expand the stored affix patterns given a specific number (doFormat ==
-     * true), for those rare cases in which a currency format references a ChoiceFormat
+     * Expands an affix pattern into an affix string. All characters in the pattern are literal unless bracketed by
+     * QUOTEs. The following characters outside QUOTE are recognized: PATTERN_PERCENT, PATTERN_PER_MILLE, PATTERN_MINUS,
+     * and CURRENCY_SIGN. If CURRENCY_SIGN is doubled, it is interpreted as an international currency sign. If
+     * CURRENCY_SIGN is tripled, it is interpreted as currency plural long names, such as "US Dollars". Any other
+     * character outside QUOTE represents itself. Quoted text must be well-formed.
+     * 
+     * This method is used in two distinct ways. First, it is used to expand the stored affix patterns into actual
+     * affixes. For this usage, doFormat must be false. Second, it is used to expand the stored affix patterns given a
+     * specific number (doFormat == true), for those rare cases in which a currency format references a ChoiceFormat
      * (e.g., en_IN display name for INR). The number itself is taken from digitList.
-     *
-     * When used in the first way, this method has a side effect: It sets currencyChoice
-     * to a ChoiceFormat object, if the currency's display name in this locale is a
-     * ChoiceFormat pattern (very rare). It only does this if currencyChoice is null to
-     * start with.
-     *
-     * @param pattern the non-null, possibly empty pattern
-     * @param pluralCount the plural count. It is only used for currency plural format. In
-     * which case, it is the plural count of the currency amount. For example, in en_US,
-     * it is the singular "one", or the plural "other". For all other cases, it is null,
-     * and is not being used.
-     * @param buffer a scratch StringBuffer; its contents will be lost
-     * @param doFormat if false, then the pattern will be expanded, and if a currency
-     * symbol is encountered that expands to a ChoiceFormat, the currencyChoice member
-     * variable will be initialized if it is null. If doFormat is true, then it is assumed
-     * that the currencyChoice has been created, and it will be used to format the value
-     * in digitList.
+     * 
+     * When used in the first way, this method has a side effect: It sets currencyChoice to a ChoiceFormat object, if
+     * the currency's display name in this locale is a ChoiceFormat pattern (very rare). It only does this if
+     * currencyChoice is null to start with.
+     * 
+     * @param pattern
+     *            the non-null, possibly empty pattern
+     * @param pluralCount
+     *            the plural count. It is only used for currency plural format. In which case, it is the plural count of
+     *            the currency amount. For example, in en_US, it is the singular "one", or the plural "other". For all
+     *            other cases, it is null, and is not being used.
+     * @param buffer
+     *            a scratch StringBuffer; its contents will be lost
+     * @param doFormat
+     *            if false, then the pattern will be expanded, and if a currency symbol is encountered that expands to a
+     *            ChoiceFormat, the currencyChoice member variable will be initialized if it is null. If doFormat is
+     *            true, then it is assumed that the currencyChoice has been created, and it will be used to format the
+     *            value in digitList.
      */
     // Bug 4212072 [Richard/GCL]
-    private void expandAffix(String pattern, String pluralCount, StringBuffer buffer,
-                             boolean doFormat) {
+    private void expandAffix(String pattern, String pluralCount, StringBuffer buffer, boolean doFormat) {
         buffer.setLength(0);
         for (int i = 0; i < pattern.length();) {
             char c = pattern.charAt(i++);
@@ -4085,16 +3971,15 @@ public class DecimalFormat extends NumberFormat {
                 Currency currency = getCurrency();
                 if (currency != null) {
                     // plural name is only needed when pluralCount != null, which means
-                    // when formatting currency plural names.  For other cases,
+                    // when formatting currency plural names. For other cases,
                     // pluralCount == null, and plural names are not needed.
                     if (plural && pluralCount != null) {
                         boolean isChoiceFormat[] = new boolean[1];
-                        s = currency.getName(symbols.getULocale(), Currency.PLURAL_LONG_NAME,
-                                             pluralCount, isChoiceFormat);
+                        s = currency.getName(symbols.getULocale(), Currency.PLURAL_LONG_NAME, pluralCount,
+                                isChoiceFormat);
                     } else if (!intl) {
                         boolean isChoiceFormat[] = new boolean[1];
-                        s = currency.getName(symbols.getULocale(), Currency.SYMBOL_NAME,
-                                             isChoiceFormat);
+                        s = currency.getName(symbols.getULocale(), Currency.SYMBOL_NAME, isChoiceFormat);
                         if (isChoiceFormat[0]) {
                             // Two modes here: If doFormat is false, we set up
                             // currencyChoice. If doFormat is true, we use the previously
@@ -4123,8 +4008,7 @@ public class DecimalFormat extends NumberFormat {
                         s = currency.getCurrencyCode();
                     }
                 } else {
-                    s = intl ? symbols.getInternationalCurrencySymbol() :
-                        symbols.getCurrencySymbol();
+                    s = intl ? symbols.getInternationalCurrencySymbol() : symbols.getCurrencySymbol();
                 }
                 buffer.append(s);
                 continue;
@@ -4145,14 +4029,13 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Append an affix to the given StringBuffer.
-     *
+     * 
      * @param buf
      *            buffer to append to
      * @param isNegative
      * @param isPrefix
      */
-    private int appendAffix(StringBuffer buf, boolean isNegative, boolean isPrefix,
-                            boolean parseAttr) {
+    private int appendAffix(StringBuffer buf, boolean isNegative, boolean isPrefix, boolean parseAttr) {
         if (currencyChoice != null) {
             String affixPat = null;
             if (isPrefix) {
@@ -4188,12 +4071,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * [Spark/CDL] This is a newly added method, used to add attributes for prefix and
-     * suffix.
+     * [Spark/CDL] This is a newly added method, used to add attributes for prefix and suffix.
      */
     private void formatAffix2Attribute(String affix, int begin, int end) {
         // [Spark/CDL] It is the invoker's responsibility to ensure that, before the
-        // invocation of this method, attributes is not null.  if( attributes == null )
+        // invocation of this method, attributes is not null. if( attributes == null )
         // return;
         if (affix.indexOf(symbols.getCurrencySymbol()) > -1) {
             addAttribute(Field.CURRENCY, begin, end);
@@ -4218,12 +4100,12 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Formats the object to an attributed string, and return the corresponding iterator.
-     *
+     * 
      * @stable ICU 3.6
      */
     @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
-      return formatToCharacterIterator(obj, NULL_UNIT);
+        return formatToCharacterIterator(obj, NULL_UNIT);
     }
 
     AttributedCharacterIterator formatToCharacterIterator(Object obj, Unit unit) {
@@ -4236,8 +4118,7 @@ public class DecimalFormat extends NumberFormat {
         if (obj instanceof BigInteger) {
             format((BigInteger) number, text, new FieldPosition(0), true);
         } else if (obj instanceof java.math.BigDecimal) {
-            format((java.math.BigDecimal) number, text, new FieldPosition(0)
-                          , true);
+            format((java.math.BigDecimal) number, text, new FieldPosition(0), true);
         } else if (obj instanceof Double) {
             format(number.doubleValue(), text, new FieldPosition(0), true);
         } else if (obj instanceof Integer || obj instanceof Long) {
@@ -4262,8 +4143,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Appends an affix pattern to the given StringBuffer. Localize unquoted specials.
      */
-    private void appendAffixPattern(StringBuffer buffer, boolean isNegative, boolean isPrefix,
-                                    boolean localized) {
+    private void appendAffixPattern(StringBuffer buffer, boolean isNegative, boolean isPrefix, boolean localized) {
         String affixPat = null;
         if (isPrefix) {
             affixPat = isNegative ? negPrefixPattern : posPrefixPattern;
@@ -4346,11 +4226,8 @@ public class DecimalFormat extends NumberFormat {
         int roundingDecimalPos = 0; // Pos of decimal in roundingDigits
         String roundingDigits = null;
         int padPos = (formatWidth > 0) ? padPosition : -1;
-        String padSpec = (formatWidth > 0)
-            ? new StringBuffer(2).append(localized
-                                         ? symbols.getPadEscape()
-                                         : PATTERN_PAD_ESCAPE).append(pad).toString()
-            : null;
+        String padSpec = (formatWidth > 0) ? new StringBuffer(2)
+                .append(localized ? symbols.getPadEscape() : PATTERN_PAD_ESCAPE).append(pad).toString() : null;
         if (roundingIncrementICU != null) {
             i = roundingIncrementICU.scale();
             roundingDigits = roundingIncrementICU.movePointRight(i).toString();
@@ -4413,14 +4290,12 @@ public class DecimalFormat extends NumberFormat {
             }
             if (!useSigDig) {
                 if (getMaximumFractionDigits() > 0 || decimalSeparatorAlwaysShown) {
-                    result.append(localized ? symbols.getDecimalSeparator() :
-                                  PATTERN_DECIMAL_SEPARATOR);
+                    result.append(localized ? symbols.getDecimalSeparator() : PATTERN_DECIMAL_SEPARATOR);
                 }
                 int pos = roundingDecimalPos;
                 for (i = 0; i < getMaximumFractionDigits(); ++i) {
                     if (roundingDigits != null && pos < roundingDigits.length()) {
-                        result.append(pos < 0 ? zero :
-                                      (char) (roundingDigits.charAt(pos) - '0' + zero));
+                        result.append(pos < 0 ? zero : (char) (roundingDigits.charAt(pos) - '0' + zero));
                         ++pos;
                         continue;
                     }
@@ -4444,9 +4319,8 @@ public class DecimalFormat extends NumberFormat {
                 int add = formatWidth
                         - result.length()
                         + sub0Start
-                        - ((part == 0)
-                           ? positivePrefix.length() + positiveSuffix.length()
-                           : negativePrefix.length() + negativeSuffix.length());
+                        - ((part == 0) ? positivePrefix.length() + positiveSuffix.length() : negativePrefix.length()
+                                + negativeSuffix.length());
                 while (add > 0) {
                     result.insert(sub0Start, digit);
                     ++maxDig;
@@ -4469,8 +4343,7 @@ public class DecimalFormat extends NumberFormat {
                 result.append(padSpec);
             }
             if (part == 0) {
-                if (negativeSuffix.equals(positiveSuffix) &&
-                    negativePrefix.equals(PATTERN_MINUS + positivePrefix)) {
+                if (negativeSuffix.equals(positiveSuffix) && negativePrefix.equals(PATTERN_MINUS + positivePrefix)) {
                     break;
                 } else {
                     result.append(localized ? symbols.getPatternSeparator() : PATTERN_SEPARATOR);
@@ -4481,24 +4354,27 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Applies the given pattern to this Format object. A pattern is a short-hand
-     * specification for the various formatting properties. These properties can also be
-     * changed individually through the various setter methods.
-     *
-     * <p>There is no limit to integer digits are set by this routine, since that is the
-     * typical end-user desire; use setMaximumInteger if you want to set a real value. For
-     * negative numbers, use a second pattern, separated by a semicolon
-     *
-     * <p>Example "#,#00.0#" -> 1,234.56
-     *
-     * <p>This means a minimum of 2 integer digits, 1 fraction digit, and a maximum of 2
-     * fraction digits.
-     *
-     * <p>Example: "#,#00.0#;(#,#00.0#)" for negatives in parentheses.
-     *
-     * <p>In negative patterns, the minimum and maximum counts are ignored; these are
-     * presumed to be set in the positive pattern.
-     *
+     * Applies the given pattern to this Format object. A pattern is a short-hand specification for the various
+     * formatting properties. These properties can also be changed individually through the various setter methods.
+     * 
+     * <p>
+     * There is no limit to integer digits are set by this routine, since that is the typical end-user desire; use
+     * setMaximumInteger if you want to set a real value. For negative numbers, use a second pattern, separated by a
+     * semicolon
+     * 
+     * <p>
+     * Example "#,#00.0#" -> 1,234.56
+     * 
+     * <p>
+     * This means a minimum of 2 integer digits, 1 fraction digit, and a maximum of 2 fraction digits.
+     * 
+     * <p>
+     * Example: "#,#00.0#;(#,#00.0#)" for negatives in parentheses.
+     * 
+     * <p>
+     * In negative patterns, the minimum and maximum counts are ignored; these are presumed to be set in the positive
+     * pattern.
+     * 
      * @stable ICU 2.0
      */
     public void applyPattern(String pattern) {
@@ -4506,25 +4382,28 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Applies the given pattern to this Format object. The pattern is assumed to be in a
-     * localized notation. A pattern is a short-hand specification for the various
-     * formatting properties. These properties can also be changed individually through
-     * the various setter methods.
-     *
-     * <p>There is no limit to integer digits are set by this routine, since that is the
-     * typical end-user desire; use setMaximumInteger if you want to set a real value. For
-     * negative numbers, use a second pattern, separated by a semicolon
-     *
-     * <p>Example "#,#00.0#" -> 1,234.56
-     *
-     * <p>This means a minimum of 2 integer digits, 1 fraction digit, and a maximum of 2
-     * fraction digits.
-     *
-     * <p>Example: "#,#00.0#;(#,#00.0#)" for negatives in parantheses.
-     *
-     * <p>In negative patterns, the minimum and maximum counts are ignored; these are
-     * presumed to be set in the positive pattern.
-     *
+     * Applies the given pattern to this Format object. The pattern is assumed to be in a localized notation. A pattern
+     * is a short-hand specification for the various formatting properties. These properties can also be changed
+     * individually through the various setter methods.
+     * 
+     * <p>
+     * There is no limit to integer digits are set by this routine, since that is the typical end-user desire; use
+     * setMaximumInteger if you want to set a real value. For negative numbers, use a second pattern, separated by a
+     * semicolon
+     * 
+     * <p>
+     * Example "#,#00.0#" -> 1,234.56
+     * 
+     * <p>
+     * This means a minimum of 2 integer digits, 1 fraction digit, and a maximum of 2 fraction digits.
+     * 
+     * <p>
+     * Example: "#,#00.0#;(#,#00.0#)" for negatives in parantheses.
+     * 
+     * <p>
+     * In negative patterns, the minimum and maximum counts are ignored; these are presumed to be set in the positive
+     * pattern.
+     * 
      * @stable ICU 2.0
      */
     public void applyLocalizedPattern(String pattern) {
@@ -4541,7 +4420,7 @@ public class DecimalFormat extends NumberFormat {
 
     private void expandAffixAdjustWidth(String pluralCount) {
         // Bug 4212072 Update the affix strings according to symbols in order to keep the
-        // affix strings up to date.  [Richard/GCL]
+        // affix strings up to date. [Richard/GCL]
         expandAffixes(pluralCount);
 
         // Now that we have the actual prefix and suffix, fix up formatWidth
@@ -4726,9 +4605,8 @@ public class DecimalFormat extends NumberFormat {
                             // 1. Require at least one mantissa pattern digit
                             // 2. Disallow "#+ @" in mantissa
                             // 3. Require at least one exponent pattern digit
-                            if (((digitLeftCount + zeroDigitCount) < 1 &&
-                                 (sigDigitCount + digitRightCount) < 1)
-                                || (sigDigitCount > 0 && digitLeftCount > 0) || expDigits < 1) {
+                            if (((digitLeftCount + zeroDigitCount) < 1 && (sigDigitCount + digitRightCount) < 1)
+                                    || (sigDigitCount > 0 && digitLeftCount > 0) || expDigits < 1) {
                                 patternError("Malformed exponential", pattern);
                             }
                         }
@@ -4774,16 +4652,14 @@ public class DecimalFormat extends NumberFormat {
                     } else if (ch == CURRENCY_SIGN) {
                         // Use lookahead to determine if the currency sign is
                         // doubled or not.
-                        boolean doubled = (pos + 1) < pattern.length() &&
-                            pattern.charAt(pos + 1) == CURRENCY_SIGN;
+                        boolean doubled = (pos + 1) < pattern.length() && pattern.charAt(pos + 1) == CURRENCY_SIGN;
 
                         // Bug 4212072 To meet the need of expandAffix(String,
                         // StirngBuffer) [Richard/GCL]
                         if (doubled) {
                             ++pos; // Skip over the doubled character
                             affix.append(ch); // append two: one here, one below
-                            if ((pos + 1) < pattern.length() &&
-                                pattern.charAt(pos + 1) == CURRENCY_SIGN) {
+                            if ((pos + 1) < pattern.length() && pattern.charAt(pos + 1) == CURRENCY_SIGN) {
                                 ++pos; // Skip over the tripled character
                                 affix.append(ch); // append again
                                 currencySignCnt = CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT;
@@ -4885,8 +4761,7 @@ public class DecimalFormat extends NumberFormat {
             // yields a minimum integer digits of zero, which allows proper round-trip
             // patterns. We don't want "#" to become "#0" when toPattern() is called (even
             // though that's what it really is, semantically).
-            if (zeroDigitCount == 0 && sigDigitCount == 0 &&
-                digitLeftCount > 0 && decimalPos >= 0) {
+            if (zeroDigitCount == 0 && sigDigitCount == 0 && digitLeftCount > 0 && decimalPos >= 0) {
                 // Handle "###.###" and "###." and ".###"
                 int n = decimalPos;
                 if (n == 0)
@@ -4898,14 +4773,9 @@ public class DecimalFormat extends NumberFormat {
 
             // Do syntax checking on the digits, decimal points, and quotes.
             if ((decimalPos < 0 && digitRightCount > 0 && sigDigitCount == 0)
-                || (decimalPos >= 0
-                    && (sigDigitCount > 0
-                        || decimalPos < digitLeftCount
-                        || decimalPos > (digitLeftCount + zeroDigitCount)))
-                || groupingCount == 0
-                || groupingCount2 == 0
-                || (sigDigitCount > 0 && zeroDigitCount > 0)
-                || subpart > 2) { // subpart > 2 == unmatched quote
+                    || (decimalPos >= 0 && (sigDigitCount > 0 || decimalPos < digitLeftCount || decimalPos > (digitLeftCount + zeroDigitCount)))
+                    || groupingCount == 0 || groupingCount2 == 0 || (sigDigitCount > 0 && zeroDigitCount > 0)
+                    || subpart > 2) { // subpart > 2 == unmatched quote
                 patternError("Malformed pattern", pattern);
             }
 
@@ -4954,17 +4824,13 @@ public class DecimalFormat extends NumberFormat {
 
                     // Upper limit on integer and fraction digits for a Java double
                     // [Richard/GCL]
-                    setMaximumIntegerDigits(useExponentialNotation ? digitLeftCount + minInt :
-                                            DOUBLE_INTEGER_DIGITS);
-                    _setMaximumFractionDigits(decimalPos >= 0 ?
-                                             (digitTotalCount - decimalPos) : 0);
-                    setMinimumFractionDigits(decimalPos >= 0 ?
-                                             (digitLeftCount + zeroDigitCount - decimalPos) : 0);
+                    setMaximumIntegerDigits(useExponentialNotation ? digitLeftCount + minInt : DOUBLE_INTEGER_DIGITS);
+                    _setMaximumFractionDigits(decimalPos >= 0 ? (digitTotalCount - decimalPos) : 0);
+                    setMinimumFractionDigits(decimalPos >= 0 ? (digitLeftCount + zeroDigitCount - decimalPos) : 0);
                 }
                 setGroupingUsed(groupingCount > 0);
                 this.groupingSize = (groupingCount > 0) ? groupingCount : 0;
-                this.groupingSize2 = (groupingCount2 > 0 && groupingCount2 != groupingCount)
-                    ? groupingCount2 : 0;
+                this.groupingSize2 = (groupingCount2 > 0 && groupingCount2 != groupingCount) ? groupingCount2 : 0;
                 this.multiplier = multpl;
                 setDecimalSeparatorAlwaysShown(decimalPos == 0 || decimalPos == digitTotalCount);
                 if (padPos >= 0) {
@@ -4998,7 +4864,6 @@ public class DecimalFormat extends NumberFormat {
             }
         }
 
-
         // Bug 4140009 Process the empty pattern [Richard/GCL]
         if (pattern.length() == 0) {
             posPrefixPattern = posSuffixPattern = "";
@@ -5014,9 +4879,7 @@ public class DecimalFormat extends NumberFormat {
 
         // Bug 4212072 To meet the need of expandAffix(String, StirngBuffer) [Richard/GCL]
 
-        if (!gotNegative ||
-            (negPrefixPattern.equals(posPrefixPattern)
-             && negSuffixPattern.equals(posSuffixPattern))) {
+        if (!gotNegative || (negPrefixPattern.equals(posPrefixPattern) && negSuffixPattern.equals(posSuffixPattern))) {
             negSuffixPattern = posSuffixPattern;
             negPrefixPattern = PATTERN_MINUS + posPrefixPattern;
         }
@@ -5030,34 +4893,31 @@ public class DecimalFormat extends NumberFormat {
             // by the currency
             Currency theCurrency = getCurrency();
             if (theCurrency != null) {
-                setRoundingIncrement(theCurrency.getRoundingIncrement());
-                int d = theCurrency.getDefaultFractionDigits();
+                setRoundingIncrement(theCurrency.getRoundingIncrement(currencyUsage));
+                int d = theCurrency.getDefaultFractionDigits(currencyUsage);
                 setMinimumFractionDigits(d);
                 _setMaximumFractionDigits(d);
             }
 
             // initialize currencyPluralInfo if needed
-            if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT
-                && currencyPluralInfo == null) {
+            if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT && currencyPluralInfo == null) {
                 currencyPluralInfo = new CurrencyPluralInfo(symbols.getULocale());
             }
         }
         resetActualRounding();
     }
 
-
     private void patternError(String msg, String pattern) {
         throw new IllegalArgumentException(msg + " in pattern \"" + pattern + '"');
     }
-
 
     // Rewrite the following 4 "set" methods Upper limit on integer and fraction digits
     // for a Java double [Richard/GCL]
 
     /**
-     * Sets the maximum number of digits allowed in the integer portion of a number. This
-     * override limits the integer digit count to 309.
-     *
+     * Sets the maximum number of digits allowed in the integer portion of a number. This override limits the integer
+     * digit count to 309.
+     * 
      * @see NumberFormat#setMaximumIntegerDigits
      * @stable ICU 2.0
      */
@@ -5067,9 +4927,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the minimum number of digits allowed in the integer portion of a number. This
-     * override limits the integer digit count to 309.
-     *
+     * Sets the minimum number of digits allowed in the integer portion of a number. This override limits the integer
+     * digit count to 309.
+     * 
      * @see NumberFormat#setMinimumIntegerDigits
      * @stable ICU 2.0
      */
@@ -5079,10 +4939,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Returns the minimum number of significant digits that will be
-     * displayed. This value has no effect unless {@link #areSignificantDigitsUsed()}
-     * returns true.
-     *
+     * {@icu} Returns the minimum number of significant digits that will be displayed. This value has no effect unless
+     * {@link #areSignificantDigitsUsed()} returns true.
+     * 
      * @return the fewest significant digits that will be shown
      * @stable ICU 3.0
      */
@@ -5091,10 +4950,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Returns the maximum number of significant digits that will be
-     * displayed. This value has no effect unless {@link #areSignificantDigitsUsed()}
-     * returns true.
-     *
+     * {@icu} Returns the maximum number of significant digits that will be displayed. This value has no effect unless
+     * {@link #areSignificantDigitsUsed()} returns true.
+     * 
      * @return the most significant digits that will be shown
      * @stable ICU 3.0
      */
@@ -5103,13 +4961,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the minimum number of significant digits that will be displayed. If
-     * <code>min</code> is less than one then it is set to one. If the maximum significant
-     * digits count is less than <code>min</code>, then it is set to <code>min</code>. 
-     * This function also enables the use of significant digits by this formatter - 
+     * {@icu} Sets the minimum number of significant digits that will be displayed. If <code>min</code> is less than one
+     * then it is set to one. If the maximum significant digits count is less than <code>min</code>, then it is set to
+     * <code>min</code>. This function also enables the use of significant digits by this formatter -
      * {@link #areSignificantDigitsUsed()} will return true.
-     *
-     * @param min the fewest significant digits to be shown
+     * 
+     * @param min
+     *            the fewest significant digits to be shown
      * @stable ICU 3.0
      */
     public void setMinimumSignificantDigits(int min) {
@@ -5124,13 +4982,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the maximum number of significant digits that will be displayed. If
-     * <code>max</code> is less than one then it is set to one. If the minimum significant
-     * digits count is greater than <code>max</code>, then it is set to <code>max</code>.
-     * This function also enables the use of significant digits by this formatter - 
+     * {@icu} Sets the maximum number of significant digits that will be displayed. If <code>max</code> is less than one
+     * then it is set to one. If the minimum significant digits count is greater than <code>max</code>, then it is set
+     * to <code>max</code>. This function also enables the use of significant digits by this formatter -
      * {@link #areSignificantDigitsUsed()} will return true.
-     *
-     * @param max the most significant digits to be shown
+     * 
+     * @param max
+     *            the most significant digits to be shown
      * @stable ICU 3.0
      */
     public void setMaximumSignificantDigits(int max) {
@@ -5145,9 +5003,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Returns true if significant digits are in use or false if integer and
-     * fraction digit counts are in use.
-     *
+     * {@icu} Returns true if significant digits are in use or false if integer and fraction digit counts are in use.
+     * 
      * @return true if significant digits are in use
      * @stable ICU 3.0
      */
@@ -5156,11 +5013,10 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets whether significant digits are in use, or integer and fraction digit
-     * counts are in use.
-     *
-     * @param useSignificantDigits true to use significant digits, or false to use integer
-     * and fraction digit counts
+     * {@icu} Sets whether significant digits are in use, or integer and fraction digit counts are in use.
+     * 
+     * @param useSignificantDigits
+     *            true to use significant digits, or false to use integer and fraction digit counts
      * @stable ICU 3.0
      */
     public void setSignificantDigitsUsed(boolean useSignificantDigits) {
@@ -5168,12 +5024,12 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the <tt>Currency</tt> object used to display currency amounts. This takes
-     * effect immediately, if this format is a currency format. If this format is not a
-     * currency format, then the currency object is used if and when this object becomes a
-     * currency format through the application of a new pattern.
-     *
-     * @param theCurrency new currency object to use. Must not be null.
+     * Sets the <tt>Currency</tt> object used to display currency amounts. This takes effect immediately, if this format
+     * is a currency format. If this format is not a currency format, then the currency object is used if and when this
+     * object becomes a currency format through the application of a new pattern.
+     * 
+     * @param theCurrency
+     *            new currency object to use. Must not be null.
      * @stable ICU 2.2
      */
     @Override
@@ -5182,22 +5038,20 @@ public class DecimalFormat extends NumberFormat {
         // encode the currency symbol for the given currency in our
         // locale, and adjust the decimal digits and rounding for the
         // given currency.
-
         super.setCurrency(theCurrency);
         if (theCurrency != null) {
             boolean[] isChoiceFormat = new boolean[1];
-            String s = theCurrency.getName(symbols.getULocale(),
-                                           Currency.SYMBOL_NAME, isChoiceFormat);
+            String s = theCurrency.getName(symbols.getULocale(), Currency.SYMBOL_NAME, isChoiceFormat);
             symbols.setCurrency(theCurrency);
             symbols.setCurrencySymbol(s);
         }
 
         if (currencySignCount != CURRENCY_SIGN_COUNT_ZERO) {
             if (theCurrency != null) {
-                setRoundingIncrement(theCurrency.getRoundingIncrement());
-                int d = theCurrency.getDefaultFractionDigits();
+                setRoundingIncrement(theCurrency.getRoundingIncrement(currencyUsage));
+                int d = theCurrency.getDefaultFractionDigits(currencyUsage);
                 setMinimumFractionDigits(d);
-                setMaximumFractionDigits(d);
+                _setMaximumFractionDigits(d);
             }
             if (currencySignCount != CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
                 // This is not necessary for plural format type
@@ -5208,9 +5062,39 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the currency in effect for this formatter. Subclasses should override this
-     * method as needed. Unlike getCurrency(), this method should never return null.
-     *
+     * Sets the <tt>Currency Usage</tt> object used to display currency. This takes effect immediately, if this format
+     * is a currency format.
+     * 
+     * @param newUsage
+     *            new currency context object to use.
+     * @draft ICU 54
+     */
+    public void setCurrencyUsage(CurrencyUsage newUsage) {
+        currencyUsage = newUsage;
+        Currency theCurrency = this.getCurrency();
+
+        // We set rounding/digit based on currency context
+        if (theCurrency != null) {
+            setRoundingIncrement(theCurrency.getRoundingIncrement(currencyUsage));
+            int d = theCurrency.getDefaultFractionDigits(currencyUsage);
+            setMinimumFractionDigits(d);
+            _setMaximumFractionDigits(d);
+        }
+    }
+
+    /**
+     * Returns the <tt>Currency Usage</tt> object used to display currency
+     * 
+     * @draft ICU 54
+     */
+    public CurrencyUsage getCurrencyUsage() {
+        return currencyUsage;
+    }
+
+    /**
+     * Returns the currency in effect for this formatter. Subclasses should override this method as needed. Unlike
+     * getCurrency(), this method should never return null.
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -5225,9 +5109,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the maximum number of digits allowed in the fraction portion of a number. This
-     * override limits the fraction digit count to 340.
-     *
+     * Sets the maximum number of digits allowed in the fraction portion of a number. This override limits the fraction
+     * digit count to 340.
+     * 
      * @see NumberFormat#setMaximumFractionDigits
      * @stable ICU 2.0
      */
@@ -5238,17 +5122,17 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /*
-     * Internal method for DecimalFormat, setting maximum fractional digits
-     * without triggering actual rounding recalculated.
+     * Internal method for DecimalFormat, setting maximum fractional digits without triggering actual rounding
+     * recalculated.
      */
     private void _setMaximumFractionDigits(int newValue) {
         super.setMaximumFractionDigits(Math.min(newValue, DOUBLE_FRACTION_DIGITS));
     }
 
     /**
-     * Sets the minimum number of digits allowed in the fraction portion of a number. This
-     * override limits the fraction digit count to 340.
-     *
+     * Sets the minimum number of digits allowed in the fraction portion of a number. This override limits the fraction
+     * digit count to 340.
+     * 
      * @see NumberFormat#setMinimumFractionDigits
      * @stable ICU 2.0
      */
@@ -5258,11 +5142,10 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets whether {@link #parse(String, ParsePosition)} returns BigDecimal. The
-     * default value is false.
-     *
-     * @param value true if {@link #parse(String, ParsePosition)}
-     * returns BigDecimal.
+     * Sets whether {@link #parse(String, ParsePosition)} returns BigDecimal. The default value is false.
+     * 
+     * @param value
+     *            true if {@link #parse(String, ParsePosition)} returns BigDecimal.
      * @stable ICU 3.6
      */
     public void setParseBigDecimal(boolean value) {
@@ -5271,33 +5154,34 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns whether {@link #parse(String, ParsePosition)} returns BigDecimal.
-     *
+     * 
      * @return true if {@link #parse(String, ParsePosition)} returns BigDecimal.
      * @stable ICU 3.6
      */
     public boolean isParseBigDecimal() {
         return parseBigDecimal;
     }
-    
+
     /**
-    * Set the maximum number of exponent digits when parsing a number. 
-    * If the limit is set too high, an OutOfMemoryException may be triggered.
-    * The default value is 1000.
-    * @param newValue the new limit
-    * @stable ICU 51
-    */
+     * Set the maximum number of exponent digits when parsing a number. If the limit is set too high, an
+     * OutOfMemoryException may be triggered. The default value is 1000.
+     * 
+     * @param newValue
+     *            the new limit
+     * @stable ICU 51
+     */
     public void setParseMaxDigits(int newValue) {
         if (newValue > 0) {
             PARSE_MAX_EXPONENT = newValue;
         }
     }
-    
+
     /**
-    * Get the current maximum number of exponent digits when parsing a
-    * number.
-    * @return the maximum number of exponent digits for parsing
-    * @stable ICU 51
-    */
+     * Get the current maximum number of exponent digits when parsing a number.
+     * 
+     * @return the maximum number of exponent digits for parsing
+     * @stable ICU 51
+     */
     public int getParseMaxDigits() {
         return PARSE_MAX_EXPONENT;
     }
@@ -5315,12 +5199,10 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * First, read the default serializable fields from the stream. Then if
-     * <code>serialVersionOnStream</code> is less than 1, indicating that the stream was
-     * written by JDK 1.1, initialize <code>useExponentialNotation</code> to false, since
-     * it was not present in JDK 1.1. Finally, set serialVersionOnStream back to the
-     * maximum allowed value so that default serialization will work properly if this
-     * object is streamed out again.
+     * First, read the default serializable fields from the stream. Then if <code>serialVersionOnStream</code> is less
+     * than 1, indicating that the stream was written by JDK 1.1, initialize <code>useExponentialNotation</code> to
+     * false, since it was not present in JDK 1.1. Finally, set serialVersionOnStream back to the maximum allowed value
+     * so that default serialization will work properly if this object is streamed out again.
      */
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
@@ -5334,7 +5216,6 @@ public class DecimalFormat extends NumberFormat {
         // if (getMaximumIntegerDigits() > DOUBLE_INTEGER_DIGITS ||
         // getMaximumFractionDigits() > DOUBLE_FRACTION_DIGITS) { throw new
         // InvalidObjectException("Digit count out of range"); }
-
 
         // Truncate the maximumIntegerDigits to DOUBLE_INTEGER_DIGITS and
         // maximumFractionDigits to DOUBLE_FRACTION_DIGITS
@@ -5358,9 +5239,12 @@ public class DecimalFormat extends NumberFormat {
             }
         }
         if (serialVersionOnStream < 3) {
-            // Versions prior to 3 do not store a currency object.  Create one to match
+            // Versions prior to 3 do not store a currency object. Create one to match
             // the DecimalFormatSymbols object.
             setCurrencyForSymbols();
+        }
+        if (serialVersionOnStream < 4) {
+            currencyUsage = CurrencyUsage.STANDARD;
         }
         serialVersionOnStream = currentSerialVersion;
         digitList = new DigitList();
@@ -5369,6 +5253,7 @@ public class DecimalFormat extends NumberFormat {
             setInternalRoundingIncrement(new BigDecimal(roundingIncrement));
         }
         resetActualRounding();
+
     }
 
     private void setInternalRoundingIncrement(BigDecimal value) {
@@ -5384,16 +5269,15 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * The symbol used as a prefix when formatting positive numbers, e.g. "+".
-     *
+     * 
      * @serial
      * @see #getPositivePrefix
      */
     private String positivePrefix = "";
 
     /**
-     * The symbol used as a suffix when formatting positive numbers. This is often an
-     * empty string.
-     *
+     * The symbol used as a suffix when formatting positive numbers. This is often an empty string.
+     * 
      * @serial
      * @see #getPositiveSuffix
      */
@@ -5401,88 +5285,82 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * The symbol used as a prefix when formatting negative numbers, e.g. "-".
-     *
+     * 
      * @serial
      * @see #getNegativePrefix
      */
     private String negativePrefix = "-";
 
     /**
-     * The symbol used as a suffix when formatting negative numbers. This is often an
-     * empty string.
-     *
+     * The symbol used as a suffix when formatting negative numbers. This is often an empty string.
+     * 
      * @serial
      * @see #getNegativeSuffix
      */
     private String negativeSuffix = "";
 
     /**
-     * The prefix pattern for non-negative numbers. This variable corresponds to
-     * <code>positivePrefix</code>.
-     *
-     * <p>This pattern is expanded by the method <code>expandAffix()</code> to
-     * <code>positivePrefix</code> to update the latter to reflect changes in
-     * <code>symbols</code>. If this variable is <code>null</code> then
-     * <code>positivePrefix</code> is taken as a literal value that does not change when
-     * <code>symbols</code> changes.  This variable is always <code>null</code> for
-     * <code>DecimalFormat</code> objects older than stream version 2 restored from
-     * stream.
-     *
+     * The prefix pattern for non-negative numbers. This variable corresponds to <code>positivePrefix</code>.
+     * 
+     * <p>
+     * This pattern is expanded by the method <code>expandAffix()</code> to <code>positivePrefix</code> to update the
+     * latter to reflect changes in <code>symbols</code>. If this variable is <code>null</code> then
+     * <code>positivePrefix</code> is taken as a literal value that does not change when <code>symbols</code> changes.
+     * This variable is always <code>null</code> for <code>DecimalFormat</code> objects older than stream version 2
+     * restored from stream.
+     * 
      * @serial
      */
     // [Richard/GCL]
     private String posPrefixPattern;
 
     /**
-     * The suffix pattern for non-negative numbers. This variable corresponds to
-     * <code>positiveSuffix</code>. This variable is analogous to
-     * <code>posPrefixPattern</code>; see that variable for further documentation.
-     *
+     * The suffix pattern for non-negative numbers. This variable corresponds to <code>positiveSuffix</code>. This
+     * variable is analogous to <code>posPrefixPattern</code>; see that variable for further documentation.
+     * 
      * @serial
      */
     // [Richard/GCL]
     private String posSuffixPattern;
 
     /**
-     * The prefix pattern for negative numbers. This variable corresponds to
-     * <code>negativePrefix</code>. This variable is analogous to
-     * <code>posPrefixPattern</code>; see that variable for further documentation.
-     *
+     * The prefix pattern for negative numbers. This variable corresponds to <code>negativePrefix</code>. This variable
+     * is analogous to <code>posPrefixPattern</code>; see that variable for further documentation.
+     * 
      * @serial
      */
     // [Richard/GCL]
     private String negPrefixPattern;
 
     /**
-     * The suffix pattern for negative numbers. This variable corresponds to
-     * <code>negativeSuffix</code>. This variable is analogous to
-     * <code>posPrefixPattern</code>; see that variable for further documentation.
-     *
+     * The suffix pattern for negative numbers. This variable corresponds to <code>negativeSuffix</code>. This variable
+     * is analogous to <code>posPrefixPattern</code>; see that variable for further documentation.
+     * 
      * @serial
      */
     // [Richard/GCL]
     private String negSuffixPattern;
 
     /**
-     * Formatter for ChoiceFormat-based currency names. If this field is not null, then
-     * delegate to it to format currency symbols.
-     *
+     * Formatter for ChoiceFormat-based currency names. If this field is not null, then delegate to it to format
+     * currency symbols.
+     * 
      * @since ICU 2.6
      */
     private ChoiceFormat currencyChoice;
 
     /**
      * The multiplier for use in percent, permill, etc.
-     *
+     * 
      * @serial
      * @see #getMultiplier
      */
     private int multiplier = 1;
 
     /**
-     * The number of digits between grouping separators in the integer portion of a
-     * number. Must be greater than 0 if <code>NumberFormat.groupingUsed</code> is true.
-     *
+     * The number of digits between grouping separators in the integer portion of a number. Must be greater than 0 if
+     * <code>NumberFormat.groupingUsed</code> is true.
+     * 
      * @serial
      * @see #getGroupingSize
      * @see NumberFormat#isGroupingUsed
@@ -5490,27 +5368,26 @@ public class DecimalFormat extends NumberFormat {
     private byte groupingSize = 3; // invariant, > 0 if useThousands
 
     /**
-     * The secondary grouping size. This is only used for Hindi numerals, which use a
-     * primary grouping of 3 and a secondary grouping of 2, e.g., "12,34,567". If this
-     * value is less than 1, then secondary grouping is equal to the primary grouping.
-     *
+     * The secondary grouping size. This is only used for Hindi numerals, which use a primary grouping of 3 and a
+     * secondary grouping of 2, e.g., "12,34,567". If this value is less than 1, then secondary grouping is equal to the
+     * primary grouping.
+     * 
      */
     private byte groupingSize2 = 0;
 
     /**
-     * If true, forces the decimal separator to always appear in a formatted number, even
-     * if the fractional part of the number is zero.
-     *
+     * If true, forces the decimal separator to always appear in a formatted number, even if the fractional part of the
+     * number is zero.
+     * 
      * @serial
      * @see #isDecimalSeparatorAlwaysShown
      */
     private boolean decimalSeparatorAlwaysShown = false;
 
     /**
-     * The <code>DecimalFormatSymbols</code> object used by this format. It contains the
-     * symbols used to format numbers, e.g. the grouping separator, decimal separator, and
-     * so on.
-     *
+     * The <code>DecimalFormatSymbols</code> object used by this format. It contains the symbols used to format numbers,
+     * e.g. the grouping separator, decimal separator, and so on.
+     * 
      * @serial
      * @see #setDecimalFormatSymbols
      * @see DecimalFormatSymbols
@@ -5519,72 +5396,68 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * True to use significant digits rather than integer and fraction digit counts.
-     *
+     * 
      * @serial
      * @since ICU 3.0
      */
     private boolean useSignificantDigits = false;
 
     /**
-     * The minimum number of significant digits to show. Must be >= 1 and <=
-     * maxSignificantDigits. Ignored unless useSignificantDigits == true.
-     *
+     * The minimum number of significant digits to show. Must be >= 1 and <= maxSignificantDigits. Ignored unless
+     * useSignificantDigits == true.
+     * 
      * @serial
      * @since ICU 3.0
      */
     private int minSignificantDigits = 1;
 
     /**
-     * The maximum number of significant digits to show. Must be >=
-     * minSignficantDigits. Ignored unless useSignificantDigits == true.
-     *
+     * The maximum number of significant digits to show. Must be >= minSignficantDigits. Ignored unless
+     * useSignificantDigits == true.
+     * 
      * @serial
      * @since ICU 3.0
      */
     private int maxSignificantDigits = 6;
 
     /**
-     * True to force the use of exponential (i.e. scientific) notation
-     * when formatting numbers.
-     *
-     *<p> Note that the JDK 1.2 public API provides no way to set this
-     * field, even though it is supported by the implementation and
-     * the stream format. The intent is that this will be added to the
-     * API in the future.
-     *
+     * True to force the use of exponential (i.e. scientific) notation when formatting numbers.
+     * 
+     * <p>
+     * Note that the JDK 1.2 public API provides no way to set this field, even though it is supported by the
+     * implementation and the stream format. The intent is that this will be added to the API in the future.
+     * 
      * @serial
      */
     private boolean useExponentialNotation; // Newly persistent in JDK 1.2
 
     /**
-     * The minimum number of digits used to display the exponent when a number is
-     * formatted in exponential notation.  This field is ignored if
-     * <code>useExponentialNotation</code> is not true.
-     *
-     * <p>Note that the JDK 1.2 public API provides no way to set this field, even though
-     * it is supported by the implementation and the stream format. The intent is that
-     * this will be added to the API in the future.
-     *
+     * The minimum number of digits used to display the exponent when a number is formatted in exponential notation.
+     * This field is ignored if <code>useExponentialNotation</code> is not true.
+     * 
+     * <p>
+     * Note that the JDK 1.2 public API provides no way to set this field, even though it is supported by the
+     * implementation and the stream format. The intent is that this will be added to the API in the future.
+     * 
      * @serial
      */
     private byte minExponentDigits; // Newly persistent in JDK 1.2
 
     /**
-     * If true, the exponent is always prefixed with either the plus sign or the minus
-     * sign. Otherwise, only negative exponents are prefixed with the minus sign. This has
-     * no effect unless <code>useExponentialNotation</code> is true.
-     *
+     * If true, the exponent is always prefixed with either the plus sign or the minus sign. Otherwise, only negative
+     * exponents are prefixed with the minus sign. This has no effect unless <code>useExponentialNotation</code> is
+     * true.
+     * 
      * @serial
      * @since AlphaWorks NumberFormat
      */
     private boolean exponentSignAlwaysShown = false;
 
     /**
-     * The value to which numbers are rounded during formatting. For example, if the
-     * rounding increment is 0.05, then 13.371 would be formatted as 13.350, assuming 3
-     * fraction digits. Has the value <code>null</code> if rounding is not in effect, or a
-     * positive value if rounding is in effect. Default value <code>null</code>.
-     *
+     * The value to which numbers are rounded during formatting. For example, if the rounding increment is 0.05, then
+     * 13.371 would be formatted as 13.350, assuming 3 fraction digits. Has the value <code>null</code> if rounding is
+     * not in effect, or a positive value if rounding is in effect. Default value <code>null</code>.
+     * 
      * @serial
      * @since AlphaWorks NumberFormat
      */
@@ -5593,74 +5466,66 @@ public class DecimalFormat extends NumberFormat {
     private java.math.BigDecimal roundingIncrement = null;
 
     /**
-     * The value to which numbers are rounded during formatting. For example, if the
-     * rounding increment is 0.05, then 13.371 would be formatted as 13.350, assuming 3
-     * fraction digits. Has the value <code>null</code> if rounding is not in effect, or a
-     * positive value if rounding is in effect. Default value <code>null</code>. WARNING:
-     * the roundingIncrement value is the one serialized.
-     *
+     * The value to which numbers are rounded during formatting. For example, if the rounding increment is 0.05, then
+     * 13.371 would be formatted as 13.350, assuming 3 fraction digits. Has the value <code>null</code> if rounding is
+     * not in effect, or a positive value if rounding is in effect. Default value <code>null</code>. WARNING: the
+     * roundingIncrement value is the one serialized.
+     * 
      * @serial
      * @since AlphaWorks NumberFormat
      */
     private transient BigDecimal roundingIncrementICU = null;
 
     /**
-     * The rounding mode. This value controls any rounding operations which occur when
-     * applying a rounding increment or when reducing the number of fraction digits to
-     * satisfy a maximum fraction digits limit. The value may assume any of the
-     * <code>BigDecimal</code> rounding mode values. Default value
-     * <code>BigDecimal.ROUND_HALF_EVEN</code>.
-     *
+     * The rounding mode. This value controls any rounding operations which occur when applying a rounding increment or
+     * when reducing the number of fraction digits to satisfy a maximum fraction digits limit. The value may assume any
+     * of the <code>BigDecimal</code> rounding mode values. Default value <code>BigDecimal.ROUND_HALF_EVEN</code>.
+     * 
      * @serial
      * @since AlphaWorks NumberFormat
      */
     private int roundingMode = BigDecimal.ROUND_HALF_EVEN;
 
     /**
-     * Operations on <code>BigDecimal</code> numbers are controlled by a {@link
-     * MathContext} object, which provides the context (precision and other information)
-     * for the operation. The default <code>MathContext</code> settings are
-     * <code>digits=0, form=PLAIN, lostDigits=false, roundingMode=ROUND_HALF_UP</code>;
-     * these settings perform fixed point arithmetic with unlimited precision, as defined
-     * for the original BigDecimal class in Java 1.1 and Java 1.2
+     * Operations on <code>BigDecimal</code> numbers are controlled by a {@link MathContext} object, which provides the
+     * context (precision and other information) for the operation. The default <code>MathContext</code> settings are
+     * <code>digits=0, form=PLAIN, lostDigits=false, roundingMode=ROUND_HALF_UP</code>; these settings perform fixed
+     * point arithmetic with unlimited precision, as defined for the original BigDecimal class in Java 1.1 and Java 1.2
      */
     // context for plain unlimited math
     private MathContext mathContext = new MathContext(0, MathContext.PLAIN);
 
     /**
-     * The padded format width, or zero if there is no padding. Must be >= 0. Default
-     * value zero.
-     *
+     * The padded format width, or zero if there is no padding. Must be >= 0. Default value zero.
+     * 
      * @serial
      * @since AlphaWorks NumberFormat
      */
     private int formatWidth = 0;
 
     /**
-     * The character used to pad the result of format to <code>formatWidth</code>, if
-     * padding is in effect. Default value ' '.
-     *
+     * The character used to pad the result of format to <code>formatWidth</code>, if padding is in effect. Default
+     * value ' '.
+     * 
      * @serial
      * @since AlphaWorks NumberFormat
      */
     private char pad = ' ';
 
     /**
-     * The position in the string at which the <code>pad</code> character will be
-     * inserted, if padding is in effect.  Must have a value from
-     * <code>PAD_BEFORE_PREFIX</code> to <code>PAD_AFTER_SUFFIX</code>. Default value
+     * The position in the string at which the <code>pad</code> character will be inserted, if padding is in effect.
+     * Must have a value from <code>PAD_BEFORE_PREFIX</code> to <code>PAD_AFTER_SUFFIX</code>. Default value
      * <code>PAD_BEFORE_PREFIX</code>.
-     *
+     * 
      * @serial
      * @since AlphaWorks NumberFormat
      */
     private int padPosition = PAD_BEFORE_PREFIX;
 
     /**
-     * True if {@link #parse(String, ParsePosition)} to return BigDecimal rather than
-     * Long, Double or BigDecimal except special values. This property is introduced for
-     * J2SE 5 compatibility support.
-     *
+     * True if {@link #parse(String, ParsePosition)} to return BigDecimal rather than Long, Double or BigDecimal except
+     * special values. This property is introduced for J2SE 5 compatibility support.
+     * 
      * @serial
      * @since ICU 3.6
      * @see #setParseBigDecimal(boolean)
@@ -5668,28 +5533,36 @@ public class DecimalFormat extends NumberFormat {
      */
     private boolean parseBigDecimal = false;
 
+    /**
+     * The currency usage for the NumberFormat(standard or cash usage). It is used as STANDARD by default
+     * 
+     * @since ICU 54
+     */
+    private CurrencyUsage currencyUsage = CurrencyUsage.STANDARD;
+
     // ----------------------------------------------------------------------
 
-    static final int currentSerialVersion = 3;
+    static final int currentSerialVersion = 4;
 
     /**
-     * The internal serial version which says which version was written Possible values
-     * are:
-     *
+     * The internal serial version which says which version was written Possible values are:
+     * 
      * <ul>
-     *
+     * 
      * <li><b>0</b> (default): versions before JDK 1.2
-     *
+     * 
      * <li><b>1</b>: version from JDK 1.2 and later, which includes the two new fields
      * <code>useExponentialNotation</code> and <code>minExponentDigits</code>.
-     *
-     * <li><b>2</b>: version on AlphaWorks, which adds roundingMode, formatWidth, pad,
-     * padPosition, exponentSignAlwaysShown, roundingIncrement.
-     *
+     * 
+     * <li><b>2</b>: version on AlphaWorks, which adds roundingMode, formatWidth, pad, padPosition,
+     * exponentSignAlwaysShown, roundingIncrement.
+     * 
      * <li><b>3</b>: ICU 2.2. Adds currency object.
-     *
+     * 
+     * <li><b>4</b>: ICU 54. Adds currency usage(standard vs cash)
+     * 
      * </ul>
-     *
+     * 
      * @serial
      */
     private int serialVersionOnStream = currentSerialVersion;
@@ -5699,9 +5572,9 @@ public class DecimalFormat extends NumberFormat {
     // ----------------------------------------------------------------------
 
     /**
-     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to
-     * specify pad characters inserted before the prefix.
-     *
+     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to specify pad characters inserted
+     * before the prefix.
+     * 
      * @see #setPadPosition
      * @see #getPadPosition
      * @see #PAD_AFTER_PREFIX
@@ -5712,9 +5585,9 @@ public class DecimalFormat extends NumberFormat {
     public static final int PAD_BEFORE_PREFIX = 0;
 
     /**
-     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to
-     * specify pad characters inserted after the prefix.
-     *
+     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to specify pad characters inserted
+     * after the prefix.
+     * 
      * @see #setPadPosition
      * @see #getPadPosition
      * @see #PAD_BEFORE_PREFIX
@@ -5725,9 +5598,9 @@ public class DecimalFormat extends NumberFormat {
     public static final int PAD_AFTER_PREFIX = 1;
 
     /**
-     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to
-     * specify pad characters inserted before the suffix.
-     *
+     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to specify pad characters inserted
+     * before the suffix.
+     * 
      * @see #setPadPosition
      * @see #getPadPosition
      * @see #PAD_BEFORE_PREFIX
@@ -5738,9 +5611,9 @@ public class DecimalFormat extends NumberFormat {
     public static final int PAD_BEFORE_SUFFIX = 2;
 
     /**
-     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to
-     * specify pad characters inserted after the suffix.
-     *
+     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to specify pad characters inserted
+     * after the suffix.
+     * 
      * @see #setPadPosition
      * @see #getPadPosition
      * @see #PAD_BEFORE_PREFIX
@@ -5784,11 +5657,10 @@ public class DecimalFormat extends NumberFormat {
     // Also plus sign. Also exponent.
 
     /**
-     * The CURRENCY_SIGN is the standard Unicode symbol for currency. It is used in
-     * patterns and substitued with either the currency symbol, or if it is doubled, with
-     * the international currency symbol. If the CURRENCY_SIGN is seen in a pattern, then
-     * the decimal separator is replaced with the monetary decimal separator.
-     *
+     * The CURRENCY_SIGN is the standard Unicode symbol for currency. It is used in patterns and substitued with either
+     * the currency symbol, or if it is doubled, with the international currency symbol. If the CURRENCY_SIGN is seen in
+     * a pattern, then the decimal separator is replaced with the monetary decimal separator.
+     * 
      * The CURRENCY_SIGN is not localized.
      */
     private static final char CURRENCY_SIGN = '\u00A4';
@@ -5802,12 +5674,11 @@ public class DecimalFormat extends NumberFormat {
     static final int DOUBLE_FRACTION_DIGITS = 340;
 
     /**
-     * When someone turns on scientific mode, we assume that more than this number of
-     * digits is due to flipping from some other mode that didn't restrict the maximum,
-     * and so we force 1 integer digit. We don't bother to track and see if someone is
-     * using exponential notation with more than this number, it wouldn't make sense
-     * anyway, and this is just to make sure that someone turning on scientific mode with
-     * default settings doesn't end up with lots of zeroes.
+     * When someone turns on scientific mode, we assume that more than this number of digits is due to flipping from
+     * some other mode that didn't restrict the maximum, and so we force 1 integer digit. We don't bother to track and
+     * see if someone is using exponential notation with more than this number, it wouldn't make sense anyway, and this
+     * is just to make sure that someone turning on scientific mode with default settings doesn't end up with lots of
+     * zeroes.
      */
     static final int MAX_SCIENTIFIC_INTEGER_DIGITS = 8;
 
@@ -5825,10 +5696,10 @@ public class DecimalFormat extends NumberFormat {
     //
     // -- default currency plural pattern char array
     // private static final char[] defaultCurrencyPluralPatternChar =
-    //   {0, '.', '#', '#', ' ', 0xA4, 0xA4, 0xA4};
+    // {0, '.', '#', '#', ' ', 0xA4, 0xA4, 0xA4};
     // -- default currency plural pattern string
     // private static final String defaultCurrencyPluralPattern =
-    //     new String(defaultCurrencyPluralPatternChar);
+    // new String(defaultCurrencyPluralPatternChar);
 
     // pattern used in this formatter
     private String formatPattern = "";
@@ -5836,20 +5707,18 @@ public class DecimalFormat extends NumberFormat {
     // DecimalFormat(pattern, decimalFormatSymbol, style)
     private int style = NumberFormat.NUMBERSTYLE;
     /**
-     * Represents whether this is a currency format, and which currency format style. 0:
-     * not currency format type; 1: currency style -- symbol name, such as "$" for US
-     * dollar. 2: currency style -- ISO name, such as USD for US dollar. 3: currency style
-     * -- plural long name, such as "US Dollar" for "1.00 US Dollar", or "US Dollars" for
+     * Represents whether this is a currency format, and which currency format style. 0: not currency format type; 1:
+     * currency style -- symbol name, such as "$" for US dollar. 2: currency style -- ISO name, such as USD for US
+     * dollar. 3: currency style -- plural long name, such as "US Dollar" for "1.00 US Dollar", or "US Dollars" for
      * "3.00 US Dollars".
      */
     private int currencySignCount = CURRENCY_SIGN_COUNT_ZERO;
 
     /**
-     * For parsing purposes, we need to remember all prefix patterns and suffix patterns
-     * of every currency format pattern, including the pattern of the default currency
-     * style, ISO currency style, and plural currency style. The patterns are set through
-     * applyPattern. The following are used to represent the affix patterns in currency
-     * plural formats.
+     * For parsing purposes, we need to remember all prefix patterns and suffix patterns of every currency format
+     * pattern, including the pattern of the default currency style, ISO currency style, and plural currency style. The
+     * patterns are set through applyPattern. The following are used to represent the affix patterns in currency plural
+     * formats.
      */
     private static final class AffixForCurrency {
         // negative prefix pattern
@@ -5862,8 +5731,7 @@ public class DecimalFormat extends NumberFormat {
         private String posSuffixPatternForCurrency = null;
         private final int patternType;
 
-        public AffixForCurrency(String negPrefix, String negSuffix, String posPrefix,
-                                String posSuffix, int type) {
+        public AffixForCurrency(String negPrefix, String negSuffix, String posPrefix, String posSuffix, int type) {
             negPrefixPatternForCurrency = negPrefix;
             negSuffixPatternForCurrency = negSuffix;
             posPrefixPatternForCurrency = posPrefix;
@@ -5892,7 +5760,7 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
-    // Affix pattern set for currency.  It is a set of AffixForCurrency, each element of
+    // Affix pattern set for currency. It is a set of AffixForCurrency, each element of
     // the set saves the negative prefix, negative suffix, positive prefix, and positive
     // suffix of a pattern.
     private transient Set<AffixForCurrency> affixPatternsForCurrency = null;
@@ -5905,11 +5773,10 @@ public class DecimalFormat extends NumberFormat {
     private CurrencyPluralInfo currencyPluralInfo = null;
 
     /**
-     * Unit is an immutable class for the textual representation of a unit, in
-     * particular its prefix and suffix.
-     *
+     * Unit is an immutable class for the textual representation of a unit, in particular its prefix and suffix.
+     * 
      * @author rocketman
-     *
+     * 
      */
     static class Unit {
         private final String prefix;
@@ -5939,6 +5806,7 @@ public class DecimalFormat extends NumberFormat {
             Unit other = (Unit) obj;
             return prefix.equals(other.prefix) && suffix.equals(other.suffix);
         }
+
         @Override
         public String toString() {
             return prefix + "/" + suffix;
@@ -5975,24 +5843,23 @@ public class DecimalFormat extends NumberFormat {
     private transient double roundingDouble = 0.0;
 
     /*
-     * If the roundingDouble is the reciprocal of an integer (the most common case!), this
-     * is set to be that integer.  Otherwise it is 0.0.
+     * If the roundingDouble is the reciprocal of an integer (the most common case!), this is set to be that integer.
+     * Otherwise it is 0.0.
      */
     private transient double roundingDoubleReciprocal = 0.0;
 
     /*
-     * Set roundingDouble, roundingDoubleReciprocal and actualRoundingIncrement
-     * based on rounding mode and width of fractional digits. Whenever setting affecting
-     * rounding mode, rounding increment and maximum width of fractional digits, then
-     * this method must be called.
+     * Set roundingDouble, roundingDoubleReciprocal and actualRoundingIncrement based on rounding mode and width of
+     * fractional digits. Whenever setting affecting rounding mode, rounding increment and maximum width of fractional
+     * digits, then this method must be called.
      * 
-     * roundingIncrementICU is the field storing the custom rounding increment value,
-     * while actual rounding increment could be larger.
+     * roundingIncrementICU is the field storing the custom rounding increment value, while actual rounding increment
+     * could be larger.
      */
     private void resetActualRounding() {
         if (roundingIncrementICU != null) {
-            BigDecimal byWidth = getMaximumFractionDigits() > 0 ?
-                    BigDecimal.ONE.movePointLeft(getMaximumFractionDigits()) : BigDecimal.ONE;
+            BigDecimal byWidth = getMaximumFractionDigits() > 0 ? BigDecimal.ONE
+                    .movePointLeft(getMaximumFractionDigits()) : BigDecimal.ONE;
             if (roundingIncrementICU.compareTo(byWidth) >= 0) {
                 actualRoundingIncrementICU = roundingIncrementICU;
             } else {
@@ -6001,13 +5868,13 @@ public class DecimalFormat extends NumberFormat {
         } else {
             if (roundingMode == BigDecimal.ROUND_HALF_EVEN || isScientificNotation()) {
                 // This rounding fix is irrelevant if mode is ROUND_HALF_EVEN as DigitList
-                // does ROUND_HALF_EVEN for us.  This rounding fix won't work at all for
+                // does ROUND_HALF_EVEN for us. This rounding fix won't work at all for
                 // scientific notation.
                 actualRoundingIncrementICU = null;
             } else {
                 if (getMaximumFractionDigits() > 0) {
                     actualRoundingIncrementICU = BigDecimal.ONE.movePointLeft(getMaximumFractionDigits());
-                }  else {
+                } else {
                     actualRoundingIncrementICU = BigDecimal.ONE;
                 }
             }

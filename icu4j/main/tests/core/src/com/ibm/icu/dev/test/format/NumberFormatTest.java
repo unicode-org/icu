@@ -23,7 +23,6 @@ import java.util.Locale;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
@@ -2735,7 +2734,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void TestGetInstance() {
         // Tests "public final static NumberFormat getInstance(int style)"
-        int maxStyle = NumberFormat.ACCOUNTINGCURRENCYSTYLE;
+        int maxStyle = NumberFormat.CASHCURRENCYSTYLE;
 
         int[] invalid_cases = { NumberFormat.NUMBERSTYLE - 1, NumberFormat.NUMBERSTYLE - 2,
                 maxStyle + 1, maxStyle + 2 };
@@ -3025,24 +3024,26 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         expect(fmt, "2\uFF61345.67", 2345.67);
 
-        // Ticket#7128
+        // Ticket#7218
         //
+        // Lenient separator parsing is enabled by default.
+        // A space character below is interpreted as a
+        // group separator, even ',' is used as grouping
+        // separator in the symbols.
         sym.setGroupingSeparator(',');
         fmt.setDecimalFormatSymbols(sym);
 
-        String skipExtSepParse = ICUConfig.get("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false");
-        if (skipExtSepParse.equals("true")) {
-            // When the property SkipExtendedSeparatorParsing is true,
-            // DecimalFormat does not use the extended equivalent separator
-            // data and only uses the one in DecimalFormatSymbols.
-            expect(fmt, "23 456", 23);
-        } else {
-            // Lenient separator parsing is enabled by default.
-            // A space character below is interpreted as a
-            // group separator, even ',' is used as grouping
-            // separator in the symbols.
-            expect(fmt, "12 345", 12345);
-        }
+        expect(fmt, "12 345", 12345);
+
+        // When the property SkipExtendedSeparatorParsing is true,
+        // DecimalFormat does not use the extended equivalent separator
+        // data and only uses the one in DecimalFormatSymbols.
+        System.setProperty("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "true");
+
+        expect(fmt, "23 456", 23);
+
+        // Set the configuration back to the default
+        System.setProperty("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false");
     }
 
     /*
@@ -3606,6 +3607,74 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             NumberFormat acfmt = NumberFormat.getInstance(loc, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
             expect(acfmt, num, fmt, rt);
+        }
+    }
+    
+    public void TestCurrencyUsage() {
+        // the 1st one is checking setter/getter, while the 2nd one checks for getInstance
+        // compare the Currency and Currency Cash Digits
+        for(int i=0; i<2; i++){
+            String original_expected = "NT$123.57";
+            DecimalFormat custom = null;
+            if(i == 0){
+                custom = (DecimalFormat)DecimalFormat.getInstance(new ULocale("en_US@currency=TWD"), DecimalFormat.CURRENCYSTYLE);
+
+                String original = custom.format(123.567);
+                assertEquals("Test Currency Context", original_expected, original);
+
+                // test the getter
+                assertEquals("Test Currency Context Purpose", custom.getCurrencyUsage(), Currency.CurrencyUsage.STANDARD);
+                custom.setCurrencyUsage(Currency.CurrencyUsage.CASH);
+                assertEquals("Test Currency Context Purpose", custom.getCurrencyUsage(), Currency.CurrencyUsage.CASH);
+            }else{
+                custom = (DecimalFormat)DecimalFormat.getInstance(new ULocale("en_US@currency=TWD"), DecimalFormat.CASHCURRENCYSTYLE);
+                
+                // test the getter
+                assertEquals("Test Currency Context Purpose", custom.getCurrencyUsage(), Currency.CurrencyUsage.CASH);
+            }
+            
+            String cash_currency = custom.format(123.567);
+            String cash_currency_expected = "NT$124";
+            assertEquals("Test Currency Context", cash_currency_expected, cash_currency);
+        }
+
+        // the 1st one is checking setter/getter, while the 2nd one checks for getInstance
+        // compare the Currency and Currency Cash Rounding
+        for(int i=0; i<2; i++){
+            String original_rounding_expected = "CA$123.57";
+            DecimalFormat fmt = null;
+            if(i == 0){
+                fmt = (DecimalFormat)DecimalFormat.getInstance(new ULocale("en_US@currency=CAD"), DecimalFormat.CURRENCYSTYLE);
+                
+                String original_rounding = fmt.format(123.566);
+                assertEquals("Test Currency Context", original_rounding_expected, original_rounding);
+                
+                fmt.setCurrencyUsage(Currency.CurrencyUsage.CASH);
+            }else{
+                fmt = (DecimalFormat)DecimalFormat.getInstance(new ULocale("en_US@currency=CAD"), DecimalFormat.CASHCURRENCYSTYLE);
+            }
+            
+            String cash_rounding_currency = fmt.format(123.567);
+            String cash__rounding_currency_expected = "CA$123.55";
+            assertEquals("Test Currency Context", cash__rounding_currency_expected, cash_rounding_currency);
+        }
+        
+
+        // the 1st one is checking setter/getter, while the 2nd one checks for getInstance
+        // Test the currency change
+        for(int i=0; i<2; i++){
+            DecimalFormat fmt2 = null;
+            if(i == 1){
+                fmt2 = (DecimalFormat)NumberFormat.getInstance(new ULocale("en_US@currency=JPY"), NumberFormat.CURRENCYSTYLE);
+                fmt2.setCurrencyUsage(Currency.CurrencyUsage.CASH);
+            }else{
+                fmt2 = (DecimalFormat)NumberFormat.getInstance(new ULocale("en_US@currency=JPY"), NumberFormat.CASHCURRENCYSTYLE);
+            }
+            
+            fmt2.setCurrency(Currency.getInstance("TWD"));
+            String TWD_changed = fmt2.format(123.567);
+            String TWD_changed_expected = "NT$124";
+            assertEquals("Test Currency Context", TWD_changed_expected, TWD_changed);
         }
     }
 }
