@@ -86,6 +86,10 @@ http://www.unicode.org/reports/tr44/tr44-13.html
     ~/svn.icu/uni70/src$ meld ../../trunk/src/source/data/unidata/UCARules.txt source/data/unidata/UCARules.txt
 - Restore ICU patches for ticket #10176 in source/test/testdata/LineBreakTest.txt
 
+- also: from http://unicode.org/Public/security/7.0.0/ download new
+  confusables.txt & confusablesWholeScript.txt
+  and copy to $ICU_ROOT/src/source/data/unidata/
+
 * initial preparseucd.py changes
 - remove new Unicode scripts from the
   only-in-ISO-15924 list according to the error message:
