@@ -105,7 +105,7 @@ const int32_t SCRIPT_PROPS[] = {
     0x1980 | LIMITED_USE | LB_LETTERS,  // Talu
     0x2D30 | ASPIRATIONAL,  // Tfng
     0x103A0 | EXCLUSION,  // Xpeo
-    0x1B05 | LIMITED_USE | LB_LETTERS,  // Bali
+    0x1B05 | LIMITED_USE,  // Bali
     0x1BC0 | LIMITED_USE,  // Batk
     0,
     0x11005 | EXCLUSION,  // Brah
@@ -121,7 +121,7 @@ const int32_t SCRIPT_PROPS[] = {
     0x16B1C | EXCLUSION,  // Hmng
     0,
     0,
-    0xA984 | LIMITED_USE | LB_LETTERS,  // Java
+    0xA984 | LIMITED_USE,  // Java
     0xA90A | LIMITED_USE,  // Kali
     0,
     0,
