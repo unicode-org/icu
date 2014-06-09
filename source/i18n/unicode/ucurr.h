@@ -179,6 +179,7 @@ ucurr_getPluralName(const UChar* currency,
 /**
  * Returns the number of the number of fraction digits that should
  * be displayed for the given currency.
+ * This is equivalent to ucurr_getDefaultFractionDigitsForUsage(currency,UCURR_USAGE_STANDARD,ec);
  * @param currency null-terminated 3-letter ISO 4217 code
  * @param ec input-output error code
  * @return a non-negative number of fraction digits to be
@@ -207,6 +208,7 @@ ucurr_getDefaultFractionDigitsForUsage(const UChar* currency,
 /**
  * Returns the rounding increment for the given currency, or 0.0 if no
  * rounding is done by the currency.
+ * This is equivalent to ucurr_getRoundingIncrementForUsage(currency,UCURR_USAGE_STANDARD,ec);
  * @param currency null-terminated 3-letter ISO 4217 code
  * @param ec input-output error code
  * @return the non-negative rounding increment, or 0.0 if none,
