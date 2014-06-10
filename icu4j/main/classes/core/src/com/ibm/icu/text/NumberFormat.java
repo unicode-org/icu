@@ -23,6 +23,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
@@ -215,6 +216,14 @@ public abstract class NumberFormat extends UFormat {
      * @provisional This API might change or be removed in a future release.
      */
     public static final int ACCOUNTINGCURRENCYSTYLE = 7;
+    /**
+     * {@icu} Constant to specify currency cash style of format which uses currency
+     * ISO code to represent currency, for example: "NT$3" instead of "NT$3.23".
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release. 
+     */
+    public static final int CASHCURRENCYSTYLE = 8;
+    /**
 
     /**
      * Field constant used to construct a FieldPosition object. Signifies that
@@ -231,7 +240,7 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public static final int FRACTION_FIELD = 1;
-
+    
     /**
      * Formats a number and appends the resulting text to the given string buffer.
      * {@icunote} recognizes <code>BigInteger</code>
@@ -1240,7 +1249,7 @@ public abstract class NumberFormat extends UFormat {
     public Currency getCurrency() {
         return currency;
     }
-
+    
     /**
      * Returns the currency in effect for this formatter.  Subclasses
      * should override this method as needed.  Unlike getCurrency(),
@@ -1302,7 +1311,7 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 4.2
      */
     public static NumberFormat getInstance(ULocale desiredLocale, int choice) {
-        if (choice < NUMBERSTYLE || choice > ACCOUNTINGCURRENCYSTYLE) {
+        if (choice < NUMBERSTYLE || choice > CASHCURRENCYSTYLE) {
             throw new IllegalArgumentException(
                 "choice should be from NUMBERSTYLE to PLURALCURRENCYSTYLE");
         }
@@ -1331,7 +1340,8 @@ public abstract class NumberFormat extends UFormat {
         // This style wont work for currency plural format.
         // For currency plural format, the pattern is get from
         // the locale (from CurrencyUnitPatterns) without override.
-        if(choice == CURRENCYSTYLE || choice == ISOCURRENCYSTYLE || choice == ACCOUNTINGCURRENCYSTYLE){
+        if (choice == CURRENCYSTYLE || choice == ISOCURRENCYSTYLE || choice == ACCOUNTINGCURRENCYSTYLE
+                || choice == CASHCURRENCYSTYLE) {
             String temp = symbols.getCurrencyPattern();
             if(temp!=null){
                 pattern = temp;
@@ -1393,6 +1403,10 @@ public abstract class NumberFormat extends UFormat {
                 f.setMaximumFractionDigits(0);
                 f.setDecimalSeparatorAlwaysShown(false);
                 f.setParseIntegerOnly(true);
+            }
+            
+            if (choice == CASHCURRENCYSTYLE) {
+                f.setCurrencyUsage(CurrencyUsage.CASH);
             }
             format = f;
        }
@@ -1477,6 +1491,7 @@ public abstract class NumberFormat extends UFormat {
             patternKey = "decimalFormat";
             break;
         case CURRENCYSTYLE:
+        case CASHCURRENCYSTYLE:
         case ISOCURRENCYSTYLE:
         case PLURALCURRENCYSTYLE:
             patternKey = "currencyFormat";
