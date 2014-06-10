@@ -399,7 +399,7 @@ public class TestUScript extends TestFmwk {
                 !scripts.get(UScript.ARABIC)) {
             errln("UScript.getScriptExtensions(U+063F) is not {ARABIC}");
         }
-        if(UScript.getScriptExtensions(0x0640, scripts)!=-3 || scripts.cardinality()!=3 ||
+        if(UScript.getScriptExtensions(0x0640, scripts)>-3 || scripts.cardinality()<3 ||
            !scripts.get(UScript.ARABIC) || !scripts.get(UScript.SYRIAC) || !scripts.get(UScript.MANDAIC)
         ) {
             errln("UScript.getScriptExtensions(U+0640) failed");
