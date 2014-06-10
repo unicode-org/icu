@@ -299,17 +299,18 @@ set(ICU_SRC_DIR /home/mscherer/svn.icu/uni70/src)
     make[1]: Leaving directory `/home/mscherer/svn.icu/uni70/dbg/data'
 - copy the big-endian Unicode data files to another location,
   separate from the other data files
-    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt53b/coll
-    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt53b/brkitr
+    ICUDT=icudt54b
+    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/coll
+    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/brkitr
     cd ~/svn.icu/uni70/dbg/data/out/icu4j
-    cp com/ibm/icu/impl/data/icudt53b/confusables.cfu /tmp/icu4j/com/ibm/icu/impl/data/icudt53b
-    cp com/ibm/icu/impl/data/icudt53b/*.icu /tmp/icu4j/com/ibm/icu/impl/data/icudt53b
-    rm /tmp/icu4j/com/ibm/icu/impl/data/icudt53b/cnvalias.icu
-    cp com/ibm/icu/impl/data/icudt53b/*.nrm /tmp/icu4j/com/ibm/icu/impl/data/icudt53b
-    cp com/ibm/icu/impl/data/icudt53b/coll/*.icu /tmp/icu4j/com/ibm/icu/impl/data/icudt53b/coll
-    cp com/ibm/icu/impl/data/icudt53b/brkitr/* /tmp/icu4j/com/ibm/icu/impl/data/icudt53b/brkitr
+    cp com/ibm/icu/impl/data/$ICUDT/confusables.cfu /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT
+    cp com/ibm/icu/impl/data/$ICUDT/*.icu /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT
+    rm /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/cnvalias.icu
+    cp com/ibm/icu/impl/data/$ICUDT/*.nrm /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT
+    cp com/ibm/icu/impl/data/$ICUDT/coll/*.icu /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/coll
+    cp com/ibm/icu/impl/data/$ICUDT/brkitr/* /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/brkitr
 - refresh ICU4J
-    ~/svn.icu/uni70/dbg/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/icudt53b
+    ~/svn.icu/uni70/dbg/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/$ICUDT
 
 * update CollationFCD.java
   + copy & paste the initializers of lcccIndex[] etc. from
@@ -349,10 +350,11 @@ set(ICU_SRC_DIR /home/mscherer/svn.icu/uni70/src)
 - rebuild ICU4C
 - refresh ICU4J collation data:
   (subset of instructions above for properties data refresh, except copies all coll/*)
+    ICUDT=icudt54b
     ~/svn.icu/uni70/dbg$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
-    ~/svn.icu/uni70/dbg$ mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt53b/coll
-    ~/svn.icu/uni70/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt53b/coll/* /tmp/icu4j/com/ibm/icu/impl/data/icudt53b/coll
-    ~/svn.icu/uni70/dbg/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/icudt53b
+    ~/svn.icu/uni70/dbg$ mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/coll
+    ~/svn.icu/uni70/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/$ICUDT/coll/* /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/coll
+    ~/svn.icu/uni70/dbg/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/$ICUDT
 - run all tests with the *_SHORT.txt or the full files (the full ones have comments, useful for debugging)
 - note on intltest: if collate/UCAConformanceTest fails, then
   utility/MultithreadTest/TestCollators will fail as well;
