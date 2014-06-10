@@ -203,6 +203,29 @@ public class DeprecatedAPIChecker {
             compareDeprecated(isAPIDeprecated(api), ec.isAnnotationPresent(Deprecated.class), enumName, ecName,
                     "Enum Constant");
         }
+
+        // check methods
+        for (Method mtd : cls.getDeclaredMethods()) {
+            // Note: We exclude built-in methods in a Java Enum instance
+            if (!isPublicOrProtected(mtd.getModifiers()) || isBuiltinEnumMethod(mtd)) {
+                continue;
+            }
+
+            String mtdName = mtd.getName();
+            List<String> paramNames = getParamNames(mtd);
+            api = findMethodInfo(apiInfoSet, enumName, mtdName, paramNames);
+
+            if (api == null) {
+                pw.println("## Error ## Method " + enumName + "#" + mtdName + formatParams(paramNames)
+                        + " is not found in the API signature data.");
+                errCount++;
+                continue;
+            }
+
+            compareDeprecated(isAPIDeprecated(api), mtd.isAnnotationPresent(Deprecated.class), enumName, mtdName
+                    + formatParams(paramNames), "Method");
+
+        }
     }
 
     private void compareDeprecated(boolean depTag, boolean depAnt, String cls, String name, String type) {
@@ -222,6 +245,13 @@ public class DeprecatedAPIChecker {
 
     private static boolean isPublicOrProtected(int modifier) {
         return ((modifier & Modifier.PUBLIC) != 0) || ((modifier & Modifier.PROTECTED) != 0);
+    }
+
+    // Check if a method is automatically generated for a each Enum
+    private static boolean isBuiltinEnumMethod(Method mtd) {
+        // Just check method name for now
+        String name = mtd.getName();
+        return name.equals("values") || name.equals("valueOf");
     }
 
     private static boolean isAPIDeprecated(APIInfo api) {
