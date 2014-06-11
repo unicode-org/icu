@@ -1547,6 +1547,8 @@ public class TestFmwk extends AbstractTestLog {
 
         private void msg(String message, int level, boolean incCount,
                 boolean newln) {
+            String testLocation = sourceLocation();
+            message = testLocation + message;
             int oldLevel = level;
             if (level == WARN && (!warnings && !nodata)){
                 level = ERR;
@@ -1934,12 +1936,12 @@ public class TestFmwk extends AbstractTestLog {
             }
             relation = relation == null ? ", got " : " " + relation + " ";
             if (result) {
-                logln("OK " + testLocation + message + ": "
+                logln("OK " + message + ": "
                         + (flip ? expected + relation + actual : expected));
             } else {
                 // assert must assume errors are true errors and not just warnings
                 // so cannot warnln here
-                errln(testLocation + message
+                errln(  message
                         + ": expected"
                         + (flip ? relation + expected : " " + expected
                                 + (actual != null ? relation + actual : "")));
@@ -1959,12 +1961,12 @@ public class TestFmwk extends AbstractTestLog {
     }
 
     // Return the source code location of the caller located callDepth frames up the stack.
-    private String sourceLocation() {
+    public static String sourceLocation() {
         // Walk up the stack to the first call site outside this file
         StackTraceElement[] st = new Throwable().getStackTrace();
         for (int i = 0; i < st.length; ++i) {
             if (!"TestFmwk.java".equals(st[i].getFileName())) {
-                return "File "   + st[i].getFileName() + ", Line " + st[i].getLineNumber();
+            	return "(" + st[i].getFileName() + ":" + st[i].getLineNumber() + ") ";
             }
         }
         throw new InternalError();
