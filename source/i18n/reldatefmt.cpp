@@ -32,11 +32,6 @@
 #include "sharedpluralrules.h"
 #include "sharednumberformat.h"
 
-#define RELDATE_STYLE_FULL 0
-#define RELDATE_STYLE_SHORT 1
-#define RELDATE_STYLE_NARROW 2
-#define RELDATE_STYLE_COUNT 3 
-
 // Copied from uscript_props.cpp
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -78,11 +73,11 @@ public:
     virtual ~RelativeDateTimeCacheData();
 
     // no numbers: e.g Next Tuesday; Yesterday; etc.
-    UnicodeString absoluteUnits[RELDATE_STYLE_COUNT][UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT];
+    UnicodeString absoluteUnits[UDAT_STYLE_COUNT][UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT];
 
     // has numbers: e.g Next Tuesday; Yesterday; etc. For second index, 0
     // means past e.g 5 days ago; 1 means future e.g in 5 days.
-    QuantityFormatter relativeUnits[RELDATE_STYLE_COUNT][UDAT_RELATIVE_UNIT_COUNT][2];
+    QuantityFormatter relativeUnits[UDAT_STYLE_COUNT][UDAT_RELATIVE_UNIT_COUNT][2];
 
     void adoptCombinedDateAndTime(MessageFormat *mfToAdopt) {
         delete combinedDateAndTime;

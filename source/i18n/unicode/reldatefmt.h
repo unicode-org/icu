@@ -49,6 +49,12 @@ typedef enum UDateRelativeDateTimeFormatterStyle {
    * @draft ICU 54
    */
   UDAT_STYLE_NARROW,
+
+  /**
+   * The number of styles.
+   * @draft ICU 54
+   */
+  UDAT_STYLE_COUNT,
 }; 
 
 /**
@@ -360,9 +366,8 @@ public:
      *   contents after calling this constructor. Caller may pass NULL for
      *   this argument if they want default number format behavior.
      * @param style the format style. The UDAT_RELATIVE bit field has no effect.
-     * @param capitalizationContext The capitalization context must start with
-     *  U_DISPCTX_CAPITALIZATION_. Otherwise status is set to
-     *  U_ILLEGAL_ARGUMENT_ERROR
+     * @param capitalizationContext A value from UDisplayContext that pertains to
+     * capitalization.
      * @status Any error is returned here. 
      * @draft ICU 53
      */
