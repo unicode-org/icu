@@ -455,8 +455,8 @@ void TestHasScript() {
 
 static UBool scriptsContain(int32_t scripts[], int32_t length, int32_t script) {
     UBool contain=FALSE;
-    int32_t prev=-1;
-    for(int32_t i=0; i<length; ++i) {
+    int32_t prev=-1, i;
+    for(i=0; i<length; ++i) {
         int32_t s=scripts[i];
         if(s<=prev) {
             log_err("uscript_getScriptExtensions() not in sorted order: %d %d\n", (int)prev, (int)s);
