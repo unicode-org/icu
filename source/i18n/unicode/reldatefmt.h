@@ -15,7 +15,6 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/udisplaycontext.h"
-#include "unicode/udat.h"
 #include "unicode/locid.h"
 
 /**
@@ -26,6 +25,31 @@
 #if !UCONFIG_NO_FORMATTING
 
 #ifndef U_HIDE_DRAFT_API
+
+/**
+ * The formatting style
+ * @draft ICU 54
+ */
+typedef enum UDateRelativeDateTimeFormatterStyle {
+
+  /**
+   * Everything spelled out.
+   * @draft ICU 54
+   */
+  UDAT_STYLE_LONG,
+
+  /**
+   * Abbreviations used when possible.
+   * @draft ICU 54
+   */
+  UDAT_STYLE_SHORT,
+
+  /**
+   * Use the shortest possible form.
+   * @draft ICU 54
+   */
+  UDAT_STYLE_NARROW,
+}; 
 
 /**
  * Represents the unit for formatting a relative date. e.g "in 5 days"
@@ -345,7 +369,7 @@ public:
     RelativeDateTimeFormatter(
             const Locale& locale,
             NumberFormat *nfToAdopt,
-            UDateFormatStyle style,
+            UDateRelativeDateTimeFormatterStyle style,
             UDisplayContext capitalizationContext,
             UErrorCode& status);
 
@@ -445,12 +469,12 @@ public:
      *
      * @draft ICU 54
      */
-    UDateFormatStyle getFormatStyle() const;
+    UDateRelativeDateTimeFormatterStyle getFormatStyle() const;
 private:
     const RelativeDateTimeCacheData* fCache;
     const SharedNumberFormat *fNumberFormat;
     const SharedPluralRules *fPluralRules;
-    UDateFormatStyle fStyle;
+    UDateRelativeDateTimeFormatterStyle fStyle;
     UDisplayContext fContext;
     const SharedBreakIterator *fOptBreakIterator;
     Locale fLocale;
