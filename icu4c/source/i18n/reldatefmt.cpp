@@ -58,14 +58,13 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-static int32_t getStyleIndex(UDateFormatStyle style) {
+static int32_t getStyleIndex(UDateRelativeDateTimeFormatterStyle style) {
     switch (style) {
-        case UDAT_FULL:
-        case UDAT_LONG:
+        case UDAT_STYLE_LONG:
             return 0;
-        case UDAT_MEDIUM:
+        case UDAT_STYLE_SHORT:
             return 1;
-        case UDAT_SHORT:
+        case UDAT_STYLE_NARROW:
             return 2;
         default:
             return 0;
@@ -669,7 +668,7 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(UErrorCode& status) :
         fCache(NULL),
         fNumberFormat(NULL),
         fPluralRules(NULL),
-        fStyle(UDAT_FULL),
+        fStyle(UDAT_STYLE_LONG),
         fContext(UDISPCTX_CAPITALIZATION_NONE),
         fOptBreakIterator(NULL) {
     init(NULL, NULL, status);
@@ -680,7 +679,7 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         fCache(NULL),
         fNumberFormat(NULL),
         fPluralRules(NULL),
-        fStyle(UDAT_FULL),
+        fStyle(UDAT_STYLE_LONG),
         fContext(UDISPCTX_CAPITALIZATION_NONE),
         fOptBreakIterator(NULL),
         fLocale(locale) {
@@ -692,7 +691,7 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         fCache(NULL),
         fNumberFormat(NULL),
         fPluralRules(NULL),
-        fStyle(UDAT_FULL),
+        fStyle(UDAT_STYLE_LONG),
         fContext(UDISPCTX_CAPITALIZATION_NONE),
         fOptBreakIterator(NULL),
         fLocale(locale) {
@@ -702,7 +701,7 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         const Locale& locale,
         NumberFormat *nfToAdopt,
-        UDateFormatStyle styl,
+        UDateRelativeDateTimeFormatterStyle styl,
         UDisplayContext capitalizationContext,
         UErrorCode& status) :
         fCache(NULL),
@@ -784,7 +783,7 @@ UDisplayContext RelativeDateTimeFormatter::getCapitalizationContext() const {
     return fContext;
 }
 
-UDateFormatStyle RelativeDateTimeFormatter::getFormatStyle() const {
+UDateRelativeDateTimeFormatterStyle RelativeDateTimeFormatter::getFormatStyle() const {
     return fStyle;
 }
 
