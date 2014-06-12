@@ -30,7 +30,7 @@ public:
     SharedObject() : refCount(0) {}
 
     /** Initializes refCount to 0. */
-    SharedObject(const SharedObject &/*other*/) : refCount(0) {}
+    SharedObject(const SharedObject &other) : UObject(other), refCount(0) {}
     virtual ~SharedObject();
 
     /**

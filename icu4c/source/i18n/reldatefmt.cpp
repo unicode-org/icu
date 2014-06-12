@@ -726,7 +726,8 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         const RelativeDateTimeFormatter& other)
-        : fCache(other.fCache),
+        : UObject(other),
+          fCache(other.fCache),
           fNumberFormat(other.fNumberFormat),
           fPluralRules(other.fPluralRules),
           fStyle(other.fStyle),
