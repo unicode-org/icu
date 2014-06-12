@@ -92,9 +92,6 @@ static const UChar gLastResortPluralCurrencyPat[] = {
 static const UChar gLastResortAccountingCurrencyPat[] =  {
     0xA4, 0xA0, 0x23, 0x2C, 0x23, 0x23, 0x30, 0x2E, 0x30, 0x30, 0 /* "\u00A4\u00A0#,##0.00" */
 };
-static const UChar gLastResortCashCurrencyPat[] =  {
-    0xA4, 0xA0, 0x23, 0x2C, 0x23, 0x23, 0x30, 0x2E, 0x30, 0x30, 0 /* "\u00A4\u00A0#,##0.00" */
-};
 
 static const UChar gSingleCurrencySign[] = {0xA4, 0};
 static const UChar gDoubleCurrencySign[] = {0xA4, 0xA4, 0};
@@ -122,7 +119,7 @@ static const UChar * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = 
     gLastResortIsoCurrencyPat,  // UNUM_CURRENCY_ISO
     gLastResortPluralCurrencyPat,  // UNUM_CURRENCY_PLURAL
     gLastResortAccountingCurrencyPat, // UNUM_CURRENCY_ACCOUNTING
-    gLastResortCashCurrencyPat,  // UNUM_CASH_CURRENCY 
+    gLastResortCurrencyPat,  // UNUM_CASH_CURRENCY 
 };
 
 // Keys used for accessing resource bundles
@@ -1390,7 +1387,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         ownedNs.adoptInstead(NumberingSystem::createInstance(desiredLocale,status));
         ns = ownedNs.getAlias();
     }
-	
+
     // check results of getting a numbering system
     if (U_FAILURE(status)) {
         return NULL;
@@ -1450,7 +1447,8 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     if (U_FAILURE(status)) {
         return NULL;
     }
-    if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO || style == UNUM_CURRENCY_ACCOUNTING || style == UNUM_CASH_CURRENCY){
+    if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO || style == UNUM_CURRENCY_ACCOUNTING 
+        || style == UNUM_CASH_CURRENCY){
         const UChar* currPattern = symbolsToAdopt->getCurrencyPattern();
         if(currPattern!=NULL){
             pattern.setTo(currPattern, u_strlen(currPattern));
@@ -1504,12 +1502,12 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         // "new DecimalFormat()" does not adopt the symbols if its memory allocation fails.
         DecimalFormatSymbols *syms = symbolsToAdopt.orphan();
         DecimalFormat* df = new DecimalFormat(pattern, syms, style, status);
-		
+
         // if it is cash currency style, setCurrencyUsage with usage
         if (style == UNUM_CASH_CURRENCY){
             df->setCurrencyUsage(UCURR_USAGE_CASH, &status);
         }
-		
+
         if (U_FAILURE(status)) {
             delete df;
             return NULL;
@@ -1522,7 +1520,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             return NULL;
         }
     }
-	
+
     f->setLocaleIDs(ures_getLocaleByType(ownedResource.getAlias(), ULOC_VALID_LOCALE, &status),
                     ures_getLocaleByType(ownedResource.getAlias(), ULOC_ACTUAL_LOCALE, &status));
     if (U_FAILURE(status)) {

@@ -2539,97 +2539,66 @@ static void TestCurrencyUsage(void) {
 
         {"TWD", "NT$124"},
         {"CAD", "CA$123.55"},
-        {"USD", "$123.57"},
+        {"USD", "$123.57"}
     };
-	
+
     // 1st time for getter/setter, 2nd for factory method
     int32_t i;
     for(i=0; i<2; i++){
         const char* localeString = "en_US";
-        int32_t j;
-        double numberToBeFormat = atof("123.567");
+        double numberToBeFormat = 123.567;
+        UNumberFormat* unumFmt;
         UNumberFormatStyle style = UNUM_CURRENCY;
         UErrorCode status = U_ZERO_ERROR;
-        UChar *result=NULL;
-        UChar expect[512];
-        UChar currencyCode[4];
-        UNumberFormat* unumFmt; 
-	  
+        int32_t j;
+
         if(i == 1){ // change for factory method
             style = UNUM_CASH_CURRENCY;
         }
 
         unumFmt = unum_open(style, NULL, 0, localeString, NULL, &status);
         if (U_FAILURE(status)) {
-            log_data_err("FAIL: unum_open, locale %s, style %d - %s\n", localeString, (int)style, myErrorName(status));
+            log_data_err("FAIL: unum_open, locale %s, style %d - %s\n",
+                        localeString, (int)style, myErrorName(status));
         }
-	
+
         if(i == 0){ // this is for the getter/setter
-            if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_STANDARD)
-                log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
-            else
-                log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
-	
+            if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_STANDARD) {
+                log_err("FAIL: currency usage attribute is not UNUM_CURRENCY_STANDARD\n");
+            }
+
             unum_setAttribute(unumFmt, UNUM_CURRENCY_USAGE, UCURR_USAGE_CASH);
-     
-            if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_CASH)
-                log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
-            else
-                log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
-        }else{
-            if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_CASH)
-                log_err("error in setting and getting attributes for UNUM_CURRENCY_USAGE\n");
-            else
-                log_verbose("Pass:setting and getting attributes for UNUM_CURRENCY_USAGE works fine\n");
+        }
+
+        if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_CASH) {
+            log_err("FAIL: currency usage attribute is not UNUM_CURRENCY_CASH\n");
         }
 
         for (j=0; j<LENGTH(DATA); ++j) { 
+            UChar expect[64];
+            int32_t expectLen;
+            UChar currencyCode[4];
+            UChar result[64];
+            int32_t resultLen;
+            UFieldPosition pos = {0};
 
-            const char* currencyISOCode = DATA[i][0];
-            const char* expected = DATA[i][1];
-            int32_t resultlength;
-            int32_t resultlengthneeded;
-            UFieldPosition pos;
-            resultlength=0;
-            pos.field = UNUM_FRACTION_FIELD;
+            u_charsToUChars(DATA[j][0], currencyCode, 3);
+            expectLen = u_unescape(DATA[j][1], expect, LENGTH(expect));
 
-            u_uastrcpy(expect, expected);
-            u_charsToUChars(currencyISOCode, currencyCode, 4);
             unum_setTextAttribute(unumFmt, UNUM_CURRENCY_CODE, currencyCode, 3, &status);
-	  
-            if (U_FAILURE(status)) {
-                log_err("FAIL: unum_setTextAttribute, locale %s, UNUM_CURRENCY_CODE %s\n", localeString, currencyISOCode);
-            }
+            assertSuccess("num_setTextAttribute()", &status);
 
-            resultlengthneeded=unum_formatDouble(unumFmt, numberToBeFormat, NULL, resultlength, &pos, &status);
-            if(status==U_BUFFER_OVERFLOW_ERROR)
-            {
-                status=U_ZERO_ERROR;
-                resultlength=resultlengthneeded+1;
-                result=(UChar*)malloc(sizeof(UChar) * resultlength);
+            resultLen = unum_formatDouble(unumFmt, numberToBeFormat, result, LENGTH(result),
+                                        &pos, &status);
+            assertSuccess("num_formatDouble()", &status);
 
-                unum_formatDouble(unumFmt, numberToBeFormat, result, resultlength, &pos, &status);
-            }
-	
-            if(U_FAILURE(status))
-            {
-                log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
-            }
-            if(u_strcmp(result, expect)==0)
-                log_verbose("Pass: Number Format Currency Purpose using unum_setAttribute;() successful\n");
-            else{
-                int32_t resultlength1 = u_strlen(expect);
-                int32_t resultlength2 = u_strlen(result);
+            if(resultLen != expectLen || u_strcmp(result, expect) != 0) {
                 log_err("Fail: Error in Number Format Currency Purpose using unum_setAttribute() expected: %s, got %s\n",
-                aescstrdup(expect, u_strlen(expect)), aescstrdup(result, u_strlen(result)));
+                aescstrdup(expect, expectLen), aescstrdup(result, resultLen));
             }
 
         }
     
-        if (result)
-            free(result);
-        result = 0;
-
         unum_close(unumFmt);
     }
 }

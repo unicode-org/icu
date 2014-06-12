@@ -18,15 +18,26 @@
 #if !UCONFIG_NO_FORMATTING
 
 /**
- * Constants for specifying currency purpose
+ * Currency Usage used for Decimal Format
  * @draft ICU 54
  */
 enum UCurrencyUsage {
-    /** @draft ICU 54, used as DEFAULT value*/
+    /**
+     * a setting to specify currency usage which determines currency digit
+     * and rounding for standard usage, for example: "50.00 NT$"
+     * @draft ICU 54
+     */
     UCURR_USAGE_STANDARD=0,
-    /** @draft ICU 54 */
+    /**
+     * a setting to specify currency usage which determines currency digit
+     * and rounding for cash usage, for example: "50 NT$"
+     * @draft ICU 54
+     */
     UCURR_USAGE_CASH=1,
-    /** @draft ICU 54 */
+    /**
+     * One higher than the last enum UCurrencyUsage constant.
+     * @draft ICU 54
+     */
     UCURR_USAGE_COUNT
 };
 typedef enum UCurrencyUsage UCurrencyUsage; 

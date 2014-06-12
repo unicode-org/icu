@@ -26,7 +26,6 @@
 #define DECIMFMT_H
 
 #include "unicode/utypes.h"
-#include "ureslocs.h"
 /**
  * \file
  * \brief C++ API: Formats decimal numbers.

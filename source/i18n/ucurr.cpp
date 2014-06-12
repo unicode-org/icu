@@ -1621,63 +1621,63 @@ ucurr_getDefaultFractionDigits(const UChar* currency, UErrorCode* ec) {
 
 U_DRAFT int32_t U_EXPORT2
 ucurr_getDefaultFractionDigitsForUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
-    if(usage == UCURR_USAGE_STANDARD){
-        return (_findMetaData(currency, *ec))[0];
-    }else if(usage == UCURR_USAGE_CASH){
-        return (_findMetaData(currency, *ec))[2];	
-    }else{
-        return (_findMetaData(currency, *ec))[0];
+    int32_t fracDigits = 0;
+    if (U_SUCCESS(*ec)) {
+        switch (usage) {
+            case UCURR_USAGE_STANDARD:
+                fracDigits = (_findMetaData(currency, *ec))[0];
+                break;
+            case UCURR_USAGE_CASH:
+                fracDigits = (_findMetaData(currency, *ec))[2];
+                break;
+            default:
+                *ec = U_UNSUPPORTED_ERROR;
+        }
     }
+    return fracDigits;
 }
 
 U_CAPI double U_EXPORT2
 ucurr_getRoundingIncrement(const UChar* currency, UErrorCode* ec) {
     return ucurr_getRoundingIncrementForUsage(currency, UCURR_USAGE_STANDARD, ec);
 }
-	
+
 U_DRAFT double U_EXPORT2
 ucurr_getRoundingIncrementForUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
-    if(usage == UCURR_USAGE_CASH){ 
-        const int32_t *data = _findMetaData(currency, *ec);
+    double result = 0.0;
 
-        // If the meta data is invalid, return 0.0.
-        if (data[2] < 0 || data[2] > MAX_POW10) {
-            if (U_SUCCESS(*ec)) {
-	            *ec = U_INVALID_FORMAT_ERROR;
+    const int32_t *data = _findMetaData(currency, *ec);
+    if (U_SUCCESS(*ec)) {
+        int32_t fracDigits;
+        int32_t increment;
+        switch (usage) {
+            case UCURR_USAGE_STANDARD:
+                fracDigits = data[0];
+                increment = data[1];
+                break;
+            case UCURR_USAGE_CASH:
+                fracDigits = data[2];
+                increment = data[3];
+                break;
+            default:
+                *ec = U_UNSUPPORTED_ERROR;
+                return result;
+        }
+
+        // If the meta data is invalid, return 0.0
+        if (fracDigits < 0 || fracDigits > MAX_POW10) {
+            *ec = U_INVALID_FORMAT_ERROR;
+        } else {
+            // A rounding value of 0 or 1 indicates no rounding.
+            if (increment >= 2) {
+                // Return (increment) / 10^(fracDigits).  The only actual rounding data,
+                // as of this writing, is CHF { 2, 5 }.
+                result = double(increment) / POW10[fracDigits];
             }
-            return 0.0;
         }
-
-        // If there is no rounding, return 0.0 to indicate no rounding.  A
-        // rounding value (data[3]) of 0 or 1 indicates no rounding.
-        if (data[3] < 2) {
-            return 0.0;
-        }
-
-        // Return data[3] / 10^(data[2]).  The only actual rounding data,
-        // as of this writing, is CHF { 2, 5 }.
-        return double(data[3]) / POW10[data[2]];
-    }else{
-        const int32_t *data = _findMetaData(currency, *ec);
-
-        // If the meta data is invalid, return 0.0.
-        if (data[0] < 0 || data[0] > MAX_POW10) {
-            if (U_SUCCESS(*ec)) {
-	            *ec = U_INVALID_FORMAT_ERROR;
-            }
-            return 0.0;
-        }
-
-        // If there is no rounding, return 0.0 to indicate no rounding.  A
-        // rounding value (data[3]) of 0 or 1 indicates no rounding.
-        if (data[1] < 2) {
-            return 0.0;
-        }
-
-        // Return data[1] / 10^(data[0]).  The only actual rounding data,
-        // as of this writing, is CHF { 2, 5 }.
-        return double(data[1]) / POW10[data[0]];
     }
+
+    return result;
 }
 
 U_CDECL_BEGIN

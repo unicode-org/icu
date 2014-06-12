@@ -5199,18 +5199,18 @@ void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
 void DecimalFormat::setCurrencyUsage(UCurrencyUsage newContext, UErrorCode* ec){
     fCurrencyUsage = newContext;
 
-    double rounding = 0.0;
-    int32_t frac = 1; 
     const UChar* theCurrency = getCurrency();
 
     // We set rounding/digit based on currency context
-    if(getCurrency()){
-        rounding = ucurr_getRoundingIncrementForUsage(theCurrency, fCurrencyUsage, ec);
-        frac = ucurr_getDefaultFractionDigitsForUsage(theCurrency, fCurrencyUsage, ec);
-            
-        setRoundingIncrement(rounding);
-        setMinimumFractionDigits(frac);
-        setMaximumFractionDigits(frac);
+    if(theCurrency){
+        double rounding = ucurr_getRoundingIncrementForUsage(theCurrency, fCurrencyUsage, ec);
+        int32_t frac = ucurr_getDefaultFractionDigitsForUsage(theCurrency, fCurrencyUsage, ec);
+
+        if (U_SUCCESS(*ec)) {
+            setRoundingIncrement(rounding);
+            setMinimumFractionDigits(frac);
+            setMaximumFractionDigits(frac);
+        }
     }
 }
 
