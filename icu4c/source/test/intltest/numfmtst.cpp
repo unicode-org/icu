@@ -134,6 +134,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestZeroScientific10547);
   TESTCASE_AUTO(TestAccountingCurrency);
   TESTCASE_AUTO(TestEquality);
+  TESTCASE_AUTO(TestCurrencyUsage);
   TESTCASE_AUTO_END;
 }
 
@@ -7626,4 +7627,95 @@ void NumberFormatTest::TestEquality() {
     delete fmtBase;
 }
 
+void NumberFormatTest::TestCurrencyUsage() {
+    double agent = 123.567;
+
+    UErrorCode status;
+    DecimalFormat *fmt;
+
+    // compare the Currency and Currency Cash Digits
+    // 1st time for getter/setter, 2nd time for factory method
+    Locale enUS_TWD("en_US@currency=TWD");
+
+    for(int i=0; i<2; i++){
+        status = U_ZERO_ERROR;
+        if(i == 0){
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_TWD, UNUM_CURRENCY, status);
+            assertSuccess("en_US@currency=TWD/CURRECY", status);
+
+            UnicodeString original;
+            fmt->format(agent,original);
+            assertEquals("Test Currency Usage 1", UnicodeString("NT$123.57"), original);
+
+            // test the getter here
+            UCurrencyUsage curUsage = fmt->getCurrencyUsage();
+            assertEquals("Test usage getter - standard", curUsage, UCURR_USAGE_STANDARD);
+
+            fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
+        }else{
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_TWD, UNUM_CASH_CURRENCY, status);
+            assertSuccess("en_US@currency=TWD/CASH", status);
+        }
+
+        // must be usage = cash
+        UCurrencyUsage curUsage = fmt->getCurrencyUsage();
+        assertEquals("Test usage getter - cash", curUsage, UCURR_USAGE_CASH);
+
+        UnicodeString cash_currency;
+        fmt->format(agent,cash_currency);
+        assertEquals("Test Currency Usage 2", UnicodeString("NT$124"), cash_currency);
+        delete fmt;
+    }
+
+    // compare the Currency and Currency Cash Rounding
+    // 1st time for getter/setter, 2nd time for factory method
+    Locale enUS_CAD("en_US@currency=CAD");
+    for(int i=0; i<2; i++){
+        status = U_ZERO_ERROR;
+        if(i == 0){
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CURRENCY, status);
+            assertSuccess("en_US@currency=CAD/CURRECY", status);
+
+            UnicodeString original_rounding;
+            fmt->format(agent, original_rounding);
+            assertEquals("Test Currency Usage 3", UnicodeString("CA$123.57"), original_rounding);
+            fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
+        }else{
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CASH_CURRENCY, status); 
+            assertSuccess("en_US@currency=CAD/CASH", status);
+        }
+
+        UnicodeString cash_rounding_currency;
+        fmt->format(agent, cash_rounding_currency);
+        assertEquals("Test Currency Usage 4", UnicodeString("CA$123.55"), cash_rounding_currency);
+        delete fmt;
+    }
+
+    // Test the currency change
+    // 1st time for getter/setter, 2nd time for factory method
+    const UChar CUR_TWD[] = {0x54, 0x57, 0x44, 0};
+    for(int i=0; i<2; i++){
+        status = U_ZERO_ERROR;
+        if(i == 0){
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CURRENCY, status);
+            assertSuccess("en_US@currency=CAD/CURRECY", status);
+            fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
+        }else{
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CASH_CURRENCY, status);
+            assertSuccess("en_US@currency=CAD/CASH", status);
+        }
+
+        UnicodeString cur_original;
+        fmt->format(agent, cur_original);
+        assertEquals("Test Currency Usage 5", UnicodeString("CA$123.55"), cur_original);
+
+        fmt->setCurrency(CUR_TWD, status);
+        assertSuccess("Set currency to TWD", status);
+
+        UnicodeString TWD_changed;
+        fmt->format(agent, TWD_changed);
+        assertEquals("Test Currency Usage 6", UnicodeString("NT$124"), TWD_changed);
+        delete fmt;
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
