@@ -54,7 +54,7 @@ typedef enum UDateRelativeDateTimeFormatterStyle {
    * The number of styles.
    * @draft ICU 54
    */
-  UDAT_STYLE_COUNT,
+  UDAT_STYLE_COUNT
 }; 
 
 /**
