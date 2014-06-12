@@ -118,7 +118,8 @@ static const UChar * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = 
     NULL,  // UNUM_PATTERN_RULEBASED
     gLastResortIsoCurrencyPat,  // UNUM_CURRENCY_ISO
     gLastResortPluralCurrencyPat,  // UNUM_CURRENCY_PLURAL
-    gLastResortAccountingCurrencyPat // UNUM_CURRENCY_ACCOUNTING
+    gLastResortAccountingCurrencyPat, // UNUM_CURRENCY_ACCOUNTING
+    gLastResortCurrencyPat,  // UNUM_CASH_CURRENCY 
 };
 
 // Keys used for accessing resource bundles
@@ -143,7 +144,8 @@ static const char *gFormatKeys[UNUM_FORMAT_STYLE_COUNT] = {
     // double currency sign or triple currency sign.
     "currencyFormat",  // UNUM_CURRENCY_ISO
     "currencyFormat",  // UNUM_CURRENCY_PLURAL
-    "accountingFormat"  // UNUM_CURRENCY_ACCOUNTING
+    "accountingFormat",  // UNUM_CURRENCY_ACCOUNTING
+    "currencyFormat"  // UNUM_CASH_CURRENCY
 };
 
 static icu::LRUCache *gNumberFormatCache = NULL;
@@ -1350,6 +1352,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             case UNUM_CURRENCY_ISO: // do not support plural formatting here
             case UNUM_CURRENCY_PLURAL:
             case UNUM_CURRENCY_ACCOUNTING:
+            case UNUM_CASH_CURRENCY:
                 f = new Win32NumberFormat(desiredLocale, curr, status);
 
                 if (U_SUCCESS(status)) {
@@ -1444,7 +1447,8 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     if (U_FAILURE(status)) {
         return NULL;
     }
-    if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO || style == UNUM_CURRENCY_ACCOUNTING){
+    if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO || style == UNUM_CURRENCY_ACCOUNTING 
+        || style == UNUM_CASH_CURRENCY){
         const UChar* currPattern = symbolsToAdopt->getCurrencyPattern();
         if(currPattern!=NULL){
             pattern.setTo(currPattern, u_strlen(currPattern));
@@ -1498,7 +1502,19 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
 
         // "new DecimalFormat()" does not adopt the symbols if its memory allocation fails.
         DecimalFormatSymbols *syms = symbolsToAdopt.orphan();
-        f = new DecimalFormat(pattern, syms, style, status);
+        DecimalFormat* df = new DecimalFormat(pattern, syms, style, status);
+
+        // if it is cash currency style, setCurrencyUsage with usage
+        if (style == UNUM_CASH_CURRENCY){
+            df->setCurrencyUsage(UCURR_USAGE_CASH, &status);
+        }
+
+        if (U_FAILURE(status)) {
+            delete df;
+            return NULL;
+        }
+
+        f = df;
         if (f == NULL) {
             delete syms;
             status = U_MEMORY_ALLOCATION_ERROR;

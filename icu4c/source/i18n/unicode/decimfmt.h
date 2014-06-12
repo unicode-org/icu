@@ -1873,6 +1873,22 @@ public:
     virtual void setCurrency(const UChar* theCurrency);
 
     /**
+     * Sets the <tt>Currency Context</tt> object used to display currency.
+     * This takes effect immediately, if this format is a
+     * currency format.  
+     * @param currencyContext new currency context object to use.  
+     * @draft ICU 54
+     */
+    void setCurrencyUsage(UCurrencyUsage newUsage, UErrorCode* ec);
+
+    /**
+     * Returns the <tt>Currency Context</tt> object used to display currency
+     * @draft ICU 54
+     */
+    UCurrencyUsage getCurrencyUsage() const;
+
+
+    /**
      * The resource tags we use to retrieve decimal format data from
      * locale resource bundles.
      * @deprecated ICU 3.4. This string has no public purpose. Please don't use it.
@@ -2165,6 +2181,14 @@ private:
                               UBool setupForCurrentPattern,
                               UBool setupForPluralPattern,
                               UErrorCode& status);
+	
+    // get the currency rounding with respect to currency usage
+    double getCurrencyRounding(const UChar* currency,
+                               UErrorCode* ec) const;
+	
+    // get the currency fraction with respect to currency usage
+    int getCurrencyFractionDigits(const UChar* currency,
+                                  UErrorCode* ec) const;
 
     // hashtable operations
     Hashtable* initHashForAffixPattern(UErrorCode& status);
@@ -2355,7 +2379,9 @@ private:
 
     // Decimal Format Static Sets singleton.
     const DecimalFormatStaticSets *fStaticSets;
-
+	
+    // Currency Usage(STANDARD vs CASH)
+    UCurrencyUsage fCurrencyUsage;
 
 protected:
 
