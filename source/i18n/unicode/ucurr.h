@@ -25,6 +25,7 @@ enum UCurrencyUsage {
     /**
      * a setting to specify currency usage which determines currency digit
      * and rounding for standard usage, for example: "50.00 NT$"
+     * used as DEFAULT value
      * @draft ICU 54
      */
     UCURR_USAGE_STANDARD=0,
