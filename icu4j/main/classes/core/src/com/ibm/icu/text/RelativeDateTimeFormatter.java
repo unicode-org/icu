@@ -12,6 +12,7 @@ import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -63,6 +64,36 @@ import com.ibm.icu.util.UResourceBundle;
  * @provisional This API might change or be removed in a future release.
  */
 public final class RelativeDateTimeFormatter {
+    
+    /**
+     * The formatting style
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     *
+     */
+    public static enum Style {
+        
+        /**
+         * Everything spelled out.
+         * @draft ICU 54
+         * @provisional This API might change or be removed in a future release.
+         */
+        LONG,
+        
+        /**
+         * Abbreviations used when possible.
+         * @draft ICU 54
+         * @provisional This API might change or be removed in a future release.
+         */
+        SHORT,
+        
+        /**
+         * Use single letters when possible.
+         * @draft ICU 54
+         * @provisional This API might change or be removed in a future release.
+         */
+        NARROW,
+    }
     
     /**
      * Represents the unit for formatting a relative date. e.g "in 5 days"
@@ -272,7 +303,7 @@ public final class RelativeDateTimeFormatter {
      * @provisional This API might change or be removed in a future release.
      */
     public static RelativeDateTimeFormatter getInstance() {
-        return getInstance(ULocale.getDefault());
+        return getInstance(ULocale.getDefault(), null, Style.LONG, DisplayContext.CAPITALIZATION_NONE);
     }
     
     /**
@@ -283,13 +314,7 @@ public final class RelativeDateTimeFormatter {
      * @provisional This API might change or be removed in a future release.
      */
     public static RelativeDateTimeFormatter getInstance(ULocale locale) {
-        RelativeDateTimeFormatterData data = cache.get(locale);
-        return new RelativeDateTimeFormatter(
-                data.qualitativeUnitMap,
-                data.quantitativeUnitMap,
-                new MessageFormat(data.dateTimePattern),
-                PluralRules.forLocale(locale),
-                NumberFormat.getInstance(locale));
+        return getInstance(locale, null, Style.LONG, DisplayContext.CAPITALIZATION_NONE);
     }
     
     /**
@@ -303,13 +328,44 @@ public final class RelativeDateTimeFormatter {
      * @provisional This API might change or be removed in a future release.
      */
     public static RelativeDateTimeFormatter getInstance(ULocale locale, NumberFormat nf) {
+        return getInstance(locale, nf, Style.LONG, DisplayContext.CAPITALIZATION_NONE);
+    }
+ 
+    /**
+     * Returns a RelativeDateTimeFormatter for a particular locale that uses a particular
+     * NumberFormat object, style, and capitalization context
+     * 
+     * @param locale the locale
+     * @param nf the number format object. It is defensively copied to ensure thread-safety
+     * and immutability of this class. May be null.
+     * @param style the style.
+     * @param capitalizationContext the capitalization context.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static RelativeDateTimeFormatter getInstance(
+            ULocale locale,
+            NumberFormat nf,
+            Style style,
+            DisplayContext capitalizationContext) {
         RelativeDateTimeFormatterData data = cache.get(locale);
+        if (nf == null) {
+            nf = NumberFormat.getInstance(locale);
+        } else {
+            nf = (NumberFormat) nf.clone();
+        }
         return new RelativeDateTimeFormatter(
                 data.qualitativeUnitMap,
                 data.quantitativeUnitMap,
                 new MessageFormat(data.dateTimePattern),
                 PluralRules.forLocale(locale),
-                (NumberFormat) nf.clone());
+                nf,
+                style,
+                capitalizationContext,
+                capitalizationContext == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ?
+                    BreakIterator.getSentenceInstance(locale) : null,
+                locale);
+                
     }
            
     /**
@@ -330,15 +386,18 @@ public final class RelativeDateTimeFormatter {
         if (direction != Direction.LAST && direction != Direction.NEXT) {
             throw new IllegalArgumentException("direction must be NEXT or LAST");
         }
+        String result;
         // This class is thread-safe, yet numberFormat is not. To ensure thread-safety of this
         // class we must guarantee that only one thread at a time uses our numberFormat.
         synchronized (numberFormat) {
-            return getQuantity(
+            result = getQuantity(
                     unit, direction == Direction.NEXT).format(
                             quantity, numberFormat, pluralRules);
         }
+        return adjustForContext(result);
     }
     
+
     /**
      * Formats a relative date without a quantity.
      * @param direction NEXT, LAST, THIS, etc.
@@ -355,7 +414,8 @@ public final class RelativeDateTimeFormatter {
         if (unit == AbsoluteUnit.NOW && direction != Direction.PLAIN) {
             throw new IllegalArgumentException("NOW can only accept direction PLAIN.");
         }
-        return this.qualitativeUnitMap.get(unit).get(direction);
+        String result = this.qualitativeUnitMap.get(style).get(unit).get(direction);
+        return result != null ? adjustForContext(result) : null;
     }
 
     /**
@@ -385,6 +445,40 @@ public final class RelativeDateTimeFormatter {
         // class we must guarantee that only one thread at a time uses our numberFormat.
         synchronized (numberFormat) {
             return (NumberFormat) numberFormat.clone();
+        }
+    }
+    
+    /**
+     * Return capitalization context.
+     *
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public DisplayContext getCapitalizationContext() {
+        return capitalizationContext;
+    }
+
+    /**
+     * Return style
+     *
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Style getFormatStyle() {
+        return style;
+    }
+    
+    private String adjustForContext(String originalFormattedString) {
+        if (breakIterator == null || originalFormattedString.length() == 0 
+                || !UCharacter.isLowerCase(UCharacter.codePointAt(originalFormattedString, 0))) {
+            return originalFormattedString;
+        }
+        synchronized (breakIterator) {
+            return UCharacter.toTitleCase(
+                    locale,
+                    originalFormattedString,
+                    breakIterator,
+                    UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
         }
     }
     
@@ -424,41 +518,56 @@ public final class RelativeDateTimeFormatter {
     }
 
     private RelativeDateTimeFormatter(
-            EnumMap<AbsoluteUnit, EnumMap<Direction, String>> qualitativeUnitMap,
-            EnumMap<RelativeUnit, QuantityFormatter[]> quantitativeUnitMap,
+            EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>> qualitativeUnitMap,
+            EnumMap<Style, EnumMap<RelativeUnit, QuantityFormatter[]>> quantitativeUnitMap,
             MessageFormat combinedDateAndTime,
             PluralRules pluralRules,
-            NumberFormat numberFormat) {
+            NumberFormat numberFormat,
+            Style style,
+            DisplayContext capitalizationContext,
+            BreakIterator breakIterator,
+            ULocale locale) {
         this.qualitativeUnitMap = qualitativeUnitMap;
         this.quantitativeUnitMap = quantitativeUnitMap;
         this.combinedDateAndTime = combinedDateAndTime;
         this.pluralRules = pluralRules;
         this.numberFormat = numberFormat;
+        this.style = style;
+        if (capitalizationContext.type() != DisplayContext.Type.CAPITALIZATION) {
+            throw new IllegalArgumentException(capitalizationContext.toString());
+        }
+        this.capitalizationContext = capitalizationContext;
+        this.breakIterator = breakIterator;
+        this.locale = locale;
     }
     
     private QuantityFormatter getQuantity(RelativeUnit unit, boolean isFuture) {
-        QuantityFormatter[] quantities = quantitativeUnitMap.get(unit);
+        QuantityFormatter[] quantities = quantitativeUnitMap.get(style).get(unit);
         return isFuture ? quantities[1] : quantities[0];
     }
     
-    private final EnumMap<AbsoluteUnit, EnumMap<Direction, String>> qualitativeUnitMap;
-    private final EnumMap<RelativeUnit, QuantityFormatter[]> quantitativeUnitMap;
+    private final EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>> qualitativeUnitMap;
+    private final EnumMap<Style, EnumMap<RelativeUnit, QuantityFormatter[]>> quantitativeUnitMap;
     private final MessageFormat combinedDateAndTime;
     private final PluralRules pluralRules;
-    private NumberFormat numberFormat;
+    private final NumberFormat numberFormat;
+    private final Style style;
+    private final DisplayContext capitalizationContext;
+    private final BreakIterator breakIterator;
+    private final ULocale locale;
     
     private static class RelativeDateTimeFormatterData {
         public RelativeDateTimeFormatterData(
-                EnumMap<AbsoluteUnit, EnumMap<Direction, String>> qualitativeUnitMap,
-                EnumMap<RelativeUnit, QuantityFormatter[]> quantitativeUnitMap,
+                EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>> qualitativeUnitMap,
+                EnumMap<Style, EnumMap<RelativeUnit, QuantityFormatter[]>> quantitativeUnitMap,
                 String dateTimePattern) {
             this.qualitativeUnitMap = qualitativeUnitMap;
             this.quantitativeUnitMap = quantitativeUnitMap;
             this.dateTimePattern = dateTimePattern;
         }
         
-        public final EnumMap<AbsoluteUnit, EnumMap<Direction, String>> qualitativeUnitMap;
-        public final EnumMap<RelativeUnit, QuantityFormatter[]> quantitativeUnitMap;
+        public final EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>> qualitativeUnitMap;
+        public final EnumMap<Style, EnumMap<RelativeUnit, QuantityFormatter[]>> quantitativeUnitMap;
         public final String dateTimePattern;  // Example: "{1}, {0}"
     }
     
@@ -485,91 +594,138 @@ public final class RelativeDateTimeFormatter {
         }
 
         public RelativeDateTimeFormatterData load() {
-            EnumMap<AbsoluteUnit, EnumMap<Direction, String>> qualitativeUnitMap = 
-                    new EnumMap<AbsoluteUnit, EnumMap<Direction, String>>(AbsoluteUnit.class);
+            EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>> qualitativeUnitMap = 
+                    new EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>>(Style.class);
             
-            EnumMap<RelativeUnit, QuantityFormatter[]> quantitativeUnitMap =
-                    new EnumMap<RelativeUnit, QuantityFormatter[]>(RelativeUnit.class);
+            EnumMap<Style, EnumMap<RelativeUnit, QuantityFormatter[]>> quantitativeUnitMap =
+                    new EnumMap<Style, EnumMap<RelativeUnit, QuantityFormatter[]>>(Style.class);
+            
+            for (Style style : Style.values()) {
+                qualitativeUnitMap.put(style, new EnumMap<AbsoluteUnit, EnumMap<Direction, String>>(AbsoluteUnit.class));
+                quantitativeUnitMap.put(style, new EnumMap<RelativeUnit, QuantityFormatter[]>(RelativeUnit.class));                
+            }
                     
             ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
                     getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
-            addTimeUnit(
-                    r.getWithFallback("fields/day"),
+            addTimeUnits(
+                    r,
+                    "fields/day", "fields/day-short", "fields/day-narrow",
                     RelativeUnit.DAYS,
                     AbsoluteUnit.DAY,
                     quantitativeUnitMap,
                     qualitativeUnitMap);
-            addTimeUnit(
-                    r.getWithFallback("fields/week"),
+            addTimeUnits(
+                    r,
+                    "fields/week", "fields/week-short", "fields/week-narrow",
                     RelativeUnit.WEEKS,
                     AbsoluteUnit.WEEK,
                     quantitativeUnitMap,
                     qualitativeUnitMap);
-            addTimeUnit(
-                    r.getWithFallback("fields/month"),
+            addTimeUnits(
+                    r,
+                    "fields/month", "fields/month-short", "fields/month-narrow",
                     RelativeUnit.MONTHS,
                     AbsoluteUnit.MONTH,
                     quantitativeUnitMap,
                     qualitativeUnitMap);
-            addTimeUnit(
-                    r.getWithFallback("fields/year"),
+            addTimeUnits(
+                    r,
+                    "fields/year", "fields/year-short", "fields/year-narrow",
                     RelativeUnit.YEARS,
                     AbsoluteUnit.YEAR,
                     quantitativeUnitMap,
                     qualitativeUnitMap);
-            addTimeUnit(
-                    r.getWithFallback("fields/second"),
+            initRelativeUnits(
+                    r,
+                    "fields/second", "fields/second-short", "fields/second-narrow",
                     RelativeUnit.SECONDS,
                     quantitativeUnitMap);
-            addTimeUnit(
-                    r.getWithFallback("fields/minute"),
+            initRelativeUnits(
+                    r,
+                    "fields/minute", "fields/minute-short", "fields/minute-narrow",
                     RelativeUnit.MINUTES,
                     quantitativeUnitMap);
-            addTimeUnit(
-                    r.getWithFallback("fields/hour"),
+            initRelativeUnits(
+                    r,
+                    "fields/hour", "fields/hour-short", "fields/hour-narrow",
                     RelativeUnit.HOURS,
                     quantitativeUnitMap);
+            
             addQualitativeUnit(
-                    qualitativeUnitMap,
+                    qualitativeUnitMap.get(Style.LONG),
                     AbsoluteUnit.NOW,
                     r.getStringWithFallback("fields/second/relative/0"));
+            addQualitativeUnit(
+                    qualitativeUnitMap.get(Style.SHORT),
+                    AbsoluteUnit.NOW,
+                    r.getStringWithFallback("fields/second-short/relative/0"));
+            addQualitativeUnit(
+                    qualitativeUnitMap.get(Style.NARROW),
+                    AbsoluteUnit.NOW,
+                    r.getStringWithFallback("fields/second-narrow/relative/0"));
             
-            EnumMap<AbsoluteUnit, String> dayOfWeekMap = readDaysOfWeek(
-                r.getWithFallback("calendar/gregorian/dayNames/stand-alone/wide")
-            );
+            EnumMap<Style, EnumMap<AbsoluteUnit, String>> dayOfWeekMap = 
+                    new EnumMap<Style, EnumMap<AbsoluteUnit, String>>(Style.class);
+            dayOfWeekMap.put(Style.LONG, readDaysOfWeek(
+                    r.getWithFallback("calendar/gregorian/dayNames/stand-alone/wide")));
+            dayOfWeekMap.put(Style.SHORT, readDaysOfWeek(
+                    r.getWithFallback("calendar/gregorian/dayNames/stand-alone/short")));
+            dayOfWeekMap.put(Style.NARROW, readDaysOfWeek(
+                    r.getWithFallback("calendar/gregorian/dayNames/stand-alone/narrow")));
             
-            addWeekDay(
-                    r.getWithFallback("fields/mon"),
+            addWeekDays(
+                    r,
+                    "fields/mon/relative",
+                    "fields/mon-short/relative",
+                    "fields/mon-narrow/relative",
                     dayOfWeekMap,
                     AbsoluteUnit.MONDAY,
                     qualitativeUnitMap);
-            addWeekDay(
-                    r.getWithFallback("fields/tue"),
+            addWeekDays(
+                    r,
+                    "fields/tue/relative",
+                    "fields/tue-short/relative",
+                    "fields/tue-narrow/relative",
                     dayOfWeekMap,
                     AbsoluteUnit.TUESDAY,
                     qualitativeUnitMap);
-            addWeekDay(
-                    r.getWithFallback("fields/wed"),
+            addWeekDays(
+                    r,
+                    "fields/wed/relative",
+                    "fields/wed-short/relative",
+                    "fields/wed-narrow/relative",
                     dayOfWeekMap,
                     AbsoluteUnit.WEDNESDAY,
                     qualitativeUnitMap);
-            addWeekDay(
-                    r.getWithFallback("fields/thu"),
+            addWeekDays(
+                    r,
+                    "fields/thu/relative",
+                    "fields/thu-short/relative",
+                    "fields/thu-narrow/relative",
                     dayOfWeekMap,
                     AbsoluteUnit.THURSDAY,
                     qualitativeUnitMap);
-            addWeekDay(
-                    r.getWithFallback("fields/fri"),
+            addWeekDays(
+                    r,
+                    "fields/fri/relative",
+                    "fields/fri-short/relative",
+                    "fields/fri-narrow/relative",
                     dayOfWeekMap,
                     AbsoluteUnit.FRIDAY,
                     qualitativeUnitMap);
-            addWeekDay(
-                    r.getWithFallback("fields/sat"),
+            addWeekDays(
+                    r,
+                    "fields/sat/relative",
+                    "fields/sat-short/relative",
+                    "fields/sat-narrow/relative",
                     dayOfWeekMap,
                     AbsoluteUnit.SATURDAY,
                     qualitativeUnitMap);
-            addWeekDay(
-                    r.getWithFallback("fields/sun"),
+            addWeekDays(
+                    r,
+                    "fields/sun/relative",
+                    "fields/sun-short/relative",
+                    "fields/sun-narrow/relative",
                     dayOfWeekMap,
                     AbsoluteUnit.SUNDAY,
                     qualitativeUnitMap);   
@@ -577,6 +733,34 @@ public final class RelativeDateTimeFormatter {
                     ulocale, r.getStringWithFallback("calendar/default"));  
             return new RelativeDateTimeFormatterData(
                     qualitativeUnitMap, quantitativeUnitMap, calData.getDateTimePattern());
+        }
+
+        private void addTimeUnits(
+                ICUResourceBundle r,
+                String path, String pathShort, String pathNarrow,
+                RelativeUnit relativeUnit, 
+                AbsoluteUnit absoluteUnit,
+                EnumMap<Style, EnumMap<RelativeUnit, QuantityFormatter[]>> quantitativeUnitMap,
+                EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>> qualitativeUnitMap) {
+           addTimeUnit(
+                   r.getWithFallback(path),
+                   relativeUnit,
+                   absoluteUnit,
+                   quantitativeUnitMap.get(Style.LONG),
+                   qualitativeUnitMap.get(Style.LONG));
+           addTimeUnit(
+                   r.getWithFallback(pathShort),
+                   relativeUnit,
+                   absoluteUnit,
+                   quantitativeUnitMap.get(Style.SHORT),
+                   qualitativeUnitMap.get(Style.SHORT));
+           addTimeUnit(
+                   r.getWithFallback(pathNarrow),
+                   relativeUnit,
+                   absoluteUnit,
+                   quantitativeUnitMap.get(Style.NARROW),
+                   qualitativeUnitMap.get(Style.NARROW));
+            
         }
 
         private void addTimeUnit(
@@ -597,6 +781,27 @@ public final class RelativeDateTimeFormatter {
                     absoluteUnit,
                     timeUnitBundle,
                     unitName);
+        }
+        
+        private void initRelativeUnits(
+                ICUResourceBundle r, 
+                String path,
+                String pathShort,
+                String pathNarrow,
+                RelativeUnit relativeUnit,
+                EnumMap<Style, EnumMap<RelativeUnit, QuantityFormatter[]>> quantitativeUnitMap) {
+            addTimeUnit(
+                    r.getWithFallback(path),
+                    relativeUnit,
+                    quantitativeUnitMap.get(Style.LONG));
+            addTimeUnit(
+                    r.getWithFallback(pathShort),
+                    relativeUnit,
+                    quantitativeUnitMap.get(Style.SHORT));
+            addTimeUnit(
+                    r.getWithFallback(pathNarrow),
+                    relativeUnit,
+                    quantitativeUnitMap.get(Style.NARROW));
         }
 
         private static void addTimeUnit(
@@ -624,18 +829,31 @@ public final class RelativeDateTimeFormatter {
                 builder.add(r.getKey(), r.getString());
             }
         }
-
-        private static void addWeekDay(
-                ICUResourceBundle weekdayBundle,
-                EnumMap<AbsoluteUnit, String> dayOfWeekMap,
+        
+        private void addWeekDays(
+                ICUResourceBundle r,
+                String path,
+                String pathShort,
+                String pathNarrow,
+                EnumMap<Style, EnumMap<AbsoluteUnit, String>> dayOfWeekMap,
                 AbsoluteUnit weekDay,
-                EnumMap<AbsoluteUnit, EnumMap<Direction, String>> qualitativeUnitMap) {
-            weekdayBundle = weekdayBundle.findWithFallback("relative");
+                EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>> qualitativeUnitMap) {
             addQualitativeUnit(
-                    qualitativeUnitMap,
+                    qualitativeUnitMap.get(Style.LONG),
                     weekDay,
-                    weekdayBundle,
-                    dayOfWeekMap.get(weekDay));
+                    r.findWithFallback(path),
+                    dayOfWeekMap.get(Style.LONG).get(weekDay)); 
+            addQualitativeUnit(
+                    qualitativeUnitMap.get(Style.SHORT),
+                    weekDay,
+                    r.findWithFallback(pathShort),
+                    dayOfWeekMap.get(Style.SHORT).get(weekDay)); 
+            addQualitativeUnit(
+                    qualitativeUnitMap.get(Style.NARROW),
+                    weekDay,
+                    r.findWithFallback(pathNarrow),
+                    dayOfWeekMap.get(Style.NARROW).get(weekDay)); 
+            
         }
 
         private static EnumMap<AbsoluteUnit, String> readDaysOfWeek(ICUResourceBundle daysOfWeekBundle) {
