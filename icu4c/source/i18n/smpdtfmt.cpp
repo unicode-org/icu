@@ -1720,6 +1720,10 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 {
     UErrorCode status = U_ZERO_ERROR;
     int32_t pos = parsePos.getIndex();
+    if(parsePos.getIndex() < 0) {
+        parsePos.setErrorIndex(0);
+        return;
+    }
     int32_t start = pos;
 
 
