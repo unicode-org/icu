@@ -27,7 +27,8 @@ class FieldPositionIterator;
 class DecimalFormatStaticSets;
 
 /**
- * A helper class for formatting in user-friendly scientific notation.
+ * A helper class for formatting numbers in standard scientific notation
+ * instead of E notation.
  *
  * Sample code:
  * <pre>
@@ -40,7 +41,7 @@ class DecimalFormatStaticSets;
  * ScientificFormatHelper helper(*decfmt->getDecimalFormatSymbols(), status);
  * UnicodeString result;
  *
- * // result = "1.23456×10<sup>-78</sup>"
+ * // result = "1.23456x10<sup>-78</sup>"
  * helper.insertMarkup(appendTo, fpositer, "<sup>", "</sup>", result, status));
  * </pre>
  *
@@ -51,9 +52,9 @@ class U_I18N_API ScientificFormatHelper : public UObject {
  public:
     /**
      * Constructor.
-     * @param symbols comes from DecimalFormat instance used for default
-     *  scientific notation.
-     * @param status any error reported here.
+     * @param symbols  comes from DecimalFormat instance used for default
+     *                 scientific notation.
+     * @param status   any error reported here.
      * @draft ICU 54
      */
     ScientificFormatHelper(const DecimalFormatSymbols &symbols, UErrorCode& status);
@@ -79,16 +80,19 @@ class U_I18N_API ScientificFormatHelper : public UObject {
     /**
      * Makes scientific notation user-friendly by surrounding exponent with
      * html to make it superscript.
-     * @param s the original formatted scientific notation e.g "6.02e23"
-     *  s is output from NumberFormat::createScientificInstance()->format().
-     * @param fpi the FieldPositionIterator from the format call.
-     *  fpi is output from NumberFormat::createScientificInstance()->format().
+     * @param s           the original formatted scientific notation
+     *                    e.g "6.02e23". s is output from
+     *                    NumberFormat::createScientificInstance()->format().
+     * @param fpi         the FieldPositionIterator from the format call.
+     *                    fpi is output from
+     *                    NumberFormat::createScientificInstance()->format().
      * @param beginMarkup the start html for the exponent e.g "<sup>"
-     * @param endMarkup the end html for the exponent e.g "</sup>"
-     * @param result user-friendly scientific notation stored here.
-     * @param status any error returned here. When status is set to a non-zero
-     * error, the value of result is unspecified, and client should fallback
-     * to using s for scientific notation.
+     * @param endMarkup   the end html for the exponent e.g "</sup>"
+     * @param result      user-friendly scientific notation appended here.
+     * @param status      any error returned here. When status is set to a
+     *                    non-zero error, the value of result is unspecified,
+     *                    and client should fallback to using s for scientific
+     *                    notation.
      * @return the value stored in result.
      * @draft ICU 54
      */
@@ -101,17 +105,19 @@ class U_I18N_API ScientificFormatHelper : public UObject {
         UErrorCode &status) const;
 
     /**
-     * Makes scientific notation user-friendly by using specific code points
-     * for superscript 0..9 and - in the exponent rather than by using
-     * html.
-     * @param s the original formatted scientific notation e.g "6.02e23"
-     *  s is output from NumberFormat::createScientificInstance()->format().
-     * @param fpi the corresponding FieldPositionIterator from the format call.
-     *  fpi is output from NumberFormat::createScientificInstance()->format().
-     * @param result user-friendly scientific notation stored here.
-     * @param status any error returned here. When status is set to a non-zero
-     * error, the value of result is unspecified, and client should fallback
-     * to using s for scientific notation.
+     * Makes scientific notation user-friendly by surrounding exponent with
+     * html to make it superscript.
+     * @param s           the original formatted scientific notation
+     *                    e.g "6.02e23". s is output from
+     *                    NumberFormat::createScientificInstance()->format().
+     * @param fpi         the FieldPositionIterator from the format call.
+     *                    fpi is output from
+     *                    NumberFormat::createScientificInstance()->format().
+     * @param result      user-friendly scientific notation appended here.
+     * @param status      any error returned here. When status is set to a
+     *                    non-zero error, the value of result is unspecified,
+     *                    and client should fallback to using s for scientific
+     *                    notation.
      * @return the value stored in result.
      * @draft ICU 54
      */
