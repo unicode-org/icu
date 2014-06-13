@@ -1410,4 +1410,22 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         }
   }
     
+  public void TestT10906()
+  {
+      String pattern = new String("MM-dd-yyyy");
+      String text = new String("06-10-2014");
+      SimpleDateFormat format = new SimpleDateFormat(pattern);
+      ParsePosition pp = new ParsePosition(-1);
+      try {
+          format.parse(text, pp);
+          int errorIdx = pp.getErrorIndex();
+          if (errorIdx == -1) {          
+              errln("failed to report invalid (negative) starting parse position");
+          }
+      } catch(StringIndexOutOfBoundsException e) {
+          errln("failed to fix invalid (negative) starting parse position");
+      }
+
+  }
+    
 }
