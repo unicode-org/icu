@@ -29,7 +29,10 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 private:
     void TestBasic();
-    void TestPlusSignInExponent();
+    void TestPlusSignInExponentMarkup();
+    void TestPlusSignInExponentSuperscript();
+    void TestFixedDecimalMarkup();
+    void TestFixedDecimalSuperscript();
 };
 
 void ScientificFormatHelperTest::runIndexedTest(
@@ -39,7 +42,10 @@ void ScientificFormatHelperTest::runIndexedTest(
     }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(TestBasic);
-    TESTCASE_AUTO(TestPlusSignInExponent);
+    TESTCASE_AUTO(TestPlusSignInExponentMarkup);
+    TESTCASE_AUTO(TestPlusSignInExponentSuperscript);
+    TESTCASE_AUTO(TestFixedDecimalMarkup);
+    TESTCASE_AUTO(TestFixedDecimalSuperscript);
     TESTCASE_AUTO_END;
 }
 
@@ -74,11 +80,29 @@ void ScientificFormatHelperTest::TestBasic() {
     }
 }
 
-void ScientificFormatHelperTest::TestPlusSignInExponent() {
+void ScientificFormatHelperTest::TestPlusSignInExponentMarkup() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createScientificInstance("en", status));
     decfmt->applyPattern("0.00E+0", status);
-    assertSuccess("1", status);
+    assertSuccess("", status);
+    UnicodeString appendTo;
+    FieldPositionIterator fpositer;
+    decfmt->format(6.02e23, appendTo, &fpositer, status);
+    ScientificFormatHelper helper(*decfmt->getDecimalFormatSymbols(), status);
+    UnicodeString result;
+    const char *expected = "6.02\\u00d710<sup>+23</sup>";
+    assertEquals(
+            "",
+            UnicodeString(expected).unescape(),
+            helper.insertMarkup(appendTo, fpositer, "<sup>", "</sup>", result, status));
+    assertSuccess("", status);
+}
+
+void ScientificFormatHelperTest::TestPlusSignInExponentSuperscript() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createScientificInstance("en", status));
+    decfmt->applyPattern("0.00E+0", status);
+    assertSuccess("", status);
     UnicodeString appendTo;
     FieldPositionIterator fpositer;
     decfmt->format(6.02e23, appendTo, &fpositer, status);
@@ -90,6 +114,38 @@ void ScientificFormatHelperTest::TestPlusSignInExponent() {
             UnicodeString(expected).unescape(),
             helper.toSuperscriptExponentDigits(appendTo, fpositer, result, status));
     assertSuccess("", status);
+}
+
+void ScientificFormatHelperTest::TestFixedDecimalMarkup() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createInstance("en", status));
+    assertSuccess("", status);
+    UnicodeString appendTo;
+    FieldPositionIterator fpositer;
+    decfmt->format(123456.0, appendTo, &fpositer, status);
+    ScientificFormatHelper helper(*decfmt->getDecimalFormatSymbols(), status);
+    assertSuccess("", status);
+    UnicodeString result;
+    helper.insertMarkup(appendTo, fpositer, "<sup>", "</sup>", result, status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("Expected U_ILLEGAL_ARGUMENT_ERROR with fixed decimal number.");
+    }
+}
+
+void ScientificFormatHelperTest::TestFixedDecimalSuperscript() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createInstance("en", status));
+    assertSuccess("", status);
+    UnicodeString appendTo;
+    FieldPositionIterator fpositer;
+    decfmt->format(123456.0, appendTo, &fpositer, status);
+    ScientificFormatHelper helper(*decfmt->getDecimalFormatSymbols(), status);
+    assertSuccess("", status);
+    UnicodeString result;
+    helper.toSuperscriptExponentDigits(appendTo, fpositer, result, status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("Expected U_ILLEGAL_ARGUMENT_ERROR with fixed decimal number.");
+    }
 }
 
 extern IntlTest *createScientificFormatHelperTest() {
