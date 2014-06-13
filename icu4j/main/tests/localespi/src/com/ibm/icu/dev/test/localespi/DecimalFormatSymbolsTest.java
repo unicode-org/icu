@@ -132,7 +132,6 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
         decfs.setPercent(decfsEnUS.getPercent());
         decfs.setPerMill(decfsEnUS.getPerMill());
         decfs.setZeroDigit(decfsEnUS.getZeroDigit());
-        decfs.setExponentMultiplicationSign(decfsEnUS.getExponentMultiplicationSign());
 
         // Check
         Currency cur = decfs.getCurrency();
@@ -157,7 +156,6 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
         checkEquivalence(decfs.getPercent(), decfsEnUS.getPercent(), loc, "getPercent");
         checkEquivalence(decfs.getPerMill(), decfsEnUS.getPerMill(), loc, "getPerMill");
         checkEquivalence(decfs.getZeroDigit(), decfsEnUS.getZeroDigit(), loc, "getZeroDigit");
-        checkEquivalence(decfs.getExponentMultiplicationSign(), decfsEnUS.getExponentMultiplicationSign(), loc, "getExponentMultiplicationSign");
     }
 
     public void TestKeywords() {
