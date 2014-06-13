@@ -59,6 +59,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(29,TestT10334)
         CASE(30,TestT10619)
         CASE(31,TestT10855)
+        CASE(32,TestT10906)
         default: name = ""; break;
     }
 }
@@ -1705,6 +1706,20 @@ void DateFormatRegressionTest::TestT10855(void) {
     }
 }
 
+void DateFormatRegressionTest::TestT10906(void) {
+
+      UErrorCode status = U_ZERO_ERROR;
+      UnicodeString pattern = "MM-dd-yyyy";
+      UnicodeString text = "06-10-2014";
+      SimpleDateFormat format(pattern, status);
+      int32_t errorIdx = 0;
+      ParsePosition pp(-1);
+      format.parse(text, pp);
+      errorIdx = pp.getErrorIndex();
+      if (errorIdx == -1) {          
+          errln("failed to report invalid (negative) starting parse position");
+      }
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
