@@ -544,6 +544,24 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     public void setMonetaryGroupingSeparator(char sep) {
         monetaryGroupingSeparator = sep;
     }
+    
+    /**
+    * Returns the multiplication sign
+    * @draft ICU 54
+    * @provisional
+    */
+    public String getExponentMultiplicationSign() {
+        return exponentMultiplicationSign;
+    }
+    
+    /**
+    * Sets the multiplication sign
+    * @draft ICU 54
+    * @provisional
+    */
+    public void setExponentMultiplicationSign(String exponentMultiplicationSign) {
+        this.exponentMultiplicationSign = exponentMultiplicationSign;
+    }
 
     /**
      * {@icu} Returns the string used to separate the mantissa from the exponent.
@@ -803,7 +821,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         plusString.equals(other.plusString) &&
         exponentSeparator.equals(other.exponentSeparator) &&
         monetarySeparator == other.monetarySeparator &&
-        monetaryGroupingSeparator == other.monetaryGroupingSeparator);
+        monetaryGroupingSeparator == other.monetaryGroupingSeparator &&
+        exponentMultiplicationSign.equals(other.exponentMultiplicationSign));
     }
 
     /**
@@ -875,7 +894,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             boolean isLatn = nsName.equals("latn");
             String baseKey = "NumberElements/" + nsName + "/symbols/";
             String latnKey = "NumberElements/latn/symbols/";
-            String[] symbolKeys = { "decimal", "group", "list", "percentSign", "minusSign", "plusSign", "exponential", "perMille", "infinity", "nan", "currencyDecimal", "currencyGroup" };
+            String[] symbolKeys = { "decimal", "group", "list", "percentSign", "minusSign", "plusSign", "exponential", "perMille", "infinity", "nan", "currencyDecimal", "currencyGroup", "superscriptingExponent" };
             String[] fallbackElements = { ".", ",", ";", "%", "-", "+", "E", "\u2030", "\u221e", "NaN", null, null };
             String[] symbolsArray = new String[symbolKeys.length];
             for ( int i = 0 ; i < symbolKeys.length; i++ ) {
@@ -931,6 +950,12 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             monetaryGroupingSeparator = numberElements[11].charAt(0);
         } else {
             monetaryGroupingSeparator = groupingSeparator;
+        }
+        
+        if ( numberElements[12] != null) {
+            exponentMultiplicationSign = numberElements[12];
+        } else {
+            exponentMultiplicationSign = "\u00D7";
         }
         
         digit = DecimalFormat.PATTERN_DIGIT;  // Localized pattern character no longer in CLDR
@@ -1049,6 +1074,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             if (plusString == null) {
                 char[] plusArray = { plusSign };
                 plusString = new String(plusArray);
+            }
+        }
+        if (serialVersionOnStream < 8) {
+            if (exponentMultiplicationSign == null) {
+                exponentMultiplicationSign = "\u00D7";
             }
         }
         serialVersionOnStream = currentSerialVersion;
@@ -1234,6 +1264,13 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     private String minusString = null;
     private String plusString = null;
+    
+    /**
+     * Exponent multiplication sign. e.g "x"
+     * @serial
+     * @since ICU 54
+     */
+    private String exponentMultiplicationSign = null;
 
     // Proclaim JDK 1.1 FCS compatibility
     private static final long serialVersionUID = 5772796243397350300L;
@@ -1249,7 +1286,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     // - 5 for ICU 3.6, which includes the monetaryGroupingSeparator field
     // - 6 for ICU 4.2, which includes the currencySpc* fields
     // - 7 for ICU 52, which includes the minusString and plusString fields
-    private static final int currentSerialVersion = 7;
+    // - 8 for ICU 54, which includes exponentMultiplicationSign field.
+    private static final int currentSerialVersion = 8;
 
     /**
      * Describes the version of <code>DecimalFormatSymbols</code> present on the stream.
