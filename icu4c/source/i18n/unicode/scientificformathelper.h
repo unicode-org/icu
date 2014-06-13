@@ -78,7 +78,7 @@ class U_I18N_API ScientificFormatHelper : public UObject {
     virtual ~ScientificFormatHelper();
 
     /**
-     * Makes scientific notation user-friendly by surrounding exponent with
+     * Formats standard scientific notation by surrounding exponent with
      * html to make it superscript.
      * @param s           the original formatted scientific notation
      *                    e.g "6.02e23". s is output from
@@ -88,7 +88,7 @@ class U_I18N_API ScientificFormatHelper : public UObject {
      *                    NumberFormat::createScientificInstance()->format().
      * @param beginMarkup the start html for the exponent e.g "<sup>"
      * @param endMarkup   the end html for the exponent e.g "</sup>"
-     * @param result      user-friendly scientific notation appended here.
+     * @param result      standard scientific notation appended here.
      * @param status      any error returned here. When status is set to a
      *                    non-zero error, the value of result is unspecified,
      *                    and client should fallback to using s for scientific
@@ -105,15 +105,15 @@ class U_I18N_API ScientificFormatHelper : public UObject {
         UErrorCode &status) const;
 
     /**
-     * Makes scientific notation user-friendly by surrounding exponent with
-     * html to make it superscript.
+     * Formats standard scientific notation by using superscript unicode
+     * points 0..9.
      * @param s           the original formatted scientific notation
      *                    e.g "6.02e23". s is output from
      *                    NumberFormat::createScientificInstance()->format().
      * @param fpi         the FieldPositionIterator from the format call.
      *                    fpi is output from
      *                    NumberFormat::createScientificInstance()->format().
-     * @param result      user-friendly scientific notation appended here.
+     * @param result      standard scientific notation appended here.
      * @param status      any error returned here. When status is set to a
      *                    non-zero error, the value of result is unspecified,
      *                    and client should fallback to using s for scientific
