@@ -2081,6 +2081,10 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         int pos = parsePos.getIndex();
+        if(pos < 0) {
+            parsePos.setErrorIndex(0);
+            return;
+        }
         int start = pos;
 
         Output<TimeType> tzTimeType = new Output<TimeType>(TimeType.UNKNOWN);
@@ -2114,8 +2118,8 @@ public class SimpleDateFormat extends DateFormat {
                     // try 4/2/2, 3/2/2, 2/2/2, and finally 1/2/2.
                     if (numericFieldStart == -1) {
                         // check if this field is followed by abutting another numeric field
-                        if ((i + 1) < items.length
-                                && (items[i + 1] instanceof PatternItem)
+                        if ((i + 1) < items.length 
+                                && (items[i + 1] instanceof PatternItem) 
                                 && ((PatternItem)items[i + 1]).isNumeric) {
                             // record the first numeric field within a numeric text run
                             numericFieldStart = i;
