@@ -35,8 +35,22 @@ public class ScientificFormatHelperTest extends TestFmwk {
                 "1.23456\u00d710\u207b\u2077\u2078",
                 helper.toSuperscriptExponentDigits(iterator));
     }
+
+    public void TestPlusSignInExponentMarkup() {
+        ULocale en = new ULocale("en");
+        DecimalFormat decfmt = (DecimalFormat) NumberFormat.getScientificInstance(en);
+        decfmt.applyPattern("0.00E+0");
+        AttributedCharacterIterator iterator = decfmt.formatToCharacterIterator(6.02e23);
+        ScientificFormatHelper helper = ScientificFormatHelper.getInstance(
+                decfmt.getDecimalFormatSymbols());
+        assertEquals(
+                "",
+                "6.02\u00d710<sup>+23</sup>",
+                helper.insertMarkup(iterator, "<sup>", "</sup>"));
+    }
+
     
-    public void TestPlusSignInExponent() {
+    public void TestPlusSignInExponentSuperscript() {
         ULocale en = new ULocale("en");
         DecimalFormat decfmt = (DecimalFormat) NumberFormat.getScientificInstance(en);
         decfmt.applyPattern("0.00E+0");
@@ -47,5 +61,33 @@ public class ScientificFormatHelperTest extends TestFmwk {
                 "",
                 "6.02\u00d710\u207a\u00b2\u00b3",
                 helper.toSuperscriptExponentDigits(iterator));
+    }
+    
+    public void TestFixedDecimalMarkup() {
+        ULocale en = new ULocale("en");
+        DecimalFormat decfmt = (DecimalFormat) NumberFormat.getInstance(en);
+        AttributedCharacterIterator iterator = decfmt.formatToCharacterIterator(123456.0);
+        ScientificFormatHelper helper = ScientificFormatHelper.getInstance(
+                decfmt.getDecimalFormatSymbols());
+        try {
+            helper.insertMarkup(iterator, "<sup>", "</sup>");
+            fail("expected illegal argument exception");
+        } catch (IllegalArgumentException expected) {
+            // do nothing
+        }
+    }
+    
+    public void TestFixedDecimalSuperscript() {
+        ULocale en = new ULocale("en");
+        DecimalFormat decfmt = (DecimalFormat) NumberFormat.getInstance(en);
+        AttributedCharacterIterator iterator = decfmt.formatToCharacterIterator(123456.0);
+        ScientificFormatHelper helper = ScientificFormatHelper.getInstance(
+                decfmt.getDecimalFormatSymbols());
+        try {
+            helper.toSuperscriptExponentDigits(iterator);
+            fail("expected illegal argument exception");
+        } catch (IllegalArgumentException expected) {
+            // do nothing
+        }
     }
 }
