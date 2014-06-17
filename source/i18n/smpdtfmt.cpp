@@ -1649,6 +1649,117 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
 
 //----------------------------------------------------------------------
 
+void SimpleDateFormat::setNumberFormat(NumberFormat* overrideNF, UErrorCode &status){
+	// if it has not been initialized yet, initialize
+	umtx_lock(&LOCK);
+    if (fNumberFormatters == NULL) {
+        fNumberFormatters = (NumberFormat**)uprv_malloc(UDAT_FIELD_COUNT * sizeof(NumberFormat*));
+        if (fNumberFormatters) {
+            for (int32_t i = 0; i < UDAT_FIELD_COUNT; i++) {
+                fNumberFormatters[i] = fNumberFormat;
+            }
+        } else {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+    umtx_unlock(&LOCK);
+
+	NSOverride *cur = fOverrideList;
+    cur = (NSOverride *)uprv_malloc(sizeof(NSOverride));
+    if (cur) {
+		
+		// no matter what the locale's default number format looked like, we want
+        // to modify it so that it doesn't use thousands separators, doesn't always
+        // show the decimal point, and recognizes integers only when parsing
+        overrideNF->setGroupingUsed(FALSE);
+        DecimalFormat* decfmt = dynamic_cast<DecimalFormat*>(overrideNF);
+        if (decfmt != NULL) {
+			decfmt->setDecimalSeparatorAlwaysShown(FALSE);
+        }
+		overrideNF->setParseIntegerOnly(TRUE);
+		overrideNF->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
+		
+		fNumberFormat = overrideNF;
+
+		cur->nf = overrideNF;
+		cur->hash = 0; // error-prone, but not used at all(so leave mark here)
+        cur->next = fOverrideList;
+		fOverrideList = cur;
+	} else {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+	
+	for ( int8_t i=0 ; i<kDateFieldsCount; i++ ) {
+		fNumberFormatters[kDateFields[i]] = overrideNF;
+	}
+	for ( int8_t i=0 ; i<kTimeFieldsCount; i++ ) {
+		fNumberFormatters[kTimeFields[i]] = overrideNF;
+	}
+}
+
+void SimpleDateFormat::setNumberFormat(UChar field, NumberFormat* overrideNF, UErrorCode &status){
+	// if it has not been initialized yet, initialize
+	umtx_lock(&LOCK);
+    if (fNumberFormatters == NULL) {
+        fNumberFormatters = (NumberFormat**)uprv_malloc(UDAT_FIELD_COUNT * sizeof(NumberFormat*));
+        if (fNumberFormatters) {
+            for (int32_t i = 0; i < UDAT_FIELD_COUNT; i++) {
+                fNumberFormatters[i] = fNumberFormat;
+            }
+        } else {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+    umtx_unlock(&LOCK);
+
+    NSOverride *cur = fOverrideList;
+    cur = (NSOverride *)uprv_malloc(sizeof(NSOverride));
+    if (cur) {
+		
+		// no matter what the locale's default number format looked like, we want
+        // to modify it so that it doesn't use thousands separators, doesn't always
+        // show the decimal point, and recognizes integers only when parsing
+        overrideNF->setGroupingUsed(FALSE);
+        DecimalFormat* decfmt = dynamic_cast<DecimalFormat*>(overrideNF);
+        if (decfmt != NULL) {
+			decfmt->setDecimalSeparatorAlwaysShown(FALSE);
+        }
+		overrideNF->setParseIntegerOnly(TRUE);
+		overrideNF->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
+
+		cur->nf = overrideNF;
+		cur->hash = 0; // error-prone, but not used at all(so leave mark here)
+        cur->next = fOverrideList;
+		fOverrideList = cur;
+	} else {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+	// if the pattern character is unrecognized, signal an error and bail out
+    UDateFormatField patternCharIndex = DateFormatSymbols::getPatternCharIndex(field);
+	if (patternCharIndex == UDAT_FIELD_COUNT) {
+		status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+
+	// Set the number formatter in the table
+	fNumberFormatters[patternCharIndex] = overrideNF;
+}
+
+const NumberFormat*
+SimpleDateFormat::getNumberFormat() const
+{
+    return fNumberFormat;
+}
+
+const NumberFormat *
+SimpleDateFormat::getNumberFormat(UChar field) const {
+	UDateFormatField index = DateFormatSymbols::getPatternCharIndex(field);
+    return getNumberFormatByIndex(index);
+}
+
 NumberFormat *
 SimpleDateFormat::getNumberFormatByIndex(UDateFormatField index) const {
     if (fNumberFormatters != NULL) {

@@ -1118,9 +1118,41 @@ public:
      * @param status Input/output status. If at entry this indicates a failure
      *               status, the function will do nothing; otherwise this will be
      *               updated with any new status from the function. 
-     * @draft ICU 53
+     * @draft ICU 54
      */
     virtual void setContext(UDisplayContext value, UErrorCode& status);
+	
+    /**
+     * set the numbering system to be used for a particular field.
+	 * @param overrideNF the NumbeferFormat used
+	 * @param status error error code
+	 * @draft ICU 54
+     */
+    void setNumberFormat(NumberFormat* overrideNF, UErrorCode &status);
+
+    /**
+     * set the numbering system to be used for a particular field.
+	 * @param field the field to override(like y)
+	 * @param overrideNF the NumbeferFormat used
+	 * @param status error error code
+	 * @draft ICU 54
+     */
+    void setNumberFormat(UChar field, NumberFormat* overrideNF, UErrorCode &status);
+	 
+    /**
+     * Gets the number formatter which this date/time formatter uses to format
+     * and parse the numeric portions of the pattern.
+     * @return the number formatter which this date/time formatter uses.
+     * @stable ICU 2.0
+     */
+    const NumberFormat* getNumberFormat(void) const;
+
+    /**
+     * Get the numbering system to be used for a particular field.
+	 * @param index The UDateFormatField to get
+	 * @draft ICU 54
+     */
+    const NumberFormat * getNumberFormat(UChar field) const;
 
 #ifndef U_HIDE_INTERNAL_API
     /**

@@ -50,6 +50,12 @@
      **/
     static UChar* myNumformat(const UNumberFormat* numfor, double d);
     static int getCurrentYear(void);
+	
+    /**
+     * Test DateFormat override number format API
+     */
+	static void TestOverrideNumberForamt(void);
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

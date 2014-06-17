@@ -55,6 +55,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestRelativeCrash);
     TESTCASE(TestContext);
     TESTCASE(TestCalendarDateParse);
+	TESTCASE(TestOverrideNumberForamt);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -1529,6 +1530,53 @@ static void TestContext(void) {
             log_data_err("FAIL: ucal_open for locale root, status %s\n", u_errorName(status) );
         }
     }
+}
+
+
+static void TestOverrideNumberForamt(void) {
+    UDateFormat* fmt;
+    UChar pattern[50];
+	UErrorCode status = U_ZERO_ERROR;
+	const char* localeString = "zh@numbers=hanidays";
+	char bbuf1[kBbufMax];
+	char bbuf2[kBbufMax];
+	UNumberFormat* overrideFmt; 
+	const UNumberFormat* getter_result; 
+	UChar* expected;
+	UDate july022008 = 1215000000000.0;
+	int32_t i;
+	
+    expected=(UChar*)malloc(sizeof(UChar) * 10);
+
+    u_uastrcpy(pattern,"MM d");
+    fmt=udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
+	
+	overrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
+	for(i=0; i<50; i++){
+		udat_setNumberFormatForField('d', fmt, overrideFmt, &status);
+		getter_result = udat_getNumberFormatForField('d', fmt);
+		if(getter_result != overrideFmt){
+			log_err("FAIL: udat_getNumberFormatForField does not work\n");
+		}
+	}
+
+	// 1st to check 1 field, 2nd is full override
+	for(i=0; i<2; i++){
+		UChar ubuf[kUbufMax];
+		if(i == 0){
+			udat_setNumberFormatForField('d', fmt, overrideFmt, &status);
+			u_uastrcpy(expected, "07 \u521D\u4E8C");
+		}else{
+			udat_setNumberFormat(fmt, overrideFmt);
+			u_uastrcpy(expected, "\u521D\u4E03 \u521D\u4E8C");
+		}
+
+		udat_format(fmt, july022008, ubuf, kUbufMax, NULL, &status);
+		if (u_strncmp(ubuf, expected, kUbufMax) != 0) {
+			log_err("fail: udat_format for locale, expected %s, got %s\n",
+					u_austrncpy(bbuf1,expected,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax));
+		}
+	}
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
