@@ -13,6 +13,9 @@
 
 U_NAMESPACE_BEGIN
 
+SharedBreakIterator::SharedBreakIterator(
+        BreakIterator *biToAdopt) : ptr(biToAdopt) { }
+
 SharedBreakIterator::~SharedBreakIterator() {
   delete ptr;
 }
