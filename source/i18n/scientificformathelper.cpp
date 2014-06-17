@@ -15,14 +15,12 @@
 #include "unicode/uniset.h"
 #include "decfmtst.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
-static UChar kSuperscriptDigits[] = {0x2070, 0xB9, 0xB2, 0xB3, 0x2074, 0x2075, 0x2076, 0x2077, 0x2078, 0x2079};
+static const UChar kSuperscriptDigits[] = {0x2070, 0xB9, 0xB2, 0xB3, 0x2074, 0x2075, 0x2076, 0x2077, 0x2078, 0x2079};
 
-static UChar kSuperscriptPlusSign = 0x207A;
-static UChar kSuperscriptMinusSign = 0x207B;
+static const UChar kSuperscriptPlusSign = 0x207A;
+static const UChar kSuperscriptMinusSign = 0x207B;
 
 ScientificFormatHelper::ScientificFormatHelper(
         const DecimalFormatSymbols &dfs, UErrorCode &status)

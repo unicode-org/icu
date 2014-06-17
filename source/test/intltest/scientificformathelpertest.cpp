@@ -8,8 +8,7 @@
 *
 *******************************************************************************
 */
-#include <stdio.h>
-#include <stdlib.h>
+#include "unicode/utypes.h"
 
 #include "intltest.h"
 
@@ -18,17 +17,14 @@
 #include "unicode/scientificformathelper.h"
 #include "unicode/numfmt.h"
 #include "unicode/decimfmt.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
+#include "unicode/localpointer.h"
 
 class ScientificFormatHelperTest : public IntlTest {
 public:
-    ScientificFormatHelperTest() {
-    }
-
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 private:
     void TestBasic();
+    void TestFarsi();
     void TestPlusSignInExponentMarkup();
     void TestPlusSignInExponentSuperscript();
     void TestFixedDecimalMarkup();
@@ -42,6 +38,7 @@ void ScientificFormatHelperTest::runIndexedTest(
     }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(TestBasic);
+    TESTCASE_AUTO(TestFarsi);
     TESTCASE_AUTO(TestPlusSignInExponentMarkup);
     TESTCASE_AUTO(TestPlusSignInExponentSuperscript);
     TESTCASE_AUTO(TestFixedDecimalMarkup);
@@ -78,6 +75,22 @@ void ScientificFormatHelperTest::TestBasic() {
     if (status != U_INVALID_CHAR_FOUND) {
         errln("Expected U_INVALID_CHAR_FOUND");
     }
+}
+
+void ScientificFormatHelperTest::TestFarsi() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createScientificInstance("fa", status));
+    UnicodeString appendTo("String: ");
+    FieldPositionIterator fpositer;
+    decfmt->format(1.23456e-78, appendTo, &fpositer, status);
+    ScientificFormatHelper helper(*decfmt->getDecimalFormatSymbols(), status);
+    UnicodeString result;
+    const char *expected = "String: \\u06F1\\u066B\\u06F2\\u06F3\\u06F4\\u06F5\\u06F6\\u00d7\\u06F1\\u06F0<sup>\\u200E\\u2212\\u06F7\\u06F8</sup>";
+    assertEquals(
+            "insertMarkup",
+            UnicodeString(expected).unescape(),
+            helper.insertMarkup(appendTo, fpositer, "<sup>", "</sup>", result, status));
+    assertSuccess("", status);
 }
 
 void ScientificFormatHelperTest::TestPlusSignInExponentMarkup() {
