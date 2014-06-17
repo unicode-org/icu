@@ -37,7 +37,9 @@ ScientificFormatHelper::ScientificFormatHelper(
 
 ScientificFormatHelper::ScientificFormatHelper(
         const ScientificFormatHelper &other)
-        : fPreExponent(other.fPreExponent), fStaticSets(other.fStaticSets) {
+        : UObject(other),
+          fPreExponent(other.fPreExponent),
+          fStaticSets(other.fStaticSets) {
 }
 
 ScientificFormatHelper &ScientificFormatHelper::operator=(const ScientificFormatHelper &other) {
