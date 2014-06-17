@@ -55,7 +55,7 @@ typedef enum UDateRelativeDateTimeFormatterStyle {
    * @draft ICU 54
    */
   UDAT_STYLE_COUNT
-}; 
+} UDateRelativeDateTimeFormatterStyle; 
 
 /**
  * Represents the unit for formatting a relative date. e.g "in 5 days"

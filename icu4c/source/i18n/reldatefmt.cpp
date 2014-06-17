@@ -53,19 +53,6 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-static int32_t getStyleIndex(UDateRelativeDateTimeFormatterStyle style) {
-    switch (style) {
-        case UDAT_STYLE_LONG:
-            return 0;
-        case UDAT_STYLE_SHORT:
-            return 1;
-        case UDAT_STYLE_NARROW:
-            return 2;
-        default:
-            return 0;
-    }
-}
-
 // RelativeDateTimeFormatter specific data for a single locale
 class RelativeDateTimeCacheData: public SharedObject {
 public:
@@ -356,20 +343,20 @@ static void addTimeUnits(
     addTimeUnit(
         resource,
         path,
-        cacheData.relativeUnits[0][relativeUnit],
-        cacheData.absoluteUnits[0][absoluteUnit],
+        cacheData.relativeUnits[UDAT_STYLE_LONG][relativeUnit],
+        cacheData.absoluteUnits[UDAT_STYLE_LONG][absoluteUnit],
         status);
     addTimeUnit(
         resource,
         pathShort,
-        cacheData.relativeUnits[1][relativeUnit],
-        cacheData.absoluteUnits[1][absoluteUnit],
+        cacheData.relativeUnits[UDAT_STYLE_SHORT][relativeUnit],
+        cacheData.absoluteUnits[UDAT_STYLE_SHORT][absoluteUnit],
         status);
     addTimeUnit(
         resource,
         pathNarrow,
-        cacheData.relativeUnits[2][relativeUnit],
-        cacheData.absoluteUnits[2][absoluteUnit],
+        cacheData.relativeUnits[UDAT_STYLE_NARROW][relativeUnit],
+        cacheData.absoluteUnits[UDAT_STYLE_NARROW][absoluteUnit],
         status);
 }
 
@@ -382,17 +369,17 @@ static void initRelativeUnits(
     initRelativeUnit(
             resource,
             path,
-            relativeUnits[0][relativeUnit],
+            relativeUnits[UDAT_STYLE_LONG][relativeUnit],
             status);
     initRelativeUnit(
             resource,
             pathShort,
-            relativeUnits[1][relativeUnit],
+            relativeUnits[UDAT_STYLE_SHORT][relativeUnit],
             status);
     initRelativeUnit(
             resource,
             pathNarrow,
-            relativeUnits[2][relativeUnit],
+            relativeUnits[UDAT_STYLE_NARROW][relativeUnit],
             status);
 }
 
@@ -406,23 +393,23 @@ static void addWeekDays(
     addWeekDay(
             resource,
             path,
-            daysOfWeek[0],
+            daysOfWeek[UDAT_STYLE_LONG],
             absoluteUnit,
-            absoluteUnits[0],
+            absoluteUnits[UDAT_STYLE_LONG],
             status);
     addWeekDay(
             resource,
             pathShort,
-            daysOfWeek[1],
+            daysOfWeek[UDAT_STYLE_SHORT],
             absoluteUnit,
-            absoluteUnits[1],
+            absoluteUnits[UDAT_STYLE_SHORT],
             status);
     addWeekDay(
             resource,
             pathNarrow,
-            daysOfWeek[2],
+            daysOfWeek[UDAT_STYLE_NARROW],
             absoluteUnit,
-            absoluteUnits[2],
+            absoluteUnits[UDAT_STYLE_NARROW],
             status);
 }
 
@@ -479,33 +466,33 @@ static UBool loadUnitData(
     getStringWithFallback(
             resource,
             "fields/second/relative/0",
-            cacheData.absoluteUnits[0][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
+            cacheData.absoluteUnits[UDAT_STYLE_LONG][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
             status);
     getStringWithFallback(
             resource,
             "fields/second-short/relative/0",
-            cacheData.absoluteUnits[1][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
+            cacheData.absoluteUnits[UDAT_STYLE_SHORT][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
             status);
     getStringWithFallback(
             resource,
             "fields/second-narrow/relative/0",
-            cacheData.absoluteUnits[2][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
+            cacheData.absoluteUnits[UDAT_STYLE_NARROW][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN],
             status);
-    UnicodeString daysOfWeek[3][7];
+    UnicodeString daysOfWeek[UDAT_STYLE_COUNT][7];
     readDaysOfWeek(
             resource,
             "calendar/gregorian/dayNames/stand-alone/wide",
-            daysOfWeek[0],
+            daysOfWeek[UDAT_STYLE_LONG],
             status);
     readDaysOfWeek(
             resource,
             "calendar/gregorian/dayNames/stand-alone/short",
-            daysOfWeek[1],
+            daysOfWeek[UDAT_STYLE_SHORT],
             status);
     readDaysOfWeek(
             resource,
             "calendar/gregorian/dayNames/stand-alone/narrow",
-            daysOfWeek[2],
+            daysOfWeek[UDAT_STYLE_NARROW],
             status);
     addWeekDays(
             resource,
@@ -796,7 +783,7 @@ UnicodeString& RelativeDateTimeFormatter::format(
     int32_t bFuture = direction == UDAT_DIRECTION_NEXT ? 1 : 0;
     FieldPosition pos(FieldPosition::DONT_CARE);
     if (fOptBreakIterator == NULL) {
-        return fCache->relativeUnits[getStyleIndex(fStyle)][unit][bFuture].format(
+        return fCache->relativeUnits[fStyle][unit][bFuture].format(
             quantity,
             **fNumberFormat,
             **fPluralRules,
@@ -805,7 +792,7 @@ UnicodeString& RelativeDateTimeFormatter::format(
             status);
     }
     UnicodeString result;
-    fCache->relativeUnits[getStyleIndex(fStyle)][unit][bFuture].format(
+    fCache->relativeUnits[fStyle][unit][bFuture].format(
             quantity,
             **fNumberFormat,
             **fPluralRules,
@@ -827,9 +814,9 @@ UnicodeString& RelativeDateTimeFormatter::format(
         return appendTo;
     }
     if (fOptBreakIterator == NULL) {
-      return appendTo.append(fCache->absoluteUnits[getStyleIndex(fStyle)][unit][direction]);
+      return appendTo.append(fCache->absoluteUnits[fStyle][unit][direction]);
     }
-    UnicodeString result(fCache->absoluteUnits[getStyleIndex(fStyle)][unit][direction]);
+    UnicodeString result(fCache->absoluteUnits[fStyle][unit][direction]);
     adjustForContext(result);
     return appendTo.append(result);
 }
