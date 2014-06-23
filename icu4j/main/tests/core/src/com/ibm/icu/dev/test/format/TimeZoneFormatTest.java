@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -772,13 +773,26 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         };
 
         for (Object[] testCase : TESTDATA) {
-            TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(new ULocale((String)testCase[0]));
             TimeZone tz = TimeZone.getTimeZone((String)testCase[1]);
             Output<TimeType> timeType = new Output<TimeType>();
+
+            ULocale uloc = new ULocale((String)testCase[0]);
+            TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(uloc);
             String out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
 
             if (!out.equals((String)testCase[4]) || timeType.value != testCase[5]) {
                 errln("Format result for [locale=" + testCase[0] + ",tzid=" + testCase[1] + ",date=" + testCase[2]
+                        + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
+                        + "]; actual [output=" + out + ",type=" + timeType.value + "]");
+            }
+
+            // with equivalent Java Locale
+            Locale loc = uloc.toLocale();
+            tzfmt = TimeZoneFormat.getInstance(loc);
+            out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
+
+            if (!out.equals((String)testCase[4]) || timeType.value != testCase[5]) {
+                errln("Format result for [locale(Java)=" + testCase[0] + ",tzid=" + testCase[1] + ",date=" + testCase[2]
                         + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
                         + "]; actual [output=" + out + ",type=" + timeType.value + "]");
             }

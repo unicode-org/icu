@@ -2913,7 +2913,7 @@ public final class UCharacterTest extends TestFmwk
         
         // Calls the function "String toTitleCase(ULocale locale, String str, BreakIterator titleIter, int options)"
         // Tests when "if (locale == null)" is true
-        UCharacter.toTitleCase(null, "", null, 0);
+        UCharacter.toTitleCase((ULocale)null, "", null, 0);
         
         // TODO: Tests when "if(index==BreakIterator.DONE || index>srcLength)" is true
         // TODO: Tests when "while((c=iter.nextCaseMapCP())>=0 && UCaseProps.NONE==gCsp.getType(c))" is false

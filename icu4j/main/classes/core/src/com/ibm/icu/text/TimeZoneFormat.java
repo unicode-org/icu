@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
 
@@ -475,6 +476,21 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             throw new NullPointerException("locale is null");
         }
         return _tzfCache.getInstance(locale, locale);
+    }
+
+    /**
+     * Returns a frozen instance of <code>TimeZoneFormat</code> for the given JDK locale.
+     * <p><b>Note</b>: The instance returned by this method is frozen. If you want to
+     * customize a TimeZoneFormat, you must use {@link #cloneAsThawed()} to get a
+     * thawed copy first.
+     * 
+     * @param locale the JDK locale.
+     * @return a frozen instance of <code>TimeZoneFormat</code> for the given locale.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static TimeZoneFormat getInstance(Locale locale) {
+        return getInstance(ULocale.forLocale(locale));
     }
 
     /**

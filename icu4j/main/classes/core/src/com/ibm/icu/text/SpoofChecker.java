@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -571,6 +572,26 @@ public class SpoofChecker {
             fAllowedLocales.addAll(locales);
             fChecks |= CHAR_LIMIT;
             return this;
+        }
+
+        /**
+         * Limit characters that are acceptable in identifiers being checked to those normally used with the languages
+         * associated with the specified locales. Any previously specified list of locales is replaced by the new
+         * settings.
+         * @param locales
+         *            A Set of Locales, from which the language and associated script are extracted. If the locales Set
+         *            is null, no restrictions will be placed on the allowed characters.
+         *
+         * @return self
+         * @draft ICU 54
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setAllowedJavaLocales(Set<Locale> locales) {
+            HashSet<ULocale> ulocales = new HashSet<ULocale>(locales.size());
+            for (Locale locale : locales) {
+                ulocales.add(ULocale.forLocale(locale));
+            }
+            return setAllowedLocales(ulocales);
         }
 
         // Add (union) to the UnicodeSet all of the characters for the scripts
@@ -1448,6 +1469,22 @@ public class SpoofChecker {
      */
     public Set<ULocale> getAllowedLocales() {
         return fAllowedLocales;
+    }
+
+    /**
+     * Get a list of JDK locales for the scripts that are acceptable in strings to be checked. If no limitations on scripts
+     * have been specified, an empty set will be returned.
+     *
+     * @return A set of locales corresponding to the acceptable scripts.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Set<Locale> getAllowedJavaLocales() {
+        HashSet<Locale> locales = new HashSet<Locale>(fAllowedLocales.size());
+        for (ULocale uloc : fAllowedLocales) {
+            locales.add(uloc.toLocale());
+        }
+        return locales;
     }
 
     /**

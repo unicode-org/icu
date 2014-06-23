@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.MissingResourceException;
@@ -325,6 +326,19 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         initializeData(locale);
     }
 
+
+    /** 
+     * Construct DateIntervalInfo for the given JDK locale,
+     * @param locale  the interval patterns are loaded from the appropriate 
+     *                calendar data (specified calendar or default calendar)
+     *                in this locale.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public DateIntervalInfo(Locale locale) 
+    {
+        this(ULocale.forLocale(locale));
+    }
 
     /*
      * Initialize the DateIntervalInfo from locale

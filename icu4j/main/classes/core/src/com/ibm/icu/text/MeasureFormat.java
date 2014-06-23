@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
@@ -224,6 +225,19 @@ public class MeasureFormat extends UFormat {
     }
     
     /**
+     * Create a format from the JDK locale, formatWidth, and format.
+     *
+     * @param locale the JDK locale.
+     * @param formatWidth hints how long formatted strings should be.
+     * @return The new MeasureFormat object.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static MeasureFormat getInstance(Locale locale, FormatWidth formatWidth) {
+        return getInstance(ULocale.forLocale(locale), formatWidth);
+    }
+
+    /**
      * Create a format from the locale, formatWidth, and format.
      *
      * @param locale the locale.
@@ -265,6 +279,20 @@ public class MeasureFormat extends UFormat {
                 new ImmutableNumberFormat(intFormat));
     }
     
+    /**
+     * Create a format from the JDK locale, formatWidth, and format.
+     *
+     * @param locale the JDK locale.
+     * @param formatWidth hints how long formatted strings should be.
+     * @param format This is defensively copied.
+     * @return The new MeasureFormat object.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static MeasureFormat getInstance(Locale locale, FormatWidth formatWidth, NumberFormat format) {
+        return getInstance(ULocale.forLocale(locale), formatWidth, format);
+    }
+
     /**
      * Able to format Collection&lt;? extends Measure&gt;, Measure[], and Measure
      * by delegating to formatMeasures.
@@ -466,6 +494,18 @@ public class MeasureFormat extends UFormat {
      */
     public static MeasureFormat getCurrencyFormat(ULocale locale) {
         return new CurrencyFormat(locale);
+    }
+
+    /**
+     * Return a formatter for CurrencyAmount objects in the given
+     * JDK locale.
+     * @param locale desired JDK locale
+     * @return a formatter object
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static MeasureFormat getCurrencyFormat(Locale locale) {
+        return getCurrencyFormat(ULocale.forLocale(locale));
     }
 
     /**

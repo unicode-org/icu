@@ -1071,7 +1071,14 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: Exception - " + e.getClass().getName());
         }
     }
-    
+
+    public void TestConstructor() {
+        DateIntervalInfo diiJapan = new DateIntervalInfo(ULocale.JAPAN);
+        DateIntervalInfo diiJapanJ = new DateIntervalInfo(Locale.JAPAN);
+
+        assertEquals("DateIntervalInfo constructors", diiJapan, diiJapanJ);
+    }
+
     /* Tests the method
      *      public boolean equals(Object a)
      */

@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -84,6 +85,16 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      */
     public static DateTimePatternGenerator getInstance(ULocale uLocale) {
         return getFrozenInstance(uLocale).cloneAsThawed();
+    }
+
+    /**
+     * Construct a flexible generator according to data for a given locale.
+     * @param locale The JDK locale to pass.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static DateTimePatternGenerator getInstance(Locale locale) {
+        return getInstance(ULocale.forLocale(locale));
     }
 
     /**

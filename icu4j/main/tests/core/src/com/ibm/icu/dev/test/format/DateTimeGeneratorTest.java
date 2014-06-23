@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -1327,43 +1328,53 @@ public class DateTimeGeneratorTest extends TestFmwk {
             ULocale uloc = new ULocale(localeName);
             DateTimePatternGenerator dtpgen = DateTimePatternGenerator.getInstance(uloc);
             for (AllFieldsTestItem testItem: testItems) {
-            	char[] skelBuf = new char[FIELD_LENGTH_MAX];
-            	for (int chrIndx = 0; chrIndx < FIELD_LENGTH_MAX; chrIndx++) {
-            	    skelBuf[chrIndx] = testItem.patternChar;
-            	}
-            	for (int lenIndx = 0; lenIndx < testItem.fieldLengths.length; lenIndx++) {
-            	    int skelLen = testItem.fieldLengths[lenIndx];
-            	    if (skelLen > FIELD_LENGTH_MAX) {
-            	        continue;
-            	    };
-            	    String skeleton = new String(skelBuf, 0, skelLen);
-            	    String pattern = dtpgen.getBestPattern(skeleton);
-            	    if (pattern.length() <= 0) {
+                char[] skelBuf = new char[FIELD_LENGTH_MAX];
+                for (int chrIndx = 0; chrIndx < FIELD_LENGTH_MAX; chrIndx++) {
+                    skelBuf[chrIndx] = testItem.patternChar;
+                }
+                for (int lenIndx = 0; lenIndx < testItem.fieldLengths.length; lenIndx++) {
+                    int skelLen = testItem.fieldLengths[lenIndx];
+                    if (skelLen > FIELD_LENGTH_MAX) {
+                        continue;
+                    };
+                    String skeleton = new String(skelBuf, 0, skelLen);
+                    String pattern = dtpgen.getBestPattern(skeleton);
+                    if (pattern.length() <= 0) {
                         errln("DateTimePatternGenerator getBestPattern for locale " + localeName +
                               ", skeleton " + skeleton + ", produces 0-length pattern");
-            	    } else {
-            	        // test that resulting pattern has at least one char in mustIncludeOneOf
-            	        boolean inQuoted = false;
-            	        int patIndx, patLen = pattern.length();
-            	        for (patIndx = 0; patIndx < patLen; patIndx++) {
-            	            char c = pattern.charAt(patIndx);
-            	            if (c == '\'') {
-            	                inQuoted = !inQuoted;
-            	            } else if (!inQuoted && c <= 'z' && c >= 'A') {
-            	                if (testItem.mustIncludeOneOf.indexOf(c) >= 0) {
-            	                    break;
-            	                }
-            	            }
-            	        }
-            	        if (patIndx >= patLen) {
+                    } else {
+                        // test that resulting pattern has at least one char in mustIncludeOneOf
+                        boolean inQuoted = false;
+                        int patIndx, patLen = pattern.length();
+                        for (patIndx = 0; patIndx < patLen; patIndx++) {
+                            char c = pattern.charAt(patIndx);
+                            if (c == '\'') {
+                                inQuoted = !inQuoted;
+                            } else if (!inQuoted && c <= 'z' && c >= 'A') {
+                                if (testItem.mustIncludeOneOf.indexOf(c) >= 0) {
+                                    break;
+                                }
+                            }
+                        }
+                        if (patIndx >= patLen) {
                             errln("DateTimePatternGenerator getBestPattern for locale " + localeName +
                                   ", skeleton " + skeleton +
                                   ", produces pattern without required chars: " + pattern);
-            	        }
-            	    }
-            	}
+                        }
+                    }
+                }
             }
         }
     }
 
+    public void TestJavaLocale() {
+        DateTimePatternGenerator genUloc = DateTimePatternGenerator.getInstance(ULocale.GERMANY);
+        DateTimePatternGenerator genLoc = DateTimePatternGenerator.getInstance(Locale.GERMANY);
+
+        final String pat = "yMdHms";
+        String patUloc = genUloc.getBestPattern(pat);
+        String patLoc = genLoc.getBestPattern(pat);
+
+        assertEquals("German pattern 'yMdHms' - getInstance with Java Locale", patUloc, patLoc);
+    }
 }
