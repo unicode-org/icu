@@ -195,6 +195,21 @@ public class Currency extends MeasureUnit {
     }
 
     /**
+     * Returns an array of Strings which contain the currency
+     * identifiers that are valid for the given JDK locale on the 
+     * given date.  If there are no such identifiers, returns null.
+     * Returned identifiers are in preference order.
+     * @param loc the JDK locale for which to retrieve currency codes.
+     * @param d the date for which to retrieve currency codes for the given locale.
+     * @return The array of ISO currency codes.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String[] getAvailableCurrencyCodes(Locale loc, Date d) {
+        return getAvailableCurrencyCodes(ULocale.forLocale(loc), d);
+    }
+
+    /**
      * Returns the set of available currencies. The returned set of currencies contains all of the
      * available currencies, including obsolete ones. The result set can be modified without
      * affecting the available currencies in the runtime.

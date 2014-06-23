@@ -54,6 +54,18 @@ public abstract class LocaleDisplayNames {
     };
 
     /**
+     * Convenience overload of {@link #getInstance(Locale, DisplayContext...)} that specifies
+     * {@link DisplayContext#STANDARD_NAMES}.
+     * @param locale the display JDK locale
+     * @return a LocaleDisplayNames instance
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static LocaleDisplayNames getInstance(Locale locale) {
+        return getInstance(ULocale.forLocale(locale));
+    };
+
+    /**
      * Returns an instance of LocaleDisplayNames that returns names formatted for the provided locale,
      * using the provided dialectHandling.
      * @param locale the display locale
@@ -104,6 +116,20 @@ public abstract class LocaleDisplayNames {
             result = new LastResortLocaleDisplayNames(locale, contexts);
         }
         return result;
+    }
+
+    /**
+     * Returns an instance of LocaleDisplayNames that returns names formatted for the provided JDK
+     * locale, using the provided DisplayContext settings
+     * @param locale the display JDK locale
+     * @param contexts one or more context settings (e.g. for dialect
+     *              handling, capitalization, etc.
+     * @return a LocaleDisplayNames instance
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static LocaleDisplayNames getInstance(Locale locale, DisplayContext... contexts) {
+        return getInstance(ULocale.forLocale(locale), contexts);
     }
 
     // getters for state

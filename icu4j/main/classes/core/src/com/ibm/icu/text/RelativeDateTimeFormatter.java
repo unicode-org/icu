@@ -7,6 +7,7 @@
 package com.ibm.icu.text;
 
 import java.util.EnumMap;
+import java.util.Locale;
 
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUCache;
@@ -310,6 +311,7 @@ public final class RelativeDateTimeFormatter {
      * Returns a RelativeDateTimeFormatter for a particular locale.
      * 
      * @param locale the locale.
+     * @return An instance of RelativeDateTimeFormatter.
      * @draft ICU 53
      * @provisional This API might change or be removed in a future release.
      */
@@ -318,12 +320,25 @@ public final class RelativeDateTimeFormatter {
     }
     
     /**
+     * Returns a RelativeDateTimeFormatter for a particular JDK locale.
+     * 
+     * @param locale the JDK locale.
+     * @return An instance of RelativeDateTimeFormatter.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static RelativeDateTimeFormatter getInstance(Locale locale) {
+        return getInstance(ULocale.forLocale(locale));
+    }
+
+    /**
      * Returns a RelativeDateTimeFormatter for a particular locale that uses a particular
      * NumberFormat object.
      * 
      * @param locale the locale
      * @param nf the number format object. It is defensively copied to ensure thread-safety
      * and immutability of this class. 
+     * @return An instance of RelativeDateTimeFormatter.
      * @draft ICU 53
      * @provisional This API might change or be removed in a future release.
      */
@@ -368,6 +383,21 @@ public final class RelativeDateTimeFormatter {
                 
     }
            
+    /**
+     * Returns a RelativeDateTimeFormatter for a particular JDK locale that uses a particular
+     * NumberFormat object.
+     * 
+     * @param locale the JDK locale
+     * @param nf the number format object. It is defensively copied to ensure thread-safety
+     * and immutability of this class. 
+     * @return An instance of RelativeDateTimeFormatter.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static RelativeDateTimeFormatter getInstance(Locale locale, NumberFormat nf) {
+        return getInstance(ULocale.forLocale(locale), nf);
+    }
+
     /**
      * Formats a relative date with a quantity such as "in 5 days" or
      * "3 months ago"
@@ -436,7 +466,7 @@ public final class RelativeDateTimeFormatter {
     
     /**
      * Returns a copy of the NumberFormat this object is using.
-     * 
+     * @return A copy of the NumberFormat.
      * @draft ICU 53
      * @provisional This API might change or be removed in a future release.
      */

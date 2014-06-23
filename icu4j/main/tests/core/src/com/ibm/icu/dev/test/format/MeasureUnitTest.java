@@ -335,12 +335,22 @@ public class MeasureUnitTest extends TestFmwk {
         verifyFormatPeriod("en NARROW", mf, narrowData);
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NUMERIC, nf);
         verifyFormatPeriod("en NUMERIC", mf, numericData);
+
         nf = NumberFormat.getNumberInstance(ULocale.GERMAN);
         nf.setMaximumFractionDigits(4);
         mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.WIDE, nf);
         verifyFormatPeriod("de FULL", mf, fullDataDe);
         mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.NUMERIC, nf);
         verifyFormatPeriod("de NUMERIC", mf, numericDataDe);
+
+        // Same tests, with Java Locale
+        nf = NumberFormat.getNumberInstance(Locale.GERMAN);
+        nf.setMaximumFractionDigits(4);
+        mf = MeasureFormat.getInstance(Locale.GERMAN, FormatWidth.WIDE, nf);
+        verifyFormatPeriod("de FULL(Java Locale)", mf, fullDataDe);
+        mf = MeasureFormat.getInstance(Locale.GERMAN, FormatWidth.NUMERIC, nf);
+        verifyFormatPeriod("de NUMERIC(Java Locale)", mf, numericDataDe);
+
     }
     
     private void verifyFormatPeriod(String desc, MeasureFormat mf, Object[][] testData) {
@@ -718,7 +728,14 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("getNumberFormat", ULocale.ENGLISH, mf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
         assertEquals("getWidth", MeasureFormat.FormatWidth.WIDE, mf.getWidth());
     }
-    
+
+    public void testCurrencyFormatLocale() {
+        MeasureFormat mfu = MeasureFormat.getCurrencyFormat(ULocale.FRANCE);
+        MeasureFormat mfj = MeasureFormat.getCurrencyFormat(Locale.FRANCE);
+
+        assertEquals("getCurrencyFormat ULocale/Locale", mfu, mfj);
+    }
+
     public void testDoubleZero() {
         ULocale en = new ULocale("en");
         NumberFormat nf = NumberFormat.getInstance(en);

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.Utility;
@@ -200,6 +201,18 @@ public class PluralFormat extends UFormat {
     }
 
     /**
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given JDK locale.
+     * @param locale the <code>PluralFormat</code> will be configured with
+     *        rules for this locale. This locale will also be used for standard
+     *        number formatting.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public PluralFormat(Locale locale) {
+        this(ULocale.forLocale(locale));
+    }
+
+    /**
      * Creates a new cardinal-number <code>PluralFormat</code> for a given set of rules.
      * The standard number formatting will be done using the default <code>FORMAT</code> locale.
      * @param rules defines the behavior of the <code>PluralFormat</code>
@@ -225,6 +238,20 @@ public class PluralFormat extends UFormat {
     }
 
     /**
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given set of rules.
+     * The standard number formatting will be done using the given locale.
+     * @param locale the default number formatting will be done using this
+     *        locale.
+     * @param rules defines the behavior of the <code>PluralFormat</code>
+     *        object.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public PluralFormat(Locale locale, PluralRules rules) {
+        this(ULocale.forLocale(locale), rules);
+    }
+
+    /**
      * Creates a new <code>PluralFormat</code> for the plural type.
      * The standard number formatting will be done using the given locale.
      * @param ulocale the default number formatting will be done using this
@@ -234,6 +261,19 @@ public class PluralFormat extends UFormat {
      */
     public PluralFormat(ULocale ulocale, PluralType type) {
         init(null, type, ulocale);
+    }
+
+    /**
+     * Creates a new <code>PluralFormat</code> for the plural type.
+     * The standard number formatting will be done using the given JDK locale.
+     * @param locale the default number formatting will be done using this
+     *        locale.
+     * @param type The plural type (e.g., cardinal or ordinal).
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public PluralFormat(Locale locale, PluralType type) {
+        this(ULocale.forLocale(locale), type);
     }
 
     /**

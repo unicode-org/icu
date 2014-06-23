@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.text;
 
+import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.CurrencyData;
@@ -37,6 +38,23 @@ public abstract class CurrencyDisplayNames {
 
     /**
      * Return an instance of CurrencyDisplayNames that provides information
+     * localized for display in the provided locale.  If there is no data for the
+     * provided locale, this falls back to the current default locale; if there
+     * is no data for that either, it falls back to the root locale.  Substitute
+     * values are returned from APIs when there is no data for the requested ISO 
+     * code.
+     * 
+     * @param locale the locale into which to localize the names
+     * @return a CurrencyDisplayNames
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static CurrencyDisplayNames getInstance(Locale locale) {
+        return getInstance(locale, true);
+    }
+
+    /**
+     * Return an instance of CurrencyDisplayNames that provides information
      * localized for display in the provided locale.  If noSubstitute is false,
      * this behaves like {@link #getInstance(ULocale)}.  Otherwise, 1) if there
      * is no supporting data for the locale at all, there is no fallback through
@@ -51,6 +69,25 @@ public abstract class CurrencyDisplayNames {
      */
     public static CurrencyDisplayNames getInstance(ULocale locale, boolean noSubstitute) {
         return CurrencyData.provider.getInstance(locale, !noSubstitute);
+    }
+
+    /**
+     * Return an instance of CurrencyDisplayNames that provides information
+     * localized for display in the provided locale.  If noSubstitute is false,
+     * this behaves like {@link #getInstance(Locale)}.  Otherwise, 1) if there
+     * is no supporting data for the locale at all, there is no fallback through
+     * the default locale or root, and null is returned, and 2) if there is data
+     * for the locale, but not data for the requested ISO code, null is returned
+     * from those APIs instead of a substitute value.
+     * 
+     * @param locale the JDK locale into which to localize the names
+     * @param noSubstitute if true, do not return substitute values.
+     * @return a CurrencyDisplayNames
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static CurrencyDisplayNames getInstance(Locale locale, boolean noSubstitute) {
+        return getInstance(ULocale.forLocale(locale), noSubstitute);
     }
 
     /**

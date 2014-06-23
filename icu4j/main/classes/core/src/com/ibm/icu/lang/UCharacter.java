@@ -5137,6 +5137,35 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
+     * {@icu} <p>Returns the titlecase version of the argument string.</p>
+     * <p>Position for titlecasing is determined by the argument break
+     * iterator, hence the user can customize his break iterator for
+     * a specialized titlecasing. In this case only the forward iteration
+     * needs to be implemented.
+     * If the break iterator passed in is null, the default Unicode algorithm
+     * will be used to determine the titlecase positions.
+     * </p>
+     * <p>Only positions returned by the break iterator will be title cased,
+     * character in between the positions will all be in lower case.</p>
+     * <p>Casing is dependent on the argument locale and context-sensitive</p>
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @param titleIter break iterator to determine the positions in which
+     *        the character should be title cased.
+     * @param options bit set to modify the titlecasing operation
+     * @return lowercase version of the argument string
+     * @see #TITLECASE_NO_LOWERCASE
+     * @see #TITLECASE_NO_BREAK_ADJUSTMENT
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String toTitleCase(Locale locale, String str,
+                                     BreakIterator titleIter,
+                                     int options) {
+        return toTitleCase(ULocale.forLocale(locale), str, titleIter, options);
+    }
+
+    /**
      * {@icu} The given character is mapped to its case folding equivalent according
      * to UnicodeData.txt and CaseFolding.txt; if the character has no case
      * folding equivalent, the character itself is returned.

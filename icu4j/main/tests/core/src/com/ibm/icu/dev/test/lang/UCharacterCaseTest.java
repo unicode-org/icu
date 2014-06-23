@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and
+* Copyright (C) 1996-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -357,6 +357,16 @@ public final class UCharacterCaseTest extends TestFmwk
         assertEquals("Dutch titlecase check in Dutch",
                 "IJssel Igloo IJmuiden",
                 UCharacter.toTitleCase(LOC_DUTCH, "ijssel igloo IJMUIDEN", null));
+
+        // Also check the behavior using Java Locale
+        Locale JAVALOC_DUTCH = new Locale("nl");
+        assertEquals("Dutch titlecase check in English (Java Locale)",
+                "Ijssel Igloo Ijmuiden",
+                UCharacter.toTitleCase(Locale.ENGLISH, "ijssel igloo IJMUIDEN", null));
+
+        assertEquals("Dutch titlecase check in Dutch (Java Locale)",
+                "IJssel Igloo IJmuiden",
+                UCharacter.toTitleCase(JAVALOC_DUTCH, "ijssel igloo IJMUIDEN", null));
 
         iter.setText("ijssel igloo IjMUIdEN iPoD ijenough");
         assertEquals("Dutch titlecase check in Dutch with nolowercase option",

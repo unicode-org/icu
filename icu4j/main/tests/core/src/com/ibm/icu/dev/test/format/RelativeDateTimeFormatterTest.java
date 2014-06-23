@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import java.util.Locale;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.NumberFormat;
@@ -713,7 +715,23 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
         RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(new ULocale("en_US"));
         assertEquals("TestcombineDateAndTime", "yesterday, 3:50", fmt.combineDateAndTime("yesterday", "3:50"));
     }
-    
+
+    public void TestJavaLocale() {
+        Locale loc = Locale.US;
+        double amount = 12.3456d;
+
+        RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(loc);
+        String s = fmt.format(amount, Direction.LAST, RelativeUnit.SECONDS);
+        assertEquals("Java Locale.US", "12.346 seconds ago", s);
+
+        // Modified instance
+        NumberFormat nf = fmt.getNumberFormat();
+        nf.setMaximumFractionDigits(1);
+        fmt = RelativeDateTimeFormatter.getInstance(loc, nf);
+
+        s = fmt.format(amount, Direction.LAST, RelativeUnit.SECONDS);
+        assertEquals("Java Locale.US", "12.3 seconds ago", s);
+    }
     public void TestGetters() {
         RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(
                 new ULocale("en_US"),

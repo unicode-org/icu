@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,6 +8,8 @@ package com.ibm.icu.dev.test;
 
 import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.LANG;
 import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.REGION;
+
+import java.util.Locale;
 
 import com.ibm.icu.impl.LocaleDisplayNamesImpl;
 import com.ibm.icu.text.LocaleDisplayNames;
@@ -24,14 +26,20 @@ public class TestLocaleNamePackaging extends TestFmwk {
     }
 
     public boolean validate() {
-        warnln("language data: " + LocaleDisplayNamesImpl.haveData(LANG));
-        warnln("  region data: " + LocaleDisplayNamesImpl.haveData(REGION));
+        logln("language data: " + LocaleDisplayNamesImpl.haveData(LANG));
+        logln("  region data: " + LocaleDisplayNamesImpl.haveData(REGION));
         return true;
     }
 
     private static ULocale[] locales = {
         ULocale.ROOT, ULocale.US, new ULocale("es_ES"), ULocale.GERMANY,
         new ULocale("und_TH")
+    };
+
+    // Java Locales equivalent to above
+    private static Locale[] javaLocales = {
+        new Locale(""), Locale.US, new Locale("es", "ES"), Locale.GERMANY,
+        new Locale("und", "TH")
     };
 
     public void testRegionDisplayNames() {
@@ -83,6 +91,20 @@ public class TestLocaleNamePackaging extends TestFmwk {
                 }
             }
         }
+
+        // Same test with Java Locale
+        n = 0;
+        for (Locale displayJavaLocale : javaLocales) {
+            LocaleDisplayNames dn = LocaleDisplayNames.getInstance(displayJavaLocale);
+            for (Locale targetLocale : javaLocales) {
+                String result = dn.regionDisplayName(targetLocale.getCountry());
+                assertEquals(targetLocale + " in " + displayJavaLocale, expected[n++], result);
+                if (n == expected.length) {
+                    n = 0;
+                }
+            }
+        }
+
     }
 
     public void testLanguageDisplayNames() {
@@ -96,12 +118,12 @@ public class TestLocaleNamePackaging extends TestFmwk {
             "English",
             "Spanish",
             "German",
-            "Unknown or Invalid Language",
+            "Unknown Language",
             "",
             "ingl\u00E9s",
             "espa\u00F1ol",
             "alem\u00E1n",
-            "indeterminada",
+            "lengua desconocida",
             "",
             "Englisch",
             "Spanisch",
@@ -111,7 +133,7 @@ public class TestLocaleNamePackaging extends TestFmwk {
             "English",
             "Spanish",
             "German",
-            "Unknown or Invalid Language",
+            "Unknown Language",
         };
         String[] expectedWithoutLanguageData = {
             "",
@@ -134,16 +156,30 @@ public class TestLocaleNamePackaging extends TestFmwk {
                 }
             }
         }
+
+        // Same test with Java Locale
+        n = 0;
+        for (Locale displayJavaLocale : javaLocales) {
+            LocaleDisplayNames dn = LocaleDisplayNames.getInstance(displayJavaLocale);
+            for (Locale targetLocale : javaLocales) {
+                String result = dn.languageDisplayName(targetLocale.getLanguage());
+                assertEquals(targetLocale + " in " + displayJavaLocale, expected[n++], result);
+                if (n == expected.length) {
+                    n = 0;
+                }
+            }
+        }
+
     }
 
     // test a 'root' locale, with keywords
     public void testLocaleDisplayNameWithKeywords() {
         String[] expectedWithLanguageData = {
             "root (collation=phonebook)",
-            "Root (collation=Phonebook Sort Order)",
-            "ra\u00EDz (intercalaci\u00F3n=orden de list\u00EDn telef\u00F3nico)",
-            "Root (Sortierung=Telefonbuch-Sortierregeln)",
-            "Root (collation=Phonebook Sort Order)",
+            "Root (Phonebook Sort Order)",
+            "ra\u00EDz (orden de list\u00EDn telef\u00F3nico)",
+            "Root (Telefonbuch-Sortierung)",
+            "Root (Phonebook Sort Order)",
         };
         String[] expectedWithoutLanguageData = {
             "root (collation=phonebook)",

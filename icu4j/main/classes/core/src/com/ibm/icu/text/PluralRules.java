@@ -1872,6 +1872,29 @@ public class PluralRules implements Serializable {
     }
 
     /**
+     * Provides access to the predefined cardinal-number <code>PluralRules</code> for a given
+     * JDK locale.
+     * Same as forLocale(locale, PluralType.CARDINAL).
+     *
+     * <p>ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
+     * For these predefined rules, see CLDR page at
+     * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+     *
+     * @param locale The JDK locale for which a <code>PluralRules</code> object is
+     *   returned.
+     * @return The predefined <code>PluralRules</code> object for this locale.
+     *   If there's no predefined rules for this locale, the rules
+     *   for the closest parent in the locale hierarchy that has one will
+     *   be returned.  The final fallback always returns the default
+     *   rules.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static PluralRules forLocale(Locale locale) {
+        return forLocale(ULocale.forLocale(locale));
+    }
+
+    /**
      * Provides access to the predefined <code>PluralRules</code> for a given
      * locale and the plural type.
      *
@@ -1891,6 +1914,29 @@ public class PluralRules implements Serializable {
      */
     public static PluralRules forLocale(ULocale locale, PluralType type) {
         return Factory.getDefaultFactory().forLocale(locale, type);
+    }
+
+    /**
+     * Provides access to the predefined <code>PluralRules</code> for a given
+     * JDK locale and the plural type.
+     *
+     * <p>ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
+     * For these predefined rules, see CLDR page at
+     * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+     *
+     * @param locale The JDK locale for which a <code>PluralRules</code> object is
+     *   returned.
+     * @param type The plural type (e.g., cardinal or ordinal).
+     * @return The predefined <code>PluralRules</code> object for this locale.
+     *   If there's no predefined rules for this locale, the rules
+     *   for the closest parent in the locale hierarchy that has one will
+     *   be returned.  The final fallback always returns the default
+     *   rules.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static PluralRules forLocale(Locale locale, PluralType type) {
+        return forLocale(ULocale.forLocale(locale), type);
     }
 
     /*

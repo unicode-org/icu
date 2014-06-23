@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -1090,5 +1091,15 @@ public class PluralRulesTest extends TestFmwk {
             }
         }
         return b.append(']').toString();
+    }
+
+    public void testJavaLocaleFactory() {
+        PluralRules rulesU0 = PluralRules.forLocale(ULocale.FRANCE);
+        PluralRules rulesJ0 = PluralRules.forLocale(Locale.FRANCE);
+        assertEquals("forLocale()", rulesU0, rulesJ0);
+
+        PluralRules rulesU1 = PluralRules.forLocale(ULocale.FRANCE, PluralType.ORDINAL);
+        PluralRules rulesJ1 = PluralRules.forLocale(Locale.FRANCE, PluralType.ORDINAL);
+        assertEquals("forLocale() with type", rulesU1, rulesJ1);
     }
 }

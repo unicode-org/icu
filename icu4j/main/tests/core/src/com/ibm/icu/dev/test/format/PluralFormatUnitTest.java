@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2013, International Business Machines Corporation and
+ * Copyright (C) 2007-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -11,6 +11,7 @@ import java.text.ParsePosition;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ public class PluralFormatUnitTest extends TestFmwk {
 
     public void TestConstructor() {
         // Test correct formatting of numbers.
-        PluralFormat plFmts[] = new PluralFormat[8];
+        PluralFormat plFmts[] = new PluralFormat[10];
         plFmts[0] = new PluralFormat();
         plFmts[0].applyPattern("other{#}");
         plFmts[1] = new PluralFormat(PluralRules.DEFAULT);
@@ -51,6 +52,12 @@ public class PluralFormatUnitTest extends TestFmwk {
                 PluralRules.DEFAULT,
                 "other{#}");
         plFmts[7] = new PluralFormat(ULocale.getDefault(), "other{#}");
+
+        // Constructors with Java Locale
+        plFmts[8] = new PluralFormat(Locale.getDefault());
+        plFmts[8].applyPattern("other{#}");
+        plFmts[9] = new PluralFormat(Locale.getDefault(), PluralRules.DEFAULT);
+        plFmts[9].applyPattern("other{#}");
 
         // These plural formats should produce the same output as a
         // NumberFormat for the default locale.

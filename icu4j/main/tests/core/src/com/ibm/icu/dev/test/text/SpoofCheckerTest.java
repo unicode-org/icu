@@ -16,6 +16,7 @@ import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -218,22 +219,34 @@ public class SpoofCheckerTest extends TestFmwk {
      */
     public void TestAllowedLocales() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
-        Set<ULocale> allowedLocales = new LinkedHashSet<ULocale>();
+        Set<ULocale> allowedLocales = null;
+        Set<Locale> allowedJavaLocales = null;
         boolean checkResults;
 
         /* Default allowed locales list should be empty */
         allowedLocales = sc.getAllowedLocales();
-        assertTrue("", allowedLocales.isEmpty());
+        assertTrue("Empty allowed locales", allowedLocales.isEmpty());
+
+        allowedJavaLocales = sc.getAllowedJavaLocales();
+        assertTrue("Empty allowed Java locales", allowedJavaLocales.isEmpty());
 
         /* Allow en and ru, which should enable Latin and Cyrillic only to pass */
         ULocale enloc = new ULocale("en");
         ULocale ruloc = new ULocale("ru_RU");
+        allowedLocales = new HashSet<ULocale>();
         allowedLocales.add(enloc);
         allowedLocales.add(ruloc);
         sc = new SpoofChecker.Builder().setAllowedLocales(allowedLocales).build();
         allowedLocales = sc.getAllowedLocales();
-        assertTrue("", allowedLocales.contains(enloc));
-        assertTrue("", allowedLocales.contains(ruloc));
+        assertTrue("en in allowed locales", allowedLocales.contains(enloc));
+        assertTrue("ru_RU in allowed locales", allowedLocales.contains(ruloc));
+
+        Locale frlocJ = new Locale("fr");
+        allowedJavaLocales = new HashSet<Locale>();
+        allowedJavaLocales.add(frlocJ);
+        sc = new SpoofChecker.Builder().setAllowedJavaLocales(allowedJavaLocales).build();
+        assertFalse("no en in allowed Java locales", allowedJavaLocales.contains(new Locale("en")));
+        assertTrue("fr in allowed Java locales", allowedJavaLocales.contains(frlocJ));
 
         /*
          * Limit checks to SpoofChecker.CHAR_LIMIT. Some of the test data has whole script confusables also, which we

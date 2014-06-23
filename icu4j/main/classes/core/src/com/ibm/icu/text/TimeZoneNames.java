@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Locale;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICUConfig;
@@ -169,6 +170,19 @@ public abstract class TimeZoneNames implements Serializable {
     public static TimeZoneNames getInstance(ULocale locale) {
         String key = locale.getBaseName();
         return TZNAMES_CACHE.getInstance(key, locale);
+    }
+
+    /**
+     * Returns an instance of <code>TimeZoneDisplayNames</code> for the specified JDK locale.
+     * 
+     * @param locale
+     *            The JDK locale.
+     * @return An instance of <code>TimeZoneDisplayNames</code>
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static TimeZoneNames getInstance(Locale locale) {
+        return getInstance(ULocale.forLocale(locale));
     }
 
     /**
