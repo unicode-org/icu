@@ -489,7 +489,7 @@ public final class ICUResourceBundleReader {
     static int RES_GET_UINT(int res) {
         return res & 0x0fffffff;
     }
-    private static boolean URES_IS_ARRAY(int type) {
+    static boolean URES_IS_ARRAY(int type) {
         return type == UResourceBundle.ARRAY || type == ICUResourceBundle.ARRAY16;
     }
     static boolean URES_IS_TABLE(int type) {
@@ -843,6 +843,9 @@ public final class ICUResourceBundleReader {
             }
             return reader.getInt(itemsOffset + 4 * index);
         }
+        int getResource(ICUResourceBundleReader reader, String resKey) {
+            return getContainerResource(reader, Integer.parseInt(resKey));
+        }
         Container() {
         }
     }
@@ -905,7 +908,8 @@ public final class ICUResourceBundleReader {
             }
             return URESDATA_ITEM_NOT_FOUND;  /* not found or table is empty. */
         }
-        int getTableResource(ICUResourceBundleReader reader, String resKey) {
+        @Override
+        int getResource(ICUResourceBundleReader reader, String resKey) {
             return getContainerResource(reader, findTableItem(reader, resKey));
         }
         Table() {

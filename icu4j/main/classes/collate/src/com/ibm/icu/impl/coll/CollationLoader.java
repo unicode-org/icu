@@ -85,12 +85,8 @@ public final class CollationLoader {
         return rules;
     }
 
-    private static final UResourceBundle getWithFallback(UResourceBundle table, String entryName) {
-        try {
-            return ((ICUResourceBundle)table).getWithFallback(entryName);
-        } catch(MissingResourceException e) {
-            return null;
-        }
+    private static final UResourceBundle findWithFallback(UResourceBundle table, String entryName) {
+        return ((ICUResourceBundle)table).findWithFallback(entryName);
     }
 
     public static CollationTailoring loadTailoring(ULocale locale, Output<ULocale> outValidLocale) {
@@ -127,7 +123,7 @@ public final class CollationLoader {
         // There are zero or more tailorings in the collations table.
         UResourceBundle collations;
         try {
-            collations = ((ICUResourceBundle)bundle).get("collations");
+            collations = bundle.get("collations");
             if (collations == null) {
                 return root;
             }
@@ -139,12 +135,9 @@ public final class CollationLoader {
         String type = locale.getKeywordValue("collation");
         String defaultType = "standard";
 
-        try {
-            String defT = ((ICUResourceBundle)collations).getStringWithFallback("default");
-            if (defT != null) {
-                defaultType = defT;
-            }
-        } catch(MissingResourceException ignored) {
+        String defT = ((ICUResourceBundle)collations).findStringWithFallback("default");
+        if (defT != null) {
+            defaultType = defT;
         }
 
         if (type == null || type.equals("default")) {
@@ -159,27 +152,27 @@ public final class CollationLoader {
         // ICU4C, but not used by ICU4J
 
         // boolean typeFallback = false;
-        UResourceBundle data = getWithFallback(collations, type);
+        UResourceBundle data = findWithFallback(collations, type);
         if (data == null &&
                 type.length() > 6 && type.startsWith("search")) {
             // fall back from something like "searchjl" to "search"
             // typeFallback = true;
             type = "search";
-            data = getWithFallback(collations, type);
+            data = findWithFallback(collations, type);
         }
 
         if (data == null && !type.equals(defaultType)) {
             // fall back to the default type
             // typeFallback = true;
             type = defaultType;
-            data = getWithFallback(collations, type);
+            data = findWithFallback(collations, type);
         }
 
         if (data == null && !type.equals("standard")) {
             // fall back to the "standard" type
             // typeFallback = true;
             type = "standard";
-            data = getWithFallback(collations, type);
+            data = findWithFallback(collations, type);
         }
 
         if (data == null) {
@@ -213,7 +206,7 @@ public final class CollationLoader {
 
         // Try to fetch the optional rules string.
         try {
-            String s = ((ICUResourceBundle)data).getString("Sequence");
+            String s = data.getString("Sequence");
             if (s != null) {
                 t.rules = s;
             }
@@ -236,12 +229,9 @@ public final class CollationLoader {
             // Opening a bundle for the actual locale should always succeed.
             UResourceBundle actualBundle = UResourceBundle.getBundleInstance(
                     ICUResourceBundle.ICU_COLLATION_BASE_NAME, actualLocale);
-            try {
-                String defT = ((ICUResourceBundle)actualBundle).getStringWithFallback("collations/default");
-                if (defT != null) {
-                    defaultType = defT;
-                }
-            } catch(MissingResourceException ignored) {
+            defT = ((ICUResourceBundle)actualBundle).findStringWithFallback("collations/default");
+            if (defT != null) {
+                defaultType = defT;
             }
         }
 

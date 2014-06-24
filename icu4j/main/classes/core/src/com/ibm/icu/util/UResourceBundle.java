@@ -823,6 +823,19 @@ public abstract class UResourceBundle extends ResourceBundle {
      */
     @Deprecated
     public Set<String> keySet() {
+        // TODO: Java 6 ResourceBundle has keySet() which calls handleKeySet()
+        // and caches the results.
+        // When we upgrade to Java 6, we still need to check for isTopLevelResource().
+        // Keep the else branch as is. The if body should just return super.keySet().
+        // Remove then-redundant caching of the keys.
+        Set<String> keys = null;
+        ICUResourceBundle icurb = null;
+        if(isTopLevelResource() && this instanceof ICUResourceBundle) {
+            // We do not cache the top-level keys in this base class so that
+            // not every string/int/binary... resource has to have a keys cache field.
+            icurb = (ICUResourceBundle)this;
+            keys = icurb.getTopLevelKeySet();
+        }
         if(keys == null) {
             if(isTopLevelResource()) {
                 TreeSet<String> newKeySet;
@@ -841,6 +854,9 @@ public abstract class UResourceBundle extends ResourceBundle {
                 }
                 newKeySet.addAll(handleKeySet());
                 keys = Collections.unmodifiableSet(newKeySet);
+                if(icurb != null) {
+                    icurb.setTopLevelKeySet(keys);
+                }
             } else {
                 return handleKeySet();
             }
@@ -848,7 +864,6 @@ public abstract class UResourceBundle extends ResourceBundle {
         return keys;
     }
 
-    private Set<String> keys = null;
     /**
      * Returns a Set of the keys contained <i>only</i> in this ResourceBundle.
      * This does not include further keys from parent bundles.
@@ -969,14 +984,14 @@ public abstract class UResourceBundle extends ResourceBundle {
      * {@icu} Actual worker method for fetching a resource based on the given key.
      * Sub classes must override this method if they support resources with keys.
      * @param aKey the key string of the resource to be fetched
-     * @param table hashtable object to hold references of resources already seen
+     * @param aliasesVisited hashtable object to hold references of resources already seen
      * @param requested the original resource bundle object on which the get method was invoked.
      *                  The requested bundle and the bundle on which this method is invoked
      *                  are the same, except in the cases where aliases are involved.
      * @return UResourceBundle a resource associated with the key
      * @stable ICU 3.8
      */
-    protected UResourceBundle handleGet(String aKey, HashMap<String, String> table, 
+    protected UResourceBundle handleGet(String aKey, HashMap<String, String> aliasesVisited, 
                                         UResourceBundle requested) {
         return null;
     }
@@ -985,14 +1000,14 @@ public abstract class UResourceBundle extends ResourceBundle {
      * {@icu} Actual worker method for fetching a resource based on the given index.
      * Sub classes must override this method if they support arrays of resources.
      * @param index the index of the resource to be fetched
-     * @param table hashtable object to hold references of resources already seen
+     * @param aliasesVisited hashtable object to hold references of resources already seen
      * @param requested the original resource bundle object on which the get method was invoked.
      *                  The requested bundle and the bundle on which this method is invoked
      *                  are the same, except in the cases where aliases are involved.
      * @return UResourceBundle a resource associated with the index
      * @stable ICU 3.8
      */
-    protected UResourceBundle handleGet(int index, HashMap<String, String> table, 
+    protected UResourceBundle handleGet(int index, HashMap<String, String> aliasesVisited, 
                                         UResourceBundle requested) {
         return null;
     }
