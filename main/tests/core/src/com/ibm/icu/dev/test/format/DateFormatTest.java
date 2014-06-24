@@ -1871,11 +1871,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateFormat fmt = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
         Calendar cal = Calendar.getInstance();
         cal.clear();
-        cal.set(117 + 1900, Calendar.JUNE, 5);
-        parse2DigitYear(fmt, "6/5/17", cal.getTime());
+        cal.set(130 + 1900, Calendar.JUNE, 5);
+        parse2DigitYear(fmt, "6/5/30", cal.getTime());
         cal.clear();
-        cal.set(34 + 1900, Calendar.JUNE, 4);
-        parse2DigitYear(fmt, "6/4/34", cal.getTime());
+        cal.set(50 + 1900, Calendar.JUNE, 4);
+        parse2DigitYear(fmt, "6/4/50", cal.getTime());
     }
     
     // internal test subroutine, used by TestTwoDigitYear
