@@ -15,41 +15,35 @@ import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
 class ICUResourceBundleImpl extends ICUResourceBundle {
-    protected ICUResourceBundleImpl(ICUResourceBundleReader reader, String key, String resPath, int resource,
-                                    ICUResourceBundleImpl container) {
-        super(reader, key, resPath, resource, container);
+    protected ICUResourceBundleImpl(ICUResourceBundleImpl container, String key) {
+        super(container, key);
+    }
+    ICUResourceBundleImpl(WholeBundle wholeBundle) {
+        super(wholeBundle);
     }
     protected final ICUResourceBundle createBundleObject(String _key,
                                                          int _resource,
-                                                         HashMap<String, String> table,
-                                                         UResourceBundle requested,
-                                                         boolean[] isAlias) {
-        if (isAlias != null) {
-            isAlias[0] = false;
-        }
-        String _resPath = resPath + "/" + _key;
+                                                         HashMap<String, String> aliasesVisited,
+                                                         UResourceBundle requested) {
         switch(ICUResourceBundleReader.RES_GET_TYPE(_resource)) {
         case STRING :
         case STRING_V2:
-            return new ICUResourceBundleImpl.ResourceString(reader, _key, _resPath, _resource, this);
+            return new ICUResourceBundleImpl.ResourceString(this, _key, _resource);
         case BINARY:
-            return new ICUResourceBundleImpl.ResourceBinary(reader, _key, _resPath, _resource, this);
+            return new ICUResourceBundleImpl.ResourceBinary(this, _key, _resource);
         case ALIAS:
-            if (isAlias != null) {
-                isAlias[0] = true;
-            }
-            return findResource(_key, _resPath, _resource, table, requested);
+            return getAliasedResource(this, null, 0, _key, _resource, aliasesVisited, requested);
         case INT:
-            return new ICUResourceBundleImpl.ResourceInt(reader, _key, _resPath, _resource, this);
+            return new ICUResourceBundleImpl.ResourceInt(this, _key, _resource);
         case INT_VECTOR:
-            return new ICUResourceBundleImpl.ResourceIntVector(reader, _key, _resPath, _resource, this);
+            return new ICUResourceBundleImpl.ResourceIntVector(this, _key, _resource);
         case ARRAY:
         case ARRAY16:
-            return new ICUResourceBundleImpl.ResourceArray(reader, _key, _resPath, _resource, this);
+            return new ICUResourceBundleImpl.ResourceArray(this, _key, _resource);
         case TABLE:
         case TABLE16:
         case TABLE32:
-            return new ICUResourceBundleImpl.ResourceTable(reader, _key, _resPath, _resource, this);
+            return new ICUResourceBundleImpl.ResourceTable(this, _key, _resource);
         default :
             throw new IllegalStateException("The resource type is unknown");
         }
@@ -58,41 +52,53 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
     // Scalar values ------------------------------------------------------- ***
 
     private static final class ResourceBinary extends ICUResourceBundleImpl {
+        private int resource;
+        public int getType() {
+            return BINARY;
+        }
         public ByteBuffer getBinary() {
-            return reader.getBinary(resource);
+            return wholeBundle.reader.getBinary(resource);
         }
         public byte [] getBinary(byte []ba) {
-            return reader.getBinary(resource, ba);
+            return wholeBundle.reader.getBinary(resource, ba);
         }
-        ResourceBinary(ICUResourceBundleReader reader, String key, String resPath, int resource,
-                       ICUResourceBundleImpl container) {
-            super(reader, key, resPath, resource, container);
+        ResourceBinary(ICUResourceBundleImpl container, String key, int resource) {
+            super(container, key);
+            this.resource = resource;
         }
     }
     private static final class ResourceInt extends ICUResourceBundleImpl {
+        private int resource;
+        public int getType() {
+            return INT;
+        }
         public int getInt() {
             return ICUResourceBundleReader.RES_GET_INT(resource);
         }
         public int getUInt() {
             return ICUResourceBundleReader.RES_GET_UINT(resource);
         }
-        ResourceInt(ICUResourceBundleReader reader, String key, String resPath, int resource,
-                    ICUResourceBundleImpl container) {
-            super(reader, key, resPath, resource, container);
+        ResourceInt(ICUResourceBundleImpl container, String key, int resource) {
+            super(container, key);
+            this.resource = resource;
         }
     }
     private static final class ResourceString extends ICUResourceBundleImpl {
+        private int resource;
         private String value;
+        public int getType() {
+            return STRING;
+        }
         public String getString() {
             if (value != null) {
                 return value;
             }
-            return reader.getString(resource);
+            return wholeBundle.reader.getString(resource);
         }
-        ResourceString(ICUResourceBundleReader reader, String key, String resPath, int resource,
-                       ICUResourceBundleImpl container) {
-            super(reader, key, resPath, resource, container);
-            String s = reader.getString(resource);
+        ResourceString(ICUResourceBundleImpl container, String key, int resource) {
+            super(container, key);
+            this.resource = resource;
+            String s = wholeBundle.reader.getString(resource);
             // Allow the reader cache's SoftReference to do its job.
             if (s.length() < ICUResourceBundleReader.LARGE_SIZE / 2) {
                 value = s;
@@ -100,18 +106,22 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
         }
     }
     private static final class ResourceIntVector extends ICUResourceBundleImpl {
-        public int[] getIntVector() {
-            return reader.getIntVector(resource);
+        private int resource;
+        public int getType() {
+            return INT_VECTOR;
         }
-        ResourceIntVector(ICUResourceBundleReader reader, String key, String resPath, int resource,
-                          ICUResourceBundleImpl container) {
-            super(reader, key, resPath, resource, container);
+        public int[] getIntVector() {
+            return wholeBundle.reader.getIntVector(resource);
+        }
+        ResourceIntVector(ICUResourceBundleImpl container, String key, int resource) {
+            super(container, key);
+            this.resource = resource;
         }
     }
 
     // Container values ---------------------------------------------------- ***
 
-    private static class ResourceContainer extends ICUResourceBundleImpl {
+    static abstract class ResourceContainer extends ICUResourceBundleImpl {
         protected ICUResourceBundleReader.Container value;
 
         public int getSize() {
@@ -119,34 +129,41 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
         }
         @Override
         public String getString(int index) {
-            int res = value.getContainerResource(reader, index);
+            int res = value.getContainerResource(wholeBundle.reader, index);
             if (res == RES_BOGUS) {
                 throw new IndexOutOfBoundsException();
             }
-            String s = reader.getString(res);
+            String s = wholeBundle.reader.getString(res);
             if (s != null) {
                 return s;
             }
             return super.getString(index);
         }
         protected int getContainerResource(int index) {
-            return value.getContainerResource(reader, index);
+            return value.getContainerResource(wholeBundle.reader, index);
         }
-        protected UResourceBundle createBundleObject(int index, String resKey, HashMap<String, String> table,
-                                                     UResourceBundle requested, boolean[] isAlias) {
+        protected UResourceBundle createBundleObject(int index, String resKey, HashMap<String, String> aliasesVisited,
+                                                     UResourceBundle requested) {
             int item = getContainerResource(index);
             if (item == RES_BOGUS) {
                 throw new IndexOutOfBoundsException();
             }
-            return createBundleObject(resKey, item, table, requested, isAlias);
+            return createBundleObject(resKey, item, aliasesVisited, requested);
         }
-        ResourceContainer(ICUResourceBundleReader reader, String key, String resPath, int resource,
-                          ICUResourceBundleImpl container) {
-            super(reader, key, resPath, resource, container);
+
+        ResourceContainer(ICUResourceBundleImpl container, String key) {
+            super(container, key);
+        }
+        ResourceContainer(WholeBundle wholeBundle) {
+            super(wholeBundle);
         }
     }
     private static class ResourceArray extends ResourceContainer {
+        public int getType() {
+            return ARRAY;
+        }
         protected String[] handleGetStringArray() {
+            ICUResourceBundleReader reader = wholeBundle.reader;
             int length = value.getSize();
             String[] strings = new String[length];
             for (int i = 0; i < length; ++i) {
@@ -161,34 +178,31 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
         public String[] getStringArray() {
             return handleGetStringArray();
         }
-        protected UResourceBundle handleGetImpl(String indexStr, HashMap<String, String> table,
-                                                UResourceBundle requested,
-                                                int[] index, boolean[] isAlias) {
-            int i = indexStr.length() > 0 ? Integer.valueOf(indexStr).intValue() : -1;
-            if(index != null) {
-                index[0] = i;
-            }
-            if (i < 0) {
-                throw new UResourceTypeMismatchException("Could not get the correct value for index: "+ indexStr);
-            }
-            return createBundleObject(i, indexStr, table, requested, isAlias);
+        @Override
+        protected UResourceBundle handleGet(String indexStr, HashMap<String, String> aliasesVisited,
+                                            UResourceBundle requested) {
+            int i = Integer.parseInt(indexStr);
+            return createBundleObject(i, indexStr, aliasesVisited, requested);
         }
-        protected UResourceBundle handleGetImpl(int index, HashMap<String, String> table,
-                                                UResourceBundle requested, boolean[] isAlias) {
-            return createBundleObject(index, Integer.toString(index), table, requested, isAlias);
+        @Override
+        protected UResourceBundle handleGet(int index, HashMap<String, String> aliasesVisited,
+                                            UResourceBundle requested) {
+            return createBundleObject(index, Integer.toString(index), aliasesVisited, requested);
         }
-        ResourceArray(ICUResourceBundleReader reader, String key, String resPath, int resource,
-                      ICUResourceBundleImpl container) {
-            super(reader, key, resPath, resource, container);
-            value = reader.getArray(resource);
-            createLookupCache(); // Use bundle cache to access array entries
+        ResourceArray(ICUResourceBundleImpl container, String key, int resource) {
+            super(container, key);
+            value = wholeBundle.reader.getArray(resource);
         }
     }
     static class ResourceTable extends ResourceContainer {
+        public int getType() {
+            return TABLE;
+        }
         protected String getKey(int index) {
-            return ((ICUResourceBundleReader.Table)value).getKey(reader, index);
+            return ((ICUResourceBundleReader.Table)value).getKey(wholeBundle.reader, index);
         }
         protected Set<String> handleKeySet() {
+            ICUResourceBundleReader reader = wholeBundle.reader;
             TreeSet<String> keySet = new TreeSet<String>();
             ICUResourceBundleReader.Table table = (ICUResourceBundleReader.Table)value;
             for (int i = 0; i < table.getSize(); ++i) {
@@ -196,31 +210,23 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
             }
             return keySet;
         }
-        protected int getTableResource(String resKey) {
-            return ((ICUResourceBundleReader.Table)value).getTableResource(reader, resKey);
-        }
-        protected int getTableResource(int index) {
-            return getContainerResource(index);
-        }
-        protected UResourceBundle handleGetImpl(String resKey, HashMap<String, String> table,
-                                                UResourceBundle requested,
-                                                int[] index, boolean[] isAlias) {
-            int i = ((ICUResourceBundleReader.Table)value).findTableItem(reader, resKey);
-            if(index != null) {
-                index[0] = i;
-            }
+        @Override
+        protected UResourceBundle handleGet(String resKey, HashMap<String, String> aliasesVisited,
+                                            UResourceBundle requested) {
+            int i = ((ICUResourceBundleReader.Table)value).findTableItem(wholeBundle.reader, resKey);
             if (i < 0) {
                 return null;
             }
-            return createBundleObject(i, resKey, table, requested, isAlias);
+            return createBundleObject(resKey, getContainerResource(i), aliasesVisited, requested);
         }
-        protected UResourceBundle handleGetImpl(int index, HashMap<String, String> table,
-                                                UResourceBundle requested, boolean[] isAlias) {
-            String itemKey = ((ICUResourceBundleReader.Table)value).getKey(reader, index);
+        @Override
+        protected UResourceBundle handleGet(int index, HashMap<String, String> aliasesVisited,
+                                            UResourceBundle requested) {
+            String itemKey = ((ICUResourceBundleReader.Table)value).getKey(wholeBundle.reader, index);
             if (itemKey == null) {
                 throw new IndexOutOfBoundsException();
             }
-            return createBundleObject(index, itemKey, table, requested, isAlias);
+            return createBundleObject(itemKey, getContainerResource(index), aliasesVisited, requested);
         }
         @Override
         protected Object handleGetObject(String key) {
@@ -228,6 +234,7 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
             // It would be even better if we could override getString(key)/getStringArray(key),
             // so that we know the expected object type,
             // but those are final in java.util.ResourceBundle.
+            ICUResourceBundleReader reader = wholeBundle.reader;
             int index = ((ICUResourceBundleReader.Table)value).findTableItem(reader, key);
             if (index >= 0) {
                 int res = value.getContainerResource(reader, index);
@@ -261,18 +268,24 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
         /**
          * Returns a String if found, or null if not found or if the key item is not a string.
          */
-        String getStringOrNull(String key) {
+        String findString(String key) {
+            ICUResourceBundleReader reader = wholeBundle.reader;
             int index = ((ICUResourceBundleReader.Table)value).findTableItem(reader, key);
             if (index < 0) {
                 return null;
             }
             return reader.getString(value.getContainerResource(reader, index));
         }
-        ResourceTable(ICUResourceBundleReader reader, String key, String resPath, int resource,
-                      ICUResourceBundleImpl container) {
-            super(reader, key, resPath, resource, container);
-            value = reader.getTable(resource);
-            createLookupCache(); // Use bundle cache to access table entries
+        ResourceTable(ICUResourceBundleImpl container, String key, int resource) {
+            super(container, key);
+            value = wholeBundle.reader.getTable(resource);
+        }
+        /**
+         * Constructor for the root table of a bundle.
+         */
+        ResourceTable(WholeBundle wholeBundle, int rootRes) {
+            super(wholeBundle);
+            value = wholeBundle.reader.getTable(rootRes);
         }
     }
 }
