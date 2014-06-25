@@ -17,7 +17,7 @@
 /**
  * Macro to declare a locale LocaleBased wrapper object for the given
  * object, which must have two members named `validLocale' and
- * `actualLocale'.
+ * `actualLocale' of size ULOC_FULLNAME_CAPACITY
  */
 #define U_LOCALE_BASED(varname, objname) \
   LocaleBased varname((objname).validLocale, (objname).actualLocale);
