@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2009-2012, International Business Machines
+*   Copyright (C) 2009-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -24,6 +24,9 @@
 #define _POSIX_SOURCE
 #include <cics.h> /* 12 Nov 2011 JAM iscics() function */
 #endif
+#include "charstr.h"
+
+using namespace icu;
 
 #ifndef UPLUG_TRACE
 #define UPLUG_TRACE 0
@@ -712,25 +715,29 @@ uplug_init(UErrorCode *status) {
 #if !U_ENABLE_DYLOAD
   (void)status; /* unused */
 #else
-  const char *plugin_dir;
+  CharString plugin_dir;
+  const char *env = getenv("ICU_PLUGINS");
 
   if(U_FAILURE(*status)) return;
-  plugin_dir = getenv("ICU_PLUGINS");
+  if(env != NULL) {
+    plugin_dir.append(env, -1, *status);
+  }
+  if(U_FAILURE(*status)) return;
 
 #if defined(DEFAULT_ICU_PLUGINS) 
-  if(plugin_dir == NULL || !*plugin_dir) {
-    plugin_dir = DEFAULT_ICU_PLUGINS;
+  if(plugin_dir.isEmpty()) {
+    plugin_dir.append(DEFAULT_ICU_PLUGINS, -1, *status);
   }
 #endif
 
 #if UPLUG_TRACE
-  DBG((stderr, "ICU_PLUGINS=%s\n", plugin_dir));
+  DBG((stderr, "ICU_PLUGINS=%s\n", plugin_dir.data()));
 #endif
 
-  if(plugin_dir != NULL && *plugin_dir) {
+  if(!plugin_dir.isEmpty()) {
     FILE *f;
         
-        
+    CharString pluginFile;
 #ifdef OS390BATCH
 /* There are potentially a lot of ways to implement a plugin directory on OS390/zOS  */
 /* Keeping in mind that unauthorized file access is logged, monitored, and enforced  */
@@ -739,17 +746,37 @@ uplug_init(UErrorCode *status) {
 /* SYS1.PARMLIB or setting an environment variable "ICU_PLUGIN_PATH" (?).  The       */
 /* DDNAME can be connected to a file in the HFS if need be.                          */
 
-    uprv_strncpy(plugin_file,"//DD:ICUPLUG", 2047);        /* JAM 20 Oct 2011 */
+    pluginFile.append("//DD:ICUPLUG", -1, *status);        /* JAM 20 Oct 2011 */
 #else
-    uprv_strncpy(plugin_file, plugin_dir, 2047);
-    uprv_strncat(plugin_file, U_FILE_SEP_STRING,2047);
-    uprv_strncat(plugin_file, "icuplugins",2047);
-    uprv_strncat(plugin_file, U_ICU_VERSION_SHORT ,2047);
-    uprv_strncat(plugin_file, ".txt" ,2047);
+    pluginFile.append(plugin_dir, *status);
+    pluginFile.append(U_FILE_SEP_STRING, -1, *status);
+    pluginFile.append("icuplugins", -1, *status);
+    pluginFile.append(U_ICU_VERSION_SHORT, -1, *status);
+    pluginFile.append(".txt", -1, *status);
 #endif
+
+#if UPLUG_TRACE
+    DBG((stderr, "status=%s\n", u_errorName(*status)));
+#endif
+
+    if(U_FAILURE(*status)) {
+      return;
+    }
+    if((size_t)pluginFile.length() > (sizeof(plugin_file)-1)) {
+      *status = U_BUFFER_OVERFLOW_ERROR;
+#if UPLUG_TRACE
+      DBG((stderr, "status=%s\n", u_errorName(*status)));
+#endif
+      return;
+    }
+    
+    /* plugin_file is not used for processing - it is only used 
+       so that uplug_getPluginFile() works (i.e. icuinfo)
+    */
+    uprv_strncpy(plugin_file, pluginFile.data(), sizeof(plugin_file));
         
 #if UPLUG_TRACE
-    DBG((stderr, "pluginfile= %s\n", plugin_file));
+    DBG((stderr, "pluginfile= %s len %d/%d\n", plugin_file, (int)strlen(plugin_file), (int)sizeof(plugin_file)));
 #endif
         
 #ifdef __MVS__
@@ -760,7 +787,7 @@ uplug_init(UErrorCode *status) {
     else
 #endif
     {
-         f = fopen(plugin_file, "r");
+        f = fopen(pluginFile.data(), "r");
     }
 
     if(f != NULL) {
