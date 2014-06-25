@@ -32,9 +32,9 @@
 #include "uresimp.h"
 
 // debugging
-// #define DEBUG
+// #define RBNF_DEBUG
 
-#ifdef DEBUG
+#ifdef RBNF_DEBUG
 #include "stdio.h"
 #endif
 
@@ -327,7 +327,7 @@ private:
     UChar*  nextString(void);
 };
 
-#ifdef DEBUG
+#ifdef RBNF_DEBUG
 #define ERROR(msg) parseError(msg); return NULL;
 #define EXPLANATION_ARG explanationArg
 #else
@@ -556,7 +556,7 @@ void LocDataParser::parseError(const char* EXPLANATION_ARG)
     pe.postContext[limit-p] = 0;
     pe.offset = (int32_t)(p - data);
     
-#ifdef DEBUG
+#ifdef RBNF_DEBUG
     fprintf(stderr, "%s at or near character %ld: ", EXPLANATION_ARG, p-data);
 
     UnicodeString msg;
