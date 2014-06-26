@@ -1063,13 +1063,13 @@ ICU_CONDITIONAL(ICUIO, test "$icuio" = true)
 
 # Enable/disable layout
 AC_ARG_ENABLE(layout,
-	[  --enable-layout         build ICU's layout library [default=yes]],
+	[  --enable-layout         build ICU's layout library [default=no]],
 	[case "${enableval}" in
 		yes) layout=true ;;
 		no)  layout=false ;;
 		*) AC_MSG_ERROR(bad value ${enableval} for --enable-layout) ;;
 		esac],
-	layout=true)
+	layout=false)
 ICU_CONDITIONAL(LAYOUT, test "$layout" = true)
 
 # Enable/disable tools

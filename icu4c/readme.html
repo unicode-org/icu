@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 53.1</title>
+    <title>ReadMe for ICU 54.1 (m1)</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2014 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -16,15 +16,15 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br/>
-     <abbr title="International Components for Unicode">ICU</abbr> 53.1 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 54.1 (m1) ReadMe</h1>
 
-    <!--p><b>Note:</b> This is a development milestone release of ICU4C 53
-    This milestone is intended for those wishing to get an early look at ICU 53 new features and API changes.
-    It is not recommended for production use.</p-->
-    <p><b>Note:</b> This is a release candidate version of ICU4C 53.
+    <p><b>Note:</b> This is a development milestone release of ICU4C 54
+    This milestone is intended for those wishing to get an early look at ICU 54 new features and API changes.
     It is not recommended for production use.</p>
+    <!-- <p><b>Note:</b> This is a release candidate version of ICU4C 53. -->
+    <!-- It is not recommended for production use.</p> -->
 
-    <p>Last updated: 2014-Mar-19<br />
+    <p>Last updated: 2014-June-25<br />
      Copyright &copy; 1997-2014 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -222,6 +222,14 @@
     <a href="http://site.icu-project.org/download/53">ICU download page</a>.
     <!-- <a href="http://site.icu-project.org/download/milestone">ICU milestone download page</a>. -->
     </p>
+    
+    <!-- ICU 54 items -->
+    <h3>Layout Engine deprecation</h3>
+    <p>The LayoutEngine is now deprecated. Please
+    see <a href='http://userguide.icu-project.org/layoutengine'>the
+    User's Guide</a> for more details and migration recommendations.
+     Passing "--enable-layout" to configure is required to enable the layout
+    engine, it is not built by default.</p>
 
     <!-- ICU 53 items -->
     <h3>ICU4C now requires C99</h3>
