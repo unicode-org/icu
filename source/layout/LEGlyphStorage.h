@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1998-2010, International Business Machines
+ *   Copyright (C) 1998-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -29,7 +29,7 @@ U_NAMESPACE_BEGIN
  *
  * @see LEInsertionList.h
  *
- * @stable ICU 3.6
+ * @deprecated see {@link LayoutEngine}
  */
 class U_LAYOUT_API LEGlyphStorage : public UObject, protected LEInsertionCallback
 {
@@ -105,7 +105,7 @@ protected:
      *
      * @see LEInsertionList.h
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     virtual le_bool applyInsertion(le_int32 atPosition, le_int32 count, LEGlyphID newGlyphs[]);
 
@@ -116,14 +116,14 @@ public:
      * <code>allocateGlyphArray, allocatePositions and allocateAuxData</code>
      * to allocate the data.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     LEGlyphStorage();
 
     /**
      * The destructor. This will deallocate all of the arrays.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     ~LEGlyphStorage();
 
@@ -132,7 +132,7 @@ public:
      *
      * @return the number of glyphs in the glyph array
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     inline le_int32 getGlyphCount() const;
 
@@ -144,7 +144,7 @@ public:
      * @param glyphs - the destiniation glyph array
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const;
 
@@ -158,7 +158,7 @@ public:
      * @param extraBits - this value will be ORed with each glyph index
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
 
@@ -170,7 +170,7 @@ public:
      * @param charIndices - the destiniation character index array
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void getCharIndices(le_int32 charIndices[], LEErrorCode &success) const;
 
@@ -183,7 +183,7 @@ public:
      * @param indexBase - an offset which will be added to each index
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const;
 
@@ -196,7 +196,7 @@ public:
      * @param positions - the destiniation position array
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void getGlyphPositions(float positions[], LEErrorCode &success) const;
 
@@ -212,7 +212,7 @@ public:
      * @param y - the glyph's Y position
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const;
 
@@ -226,7 +226,7 @@ public:
      * @param success set to an error code if the storage cannot be allocated of if the initial
      *        glyph count is not positive.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void allocateGlyphArray(le_int32 initialGlyphCount, le_bool rightToLeft, LEErrorCode &success);
 
@@ -238,7 +238,7 @@ public:
      *
      * @return the number of X, Y position pairs allocated.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     le_int32 allocatePositions(LEErrorCode &success);
 
@@ -249,7 +249,7 @@ public:
      *
      * @return the size of the auxillary data array.
      *
-     * @stable ICU 3.6
+     * @deprecated see {@link LayoutEngine}
      */
     le_int32 allocateAuxData(LEErrorCode &success);
 
@@ -259,7 +259,7 @@ public:
      * @param auxData the auxillary data array will be copied to this address
      * @param success set to an error code if the data cannot be copied
      *
-     * @stable ICU 3.6
+     * @deprecated see {@link LayoutEngine}
      */
     void getAuxData(le_uint32 auxData[], LEErrorCode &success) const;
 
@@ -271,7 +271,7 @@ public:
      *
      * @return the glyph ID
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     LEGlyphID getGlyphID(le_int32 glyphIndex, LEErrorCode &success) const;
 
@@ -283,7 +283,7 @@ public:
      *
      * @return the character index
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     le_int32  getCharIndex(le_int32 glyphIndex, LEErrorCode &success) const;
 
@@ -296,7 +296,7 @@ public:
      *
      * @return the auxillary data
      *
-     * @stable ICU 3.6
+     * @deprecated see {@link LayoutEngine}
      */
     le_uint32 getAuxData(le_int32 glyphIndex, LEErrorCode &success) const;
 
@@ -308,7 +308,7 @@ public:
      *
      * @return a reference to the given location in the glyph array
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     inline LEGlyphID &operator[](le_int32 glyphIndex) const;
 
@@ -327,7 +327,7 @@ public:
      *
      * @see LEInsertionList.h
      *
-     * @stable ICU 4.2
+     * @deprecated see {@link LayoutEngine}
      */
     LEGlyphID *insertGlyphs(le_int32 atIndex, le_int32 insertCount, LEErrorCode& success);
 
@@ -347,7 +347,7 @@ public:
      *
      * @see LEInsertionList.h
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     LEGlyphID *insertGlyphs(le_int32 atIndex, le_int32 insertCount);
 
@@ -362,7 +362,7 @@ public:
      * @param toPosition - target position of the glyph
      * @param marker marker bit
      *
-     * @stable ICU 4.2
+     * @deprecated see {@link LayoutEngine}
      */
     void moveGlyph(le_int32 fromPosition, le_int32 toPosition, le_uint32 marker);
 
@@ -376,7 +376,7 @@ public:
      *
      * @see LEInsertionList.h
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     le_int32 applyInsertions();
 
@@ -387,7 +387,7 @@ public:
      * @param glyphID the new glyph ID
      * @param success will be set to an error code if the glyph ID cannot be set.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void setGlyphID(le_int32 glyphIndex, LEGlyphID glyphID, LEErrorCode &success);
 
@@ -398,7 +398,7 @@ public:
      * @param charIndex the new char index
      * @param success will be set to an error code if the char index cannot be set.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void setCharIndex(le_int32 glyphIndex, le_int32 charIndex, LEErrorCode &success);
 
@@ -410,7 +410,7 @@ public:
      * @param y the new Y position
      * @param success will be set to an error code if the position cannot be set.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void setPosition(le_int32 glyphIndex, float x, float y, LEErrorCode &success);
 
@@ -422,7 +422,7 @@ public:
      * @param yAdjust the adjustment to the glyph's Y position
      * @param success will be set to an error code if the glyph's position cannot be adjusted.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void adjustPosition(le_int32 glyphIndex, float xAdjust, float yAdjust, LEErrorCode &success);
 
@@ -433,7 +433,7 @@ public:
      * @param auxData the new auxillary data
      * @param success will be set to an error code if the auxillary data cannot be set.
      *
-     * @stable ICU 3.6
+     * @deprecated see {@link LayoutEngine}
      */
     void setAuxData(le_int32 glyphIndex, le_uint32 auxData, LEErrorCode &success);
 
@@ -445,7 +445,7 @@ public:
      * @param from the <code>LEGlyphStorage</code> object from which
      *             to get the new glyph array.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void adoptGlyphArray(LEGlyphStorage &from);
 
@@ -457,7 +457,7 @@ public:
      * @param from the <code>LEGlyphStorage</code> object from which
      *             to get the new char indices array.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void adoptCharIndicesArray(LEGlyphStorage &from);
 
@@ -469,7 +469,7 @@ public:
      * @param from the <code>LEGlyphStorage</code> object from which
      *             to get the new position array.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void adoptPositionArray(LEGlyphStorage &from);
 
@@ -481,7 +481,7 @@ public:
      * @param from the <code>LEGlyphStorage</code> object from which
      *             to get the new auxillary data array.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void adoptAuxDataArray(LEGlyphStorage &from);
 
@@ -492,7 +492,7 @@ public:
      * @param from the <code>LEGlyphStorage</code> object from which
      *             to get the new glyph count.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void adoptGlyphCount(LEGlyphStorage &from);
 
@@ -501,7 +501,7 @@ public:
      *
      * @param newGlyphCount the new glyph count.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void adoptGlyphCount(le_int32 newGlyphCount);
 
@@ -511,21 +511,21 @@ public:
      * to layout a different characer array. (This method is also called
      * by the destructor)
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     void reset();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @stable ICU 3.0
+     * @deprecated see {@link LayoutEngine}
      */
     static UClassID getStaticClassID();
 };
