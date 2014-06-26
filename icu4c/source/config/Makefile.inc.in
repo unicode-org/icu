@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 #******************************************************************************
-#   Copyright (C) 1999-2013, International Business Machines
+#   Copyright (C) 1999-2014, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
@@ -193,7 +193,6 @@ CXXFLAGS = @UCONFIG_CXXFLAGS@
 CXX = @CXX@
 DEFAULT_MODE = @DATA_PACKAGING_MODE@
 DEFS = @DEFS@ 
-FFLAGS = @FFLAGS@
 # use a consistent INSTALL 
 INSTALL  =  $(SHELL) $(pkgdatadir)/install-sh -c
 INSTALL_DATA  =  @INSTALL_DATA@
