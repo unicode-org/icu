@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
  * Constants for Unicode script values, generated using
  * ICU4J's <code>UScript</code> class.
  *
- * @stable ICU 2.2
+ * @deprecated see {@link LayoutEngine}
  */
 
 enum ScriptCodes {
@@ -70,12 +70,12 @@ enum ScriptCodes {
     thaiScriptCode = 38,
     tibtScriptCode = 39,
 /**
- * @stable ICU 2.6
+ * @deprecated see {@link LayoutEngine}
  */
 
     cansScriptCode = 40,
 /**
- * @stable ICU 2.2
+ * @deprecated see {@link LayoutEngine}
  */
 
     yiiiScriptCode = 41,
@@ -84,7 +84,7 @@ enum ScriptCodes {
     buhdScriptCode = 44,
     tagbScriptCode = 45,
 /**
- * @stable ICU 2.6
+ * @deprecated see {@link LayoutEngine}
  */
 
     braiScriptCode = 46,
@@ -96,12 +96,12 @@ enum ScriptCodes {
     taleScriptCode = 52,
     ugarScriptCode = 53,
 /**
- * @stable ICU 3.0
+ * @deprecated see {@link LayoutEngine}
  */
 
     hrktScriptCode = 54,
 /**
- * @stable ICU 3.4
+ * @deprecated see {@link LayoutEngine}
  */
 
     bugiScriptCode = 55,
@@ -112,7 +112,7 @@ enum ScriptCodes {
     tfngScriptCode = 60,
     xpeoScriptCode = 61,
 /**
- * @stable ICU 3.6
+ * @deprecated see {@link LayoutEngine}
  */
 
     baliScriptCode = 62,
@@ -158,7 +158,7 @@ enum ScriptCodes {
     zxxxScriptCode = 102,
     zzzzScriptCode = 103,
 /**
- * @stable ICU 3.8
+ * @deprecated see {@link LayoutEngine}
  */
 
     cariScriptCode = 104,
@@ -174,7 +174,7 @@ enum ScriptCodes {
     moonScriptCode = 114,
     mteiScriptCode = 115,
 /**
- * @stable ICU 4.0
+ * @deprecated see {@link LayoutEngine}
  */
 
     armiScriptCode = 116,
@@ -192,7 +192,7 @@ enum ScriptCodes {
     zmthScriptCode = 128,
     zsymScriptCode = 129,
 /**
- * @stable ICU 4.4
+ * @deprecated see {@link LayoutEngine}
  */
 
     bamuScriptCode = 130,
@@ -200,7 +200,7 @@ enum ScriptCodes {
     nkgbScriptCode = 132,
     sarbScriptCode = 133,
 /**
- * @stable ICU 4.6
+ * @deprecated see {@link LayoutEngine}
  */
 
     bassScriptCode = 134,
@@ -217,7 +217,7 @@ enum ScriptCodes {
     sindScriptCode = 145,
     waraScriptCode = 146,
 /**
- * @stable ICU 4.8
+ * @deprecated see {@link LayoutEngine}
  */
 
     afakScriptCode = 147,
@@ -230,20 +230,20 @@ enum ScriptCodes {
     tangScriptCode = 154,
     woleScriptCode = 155,
 /**
- * @stable ICU 49
+ * @deprecated see {@link LayoutEngine}
  */
 
     hluwScriptCode = 156,
     khojScriptCode = 157,
     tirhScriptCode = 158,
 /**
- * @stable ICU 52
+ * @deprecated see {@link LayoutEngine}
  */
 
     aghbScriptCode = 159,
     mahjScriptCode = 160,
 /**
- * @stable ICU 54
+ * @deprecated see {@link LayoutEngine}
  */
 
     ahomScriptCode = 161,
@@ -254,7 +254,7 @@ enum ScriptCodes {
     siddScriptCode = 166,
 
 /**
- * @stable ICU 2.2
+ * @deprecated see {@link LayoutEngine}
  */
     scriptCodeCount
 };
