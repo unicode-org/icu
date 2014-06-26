@@ -29,42 +29,42 @@
 /**
  * A type used for signed, 32-bit integers.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef int32_t le_int32;
 
 /**
  * A type used for unsigned, 32-bit integers.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef uint32_t le_uint32;
 
 /**
  * A type used for signed, 16-bit integers.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef int16_t le_int16;
 
 /**
  * A type used for unsigned, 16-bit integers.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef uint16_t le_uint16;
 
 /**
  * A type used for signed, 8-bit integers.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef int8_t le_int8;
 
 /**
  * A type used for unsigned, 8-bit integers.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef uint8_t le_uint8;
 
@@ -72,7 +72,7 @@ typedef uint8_t le_uint8;
 /**
  * A type used for boolean values.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef UBool le_bool;
 
@@ -80,7 +80,7 @@ typedef UBool le_bool;
 /**
  * Used to represent empty pointers.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define NULL 0
 #endif
@@ -88,7 +88,7 @@ typedef UBool le_bool;
 /**
  * Used for four character tags.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef le_uint32 LETag;
 
@@ -96,7 +96,7 @@ typedef le_uint32 LETag;
  * Used for 16-bit glyph indices as they're represented
  * in TrueType font tables.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef le_uint16 TTGlyphID;
 
@@ -107,7 +107,7 @@ typedef le_uint16 TTGlyphID;
  * order 8 bits are client defined. The LayoutEngine
  * will never change or look at the client defined bits.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef le_uint32 LEGlyphID;
 
@@ -115,7 +115,7 @@ typedef le_uint32 LEGlyphID;
  * Used to mask off the glyph ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_GLYPH_MASK     0x0000FFFF
 
@@ -124,7 +124,7 @@ typedef le_uint32 LEGlyphID;
  * into the low-order bits.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_GLYPH_SHIFT    0
 
@@ -133,7 +133,7 @@ typedef le_uint32 LEGlyphID;
  * Used to mask off the sub-font ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_SUB_FONT_MASK  0x00FF0000
 
@@ -142,7 +142,7 @@ typedef le_uint32 LEGlyphID;
  * into the low-order bits.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_SUB_FONT_SHIFT 16
 
@@ -151,7 +151,7 @@ typedef le_uint32 LEGlyphID;
  * Used to mask off the client-defined part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_CLIENT_MASK    0xFF000000
 
@@ -160,7 +160,7 @@ typedef le_uint32 LEGlyphID;
  * into the low-order bits.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_CLIENT_SHIFT   24
 
@@ -169,7 +169,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to get the Glyph ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_GET_GLYPH(gid) ((gid & LE_GLYPH_MASK) >> LE_GLYPH_SHIFT)
 
@@ -177,7 +177,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to get the sub-font ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_GET_SUB_FONT(gid) ((gid & LE_SUB_FONT_MASK) >> LE_SUB_FONT_SHIFT)
 
@@ -185,7 +185,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to get the client-defined part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_GET_CLIENT(gid) ((gid & LE_CLIENT_MASK) >> LE_CLIENT_SHIFT)
 
@@ -194,7 +194,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to set the Glyph ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_SET_GLYPH(gid, glyph) ((gid & ~LE_GLYPH_MASK) | ((glyph << LE_GLYPH_SHIFT) & LE_GLYPH_MASK))
 
@@ -202,7 +202,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to set the sub-font ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_SET_SUB_FONT(gid, font) ((gid & ~LE_SUB_FONT_MASK) | ((font << LE_SUB_FONT_SHIFT) & LE_SUB_FONT_MASK))
 
@@ -210,7 +210,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to set the client-defined part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_SET_CLIENT(gid, client) ((gid & ~LE_CLIENT_MASK) | ((client << LE_CLIENT_SHIFT) & LE_CLIENT_MASK))
 
@@ -218,14 +218,14 @@ typedef le_uint32 LEGlyphID;
 /**
  * Used to represent 16-bit Unicode code points.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef UChar LEUnicode16;
 
 /**
  * Used to represent 32-bit Unicode code points.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef UChar32 LEUnicode32;
 
@@ -233,7 +233,7 @@ typedef UChar32 LEUnicode32;
 /**
  * Used to represent 16-bit Unicode code points.
  *
- * @deprecated since ICU 2.4. Use LEUnicode16 instead
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef UChar LEUnicode;
 #endif  /* U_HIDE_DEPRECATED_API */
@@ -241,21 +241,21 @@ typedef UChar LEUnicode;
 /**
  * Used to hold a pair of (x, y) values which represent a point.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 struct LEPoint
 {
     /**
      * The x coordinate of the point.
      *
-     * @deprecated see {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link LayoutEngine}
      */
     float fX;
 
     /**
      * The y coordinate of the point.
      *
-     * @deprecated see {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link LayoutEngine}
      */
     float fY;
 };
@@ -264,7 +264,7 @@ struct LEPoint
 /**
  * Used to hold a pair of (x, y) values which represent a point.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef struct LEPoint LEPoint;
 #endif
@@ -406,7 +406,7 @@ typedef struct LEPoint LEPoint;
  * WARNING: THIS MACRO WILL ONLY WORK CORRECTLY IF
  * THE ARGUMENT CHARACTERS ARE ASCII.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_MAKE_TAG(a, b, c, d) \
     (((le_uint32)(a) << 24) |   \
@@ -418,7 +418,7 @@ typedef struct LEPoint LEPoint;
  * This enumeration defines constants for the standard
  * TrueType, OpenType and AAT table tags.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 enum LETableTags {
     LE_ACNT_TABLE_TAG = 0x61636E74UL, /**< 'acnt' */
@@ -480,7 +480,7 @@ enum LETableTags {
  * This enumeration defines constants for all
  * the common OpenType feature tags.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 enum LEFeatureTags {
     LE_AALT_FEATURE_TAG = 0x61616C74UL, /**< 'aalt' */
@@ -682,7 +682,7 @@ enum LEFeatureENUMs {
 /**
  * Error codes returned by the LayoutEngine.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 enum LEErrorCode {
     /* informational */
@@ -705,7 +705,7 @@ enum LEErrorCode {
 /**
  * Error codes returned by the LayoutEngine.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 typedef enum LEErrorCode LEErrorCode;
 #endif
@@ -713,14 +713,14 @@ typedef enum LEErrorCode LEErrorCode;
 /**
  * A convenience macro to test for the success of a LayoutEngine call.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_SUCCESS(code) (U_SUCCESS((UErrorCode)code))
 
 /**
  * A convenience macro to test for the failure of a LayoutEngine call.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define LE_FAILURE(code) (U_FAILURE((UErrorCode)code))
 

@@ -56,14 +56,14 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @deprecated see {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link LayoutEngine}
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @deprecated see {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link LayoutEngine}
      */
     static UClassID getStaticClassID();
 
