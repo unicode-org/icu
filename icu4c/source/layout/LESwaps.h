@@ -20,7 +20,7 @@ U_NAMESPACE_BEGIN
  * A convenience macro which invokes the swapWord member function
  * from a concise call.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define SWAPW(value) LESwaps::swapWord((le_uint16)(value))
 
@@ -28,7 +28,7 @@ U_NAMESPACE_BEGIN
  * A convenience macro which invokes the swapLong member function
  * from a concise call.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 #define SWAPL(value) LESwaps::swapLong((le_uint32)(value))
 
@@ -39,7 +39,7 @@ U_NAMESPACE_BEGIN
  * All methods are static and inline in an attempt to induce the compiler
  * to do most of the calculations at compile time.
  *
- * @deprecated see {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link LayoutEngine}
  */
 class U_LAYOUT_API LESwaps /* not : public UObject because all methods are static */ {
 public:
@@ -52,7 +52,7 @@ public:
      *
      * @return the byte swapped word
      *
-     * @deprecated see {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link LayoutEngine}
      */
     static le_uint16 swapWord(le_uint16 value)
     {
@@ -76,7 +76,7 @@ public:
      *
      * @return the byte swapped long
      *
-     * @deprecated see {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link LayoutEngine}
      */
     static le_uint32 swapLong(le_uint32 value)
     {
