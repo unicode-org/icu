@@ -414,7 +414,6 @@
 #define u_vsprintf_u U_ICU_ENTRY_POINT_RENAME(u_vsprintf_u)
 #define u_vsscanf U_ICU_ENTRY_POINT_RENAME(u_vsscanf)
 #define u_vsscanf_u U_ICU_ENTRY_POINT_RENAME(u_vsscanf_u)
-#define u_wfopen U_ICU_ENTRY_POINT_RENAME(u_wfopen)
 #define u_writeIdenticalLevelRun U_ICU_ENTRY_POINT_RENAME(u_writeIdenticalLevelRun)
 #define ubidi_addPropertyStarts U_ICU_ENTRY_POINT_RENAME(ubidi_addPropertyStarts)
 #define ubidi_close U_ICU_ENTRY_POINT_RENAME(ubidi_close)
