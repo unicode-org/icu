@@ -118,24 +118,26 @@ public class RelativeDateFormat extends DateFormat {
             relativeDayString = getStringForDay(dayDiff);
         }
 
-        if ( relativeDayString != null && fDatePattern != null &&
-                (fTimePattern == null || fCombinedFormat == null || combinedFormatHasDateAtStart) ) {
-            // capitalize relativeDayString according to context for relative, set formatter no context
-            if ( relativeDayString.length() > 0 && UCharacter.isLowerCase(relativeDayString.codePointAt(0)) &&
-                 (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
-                    (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationOfRelativeUnitsForListOrMenu) ||
-                    (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_STANDALONE && capitalizationOfRelativeUnitsForStandAlone) )) {
-                if (capitalizationBrkIter == null) {
-                    // should only happen when deserializing, etc.
-                    capitalizationBrkIter = BreakIterator.getSentenceInstance(fLocale);
+        if (fDateTimeFormat != null) {
+            if (relativeDayString != null && fDatePattern != null &&
+                    (fTimePattern == null || fCombinedFormat == null || combinedFormatHasDateAtStart) ) {
+                // capitalize relativeDayString according to context for relative, set formatter no context
+                if ( relativeDayString.length() > 0 && UCharacter.isLowerCase(relativeDayString.codePointAt(0)) &&
+                     (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+                        (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationOfRelativeUnitsForListOrMenu) ||
+                        (capitalizationContext == DisplayContext.CAPITALIZATION_FOR_STANDALONE && capitalizationOfRelativeUnitsForStandAlone) )) {
+                    if (capitalizationBrkIter == null) {
+                        // should only happen when deserializing, etc.
+                        capitalizationBrkIter = BreakIterator.getSentenceInstance(fLocale);
+                    }
+                    relativeDayString = UCharacter.toTitleCase(fLocale, relativeDayString, capitalizationBrkIter,
+                                    UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
                 }
-                relativeDayString = UCharacter.toTitleCase(fLocale, relativeDayString, capitalizationBrkIter,
-                                UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+                fDateTimeFormat.setContext(DisplayContext.CAPITALIZATION_NONE);
+            } else {
+                // set our context for the formatter
+                fDateTimeFormat.setContext(capitalizationContext);
             }
-            fDateTimeFormat.setContext(DisplayContext.CAPITALIZATION_NONE);
-        } else {
-            // set our context for the formatter
-            fDateTimeFormat.setContext(capitalizationContext);
         }
 
         if (fDateTimeFormat != null && (fDatePattern != null || fTimePattern != null)) {
