@@ -64,9 +64,11 @@ public class ICUResourceTableAccess {
                         } else if (tableName.equals("Languages")) {
                             currentName = LocaleIDs.getCurrentLanguageID(item);
                         }
-                        result = table.findStringWithFallback(currentName);
-                        if (result != null) {
-                            break; // possible real exception
+                        if (currentName != null) {
+                            result = table.findStringWithFallback(currentName);
+                            if (result != null) {
+                                break; // possible real exception
+                            }
                         }
                     }
 
