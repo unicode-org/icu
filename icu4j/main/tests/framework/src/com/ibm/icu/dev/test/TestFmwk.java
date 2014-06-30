@@ -1964,7 +1964,8 @@ public class TestFmwk extends AbstractTestLog {
         // Walk up the stack to the first call site outside this file
         StackTraceElement[] st = new Throwable().getStackTrace();
         for (int i = 0; i < st.length; ++i) {
-            if (!"TestFmwk.java".equals(st[i].getFileName())) {
+            String source = st[i].getFileName();
+            if (!source.equals("TestFmwk.java") && !source.equals("AbstractTestLog.java")) {
             	return "(" + st[i].getFileName() + ":" + st[i].getLineNumber() + ") ";
             }
         }
