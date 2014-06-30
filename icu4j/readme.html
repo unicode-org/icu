@@ -14,18 +14,18 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h1>International Components for Unicode for Java (ICU4J)</h1>
-<h2>Read Me for ICU4J 53 Release Candidate</h2>
-(Last Update: 2014-Mar-18)
+<h2>Read Me for ICU4J 54 Milestone 1</h2>
+(Last Update: 2014-Jun-30)
 <hr size="2" width="100%">
 
 <p>
 <!-- <b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
 of inherited API and introduces new API or functionality. -->
-<b>Note:</b> This is a release candidate version of ICU4J 53.
+<b>Note:</b> This is a development release of ICU4J 54.
 The contents of this document may not reflect the recent changes done
-for ICU 53 development. This release candidate version is intended for those
-planning to integrate ICU4J 53 to software, or to evaluate new features and
-API changes. It is not recommended for production use.
+for ICU 54 development. This milestone is intended for those wishing
+to get an early look at ICU4J 54 new features and API changes. It is not
+recommended for production use.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -131,40 +131,15 @@ found in ICU4J.</p>
 
 <h2 class="doc"><a name="changes"></a>Changes In This Release</h2>
 
-<p>See the <a href="https://sites.google.com/site/icusite/download/53">ICU 53 download page</a>
+<p>See the <a href="https://sites.google.com/site/icusite/download/54m1">ICU 54M1 download page</a>
 about new features in this release.
 The list of API changes since the previous ICU4J release is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-53-rc/APIChangeReport.html">here</a>.</p>
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-54-0-1/APIChangeReport.html">here</a>.</p>
 
-    <!-- ICU 53 items -->
-    <h3>Collation code re-implemented</h3>
-    <ul>
-      <li>New, incompatible data format of the binary collation data in
-        coll/*.res and coll/ucadata.icu data files.
-        coll/invuca.icu has been removed.</li>
-      <li>Data loading will not fall back to building from rules any more
-        when the binary data is missing or does not match the current implementation.
-        (This removes the dependency from the "runtime" code on the builder.)</li>
-      <li>Rule syntax and semantics tightened and improved, matching
-        <a href="http://unicode.org/repos/cldr/trunk/specs/ldml/tr35-collation.html#Rules">LDML 25 Collation Rule Syntax</a>
-        (TODO: update link for released LDML 25)
-        <ul>
-          <li>In particular, rule chains now must start with a reset.</li>
-        </ul>
-      </li>
-      <li>Setting of variableTop deprecated, and not supported in rule syntax any more
-        <ul>
-          <li>Replaced by the new maxVariable setting; see
-            <a href="http://unicode.org/repos/cldr/trunk/specs/ldml/tr35-collation.html#Collation_Settings">LDML 25 Collation Settings</a>
-            (TODO: update link for released LDML 25)</li>
-        </ul>
-      </li>
-      <li>Java Collator base class (does not apply to RuleBasedCollator instances):
-        getters for strength, decomposition mode, and locales return hardcoded default values;
-        their setters do nothing</li>
-    </ul>
+    <!-- ICU 54 items -->
+    <!-- <h3>[Subject]</h3> -->
 
-    <!-- end ICU 53 items -->
+    <!-- end ICU 54 items -->
 
 <h2 class="doc"><a name="license"></a>License Information</h2>
 <p>
@@ -188,12 +163,12 @@ mean that projects using ICU become subject to GPL.
 <p>
  The IBM version contains the essential text of the license, omitting the
 X-specific trademarks and copyright notices. The full copy of <a
- href="http://source.icu-project.org/repos/icu/icu4j/tags/release-53-rc/main/shared/licenses/license.html">ICU's license</a> is included in the download
+ href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-54-0-1/main/shared/licenses/license.html">ICU's license</a> is included in the download
 package.
 </p>
 <h2 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h2>
 <p>
-ICU4J 53 depends on J2SE 5.0 functionality.  Therefore, ICU4J only runs on
+ICU4J 54 depends on J2SE 5.0 functionality.  Therefore, ICU4J only runs on
 JRE version 5.0 or later.
 The table below shows the operating systems and JRE/VM versions currently
 used by the ICU development team to test ICU4J.
@@ -873,54 +848,54 @@ from release to release, so clients should not depend on the exact
 organization
 of the data in ICU4J.</p>
 <ul>
-  <li>The primary <b>locale data</b> is under the directory <tt>icudt53b</tt>,
+  <li>The primary <b>locale data</b> is under the directory <tt>icudt54b</tt>,
   as a set of <tt>".res"</tt> files whose names are the locale identifiers. 
   Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
   class, and the use of these names in searching for resources is documented 
   in <code>com.ibm.icu.util.UResourceBundle</code>.</li>
 
-  <li>The <b>collation data</b> is under the directory <tt>icudt53b/coll</tt>,
+  <li>The <b>collation data</b> is under the directory <tt>icudt54b/coll</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>currency display name data</b> is under the directory <tt>icudt53b/curr</tt>,
+  <li>The <b>currency display name data</b> is under the directory <tt>icudt54b/curr</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>language display name data</b> is under the directory <tt>icudt53b/lang</tt>,
+  <li>The <b>language display name data</b> is under the directory <tt>icudt54b/lang</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>region display name data</b> is under the directory <tt>icudt53b/region</tt>,
+  <li>The <b>region display name data</b> is under the directory <tt>icudt54b/region</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based transliterator data</b> is under the directory
-  <tt>icudt53b/translit</tt>, as a set of <tt>".res"</tt> files.</li>
+  <tt>icudt54b/translit</tt>, as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based number format data</b> is under the directory
-  <tt>icudt53b/rbnf</tt>, as a set of <tt>".res"</tt> files.
+  <tt>icudt54b/rbnf</tt>, as a set of <tt>".res"</tt> files.
 
   <li>The <b>break iterator data</b> is directly under the
-  directory <tt>icudt53b</tt>, as a set of <tt>".brk"</tt> files, named according to the
+  directory <tt>icudt54b</tt>, as a set of <tt>".brk"</tt> files, named according to the
   type of break and the locale where there are locale-specific versions.</li>
 
-  <li>The <b>holiday data</b> is under the directory <tt>icudt53b</tt>,
+  <li>The <b>holiday data</b> is under the directory <tt>icudt54b</tt>,
   as a set of <tt>".class"</tt> files, named <tt>"HolidayBundle_"</tt>
   followed by the locale ID.</li>
 
   <li>The <b>character property data</b> and default <b>unicode collation algorithm
-  (UCA) data</b> is found under the directory <tt>icudt53b</tt>, as a set of
+  (UCA) data</b> is found under the directory <tt>icudt54b</tt>, as a set of
   <tt>".icu"</tt> files. </li>
 
-  <li>The <b>normalization data</b> is found under the directory <tt>icudt53b</tt>,
+  <li>The <b>normalization data</b> is found under the directory <tt>icudt54b</tt>,
   as a set of <tt>".nrm"</tt> files. </li>
 
   <li>The <b>character set converter data</b> is under the directory
-  <tt>icudt53b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
+  <tt>icudt54b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
   currently included only in icu-charset.jar.</li>
 
   <li>The <b>time zone rule data</b> is under the directory 
-  <tt>icudt53b</tt>, as <tt>zoneinfo64.res</tt>.</li>
+  <tt>icudt54b</tt>, as <tt>zoneinfo64.res</tt>.</li>
 
   <li>The <b>time zone display name data</b> is under the directory
-  <tt>icudt53b/zone</tt>, as a set of <tt>".res"</tt> files.</li>
+  <tt>icudt54b/zone</tt>, as a set of <tt>".res"</tt> files.</li>
 </ul>
 <p>
 Some of the data files alias or otherwise reference data from other
@@ -1015,9 +990,9 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'release-25'</li>
-    <li>Checkout ICU4C with tag 'release-53-1'</li>
-    <li>Checkout ICU4J with tag 'release-53-1'</li>
+    <li>Checkout or download CLDR version 'release-26'</li>
+    <li>Checkout ICU4C with tag 'release-54-1'</li>
+    <li>Checkout ICU4J with tag 'release-54-1'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
@@ -1029,7 +1004,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h2 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h2>
-<p>ICU4J 53 Release Candidate includes time zone data version 2014a, which is the latest one as of
+<p>ICU4J 54 Milestone 1 includes time zone data version 2014e, which is the latest one as of
 the release date. However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
