@@ -369,7 +369,7 @@ public:
      * @param capitalizationContext A value from UDisplayContext that pertains to
      * capitalization.
      * @status Any error is returned here. 
-     * @draft ICU 53
+     * @draft ICU 54
      */
     RelativeDateTimeFormatter(
             const Locale& locale,
