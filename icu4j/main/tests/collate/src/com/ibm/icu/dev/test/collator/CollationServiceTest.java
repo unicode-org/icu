@@ -77,7 +77,8 @@ public class CollationServiceTest extends TestFmwk {
             }
             try{
                 String name = Collator.getDisplayName(fu_FU);
-                if (!"fu (FU, FOO)".equals(name)) {
+                if (!"fu (FU, FOO)".equals(name)
+                        && !"fu_FU_FOO".equals(name) /* no LocaleDisplayNamesImpl */) {
                     errln("found " + name + " for fu_FU");
                 }
             }catch(MissingResourceException ex){
@@ -85,7 +86,8 @@ public class CollationServiceTest extends TestFmwk {
             }
             try{
                 String name = Collator.getDisplayName(fu_FU, fu_FU);
-                if (!"fu (FU, FOO)".equals(name)) {
+                if (!"fu (FU, FOO)".equals(name)
+                        && !"fu_FU_FOO".equals(name) /* no LocaleDisplayNamesImpl */) {
                     errln("found " + name + " for fu_FU");
                 }
             }catch(MissingResourceException ex){
