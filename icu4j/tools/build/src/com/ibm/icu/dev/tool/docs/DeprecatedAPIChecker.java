@@ -380,7 +380,7 @@ public class DeprecatedAPIChecker {
             paramsSegment = buf.toString();
         }
 
-        if (!paramsSegment.isEmpty()) {
+        if (paramsSegment.length() > 0) {
             String[] params = paramsSegment.split("\\s*,\\s*");
             for (String p : params) {
                 if (p.endsWith("...")) {
