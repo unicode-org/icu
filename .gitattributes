@@ -143,6 +143,7 @@ icu4c/source/stubdata/stubdata.vcxproj -text
 icu4c/source/stubdata/stubdata.vcxproj.filters -text
 icu4c/source/test/cintltst/cintltst.vcxproj -text
 icu4c/source/test/cintltst/cintltst.vcxproj.filters -text
+icu4c/source/test/depstest/icu-dependencies-mode.el -text
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
 icu4c/source/test/intltest/scientificformathelpertest.cpp -text
