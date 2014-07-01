@@ -13,18 +13,39 @@
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 	<link type="text/css" href="./icu4c.css" rel="stylesheet"/>
   </head>
+    
+<!-- 
+    classes to use with the "body" - 
+        draft - if the release note is itself a draft (May be combined with the other two)
+        
+        
+        rc  - if the release note is a release candidate
+        milestone - if the release note is a milestone release
+-->
 
-  <body class="draft">
-    <h1>International Components for Unicode<br/>
-     <abbr title="International Components for Unicode">ICU</abbr> 54.1 (m1) ReadMe</h1>
+  <body class="milestone">
+    <p class="only-draft"><b>Note:</b> This is a draft readme.</p>
 
-    <p><b>Note:</b> This is a development milestone release of ICU4C 54
-    This milestone is intended for those wishing to get an early look at ICU 54 new features and API changes.
+    <h1>
+        <span class="only-draft">DRAFT</span>
+        International Components for Unicode<br/>
+
+        <span class="only-rc">Release Candidate</span>
+        <span class="only-milestone">(Milestone Release)</span>
+         <abbr title="International Components for Unicode">ICU</abbr> 54.1 (m1) ReadMe
+     </h1>
+
+    
+    <!-- Shouldn't need to comment/uncomment this paragraph, just change the body class -->
+    <p class="note only-milestone">This is a development milestone release of ICU
+    This milestone is intended for those wishing to get an early look at new features and API changes.
     It is not recommended for production use.</p>
-    <!-- <p><b>Note:</b> This is a release candidate version of ICU4C 53. -->
-    <!-- It is not recommended for production use.</p> -->
 
-    <p>Last updated: 2014-June-25<br />
+    <!-- Shouldn't need to comment/uncomment this paragraph, just change the body class -->
+    <p class="note only-rc">This is a release candidate version of ICU4C.
+     It is not recommended for production use.</p>
+
+    <p>Last updated: 2014-July-01<br />
      Copyright &copy; 1997-2014 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -213,53 +234,31 @@
     <h2><a name="News" href="#News" id="News">What is new in this
     release?</a></h2>
 
-    <p>To see which APIs are new or changed in this release, view the <a href="APIChangeReport.html">ICU4C API Change Report</a>. </p>
+    <h3>API Changes</h3>
+    <p>See the <a href="APIChangeReport.html">API Change Report</a> for a complete 
+    list of APIs added, removed, or changed in this release.</p>
 
-    <h3></h3><!-- for a horizotal rule matching those at the beginning of each h3 -->
-    <p>The following list concentrates on <em>changes that affect existing
-    applications migrating from previous ICU releases</em>.
-    For more news about this release, see the
-    <a href="http://site.icu-project.org/download/53">ICU download page</a>.
-    <!-- <a href="http://site.icu-project.org/download/milestone">ICU milestone download page</a>. -->
-    </p>
-    
     <!-- ICU 54 items -->
-    <h3>Layout Engine deprecation</h3>
+    <h3>Deprecation: Layout Engine</h3>
     <p>The LayoutEngine is now deprecated. Please
     see <a href='http://userguide.icu-project.org/layoutengine'>the
     User's Guide</a> for more details and migration recommendations.
-     Passing "--enable-layout" to configure is required to enable the layout
-    engine, it is not built by default.</p>
+     Passing "<tt>--enable-layout</tt>" to configure is now required to 
+     enable the layout engine, as it is not built by default.</p>
+    
+    <h3>Deprecation: Collation Short Strings</h3>
+    <p>The collation short naming scheme and its API functions are deprecated. 
+    Use ucol_open() with language tag collation keywords instead (see <a href="http://userguide.icu-project.org/collation/api">Collation API Details</a>). For example, <code>ucol_open("de-u-co-phonebk-ka-shifted", &amp;errorCode)</code>
+     for German Phonebook order with "ignore punctuation" mode.</p>
 
-    <!-- ICU 53 items -->
-    <h3>ICU4C now requires C99</h3>
-    <p>ICU4C must be built with compilers (or compiler options) that support C99 (ISO/IEC 9899:1999).</p>
+    <!-- standing item -->
+    <h3>Full release notes and the latest updates</h3>
+    <p>The previous list concentrates on <em>changes that affect existing
+    applications migrating from previous ICU releases</em>.
+    For more news about this release, as well as late-breaking news, see the
+    <a href="http://site.icu-project.org/download/54m1">ICU download page</a>.</p>
 
-    <h3>Collation code re-implemented</h3>
-    <ul>
-      <li>New, incompatible data format of the binary collation data in
-        coll/*.res and coll/ucadata.icu data files.
-        coll/invuca.icu has been removed.</li>
-      <li>Data loading will not fall back to building from rules any more
-        when the binary data is missing or does not match the current implementation.
-        (This removes the dependency from the "runtime" code on the builder.)</li>
-      <li>Rule syntax and semantics tightened and improved, matching
-        <a href="http://unicode.org/repos/cldr/trunk/specs/ldml/tr35-collation.html#Rules">LDML 25 Collation Rule Syntax</a>
-        (TODO: update link for released LDML 25)
-        <ul>
-          <li>In particular, rule chains now must start with a reset.</li>
-        </ul>
-      </li>
-      <li>Setting of variableTop deprecated, and not supported in rule syntax any more
-        <ul>
-          <li>Replaced by the new maxVariable setting; see
-            <a href="http://unicode.org/repos/cldr/trunk/specs/ldml/tr35-collation.html#Collation_Settings">LDML 25 Collation Settings</a>
-            (TODO: update link for released LDML 25)</li>
-        </ul>
-      </li>
-    </ul>
-
-    <!-- end ICU 53 items -->
+    <!-- end ICU 54 items -->
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
@@ -359,7 +358,12 @@
       <tr>
         <td><i>&lt;ICU&gt;</i>/source/<b>layout</b>/</td>
 
-        <td>Contains the ICU layout engine (not a rasterizer).</td>
+        <td>Contains the ICU complex text layout engine. (Deprecated)</td>
+      </tr>
+      <tr>
+        <td><i>&lt;ICU&gt;</i>/source/<b>layoutex</b>/</td>
+
+        <td>Contains the ICU paragraph layout engine.</td>
       </tr>
 
       <tr>
@@ -551,7 +555,8 @@
         (This is for historical reasons: Originally, ICU4C did not use namespaces,
         and some compilers did not support them. The default "using" statement
         preserves source code compatibility.)<br />
-        We recommend you turn this off via <code>-DU_USING_ICU_NAMESPACE=0</code>
+        If this compatibility is not an issue, we recommend you turn this off
+         via <code>-DU_USING_ICU_NAMESPACE=0</code>
         or by modifying unicode/uversion.h:
 <pre>Index: source/common/unicode/uversion.h
 ===================================================================
@@ -733,11 +738,10 @@
     <ul>
       <li>Microsoft Windows</li>
 
-      <li>Microsoft Visual C++ (see the ICU download page for the currently compatible version)</li>
-      
-      <li>NOTE: <a href="#HowToBuildCygwin">Cygwin</a> is required if using a version of MSVC other than the one
-      compatible with the supplied project files or if other compilers are used to build ICU. (e.g. GCC)</li>
+      <li>Microsoft Visual C++ (see the ICU download page for the currently compatible version)</li>      
     </ul>
+        <p class="note"><a href="#HowToBuildCygwin">Cygwin</a> is required if using a version of MSVC other than the one
+        compatible with the supplied project files or if other compilers are used to build ICU. (e.g. GCC)</p>
 
     <p>The steps are:</p>
 
@@ -776,14 +780,11 @@
        </li>
 	<li>So, for example:
 				 <br />
-		<tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Debug</b>
-		</tt>
-				<br/>  or <br />
-		<tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Release</b>
-		</tt>
-				<br/>  or <br />
-		<tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x64</b> <b>Release</b>
-		</tt></li>
+		<samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Debug</b></samp>
+				or
+		<samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Release</b></samp>
+				or
+		<samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x64</b> <b>Release</b></samp></li>
 	</ul>	
 
          <h4>Running the Tests from within Visual Studio</h4>
@@ -985,36 +986,36 @@
 
     <ol>
       <li>Decompress the icu-<i>X</i>.<i>Y</i>.tgz (or
-      icu-<i>X</i>.<i>Y</i>.tar.gz) file. For example, <tt>"gunzip -d &lt;
-      icu-<i>X</i>.<i>Y</i>.tgz | tar xvf -"</tt></li>
+      icu-<i>X</i>.<i>Y</i>.tar.gz) file. For example, <samp>gunzip -d &lt; icu-<i>X</i>.<i>Y</i>.tgz | tar xvf -</samp></li>
 
-      <li>Change directory to the "icu/source".</li>
+      <li>Change directory to <code>icu/source</code>.
+          <samp>cd icu/source</samp>
+          </li>
 
-      <li>Run <span style='font-family: monospace;'>"chmod +x runConfigureICU configure install-sh"</span> because
-      these files may have the wrong permissions.</li>
+      <li>Some files may have the wrong permissions.<samp>chmod +x runConfigureICU configure install-sh</samp></li>
 
       <li>Run the <span style='font-family: monospace;'><a href="source/runConfigureICU">runConfigureICU</a></span>
       script for your platform. (See <a href="#HowToConfigureICU">configuration
       note</a> below).</li>
 
-      <li>Type <span style='font-family: monospace;'>"gmake"</span> (or "make" if GNU make is the default make on
+      <li>Now build: <samp>gmake</samp> (or just <code>make</code> if GNU make is the default make on
       your platform) to compile the libraries and all the data files. The proper
       name of the GNU make command is printed at the end of the configuration
-      run, as in "You must use gmake to compile ICU".
+      run, as in <tt>"You must use gmake to compile ICU"</tt>.
       <br/>
       Note that the compilation command output may be simplified on your platform.  If this is the case, you will see just:
-      <blockquote><p style='background-color: #ddd; font-family: monospace; font-size: small'>gcc ... stubdata.c</p></blockquote>
+      <tt>gcc ... stubdata.c</tt>
       rather than
-      <blockquote><p style='background-color: #ddd; font-family: monospace; font-size: small'>gcc  -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -D_REENTRANT -I../common -DU_ATTRIBUTE_DEPRECATED= -O2 -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -c -DPIC -fPIC -o stubdata.o stubdata.c</p></blockquote>
-      .<br/>
+      <tt>gcc  -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -D_REENTRANT -I../common -DU_ATTRIBUTE_DEPRECATED= -O2 -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -c -DPIC -fPIC -o stubdata.o stubdata.c</tt>
+      <br/>
       If you need to see the whole compilation line,  use <span style='font-family: monospace;'>"gmake VERBOSE=1"</span>. The full compilation line will print if an error occurs.
       </li>
 
-      <li>Optionally, type <span style='font-family: monospace;'>"gmake check"</span> to run the test suite, which
+      <li>Optionally,<samp>gmake check</samp> will run the test suite, which
       checks for ICU's functionality integrity (See <a href=
       "#HowToTestWithoutGmake">testing note</a> below).</li>
 
-      <li>Type <span style='font-family: monospace;'>"gmake install"</span> to install ICU. If you used the --prefix=
+      <li>To install, <samp>gmake install</samp> to install ICU. If you used the --prefix=
       option on configure or runConfigureICU, ICU will be installed to the
       directory you specified. (See <a href="#HowToInstallICU">installation
       note</a> below).</li>
@@ -1324,7 +1325,7 @@ gnumake
 		</li>
 		<li>Set PATH or other variables as needed, such as CPPFLAGS.</li>
 		<li>Build ICU in /buildB<br />
-			<div class="note"><b>Note:</b> "<code>--with-cross-build</code>" takes an absolute path.</div>
+			<p class="note">"<code>--with-cross-build</code>" takes an absolute path.</p>
 <pre class="samp">cd /buildB
 sh /icu/source/configure --host=<strong>i586-pc-haiku</strong> --with-cross-build=<strong>/buildA</strong>
 gnumake</pre>
