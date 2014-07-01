@@ -1,3 +1,4 @@
+# -*- icu-dependencies -*-
 # Copyright (C) 2011-2014, International Business Machines
 # Corporation and others. All Rights Reserved.
 #
@@ -180,6 +181,7 @@ group: breakiterator
     uhash ustack utrie
     ucharstrie bytestrie
     normlzr  # for dictbe.o, should switch to Normalizer2
+    uvector32 # for dictbe.o
 
 group: unormcmp  # unorm_compare()
     unormcmp.o
@@ -337,7 +339,7 @@ group: unistr_cnv
 group: unistr_core
     unistr.o
   deps
-    ustrtrns appendable
+    ustrtrns appendable stringpiece
 
 group: uscript
     uscript.o  # uscript_getCode() accepts a locale ID and loads its script code data
@@ -718,7 +720,7 @@ group: appendable
 group: icuplug
     icuplug.o
   deps
-    platform
+    platform charstr
 
 group: ucol_swp
     ucol_swp.o
@@ -819,7 +821,7 @@ group: collation
   deps
     bytestream normalizer2 resourcebundle service_registration
     ucharstrieiterator uiter ulist uset usetiter uvector32 uvector64
-    uclean_i18n
+    uclean_i18n propname
 
 group: collation_builder
     # The CollationBaseDataBuilder is only called from genuca, and maybe from tests.
@@ -847,6 +849,8 @@ group: formatting
     # decimalformat
     dcfmtsym.o decfmtst.o decimfmt.o decimalformatpattern.o compactdecimalformat.o
     numfmt.o numsys.o unumsys.o unum.o winnmfmt.o
+    # scientificformathelper - would depend on dcfmtsym, so would be circular.
+    scientificformathelper.o
     # rbnf
     nfrs.o nfrule.o nfsubs.o rbnf.o
     # measureformat
@@ -872,7 +876,13 @@ group: formatting
     floating_point  # sqrt() for astro.o
     trigonometry  # for astro.o
     stdlib_qsort  # for ucurr.o (which does not use ICU's uarrsort.o)
+    sharedbreakiterator # for reldatefmt.o
     uclean_i18n
+
+group: sharedbreakiterator
+    sharedbreakiterator.o
+  deps
+    breakiterator
 
 group: digitlist
     digitlst.o decContext.o decNumber.o
@@ -926,10 +936,16 @@ group: translit
     formatting  # for Transliterator::getDisplayName()
     uclean_i18n
 
+# This is off by default, UCONFIG_NO_FILTERED_BREAK_ITERATION=0
+# so, you will see warnings:
+#Info:  group filteredbreakiterator  does not need to depend on  breakiterator
+#Info:  group filteredbreakiterator  does not need to depend on  ucharstriebuilder
 group: filteredbreakiterator
     filteredbrk.o
   deps
     breakiterator ucharstriebuilder
+    # depends on global new/delete and STL. Not recording these here.
+    # http://bugs.icu-project.org/trac/ticket/10990
 
 group: universal_time_scale
     utmscale.o
