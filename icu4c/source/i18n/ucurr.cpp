@@ -171,8 +171,8 @@ static void makeEquivalent(
         // already equivalent
         return;
     }
-    EquivIterator leftIter(*hash, lhs);
-    EquivIterator rightIter(*hash, rhs);
+    icu::EquivIterator leftIter(*hash, lhs);
+    icu::EquivIterator rightIter(*hash, rhs);
     const icu::UnicodeString *firstLeft = leftIter.next();
     const icu::UnicodeString *firstRight = rightIter.next();
     const icu::UnicodeString *nextLeft = firstLeft;
@@ -224,7 +224,7 @@ static void makeEquivalent(
 // countEquivalent does not include s itself in the count.
 static int32_t countEquivalent(const icu::Hashtable &hash, const icu::UnicodeString &s) {
     int32_t result = 0;
-    EquivIterator iter(hash, s);
+    icu::EquivIterator iter(hash, s);
     while (iter.next() != NULL) {
         ++result;
     }
@@ -1071,7 +1071,7 @@ collectCurrencyNames(const char* locale,
                 (*currencySymbols)[(*total_currency_symbol_count)++].currencyNameLen = len;
                 // Add equivalent symbols
                 if (currencySymbolsEquiv != NULL) {
-                    EquivIterator iter(*currencySymbolsEquiv, UnicodeString(TRUE, s, len));
+                  icu::EquivIterator iter(*currencySymbolsEquiv, UnicodeString(TRUE, s, len));
                     const UnicodeString *symbol;
                     while ((symbol = iter.next()) != NULL) {
                         (*currencySymbols)[*total_currency_symbol_count].IsoCode = iso;
