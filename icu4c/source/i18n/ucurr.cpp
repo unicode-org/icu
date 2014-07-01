@@ -119,6 +119,8 @@ static icu::UInitOnce gIsoCodesInitOnce = U_INITONCE_INITIALIZER;
 static const icu::Hashtable* gCurrSymbolsEquiv = NULL;
 static icu::UInitOnce gCurrSymbolsEquivInitOnce = U_INITONCE_INITIALIZER;
 
+U_NAMESPACE_BEGIN
+
 // EquivIterator iterates over all strings that are equivalent to a given
 // string, s. Note that EquivIterator will never yield s itself.
 class EquivIterator : icu::UMemory {
@@ -153,6 +155,8 @@ EquivIterator::next() {
     _current = _next;
     return _next;
 }
+
+U_NAMESPACE_END
 
 // makeEquivalent makes lhs and rhs equivalent by updating the equivalence
 // relations in hash accordingly.
