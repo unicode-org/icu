@@ -129,11 +129,11 @@ def _Resolve(name, parents):
       if symbol in _obj_files[file_name]["imports"]:
         neededFile = _symbols_to_files.get(symbol)
         if neededFile:
-          neededItem = "%s (for %s)" % (dependencies.file_to_item[neededFile], neededFile)
+          neededItem = "but %s does not depend on %s (for %s)" % (name, dependencies.file_to_item[neededFile], neededFile)
         else:
-          neededItem = "(system symbol?)"
-        sys.stderr.write("Error: in %s %s: %s imports %s but %s does not depend on %s\n" %
-                         (item_type, name, file_name, symbol, name, neededItem))
+          neededItem = "- is this a new system symbol?"
+        sys.stderr.write("Error: in %s %s: %s imports %s %s\n" %
+                         (item_type, name, file_name, symbol, neededItem))
     _return_value = 1
   del parents[-1]
   return item
