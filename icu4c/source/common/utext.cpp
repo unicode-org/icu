@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2013, International Business Machines
+*   Copyright (C) 2005-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -516,8 +516,17 @@ utext_copy(UText *ut,
 
 U_CAPI UText * U_EXPORT2
 utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCode *status) {
-    UText *result;
-    result = src->pFuncs->clone(dest, src, deep, status);
+    if (U_FAILURE(*status)) {
+        return dest;
+    }
+    UText *result = src->pFuncs->clone(dest, src, deep, status);
+    if (U_FAILURE(*status)) {
+        return result;
+    }
+    if (result == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return result;
+    }
     if (readOnly) {
         utext_freeze(result);
     }
