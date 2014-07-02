@@ -422,11 +422,6 @@ Locale &Locale::operator=(const Locale &other)
         return *this;
     }
 
-    if (&other == NULL) {
-        this->setToBogus();
-        return *this;
-    }
-
     /* Free our current storage */
     if(fullName != fullNameBuffer) {
         uprv_free(fullName);
