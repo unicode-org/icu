@@ -220,12 +220,14 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                 (capitalizationUsage != null && capitalizationUsage[usage.ordinal()]) )) {
             // Note, won't have capitalizationUsage != null && capitalizationUsage[usage.ordinal()]
             // unless capitalization is CAPITALIZATION_FOR_UI_LIST_OR_MENU or CAPITALIZATION_FOR_STANDALONE
-            if (capitalizationBrkIter == null) {
-                // should only happen when deserializing, etc.
-                capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
+            synchronized (this) {
+                if (capitalizationBrkIter == null) {
+                    // should only happen when deserializing, etc.
+                    capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
+                }
+                return UCharacter.toTitleCase(locale, name, capitalizationBrkIter,
+                        UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
             }
-            return UCharacter.toTitleCase(locale, name, capitalizationBrkIter,
-                            UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
         }
         return name;
     }
