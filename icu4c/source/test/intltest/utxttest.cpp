@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2005-2013, International Business Machines Corporation and
+ * Copyright (c) 2005-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -59,6 +59,8 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
             if (exec) Ticket6847();  break;
         case 5: name = "Ticket10562";
             if (exec) Ticket10562();  break;
+        case 6: name = "Ticket10983";
+            if (exec) Ticket10983();  break;
         default: name = "";          break;
     }
 }
@@ -1483,3 +1485,19 @@ void UTextTest::Ticket10562() {
     utext_close(usText);
 }
 
+
+void UTextTest::Ticket10983() {
+    // Note: failure shows as a seg fault when the defect is present.
+
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString s("Hello, World");
+    UText *ut = utext_openConstUnicodeString(NULL, &s, &status);
+    TEST_SUCCESS(status);
+
+    status = U_INVALID_STATE_ERROR;
+    UText *cloned = utext_clone(NULL, ut, TRUE, TRUE, &status);
+    TEST_ASSERT(cloned == NULL);
+    TEST_ASSERT(status == U_INVALID_STATE_ERROR);
+
+    utext_close(ut);
+}
