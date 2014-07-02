@@ -10,7 +10,7 @@
 
 #include "unicode/reldatefmt.h"
 
-#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/localpointer.h"
 #include "quantityformatter.h"

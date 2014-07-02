@@ -13,7 +13,7 @@
 
 #include "intltest.h"
 
-#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/localpointer.h"
 #include "unicode/numfmt.h"
@@ -628,6 +628,10 @@ void RelativeDateTimeFormatterTest::TestEnglishCaps() {
             UDAT_STYLE_LONG,
             UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,
             status);
+    if (U_FAILURE(status)) {
+        dataerrln("Failed call to RelativeDateTimeFormatter(\"en\", NULL, UDAT_STYLE_LONG, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, status); : %s", u_errorName(status));
+        return;
+    }
     RelativeDateTimeFormatter fmt3(status);
 
     // Test assignment and copy constructor with capitalization on.
@@ -665,7 +669,9 @@ void RelativeDateTimeFormatterTest::TestEnglishNoQuantityCaps() {
             UDAT_STYLE_LONG,
             UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,
             status);
-    assertSuccess("", status);
+    if (assertSuccess("RelativeDateTimeFormatter", status, TRUE) == FALSE) {
+        return;
+    }
     RunTest(
             fmt,
             kEnglishNoQuantityCaps,
@@ -750,6 +756,10 @@ void RelativeDateTimeFormatterTest::TestGetters() {
             UDAT_STYLE_NARROW,
             UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
             status);
+    if (U_FAILURE(status)) {
+        dataerrln("Failed call to RelativeDateTimeFormatter(\"en\", NULL, UDAT_STYLE_NARROW, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, status);) : %s", u_errorName(status));
+        return;
+    }
     RelativeDateTimeFormatter fmt3(status);
 
     // copy and assignment.

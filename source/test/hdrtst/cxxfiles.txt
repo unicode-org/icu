@@ -74,6 +74,7 @@ region.h
 rep.h
 resbund.h
 schriter.h
+scientificformathelper.h
 search.h
 selfmt.h
 simpletz.h

@@ -1683,7 +1683,7 @@ void DateFormatRegressionTest::TestT10855(void) {
 
         SimpleDateFormat dateFmt(items[x].pattern, status);
         if(U_FAILURE(status)) { 
-            errln(u_errorName(status)); 
+            errcheckln(status, "Failed dateFmt: %s", u_errorName(status));
             ++x;
             continue;
         } 

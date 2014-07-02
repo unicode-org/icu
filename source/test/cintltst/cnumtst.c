@@ -2560,6 +2560,7 @@ static void TestCurrencyUsage(void) {
         if (U_FAILURE(status)) {
             log_data_err("FAIL: unum_open, locale %s, style %d - %s\n",
                         localeString, (int)style, myErrorName(status));
+            continue;
         }
 
         if(i == 0){ // this is for the getter/setter
