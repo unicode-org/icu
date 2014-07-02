@@ -22,7 +22,7 @@
  * \brief C++ API: Formats relative dates such as "1 day ago" or "tomorrow"
  */
 
-#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_BREAK_ITERATION
 
 #ifndef U_HIDE_DRAFT_API
 
@@ -494,5 +494,5 @@ U_NAMESPACE_END
 
 #endif /* U_HIDE_DRAFT_API */
 
-#endif /* !UCONFIG_NO_FORMATTING */
+#endif /* !UCONFIG_NO_FORMATTING && !UCONFIG_NO_BREAK_ITERATION*/
 #endif

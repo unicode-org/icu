@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2013, International Business Machines Corporation
+ * Copyright (c) 2013-2014, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -415,13 +415,13 @@ void RegionTest::TestGetInstanceString() {
     UErrorCode status = U_ZERO_ERROR;
     const Region *r = Region::getInstance((const char *)NULL,status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
-        errln("Calling Region::getInstance(NULL) should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't.");
+        errcheckln(status, "Calling Region::getInstance(NULL) should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't. - %s", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     r = Region::getInstance("BOGUS",status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
-        errln("Calling Region::getInstance(\"BOGUS\") should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't.");
+        errcheckln(status, "Calling Region::getInstance(\"BOGUS\") should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't. - %s", u_errorName(status));
     }
 
 
@@ -466,7 +466,7 @@ void RegionTest::TestGetInstanceInt() {
     UErrorCode status = U_ZERO_ERROR;
     Region::getInstance(-123,status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
-        errln("Calling Region::getInstance(-123) should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't.");
+        errcheckln(status, "Calling Region::getInstance(-123) should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't. - %s", u_errorName(status));
     }
 
     for (int32_t i = 0 ; i < LENGTHOF(testData) ; i++ ) {

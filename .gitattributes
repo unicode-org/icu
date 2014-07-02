@@ -3229,10 +3229,6 @@ icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
 icu4c/source/i18n/regexcst.txt svneol=native#text/plain
-icu4c/source/i18n/scientificformathelper.cpp -text
-icu4c/source/i18n/sharedbreakiterator.cpp -text
-icu4c/source/i18n/sharedbreakiterator.h -text
-icu4c/source/i18n/unicode/scientificformathelper.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text
@@ -3334,7 +3330,6 @@ icu4c/source/test/hdrtst/dfiles.txt svneol=native#text/plain
 icu4c/source/test/hdrtst/pfiles.txt svneol=native#text/plain
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
-icu4c/source/test/intltest/scientificformathelpertest.cpp -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/iotest/iotest.vcxproj.filters -text
 icu4c/source/test/letest/cletest.vcxproj -text
