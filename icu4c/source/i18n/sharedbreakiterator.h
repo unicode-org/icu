@@ -12,6 +12,8 @@
 #include "unicode/utypes.h"
 #include "sharedobject.h"
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 U_NAMESPACE_BEGIN
 
 class BreakIterator;
@@ -39,5 +41,7 @@ private:
 };
 
 U_NAMESPACE_END
+
+#endif
 
 #endif

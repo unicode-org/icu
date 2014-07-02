@@ -11,6 +11,8 @@
 #include "sharedbreakiterator.h"
 #include "unicode/brkiter.h"
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 U_NAMESPACE_BEGIN
 
 SharedBreakIterator::SharedBreakIterator(
@@ -22,3 +24,4 @@ SharedBreakIterator::~SharedBreakIterator() {
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

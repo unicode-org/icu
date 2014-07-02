@@ -4419,6 +4419,10 @@ void DateFormatTest::TestParseLeniencyAPIs() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DateFormat> dateFormat(DateFormat::createDateInstance());
     DateFormat *fmt = dateFormat.getAlias();
+    if (fmt == NULL) {
+        dataerrln("Failed calling dateFormat.getAlias()");
+        return;
+    }
 
     assertTrue("isLenient default", fmt->isLenient());
     assertTrue("isCalendarLenient default", fmt->isCalendarLenient());

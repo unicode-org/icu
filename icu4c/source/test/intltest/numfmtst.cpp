@@ -7641,7 +7641,9 @@ void NumberFormatTest::TestCurrencyUsage() {
         status = U_ZERO_ERROR;
         if(i == 0){
             fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_TWD, UNUM_CURRENCY, status);
-            assertSuccess("en_US@currency=TWD/CURRECY", status);
+            if (assertSuccess("en_US@currency=TWD/CURRECY", status, TRUE) == FALSE) {
+                continue;
+            }
 
             UnicodeString original;
             fmt->format(agent,original);
@@ -7654,7 +7656,9 @@ void NumberFormatTest::TestCurrencyUsage() {
             fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
         }else{
             fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_TWD, UNUM_CASH_CURRENCY, status);
-            assertSuccess("en_US@currency=TWD/CASH", status);
+            if (assertSuccess("en_US@currency=TWD/CASH", status, TRUE) == FALSE) {
+                continue;
+            }
         }
 
         // must be usage = cash
@@ -7674,7 +7678,9 @@ void NumberFormatTest::TestCurrencyUsage() {
         status = U_ZERO_ERROR;
         if(i == 0){
             fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CURRENCY, status);
-            assertSuccess("en_US@currency=CAD/CURRECY", status);
+            if (assertSuccess("en_US@currency=CAD/CURRECY", status, TRUE) == FALSE) {
+                continue;
+            }
 
             UnicodeString original_rounding;
             fmt->format(agent, original_rounding);
@@ -7682,7 +7688,9 @@ void NumberFormatTest::TestCurrencyUsage() {
             fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
         }else{
             fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CASH_CURRENCY, status); 
-            assertSuccess("en_US@currency=CAD/CASH", status);
+            if (assertSuccess("en_US@currency=CAD/CASH", status, TRUE) == FALSE) {
+                continue;
+            }
         }
 
         UnicodeString cash_rounding_currency;
@@ -7698,11 +7706,15 @@ void NumberFormatTest::TestCurrencyUsage() {
         status = U_ZERO_ERROR;
         if(i == 0){
             fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CURRENCY, status);
-            assertSuccess("en_US@currency=CAD/CURRECY", status);
+            if (assertSuccess("en_US@currency=CAD/CURRECY", status, TRUE) == FALSE) {
+                continue;
+            }
             fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
         }else{
             fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CASH_CURRENCY, status);
-            assertSuccess("en_US@currency=CAD/CASH", status);
+            if (assertSuccess("en_US@currency=CAD/CASH", status, TRUE) == FALSE) {
+                continue;
+            }
         }
 
         UnicodeString cur_original;

@@ -49,6 +49,10 @@ void ScientificFormatHelperTest::runIndexedTest(
 void ScientificFormatHelperTest::TestBasic() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createScientificInstance("en", status));
+    if (U_FAILURE(status)) {
+        dataerrln("Failed call NumberFormat::createScientificInstance(\"en\", status) - %s", u_errorName(status));
+        return;
+    }
     UnicodeString appendTo("String: ");
     FieldPositionIterator fpositer;
     decfmt->format(1.23456e-78, appendTo, &fpositer, status);
@@ -80,6 +84,10 @@ void ScientificFormatHelperTest::TestBasic() {
 void ScientificFormatHelperTest::TestFarsi() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createScientificInstance("fa", status));
+    if (U_FAILURE(status)) {
+        dataerrln("Failed call NumberFormat::createScientificInstance(\"fa\", status) - %s", u_errorName(status));
+        return;
+    }
     UnicodeString appendTo("String: ");
     FieldPositionIterator fpositer;
     decfmt->format(1.23456e-78, appendTo, &fpositer, status);
@@ -96,6 +104,10 @@ void ScientificFormatHelperTest::TestFarsi() {
 void ScientificFormatHelperTest::TestPlusSignInExponentMarkup() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createScientificInstance("en", status));
+    if (U_FAILURE(status)) {
+        dataerrln("Failed call NumberFormat::createScientificInstance(\"en\", status) - %s", u_errorName(status));
+        return;
+    }
     decfmt->applyPattern("0.00E+0", status);
     assertSuccess("", status);
     UnicodeString appendTo;
@@ -114,6 +126,10 @@ void ScientificFormatHelperTest::TestPlusSignInExponentMarkup() {
 void ScientificFormatHelperTest::TestPlusSignInExponentSuperscript() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createScientificInstance("en", status));
+    if (U_FAILURE(status)) {
+        dataerrln("Failed call NumberFormat::createScientificInstance(\"en\", status) - %s", u_errorName(status));
+        return;
+    }
     decfmt->applyPattern("0.00E+0", status);
     assertSuccess("", status);
     UnicodeString appendTo;
@@ -132,7 +148,9 @@ void ScientificFormatHelperTest::TestPlusSignInExponentSuperscript() {
 void ScientificFormatHelperTest::TestFixedDecimalMarkup() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createInstance("en", status));
-    assertSuccess("", status);
+    if (assertSuccess("NumberFormat::createInstance", status, TRUE) == FALSE) {
+        return;
+    }
     UnicodeString appendTo;
     FieldPositionIterator fpositer;
     decfmt->format(123456.0, appendTo, &fpositer, status);
@@ -148,7 +166,9 @@ void ScientificFormatHelperTest::TestFixedDecimalMarkup() {
 void ScientificFormatHelperTest::TestFixedDecimalSuperscript() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createInstance("en", status));
-    assertSuccess("", status);
+    if (assertSuccess("NumberFormat::createInstance", status, TRUE) == FALSE) {
+        return;
+    }
     UnicodeString appendTo;
     FieldPositionIterator fpositer;
     decfmt->format(123456.0, appendTo, &fpositer, status);
