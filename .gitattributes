@@ -3936,7 +3936,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/ReplaceableString.java svneol=nativ
 icu4j/main/classes/core/src/com/ibm/icu/text/RuleBasedBreakIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RuleBasedNumberFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SCSU.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/ScientificFormatHelper.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/ScientificFormatHelper.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SelectFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SimpleDateFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SpoofChecker.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4342,7 +4342,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RBNFParseTest.java svneol=
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RbnfRoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RbnfTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RelativeDateTimeFormatterTest.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/ScientificFormatHelperTest.java -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/ScientificFormatHelperTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/SelectFormatAPITest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/SelectFormatUnitTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4898,7 +4898,7 @@ icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CheckAPI.java svneol=native#text
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CheckTags.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CodeMangler.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CollectAPI.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/DeprecatedAPIChecker.java -text
+icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/DeprecatedAPIChecker.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/Deprecator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/GatherAPIData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/GatherAPIDataOld.java svneol=native#text/plain%3Bcharset%3Dutf-8
