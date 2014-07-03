@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,13 +10,18 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
+import com.ibm.icu.text.NumberingSystem;
+import com.ibm.icu.text.PluralRanges;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
+import com.ibm.icu.text.PluralRules.StandardPluralCategories;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -29,6 +34,8 @@ public class PluralRulesLoader extends PluralRules.Factory {
     private Map<String, String> localeIdToCardinalRulesId;
     private Map<String, String> localeIdToOrdinalRulesId;
     private Map<String, ULocale> rulesIdToEquivalentULocale;
+    private static Map<String, PluralRanges> localeIdToPluralRanges;
+
 
     /**
      * Access through singleton.
@@ -140,7 +147,7 @@ public class PluralRulesLoader extends PluralRules.Factory {
                 tempLocaleIdToOrdinalRulesId = Collections.emptyMap();
                 tempRulesIdToEquivalentULocale = Collections.emptyMap();
             }
-            
+
             synchronized(this) {
                 if (localeIdToCardinalRulesId == null) {
                     localeIdToCardinalRulesId = tempLocaleIdToCardinalRulesId;
@@ -252,5 +259,246 @@ public class PluralRulesLoader extends PluralRules.Factory {
     @Override
     public boolean hasOverride(ULocale locale) {
         return false;
+    }
+    
+    private static final PluralRanges UNKNOWN_RANGE = new PluralRanges().freeze();
+
+    public PluralRanges getPluralRanges(ULocale locale) {
+        // TODO markdavis Fix the bad fallback, here and elsewhere in this file.
+        String localeId = ULocale.canonicalize(locale.getBaseName());
+        PluralRanges result;
+        while (null == (result = localeIdToPluralRanges.get(localeId))) {
+            int ix = localeId.lastIndexOf("_");
+            if (ix == -1) {
+                result = UNKNOWN_RANGE;
+                break;
+            }
+            localeId = localeId.substring(0, ix);
+        }
+        return result;
+    }
+
+    public boolean isPluralRangesAvailable(ULocale locale) {
+        return getPluralRanges(locale) == UNKNOWN_RANGE;
+    }
+
+    // TODO markdavis FIX HARD-CODED HACK once we have data from CLDR in the bundles
+    static {
+        String[][] pluralRangeData = {
+                {"locales", "id ja km ko lo ms my th vi zh"},
+                {"other", "other", "other"},
+
+                {"locales", "am bn fr gu hi hy kn mr pa zu"},
+                {"one", "one", "one"},
+                {"one", "other", "other"},
+                {"other", "other", "other"},
+
+                {"locales", "fa"},
+                {"one", "one", "other"},
+                {"one", "other", "other"},
+                {"other", "other", "other"},
+
+                {"locales", "ka"},
+                {"one", "other", "one"},
+                {"other", "one", "other"},
+                {"other", "other", "other"},
+
+                {"locales", "az de el gl hu it kk ky ml mn ne nl pt sq sw ta te tr ug uz"},
+                {"one", "other", "other"},
+                {"other", "one", "one"},
+                {"other", "other", "other"},
+
+                {"locales", "af bg ca en es et eu fi nb sv ur"},
+                {"one", "other", "other"},
+                {"other", "one", "other"},
+                {"other", "other", "other"},
+
+                {"locales", "da fil is"},
+                {"one", "one", "one"},
+                {"one", "other", "other"},
+                {"other", "one", "one"},
+                {"other", "other", "other"},
+
+                {"locales", "si"},
+                {"one", "one", "one"},
+                {"one", "other", "other"},
+                {"other", "one", "other"},
+                {"other", "other", "other"},
+
+                {"locales", "mk"},
+                {"one", "one", "other"},
+                {"one", "other", "other"},
+                {"other", "one", "other"},
+                {"other", "other", "other"},
+
+                {"locales", "lv"},
+                {"zero", "zero", "other"},
+                {"zero", "one", "one"},
+                {"zero", "other", "other"},
+                {"one", "zero", "other"},
+                {"one", "one", "one"},
+                {"one", "other", "other"},
+                {"other", "zero", "other"},
+                {"other", "one", "one"},
+                {"other", "other", "other"},
+
+                {"locales", "ro"},
+                {"one", "few", "few"},
+                {"one", "other", "other"},
+                {"few", "one", "few"},
+                {"few", "few", "few"},
+                {"few", "other", "other"},
+                {"other", "few", "few"},
+                {"other", "other", "other"},
+
+                {"locales", "hr sr bs"},
+                {"one", "one", "one"},
+                {"one", "few", "few"},
+                {"one", "other", "other"},
+                {"few", "one", "one"},
+                {"few", "few", "few"},
+                {"few", "other", "other"},
+                {"other", "one", "one"},
+                {"other", "few", "few"},
+                {"other", "other", "other"},
+
+                {"locales", "sl"},
+                {"one", "one", "few"},
+                {"one", "two", "two"},
+                {"one", "few", "few"},
+                {"one", "other", "other"},
+                {"two", "one", "few"},
+                {"two", "two", "two"},
+                {"two", "few", "few"},
+                {"two", "other", "other"},
+                {"few", "one", "few"},
+                {"few", "two", "two"},
+                {"few", "few", "few"},
+                {"few", "other", "other"},
+                {"other", "one", "few"},
+                {"other", "two", "two"},
+                {"other", "few", "few"},
+                {"other", "other", "other"},
+
+                {"locales", "he"},
+                {"one", "two", "other"},
+                {"one", "many", "many"},
+                {"one", "other", "other"},
+                {"two", "many", "other"},
+                {"two", "other", "other"},
+                {"many", "many", "many"},
+                {"many", "other", "many"},
+                {"other", "one", "other"},
+                {"other", "two", "other"},
+                {"other", "many", "many"},
+                {"other", "other", "other"},
+
+                {"locales", "cs pl sk"},
+                {"one", "few", "few"},
+                {"one", "many", "many"},
+                {"one", "other", "other"},
+                {"few", "few", "few"},
+                {"few", "many", "many"},
+                {"few", "other", "other"},
+                {"many", "one", "one"},
+                {"many", "few", "few"},
+                {"many", "many", "many"},
+                {"many", "other", "other"},
+                {"other", "one", "one"},
+                {"other", "few", "few"},
+                {"other", "many", "many"},
+                {"other", "other", "other"},
+
+                {"locales", "lt ru uk"},
+                {"one", "one", "one"},
+                {"one", "few", "few"},
+                {"one", "many", "many"},
+                {"one", "other", "other"},
+                {"few", "one", "one"},
+                {"few", "few", "few"},
+                {"few", "many", "many"},
+                {"few", "other", "other"},
+                {"many", "one", "one"},
+                {"many", "few", "few"},
+                {"many", "many", "many"},
+                {"many", "other", "other"},
+                {"other", "one", "one"},
+                {"other", "few", "few"},
+                {"other", "many", "many"},
+                {"other", "other", "other"},
+
+                {"locales", "cy"},
+                {"zero", "one", "one"},
+                {"zero", "two", "two"},
+                {"zero", "few", "few"},
+                {"zero", "many", "many"},
+                {"zero", "other", "other"},
+                {"one", "two", "two"},
+                {"one", "few", "few"},
+                {"one", "many", "many"},
+                {"one", "other", "other"},
+                {"two", "few", "few"},
+                {"two", "many", "many"},
+                {"two", "other", "other"},
+                {"few", "many", "many"},
+                {"few", "other", "other"},
+                {"many", "other", "other"},
+                {"other", "one", "one"},
+                {"other", "two", "two"},
+                {"other", "few", "few"},
+                {"other", "many", "many"},
+                {"other", "other", "other"},
+
+                {"locales", "ar"},
+                {"zero", "one", "zero"},
+                {"zero", "two", "zero"},
+                {"zero", "few", "few"},
+                {"zero", "many", "many"},
+                {"zero", "other", "other"},
+                {"one", "two", "other"},
+                {"one", "few", "few"},
+                {"one", "many", "many"},
+                {"one", "other", "other"},
+                {"two", "few", "few"},
+                {"two", "many", "many"},
+                {"two", "other", "other"},
+                {"few", "few", "few"},
+                {"few", "many", "many"},
+                {"few", "other", "other"},
+                {"many", "few", "few"},
+                {"many", "many", "many"},
+                {"many", "other", "other"},
+                {"other", "one", "other"},
+                {"other", "two", "other"},
+                {"other", "few", "few"},
+                {"other", "many", "many"},
+                {"other", "other", "other"},     
+        };
+        PluralRanges pr = null;
+        String[] locales = null;
+        HashMap<String, PluralRanges> tempLocaleIdToPluralRanges = new HashMap<String, PluralRanges>();
+        for (String[] row : pluralRangeData) {
+            if (row[0].equals("locales")) {
+                if (pr != null) {
+                    pr.freeze();
+                    for (String locale : locales) {
+                        tempLocaleIdToPluralRanges.put(locale, pr);
+                    }
+                }
+                locales = row[1].split(" ");
+                pr = new PluralRanges();
+            } else {
+                pr.add(
+                        StandardPluralCategories.valueOf(row[0]),
+                        StandardPluralCategories.valueOf(row[1]),
+                        StandardPluralCategories.valueOf(row[2]));
+            }
+        }
+        // do last one
+        for (String locale : locales) {
+            tempLocaleIdToPluralRanges.put(locale, pr);
+        }
+        // now make whole thing immutable
+        localeIdToPluralRanges = Collections.unmodifiableMap(tempLocaleIdToPluralRanges);
     }
 }

@@ -3912,6 +3912,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/NumberFormat.java svneol=native#tex
 icu4j/main/classes/core/src/com/ibm/icu/text/NumberFormatServiceShim.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/NumberingSystem.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/PluralRanges.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralRules.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralRulesSerialProxy.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralSamples.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4336,6 +4337,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt 
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberRegression.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralFormatUnitTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralRangesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralRulesFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralRulesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RBNFParseTest.java svneol=native#text/plain%3Bcharset%3Dutf-8

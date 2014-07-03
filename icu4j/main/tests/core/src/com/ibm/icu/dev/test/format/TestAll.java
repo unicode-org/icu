@@ -63,6 +63,7 @@ public class TestAll extends TestGroup {
                 "IntlTestDecimalFormatAPIC",
                 "IntlTestDecimalFormatSymbols",
                 "IntlTestDecimalFormatSymbolsC",
+                "PluralRangesTest",
             });
         }
     }
