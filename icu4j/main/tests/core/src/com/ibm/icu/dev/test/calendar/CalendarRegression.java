@@ -2362,7 +2362,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
     public void TestWeekendData_10560() {
         assertEquals("World", new Calendar.WeekData(2, 1, 7, 0, 1, 86400000), Calendar.getWeekDataForRegion("001"));
         assertEquals("Illegal code => world", Calendar.getWeekDataForRegion("001"), Calendar.getWeekDataForRegion("xx"));
-        assertEquals("FR = US", Calendar.getWeekDataForRegion("FR"), Calendar.getWeekDataForRegion("US"));
+        assertEquals("FR = DE", Calendar.getWeekDataForRegion("FR"), Calendar.getWeekDataForRegion("DE"));
         assertNotEquals("IN ≠ world", Calendar.getWeekDataForRegion("001"), Calendar.getWeekDataForRegion("IN"));
         assertNotEquals("FR ≠ EG", Calendar.getWeekDataForRegion("FR"), Calendar.getWeekDataForRegion("EG"));
     }
