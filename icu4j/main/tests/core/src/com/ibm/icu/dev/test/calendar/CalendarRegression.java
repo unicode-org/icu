@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2358,6 +2358,16 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         logln("sdf2: " + pos2.getErrorIndex() + "/" + pos2.getIndex());
         assertTrue("Fail: failed to detect bad parse", pos2.getErrorIndex() == 0);
     }
+    
+    public void TestWeekendData_10560() {
+        assertEquals("World", new Calendar.WeekData(2, 1, 7, 0, 1, 86400000), Calendar.getWeekDataForRegion("001"));
+        assertEquals("Illegal code => world", Calendar.getWeekDataForRegion("001"), Calendar.getWeekDataForRegion("xx"));
+        assertEquals("FR = US", Calendar.getWeekDataForRegion("FR"), Calendar.getWeekDataForRegion("US"));
+        assertNotEquals("IN ≠ world", Calendar.getWeekDataForRegion("001"), Calendar.getWeekDataForRegion("IN"));
+        assertNotEquals("FR ≠ EG", Calendar.getWeekDataForRegion("FR"), Calendar.getWeekDataForRegion("EG"));
+    }
+
+
 }
 
 //eof
