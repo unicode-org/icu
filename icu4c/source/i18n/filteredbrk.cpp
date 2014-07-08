@@ -11,15 +11,107 @@
 
 #include <unicode/ucharstriebuilder.h>
 
-#include <set>
-#include <string>
-#include <functional>
 #include "uresimp.h"
 #include "ubrkimpl.h"
-
+#include "uvector.h"
 U_NAMESPACE_BEGIN
 
-using namespace std;
+#ifndef FB_DEBUG
+#define FB_DEBUG 0
+#endif
+
+#if FB_DEBUG
+#include <stdio.h>
+static void _fb_trace(const char *m, const UnicodeString *s, UBool b, int32_t d, const char *f, int l) {
+  char buf[2048];
+  if(s) {
+    s->extract(0,s->length(),buf,2048);
+  } else {
+    strcpy(buf,"NULL");
+  }
+  fprintf(stderr,"%s:%d: %s. s='%s'(%p), b=%c, d=%d\n",
+          f, l, m, buf, (const void*)s, b?'T':'F',(int)d);
+}
+
+#define FB_TRACE(m,s,b,d) _fb_trace(m,s,b,d,__FILE__,__LINE__)
+#else
+#define FB_TRACE(m,s,b,d)
+#endif
+
+static int8_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
+    const UnicodeString &a = *(const UnicodeString*)t1.pointer;
+    const UnicodeString &b = *(const UnicodeString*)t2.pointer;
+    return a.compare(b);
+}
+
+/**
+ * A UVector which implements a set of strings.
+ */
+class U_I18N_API UStringSet : public UVector {
+ public:
+  UStringSet(UErrorCode &status) : UVector(uprv_deleteUObject,
+                                           uhash_compareUnicodeString,
+                                           1,
+                                           status) {}
+  virtual ~UStringSet();
+  /**
+   * Is this UnicodeSet contained?
+   */
+  inline UBool contains(const UnicodeString& s) {
+    return contains((void*) &s);
+  }
+  using UVector::contains;
+  /**
+   * Return the ith UnicodeString alias
+   */
+  inline const UnicodeString* getStringAt(int32_t i) const {
+    return (const UnicodeString*)elementAt(i);
+  }
+  /**
+   * Adopt the UnicodeString if not already contained.
+   * Caller no longer owns the pointer in any case.
+   * @return true if adopted successfully, false otherwise (error, or else duplicate)
+   */
+  inline UBool adopt(UnicodeString *str, UErrorCode &status) {
+    if(U_FAILURE(status) || contains(*str)) {
+      delete str;
+      return false;
+    } else {
+      sortedInsert(str, compareUnicodeString, status);
+      if(U_FAILURE(status)) {
+        delete str;
+        return false;
+      }
+      return true;
+    }
+  }
+  /**
+   * Add by value.
+   * @return true if successfully adopted.
+   */
+  inline UBool add(const UnicodeString& str, UErrorCode &status) {
+    if(U_FAILURE(status)) return false;
+    UnicodeString *t = new UnicodeString(str);
+    if(t==NULL) {
+      status = U_MEMORY_ALLOCATION_ERROR; return false;
+    }
+    return adopt(t, status);
+  }
+  /**
+   * Remove this string.
+   * @return true if successfully removed, false otherwise (error, or else it wasn't there)
+   */
+  inline UBool remove(const UnicodeString &s, UErrorCode &status) {
+    if(U_FAILURE(status)) return false;
+    return removeElement((void*) &s);
+  }
+};
+
+/**
+ * Virtual, won't be inlined
+ */
+UStringSet::~UStringSet() {}
+
 
 static const int32_t kPARTIAL = (1<<0); //< partial - need to run through forward trie
 static const int32_t kMATCH   = (1<<1); //< exact match - skip this one.
@@ -27,11 +119,11 @@ static const int32_t kSuppressInReverse = (1<<0);
 static const int32_t kAddToForward = (1<<1);
 static const UChar kFULLSTOP = 0x002E; // '.'
 
-class ULISentenceBreakIterator : public BreakIterator {
+class SimpleFilteredSentenceBreakIterator : public BreakIterator {
 public:
-  ULISentenceBreakIterator(BreakIterator *adopt, UCharsTrie *forwards, UCharsTrie *backwards, UErrorCode &status);
-  virtual ~ULISentenceBreakIterator() {}
-  ULISentenceBreakIterator(const ULISentenceBreakIterator& other);
+  SimpleFilteredSentenceBreakIterator(BreakIterator *adopt, UCharsTrie *forwards, UCharsTrie *backwards, UErrorCode &status);
+  virtual ~SimpleFilteredSentenceBreakIterator() {}
+  SimpleFilteredSentenceBreakIterator(const SimpleFilteredSentenceBreakIterator& other);
 private:
   LocalPointer<BreakIterator> fDelegate;
   LocalUTextPointer           fText;
@@ -48,7 +140,7 @@ public:
     status = U_SAFECLONE_ALLOCATED_WARNING;
     return clone();
   }
-  virtual BreakIterator* clone(void) const { return new ULISentenceBreakIterator(*this); }
+  virtual BreakIterator* clone(void) const { return new SimpleFilteredSentenceBreakIterator(*this); }
   virtual UClassID getDynamicClassID(void) const { return NULL; }
   virtual UBool operator==(const BreakIterator& o) const { if(*this==o) return true; return false; }
 
@@ -77,7 +169,7 @@ public:
 
 };
 
-ULISentenceBreakIterator::ULISentenceBreakIterator(const ULISentenceBreakIterator& other)
+SimpleFilteredSentenceBreakIterator::SimpleFilteredSentenceBreakIterator(const SimpleFilteredSentenceBreakIterator& other)
   : BreakIterator(other), fDelegate(other.fDelegate->clone())
 {
   /*
@@ -92,7 +184,7 @@ ULISentenceBreakIterator::ULISentenceBreakIterator(const ULISentenceBreakIterato
 }
 
 
-ULISentenceBreakIterator::ULISentenceBreakIterator(BreakIterator *adopt, UCharsTrie *forwards, UCharsTrie *backwards, UErrorCode &status) :
+SimpleFilteredSentenceBreakIterator::SimpleFilteredSentenceBreakIterator(BreakIterator *adopt, UCharsTrie *forwards, UCharsTrie *backwards, UErrorCode &status) :
   BreakIterator(adopt->getLocale(ULOC_VALID_LOCALE,status),adopt->getLocale(ULOC_ACTUAL_LOCALE,status)),
   fDelegate(adopt),
   fBackwardsTrie(backwards),
@@ -101,7 +193,7 @@ ULISentenceBreakIterator::ULISentenceBreakIterator(BreakIterator *adopt, UCharsT
   // all set..
 }
 
-int32_t ULISentenceBreakIterator::next() {
+int32_t SimpleFilteredSentenceBreakIterator::next() {
   int32_t n = fDelegate->next();
   if(n == UBRK_DONE || // at end  or
      fBackwardsTrie.isNull()) { // .. no backwards table loaded == no exceptions
@@ -196,40 +288,32 @@ int32_t ULISentenceBreakIterator::next() {
   return n;
 }
 
-U_NAMESPACE_END
-
-#if 0
-// Would improve performance - but, platform issues.
-// for the 'set'
-namespace std {
-  template <> struct hash<icu::UnicodeString> {
-    size_t operator()( const UnicodeString& str ) const {
-      return (size_t)str.hashCode();
-    }
-  };
-}
-#endif
-
-U_NAMESPACE_BEGIN
-
+/**
+ * Concrete implementation of builder class.
+ */
 class SimpleFilteredBreakIteratorBuilder : public FilteredBreakIteratorBuilder {
 public:
   virtual ~SimpleFilteredBreakIteratorBuilder();
   SimpleFilteredBreakIteratorBuilder(const Locale &fromLocale, UErrorCode &status);
-  SimpleFilteredBreakIteratorBuilder();
+  SimpleFilteredBreakIteratorBuilder(UErrorCode &status);
   virtual UBool suppressBreakAfter(const UnicodeString& exception, UErrorCode& status);
   virtual UBool unsuppressBreakAfter(const UnicodeString& exception, UErrorCode& status);
   virtual BreakIterator *build(BreakIterator* adoptBreakIterator, UErrorCode& status);
 private:
-  set<UnicodeString> fSet;
+  UStringSet fSet;
 };
 
 SimpleFilteredBreakIteratorBuilder::~SimpleFilteredBreakIteratorBuilder()
 {
 }
 
+SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder(UErrorCode &status) 
+  : fSet(status)
+{
+}
+
 SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder(const Locale &fromLocale, UErrorCode &status)
-  : fSet()
+  : fSet(status)
 {
   if(U_SUCCESS(status)) {
     LocalUResourceBundlePointer b(ures_open(U_ICUDATA_BRKITR, fromLocale.getBaseName(), &status));
@@ -252,23 +336,20 @@ SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder(const Loc
   }
 }
 
-SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder()
-  : fSet()
-{
-}
-
 UBool
 SimpleFilteredBreakIteratorBuilder::suppressBreakAfter(const UnicodeString& exception, UErrorCode& status)
 {
-  if( U_FAILURE(status) ) return FALSE;
-  return fSet.insert(exception).second;
+  UBool r = fSet.add(exception, status);
+  FB_TRACE("suppressBreakAfter",&exception,r,0);
+  return r;
 }
 
 UBool
 SimpleFilteredBreakIteratorBuilder::unsuppressBreakAfter(const UnicodeString& exception, UErrorCode& status)
 {
-  if( U_FAILURE(status) ) return FALSE;
-  return ((fSet.erase(exception)) != 0);
+  UBool r = fSet.remove(exception, status);
+  FB_TRACE("unsuppressBreakAfter",&exception,r,0);
+  return r;
 }
 
 BreakIterator *
@@ -293,11 +374,19 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   LocalPointer<UCharsTrie>    forwardsPartialTrie; //  Has ".a" for "a.M."
 
   int n=0;
-  for ( set<UnicodeString>::iterator i = fSet.begin();
-        i != fSet.end();
+  for ( int32_t i = 0;
+        i<fSet.size();
         i++) {
-    const UnicodeString &abbr = *i;
-    ustrs[n] = abbr;
+    const UnicodeString *abbr = fSet.getStringAt(i);
+    if(abbr) {
+      FB_TRACE("build",abbr,TRUE,i);
+      ustrs[n] = *abbr; // copy by value
+      FB_TRACE("ustrs[n]",&ustrs[n],TRUE,i);
+    } else {
+      FB_TRACE("build",abbr,FALSE,i);
+      status = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
+    }
     partials[n] = 0; // default: not partial
     n++;
   }
@@ -305,34 +394,37 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   for(int i=0;i<subCount;i++) {
     int nn = ustrs[i].indexOf(kFULLSTOP); // TODO: non-'.' abbreviations
     if(nn>-1 && (nn+1)!=ustrs[i].length()) {
-      //if(true) u_printf("Is a partial: /%S/\n", ustrs[i].getTerminatedBuffer());
+      FB_TRACE("partial",&ustrs[i],FALSE,i);
       // is partial.
       // is it unique?
       int sameAs = -1;
       for(int j=0;j<subCount;j++) {
         if(j==i) continue;
         if(ustrs[i].compare(0,nn+1,ustrs[j],0,nn+1)==0) {
-          //if(true) u_printf("Prefix match: /%S/ to %d\n", ustrs[j].getTerminatedBuffer(), nn+1);
+          FB_TRACE("prefix",&ustrs[j],FALSE,nn+1);
           //UBool otherIsPartial = ((nn+1)!=ustrs[j].length());  // true if ustrs[j] doesn't end at nn
           if(partials[j]==0) { // hasn't been processed yet
             partials[j] = kSuppressInReverse | kAddToForward;
-            //if(true) u_printf("Suppressing: /%S/\n", ustrs[j].getTerminatedBuffer());
+            FB_TRACE("suppressing",&ustrs[j],FALSE,j);
           } else if(partials[j] & kSuppressInReverse) {
             sameAs = j; // the other entry is already in the reverse table.
           }
         }
       }
-      //if(debug2) u_printf("for partial /%S/ same=%d partials=%d\n",      ustrs[i].getTerminatedBuffer(), sameAs, partials[i]);
+      FB_TRACE("for partial same-",&ustrs[i],FALSE,sameAs);
+      FB_TRACE(" == partial #",&ustrs[i],FALSE,partials[i]);
       UnicodeString prefix(ustrs[i], 0, nn+1);
       if(sameAs == -1 && partials[i] == 0) {
         // first one - add the prefix to the reverse table.
         prefix.reverse();
         builder->add(prefix, kPARTIAL, status);
         revCount++;
-        //if(debug2) u_printf("Added Partial: /%S/ from /%S/ status=%s\n", prefix.getTerminatedBuffer(), ustrs[i].getTerminatedBuffer(), u_errorName(status));
+        FB_TRACE("Added partial",&prefix,FALSE, i);
+        FB_TRACE(u_errorName(status),&ustrs[i],FALSE,i);
         partials[i] = kSuppressInReverse | kAddToForward;
       } else {
-        //if(debug2) u_printf(" // not adding partial for /%S/ from /%S/\n", prefix.getTerminatedBuffer(), ustrs[i].getTerminatedBuffer());
+        FB_TRACE("NOT adding partial",&prefix,FALSE, i);
+        FB_TRACE(u_errorName(status),&ustrs[i],FALSE,i);
       }
     }
   }
@@ -341,9 +433,9 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
       ustrs[i].reverse();
       builder->add(ustrs[i], kMATCH, status);
       revCount++;
-      //if(debug2) u_printf("Added: /%S/ status=%s\n", ustrs[i].getTerminatedBuffer(), u_errorName(status));
+      FB_TRACE(u_errorName(status), &ustrs[i], FALSE, i);
     } else {
-      //if(debug2) u_printf(" Adding fwd: /%S/\n", ustrs[i].getTerminatedBuffer());
+      FB_TRACE("Adding fwd",&ustrs[i], FALSE, i);
 
       // an optimization would be to only add the portion after the '.'
       // for example, for "Ph.D." we store ".hP" in the reverse table. We could just store "D." in the forward,
@@ -355,12 +447,12 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
       ////if(debug2) u_printf("SUPPRESS- not Added(%d):  /%S/ status=%s\n",partials[i], ustrs[i].getTerminatedBuffer(), u_errorName(status));
     }
   }
-  //if(debug) u_printf(" %s has %d abbrs.\n", fJSONSource.c_str(), subCount);
+  FB_TRACE("AbbrCount",NULL,FALSE, subCount);
 
   if(revCount>0) {
     backwardsTrie.adoptInstead(builder->build(USTRINGTRIE_BUILD_FAST, status));
     if(U_FAILURE(status)) {
-      //printf("Error %s building backwards\n", u_errorName(status));
+      FB_TRACE(u_errorName(status),NULL,FALSE, -1);
       return NULL;
     }
   }
@@ -368,16 +460,16 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   if(fwdCount>0) {
     forwardsPartialTrie.adoptInstead(builder2->build(USTRINGTRIE_BUILD_FAST, status));
     if(U_FAILURE(status)) {
-      //printf("Error %s building forwards\n", u_errorName(status));
+      FB_TRACE(u_errorName(status),NULL,FALSE, -1);
       return NULL;
     }
   }
 
-  return new ULISentenceBreakIterator(adopt.orphan(), forwardsPartialTrie.orphan(), backwardsTrie.orphan(), status);
+  return new SimpleFilteredSentenceBreakIterator(adopt.orphan(), forwardsPartialTrie.orphan(), backwardsTrie.orphan(), status);
 }
 
 
-// -----------
+// ----------- Base class implementation
 
 FilteredBreakIteratorBuilder::FilteredBreakIteratorBuilder() {
 }
@@ -388,18 +480,16 @@ FilteredBreakIteratorBuilder::~FilteredBreakIteratorBuilder() {
 FilteredBreakIteratorBuilder *
 FilteredBreakIteratorBuilder::createInstance(const Locale& where, UErrorCode& status) {
   if(U_FAILURE(status)) return NULL;
-
   LocalPointer<FilteredBreakIteratorBuilder> ret(new SimpleFilteredBreakIteratorBuilder(where, status));
-  if(!ret.isValid()) status = U_MEMORY_ALLOCATION_ERROR;
+  if(U_SUCCESS(status) && !ret.isValid()) status = U_MEMORY_ALLOCATION_ERROR;
   return ret.orphan();
 }
 
 FilteredBreakIteratorBuilder *
 FilteredBreakIteratorBuilder::createInstance(UErrorCode& status) {
   if(U_FAILURE(status)) return NULL;
-
-  LocalPointer<FilteredBreakIteratorBuilder> ret(new SimpleFilteredBreakIteratorBuilder());
-  if(!ret.isValid()) status = U_MEMORY_ALLOCATION_ERROR;
+  LocalPointer<FilteredBreakIteratorBuilder> ret(new SimpleFilteredBreakIteratorBuilder(status));
+  if(U_SUCCESS(status) && !ret.isValid()) status = U_MEMORY_ALLOCATION_ERROR;
   return ret.orphan();
 }
 
