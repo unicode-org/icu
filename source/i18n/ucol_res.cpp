@@ -502,7 +502,7 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
 
                     ulist_addItemBeginList(results, defcoll, TRUE, status);
                 }
-            } else {
+            } else if (uprv_strncmp(key, "private-", 8) != 0) {
                 ulist_addItemEndList(values, key, FALSE, status);
             }
         }

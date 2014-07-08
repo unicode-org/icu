@@ -865,12 +865,14 @@ void CollationTest::TestTailoredElements() {
         LocalPointer<StringEnumeration> types(
                 Collator::getKeywordValuesForLocale("collation", locale, FALSE, errorCode));
         errorCode.assertSuccess();
-        const char *type = NULL;  // default type
-        do {
-            Locale localeWithType(locale);
-            if(type != NULL) {
-                localeWithType.setKeywordValue("collation", type, errorCode);
+        const char *type;  // first: default type
+        while((type = types->next(NULL, errorCode)) != NULL) {
+            if(strncmp(type, "private-", 8) == 0) {
+                errln("Collator::getKeywordValuesForLocale(%s) returns private collation keyword: %s",
+                        localeID, type);
             }
+            Locale localeWithType(locale);
+            localeWithType.setKeywordValue("collation", type, errorCode);
             errorCode.assertSuccess();
             LocalPointer<Collator> coll(Collator::createInstance(localeWithType, errorCode));
             if(errorCode.logIfFailureAndReset("Collator::createInstance(%s)",
@@ -914,7 +916,7 @@ void CollationTest::TestTailoredElements() {
                     }
                 }
             }
-        } while((type = types->next(NULL, errorCode)) != NULL);
+        }
     } while((localeID = locales->next(NULL, errorCode)) != NULL);
     uhash_close(prevLocales);
 }

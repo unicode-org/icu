@@ -1318,6 +1318,11 @@ static void TestJ5298(void)
     const char *keywordValue = NULL;
     log_verbose("Number of collator locales returned : %i \n", ucol_countAvailable());
     values = ucol_getKeywordValues("collation", &status);
+    while ((keywordValue = uenum_next(values, NULL, &status)) != NULL) {
+        if (strncmp(keywordValue, "private-", 8) == 0) {
+            log_err("ucol_getKeywordValues() returns private collation keyword: %s\n", keywordValue);
+        }
+    }
     for (i = 0; i < ucol_countAvailable(); i++) {
         uenum_reset(values, &status);
         while ((keywordValue = uenum_next(values, NULL, &status)) != NULL) {
