@@ -980,6 +980,15 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
     warning(line, "Not building collation elements because of UCONFIG_NO_COLLATION and/or UCONFIG_NO_FILE_IO, see uconfig.h");
     (void)collationType;
 #else
+    // CLDR ticket #3949, ICU ticket #8082:
+    // Do not build collation binary data for for-import-only "private" collation rule strings.
+    if (uprv_strncmp(collationType, "private-", 8) == 0) {
+        if(isVerbose()) {
+            printf("Not building %s~%s collation binary\n", state->filename, collationType);
+        }
+        return result;
+    }
+
     if(!state->makeBinaryCollation) {
         if(isVerbose()) {
             printf("Not building %s~%s collation binary\n", state->filename, collationType);

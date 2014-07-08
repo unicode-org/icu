@@ -2768,20 +2768,23 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
             const char *k;
             int32_t i;
             k = ures_getKey(subPtr);
-            
+
 #if defined(URES_TREE_DEBUG)
             /* fprintf(stderr, "%s | %s | %s | %s\n", path?path:"<ICUDATA>", keyword, locale, k); */
 #endif
-            for(i=0;k&&i<valuesCount;i++) {
+            if(k == NULL || *k == 0 ||
+                    uprv_strcmp(k, DEFAULT_TAG) == 0 || uprv_strncmp(k, "private-", 8) == 0) {
+                // empty or "default" or unlisted type
+                continue;
+            }
+            for(i=0; i<valuesCount; i++) {
                 if(!uprv_strcmp(valuesList[i],k)) {
                     k = NULL; /* found duplicate */
+                    break;
                 }
             }
-            if(k && *k) {
+            if(k != NULL) {
                 int32_t kLen = (int32_t)uprv_strlen(k);
-                if(!uprv_strcmp(k,DEFAULT_TAG)) {
-                    continue; /* don't need 'default'. */
-                }
                 if((valuesCount >= (VALUES_LIST_SIZE-1)) ||       /* no more space in list .. */
                     ((valuesIndex+kLen+1+1) >= VALUES_BUF_SIZE)) { /* no more space in buffer (string + 2 nulls) */
                     *status = U_ILLEGAL_ARGUMENT_ERROR; /* out of space.. */
