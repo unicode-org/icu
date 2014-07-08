@@ -2194,7 +2194,12 @@ public class CollationMiscTest extends TestFmwk {
             log(values[i]+", ");
         }
         logln("");
-        logln("Number of collator values returned : " + values.length);
+        logln("Number of collation keyword values returned : " + values.length);
+        for(int i=0; i<values.length;i++){
+            if (values[i].startsWith("private-")) {
+                errln("Collator.getKeywordValues() returns private collation keyword: " + values[i]);
+            }
+        }
 
         Set foundValues = new TreeSet(Arrays.asList(values));
 

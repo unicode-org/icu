@@ -994,7 +994,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
                         // Keep the default
                         defcoll = collations.getString("default");
                     }
-                } else if (!values.contains(collkey)) {
+                } else if (!collkey.startsWith("private-") && !values.contains(collkey)) {
                     values.add(collkey);
                 }
             }

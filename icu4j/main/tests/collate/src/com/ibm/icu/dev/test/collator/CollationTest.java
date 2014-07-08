@@ -950,13 +950,13 @@ public class CollationTest extends TestFmwk {
         for (; locIdx < locales.length; localeID = locales[locIdx++].getName()) {
             ULocale locale = new ULocale(localeID);
             String[] types = Collator.getKeywordValuesForLocale("collation", locale, false);
-            String type = null; // default type
-            int typeIdx = 0;
-            for (; typeIdx < types.length; type = types[typeIdx++]) {
-                ULocale localeWithType = locale;
-                if (type != null) {
-                    localeWithType = localeWithType.setKeywordValue("collation", type);
+            for (int typeIdx = 0; typeIdx < types.length; ++typeIdx) {
+                String type = types[typeIdx];  // first: default type
+                if (type.startsWith("private-")) {
+                    errln("Collator.getKeywordValuesForLocale(" + localeID +
+                            ") returns private collation keyword: " + type);
                 }
+                ULocale localeWithType = locale.setKeywordValue("collation", type);
                 Collator coll = Collator.getInstance(localeWithType);
                 ULocale actual = coll.getLocale(ULocale.ACTUAL_LOCALE);
                 if (prevLocales.contains(actual.getName())) {

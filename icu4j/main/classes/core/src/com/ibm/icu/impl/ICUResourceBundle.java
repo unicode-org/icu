@@ -323,8 +323,8 @@ public  class ICUResourceBundle extends UResourceBundle {
                 Enumeration<String> e = irb.getKeys();
                 while (e.hasMoreElements()) {
                     String s = e.nextElement();
-                    if (!DEFAULT_TAG.equals(s)) {
-                        // don't add 'default' items
+                    if (!DEFAULT_TAG.equals(s) && !s.startsWith("private-")) {
+                        // don't add 'default' items, nor unlisted types
                         keywords.add(s);
                     }
                 }
