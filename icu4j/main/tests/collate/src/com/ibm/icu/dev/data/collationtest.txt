@@ -2410,3 +2410,32 @@
 <1 ae
 <2 ä
 <3 Ä
+
+** test: import root search rules plus German phonebook rules, ICU ticket 8962
+@ locale de-u-co-search
+* compare
+<1 =
+<1 ≠
+<1 a
+<1 ae
+<2 ä
+
+# Once more, but with runtime builder.
+@ rules
+[import und-u-co-search][import de-u-co-phonebk]
+* compare
+<1 =
+<1 ≠
+<1 a
+<1 ae
+<2 ä
+
+# Once again, with import from "root" not "und" (as in a proper language tag).
+@ rules
+[import root-u-co-search][import de-u-co-phonebk]
+* compare
+<1 =
+<1 ≠
+<1 a
+<1 ae
+<2 ä
