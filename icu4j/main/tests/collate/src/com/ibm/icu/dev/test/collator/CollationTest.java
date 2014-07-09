@@ -1290,10 +1290,14 @@ public class CollationTest extends TestFmwk {
             String name = fileLine.substring(start, limit);
             int code = CollationRuleParser.getReorderCode(name);
             if (code < -1) {
-                logln(fileLine);
-                error = new ParseException("invalid reorder code '" + name + "' on line "
-                                            + fileLineNumber, fileLineNumber);
-                return;
+                if (name.equalsIgnoreCase("default")) {
+                    code = ReorderCodes.DEFAULT;  // -1
+                } else {
+                    logln(fileLine);
+                    error = new ParseException("invalid reorder code '" + name + "' on line "
+                                                + fileLineNumber, fileLineNumber);
+                    return;
+                }
             }
             reorderCodes.addElement(code);
             start = limit;

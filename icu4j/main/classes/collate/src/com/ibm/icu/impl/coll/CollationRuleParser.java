@@ -719,8 +719,7 @@ public final class CollationRuleParser {
             i = limit;
         }
         int length = reorderCodes.size();
-        if(length == 1 && reorderCodes.get(0) == Collator.ReorderCodes.DEFAULT) {
-            // The root collator does not have a reordering, by definition.
+        if(length == 1 && reorderCodes.get(0) == Collator.ReorderCodes.NONE) {
             settings.resetReordering();
             return;
         }
@@ -739,8 +738,7 @@ public final class CollationRuleParser {
     /**
      * Gets a script or reorder code from its string representation.
      * @return the script/reorder code, or
-     * -1==Collator.ReorderCodes.REORDER_CODE_DEFAULT, or
-     * -2 if not recognized
+     * -1 if not recognized
      */
     public static int getReorderCode(String word) {
         for(int i = 0; i < gSpecialReorderCodes.length; ++i) {
@@ -756,10 +754,10 @@ public final class CollationRuleParser {
         } catch (IllegalIcuArgumentException e) {
             // fall through
         }
-        if(word.equalsIgnoreCase("default")) {
-            return Collator.ReorderCodes.DEFAULT;
+        if(word.equalsIgnoreCase("others")) {
+            return Collator.ReorderCodes.OTHERS;  // same as Zzzz = USCRIPT_UNKNOWN 
         }
-        return -2;
+        return -1;
     }
 
     private static int getOnOffValue(String s) {

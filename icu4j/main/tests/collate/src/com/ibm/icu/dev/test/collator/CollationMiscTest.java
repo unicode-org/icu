@@ -3204,6 +3204,13 @@ public class CollationMiscTest extends TestFmwk {
             errln("ERROR: collation result should have been greater.");
         }
         
+        /* clear the reordering using [NONE] */
+        myCollation.setReorderCodes(new int[]{ ReorderCodes.NONE });    
+        retrievedReorderCodes = myCollation.getReorderCodes();
+        if (retrievedReorderCodes.length != 0) {
+            errln("ERROR: [NONE] retrieved reorder codes was not null.");
+        }
+
         boolean gotException = false;
         /* set duplicates in the reorder codes */
         try {

@@ -935,12 +935,15 @@ public final class RuleBasedCollator extends Collator {
     @Override
     public void setReorderCodes(int... order) {
         checkNotFrozen();
-        if(order == null ?
+        int length = (order != null) ? order.length : 0;
+        if(length == 1 && order[0] == ReorderCodes.NONE) {
+            length = 0;
+        }
+        if(length == 0 ?
                 settings.readOnly().reorderCodes.length == 0 :
                 Arrays.equals(order, settings.readOnly().reorderCodes)) {
             return;
         }
-        int length = (order != null) ? order.length : 0;
         CollationSettings defaultSettings = getDefaultSettings();
         if(length == 1 && order[0] == Collator.ReorderCodes.DEFAULT) {
             if(settings.readOnly() != defaultSettings) {
