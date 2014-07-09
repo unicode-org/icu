@@ -644,6 +644,9 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     private static final int getReorderCode(String keyword, String s) {
         return Collator.ReorderCodes.FIRST +
                 getIntValue(keyword, s, "space", "punct", "symbol", "currency", "digit");
+        // Not supporting "others" = UCOL_REORDER_CODE_OTHERS
+        // as a synonym for Zzzz = USCRIPT_UNKNOWN for now:
+        // Avoid introducing synonyms/aliases.
     }
 
     /**
