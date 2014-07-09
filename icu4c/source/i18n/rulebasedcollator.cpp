@@ -646,6 +646,9 @@ RuleBasedCollator::setReorderCodes(const int32_t *reorderCodes, int32_t length,
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
+    if(length == 1 && reorderCodes[0] == UCOL_REORDER_CODE_NONE) {
+        length = 0;
+    }
     if(length == settings->reorderCodesLength &&
             uprv_memcmp(reorderCodes, settings->reorderCodes, length * 4) == 0) {
         return;
@@ -670,7 +673,7 @@ RuleBasedCollator::setReorderCodes(const int32_t *reorderCodes, int32_t length,
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    if(length == 0 || (length == 1 && reorderCodes[0] == UCOL_REORDER_CODE_NONE)) {
+    if(length == 0) {
         ownedSettings->resetReordering();
     } else {
         uint8_t reorderTable[256];
