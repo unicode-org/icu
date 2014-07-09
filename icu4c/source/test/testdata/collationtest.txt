@@ -2439,3 +2439,28 @@
 <1 a
 <1 ae
 <2 ä
+
+** test: import rules from a language with non-Latin native script, and reset the reordering, ICU ticket 10998
+# Greek should sort Greek first.
+@ rules
+[import el]
+* compare
+<1 4
+<1 Ω
+<1 L
+
+# Import Greek, and then reset the reordering.
+@ rules
+[import el][reorder Zzzz]
+* compare
+<1 4
+<1 L
+<1 Ω
+
+# "others" is a synonym for Zzzz.
+@ rules
+[import el][reorder others]
+* compare
+<1 4
+<1 L
+<1 Ω

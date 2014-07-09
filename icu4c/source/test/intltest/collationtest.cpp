@@ -1173,11 +1173,15 @@ void CollationTest::parseAndSetReorderCodes(int32_t start, IcuTestErrorCode &err
         CharString name;
         name.appendInvariantChars(fileLine.tempSubStringBetween(start, limit), errorCode);
         int32_t code = CollationRuleParser::getReorderCode(name.data());
-        if(code < -1) {
-            errln("invalid reorder code '%s' on line %d", name.data(), (int)fileLineNumber);
-            infoln(fileLine);
-            errorCode.set(U_PARSE_ERROR);
-            return;
+        if(code < 0) {
+            if(uprv_stricmp(name.data(), "default") == 0) {
+                code = UCOL_REORDER_CODE_DEFAULT;  // -1
+            } else {
+                errln("invalid reorder code '%s' on line %d", name.data(), (int)fileLineNumber);
+                infoln(fileLine);
+                errorCode.set(U_PARSE_ERROR);
+                return;
+            }
         }
         reorderCodes.addElement(code, errorCode);
         start = limit;
