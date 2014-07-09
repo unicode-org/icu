@@ -132,8 +132,7 @@ public:
     /**
      * Gets a script or reorder code from its string representation.
      * @return the script/reorder code, or
-     * -1==UCOL_REORDER_CODE_DEFAULT, or
-     * -2 if not recognized
+     * -1 if not recognized
      */
     static int32_t getReorderCode(const char *word);
 

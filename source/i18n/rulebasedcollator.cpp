@@ -670,7 +670,7 @@ RuleBasedCollator::setReorderCodes(const int32_t *reorderCodes, int32_t length,
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    if(length == 0) {
+    if(length == 0 || (length == 1 && reorderCodes[0] == UCOL_REORDER_CODE_NONE)) {
         ownedSettings->resetReordering();
     } else {
         uint8_t reorderTable[256];

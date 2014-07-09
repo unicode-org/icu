@@ -710,8 +710,7 @@ CollationRuleParser::parseReordering(const UnicodeString &raw, UErrorCode &error
         i = limit;
     }
     int32_t length = reorderCodes.size();
-    if(length == 1 && reorderCodes.elementAti(0) == UCOL_REORDER_CODE_DEFAULT) {
-        // The root collator does not have a reordering, by definition.
+    if(length == 1 && reorderCodes.elementAti(0) == UCOL_REORDER_CODE_NONE) {
         settings->resetReordering();
         return;
     }
@@ -738,10 +737,10 @@ CollationRuleParser::getReorderCode(const char *word) {
     if(script >= 0) {
         return script;
     }
-    if(uprv_stricmp(word, "default") == 0) {
-        return UCOL_REORDER_CODE_DEFAULT;
+    if(uprv_stricmp(word, "others") == 0) {
+        return UCOL_REORDER_CODE_OTHERS;  // same as Zzzz = USCRIPT_UNKNOWN
     }
-    return -2;
+    return -1;
 }
 
 UColAttributeValue
