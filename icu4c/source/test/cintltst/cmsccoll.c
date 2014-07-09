@@ -4691,6 +4691,7 @@ static void TestReorderingAPI(void)
     int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
     int32_t duplicateReorderCodes[] = {USCRIPT_CUNEIFORM, USCRIPT_GREEK, UCOL_REORDER_CODE_CURRENCY, USCRIPT_EGYPTIAN_HIEROGLYPHS};
     int32_t reorderCodesStartingWithDefault[] = {UCOL_REORDER_CODE_DEFAULT, USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
+    int32_t reorderCodeNone = UCOL_REORDER_CODE_NONE;
     UCollationResult collResult;
     int32_t retrievedReorderCodesLength;
     int32_t retrievedReorderCodes[10];
@@ -4765,6 +4766,22 @@ static void TestReorderingAPI(void)
     collResult = ucol_strcoll(myCollation, greekString, LEN(greekString), punctuationString, LEN(punctuationString));
     if (collResult != UCOL_GREATER) {
         log_err_status(status, "ERROR: collation result should have been UCOL_GREATER\n");
+        return;
+    }
+
+    /* clear the reordering using [NONE] */
+    ucol_setReorderCodes(myCollation, &reorderCodeNone, 1, &status);    
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: setting reorder codes to [NONE]: %s\n", myErrorName(status));
+        return;
+    }
+
+    /* get the reordering again */
+    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, NULL, 0, &status);
+    if (retrievedReorderCodesLength != 0) {
+        log_err_status(status,
+                       "ERROR: [NONE] retrieved reorder codes length was %d but should have been 0\n",
+                       retrievedReorderCodesLength);
         return;
     }
 

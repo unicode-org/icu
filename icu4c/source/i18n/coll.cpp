@@ -301,6 +301,9 @@ int32_t getReorderCode(const char *s) {
             return UCOL_REORDER_CODE_FIRST + i;
         }
     }
+    // Not supporting "others" = UCOL_REORDER_CODE_OTHERS
+    // as a synonym for Zzzz = USCRIPT_UNKNOWN for now:
+    // Avoid introducing synonyms/aliases.
     return -1;
 }
 
