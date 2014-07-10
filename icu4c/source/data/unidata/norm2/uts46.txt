@@ -1,6 +1,6 @@
 # Original file:
 # IdnaMappingTable-7.0.0.txt
-# Date: 2014-02-14 01:03:07 GMT [MD]
+# Date: 2014-04-10 13:40:45 GMT [MD]
 #
 # Unicode IDNA Compatible Preprocessing (UTS #46)
 # Copyright (c) 1991-2014 Unicode, Inc.
@@ -1615,7 +1615,7 @@
 # 19B0..19C9  valid                     # 4.1  NEW TAI LUE VOWEL SIGN VOWEL SHORTENER..NEW TAI LUE TONE MARK-2
 19CA..19CF    >FFFD                     # NA   <reserved-19CA>..<reserved-19CF>
 # 19D0..19D9  valid                     # 4.1  NEW TAI LUE DIGIT ZERO..NEW TAI LUE DIGIT NINE
-# 19DA        valid                     # 5.2  NEW TAI LUE THAM DIGIT ONE
+# 19DA        valid                  ;      ; XV8 # 5.2  NEW TAI LUE THAM DIGIT ONE
 19DB..19DD    >FFFD                     # NA   <reserved-19DB>..<reserved-19DD>
 # 19DE..19DF  valid                     # 4.1  NEW TAI LUE SIGN LAE..NEW TAI LUE SIGN LAEV
 # 19E0..19FF  valid                     # 4.0  KHMER SYMBOL PATHAMASAT..KHMER SYMBOL DAP-PRAM ROC
