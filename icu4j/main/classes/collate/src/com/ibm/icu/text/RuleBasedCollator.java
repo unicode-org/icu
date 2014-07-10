@@ -43,7 +43,9 @@ import com.ibm.icu.util.VersionInfo;
  * sets. RuleBasedCollator is designed to be fully compliant to the <a
  * href="http://www.unicode.org/unicode/reports/tr10/">Unicode Collation Algorithm (UCA)</a> and conforms to ISO 14651.
  * </p>
- * 
+ *
+ * <p>A Collator is thread-safe only when frozen. See {{@link #isFrozen()} and {@link com.ibm.icu.util.Freezable}.
+ *
  * <p>
  * Users are strongly encouraged to read the <a href="http://userguide.icu-project.org/collation">User
  * Guide</a> for more information about the collation service before using this class.
@@ -308,6 +310,10 @@ public final class RuleBasedCollator extends Collator {
 
     /**
      * Determines whether the object has been frozen or not.
+     *
+     * <p>An unfrozen Collator is mutable and not thread-safe.
+     * A frozen Collator is immutable and thread-safe.
+     *
      * @stable ICU 4.8
      */
     @Override
