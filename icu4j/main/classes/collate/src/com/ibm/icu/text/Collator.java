@@ -35,6 +35,8 @@ import com.ibm.icu.util.VersionInfo;
 * subclass, RuleBasedCollator, allows customization of the collation
 * ordering by the use of rule sets.</p>
 *
+* <p>A Collator is thread-safe only when frozen. See {{@link #isFrozen()} and {@link Freezable}.
+*
 * <p>Following the <a href=http://www.unicode.org>Unicode
 * Consortium</a>'s specifications for the
 * <a href="http://www.unicode.org/unicode/reports/tr10/">Unicode Collation
@@ -1411,6 +1413,10 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     
     /**
      * Determines whether the object has been frozen or not.
+     *
+     * <p>An unfrozen Collator is mutable and not thread-safe.
+     * A frozen Collator is immutable and thread-safe.
+     *
      * @stable ICU 4.8
      */
     public boolean isFrozen() {
@@ -1418,7 +1424,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     }
 
     /**
-     * Freezes the collaotr.
+     * Freezes the collator.
      * @return the collator itself.
      * @stable ICU 4.8
      */
