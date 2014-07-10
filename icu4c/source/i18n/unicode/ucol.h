@@ -1429,14 +1429,14 @@ ucol_cloneBinary(const UCollator *coll,
  *  ucol_cloneBinary. Binary image used in instantiation of the 
  *  collator remains owned by the user and should stay around for 
  *  the lifetime of the collator. The API also takes a base collator
- *  which usually should be the root collator.
+ *  which must be the root collator.
  *  @param bin binary image owned by the user and required through the
  *             lifetime of the collator
  *  @param length size of the image. If negative, the API will try to
  *                figure out the length of the image
- *  @param base fallback collator, usually the root collator. Base is required to be
- *              present through the lifetime of the collator. Currently 
- *              it cannot be NULL.
+ *  @param base Base collator, for lookup of untailored characters.
+ *              Must be the root collator, must not be NULL.
+ *              The base is required to be present through the lifetime of the collator.
  *  @param status for catching errors
  *  @return newly created collator
  *  @see ucol_cloneBinary

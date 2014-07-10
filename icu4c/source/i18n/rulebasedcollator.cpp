@@ -158,7 +158,7 @@ RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length,
           explicitlySetAttributes(0),
           actualLocaleIsSameAsValid(FALSE) {
     if(U_FAILURE(errorCode)) { return; }
-    if(bin == NULL || length <= 0 || base == NULL) {
+    if(bin == NULL || length == 0 || base == NULL) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
