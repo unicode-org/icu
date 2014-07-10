@@ -2386,6 +2386,14 @@ void CollationAPITest::TestCloneBinary() {
     int32_t bin2Length = rbc2.cloneBinary(bin2, LENGTHOF(bin2), errorCode);
     assertEquals("len(rbc binary)==len(rbc2 binary)", binLength, bin2Length);
     assertTrue("rbc binary==rbc2 binary", binLength == bin2Length && memcmp(bin, bin2, binLength) == 0);
+
+    RuleBasedCollator rbc3(bin, -1, rbRoot, errorCode);
+    if(errorCode.logDataIfFailureAndReset("RuleBasedCollator(rbc binary, length<0)")) {
+        return;
+    }
+    assertEquals("rbc3.strength==primary", UCOL_PRIMARY, rbc3.getAttribute(UCOL_STRENGTH, errorCode));
+    assertEquals("rbc3: u-umlaut==ue", UCOL_EQUAL, rbc3.compare(uUmlaut, ue, errorCode));
+    assertTrue("rbc==rbc3", *rbc == rbc3);
 }
 
 void CollationAPITest::TestIterNumeric() {
