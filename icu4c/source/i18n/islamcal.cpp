@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2013, International Business Machines Corporation
+* Copyright (C) 2003-2014, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -610,7 +610,7 @@ UBool
 IslamicCalendar::inDaylightTime(UErrorCode& status) const
 {
     // copied from GregorianCalendar
-    if (U_FAILURE(status) || (&(getTimeZone()) == NULL && !getTimeZone().useDaylightTime())) 
+    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) 
         return FALSE;
 
     // Force an update of the state of the Calendar.
