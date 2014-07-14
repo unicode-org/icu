@@ -680,11 +680,14 @@ fAreFieldsVirtuallySet(FALSE),
 fNextStamp((int32_t)kMinimumUserStamp),
 fTime(0),
 fLenient(TRUE),
-fZone(0),
+fZone(NULL),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
     clear();
+    if (U_FAILURE(success)) {
+        return;
+    }
     fZone = TimeZone::createDefault();
     if (fZone == NULL) {
         success = U_MEMORY_ALLOCATION_ERROR;
@@ -703,10 +706,13 @@ fAreFieldsVirtuallySet(FALSE),
 fNextStamp((int32_t)kMinimumUserStamp),
 fTime(0),
 fLenient(TRUE),
-fZone(0),
+fZone(NULL),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
+    if (U_FAILURE(success)) {
+        return;
+    }
     if(zone == 0) {
 #if defined (U_DEBUG_CAL)
         fprintf(stderr, "%s:%d: ILLEGAL ARG because timezone cannot be 0\n",
@@ -718,7 +724,6 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
 
     clear();    
     fZone = zone;
-
     setWeekData(aLocale, NULL, success);
 }
 
@@ -733,10 +738,13 @@ fAreFieldsVirtuallySet(FALSE),
 fNextStamp((int32_t)kMinimumUserStamp),
 fTime(0),
 fLenient(TRUE),
-fZone(0),
+fZone(NULL),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
+    if (U_FAILURE(success)) {
+        return;
+    }
     clear();
     fZone = zone.clone();
     if (fZone == NULL) {
@@ -757,7 +765,7 @@ Calendar::~Calendar()
 Calendar::Calendar(const Calendar &source)
 :   UObject(source)
 {
-    fZone = 0;
+    fZone = NULL;
     *this = source;
 }
 
@@ -778,9 +786,8 @@ Calendar::operator=(const Calendar &right)
         fLenient                 = right.fLenient;
         fRepeatedWallTime        = right.fRepeatedWallTime;
         fSkippedWallTime         = right.fSkippedWallTime;
-        if (fZone != NULL) {
-            delete fZone;
-        }
+        delete fZone;
+        fZone = NULL;
         if (right.fZone != NULL) {
             fZone                = right.fZone->clone();
         }
@@ -2307,7 +2314,7 @@ Calendar::adoptTimeZone(TimeZone* zone)
     if (zone == NULL) return;
 
     // fZone should always be non-null
-    if (fZone != NULL) delete fZone;
+    delete fZone;
     fZone = zone;
 
     // if the zone changes, we need to recompute the time fields
@@ -2326,6 +2333,7 @@ Calendar::setTimeZone(const TimeZone& zone)
 const TimeZone&
 Calendar::getTimeZone() const
 {
+    U_ASSERT(fZone != NULL);
     return *fZone;
 }
 
@@ -2334,9 +2342,14 @@ Calendar::getTimeZone() const
 TimeZone*
 Calendar::orphanTimeZone()
 {
-    TimeZone *z = fZone;
     // we let go of the time zone; the new time zone is the system default time zone
-    fZone = TimeZone::createDefault();
+    TimeZone *defaultZone = TimeZone::createDefault();
+    if (defaultZone == NULL) {
+        // No error handling available. Must keep fZone non-NULL, there are many unchecked uses.
+        return NULL;
+    }
+    TimeZone *z = fZone;
+    fZone = defaultZone;
     return z;
 }
 
