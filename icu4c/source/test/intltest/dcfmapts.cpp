@@ -103,6 +103,14 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
         return;
     }
 
+    // bug 10864
+    status = U_ZERO_ERROR;
+    DecimalFormat noGrouping("###0.##", status);
+    if (noGrouping.getGroupingSize() != 0) {
+      errln("Grouping size should be 0 for no grouping.");
+    }
+    // end bug 10864
+
     status = U_ZERO_ERROR;
     const UnicodeString pattern("#,##0.# FF");
     DecimalFormat pat(pattern, status);
