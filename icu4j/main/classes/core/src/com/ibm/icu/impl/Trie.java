@@ -7,9 +7,6 @@
 
 package com.ibm.icu.impl;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -137,39 +134,6 @@ public abstract class Trie
     }
 
     // protected constructor -------------------------------------------
-
-    /**
-    * Trie constructor for CharTrie use.
-    * @param inputStream ICU data file input stream which contains the
-    *                        trie
-    * @param dataManipulate object containing the information to parse the 
-    *                       trie data
-    * @throws IOException thrown when input stream does not have the
-    *                        right header.
-    */
-    protected Trie(InputStream inputStream, 
-                   DataManipulate  dataManipulate) throws IOException
-    {
-        DataInputStream input = new DataInputStream(inputStream);
-        // Magic number to authenticate the data.
-        int signature = input.readInt();
-        m_options_    = input.readInt();
-        
-        if (!checkHeader(signature)) {
-            throw new IllegalArgumentException("ICU data file error: Trie header authentication failed, please check if you have the most updated ICU data file");
-        }
-
-        if(dataManipulate != null) {
-            m_dataManipulate_ = dataManipulate;
-        } else {
-            m_dataManipulate_ = new DefaultGetFoldingOffset();
-        }
-        m_isLatin1Linear_ = (m_options_ &
-                             HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_) != 0;
-        m_dataOffset_     = input.readInt();
-        m_dataLength_     = input.readInt();
-        unserialize(inputStream);
-    }
 
     /**
      * Trie constructor for CharTrie use.
@@ -386,22 +350,6 @@ public abstract class Trie
         } else {
             // return -1 if there is an error, in this case we return 
             return -1;
-        }
-    }
-
-    /**
-    * <p>Parses the inputstream and creates the trie index with it.</p>
-    * <p>This is overwritten by the child classes.
-    * @param inputStream input stream containing the trie information
-    * @exception IOException thrown when data reading fails.
-    */
-    protected void unserialize(InputStream inputStream) throws IOException
-    {
-        //indexLength is a multiple of 1024 >> INDEX_STAGE_2_SHIFT_
-        m_index_              = new char[m_dataOffset_];
-        DataInputStream input = new DataInputStream(inputStream);
-        for (int i = 0; i < m_dataOffset_; i ++) {
-             m_index_[i] = input.readChar();
         }
     }
 

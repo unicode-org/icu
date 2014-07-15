@@ -1,15 +1,14 @@
 /*
-******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ******************************************************************************
+ */
 
 package com.ibm.icu.impl;
 
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import com.ibm.icu.text.UTF16;
@@ -28,16 +27,15 @@ public class IntTrie extends Trie
     * <p>Creates a new Trie with the settings for the trie data.</p>
     * <p>Unserialize the 32-bit-aligned input stream and use the data for the 
     * trie.</p>
-    * @param inputStream file input stream to a ICU data file, containing 
-    *                    the trie
+    * @param bytes file buffer to a ICU data file, containing the trie
     * @param dataManipulate object which provides methods to parse the char 
     *                        data
     * @throws IOException thrown when data reading fails
     */
-    public IntTrie(InputStream inputStream, DataManipulate dataManipulate)
+    public IntTrie(ByteBuffer bytes, DataManipulate dataManipulate)
                                                     throws IOException
     {
-        super(inputStream, dataManipulate);
+        super(bytes, dataManipulate);
         if (!isIntTrie()) {
             throw new IllegalArgumentException(
                                "Data given does not belong to a int trie.");
@@ -244,22 +242,19 @@ public class IntTrie extends Trie
     /**
     * <p>Parses the input stream and stores its trie content into a index and
     * data array</p>
-    * @param inputStream data input stream containing trie data
-    * @exception IOException thrown when data reading fails
+    * @param bytes data buffer containing trie data
     */
-    protected final void unserialize(InputStream inputStream) 
-                                                    throws IOException
+    protected final void unserialize(ByteBuffer bytes)
     {
-        super.unserialize(inputStream);
+        super.unserialize(bytes);
         // one used for initial value
         m_data_               = new int[m_dataLength_];
-        DataInputStream input = new DataInputStream(inputStream);
         for (int i = 0; i < m_dataLength_; i ++) {
-            m_data_[i] = input.readInt();
+            m_data_[i] = bytes.getInt();
         }
         m_initialValue_ = m_data_[0];
     }
-    
+
     /**
     * Gets the offset to the data which the surrogate pair points to.
     * @param lead lead surrogate

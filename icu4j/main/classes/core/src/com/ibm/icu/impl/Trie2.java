@@ -4,9 +4,9 @@
  * others. All Rights Reserved.
  *******************************************************************************
  */
+
 package com.ibm.icu.impl;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,30 +28,33 @@ import java.util.NoSuchElementException;
  */
 public abstract class Trie2 implements Iterable<Trie2.Range> {
 
-   
+
     /**
      * Create a Trie2 from its serialized form.  Inverse of utrie2_serialize().
+     *
+     * Reads from the current position and leaves the buffer after the end of the trie.
+     *
      * The serialized format is identical between ICU4C and ICU4J, so this function
      * will work with serialized Trie2s from either.
-     * 
+     *
      * The actual type of the returned Trie2 will be either Trie2_16 or Trie2_32, depending
-     * on the width of the data.  
-     * 
+     * on the width of the data.
+     *
      * To obtain the width of the Trie2, check the actual class type of the returned Trie2.
      * Or use the createFromSerialized() function of Trie2_16 or Trie2_32, which will
      * return only Tries of their specific type/size.
-     * 
+     *
      * The serialized Trie2 on the stream may be in either little or big endian byte order.
      * This allows using serialized Tries from ICU4C without needing to consider the
      * byte order of the system that created them.
      *
-     * @param is an input stream to the serialized form of a UTrie2.  
+     * @param bytes a byte buffer to the serialized form of a UTrie2.
      * @return An unserialized Trie2, ready for use.
      * @throws IllegalArgumentException if the stream does not contain a serialized Trie2.
-     * @throws IOException if a read error occurs on the InputStream.
-     * 
+     * @throws IOException if a read error occurs in the buffer.
+     *
      */
-    public static Trie2  createFromSerialized(InputStream is) throws IOException {
+    public static Trie2 createFromSerialized(ByteBuffer bytes) throws IOException {
          //    From ICU4C utrie2_impl.h
          //    * Trie2 data structure in serialized form:
          //     *
@@ -63,193 +66,30 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
          //    typedef struct UTrie2Header {
          //        /** "Tri2" in big-endian US-ASCII (0x54726932) */
          //        uint32_t signature;
-    
+
          //       /**
          //         * options bit field:
          //         * 15.. 4   reserved (0)
          //         *  3.. 0   UTrie2ValueBits valueBits
          //         */
          //        uint16_t options;
-         // 
+         //
          //        /** UTRIE2_INDEX_1_OFFSET..UTRIE2_MAX_INDEX_LENGTH */
          //        uint16_t indexLength;
-         // 
+         //
          //        /** (UTRIE2_DATA_START_OFFSET..UTRIE2_MAX_DATA_LENGTH)>>UTRIE2_INDEX_SHIFT */
          //        uint16_t shiftedDataLength;
-         // 
+         //
          //        /** Null index and data blocks, not shifted. */
          //        uint16_t index2NullOffset, dataNullOffset;
-         // 
+         //
          //        /**
          //         * First code point of the single-value range ending with U+10ffff,
          //         * rounded up and then shifted right by UTRIE2_SHIFT_1.
          //         */
          //        uint16_t shiftedHighStart;
          //    } UTrie2Header;
-        
-        DataInputStream dis = new DataInputStream(is);        
-        boolean needByteSwap = false;
-        
-        UTrie2Header  header = new UTrie2Header();
-        
-        /* check the signature */
-        header.signature = dis.readInt();
-        switch (header.signature) {
-        case 0x54726932:
-            needByteSwap = false;
-            break;
-        case 0x32697254:
-            needByteSwap = true;
-            header.signature = Integer.reverseBytes(header.signature);
-            break;
-        default:
-            throw new IllegalArgumentException("Stream does not contain a serialized UTrie2");
-        }
-                
-        header.options = swapShort(needByteSwap, dis.readUnsignedShort());
-        header.indexLength = swapShort(needByteSwap, dis.readUnsignedShort());
-        header.shiftedDataLength = swapShort(needByteSwap, dis.readUnsignedShort());
-        header.index2NullOffset = swapShort(needByteSwap, dis.readUnsignedShort());
-        header.dataNullOffset   = swapShort(needByteSwap, dis.readUnsignedShort());
-        header.shiftedHighStart = swapShort(needByteSwap, dis.readUnsignedShort());
-        
-        // Trie2 data width - 0: 16 bits
-        //                    1: 32 bits
-        if ((header.options & UTRIE2_OPTIONS_VALUE_BITS_MASK) > 1) {
-            throw new IllegalArgumentException("UTrie2 serialized format error.");
-        }
-        ValueWidth  width;
-        Trie2 This;
-        if ((header.options & UTRIE2_OPTIONS_VALUE_BITS_MASK) == 0) {
-            width = ValueWidth.BITS_16;
-            This  = new Trie2_16();
-        } else {
-            width = ValueWidth.BITS_32;
-            This  = new Trie2_32();
-        }
-        This.header = header;
-        
-        /* get the length values and offsets */
-        This.indexLength      = header.indexLength;
-        This.dataLength       = header.shiftedDataLength << UTRIE2_INDEX_SHIFT;
-        This.index2NullOffset = header.index2NullOffset;
-        This.dataNullOffset   = header.dataNullOffset;
-        This.highStart        = header.shiftedHighStart << UTRIE2_SHIFT_1;
-        This.highValueIndex   = This.dataLength - UTRIE2_DATA_GRANULARITY;
-        if (width == ValueWidth.BITS_16) {
-            This.highValueIndex += This.indexLength;
-        }
 
-        // Allocate the Trie2 index array.  If the data width is 16 bits, the array also
-        //   includes the space for the data.
-        
-        int indexArraySize = This.indexLength;
-        if (width == ValueWidth.BITS_16) {
-            indexArraySize += This.dataLength;
-        }
-        This.index = new char[indexArraySize];
-        
-        /* Read in the index */
-        int i;
-        for (i=0; i<This.indexLength; i++) {
-            This.index[i] = swapChar(needByteSwap, dis.readChar());
-        }
-        
-        /* Read in the data.  16 bit data goes in the same array as the index.
-         * 32 bit data goes in its own separate data array.
-         */
-        if (width == ValueWidth.BITS_16) {
-            This.data16 = This.indexLength;
-            for (i=0; i<This.dataLength; i++) {
-                This.index[This.data16 + i] = swapChar(needByteSwap, dis.readChar());
-            }
-        } else {
-            This.data32 = new int[This.dataLength];
-            for (i=0; i<This.dataLength; i++) {
-                This.data32[i] = swapInt(needByteSwap, dis.readInt());
-            }
-        }
-        
-        switch(width) {
-        case BITS_16:
-            This.data32 = null;
-            This.initialValue = This.index[This.dataNullOffset];
-            This.errorValue   = This.index[This.data16+UTRIE2_BAD_UTF8_DATA_OFFSET];
-            break;
-        case BITS_32:
-            This.data16=0;
-            This.initialValue = This.data32[This.dataNullOffset];
-            This.errorValue   = This.data32[UTRIE2_BAD_UTF8_DATA_OFFSET];
-            break;
-        default:
-            throw new IllegalArgumentException("UTrie2 serialized format error.");
-        }
-
-        return This;
-    }
-    
-    
-    private static int swapShort(boolean needSwap, int value) {
-        return needSwap? ((int)Short.reverseBytes((short)value)) & 0x0000ffff : value;
-    }
-    
-    private static char swapChar(boolean needSwap, char value) {
-        return needSwap? (char)Short.reverseBytes((short)value) : value;
-    }
-    
-    private static int swapInt(boolean needSwap, int value) {
-        return needSwap? Integer.reverseBytes(value) : value;
-    }
-    
-    
-    /**
-     * Get the UTrie version from an InputStream containing the serialized form
-     * of either a Trie (version 1) or a Trie2 (version 2).
-     *
-     * @param is   an InputStream containing the serialized form
-     *             of a UTrie, version 1 or 2.  The stream must support mark() and reset().
-     *             The position of the input stream will be left unchanged.
-     * @param littleEndianOk If FALSE, only big-endian (Java native) serialized forms are recognized.
-     *                    If TRUE, little-endian serialized forms are recognized as well.
-     * @return     the Trie version of the serialized form, or 0 if it is not
-     *             recognized as a serialized UTrie
-     * @throws     IOException on errors in reading from the input stream.
-     */
-    public static int getVersion(InputStream is, boolean littleEndianOk) throws IOException {
-        if (! is.markSupported()) {
-            throw new IllegalArgumentException("Input stream must support mark().");
-            }
-        is.mark(4);
-        byte sig[] = new byte[4];
-        int read = is.read(sig);
-        is.reset();
-        
-        if (read != sig.length) {
-            return 0;
-        }
-        
-        if (sig[0]=='T' && sig[1]=='r' && sig[2]=='i' && sig[3]=='e') {
-            return 1;
-        }
-        if (sig[0]=='T' && sig[1]=='r' && sig[2]=='i' && sig[3]=='2') {
-            return 2;
-        }
-        if (littleEndianOk) {
-            if (sig[0]=='e' && sig[1]=='i' && sig[2]=='r' && sig[3]=='T') {
-                return 1;
-            }
-            if (sig[0]=='2' && sig[1]=='i' && sig[2]=='r' && sig[3]=='T') {
-                return 2;
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * Deserializes a Trie2 from a ByteBuffer.
-     * Reads from the current position and leaves the buffer after the end of the trie.
-     */
-    public static Trie2 createFromSerialized(ByteBuffer bytes) throws IOException {
         ByteOrder outerByteOrder = bytes.order();
         try {
             UTrie2Header header = new UTrie2Header();
@@ -351,6 +191,49 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
         } finally {
             bytes.order(outerByteOrder);
         }
+    }
+
+    /**
+     * Get the UTrie version from an InputStream containing the serialized form
+     * of either a Trie (version 1) or a Trie2 (version 2).
+     *
+     * @param is   an InputStream containing the serialized form
+     *             of a UTrie, version 1 or 2.  The stream must support mark() and reset().
+     *             The position of the input stream will be left unchanged.
+     * @param littleEndianOk If FALSE, only big-endian (Java native) serialized forms are recognized.
+     *                    If TRUE, little-endian serialized forms are recognized as well.
+     * @return     the Trie version of the serialized form, or 0 if it is not
+     *             recognized as a serialized UTrie
+     * @throws     IOException on errors in reading from the input stream.
+     */
+    public static int getVersion(InputStream is, boolean littleEndianOk) throws IOException {
+        if (! is.markSupported()) {
+            throw new IllegalArgumentException("Input stream must support mark().");
+            }
+        is.mark(4);
+        byte sig[] = new byte[4];
+        int read = is.read(sig);
+        is.reset();
+        
+        if (read != sig.length) {
+            return 0;
+        }
+        
+        if (sig[0]=='T' && sig[1]=='r' && sig[2]=='i' && sig[3]=='e') {
+            return 1;
+        }
+        if (sig[0]=='T' && sig[1]=='r' && sig[2]=='i' && sig[3]=='2') {
+            return 2;
+        }
+        if (littleEndianOk) {
+            if (sig[0]=='e' && sig[1]=='i' && sig[2]=='r' && sig[3]=='T') {
+                return 1;
+            }
+            if (sig[0]=='2' && sig[1]=='i' && sig[2]=='r' && sig[3]=='T') {
+                return 2;
+            }
+        }
+        return 0;
     }
 
     /**
