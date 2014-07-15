@@ -1,17 +1,20 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
+
 package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -100,16 +103,17 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 
         RuleBasedBreakIterator    iter = null;
         ICUResourceBundle rb           = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME, locale);
-        
+
         //
         //  Get the binary rules.
-        // 
-        InputStream      ruleStream = null;
+        //
+        ByteBuffer bytes = null;
         try {
             String         typeKey       = KIND_NAMES[kind];
             String         brkfname      = rb.getStringWithFallback("boundaries/" + typeKey);
             String         rulesFileName = ICUResourceBundle.ICU_BUNDLE +ICUResourceBundle.ICU_BRKITR_NAME+ "/" + brkfname;
-                           ruleStream    = ICUData.getStream(rulesFileName);
+            InputStream    ruleStream    = ICUData.getStream(rulesFileName);
+                           bytes         = ICUBinary.getByteBufferFromInputStream(ruleStream);
         }
         catch (Exception e) {
             throw new MissingResourceException(e.toString(),"","");
@@ -119,7 +123,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         // Create a normal RuleBasedBreakIterator.
         //
         try {
-            iter = RuleBasedBreakIterator.getInstanceFromCompiledRules(ruleStream);
+            iter = RuleBasedBreakIterator.getInstanceFromCompiledRules(bytes);
         }
         catch (IOException e) {
             // Shouldn't be possible to get here.
@@ -130,7 +134,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         ULocale uloc = ULocale.forLocale(rb.getLocale());
         iter.setLocale(uloc, uloc);
         iter.setBreakType(kind);
-        
+
         return iter;
 
     }

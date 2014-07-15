@@ -1,14 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
+
 package com.ibm.icu.text;
 
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
 
 import com.ibm.icu.impl.ICUBinary;
@@ -103,25 +103,24 @@ class BreakCTDictionary {
     private CompactTrieNodes[] nodes;
 
     // Constructor
-    public BreakCTDictionary(InputStream is) throws IOException {
-        ICUBinary.readHeader(is, DATA_FORMAT_ID, null);
+    public BreakCTDictionary(ByteBuffer bytes) throws IOException {
+        ICUBinary.readHeader(bytes, DATA_FORMAT_ID, null);
 
-        DataInputStream in = new DataInputStream(is);
         // Get header information
         fData = new CompactTrieHeader();
-        fData.size = in.readInt();
-        fData.magic = in.readInt();
-        fData.nodeCount = in.readShort();
-        fData.root = in.readShort();
+        fData.size = bytes.getInt();
+        fData.magic = bytes.getInt();
+        fData.nodeCount = bytes.getShort();
+        fData.root = bytes.getShort();
 
-        loadBreakCTDictionary(in);
+        loadBreakCTDictionary(bytes);
     }
 
     // Loads the compact trie dictionary file into the CompactTrieNodes
-    private void loadBreakCTDictionary(DataInputStream in) throws IOException {
+    private void loadBreakCTDictionary(ByteBuffer bytes) throws IOException {
         // skip over offset information
         for (int i = 0; i < fData.nodeCount; i++) {
-            in.readInt();
+            bytes.getInt();
         }
 
         // Create compact trie dictionary
@@ -131,7 +130,7 @@ class BreakCTDictionary {
         // Load in compact trie dictionary
         for (int j = 1; j < fData.nodeCount; j++) {
             nodes[j] = new CompactTrieNodes();
-            nodes[j].flagscount = in.readShort();
+            nodes[j].flagscount = bytes.getShort();
 
             int count = nodes[j].flagscount & CompactTrieNodeFlags.kCountMask;
 
@@ -141,17 +140,17 @@ class BreakCTDictionary {
                 // Vertical node
                 if (isVerticalNode) {
                     nodes[j].vnode = new CompactTrieVerticalNode();
-                    nodes[j].vnode.equal = in.readShort();
+                    nodes[j].vnode.equal = bytes.getShort();
 
                     nodes[j].vnode.chars = new char[count];
                     for (int l = 0; l < count; l++) {
-                        nodes[j].vnode.chars[l] = in.readChar();
+                        nodes[j].vnode.chars[l] = bytes.getChar();
                     }
                 } else { // Horizontal node
                     nodes[j].hnode = new CompactTrieHorizontalNode[count];
                     for (int n = 0; n < count; n++) {
-                        nodes[j].hnode[n] = new CompactTrieHorizontalNode(in
-                                .readChar(), in.readShort());
+                        nodes[j].hnode[n] = new CompactTrieHorizontalNode(
+                                bytes.getChar(), bytes.getShort());
                     }
                 }
             }
@@ -250,6 +249,5 @@ class BreakCTDictionary {
     }
 
     // Use for reading the header portion of the file
-    private static final byte DATA_FORMAT_ID[] = { (byte) 0x54, (byte) 0x72,
-            (byte) 0x44, (byte) 0x63 };
+    private static final int DATA_FORMAT_ID = 0x54724463;
 }
