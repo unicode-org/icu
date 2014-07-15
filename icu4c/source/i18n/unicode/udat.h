@@ -1088,6 +1088,7 @@ udat_getNumberFormat(const UDateFormat* fmt);
 * Set the UNumberFormat associated with an UDateFormat.
 * A UDateFormat uses a UNumberFormat to format numbers within a date,
 * for example the day number.
+* Note: udat_setNumberFormat will clone the UNumberFormat*
 * @param fmt The formatter to set.
 * @param numberFormatToSet A pointer to the UNumberFormat to be used by fmt to format numbers.
 * @see udat_getNumberFormat
@@ -1096,6 +1097,19 @@ udat_getNumberFormat(const UDateFormat* fmt);
 U_STABLE void U_EXPORT2 
 udat_setNumberFormat(            UDateFormat*    fmt,
                         const   UNumberFormat*  numberFormatToSet);
+
+/**
+* Adopt the UNumberFormat associated with an UDateFormat.
+* A UDateFormat uses a UNumberFormat to format numbers within a date,
+* for example the day number.
+* @param fmt The formatter to set.
+* @param numberFormatToAdopt A pointer to the UNumberFormat to be used by fmt to format numbers.
+* @see udat_getNumberFormat
+* @draft ICU 54
+*/
+U_DRAFT void U_EXPORT2 
+udat_adoptNumberFormat(            UDateFormat*    fmt,
+                                   UNumberFormat*  numberFormatToAdopt);
 
 /**
 * Get a locale for which date/time formatting patterns are available.
