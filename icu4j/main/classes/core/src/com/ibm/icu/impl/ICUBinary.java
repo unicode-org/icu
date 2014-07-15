@@ -261,6 +261,18 @@ public final class ICUBinary
                 version >>> 24, (version >> 16) & 0xff, (version >> 8) & 0xff, version & 0xff);
     }
 
+    /**
+     * Returns an array of the bytes in the compact version integer.
+     */
+    public static byte[] getVersionByteArrayFromCompactInt(int version) {
+        return new byte[] {
+                (byte)(version >> 24),
+                (byte)(version >> 16),
+                (byte)(version >> 8),
+                (byte)(version)
+        };
+    }
+
     // private variables -------------------------------------------------
   
     /**
