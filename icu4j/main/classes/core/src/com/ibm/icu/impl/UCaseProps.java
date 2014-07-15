@@ -1,28 +1,27 @@
 /*
-*******************************************************************************
-*
-*   Copyright (C) 2004-2014, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-*******************************************************************************
-*   file name:  UCaseProps.java
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 2005jan29
-*   created by: Markus W. Scherer
-*
-*   Low-level Unicode character/string case mapping code.
-*   Java port of ucase.h/.c.
-*/
+ *******************************************************************************
+ *
+ *   Copyright (C) 2004-2014, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ *******************************************************************************
+ *   file name:  UCaseProps.java
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2005jan29
+ *   created by: Markus W. Scherer
+ *
+ *   Low-level Unicode character/string case mapping code.
+ *   Java port of ucase.h/.c.
+ */
 
 package com.ibm.icu.impl;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
 
 import com.ibm.icu.lang.UCharacter;
@@ -39,21 +38,17 @@ public final class UCaseProps {
     // port of ucase_openProps()
     private UCaseProps() throws IOException {
         InputStream is=ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/"+DATA_FILE_NAME);
-        BufferedInputStream b=new BufferedInputStream(is, 4096 /* data buffer size */);
-        readData(b);
-        b.close();
-        is.close();
+        ByteBuffer bytes=ICUBinary.getByteBufferFromInputStream(is);
+        readData(bytes);
     }
 
-    private final void readData(InputStream is) throws IOException {
-        DataInputStream inputStream=new DataInputStream(is);
-
+    private final void readData(ByteBuffer bytes) throws IOException {
         // read the header
-        ICUBinary.readHeader(inputStream, FMT, new IsAcceptable());
+        ICUBinary.readHeader(bytes, FMT, new IsAcceptable());
 
         // read indexes[]
         int i, count;
-        count=inputStream.readInt();
+        count=bytes.getInt();
         if(count<IX_TOP) {
             throw new IOException("indexes[0] too small in "+DATA_FILE_NAME);
         }
@@ -61,25 +56,25 @@ public final class UCaseProps {
 
         indexes[0]=count;
         for(i=1; i<count; ++i) {
-            indexes[i]=inputStream.readInt();
+            indexes[i]=bytes.getInt();
         }
 
         // read the trie
-        trie=Trie2_16.createFromSerialized(inputStream);
+        trie=Trie2_16.createFromSerialized(bytes);
         int expectedTrieLength=indexes[IX_TRIE_SIZE];
         int trieLength=trie.getSerializedLength();
         if(trieLength>expectedTrieLength) {
             throw new IOException(DATA_FILE_NAME+": not enough bytes for the trie");
         }
         // skip padding after trie bytes
-        inputStream.skipBytes(expectedTrieLength-trieLength);
+        ICUBinary.skipBytes(bytes, expectedTrieLength-trieLength);
 
         // read exceptions[]
         count=indexes[IX_EXC_LENGTH];
         if(count>0) {
             exceptions=new char[count];
             for(i=0; i<count; ++i) {
-                exceptions[i]=inputStream.readChar();
+                exceptions[i]=bytes.getChar();
             }
         }
 
@@ -88,7 +83,7 @@ public final class UCaseProps {
         if(count>0) {
             unfold=new char[count];
             for(i=0; i<count; ++i) {
-                unfold[i]=inputStream.readChar();
+                unfold[i]=bytes.getChar();
             }
         }
     }
@@ -1323,7 +1318,7 @@ public final class UCaseProps {
     private static final String DATA_FILE_NAME=DATA_NAME+"."+DATA_TYPE;
 
     /* format "cAsE" */
-    private static final byte FMT[]={ 0x63, 0x41, 0x53, 0x45 };
+    private static final int FMT=0x63415345;
 
     /* indexes into indexes[] */
     //private static final int IX_INDEX_TOP=0;

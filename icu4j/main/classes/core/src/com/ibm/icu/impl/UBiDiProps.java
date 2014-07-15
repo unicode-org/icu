@@ -1,28 +1,27 @@
 /*
-*******************************************************************************
-*
-*   Copyright (C) 2004-2014, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-*******************************************************************************
-*   file name:  UBiDiProps.java
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 2005jan16
-*   created by: Markus W. Scherer
-*
-*   Low-level Unicode bidi/shaping properties access.
-*   Java port of ubidi_props.h/.c.
-*/
+ *******************************************************************************
+ *
+ *   Copyright (C) 2004-2014, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ *******************************************************************************
+ *   file name:  UBiDiProps.java
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2005jan16
+ *   created by: Markus W. Scherer
+ *
+ *   Low-level Unicode bidi/shaping properties access.
+ *   Java port of ubidi_props.h/.c.
+ */
 
 package com.ibm.icu.impl;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
 
 import com.ibm.icu.lang.UCharacter;
@@ -36,21 +35,17 @@ public final class UBiDiProps {
     // port of ubidi_openProps()
     private UBiDiProps() throws IOException{
         InputStream is=ICUData.getStream(ICUResourceBundle.ICU_BUNDLE+"/"+DATA_FILE_NAME);
-        BufferedInputStream b=new BufferedInputStream(is, 4096 /* data buffer size */);
-        readData(b);
-        b.close();
-        is.close();
+        ByteBuffer bytes=ICUBinary.getByteBufferFromInputStream(is);
+        readData(bytes);
     }
 
-    private void readData(InputStream is) throws IOException {
-        DataInputStream inputStream=new DataInputStream(is);
-
+    private void readData(ByteBuffer bytes) throws IOException {
         // read the header
-        ICUBinary.readHeader(inputStream, FMT, new IsAcceptable());
+        ICUBinary.readHeader(bytes, FMT, new IsAcceptable());
 
         // read indexes[]
         int i, count;
-        count=inputStream.readInt();
+        count=bytes.getInt();
         if(count<IX_TOP) {
             throw new IOException("indexes[0] too small in "+DATA_FILE_NAME);
         }
@@ -58,25 +53,25 @@ public final class UBiDiProps {
 
         indexes[0]=count;
         for(i=1; i<count; ++i) {
-            indexes[i]=inputStream.readInt();
+            indexes[i]=bytes.getInt();
         }
 
         // read the trie
-        trie=Trie2_16.createFromSerialized(inputStream);
+        trie=Trie2_16.createFromSerialized(bytes);
         int expectedTrieLength=indexes[IX_TRIE_SIZE];
         int trieLength=trie.getSerializedLength();
         if(trieLength>expectedTrieLength) {
             throw new IOException(DATA_FILE_NAME+": not enough bytes for the trie");
         }
         // skip padding after trie bytes
-        inputStream.skipBytes(expectedTrieLength-trieLength);
+        ICUBinary.skipBytes(bytes, expectedTrieLength-trieLength);
 
         // read mirrors[]
         count=indexes[IX_MIRROR_LENGTH];
         if(count>0) {
             mirrors=new int[count];
             for(i=0; i<count; ++i) {
-                mirrors[i]=inputStream.readInt();
+                mirrors[i]=bytes.getInt();
             }
         }
 
@@ -84,14 +79,14 @@ public final class UBiDiProps {
         count=indexes[IX_JG_LIMIT]-indexes[IX_JG_START];
         jgArray=new byte[count];
         for(i=0; i<count; ++i) {
-            jgArray[i]=inputStream.readByte();
+            jgArray[i]=bytes.get();
         }
 
         // read jgArray2[]
         count=indexes[IX_JG_LIMIT2]-indexes[IX_JG_START2];
         jgArray2=new byte[count];
         for(i=0; i<count; ++i) {
-            jgArray2[i]=inputStream.readByte();
+            jgArray2[i]=bytes.get();
         }
     }
 
@@ -275,7 +270,7 @@ public final class UBiDiProps {
     private static final String DATA_FILE_NAME=DATA_NAME+"."+DATA_TYPE;
 
     /* format "BiDi" */
-    private static final byte FMT[]={ 0x42, 0x69, 0x44, 0x69 };
+    private static final int FMT=0x42694469;
 
     /* indexes into indexes[] */
     //private static final int IX_INDEX_TOP=0;
