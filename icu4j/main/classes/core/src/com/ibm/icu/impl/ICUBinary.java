@@ -4,6 +4,7 @@
  * others. All Rights Reserved.
  *******************************************************************************
  */
+
 package com.ibm.icu.impl;
 
 import java.io.DataInputStream;
@@ -146,6 +147,16 @@ public final class ICUBinary
         byte[] dataVersion = readHeader(inputStream, dataFormatIDExpected, authenticate);
         return VersionInfo.getInstance(dataVersion[0], dataVersion[1],
                                        dataVersion[2], dataVersion[3]);
+    }
+
+    /**
+     * Same as readHeader(), but returns a VersionInfo rather than a compact int.
+     */
+    public static final VersionInfo readHeaderAndDataVersion(ByteBuffer bytes,
+                                                             int dataFormat,
+                                                             Authenticate authenticate)
+                                                                throws IOException {
+        return getVersionInfoFromCompactInt(readHeader(bytes, dataFormat, authenticate));
     }
 
     /**

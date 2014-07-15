@@ -1,15 +1,17 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and
+ * Copyright (C) 2009-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
+
 package com.ibm.icu.impl;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -53,6 +55,25 @@ public final class Trie2_16 extends Trie2 {
      */
     public static Trie2_16  createFromSerialized(InputStream is) throws IOException {
         return (Trie2_16) Trie2.createFromSerialized(is);
+    }
+
+    /**
+     * Create a Trie2 from its serialized form.  Inverse of utrie2_serialize().
+     * The serialized format is identical between ICU4C and ICU4J, so this function
+     * will work with serialized Trie2s from either.
+     *
+     * The serialized Trie2 in the bytes may be in either little or big endian byte order.
+     * This allows using serialized Tries from ICU4C without needing to consider the
+     * byte order of the system that created them.
+     *
+     * @param bytes a byte buffer to the serialized form of a UTrie2.
+     * @return An unserialized Trie2_16, ready for use.
+     * @throws IllegalArgumentException if the buffer does not contain a serialized Trie2.
+     * @throws IOException if a read error occurs in the buffer.
+     * @throws ClassCastException if the bytes contain a serialized Trie2_32
+     */
+    public static Trie2_16  createFromSerialized(ByteBuffer bytes) throws IOException {
+        return (Trie2_16) Trie2.createFromSerialized(bytes);
     }
 
     /**
