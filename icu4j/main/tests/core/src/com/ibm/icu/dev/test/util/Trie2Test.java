@@ -1,18 +1,21 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
+
 package com.ibm.icu.dev.test.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.Trie2Writable;
 import com.ibm.icu.impl.Trie2_16;
@@ -212,15 +215,13 @@ public class Trie2Test extends TestFmwk {
              ByteArrayOutputStream os = new ByteArrayOutputStream();
              try {
                  frozen16.serialize(os);
-                 ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-                 Trie2 unserialized16 = Trie2.createFromSerialized(is);
+                 Trie2 unserialized16 = Trie2.createFromSerialized(ByteBuffer.wrap(os.toByteArray()));
                  assertEquals("", trie, unserialized16);
                  assertEquals("", Trie2_16.class, unserialized16.getClass());
                  
                  os.reset();
                  frozen32.serialize(os);
-                 is = new ByteArrayInputStream(os.toByteArray());
-                 Trie2 unserialized32 = Trie2.createFromSerialized(is);
+                 Trie2 unserialized32 = Trie2.createFromSerialized(ByteBuffer.wrap(os.toByteArray()));
                  assertEquals("", trie, unserialized32);
                  assertEquals("", Trie2_32.class, unserialized32.getClass());
              } catch (IOException e) {
@@ -337,8 +338,7 @@ public class Trie2Test extends TestFmwk {
              // Fragile test.  Serialized length could change with changes to compaction.
              //                But it should not change unexpectedly.
              assertEquals("", 3508, serializedLen);
-             ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-             Trie2 t1ws16 = Trie2.createFromSerialized(is);
+             Trie2 t1ws16 = Trie2.createFromSerialized(ByteBuffer.wrap(os.toByteArray()));
              assertEquals("", t1ws16.getClass(), Trie2_16.class);
              assertEquals("", t1w, t1ws16);
              
@@ -348,8 +348,7 @@ public class Trie2Test extends TestFmwk {
              // Fragile test.  Serialized length could change with changes to compaction.
              //                But it should not change unexpectedly.
              assertEquals("", 4332, serializedLen);
-             is = new ByteArrayInputStream(os.toByteArray());
-             Trie2 t1ws32 = Trie2.createFromSerialized(is);
+             Trie2 t1ws32 = Trie2.createFromSerialized(ByteBuffer.wrap(os.toByteArray()));
              assertEquals("", t1ws32.getClass(), Trie2_32.class);
              assertEquals("", t1w, t1ws32);
          } catch (IOException e) {
@@ -716,13 +715,11 @@ public class Trie2Test extends TestFmwk {
          String fileName32 = "Trie2Test." + serializedName + ".32.tri2";
          
          InputStream is = Trie2Test.class.getResourceAsStream(fileName16);
-         Trie2  trie16 = Trie2.createFromSerialized(is);
-         is.close();
+         Trie2  trie16 = Trie2.createFromSerialized(ICUBinary.getByteBufferFromInputStream(is));
          
          trieGettersTest(testName, trie16, checkRanges);
          is = Trie2Test.class.getResourceAsStream(fileName32);
-         Trie2  trie32 = Trie2.createFromSerialized(is);
-         is.close();
+         Trie2  trie32 = Trie2.createFromSerialized(ICUBinary.getByteBufferFromInputStream(is));
          
          trieGettersTest(testName, trie32, checkRanges);
          

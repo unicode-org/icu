@@ -1,15 +1,16 @@
 /*
-******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ******************************************************************************
+ */
 
 package com.ibm.icu.impl;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 import com.ibm.icu.text.UTF16;
 
@@ -41,6 +42,23 @@ public class CharTrie extends Trie
     {
         super(inputStream, dataManipulate);
         
+        if (!isCharTrie()) {
+            throw new IllegalArgumentException(
+                               "Data given does not belong to a char trie.");
+        }
+    }
+
+    /**
+     * <p>Creates a new Trie with the settings for the trie data.</p>
+     * <p>Unserialize the 32-bit-aligned input buffer and use the data for the
+     * trie.</p>
+     * @param bytes data of an ICU data file, containing the trie
+     * @param dataManipulate object which provides methods to parse the char
+     *                        data
+     */
+    public CharTrie(ByteBuffer bytes, DataManipulate dataManipulate) {
+        super(bytes, dataManipulate);
+
         if (!isCharTrie()) {
             throw new IllegalArgumentException(
                                "Data given does not belong to a char trie.");
@@ -253,7 +271,23 @@ public class CharTrie extends Trie
         m_data_           = m_index_;
         m_initialValue_   = m_data_[m_dataOffset_];
     }
-    
+
+    /**
+     * <p>Parses the byte buffer and stores its trie content into a index and
+     * data array</p>
+     * @param bytes buffer containing trie data
+     */
+    protected final void unserialize(ByteBuffer bytes)
+    {
+        int indexDataLength = m_dataOffset_ + m_dataLength_;
+        m_index_ = new char[indexDataLength];
+        for (int i = 0; i < indexDataLength; i ++) {
+            m_index_[i] = bytes.getChar();
+        }
+        m_data_           = m_index_;
+        m_initialValue_   = m_data_[m_dataOffset_];
+    }
+
     /**
     * Gets the offset to the data which the surrogate pair points to.
     * @param lead lead surrogate
