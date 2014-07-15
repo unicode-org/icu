@@ -1,13 +1,14 @@
 /*
-*******************************************************************************
-*   Copyright (C) 2009-2014, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2009-2014, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.Normalizer2;
@@ -318,8 +319,8 @@ public final class Norm2AllModes {
         default: return null;
         }
     }
-    public static Norm2AllModes getInstance(InputStream data, String name) {
-        if(data==null) {
+    public static Norm2AllModes getInstance(ByteBuffer bytes, String name) {
+        if(bytes==null) {
             Norm2AllModesSingleton singleton;
             if(name.equals("nfc")) {
                 singleton=NFCSingleton.INSTANCE;
@@ -337,16 +338,16 @@ public final class Norm2AllModes {
                 return singleton.allModes;
             }
         }
-        return cache.getInstance(name, data);
+        return cache.getInstance(name, bytes);
     }
-    private static CacheBase<String, Norm2AllModes, InputStream> cache =
-        new SoftCache<String, Norm2AllModes, InputStream>() {
-            protected Norm2AllModes createInstance(String key, InputStream data) {
+    private static CacheBase<String, Norm2AllModes, ByteBuffer> cache =
+        new SoftCache<String, Norm2AllModes, ByteBuffer>() {
+            protected Norm2AllModes createInstance(String key, ByteBuffer bytes) {
                 Normalizer2Impl impl;
-                if(data==null) {
+                if(bytes==null) {
                     impl=new Normalizer2Impl().load(ICUResourceBundle.ICU_BUNDLE+"/"+key+".nrm");
                 } else {
-                    impl=new Normalizer2Impl().load(data);
+                    impl=new Normalizer2Impl().load(bytes);
                 }
                 return new Norm2AllModes(impl);
             }

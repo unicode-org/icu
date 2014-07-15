@@ -1,15 +1,14 @@
 /*
-*******************************************************************************
-*   Copyright (C) 2009-2014, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2009-2014, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -417,42 +416,40 @@ public final class Normalizer2Impl {
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
-    private static final byte DATA_FORMAT[] = { 0x4e, 0x72, 0x6d, 0x32  };  // "Nrm2"
+    private static final int DATA_FORMAT = 0x4e726d32;  // "Nrm2"
 
-    public Normalizer2Impl load(InputStream data) {
+    public Normalizer2Impl load(ByteBuffer bytes) {
         try {
-            BufferedInputStream bis=new BufferedInputStream(data);
-            dataVersion=ICUBinary.readHeaderAndDataVersion(bis, DATA_FORMAT, IS_ACCEPTABLE);
-            DataInputStream ds=new DataInputStream(bis);
-            int indexesLength=ds.readInt()/4;  // inIndexes[IX_NORM_TRIE_OFFSET]/4
+            dataVersion=ICUBinary.readHeaderAndDataVersion(bytes, DATA_FORMAT, IS_ACCEPTABLE);
+            int indexesLength=bytes.getInt()/4;  // inIndexes[IX_NORM_TRIE_OFFSET]/4
             if(indexesLength<=IX_MIN_MAYBE_YES) {
                 throw new ICUUncheckedIOException("Normalizer2 data: not enough indexes");
             }
             int[] inIndexes=new int[indexesLength];
             inIndexes[0]=indexesLength*4;
             for(int i=1; i<indexesLength; ++i) {
-                inIndexes[i]=ds.readInt();
+                inIndexes[i]=bytes.getInt();
             }
-    
+
             minDecompNoCP=inIndexes[IX_MIN_DECOMP_NO_CP];
             minCompNoMaybeCP=inIndexes[IX_MIN_COMP_NO_MAYBE_CP];
-    
+
             minYesNo=inIndexes[IX_MIN_YES_NO];
             minYesNoMappingsOnly=inIndexes[IX_MIN_YES_NO_MAPPINGS_ONLY];
             minNoNo=inIndexes[IX_MIN_NO_NO];
             limitNoNo=inIndexes[IX_LIMIT_NO_NO];
             minMaybeYes=inIndexes[IX_MIN_MAYBE_YES];
-    
+
             // Read the normTrie.
             int offset=inIndexes[IX_NORM_TRIE_OFFSET];
             int nextOffset=inIndexes[IX_EXTRA_DATA_OFFSET];
-            normTrie=Trie2_16.createFromSerialized(ds);
+            normTrie=Trie2_16.createFromSerialized(bytes);
             int trieLength=normTrie.getSerializedLength();
             if(trieLength>(nextOffset-offset)) {
                 throw new ICUUncheckedIOException("Normalizer2 data: not enough bytes for normTrie");
             }
-            ds.skipBytes((nextOffset-offset)-trieLength);  // skip padding after trie bytes
-    
+            ICUBinary.skipBytes(bytes, (nextOffset-offset)-trieLength);  // skip padding after trie bytes
+
             // Read the composition and mapping data.
             offset=nextOffset;
             nextOffset=inIndexes[IX_SMALL_FCD_OFFSET];
@@ -461,7 +458,7 @@ public final class Normalizer2Impl {
             if(numChars!=0) {
                 chars=new char[numChars];
                 for(int i=0; i<numChars; ++i) {
-                    chars[i]=ds.readChar();
+                    chars[i]=bytes.getChar();
                 }
                 maybeYesCompositions=new String(chars);
                 extraData=maybeYesCompositions.substring(MIN_NORMAL_MAYBE_YES-minMaybeYes);
@@ -471,7 +468,7 @@ public final class Normalizer2Impl {
             offset=nextOffset;
             smallFCD=new byte[0x100];
             for(int i=0; i<0x100; ++i) {
-                smallFCD[i]=ds.readByte();
+                smallFCD[i]=bytes.get();
             }
 
             // Build tccc180[].
@@ -491,14 +488,17 @@ public final class Normalizer2Impl {
                 }
             }
 
-            data.close();
             return this;
         } catch(IOException e) {
             throw new ICUUncheckedIOException(e);
         }
     }
     public Normalizer2Impl load(String name) {
-        return load(ICUData.getRequiredStream(name));
+        try {
+            return load(ICUBinary.getByteBufferFromInputStream(ICUData.getRequiredStream(name)));
+        } catch(IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
     }
 
     private void enumLcccRange(int start, int end, int norm16, UnicodeSet set) {

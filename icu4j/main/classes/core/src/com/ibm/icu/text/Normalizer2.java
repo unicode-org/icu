@@ -1,14 +1,19 @@
 /*
-*******************************************************************************
-*   Copyright (C) 2009-2014, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2009-2014, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.text;
 
 import java.io.InputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.util.ICUUncheckedIOException;
 
 /**
  * Unicode normalization functionality for standard Unicode normalization or
@@ -175,6 +180,7 @@ public abstract class Normalizer2 {
      * name as the key.
      * If you know or expect the data to be cached already, you can use data!=null
      * for non-ICU data as well.
+     * <p>Any {@link java.io.IOException} is wrapped into a {@link com.ibm.icu.util.ICUUncheckedIOException}.
      * @param data the binary, big-endian normalization (.nrm file) data, or null for ICU data
      * @param name "nfc" or "nfkc" or "nfkc_cf" or name of custom data file
      * @param mode normalization mode (compose or decompose etc.)
@@ -182,7 +188,16 @@ public abstract class Normalizer2 {
      * @stable ICU 4.4
      */
     public static Normalizer2 getInstance(InputStream data, String name, Mode mode) {
-        Norm2AllModes all2Modes=Norm2AllModes.getInstance(data, name);
+        // TODO: If callers really use this API, then we should add an overload that takes a ByteBuffer.
+        ByteBuffer bytes = null;
+        if (data != null) {
+            try {
+                bytes = ICUBinary.getByteBufferFromInputStream(data);
+            } catch (IOException e) {
+                throw new ICUUncheckedIOException(e);
+            }
+        }
+        Norm2AllModes all2Modes=Norm2AllModes.getInstance(bytes, name);
         switch(mode) {
         case COMPOSE: return all2Modes.comp;
         case DECOMPOSE: return all2Modes.decomp;
