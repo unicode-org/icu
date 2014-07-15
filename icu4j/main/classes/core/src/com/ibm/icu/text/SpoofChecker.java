@@ -6,15 +6,15 @@
  *
  * Unicode Spoof Detection
  */
+
 package com.ibm.icu.text;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +29,7 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.Trie2Writable;
 import com.ibm.icu.lang.UCharacter;
@@ -2182,7 +2183,7 @@ public class SpoofChecker {
             try {
                 InputStream is = com.ibm.icu.impl.ICUData.getRequiredStream(com.ibm.icu.impl.ICUResourceBundle.ICU_BUNDLE
                         + "/confusables.cfu");
-                This = new SpoofData(is);
+                This = new SpoofData(ICUBinary.getByteBufferFromInputStream(is));
                 is.close();
             }
             catch (IOException e) {
@@ -2197,15 +2198,13 @@ public class SpoofChecker {
         }
 
         // Constructor for use when creating from prebuilt default data.
-        // A InputStream is what the ICU internal data loading functions provide.
-        SpoofData(InputStream is) throws java.io.IOException {
+        // A ByteBuffer is what the ICU internal data loading functions provide.
+        SpoofData(ByteBuffer bytes) throws java.io.IOException {
             // Seek past the ICU data header.
             // TODO: verify that the header looks good.
-            DataInputStream dis = new DataInputStream(new BufferedInputStream(is));
-            dis.skip(0x80);
-            assert (dis.markSupported());
-            dis.mark(Integer.MAX_VALUE);
-            readData(dis);
+            ICUBinary.skipBytes(bytes, 0x80);
+            bytes.mark();
+            readData(bytes);
         }
 
         public boolean equals(Object other) {
@@ -2229,41 +2228,41 @@ public class SpoofChecker {
             return true;
         }
 
-        // Set the SpoofChecker data from pre-built binary data on a DataInputStream.
+        // Set the SpoofChecker data from pre-built binary data in a byte buffer.
         // The binary data format is as described for ICU4C spoof data.
         //
-        void readData(DataInputStream dis) throws java.io.IOException {
-            int magic = dis.readInt();
+        void readData(ByteBuffer bytes) throws java.io.IOException {
+            int magic = bytes.getInt();
             if (magic != 0x3845fdef) {
                 throw new IllegalArgumentException("Bad Spoof Check Data.");
             }
             @SuppressWarnings("unused")
-            int dataFormatVersion      = dis.readInt();
+            int dataFormatVersion      = bytes.getInt();
             @SuppressWarnings("unused")
-            int dataLength             = dis.readInt();
+            int dataLength             = bytes.getInt();
 
-            int CFUKeysOffset          = dis.readInt();
-            int CFUKeysSize            = dis.readInt();
+            int CFUKeysOffset          = bytes.getInt();
+            int CFUKeysSize            = bytes.getInt();
 
-            int CFUValuesOffset        = dis.readInt();
-            int CFUValuesSize          = dis.readInt();
+            int CFUValuesOffset        = bytes.getInt();
+            int CFUValuesSize          = bytes.getInt();
 
-            int CFUStringTableOffset   = dis.readInt();
-            int CFUStringTableSize     = dis.readInt();
+            int CFUStringTableOffset   = bytes.getInt();
+            int CFUStringTableSize     = bytes.getInt();
 
-            int CFUStringLengthsOffset = dis.readInt();
-            int CFUStringLengthsSize   = dis.readInt();
+            int CFUStringLengthsOffset = bytes.getInt();
+            int CFUStringLengthsSize   = bytes.getInt();
 
-            int anyCaseTrieOffset      = dis.readInt();
+            int anyCaseTrieOffset      = bytes.getInt();
             @SuppressWarnings("unused")
-            int anyCaseTrieSize        = dis.readInt();
+            int anyCaseTrieSize        = bytes.getInt();
 
-            int lowerCaseTrieOffset    = dis.readInt();
+            int lowerCaseTrieOffset    = bytes.getInt();
             @SuppressWarnings("unused")
-            int lowerCaseTrieLength    = dis.readInt();
+            int lowerCaseTrieLength    = bytes.getInt();
 
-            int scriptSetsOffset       = dis.readInt();
-            int scriptSetslength       = dis.readInt();
+            int scriptSetsOffset       = bytes.getInt();
+            int scriptSetslength       = bytes.getInt();
 
             int i;
             fCFUKeys = null;
@@ -2275,50 +2274,50 @@ public class SpoofChecker {
             // of the data items. Now read each in turn, first seeking the
             // input stream to the position of the data item.
 
-            dis.reset();
-            dis.skip(CFUKeysOffset);
+            bytes.reset();
+            ICUBinary.skipBytes(bytes, CFUKeysOffset);
             fCFUKeys = new int[CFUKeysSize];
             for (i = 0; i < CFUKeysSize; i++) {
-                fCFUKeys[i] = dis.readInt();
+                fCFUKeys[i] = bytes.getInt();
             }
 
-            dis.reset();
-            dis.skip(CFUValuesOffset);
+            bytes.reset();
+            ICUBinary.skipBytes(bytes, CFUValuesOffset);
             fCFUValues = new short[CFUValuesSize];
             for (i = 0; i < CFUValuesSize; i++) {
-                fCFUValues[i] = dis.readShort();
+                fCFUValues[i] = bytes.getShort();
             }
 
-            dis.reset();
-            dis.skip(CFUStringTableOffset);
+            bytes.reset();
+            ICUBinary.skipBytes(bytes, CFUStringTableOffset);
             StringBuffer CFUStringB = new StringBuffer();
             for (i = 0; i < CFUStringTableSize; i++) {
-                CFUStringB.append(dis.readChar());
+                CFUStringB.append(bytes.getChar());
             }
             fCFUStrings = CFUStringB.toString();
 
-            dis.reset();
-            dis.skip(CFUStringLengthsOffset);
+            bytes.reset();
+            ICUBinary.skipBytes(bytes, CFUStringLengthsOffset);
             fCFUStringLengths = new SpoofStringLengthsElement[CFUStringLengthsSize];
             for (i = 0; i < CFUStringLengthsSize; i++) {
                 fCFUStringLengths[i] = new SpoofStringLengthsElement();
-                fCFUStringLengths[i].fLastString = dis.readShort();
-                fCFUStringLengths[i].fStrLength = dis.readShort();
+                fCFUStringLengths[i].fLastString = bytes.getShort();
+                fCFUStringLengths[i].fStrLength = bytes.getShort();
             }
 
-            dis.reset();
-            dis.skip(anyCaseTrieOffset);
-            fAnyCaseTrie = Trie2.createFromSerialized(dis);
+            bytes.reset();
+            ICUBinary.skipBytes(bytes, anyCaseTrieOffset);
+            fAnyCaseTrie = Trie2.createFromSerialized(bytes);
 
-            dis.reset();
-            dis.skip(lowerCaseTrieOffset);
-            fLowerCaseTrie = Trie2.createFromSerialized(dis);
+            bytes.reset();
+            ICUBinary.skipBytes(bytes, lowerCaseTrieOffset);
+            fLowerCaseTrie = Trie2.createFromSerialized(bytes);
 
-            dis.reset();
-            dis.skip(scriptSetsOffset);
+            bytes.reset();
+            ICUBinary.skipBytes(bytes, scriptSetsOffset);
             fScriptSets = new ScriptSet[scriptSetslength];
             for (i = 0; i < scriptSetslength; i++) {
-                fScriptSets[i] = new ScriptSet(dis);
+                fScriptSets[i] = new ScriptSet(bytes);
             }
         }
 
@@ -2336,9 +2335,9 @@ public class SpoofChecker {
         public ScriptSet() {
         }
 
-        public ScriptSet(DataInputStream dis) throws java.io.IOException {
+        public ScriptSet(ByteBuffer bytes) throws java.io.IOException {
             for (int j = 0; j < bits.length; j++) {
-                bits[j] = dis.readInt();
+                bits[j] = bytes.getInt();
             }
         }
 
