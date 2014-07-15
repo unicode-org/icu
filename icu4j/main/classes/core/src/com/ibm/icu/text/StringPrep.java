@@ -4,15 +4,16 @@
  * others. All Rights Reserved.
  *******************************************************************************
  */
+
 package com.ibm.icu.text;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.nio.ByteBuffer;
 
 import com.ibm.icu.impl.CharTrie;
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.StringPrepDataReader;
@@ -209,7 +210,7 @@ public final class StringPrep {
     //private static final int MAX_INDEX_TOP_LENGTH = 0x0003;
     
     /* indexes[] value names */
-    private static final int INDEX_TRIE_SIZE                  =  0; /* number of bytes in normalization trie */
+//  private static final int INDEX_TRIE_SIZE                  =  0; /* number of bytes in normalization trie */
     private static final int INDEX_MAPPING_DATA_SIZE          =  1; /* The array that contains the mapping   */
     private static final int NORM_CORRECTNS_LAST_UNI_VERSION  =  2; /* The index of Unicode version of last entry in NormalizationCorrections.txt */ 
     private static final int ONE_UCHAR_MAPPING_INDEX_START    =  3; /* The starting index of 1 UChar mapping index in the mapping data array */
@@ -220,11 +221,6 @@ public final class StringPrep {
     private static final int INDEX_TOP                        = 16;                          /* changing this requires a new formatVersion */
    
    
-    /**
-     * Default buffer size of datafile
-     */
-    private static final int DATA_BUFFER_SIZE = 25000;
-    
     // CharTrie implmentation for reading the trie data
     private CharTrie sprepTrie;
     // Indexes read from the data file
@@ -257,43 +253,41 @@ public final class StringPrep {
         int major =(comp >> 24) & 0xFF;
         return VersionInfo.getInstance(major,minor,milli,micro);
     }
+
     private static VersionInfo getVersionInfo(byte[] version){
         if(version.length != 4){
             return null;
         }
         return VersionInfo.getInstance((int)version[0],(int) version[1],(int) version[2],(int) version[3]);
     }
+
     /**
      * Creates an StringPrep object after reading the input stream.
      * The object does not hold a reference to the input steam, so the stream can be
      * closed after the method returns.
-     * 
-     * @param inputStream The stream for reading the StringPrep profile binarySun 
+     *
+     * @param inputStream The stream for reading the StringPrep profile binarySun
      * @throws IOException An exception occurs when I/O of the inputstream is invalid
      * @stable ICU 2.8
      */
     public StringPrep(InputStream inputStream) throws IOException{
+        // TODO: Add a public constructor that takes ByteBuffer directly.
+        ByteBuffer bytes = ICUBinary.getByteBufferFromInputStream(inputStream);
+        StringPrepDataReader reader = new StringPrepDataReader(bytes);
 
-        BufferedInputStream b = new BufferedInputStream(inputStream,DATA_BUFFER_SIZE);
-  
-        StringPrepDataReader reader = new StringPrepDataReader(b);
-        
-        // read the indexes            
+        // read the indexes
         indexes = reader.readIndexes(INDEX_TOP);
-   
-        byte[] sprepBytes = new byte[indexes[INDEX_TRIE_SIZE]];
-   
 
-        //indexes[INDEX_MAPPING_DATA_SIZE] store the size of mappingData in bytes           
-        mappingData = new char[indexes[INDEX_MAPPING_DATA_SIZE]/2]; 
+        sprepTrie = new CharTrie(bytes, null);
+
+        //indexes[INDEX_MAPPING_DATA_SIZE] store the size of mappingData in bytes
+        mappingData = new char[indexes[INDEX_MAPPING_DATA_SIZE]/2];
         // load the rest of the data data and initialize the data members
-        reader.read(sprepBytes,mappingData);
-                                   
-        sprepTrie = new CharTrie(new ByteArrayInputStream(sprepBytes), null);
-              
-        // get the data format version                           
+        reader.read(mappingData);
+
+        // get the data format version
         /*formatVersion = */reader.getDataFormatVersion();
- 
+
         // get the options
         doNFKC            = ((indexes[OPTIONS] & NORMALIZATION_ON) > 0);
         checkBiDi         = ((indexes[OPTIONS] & CHECK_BIDI_ON) > 0);
@@ -306,13 +300,12 @@ public final class StringPrep {
            ){
             throw new IOException("Normalization Correction version not supported");
         }
-        b.close();
-        
+
         if(checkBiDi) {
             bdp=UBiDiProps.INSTANCE;
         }
     }
- 
+
     /**
      * Gets a StringPrep instance for the specified profile
      * 
