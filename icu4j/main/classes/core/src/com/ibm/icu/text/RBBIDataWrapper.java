@@ -1,18 +1,17 @@
-/**
-*******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.text;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 import com.ibm.icu.impl.CharTrie;
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.Trie;
 
 /**
@@ -149,172 +148,171 @@ final class RBBIDataWrapper {
      *  Get an RBBIDataWrapper from an InputStream onto a pre-compiled set
      *  of RBBI rules.
      */
-    static RBBIDataWrapper get(InputStream is) throws IOException {
+    static RBBIDataWrapper get(ByteBuffer bytes) throws IOException {
         int i;
-        
-        DataInputStream dis = new DataInputStream(new BufferedInputStream(is));
+
         RBBIDataWrapper This = new RBBIDataWrapper();
-        
+
         // Seek past the ICU data header.
         //   TODO:  verify that the header looks good.
-        dis.skip(0x80);
-        
+        ICUBinary.skipBytes(bytes, 0x80);
+
         // Read in the RBBI data header...
         This.fHeader = new  RBBIDataHeader();
-        This.fHeader.fMagic          = dis.readInt();
-        This.fHeader.fVersion        = dis.readInt();
+        This.fHeader.fMagic          = bytes.getInt();
+        This.fHeader.fVersion        = bytes.getInt();
         This.fHeader.fFormatVersion[0] = (byte) (This.fHeader.fVersion >> 24);
         This.fHeader.fFormatVersion[1] = (byte) (This.fHeader.fVersion >> 16);
         This.fHeader.fFormatVersion[2] = (byte) (This.fHeader.fVersion >> 8);
         This.fHeader.fFormatVersion[3] = (byte) (This.fHeader.fVersion);
-        This.fHeader.fLength         = dis.readInt();
-        This.fHeader.fCatCount       = dis.readInt();
-        This.fHeader.fFTable         = dis.readInt();
-        This.fHeader.fFTableLen      = dis.readInt();
-        This.fHeader.fRTable         = dis.readInt();
-        This.fHeader.fRTableLen      = dis.readInt();
-        This.fHeader.fSFTable        = dis.readInt();
-        This.fHeader.fSFTableLen     = dis.readInt();
-        This.fHeader.fSRTable        = dis.readInt();
-        This.fHeader.fSRTableLen     = dis.readInt();
-        This.fHeader.fTrie           = dis.readInt();
-        This.fHeader.fTrieLen        = dis.readInt();
-        This.fHeader.fRuleSource     = dis.readInt();
-        This.fHeader.fRuleSourceLen  = dis.readInt();
-        This.fHeader.fStatusTable    = dis.readInt();
-        This.fHeader.fStatusTableLen = dis.readInt();
-        dis.skip(6 * 4);    // uint32_t  fReserved[6];
-        
-        
-        if (This.fHeader.fMagic != 0xb1a0 || 
+        This.fHeader.fLength         = bytes.getInt();
+        This.fHeader.fCatCount       = bytes.getInt();
+        This.fHeader.fFTable         = bytes.getInt();
+        This.fHeader.fFTableLen      = bytes.getInt();
+        This.fHeader.fRTable         = bytes.getInt();
+        This.fHeader.fRTableLen      = bytes.getInt();
+        This.fHeader.fSFTable        = bytes.getInt();
+        This.fHeader.fSFTableLen     = bytes.getInt();
+        This.fHeader.fSRTable        = bytes.getInt();
+        This.fHeader.fSRTableLen     = bytes.getInt();
+        This.fHeader.fTrie           = bytes.getInt();
+        This.fHeader.fTrieLen        = bytes.getInt();
+        This.fHeader.fRuleSource     = bytes.getInt();
+        This.fHeader.fRuleSourceLen  = bytes.getInt();
+        This.fHeader.fStatusTable    = bytes.getInt();
+        This.fHeader.fStatusTableLen = bytes.getInt();
+        ICUBinary.skipBytes(bytes, 6 * 4);    // uint32_t  fReserved[6];
+
+
+        if (This.fHeader.fMagic != 0xb1a0 ||
                 ! (This.fHeader.fVersion == 1  ||         // ICU 3.2 and earlier
                    This.fHeader.fFormatVersion[0] == 3)   // ICU 3.4
             ) {
             throw new IOException("Break Iterator Rule Data Magic Number Incorrect, or unsupported data version.");
         }
-        
-        // Current position in input stream.  
+
+        // Current position in the buffer.
         int pos = 24 * 4;     // offset of end of header, which has 24 fields, all int32_t (4 bytes)
-        
+
         //
         // Read in the Forward state transition table as an array of shorts.
         //
-        
+
         //   Quick Sanity Check
         if (This.fHeader.fFTable < pos || This.fHeader.fFTable > This.fHeader.fLength) {
              throw new IOException("Break iterator Rule data corrupt");
         }
-        
+
         //    Skip over any padding preceding this table
-        dis.skip(This.fHeader.fFTable - pos);
+        ICUBinary.skipBytes(bytes, This.fHeader.fFTable - pos);
         pos = This.fHeader.fFTable;
-        
+
         This.fFTable = new short[This.fHeader.fFTableLen / 2];
         for ( i=0; i<This.fFTable.length; i++) {
-            This.fFTable[i] = dis.readShort(); 
+            This.fFTable[i] = bytes.getShort();
             pos += 2;
         }
-        
+
         //
         // Read in the Reverse state table
         //
-        
+
         // Skip over any padding in the file
-        dis.skip(This.fHeader.fRTable - pos);
+        ICUBinary.skipBytes(bytes, This.fHeader.fRTable - pos);
         pos = This.fHeader.fRTable;
-        
+
         // Create & fill the table itself.
         This.fRTable = new short[This.fHeader.fRTableLen / 2];
         for (i=0; i<This.fRTable.length; i++) {
-            This.fRTable[i] = dis.readShort(); 
+            This.fRTable[i] = bytes.getShort();
             pos += 2;
         }
-        
+
         //
         // Read in the Safe Forward state table
-        // 
+        //
         if (This.fHeader.fSFTableLen > 0) {
             // Skip over any padding in the file
-            dis.skip(This.fHeader.fSFTable - pos);
+            ICUBinary.skipBytes(bytes, This.fHeader.fSFTable - pos);
             pos = This.fHeader.fSFTable;
-            
+
             // Create & fill the table itself.
             This.fSFTable = new short[This.fHeader.fSFTableLen / 2];
             for (i=0; i<This.fSFTable.length; i++) {
-                This.fSFTable[i] = dis.readShort(); 
+                This.fSFTable[i] = bytes.getShort();
                 pos += 2;
-            }           
+            }
         }
-        
+
         //
         // Read in the Safe Reverse state table
-        // 
+        //
         if (This.fHeader.fSRTableLen > 0) {
             // Skip over any padding in the file
-            dis.skip(This.fHeader.fSRTable - pos);
+            ICUBinary.skipBytes(bytes, This.fHeader.fSRTable - pos);
             pos = This.fHeader.fSRTable;
-            
+
             // Create & fill the table itself.
             This.fSRTable = new short[This.fHeader.fSRTableLen / 2];
             for (i=0; i<This.fSRTable.length; i++) {
-                This.fSRTable[i] = dis.readShort(); 
+                This.fSRTable[i] = bytes.getShort();
                 pos += 2;
-            }           
+            }
         }
-        
+
         //
         // Unserialize the Character categories TRIE
         //     Because we can't be absolutely certain where the Trie deserialize will
-        //     leave the input stream, leave position unchanged.
+        //     leave the buffer, leave position unchanged.
         //     The seek to the start of the next item following the TRIE will get us
         //     back in sync.
         //
-        dis.skip(This.fHeader.fTrie - pos);     // seek input stream from end of previous section to
-        pos = This.fHeader.fTrie;               //   to the start of the trie
-    
-        dis.mark(This.fHeader.fTrieLen+100);    // Mark position of start of TRIE in the input
+        ICUBinary.skipBytes(bytes, This.fHeader.fTrie - pos);  // seek buffer from end of
+        pos = This.fHeader.fTrie;               // previous section to the start of the trie
+
+        bytes.mark();                           // Mark position of start of TRIE in the input
                                                 //  and tell Java to keep the mark valid so long
                                                 //  as we don't go more than 100 bytes past the
                                                 //  past the end of the TRIE.
-    
-        This.fTrie = new CharTrie(dis, fTrieFoldingFunc);  // Deserialize the TRIE, leaving input
-                                                //  stream at an unknown position, preceding the
+
+        This.fTrie = new CharTrie(bytes, fTrieFoldingFunc);  // Deserialize the TRIE, leaving buffer
+                                                //  at an unknown position, preceding the
                                                 //  padding between TRIE and following section.
-    
-        dis.reset();                            // Move input stream back to marked position at
+
+        bytes.reset();                          // Move buffer back to marked position at
                                                 //   the start of the serialized TRIE.  Now our
-                                                //   "pos" variable and the input stream are in
+                                                //   "pos" variable and the buffer are in
                                                 //   agreement.
-        
+
         //
         // Read the Rule Status Table
         //
         if (pos > This.fHeader.fStatusTable) {
-            throw new IOException("Break iterator Rule data corrupt");            
+            throw new IOException("Break iterator Rule data corrupt");
         }
-        dis.skip(This.fHeader.fStatusTable - pos);
+        ICUBinary.skipBytes(bytes, This.fHeader.fStatusTable - pos);
         pos = This.fHeader.fStatusTable;
         This.fStatusTable = new int[This.fHeader.fStatusTableLen / 4];
         for (i=0; i<This.fStatusTable.length; i++) {
-            This.fStatusTable[i] = dis.readInt(); 
+            This.fStatusTable[i] = bytes.getInt();
             pos += 4;
         }
-        
+
         //
         // Put the break rule source into a String
         //
         if (pos > This.fHeader.fRuleSource) {
-            throw new IOException("Break iterator Rule data corrupt");            
+            throw new IOException("Break iterator Rule data corrupt");
         }
-        dis.skip(This.fHeader.fRuleSource - pos);
+        ICUBinary.skipBytes(bytes, This.fHeader.fRuleSource - pos);
         pos = This.fHeader.fRuleSource;
         StringBuilder sb = new StringBuilder(This.fHeader.fRuleSourceLen / 2);
         for (i=0; i<This.fHeader.fRuleSourceLen; i+=2) {
-            sb.append(dis.readChar()); 
+            sb.append(bytes.getChar());
             pos += 2;
         }
         This.fRuleSource = sb.toString();
-        
+
         if (RuleBasedBreakIterator.fDebugEnv!=null && RuleBasedBreakIterator.fDebugEnv.indexOf("data")>=0) {
             This.dump();
         }
