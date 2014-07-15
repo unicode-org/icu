@@ -1,18 +1,19 @@
-/**
-*******************************************************************************
-* Copyright (C) 2006-2010, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
-*******************************************************************************
-*/ 
+/*
+ *******************************************************************************
+ * Copyright (C) 2006-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ *
+ *******************************************************************************
+ */
+
 package com.ibm.icu.charset;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 
@@ -116,11 +117,6 @@ final class UConverterAlias {
 
     private static final String CNVALIAS_DATA_FILE_NAME = ICUResourceBundle.ICU_BUNDLE + "/cnvalias.icu";
 
-    /**
-     * Default buffer size of datafile
-     */
-    private static final int CNVALIAS_DATA_BUFFER_SIZE = 25000;
-
     private static final synchronized boolean haveAliasData() 
                                                throws IOException{
         boolean needInit;
@@ -136,7 +132,7 @@ final class UConverterAlias {
             //byte[] reservedBytes = null;
 
             InputStream i = ICUData.getRequiredStream(CNVALIAS_DATA_FILE_NAME);
-            BufferedInputStream b = new BufferedInputStream(i, CNVALIAS_DATA_BUFFER_SIZE);
+            ByteBuffer b = ICUBinary.getByteBufferFromInputStream(i);
             UConverterAliasDataReader reader = new UConverterAliasDataReader(b);
             tableArray = reader.readToc(offsetsCount);
 

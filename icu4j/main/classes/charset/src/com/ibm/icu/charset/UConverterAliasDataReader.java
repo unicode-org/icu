@@ -1,14 +1,14 @@
 /*
-*******************************************************************************
-* Copyright (C) 2006-2010, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/ 
+ *******************************************************************************
+ * Copyright (C) 2006-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.charset;
-import java.io.DataInputStream;
+
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 import com.ibm.icu.impl.ICUBinary;
 
@@ -124,65 +124,62 @@ import com.ibm.icu.impl.ICUBinary;
 
 final class UConverterAliasDataReader implements ICUBinary.Authenticate {
 //    private final static boolean debug = ICUDebug.enabled("UConverterAliasDataReader");
-    
+
    /**
     * <p>Protected constructor.</p>
-    * @param inputStream ICU uprop.dat file input stream
-    * @exception IOException throw if data file fails authentication 
+    * @param bytes ICU uprop.dat file buffer
+    * @exception IOException throw if data file fails authentication
     */
-    protected UConverterAliasDataReader(InputStream inputStream) 
+    protected UConverterAliasDataReader(ByteBuffer bytes)
                                         throws IOException{
-        //if(debug) System.out.println("Bytes in inputStream " + inputStream.available());
-        
-        /*unicodeVersion = */ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, this);
-        
-        //if(debug) System.out.println("Bytes left in inputStream " +inputStream.available());
-        
-        dataInputStream = new DataInputStream(inputStream);
-        
-        //if(debug) System.out.println("Bytes left in dataInputStream " +dataInputStream.available());
+        //if(debug) System.out.println("Bytes in buffer " + bytes.remaining());
+
+        byteBuffer = bytes;
+        /*unicodeVersion = */ICUBinary.readHeader(byteBuffer, DATA_FORMAT_ID, this);
+
+        //if(debug) System.out.println("Bytes left in byteBuffer " + byteBuffer.remaining());
     }
-    
+
     // protected methods -------------------------------------------------
-    
+
     protected int[] readToc(int n)throws IOException
     {
         int[] toc = new int[n];
         //Read the toc
         for (int i = 0; i < n ; ++i) {
-            toc[i] = dataInputStream.readInt() & UNSIGNED_INT_MASK;
+            toc[i] = byteBuffer.getInt() & UNSIGNED_INT_MASK;
         }
         return toc;
     } 
-        
+
     protected void read(int[] convList, int[] tagList, int[] aliasList, int[]untaggedConvArray, int[] taggedAliasArray, int[] taggedAliasLists, int[] optionTable, byte[] stringTable, byte[] normalizedStringTable) throws IOException{
         int i;
         //int listnum = 1;
         //long listsize;
 
         for(i = 0; i < convList.length; ++i)
-            convList[i] = dataInputStream.readUnsignedShort();
+            convList[i] = byteBuffer.getChar();
 
         for(i = 0; i < tagList.length; ++i)
-            tagList[i] = dataInputStream.readUnsignedShort();
+            tagList[i] = byteBuffer.getChar();
 
         for(i = 0; i < aliasList.length; ++i)
-            aliasList[i] = dataInputStream.readUnsignedShort();
+            aliasList[i] = byteBuffer.getChar();
 
         for(i = 0; i < untaggedConvArray.length; ++i)
-            untaggedConvArray[i] = dataInputStream.readUnsignedShort();
+            untaggedConvArray[i] = byteBuffer.getChar();
 
         for(i = 0; i < taggedAliasArray.length; ++i)
-            taggedAliasArray[i] = dataInputStream.readUnsignedShort();
+            taggedAliasArray[i] = byteBuffer.getChar();
 
         for(i = 0; i < taggedAliasLists.length; ++i)
-            taggedAliasLists[i] = dataInputStream.readUnsignedShort();
+            taggedAliasLists[i] = byteBuffer.getChar();
 
         for(i = 0; i < optionTable.length; ++i)
-            optionTable[i] = dataInputStream.readUnsignedShort();
+            optionTable[i] = byteBuffer.getChar();
 
-        dataInputStream.readFully(stringTable);
-        dataInputStream.readFully(normalizedStringTable);
+        byteBuffer.get(stringTable);
+        byteBuffer.get(normalizedStringTable);
     }
 
     public boolean isDataVersionAcceptable(byte version[])
@@ -194,28 +191,27 @@ final class UConverterAliasDataReader implements ICUBinary.Authenticate {
     }
     
     /*byte[] getUnicodeVersion(){
-        return unicodeVersion;    
+        return ICUBinary.getVersionByteArrayFromCompactInt(unicodeVersion);    
     }*/
     // private data members -------------------------------------------------
-      
+
 
     /**
-    * ICU data file input stream
+    * ICU data file buffer
     */
-    private DataInputStream dataInputStream;
-    
-//    private byte[] unicodeVersion;
-                                       
+    private ByteBuffer byteBuffer;
+
+//    private int unicodeVersion;
+
     /**
     * File format version that this class understands.
     * No guarantees are made if a older version is used
     * see store.c of gennorm for more information and values
     */
         // DATA_FORMAT_ID_ values taken from icu4c isAcceptable (ucnv_io.c)
-    private static final byte DATA_FORMAT_ID[] = {(byte)0x43, (byte)0x76, (byte)0x41, (byte)0x6c}; // dataFormat="CvAl"
+    private static final int DATA_FORMAT_ID = 0x4376416c; // dataFormat="CvAl"
     private static final byte DATA_FORMAT_VERSION[] = {3, 0, 1};
 
     //private static final int UNSIGNED_SHORT_MASK = 0xffff;
     private static final int UNSIGNED_INT_MASK = 0xffffffff;
-    
 }
