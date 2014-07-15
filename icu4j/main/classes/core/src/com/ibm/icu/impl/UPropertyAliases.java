@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2011, International Business Machines
+ * Copyright (c) 2002-2014, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -12,10 +12,9 @@
 
 package com.ibm.icu.impl;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UProperty;
@@ -74,21 +73,19 @@ public final class UPropertyAliases {
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE=new IsAcceptable();
-    private static final byte DATA_FORMAT[]={ 0x70, 0x6E, 0x61, 0x6D  };  // "pnam"
+    private static final int DATA_FORMAT=0x706E616D;  // "pnam"
 
-    private void load(InputStream data) throws IOException {
-        BufferedInputStream bis=new BufferedInputStream(data);
-        //dataVersion=ICUBinary.readHeaderAndDataVersion(bis, DATA_FORMAT, IS_ACCEPTABLE);
-        ICUBinary.readHeader(bis, DATA_FORMAT, IS_ACCEPTABLE);
-        DataInputStream ds=new DataInputStream(bis);
-        int indexesLength=ds.readInt()/4;  // inIndexes[IX_VALUE_MAPS_OFFSET]/4
+    private void load(ByteBuffer bytes) throws IOException {
+        //dataVersion=ICUBinary.readHeaderAndDataVersion(bytes, DATA_FORMAT, IS_ACCEPTABLE);
+        ICUBinary.readHeader(bytes, DATA_FORMAT, IS_ACCEPTABLE);
+        int indexesLength=bytes.getInt()/4;  // inIndexes[IX_VALUE_MAPS_OFFSET]/4
         if(indexesLength<8) {  // formatVersion 2 initially has 8 indexes
             throw new IOException("pnames.icu: not enough indexes");
         }
         int[] inIndexes=new int[indexesLength];
         inIndexes[0]=indexesLength*4;
         for(int i=1; i<indexesLength; ++i) {
-            inIndexes[i]=ds.readInt();
+            inIndexes[i]=bytes.getInt();
         }
 
         // Read the valueMaps.
@@ -97,7 +94,7 @@ public final class UPropertyAliases {
         int numInts=(nextOffset-offset)/4;
         valueMaps=new int[numInts];
         for(int i=0; i<numInts; ++i) {
-            valueMaps[i]=ds.readInt();
+            valueMaps[i]=bytes.getInt();
         }
 
         // Read the bytesTries.
@@ -105,7 +102,7 @@ public final class UPropertyAliases {
         nextOffset=inIndexes[IX_NAME_GROUPS_OFFSET];
         int numBytes=nextOffset-offset;
         bytesTries=new byte[numBytes];
-        ds.readFully(bytesTries);
+        bytes.get(bytesTries);
 
         // Read the nameGroups and turn them from ASCII bytes into a Java String.
         offset=nextOffset;
@@ -113,15 +110,15 @@ public final class UPropertyAliases {
         numBytes=nextOffset-offset;
         StringBuilder sb=new StringBuilder(numBytes);
         for(int i=0; i<numBytes; ++i) {
-            sb.append((char)ds.readByte());
+            sb.append((char)bytes.get());
         }
         nameGroups=sb.toString();
-
-        data.close();
     }
 
     private UPropertyAliases() throws IOException {
-        load(ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/pnames.icu"));
+        InputStream stream = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/pnames.icu");
+        ByteBuffer bytes = ICUBinary.getByteBufferFromInputStream(stream);
+        load(bytes);
     }
 
     private int findProperty(int property) {
