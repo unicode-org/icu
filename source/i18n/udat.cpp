@@ -356,6 +356,13 @@ udat_setNumberFormat(UDateFormat*    fmt,
     ((DateFormat*)fmt)->setNumberFormat(*((NumberFormat*)numberFormatToSet));
 }
 
+U_DRAFT void U_EXPORT2
+udat_adoptNumberFormat(      UDateFormat*    fmt,
+                             UNumberFormat*  numberFormatToAdopt)
+{
+    ((DateFormat*)fmt)->adoptNumberFormat((NumberFormat*)numberFormatToAdopt);
+}
+
 U_CAPI const char* U_EXPORT2
 udat_getAvailable(int32_t index)
 {

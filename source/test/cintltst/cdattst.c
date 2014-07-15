@@ -66,6 +66,7 @@ static void TestDateFormat()
     UChar* result = NULL;
     const UCalendar *cal;
     const UNumberFormat *numformat1, *numformat2;
+    UNumberFormat *adoptNF;
     UChar temp[50];
     int32_t numlocales;
     UDate d1;
@@ -338,6 +339,16 @@ static void TestDateFormat()
         log_err("FAIL: error in setNumberFormat or getNumberFormat()\n");
     else
         log_verbose("PASS:setNumberFormat and getNumberFormat succesful\n");
+        
+    /*Test getNumberFormat() and adoptNumberFormat() */
+    log_verbose("\nTesting the get and adopt NumberFormat properties of date format\n");
+    adoptNF= unum_open(UNUM_DEFAULT, NULL, 0, NULL, NULL, &status);
+    udat_adoptNumberFormat(def1, adoptNF);
+    numformat2=udat_getNumberFormat(def1);
+    if(u_strcmp(myNumformat(adoptNF, num), myNumformat(numformat2, num)) !=0)
+        log_err("FAIL: error in adoptNumberFormat or getNumberFormat()\n");
+    else
+        log_verbose("PASS:adoptNumberFormat and getNumberFormat succesful\n");
 
     /*try setting the number format to another format */
     numformat1=udat_getNumberFormat(def);
