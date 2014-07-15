@@ -1,14 +1,14 @@
-/**
+/*
  *******************************************************************************
- * Copyright (C) 2006-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2006-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  *
  *******************************************************************************
  */
+
 package com.ibm.icu.charset;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.Buffer;
@@ -22,6 +22,7 @@ import java.nio.charset.CoderResult;
 import java.util.Locale;
 
 import com.ibm.icu.charset.UConverterSharedData.UConverterType;
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.InvalidFormatException;
@@ -200,7 +201,7 @@ class CharsetMBCS extends CharsetICU {
             } else {
                 i = ICUData.getRequiredStream(resourceName);
             }
-            BufferedInputStream b = new BufferedInputStream(i, UConverterConstants.CNV_DATA_BUFFER_SIZE);
+            ByteBuffer b = ICUBinary.getByteBufferFromInputStream(i);
             reader = new UConverterDataReader(b);
             reader.readStaticData(staticData);
         } catch (IOException e) {
