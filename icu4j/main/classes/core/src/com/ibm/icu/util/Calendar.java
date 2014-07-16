@@ -1127,7 +1127,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WEEKEND_CEASE
      * @see #getDayOfWeekType
      * @stable ICU 2.0
+     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
      */
+    @Deprecated
     public static final int WEEKDAY = 0;
 
     /**
@@ -1138,7 +1140,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WEEKEND_CEASE
      * @see #getDayOfWeekType
      * @stable ICU 2.0
+     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
      */
+    @Deprecated
     public static final int WEEKEND = 1;
 
     /**
@@ -1150,7 +1154,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WEEKEND_CEASE
      * @see #getDayOfWeekType
      * @stable ICU 2.0
+     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
      */
+    @Deprecated
     public static final int WEEKEND_ONSET = 2;
 
     /**
@@ -1162,7 +1168,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WEEKEND_ONSET
      * @see #getDayOfWeekType
      * @stable ICU 2.0
+     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
      */
+    @Deprecated
     public static final int WEEKEND_CEASE = 3;
 
     /**
@@ -4331,7 +4339,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #isWeekend(Date)
      * @see #isWeekend()
      * @stable ICU 2.0
+     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
      */
+    @Deprecated
     public int getDayOfWeekType(int dayOfWeek) {
         if (dayOfWeek < SUNDAY || dayOfWeek > SATURDAY) {
             throw new IllegalArgumentException("Invalid day of week");
@@ -4375,7 +4385,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #isWeekend(Date)
      * @see #isWeekend()
      * @stable ICU 2.0
+     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
      */
+    @Deprecated
     public int getWeekendTransition(int dayOfWeek) {
         if (dayOfWeek == weekendOnset) {
             return weekendOnsetMillis;
@@ -4505,11 +4517,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Simple, immutable struct-like class for access to the CLDR weekend data.
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
-    @Deprecated
     public static final class WeekData {
         
         /**
@@ -4540,10 +4548,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
         /**
          * Constructor
-         * @internal
-         * @deprecated This API is ICU internal only.
          */
-        @Deprecated
         public WeekData(int fdow, int mdifw,
                 int weekendOnset, int weekendOnsetMillis,
                 int weekendCease, int weekendCeaseMillis) {
@@ -4572,7 +4577,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
         @Override
         public String toString() {
-            // TODO Auto-generated method stub
             return "{" + firstDayOfWeek
                     + ", " + minimalDaysInFirstWeek
                     + ", " + weekendOnset
@@ -4585,15 +4589,37 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Return simple, immutable struct-like class for access to the CLDR weekend data.
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @param region The input region. The results are undefined if the region code is not valid.
+     * @return the WeekData for the input region
      */
-    @Deprecated
     public static WeekData getWeekDataForRegion(String region) {
         return WEEK_DATA_CACHE.createInstance(region, region);
     }
     
+    /**
+     * Return simple, immutable struct-like class for access to the weekend data in this calendar.
+     * @return the WeekData for this calendar.
+     */
+    public WeekData getWeekData() {
+        return new WeekData(firstDayOfWeek, minimalDaysInFirstWeek, weekendOnset, weekendOnsetMillis, weekendCease, weekendCeaseMillis);
+    }
+    
+    /**
+     * Set data in this calendar based on the WeekData input.
+     * @param wdata The week data to use
+     * @return this, for chaining
+     */
+    public Calendar setWeekData(WeekData wdata) {
+        setFirstDayOfWeek(wdata.firstDayOfWeek);
+        setMinimalDaysInFirstWeek(wdata.minimalDaysInFirstWeek);
+
+        weekendOnset       = wdata.weekendOnset;
+        weekendOnsetMillis = wdata.weekendOnsetMillis;
+        weekendCease       = wdata.weekendCease;
+        weekendCeaseMillis = wdata.weekendCeaseMillis;
+        return this;
+    }
+
     private static WeekData getWeekDataForRegionInternal(String region) {
         if (region == null) {
             region = "001";
@@ -4645,14 +4671,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             region = "001";
         }
         WeekData wdata = WEEK_DATA_CACHE.getInstance(region, region);
-
-        setFirstDayOfWeek(wdata.firstDayOfWeek);
-        setMinimalDaysInFirstWeek(wdata.minimalDaysInFirstWeek);
-
-        weekendOnset       = wdata.weekendOnset;
-        weekendOnsetMillis = wdata.weekendOnsetMillis;
-        weekendCease       = wdata.weekendCease;
-        weekendCeaseMillis = wdata.weekendCeaseMillis;
+        setWeekData(wdata);
     }
 
     /**
