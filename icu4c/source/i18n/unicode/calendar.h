@@ -2164,7 +2164,7 @@ private:
 
     /**
      * Time zone affects the time calculation done by Calendar. Calendar subclasses use
-     * the time zone data to produce the local time.
+     * the time zone data to produce the local time. Always set; never NULL.
      */
     TimeZone*   fZone;
 
