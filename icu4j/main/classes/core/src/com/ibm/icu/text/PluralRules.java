@@ -2446,41 +2446,4 @@ public class PluralRules implements Serializable {
     public boolean computeLimited(String keyword, SampleType sampleType) {
         return rules.computeLimited(keyword, sampleType);
     }
-
-    /**
-     * Return the plural category for a range, such as 3.1-4.2.
-     * @param locale locale for the range
-     * @param startPluralCategory the plural category of the low end of the range.
-     * @param endPluralCategory the plural category of the high end of the range.
-     * @return the plural category of the range
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    static public StandardPluralCategories getRange(ULocale locale, 
-            StandardPluralCategories startPluralCategory, 
-            StandardPluralCategories endPluralCategory) {
-        final PluralRanges pluralRanges = Factory.getDefaultFactory().getPluralRanges(locale);
-        return pluralRanges.get(startPluralCategory, endPluralCategory);
-    }
-
-    /**
-     * Return the plural category for a range, such as 3.1-4.2.
-     * @param locale locale for the range
-     * @param startPluralCategory the plural category of the low end of the range.
-     * @param endPluralCategory the plural category of the high end of the range.
-     * @return the plural category of the range
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    static public String getRange(ULocale locale, 
-            String startPluralCategory, 
-            String endPluralCategory) {
-        final PluralRanges pluralRanges = Factory.getDefaultFactory().getPluralRanges(locale);
-        return pluralRanges.get(
-                StandardPluralCategories.valueOf(startPluralCategory), 
-                StandardPluralCategories.valueOf(endPluralCategory))
-                .toString();
-    }
 }

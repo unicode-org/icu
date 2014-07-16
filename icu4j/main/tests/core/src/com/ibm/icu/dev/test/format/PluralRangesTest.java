@@ -11,7 +11,9 @@ import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.PluralRanges;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.PluralRules.Factory;
 import com.ibm.icu.text.PluralRules.StandardPluralCategories;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
@@ -41,8 +43,9 @@ public class PluralRangesTest extends TestFmwk {
             final StandardPluralCategories start = StandardPluralCategories.valueOf(test[1]);
             final StandardPluralCategories end = StandardPluralCategories.valueOf(test[2]);
             final StandardPluralCategories expected = StandardPluralCategories.valueOf(test[3]);
+            final PluralRanges pluralRanges = Factory.getDefaultFactory().getPluralRanges(locale);
 
-            StandardPluralCategories actual = PluralRules.getRange(locale, start, end);
+            StandardPluralCategories actual = pluralRanges.get(start, end);
             assertEquals("Deriving range category", expected, actual);
         }
     }
@@ -54,7 +57,10 @@ public class PluralRangesTest extends TestFmwk {
                 {3.1, 4.25, ULocale.FRANCE, FormatWidth.SHORT, MeasureUnit.FAHRENHEIT, "3,1–4,25 °F"},
                 {3.1, 4.25, ULocale.ENGLISH, FormatWidth.SHORT, MeasureUnit.FAHRENHEIT, "3.1–4.25°F"},
                 {3.1, 4.25, ULocale.CHINESE, FormatWidth.WIDE, MeasureUnit.INCH, "3.1-4.25英寸"},
-                {0.0, 1.0, new ULocale("xx"), FormatWidth.WIDE, MeasureUnit.INCH, "0–1 inches"},
+                {0.0, 1.0, ULocale.ENGLISH, FormatWidth.WIDE, MeasureUnit.INCH, "0–1 inches"},
+                
+                {0.0, 1.0, ULocale.ENGLISH, FormatWidth.WIDE, Currency.getInstance("EUR"), 
+                    IllegalArgumentException.class},
         };
         for (Object[] test : tests) {
             double low = (Double) test[0];
@@ -62,10 +68,15 @@ public class PluralRangesTest extends TestFmwk {
             final ULocale locale = (ULocale) test[2];
             final FormatWidth width = (FormatWidth) test[3];
             final MeasureUnit unit = (MeasureUnit) test[4];
-            final String expected = (String) test[5];
+            final Object expected = test[5];
 
             MeasureFormat mf = MeasureFormat.getInstance(locale, width);
-            String actual = mf.formatMeasureRange(new Measure(low, unit), new Measure(high, unit));
+            Object actual;
+            try {
+                actual = mf.formatMeasureRange(new Measure(low, unit), new Measure(high, unit));
+            } catch (Exception e) {
+                actual = e.getClass();
+            }
             assertEquals("Formatting unit", expected, actual);
         }
     }
