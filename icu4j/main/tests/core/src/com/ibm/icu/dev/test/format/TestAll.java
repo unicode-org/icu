@@ -110,6 +110,7 @@ public class TestAll extends TestGroup {
                 "PluralFormatUnitTest",
                 "PluralFormatTest",
                 "PluralRulesTest",
+                "PluralRangesTest",
             });
         }
     }

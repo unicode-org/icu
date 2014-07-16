@@ -16,6 +16,7 @@ import java.io.InvalidObjectException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
+import java.nio.Buffer;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimplePatternFormatter;
 import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.text.PluralRules.Factory;
 import com.ibm.icu.text.PluralRules.StandardPluralCategories;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
@@ -380,8 +382,10 @@ public class MeasureFormat extends UFormat {
     /**
      * Format a range of measures, such as "3.4-5.1 meters". It is the caller’s
      * responsibility to have the appropriate values in appropriate order,
-     * and using the appropriate Number values. Typically the units should be
-     * in ascending order.
+     * and using the appropriate Number values.
+     * <br>Note: If the format doesn’t have enough decimals, or lowValue ≥ highValue,
+     * the result will be a degenerate range, like “5-5 meters”.
+     * <br>Currency Units are not yet supported.
      * 
      * @param lowValue low value in range
      * @param highValue high value in range
@@ -400,22 +404,29 @@ public class MeasureFormat extends UFormat {
 
         UFieldPosition fpos = new UFieldPosition();
         StringBuffer lowFormatted = numberFormat.format(lowNumber, new StringBuffer(), fpos);
-        String keywordLow = rules.select(new PluralRules.FixedDecimal(lowNumber.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
+        final double lowDouble = lowNumber.doubleValue();
+        String keywordLow = rules.select(new PluralRules.FixedDecimal(lowDouble, 
+                fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
 
         StringBuffer highFormatted = numberFormat.format(highNumber, new StringBuffer(), fpos);
-        String keywordHigh = rules.select(new PluralRules.FixedDecimal(highNumber.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
+        String keywordHigh = rules.select(new PluralRules.FixedDecimal(highNumber.doubleValue(), 
+                fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
 
-        StandardPluralCategories resolvedCategory = PluralRules.getRange(
-                getLocale(),
-                StandardPluralCategories.valueOf(keywordLow),
-                StandardPluralCategories.valueOf(keywordHigh));
+        final PluralRanges pluralRanges = Factory.getDefaultFactory().getPluralRanges(getLocale());
+        StandardPluralCategories resolvedCategory = pluralRanges.get(
+                StandardPluralCategories.valueOf(keywordLow), StandardPluralCategories.valueOf(keywordHigh));
 
-        Map<FormatWidth, QuantityFormatter> styleToCountToFormat = unitToStyleToCountToFormat.get(lowValue.getUnit());
-        QuantityFormatter countToFormat = styleToCountToFormat.get(formatWidth);
-        SimplePatternFormatter formatter = countToFormat.getByVariant(resolvedCategory.toString());
         SimplePatternFormatter rangeFormatter = getRangeFormat(getLocale(), formatWidth);
         String formattedNumber = rangeFormatter.format(lowFormatted, highFormatted);
-        return formatter.format(formattedNumber);
+
+        if (unit instanceof Currency) {
+            throw new IllegalArgumentException("Currency units not supported in ranges");
+        } else {
+            Map<FormatWidth, QuantityFormatter> styleToCountToFormat = unitToStyleToCountToFormat.get(lowValue.getUnit());
+            QuantityFormatter countToFormat = styleToCountToFormat.get(formatWidth);
+            SimplePatternFormatter formatter = countToFormat.getByVariant(resolvedCategory.toString());
+            return formatter.format(formattedNumber);
+        }
     }
 
     /**
@@ -764,6 +775,13 @@ public class MeasureFormat extends UFormat {
         public synchronized String format(Number number) {
             return nf.format(number);
         }
+        
+        public String getPrefix(boolean positive) {
+            return positive ? ((DecimalFormat)nf).getPositivePrefix() : ((DecimalFormat)nf).getNegativePrefix();
+        }
+        public String getSuffix(boolean positive) {
+            return positive ? ((DecimalFormat)nf).getPositiveSuffix() : ((DecimalFormat)nf).getPositiveSuffix();
+        }
     }
 
     static final class PatternData {
@@ -1075,10 +1093,10 @@ public class MeasureFormat extends UFormat {
         }
         return values[ordinal];
     }
-    
+
     static final Map<ULocale, SimplePatternFormatter> localeIdToRangeFormat 
     = new ConcurrentHashMap<ULocale, SimplePatternFormatter>();
-    
+
     /**
      * Return a simple pattern formatter for a range, such as "{0}–{1}".
      * @param forLocale locale to get the format for
@@ -1097,7 +1115,7 @@ public class MeasureFormat extends UFormat {
         SimplePatternFormatter result = localeIdToRangeFormat.get(forLocale);
         if (result == null) {
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
-            getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, forLocale);
+                    getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, forLocale);
             ULocale realLocale = rb.getULocale();
             if (!forLocale.equals(realLocale)) { // if the child would inherit, then add a cache entry for it.
                 result = localeIdToRangeFormat.get(forLocale);
@@ -1109,7 +1127,7 @@ public class MeasureFormat extends UFormat {
             // At this point, both the forLocale and the realLocale don't have an item
             // So we have to make one.
             NumberingSystem ns = NumberingSystem.getInstance(forLocale);
-    
+
             String resultString = null;
             try {
                 resultString = rb.getStringWithFallback("NumberElements/" + ns.getName() + "/miscPatterns/range");
