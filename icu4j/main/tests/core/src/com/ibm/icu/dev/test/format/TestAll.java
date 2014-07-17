@@ -53,6 +53,7 @@ public class TestAll extends TestGroup {
                 "CompactDecimalFormatTest",
                 "IntlTestNumberFormat",
                 "IntlTestNumberFormatAPI",
+                "NumberFormatSpecificationTest",
                 "NumberFormatTest",
                 "NumberFormatRegistrationTest",
                 "NumberFormatRoundTripTest",
