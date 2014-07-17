@@ -4331,6 +4331,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatRegistrationTe
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatRegressionTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatRoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatSerialTestData.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatSpecificationTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberRegression.java svneol=native#text/plain%3Bcharset%3Dutf-8
