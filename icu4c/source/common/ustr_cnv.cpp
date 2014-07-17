@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2013, International Business Machines
+*   Copyright (C) 1998-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  ustr_cnv.c
+*   file name:  ustr_cnv.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -24,7 +24,7 @@
 #include "unicode/ucnv.h"
 #include "cstring.h"
 #include "cmemory.h"
-#include "cmutex.h"
+#include "umutex.h"
 #include "ustr_cnv.h"
 
 /* mutexed access to a shared default converter ----------------------------- */
