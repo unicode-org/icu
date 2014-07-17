@@ -513,7 +513,7 @@ static const UConverterImpl _MBCSImpl={
 const UConverterSharedData _MBCSData={
     sizeof(UConverterSharedData), 1,
     NULL, NULL, NULL, FALSE, &_MBCSImpl, 
-    0, {}
+    0, UCNV_MBCS_TABLE_INITIALIZER
 };
 
 
@@ -1513,7 +1513,7 @@ reconstituteData(UConverterMBCSTable *mbcsTable,
 
         for(st1=0; stageUTF8Index<stageUTF8Length; ++st1) {
             st2=stage1[st1];
-            if(st2!=stage1Length/2) {
+            if(st2!=(int32_t)stage1Length/2) {
                 /* each stage 2 block has 64 entries corresponding to 16 entries in the mbcsIndex */
                 for(i=0; i<16; ++i) {
                     st3=mbcsTable->mbcsIndex[stageUTF8Index++];
@@ -1582,7 +1582,7 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
     }
 
     if(mbcsTable->outputType==MBCS_OUTPUT_EXT_ONLY) {
-        UConverterLoadArgs args={};
+        UConverterLoadArgs args=UCNV_LOAD_ARGS_INITIALIZER;
         UConverterSharedData *baseSharedData;
         const int32_t *extIndexes;
         const char *baseName;
