@@ -232,7 +232,7 @@
     <ClCompile Include="ucnvlat1.c">
       <Filter>conversion</Filter>
     </ClCompile>
-    <ClCompile Include="ucnvmbcs.c">
+    <ClCompile Include="ucnvmbcs.cpp">
       <Filter>conversion</Filter>
     </ClCompile>
     <ClCompile Include="ucnvscsu.c">
@@ -502,7 +502,7 @@
     <ClCompile Include="unistr_titlecase_brkiter.cpp">
       <Filter>strings</Filter>
     </ClCompile>
-    <ClCompile Include="ustr_cnv.c">
+    <ClCompile Include="ustr_cnv.cpp">
       <Filter>strings</Filter>
     </ClCompile>
     <ClCompile Include="ustr_titlecase_brkiter.cpp">
