@@ -328,7 +328,7 @@
     <ClCompile Include="ucnvhz.c" />
     <ClCompile Include="ucnvisci.c" />
     <ClCompile Include="ucnvlat1.c" />
-    <ClCompile Include="ucnvmbcs.c" />
+    <ClCompile Include="ucnvmbcs.cpp" />
     <ClCompile Include="ucnvscsu.c" />
     <ClCompile Include="ucnvsel.cpp">
     </ClCompile>
@@ -457,7 +457,7 @@
     <ClCompile Include="unistr_cnv.cpp" />
     <ClCompile Include="unistr_props.cpp" />
     <ClCompile Include="unistr_titlecase_brkiter.cpp" />
-    <ClCompile Include="ustr_cnv.c" />
+    <ClCompile Include="ustr_cnv.cpp" />
     <ClCompile Include="ustr_titlecase_brkiter.cpp" />
     <ClCompile Include="ustr_wcs.cpp" />
     <ClCompile Include="ustrcase.cpp" />

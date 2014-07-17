@@ -1,11 +1,11 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2013, International Business Machines
+*   Copyright (C) 2000-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
-*   file name:  ucnvmbcs.c
+*   file name:  ucnvmbcs.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -56,7 +56,9 @@
 #include "ucnv_cnv.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "cmutex.h"
+#include "umutex.h"
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /* control optimizations according to the platform */
 #define MBCS_UNROLL_SINGLE_TO_BMP 1
@@ -359,8 +361,161 @@
  * adding new ones without crashing an unaware converter
  */
 
-static const UConverterImpl _SBCSUTF8Impl;
-static const UConverterImpl _DBCSUTF8Impl;
+/**
+ * Callback from ucnv_MBCSEnumToUnicode(), takes 32 mappings from
+ * consecutive sequences of bytes, starting from the one encoded in value,
+ * to Unicode code points. (Multiple mappings to reduce per-function call overhead.)
+ * Does not currently support m:n mappings or reverse fallbacks.
+ * This function will not be called for sequences of bytes with leading zeros.
+ *
+ * @param context an opaque pointer, as passed into ucnv_MBCSEnumToUnicode()
+ * @param value contains 1..4 bytes of the first byte sequence, right-aligned
+ * @param codePoints resulting Unicode code points, or negative if a byte sequence does
+ *        not map to anything
+ * @return TRUE to continue enumeration, FALSE to stop
+ */
+typedef UBool U_CALLCONV
+UConverterEnumToUCallback(const void *context, uint32_t value, UChar32 codePoints[32]);
+
+static void
+ucnv_MBCSLoad(UConverterSharedData *sharedData,
+          UConverterLoadArgs *pArgs,
+          const uint8_t *raw,
+          UErrorCode *pErrorCode);
+
+static void
+ucnv_MBCSUnload(UConverterSharedData *sharedData);
+
+static void
+ucnv_MBCSOpen(UConverter *cnv,
+              UConverterLoadArgs *pArgs,
+              UErrorCode *pErrorCode);
+
+static UChar32
+ucnv_MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
+                  UErrorCode *pErrorCode);
+
+static void
+ucnv_MBCSGetStarters(const UConverter* cnv,
+                 UBool starters[256],
+                 UErrorCode *pErrorCode);
+
+static const char *
+ucnv_MBCSGetName(const UConverter *cnv);
+
+static void
+ucnv_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
+              int32_t offsetIndex,
+              UErrorCode *pErrorCode);
+
+static UChar32
+ucnv_MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
+                  UErrorCode *pErrorCode);
+
+static void
+ucnv_SBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
+                  UConverterToUnicodeArgs *pToUArgs,
+                  UErrorCode *pErrorCode);
+
+static void
+ucnv_MBCSGetUnicodeSet(const UConverter *cnv,
+                   const USetAdder *sa,
+                   UConverterUnicodeSet which,
+                   UErrorCode *pErrorCode);
+
+static void
+ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
+                  UConverterToUnicodeArgs *pToUArgs,
+                  UErrorCode *pErrorCode);
+
+static const UConverterImpl _SBCSUTF8Impl={
+    UCNV_MBCS,
+
+    ucnv_MBCSLoad,
+    ucnv_MBCSUnload,
+
+    ucnv_MBCSOpen,
+    NULL,
+    NULL,
+
+    ucnv_MBCSToUnicodeWithOffsets,
+    ucnv_MBCSToUnicodeWithOffsets,
+    ucnv_MBCSFromUnicodeWithOffsets,
+    ucnv_MBCSFromUnicodeWithOffsets,
+    ucnv_MBCSGetNextUChar,
+
+    ucnv_MBCSGetStarters,
+    ucnv_MBCSGetName,
+    ucnv_MBCSWriteSub,
+    NULL,
+    ucnv_MBCSGetUnicodeSet,
+
+    NULL,
+    ucnv_SBCSFromUTF8
+};
+
+static const UConverterImpl _DBCSUTF8Impl={
+    UCNV_MBCS,
+
+    ucnv_MBCSLoad,
+    ucnv_MBCSUnload,
+
+    ucnv_MBCSOpen,
+    NULL,
+    NULL,
+
+    ucnv_MBCSToUnicodeWithOffsets,
+    ucnv_MBCSToUnicodeWithOffsets,
+    ucnv_MBCSFromUnicodeWithOffsets,
+    ucnv_MBCSFromUnicodeWithOffsets,
+    ucnv_MBCSGetNextUChar,
+
+    ucnv_MBCSGetStarters,
+    ucnv_MBCSGetName,
+    ucnv_MBCSWriteSub,
+    NULL,
+    ucnv_MBCSGetUnicodeSet,
+
+    NULL,
+    ucnv_DBCSFromUTF8
+};
+
+static const UConverterImpl _MBCSImpl={
+    UCNV_MBCS,
+
+    ucnv_MBCSLoad,
+    ucnv_MBCSUnload,
+
+    ucnv_MBCSOpen,
+    NULL,
+    NULL,
+
+    ucnv_MBCSToUnicodeWithOffsets,
+    ucnv_MBCSToUnicodeWithOffsets,
+    ucnv_MBCSFromUnicodeWithOffsets,
+    ucnv_MBCSFromUnicodeWithOffsets,
+    ucnv_MBCSGetNextUChar,
+
+    ucnv_MBCSGetStarters,
+    ucnv_MBCSGetName,
+    ucnv_MBCSWriteSub,
+    NULL,
+    ucnv_MBCSGetUnicodeSet,
+    NULL,
+    NULL
+};
+
+
+/* Static data is in tools/makeconv/ucnvstat.c for data-based
+ * converters. Be sure to update it as well.
+ */
+
+const UConverterSharedData _MBCSData={
+    sizeof(UConverterSharedData), 1,
+    NULL, NULL, NULL, FALSE, &_MBCSImpl, 
+    0, {}
+};
+
 
 /* GB 18030 data ------------------------------------------------------------ */
 
@@ -472,22 +627,6 @@ static int32_t getSISOBytes(SISO_Option option, uint32_t cnvOption, uint8_t *val
 }
 
 /* Miscellaneous ------------------------------------------------------------ */
-
-/**
- * Callback from ucnv_MBCSEnumToUnicode(), takes 32 mappings from
- * consecutive sequences of bytes, starting from the one encoded in value,
- * to Unicode code points. (Multiple mappings to reduce per-function call overhead.)
- * Does not currently support m:n mappings or reverse fallbacks.
- * This function will not be called for sequences of bytes with leading zeros.
- *
- * @param context an opaque pointer, as passed into ucnv_MBCSEnumToUnicode()
- * @param value contains 1..4 bytes of the first byte sequence, right-aligned
- * @param codePoints resulting Unicode code points, or negative if a byte sequence does
- *        not map to anything
- * @return TRUE to continue enumeration, FALSE to stop
- */
-typedef UBool U_CALLCONV
-UConverterEnumToUCallback(const void *context, uint32_t value, UChar32 codePoints[32]);
 
 /* similar to ucnv_MBCSGetNextUChar() but recursive */
 static UBool
@@ -987,7 +1126,7 @@ _extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
         int32_t i;
 
         range=gb18030Ranges[0];
-        for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); range+=4, ++i) {
+        for(i=0; i<LENGTHOF(gb18030Ranges); range+=4, ++i) {
             if(range[0]<=(uint32_t)cp && (uint32_t)cp<=range[1]) {
                 /* found the Unicode code point, output the four-byte sequence for it */
                 uint32_t linear;
@@ -1054,7 +1193,7 @@ _extToU(UConverter *cnv, const UConverterSharedData *sharedData,
 
         linear=LINEAR_18030(cnv->toUBytes[0], cnv->toUBytes[1], cnv->toUBytes[2], cnv->toUBytes[3]);
         range=gb18030Ranges[0];
-        for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); range+=4, ++i) {
+        for(i=0; i<LENGTHOF(gb18030Ranges); range+=4, ++i) {
             if(range[2]<=linear && linear<=range[3]) {
                 /* found the sequence, output the Unicode code point for it */
                 *pErrorCode=U_ZERO_ERROR;
@@ -1443,7 +1582,7 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
     }
 
     if(mbcsTable->outputType==MBCS_OUTPUT_EXT_ONLY) {
-        UConverterLoadArgs args={ 0 };
+        UConverterLoadArgs args={};
         UConverterSharedData *baseSharedData;
         const int32_t *extIndexes;
         const char *baseName;
@@ -5479,7 +5618,7 @@ unassigned:
 static void
 ucnv_MBCSGetStarters(const UConverter* cnv,
                  UBool starters[256],
-                 UErrorCode *pErrorCode) {
+                 UErrorCode *) {
     const int32_t *state0;
     int i;
 
@@ -5571,91 +5710,5 @@ ucnv_MBCSGetType(const UConverter* converter) {
     }
     return (UConverterType)UCNV_MBCS;
 }
-
-static const UConverterImpl _SBCSUTF8Impl={
-    UCNV_MBCS,
-
-    ucnv_MBCSLoad,
-    ucnv_MBCSUnload,
-
-    ucnv_MBCSOpen,
-    NULL,
-    NULL,
-
-    ucnv_MBCSToUnicodeWithOffsets,
-    ucnv_MBCSToUnicodeWithOffsets,
-    ucnv_MBCSFromUnicodeWithOffsets,
-    ucnv_MBCSFromUnicodeWithOffsets,
-    ucnv_MBCSGetNextUChar,
-
-    ucnv_MBCSGetStarters,
-    ucnv_MBCSGetName,
-    ucnv_MBCSWriteSub,
-    NULL,
-    ucnv_MBCSGetUnicodeSet,
-
-    NULL,
-    ucnv_SBCSFromUTF8
-};
-
-static const UConverterImpl _DBCSUTF8Impl={
-    UCNV_MBCS,
-
-    ucnv_MBCSLoad,
-    ucnv_MBCSUnload,
-
-    ucnv_MBCSOpen,
-    NULL,
-    NULL,
-
-    ucnv_MBCSToUnicodeWithOffsets,
-    ucnv_MBCSToUnicodeWithOffsets,
-    ucnv_MBCSFromUnicodeWithOffsets,
-    ucnv_MBCSFromUnicodeWithOffsets,
-    ucnv_MBCSGetNextUChar,
-
-    ucnv_MBCSGetStarters,
-    ucnv_MBCSGetName,
-    ucnv_MBCSWriteSub,
-    NULL,
-    ucnv_MBCSGetUnicodeSet,
-
-    NULL,
-    ucnv_DBCSFromUTF8
-};
-
-static const UConverterImpl _MBCSImpl={
-    UCNV_MBCS,
-
-    ucnv_MBCSLoad,
-    ucnv_MBCSUnload,
-
-    ucnv_MBCSOpen,
-    NULL,
-    NULL,
-
-    ucnv_MBCSToUnicodeWithOffsets,
-    ucnv_MBCSToUnicodeWithOffsets,
-    ucnv_MBCSFromUnicodeWithOffsets,
-    ucnv_MBCSFromUnicodeWithOffsets,
-    ucnv_MBCSGetNextUChar,
-
-    ucnv_MBCSGetStarters,
-    ucnv_MBCSGetName,
-    ucnv_MBCSWriteSub,
-    NULL,
-    ucnv_MBCSGetUnicodeSet
-};
-
-
-/* Static data is in tools/makeconv/ucnvstat.c for data-based
- * converters. Be sure to update it as well.
- */
-
-const UConverterSharedData _MBCSData={
-    sizeof(UConverterSharedData), 1,
-    NULL, NULL, NULL, FALSE, &_MBCSImpl, 
-    0
-};
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
