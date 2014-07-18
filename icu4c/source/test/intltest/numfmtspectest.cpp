@@ -93,8 +93,7 @@ void NumberFormatSpecificationTest::TestBasicPatterns() {
     assertPatternFr("1234,567", 1234.567, "###0.#####");
     assertPatternFr("1234,5670", 1234.567, "###0.0000#");
     assertPatternFr("01234,5670", 1234.567, "00000.0000");
-    // Broken ticket 11026
-    // assertPatternFr("1 234,57 \\u20ac", 1234.567, "#,##0.00 \\u00a4");
+    assertPatternFr("1 234,57 \\u20ac", 1234.567, "#,##0.00 \\u00a4");
 }
 
 void NumberFormatSpecificationTest::TestNfSetters() {
@@ -178,10 +177,9 @@ void NumberFormatSpecificationTest::TestPadding() {
     assertPatternFr("ne1 234nx", -1234, "####,##0$*x;ne#n");
     assertPatternFr("n1 234*xx", -1234, "####,##0$*x;n#'*'");
     assertPatternFr("yyyy%432,6", 4.33, "*y%4.2######");
-    // Broken ticket 11026
-    // assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **####0.00");
-    // Broken ticket 11026
-    // assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **#######0");
+// Next 2 tests broken because of ticket 11025
+//    assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **####0.00");
+//    assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **#######0");
     {
         UnicodeString upattern("\\u00a4\\u00a4 **#######0", -1, US_INV);
         upattern = upattern.unescape();
@@ -238,7 +236,7 @@ void NumberFormatSpecificationTest::assertPatternFr(
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString result;
     DecimalFormat fmt(
-            upattern, new DecimalFormatSymbols("fr", status), status);
+            upattern, new DecimalFormatSymbols("fr_FR", status), status);
     fmt.format(x, result);
     fixNonBreakingSpace(result);
     assertSuccess("", status);
