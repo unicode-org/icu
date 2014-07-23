@@ -3738,6 +3738,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/SoftCache.java svneol=native#text/p
 icu4j/main/classes/core/src/com/ibm/icu/impl/SortedSetRelation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringPrepDataReader.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/TZDBTimeZoneNames.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/TextTrieMap.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneAdapter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneGenericNames.java svneol=native#text/plain%3Bcharset%3Dutf-8

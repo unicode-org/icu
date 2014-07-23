@@ -15,6 +15,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.SoftCache;
+import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.TimeZoneNamesImpl;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -160,11 +161,11 @@ public abstract class TimeZoneNames implements Serializable {
     }
 
     /**
-     * Returns an instance of <code>TimeZoneDisplayNames</code> for the specified locale.
+     * Returns an instance of <code>TimeZoneNames</code> for the specified locale.
      * 
      * @param locale
      *            The locale.
-     * @return An instance of <code>TimeZoneDisplayNames</code>
+     * @return An instance of <code>TimeZoneNames</code>
      * @stable ICU 49
      */
     public static TimeZoneNames getInstance(ULocale locale) {
@@ -173,7 +174,7 @@ public abstract class TimeZoneNames implements Serializable {
     }
 
     /**
-     * Returns an instance of <code>TimeZoneDisplayNames</code> for the specified JDK locale.
+     * Returns an instance of <code>TimeZoneNames</code> for the specified JDK locale.
      * 
      * @param locale
      *            The JDK locale.
@@ -183,6 +184,22 @@ public abstract class TimeZoneNames implements Serializable {
      */
     public static TimeZoneNames getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale));
+    }
+
+    /**
+     * Returns an instance of <code>TimeZoneNames</code> containing only short specific
+     * zone names ({@link NameType#SHORT_STANDARD} and {@link NameType#SHORT_DAYLIGHT}),
+     * compatible with the IANA tz database's zone abbreviations (not localized).
+     * <br>
+     * Note: The input locale is used for resolving ambiguous names (e.g. "IST" is parsed
+     * as Israel Standard Time for Israel, while it is parsed as India Standard Time for
+     * all other regions). The zone names returned by this instance are not localized.
+     * 
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static TimeZoneNames getTZDBInstance(ULocale locale) {
+        return new TZDBTimeZoneNames(locale);
     }
 
     /**

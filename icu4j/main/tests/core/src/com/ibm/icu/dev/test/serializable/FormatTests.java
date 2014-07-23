@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2004-2013, International Business Machines
+ * Copyright (c) 2004-2014, International Business Machines
  * Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *
@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import com.ibm.icu.impl.DateNumberFormat;
+import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.TimeZoneGenericNames;
 import com.ibm.icu.impl.TimeZoneGenericNames.GenericNameType;
 import com.ibm.icu.impl.Utility;
@@ -38,6 +39,7 @@ import com.ibm.icu.text.TimeUnitFormat;
 import com.ibm.icu.text.TimeZoneFormat;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneNames;
+import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.util.GregorianCalendar;
@@ -2286,6 +2288,50 @@ public class FormatTests
                     for (long date : DATES) {
                         String nameA = tzgna.getDisplayName(tz, nt, date);
                         String nameB = tzgnb.getDisplayName(tz, nt, date);
+                        if (!Utility.objectEquals(nameA, nameB)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+
+    public static class TZDBTimeZoneNamesHandler implements SerializableTest.Handler {
+        public Object[] getTestObjects() {
+            return new Object[] {
+                    TimeZoneNames.getTZDBInstance(ULocale.ENGLISH),
+                    TimeZoneNames.getTZDBInstance(ULocale.JAPAN)
+            };
+        }
+        public boolean hasSameBehavior(Object a, Object b) {
+            TZDBTimeZoneNames tzdbna = (TZDBTimeZoneNames)a;
+            TZDBTimeZoneNames tzdbnb = (TZDBTimeZoneNames)b;
+
+            final String[] TZIDS = {
+                "America/Los_Angeles",
+                "America/Argentina/Buenos_Aires",
+                "Asia/Shanghai",
+                "Etc/GMT"
+            };
+
+            final long[] DATES = {
+                1277942400000L, // 2010-07-01 00:00:00 GMT
+                1293840000000L, // 2011-01-01 00:00:00 GMT
+            };
+
+            final NameType[] nTypes = {
+                    NameType.SHORT_STANDARD,
+                    NameType.SHORT_DAYLIGHT
+            };
+
+            for (String tzid : TZIDS) {
+                for (NameType nt : nTypes) {
+                    for (long date : DATES) {
+                        String nameA = tzdbna.getDisplayName(tzid, nt, date);
+                        String nameB = tzdbnb.getDisplayName(tzid, nt, date);
                         if (!Utility.objectEquals(nameA, nameB)) {
                             return false;
                         }

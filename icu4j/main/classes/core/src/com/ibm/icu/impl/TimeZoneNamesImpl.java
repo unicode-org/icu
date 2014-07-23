@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2011-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -41,7 +41,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
     private static final String ZONE_STRINGS_BUNDLE = "zoneStrings";
     private static final String MZ_PREFIX = "meta:";
 
-    private static Set<String> METAZONE_IDS;
+    private static volatile Set<String> METAZONE_IDS;
     private static final TZ2MZsCache TZ_TO_MZS_CACHE = new TZ2MZsCache();
     private static final MZ2TZsCache MZ_TO_TZS_CACHE = new MZ2TZsCache();
 
@@ -65,12 +65,20 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
      * @see com.ibm.icu.text.TimeZoneNames#getAvailableMetaZoneIDs()
      */
     @Override
-    public synchronized Set<String> getAvailableMetaZoneIDs() {
+    public Set<String> getAvailableMetaZoneIDs() {
+        return _getAvailableMetaZoneIDs();
+    }
+
+    static Set<String> _getAvailableMetaZoneIDs() {
         if (METAZONE_IDS == null) {
-            UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metaZones");
-            UResourceBundle mapTimezones = bundle.get("mapTimezones");
-            Set<String> keys = mapTimezones.keySet();
-            METAZONE_IDS = Collections.unmodifiableSet(keys);
+            synchronized (TimeZoneNamesImpl.class) {
+                if (METAZONE_IDS == null) {
+                    UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metaZones");
+                    UResourceBundle mapTimezones = bundle.get("mapTimezones");
+                    Set<String> keys = mapTimezones.keySet();
+                    METAZONE_IDS = Collections.unmodifiableSet(keys);
+                }
+            }
         }
         return METAZONE_IDS;
     }
@@ -80,6 +88,10 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
      */
     @Override
     public Set<String> getAvailableMetaZoneIDs(String tzID) {
+        return _getAvailableMetaZoneIDs(tzID);
+    }
+
+    static Set<String> _getAvailableMetaZoneIDs(String tzID) {
         if (tzID == null || tzID.length() == 0) {
             return Collections.emptySet();
         }
@@ -100,6 +112,10 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
      */
     @Override
     public String getMetaZoneID(String tzID, long date) {
+        return _getMetaZoneID(tzID, date);
+    }
+
+    static String _getMetaZoneID(String tzID, long date) {
         if (tzID == null || tzID.length() == 0) {
             return null;
         }
@@ -119,6 +135,10 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
      */
     @Override
     public String getReferenceZoneID(String mzID, String region) {
+        return _getReferenceZoneID(mzID, region);
+    }
+
+    static String _getReferenceZoneID(String mzID, String region) {
         if (mzID == null || mzID.length() == 0) {
             return null;
         }
