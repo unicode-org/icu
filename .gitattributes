@@ -3149,6 +3149,7 @@ icu4c/source/data/zone/tl_PH.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/to.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/tr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/twq.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/zone/tzdbNames.txt -text
 icu4c/source/data/zone/tzm.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/tzm_Latn.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/tzm_Latn_MA.txt svneol=native#text/plain%3Bcharset%3Dutf-8

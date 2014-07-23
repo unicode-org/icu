@@ -233,7 +233,15 @@ typedef enum UTimeZoneFormatParseOption {
      * by other styles.
      * @stable ICU 50
      */
-    UTZFMT_PARSE_OPTION_ALL_STYLES  = 0x01
+    UTZFMT_PARSE_OPTION_ALL_STYLES  = 0x01,
+     /**
+      * When parsing a time zone display name in UTZFMT_STYLE_SPECIFIC_SHORT,
+      * look for the IANA tz database compatible zone abbreviations in addition
+      * to the localized names coming from the {@link TimeZoneNames} currently
+      * used by the {@link TimeZoneFormat}. 
+      * @draft ICU 54
+      */
+    UTZFMT_PARSE_OPTION_TZ_DATABASE_ABBREVIATIONS = 0x02
 } UTimeZoneFormatParseOption;
 
 U_CDECL_END
@@ -241,6 +249,7 @@ U_CDECL_END
 U_NAMESPACE_BEGIN
 
 class TimeZoneGenericNames;
+class TZDBTimeZoneNames;
 class UVector;
 
 /**
@@ -697,6 +706,9 @@ private:
 
     UBool fAbuttingOffsetHoursAndMinutes;
 
+    /* TZDBTimeZoneNames object used for parsing */
+    TZDBTimeZoneNames* fTZDBTimeZoneNames;
+
     /**
      * Returns the time zone's specific format string.
      * @param tz the time zone
@@ -726,6 +738,13 @@ private:
      * @return the cached TimeZoneGenericNames.
      */
     const TimeZoneGenericNames* getTimeZoneGenericNames(UErrorCode& status) const;
+
+    /**
+     * Lazily create a TZDBTimeZoneNames instance
+     * @param status receives the status
+     * @return the cached TZDBTimeZoneNames.
+     */
+    const TZDBTimeZoneNames* getTZDBTimeZoneNames(UErrorCode& status) const;
 
     /**
      * Private method returning the time zone's exemplar location string.
