@@ -158,14 +158,27 @@ public:
     virtual TimeZoneNames* clone() const = 0;
 
     /**
-     * Returns an instance of <code>TimeZoneDisplayNames</code> for the specified locale.
+     * Returns an instance of <code>TimeZoneNames</code> for the specified locale.
      *
      * @param locale The locale.
      * @param status Receives the status.
-     * @return An instance of <code>TimeZoneDisplayNames</code>
+     * @return An instance of <code>TimeZoneNames</code>
      * @stable ICU 50
      */
     static TimeZoneNames* U_EXPORT2 createInstance(const Locale& locale, UErrorCode& status);
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns an instance of <code>TimeZoneNames</code> containing only short specific
+     * zone names (SHORT_STANDARD and SHORT_DAYLIGHT),
+     * compatible with the IANA tz database's zone abbreviations (not localized).
+     * <br>
+     * Note: The input locale is used for resolving ambiguous names (e.g. "IST" is parsed
+     * as Israel Standard Time for Israel, while it is parsed as India Standard Time for
+     * all other regions). The zone names returned by this instance are not localized.
+     */
+     static TimeZoneNames* U_EXPORT2 createTZDBInstance(const Locale& locale, UErrorCode& status);
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns an enumeration of all available meta zone IDs.
