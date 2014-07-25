@@ -3898,6 +3898,65 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: parsed -> " + parsedate.toString() + " expected -> " + cal.toString()); 
         }
     } 
+    
+    public void TestOverrideNumberForamt() {
+        SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
+
+        // test override get/set NumberFormat
+        for (int i = 0; i < 100; i++) {
+            NumberFormat check_nf = NumberFormat.getInstance(new ULocale("en_US"));
+            fmt.setNumberFormat("y", check_nf);
+            NumberFormat get_nf = fmt.getNumberFormat('y');
+            if (!get_nf.equals(check_nf))
+                errln("FAIL: getter and setter do not work");
+        }
+
+        NumberFormat reused_nf = NumberFormat.getInstance(new ULocale("en_US"));
+        fmt.setNumberFormat("y", reused_nf);
+        fmt.setNumberFormat(reused_nf); // test the same override NF will not crash
+
+        // DATA[i][0] is to tell which field to set, DATA[i][1] is the expected result
+        String[][] DATA = { 
+                { "", "\u521D\u516D \u5341\u4E94" }, 
+                { "M", "\u521D\u516D 15" },
+                { "Mo", "\u521D\u516D \u5341\u4E94" }, 
+                { "Md", "\u521D\u516D \u5341\u4E94" }, 
+                { "MdMMd", "\u521D\u516D \u5341\u4E94" }, 
+                { "mixed", "\u521D\u516D \u5341\u4E94" }, 
+        };
+
+        NumberFormat override = NumberFormat.getInstance(new ULocale("en@numbers=hanidays"));
+        Calendar cal = Calendar.getInstance();
+        cal.set(1997, Calendar.JUNE, 15);
+        Date test_date = cal.getTime();
+        
+        for (int i = 0; i < DATA.length; i++) {
+            fmt = new SimpleDateFormat("MM d", new ULocale("en_US"));
+            String field = DATA[i][0];
+            
+            if (field == "") { // use the one w/o field
+                fmt.setNumberFormat(override);
+            } else if (field == "mixed") { // set 1 field at first but then full override, both(M & d) should be override
+                NumberFormat single_override = NumberFormat.getInstance(new ULocale("en@numbers=hebr"));
+                fmt.setNumberFormat("M", single_override);
+                fmt.setNumberFormat(override);
+            } else if (field == "Mo") { // o is invalid field
+                try {
+                    fmt.setNumberFormat(field, override);
+                } catch (IllegalArgumentException e) {
+                    logln("IllegalArgumentException is thrown for invalid fields");
+                    continue;
+                }
+            } else {
+                fmt.setNumberFormat(field, override);
+            }
+            String result = fmt.format(test_date);
+            String expected  = DATA[i][1];
+
+            if (!result.equals(expected))
+                errln((String) "FAIL: -> " + result.toString() + " expected -> " + expected);
+        }
+    }
 
     public void TestParsePosition() {
         class ParseTestData {
