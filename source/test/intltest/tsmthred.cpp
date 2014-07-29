@@ -202,6 +202,12 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
         }
         break;
      
+    case 7:
+        name = "TestConditionVariables";
+        if (exec) {
+            TestConditionVariables();
+        }
+        break;
     default:
         name = "";
         break; //needed to end loop
@@ -1601,4 +1607,89 @@ void MultithreadTest::TestAnyTranslit() {
 #endif  // !UCONFIG_NO_TRANSLITERATION
 }
 
+
+// Condition Variables Test
+//   Create a swarm of threads.
+//   Using a mutex and a condition variables each thread
+//     Increments a global count of started threads.
+//     Broadcasts that it has started.
+//     Waits on the condition that all threads have started.
+//     Increments a global count of finished threads.
+//     Waits on the condition that all threads have finished.
+//     Exits.
+
+class CondThread: public SimpleThread {
+  public:
+    CondThread() :fFinished(false)  {};
+    ~CondThread() {};
+    void run();
+    bool  fFinished;
+};
+
+static UMutex gCTMutex = U_MUTEX_INITIALIZER;
+static UConditionVar gCTConditionVar = U_CONDITION_INITIALIZER;
+int gConditionTestOne = 1;   // Value one. Non-const, extern linkage to inhibit
+                             //   compiler assuming a known value.
+int gStartedThreads;         
+int gFinishedThreads;
+static const int NUMTHREADS = 10;
+
+static MultithreadTest *gThisTest = NULL; // Make test frame work functions available to
+                                          //   non-member functions.
+
+// Worker thread function.
+void CondThread::run() {
+    umtx_lock(&gCTMutex); 
+    gStartedThreads += gConditionTestOne;
+    umtx_condBroadcast(&gCTConditionVar);
+    
+    while (gStartedThreads < NUMTHREADS) {
+        if (gFinishedThreads != 0) {
+            gThisTest->errln("File %s, Line %d: Error, gStartedThreads = %d, gFinishedThreads = %d", 
+                             __FILE__, __LINE__, gStartedThreads, gFinishedThreads);
+        }
+        umtx_condWait(&gCTConditionVar, &gCTMutex);
+    }
+
+    gFinishedThreads += gConditionTestOne;
+    fFinished = true;
+    umtx_condBroadcast(&gCTConditionVar);
+
+    while (gFinishedThreads < NUMTHREADS) {
+        umtx_condWait(&gCTConditionVar, &gCTMutex);
+    }
+    umtx_unlock(&gCTMutex);
+}
+
+void MultithreadTest::TestConditionVariables() {
+    gThisTest = this;
+    gStartedThreads = 0;
+    gFinishedThreads = 0;
+    int i;
+
+    umtx_lock(&gCTMutex);
+    CondThread *threads[NUMTHREADS];
+    for (i=0; i<NUMTHREADS; ++i) {
+        threads[i] = new CondThread;
+        threads[i]->start();
+    }
+
+    while (gStartedThreads < NUMTHREADS) {
+        umtx_condWait(&gCTConditionVar, &gCTMutex);
+    }
+
+    while (gFinishedThreads < NUMTHREADS) {
+        umtx_condWait(&gCTConditionVar, &gCTMutex);
+    }
+
+    umtx_unlock(&gCTMutex);
+
+    for (i=0; i<NUMTHREADS; ++i) {
+        if (!threads[i]->fFinished) {
+            errln("File %s, Line %d: Error, threads[%d]->fFinished == false", __FILE__, __LINE__, i);
+        }
+        delete threads[i];
+    }
+}
+            
 #endif // ICU_USE_THREADS
