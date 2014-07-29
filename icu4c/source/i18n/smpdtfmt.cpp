@@ -1648,6 +1648,98 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
 
 //----------------------------------------------------------------------
 
+void SimpleDateFormat::adoptNumberFormat(NumberFormat *formatToAdopt) {
+    formatToAdopt->setParseIntegerOnly(TRUE);
+    fNumberFormat = formatToAdopt;
+
+    if (fNumberFormatters) {
+        for (int32_t i = 0; i < UDAT_FIELD_COUNT; i++) {
+            if (fNumberFormatters[i] == formatToAdopt) {
+                fNumberFormatters[i] = NULL;
+            }
+        }
+        uprv_free(fNumberFormatters);
+        fNumberFormatters = NULL;
+    }
+    
+    while (fOverrideList) {
+        NSOverride *cur = fOverrideList;
+        fOverrideList = cur->next;
+        if (cur->nf != formatToAdopt) { // only delete those not duplicate
+            delete cur->nf;
+            uprv_free(cur);
+        }
+    }
+}
+
+void SimpleDateFormat::adoptNumberFormat(const UnicodeString& fields, NumberFormat *formatToAdopt, UErrorCode &status){
+    // if it has not been initialized yet, initialize
+    if (fNumberFormatters == NULL) {
+        fNumberFormatters = (NumberFormat**)uprv_malloc(UDAT_FIELD_COUNT * sizeof(NumberFormat*));
+        if (fNumberFormatters) {
+            for (int32_t i = 0; i < UDAT_FIELD_COUNT; i++) {
+                fNumberFormatters[i] = fNumberFormat;
+            }
+        } else {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+    }
+    
+    // See if the numbering format is in the override list, if not, then add it.
+    NSOverride *cur = fOverrideList;
+    UBool found = FALSE;
+    while (cur && !found) {
+        if ( cur->nf == formatToAdopt ) {
+            found = TRUE;
+        }
+        cur = cur->next;
+    }
+
+    if (!found) {
+        cur = (NSOverride *)uprv_malloc(sizeof(NSOverride));
+        if (cur) {
+            // no matter what the locale's default number format looked like, we want
+            // to modify it so that it doesn't use thousands separators, doesn't always
+            // show the decimal point, and recognizes integers only when parsing
+            formatToAdopt->setGroupingUsed(FALSE);
+            DecimalFormat* decfmt = dynamic_cast<DecimalFormat*>(formatToAdopt);
+            if (decfmt != NULL) {
+                decfmt->setDecimalSeparatorAlwaysShown(FALSE);
+            }
+            formatToAdopt->setParseIntegerOnly(TRUE);
+            formatToAdopt->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
+
+            cur->nf = formatToAdopt;
+            cur->hash = -1; // set duplicate here (before we set it with NumberSystem Hash, here we cannot get nor use it)
+            cur->next = fOverrideList;
+            fOverrideList = cur;
+        } else {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+    }
+    
+    for (int i=0; i<fields.length(); i++) {
+        UChar field = fields.charAt(i);
+        // if the pattern character is unrecognized, signal an error and bail out
+        UDateFormatField patternCharIndex = DateFormatSymbols::getPatternCharIndex(field);
+        if (patternCharIndex == UDAT_FIELD_COUNT) {
+            status = U_INVALID_FORMAT_ERROR;
+            return;
+        }
+
+        // Set the number formatter in the table
+        fNumberFormatters[patternCharIndex] = formatToAdopt;
+    }
+}
+
+const NumberFormat *
+SimpleDateFormat::getNumberFormatForField(UChar field) const {
+    UDateFormatField index = DateFormatSymbols::getPatternCharIndex(field);
+    return getNumberFormatByIndex(index);
+}
+
 NumberFormat *
 SimpleDateFormat::getNumberFormatByIndex(UDateFormatField index) const {
     if (fNumberFormatters != NULL) {
