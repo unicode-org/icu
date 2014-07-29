@@ -104,6 +104,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestParseMultiPatternMatch);
 
     TESTCASE_AUTO(TestParseLeniencyAPIs);
+    TESTCASE_AUTO(TestNumberFormatOverride);
 
     TESTCASE_AUTO_END;
 }
@@ -4467,6 +4468,79 @@ void DateFormatTest::TestParseLeniencyAPIs() {
     assertTrue("ALLOW_NUMERIC after setLenient(TRUE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status));
 }
 
+void DateFormatTest::TestNumberFormatOverride() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString fields = (UnicodeString) "M";
+
+    LocalPointer<SimpleDateFormat> fmt;
+    fmt.adoptInstead(new SimpleDateFormat((UnicodeString)"MM d", status));
+    assertSuccess("SimpleDateFormat with pattern MM d", status);
+
+    NumberFormat* check_nf = NumberFormat::createInstance(Locale("en_US"), status);
+    assertSuccess("NumberFormat en_US", status);
+
+    // loop 100 times to test setter/getter
+    for(int i=0; i<100; i++){
+        fmt->adoptNumberFormat(fields, check_nf, status);
+        assertSuccess("adoptNumberFormat check_nf", status);
+
+        const NumberFormat* get_nf = fmt->getNumberFormatForField('M');
+        if (get_nf != check_nf) errln("FAIL: getter and setter do not work");
+    }
+    fmt->adoptNumberFormat(check_nf); // make sure using the same NF will not crash
+
+    const char * DATA [][2] = {
+        { "", "\\u521D\\u516D \\u5341\\u4E94"},
+        { "M", "\\u521D\\u516D 15"},
+        { "Mo", "\\u521D\\u516D 15"},
+        { "Md", "\\u521D\\u516D \\u5341\\u4E94"},
+        { "MdMMd", "\\u521D\\u516D \\u5341\\u4E94"},
+        { "mixed", "\\u521D\\u516D \\u5341\\u4E94"}
+    };
+    
+    UDate test_date = date(97, 6 - 1, 15);
+
+    for(int i=0; i < sizeof(DATA)/sizeof(DATA[0]); i++){
+        fields = DATA[i][0];
+        
+        LocalPointer<SimpleDateFormat> fmt;
+        fmt.adoptInstead(new SimpleDateFormat((UnicodeString)"MM d", status));
+        assertSuccess("SimpleDateFormat with pattern MM d", status);
+        NumberFormat* overrideNF = NumberFormat::createInstance(Locale::createFromName("zh@numbers=hanidays"),status);
+        assertSuccess("NumberFormat zh@numbers=hanidays", status);
+
+        if (fields == (UnicodeString) "") { // use the one w/o fields
+            fmt->adoptNumberFormat(overrideNF);
+        } else if (fields == (UnicodeString) "mixed") { // set 1 field at first but then full override, both(M & d) should be override
+            NumberFormat* singleOverrideNF = NumberFormat::createInstance(Locale::createFromName("en@numbers=hebr"),status);
+            assertSuccess("NumberFormat en@numbers=hebr", status);
+
+            fields = (UnicodeString) "M";
+            fmt->adoptNumberFormat(fields, singleOverrideNF, status);
+            assertSuccess("adoptNumberFormat singleOverrideNF", status);
+            
+            fmt->adoptNumberFormat(overrideNF);
+        } else if (fields == (UnicodeString) "Mo"){ // o is invlid field
+            fmt->adoptNumberFormat(fields, overrideNF, status);
+            if(status == U_INVALID_FORMAT_ERROR) {
+                status = U_ZERO_ERROR;
+                continue;
+            }
+        } else {
+            fmt->adoptNumberFormat(fields, overrideNF, status);
+            assertSuccess("adoptNumberFormat overrideNF", status);
+        }
+
+        UnicodeString result;
+        FieldPosition pos(0);
+        fmt->format(test_date,result, pos);
+
+        UnicodeString expected = ((UnicodeString)DATA[i][1]).unescape();;
+
+        if (result != expected) 
+            errln("FAIL: Expected " + expected + " get: " + result);
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
