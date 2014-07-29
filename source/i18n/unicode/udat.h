@@ -1085,13 +1085,48 @@ U_STABLE const UNumberFormat* U_EXPORT2
 udat_getNumberFormat(const UDateFormat* fmt);
 
 /**
+* Get the UNumberFormat for specific field associated with an UDateFormat.
+* For example: 'y' for year and 'M' for month
+* @param fmt The formatter to query.
+* @param field the field to query
+* @return A pointer to the UNumberFormat used by fmt to format field numbers.
+* @see udat_setNumberFormatForField
+* @draft ICU 54
+*/
+U_DRAFT const UNumberFormat* U_EXPORT2 
+udat_getNumberFormatForField(const UDateFormat* fmt, UChar field);
+
+/**
+* Set the UNumberFormat for specific field associated with an UDateFormat.
+* It can be a single field like: "y"(year) or "M"(month)
+* It can be several field combined together: "yM"(year and month)
+* Note: 
+* 1 symbol field is enough for multiple symbol field (so "y" will override "yy", "yyy")
+* If the field is not numeric, then override has no effect (like "MMM" will use abbreviation, not numerical field)
+*
+* @param fields the fields to set
+* @param fmt The formatter to set.
+* @param numberFormatToSet A pointer to the UNumberFormat to be used by fmt to format numbers.
+* @param status error code passed around (memory allocation or invalid fields)
+* @see udat_getNumberFormatForField
+* @draft ICU 54
+*/
+U_DRAFT void U_EXPORT2 
+udat_adoptNumberFormatForFields(  UDateFormat* fmt,
+                            const UChar* fields,
+                                  UNumberFormat*  numberFormatToSet,
+                                  UErrorCode* status);
+
+/**
 * Set the UNumberFormat associated with an UDateFormat.
 * A UDateFormat uses a UNumberFormat to format numbers within a date,
 * for example the day number.
-* Note: udat_setNumberFormat will clone the UNumberFormat*
+* This method also clears per field NumberFormat instances previously 
+* set by {@see udat_setNumberFormatForField} 
 * @param fmt The formatter to set.
 * @param numberFormatToSet A pointer to the UNumberFormat to be used by fmt to format numbers.
 * @see udat_getNumberFormat
+* @see udat_setNumberFormatForField
 * @stable ICU 2.0
 */
 U_STABLE void U_EXPORT2 

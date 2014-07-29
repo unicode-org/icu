@@ -1121,6 +1121,41 @@ public:
      * @draft ICU 53
      */
     virtual void setContext(UDisplayContext value, UErrorCode& status);
+    
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Overrides base class method and
+     * This method clears per field NumberFormat instances 
+     * previously set by {@see adoptNumberFormat(const UnicodeString&, NumberFormat*, UErrorCode)} 
+     * @param adoptNF the NumbeferFormat used
+     * @draft ICU 54
+     */
+    void adoptNumberFormat(NumberFormat *formatToAdopt);
+
+    /**
+     * Allow the user to set the NumberFormat for several fields
+     * It can be a single field like: "y"(year) or "M"(month)
+     * It can be several field combined together: "yM"(year and month)
+     * Note: 
+     * 1 symbol field is enough for multiple symbol field (so "y" will override "yy", "yyy")
+     * If the field is not numeric, then override has no effect (like "MMM" will use abbreviation, not numerical field)
+     * Per field NumberFormat can also be cleared in {@see DateFormat::setNumberFormat(const NumberFormat& newNumberFormat)}
+     *
+     * @param fields  the fields to override(like y)
+     * @param adoptNF the NumbeferFormat used
+     * @param status  Receives a status code, which will be U_ZERO_ERROR
+     *                if the operation succeeds.
+     * @draft ICU 54
+     */
+    void adoptNumberFormat(const UnicodeString& fields, NumberFormat *formatToAdopt, UErrorCode &status);
+
+    /**
+     * Get the numbering system to be used for a particular field.
+     * @param field The UDateFormatField to get
+     * @draft ICU 54
+     */
+    const NumberFormat * getNumberFormatForField(UChar field) const;
+#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
     /**

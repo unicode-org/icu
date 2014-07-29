@@ -343,10 +343,34 @@ udat_setCalendar(UDateFormat*    fmt,
     ((DateFormat*)fmt)->setCalendar(*((Calendar*)calendarToSet));
 }
 
+U_DRAFT const UNumberFormat* U_EXPORT2 
+udat_getNumberFormatForField(const UDateFormat* fmt, UChar field)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    verifyIsSimpleDateFormat(fmt, &status);
+    if (U_FAILURE(status)) return (const UNumberFormat*) ((DateFormat*)fmt)->getNumberFormat();
+    return (const UNumberFormat*) ((SimpleDateFormat*)fmt)->getNumberFormatForField(field);
+}
+
 U_CAPI const UNumberFormat* U_EXPORT2
 udat_getNumberFormat(const UDateFormat* fmt)
 {
     return (const UNumberFormat*) ((DateFormat*)fmt)->getNumberFormat();
+}
+
+U_DRAFT void U_EXPORT2 
+udat_adoptNumberFormatForFields(           UDateFormat*    fmt,
+                                    const  UChar*          fields,
+                                           UNumberFormat*  numberFormatToSet,
+                                           UErrorCode*     status)
+{
+    verifyIsSimpleDateFormat(fmt, status);
+    if (U_FAILURE(*status)) return;
+    
+    if (fields!=NULL) {
+        UnicodeString overrideFields(fields);
+        ((SimpleDateFormat*)fmt)->adoptNumberFormat(overrideFields, (NumberFormat*)numberFormatToSet, *status);
+    }
 }
 
 U_CAPI void U_EXPORT2
