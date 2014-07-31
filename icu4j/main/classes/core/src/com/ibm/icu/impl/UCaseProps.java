@@ -20,7 +20,6 @@
 package com.ibm.icu.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
@@ -37,8 +36,7 @@ public final class UCaseProps {
 
     // port of ucase_openProps()
     private UCaseProps() throws IOException {
-        InputStream is=ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/"+DATA_FILE_NAME);
-        ByteBuffer bytes=ICUBinary.getByteBufferFromInputStream(is);
+        ByteBuffer bytes=ICUBinary.getRequiredData(DATA_FILE_NAME);
         readData(bytes);
     }
 

@@ -1200,7 +1200,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         int state           = START_STATE;
         int row             = fRData.getRowIndex(state); 
         short category      = 3;
-        short flagsState    = stateTable[RBBIDataWrapper.FLAGS+1];
+        int flagsState      = fRData.getStateTableFlags(stateTable);
         int mode            = RBBI_RUN;
         if ((flagsState & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
             category = 2;
@@ -1373,7 +1373,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         int            initialPosition    = 0;
         int            lookaheadResult    = 0;
         boolean        lookAheadHardBreak = 
-            (stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0;
+            (fRData.getStateTableFlags(stateTable) & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0;
         
         // handlePrevious() never gets the rule status.
         // Flag the status as invalid; if the user ever asks for status, we will need
@@ -1392,7 +1392,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         row = fRData.getRowIndex(state);
         category = 3;   // TODO:  obsolete?  from the old start/run mode scheme?
         mode     = RBBI_RUN;
-        if ((stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
+        if ((fRData.getStateTableFlags(stateTable) & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
             category = 2;
             mode     = RBBI_START;
         }

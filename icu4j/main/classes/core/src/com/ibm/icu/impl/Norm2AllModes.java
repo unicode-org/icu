@@ -345,7 +345,7 @@ public final class Norm2AllModes {
             protected Norm2AllModes createInstance(String key, ByteBuffer bytes) {
                 Normalizer2Impl impl;
                 if(bytes==null) {
-                    impl=new Normalizer2Impl().load(ICUResourceBundle.ICU_BUNDLE+"/"+key+".nrm");
+                    impl=new Normalizer2Impl().load(key+".nrm");
                 } else {
                     impl=new Normalizer2Impl().load(bytes);
                 }
@@ -365,8 +365,7 @@ public final class Norm2AllModes {
     private static final class Norm2AllModesSingleton {
         private Norm2AllModesSingleton(String name) {
             try {
-                Normalizer2Impl impl=new Normalizer2Impl().load(
-                        ICUResourceBundle.ICU_BUNDLE+"/"+name+".nrm");
+                Normalizer2Impl impl=new Normalizer2Impl().load(name+".nrm");
                 allModes=new Norm2AllModes(impl);
             } catch(RuntimeException e) {
                 exception=e;

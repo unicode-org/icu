@@ -8,7 +8,6 @@
 package com.ibm.icu.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -1039,7 +1038,7 @@ public final class UCharacterName
     /**
     * Default name of the name datafile
     */
-    private static final String NAME_FILE_NAME_ = ICUResourceBundle.ICU_BUNDLE+"/unames.icu";
+    private static final String FILE_NAME_ = "unames.icu";
     /**
     * Shift count to retrieve group information
     */
@@ -1168,8 +1167,7 @@ public final class UCharacterName
     */
     private UCharacterName() throws IOException
     {
-        InputStream is = ICUData.getRequiredStream(NAME_FILE_NAME_);
-        ByteBuffer b = ICUBinary.getByteBufferFromInputStream(is);
+        ByteBuffer b = ICUBinary.getRequiredData(FILE_NAME_);
         UCharacterNameReader reader = new UCharacterNameReader(b);
         reader.read(this);
     }

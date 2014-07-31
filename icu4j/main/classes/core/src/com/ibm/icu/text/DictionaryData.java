@@ -8,7 +8,6 @@
 package com.ibm.icu.text;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import com.ibm.icu.impl.Assert;
@@ -45,9 +44,8 @@ final class DictionaryData {
     public static DictionaryMatcher loadDictionaryFor(String dictType) throws IOException {
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME);
         String dictFileName = rb.getStringWithFallback("dictionaries/" + dictType);
-        dictFileName = ICUResourceBundle.ICU_BUNDLE +ICUResourceBundle.ICU_BRKITR_NAME+ "/" + dictFileName;
-        InputStream is = ICUData.getStream(dictFileName);
-        ByteBuffer bytes = ICUBinary.getByteBufferFromInputStream(is);
+        dictFileName = ICUData.ICU_BRKITR_NAME + '/' + dictFileName;
+        ByteBuffer bytes = ICUBinary.getRequiredData(dictFileName);
         ICUBinary.readHeader(bytes, DATA_FORMAT_ID, null);
         int[] indexes = new int[IX_COUNT];
         // TODO: read indexes[IX_STRING_TRIE_OFFSET] first, then read a variable-length indexes[]

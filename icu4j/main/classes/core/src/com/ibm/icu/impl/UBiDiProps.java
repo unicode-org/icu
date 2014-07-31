@@ -20,7 +20,6 @@
 package com.ibm.icu.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
@@ -34,8 +33,7 @@ public final class UBiDiProps {
 
     // port of ubidi_openProps()
     private UBiDiProps() throws IOException{
-        InputStream is=ICUData.getStream(ICUResourceBundle.ICU_BUNDLE+"/"+DATA_FILE_NAME);
-        ByteBuffer bytes=ICUBinary.getByteBufferFromInputStream(is);
+        ByteBuffer bytes=ICUBinary.getData(DATA_FILE_NAME);
         readData(bytes);
     }
 

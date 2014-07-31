@@ -14,8 +14,6 @@ import java.nio.ByteBuffer;
 
 import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.ICUBinary;
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.StringPrepDataReader;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.lang.UCharacter;
@@ -272,7 +270,10 @@ public final class StringPrep {
      */
     public StringPrep(InputStream inputStream) throws IOException{
         // TODO: Add a public constructor that takes ByteBuffer directly.
-        ByteBuffer bytes = ICUBinary.getByteBufferFromInputStream(inputStream);
+        this(ICUBinary.getByteBufferFromInputStream(inputStream));
+    }
+
+    private StringPrep(ByteBuffer bytes) throws IOException {
         StringPrepDataReader reader = new StringPrepDataReader(bytes);
 
         // read the indexes
@@ -328,15 +329,10 @@ public final class StringPrep {
             }
 
             if (instance == null) {
-                InputStream stream = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE + "/"
-                        + PROFILE_NAMES[profile] + ".spp");
-                if (stream != null) {
+                ByteBuffer bytes = ICUBinary.getRequiredData(PROFILE_NAMES[profile] + ".spp");
+                if (bytes != null) {
                     try {
-                        try {
-                            instance = new StringPrep(stream);
-                        } finally {
-                            stream.close();
-                        }
+                        instance = new StringPrep(bytes);
                     } catch (IOException e) {
                         throw new ICUUncheckedIOException(e);
                     }

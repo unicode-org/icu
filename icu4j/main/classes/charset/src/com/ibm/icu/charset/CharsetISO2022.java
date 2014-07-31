@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.charset;
@@ -271,13 +271,13 @@ class CharsetISO2022 extends CharsetICU {
         char[] table;
         int value;
         /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
-        if (c >= 0x10000 && (sharedData.mbcs.unicodeMask&UConverterConstants.HAS_SUPPLEMENTARY) == 0) {
+        if (c >= 0x10000 && !sharedData.mbcs.hasSupplementary()) {
             return 0;
         }
         /* convert the Unicode code point in c into codepage bytes */
         table = sharedData.mbcs.fromUnicodeTable;
         /* get the byte for the output */
-        value = CharsetMBCS.MBCS_SINGLE_RESULT_FROM_U(table, sharedData.mbcs.fromUnicodeBytes, c);
+        value = CharsetMBCS.MBCS_SINGLE_RESULT_FROM_U(table, sharedData.mbcs.fromUnicodeChars, c);
         /* get the byte for the output */
         retval[0] = value & 0xff;
         if (value >= 0xf00) {

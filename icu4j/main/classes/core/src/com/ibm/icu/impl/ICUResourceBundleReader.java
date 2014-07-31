@@ -328,11 +328,25 @@ public final class ICUResourceBundleReader {
         @Override
         protected ICUResourceBundleReader createInstance(ReaderInfo key, ReaderInfo data) {
             String fullName = ICUResourceBundleReader.getFullName(data.baseName, data.localeID);
-            InputStream stream = ICUData.getStream(data.loader, fullName);
-            if (stream == null) {
-                return NULL_READER;
+            try {
+                ByteBuffer inBytes;
+                if (data.baseName != null && data.baseName.startsWith(ICUData.ICU_BASE_NAME)) {
+                    String itemPath = fullName.substring(ICUData.ICU_BASE_NAME.length() + 1);
+                    inBytes = ICUBinary.getData(data.loader, fullName, itemPath);
+                    if (inBytes == null) {
+                        return NULL_READER;
+                    }
+                } else {
+                    InputStream stream = ICUData.getStream(data.loader, fullName);
+                    if (stream == null) {
+                        return NULL_READER;
+                    }
+                    inBytes = ICUBinary.getByteBufferFromInputStream(stream);
+                }
+                return new ICUResourceBundleReader(inBytes, data.baseName, data.localeID, data.loader);
+            } catch (IOException ex) {
+                throw new ICUUncheckedIOException("Data file " + fullName + " is corrupt - " + ex.getMessage(), ex);
             }
-            return new ICUResourceBundleReader(stream, data.baseName, data.localeID, data.loader);
         }
     }
 
@@ -342,14 +356,10 @@ public final class ICUResourceBundleReader {
     private ICUResourceBundleReader() {
     }
 
-    private ICUResourceBundleReader(InputStream stream, String baseName, String localeID, ClassLoader loader) {
-        try {
-            ByteBuffer inBytes = ICUBinary.getByteBufferFromInputStream(stream);
-            init(inBytes);
-        } catch (IOException ex) {
-            String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
-            throw new ICUUncheckedIOException("Data file " + fullName + " is corrupt - " + ex.getMessage(), ex);
-        }
+    private ICUResourceBundleReader(ByteBuffer inBytes,
+            String baseName, String localeID,
+            ClassLoader loader) throws IOException {
+        init(inBytes);
 
         // set pool bundle keys if necessary
         if (usesPoolBundle) {
@@ -377,7 +387,7 @@ public final class ICUResourceBundleReader {
     private void init(ByteBuffer inBytes) throws IOException {
         dataVersion = ICUBinary.readHeader(inBytes, DATA_FORMAT, IS_ACCEPTABLE);
         boolean isFormatVersion10 = inBytes.get(16) == 1 && inBytes.get(17) == 0;
-        bytes = inBytes.slice();
+        bytes = ICUBinary.sliceWithOrder(inBytes);
         int dataLength = bytes.remaining();
 
         if(DEBUG) System.out.println("The ByteBuffer is direct (memory-mapped): " + bytes.isDirect());
@@ -420,7 +430,7 @@ public final class ICUResourceBundleReader {
             if(_16BitTop > keysTop) {
                 int num16BitUnits = (_16BitTop - keysTop) * 2;
                 bytes.position(keysTop << 2);
-                b16BitUnits = bytes.slice().asCharBuffer();
+                b16BitUnits = bytes.asCharBuffer();
                 b16BitUnits.limit(num16BitUnits);
                 maxOffset |= num16BitUnits - 1;
             } else {
@@ -444,7 +454,7 @@ public final class ICUResourceBundleReader {
                 // unlike regular bundles' key strings for which indexes
                 // are based on the start of the bundle data.
                 bytes.position((1 + indexLength) << 2);
-                bytes = bytes.slice();
+                bytes = ICUBinary.sliceWithOrder(bytes);
             } else {
                 localKeyLimit = getIndexesInt(URES_INDEX_KEYS_TOP) << 2;
             }
@@ -582,38 +592,18 @@ public final class ICUResourceBundleReader {
             return makeKeyStringFromBytes(poolBundleKeys, keyOffset & 0x7fffffff);
         }
     }
-    // Compare the length-specified input key with the
-    // NUL-terminated table key.
-    private static int compareKeys(CharSequence key, ByteBuffer keyBytes, int keyOffset) {
-        for(int i = 0;; ++i, ++keyOffset) {
-            int c2 = keyBytes.get(keyOffset);
-            if(c2 == 0) {
-                if(i == key.length()) {
-                    return 0;
-                } else {
-                    return 1;  // key > table key because key is longer.
-                }
-            } else if(i == key.length()) {
-                return -1;  // key < table key because key is shorter.
-            }
-            int diff = (int)key.charAt(i) - c2;
-            if(diff != 0) {
-                return diff;
-            }
-        }
-    }
     private int compareKeys(CharSequence key, char keyOffset) {
         if(keyOffset < localKeyLimit) {
-            return compareKeys(key, bytes, keyOffset);
+            return ICUBinary.compareKeys(key, bytes, keyOffset);
         } else {
-            return compareKeys(key, poolBundleKeys, keyOffset - localKeyLimit);
+            return ICUBinary.compareKeys(key, poolBundleKeys, keyOffset - localKeyLimit);
         }
     }
     private int compareKeys32(CharSequence key, int keyOffset) {
         if(keyOffset >= 0) {
-            return compareKeys(key, bytes, keyOffset);
+            return ICUBinary.compareKeys(key, bytes, keyOffset);
         } else {
-            return compareKeys(key, poolBundleKeys, keyOffset & 0x7fffffff);
+            return ICUBinary.compareKeys(key, poolBundleKeys, keyOffset & 0x7fffffff);
         }
     }
 
@@ -743,7 +733,7 @@ public final class ICUResourceBundleReader {
                 offset += 4;
                 ByteBuffer result = bytes.duplicate();
                 result.position(offset).limit(offset + length);
-                result = result.slice();
+                result = ICUBinary.sliceWithOrder(result);
                 if(!result.isReadOnly()) {
                     result = result.asReadOnlyBuffer();
                 }
