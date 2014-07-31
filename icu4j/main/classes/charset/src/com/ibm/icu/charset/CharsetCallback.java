@@ -1,11 +1,9 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2011, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2006-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
-*
-*******************************************************************************
-*/ 
+*/
 
 package com.ibm.icu.charset;
 
@@ -253,14 +251,14 @@ public class CharsetCallback {
                 while (i < length) {
                     valueString[valueStringLength++] = UNICODE_PERCENT_SIGN_CODEPOINT; /* adding % */
                     valueString[valueStringLength++] = UNICODE_U_CODEPOINT; /* adding U */
-                    valueStringLength += itou(valueString, valueStringLength, (int)buffer[i++] & UConverterConstants.UNSIGNED_SHORT_MASK, 16, 4);
+                    valueStringLength += itou(valueString, valueStringLength, buffer[i++], 16, 4);
                 }
             } else {
                 if (((String)context).equals(ESCAPE_JAVA)) {
                     while (i < length) {
                         valueString[valueStringLength++] = UNICODE_RS_CODEPOINT;    /* adding \ */
                         valueString[valueStringLength++] = UNICODE_U_LOW_CODEPOINT; /* adding u */
-                        valueStringLength += itou(valueString, valueStringLength, (int)buffer[i++] & UConverterConstants.UNSIGNED_SHORT_MASK, 16, 4);
+                        valueStringLength += itou(valueString, valueStringLength, buffer[i++], 16, 4);
                     }
                 } else if (((String)context).equals(ESCAPE_C)) {
                     valueString[valueStringLength++] = UNICODE_RS_CODEPOINT;    /* adding \ */
@@ -270,7 +268,7 @@ public class CharsetCallback {
                         valueStringLength = itou(valueString, valueStringLength, cp, 16, 8);
                     } else {
                         valueString[valueStringLength++] = UNICODE_U_LOW_CODEPOINT; /* adding u */
-                        valueStringLength += itou(valueString, valueStringLength, (int)buffer[0] & UConverterConstants.UNSIGNED_SHORT_MASK, 16, 4);
+                        valueStringLength += itou(valueString, valueStringLength, buffer[0], 16, 4);
                     }
                 } else if (((String)context).equals(ESCAPE_XML_DEC)) {
                     valueString[valueStringLength++] = UNICODE_AMP_CODEPOINT;   /* adding & */
@@ -278,7 +276,7 @@ public class CharsetCallback {
                     if (length == 2) {
                         valueStringLength += itou(valueString, valueStringLength, cp, 10, 0);
                     } else {
-                        valueStringLength += itou(valueString, valueStringLength, (int)buffer[0] & UConverterConstants.UNSIGNED_SHORT_MASK, 10, 0);
+                        valueStringLength += itou(valueString, valueStringLength, buffer[0], 10, 0);
                     }
                     valueString[valueStringLength++] = UNICODE_SEMICOLON_CODEPOINT; /* adding ; */
                 } else if (((String)context).equals(ESCAPE_XML_HEX)) {
@@ -288,7 +286,7 @@ public class CharsetCallback {
                     if (length == 2) {
                         valueStringLength += itou(valueString, valueStringLength, cp, 16, 0);
                     } else {
-                        valueStringLength += itou(valueString, valueStringLength, (int)buffer[0] & UConverterConstants.UNSIGNED_SHORT_MASK, 16, 0);
+                        valueStringLength += itou(valueString, valueStringLength, buffer[0], 16, 0);
                     }
                     valueString[valueStringLength++] = UNICODE_SEMICOLON_CODEPOINT; /* adding ; */
                 } else if (((String)context).equals(ESCAPE_UNICODE)) {
@@ -298,7 +296,7 @@ public class CharsetCallback {
                     if (length == 2) {
                         valueStringLength += itou(valueString, valueStringLength,cp, 16, 4);
                     } else {
-                        valueStringLength += itou(valueString, valueStringLength, (int)buffer[0] & UConverterConstants.UNSIGNED_SHORT_MASK, 16, 4);
+                        valueStringLength += itou(valueString, valueStringLength, buffer[0], 16, 4);
                     }
                     valueString[valueStringLength++] = UNICODE_RIGHT_CURLY_CODEPOINT;   /* adding } */
                 } else if (((String)context).equals(ESCAPE_CSS2)) {
@@ -311,7 +309,7 @@ public class CharsetCallback {
                     while (i < length) {
                         valueString[valueStringLength++] = UNICODE_PERCENT_SIGN_CODEPOINT;  /* adding % */
                         valueString[valueStringLength++] = UNICODE_U_CODEPOINT;             /* adding U */
-                        valueStringLength += itou(valueString, valueStringLength, (int)buffer[i++] & UConverterConstants.UNSIGNED_SHORT_MASK, 16, 4);
+                        valueStringLength += itou(valueString, valueStringLength, buffer[i++], 16, 4);
                     }
                 }
             }

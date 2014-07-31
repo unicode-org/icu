@@ -98,10 +98,12 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
             header.signature = bytes.getInt();
             switch (header.signature) {
             case 0x54726932:
-                bytes.order(ByteOrder.BIG_ENDIAN);
+                // The buffer is already set to the trie data byte order.
                 break;
             case 0x32697254:
-                bytes.order(ByteOrder.LITTLE_ENDIAN);
+                // Temporarily reverse the byte order.
+                boolean isBigEndian = outerByteOrder == ByteOrder.BIG_ENDIAN;
+                bytes.order(isBigEndian ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN);
                 header.signature = 0x54726932;
                 break;
             default:

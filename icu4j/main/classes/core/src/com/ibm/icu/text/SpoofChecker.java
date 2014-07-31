@@ -11,7 +11,6 @@ package com.ibm.icu.text;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.nio.ByteBuffer;
@@ -32,6 +31,7 @@ import java.util.regex.Pattern;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.Trie2Writable;
+import com.ibm.icu.impl.ICUBinary.Authenticate;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
@@ -2172,24 +2172,32 @@ public class SpoofChecker {
             }
         }
 
+        private static final int DATA_FORMAT = 0x43667520;  // "Cfu "
 
+        private static final class IsAcceptable implements Authenticate {
+            // @Override when we switch to Java 6
+            public boolean isDataVersionAcceptable(byte version[]) {
+                return version[0] == 1;
+            }
+        }
+        private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
 
-        // getDefault() - Create a SpoofData instance that is built from
-        //                the data baked into the default ICU data.
+        private static final class DefaultData {
+            private static SpoofData INSTANCE = null;
 
+            static {
+                try {
+                    INSTANCE = new SpoofData(ICUBinary.getRequiredData("confusables.cfu"));
+                } catch (IOException ignored) {
+                }
+            }
+        }
+
+        /**
+         * @return instance for Unicode standard data
+         */
         static SpoofData getDefault() {
-            // TODO: Cache it. Lazy create, keep until cleanup.
-            SpoofData This = null;
-            try {
-                InputStream is = com.ibm.icu.impl.ICUData.getRequiredStream(com.ibm.icu.impl.ICUResourceBundle.ICU_BUNDLE
-                        + "/confusables.cfu");
-                This = new SpoofData(ICUBinary.getByteBufferFromInputStream(is));
-                is.close();
-            }
-            catch (IOException e) {
-                // Return null in this case.
-            }
-            return This;
+            return DefaultData.INSTANCE;
         }
 
         // SpoofChecker Data constructor for use from data builder.
@@ -2200,9 +2208,7 @@ public class SpoofChecker {
         // Constructor for use when creating from prebuilt default data.
         // A ByteBuffer is what the ICU internal data loading functions provide.
         SpoofData(ByteBuffer bytes) throws java.io.IOException {
-            // Seek past the ICU data header.
-            // TODO: verify that the header looks good.
-            ICUBinary.skipBytes(bytes, 0x80);
+            ICUBinary.readHeader(bytes, DATA_FORMAT, IS_ACCEPTABLE);
             bytes.mark();
             readData(bytes);
         }

@@ -13,7 +13,6 @@
 package com.ibm.icu.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.MissingResourceException;
 
@@ -116,8 +115,7 @@ public final class UPropertyAliases {
     }
 
     private UPropertyAliases() throws IOException {
-        InputStream stream = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/pnames.icu");
-        ByteBuffer bytes = ICUBinary.getByteBufferFromInputStream(stream);
+        ByteBuffer bytes = ICUBinary.getRequiredData("pnames.icu");
         load(bytes);
     }
 

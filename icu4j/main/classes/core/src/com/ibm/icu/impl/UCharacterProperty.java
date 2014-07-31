@@ -8,7 +8,6 @@
 package com.ibm.icu.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.MissingResourceException;
@@ -970,7 +969,7 @@ public final class UCharacterProperty
     /**
     * Default name of the datafile
     */
-    private static final String DATA_FILE_NAME_ = ICUResourceBundle.ICU_BUNDLE+"/uprops.icu";
+    private static final String DATA_FILE_NAME_ = "uprops.icu";
 
     /**
     * Shift value for lead surrogate to form a supplementary character.
@@ -1184,8 +1183,7 @@ public final class UCharacterProperty
         }
 
         // jar access
-        InputStream is = ICUData.getRequiredStream(DATA_FILE_NAME_);
-        ByteBuffer bytes=ICUBinary.getByteBufferFromInputStream(is);
+        ByteBuffer bytes=ICUBinary.getRequiredData(DATA_FILE_NAME_);
         m_unicodeVersion_ = ICUBinary.readHeaderAndDataVersion(bytes, DATA_FORMAT, new IsAcceptable());
         // Read or skip the 16 indexes.
         int propertyOffset = bytes.getInt();

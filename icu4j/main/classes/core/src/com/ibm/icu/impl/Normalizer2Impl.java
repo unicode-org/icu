@@ -494,11 +494,7 @@ public final class Normalizer2Impl {
         }
     }
     public Normalizer2Impl load(String name) {
-        try {
-            return load(ICUBinary.getByteBufferFromInputStream(ICUData.getRequiredStream(name)));
-        } catch(IOException e) {
-            throw new ICUUncheckedIOException(e);
-        }
+        return load(ICUBinary.getRequiredData(name));
     }
 
     private void enumLcccRange(int start, int end, int norm16, UnicodeSet set) {

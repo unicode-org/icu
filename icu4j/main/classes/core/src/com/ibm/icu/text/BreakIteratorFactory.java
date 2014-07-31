@@ -8,7 +8,6 @@
 package com.ibm.icu.text;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -111,9 +110,8 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         try {
             String         typeKey       = KIND_NAMES[kind];
             String         brkfname      = rb.getStringWithFallback("boundaries/" + typeKey);
-            String         rulesFileName = ICUResourceBundle.ICU_BUNDLE +ICUResourceBundle.ICU_BRKITR_NAME+ "/" + brkfname;
-            InputStream    ruleStream    = ICUData.getStream(rulesFileName);
-                           bytes         = ICUBinary.getByteBufferFromInputStream(ruleStream);
+            String         rulesFileName = ICUData.ICU_BRKITR_NAME+ '/' + brkfname;
+                           bytes         = ICUBinary.getData(rulesFileName);
         }
         catch (Exception e) {
             throw new MissingResourceException(e.toString(),"","");

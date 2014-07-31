@@ -9,10 +9,12 @@ package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.Trie;
+import com.ibm.icu.impl.ICUBinary.Authenticate;
 
 /**
 * <p>Internal class used for Rule Based Break Iterators</p>
@@ -32,7 +34,20 @@ final class RBBIDataWrapper {
     CharTrie       fTrie;
     String         fRuleSource;
     int            fStatusTable[];
-    
+
+    private boolean isBigEndian;
+
+    static final int DATA_FORMAT = 0x42726b20;  // "Brk "
+    static final int FORMAT_VERSION = 0x03010000;  // 3.1
+
+    private static final class IsAcceptable implements Authenticate {
+        // @Override when we switch to Java 6
+        public boolean isDataVersionAcceptable(byte version[]) {
+            return version[0] == (FORMAT_VERSION >>> 24);
+        }
+    }
+    private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
+
     //
     // Indexes to fields in the ICU4C style binary form of the RBBI Data Header
     //   Used by the rule compiler when flattening the data.
@@ -70,12 +85,12 @@ final class RBBIDataWrapper {
     // Index offsets to header fields of a state table
     //     struct RBBIStateTable {...   in the C version.
     //
-    final static int      NUMSTATES  = 0;
-    final static int      ROWLEN     = 2;
-    final static int      FLAGS      = 4;
-    final static int      RESERVED_2 = 6;
-    final static int      ROW_DATA   = 8;
-    
+            static final int NUMSTATES  = 0;
+            static final int ROWLEN     = 2;
+            static final int FLAGS      = 4;
+    //ivate static final int RESERVED_2 = 6;
+    private static final int ROW_DATA   = 8;
+
     //  Bit selectors for the "FLAGS" field of the state table header
     //     enum RBBIStateTableFlags in the C version.
     //
@@ -153,18 +168,20 @@ final class RBBIDataWrapper {
 
         RBBIDataWrapper This = new RBBIDataWrapper();
 
-        // Seek past the ICU data header.
-        //   TODO:  verify that the header looks good.
-        ICUBinary.skipBytes(bytes, 0x80);
+        ICUBinary.readHeader(bytes, DATA_FORMAT, IS_ACCEPTABLE);
+        This.isBigEndian = bytes.order() == ByteOrder.BIG_ENDIAN;
 
         // Read in the RBBI data header...
         This.fHeader = new  RBBIDataHeader();
         This.fHeader.fMagic          = bytes.getInt();
-        This.fHeader.fVersion        = bytes.getInt();
-        This.fHeader.fFormatVersion[0] = (byte) (This.fHeader.fVersion >> 24);
-        This.fHeader.fFormatVersion[1] = (byte) (This.fHeader.fVersion >> 16);
-        This.fHeader.fFormatVersion[2] = (byte) (This.fHeader.fVersion >> 8);
-        This.fHeader.fFormatVersion[3] = (byte) (This.fHeader.fVersion);
+        // Read the same 4 bytes as an int and as a byte array: The data format could be
+        // the old fVersion=1 (TODO: probably not with a real ICU data header?)
+        // or the new fFormatVersion=3.x.
+        This.fHeader.fVersion        = bytes.getInt(bytes.position());
+        This.fHeader.fFormatVersion[0] = bytes.get();
+        This.fHeader.fFormatVersion[1] = bytes.get();
+        This.fHeader.fFormatVersion[2] = bytes.get();
+        This.fHeader.fFormatVersion[3] = bytes.get();
         This.fHeader.fLength         = bytes.getInt();
         This.fHeader.fCatCount       = bytes.getInt();
         This.fHeader.fFTable         = bytes.getInt();
@@ -322,13 +339,19 @@ final class RBBIDataWrapper {
     ///CLOVER:OFF
     //  Getters for fields from the state table header
     //
-    final static int   getNumStates(short  table[]) {
-        int  hi = table[NUMSTATES];
-        int  lo = table[NUMSTATES+1];
-        int  val = (hi<<16) + (lo&0x0000ffff);
-        return val;
+    private int getStateTableNumStates(short table[]) {
+        if (isBigEndian) {
+            return (table[NUMSTATES] << 16) | (table[NUMSTATES+1] & 0xffff);
+        } else {
+            return (table[NUMSTATES+1] << 16) | (table[NUMSTATES] & 0xffff);
+        }
     }
     ///CLOVER:ON
+
+    int getStateTableFlags(short table[]) {
+        // This works for up to 15 flags bits.
+        return table[isBigEndian ? FLAGS + 1 : FLAGS];
+    }
 
     ///CLOVER:OFF
     /* Debug function to display the break iterator data. */
@@ -395,7 +418,7 @@ final class RBBIDataWrapper {
                 System.out.print("-");
             }
             System.out.println();
-            for (state=0; state< getNumStates(table); state++) {
+            for (state=0; state< getStateTableNumStates(table); state++) {
                 dumpRow(table, state);   
             }
             System.out.println();

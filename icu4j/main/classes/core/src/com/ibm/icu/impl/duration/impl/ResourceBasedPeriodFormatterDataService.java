@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
- * Copyright (C) 2007-2011, International Business Machines Corporation and   *
- * others. All Rights Reserved.                                               *
+ * Copyright (C) 2007-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  ******************************************************************************
  */
 
@@ -103,26 +103,21 @@ public class ResourceBasedPeriodFormatterDataService extends
                 if (ln != null) {
                     String name = PATH + "pfd_" + ln + ".xml";
                     try {
-                        InputStream is = ICUData.getStream(getClass(), name);
-                        if (is == null) {
-                            throw new MissingResourceException(
-                                    "no resource named " + name, name, "");
-                        } else {
-                            DataRecord dr = DataRecord.read(ln,
-                                    new XMLRecordReader(new InputStreamReader(
-                                            is, "UTF-8")));
-                            if (dr != null) {
-                                // debug
-                                // if (false && ln.equals("ar_EG")) {
-                                // OutputStreamWriter osw = new
-                                // OutputStreamWriter(System.out, "UTF-8");
-                                // XMLRecordWriter xrw = new
-                                // XMLRecordWriter(osw);
-                                // dr.write(xrw);
-                                // osw.flush();
-                                // }
-                                ld = new PeriodFormatterData(localeName, dr);
-                            }
+                        InputStream is = ICUData.getRequiredStream(getClass(), name);
+                        DataRecord dr = DataRecord.read(ln,
+                                new XMLRecordReader(new InputStreamReader(
+                                        is, "UTF-8")));
+                        if (dr != null) {
+                            // debug
+                            // if (false && ln.equals("ar_EG")) {
+                            // OutputStreamWriter osw = new
+                            // OutputStreamWriter(System.out, "UTF-8");
+                            // XMLRecordWriter xrw = new
+                            // XMLRecordWriter(osw);
+                            // dr.write(xrw);
+                            // osw.flush();
+                            // }
+                            ld = new PeriodFormatterData(localeName, dr);
                         }
                     } catch (UnsupportedEncodingException e) {
                         throw new MissingResourceException(

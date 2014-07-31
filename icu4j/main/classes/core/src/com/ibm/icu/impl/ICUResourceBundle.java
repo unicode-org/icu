@@ -29,52 +29,76 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
-import com.ibm.icu.util.VersionInfo;
 
 public  class ICUResourceBundle extends UResourceBundle {
     /**
      * The data path to be used with getBundleInstance API
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
      */
-    protected static final String ICU_DATA_PATH = "com/ibm/icu/impl/";
+    @Deprecated
+    protected static final String ICU_DATA_PATH = ICUData.ICU_DATA_PATH;
     /**
      * The data path to be used with getBundleInstance API
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
      */
-    public static final String ICU_BUNDLE = "data/icudt" + VersionInfo.ICU_DATA_VERSION_PATH;
+    @Deprecated
+    public static final String ICU_BUNDLE = ICUData.ICU_BUNDLE;
 
     /**
      * The base name of ICU data to be used with getBundleInstance API
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
      */
-    public static final String ICU_BASE_NAME = ICU_DATA_PATH + ICU_BUNDLE;
+    @Deprecated
+    public static final String ICU_BASE_NAME = ICUData.ICU_BASE_NAME;
 
     /**
      * The base name of collation data to be used with getBundleInstance API
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
      */
-    public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
-
-    /**
-     * The base name of rbbi data to be used with getData API
-     */
-    public static final String ICU_BRKITR_NAME = "/brkitr";
+    @Deprecated
+    public static final String ICU_COLLATION_BASE_NAME = ICUData.ICU_COLLATION_BASE_NAME;
 
     /**
      * The base name of rbbi data to be used with getBundleInstance API
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
      */
-    public static final String ICU_BRKITR_BASE_NAME = ICU_BASE_NAME + ICU_BRKITR_NAME;
+    @Deprecated
+    public static final String ICU_BRKITR_BASE_NAME = ICUData.ICU_BRKITR_BASE_NAME;
 
     /**
      * The base name of rbnf data to be used with getBundleInstance API
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
      */
-    public static final String ICU_RBNF_BASE_NAME = ICU_BASE_NAME + "/rbnf";
+    @Deprecated
+    public static final String ICU_RBNF_BASE_NAME = ICUData.ICU_RBNF_BASE_NAME;
 
     /**
      * The base name of transliterator data to be used with getBundleInstance API
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
      */
-    public static final String ICU_TRANSLIT_BASE_NAME = ICU_BASE_NAME + "/translit";
+    @Deprecated
+    public static final String ICU_TRANSLIT_BASE_NAME = ICUData.ICU_TRANSLIT_BASE_NAME;
 
-    public static final String ICU_LANG_BASE_NAME = ICU_BASE_NAME + "/lang";
-    public static final String ICU_CURR_BASE_NAME = ICU_BASE_NAME + "/curr";
-    public static final String ICU_REGION_BASE_NAME = ICU_BASE_NAME + "/region";
-    public static final String ICU_ZONE_BASE_NAME = ICU_BASE_NAME + "/zone";
+    /**
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
+     */
+    @Deprecated
+    public static final String ICU_LANG_BASE_NAME = ICUData.ICU_LANG_BASE_NAME;
+    /**
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
+     */
+    @Deprecated
+    public static final String ICU_CURR_BASE_NAME = ICUData.ICU_CURR_BASE_NAME;
+    /**
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
+     */
+    @Deprecated
+    public static final String ICU_REGION_BASE_NAME = ICUData.ICU_REGION_BASE_NAME;
+    /**
+     * @deprecated because not specific to resource bundles; use the ICUData constants instead
+     */
+    @Deprecated
+    public static final String ICU_ZONE_BASE_NAME = ICUData.ICU_ZONE_BASE_NAME;
 
     private static final String NO_INHERITANCE_MARKER = "\u2205\u2205\u2205";
 
