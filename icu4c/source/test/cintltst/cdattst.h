@@ -54,7 +54,7 @@
     /**
      * Test DateFormat override number format API
      */
-     static void TestOverrideNumberForamt(void);
+     static void TestOverrideNumberFormat(void);
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
