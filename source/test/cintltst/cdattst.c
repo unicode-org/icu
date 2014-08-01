@@ -55,7 +55,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestRelativeCrash);
     TESTCASE(TestContext);
     TESTCASE(TestCalendarDateParse);
-    TESTCASE(TestOverrideNumberForamt);
+    TESTCASE(TestOverrideNumberFormat);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -1555,7 +1555,7 @@ static const char * overrideNumberFormat[][2] = {
         {"mixed", "\\u521D\\u4E03 \\u521D\\u4E8C"}
 };
 
-static void TestOverrideNumberForamt(void) {
+static void TestOverrideNumberFormat(void) {
     UErrorCode status = U_ZERO_ERROR;
     UChar pattern[50];
     UChar* expected;
@@ -1566,8 +1566,8 @@ static void TestOverrideNumberForamt(void) {
     UDateFormat* fmt;
     UNumberFormat* overrideFmt;
     const UNumberFormat* getter_result;
-    UDate july022008 = 1215000000000.0;
     int32_t i;
+    unsigned j;
 
     expected=(UChar*)malloc(sizeof(UChar) * 10);
     fields=(UChar*)malloc(sizeof(UChar) * 10);
@@ -1592,23 +1592,23 @@ static void TestOverrideNumberForamt(void) {
     udat_setNumberFormat(fmt, overrideFmt); // test the same override NF will not crash
     udat_close(fmt);
     
-    for (i=0; i<sizeof(overrideNumberFormat)/sizeof(overrideNumberFormat[0]); i++){
+    for (j=0; i<sizeof(overrideNumberFormat)/sizeof(overrideNumberFormat[0]); i++){
         UChar ubuf[kUbufMax];
-        UDateFormat* fmt;
-        UNumberFormat* overrideFmt;
+        UDateFormat* fmt2;
+        UNumberFormat* overrideFmt2;
 
-        fmt =udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
+        fmt2 =udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
         assertSuccess("udat_open() with en_US", &status);
 
-        overrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
+        overrideFmt2 = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
         assertSuccess("unum_open() in loop", &status);
 
         u_uastrcpy(fields, overrideNumberFormat[i][0]);
         u_unescape(overrideNumberFormat[i][1], expected, 50);
 
-        if (overrideNumberFormat[i][0] == "") { // use the one w/o field
-            udat_setNumberFormat(fmt, overrideFmt);
-        } else if (overrideNumberFormat[i][0] == "mixed") { // set 1 field at first but then full override, both(M & d) should be override
+        if ( strcmp(overrideNumberFormat[i][0], "") == 0 ) { // use the one w/o field
+            udat_setNumberFormat(fmt2, overrideFmt2);
+        } else if ( strcmp(overrideNumberFormat[i][0], "mixed") == 0 ) { // set 1 field at first but then full override, both(M & d) should be override
             const char* singleLocale = "en@numbers=hebr";
             UNumberFormat* singleOverrideFmt;
             u_uastrcpy(fields, "d");
@@ -1616,29 +1616,33 @@ static void TestOverrideNumberForamt(void) {
             singleOverrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, singleLocale, NULL, &status);
             assertSuccess("unum_open() in mixed", &status);
 
-            udat_adoptNumberFormatForFields(fmt, fields, singleOverrideFmt, &status);
+            udat_adoptNumberFormatForFields(fmt2, fields, singleOverrideFmt, &status);
             assertSuccess("udat_setNumberFormatForField() in mixed", &status);
 
-            udat_setNumberFormat(fmt, overrideFmt);
-        } else if (overrideNumberFormat[i][0] == "do") { // o is an invalid field
-            udat_adoptNumberFormatForFields(fmt, fields, overrideFmt, &status);
+            udat_setNumberFormat(fmt2, overrideFmt2);
+        } else if ( strcmp(overrideNumberFormat[i][0], "do") == 0 ) { // o is an invalid field
+            udat_adoptNumberFormatForFields(fmt2, fields, overrideFmt2, &status);
             if(status == U_INVALID_FORMAT_ERROR) {
+                udat_close(fmt2);
                 status = U_ZERO_ERROR;
                 continue;
             }
         } else {
-            udat_adoptNumberFormatForFields(fmt, fields, overrideFmt, &status);
+            udat_adoptNumberFormatForFields(fmt2, fields, overrideFmt2, &status);
             assertSuccess("udat_setNumberFormatForField() in loop", &status);
         }
 
-        udat_format(fmt, july022008, ubuf, kUbufMax, NULL, &status);
+        udat_format(fmt2, july022008, ubuf, kUbufMax, NULL, &status);
         assertSuccess("udat_format() july022008", &status);
 
         if (u_strncmp(ubuf, expected, kUbufMax) != 0) 
             log_err("fail: udat_format for locale, expected %s, got %s\n",
                     u_austrncpy(bbuf1,expected,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
 
-        udat_close(fmt);
+        udat_close(fmt2);
+        if ( strcmp(overrideNumberFormat[i][0], "") == 0 ) { // set uses clone, so free up
+            udat_close(overrideFmt2);
+        }
     }
     free(expected);
     free(fields);
