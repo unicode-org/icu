@@ -1650,6 +1650,9 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
 
 void SimpleDateFormat::adoptNumberFormat(NumberFormat *formatToAdopt) {
     formatToAdopt->setParseIntegerOnly(TRUE);
+    if (fNumberFormat && fNumberFormat != formatToAdopt){
+        delete fNumberFormat;
+    }
     fNumberFormat = formatToAdopt;
 
     if (fNumberFormatters) {
@@ -1667,6 +1670,9 @@ void SimpleDateFormat::adoptNumberFormat(NumberFormat *formatToAdopt) {
         fOverrideList = cur->next;
         if (cur->nf != formatToAdopt) { // only delete those not duplicate
             delete cur->nf;
+            uprv_free(cur);
+        } else {
+            cur->nf = NULL;
             uprv_free(cur);
         }
     }
