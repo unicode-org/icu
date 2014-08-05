@@ -1685,7 +1685,6 @@
         <copy todir="${module.tests.dir}">
             <fileset dir="${icu4j.core-tests.dir}/src">
                 <include name="com/ibm/icu/dev/data/unicode/*.txt"/>
-                <exclude name="com/ibm/icu/dev/data/unicode/ucdterms.txt"/>
             </fileset>
         </copy>
 
