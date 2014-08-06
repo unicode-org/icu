@@ -23,6 +23,7 @@
 #include "intltest.h"
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
+#include "unicode/localpointer.h"
 #include "unicode/regex.h"
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
@@ -140,7 +141,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 23: name = "TestCaseInsensitiveStarters";
             if (exec) TestCaseInsensitiveStarters();
             break;
-
+        case 24: name = "TestBug11049";
+            if (exec) TestBug11049();
+            break;
         default: name = "";
             break; //needed to end loop
     }
@@ -5300,6 +5303,52 @@ void RegexTest::TestCaseInsensitiveStarters() {
             }
         }
     }
+}
+
+
+void RegexTest::TestBug11049() {
+    // Original bug report: pattern with match start consisting of one of several individual characters,
+    //  and the text being matched ending with a supplementary character. find() would read past the
+    //  end of the input text when searching for potential match starting points.
+
+    // To see the problem, the text must exactly fill an allocated buffer, so that valgrind will
+    // detect the bad read.
+
+    UnicodeString patternString("A|B|C");
+    UnicodeString txtString = UnicodeString("a string \\ud800\\udc00").unescape();
+    UChar *exactBuffer = new UChar[txtString.length()];
+    UErrorCode status = U_ZERO_ERROR;
+    txtString.extract(exactBuffer, txtString.length(), status);
+    UText *ut = utext_openUChars(NULL, exactBuffer, txtString.length(), &status);
+
+    LocalPointer<RegexPattern> pattern(RegexPattern::compile(patternString, 0, status));
+    REGEX_CHECK_STATUS;
+    LocalPointer<RegexMatcher> matcher(pattern->matcher(status));
+    matcher->reset(ut);
+    REGEX_CHECK_STATUS;
+    UBool result = matcher->find();
+    REGEX_ASSERT(result == FALSE);
+
+    // Verify that match starting on the last char in input will be found.
+    txtString = UnicodeString("string matches at end C");
+    matcher->reset(txtString);
+    result = matcher->find();
+    REGEX_ASSERT(result == TRUE);
+
+    // Put an unpaired surrogate at the end of the input text,
+    // let valgrind verify that find() doesn't look off the end.
+    txtString = UnicodeString("a string \\ud800").unescape();
+    delete [] exactBuffer;
+    exactBuffer = new UChar[txtString.length()];
+    txtString.extract(exactBuffer, txtString.length(), status);
+    utext_openUChars(ut, exactBuffer, txtString.length(), &status);
+    matcher->reset(ut);
+    result = matcher->find();
+    REGEX_ASSERT(result == FALSE);
+    REGEX_CHECK_STATUS;
+
+    utext_close(ut);
+    delete [] exactBuffer;
 }
 
 
