@@ -1,6 +1,6 @@
 /*
 **************************************************************************
-*   Copyright (C) 2002-2013 International Business Machines Corporation  *
+*   Copyright (C) 2002-2014 International Business Machines Corporation  *
 *   and others. All rights reserved.                                     *
 **************************************************************************
 */
@@ -983,7 +983,7 @@ UBool RegexMatcher::findUsingChunk() {
                     return TRUE;
                 }
             }
-            if (pos >= testLen) {
+            if (startPos > testLen) {
                 fMatch = FALSE;
                 fHitEnd = TRUE;
                 return FALSE;
