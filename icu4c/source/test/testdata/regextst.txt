@@ -1192,6 +1192,15 @@
 "^(\w+\d\w+:\w+)$"              "<0><1>DiesIst1Beispiel:text</1></0>"
 "^(\w+\d\w+:\w+)$"       i      "<0><1>DiesIst1Beispiel:text</1></0>"
 
+# Bug 11049
+#   Edge cases in find() when pattern match begins with set of code points
+#   and the match begins at the end of the string.
+
+"A|B|C"                         "hello <0>A</0>"
+"A|B|C"                         "hello \U00011234"
+"A|B|\U00012345"                "hello <0>\U00012345</0>"
+"A|B|\U00010000"                "hello \ud800"
+
 #  Random debugging, Temporary
 #
 
