@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -57,20 +57,20 @@ final class NFRuleSet {
      * behavior than a regular rule set.
      */
     private boolean isFractionRuleSet = false;
-    
+
     /**
-     * True if the rule set is parseable.  
+     * True if the rule set is parseable.
      */
     private boolean isParseable = true;
-    
+
     /**
      * Used to limit recursion for bad rule sets.
      */
     private int recursionCount = 0;
 
     /**
-      * Limit of recursion.
-      */
+     * Limit of recursion.
+     */
     private static final int RECURSION_LIMIT = 50;
 
     //-----------------------------------------------------------------------
@@ -88,9 +88,9 @@ final class NFRuleSet {
     public NFRuleSet(String[] descriptions, int index) throws IllegalArgumentException {
         String description = descriptions[index];
 
-    if (description.length() == 0) {
-      throw new IllegalArgumentException("Empty rule set description");
-    }
+        if (description.length() == 0) {
+            throw new IllegalArgumentException("Empty rule set description");
+        }
 
         // if the description begins with a rule set name (the rule set
         // name can be omitted in formatter descriptions that consist
@@ -100,18 +100,18 @@ final class NFRuleSet {
             int pos = description.indexOf(':');
             if (pos == -1) {
                 throw new IllegalArgumentException("Rule set name doesn't end in colon");
-            } else {
+            }
+            else {
                 name = description.substring(0, pos);
-                while (pos < description.length() && PatternProps.isWhiteSpace(description.
-                charAt(++pos))) {
+                while (pos < description.length() && PatternProps.isWhiteSpace(description.charAt(++pos))) {
                 }
                 description = description.substring(pos);
                 descriptions[index] = description;
             }
-
-        // if the description doesn't begin with a rule set name, its
-        // name is "%default"
-        } else {
+        }
+        else {
+            // if the description doesn't begin with a rule set name, its
+            // name is "%default"
             name = "%default";
         }
 
@@ -123,7 +123,7 @@ final class NFRuleSet {
             name = name.substring(0,name.length()-8); // Remove the @noparse from the name
             isParseable = false;
         }
-        
+
         // all of the other members of NFRuleSet are initialized
         // by parseRules()
     }
@@ -169,19 +169,19 @@ final class NFRuleSet {
         // we keep track of the rule before the one we're currently working
         // on solely to support >>> substitutions
         NFRule predecessor = null;
-        for (int i = 0; i < ruleDescriptions.size(); i++) {
+        for (String ruleDescription : ruleDescriptions) {
             // makeRules (a factory method on NFRule) will return either
             // a single rule or an array of rules.  Either way, add them
             // to our rule vector
-            Object temp = NFRule.makeRules(ruleDescriptions.get(i),
-                            this, predecessor, owner);
+            Object temp = NFRule.makeRules(ruleDescription,
+                    this, predecessor, owner);
 
             if (temp instanceof NFRule) {
-                tempRules.add((NFRule)temp);
-                predecessor = (NFRule)temp;
+                tempRules.add((NFRule) temp);
+                predecessor = (NFRule) temp;
             }
             else if (temp instanceof NFRule[]) {
-                NFRule[] rulesToAdd = (NFRule[])temp;
+                NFRule[] rulesToAdd = (NFRule[]) temp;
 
                 for (int j = 0; j < rulesToAdd.length; j++) {
                     tempRules.add(rulesToAdd[j]);
@@ -200,7 +200,7 @@ final class NFRuleSet {
 
         // (this isn't a for loop because we might be deleting items from
         // the vector-- we want to make sure we only increment i when
-        // we _didn't_ delete aything from the vector)
+        // we _didn't_ delete anything from the vector)
         int i = 0;
         while (i < tempRules.size()) {
             NFRule rule = tempRules.get(i);
@@ -252,8 +252,8 @@ final class NFRuleSet {
                 // the default base value for the next rule
                 default:
                     if (rule.getBaseValue() < defaultBaseValue) {
-                        throw new IllegalArgumentException("Rules are not in order, base: " + 
-                               rule.getBaseValue() + " < " + defaultBaseValue);
+                        throw new IllegalArgumentException("Rules are not in order, base: " +
+                                rule.getBaseValue() + " < " + defaultBaseValue);
                     }
                     defaultBaseValue = rule.getBaseValue();
                     if (!isFractionRuleSet) {
@@ -300,13 +300,13 @@ final class NFRuleSet {
             NFRuleSet that2 = (NFRuleSet)that;
 
             if (!name.equals(that2.name)
-        || !Utility.objectEquals(negativeNumberRule, that2.negativeNumberRule)
-        || !Utility.objectEquals(fractionRules[0], that2.fractionRules[0])
-        || !Utility.objectEquals(fractionRules[1], that2.fractionRules[1])
-        || !Utility.objectEquals(fractionRules[2], that2.fractionRules[2])
-        || rules.length != that2.rules.length
-                || isFractionRuleSet != that2.isFractionRuleSet) {
-
+                    || !Utility.objectEquals(negativeNumberRule, that2.negativeNumberRule)
+                    || !Utility.objectEquals(fractionRules[0], that2.fractionRules[0])
+                    || !Utility.objectEquals(fractionRules[1], that2.fractionRules[1])
+                    || !Utility.objectEquals(fractionRules[2], that2.fractionRules[2])
+                    || rules.length != that2.rules.length
+                    || isFractionRuleSet != that2.isFractionRuleSet)
+            {
                 return false;
             }
 
@@ -317,11 +317,11 @@ final class NFRuleSet {
                 }
             }
 
-            // ...and if we make it here, tney're equal
+            // ...and if we make it here, they're equal
             return true;
         }
     }
-    
+
     public int hashCode() {
         assert false : "hashCode not designed";
         return 42;
@@ -338,25 +338,25 @@ final class NFRuleSet {
         StringBuilder result = new StringBuilder();
 
         // the rule set name goes first...
-        result.append(name + ":\n");
+        result.append(name).append(":\n");
 
         // followed by the regular rules...
         for (int i = 0; i < rules.length; i++) {
-            result.append("    " + rules[i].toString() + "\n");
+            result.append("    ").append(rules[i].toString()).append("\n");
         }
 
         // followed by the special rules (if they exist)
         if (negativeNumberRule != null) {
-            result.append("    " + negativeNumberRule.toString() + "\n");
+            result.append("    ").append(negativeNumberRule.toString()).append("\n");
         }
         if (fractionRules[0] != null) {
-            result.append("    " + fractionRules[0].toString() + "\n");
+            result.append("    ").append(fractionRules[0].toString()).append("\n");
         }
         if (fractionRules[1] != null) {
-            result.append("    " + fractionRules[1].toString() + "\n");
+            result.append("    ").append(fractionRules[1].toString()).append("\n");
         }
         if (fractionRules[2] != null) {
-            result.append("    " + fractionRules[2].toString() + "\n");
+            result.append("    ").append(fractionRules[2].toString()).append("\n");
         }
 
         return result.toString();
@@ -441,7 +441,7 @@ final class NFRuleSet {
     }
 
     /**
-     * Selects an apropriate rule for formatting the number.
+     * Selects an appropriate rule for formatting the number.
      * @param number The number being formatted.
      * @return The rule that should be used to format it
      */
@@ -480,9 +480,9 @@ final class NFRuleSet {
         if (fractionRules[2] != null) {
             return fractionRules[2];
 
-        // and if we haven't yet returned a rule, use findNormalRule()
-        // to find the applicable rule
         } else {
+            // and if we haven't yet returned a rule, use findNormalRule()
+            // to find the applicable rule
             return findNormalRule(Math.round(number));
         }
     }
@@ -535,40 +535,40 @@ final class NFRuleSet {
         // the next rule's base value)
         int lo = 0;
         int hi = rules.length;
-    if (hi > 0) {
-        while (lo < hi) {
-        int mid = (lo + hi) >>> 1;
-        if (rules[mid].getBaseValue() == number) {
-            return rules[mid];
-        }
-        else if (rules[mid].getBaseValue() > number) {
-            hi = mid;
-        }
-        else {
-            lo = mid + 1;
-        }
-        }
-        if (hi == 0) { // bad rule set
-        throw new IllegalStateException("The rule set " + name + " cannot format the value " + number);
-        }
-        NFRule result = rules[hi - 1];
+        if (hi > 0) {
+            while (lo < hi) {
+                int mid = (lo + hi) >>> 1;
+                if (rules[mid].getBaseValue() == number) {
+                    return rules[mid];
+                }
+                else if (rules[mid].getBaseValue() > number) {
+                    hi = mid;
+                }
+                else {
+                    lo = mid + 1;
+                }
+            }
+            if (hi == 0) { // bad rule set
+                throw new IllegalStateException("The rule set " + name + " cannot format the value " + number);
+            }
+            NFRule result = rules[hi - 1];
 
-        // use shouldRollBack() to see whether we need to invoke the
-        // rollback rule (see shouldRollBack()'s documentation for
-        // an explanation of the rollback rule).  If we do, roll back
-        // one rule and return that one instead of the one we'd normally
-        // return
-        if (result.shouldRollBack(number)) {
-        if (hi == 1) { // bad rule set
-            throw new IllegalStateException("The rule set " + name + " cannot roll back from the rule '" +
+            // use shouldRollBack() to see whether we need to invoke the
+            // rollback rule (see shouldRollBack()'s documentation for
+            // an explanation of the rollback rule).  If we do, roll back
+            // one rule and return that one instead of the one we'd normally
+            // return
+            if (result.shouldRollBack(number)) {
+                if (hi == 1) { // bad rule set
+                    throw new IllegalStateException("The rule set " + name + " cannot roll back from the rule '" +
                             result + "'");
+                }
+                result = rules[hi - 2];
+            }
+            return result;
         }
-        result = rules[hi - 2];
-        }
-        return result;
-    }
-    // else use the master rule
-    return fractionRules[2];
+        // else use the master rule
+        return fractionRules[2];
     }
 
     /**
@@ -609,8 +609,8 @@ final class NFRuleSet {
         for (int i = 0; i < rules.length; i++) {
             // "numerator" is the numerator of the fraction is the
             // denominator is the LCD.  The numerator if the the rule's
-            // base value is the denomiator is "numerator" times the
-            // base value divided bythe LCD.  Here we check to see if
+            // base value is the denominator is "numerator" times the
+            // base value divided by the LCD.  Here we check to see if
             // that's an integer, and if not, how close it is to being
             // an integer.
             tempDifference = numerator * rules[i].getBaseValue() % leastCommonMultiple;
@@ -639,7 +639,7 @@ final class NFRuleSet {
         // value, then the first one (the one we found above) is used if
         // the numerator of the fraction is 1 and the second one is used if
         // the numerator of the fraction is anything else (this lets us
-        // do things like "one third"/"two thirds" without haveing to define
+        // do things like "one third"/"two thirds" without having to define
         // a whole bunch of extra rule sets)
         if (winner + 1 < rules.length
                 && rules[winner + 1].getBaseValue() == rules[winner].getBaseValue()) {
@@ -700,7 +700,7 @@ final class NFRuleSet {
     /**
      * Parses a string.  Matches the string to be parsed against each
      * of its rules (with a base value less than upperBound) and returns
-     * the value produced by the rule that matched the most charcters
+     * the value produced by the rule that matched the most characters
      * in the source string.
      * @param text The string to parse
      * @param parsePosition The initial position is ignored and assumed
@@ -732,7 +732,7 @@ final class NFRuleSet {
             return result;
         }
 
-        // start by trying the nehative number rule (if there is one)
+        // start by trying the negative number rule (if there is one)
         if (negativeNumberRule != null) {
             tempResult = negativeNumberRule.doParse(text, parsePosition, false, upperBound);
             if (parsePosition.getIndex() > highWaterMark.getIndex()) {
@@ -764,7 +764,7 @@ final class NFRuleSet {
 
         // finally, go through the regular rules one at a time.  We start
         // at the end of the list because we want to try matching the most
-        // sigificant rule first (this helps ensure that we parse
+        // significant rule first (this helps ensure that we parse
         // "five thousand three hundred six" as
         // "(five thousand) (three hundred) (six)" rather than
         // "((five thousand three) hundred) (six)").  Skip rules whose
@@ -788,9 +788,9 @@ final class NFRuleSet {
             parsePosition.setIndex(0);
         }
 
-        // finally, update the parse postion we were passed to point to the
+        // finally, update the parse position we were passed to point to the
         // first character we didn't use, and return the result that
-        // cporresponds to that string of characters
+        // corresponds to that string of characters
         parsePosition.setIndex(highWaterMark.getIndex());
 // commented out because the error-index API on ParsePosition isn't there in 1.1.x
 //        if (parsePosition.getIndex() == 0) {

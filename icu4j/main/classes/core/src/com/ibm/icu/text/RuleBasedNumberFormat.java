@@ -68,7 +68,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * <p>In these rules, the <em>base value</em> is spelled out explicitly and set off from the
  * rule's output text with a colon. The rules are in a sorted list, and a rule is applicable
  * to all numbers from its own base value to one less than the next rule's base value. The
- * &quot;&gt;&gt;&quot; token is called a <em>substitution</em> and tells the fomatter to
+ * &quot;&gt;&gt;&quot; token is called a <em>substitution</em> and tells the formatter to
  * isolate the number's ones digit, format it using this same set of rules, and place the
  * result at the position of the &quot;&gt;&gt;&quot; token. Text in brackets is omitted if
  * the number being formatted is an even multiple of 10 (the hyphen is a literal hyphen; 24
@@ -212,7 +212,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     <td width="8%" valign="top"><em>bv</em>:</td>
  *     <td valign="top"><em>bv</em> specifies the rule's base value. <em>bv</em> is a decimal
  *     number expressed using ASCII digits. <em>bv</em> may contain spaces, period, and commas,
- *     which are irgnored. The rule's divisor is the highest power of 10 less than or equal to
+ *     which are ignored. The rule's divisor is the highest power of 10 less than or equal to
  *     the base value.</td>
  *   </tr>
  *   <tr>
@@ -712,7 +712,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * See the class documentation for a complete explanation of the description
      * syntax.
      * @param localizations a list of localizations for the rule set names in the description.
-     * @param locale A ulocale that governs which characters are used for
+     * @param locale A ULocale that governs which characters are used for
      * formatting values in numerals, and determines which characters are equivalent in
      * lenient parsing.
      * @stable ICU 3.2
@@ -724,7 +724,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * Creates a RuleBasedNumberFormat from a predefined description.  The selector
-     * code choosed among three possible predefined formats: spellout, ordinal,
+     * code chooses among three possible predefined formats: spellout, ordinal,
      * and duration.
      * @param locale The locale for the formatter.
      * @param format A selector code specifying which kind of formatter to create for that
@@ -740,7 +740,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * Creates a RuleBasedNumberFormat from a predefined description.  The selector
-     * code choosed among three possible predefined formats: spellout, ordinal,
+     * code chooses among three possible predefined formats: spellout, ordinal,
      * and duration.
      * @param locale The locale for the formatter.
      * @param format A selector code specifying which kind of formatter to create for that
@@ -764,23 +764,17 @@ public class RuleBasedNumberFormat extends NumberFormat {
         ULocale uloc = bundle.getULocale();
         setLocale(uloc, uloc);
 
-        String description = "";
+        StringBuilder description = new StringBuilder();
         String[][] localizations = null;
 
         try {
-            // For backwards compatability - If we have a pre-4.2 style RBNF resource, attempt to read it.
-            description = bundle.getString(rulenames[format-1]);
+            ICUResourceBundle rules = bundle.getWithFallback("RBNFRules/"+rulenames[format-1]);
+            UResourceBundleIterator it = rules.getIterator();
+            while (it.hasNext()) {
+               description.append(it.nextString());
+            }
         }
-        catch (MissingResourceException e) {
-            try {
-                ICUResourceBundle rules = bundle.getWithFallback("RBNFRules/"+rulenames[format-1]);
-                UResourceBundleIterator it = rules.getIterator();
-                while (it.hasNext()) {
-                   description = description.concat(it.nextString());
-                }
-            }
-            catch (MissingResourceException e1) {
-            }
+        catch (MissingResourceException e1) {
         }
 
         try {
@@ -794,7 +788,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
             // might have description and no localizations, or no description...
         }
 
-        init(description, localizations);
+        init(description.toString(), localizations);
 
     }
 
@@ -810,7 +804,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * default <code>FORMAT</code> locale.
      * @param format A selector code specifying which kind of formatter to create.
      * There are three legal values: SPELLOUT, which creates a formatter that spells
-     * out a value in words in the default locale's langyage, ORDINAL, which attaches
+     * out a value in words in the default locale's language, ORDINAL, which attaches
      * an ordinal suffix from the default locale's language to a numeral, and
      * DURATION, which formats a duration in seconds as hours, minutes, and seconds.
      * or NUMBERING_SYSTEM, which is used for alternate numbering systems such as Hebrew.
@@ -961,7 +955,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Return a list of locales for which there are locale-specific display names
      * for the rule sets in this formatter.  If there are no localized display names, return null.
-     * @return an array of the ulocales for which there is rule set display name information
+     * @return an array of the ULocales for which there is rule set display name information
      * @stable ICU 3.2
      */
     public ULocale[] getRuleSetDisplayNameLocales() {
@@ -1187,7 +1181,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
-     * Parses the specfied string, beginning at the specified position, according
+     * Parses the specified string, beginning at the specified position, according
      * to this formatter's rules.  This will match the string against all of the
      * formatter's public rule sets and return the value corresponding to the longest
      * parseable substring.  This function's behavior is affected by the lenient
@@ -1555,7 +1549,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // check to see if there's a set of lenient-parse rules.  If there
         // is, pull them out into our temporary holding place for them,
-        // and delete them from the description before the real desciption-
+        // and delete them from the description before the real description-
         // parsing code sees them
 
         lenientParseRules = extractSpecial(descBuf, "%%lenient-parse:");
@@ -1571,7 +1565,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
         ++numRuleSets;
 
-        // our rule list is an array of the apprpriate size
+        // our rule list is an array of the appropriate size
         ruleSets = new NFRuleSet[numRuleSets];
 
         // divide up the descriptions into individual rule-set descriptions
@@ -1597,7 +1591,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // now we can take note of the formatter's default rule set, which
         // is the last public rule set in the description (it's the last
         // rather than the first so that a user can create a new formatter
-        // from an existing formatter and change its default bevhaior just
+        // from an existing formatter and change its default behavior just
         // by appending more rule sets to the end)
 
         // {dlf} Initialization of a fraction rule set requires the default rule
@@ -1630,7 +1624,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
 
         // finally, we can go back through the temporary descriptions
-        // list and finish seting up the substructure
+        // list and finish setting up the substructure
         for (int i = 0; i < ruleSets.length; i++) {
             ruleSets[i].parseRules(ruleSetDescriptions[i], this);
         }
@@ -1730,43 +1724,43 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // since we don't have a method that deletes characters (why?!!)
         // create a new StringBuffer to copy the text into
         StringBuilder result = new StringBuilder();
+        int descriptionLength = description.length();
 
         // iterate through the characters...
         int start = 0;
-        while (start != -1 && start < description.length()) {
+        while (start < descriptionLength) {
             // seek to the first non-whitespace character...
-            while (start < description.length()
-                   && PatternProps.isWhiteSpace(description.charAt(start))) {
+            while (start < descriptionLength
+                   && PatternProps.isWhiteSpace(description.charAt(start)))
+            {
                 ++start;
             }
 
             //if the first non-whitespace character is semicolon, skip it and continue
-            if (start < description.length() && description.charAt(start) == ';') {
+            if (start < descriptionLength && description.charAt(start) == ';') {
                 start += 1;
                 continue;
             }
 
             // locate the next semicolon in the text and copy the text from
             // our current position up to that semicolon into the result
-            int p;
-            p = description.indexOf(';', start);
+            int p = description.indexOf(';', start);
             if (p == -1) {
                 // or if we don't find a semicolon, just copy the rest of
                 // the string into the result
                 result.append(description.substring(start));
-                start = -1;
+                break;
             }
-            else if (p < description.length()) {
+            else if (p < descriptionLength) {
                 result.append(description.substring(start, p + 1));
                 start = p + 1;
             }
-
-            // when we get here, we've seeked off the end of the sring, and
-            // we terminate the loop (we continue until *start* is -1 rather
-            // than until *p* is -1, because otherwise we'd miss the last
-            // rule in the description)
             else {
-                start = -1;
+                // when we get here, we've seeked off the end of the string, and
+                // we terminate the loop (we continue until *start* is -1 rather
+                // than until *p* is -1, because otherwise we'd miss the last
+                // rule in the description)
+                break;
             }
         }
         return result;
