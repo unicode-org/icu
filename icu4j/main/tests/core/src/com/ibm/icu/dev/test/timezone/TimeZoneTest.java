@@ -1475,7 +1475,16 @@ public class TimeZoneTest extends TestFmwk
         // Some canonical IDs in CLDR are defined as "Link"
         // in Olson tzdata.
         final String[][] excluded1 = {
+                {"Africa/Bamako", "Africa/Abidjan"},
+                {"Africa/Banjul", "Africa/Abidjan"},
+                {"Africa/Conakry", "Africa/Abidjan"},
+                {"Africa/Dakar", "Africa/Abidjan"},
+                {"Africa/Freetown", "Africa/Abidjan"},
                 {"Africa/Khartoum", "Africa/Juba"},
+                {"Africa/Lome", "Africa/Abidjan"},
+                {"Africa/Nouakchott", "Africa/Abidjan"},
+                {"Africa/Ouagadougou", "Africa/Abidjan"},
+                {"Africa/Sao_Tome", "Africa/Abidjan"},
                 {"America/Shiprock", "America/Denver"}, // America/Shiprock is defined as a Link to America/Denver in tzdata
                 {"America/Kralendijk", "America/Curacao"},
                 {"America/Lower_Princes", "America/Curacao"},
@@ -1499,6 +1508,7 @@ public class TimeZoneTest extends TestFmwk
                 {"America/Lower_Princes", "America/Aruba"},
                 {"Antarctica/South_Pole", "Antarctica/McMurdo"},
                 {"Atlantic/Jan_Mayen", "Europe/Oslo"},
+                {"Atlantic/St_Helena", "Africa/Abidjan"},
                 {"Arctic/Longyearbyen", "Europe/Oslo"},
                 {"Europe/Busingen", "Europe/Zurich"},
                 {"Europe/Guernsey", "Europe/London"},
