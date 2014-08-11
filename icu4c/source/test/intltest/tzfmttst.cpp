@@ -335,6 +335,40 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
     delete tzids;
 }
 
+// Special exclusions in TestTimeZoneRoundTrip.
+// These special cases do not round trip time as designed.
+static UBool isSpecialTimeRoundTripCase(const char* loc,
+                                        const UnicodeString& id,
+                                        const char* pattern,
+                                        UDate time) {
+    struct {
+        const char* loc;
+        const char* id;
+        const char* pattern;
+        UDate time;
+    } EXCLUSIONS[] = {
+        {NULL, "Asia/Chita", "zzzz", 1414252800000.0},
+        {NULL, "Asia/Chita", "vvvv", 1414252800000.0},
+        {NULL, "Asia/Srednekolymsk", "zzzz", 1414241999999.0},
+        {NULL, "Asia/Srednekolymsk", "vvvv", 1414241999999.0},
+        {NULL, NULL, NULL, U_DATE_MIN}
+    };
+
+    UBool isExcluded = FALSE;
+    for (int32_t i = 0; EXCLUSIONS[i].id != NULL; i++) {
+        if (EXCLUSIONS[i].loc == NULL || uprv_strcmp(loc, EXCLUSIONS[i].loc) == 0) {
+            if (id.compare(EXCLUSIONS[i].id) == 0) {
+                if (EXCLUSIONS[i].pattern == NULL || uprv_strcmp(pattern, EXCLUSIONS[i].pattern) == 0) {
+                    if (EXCLUSIONS[i].time == U_DATE_MIN || EXCLUSIONS[i].time == time) {
+                        isExcluded = TRUE;
+                    }
+                }
+            }
+        }
+    }
+    return isExcluded;
+}
+
 struct LocaleData {
     int32_t index;
     int32_t testCounts;
@@ -458,6 +492,11 @@ public:
                         }
                     }
 
+                    if (*tzid == "Pacific/Apia" && uprv_strcmp(PATTERNS[patidx], "vvvv") == 0
+                            && log.logKnownIssue("11052", "Ambiguous zone name - Samoa Time")) {
+                        continue;
+                    }
+
                     BasicTimeZone *tz = (BasicTimeZone*) TimeZone::createTimeZone(*tzid);
                     sdf->setTimeZone(*tz);
 
@@ -527,7 +566,9 @@ public:
                                 UnicodeString msg = (UnicodeString) "Time round trip failed for " + "tzid=" + *tzid + ", locale=" + data.locales[locidx].getName() + ", pattern=" + PATTERNS[patidx]
                                         + ", text=" + text + ", time=" + testTimes[testidx] + ", restime=" + parsedDate + ", diff=" + (parsedDate - testTimes[testidx]);
                                 // Timebomb for TZData update
-                                if (expectedRoundTrip[testidx]) {
+                                if (expectedRoundTrip[testidx]
+                                        && !isSpecialTimeRoundTripCase(data.locales[locidx].getName(), *tzid,
+                                                PATTERNS[patidx], testTimes[testidx])) {
                                     log.errln((UnicodeString) "FAIL: " + msg);
                                 } else if (REALLY_VERBOSE) {
                                     log.logln(msg);
