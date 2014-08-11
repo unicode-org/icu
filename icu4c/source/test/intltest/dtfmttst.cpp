@@ -2569,8 +2569,8 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "India Standard Time", "Asia/Calcutta" },
 
         // Proper CLDR primary zone support #9733
-        { "en", "Asia/Shanghai", "2013-01-01T00:00:00Z", "VVVV", "China Time", "Asia/Shanghai" },
-        { "en", "Asia/Harbin", "2013-01-01T00:00:00Z", "VVVV", "Harbin Time", "Asia/Harbin" },
+        { "en", "America/Santiago", "2013-01-01T00:00:00Z", "VVVV", "Chile Time", "America/Santiago" },
+        { "en", "Pacific/Easter", "2013-01-01T00:00:00Z", "VVVV", "Easter Time", "Pacific/Easter" },
 
         // ==========
 
@@ -2783,10 +2783,6 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\\u5370\\u5ea6\\u65f6\\u95f4", "+5:30" },
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\\u5370\\u5ea6\\u65f6\\u95f4", "Asia/Calcutta" },
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\\u5370\\u5ea6\\u65f6\\u95f4", "Asia/Calcutta" },
-
-        // Proper CLDR primary zone support #9733
-        { "zh", "Asia/Shanghai", "2013-01-01T00:00:00Z", "VVVV", "\\u4e2d\\u56fd\\u65f6\\u95f4", "Asia/Shanghai" },
-        { "zh", "Asia/Harbin", "2013-01-01T00:00:00Z", "VVVV", "\\u54c8\\u5c14\\u6ee8\\u65f6\\u95f4", "Asia/Harbin" },
 
         // ==========
 
@@ -3590,7 +3586,7 @@ void DateFormatTest::Test6880() {
     if (failure(status, "construct GregorianCalendar", TRUE)) return;
     
     gcal.clear();
-    gcal.set(1910, UCAL_JULY, 1, 12, 00);   // offset 8:05:57
+    gcal.set(1900, UCAL_JULY, 1, 12, 00);   // offset 8:05:43
     d1 = gcal.getTime(status);
 
     gcal.clear();
@@ -3600,7 +3596,7 @@ void DateFormatTest::Test6880() {
     gcal.clear();
     gcal.set(1970, UCAL_JANUARY, 1, 12, 00);
     dexp2 = gcal.getTime(status);
-    dexp1 = dexp2 - (5*60 + 57)*1000;   // subtract 5m57s
+    dexp1 = dexp2 - (5*60 + 43)*1000;   // subtract 5m43s
 
     if (U_FAILURE(status)) {
         errln("FAIL: Gregorian calendar error");
