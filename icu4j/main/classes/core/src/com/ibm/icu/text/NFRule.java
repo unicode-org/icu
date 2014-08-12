@@ -513,7 +513,7 @@ final class NFRule {
      */
     private static int indexOfAny(String ruleText, String[] strings) {
         int result = -1;
-        if (!ruleText.isEmpty()) {
+        if (ruleText.length() > 0) {
             int pos;
             for (String string : strings) {
                 pos = ruleText.indexOf(string);
