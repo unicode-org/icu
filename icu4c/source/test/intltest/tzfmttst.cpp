@@ -807,8 +807,8 @@ TimeZoneFormatTest::TestParse(void) {
             {"CST",             0,      "zh_CN",    UTZFMT_STYLE_SPECIFIC_SHORT,
                 UTZFMT_PARSE_OPTION_TZ_DATABASE_ABBREVIATIONS,  "Asia/Shanghai",    3,  UTZFMT_TIME_TYPE_STANDARD},
 
-            {"EST",             0,      "en_AU",    UTZFMT_STYLE_SPECIFIC_SHORT,
-                UTZFMT_PARSE_OPTION_TZ_DATABASE_ABBREVIATIONS,  "Australia/Sydney", 3,  UTZFMT_TIME_TYPE_UNKNOWN},
+            {"AEST",            0,      "en_AU",    UTZFMT_STYLE_SPECIFIC_SHORT,
+                UTZFMT_PARSE_OPTION_TZ_DATABASE_ABBREVIATIONS,  "Australia/Sydney", 4,  UTZFMT_TIME_TYPE_STANDARD},
 
             {"AST",             0,      "ar_SA",    UTZFMT_STYLE_SPECIFIC_SHORT,
                 UTZFMT_PARSE_OPTION_TZ_DATABASE_ABBREVIATIONS,  "Asia/Riyadh",      3,  UTZFMT_TIME_TYPE_STANDARD},
@@ -1185,7 +1185,7 @@ TimeZoneFormatTest::TestFormatTZDBNames(void) {
             "Australia/Sydney",
             dateJan,
             UTZFMT_STYLE_SPECIFIC_SHORT,
-            "EST",
+            "AEDT",
             UTZFMT_TIME_TYPE_DAYLIGHT
         },
         {
@@ -1193,7 +1193,7 @@ TimeZoneFormatTest::TestFormatTZDBNames(void) {
             "Australia/Sydney",
             dateJul,
             UTZFMT_STYLE_SPECIFIC_SHORT,
-            "EST",
+            "AEST",
             UTZFMT_TIME_TYPE_STANDARD
         },
 
