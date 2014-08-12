@@ -12,6 +12,7 @@ tzdbNames{
         "meta:Acre"{
             sd{"ACST"}
             ss{"ACT"}
+            parseRegions{"BR"}
         }
         "meta:Afghanistan"{
             ss{"AFT"}
@@ -76,6 +77,10 @@ tzdbNames{
             sd{"ANAST"}
             ss{"ANAT"}
         }
+        "meta:Apia"{
+            sd{"WSDT"}
+            ss{"WST"}
+        }
         "meta:Aqtau"{
             sd{"AQTST"}
             ss{"AQTT"}
@@ -113,22 +118,20 @@ tzdbNames{
             ss{"AST"}
         }
         "meta:Australia_Central"{
-            sd{"CST"}
-            ss{"CST"}
-            parseRegions{"AU"}
+            sd{"ACDT"}
+            ss{"ACST"}
         }
         "meta:Australia_CentralWestern"{
-            sd{"CWST"}
-            ss{"CWST"}
+            sd{"ACWDT"}
+            ss{"ACWST"}
         }
         "meta:Australia_Eastern"{
-            sd{"EST"}
-            ss{"EST"}
-            parseRegions{"AU"}
+            sd{"AEDT"}
+            ss{"AEST"}
         }
         "meta:Australia_Western"{
-            sd{"WST"}
-            ss{"WST"}
+            sd{"AWDT"}
+            ss{"AWST"}
         }
         "meta:Azerbaijan"{
             sd{"AZT"}
@@ -378,9 +381,6 @@ tzdbNames{
         "meta:Karachi"{
             ss{"KART"}
         }
-        "meta:Kashgar"{
-            ss{"KAST"}
-        }
         "meta:Kazakhstan_Eastern"{
             sd{"ALMST"}
             ss{"ALMT"}
@@ -423,9 +423,6 @@ tzdbNames{
         }
         "meta:Line_Islands"{
             ss{"LINT"}
-        }
-        "meta:Long_Shu"{
-            ss{"LONT"}
         }
         "meta:Lord_Howe"{
             ss{"LHST"}
@@ -659,7 +656,7 @@ tzdbNames{
             ss{"UYT"}
         }
         "meta:Urumqi"{
-            ss{"URUT"}
+            ss{"XJT"}
         }
         "meta:Uzbekistan"{
             sd{"UZST"}
