@@ -3714,6 +3714,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         String bcpKey = null;
         try {
             bcpKey = keyMap.getString(key);
+            if (bcpKey.length() == 0) {
+                // empty value indicates the BCP47 key is same with the legacy key
+                bcpKey = key;
+            }
         } catch (MissingResourceException mre) {
             // fall through
         }
@@ -3739,7 +3743,12 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         String key = null;
         for (int i = 0; i < keyMap.getSize(); i++) {
             UResourceBundle mapData = keyMap.get(i);
-            if (bcpKey.equals(mapData.getString())) {
+            String tmpBcpKey = mapData.getString();
+            if (tmpBcpKey.length() == 0) {
+                // empty value indicates the BCP47 key is same with the legacy key
+                tmpBcpKey = mapData.getKey();
+            }
+            if (bcpKey.equals(tmpBcpKey)) {
                 key = mapData.getKey();
                 break;
             }
@@ -3758,6 +3767,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         UResourceBundle typeMap = keyTypeData.get("typeMap");
 
         // keys are case-insensitive, while types are case-sensitive
+        // TODO: make types case insensitive
         key = AsciiUtil.toLowerString(key);
         UResourceBundle typeMapForKey = null;
         String bcpType = null;
@@ -3765,6 +3775,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         try {
             typeMapForKey = typeMap.get(key);
             bcpType = typeMapForKey.getString(typeResKey);
+            if (bcpType.length() == 0) {
+                // empty value indicates the BCP47 type is same with the legacy type
+                bcpType = type;
+            }
         } catch (MissingResourceException mre) {
             // fall through
         }
@@ -3776,6 +3790,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 UResourceBundle typeAliasForKey = typeAlias.get(key);
                 typeResKey = typeAliasForKey.getString(typeResKey);
                 bcpType = typeMapForKey.getString(typeResKey.replace('/', ':'));
+                if (bcpType.length() == 0) {
+                    // empty value indicates the BCP47 type is same with the legacy type
+                    bcpType = typeResKey;
+                }
             } catch (MissingResourceException mre) {
                 // fall through
             }
@@ -3813,7 +3831,12 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
             for (int i = 0; i < typeMapForKey.getSize(); i++) {
                 UResourceBundle mapData = typeMapForKey.get(i);
-                if (bcpType.equals(mapData.getString())) {
+                String tmpBcpType = mapData.getString();
+                if (tmpBcpType.length() == 0) {
+                    // empty value indicates the BCP47 type is same with the legacy type
+                    tmpBcpType = mapData.getKey();
+                }
+                if (bcpType.equals(tmpBcpType)) {
                     type = mapData.getKey();
                     if (key.equals("timezone")) {
                         type = type.replace(':', '/');
