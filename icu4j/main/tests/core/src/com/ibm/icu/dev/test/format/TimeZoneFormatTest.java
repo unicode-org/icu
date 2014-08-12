@@ -601,8 +601,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {"CST",                 0,          "zh_CN",    Style.SPECIFIC_SHORT,
                 EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),  "Asia/Shanghai",    3,  TimeType.STANDARD},
 
-            {"EST",                 0,          "en_AU",    Style.SPECIFIC_SHORT,
-                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),  "Australia/Sydney", 3,  TimeType.UNKNOWN},
+            {"AEST",                0,          "en_AU",    Style.SPECIFIC_SHORT,
+                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),  "Australia/Sydney", 4,  TimeType.STANDARD},
 
             {"AST",                 0,          "ar_SA",    Style.SPECIFIC_SHORT,
                 EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),  "Asia/Riyadh",      3,  TimeType.STANDARD},
@@ -947,7 +947,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "Australia/Sydney",
                 dateJan,
                 Style.SPECIFIC_SHORT,
-                "EST",
+                "AEDT",
                 TimeType.DAYLIGHT
             },
             {
@@ -955,7 +955,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "Australia/Sydney",
                 dateJul,
                 Style.SPECIFIC_SHORT,
-                "EST",
+                "AEST",
                 TimeType.STANDARD
             },
         };
