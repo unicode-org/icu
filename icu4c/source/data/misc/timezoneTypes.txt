@@ -7,6 +7,15 @@
 // *
 // ***************************************************************************
 timezoneTypes:table(nofallback){
+    bcpTypeAlias{
+        tz{
+            aqams{"nzakl"}
+            cnckg{"cnsha"}
+            cnhrb{"cnsha"}
+            cnkhg{"cnurc"}
+            usnavajo{"usden"}
+        }
+    }
     typeAlias{
         timezone{
             "Africa:Asmara"{"Africa/Asmera"}
