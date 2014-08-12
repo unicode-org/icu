@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2009-2012, International Business Machines
+*   Copyright (C) 2009-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -659,9 +659,16 @@ _ldmlKeyToBCP47(const char* key, int32_t keyLen,
 
     uBcpKey = ures_getStringByKey(rb, keyBuf, &bcpKeyLen, &tmpStatus);
     if (U_SUCCESS(tmpStatus)) {
-        u_UCharsToChars(uBcpKey, bcpKeyBuf, bcpKeyLen);
-        bcpKeyBuf[bcpKeyLen] = 0;
-        resultLen = bcpKeyLen;
+        if (bcpKeyLen == 0) {
+            /* empty value indicates the BCP47 key is same with the legacy key */
+            uprv_memcpy(bcpKeyBuf, key, keyLen);
+            bcpKeyBuf[keyLen] = 0;
+            resultLen = keyLen;
+        } else {
+            u_UCharsToChars(uBcpKey, bcpKeyBuf, bcpKeyLen);
+            bcpKeyBuf[bcpKeyLen] = 0;
+            resultLen = bcpKeyLen;
+        }
     } else {
         if (_isLDMLKey(key, keyLen)) {
             uprv_memcpy(bcpKeyBuf, key, keyLen);
@@ -722,14 +729,20 @@ _bcp47ToLDMLKey(const char* bcpKey, int32_t bcpKeyLen,
         const UChar *uBcpKey;
         char tmpBcpKeyBuf[MAX_BCP47_SUBTAG_LEN];
         int32_t tmpBcpKeyLen;
+        const char *tmpBcpKey = tmpBcpKeyBuf;
 
         uBcpKey = ures_getString(mapData, &tmpBcpKeyLen, status);
         if (U_FAILURE(*status)) {
             break;
         }
-        u_UCharsToChars(uBcpKey, tmpBcpKeyBuf, tmpBcpKeyLen);
-        tmpBcpKeyBuf[tmpBcpKeyLen] = 0;
-        if (uprv_compareInvCharsAsAscii(bcpKeyBuf, tmpBcpKeyBuf) == 0) {
+        if (tmpBcpKeyLen == 0) {
+            /* empty value indicates the BCP47 key is same with the legacy key */
+            tmpBcpKey = ures_getKey(mapData);
+        } else {
+            u_UCharsToChars(uBcpKey, tmpBcpKeyBuf, tmpBcpKeyLen);
+            tmpBcpKeyBuf[tmpBcpKeyLen] = 0;
+        }
+        if (uprv_compareInvCharsAsAscii(bcpKeyBuf, tmpBcpKey) == 0) {
             /* found a matching BCP47 key */
             resKey = ures_getKey(mapData);
             resultLen = (int32_t)uprv_strlen(resKey);
@@ -823,8 +836,14 @@ _ldmlTypeToBCP47(const char* key, int32_t keyLen,
     typeMapForKey = ures_getByKey(rb, keyBuf, NULL, &tmpStatus);
     uBcpType = ures_getStringByKey(typeMapForKey, type, &bcpTypeLen, &tmpStatus);
     if (U_SUCCESS(tmpStatus)) {
-        u_UCharsToChars(uBcpType, bcpTypeBuf, bcpTypeLen);
-        resultLen = bcpTypeLen;
+        if (bcpTypeLen == 0) {
+            /* empty value indicates the BCP47 type is same with the legacy type */
+            uprv_memcpy(bcpTypeBuf, type, typeLen);
+            resultLen = typeLen;
+        } else {
+            u_UCharsToChars(uBcpType, bcpTypeBuf, bcpTypeLen);
+            resultLen = bcpTypeLen;
+        }
     } else if (tmpStatus == U_MISSING_RESOURCE_ERROR) {
         /* is this type alias? */
         tmpStatus = U_ZERO_ERROR;
@@ -846,8 +865,14 @@ _ldmlTypeToBCP47(const char* key, int32_t keyLen,
             /* look up the canonical type */
             uBcpType = ures_getStringByKey(typeMapForKey, typeBuf, &bcpTypeLen, &tmpStatus);
             if (U_SUCCESS(tmpStatus)) {
-                u_UCharsToChars(uBcpType, bcpTypeBuf, bcpTypeLen);
-                resultLen = bcpTypeLen;
+                if (bcpTypeLen == 0) {
+                    /* empty value indicates the BCP47 type is same with the legacy type */
+                    uprv_memcpy(bcpTypeBuf, typeBuf, canonicalTypeLen);
+                    resultLen = canonicalTypeLen;
+                } else {
+                    u_UCharsToChars(uBcpType, bcpTypeBuf, bcpTypeLen);
+                    resultLen = bcpTypeLen;
+                }
             }
         }
         if (tmpStatus == U_MISSING_RESOURCE_ERROR) {
@@ -945,14 +970,20 @@ _bcp47ToLDMLType(const char* key, int32_t keyLen,
         const UChar *uBcpType;
         char tmpBcpTypeBuf[MAX_BCP47_SUBTAG_LEN];
         int32_t tmpBcpTypeLen;
+        const char *tmpBcpType = tmpBcpTypeBuf;
 
         uBcpType = ures_getString(mapData, &tmpBcpTypeLen, &tmpStatus);
         if (U_FAILURE(tmpStatus)) {
             break;
         }
-        u_UCharsToChars(uBcpType, tmpBcpTypeBuf, tmpBcpTypeLen);
-        tmpBcpTypeBuf[tmpBcpTypeLen] = 0;
-        if (uprv_compareInvCharsAsAscii(bcpTypeBuf, tmpBcpTypeBuf) == 0) {
+        if (tmpBcpTypeLen == 0) {
+            /* empty value indicates the BCP47 type is same with the legacy type */
+            tmpBcpType = ures_getKey(mapData);
+        } else {
+            u_UCharsToChars(uBcpType, tmpBcpTypeBuf, tmpBcpTypeLen);
+            tmpBcpTypeBuf[tmpBcpTypeLen] = 0;
+        }
+        if (uprv_compareInvCharsAsAscii(bcpTypeBuf, tmpBcpType) == 0) {
             /* found a matching BCP47 type */
             resType = ures_getKey(mapData);
             resultLen = (int32_t)uprv_strlen(resType);
