@@ -100,16 +100,17 @@ CollationLoader::appendRootRules(UnicodeString &s) {
     }
 }
 
-UnicodeString *
-CollationLoader::loadRules(const char *localeID, const char *collationType, UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return NULL; }
+void
+CollationLoader::loadRules(const char *localeID, const char *collationType,
+                           UnicodeString &rules, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
     U_ASSERT(collationType != NULL && *collationType != 0);
     // Copy the type for lowercasing.
     char type[16];
     int32_t typeLength = uprv_strlen(collationType);
     if(typeLength >= LENGTHOF(type)) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return;
     }
     uprv_memcpy(type, collationType, typeLength + 1);
     T_CString_toLowerCase(type);
@@ -121,15 +122,13 @@ CollationLoader::loadRules(const char *localeID, const char *collationType, UErr
             ures_getByKeyWithFallback(collations.getAlias(), type, NULL, &errorCode));
     int32_t length;
     const UChar *s =  ures_getStringByKey(data.getAlias(), "Sequence", &length, &errorCode);
-    if(U_FAILURE(errorCode)) { return NULL; }
+    if(U_FAILURE(errorCode)) { return; }
 
     // No string pointer aliasing so that we need not hold onto the resource bundle.
-    UnicodeString *rules = new UnicodeString(s, length);
-    if(rules == NULL) {
+    rules.setTo(s, length);
+    if(rules.isBogus()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
     }
-    return rules;
 }
 
 const CollationTailoring *

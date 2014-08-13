@@ -638,10 +638,9 @@ CollationRuleParser::parseSetting(UErrorCode &errorCode) {
             if(importer == NULL) {
                 setParseError("[import langTag] is not supported", errorCode);
             } else {
-                const UnicodeString *importedRules =
-                    importer->getRules(baseID,
-                                       length > 0 ? collationType : "standard",
-                                       errorReason, errorCode);
+                UnicodeString importedRules;
+                importer->getRules(baseID, length > 0 ? collationType : "standard",
+                                   importedRules, errorReason, errorCode);
                 if(U_FAILURE(errorCode)) {
                     if(errorReason == NULL) {
                         errorReason = "[import langTag] failed";
@@ -651,7 +650,7 @@ CollationRuleParser::parseSetting(UErrorCode &errorCode) {
                 }
                 const UnicodeString *outerRules = rules;
                 int32_t outerRuleIndex = ruleIndex;
-                parse(*importedRules, errorCode);
+                parse(importedRules, errorCode);
                 if(U_FAILURE(errorCode)) {
                     if(parseError != NULL) {
                         parseError->offset = outerRuleIndex;
