@@ -1547,8 +1547,6 @@ public class TestFmwk extends AbstractTestLog {
 
         private void msg(String message, int level, boolean incCount,
                 boolean newln) {
-            String testLocation = sourceLocation();
-            message = testLocation + message;
             int oldLevel = level;
             if (level == WARN && (!warnings && !nodata)){
                 level = ERR;
@@ -1571,6 +1569,8 @@ public class TestFmwk extends AbstractTestLog {
                     log.print(MSGNAMES[oldLevel]);
                 }
 
+                String testLocation = sourceLocation();
+                message = testLocation + message;
                 log.print(message);
                 if (newln) {
                     log.println();

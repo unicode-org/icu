@@ -206,12 +206,12 @@ final class NFRuleSet {
             NFRule rule = tempRules.get(i);
 
             switch ((int)rule.getBaseValue()) {
-                // if the rule's base value is 0, fill in a default
-                // base value (this will be 1 plus the preceding
-                // rule's base value for regular rule sets, and the
-                // same as the preceding rule's base value in fraction
-                // rule sets)
                 case 0:
+                    // if the rule's base value is 0, fill in a default
+                    // base value (this will be 1 plus the preceding
+                    // rule's base value for regular rule sets, and the
+                    // same as the preceding rule's base value in fraction
+                    // rule sets)
                     rule.setBaseValue(defaultBaseValue);
                     if (!isFractionRuleSet) {
                         ++defaultBaseValue;
@@ -219,38 +219,38 @@ final class NFRuleSet {
                     ++i;
                     break;
 
-                // if it's the negative-number rule, copy it into its own
-                // data member and delete it from the list
                 case NFRule.NEGATIVE_NUMBER_RULE:
+                    // if it's the negative-number rule, copy it into its own
+                    // data member and delete it from the list
                     negativeNumberRule = rule;
                     tempRules.remove(i);
                     break;
 
-                // if it's the improper fraction rule, copy it into the
-                // correct element of fractionRules
                 case NFRule.IMPROPER_FRACTION_RULE:
+                    // if it's the improper fraction rule, copy it into the
+                    // correct element of fractionRules
                     fractionRules[0] = rule;
                     tempRules.remove(i);
                     break;
 
-                // if it's the proper fraction rule, copy it into the
-                // correct element of fractionRules
                 case NFRule.PROPER_FRACTION_RULE:
+                    // if it's the proper fraction rule, copy it into the
+                    // correct element of fractionRules
                     fractionRules[1] = rule;
                     tempRules.remove(i);
                     break;
 
-                // if it's the master rule, copy it into the
-                // correct element of fractionRules
                 case NFRule.MASTER_RULE:
+                    // if it's the master rule, copy it into the
+                    // correct element of fractionRules
                     fractionRules[2] = rule;
                     tempRules.remove(i);
                     break;
 
-                // if it's a regular rule that already knows its base value,
-                // check to make sure the rules are in order, and update
-                // the default base value for the next rule
                 default:
+                    // if it's a regular rule that already knows its base value,
+                    // check to make sure the rules are in order, and update
+                    // the default base value for the next rule
                     if (rule.getBaseValue() < defaultBaseValue) {
                         throw new IllegalArgumentException("Rules are not in order, base: " +
                                 rule.getBaseValue() + " < " + defaultBaseValue);
@@ -395,7 +395,7 @@ final class NFRuleSet {
      * @return true if the rule set can be used for parsing.
      */
     public boolean isParseable() {
-        return (isParseable);
+        return isParseable;
     }
 
     //-----------------------------------------------------------------------
@@ -538,10 +538,11 @@ final class NFRuleSet {
         if (hi > 0) {
             while (lo < hi) {
                 int mid = (lo + hi) >>> 1;
-                if (rules[mid].getBaseValue() == number) {
+                long ruleBaseValue = rules[mid].getBaseValue();
+                if (ruleBaseValue == number) {
                     return rules[mid];
                 }
-                else if (rules[mid].getBaseValue() > number) {
+                else if (ruleBaseValue > number) {
                     hi = mid;
                 }
                 else {
