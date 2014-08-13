@@ -61,8 +61,8 @@ class UnicodeString;
 class CollationLoader {
 public:
     static void appendRootRules(UnicodeString &s);
-    static UnicodeString *loadRules(const char *localeID, const char *collationType,
-                                    UErrorCode &errorCode);
+    static void loadRules(const char *localeID, const char *collationType,
+                          UnicodeString &rules, UErrorCode &errorCode);
     static const CollationTailoring *loadTailoring(const Locale &locale, Locale &validLocale,
                                                    UErrorCode &errorCode);
 
