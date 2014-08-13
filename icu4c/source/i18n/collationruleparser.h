@@ -93,8 +93,9 @@ public:
     class U_I18N_API Importer : public UObject {
     public:
         virtual ~Importer();
-        virtual const UnicodeString *getRules(
+        virtual void getRules(
                 const char *localeID, const char *collationType,
+                UnicodeString &rules,
                 const char *&errorReason, UErrorCode &errorCode) = 0;
     };
 

@@ -673,21 +673,22 @@ class GenrbImporter : public icu::CollationRuleParser::Importer {
 public:
     GenrbImporter(const char *in, const char *out) : inputDir(in), outputDir(out) {}
     virtual ~GenrbImporter();
-    virtual const UnicodeString *getRules(
+    virtual void getRules(
             const char *localeID, const char *collationType,
+            UnicodeString &rules,
             const char *&errorReason, UErrorCode &errorCode);
 
 private:
     const char *inputDir;
     const char *outputDir;
-    UnicodeString rules;
 };
 
 GenrbImporter::~GenrbImporter() {}
 
-const UnicodeString *
+void
 GenrbImporter::getRules(
         const char *localeID, const char *collationType,
+        UnicodeString &rules,
         const char *& /*errorReason*/, UErrorCode &errorCode) {
     struct SRBRoot *data         = NULL;
     UCHARBUF       *ucbuf        = NULL;
@@ -718,11 +719,11 @@ GenrbImporter::getRules(
 
 
     if (U_FAILURE(errorCode)) {
-        return NULL;
+        return;
     }
     if(filename==NULL){
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return;
     }else{
         filelen = (int32_t)uprv_strlen(filename);
     }
@@ -810,6 +811,9 @@ GenrbImporter::getRules(
 
     /* Parse the data into an SRBRoot */
     data = parse(ucbuf, inputDir, outputDir, filename, FALSE, FALSE, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        goto finish;
+    }
 
     root = data->fRoot;
     collations = resLookup(root, "collations");
@@ -818,7 +822,8 @@ GenrbImporter::getRules(
       if (collation != NULL) {
         sequence = resLookup(collation, "Sequence");
         if (sequence != NULL) {
-          rules.setTo(FALSE, sequence->u.fString.fChars, sequence->u.fString.fLength);
+          // No string pointer aliasing so that we need not hold onto the resource bundle.
+          rules.setTo(sequence->u.fString.fChars, sequence->u.fString.fLength);
         }
       }
     }
@@ -835,8 +840,6 @@ finish:
     if(ucbuf) {
         ucbuf_close(ucbuf);
     }
-
-    return &rules;
 }
 
 // Quick-and-dirty escaping function.
