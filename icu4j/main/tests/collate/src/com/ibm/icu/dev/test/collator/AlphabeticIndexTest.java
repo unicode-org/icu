@@ -551,7 +551,13 @@ public class AlphabeticIndexTest extends TestFmwk {
                 if (locale.getCountry().length() != 0) {
                     continue;
                 }
+                boolean isUnihan = collationValue.contains("unihan");
                 AlphabeticIndex alphabeticIndex = new AlphabeticIndex(locale);
+                if (isUnihan) {
+                    // Unihan tailorings have a label per radical, and there are at least 214,
+                    // if not more when simplified radicals are distinguished.
+                    alphabeticIndex.setMaxLabelCount(500);
+                }
                 final Collection mainChars = alphabeticIndex.getBucketLabels();
                 String mainCharString = mainChars.toString();
                 if (mainCharString.length() > 500) {
@@ -559,7 +565,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 }
                 logln(mainChars.size() + "\t" + locale + "\t" + locale.getDisplayName(ULocale.ENGLISH));
                 logln("Index:\t" + mainCharString);
-                if (mainChars.size() > 100) {
+                if (!isUnihan && mainChars.size() > 100) {
                     errln("Index character set too large: " +
                             locale + " [" + mainChars.size() + "]:\n    " + mainChars);
                 }
@@ -1012,5 +1018,28 @@ public class AlphabeticIndexTest extends TestFmwk {
         AlphabeticIndex index = new AlphabeticIndex(coll);
         assertEquals("same strength as input Collator",
                 Collator.IDENTICAL, index.getCollator().getStrength());
+    }
+
+    public void TestChineseUnihan() {
+        AlphabeticIndex index = new AlphabeticIndex(new ULocale("zh-u-co-unihan"));
+        index.setMaxLabelCount(500);  // ICU 54 default is 99.
+        AlphabeticIndex.ImmutableIndex immIndex = index.buildImmutableIndex();
+        int bucketCount = immIndex.getBucketCount();
+        if(bucketCount < 216) {
+            // There should be at least an underflow and overflow label,
+            // and one for each of 214 radicals,
+            // and maybe additional labels for simplified radicals.
+            // (ICU4C: dataerrln(), prints only a warning if the data is missing)
+            errln("too few buckets/labels for Chinese/unihan: " + bucketCount +
+                    " (is zh/unihan data available?)");
+            return;
+        } else {
+            logln("Chinese/unihan has " + bucketCount + " buckets/labels");
+        }
+        // bucketIndex = radical number, adjusted for simplified radicals in lower buckets.
+        int bucketIndex = index.getBucketIndex("\u4e5d");
+        assertEquals("getBucketIndex(U+4E5D)", 5, bucketIndex);
+        bucketIndex = index.getBucketIndex("\u7527");
+        assertEquals("getBucketIndex(U+7527)", 100, bucketIndex);
     }
 }

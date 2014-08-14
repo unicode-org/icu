@@ -445,7 +445,16 @@ public class CollationServiceTest extends TestFmwk {
 //                }
 //        }
 //    }
-    
+
+    private static boolean arrayContains(String[] array, String s) {
+        for (int i = 0; i < array.length; ++i) {
+            if (s.equals(array[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void TestGetKeywordValues(){
         final String[][] PREFERRED = {
             {"und",             "standard", "eor", "search"},
@@ -453,12 +462,12 @@ public class CollationServiceTest extends TestFmwk {
             {"en_029",          "standard", "eor", "search"},
             {"de_DE",           "standard", "phonebook", "search", "eor"},
             {"de_Latn_DE",      "standard", "phonebook", "search", "eor"},
-            {"zh",              "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard"},
-            {"zh_Hans",         "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard"},
-            {"zh_CN",           "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard"},
-            {"zh_Hant",         "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "eor", "search", "standard"},
-            {"zh_TW",           "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "eor", "search", "standard"},
-            {"zh__PINYIN",      "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard"},
+            {"zh",              "pinyin", "stroke", "eor", "search", "standard"},
+            {"zh_Hans",         "pinyin", "stroke", "eor", "search", "standard"},
+            {"zh_CN",           "pinyin", "stroke", "eor", "search", "standard"},
+            {"zh_Hant",         "stroke", "pinyin", "eor", "search", "standard"},
+            {"zh_TW",           "stroke", "pinyin", "eor", "search", "standard"},
+            {"zh__PINYIN",      "pinyin", "stroke", "eor", "search", "standard"},
             {"es_ES",           "standard", "search", "traditional", "eor"},
             {"es__TRADITIONAL", "traditional", "search", "standard", "eor"},
             {"und@collation=phonebook",     "standard", "eor", "search"},
@@ -467,29 +476,19 @@ public class CollationServiceTest extends TestFmwk {
         };
 
         for (int i = 0; i < PREFERRED.length; i++) {
-            ULocale loc = new ULocale(PREFERRED[i][0]);
-            String[] expected = new String[PREFERRED[i].length - 1];
-            System.arraycopy(PREFERRED[i], 1, expected, 0, expected.length);
-
+            String locale = PREFERRED[i][0];
+            ULocale loc = new ULocale(locale);
+            String[] expected = PREFERRED[i];
             String[] pref = Collator.getKeywordValuesForLocale("collation", loc, true);
-            boolean matchPref = false;
-            if (pref.length == expected.length) {
-                matchPref = true;
-                for (int j = 0; j < pref.length; j++) {
-                    if (!pref[j].equals(expected[j])) {
-                        matchPref = false;
-                    }
+            for (int j = 1; j < expected.length; ++j) {
+                if (!arrayContains(pref, expected[j])) {
+                    errln("Keyword value " + expected[j] + " missing for locale: " + locale);
                 }
             }
-            if (!matchPref) {
-                errln("FAIL: Preferred values for locale " + loc 
-                        + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
-            }
  
-            String[] all = Collator.getKeywordValuesForLocale("collation", loc, true);
-
             // Collator.getKeywordValues return the same contents for both commonlyUsed
             // true and false.
+            String[] all = Collator.getKeywordValuesForLocale("collation", loc, false);
             boolean matchAll = false;
             if (pref.length == all.length) {
                 matchAll = true;

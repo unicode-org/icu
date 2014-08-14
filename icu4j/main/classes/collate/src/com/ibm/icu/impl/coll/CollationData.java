@@ -101,6 +101,74 @@ public final class CollationData {
     }
 
     /**
+     * Returns the single CE that c maps to.
+     * Throws UnsupportedOperationException if c does not map to a single CE.
+     */
+    long getSingleCE(int c) {
+        CollationData d;
+        int ce32 = getCE32(c);
+        if(ce32 == Collation.FALLBACK_CE32) {
+            d = base;
+            ce32 = base.getCE32(c);
+        } else {
+            d = this;
+        }
+        while(Collation.isSpecialCE32(ce32)) {
+            switch(Collation.tagFromCE32(ce32)) {
+            case Collation.LATIN_EXPANSION_TAG:
+            case Collation.BUILDER_DATA_TAG:
+            case Collation.PREFIX_TAG:
+            case Collation.CONTRACTION_TAG:
+            case Collation.HANGUL_TAG:
+            case Collation.LEAD_SURROGATE_TAG:
+                throw new UnsupportedOperationException(String.format(
+                        "there is not exactly one collation element for U+%04X (CE32 0x%08x)",
+                        c, ce32));
+            case Collation.FALLBACK_TAG:
+            case Collation.RESERVED_TAG_3:
+                throw new AssertionError(String.format(
+                        "unexpected CE32 tag for U+%04X (CE32 0x%08x)", c, ce32));
+            case Collation.LONG_PRIMARY_TAG:
+                return Collation.ceFromLongPrimaryCE32(ce32);
+            case Collation.LONG_SECONDARY_TAG:
+                return Collation.ceFromLongSecondaryCE32(ce32);
+            case Collation.EXPANSION32_TAG:
+                if(Collation.lengthFromCE32(ce32) == 1) {
+                    ce32 = d.ce32s[Collation.indexFromCE32(ce32)];
+                    break;
+                } else {
+                    throw new UnsupportedOperationException(String.format(
+                            "there is not exactly one collation element for U+%04X (CE32 0x%08x)",
+                            c, ce32));
+                }
+            case Collation.EXPANSION_TAG: {
+                if(Collation.lengthFromCE32(ce32) == 1) {
+                    return d.ces[Collation.indexFromCE32(ce32)];
+                } else {
+                    throw new UnsupportedOperationException(String.format(
+                            "there is not exactly one collation element for U+%04X (CE32 0x%08x)",
+                            c, ce32));
+                }
+            }
+            case Collation.DIGIT_TAG:
+                // Fetch the non-numeric-collation CE32 and continue.
+                ce32 = d.ce32s[Collation.indexFromCE32(ce32)];
+                break;
+            case Collation.U0000_TAG:
+                assert(c == 0);
+                // Fetch the normal ce32 for U+0000 and continue.
+                ce32 = d.ce32s[0];
+                break;
+            case Collation.OFFSET_TAG:
+                return d.getCEFromOffsetCE32(c, ce32);
+            case Collation.IMPLICIT_TAG:
+                return Collation.unassignedCEFromCodePoint(c);
+            }
+        }
+        return Collation.ceFromSimpleCE32(ce32);
+    }
+
+    /**
      * Returns the FCD16 value for code point c. c must be >= 0.
      */
     int getFCD16(int c) {
