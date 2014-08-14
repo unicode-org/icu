@@ -1309,17 +1309,15 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // the same time, but you get what you get, and you shouldn't be using this from
         // multiple threads anyway.
         if (scannerProvider == null && lenientParse && !lookedForScanner) {
-            ///CLOVER:OFF
             try {
                 lookedForScanner = true;
-                Class<?> cls = Class.forName("com.ibm.icu.text.RbnfScannerProviderImpl");
+                Class<?> cls = Class.forName("com.ibm.icu.impl.text.RbnfScannerProviderImpl");
                 RbnfLenientScannerProvider provider = (RbnfLenientScannerProvider)cls.newInstance();
                 setLenientScannerProvider(provider);
             }
             catch (Exception e) {
                 // any failure, we just ignore and return null
             }
-            ///CLOVER:ON
         }
 
         return scannerProvider;
@@ -1474,12 +1472,16 @@ public class RuleBasedNumberFormat extends NumberFormat {
     DecimalFormat getDecimalFormat() {
         if (decimalFormat == null) {
             decimalFormat = (DecimalFormat)NumberFormat.getInstance(locale);
-            
+
             if (decimalFormatSymbols != null) {
                 decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
             }
         }
         return decimalFormat;
+    }
+
+    PluralFormat createPluralFormat(PluralRules.PluralType pluralType, String pattern) {
+        return new PluralFormat(locale, pluralType, pattern, getDecimalFormat());
     }
 
     //-----------------------------------------------------------------------

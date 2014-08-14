@@ -68,77 +68,53 @@ public class RbnfTest extends TestFmwk {
         "    9: <0</9;\n" +
         "   10: <0</10;\n";
 
-    static {
-        // mondo hack
-        char[] fracRulesArr = fracRules.toCharArray();
-        int len = fracRulesArr.length;
-        int change = 2;
-        for (int i = 0; i < len; ++i) {
-            char ch = fracRulesArr[i];
-            if (ch == '\n') {
-                change = 2; // change ok
-            } else if (ch == ':') {
-                change = 1; // change, but once we hit a non-space char, don't change
-            } else if (ch == ' ') {
-                if (change != 0) {
-                    fracRulesArr[i] = (char)0x200e;
-                }
-            } else {
-                if (change == 1) {
-                    change = 0;
-                }
-            }
-        }
-        fracRules = new String(fracRulesArr);
-    }
-
-    static final String durationInSecondsRules =
-        // main rule set for formatting with words
-        "%with-words:\n"
-        // take care of singular and plural forms of "second"
-        + "    0 seconds; 1 second; =0= seconds;\n"
-        // use %%min to format values greater than 60 seconds
-        + "    60/60: <%%min<[, >>];\n"
-        // use %%hr to format values greater than 3,600 seconds
-        // (the ">>>" below causes us to see the number of minutes
-        // when when there are zero minutes)
-        + "    3600/60: <%%hr<[, >>>];\n"
-        // this rule set takes care of the singular and plural forms
-        // of "minute"
-        + "%%min:\n"
-        + "    0 minutes; 1 minute; =0= minutes;\n"
-        // this rule set takes care of the singular and plural forms
-        // of "hour"
-        + "%%hr:\n"
-        + "    0 hours; 1 hour; =0= hours;\n"
-
-        // main rule set for formatting in numerals
-        + "%in-numerals:\n"
-        // values below 60 seconds are shown with "sec."
-        + "    =0= sec.;\n"
-        // higher values are shown with colons: %%min-sec is used for
-        // values below 3,600 seconds...
-        + "    60: =%%min-sec=;\n"
-        // ...and %%hr-min-sec is used for values of 3,600 seconds
-        // and above
-        + "    3600: =%%hr-min-sec=;\n"
-        // this rule causes values of less than 10 minutes to show without
-        // a leading zero
-        + "%%min-sec:\n"
-        + "    0: :=00=;\n"
-        + "    60/60: <0<>>;\n"
-        // this rule set is used for values of 3,600 or more.  Minutes are always
-        // shown, and always shown with two digits
-        + "%%hr-min-sec:\n"
-        + "    0: :=00=;\n"
-        + "    60/60: <00<>>;\n"
-        + "    3600/60: <#,##0<:>>>;\n"
-        // the lenient-parse rules allow several different characters to be used
-        // as delimiters between hours, minutes, and seconds
-        + "%%lenient-parse:\n"
-        + "    & : = . = ' ' = -;\n";
-
     public void TestCoverage() {
+        String durationInSecondsRules =
+                // main rule set for formatting with words
+                "%with-words:\n"
+                        // take care of singular and plural forms of "second"
+                        + "    0 seconds; 1 second; =0= seconds;\n"
+                        // use %%min to format values greater than 60 seconds
+                        + "    60/60: <%%min<[, >>];\n"
+                        // use %%hr to format values greater than 3,600 seconds
+                        // (the ">>>" below causes us to see the number of minutes
+                        // when when there are zero minutes)
+                        + "    3600/60: <%%hr<[, >>>];\n"
+                        // this rule set takes care of the singular and plural forms
+                        // of "minute"
+                        + "%%min:\n"
+                        + "    0 minutes; 1 minute; =0= minutes;\n"
+                        // this rule set takes care of the singular and plural forms
+                        // of "hour"
+                        + "%%hr:\n"
+                        + "    0 hours; 1 hour; =0= hours;\n"
+
+                        // main rule set for formatting in numerals
+                        + "%in-numerals:\n"
+                        // values below 60 seconds are shown with "sec."
+                        + "    =0= sec.;\n"
+                        // higher values are shown with colons: %%min-sec is used for
+                        // values below 3,600 seconds...
+                        + "    60: =%%min-sec=;\n"
+                        // ...and %%hr-min-sec is used for values of 3,600 seconds
+                        // and above
+                        + "    3600: =%%hr-min-sec=;\n"
+                        // this rule causes values of less than 10 minutes to show without
+                        // a leading zero
+                        + "%%min-sec:\n"
+                        + "    0: :=00=;\n"
+                        + "    60/60: <0<>>;\n"
+                        // this rule set is used for values of 3,600 or more.  Minutes are always
+                        // shown, and always shown with two digits
+                        + "%%hr-min-sec:\n"
+                        + "    0: :=00=;\n"
+                        + "    60/60: <00<>>;\n"
+                        + "    3600/60: <#,##0<:>>>;\n"
+                        // the lenient-parse rules allow several different characters to be used
+                        // as delimiters between hours, minutes, and seconds
+                        + "%%lenient-parse:\n"
+                        + "    & : = . = ' ' = -;\n";
+
         // extra calls to boost coverage numbers
         RuleBasedNumberFormat fmt0 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
         RuleBasedNumberFormat fmt1 = (RuleBasedNumberFormat)fmt0.clone();
@@ -574,39 +550,90 @@ public class RbnfTest extends TestFmwk {
         doTest(formatter, testData, true);
     }
 
-//    /**
-//     * Perform a simple spot check on the ordinal spellout rules
-//     */
-//    public void TestOrdinalSpellout() {
-//        String rules = "%%digits-ordinal-indicator:"
-//                + "0=1: th;"
-//                + "1=1: st;"
-//                + "2=1: nd;"
-//                + "3=1: rd;"
-//                + "4=1: th;"
-//                + "20=1: >>;"
-//                + "100=1: >>;"
-//                + "%digits-ordinal:"
-//                + "-x: −>>;"
-//                + "0: =#,##0==%%digits-ordinal-indicator=;";
-//        RuleBasedNumberFormat formatter = new RuleBasedNumberFormat(rules);
-//        String[][] testData = {
-//                { "1", "1st" },
-//                { "2", "2nd" },
-//                { "3", "3rd" },
-//                { "4", "4th" },
-//                { "11", "11th" },
-//                { "12", "12th" },
-//                { "13", "13th" },
-//                { "14", "14th" },
-//                { "21", "21st" },
-//                { "22", "22nd" },
-//                { "23", "23rd" },
-//                { "24", "24th" },
-//        };
-//
-//        doTest(formatter, testData, true);
-//    }
+    /**
+     * Perform a simple spot check on the ordinal spellout rules
+     */
+    public void TestPluralRules() {
+        String enRules = "%digits-ordinal:"
+                + "-x: −>>;"
+                + "0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th});";
+        RuleBasedNumberFormat enFormatter = new RuleBasedNumberFormat(enRules, ULocale.ENGLISH);
+        String[][] enTestData = {
+                { "1", "1st" },
+                { "2", "2nd" },
+                { "3", "3rd" },
+                { "4", "4th" },
+                { "11", "11th" },
+                { "12", "12th" },
+                { "13", "13th" },
+                { "14", "14th" },
+                { "21", "21st" },
+                { "22", "22nd" },
+                { "23", "23rd" },
+                { "24", "24th" },
+        };
+
+        doTest(enFormatter, enTestData, true);
+
+        // This is trying to model the feminine form, but don't worry about the details too much.
+        // We're trying to test the plural rules.
+        String ruRules = "%spellout-numbering:"
+                + "-x: минус >>;"
+                + "x.x: << запятая >>;"
+                + "0: ноль;"
+                + "1: один;"
+                + "2: два;"
+                + "3: три;"
+                + "4: четыре;"
+                + "5: пять;"
+                + "6: шесть;"
+                + "7: семь;"
+                + "8: восемь;"
+                + "9: девять;"
+                + "10: десять;"
+                + "11: одиннадцать;"
+                + "12: двенадцать;"
+                + "13: тринадцать;"
+                + "14: четырнадцать;"
+                + "15: пятнадцать;"
+                + "16: шестнадцать;"
+                + "17: семнадцать;"
+                + "18: восемнадцать;"
+                + "19: девятнадцать;"
+                + "20: двадцать[ >>];"
+                + "30: тридцать[ >>];"
+                + "40: сорок[ >>];"
+                + "50: пятьдесят[ >>];"
+                + "60: шестьдесят[ >>];"
+                + "70: семьдесят[ >>];"
+                + "80: восемьдесят[ >>];"
+                + "90: девяносто[ >>];"
+                + "100: сто[ >>];"
+                + "200: <<сти[ >>];"
+                + "300: <<ста[ >>];"
+                + "500: <<сот[ >>];"
+                + "1000: <<$(cardinal,one{ тысяча}few{ тысячи}other{ тысяч})[ >>];";
+        RuleBasedNumberFormat ruFormatter = new RuleBasedNumberFormat(ruRules, new ULocale("ru"));
+        String[][] ruTestData = {
+                { "1", "один" },
+                { "100", "сто" },
+                { "125", "сто двадцать пять" },
+                { "399", "триста девяносто девять" },
+                { "1,000", "один тысяча" },
+                { "2,000", "два тысячи" },
+                { "5,000", "пять тысяч" },
+                { "21,000", "двадцать один тысяча" },
+                { "22,000", "двадцать два тысячи" },
+        };
+
+        doTest(ruFormatter, ruTestData, true);
+
+        // Make sure there are no divide by 0 errors.
+        String result = new RuleBasedNumberFormat(ruRules, new ULocale("ru")).format(21000);
+        if (!"двадцать один тысяча".equals(result)) {
+            errln("Got " + result + " for 21000");
+        }
+    }
 
     public void TestFractionalRuleSet() {
         RuleBasedNumberFormat formatter = new RuleBasedNumberFormat(fracRules,
@@ -714,38 +741,38 @@ public class RbnfTest extends TestFmwk {
         logln("big dec: " + buf.toString());
     }
 
-  public void TestTrailingSemicolon() {
-    String thaiRules =
-        "%default:\n" +
-        "  -x: \u0e25\u0e1a>>;\n" +
-        "  x.x: <<\u0e08\u0e38\u0e14>>>;\n" +
-        "  \u0e28\u0e39\u0e19\u0e22\u0e4c; \u0e2b\u0e19\u0e36\u0e48\u0e07; \u0e2a\u0e2d\u0e07; \u0e2a\u0e32\u0e21;\n" +
-        "  \u0e2a\u0e35\u0e48; \u0e2b\u0e49\u0e32; \u0e2b\u0e01; \u0e40\u0e08\u0e47\u0e14; \u0e41\u0e1b\u0e14;\n" +
-        "  \u0e40\u0e01\u0e49\u0e32; \u0e2a\u0e34\u0e1a; \u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14;\n" +
-        "  \u0e2a\u0e34\u0e1a\u0e2a\u0e2d\u0e07; \u0e2a\u0e34\u0e1a\u0e2a\u0e32\u0e21;\n" +
-        "  \u0e2a\u0e34\u0e1a\u0e2a\u0e35\u0e48; \u0e2a\u0e34\u0e1a\u0e2b\u0e49\u0e32;\n" +
-        "  \u0e2a\u0e34\u0e1a\u0e2b\u0e01; \u0e2a\u0e34\u0e1a\u0e40\u0e08\u0e47\u0e14;\n" +
-        "  \u0e2a\u0e34\u0e1a\u0e41\u0e1b\u0e14; \u0e2a\u0e34\u0e1a\u0e40\u0e01\u0e49\u0e32;\n" +
-        "  20: \u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
-        "  30: \u0e2a\u0e32\u0e21\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
-        "  40: \u0e2a\u0e35\u0e48\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
-        "  50: \u0e2b\u0e49\u0e32\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
-        "  60: \u0e2b\u0e01\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
-        "  70: \u0e40\u0e08\u0e47\u0e14\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
-        "  80: \u0e41\u0e1b\u0e14\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
-        "  90: \u0e40\u0e01\u0e49\u0e32\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
-        "  100: <<\u0e23\u0e49\u0e2d\u0e22[>>];\n" +
-        "  1000: <<\u0e1e\u0e31\u0e19[>>];\n" +
-        "  10000: <<\u0e2b\u0e21\u0e37\u0e48\u0e19[>>];\n" +
-        "  100000: <<\u0e41\u0e2a\u0e19[>>];\n" +
-        "  1,000,000: <<\u0e25\u0e49\u0e32\u0e19[>>];\n" +
-        "  1,000,000,000: <<\u0e1e\u0e31\u0e19\u0e25\u0e49\u0e32\u0e19[>>];\n" +
-        "  1,000,000,000,000: <<\u0e25\u0e49\u0e32\u0e19\u0e25\u0e49\u0e32\u0e19[>>];\n" +
-        "  1,000,000,000,000,000: =#,##0=;\n" +
-        "%%alt-ones:\n" +
-        "  \u0e28\u0e39\u0e19\u0e22\u0e4c;\n" +
-        "  \u0e40\u0e2d\u0e47\u0e14;\n" +
-        "  =%default=;\n ; ;; ";
+    public void TestTrailingSemicolon() {
+        String thaiRules =
+            "%default:\n" +
+            "  -x: \u0e25\u0e1a>>;\n" +
+            "  x.x: <<\u0e08\u0e38\u0e14>>>;\n" +
+            "  \u0e28\u0e39\u0e19\u0e22\u0e4c; \u0e2b\u0e19\u0e36\u0e48\u0e07; \u0e2a\u0e2d\u0e07; \u0e2a\u0e32\u0e21;\n" +
+            "  \u0e2a\u0e35\u0e48; \u0e2b\u0e49\u0e32; \u0e2b\u0e01; \u0e40\u0e08\u0e47\u0e14; \u0e41\u0e1b\u0e14;\n" +
+            "  \u0e40\u0e01\u0e49\u0e32; \u0e2a\u0e34\u0e1a; \u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14;\n" +
+            "  \u0e2a\u0e34\u0e1a\u0e2a\u0e2d\u0e07; \u0e2a\u0e34\u0e1a\u0e2a\u0e32\u0e21;\n" +
+            "  \u0e2a\u0e34\u0e1a\u0e2a\u0e35\u0e48; \u0e2a\u0e34\u0e1a\u0e2b\u0e49\u0e32;\n" +
+            "  \u0e2a\u0e34\u0e1a\u0e2b\u0e01; \u0e2a\u0e34\u0e1a\u0e40\u0e08\u0e47\u0e14;\n" +
+            "  \u0e2a\u0e34\u0e1a\u0e41\u0e1b\u0e14; \u0e2a\u0e34\u0e1a\u0e40\u0e01\u0e49\u0e32;\n" +
+            "  20: \u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
+            "  30: \u0e2a\u0e32\u0e21\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
+            "  40: \u0e2a\u0e35\u0e48\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
+            "  50: \u0e2b\u0e49\u0e32\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
+            "  60: \u0e2b\u0e01\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
+            "  70: \u0e40\u0e08\u0e47\u0e14\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
+            "  80: \u0e41\u0e1b\u0e14\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
+            "  90: \u0e40\u0e01\u0e49\u0e32\u0e2a\u0e34\u0e1a[>%%alt-ones>];\n" +
+            "  100: <<\u0e23\u0e49\u0e2d\u0e22[>>];\n" +
+            "  1000: <<\u0e1e\u0e31\u0e19[>>];\n" +
+            "  10000: <<\u0e2b\u0e21\u0e37\u0e48\u0e19[>>];\n" +
+            "  100000: <<\u0e41\u0e2a\u0e19[>>];\n" +
+            "  1,000,000: <<\u0e25\u0e49\u0e32\u0e19[>>];\n" +
+            "  1,000,000,000: <<\u0e1e\u0e31\u0e19\u0e25\u0e49\u0e32\u0e19[>>];\n" +
+            "  1,000,000,000,000: <<\u0e25\u0e49\u0e32\u0e19\u0e25\u0e49\u0e32\u0e19[>>];\n" +
+            "  1,000,000,000,000,000: =#,##0=;\n" +
+            "%%alt-ones:\n" +
+            "  \u0e28\u0e39\u0e19\u0e22\u0e4c;\n" +
+            "  \u0e40\u0e2d\u0e47\u0e14;\n" +
+            "  =%default=;\n ; ;; ";
 
         RuleBasedNumberFormat formatter = new RuleBasedNumberFormat(thaiRules, new Locale("th", "TH", ""));
 
@@ -798,6 +825,83 @@ public class RbnfTest extends TestFmwk {
     }
 
     public void TestRuleSetDisplayName() {
+        /**
+         * Spellout rules for U.K. English.
+         * I borrow the rule sets for TestRuleSetDisplayName()
+         */
+        final String ukEnglish =
+                "%simplified:\n"
+                        + "    -x: minus >>;\n"
+                        + "    x.x: << point >>;\n"
+                        + "    zero; one; two; three; four; five; six; seven; eight; nine;\n"
+                        + "    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
+                        + "        seventeen; eighteen; nineteen;\n"
+                        + "    20: twenty[->>];\n"
+                        + "    30: thirty[->>];\n"
+                        + "    40: forty[->>];\n"
+                        + "    50: fifty[->>];\n"
+                        + "    60: sixty[->>];\n"
+                        + "    70: seventy[->>];\n"
+                        + "    80: eighty[->>];\n"
+                        + "    90: ninety[->>];\n"
+                        + "    100: << hundred[ >>];\n"
+                        + "    1000: << thousand[ >>];\n"
+                        + "    1,000,000: << million[ >>];\n"
+                        + "    1,000,000,000,000: << billion[ >>];\n"
+                        + "    1,000,000,000,000,000: =#,##0=;\n"
+                        + "%alt-teens:\n"
+                        + "    =%simplified=;\n"
+                        + "    1000>: <%%alt-hundreds<[ >>];\n"
+                        + "    10,000: =%simplified=;\n"
+                        + "    1,000,000: << million[ >%simplified>];\n"
+                        + "    1,000,000,000,000: << billion[ >%simplified>];\n"
+                        + "    1,000,000,000,000,000: =#,##0=;\n"
+                        + "%%alt-hundreds:\n"
+                        + "    0: SHOULD NEVER GET HERE!;\n"
+                        + "    10: <%simplified< thousand;\n"
+                        + "    11: =%simplified= hundred>%%empty>;\n"
+                        + "%%empty:\n"
+                        + "    0:;"
+                        + "%ordinal:\n"
+                        + "    zeroth; first; second; third; fourth; fifth; sixth; seventh;\n"
+                        + "        eighth; ninth;\n"
+                        + "    tenth; eleventh; twelfth; thirteenth; fourteenth;\n"
+                        + "        fifteenth; sixteenth; seventeenth; eighteenth;\n"
+                        + "        nineteenth;\n"
+                        + "    twentieth; twenty->>;\n"
+                        + "    30: thirtieth; thirty->>;\n"
+                        + "    40: fortieth; forty->>;\n"
+                        + "    50: fiftieth; fifty->>;\n"
+                        + "    60: sixtieth; sixty->>;\n"
+                        + "    70: seventieth; seventy->>;\n"
+                        + "    80: eightieth; eighty->>;\n"
+                        + "    90: ninetieth; ninety->>;\n"
+                        + "    100: <%simplified< hundredth; <%simplified< hundred >>;\n"
+                        + "    1000: <%simplified< thousandth; <%simplified< thousand >>;\n"
+                        + "    1,000,000: <%simplified< millionth; <%simplified< million >>;\n"
+                        + "    1,000,000,000,000: <%simplified< billionth;\n"
+                        + "        <%simplified< billion >>;\n"
+                        + "    1,000,000,000,000,000: =#,##0=;"
+                        + "%default:\n"
+                        + "    -x: minus >>;\n"
+                        + "    x.x: << point >>;\n"
+                        + "    =%simplified=;\n"
+                        + "    100: << hundred[ >%%and>];\n"
+                        + "    1000: << thousand[ >%%and>];\n"
+                        + "    100,000>>: << thousand[>%%commas>];\n"
+                        + "    1,000,000: << million[>%%commas>];\n"
+                        + "    1,000,000,000,000: << billion[>%%commas>];\n"
+                        + "    1,000,000,000,000,000: =#,##0=;\n"
+                        + "%%and:\n"
+                        + "    and =%default=;\n"
+                        + "    100: =%default=;\n"
+                        + "%%commas:\n"
+                        + "    ' and =%default=;\n"
+                        + "    100: , =%default=;\n"
+                        + "    1000: , <%default< thousand, >%default>;\n"
+                        + "    1,000,000: , =%default=;"
+                        + "%%lenient-parse:\n"
+                        + "    & ' ' , ',' ;\n";
         ULocale.setDefault(ULocale.US);
         String[][] localizations = new String[][] {
             /* public rule sets*/
@@ -860,7 +964,7 @@ public class RbnfTest extends TestFmwk {
     }
 
     public void TestAllLocales() {
-        StringBuffer errors = new StringBuffer();
+        StringBuilder errors = new StringBuilder();
         String[] names = {
                 " (spellout) ",
                 " (ordinal) "
@@ -883,18 +987,22 @@ public class RbnfTest extends TestFmwk {
                     if (c < numbers.length) {
                         n = numbers[c];
                     } else {
-                        n = ((int)(r.nextInt(10000) - 3000)) / 16d;
+                        n = (r.nextInt(10000) - 3000) / 16d;
                     }
 
                     String s = fmt.format(n);
-                    logln(loc.getName() + names[j] + "success format: " + n + " -> " + s);
+                    if (isVerbose()) {
+                        logln(loc.getName() + names[j] + "success format: " + n + " -> " + s);
+                    }
 
                     try {
                         // RBNF parse is extremely slow when lenient option is enabled.
                         // non-lenient parse
                         fmt.setLenientParseMode(false);
                         Number num = fmt.parse(s);
-                        logln(loc.getName() + names[j] + "success parse: " + s + " -> " + num);
+                        if (isVerbose()) {
+                            logln(loc.getName() + names[j] + "success parse: " + s + " -> " + num);
+                        }
                         if (j != 0) {
                             // TODO: Fix the ordinal rules.
                             continue;
@@ -923,7 +1031,9 @@ public class RbnfTest extends TestFmwk {
             for (int i = 0; i < testData.length; i++) {
                 String number = testData[i][0];
                 String expectedWords = testData[i][1];
-                logln("test[" + i + "] number: " + number + " target: " + expectedWords);
+                if (isVerbose()) {
+                    logln("test[" + i + "] number: " + number + " target: " + expectedWords);
+                }
                 Number num = decFmt.parse(number);
                 String actualWords = formatter.format(num);
 
@@ -950,99 +1060,21 @@ public class RbnfTest extends TestFmwk {
         }
     }
 
-    /**
-     * Spellout rules for U.K. English.
-     * I borrow the rule sets for TestRuleSetDisplayName()
-     */
-    public static final String ukEnglish =
-        "%simplified:\n"
-        + "    -x: minus >>;\n"
-        + "    x.x: << point >>;\n"
-        + "    zero; one; two; three; four; five; six; seven; eight; nine;\n"
-        + "    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
-        + "        seventeen; eighteen; nineteen;\n"
-        + "    20: twenty[->>];\n"
-        + "    30: thirty[->>];\n"
-        + "    40: forty[->>];\n"
-        + "    50: fifty[->>];\n"
-        + "    60: sixty[->>];\n"
-        + "    70: seventy[->>];\n"
-        + "    80: eighty[->>];\n"
-        + "    90: ninety[->>];\n"
-        + "    100: << hundred[ >>];\n"
-        + "    1000: << thousand[ >>];\n"
-        + "    1,000,000: << million[ >>];\n"
-        + "    1,000,000,000,000: << billion[ >>];\n"
-        + "    1,000,000,000,000,000: =#,##0=;\n"
-        + "%alt-teens:\n"
-        + "    =%simplified=;\n"
-        + "    1000>: <%%alt-hundreds<[ >>];\n"
-        + "    10,000: =%simplified=;\n"
-        + "    1,000,000: << million[ >%simplified>];\n"
-        + "    1,000,000,000,000: << billion[ >%simplified>];\n"
-        + "    1,000,000,000,000,000: =#,##0=;\n"
-        + "%%alt-hundreds:\n"
-        + "    0: SHOULD NEVER GET HERE!;\n"
-        + "    10: <%simplified< thousand;\n"
-        + "    11: =%simplified= hundred>%%empty>;\n"
-        + "%%empty:\n"
-        + "    0:;"
-        + "%ordinal:\n"
-        + "    zeroth; first; second; third; fourth; fifth; sixth; seventh;\n"
-        + "        eighth; ninth;\n"
-        + "    tenth; eleventh; twelfth; thirteenth; fourteenth;\n"
-        + "        fifteenth; sixteenth; seventeenth; eighteenth;\n"
-        + "        nineteenth;\n"
-        + "    twentieth; twenty->>;\n"
-        + "    30: thirtieth; thirty->>;\n"
-        + "    40: fortieth; forty->>;\n"
-        + "    50: fiftieth; fifty->>;\n"
-        + "    60: sixtieth; sixty->>;\n"
-        + "    70: seventieth; seventy->>;\n"
-        + "    80: eightieth; eighty->>;\n"
-        + "    90: ninetieth; ninety->>;\n"
-        + "    100: <%simplified< hundredth; <%simplified< hundred >>;\n"
-        + "    1000: <%simplified< thousandth; <%simplified< thousand >>;\n"
-        + "    1,000,000: <%simplified< millionth; <%simplified< million >>;\n"
-        + "    1,000,000,000,000: <%simplified< billionth;\n"
-        + "        <%simplified< billion >>;\n"
-        + "    1,000,000,000,000,000: =#,##0=;"
-        + "%default:\n"
-        + "    -x: minus >>;\n"
-        + "    x.x: << point >>;\n"
-        + "    =%simplified=;\n"
-        + "    100: << hundred[ >%%and>];\n"
-        + "    1000: << thousand[ >%%and>];\n"
-        + "    100,000>>: << thousand[>%%commas>];\n"
-        + "    1,000,000: << million[>%%commas>];\n"
-        + "    1,000,000,000,000: << billion[>%%commas>];\n"
-        + "    1,000,000,000,000,000: =#,##0=;\n"
-        + "%%and:\n"
-        + "    and =%default=;\n"
-        + "    100: =%default=;\n"
-        + "%%commas:\n"
-        + "    ' and =%default=;\n"
-        + "    100: , =%default=;\n"
-        + "    1000: , <%default< thousand, >%default>;\n"
-        + "    1,000,000: , =%default=;"
-        + "%%lenient-parse:\n"
-        + "    & ' ' , ',' ;\n";
-
     /* Tests the method
      *      public boolean equals(Object that)
      */
     public void TestEquals(){
         // Tests when "if (!(that instanceof RuleBasedNumberFormat))" is true
         RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("dummy");
-        if (rbnf.equals(new String("dummy")) != false ||
-                rbnf.equals(new Character('a')) != false ||
-                rbnf.equals(new Object()) != false ||
-                rbnf.equals(-1) != false ||
-                rbnf.equals(0) != false ||
-                rbnf.equals(1) != false ||
-                rbnf.equals(-1.0) != false ||
-                rbnf.equals(0.0) != false ||
-                rbnf.equals(1.0) != false)
+        if (rbnf.equals("dummy") ||
+                rbnf.equals(new Character('a')) ||
+                rbnf.equals(new Object()) ||
+                rbnf.equals(-1) ||
+                rbnf.equals(0) ||
+                rbnf.equals(1) ||
+                rbnf.equals(-1.0) ||
+                rbnf.equals(0.0) ||
+                rbnf.equals(1.0))
         {
             errln("RuleBasedNumberFormat.equals(Object that) was suppose to " +
                     "be false for an invalid object.");
@@ -1056,29 +1088,29 @@ public class RbnfTest extends TestFmwk {
         RuleBasedNumberFormat rbnf3 = new RuleBasedNumberFormat("dummy", new Locale("sp"));
         RuleBasedNumberFormat rbnf4 = new RuleBasedNumberFormat("dummy", new Locale("fr"));
 
-        if(rbnf1.equals(rbnf2) != false || rbnf1.equals(rbnf3) != false ||
-                rbnf1.equals(rbnf4) != false || rbnf2.equals(rbnf3) != false ||
-                rbnf2.equals(rbnf4) != false || rbnf3.equals(rbnf4) != false){
+        if(rbnf1.equals(rbnf2) || rbnf1.equals(rbnf3) ||
+                rbnf1.equals(rbnf4) || rbnf2.equals(rbnf3) ||
+                rbnf2.equals(rbnf4) || rbnf3.equals(rbnf4)){
             errln("RuleBasedNumberFormat.equals(Object that) was suppose to " +
                     "be false for an invalid object.");
         }
 
-        if(rbnf1.equals(rbnf1) == false){
+        if(!rbnf1.equals(rbnf1)){
             errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
                     "be false for an invalid object.");
         }
 
-        if(rbnf2.equals(rbnf2) == false){
+        if(!rbnf2.equals(rbnf2)){
             errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
                     "be false for an invalid object.");
         }
 
-        if(rbnf3.equals(rbnf3) == false){
+        if(!rbnf3.equals(rbnf3)){
             errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
                     "be false for an invalid object.");
         }
 
-        if(rbnf4.equals(rbnf4) == false){
+        if(!rbnf4.equals(rbnf4)){
             errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
                     "be false for an invalid object.");
         }
@@ -1086,20 +1118,20 @@ public class RbnfTest extends TestFmwk {
         RuleBasedNumberFormat rbnf5 = new RuleBasedNumberFormat("dummy", new Locale("en"));
         RuleBasedNumberFormat rbnf6 = new RuleBasedNumberFormat("dummy", new Locale("en"));
 
-        if(rbnf5.equals(rbnf6) == false){
+        if(!rbnf5.equals(rbnf6)){
             errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
                     "be false for an invalid object.");
         }
         rbnf6.setLenientParseMode(true);
 
-        if(rbnf5.equals(rbnf6) != false){
+        if(rbnf5.equals(rbnf6)){
             errln("RuleBasedNumberFormat.equals(Object that) was suppose to " +
                     "be false for an invalid object.");
         }
 
         // Tests when "if (!ruleSets[i].equals(that2.ruleSets[i]))" is true
         RuleBasedNumberFormat rbnf7 = new RuleBasedNumberFormat("not_dummy", new Locale("en"));
-        if(rbnf5.equals(rbnf7) != false){
+        if(rbnf5.equals(rbnf7)){
             errln("RuleBasedNumberFormat.equals(Object that) was suppose to " +
                     "be false for an invalid object.");
         }
@@ -1321,7 +1353,7 @@ public class RbnfTest extends TestFmwk {
                 value = val;
                 expectedResult = expRes;
             }
-        };
+        }
         final TextContextItem[] items = {
                 new TextContextItem( "sv", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    123.45, "ett\u00ADhundra\u00ADtjugo\u00ADtre komma fyra fem" ),
                 new TextContextItem( "sv", RuleBasedNumberFormat.SPELLOUT, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 123.45, "Ett\u00ADhundra\u00ADtjugo\u00ADtre komma fyra fem" ),

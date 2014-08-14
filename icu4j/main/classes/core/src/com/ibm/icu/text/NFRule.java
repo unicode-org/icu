@@ -6,7 +6,7 @@
  */
 package com.ibm.icu.text;
 
-import java.lang.String;
+import java.text.FieldPosition;
 import java.text.ParsePosition;
 
 import com.ibm.icu.impl.PatternProps;
@@ -68,6 +68,13 @@ final class NFRule {
      * substitutions is inserted into the result string
      */
     private String ruleText = null;
+
+    /**
+     * The rule's plural format when defined. This is not a substitution
+     * because it only works on the current baseValue. It's normally not used
+     * due to the overhead.
+     */
+    private PluralFormat rulePatternFormat = null;
 
     /**
      * The rule's first substitution (the one with the lower offset
@@ -235,7 +242,8 @@ final class NFRule {
         int p = description.indexOf(":");
         if (p == -1) {
             setBaseValue(0);
-        } else {
+        }
+        else {
             // copy the descriptor out into its own string and strip it,
             // along with any trailing whitespace, out of the original
             // description
@@ -249,22 +257,14 @@ final class NFRule {
             // check first to see if the rule descriptor matches the token
             // for one of the special rules.  If it does, set the base
             // value to the correct identifier value
-            if (descriptor.equals("-x")) {
-                setBaseValue(NEGATIVE_NUMBER_RULE);
-            }
-            else if (descriptor.equals("x.x")) {
-                setBaseValue(IMPROPER_FRACTION_RULE);
-            }
-            else if (descriptor.equals("0.x")) {
+            if (descriptor.equals("0.x")) {
                 setBaseValue(PROPER_FRACTION_RULE);
-            }
-            else if (descriptor.equals("x.0")) {
-                setBaseValue(MASTER_RULE);
             }
             else if (descriptor.charAt(0) >= '0' && descriptor.charAt(0) <= '9') {
                 // if the rule descriptor begins with a digit, it's a descriptor
                 // for a normal rule
                 long tempValue = 0;
+                int descriptorLength = descriptor.length();
                 char c = 0;
                 p = 0;
 
@@ -272,7 +272,7 @@ final class NFRule {
                 // into "tempValue", skip periods, commas, and spaces,
                 // stop on a slash or > sign (or at the end of the string),
                 // and throw an exception on any other character
-                while (p < descriptor.length()) {
+                while (p < descriptorLength) {
                     c = descriptor.charAt(p);
                     if (c >= '0' && c <= '9') {
                         tempValue = tempValue * 10 + (c - '0');
@@ -296,7 +296,7 @@ final class NFRule {
                 if (c == '/') {
                     tempValue = 0;
                     ++p;
-                    while (p < descriptor.length()) {
+                    while (p < descriptorLength) {
                         c = descriptor.charAt(p);
                         if (c >= '0' && c <= '9') {
                             tempValue = tempValue * 10 + (c - '0');
@@ -325,7 +325,7 @@ final class NFRule {
                 // If we see another character before reaching the end of
                 // the descriptor, that's also a syntax error.
                 if (c == '>') {
-                    while (p < descriptor.length()) {
+                    while (p < descriptorLength) {
                         c = descriptor.charAt(p);
                         if (c == '>' && exponent > 0) {
                             --exponent;
@@ -335,6 +335,15 @@ final class NFRule {
                         ++p;
                     }
                 }
+            }
+            else if (descriptor.equals("-x")) {
+                setBaseValue(NEGATIVE_NUMBER_RULE);
+            }
+            else if (descriptor.equals("x.x")) {
+                setBaseValue(IMPROPER_FRACTION_RULE);
+            }
+            else if (descriptor.equals("x.0")) {
+                setBaseValue(MASTER_RULE);
             }
         }
 
@@ -355,15 +364,42 @@ final class NFRule {
      * creates the substitutions, and removes the substitution tokens
      * from the rule's rule text.
      * @param owner The rule set containing this rule
-     * @param predecessor The rule preseding this one in "owners" rule list
+     * @param predecessor The rule preceding this one in "owners" rule list
      * @param ruleText The rule text
      */
     private void extractSubstitutions(NFRuleSet             owner,
                                       String                ruleText,
                                       NFRule                predecessor) {
         this.ruleText = ruleText;
+        this.rulePatternFormat = null;
         sub1 = extractSubstitution(owner, predecessor);
-        sub2 = extractSubstitution(owner, predecessor);
+        if (sub1.isNullSubstitution()) {
+            // Small optimization. There is no need to create a redundant NullSubstitution.
+            sub2 = sub1;
+        }
+        else {
+            sub2 = extractSubstitution(owner, predecessor);
+        }
+        ruleText = this.ruleText;
+        if (ruleText.startsWith("$(") && ruleText.endsWith(")")) {
+            int endType = ruleText.indexOf(',');
+            if (endType < 0) {
+                throw new IllegalArgumentException("Rule \"" + ruleText + "\" does not have a defined type");
+            }
+            String type = this.ruleText.substring(2, endType);
+            PluralRules.PluralType pluralType;
+            if ("cardinal".equals(type)) {
+                pluralType = PluralRules.PluralType.CARDINAL;
+            }
+            else if ("ordinal".equals(type)) {
+                pluralType = PluralRules.PluralType.ORDINAL;
+            }
+            else {
+                throw new IllegalArgumentException(type + " is an unknown type");
+            }
+            rulePatternFormat = formatter.createPluralFormat(pluralType,
+                    ruleText.substring(endType + 1, ruleText.length() - 1));
+        }
     }
 
     private static final String[] RULE_PREFIXES = new String[] {
@@ -575,14 +611,13 @@ final class NFRule {
         else if (baseValue == MASTER_RULE) {
             result.append("x.0: ");
         }
-
-        // for a normal rule, write out its base value, and if the radix is
-        // something other than 10, write out the radix (with the preceding
-        // slash, of course).  Then calculate the expected exponent and if
-        // if isn't the same as the actual exponent, write an appropriate
-        // number of > signs.  Finally, terminate the whole thing with
-        // a colon.
         else {
+            // for a normal rule, write out its base value, and if the radix is
+            // something other than 10, write out the radix (with the preceding
+            // slash, of course).  Then calculate the expected exponent and if
+            // if isn't the same as the actual exponent, write an appropriate
+            // number of > signs.  Finally, terminate the whole thing with
+            // a colon.
             result.append(String.valueOf(baseValue));
             if (radix != 10) {
                 result.append('/').append(radix);
@@ -653,9 +688,18 @@ final class NFRule {
         // into the right places in toInsertInto (notice we do the
         // substitutions in reverse order so that the offsets don't get
         // messed up)
-        toInsertInto.insert(pos, ruleText);
-        sub2.doSubstitution(number, toInsertInto, pos);
-        sub1.doSubstitution(number, toInsertInto, pos);
+        if (rulePatternFormat == null) {
+            toInsertInto.insert(pos, ruleText);
+        }
+        else {
+            toInsertInto.insert(pos, rulePatternFormat.format(baseValue == 0 ? number : number/baseValue));
+        }
+        if (!sub2.isNullSubstitution()) {
+            sub2.doSubstitution(number, toInsertInto, pos);
+        }
+        if (!sub1.isNullSubstitution()) {
+            sub1.doSubstitution(number, toInsertInto, pos);
+        }
     }
 
     /**
@@ -674,9 +718,18 @@ final class NFRule {
         // [again, we have two copies of this routine that do the same thing
         // so that we don't sacrifice precision in a long by casting it
         // to a double]
-        toInsertInto.insert(pos, ruleText);
-        sub2.doSubstitution(number, toInsertInto, pos);
-        sub1.doSubstitution(number, toInsertInto, pos);
+        if (rulePatternFormat == null) {
+            toInsertInto.insert(pos, ruleText);
+        }
+        else {
+            toInsertInto.insert(pos, rulePatternFormat.format(number));
+        }
+        if (!sub2.isNullSubstitution()) {
+            sub2.doSubstitution(number, toInsertInto, pos);
+        }
+        if (!sub1.isNullSubstitution()) {
+            sub1.doSubstitution(number, toInsertInto, pos);
+        }
     }
 
     /**
@@ -791,8 +844,8 @@ final class NFRule {
             // the substitution, giving us a new partial parse result
             pp.setIndex(0);
             double partialResult = matchToDelimiter(workText, start, tempBaseValue,
-                                                    ruleText.substring(sub1.getPos(), sub2.getPos()), pp, sub1,
-                                                    upperBound).doubleValue();
+                                                    ruleText.substring(sub1.getPos(), sub2.getPos()), rulePatternFormat,
+                                                    pp, sub1, upperBound).doubleValue();
 
             // if we got a successful match (or were trying to match a
             // null substitution), pp is now pointing at the first unmatched
@@ -809,7 +862,7 @@ final class NFRule {
                 // substitution if there's a successful match, giving us
                 // a real result
                 partialResult = matchToDelimiter(workText2, 0, partialResult,
-                                                 ruleText.substring(sub2.getPos()), pp2, sub2,
+                                                 ruleText.substring(sub2.getPos()), rulePatternFormat, pp2, sub2,
                                                  upperBound).doubleValue();
 
                 // if we got a successful match on this second
@@ -936,7 +989,7 @@ final class NFRule {
      * Double.
      */
     private Number matchToDelimiter(String text, int startPos, double baseVal,
-                                    String delimiter, ParsePosition pp, NFSubstitution sub, double upperBound) {
+                                    String delimiter, PluralFormat pluralFormatDelimiter, ParsePosition pp, NFSubstitution sub, double upperBound) {
         // if "delimiter" contains real (i.e., non-ignorable) text, search
         // it for "delimiter" beginning at "start".  If that succeeds, then
         // use "sub"'s doParse() method to match the text before the
@@ -949,7 +1002,7 @@ final class NFRule {
             // element array: element 0 is the position of the match, and
             // element 1 is the number of characters that matched
             // "delimiter".
-            int[] temp = findText(text, delimiter, startPos);
+            int[] temp = findText(text, delimiter, pluralFormatDelimiter, startPos);
             int dPos = temp[0];
             int dLen = temp[1];
 
@@ -985,7 +1038,7 @@ final class NFRule {
                 // copy of "delimiter" in "text" and repeat the loop if
                 // we find it
                 tempPP.setIndex(0);
-                temp = findText(text, delimiter, dPos + dLen);
+                temp = findText(text, delimiter, pluralFormatDelimiter, dPos + dLen);
                 dPos = temp[0];
                 dLen = temp[1];
             }
@@ -1053,143 +1106,13 @@ final class NFRule {
             return scanner.prefixLength(str, prefix);
         }
 
-        // go through all this grief if we're in lenient-parse mode
-        // if (formatter.lenientParseEnabled()) {
-        //     // get the formatter's collator and use it to create two
-        //     // collation element iterators, one over the target string
-        //     // and another over the prefix (right now, we'll throw an
-        //     // exception if the collator we get back from the formatter
-        //     // isn't a RuleBasedCollator, because RuleBasedCollator defines
-        //     // the CollationElementIteratoer protocol.  Hopefully, this
-        //     // will change someday.)
-        //     //
-        //     // Previous code was matching "fifty-" against " fifty" and leaving
-        //     // the number " fifty-7" to parse as 43 (50 - 7).
-        //     // Also it seems that if we consume the entire prefix, that's ok even
-        //     // if we've consumed the entire string, so I switched the logic to
-        //     // reflect this.
-        //     RuleBasedCollator collator = (RuleBasedCollator)formatter.getCollator();
-        //     CollationElementIterator strIter = collator.getCollationElementIterator(str);
-        //     CollationElementIterator prefixIter = collator.getCollationElementIterator(prefix);
-
-        //     // match collation elements between the strings
-        //     int oStr = strIter.next();
-        //     int oPrefix = prefixIter.next();
-
-        //     while (oPrefix != CollationElementIterator.NULLORDER) {
-        //         // skip over ignorable characters in the target string
-        //         while (CollationElementIterator.primaryOrder(oStr) == 0 && oStr !=
-        //                CollationElementIterator.NULLORDER) {
-        //             oStr = strIter.next();
-        //         }
-
-        //         // skip over ignorable characters in the prefix
-        //         while (CollationElementIterator.primaryOrder(oPrefix) == 0 && oPrefix !=
-        //                CollationElementIterator.NULLORDER) {
-        //             oPrefix = prefixIter.next();
-        //         }
-
-        //         // if skipping over ignorables brought to the end of
-        //         // the prefix, we DID match: drop out of the loop
-        //         if (oPrefix == CollationElementIterator.NULLORDER) {
-        //             break;
-        //         }
-
-        //         // if skipping over ignorables brought us to the end
-        //         // of the target string, we didn't match and return 0
-        //         if (oStr == CollationElementIterator.NULLORDER) {
-        //             return 0;
-        //         }
-
-        //         // match collation elements from the two strings
-        //         // (considering only primary differences).  If we
-        //         // get a mismatch, dump out and return 0
-        //         if (CollationElementIterator.primaryOrder(oStr) != CollationElementIterator.
-        //             primaryOrder(oPrefix)) {
-        //             return 0;
-        //         }
-        //         // otherwise, advance to the next character in each string
-        //         // and loop (we drop out of the loop when we exhaust
-        //         // collation elements in the prefix)
-
-        //         oStr = strIter.next();
-        //         oPrefix = prefixIter.next();
-        //     }
-
-        //     // we are not compatible with jdk 1.1 any longer
-        //     int result = strIter.getOffset();
-        //     if (oStr != CollationElementIterator.NULLORDER) {
-        //         --result;
-        //     }
-        //     return result;
-
-            /*
-              //----------------------------------------------------------------
-              // JDK 1.2-specific API call
-              // return strIter.getOffset();
-              //----------------------------------------------------------------
-              // JDK 1.1 HACK (take out for 1.2-specific code)
-
-              // if we make it to here, we have a successful match.  Now we
-              // have to find out HOW MANY characters from the target string
-              // matched the prefix (there isn't necessarily a one-to-one
-              // mapping between collation elements and characters).
-              // In JDK 1.2, there's a simple getOffset() call we can use.
-              // In JDK 1.1, on the other hand, we have to go through some
-              // ugly contortions.  First, use the collator to compare the
-              // same number of characters from the prefix and target string.
-              // If they're equal, we're done.
-              collator.setStrength(Collator.PRIMARY);
-              if (str.length() >= prefix.length()
-              && collator.equals(str.substring(0, prefix.length()), prefix)) {
-              return prefix.length();
-              }
-
-              // if they're not equal, then we have to compare successively
-              // larger and larger substrings of the target string until we
-              // get to one that matches the prefix.  At that point, we know
-              // how many characters matched the prefix, and we can return.
-              int p = 1;
-              while (p <= str.length()) {
-              if (collator.equals(str.substring(0, p), prefix)) {
-              return p;
-              } else {
-              ++p;
-              }
-              }
-
-              // SHOULKD NEVER GET HERE!!!
-              return 0;
-              //----------------------------------------------------------------
-            */
-
-            // If lenient parsing is turned off, forget all that crap above.
-            // Just use String.startsWith() and be done with it.
-        //        } else {
-            if (str.startsWith(prefix)) {
-                return prefix.length();
-            } else {
-                return 0;
-            }
-        // }
+        // If lenient parsing is turned off, forget all that crap above.
+        // Just use String.startsWith() and be done with it.
+        if (str.startsWith(prefix)) {
+            return prefix.length();
+        }
+        return 0;
     }
-
-    /*
-     * Searches a string for another string.  If lenient parsing is off,
-     * this just calls indexOf().  If lenient parsing is on, this function
-     * uses CollationElementIterator to match characters, and only
-     * primary-order differences are significant in determining whether
-     * there's a match.
-     * @param str The string to search
-     * @param key The string to search "str" for
-     * @return A two-element array of ints.  Element 0 is the position
-     * of the match, or -1 if there was no match.  Element 1 is the
-     * number of characters in "str" that matched (which isn't necessarily
-     * the same as the length of "key")
-     */
-/*    private int[] findText(String str, String key) {
-        return findText(str, key, 0);
-    }*/
 
     /**
      * Searches a string for another string.  If lenient parsing is off,
@@ -1206,100 +1129,27 @@ final class NFRule {
      * number of characters in "str" that matched (which isn't necessarily
      * the same as the length of "key")
      */
-    private int[] findText(String str, String key, int startingAt) {
-        // if lenient parsing is turned off, this is easy: just call
-        // String.indexOf() and we're done
+    private int[] findText(String str, String key, PluralFormat pluralFormatKey, int startingAt) {
         RbnfLenientScanner scanner = formatter.getLenientScanner();
-//        if (!formatter.lenientParseEnabled()) {
-        if (scanner == null) {
-            return new int[] { str.indexOf(key, startingAt), key.length() };
-
-            // but if lenient parsing is turned ON, we've got some work
-            // ahead of us
-        } else {
-            return scanner.findText(str, key, startingAt);
-
-            // //----------------------------------------------------------------
-            // // JDK 1.1 HACK (take out of 1.2-specific code)
-
-            // // in JDK 1.2, CollationElementIterator provides us with an
-            // // API to map between character offsets and collation elements
-            // // and we can do this by marching through the string comparing
-            // // collation elements.  We can't do that in JDK 1.1.  Insted,
-            // // we have to go through this horrible slow mess:
-            // int p = startingAt;
-            // int keyLen = 0;
-
-            // // basically just isolate smaller and smaller substrings of
-            // // the target string (each running to the end of the string,
-            // // and with the first one running from startingAt to the end)
-            // // and then use prefixLength() to see if the search key is at
-            // // the beginning of each substring.  This is excruciatingly
-            // // slow, but it will locate the key and tell use how long the
-            // // matching text was.
-            // while (p < str.length() && keyLen == 0) {
-            //     keyLen = prefixLength(str.substring(p), key);
-            //     if (keyLen != 0) {
-            //         return new int[] { p, keyLen };
-            //     }
-            //     ++p;
-            // }
-            // // if we make it to here, we didn't find it.  Return -1 for the
-            // // location.  The length should be ignored, but set it to 0,
-            // // which should be "safe"
-            // return new int[] { -1, 0 };
-
-            //----------------------------------------------------------------
-            // JDK 1.2 version of this routine
-            //RuleBasedCollator collator = (RuleBasedCollator)formatter.getCollator();
-            //
-            //CollationElementIterator strIter = collator.getCollationElementIterator(str);
-            //CollationElementIterator keyIter = collator.getCollationElementIterator(key);
-            //
-            //int keyStart = -1;
-            //
-            //str.setOffset(startingAt);
-            //
-            //int oStr = strIter.next();
-            //int oKey = keyIter.next();
-            //while (oKey != CollationElementIterator.NULLORDER) {
-            //    while (oStr != CollationElementIterator.NULLORDER &&
-            //                CollationElementIterator.primaryOrder(oStr) == 0)
-            //        oStr = strIter.next();
-            //
-            //    while (oKey != CollationElementIterator.NULLORDER &&
-            //                CollationElementIterator.primaryOrder(oKey) == 0)
-            //        oKey = keyIter.next();
-            //
-            //    if (oStr == CollationElementIterator.NULLORDER) {
-            //        return new int[] { -1, 0 };
-            //    }
-            //
-            //    if (oKey == CollationElementIterator.NULLORDER) {
-            //        break;
-            //    }
-            //
-            //    if (CollationElementIterator.primaryOrder(oStr) ==
-            //            CollationElementIterator.primaryOrder(oKey)) {
-            //        keyStart = strIter.getOffset();
-            //        oStr = strIter.next();
-            //        oKey = keyIter.next();
-            //    } else {
-            //        if (keyStart != -1) {
-            //            keyStart = -1;
-            //            keyIter.reset();
-            //        } else {
-            //            oStr = strIter.next();
-            //        }
-            //    }
-            //}
-            //
-            //if (oKey == CollationElementIterator.NULLORDER) {
-            //    return new int[] { keyStart, strIter.getOffset() - keyStart };
-            //} else {
-            //    return new int[] { -1, 0 };
-            //}
+        if (pluralFormatKey != null) {
+            FieldPosition position = new FieldPosition(NumberFormat.INTEGER_FIELD);
+            position.setBeginIndex(startingAt);
+            pluralFormatKey.parseType(str, scanner, position);
+            int start = position.getBeginIndex();
+            if (start >= 0) {
+                return new int[]{start, position.getEndIndex() - start};
+            }
+            return new int[]{-1, 0};
         }
+
+        if (scanner != null) {
+            // if lenient parsing is turned ON, we've got some work
+            // ahead of us
+            return scanner.findText(str, key, startingAt);
+        }
+        // if lenient parsing is turned off, this is easy. Just call
+        // String.indexOf() and we're done
+        return new int[]{str.indexOf(key, startingAt), key.length()};
     }
 
     /**
@@ -1316,31 +1166,6 @@ final class NFRule {
             return true;
         }
         RbnfLenientScanner scanner = formatter.getLenientScanner();
-        if (scanner != null) {
-            return scanner.allIgnorable(str);
-        }
-        return false;
-
-        // if lenient parsing is turned on, walk through the string with
-        // a collation element iterator and make sure each collation
-        // element is 0 (ignorable) at the primary level
-        //        if (formatter.lenientParseEnabled()) {
-          // {dlf}
-        //return false;
-            // RuleBasedCollator collator = (RuleBasedCollator)(formatter.getCollator());
-            // CollationElementIterator iter = collator.getCollationElementIterator(str);
-
-            // int o = iter.next();
-            // while (o != CollationElementIterator.NULLORDER
-            //        && CollationElementIterator.primaryOrder(o) == 0) {
-            //     o = iter.next();
-            // }
-            // return o == CollationElementIterator.NULLORDER;
-
-            // if lenient parsing is turned off, there is no such thing as
-            // an ignorable character: return true only if the string is empty
-        // } else {
-        //     return false;
-        // }
+        return scanner != null && scanner.allIgnorable(str);
     }
 }

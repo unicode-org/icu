@@ -5,12 +5,13 @@
 *******************************************************************************
 */
 
-package com.ibm.icu.text;
+package com.ibm.icu.impl.text;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.text.*;
 import com.ibm.icu.util.ULocale;
 
 /**
