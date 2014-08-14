@@ -546,12 +546,9 @@ CollationBuilder::getSpecialResetPosition(const UnicodeString &str,
         ce = rootElements.firstCEWithPrimaryAtLeast(
             baseData->getFirstPrimaryForGroup(USCRIPT_HAN));
         break;
-    case CollationRuleParser::FIRST_IMPLICIT: {
-        uint32_t ce32 = baseData->getCE32(0x4e00);
-        U_ASSERT(Collation::hasCE32Tag(ce32, Collation::OFFSET_TAG));
-        ce = baseData->getCEFromOffsetCE32(0x4e00, ce32);
+    case CollationRuleParser::FIRST_IMPLICIT:
+        ce = baseData->getSingleCE(0x4e00, errorCode);
         break;
-    }
     case CollationRuleParser::LAST_IMPLICIT:
         // We do not support tailoring to an unassigned-implicit CE.
         errorCode = U_UNSUPPORTED_ERROR;

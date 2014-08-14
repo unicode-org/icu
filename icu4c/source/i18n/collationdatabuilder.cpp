@@ -420,6 +420,7 @@ CollationDataBuilder::getLongPrimaryIfSingleCE(UChar32 c) const {
 int64_t
 CollationDataBuilder::getSingleCE(UChar32 c, UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) { return 0; }
+    // Keep parallel with CollationData::getSingleCE().
     UBool fromBase = FALSE;
     uint32_t ce32 = utrie2_get32(trie, c);
     if(ce32 == Collation::FALLBACK_CE32) {

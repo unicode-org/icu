@@ -351,7 +351,7 @@ void AlphabeticIndex::initLabels(UVector &indexCharacters, UErrorCode &errorCode
     }
     if (U_FAILURE(errorCode)) { return; }
 
-    // if the result is still too large, cut down to maxCount elements, by removing every nth element
+    // if the result is still too large, cut down to maxLabelCount_ elements, by removing every nth element
 
     int32_t size = indexCharacters.size() - 1;
     if (size > maxLabelCount_) {

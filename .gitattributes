@@ -643,7 +643,8 @@ icu4c/source/data/curr/zu.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/icu-coll-deprecates.xml svneol=native#text/xml
 icu4c/source/data/icu-config.xml svneol=native#text/xml
 icu4c/source/data/icu4j-readme.txt svneol=native#text/plain
-icu4c/source/data/in/coll/ucadata.icu -text
+icu4c/source/data/in/coll/ucadata-implicithan.icu -text
+icu4c/source/data/in/coll/ucadata-unihan.icu -text
 icu4c/source/data/in/nfc.nrm -text
 icu4c/source/data/in/nfkc.nrm -text
 icu4c/source/data/in/nfkc_cf.nrm -text
