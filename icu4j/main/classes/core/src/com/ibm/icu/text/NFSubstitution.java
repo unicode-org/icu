@@ -79,84 +79,72 @@ abstract class NFSubstitution {
         }
 
         switch (description.charAt(0)) {
-            // if the description begins with '<'...
         case '<':
-            // throw an exception if the rule is a negative number
-            // rule
-            ///CLOVER:OFF
-            // If you look at the call hierarchy of this method, the rule would
-            // never be directly modified by the user and therefore makes the
-            // following pointless unless the user changes the ruleset.
             if (rule.getBaseValue() == NFRule.NEGATIVE_NUMBER_RULE) {
+                // throw an exception if the rule is a negative number rule
+                ///CLOVER:OFF
+                // If you look at the call hierarchy of this method, the rule would
+                // never be directly modified by the user and therefore makes the
+                // following pointless unless the user changes the ruleset.
                 throw new IllegalArgumentException("<< not allowed in negative-number rule");
+                ///CLOVER:ON
             }
-            ///CLOVER:ON
-
-            // if the rule is a fraction rule, return an
-            // IntegralPartSubstitution
             else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
                      || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
-                     || rule.getBaseValue() == NFRule.MASTER_RULE) {
+                     || rule.getBaseValue() == NFRule.MASTER_RULE)
+            {
+                // if the rule is a fraction rule, return an IntegralPartSubstitution
                 return new IntegralPartSubstitution(pos, ruleSet, formatter, description);
             }
-
-            // if the rule set containing the rule is a fraction
-            // rule set, return a NumeratorSubstitution
             else if (ruleSet.isFractionSet()) {
+                // if the rule set containing the rule is a fraction
+                // rule set, return a NumeratorSubstitution
                 return new NumeratorSubstitution(pos, rule.getBaseValue(),
                                                  formatter.getDefaultRuleSet(), formatter, description);
             }
-
-            // otherwise, return a MultiplierSubstitution
             else {
+                // otherwise, return a MultiplierSubstitution
                 return new MultiplierSubstitution(pos, rule.getDivisor(), ruleSet,
                                                   formatter, description);
             }
 
-            // if the description begins with '>'...
         case '>':
-            // if the rule is a negative-number rule, return
-            // an AbsoluteValueSubstitution
             if (rule.getBaseValue() == NFRule.NEGATIVE_NUMBER_RULE) {
+                // if the rule is a negative-number rule, return
+                // an AbsoluteValueSubstitution
                 return new AbsoluteValueSubstitution(pos, ruleSet, formatter, description);
             }
-
-            // if the rule is a fraction rule, return a
-            // FractionalPartSubstitution
             else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
                      || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
-                     || rule.getBaseValue() == NFRule.MASTER_RULE) {
+                     || rule.getBaseValue() == NFRule.MASTER_RULE)
+            {
+                // if the rule is a fraction rule, return a
+                // FractionalPartSubstitution
                 return new FractionalPartSubstitution(pos, ruleSet, formatter, description);
             }
-
-            // if the rule set owning the rule is a fraction rule set,
-            // throw an exception
-            ///CLOVER:OFF
-            // If you look at the call hierarchy of this method, the rule would
-            // never be directly modified by the user and therefore makes the
-            // following pointless unless the user changes the ruleset.
             else if (ruleSet.isFractionSet()) {
+                // if the rule set owning the rule is a fraction rule set,
+                // throw an exception
+                ///CLOVER:OFF
+                // If you look at the call hierarchy of this method, the rule would
+                // never be directly modified by the user and therefore makes the
+                // following pointless unless the user changes the ruleset.
                 throw new IllegalArgumentException(">> not allowed in fraction rule set");
+                ///CLOVER:ON
             }
-            ///CLOVER:ON
-
-            // otherwise, return a ModulusSubstitution
             else {
+                // otherwise, return a ModulusSubstitution
                 return new ModulusSubstitution(pos, rule.getDivisor(), rulePredecessor,
                                                ruleSet, formatter, description);
             }
-
-            // if the description begins with '=', always return a
-            // SameValueSubstitution
         case '=':
             return new SameValueSubstitution(pos, ruleSet, formatter, description);
-
+        default:
             // and if it's anything else, throw an exception
             ///CLOVER:OFF
             // If you look at the call hierarchy of this method, the rule would
             // never be directly modified by the user and therefore makes the
             // following pointless unless the user changes the ruleset.
-        default:
             throw new IllegalArgumentException("Illegal substitution character");
             ///CLOVER:ON
         }
@@ -184,8 +172,7 @@ abstract class NFSubstitution {
         // If it doesn't that's a syntax error.  Otherwise,
         // makeSubstitution() was the only thing that needed to know
         // about these characters, so strip them off
-        if (description.length() >= 2 && description.charAt(0) == description.charAt(
-                                                                                     description.length() - 1)) {
+        if (description.length() >= 2 && description.charAt(0) == description.charAt(description.length() - 1)) {
             description = description.substring(1, description.length() - 1);
         }
         else if (description.length() != 0) {
@@ -681,10 +668,10 @@ class MultiplierSubstitution extends NFSubstitution {
         // rule, we keep a copy of the divisor
         this.divisor = divisor;
 
-    if (divisor == 0) { // this will cause recursion
-        throw new IllegalStateException("Substitution with bad divisor (" + divisor + ") " + description.substring(0, pos) + 
-                     " | " + description.substring(pos));
-    }
+        if (divisor == 0) { // this will cause recursion
+            throw new IllegalStateException("Substitution with divisor 0 " + description.substring(0, pos) +
+                         " | " + description.substring(pos));
+        }
     }
 
     /**
@@ -695,9 +682,9 @@ class MultiplierSubstitution extends NFSubstitution {
     public void setDivisor(int radix, int exponent) {
         divisor = Math.pow(radix, exponent);
 
-    if (divisor == 0) {
-        throw new IllegalStateException("Substitution with divisor 0");
-    }
+        if (divisor == 0) {
+            throw new IllegalStateException("Substitution with divisor 0");
+        }
     }
 
     //-----------------------------------------------------------------------
@@ -719,11 +706,6 @@ class MultiplierSubstitution extends NFSubstitution {
         }
     }
     
-    public int hashCode() {
-        assert false : "hashCode not designed";
-        return 42;
-    }
-
     //-----------------------------------------------------------------------
     // formatting
     //-----------------------------------------------------------------------
@@ -899,11 +881,6 @@ class ModulusSubstitution extends NFSubstitution {
         }
     }
     
-    public int hashCode() {
-        assert false : "hashCode not designed";
-        return 42;
-    }
-
     //-----------------------------------------------------------------------
     // formatting
     //-----------------------------------------------------------------------
@@ -1176,12 +1153,6 @@ class FractionalPartSubstitution extends NFSubstitution {
      */
     private boolean useSpaces = true;
 
-    /*
-     * The largest number of digits after the decimal point that this
-     * object will show in "by digits" mode
-     */
-    //private static final int MAXDECIMALDIGITS = 18; // 8
-
     //-----------------------------------------------------------------------
     // construction
     //-----------------------------------------------------------------------
@@ -1196,9 +1167,6 @@ class FractionalPartSubstitution extends NFSubstitution {
                                RuleBasedNumberFormat formatter,
                                String description) {
         super(pos, ruleSet, formatter, description);
-//    boolean chevron = description.startsWith(">>") || ruleSet == this.ruleSet;
-//      if (chevron || ruleSet == this.ruleSet) {
-
         if (description.equals(">>") || description.equals(">>>") || ruleSet == this.ruleSet) {
             byDigits = true;
             if (description.equals(">>>")) {
@@ -1224,45 +1192,22 @@ class FractionalPartSubstitution extends NFSubstitution {
      * toInsertInto
      */
     public void doSubstitution(double number, StringBuffer toInsertInto, int position) {
-        // if we're not in "byDigits" mode, just use the inherited
-        // doSubstitution() routine
         if (!byDigits) {
+            // if we're not in "byDigits" mode, just use the inherited
+            // doSubstitution() routine
             super.doSubstitution(number, toInsertInto, position);
-
-        // if we're in "byDigits" mode, transform the value into an integer
-        // by moving the decimal point eight places to the right and
-        // pulling digits off the right one at a time, formatting each digit
-        // as an integer using this substitution's owning rule set
-        // (this is slower, but more accurate, than doing it from the
-        // other end)
-        } else {
-//              int numberToFormat = (int)Math.round(transformNumber(number) * Math.pow(
-//                              10, MAXDECIMALDIGITS));
-//          long numberToFormat = (long)Math.round(transformNumber(number) * Math.pow(10, MAXDECIMALDIGITS));
+        }
+        else {
+            // if we're in "byDigits" mode, transform the value into an integer
+            // by moving the decimal point eight places to the right and
+            // pulling digits off the right one at a time, formatting each digit
+            // as an integer using this substitution's owning rule set
+            // (this is slower, but more accurate, than doing it from the
+            // other end)
 
             // just print to string and then use that
             DigitList dl = new DigitList();
             dl.set(number, 20, true);
-
-            // this flag keeps us from formatting trailing zeros.  It starts
-            // out false because we're pulling from the right, and switches
-            // to true the first time we encounter a non-zero digit
-//              boolean doZeros = false;
-//          System.out.println("class: " + getClass().getName());
-//          System.out.println("number: " + number + " transformed: " + transformNumber(number));
-//          System.out.println("formatting " + numberToFormat);
-//              for (int i = 0; i < MAXDECIMALDIGITS; i++) {
-//                  int digit = (int)(numberToFormat % 10);
-//          System.out.println("   #: '" + numberToFormat + "'" + " digit '" + digit + "'");
-//                  if (digit != 0 || doZeros) {
-//                      if (doZeros && useSpaces) {
-//                          toInsertInto.insert(pos + this.pos, ' ');
-//                      }
-//                      doZeros = true;
-//                      ruleSet.format(digit, toInsertInto, pos + this.pos);
-//                  }
-//                  numberToFormat /= 10;
-//              }
 
             boolean pad = false;
             while (dl.count > Math.max(0, dl.decimalAt)) {
@@ -1340,27 +1285,6 @@ class FractionalPartSubstitution extends NFSubstitution {
             ParsePosition workPos = new ParsePosition(1);
             double result = 0;
             int digit;
-//              double p10 = 0.1;
-
-//              while (workText.length() > 0 && workPos.getIndex() != 0) {
-//                  workPos.setIndex(0);
-//                  digit = ruleSet.parse(workText, workPos, 10).intValue();
-//                  if (lenientParse && workPos.getIndex() == 0) {
-//                      digit = NumberFormat.getInstance().parse(workText, workPos).intValue();
-//                  }
-
-//                  if (workPos.getIndex() != 0) {
-//                      result += digit * p10;
-//                      p10 /= 10;
-//                      parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
-//                      workText = workText.substring(workPos.getIndex());
-//                      while (workText.length() > 0 && workText.charAt(0) == ' ') {
-//                          workText = workText.substring(1);
-//                          parsePosition.setIndex(parsePosition.getIndex() + 1);
-//                      }
-//                  }
-//              }
-
 
             DigitList dl = new DigitList();
             while (workText.length() > 0 && workPos.getIndex() != 0) {
@@ -1580,11 +1504,6 @@ class NumeratorSubstitution extends NFSubstitution {
         }
     }
     
-    public int hashCode() {
-        assert false : "hashCode not designed";
-        return 42;
-    }
-
     //-----------------------------------------------------------------------
     // formatting
     //-----------------------------------------------------------------------
@@ -1789,11 +1708,6 @@ class NullSubstitution extends NFSubstitution {
         return super.equals(that);
     }
     
-    public int hashCode() {
-        assert false : "hashCode not designed";
-        return 42;
-    }
-
     /**
      * NullSubstitutions don't show up in the textual representation
      * of a RuleBasedNumberFormat

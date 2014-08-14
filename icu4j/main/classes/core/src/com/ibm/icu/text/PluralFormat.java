@@ -186,7 +186,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat() {
-        init(null, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT));
+        init(null, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT), null);
     }
 
     /**
@@ -197,7 +197,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(ULocale ulocale) {
-        init(null, PluralType.CARDINAL, ulocale);
+        init(null, PluralType.CARDINAL, ulocale, null);
     }
 
     /**
@@ -221,7 +221,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules) {
-        init(rules, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT));
+        init(rules, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT), null);
     }
 
     /**
@@ -234,7 +234,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(ULocale ulocale, PluralRules rules) {
-        init(rules, PluralType.CARDINAL, ulocale);
+        init(rules, PluralType.CARDINAL, ulocale, null);
     }
 
     /**
@@ -260,7 +260,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 50
      */
     public PluralFormat(ULocale ulocale, PluralType type) {
-        init(null, type, ulocale);
+        init(null, type, ulocale, null);
     }
 
     /**
@@ -286,7 +286,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(String pattern) {
-        init(null, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT));
+        init(null, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT), null);
         applyPattern(pattern);
     }
 
@@ -304,7 +304,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(ULocale ulocale, String pattern) {
-        init(null, PluralType.CARDINAL, ulocale);
+        init(null, PluralType.CARDINAL, ulocale, null);
         applyPattern(pattern);
     }
 
@@ -320,7 +320,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules, String pattern) {
-        init(rules, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT));
+        init(rules, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT), null);
         applyPattern(pattern);
     }
 
@@ -337,7 +337,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(ULocale ulocale, PluralRules rules, String pattern) {
-        init(rules, PluralType.CARDINAL, ulocale);
+        init(rules, PluralType.CARDINAL, ulocale, null);
         applyPattern(pattern);
     }
 
@@ -353,7 +353,24 @@ public class PluralFormat extends UFormat {
      * @stable ICU 50
      */
     public PluralFormat(ULocale ulocale, PluralType type, String pattern) {
-        init(null, type, ulocale);
+        init(null, type, ulocale, null);
+        applyPattern(pattern);
+    }
+
+    /**
+     * Creates a new <code>PluralFormat</code> for a plural type, a
+     * pattern and a locale.
+     * @param ulocale the <code>PluralFormat</code> will be configured with
+     *        rules for this locale. This locale will also be used for standard
+     *        number formatting.
+     * @param type The plural type (e.g., cardinal or ordinal).
+     * @param pattern the pattern for this <code>PluralFormat</code>.
+     * @param numberFormat The number formatter to use.
+     * @throws IllegalArgumentException if the pattern is invalid.
+     * @stable ICU 50
+     */
+    /*package*/ PluralFormat(ULocale ulocale, PluralType type, String pattern, NumberFormat numberFormat) {
+        init(null, type, ulocale, numberFormat);
         applyPattern(pattern);
     }
 
@@ -370,12 +387,12 @@ public class PluralFormat extends UFormat {
      *   <code>numberFormat</code>: a <code>NumberFormat</code> for the locale
      *                              <code>ulocale</code>.
      */
-    private void init(PluralRules rules, PluralType type, ULocale locale) {
+    private void init(PluralRules rules, PluralType type, ULocale locale, NumberFormat numberFormat) {
         ulocale = locale;
         pluralRules = (rules == null) ? PluralRules.forLocale(ulocale, type)
                                       : rules;
         resetPattern();
-        numberFormat = NumberFormat.getInstance(ulocale);
+        this.numberFormat = (numberFormat == null) ? NumberFormat.getInstance(ulocale) : numberFormat;
     }
 
     private void resetPattern() {
@@ -588,7 +605,7 @@ public class PluralFormat extends UFormat {
         return toAppendTo;
     }
 
-    private final String format(Number numberObject, double number) {
+    private String format(Number numberObject, double number) {
         // If no pattern was applied, return the formatted number.
         if (msgPattern == null || msgPattern.countParts() == 0) {
             return numberFormat.format(numberObject);
@@ -660,6 +677,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public Number parse(String text, ParsePosition parsePosition) {
+        // You get number ranges from this. You can't get an exact number.
         throw new UnsupportedOperationException();
     }
 
@@ -675,6 +693,84 @@ public class PluralFormat extends UFormat {
      */
     public Object parseObject(String source, ParsePosition pos) {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * This method returns the PluralRules type found from parsing.
+     * @param source the string to be parsed.
+     * @param pos defines the position where parsing is to begin,
+     * and upon return, the position where parsing left off.  If the position
+     * is a negative index, then parsing failed.
+     * @return Returns the PluralRules type. For example, it could be "zero", "one", "two", "few", "many" or "other")
+     */
+    /*package*/ String parseType(String source, RbnfLenientScanner scanner, FieldPosition pos) {
+        // If no pattern was applied, return null.
+        if (msgPattern == null || msgPattern.countParts() == 0) {
+            pos.setBeginIndex(-1);
+            pos.setEndIndex(-1);
+            return null;
+        }
+        int partIndex = 0;
+        int currMatchIndex;
+        int count=msgPattern.countParts();
+        int startingAt = pos.getBeginIndex();
+        if (startingAt < 0) {
+            startingAt = 0;
+        }
+
+        // The keyword is null until we need to match against a non-explicit, not-"other" value.
+        // Then we get the keyword from the selector.
+        // (In other words, we never call the selector if we match against an explicit value,
+        // or if the only non-explicit keyword is "other".)
+        String keyword = null;
+        String matchedWord = null;
+        int matchedIndex = -1;
+        // Iterate over (ARG_SELECTOR ARG_START message ARG_LIMIT) tuples
+        // until the end of the plural-only pattern.
+        do {
+            MessagePattern.Part partSelector=msgPattern.getPart(partIndex++);
+            if (partSelector.getType() != MessagePattern.Part.Type.ARG_SELECTOR) {
+                // Bad format
+                continue;
+            }
+
+            MessagePattern.Part partStart=msgPattern.getPart(partIndex++);
+            if (partStart.getType() != MessagePattern.Part.Type.MSG_START) {
+                // Bad format
+                continue;
+            }
+
+            MessagePattern.Part partLimit=msgPattern.getPart(partIndex++);
+            if (partLimit.getType() != MessagePattern.Part.Type.MSG_LIMIT) {
+                // Bad format
+                continue;
+            }
+
+            String currArg = pattern.substring(partStart.getLimit(), partLimit.getIndex());
+            if (scanner != null) {
+                // If lenient parsing is turned ON, we've got some time consuming parsing ahead of us.
+                int[] scannerMatchResult = scanner.findText(source, currArg, startingAt);
+                currMatchIndex = scannerMatchResult[0];
+            }
+            else {
+                currMatchIndex = source.indexOf(currArg);
+            }
+            if (currMatchIndex > matchedIndex && (matchedWord == null || currArg.length() > matchedWord.length())) {
+                matchedIndex = currMatchIndex;
+                matchedWord = currArg;
+                keyword = pattern.substring(partStart.getLimit(), partLimit.getIndex());
+            }
+        } while(partIndex<count);
+        if (keyword != null) {
+            pos.setBeginIndex(matchedIndex);
+            pos.setEndIndex(matchedIndex + matchedWord.length());
+            return keyword;
+        }
+
+        // Not found!
+        pos.setBeginIndex(-1);
+        pos.setEndIndex(-1);
+        return null;
     }
 
     /**
@@ -698,7 +794,7 @@ public class PluralFormat extends UFormat {
         if (ulocale == null) {
             ulocale = ULocale.getDefault(Category.FORMAT);
         }
-        init(null, PluralType.CARDINAL, ulocale);
+        init(null, PluralType.CARDINAL, ulocale, null);
     }
 
     /**
