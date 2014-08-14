@@ -63,6 +63,8 @@ public:
     virtual UChar *ReadAndConvertFile(const char *fileName, int32_t &len, const char *charset, UErrorCode &status);
     virtual const char *getPath(char buffer[2048], const char *filename);
 
+    virtual void TestCase11049(const char *pattern, const char *data, UBool expectMatch, int32_t lineNumber);
+
     static const char* extractToAssertBuf(const UnicodeString& message);
     
 };
