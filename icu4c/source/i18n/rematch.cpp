@@ -640,9 +640,9 @@ UBool RegexMatcher::find() {
             return FALSE;
         }
     } else {
-        // For now, let the matcher discover that it can't match on its own
-        // We don't know how long the match len is in native characters
-        testStartLimit = fActiveLimit;
+        // We don't know exactly how long the minimum match length is in native characters.
+        // Treat anything > 0 as 1.
+        testStartLimit = fActiveLimit - (fPattern->fMinMatchLen > 0 ? 1 : 0);
     }
 
     UChar32  c;
@@ -693,17 +693,17 @@ UBool RegexMatcher::find() {
         {
             // Match may start on any char from a pre-computed set.
             U_ASSERT(fPattern->fMinMatchLen > 0);
-            int64_t pos;
             UTEXT_SETNATIVEINDEX(fInputText, startPos);
             for (;;) {
+                int64_t pos = startPos;
                 c = UTEXT_NEXT32(fInputText);
-                pos = UTEXT_GETNATIVEINDEX(fInputText);
+                startPos = UTEXT_GETNATIVEINDEX(fInputText);
                 // c will be -1 (U_SENTINEL) at end of text, in which case we
                 // skip this next block (so we don't have a negative array index)
                 // and handle end of text in the following block.
                 if (c >= 0 && ((c<256 && fPattern->fInitialChars8->contains(c)) ||
                               (c>=256 && fPattern->fInitialChars->contains(c)))) {
-                    MatchAt(startPos, FALSE, fDeferredStatus);
+                    MatchAt(pos, FALSE, fDeferredStatus);
                     if (U_FAILURE(fDeferredStatus)) {
                         return FALSE;
                     }
@@ -712,12 +712,11 @@ UBool RegexMatcher::find() {
                     }
                     UTEXT_SETNATIVEINDEX(fInputText, pos);
                 }
-                if (startPos >= testStartLimit) {
+                if (startPos > testStartLimit) {
                     fMatch = FALSE;
                     fHitEnd = TRUE;
                     return FALSE;
                 }
-                startPos = pos;
 	            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                     return FALSE;
             }
@@ -730,13 +729,13 @@ UBool RegexMatcher::find() {
             // Match starts on exactly one char.
             U_ASSERT(fPattern->fMinMatchLen > 0);
             UChar32 theChar = fPattern->fInitialChar;
-            int64_t pos;
             UTEXT_SETNATIVEINDEX(fInputText, startPos);
             for (;;) {
+                int64_t pos = startPos;
                 c = UTEXT_NEXT32(fInputText);
-                pos = UTEXT_GETNATIVEINDEX(fInputText);
+                startPos = UTEXT_GETNATIVEINDEX(fInputText);
                 if (c == theChar) {
-                    MatchAt(startPos, FALSE, fDeferredStatus);
+                    MatchAt(pos, FALSE, fDeferredStatus);
                     if (U_FAILURE(fDeferredStatus)) {
                         return FALSE;
                     }
@@ -745,12 +744,11 @@ UBool RegexMatcher::find() {
                     }
                     UTEXT_SETNATIVEINDEX(fInputText, pos);
                 }
-                if (startPos >= testStartLimit) {
+                if (startPos > testStartLimit) {
                     fMatch = FALSE;
                     fHitEnd = TRUE;
                     return FALSE;
                 }
-                startPos = pos;
 	            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                     return FALSE;
            }
@@ -917,6 +915,7 @@ UBool RegexMatcher::findUsingChunk() {
     //   the minimum length match would extend past the end of the input.
     //   Note:  some patterns that cannot match anything will have fMinMatchLength==Max Int.
     //          Be aware of possible overflows if making changes here.
+    //   Note:  a match can begin at inputBuf + testLen; it is an inclusive limit.
     int32_t testLen  = (int32_t)(fActiveLimit - fPattern->fMinMatchLen);
     if (startPos > testLen) {
         fMatch = FALSE;
@@ -1012,7 +1011,7 @@ UBool RegexMatcher::findUsingChunk() {
                     return TRUE;
                 }
             }
-            if (pos >= testLen) {
+            if (startPos > testLen) {
                 fMatch = FALSE;
                 fHitEnd = TRUE;
                 return FALSE;
@@ -1021,7 +1020,7 @@ UBool RegexMatcher::findUsingChunk() {
                 return FALSE;
         }
     }
-        U_ASSERT(FALSE);
+    U_ASSERT(FALSE);
 
     case START_LINE:
     {

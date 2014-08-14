@@ -5314,42 +5314,57 @@ void RegexTest::TestBug11049() {
     // To see the problem, the text must exactly fill an allocated buffer, so that valgrind will
     // detect the bad read.
 
-    UnicodeString patternString("A|B|C");
-    UnicodeString txtString = UnicodeString("a string \\ud800\\udc00").unescape();
-    UChar *exactBuffer = new UChar[txtString.length()];
+    TestCase11049("A|B|C", "a string \\ud800\\udc00", FALSE, __LINE__);
+    TestCase11049("A|B|C", "string matches at end C", TRUE, __LINE__);
+
+    // Test again with a pattern starting with a single character, 
+    // which takes a different code path than starting with an OR expression,
+    // but with similar logic.
+    TestCase11049("C", "a string \\ud800\\udc00", FALSE, __LINE__);
+    TestCase11049("C", "string matches at end C", TRUE, __LINE__);
+}
+
+// Run a single test case from TestBug11049(). Internal function.
+void RegexTest::TestCase11049(const char *pattern, const char *data, UBool expectMatch, int32_t lineNumber) {
     UErrorCode status = U_ZERO_ERROR;
-    txtString.extract(exactBuffer, txtString.length(), status);
-    UText *ut = utext_openUChars(NULL, exactBuffer, txtString.length(), &status);
+    UnicodeString patternString = UnicodeString(pattern).unescape();
+    LocalPointer<RegexPattern> compiledPat(RegexPattern::compile(patternString, 0, status));
 
-    LocalPointer<RegexPattern> pattern(RegexPattern::compile(patternString, 0, status));
+    UnicodeString dataString = UnicodeString(data).unescape();
+    UChar *exactBuffer = new UChar[dataString.length()];
+    dataString.extract(exactBuffer, dataString.length(), status);
+    UText *ut = utext_openUChars(NULL, exactBuffer, dataString.length(), &status);
+
+    LocalPointer<RegexMatcher> matcher(compiledPat->matcher(status));
     REGEX_CHECK_STATUS;
-    LocalPointer<RegexMatcher> matcher(pattern->matcher(status));
     matcher->reset(ut);
-    REGEX_CHECK_STATUS;
     UBool result = matcher->find();
-    REGEX_ASSERT(result == FALSE);
+    if (result != expectMatch) {
+        errln("File %s, line %d: expected %d, got %d. Pattern = \"%s\", text = \"%s\"",
+              __FILE__, lineNumber, expectMatch, result, pattern, data);
+    }
 
-    // Verify that match starting on the last char in input will be found.
-    txtString = UnicodeString("string matches at end C");
-    matcher->reset(txtString);
-    result = matcher->find();
-    REGEX_ASSERT(result == TRUE);
-
-    // Put an unpaired surrogate at the end of the input text,
-    // let valgrind verify that find() doesn't look off the end.
-    txtString = UnicodeString("a string \\ud800").unescape();
-    delete [] exactBuffer;
-    exactBuffer = new UChar[txtString.length()];
-    txtString.extract(exactBuffer, txtString.length(), status);
-    utext_openUChars(ut, exactBuffer, txtString.length(), &status);
+    // Rerun test with UTF-8 input text. Won't see buffer overreads, but could see
+    //   off-by-one on find() with match at the last code point.
+    //   Size of the original char * data (invariant charset) will be <= than the equivalent UTF-8
+    //   because string.unescape() will only shrink it.
+    char * utf8Buffer = new char[uprv_strlen(data)+1];
+    u_strToUTF8(utf8Buffer, uprv_strlen(data)+1, NULL, dataString.getBuffer(), dataString.length(), &status);
+    REGEX_CHECK_STATUS;
+    ut = utext_openUTF8(ut, utf8Buffer, -1, &status);
+    REGEX_CHECK_STATUS;
     matcher->reset(ut);
     result = matcher->find();
-    REGEX_ASSERT(result == FALSE);
-    REGEX_CHECK_STATUS;
+    if (result != expectMatch) {
+        errln("File %s, line %d (UTF-8 check): expected %d, got %d. Pattern = \"%s\", text = \"%s\"",
+              __FILE__, lineNumber, expectMatch, result, pattern, data);
+    }
+    delete [] utf8Buffer;
 
     utext_close(ut);
     delete [] exactBuffer;
 }
+
 
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
