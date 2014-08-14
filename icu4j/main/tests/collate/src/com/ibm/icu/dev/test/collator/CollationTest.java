@@ -313,6 +313,16 @@ public class CollationTest extends TestFmwk {
         UnicodeSet unassigned = new UnicodeSet("[[:Cn:][:Cs:][:Co:]]");
         unassigned.remove(0xfffe, 0xffff);  // These have special CLDR root mappings.
 
+        // Starting with CLDR 26/ICU 54, the root Han order may instead be
+        // the Unihan radical-stroke order.
+        // The tests should pass either way, so we only test the order of a small set of Han characters
+        // whose radical-stroke order is the same as their code point order.
+        UnicodeSet someHanInCPOrder = new UnicodeSet(
+                "[\\u4E00-\\u4E16\\u4E18-\\u4E2B\\u4E2D-\\u4E3C\\u4E3E-\\u4E48" +
+                "\\u4E4A-\\u4E60\\u4E63-\\u4E8F\\u4E91-\\u4F63\\u4F65-\\u50F1\\u50F3-\\u50F6]");
+        UnicodeSet inOrder = new UnicodeSet(someHanInCPOrder);
+        inOrder.addAll(unassigned).freeze();
+
         UnicodeSet[] sets = { coreHan, otherHan, unassigned };
         int prev = 0;
         long prevPrimary = 0;
@@ -337,7 +347,7 @@ public class CollationTest extends TestFmwk {
                     continue;
                 }
                 long primary = ce >>> 32;
-                if (!(primary > prevPrimary)) {
+                if (!(primary > prevPrimary) && inOrder.contains(c) && inOrder.contains(prev)) {
                     errln("CE(U+" + Utility.hex(c) + ")=0x" + Utility.hex(primary)
                             + ".. not greater than CE(U+" + Utility.hex(prev)
                             + ")=0x" + Utility.hex(prevPrimary) + "..");

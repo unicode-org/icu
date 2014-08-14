@@ -481,7 +481,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             }
         }
 
-        // if the result is still too large, cut down to maxCount elements, by removing every nth element
+        // if the result is still too large, cut down to maxLabelCount elements, by removing every nth element
 
         final int size = indexCharacters.size() - 1;
         if (size > maxLabelCount) {

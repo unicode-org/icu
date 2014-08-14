@@ -348,12 +348,9 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
             ce = rootElements.firstCEWithPrimaryAtLeast(
                 baseData.getFirstPrimaryForGroup(UScript.HAN));
             break;
-        case FIRST_IMPLICIT: {
-            int ce32 = baseData.getCE32(0x4e00);
-            assert(Collation.hasCE32Tag(ce32, Collation.OFFSET_TAG));
-            ce = baseData.getCEFromOffsetCE32(0x4e00, ce32);
+        case FIRST_IMPLICIT:
+            ce = baseData.getSingleCE(0x4e00);
             break;
-        }
         case LAST_IMPLICIT:
             // We do not support tailoring to an unassigned-implicit CE.
             throw new UnsupportedOperationException(
