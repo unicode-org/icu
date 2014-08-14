@@ -1112,7 +1112,10 @@ uprv_tzname(int n)
 
 /* Get and set the ICU data directory --------------------------------------- */
 
+static icu::UInitOnce gDataDirInitOnce = U_INITONCE_INITIALIZER;
 static char *gDataDirectory = NULL;
+
+
 #if U_POSIX_LOCALE || U_PLATFORM_USES_ONLY_WIN32_API
  static char *gCorrectedPOSIXLocale = NULL; /* Heap allocated */
 #endif
@@ -1123,6 +1126,8 @@ static UBool U_CALLCONV putil_cleanup(void)
         uprv_free(gDataDirectory);
     }
     gDataDirectory = NULL;
+    gDataDirInitOnce.reset();
+
 #if U_POSIX_LOCALE || U_PLATFORM_USES_ONLY_WIN32_API
     if (gCorrectedPOSIXLocale) {
         uprv_free(gCorrectedPOSIXLocale);
@@ -1210,17 +1215,18 @@ uprv_pathIsAbsolute(const char *path)
 # endif
 #endif
 
-U_CAPI const char * U_EXPORT2
-u_getDataDirectory(void) {
+static void U_CALLCONV dataDirectoryInitFn() {
+    /* If we already have the directory, then return immediately. Will happen if user called
+     * u_setDataDirectory().
+     */
+    if (gDataDirectory) {
+        return;
+    }
+
     const char *path = NULL;
 #if defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
     char datadir_path_buffer[PATH_MAX];
 #endif
-
-    /* if we have the directory, then return it immediately */
-    if(gDataDirectory) {
-        return gDataDirectory;
-    }
 
     /*
     When ICU_NO_USER_DATA_OVERRIDE is defined, users aren't allowed to
@@ -1272,6 +1278,12 @@ u_getDataDirectory(void) {
     }
 
     u_setDataDirectory(path);
+    return;
+}
+
+U_CAPI const char * U_EXPORT2
+u_getDataDirectory(void) {
+    umtx_initOnce(gDataDirInitOnce, &dataDirectoryInitFn);
     return gDataDirectory;
 }
 
