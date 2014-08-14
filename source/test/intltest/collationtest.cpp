@@ -199,6 +199,7 @@ void CollationTest::TestImplicits() {
     // Implicit primary weights should be assigned for the following sets,
     // and sort in ascending order by set and then code point.
     // See http://www.unicode.org/reports/tr10/#Implicit_Weights
+
     // core Han Unified Ideographs
     UnicodeSet coreHan("[\\p{unified_ideograph}&"
                             "[\\p{Block=CJK_Unified_Ideographs}"
@@ -211,6 +212,17 @@ void CollationTest::TestImplicits() {
                         errorCode);
     UnicodeSet unassigned("[[:Cn:][:Cs:][:Co:]]", errorCode);
     unassigned.remove(0xfffe, 0xffff);  // These have special CLDR root mappings.
+
+    // Starting with CLDR 26/ICU 54, the root Han order may instead be
+    // the Unihan radical-stroke order.
+    // The tests should pass either way, so we only test the order of a small set of Han characters
+    // whose radical-stroke order is the same as their code point order.
+    UnicodeSet someHanInCPOrder(
+            "[\\u4E00-\\u4E16\\u4E18-\\u4E2B\\u4E2D-\\u4E3C\\u4E3E-\\u4E48"
+            "\\u4E4A-\\u4E60\\u4E63-\\u4E8F\\u4E91-\\u4F63\\u4F65-\\u50F1\\u50F3-\\u50F6]",
+            errorCode);
+    UnicodeSet inOrder(someHanInCPOrder);
+    inOrder.addAll(unassigned).freeze();
     if(errorCode.logIfFailureAndReset("UnicodeSet")) {
         return;
     }
@@ -239,7 +251,7 @@ void CollationTest::TestImplicits() {
                 continue;
             }
             uint32_t primary = (uint32_t)(ce >> 32);
-            if(!(primary > prevPrimary)) {
+            if(!(primary > prevPrimary) && inOrder.contains(c) && inOrder.contains(prev)) {
                 errln("CE(U+%04lx)=%04lx.. not greater than CE(U+%04lx)=%04lx..",
                       (long)c, (long)primary, (long)prev, (long)prevPrimary);
             }

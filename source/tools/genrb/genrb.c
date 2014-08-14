@@ -92,7 +92,6 @@ static     UBool       write_java = FALSE;
 static     UBool       write_xliff = FALSE;
 static     const char* outputEnc ="";
 static     struct SRBRoot *newPoolBundle = NULL;
-           UBool       gIncludeUnihanColl = FALSE;
 
 /* TODO: separate header file for ResFile? */
 typedef struct ResFile {
@@ -397,7 +396,10 @@ main(int argc,
     }
 
     if(options[INCLUDE_UNIHAN_COLL].doesOccur) {
-        gIncludeUnihanColl = TRUE;
+        puts("genrb option --includeUnihanColl ignored: \n"
+                "CLDR 26/ICU 54 unihan data is small, except\n"
+                "the ucadata-unihan.icu version of the collation root data\n"
+                "is about 300kB larger than the ucadata-implicithan.icu version.");
     }
 
     if((argc-1)!=1) {

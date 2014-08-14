@@ -510,7 +510,7 @@ $(BUILDDIR)/%.icu: $(SRCDATADIR)/in/%.icu
 $(BUILDDIR)/%.nrm: $(SRCDATADIR)/in/%.nrm
 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
 
-$(BUILDDIR)/coll/%.icu: $(SRCDATADIR)/in/coll/%.icu
+$(BUILDDIR)/coll/ucadata.icu: $(SRCDATADIR)/in/coll/ucadata-unihan.icu
 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
 
 ####################################################    SPP

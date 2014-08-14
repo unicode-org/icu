@@ -64,6 +64,7 @@ void AlphabeticIndexTest::runIndexedTest( int32_t index, UBool exec, const char*
     TESTCASE_AUTO(TestNoLabels);
     TESTCASE_AUTO(TestChineseZhuyin);
     TESTCASE_AUTO(TestJapaneseKanji);
+    TESTCASE_AUTO(TestChineseUnihan);
     TESTCASE_AUTO_END;
 }
 
@@ -598,7 +599,7 @@ void AlphabeticIndexTest::TestPinyinFirst() {
     index.addLabels(Locale::getChinese(), status);
     assertEquals("getBucketCount()", 28, index.getBucketCount(status));  // ... A-Z ...
     int32_t bucketIndex = index.getBucketIndex(UnicodeString((UChar)0x897f), status);
-    assertEquals("getBucketIndex(U+897F)", (int32_t)((UChar)0x0058/*X*/ - (UChar)0x0041/*A*/ + 1), (int32_t)bucketIndex);
+    assertEquals("getBucketIndex(U+897F)", (int32_t)((UChar)0x0058/*X*/ - (UChar)0x0041/*A*/ + 1), bucketIndex);
     bucketIndex = index.getBucketIndex("i", status);
     assertEquals("getBucketIndex(i)", 9, bucketIndex);
     bucketIndex = index.getBucketIndex(UnicodeString((UChar)0x03B1), status);
@@ -699,6 +700,34 @@ void AlphabeticIndexTest::TestJapaneseKanji() {
         assertEquals(msg, overflowIndex, immIndex->getBucketIndex(UnicodeString(kanji[i]), status));
         TEST_CHECK_STATUS;
     }
+}
+
+void AlphabeticIndexTest::TestChineseUnihan() {
+    UErrorCode status = U_ZERO_ERROR;
+    AlphabeticIndex index("zh-u-co-unihan", status);
+    if(U_FAILURE(status)) {
+        dataerrln("unable create an AlphabeticIndex for Chinese/unihan: %s", u_errorName(status));
+        return;
+    }
+    index.setMaxLabelCount(500, status);  // ICU 54 default is 99.
+    LocalPointer<AlphabeticIndex::ImmutableIndex> immIndex(index.buildImmutableIndex(status));
+    TEST_CHECK_STATUS;
+    int32_t bucketCount = immIndex->getBucketCount();
+    if(bucketCount < 216) {
+        // There should be at least an underflow and overflow label,
+        // and one for each of 214 radicals,
+        // and maybe additional labels for simplified radicals.
+        dataerrln("too few buckets/labels for Chinese/unihan: %d (is zh/unihan data available?)",
+                  bucketCount);
+        return;
+    } else {
+        logln("Chinese/unihan has %d buckets/labels", bucketCount);
+    }
+    // bucketIndex = radical number, adjusted for simplified radicals in lower buckets.
+    int32_t bucketIndex = index.getBucketIndex(UnicodeString((UChar)0x4e5d), status);
+    assertEquals("getBucketIndex(U+4E5D)", 5, bucketIndex);
+    bucketIndex = index.getBucketIndex(UnicodeString((UChar)0x7527), status);
+    assertEquals("getBucketIndex(U+7527)", 100, bucketIndex);
 }
 
 #endif
