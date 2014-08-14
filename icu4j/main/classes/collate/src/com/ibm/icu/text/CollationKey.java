@@ -475,8 +475,7 @@ public final class CollationKey implements Comparable<CollationKey>
     }
 
 
-    
-    /** 
+    /**
      * Merges this CollationKey with another.
      * The levels are merged with their corresponding counterparts
      * (primaries with primaries, secondaries with secondaries etc.).
@@ -484,7 +483,18 @@ public final class CollationKey implements Comparable<CollationKey>
      *
      * <p>This is useful, for example, for combining sort keys from first and last names
      * to sort such pairs.
-     * It is possible to merge multiple sort keys by consecutively merging
+     * See http://www.unicode.org/reports/tr10/#Merging_Sort_Keys
+     *
+     * <p>The recommended way to achieve "merged" sorting is by
+     * concatenating strings with U+FFFE between them.
+     * The concatenation has the same sort order as the merged sort keys,
+     * but merge(getSortKey(str1), getSortKey(str2)) may differ from getSortKey(str1 + '\uFFFE' + str2).
+     * Using strings with U+FFFE may yield shorter sort keys.
+     *
+     * <p>For details about Sort Key Features see
+     * http://userguide.icu-project.org/collation/api#TOC-Sort-Key-Features
+     *
+     * <p>It is possible to merge multiple sort keys by consecutively merging
      * another one with the intermediate result.
      *
      * <p>Only the sort key bytes of the CollationKeys are merged.
