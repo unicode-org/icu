@@ -46,6 +46,7 @@ public:
      */
     void TestChineseZhuyin();
     void TestJapaneseKanji();
+    void TestChineseUnihan();
 };
 
 #endif

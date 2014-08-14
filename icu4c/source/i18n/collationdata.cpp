@@ -48,6 +48,70 @@ CollationData::getFinalCE32(uint32_t ce32) const {
     return ce32;
 }
 
+int64_t
+CollationData::getSingleCE(UChar32 c, UErrorCode &errorCode) const {
+    if(U_FAILURE(errorCode)) { return 0; }
+    // Keep parallel with CollationDataBuilder::getSingleCE().
+    const CollationData *d;
+    uint32_t ce32 = getCE32(c);
+    if(ce32 == Collation::FALLBACK_CE32) {
+        d = base;
+        ce32 = base->getCE32(c);
+    } else {
+        d = this;
+    }
+    while(Collation::isSpecialCE32(ce32)) {
+        switch(Collation::tagFromCE32(ce32)) {
+        case Collation::LATIN_EXPANSION_TAG:
+        case Collation::BUILDER_DATA_TAG:
+        case Collation::PREFIX_TAG:
+        case Collation::CONTRACTION_TAG:
+        case Collation::HANGUL_TAG:
+        case Collation::LEAD_SURROGATE_TAG:
+            errorCode = U_UNSUPPORTED_ERROR;
+            return 0;
+        case Collation::FALLBACK_TAG:
+        case Collation::RESERVED_TAG_3:
+            errorCode = U_INTERNAL_PROGRAM_ERROR;
+            return 0;
+        case Collation::LONG_PRIMARY_TAG:
+            return Collation::ceFromLongPrimaryCE32(ce32);
+        case Collation::LONG_SECONDARY_TAG:
+            return Collation::ceFromLongSecondaryCE32(ce32);
+        case Collation::EXPANSION32_TAG:
+            if(Collation::lengthFromCE32(ce32) == 1) {
+                ce32 = d->ce32s[Collation::indexFromCE32(ce32)];
+                break;
+            } else {
+                errorCode = U_UNSUPPORTED_ERROR;
+                return 0;
+            }
+        case Collation::EXPANSION_TAG: {
+            if(Collation::lengthFromCE32(ce32) == 1) {
+                return d->ces[Collation::indexFromCE32(ce32)];
+            } else {
+                errorCode = U_UNSUPPORTED_ERROR;
+                return 0;
+            }
+        }
+        case Collation::DIGIT_TAG:
+            // Fetch the non-numeric-collation CE32 and continue.
+            ce32 = d->ce32s[Collation::indexFromCE32(ce32)];
+            break;
+        case Collation::U0000_TAG:
+            U_ASSERT(c == 0);
+            // Fetch the normal ce32 for U+0000 and continue.
+            ce32 = d->ce32s[0];
+            break;
+        case Collation::OFFSET_TAG:
+            return d->getCEFromOffsetCE32(c, ce32);
+        case Collation::IMPLICIT_TAG:
+            return Collation::unassignedCEFromCodePoint(c);
+        }
+    }
+    return Collation::ceFromSimpleCE32(ce32);
+}
+
 uint32_t
 CollationData::getFirstPrimaryForGroup(int32_t script) const {
     int32_t index = findScript(script);

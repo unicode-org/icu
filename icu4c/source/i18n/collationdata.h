@@ -99,6 +99,12 @@ struct U_I18N_API CollationData : public UMemory {
     }
 
     /**
+     * Returns the single CE that c maps to.
+     * Sets U_UNSUPPORTED_ERROR if c does not map to a single CE.
+     */
+    int64_t getSingleCE(UChar32 c, UErrorCode &errorCode) const;
+
+    /**
      * Returns the FCD16 value for code point c. c must be >= 0.
      */
     uint16_t getFCD16(UChar32 c) const {

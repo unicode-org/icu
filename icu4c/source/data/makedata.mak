@@ -975,7 +975,7 @@ res_index:table(nofallback) {
 "$(ICUBLD_PKG)\uts46.nrm": $(ICUSRCDATA_RELATIVE_PATH)\in\uts46.nrm
 	"$(ICUPBIN)\icupkg" -tl $? $@
 
-"$(ICUBLD_PKG)\coll\ucadata.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\coll\ucadata.icu
+"$(ICUBLD_PKG)\coll\ucadata.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\coll\ucadata-unihan.icu
 	"$(ICUPBIN)\icupkg" -tl $? $@
 
 # Stringprep .spp file generation.

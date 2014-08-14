@@ -1081,8 +1081,8 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
 }
 
 static UBool
-keepCollationType(const char *type) {
-    return gIncludeUnihanColl || uprv_strcmp(type, "unihan") != 0;
+keepCollationType(const char * /*type*/) {
+    return TRUE;
 }
 
 static struct SResource *
