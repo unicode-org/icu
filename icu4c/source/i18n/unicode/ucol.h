@@ -1111,6 +1111,17 @@ ucol_getUCAVersion(const UCollator* coll, UVersionInfo info);
  *
  * This is useful, for example, for combining sort keys from first and last names
  * to sort such pairs.
+ * See http://www.unicode.org/reports/tr10/#Merging_Sort_Keys
+ *
+ * The recommended way to achieve "merged" sorting is by
+ * concatenating strings with U+FFFE between them.
+ * The concatenation has the same sort order as the merged sort keys,
+ * but merge(getSortKey(str1), getSortKey(str2)) may differ from getSortKey(str1 + '\uFFFE' + str2).
+ * Using strings with U+FFFE may yield shorter sort keys.
+ *
+ * For details about Sort Key Features see
+ * http://userguide.icu-project.org/collation/api#TOC-Sort-Key-Features
+ *
  * It is possible to merge multiple sort keys by consecutively merging
  * another one with the intermediate result.
  *
