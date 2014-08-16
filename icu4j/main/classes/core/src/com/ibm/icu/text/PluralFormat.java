@@ -727,7 +727,7 @@ public class PluralFormat extends UFormat {
         int matchedIndex = -1;
         // Iterate over (ARG_SELECTOR ARG_START message ARG_LIMIT) tuples
         // until the end of the plural-only pattern.
-        do {
+        while (partIndex < count) {
             MessagePattern.Part partSelector=msgPattern.getPart(partIndex++);
             if (partSelector.getType() != MessagePattern.Part.Type.ARG_SELECTOR) {
                 // Bad format
@@ -760,7 +760,7 @@ public class PluralFormat extends UFormat {
                 matchedWord = currArg;
                 keyword = pattern.substring(partStart.getLimit(), partLimit.getIndex());
             }
-        } while(partIndex<count);
+        }
         if (keyword != null) {
             pos.setBeginIndex(matchedIndex);
             pos.setEndIndex(matchedIndex + matchedWord.length());
