@@ -120,7 +120,7 @@ typedef size_t uintptr_t;
        /* uClibc does not have __timezone or _timezone. */
 #   elif defined(_NEWLIB_VERSION)
 #      define U_TIMEZONE      _timezone
-#   else
+#   elif defined(__GLIBC__)
        /* glibc */
 #      define U_TIMEZONE      __timezone
 #   endif
