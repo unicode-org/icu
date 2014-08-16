@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2013, International Business Machines
+*   Copyright (C) 2002-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -80,7 +80,7 @@ class  UVector64;
   *
   * @stable ICU 2.4
   */
-class U_I18N_API RegexPattern: public UObject {
+class U_I18N_API RegexPattern U_FINAL : public UObject {
 public:
 
     /**
@@ -622,7 +622,7 @@ private:
  *
  * @stable ICU 2.4
  */
-class U_I18N_API RegexMatcher: public UObject {
+class U_I18N_API RegexMatcher U_FINAL : public UObject {
 public:
 
     /**

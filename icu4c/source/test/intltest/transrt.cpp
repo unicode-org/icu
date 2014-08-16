@@ -1,12 +1,16 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2013, International Business Machines
+*   Copyright (C) 2000-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   05/23/00    aliu        Creation.
 **********************************************************************
 */
+
+// AbbreviatedUnicodeSetIterator overrides UnicodeSetIterator.
+#define U_FINAL
+#define U_OVERRIDE
 
 #include "unicode/utypes.h"
 
