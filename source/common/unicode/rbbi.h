@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2013 International Business Machines Corporation   *
+*   Copyright (C) 1999-2014 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 
@@ -62,7 +62,7 @@ struct RBBIStateTable;
  *    not part of the ICU API, and may not remain stable.</p>
  *
  */
-class U_COMMON_API RuleBasedBreakIterator : public BreakIterator {
+class U_COMMON_API RuleBasedBreakIterator /*U_FINAL*/ : public BreakIterator {
 
 protected:
     /**

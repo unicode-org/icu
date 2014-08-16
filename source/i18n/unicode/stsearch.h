@@ -129,7 +129,7 @@ U_NAMESPACE_BEGIN
  * @since ICU 2.0
  */
 
-class U_I18N_API StringSearch : public SearchIterator
+class U_I18N_API StringSearch U_FINAL : public SearchIterator
 {
 public:
 
