@@ -278,9 +278,8 @@ public class MeasureFormat extends UFormat {
                 rules,
                 unitToStyleToCountToFormat,
                 formatters,
-                new ImmutableNumberFormat(
-                        NumberFormat.getInstance(locale, formatWidth.getCurrencyStyle())),
-                        new ImmutableNumberFormat(intFormat));
+                new ImmutableNumberFormat(NumberFormat.getInstance(locale, formatWidth.getCurrencyStyle())),
+                new ImmutableNumberFormat(intFormat));
     }
 
     /**
@@ -401,16 +400,38 @@ public class MeasureFormat extends UFormat {
         }
         Number lowNumber = lowValue.getNumber();
         Number highNumber = highValue.getNumber();
+        final boolean isCurrency = unit instanceof Currency;
 
-        UFieldPosition fpos = new UFieldPosition();
-        StringBuffer lowFormatted = numberFormat.format(lowNumber, new StringBuffer(), fpos);
+        UFieldPosition lowFpos = new UFieldPosition();
+        UFieldPosition highFpos = new UFieldPosition();
+        StringBuffer lowFormatted = null;
+        StringBuffer highFormatted = null;
+
+        if (isCurrency) {
+            Currency currency = (Currency) unit;
+            int fracDigits = currency.getDefaultFractionDigits();
+            int maxFrac = numberFormat.nf.getMaximumFractionDigits();
+            int minFrac = numberFormat.nf.getMinimumFractionDigits();
+            if (fracDigits != maxFrac || fracDigits != minFrac) {
+                DecimalFormat currentNumberFormat = (DecimalFormat) numberFormat.get();
+                currentNumberFormat.setMaximumFractionDigits(fracDigits);
+                currentNumberFormat.setMinimumFractionDigits(fracDigits);
+                lowFormatted = currentNumberFormat.format(lowNumber, new StringBuffer(), lowFpos);
+                highFormatted = currentNumberFormat.format(highNumber, new StringBuffer(), highFpos);
+            }
+        }
+        if (lowFormatted == null) {
+            lowFormatted = numberFormat.format(lowNumber, new StringBuffer(), lowFpos);
+            highFormatted = numberFormat.format(highNumber, new StringBuffer(), highFpos);
+        }
+
         final double lowDouble = lowNumber.doubleValue();
         String keywordLow = rules.select(new PluralRules.FixedDecimal(lowDouble, 
-                fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
+                lowFpos.getCountVisibleFractionDigits(), lowFpos.getFractionDigits()));
 
-        StringBuffer highFormatted = numberFormat.format(highNumber, new StringBuffer(), fpos);
-        String keywordHigh = rules.select(new PluralRules.FixedDecimal(highNumber.doubleValue(), 
-                fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
+        final double highDouble = highNumber.doubleValue();
+        String keywordHigh = rules.select(new PluralRules.FixedDecimal(highDouble, 
+                highFpos.getCountVisibleFractionDigits(), highFpos.getFractionDigits()));
 
         final PluralRanges pluralRanges = Factory.getDefaultFactory().getPluralRanges(getLocale());
         StandardPluralCategories resolvedCategory = pluralRanges.get(
@@ -419,13 +440,62 @@ public class MeasureFormat extends UFormat {
         SimplePatternFormatter rangeFormatter = getRangeFormat(getLocale(), formatWidth);
         String formattedNumber = rangeFormatter.format(lowFormatted, highFormatted);
 
-        if (unit instanceof Currency) {
-            throw new IllegalArgumentException("Currency units not supported in ranges");
+        if (isCurrency) {
+            // Nasty hack
+            currencyFormat.format(1d); // have to call this for the side effect
+
+            Currency currencyUnit = (Currency) unit;
+            StringBuilder result = new StringBuilder();
+            appendReplacingCurrency(currencyFormat.getPrefix(lowDouble >= 0), currencyUnit, resolvedCategory, result);
+            result.append(formattedNumber);
+            appendReplacingCurrency(currencyFormat.getSuffix(highDouble >= 0), currencyUnit, resolvedCategory, result);
+            return result.toString();
+            //            StringBuffer buffer = new StringBuffer();
+            //            CurrencyAmount currencyLow = (CurrencyAmount) lowValue;
+            //            CurrencyAmount currencyHigh = (CurrencyAmount) highValue;
+            //            FieldPosition pos = new FieldPosition(NumberFormat.INTEGER_FIELD);
+            //            currencyFormat.format(currencyLow, buffer, pos);
+            //            int startOfInteger = pos.getBeginIndex();
+            //            StringBuffer buffer2 = new StringBuffer();
+            //            FieldPosition pos2 = new FieldPosition(0);
+            //            currencyFormat.format(currencyHigh, buffer2, pos2);
         } else {
             Map<FormatWidth, QuantityFormatter> styleToCountToFormat = unitToStyleToCountToFormat.get(lowValue.getUnit());
             QuantityFormatter countToFormat = styleToCountToFormat.get(formatWidth);
             SimplePatternFormatter formatter = countToFormat.getByVariant(resolvedCategory.toString());
             return formatter.format(formattedNumber);
+        }
+    }
+
+    /**
+     * @param affix
+     * @param unit
+     * @param resolvedCategory 
+     * @param result 
+     * @return
+     */
+    private void appendReplacingCurrency(String affix, Currency unit, StandardPluralCategories resolvedCategory, StringBuilder result) {
+        String replacement = "¤";
+        int pos = affix.indexOf(replacement);
+        if (pos < 0) {
+            replacement = "XXX";
+            pos = affix.indexOf(replacement);
+        }
+        if (pos < 0) {
+            result.append(affix);
+        } else {
+            // for now, just assume single
+            result.append(affix.substring(0,pos));
+            // we have a mismatch between the number style and the currency style, so remap
+            int currentStyle = formatWidth.getCurrencyStyle();
+            if (currentStyle == NumberFormat.ISOCURRENCYSTYLE) {
+                result.append(unit.getCurrencyCode());
+            } else {
+                result.append(unit.getName(currencyFormat.nf.getLocale(ULocale.ACTUAL_LOCALE),
+                        currentStyle == NumberFormat.CURRENCYSTYLE ? Currency.SYMBOL_NAME :  Currency.PLURAL_LONG_NAME,
+                                resolvedCategory.toString(), null));
+            }
+            result.append(affix.substring(pos+replacement.length()));
         }
     }
 
@@ -775,7 +845,7 @@ public class MeasureFormat extends UFormat {
         public synchronized String format(Number number) {
             return nf.format(number);
         }
-        
+
         public String getPrefix(boolean positive) {
             return positive ? ((DecimalFormat)nf).getPositivePrefix() : ((DecimalFormat)nf).getNegativePrefix();
         }
@@ -1109,7 +1179,7 @@ public class MeasureFormat extends UFormat {
 
     public SimplePatternFormatter getRangeFormat(ULocale forLocale, FormatWidth width) {
         // TODO fix Hack for French
-        if (width != FormatWidth.WIDE && forLocale.getLanguage().equals("fr")) {
+        if (forLocale.getLanguage().equals("fr")) {
             return getRangeFormat(ULocale.ROOT, width);
         }
         SimplePatternFormatter result = localeIdToRangeFormat.get(forLocale);
