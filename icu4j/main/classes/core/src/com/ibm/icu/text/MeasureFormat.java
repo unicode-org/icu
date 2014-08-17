@@ -1177,7 +1177,7 @@ public class MeasureFormat extends UFormat {
      */
     @Deprecated
 
-    public SimplePatternFormatter getRangeFormat(ULocale forLocale, FormatWidth width) {
+    public static SimplePatternFormatter getRangeFormat(ULocale forLocale, FormatWidth width) {
         // TODO fix Hack for French
         if (forLocale.getLanguage().equals("fr")) {
             return getRangeFormat(ULocale.ROOT, width);
@@ -1211,5 +1211,18 @@ public class MeasureFormat extends UFormat {
             }
         }
         return result;
+    }
+    
+    /**
+     * Return a simple pattern pattern for a range, such as "{0}–{1}" or "{0}～{1}".
+     * @param forLocale locale to get the range pattern for
+     * @param width the format width.
+     * @return range pattern
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static String getRangePattern(ULocale forLocale, FormatWidth width) {
+        return getRangeFormat(forLocale, width).toString();
     }
 }
