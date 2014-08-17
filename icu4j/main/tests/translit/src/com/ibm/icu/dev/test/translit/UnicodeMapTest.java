@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,7 +17,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.dev.util.UnicodeMap;
+import com.ibm.icu.dev.util.UnicodeMap.EntryRange;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -35,6 +37,63 @@ public class UnicodeMapTest extends TestFmwk {
         new UnicodeMapTest().run(args);
     }
 
+    public void TestIterations() {
+        UnicodeMap<Double> foo = new UnicodeMap();
+        checkToString(foo, "");
+        foo.put(3, 6d).put(5, 10d);
+        checkToString(foo, "0003=6.0\n0005=10.0\n");
+        foo.put(0x10FFFF, 666d);
+        checkToString(foo, "0003=6.0\n0005=10.0\n10FFFF=666.0\n");
+        foo.put("neg", -555d);
+        checkToString(foo, "0003=6.0\n0005=10.0\n10FFFF=666.0\n006E,0065,0067=-555.0\n");
+
+        double i = 0;
+        for (EntryRange<Double> entryRange : foo.entryRanges()) {
+            i += entryRange.value;
+        }
+        assertEquals("EntryRange<T>", 127d, i);
+    }
+
+    public void checkToString(UnicodeMap<Double> foo, String expected) {
+        assertEquals("EntryRange<T>", expected, CollectionUtilities.join(foo.entryRanges(), "\n") + (foo.size() == 0 ? "" : "\n"));
+        assertEquals("EntryRange<T>", expected, foo.toString());
+    }
+    
+    public void TestRemove() {
+        UnicodeMap<Double> foo = new UnicodeMap()
+        .putAll(0x20, 0x29, -2d)
+        .put("abc", 3d)
+        .put("xy", 2d)
+        .put("mark", 4d)
+        .freeze();
+        UnicodeMap<Double> fii = new UnicodeMap()
+        .putAll(0x21, 0x25, -2d)
+        .putAll(0x26, 0x28, -3d)
+        .put("abc", 3d)
+        .put("mark", 999d)
+        .freeze();
+        
+        UnicodeMap<Double> afterFiiRemoval = new UnicodeMap()
+        .put(0x20, -2d)
+        .putAll(0x26, 0x29, -2d)
+        .put("xy", 2d)
+        .put("mark", 4d)
+        .freeze();
+        
+        UnicodeMap<Double> afterFiiRetained = new UnicodeMap()
+        .putAll(0x21, 0x25, -2d)
+        .put("abc", 3d)
+        .freeze();
+
+        UnicodeMap<Double> test = new UnicodeMap<Double>().putAll(foo)
+                .removeAll(fii);
+        assertEquals("removeAll", afterFiiRemoval, test);
+        
+        test = new UnicodeMap<Double>().putAll(foo)
+                .retainAll(fii);
+        assertEquals("retainAll", afterFiiRetained, test);
+    }
+
     public void TestAMonkey() {
         SortedMap<String,Integer> stayWithMe = new TreeMap<String,Integer>(OneFirstComparator);
 
@@ -42,7 +101,7 @@ public class UnicodeMapTest extends TestFmwk {
         // check one special case, removal near end
         me.putAll(0x10FFFE, 0x10FFFF, 666);
         me.remove(0x10FFFF);
-        
+
         int iterations = 100000;
         SortedMap<String,Integer> test = new TreeMap();
 
@@ -65,9 +124,9 @@ public class UnicodeMapTest extends TestFmwk {
                 break;
             case 2: case 3: case 4: case 5: case 6: case 7: case 8:
                 other = getRandomKey(rand);
-//                if (other.equals("\uDBFF\uDFFF") && me.containsKey(0x10FFFF) && me.get(0x10FFFF).equals(me.get(0x10FFFE))) {
-//                    System.out.println("Remove\t" + other + "\n" + me);
-//                }
+                //                if (other.equals("\uDBFF\uDFFF") && me.containsKey(0x10FFFF) && me.get(0x10FFFF).equals(me.get(0x10FFFE))) {
+                //                    System.out.println("Remove\t" + other + "\n" + me);
+                //                }
                 logln("remove\t" + other);
                 stayWithMe.remove(other);
                 try {
@@ -138,7 +197,7 @@ public class UnicodeMapTest extends TestFmwk {
         Set<String> nonCodePointStrings = stayWithMe.tailMap("").keySet();
         if (nonCodePointStrings.size() == 0) nonCodePointStrings = null; // for parallel api
         assertEquals("getNonRangeStrings", nonCodePointStrings, me.getNonRangeStrings());
-        
+
         TreeSet<Integer> values = new TreeSet<Integer>(stayWithMe.values());
         TreeSet<Integer> myValues = new TreeSet<Integer>(me.values());
         assertEquals("values", myValues, values);
@@ -147,7 +206,7 @@ public class UnicodeMapTest extends TestFmwk {
             assertEquals("containsKey", stayWithMe.containsKey(key), me.containsKey(key));
         }
     }
-    
+
     static Comparator<String> OneFirstComparator = new Comparator<String>() {
         public int compare(String o1, String o2) {
             int cp1 = UnicodeSet.getSingleCodePoint(o1);
@@ -161,7 +220,7 @@ public class UnicodeMapTest extends TestFmwk {
             }
             return 0;
         }
-        
+
     };
 
     /**
@@ -177,8 +236,8 @@ public class UnicodeMapTest extends TestFmwk {
             return UTF16.valueOf('A'-1+r);
         } else if (r < 20) {
             return UTF16.valueOf(0x10FFFF - (r-10));
-//        } else if (r == 20) {
-//            return "";
+            //        } else if (r == 20) {
+            //            return "";
         }
         return "a" + UTF16.valueOf(r + 'a'-1);
     }
