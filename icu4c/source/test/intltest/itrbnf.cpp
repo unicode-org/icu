@@ -21,8 +21,6 @@
 #include "unicode/udata.h"
 #include "testutil.h"
 
-//#include "llong.h"
-
 #include <string.h>
 
 // import com.ibm.text.RuleBasedNumberFormat;
@@ -67,6 +65,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(17, TestPortugueseSpellout);
         TESTCASE(18, TestMultiplierSubstitution);
         TESTCASE(19, TestSetDecimalFormatSymbols);
+        TESTCASE(20, TestPluralRules);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1831,8 +1830,10 @@ IntlTestRBNF::TestAllLocales()
                 UnicodeString str;
                 f->format(n, str);
 
-                logln(UnicodeString(loc->getName()) + names[j]
-                    + "success: " + n + " -> " + str);
+                if (verbose) {
+                    logln(UnicodeString(loc->getName()) + names[j]
+                        + "success: " + n + " -> " + str);
+                }
 
                 // We do not validate the result in this test case,
                 // because there are cases which do not round trip by design.
@@ -1893,27 +1894,27 @@ IntlTestRBNF::TestAllLocales()
 
 void 
 IntlTestRBNF::TestMultiplierSubstitution(void) {
-  UnicodeString rules("=#,##0=;1,000,000: <##0.###< million;");
-  UErrorCode status = U_ZERO_ERROR;
-  UParseError parse_error;
-  RuleBasedNumberFormat *rbnf = 
-    new RuleBasedNumberFormat(rules, Locale::getUS(), parse_error, status);
-  if (U_SUCCESS(status)) {
-    UnicodeString res;
-    FieldPosition pos;
-    double n = 1234000.0;
-    rbnf->format(n, res, pos);
-    delete rbnf;
+    UnicodeString rules("=#,##0=;1,000,000: <##0.###< million;");
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parse_error;
+    RuleBasedNumberFormat *rbnf = 
+        new RuleBasedNumberFormat(rules, Locale::getUS(), parse_error, status);
+    if (U_SUCCESS(status)) {
+        UnicodeString res;
+        FieldPosition pos;
+        double n = 1234000.0;
+        rbnf->format(n, res, pos);
+        delete rbnf;
 
-    UnicodeString expected = UNICODE_STRING_SIMPLE("1.234 million");
-    if (expected != res) {
-      UnicodeString msg = "Expected: ";
-      msg.append(expected);
-      msg.append(" but got ");
-      msg.append(res);
-      errln(msg);
+        UnicodeString expected(UNICODE_STRING_SIMPLE("1.234 million"));
+        if (expected != res) {
+            UnicodeString msg = "Expected: ";
+            msg.append(expected);
+            msg.append(" but got ");
+            msg.append(res);
+            errln(msg);
+        }
     }
-  }
 }
 
 void
@@ -1958,6 +1959,99 @@ IntlTestRBNF::TestSetDecimalFormatSymbols() {
     }
 }
 
+void IntlTestRBNF::TestPluralRules() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString enRules("%digits-ordinal:-x: −>>;0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th});");
+    UParseError parseError;
+    RuleBasedNumberFormat enFormatter(enRules, Locale::getEnglish(), parseError, status);
+    if (U_FAILURE(status)) {
+        errln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
+        return;
+    }
+    const char* const enTestData[][2] = {
+            { "1", "1st" },
+            { "2", "2nd" },
+            { "3", "3rd" },
+            { "4", "4th" },
+            { "11", "11th" },
+            { "12", "12th" },
+            { "13", "13th" },
+            { "14", "14th" },
+            { "21", "21st" },
+            { "22", "22nd" },
+            { "23", "23rd" },
+            { "24", "24th" },
+            { NULL, NULL }
+    };
+
+    doTest(&enFormatter, enTestData, TRUE);
+
+    // This is trying to model the feminine form, but don't worry about the details too much.
+    // We're trying to test the plural rules.
+    UnicodeString ruRules("%spellout-numbering:"
+            "-x: minus >>;"
+            "x.x: << point >>;"
+            "0: zero;"
+            "1: one;"
+            "2: two;"
+            "3: three;"
+            "4: four;"
+            "5: five;"
+            "6: six;"
+            "7: seven;"
+            "8: eight;"
+            "9: nine;"
+            "10: ten;"
+            "11: eleven;"
+            "12: twelve;"
+            "13: thirteen;"
+            "14: fourteen;"
+            "15: fifteen;"
+            "16: sixteen;"
+            "17: seventeen;"
+            "18: eighteen;"
+            "19: nineteen;"
+            "20: twenty[->>];"
+            "30: thirty[->>];"
+            "40: forty[->>];"
+            "50: fifty[->>];"
+            "60: sixty[->>];"
+            "70: seventy[->>];"
+            "80: eighty[->>];"
+            "90: ninety[->>];"
+            "100: hundred[ >>];"
+            "200: << hundred[ >>];"
+            "300: << hundreds[ >>];"
+            "500: << hundredss[ >>];"
+            "1000: <<$(cardinal,one{ thousand}few{ thousands}other{ thousandss})[ >>];");
+    RuleBasedNumberFormat ruFormatter(ruRules, Locale("ru"), parseError, status);
+    const char* const ruTestData[][2] = {
+            { "1", "one" },
+            { "100", "hundred" },
+            { "125", "hundred twenty-five" },
+            { "399", "three hundreds ninety-nine" },
+            { "1,000", "one thousand" },
+            { "2,000", "two thousands" },
+            { "5,000", "five thousandss" },
+            { "21,000", "twenty-one thousand" },
+            { "22,000", "twenty-two thousands" },
+            { NULL, NULL }
+    };
+
+    if (U_FAILURE(status)) {
+        errln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
+        return;
+    }
+    doTest(&ruFormatter, ruTestData, TRUE);
+
+    // Make sure there are no divide by 0 errors.
+    UnicodeString result;
+    RuleBasedNumberFormat(ruRules, Locale("ru"), parseError, status).format(21000, result);
+    if (result.compare(UNICODE_STRING_SIMPLE("twenty-one thousand")) != 0) {
+        errln("Got " + result + " for 21000");
+    }
+
+}
 
 void 
 IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* const testData[][2], UBool testParsing) 
