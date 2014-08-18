@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 2009-2011, International Business Machines
+ *   Copyright (C) 2009-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -10,23 +10,25 @@
 package com.ibm.icu.impl;
 
 import com.ibm.icu.text.UnicodeSet.SpanCondition;
+import com.ibm.icu.util.OutputInt;
 
-/*
+/**
  * Helper class for frozen UnicodeSets, implements contains() and span() optimized for BMP code points.
  * 
- * Latin-1: Look up bytes. 2-byte characters: Bits organized vertically. 3-byte characters: Use zero/one/mixed data
- * per 64-block in U+0000..U+FFFF, with mixed for illegal ranges. Supplementary characters: Call contains() on the
- * parent set.
+ * Latin-1: Look up bytes.
+ * 2-byte characters: Bits organized vertically.
+ * 3-byte characters: Use zero/one/mixed data per 64-block in U+0000..U+FFFF, with mixed for illegal ranges.
+ * Supplementary characters: Call contains() on the parent set.
  */
 public final class BMPSet {
     public static int U16_SURROGATE_OFFSET = ((0xd800 << 10) + 0xdc00 - 0x10000);
 
-    /*
+    /**
      * One boolean ('true' or 'false') per Latin-1 character.
      */
     private boolean[] latin1Contains;
 
-    /*
+    /**
      * One bit per code point from U+0000..U+07FF. The bits are organized vertically; consecutive code points
      * correspond to the same bit positions in consecutive table words. With code point parts lead=c{10..6}
      * trail=c{5..0} it is set.contains(c)==(table7FF[trail] bit lead)
@@ -36,7 +38,7 @@ public final class BMPSet {
      */
     private int[] table7FF;
 
-    /*
+    /**
      * One bit per 64 BMP code points. The bits are organized vertically; consecutive 64-code point blocks
      * correspond to the same bit position in consecutive table words. With code point parts lead=c{15..12}
      * t1=c{11..6} test bits (lead+16) and lead in bmpBlockBits[t1]. If the upper bit is 0, then the lower bit
@@ -48,14 +50,14 @@ public final class BMPSet {
      */
     private int[] bmpBlockBits;
 
-    /*
+    /**
      * Inversion list indexes for restricted binary searches in findCodePoint(), from findCodePoint(U+0800, U+1000,
      * U+2000, .., U+F000, U+10000). U+0800 is the first 3-byte-UTF-8 code point. Code points below U+0800 are
      * always looked up in the bit tables. The last pair of indexes is for finding supplementary code points.
      */
     private int[] list4kStarts;
 
-    /*
+    /**
      * The inversion list of the parent set, for the slower contains() implementation for mixed BMP blocks and for
      * supplementary code points. The list is terminated with list[listLength-1]=0x110000.
      */
@@ -120,22 +122,24 @@ public final class BMPSet {
         }
     }
 
-    /*
+    /**
      * Span the initial substring for which each character c has spanCondition==contains(c). It must be
      * spanCondition==0 or 1.
      * 
      * @param start The start index
-     * @param end   The end   index
-     * @return The length of the span.
+     * @param outCount If not null: Receives the number of code points in the span.
+     * @return the limit (exclusive end) of the span
      *
      * NOTE: to reduce the overhead of function call to contains(c), it is manually inlined here. Check for
      * sufficient length for trail unit for each surrogate pair. Handle single surrogates as surrogate code points
      * as usual in ICU.
      */
-    public final int span(CharSequence s, int start, int end, SpanCondition spanCondition) {
+    public final int span(CharSequence s, int start, SpanCondition spanCondition,
+            OutputInt outCount) {
         char c, c2;
         int i = start;
-        int limit = Math.min(s.length(), end);
+        int limit = s.length();
+        int numSupplementary = 0;
         if (SpanCondition.NOT_CONTAINED != spanCondition) {
             // span
             while (i < limit) {
@@ -170,6 +174,7 @@ public final class BMPSet {
                     if (!containsSlow(supplementary, list4kStarts[0x10], list4kStarts[0x11])) {
                         break;
                     }
+                    ++numSupplementary;
                     ++i;
                 }
                 ++i;
@@ -208,15 +213,20 @@ public final class BMPSet {
                     if (containsSlow(supplementary, list4kStarts[0x10], list4kStarts[0x11])) {
                         break;
                     }
+                    ++numSupplementary;
                     ++i;
                 }
                 ++i;
             }
         }
-        return i - start;
+        if (outCount != null) {
+            int spanLength = i - start;
+            outCount.value = spanLength - numSupplementary;  // number of code points
+        }
+        return i;
     }
 
-    /*
+    /**
      * Symmetrical with span().
      * Span the trailing substring for which each character c has spanCondition==contains(c). It must be s.length >=
      * limit and spanCondition==0 or 1.
@@ -226,7 +236,6 @@ public final class BMPSet {
     public final int spanBack(CharSequence s, int limit, SpanCondition spanCondition) {
         char c, c2;
 
-        limit = Math.min(s.length(), limit);
         if (SpanCondition.NOT_CONTAINED != spanCondition) {
             // span
             for (;;) {
@@ -311,7 +320,7 @@ public final class BMPSet {
         return limit + 1;
     }
 
-    /*
+    /**
      * Set bits in a bit rectangle in "vertical" bit organization. start<limit<=0x800
      */
     private static void set32x64Bits(int[] table, int start, int limit) {

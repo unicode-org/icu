@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -13,6 +13,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UTF16.StringComparator;
 
 /**
 * Testing class for UTF16
@@ -1560,6 +1561,39 @@ public final class UTF16Test extends TestFmwk
         }
     }
 
+    public void TestUtilities() {
+        String[] tests = {
+                "a",
+                "\uFFFF",
+                "😀",
+                "\uD800",
+                "\uDC00",
+                "\uDBFF\uDfff",
+                "",
+                "\u0000",
+                "\uDC00\uD800",
+                "ab",
+                "😀a",
+                null,
+        };
+        StringComparator sc = new UTF16.StringComparator(true,false,0);
+        for (String item1 : tests) {
+            String nonNull1 = item1 == null ? "" : item1;
+            int count = UTF16.countCodePoint(nonNull1);
+            int expected = count == 0 || count > 1 ? -1 : nonNull1.codePointAt(0);
+            assertEquals("codepoint test " + Utility.hex(nonNull1), expected, UTF16.getSingleCodePoint(item1));
+            if (expected == -1) {
+                continue;
+            }
+            for (String item2 : tests) {
+                String nonNull2 = item2 == null ? "" : item2;
+                int scValue = Integer.signum(sc.compare(nonNull1, nonNull2));
+                int fValue = Integer.signum(UTF16.compareCodePoint(expected, item2));
+                assertEquals("comparison " + Utility.hex(nonNull1) + ", " + Utility.hex(nonNull2), scValue, fValue);
+            }
+        }
+    }
+
     public void TestNewString() {
     final int[] codePoints = {
         UCharacter.toCodePoint(UCharacter.MIN_HIGH_SURROGATE, UCharacter.MAX_LOW_SURROGATE),
@@ -1568,6 +1602,7 @@ public final class UTF16Test extends TestFmwk
         'A',
         -1,
     };
+    
 
     final String cpString = "" +
         UCharacter.MIN_HIGH_SURROGATE +

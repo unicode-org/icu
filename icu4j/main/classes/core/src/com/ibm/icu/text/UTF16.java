@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -2610,6 +2610,61 @@ public final class UTF16 {
             // now c1 and c2 are in UTF-32-compatible order
             return c1 - c2;
         }
+    }
+
+    /**
+     * Utility for getting a code point from a CharSequence that contains exactly one code point.
+     * @return a code point IF the string is non-null and consists of a single code point.
+     * otherwise returns -1.
+     * @param s to test
+     */
+    public static int getSingleCodePoint(CharSequence s) {
+        if (s == null || s.length() == 0) {
+            return -1;
+        } else if (s.length() == 1) {
+            return s.charAt(0);
+        } else if (s.length() > 2) {
+            return -1;
+        }
+
+        // at this point, len = 2
+        int cp = UTF16.charAt(s, 0); 
+        if (cp > 0xFFFF) { // is surrogate pair
+            return cp;
+        }
+        return -1;
+    }
+
+    /**
+     * Utility for comparing a code point to a string without having to create a new string. Returns the same results
+     * as a code point comparison of UTF16.valueOf(codePoint) and s.toString(). More specifically, if
+     * <pre>
+     * sc = new StringComparator(true,false,0);
+     * fast = UTF16.compare(codePoint, charSequence)
+     * slower = sc.compare(UTF16.valueOf(codePoint), charSequence == null ? "" : charSequence.toString())
+     * </pre>
+     * then
+     * </pre>
+     * Integer.signum(fast) == Integer.signum(slower)
+     * </pre>
+     * @param codePoint to test
+     * @param s to test
+     * @return equivalent of code point comparator comparing two strings.
+     */
+    public static int compareCodePoint(int codePoint, CharSequence s) {
+        if (s == null) {
+            return 1;
+        }
+        final int strLen = s.length();
+        if (strLen == 0) {
+            return 1;
+        }
+        int second = Character.codePointAt(s, 0);
+        int diff = codePoint - second;
+        if (diff != 0) {
+            return diff;
+        }
+        return strLen == Character.charCount(codePoint) ? 0 : -1;
     }
 
     // private data members -------------------------------------------------
