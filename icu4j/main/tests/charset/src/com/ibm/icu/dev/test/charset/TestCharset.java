@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2012, International Business Machines Corporation and    *
+* Copyright (C) 2006-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -33,6 +33,7 @@ import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 public class TestCharset extends TestFmwk {
     private String m_encoding = "UTF-16";
@@ -5734,5 +5735,27 @@ public class TestCharset extends TestFmwk {
             errln("Error calling getBytes(): " + ex);
         }
         
+    }
+    
+    public void TestDefaultIgnorableCallback() {
+        String name = "euc-jp-2007";
+        String pattern = "[:Default_Ignorable_Code_Point:]";
+        UnicodeSet set = new UnicodeSet(pattern);
+        CharsetEncoder encoder =  CharsetICU.forNameICU(name).newEncoder();
+
+        // set callback for the converter
+        encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+
+        int size = set.size();
+        for (int i = 0; i < size; i++) {
+            CharBuffer input = CharBuffer.wrap(Character.toChars(set.charAt(i)));
+            encoder.reset();
+            try {
+                encoder.encode(CharBuffer.wrap(Character.toChars(set.charAt(i))));
+            } catch (Exception ex) {
+                errln("Callback should have ignore default ignorable: 0x" + Integer.toHexString(set.charAt(i)));
+            }
+
+        }
     }
 }
