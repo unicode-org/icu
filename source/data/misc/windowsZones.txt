@@ -322,6 +322,11 @@ windowsZones:table(nofallback){
             001{"Africa/Tripoli"}
             LY{"Africa/Tripoli"}
         }
+        "Line Islands Standard Time"{
+            001{"Pacific/Kiritimati"}
+            KI{"Pacific/Kiritimati"}
+            ZZ{"Etc/GMT-14"}
+        }
         "Magadan Standard Time"{
             001{"Asia/Magadan"}
             RU{"Asia/Magadan Asia/Anadyr Asia/Kamchatka Asia/Srednekolymsk"}
