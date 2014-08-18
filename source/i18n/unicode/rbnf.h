@@ -34,11 +34,13 @@
 #include "unicode/unistr.h"
 #include "unicode/strenum.h"
 #include "unicode/brkiter.h"
+#include "unicode/upluralrules.h"
 
 U_NAMESPACE_BEGIN
 
 class NFRuleSet;
 class LocalizationInfo;
+class PluralFormat;
 class RuleBasedCollator;
 
 /**
@@ -428,6 +430,20 @@ enum URBNFRuleSetTag {
  *     <td>in rule in fraction rule set</td>
  *     <td>Omit the optional text if multiplying the number by the rule's base value yields 1.</td>
  *   </tr>
+ *   <tr>
+ *     <td width="37">$(cardinal,<i>plural syntax</i>)</td>
+ *     <td width="23"></td>
+ *     <td width="165" valign="top">in all rule sets</td>
+ *     <td>This provides the ability to choose a word based on the number divided by the base value for the specified locale.
+ *     This uses the cardinal plural rules from PluralFormat. All strings used in the plural format are treated as the same base value for parsing.</td>
+ *   </tr>
+ *   <tr>
+ *     <td width="37">$(ordinal,<i>plural syntax</i>)</td>
+ *     <td width="23"></td>
+ *     <td width="165" valign="top">in all rule sets</td>
+ *     <td>This provides the ability to choose a word based on the number divided by the base value for the specified locale.
+ *     This uses the ordinal plural rules from PluralFormat. All strings used in the plural format are treated as the same base value for parsing.</td>
+ *   </tr>
  * </table>
  *
  * <p>The substitution descriptor (i.e., the text between the token characters) may take one
@@ -495,6 +511,8 @@ enum URBNFRuleSetTag {
  * @author Richard Gillam
  * @see NumberFormat
  * @see DecimalFormat
+ * @see PluralFormat
+ * @see PluralRules
  * @stable ICU 2.0
  */
 class U_I18N_API RuleBasedNumberFormat : public NumberFormat {
@@ -964,6 +982,7 @@ private:
     inline NFRuleSet * getDefaultRuleSet() const;
     const RuleBasedCollator * getCollator() const;
     DecimalFormatSymbols * getDecimalFormatSymbols() const;
+    PluralFormat *createPluralFormat(UPluralType pluralType, const UnicodeString &pattern, UErrorCode& status) const;
     UnicodeString& adjustForCapitalizationContext(int32_t startPos, UnicodeString& currentResult) const;
 
 private:

@@ -20,6 +20,8 @@
 #include "unicode/localpointer.h"
 #include "unicode/rbnf.h"
 #include "unicode/tblcoll.h"
+#include "unicode/plurfmt.h"
+#include "unicode/upluralrules.h"
 #include "unicode/coleitr.h"
 #include "unicode/uchar.h"
 #include "nfrs.h"
@@ -37,13 +39,17 @@ NFRule::NFRule(const RuleBasedNumberFormat* _rbnf)
   , sub1(NULL)
   , sub2(NULL)
   , formatter(_rbnf)
+  , rulePatternFormat(NULL)
 {
 }
 
 NFRule::~NFRule()
 {
-  delete sub1;
-  delete sub2;
+    if (sub1 != sub2) {
+        delete sub2;
+    }
+    delete sub1;
+    delete rulePatternFormat;
 }
 
 static const UChar gLeftBracket = 0x005b;
@@ -65,6 +71,9 @@ static const UChar gMinusX[] =                  {0x2D, 0x78, 0};    /* "-x" */
 static const UChar gXDotX[] =                   {0x78, 0x2E, 0x78, 0}; /* "x.x" */
 static const UChar gXDotZero[] =                {0x78, 0x2E, 0x30, 0}; /* "x.0" */
 static const UChar gZeroDotX[] =                {0x30, 0x2E, 0x78, 0}; /* "0.x" */
+
+static const UChar gDollarOpenParenthesis[] =   {0x24, 0x28, 0}; /* "$(" */
+static const UChar gClosedParenthesis[] =       {0x29, 0}; /* ")" */
 
 static const UChar gLessLess[] =                {0x3C, 0x3C, 0};    /* "<<" */
 static const UChar gLessPercent[] =             {0x3C, 0x25, 0};    /* "<%" */
@@ -117,8 +126,7 @@ NFRule::makeRules(UnicodeString& description,
     if (brack1 == -1 || brack2 == -1 || brack1 > brack2
         || rule1->getType() == kProperFractionRule
         || rule1->getType() == kNegativeNumberRule) {
-        rule1->ruleText = description;
-        rule1->extractSubstitutions(ruleSet, predecessor, rbnf, status);
+        rule1->extractSubstitutions(ruleSet, description, predecessor, status);
         rules.add(rule1);
     } else {
         // if the description does contain a matched pair of brackets,
@@ -178,8 +186,7 @@ NFRule::makeRules(UnicodeString& description,
             if (brack2 + 1 < description.length()) {
                 sbuf.append(description, brack2 + 1, description.length() - brack2 - 1);
             }
-            rule2->ruleText.setTo(sbuf);
-            rule2->extractSubstitutions(ruleSet, predecessor, rbnf, status);
+            rule2->extractSubstitutions(ruleSet, sbuf, predecessor, status);
         }
 
         // rule1's text includes the text in the brackets but omits
@@ -190,8 +197,7 @@ NFRule::makeRules(UnicodeString& description,
         if (brack2 + 1 < description.length()) {
             sbuf.append(description, brack2 + 1, description.length() - brack2 - 1);
         }
-        rule1->ruleText.setTo(sbuf);
-        rule1->extractSubstitutions(ruleSet, predecessor, rbnf, status);
+        rule1->extractSubstitutions(ruleSet, sbuf, predecessor, status);
 
         // if we only have one rule, return it; if we have two, return
         // a two-element array containing them (notice that rule2 goes
@@ -370,13 +376,43 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
 */
 void
 NFRule::extractSubstitutions(const NFRuleSet* ruleSet,
+                             const UnicodeString &ruleText,
                              const NFRule* predecessor,
-                             const RuleBasedNumberFormat* rbnf,
                              UErrorCode& status)
 {
-    if (U_SUCCESS(status)) {
-        sub1 = extractSubstitution(ruleSet, predecessor, rbnf, status);
-        sub2 = extractSubstitution(ruleSet, predecessor, rbnf, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    this->ruleText = ruleText;
+    this->rulePatternFormat = NULL;
+    sub1 = extractSubstitution(ruleSet, predecessor, status);
+    if (sub1 == NULL || sub1->isNullSubstitution()) {
+        // Small optimization. There is no need to create a redundant NullSubstitution.
+        sub2 = sub1;
+    }
+    else {
+        sub2 = extractSubstitution(ruleSet, predecessor, status);
+    }
+    if (this->ruleText.startsWith(gDollarOpenParenthesis, -1) && this->ruleText.endsWith(gClosedParenthesis, -1)) {
+        int32_t endType = this->ruleText.indexOf(gComma);
+        if (endType < 0) {
+            status = U_PARSE_ERROR;
+            return;
+        }
+        UnicodeString type(this->ruleText.tempSubString(2, endType - 2));
+        UPluralType pluralType;
+        if (type.startsWith(UNICODE_STRING_SIMPLE("cardinal"))) {
+            pluralType = UPLURAL_TYPE_CARDINAL;
+        }
+        else if (type.startsWith(UNICODE_STRING_SIMPLE("ordinal"))) {
+            pluralType = UPLURAL_TYPE_ORDINAL;
+        }
+        else {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        rulePatternFormat = formatter->createPluralFormat(pluralType,
+                this->ruleText.tempSubString(endType + 1, this->ruleText.length() - 2 - endType), status);
     }
 }
 
@@ -395,7 +431,6 @@ NFRule::extractSubstitutions(const NFRuleSet* ruleSet,
 NFSubstitution *
 NFRule::extractSubstitution(const NFRuleSet* ruleSet,
                             const NFRule* predecessor,
-                            const RuleBasedNumberFormat* rbnf,
                             UErrorCode& status)
 {
     NFSubstitution* result = NULL;
@@ -409,7 +444,7 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
     // at the end of the rule text
     if (subStart == -1) {
         return NFSubstitution::makeSubstitution(ruleText.length(), this, predecessor,
-            ruleSet, rbnf, UnicodeString(), status);
+            ruleSet, this->formatter, UnicodeString(), status);
     }
 
     // special-case the ">>>" token, since searching for the > at the
@@ -437,7 +472,7 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
     // at the end of the rule
     if (subEnd == -1) {
         return NFSubstitution::makeSubstitution(ruleText.length(), this, predecessor,
-            ruleSet, rbnf, UnicodeString(), status);
+            ruleSet, this->formatter, UnicodeString(), status);
     }
 
     // if we get here, we have a real substitution token (or at least
@@ -446,7 +481,7 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
     UnicodeString subToken;
     subToken.setTo(ruleText, subStart, subEnd + 1 - subStart);
     result = NFSubstitution::makeSubstitution(subStart, this, predecessor, ruleSet,
-        rbnf, subToken, status);
+        this->formatter, subToken, status);
 
     // remove the substitution from the rule text
     ruleText.removeBetween(subStart, subEnd+1);
@@ -645,16 +680,27 @@ NFRule::_appendRuleText(UnicodeString& result) const
 * should be inserted
 */
 void
-NFRule::doFormat(int64_t number, UnicodeString& toInsertInto, int32_t pos) const
+NFRule::doFormat(int64_t number, UnicodeString& toInsertInto, int32_t pos, UErrorCode& status) const
 {
     // first, insert the rule's rule text into toInsertInto at the
     // specified position, then insert the results of the substitutions
     // into the right places in toInsertInto (notice we do the
     // substitutions in reverse order so that the offsets don't get
     // messed up)
-    toInsertInto.insert(pos, ruleText);
-    sub2->doSubstitution(number, toInsertInto, pos);
-    sub1->doSubstitution(number, toInsertInto, pos);
+    if (!rulePatternFormat) {
+        toInsertInto.insert(pos, ruleText);
+    }
+    else {
+        toInsertInto.insert(pos,
+            rulePatternFormat->format((double)(baseValue == 0 ? number : number/baseValue), status));
+    }
+
+    if (!sub2->isNullSubstitution()) {
+        sub2->doSubstitution(number, toInsertInto, pos, status);
+    }
+    if (!sub1->isNullSubstitution()) {
+        sub1->doSubstitution(number, toInsertInto, pos, status);
+    }
 }
 
 /**
@@ -667,7 +713,7 @@ NFRule::doFormat(int64_t number, UnicodeString& toInsertInto, int32_t pos) const
 * should be inserted
 */
 void
-NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos) const
+NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos, UErrorCode& status) const
 {
     // first, insert the rule's rule text into toInsertInto at the
     // specified position, then insert the results of the substitutions
@@ -675,9 +721,19 @@ NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos) const
     // [again, we have two copies of this routine that do the same thing
     // so that we don't sacrifice precision in a long by casting it
     // to a double]
-    toInsertInto.insert(pos, ruleText);
-    sub2->doSubstitution(number, toInsertInto, pos);
-    sub1->doSubstitution(number, toInsertInto, pos);
+    if (!rulePatternFormat) {
+        toInsertInto.insert(pos, ruleText);
+    }
+    else {
+        toInsertInto.insert(pos,
+            rulePatternFormat->format(baseValue == 0 ? number : number/baseValue, status));
+    }
+    if (!sub2->isNullSubstitution()) {
+        sub2->doSubstitution(number, toInsertInto, pos, status);
+    }
+    if (!sub1->isNullSubstitution()) {
+        sub1->doSubstitution(number, toInsertInto, pos, status);
+    }
 }
 
 /**
@@ -1309,107 +1365,75 @@ NFRule::findText(const UnicodeString& str,
                  int32_t startingAt,
                  int32_t* length) const
 {
-#if !UCONFIG_NO_COLLATION
-    // if lenient parsing is turned off, this is easy: just call
-    // String.indexOf() and we're done
-    if (!formatter->isLenient()) {
-        *length = key.length();
-        return str.indexOf(key, startingAt);
-
-        // but if lenient parsing is turned ON, we've got some work
-        // ahead of us
-    } else
-#endif
-    {
-        //----------------------------------------------------------------
-        // JDK 1.1 HACK (take out of 1.2-specific code)
-
-        // in JDK 1.2, CollationElementIterator provides us with an
-        // API to map between character offsets and collation elements
-        // and we can do this by marching through the string comparing
-        // collation elements.  We can't do that in JDK 1.1.  Insted,
-        // we have to go through this horrible slow mess:
-        int32_t p = startingAt;
-        int32_t keyLen = 0;
-
-        // basically just isolate smaller and smaller substrings of
-        // the target string (each running to the end of the string,
-        // and with the first one running from startingAt to the end)
-        // and then use prefixLength() to see if the search key is at
-        // the beginning of each substring.  This is excruciatingly
-        // slow, but it will locate the key and tell use how long the
-        // matching text was.
-        UnicodeString temp;
-        UErrorCode status = U_ZERO_ERROR;
-        while (p < str.length() && keyLen == 0) {
-            temp.setTo(str, p, str.length() - p);
-            keyLen = prefixLength(temp, key, status);
-            if (U_FAILURE(status)) {
-            	break;
-            }
-            if (keyLen != 0) {
-                *length = keyLen;
-                return p;
-            }
-            ++p;
+    if (rulePatternFormat) {
+        Formattable result;
+        FieldPosition position(UNUM_INTEGER_FIELD);
+        position.setBeginIndex(startingAt);
+        rulePatternFormat->parseType(str, this, result, position);
+        int start = position.getBeginIndex();
+        if (start >= 0) {
+            *length = position.getEndIndex() - start;
+            return start;
         }
-        // if we make it to here, we didn't find it.  Return -1 for the
-        // location.  The length should be ignored, but set it to 0,
-        // which should be "safe"
         *length = 0;
         return -1;
-
-        //----------------------------------------------------------------
-        // JDK 1.2 version of this routine
-        //RuleBasedCollator collator = (RuleBasedCollator)formatter.getCollator();
-        //
-        //CollationElementIterator strIter = collator.getCollationElementIterator(str);
-        //CollationElementIterator keyIter = collator.getCollationElementIterator(key);
-        //
-        //int keyStart = -1;
-        //
-        //str.setOffset(startingAt);
-        //
-        //int oStr = strIter.next();
-        //int oKey = keyIter.next();
-        //while (oKey != CollationElementIterator.NULLORDER) {
-        //    while (oStr != CollationElementIterator.NULLORDER &&
-        //                CollationElementIterator.primaryOrder(oStr) == 0)
-        //        oStr = strIter.next();
-        //
-        //    while (oKey != CollationElementIterator.NULLORDER &&
-        //                CollationElementIterator.primaryOrder(oKey) == 0)
-        //        oKey = keyIter.next();
-        //
-        //    if (oStr == CollationElementIterator.NULLORDER) {
-        //        return new int[] { -1, 0 };
-        //    }
-        //
-        //    if (oKey == CollationElementIterator.NULLORDER) {
-        //        break;
-        //    }
-        //
-        //    if (CollationElementIterator.primaryOrder(oStr) ==
-        //            CollationElementIterator.primaryOrder(oKey)) {
-        //        keyStart = strIter.getOffset();
-        //        oStr = strIter.next();
-        //        oKey = keyIter.next();
-        //    } else {
-        //        if (keyStart != -1) {
-        //            keyStart = -1;
-        //            keyIter.reset();
-        //        } else {
-        //            oStr = strIter.next();
-        //        }
-        //    }
-        //}
-        //
-        //if (oKey == CollationElementIterator.NULLORDER) {
-        //    return new int[] { keyStart, strIter.getOffset() - keyStart };
-        //} else {
-        //    return new int[] { -1, 0 };
-        //}
     }
+    if (!formatter->isLenient()) {
+        // if lenient parsing is turned off, this is easy: just call
+        // String.indexOf() and we're done
+        *length = key.length();
+        return str.indexOf(key, startingAt);
+    }
+    else {
+        // but if lenient parsing is turned ON, we've got some work
+        // ahead of us
+        return findTextLenient(str, key, startingAt, length);
+    }
+}
+
+int32_t
+NFRule::findTextLenient(const UnicodeString& str,
+                 const UnicodeString& key,
+                 int32_t startingAt,
+                 int32_t* length) const
+{
+    //----------------------------------------------------------------
+    // JDK 1.1 HACK (take out of 1.2-specific code)
+
+    // in JDK 1.2, CollationElementIterator provides us with an
+    // API to map between character offsets and collation elements
+    // and we can do this by marching through the string comparing
+    // collation elements.  We can't do that in JDK 1.1.  Insted,
+    // we have to go through this horrible slow mess:
+    int32_t p = startingAt;
+    int32_t keyLen = 0;
+
+    // basically just isolate smaller and smaller substrings of
+    // the target string (each running to the end of the string,
+    // and with the first one running from startingAt to the end)
+    // and then use prefixLength() to see if the search key is at
+    // the beginning of each substring.  This is excruciatingly
+    // slow, but it will locate the key and tell use how long the
+    // matching text was.
+    UnicodeString temp;
+    UErrorCode status = U_ZERO_ERROR;
+    while (p < str.length() && keyLen == 0) {
+        temp.setTo(str, p, str.length() - p);
+        keyLen = prefixLength(temp, key, status);
+        if (U_FAILURE(status)) {
+            break;
+        }
+        if (keyLen != 0) {
+            *length = keyLen;
+            return p;
+        }
+        ++p;
+    }
+    // if we make it to here, we didn't find it.  Return -1 for the
+    // location.  The length should be ignored, but set it to 0,
+    // which should be "safe"
+    *length = 0;
+    return -1;
 }
 
 /**
