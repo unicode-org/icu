@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 2009-2012, International Business Machines
+ *   Copyright (C) 2009-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSet.SpanCondition;
+import com.ibm.icu.util.OutputInt;
 
 /*
  * Implement span() etc. for a set with strings.
@@ -22,54 +23,69 @@ import com.ibm.icu.text.UnicodeSet.SpanCondition;
 public class UnicodeSetStringSpan {
 
     /*
-     * Which span() variant will be used? The object is either built for one variant and used once, or built for all and
-     * may be used many times.
+     * Which span() variant will be used? The object is either built for one variant and used once,
+     * or built for all and may be used many times.
      */
+    public static final int WITH_COUNT    = 0x40;  // spanAndCount() may be called
     public static final int FWD           = 0x20;
     public static final int BACK          = 0x10;
-    public static final int UTF16         = 8;
+    // public static final int UTF16      = 8;
     public static final int CONTAINED     = 2;
     public static final int NOT_CONTAINED = 1;
 
-    public static final int ALL = 0x3f;
+    public static final int ALL = 0x7f;
 
-    public static final int FWD_UTF16_CONTAINED      = FWD  | UTF16 |     CONTAINED;
-    public static final int FWD_UTF16_NOT_CONTAINED  = FWD  | UTF16 | NOT_CONTAINED;
-    public static final int BACK_UTF16_CONTAINED     = BACK | UTF16 |     CONTAINED;
-    public static final int BACK_UTF16_NOT_CONTAINED = BACK | UTF16 | NOT_CONTAINED;
+    public static final int FWD_UTF16_CONTAINED      = FWD  | /* UTF16 | */    CONTAINED;
+    public static final int FWD_UTF16_NOT_CONTAINED  = FWD  | /* UTF16 | */NOT_CONTAINED;
+    public static final int BACK_UTF16_CONTAINED     = BACK | /* UTF16 | */    CONTAINED;
+    public static final int BACK_UTF16_NOT_CONTAINED = BACK | /* UTF16 | */NOT_CONTAINED;
 
-    // Special spanLength short values. (since Java has not unsigned byte type)
-    // All code points in the string are contained in the parent set.
+    /**
+     * Special spanLength short values. (since Java has not unsigned byte type)
+     * All code points in the string are contained in the parent set.
+     */
     static final short ALL_CP_CONTAINED = 0xff;
-    // The spanLength is >=0xfe.
+    /** The spanLength is >=0xfe. */
     static final short LONG_SPAN = ALL_CP_CONTAINED - 1;
 
-    // Set for span(). Same as parent but without strings.
+    /** Set for span(). Same as parent but without strings. */
     private UnicodeSet spanSet;
 
-    // Set for span(not contained).
-    // Same as spanSet, plus characters that start or end strings.
+    /**
+     * Set for span(not contained).
+     * Same as spanSet, plus characters that start or end strings.
+     */
     private UnicodeSet spanNotSet;
 
-    // The strings of the parent set.
+    /** The strings of the parent set. */
     private ArrayList<String> strings;
 
-    // the lengths of span(), spanBack() etc. for each string.
+    /** The lengths of span(), spanBack() etc. for each string. */
     private short[] spanLengths;
 
-    // Maximum lengths of relevant strings.
+    /** Maximum lengths of relevant strings. */
     private int maxLength16;
 
-    // Set up for all variants of span()?
+    /** Are there strings that are not fully contained in the code point set? */
+    private boolean someRelevant;
+
+    /** Set up for all variants of span()? */
     private boolean all;
 
-    // Span helper
+    /** Span helper */
     private OffsetList offsets;
 
-    // Construct for all variants of span(), or only for any one variant.
-    // Initialize as little as possible, for single use.
+    /**
+     * Constructs for all variants of span(), or only for any one variant.
+     * Initializes as little as possible, for single use.
+     */
     public UnicodeSetStringSpan(final UnicodeSet set, final ArrayList<String> setStrings, int which) {
         spanSet = new UnicodeSet(0, 0x10ffff);
+        // TODO: With Java 6, just take the parent set's strings as is,
+        // as a NavigableSet<String>, rather than as an ArrayList copy of the set of strings.
+        // Then iterate via the first() and higher() methods.
+        // (We do not want to create multiple Iterator objects in each span().)
+        // See ICU ticket #7454.
         strings = setStrings;
         all = (which == ALL);
         spanSet.retainAll(set);
@@ -90,7 +106,7 @@ public class UnicodeSetStringSpan {
         int stringsLength = strings.size();
 
         int i, spanLength;
-        boolean someRelevant = false;
+        someRelevant = false;
         for (i = 0; i < stringsLength; ++i) {
             String string = strings.get(i);
             int length16 = string.length();
@@ -98,12 +114,11 @@ public class UnicodeSetStringSpan {
             if (spanLength < length16) { // Relevant string.
                 someRelevant = true;
             }
-            if ((0 != (which & UTF16)) && length16 > maxLength16) {
+            if (/* (0 != (which & UTF16)) && */ length16 > maxLength16) {
                 maxLength16 = length16;
             }
         }
-        if (!someRelevant) {
-            maxLength16 = 0;
+        if (!someRelevant && (which & WITH_COUNT) == 0) {
             return;
         }
 
@@ -140,7 +155,7 @@ public class UnicodeSetStringSpan {
             int length16 = string.length();
             spanLength = spanSet.span(string, SpanCondition.CONTAINED);
             if (spanLength < length16) { // Relevant string.
-                if (0 != (which & UTF16)) {
+                if (true /* 0 != (which & UTF16) */) {
                     if (0 != (which & CONTAINED)) {
                         if (0 != (which & FWD)) {
                             spanLengths[i] = makeSpanLengthByte(spanLength);
@@ -188,10 +203,12 @@ public class UnicodeSetStringSpan {
      * Constructs a copy of an existing UnicodeSetStringSpan.
      * Assumes which==ALL for a frozen set.
      */
-    public UnicodeSetStringSpan(final UnicodeSetStringSpan otherStringSpan, final ArrayList<String> newParentSetStrings) {
+    public UnicodeSetStringSpan(final UnicodeSetStringSpan otherStringSpan,
+            final ArrayList<String> newParentSetStrings) {
         spanSet = otherStringSpan.spanSet;
         strings = newParentSetStrings;
         maxLength16 = otherStringSpan.maxLength16;
+        someRelevant = otherStringSpan.someRelevant;
         all = true;
         if (otherStringSpan.spanNotSet == otherStringSpan.spanSet) {
             spanNotSet = spanSet;
@@ -203,22 +220,25 @@ public class UnicodeSetStringSpan {
         spanLengths = otherStringSpan.spanLengths.clone();
     }
 
-    /*
+    /**
      * Do the strings need to be checked in span() etc.?
      * 
-     * @return TRUE if strings need to be checked (call span() here), FALSE if not (use a BMPSet for best performance).
+     * @return true if strings need to be checked (call span() here),
+     *         false if not (use a BMPSet for best performance).
      */
     public boolean needsStringSpanUTF16() {
-        return (maxLength16 != 0);
+        return someRelevant;
     }
 
-    // For fast UnicodeSet::contains(c).
+    /** For fast UnicodeSet::contains(c). */
     public boolean contains(int c) {
         return spanSet.contains(c);
     }
 
-    // Add a starting or ending string character to the spanNotSet
-    // so that a character span ends before any string.
+    /**
+     * Adds a starting or ending string character to the spanNotSet
+     * so that a character span ends before any string.
+     */
     private void addToSpanNotSet(int c) {
         if (spanNotSet == null || spanNotSet == spanSet) {
             if (spanSet.contains(c)) {
@@ -230,12 +250,14 @@ public class UnicodeSetStringSpan {
     }
 
     /*
-     * Note: In span() when spanLength==0 (after a string match, or at the beginning after an empty code point span) and
-     * in spanNot() and spanNotUTF8(), string matching could use a binary search because all string matches are done
+     * Note: In span() when spanLength==0
+     * (after a string match, or at the beginning after an empty code point span)
+     * and in spanNot() and spanNotUTF8(),
+     * string matching could use a binary search because all string matches are done
      * from the same start index.
-     * 
+     *
      * For UTF-8, this would require a comparison function that returns UTF-16 order.
-     * 
+     *
      * This optimization should not be necessary for normal UnicodeSets because most sets have no strings, and most sets
      * with strings have very few very short strings. For cases with many strings, it might be better to use a different
      * API and implementation with a DFA (state machine).
@@ -244,84 +266,119 @@ public class UnicodeSetStringSpan {
     /*
      * Algorithm for span(SpanCondition.CONTAINED)
      * 
-     * Theoretical algorithm: - Iterate through the string, and at each code point boundary: + If the code point there
-     * is in the set, then remember to continue after it. + If a set string matches at the current position, then
-     * remember to continue after it. + Either recursively span for each code point or string match, or recursively span
-     * for all but the shortest one and iteratively continue the span with the shortest local match. + Remember the
-     * longest recursive span (the farthest end point). + If there is no match at the current position, neither for the
-     * code point there nor for any set string, then stop and return the longest recursive span length.
-     * 
+     * Theoretical algorithm:
+     * - Iterate through the string, and at each code point boundary:
+     *   + If the code point there is in the set, then remember to continue after it.
+     *   + If a set string matches at the current position, then remember to continue after it.
+     *   + Either recursively span for each code point or string match, or recursively span
+     *     for all but the shortest one and iteratively continue the span with the shortest local match.
+     *   + Remember the longest recursive span (the farthest end point).
+     *   + If there is no match at the current position,
+     *     neither for the code point there nor for any set string,
+     *     then stop and return the longest recursive span length.
+     *
      * Optimized implementation:
-     * 
-     * (We assume that most sets will have very few very short strings. A span using a string-less set is extremely
-     * fast.)
-     * 
-     * Create and cache a spanSet which contains all of the single code points of the original set but none of its
-     * strings.
-     * 
-     * - Start with spanLength=spanSet.span(SpanCondition.CONTAINED). - Loop: + Try to match each set
-     * string at the end of the spanLength. ~ Set strings that start with set-contained code points must be matched with
-     * a partial overlap because the recursive algorithm would have tried to match them at every position. ~ Set strings
-     * that entirely consist of set-contained code points are irrelevant for span(SpanCondition.CONTAINED)
-     * because the recursive algorithm would continue after them anyway and find the longest recursive match from their
-     * end. ~ Rather than recursing, note each end point of a set string match. + If no set string matched after
-     * spanSet.span(), then return with where the spanSet.span() ended. + If at least one set string matched after
-     * spanSet.span(), then pop the shortest string match end point and continue the loop, trying to match all set
-     * strings from there. + If at least one more set string matched after a previous string match, then test if the
-     * code point after the previous string match is also contained in the set. Continue the loop with the shortest end
-     * point of either this code point or a matching set string. + If no more set string matched after a previous string
-     * match, then try another spanLength=spanSet.span(SpanCondition.CONTAINED). Stop if spanLength==0,
-     * otherwise continue the loop.
-     * 
+     *
+     * (We assume that most sets will have very few very short strings.
+     * A span using a string-less set is extremely fast.)
+     *
+     * Create and cache a spanSet which contains all of the single code points of the original set
+     * but none of its strings.
+     *
+     * - Start with spanLength=spanSet.span(SpanCondition.CONTAINED).
+     * - Loop:
+     *   + Try to match each set string at the end of the spanLength.
+     *     ~ Set strings that start with set-contained code points
+     *       must be matched with a partial overlap
+     *       because the recursive algorithm would have tried to match them at every position.
+     *     ~ Set strings that entirely consist of set-contained code points
+     *       are irrelevant for span(SpanCondition.CONTAINED)
+     *       because the recursive algorithm would continue after them anyway and
+     *       find the longest recursive match from their end.
+     *     ~ Rather than recursing, note each end point of a set string match.
+     *   + If no set string matched after spanSet.span(),
+     *     then return with where the spanSet.span() ended.
+     *   + If at least one set string matched after spanSet.span(),
+     *     then pop the shortest string match end point and continue the loop,
+     *     trying to match all set strings from there.
+     *   + If at least one more set string matched after a previous string match, then test if the
+     *     code point after the previous string match is also contained in the set.
+     *     Continue the loop with the shortest end point of
+     *     either this code point or a matching set string.
+     *   + If no more set string matched after a previous string match,
+     *     then try another spanLength=spanSet.span(SpanCondition.CONTAINED).
+     *     Stop if spanLength==0, otherwise continue the loop.
+     *
      * By noting each end point of a set string match, the function visits each string position at most once and
      * finishes in linear time.
-     * 
-     * The recursive algorithm may visit the same string position many times if multiple paths lead to it and finishes
-     * in exponential time.
+     *
+     * The recursive algorithm may visit the same string position many times
+     * if multiple paths lead to it and finishes in exponential time.
      */
 
     /*
      * Algorithm for span(SIMPLE)
      * 
-     * Theoretical algorithm: - Iterate through the string, and at each code point boundary: + If the code point there
-     * is in the set, then remember to continue after it. + If a set string matches at the current position, then
-     * remember to continue after it. + Continue from the farthest match position and ignore all others. + If there is
-     * no match at the current position, then stop and return the current position.
-     * 
+     * Theoretical algorithm:
+     * - Iterate through the string, and at each code point boundary:
+     *   + If the code point there is in the set, then remember to continue after it.
+     *   + If a set string matches at the current position, then remember to continue after it.
+     *   + Continue from the farthest match position and ignore all others.
+     *   + If there is no match at the current position, then stop and return the current position.
+     *
      * Optimized implementation:
-     * 
+     *
      * (Same assumption and spanSet as above.)
-     * 
-     * - Start with spanLength=spanSet.span(SpanCondition.CONTAINED). - Loop: + Try to match each set
-     * string at the end of the spanLength. ~ Set strings that start with set-contained code points must be matched with
-     * a partial overlap because the standard algorithm would have tried to match them earlier. ~ Set strings that
-     * entirely consist of set-contained code points must be matched with a full overlap because the longest-match
-     * algorithm would hide set string matches that end earlier. Such set strings need not be matched earlier inside the
-     * code point span because the standard algorithm would then have continued after the set string match anyway. ~
-     * Remember the longest set string match (farthest end point) from the earliest starting point. + If no set string
-     * matched after spanSet.span(), then return with where the spanSet.span() ended. + If at least one set string
-     * matched, then continue the loop after the longest match from the earliest position. + If no more set string
-     * matched after a previous string match, then try another
-     * spanLength=spanSet.span(SpanCondition.CONTAINED). Stop if spanLength==0, otherwise continue the
-     * loop.
+     *
+     * - Start with spanLength=spanSet.span(SpanCondition.CONTAINED).
+     * - Loop:
+     *   + Try to match each set string at the end of the spanLength.
+     *     ~ Set strings that start with set-contained code points
+     *       must be matched with a partial overlap
+     *       because the standard algorithm would have tried to match them earlier.
+     *     ~ Set strings that entirely consist of set-contained code points
+     *       must be matched with a full overlap because the longest-match algorithm
+     *       would hide set string matches that end earlier.
+     *       Such set strings need not be matched earlier inside the code point span
+     *       because the standard algorithm would then have
+     *       continued after the set string match anyway.
+     *     ~ Remember the longest set string match (farthest end point)
+     *       from the earliest starting point.
+     *   + If no set string matched after spanSet.span(),
+     *     then return with where the spanSet.span() ended.
+     *   + If at least one set string matched,
+     *     then continue the loop after the longest match from the earliest position.
+     *   + If no more set string matched after a previous string match,
+     *     then try another spanLength=spanSet.span(SpanCondition.CONTAINED).
+     *     Stop if spanLength==0, otherwise continue the loop.
      */
     /**
-     * Span a string.
+     * Spans a string.
      * 
      * @param s The string to be spanned
      * @param start The start index that the span begins
      * @param spanCondition The span condition
-     * @return the length of the span
+     * @return the limit (exclusive end) of the span
      */
-    public synchronized int span(CharSequence s, int start, int length, SpanCondition spanCondition) {
+    public int span(CharSequence s, int start, SpanCondition spanCondition) {
         if (spanCondition == SpanCondition.NOT_CONTAINED) {
-            return spanNot(s, start, length);
+            return spanNot(s, start, null);
         }
-        int spanLength = spanSet.span(s.subSequence(start, start + length), SpanCondition.CONTAINED);
-        if (spanLength == length) {
-            return length;
+        int spanLimit = spanSet.span(s, start, SpanCondition.CONTAINED);
+        if (spanLimit == s.length()) {
+            return spanLimit;
         }
+        return spanWithStrings(s, start, spanLimit, spanCondition);
+    }
 
+    /**
+     * Synchronized method for complicated spans using the offsets.
+     * Avoids synchronization for simple cases.
+     *
+     * @param spanLimit = spanSet.span(s, start, CONTAINED)
+     */
+    private synchronized int spanWithStrings(CharSequence s, int start, int spanLimit,
+            SpanCondition spanCondition) {
         // Consider strings; they may overlap with the span.
         int initSize = 0;
         if (spanCondition == SpanCondition.CONTAINED) {
@@ -329,7 +386,9 @@ public class UnicodeSetStringSpan {
             initSize = maxLength16;
         }
         offsets.setMaxLength(initSize);
-        int pos = start + spanLength, rest = length - spanLength;
+        int length = s.length();
+        int pos = spanLimit, rest = length - spanLimit;
+        int spanLength = spanLimit - start;
         int i, stringsLength = strings.size();
         for (;;) {
             if (spanCondition == SpanCondition.CONTAINED) {
@@ -429,7 +488,7 @@ public class UnicodeSetStringSpan {
                 // Otherwise, an unlimited code point span is only tried again when no
                 // strings match, and if such a non-initial span fails we stop.
                 if (offsets.isEmpty()) {
-                    return pos - start; // No strings matched after a span.
+                    return pos; // No strings matched after a span.
                 }
                 // Match strings from after the next string match.
             } else {
@@ -437,11 +496,12 @@ public class UnicodeSetStringSpan {
                 if (offsets.isEmpty()) {
                     // No more strings matched after a previous string match.
                     // Try another code point span from after the last string match.
-                    spanLength = spanSet.span(s.subSequence(pos, pos + rest), SpanCondition.CONTAINED);
+                    spanLimit = spanSet.span(s, pos, SpanCondition.CONTAINED);
+                    spanLength = spanLimit - pos;
                     if (spanLength == rest || // Reached the end of the string, or
                             spanLength == 0 // neither strings nor span progressed.
                     ) {
-                        return pos + spanLength - start;
+                        return spanLimit;
                     }
                     pos += spanLength;
                     rest -= spanLength;
@@ -467,11 +527,108 @@ public class UnicodeSetStringSpan {
                     // Match strings from after the next string match.
                 }
             }
-            int minOffset = offsets.popMinimum();
+            int minOffset = offsets.popMinimum(null);
             pos += minOffset;
             rest -= minOffset;
             spanLength = 0; // Match strings from after a string match.
         }
+    }
+
+    /**
+     * Spans a string and counts the smallest number of set elements on any path across the span.
+     *
+     * <p>For proper counting, we cannot ignore strings that are fully contained in code point spans.
+     *
+     * <p>If the set does not have any fully-contained strings, then we could optimize this
+     * like span(), but such sets are likely rare, and this is at least still linear.
+     *
+     * @param s The string to be spanned
+     * @param start The start index that the span begins
+     * @param spanCondition The span condition
+     * @param outCount The count
+     * @return the limit (exclusive end) of the span
+     */
+    public int spanAndCount(CharSequence s, int start, SpanCondition spanCondition,
+            OutputInt outCount) {
+        if (spanCondition == SpanCondition.NOT_CONTAINED) {
+            return spanNot(s, start, outCount);
+        }
+        // Consider strings; they may overlap with the span,
+        // and they may result in a smaller count that with just code points.
+        if (spanCondition == SpanCondition.CONTAINED) {
+            return spanContainedAndCount(s, start, outCount);
+        }
+        // SIMPLE (not synchronized, does not use offsets)
+        int stringsLength = strings.size();
+        int length = s.length();
+        int pos = start;
+        int rest = length - start;
+        int count = 0;
+        while (rest != 0) {
+            // Try to match the next code point.
+            int cpLength = spanOne(spanSet, s, pos, rest);
+            int maxInc = (cpLength > 0) ? cpLength : 0;
+            // Try to match all of the strings.
+            for (int i = 0; i < stringsLength; ++i) {
+                String string = strings.get(i);
+                int length16 = string.length();
+                if (maxInc < length16 && length16 <= rest &&
+                        matches16CPB(s, pos, length, string, length16)) {
+                    maxInc = length16;
+                }
+            }
+            // We are done if there is no match beyond pos.
+            if (maxInc == 0) {
+                outCount.value = count;
+                return pos;
+            }
+            // Continue from the longest match.
+            ++count;
+            pos += maxInc;
+            rest -= maxInc;
+        }
+        outCount.value = count;
+        return pos;
+    }
+
+    private synchronized int spanContainedAndCount(CharSequence s, int start, OutputInt outCount) {
+        // Use offset list to try all possibilities.
+        offsets.setMaxLength(maxLength16);
+        int stringsLength = strings.size();
+        int length = s.length();
+        int pos = start;
+        int rest = length - start;
+        int count = 0;
+        while (rest != 0) {
+            // Try to match the next code point.
+            int cpLength = spanOne(spanSet, s, pos, rest);
+            if (cpLength > 0) {
+                offsets.addOffsetAndCount(cpLength, count + 1);
+            }
+            // Try to match all of the strings.
+            for (int i = 0; i < stringsLength; ++i) {
+                String string = strings.get(i);
+                int length16 = string.length();
+                // Note: If the strings were sorted by length, then we could also
+                // avoid trying to match if there is already a match of the same length.
+                if (length16 <= rest && !offsets.hasCountAtOffset(length16, count + 1) &&
+                        matches16CPB(s, pos, length, string, length16)) {
+                    offsets.addOffsetAndCount(length16, count + 1);
+                }
+            }
+            // We are done if there is no match beyond pos.
+            if (offsets.isEmpty()) {
+                outCount.value = count;
+                return pos;
+            }
+            // Continue from the nearest match.
+            int minOffset = offsets.popMinimum(outCount);
+            count = outCount.value;
+            pos += minOffset;
+            rest -= minOffset;
+        }
+        outCount.value = count;
+        return pos;
     }
 
     /**
@@ -638,59 +795,72 @@ public class UnicodeSetStringSpan {
                     // Match strings from before the next string match.
                 }
             }
-            pos -= offsets.popMinimum();
+            pos -= offsets.popMinimum(null);
             spanLength = 0; // Match strings from before a string match.
         }
     }
 
-    /*
+    /**
      * Algorithm for spanNot()==span(SpanCondition.NOT_CONTAINED)
      * 
-     * Theoretical algorithm: - Iterate through the string, and at each code point boundary: + If the code point there
-     * is in the set, then return with the current position. + If a set string matches at the current position, then
-     * return with the current position.
-     * 
+     * Theoretical algorithm:
+     * - Iterate through the string, and at each code point boundary:
+     *   + If the code point there is in the set, then return with the current position.
+     *   + If a set string matches at the current position, then return with the current position.
+     *
      * Optimized implementation:
-     * 
+     *
      * (Same assumption as for span() above.)
-     * 
-     * Create and cache a spanNotSet which contains all of the single code points of the original set but none of its
-     * strings. For each set string add its initial code point to the spanNotSet. (Also add its final code point for
-     * spanNotBack().)
-     * 
+     *
+     * Create and cache a spanNotSet which contains
+     * all of the single code points of the original set but none of its strings.
+     * For each set string add its initial code point to the spanNotSet.
+     * (Also add its final code point for spanNotBack().)
+     *
      * - Loop:
      *   + Do spanLength=spanNotSet.span(SpanCondition.NOT_CONTAINED).
      *   + If the current code point is in the original set, then return the current position.
      *   + If any set string matches at the current position, then return the current position.
      *   + If there is no match at the current position, neither for the code point
-     * there nor for any set string, then skip this code point and continue the loop. This happens for
-     * set-string-initial code points that were added to spanNotSet when there is not actually a match for such a set
-     * string.
+     *     there nor for any set string, then skip this code point and continue the loop.
+     *     This happens for set-string-initial code points that were added to spanNotSet
+     *     when there is not actually a match for such a set string.
      *
-     * @return the length of the span
+     * @param s The string to be spanned
+     * @param start The start index that the span begins
+     * @param outCount If not null: Receives the number of code points across the span.
+     * @return the limit (exclusive end) of the span
      */
-    private int spanNot(CharSequence s, int start, int length) {
-        int pos = start, rest = length;
-        int i, stringsLength = strings.size();
+    private int spanNot(CharSequence s, int start, OutputInt outCount) {
+        int length = s.length();
+        int pos = start, rest = length - start;
+        int stringsLength = strings.size();
+        int count = 0;
         do {
             // Span until we find a code point from the set,
             // or a code point that starts or ends some string.
-            i = spanNotSet.span(s.subSequence(pos, pos + rest), SpanCondition.NOT_CONTAINED);
-            if (i == rest) {
+            int spanLimit;
+            if (outCount == null) {
+                spanLimit = spanNotSet.span(s, pos, SpanCondition.NOT_CONTAINED);
+            } else {
+                spanLimit = spanNotSet.spanAndCount(s, pos, SpanCondition.NOT_CONTAINED, outCount);
+                outCount.value = count = count + outCount.value;
+            }
+            if (spanLimit == length) {
                 return length; // Reached the end of the string.
             }
-            pos += i;
-            rest -= i;
+            pos = spanLimit;
+            rest = length - spanLimit;
 
             // Check whether the current code point is in the original set,
             // without the string starts and ends.
             int cpLength = spanOne(spanSet, s, pos, rest);
             if (cpLength > 0) {
-                return pos - start; // There is a set element at pos.
+                return pos; // There is a set element at pos.
             }
 
             // Try to match the strings at pos.
-            for (i = 0; i < stringsLength; ++i) {
+            for (int i = 0; i < stringsLength; ++i) {
                 if (spanLengths[i] == ALL_CP_CONTAINED) {
                     continue; // Irrelevant string.
                 }
@@ -698,7 +868,7 @@ public class UnicodeSetStringSpan {
 
                 int length16 = string.length();
                 if (length16 <= rest && matches16CPB(s, pos, length, string, length16)) {
-                    return pos - start; // There is a set element at pos.
+                    return pos; // There is a set element at pos.
                 }
             }
 
@@ -707,7 +877,11 @@ public class UnicodeSetStringSpan {
             // cpLength<0
             pos -= cpLength;
             rest += cpLength;
+            ++count;
         } while (rest != 0);
+        if (outCount != null) {
+            outCount.value = count;
+        }
         return length; // Reached the end of the string.
     }
 
@@ -773,20 +947,24 @@ public class UnicodeSetStringSpan {
      * Compare 16-bit Unicode strings (which may be malformed UTF-16)
      * at code point boundaries.
      * That is, each edge of a match must not be in the middle of a surrogate pair.
+     * @param s       The string to match in.
      * @param start   The start index of s.
-     * @param slength The length of s from start.
+     * @param limit   The limit of the subsequence of s being spanned.
+     * @param t       The substring to be matched in s.
      * @param tlength The length of t.
      */
-    static boolean matches16CPB(CharSequence s, int start, int slength, final String t, int tlength) {
-        return !(0 < start && com.ibm.icu.text.UTF16.isLeadSurrogate (s.charAt(start - 1)) &&
-                              com.ibm.icu.text.UTF16.isTrailSurrogate(s.charAt(start + 0)))
-                && !(tlength < slength && com.ibm.icu.text.UTF16.isLeadSurrogate (s.charAt(start + tlength - 1)) &&
-                                       com.ibm.icu.text.UTF16.isTrailSurrogate(s.charAt(start + tlength)))
-                && matches16(s, start, t, tlength);
+    static boolean matches16CPB(CharSequence s, int start, int limit, final String t, int tlength) {
+        return matches16(s, start, t, tlength)
+                && !(0 < start && Character.isHighSurrogate(s.charAt(start - 1)) &&
+                        Character.isLowSurrogate(s.charAt(start)))
+                && !((start + tlength) < limit && Character.isHighSurrogate(s.charAt(start + tlength - 1)) &&
+                        Character.isLowSurrogate(s.charAt(start + tlength)));
     }
 
-    // Does the set contain the next code point?
-    // If so, return its length; otherwise return its negative length.
+    /**
+     * Does the set contain the next code point?
+     * If so, return its length; otherwise return its negative length.
+     */
     static int spanOne(final UnicodeSet set, CharSequence s, int start, int length) {
         char c = s.charAt(start);
         if (c >= 0xd800 && c <= 0xdbff && length >= 2) {
@@ -811,47 +989,57 @@ public class UnicodeSetStringSpan {
         return set.contains(c) ? 1 : -1;
     }
 
-
-    /*
+    /**
      * Helper class for UnicodeSetStringSpan.
      *
-     * List of offsets from the current position from where to try matching a code point or a string. Store offsets rather
-     * than indexes to simplify the code and use the same list for both increments (in span()) and decrements (in
-     * spanBack()).
-     * 
-     * Assumption: The maximum offset is limited, and the offsets that are stored at any one time are relatively dense, that
-     * is, there are normally no gaps of hundreds or thousands of offset values.
-     * 
-     * The implementation uses a circular buffer of byte flags, each indicating whether the corresponding offset is in the
-     * list. This avoids inserting into a sorted list of offsets (or absolute indexes) and physically moving part of the
-     * list.
-     * 
-     * Note: In principle, the caller should setMaxLength() to the maximum of the max string length and U16_LENGTH/U8_LENGTH
+     * <p>List of offsets from the current position from where to try matching
+     * a code point or a string.
+     * Stores offsets rather than indexes to simplify the code and use the same list
+     * for both increments (in span()) and decrements (in spanBack()).
+     *
+     * <p>Assumption: The maximum offset is limited, and the offsets that are stored at any one time
+     * are relatively dense, that is,
+     * there are normally no gaps of hundreds or thousands of offset values.
+     *
+     * <p>This class optionally also tracks the minimum non-negative count for each position,
+     * intended to count the smallest number of elements of any path leading to that position.
+     *
+     * <p>The implementation uses a circular buffer of count integers,
+     * each indicating whether the corresponding offset is in the list,
+     * and its path element count.
+     * This avoids inserting into a sorted list of offsets (or absolute indexes)
+     * and physically moving part of the list.
+     *
+     * <p>Note: In principle, the caller should setMaxLength() to
+     * the maximum of the max string length and U16_LENGTH/U8_LENGTH
      * to account for "long" single code points.
-     * 
-     * Note: If maxLength were guaranteed to be no more than 32 or 64, the list could be stored as bit flags in a single
-     * integer. Rather than handling a circular buffer with a start list index, the integer would simply be shifted when
-     * lower offsets are removed. UnicodeSet does not have a limit on the lengths of strings.
+     *
+     * <p>Note: An earlier version did not track counts and stored only byte flags.
+     * With boolean flags, if maxLength were guaranteed to be no more than 32 or 64,
+     * the list could be stored as bit flags in a single integer.
+     * Rather than handling a circular buffer with a start list index,
+     * the integer would simply be shifted when lower offsets are removed.
+     * UnicodeSet does not have a limit on the lengths of strings.
      */
-    static class OffsetList {
-        private boolean[] list;
+    private static final class OffsetList {
+        private int[] list;
         private int length;
         private int start;
 
         public OffsetList() {
-            list = new boolean[16];  // default size
+            list = new int[16];  // default size
         }
 
         public void setMaxLength(int maxLength) {
             if (maxLength > list.length) {
-                list = new boolean[maxLength];
+                list = new int[maxLength];
             }
             clear();
         }
 
         public void clear() {
             for (int i = list.length; i-- > 0;) {
-                list[i] = false;
+                list[i] = 0;
             }
             start = length = 0;
         }
@@ -860,55 +1048,97 @@ public class UnicodeSetStringSpan {
             return (length == 0);
         }
 
-        // Reduce all stored offsets by delta, used when the current position
-        // moves by delta.
-        // There must not be any offsets lower than delta.
-        // If there is an offset equal to delta, it is removed.
-        // delta=[1..maxLength]
+        /**
+         * Reduces all stored offsets by delta, used when the current position moves by delta.
+         * There must not be any offsets lower than delta.
+         * If there is an offset equal to delta, it is removed.
+         *
+         * @param delta [1..maxLength]
+         */
         public void shift(int delta) {
             int i = start + delta;
             if (i >= list.length) {
                 i -= list.length;
             }
-            if (list[i]) {
-                list[i] = false;
+            if (list[i] != 0) {
+                list[i] = 0;
                 --length;
             }
             start = i;
         }
 
-        // Add an offset. The list must not contain it yet.
-        // offset=[1..maxLength]
+        /**
+         * Adds an offset. The list must not contain it yet.
+         * @param offset [1..maxLength]
+         */
         public void addOffset(int offset) {
             int i = start + offset;
             if (i >= list.length) {
                 i -= list.length;
             }
-            list[i] = true;
+            assert list[i] == 0;
+            list[i] = 1;
             ++length;
         }
 
-        // offset=[1..maxLength]
+        /**
+         * Adds an offset and updates its count.
+         * The list may already contain the offset.
+         * @param offset [1..maxLength]
+         */
+        public void addOffsetAndCount(int offset, int count) {
+            assert count > 0;
+            int i = start + offset;
+            if (i >= list.length) {
+                i -= list.length;
+            }
+            if (list[i] == 0) {
+                list[i] = count;
+                ++length;
+            } else if (count < list[i]) {
+                list[i] = count;
+            }
+        }
+
+        /**
+         * @param offset [1..maxLength]
+         */
         public boolean containsOffset(int offset) {
             int i = start + offset;
             if (i >= list.length) {
                 i -= list.length;
             }
-            return list[i];
+            return list[i] != 0;
         }
 
-        // Find the lowest stored offset from a non-empty list, remove it,
-        // and reduce all other offsets by this minimum.
-        // Returns [1..maxLength].
-        public int popMinimum() {
+        /**
+         * @param offset [1..maxLength]
+         */
+        public boolean hasCountAtOffset(int offset, int count) {
+            int i = start + offset;
+            if (i >= list.length) {
+                i -= list.length;
+            }
+            int oldCount = list[i];
+            return oldCount != 0 && oldCount <= count;
+        }
+
+        /**
+         * Finds the lowest stored offset from a non-empty list, removes it,
+         * and reduces all other offsets by this minimum.
+         * @return min=[1..maxLength]
+         */
+        public int popMinimum(OutputInt outCount) {
             // Look for the next offset in list[start+1..list.length-1].
             int i = start, result;
             while (++i < list.length) {
-                if (list[i]) {
-                    list[i] = false;
+                int count = list[i];
+                if (count != 0) {
+                    list[i] = 0;
                     --length;
                     result = i - start;
                     start = i;
+                    if (outCount != null) { outCount.value = count; }
                     return result;
                 }
             }
@@ -918,12 +1148,14 @@ public class UnicodeSetStringSpan {
             // Since the list is not empty, there will be one.
             result = list.length - start;
             i = 0;
-            while (!list[i]) {
+            int count;
+            while ((count = list[i]) == 0) {
                 ++i;
             }
-            list[i] = false;
+            list[i] = 0;
             --length;
             start = i;
+            if (outCount != null) { outCount.value = count; }
             return result + i;
         }
     }
