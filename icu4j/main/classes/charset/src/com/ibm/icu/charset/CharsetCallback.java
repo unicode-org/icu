@@ -79,6 +79,40 @@ public class CharsetCallback {
      */
     private static final String ESCAPE_CSS2  = "S";
 
+    /*
+     * This list should be sync with the one in ucnv_err.c
+     */
+    private static boolean IS_DEFAULT_IGNORABLE_CODE_POINT(int c) {
+        return ((c == 0x00AD) || 
+                (c == 0x034F) || 
+                (c == 0x061C) || 
+                (c == 0x115F) || 
+                (c == 0x1160) || 
+                (0x17B4 <= c && c <= 0x17B5) || 
+                (0x180B <= c && c <= 0x180E) || 
+                (0x200B <= c && c <= 0x200F) || 
+                (0x202A <= c && c <= 0x202E) || 
+                (c == 0x2060) || 
+                (0x2066 <= c && c <= 0x2069) || 
+                (0x2061 <= c && c <= 0x2064) || 
+                (0x206A <= c && c <= 0x206F) || 
+                (c == 0x3164) || 
+                (0x0FE00 <= c && c <= 0x0FE0F) || 
+                (c == 0x0FEFF) || 
+                (c == 0x0FFA0) || 
+                (0x01BCA0  <= c && c <= 0x01BCA3) || 
+                (0x01D173 <= c && c <= 0x01D17A) || 
+                (c == 0x0E0001) || 
+                (0x0E0020 <= c && c <= 0x0E007F) || 
+                (0x0E0100 <= c && c <= 0x0E01EF) || 
+                (c == 0x2065) || 
+                (0x0FFF0 <= c && c <= 0x0FFF8) || 
+                (c == 0x0E0000) || 
+                (0x0E0002 <= c && c <= 0x0E001F) || 
+                (0x0E0080 <= c && c <= 0x0E00FF) || 
+                (0x0E01F0 <= c && c <= 0x0E0FFF)
+                );
+    }
     /**
      * Decoder Callback interface
      * @stable ICU 3.6
@@ -160,7 +194,9 @@ public class CharsetCallback {
         public CoderResult call(CharsetEncoderICU encoder, Object context, 
                 CharBuffer source, ByteBuffer target, IntBuffer offsets, 
                 char[] buffer, int length, int cp, CoderResult cr){
-            if(context==null){
+            if (cr.isUnmappable() && IS_DEFAULT_IGNORABLE_CODE_POINT(cp)) {
+                return CoderResult.UNDERFLOW;
+            }else if(context==null){
                 return encoder.cbFromUWriteSub(encoder, source, target, offsets);
             }else if(((String)context).equals(SUB_STOP_ON_ILLEGAL)){
                 if(!cr.isUnmappable()){
@@ -207,6 +243,9 @@ public class CharsetCallback {
         public CoderResult call(CharsetEncoderICU encoder, Object context, 
                 CharBuffer source, ByteBuffer target, IntBuffer offsets, 
                 char[] buffer, int length, int cp, CoderResult cr){
+            if (cr.isUnmappable() && IS_DEFAULT_IGNORABLE_CODE_POINT(cp)) {
+                return CoderResult.UNDERFLOW;
+            }
             return cr;
         }
     };
@@ -246,6 +285,10 @@ public class CharsetCallback {
             char[] valueString = new char[VALUE_STRING_LENGTH];
             int valueStringLength = 0;
             int i = 0;
+            
+            if (cr.isUnmappable() && IS_DEFAULT_IGNORABLE_CODE_POINT(cp)) {
+                return CoderResult.UNDERFLOW;
+            }
             
             if (context == null || !(context instanceof String)) {
                 while (i < length) {
