@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2013, International Business Machines
+*   Copyright (C) 2003-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -71,12 +71,14 @@ ConversionTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
         case 0: name="TestToUnicode"; if (exec) TestToUnicode(); break;
         case 1: name="TestFromUnicode"; if (exec) TestFromUnicode(); break;
         case 2: name="TestGetUnicodeSet"; if (exec) TestGetUnicodeSet(); break;
+        case 3: name="TestDefaultIgnorableCallback"; if (exec) TestDefaultIgnorableCallback(); break;
 #else
         case 0:
         case 1:
-        case 2: name="skip"; break;
+        case 2:
+        case 3: name="skip"; break;
 #endif
-        case 3: name="TestGetUnicodeSet2"; if (exec) TestGetUnicodeSet2(); break;
+        case 4: name="TestGetUnicodeSet2"; if (exec) TestGetUnicodeSet2(); break;
         default: name=""; break; //needed to end loop
     }
 }
@@ -647,6 +649,44 @@ ConversionTest::TestGetUnicodeSet2() {
 
     delete [] s0;
 }
+
+// Test all codepoints which has the default ignorable Unicode property are ignored if they have no mapping
+// If there are any failures, the hard coded list (IS_DEFAULT_IGNORABLE_CODE_POINT) in ucnv_err.c should be updated
+void
+ConversionTest::TestDefaultIgnorableCallback() {
+    UErrorCode status = U_ZERO_ERROR;
+    const char *name = "euc-jp-2007";
+    const char *pattern = "[:Default_Ignorable_Code_Point:]";
+    UnicodeSet *set = new UnicodeSet(pattern, status);
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create Unicodeset: %s - %s\n", pattern, u_errorName(status));
+        return;
+    }
+    UConverter *cnv = cnv_open(name, status);
+    if (U_FAILURE(status)) {
+        errln("Unable to open converter: %s - %s\n", name, u_errorName(status));
+        return;
+    }
+    // set callback for the converter
+    ucnv_setFromUCallBack(cnv, UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &status);
+
+    UChar32 input[1];
+    char output[10];
+    int size = set->size();
+    for (int i = 0; i < size; i++) {
+        status = U_ZERO_ERROR;
+
+        input[0] = set->charAt(i);
+
+        ucnv_fromUChars(cnv, output, 10, UnicodeString::fromUTF32(input, 1).getTerminatedBuffer(), -1, &status);
+        if (U_FAILURE(status)) {
+            errln("Callback did not ignore code point: 0x%06X on failed conversion - %s", input[0], u_errorName(status));
+        }
+    }
+    delete set;
+    ucnv_close(cnv);
+}
+
 
 // open testdata or ICU data converter ------------------------------------- ***
 
