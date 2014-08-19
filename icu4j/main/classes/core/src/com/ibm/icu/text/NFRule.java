@@ -384,7 +384,7 @@ final class NFRule {
         int pluralRuleStart = ruleText.indexOf("$(");
         int pluralRuleEnd = (pluralRuleStart >= 0 ? ruleText.indexOf(')', pluralRuleStart) : -1);
         if (pluralRuleEnd >= 0) {
-            int endType = ruleText.indexOf(',');
+            int endType = ruleText.indexOf(',', pluralRuleStart);
             if (endType < 0) {
                 throw new IllegalArgumentException("Rule \"" + ruleText + "\" does not have a defined type");
             }

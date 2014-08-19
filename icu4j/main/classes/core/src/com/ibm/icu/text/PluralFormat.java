@@ -755,7 +755,7 @@ public class PluralFormat extends UFormat {
             else {
                 currMatchIndex = source.indexOf(currArg);
             }
-            if (currMatchIndex > matchedIndex && (matchedWord == null || currArg.length() > matchedWord.length())) {
+            if (currMatchIndex >= 0 && currMatchIndex >= matchedIndex && (matchedWord == null || currArg.length() > matchedWord.length())) {
                 matchedIndex = currMatchIndex;
                 matchedWord = currArg;
                 keyword = pattern.substring(partStart.getLimit(), partLimit.getIndex());
