@@ -434,15 +434,19 @@ enum URBNFRuleSetTag {
  *     <td width="37">$(cardinal,<i>plural syntax</i>)</td>
  *     <td width="23"></td>
  *     <td width="165" valign="top">in all rule sets</td>
- *     <td>This provides the ability to choose a word based on the number divided by the base value for the specified locale.
- *     This uses the cardinal plural rules from PluralFormat. All strings used in the plural format are treated as the same base value for parsing.</td>
+ *     <td>This provides the ability to choose a word based on the number divided by the radix to the power of the
+ *     exponent of the base value for the specified locale, which is normally equivalent to the &lt;&lt; value.
+ *     This uses the cardinal plural rules from PluralFormat. All strings used in the plural format are treated
+ *     as the same base value for parsing.</td>
  *   </tr>
  *   <tr>
  *     <td width="37">$(ordinal,<i>plural syntax</i>)</td>
  *     <td width="23"></td>
  *     <td width="165" valign="top">in all rule sets</td>
- *     <td>This provides the ability to choose a word based on the number divided by the base value for the specified locale.
- *     This uses the ordinal plural rules from PluralFormat. All strings used in the plural format are treated as the same base value for parsing.</td>
+ *     <td>This provides the ability to choose a word based on the number divided by the radix to the power of the
+ *     exponent of the base value for the specified locale, which is normally equivalent to the &lt;&lt; value.
+ *     This uses the ordinal plural rules from PluralFormat. All strings used in the plural format are treated
+ *     as the same base value for parsing.</td>
  *   </tr>
  * </table>
  *
