@@ -381,12 +381,14 @@ final class NFRule {
             sub2 = extractSubstitution(owner, predecessor);
         }
         ruleText = this.ruleText;
-        if (ruleText.startsWith("$(") && ruleText.endsWith(")")) {
+        int pluralRuleStart = ruleText.indexOf("$(");
+        int pluralRuleEnd = (pluralRuleStart >= 0 ? ruleText.indexOf(')', pluralRuleStart) : -1);
+        if (pluralRuleEnd >= 0) {
             int endType = ruleText.indexOf(',');
             if (endType < 0) {
                 throw new IllegalArgumentException("Rule \"" + ruleText + "\" does not have a defined type");
             }
-            String type = this.ruleText.substring(2, endType);
+            String type = this.ruleText.substring(pluralRuleStart + 2, endType);
             PluralRules.PluralType pluralType;
             if ("cardinal".equals(type)) {
                 pluralType = PluralRules.PluralType.CARDINAL;
@@ -398,7 +400,7 @@ final class NFRule {
                 throw new IllegalArgumentException(type + " is an unknown type");
             }
             rulePatternFormat = formatter.createPluralFormat(pluralType,
-                    ruleText.substring(endType + 1, ruleText.length() - 1));
+                    ruleText.substring(endType + 1, pluralRuleEnd));
         }
     }
 
@@ -688,17 +690,29 @@ final class NFRule {
         // into the right places in toInsertInto (notice we do the
         // substitutions in reverse order so that the offsets don't get
         // messed up)
+        int pluralRuleStart = ruleText.length();
+        int lengthOffset = 0;
         if (rulePatternFormat == null) {
             toInsertInto.insert(pos, ruleText);
         }
         else {
-            toInsertInto.insert(pos, rulePatternFormat.format(baseValue == 0 ? number : number/baseValue));
+            pluralRuleStart = ruleText.indexOf("$(");
+            int pluralRuleEnd = ruleText.indexOf(')', pluralRuleStart);
+            int initialLength = toInsertInto.length();
+            if (pluralRuleEnd < ruleText.length() - 1) {
+                toInsertInto.insert(pos, ruleText.substring(pluralRuleEnd + 1));
+            }
+            toInsertInto.insert(pos, rulePatternFormat.format((long)(number/Math.pow(radix, exponent))));
+            if (pluralRuleStart > 0) {
+                toInsertInto.insert(pos, ruleText.substring(0, pluralRuleStart));
+            }
+            lengthOffset = ruleText.length() - (toInsertInto.length() - initialLength);
         }
         if (!sub2.isNullSubstitution()) {
-            sub2.doSubstitution(number, toInsertInto, pos);
+            sub2.doSubstitution(number, toInsertInto, pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0));
         }
         if (!sub1.isNullSubstitution()) {
-            sub1.doSubstitution(number, toInsertInto, pos);
+            sub1.doSubstitution(number, toInsertInto, pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0));
         }
     }
 
@@ -718,17 +732,29 @@ final class NFRule {
         // [again, we have two copies of this routine that do the same thing
         // so that we don't sacrifice precision in a long by casting it
         // to a double]
+        int pluralRuleStart = ruleText.length();
+        int lengthOffset = 0;
         if (rulePatternFormat == null) {
             toInsertInto.insert(pos, ruleText);
         }
         else {
-            toInsertInto.insert(pos, rulePatternFormat.format(number));
+            pluralRuleStart = ruleText.indexOf("$(");
+            int pluralRuleEnd = ruleText.indexOf(')', pluralRuleStart);
+            int initialLength = toInsertInto.length();
+            if (pluralRuleEnd < ruleText.length() - 1) {
+                toInsertInto.insert(pos, ruleText.substring(pluralRuleEnd + 1));
+            }
+            toInsertInto.insert(pos, rulePatternFormat.format((long)(number/Math.pow(radix, exponent))));
+            if (pluralRuleStart > 0) {
+                toInsertInto.insert(pos, ruleText.substring(0, pluralRuleStart));
+            }
+            lengthOffset = ruleText.length() - (toInsertInto.length() - initialLength);
         }
         if (!sub2.isNullSubstitution()) {
-            sub2.doSubstitution(number, toInsertInto, pos);
+            sub2.doSubstitution(number, toInsertInto, pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0));
         }
         if (!sub1.isNullSubstitution()) {
-            sub1.doSubstitution(number, toInsertInto, pos);
+            sub1.doSubstitution(number, toInsertInto, pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0));
         }
     }
 
@@ -1137,7 +1163,16 @@ final class NFRule {
             pluralFormatKey.parseType(str, scanner, position);
             int start = position.getBeginIndex();
             if (start >= 0) {
-                return new int[]{start, position.getEndIndex() - start};
+                int pluralRuleStart = ruleText.indexOf("$(");
+                int pluralRuleSuffix = ruleText.indexOf(')', pluralRuleStart) + 1;
+                int matchLen = position.getEndIndex() - start;
+                String prefix = ruleText.substring(0, pluralRuleStart);
+                String suffix = ruleText.substring(pluralRuleSuffix);
+                if (str.regionMatches(start - prefix.length(), prefix, 0, prefix.length())
+                        && str.regionMatches(start + matchLen, suffix, 0, suffix.length()))
+                {
+                    return new int[]{start - prefix.length(), matchLen + prefix.length() + suffix.length()};
+                }
             }
             return new int[]{-1, 0};
         }
