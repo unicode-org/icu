@@ -535,7 +535,7 @@ void PluralFormat::parseType(const UnicodeString& source, const NFRule *rbnfLeni
         else {
             currMatchIndex = source.indexOf(currArg);
         }
-        if (currMatchIndex > matchedIndex && currArg.length() > matchedWord.length()) {
+        if (currMatchIndex >= 0 && currMatchIndex >= matchedIndex && currArg.length() > matchedWord.length()) {
             matchedIndex = currMatchIndex;
             matchedWord = currArg;
             keyword = pattern.tempSubString(partStart->getLimit(), partLimit->getIndex() - partStart->getLimit());
