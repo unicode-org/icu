@@ -2023,7 +2023,8 @@ void IntlTestRBNF::TestPluralRules() {
             "200: << hundred[ >>];"
             "300: << hundreds[ >>];"
             "500: << hundredss[ >>];"
-            "1000: <<$(cardinal,one{ thousand}few{ thousands}other{ thousandss})[ >>];");
+            "1000: << $(cardinal,one{thousand}few{thousands}other{thousandss})[ >>];"
+            "1000000: << $(cardinal,one{million}few{millions}other{millionss})[ >>];");
     RuleBasedNumberFormat ruFormatter(ruRules, Locale("ru"), parseError, status);
     const char* const ruTestData[][2] = {
             { "1", "one" },
@@ -2031,8 +2032,13 @@ void IntlTestRBNF::TestPluralRules() {
             { "125", "hundred twenty-five" },
             { "399", "three hundreds ninety-nine" },
             { "1,000", "one thousand" },
+            { "1,001", "one thousand one" },
             { "2,000", "two thousands" },
+            { "2,001", "two thousands one" },
+            { "2,002", "two thousands two" },
+            { "3,333", "three thousands three hundreds thirty-three" },
             { "5,000", "five thousandss" },
+            { "11,000", "eleven thousandss" },
             { "21,000", "twenty-one thousand" },
             { "22,000", "twenty-two thousands" },
             { NULL, NULL }
