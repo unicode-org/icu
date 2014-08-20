@@ -11,6 +11,7 @@ keyTypeData:table(nofallback){
         ca{
             islamicc{"islamic-civil"}
         }
+        tz:alias{"/ICUDATA/timezoneTypes/bcpTypeAlias/tz"}
     }
     keyMap{
         calendar{"ca"}
@@ -28,6 +29,7 @@ keyTypeData:table(nofallback){
         kv{""}
         numbers{"nu"}
         timezone{"tz"}
+        va{""}
         variabletop{"vt"}
     }
     typeAlias{
@@ -486,6 +488,9 @@ keyTypeData:table(nofallback){
             vaii{""}
         }
         timezone:alias{"/ICUDATA/timezoneTypes/typeMap/timezone"}
+        va{
+            posix{""}
+        }
         variabletop{
             CODEPOINTS{""}
         }
