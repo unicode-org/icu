@@ -382,7 +382,7 @@ final class NFRule {
         }
         ruleText = this.ruleText;
         int pluralRuleStart = ruleText.indexOf("$(");
-        int pluralRuleEnd = (pluralRuleStart >= 0 ? ruleText.indexOf(')', pluralRuleStart) : -1);
+        int pluralRuleEnd = (pluralRuleStart >= 0 ? ruleText.indexOf(")$", pluralRuleStart) : -1);
         if (pluralRuleEnd >= 0) {
             int endType = ruleText.indexOf(',', pluralRuleStart);
             if (endType < 0) {
@@ -697,10 +697,10 @@ final class NFRule {
         }
         else {
             pluralRuleStart = ruleText.indexOf("$(");
-            int pluralRuleEnd = ruleText.indexOf(')', pluralRuleStart);
+            int pluralRuleEnd = ruleText.indexOf(")$", pluralRuleStart);
             int initialLength = toInsertInto.length();
             if (pluralRuleEnd < ruleText.length() - 1) {
-                toInsertInto.insert(pos, ruleText.substring(pluralRuleEnd + 1));
+                toInsertInto.insert(pos, ruleText.substring(pluralRuleEnd + 2));
             }
             toInsertInto.insert(pos, rulePatternFormat.format((long)(number/Math.pow(radix, exponent))));
             if (pluralRuleStart > 0) {
@@ -739,10 +739,10 @@ final class NFRule {
         }
         else {
             pluralRuleStart = ruleText.indexOf("$(");
-            int pluralRuleEnd = ruleText.indexOf(')', pluralRuleStart);
+            int pluralRuleEnd = ruleText.indexOf(")$", pluralRuleStart);
             int initialLength = toInsertInto.length();
             if (pluralRuleEnd < ruleText.length() - 1) {
-                toInsertInto.insert(pos, ruleText.substring(pluralRuleEnd + 1));
+                toInsertInto.insert(pos, ruleText.substring(pluralRuleEnd + 2));
             }
             toInsertInto.insert(pos, rulePatternFormat.format((long)(number/Math.pow(radix, exponent))));
             if (pluralRuleStart > 0) {
@@ -1164,7 +1164,7 @@ final class NFRule {
             int start = position.getBeginIndex();
             if (start >= 0) {
                 int pluralRuleStart = ruleText.indexOf("$(");
-                int pluralRuleSuffix = ruleText.indexOf(')', pluralRuleStart) + 1;
+                int pluralRuleSuffix = ruleText.indexOf(")$", pluralRuleStart) + 2;
                 int matchLen = position.getEndIndex() - start;
                 String prefix = ruleText.substring(0, pluralRuleStart);
                 String suffix = ruleText.substring(pluralRuleSuffix);
