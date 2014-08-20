@@ -52,7 +52,7 @@
 #include "digitlst.h"
 #include <float.h>
 #include "sharednumberformat.h"
-#include "lrucache.h"
+#include "unifiedcache.h"
 
 //#define FMT_DEBUG
 
@@ -148,10 +148,6 @@ static const char *gFormatKeys[UNUM_FORMAT_STYLE_COUNT] = {
     "currencyFormat"  // UNUM_CASH_CURRENCY
 };
 
-static icu::LRUCache *gNumberFormatCache = NULL;
-static UMutex gNumberFormatCacheMutex = U_MUTEX_INITIALIZER;
-static icu::UInitOnce gNumberFormatCacheInitOnce = U_INITONCE_INITIALIZER;
-
 // Static hashtable cache of NumberingSystem objects used by NumberFormat
 static UHashtable * NumberingSystem_cache = NULL;
 static UMutex nscacheMutex = U_MUTEX_INITIALIZER;
@@ -184,11 +180,6 @@ static UBool U_CALLCONV numfmt_cleanup(void) {
         // delete NumberingSystem_cache;
         uhash_close(NumberingSystem_cache);
         NumberingSystem_cache = NULL;
-    }
-    gNumberFormatCacheInitOnce.reset();
-    if (gNumberFormatCache) {
-        delete gNumberFormatCache;
-        gNumberFormatCache = NULL;
     }
     return TRUE;
 }
@@ -1243,45 +1234,23 @@ static void U_CALLCONV nscacheInit() {
     uhash_setValueDeleter(NumberingSystem_cache, deleteNumberingSystem);
 }
 
-static SharedObject *U_CALLCONV createSharedNumberFormat(
-        const char *localeId, UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
+template<> U_I18N_API
+const SharedNumberFormat *LocaleCacheKey<SharedNumberFormat>::createObject(
+        const void * /*unused*/, UErrorCode &status) const {
+    const char *localeId = fLoc.getName();
     NumberFormat *nf = NumberFormat::internalCreateInstance(
             localeId, UNUM_DECIMAL, status);
     if (U_FAILURE(status)) {
         return NULL;
     }
-    SharedObject *result = new SharedNumberFormat(nf);
+    SharedNumberFormat *result = new SharedNumberFormat(nf);
     if (result == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         delete nf;
         return NULL;
     }
+    result->addRef();
     return result;
-}
-
-static void U_CALLCONV numberFormatCacheInit(UErrorCode &status) {
-    U_ASSERT(gNumberFormatCache == NULL);
-    ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, numfmt_cleanup);
-    gNumberFormatCache = new SimpleLRUCache(100, &createSharedNumberFormat, status);
-    if (U_FAILURE(status)) {
-        delete gNumberFormatCache;
-        gNumberFormatCache = NULL;
-    }
-}
-
-static void getSharedNumberFormatFromCache(
-        const char *locale,
-        const SharedNumberFormat *&ptr,
-        UErrorCode &status) {
-    umtx_initOnce(gNumberFormatCacheInitOnce, &numberFormatCacheInit, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-    Mutex lock(&gNumberFormatCacheMutex);
-    gNumberFormatCache->get(locale, ptr, status);
 }
 
 const SharedNumberFormat* U_EXPORT2
@@ -1294,7 +1263,7 @@ NumberFormat::createSharedInstance(const Locale& loc, UNumberFormatStyle kind, U
         return NULL;
     }
     const SharedNumberFormat *result = NULL;
-    getSharedNumberFormatFromCache(loc.getName(), result, status);
+    UnifiedCache::getByLocale(loc, result, status);
     return result;
 }
 

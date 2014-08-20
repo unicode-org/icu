@@ -28,6 +28,9 @@
 #include "tsmthred.h"
 #include "unicode/ushape.h"
 #include "unicode/translit.h"
+#include "sharedobject.h"
+#include "unifiedcache.h"
+#include "uassert.h"
 
 #if U_PLATFORM_USES_ONLY_WIN32_API
     /* Prefer native Windows APIs even if POSIX is implemented (i.e., on Cygwin). */
@@ -206,6 +209,12 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
         name = "TestConditionVariables";
         if (exec) {
             TestConditionVariables();
+        }
+        break;
+    case 8:
+        name = "TestUnifiedCache";
+        if (exec) {
+            TestUnifiedCache();
         }
         break;
     default:
@@ -1691,5 +1700,103 @@ void MultithreadTest::TestConditionVariables() {
         delete threads[i];
     }
 }
-            
+
+static const char *gCacheLocales[] = {"en_US", "en_GB", "fr_FR", "fr"};
+static int32_t gObjectsCreated = 0;
+static const int32_t CACHE_LOAD = 3;
+
+class UCTMultiThreadItem : public SharedObject {
+  public:
+    char *value;
+    UCTMultiThreadItem(const char *x) : value(NULL) { 
+        value = uprv_strdup(x);
+    }
+    virtual ~UCTMultiThreadItem() { 
+        uprv_free(value);
+    }
+};
+
+template<> U_EXPORT
+const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
+        const void * /*unused*/, UErrorCode & /* status */) const {
+    // Since multiple threads are hitting the cache for the first time,
+    // no objects should be created yet.
+    umtx_lock(&gCTMutex);
+    if (gObjectsCreated != 0) {
+        gThisTest->errln("Expected no objects to be created yet.");
+    }
+    umtx_unlock(&gCTMutex);
+
+    // Big, expensive object that takes 1 second to create.
+    SimpleThread::sleep(1000);
+
+    // Log that we created an object.
+    umtx_lock(&gCTMutex);
+    ++gObjectsCreated;
+    umtx_unlock(&gCTMutex);
+    UCTMultiThreadItem *result = new UCTMultiThreadItem(fLoc.getName());
+    result->addRef();
+    return result;
+}
+
+class UnifiedCacheThread: public SimpleThread {
+  public:
+    UnifiedCacheThread(const char *loc) : fLoc(loc) {};
+    ~UnifiedCacheThread() {};
+    void run();
+    const char *fLoc;
+};
+
+void UnifiedCacheThread::run() {
+    UErrorCode status = U_ZERO_ERROR;
+    const UnifiedCache *cache = UnifiedCache::getInstance(status);
+    U_ASSERT(status == U_ZERO_ERROR);
+    const UCTMultiThreadItem *item = NULL;
+    cache->get(LocaleCacheKey<UCTMultiThreadItem>(fLoc), item, status);
+    U_ASSERT(item != NULL);
+    if (uprv_strcmp(fLoc, item->value)) {
+      gThisTest->errln("Expected %s, got %s", fLoc, item->value);
+    }
+    item->removeRef();
+
+    // Mark this thread as finished
+    umtx_lock(&gCTMutex);
+    ++gFinishedThreads;
+    umtx_condBroadcast(&gCTConditionVar);
+    umtx_unlock(&gCTMutex);
+}
+
+void MultithreadTest::TestUnifiedCache() {
+    UErrorCode status = U_ZERO_ERROR;
+    const UnifiedCache *cache = UnifiedCache::getInstance(status);
+    U_ASSERT(cache != NULL);
+    cache->flush();
+    gThisTest = this;
+    gFinishedThreads = 0;
+    gObjectsCreated = 0;
+
+    UnifiedCacheThread *threads[CACHE_LOAD][LENGTHOF(gCacheLocales)];
+    for (int32_t i=0; i<CACHE_LOAD; ++i) {
+        for (int32_t j=0; j<LENGTHOF(gCacheLocales); ++j) {
+            threads[i][j] = new UnifiedCacheThread(gCacheLocales[j]);
+            threads[i][j]->start();
+        }
+    }
+    // Wait on all the threads to complete verify that LENGTHOF(gCacheLocales)
+    // objects were created.
+    umtx_lock(&gCTMutex);
+    while (gFinishedThreads < CACHE_LOAD*LENGTHOF(gCacheLocales)) {
+        umtx_condWait(&gCTConditionVar, &gCTMutex);
+    }
+    assertEquals("Objects created", LENGTHOF(gCacheLocales), gObjectsCreated);
+    umtx_unlock(&gCTMutex);
+
+    // clean up threads
+    for (int32_t i=0; i<CACHE_LOAD; ++i) {
+        for (int32_t j=0; j<LENGTHOF(gCacheLocales); ++j) {
+            delete threads[i][j];
+        }
+    }
+}
+
 #endif // ICU_USE_THREADS

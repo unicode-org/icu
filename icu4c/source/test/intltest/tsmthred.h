@@ -48,6 +48,7 @@ public:
     void TestString();
     void TestAnyTranslit();
     void TestConditionVariables();
+    void TestUnifiedCache();
 
 };
 

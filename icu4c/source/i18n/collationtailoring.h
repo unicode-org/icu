@@ -90,6 +90,19 @@ private:
     CollationTailoring(const CollationTailoring &other);
 };
 
+struct CollationCacheEntry : public SharedObject {
+    CollationCacheEntry(const Locale &loc, const CollationTailoring *t)
+            : validLocale(loc), tailoring(t) {
+        if(t != NULL) {
+            t->addRef();
+        }
+    }
+    ~CollationCacheEntry();
+
+    Locale validLocale;
+    const CollationTailoring *tailoring;
+};
+
 U_NAMESPACE_END
 
 #endif  // !UCONFIG_NO_COLLATION
