@@ -556,7 +556,7 @@ public class RbnfTest extends TestFmwk {
     public void TestPluralRules() {
         String enRules = "%digits-ordinal:"
                 + "-x: −>>;"
-                + "0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th});";
+                + "0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th})$;";
         RuleBasedNumberFormat enFormatter = new RuleBasedNumberFormat(enRules, ULocale.ENGLISH);
         String[][] enTestData = {
                 { "1", "1st" },
@@ -612,8 +612,8 @@ public class RbnfTest extends TestFmwk {
                 + "200: <<сти[ >>];"
                 + "300: <<ста[ >>];"
                 + "500: <<сот[ >>];"
-                + "1000: << $(cardinal,one{тысяча}few{тысячи}other{тысяч})[ >>];"
-                + "1000000: << $(cardinal,one{миллион}few{миллионы}other{миллионов})[ >>];";
+                + "1000: << $(cardinal,one{тысяча}few{тысячи}other{тысяч})$[ >>];"
+                + "1000000: << $(cardinal,one{миллион}few{миллионы}other{миллионов})$[ >>];";
         RuleBasedNumberFormat ruFormatter = new RuleBasedNumberFormat(ruRules, new ULocale("ru"));
         String[][] ruTestData = {
                 { "1", "один" },
@@ -630,6 +630,7 @@ public class RbnfTest extends TestFmwk {
                 { "11,000", "одиннадцать тысяч" },
                 { "21,000", "двадцать один тысяча" },
                 { "22,000", "двадцать два тысячи" },
+                { "25,001", "двадцать пять тысяч один" },
         };
 
         doTest(ruFormatter, ruTestData, true);
