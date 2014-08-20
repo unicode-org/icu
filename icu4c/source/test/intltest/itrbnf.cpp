@@ -1961,7 +1961,7 @@ IntlTestRBNF::TestSetDecimalFormatSymbols() {
 
 void IntlTestRBNF::TestPluralRules() {
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeString enRules("%digits-ordinal:-x: −>>;0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th});");
+    UnicodeString enRules("%digits-ordinal:-x: −>>;0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th})$;");
     UParseError parseError;
     RuleBasedNumberFormat enFormatter(enRules, Locale::getEnglish(), parseError, status);
     if (U_FAILURE(status)) {
@@ -2023,8 +2023,8 @@ void IntlTestRBNF::TestPluralRules() {
             "200: << hundred[ >>];"
             "300: << hundreds[ >>];"
             "500: << hundredss[ >>];"
-            "1000: << $(cardinal,one{thousand}few{thousands}other{thousandss})[ >>];"
-            "1000000: << $(cardinal,one{million}few{millions}other{millionss})[ >>];");
+            "1000: << $(cardinal,one{thousand}few{thousands}other{thousandss})$[ >>];"
+            "1000000: << $(cardinal,one{million}few{millions}other{millionss})$[ >>];");
     RuleBasedNumberFormat ruFormatter(ruRules, Locale("ru"), parseError, status);
     const char* const ruTestData[][2] = {
             { "1", "one" },
@@ -2041,6 +2041,7 @@ void IntlTestRBNF::TestPluralRules() {
             { "11,000", "eleven thousandss" },
             { "21,000", "twenty-one thousand" },
             { "22,000", "twenty-two thousands" },
+            { "25,001", "twenty-five thousandss one" },
             { NULL, NULL }
     };
 

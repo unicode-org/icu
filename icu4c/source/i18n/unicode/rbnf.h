@@ -431,7 +431,7 @@ enum URBNFRuleSetTag {
  *     <td>Omit the optional text if multiplying the number by the rule's base value yields 1.</td>
  *   </tr>
  *   <tr>
- *     <td width="37">$(cardinal,<i>plural syntax</i>)</td>
+ *     <td width="37">$(cardinal,<i>plural syntax</i>)$</td>
  *     <td width="23"></td>
  *     <td width="165" valign="top">in all rule sets</td>
  *     <td>This provides the ability to choose a word based on the number divided by the radix to the power of the
@@ -440,7 +440,7 @@ enum URBNFRuleSetTag {
  *     as the same base value for parsing.</td>
  *   </tr>
  *   <tr>
- *     <td width="37">$(ordinal,<i>plural syntax</i>)</td>
+ *     <td width="37">$(ordinal,<i>plural syntax</i>)$</td>
  *     <td width="23"></td>
  *     <td width="165" valign="top">in all rule sets</td>
  *     <td>This provides the ability to choose a word based on the number divided by the radix to the power of the
