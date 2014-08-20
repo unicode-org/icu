@@ -135,7 +135,7 @@ class LocaleCacheKey : public CacheKey<T> {
    Locale   fLoc;
  public:
    LocaleCacheKey(const Locale &loc) : fLoc(loc) {};
-   LocaleCacheKey(const LocaleCacheKey &other)
+   LocaleCacheKey(const LocaleCacheKey<T> &other)
            : CacheKey<T>(other), fLoc(other.fLoc) { }
    virtual ~LocaleCacheKey() { }
    virtual int32_t hashCode() const {
