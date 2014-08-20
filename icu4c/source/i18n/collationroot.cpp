@@ -30,7 +30,7 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
-static const CollationTailoring *rootSingleton = NULL;
+static const CollationCacheEntry *rootSingleton = NULL;
 static UInitOnce initOnce = U_INITONCE_INITIALIZER;
 
 }  // namespace
@@ -61,15 +61,26 @@ CollationRoot::load(UErrorCode &errorCode) {
     CollationDataReader::read(NULL, inBytes, udata_getLength(t->memory), *t, errorCode);
     if(U_FAILURE(errorCode)) { return; }
     ucln_i18n_registerCleanup(UCLN_I18N_COLLATION_ROOT, uprv_collation_root_cleanup);
-    t->addRef();  // The rootSingleton takes ownership.
-    rootSingleton = t.orphan();
+    CollationCacheEntry *entry = new CollationCacheEntry(Locale::getRoot(), t.getAlias());
+    if(entry != NULL) {
+        t.orphan();  // The rootSingleton took ownership of the tailoring.
+        entry->addRef();
+        rootSingleton = entry;
+    }
+}
+
+const CollationCacheEntry *
+CollationRoot::getRootCacheEntry(UErrorCode &errorCode) {
+    umtx_initOnce(initOnce, CollationRoot::load, errorCode);
+    if(U_FAILURE(errorCode)) { return NULL; }
+    return rootSingleton;
 }
 
 const CollationTailoring *
 CollationRoot::getRoot(UErrorCode &errorCode) {
     umtx_initOnce(initOnce, CollationRoot::load, errorCode);
     if(U_FAILURE(errorCode)) { return NULL; }
-    return rootSingleton;
+    return rootSingleton->tailoring;
 }
 
 const CollationData *

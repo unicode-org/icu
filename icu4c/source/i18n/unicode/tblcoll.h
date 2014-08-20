@@ -71,6 +71,7 @@
 
 U_NAMESPACE_BEGIN
 
+struct CollationCacheEntry;
 struct CollationData;
 struct CollationSettings;
 struct CollationTailoring;
@@ -789,7 +790,7 @@ private:
     friend class CollationElementIterator;
     friend class Collator;
 
-    RuleBasedCollator(const CollationTailoring *t, const Locale &vl);
+    RuleBasedCollator(const CollationCacheEntry *entry);
 
     /**
      * Enumeration of attributes that are relevant for short definition strings
@@ -801,7 +802,7 @@ private:
         ATTR_LIMIT
     };
 
-    void adoptTailoring(CollationTailoring *t);
+    void adoptTailoring(CollationTailoring *t, UErrorCode &errorCode);
 
     // Both lengths must be <0 or else both must be >=0.
     UCollationResult doCompare(const UChar *left, int32_t leftLength,
@@ -846,7 +847,8 @@ private:
 
     const CollationData *data;
     const CollationSettings *settings;  // reference-counted
-    const CollationTailoring *tailoring;  // reference-counted
+    const CollationTailoring *tailoring;  // alias of cacheEntry->tailoring
+    const CollationCacheEntry *cacheEntry;  // reference-counted
     Locale validLocale;
     uint32_t explicitlySetAttributes;
 

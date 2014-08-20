@@ -20,7 +20,6 @@
 #include "quantityformatter.h"
 #include "unicode/plurrule.h"
 #include "unicode/decimfmt.h"
-#include "lrucache.h"
 #include "uresimp.h"
 #include "unicode/ures.h"
 #include "cstring.h"
@@ -34,25 +33,11 @@
 
 #include "sharednumberformat.h"
 #include "sharedpluralrules.h"
+#include "unifiedcache.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 #define MEAS_UNIT_COUNT 46
 #define WIDTH_INDEX_COUNT (UMEASFMT_WIDTH_NARROW + 1)
-
-static icu::LRUCache *gCache = NULL;
-static UMutex gCacheMutex = U_MUTEX_INITIALIZER;
-static icu::UInitOnce gCacheInitOnce = U_INITONCE_INITIALIZER;
-
-U_CDECL_BEGIN
-static UBool U_CALLCONV measfmt_cleanup() {
-    gCacheInitOnce.reset();
-    if (gCache) {
-        delete gCache;
-        gCache = NULL;
-    }
-    return TRUE;
-}
-U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
@@ -303,9 +288,10 @@ static NumericDateFormatters *loadNumericDateFormatters(
     return result;
 }
 
-// Creates the MeasureFormatCacheData for a particular locale
-static SharedObject *U_CALLCONV createData(
-        const char *localeId, UErrorCode &status) {
+template<> U_I18N_API
+const MeasureFormatCacheData *LocaleCacheKey<MeasureFormatCacheData>::createObject(
+        const void * /*unused*/, UErrorCode &status) const {
+    const char *localeId = fLoc.getName();
     LocalUResourceBundlePointer topLevel(ures_open(NULL, localeId, &status));
     static UNumberFormatStyle currencyStyles[] = {
             UNUM_CURRENCY_PLURAL, UNUM_CURRENCY_ISO, UNUM_CURRENCY};
@@ -347,31 +333,8 @@ static SharedObject *U_CALLCONV createData(
         decfmt->setRoundingMode(DecimalFormat::kRoundDown);
     }
     result->adoptIntegerFormat(inf);
+    result->addRef();
     return result.orphan();
-}
-
-static void U_CALLCONV cacheInit(UErrorCode &status) {
-    U_ASSERT(gCache == NULL);
-    U_ASSERT(MeasureUnit::getIndexCount() == MEAS_UNIT_COUNT);
-    ucln_i18n_registerCleanup(UCLN_I18N_MEASFMT, measfmt_cleanup);
-    gCache = new SimpleLRUCache(100, &createData, status);
-    if (U_FAILURE(status)) {
-        delete gCache;
-        gCache = NULL;
-    }
-}
-
-static UBool getFromCache(
-        const char *locale,
-        const MeasureFormatCacheData *&ptr,
-        UErrorCode &status) {
-    umtx_initOnce(gCacheInitOnce, &cacheInit, status);
-    if (U_FAILURE(status)) {
-        return FALSE;
-    }
-    Mutex lock(&gCacheMutex);
-    gCache->get(locale, ptr, status);
-    return U_SUCCESS(status);
 }
 
 static UBool isTimeUnit(const MeasureUnit &mu, const char *tu) {
@@ -637,7 +600,8 @@ void MeasureFormat::initMeasureFormat(
     const char *name = locale.getName();
     setLocaleIDs(name, name);
 
-    if (!getFromCache(name, cache, status)) {
+    UnifiedCache::getByLocale(locale, cache, status);
+    if (U_FAILURE(status)) {
         return;
     }
 

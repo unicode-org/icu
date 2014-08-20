@@ -124,6 +124,9 @@
     <ClCompile Include="ulist.c">
       <Filter>collections</Filter>
     </ClCompile>
+    <ClCompile Include="unifiedcache.cpp">
+      <Filter>collections</Filter>
+    </ClCompile>
     <ClCompile Include="ustack.cpp">
       <Filter>collections</Filter>
     </ClCompile>
@@ -634,6 +637,9 @@
       <Filter>collections</Filter>
     </ClInclude>
     <ClInclude Include="ulist.h">
+      <Filter>collections</Filter>
+    </ClInclude>
+    <ClInclude Include="unifiedcache.h">
       <Filter>collections</Filter>
     </ClInclude>
     <ClInclude Include="ustrenum.h">

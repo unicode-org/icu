@@ -18,6 +18,7 @@
 
 U_NAMESPACE_BEGIN
 
+struct CollationCacheEntry;
 struct CollationData;
 struct CollationSettings;
 struct CollationTailoring;
@@ -27,6 +28,7 @@ struct CollationTailoring;
  */
 class U_I18N_API CollationRoot {  // purely static
 public:
+    static const CollationCacheEntry *getRootCacheEntry(UErrorCode &errorCode);
     static const CollationTailoring *getRoot(UErrorCode &errorCode);
     static const CollationData *getData(UErrorCode &errorCode);
     static const CollationSettings *getSettings(UErrorCode &errorCode);

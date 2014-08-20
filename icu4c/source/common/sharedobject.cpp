@@ -12,19 +12,41 @@ SharedObject::~SharedObject() {}
 
 void
 SharedObject::addRef() const {
-    umtx_atomic_inc(&refCount);
+    umtx_atomic_inc(&totalRefCount);
 }
 
 void
 SharedObject::removeRef() const {
-    if(umtx_atomic_dec(&refCount) == 0) {
+    if(umtx_atomic_dec(&totalRefCount) == 0) {
         delete this;
     }
 }
 
+void
+SharedObject::addSoftRef() const {
+    addRef();
+    umtx_atomic_inc(&softRefCount);
+}
+
+void
+SharedObject::removeSoftRef() const {
+    umtx_atomic_dec(&softRefCount);
+    removeRef();
+}
+
+UBool
+SharedObject::allSoftReferences() const {
+    return umtx_loadAcquire(totalRefCount) == umtx_loadAcquire(softRefCount);
+}
+
 int32_t
 SharedObject::getRefCount() const {
-    return umtx_loadAcquire(refCount);
+    return umtx_loadAcquire(totalRefCount);
+}
+
+int32_t
+SharedObject::getSoftRefCount() const {
+    return umtx_loadAcquire(softRefCount);
 }
 
 void

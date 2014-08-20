@@ -142,11 +142,12 @@ RuleBasedCollator::RuleBasedCollator(const RuleBasedCollator &other)
           data(other.data),
           settings(other.settings),
           tailoring(other.tailoring),
+          cacheEntry(other.cacheEntry),
           validLocale(other.validLocale),
           explicitlySetAttributes(other.explicitlySetAttributes),
           actualLocaleIsSameAsValid(other.actualLocaleIsSameAsValid) {
     settings->addRef();
-    tailoring->addRef();
+    cacheEntry->addRef();
 }
 
 RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length,
@@ -154,6 +155,7 @@ RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length,
         : data(NULL),
           settings(NULL),
           tailoring(NULL),
+          cacheEntry(NULL),
           validLocale(""),
           explicitlySetAttributes(0),
           actualLocaleIsSameAsValid(FALSE) {
@@ -176,33 +178,44 @@ RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length,
     CollationDataReader::read(base->tailoring, bin, length, *t, errorCode);
     if(U_FAILURE(errorCode)) { return; }
     t->actualLocale.setToBogus();
-    adoptTailoring(t.orphan());
+    adoptTailoring(t.orphan(), errorCode);
 }
 
-RuleBasedCollator::RuleBasedCollator(const CollationTailoring *t, const Locale &vl)
-        : data(t->data),
-          settings(t->settings),
-          tailoring(t),
-          validLocale(vl),
+RuleBasedCollator::RuleBasedCollator(const CollationCacheEntry *entry)
+        : data(entry->tailoring->data),
+          settings(entry->tailoring->settings),
+          tailoring(entry->tailoring),
+          cacheEntry(entry),
+          validLocale(entry->validLocale),
           explicitlySetAttributes(0),
           actualLocaleIsSameAsValid(FALSE) {
     settings->addRef();
-    tailoring->addRef();
+    cacheEntry->addRef();
 }
 
 RuleBasedCollator::~RuleBasedCollator() {
     SharedObject::clearPtr(settings);
-    SharedObject::clearPtr(tailoring);
+    SharedObject::clearPtr(cacheEntry);
 }
 
 void
-RuleBasedCollator::adoptTailoring(CollationTailoring *t) {
-    U_ASSERT(settings == NULL && data == NULL && tailoring == NULL);
+RuleBasedCollator::adoptTailoring(CollationTailoring *t, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) {
+        t->deleteIfZeroRefCount();
+        return;
+    }
+    U_ASSERT(settings == NULL && data == NULL && tailoring == NULL && cacheEntry == NULL);
+    cacheEntry = new CollationCacheEntry(t->actualLocale, t);
+    if(cacheEntry == NULL) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        t->deleteIfZeroRefCount();
+        return;
+    }
     data = t->data;
     settings = t->settings;
     settings->addRef();
-    t->addRef();
     tailoring = t;
+    cacheEntry->addRef();
     validLocale = t->actualLocale;
     actualLocaleIsSameAsValid = FALSE;
 }
@@ -215,7 +228,8 @@ RuleBasedCollator::clone() const {
 RuleBasedCollator &RuleBasedCollator::operator=(const RuleBasedCollator &other) {
     if(this == &other) { return *this; }
     SharedObject::copyPtr(other.settings, settings);
-    SharedObject::copyPtr(other.tailoring, tailoring);
+    tailoring = other.tailoring;
+    SharedObject::copyPtr(other.cacheEntry, cacheEntry);
     data = tailoring->data;
     validLocale = other.validLocale;
     explicitlySetAttributes = other.explicitlySetAttributes;
