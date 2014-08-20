@@ -150,12 +150,12 @@ struct UPattern {
     const UChar              *text;
           int32_t             textLength; // exact length
           // length required for backwards ce comparison
-          int32_t             CELength; 
-          int32_t            *CE;
-          int32_t             CEBuffer[INITIAL_ARRAY_SIZE_];
-          int32_t             PCELength;
-          int64_t            *PCE;
-          int64_t             PCEBuffer[INITIAL_ARRAY_SIZE_];
+          int32_t             cesLength;
+          int32_t            *ces;
+          int32_t             cesBuffer[INITIAL_ARRAY_SIZE_];
+          int32_t             pcesLength;
+          int64_t            *pces;
+          int64_t             pcesBuffer[INITIAL_ARRAY_SIZE_];
           UBool               hasPrefixAccents;
           UBool               hasSuffixAccents;
           int16_t             defaultShiftSize;
