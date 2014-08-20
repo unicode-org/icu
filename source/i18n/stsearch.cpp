@@ -307,7 +307,7 @@ int32_t StringSearch::handleNext(int32_t position, UErrorCode &status)
 {
     // values passed here are already in the pre-shift position
     if (U_SUCCESS(status)) {
-        if (m_strsrch_->pattern.CELength == 0) {
+        if (m_strsrch_->pattern.cesLength == 0) {
             m_search_->matchedIndex =
                                     m_search_->matchedIndex == USEARCH_DONE ?
                                     getOffset() : m_search_->matchedIndex + 1;
@@ -405,7 +405,7 @@ int32_t StringSearch::handlePrev(int32_t position, UErrorCode &status)
 {
     // values passed here are already in the pre-shift position
     if (U_SUCCESS(status)) {
-        if (m_strsrch_->pattern.CELength == 0) {
+        if (m_strsrch_->pattern.cesLength == 0) {
             m_search_->matchedIndex =
                   (m_search_->matchedIndex == USEARCH_DONE ? getOffset() :
                    m_search_->matchedIndex);
