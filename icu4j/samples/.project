@@ -3,6 +3,8 @@
 	<name>icu4j-samples</name>
 	<comment></comment>
 	<projects>
+		<project>icu4j-collate</project>
+		<project>icu4j-core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
