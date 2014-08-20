@@ -37,7 +37,6 @@ typedef enum ECleanupCommonType {
     UCLN_COMMON_BREAKITERATOR,
     UCLN_COMMON_BREAKITERATOR_DICT,
     UCLN_COMMON_SERVICE,
-    UCLN_COMMON_URES,
     UCLN_COMMON_LOCALE,
     UCLN_COMMON_LOCALE_AVAILABLE,
     UCLN_COMMON_ULOC,
@@ -51,6 +50,14 @@ typedef enum ECleanupCommonType {
     UCLN_COMMON_PUTIL,
     UCLN_COMMON_LIST_FORMATTER,
     UCLN_COMMON_UINIT,
+
+    /*
+       Unified caches caches collation stuff. Collation data structures
+       contain resource bundles which means that unified cache cleanup
+       must happen before resource bundle clean up.
+    */
+    UCLN_COMMON_UNIFIED_CACHE,
+    UCLN_COMMON_URES,
     UCLN_COMMON_COUNT /* This must be last */
 } ECleanupCommonType;
 

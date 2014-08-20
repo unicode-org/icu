@@ -46,6 +46,7 @@
 #include "uenumimp.h"
 #include "ulist.h"
 #include "umutex.h"
+#include "unifiedcache.h"
 #include "uresimp.h"
 #include "ustrenum.h"
 #include "utracimp.h"
@@ -131,139 +132,221 @@ CollationLoader::loadRules(const char *localeID, const char *collationType,
     }
 }
 
-const CollationTailoring *
-CollationLoader::loadTailoring(const Locale &locale, Locale &validLocale, UErrorCode &errorCode) {
-    const CollationTailoring *root = CollationRoot::getRoot(errorCode);
+template<> U_I18N_API
+const CollationCacheEntry *
+LocaleCacheKey<CollationCacheEntry>::createObject(const void *creationContext,
+                                                  UErrorCode &errorCode) const {
+    CollationLoader *loader =
+            reinterpret_cast<CollationLoader *>(
+                    const_cast<void *>(creationContext));
+    return loader->createCacheEntry(errorCode);
+}
+
+const CollationCacheEntry *
+CollationLoader::loadTailoring(const Locale &locale, UErrorCode &errorCode) {
+    const CollationCacheEntry *rootEntry = CollationRoot::getRootCacheEntry(errorCode);
     if(U_FAILURE(errorCode)) { return NULL; }
     const char *name = locale.getName();
     if(*name == 0 || uprv_strcmp(name, "root") == 0) {
-        validLocale = Locale::getRoot();
-        return root;
+
+        // Have to add a ref.
+        rootEntry->addRef();
+        return rootEntry;
     }
 
-    LocalUResourceBundlePointer bundle(ures_open(U_ICUDATA_COLL, name, &errorCode));
+    // Clear warning codes before loading where they get cached.
+    errorCode = U_ZERO_ERROR;
+    CollationLoader loader(rootEntry, locale, errorCode);
+
+    // getCacheEntry adds a ref for us.
+    return loader.getCacheEntry(errorCode);
+}
+
+CollationLoader::CollationLoader(const CollationCacheEntry *re, const Locale &requested,
+                                 UErrorCode &errorCode)
+        : cache(UnifiedCache::getInstance(errorCode)), rootEntry(re),
+          validLocale(re->validLocale), locale(requested),
+          typesTried(0), typeFallback(FALSE),
+          bundle(NULL), collations(NULL), data(NULL) {
+    type[0] = 0;
+    defaultType[0] = 0;
+    if(U_FAILURE(errorCode)) { return; }
+
+    // Canonicalize the locale ID: Ignore all irrelevant keywords.
+    const char *baseName = locale.getBaseName();
+    if(uprv_strcmp(locale.getName(), baseName) != 0) {
+        locale = Locale(baseName);
+
+        // Fetch the collation type from the locale ID.
+        int32_t typeLength = requested.getKeywordValue("collation",
+                type, LENGTHOF(type) - 1, errorCode);
+        if(U_FAILURE(errorCode)) {
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        type[typeLength] = 0;  // in case of U_NOT_TERMINATED_WARNING
+        if(typeLength == 0) {
+            // No collation type.
+        } else if(uprv_stricmp(type, "default") == 0) {
+            // Ignore "default" (case-insensitive).
+            type[0] = 0;
+        } else {
+            // Copy the collation type.
+            T_CString_toLowerCase(type);
+            locale.setKeywordValue("collation", type, errorCode);
+        }
+    }
+}
+
+CollationLoader::~CollationLoader() {
+    ures_close(data);
+    ures_close(collations);
+    ures_close(bundle);
+}
+
+const CollationCacheEntry *
+CollationLoader::createCacheEntry(UErrorCode &errorCode) {
+    // This is a linear lookup and fallback flow turned into a state machine.
+    // Most local variables have been turned into instance fields.
+    // In a cache miss, cache.get() calls CacheKey::createObject(),
+    // which means that we progress via recursion.
+    // loadFromCollations() will recurse to itself as well for collation type fallback.
+    if(bundle == NULL) {
+        return loadFromLocale(errorCode);
+    } else if(collations == NULL) {
+        return loadFromBundle(errorCode);
+    } else if(data == NULL) {
+        return loadFromCollations(errorCode);
+    } else {
+        return loadFromData(errorCode);
+    }
+}
+
+const CollationCacheEntry *
+CollationLoader::loadFromLocale(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    U_ASSERT(bundle == NULL);
+    bundle = ures_open(U_ICUDATA_COLL, locale.getBaseName(), &errorCode);
     if(errorCode == U_MISSING_RESOURCE_ERROR) {
         errorCode = U_USING_DEFAULT_WARNING;
-        validLocale = Locale::getRoot();
-        return root;
-    }
-    const char *vLocale = ures_getLocaleByType(bundle.getAlias(), ULOC_ACTUAL_LOCALE, &errorCode);
-    if(U_FAILURE(errorCode)) { return NULL; }
-    validLocale = Locale(vLocale);
 
+        // Have to add that ref that we promise.
+        rootEntry->addRef();
+        return rootEntry;
+    }
+    Locale requestedLocale(locale);
+    const char *vLocale = ures_getLocaleByType(bundle, ULOC_ACTUAL_LOCALE, &errorCode);
+    if(U_FAILURE(errorCode)) { return NULL; }
+    locale = validLocale = Locale(vLocale);  // no type until loadFromCollations()
+    if(type[0] != 0) {
+        locale.setKeywordValue("collation", type, errorCode);
+    }
+    if(locale != requestedLocale) {
+        return getCacheEntry(errorCode);
+    } else {
+        return loadFromBundle(errorCode);
+    }
+}
+
+const CollationCacheEntry *
+CollationLoader::loadFromBundle(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    U_ASSERT(collations == NULL);
     // There are zero or more tailorings in the collations table.
-    LocalUResourceBundlePointer collations(
-            ures_getByKey(bundle.getAlias(), "collations", NULL, &errorCode));
+    collations = ures_getByKey(bundle, "collations", NULL, &errorCode);
     if(errorCode == U_MISSING_RESOURCE_ERROR) {
         errorCode = U_USING_DEFAULT_WARNING;
-        return root;
+        // Return the root tailoring with the validLocale, without collation type.
+        return makeCacheEntryFromRoot(validLocale, errorCode);
     }
     if(U_FAILURE(errorCode)) { return NULL; }
 
-    // Fetch the collation type from the locale ID and the default type from the data.
-    char type[16];
-    int32_t typeLength = locale.getKeywordValue("collation", type, LENGTHOF(type) - 1, errorCode);
-    if(U_FAILURE(errorCode)) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-    type[typeLength] = 0;  // in case of U_NOT_TERMINATED_WARNING
-    char defaultType[16];
+    // Fetch the default type from the data.
     {
         UErrorCode internalErrorCode = U_ZERO_ERROR;
         LocalUResourceBundlePointer def(
-                ures_getByKeyWithFallback(collations.getAlias(), "default", NULL,
-                                          &internalErrorCode));
+                ures_getByKeyWithFallback(collations, "default", NULL, &internalErrorCode));
         int32_t length;
         const UChar *s = ures_getString(def.getAlias(), &length, &internalErrorCode);
-        if(U_SUCCESS(internalErrorCode) && length < LENGTHOF(defaultType)) {
+        if(U_SUCCESS(internalErrorCode) && 0 < length && length < LENGTHOF(defaultType)) {
             u_UCharsToChars(s, defaultType, length + 1);
         } else {
             uprv_strcpy(defaultType, "standard");
         }
     }
-    if(typeLength == 0 || uprv_strcmp(type, "default") == 0) {
-        uprv_strcpy(type, defaultType);
-    } else {
-        T_CString_toLowerCase(type);
-    }
 
-    // Load the collations/type tailoring, with type fallback.
-    UBool typeFallback = FALSE;
-    LocalUResourceBundlePointer data(
-            ures_getByKeyWithFallback(collations.getAlias(), type, NULL, &errorCode));
-    if(errorCode == U_MISSING_RESOURCE_ERROR &&
-            typeLength > 6 && uprv_strncmp(type, "search", 6) == 0) {
-        // fall back from something like "searchjl" to "search"
-        typeFallback = TRUE;
-        type[6] = 0;
-        errorCode = U_ZERO_ERROR;
-        data.adoptInstead(
-            ures_getByKeyWithFallback(collations.getAlias(), type, NULL, &errorCode));
-    }
-    if(errorCode == U_MISSING_RESOURCE_ERROR && uprv_strcmp(type, defaultType) != 0) {
-        // fall back to the default type
-        typeFallback = TRUE;
+    // Record which collation types we have looked for already,
+    // so that we do not deadlock in the cache.
+    //
+    // If there is no explicit type, then we look in the cache
+    // for the entry with the default type.
+    // If the explicit type is the default type, then we do not look in the cache
+    // for the entry with an empty type.
+    // Otherwise, two concurrent requests with opposite fallbacks would deadlock each other.
+    // Also, it is easier to always enter the next method with a non-empty type.
+    if(type[0] == 0) {
         uprv_strcpy(type, defaultType);
-        errorCode = U_ZERO_ERROR;
-        data.adoptInstead(
-            ures_getByKeyWithFallback(collations.getAlias(), type, NULL, &errorCode));
+        typesTried |= TRIED_DEFAULT;
+        if(uprv_strcmp(type, "search") == 0) {
+            typesTried |= TRIED_SEARCH;
+        }
+        if(uprv_strcmp(type, "standard") == 0) {
+            typesTried |= TRIED_STANDARD;
+        }
+        locale.setKeywordValue("collation", type, errorCode);
+        return getCacheEntry(errorCode);
+    } else {
+        if(uprv_strcmp(type, defaultType) == 0) {
+            typesTried |= TRIED_DEFAULT;
+        }
+        if(uprv_strcmp(type, "search") == 0) {
+            typesTried |= TRIED_SEARCH;
+        }
+        if(uprv_strcmp(type, "standard") == 0) {
+            typesTried |= TRIED_STANDARD;
+        }
+        return loadFromCollations(errorCode);
     }
-    if(errorCode == U_MISSING_RESOURCE_ERROR && uprv_strcmp(type, "standard") != 0) {
-        // fall back to the "standard" type
-        typeFallback = TRUE;
-        uprv_strcpy(type, "standard");
-        errorCode = U_ZERO_ERROR;
-        data.adoptInstead(
-            ures_getByKeyWithFallback(collations.getAlias(), type, NULL, &errorCode));
-    }
+}
+
+const CollationCacheEntry *
+CollationLoader::loadFromCollations(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    U_ASSERT(data == NULL);
+    // Load the collations/type tailoring, with type fallback.
+    LocalUResourceBundlePointer localData(
+            ures_getByKeyWithFallback(collations, type, NULL, &errorCode));
+    int32_t typeLength = uprv_strlen(type);
     if(errorCode == U_MISSING_RESOURCE_ERROR) {
         errorCode = U_USING_DEFAULT_WARNING;
-        return root;
-    }
-    if(U_FAILURE(errorCode)) { return NULL; }
-
-    LocalPointer<CollationTailoring> t(new CollationTailoring(root->settings));
-    if(t.isNull() || t->isBogus()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-
-    // Is this the same as the root collator? If so, then use that instead.
-    const char *actualLocale = ures_getLocaleByType(data.getAlias(), ULOC_ACTUAL_LOCALE, &errorCode);
-    if(U_FAILURE(errorCode)) { return NULL; }
-    if((*actualLocale == 0 || uprv_strcmp(actualLocale, "root") == 0) &&
-            uprv_strcmp(type, "standard") == 0) {
-        if(typeFallback) {
-            errorCode = U_USING_DEFAULT_WARNING;
+        typeFallback = TRUE;
+        if((typesTried & TRIED_SEARCH) == 0 &&
+                typeLength > 6 && uprv_strncmp(type, "search", 6) == 0) {
+            // fall back from something like "searchjl" to "search"
+            typesTried |= TRIED_SEARCH;
+            type[6] = 0;
+        } else if((typesTried & TRIED_DEFAULT) == 0) {
+            // fall back to the default type
+            typesTried |= TRIED_DEFAULT;
+            uprv_strcpy(type, defaultType);
+        } else if((typesTried & TRIED_STANDARD) == 0) {
+            // fall back to the "standard" type
+            typesTried |= TRIED_STANDARD;
+            uprv_strcpy(type, "standard");
+        } else {
+            // Return the root tailoring with the validLocale, without collation type.
+            return makeCacheEntryFromRoot(validLocale, errorCode);
         }
-        return root;
+        locale.setKeywordValue("collation", type, errorCode);
+        return getCacheEntry(errorCode);
     }
-    t->actualLocale = Locale(actualLocale);
-
-    // deserialize
-    LocalUResourceBundlePointer binary(
-            ures_getByKey(data.getAlias(), "%%CollationBin", NULL, &errorCode));
-    // Note: U_MISSING_RESOURCE_ERROR --> The old code built from rules if available
-    // but that created undesirable dependencies.
-    int32_t length;
-    const uint8_t *inBytes = ures_getBinary(binary.getAlias(), &length, &errorCode);
-    if(U_FAILURE(errorCode)) { return NULL; }
-    CollationDataReader::read(root, inBytes, length, *t, errorCode);
-    // Note: U_COLLATOR_VERSION_MISMATCH --> The old code built from rules if available
-    // but that created undesirable dependencies.
     if(U_FAILURE(errorCode)) { return NULL; }
 
-    // Try to fetch the optional rules string.
-    {
-        UErrorCode internalErrorCode = U_ZERO_ERROR;
-        int32_t length;
-        const UChar *s = ures_getStringByKey(data.getAlias(), "Sequence", &length,
-                                             &internalErrorCode);
-        if(U_SUCCESS(errorCode)) {
-            t->rules.setTo(TRUE, s, length);
-        }
-    }
+    data = localData.orphan();
+    const char *actualLocale = ures_getLocaleByType(data, ULOC_ACTUAL_LOCALE, &errorCode);
+    if(U_FAILURE(errorCode)) { return NULL; }
+    const char *vLocale = validLocale.getBaseName();
+    UBool actualAndValidLocalesAreDifferent = uprv_strcmp(actualLocale, vLocale) != 0;
 
     // Set the collation types on the informational locales,
     // except when they match the default types (for brevity and backwards compatibility).
@@ -273,12 +356,66 @@ CollationLoader::loadTailoring(const Locale &locale, Locale &validLocale, UError
         if(U_FAILURE(errorCode)) { return NULL; }
     }
 
+    // Is this the same as the root collator? If so, then use that instead.
+    if((*actualLocale == 0 || uprv_strcmp(actualLocale, "root") == 0) &&
+            uprv_strcmp(type, "standard") == 0) {
+        if(typeFallback) {
+            errorCode = U_USING_DEFAULT_WARNING;
+        }
+        return makeCacheEntryFromRoot(validLocale, errorCode);
+    }
+
+    locale = Locale(actualLocale);
+    if(actualAndValidLocalesAreDifferent) {
+        locale.setKeywordValue("collation", type, errorCode);
+        const CollationCacheEntry *entry = getCacheEntry(errorCode);
+        return makeCacheEntry(validLocale, entry, errorCode);
+    } else {
+        return loadFromData(errorCode);
+    }
+}
+
+const CollationCacheEntry *
+CollationLoader::loadFromData(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    LocalPointer<CollationTailoring> t(new CollationTailoring(rootEntry->tailoring->settings));
+    if(t.isNull() || t->isBogus()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    // deserialize
+    LocalUResourceBundlePointer binary(ures_getByKey(data, "%%CollationBin", NULL, &errorCode));
+    // Note: U_MISSING_RESOURCE_ERROR --> The old code built from rules if available
+    // but that created undesirable dependencies.
+    int32_t length;
+    const uint8_t *inBytes = ures_getBinary(binary.getAlias(), &length, &errorCode);
+    CollationDataReader::read(rootEntry->tailoring, inBytes, length, *t, errorCode);
+    // Note: U_COLLATOR_VERSION_MISMATCH --> The old code built from rules if available
+    // but that created undesirable dependencies.
+    if(U_FAILURE(errorCode)) { return NULL; }
+
+    // Try to fetch the optional rules string.
+    {
+        UErrorCode internalErrorCode = U_ZERO_ERROR;
+        int32_t length;
+        const UChar *s = ures_getStringByKey(data, "Sequence", &length,
+                                             &internalErrorCode);
+        if(U_SUCCESS(internalErrorCode)) {
+            t->rules.setTo(TRUE, s, length);
+        }
+    }
+
+    const char *actualLocale = locale.getBaseName();  // without type
+    const char *vLocale = validLocale.getBaseName();
+    UBool actualAndValidLocalesAreDifferent = uprv_strcmp(actualLocale, vLocale) != 0;
+
     // For the actual locale, suppress the default type *according to the actual locale*.
     // For example, zh has default=pinyin and contains all of the Chinese tailorings.
     // zh_Hant has default=stroke but has no other data.
     // For the valid locale "zh_Hant" we need to suppress stroke.
     // For the actual locale "zh" we need to suppress pinyin instead.
-    if(uprv_strcmp(actualLocale, vLocale) != 0) {
+    if(actualAndValidLocalesAreDifferent) {
         // Opening a bundle for the actual locale should always succeed.
         LocalUResourceBundlePointer actualBundle(
                 ures_open(U_ICUDATA_COLL, actualLocale, &errorCode));
@@ -295,16 +432,67 @@ CollationLoader::loadTailoring(const Locale &locale, Locale &validLocale, UError
             uprv_strcpy(defaultType, "standard");
         }
     }
+    t->actualLocale = locale;
     if(uprv_strcmp(type, defaultType) != 0) {
         t->actualLocale.setKeywordValue("collation", type, errorCode);
-        if(U_FAILURE(errorCode)) { return NULL; }
+    } else if(uprv_strcmp(locale.getName(), locale.getBaseName()) != 0) {
+        // Remove the collation keyword if it was set.
+        t->actualLocale.setKeywordValue("collation", NULL, errorCode);
     }
+    if(U_FAILURE(errorCode)) { return NULL; }
 
     if(typeFallback) {
         errorCode = U_USING_DEFAULT_WARNING;
     }
-    t->bundle = bundle.orphan();
-    return t.orphan();
+    t->bundle = bundle;
+    bundle = NULL;
+    const CollationCacheEntry *entry = new CollationCacheEntry(validLocale, t.getAlias());
+    if(entry == NULL) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        t.orphan();
+    }
+    // Have to add that reference that we promise.
+    entry->addRef();
+    return entry;
+}
+
+const CollationCacheEntry *
+CollationLoader::getCacheEntry(UErrorCode &errorCode) {
+    LocaleCacheKey<CollationCacheEntry> key(locale);
+    const CollationCacheEntry *entry = NULL;
+    cache->get(key, this, entry, errorCode);
+    return entry;
+}
+
+const CollationCacheEntry *
+CollationLoader::makeCacheEntryFromRoot(
+        const Locale &loc,
+        UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return NULL;
+    }
+    rootEntry->addRef();
+    return makeCacheEntry(validLocale, rootEntry, errorCode);
+}
+
+const CollationCacheEntry *
+CollationLoader::makeCacheEntry(
+        const Locale &loc,
+        const CollationCacheEntry *entryFromCache,
+        UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode) || loc == entryFromCache->validLocale) {
+        return entryFromCache;
+    }
+    CollationCacheEntry *entry = new CollationCacheEntry(loc, entryFromCache->tailoring);
+    if(entry == NULL) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        entryFromCache->removeRef();
+        return NULL;
+    }
+    entry->addRef();
+    entryFromCache->removeRef();
+    return entry;
 }
 
 U_NAMESPACE_END

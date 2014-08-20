@@ -101,6 +101,10 @@ CollationTailoring::getUCAVersion() const {
     return ((int32_t)version[1] << 4) | (version[2] >> 6);
 }
 
+CollationCacheEntry::~CollationCacheEntry() {
+    SharedObject::clearPtr(tailoring);
+}
+
 U_NAMESPACE_END
 
 #endif  // !UCONFIG_NO_COLLATION

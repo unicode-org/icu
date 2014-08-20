@@ -20,7 +20,9 @@
 #include "unicode/measure.h"
 #include "unicode/measunit.h"
 #include "unicode/tmunit.h"
+#include "unicode/plurrule.h"
 #include "charstr.h"
+#include "unicode/reldatefmt.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
 
