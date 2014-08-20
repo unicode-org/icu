@@ -26,6 +26,8 @@ class UCTItem : public SharedObject {
 class UCTItem2 : public SharedObject {
 };
 
+U_NAMESPACE_BEGIN
+
 template<> U_EXPORT
 const UCTItem *LocaleCacheKey<UCTItem>::createObject(
         const void * /*unused*/, UErrorCode &status) const {
@@ -51,6 +53,9 @@ const UCTItem2 *LocaleCacheKey<UCTItem2>::createObject(
         const void * /*unused*/, UErrorCode & /*status*/) const {
     return NULL;
 }
+
+U_NAMESPACE_END
+
 
 class UnifiedCacheTest : public IntlTest {
 public:
