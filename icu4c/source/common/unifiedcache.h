@@ -38,7 +38,7 @@ class U_COMMON_API CacheKeyBase : public UObject {
     * Copy constructor. Needed to support cloning.
     */
    CacheKeyBase(const CacheKeyBase &other) 
-           : creationStatus(other.creationStatus) { }
+           : UObject(other), creationStatus(other.creationStatus) { }
    virtual ~CacheKeyBase();
 
    /**
@@ -135,6 +135,8 @@ class LocaleCacheKey : public CacheKey<T> {
    Locale   fLoc;
  public:
    LocaleCacheKey(const Locale &loc) : fLoc(loc) {};
+   LocaleCacheKey(const LocaleCacheKey &other)
+           : CacheKey<T>(other), fLoc(other.fLoc) { }
    virtual ~LocaleCacheKey() { }
    virtual int32_t hashCode() const {
        return 37 *CacheKey<T>::hashCode() + fLoc.hashCode();

@@ -1716,6 +1716,8 @@ class UCTMultiThreadItem : public SharedObject {
     }
 };
 
+U_NAMESPACE_BEGIN
+
 template<> U_EXPORT
 const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
         const void * /*unused*/, UErrorCode & /* status */) const {
@@ -1738,6 +1740,8 @@ const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
     result->addRef();
     return result;
 }
+
+U_NAMESPACE_END
 
 class UnifiedCacheThread: public SimpleThread {
   public:
