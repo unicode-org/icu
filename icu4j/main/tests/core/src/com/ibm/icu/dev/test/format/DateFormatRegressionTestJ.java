@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2001-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -53,10 +53,10 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
-    //Missing digit in millisecone format in SimpleDateFormat 
+
+    // Missing digit in millisecond format in SimpleDateFormat 
     public void Test4148168() {
-            Date d = new Date(1002705212906l); 
+            Date d = new Date(1002705212906L);
             String[] ISOPattern = {
                 "''yyyy-MM-dd-hh.mm.ss.S''", "''yyyy-MM-dd-hh.mm.ss.SS''", 
                 "''yyyy-MM-dd-hh.mm.ss.SSS''", "''yyyy-MM-dd-hh.mm.ss.SSSS''", 
@@ -137,8 +137,8 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
     
     //pattern "s.S, parse '1ms'"
     public void Test4253490() {
-        Date d = new Date(1002705212231l);
-    
+        Date d = new Date(1002705212231L);
+
         String[] ISOPattern = {
                 "''yyyy-MM-dd-hh.mm.ss.S''", 
                 "''yyyy-MM-dd-hh.mm.ss.SS''", 
@@ -218,7 +218,7 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
     }*/
     
     public void Test4468663() {
-        Date d =new Date(-93716671115767l);
+        Date d =new Date(-93716671115767L);
         String origin_d = d.toString();
         String str;
         final String pattern = new String("EEEE, MMMM d, yyyy");
