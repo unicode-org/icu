@@ -1894,7 +1894,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestDateFormatZone061() {
         Date date;
         DateFormat formatter;
-        date = new Date(859248000000l);
+        date = new Date(859248000000L);
         logln("Date 1997/3/25 00:00 GMT: " + date);
         formatter = new SimpleDateFormat("dd-MMM-yyyyy HH:mm", Locale.UK);
         formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -1970,8 +1970,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * Test the formatting of dates in different locales.
      */
     public void TestLocaleDateFormat() {
-    
-        Date testDate = new Date(874306800000l); //Mon Sep 15 00:00:00 PDT 1997
+        Date testDate = new Date(874306800000L); //Mon Sep 15 00:00:00 PDT 1997
         DateFormat dfFrench = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.FRENCH);
         DateFormat dfUS = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US);
         //Set TimeZone = PDT
@@ -2007,8 +2006,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * Test the formatting of dates with the 'NONE' keyword.
      */
     public void TestDateFormatNone() {
-    
-        Date testDate = new Date(874306800000l); //Mon Sep 15 00:00:00 PDT 1997
+        Date testDate = new Date(874306800000L); //Mon Sep 15 00:00:00 PDT 1997
         DateFormat dfFrench = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.NONE, Locale.FRENCH);
         //Set TimeZone = PDT
         TimeZone tz = TimeZone.getTimeZone("PST");
