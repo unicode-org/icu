@@ -1224,7 +1224,7 @@ public final class UScript {
             // Begin copy-paste output from
             // tools/trunk/unicode/py/parsescriptmetadata.py
             // or from icu/trunk/source/common/uscript_props.cpp
-            0x0040 | UNKNOWN,  // Zyyy
+            0x0040 | RECOMMENDED,  // Zyyy
             0x0308 | UNKNOWN,  // Zinh
             0x0628 | RECOMMENDED | RTL,  // Arab
             0x0531 | RECOMMENDED | CASED,  // Armn
