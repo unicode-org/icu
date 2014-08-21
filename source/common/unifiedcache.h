@@ -237,11 +237,13 @@ class U_COMMON_API UnifiedCache : public UObject {
        }
    }
 
+#ifdef UNIFIED_CACHE_DEBUG
    /**
     * Dumps the contents of this cache to standard error. Used for testing of
     * cache only.
     */
    void dumpContents() const;
+#endif
 
    /**
     * Convenience method to get a value of type T from cache for a
@@ -265,10 +267,12 @@ class U_COMMON_API UnifiedCache : public UObject {
        cache->get(LocaleCacheKey<T>(loc), ptr, status);
    }
 
+#ifdef UNIFIED_CACHE_DEBUG
    /**
     * Dumps the cache contents to stderr. For testing only.
     */
    static void dump();
+#endif
 
    /**
     * Returns the number of keys in this cache. For testing only.
@@ -305,7 +309,9 @@ class U_COMMON_API UnifiedCache : public UObject {
            const CacheKeyBase &key,
            const SharedObject *&value,
            UErrorCode &status) const;
+#ifdef UNIFIED_CACHE_DEBUG
    void _dumpContents() const;
+#endif
    static void _put(
            const UHashElement *element,
            const SharedObject *value,

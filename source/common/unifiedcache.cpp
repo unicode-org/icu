@@ -14,7 +14,6 @@
 #include "mutex.h"
 #include "uassert.h"
 #include "ucln_cmn.h"
-#include <stdio.h>
 
 static icu::UnifiedCache *gCache = NULL;
 static icu::SharedObject *gNoValue = NULL;
@@ -126,6 +125,9 @@ void UnifiedCache::flush() const {
     umtx_condBroadcast(&gInProgressValueAddedCond);
 }
 
+#ifdef UNIFIED_CACHE_DEBUG
+#include <stdio.h>
+
 void UnifiedCache::dump() {
     UErrorCode status = U_ZERO_ERROR;
     const UnifiedCache *cache = getInstance(status);
@@ -168,6 +170,7 @@ void UnifiedCache::_dumpContents() const {
     }
     fprintf(stderr, "Unified Cache: %d out of a total of %d still have hard references\n", cnt, uhash_count(fHashtable));
 }
+#endif
 
 UnifiedCache::~UnifiedCache() {
     // Try our best to clean up first.
