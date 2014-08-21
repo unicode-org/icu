@@ -4619,6 +4619,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * case):
      * <ul>
      * <li>CONTAINED and SIMPLE work the same.
+     * <li>CONTAINED and SIMPLE are inverses of NOT_CONTAINED.
      * <li>span() and spanBack() partition any string the
      * same way when alternating between span(NOT_CONTAINED) and span(either "contained" condition).
      * <li>Using a
@@ -4647,40 +4648,43 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * <p>
      * Note: Unpaired surrogates are treated like surrogate code points. Similarly, set strings match only on code point
      * boundaries, never in the middle of a surrogate pair.
-     * 
+     *
      * @stable ICU 4.4
      */
     public enum SpanCondition {
         /**
-         * Continue a span() while there is no set element at the current position. Stops before the first set element
-         * (character or string). (For code points only, this is like while contains(current)==FALSE).
+         * Continues a span() while there is no set element at the current position.
+         * Increments by one code point at a time.
+         * Stops before the first set element (character or string).
+         * (For code points only, this is like while contains(current)==false).
          * <p>
          * When span() returns, the substring between where it started and the position it returned consists only of
          * characters that are not in the set, and none of its strings overlap with the span.
-         * 
+         *
          * @stable ICU 4.4
          */
         NOT_CONTAINED,
 
         /**
-         * Continue a span() while there is a set element at the current position. (For characters only, this is like
-         * while contains(current)==TRUE).
+         * Spans the longest substring that is a concatenation of set elements (characters or strings).
+         * (For characters only, this is like while contains(current)==true).
          * <p>
          * When span() returns, the substring between where it started and the position it returned consists only of set
          * elements (characters or strings) that are in the set.
          * <p>
-         * If a set contains strings, then the span will be the longest substring matching any of the possible
-         * concatenations of set elements (characters or strings). (There must be a single, non-overlapping
-         * concatenation of characters or strings.) This is equivalent to a POSIX regular expression for (OR of each set
-         * element)*.
-         * 
+         * If a set contains strings, then the span will be the longest substring for which there
+         * exists at least one non-overlapping concatenation of set elements (characters or strings).
+         * This is equivalent to a POSIX regular expression for <code>(OR of each set element)*</code>.
+         * (Java/ICU/Perl regex stops at the first match of an OR.)
+         *
          * @stable ICU 4.4
          */
-
         CONTAINED,
+
         /**
-         * Continue a span() while there is a set element at the current position. (For characters only, this is like
-         * while contains(current)==TRUE).
+         * Continues a span() while there is a set element at the current position.
+         * Increments by the longest matching element at each position.
+         * (For characters only, this is like while contains(current)==true).
          * <p>
          * When span() returns, the substring between where it started and the position it returned consists only of set
          * elements (characters or strings) that are in the set.
@@ -4692,14 +4696,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          * <p>
          * Use this span condition together with other longest-match algorithms, such as ICU converters
          * (ucnv_getUnicodeSet()).
-         * 
+         *
          * @stable ICU 4.4
          */
-
         SIMPLE,
+
         /**
          * One more than the last span condition.
-         * 
+         *
          * @stable ICU 4.4
          */
         CONDITION_COUNT
