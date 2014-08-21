@@ -14,6 +14,7 @@
 #include "mutex.h"
 #include "uassert.h"
 #include "ucln_cmn.h"
+#include <stdio.h>
 
 static icu::UnifiedCache *gCache = NULL;
 static icu::SharedObject *gNoValue = NULL;
