@@ -136,9 +136,6 @@
     <ClCompile Include="ucaconf.cpp">
       <Filter>collation</Filter>
     </ClCompile>
-    <ClCompile Include="lrucachetest.cpp">
-      <Filter>collections</Filter>
-    </ClCompile>
     <ClCompile Include="unifiedcachetest.cpp">
       <Filter>collections</Filter>
     </ClCompile>
