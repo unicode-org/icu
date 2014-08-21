@@ -43,7 +43,7 @@ const int32_t CASED = 1 << 26;
 const int32_t SCRIPT_PROPS[] = {
     // Begin copy-paste output from
     // tools/trunk/unicode/py/parsescriptmetadata.py
-    0x0040 | UNKNOWN,  // Zyyy
+    0x0040 | RECOMMENDED,  // Zyyy
     0x0308 | UNKNOWN,  // Zinh
     0x0628 | RECOMMENDED | RTL,  // Arab
     0x0531 | RECOMMENDED | CASED,  // Armn
