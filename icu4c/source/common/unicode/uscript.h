@@ -343,8 +343,10 @@ typedef enum UScriptCode {
 
       /** @stable ICU 4.6 */
       USCRIPT_BASSA_VAH                     = 134,/* Bass */
-      /** @stable ICU 4.6 */
-      USCRIPT_DUPLOYAN_SHORTAND             = 135,/* Dupl */
+      /** @stable ICU 54 */
+      USCRIPT_DUPLOYAN                      = 135,/* Dupl */
+      /** @deprecated ICU 54 Typo, use USCRIPT_DUPLOYAN */
+      USCRIPT_DUPLOYAN_SHORTAND             = USCRIPT_DUPLOYAN,
       /** @stable ICU 4.6 */
       USCRIPT_ELBASAN                       = 136,/* Elba */
       /** @stable ICU 4.6 */
