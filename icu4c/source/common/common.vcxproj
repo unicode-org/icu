@@ -368,9 +368,6 @@
     <ClCompile Include="locresdata.cpp" />
     <ClCompile Include="locutil.cpp">
     </ClCompile>
-    <ClCompile Include="lrucache.cpp">
-    <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
     <ClCompile Include="resbund.cpp">
     </ClCompile>
     <ClCompile Include="resbund_cnv.cpp" />
@@ -1069,7 +1066,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="locutil.h" />
-    <ClInclude Include="lrucache.h" />
     <CustomBuild Include="unicode\resbund.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
@@ -1086,7 +1082,6 @@
     </CustomBuild>
     <ClInclude Include="sharedobject.h" />
     <ClCompile Include="sharedobject.cpp" />
-    <ClInclude Include="sharedptr.h" />
     <ClInclude Include="simplepatternformatter.h" />
     <CustomBuild Include="unicode\ucat.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
