@@ -762,9 +762,14 @@ public final class UScript {
     public static final int BASSA_VAH                     = 134;/* Bass */
     /**
      * ISO 15924 script code
-     * @stable ICU 4.6
+     * @stable ICU 54
      */
-    public static final int DUPLOYAN_SHORTAND             = 135;/* Dupl */
+    public static final int DUPLOYAN                      = 135;/* Dupl */
+    /**
+     * Typo, use DUPLOYAN
+     * @deprecated ICU 54
+     */
+    public static final int DUPLOYAN_SHORTAND             = DUPLOYAN;
     /**
      * ISO 15924 script code
      * @stable ICU 4.6
