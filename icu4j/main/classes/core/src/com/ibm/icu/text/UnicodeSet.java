@@ -4128,14 +4128,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
-     * Provide for faster iteration than by String. Returns an iterator over a range values. The UnicodeSet
-     * must not be altered during the iteration. The EntryRange is the same each time; the contents are just reset.
-     * <br><b>Warning: </b>To iterate over the full contents, you have to also iterate over the strings.
+     * Provide for faster iteration than by String. Returns an iterator over a ranges of code points.
+     * The UnicodeSet must not be altered during the iteration.
+     * The EntryRange is the same each time; the contents are just reset.<br>
+     * <b>Warning: </b>To iterate over the full contents, you have to also iterate over the strings.
      * 
      * <pre>
      * // Sample code
      * for (EntryRange range : us1.ranges()) {
-     *     // do something with code points between range.codepointEnd and range.codepointEnd;
+     *     // do something with code points between range.codepoint and range.codepointEnd;
      * }
      * for (String s : us1.strings()) {
      *     // do something with each string;

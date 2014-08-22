@@ -12,6 +12,31 @@ import com.ibm.icu.util.OutputInt;
 /**
  * A helper class used to count, replace, and trim CharSequences based on UnicodeSet matches.
  * An instance is immutable (and thus thread-safe) iff the source UnicodeSet is frozen.
+ * <p><b>Note:</b> The counting, deletion, and replacement depend on alternating a {@link SpanCondition} with
+ * its inverse. That is, the code spans, then spans for the inverse, then spans, and so on.
+ * For the inverse, the following mapping is used:</p>
+ * <ul>
+ * <li>{@link SpanCondition.SIMPLE} → {@link SpanCondition.NOT_CONTAINED}</li>
+ * <li>{@link SpanCondition.CONTAINED} → {@link SpanCondition.NOT_CONTAINED}</li>
+ * <li>{@link SpanCondition.NOT_CONTAINED} → {@link SpanCondition.SIMPLE}</li>
+ * </ul>
+ * These are actually not complete inverses. However, the alternating works because there are no gaps.
+ * For example, with [a{ab}{bc}], you get the following behavior when scanning forward:
+ * <p>
+ * <table border="1">
+ * <tr><th>SIMPLE</th><td>xxx[ab]cyyy</td></tr>
+ * <tr><th>CONTAINED</th><td>xxx[abc]yyy</td></tr>
+ * <tr><th>NOT_CONTAINED</th><td>[xxx]ab[cyyy]</td></tr>
+ * </table>
+ * <p>So here is what happens when you alternate:
+ * <p>
+ * <table border="1">
+ * <tr><th>start</th><td>|xxxabcyyy</td></tr>
+ * <tr><th>NOT_CONTAINED</th><td>xxx|abcyyy</td></tr>
+ * <tr><th>CONTAINED</th><td>xxxabc|yyy</td></tr>
+ * <tr><th>NOT_CONTAINED</th><td>xxxabcyyy|</td></tr>
+ * </table>
+ * </p>The entire string is traversed.
  */
 public class UnicodeSetSpanner {
 
@@ -63,19 +88,20 @@ public class UnicodeSetSpanner {
      * since it is similar to whether one is replacing [abc] by x, or [abc]* by x.
      * 
      */
-    public enum Quantifier {
+    public enum CountMethod {
         /**
          * Collapse spans. That is, modify/count the entire matching span as a single item, instead of separate
          * code points.
          * 
          */
-        SPAN,
+        WHOLE_SPAN,
         /**
-         * Use the smallest number of elements in the spanned range for counting and modification. In other words, the "longest matches" are
-         * used where possible. If there are no strings, this will be the same as code points.
-         * <p>For example, in the string "abab":
+         * Use the smallest number of elements in the spanned range for counting and modification,
+         * based on the {@link UnicodeSet.SpanCondition}.
+         * If the set has no strings, this will be the same as the number of spanned code points.
+         * <p>For example, in the string "abab" with SpanCondition.SIMPLE:
          * <ul>
-         * <li>spanning with [ab] will also count four MIN_ELEMENTS.</li>
+         * <li>spanning with [ab] will count four MIN_ELEMENTS.</li>
          * <li>spanning with [{ab}] will count two MIN_ELEMENTS.</li>
          * <li>spanning with [ab{ab}] will also count two MIN_ELEMENTS.</li>
          * </ul>
@@ -85,44 +111,45 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns the number of matching characters found in a character sequence, counting by Quantifier.ELEMENT using SpanCondition.CONTAINED.
-     * 
+     * Returns the number of matching characters found in a character sequence, 
+     * counting by Quantifier.MIN_ELEMENTS using SpanCondition.SIMPLE.
+     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            the sequence to count characters in
      * @return the count. Zero if there are none.
      */
     public int countIn(CharSequence sequence) {
-        return countIn(sequence, Quantifier.MIN_ELEMENTS, SpanCondition.CONTAINED);
+        return countIn(sequence, CountMethod.MIN_ELEMENTS, SpanCondition.SIMPLE);
     }
 
     /**
-     * Returns the number of matching characters found in a character sequence, using SpanCondition.CONTAINED
-     * 
+     * Returns the number of matching characters found in a character sequence, using SpanCondition.SIMPLE.
+     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            the sequence to count characters in
      * @return the count. Zero if there are none.
      */
-    public int countIn(CharSequence sequence, Quantifier quantifier) {
-        return countIn(sequence, quantifier, SpanCondition.CONTAINED);
+    public int countIn(CharSequence sequence, CountMethod quantifier) {
+        return countIn(sequence, quantifier, SpanCondition.SIMPLE);
     }
 
     /**
      * Returns the number of matching characters found in a character sequence.
-     * 
+     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            the sequence to count characters in
-     * @param quantifier
-     *            (optional) whether to treat the entire span as a match, or individual code points
-     * @param countSpan
-     *            (optional) the spanCondition to use. CONTAINED means only count the code points in the CONTAINED span;
+     * @param quantifier whether to treat an entire span as a match, or individual code points
+     * @param spanCondition
+     *            the spanCondition to use. SIMPLE or CONTAINED means only count the code points in the span;
      *            NOT_CONTAINED is the reverse.
+     *            <br><b>WARNING: </b> when a UnicodeSet contains strings, there may be unexpected behavior in edge cases.
      * @return the count. Zero if there are none.
      */
-    public int countIn(CharSequence sequence, Quantifier quantifier, SpanCondition countSpan) {
+    public int countIn(CharSequence sequence, CountMethod quantifier, SpanCondition spanCondition) {
         int count = 0;
         int start = 0;
-        SpanCondition skipSpan = countSpan == SpanCondition.CONTAINED ? SpanCondition.NOT_CONTAINED
-                : SpanCondition.CONTAINED;
+        SpanCondition skipSpan = spanCondition == SpanCondition.NOT_CONTAINED ? SpanCondition.SIMPLE
+                : SpanCondition.NOT_CONTAINED;
         final int length = sequence.length();
         OutputInt spanCount = new OutputInt();
         while (start != length) {
@@ -130,40 +157,40 @@ public class UnicodeSetSpanner {
             if (endNotContained == length) {
                 break;
             }
-            start = unicodeSet.spanAndCount(sequence, endNotContained, countSpan, spanCount);
-            count += quantifier == Quantifier.SPAN ? 1 : spanCount.value;
+            start = unicodeSet.spanAndCount(sequence, endNotContained, spanCondition, spanCount);
+            count += quantifier == CountMethod.WHOLE_SPAN ? 1 : spanCount.value;
         }
         return count;
     }
 
     /**
-     * Delete all the matching spans in sequence, using SpanCondition.CONTAINED
-     * 
+     * Delete all the matching spans in sequence, using SpanCondition.SIMPLE
+     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            charsequence to replace matching spans in.
      * @return modified string.
      */
     public String deleteFrom(CharSequence sequence) {
-        return replaceFrom(sequence, "", Quantifier.SPAN, SpanCondition.CONTAINED);
+        return replaceFrom(sequence, "", CountMethod.WHOLE_SPAN, SpanCondition.SIMPLE);
     }
 
     /**
      * Delete all matching spans in sequence, according to the operations.
-     * 
+     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            charsequence to replace matching spans in.
-     * @param modifySpan
-     *            specify whether to modify the matching spans (CONTAINED) or the non-matching (NOT_CONTAINED)
+     * @param spanCondition
+     *            specify whether to modify the matching spans (CONTAINED or SIMPLE) or the non-matching (NOT_CONTAINED)
      * @return modified string.
      */
-    public String deleteFrom(CharSequence sequence, SpanCondition modifySpan) {
-        return replaceFrom(sequence, "", Quantifier.SPAN, modifySpan);
+    public String deleteFrom(CharSequence sequence, SpanCondition spanCondition) {
+        return replaceFrom(sequence, "", CountMethod.WHOLE_SPAN, spanCondition);
     }
 
     /**
      * Replace all matching spans in sequence by the replacement,
-     * counting by Quantifier.ELEMENT using SpanCondition.CONTAINED.
-     * 
+     * counting by Quantifier.MIN_ELEMENTS using SpanCondition.SIMPLE.
+     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            charsequence to replace matching spans in.
      * @param replacement
@@ -171,42 +198,42 @@ public class UnicodeSetSpanner {
      * @return modified string.
      */
     public String replaceFrom(CharSequence sequence, CharSequence replacement) {
-        return replaceFrom(sequence, replacement, Quantifier.MIN_ELEMENTS, SpanCondition.CONTAINED);
+        return replaceFrom(sequence, replacement, CountMethod.MIN_ELEMENTS, SpanCondition.SIMPLE);
     }
 
     /**
-     * Replace all matching spans in sequence by replacement, according to the Quantifier, using SpanCondition.CONTAINED. 
-     * 
+     * Replace all matching spans in sequence by replacement, according to the Quantifier, using SpanCondition.SIMPLE. 
+     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            charsequence to replace matching spans in.
      * @param replacement
      *            replacement sequence. To delete, use ""
      * @param quantifier
-     *            whether to treat the entire span as a match, or individual code points
+     *            whether to treat an entire span as a match, or individual code points
      * @return modified string.
      */
-    public String replaceFrom(CharSequence sequence, CharSequence replacement, Quantifier quantifier) {
-        return replaceFrom(sequence, replacement, quantifier, SpanCondition.CONTAINED);
+    public String replaceFrom(CharSequence sequence, CharSequence replacement, CountMethod quantifier) {
+        return replaceFrom(sequence, replacement, quantifier, SpanCondition.SIMPLE);
     }
 
     /**
-     * Replace all matching spans in sequence by replacement, according to the operations quantifier and modifySpan.
-     * 
+     * Replace all matching spans in sequence by replacement, according to the operations quantifier and spanCondition.
+     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            charsequence to replace matching spans in.
      * @param replacement
      *            replacement sequence. To delete, use ""
-     * @param modifySpan
-     *            (optional) specify whether to modify the matching spans (CONTAINED) or the non-matching
+     * @param spanCondition
+     *            specify whether to modify the matching spans (CONTAINED or SIMPLE) or the non-matching
      *            (NOT_CONTAINED)
      * @param quantifier
-     *            (optional) specify whether to collapse or do codepoint by codepoint.
+     *            specify whether to collapse or do codepoint by codepoint.
      * @return modified string.
      */
-    public String replaceFrom(CharSequence sequence, CharSequence replacement, Quantifier quantifier,
-            SpanCondition modifySpan) {
-        SpanCondition copySpan = modifySpan == SpanCondition.CONTAINED ? SpanCondition.NOT_CONTAINED
-                : SpanCondition.CONTAINED;
+    public String replaceFrom(CharSequence sequence, CharSequence replacement, CountMethod quantifier,
+            SpanCondition spanCondition) {
+        SpanCondition copySpan = spanCondition == SpanCondition.NOT_CONTAINED ? SpanCondition.SIMPLE
+                : SpanCondition.NOT_CONTAINED;
         final boolean remove = replacement.length() == 0;
         StringBuilder result = new StringBuilder();
         // TODO, we can optimize this to
@@ -215,10 +242,10 @@ public class UnicodeSetSpanner {
         final int length = sequence.length();
         OutputInt spanCount = new OutputInt();
         for (int endCopy = 0; endCopy != length;) {
-            int endModify = unicodeSet.spanAndCount(sequence, endCopy, modifySpan, spanCount);
+            int endModify = unicodeSet.spanAndCount(sequence, endCopy, spanCondition, spanCount);
             if (remove || endModify == 0) {
                 // do nothing
-            } else if (quantifier == Quantifier.SPAN) {
+            } else if (quantifier == CountMethod.WHOLE_SPAN) {
                 result.append(replacement);
             } else {
                 for (int i = spanCount.value; i > 0; --i) {
@@ -240,17 +267,17 @@ public class UnicodeSetSpanner {
      */
     public enum TrimOption {
         /**
-         * Trim leading spans (subject to INVERT).
+         * Trim leading spans.
          * 
          */
         LEADING,
         /**
-         * Trim leading and trailing spans (subject to INVERT).
+         * Trim leading and trailing spans.
          * 
          */
         BOTH,
         /**
-         * Trim trailing spans (subject to INVERT).
+         * Trim trailing spans.
          * 
          */
         TRAILING;
@@ -258,7 +285,7 @@ public class UnicodeSetSpanner {
 
     /**
      * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching code points at the start or
-     * end of the string, using TrimOption.BOTH and SpanCondition.CONTAINED. For example:
+     * end of the string, using TrimOption.BOTH and SpanCondition.SIMPLE. For example:
      * 
      * <pre>
      * {@code
@@ -270,12 +297,12 @@ public class UnicodeSetSpanner {
      * 
      */
     public CharSequence trim(CharSequence sequence) {
-        return trim(sequence, TrimOption.BOTH, SpanCondition.CONTAINED);
+        return trim(sequence, TrimOption.BOTH, SpanCondition.SIMPLE);
     }
 
     /**
      * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching code points at the start or
-     * end of the string, using the trimOption and SpanCondition.CONTAINED. For example:
+     * end of the string, using the trimOption and SpanCondition.SIMPLE. For example:
      * 
      * <pre>
      * {@code
@@ -287,12 +314,12 @@ public class UnicodeSetSpanner {
      * 
      */
     public CharSequence trim(CharSequence sequence, TrimOption trimOption) {
-        return trim(sequence, trimOption, SpanCondition.CONTAINED);
+        return trim(sequence, trimOption, SpanCondition.SIMPLE);
     }
 
     /**
      * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching code points at the start or
-     * end of the string, depending on the trimOption and modifySpan. For example:
+     * end of the string, depending on the trimOption and spanCondition. For example:
      * 
      * <pre>
      * {@code
@@ -305,16 +332,16 @@ public class UnicodeSetSpanner {
      * @param sequence
      *            the sequence to trim
      * @param trimOption
-     *            (optional) LEADING, TRAILING, or BOTH
-     * @param modifySpan
-     *            (optional) CONTAINED or NOT_CONTAINED
+     *            LEADING, TRAILING, or BOTH
+     * @param spanCondition
+     *            SIMPLE, CONTAINED or NOT_CONTAINED
      * @return a subsequence
      */
-    public CharSequence trim(CharSequence sequence, TrimOption trimOption, SpanCondition modifySpan) {
+    public CharSequence trim(CharSequence sequence, TrimOption trimOption, SpanCondition spanCondition) {
         int endLeadContained, startTrailContained;
         final int length = sequence.length();
         if (trimOption != TrimOption.TRAILING) {
-            endLeadContained = unicodeSet.span(sequence, modifySpan);
+            endLeadContained = unicodeSet.span(sequence, spanCondition);
             if (endLeadContained == length) {
                 return "";
             }
@@ -322,7 +349,7 @@ public class UnicodeSetSpanner {
             endLeadContained = 0;
         }
         if (trimOption != TrimOption.LEADING) {
-            startTrailContained = unicodeSet.spanBack(sequence, modifySpan);
+            startTrailContained = unicodeSet.spanBack(sequence, spanCondition);
         } else {
             startTrailContained = length;
         }

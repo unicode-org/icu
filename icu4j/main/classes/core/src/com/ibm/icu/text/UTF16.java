@@ -2614,7 +2614,7 @@ public final class UTF16 {
 
     /**
      * Utility for getting a code point from a CharSequence that contains exactly one code point.
-     * @return a code point IF the string is non-null and consists of a single code point.
+     * @return the code point IF the string is non-null and consists of a single code point.
      * otherwise returns -1.
      * @param s to test
      */
@@ -2640,7 +2640,7 @@ public final class UTF16 {
      * as a code point comparison of UTF16.valueOf(codePoint) and s.toString(). More specifically, if
      * <pre>
      * sc = new StringComparator(true,false,0);
-     * fast = UTF16.compare(codePoint, charSequence)
+     * fast = UTF16.compareCodePoint(codePoint, charSequence)
      * slower = sc.compare(UTF16.valueOf(codePoint), charSequence == null ? "" : charSequence.toString())
      * </pre>
      * then
