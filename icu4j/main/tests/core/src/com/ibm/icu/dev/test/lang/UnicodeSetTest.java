@@ -37,7 +37,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSet.ComparisonStyle;
 import com.ibm.icu.text.UnicodeSet.EntryRange;
 import com.ibm.icu.text.UnicodeSetSpanner;
-import com.ibm.icu.text.UnicodeSetSpanner.Quantifier;
+import com.ibm.icu.text.UnicodeSetSpanner.CountMethod;
 import com.ibm.icu.text.UnicodeSet.SpanCondition;
 import com.ibm.icu.text.UnicodeSetSpanner.TrimOption;
 import com.ibm.icu.text.UnicodeSetIterator;
@@ -2455,10 +2455,10 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("", "a_._b_._c_._", m.trim("_._a_._b_._c_._", TrimOption.LEADING));
         assertEquals("", "_._a_._b_._c", m.trim("_._a_._b_._c_._", TrimOption.TRAILING));
 
-        assertEquals("", "a??b??c", m.replaceFrom("a_._b_._c", "??", Quantifier.SPAN));
-        assertEquals("", "a??b??c", m.replaceFrom(m.trim("_._a_._b_._c_._"), "??", Quantifier.SPAN));
+        assertEquals("", "a??b??c", m.replaceFrom("a_._b_._c", "??", CountMethod.WHOLE_SPAN));
+        assertEquals("", "a??b??c", m.replaceFrom(m.trim("_._a_._b_._c_._"), "??", CountMethod.WHOLE_SPAN));
         assertEquals("", "XYXYXYaXYXYXYbXYXYXYcXYXYXY", m.replaceFrom("_._a_._b_._c_._", "XY"));
-        assertEquals("", "XYaXYbXYcXY", m.replaceFrom("_._a_._b_._c_._", "XY", Quantifier.SPAN));
+        assertEquals("", "XYaXYbXYcXY", m.replaceFrom("_._a_._b_._c_._", "XY", CountMethod.WHOLE_SPAN));
 
         m = new UnicodeSetSpanner(new UnicodeSet("\\p{uppercase}"));
         assertEquals("", "TQBF", m.deleteFrom("The Quick Brown Fox.", SpanCondition.NOT_CONTAINED));
@@ -2468,17 +2468,17 @@ public class UnicodeSetTest extends TestFmwk {
 
         m = new UnicodeSetSpanner(new UnicodeSet("[{ab}]"));
         assertEquals("", "XXc acb", m.replaceFrom("ababc acb", "X"));
-        assertEquals("", "Xc acb", m.replaceFrom("ababc acb", "X", Quantifier.SPAN));
+        assertEquals("", "Xc acb", m.replaceFrom("ababc acb", "X", CountMethod.WHOLE_SPAN));
     }
 
     public void TestCodePoints() {
         // test supplemental code points and strings clusters
-        checkCodePoints("x\u0308", "z\u0308", Quantifier.MIN_ELEMENTS, null, 1);
-        checkCodePoints("𣿡", "𣿢", Quantifier.MIN_ELEMENTS, null, 1);
-        checkCodePoints("👦", "👧", Quantifier.MIN_ELEMENTS, null, 1);
+        checkCodePoints("x\u0308", "z\u0308", CountMethod.MIN_ELEMENTS, null, 1);
+        checkCodePoints("𣿡", "𣿢", CountMethod.MIN_ELEMENTS, null, 1);
+        checkCodePoints("👦", "👧", CountMethod.MIN_ELEMENTS, null, 1);
     }
 
-    private void checkCodePoints(String a, String b, Quantifier quantifier, String expectedReplaced, int expectedCount) {
+    private void checkCodePoints(String a, String b, CountMethod quantifier, String expectedReplaced, int expectedCount) {
         final String ab = a+b;
         UnicodeSetSpanner m = new UnicodeSetSpanner(new UnicodeSet("[{" + a + "}]"));
         assertEquals("new UnicodeSetSpanner(\"[{" + a + "}]\").countIn(\"" + ab + "\")", 
@@ -2492,4 +2492,77 @@ public class UnicodeSetTest extends TestFmwk {
                 expectedReplaced, m.replaceFrom(ab, "-", quantifier));
     }
 
+    public void testForSpanGaps() {
+        String[] items = {"a", "b", "c", "{ab}", "{bc}", "{cd}", "{abc}", "{bcd}"};
+        final int limit = 1<<items.length;
+        // build long string for testing
+        StringBuilder longBuffer = new StringBuilder();
+        for (int i = 1; i < limit; ++i) {
+            longBuffer.append("x");
+            longBuffer.append(getCombinations(items, i));
+        }
+        String longString = longBuffer.toString();
+        longString = longString.replace("{","").replace("}","");
+
+        long start = System.nanoTime();
+        for (int i = 1; i < limit; ++i) {
+            UnicodeSet us = new UnicodeSet("[" + getCombinations(items, i) + "]");
+            int problemFound = checkSpan(longString, us, SpanCondition.SIMPLE);
+            if (problemFound >= 0) {
+                assertEquals("Testing " + longString + ", found gap at", -1, problemFound);
+                break;
+            }
+        }
+        long end = System.nanoTime();
+        logln("Time for SIMPLE   :\t" + (end-start));
+        start = System.nanoTime();
+        for (int i = 1; i < limit; ++i) {
+            UnicodeSet us = new UnicodeSet("[" + getCombinations(items, i) + "]");
+            int problemFound = checkSpan(longString, us, SpanCondition.CONTAINED);
+            if (problemFound >= 0) {
+                assertEquals("Testing " + longString + ", found gap at", -1, problemFound);
+                break;
+            }
+        }
+        end = System.nanoTime();
+        logln("Time for CONTAINED:\t" + (end-start));
+    }
+
+    /**
+     * Check that there are no gaps, when we alternate spanning. That is, there
+     * should only be a zero length span at the very start.
+     * @param longString
+     * @param us
+     * @param simple
+     */
+    private int checkSpan(String longString, UnicodeSet us, SpanCondition spanCondition) {
+        int start = 0;
+        while (start < longString.length()) {
+            int limit = us.span(longString, start, spanCondition);
+            if (limit == longString.length()) {
+                break;
+            } else if (limit == start && start != 0) {
+                return start;
+            }
+            start = limit;
+            limit = us.span(longString, start, SpanCondition.NOT_CONTAINED);
+            if (limit == start) {
+                return start;
+            }
+            start = limit;
+        }
+        return -1; // all ok
+    }
+
+    private String getCombinations(String[] items, int bitset) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; bitset != 0; ++i) {
+            int other = bitset & (1 << i);
+            if (other != 0) {
+                bitset ^= other;
+                result.append(items[i]);
+            }
+        }
+        return result.toString();
+    }
 }
