@@ -34,7 +34,7 @@ powerpc*-*-linux*)
 *-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
 i[[34567]]86-*-cygwin) icu_cv_host_frag=mh-cygwin ;;
 x86_64-*-cygwin) icu_cv_host_frag=mh-cygwin64 ;;
-*-*-mingw32|*-*-mingw64)
+*-*-mingw*)
 	if test "$GCC" = yes; then
                 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #ifndef __MINGW64__
