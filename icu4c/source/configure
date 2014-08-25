@@ -4105,9 +4105,6 @@ $as_echo "$ac_use_strict_options" >&6; }
         if test "$GCC" = yes
         then
             case "${host}" in
-            *-*-solaris*)
-                # Don't use -std=c99 option on Solaris/GCC
-                ;;
             *)
                 # Do not use -ansi. It limits us to C90, and it breaks some platforms.
                 # We use -std=c99 to disable the gnu99 defaults and its associated warnings
@@ -4600,7 +4597,7 @@ fi
                     if test "$CAN_BUILD_64" != yes; then
                         # Nope. back out changes.
                         CFLAGS="${CFLAGS_OLD}"
-                        CXXFLAGS="${CFLAGS_OLD}"
+                        CXXFLAGS="${CXXFLAGS_OLD}"
                         # 2. try xarch=v9 [deprecated]
                         ## TODO: cross compile: the following won't work.
                         SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
@@ -4897,7 +4894,7 @@ powerpc*-*-linux*)
 *-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
 i[34567]86-*-cygwin) icu_cv_host_frag=mh-cygwin ;;
 x86_64-*-cygwin) icu_cv_host_frag=mh-cygwin64 ;;
-*-*-mingw32|*-*-mingw64)
+*-*-mingw*)
 	if test "$GCC" = yes; then
                 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
