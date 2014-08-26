@@ -427,8 +427,9 @@ class TimeZoneFormat;
  *     <tr>
  *         <td style="text-align: center">S</td>
  *         <td style="text-align: center">1..n</td>
- *         <td>3456</td>
- *         <td>Fractional Second - truncates (like other time fields) to the count of letters.
+ *         <td>3450</td>
+ *         <td>Fractional Second - truncates (like other time fields) to the count of letters when formatting.
+ *         Appends zeros if more than 3 letters specified. Truncates at three significant digits when parsing.
  *         (example shows display using pattern SSSS for seconds value 12.34567)</td>
  *     </tr>
  *     <tr>
