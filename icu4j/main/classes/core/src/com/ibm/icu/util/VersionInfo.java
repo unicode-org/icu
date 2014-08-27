@@ -196,10 +196,12 @@ public final class VersionInfo implements Comparable<VersionInfo>
     public static final VersionInfo UCOL_BUILDER_VERSION;
 
     /**
-     * This is the version of collation tailorings.
-     * This value may change in subsequent releases of ICU.
-     * @stable ICU 2.8
+     * Constant version 1.
+     * This was intended to be the version of collation tailorings,
+     * but instead the tailoring data carries a version number.
+     * @deprecated ICU 54
      */
+    @Deprecated
     public static final VersionInfo UCOL_TAILORINGS_VERSION;
 
 
