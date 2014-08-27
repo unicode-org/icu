@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 1999-2013, International Business Machines Corporation and
+# Copyright (c) 1999-2014, International Business Machines Corporation and
 # others. All Rights Reserved.
 
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
@@ -51,6 +51,7 @@ The following names can be supplied as the argument for platform:
     MacOSX              Use the default compilers on MacOS X (Darwin)
     MacOSX/GCC          Use the GNU gcc/g++ compilers on MacOSX (Darwin)
     MinGW               Use the GNU gcc/g++ compilers on MinGW
+    MSYS/MSVC           Use the Microsoft Visual C++ computer on MSYS
     QNX                 Use the QNX QCC compiler on QNX/Neutrino
     Solaris             Use the Sun cc/CC compilers on Solaris
     Solaris/GCC         Use the GNU gcc/g++ compilers on Solaris
@@ -314,6 +315,17 @@ case $platform in
         RELEASE_CXXFLAGS='-O3'
         CXXFLAGS="--std=c++03"
         export CXXFLAGS
+        ;;
+    MSYS/MSVC)
+        THE_OS="MSYS"
+        THE_COMP="Microsoft Visual C++"
+        CC=cl; export CC
+        CXX=cl; export CXX
+        RELEASE_CFLAGS='-Gy -MD'
+        RELEASE_CXXFLAGS='-Gy -MD'
+        DEBUG_CFLAGS='-Zi -MDd'
+        DEBUG_CXXFLAGS='-Zi -MDd'
+        DEBUG_LDFLAGS='-DEBUG'
         ;;
     *BSD)
         THE_OS="BSD"
