@@ -1674,11 +1674,13 @@ void CollationAPITest::TestGetLocale() {
     // The requested locale may be the same as the valid locale,
     // or may not be supported at all. See ticket #10477.
     locale = coll->getLocale(ULOC_REQUESTED_LOCALE, status);
-    if(locale != testStruct[i].requestedLocale && locale != testStruct[i].validLocale) {
+    if(U_SUCCESS(status) &&
+        locale != testStruct[i].requestedLocale && locale != testStruct[i].validLocale) {
       errln("[Coll %s]: Error in requested locale, expected %s or %s, got %s",
             testStruct[i].requestedLocale,
             testStruct[i].requestedLocale, testStruct[i].validLocale, locale.getName());
     }
+    status = U_ZERO_ERROR;
     locale = coll->getLocale(ULOC_VALID_LOCALE, status);
     if(locale != testStruct[i].validLocale) {
       errln("[Coll %s]: Error in valid locale, expected %s, got %s",
@@ -1736,9 +1738,10 @@ void CollationAPITest::TestGetLocale() {
   /* collator instantiated from rules should have all three locales NULL */
   coll = new RuleBasedCollator(rlz, status);
   locale = coll->getLocale(ULOC_REQUESTED_LOCALE, status);
-  if(!locale.isBogus()) {
+  if(U_SUCCESS(status) && !locale.isBogus()) {
     errln("For collator instantiated from rules, requested locale %s is not bogus", locale.getName());
   }
+  status = U_ZERO_ERROR;
   locale = coll->getLocale(ULOC_VALID_LOCALE, status);
   if(!locale.isBogus()) {
     errln("For collator instantiated from rules, valid locale %s is not bogus", locale.getName());
