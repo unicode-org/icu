@@ -52,7 +52,10 @@ x86_64-*-cygwin)
 #endif]])],                        [icu_cv_host_frag=mh-mingw64],
                                    [icu_cv_host_frag=mh-mingw])
 	else
-		icu_cv_host_frag=mh-cygwin-msvc
+	        case "${host}" in
+		*-*-mingw*) icu_cv_host_frag=mh-msys-msvc ;;
+		*-*-cygwin) icu_cv_host_frag=mh-cygwin-msvc ;;
+		esac
 	fi ;;
 *-*-*bsd*|*-*-dragonfly*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
@@ -481,7 +484,9 @@ AC_DEFUN([AC_CHECK_STRICT_COMPILE],
                 if test "`$CC /help 2>&1 | head -c9`" = "Microsoft"
                 then
                     CFLAGS="$CFLAGS /W4"
-                fi
+                fi ;;
+            *-*-mingw*)
+                CFLAGS="$CFLAGS -W4" ;;
             esac
         fi
         if test "$GXX" = yes
@@ -493,7 +498,9 @@ AC_DEFUN([AC_CHECK_STRICT_COMPILE],
                 if test "`$CXX /help 2>&1 | head -c9`" = "Microsoft"
                 then
                     CXXFLAGS="$CXXFLAGS /W4"
-                fi
+                fi ;;
+            *-*-mingw*)
+                CFLAGS="$CFLAGS -W4" ;;
             esac
         fi
     fi
