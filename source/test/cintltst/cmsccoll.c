@@ -2783,7 +2783,7 @@ static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCo
         errorNo++;
     }
     ucol_close(target);
-    if(uprv_strcmp(ucol_getLocaleByType(source, ULOC_REQUESTED_LOCALE, &status), ucol_getLocaleByType(source, ULOC_ACTUAL_LOCALE, &status)) == 0) {
+    if(uprv_strcmp(locName, ucol_getLocaleByType(source, ULOC_ACTUAL_LOCALE, &status)) == 0) {
         target = ucol_safeClone(source, NULL, NULL, &status);
         if(U_FAILURE(status)) {
             log_err("Error creating clone\n");
@@ -2886,8 +2886,8 @@ static void TestEquals(void) {
     if(!ucol_equals(source, source)) {
         log_err("Same collator not equal\n");
     }
-    if(TestEqualsForCollator(locName, source, target)) {
-        log_err("Errors for root\n", locName);
+    if(TestEqualsForCollator("root", source, target)) {
+        log_err("Errors for root\n");
     }
     ucol_close(source);
 

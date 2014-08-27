@@ -310,8 +310,8 @@ RuleBasedCollator::getLocale(ULocDataLocaleType type, UErrorCode& errorCode) con
     case ULOC_ACTUAL_LOCALE:
         return actualLocaleIsSameAsValid ? validLocale : tailoring->actualLocale;
     case ULOC_VALID_LOCALE:
-    case ULOC_REQUESTED_LOCALE:  // TODO: Drop this, see ticket #10477.
         return validLocale;
+    case ULOC_REQUESTED_LOCALE:
     default:
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return Locale::getRoot();
@@ -329,9 +329,9 @@ RuleBasedCollator::internalGetLocaleID(ULocDataLocaleType type, UErrorCode &erro
         result = actualLocaleIsSameAsValid ? &validLocale : &tailoring->actualLocale;
         break;
     case ULOC_VALID_LOCALE:
-    case ULOC_REQUESTED_LOCALE:  // TODO: Drop this, see ticket #10477.
         result = &validLocale;
         break;
+    case ULOC_REQUESTED_LOCALE:
     default:
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;

@@ -1432,9 +1432,11 @@ void TestGetLocale() {
      * or may not be supported at all. See ticket #10477.
      */
     locale = ucol_getLocaleByType(coll, ULOC_REQUESTED_LOCALE, &status);
-    if(strcmp(locale, testStruct[i].requestedLocale) != 0 && strcmp(locale, testStruct[i].validLocale) != 0) {
+    if(U_SUCCESS(status) &&
+          strcmp(locale, testStruct[i].requestedLocale) != 0 && strcmp(locale, testStruct[i].validLocale) != 0) {
       log_err("[Coll %s]: Error in requested locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].requestedLocale, locale);
     }
+    status = U_ZERO_ERROR;
     locale = ucol_getLocaleByType(coll, ULOC_VALID_LOCALE, &status);
     if(strcmp(locale, testStruct[i].validLocale) != 0) {
       log_err("[Coll %s]: Error in valid locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].validLocale, locale);
@@ -1477,9 +1479,10 @@ void TestGetLocale() {
   /* collator instantiated from rules should have all three locales NULL */
   coll = ucol_openRules(rlz, rlzLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
   locale = ucol_getLocaleByType(coll, ULOC_REQUESTED_LOCALE, &status);
-  if(locale != NULL) {
+  if(U_SUCCESS(status) && locale != NULL) {
     log_err("For collator instantiated from rules, requested locale returned %s instead of NULL\n", locale);
   }
+  status = U_ZERO_ERROR;
   locale = ucol_getLocaleByType(coll, ULOC_VALID_LOCALE, &status);
   if(locale != NULL) {
     log_err("For collator instantiated from rules,  valid locale returned %s instead of NULL\n", locale);

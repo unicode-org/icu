@@ -1988,7 +1988,6 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
         case ULOC_VALID_LOCALE:
             return resourceBundle->fTopLevelData->fName;
         case ULOC_REQUESTED_LOCALE:
-            return NULL;
         default:
             *status = U_ILLEGAL_ARGUMENT_ERROR;
             return NULL;
