@@ -32,8 +32,18 @@ powerpc*-*-linux*)
 		icu_cv_host_frag=mh-linux-va
 	fi ;;
 *-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
-i[[34567]]86-*-cygwin) icu_cv_host_frag=mh-cygwin ;;
-x86_64-*-cygwin) icu_cv_host_frag=mh-cygwin64 ;;
+i[[34567]]86-*-cygwin) 
+	if test "$GCC" = yes; then
+		icu_cv_host_frag=mh-cygwin
+	else
+		icu_cv_host_frag=mh-cygwin-msvc
+	fi ;;
+x86_64-*-cygwin) 
+	if test "$GCC" = yes; then
+		icu_cv_host_frag=mh-cygwin64
+	else
+		icu_cv_host_frag=mh-cygwin-msvc
+	fi ;;
 *-*-mingw*)
 	if test "$GCC" = yes; then
                 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
