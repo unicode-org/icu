@@ -612,11 +612,12 @@ ResourceBundleTest::TestGetLocaleByType(void)
             status = U_ZERO_ERROR;
             continue;
         }
-        
+
         locale = res.getLocale(ULOC_REQUESTED_LOCALE, status);
-        if(locale != Locale::getDefault()) {
+        if(U_SUCCESS(status) && locale != Locale::getDefault()) {
             err("Expected requested locale to be %s. Got %s\n", test[i].requestedLocale, locale.getName());
         }
+        status = U_ZERO_ERROR;
         locale = res.getLocale(ULOC_VALID_LOCALE, status);
         if(strcmp(locale.getName(), test[i].validLocale) != 0) {
             err("Expected valid locale to be %s. Got %s\n", test[i].requestedLocale, locale.getName());
@@ -627,6 +628,3 @@ ResourceBundleTest::TestGetLocaleByType(void)
         }
     }
 }
-
-//eof
-

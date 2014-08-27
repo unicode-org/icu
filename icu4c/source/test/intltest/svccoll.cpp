@@ -62,9 +62,10 @@ void CollationServiceTest::TestRegister()
         // The requested locale may be the same as the valid locale,
         // or may not be supported at all. See ticket #10477.
         Locale loc = ncol->getLocale(ULOC_REQUESTED_LOCALE, status);
-        if (loc != US_FOO && loc != US) {
+        if (U_SUCCESS(status) && loc != US_FOO && loc != US) {
             errln(UnicodeString("requested locale for en_US_FOO is not en_US_FOO nor en_US but ") + loc.getName());
         }
+        status = U_ZERO_ERROR;
         loc = ncol->getLocale(ULOC_VALID_LOCALE, status);
         if (loc != US) {
             errln(UnicodeString("valid locale for en_US_FOO is not en_US but ") + loc.getName());
@@ -413,9 +414,10 @@ void CollationServiceTest::TestRegisterFactory(void)
         // The requested locale may be the same as the valid locale,
         // or may not be supported at all. See ticket #10477.
         Locale loc = ncol->getLocale(ULOC_REQUESTED_LOCALE, status);
-        if (loc != fu_FU_FOO && loc != fu_FU) {
+        if (U_SUCCESS(status) && loc != fu_FU_FOO && loc != fu_FU) {
             errln(UnicodeString("requested locale for fu_FU_FOO is not fu_FU_FOO nor fu_FU but ") + loc.getName());
         }
+        status = U_ZERO_ERROR;
         loc = ncol->getLocale(ULOC_VALID_LOCALE, status);
         if (loc != fu_FU) {
             errln(UnicodeString("valid locale for fu_FU_FOO is not fu_FU but ") + loc.getName());

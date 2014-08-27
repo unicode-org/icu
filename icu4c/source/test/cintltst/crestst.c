@@ -996,11 +996,12 @@ static void TestGetLocaleByType(void) {
             status = U_ZERO_ERROR;
             continue;
         }
-        
+
         locale = ures_getLocaleByType(res, ULOC_REQUESTED_LOCALE, &status);
-        if(locale) {
+        if(U_SUCCESS(status) && locale != NULL) {
             log_err("Requested locale should return NULL\n");
         }
+        status = U_ZERO_ERROR;
         locale = ures_getLocaleByType(res, ULOC_VALID_LOCALE, &status);
         if(!locale || strcmp(locale, test[i].validLocale) != 0) {
             log_err("Expected valid locale to be %s. Got %s\n", test[i].requestedLocale, locale);
@@ -1013,4 +1014,3 @@ static void TestGetLocaleByType(void) {
     }
     ures_close(res);
 }
-
