@@ -158,9 +158,10 @@
 #define UCOL_BUILDER_VERSION 9
 
 /**
- * This is the version of collation tailorings.
- * This value may change in subsequent releases of ICU.
- * @stable ICU 2.4
+ * Constant 1.
+ * This was intended to be the version of collation tailorings,
+ * but instead the tailoring data carries a version number.
+ * @deprecated ICU 54
  */
 #define UCOL_TAILORINGS_VERSION 1
 
