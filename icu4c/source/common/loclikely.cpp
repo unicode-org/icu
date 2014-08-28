@@ -28,8 +28,6 @@
 #include "ulocimp.h"
 #include "ustr_imp.h"
 
-#define UPRV_LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 /**
  * This function looks for the localeID in the likelySubtags resource.
  *

@@ -58,8 +58,6 @@
 #include "cstring.h"
 #include "umutex.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 /* control optimizations according to the platform */
 #define MBCS_UNROLL_SINGLE_TO_BMP 1
 #define MBCS_UNROLL_SINGLE_FROM_BMP 0
@@ -1126,7 +1124,7 @@ _extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
         int32_t i;
 
         range=gb18030Ranges[0];
-        for(i=0; i<LENGTHOF(gb18030Ranges); range+=4, ++i) {
+        for(i=0; i<UPRV_LENGTHOF(gb18030Ranges); range+=4, ++i) {
             if(range[0]<=(uint32_t)cp && (uint32_t)cp<=range[1]) {
                 /* found the Unicode code point, output the four-byte sequence for it */
                 uint32_t linear;
@@ -1193,7 +1191,7 @@ _extToU(UConverter *cnv, const UConverterSharedData *sharedData,
 
         linear=LINEAR_18030(cnv->toUBytes[0], cnv->toUBytes[1], cnv->toUBytes[2], cnv->toUBytes[3]);
         range=gb18030Ranges[0];
-        for(i=0; i<LENGTHOF(gb18030Ranges); range+=4, ++i) {
+        for(i=0; i<UPRV_LENGTHOF(gb18030Ranges); range+=4, ++i) {
             if(range[2]<=linear && linear<=range[3]) {
                 /* found the sequence, output the Unicode code point for it */
                 *pErrorCode=U_ZERO_ERROR;
