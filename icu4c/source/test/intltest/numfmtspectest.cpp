@@ -20,8 +20,6 @@
 #include "unicode/dtfmtsym.h"
 #include "uassert.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
-
 static const UChar kJPY[] = {0x4A, 0x50, 0x59};
 
 static void fixNonBreakingSpace(UnicodeString &str) {
