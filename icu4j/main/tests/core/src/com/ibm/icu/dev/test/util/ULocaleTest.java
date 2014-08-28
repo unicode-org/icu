@@ -3874,7 +3874,7 @@ public class ULocaleTest extends TestFmwk {
                 {"en@timezone=America/New_York;calendar=japanese",    "en-u-ca-japanese-tz-usnyc"},
                 {"en@timezone=US/Eastern",    "en-u-tz-usnyc"},
                 {"en@x=x-y-z;a=a-b-c",  "en-x-x-y-z"},
-                {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-ks-identic"},
+                {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-cu-usd-eur-ks-identic"},
                 {"en_US_POSIX", "en-US-u-va-posix"},
                 {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-eur-va-posix"},
                 {"@x=elmer",    "x-elmer"},
@@ -4447,6 +4447,110 @@ public class ULocaleTest extends TestFmwk {
                 errln("FAILED: Sort order is incorrect for " + loc.toString());
                 break;
             }
+        }
+    }
+
+    public void TestToUnicodeLocaleKey() {
+        String[][] DATA = {
+                {"calendar",    "ca"},
+                {"CALEndar",    "ca"},  // difference casing
+                {"ca",          "ca"},  // bcp key itself
+                {"kv",          "kv"},  // no difference between legacy and bcp
+                {"foo",         null},  // unknown, bcp ill-formed
+                {"ZZ",          "zz"},  // unknown, bcp well-formed
+        };
+
+        for (String[] d : DATA) {
+            String keyword = d[0];
+            String expected = d[1];
+
+            String bcpKey = ULocale.toUnicodeLocaleKey(keyword);
+            assertEquals("keyword=" + keyword, expected, bcpKey);
+        }
+    }
+
+    public void TestToLegacyKey() {
+        String[][] DATA = {
+                {"kb",          "colbackwards"},
+                {"kB",          "colbackwards"},    // different casing
+                {"Collation",   "collation"},   // keyword itself with different casing
+                {"kv",          "kv"},  // no difference between legacy and bcp
+                {"foo",         "foo"}, // unknown, bcp ill-formed
+                {"ZZ",          "zz"},  // unknown, bcp well-formed
+                {"e=mc2",       null},  // unknown, bcp/legacy ill-formed
+        };
+
+        for (String[] d : DATA) {
+            String keyword = d[0];
+            String expected = d[1];
+
+            String legacyKey = ULocale.toLegacyKey(keyword);
+            assertEquals("bcpKey=" + keyword, expected, legacyKey);
+        }
+    }
+
+    public void TestToUnicodeLocaleType() {
+        String[][] DATA = {
+                {"tz",              "Asia/Kolkata",     "inccu"},
+                {"calendar",        "gregorian",        "gregory"},
+                {"ca",              "gregorian",        "gregory"},
+                {"ca",              "Gregorian",        "gregory"},
+                {"ca",              "buddhist",         "buddhist"},
+                {"Calendar",        "Japanese",         "japanese"},
+                {"calendar",        "Islamic-Civil",    "islamic-civil"},
+                {"calendar",        "islamicc",         "islamic-civil"},   // bcp type alias
+                {"colalternate",    "NON-IGNORABLE",    "noignore"},
+                {"colcaselevel",    "yes",              "true"},
+                {"tz",              "america/new_york", "usnyc"},
+                {"tz",              "Asia/Kolkata",     "inccu"},
+                {"timezone",        "navajo",           "usden"},
+                {"ca",              "aaaa",             "aaaa"},    // unknown type, well-formed type
+                {"ca",              "gregory-japanese-islamic", "gregory-japanese-islamic"},    // unknown type, well-formed type
+                {"zz",              "gregorian",        null},      // unknown key, ill-formed type
+                {"co",              "foo-",             null},      // unknown type, ill-formed type
+        };
+
+        for (String[] d : DATA) {
+            String keyword = d[0];
+            String value = d[1];
+            String expected = d[2];
+
+            String bcpType = ULocale.toUnicodeLocaleType(keyword, value);
+            assertEquals("keyword=" + keyword + ", value=" + value, expected, bcpType);
+        }
+
+    }
+
+    public void TestToLegacyType() {
+        String[][] DATA = {
+                {"calendar",        "gregory",          "gregorian"},
+                {"ca",              "gregory",          "gregorian"},
+                {"ca",              "Gregory",          "gregorian"},
+                {"ca",              "buddhist",         "buddhist"},
+                {"Calendar",        "Japanese",         "japanese"},
+                {"calendar",        "Islamic-Civil",    "islamic-civil"},
+                {"calendar",        "islamicc",         "islamic-civil"},   // bcp type alias
+                {"colalternate",    "noignore",         "non-ignorable"},
+                {"colcaselevel",    "true",             "yes"},
+                {"tz",              "usnyc",            "America/New_York"},
+                {"tz",              "inccu",            "Asia/Calcutta"},
+                {"timezone",        "usden",            "America/Denver"},
+                {"timezone",        "usnavajo",         "America/Denver"},  // bcp type alias
+                {"colstrength",     "quarternary",      "quaternary"},  // type alias
+                {"ca",              "aaaa",             "aaaa"},    // unknown type
+                {"calendar",        "gregory-japanese-islamic", "gregory-japanese-islamic"},    // unknown type, well-formed type
+                {"zz",              "gregorian",        "gregorian"},   // unknown key, bcp ill-formed type
+                {"ca",              "gregorian-calendar",   "gregorian-calendar"},  // known key, bcp ill-formed type
+                {"co",              "e=mc2",            null},  // known key, ill-formed bcp/legacy type
+        };
+
+        for (String[] d : DATA) {
+            String keyword = d[0];
+            String value = d[1];
+            String expected = d[2];
+
+            String legacyType = ULocale.toLegacyType(keyword, value);
+            assertEquals("keyword=" + keyword + ", value="  + value, expected, legacyType);
         }
     }
 }

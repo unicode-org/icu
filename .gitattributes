@@ -3832,6 +3832,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/locale/AsciiUtil.java svneol=native
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/BaseLocale.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/Extension.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/InternalLocaleBuilder.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/locale/KeyTypeData.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LanguageTag.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LocaleExtensions.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LocaleObjectCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
