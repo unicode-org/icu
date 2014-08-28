@@ -41,6 +41,7 @@ import com.ibm.icu.impl.locale.LocaleSyntaxException;
 import com.ibm.icu.impl.locale.ParseStatus;
 import com.ibm.icu.impl.locale.UnicodeLocaleExtension;
 import com.ibm.icu.impl.locale.KeyTypeData;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 
@@ -1329,6 +1330,56 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      */
     public static String getISO3Country(String localeID) {
         return LocaleIDs.getISO3Country(getCountry(localeID));
+    }
+
+    /**
+     * Pairs of (language subtag, + or -) for finding out fast if common languages
+     * are LTR (minus) or RTL (plus).
+     */
+    private static final String LANG_DIR_STRING =
+            "root-en-es-pt-zh-ja-ko-de-fr-it-ar+he+fa+ru-nl-pl-th-tr-";
+
+    /**
+     * Returns whether this locale's script is written right-to-left.
+     * If there is no script subtag, then the likely script is used,
+     * see {@link #addLikelySubtags(ULocale)}.
+     * If no likely script is known, then false is returned.
+     *
+     * <p>A script is right-to-left according to the CLDR script metadata
+     * which corresponds to whether the script's letters have Bidi_Class=R or AL.
+     *
+     * <p>Returns true for "ar" and "en-Hebr", false for "zh" and "fa-Cyrl".
+     *
+     * @return true if the locale's script is written right-to-left
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public boolean isRightToLeft() {
+        String script = getScript();
+        if (script.length() == 0) {
+            // Fastpath: We know the likely scripts and their writing direction
+            // for some common languages.
+            String lang = getLanguage();
+            if (lang.length() == 0) {
+                return false;
+            }
+            int langIndex = LANG_DIR_STRING.indexOf(lang);
+            if (langIndex >= 0) {
+                switch (LANG_DIR_STRING.charAt(langIndex + lang.length())) {
+                case '-': return false;
+                case '+': return true;
+                default: break;  // partial match of a longer code
+                }
+            }
+            // Otherwise, find the likely script.
+            ULocale likely = addLikelySubtags(this);
+            script = likely.getScript();
+            if (script.length() == 0) {
+                return false;
+            }
+        }
+        int scriptCode = UScript.getCodeFromName(script);
+        return UScript.isRightToLeft(scriptCode);
     }
 
     // display names

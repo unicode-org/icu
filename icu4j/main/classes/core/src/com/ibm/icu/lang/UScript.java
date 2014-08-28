@@ -1043,19 +1043,19 @@ public final class UScript {
     }
 
     /**
-     * Gets a script codes associated with the given ISO 15924 abbreviation or name.
+     * Returns the script code associated with the given Unicode script property alias
+     * (name or abbreviation).
+     * Short aliases are ISO 15924 script codes.
      * Returns MALAYAM given "Malayam" OR "Mlym".
      *
      * @param nameOrAbbr name of the script or ISO 15924 code
-     * @return The script code value or INVALID_CODE if the code cannot be found.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @return The script code value, or INVALID_CODE if the code cannot be found.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
     public static final int getCodeFromName(String nameOrAbbr) {
         try {
-            return UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
-                                                   nameOrAbbr);
+            return UCharacter.getPropertyValueEnum(UProperty.SCRIPT, nameOrAbbr);
         } catch (IllegalArgumentException e) {
             return INVALID_CODE;
         }
