@@ -20,6 +20,7 @@
 
 #include "unicode/utypes.h"
 #include "unicont.h"
+#include "cmemory.h" // for UPRV_LENGTHOF
 
 /*
  * Hash table for up to 1k 64-bit words, for 1 bit per BMP code point.

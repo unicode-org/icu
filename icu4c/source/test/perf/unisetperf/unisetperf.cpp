@@ -19,6 +19,7 @@
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "uoptions.h"
+#include "cmemory.h" // for UPRV_LENGTHOF
 
 // Command-line options specific to unisetperf.
 // Options do not have abbreviations: Force readable command lines.

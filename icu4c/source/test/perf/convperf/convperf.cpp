@@ -14,6 +14,7 @@
 #include "convperf.h"
 #include "data.h"
 #include <stdio.h>
+#include "cmemory.h" // for UPRV_LENGTHOF
 
 int main(int argc, const char* argv[]){
     UErrorCode status = U_ZERO_ERROR;

@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/uperf.h"
+#include "cmemory.h" // for UPRV_LENGTHOF
 #include "uoptions.h"
 
 /* definitions and text buffers */
