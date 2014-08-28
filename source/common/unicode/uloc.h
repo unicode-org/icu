@@ -887,6 +887,23 @@ uloc_setKeywordValue(const char* keywordName,
                      UErrorCode* status);
 
 /**
+ * Returns whether the locale's script is written right-to-left.
+ * If there is no script subtag, then the likely script is used, see uloc_addLikelySubtags().
+ * If no likely script is known, then FALSE is returned.
+ *
+ * A script is right-to-left according to the CLDR script metadata
+ * which corresponds to whether the script's letters have Bidi_Class=R or AL.
+ *
+ * Returns TRUE for "ar" and "en-Hebr", FALSE for "zh" and "fa-Cyrl".
+ *
+ * @param locale input locale ID
+ * @return TRUE if the locale's script is written right-to-left
+ * @draft ICU 54
+ */
+U_DRAFT UBool U_EXPORT2
+uloc_isRightToLeft(const char *locale);
+
+/**
  * enums for the  return value for the character and line orientation
  * functions.
  * @stable ICU 4.0
