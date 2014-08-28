@@ -13,6 +13,7 @@
  */
 #include "normperf.h"
 #include "uoptions.h"
+#include "cmemory.h" // for UPRV_LENGTHOF
 #include <stdio.h>
 
 UPerfFunction* NormalizerPerformanceTest::runIndexedTest(int32_t index, UBool exec,const char* &name, char* par) {

@@ -37,6 +37,7 @@
 #include "ucbuf.h"  // struct ULine
 #include "uoptions.h"
 #include "uvectr32.h"
+#include "cmemory.h" // for UPRV_LENGTHOF
 
 // Test object.
 class DictionaryTriePerfTest : public UPerfTest {
