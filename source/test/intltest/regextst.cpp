@@ -2035,7 +2035,7 @@ void RegexTest::API_Match_UTF8() {
         utext_openUnicodeString(&destText, &dest, &status);
         UText *result;
         //const char str_0123456789[] = { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x00 }; /* 0123456789 */
-        //	Test shallow-clone API
+        //  Test shallow-clone API
         int64_t   group_len;
         result = matcher->group((UText *)NULL, group_len, status);
         REGEX_CHECK_STATUS;
@@ -4826,6 +4826,9 @@ struct progressCallBackContext {
     void reset(int32_t max) {maxCalls=max; numCalls=0;lastIndex=0;};
 };
 
+// call-back function for find().
+// Return TRUE to continue the find().
+// Return FALSE to stop the find().
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 testProgressCallBackFn(const void *context, int64_t matchIndex) {
@@ -4861,7 +4864,7 @@ void RegexTest::FindProgressCallbacks() {
         const void                  *returnedContext;
         URegexFindProgressCallback  *returnedFn;
         UErrorCode status = U_ZERO_ERROR;
-        RegexMatcher matcher(UNICODE_STRING_SIMPLE("((.)+\\2)+x"), 0, status);  // A pattern that can run long.
+        RegexMatcher matcher(UNICODE_STRING_SIMPLE("((.)\\2)x"), 0, status);
         REGEX_CHECK_STATUS;
         matcher.setFindProgressCallback(testProgressCallBackFn, &cbInfo, status);
         REGEX_CHECK_STATUS;
@@ -4870,10 +4873,10 @@ void RegexTest::FindProgressCallbacks() {
         REGEX_ASSERT(returnedFn == testProgressCallBackFn);
         REGEX_ASSERT(returnedContext == &cbInfo);
 
-        // A short-running match should NOT invoke the callback.
+        // A find that matches on the initial position does NOT invoke the callback.
         status = U_ZERO_ERROR;
         cbInfo.reset(100);
-        UnicodeString s = "abxxx";
+        UnicodeString s = "aaxxx";
         matcher.reset(s);
 #if 0
         matcher.setTrace(TRUE);
@@ -4882,7 +4885,8 @@ void RegexTest::FindProgressCallbacks() {
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(cbInfo.numCalls == 0);
 
-        // A medium running match that causes matcher.find() to invoke our callback for each index.
+        // A medium running find() that causes matcher.find() to invoke our callback for each index,
+        //   but not so many times that we interrupt the operation.
         status = U_ZERO_ERROR;
         s = "aaaaaaaaaaaaaaaaaaab";
         cbInfo.reset(s.length()); //  Some upper limit for number of calls that is greater than size of our input string
@@ -4897,22 +4901,21 @@ void RegexTest::FindProgressCallbacks() {
         cbInfo.reset(s1.length() - 5); //  Bail early somewhere near the end of input string
         matcher.reset(s1);
         REGEX_ASSERT(matcher.find(0, status)==FALSE);
-        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
         REGEX_ASSERT(cbInfo.numCalls == s1.length() - 5);
 
-#if 0
         // Now a match that will succeed, but after an interruption
         status = U_ZERO_ERROR;
         UnicodeString s2 = "aaaaaaaaaaaaaa aaaaaaaaab xxx";
         cbInfo.reset(s2.length() - 10); //  Bail early somewhere near the end of input string
         matcher.reset(s2);
         REGEX_ASSERT(matcher.find(0, status)==FALSE);
-        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
         // Now retry the match from where left off
         cbInfo.maxCalls = 100; //  No callback limit
+        status = U_ZERO_ERROR;
         REGEX_ASSERT(matcher.find(cbInfo.lastIndex, status));
         REGEX_CHECK_STATUS;
-#endif
     }
 
 
@@ -5317,7 +5320,7 @@ void RegexTest::TestBug11049() {
     TestCase11049("A|B|C", "a string \\ud800\\udc00", FALSE, __LINE__);
     TestCase11049("A|B|C", "string matches at end C", TRUE, __LINE__);
 
-    // Test again with a pattern starting with a single character, 
+    // Test again with a pattern starting with a single character,
     // which takes a different code path than starting with an OR expression,
     // but with similar logic.
     TestCase11049("C", "a string \\ud800\\udc00", FALSE, __LINE__);
