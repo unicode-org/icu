@@ -9,12 +9,9 @@ package com.ibm.icu.lang;
 
 import java.util.BitSet;
 import java.util.Locale;
-import java.util.MissingResourceException;
 
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 /**
  * A class to reflect UTR #24: Script Names
@@ -945,55 +942,44 @@ public final class UScript {
      */
     public static final int CODE_LIMIT   = 167;
 
-    private static final String kLocaleScript = "LocaleScript";
-    
-    //private static final String INVALID_NAME = "Invalid";
+    private static int[] getCodesFromLocale(ULocale locale) {
+        // Multi-script languages, equivalent to the LocaleScript data
+        // that we used to load from locale resource bundles.
+        String lang = locale.getLanguage();
+        if(lang.equals("ja")) {
+            return new int[] { UScript.KATAKANA, UScript.HIRAGANA, UScript.HAN };
+        }
+        if(lang.equals("ko")) {
+            return new int[] { UScript.HANGUL, UScript.HAN };
+        }
+        String script = locale.getScript();
+        if(lang.equals("zh") && script.equals("Hant")) {
+            return new int[] { UScript.HAN, UScript.BOPOMOFO };
+        }
+        // Explicit script code.
+        if(script.length() != 0) {
+            int scriptCode = UScript.getCodeFromName(script);
+            if(scriptCode != UScript.INVALID_CODE) {
+                if(scriptCode == UScript.SIMPLIFIED_HAN || scriptCode == UScript.TRADITIONAL_HAN) {
+                    scriptCode = UScript.HAN;
+                }
+                return new int[] { scriptCode };
+            }
+        }
+        return null;
+    }
+
     /**
      * Helper function to find the code from locale.
      * @param locale The locale.
      */
     private static int[] findCodeFromLocale(ULocale locale) {
-        ICUResourceBundle rb;
-        
-        try {
-            rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-        } catch (MissingResourceException e) {
-            /* This part seems to never be called since "UResourceBundle.getBundleInstance"
-             * corrects this by setting to ICUResourceBundle.FROM_DEFAULT
-             * when such an invalid locale is passed.
-             */
-            ///CLOVER:OFF
-            return null;
-            ///CLOVER:ON
+        int[] result = getCodesFromLocale(locale);
+        if(result != null) {
+            return result;
         }
-        
-        rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-        
-        // if rb is not a strict fallback of the requested locale, return null
-        //if(!LocaleUtility.isFallbackOf(rb.getULocale().toString(), locale.toString())){
-        //    return null;
-        //}
-        //non existent locale check
-        if(rb.getLoadingStatus()==ICUResourceBundle.FROM_DEFAULT && ! locale.equals(ULocale.getDefault())){
-            return null;
-        }
-        UResourceBundle sub = rb.get(kLocaleScript);
-        
-        int[] result = new int[sub.getSize()];
-        int w = 0;
-        for (int i = 0; i < result.length; ++i) {
-            int code = UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
-                                                       sub.getString(i));
-            result[w++] = code;
-
-        }
-
-        if (w < result.length) {
-            throw new IllegalStateException("bad locale data, listed " + 
-                 result.length + " scripts but found only " + w);
-        }
-
-        return result;
+        ULocale likely = ULocale.addLikelySubtags(locale);
+        return getCodesFromLocale(likely);
     }
 
     /**
@@ -1019,27 +1005,42 @@ public final class UScript {
         return findCodeFromLocale(locale);
     }
     /**
-     * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name.
+     * Gets the script codes associated with the given locale or ISO 15924 abbreviation or name.
      * Returns MALAYAM given "Malayam" OR "Mlym".
      * Returns LATIN given "en" OR "en_US"
      *
      * <p>Note: To search by short or long script alias only, use
-     * UCharacater.getPropertyValueEnum(UProperty.SCRIPT, alias)
-     * instead.  This does a fast lookup with no access of the locale
-     * data.
+     * {@link #getCodeFromName(String)} instead.
+     * That does a fast lookup with no access of the locale data.
+     *
      * @param nameOrAbbrOrLocale name of the script or ISO 15924 code or locale
      * @return The script codes array. null if the the code cannot be found.
      * @stable ICU 2.4
      */
-    public static final int[] getCode(String nameOrAbbrOrLocale){
-        try {
-            return new int[] {
-                UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
-                                                nameOrAbbrOrLocale)
-            };
-        } catch (IllegalArgumentException e) {
-            return findCodeFromLocale(new ULocale(nameOrAbbrOrLocale));
+    public static final int[] getCode(String nameOrAbbrOrLocale) {
+        boolean triedCode = false;
+        if (nameOrAbbrOrLocale.indexOf('_') < 0 && nameOrAbbrOrLocale.indexOf('-') < 0) {
+            try {
+                return new int[] {
+                    UCharacter.getPropertyValueEnum(UProperty.SCRIPT, nameOrAbbrOrLocale)
+                };
+            } catch (IllegalArgumentException ignored) {
+            }
+            triedCode = true;
         }
+        int[] scripts = findCodeFromLocale(new ULocale(nameOrAbbrOrLocale));
+        if (scripts != null) {
+            return scripts;
+        }
+        if (!triedCode) {
+            try {
+                return new int[] {
+                    UCharacter.getPropertyValueEnum(UProperty.SCRIPT, nameOrAbbrOrLocale)
+                };
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        return null;
     }
 
     /**

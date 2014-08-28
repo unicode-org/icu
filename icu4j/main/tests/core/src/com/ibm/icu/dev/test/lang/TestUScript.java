@@ -29,6 +29,25 @@ public class TestUScript extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new TestUScript().run(args);
     }
+
+    private static String scriptsToString(int[] scripts) {
+        if(scripts == null) {
+            return "null";
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int script : scripts) {
+            if(sb.length() > 0) {
+                sb.append(' ');
+            }
+            sb.append(UScript.getShortName(script));
+        }
+        return sb.toString();
+    }
+
+    private void assertEqualScripts(String msg, int[] expectedScripts, int[] actualScripts) {
+        assertEquals(msg, scriptsToString(expectedScripts), scriptsToString(actualScripts));
+    }
+
     public void TestLocaleGetCode(){
         final ULocale[] testNames={
         /* test locale */
@@ -73,17 +92,47 @@ public class TestUScript extends TestFmwk {
         
         // 
         ULocale defaultLoc = ULocale.getDefault(); 
-        ULocale esparanto = new ULocale("eo_DE");
-        ULocale.setDefault(esparanto);
-        int[] code = UScript.getCode(esparanto); 
+        ULocale esperanto = new ULocale("eo_DE");
+        ULocale.setDefault(esperanto);
+        int[] code = UScript.getCode(esperanto); 
         if(code != null){
             if( code[0] != UScript.LATIN){
-                errln("Did not get the expected script code for Esparanto");
+                errln("Did not get the expected script code for Esperanto");
             }
         }else{
             warnln("Could not load the locale data.");
         }
         ULocale.setDefault(defaultLoc);
+
+        // Should work regardless of whether we have locale data for the language.
+        assertEqualScripts("tg script: Cyrl",  // Tajik
+                new int[] { UScript.CYRILLIC },
+                UScript.getCode(new ULocale("tg")));
+        assertEqualScripts("xsr script: Deva",  // Sherpa
+                new int[] { UScript.DEVANAGARI },
+                UScript.getCode(new ULocale("xsr")));
+
+        // Multi-script languages.
+        assertEqualScripts("ja scripts: Kana Hira Hani",
+                new int[] { UScript.KATAKANA, UScript.HIRAGANA, UScript.HAN },
+                UScript.getCode(ULocale.JAPANESE));
+        assertEqualScripts("ko scripts: Hang Hani",
+                new int[] { UScript.HANGUL, UScript.HAN },
+                UScript.getCode(ULocale.KOREAN));
+        assertEqualScripts("zh script: Hani",
+                new int[] { UScript.HAN },
+                UScript.getCode(ULocale.CHINESE));
+        assertEqualScripts("zh-Hant scripts: Hani Bopo",
+                new int[] { UScript.HAN, UScript.BOPOMOFO },
+                UScript.getCode(ULocale.TRADITIONAL_CHINESE));
+        assertEqualScripts("zh-TW scripts: Hani Bopo",
+                new int[] { UScript.HAN, UScript.BOPOMOFO },
+                UScript.getCode(ULocale.TAIWAN));
+
+        // Ambiguous API, but this probably wants to return Latin rather than Rongorongo (Roro).
+        assertEqualScripts("ro-RO script: Latn",
+                new int[] { UScript.LATIN },
+                UScript.getCode("ro-RO"));  // String not ULocale
     }
 
     private void reportDataErrors(int numErrors) {
