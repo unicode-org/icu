@@ -1605,7 +1605,7 @@ void TestMessageFormat::TestApostropheMode() {
         "I don't know", "I don't know", "I don''t know",
         "I don't know", "I don''t know", "I don''t know"
     };
-    int32_t tuples_count = uprv_lengthof(tuples);
+    int32_t tuples_count = UPRV_LENGTHOF(tuples);
 
     for (int i = 0; i < tuples_count; i += 3) {
       UnicodeString& desired = tuples[i];

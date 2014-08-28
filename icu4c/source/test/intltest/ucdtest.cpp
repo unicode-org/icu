@@ -38,7 +38,7 @@ UnicodeTest::UnicodeTest()
         unknownPropertyNames=NULL;
     }
     // Ignore some property names altogether.
-    for(int32_t i=0; i<uprv_lengthof(ignorePropNames); ++i) {
+    for(int32_t i=0; i<UPRV_LENGTHOF(ignorePropNames); ++i) {
         unknownPropertyNames->puti(UnicodeString(ignorePropNames[i], -1, US_INV), 1, errorCode);
     }
 }
@@ -148,7 +148,7 @@ derivedPropsIndex[]={
     UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
 };
 
-static int32_t numErrors[uprv_lengthof(derivedPropsIndex)]={ 0 };
+static int32_t numErrors[UPRV_LENGTHOF(derivedPropsIndex)]={ 0 };
 
 enum { MAX_ERRORS=50 };
 
@@ -168,7 +168,7 @@ derivedPropsLineFn(void *context,
     }
 
     /* parse derived binary property name, ignore unknown names */
-    i=getTokenIndex(derivedPropsNames, uprv_lengthof(derivedPropsNames), fields[1][0]);
+    i=getTokenIndex(derivedPropsNames, UPRV_LENGTHOF(derivedPropsNames), fields[1][0]);
     if(i<0) {
         UnicodeString propName(fields[1][0], (int32_t)(fields[1][1]-fields[1][0]));
         propName.trim();
@@ -186,13 +186,13 @@ derivedPropsLineFn(void *context,
 void UnicodeTest::TestAdditionalProperties() {
 #if !UCONFIG_NO_NORMALIZATION
     // test DerivedCoreProperties.txt and DerivedNormalizationProps.txt
-    if(uprv_lengthof(derivedProps)<uprv_lengthof(derivedPropsNames)) {
+    if(UPRV_LENGTHOF(derivedProps)<UPRV_LENGTHOF(derivedPropsNames)) {
         errln("error: UnicodeTest::derivedProps[] too short, need at least %d UnicodeSets\n",
-              uprv_lengthof(derivedPropsNames));
+              UPRV_LENGTHOF(derivedPropsNames));
         return;
     }
-    if(uprv_lengthof(derivedPropsIndex)!=uprv_lengthof(derivedPropsNames)) {
-        errln("error in ucdtest.cpp: uprv_lengthof(derivedPropsIndex)!=uprv_lengthof(derivedPropsNames)\n");
+    if(UPRV_LENGTHOF(derivedPropsIndex)!=UPRV_LENGTHOF(derivedPropsNames)) {
+        errln("error in ucdtest.cpp: UPRV_LENGTHOF(derivedPropsIndex)!=UPRV_LENGTHOF(derivedPropsNames)\n");
         return;
     }
 
@@ -226,7 +226,7 @@ void UnicodeTest::TestAdditionalProperties() {
     UChar32 start, end;
 
     // test all TRUE properties
-    for(i=0; i<uprv_lengthof(derivedPropsNames); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(derivedPropsNames); ++i) {
         rangeCount=derivedProps[i].getRangeCount();
         for(range=0; range<rangeCount && numErrors[i]<MAX_ERRORS; ++range) {
             start=derivedProps[i].getRangeStart(range);
@@ -244,12 +244,12 @@ void UnicodeTest::TestAdditionalProperties() {
     }
 
     // invert all properties
-    for(i=0; i<uprv_lengthof(derivedPropsNames); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(derivedPropsNames); ++i) {
         derivedProps[i].complement();
     }
 
     // test all FALSE properties
-    for(i=0; i<uprv_lengthof(derivedPropsNames); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(derivedPropsNames); ++i) {
         rangeCount=derivedProps[i].getRangeCount();
         for(range=0; range<rangeCount && numErrors[i]<MAX_ERRORS; ++range) {
             start=derivedProps[i].getRangeStart(range);
@@ -283,7 +283,7 @@ void UnicodeTest::TestBinaryValues() {
     static const char *const falseValues[]={ "N", "No", "F", "False" };
     static const char *const trueValues[]={ "Y", "Yes", "T", "True" };
     int32_t i;
-    for(i=0; i<uprv_lengthof(falseValues); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(falseValues); ++i) {
         UnicodeString pattern=UNICODE_STRING_SIMPLE("[:Alphabetic=:]");
         pattern.insert(pattern.length()-2, UnicodeString(falseValues[i], -1, US_INV));
         errorCode=U_ZERO_ERROR;
@@ -297,7 +297,7 @@ void UnicodeTest::TestBinaryValues() {
             errln("UnicodeSet([:Alphabetic=%s:]).complement()!=UnicodeSet([:Alphabetic:])\n", falseValues[i]);
         }
     }
-    for(i=0; i<uprv_lengthof(trueValues); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(trueValues); ++i) {
         UnicodeString pattern=UNICODE_STRING_SIMPLE("[:Alphabetic=:]");
         pattern.insert(pattern.length()-2, UnicodeString(trueValues[i], -1, US_INV));
         errorCode=U_ZERO_ERROR;

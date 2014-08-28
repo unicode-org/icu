@@ -1686,7 +1686,7 @@ TestSwapData() {
     errorCode=U_ZERO_ERROR;
 #endif
 
-    for(i=0; i<uprv_lengthof(swapCases); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(swapCases); ++i) {
         /* build the name for logging */
         errorCode=U_ZERO_ERROR;
         if(swapCases[i].name[0]=='*') {

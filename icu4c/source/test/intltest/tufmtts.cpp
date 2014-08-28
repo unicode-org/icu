@@ -421,8 +421,8 @@ void TimeUnitTest::test10219Plurals() {
         dataerrln("generating NumberFormat Object failed: %s", u_errorName(status));
         return;
     }
-    for (int32_t j = 0; j < uprv_lengthof(values); ++j) {
-        for (int32_t i = 0; i < uprv_lengthof(expected[j]); ++i) {
+    for (int32_t j = 0; j < UPRV_LENGTHOF(values); ++j) {
+        for (int32_t i = 0; i < UPRV_LENGTHOF(expected[j]); ++i) {
             nf->setMinimumFractionDigits(i);
             nf->setMaximumFractionDigits(i);
             nf->setRoundingMode(DecimalFormat::kRoundDown);

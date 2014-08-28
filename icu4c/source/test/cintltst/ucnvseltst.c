@@ -391,7 +391,7 @@ static void TestSelector()
     excluded_sets[i] = uset_open(i*30, i*30+500);
   }
 
-  for(testCaseIdx = 0; testCaseIdx < uprv_lengthof(getEncodingsFns); testCaseIdx++)
+  for(testCaseIdx = 0; testCaseIdx < UPRV_LENGTHOF(getEncodingsFns); testCaseIdx++)
   {
     int32_t excluded_set_id;
     int32_t num_encodings;
@@ -409,7 +409,7 @@ static void TestSelector()
      * The handling of the exclusion set is independent of the
      * set of encodings, so there is no need to test every combination.
      */
-    excluded_set_id = testCaseIdx % uprv_lengthof(excluded_sets);
+    excluded_set_id = testCaseIdx % UPRV_LENGTHOF(excluded_sets);
     {
       UConverterSelector *sel_rt, *sel_fb;
       char *buffer_fb = NULL;
@@ -467,7 +467,7 @@ static void TestSelector()
         verifyResult(ucnvsel_selectForUTF8(sel_rt, s, -1, &status), manual_rt);
         verifyResult(ucnvsel_selectForUTF8(sel_fb, s, -1, &status), manual_fb);
 
-        u_strFromUTF8(utf16, uprv_lengthof(utf16), &length16, s, length8, &status);
+        u_strFromUTF8(utf16, UPRV_LENGTHOF(utf16), &length16, s, length8, &status);
         if (U_FAILURE(status)) {
           log_err("error converting the test text (string %ld) to UTF-16 - %s\n",
                   (long)text.number, u_errorName(status));

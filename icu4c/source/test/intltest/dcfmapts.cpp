@@ -572,7 +572,7 @@ void IntlTestDecimalFormatAPI::TestScale()
     UnicodeString percentPattern("#,##0%");
     pat.setMaximumFractionDigits(4);
 
-    for(int32_t i=0; i < uprv_lengthof(testData); i++) {
+    for(int32_t i=0; i < UPRV_LENGTHOF(testData); i++) {
         if ( i > 2 ) {
             pat.applyPattern(percentPattern,status);
         }

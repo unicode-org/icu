@@ -181,7 +181,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
     selFmt = NULL;
 
     selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
-    for (int32_t i = 0; i < uprv_lengthof(keywords); i++ ){
+    for (int32_t i = 0; i < UPRV_LENGTHOF(keywords); i++ ){
         status = U_ZERO_ERROR;
         selFmt->format( keywords[i], result , ignore , status);
         if (!U_FAILURE(status)) {

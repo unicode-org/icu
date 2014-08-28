@@ -944,7 +944,7 @@ ConvertFile::convertFile(const char *pname,
                     int8_t i, length, errorLength;
 
                     UErrorCode localError = U_ZERO_ERROR;
-                    errorLength = (int8_t)uprv_lengthof(errorUChars);
+                    errorLength = (int8_t)UPRV_LENGTHOF(errorUChars);
                     ucnv_getInvalidUChars(convto, errorUChars, &errorLength, &localError);
                     if (U_FAILURE(localError) || errorLength == 0) {
                         // need at least 1 so that we don't access beyond the length of fromoffsets[]

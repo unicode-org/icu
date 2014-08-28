@@ -1558,8 +1558,8 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         }
 
         /* Start of Arabic letter shaping part */
-        if(outputSize<=uprv_lengthof(buffer)) {
-            outputSize=uprv_lengthof(buffer);
+        if(outputSize<=UPRV_LENGTHOF(buffer)) {
+            outputSize=UPRV_LENGTHOF(buffer);
             tempbuffer=buffer;
         } else {
             tempbuffer = (UChar *)uprv_malloc(outputSize*U_SIZEOF_UCHAR);

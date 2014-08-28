@@ -68,7 +68,7 @@ public:
 
     HangulIterator() : rangeIndex(0) {}
     const Range *nextRange() {
-        if(rangeIndex<uprv_lengthof(ranges)) {
+        if(rangeIndex<UPRV_LENGTHOF(ranges)) {
             return ranges+rangeIndex++;
         } else {
             return NULL;

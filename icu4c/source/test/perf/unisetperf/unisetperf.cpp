@@ -44,7 +44,7 @@ static const char *const unisetperf_usage =
 class UnicodeSetPerformanceTest : public UPerfTest {
 public:
     UnicodeSetPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status)
-            : UPerfTest(argc, argv, options, uprv_lengthof(options), unisetperf_usage, status),
+            : UPerfTest(argc, argv, options, UPRV_LENGTHOF(options), unisetperf_usage, status),
               utf8(NULL), utf8Length(0), countInputCodePoints(0), spanCount(0) {
         if (U_SUCCESS(status)) {
             UnicodeString pattern=UnicodeString(options[SET_PATTERN].value, -1, US_INV).unescape();

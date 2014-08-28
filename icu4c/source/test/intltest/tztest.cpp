@@ -1905,9 +1905,9 @@ void TimeZoneTest::TestFebruary() {
     TimeZone *tz;
     UDate dt;
     int32_t t, i, raw, dst;
-    for (t = 0; t < uprv_lengthof(timezones); ++t) {
+    for (t = 0; t < UPRV_LENGTHOF(timezones); ++t) {
         tz = timezones[t];
-        for (i = 0; i < uprv_lengthof(data); ++i) {
+        for (i = 0; i < UPRV_LENGTHOF(data); ++i) {
             gc.set(data[i].year, data[i].month, data[i].day,
                    data[i].hour, data[i].minute, data[i].second);
             dt = gc.getTime(status);

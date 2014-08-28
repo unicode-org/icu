@@ -72,7 +72,7 @@ RCEBuffer::RCEBuffer()
 {
     buffer = defaultBuffer;
     bufferIndex = 0;
-    bufferSize = uprv_lengthof(defaultBuffer);
+    bufferSize = UPRV_LENGTHOF(defaultBuffer);
 }
 
 RCEBuffer::~RCEBuffer()
@@ -122,7 +122,7 @@ PCEBuffer::PCEBuffer()
 {
     buffer = defaultBuffer;
     bufferIndex = 0;
-    bufferSize = uprv_lengthof(defaultBuffer);
+    bufferSize = UPRV_LENGTHOF(defaultBuffer);
 }
 
 PCEBuffer::~PCEBuffer()

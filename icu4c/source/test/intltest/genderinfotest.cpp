@@ -54,17 +54,17 @@ void GenderInfoTest::runIndexedTest(int32_t index, UBool exec, const char *&name
 
 void GenderInfoTest::TestGetListGender() {
     check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_OTHER, NULL, 0);
-    check(UGENDER_FEMALE, UGENDER_FEMALE, UGENDER_FEMALE, kSingleFemale, uprv_lengthof(kSingleFemale));
-    check(UGENDER_MALE, UGENDER_MALE, UGENDER_MALE, kSingleMale, uprv_lengthof(kSingleMale));
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_OTHER, kSingleOther, uprv_lengthof(kSingleOther));
+    check(UGENDER_FEMALE, UGENDER_FEMALE, UGENDER_FEMALE, kSingleFemale, UPRV_LENGTHOF(kSingleFemale));
+    check(UGENDER_MALE, UGENDER_MALE, UGENDER_MALE, kSingleMale, UPRV_LENGTHOF(kSingleMale));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_OTHER, kSingleOther, UPRV_LENGTHOF(kSingleOther));
 
-    check(UGENDER_OTHER, UGENDER_FEMALE, UGENDER_FEMALE, kAllFemale, uprv_lengthof(kAllFemale));
-    check(UGENDER_OTHER, UGENDER_MALE, UGENDER_MALE, kAllMale, uprv_lengthof(kAllMale));
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kAllOther, uprv_lengthof(kAllOther));
+    check(UGENDER_OTHER, UGENDER_FEMALE, UGENDER_FEMALE, kAllFemale, UPRV_LENGTHOF(kAllFemale));
+    check(UGENDER_OTHER, UGENDER_MALE, UGENDER_MALE, kAllMale, UPRV_LENGTHOF(kAllMale));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kAllOther, UPRV_LENGTHOF(kAllOther));
 
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kFemaleMale, uprv_lengthof(kFemaleMale));
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kFemaleOther, uprv_lengthof(kFemaleOther));
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kMaleOther, uprv_lengthof(kMaleOther));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kFemaleMale, UPRV_LENGTHOF(kFemaleMale));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kFemaleOther, UPRV_LENGTHOF(kFemaleOther));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kMaleOther, UPRV_LENGTHOF(kMaleOther));
 }
 
 void GenderInfoTest::TestFallback() {

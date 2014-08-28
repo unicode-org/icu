@@ -26,7 +26,7 @@ static const char * const gPluralForms[] = {
         "other", "zero", "one", "two", "few", "many"};
 
 static int32_t getPluralIndex(const char *pluralForm) {
-    int32_t len = uprv_lengthof(gPluralForms);
+    int32_t len = UPRV_LENGTHOF(gPluralForms);
     for (int32_t i = 0; i < len; ++i) {
         if (uprv_strcmp(pluralForm, gPluralForms[i]) == 0) {
             return i;
@@ -36,13 +36,13 @@ static int32_t getPluralIndex(const char *pluralForm) {
 }
 
 QuantityFormatter::QuantityFormatter() {
-    for (int32_t i = 0; i < uprv_lengthof(formatters); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(formatters); ++i) {
         formatters[i] = NULL;
     }
 }
 
 QuantityFormatter::QuantityFormatter(const QuantityFormatter &other) {
-    for (int32_t i = 0; i < uprv_lengthof(formatters); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(formatters); ++i) {
         if (other.formatters[i] == NULL) {
             formatters[i] = NULL;
         } else {
@@ -56,7 +56,7 @@ QuantityFormatter &QuantityFormatter::operator=(
     if (this == &other) {
         return *this;
     }
-    for (int32_t i = 0; i < uprv_lengthof(formatters); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(formatters); ++i) {
         delete formatters[i];
         if (other.formatters[i] == NULL) {
             formatters[i] = NULL;
@@ -68,13 +68,13 @@ QuantityFormatter &QuantityFormatter::operator=(
 }
 
 QuantityFormatter::~QuantityFormatter() {
-    for (int32_t i = 0; i < uprv_lengthof(formatters); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(formatters); ++i) {
         delete formatters[i];
     }
 }
 
 void QuantityFormatter::reset() {
-    for (int32_t i = 0; i < uprv_lengthof(formatters); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(formatters); ++i) {
         delete formatters[i];
         formatters[i] = NULL;
     }
@@ -164,7 +164,7 @@ UnicodeString &QuantityFormatter::format(
     fmt.format(quantity, formattedNumber, fpos, status);
     const UnicodeString *params[1] = {&formattedNumber};
     int32_t offsets[1];
-    pattern->format(params, uprv_lengthof(params), appendTo, offsets, uprv_lengthof(offsets), status);
+    pattern->format(params, UPRV_LENGTHOF(params), appendTo, offsets, UPRV_LENGTHOF(offsets), status);
     if (offsets[0] != -1) {
         if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
             pos.setBeginIndex(fpos.getBeginIndex() + offsets[0]);

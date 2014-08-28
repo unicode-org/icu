@@ -740,7 +740,7 @@ static void TestAppend() {
     UBool isError, expectIsError, wrongIsError;
 
     length=0;
-    for(i=0; i<uprv_lengthof(codePoints); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(codePoints); ++i) {
         c=codePoints[i];
         if(c<0 || 0x10ffff<c) {
             continue; /* skip non-code points for U16_APPEND_UNSAFE */
@@ -748,24 +748,24 @@ static void TestAppend() {
 
         U16_APPEND_UNSAFE(buffer, length, c);
     }
-    if(length!=uprv_lengthof(expectUnsafe) || 0!=memcmp(buffer, expectUnsafe, length*U_SIZEOF_UCHAR)) {
+    if(length!=UPRV_LENGTHOF(expectUnsafe) || 0!=memcmp(buffer, expectUnsafe, length*U_SIZEOF_UCHAR)) {
         log_err("U16_APPEND_UNSAFE did not generate the expected output\n");
     }
 
     length=0;
     wrongIsError=FALSE;
-    for(i=0; i<uprv_lengthof(codePoints); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(codePoints); ++i) {
         c=codePoints[i];
         expectIsError= c<0 || 0x10ffff<c; /* || U_IS_SURROGATE(c); */ /* surrogates in UTF-32 shouldn't be used, but it's okay to pass them around internally. */
         isError=FALSE;
 
-        U16_APPEND(buffer, length, uprv_lengthof(buffer), c, isError);
+        U16_APPEND(buffer, length, UPRV_LENGTHOF(buffer), c, isError);
         wrongIsError|= isError!=expectIsError;
     }
     if(wrongIsError) {
         log_err("U16_APPEND did not set isError correctly\n");
     }
-    if(length!=uprv_lengthof(expectSafe) || 0!=memcmp(buffer, expectSafe, length*U_SIZEOF_UCHAR)) {
+    if(length!=UPRV_LENGTHOF(expectSafe) || 0!=memcmp(buffer, expectSafe, length*U_SIZEOF_UCHAR)) {
         log_err("U16_APPEND did not generate the expected output\n");
     }
 }

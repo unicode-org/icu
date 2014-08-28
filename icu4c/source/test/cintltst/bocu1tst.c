@@ -949,21 +949,21 @@ static const struct {
     const UChar *s;
     int32_t length;
 } strings[]={
-    { feff,         uprv_lengthof(feff) },
-    { ascii,        uprv_lengthof(ascii) },
-    { crlf,         uprv_lengthof(crlf) },
-    { nul,          uprv_lengthof(nul) },
-    { latin,        uprv_lengthof(latin) },
-    { devanagari,   uprv_lengthof(devanagari) },
-    { hiragana,     uprv_lengthof(hiragana) },
-    { unihan,       uprv_lengthof(unihan) },
-    { hangul,       uprv_lengthof(hangul) },
-    { surrogates,   uprv_lengthof(surrogates) },
-    { plane1,       uprv_lengthof(plane1) },
-    { plane2,       uprv_lengthof(plane2) },
-    { plane15,      uprv_lengthof(plane15) },
-    { plane16,      uprv_lengthof(plane16) },
-    { c0,           uprv_lengthof(c0) }
+    { feff,         UPRV_LENGTHOF(feff) },
+    { ascii,        UPRV_LENGTHOF(ascii) },
+    { crlf,         UPRV_LENGTHOF(crlf) },
+    { nul,          UPRV_LENGTHOF(nul) },
+    { latin,        UPRV_LENGTHOF(latin) },
+    { devanagari,   UPRV_LENGTHOF(devanagari) },
+    { hiragana,     UPRV_LENGTHOF(hiragana) },
+    { unihan,       UPRV_LENGTHOF(unihan) },
+    { hangul,       UPRV_LENGTHOF(hangul) },
+    { surrogates,   UPRV_LENGTHOF(surrogates) },
+    { plane1,       UPRV_LENGTHOF(plane1) },
+    { plane2,       UPRV_LENGTHOF(plane2) },
+    { plane15,      UPRV_LENGTHOF(plane15) },
+    { plane16,      UPRV_LENGTHOF(plane16) },
+    { c0,           UPRV_LENGTHOF(c0) }
 };
 
 /*
@@ -991,7 +991,7 @@ TestBOCU1(void) {
 
     /* text 1: each of strings[] once */
     length=0;
-    for(i=0; i<uprv_lengthof(strings); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(strings); ++i) {
         u_memcpy(text+length, strings[i].s, strings[i].length);
         length+=strings[i].length;
     }
@@ -999,7 +999,7 @@ TestBOCU1(void) {
 
     /* text 2: each of strings[] twice */
     length=0;
-    for(i=0; i<uprv_lengthof(strings); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(strings); ++i) {
         u_memcpy(text+length, strings[i].s, strings[i].length);
         length+=strings[i].length;
         u_memcpy(text+length, strings[i].s, strings[i].length);
@@ -1010,8 +1010,8 @@ TestBOCU1(void) {
     /* text 3: each of strings[] many times (set step vs. |strings| so that all strings are used) */
     length=0;
     for(i=1; length<5000; i+=7) {
-        if(i>=uprv_lengthof(strings)) {
-            i-=uprv_lengthof(strings);
+        if(i>=UPRV_LENGTHOF(strings)) {
+            i-=UPRV_LENGTHOF(strings);
         }
         u_memcpy(text+length, strings[i].s, strings[i].length);
         length+=strings[i].length;

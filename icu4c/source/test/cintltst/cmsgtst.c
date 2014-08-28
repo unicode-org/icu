@@ -1127,7 +1127,7 @@ static void TestMessageWithUnusedArgNumber() {
 
     U_STRING_INIT(pattern, "abc {1} def", 11);
     U_STRING_INIT(expected, "abc y def", 9);
-    length = u_formatMessage("en", pattern, -1, result, uprv_lengthof(result), &errorCode, x, y);
+    length = u_formatMessage("en", pattern, -1, result, UPRV_LENGTHOF(result), &errorCode, x, y);
     if (U_FAILURE(errorCode) || length != u_strlen(expected) || u_strcmp(result, expected) != 0) {
         log_err("u_formatMessage(pattern with only {1}, 2 args) failed: result length %d, UErrorCode %s \n",
                 (int)length, u_errorName(errorCode));

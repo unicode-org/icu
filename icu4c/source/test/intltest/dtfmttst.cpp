@@ -167,7 +167,7 @@ void DateFormatTest::TestPatterns() {
     };
 
     IcuTestErrorCode errorCode(*this, "TestPatterns()");
-    for (int32_t i = 0; i < uprv_lengthof(EXPECTED); i++) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(EXPECTED); i++) {
         // Verify that patterns have the correct values
         UnicodeString actualPattern(EXPECTED[i].actualPattern, -1, US_INV);
         UnicodeString expectedPattern(EXPECTED[i].expectedPattern, -1, US_INV);
@@ -4178,7 +4178,7 @@ void DateFormatTest::TestDotAndAtLeniency() {
     // Test for date/time parsing regression with CLDR 22.1/ICU 50 pattern strings.
     // For details see http://bugs.icu-project.org/trac/ticket/9789
     static const char *locales[] = { "en", "fr" };
-    for (int32_t i = 0; i < uprv_lengthof(locales); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(locales); ++i) {
         Locale locale(locales[i]);
 
         for (DateFormat::EStyle dateStyle = DateFormat::FULL; dateStyle <= DateFormat::SHORT;
