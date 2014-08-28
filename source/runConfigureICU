@@ -388,7 +388,7 @@ then
     fi
     if test "$RELEASE_CFLAGS" != ""
     then
-        CFLAGS="$CFLAGS $RELEASE_CFLAGS"
+        CFLAGS="$RELEASE_CFLAGS $CFLAGS"
     fi
     if test "$RELEASE_CXXFLAGS" = ""
     then
@@ -400,11 +400,11 @@ then
     fi
     if test "$RELEASE_CXXFLAGS" != ""
     then
-        CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
+        CXXFLAGS="$RELEASE_CXXFLAGS $CXXFLAGS"
     fi
     if test "$RELEASE_LDFLAGS" != ""
     then
-        LDFLAGS="$LDFLAGS $RELEASE_LDFLAGS"
+        LDFLAGS="$RELEASE_LDFLAGS $LDFLAGS"
     fi
 fi
 
@@ -412,15 +412,15 @@ if test $debug -eq 1
 then
     if test "$DEBUG_CFLAGS" != ""
     then
-        CFLAGS="$CFLAGS $DEBUG_CFLAGS"
+        CFLAGS="$DEBUG_CFLAGS $CFLAGS"
     fi
     if test "$DEBUG_CXXFLAGS" != ""
     then
-        CXXFLAGS="$CXXFLAGS $DEBUG_CXXFLAGS"
+        CXXFLAGS="$DEBUG_CXXFLAGS $CXXFLAGS"
     fi
     if test "$DEBUG_LDFLAGS" != ""
     then
-        LDFLAGS="$LDFLAGS $DEBUG_LDFLAGS"
+        LDFLAGS="$DEBUG_LDFLAGS $LDFLAGS"
     fi
 fi
 
