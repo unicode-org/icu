@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1996-2013, International Business Machines
+*   Copyright (C) 1996-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -492,6 +492,21 @@ public:
      * @stable ICU 2.0
      */
     uint32_t        getLCID(void) const;
+
+    /**
+     * Returns whether this locale's script is written right-to-left.
+     * If there is no script subtag, then the likely script is used, see uloc_addLikelySubtags().
+     * If no likely script is known, then FALSE is returned.
+     *
+     * A script is right-to-left according to the CLDR script metadata
+     * which corresponds to whether the script's letters have Bidi_Class=R or AL.
+     *
+     * Returns TRUE for "ar" and "en-Hebr", FALSE for "zh" and "fa-Cyrl".
+     *
+     * @return TRUE if the locale's script is written right-to-left
+     * @draft ICU 54
+     */
+    UBool isRightToLeft() const;
 
     /**
      * Fills in "dispLang" with the name of this locale's language in a format suitable for

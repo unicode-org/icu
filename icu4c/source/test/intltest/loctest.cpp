@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -180,59 +180,50 @@ LocaleTest::~LocaleTest()
 
 void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
-    switch (index) {
-        TESTCASE(0, TestBasicGetters);
-        TESTCASE(1, TestSimpleResourceInfo);
-        TESTCASE(2, TestDisplayNames);
-        TESTCASE(3, TestSimpleObjectStuff);
-        TESTCASE(4, TestPOSIXParsing);
-        TESTCASE(5, TestGetAvailableLocales);
-        TESTCASE(6, TestDataDirectory);
-        TESTCASE(7, TestISO3Fallback);
-        TESTCASE(8, TestGetLangsAndCountries);
-        TESTCASE(9, TestSimpleDisplayNames);
-        TESTCASE(10, TestUninstalledISO3Names);
-        TESTCASE(11, TestAtypicalLocales);
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestBasicGetters);
+    TESTCASE_AUTO(TestSimpleResourceInfo);
+    TESTCASE_AUTO(TestDisplayNames);
+    TESTCASE_AUTO(TestSimpleObjectStuff);
+    TESTCASE_AUTO(TestPOSIXParsing);
+    TESTCASE_AUTO(TestGetAvailableLocales);
+    TESTCASE_AUTO(TestDataDirectory);
+    TESTCASE_AUTO(TestISO3Fallback);
+    TESTCASE_AUTO(TestGetLangsAndCountries);
+    TESTCASE_AUTO(TestSimpleDisplayNames);
+    TESTCASE_AUTO(TestUninstalledISO3Names);
+    TESTCASE_AUTO(TestAtypicalLocales);
 #if !UCONFIG_NO_FORMATTING
-        TESTCASE(12, TestThaiCurrencyFormat);
-        TESTCASE(13, TestEuroSupport);
+    TESTCASE_AUTO(TestThaiCurrencyFormat);
+    TESTCASE_AUTO(TestEuroSupport);
 #endif
-        TESTCASE(14, TestToString);
+    TESTCASE_AUTO(TestToString);
 #if !UCONFIG_NO_FORMATTING
-        TESTCASE(15, Test4139940);
-        TESTCASE(16, Test4143951);
+    TESTCASE_AUTO(Test4139940);
+    TESTCASE_AUTO(Test4143951);
 #endif
-        TESTCASE(17, Test4147315);
-        TESTCASE(18, Test4147317);
-        TESTCASE(19, Test4147552);
-        TESTCASE(20, TestVariantParsing);
+    TESTCASE_AUTO(Test4147315);
+    TESTCASE_AUTO(Test4147317);
+    TESTCASE_AUTO(Test4147552);
+    TESTCASE_AUTO(TestVariantParsing);
 #if !UCONFIG_NO_FORMATTING
-        TESTCASE(21, Test4105828);
+    TESTCASE_AUTO(Test4105828);
 #endif
-        TESTCASE(22, TestSetIsBogus);
-        TESTCASE(23, TestParallelAPIValues);
-        TESTCASE(24, TestKeywordVariants);
-        TESTCASE(25, TestKeywordVariantParsing);
-        TESTCASE(26, TestSetKeywordValue);
-        TESTCASE(27, TestGetBaseName);
+    TESTCASE_AUTO(TestSetIsBogus);
+    TESTCASE_AUTO(TestParallelAPIValues);
+    TESTCASE_AUTO(TestKeywordVariants);
+    TESTCASE_AUTO(TestKeywordVariantParsing);
+    TESTCASE_AUTO(TestSetKeywordValue);
+    TESTCASE_AUTO(TestGetBaseName);
 #if !UCONFIG_NO_FILE_IO
-        TESTCASE(28, TestGetLocale);
+    TESTCASE_AUTO(TestGetLocale);
 #endif
-        TESTCASE(29, TestVariantWithOutCountry);
-        TESTCASE(30, TestCanonicalization);
-        TESTCASE(31, TestCurrencyByDate);
-	TESTCASE(32, TestGetVariantWithKeywords);
-
-        // keep the last index in sync with the condition in default:
-
-        default:
-            if (index <= 28) { // keep this in sync with the last index!
-                name = "(test omitted by !UCONFIG_NO_FORMATTING)";
-            } else {
-                name = "";
-            }
-            break; //needed to end loop
-    }
+    TESTCASE_AUTO(TestVariantWithOutCountry);
+    TESTCASE_AUTO(TestCanonicalization);
+    TESTCASE_AUTO(TestCurrencyByDate);
+    TESTCASE_AUTO(TestGetVariantWithKeywords);
+    TESTCASE_AUTO(TestIsRightToLeft);
+    TESTCASE_AUTO_END;
 }
 
 void LocaleTest::TestBasicGetters() {
@@ -2545,4 +2536,16 @@ void LocaleTest::TestGetVariantWithKeywords(void)
   int32_t len = l.getKeywordValue("foo", buffer, 50, status);
   buffer[len] = '\0';
   test_assert(strcmp("value", buffer) == 0);
+}
+
+void LocaleTest::TestIsRightToLeft() {
+    assertFalse("root LTR", Locale::getRoot().isRightToLeft());
+    assertFalse("zh LTR", Locale::getChinese().isRightToLeft());
+    assertTrue("ar RTL", Locale("ar").isRightToLeft());
+    assertTrue("und-EG RTL", Locale("und-EG").isRightToLeft());
+    assertFalse("fa-Cyrl LTR", Locale("fa-Cyrl").isRightToLeft());
+    assertTrue("en-Hebr RTL", Locale("en-Hebr").isRightToLeft());
+    assertTrue("ckb RTL", Locale("ckb").isRightToLeft());  // Sorani Kurdish
+    assertFalse("fil LTR", Locale("fil").isRightToLeft());
+    assertFalse("he-Zyxw LTR", Locale("he-Zyxw").isRightToLeft());
 }

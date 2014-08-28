@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -101,6 +101,7 @@ public:
     void TestCurrencyByDate(void);
 
     void TestGetVariantWithKeywords(void);
+    void TestIsRightToLeft();
 
 private:
     void _checklocs(const char* label,
@@ -169,6 +170,3 @@ private:
         DNAME_NO
     };
 };
-
-
-

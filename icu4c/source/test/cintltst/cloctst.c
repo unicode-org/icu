@@ -45,6 +45,8 @@ static void TestDisplayNameBrackets(void);
 
 static void TestUnicodeDefines(void);
 
+static void TestIsRightToLeft(void);
+
 void PrintDataTable();
 
 /*---------------------------------------------------
@@ -247,6 +249,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestUnicodeDefines);
     TESTCASE(TestEnglishExemplarCharacters);
     TESTCASE(TestDisplayNameBrackets);
+    TESTCASE(TestIsRightToLeft);
 }
 
 
@@ -5875,4 +5878,11 @@ static void TestUnicodeDefines(void) {
   TEST_UNICODE_DEFINE(ULOC_KEYWORD_SEPARATOR, ULOC_KEYWORD_SEPARATOR_UNICODE);
   TEST_UNICODE_DEFINE(ULOC_KEYWORD_ASSIGN, ULOC_KEYWORD_ASSIGN_UNICODE);
   TEST_UNICODE_DEFINE(ULOC_KEYWORD_ITEM_SEPARATOR, ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE);
+}
+
+static void TestIsRightToLeft() {
+    // API test only. More test cases in intltest/LocaleTest.
+    if(uloc_isRightToLeft("root") || !uloc_isRightToLeft("EN-HEBR")) {
+        log_err("uloc_isRightToLeft() failed");
+    }
 }
