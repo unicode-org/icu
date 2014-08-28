@@ -664,6 +664,9 @@ public class PluralRules implements Serializable {
             if (n < 0) {
                 n = -n;
             }
+            if (n == Math.floor(n)) {
+                return 0;
+            }
             if (n < MAX_INTEGER_PART) {
                 long temp = (long)(n * 1000000) % 1000000; // get 6 decimals
                 for (int mask = 10, digits = 6; digits > 0; mask *= 10, --digits) {
