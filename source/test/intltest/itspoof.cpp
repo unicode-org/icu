@@ -509,7 +509,7 @@ void IntlTestSpoof::testIdentifierInfo() {
     };
 
     int testNum;
-    for (testNum = 0; testNum < uprv_lengthof(tests); testNum++) {
+    for (testNum = 0; testNum < UPRV_LENGTHOF(tests); testNum++) {
         char testNumStr[40];
         sprintf(testNumStr, "testNum = %d", testNum);
         Test &test = tests[testNum];
@@ -573,7 +573,7 @@ void IntlTestSpoof::testIdentifierInfo() {
 
     status = U_ZERO_ERROR;
     IdentifierInfo identifierInfo(status);
-    for (testNum=0; testNum<uprv_lengthof(scriptTests); testNum++) {
+    for (testNum=0; testNum<UPRV_LENGTHOF(scriptTests); testNum++) {
         ScriptTest &test = scriptTests[testNum];
         char msgBuf[100];
         sprintf(msgBuf, "testNum = %d ", testNum);
@@ -689,7 +689,7 @@ void IntlTestSpoof::testRestrictionLevel() {
     TEST_ASSERT_SUCCESS(status);
     idInfo.setIdentifierProfile(*uspoof_getRecommendedUnicodeSet(&status));
     TEST_ASSERT_SUCCESS(status);
-    for (int32_t testNum=0; testNum < uprv_lengthof(tests); testNum++) {
+    for (int32_t testNum=0; testNum < UPRV_LENGTHOF(tests); testNum++) {
         status = U_ZERO_ERROR;
         const Test &test = tests[testNum];
         UnicodeString testString = UnicodeString(test.fId).unescape();
@@ -698,7 +698,7 @@ void IntlTestSpoof::testRestrictionLevel() {
         sprintf(msgBuffer, "testNum = %d ", testNum);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_MSG(expectedLevel == idInfo.getRestrictionLevel(status), msgBuffer);
-        for (int levelIndex=0; levelIndex<uprv_lengthof(restrictionLevels); levelIndex++) {
+        for (int levelIndex=0; levelIndex<UPRV_LENGTHOF(restrictionLevels); levelIndex++) {
             status = U_ZERO_ERROR;
             URestrictionLevel levelSetInSpoofChecker = restrictionLevels[levelIndex];
             USpoofChecker *sc = uspoof_open(&status);
@@ -749,7 +749,7 @@ void IntlTestSpoof::testMixedNumbers() {
     };
     UErrorCode status = U_ZERO_ERROR;
     IdentifierInfo idInfo(status);
-    for (int32_t testNum=0; testNum < uprv_lengthof(tests); testNum++) {
+    for (int32_t testNum=0; testNum < UPRV_LENGTHOF(tests); testNum++) {
         char msgBuf[100];
         sprintf(msgBuf, "testNum = %d ", testNum);
         Test &test = tests[testNum];

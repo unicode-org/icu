@@ -508,7 +508,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
     const char *key=NULL;
     int32_t i;
 
-    UnicodeString defaultItemFormat(TRUE, UDATPG_ItemFormat, uprv_lengthof(UDATPG_ItemFormat)-1);  // Read-only alias.
+    UnicodeString defaultItemFormat(TRUE, UDATPG_ItemFormat, UPRV_LENGTHOF(UDATPG_ItemFormat)-1);  // Read-only alias.
 
     err = U_ZERO_ERROR;
     

@@ -490,7 +490,7 @@ StringCaseTest::TestCasing() {
                         // or even just { 0 } as boundaries.
                         static const UChar rules[] = { 0x2e, 0x2a, 0x3b };  // ".*;"
                         UParseError parseError;
-                        iter.adoptInstead(ubrk_openRules(rules, uprv_lengthof(rules), NULL, 0, &parseError, &status));
+                        iter.adoptInstead(ubrk_openRules(rules, UPRV_LENGTHOF(rules), NULL, 0, &parseError, &status));
                     }
                 }
 #endif

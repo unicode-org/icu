@@ -197,9 +197,9 @@ UnicodeStringTest::TestBasicManipulation()
         }
 
         UChar buffer[10]={ 0x61, 0x62, 0x20ac, 0xd900, 0xdc05, 0,   0x62, 0xffff, 0xdbff, 0xdfff };
-        UnicodeString s, t(buffer, -1, uprv_lengthof(buffer));
+        UnicodeString s, t(buffer, -1, UPRV_LENGTHOF(buffer));
 
-        if(s.setTo(buffer, -1, uprv_lengthof(buffer)).length()!=u_strlen(buffer)) {
+        if(s.setTo(buffer, -1, UPRV_LENGTHOF(buffer)).length()!=u_strlen(buffer)) {
             errln("UnicodeString.setTo(buffer, length, capacity) does not work with length==-1");
         }
         if(t.length()!=u_strlen(buffer)) {
@@ -214,11 +214,11 @@ UnicodeStringTest::TestBasicManipulation()
         }
 
         buffer[u_strlen(buffer)]=0xe4;
-        UnicodeString u(buffer, -1, uprv_lengthof(buffer));
-        if(s.setTo(buffer, -1, uprv_lengthof(buffer)).length()!=uprv_lengthof(buffer)) {
+        UnicodeString u(buffer, -1, UPRV_LENGTHOF(buffer));
+        if(s.setTo(buffer, -1, UPRV_LENGTHOF(buffer)).length()!=UPRV_LENGTHOF(buffer)) {
             errln("UnicodeString.setTo(buffer without NUL, length, capacity) does not work with length==-1");
         }
-        if(u.length()!=uprv_lengthof(buffer)) {
+        if(u.length()!=UPRV_LENGTHOF(buffer)) {
             errln("UnicodeString(buffer without NUL, length, capacity) does not work with length==-1");
         }
 
@@ -241,7 +241,7 @@ UnicodeStringTest::TestBasicManipulation()
         static const UChar utf16[]={ 0x61, 0xE4, 0xDF, 0x4E00 };
         UnicodeString from8a = UnicodeString((const char *)utf8);
         UnicodeString from8b = UnicodeString((const char *)utf8, (int32_t)sizeof(utf8)-1);
-        UnicodeString from16(FALSE, utf16, uprv_lengthof(utf16));
+        UnicodeString from16(FALSE, utf16, UPRV_LENGTHOF(utf16));
         if(from8a != from16 || from8b != from16) {
             errln("UnicodeString(const char * U_CHARSET_IS_UTF8) failed");
         }
@@ -1408,7 +1408,7 @@ UnicodeStringTest::TestCountChar32(void) {
         0xd804, 0xdc04, 0xd805, 0xdc05,
         0x67
     };
-    UnicodeString string(str, uprv_lengthof(str));
+    UnicodeString string(str, UPRV_LENGTHOF(str));
     int32_t start, length, number;
 
     /* test hasMoreChar32Than() */
@@ -1662,11 +1662,11 @@ public:
     TestEnumeration() : i(0) {}
 
     virtual int32_t count(UErrorCode& /*status*/) const {
-        return uprv_lengthof(testEnumStrings);
+        return UPRV_LENGTHOF(testEnumStrings);
     }
 
     virtual const UnicodeString *snext(UErrorCode &status) {
-        if(U_SUCCESS(status) && i<uprv_lengthof(testEnumStrings)) {
+        if(U_SUCCESS(status) && i<UPRV_LENGTHOF(testEnumStrings)) {
             unistr=UnicodeString(testEnumStrings[i++], "");
             return &unistr;
         }
@@ -1704,7 +1704,7 @@ UnicodeStringTest::TestStringEnumeration() {
     const char *pc;
 
     // test the next() default implementation and ensureCharsCapacity()
-    for(i=0; i<uprv_lengthof(testEnumStrings); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(testEnumStrings); ++i) {
         status=U_ZERO_ERROR;
         pc=ten.next(&length, status);
         s=UnicodeString(testEnumStrings[i], "");
@@ -1719,7 +1719,7 @@ UnicodeStringTest::TestStringEnumeration() {
 
     // test the unext() default implementation
     ten.reset(status);
-    for(i=0; i<uprv_lengthof(testEnumStrings); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(testEnumStrings); ++i) {
         status=U_ZERO_ERROR;
         pu=ten.unext(&length, status);
         s=UnicodeString(testEnumStrings[i], "");
@@ -1748,7 +1748,7 @@ UnicodeStringTest::TestStringEnumeration() {
     }
     
     // test  uenum_next()
-    for(i=0; i<uprv_lengthof(testEnumStrings); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(testEnumStrings); ++i) {
         status=U_ZERO_ERROR;
         pc=uenum_next(uten, &length, &status);
         if(U_FAILURE(status) || pc==NULL || strcmp(pc, testEnumStrings[i]) != 0) {
@@ -1762,7 +1762,7 @@ UnicodeStringTest::TestStringEnumeration() {
 
     // test the uenum_unext()
     uenum_reset(uten, &status);
-    for(i=0; i<uprv_lengthof(testEnumStrings); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(testEnumStrings); ++i) {
         status=U_ZERO_ERROR;
         pu=uenum_unext(uten, &length, &status);
         s=UnicodeString(testEnumStrings[i], "");
@@ -1827,8 +1827,8 @@ UnicodeStringTest::TestUTF32() {
         0x41, 0xfffd, 0x61, 0xfffd, 0xfffd, 0xfffd, 0x5a, 0xd900, 0xdc00, 0x7a,
         0xd800, 0xdc00, 0xd840, 0xdc00, 0xdb40, 0xdc00, 0xdbff, 0xdfff
     };
-    UnicodeString from32 = UnicodeString::fromUTF32(utf32, uprv_lengthof(utf32));
-    UnicodeString expected(FALSE, expected_utf16, uprv_lengthof(expected_utf16));
+    UnicodeString from32 = UnicodeString::fromUTF32(utf32, UPRV_LENGTHOF(utf32));
+    UnicodeString expected(FALSE, expected_utf16, UPRV_LENGTHOF(expected_utf16));
     if(from32 != expected) {
         errln("UnicodeString::fromUTF32() did not create the expected string.");
     }
@@ -1842,9 +1842,9 @@ UnicodeStringTest::TestUTF32() {
     UChar32 result32[16];
     UErrorCode errorCode = U_ZERO_ERROR;
     int32_t length32 =
-        UnicodeString(FALSE, utf16, uprv_lengthof(utf16)).
-        toUTF32(result32, uprv_lengthof(result32), errorCode);
-    if( length32 != uprv_lengthof(expected_utf32) ||
+        UnicodeString(FALSE, utf16, UPRV_LENGTHOF(utf16)).
+        toUTF32(result32, UPRV_LENGTHOF(result32), errorCode);
+    if( length32 != UPRV_LENGTHOF(expected_utf32) ||
         0 != uprv_memcmp(result32, expected_utf32, length32*4) ||
         result32[length32] != 0
     ) {
@@ -1886,7 +1886,7 @@ UnicodeStringTest::TestUTF8() {
         0xdb40, 0xdc00, 0xdbff, 0xdfff
     };
     UnicodeString from8 = UnicodeString::fromUTF8(StringPiece((const char *)utf8, (int32_t)sizeof(utf8)));
-    UnicodeString expected(FALSE, expected_utf16, uprv_lengthof(expected_utf16));
+    UnicodeString expected(FALSE, expected_utf16, UPRV_LENGTHOF(expected_utf16));
 
     if(from8 != expected) {
         errln("UnicodeString::fromUTF8(StringPiece) did not create the expected string.");
@@ -1906,7 +1906,7 @@ UnicodeStringTest::TestUTF8() {
         0x41, 0xef, 0xbf, 0xbd, 0x61, 0xef, 0xbf, 0xbd, 0x5a, 0xf1, 0x90, 0x80, 0x80, 0x7a,
         0xf0, 0x90, 0x80, 0x80, 0xf4, 0x8f, 0xbf, 0xbf
     };
-    UnicodeString us(FALSE, utf16, uprv_lengthof(utf16));
+    UnicodeString us(FALSE, utf16, UPRV_LENGTHOF(utf16));
 
     char buffer[64];
     TestCheckedArrayByteSink sink(buffer, (int32_t)sizeof(buffer));

@@ -447,7 +447,7 @@ public:
             utext_openUChars(&text, lines[i].name, lines[i].len, pErrorCode);
             int32_t count=0;
             ucharsTrieMatches(*trie, &text, lines[i].len,
-                              lengths, count, uprv_lengthof(lengths));
+                              lengths, count, UPRV_LENGTHOF(lengths));
             if(count==0 || lengths[count-1]!=lines[i].len) {
                 fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
             }
@@ -596,7 +596,7 @@ public:
             utext_openUChars(&text, lines[i].name, lines[i].len, pErrorCode);
             int32_t count=0;
             bytesTrieMatches(*trie, &text, lines[i].len,
-                             lengths, count, uprv_lengthof(lengths));
+                             lengths, count, UPRV_LENGTHOF(lengths));
             if(count==0 || lengths[count-1]!=lines[i].len) {
                 fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
             }

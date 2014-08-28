@@ -474,7 +474,7 @@ allocIndex2Block(UNewTrie2 *trie) {
 
     newBlock=trie->index2Length;
     newTop=newBlock+UTRIE2_INDEX_2_BLOCK_LENGTH;
-    if(newTop>uprv_lengthof(trie->index2)) {
+    if(newTop>UPRV_LENGTHOF(trie->index2)) {
         /*
          * Should never occur.
          * Either UTRIE2_MAX_BUILD_TIME_INDEX_LENGTH is incorrect,

@@ -125,7 +125,7 @@ U_CFUNC int u_wmsg(FILE *fp, const char *tag, ... )
     va_list ap;
 #endif
     UChar   result[4096];
-    int32_t resultLength = uprv_lengthof(result);
+    int32_t resultLength = UPRV_LENGTHOF(result);
 
     if(gBundle == NULL)
     {
@@ -144,7 +144,7 @@ U_CFUNC int u_wmsg(FILE *fp, const char *tag, ... )
 
 #if UCONFIG_NO_FORMATTING
     resultLength = sizeof(gNoFormatting) / U_SIZEOF_UCHAR;
-    if((msgLen + resultLength) <= uprv_lengthof(result)) {
+    if((msgLen + resultLength) <= UPRV_LENGTHOF(result)) {
         memcpy(result, msg, msgLen * U_SIZEOF_UCHAR);
         memcpy(result + msgLen, gNoFormatting, resultLength);
         resultLength += msgLen;

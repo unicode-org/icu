@@ -267,7 +267,7 @@ ZoneMeta::getCanonicalCLDRID(const UnicodeString &tzid, UErrorCode& status) {
     // If not, resolve CLDR canonical ID with resource data
     UBool isInputCanonical = FALSE;
     char id[ZID_KEY_MAX + 1];
-    tzid.extract(0, 0x7fffffff, id, uprv_lengthof(id), US_INV);
+    tzid.extract(0, 0x7fffffff, id, UPRV_LENGTHOF(id), US_INV);
 
     // replace '/' with ':'
     char *p = id;

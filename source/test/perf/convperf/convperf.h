@@ -158,7 +158,7 @@ public:
         name = cpName;
         src = pszIn;
         srcLen = szLen;
-        dstLen = uprv_lengthof(dest);
+        dstLen = UPRV_LENGTHOF(dest);
         unsigned short bEnc[30]={'\0'};
         const char* tenc=name;
         for(int i=0;*tenc!='\0';i++){
@@ -212,7 +212,7 @@ public:
         name = cpName;
         src = pszIn;
         srcLen = szLen;
-        dstLen = uprv_lengthof(dest);
+        dstLen = UPRV_LENGTHOF(dest);
         lpUsedDefaultChar=FALSE;
         unsigned short bEnc[30]={'\0'};
         const char* tenc=name;
@@ -307,7 +307,7 @@ public:
         getErr(err,status);
         src = source;
         srcLen = sourceLen;
-        dstLen = uprv_lengthof(dst);
+        dstLen = UPRV_LENGTHOF(dst);
         cpName = name;
     }
 
@@ -363,7 +363,7 @@ public:
         getErr(err,status);
         src = source;
         srcLen = sourceLen;
-        dstLen = uprv_lengthof(dst);
+        dstLen = UPRV_LENGTHOF(dst);
         cpName = name;
 
     }
@@ -403,7 +403,7 @@ public:
 
         src = source;
         srcLen = sourceLen;
-        dstLen = uprv_lengthof(dst);
+        dstLen = UPRV_LENGTHOF(dst);
         cpName = name;
         unsigned short bEnc[30]={'\0'};
         const char* tenc=name;
@@ -464,7 +464,7 @@ public:
         }
         src = source;
         srcLen = sourceLen;
-        dstLen = uprv_lengthof(dst);
+        dstLen = UPRV_LENGTHOF(dst);
         cpName = name;
         /* get the charset info */
         MIMECSETINFO mimeInfo;

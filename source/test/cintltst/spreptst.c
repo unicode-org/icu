@@ -441,7 +441,7 @@ Test_nfs4_mixed_prep(void){
         char src[MAX_BUFFER_SIZE];
         int32_t srcLen;
 
-        for(i=0; i< uprv_lengthof(mixed_prep_data); i++){
+        for(i=0; i< UPRV_LENGTHOF(mixed_prep_data); i++){
             int32_t destLen=0;
             char* dest = NULL;
             UErrorCode status = U_ZERO_ERROR;
@@ -758,7 +758,7 @@ static void TestStringPrepProfiles(void) {
     int32_t i, testNum = 0;
     UStringPrepProfile *sprep = NULL;
     
-    for (i = 0; i < uprv_lengthof(profile_test_case); i++) {
+    for (i = 0; i < UPRV_LENGTHOF(profile_test_case); i++) {
         if (uprv_strstr(profile_test_case[i], "RFC")) {
             if (sprep != NULL) {
                 usprep_close(sprep);

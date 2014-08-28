@@ -491,7 +491,7 @@ TestSerialized() {
         return;
     }
 
-    length=uset_serialize(set, buffer, uprv_lengthof(buffer), &errorCode);
+    length=uset_serialize(set, buffer, UPRV_LENGTHOF(buffer), &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("unable to uset_serialize([:Cf:]) - %s\n", u_errorName(errorCode));
         uset_close(set);

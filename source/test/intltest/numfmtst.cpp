@@ -3401,8 +3401,8 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
         UNUM_CURRENCY_PLURAL
     };
 
-    for (int32_t i=0; i<uprv_lengthof(DATA); ++i) {
-      for (int32_t kIndex = 0; kIndex < uprv_lengthof(currencyStyles); ++kIndex) {
+    for (int32_t i=0; i<UPRV_LENGTHOF(DATA); ++i) {
+      for (int32_t kIndex = 0; kIndex < UPRV_LENGTHOF(currencyStyles); ++kIndex) {
         UNumberFormatStyle k = currencyStyles[kIndex];
         const char* localeString = DATA[i][0];
         double numberToBeFormat = atof(DATA[i][1]);
@@ -3510,7 +3510,7 @@ for (;;) {
     printf("loop: %d\n", deadloop++);
 #endif
     for (uint32_t i=0; i< sizeof(DATA)/sizeof(DATA[0]); ++i) {  /* i = test case #  - should be i=0*/
-      for (int32_t kIndex = 2; kIndex < uprv_lengthof(currencyStyles); ++kIndex) {
+      for (int32_t kIndex = 2; kIndex < UPRV_LENGTHOF(currencyStyles); ++kIndex) {
         UNumberFormatStyle k = currencyStyles[kIndex]; /* k = style */
         const char* localeString = DATA[i][0];
         double numberToBeFormat = atof(DATA[i][1]);

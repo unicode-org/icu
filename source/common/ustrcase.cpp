@@ -397,7 +397,7 @@ ustrcase_map(const UCaseMap *csm,
          (dest>=src && dest<(src+srcLength)))
     ) {
         /* overlap: provide a temporary destination buffer and later copy the result */
-        if(destCapacity<=uprv_lengthof(buffer)) {
+        if(destCapacity<=UPRV_LENGTHOF(buffer)) {
             /* the stack buffer is large enough */
             temp=buffer;
         } else {

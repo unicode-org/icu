@@ -766,13 +766,13 @@ static int32_t populatePrefixSuffix(
   if (U_FAILURE(status)) {
     return 0;
   }
-  int32_t firstIdx = formatStr.indexOf(kZero, uprv_lengthof(kZero), 0);
+  int32_t firstIdx = formatStr.indexOf(kZero, UPRV_LENGTHOF(kZero), 0);
   // We must have 0's in format string.
   if (firstIdx == -1) {
     status = U_INTERNAL_PROGRAM_ERROR;
     return 0;
   }
-  int32_t lastIdx = formatStr.lastIndexOf(kZero, uprv_lengthof(kZero), firstIdx);
+  int32_t lastIdx = formatStr.lastIndexOf(kZero, UPRV_LENGTHOF(kZero), firstIdx);
   CDFUnit* unit = createCDFUnit(variant, log10Value, result, status);
   if (U_FAILURE(status)) {
     return 0;

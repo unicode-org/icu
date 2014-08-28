@@ -240,7 +240,7 @@ void TestUScriptCodeAPI(){
         UErrorCode status = U_ZERO_ERROR;
         UBool passed = TRUE;
 
-        for(i=0; i<uprv_lengthof(codepoints); ++i){
+        for(i=0; i<UPRV_LENGTHOF(codepoints); ++i){
             code = uscript_getScript(codepoints[i],&status);
             if(U_SUCCESS(status)){
                 if( code != expected[i] ||
@@ -360,7 +360,7 @@ void TestUScriptCodeAPI(){
             "Ahom", "Hatr", "Modi", "Mult", "Pauc", "Sidd"
         };
         int32_t j = 0;
-        if(uprv_lengthof(expectedLong)!=(USCRIPT_CODE_LIMIT-USCRIPT_BALINESE)) {
+        if(UPRV_LENGTHOF(expectedLong)!=(USCRIPT_CODE_LIMIT-USCRIPT_BALINESE)) {
             log_err("need to add new script codes in cucdapi.c!\n");
             return;
         }
@@ -374,11 +374,11 @@ void TestUScriptCodeAPI(){
                 log_err("uscript_getShortName failed for code %i: %s!=%s\n", i, name, expectedShort[j]);
             }
         }
-        for(i=0; i<uprv_lengthof(expectedLong); i++){
+        for(i=0; i<UPRV_LENGTHOF(expectedLong); i++){
             UScriptCode fillIn[5] = {USCRIPT_INVALID_CODE};
             UErrorCode status = U_ZERO_ERROR;
             int32_t len = 0;
-            len = uscript_getCode(expectedShort[i], fillIn, uprv_lengthof(fillIn), &status);
+            len = uscript_getCode(expectedShort[i], fillIn, UPRV_LENGTHOF(fillIn), &status);
             if(U_FAILURE(status)){
                 log_err("uscript_getCode failed for script name %s. Error: %s\n",expectedShort[i], u_errorName(status));
             }
@@ -472,13 +472,13 @@ void TestGetScriptExtensions() {
 
     /* errors and overflows */
     errorCode=U_PARSE_ERROR;
-    length=uscript_getScriptExtensions(0x0640, scripts, uprv_lengthof(scripts), &errorCode);
+    length=uscript_getScriptExtensions(0x0640, scripts, UPRV_LENGTHOF(scripts), &errorCode);
     if(errorCode!=U_PARSE_ERROR) {
         log_err("uscript_getScriptExtensions(U+0640, U_PARSE_ERROR) did not preserve the UErrorCode - %s\n",
               u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
-    length=uscript_getScriptExtensions(0x0640, NULL, uprv_lengthof(scripts), &errorCode);
+    length=uscript_getScriptExtensions(0x0640, NULL, UPRV_LENGTHOF(scripts), &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("uscript_getScriptExtensions(U+0640, NULL) did not set U_ILLEGAL_ARGUMENT_ERROR - %s\n",
               u_errorName(errorCode));
@@ -511,13 +511,13 @@ void TestGetScriptExtensions() {
 
     /* invalid code points */
     errorCode=U_ZERO_ERROR;
-    length=uscript_getScriptExtensions(-1, scripts, uprv_lengthof(scripts), &errorCode);
+    length=uscript_getScriptExtensions(-1, scripts, UPRV_LENGTHOF(scripts), &errorCode);
     if(U_FAILURE(errorCode) || length!=1 || scripts[0]!=USCRIPT_UNKNOWN) {
         log_err("uscript_getScriptExtensions(-1)=%d does not return {UNKNOWN} - %s\n",
               (int)length, u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
-    length=uscript_getScriptExtensions(0x110000, scripts, uprv_lengthof(scripts), &errorCode);
+    length=uscript_getScriptExtensions(0x110000, scripts, UPRV_LENGTHOF(scripts), &errorCode);
     if(U_FAILURE(errorCode) || length!=1 || scripts[0]!=USCRIPT_UNKNOWN) {
         log_err("uscript_getScriptExtensions(0x110000)=%d does not return {UNKNOWN} - %s\n",
               (int)length, u_errorName(errorCode));
@@ -531,7 +531,7 @@ void TestGetScriptExtensions() {
               (int)length, u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
-    length=uscript_getScriptExtensions(0x0640, scripts, uprv_lengthof(scripts), &errorCode);
+    length=uscript_getScriptExtensions(0x0640, scripts, UPRV_LENGTHOF(scripts), &errorCode);
     if(U_FAILURE(errorCode) || length<3 ||
             !scriptsContain(scripts, length, USCRIPT_ARABIC) ||
             !scriptsContain(scripts, length, USCRIPT_SYRIAC) ||
@@ -540,13 +540,13 @@ void TestGetScriptExtensions() {
               (int)length, u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
-    length=uscript_getScriptExtensions(0xfdf2, scripts, uprv_lengthof(scripts), &errorCode);
+    length=uscript_getScriptExtensions(0xfdf2, scripts, UPRV_LENGTHOF(scripts), &errorCode);
     if(U_FAILURE(errorCode) || length!=2 || scripts[0]!=USCRIPT_ARABIC || scripts[1]!=USCRIPT_THAANA) {
         log_err("uscript_getScriptExtensions(U+FDF2)=%d failed - %s\n",
               (int)length, u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
-    length=uscript_getScriptExtensions(0xff65, scripts, uprv_lengthof(scripts), &errorCode);
+    length=uscript_getScriptExtensions(0xff65, scripts, UPRV_LENGTHOF(scripts), &errorCode);
     if(U_FAILURE(errorCode) || length!=6 || scripts[0]!=USCRIPT_BOPOMOFO || scripts[5]!=USCRIPT_YI) {
         log_err("uscript_getScriptExtensions(U+FF65)=%d failed - %s\n",
               (int)length, u_errorName(errorCode));
@@ -558,7 +558,7 @@ void TestScriptMetadataAPI() {
     UErrorCode errorCode=U_ZERO_ERROR;
     UChar sample[8];
 
-    if(uscript_getSampleString(USCRIPT_LATIN, sample, uprv_lengthof(sample), &errorCode)!=1 ||
+    if(uscript_getSampleString(USCRIPT_LATIN, sample, UPRV_LENGTHOF(sample), &errorCode)!=1 ||
             U_FAILURE(errorCode) ||
             uscript_getScript(sample[0], &errorCode)!=USCRIPT_LATIN ||
             sample[1]!=0) {
@@ -571,7 +571,7 @@ void TestScriptMetadataAPI() {
         log_err("uscript_getSampleString(Latn, capacity=0) failed - %s\n", u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
-    if(uscript_getSampleString(USCRIPT_INVALID_CODE, sample, uprv_lengthof(sample), &errorCode)!=0 ||
+    if(uscript_getSampleString(USCRIPT_INVALID_CODE, sample, UPRV_LENGTHOF(sample), &errorCode)!=0 ||
             U_FAILURE(errorCode) ||
             sample[0]!=0) {
         log_err("uscript_getSampleString(invalid) failed - %s\n", u_errorName(errorCode));
@@ -623,12 +623,12 @@ void TestBinaryValues() {
     static const char *const falseValues[]={ "N", "No", "F", "False" };
     static const char *const trueValues[]={ "Y", "Yes", "T", "True" };
     int32_t i;
-    for(i=0; i<uprv_lengthof(falseValues); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(falseValues); ++i) {
         if(FALSE!=u_getPropertyValueEnum(UCHAR_ALPHABETIC, falseValues[i])) {
             log_data_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=FALSE (Are you missing data?)\n", falseValues[i]);
         }
     }
-    for(i=0; i<uprv_lengthof(trueValues); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(trueValues); ++i) {
         if(TRUE!=u_getPropertyValueEnum(UCHAR_ALPHABETIC, trueValues[i])) {
             log_data_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=TRUE (Are you missing data?)\n", trueValues[i]);
         }

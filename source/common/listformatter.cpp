@@ -271,10 +271,10 @@ static void joinStrings(
     int32_t offsets[2];
     pat.format(
             params,
-            uprv_lengthof(params),
+            UPRV_LENGTHOF(params),
             result,
             offsets,
-            uprv_lengthof(offsets),
+            UPRV_LENGTHOF(offsets),
             errorCode);
     if (U_FAILURE(errorCode)) {
         return;

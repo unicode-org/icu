@@ -1717,7 +1717,7 @@ getTrail:
                 }
 
                 /* try all the other possible charsets */
-                for(i = 0; i < uprv_lengthof(jpCharsetPref); ++i) {
+                for(i = 0; i < UPRV_LENGTHOF(jpCharsetPref); ++i) {
                     cs = (int8_t)jpCharsetPref[i];
                     if(CSM(cs) & csm) {
                         choices[choiceCount++] = cs;

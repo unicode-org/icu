@@ -39,7 +39,7 @@ static void TestGenderInfo(void) {
     log_err_status(status, "Fail to create UGenderInfo - %s (Are you missing data?)", u_errorName(status));
     return;
   }
-  actual = ugender_getListGender(actual_gi, kAllFemale, uprv_lengthof(kAllFemale), &status);
+  actual = ugender_getListGender(actual_gi, kAllFemale, UPRV_LENGTHOF(kAllFemale), &status);
   if (U_FAILURE(status)) {
     log_err("Fail to get gender of list - %s\n", u_errorName(status));
     return;

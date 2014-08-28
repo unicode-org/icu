@@ -436,7 +436,7 @@ static const char *getCharCatName(UChar32 cp) {
     /* Return unknown if the table of names above is not up to
        date. */
 
-    if (cat >= uprv_lengthof(charCatNames)) {
+    if (cat >= UPRV_LENGTHOF(charCatNames)) {
         return "unknown";
     } else {
         return charCatNames[cat];
@@ -1275,7 +1275,7 @@ static int32_t
 calcExtNameSetsLengths(int32_t maxNameLength) {
     int32_t i, length;
 
-    for(i=0; i<uprv_lengthof(charCatNames); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(charCatNames); ++i) {
         /*
          * for each category, count the length of the category name
          * plus 9=
@@ -1582,7 +1582,7 @@ u_charFromName(UCharNameChoice nameChoice,
                        We could use a binary search, or a trie, if
                        we really wanted to. */
 
-                    for (lower[i] = 0, cIdx = 0; cIdx < uprv_lengthof(charCatNames); ++cIdx) {
+                    for (lower[i] = 0, cIdx = 0; cIdx < UPRV_LENGTHOF(charCatNames); ++cIdx) {
 
                         if (!uprv_strcmp(lower + 1, charCatNames[cIdx])) {
                             if (getCharCat(cp) == cIdx) {

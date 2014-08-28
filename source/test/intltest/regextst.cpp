@@ -5267,7 +5267,7 @@ void RegexTest::Bug10459() {
     //   It should set an U_REGEX_INVALID_STATE.
 
     UChar buf[100];
-    int32_t len = uregex_group(icu_re, 0, buf, uprv_lengthof(buf), &status);
+    int32_t len = uregex_group(icu_re, 0, buf, UPRV_LENGTHOF(buf), &status);
     REGEX_ASSERT(status == U_REGEX_INVALID_STATE);
     REGEX_ASSERT(len == 0);
 

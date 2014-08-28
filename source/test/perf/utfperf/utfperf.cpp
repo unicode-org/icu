@@ -65,7 +65,7 @@ static const char *const utfperf_usage =
 class  UtfPerformanceTest : public UPerfTest{
 public:
     UtfPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status)
-            : UPerfTest(argc, argv, options, uprv_lengthof(options), utfperf_usage, status) {
+            : UPerfTest(argc, argv, options, UPRV_LENGTHOF(options), utfperf_usage, status) {
         if (U_SUCCESS(status)) {
             charset = options[CHARSET].value;
 

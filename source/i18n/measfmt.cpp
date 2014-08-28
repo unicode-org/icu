@@ -111,7 +111,7 @@ private:
 };
 
 MeasureFormatCacheData::MeasureFormatCacheData() {
-    for (int32_t i = 0; i < uprv_lengthof(currencyFormats); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(currencyFormats); ++i) {
         currencyFormats[i] = NULL;
     }
     integerFormat = NULL;
@@ -119,7 +119,7 @@ MeasureFormatCacheData::MeasureFormatCacheData() {
 }
 
 MeasureFormatCacheData::~MeasureFormatCacheData() {
-    for (int32_t i = 0; i < uprv_lengthof(currencyFormats); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(currencyFormats); ++i) {
         delete currencyFormats[i];
     }
     delete integerFormat;

@@ -130,7 +130,7 @@ NormalizerPerformanceTest::NormalizerPerformanceTest(int32_t argc, const char* a
         return;
     }
 
-    _remainingArgc = u_parseArgs(_remainingArgc, (char **)argv, (int32_t)(uprv_lengthof(cmdLineOptions)), cmdLineOptions);
+    _remainingArgc = u_parseArgs(_remainingArgc, (char **)argv, (int32_t)(UPRV_LENGTHOF(cmdLineOptions)), cmdLineOptions);
     if(cmdLineOptions[0].doesOccur && cmdLineOptions[0].value!=NULL) {
         options=(int32_t)strtol(cmdLineOptions[0].value, NULL, 16);
     }

@@ -1792,7 +1792,7 @@ doTestTruncated(const char *cnvName, const uint8_t *bytes, int32_t length) {
     source=(const char *)bytes;
     sourceLimit=source+length;
     target=buffer;
-    targetLimit=buffer+uprv_lengthof(buffer);
+    targetLimit=buffer+UPRV_LENGTHOF(buffer);
 
     /* 1. input bytes with flush=FALSE, then input nothing with flush=TRUE */
     ucnv_toUnicode(cnv, &target, targetLimit, &source, sourceLimit, NULL, FALSE, &errorCode);
@@ -1866,7 +1866,7 @@ TestTruncated() {
     };
     int32_t i;
 
-    for(i=0; i<uprv_lengthof(testCases); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(testCases); ++i) {
         doTestTruncated(testCases[i].cnvName, testCases[i].bytes, testCases[i].length);
     }
 }
@@ -1961,7 +1961,7 @@ TestUnicodeSet() {
     }
 
     /* test converters that are known to convert all of Unicode (except maybe for surrogates) */
-    for(i=0; i<uprv_lengthof(completeSetNames); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(completeSetNames); ++i) {
         errorCode=U_ZERO_ERROR;
         name=completeSetNames[i];
         cnv=ucnv_open(name, &errorCode);
@@ -1985,7 +1985,7 @@ TestUnicodeSet() {
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
     /* test LMBCS variants which convert all of Unicode except for U+F6xx */
-    for(i=0; i<uprv_lengthof(lmbcsNames); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(lmbcsNames); ++i) {
         errorCode=U_ZERO_ERROR;
         name=lmbcsNames[i];
         cnv=ucnv_open(name, &errorCode);
@@ -2009,7 +2009,7 @@ TestUnicodeSet() {
 #endif
 
     /* test specific sets */
-    for(i=0; i<uprv_lengthof(nameRanges); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(nameRanges); ++i) {
         errorCode=U_ZERO_ERROR;
         name=nameRanges[i].name;
         cnv=ucnv_open(name, &errorCode);

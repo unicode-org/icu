@@ -433,7 +433,7 @@ UTS46::processUTF8(const StringPiece &src,
         char stackArray[256];
         int32_t destCapacity;
         char *destArray=dest.GetAppendBuffer(srcLength, srcLength+20,
-                                             stackArray, uprv_lengthof(stackArray), &destCapacity);
+                                             stackArray, UPRV_LENGTHOF(stackArray), &destCapacity);
         UBool disallowNonLDHDot=(options&UIDNA_USE_STD3_RULES)!=0;
         int32_t i;
         for(i=0;; ++i) {
