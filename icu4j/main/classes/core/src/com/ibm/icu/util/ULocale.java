@@ -40,6 +40,7 @@ import com.ibm.icu.impl.locale.LocaleExtensions;
 import com.ibm.icu.impl.locale.LocaleSyntaxException;
 import com.ibm.icu.impl.locale.ParseStatus;
 import com.ibm.icu.impl.locale.UnicodeLocaleExtension;
+import com.ibm.icu.impl.locale.KeyTypeData;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 
@@ -3218,6 +3219,149 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         return getInstance(bldr.getBaseLocale(), bldr.getLocaleExtensions());
     }
 
+    /**
+     * Converts the specified keyword (legacy key, or BCP 47 Unicode locale
+     * extension key) to the equivalent BCP 47 Unicode locale extension key.
+     * For example, BCP 47 Unicode locale extension key "co" is returned for
+     * the input keyword "collation".
+     * <p>
+     * When the specified keyword is unknown, but satisfies the BCP syntax,
+     * then the lower-case version of the input keyword will be returned.
+     * For example,
+     * <code>toUnicodeLocaleKey("ZZ")</code> returns "zz".
+     * 
+     * @param keyword       the input locale keyword (either legacy key
+     *                      such as "collation" or BCP 47 Unicode locale extension
+     *                      key such as "co").
+     * @return              the well-formed BCP 47 Unicode locale extension key,
+     *                      or null if the specified locale keyword cannot be mapped
+     *                      to a well-formed BCP 47 Unicode locale extension key. 
+     * @see #toLegacyKey(String)
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String toUnicodeLocaleKey(String keyword) {
+        String uniLocKey = KeyTypeData.toBcpKey(keyword);
+        if (uniLocKey == null && UnicodeLocaleExtension.isKey(keyword)) {
+            // unknown keyword, but syntax is fine..
+            uniLocKey = AsciiUtil.toLowerString(keyword);
+        }
+        return uniLocKey;
+    }
+
+    /**
+     * Converts the specified keyword value (legacy type, or BCP 47
+     * Unicode locale extension type) to the well-formed BCP 47 Unicode locale
+     * extension type for the specified keyword (category). For example, BCP 47
+     * Unicode locale extension type "phonebk" is returned for the input
+     * keyword value "phonebook", with the keyword "collation" (or "co").
+     * <p>
+     * When the specified keyword is not recognized, but the specified value
+     * satisfies the syntax of the BCP 47 Unicode locale extension type,
+     * or when the specified keyword allows 'variable' type and the specified
+     * value satisfies the syntax, the lower-case version of the input value
+     * will be returned. For example,
+     * <code>toUnicodeLocaleType("Foo", "Bar")</code> returns "bar",
+     * <code>toUnicodeLocaleType("variableTop", "00A4")</code> returns "00a4".
+     * 
+     * @param keyword       the locale keyword (either legacy key such as
+     *                      "collation" or BCP 47 Unicode locale extension
+     *                      key such as "co").
+     * @param value         the locale keyword value (either legacy type
+     *                      such as "phonebook" or BCP 47 Unicode locale extension
+     *                      type such as "phonebk").
+     * @return              the well-formed BCP47 Unicode locale extension type,
+     *                      or null if the locale keyword value cannot be mapped to
+     *                      a well-formed BCP 47 Unicode locale extension type.
+     * @see #toLegacyType(String, String)
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String toUnicodeLocaleType(String keyword, String value) {
+        String bcpType = KeyTypeData.toBcpType(keyword, value, null, null);
+        if (bcpType == null && UnicodeLocaleExtension.isType(value)) {
+            // unknown keyword, but syntax is fine..
+            bcpType = AsciiUtil.toLowerString(value);
+        }
+        return bcpType;
+    }
+
+    /**
+     * Converts the specified keyword (BCP 47 Unicode locale extension key, or
+     * legacy key) to the legacy key. For example, legacy key "collation" is
+     * returned for the input BCP 47 Unicode locale extension key "co".
+     * 
+     * @param keyword       the input locale keyword (either BCP 47 Unicode locale
+     *                      extension key or legacy key).
+     * @return              the well-formed legacy key, or null if the specified
+     *                      keyword cannot be mapped to a well-formed legacy key.
+     * @see #toUnicodeLocaleKey(String)
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String toLegacyKey(String keyword) {
+        String legacyKey = KeyTypeData.toLegacyKey(keyword);
+        if (legacyKey == null) {
+            // Checks if the specified locale key is well-formed with the legacy locale syntax.
+            //
+            // Note:
+            //  Neither ICU nor LDML/CLDR provides the definition of keyword syntax.
+            //  However, a key should not contain '=' obviously. For now, all existing
+            //  keys are using ASCII alphabetic letters only. We won't add any new key
+            //  that is not compatible with the BCP 47 syntax. Therefore, we assume
+            //  a valid key consist from [0-9a-zA-Z], no symbols.
+            if (keyword.matches("[0-9a-zA-Z]*")) {
+                legacyKey = AsciiUtil.toLowerString(keyword);
+            }
+        }
+        return legacyKey;
+    }
+
+    /**
+     * Converts the specified keyword value (BCP 47 Unicode locale extension type,
+     * or legacy type or type alias) to the canonical legacy type. For example,
+     * the legacy type "phonebook" is returned for the input BCP 47 Unicode
+     * locale extension type "phonebk" with the keyword "collation" (or "co").
+     * <p>
+     * When the specified keyword is not recognized, but the specified value
+     * satisfies the syntax of legacy key, or when the specified keyword
+     * allows 'variable' type and the specified value satisfies the syntax,
+     * the lower-case version of the input value will be returned.
+     * For example,
+     * <code>toLegacyType("Foo", "Bar")</code> returns "bar",
+     * <code>toLegacyType("vt", "00A4")</code> returns "00a4".
+     *
+     * @param keyword       the locale keyword (either legacy keyword such as
+     *                      "collation" or BCP 47 Unicode locale extension
+     *                      key such as "co").
+     * @param value         the locale keyword value (either BCP 47 Unicode locale
+     *                      extension type such as "phonebk" or legacy keyword value
+     *                      such as "phonebook").
+     * @return              the well-formed legacy type, or null if the specified
+     *                      keyword value cannot be mapped to a well-formed legacy
+     *                      type.
+     * @see #toUnicodeLocaleType(String, String)
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String toLegacyType(String keyword, String value) {
+        String legacyType = KeyTypeData.toLegacyType(keyword, value, null, null);
+        if (legacyType == null) {
+            // Checks if the specified locale type is well-formed with the legacy locale syntax.
+            //
+            // Note:
+            //  Neither ICU nor LDML/CLDR provides the definition of keyword syntax.
+            //  However, a type should not contain '=' obviously. For now, all existing
+            //  types are using ASCII alphabetic letters with a few symbol letters. We won't
+            //  add any new type that is not compatible with the BCP 47 syntax except timezone
+            //  IDs. For now, we assume a valid type start with [0-9a-zA-Z], but may contain
+            //  '-' '_' '/' in the middle.
+            if (value.matches("[0-9a-zA-Z]+([_/\\-][0-9a-zA-Z]+)*")) {
+                legacyType = AsciiUtil.toLowerString(value);
+            }
+        }
+        return legacyType;
+    }
 
     /**
      * <code>Builder</code> is used to build instances of <code>ULocale</code>
@@ -3591,8 +3735,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                     for (String bcpKey : ukeys) {
                         String bcpType = uext.getUnicodeLocaleType(bcpKey);
                         // convert to legacy key/type
-                        String lkey = bcp47ToLDMLKey(bcpKey);
-                        String ltype = bcp47ToLDMLType(lkey, ((bcpType.length() == 0) ? "yes" : bcpType)); // use "yes" as the value of typeless keywords
+                        String lkey = toLegacyKey(bcpKey);
+                        String ltype = toLegacyType(bcpKey, ((bcpType.length() == 0) ? "yes" : bcpType)); // use "yes" as the value of typeless keywords
                         // special handling for u-va-posix, since this is a variant, not a keyword
                         if (lkey.equals("va") && ltype.equals("posix") && base.getVariant().length() == 0) {
                             id = id + "_POSIX";
@@ -3675,8 +3819,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                             }
                         }
                     } else if (key.length() >= 2) {
-                        String bcpKey = ldmlKeyToBCP47(key);
-                        String bcpType = ldmlTypeToBCP47(key, getKeywordValue(key));
+                        String bcpKey = toUnicodeLocaleKey(key);
+                        String bcpType = toUnicodeLocaleType(key, getKeywordValue(key));
                         if (bcpKey != null && bcpType != null) {
                             try {
                                 intbld.setUnicodeLocaleKeyword(bcpKey, bcpType);
@@ -3697,161 +3841,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             }
         }
         return extensions;
-    }
-
-    //
-    // LDML legacy/BCP47 key and type mapping functions
-    //
-    private static String ldmlKeyToBCP47(String key) {
-        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
-                                            ICUResourceBundle.ICU_BASE_NAME,
-                                            "keyTypeData",
-                                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle keyMap = keyTypeData.get("keyMap");
-
-        // normalize key to lowercase
-        key = AsciiUtil.toLowerString(key);
-        String bcpKey = null;
-        try {
-            bcpKey = keyMap.getString(key);
-            if (bcpKey.length() == 0) {
-                // empty value indicates the BCP47 key is same with the legacy key
-                bcpKey = key;
-            }
-        } catch (MissingResourceException mre) {
-            // fall through
-        }
-
-        if (bcpKey == null) {
-            if (key.length() == 2 && LanguageTag.isExtensionSubtag(key)) {
-                return key;
-            }
-            return null;
-        }
-        return bcpKey;
-    }
-
-    private static String bcp47ToLDMLKey(String bcpKey) {
-        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
-                                            ICUResourceBundle.ICU_BASE_NAME,
-                                            "keyTypeData",
-                                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle keyMap = keyTypeData.get("keyMap");
-
-        // normalize bcp key to lowercase
-        bcpKey = AsciiUtil.toLowerString(bcpKey);
-        String key = null;
-        for (int i = 0; i < keyMap.getSize(); i++) {
-            UResourceBundle mapData = keyMap.get(i);
-            String tmpBcpKey = mapData.getString();
-            if (tmpBcpKey.length() == 0) {
-                // empty value indicates the BCP47 key is same with the legacy key
-                tmpBcpKey = mapData.getKey();
-            }
-            if (bcpKey.equals(tmpBcpKey)) {
-                key = mapData.getKey();
-                break;
-            }
-        }
-        if (key == null) {
-            return bcpKey;
-        }
-        return key;
-    }
-
-    private static String ldmlTypeToBCP47(String key, String type) {
-        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
-                                            ICUResourceBundle.ICU_BASE_NAME,
-                                            "keyTypeData",
-                                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle typeMap = keyTypeData.get("typeMap");
-
-        // keys are case-insensitive, while types are case-sensitive
-        // TODO: make types case insensitive
-        key = AsciiUtil.toLowerString(key);
-        UResourceBundle typeMapForKey = null;
-        String bcpType = null;
-        String typeResKey = key.equals("timezone") ? type.replace('/', ':') : type;
-        try {
-            typeMapForKey = typeMap.get(key);
-            bcpType = typeMapForKey.getString(typeResKey);
-            if (bcpType.length() == 0) {
-                // empty value indicates the BCP47 type is same with the legacy type
-                bcpType = type;
-            }
-        } catch (MissingResourceException mre) {
-            // fall through
-        }
-
-        if (bcpType == null && typeMapForKey != null) {
-            // is this type alias?
-            UResourceBundle typeAlias = keyTypeData.get("typeAlias");
-            try {
-                UResourceBundle typeAliasForKey = typeAlias.get(key);
-                typeResKey = typeAliasForKey.getString(typeResKey);
-                bcpType = typeMapForKey.getString(typeResKey.replace('/', ':'));
-                if (bcpType.length() == 0) {
-                    // empty value indicates the BCP47 type is same with the legacy type
-                    bcpType = typeResKey;
-                }
-            } catch (MissingResourceException mre) {
-                // fall through
-            }
-        }
-
-        if (bcpType == null) {
-            int typeLen = type.length();
-            if (typeLen >= 3 && typeLen <= 8 && LanguageTag.isExtensionSubtag(type)) {
-                return type;
-            }
-            return null;
-        }
-        return bcpType;
-    }
-
-    private static String bcp47ToLDMLType(String key, String bcpType) {
-        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
-                                            ICUResourceBundle.ICU_BASE_NAME,
-                                            "keyTypeData",
-                                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle typeMap = keyTypeData.get("typeMap");
-
-        // normalize key/bcpType to lowercase
-        key = AsciiUtil.toLowerString(key);
-        bcpType = AsciiUtil.toLowerString(bcpType);
-
-        String type = null;
-        try {
-            UResourceBundle typeMapForKey = typeMap.get(key);
-
-            // Note:    Linear search for time zone ID might be too slow.
-            //          ICU services do not use timezone keywords for now.
-            //          In future, we may need to build the optimized inverse
-            //          lookup table.
-
-            for (int i = 0; i < typeMapForKey.getSize(); i++) {
-                UResourceBundle mapData = typeMapForKey.get(i);
-                String tmpBcpType = mapData.getString();
-                if (tmpBcpType.length() == 0) {
-                    // empty value indicates the BCP47 type is same with the legacy type
-                    tmpBcpType = mapData.getKey();
-                }
-                if (bcpType.equals(tmpBcpType)) {
-                    type = mapData.getKey();
-                    if (key.equals("timezone")) {
-                        type = type.replace(':', '/');
-                    }
-                    break;
-                }
-            }
-        } catch (MissingResourceException mre) {
-            // fall through
-        }
-
-        if (type == null) {
-            return bcpType;
-        }
-        return type;
     }
 
     /*
@@ -4073,9 +4062,9 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
                     if (kwKey.length() != 1) {
                         // Unicode locale key
-                        kwKey = bcp47ToLDMLKey(kwKey);
+                        kwKey = toLegacyKey(kwKey);
                         // use "yes" as the value of typeless keywords
-                        kwVal = bcp47ToLDMLType(kwKey, ((kwVal.length() == 0) ? "yes" : kwVal));
+                        kwVal = toLegacyType(kwKey, ((kwVal.length() == 0) ? "yes" : kwVal));
                     }
 
                     if (addSep) {

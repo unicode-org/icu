@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -98,5 +98,24 @@ public class UnicodeLocaleExtension extends Extension {
     public static boolean isTypeSubtag(String s) {
         // 3*8alphanum
         return (s.length() >= 3) && (s.length() <= 8) && AsciiUtil.isAlphaNumericString(s);
+    }
+
+    public static boolean isType(String s) {
+        // sequence of type subtags delimited by '-'
+        int startIdx = 0;
+        boolean sawSubtag = false;
+        while (true) {
+            int idx = s.indexOf(LanguageTag.SEP, startIdx);
+            String subtag = idx < 0 ? s.substring(startIdx) : s.substring(startIdx, idx);
+            if (!isTypeSubtag(subtag)) {
+                return false;
+            }
+            sawSubtag = true;
+            if (idx < 0) {
+                break;
+            }
+            startIdx = idx + 1;
+        }
+        return sawSubtag && startIdx < s.length();
     }
 }
