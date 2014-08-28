@@ -11,6 +11,38 @@
 #include "cucdapi.h"
 #include "cmemory.h"
 
+static void scriptsToString(const UScriptCode scripts[], int32_t length, char s[]) {
+    int32_t i;
+    if(length == 0) {
+        strcpy(s, "(no scripts)");
+        return;
+    }
+    s[0] = 0;
+    for(i = 0; i < length; ++i) {
+        if(i > 0) {
+            strcat(s, " ");
+        }
+        strcat(s, uscript_getShortName(scripts[i]));
+    }
+}
+
+static void assertEqualScripts(const char *msg,
+                               const UScriptCode scripts1[], int32_t length1,
+                               const UScriptCode scripts2[], int32_t length2,
+                               UErrorCode errorCode) {
+    char s1[80];
+    char s2[80];
+    if(U_FAILURE(errorCode)) {
+        log_err("Failed: %s - %s\n", msg, u_errorName(errorCode));
+        return;
+    }
+    scriptsToString(scripts1, length1, s1);
+    scriptsToString(scripts2, length2, s2);
+    if(0!=strcmp(s1, s2)) {
+        log_err("Failed: %s: expected %s but got %s\n", msg, s1, s2);
+    }
+}
+
 void TestUScriptCodeAPI(){
     int i =0;
     int numErrors =0;
@@ -111,6 +143,50 @@ void TestUScriptCodeAPI(){
                  u_errorName(err));
         }
 
+    }
+    {
+        static const UScriptCode LATIN[1] = { USCRIPT_LATIN };
+        static const UScriptCode CYRILLIC[1] = { USCRIPT_CYRILLIC };
+        static const UScriptCode DEVANAGARI[1] = { USCRIPT_DEVANAGARI };
+        static const UScriptCode HAN[1] = { USCRIPT_HAN };
+        static const UScriptCode JAPANESE[3] = { USCRIPT_KATAKANA, USCRIPT_HIRAGANA, USCRIPT_HAN };
+        static const UScriptCode KOREAN[2] = { USCRIPT_HANGUL, USCRIPT_HAN };
+        static const UScriptCode HAN_BOPO[2] = { USCRIPT_HAN, USCRIPT_BOPOMOFO };
+        UScriptCode scripts[5];
+        UErrorCode err;
+        int32_t num;
+
+        // Should work regardless of whether we have locale data for the language.
+        err = U_ZERO_ERROR;
+        num = uscript_getCode("tg", scripts, UPRV_LENGTHOF(scripts), &err);
+        assertEqualScripts("tg script: Cyrl", CYRILLIC, 1, scripts, num, err);  // Tajik
+        err = U_ZERO_ERROR;
+        num = uscript_getCode("xsr", scripts, UPRV_LENGTHOF(scripts), &err);
+        assertEqualScripts("xsr script: Deva", DEVANAGARI, 1, scripts, num, err);  // Sherpa
+
+        // Multi-script languages.
+        err = U_ZERO_ERROR;
+        num = uscript_getCode("ja", scripts, UPRV_LENGTHOF(scripts), &err);
+        assertEqualScripts("ja scripts: Kana Hira Hani",
+                           JAPANESE, UPRV_LENGTHOF(JAPANESE), scripts, num, err);
+        err = U_ZERO_ERROR;
+        num = uscript_getCode("ko", scripts, UPRV_LENGTHOF(scripts), &err);
+        assertEqualScripts("ko scripts: Hang Hani",
+                           KOREAN, UPRV_LENGTHOF(KOREAN), scripts, num, err);
+        err = U_ZERO_ERROR;
+        num = uscript_getCode("zh", scripts, UPRV_LENGTHOF(scripts), &err);
+        assertEqualScripts("zh script: Hani", HAN, 1, scripts, num, err);
+        err = U_ZERO_ERROR;
+        num = uscript_getCode("zh-Hant", scripts, UPRV_LENGTHOF(scripts), &err);
+        assertEqualScripts("zh-Hant scripts: Hani Bopo", HAN_BOPO, 2, scripts, num, err);
+        err = U_ZERO_ERROR;
+        num = uscript_getCode("zh-TW", scripts, UPRV_LENGTHOF(scripts), &err);
+        assertEqualScripts("zh-TW scripts: Hani Bopo", HAN_BOPO, 2, scripts, num, err);
+
+        // Ambiguous API, but this probably wants to return Latin rather than Rongorongo (Roro).
+        err = U_ZERO_ERROR;
+        num = uscript_getCode("ro-RO", scripts, UPRV_LENGTHOF(scripts), &err);
+        assertEqualScripts("ro-RO script: Latn", LATIN, 1, scripts, num, err);
     }
 
     {
