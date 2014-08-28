@@ -21,8 +21,6 @@
 #include "cmemory.h"
 #include "dictionarydata.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 /*
@@ -158,7 +156,7 @@ int32_t PossibleWord::candidates( UText *text, DictionaryMatcher *dict, int32_t 
     int32_t start = (int32_t)utext_getNativeIndex(text);
     if (start != offset) {
         offset = start;
-        count = dict->matches(text, rangeEnd-start, LENGTHOF(cuLengths), cuLengths, cpLengths, NULL, &prefix);
+        count = dict->matches(text, rangeEnd-start, uprv_lengthof(cuLengths), cuLengths, cpLengths, NULL, &prefix);
         // Dictionary leaves text after longest prefix, not longest word. Back up.
         if (count <= 0) {
             utext_setNativeIndex(text, start);

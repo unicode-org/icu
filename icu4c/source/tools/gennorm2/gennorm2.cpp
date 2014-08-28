@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2012, International Business Machines
+*   Copyright (C) 2009-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -37,8 +37,6 @@
 #if UCONFIG_NO_NORMALIZATION
 #include "unewdata.h"
 #endif
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 U_NAMESPACE_BEGIN
 
@@ -239,7 +237,7 @@ void parseFile(FILE *f, Normalizer2DataBuilder &builder) {
         }
         if(*delimiter=='=' || *delimiter=='>') {
             UChar uchars[Normalizer2Impl::MAPPING_LENGTH_MASK];
-            int32_t length=u_parseString(delimiter+1, uchars, LENGTHOF(uchars), NULL, errorCode);
+            int32_t length=u_parseString(delimiter+1, uchars, uprv_lengthof(uchars), NULL, errorCode);
             if(errorCode.isFailure()) {
                 fprintf(stderr, "gennorm2 error: parsing mapping string from %s\n", line);
                 exit(errorCode.reset());

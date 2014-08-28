@@ -42,8 +42,6 @@
 #include "ucln_cmn.h"
 #include "ustr_imp.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_CDECL_BEGIN
 static UBool U_CALLCONV locale_cleanup(void);
 U_CDECL_END

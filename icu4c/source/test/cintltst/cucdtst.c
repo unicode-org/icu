@@ -34,8 +34,7 @@
 #include "usc_impl.h"
 #include "udatamem.h" /* for testing ucase_openBinary() */
 #include "cucdapi.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+#include "cmemory.h"
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -559,31 +558,31 @@ static void TestMisc()
 
     memset(icuVersion, 0, U_MAX_VERSION_STRING_LENGTH);
 
-    testSampleCharProps(u_isspace, "u_isspace", sampleSpaces, LENGTHOF(sampleSpaces), TRUE);
-    testSampleCharProps(u_isspace, "u_isspace", sampleNonSpaces, LENGTHOF(sampleNonSpaces), FALSE);
+    testSampleCharProps(u_isspace, "u_isspace", sampleSpaces, uprv_lengthof(sampleSpaces), TRUE);
+    testSampleCharProps(u_isspace, "u_isspace", sampleNonSpaces, uprv_lengthof(sampleNonSpaces), FALSE);
 
     testSampleCharProps(u_isJavaSpaceChar, "u_isJavaSpaceChar",
-                        sampleSpaces, LENGTHOF(sampleSpaces), TRUE);
+                        sampleSpaces, uprv_lengthof(sampleSpaces), TRUE);
     testSampleCharProps(u_isJavaSpaceChar, "u_isJavaSpaceChar",
-                        sampleNonSpaces, LENGTHOF(sampleNonSpaces), FALSE);
+                        sampleNonSpaces, uprv_lengthof(sampleNonSpaces), FALSE);
 
     testSampleCharProps(u_isWhitespace, "u_isWhitespace",
-                        sampleWhiteSpaces, LENGTHOF(sampleWhiteSpaces), TRUE);
+                        sampleWhiteSpaces, uprv_lengthof(sampleWhiteSpaces), TRUE);
     testSampleCharProps(u_isWhitespace, "u_isWhitespace",
-                        sampleNonWhiteSpaces, LENGTHOF(sampleNonWhiteSpaces), FALSE);
+                        sampleNonWhiteSpaces, uprv_lengthof(sampleNonWhiteSpaces), FALSE);
 
     testSampleCharProps(u_isdefined, "u_isdefined",
-                        sampleDefined, LENGTHOF(sampleDefined), TRUE);
+                        sampleDefined, uprv_lengthof(sampleDefined), TRUE);
     testSampleCharProps(u_isdefined, "u_isdefined",
-                        sampleUndefined, LENGTHOF(sampleUndefined), FALSE);
+                        sampleUndefined, uprv_lengthof(sampleUndefined), FALSE);
 
-    testSampleCharProps(u_isbase, "u_isbase", sampleBase, LENGTHOF(sampleBase), TRUE);
-    testSampleCharProps(u_isbase, "u_isbase", sampleNonBase, LENGTHOF(sampleNonBase), FALSE);
+    testSampleCharProps(u_isbase, "u_isbase", sampleBase, uprv_lengthof(sampleBase), TRUE);
+    testSampleCharProps(u_isbase, "u_isbase", sampleNonBase, uprv_lengthof(sampleNonBase), FALSE);
 
-    testSampleCharProps(u_isdigit, "u_isdigit", sampleDigits, LENGTHOF(sampleDigits), TRUE);
-    testSampleCharProps(u_isdigit, "u_isdigit", sampleNonDigits, LENGTHOF(sampleNonDigits), FALSE);
+    testSampleCharProps(u_isdigit, "u_isdigit", sampleDigits, uprv_lengthof(sampleDigits), TRUE);
+    testSampleCharProps(u_isdigit, "u_isdigit", sampleNonDigits, uprv_lengthof(sampleNonDigits), FALSE);
 
-    for (i = 0; i < LENGTHOF(sampleDigits); i++) {
+    for (i = 0; i < uprv_lengthof(sampleDigits); i++) {
         if (u_charDigitValue(sampleDigits[i]) != sampleDigitValues[i]) {
             log_err("error: u_charDigitValue(U+04x)=%d != %d\n",
                     sampleDigits[i], u_charDigitValue(sampleDigits[i]), sampleDigitValues[i]);
@@ -721,7 +720,7 @@ static void TestMisc()
             { 0xff3a, 37, -1 }
         };
 
-        for(i=0; i<LENGTHOF(data); ++i) {
+        for(i=0; i<uprv_lengthof(data); ++i) {
             if(u_digit(data[i].c, data[i].radix)!=data[i].value) {
                 log_err("u_digit(U+%04x, %d)=%d expected %d\n",
                         data[i].c,
@@ -822,7 +821,7 @@ TestPOSIX() {
 
     mask=1;
     for(cl=0; cl<12; ++cl) {
-        for(i=0; i<LENGTHOF(posixData); ++i) {
+        for(i=0; i<uprv_lengthof(posixData); ++i) {
             expect=(UBool)((posixData[i].posixResults&mask)!=0);
             if(posixClasses[cl].fn(posixData[i].c)!=expect) {
                 log_err("u_%s(U+%04x)=%s is wrong\n",
@@ -842,13 +841,13 @@ static void TestControlPrint()
     const UChar32 sampleNonPrintable[] = {0x200c, 0x009f, 0x001b};
     UChar32 c;
 
-    testSampleCharProps(u_iscntrl, "u_iscntrl", sampleControl, LENGTHOF(sampleControl), TRUE);
-    testSampleCharProps(u_iscntrl, "u_iscntrl", sampleNonControl, LENGTHOF(sampleNonControl), FALSE);
+    testSampleCharProps(u_iscntrl, "u_iscntrl", sampleControl, uprv_lengthof(sampleControl), TRUE);
+    testSampleCharProps(u_iscntrl, "u_iscntrl", sampleNonControl, uprv_lengthof(sampleNonControl), FALSE);
 
     testSampleCharProps(u_isprint, "u_isprint",
-                        samplePrintable, LENGTHOF(samplePrintable), TRUE);
+                        samplePrintable, uprv_lengthof(samplePrintable), TRUE);
     testSampleCharProps(u_isprint, "u_isprint",
-                        sampleNonPrintable, LENGTHOF(sampleNonPrintable), FALSE);
+                        sampleNonPrintable, uprv_lengthof(sampleNonPrintable), FALSE);
 
     /* test all ISO 8 controls */
     for(c=0; c<=0x9f; ++c) {
@@ -896,37 +895,37 @@ static void TestIdentifier()
     const UChar32 sampleNonIDIgnore[] = {0x0075, 0x00a3, 0x0061};
 
     testSampleCharProps(u_isJavaIDStart, "u_isJavaIDStart",
-                        sampleJavaIDStart, LENGTHOF(sampleJavaIDStart), TRUE);
+                        sampleJavaIDStart, uprv_lengthof(sampleJavaIDStart), TRUE);
     testSampleCharProps(u_isJavaIDStart, "u_isJavaIDStart",
-                        sampleNonJavaIDStart, LENGTHOF(sampleNonJavaIDStart), FALSE);
+                        sampleNonJavaIDStart, uprv_lengthof(sampleNonJavaIDStart), FALSE);
 
     testSampleCharProps(u_isJavaIDPart, "u_isJavaIDPart",
-                        sampleJavaIDPart, LENGTHOF(sampleJavaIDPart), TRUE);
+                        sampleJavaIDPart, uprv_lengthof(sampleJavaIDPart), TRUE);
     testSampleCharProps(u_isJavaIDPart, "u_isJavaIDPart",
-                        sampleNonJavaIDPart, LENGTHOF(sampleNonJavaIDPart), FALSE);
+                        sampleNonJavaIDPart, uprv_lengthof(sampleNonJavaIDPart), FALSE);
 
     /* IDPart should imply IDStart */
     testSampleCharProps(u_isJavaIDPart, "u_isJavaIDPart",
-                        sampleJavaIDStart, LENGTHOF(sampleJavaIDStart), TRUE);
+                        sampleJavaIDStart, uprv_lengthof(sampleJavaIDStart), TRUE);
 
     testSampleCharProps(u_isIDStart, "u_isIDStart",
-                        sampleUnicodeIDStart, LENGTHOF(sampleUnicodeIDStart), TRUE);
+                        sampleUnicodeIDStart, uprv_lengthof(sampleUnicodeIDStart), TRUE);
     testSampleCharProps(u_isIDStart, "u_isIDStart",
-                        sampleNonUnicodeIDStart, LENGTHOF(sampleNonUnicodeIDStart), FALSE);
+                        sampleNonUnicodeIDStart, uprv_lengthof(sampleNonUnicodeIDStart), FALSE);
 
     testSampleCharProps(u_isIDPart, "u_isIDPart",
-                        sampleUnicodeIDPart, LENGTHOF(sampleUnicodeIDPart), TRUE);
+                        sampleUnicodeIDPart, uprv_lengthof(sampleUnicodeIDPart), TRUE);
     testSampleCharProps(u_isIDPart, "u_isIDPart",
-                        sampleNonUnicodeIDPart, LENGTHOF(sampleNonUnicodeIDPart), FALSE);
+                        sampleNonUnicodeIDPart, uprv_lengthof(sampleNonUnicodeIDPart), FALSE);
 
     /* IDPart should imply IDStart */
     testSampleCharProps(u_isIDPart, "u_isIDPart",
-                        sampleUnicodeIDStart, LENGTHOF(sampleUnicodeIDStart), TRUE);
+                        sampleUnicodeIDStart, uprv_lengthof(sampleUnicodeIDStart), TRUE);
 
     testSampleCharProps(u_isIDIgnorable, "u_isIDIgnorable",
-                        sampleIDIgnore, LENGTHOF(sampleIDIgnore), TRUE);
+                        sampleIDIgnore, uprv_lengthof(sampleIDIgnore), TRUE);
     testSampleCharProps(u_isIDIgnorable, "u_isIDIgnorable",
-                        sampleNonIDIgnore, LENGTHOF(sampleNonIDIgnore), FALSE);
+                        sampleNonIDIgnore, uprv_lengthof(sampleNonIDIgnore), FALSE);
 }
 
 /* for each line of UnicodeData.txt, check some of the properties */
@@ -1188,7 +1187,7 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
         return FALSE;
     }
 
-    count=LENGTHOF(test);
+    count=uprv_lengthof(test);
     for(i=0; i<count; ++i) {
         if(start<=test[i][0] && test[i][0]<limit) {
             if(type!=(UCharCategory)test[i][1]) {
@@ -1277,7 +1276,7 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
     if(type==U_UNASSIGNED || type==U_PRIVATE_USE_CHAR) {
         /* enumerate the intersections of defaultBidi ranges with [start..limit[ */
         c=start;
-        for(i=0; i<LENGTHOF(defaultBidi) && c<limit; ++i) {
+        for(i=0; i<uprv_lengthof(defaultBidi) && c<limit; ++i) {
             if((int32_t)c<defaultBidi[i][0]) {
                 while(c<limit && (int32_t)c<defaultBidi[i][0]) {
                     if(U_IS_UNICODE_NONCHAR(c) || u_hasBinaryProperty(c, UCHAR_DEFAULT_IGNORABLE_CODE_POINT)) {
@@ -2076,11 +2075,11 @@ TestUScriptRunAPI()
       const RunTestData *testData;
       int32_t nRuns;
     } testDataEntries[] = {
-        {testData1, LENGTHOF(testData1)},
-        {testData2, LENGTHOF(testData2)}
+        {testData1, uprv_lengthof(testData1)},
+        {testData2, uprv_lengthof(testData2)}
     };
     
-    static const int32_t nTestEntries = LENGTHOF(testDataEntries);
+    static const int32_t nTestEntries = uprv_lengthof(testDataEntries);
     int32_t testEntry;
     
     for (testEntry = 0; testEntry < nTestEntries; testEntry += 1) {
@@ -2887,7 +2886,7 @@ TestNumericProperties(void) {
     UChar32 c;
     int32_t i, type;
 
-    for(i=0; i<LENGTHOF(values); ++i) {
+    for(i=0; i<uprv_lengthof(values); ++i) {
         c=values[i].c;
         type=u_getIntPropertyValue(c, UCHAR_NUMERIC_TYPE);
         nv=u_getNumericValue(c);
@@ -3334,7 +3333,7 @@ testFold(UChar32 c, int which,
         log_err("u_foldCase(U+%04lx, default)=U+%04lx != U+%04lx\n", (long)c, (long)c2, (long)simple);
     }
     if((which&CF_FULL)!=0) {
-        length2=u_strFoldCase(t, LENGTHOF(t), s, length, 0, &errorCode);
+        length2=u_strFoldCase(t, uprv_lengthof(t), s, length, 0, &errorCode);
         if(length2!=fullLength || 0!=u_memcmp(t, full, fullLength)) {
             log_err("u_strFoldCase(U+%04lx, default) does not fold properly\n", (long)c);
         }
@@ -3344,7 +3343,7 @@ testFold(UChar32 c, int which,
             log_err("u_foldCase(U+%04lx, turkic)=U+%04lx != U+%04lx\n", (long)c, (long)c2, (long)simple);
         }
 
-        length2=u_strFoldCase(t, LENGTHOF(t), s, length, U_FOLD_CASE_EXCLUDE_SPECIAL_I, &errorCode);
+        length2=u_strFoldCase(t, uprv_lengthof(t), s, length, U_FOLD_CASE_EXCLUDE_SPECIAL_I, &errorCode);
         if(length2!=turkicFullLength || 0!=u_memcmp(t, turkicFull, length2)) {
             log_err("u_strFoldCase(U+%04lx, turkic) does not fold properly\n", (long)c);
         }

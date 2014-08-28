@@ -9,8 +9,6 @@
 #include "cstring.h"
 #include "uassert.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 typedef enum SimplePatternFormatterCompileState {
@@ -191,7 +189,7 @@ UnicodeString& SimplePatternFormatter::format(
     const UnicodeString *params[] = {&arg0};
     return format(
             params,
-            LENGTHOF(params),
+            uprv_lengthof(params),
             appendTo,
             NULL,
             0,
@@ -206,7 +204,7 @@ UnicodeString& SimplePatternFormatter::format(
     const UnicodeString *params[] = {&arg0, &arg1};
     return format(
             params,
-            LENGTHOF(params),
+            uprv_lengthof(params),
             appendTo,
             NULL,
             0,
@@ -222,7 +220,7 @@ UnicodeString& SimplePatternFormatter::format(
     const UnicodeString *params[] = {&arg0, &arg1, &arg2};
     return format(
             params,
-            LENGTHOF(params),
+            uprv_lengthof(params),
             appendTo,
             NULL,
             0,

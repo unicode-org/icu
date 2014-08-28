@@ -26,8 +26,6 @@
 #include "cmemory.h"
 #include "nucnvtst.h"
 
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
-
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const int32_t results[], const char* message);
 static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
 #if !UCONFIG_NO_COLLATION
@@ -5575,7 +5573,7 @@ TestIsFixedWidth() {
             "UTF16"
     };
 
-    for (i = 0; i < LENGTHOF(fixedWidth); i++) {
+    for (i = 0; i < uprv_lengthof(fixedWidth); i++) {
         cnv = ucnv_open(fixedWidth[i], &status);
         if (cnv == NULL || U_FAILURE(status)) {
             log_data_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
@@ -5588,7 +5586,7 @@ TestIsFixedWidth() {
         ucnv_close(cnv);
     }
 
-    for (i = 0; i < LENGTHOF(notFixedWidth); i++) {
+    for (i = 0; i < uprv_lengthof(notFixedWidth); i++) {
         cnv = ucnv_open(notFixedWidth[i], &status);
         if (cnv == NULL || U_FAILURE(status)) {
             log_data_err("Error open converter: %s - %s \n", notFixedWidth[i], u_errorName(status));

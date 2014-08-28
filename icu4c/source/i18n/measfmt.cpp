@@ -35,7 +35,6 @@
 #include "sharedpluralrules.h"
 #include "unifiedcache.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 #define MEAS_UNIT_COUNT 46
 #define WIDTH_INDEX_COUNT (UMEASFMT_WIDTH_NARROW + 1)
 
@@ -112,7 +111,7 @@ private:
 };
 
 MeasureFormatCacheData::MeasureFormatCacheData() {
-    for (int32_t i = 0; i < LENGTHOF(currencyFormats); ++i) {
+    for (int32_t i = 0; i < uprv_lengthof(currencyFormats); ++i) {
         currencyFormats[i] = NULL;
     }
     integerFormat = NULL;
@@ -120,7 +119,7 @@ MeasureFormatCacheData::MeasureFormatCacheData() {
 }
 
 MeasureFormatCacheData::~MeasureFormatCacheData() {
-    for (int32_t i = 0; i < LENGTHOF(currencyFormats); ++i) {
+    for (int32_t i = 0; i < uprv_lengthof(currencyFormats); ++i) {
         delete currencyFormats[i];
     }
     delete integerFormat;

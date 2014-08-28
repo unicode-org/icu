@@ -22,8 +22,6 @@
 #include "plurrule_impl.h"
 #include <stdio.h>
 
-#define LENGTHOF(array) ((int32_t)(sizeof(array)/sizeof((array)[0])))
-
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
@@ -574,7 +572,7 @@ void IntlTestDecimalFormatAPI::TestScale()
     UnicodeString percentPattern("#,##0%");
     pat.setMaximumFractionDigits(4);
 
-    for(int32_t i=0; i < LENGTHOF(testData); i++) {
+    for(int32_t i=0; i < uprv_lengthof(testData); i++) {
         if ( i > 2 ) {
             pat.applyPattern(percentPattern,status);
         }

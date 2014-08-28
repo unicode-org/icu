@@ -51,8 +51,6 @@
 #include "ustrenum.h"
 #include "utracimp.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 namespace {
@@ -109,7 +107,7 @@ CollationLoader::loadRules(const char *localeID, const char *collationType,
     // Copy the type for lowercasing.
     char type[16];
     int32_t typeLength = uprv_strlen(collationType);
-    if(typeLength >= LENGTHOF(type)) {
+    if(typeLength >= uprv_lengthof(type)) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -179,7 +177,7 @@ CollationLoader::CollationLoader(const CollationCacheEntry *re, const Locale &re
 
         // Fetch the collation type from the locale ID.
         int32_t typeLength = requested.getKeywordValue("collation",
-                type, LENGTHOF(type) - 1, errorCode);
+                type, uprv_lengthof(type) - 1, errorCode);
         if(U_FAILURE(errorCode)) {
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             return;
@@ -268,7 +266,7 @@ CollationLoader::loadFromBundle(UErrorCode &errorCode) {
                 ures_getByKeyWithFallback(collations, "default", NULL, &internalErrorCode));
         int32_t length;
         const UChar *s = ures_getString(def.getAlias(), &length, &internalErrorCode);
-        if(U_SUCCESS(internalErrorCode) && 0 < length && length < LENGTHOF(defaultType)) {
+        if(U_SUCCESS(internalErrorCode) && 0 < length && length < uprv_lengthof(defaultType)) {
             u_UCharsToChars(s, defaultType, length + 1);
         } else {
             uprv_strcpy(defaultType, "standard");
@@ -426,7 +424,7 @@ CollationLoader::loadFromData(UErrorCode &errorCode) {
                                           &internalErrorCode));
         int32_t length;
         const UChar *s = ures_getString(def.getAlias(), &length, &internalErrorCode);
-        if(U_SUCCESS(internalErrorCode) && length < LENGTHOF(defaultType)) {
+        if(U_SUCCESS(internalErrorCode) && length < uprv_lengthof(defaultType)) {
             u_UCharsToChars(s, defaultType, length + 1);
         } else {
             uprv_strcpy(defaultType, "standard");
@@ -581,7 +579,7 @@ static const char RESOURCE_NAME[] = "collations";
 
 static const char* const KEYWORDS[] = { "collation" };
 
-#define KEYWORD_COUNT LENGTHOF(KEYWORDS)
+#define KEYWORD_COUNT uprv_lengthof(KEYWORDS)
 
 U_CAPI UEnumeration* U_EXPORT2
 ucol_getKeywords(UErrorCode *status) {

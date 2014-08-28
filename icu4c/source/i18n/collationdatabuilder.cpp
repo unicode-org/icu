@@ -35,8 +35,6 @@
 #include "uvectr64.h"
 #include "uvector.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 CollationDataBuilder::CEModifier::~CEModifier() {}

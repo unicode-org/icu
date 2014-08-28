@@ -27,8 +27,6 @@
 #include "cmemory.h"
 #include "usrchimp.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_USE
 
 #define BUFFER_LENGTH             100
@@ -74,7 +72,7 @@ RCEBuffer::RCEBuffer()
 {
     buffer = defaultBuffer;
     bufferIndex = 0;
-    bufferSize = LENGTHOF(defaultBuffer);
+    bufferSize = uprv_lengthof(defaultBuffer);
 }
 
 RCEBuffer::~RCEBuffer()
@@ -124,7 +122,7 @@ PCEBuffer::PCEBuffer()
 {
     buffer = defaultBuffer;
     bufferIndex = 0;
-    bufferSize = LENGTHOF(defaultBuffer);
+    bufferSize = uprv_lengthof(defaultBuffer);
 }
 
 PCEBuffer::~PCEBuffer()

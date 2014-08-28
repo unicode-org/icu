@@ -36,11 +36,10 @@
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "convtest.h"
+#include "cmemory.h"
 #include "unicode/tstdtmod.h"
 #include <string.h>
 #include <stdlib.h>
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 enum {
     // characters used in test data for callbacks
@@ -291,7 +290,7 @@ ConversionTest::TestFromUnicode() {
                     // read a substitution string, separated by an equal sign
                     p=s.getBuffer()+index+1;
                     length=s.length()-(index+1);
-                    if(length<0 || length>=LENGTHOF(cc.subString)) {
+                    if(length<0 || length>=uprv_lengthof(cc.subString)) {
                         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
                     } else {
                         u_memcpy(cc.subString, p, length);
@@ -445,7 +444,7 @@ ConversionTest::TestGetUnicodeSet() {
                 if(!diffSet.isEmpty()) {
                     diffSet.toPattern(s, TRUE);
                     if(s.length()>100) {
-                        s.replace(100, 0x7fffffff, ellipsis, LENGTHOF(ellipsis));
+                        s.replace(100, 0x7fffffff, ellipsis, uprv_lengthof(ellipsis));
                     }
                     errln("error: ucnv_getUnicodeSet(\"%s\") is missing items - conversion/getUnicodeSet test case %d",
                             charset, i);
@@ -457,7 +456,7 @@ ConversionTest::TestGetUnicodeSet() {
                 if(!diffSet.isEmpty()) {
                     diffSet.toPattern(s, TRUE);
                     if(s.length()>100) {
-                        s.replace(100, 0x7fffffff, ellipsis, LENGTHOF(ellipsis));
+                        s.replace(100, 0x7fffffff, ellipsis, uprv_lengthof(ellipsis));
                     }
                     errln("error: ucnv_getUnicodeSet(\"%s\") contains unexpected items - conversion/getUnicodeSet test case %d",
                             charset, i);
@@ -555,7 +554,7 @@ ConversionTest::TestGetUnicodeSet2() {
     LocalUConverterPointer cnv;
     char buffer[1024];
     int32_t i;
-    for(i=0; i<LENGTHOF(cnvNames); ++i) {
+    for(i=0; i<uprv_lengthof(cnvNames); ++i) {
         UErrorCode errorCode=U_ZERO_ERROR;
         cnv.adoptInstead(cnv_open(cnvNames[i], errorCode));
         if(U_FAILURE(errorCode)) {
@@ -625,7 +624,7 @@ ConversionTest::TestGetUnicodeSet2() {
                 if(!diffSet.isEmpty()) {
                     diffSet.toPattern(out, TRUE);
                     if(out.length()>100) {
-                        out.replace(100, 0x7fffffff, ellipsis, LENGTHOF(ellipsis));
+                        out.replace(100, 0x7fffffff, ellipsis, uprv_lengthof(ellipsis));
                     }
                     errln("error: ucnv_getUnicodeSet(\"%s\") is missing items - which set: %d",
                             cnvNames[i], which);
@@ -637,7 +636,7 @@ ConversionTest::TestGetUnicodeSet2() {
                 if(!diffSet.isEmpty()) {
                     diffSet.toPattern(out, TRUE);
                     if(out.length()>100) {
-                        out.replace(100, 0x7fffffff, ellipsis, LENGTHOF(ellipsis));
+                        out.replace(100, 0x7fffffff, ellipsis, uprv_lengthof(ellipsis));
                     }
                     errln("error: ucnv_getUnicodeSet(\"%s\") contains unexpected items - which set: %d",
                             cnvNames[i], which);
@@ -1030,7 +1029,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
     int32_t i, step;
 
     ok=TRUE;
-    for(i=0; i<LENGTHOF(steps) && ok; ++i) {
+    for(i=0; i<uprv_lengthof(steps) && ok; ++i) {
         step=steps[i].step;
         if(step<0 && !cc.finalFlush) {
             // skip ucnv_getNextUChar() if !finalFlush because
@@ -1042,12 +1041,12 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
             cc.offsets=NULL;
         }
         else {
-            memset(resultOffsets, -1, LENGTHOF(resultOffsets));
+            memset(resultOffsets, -1, uprv_lengthof(resultOffsets));
         }
-        memset(result, -1, LENGTHOF(result));
+        memset(result, -1, uprv_lengthof(result));
         errorCode.reset();
         resultLength=stepToUnicode(cc, cnv.getAlias(),
-                                result, LENGTHOF(result),
+                                result, uprv_lengthof(result),
                                 step==0 ? resultOffsets : NULL,
                                 step, errorCode);
         ok=checkToUnicode(
@@ -1077,7 +1076,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
 
         errorCode.reset();
         resultLength=ucnv_toUChars(cnv.getAlias(),
-                        result, LENGTHOF(result),
+                        result, uprv_lengthof(result),
                         (const char *)cc.bytes, cc.bytesLength,
                         errorCode);
         ok=checkToUnicode(
@@ -1224,7 +1223,7 @@ stepFromUTF8(ConversionCase &cc,
         targetLimit=resultLimit;
         flush=cc.finalFlush;
 
-        pivotLimit=pivotBuffer+LENGTHOF(pivotBuffer);
+        pivotLimit=pivotBuffer+uprv_lengthof(pivotBuffer);
     } else {
         // start with empty partial buffers
         sourceLimit=source;
@@ -1443,7 +1442,7 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     // convert unicode to utf8
     char utf8[256];
     cc.utf8=utf8;
-    u_strToUTF8(utf8, LENGTHOF(utf8), &cc.utf8Length,
+    u_strToUTF8(utf8, uprv_lengthof(utf8), &cc.utf8Length,
                 cc.unicode, cc.unicodeLength,
                 &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -1470,13 +1469,13 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     int32_t i, step;
 
     ok=TRUE;
-    for(i=0; i<LENGTHOF(steps) && ok; ++i) {
+    for(i=0; i<uprv_lengthof(steps) && ok; ++i) {
         step=steps[i].step;
-        memset(resultOffsets, -1, LENGTHOF(resultOffsets));
-        memset(result, -1, LENGTHOF(result));
+        memset(resultOffsets, -1, uprv_lengthof(resultOffsets));
+        memset(result, -1, uprv_lengthof(result));
         errorCode=U_ZERO_ERROR;
         resultLength=stepFromUnicode(cc, cnv,
-                                result, LENGTHOF(result),
+                                result, uprv_lengthof(result),
                                 step==0 ? resultOffsets : NULL,
                                 step, &errorCode);
         ok=checkFromUnicode(
@@ -1505,7 +1504,7 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
         if(cc.utf8Length>=0) {
             errorCode=U_ZERO_ERROR;
             resultLength=stepFromUTF8(cc, utf8Cnv, cnv,
-                                    result, LENGTHOF(result),
+                                    result, uprv_lengthof(result),
                                     step, &errorCode);
             ok=checkFromUnicode(
                     cc, cnv, steps[i].utf8Name,
@@ -1528,7 +1527,7 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
 
         errorCode=U_ZERO_ERROR;
         resultLength=ucnv_fromUChars(cnv,
-                        result, LENGTHOF(result),
+                        result, uprv_lengthof(result),
                         cc.unicode, cc.unicodeLength,
                         &errorCode);
         ok=checkFromUnicode(
@@ -1577,7 +1576,7 @@ ConversionTest::checkFromUnicode(ConversionCase &cc, UConverter *cnv, const char
     msg=NULL;
 
     errorCode=U_ZERO_ERROR;
-    resultInvalidLength=LENGTHOF(resultInvalidUChars);
+    resultInvalidLength=uprv_lengthof(resultInvalidUChars);
     ucnv_getInvalidUChars(cnv, resultInvalidUChars, &resultInvalidLength, &errorCode);
     if(U_FAILURE(errorCode)) {
         errln("fromUnicode[%d](%s cb=\"%s\" fb=%d flush=%d %s) ucnv_getInvalidUChars() failed - %s",

@@ -46,8 +46,6 @@
 #include "ucol_imp.h"
 #include "utf16collationiterator.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 namespace {
@@ -276,7 +274,7 @@ CollationBuilder::parseAndBuild(const UnicodeString &ruleString,
     if(U_FAILURE(errorCode)) { return NULL; }
     ownedSettings.fastLatinOptions = CollationFastLatin::getOptions(
         tailoring->data, ownedSettings,
-        ownedSettings.fastLatinPrimaries, LENGTHOF(ownedSettings.fastLatinPrimaries));
+        ownedSettings.fastLatinPrimaries, uprv_lengthof(ownedSettings.fastLatinPrimaries));
     tailoring->rules = ruleString;
     tailoring->rules.getTerminatedBuffer();  // ensure NUL-termination
     tailoring->setVersion(base->version, rulesVersion);

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /* Modification History:
@@ -14,8 +14,7 @@
 #include "unicode/gender.h"
 #include "unicode/unum.h"
 #include "intltest.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
+#include "cmemory.h"
 
 static const UGender kSingleFemale[] = {UGENDER_FEMALE};
 static const UGender kSingleMale[] = {UGENDER_MALE};
@@ -55,17 +54,17 @@ void GenderInfoTest::runIndexedTest(int32_t index, UBool exec, const char *&name
 
 void GenderInfoTest::TestGetListGender() {
     check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_OTHER, NULL, 0);
-    check(UGENDER_FEMALE, UGENDER_FEMALE, UGENDER_FEMALE, kSingleFemale, LENGTHOF(kSingleFemale));
-    check(UGENDER_MALE, UGENDER_MALE, UGENDER_MALE, kSingleMale, LENGTHOF(kSingleMale));
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_OTHER, kSingleOther, LENGTHOF(kSingleOther));
+    check(UGENDER_FEMALE, UGENDER_FEMALE, UGENDER_FEMALE, kSingleFemale, uprv_lengthof(kSingleFemale));
+    check(UGENDER_MALE, UGENDER_MALE, UGENDER_MALE, kSingleMale, uprv_lengthof(kSingleMale));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_OTHER, kSingleOther, uprv_lengthof(kSingleOther));
 
-    check(UGENDER_OTHER, UGENDER_FEMALE, UGENDER_FEMALE, kAllFemale, LENGTHOF(kAllFemale));
-    check(UGENDER_OTHER, UGENDER_MALE, UGENDER_MALE, kAllMale, LENGTHOF(kAllMale));
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kAllOther, LENGTHOF(kAllOther));
+    check(UGENDER_OTHER, UGENDER_FEMALE, UGENDER_FEMALE, kAllFemale, uprv_lengthof(kAllFemale));
+    check(UGENDER_OTHER, UGENDER_MALE, UGENDER_MALE, kAllMale, uprv_lengthof(kAllMale));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kAllOther, uprv_lengthof(kAllOther));
 
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kFemaleMale, LENGTHOF(kFemaleMale));
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kFemaleOther, LENGTHOF(kFemaleOther));
-    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kMaleOther, LENGTHOF(kMaleOther));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kFemaleMale, uprv_lengthof(kFemaleMale));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kFemaleOther, uprv_lengthof(kFemaleOther));
+    check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_MALE, kMaleOther, uprv_lengthof(kMaleOther));
 }
 
 void GenderInfoTest::TestFallback() {

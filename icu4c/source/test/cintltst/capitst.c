@@ -33,8 +33,6 @@
 #include "cstring.h"
 #include "ucol_imp.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 static void TestAttribute(void);
 static void TestDefault(void);
 static void TestDefaultKeyword(void);
@@ -1860,7 +1858,7 @@ void TestGetTailoredSet() {
   int32_t buffLen = 0;
   USet *set = NULL;
 
-  for(i = 0; i < LENGTHOF(setTest); i++) {
+  for(i = 0; i < uprv_lengthof(setTest); i++) {
     buffLen = u_unescape(setTest[i].rules, buff, 1024);
     coll = ucol_openRules(buff, buffLen, UCOL_DEFAULT, UCOL_DEFAULT, &pError, &status);
     if(U_SUCCESS(status)) {
@@ -2128,9 +2126,9 @@ doSetsTest(const char *locale, const USet *ref, USet *set, const char* inSet, co
     if(!uset_containsAll(ref, set)) {
         log_err("%s: Some stuff from %s is not present in the set\n", locale, inSet);
         uset_removeAll(set, ref);
-        bufLen = uset_toPattern(set, buffer, LENGTHOF(buffer), TRUE, status);
+        bufLen = uset_toPattern(set, buffer, uprv_lengthof(buffer), TRUE, status);
         log_info("    missing: %s\n", aescstrdup(buffer, bufLen));
-        bufLen = uset_toPattern(ref, buffer, LENGTHOF(buffer), TRUE, status);
+        bufLen = uset_toPattern(ref, buffer, uprv_lengthof(buffer), TRUE, status);
         log_info("    total: size=%i  %s\n", uset_getItemCount(ref), aescstrdup(buffer, bufLen));
     }
 
@@ -2427,7 +2425,7 @@ static void TestGetKeywordValuesForLocale(void) {
     const char *locale = NULL, *value = NULL;
     UBool errorOccurred = FALSE;
 
-    for (i = 0; i < LENGTHOF(PREFERRED) && !errorOccurred; i++) {
+    for (i = 0; i < uprv_lengthof(PREFERRED) && !errorOccurred; i++) {
         locale = PREFERRED[i][0];
         value = NULL;
         valueLength = 0;
