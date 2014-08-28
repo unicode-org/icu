@@ -4553,4 +4553,16 @@ public class ULocaleTest extends TestFmwk {
             assertEquals("keyword=" + keyword + ", value="  + value, expected, legacyType);
         }
     }
+
+    public void TestIsRightToLeft() {
+        assertFalse("root LTR", ULocale.ROOT.isRightToLeft());
+        assertFalse("zh LTR", ULocale.CHINESE.isRightToLeft());
+        assertTrue("ar RTL", new ULocale("ar").isRightToLeft());
+        assertTrue("und-EG RTL", new ULocale("und-EG").isRightToLeft());
+        assertFalse("fa-Cyrl LTR", new ULocale("fa-Cyrl").isRightToLeft());
+        assertTrue("en-Hebr RTL", new ULocale("en-Hebr").isRightToLeft());
+        assertTrue("ckb RTL", new ULocale("ckb").isRightToLeft());  // Sorani Kurdish
+        assertFalse("fil LTR", new ULocale("fil").isRightToLeft());
+        assertFalse("he-Zyxw LTR", new ULocale("he-Zyxw").isRightToLeft());
+    }
 }
