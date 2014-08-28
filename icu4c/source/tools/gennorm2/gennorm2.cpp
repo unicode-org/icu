@@ -237,7 +237,7 @@ void parseFile(FILE *f, Normalizer2DataBuilder &builder) {
         }
         if(*delimiter=='=' || *delimiter=='>') {
             UChar uchars[Normalizer2Impl::MAPPING_LENGTH_MASK];
-            int32_t length=u_parseString(delimiter+1, uchars, uprv_lengthof(uchars), NULL, errorCode);
+            int32_t length=u_parseString(delimiter+1, uchars, UPRV_LENGTHOF(uchars), NULL, errorCode);
             if(errorCode.isFailure()) {
                 fprintf(stderr, "gennorm2 error: parsing mapping string from %s\n", line);
                 exit(errorCode.reset());

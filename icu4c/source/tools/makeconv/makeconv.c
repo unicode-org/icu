@@ -211,7 +211,7 @@ int main(int argc, char* argv[])
 
     /* preset then read command line options */
     options[OPT_DESTDIR].value=u_getDataDirectory();
-    argc=u_parseArgs(argc, argv, uprv_lengthof(options), options);
+    argc=u_parseArgs(argc, argv, UPRV_LENGTHOF(options), options);
 
     /* error handling, printing usage message */
     if(argc<0) {

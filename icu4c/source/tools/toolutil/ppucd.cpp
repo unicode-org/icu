@@ -296,7 +296,7 @@ PreparsedUCD::parseProperty(UniProps &props, const char *field, UnicodeSet &newV
     int32_t prop=pnames->getPropertyEnum(p);
     if(prop<0) {
         for(int32_t i=0;; ++i) {
-            if(i==uprv_lengthof(ppucdProperties)) {
+            if(i==UPRV_LENGTHOF(ppucdProperties)) {
                 // Ignore unknown property names.
                 return TRUE;
             }

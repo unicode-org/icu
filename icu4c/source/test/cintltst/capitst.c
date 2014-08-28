@@ -1858,7 +1858,7 @@ void TestGetTailoredSet() {
   int32_t buffLen = 0;
   USet *set = NULL;
 
-  for(i = 0; i < uprv_lengthof(setTest); i++) {
+  for(i = 0; i < UPRV_LENGTHOF(setTest); i++) {
     buffLen = u_unescape(setTest[i].rules, buff, 1024);
     coll = ucol_openRules(buff, buffLen, UCOL_DEFAULT, UCOL_DEFAULT, &pError, &status);
     if(U_SUCCESS(status)) {
@@ -2126,9 +2126,9 @@ doSetsTest(const char *locale, const USet *ref, USet *set, const char* inSet, co
     if(!uset_containsAll(ref, set)) {
         log_err("%s: Some stuff from %s is not present in the set\n", locale, inSet);
         uset_removeAll(set, ref);
-        bufLen = uset_toPattern(set, buffer, uprv_lengthof(buffer), TRUE, status);
+        bufLen = uset_toPattern(set, buffer, UPRV_LENGTHOF(buffer), TRUE, status);
         log_info("    missing: %s\n", aescstrdup(buffer, bufLen));
-        bufLen = uset_toPattern(ref, buffer, uprv_lengthof(buffer), TRUE, status);
+        bufLen = uset_toPattern(ref, buffer, UPRV_LENGTHOF(buffer), TRUE, status);
         log_info("    total: size=%i  %s\n", uset_getItemCount(ref), aescstrdup(buffer, bufLen));
     }
 
@@ -2425,7 +2425,7 @@ static void TestGetKeywordValuesForLocale(void) {
     const char *locale = NULL, *value = NULL;
     UBool errorOccurred = FALSE;
 
-    for (i = 0; i < uprv_lengthof(PREFERRED) && !errorOccurred; i++) {
+    for (i = 0; i < UPRV_LENGTHOF(PREFERRED) && !errorOccurred; i++) {
         locale = PREFERRED[i][0];
         value = NULL;
         valueLength = 0;

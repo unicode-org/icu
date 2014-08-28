@@ -790,7 +790,7 @@ udata_swap(const UDataSwapper *ds,
     }
 
     /* dispatch to the swap function for the dataFormat */
-    for(i=0; i<uprv_lengthof(swapFns); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(swapFns); ++i) {
         if(0==memcmp(swapFns[i].dataFormat, pInfo->dataFormat, 4)) {
             swappedLength=swapFns[i].swapFn(ds, inData, length, outData, pErrorCode);
 

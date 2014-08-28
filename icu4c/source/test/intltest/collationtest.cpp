@@ -228,7 +228,7 @@ void CollationTest::TestImplicits() {
     UChar32 prev = 0;
     uint32_t prevPrimary = 0;
     UTF16CollationIterator ci(cd, FALSE, NULL, NULL, NULL);
-    for(int32_t i = 0; i < uprv_lengthof(sets); ++i) {
+    for(int32_t i = 0; i < UPRV_LENGTHOF(sets); ++i) {
         LocalPointer<UnicodeSetIterator> iter(new UnicodeSetIterator(*sets[i]));
         while(iter->next()) {
             UChar32 c = iter->getCodepoint();
@@ -308,7 +308,7 @@ void CollationTest::TestIllegalUTF8() {
     };
 
     StringPiece fffd(strings[0]);
-    for(int32_t i = 1; i < uprv_lengthof(strings); ++i) {
+    for(int32_t i = 1; i < UPRV_LENGTHOF(strings); ++i) {
         StringPiece illegal(strings[i]);
         UCollationResult order = coll->compareUTF8(fffd, illegal, errorCode);
         if(order != UCOL_EQUAL) {
@@ -479,7 +479,7 @@ void CollationTest::TestFCD() {
     if(errorCode.logIfFailureAndReset("FCDUTF16CollationIterator constructor")) {
         return;
     }
-    CodePointIterator cpi(cp, uprv_lengthof(cp));
+    CodePointIterator cpi(cp, UPRV_LENGTHOF(cp));
     checkFCD("FCDUTF16CollationIterator", u16ci, cpi);
 
 #if U_HAVE_STD_STRING
@@ -496,7 +496,7 @@ void CollationTest::TestFCD() {
 
     cpi.resetToStart();
     UCharIterator iter;
-    uiter_setString(&iter, s, uprv_lengthof(s) - 1);  // -1: without the terminating NUL
+    uiter_setString(&iter, s, UPRV_LENGTHOF(s) - 1);  // -1: without the terminating NUL
     FCDUIterCollationIterator uici(data, FALSE, iter, 0);
     if(errorCode.logIfFailureAndReset("FCDUIterCollationIterator constructor")) {
         return;
@@ -1138,7 +1138,7 @@ void CollationTest::parseAndSetAttribute(IcuTestErrorCode &errorCode) {
 
     UColAttribute attr;
     for(int32_t i = 0;; ++i) {
-        if(i == uprv_lengthof(attributes)) {
+        if(i == UPRV_LENGTHOF(attributes)) {
             errln("invalid attribute name on line %d", (int)fileLineNumber);
             infoln(fileLine);
             errorCode.set(U_PARSE_ERROR);
@@ -1152,7 +1152,7 @@ void CollationTest::parseAndSetAttribute(IcuTestErrorCode &errorCode) {
 
     UColAttributeValue value;
     for(int32_t i = 0;; ++i) {
-        if(i == uprv_lengthof(attributeValues)) {
+        if(i == UPRV_LENGTHOF(attributeValues)) {
             errln("invalid attribute value name on line %d", (int)fileLineNumber);
             infoln(fileLine);
             errorCode.set(U_PARSE_ERROR);
@@ -1300,7 +1300,7 @@ UBool CollationTest::getSortKeyParts(const UChar *s, int32_t length,
                                      IcuTestErrorCode &errorCode) {
     if(errorCode.isFailure()) { return FALSE; }
     uint8_t part[32];
-    U_ASSERT(partSize <= uprv_lengthof(part));
+    U_ASSERT(partSize <= UPRV_LENGTHOF(part));
     UCharIterator iter;
     uiter_setString(&iter, s, length);
     uint32_t state[2] = { 0, 0 };
@@ -1438,7 +1438,7 @@ UBool CollationTest::getCollationKey(const char *norm, const UnicodeString &line
 
     // Check that internalNextSortKeyPart() makes the same key, with several part sizes.
     static const int32_t partSizes[] = { 32, 3, 1 };
-    for(int32_t psi = 0; psi < uprv_lengthof(partSizes); ++psi) {
+    for(int32_t psi = 0; psi < UPRV_LENGTHOF(partSizes); ++psi) {
         int32_t partSize = partSizes[psi];
         CharString parts;
         if(!getSortKeyParts(s, length, parts, 32, errorCode)) {

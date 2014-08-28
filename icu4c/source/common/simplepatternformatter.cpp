@@ -189,7 +189,7 @@ UnicodeString& SimplePatternFormatter::format(
     const UnicodeString *params[] = {&arg0};
     return format(
             params,
-            uprv_lengthof(params),
+            UPRV_LENGTHOF(params),
             appendTo,
             NULL,
             0,
@@ -204,7 +204,7 @@ UnicodeString& SimplePatternFormatter::format(
     const UnicodeString *params[] = {&arg0, &arg1};
     return format(
             params,
-            uprv_lengthof(params),
+            UPRV_LENGTHOF(params),
             appendTo,
             NULL,
             0,
@@ -220,7 +220,7 @@ UnicodeString& SimplePatternFormatter::format(
     const UnicodeString *params[] = {&arg0, &arg1, &arg2};
     return format(
             params,
-            uprv_lengthof(params),
+            UPRV_LENGTHOF(params),
             appendTo,
             NULL,
             0,

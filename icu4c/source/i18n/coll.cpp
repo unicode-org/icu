@@ -294,7 +294,7 @@ static const char *collReorderCodes[UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_
 };
 
 int32_t getReorderCode(const char *s) {
-    for (int32_t i = 0; i < uprv_lengthof(collReorderCodes); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(collReorderCodes); ++i) {
         if (uprv_stricmp(s, collReorderCodes[i]) == 0) {
             return UCOL_REORDER_CODE_FIRST + i;
         }
@@ -324,7 +324,7 @@ void setAttributesFromKeywords(const Locale &loc, Collator &coll, UErrorCode &er
     char value[1024];  // The reordering value could be long.
     // Check for collation keywords that were already deprecated
     // before any were supported in createInstance() (except for "collation").
-    int32_t length = loc.getKeywordValue("colHiraganaQuaternary", value, uprv_lengthof(value), errorCode);
+    int32_t length = loc.getKeywordValue("colHiraganaQuaternary", value, UPRV_LENGTHOF(value), errorCode);
     if (U_FAILURE(errorCode)) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -333,7 +333,7 @@ void setAttributesFromKeywords(const Locale &loc, Collator &coll, UErrorCode &er
         errorCode = U_UNSUPPORTED_ERROR;
         return;
     }
-    length = loc.getKeywordValue("variableTop", value, uprv_lengthof(value), errorCode);
+    length = loc.getKeywordValue("variableTop", value, UPRV_LENGTHOF(value), errorCode);
     if (U_FAILURE(errorCode)) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -346,15 +346,15 @@ void setAttributesFromKeywords(const Locale &loc, Collator &coll, UErrorCode &er
     if (errorCode == U_STRING_NOT_TERMINATED_WARNING) {
         errorCode = U_ZERO_ERROR;
     }
-    for (int32_t i = 0; i < uprv_lengthof(collAttributes); ++i) {
-        length = loc.getKeywordValue(collAttributes[i].name, value, uprv_lengthof(value), errorCode);
+    for (int32_t i = 0; i < UPRV_LENGTHOF(collAttributes); ++i) {
+        length = loc.getKeywordValue(collAttributes[i].name, value, UPRV_LENGTHOF(value), errorCode);
         if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
         if (length == 0) { continue; }
         for (int32_t j = 0;; ++j) {
-            if (j == uprv_lengthof(collAttributeValues)) {
+            if (j == UPRV_LENGTHOF(collAttributeValues)) {
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
@@ -364,7 +364,7 @@ void setAttributesFromKeywords(const Locale &loc, Collator &coll, UErrorCode &er
             }
         }
     }
-    length = loc.getKeywordValue("colReorder", value, uprv_lengthof(value), errorCode);
+    length = loc.getKeywordValue("colReorder", value, UPRV_LENGTHOF(value), errorCode);
     if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -374,7 +374,7 @@ void setAttributesFromKeywords(const Locale &loc, Collator &coll, UErrorCode &er
         int32_t codesLength = 0;
         char *scriptName = value;
         for (;;) {
-            if (codesLength == uprv_lengthof(codes)) {
+            if (codesLength == UPRV_LENGTHOF(codes)) {
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
@@ -399,7 +399,7 @@ void setAttributesFromKeywords(const Locale &loc, Collator &coll, UErrorCode &er
         }
         coll.setReorderCodes(codes, codesLength, errorCode);
     }
-    length = loc.getKeywordValue("kv", value, uprv_lengthof(value), errorCode);
+    length = loc.getKeywordValue("kv", value, UPRV_LENGTHOF(value), errorCode);
     if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;

@@ -592,7 +592,7 @@ Package::readPackage(const char *filename) {
                 exit(U_INVALID_FORMAT_ERROR);
             }
             prefixLength=(int32_t)(prefixLimit-s);
-            if(prefixLength==0 || prefixLength>=uprv_lengthof(pkgPrefix)) {
+            if(prefixLength==0 || prefixLength>=UPRV_LENGTHOF(pkgPrefix)) {
                 fprintf(stderr,
                         "icupkg: --auto_toc_prefix[_with_type] but "
                         "the prefix of the first entry \"%s\" is empty or too long\n",

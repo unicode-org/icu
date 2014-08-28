@@ -219,7 +219,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
     }
     double fData[] =     {-101, -100, -1,     -0.0,  0,     0.1,  1,     1.999,  2.0,   100,   100.001 };
     UBool isKeywordA[] = {TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE,   FALSE, FALSE, TRUE };
-    for (int32_t i=0; i<uprv_lengthof(fData); i++) {
+    for (int32_t i=0; i<UPRV_LENGTHOF(fData); i++) {
         if ((newRules->select(fData[i])== KEYWORD_A) != isKeywordA[i]) {
              errln("File %s, Line %d, ERROR: plural rules for decimal fractions test failed!\n"
                    "  number = %g, expected %s", __FILE__, __LINE__, fData[i], isKeywordA[i]?"TRUE":"FALSE");
@@ -396,7 +396,7 @@ void PluralRulesTest::testGetSamples() {
     }
     const UnicodeString* keyword;
     while (NULL != (keyword = keywords->snext(status))) {
-      int32_t count = rules->getSamples(*keyword, values, uprv_lengthof(values), status);
+      int32_t count = rules->getSamples(*keyword, values, UPRV_LENGTHOF(values), status);
       if (U_FAILURE(status)) {
         errln(UNICODE_STRING_SIMPLE("getSamples() failed for locale ") +
               locales[i].getName() +
@@ -407,12 +407,12 @@ void PluralRulesTest::testGetSamples() {
         // TODO: Lots of these. 
         //   errln(UNICODE_STRING_SIMPLE("no samples for keyword ") + *keyword + UNICODE_STRING_SIMPLE(" in locale ") + locales[i].getName() );
       }
-      if (count > uprv_lengthof(values)) {
+      if (count > UPRV_LENGTHOF(values)) {
         errln(UNICODE_STRING_SIMPLE("getSamples()=") + count +
               UNICODE_STRING_SIMPLE(", too many values, for locale ") +
               locales[i].getName() +
               UNICODE_STRING_SIMPLE(", keyword ") + *keyword);
-        count = uprv_lengthof(values);
+        count = UPRV_LENGTHOF(values);
       }
       for (int32_t j = 0; j < count; ++j) {
         if (values[j] == UPLRULES_NO_UNIQUE_VALUE) {
@@ -937,7 +937,7 @@ void PluralRulesTest::testParseErrors() {
             "a: n % 37 ! in 3..4"
 
             };
-    for (int i=0; i<uprv_lengthof(testCases); i++) {
+    for (int i=0; i<UPRV_LENGTHOF(testCases); i++) {
         const char *rules = testCases[i];
         UErrorCode status = U_ZERO_ERROR;
         PluralRules *pr = PluralRules::createRules(UnicodeString(rules), status);
@@ -979,7 +979,7 @@ void PluralRulesTest::testFixedDecimal() {
         {100.0001234, 7, 1234}
     };
 
-    for (int i=0; i<uprv_lengthof(testCases); ++i) {
+    for (int i=0; i<UPRV_LENGTHOF(testCases); ++i) {
         DoubleTestCase &tc = testCases[i];
         int32_t numFractionDigits = FixedDecimal::decimals(tc.n);
         if (numFractionDigits != tc.fractionDigitCount) {

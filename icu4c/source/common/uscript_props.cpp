@@ -213,7 +213,7 @@ const int32_t SCRIPT_PROPS[] = {
 };
 
 int32_t getScriptProps(UScriptCode script) {
-    if (0 <= script && script < uprv_lengthof(SCRIPT_PROPS)) {
+    if (0 <= script && script < UPRV_LENGTHOF(SCRIPT_PROPS)) {
         return SCRIPT_PROPS[script];
     } else {
         return 0;

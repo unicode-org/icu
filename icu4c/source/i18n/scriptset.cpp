@@ -27,7 +27,7 @@ U_NAMESPACE_BEGIN
 //
 //----------------------------------------------------------------------------
 ScriptSet::ScriptSet() {
-    for (uint32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         bits[i] = 0;
     }
 }
@@ -41,7 +41,7 @@ ScriptSet::ScriptSet(const ScriptSet &other) {
     
 
 ScriptSet & ScriptSet::operator =(const ScriptSet &other) {
-    for (uint32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         bits[i] = other.bits[i];
     }
     return *this;
@@ -49,7 +49,7 @@ ScriptSet & ScriptSet::operator =(const ScriptSet &other) {
 
 
 UBool ScriptSet::operator == (const ScriptSet &other) const {
-    for (uint32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         if (bits[i] != other.bits[i]) {
             return FALSE;
         }
@@ -102,14 +102,14 @@ ScriptSet &ScriptSet::reset(UScriptCode script, UErrorCode &status) {
 
 
 ScriptSet &ScriptSet::Union(const ScriptSet &other) {
-    for (uint32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         bits[i] |= other.bits[i];
     }
     return *this;
 }
 
 ScriptSet &ScriptSet::intersect(const ScriptSet &other) {
-    for (uint32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         bits[i] &= other.bits[i];
     }
     return *this;
@@ -125,7 +125,7 @@ ScriptSet &ScriptSet::intersect(UScriptCode script, UErrorCode &status) {
 }
     
 UBool ScriptSet::intersects(const ScriptSet &other) const {
-    for (uint32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         if ((bits[i] & other.bits[i]) != 0) {
             return true;
         }
@@ -141,7 +141,7 @@ UBool ScriptSet::contains(const ScriptSet &other) const {
 
 
 ScriptSet &ScriptSet::setAll() {
-    for (uint32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         bits[i] = 0xffffffffu;
     }
     return *this;
@@ -149,7 +149,7 @@ ScriptSet &ScriptSet::setAll() {
 
 
 ScriptSet &ScriptSet::resetAll() {
-    for (uint32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         bits[i] = 0;
     }
     return *this;
@@ -159,7 +159,7 @@ int32_t ScriptSet::countMembers() const {
     // This bit counter is good for sparse numbers of '1's, which is
     //  very much the case that we will usually have.
     int32_t count = 0;
-    for (uint32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         uint32_t x = bits[i];
         while (x > 0) {
             count++;
@@ -171,7 +171,7 @@ int32_t ScriptSet::countMembers() const {
 
 int32_t ScriptSet::hashCode() const {
     int32_t hash = 0;
-    for (int32_t i=0; i<uprv_lengthof(bits); i++) {
+    for (int32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
         hash ^= bits[i];
     }
     return hash;

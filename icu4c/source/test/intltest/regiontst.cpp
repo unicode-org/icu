@@ -362,7 +362,7 @@ RegionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* 
 
 void RegionTest::TestKnownRegions() {
 
-    for (int32_t i = 0 ; i < uprv_lengthof(knownRegions) ; i++ ) {
+    for (int32_t i = 0 ; i < UPRV_LENGTHOF(knownRegions) ; i++ ) {
         KnownRegion rd = knownRegions[i];
         UErrorCode status = U_ZERO_ERROR;
         const Region *r = Region::getInstance(rd.code,status);
@@ -423,7 +423,7 @@ void RegionTest::TestGetInstanceString() {
     }
 
 
-    for (int32_t i = 0 ; i < uprv_lengthof(testData) ; i++ ) {
+    for (int32_t i = 0 ; i < UPRV_LENGTHOF(testData) ; i++ ) {
         TestData data = testData[i];
         status = U_ZERO_ERROR;
         r = Region::getInstance(data.inputID,status);
@@ -467,7 +467,7 @@ void RegionTest::TestGetInstanceInt() {
         errcheckln(status, "Calling Region::getInstance(-123) should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't. - %s", u_errorName(status));
     }
 
-    for (int32_t i = 0 ; i < uprv_lengthof(testData) ; i++ ) {
+    for (int32_t i = 0 ; i < UPRV_LENGTHOF(testData) ; i++ ) {
         TestData data = testData[i];
         status = U_ZERO_ERROR;
         const Region *r = Region::getInstance(data.inputID,status);
@@ -490,7 +490,7 @@ void RegionTest::TestGetInstanceInt() {
 }
 
 void RegionTest::TestGetContainedRegions() {
-    for (int32_t i = 0 ; i < uprv_lengthof(knownRegions) ; i++ ) {
+    for (int32_t i = 0 ; i < UPRV_LENGTHOF(knownRegions) ; i++ ) {
         KnownRegion rd = knownRegions[i];
         UErrorCode status = U_ZERO_ERROR;
 
@@ -517,7 +517,7 @@ void RegionTest::TestGetContainedRegions() {
 }
 
 void RegionTest::TestGetContainedRegionsWithType() {
-    for (int32_t i = 0 ; i < uprv_lengthof(knownRegions) ; i++ ) {
+    for (int32_t i = 0 ; i < UPRV_LENGTHOF(knownRegions) ; i++ ) {
         KnownRegion rd = knownRegions[i];
         UErrorCode status = U_ZERO_ERROR;
 
@@ -544,7 +544,7 @@ void RegionTest::TestGetContainedRegionsWithType() {
 }
 
 void RegionTest::TestGetContainingRegion() {        
-    for (int32_t i = 0 ; i < uprv_lengthof(knownRegions) ; i++ ) {
+    for (int32_t i = 0 ; i < UPRV_LENGTHOF(knownRegions) ; i++ ) {
         KnownRegion rd = knownRegions[i];
         UErrorCode status = U_ZERO_ERROR;
         const Region *r = Region::getInstance(rd.code,status);
@@ -568,7 +568,7 @@ void RegionTest::TestGetContainingRegion() {
 }
 
 void RegionTest::TestGetContainingRegionWithType() {        
-    for (int32_t i = 0 ; i < uprv_lengthof(knownRegions) ; i++ ) {
+    for (int32_t i = 0 ; i < UPRV_LENGTHOF(knownRegions) ; i++ ) {
         KnownRegion rd = knownRegions[i];
         UErrorCode status = U_ZERO_ERROR;
 
@@ -630,7 +630,7 @@ void RegionTest::TestGetPreferredValues() {
 }
 
 void RegionTest::TestContains() {        
-    for (int32_t i = 0 ; i < uprv_lengthof(knownRegions) ; i++ ) {
+    for (int32_t i = 0 ; i < UPRV_LENGTHOF(knownRegions) ; i++ ) {
         KnownRegion rd = knownRegions[i];
         UErrorCode status = U_ZERO_ERROR;
 

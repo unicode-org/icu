@@ -129,7 +129,7 @@ main(int argc, char *argv[]) {
         pname=argv[0];
     }
 
-    argc=u_parseArgs(argc, argv, uprv_lengthof(options), options);
+    argc=u_parseArgs(argc, argv, UPRV_LENGTHOF(options), options);
     ishelp=options[OPT_HELP_H].doesOccur || options[OPT_HELP_QUESTION_MARK].doesOccur;
     if(ishelp || argc!=3) {
         return printUsage(pname, ishelp);

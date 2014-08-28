@@ -103,13 +103,13 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
             "Prefix: Templates frogtommy{0} and leg are out of order.",
             fmt.format(
                     params,
-                    uprv_lengthof(params),
+                    UPRV_LENGTHOF(params),
                     appendTo,
                     offsets,
-                    uprv_lengthof(offsets),
+                    UPRV_LENGTHOF(offsets),
                     status));
     assertSuccess("Status", status);
-    for (int32_t i = 0; i < uprv_lengthof(expectedOffsets); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(expectedOffsets); ++i) {
         if (expectedOffsets[i] != offsets[i]) {
             errln("Expected %d, got %d", expectedOffsets[i], offsets[i]);
         }
@@ -117,25 +117,25 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
     appendTo.remove();
     fmt.format(
             params,
-            uprv_lengthof(params) - 1,
+            UPRV_LENGTHOF(params) - 1,
             appendTo,
             offsets,
-            uprv_lengthof(offsets),
+            UPRV_LENGTHOF(offsets),
             status);
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         errln("Expected U_ILLEGAL_ARGUMENT_ERROR");
     }
     status = U_ZERO_ERROR;
-    offsets[uprv_lengthof(offsets) - 1] = 289;
+    offsets[UPRV_LENGTHOF(offsets) - 1] = 289;
     appendTo.remove();
     fmt.format(
             params,
-            uprv_lengthof(params),
+            UPRV_LENGTHOF(params),
             appendTo,
             offsets,
-            uprv_lengthof(offsets) - 1,
+            UPRV_LENGTHOF(offsets) - 1,
             status);
-    assertEquals("Offsets buffer length", 289, offsets[uprv_lengthof(offsets) - 1]);
+    assertEquals("Offsets buffer length", 289, offsets[UPRV_LENGTHOF(offsets) - 1]);
 
     // Test assignment
     SimplePatternFormatter s;
@@ -146,7 +146,7 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
             "Templates frogtommy{0} and leg are out of order.",
             s.format(
                     params,
-                    uprv_lengthof(params),
+                    UPRV_LENGTHOF(params),
                     appendTo,
                     NULL,
                     0,
@@ -160,7 +160,7 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
             "Templates frogtommy{0} and leg are out of order.",
             r.format(
                     params,
-                    uprv_lengthof(params),
+                    UPRV_LENGTHOF(params),
                     appendTo,
                     NULL,
                     0,
@@ -210,13 +210,13 @@ void SimplePatternFormatterTest::TestOptimization() {
             "leg, freddy, frog and by",
             fmt.format(
                     params,
-                    uprv_lengthof(params),
+                    UPRV_LENGTHOF(params),
                     values[2],
                     offsets,
-                    uprv_lengthof(offsets),
+                    UPRV_LENGTHOF(offsets),
                     status));
     assertSuccess("Status", status);
-    for (int32_t i = 0; i < uprv_lengthof(expectedOffsets); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(expectedOffsets); ++i) {
         if (expectedOffsets[i] != offsets[i]) {
             errln("Expected %d, got %d", expectedOffsets[i], offsets[i]);
         }

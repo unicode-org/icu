@@ -274,7 +274,7 @@ CollationBuilder::parseAndBuild(const UnicodeString &ruleString,
     if(U_FAILURE(errorCode)) { return NULL; }
     ownedSettings.fastLatinOptions = CollationFastLatin::getOptions(
         tailoring->data, ownedSettings,
-        ownedSettings.fastLatinPrimaries, uprv_lengthof(ownedSettings.fastLatinPrimaries));
+        ownedSettings.fastLatinPrimaries, UPRV_LENGTHOF(ownedSettings.fastLatinPrimaries));
     tailoring->rules = ruleString;
     tailoring->rules.getTerminatedBuffer();  // ensure NUL-termination
     tailoring->setVersion(base->version, rulesVersion);

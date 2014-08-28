@@ -91,7 +91,7 @@ void G7CollationTest::TestG7Locales(/* char* par */)
         Locale("ja", "JP", "")
     };
 
-    for (i = 0; i < uprv_lengthof(locales); i++)
+    for (i = 0; i < UPRV_LENGTHOF(locales); i++)
     {
         UnicodeString dispName;
         UErrorCode status = U_ZERO_ERROR;

@@ -747,7 +747,7 @@ ures_swapResource(const UDataSwapper *ds,
             (key!=gUnknownKey ?
                 /* its table key string is "%%CollationBin" */
                 0==ds->compareInvChars(ds, key, -1,
-                                       gCollationBinKey, uprv_lengthof(gCollationBinKey)-1) :
+                                       gCollationBinKey, UPRV_LENGTHOF(gCollationBinKey)-1) :
                 /* its table key string is unknown but it looks like a collation binary */
                 ucol_looksLikeCollationBinary(ds, p+1, count))
         ) {

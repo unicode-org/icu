@@ -712,7 +712,7 @@ TestTable32(void) {
     }
 
     /* search for some items by key */
-    for(i=0; i<uprv_lengthof(testcases); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(testcases); ++i) {
         item=ures_getByKey(res, testcases[i].key, item, &errorCode);
         if(U_FAILURE(errorCode)) {
             log_err("unable to find the key \"%s\" in testdata/testtable32.res - %s\n",

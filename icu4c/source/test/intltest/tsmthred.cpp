@@ -276,7 +276,7 @@ private:
   IntlTest inteltst =  IntlTest();
  
   status = U_ZERO_ERROR;
-  length = u_shapeArabic(src, -1, dst, uprv_lengthof(dst),
+  length = u_shapeArabic(src, -1, dst, UPRV_LENGTHOF(dst),
                          U_SHAPE_LETTERS_SHAPE|U_SHAPE_SEEN_TWOCELL_NEAR, &status);
   if(U_FAILURE(status)) {
 	   inteltst.errln("Fail: status %s\n", u_errorName(status)); 
@@ -284,7 +284,7 @@ private:
   } else if(length!=2) {
     inteltst.errln("Fail: len %d expected 3\n", length);
 	return FALSE;
-  } else if(u_strncmp(dst,dst_old,uprv_lengthof(dst))) {
+  } else if(u_strncmp(dst,dst_old,UPRV_LENGTHOF(dst))) {
     inteltst.errln("Fail: got U+%04X U+%04X expected U+%04X U+%04X\n",
             dst[0],dst[1],dst_old[0],dst_old[1]);
 	return FALSE;
@@ -293,7 +293,7 @@ private:
 
   //"Trying new tail
   status = U_ZERO_ERROR;
-  length = u_shapeArabic(src, -1, dst, uprv_lengthof(dst),
+  length = u_shapeArabic(src, -1, dst, UPRV_LENGTHOF(dst),
                          U_SHAPE_LETTERS_SHAPE|U_SHAPE_SEEN_TWOCELL_NEAR|U_SHAPE_TAIL_NEW_UNICODE, &status);
   if(U_FAILURE(status)) {
     inteltst.errln("Fail: status %s\n", u_errorName(status)); 
@@ -301,7 +301,7 @@ private:
   } else if(length!=2) {
     inteltst.errln("Fail: len %d expected 3\n", length);
 	return FALSE;
-  } else if(u_strncmp(dst,dst_new,uprv_lengthof(dst))) {
+  } else if(u_strncmp(dst,dst_new,UPRV_LENGTHOF(dst))) {
     inteltst.errln("Fail: got U+%04X U+%04X expected U+%04X U+%04X\n",
             dst[0],dst[1],dst_new[0],dst_new[1]);
 	return FALSE;
@@ -1777,9 +1777,9 @@ void MultithreadTest::TestUnifiedCache() {
     gFinishedThreads = 0;
     gObjectsCreated = 0;
 
-    UnifiedCacheThread *threads[CACHE_LOAD][uprv_lengthof(gCacheLocales)];
+    UnifiedCacheThread *threads[CACHE_LOAD][UPRV_LENGTHOF(gCacheLocales)];
     for (int32_t i=0; i<CACHE_LOAD; ++i) {
-        for (int32_t j=0; j<uprv_lengthof(gCacheLocales); ++j) {
+        for (int32_t j=0; j<UPRV_LENGTHOF(gCacheLocales); ++j) {
             threads[i][j] = new UnifiedCacheThread(gCacheLocales[j]);
             threads[i][j]->start();
         }
@@ -1787,15 +1787,15 @@ void MultithreadTest::TestUnifiedCache() {
     // Wait on all the threads to complete verify that LENGTHOF(gCacheLocales)
     // objects were created.
     umtx_lock(&gCTMutex);
-    while (gFinishedThreads < CACHE_LOAD*uprv_lengthof(gCacheLocales)) {
+    while (gFinishedThreads < CACHE_LOAD*UPRV_LENGTHOF(gCacheLocales)) {
         umtx_condWait(&gCTConditionVar, &gCTMutex);
     }
-    assertEquals("Objects created", uprv_lengthof(gCacheLocales), gObjectsCreated);
+    assertEquals("Objects created", UPRV_LENGTHOF(gCacheLocales), gObjectsCreated);
     umtx_unlock(&gCTMutex);
 
     // clean up threads
     for (int32_t i=0; i<CACHE_LOAD; ++i) {
-        for (int32_t j=0; j<uprv_lengthof(gCacheLocales); ++j) {
+        for (int32_t j=0; j<UPRV_LENGTHOF(gCacheLocales); ++j) {
             delete threads[i][j];
         }
     }

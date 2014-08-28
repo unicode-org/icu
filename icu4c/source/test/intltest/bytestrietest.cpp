@@ -128,14 +128,14 @@ void BytesTrieTest::TestEmpty() {
     static const StringAndValue data[]={
         { "", 0 }
     };
-    checkData(data, uprv_lengthof(data));
+    checkData(data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::Test_a() {
     static const StringAndValue data[]={
         { "a", 1 }
     };
-    checkData(data, uprv_lengthof(data));
+    checkData(data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::Test_a_ab() {
@@ -143,7 +143,7 @@ void BytesTrieTest::Test_a_ab() {
         { "a", 1 },
         { "ab", 100 }
     };
-    checkData(data, uprv_lengthof(data));
+    checkData(data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::TestShortestBranch() {
@@ -151,7 +151,7 @@ void BytesTrieTest::TestShortestBranch() {
         { "a", 1000 },
         { "b", 2000 }
     };
-    checkData(data, uprv_lengthof(data));
+    checkData(data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::TestBranches() {
@@ -171,7 +171,7 @@ void BytesTrieTest::TestBranches() {
         { "vv", 0x7fffffff },
         { "zz", (int32_t)0x80000000 }
     };
-    for(int32_t length=2; length<=uprv_lengthof(data); ++length) {
+    for(int32_t length=2; length<=UPRV_LENGTHOF(data); ++length) {
         logln("TestBranches length=%d", (int)length);
         checkData(data, length);
     }
@@ -190,7 +190,7 @@ void BytesTrieTest::TestLongSequence() {
           "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
           "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", -3 }
     };
-    checkData(data, uprv_lengthof(data));
+    checkData(data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::TestLongBranch() {
@@ -218,7 +218,7 @@ void BytesTrieTest::TestLongBranch() {
         { "t234567890", 0x77777777 },
         { "z", (int32_t)0x80000001 }
     };
-    checkData(data, uprv_lengthof(data));
+    checkData(data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::TestValuesForState() {
@@ -232,7 +232,7 @@ void BytesTrieTest::TestValuesForState() {
         { "abcde", -5 },
         { "abcdef", -6 }
     };
-    checkData(data, uprv_lengthof(data));
+    checkData(data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::TestCompact() {
@@ -259,7 +259,7 @@ void BytesTrieTest::TestCompact() {
         { "xjuly", 7 },
         { "xjune", 6 }
     };
-    checkData(data, uprv_lengthof(data));
+    checkData(data, UPRV_LENGTHOF(data));
 }
 
 BytesTrie *BytesTrieTest::buildMonthsTrie(UStringTrieBuildOption buildOption) {
@@ -299,7 +299,7 @@ BytesTrie *BytesTrieTest::buildMonthsTrie(UStringTrieBuildOption buildOption) {
         { "jun.", 6 },
         { "june", 6 }
     };
-    return buildTrie(data, uprv_lengthof(data), buildOption);
+    return buildTrie(data, UPRV_LENGTHOF(data), buildOption);
 }
 
 void BytesTrieTest::TestHasUniqueValue() {
@@ -344,7 +344,7 @@ void BytesTrieTest::TestGetNextBytes() {
         return;  // buildTrie() reported an error
     }
     char buffer[40];
-    CheckedArrayByteSink sink(buffer, uprv_lengthof(buffer));
+    CheckedArrayByteSink sink(buffer, UPRV_LENGTHOF(buffer));
     int32_t count=trie->getNextBytes(sink);
     if(count!=2 || sink.NumberOfBytesAppended()!=2 || buffer[0]!='a' || buffer[1]!='j') {
         errln("months getNextBytes()!=[aj] at root");
@@ -430,10 +430,10 @@ void BytesTrieTest::TestIteratorFromBranch() {
         { "uar", 1 },
         { "uary", 1 }
     };
-    checkIterator(iter, data, uprv_lengthof(data));
+    checkIterator(iter, data, UPRV_LENGTHOF(data));
     // Reset, and we should get the same result.
     logln("after iter.reset()");
-    checkIterator(iter.reset(), data, uprv_lengthof(data));
+    checkIterator(iter.reset(), data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::TestIteratorFromLinearMatch() {
@@ -458,10 +458,10 @@ void BytesTrieTest::TestIteratorFromLinearMatch() {
         { "r", 1 },
         { "ry", 1 }
     };
-    checkIterator(iter, data, uprv_lengthof(data));
+    checkIterator(iter, data, UPRV_LENGTHOF(data));
     // Reset, and we should get the same result.
     logln("after iter.reset()");
-    checkIterator(iter.reset(), data, uprv_lengthof(data));
+    checkIterator(iter.reset(), data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::TestTruncatingIteratorFromRoot() {
@@ -504,10 +504,10 @@ void BytesTrieTest::TestTruncatingIteratorFromRoot() {
         { "jun.", 6 },
         { "june", 6 }
     };
-    checkIterator(iter, data, uprv_lengthof(data));
+    checkIterator(iter, data, UPRV_LENGTHOF(data));
     // Reset, and we should get the same result.
     logln("after iter.reset()");
-    checkIterator(iter.reset(), data, uprv_lengthof(data));
+    checkIterator(iter.reset(), data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::TestTruncatingIteratorFromLinearMatchShort() {
@@ -516,7 +516,7 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchShort() {
         { "abcdepq", 200 },
         { "abcdeyz", 3000 }
     };
-    LocalPointer<BytesTrie> trie(buildTrie(data, uprv_lengthof(data), USTRINGTRIE_BUILD_FAST));
+    LocalPointer<BytesTrie> trie(buildTrie(data, UPRV_LENGTHOF(data), USTRINGTRIE_BUILD_FAST));
     if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
@@ -532,10 +532,10 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchShort() {
     static const StringAndValue expected[]={
         { "cd", -1 }
     };
-    checkIterator(iter, expected, uprv_lengthof(expected));
+    checkIterator(iter, expected, UPRV_LENGTHOF(expected));
     // Reset, and we should get the same result.
     logln("after iter.reset()");
-    checkIterator(iter.reset(), expected, uprv_lengthof(expected));
+    checkIterator(iter.reset(), expected, UPRV_LENGTHOF(expected));
 }
 
 void BytesTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
@@ -544,7 +544,7 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
         { "abcdepq", 200 },
         { "abcdeyz", 3000 }
     };
-    LocalPointer<BytesTrie> trie(buildTrie(data, uprv_lengthof(data), USTRINGTRIE_BUILD_FAST));
+    LocalPointer<BytesTrie> trie(buildTrie(data, UPRV_LENGTHOF(data), USTRINGTRIE_BUILD_FAST));
     if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
@@ -563,10 +563,10 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
         { "dep", -1 },
         { "dey", -1 }
     };
-    checkIterator(iter, expected, uprv_lengthof(expected));
+    checkIterator(iter, expected, UPRV_LENGTHOF(expected));
     // Reset, and we should get the same result.
     logln("after iter.reset()");
-    checkIterator(iter.reset(), expected, uprv_lengthof(expected));
+    checkIterator(iter.reset(), expected, UPRV_LENGTHOF(expected));
 }
 
 void BytesTrieTest::TestIteratorFromBytes() {
@@ -577,12 +577,12 @@ void BytesTrieTest::TestIteratorFromBytes() {
     };
     builder_->clear();
     IcuTestErrorCode errorCode(*this, "TestIteratorFromBytes()");
-    for(int32_t i=0; i<uprv_lengthof(data); ++i) {
+    for(int32_t i=0; i<UPRV_LENGTHOF(data); ++i) {
         builder_->add(data[i].s, data[i].value, errorCode);
     }
     StringPiece trieBytes=builder_->buildStringPiece(USTRINGTRIE_BUILD_FAST, errorCode);
     BytesTrie::Iterator iter(trieBytes.data(), 0, errorCode);
-    checkIterator(iter, data, uprv_lengthof(data));
+    checkIterator(iter, data, UPRV_LENGTHOF(data));
 }
 
 void BytesTrieTest::checkData(const StringAndValue data[], int32_t dataLength) {

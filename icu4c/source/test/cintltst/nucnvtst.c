@@ -5573,7 +5573,7 @@ TestIsFixedWidth() {
             "UTF16"
     };
 
-    for (i = 0; i < uprv_lengthof(fixedWidth); i++) {
+    for (i = 0; i < UPRV_LENGTHOF(fixedWidth); i++) {
         cnv = ucnv_open(fixedWidth[i], &status);
         if (cnv == NULL || U_FAILURE(status)) {
             log_data_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
@@ -5586,7 +5586,7 @@ TestIsFixedWidth() {
         ucnv_close(cnv);
     }
 
-    for (i = 0; i < uprv_lengthof(notFixedWidth); i++) {
+    for (i = 0; i < UPRV_LENGTHOF(notFixedWidth); i++) {
         cnv = ucnv_open(notFixedWidth[i], &status);
         if (cnv == NULL || U_FAILURE(status)) {
             log_data_err("Error open converter: %s - %s \n", notFixedWidth[i], u_errorName(status));
