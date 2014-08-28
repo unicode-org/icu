@@ -26,8 +26,6 @@
 #include "ubidi_props.h"
 #include "uassert.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 /*
  * This implementation is designed for 16-bit Unicode strings.
  * The main assumption is that the Arabic characters and their
@@ -1560,8 +1558,8 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         }
 
         /* Start of Arabic letter shaping part */
-        if(outputSize<=LENGTHOF(buffer)) {
-            outputSize=LENGTHOF(buffer);
+        if(outputSize<=uprv_lengthof(buffer)) {
+            outputSize=uprv_lengthof(buffer);
             tempbuffer=buffer;
         } else {
             tempbuffer = (UChar *)uprv_malloc(outputSize*U_SIZEOF_UCHAR);

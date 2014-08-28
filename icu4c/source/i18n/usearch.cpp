@@ -28,8 +28,6 @@ U_NAMESPACE_USE
 // (and if we decide to turn this on again there are several new TODOs that will need to be addressed)
 #define BOYER_MOORE 0
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 // internal definition ---------------------------------------------------
 
 #define LAST_BYTE_MASK_          0xFF

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -19,8 +19,7 @@
 #include "normalizer2impl.h"
 #include "tstnorm.h"
 
-#define LENGTHOF(array) ((int32_t)(sizeof(array)/sizeof((array)[0])))
-#define ARRAY_LENGTH(array) LENGTHOF(array)
+#define ARRAY_LENGTH(array) uprv_lengthof(array)
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \
@@ -747,27 +746,27 @@ BasicNormalizerTest::TestPreviousNext() {
     // for both sets of test data
     static const char *const moves="0+0+0--0-0-+++0--+++++++0--------";
 
-    TestPreviousNext(src, LENGTHOF(src),
-                     expect, LENGTHOF(expect),
+    TestPreviousNext(src, uprv_lengthof(src),
+                     expect, uprv_lengthof(expect),
                      expectIndex,
                      SRC_MIDDLE, EXPECT_MIDDLE,
                      moves, UNORM_NFD, "basic");
 
-    TestPreviousNext(src_j2911, LENGTHOF(src_j2911),
-                     expect_j2911, LENGTHOF(expect_j2911),
+    TestPreviousNext(src_j2911, uprv_lengthof(src_j2911),
+                     expect_j2911, uprv_lengthof(expect_j2911),
                      expectIndex_j2911,
                      SRC_MIDDLE, EXPECT_MIDDLE,
                      moves, UNORM_NFKC, "j2911");
 
     // try again from different "middle" indexes
-    TestPreviousNext(src, LENGTHOF(src),
-                     expect, LENGTHOF(expect),
+    TestPreviousNext(src, uprv_lengthof(src),
+                     expect, uprv_lengthof(expect),
                      expectIndex,
                      SRC_MIDDLE_2, EXPECT_MIDDLE_2,
                      moves, UNORM_NFD, "basic_2");
 
-    TestPreviousNext(src_j2911, LENGTHOF(src_j2911),
-                     expect_j2911, LENGTHOF(expect_j2911),
+    TestPreviousNext(src_j2911, uprv_lengthof(src_j2911),
+                     expect_j2911, uprv_lengthof(expect_j2911),
                      expectIndex_j2911,
                      SRC_MIDDLE_2, EXPECT_MIDDLE_2,
                      moves, UNORM_NFKC, "j2911_2");
@@ -1064,7 +1063,7 @@ BasicNormalizerTest::TestCompare() {
         { UNORM_UNICODE_3_2<<UNORM_COMPARE_NORM_OPTIONS_SHIFT, "Unicode 3.2" }
     };
 
-    int32_t i, j, k, count=LENGTHOF(strings);
+    int32_t i, j, k, count=uprv_lengthof(strings);
     int32_t result, refResult;
 
     UErrorCode errorCode;
@@ -1077,7 +1076,7 @@ BasicNormalizerTest::TestCompare() {
     // test them each with each other
     for(i=0; i<count; ++i) {
         for(j=i; j<count; ++j) {
-            for(k=0; k<LENGTHOF(opt); ++k) {
+            for(k=0; k<uprv_lengthof(opt); ++k) {
                 // test Normalizer::compare
                 errorCode=U_ZERO_ERROR;
                 result=_norm_compare(s[i], s[j], opt[k].options, errorCode);
@@ -1117,7 +1116,7 @@ BasicNormalizerTest::TestCompare() {
     }
 
     // collect all sets into one for contiguous output
-    for(i=0; i<LENGTHOF(iI); ++i) {
+    for(i=0; i<uprv_lengthof(iI); ++i) {
         if(nfcImpl->getCanonStartSet(iI[i], iSet)) {
             set.addAll(iSet);
         }
@@ -1134,7 +1133,7 @@ BasicNormalizerTest::TestCompare() {
         }
 
         s1.setTo(c);
-        for(k=0; k<LENGTHOF(opt); ++k) {
+        for(k=0; k<uprv_lengthof(opt); ++k) {
             // test Normalizer::compare
             errorCode=U_ZERO_ERROR;
             result=_norm_compare(s1, s2, opt[k].options, errorCode);
@@ -1438,7 +1437,7 @@ BasicNormalizerTest::TestCustomComp() {
     if(errorCode.logDataIfFailureAndReset("unable to load testdata/testnorm.nrm")) {
         return;
     }
-    for(int32_t i=0; i<LENGTHOF(pairs); ++i) {
+    for(int32_t i=0; i<uprv_lengthof(pairs); ++i) {
         const StringPair &pair=pairs[i];
         UnicodeString input=UnicodeString(pair.input, -1, US_INV).unescape();
         UnicodeString expected=UnicodeString(pair.expected, -1, US_INV).unescape();
@@ -1470,7 +1469,7 @@ BasicNormalizerTest::TestCustomFCC() {
     if(errorCode.logDataIfFailureAndReset("unable to load testdata/testnorm.nrm")) {
         return;
     }
-    for(int32_t i=0; i<LENGTHOF(pairs); ++i) {
+    for(int32_t i=0; i<uprv_lengthof(pairs); ++i) {
         const StringPair &pair=pairs[i];
         UnicodeString input=UnicodeString(pair.input, -1, US_INV).unescape();
         UnicodeString expected=UnicodeString(pair.expected, -1, US_INV).unescape();

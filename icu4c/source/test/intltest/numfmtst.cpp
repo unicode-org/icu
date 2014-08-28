@@ -39,8 +39,6 @@
 
 //#define NUMFMTST_DEBUG 1
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof(array[0]))
-
 static const UChar EUR[] = {69,85,82,0}; // "EUR"
 static const UChar ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
 
@@ -3403,8 +3401,8 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
         UNUM_CURRENCY_PLURAL
     };
 
-    for (int32_t i=0; i<LENGTHOF(DATA); ++i) {
-      for (int32_t kIndex = 0; kIndex < LENGTHOF(currencyStyles); ++kIndex) {
+    for (int32_t i=0; i<uprv_lengthof(DATA); ++i) {
+      for (int32_t kIndex = 0; kIndex < uprv_lengthof(currencyStyles); ++kIndex) {
         UNumberFormatStyle k = currencyStyles[kIndex];
         const char* localeString = DATA[i][0];
         double numberToBeFormat = atof(DATA[i][1]);
@@ -3512,7 +3510,7 @@ for (;;) {
     printf("loop: %d\n", deadloop++);
 #endif
     for (uint32_t i=0; i< sizeof(DATA)/sizeof(DATA[0]); ++i) {  /* i = test case #  - should be i=0*/
-      for (int32_t kIndex = 2; kIndex < LENGTHOF(currencyStyles); ++kIndex) {
+      for (int32_t kIndex = 2; kIndex < uprv_lengthof(currencyStyles); ++kIndex) {
         UNumberFormatStyle k = currencyStyles[kIndex]; /* k = style */
         const char* localeString = DATA[i][0];
         double numberToBeFormat = atof(DATA[i][1]);

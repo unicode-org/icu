@@ -27,8 +27,6 @@
 #include "ubidi_props.h"
 #include "ustr_imp.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 // Note about tests for UIDNA_ERROR_DOMAIN_NAME_TOO_LONG:
 //
 // The domain name length limit is 255 octets in an internal DNS representation
@@ -435,7 +433,7 @@ UTS46::processUTF8(const StringPiece &src,
         char stackArray[256];
         int32_t destCapacity;
         char *destArray=dest.GetAppendBuffer(srcLength, srcLength+20,
-                                             stackArray, LENGTHOF(stackArray), &destCapacity);
+                                             stackArray, uprv_lengthof(stackArray), &destCapacity);
         UBool disallowNonLDHDot=(options&UIDNA_USE_STD3_RULES)!=0;
         int32_t i;
         for(i=0;; ++i) {

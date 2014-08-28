@@ -12,6 +12,7 @@
 #include "unicode/tmutamt.h"
 #include "unicode/tmutfmt.h"
 #include "tufmtts.h"
+#include "cmemory.h"
 #include "unicode/ustring.h"
 
 //TODO: put as compilation flag
@@ -20,8 +21,6 @@
 #ifdef TUFMTTS_DEBUG
 #include <iostream>
 #endif
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ ) {
     if (exec) logln("TestSuite TimeUnitTest");
@@ -422,8 +421,8 @@ void TimeUnitTest::test10219Plurals() {
         dataerrln("generating NumberFormat Object failed: %s", u_errorName(status));
         return;
     }
-    for (int32_t j = 0; j < LENGTHOF(values); ++j) {
-        for (int32_t i = 0; i < LENGTHOF(expected[j]); ++i) {
+    for (int32_t j = 0; j < uprv_lengthof(values); ++j) {
+        for (int32_t i = 0; i < uprv_lengthof(expected[j]); ++i) {
             nf->setMinimumFractionDigits(i);
             nf->setMaximumFractionDigits(i);
             nf->setRoundingMode(DecimalFormat::kRoundDown);

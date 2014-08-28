@@ -27,8 +27,6 @@
 #include "windttst.h"
 #endif
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
 #define ASSERT_OK(status)  if(U_FAILURE(status)) {errcheckln(status, #status " = %s @ %s:%d", u_errorName(status), __FILE__, __LINE__); return; }
@@ -169,7 +167,7 @@ void DateFormatTest::TestPatterns() {
     };
 
     IcuTestErrorCode errorCode(*this, "TestPatterns()");
-    for (int32_t i = 0; i < LENGTHOF(EXPECTED); i++) {
+    for (int32_t i = 0; i < uprv_lengthof(EXPECTED); i++) {
         // Verify that patterns have the correct values
         UnicodeString actualPattern(EXPECTED[i].actualPattern, -1, US_INV);
         UnicodeString expectedPattern(EXPECTED[i].expectedPattern, -1, US_INV);
@@ -4180,7 +4178,7 @@ void DateFormatTest::TestDotAndAtLeniency() {
     // Test for date/time parsing regression with CLDR 22.1/ICU 50 pattern strings.
     // For details see http://bugs.icu-project.org/trac/ticket/9789
     static const char *locales[] = { "en", "fr" };
-    for (int32_t i = 0; i < LENGTHOF(locales); ++i) {
+    for (int32_t i = 0; i < uprv_lengthof(locales); ++i) {
         Locale locale(locales[i]);
 
         for (DateFormat::EStyle dateStyle = DateFormat::FULL; dateStyle <= DateFormat::SHORT;

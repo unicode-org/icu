@@ -30,8 +30,6 @@
 #include "ucmndata.h"
 #include "utrie2.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 namespace {
@@ -370,7 +368,7 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     int32_t options = inIndexes[IX_OPTIONS] & 0xffff;
     uint16_t fastLatinPrimaries[CollationFastLatin::LATIN_LIMIT];
     int32_t fastLatinOptions = CollationFastLatin::getOptions(
-            tailoring.data, ts, fastLatinPrimaries, LENGTHOF(fastLatinPrimaries));
+            tailoring.data, ts, fastLatinPrimaries, uprv_lengthof(fastLatinPrimaries));
     if(options == ts.options && ts.variableTop != 0 &&
             reorderCodesLength == ts.reorderCodesLength &&
             uprv_memcmp(reorderCodes, ts.reorderCodes, reorderCodesLength * 4) == 0 &&
@@ -409,7 +407,7 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
 
     settings->fastLatinOptions = CollationFastLatin::getOptions(
         tailoring.data, *settings,
-        settings->fastLatinPrimaries, LENGTHOF(settings->fastLatinPrimaries));
+        settings->fastLatinPrimaries, uprv_lengthof(settings->fastLatinPrimaries));
 }
 
 UBool U_CALLCONV

@@ -34,8 +34,6 @@
 #include "uassert.h"
 #include "uvectr32.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 namespace {
@@ -463,7 +461,7 @@ CollationRuleParser::parseSpecialPosition(int32_t i, UnicodeString &str, UErrorC
     int32_t j = readWords(i + 1, raw);
     if(j > i && rules->charAt(j) == 0x5d && !raw.isEmpty()) {  // words end with ]
         ++j;
-        for(int32_t pos = 0; pos < LENGTHOF(positions); ++pos) {
+        for(int32_t pos = 0; pos < uprv_lengthof(positions); ++pos) {
             if(raw == UnicodeString(positions[pos], -1, US_INV)) {
                 str.setTo((UChar)POS_LEAD).append((UChar)(POS_BASE + pos));
                 return j;
@@ -727,7 +725,7 @@ static const char *const gSpecialReorderCodes[] = {
 
 int32_t
 CollationRuleParser::getReorderCode(const char *word) {
-    for(int32_t i = 0; i < LENGTHOF(gSpecialReorderCodes); ++i) {
+    for(int32_t i = 0; i < uprv_lengthof(gSpecialReorderCodes); ++i) {
         if(uprv_stricmp(word, gSpecialReorderCodes[i]) == 0) {
             return UCOL_REORDER_CODE_FIRST + i;
         }

@@ -18,8 +18,7 @@
 #include "unicode/localpointer.h"
 #include "unicode/numfmt.h"
 #include "unicode/reldatefmt.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
+#include "cmemory.h"
 
 static const char *DirectionStr(UDateDirection direction);
 static const char *RelativeUnitStr(UDateRelativeUnit unit);
@@ -617,7 +616,7 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
 }
 
 void RelativeDateTimeFormatterTest::TestEnglish() {
-    RunTest("en", kEnglish, LENGTHOF(kEnglish));
+    RunTest("en", kEnglish, uprv_lengthof(kEnglish));
 }
 
 void RelativeDateTimeFormatterTest::TestEnglishCaps() {
@@ -638,27 +637,27 @@ void RelativeDateTimeFormatterTest::TestEnglishCaps() {
     RelativeDateTimeFormatter fmt2(fmt);
     fmt3 = fmt2;
     assertSuccess("", status);
-    RunTest(fmt3, kEnglishCaps, LENGTHOF(kEnglishCaps), "en caps");
+    RunTest(fmt3, kEnglishCaps, uprv_lengthof(kEnglishCaps), "en caps");
 }
 
 void RelativeDateTimeFormatterTest::TestEnglishShort() {
-    RunTest("en", UDAT_STYLE_SHORT, kEnglishShort, LENGTHOF(kEnglishShort));
+    RunTest("en", UDAT_STYLE_SHORT, kEnglishShort, uprv_lengthof(kEnglishShort));
 }
 
 void RelativeDateTimeFormatterTest::TestEnglishNarrow() {
-    RunTest("en", UDAT_STYLE_NARROW, kEnglishNarrow, LENGTHOF(kEnglishNarrow));
+    RunTest("en", UDAT_STYLE_NARROW, kEnglishNarrow, uprv_lengthof(kEnglishNarrow));
 }
 
 void RelativeDateTimeFormatterTest::TestSerbian() {
-    RunTest("sr", kSerbian, LENGTHOF(kSerbian));
+    RunTest("sr", kSerbian, uprv_lengthof(kSerbian));
 }
 
 void RelativeDateTimeFormatterTest::TestSerbianFallback() {
-    RunTest("sr", UDAT_STYLE_NARROW, kSerbian, LENGTHOF(kSerbian));
+    RunTest("sr", UDAT_STYLE_NARROW, kSerbian, uprv_lengthof(kSerbian));
 }
 
 void RelativeDateTimeFormatterTest::TestEnglishNoQuantity() {
-    RunTest("en", kEnglishNoQuantity, LENGTHOF(kEnglishNoQuantity));
+    RunTest("en", kEnglishNoQuantity, uprv_lengthof(kEnglishNoQuantity));
 }
 
 void RelativeDateTimeFormatterTest::TestEnglishNoQuantityCaps() {
@@ -675,7 +674,7 @@ void RelativeDateTimeFormatterTest::TestEnglishNoQuantityCaps() {
     RunTest(
             fmt,
             kEnglishNoQuantityCaps,
-            LENGTHOF(kEnglishNoQuantityCaps),
+            uprv_lengthof(kEnglishNoQuantityCaps),
             "en caps no quantity");
 }
 
@@ -684,7 +683,7 @@ void RelativeDateTimeFormatterTest::TestEnglishNoQuantityShort() {
             "en",
             UDAT_STYLE_SHORT,
             kEnglishNoQuantityShort,
-            LENGTHOF(kEnglishNoQuantityShort));
+            uprv_lengthof(kEnglishNoQuantityShort));
 }
 
 void RelativeDateTimeFormatterTest::TestEnglishNoQuantityNarrow() {
@@ -692,11 +691,11 @@ void RelativeDateTimeFormatterTest::TestEnglishNoQuantityNarrow() {
             "en",
             UDAT_STYLE_NARROW,
             kEnglishNoQuantityNarrow,
-            LENGTHOF(kEnglishNoQuantityNarrow));
+            uprv_lengthof(kEnglishNoQuantityNarrow));
 }
 
 void RelativeDateTimeFormatterTest::TestSpanishNoQuantity() {
-    RunTest("es", kSpanishNoQuantity, LENGTHOF(kSpanishNoQuantity));
+    RunTest("es", kSpanishNoQuantity, uprv_lengthof(kSpanishNoQuantity));
 }
 
 void RelativeDateTimeFormatterTest::TestFormatWithQuantityIllegalArgument() {
@@ -740,11 +739,11 @@ void RelativeDateTimeFormatterTest::TestCustomNumberFormat() {
 
     // Test copy constructor.
     RelativeDateTimeFormatter fmt2(fmt);
-    RunTest(fmt2, kEnglishDecimal, LENGTHOF(kEnglishDecimal), "en decimal digits");
+    RunTest(fmt2, kEnglishDecimal, uprv_lengthof(kEnglishDecimal), "en decimal digits");
 
     // Test assignment
     fmt = RelativeDateTimeFormatter("es", status);
-    RunTest(fmt, kSpanishNoQuantity, LENGTHOF(kSpanishNoQuantity), "assignment operator");
+    RunTest(fmt, kSpanishNoQuantity, uprv_lengthof(kSpanishNoQuantity), "assignment operator");
 
 }
 

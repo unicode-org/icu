@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2011, International Business Machines
+*   Copyright (C) 2002-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -34,8 +34,6 @@
 #include "unicode/utf16.h"
 #include "cmemory.h"
 #include "cintltst.h"
-
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 /* icuhtml/design/conversion/bocu1/bocu1.h ---------------------------------- */
 
@@ -951,21 +949,21 @@ static const struct {
     const UChar *s;
     int32_t length;
 } strings[]={
-    { feff,         LENGTHOF(feff) },
-    { ascii,        LENGTHOF(ascii) },
-    { crlf,         LENGTHOF(crlf) },
-    { nul,          LENGTHOF(nul) },
-    { latin,        LENGTHOF(latin) },
-    { devanagari,   LENGTHOF(devanagari) },
-    { hiragana,     LENGTHOF(hiragana) },
-    { unihan,       LENGTHOF(unihan) },
-    { hangul,       LENGTHOF(hangul) },
-    { surrogates,   LENGTHOF(surrogates) },
-    { plane1,       LENGTHOF(plane1) },
-    { plane2,       LENGTHOF(plane2) },
-    { plane15,      LENGTHOF(plane15) },
-    { plane16,      LENGTHOF(plane16) },
-    { c0,           LENGTHOF(c0) }
+    { feff,         uprv_lengthof(feff) },
+    { ascii,        uprv_lengthof(ascii) },
+    { crlf,         uprv_lengthof(crlf) },
+    { nul,          uprv_lengthof(nul) },
+    { latin,        uprv_lengthof(latin) },
+    { devanagari,   uprv_lengthof(devanagari) },
+    { hiragana,     uprv_lengthof(hiragana) },
+    { unihan,       uprv_lengthof(unihan) },
+    { hangul,       uprv_lengthof(hangul) },
+    { surrogates,   uprv_lengthof(surrogates) },
+    { plane1,       uprv_lengthof(plane1) },
+    { plane2,       uprv_lengthof(plane2) },
+    { plane15,      uprv_lengthof(plane15) },
+    { plane16,      uprv_lengthof(plane16) },
+    { c0,           uprv_lengthof(c0) }
 };
 
 /*
@@ -993,7 +991,7 @@ TestBOCU1(void) {
 
     /* text 1: each of strings[] once */
     length=0;
-    for(i=0; i<LENGTHOF(strings); ++i) {
+    for(i=0; i<uprv_lengthof(strings); ++i) {
         u_memcpy(text+length, strings[i].s, strings[i].length);
         length+=strings[i].length;
     }
@@ -1001,7 +999,7 @@ TestBOCU1(void) {
 
     /* text 2: each of strings[] twice */
     length=0;
-    for(i=0; i<LENGTHOF(strings); ++i) {
+    for(i=0; i<uprv_lengthof(strings); ++i) {
         u_memcpy(text+length, strings[i].s, strings[i].length);
         length+=strings[i].length;
         u_memcpy(text+length, strings[i].s, strings[i].length);
@@ -1012,8 +1010,8 @@ TestBOCU1(void) {
     /* text 3: each of strings[] many times (set step vs. |strings| so that all strings are used) */
     length=0;
     for(i=1; length<5000; i+=7) {
-        if(i>=LENGTHOF(strings)) {
-            i-=LENGTHOF(strings);
+        if(i>=uprv_lengthof(strings)) {
+            i-=uprv_lengthof(strings);
         }
         u_memcpy(text+length, strings[i].s, strings[i].length);
         length+=strings[i].length;

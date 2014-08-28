@@ -43,8 +43,6 @@
 #include "cmemory.h"
 #include "uassert.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 #ifdef U_ENABLE_GENERIC_ISO_2022
 /*
  * I am disabling the generic ISO-2022 converter after proposing to do so on
@@ -1719,7 +1717,7 @@ getTrail:
                 }
 
                 /* try all the other possible charsets */
-                for(i = 0; i < LENGTHOF(jpCharsetPref); ++i) {
+                for(i = 0; i < uprv_lengthof(jpCharsetPref); ++i) {
                     cs = (int8_t)jpCharsetPref[i];
                     if(CSM(cs) & csm) {
                         choices[choiceCount++] = cs;

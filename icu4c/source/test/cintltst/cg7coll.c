@@ -50,8 +50,6 @@
 #include "callcoll.h"
 #include "unicode/ustring.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 const char* locales[8] = {
         "en_US",
         "en_GB",
@@ -142,7 +140,7 @@ static void TestG7Locales()
     const UChar *defRules;
     int32_t i, rlen, j, n;
     log_verbose("Testing  ucol_openRules for all the locales\n");
-    for (i = 0; i < LENGTHOF(locales); i++)
+    for (i = 0; i < uprv_lengthof(locales); i++)
     {
         const char *locale = locales[i];
         status = U_ZERO_ERROR;

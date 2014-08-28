@@ -35,8 +35,6 @@
 #include "uresimp.h"
 #include "dtptngen_impl.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 #if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
 /**
  * If we are on EBCDIC, use an iterator which will
@@ -510,7 +508,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
     const char *key=NULL;
     int32_t i;
 
-    UnicodeString defaultItemFormat(TRUE, UDATPG_ItemFormat, LENGTHOF(UDATPG_ItemFormat)-1);  // Read-only alias.
+    UnicodeString defaultItemFormat(TRUE, UDATPG_ItemFormat, uprv_lengthof(UDATPG_ItemFormat)-1);  // Read-only alias.
 
     err = U_ZERO_ERROR;
     

@@ -55,8 +55,6 @@ unorm2_swap(const UDataSwapper *ds,
 
 /* other definitions and prototypes */
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 #if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestUDataOpen(void);
 static void TestUDataOpenChoiceDemo1(void);
@@ -1688,7 +1686,7 @@ TestSwapData() {
     errorCode=U_ZERO_ERROR;
 #endif
 
-    for(i=0; i<LENGTHOF(swapCases); ++i) {
+    for(i=0; i<uprv_lengthof(swapCases); ++i) {
         /* build the name for logging */
         errorCode=U_ZERO_ERROR;
         if(swapCases[i].name[0]=='*') {

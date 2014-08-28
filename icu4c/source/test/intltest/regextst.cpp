@@ -219,8 +219,6 @@ const char* RegexTest::extractToAssertBuf(const UnicodeString& message) {
   return ASSERT_BUF;
 }
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 #define REGEX_VERBOSE_TEXT(text) {char buf[200];utextToPrintable(buf,sizeof(buf)/sizeof(buf[0]),text);logln("%s:%d: UText %s=\"%s\"", __FILE__, __LINE__, #text, buf);}
 
 #define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {dataerrln("%s:%d: RegexTest failure.  status=%s", \
@@ -5269,7 +5267,7 @@ void RegexTest::Bug10459() {
     //   It should set an U_REGEX_INVALID_STATE.
 
     UChar buf[100];
-    int32_t len = uregex_group(icu_re, 0, buf, LENGTHOF(buf), &status);
+    int32_t len = uregex_group(icu_re, 0, buf, uprv_lengthof(buf), &status);
     REGEX_ASSERT(status == U_REGEX_INVALID_STATE);
     REGEX_ASSERT(len == 0);
 

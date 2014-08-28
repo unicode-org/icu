@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2013, International Business Machines
+*   Copyright (C) 2003-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,8 +25,6 @@
 #include "cintltst.h"
 #include "uarrsort.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 static void
 SortTest() {
     uint16_t small[]={ 8, 1, 2, 5, 4, 3, 7, 6 };
@@ -39,12 +37,12 @@ SortTest() {
 
     /* sort small array (stable) */
     errorCode=U_ZERO_ERROR;
-    uprv_sortArray(small, LENGTHOF(small), sizeof(small[0]), uprv_uint16Comparator, NULL, TRUE, &errorCode);
+    uprv_sortArray(small, uprv_lengthof(small), sizeof(small[0]), uprv_uint16Comparator, NULL, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("uprv_sortArray(small) failed - %s\n", u_errorName(errorCode));
         return;
     }
-    for(i=1; i<LENGTHOF(small); ++i) {
+    for(i=1; i<uprv_lengthof(small); ++i) {
         if(small[i-1]>small[i]) {
             log_err("uprv_sortArray(small) mis-sorted [%d]=%u > [%d]=%u\n", i-1, small[i-1], i, small[i]);
             return;
@@ -52,17 +50,17 @@ SortTest() {
     }
 
     /* for medium, add bits that will not be compared, to test stability */
-    for(i=0; i<LENGTHOF(medium); ++i) {
+    for(i=0; i<uprv_lengthof(medium); ++i) {
         medium[i]=(medium[i]<<4)|i;
     }
 
     /* sort medium array (stable) */
-    uprv_sortArray(medium, LENGTHOF(medium), sizeof(medium[0]), uprv_int32Comparator, NULL, TRUE, &errorCode);
+    uprv_sortArray(medium, uprv_lengthof(medium), sizeof(medium[0]), uprv_int32Comparator, NULL, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("uprv_sortArray(medium) failed - %s\n", u_errorName(errorCode));
         return;
     }
-    for(i=1; i<LENGTHOF(medium); ++i) {
+    for(i=1; i<uprv_lengthof(medium); ++i) {
         if(medium[i-1]>=medium[i]) {
             log_err("uprv_sortArray(medium) mis-sorted [%d]=%u > [%d]=%u\n", i-1, medium[i-1], i, medium[i]);
             return;
@@ -71,12 +69,12 @@ SortTest() {
 
     /* sort large array (not stable) */
     errorCode=U_ZERO_ERROR;
-    uprv_sortArray(large, LENGTHOF(large), sizeof(large[0]), uprv_uint32Comparator, NULL, FALSE, &errorCode);
+    uprv_sortArray(large, uprv_lengthof(large), sizeof(large[0]), uprv_uint32Comparator, NULL, FALSE, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("uprv_sortArray(large) failed - %s\n", u_errorName(errorCode));
         return;
     }
-    for(i=1; i<LENGTHOF(large); ++i) {
+    for(i=1; i<uprv_lengthof(large); ++i) {
         if(large[i-1]>large[i]) {
             log_err("uprv_sortArray(large) mis-sorted [%d]=%u > [%d]=%u\n", i-1, large[i-1], i, large[i]);
             return;

@@ -30,8 +30,6 @@
 //#include <string>
 //#include <iostream>
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 namespace {

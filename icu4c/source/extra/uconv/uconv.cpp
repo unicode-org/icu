@@ -66,8 +66,6 @@ U_NAMESPACE_USE
 U_CFUNC char uconvmsg_dat[];
 #endif
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 #define DEFAULT_BUFSZ   4096
 #define UCONVMSG "uconvmsg"
 
@@ -946,7 +944,7 @@ ConvertFile::convertFile(const char *pname,
                     int8_t i, length, errorLength;
 
                     UErrorCode localError = U_ZERO_ERROR;
-                    errorLength = (int8_t)LENGTHOF(errorUChars);
+                    errorLength = (int8_t)uprv_lengthof(errorUChars);
                     ucnv_getInvalidUChars(convto, errorUChars, &errorLength, &localError);
                     if (U_FAILURE(localError) || errorLength == 0) {
                         // need at least 1 so that we don't access beyond the length of fromoffsets[]

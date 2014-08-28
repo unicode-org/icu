@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2012, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -59,6 +59,7 @@ U_CAPI void uprv_checkValidMemory(const void *p, size_t n);
 
 #endif  /* U_DEBUG */
 
+#define uprv_lengthof(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 #define uprv_memset(buffer, mark, size) U_STANDARD_CPP_NAMESPACE memset(buffer, mark, size)
 #define uprv_memcmp(buffer1, buffer2, size) U_STANDARD_CPP_NAMESPACE memcmp(buffer1, buffer2,size)
 

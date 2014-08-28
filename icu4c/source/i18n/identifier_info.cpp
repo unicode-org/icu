@@ -18,8 +18,6 @@
 
 U_NAMESPACE_BEGIN
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 static UnicodeSet *ASCII;
 static ScriptSet *JAPANESE;
 static ScriptSet *CHINESE;
@@ -137,7 +135,7 @@ IdentifierInfo &IdentifierInfo::setIdentifier(const UnicodeString &identifier, U
             fNumerics->add(cp - (UChar32)u_getNumericValue(cp));
         }
         UScriptCode extensions[500];
-        int32_t extensionsCount = uscript_getScriptExtensions(cp, extensions, LENGTHOF(extensions), &status);
+        int32_t extensionsCount = uscript_getScriptExtensions(cp, extensions, uprv_lengthof(extensions), &status);
         if (U_FAILURE(status)) {
             return *this;
         }
