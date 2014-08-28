@@ -17,8 +17,7 @@
 #include "unicode/uscript.h"
 #include "unicode/utf16.h"
 #include "ustr_imp.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+#include "cmemory.h"
 
 namespace {
 
@@ -214,7 +213,7 @@ const int32_t SCRIPT_PROPS[] = {
 };
 
 int32_t getScriptProps(UScriptCode script) {
-    if (0 <= script && script < LENGTHOF(SCRIPT_PROPS)) {
+    if (0 <= script && script < uprv_lengthof(SCRIPT_PROPS)) {
         return SCRIPT_PROPS[script];
     } else {
         return 0;

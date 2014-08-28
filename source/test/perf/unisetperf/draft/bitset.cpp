@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2007, International Business Machines
+*   Copyright (C) 2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  bitset.cpp
@@ -146,7 +146,7 @@ public:
             prevIndex=j;
         }
 
-        if(bitHash->countKeys()>LENGTHOF(shortBits)) {
+        if(bitHash->countKeys()>uprv_lengthof(shortBits)) {
             bits=(int64_t *)uprv_malloc(bitHash->countKeys()*8);
         }
         if(bits!=NULL) {

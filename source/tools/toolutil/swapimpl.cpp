@@ -67,8 +67,6 @@ U_NAMESPACE_USE
 
 /* definitions */
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 /* Unicode property (value) aliases data swapping --------------------------- */
 
 static int32_t U_CALLCONV
@@ -792,7 +790,7 @@ udata_swap(const UDataSwapper *ds,
     }
 
     /* dispatch to the swap function for the dataFormat */
-    for(i=0; i<LENGTHOF(swapFns); ++i) {
+    for(i=0; i<uprv_lengthof(swapFns); ++i) {
         if(0==memcmp(swapFns[i].dataFormat, pInfo->dataFormat, 4)) {
             swappedLength=swapFns[i].swapFn(ds, inData, length, outData, pErrorCode);
 

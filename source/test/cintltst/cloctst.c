@@ -36,7 +36,6 @@
 #include "unicode/uldnames.h"
 #include "unicode/parseerr.h" /* may not be included with some uconfig switches */
 #include "udbgutil.h"
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static void TestNullDefault(void);
 static void TestNonexistentLanguageExemplars(void);
@@ -665,7 +664,7 @@ static void TestDisplayNames()
 
     /* test that the default locale has a display name for its own language */
     errorCode=U_ZERO_ERROR;
-    length=uloc_getDisplayLanguage(NULL, NULL, buffer, LENGTHOF(buffer), &errorCode);
+    length=uloc_getDisplayLanguage(NULL, NULL, buffer, uprv_lengthof(buffer), &errorCode);
     if(U_FAILURE(errorCode) || (length<=3 && buffer[0]<=0x7f)) {
         /* check <=3 to reject getting the language code as a display name */
         log_data_err("unable to get a display string for the language of the default locale - %s (Are you missing data?)\n", u_errorName(errorCode));
@@ -673,14 +672,14 @@ static void TestDisplayNames()
 
     /* test that we get the language code itself for an unknown language, and a default warning */
     errorCode=U_ZERO_ERROR;
-    length=uloc_getDisplayLanguage("qq", "rr", buffer, LENGTHOF(buffer), &errorCode);
+    length=uloc_getDisplayLanguage("qq", "rr", buffer, uprv_lengthof(buffer), &errorCode);
     if(errorCode!=U_USING_DEFAULT_WARNING || length!=2 || buffer[0]!=0x71 || buffer[1]!=0x71) {
         log_err("error getting the display string for an unknown language - %s\n", u_errorName(errorCode));
     }
     
     /* test that we get a default warning for a display name where one component is unknown (4255) */
     errorCode=U_ZERO_ERROR;
-    length=uloc_getDisplayName("qq_US_POSIX", "en_US", buffer, LENGTHOF(buffer), &errorCode);
+    length=uloc_getDisplayName("qq_US_POSIX", "en_US", buffer, uprv_lengthof(buffer), &errorCode);
     if(errorCode!=U_USING_DEFAULT_WARNING) {
         log_err("error getting the display name for a locale with an unknown language - %s\n", u_errorName(errorCode));
     }
@@ -698,9 +697,9 @@ static void TestDisplayNames()
             "\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac (\\u0397\\u03bc\\u03b5\\u03c1\\u03bf\\u03bb\\u03cc\\u03b3\\u03b9\\u03bf=\\u0399\\u03b1\\u03c0\\u03c9\\u03bd\\u03b9\\u03ba\\u03cc \\u03b7\\u03bc\\u03b5\\u03c1\\u03bf\\u03bb\\u03cc\\u03b3\\u03b9\\u03bf, \\u03a3\\u03b5\\u03b9\\u03c1\\u03ac \\u03c4\\u03b1\\u03be\\u03b9\\u03bd\\u03cc\\u03bc\\u03b7\\u03c3\\u03b7\\u03c2=\\u03a0\\u03b1\\u03c1\\u03b1\\u03b4\\u03bf\\u03c3\\u03b9\\u03b1\\u03ba\\u03ae \\u03c3\\u03b5\\u03b9\\u03c1\\u03ac \\u03c4\\u03b1\\u03be\\u03b9\\u03bd\\u03cc\\u03bc\\u03b7\\u03c3\\u03b7\\u03c2)" };
         UChar *expectBuffer;
 
-        for(i=0;i<LENGTHOF(testL);i++) {
+        for(i=0;i<uprv_lengthof(testL);i++) {
             errorCode = U_ZERO_ERROR;
-            uloc_getDisplayName(aLocale, testL[i], buffer, LENGTHOF(buffer), &errorCode);
+            uloc_getDisplayName(aLocale, testL[i], buffer, uprv_lengthof(buffer), &errorCode);
             if(U_FAILURE(errorCode)) {
                 log_err("FAIL in uloc_getDisplayName(%s,%s,..) -> %s\n", aLocale, testL[i], u_errorName(errorCode));
             } else {
@@ -732,7 +731,7 @@ static void TestDisplayNames()
         if(ec==U_BUFFER_OVERFLOW_ERROR) {
             ec=U_ZERO_ERROR;
         }
-        len=uloc_getDisplayName(locale, displayLocale, result, LENGTHOF(result), &ec);
+        len=uloc_getDisplayName(locale, displayLocale, result, uprv_lengthof(result), &ec);
         if(U_FAILURE(ec)) {
             log_err("uloc_getDisplayName(%s, %s...) returned error: %s",
                     locale, displayLocale, u_errorName(ec));
@@ -2779,7 +2778,7 @@ static void TestCalendar() {
         log_err_status(status, "Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
         return;
     }
-    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+    for (i=0; i<uprv_lengthof(LOCALE_ALIAS); i++) {
         const char* oldLoc = LOCALE_ALIAS[i][0];
         const char* newLoc = LOCALE_ALIAS[i][1];
         UCalendar* c1 = NULL;
@@ -2815,7 +2814,7 @@ static void TestDateFormat() {
         log_err_status(status, "Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
         return;
     }
-    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+    for (i=0; i<uprv_lengthof(LOCALE_ALIAS); i++) {
         const char* oldLoc = LOCALE_ALIAS[i][0];
         const char* newLoc = LOCALE_ALIAS[i][1];
         UDateFormat* df1 = NULL;
@@ -2858,7 +2857,7 @@ static void TestCollation() {
         log_err_status(status, "Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
         return;
     }
-    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+    for (i=0; i<uprv_lengthof(LOCALE_ALIAS); i++) {
         const char* oldLoc = LOCALE_ALIAS[i][0];
         const char* newLoc = LOCALE_ALIAS[i][1];
         UCollator* c1 = NULL;
@@ -2982,7 +2981,7 @@ static void  TestULocale() {
         log_err_status(status, "Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
         return;
     }
-    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+    for (i=0; i<uprv_lengthof(LOCALE_ALIAS); i++) {
         const char* oldLoc = LOCALE_ALIAS[i][0];
         const char* newLoc = LOCALE_ALIAS[i][1];
         UChar name1[256], name2[256];
@@ -3028,7 +3027,7 @@ static void TestUResourceBundle() {
         return;
     }
     resIndex = ures_open(NULL,"res_index", &status);
-    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+    for (i=0; i<uprv_lengthof(LOCALE_ALIAS); i++) {
 
         const char* oldLoc = LOCALE_ALIAS[i][0];
         const char* newLoc = LOCALE_ALIAS[i][1];
@@ -3073,7 +3072,7 @@ static void TestDisplayName() {
     int32_t capacity = 256;
     int i =0;
     int j=0;
-    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+    for (i=0; i<uprv_lengthof(LOCALE_ALIAS); i++) {
         const char* oldLoc = LOCALE_ALIAS[i][0];
         const char* newLoc = LOCALE_ALIAS[i][1];
         UErrorCode status = U_ZERO_ERROR;

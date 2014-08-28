@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and    *
+* Copyright (C) 1997-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -17,8 +17,7 @@
 
 #include "unicode/compactdecimalformat.h"
 #include "unicode/unum.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
+#include "cmemory.h"
 
 typedef struct ExpectedResult {
   double value;
@@ -218,27 +217,27 @@ void CompactDecimalFormatTest::runIndexedTest(
 }
 
 void CompactDecimalFormatTest::TestEnglishShort() {
-  CheckLocale("en", UNUM_SHORT, kEnglishShort, LENGTHOF(kEnglishShort));
+  CheckLocale("en", UNUM_SHORT, kEnglishShort, uprv_lengthof(kEnglishShort));
 }
 
 void CompactDecimalFormatTest::TestSerbianShort() {
-  CheckLocale("sr", UNUM_SHORT, kSerbianShort, LENGTHOF(kSerbianShort));
+  CheckLocale("sr", UNUM_SHORT, kSerbianShort, uprv_lengthof(kSerbianShort));
 }
 
 void CompactDecimalFormatTest::TestSerbianLong() {
-  CheckLocale("sr", UNUM_LONG, kSerbianLong, LENGTHOF(kSerbianLong));
+  CheckLocale("sr", UNUM_LONG, kSerbianLong, uprv_lengthof(kSerbianLong));
 }
 
 void CompactDecimalFormatTest::TestSerbianLongNegative() {
-  CheckLocale("sr", UNUM_LONG, kSerbianLongNegative, LENGTHOF(kSerbianLongNegative));
+  CheckLocale("sr", UNUM_LONG, kSerbianLongNegative, uprv_lengthof(kSerbianLongNegative));
 }
 
 void CompactDecimalFormatTest::TestJapaneseShort() {
-  CheckLocale(Locale::getJapan(), UNUM_SHORT, kJapaneseShort, LENGTHOF(kJapaneseShort));
+  CheckLocale(Locale::getJapan(), UNUM_SHORT, kJapaneseShort, uprv_lengthof(kJapaneseShort));
 }
 
 void CompactDecimalFormatTest::TestSwahiliShort() {
-  CheckLocale("sw", UNUM_SHORT, kSwahiliShort, LENGTHOF(kSwahiliShort));
+  CheckLocale("sw", UNUM_SHORT, kSwahiliShort, uprv_lengthof(kSwahiliShort));
 }
 
 void CompactDecimalFormatTest::TestFieldPosition() {
@@ -259,7 +258,7 @@ void CompactDecimalFormatTest::TestFieldPosition() {
 }
 
 void CompactDecimalFormatTest::TestCsShort() {
-  CheckLocale("cs", UNUM_SHORT, kCsShort, LENGTHOF(kCsShort));
+  CheckLocale("cs", UNUM_SHORT, kCsShort, uprv_lengthof(kCsShort));
 }
 
 void CompactDecimalFormatTest::TestSkLong() {
@@ -268,15 +267,15 @@ void CompactDecimalFormatTest::TestSkLong() {
   //   few{"0"}
   //   one{"0"}
   //   other{"0"}
-  CheckLocale("sk", UNUM_LONG, kSkLong, LENGTHOF(kSkLong));
+  CheckLocale("sk", UNUM_LONG, kSkLong, uprv_lengthof(kSkLong));
 }
 
 void CompactDecimalFormatTest::TestSwahiliShortNegative() {
-  CheckLocale("sw", UNUM_SHORT, kSwahiliShortNegative, LENGTHOF(kSwahiliShortNegative));
+  CheckLocale("sw", UNUM_SHORT, kSwahiliShortNegative, uprv_lengthof(kSwahiliShortNegative));
 }
 
 void CompactDecimalFormatTest::TestArabicLong() {
-  CheckLocale("ar", UNUM_LONG, kArabicLong, LENGTHOF(kArabicLong));
+  CheckLocale("ar", UNUM_LONG, kArabicLong, uprv_lengthof(kArabicLong));
 }
 
 void CompactDecimalFormatTest::TestSignificantDigits() {

@@ -20,9 +20,8 @@
 #include "unicode/ucnv.h"
 #include "unicode/uiter.h"
 #include "cintltst.h"
+#include "cmemory.h"
 #include <string.h>
-
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 /* get the sign of an integer */
 #define _SIGN(value) ((value)==0 ? 0 : ((int32_t)(value)>>31)|1)
@@ -719,12 +718,12 @@ TestSurrogateSearching() {
     if(
         first!=u_strchr(s, nul) ||
         first!=u_strchr32(s, nul) ||
-        first!=u_memchr(s, nul, LENGTHOF(s)) ||
-        first!=u_memchr32(s, nul, LENGTHOF(s)) ||
+        first!=u_memchr(s, nul, uprv_lengthof(s)) ||
+        first!=u_memchr32(s, nul, uprv_lengthof(s)) ||
         first!=u_strrchr(s, nul) ||
         first!=u_strrchr32(s, nul) ||
-        first!=u_memrchr(s, nul, LENGTHOF(s)) ||
-        first!=u_memrchr32(s, nul, LENGTHOF(s))
+        first!=u_memrchr(s, nul, uprv_lengthof(s)) ||
+        first!=u_memrchr32(s, nul, uprv_lengthof(s))
     ) {
         log_err("error: one of the u_str[|mem][r]chr[32](s, nul) does not find the terminator of s\n");
     }
@@ -734,13 +733,13 @@ TestSurrogateSearching() {
         s!=u_strstr(s, &nul) ||
         s!=u_strFindFirst(s, -1, &nul, -1) ||
         s!=u_strFindFirst(s, -1, &nul, 0) ||
-        s!=u_strFindFirst(s, LENGTHOF(s), &nul, -1) ||
-        s!=u_strFindFirst(s, LENGTHOF(s), &nul, 0) ||
+        s!=u_strFindFirst(s, uprv_lengthof(s), &nul, -1) ||
+        s!=u_strFindFirst(s, uprv_lengthof(s), &nul, 0) ||
         s!=u_strrstr(s, &nul) ||
         s!=u_strFindLast(s, -1, &nul, -1) ||
         s!=u_strFindLast(s, -1, &nul, 0) ||
-        s!=u_strFindLast(s, LENGTHOF(s), &nul, -1) ||
-        s!=u_strFindLast(s, LENGTHOF(s), &nul, 0)
+        s!=u_strFindLast(s, uprv_lengthof(s), &nul, -1) ||
+        s!=u_strFindLast(s, uprv_lengthof(s), &nul, 0)
     ) {
         log_err("error: one of the u_str[str etc](s, \"\") does not find s itself\n");
     }
@@ -1144,7 +1143,7 @@ TestCountChar32() {
     int32_t i, length, number;
 
     /* test u_strHasMoreChar32Than() with length>=0 */
-    length=LENGTHOF(string);
+    length=uprv_lengthof(string);
     while(length>=0) {
         for(i=0; i<=length; ++i) {
             for(number=-1; number<=((length-i)+2); ++number) {
@@ -1155,7 +1154,7 @@ TestCountChar32() {
     }
 
     /* test u_strHasMoreChar32Than() with NUL-termination (length=-1) */
-    length=LENGTHOF(string);
+    length=uprv_lengthof(string);
     u_memcpy(buffer, string, length);
     while(length>=0) {
         buffer[length]=0;
@@ -1454,7 +1453,7 @@ TestUCharIterator() {
     }
 
     /* test get/set state */
-    length=LENGTHOF(text)-1;
+    length=uprv_lengthof(text)-1;
     uiter_setString(&iter1, text, -1);
     uiter_setString(&iter2, text, length);
     testIteratorState(&iter1, &iter2, "UTF16IteratorState", length/2);
@@ -1477,7 +1476,7 @@ TestUCharIterator() {
     compareIterators(&iter1, "UTF16Iterator", &iter2, "UTF8Iterator_1");
 
     /* test get/set state */
-    length=LENGTHOF(text)-1;
+    length=uprv_lengthof(text)-1;
     uiter_setUTF8(&iter1, bytes, -1);
     testIteratorState(&iter1, &iter2, "UTF8IteratorState", length/2);
     testIteratorState(&iter1, &iter2, "UTF8IteratorStatePlus1", length/2+1);

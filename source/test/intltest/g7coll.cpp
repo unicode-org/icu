@@ -14,8 +14,7 @@
 #include "unicode/sortkey.h"
 #include "g7coll.h"
 #include "sfwdchit.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+#include "cmemory.h"
 
 static const UChar testCases[][G7CollationTest::MAX_TOKEN_LEN] = {
     {  0x0062 /*'b'*/, 0x006c /*'l'*/, 0x0061 /*'a'*/, 0x0062 /*'c'*/, 0x006b /*'k'*/, 
@@ -92,7 +91,7 @@ void G7CollationTest::TestG7Locales(/* char* par */)
         Locale("ja", "JP", "")
     };
 
-    for (i = 0; i < LENGTHOF(locales); i++)
+    for (i = 0; i < uprv_lengthof(locales); i++)
     {
         UnicodeString dispName;
         UErrorCode status = U_ZERO_ERROR;

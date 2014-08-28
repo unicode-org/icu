@@ -53,8 +53,6 @@
 #include "utf8collationiterator.h"
 #include "uvectr64.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 namespace {
@@ -705,7 +703,7 @@ void
 RuleBasedCollator::setFastLatinOptions(CollationSettings &ownedSettings) const {
     ownedSettings.fastLatinOptions = CollationFastLatin::getOptions(
             data, ownedSettings,
-            ownedSettings.fastLatinPrimaries, LENGTHOF(ownedSettings.fastLatinPrimaries));
+            ownedSettings.fastLatinPrimaries, uprv_lengthof(ownedSettings.fastLatinPrimaries));
 }
 
 UCollationResult
@@ -1594,21 +1592,21 @@ RuleBasedCollator::internalGetShortDefinitionString(const char *locale,
         appendAttribute(result, 'F', getAttribute(UCOL_FRENCH_COLLATION, errorCode), errorCode);
     }
     // Note: UCOL_HIRAGANA_QUATERNARY_MODE is deprecated and never changes away from default.
-    length = uloc_getKeywordValue(resultLocale, "collation", subtag, LENGTHOF(subtag), &errorCode);
+    length = uloc_getKeywordValue(resultLocale, "collation", subtag, uprv_lengthof(subtag), &errorCode);
     appendSubtag(result, 'K', subtag, length, errorCode);
-    length = uloc_getLanguage(resultLocale, subtag, LENGTHOF(subtag), &errorCode);
+    length = uloc_getLanguage(resultLocale, subtag, uprv_lengthof(subtag), &errorCode);
     appendSubtag(result, 'L', subtag, length, errorCode);
     if(attributeHasBeenSetExplicitly(UCOL_NORMALIZATION_MODE)) {
         appendAttribute(result, 'N', getAttribute(UCOL_NORMALIZATION_MODE, errorCode), errorCode);
     }
-    length = uloc_getCountry(resultLocale, subtag, LENGTHOF(subtag), &errorCode);
+    length = uloc_getCountry(resultLocale, subtag, uprv_lengthof(subtag), &errorCode);
     appendSubtag(result, 'R', subtag, length, errorCode);
     if(attributeHasBeenSetExplicitly(UCOL_STRENGTH)) {
         appendAttribute(result, 'S', getAttribute(UCOL_STRENGTH, errorCode), errorCode);
     }
-    length = uloc_getVariant(resultLocale, subtag, LENGTHOF(subtag), &errorCode);
+    length = uloc_getVariant(resultLocale, subtag, uprv_lengthof(subtag), &errorCode);
     appendSubtag(result, 'V', subtag, length, errorCode);
-    length = uloc_getScript(resultLocale, subtag, LENGTHOF(subtag), &errorCode);
+    length = uloc_getScript(resultLocale, subtag, uprv_lengthof(subtag), &errorCode);
     appendSubtag(result, 'Z', subtag, length, errorCode);
 
     if(U_FAILURE(errorCode)) { return 0; }

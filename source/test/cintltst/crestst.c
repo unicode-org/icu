@@ -28,8 +28,6 @@
 #include "crestst.h"
 #include "unicode/ctest.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 static void TestOpenDirect(void);
 static void TestFallback(void);
 static void TestTable32(void);
@@ -714,7 +712,7 @@ TestTable32(void) {
     }
 
     /* search for some items by key */
-    for(i=0; i<LENGTHOF(testcases); ++i) {
+    for(i=0; i<uprv_lengthof(testcases); ++i) {
         item=ures_getByKey(res, testcases[i].key, item, &errorCode);
         if(U_FAILURE(errorCode)) {
             log_err("unable to find the key \"%s\" in testdata/testtable32.res - %s\n",

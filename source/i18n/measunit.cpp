@@ -19,8 +19,6 @@
 #include "cstring.h"
 #include "uassert.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
-
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MeasureUnit)
@@ -641,20 +639,20 @@ int32_t MeasureUnit::getAvailable(
     if (U_FAILURE(errorCode)) {
         return 0;
     }
-    if (destCapacity < LENGTHOF(gSubTypes)) {
+    if (destCapacity < uprv_lengthof(gSubTypes)) {
         errorCode = U_BUFFER_OVERFLOW_ERROR;
-        return LENGTHOF(gSubTypes);
+        return uprv_lengthof(gSubTypes);
     }
     int32_t idx = 0;
-    for (int32_t typeIdx = 0; typeIdx < LENGTHOF(gTypes); ++typeIdx) {
+    for (int32_t typeIdx = 0; typeIdx < uprv_lengthof(gTypes); ++typeIdx) {
         int32_t len = gOffsets[typeIdx + 1] - gOffsets[typeIdx];
         for (int32_t subTypeIdx = 0; subTypeIdx < len; ++subTypeIdx) {
             dest[idx].setTo(typeIdx, subTypeIdx);
             ++idx;
         }
     }
-    U_ASSERT(idx == LENGTHOF(gSubTypes));
-    return LENGTHOF(gSubTypes);
+    U_ASSERT(idx == uprv_lengthof(gSubTypes));
+    return uprv_lengthof(gSubTypes);
 }
 
 int32_t MeasureUnit::getAvailable(
@@ -665,7 +663,7 @@ int32_t MeasureUnit::getAvailable(
     if (U_FAILURE(errorCode)) {
         return 0;
     }
-    int32_t typeIdx = binarySearch(gTypes, 0, LENGTHOF(gTypes), type);
+    int32_t typeIdx = binarySearch(gTypes, 0, uprv_lengthof(gTypes), type);
     if (typeIdx == -1) {
         return 0;
     }
@@ -682,7 +680,7 @@ int32_t MeasureUnit::getAvailable(
 
 StringEnumeration* MeasureUnit::getAvailableTypes(UErrorCode &errorCode) {
     UEnumeration *uenum = uenum_openCharStringsEnumeration(
-            gTypes, LENGTHOF(gTypes), &errorCode);
+            gTypes, uprv_lengthof(gTypes), &errorCode);
     if (U_FAILURE(errorCode)) {
         uenum_close(uenum);
         return NULL;
@@ -697,7 +695,7 @@ StringEnumeration* MeasureUnit::getAvailableTypes(UErrorCode &errorCode) {
 }
 
 int32_t MeasureUnit::getIndexCount() {
-    return gIndexes[LENGTHOF(gIndexes) - 1];
+    return gIndexes[uprv_lengthof(gIndexes) - 1];
 }
 
 MeasureUnit *MeasureUnit::create(int typeId, int subTypeId, UErrorCode &status) {
@@ -712,7 +710,7 @@ MeasureUnit *MeasureUnit::create(int typeId, int subTypeId, UErrorCode &status) 
 }
 
 void MeasureUnit::initTime(const char *timeId) {
-    int32_t result = binarySearch(gTypes, 0, LENGTHOF(gTypes), "duration");
+    int32_t result = binarySearch(gTypes, 0, uprv_lengthof(gTypes), "duration");
     U_ASSERT(result != -1);
     fTypeId = result;
     result = binarySearch(gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], timeId);
@@ -721,7 +719,7 @@ void MeasureUnit::initTime(const char *timeId) {
 }
 
 void MeasureUnit::initCurrency(const char *isoCurrency) {
-    int32_t result = binarySearch(gTypes, 0, LENGTHOF(gTypes), "currency");
+    int32_t result = binarySearch(gTypes, 0, uprv_lengthof(gTypes), "currency");
     U_ASSERT(result != -1);
     fTypeId = result;
     result = binarySearch(
@@ -729,7 +727,7 @@ void MeasureUnit::initCurrency(const char *isoCurrency) {
     if (result != -1) {
         fSubTypeId = result - gOffsets[fTypeId];
     } else {
-        uprv_strncpy(fCurrency, isoCurrency, LENGTHOF(fCurrency));
+        uprv_strncpy(fCurrency, isoCurrency, uprv_lengthof(fCurrency));
     }
 }
 
