@@ -14,6 +14,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/uclean.h"
 #include "unicode/ustring.h"
+#include "cmemory.h" // for UPRV_LENGTHOF
 
 #include "unicode/uperf.h"
 
