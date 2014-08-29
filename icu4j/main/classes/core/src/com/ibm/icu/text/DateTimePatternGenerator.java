@@ -1599,7 +1599,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private char defaultHourFormatChar = 'H';
     //private boolean chineseMonthHack = false;
     //private boolean isComplete = false;
-    private boolean frozen = false;
+    private volatile boolean frozen = false;
 
     private transient DateTimeMatcher current = new DateTimeMatcher();
     private transient FormatParser fp = new FormatParser();

@@ -1476,7 +1476,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
 
     // Freezable implementation
     
-    private boolean frozen;
+    private volatile boolean frozen;
 
     /**
      * @draft ICU 3.6

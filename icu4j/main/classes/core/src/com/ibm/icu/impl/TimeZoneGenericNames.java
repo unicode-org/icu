@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2011-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -107,7 +107,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
     private ULocale _locale;
     private TimeZoneNames _tznames;
 
-    private transient boolean _frozen;
+    private transient volatile boolean _frozen;
     private transient String _region;
     private transient WeakReference<LocaleDisplayNames> _localeDisplayNamesRef;
     private transient MessageFormat[] _patternFormatters;

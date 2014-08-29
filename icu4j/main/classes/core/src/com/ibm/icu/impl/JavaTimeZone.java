@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -235,7 +235,7 @@ public class JavaTimeZone extends TimeZone {
     }
 
     // Freezable stuffs
-    private transient boolean isFrozen = false;
+    private transient volatile boolean isFrozen = false;
 
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#isFrozen()

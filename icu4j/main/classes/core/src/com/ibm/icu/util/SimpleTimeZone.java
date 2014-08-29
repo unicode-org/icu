@@ -1410,7 +1410,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     // Freezable stuffs
-    private transient boolean isFrozen = false;
+    private volatile transient boolean isFrozen = false;
 
     /**
      * {@inheritDoc}

@@ -348,8 +348,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     private static UnicodeSet INCLUSIONS[] = null;
 
-    private BMPSet bmpSet; // The set is frozen if bmpSet or stringSpan is not null.
-    private UnicodeSetStringSpan stringSpan;
+    private volatile BMPSet bmpSet; // The set is frozen if bmpSet or stringSpan is not null.
+    private volatile UnicodeSetStringSpan stringSpan;
     //----------------------------------------------------------------
     // Public API
     //----------------------------------------------------------------

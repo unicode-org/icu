@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
 */
@@ -158,7 +158,7 @@ package com.ibm.icu.util;
  * </p>
  * 
  * <pre>
- * protected boolean immutable;
+ * protected volatile boolean frozen; // WARNING: must be volatile
  * </pre>
  * 
  * <p>
@@ -171,7 +171,7 @@ package com.ibm.icu.util;
  * };
  * 
  * public A freeze() {
- *      frozen = true;
+ *      frozen = true;  // WARNING: must be final statement before return
  *      return this;
  * }
  * </pre>
@@ -245,7 +245,8 @@ package com.ibm.icu.util;
  * fields frozen, and set the frozen flag. Any subsequent getter/setter will
  * work properly. Here is an example:
  * </p>
- * 
+ * <p><b>Warning!</b> The 'frozen' boolean MUST be volatile, and must be set as the last statement
+ * in the method.</p>
  * <pre>
  * public A freeze() {
  *      if (!frozen) {

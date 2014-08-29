@@ -1261,7 +1261,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     }
 
     // Freezable stuffs
-    private transient boolean isFrozen = false;
+    private transient volatile boolean isFrozen = false;
 
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#isFrozen()

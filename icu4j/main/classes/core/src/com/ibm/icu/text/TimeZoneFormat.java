@@ -347,7 +347,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     private transient String _region;
 
-    private transient boolean _frozen;
+    private volatile transient boolean _frozen;
 
     private transient volatile TimeZoneNames _tzdbNames;
 

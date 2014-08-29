@@ -1603,7 +1603,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
     private boolean hasArgNames;
     private boolean hasArgNumbers;
     private boolean needsAutoQuoting;
-    private boolean frozen;
+    private volatile boolean frozen;
 
     private static final ApostropheMode defaultAposMode=
         ApostropheMode.valueOf(

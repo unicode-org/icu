@@ -55,7 +55,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
     private transient boolean staleAvailableValues;
 
     private transient boolean errorOnReset;
-    private transient boolean locked;
+    private volatile transient boolean locked;
     private int lastIndex;
     private Map<String,T> stringMap;
 
