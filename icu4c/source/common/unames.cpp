@@ -1554,15 +1554,16 @@ u_charFromName(UCharNameChoice nameChoice,
         *pErrorCode = U_ILLEGAL_CHAR_FOUND;
         return error;
     }
+    // i==strlen(name)==strlen(lower)==strlen(upper)
 
     /* try extended names first */
     if (lower[0] == '<') {
         if (nameChoice == U_EXTENDED_CHAR_NAME) {
-            if (lower[--i] == '>') {
-                for (--i; lower[i] && lower[i] != '-'; --i) {
-                }
+            // Parse a string like "<category-HHHH>" where HHHH is a hex code point.
+            if (lower[--i] == '>' && i >= 3 && lower[--i] != '-') {
+                while (i >= 3 && lower[--i] != '-') {}
 
-                if (lower[i] == '-') { /* We've got a category. */
+                if (i >= 2 && lower[i] == '-') {
                     uint32_t cIdx;
 
                     lower[i] = 0;

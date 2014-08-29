@@ -49,6 +49,7 @@ static void TestCodeUnit(void);
 static void TestCodePoint(void);
 static void TestCharLength(void);
 static void TestCharNames(void);
+static void TestUCharFromNameUnderflow(void);
 static void TestMirroring(void);
 static void TestUScriptRunAPI(void);
 static void TestAdditionalProperties(void);
@@ -183,6 +184,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestControlPrint, "tsutil/cucdtst/TestControlPrint");
     addTest(root, &TestIdentifier, "tsutil/cucdtst/TestIdentifier");
     addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
+    addTest(root, &TestUCharFromNameUnderflow, "tsutil/cucdtst/TestUCharFromNameUnderflow");
     addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
     addTest(root, &TestUScriptCodeAPI, "tsutil/cucdtst/TestUScriptCodeAPI");
     addTest(root, &TestHasScript, "tsutil/cucdtst/TestHasScript");
@@ -1935,6 +1937,35 @@ TestCharNames() {
     }
 
     /* ### TODO: test error cases and other interesting things */
+}
+
+static void
+TestUCharFromNameUnderflow() {
+    // Ticket #10889: Underflow crash when there is no dash.
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UChar32 c=u_charFromName(U_EXTENDED_CHAR_NAME, "<NO BREAK SPACE>", &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        log_err("u_charFromName(<NO BREAK SPACE>) = U+%04x but should fail - %s\n", c, u_errorName(errorCode));
+    }
+
+    // Test related edge cases.
+    errorCode=U_ZERO_ERROR;
+    c=u_charFromName(U_EXTENDED_CHAR_NAME, "<-00a0>", &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        log_err("u_charFromName(<-00a0>) = U+%04x but should fail - %s\n", c, u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    c=u_charFromName(U_EXTENDED_CHAR_NAME, "<control->", &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        log_err("u_charFromName(<control->) = U+%04x but should fail - %s\n", c, u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    c=u_charFromName(U_EXTENDED_CHAR_NAME, "<control-111111>", &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        log_err("u_charFromName(<control-111111>) = U+%04x but should fail - %s\n", c, u_errorName(errorCode));
+    }
 }
 
 /* test u_isMirrored() and u_charMirror() ----------------------------------- */
