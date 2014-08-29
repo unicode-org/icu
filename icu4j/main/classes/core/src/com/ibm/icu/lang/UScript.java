@@ -1,9 +1,9 @@
 /**
-*******************************************************************************
-* Copyright (C) 2001-2014 International Business Machines Corporation and
-* others. All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ * Copyright (C) 2001-2014 International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.lang;
 
@@ -585,7 +585,7 @@ public final class UScript {
      * @stable ICU 3.6
      */
     public static final int UNKNOWN                       = 103;/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
-    
+
     /**
      * ISO 15924 script code
      * @stable ICU 3.8
@@ -646,7 +646,7 @@ public final class UScript {
      * @stable ICU 3.8
      */
     public static final int MEITEI_MAYEK                  = 115;/* Mtei */
-    
+
     /**
      * ISO 15924 script code
      * @stable ICU 4.0
@@ -1020,11 +1020,9 @@ public final class UScript {
     public static final int[] getCode(String nameOrAbbrOrLocale) {
         boolean triedCode = false;
         if (nameOrAbbrOrLocale.indexOf('_') < 0 && nameOrAbbrOrLocale.indexOf('-') < 0) {
-            try {
-                return new int[] {
-                    UCharacter.getPropertyValueEnum(UProperty.SCRIPT, nameOrAbbrOrLocale)
-                };
-            } catch (IllegalArgumentException ignored) {
+            int propNum = UCharacter.getPropertyValueEnumNoThrow(UProperty.SCRIPT, nameOrAbbrOrLocale);
+            if (propNum != UProperty.UNDEFINED) {
+                return new int[] {propNum};
             }
             triedCode = true;
         }
@@ -1033,11 +1031,9 @@ public final class UScript {
             return scripts;
         }
         if (!triedCode) {
-            try {
-                return new int[] {
-                    UCharacter.getPropertyValueEnum(UProperty.SCRIPT, nameOrAbbrOrLocale)
-                };
-            } catch (IllegalArgumentException ignored) {
+            int propNum = UCharacter.getPropertyValueEnumNoThrow(UProperty.SCRIPT, nameOrAbbrOrLocale);
+            if (propNum != UProperty.UNDEFINED) {
+                return new int[] {propNum};
             }
         }
         return null;
@@ -1055,11 +1051,8 @@ public final class UScript {
      * @provisional This API might change or be removed in a future release.
      */
     public static final int getCodeFromName(String nameOrAbbr) {
-        try {
-            return UCharacter.getPropertyValueEnum(UProperty.SCRIPT, nameOrAbbr);
-        } catch (IllegalArgumentException e) {
-            return INVALID_CODE;
-        }
+        int propNum = UCharacter.getPropertyValueEnumNoThrow(UProperty.SCRIPT, nameOrAbbr);
+        return propNum == UProperty.UNDEFINED ? INVALID_CODE : propNum;
     }
 
     /**
@@ -1184,8 +1177,8 @@ public final class UScript {
      */
     public static final String getName(int scriptCode){
         return UCharacter.getPropertyValueName(UProperty.SCRIPT,
-                                               scriptCode,
-                                               UProperty.NameChoice.LONG);
+                scriptCode,
+                UProperty.NameChoice.LONG);
     }
 
     /**
@@ -1197,8 +1190,8 @@ public final class UScript {
      */
     public static final String getShortName(int scriptCode){
         return UCharacter.getPropertyValueName(UProperty.SCRIPT,
-                                               scriptCode,
-                                               UProperty.NameChoice.SHORT);
+                scriptCode,
+                UProperty.NameChoice.SHORT);
     }
 
     /**
@@ -1208,19 +1201,19 @@ public final class UScript {
     private static final class ScriptMetadata {
         // 0 = NOT_ENCODED, no sample character, default false script properties.
         // Bits 20.. 0: sample character
-    
+
         // Bits 23..21: usage
         private static final int UNKNOWN = 1 << 21;
         private static final int EXCLUSION = 2 << 21;
         private static final int LIMITED_USE = 3 << 21;
         private static final int ASPIRATIONAL = 4 << 21;
         private static final int RECOMMENDED = 5 << 21;
-    
+
         // Bits 31..24: Single-bit flags
         private static final int RTL = 1 << 24;
         private static final int LB_LETTERS = 1 << 25;
         private static final int CASED = 1 << 26;
-    
+
         private static final int SCRIPT_PROPS[] = {
             // Begin copy-paste output from
             // tools/trunk/unicode/py/parsescriptmetadata.py
