@@ -95,6 +95,11 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
                 UScriptCode* fillIn,
                 int32_t capacity,
                 UErrorCode* err){
+    UBool triedCode;
+    char likely[ULOC_FULLNAME_CAPACITY];
+    UErrorCode internalErrorCode;
+    int32_t length;
+
     if(U_FAILURE(*err)) {
         return 0;
     }
@@ -104,7 +109,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
         return 0;
     }
 
-    UBool triedCode = FALSE;
+    triedCode = FALSE;
     if(uprv_strchr(nameOrAbbrOrLocale, '-')==NULL && uprv_strchr(nameOrAbbrOrLocale, '_')==NULL ){
         /* try long and abbreviated script names first */
         UScriptCode code = (UScriptCode) u_getPropertyValueEnum(UCHAR_SCRIPT, nameOrAbbrOrLocale);
@@ -113,9 +118,8 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
         }
         triedCode = TRUE;
     }
-    char likely[ULOC_FULLNAME_CAPACITY];
-    UErrorCode internalErrorCode = U_ZERO_ERROR;
-    int32_t length = getCodesFromLocale(nameOrAbbrOrLocale, fillIn, capacity, err);
+    internalErrorCode = U_ZERO_ERROR;
+    length = getCodesFromLocale(nameOrAbbrOrLocale, fillIn, capacity, err);
     if(U_FAILURE(*err) || length != 0) {
         return length;
     }
