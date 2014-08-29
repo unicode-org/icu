@@ -4631,6 +4631,26 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
+     * Same as {@link #getPropertyValueEnum(int, CharSequence)}, except doesn't throw exception. Instead, returns UProperty.UNDEFINED.
+     * @param property  Same as {@link #getPropertyValueEnum(int, CharSequence)}
+     * @param valueAlias    Same as {@link #getPropertyValueEnum(int, CharSequence)}
+     * @return returns UProperty.UNDEFINED if the value is not valid, otherwise the value.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static int getPropertyValueEnumNoThrow(int property, CharSequence valueAlias) {
+        int propEnum;
+        try {
+            propEnum = UPropertyAliases.INSTANCE.getPropertyValueEnum(property, valueAlias);
+        } catch (Exception e) {
+            propEnum = UProperty.UNDEFINED;
+        }
+        return propEnum;
+    }
+
+
+    /**
      * {@icu} Returns a code point corresponding to the two UTF16 characters.
      * @param lead the lead char
      * @param trail the trail char
