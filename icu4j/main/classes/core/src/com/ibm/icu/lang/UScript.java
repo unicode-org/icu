@@ -1169,10 +1169,13 @@ public final class UScript {
     }
 
     /**
-     * Gets a script name associated with the given script code.
-     * Returns  "Malayam" given MALAYAM
+     * Returns the long Unicode script name, if there is one.
+     * Otherwise returns the 4-letter ISO 15924 script code.
+     * Returns "Malayam" given MALAYALAM.
+     *
      * @param scriptCode int script code
-     * @return script name as a string in full as given in TR#24
+     * @return long script name as given in PropertyValueAliases.txt, or the 4-letter code
+     * @throws IllegalArgumentException if the script code is not valid
      * @stable ICU 2.4
      */
     public static final String getName(int scriptCode){
@@ -1182,10 +1185,13 @@ public final class UScript {
     }
 
     /**
-     * Gets a script name associated with the given script code.
-     * Returns  "Mlym" given MALAYAM
+     * Returns the 4-letter ISO 15924 script code,
+     * which is the same as the short Unicode script name if Unicode has names for the script.
+     * Returns "Mlym" given MALAYALAM.
+     *
      * @param scriptCode int script code
-     * @return script abbreviated name as a string  as given in TR#24
+     * @return short script name (4-letter code)
+     * @throws IllegalArgumentException if the script code is not valid
      * @stable ICU 2.4
      */
     public static final String getShortName(int scriptCode){
