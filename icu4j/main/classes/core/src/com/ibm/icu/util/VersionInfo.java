@@ -604,8 +604,11 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @param minDigits Minimum number of version digits
      * @param maxDigits Maximum number of version digits
      * @return A tailored version string
+     * @internal
+     * @deprecated for use by CLDR
      */
-    private String getVersionString(int minDigits, int maxDigits) {
+    @Deprecated
+    public String getVersionString(int minDigits, int maxDigits) {
         if (minDigits < 1 || maxDigits < 1
                 || minDigits > 4 || maxDigits > 4 || minDigits > maxDigits) {
             throw new IllegalArgumentException("Invalid min/maxDigits range");
