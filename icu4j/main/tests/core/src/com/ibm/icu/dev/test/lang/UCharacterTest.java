@@ -1214,6 +1214,33 @@ public final class UCharacterTest extends TestFmwk
 
     }
 
+    public void TestUCharFromNameUnderflow() {
+        // Ticket #10889: Underflow crash when there is no dash.
+        int c = UCharacter.getCharFromExtendedName("<NO BREAK SPACE>");
+        if(c >= 0) {
+            errln("UCharacter.getCharFromExtendedName(<NO BREAK SPACE>) = U+" + hex(c) +
+                    " but should fail (-1)");
+        }
+
+        // Test related edge cases.
+        c = UCharacter.getCharFromExtendedName("<-00a0>");
+        if(c >= 0) {
+            errln("UCharacter.getCharFromExtendedName(<-00a0>) = U+" + hex(c) +
+                    " but should fail (-1)");
+        }
+
+        c = UCharacter.getCharFromExtendedName("<control->");
+        if(c >= 0) {
+            errln("UCharacter.getCharFromExtendedName(<control->) = U+" + hex(c) +
+                    " but should fail (-1)");
+        }
+
+        c = UCharacter.getCharFromExtendedName("<control-111111>");
+        if(c >= 0) {
+            errln("UCharacter.getCharFromExtendedName(<control-111111>) = U+" + hex(c) +
+                    " but should fail (-1)");
+        }
+    }
 
     /**
     * Testing name iteration
