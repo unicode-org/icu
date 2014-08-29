@@ -123,9 +123,7 @@ public final class UTS46 extends IDNA {
         resetInfo(info);
         int srcLength=src.length();
         if(srcLength==0) {
-            if(toASCII) {
-                addError(info, Error.EMPTY_LABEL);
-            }
+            addError(info, Error.EMPTY_LABEL);
             return dest;
         }
         // ASCII fastpath
@@ -177,12 +175,11 @@ public final class UTS46 extends IDNA {
                         ++i;  // '.' was copied to dest already
                         break;
                     }
-                    if(toASCII) {
-                        if(i==labelStart) {
-                            addLabelError(info, Error.EMPTY_LABEL);
-                        } else if((i-labelStart)>63) {
-                            addLabelError(info, Error.LABEL_TOO_LONG);
-                        }
+                    if(i==labelStart) {
+                        addLabelError(info, Error.EMPTY_LABEL);
+                    }
+                    if(toASCII && (i-labelStart)>63) {
+                        addLabelError(info, Error.LABEL_TOO_LONG);
                     }
                     promoteAndResetLabelErrors(info);
                     labelStart=i+1;
@@ -357,9 +354,7 @@ public final class UTS46 extends IDNA {
         }
         // Validity check
         if(labelLength==0) {
-            if(toASCII) {
-                addLabelError(info, Error.EMPTY_LABEL);
-            }
+            addLabelError(info, Error.EMPTY_LABEL);
             return replaceLabel(dest, destLabelStart, destLabelLength, labelString, labelLength);
         }
         // labelLength>0
