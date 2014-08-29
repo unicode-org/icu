@@ -445,22 +445,25 @@ U_STABLE int32_t  U_EXPORT2
 uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capacity,UErrorCode *err);
 
 /**
- * Gets a script name associated with the given script code. 
- * Returns  "Malayam" given USCRIPT_MALAYALAM
+ * Returns the long Unicode script name, if there is one.
+ * Otherwise returns the 4-letter ISO 15924 script code.
+ * Returns "Malayam" given USCRIPT_MALAYALAM.
+ *
  * @param scriptCode UScriptCode enum
- * @return script long name as given in
- * PropertyValueAliases.txt, or NULL if scriptCode is invalid
+ * @return long script name as given in PropertyValueAliases.txt, or the 4-letter code,
+ * or NULL if scriptCode is invalid
  * @stable ICU 2.4
  */
 U_STABLE const char*  U_EXPORT2 
 uscript_getName(UScriptCode scriptCode);
 
 /**
- * Gets a script name associated with the given script code. 
- * Returns  "Mlym" given USCRIPT_MALAYALAM
+ * Returns the 4-letter ISO 15924 script code,
+ * which is the same as the short Unicode script name if Unicode has names for the script.
+ * Returns "Mlym" given USCRIPT_MALAYALAM.
+ *
  * @param scriptCode UScriptCode enum
- * @return script abbreviated name as given in
- * PropertyValueAliases.txt, or NULL if scriptCode is invalid
+ * @return short script name (4-letter code), or NULL if scriptCode is invalid
  * @stable ICU 2.4
  */
 U_STABLE const char*  U_EXPORT2 
