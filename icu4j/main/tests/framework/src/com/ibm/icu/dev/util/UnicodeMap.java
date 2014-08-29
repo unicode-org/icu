@@ -923,7 +923,8 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
     }
     
     /**
-     * Struct-like class used to iterate over a UnicodeMap in a for loop.
+     * Struct-like class used to iterate over a UnicodeMap in a for loop. 
+     * If the value is a string, then codepoint == codepointEnd == -1. Otherwise the string is null;
      * Caution: The contents may change during the iteration!
      */
     public static class EntryRange<T> {
@@ -950,10 +951,10 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
     }
 
     private class EntryRanges implements Iterable<EntryRange<T>>, Iterator<EntryRange<T>> {
-        int pos;
-        EntryRange result = new EntryRange();
-        int lastRealRange = values[length-2] == null ? length - 2 : length - 1;
-        Iterator<Entry<String, T>> stringIterator = stringMap == null ? null : stringMap.entrySet().iterator();
+        private int pos;
+        private EntryRange<T> result = new EntryRange<T>();
+        private int lastRealRange = values[length-2] == null ? length - 2 : length - 1;
+        private Iterator<Entry<String, T>> stringIterator = stringMap == null ? null : stringMap.entrySet().iterator();
         
         public Iterator<EntryRange<T>> iterator() {
             return this;
@@ -961,7 +962,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
         public boolean hasNext() {
             return pos < lastRealRange || (stringIterator != null && stringIterator.hasNext());
         }
-        public EntryRange next() {
+        public EntryRange<T> next() {
             // a range may be null, but then the next one must not be (except the final range)
             if (pos < lastRealRange) {
                 T temp = values[pos];
@@ -1172,5 +1173,13 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
             }
         }
         return putAll(toNuke, null);
+    }
+    
+    /**
+     * Returns the keys that consist of multiple code points.
+     * @return
+     */
+    public Set<String> stringKeys() {
+        return stringMap.keySet();
     }
 }
