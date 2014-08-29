@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -749,7 +749,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return this;
         }
 
-        public final UnicodeProperty getProperty(String propertyAlias) {
+        public UnicodeProperty getProperty(String propertyAlias) {
             return (UnicodeProperty) skeletonNames
             .get(toSkeleton(propertyAlias));
         }
