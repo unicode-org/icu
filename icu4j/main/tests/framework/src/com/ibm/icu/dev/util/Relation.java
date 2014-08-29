@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2012, International Business Machines
+ * Copyright (c) 2002-2014, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
@@ -269,7 +269,7 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
         return this;
     }
 
-    boolean frozen = false;
+    volatile boolean frozen = false;
 
     public boolean isFrozen() {
         return frozen;
@@ -277,13 +277,13 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
 
     public Object freeze() {
         if (!frozen) {
-            frozen = true;
             // does not handle one level down, so we do that on a case-by-case basis
             for (K key : data.keySet()) {
                 data.put(key, Collections.unmodifiableSet(data.get(key)));
             }
             // now do top level
             data = Collections.unmodifiableMap(data);
+            frozen = true;
         }
         return this;
     }

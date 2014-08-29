@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011-2013, International Business Machines
+*   Copyright (C) 2011-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2011jul14
@@ -113,7 +113,7 @@ public final class MessagePatternUtil {
             return this;
         }
 
-        private List<MessageContentsNode> list = new ArrayList<MessageContentsNode>();
+        private volatile List<MessageContentsNode> list = new ArrayList<MessageContentsNode>();
     }
 
     /**
@@ -391,7 +391,7 @@ public final class MessagePatternUtil {
         private MessagePattern.ArgType argType;
         private double offset;
         private boolean explicitOffset;
-        private List<VariantNode> list = new ArrayList<VariantNode>();
+        private volatile List<VariantNode> list = new ArrayList<VariantNode>();
     }
 
     /**

@@ -531,7 +531,7 @@ public class LocaleMatcher {
 
         }
 
-        private boolean frozen = false;
+        private volatile boolean frozen = false;
 
         public ScoreData freeze() {
             return this;
@@ -703,7 +703,7 @@ public class LocaleMatcher {
             }
         }
 
-        private boolean frozen = false;
+        private volatile boolean frozen = false;
 
         /** 
          * {@inheritDoc}

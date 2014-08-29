@@ -283,7 +283,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
     // HashMap( skeleton, HashMap(largest_different_field, pattern) )
     private Map<String, Map<String, PatternInfo>> fIntervalPatterns = null;
 
-    private transient boolean frozen = false;
+    private transient volatile boolean frozen = false;
     
     // If true, fIntervalPatterns should not be modified in-place because it
     // is shared with other objects. Unlike frozen which is always true once
@@ -839,8 +839,8 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @stable ICU 4.4
      */
     public DateIntervalInfo freeze() {
-        frozen = true;
         fIntervalPatternsReadOnly = true;
+        frozen = true;
         return this;
     }
     

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2011, Google, International Business Machines
+ * Copyright (c) 2002-2014, Google, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
@@ -15,7 +15,7 @@ import com.ibm.icu.util.Freezable;
 public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
                                         Freezable<Row<C0, C1, C2, C3, C4>>{
     protected Object[] items;
-    protected boolean frozen;
+    protected volatile boolean frozen;
 
     /**
      * Convenience Methods
