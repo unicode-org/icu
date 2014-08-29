@@ -605,7 +605,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @param maxDigits Maximum number of version digits
      * @return A tailored version string
      * @internal
-     * @deprecated for use by CLDR
+     * @deprecated This API is ICU internal only. (For use in CLDR, etc.)
      */
     @Deprecated
     public String getVersionString(int minDigits, int maxDigits) {
