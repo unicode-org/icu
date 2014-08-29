@@ -319,9 +319,7 @@ UTS46::process(const UnicodeString &src,
     info.reset();
     int32_t srcLength=src.length();
     if(srcLength==0) {
-        if(toASCII) {
-            info.errors|=UIDNA_ERROR_EMPTY_LABEL;
-        }
+        info.errors|=UIDNA_ERROR_EMPTY_LABEL;
         return dest;
     }
     UChar *destArray=dest.getBuffer(srcLength);
@@ -379,12 +377,11 @@ UTS46::process(const UnicodeString &src,
                     ++i;  // '.' was copied to dest already
                     break;
                 }
-                if(toASCII) {
-                    if(i==labelStart) {
-                        info.labelErrors|=UIDNA_ERROR_EMPTY_LABEL;
-                    } else if((i-labelStart)>63) {
-                        info.labelErrors|=UIDNA_ERROR_LABEL_TOO_LONG;
-                    }
+                if(i==labelStart) {
+                    info.labelErrors|=UIDNA_ERROR_EMPTY_LABEL;
+                }
+                if(toASCII && (i-labelStart)>63) {
+                    info.labelErrors|=UIDNA_ERROR_LABEL_TOO_LONG;
                 }
                 info.errors|=info.labelErrors;
                 info.labelErrors=0;
@@ -420,9 +417,7 @@ UTS46::processUTF8(const StringPiece &src,
     // Arguments are fine, reset output values.
     info.reset();
     if(srcLength==0) {
-        if(toASCII) {
-            info.errors|=UIDNA_ERROR_EMPTY_LABEL;
-        }
+        info.errors|=UIDNA_ERROR_EMPTY_LABEL;
         dest.Flush();
         return;
     }
@@ -480,12 +475,11 @@ UTS46::processUTF8(const StringPiece &src,
                     if(isLabel) {
                         break;  // Replacing with U+FFFD can be complicated for toASCII.
                     }
-                    if(toASCII) {
-                        if(i==labelStart) {
-                            info.labelErrors|=UIDNA_ERROR_EMPTY_LABEL;
-                        } else if((i-labelStart)>63) {
-                            info.labelErrors|=UIDNA_ERROR_LABEL_TOO_LONG;
-                        }
+                    if(i==labelStart) {
+                        info.labelErrors|=UIDNA_ERROR_EMPTY_LABEL;
+                    }
+                    if(toASCII && (i-labelStart)>63) {
+                        info.labelErrors|=UIDNA_ERROR_LABEL_TOO_LONG;
                     }
                     info.errors|=info.labelErrors;
                     info.labelErrors=0;
@@ -744,9 +738,7 @@ UTS46::processLabel(UnicodeString &dest,
     }
     // Validity check
     if(labelLength==0) {
-        if(toASCII) {
-            info.labelErrors|=UIDNA_ERROR_EMPTY_LABEL;
-        }
+        info.labelErrors|=UIDNA_ERROR_EMPTY_LABEL;
         return replaceLabel(dest, destLabelStart, destLabelLength, *labelString, labelLength);
     }
     // labelLength>0
