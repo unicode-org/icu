@@ -465,6 +465,7 @@ static const TestCase testCases[]={
       "1234567890123456789012345678901234567890123456789012345678901",
       UIDNA_ERROR_LABEL_TOO_LONG|UIDNA_ERROR_DOMAIN_NAME_TOO_LONG },
     // hyphen errors and empty-label errors
+    // Ticket #10883: ToUnicode also checks for empty labels.
     { ".", "B", ".", UIDNA_ERROR_EMPTY_LABEL },
     { "\\uFF0E", "B", ".", UIDNA_ERROR_EMPTY_LABEL },
     // "xn---q----jra"=="-q--a-umlaut-"
@@ -478,11 +479,13 @@ static const TestCase testCases[]={
       UIDNA_ERROR_EMPTY_LABEL|UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN|
       UIDNA_ERROR_HYPHEN_3_4 },
     { "a..c", "B", "a..c", UIDNA_ERROR_EMPTY_LABEL },
+    { "a.xn--.c", "B", "a..c", UIDNA_ERROR_EMPTY_LABEL },
     { "a.-b.", "B", "a.-b.", UIDNA_ERROR_LEADING_HYPHEN },
     { "a.b-.c", "B", "a.b-.c", UIDNA_ERROR_TRAILING_HYPHEN },
     { "a.-.c", "B", "a.-.c", UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN },
     { "a.bc--de.f", "B", "a.bc--de.f", UIDNA_ERROR_HYPHEN_3_4 },
     { "\\u00E4.\\u00AD.c", "B", "\\u00E4..c", UIDNA_ERROR_EMPTY_LABEL },
+    { "\\u00E4.xn--.c", "B", "\\u00E4..c", UIDNA_ERROR_EMPTY_LABEL },
     { "\\u00E4.-b.", "B", "\\u00E4.-b.", UIDNA_ERROR_LEADING_HYPHEN },
     { "\\u00E4.b-.c", "B", "\\u00E4.b-.c", UIDNA_ERROR_TRAILING_HYPHEN },
     { "\\u00E4.-.c", "B", "\\u00E4.-.c", UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN },
@@ -598,10 +601,9 @@ void UTS46Test::TestSomeCases() {
         ) {
             continue;
         }
-        // ToUnicode does not set length errors.
+        // ToUnicode does not set length-overflow errors.
         uint32_t uniErrors=testCase.errors&~
-            (UIDNA_ERROR_EMPTY_LABEL|
-             UIDNA_ERROR_LABEL_TOO_LONG|
+            (UIDNA_ERROR_LABEL_TOO_LONG|
              UIDNA_ERROR_DOMAIN_NAME_TOO_LONG);
         char mode=testCase.o[0];
         if(mode=='B' || mode=='N') {
