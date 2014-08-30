@@ -940,6 +940,16 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_PARSE_NO_EXPONENT,
 
+  /** 
+   * if this attribute is set to 1, specifies that, if the pattern contains a 
+   * decimal mark the input is required to have one. If this attribute is set to 0,
+   * specifies that input does not have to contain a decimal mark.
+   * Has no effect on formatting.
+   * Default: 0 (unset)
+   * @draft ICU 54
+   */
+  UNUM_PARSE_DECIMAL_MARK_REQUIRED,
+
   /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
   /** Limit of boolean attributes.
    * @internal */

@@ -1632,6 +1632,26 @@ public:
     virtual void setDecimalSeparatorAlwaysShown(UBool newValue);
 
     /**
+     * Allows you to get the parse behavior of the pattern decimal mark.
+     *
+     * @return    TRUE if input must contain a match to decimal mark in pattern
+     * @draft ICU 54
+     */
+    UBool isDecimalPatternMatchRequired(void) const;
+
+    /**
+     * Allows you to set the behavior of the pattern decimal mark.
+     * 
+     * if TRUE, the input must have a decimal mark if one was specified in the pattern. When
+     * FALSE the decimal mark may be omitted from the input.
+     *
+     * @param newValue    set TRUE if input must contain a match to decimal mark in pattern
+     * @draft ICU 54
+     */
+    virtual void setDecimalPatternMatchRequired(UBool newValue);
+
+
+    /**
      * Synthesizes a pattern string that represents the current state
      * of this Format object.
      *
