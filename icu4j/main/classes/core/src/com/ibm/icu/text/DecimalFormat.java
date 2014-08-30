@@ -2305,6 +2305,8 @@ public class DecimalFormat extends NumberFormat {
         "com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false")
         .equals("true");
 
+    // allow control of requiring a matching decimal point when parsing
+    boolean parseRequireDecimalPoint = false;
 
     // When parsing a number with big exponential value, it requires to transform the
     // value into a string representation to construct BigInteger instance.  We want to
@@ -2628,6 +2630,14 @@ public class DecimalFormat extends NumberFormat {
                 }
             }
 
+            if(digits.decimalAt == 0 && isDecimalPatternMatchRequired()) {
+                if(this.formatPattern.indexOf(decimal) != -1) {
+                    parsePosition.setIndex(oldStart);
+                    parsePosition.setErrorIndex(position);
+                    return false;
+                }
+            }
+            
             if (backup != -1)
                 position = backup;
 
@@ -3766,6 +3776,31 @@ public class DecimalFormat extends NumberFormat {
     public boolean isDecimalSeparatorAlwaysShown() {
         return decimalSeparatorAlwaysShown;
     }
+    
+    /**
+     * When decimal match is not required, the input does not have to
+     * contain a decimal mark when there is a decimal mark specified in the
+     * pattern. 
+     * @param value true if input must contain a match to decimal mark in pattern  
+     * Default is false.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+     public void setDecimalPatternMatchRequired(boolean value) {
+         parseRequireDecimalPoint = value;
+     }
+
+    /**
+     * {@icu} Returns whether the input to parsing must contain a decimal mark if there
+     * is a decimal mark in the pattern.
+     * @return true if input must contain a match to decimal mark in pattern
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    public boolean isDecimalPatternMatchRequired() {
+        return parseRequireDecimalPoint;
+    }
+
 
     /**
      * Sets the behavior of the decimal separator with integers. (The decimal separator
