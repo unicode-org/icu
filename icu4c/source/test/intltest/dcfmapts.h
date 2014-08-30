@@ -30,6 +30,7 @@ public:
     void TestScale();
     void TestFixedDecimal();
     void TestBadFastpath();
+    void TestRequiredDecimalPoint();
 private:
     /*Helper functions */
     void verify(const UnicodeString& message, const UnicodeString& got, double expected);

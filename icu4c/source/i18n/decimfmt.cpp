@@ -2944,6 +2944,18 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
             }
         }
 
+        // if we didn't see a decimal and it is required, check to see if the pattern had one
+        if(!sawDecimal && isDecimalPatternMatchRequired()) 
+        {
+            if(fFormatPattern.indexOf(DecimalFormatSymbols::kDecimalSeparatorSymbol) != 0) 
+            {
+                parsePosition.setIndex(oldStart);
+                parsePosition.setErrorIndex(position);
+                debug("decimal point match required fail!");
+                return FALSE;
+            }
+        }
+
         if (backup != -1)
         {
             position = backup;
@@ -3057,6 +3069,20 @@ printf("PP -> %d, SLOW = [%s]!    pp=%d, os=%d, err=%s\n", position, parsedNum.d
         parsePosition.setErrorIndex(position);
         return FALSE;
     }
+
+    // check if we missed a required decimal point
+    if(fastParseOk && isDecimalPatternMatchRequired()) 
+    {
+        if(fFormatPattern.indexOf(DecimalFormatSymbols::kDecimalSeparatorSymbol) != 0) 
+        {
+            parsePosition.setIndex(oldStart);
+            parsePosition.setErrorIndex(position);
+            debug("decimal point match required fail!");
+            return FALSE;
+        }
+    }
+
+
     return TRUE;
 }
 
@@ -4167,6 +4193,24 @@ DecimalFormat::setDecimalSeparatorAlwaysShown(UBool newValue)
     handleChanged();
 #endif
 }
+
+//------------------------------------------------------------------------------
+// Checks if decimal point pattern match is required
+UBool 
+DecimalFormat::isDecimalPatternMatchRequired(void) const
+{
+    return fBoolFlags.contains(UNUM_PARSE_DECIMAL_MARK_REQUIRED);
+}
+
+//------------------------------------------------------------------------------
+// Checks if decimal point pattern match is required
+         
+void 
+DecimalFormat::setDecimalPatternMatchRequired(UBool newValue)
+{
+    fBoolFlags.set(UNUM_PARSE_DECIMAL_MARK_REQUIRED, newValue);
+}
+
 
 //------------------------------------------------------------------------------
 // Emits the pattern of this DecimalFormat instance.
@@ -5480,6 +5524,7 @@ DecimalFormat& DecimalFormat::setAttribute( UNumberFormatAttribute attr,
     /* These are stored in fBoolFlags */
     case UNUM_PARSE_NO_EXPONENT:
     case UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS:
+    case UNUM_PARSE_DECIMAL_MARK_REQUIRED:
       if(!fBoolFlags.isValidValue(newValue)) {
           status = U_ILLEGAL_ARGUMENT_ERROR;
       } else {
@@ -5567,6 +5612,7 @@ int32_t DecimalFormat::getAttribute( UNumberFormatAttribute attr,
     /* These are stored in fBoolFlags */
     case UNUM_PARSE_NO_EXPONENT:
     case UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS:
+    case UNUM_PARSE_DECIMAL_MARK_REQUIRED:
       return fBoolFlags.get(attr);
 
     case UNUM_SCALE:
