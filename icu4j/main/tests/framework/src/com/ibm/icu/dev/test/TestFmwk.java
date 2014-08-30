@@ -197,7 +197,7 @@ public class TestFmwk extends AbstractTestLog {
             Target target = null;
             if (targetName != null) {
                 finishInit(); // hmmm, want to get subtest without initializing
-                              // all tests
+                // all tests
 
                 try {
                     TestFmwk test = getSubtest(targetName);
@@ -246,8 +246,8 @@ public class TestFmwk extends AbstractTestLog {
 
             for (int i = 0; i < names.length; ++i) {
                 if (names[i].equalsIgnoreCase(testName)) { // allow
-                                                           // case-insensitive
-                                                           // matching
+                    // case-insensitive
+                    // matching
                     return getSubtest(i, false);
                 }
             }
@@ -405,7 +405,7 @@ public class TestFmwk extends AbstractTestLog {
                 } catch (Exception e) {
                     handleException(e);
                 }
-                    
+
             }
             // If non-exhaustive, check if the method target
             // takes excessive time.
@@ -529,7 +529,7 @@ public class TestFmwk extends AbstractTestLog {
      */
     public void run(String[] args) {
         System.exit(run(args, new PrintWriter(System.out)));
-     }
+    }
 
     /**
      * Like run(String[]) except this allows you to specify the error log.
@@ -747,9 +747,9 @@ public class TestFmwk extends AbstractTestLog {
                 Method method = cls.getMethod(targetName, (Class[])null);
                 target = new MethodTarget(targetName, method);
             } catch (NoSuchMethodException e) {
-        if (!inheritTargets()) {
-            return new Target(targetName); // invalid target
-        }
+                if (!inheritTargets()) {
+                    return new Target(targetName); // invalid target
+                }
             } catch (SecurityException e) {
                 return null;
             }
@@ -760,21 +760,21 @@ public class TestFmwk extends AbstractTestLog {
                     String name = methods[i].getName();
                     if (name.startsWith("Test") || name.startsWith("test")) {
                         target = new MethodTarget(name, methods[i])
-                                .setNext(target);
+                        .setNext(target);
                     }
                 }
             }
         }
 
         if (inheritTargets()) {
-          Target parentTarget = getClassTargets(cls.getSuperclass(), targetName);
-          if (parentTarget == null) {
-            return target;
-          }
-          if (target == null) {
-            return parentTarget;
-          }
-          return parentTarget.append(target);
+            Target parentTarget = getClassTargets(cls.getSuperclass(), targetName);
+            if (parentTarget == null) {
+                return target;
+            }
+            if (target == null) {
+                return parentTarget;
+            }
+            return parentTarget.append(target);
         }
 
         return target;
@@ -940,21 +940,21 @@ public class TestFmwk extends AbstractTestLog {
         pw.println(" -d[escribe] Print a short descriptive string for this test and all");
         pw.println("       listed targets.");
         pw.println(" -e<n> Set exhaustiveness from 0..10.  Default is 0, fewest tests.\n"
-                 + "       To run all tests, specify -e10.  Giving -e with no <n> is\n"
-                 + "       the same as -e5.");
+                + "       To run all tests, specify -e10.  Giving -e with no <n> is\n"
+                + "       the same as -e5.");
         pw.println(" -filter:<str> Only tests matching filter will be run or listed.\n"
-                 + "       <str> is of the form ['^']text[','['^']text].\n"
-                 + "       Each string delimited by ',' is a separate filter argument.\n"
-                 + "       If '^' is prepended to an argument, its matches are excluded.\n"
-                 + "       Filtering operates on test groups as well as tests, if a test\n"
-                 + "       group is included, all its subtests that are not excluded will\n"
-                 + "       be run.  Examples:\n"
-                 + "    -filter:A -- only tests matching A are run.  If A matches a group,\n"
-                 + "       all subtests of this group are run.\n"
-                 + "    -filter:^A -- all tests except those matching A are run.  If A matches\n"
-                 + "        a group, no subtest of that group will be run.\n"
-                 + "    -filter:A,B,^C,^D -- tests matching A or B and not C and not D are run\n"
-                 + "       Note: Filters are case insensitive.");
+                + "       <str> is of the form ['^']text[','['^']text].\n"
+                + "       Each string delimited by ',' is a separate filter argument.\n"
+                + "       If '^' is prepended to an argument, its matches are excluded.\n"
+                + "       Filtering operates on test groups as well as tests, if a test\n"
+                + "       group is included, all its subtests that are not excluded will\n"
+                + "       be run.  Examples:\n"
+                + "    -filter:A -- only tests matching A are run.  If A matches a group,\n"
+                + "       all subtests of this group are run.\n"
+                + "    -filter:^A -- all tests except those matching A are run.  If A matches\n"
+                + "        a group, no subtest of that group will be run.\n"
+                + "    -filter:A,B,^C,^D -- tests matching A or B and not C and not D are run\n"
+                + "       Note: Filters are case insensitive.");
         pw.println(" -h[elp] Print this help text and exit.");
         pw.println(" -l[ist] List immediate targets of this test");
         pw.println("   -la, -listAll List immediate targets of this test, and all subtests");
@@ -968,8 +968,8 @@ public class TestFmwk extends AbstractTestLog {
         pw.println(" -prop:<key>=<value> Set optional property used by this test");
         pw.println(" -q[uiet] Do not show warnings");
         pw.println(" -r[andom][:<n>] If present, randomize targets.  If n is present,\n"
-                        + "       use it as the seed.  If random is not set, targets will\n"
-                        + "       be in alphabetical order to ensure cross-platform consistency.");
+                + "       use it as the seed.  If random is not set, targets will\n"
+                + "       be in alphabetical order to ensure cross-platform consistency.");
         pw.println(" -s[ilent] No output except error summary or exceptions.");
         pw.println(" -tfilter:<str> Transliterator Test filter of ids.");
         pw.println(" -t[ime]:<n> Print elapsed time only for tests exceeding n milliseconds.");
@@ -1277,8 +1277,8 @@ public class TestFmwk extends AbstractTestLog {
                         } else if (arg.startsWith("-e")) {
                             // see above
                             params.inclusion = (arg.length() == 2)
-                                ? 5
-                                : Integer.parseInt(arg.substring(2));
+                                    ? 5
+                                            : Integer.parseInt(arg.substring(2));
                             if (params.inclusion < 0 || params.inclusion > 10) {
                                 usageError = true;
                                 break;
@@ -1294,7 +1294,7 @@ public class TestFmwk extends AbstractTestLog {
                                     val = Long.parseLong(num);
                                 } catch (Exception e) {
                                     log.println("*** Error: could not parse time threshold '"
-                                                + num + "'");
+                                            + num + "'");
                                     usageError = true;
                                     break;
                                 }
@@ -1333,7 +1333,7 @@ public class TestFmwk extends AbstractTestLog {
                             params.props.put(temp.substring(0, eql), temp.substring(eql+1));
                         } else {
                             log.println("*** Error: unrecognized argument: "
-                                        + args[i]);
+                                    + args[i]);
                             usageError = true;
                             break;
                         }
@@ -1548,14 +1548,14 @@ public class TestFmwk extends AbstractTestLog {
         private void msg(String message, int level, boolean incCount,
                 boolean newln) {
             int oldLevel = level;
-            if (level == WARN && (!warnings && !nodata)){
-                level = ERR;
-            }
+//            if (level == WARN && (!warnings && !nodata)){
+//                level = ERR;
+//            }
 
             if (incCount) {
                 if (level == WARN) {
                     warnCount++;
-                    invalidCount++;
+//                    invalidCount++;
                 } else if (level == ERR) {
                     errorCount++;
                 }
@@ -1607,7 +1607,7 @@ public class TestFmwk extends AbstractTestLog {
             } else {
                 if(!nodataArg){
                     msg("Test " + name + " not found or not valid.", WARN, true,
-                        true);
+                            true);
                 }
             }
         }
@@ -1651,6 +1651,7 @@ public class TestFmwk extends AbstractTestLog {
             }
 
             int errorDelta = errorCount - stack.ec;
+            int warnDelta = warnCount - stack.wc;
             int invalidDelta = invalidCount - stack.ic;
 
             stack.flush();
@@ -1678,11 +1679,19 @@ public class TestFmwk extends AbstractTestLog {
             if (errorDelta != 0) {
                 log.println(" FAILED ("
                         + errorDelta
-                        + " failures"
+                        + " failure(s)"
+                        + ((warnDelta != 0) ? ", " + warnDelta
+                                + " warning(s)" : "")
                         + ((invalidDelta != 0) ? ", " + invalidDelta
-                                + " tests skipped)" : ")"));
+                                + " test(s) skipped)" : ")"));
+            } else if (warnDelta != 0) {
+                log.println(" ALERT ("
+                        + warnDelta
+                        + " warning(s)"
+                        + ((invalidDelta != 0) ? ", " + invalidDelta
+                                + " test(s) skipped)" : ")"));
             } else if (invalidDelta != 0) {
-                log.println(" Qualified (" + invalidDelta + " tests skipped)");
+                log.println(" Qualified (" + invalidDelta + " test(s) skipped)");
             } else {
                 log.println(" Passed");
             }
@@ -1868,7 +1877,7 @@ public class TestFmwk extends AbstractTestLog {
         String actualString = actual == null ? "null" : Arrays.asList(actual).toString();
         return assertEquals(message, expectedString, actualString);
     }
-    
+
     protected boolean assertEquals(String message, Object expected,
             Object actual) {
         boolean result = expected == null ? actual == null : expected
@@ -1908,7 +1917,7 @@ public class TestFmwk extends AbstractTestLog {
     protected void fail() {
         fail("");
     }
-    
+
     protected void fail(String message) {
         if (message == null) {
             message = "";            
@@ -1966,7 +1975,7 @@ public class TestFmwk extends AbstractTestLog {
         for (int i = 0; i < st.length; ++i) {
             String source = st[i].getFileName();
             if (!source.equals("TestFmwk.java") && !source.equals("AbstractTestLog.java")) {
-            	return "(" + st[i].getFileName() + ":" + st[i].getLineNumber() + ") ";
+                return "(" + st[i].getFileName() + ":" + st[i].getLineNumber() + ") ";
             }
         }
         throw new InternalError();
