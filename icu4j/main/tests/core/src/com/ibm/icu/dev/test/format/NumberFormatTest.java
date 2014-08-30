@@ -3682,4 +3682,41 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             assertEquals("Test Currency Context", TWD_changed_expected, TWD_changed);
         }
     }
+
+    public void TestParseRequiredDecimalPoint() {
+        
+        String[] testPattern = { "00.####", "00.0", "00" };
+        
+        String value2Parse = "99";
+        double parseValue  =  99;
+        DecimalFormat parser = new DecimalFormat();
+        double result;
+        boolean hasDecimalPoint; 
+        for (int i = 0; i < testPattern.length; i++) {            
+            parser.applyPattern(testPattern[i]);
+            hasDecimalPoint = testPattern[i].contains(".");
+            
+            parser.setDecimalPatternMatchRequired(false);
+            try {
+                result = parser.parse(value2Parse).doubleValue();
+                assertEquals("wrong parsed value", parseValue, result);
+            } catch (ParseException e) {
+               this.errln("Parsing " + value2Parse + " should have succeeded with " + testPattern[i] + 
+                            " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired());
+            }
+            
+            parser.setDecimalPatternMatchRequired(true);
+            try {
+                result = parser.parse(value2Parse).doubleValue();
+                if(hasDecimalPoint){
+                    this.errln("Parsing " + value2Parse + " should NOT have succeeded with " + testPattern[i] + 
+                            " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired());
+                }
+            } catch (ParseException e) {
+                    // OK, should fail
+            }
+        }
+        
+    }
+    
 }
