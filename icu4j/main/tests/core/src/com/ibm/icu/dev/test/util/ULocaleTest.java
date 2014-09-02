@@ -4508,6 +4508,10 @@ public class ULocaleTest extends TestFmwk {
                 {"ca",              "gregory-japanese-islamic", "gregory-japanese-islamic"},    // unknown type, well-formed type
                 {"zz",              "gregorian",        null},      // unknown key, ill-formed type
                 {"co",              "foo-",             null},      // unknown type, ill-formed type
+                {"variableTop",     "00A0",             "00a0"},    // valid codepoints type
+                {"variableTop",     "wxyz",             "wxyz"},      // invalid codepoints type - return as is for now
+                {"kr",              "space-punct",      "space-punct"}, // valid reordercode type
+                {"kr",              "digit-spacepunct", null},      // invalid reordercode type
         };
 
         for (String[] d : DATA) {
@@ -4542,6 +4546,10 @@ public class ULocaleTest extends TestFmwk {
                 {"zz",              "gregorian",        "gregorian"},   // unknown key, bcp ill-formed type
                 {"ca",              "gregorian-calendar",   "gregorian-calendar"},  // known key, bcp ill-formed type
                 {"co",              "e=mc2",            null},  // known key, ill-formed bcp/legacy type
+                {"variableTop",     "00A0",             "00a0"},        // valid codepoints type
+                {"variableTop",     "wxyz",             "wxyz"},        // invalid codepoints type - return as is for now
+                {"kr",              "space-punct",      "space-punct"}, // valid reordercode type
+                {"kr",              "digit-spacepunct", "digit-spacepunct"},    // invalid reordercode type, bad ok for legacy syntax
         };
 
         for (String[] d : DATA) {

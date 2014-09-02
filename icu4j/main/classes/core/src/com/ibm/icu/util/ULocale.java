@@ -3292,12 +3292,12 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @provisional This API might change or be removed in a future release.
      */
     public static String toUnicodeLocaleKey(String keyword) {
-        String uniLocKey = KeyTypeData.toBcpKey(keyword);
-        if (uniLocKey == null && UnicodeLocaleExtension.isKey(keyword)) {
+        String bcpKey = KeyTypeData.toBcpKey(keyword);
+        if (bcpKey == null && UnicodeLocaleExtension.isKey(keyword)) {
             // unknown keyword, but syntax is fine..
-            uniLocKey = AsciiUtil.toLowerString(keyword);
+            bcpKey = AsciiUtil.toLowerString(keyword);
         }
-        return uniLocKey;
+        return bcpKey;
     }
 
     /**
