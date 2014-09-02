@@ -812,7 +812,7 @@ public:
     *     position may not be valid with the altered input string.</p>
     *  @param   status  A reference to a UErrorCode to receive any errors.
     *  @return  TRUE if a match is found.
-    *  @stable @internal
+    *  @internal
     */
     virtual UBool find(UErrorCode &status);
 

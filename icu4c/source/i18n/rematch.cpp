@@ -557,6 +557,23 @@ int32_t RegexMatcher::end(int32_t group, UErrorCode &err) const {
     return (int32_t)end64(group, err);
 }
 
+//--------------------------------------------------------------------------------
+//
+//   findProgressInterrupt  This function is called once for each advance in the target
+//                          string from the find() function, and calls the user progress callback
+//                          function if there is one installed.
+//
+//         Return:  TRUE if the find operation is to be terminated.
+//                  FALSE if the find operation is to continue running.
+//
+//--------------------------------------------------------------------------------
+UBool RegexMatcher::findProgressInterrupt(int64_t pos, UErrorCode &status) {
+    if (fFindProgressCallbackFn && !(*fFindProgressCallbackFn)(fFindProgressCallbackContext, pos)) {
+        status = U_REGEX_STOPPED_BY_CALLER;
+        return TRUE;
+    }
+    return FALSE;
+}
 
 //--------------------------------------------------------------------------------
 //
@@ -2619,24 +2636,6 @@ void RegexMatcher::IncrementTime(UErrorCode &status) {
     if (fTimeLimit > 0 && fTime >= fTimeLimit) {
         status = U_REGEX_TIME_OUT;
     }
-}
-
-//--------------------------------------------------------------------------------
-//
-//   findProgressInterrupt  This function is called once for each advance in the target
-//                          string from the find() function, and calls the user progress callback
-//                          function if there is one installed.
-//
-//         Return:  TRUE if the find operation is to be terminated.
-//                  FALSE if the find operation is to continue running.
-//
-//--------------------------------------------------------------------------------
-UBool RegexMatcher::findProgressInterrupt(int64_t pos, UErrorCode &status) {
-    if (fFindProgressCallbackFn && !(*fFindProgressCallbackFn)(fFindProgressCallbackContext, pos)) {
-        status = U_REGEX_STOPPED_BY_CALLER;
-        return TRUE;
-    }
-    return FALSE;
 }
 
 //--------------------------------------------------------------------------------
