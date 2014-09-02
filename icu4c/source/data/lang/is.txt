@@ -37,6 +37,7 @@ is{
         ae{"avestíska"}
         af{"afríkanska"}
         afh{"afríhílí"}
+        agq{"aghem"}
         ak{"akan"}
         akk{"akkadíska"}
         ale{"aleúska"}
@@ -50,6 +51,7 @@ is{
         arp{"arapahó"}
         arw{"aravakska"}
         as{"assamska"}
+        asa{"asu"}
         ast{"astúríska"}
         av{"avaríska"}
         awa{"avadí"}
@@ -62,6 +64,7 @@ is{
         be{"hvítrússneska"}
         bej{"beja"}
         bem{"bemba"}
+        bez{"bena"}
         bg{"búlgarska"}
         bho{"bojpúrí"}
         bi{"bíslama"}
@@ -73,6 +76,7 @@ is{
         bo{"tíbeska"}
         br{"bretónska"}
         bra{"braí"}
+        brx{"bódó"}
         bs{"bosníska"}
         bua{"búríat"}
         bug{"búgíska"}
@@ -82,6 +86,7 @@ is{
         car{"karíbamál"}
         ce{"tsjetsjenska"}
         ceb{"kebúanó"}
+        cgg{"kíga"}
         ch{"kamorró"}
         chb{"síbsja"}
         chg{"sjagataí"}
@@ -105,6 +110,7 @@ is{
         da{"danska"}
         dak{"dakóta"}
         dar{"dargva"}
+        dav{"taíta"}
         de{"þýska"}
         de_AT{"austurrísk þýska"}
         de_CH{"svissnesk háþýska"}
@@ -112,13 +118,16 @@ is{
         den{"slavneska"}
         dgr{"dogríb"}
         din{"dinka"}
+        dje{"zarma"}
         doi{"dogrí"}
         dsb{"lágsorbneska"}
         dua{"dúala"}
         dum{"miðhollenska"}
         dv{"dívehí"}
+        dyo{"jola-fonyi"}
         dyu{"djúla"}
         dz{"dsongka"}
+        ebu{"embu"}
         ee{"ewe"}
         efi{"efík"}
         egy{"fornegypska"}
@@ -159,12 +168,13 @@ is{
         fy{"vesturfrísneska"}
         ga{"írska"}
         gaa{"ga"}
+        gag{"gagás"}
         gay{"gajó"}
         gba{"gbaja"}
         gd{"skosk gelíska"}
         gez{"gís"}
         gil{"gilberska"}
-        gl{"gallegska"}
+        gl{"galíanska"}
         gmh{"miðháþýska"}
         gn{"gvaraní"}
         goh{"fornháþýska"}
@@ -175,7 +185,8 @@ is{
         grc{"forngríska"}
         gsw{"svissnesk þýska"}
         gu{"gújaratí"}
-        gv{"manx"}
+        guz{"gusii"}
+        gv{"manska"}
         gwi{"gvísín"}
         ha{"hása"}
         hai{"haída"}
@@ -208,6 +219,8 @@ is{
         iu{"inúktitút"}
         ja{"japanska"}
         jbo{"lojban"}
+        jgo{"ngomba"}
+        jmc{"masjáme"}
         jpr{"gyðingapersneska"}
         jrb{"gyðingaarabíska"}
         jv{"javanska"}
@@ -218,17 +231,22 @@ is{
         kam{"kamba"}
         kaw{"kaví"}
         kbd{"kabardíska"}
+        kde{"makonde"}
+        kea{"grænhöfðeyska"}
         kg{"kongóska"}
         kha{"kasí"}
         kho{"kotaska"}
+        khq{"koyra chiini"}
         ki{"kíkújú"}
         kj{"kúanjama"}
         kk{"kasakska"}
         kl{"grænlenska"}
+        kln{"kalenjin"}
         km{"kmer"}
         kmb{"kimbúndú"}
         kn{"kannada"}
         ko{"kóreska"}
+        koi{"kómí-permyak"}
         kok{"konkaní"}
         kos{"kosraska"}
         kpe{"kpelle"}
@@ -236,20 +254,24 @@ is{
         krc{"karasaíbalkar"}
         kru{"kúrúk"}
         ks{"kasmírska"}
-        ku{"kúrdneska"}
+        ksb{"sjambala"}
+        ksf{"bafía"}
+        ku{"kúrdíska"}
         kum{"kúmík"}
         kut{"kútenaí"}
         kv{"komíska"}
-        kw{"korníska"}
+        kw{"kornbreska"}
         ky{"kirgiska"}
         la{"latína"}
         lad{"ladínska"}
+        lag{"langí"}
         lah{"landa"}
         lam{"lamba"}
         lb{"lúxemborgíska"}
         lez{"lesgíska"}
         lg{"ganda"}
         li{"limbúrgíska"}
+        lkt{"lakóta"}
         ln{"lingala"}
         lo{"laó"}
         lol{"mongó"}
@@ -261,6 +283,7 @@ is{
         lun{"lúnda"}
         luo{"lúó"}
         lus{"lúsaí"}
+        luy{"luyia"}
         lv{"lettneska"}
         mad{"madúrska"}
         mag{"magahí"}
@@ -271,11 +294,14 @@ is{
         mdf{"moksa"}
         mdr{"mandar"}
         men{"mende"}
-        mfe{"morisyen"}
+        mer{"merú"}
+        mfe{"máritíska"}
         mg{"malagasíska"}
         mga{"miðírska"}
+        mgh{"makhuwa-meetto"}
+        mgo{"meta’"}
         mh{"marshallska"}
-        mi{"maórí"}
+        mi{"maorí"}
         mic{"mikmak"}
         min{"mínangkabá"}
         mk{"makedónska"}
@@ -288,6 +314,7 @@ is{
         mr{"maratí"}
         ms{"malaíska"}
         mt{"maltneska"}
+        mua{"mundang"}
         mul{"margvísleg mál"}
         mus{"krík"}
         mwr{"marvarí"}
@@ -295,8 +322,9 @@ is{
         myv{"ersja"}
         na{"nárúska"}
         nap{"napólíska"}
+        naq{"nama"}
         nb{"norskt bókmál"}
-        nd{"norðurndebele"}
+        nd{"norður-ndebele"}
         nds{"lágþýska; lágsaxneska"}
         ne{"nepalska"}
         new{"nevarí"}
@@ -305,6 +333,7 @@ is{
         niu{"níveska"}
         nl{"hollenska"}
         nl_BE{"flæmska"}
+        nmg{"kwasio"}
         nn{"nýnorska"}
         no{"norska"}
         nog{"nógaí"}
@@ -312,6 +341,7 @@ is{
         nqo{"n’ko"}
         nr{"suðurndebele"}
         nso{"norðursótó"}
+        nus{"núer"}
         nv{"navahó"}
         ny{"njanja; sísjeva; sjeva"}
         nym{"njamvesí"}
@@ -342,6 +372,7 @@ is{
         pt_BR{"brasílísk portúgalska"}
         pt_PT{"evrópsk portúgalska"}
         qu{"kvesjúa"}
+        quc{"kiche"}
         raj{"rajastaní"}
         rap{"rapanúí"}
         rar{"rarótongska"}
@@ -349,27 +380,34 @@ is{
         rn{"rúndí"}
         ro{"rúmenska"}
         ro_MD{"moldóvska"}
+        rof{"rombó"}
         rom{"romaní"}
         root{"rót"}
         ru{"rússneska"}
         rw{"kínjarvanda"}
+        rwk{"rúa"}
         sa{"sanskrít"}
         sad{"sandave"}
         sah{"jakút"}
         sam{"samversk arameíska"}
+        saq{"sambúrú"}
         sas{"sasak"}
         sat{"santalí"}
+        sbp{"sangú"}
         sc{"sardínska"}
         scn{"sikileyska"}
         sco{"skoska"}
         sd{"sindí"}
         se{"norðursamíska"}
+        seh{"sena"}
         sel{"selkúp"}
+        ses{"koíraboró-senní"}
         sg{"sangó"}
         sga{"fornírska"}
         sh{"serbókróatíska"}
+        shi{"tachelhit"}
         shn{"sjan"}
-        si{"sinhala"}
+        si{"singalíska"}
         sid{"sídamó"}
         sk{"slóvakíska"}
         sl{"slóvenska"}
@@ -378,7 +416,7 @@ is{
         smj{"lúlesamíska"}
         smn{"enaresamíska"}
         sms{"skoltesamíska"}
-        sn{"shóna"}
+        sn{"shona"}
         snk{"sóninke"}
         so{"sómalska"}
         sog{"sogdíen"}
@@ -393,11 +431,13 @@ is{
         sux{"súmerska"}
         sv{"sænska"}
         sw{"svahílí"}
+        swc{"Kongó-svahílí"}
         syc{"klassísk sýrlenska"}
         syr{"sýrlenska"}
         ta{"tamílska"}
         te{"telúgú"}
         tem{"tímne"}
+        teo{"tesó"}
         ter{"terenó"}
         tet{"tetúm"}
         tg{"tadsjikska"}
@@ -422,8 +462,10 @@ is{
         tum{"túmbúka"}
         tvl{"túvalúska"}
         tw{"tví"}
+        twq{"tasawaq"}
         ty{"tahítíska"}
         tyv{"túvínska"}
+        tzm{"tamazight"}
         udm{"údmúrt"}
         ug{"úígúr"}
         uga{"úgarítíska"}
@@ -436,6 +478,7 @@ is{
         ve{"venda"}
         vi{"víetnamska"}
         vot{"votíska"}
+        vun{"vunjó"}
         wa{"vallónska"}
         wal{"valamó"}
         war{"varaí"}
@@ -443,6 +486,7 @@ is{
         wo{"volof"}
         xal{"kalmúkska"}
         xh{"sósa"}
+        xog{"sóga"}
         yao{"jaó"}
         yap{"japíska"}
         yi{"jiddíska"}
@@ -460,7 +504,7 @@ is{
         zxx{"ekkert tungumálaefni"}
     }
     LanguagesShort{
-        az{"azeri"}
+        az{"aserska"}
     }
     Scripts{
         Arab{"arabískt"}
@@ -508,21 +552,26 @@ is{
         Hans{"einfaldað han"}
         Hant{"hefðbundið han"}
     }
+    Scripts%variant{
+        Arab{"persneskt-arabískt"}
+    }
     Types{
         calendar{
             buddhist{"Búddískt dagatal"}
             chinese{"Kínverskt dagatal"}
             coptic{"Koptískt tímatal"}
-            ethiopic{"Eþíópískt tímatal"}
-            ethiopic-amete-alem{"Eþíópískt 'amete alem' tímatal"}
+            dangi{"Dangi dagatal"}
+            ethiopic{"Eþíópískt dagatal"}
+            ethiopic-amete-alem{"Eþíópískt ‘amete alem’ tímatal"}
             gregorian{"Gregorískt dagatal"}
             hebrew{"Hebreskt dagatal"}
             indian{"indverskt dagatal"}
             islamic{"Íslamskt dagatal"}
             islamic-civil{"Íslamskt borgaradagatal"}
+            iso8601{"ISO-8601 dagatal"}
             japanese{"Japanskt dagatal"}
-            persian{"Persneskt tímatal"}
-            roc{"kínverskt dagatal"}
+            persian{"Persneskt dagatal"}
+            roc{"Minguo dagatal"}
         }
         colAlternate{
             non-ignorable{"Raða táknum"}
@@ -582,15 +631,15 @@ is{
             armn{"Armenskir tölustafir"}
             armnlow{"Armenskar lágstafatölur"}
             beng{"Bengalskar tölur"}
-            deva{"Tölur í devanagari"}
+            deva{"Devanagari tölur"}
             ethi{"Eþíópískir tölustafir"}
             finance{"Viðskiptafræðileg töluorð"}
-            fullwide{"Tölur með fullri breidd"}
-            geor{"Tölustafir í georgísku"}
+            fullwide{"Tölur í fullri breidd"}
+            geor{"Georgískir tölustafir"}
             grek{"Grískir tölustafir"}
             greklow{"Grískar lágstafatölur"}
-            gujr{"Tölur í gujarati"}
-            guru{"Tölur í gurmukhi"}
+            gujr{"Gujarati-tölur"}
+            guru{"Gurmukhi-tölur"}
             hanidec{"Kínverskir tugatölustafir"}
             hans{"Einfaldaðir kínverskir tölustafir"}
             hansfin{"Einfaldaðar kínverskar fjármálatölur"}
@@ -599,27 +648,27 @@ is{
             hebr{"Hebreskir tölustafir"}
             jpan{"Japanskir tölustafir"}
             jpanfin{"Japanskar fjármálatölur"}
-            khmr{"Tölur í khmer"}
-            knda{"Tölur í kannada"}
-            laoo{"Tölur í lao"}
+            khmr{"Kmerískar tölur"}
+            knda{"Kannada-tölur"}
+            laoo{"Lao-tölur"}
             latn{"Vestrænar tölur"}
-            mlym{"Tölur í malayalam"}
+            mlym{"Malayalam-tölur"}
             mong{"Mongólskar tölur"}
-            mymr{"Tölur í myanmar"}
+            mymr{"Mjanmarskar tölur"}
             native{"Upprunalegir tölustafir"}
-            orya{"Tölur í oriya"}
+            orya{"Oriya-tölur"}
             roman{"Rómverskir tölustafir"}
-            romanlow{"Rómverkar lágstafatölur"}
-            taml{"Tamílskir tölustafir"}
+            romanlow{"Rómverskar lágstafatölur"}
+            taml{"Hefðbundnir tamílskir tölustafir"}
             tamldec{"Tamílskar tölur"}
-            telu{"Tölur í telúgú"}
+            telu{"Telúgú-tölur"}
             thai{"Tælenskar tölur"}
             tibt{"Tíbeskir tölustafir"}
             traditional{"Hefðbundin tölutákn"}
             vaii{"Vai-tölustafir"}
         }
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"tungumál: {0}"}
         script{"leturgerð: {0}"}

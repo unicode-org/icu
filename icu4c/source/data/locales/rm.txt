@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/rm.xml
  */
 rm{
-    AuxExemplarCharacters{"[á à ă â å ä ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ]"}
+    AuxExemplarCharacters{"[á ă â å ä ā æ ç ĕ ê ë ē í ĭ î ï ī ñ ó ŏ ô ö ø ō œ ú ŭ û ü ū ÿ]"}
     ExemplarCharacters{"[a à b c d e é è f g h i ì j k l m n o ò p q r s t u ù v w x y z]"}
     ExemplarCharactersIndex{"[A À B C D E É È F G H I Ì J K L M N O Ò P Q R S T U Ù V W X Y Z]"}
     LocaleScript{
@@ -38,7 +38,7 @@ rm{
             }
         }
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     calendar{
         generic{
             DateTimePatterns{
@@ -408,6 +408,11 @@ rm{
         quotationEnd{"»"}
         quotationStart{"«"}
     }
+    durationUnits{
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
+    }
     fields{
         day{
             dn{"Tag"}
@@ -441,18 +446,19 @@ rm{
             dn{"emna"}
         }
         weekday{
-            dn{"di da l'emna"}
+            dn{"di da l’emna"}
         }
         year{
             dn{"onn"}
         }
         zone{
-            dn{"zona d'urari"}
+            dn{"zona d’urari"}
         }
     }
     measurementSystemNames{
-        US{"unitads americans"}
-        metric{"unitads metrics"}
+        UK{"englais"}
+        US{"american"}
+        metric{"metric"}
     }
     units{
         duration{
@@ -482,6 +488,38 @@ rm{
             }
             year{
                 one{"{0} onn"}
+                other{"{0} onns"}
+            }
+        }
+    }
+    unitsNarrow{
+        duration{
+            day{
+                one{"{0} dis"}
+                other{"{0} dis"}
+            }
+            hour{
+                one{"{0} uras"}
+                other{"{0} uras"}
+            }
+            minute{
+                one{"{0} mins."}
+                other{"{0} mins."}
+            }
+            month{
+                one{"{0} mais"}
+                other{"{0} mais"}
+            }
+            second{
+                one{"{0} secs."}
+                other{"{0} secs."}
+            }
+            week{
+                one{"{0} emnas"}
+                other{"{0} emnas"}
+            }
+            year{
+                one{"{0} onns"}
                 other{"{0} onns"}
             }
         }

@@ -13,10 +13,6 @@ en_MO{
             "MOP$",
             "Macanese Pataca",
         }
-        USD{
-            "US$",
-            "US Dollar",
-        }
     }
-    Version{"2.0.92.29"}
+    Version{"2.1.8.19"}
 }

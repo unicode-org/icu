@@ -23,7 +23,7 @@ cy{
         017{"Canol Affrica"}
         018{"Deheudir Affrica"}
         019{"Yr Amerig"}
-        021{"America i'r Gogledd o Mecsico"}
+        021{"America i’r Gogledd o Mecsico"}
         029{"Y Caribî"}
         030{"Dwyrain Asia"}
         034{"De Asia"}
@@ -302,6 +302,13 @@ cy{
         ZW{"Zimbabwe"}
         ZZ{"Rhanbarth Anhysbys"}
     }
+    Countries%variant{
+        CD{"y Congo (G.Dd.C.)"}
+        CG{"Y Congo (Gweriniaeth)"}
+        FK{"Ynysoedd y Falkland (Ynysoedd y Malfinas)"}
+        MK{"Macedonia (CWIM)"}
+        TL{"Dwyrain Timor"}
+    }
     CountriesShort{
         GB{"DU"}
         HK{"Hong Kong"}
@@ -309,5 +316,5 @@ cy{
         PS{"Palesteina"}
         US{"UDA"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.7.80"}
 }

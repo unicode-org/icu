@@ -57,5 +57,5 @@ dje{
         zh{"Sinuwa senni"}
         zu{"Zulu senni"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.6.69"}
 }

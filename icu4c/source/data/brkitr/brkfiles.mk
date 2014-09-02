@@ -1,17 +1,17 @@
 # *   Copyright (C) 1998-2014, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-BRK_RES_CLDR_VERSION = 25
+BRK_RES_CLDR_VERSION = %version%
 # A list of txt's to build
 # Note:
 #
 #   If you are thinking of modifying this file, READ THIS.
 #
 # Instead of changing this file [unless you want to check it back in],
-# you should consider creating a 'brklocal.mk' file in this same directory.
+# you should consider creating a '%local%' file in this same directory.
 # Then, you can have your local changes remain even if you upgrade or
 # reconfigure ICU.
 #
-# Example 'brklocal.mk' files:
+# Example '%local%' files:
 #
 #  * To add an additional locale to the list:
 #    _____________________________________________________

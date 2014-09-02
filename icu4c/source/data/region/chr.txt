@@ -213,8 +213,11 @@ chr{
         US{"ᎠᎹᏰᏟ"}
         ZZ{"ᏄᏬᎵᏍᏛᎾ ᎤᏔᏂᏗᎦᏙᎯ"}
     }
+    Countries%variant{
+        FK{"ᏩᎩ ᎤᎦᏚᏛ (ᎢᏍᎳᏍ ᎹᎸᏫᎾᏍ)"}
+    }
     CountriesShort{
         MO{"ᎹᎧᎣ"}
     }
-    Version{"2.0.98.76"}
+    Version{"2.1.6.69"}
 }

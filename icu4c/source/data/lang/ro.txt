@@ -11,6 +11,7 @@
  */
 ro{
     Keys{
+        calendar{"calendar"}
         colAlternate{"Ordonare cu simbolurile ignorate"}
         colBackwards{"Ordonare inversă după accent"}
         colCaseFirst{"Ordonare după majuscule/minuscule"}
@@ -118,7 +119,7 @@ ro{
         csb{"cașubiană"}
         cu{"slavonă"}
         cv{"ciuvașă"}
-        cy{"velșă"}
+        cy{"galeză"}
         da{"daneză"}
         dak{"dakota"}
         dar{"dargwa"}
@@ -136,7 +137,7 @@ ro{
         dua{"duala"}
         dum{"olandeză mijlocie"}
         dv{"divehi"}
-        dyo{"Jola-Fonyi"}
+        dyo{"jola-fonyi"}
         dyu{"dyula"}
         dz{"dzongkha"}
         dzg{"dazaga"}
@@ -181,6 +182,7 @@ ro{
         fy{"frizonă occidentală"}
         ga{"irlandeză"}
         gaa{"ga"}
+        gag{"găgăuză"}
         gay{"gayo"}
         gba{"gbaya"}
         gd{"gaelică scoțiană"}
@@ -264,6 +266,7 @@ ro{
         kmb{"kimbundu"}
         kn{"kannada"}
         ko{"coreeană"}
+        koi{"komi-permiak"}
         kok{"konkani"}
         kos{"kosrae"}
         kpe{"kpelle"}
@@ -290,6 +293,7 @@ ro{
         lez{"lezghian"}
         lg{"ganda"}
         li{"limburgheză"}
+        lkt{"lakota"}
         ln{"lingala"}
         lo{"laoțiană"}
         lol{"mongo"}
@@ -319,7 +323,7 @@ ro{
         mg{"malgașă"}
         mga{"irlandeză mijlocie"}
         mgh{"makhuwa-meetto"}
-        mgo{"meta'"}
+        mgo{"meta’"}
         mh{"marshalleză"}
         mi{"maori"}
         mic{"micmac"}
@@ -332,7 +336,7 @@ ro{
         moh{"mohawk"}
         mos{"mossi"}
         mr{"marathi"}
-        ms{"malay"}
+        ms{"malaeză"}
         mt{"malteză"}
         mua{"mundang"}
         mul{"limbi multiple"}
@@ -396,6 +400,7 @@ ro{
         pt_BR{"portugheză braziliană"}
         pt_PT{"portugheză europeană"}
         qu{"quechua"}
+        quc{"kʼicheʼ"}
         raj{"rajasthani"}
         rap{"rapanui"}
         rar{"rarotongan"}
@@ -472,7 +477,7 @@ ro{
         tet{"tetum"}
         tg{"tadjică"}
         th{"thailandeză"}
-        ti{"tigrinya"}
+        ti{"tigrină"}
         tig{"tigre"}
         tiv{"tiv"}
         tk{"turkmenă"}
@@ -540,6 +545,9 @@ ro{
         zxx{"fară conținut lingvistic"}
         zza{"zaza"}
     }
+    Languages%variant{
+        ps{"pushto"}
+    }
     LanguagesShort{
         az{"azeră"}
         en_GB{"engleză britanică"}
@@ -549,7 +557,7 @@ ro{
         Arab{"arabă"}
         Armn{"armeană"}
         Bali{"balineză"}
-        Beng{"bengali"}
+        Beng{"bengaleză"}
         Bopo{"bopomofo"}
         Brai{"braille"}
         Cans{"silabică aborigenă canadiană unificată"}
@@ -622,11 +630,15 @@ ro{
         Hans{"han simplificată"}
         Hant{"han tradițională"}
     }
+    Scripts%variant{
+        Arab{"persano-arabă"}
+    }
     Types{
         calendar{
             buddhist{"calendar budist"}
             chinese{"calendar chinezesc"}
             coptic{"calendar copt"}
+            dangi{"calendar dangi"}
             ethiopic{"calendar etiopian"}
             ethiopic-amete-alem{"Calendarul etiopian amete alem"}
             gregorian{"calendar gregorian"}
@@ -634,9 +646,10 @@ ro{
             indian{"calendar național indian"}
             islamic{"calendar islamic"}
             islamic-civil{"calendar islamic civil"}
+            iso8601{"calendar ISO-8601"}
             japanese{"calendar japonez"}
             persian{"calendar persan"}
-            roc{"calendar al Republicii Chineze"}
+            roc{"calendarul Republicii Chineze"}
         }
         colAlternate{
             non-ignorable{"Ordonați simbolurile"}
@@ -726,7 +739,7 @@ ro{
             roman{"numerale romane"}
             romanlow{"numerale romane cu minuscule"}
             taml{"numerale tradiționale tamilă"}
-            tamldec{"cifre tamilă"}
+            tamldec{"cifre tamile"}
             telu{"cifre telugu"}
             thai{"cifre thailandeze"}
             tibt{"cifre tibetane"}
@@ -739,7 +752,7 @@ ro{
         SCOTLAND{"engleză standard scoțiană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Limbă: {0}"}
         script{"Scriere: {0}"}

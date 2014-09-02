@@ -76,7 +76,7 @@ eu{
         BR{"Brasil"}
         BS{"Bahamak"}
         BT{"Bhutan"}
-        BV{"Bouvet Uhartea"}
+        BV{"Bouvet uhartea"}
         BW{"Botswana"}
         BY{"Bielorrusia"}
         BZ{"Belize"}
@@ -302,11 +302,19 @@ eu{
         ZW{"Zimbabwe"}
         ZZ{"Eskualde ezezaguna"}
     }
+    Countries%variant{
+        CD{"Kongo (KED)"}
+        CG{"Kongo (errepublika)"}
+        FK{"Falkland uharteak (Malvina uharteak)"}
+        MK{"Mazedonia (Mazedoniako Yugoslaviar Errepublika ohia)"}
+        TL{"Timor ekialdea"}
+    }
     CountriesShort{
+        GB{"EB"}
         HK{"Hong Kong"}
         MO{"Macau"}
         PS{"Palestina"}
         US{"AEB"}
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.8.9"}
 }

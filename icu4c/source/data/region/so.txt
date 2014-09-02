@@ -238,5 +238,5 @@ so{
         ZW{"Simbaabwe"}
         ZZ{"Far aan la aqoon amase aan saxnayn"}
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.7.39"}
 }

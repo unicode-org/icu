@@ -13,9 +13,6 @@ en_GB{
         colNormalization{"Normalised Sorting"}
     }
     Languages{
-        arn{"Araucanian"}
-        bax{"Bamum"}
-        tzm{"Central Morocco Tamazight"}
         wal{"Walamo"}
     }
     LanguagesShort{
@@ -31,8 +28,9 @@ en_GB{
             yes{"Sort Unicode Normalised"}
         }
         numbers{
+            arabext{"Extended Arabic-Indic Digits"}
             fullwide{"Full-Width Digits"}
         }
     }
-    Version{"2.0.98.76"}
+    Version{"2.1.8.19"}
 }

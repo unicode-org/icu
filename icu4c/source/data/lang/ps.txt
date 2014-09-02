@@ -46,5 +46,5 @@ ps{
     Scripts{
         Arab{"عربي"}
     }
-    Version{"2.0.98.62"}
+    Version{"2.1.6.69"}
 }

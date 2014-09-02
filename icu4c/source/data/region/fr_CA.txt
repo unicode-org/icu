@@ -8,21 +8,15 @@
 // ***************************************************************************
 fr_CA{
     Countries{
-        053{"Australie et Nouvelle-Zélande"}
-        AC{"Île de l'Ascension"}
-        BL{"Saint-Barthélémy"}
         BY{"Bélarus"}
+        CC{"Îles Cocos (Keeling)"}
         FM{"Micronésie"}
         GS{"Géorgie du Sud et les îles Sandwich du Sud"}
-        IO{"Territoire britannique de l'océan Indien"}
-        MF{"Saint-Martin"}
-        PS{"Territoire palestinien"}
-        RE{"Réunion"}
-        TC{"Îles Turks et Caïques"}
-        UM{"Îles éloignées des États-Unis"}
+        MF{"Saint-Martin (France)"}
+        QO{"Océanie éloignée"}
+        SV{"Salvador"}
+        SX{"Saint-Martin (Pays-Bas)"}
+        VC{"Saint-Vincent-et-les Grenadines"}
     }
-    CountriesShort{
-        GB{"GB"}
-    }
-    Version{"2.0.92.80"}
+    Version{"2.1.8.19"}
 }

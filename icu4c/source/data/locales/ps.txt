@@ -44,7 +44,7 @@ ps{
         }
         native{"arabext"}
     }
-    Version{"2.0.98.62"}
+    Version{"2.1.6.69"}
     calendar{
         default{"persian"}
         generic{
@@ -141,8 +141,8 @@ ps{
                     wide{
                         "وری",
                         "غویی",
-                        "غبرګولی",
-                        "چنګاښ",
+                        "غبرگولی",
+                        "چنگاښ",
                         "زمری",
                         "وږی",
                         "تله",
@@ -158,5 +158,15 @@ ps{
     }
     layout{
         characters{"right-to-left"}
+    }
+    units{
+        duration{
+            day{
+                dnam{"ورځ"}
+            }
+            year{
+                dnam{"کالونه"}
+            }
+        }
     }
 }

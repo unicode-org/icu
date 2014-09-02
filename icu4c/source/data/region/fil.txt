@@ -13,33 +13,33 @@ fil{
     Countries{
         001{"Mundo"}
         002{"Africa"}
-        003{"North America"}
+        003{"Hilagang Amerika"}
         005{"South America"}
         009{"Oceania"}
-        011{"Western Africa"}
-        013{"Central America"}
-        014{"Eastern Africa"}
-        015{"Northern Africa"}
-        017{"Middle Africa"}
-        018{"Southern Africa"}
+        011{"Kanlurang Africa"}
+        013{"Gitnang Amerika"}
+        014{"Silangang Africa"}
+        015{"Hilagang Africa"}
+        017{"Gitnang Africa"}
+        018{"Katimugang Africa"}
         019{"Americas"}
-        021{"Northern America"}
+        021{"Rehiyon ng Hilagang Amerika"}
         029{"Carribbean"}
-        030{"Eastern Asia"}
-        034{"Southern Asia"}
-        035{"South-Eastern Asia"}
-        039{"Southern Europe"}
+        030{"Silangang Asya"}
+        034{"Katimugang Asya"}
+        035{"Timog-Silangang Asya"}
+        039{"Katimugang Europe"}
         053{"Australasia"}
         054{"Melanesia"}
-        057{"Micronesian Region"}
+        057{"Rehiyon ng Micronesia"}
         061{"Polynesia"}
-        142{"Asia"}
-        143{"Central Asia"}
-        145{"Western Asia"}
+        142{"Asya"}
+        143{"Gitnang Asya"}
+        145{"Kanlurang Asya"}
         150{"Europe"}
-        151{"Eastern Europe"}
-        154{"Northern Europe"}
-        155{"Western Europe"}
+        151{"Silangang Europe"}
+        154{"Hilagang Europe"}
+        155{"Kanlurang Europe"}
         419{"Latin America"}
         AC{"Acsencion island"}
         AD{"Andorra"}
@@ -86,7 +86,7 @@ fil{
         CF{"Central African Republic"}
         CG{"Congo - Brazzaville"}
         CH{"Switzerland"}
-        CI{"Côte d'Ivoire"}
+        CI{"Côte d’Ivoire"}
         CK{"Cook Islands"}
         CL{"Chile"}
         CM{"Cameroon"}
@@ -111,7 +111,7 @@ fil{
         EC{"Ecuador"}
         EE{"Estonia"}
         EG{"Egypt"}
-        EH{"Western Sahara"}
+        EH{"Kanlurang Sahara"}
         ER{"Eritrea"}
         ES{"Spain"}
         ET{"Ethiopia"}
@@ -256,7 +256,7 @@ fil{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Suriname"}
-        SS{"South Sudan"}
+        SS{"Timog Sudan"}
         ST{"São Tomé and Príncipe"}
         SV{"El Salvador"}
         SX{"Sint Maarten"}
@@ -302,6 +302,14 @@ fil{
         ZW{"Zimbabwe"}
         ZZ{"Hindi Kilalang Rehiyon"}
     }
+    Countries%variant{
+        CD{"Congo (DRC)"}
+        CG{"Congo (Republic)"}
+        CI{"Ivory Coast"}
+        FK{"Falkland Islands (Islas Malvinas)"}
+        MK{"Macedonia (FYROM)"}
+        TL{"East Timor"}
+    }
     CountriesShort{
         GB{"U.K."}
         HK{"Hong Kong"}
@@ -309,5 +317,5 @@ fil{
         PS{"Palestine"}
         US{"U.S."}
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.8.9"}
 }

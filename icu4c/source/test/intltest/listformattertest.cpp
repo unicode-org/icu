@@ -182,8 +182,8 @@ void ListFormatterTest::TestZulu() {
     UnicodeString results[4] = {
         one,
         "I-" + one + " ne-" + two,
-        one + ", " + two + ", no-" + three,
-        one + ", " + two + ", " + three + ", no-" + four
+        one + ", " + two + ", ne-" + three,
+        one + ", " + two + ", " + three + ", ne-" + four
     };
 
     CheckFourCases("zu", one, two, three, four, results);

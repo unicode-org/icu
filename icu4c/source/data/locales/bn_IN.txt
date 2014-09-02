@@ -120,7 +120,7 @@ bn_IN{
             }
         }
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.8.19"}
     calendar{
         gregorian{
             intervalFormats{
@@ -133,7 +133,7 @@ bn_IN{
                     abbreviated{
                         "ত্রৈমাসিক",
                         "ষাণ্মাসিক",
-                        "চতুর্থাংশ ৩",
+                        "তৃ.ত্রৈ.এক.চতুর্থাংশ",
                         "বার্ষিক",
                     }
                     wide{

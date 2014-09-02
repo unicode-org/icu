@@ -100,7 +100,7 @@ ha{
         HU{"Hungari"}
         ID{"Indunusiya"}
         IE{"Ayalan"}
-        IL{"Izira'ila"}
+        IL{"Iziraʼila"}
         IN{"Indiya"}
         IO{"Yankin Birtaniya Na Tekun Indiya"}
         IQ{"Iraƙi"}
@@ -237,5 +237,5 @@ ha{
         ZM{"Zambiya"}
         ZW{"Zimbabuwe"}
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.7.39"}
 }

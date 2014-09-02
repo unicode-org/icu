@@ -7,11 +7,8 @@
 // *
 // ***************************************************************************
 zh_Hans_SG{
-    Version{"2.0.92.87"}
+    Version{"2.1.8.19"}
     zoneStrings{
-        "America:Menominee"{
-            ec{"梅诺米尼"}
-        }
         "America:Pangnirtung"{
             ec{"旁尼唐"}
         }
@@ -71,5 +68,6 @@ zh_Hans_SG{
         "meta:Tuvalu"{
             ls{"吐瓦鲁时间"}
         }
+        gmtFormat{"GMT {0}"}
     }
 }

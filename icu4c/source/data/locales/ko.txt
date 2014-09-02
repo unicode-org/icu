@@ -54,6 +54,7 @@ ko{
     }
     MoreInformation{"?"}
     NumberElements{
+        default{"latn"}
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
@@ -158,10 +159,13 @@ ko{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
+        minimumGroupingDigits{"1"}
+        native{"latn"}
     }
-    Version{"2.0.99.67"}
+    Version{"2.1.8.9"}
     calendar{
         buddhist{
             eras{
@@ -223,6 +227,36 @@ ko{
                 yyyyQQQQ{"U년 QQQQ"}
             }
             cyclicNameSets{
+                solarTerms{
+                    format{
+                        abbreviated{
+                            "입춘",
+                            "우수",
+                            "경칩",
+                            "춘분",
+                            "청명",
+                            "곡우",
+                            "입하",
+                            "소만",
+                            "망종",
+                            "하지",
+                            "소서",
+                            "대서",
+                            "입추",
+                            "처서",
+                            "백로",
+                            "추분",
+                            "한로",
+                            "상강",
+                            "입동",
+                            "소설",
+                            "대설",
+                            "동지",
+                            "소한",
+                            "대한",
+                        }
+                    }
+                }
                 years{
                     format{
                         abbreviated{
@@ -287,6 +321,23 @@ ko{
                             "임술",
                             "계해",
                         }
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    wide{
+                        leap{"윤{0}월"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"윤{0}월"}
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        leap{"윤{0}월"}
                     }
                 }
             }
@@ -376,6 +427,102 @@ ko{
                             "유",
                             "술",
                             "해",
+                        }
+                    }
+                }
+                solarTerms{
+                    format{
+                        abbreviated{
+                            "입춘",
+                            "우수",
+                            "경칩",
+                            "춘분",
+                            "청명",
+                            "곡우",
+                            "입하",
+                            "소만",
+                            "망종",
+                            "하지",
+                            "소서",
+                            "대서",
+                            "입추",
+                            "처서",
+                            "백로",
+                            "추분",
+                            "한로",
+                            "상강",
+                            "입동",
+                            "소설",
+                            "대설",
+                            "동지",
+                            "소한",
+                            "대한",
+                        }
+                    }
+                }
+                years{
+                    format{
+                        abbreviated{
+                            "갑자",
+                            "을축",
+                            "병인",
+                            "정묘",
+                            "무진",
+                            "기사",
+                            "경오",
+                            "신미",
+                            "임신",
+                            "계유",
+                            "갑술",
+                            "을해",
+                            "병자",
+                            "정축",
+                            "무인",
+                            "기묘",
+                            "경진",
+                            "신사",
+                            "임오",
+                            "계미",
+                            "갑신",
+                            "을유",
+                            "병술",
+                            "정해",
+                            "무자",
+                            "기축",
+                            "경인",
+                            "신묘",
+                            "임진",
+                            "계사",
+                            "갑오",
+                            "을미",
+                            "병신",
+                            "정유",
+                            "무술",
+                            "기해",
+                            "경자",
+                            "신축",
+                            "임인",
+                            "계묘",
+                            "갑진",
+                            "을사",
+                            "병오",
+                            "정미",
+                            "무신",
+                            "기유",
+                            "경술",
+                            "신해",
+                            "임자",
+                            "계축",
+                            "갑인",
+                            "을묘",
+                            "병진",
+                            "정사",
+                            "무오",
+                            "기미",
+                            "경신",
+                            "신유",
+                            "임술",
+                            "계해",
                         }
                     }
                 }
@@ -485,6 +632,23 @@ ko{
                         "10월",
                         "11월",
                         "12월",
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    wide{
+                        leap{"윤{0}월"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"윤{0}월"}
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        leap{"윤{0}월"}
                     }
                 }
             }
@@ -709,6 +873,10 @@ ko{
                 "오전",
                 "오후",
             }
+            AmPmMarkersNarrow{
+                "오전",
+                "오후",
+            }
             DateTimePatterns{
                 "a h시 m분 s초 zzzz",
                 "a h시 m분 s초 z",
@@ -724,10 +892,13 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"정오"}
+            NoonMarkerNarrow{"정오"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
             availableFormats{
+                E{"ccc"}
                 EEEEd{"d일 EEEE"}
                 EHm{"(E) HH:mm"}
                 EHms{"(E) HH:mm:ss"}
@@ -781,6 +952,15 @@ ko{
                         "금",
                         "토",
                     }
+                    narrow{
+                        "일",
+                        "월",
+                        "화",
+                        "수",
+                        "목",
+                        "금",
+                        "토",
+                    }
                     short{
                         "일",
                         "월",
@@ -801,6 +981,15 @@ ko{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "일",
+                        "월",
+                        "화",
+                        "수",
+                        "목",
+                        "금",
+                        "토",
+                    }
                     narrow{
                         "일",
                         "월",
@@ -819,6 +1008,15 @@ ko{
                         "금",
                         "토",
                     }
+                    wide{
+                        "일요일",
+                        "월요일",
+                        "화요일",
+                        "수요일",
+                        "목요일",
+                        "금요일",
+                        "토요일",
+                    }
                 }
             }
             eras{
@@ -826,14 +1024,18 @@ ko{
                     "기원전",
                     "서기",
                 }
+                abbreviated%variant{
+                    "BCE",
+                    "CE",
+                }
                 wide{
-                    "서력기원전",
-                    "서력기원",
+                    "기원전",
+                    "서기",
                 }
             }
             intervalFormats{
                 H{
-                    H{"HH ~ HH시"}
+                    H{"H ~ H시"}
                 }
                 Hm{
                     H{"HH:mm ~ HH:mm"}
@@ -847,14 +1049,14 @@ ko{
                     H{"HH ~ HH시 v"}
                 }
                 M{
-                    M{"M월 ~ M월"}
+                    M{"M월~M월"}
                 }
                 MEd{
                     M{"M. d (E) ~ M. d (E)"}
                     d{"M. d (E) ~ M. d (E)"}
                 }
                 MMM{
-                    M{"MMM ~ MMM"}
+                    M{"MMM~MMM"}
                 }
                 MMMEd{
                     M{"M월 d일 (E) ~ M월 d일 (E)"}
@@ -865,14 +1067,14 @@ ko{
                 }
                 MMMd{
                     M{"M월 d일 ~ M월 d일"}
-                    d{"M월 d일 ~ d일"}
+                    d{"MMM d일~d일"}
                 }
                 Md{
                     M{"M. d ~ M. d"}
                     d{"M. d ~ M. d"}
                 }
                 d{
-                    d{"d일 ~ d일"}
+                    d{"d일~d일"}
                 }
                 fallback{"{0} ~ {1}"}
                 h{
@@ -920,8 +1122,8 @@ ko{
                     y{"y년 M월 d일 (E) ~ y년 M월 d일 (E)"}
                 }
                 yMMMM{
-                    M{"y년 MM월 ~ MM월"}
-                    y{"y년 MM월 ~ y년 MM월"}
+                    M{"y년 MMMM ~ MMMM"}
+                    y{"y년 MMMM ~ y년 MMMM"}
                 }
                 yMMMd{
                     M{"y년 M월 d일 ~ M월 d일"}
@@ -995,6 +1197,20 @@ ko{
                         "12월",
                     }
                     narrow{
+                        "1월",
+                        "2월",
+                        "3월",
+                        "4월",
+                        "5월",
+                        "6월",
+                        "7월",
+                        "8월",
+                        "9월",
+                        "10월",
+                        "11월",
+                        "12월",
+                    }
+                    wide{
                         "1월",
                         "2월",
                         "3월",
@@ -1402,6 +1618,28 @@ ko{
                 }
             }
         }
+        day-narrow{
+            dn{"일"}
+            relativeTime{
+                future{
+                    other{"{0}일 후"}
+                }
+                past{
+                    other{"{0}일 전"}
+                }
+            }
+        }
+        day-short{
+            dn{"일"}
+            relativeTime{
+                future{
+                    other{"{0}일 후"}
+                }
+                past{
+                    other{"{0}일 전"}
+                }
+            }
+        }
         dayperiod{
             dn{"오전/오후"}
         }
@@ -1415,7 +1653,43 @@ ko{
                 "1"{"다음 금요일"}
             }
         }
+        fri-narrow{
+            relative{
+                "-1"{"지난 금요일"}
+                "0"{"이번 금요일"}
+                "1"{"다음 금요일"}
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"지난 금요일"}
+                "0"{"이번 금요일"}
+                "1"{"다음 금요일"}
+            }
+        }
         hour{
+            dn{"시"}
+            relativeTime{
+                future{
+                    other{"{0}시간 후"}
+                }
+                past{
+                    other{"{0}시간 전"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"시"}
+            relativeTime{
+                future{
+                    other{"{0}시간 후"}
+                }
+                past{
+                    other{"{0}시간 전"}
+                }
+            }
+        }
+        hour-short{
             dn{"시"}
             relativeTime{
                 future{
@@ -1437,7 +1711,43 @@ ko{
                 }
             }
         }
+        minute-narrow{
+            dn{"분"}
+            relativeTime{
+                future{
+                    other{"{0}분 후"}
+                }
+                past{
+                    other{"{0}분 전"}
+                }
+            }
+        }
+        minute-short{
+            dn{"분"}
+            relativeTime{
+                future{
+                    other{"{0}분 후"}
+                }
+                past{
+                    other{"{0}분 전"}
+                }
+            }
+        }
         mon{
+            relative{
+                "-1"{"지난 월요일"}
+                "0"{"이번 월요일"}
+                "1"{"다음 월요일"}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"지난 월요일"}
+                "0"{"이번 월요일"}
+                "1"{"다음 월요일"}
+            }
+        }
+        mon-short{
             relative{
                 "-1"{"지난 월요일"}
                 "0"{"이번 월요일"}
@@ -1460,7 +1770,76 @@ ko{
                 }
             }
         }
+        month-narrow{
+            dn{"월"}
+            relativeTime{
+                future{
+                    other{"{0}개월 후"}
+                }
+                past{
+                    other{"{0}개월 전"}
+                }
+            }
+        }
+        month-short{
+            dn{"월"}
+            relativeTime{
+                future{
+                    other{"{0}개월 후"}
+                }
+                past{
+                    other{"{0}개월 전"}
+                }
+            }
+        }
+        quarter{
+            dn{"분기"}
+            relativeTime{
+                future{
+                    other{"{0}분기 후"}
+                }
+                past{
+                    other{"{0}분기 전"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"분기"}
+            relativeTime{
+                future{
+                    other{"{0}분기 후"}
+                }
+                past{
+                    other{"{0}분기 전"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"분기"}
+            relativeTime{
+                future{
+                    other{"{0}분기 후"}
+                }
+                past{
+                    other{"{0}분기 전"}
+                }
+            }
+        }
         sat{
+            relative{
+                "-1"{"지난 토요일"}
+                "0"{"이번 토요일"}
+                "1"{"다음 토요일"}
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"지난 토요일"}
+                "0"{"이번 토요일"}
+                "1"{"다음 토요일"}
+            }
+        }
+        sat-short{
             relative{
                 "-1"{"지난 토요일"}
                 "0"{"이번 토요일"}
@@ -1481,7 +1860,43 @@ ko{
                 }
             }
         }
+        second-narrow{
+            dn{"초"}
+            relativeTime{
+                future{
+                    other{"{0}초 후"}
+                }
+                past{
+                    other{"{0}초 전"}
+                }
+            }
+        }
+        second-short{
+            dn{"초"}
+            relativeTime{
+                future{
+                    other{"{0}초 후"}
+                }
+                past{
+                    other{"{0}초 전"}
+                }
+            }
+        }
         sun{
+            relative{
+                "-1"{"지난 일요일"}
+                "0"{"이번 일요일"}
+                "1"{"다음 일요일"}
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"지난 일요일"}
+                "0"{"이번 일요일"}
+                "1"{"다음 일요일"}
+            }
+        }
+        sun-short{
             relative{
                 "-1"{"지난 일요일"}
                 "0"{"이번 일요일"}
@@ -1495,6 +1910,20 @@ ko{
                 "1"{"다음 목요일"}
             }
         }
+        thu-narrow{
+            relative{
+                "-1"{"지난 목요일"}
+                "0"{"이번 목요일"}
+                "1"{"다음 목요일"}
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"지난 목요일"}
+                "0"{"이번 목요일"}
+                "1"{"다음 목요일"}
+            }
+        }
         tue{
             relative{
                 "-1"{"지난 화요일"}
@@ -1502,7 +1931,35 @@ ko{
                 "1"{"다음 화요일"}
             }
         }
+        tue-narrow{
+            relative{
+                "-1"{"지난 화요일"}
+                "0"{"이번 화요일"}
+                "1"{"다음 화요일"}
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"지난 화요일"}
+                "0"{"이번 화요일"}
+                "1"{"다음 화요일"}
+            }
+        }
         wed{
+            relative{
+                "-1"{"지난 수요일"}
+                "0"{"이번 수요일"}
+                "1"{"다음 수요일"}
+            }
+        }
+        wed-narrow{
+            relative{
+                "-1"{"지난 수요일"}
+                "0"{"이번 수요일"}
+                "1"{"다음 수요일"}
+            }
+        }
+        wed-short{
             relative{
                 "-1"{"지난 수요일"}
                 "0"{"이번 수요일"}
@@ -1525,16 +1982,60 @@ ko{
                 }
             }
         }
+        week-narrow{
+            dn{"주"}
+            relativeTime{
+                future{
+                    other{"{0}주 후"}
+                }
+                past{
+                    other{"{0}주 전"}
+                }
+            }
+        }
+        week-short{
+            dn{"주"}
+            relativeTime{
+                future{
+                    other{"{0}주 후"}
+                }
+                past{
+                    other{"{0}주 전"}
+                }
+            }
+        }
         weekday{
             dn{"요일"}
         }
         year{
             dn{"년"}
             relative{
-                "-1"{"지난해"}
+                "-1"{"작년"}
                 "0"{"올해"}
                 "1"{"내년"}
             }
+            relativeTime{
+                future{
+                    other{"{0}년 후"}
+                }
+                past{
+                    other{"{0}년 전"}
+                }
+            }
+        }
+        year-narrow{
+            dn{"년"}
+            relativeTime{
+                future{
+                    other{"{0}년 후"}
+                }
+                past{
+                    other{"{0}년 전"}
+                }
+            }
+        }
+        year-short{
+            dn{"년"}
             relativeTime{
                 future{
                     other{"{0}년 후"}
@@ -1561,6 +2062,12 @@ ko{
             middle{"{0} {1}"}
             start{"{0} {1}"}
         }
+        unit-narrow{
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
+        }
         unit-short{
             2{"{0} {1}"}
             end{"{0} {1}"}
@@ -1569,8 +2076,8 @@ ko{
         }
     }
     measurementSystemNames{
-        UK{"영국"}
-        US{"미국"}
+        UK{"영국식"}
+        US{"미국식"}
         metric{"미터법"}
     }
     transformNames{
@@ -1588,165 +2095,511 @@ ko{
     units{
         acceleration{
             g-force{
-                other{"{0}중력가속도"}
+                dnam{"중력가속도"}
+                other{"{0} 중력가속도"}
+            }
+            meter-per-second-squared{
+                dnam{"m/s²"}
+                other{"{0}m/s²"}
             }
         }
         angle{
             arc-minute{
-                other{"{0}분"}
+                dnam{"분각"}
+                other{"{0}분각"}
             }
             arc-second{
-                other{"{0}초"}
+                dnam{"각초"}
+                other{"{0}각초"}
             }
             degree{
+                dnam{"도"}
                 other{"{0}도"}
+            }
+            radian{
+                dnam{"라디안"}
+                other{"{0}라디안"}
             }
         }
         area{
             acre{
+                dnam{"에이커"}
                 other{"{0}에이커"}
             }
             hectare{
+                dnam{"헥타르"}
                 other{"{0}헥타르"}
             }
+            square-centimeter{
+                dnam{"제곱센티미터"}
+                other{"{0}제곱센티미터"}
+            }
             square-foot{
+                dnam{"제곱피트"}
                 other{"{0}제곱피트"}
             }
+            square-inch{
+                dnam{"제곱인치"}
+                other{"{0}제곱인치"}
+            }
             square-kilometer{
+                dnam{"제곱킬로미터"}
                 other{"{0}제곱킬로미터"}
             }
             square-meter{
+                dnam{"제곱미터"}
                 other{"{0}제곱미터"}
             }
             square-mile{
+                dnam{"제곱마일"}
                 other{"{0}제곱마일"}
+            }
+            square-yard{
+                dnam{"제곱야드"}
+                other{"{0}제곱야드"}
             }
         }
         compound{
             per{"{1}당 {0}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"킬로미터당 리터"}
+                other{"킬로미터당 {0}리터"}
+            }
+            mile-per-gallon{
+                dnam{"갤런당 마일"}
+                other{"갤런당 {0}마일"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"비트"}
+                other{"{0}비트"}
+            }
+            byte{
+                dnam{"바이트"}
+                other{"{0}바이트"}
+            }
+            gigabit{
+                dnam{"기가비트"}
+                other{"{0}기가비트"}
+            }
+            gigabyte{
+                dnam{"기가바이트"}
+                other{"{0}기가바이트"}
+            }
+            kilobit{
+                dnam{"킬로비트"}
+                other{"{0}킬로비트"}
+            }
+            kilobyte{
+                dnam{"킬로바이트"}
+                other{"{0}킬로바이트"}
+            }
+            megabit{
+                dnam{"메가비트"}
+                other{"{0}메가비트"}
+            }
+            megabyte{
+                dnam{"메가바이트"}
+                other{"{0}메가바이트"}
+            }
+            terabit{
+                dnam{"테라비트"}
+                other{"{0}테라비트"}
+            }
+            terabyte{
+                dnam{"테라바이트"}
+                other{"{0}테라바이트"}
+            }
+        }
         duration{
             day{
+                dnam{"일"}
                 other{"{0}일"}
             }
             hour{
+                dnam{"시간"}
                 other{"{0}시간"}
+                per{"{0}/h"}
+            }
+            microsecond{
+                dnam{"마이크로초"}
+                other{"{0}마이크로초"}
             }
             millisecond{
+                dnam{"밀리초"}
                 other{"{0}밀리초"}
             }
             minute{
+                dnam{"분"}
                 other{"{0}분"}
             }
             month{
+                dnam{"개월"}
                 other{"{0}개월"}
             }
+            nanosecond{
+                dnam{"나노초"}
+                other{"{0}나노초"}
+            }
             second{
+                dnam{"초"}
                 other{"{0}초"}
+                per{"{0}/s"}
             }
             week{
+                dnam{"주"}
                 other{"{0}주"}
             }
             year{
+                dnam{"년"}
                 other{"{0}년"}
             }
         }
+        electric{
+            ampere{
+                dnam{"암페어"}
+                other{"{0}암페어"}
+            }
+            milliampere{
+                dnam{"밀리암페어"}
+                other{"{0}밀리암페어"}
+            }
+            ohm{
+                dnam{"옴"}
+                other{"{0}옴"}
+            }
+            volt{
+                dnam{"볼트"}
+                other{"{0}볼트"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"칼로리"}
+                other{"{0}칼로리"}
+            }
+            foodcalorie{
+                dnam{"칼로리"}
+                other{"{0}칼로리"}
+            }
+            joule{
+                dnam{"줄"}
+                other{"{0}줄"}
+            }
+            kilocalorie{
+                dnam{"킬로칼로리"}
+                other{"{0}킬로칼로리"}
+            }
+            kilojoule{
+                dnam{"킬로줄"}
+                other{"{0}킬로줄"}
+            }
+            kilowatt-hour{
+                dnam{"킬로와트시"}
+                other{"{0}킬로와트시"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"기가헤르츠"}
+                other{"{0}기가헤르츠"}
+            }
+            hertz{
+                dnam{"헤르츠"}
+                other{"{0}헤르츠"}
+            }
+            kilohertz{
+                dnam{"킬로헤르츠"}
+                other{"{0}킬로헤르츠"}
+            }
+            megahertz{
+                dnam{"메가헤르츠"}
+                other{"{0}메가헤르츠"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"천문 단위"}
+                other{"{0} 천문 단위"}
+            }
             centimeter{
+                dnam{"센티미터"}
                 other{"{0}센티미터"}
             }
+            decimeter{
+                dnam{"데시미터"}
+                other{"{0}데시미터"}
+            }
             foot{
+                dnam{"피트"}
                 other{"{0}피트"}
             }
             inch{
+                dnam{"인치"}
                 other{"{0}인치"}
             }
             kilometer{
+                dnam{"킬로미터"}
                 other{"{0}킬로미터"}
             }
             light-year{
+                dnam{"광년"}
                 other{"{0}광년"}
             }
             meter{
+                dnam{"미터"}
                 other{"{0}미터"}
             }
+            micrometer{
+                dnam{"마이크로미터"}
+                other{"{0}마이크로미터"}
+            }
             mile{
+                dnam{"마일"}
                 other{"{0}마일"}
             }
             millimeter{
+                dnam{"밀리미터"}
                 other{"{0}밀리미터"}
             }
+            nanometer{
+                dnam{"나노미터"}
+                other{"{0}나노미터"}
+            }
+            nautical-mile{
+                dnam{"해리"}
+                other{"{0}해리"}
+            }
+            parsec{
+                dnam{"파섹"}
+                other{"{0}파섹"}
+            }
             picometer{
+                dnam{"피코미터"}
                 other{"{0}피코미터"}
             }
             yard{
+                dnam{"야드"}
                 other{"{0}야드"}
             }
         }
+        light{
+            lux{
+                dnam{"룩스"}
+                other{"{0}룩스"}
+            }
+        }
         mass{
+            carat{
+                dnam{"캐럿"}
+                other{"{0}캐럿"}
+            }
             gram{
+                dnam{"그램"}
                 other{"{0}그램"}
             }
             kilogram{
+                dnam{"킬로그램"}
                 other{"{0}킬로그램"}
             }
+            metric-ton{
+                dnam{"메트릭 톤"}
+                other{"{0}메트릭 톤"}
+            }
+            microgram{
+                dnam{"마이크로그램"}
+                other{"{0}마이크로그램"}
+            }
+            milligram{
+                dnam{"밀리그램"}
+                other{"{0}밀리그램"}
+            }
             ounce{
+                dnam{"온스"}
                 other{"{0}온스"}
             }
+            ounce-troy{
+                dnam{"트로이 온스"}
+                other{"{0}트로이 온스"}
+            }
             pound{
+                dnam{"파운드"}
                 other{"{0}파운드"}
+            }
+            ton{
+                dnam{"톤"}
+                other{"{0}톤"}
             }
         }
         power{
+            gigawatt{
+                dnam{"기가와트"}
+                other{"{0}기가와트"}
+            }
             horsepower{
+                dnam{"마력"}
                 other{"{0}마력"}
             }
             kilowatt{
+                dnam{"킬로와트"}
                 other{"{0}킬로와트"}
             }
+            megawatt{
+                dnam{"메가와트"}
+                other{"{0}메가와트"}
+            }
+            milliwatt{
+                dnam{"밀리와트"}
+                other{"{0}밀리와트"}
+            }
             watt{
+                dnam{"와트"}
                 other{"{0}와트"}
             }
         }
         pressure{
             hectopascal{
+                dnam{"헥토파스칼"}
                 other{"{0}헥토파스칼"}
             }
             inch-hg{
+                dnam{"수은주인치"}
                 other{"{0}수은주인치"}
             }
             millibar{
+                dnam{"밀리바"}
                 other{"{0}밀리바"}
+            }
+            millimeter-of-mercury{
+                dnam{"수은주밀리미터"}
+                other{"{0}수은주밀리미터"}
+            }
+            pound-per-square-inch{
+                dnam{"제곱인치당 파운드"}
+                other{"{0}제곱인치당 파운드"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"캐럿"}
+                other{"{0}캐럿"}
             }
         }
         speed{
             kilometer-per-hour{
+                dnam{"km/h"}
                 other{"시속 {0}킬로미터"}
             }
             meter-per-second{
+                dnam{"m/s"}
                 other{"초속 {0}미터"}
             }
             mile-per-hour{
+                dnam{"mi/h"}
                 other{"시속 {0}마일"}
             }
         }
         temperature{
             celsius{
+                dnam{"°C"}
                 other{"섭씨 {0}도"}
             }
             fahrenheit{
+                dnam{"°F"}
                 other{"화씨 {0}도"}
+            }
+            kelvin{
+                dnam{"켈빈"}
+                other{"{0}켈빈"}
             }
         }
         volume{
+            acre-foot{
+                dnam{"에이커 피트"}
+                other{"{0}에이커 피트"}
+            }
+            centiliter{
+                dnam{"센티리터"}
+                other{"{0}센티리터"}
+            }
+            cubic-centimeter{
+                dnam{"세제곱센티미터"}
+                other{"{0}세제곱센티미터"}
+            }
+            cubic-foot{
+                dnam{"세제곱피트"}
+                other{"{0}세제곱피트"}
+            }
+            cubic-inch{
+                dnam{"세제곱인치"}
+                other{"{0}세제곱인치"}
+            }
             cubic-kilometer{
+                dnam{"세제곱킬로미터"}
                 other{"{0}세제곱킬로미터"}
             }
+            cubic-meter{
+                dnam{"세제곱미터"}
+                other{"{0}세제곱미터"}
+            }
             cubic-mile{
+                dnam{"세제곱마일"}
                 other{"{0}세제곱마일"}
             }
+            cubic-yard{
+                dnam{"세제곱야드"}
+                other{"{0}세제곱야드"}
+            }
+            cup{
+                dnam{"컵"}
+                other{"{0}컵"}
+            }
+            deciliter{
+                dnam{"데시리터"}
+                other{"{0}데시리터"}
+            }
+            fluid-ounce{
+                dnam{"액량 온스"}
+                other{"{0}액량 온스"}
+            }
+            gallon{
+                dnam{"갤런"}
+                other{"{0}갤런"}
+            }
+            hectoliter{
+                dnam{"헥토리터"}
+                other{"{0}헥토리터"}
+            }
             liter{
+                dnam{"리터"}
                 other{"{0}리터"}
+            }
+            megaliter{
+                dnam{"메가리터"}
+                other{"{0}메가리터"}
+            }
+            milliliter{
+                dnam{"밀리리터"}
+                other{"{0}밀리리터"}
+            }
+            pint{
+                dnam{"파인트"}
+                other{"{0}파인트"}
+            }
+            quart{
+                dnam{"쿼트"}
+                other{"{0}쿼트"}
+            }
+            tablespoon{
+                dnam{"테이블스푼"}
+                other{"{0}테이블스푼"}
+            }
+            teaspoon{
+                dnam{"티스푼"}
+                other{"{0}티스푼"}
             }
         }
     }
@@ -1792,32 +2645,41 @@ ko{
         }
         duration{
             day{
+                dnam{"일"}
                 other{"{0}일"}
             }
             hour{
+                dnam{"시간"}
                 other{"{0}시간"}
             }
             millisecond{
+                dnam{"ms"}
                 other{"{0}ms"}
             }
             minute{
+                dnam{"분"}
                 other{"{0}분"}
             }
             month{
+                dnam{"개월"}
                 other{"{0}개월"}
             }
             second{
+                dnam{"초"}
                 other{"{0}초"}
             }
             week{
+                dnam{"주"}
                 other{"{0}주"}
             }
             year{
+                dnam{"년"}
                 other{"{0}년"}
             }
         }
         length{
             centimeter{
+                dnam{"cm"}
                 other{"{0}cm"}
             }
             foot{
@@ -1827,18 +2689,21 @@ ko{
                 other{"{0}″"}
             }
             kilometer{
+                dnam{"km"}
                 other{"{0}km"}
             }
             light-year{
                 other{"{0}ly"}
             }
             meter{
+                dnam{"미터"}
                 other{"{0}m"}
             }
             mile{
                 other{"{0}mi"}
             }
             millimeter{
+                dnam{"mm"}
                 other{"{0}mm"}
             }
             picometer{
@@ -1850,9 +2715,11 @@ ko{
         }
         mass{
             gram{
+                dnam{"그램"}
                 other{"{0}g"}
             }
             kilogram{
+                dnam{"kg"}
                 other{"{0}kg"}
             }
             ounce{
@@ -1886,6 +2753,7 @@ ko{
         }
         speed{
             kilometer-per-hour{
+                dnam{"km/h"}
                 other{"{0}km/h"}
             }
             meter-per-second{
@@ -1897,171 +2765,7 @@ ko{
         }
         temperature{
             celsius{
-                other{"{0}°"}
-            }
-            fahrenheit{
-                other{"{0}°F"}
-            }
-        }
-        volume{
-            cubic-kilometer{
-                other{"{0}km³"}
-            }
-            cubic-mile{
-                other{"{0}mi³"}
-            }
-            liter{
-                other{"{0}ℓ"}
-            }
-        }
-    }
-    unitsShort{
-        acceleration{
-            g-force{
-                other{"{0} G"}
-            }
-        }
-        angle{
-            arc-minute{
-                other{"{0}분"}
-            }
-            arc-second{
-                other{"{0}초"}
-            }
-            degree{
-                other{"{0}도"}
-            }
-        }
-        area{
-            acre{
-                other{"{0}ac"}
-            }
-            hectare{
-                other{"{0}ha"}
-            }
-            square-foot{
-                other{"{0}ft²"}
-            }
-            square-kilometer{
-                other{"{0}km²"}
-            }
-            square-meter{
-                other{"{0}m²"}
-            }
-            square-mile{
-                other{"{0}mi²"}
-            }
-        }
-        compound{
-            per{"{0}/{1}"}
-        }
-        duration{
-            day{
-                other{"{0}일"}
-            }
-            hour{
-                other{"{0}시간"}
-            }
-            millisecond{
-                other{"{0}ms"}
-            }
-            minute{
-                other{"{0}분"}
-            }
-            month{
-                other{"{0}개월"}
-            }
-            second{
-                other{"{0}초"}
-            }
-            week{
-                other{"{0}주"}
-            }
-            year{
-                other{"{0}년"}
-            }
-        }
-        length{
-            centimeter{
-                other{"{0}cm"}
-            }
-            foot{
-                other{"{0}ft"}
-            }
-            inch{
-                other{"{0}in"}
-            }
-            kilometer{
-                other{"{0}km"}
-            }
-            light-year{
-                other{"{0}ly"}
-            }
-            meter{
-                other{"{0}m"}
-            }
-            mile{
-                other{"{0}mil"}
-            }
-            millimeter{
-                other{"{0}mm"}
-            }
-            picometer{
-                other{"{0}pm"}
-            }
-            yard{
-                other{"{0}yd"}
-            }
-        }
-        mass{
-            gram{
-                other{"{0}g"}
-            }
-            kilogram{
-                other{"{0}kg"}
-            }
-            ounce{
-                other{"{0}oz"}
-            }
-            pound{
-                other{"{0}lb"}
-            }
-        }
-        power{
-            horsepower{
-                other{"{0}HP"}
-            }
-            kilowatt{
-                other{"{0}kW"}
-            }
-            watt{
-                other{"{0}W"}
-            }
-        }
-        pressure{
-            hectopascal{
-                other{"{0}hPa"}
-            }
-            inch-hg{
-                other{"{0}inHg"}
-            }
-            millibar{
-                other{"{0}mb"}
-            }
-        }
-        speed{
-            kilometer-per-hour{
-                other{"시속 {0}km"}
-            }
-            meter-per-second{
-                other{"초속 {0}m"}
-            }
-            mile-per-hour{
-                other{"시속 {0}mi"}
-            }
-        }
-        temperature{
-            celsius{
+                dnam{"°C"}
                 other{"{0}°C"}
             }
             fahrenheit{
@@ -2076,7 +2780,519 @@ ko{
                 other{"{0}mi³"}
             }
             liter{
+                dnam{"리터"}
+                other{"{0}ℓ"}
+            }
+        }
+    }
+    unitsShort{
+        acceleration{
+            g-force{
+                dnam{"중력가속도"}
+                other{"{0}G"}
+            }
+            meter-per-second-squared{
+                dnam{"m/s²"}
+                other{"{0}m/s²"}
+            }
+        }
+        angle{
+            arc-minute{
+                dnam{"′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                dnam{"″"}
+                other{"{0}″"}
+            }
+            degree{
+                dnam{"°"}
+                other{"{0}°"}
+            }
+            radian{
+                dnam{"rad"}
+                other{"{0}rad"}
+            }
+        }
+        area{
+            acre{
+                dnam{"에이커"}
+                other{"{0}에이커"}
+            }
+            hectare{
+                dnam{"헥타르"}
+                other{"{0}ha"}
+            }
+            square-centimeter{
+                dnam{"cm²"}
+                other{"{0}cm²"}
+            }
+            square-foot{
+                dnam{"제곱피트"}
+                other{"{0}ft²"}
+            }
+            square-inch{
+                dnam{"in²"}
+                other{"{0}in²"}
+            }
+            square-kilometer{
+                dnam{"km²"}
+                other{"{0}km²"}
+            }
+            square-meter{
+                dnam{"m²"}
+                other{"{0}m²"}
+            }
+            square-mile{
+                dnam{"mi²"}
+                other{"{0}mi²"}
+            }
+            square-yard{
+                dnam{"yd²"}
+                other{"{0}yd²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        consumption{
+            liter-per-kilometer{
+                dnam{"L/km"}
+                other{"{0}L/km"}
+            }
+            mile-per-gallon{
+                dnam{"mpg"}
+                other{"{0}mpg"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"bit"}
+                other{"{0}bit"}
+            }
+            byte{
+                dnam{"byte"}
+                other{"{0}byte"}
+            }
+            gigabit{
+                dnam{"Gbit"}
+                other{"{0}Gb"}
+            }
+            gigabyte{
+                dnam{"GByte"}
+                other{"{0}GB"}
+            }
+            kilobit{
+                dnam{"kbit"}
+                other{"{0}kb"}
+            }
+            kilobyte{
+                dnam{"kB"}
+                other{"{0}kB"}
+            }
+            megabit{
+                dnam{"Mbit"}
+                other{"{0}Mb"}
+            }
+            megabyte{
+                dnam{"MB"}
+                other{"{0}MB"}
+            }
+            terabit{
+                dnam{"Tbit"}
+                other{"{0}Tb"}
+            }
+            terabyte{
+                dnam{"TByte"}
+                other{"{0}TB"}
+            }
+        }
+        duration{
+            day{
+                dnam{"일"}
+                other{"{0}일"}
+            }
+            hour{
+                dnam{"시간"}
+                other{"{0}시간"}
+                per{"{0}/h"}
+            }
+            microsecond{
+                dnam{"μs"}
+                other{"{0}μs"}
+            }
+            millisecond{
+                dnam{"밀리초"}
+                other{"{0}ms"}
+            }
+            minute{
+                dnam{"분"}
+                other{"{0}분"}
+            }
+            month{
+                dnam{"개월"}
+                other{"{0}개월"}
+            }
+            nanosecond{
+                dnam{"ns"}
+                other{"{0}ns"}
+            }
+            second{
+                dnam{"초"}
+                other{"{0}초"}
+                per{"{0}/s"}
+            }
+            week{
+                dnam{"주"}
+                other{"{0}주"}
+            }
+            year{
+                dnam{"년"}
+                other{"{0}년"}
+            }
+        }
+        electric{
+            ampere{
+                dnam{"amp"}
+                other{"{0}A"}
+            }
+            milliampere{
+                dnam{"mA"}
+                other{"{0}mA"}
+            }
+            ohm{
+                dnam{"ohm"}
+                other{"{0}Ω"}
+            }
+            volt{
+                dnam{"volt"}
+                other{"{0}V"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"cal"}
+                other{"{0}cal"}
+            }
+            foodcalorie{
+                dnam{"Cal"}
+                other{"{0}Cal"}
+            }
+            joule{
+                dnam{"줄"}
+                other{"{0}줄"}
+            }
+            kilocalorie{
+                dnam{"kcal"}
+                other{"{0}kcal"}
+            }
+            kilojoule{
+                dnam{"kJ"}
+                other{"{0}kJ"}
+            }
+            kilowatt-hour{
+                dnam{"kWh"}
+                other{"{0}kWh"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"GHz"}
+                other{"{0}GHz"}
+            }
+            hertz{
+                dnam{"Hz"}
+                other{"{0}Hz"}
+            }
+            kilohertz{
+                dnam{"kHz"}
+                other{"{0}kHz"}
+            }
+            megahertz{
+                dnam{"MHz"}
+                other{"{0}MHz"}
+            }
+        }
+        length{
+            astronomical-unit{
+                dnam{"au"}
+                other{"{0}au"}
+            }
+            centimeter{
+                dnam{"cm"}
+                other{"{0}cm"}
+            }
+            decimeter{
+                dnam{"dm"}
+                other{"{0}dm"}
+            }
+            foot{
+                dnam{"피트"}
+                other{"{0}ft"}
+            }
+            inch{
+                dnam{"in"}
+                other{"{0}in"}
+            }
+            kilometer{
+                dnam{"km"}
+                other{"{0}km"}
+            }
+            light-year{
+                dnam{"ly"}
+                other{"{0}ly"}
+            }
+            meter{
+                dnam{"미터"}
+                other{"{0}m"}
+            }
+            micrometer{
+                dnam{"µm"}
+                other{"{0}µm"}
+            }
+            mile{
+                dnam{"마일"}
+                other{"{0}mil"}
+            }
+            millimeter{
+                dnam{"mm"}
+                other{"{0}mm"}
+            }
+            nanometer{
+                dnam{"nm"}
+                other{"{0}nm"}
+            }
+            nautical-mile{
+                dnam{"nmi"}
+                other{"{0}nmi"}
+            }
+            parsec{
+                dnam{"파섹"}
+                other{"{0}pc"}
+            }
+            picometer{
+                dnam{"pm"}
+                other{"{0}pm"}
+            }
+            yard{
+                dnam{"야드"}
+                other{"{0}야드"}
+            }
+        }
+        light{
+            lux{
+                dnam{"lx"}
+                other{"{0}lx"}
+            }
+        }
+        mass{
+            carat{
+                dnam{"CD"}
+                other{"{0}CD"}
+            }
+            gram{
+                dnam{"그램"}
+                other{"{0}g"}
+            }
+            kilogram{
+                dnam{"kg"}
+                other{"{0}kg"}
+            }
+            metric-ton{
+                dnam{"t"}
+                other{"{0}t"}
+            }
+            microgram{
+                dnam{"µg"}
+                other{"{0}µg"}
+            }
+            milligram{
+                dnam{"mg"}
+                other{"{0}mg"}
+            }
+            ounce{
+                dnam{"oz"}
+                other{"{0}oz"}
+            }
+            ounce-troy{
+                dnam{"oz t"}
+                other{"{0}oz t"}
+            }
+            pound{
+                dnam{"lb"}
+                other{"{0}lb"}
+            }
+            ton{
+                dnam{"tn"}
+                other{"{0}tn"}
+            }
+        }
+        power{
+            gigawatt{
+                dnam{"GW"}
+                other{"{0}GW"}
+            }
+            horsepower{
+                dnam{"hp"}
+                other{"{0}HP"}
+            }
+            kilowatt{
+                dnam{"kW"}
+                other{"{0}kW"}
+            }
+            megawatt{
+                dnam{"MW"}
+                other{"{0}MW"}
+            }
+            milliwatt{
+                dnam{"mW"}
+                other{"{0}mW"}
+            }
+            watt{
+                dnam{"w"}
+                other{"{0}W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                dnam{"hPa"}
+                other{"{0}hPa"}
+            }
+            inch-hg{
+                dnam{"inHg"}
+                other{"{0}inHg"}
+            }
+            millibar{
+                dnam{"mbar"}
+                other{"{0}mb"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                other{"{0}mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                other{"{0}psi"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"kt"}
+                other{"{0}kt"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                dnam{"km/h"}
+                other{"시속 {0}km"}
+            }
+            meter-per-second{
+                dnam{"m/s"}
+                other{"초속 {0}m"}
+            }
+            mile-per-hour{
+                dnam{"mi/h"}
+                other{"시속 {0}mi"}
+            }
+        }
+        temperature{
+            celsius{
+                dnam{"°C"}
+                other{"{0}°C"}
+            }
+            fahrenheit{
+                dnam{"°F"}
+                other{"{0}°F"}
+            }
+            kelvin{
+                dnam{"K"}
+                other{"{0}K"}
+            }
+        }
+        volume{
+            acre-foot{
+                dnam{"ac ft"}
+                other{"{0}ac ft"}
+            }
+            centiliter{
+                dnam{"cL"}
+                other{"{0}cL"}
+            }
+            cubic-centimeter{
+                dnam{"cm³"}
+                other{"{0}cm³"}
+            }
+            cubic-foot{
+                dnam{"ft³"}
+                other{"{0}ft³"}
+            }
+            cubic-inch{
+                dnam{"in³"}
+                other{"{0}in³"}
+            }
+            cubic-kilometer{
+                dnam{"km³"}
+                other{"{0}km³"}
+            }
+            cubic-meter{
+                dnam{"m³"}
+                other{"{0}m³"}
+            }
+            cubic-mile{
+                dnam{"mi³"}
+                other{"{0}mi³"}
+            }
+            cubic-yard{
+                dnam{"yd³"}
+                other{"{0}yd³"}
+            }
+            cup{
+                dnam{"컵"}
+                other{"{0}컵"}
+            }
+            deciliter{
+                dnam{"dL"}
+                other{"{0}dL"}
+            }
+            fluid-ounce{
+                dnam{"fl oz"}
+                other{"{0}fl oz"}
+            }
+            gallon{
+                dnam{"gal"}
+                other{"{0}gal"}
+            }
+            hectoliter{
+                dnam{"hL"}
+                other{"{0}hL"}
+            }
+            liter{
+                dnam{"리터"}
                 other{"{0}L"}
+            }
+            megaliter{
+                dnam{"ML"}
+                other{"{0}ML"}
+            }
+            milliliter{
+                dnam{"mL"}
+                other{"{0}mL"}
+            }
+            pint{
+                dnam{"pt"}
+                other{"{0}pt"}
+            }
+            quart{
+                dnam{"qt"}
+                other{"{0}qt"}
+            }
+            tablespoon{
+                dnam{"tbsp"}
+                other{"{0}tbsp"}
+            }
+            teaspoon{
+                dnam{"tsp"}
+                other{"{0}tsp"}
             }
         }
     }

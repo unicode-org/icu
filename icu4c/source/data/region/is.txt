@@ -24,14 +24,14 @@ is{
         018{"Suðurhluti Afríku"}
         019{"Ameríka"}
         021{"Ameríka norðan Mexikó"}
-        029{"Karabíska hafið"}
+        029{"Karíbahafið"}
         030{"Austur-Asía"}
         034{"Suður-Asía"}
         035{"Suðaustur-Asía"}
         039{"Suður-Evrópa"}
         053{"Ástralasía"}
         054{"Melanesía"}
-        057{"Míkrónesía"}
+        057{"Míkrónesíusvæðið"}
         061{"Pólýnesía"}
         142{"Asía"}
         143{"Mið-Asía"}
@@ -96,7 +96,7 @@ is{
         CR{"Kostaríka"}
         CU{"Kúba"}
         CV{"Grænhöfðaeyjar"}
-        CW{"Curaçao"}
+        CW{"Curacao"}
         CX{"Jólaey"}
         CY{"Kýpur"}
         CZ{"Tékkland"}
@@ -119,7 +119,7 @@ is{
         FI{"Finnland"}
         FJ{"Fídjieyjar"}
         FK{"Falklandseyjar"}
-        FM{"Míkrónesía (FM)"}
+        FM{"Míkrónesía"}
         FO{"Færeyjar"}
         FR{"Frakkland"}
         GA{"Gabon"}
@@ -163,11 +163,11 @@ is{
         JO{"Jórdanía"}
         JP{"Japan"}
         KE{"Kenía"}
-        KG{"Kirgisistan"}
+        KG{"Kirgistan"}
         KH{"Kambódía"}
         KI{"Kíribatí"}
         KM{"Kómoreyjar"}
-        KN{"Sankti Kristófer og Nevis"}
+        KN{"Sankti Kitts og Nevis"}
         KP{"Norður-Kórea"}
         KR{"Suður-Kórea"}
         KW{"Kúveit"}
@@ -285,7 +285,7 @@ is{
         US{"Bandaríkin"}
         UY{"Úrúgvæ"}
         UZ{"Úsbekistan"}
-        VA{"Páfastóll"}
+        VA{"Vatíkanið"}
         VC{"Sankti Vinsent og Grenadíneyjar"}
         VE{"Venesúela"}
         VG{"Bresku Jómfrúaeyjar"}
@@ -302,11 +302,19 @@ is{
         ZW{"Simbabve"}
         ZZ{"Óþekkt svæði"}
     }
+    Countries%variant{
+        CD{"Kongó (Lýðstjórnarlýðveldið)"}
+        CG{"Kongó (Lýðveldið)"}
+        FK{"Falklandseyjar (Malvinas)"}
+        MK{"Makedónía (Fyrrverandi lýðveldi Júgóslavíu)"}
+        TL{"Austur-Tímor"}
+    }
     CountriesShort{
+        GB{"Bretland"}
         HK{"Hong Kong"}
         MO{"Makaó"}
         PS{"Palestína"}
         US{"BNA"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
 }

@@ -17,7 +17,7 @@ gu{
                 "[normalization on][reorder Gujr Deva Beng Guru Orya Taml Telu Knda Mlym Sinh]"
                 "&ૐ<ં<<ઁ<ઃ"
             }
-            Version{"25"}
+            Version{"26"}
         }
     }
 }

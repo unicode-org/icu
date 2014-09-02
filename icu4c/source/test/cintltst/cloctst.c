@@ -99,7 +99,7 @@ static const char* const rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display name (French) */
     {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", 
         "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)",  "chinois (simplifi\\u00e9, Chine)", 
-        "allemand (Allemagne, ordre de tri=Ordre de l\\u2019annuaire)", "espagnol (ordre de tri=Ordre traditionnel)", "japonais (Japon, calendrier=Calendrier japonais)" },
+        "allemand (Allemagne, ordre de tri=Ordre de l\\u2019annuaire)", "espagnol (ordre de tri=Ordre traditionnel)", "japonais (Japon, calendrier=calendrier japonais)" },
 
     /* display language (Catalan) */
     {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "xin\\u00E8s", "alemany", "espanyol", "japon\\u00E8s"    },
@@ -695,7 +695,7 @@ static void TestDisplayNames()
             "ca_ES",
             "el_GR" };
         static const char *expect[] = { "Spanish (Calendar=Japanese Calendar, Sort Order=Traditional Sort Order)", /* note sorted order of keywords */
-            "espagnol (calendrier=Calendrier japonais, ordre de tri=Ordre traditionnel)",
+            "espagnol (calendrier=calendrier japonais, ordre de tri=Ordre traditionnel)",
             "espanyol (calendari=calendari japon\\u00e8s, ordenaci\\u00f3=ordre tradicional)",
             "\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac (\\u0397\\u03bc\\u03b5\\u03c1\\u03bf\\u03bb\\u03cc\\u03b3\\u03b9\\u03bf=\\u0399\\u03b1\\u03c0\\u03c9\\u03bd\\u03b9\\u03ba\\u03cc \\u03b7\\u03bc\\u03b5\\u03c1\\u03bf\\u03bb\\u03cc\\u03b3\\u03b9\\u03bf, \\u03a3\\u03b5\\u03b9\\u03c1\\u03ac \\u03c4\\u03b1\\u03be\\u03b9\\u03bd\\u03cc\\u03bc\\u03b7\\u03c3\\u03b7\\u03c2=\\u03a0\\u03b1\\u03c1\\u03b1\\u03b4\\u03bf\\u03c3\\u03b9\\u03b1\\u03ba\\u03ae \\u03c3\\u03b5\\u03b9\\u03c1\\u03ac \\u03c4\\u03b1\\u03be\\u03b9\\u03bd\\u03cc\\u03bc\\u03b7\\u03c3\\u03b7\\u03c2)" };
         UChar *expectBuffer;
@@ -4612,8 +4612,8 @@ const char* const full_data[][3] = {
     "it_SM"
   }, {
     "und_SN",
-    "fr_Latn_SN",
-    "fr_SN"
+    "wo_Latn_SN",
+    "wo"
   }, {
     "und_SO",
     "so_Latn_SO",
@@ -4720,8 +4720,8 @@ const char* const full_data[][3] = {
     "uz"
   }, {
     "und_VA",
-    "la_Latn_VA",
-    "la"
+    "it_Latn_VA",
+    "it_VA"
   }, {
     "und_VE",
     "es_Latn_VE",

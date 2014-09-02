@@ -256,7 +256,7 @@ zu{
         SN{"i-Senegal"}
         SO{"i-Somalia"}
         SR{"i-Suriname"}
-        SS{"iNingizimu Sudan"}
+        SS{"i-South Sudan"}
         ST{"i-São Tomé kanye ne-Príncipe"}
         SV{"i-El Salvador"}
         SX{"I-Sint Maarten"}
@@ -302,10 +302,20 @@ zu{
         ZW{"i-Zimbabwe"}
         ZZ{"iSifunda esingaziwa"}
     }
+    Countries%variant{
+        CD{"i-Congo (DRC)"}
+        CG{"i-Congo (Republic)"}
+        CI{"i-Ivory Coast"}
+        FK{"i-Falkland Islands (Islas Malvinas)"}
+        MK{"i-Macedonia (FYROM)"}
+        TL{"i-East Timor"}
+    }
     CountriesShort{
+        GB{"i-U.K."}
         HK{"i-Hong Kong"}
         MO{"i-Macau"}
         PS{"i-Phalestine"}
+        US{"i-U.S"}
     }
-    Version{"2.0.98.76"}
+    Version{"2.1.8.18"}
 }

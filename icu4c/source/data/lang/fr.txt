@@ -176,12 +176,14 @@ fr{
         fr_CH{"français suisse"}
         frm{"moyen français"}
         fro{"ancien français"}
+        frp{"franco-provençal"}
         frr{"frison du Nord"}
         frs{"frison oriental"}
         fur{"frioulan"}
         fy{"frison occidental"}
         ga{"irlandais"}
         gaa{"ga"}
+        gag{"gagaouze"}
         gay{"gayo"}
         gba{"gbaya"}
         gd{"gaélique écossais"}
@@ -223,7 +225,7 @@ fr{
         id{"indonésien"}
         ie{"interlingue"}
         ig{"igbo"}
-        ii{"yi de Sichuan"}
+        ii{"yi du Sichuan"}
         ik{"inupiaq"}
         ilo{"ilokano"}
         inh{"ingouche"}
@@ -265,6 +267,7 @@ fr{
         kmb{"kiMboundou"}
         kn{"kannada"}
         ko{"coréen"}
+        koi{"komi-permiak"}
         kok{"konkani"}
         kos{"kusaien"}
         kpe{"kpellé"}
@@ -321,7 +324,7 @@ fr{
         mg{"malgache"}
         mga{"moyen irlandais"}
         mgh{"makhuwa-meetto"}
-        mgo{"méta'"}
+        mgo{"méta’"}
         mh{"marshall"}
         mi{"maori"}
         mic{"micmac"}
@@ -398,6 +401,7 @@ fr{
         pt_BR{"portugais brésilien"}
         pt_PT{"portugais d’Europe"}
         qu{"quechua"}
+        quc{"k’iche’"}
         raj{"rajasthani"}
         rap{"rapanui"}
         rar{"rarotongien"}
@@ -542,6 +546,10 @@ fr{
         zxx{"sans contenu linguistique"}
         zza{"zazaki"}
     }
+    Languages%variant{
+        ps{"pashto"}
+        ug{"ouïgour"}
+    }
     LanguagesShort{
         az{"azéri"}
         en_GB{"anglais (R.-U.)"}
@@ -683,22 +691,27 @@ fr{
         Hans{"sinogrammes simplifiés"}
         Hant{"sinogrammes traditionnels"}
     }
+    Scripts%variant{
+        Arab{"arabo-persan"}
+    }
     Types{
         calendar{
             buddhist{"calendrier bouddhiste"}
-            chinese{"Calendrier chinois"}
+            chinese{"calendrier chinois"}
             coptic{"Calendrier copte"}
-            ethiopic{"Calendrier éthiopien"}
+            dangi{"calendrier dangi"}
+            ethiopic{"calendrier éthiopien"}
             ethiopic-amete-alem{"Calendrier éthiopien Amete Alem"}
             gregorian{"calendrier grégorien"}
-            hebrew{"Calendrier hébraïque"}
+            hebrew{"calendrier hébraïque"}
             indian{"Calendrier indien"}
             islamic{"calendrier musulman"}
             islamic-civil{"calendrier musulman (tabulaire, époque civile)"}
             islamic-tbla{"calendrier musulman (tabulaire, époque astronomique)"}
-            japanese{"Calendrier japonais"}
-            persian{"Calendrier persan"}
-            roc{"Calendrier républicain chinois"}
+            iso8601{"calendrier ISO 8601"}
+            japanese{"calendrier japonais"}
+            persian{"calendrier persan"}
+            roc{"calendrier républicain chinois"}
         }
         colAlternate{
             non-ignorable{"Trier les symboles"}
@@ -706,12 +719,12 @@ fr{
         }
         colBackwards{
             no{"Trier les caractères accentués normalement"}
-            yes{"Trier les caractères accentués dans l'ordre inverse"}
+            yes{"Trier les caractères accentués dans l’ordre inverse"}
         }
         colCaseFirst{
-            lower{"Trier avec les minuscules d'abord"}
+            lower{"Trier avec les minuscules d’abord"}
             no{"Trier sans ordre lié à la casse"}
-            upper{"Trier avec les majuscules d'abord"}
+            upper{"Trier avec les majuscules d’abord"}
         }
         colCaseLevel{
             no{"Trier sans tenir compte de la casse"}
@@ -782,7 +795,7 @@ fr{
             jpan{"chiffres japonais"}
             jpanfin{"chiffres japonais financiers"}
             khmr{"chiffres khmers"}
-            knda{"Chiffres en kannada"}
+            knda{"chiffres en kannada"}
             laoo{"chiffres laotiens"}
             latn{"chiffres occidentaux"}
             mlym{"chiffres malayâlams"}
@@ -832,7 +845,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"langue : {0}"}
         script{"écriture : {0}"}

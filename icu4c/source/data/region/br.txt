@@ -222,7 +222,7 @@ br{
         OM{"Oman"}
         PA{"Panamá"}
         PE{"Perou"}
-        PF{"Polinezia cʼhall"}
+        PF{"Polinezia Cʼhall"}
         PG{"Papoua Ginea-Nevez"}
         PH{"Filipinez"}
         PK{"Pakistan"}
@@ -247,7 +247,7 @@ br{
         SD{"Soudan"}
         SE{"Sveden"}
         SG{"Singapour"}
-        SH{"Saint Helena"}
+        SH{"Saint-Helena"}
         SI{"Slovenia"}
         SJ{"Svalbard"}
         SK{"Slovakia"}
@@ -256,7 +256,7 @@ br{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
-        SS{"Su Soudan"}
+        SS{"Susoudan"}
         ST{"São Tomé ha Príncipe"}
         SV{"Salvador"}
         SX{"Sint Maarten"}
@@ -294,6 +294,7 @@ br{
         VU{"Vanuatu"}
         WF{"Wallis ha Futuna"}
         WS{"Samoa"}
+        XK{"Kosovo"}
         YE{"Yemen"}
         YT{"Mayotte"}
         ZA{"Suafrika"}
@@ -301,9 +302,20 @@ br{
         ZW{"Zimbabwe"}
         ZZ{"Rannved dianav"}
     }
+    Countries%variant{
+        CD{"Kongo (RDK)"}
+        CG{"Kongo (Republik)"}
+        CI{"Aod Olifant"}
+        FK{"Inizi Falkland (Inizi Maloù)"}
+        MK{"Makedonia (RYKM)"}
+        TL{"Timor ar Reter"}
+    }
     CountriesShort{
+        GB{"R.U."}
         HK{"Hong Kong"}
         MO{"Macau"}
+        PS{"Palestina"}
+        US{"S.U."}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.7.39"}
 }

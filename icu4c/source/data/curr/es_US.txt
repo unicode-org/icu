@@ -11,12 +11,12 @@ es_US{
     Currencies{
         JPY{
             "¥",
-            "yen japonés",
+            "yen",
         }
         USD{
             "$",
             "dólar estadounidense",
         }
     }
-    Version{"2.0.98.76"}
+    Version{"2.1.8.19"}
 }

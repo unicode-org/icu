@@ -856,7 +856,7 @@ nn{
             "swazilandsk lilangeni",
         }
         THB{
-            "฿",
+            "THB",
             "thailandsk baht",
         }
         TJR{
@@ -1922,5 +1922,5 @@ nn{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.7.72"}
 }

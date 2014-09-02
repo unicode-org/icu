@@ -39,7 +39,7 @@ rw{
         fr{"Igifaransa"}
         fy{"Igifiriziyani"}
         ga{"Ikirilandi"}
-        gd{"Ikigaluwa cy'Igisweduwa"}
+        gd{"Ikigaluwa cy’Igisweduwa"}
         gl{"Ikigalisiya"}
         gn{"Inyaguwarani"}
         gu{"Inyegujarati"}
@@ -117,5 +117,5 @@ rw{
         yi{"Inyeyidishi"}
         zu{"Inyezulu"}
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.7.39"}
 }

@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/en.xml
  */
 en{
-    Version{"2.0.98.76"}
+    Version{"2.1.8.87"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -22,7 +22,7 @@ en{
             ec{"Curaçao"}
         }
         "America:St_Barthelemy"{
-            ec{"Saint Barthélemy"}
+            ec{"St. Barthélemy"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
@@ -34,10 +34,13 @@ en{
             ec{"Unknown City"}
         }
         "Europe:Dublin"{
-            ld{"Irish Summer Time"}
+            ld{"Irish Standard Time"}
         }
         "Europe:London"{
             ld{"British Summer Time"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Uzhhorod"}
         }
         "Indian:Reunion"{
             ec{"Réunion"}
@@ -123,6 +126,11 @@ en{
             ld{"Anadyr Summer Time"}
             lg{"Anadyr Time"}
             ls{"Anadyr Standard Time"}
+        }
+        "meta:Apia"{
+            ld{"Apia Daylight Time"}
+            lg{"Apia Time"}
+            ls{"Apia Standard Time"}
         }
         "meta:Aqtau"{
             ld{"Aqtau Summer Time"}
@@ -290,6 +298,9 @@ en{
             lg{"Eastern European Time"}
             ls{"Eastern European Standard Time"}
         }
+        "meta:Europe_Further_Eastern"{
+            ls{"Further-eastern European Time"}
+        }
         "meta:Europe_Western"{
             ld{"Western European Summer Time"}
             lg{"Western European Time"}
@@ -309,7 +320,7 @@ en{
             ls{"French Guiana Time"}
         }
         "meta:French_Southern"{
-            ls{"French Southern and Antarctic Time"}
+            ls{"French Southern & Antarctic Time"}
         }
         "meta:GMT"{
             ls{"Greenwich Mean Time"}
@@ -573,9 +584,9 @@ en{
             ls{"Phoenix Islands Time"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Saint Pierre and Miquelon Daylight Time"}
-            lg{"Saint Pierre and Miquelon Time"}
-            ls{"Saint Pierre and Miquelon Standard Time"}
+            ld{"St. Pierre & Miquelon Daylight Time"}
+            lg{"St. Pierre & Miquelon Time"}
+            ls{"St. Pierre & Miquelon Standard Time"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairn Time"}
@@ -692,7 +703,7 @@ en{
             ls{"Wake Island Time"}
         }
         "meta:Wallis"{
-            ls{"Wallis and Futuna Time"}
+            ls{"Wallis & Futuna Time"}
         }
         "meta:Yakutsk"{
             ld{"Yakutsk Summer Time"}

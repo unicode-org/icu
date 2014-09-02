@@ -86,7 +86,7 @@ da{
         CF{"Centralafrikanske Republik"}
         CG{"Congo-Brazzaville"}
         CH{"Schweiz"}
-        CI{"Côte d’Ivoire"}
+        CI{"Elfenbenskysten"}
         CK{"Cookøerne"}
         CL{"Chile"}
         CM{"Cameroun"}
@@ -136,13 +136,13 @@ da{
         GP{"Guadeloupe"}
         GQ{"Ækvatorialguinea"}
         GR{"Grækenland"}
-        GS{"South Georgia og De Sydlige Sandwichøer"}
+        GS{"South Georgia og South Sandwich Islands"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
         HK{"Hongkong SAR"}
-        HM{"Heard- og McDonald-øerne"}
+        HM{"Heard Island og McDonald Islands"}
         HN{"Honduras"}
         HR{"Kroatien"}
         HT{"Haiti"}
@@ -302,6 +302,13 @@ da{
         ZW{"Zimbabwe"}
         ZZ{"Ukendt område"}
     }
+    Countries%variant{
+        CD{"Den Demokratiske Republik Congo"}
+        CG{"Republikken Congo"}
+        FK{"Falklandsøerne (Islas Malvinas)"}
+        MK{"Makedonien (Den Tidligere Jugoslaviske Republik Makedonien)"}
+        TL{"Østtimor"}
+    }
     CountriesShort{
         GB{"UK"}
         HK{"Hongkong"}
@@ -309,5 +316,5 @@ da{
         PS{"Palæstina"}
         US{"USA"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
 }

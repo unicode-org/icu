@@ -58,5 +58,5 @@ shi_Latn{
         zh{"tacinwit"}
         zu{"tazulut"}
     }
-    Version{"2.0.97.28"}
+    Version{"2.1.6.69"}
 }

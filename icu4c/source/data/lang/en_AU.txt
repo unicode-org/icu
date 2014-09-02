@@ -9,10 +9,15 @@
 en_AU{
     %%Parent{"en_GB"}
     Languages{
-        en_US{"US English"}
+        bax{"Bamum"}
+        en_US{"United States English"}
     }
     Scripts{
+        Cham{"Cham"}
+        Loma{"Loma"}
+        Modi{"Modi"}
+        Moon{"Moon"}
         Thai{"Thai"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.8.19"}
 }

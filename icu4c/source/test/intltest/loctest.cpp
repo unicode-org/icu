@@ -1126,7 +1126,7 @@ LocaleTest::TestThaiCurrencyFormat()
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *thaiCurrency = (DecimalFormat*)NumberFormat::createCurrencyInstance(
                     Locale("th", "TH"), status);
-    UChar posPrefix = 0x0e3f;
+    UnicodeString posPrefix("THB", 3, US_INV);  // per cldrbug 7618
     UnicodeString temp;
 
     if(U_FAILURE(status) || !thaiCurrency)
@@ -1134,8 +1134,8 @@ LocaleTest::TestThaiCurrencyFormat()
         dataerrln("Couldn't get th_TH currency -> " + UnicodeString(u_errorName(status)));
         return;
     }
-    if (thaiCurrency->getPositivePrefix(temp) != UnicodeString(&posPrefix, 1, 1))
-        errln("Thai currency prefix wrong: expected 0x0e3f, got \"" +
+    if (thaiCurrency->getPositivePrefix(temp) != posPrefix)
+        errln("Thai currency prefix wrong: expected THB, got \"" +
                         thaiCurrency->getPositivePrefix(temp) + "\"");
     if (thaiCurrency->getPositiveSuffix(temp) != "")
         errln("Thai currency suffix wrong: expected \"\", got \"" +

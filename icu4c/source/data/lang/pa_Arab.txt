@@ -12,11 +12,11 @@
 pa_Arab{
     %%Parent{"root"}
     Languages{
-        pa{"پنجاب"}
+        pa{"پنجابی"}
     }
     Scripts{
-        Arab{"العربية"}
+        Arab{"عربی"}
         Guru{"گُرمُکھی"}
     }
-    Version{"2.0.92.75"}
+    Version{"2.1.6.69"}
 }

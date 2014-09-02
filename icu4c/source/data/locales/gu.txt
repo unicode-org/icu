@@ -13,8 +13,8 @@ gu{
     AuxExemplarCharacters{"[\u200C\u200D ૰]"}
     Ellipsis{
         final{"{0}…"}
-        initial{"… {0}"}
-        medial{"{0} … {1}"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
         word-final{"{0} …"}
         word-initial{"… {0}"}
         word-medial{"{0} … {1}"}
@@ -48,7 +48,7 @@ gu{
                 currencyFormat{"¤#,##,##0.00"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##,##0%"}
-                scientificFormat{"#E0"}
+                scientificFormat{"[#E0]"}
             }
             patternsLong{
                 decimalFormat{
@@ -166,11 +166,13 @@ gu{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
+        minimumGroupingDigits{"1"}
         native{"gujr"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     calendar{
         generic{
             DateTimePatterns{
@@ -336,22 +338,25 @@ gu{
                 "EEEE, d MMMM, y",
                 "d MMMM, y",
                 "d MMM, y",
-                "d-MM-yy",
+                "d/M/yy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"મધ્યાહ્ન"}
+            NoonMarkerNarrow{"મધ્યાહ્ન"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
             availableFormats{
-                EHm{"HH:mm E"}
-                EHms{"HH:mm:ss E"}
+                E{"ccc"}
+                EHm{"E HH:mm"}
+                EHms{"E HH:mm:ss"}
                 Ed{"E d"}
-                Ehm{"h:mm a E"}
-                Ehms{"h:mm:ss a E"}
+                Ehm{"E h:mm a"}
+                Ehms{"E h:mm:ss a"}
                 Gy{"G y"}
                 GyMMM{"MMM, G y"}
                 GyMMMEd{"E, d MMM, G y"}
@@ -467,6 +472,10 @@ gu{
                     "ઈસુના જન્મ પહેલા",
                     "ઇસવીસન",
                 }
+                abbreviated%variant{
+                    "સામાન્ય યુગ પહેલા",
+                    "સામાન્ય યુગ",
+                }
                 narrow{
                     "ઇ સ પુ",
                     "ઇસ",
@@ -475,13 +484,17 @@ gu{
                     "ઈસવીસન પૂર્વે",
                     "ઇસવીસન",
                 }
+                wide%variant{
+                    "સામાન્ય યુગ પહેલા",
+                    "સામાન્ય યુગ",
+                }
             }
             intervalFormats{
                 H{
-                    H{"HH–HH"}
+                    H{"HH – HH"}
                 }
                 Hm{
-                    H{"HH:mm–HH:mm"}
+                    H{"HH:mm – HH:mm"}
                     m{"HH:mm–HH:mm"}
                 }
                 Hmv{
@@ -492,7 +505,7 @@ gu{
                     H{"HH–HH v"}
                 }
                 M{
-                    M{"M–M"}
+                    M{"M – M"}
                 }
                 MEd{
                     M{"E,d/M – E,d/M"}
@@ -523,7 +536,7 @@ gu{
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
+                    h{"h:mm – h:mm a"}
                     m{"h:mm–h:mm a"}
                 }
                 hmv{
@@ -581,7 +594,7 @@ gu{
                         "મે",
                         "જૂન",
                         "જુલાઈ",
-                        "ઑગસ્ટ",
+                        "ઑગ",
                         "સપ્ટે",
                         "ઑક્ટો",
                         "નવે",
@@ -625,7 +638,7 @@ gu{
                         "મે",
                         "જૂન",
                         "જુલાઈ",
-                        "ઑગ",
+                        "ઑગસ્ટ",
                         "સપ્ટે",
                         "ઑક્ટો",
                         "નવે",
@@ -737,6 +750,32 @@ gu{
                 }
             }
         }
+        day-narrow{
+            dn{"દિ."}
+            relativeTime{
+                future{
+                    one{"+{0} દિવસ"}
+                    other{"+{0} દિવસ"}
+                }
+                past{
+                    one{"-{0} દિવસ"}
+                    other{"-{0} દિવસ"}
+                }
+            }
+        }
+        day-short{
+            dn{"દિ."}
+            relativeTime{
+                future{
+                    one{"{0} દિવસમાં"}
+                    other{"{0} દિવસમાં"}
+                }
+                past{
+                    one{"{0} દિવસ પહેલા"}
+                    other{"{0} દિવસ પહેલા"}
+                }
+            }
+        }
         dayperiod{
             dn{"AM/PM"}
         }
@@ -750,8 +789,48 @@ gu{
                 "1"{"આવતા શુક્રવારે"}
             }
         }
+        fri-narrow{
+            relative{
+                "-1"{"ગયા શુક્રવારે"}
+                "0"{"આ શુક્રવારે"}
+                "1"{"આવતા શુક્રવારે"}
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"ગયા શુક્રવારે"}
+                "0"{"આ શુક્રવારે"}
+                "1"{"આવતા શુક્રવારે"}
+            }
+        }
         hour{
             dn{"કલાક"}
+            relativeTime{
+                future{
+                    one{"{0} કલાકમાં"}
+                    other{"{0} કલાકમાં"}
+                }
+                past{
+                    one{"{0} કલાક પહેલા"}
+                    other{"{0} કલાક પહેલા"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"ક"}
+            relativeTime{
+                future{
+                    one{"{0} કલાકમાં"}
+                    other{"{0} કલાકમાં"}
+                }
+                past{
+                    one{"-{0} કલાક"}
+                    other{"-{0} કલાક"}
+                }
+            }
+        }
+        hour-short{
+            dn{"ક."}
             relativeTime{
                 future{
                     one{"{0} કલાકમાં"}
@@ -776,7 +855,47 @@ gu{
                 }
             }
         }
+        minute-narrow{
+            dn{"મિ"}
+            relativeTime{
+                future{
+                    one{"{0} મિનિટમાં"}
+                    other{"{0} મિનિટમાં"}
+                }
+                past{
+                    one{"-{0} મિનિટ"}
+                    other{"-{0} મિનિટ"}
+                }
+            }
+        }
+        minute-short{
+            dn{"મિ."}
+            relativeTime{
+                future{
+                    one{"{0} મિનિટમાં"}
+                    other{"{0} મિનિટમાં"}
+                }
+                past{
+                    one{"{0} મિનિટ પહેલા"}
+                    other{"{0} મિનિટ પહેલા"}
+                }
+            }
+        }
         mon{
+            relative{
+                "-1"{"ગયા સોમવારે"}
+                "0"{"આ સોમવારે"}
+                "1"{"આવતા સોમવારે"}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"ગયા સોમવારે"}
+                "0"{"આ સોમવારે"}
+                "1"{"આવતા સોમવારે"}
+            }
+        }
+        mon-short{
             relative{
                 "-1"{"ગયા સોમવારે"}
                 "0"{"આ સોમવારે"}
@@ -801,7 +920,86 @@ gu{
                 }
             }
         }
+        month-narrow{
+            dn{"મ."}
+            relativeTime{
+                future{
+                    one{"+{0} મહિના"}
+                    other{"+{0} મહિના"}
+                }
+                past{
+                    one{"-{0} મહિના"}
+                    other{"-{0} મહિના"}
+                }
+            }
+        }
+        month-short{
+            dn{"મ."}
+            relativeTime{
+                future{
+                    one{"{0} મહિનામાં"}
+                    other{"{0} મહિનામાં"}
+                }
+                past{
+                    one{"{0} મહિના પહેલા"}
+                    other{"{0} મહિના પહેલા"}
+                }
+            }
+        }
+        quarter{
+            dn{"ક્વાર્ટર"}
+            relativeTime{
+                future{
+                    one{"{0} ત્રિમાસમાં"}
+                    other{"{0} ત્રિમાસમાં"}
+                }
+                past{
+                    one{"{0} ત્રિમાસ પહેલાં"}
+                    other{"{0} ત્રિમાસ પહેલાં"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"ક્વા."}
+            relativeTime{
+                future{
+                    one{"+{0} ત્રિમાસ"}
+                    other{"+{0} ત્રિમાસ"}
+                }
+                past{
+                    one{"-{0} ત્રિમાસ"}
+                    other{"-{0} ત્રિમાસ"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"ક્વા."}
+            relativeTime{
+                future{
+                    one{"{0} ત્રિમાસમાં"}
+                    other{"{0} ત્રિમાસમાં"}
+                }
+                past{
+                    one{"{0} ત્રિમાસ પહેલાં"}
+                    other{"{0} ત્રિમાસ પહેલાં"}
+                }
+            }
+        }
         sat{
+            relative{
+                "-1"{"ગયા શનિવારે"}
+                "0"{"આ શનિવારે"}
+                "1"{"આવતા શનિવારે"}
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"ગયા શનિવારે"}
+                "0"{"આ શનિવારે"}
+                "1"{"આવતા શનિવારે"}
+            }
+        }
+        sat-short{
             relative{
                 "-1"{"ગયા શનિવારે"}
                 "0"{"આ શનિવારે"}
@@ -824,7 +1022,47 @@ gu{
                 }
             }
         }
+        second-narrow{
+            dn{"સે"}
+            relativeTime{
+                future{
+                    one{"{0} સેકંડમાં"}
+                    other{"{0} સેકંડમાં"}
+                }
+                past{
+                    one{"-{0} સેકંડ પહેલા"}
+                    other{"-{0} સેકંડ પહેલા"}
+                }
+            }
+        }
+        second-short{
+            dn{"સેકન્ડ"}
+            relativeTime{
+                future{
+                    one{"{0} સેકંડમાં"}
+                    other{"{0} સેકંડમાં"}
+                }
+                past{
+                    one{"{0} સેકંડ પહેલા"}
+                    other{"{0} સેકંડ પહેલા"}
+                }
+            }
+        }
         sun{
+            relative{
+                "-1"{"ગયા રવિવારે"}
+                "0"{"આ રવિવારે"}
+                "1"{"આવતા રવિવારે"}
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"ગયા રવિવારે"}
+                "0"{"આ રવિવારે"}
+                "1"{"આવતા રવિવારે"}
+            }
+        }
+        sun-short{
             relative{
                 "-1"{"ગયા રવિવારે"}
                 "0"{"આ રવિવારે"}
@@ -838,7 +1076,35 @@ gu{
                 "1"{"આવતા ગુરુવારે"}
             }
         }
+        thu-narrow{
+            relative{
+                "-1"{"ગયા ગુરુવારે"}
+                "0"{"આ ગુરુવારે"}
+                "1"{"આવતા ગુરુવારે"}
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"ગયા ગુરુવારે"}
+                "0"{"આ ગુરુવારે"}
+                "1"{"આવતા ગુરુવારે"}
+            }
+        }
         tue{
+            relative{
+                "-1"{"ગયા મંગળવારે"}
+                "0"{"આ મંગળવારે"}
+                "1"{"આવતા મંગળવારે"}
+            }
+        }
+        tue-narrow{
+            relative{
+                "-1"{"ગયા મંગળવારે"}
+                "0"{"આ મંગળવારે"}
+                "1"{"આવતા મંગળવારે"}
+            }
+        }
+        tue-short{
             relative{
                 "-1"{"ગયા મંગળવારે"}
                 "0"{"આ મંગળવારે"}
@@ -852,6 +1118,20 @@ gu{
                 "1"{"આવતા બુધવારે"}
             }
         }
+        wed-narrow{
+            relative{
+                "-1"{"ગયા બુધવારે"}
+                "0"{"આ બુધવારે"}
+                "1"{"આવતા બુધવારે"}
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"ગયા બુધવારે"}
+                "0"{"આ બુધવારે"}
+                "1"{"આવતા બુધવારે"}
+            }
+        }
         week{
             dn{"અઠવાડિયું"}
             relative{
@@ -859,6 +1139,32 @@ gu{
                 "0"{"આ અઠવાડિયે"}
                 "1"{"આવતા અઠવાડિયે"}
             }
+            relativeTime{
+                future{
+                    one{"{0} અઠવાડિયામાં"}
+                    other{"{0} અઠવાડિયામાં"}
+                }
+                past{
+                    one{"{0} અઠવાડિયા પહેલા"}
+                    other{"{0} અઠવાડિયા પહેલા"}
+                }
+            }
+        }
+        week-narrow{
+            dn{"અઠ."}
+            relativeTime{
+                future{
+                    one{"+{0} અઠવાડિયા"}
+                    other{"+{0} અઠવાડિયા"}
+                }
+                past{
+                    one{"-{0} અઠવાડિયા"}
+                    other{"-{0} અઠવાડિયા"}
+                }
+            }
+        }
+        week-short{
+            dn{"અઠ."}
             relativeTime{
                 future{
                     one{"{0} અઠવાડિયામાં"}
@@ -891,6 +1197,32 @@ gu{
                 }
             }
         }
+        year-narrow{
+            dn{"વર્ષ"}
+            relativeTime{
+                future{
+                    one{"+{0} વર્ષ"}
+                    other{"+{0} વર્ષ"}
+                }
+                past{
+                    one{"-{0} વર્ષ"}
+                    other{"-{0} વર્ષ"}
+                }
+            }
+        }
+        year-short{
+            dn{"વર્ષ"}
+            relativeTime{
+                future{
+                    one{"{0} વર્ષમાં"}
+                    other{"{0} વર્ષમાં"}
+                }
+                past{
+                    one{"{0} વર્ષ પહેલા"}
+                    other{"{0} વર્ષ પહેલા"}
+                }
+            }
+        }
         zone{
             dn{"સમય ઝોન"}
         }
@@ -904,7 +1236,13 @@ gu{
         }
         unit{
             2{"{0} અને {1}"}
-            end{"{0} અને {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit-narrow{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
@@ -935,211 +1273,628 @@ gu{
     units{
         acceleration{
             g-force{
+                dnam{"g-બળ"}
                 one{"{0} g-બળ"}
                 other{"{0} g-બળ"}
+            }
+            meter-per-second-squared{
+                dnam{"મીટર પ્રતિ સેકન્ડ²"}
+                one{"{0} મીટર પ્રતિ સેકન્ડ²"}
+                other{"{0} મીટર પ્રતિ સેકન્ડ²"}
             }
         }
         angle{
             arc-minute{
-                one{"{0} માઇન્યૂટ"}
-                other{"{0} માઇન્યૂટ"}
+                dnam{"ચાપમિનિટ"}
+                one{"{0} ચાપમિનિટ"}
+                other{"{0} ચાપમિનિટ"}
             }
             arc-second{
-                one{"{0} સેકન્ડ"}
-                other{"{0} સેકન્ડ"}
+                dnam{"ચાપસેકન્ડ"}
+                one{"{0} ચાપસેકન્ડ"}
+                other{"{0} ચાપસેકન્ડ"}
             }
             degree{
+                dnam{"અંશ"}
                 one{"{0} અંશ"}
                 other{"{0} અંશ"}
+            }
+            radian{
+                dnam{"સમત્રિજ્યાકોણ"}
+                one{"{0} સમત્રિજ્યાકોણ"}
+                other{"{0} સમત્રિજ્યાકોણ"}
             }
         }
         area{
             acre{
+                dnam{"એકર"}
                 one{"{0} એકર"}
                 other{"{0} એકર"}
             }
             hectare{
+                dnam{"હેક્ટર"}
                 one{"{0} હેક્ટર"}
                 other{"{0} હેક્ટર"}
             }
+            square-centimeter{
+                dnam{"ચોરસ સેન્ટીમીટર"}
+                one{"{0} ચોરસ સેન્ટીમીટર"}
+                other{"{0} ચોરસ સેન્ટીમીટર"}
+            }
             square-foot{
+                dnam{"ચોરસ ફૂટ"}
                 one{"{0} ચોરસ ફૂટ"}
                 other{"{0} ચોરસ ફૂટ"}
             }
+            square-inch{
+                dnam{"ચોરસ ઇંચ"}
+                one{"{0} ચોરસ ઇંચ"}
+                other{"{0} ચોરસ ઇંચ"}
+            }
             square-kilometer{
+                dnam{"ચોરસ કિલોમીટર"}
                 one{"{0} ચોરસ કિલોમીટર"}
                 other{"{0} ચોરસ કિલોમીટર"}
             }
             square-meter{
+                dnam{"ચોરસ મીટર"}
                 one{"{0} ચોરસ મીટર"}
                 other{"{0} ચોરસ મીટર"}
             }
             square-mile{
+                dnam{"ચોરસ માઇલ"}
                 one{"{0} ચોરસ માઇલ"}
                 other{"{0} ચોરસ માઇલ"}
+            }
+            square-yard{
+                dnam{"ચોરસ વાર"}
+                one{"{0} ચોરસ વાર"}
+                other{"{0} ચોરસ વાર"}
             }
         }
         compound{
             per{"{0} પ્રતિ {1}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"લીટર પ્રતિ કિલોમીટર"}
+                one{"{0} લીટર પ્રતિ કિલોમીટર"}
+                other{"{0} લીટર પ્રતિ કિલોમીટર"}
+            }
+            mile-per-gallon{
+                dnam{"માઇલ પ્રતિ ગૅલન"}
+                one{"{0} માઇલ પ્રતિ ગૅલન"}
+                other{"{0} માઇલ પ્રતિ ગૅલન"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"બિટ"}
+                one{"{0} બિટ"}
+                other{"{0} બિટ"}
+            }
+            byte{
+                dnam{"બાઇટ"}
+                one{"{0} બાઇટ"}
+                other{"{0} બાઇટ"}
+            }
+            gigabit{
+                dnam{"ગીગાબિટ"}
+                one{"{0} ગીગાબિટ"}
+                other{"{0} ગીગાબિટ"}
+            }
+            gigabyte{
+                dnam{"ગીગાબાઇટ"}
+                one{"{0} ગીગાબાઇટ"}
+                other{"{0} ગીગાબાઇટ"}
+            }
+            kilobit{
+                dnam{"કિલોબિટ"}
+                one{"{0} કિલોબિટ"}
+                other{"{0} કિલોબિટ"}
+            }
+            kilobyte{
+                dnam{"કિલોબાઇટ"}
+                one{"{0} કિલોબાઇટ"}
+                other{"{0} કિલોબાઇટ"}
+            }
+            megabit{
+                dnam{"મેગાબિટ"}
+                one{"{0} મેગાબિટ"}
+                other{"{0} મેગાબિટ"}
+            }
+            megabyte{
+                dnam{"મેગાબાઇટ"}
+                one{"{0} મેગાબાઇટ"}
+                other{"{0} મેગાબાઇટ"}
+            }
+            terabit{
+                dnam{"ટેરાબિટ"}
+                one{"{0} ટેરાબિટ"}
+                other{"{0} ટેરાબિટ"}
+            }
+            terabyte{
+                dnam{"ટેરાબાઇટ"}
+                one{"{0} ટેરાબાઇટ"}
+                other{"{0} ટેરાબાઇટ"}
+            }
+        }
         duration{
             day{
+                dnam{"દિવસ"}
                 one{"{0} દિવસ"}
                 other{"{0} દિવસ"}
             }
             hour{
+                dnam{"કલાક"}
                 one{"{0} કલાક"}
                 other{"{0} કલાક"}
+                per{"{0} પ્રતિ કલાક"}
+            }
+            microsecond{
+                dnam{"માઇક્રોસેકંડ"}
+                one{"{0} માઇક્રોસેકંડ"}
+                other{"{0} માઇક્રોસેકંડ"}
             }
             millisecond{
+                dnam{"મિલિસેકન્ડ"}
                 one{"{0} મિલિસેકન્ડ"}
-                other{"{0} મિલિસેકન્ડ્સ"}
+                other{"{0} મિલિસેકન્ડ"}
             }
             minute{
+                dnam{"મિનિટ"}
                 one{"{0} મિનિટ"}
                 other{"{0} મિનિટ"}
             }
             month{
+                dnam{"મહિના"}
                 one{"{0} મહિનો"}
                 other{"{0} મહિના"}
             }
+            nanosecond{
+                dnam{"નેનોસેકંડ"}
+                one{"{0} નેનોસેકંડ"}
+                other{"{0} નેનોસેકંડ"}
+            }
             second{
+                dnam{"સેકંડ"}
                 one{"{0} સેકંડ"}
                 other{"{0} સેકંડ"}
+                per{"{0} પ્રતિ સેકંડ"}
             }
             week{
+                dnam{"અઠવાડિયા"}
                 one{"{0} અઠવાડિયું"}
                 other{"{0} અઠવાડિયા"}
             }
             year{
+                dnam{"વર્ષ"}
                 one{"{0} વર્ષ"}
                 other{"{0} વર્ષ"}
             }
         }
+        electric{
+            ampere{
+                dnam{"એમ્પીયર"}
+                one{"{0} એમ્પીયર"}
+                other{"{0} એમ્પીયર"}
+            }
+            milliampere{
+                dnam{"મિલિએમ્પીયર"}
+                one{"{0} મિલિએમ્પીયર"}
+                other{"{0} મિલિએમ્પીયર"}
+            }
+            ohm{
+                dnam{"ઓહ્મ"}
+                one{"{0} ઓહ્મ"}
+                other{"{0} ઓહ્મ"}
+            }
+            volt{
+                dnam{"વૉલ્ટ્સ"}
+                one{"{0} વૉલ્ટ્"}
+                other{"{0} વૉલ્ટ્"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"કેલરી"}
+                one{"{0} કેલરી"}
+                other{"{0} કેલરી"}
+            }
+            foodcalorie{
+                dnam{"કેલરી"}
+                one{"{0} કેલરી"}
+                other{"{0} કેલરી"}
+            }
+            joule{
+                dnam{"જૂલ"}
+                one{"{0} જૂલ"}
+                other{"{0} જૂલ"}
+            }
+            kilocalorie{
+                dnam{"કિલોકેલરી"}
+                one{"{0} કિલોકેલરી"}
+                other{"{0} કિલોકેલરી"}
+            }
+            kilojoule{
+                dnam{"કિલોજૂલ"}
+                one{"{0} કિલોજૂલ"}
+                other{"{0} કિલોજૂલ"}
+            }
+            kilowatt-hour{
+                dnam{"કિલોવૉટ-કલાક"}
+                one{"{0} કિલોવૉટ કલાક"}
+                other{"{0} કિલોવૉટ-કલાક"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"ગીગાહર્ટ્ઝ"}
+                one{"{0} ગીગાહર્ટ્ઝ"}
+                other{"{0} ગીગાહર્ટ્ઝ"}
+            }
+            hertz{
+                dnam{"હર્ટ્ઝ"}
+                one{"{0} હર્ટ્ઝ"}
+                other{"{0} હર્ટ્ઝ"}
+            }
+            kilohertz{
+                dnam{"કિલોહર્ટ્ઝ"}
+                one{"{0} કિલોહર્ટ્ઝ"}
+                other{"{0} કિલોહર્ટ્ઝ"}
+            }
+            megahertz{
+                dnam{"મેગાહર્ટ્ઝ"}
+                one{"{0} મેગાહર્ટ્ઝ"}
+                other{"{0} મેગાહર્ટ્ઝ"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"ખગોળીય યુનિટ"}
+                one{"{0} ખગોળીય યુનિટ"}
+                other{"{0} ખગોળીય યુનિટ"}
+            }
             centimeter{
+                dnam{"સેન્ટિમીટર"}
                 one{"{0} સેન્ટિમીટર"}
                 other{"{0} સેન્ટિમીટર"}
             }
+            decimeter{
+                dnam{"ડેસિમીટર"}
+                one{"{0} ડેસિમીટર"}
+                other{"{0} ડેસિમીટર"}
+            }
             foot{
+                dnam{"ફૂટ"}
                 one{"{0} ફૂટ"}
-                other{"{0} ફિટ"}
+                other{"{0} ફૂટ"}
             }
             inch{
+                dnam{"ઇંચ"}
                 one{"{0} ઇંચ"}
                 other{"{0} ઇંચ"}
             }
             kilometer{
+                dnam{"કિલોમીટર"}
                 one{"{0} કિલોમીટર"}
                 other{"{0} કિલોમીટર"}
             }
             light-year{
+                dnam{"પ્રકાશ વર્ષ"}
                 one{"{0} પ્રકાશ વર્ષ"}
                 other{"{0} પ્રકાશ વર્ષ"}
             }
             meter{
+                dnam{"મીટર"}
                 one{"{0} મીટર"}
                 other{"{0} મીટર"}
             }
+            micrometer{
+                dnam{"માઇક્રોમીટર"}
+                one{"{0} માઇક્રોમીટર"}
+                other{"{0} માઇક્રોમીટર"}
+            }
             mile{
+                dnam{"માઇલ"}
                 one{"{0} માઇલ"}
                 other{"{0} માઇલ"}
             }
             millimeter{
+                dnam{"મિલિમીટર"}
                 one{"{0} મિલિમીટર"}
                 other{"{0} મિલિમીટર"}
             }
+            nanometer{
+                dnam{"નેનોમીટર"}
+                one{"{0} નેનોમીટર"}
+                other{"{0} નેનોમીટર"}
+            }
+            nautical-mile{
+                dnam{"નૉટિકલ માઇલ"}
+                one{"{0} નૉટિકલ માઇલ"}
+                other{"{0} નૉટિકલ માઇલ"}
+            }
+            parsec{
+                dnam{"પરસેક"}
+                one{"{0} પરસેક"}
+                other{"{0} પરસેક"}
+            }
             picometer{
-                one{"{0} પિસૉમિટર"}
-                other{"{0} પિસૉમિટર"}
+                dnam{"પિસૉમીટર"}
+                one{"{0} પિસૉમીટર"}
+                other{"{0} પિસૉમીટર"}
             }
             yard{
+                dnam{"વાર"}
                 one{"{0} વાર"}
                 other{"{0} વાર"}
             }
         }
+        light{
+            lux{
+                dnam{"લક્સ"}
+                one{"{0} લક્સ"}
+                other{"{0} લક્સ"}
+            }
+        }
         mass{
+            carat{
+                dnam{"કેરેટ"}
+                one{"{0} કેરેટ"}
+                other{"{0} કેરેટ"}
+            }
             gram{
+                dnam{"ગ્રામ"}
                 one{"{0} ગ્રામ"}
                 other{"{0} ગ્રામ"}
             }
             kilogram{
+                dnam{"કિલોગ્રામ"}
                 one{"{0} કિલોગ્રામ"}
                 other{"{0} કિલોગ્રામ"}
             }
+            metric-ton{
+                dnam{"મેટ્રિક ટન"}
+                one{"{0} મેટ્રિક ટન"}
+                other{"{0} મેટ્રિક ટન"}
+            }
+            microgram{
+                dnam{"માઇક્રોગ્રામ"}
+                one{"{0} માઇક્રોગ્રામ"}
+                other{"{0} માઇક્રોગ્રામ"}
+            }
+            milligram{
+                dnam{"મિલિગ્રામ"}
+                one{"{0} મિલિગ્રામ"}
+                other{"{0} મિલિગ્રામ"}
+            }
             ounce{
-                one{"{0} ઔંશ"}
-                other{"{0} ઔંશ"}
+                dnam{"ઔંસ"}
+                one{"{0} ઔંસ"}
+                other{"{0} ઔંસ"}
+            }
+            ounce-troy{
+                dnam{"ટ્રોય ઔંસ"}
+                one{"{0} ટ્રોય ઔંસ"}
+                other{"{0} ટ્રોય ઔંસ"}
             }
             pound{
+                dnam{"પાઉન્ડ"}
                 one{"{0} પાઉન્ડ"}
                 other{"{0} પાઉન્ડ"}
             }
+            ton{
+                dnam{"ટન"}
+                one{"{0} ટન"}
+                other{"{0} ટન"}
+            }
         }
         power{
+            gigawatt{
+                dnam{"ગીગાવૉટ"}
+                one{"{0} ગીગાવૉટ"}
+                other{"{0} ગીગાવૉટ"}
+            }
             horsepower{
+                dnam{"હોર્સપાવર"}
                 one{"{0} હોર્સપાવર"}
                 other{"{0} હોર્સપાવર"}
             }
             kilowatt{
+                dnam{"કિલોવૉટ"}
                 one{"{0} કિલોવૉટ"}
                 other{"{0} કિલોવૉટ"}
             }
+            megawatt{
+                dnam{"મેગાવૉટ"}
+                one{"{0} મેગાવૉટ"}
+                other{"{0} મેગાવૉટ"}
+            }
+            milliwatt{
+                dnam{"મિલિવૉટ"}
+                one{"{0} મિલિવૉટ"}
+                other{"{0} મિલિવૉટ"}
+            }
             watt{
+                dnam{"વૉટ"}
                 one{"{0} વૉટ"}
                 other{"{0} વૉટ"}
             }
         }
         pressure{
             hectopascal{
+                dnam{"હેક્ટૉપાસ્કલ"}
                 one{"{0} હેક્ટૉપાસ્કલ"}
                 other{"{0} હેક્ટૉપાસ્કલ"}
             }
             inch-hg{
+                dnam{"પારાના ઇંચ"}
                 one{"{0} પારાના ઇંચ"}
                 other{"{0} પારાના ઇંચ"}
             }
             millibar{
-                one{"{0} મિલીબાર"}
-                other{"{0} મિલીબાર"}
+                dnam{"મિલિબાર"}
+                one{"{0} મિલિબાર"}
+                other{"{0} મિલિબાર"}
+            }
+            millimeter-of-mercury{
+                dnam{"પારાનું મિલિમીટર"}
+                one{"{0} પારાનું મિલિમીટર"}
+                other{"{0} પારાનું મિલિમીટર"}
+            }
+            pound-per-square-inch{
+                dnam{"પાઉન્ડ પ્રતિ વર્ગ ઇંચ"}
+                one{"{0} પાઉન્ડ પ્રતિ વર્ગ ઇંચ"}
+                other{"{0} પાઉન્ડ પ્રતિ વર્ગ ઇંચ"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"કૅરેટ"}
+                one{"{0} કૅરેટ"}
+                other{"{0} કૅરેટ"}
             }
         }
         speed{
             kilometer-per-hour{
+                dnam{"કિલોમીટર પ્રતિ કલાક"}
                 one{"{0} કિલોમીટર પ્રતિ કલાક"}
                 other{"{0} કિલોમીટર પ્રતિ કલાક"}
             }
             meter-per-second{
+                dnam{"મીટર પ્રતિ સેકન્ડ"}
                 one{"{0} મીટર પ્રતિ સેકન્ડ"}
                 other{"{0} મીટર પ્રતિ સેકન્ડ"}
             }
             mile-per-hour{
+                dnam{"માઇલ પ્રતિ કલાક"}
                 one{"{0} માઇલ પ્રતિ કલાક"}
                 other{"{0} માઇલ પ્રતિ કલાક"}
             }
         }
         temperature{
             celsius{
+                dnam{"ડિગ્રી સેલ્સિયસ"}
                 one{"{0} ડિગ્રી સેલ્સિયસ"}
                 other{"{0} ડિગ્રી સેલ્સિયસ"}
             }
             fahrenheit{
+                dnam{"ડિગ્રી ફેરનહીટ"}
                 one{"{0} ડિગ્રી ફેરનહીટ"}
                 other{"{0} ડિગ્રી ફેરનહીટ"}
             }
+            kelvin{
+                dnam{"કેલ્વિન"}
+                one{"{0} કેલ્વિન"}
+                other{"{0} કેલ્વિન"}
+            }
         }
         volume{
+            acre-foot{
+                dnam{"એકર-ફૂટ"}
+                one{"{0} એકર-ફૂટ"}
+                other{"{0} એકર-ફૂટ"}
+            }
+            centiliter{
+                dnam{"સેન્ટિલીટર"}
+                one{"{0} સેન્ટિલીટર"}
+                other{"{0} સેન્ટિલીટર"}
+            }
+            cubic-centimeter{
+                dnam{"ઘન સેન્ટિમીટર"}
+                one{"{0} ઘન સેન્ટિમીટર"}
+                other{"{0} ઘન સેન્ટિમીટર"}
+            }
+            cubic-foot{
+                dnam{"ઘન ફૂટ"}
+                one{"{0} ઘન ફૂટ"}
+                other{"{0} ઘન ફૂટ"}
+            }
+            cubic-inch{
+                dnam{"ઘન ઇંચ"}
+                one{"{0} ઘન ઇંચ"}
+                other{"{0} ઘન ઇંચ"}
+            }
             cubic-kilometer{
+                dnam{"ઘન કિલોમીટર"}
                 one{"{0} ઘન કિલોમીટર"}
                 other{"{0} ઘન કિલોમીટર"}
             }
+            cubic-meter{
+                dnam{"ઘન મીટર"}
+                one{"{0} ઘન મીટર"}
+                other{"{0} ઘન મીટર"}
+            }
             cubic-mile{
+                dnam{"ઘન માઇલ"}
                 one{"{0} ઘન માઇલ"}
                 other{"{0} ઘન માઇલ"}
             }
+            cubic-yard{
+                dnam{"ઘન વાર"}
+                one{"{0} ઘન વાર"}
+                other{"{0} ઘન વાર"}
+            }
+            cup{
+                dnam{"કપ"}
+                one{"{0} કપ"}
+                other{"{0} કપ"}
+            }
+            deciliter{
+                dnam{"ડેસિલીટર"}
+                one{"{0} ડેસિલીટર"}
+                other{"{0} ડેસિલીટર"}
+            }
+            fluid-ounce{
+                dnam{"પ્રવાહી ઔંસ"}
+                one{"{0} પ્રવાહી ઔંસ"}
+                other{"{0} પ્રવાહી ઔંસ"}
+            }
+            gallon{
+                dnam{"ગૅલન"}
+                one{"{0} ગૅલન"}
+                other{"{0} ગૅલન"}
+            }
+            hectoliter{
+                dnam{"હેક્ટોલીટર"}
+                one{"{0} હેક્ટોલીટર"}
+                other{"{0} હેક્ટોલીટર"}
+            }
             liter{
+                dnam{"લિટર"}
                 one{"{0} લિટર"}
                 other{"{0} લિટર"}
+            }
+            megaliter{
+                dnam{"મેગાલીટર"}
+                one{"{0} મેગાલીટર"}
+                other{"{0} મેગાલીટર"}
+            }
+            milliliter{
+                dnam{"મિલિલીટર"}
+                one{"{0} મિલિલીટર"}
+                other{"{0} મિલિલીટર"}
+            }
+            pint{
+                dnam{"પિન્ટ"}
+                one{"{0} પિન્ટ"}
+                other{"{0} પિન્ટ"}
+            }
+            quart{
+                dnam{"ક્વાર્ટ"}
+                one{"{0} ક્વાર્ટ"}
+                other{"{0} ક્વાર્ટ"}
+            }
+            tablespoon{
+                dnam{"ટેબલસ્પૂન"}
+                one{"{0} ટેબલસ્પૂન"}
+                other{"{0} ટેબલસ્પૂન"}
+            }
+            teaspoon{
+                dnam{"ટીસ્પૂન"}
+                one{"{0} ટીસ્પૂન"}
+                other{"{0} ટીસ્પૂન"}
             }
         }
     }
@@ -1160,6 +1915,7 @@ gu{
                 other{"{0}″"}
             }
             degree{
+                dnam{"અંશ"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
@@ -1195,40 +1951,49 @@ gu{
         }
         duration{
             day{
-                one{"{0} દિવસ"}
-                other{"{0} દિવસ"}
+                dnam{"દિવસ"}
+                one{"{0} દિ"}
+                other{"{0} દિ"}
             }
             hour{
-                one{"{0} કલાક"}
-                other{"{0} કલાક"}
+                dnam{"કલાક"}
+                one{"{0} ક"}
+                other{"{0} ક"}
             }
             millisecond{
+                dnam{"મિલિસેકન્ડ"}
                 one{"{0} મિસે"}
                 other{"{0} મિસે"}
             }
             minute{
-                one{"{0} મિનિટ"}
-                other{"{0} મિનિટ"}
+                dnam{"મિનિટ"}
+                one{"{0} મિ"}
+                other{"{0} મિ"}
             }
             month{
-                one{"{0} મહિનો"}
-                other{"{0} મહિનો"}
+                dnam{"મહિના"}
+                one{"{0} મ"}
+                other{"{0} મ"}
             }
             second{
-                one{"{0} સેકંડ"}
-                other{"{0} સેકંડ"}
+                dnam{"સેકંડ"}
+                one{"{0} સે"}
+                other{"{0} સે"}
             }
             week{
+                dnam{"અઠવાડિયા"}
                 one{"{0} અઠ."}
                 other{"{0} અઠ."}
             }
             year{
-                one{"{0} વર્ષ"}
-                other{"{0} વર્ષ"}
+                dnam{"વર્ષ"}
+                one{"{0} વ"}
+                other{"{0} વ"}
             }
         }
         length{
             centimeter{
+                dnam{"સેમી"}
                 one{"{0} સેમી"}
                 other{"{0} સેમી"}
             }
@@ -1241,6 +2006,7 @@ gu{
                 other{"{0} \u0022"}
             }
             kilometer{
+                dnam{"કિમી"}
                 one{"{0} કિમી"}
                 other{"{0} કિમી"}
             }
@@ -1249,6 +2015,7 @@ gu{
                 other{"{0}પ્રકાશવર્ષ"}
             }
             meter{
+                dnam{"મીટર"}
                 one{"{0} મી"}
                 other{"{0} મી"}
             }
@@ -1257,6 +2024,7 @@ gu{
                 other{"{0} માઇલ"}
             }
             millimeter{
+                dnam{"મિમી"}
                 one{"{0} મિમી"}
                 other{"{0} મિમી"}
             }
@@ -1271,10 +2039,12 @@ gu{
         }
         mass{
             gram{
+                dnam{"ગ્રામ"}
                 one{"{0} ગ્રા"}
                 other{"{0} ગ્રા"}
             }
             kilogram{
+                dnam{"કિગ્રા"}
                 one{"{0} કિગ્રા"}
                 other{"{0} કિગ્રા"}
             }
@@ -1317,6 +2087,7 @@ gu{
         }
         speed{
             kilometer-per-hour{
+                dnam{"કિમી/કલાક"}
                 one{"{0} km/h"}
                 other{"{0} km/h"}
             }
@@ -1331,8 +2102,9 @@ gu{
         }
         temperature{
             celsius{
-                one{"{0}°"}
-                other{"{0}°"}
+                dnam{"°C"}
+                one{"{0}°C"}
+                other{"{0}°C"}
             }
             fahrenheit{
                 one{"{0}°F"}
@@ -1349,219 +2121,637 @@ gu{
                 other{"{0} mi³"}
             }
             liter{
-                one{"{0} l"}
-                other{"{0} l"}
+                dnam{"લિટર"}
+                one{"{0} લિ"}
+                other{"{0} લિ"}
             }
         }
     }
     unitsShort{
         acceleration{
             g-force{
+                dnam{"g-બળ"}
                 one{"{0} G"}
                 other{"{0} G"}
+            }
+            meter-per-second-squared{
+                dnam{"મીટર/સેકન્ડ²"}
+                one{"{0} m/s²"}
+                other{"{0} m/s²"}
             }
         }
         angle{
             arc-minute{
-                one{"{0} માઇન્યૂટ"}
-                other{"{0} માઇન્યૂટ"}
+                dnam{"ચાપમિનિટ"}
+                one{"{0} ચાપમિનિટ"}
+                other{"{0} ચાપ મિનિટ"}
             }
             arc-second{
-                one{"{0} સેકન્ડ"}
-                other{"{0} સેકન્ડ"}
+                dnam{"ચાપસેકન્ડ"}
+                one{"{0} ચાપસેકન્ડ"}
+                other{"{0} ચાપસેકન્ડ"}
             }
             degree{
+                dnam{"અંશ"}
                 one{"{0} અંશ"}
                 other{"{0} અંશ"}
+            }
+            radian{
+                dnam{"સમત્રિજ્યાકોણ"}
+                one{"{0} rad"}
+                other{"{0} rad"}
             }
         }
         area{
             acre{
+                dnam{"એકર"}
                 one{"{0} એકર"}
                 other{"{0} એકર"}
             }
             hectare{
+                dnam{"હેક્ટર"}
                 one{"{0} હેક્ટર"}
                 other{"{0} હેક્ટર"}
             }
+            square-centimeter{
+                dnam{"ચોરસ સેમી"}
+                one{"{0} ચોરસ સેમી"}
+                other{"{0} ચોરસ સેમી"}
+            }
             square-foot{
+                dnam{"ચોરસ ફૂટ"}
                 one{"{0} ચોરસ ફૂટ"}
                 other{"{0} ચોરસ ફૂટ"}
             }
+            square-inch{
+                dnam{"ચોરસ ઇંચ"}
+                one{"{0} ચોરસ ઇંચ"}
+                other{"{0} ચોરસ ઇંચ"}
+            }
             square-kilometer{
-                one{"{0} km²"}
-                other{"{0} km²"}
+                dnam{"ચોરસ કિમી"}
+                one{"{0} ચોરસ કિમી"}
+                other{"{0} ચોરસ કિમી"}
             }
             square-meter{
+                dnam{"ચોરસ મીટર"}
                 one{"{0} ચોરસ મીટર"}
                 other{"{0} ચોરસ મીટર"}
             }
             square-mile{
+                dnam{"ચોરસ માઇલ"}
                 one{"{0} ચોરસ માઇલ"}
                 other{"{0} ચોરસ માઇલ"}
+            }
+            square-yard{
+                dnam{"ચોરસ વાર"}
+                one{"{0} ચોરસ વાર"}
+                other{"{0} ચોરસ વાર"}
             }
         }
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"લીટર/કિમી"}
+                one{"{0} લીટર/કિમી"}
+                other{"{0} લીટર/કિમી"}
+            }
+            mile-per-gallon{
+                dnam{"માઇલ/ગૅલન"}
+                one{"{0} માઇલ/ગૅલન"}
+                other{"{0} માઇલ/ગૅલન"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"બિટ"}
+                one{"{0} બિટ"}
+                other{"{0} બિટ"}
+            }
+            byte{
+                dnam{"બાઇટ"}
+                one{"{0} બાઇટ"}
+                other{"{0} બાઇટ"}
+            }
+            gigabit{
+                dnam{"ગીગાબિટ"}
+                one{"{0} Gb"}
+                other{"{0} Gb"}
+            }
+            gigabyte{
+                dnam{"GB"}
+                one{"{0} GB"}
+                other{"{0} GB"}
+            }
+            kilobit{
+                dnam{"kb"}
+                one{"{0} kb"}
+                other{"{0} kb"}
+            }
+            kilobyte{
+                dnam{"kB"}
+                one{"{0} kB"}
+                other{"{0} kB"}
+            }
+            megabit{
+                dnam{"Mb"}
+                one{"{0} Mb"}
+                other{"{0} Mb"}
+            }
+            megabyte{
+                dnam{"MB"}
+                one{"{0} MB"}
+                other{"{0} MB"}
+            }
+            terabit{
+                dnam{"Tb"}
+                one{"{0} Tb"}
+                other{"{0} Tb"}
+            }
+            terabyte{
+                dnam{"TB"}
+                one{"{0} TB"}
+                other{"{0} TB"}
+            }
+        }
         duration{
             day{
+                dnam{"દિવસ"}
                 one{"{0} દિવસ"}
                 other{"{0} દિવસ"}
             }
             hour{
+                dnam{"કલાક"}
                 one{"{0} કલાક"}
                 other{"{0} કલાક"}
+                per{"{0} પ્રતિ કલાક"}
+            }
+            microsecond{
+                dnam{"μs"}
+                one{"{0} μs"}
+                other{"{0} μs"}
             }
             millisecond{
+                dnam{"મિલિસેકન્ડ"}
                 one{"{0} મિસે"}
                 other{"{0} મિસે"}
             }
             minute{
+                dnam{"મિનિટ"}
                 one{"{0} મિનિટ"}
                 other{"{0} મિનિટ"}
             }
             month{
+                dnam{"મહિના"}
                 one{"{0} મહિનો"}
                 other{"{0} મહિના"}
             }
+            nanosecond{
+                dnam{"નેનોસેકંડ"}
+                one{"{0} ns"}
+                other{"{0} ns"}
+            }
             second{
+                dnam{"સેકંડ"}
                 one{"{0} સેકંડ"}
                 other{"{0} સેકંડ"}
+                per{"{0} પ્રતિ સેકંડ"}
             }
             week{
+                dnam{"અઠવાડિયા"}
                 one{"{0} અઠ."}
                 other{"{0} અઠ."}
             }
             year{
+                dnam{"વર્ષ"}
                 one{"{0} વર્ષ"}
                 other{"{0} વર્ષ"}
             }
         }
+        electric{
+            ampere{
+                dnam{"amp"}
+                one{"{0} A"}
+                other{"{0} A"}
+            }
+            milliampere{
+                dnam{"mA"}
+                one{"{0} mA"}
+                other{"{0} mA"}
+            }
+            ohm{
+                dnam{"ઓહ્મ"}
+                one{"{0} Ω"}
+                other{"{0} Ω"}
+            }
+            volt{
+                dnam{"વૉલ્ટ્સ"}
+                one{"{0} V"}
+                other{"{0} V"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"કેલરી"}
+                one{"{0} Cal"}
+                other{"{0} Cal"}
+            }
+            foodcalorie{
+                dnam{"કેલરી"}
+                one{"{0} Cal"}
+                other{"{0} Cal"}
+            }
+            joule{
+                dnam{"જૂલ"}
+                one{"{0} J"}
+                other{"{0} J"}
+            }
+            kilocalorie{
+                dnam{"કિલોકેલરી"}
+                one{"{0} kcal"}
+                other{"{0} kcal"}
+            }
+            kilojoule{
+                dnam{"કિલોજૂલ"}
+                one{"{0} kJ"}
+                other{"{0} kJ"}
+            }
+            kilowatt-hour{
+                dnam{"કિલોવૉટ-કલાક"}
+                one{"{0} kWh"}
+                other{"{0} kWh"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"GHz"}
+                one{"{0} GHz"}
+                other{"{0} GHz"}
+            }
+            hertz{
+                dnam{"Hz"}
+                one{"{0} Hz"}
+                other{"{0} Hz"}
+            }
+            kilohertz{
+                dnam{"kHz"}
+                one{"{0} kHz"}
+                other{"{0} kHz"}
+            }
+            megahertz{
+                dnam{"MHz"}
+                one{"{0} MHz"}
+                other{"{0} MHz"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"ખગોળીય યુનિટ"}
+                one{"{0} au"}
+                other{"{0} au"}
+            }
             centimeter{
+                dnam{"સેમી"}
                 one{"{0} સેમી"}
                 other{"{0} સેમી"}
             }
+            decimeter{
+                dnam{"ડેમી"}
+                one{"{0} ડેમી"}
+                other{"{0} ડેમી"}
+            }
             foot{
+                dnam{"ફૂટ"}
                 one{"{0} ફૂટ"}
                 other{"{0} ફૂટ"}
             }
             inch{
+                dnam{"ઇંચ"}
                 one{"{0} ઇંચ"}
                 other{"{0} ઇંચ"}
             }
             kilometer{
+                dnam{"કિમી"}
                 one{"{0} કિમી"}
                 other{"{0} કિમી"}
             }
             light-year{
+                dnam{"પ્રકાશ વર્ષ"}
                 one{"{0} પ્રકાશ વર્ષ"}
                 other{"{0} પ્રકાશ વર્ષ"}
             }
             meter{
+                dnam{"મીટર"}
                 one{"{0} મી"}
                 other{"{0} મી"}
             }
+            micrometer{
+                dnam{"માઇક્રોમીટર"}
+                one{"{0} µમી"}
+                other{"{0} µમી"}
+            }
             mile{
+                dnam{"માઇલ"}
                 one{"{0} માઇલ"}
                 other{"{0} માઇલ"}
             }
             millimeter{
+                dnam{"મિમી"}
                 one{"{0} મિમી"}
                 other{"{0} મિમી"}
             }
+            nanometer{
+                dnam{"નેનોમીટર"}
+                one{"{0} નેનોમીટર"}
+                other{"{0} નેનોમીટર"}
+            }
+            nautical-mile{
+                dnam{"નૉટિકલ માઇલ"}
+                one{"{0} nmi"}
+                other{"{0} nmi"}
+            }
+            parsec{
+                dnam{"પરસેક"}
+                one{"{0} પરસેક"}
+                other{"{0} પરસેક"}
+            }
             picometer{
-                one{"{0} પિસૉમિટર"}
-                other{"{0} પિસૉમિટર"}
+                dnam{"પિસૉમીટર"}
+                one{"{0} પિસૉમીટર"}
+                other{"{0} પિસૉમીટર"}
             }
             yard{
+                dnam{"વાર"}
                 one{"{0} વાર"}
                 other{"{0} વાર"}
             }
         }
+        light{
+            lux{
+                dnam{"લક્સ"}
+                one{"{0} લક્સ"}
+                other{"{0} લક્સ"}
+            }
+        }
         mass{
+            carat{
+                dnam{"કેરેટ"}
+                one{"{0} કેરેટ"}
+                other{"{0} કેરેટ"}
+            }
             gram{
+                dnam{"ગ્રામ"}
                 one{"{0} ગ્રા"}
                 other{"{0} ગ્રા"}
             }
             kilogram{
+                dnam{"કિગ્રા"}
                 one{"{0} કિગ્રા"}
                 other{"{0} કિગ્રા"}
             }
+            metric-ton{
+                dnam{"મેટ્રિક ટન"}
+                one{"{0} મેટ્રિક ટન"}
+                other{"{0} મેટ્રિક ટન"}
+            }
+            microgram{
+                dnam{"µગ્રામ"}
+                one{"{0} µગ્રામ"}
+                other{"{0} µગ્રામ"}
+            }
+            milligram{
+                dnam{"મિગ્રા"}
+                one{"{0} મિગ્રા"}
+                other{"{0} મિગ્રા"}
+            }
             ounce{
-                one{"{0} ઔંશ"}
-                other{"{0} ઔંશ"}
+                dnam{"ઔંસ"}
+                one{"{0} ઔંસ"}
+                other{"{0} ઔંસ"}
+            }
+            ounce-troy{
+                dnam{"ટ્રોય ઔંસ"}
+                one{"{0} ટ્રોય ઔંસ"}
+                other{"{0} ટ્રોય ઔંસ"}
             }
             pound{
+                dnam{"પાઉન્ડ"}
                 one{"{0} પાઉન્ડ"}
                 other{"{0} પાઉન્ડ"}
             }
+            ton{
+                dnam{"ટન"}
+                one{"{0} ટન"}
+                other{"{0} ટન"}
+            }
         }
         power{
+            gigawatt{
+                dnam{"ગીગાવૉટ"}
+                one{"{0} GW"}
+                other{"{0} GW"}
+            }
             horsepower{
-                one{"{0} હોર્સપાવર"}
-                other{"{0} હોર્સપાવર"}
+                dnam{"હોર્સપાવર"}
+                one{"{0} hp"}
+                other{"{0} hp"}
             }
             kilowatt{
-                one{"{0} કિલોવૉટ"}
-                other{"{0} કિલોવૉટ"}
+                dnam{"કિલોવૉટ"}
+                one{"{0} kW"}
+                other{"{0} kW"}
+            }
+            megawatt{
+                dnam{"મેગાવૉટ"}
+                one{"{0} MW"}
+                other{"{0} MW"}
+            }
+            milliwatt{
+                dnam{"મિલિવૉટ"}
+                one{"{0} mW"}
+                other{"{0} mW"}
             }
             watt{
-                one{"{0} વૉટ"}
-                other{"{0} વૉટ"}
+                dnam{"વૉટ"}
+                one{"{0} W"}
+                other{"{0} W"}
             }
         }
         pressure{
             hectopascal{
+                dnam{"hPa"}
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
             inch-hg{
+                dnam{"inHg"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
             }
             millibar{
-                one{"{0} મિલીબાર"}
-                other{"{0} મિલીબાર"}
+                dnam{"મિલિબાર"}
+                one{"{0} મિલિબાર"}
+                other{"{0} મિલિબાર"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"પાઉન્ડ/વર્ગ ઇંચ"}
+                one{"{0} psi"}
+                other{"{0} psi"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"કૅરેટ"}
+                one{"{0} કૅરેટ"}
+                other{"{0} કૅરેટ"}
             }
         }
         speed{
             kilometer-per-hour{
+                dnam{"કિમી/કલાક"}
                 one{"{0} કિમી/કલાક"}
                 other{"{0} કિમી/કલાક"}
             }
             meter-per-second{
+                dnam{"મીટર/સેકન્ડ"}
                 one{"{0} મીટર/સેકન્ડ"}
                 other{"{0} મીટર/સેકન્ડ"}
             }
             mile-per-hour{
+                dnam{"માઇલ/કલાક"}
                 one{"{0} માઇલ/કલાક"}
                 other{"{0} માઇલ/કલાક"}
             }
         }
         temperature{
             celsius{
+                dnam{"ડિગ્રી સેલ્સિયસ"}
                 one{"{0}°C"}
                 other{"{0}°C"}
             }
             fahrenheit{
+                dnam{"ડિગ્રી ફેરનહીટ"}
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            kelvin{
+                dnam{"કેલ્વિન"}
+                one{"{0} K"}
+                other{"{0} K"}
+            }
         }
         volume{
+            acre-foot{
+                dnam{"એકર-ફૂટ"}
+                one{"{0} એકર-ફૂટ"}
+                other{"{0} એકર-ફૂટ"}
+            }
+            centiliter{
+                dnam{"સેન્ટિલીટર"}
+                one{"{0} સેન્ટિલીટર"}
+                other{"{0} સેન્ટિલીટર"}
+            }
+            cubic-centimeter{
+                dnam{"ઘન સેમી"}
+                one{"{0} ઘન સેમી"}
+                other{"{0} ઘન સેમી"}
+            }
+            cubic-foot{
+                dnam{"ઘન ફૂટ"}
+                one{"{0} ઘન ફૂટ"}
+                other{"{0} ઘન ફૂટ"}
+            }
+            cubic-inch{
+                dnam{"ઘન ઇંચ"}
+                one{"{0} ઘન ઇંચ"}
+                other{"{0} ઘન ઇંચ"}
+            }
             cubic-kilometer{
-                one{"{0} km³"}
-                other{"{0} km³"}
+                dnam{"ઘન કિમી"}
+                one{"{0} ઘન કિમી"}
+                other{"{0} ઘન કિમી"}
+            }
+            cubic-meter{
+                dnam{"ઘન મીટર"}
+                one{"{0} ઘન મીટર"}
+                other{"{0} ઘન મીટર"}
             }
             cubic-mile{
+                dnam{"ઘન માઇલ"}
                 one{"{0} ઘન માઇલ"}
                 other{"{0} ઘન માઇલ"}
             }
+            cubic-yard{
+                dnam{"ઘન વાર"}
+                one{"{0} ઘન વાર"}
+                other{"{0} ઘન વાર"}
+            }
+            cup{
+                dnam{"કપ"}
+                one{"{0} કપ"}
+                other{"{0} કપ"}
+            }
+            deciliter{
+                dnam{"ડેસિલીટર"}
+                one{"{0} ડેસિલીટર"}
+                other{"{0} ડેસિલીટર"}
+            }
+            fluid-ounce{
+                dnam{"પ્રવાહી ઔંસ"}
+                one{"{0} પ્રવાહી ઔંસ"}
+                other{"{0} પ્રવાહી ઔંસ"}
+            }
+            gallon{
+                dnam{"ગૅલન"}
+                one{"{0} ગૅલન"}
+                other{"{0} ગૅલન"}
+            }
+            hectoliter{
+                dnam{"હેક્ટોલીટર"}
+                one{"{0} હેક્ટોલીટર"}
+                other{"{0} હેક્ટોલીટર"}
+            }
             liter{
+                dnam{"લિટર"}
                 one{"{0} લિ"}
                 other{"{0} લિ"}
+            }
+            megaliter{
+                dnam{"મેગાલીટર"}
+                one{"{0} મેગાલીટર"}
+                other{"{0} મેગાલીટર"}
+            }
+            milliliter{
+                dnam{"મિલિલીટર"}
+                one{"{0} મિલિલીટર"}
+                other{"{0} મિલિલીટર"}
+            }
+            pint{
+                dnam{"પિન્ટ"}
+                one{"{0} પિન્ટ"}
+                other{"{0} પિન્ટ"}
+            }
+            quart{
+                dnam{"ક્વાર્ટ"}
+                one{"{0} ક્વાર્ટ"}
+                other{"{0} ક્વાર્ટ"}
+            }
+            tablespoon{
+                dnam{"ટેબલસ્પૂન"}
+                one{"{0} ટેબલસ્પૂન"}
+                other{"{0} ટેબલસ્પૂન"}
+            }
+            teaspoon{
+                dnam{"ટીસ્પૂન"}
+                one{"{0} ટીસ્પૂન"}
+                other{"{0} ટીસ્પૂન"}
             }
         }
     }

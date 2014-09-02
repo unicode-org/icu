@@ -11,24 +11,45 @@
  */
 mt{
     AuxExemplarCharacters{"[c y]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{"[a à b ċ d e è f ġ g {għ} h ħ i ì j k l m n o ò p q r s t u ù v w x ż z]"}
-    ExemplarCharactersIndex{"[A B Ċ C D E F Ġ G {GĦ} H Ħ I {IE} J K L M N O P Q R S T U V W X Y Ż Z]"}
+    ExemplarCharactersIndex{"[A B Ċ C D E F Ġ G {GĦ} H Ħ I {IE*} J K L M N O P Q R S T U V W X Y Ż Z]"}
     ExemplarCharactersPunctuation{"[\\- , ; \\: ! ? . ' ‘ ’ \u0022 “ ” ( ) \\[ \\] \\{ \\}]"}
     LocaleScript{
         "Latn",
     }
+    MoreInformation{"?"}
     NumberElements{
+        default{"latn"}
         latn{
             patterns{
                 currencyFormat{"¤#,##0.00"}
             }
             symbols{
                 decimal{"."}
+                exponential{"E"}
                 group{","}
+                infinity{"∞"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
+        minimumGroupingDigits{"1"}
+        native{"latn"}
     }
-    Version{"2.0.97.92"}
+    Version{"2.1.8.22"}
     calendar{
         generic{
             DateTimePatterns{
@@ -49,8 +70,8 @@ mt{
         }
         gregorian{
             AmPmMarkers{
-                "QN",
-                "WN",
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -98,14 +119,32 @@ mt{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Ħad",
+                        "Tne",
+                        "Tli",
+                        "Erb",
+                        "Ħam",
+                        "Ġim",
+                        "Sib",
+                    }
                     narrow{
-                        "Ħ",
-                        "T",
-                        "T",
-                        "E",
-                        "Ħ",
-                        "Ġ",
-                        "S",
+                        "Ħd",
+                        "Tn",
+                        "Tl",
+                        "Er",
+                        "Ħm",
+                        "Ġm",
+                        "Sb",
+                    }
+                    wide{
+                        "Il-Ħadd",
+                        "It-Tnejn",
+                        "It-Tlieta",
+                        "L-Erbgħa",
+                        "Il-Ħamis",
+                        "Il-Ġimgħa",
+                        "Is-Sibt",
                     }
                 }
             }
@@ -113,6 +152,10 @@ mt{
                 abbreviated{
                     "QK",
                     "WK",
+                }
+                abbreviated%variant{
+                    "QEK",
+                    "EK",
                 }
                 wide{
                     "Qabel Kristu",
@@ -135,6 +178,20 @@ mt{
                         "Nov",
                         "Diċ",
                     }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "Ġ",
+                        "L",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "Jannar",
                         "Frar",
@@ -151,19 +208,33 @@ mt{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Jan",
+                        "Fra",
+                        "Mar",
+                        "Apr",
+                        "Mej",
+                        "Ġun",
+                        "Lul",
+                        "Aww",
+                        "Set",
+                        "Ott",
+                        "Nov",
+                        "Diċ",
+                    }
                     narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "Ġ",
-                        "L",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
+                        "Jn",
+                        "Fr",
+                        "Mz",
+                        "Ap",
+                        "Mj",
+                        "Ġn",
+                        "Lj",
+                        "Aw",
+                        "St",
+                        "Ob",
+                        "Nv",
+                        "Dċ",
                     }
                     wide{
                         "Jannar",
@@ -196,10 +267,10 @@ mt{
                         "4",
                     }
                     wide{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
+                        "1el kwart",
+                        "2ni kwart",
+                        "3et kwart",
+                        "4ba’ kwart",
                     }
                 }
                 stand-alone{
@@ -219,11 +290,17 @@ mt{
                         "1el kwart",
                         "2ni kwart",
                         "3et kwart",
-                        "4ba' kwart",
+                        "4ba’ kwart",
                     }
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
     fields{
         day{
@@ -297,9 +374,182 @@ mt{
             dn{"Żona"}
         }
     }
+    listPattern{
+        standard{
+            2{"{0} u {1}"}
+            end{"{0}, u {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit{
+            2{"{0} u {1}"}
+            end{"{0}, u {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit-narrow{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit-short{
+            2{"{0} u {1}"}
+            end{"{0}, u {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+    }
     measurementSystemNames{
         UK{"UK"}
         US{"US"}
         metric{"Metriku"}
+    }
+    units{
+        angle{
+            arc-minute{
+                few{"{0}′"}
+                many{"{0}′"}
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+        }
+        consumption{
+            liter-per-kilometer{
+                dnam{"L/km"}
+                few{"{0} litri kull kilometru"}
+                many{"{0} litri kull kilometru"}
+                one{"{0} litru kull kilometru"}
+                other{"{0} litri kull kilometru"}
+            }
+        }
+        digital{
+            megabyte{
+                dnam{"megabytes"}
+                few{"{0} megabytes"}
+                many{"{0} megabytes"}
+                one{"{0} megabyte"}
+                other{"{0} megabytes"}
+            }
+            terabit{
+                dnam{"terabits"}
+                few{"{0} terabits"}
+                many{"{0} terabits"}
+                one{"{0} terabit"}
+                other{"{0} terabits"}
+            }
+            terabyte{
+                dnam{"terabytes"}
+                few{"{0} terabytes"}
+                many{"{0} terabytes"}
+                one{"{0} terabyte"}
+                other{"{0} terabytes"}
+            }
+        }
+        duration{
+            millisecond{
+                dnam{"millisekondi"}
+                few{"{0} millisekondi"}
+                many{"{0} millisekondi"}
+                one{"{0} millisekonda"}
+                other{"{0} millisekondi"}
+            }
+        }
+        light{
+            lux{
+                dnam{"lx"}
+                few{"{0} lx"}
+                many{"{0} lx"}
+                one{"{0} lx"}
+                other{"{0} lx"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"karati"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
+    }
+    unitsNarrow{
+        duration{
+            millisecond{
+                dnam{"millisek"}
+                few{"{0}ms"}
+                many{"{0}ms"}
+                one{"{0}ms"}
+                other{"{0}ms"}
+            }
+        }
+    }
+    unitsShort{
+        consumption{
+            liter-per-kilometer{
+                dnam{"L/km"}
+                few{"{0} L/km"}
+                many{"{0} L/km"}
+                one{"{0} L/km"}
+                other{"{0} L/km"}
+            }
+        }
+        digital{
+            megabit{
+                few{"{0} Mb"}
+                many{"{0} Mb"}
+                one{"{0} Mb"}
+                other{"{0} Mb"}
+            }
+            megabyte{
+                dnam{"MB"}
+                few{"{0} MB"}
+                many{"{0} MB"}
+                one{"{0} MB"}
+                other{"{0} MB"}
+            }
+            terabit{
+                dnam{"Tb"}
+                few{"{0} Tb"}
+                many{"{0} Tb"}
+                one{"{0} Tb"}
+                other{"{0} Tb"}
+            }
+            terabyte{
+                dnam{"TB"}
+                few{"{0} TB"}
+                many{"{0} TB"}
+                one{"{0} TB"}
+                other{"{0} TB"}
+            }
+        }
+        duration{
+            millisecond{
+                dnam{"millisek"}
+                few{"{0} ms"}
+                many{"{0} ms"}
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+        }
+        light{
+            lux{
+                dnam{"lx"}
+                few{"{0} lx"}
+                many{"{0} lx"}
+                one{"{0} lx"}
+                other{"{0} lx"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
     }
 }

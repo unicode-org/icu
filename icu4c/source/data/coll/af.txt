@@ -14,7 +14,7 @@ af{
     collations{
         standard{
             Sequence{"&N<<<ŉ"}
-            Version{"25"}
+            Version{"26"}
         }
     }
 }

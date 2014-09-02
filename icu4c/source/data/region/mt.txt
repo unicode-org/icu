@@ -68,7 +68,7 @@ mt{
         BM{"Bermuda"}
         BN{"Brunej"}
         BO{"Bolivja"}
-        BR{"Brażil"}
+        BR{"Il-Brażil"}
         BS{"Baħamas"}
         BT{"Butan"}
         BV{"Bouvet Island"}
@@ -85,7 +85,7 @@ mt{
         CK{"Cook Islands"}
         CL{"Ċili"}
         CM{"Kamerun"}
-        CN{"Ċina"}
+        CN{"Iċ-Ċina"}
         CO{"Kolumbja"}
         CR{"Kosta Rika"}
         CU{"Kuba"}
@@ -93,7 +93,7 @@ mt{
         CX{"Christmas Island"}
         CY{"Ċipru"}
         CZ{"Repubblika Ċeka"}
-        DE{"Ġermanja"}
+        DE{"Il-Ġermanja"}
         DJ{"Ġibuti"}
         DK{"Danimarka"}
         DM{"Dominika"}
@@ -114,7 +114,7 @@ mt{
         FO{"Gżejjer Faroe"}
         FR{"Franza"}
         GA{"Gabon"}
-        GB{"Ingilterra"}
+        GB{"L-Ingilterra"}
         GD{"Grenada"}
         GE{"Ġorġja"}
         GF{"Gujana Franċiża"}
@@ -141,15 +141,15 @@ mt{
         IE{"Irlanda"}
         IL{"Iżrael"}
         IM{"Isle of Man"}
-        IN{"Indja"}
+        IN{"L-Indja"}
         IO{"British Indian Ocean Territory"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Islanda"}
-        IT{"Italja"}
+        IT{"L-Italja"}
         JM{"Ġamajka"}
         JO{"Ġordan"}
-        JP{"Ġappun"}
+        JP{"Il-Ġappun"}
         KE{"Kenja"}
         KG{"Kirgistan"}
         KH{"Kambodja"}
@@ -223,7 +223,7 @@ mt{
         QA{"Qatar"}
         RE{"Réunion"}
         RO{"Rumanija"}
-        RU{"Russja"}
+        RU{"Ir-Russja"}
         RW{"Rwanda"}
         SA{"Għarabja Sawdita"}
         SB{"Solomon Islands"}
@@ -263,7 +263,7 @@ mt{
         UA{"Ukraina"}
         UG{"Uganda"}
         UM{"United States Minor Outlying Islands"}
-        US{"Stati Uniti"}
+        US{"L-Istati Uniti"}
         UY{"Urugwaj"}
         UZ{"Użbekistan"}
         VA{"Vatikan"}
@@ -282,5 +282,5 @@ mt{
         ZW{"Żimbabwe"}
         ZZ{"Reġjun Mhux Magħruf"}
     }
-    Version{"2.0.97.92"}
+    Version{"2.1.8.22"}
 }

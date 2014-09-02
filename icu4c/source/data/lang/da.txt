@@ -11,7 +11,7 @@
  */
 da{
     Keys{
-        calendar{"Kalender"}
+        calendar{"kalender"}
         colAlternate{"Ignorer symboler under sortering"}
         colBackwards{"Omvendt sortering efter accenter"}
         colCaseFirst{"Sortering efter store/små bogstaver"}
@@ -20,9 +20,9 @@ da{
         colNormalization{"Normaliseret sortering"}
         colNumeric{"Numerisk sortering"}
         colStrength{"Sorteringsstyrke"}
-        collation{"Sortering"}
-        currency{"Valuta"}
-        numbers{"Tal"}
+        collation{"sorteringsrækkefølge"}
+        currency{"valuta"}
+        numbers{"tal"}
         timezone{"Tidszone"}
         va{"Sprogvariant"}
         variableTop{"Sortér som symboler"}
@@ -182,6 +182,7 @@ da{
         fy{"frisisk"}
         ga{"irsk"}
         gaa{"ga"}
+        gag{"gagauzisk"}
         gay{"gayo"}
         gba{"gbaya"}
         gd{"skotsk gælisk"}
@@ -240,7 +241,7 @@ da{
         jv{"javanesisk"}
         ka{"georgisk"}
         kaa{"karakalpakisk"}
-        kab{"kabyle"}
+        kab{"kabylisk"}
         kac{"kachin"}
         kaj{"jju"}
         kam{"kamba"}
@@ -265,6 +266,7 @@ da{
         kmb{"kimbundu"}
         kn{"kannada"}
         ko{"koreansk"}
+        koi{"komi-permjakisk"}
         kok{"konkani"}
         kos{"kosraean"}
         kpe{"kpelle"}
@@ -291,6 +293,7 @@ da{
         lez{"lezghian"}
         lg{"ganda"}
         li{"limburgsk"}
+        lkt{"lakota"}
         ln{"lingala"}
         lo{"lao"}
         lol{"mongo"}
@@ -302,7 +305,7 @@ da{
         lun{"lunda"}
         luo{"luo"}
         lus{"lushai"}
-        luy{"olulujia"}
+        luy{"luyana"}
         lv{"lettisk"}
         mad{"madurese"}
         maf{"mafa"}
@@ -397,6 +400,7 @@ da{
         pt_BR{"brasiliansk portugisisk"}
         pt_PT{"europæisk portugisisk"}
         qu{"quechua"}
+        quc{"quiché"}
         raj{"rajasthani"}
         rap{"rapanui"}
         rar{"rarotongan"}
@@ -441,9 +445,9 @@ da{
         sl{"slovensk"}
         sm{"samoansk"}
         sma{"sydsamisk"}
-        smj{"lule sami"}
-        smn{"inari sami"}
-        sms{"skolt sami"}
+        smj{"lulesamisk"}
+        smn{"enaresamisk"}
+        sms{"skoltesamisk"}
         sn{"shona"}
         snk{"soninke"}
         so{"somalisk"}
@@ -540,6 +544,10 @@ da{
         zun{"zuni"}
         zxx{"intet sprogligt indhold"}
         zza{"zaza"}
+    }
+    Languages%variant{
+        ps{"pushto"}
+        ug{"uighurisk"}
     }
     LanguagesShort{
         az{"azeri"}
@@ -640,7 +648,7 @@ da{
         Narb{"gammelt nordarabisk"}
         Nbat{"nabateisk"}
         Nkgb{"nakhi geba"}
-        Nkoo{"n'ko"}
+        Nkoo{"n’ko"}
         Nshu{"nüshu"}
         Ogam{"ogham"}
         Olck{"ol-chiki"}
@@ -708,6 +716,9 @@ da{
     Scripts%stand-alone{
         Hans{"forenklet han"}
         Hant{"traditionelt han"}
+    }
+    Scripts%variant{
+        Arab{"persisk-arabisk"}
     }
     Types{
         calendar{
@@ -785,40 +796,40 @@ da{
             zhuyin{"zhuyin-sorteringsrækkefølge"}
         }
         numbers{
-            arab{"Hindu-arabiske tal"}
-            arabext{"Udvidede hindu-arabiske tal"}
-            armn{"Armenske tal"}
-            armnlow{"Armenske tal i små bogstaver"}
+            arab{"hindu-arabiske tal"}
+            arabext{"udvidede hindu-arabiske tal"}
+            armn{"armenske tal"}
+            armnlow{"armenske tal i små bogstaver"}
             bali{"Balinesiske tal"}
-            beng{"Bengalske tal"}
+            beng{"bengali tal"}
             brah{"Brahmi-tal"}
             cakm{"Chakma-tal"}
             cham{"Cham-tal"}
-            deva{"Devanagariske tal"}
-            ethi{"Etiopiske tal"}
+            deva{"devanagariske tal"}
+            ethi{"etiopiske tal"}
             finance{"Finansielle tal"}
-            fullwide{"Tal i fuld bredde"}
-            geor{"Georgiske tal"}
-            grek{"Græske tal"}
-            greklow{"Græske tal i små bogstaver"}
-            gujr{"Gujarati tal"}
-            guru{"Gurmukhi tal"}
-            hanidec{"Kinesiske decimaltal"}
-            hans{"Forenklede kinesiske tal"}
-            hansfin{"Forenklede kinesiske financielle tal"}
-            hant{"Traditionelle kinesiske tal"}
-            hantfin{"Traditionelle kinesiske finansielle tal"}
-            hebr{"Hebræiske tal"}
+            fullwide{"tal i fuld bredde"}
+            geor{"georgiske tal"}
+            grek{"græske tal"}
+            greklow{"græske tal i små bogstaver"}
+            gujr{"gujarati tal"}
+            guru{"gurmukhi tal"}
+            hanidec{"kinesiske decimaltal"}
+            hans{"forenklede kinesiske tal"}
+            hansfin{"forenklede kinesiske financielle tal"}
+            hant{"traditionelle kinesiske tal"}
+            hantfin{"traditionelle kinesiske finansielle tal"}
+            hebr{"hebræiske tal"}
             java{"Javanesiske tal"}
-            jpan{"Japanske tal"}
-            jpanfin{"Japanske financielle tal"}
+            jpan{"japanske tal"}
+            jpanfin{"japanske financielle tal"}
             kali{"Kayah Li-tal"}
-            khmr{"Khmerske tal"}
-            knda{"Kannada tal"}
+            khmr{"khmer tal"}
+            knda{"kannada tal"}
             lana{"Tai Tham Hora-tal"}
             lanatham{"Tai Tham Tahm-tal"}
-            laoo{"Laotiske tal"}
-            latn{"Arabertal"}
+            laoo{"laotiske tal"}
+            latn{"arabertal"}
             lepc{"Lepcha-tal"}
             limb{"Limbu-tal"}
             mlym{"Malayalamske tal"}
@@ -827,23 +838,23 @@ da{
             mymr{"Myanmar tal"}
             mymrshan{"Myanmar Shan-tal"}
             native{"Nationale cifre"}
-            nkoo{"N'Ko-tal"}
+            nkoo{"N’Ko-tal"}
             olck{"Ol Chiki-tal"}
             orya{"Oriya tal"}
             osma{"Osmanya-tal"}
-            roman{"Romertal"}
-            romanlow{"Romertal i små bogstaver"}
+            roman{"romertal"}
+            romanlow{"romertal i små bogstaver"}
             saur{"Saurashtra-tal"}
             shrd{"Sharada-tal"}
             sora{"Sora Sompeng-tal"}
             sund{"Sundanesiske tal"}
             takr{"Takri-tal"}
             talu{"Nye Tai Lue-tal"}
-            taml{"Traditionelle tamilske tal"}
-            tamldec{"Tamilske tal"}
+            taml{"traditionelle tamilske tal"}
+            tamldec{"tamilske tal"}
             telu{"Telugu tal"}
-            thai{"Thailandske tal"}
-            tibt{"Tibetanske tal"}
+            thai{"thailandske tal"}
+            tibt{"tibetanske tal"}
             traditional{"Traditionelle tal"}
             vaii{"Vai-tal"}
         }
@@ -908,7 +919,7 @@ da{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Sprog: {0}"}
         script{"Instruks: {0}"}

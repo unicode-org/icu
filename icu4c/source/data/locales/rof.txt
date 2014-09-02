@@ -23,7 +23,7 @@ rof{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.7.39"}
     calendar{
         generic{
             DateTimePatterns{
@@ -67,7 +67,7 @@ rof{
         }
         gregorian{
             AmPmMarkers{
-                "kang'ama",
+                "kang’ama",
                 "kingoto",
             }
             DateTimePatterns{
@@ -229,7 +229,7 @@ rof{
             relative{
                 "-1"{"Hiyo"}
                 "0"{"Linu"}
-                "1"{"Ng'ama"}
+                "1"{"Ng’ama"}
             }
         }
         dayperiod{

@@ -715,7 +715,7 @@ static const char* testCases[][2]= {
     {"eu_ES_PREEURO", "\\u20A7\\u00A01.150" },
     {"gl_ES_PREEURO", "1.150\\u00A0\\u20A7" },
     {"it_IT_PREEURO", "ITL\\u00A01.150" },
-    {"pt_PT_PREEURO", "1,150$50\\u00A0Esc."},
+    {"pt_PT_PREEURO", "1,150$50\\u00A0\\u200B"}, // per cldrbug 7670
     {"en_US@currency=JPY", "\\u00A51,150"},
     {"en_US@currency=jpy", "\\u00A51,150"},
     {"en-US-u-cu-jpy", "\\u00A51,150"}
@@ -745,8 +745,8 @@ NumberFormatTest::TestCurrency(void)
     currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc),status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en Allemagne a.." + s);
-    if (!(s==CharsToUnicodeString("1,50\\u00A0DEM")))
-        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>DEM");
+    if (!(s==CharsToUnicodeString("1,50\\u00A0DM")))
+        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>DM");
     delete currencyFmt;
     s.truncate(0);
     len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
@@ -829,7 +829,7 @@ void NumberFormatTest::TestCurrencyObject() {
     expectCurrency(*fmt, null, 1234.56, CharsToUnicodeString("1 234,56 \\u20AC"));
 
     expectCurrency(*fmt, Locale::getJapan(),
-                   1234.56, CharsToUnicodeString("1 235 \\u00A5JP")); // Yen
+                   1234.56, CharsToUnicodeString("1 235 JPY")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
                    1234.56, "1 234,56 CHF"); // no more 0.05 rounding here, see cldrbug 5548
@@ -2290,6 +2290,12 @@ void NumberFormatTest::TestCases() {
                     if (!tokens.next(tok, ec)) goto error;
                     continue;
                 }
+            } else if (mfmt == NULL) {
+                errln("FAIL: " + where + "Loc \"" + mloc + "\": skip case using previous locale, no valid MeasureFormat");
+                if (!tokens.next(tok, ec)) goto error;
+                if (!tokens.next(tok, ec)) goto error;
+                if (!tokens.next(tok, ec)) goto error;
+                continue;
             }
             // fpc: <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
             if (!tokens.next(currAmt, ec)) goto error;
@@ -2718,7 +2724,7 @@ void NumberFormatTest::TestJB3832(){
     const char* localeID = "pt_PT@currency=PTE";
     Locale loc(localeID);
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeString expected(CharsToUnicodeString("1,150$50\\u00A0Esc."));
+    UnicodeString expected(CharsToUnicodeString("1,150$50\\u00A0\\u200B")); // per cldrbug 7670
     UnicodeString s;
     NumberFormat* currencyFmt = NumberFormat::createCurrencyInstance(loc, status);
     if(U_FAILURE(status)){
@@ -3133,6 +3139,9 @@ void NumberFormatTest::TestNumberingSystems() {
 
     const TestNumberingSystemItem *item;
     for (item = DATA; item->localeName != NULL; item++) {
+        if (uprv_strcmp(item->localeName, "en_US@numbers=hebr") == 0 && logKnownIssue("11219", "Skip tests that depend on hebr numbers in the thousands")) {
+            continue;
+        }
         ec = U_ZERO_ERROR;
         Locale loc = Locale::createFromName(item->localeName);
 
@@ -3479,7 +3488,7 @@ NumberFormatTest::TestCurrencyParsing() {
         {"es_AR", "1", "USD", "US$1,00", "USD1,00", "1,00 d\\u00f3lar estadounidense"},
         {"ar_EG", "1", "USD", "US$\\u00a0\\u0661\\u066b\\u0660\\u0660", "USD\\u00a0\\u0661\\u066b\\u0660\\u0660", "\\u0661\\u066b\\u0660\\u0660 \\u062f\\u0648\\u0644\\u0627\\u0631 \\u0623\\u0645\\u0631\\u064a\\u0643\\u064a"},
         {"fa_CA", "1", "USD", "\\u200e$\\u06f1\\u066b\\u06f0\\u06f0", "\\u200eUSD\\u06f1\\u066b\\u06f0\\u06f0", "\\u200e\\u062f\\u0644\\u0627\\u0631 \\u0627\\u0645\\u0631\\u06cc\\u06a9\\u0627\\u06f1\\u066b\\u06f0\\u06f0"},
-        {"he_IL", "1", "USD", "1.00\\u00a0US$", "1.00\\u00a0USD", "1.00 \\u05d3\\u05d5\\u05dc\\u05e8 \\u05d0\\u05de\\u05e8\\u05d9\\u05e7\\u05d0\\u05d9"},
+        {"he_IL", "1", "USD", "1.00\\u00a0$", "1.00\\u00a0USD", "1.00 \\u05d3\\u05d5\\u05dc\\u05e8 \\u05d0\\u05de\\u05e8\\u05d9\\u05e7\\u05d0\\u05d9"},
         {"hr_HR", "1", "USD", "1,00\\u00a0USD", "1,00\\u00a0USD", "1,00 Ameri\\u010dki dolar"},
         {"id_ID", "1", "USD", "US$1,00", "USD1,00", "1,00 Dolar Amerika Serikat"},
         {"it_IT", "1", "USD", "1,00\\u00a0US$", "1,00\\u00a0USD", "1,00 Dollaro Statunitense"},
@@ -4509,12 +4518,12 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "SVC1.00",
         "SYP1.00",
         "SZL1.00",
-        "Saint Helena Pound1.00",
-        "Saint Helena pound1.00",
-        "Saint Helena pounds1.00",
-        "S\\u00e3o Tom\\u00e9 and Pr\\u00edncipe Dobra1.00",
-        "S\\u00e3o Tom\\u00e9 and Pr\\u00edncipe dobra1.00",
-        "S\\u00e3o Tom\\u00e9 and Pr\\u00edncipe dobras1.00",
+        "St. Helena Pound1.00",
+        "St. Helena pound1.00",
+        "St. Helena pounds1.00",
+        "S\\u00e3o Tom\\u00e9 & Pr\\u00edncipe Dobra1.00",
+        "S\\u00e3o Tom\\u00e9 & Pr\\u00edncipe dobra1.00",
+        "S\\u00e3o Tom\\u00e9 & Pr\\u00edncipe dobras1.00",
         "Saudi Riyal1.00",
         "Saudi riyal1.00",
         "Saudi riyals1.00",
@@ -4631,9 +4640,9 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "Tongan Pa\\u02bbanga1.00",
         "Tongan pa\\u02bbanga1.00",
         "Tongan pa\\u02bbanga1.00",
-        "Trinidad and Tobago Dollar1.00",
-        "Trinidad and Tobago dollar1.00",
-        "Trinidad and Tobago dollars1.00",
+        "Trinidad & Tobago Dollar1.00",
+        "Trinidad & Tobago dollar1.00",
+        "Trinidad & Tobago dollars1.00",
         "Tunisian Dinar1.00",
         "Tunisian dinar1.00",
         "Tunisian dinars1.00",
@@ -4817,7 +4826,6 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "unknown currency1.00",
         "\\u00a31.00",
         "\\u00a51.00",
-        "\\u0e3f1.00",
         "\\u20ab1.00",
         "\\u20aa1.00",
         "\\u20ac1.00",
@@ -5402,12 +5410,12 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "1.00 Rwandan Franc random",
         "1.00 Rwandan franc random",
         "1.00 Rwandan francs random",
-        "1.00 Saint Helena Pound random",
-        "1.00 Saint Helena pound random",
-        "1.00 Saint Helena pounds random",
-        "1.00 S\\u00e3o Tom\\u00e9 and Pr\\u00edncipe Dobra random",
-        "1.00 S\\u00e3o Tom\\u00e9 and Pr\\u00edncipe dobra random",
-        "1.00 S\\u00e3o Tom\\u00e9 and Pr\\u00edncipe dobras random",
+        "1.00 St. Helena Pound random",
+        "1.00 St. Helena pound random",
+        "1.00 St. Helena pounds random",
+        "1.00 S\\u00e3o Tom\\u00e9 & Pr\\u00edncipe Dobra random",
+        "1.00 S\\u00e3o Tom\\u00e9 & Pr\\u00edncipe dobra random",
+        "1.00 S\\u00e3o Tom\\u00e9 & Pr\\u00edncipe dobras random",
         "1.00 Saudi Riyal random",
         "1.00 Saudi riyal random",
         "1.00 Saudi riyals random",
@@ -5501,9 +5509,9 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "1.00 Timorese Escudo random",
         "1.00 Timorese escudo random",
         "1.00 Timorese escudos random",
-        "1.00 Trinidad and Tobago Dollar random",
-        "1.00 Trinidad and Tobago dollar random",
-        "1.00 Trinidad and Tobago dollars random",
+        "1.00 Trinidad & Tobago Dollar random",
+        "1.00 Trinidad & Tobago dollar random",
+        "1.00 Trinidad & Tobago dollars random",
         "1.00 Tunisian Dinar random",
         "1.00 Tunisian dinar random",
         "1.00 Tunisian dinars random",
@@ -6010,8 +6018,8 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "SV1.00",
         "SY1.00",
         "SZ1.00",
-        "Saint Helena Poun1.00",
-        "S\\u00e3o Tom\\u00e9 and Pr\\u00edncipe Dobr1.00",
+        "St. Helena Poun1.00",
+        "S\\u00e3o Tom\\u00e9 & Pr\\u00edncipe Dobr1.00",
         "Saudi Riya1.00",
         "Serbian Dina1.00",
         "Seychellois Rupe1.00",
@@ -6058,7 +6066,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "Thai Bah1.00",
         "Timorese Escud1.00",
         "Tongan Pa\\u20bbang1.00",
-        "Trinidad and Tobago Dolla1.00",
+        "Trinidad & Tobago Dolla1.00",
         "Tunisian Dina1.00",
         "Turkish Lir1.00",
         "Turkmenistani Mana1.00",
@@ -7632,20 +7640,23 @@ void NumberFormatTest::TestCurrencyUsage() {
     DecimalFormat *fmt;
 
     // compare the Currency and Currency Cash Digits
+    // Note that as of CLDR 26:
+    // * TWD switches from 0 decimals to 2; PKR still has 0, so change test to that
+    // * CAD and all other currencies that rounded to .05 no longer do
     // 1st time for getter/setter, 2nd time for factory method
-    Locale enUS_TWD("en_US@currency=TWD");
+    Locale enUS_PKR("en_US@currency=PKR");
 
     for(int i=0; i<2; i++){
         status = U_ZERO_ERROR;
         if(i == 0){
-            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_TWD, UNUM_CURRENCY, status);
-            if (assertSuccess("en_US@currency=TWD/CURRECY", status, TRUE) == FALSE) {
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_PKR, UNUM_CURRENCY, status);
+            if (assertSuccess("en_US@currency=PKR/CURRENCY", status, TRUE) == FALSE) {
                 continue;
             }
 
             UnicodeString original;
             fmt->format(agent,original);
-            assertEquals("Test Currency Usage 1", UnicodeString("NT$123.57"), original);
+            assertEquals("Test Currency Usage 1", UnicodeString("PKR124"), original);
 
             // test the getter here
             UCurrencyUsage curUsage = fmt->getCurrencyUsage();
@@ -7653,8 +7664,8 @@ void NumberFormatTest::TestCurrencyUsage() {
 
             fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
         }else{
-            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_TWD, UNUM_CASH_CURRENCY, status);
-            if (assertSuccess("en_US@currency=TWD/CASH", status, TRUE) == FALSE) {
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_PKR, UNUM_CASH_CURRENCY, status);
+            if (assertSuccess("en_US@currency=PKR/CASH", status, TRUE) == FALSE) {
                 continue;
             }
         }
@@ -7665,7 +7676,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString cash_currency;
         fmt->format(agent,cash_currency);
-        assertEquals("Test Currency Usage 2", UnicodeString("NT$124"), cash_currency);
+        assertEquals("Test Currency Usage 2", UnicodeString("PKR124"), cash_currency);
         delete fmt;
     }
 
@@ -7676,7 +7687,7 @@ void NumberFormatTest::TestCurrencyUsage() {
         status = U_ZERO_ERROR;
         if(i == 0){
             fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CURRENCY, status);
-            if (assertSuccess("en_US@currency=CAD/CURRECY", status, TRUE) == FALSE) {
+            if (assertSuccess("en_US@currency=CAD/CURRENCY", status, TRUE) == FALSE) {
                 continue;
             }
 
@@ -7693,18 +7704,18 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString cash_rounding_currency;
         fmt->format(agent, cash_rounding_currency);
-        assertEquals("Test Currency Usage 4", UnicodeString("CA$123.55"), cash_rounding_currency);
+        assertEquals("Test Currency Usage 4", UnicodeString("CA$123.57"), cash_rounding_currency);
         delete fmt;
     }
 
     // Test the currency change
     // 1st time for getter/setter, 2nd time for factory method
-    const UChar CUR_TWD[] = {0x54, 0x57, 0x44, 0};
+    const UChar CUR_PKR[] = {0x50, 0x4B, 0x52, 0};
     for(int i=0; i<2; i++){
         status = U_ZERO_ERROR;
         if(i == 0){
             fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CURRENCY, status);
-            if (assertSuccess("en_US@currency=CAD/CURRECY", status, TRUE) == FALSE) {
+            if (assertSuccess("en_US@currency=CAD/CURRENCY", status, TRUE) == FALSE) {
                 continue;
             }
             fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
@@ -7717,14 +7728,14 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString cur_original;
         fmt->format(agent, cur_original);
-        assertEquals("Test Currency Usage 5", UnicodeString("CA$123.55"), cur_original);
+        assertEquals("Test Currency Usage 5", UnicodeString("CA$123.57"), cur_original);
 
-        fmt->setCurrency(CUR_TWD, status);
-        assertSuccess("Set currency to TWD", status);
+        fmt->setCurrency(CUR_PKR, status);
+        assertSuccess("Set currency to PKR", status);
 
-        UnicodeString TWD_changed;
-        fmt->format(agent, TWD_changed);
-        assertEquals("Test Currency Usage 6", UnicodeString("NT$124"), TWD_changed);
+        UnicodeString PKR_changed;
+        fmt->format(agent, PKR_changed);
+        assertEquals("Test Currency Usage 6", UnicodeString("PKR124"), PKR_changed);
         delete fmt;
     }
 }

@@ -10,14 +10,14 @@
  * ICU <specials> source: <path>/xml/collation/haw.xml
  */
 haw{
-    Version{"2.0.98.69"}
+    Version{"2.0.98.68"}
     collations{
         standard{
             Sequence{
                 "&a<e<<<E<i<<<I<o<<<O<u<<<U"
                 "&w<ʻ"
             }
-            Version{"25"}
+            Version{"26"}
         }
     }
 }

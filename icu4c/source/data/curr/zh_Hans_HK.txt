@@ -12,9 +12,9 @@ zh_Hans_HK{
             "AWG",
             "阿鲁巴弗罗林",
         }
-        HKD{
-            "$",
-            "港元",
+        CNY{
+            "CN¥",
+            "人民币",
         }
         HNL{
             "HNL",
@@ -64,5 +64,5 @@ zh_Hans_HK{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.96.25"}
+    Version{"2.1.8.19"}
 }

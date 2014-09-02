@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/gsw.xml
  */
 gsw{
-    Version{"2.0.98.52"}
+    Version{"2.1.7.41"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -88,7 +88,7 @@ gsw{
             ec{"St. Vincent"}
         }
         "Antarctica:DumontDUrville"{
-            ec{"Dumont D'Urville"}
+            ec{"Dumont D’Urville"}
         }
         "Antarctica:Vostok"{
             ec{"Woschtok"}
@@ -303,6 +303,11 @@ gsw{
             ld{"Amazonas-Summerziit"}
             lg{"Amazonas-Ziit"}
             ls{"Amazonas-Schtandardziit"}
+        }
+        "meta:America_Central"{
+            ld{"Amerika-Zentraal Summerziit"}
+            lg{"Amerika-Zentraal Ziit"}
+            ls{"Amerika-Zentraal Schtandardziit"}
         }
         "meta:Europe_Central"{
             ld{"Mitteleuropäischi Summerziit"}
