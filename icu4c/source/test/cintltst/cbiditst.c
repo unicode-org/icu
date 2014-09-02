@@ -87,6 +87,8 @@ static void testContext(void);
 
 static void doTailTest(void);
 
+static void testBracketOverflow(void);
+
 /* new BIDI API */
 static void testReorderingMode(void);
 static void testReorderRunsOnly(void);
@@ -133,6 +135,7 @@ addComplexTest(TestNode** root) {
     addTest(root, testClassOverride, "complex/bidi/TestClassOverride");
     addTest(root, testGetBaseDirection, "complex/bidi/testGetBaseDirection");
     addTest(root, testContext, "complex/bidi/testContext");
+    addTest(root, testBracketOverflow, "complex/bidi/TestBracketOverflow");
 
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
@@ -4896,3 +4899,25 @@ testContext(void) {
 
     log_verbose("\nExiting TestContext \n\n");
 }
+
+/* Ticket#11054 ubidi_setPara crash with heavily nested brackets */
+static void
+testBracketOverflow(void) {
+    static const char* TEXT = "(((((((((((((((((((((((((((((((((((((((((a)(A)))))))))))))))))))))))))))))))))))))))))";
+    UErrorCode status = U_ZERO_ERROR;
+    UBiDi* bidi;
+    UChar src[100];
+    UChar dest[100];
+    int32_t len;
+
+    bidi = ubidi_open();
+    len = uprv_strlen(TEXT);
+    pseudoToU16(len, TEXT, src);
+    ubidi_setPara(bidi, src, len, UBIDI_DEFAULT_LTR , NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err("setPara failed with heavily nested brackets - %s", u_errorName(status));
+    }
+
+    ubidi_close(bidi);
+}
+
