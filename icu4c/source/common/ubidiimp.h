@@ -173,7 +173,7 @@ typedef struct BracketData {
     /* array of opening entries which should be enough in most cases; no malloc() */
     Opening simpleOpenings[SIMPLE_OPENINGS_SIZE];
     Opening *openings;                  /* pointer to current array of entries */
-    int32_t openingsSize;               /* number of allocated entries */
+    int32_t openingsCount;              /* number of allocated entries */
     int32_t isoRunLast;                 /* index of last used entry */
     /* array of nested isolated sequence entries; can never excess UBIDI_MAX_EXPLICIT_LEVEL
        + 1 for index 0, + 1 for before the first isolated sequence */
