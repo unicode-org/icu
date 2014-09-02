@@ -14,5 +14,5 @@ en_MG{
             "Malagasy Ariary",
         }
     }
-    Version{"2.0.91.70"}
+    Version{"2.1.6.69"}
 }

@@ -142,7 +142,7 @@ rm{
         frm{"franzos mesaun"}
         fro{"franzos vegl"}
         frr{"fris dal nord"}
-        frs{"fris da l'ost"}
+        frs{"fris da l’ost"}
         fur{"friulan"}
         fy{"fris"}
         ga{"irlandais"}
@@ -301,7 +301,7 @@ rm{
         no{"norvegiais"}
         nog{"nogai"}
         non{"nordic vegl"}
-        nqo{"n'ko"}
+        nqo{"n’ko"}
         nr{"ndebele dal sid"}
         nso{"sotho dal nord"}
         nv{"navajo"}
@@ -532,7 +532,7 @@ rm{
         Moon{"moon"}
         Mtei{"meetei mayek"}
         Mymr{"burmais"}
-        Nkoo{"n'ko"}
+        Nkoo{"n’ko"}
         Ogam{"ogham"}
         Olck{"ol chiki"}
         Orkh{"orkhon"}
@@ -560,7 +560,7 @@ rm{
         Syrc{"siric"}
         Syre{"siric estrangelo"}
         Syrj{"siric dal vest"}
-        Syrn{"siric da l'ost"}
+        Syrn{"siric da l’ost"}
         Tagb{"tagbanwa"}
         Tale{"tai le"}
         Talu{"tai lue"}
@@ -619,7 +619,7 @@ rm{
         BISKE{"dialect da San Giorgio"}
         BOONT{"dialect boontling"}
         FONIPA{"alfabet fonetic internaziunal (IPA)"}
-        FONUPA{"alfabet fonetic da l'Ural (UPA)"}
+        FONUPA{"alfabet fonetic da l’Ural (UPA)"}
         LIPAW{"dialect lipovaz da Resia"}
         MONOTON{"monotonic"}
         NEDIS{"dialect da Natisone"}
@@ -636,7 +636,7 @@ rm{
         TARASK{"ortografia taraskievica"}
         VALENCIA{"valencian"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Scrittira: {0}"}

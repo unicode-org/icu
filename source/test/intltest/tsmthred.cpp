@@ -979,7 +979,7 @@ public:
                 countryToCheck=                     Locale("","BF");
                 currencyToCheck=                    2.32;
                 expected=                           CharsToUnicodeString(
-                                                    "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing 2,32\\u00A0DEM.");
+                                                    "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing 2,32\\u00A0DM.");
                 break;
             case 2:
                 statusToCheck=                      U_MEMORY_ALLOCATION_ERROR;

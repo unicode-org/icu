@@ -138,7 +138,7 @@ et{
         dv{"maldiivi"}
         dyo{"jola-fonyi"}
         dyu{"djula"}
-        dz{"bhutani"}
+        dz{"dzongkha"}
         dzg{"dazaga"}
         ebu{"embu"}
         ee{"eve"}
@@ -175,6 +175,7 @@ et{
         fy{"läänefriisi"}
         ga{"iiri"}
         gaa{"gaa"}
+        gag{"gagauusi"}
         gay{"gajo"}
         gba{"gbaja"}
         gd{"gaeli"}
@@ -189,7 +190,7 @@ et{
         got{"gooti"}
         grb{"grebo"}
         grc{"vanakreeka"}
-        gsw{"alemanni"}
+        gsw{"šveitsisaksa"}
         gu{"gudžarati"}
         guz{"gusii"}
         gv{"mänksi"}
@@ -258,6 +259,7 @@ et{
         kmb{"mbundu"}
         kn{"kannada"}
         ko{"korea"}
+        koi{"permikomi"}
         kok{"konkani"}
         kos{"kosrae"}
         kpe{"kpelle"}
@@ -284,6 +286,7 @@ et{
         lez{"lesgi"}
         lg{"ganda"}
         li{"limburgi"}
+        lkt{"lakota"}
         ln{"lingala"}
         lo{"lao"}
         lol{"mongo"}
@@ -309,11 +312,11 @@ et{
         mdr{"mandari"}
         men{"mende"}
         mer{"meru"}
-        mfe{"Mauritaania kreooli"}
+        mfe{"Mauritiuse kreoolkeel"}
         mg{"malagassi"}
         mga{"keskiiri"}
         mgh{"makhuwa-meetto"}
-        mgo{"meta'"}
+        mgo{"meta’"}
         mh{"maršalli"}
         mi{"maoori"}
         mic{"mikmaki"}
@@ -368,7 +371,7 @@ et{
         nzi{"nzima"}
         oc{"provansi"}
         oj{"odžibvei"}
-        om{"oromo keel"}
+        om{"oromo"}
         or{"oria"}
         os{"osseedi"}
         osa{"oseidži"}
@@ -389,6 +392,7 @@ et{
         pt{"portugali"}
         pt_PT{"portugali (Euroopa)"}
         qu{"ketšua"}
+        quc{"k’iche’"}
         raj{"radžastani"}
         rap{"rapanui"}
         rar{"rarotonga"}
@@ -526,8 +530,8 @@ et{
         zen{"zenaga"}
         zgh{"tamasikti (Maroko)"}
         zh{"hiina"}
-        zh_Hans{"hiina keel - lihtsustatud"}
-        zh_Hant{"hiina keel - traditsiooniline"}
+        zh_Hans{"hiina (lihtsustatud)"}
+        zh_Hant{"hiina (traditsiooniline)"}
         zu{"suulu"}
         zun{"sunji"}
         zxx{"mittekeeleline"}
@@ -649,11 +653,15 @@ et{
         Hans{"lihtsustatud han"}
         Hant{"traditsiooniline han"}
     }
+    Scripts%variant{
+        Arab{"pärsia-araabia"}
+    }
     Types{
         calendar{
             buddhist{"budistlik kalender"}
             chinese{"Hiina kalender"}
             coptic{"Kopti kalender"}
+            dangi{"dangi kalender"}
             ethiopic{"Etioopia kalender"}
             ethiopic-amete-alem{"Etioopia amete alemi kalender"}
             gregorian{"Gregoriuse kalender"}
@@ -661,6 +669,7 @@ et{
             indian{"India rahvuslik"}
             islamic{"islamikalender"}
             islamic-civil{"islami ilmalik kalender"}
+            iso8601{"ISO-8601 kalender"}
             japanese{"Jaapani kalender"}
             persian{"Pärsia kalender"}
             roc{"Hiina Vabariigi kalender"}
@@ -688,7 +697,7 @@ et{
         }
         colNormalization{
             no{"Normeerimata sortimine"}
-            yes{"Normeeritud Unicode'i alusel sortimine"}
+            yes{"Normeeritud Unicode’i alusel sortimine"}
         }
         colNumeric{
             no{"Numbrite eraldi sortimine"}
@@ -704,7 +713,7 @@ et{
         collation{
             big5han{"hiina traditsiooniline - big5"}
             dictionary{"Sõnastiku sortimisjärjestus"}
-            ducet{"Unicode'i sortimise vaikejärjestus"}
+            ducet{"Unicode’i sortimise vaikejärjestus"}
             gb2312han{"hiina lihtsustatud - GB2312"}
             phonebook{"telefoniraamat"}
             phonetic{"Foneetiline sortimisjärjestus"}
@@ -775,7 +784,7 @@ et{
         FONIPA{"IPA foneetika"}
         FONUPA{"UPA foneetika"}
         KKCOR{"üldlevinud ortograafia"}
-        LIPAW{"Resia Lipovaz'i murre"}
+        LIPAW{"Resia Lipovaz’i murre"}
         MONOTON{"monotoonne"}
         NEDIS{"Natisone murre"}
         NJIVA{"Gniva/Njiva murre"}
@@ -795,7 +804,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Skript: {0}"}

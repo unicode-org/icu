@@ -30,8 +30,8 @@ to{
         035{"ʻĒsia fakatongahahake"}
         039{"ʻIulope fakatonga"}
         053{"ʻAositelēlēsia"}
-        054{"Melanisia"}
-        057{"Potu fonua Mikolonisia"}
+        054{"Melanīsia"}
+        057{"Potu fonua Mikolonīsia"}
         061{"Polinīsia"}
         142{"ʻĒsia"}
         143{"ʻĒsia lotoloto"}
@@ -42,15 +42,15 @@ to{
         155{"ʻIulope fakahihifo"}
         419{"ʻAmelika fakalatina"}
         AC{"Motu ʻAsenisini"}
-        AD{"ʻEnitola"}
+        AD{"ʻAnitola"}
         AE{"ʻAlepea Fakatahataha"}
         AF{"ʻAfikānisitani"}
         AG{"Anitikua mo Palaputa"}
         AI{"Anikuila"}
         AL{"ʻAlipania"}
-        AM{"ʻĀminia"}
-        AN{"Netaleni ʻEnitilisi"}
-        AO{"ʻEngikola"}
+        AM{"ʻĀmenia"}
+        AN{"Anitila fakahōlani"}
+        AO{"ʻAngikola"}
         AQ{"ʻAnitātika"}
         AR{"ʻAsenitina"}
         AS{"Haʻamoa ʻAmelika"}
@@ -86,16 +86,16 @@ to{
         CF{"Lipapilika ʻAfilika Lotoloto"}
         CG{"Kongo - Palasavila"}
         CH{"Suisilani"}
-        CI{"Matāfonua ʻAivili"}
+        CI{"Matafonua ʻAivolī"}
         CK{"ʻOtumotu Kuki"}
         CL{"Sili"}
-        CM{"Kemaluni"}
+        CM{"Kameluni"}
         CN{"Siaina"}
         CO{"Kolomipia"}
         CP{"Motu Kilipatoni"}
         CR{"Kosita Lika"}
         CU{"Kiupa"}
-        CV{"Muiʻi Vete"}
+        CV{"Muiʻi Vēte"}
         CW{"Kulasao"}
         CX{"Motu Kilisimasi"}
         CY{"Saipalesi"}
@@ -119,7 +119,7 @@ to{
         FI{"Finilani"}
         FJ{"Fisi"}
         FK{"ʻOtumotu Fokulani"}
-        FM{"Mikolonisia"}
+        FM{"Mikolonīsia"}
         FO{"ʻOtumotu Faloe"}
         FR{"Falanisē"}
         GA{"Kaponi"}
@@ -154,8 +154,8 @@ to{
         IM{"Motu Mani"}
         IN{"ʻInitia"}
         IO{"Potu fonua moana ʻInitia fakapilitānia"}
-        IQ{"ʻIulaaki"}
-        IR{"ʻIulaani"}
+        IQ{"ʻIlaaki"}
+        IR{"ʻIlaani"}
         IS{"ʻAisilani"}
         IT{"ʻĪtali"}
         JE{"Selusī"}
@@ -164,7 +164,7 @@ to{
         JP{"Siapani"}
         KE{"Keniā"}
         KG{"Kīkisitani"}
-        KH{"Kemipōtia"}
+        KH{"Kamipōtia"}
         KI{"Kilipasi"}
         KM{"Komolosi"}
         KN{"Sā Kitisi mo Nevisi"}
@@ -176,14 +176,14 @@ to{
         LA{"Lau"}
         LB{"Lepanoni"}
         LC{"Sā Lūsia"}
-        LI{"Lekitenisaini"}
+        LI{"Likitenisiteini"}
         LK{"Sīlangikā"}
         LR{"Laipelia"}
         LS{"Lesoto"}
-        LT{"Lifiuania"}
+        LT{"Lituania"}
         LU{"Lakisimipeki"}
         LV{"Lativia"}
-        LY{"Lipia"}
+        LY{"Līpia"}
         MA{"Moloko"}
         MC{"Monako"}
         MD{"Molotova"}
@@ -197,7 +197,7 @@ to{
         MN{"Mongokōlia"}
         MO{"Makau SAR Siaina"}
         MP{"ʻOtumotu Maliana tokelau"}
-        MQ{"Mateniki"}
+        MQ{"Māteniki"}
         MR{"Maulitenia"}
         MS{"Moʻungaselati"}
         MT{"Malita"}
@@ -233,10 +233,10 @@ to{
         PS{"Potu Palesitaine"}
         PT{"Potukali"}
         PW{"Palau"}
-        PY{"Palakuei"}
+        PY{"Palakuai"}
         QA{"Katā"}
         QO{"ʻOsēnia mamaʻo"}
-        RE{"Liʻiunioni"}
+        RE{"Lēunioni"}
         RO{"Lomēnia"}
         RS{"Sēpia"}
         RU{"Lūsia"}
@@ -255,7 +255,7 @@ to{
         SM{"Sā Malino"}
         SN{"Senekalo"}
         SO{"Sōmalia"}
-        SR{"Sulinami"}
+        SR{"Suliname"}
         SS{"Sūtani fakatonga"}
         ST{"Sao Tomē mo Pilinisipe"}
         SV{"ʻEle Salavatoa"}
@@ -267,11 +267,11 @@ to{
         TD{"Sāti"}
         TF{"Potu fonua tonga fakafalanisē"}
         TG{"Toko"}
-        TH{"Taileni"}
+        TH{"Tailani"}
         TJ{"Tasikitani"}
         TK{"Tokelau"}
         TL{"Timoa Hahake"}
-        TM{"Tekimenisitani"}
+        TM{"Tūkimenisitani"}
         TN{"Tunīsia"}
         TO{"Tonga"}
         TR{"Toake"}
@@ -279,28 +279,33 @@ to{
         TV{"Tūvalu"}
         TW{"Taiuani"}
         TZ{"Tenisānia"}
-        UA{"ʻIukuleini"}
+        UA{"ʻŪkalaʻine"}
         UG{"ʻIukanitā"}
         UM{"ʻOtumotu siʻi ʻo ʻAmelika"}
         US{"Puleʻanga fakatahataha ʻAmelika"}
-        UY{"ʻUlukuei"}
+        UY{"ʻUlukuai"}
         UZ{"ʻUsipekitani"}
         VA{"Kolo Vatikani"}
         VC{"Sā Viniseni mo Kulenatini"}
         VE{"Venesuela"}
         VG{"ʻOtumotu Vilikini fakapilitānia"}
         VI{"ʻOtumotu Vilikini fakaʻamelika"}
-        VN{"Vietinemi"}
+        VN{"Vietinami"}
         VU{"Vanuatu"}
         WF{"ʻUvea mo Futuna"}
         WS{"Haʻamoa"}
         XK{"Kōsovo"}
         YE{"Iemeni"}
-        YT{"Meioti"}
+        YT{"Maiote"}
         ZA{"ʻAfilika tonga"}
         ZM{"Semipia"}
         ZW{"Simipapuei"}
         ZZ{"Potu fonua taʻeʻiloa pe hala"}
+    }
+    Countries%variant{
+        CD{"Kongo (LTK)"}
+        CG{"Kongo (Lipapilika)"}
+        MK{"Masetōnia (FYROM)"}
     }
     CountriesShort{
         GB{"Pilitānia"}
@@ -309,5 +314,5 @@ to{
         PS{"Palesitaine"}
         US{"ʻAmelika"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
 }

@@ -10,13 +10,13 @@
  * ICU <specials> source: <path>/xml/collation/ml.xml
  */
 ml{
-    Version{"2.0.96.14"}
+    Version{"2.1.8.15"}
     collations{
         standard{
             Sequence{
                 "[reorder Mlym Latn Deva Arab Taml Knda Telu Beng Guru Gujr Orya Sinh]"
                 "&ഃ<<ഽ"
-                "&ോ<ൗ<<<ൌ"
+                "&\u0D4C<<\u0D57"
                 "&ക്<<ക്\u200D<<<ൿ"
                 "&ണ്<<ണ്\u200D<<<ൺ"
                 "&ന്<<ന്\u200D<<<ൻ"
@@ -26,7 +26,7 @@ ml{
                 "&മ്<<ം"
                 "&ന്<<<ൻ്"
             }
-            Version{"25"}
+            Version{"26"}
         }
     }
 }

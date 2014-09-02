@@ -13,10 +13,6 @@ en_SG{
             "$",
             "Singapore Dollar",
         }
-        USD{
-            "US$",
-            "US Dollar",
-        }
     }
-    Version{"2.0.95.35"}
+    Version{"2.1.8.19"}
 }

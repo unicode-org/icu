@@ -11,12 +11,11 @@ zh_Hans_MO{
     NumberElements{
         latn{
             patterns{
-                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.8.19"}
     calendar{
         chinese{
             DateTimePatterns{
@@ -127,7 +126,6 @@ zh_Hans_MO{
                 MMMMdd{"M月d日"}
                 MMdd{"MM-dd"}
                 Md{"M-d"}
-                yM{"y年M月"}
                 yMEd{"y年M月d日，E"}
                 yMd{"y年M月d日"}
             }
@@ -236,32 +234,32 @@ zh_Hans_MO{
                 other{"{0}秒"}
             }
         }
+        proportion{
+            karat{
+                dnam{"开"}
+                other{"{0}开"}
+            }
+        }
+        temperature{
+            kelvin{
+                dnam{"开氏度"}
+                other{"{0}开氏度"}
+            }
+        }
     }
     unitsNarrow{
         length{
-            centimeter{
-                other{"{0}厘米"}
-            }
             foot{
                 other{"{0}英尺"}
             }
             inch{
                 other{"{0}英寸"}
             }
-            kilometer{
-                other{"{0}公里"}
-            }
             light-year{
                 other{"{0}光年"}
             }
-            meter{
-                other{"{0}米"}
-            }
             mile{
                 other{"{0}英里"}
-            }
-            millimeter{
-                other{"{0}毫米"}
             }
             picometer{
                 other{"{0}皮米"}
@@ -270,38 +268,50 @@ zh_Hans_MO{
                 other{"{0}码"}
             }
         }
+        temperature{
+            celsius{
+                other{"{0}°C"}
+            }
+        }
     }
     unitsShort{
+        acceleration{
+            g-force{
+                other{"{0}G力"}
+            }
+        }
+        area{
+            hectare{
+                other{"{0}公顷"}
+            }
+            square-foot{
+                other{"{0}平方英尺"}
+            }
+        }
         length{
-            centimeter{
-                other{"{0}厘米"}
-            }
-            foot{
-                other{"{0}英尺"}
-            }
-            inch{
-                other{"{0}英寸"}
-            }
-            kilometer{
-                other{"{0}公里"}
-            }
             light-year{
                 other{"{0}光年"}
             }
             meter{
                 other{"{0}米"}
             }
-            mile{
-                other{"{0}英里"}
-            }
-            millimeter{
-                other{"{0}毫米"}
-            }
             picometer{
                 other{"{0}皮米"}
             }
             yard{
                 other{"{0}码"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"开"}
+                other{"{0}开"}
+            }
+        }
+        temperature{
+            kelvin{
+                dnam{"开氏度"}
+                other{"{0}°K"}
             }
         }
     }

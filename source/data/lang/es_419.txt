@@ -10,9 +10,34 @@ es_419{
     Keys{
         numbers{"Números"}
     }
+    Languages{
+        arn{"mapuche"}
+        az{"azerbaiyano"}
+        ba{"baskir"}
+        eu{"vasco"}
+        gsw{"alemán (Suiza)"}
+        luo{"luo"}
+        mr{"maratí"}
+        vai{"vai"}
+    }
+    Languages%variant{
+        ps{"Pastú"}
+        ug{"Uyghur"}
+    }
+    LanguagesShort{
+        en_GB{"inglés (R. U.)"}
+    }
+    Scripts{
+        Laoo{"laosiano"}
+        Mlym{"malayalam"}
+        Sinh{"sinhala"}
+    }
     Scripts%stand-alone{
         Hans{"Han simplificado"}
         Hant{"Han tradicional"}
+    }
+    Scripts%variant{
+        Arab{"persa-árabe"}
     }
     Types{
         calendar{
@@ -66,5 +91,8 @@ es_419{
             tibt{"Dígitos tibetanos"}
         }
     }
-    Version{"2.0.96.24"}
+    Version{"2.1.8.19"}
+    codePatterns{
+        script{"Alfabeto: {0}"}
+    }
 }

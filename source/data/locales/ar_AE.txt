@@ -7,5 +7,39 @@
 // *
 // ***************************************************************************
 ar_AE{
-    Version{"2.0.92.80"}
+    Version{"2.1.8.19"}
+    calendar{
+        gregorian{
+            NoonMarker{"ظهرا"}
+            eras{
+                abbreviated%variant{
+                    "ق.م",
+                    "ب.م",
+                }
+                wide%variant{
+                    "قبل الميلاد",
+                    "بعد الميلاد",
+                }
+            }
+        }
+    }
+    fields{
+        year{
+            relative{
+                "0"{"هذه السنة"}
+            }
+        }
+    }
+    unitsNarrow{
+        length{
+            millimeter{
+                few{"{0} ملم"}
+                many{"{0} ملم"}
+                one{"ملم"}
+                other{"{0} ملم"}
+                two{"ملم"}
+                zero{"ملم"}
+            }
+        }
+    }
 }

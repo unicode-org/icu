@@ -108,9 +108,9 @@ es{
         chn{"jerga chinuk"}
         cho{"choctaw"}
         chp{"chipewyan"}
-        chr{"cherokee"}
+        chr{"cheroqui"}
         chy{"cheyene"}
-        ckb{"kurdo central"}
+        ckb{"kurdo sorani"}
         co{"corso"}
         cop{"copto"}
         cr{"cree"}
@@ -142,7 +142,7 @@ es{
         dz{"dzongkha"}
         dzg{"dazaga"}
         ebu{"embu"}
-        ee{"ewe"}
+        ee{"ewé"}
         efi{"efik"}
         egy{"egipcio antiguo"}
         eka{"ekajuk"}
@@ -158,8 +158,9 @@ es{
         es{"español"}
         es_419{"español de América"}
         es_ES{"español de España"}
+        es_MX{"español de México"}
         et{"estonio"}
-        eu{"vasco"}
+        eu{"euskera"}
         ewo{"ewondo"}
         fa{"persa"}
         fan{"fang"}
@@ -172,7 +173,7 @@ es{
         fon{"fon"}
         fr{"francés"}
         fr_CA{"francés canadiense"}
-        fr_CH{"francés de Suiza"}
+        fr_CH{"francés suizo"}
         frm{"francés medieval"}
         fro{"francés antiguo"}
         frr{"frisón septentrional"}
@@ -181,6 +182,7 @@ es{
         fy{"frisón occidental"}
         ga{"irlandés"}
         gaa{"ga"}
+        gag{"gagauzo"}
         gay{"gayo"}
         gba{"gbaya"}
         gd{"gaélico escocés"}
@@ -222,7 +224,7 @@ es{
         id{"indonesio"}
         ie{"interlingue"}
         ig{"igbo"}
-        ii{"sichuan yi"}
+        ii{"yi de Sichuán"}
         ik{"inupiaq"}
         ilo{"ilocano"}
         inh{"ingush"}
@@ -259,12 +261,13 @@ es{
         kk{"kazajo"}
         kkj{"kako"}
         kl{"groenlandés"}
-        kln{"kalenyin"}
+        kln{"kalenjin"}
         km{"jemer"}
         kmb{"kimbundu"}
         kn{"canarés"}
         ko{"coreano"}
-        kok{"konkani"}
+        koi{"komi permio"}
+        kok{"konkaní"}
         kos{"kosraeano"}
         kpe{"kpelle"}
         kr{"kanuri"}
@@ -280,7 +283,7 @@ es{
         kut{"kutenai"}
         kv{"komi"}
         kw{"córnico"}
-        ky{"kirghiz"}
+        ky{"kirguís"}
         la{"latín"}
         lad{"ladino"}
         lag{"langi"}
@@ -290,6 +293,7 @@ es{
         lez{"lezgiano"}
         lg{"ganda"}
         li{"limburgués"}
+        lkt{"lakota"}
         ln{"lingala"}
         lo{"laosiano"}
         lol{"mongo"}
@@ -309,7 +313,7 @@ es{
         mai{"maithili"}
         mak{"macasar"}
         man{"mandingo"}
-        mas{"masai"}
+        mas{"masái"}
         mde{"maba"}
         mdf{"moksha"}
         mdr{"mandar"}
@@ -319,7 +323,7 @@ es{
         mg{"malgache"}
         mga{"irlandés medieval"}
         mgh{"makhuwa-meetto"}
-        mgo{"meta'"}
+        mgo{"meta’"}
         mh{"marshalés"}
         mi{"maorí"}
         mic{"micmac"}
@@ -396,6 +400,7 @@ es{
         pt_BR{"portugués de Brasil"}
         pt_PT{"portugués de Portugal"}
         qu{"quechua"}
+        quc{"quiché"}
         raj{"rajasthani"}
         rap{"rapanui"}
         rar{"rarotongano"}
@@ -510,13 +515,13 @@ es{
         vi{"vietnamita"}
         vo{"volapük"}
         vot{"vótico"}
-        vun{"kivunyo"}
+        vun{"kivunjo"}
         wa{"valón"}
         wae{"walser"}
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
-        wo{"uolof"}
+        wo{"wólof"}
         xal{"kalmyk"}
         xh{"xhosa"}
         xog{"soga"}
@@ -540,8 +545,14 @@ es{
         zxx{"sin contenido lingüístico"}
         zza{"zazaki"}
     }
+    Languages%variant{
+        ps{"pastú"}
+        ug{"uygur"}
+    }
     LanguagesShort{
         az{"azerí"}
+        en_GB{"inglés (RU)"}
+        en_US{"inglés (EE. UU.)"}
     }
     Scripts{
         Arab{"árabe"}
@@ -634,7 +645,7 @@ es{
         Saur{"saurashtra"}
         Sgnw{"SignWriting"}
         Shaw{"shaviano"}
-        Sinh{"binhala"}
+        Sinh{"singalés"}
         Sund{"sundanés"}
         Sylo{"syloti nagri"}
         Syrc{"siriaco"}
@@ -668,11 +679,15 @@ es{
         Hans{"hanzi simplificado"}
         Hant{"hanzi tradicional"}
     }
+    Scripts%variant{
+        Arab{"perso-arábigo"}
+    }
     Types{
         calendar{
             buddhist{"calendario budista"}
             chinese{"calendario chino"}
             coptic{"calendario copto"}
+            dangi{"calendario dangi"}
             ethiopic{"calendario etíope"}
             ethiopic-amete-alem{"calendario amete alem etíope"}
             gregorian{"calendario gregoriano"}
@@ -680,6 +695,7 @@ es{
             indian{"calendario nacional hindú"}
             islamic{"calendario islámico"}
             islamic-civil{"calendario civil islámico"}
+            iso8601{"calendario ISO-8601"}
             japanese{"calendario japonés"}
             persian{"calendario persa"}
             roc{"calendario de la República de China"}
@@ -793,7 +809,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}

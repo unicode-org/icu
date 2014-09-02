@@ -597,6 +597,7 @@ void MeasureFormatTest::TestGreek() {
             UMEASFMT_WIDTH_SHORT};
     int32_t numbers[] = {1, 7};
     const char *expected[] = {
+        // "el_GR" 1 wide
         "1 \\u03B4\\u03B5\\u03C5\\u03C4\\u03B5\\u03C1\\u03CC\\u03BB\\u03B5\\u03C0\\u03C4\\u03BF",
         "1 \\u03BB\\u03B5\\u03C0\\u03C4\\u03CC",
         "1 \\u03CE\\u03C1\\u03B1",
@@ -604,13 +605,15 @@ void MeasureFormatTest::TestGreek() {
         "1 \\u03B5\\u03B2\\u03B4\\u03BF\\u03BC\\u03AC\\u03B4\\u03B1",
         "1 \\u03BC\\u03AE\\u03BD\\u03B1\\u03C2",
         "1 \\u03AD\\u03C4\\u03BF\\u03C2",
+        // "el_GR" 1 short
         "1 \\u03B4\\u03B5\\u03C5\\u03C4.",
         "1 \\u03BB\\u03B5\\u03C0.",
         "1 \\u03CE\\u03C1\\u03B1",
         "1 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B1",
         "1 \\u03B5\\u03B2\\u03B4.",
         "1 \\u03BC\\u03AE\\u03BD.",
-        "1 \\u03AD\\u03C4\\u03BF\\u03C2",
+        "1 \\u03AD\\u03C4.",	        // year (one)
+        // "el_GR" 7 wide
         "7 \\u03B4\\u03B5\\u03C5\\u03C4\\u03B5\\u03C1\\u03CC\\u03BB\\u03B5\\u03C0\\u03C4\\u03B1",
         "7 \\u03BB\\u03B5\\u03C0\\u03C4\\u03AC",
         "7 \\u03CE\\u03C1\\u03B5\\u03C2",
@@ -618,13 +621,16 @@ void MeasureFormatTest::TestGreek() {
         "7 \\u03B5\\u03B2\\u03B4\\u03BF\\u03BC\\u03AC\\u03B4\\u03B5\\u03C2",
         "7 \\u03BC\\u03AE\\u03BD\\u03B5\\u03C2",
         "7 \\u03AD\\u03C4\\u03B7",
+        // "el_GR" 7 short
         "7 \\u03B4\\u03B5\\u03C5\\u03C4.",
         "7 \\u03BB\\u03B5\\u03C0.",
-        "7 \\u03CE\\u03C1\\u03B5\\u03C2",
+        "7 \\u03CE\\u03C1.",		    // hour (other)
         "7 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B5\\u03C2",
         "7 \\u03B5\\u03B2\\u03B4.",
         "7 \\u03BC\\u03AE\\u03BD.",
-        "7 \\u03AD\\u03C4\\u03B7",
+        "7 \\u03AD\\u03C4.",            // year (other)
+
+        // "el" 1 wide
         "1 \\u03B4\\u03B5\\u03C5\\u03C4\\u03B5\\u03C1\\u03CC\\u03BB\\u03B5\\u03C0\\u03C4\\u03BF",
         "1 \\u03BB\\u03B5\\u03C0\\u03C4\\u03CC",
         "1 \\u03CE\\u03C1\\u03B1",
@@ -632,13 +638,15 @@ void MeasureFormatTest::TestGreek() {
         "1 \\u03B5\\u03B2\\u03B4\\u03BF\\u03BC\\u03AC\\u03B4\\u03B1",
         "1 \\u03BC\\u03AE\\u03BD\\u03B1\\u03C2",
         "1 \\u03AD\\u03C4\\u03BF\\u03C2",
+        // "el" 1 short
         "1 \\u03B4\\u03B5\\u03C5\\u03C4.",
         "1 \\u03BB\\u03B5\\u03C0.",
         "1 \\u03CE\\u03C1\\u03B1",
         "1 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B1",
         "1 \\u03B5\\u03B2\\u03B4.",
         "1 \\u03BC\\u03AE\\u03BD.",
-        "1 \\u03AD\\u03C4\\u03BF\\u03C2",
+        "1 \\u03AD\\u03C4.",	        // year (one)
+        // "el" 7 wide
         "7 \\u03B4\\u03B5\\u03C5\\u03C4\\u03B5\\u03C1\\u03CC\\u03BB\\u03B5\\u03C0\\u03C4\\u03B1",
         "7 \\u03BB\\u03B5\\u03C0\\u03C4\\u03AC",
         "7 \\u03CE\\u03C1\\u03B5\\u03C2",
@@ -646,13 +654,14 @@ void MeasureFormatTest::TestGreek() {
         "7 \\u03B5\\u03B2\\u03B4\\u03BF\\u03BC\\u03AC\\u03B4\\u03B5\\u03C2",
         "7 \\u03BC\\u03AE\\u03BD\\u03B5\\u03C2",
         "7 \\u03AD\\u03C4\\u03B7",
+        // "el" 7 short
         "7 \\u03B4\\u03B5\\u03C5\\u03C4.",
         "7 \\u03BB\\u03B5\\u03C0.",
-        "7 \\u03CE\\u03C1\\u03B5\\u03C2",
+        "7 \\u03CE\\u03C1.",		    // hour (other)
         "7 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B5\\u03C2",
         "7 \\u03B5\\u03B2\\u03B4.",
         "7 \\u03BC\\u03AE\\u03BD.",
-        "7 \\u03AD\\u03C4\\u03B7"};
+        "7 \\u03AD\\u03C4."};           // year (other)
 
     int32_t counter = 0;
     for (int32_t locIndex = 0; locIndex < UPRV_LENGTHOF(locales); ++locIndex ) {
@@ -710,7 +719,7 @@ void MeasureFormatTest::TestMultiples() {
     helperTestMultiples(en, UMEASFMT_WIDTH_SHORT, "2 mi, 1 ft, 2.3 in");
     helperTestMultiples(en, UMEASFMT_WIDTH_NARROW, "2mi 1\\u2032 2.3\\u2033");
     helperTestMultiples(ru, UMEASFMT_WIDTH_WIDE, "2 \\u043C\\u0438\\u043B\\u0438, 1 \\u0444\\u0443\\u0442 \\u0438 2,3 \\u0434\\u044E\\u0439\\u043C\\u0430");
-    helperTestMultiples(ru, UMEASFMT_WIDTH_SHORT, "2 \\u043C\\u0438\\u043B\\u0438, 1 \\u0444\\u0443\\u0442, 2,3 \\u0434\\u044E\\u0439\\u043C\\u0430");
+    helperTestMultiples(ru, UMEASFMT_WIDTH_SHORT, "2 \\u043C\\u0438\\u043B\\u0438, 1 \\u0444\\u0443\\u0442, 2,3 \\u0434\\u044E\\u0439\\u043C.");
     helperTestMultiples(ru, UMEASFMT_WIDTH_NARROW, "2 \\u043C\\u0438\\u043B\\u044C 1 \\u0444\\u0443\\u0442 2,3 \\u0434\\u044E\\u0439\\u043C\\u0430");
 }
 

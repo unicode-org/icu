@@ -40,6 +40,7 @@ lt{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
@@ -209,10 +210,13 @@ lt{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
+        minimumGroupingDigits{"1"}
+        native{"latn"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     calendar{
         buddhist{
             eras{
@@ -222,6 +226,242 @@ lt{
             }
         }
         chinese{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "U MMMM d, EEEE",
+                "U MMMM d",
+                "U MMM d",
+                "y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d, E"}
+                Gy{"U"}
+                GyMMM{"U MMM"}
+                GyMMMEd{"U MMM d, E"}
+                GyMMMd{"U MMM d"}
+                M{"L"}
+                MEd{"MM-dd, E"}
+                MMM{"LLL"}
+                MMMEd{"MMM d, E"}
+                MMMd{"MMM d"}
+                Md{"MM-dd"}
+                d{"d"}
+                y{"U"}
+                yMd{"y-MM-dd"}
+                yyyy{"U"}
+                yyyyM{"y-MM"}
+                yyyyMEd{"y-MM-dd, E"}
+                yyyyMMM{"U MMM"}
+                yyyyMMMEd{"U MMM d, E"}
+                yyyyMMMd{"U MMM d"}
+                yyyyMd{"y-MM-dd"}
+                yyyyQQQ{"U QQQ"}
+                yyyyQQQQ{"U QQQQ"}
+            }
+            cyclicNameSets{
+                dayParts{
+                    format{
+                        abbreviated{
+                            "zi",
+                            "chou",
+                            "yin",
+                            "mao",
+                            "chen",
+                            "si",
+                            "wu",
+                            "wei",
+                            "shen",
+                            "you",
+                            "xu",
+                            "hai",
+                        }
+                    }
+                }
+                solarTerms{
+                    format{
+                        abbreviated{
+                            "pavasario pradžia",
+                            "lietaus vanduo",
+                            "vabzdžių pabudimas",
+                            "pavasario lygiadienis",
+                            "šviesu",
+                            "lietus javams",
+                            "vasaros pradžia",
+                            "liūtys",
+                            "varpų formavimasis",
+                            "vasaros saulėgrįža",
+                            "nedidelis karštis",
+                            "didelis karštis",
+                            "rudens pradžia",
+                            "karščių pabaiga",
+                            "šerkšnas",
+                            "rudens lygiadienis",
+                            "šalta rasa",
+                            "šalnos",
+                            "žiemos pradžia",
+                            "nesmarkus snigimas",
+                            "smarkus snigimas",
+                            "žiemos saulėgrįža",
+                            "nedidelis šaltis",
+                            "didelis šaltis",
+                        }
+                    }
+                }
+                years{
+                    format{
+                        abbreviated{
+                            "jia-zi",
+                            "yi-chou",
+                            "bing-yin",
+                            "ding-mao",
+                            "wu-chen",
+                            "ji-si",
+                            "geng-wu",
+                            "xin-wei",
+                            "ren-shen",
+                            "gui-you",
+                            "jia-xu",
+                            "yi-hai",
+                            "bing-zi",
+                            "ding-chou",
+                            "wu-yin",
+                            "ji-mao",
+                            "geng-chen",
+                            "xin-si",
+                            "ren-wu",
+                            "gui-wei",
+                            "jia-shen",
+                            "yi-you",
+                            "bing-xu",
+                            "ding-hai",
+                            "wu-zi",
+                            "ji-chou",
+                            "geng-yin",
+                            "xin-mao",
+                            "ren-chen",
+                            "gui-si",
+                            "jia-wu",
+                            "yi-wei",
+                            "bing-shen",
+                            "ding-you",
+                            "wu-xu",
+                            "ji-hai",
+                            "geng-zi",
+                            "xin-chou",
+                            "ren-yin",
+                            "gui-mao",
+                            "jia-chen",
+                            "yi-si",
+                            "bing-wu",
+                            "ding-wei",
+                            "wu-shen",
+                            "ji-you",
+                            "geng-xu",
+                            "xin-hai",
+                            "ren-zi",
+                            "gui-chou",
+                            "jia-yin",
+                            "yi-mao",
+                            "bing-chen",
+                            "ding-si",
+                            "wu-wu",
+                            "ji-wei",
+                            "geng-shen",
+                            "xin-you",
+                            "ren-xu",
+                            "gui-hai",
+                        }
+                    }
+                }
+                zodiacs{
+                    format{
+                        abbreviated{
+                            "Žiurkė",
+                            "Jautis",
+                            "Tigras",
+                            "Triušis",
+                            "Drakonas",
+                            "Gyvatė",
+                            "Arklys",
+                            "Ožka",
+                            "Beždžionė",
+                            "Gaidys",
+                            "Šuo",
+                            "Kiaulė",
+                        }
+                    }
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"MM–MM"}
+                }
+                MEd{
+                    M{"MM-dd, E–MM-dd, E"}
+                    d{"MM-dd, E–MM-dd, E"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
+                }
+                MMMEd{
+                    M{"MMM d, E–MMM d, E"}
+                    d{"MMM d, E–MMM d, E"}
+                }
+                MMMd{
+                    M{"MMM d–MMM d"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"MM-dd–MM-dd"}
+                    d{"MM-dd–MM-dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                y{
+                    y{"U–U"}
+                }
+                yM{
+                    M{"y-MM–y-MM"}
+                    y{"y-MM–y-MM"}
+                }
+                yMEd{
+                    M{"y-MM-dd, E–y-MM-dd, E"}
+                    d{"y-MM-dd, E–y-MM-dd, E"}
+                    y{"y-MM-dd, E–y-MM-dd, E"}
+                }
+                yMMM{
+                    M{"U MMM–MMM"}
+                    y{"U MMM–U MMM"}
+                }
+                yMMMEd{
+                    M{"U MMM d, E–MMM d, E"}
+                    d{"U MMM d, E–MMM d, E"}
+                    y{"U MMM d, E–U MMM d, E"}
+                }
+                yMMMM{
+                    M{"U MMMM–MMMM"}
+                    y{"U MMMM–U MMMM"}
+                }
+                yMMMd{
+                    M{"U MMM d–MMM d"}
+                    d{"U MMM d–d"}
+                    y{"U MMM d–U MMM d"}
+                }
+                yMd{
+                    M{"y-MM-dd–y-MM-dd"}
+                    d{"y-MM-dd–y-MM-dd"}
+                    y{"y-MM-dd–y-MM-dd"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -312,28 +552,53 @@ lt{
                     }
                 }
             }
-        }
-        coptic{
-            monthNames{
+            monthPatterns{
                 format{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
+                    wide{
+                        leap{"{0}bis"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"{0}bis"}
                     }
                 }
                 stand-alone{
                     narrow{
+                        leap{"{0}b"}
+                    }
+                }
+            }
+        }
+        coptic{
+            eras{
+                abbreviated{
+                    "ERA0",
+                    "ERA1",
+                }
+                wide{
+                    "ERA0",
+                    "ERA1",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                    narrow{
                         "1",
                         "2",
                         "3",
@@ -348,6 +613,531 @@ lt{
                         "12",
                         "13",
                     }
+                    wide{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                }
+            }
+        }
+        dangi{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "U MMMM d, EEEE",
+                "U MMMM d",
+                "U MMM d",
+                "y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d, E"}
+                Gy{"U"}
+                GyMMM{"U MMM"}
+                GyMMMEd{"U MMM d, E"}
+                GyMMMd{"U MMM d"}
+                M{"L"}
+                MEd{"MM-dd, E"}
+                MMM{"LLL"}
+                MMMEd{"MMM d, E"}
+                MMMd{"MMM d"}
+                Md{"MM-dd"}
+                d{"d"}
+                y{"U"}
+                yMd{"y-MM-dd"}
+                yyyy{"U"}
+                yyyyM{"y-MM"}
+                yyyyMEd{"y-MM-dd, E"}
+                yyyyMMM{"U MMM"}
+                yyyyMMMEd{"U MMM d, E"}
+                yyyyMMMd{"U MMM d"}
+                yyyyMd{"y-MM-dd"}
+                yyyyQQQ{"U QQQ"}
+                yyyyQQQQ{"U QQQQ"}
+            }
+            cyclicNameSets{
+                dayParts{
+                    format{
+                        abbreviated{
+                            "zi",
+                            "chou",
+                            "yin",
+                            "mao",
+                            "chen",
+                            "si",
+                            "wu",
+                            "wei",
+                            "shen",
+                            "you",
+                            "xu",
+                            "hai",
+                        }
+                    }
+                }
+                solarTerms{
+                    format{
+                        abbreviated{
+                            "pavasario pradžia",
+                            "lietaus vanduo",
+                            "vabzdžių pabudimas",
+                            "pavasario lygiadienis",
+                            "šviesu",
+                            "lietus javams",
+                            "vasaros pradžia",
+                            "liūtys",
+                            "varpų formavimasis",
+                            "vasaros saulėgrįža",
+                            "nedidelis karštis",
+                            "didelis karštis",
+                            "rudens pradžia",
+                            "karščių pabaiga",
+                            "šerkšnas",
+                            "rudens lygiadienis",
+                            "šalta rasa",
+                            "šalnos",
+                            "žiemos pradžia",
+                            "nesmarkus snigimas",
+                            "smarkus snigimas",
+                            "žiemos saulėgrįža",
+                            "nedidelis šaltis",
+                            "didelis šaltis",
+                        }
+                    }
+                }
+                years{
+                    format{
+                        abbreviated{
+                            "jia-zi",
+                            "yi-chou",
+                            "bing-yin",
+                            "ding-mao",
+                            "wu-chen",
+                            "ji-si",
+                            "geng-wu",
+                            "xin-wei",
+                            "ren-shen",
+                            "gui-you",
+                            "jia-xu",
+                            "yi-hai",
+                            "bing-zi",
+                            "ding-chou",
+                            "wu-yin",
+                            "ji-mao",
+                            "geng-chen",
+                            "xin-si",
+                            "ren-wu",
+                            "gui-wei",
+                            "jia-shen",
+                            "yi-you",
+                            "bing-xu",
+                            "ding-hai",
+                            "wu-zi",
+                            "ji-chou",
+                            "geng-yin",
+                            "xin-mao",
+                            "ren-chen",
+                            "gui-si",
+                            "jia-wu",
+                            "yi-wei",
+                            "bing-shen",
+                            "ding-you",
+                            "wu-xu",
+                            "ji-hai",
+                            "geng-zi",
+                            "xin-chou",
+                            "ren-yin",
+                            "gui-mao",
+                            "jia-chen",
+                            "yi-si",
+                            "bing-wu",
+                            "ding-wei",
+                            "wu-shen",
+                            "ji-you",
+                            "geng-xu",
+                            "xin-hai",
+                            "ren-zi",
+                            "gui-chou",
+                            "jia-yin",
+                            "yi-mao",
+                            "bing-chen",
+                            "ding-si",
+                            "wu-wu",
+                            "ji-wei",
+                            "geng-shen",
+                            "xin-you",
+                            "ren-xu",
+                            "gui-hai",
+                        }
+                    }
+                }
+                zodiacs{
+                    format{
+                        abbreviated{
+                            "Žiurkė",
+                            "Jautis",
+                            "Tigras",
+                            "Triušis",
+                            "Drakonas",
+                            "Gyvatė",
+                            "Arklys",
+                            "Ožka",
+                            "Beždžionė",
+                            "Gaidys",
+                            "Šuo",
+                            "Kiaulė",
+                        }
+                    }
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"MM–MM"}
+                }
+                MEd{
+                    M{"MM-dd, E–MM-dd, E"}
+                    d{"MM-dd, E–MM-dd, E"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
+                }
+                MMMEd{
+                    M{"MMM d, E–MMM d, E"}
+                    d{"MMM d, E–MMM d, E"}
+                }
+                MMMd{
+                    M{"MMM d–MMM d"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"MM-dd–MM-dd"}
+                    d{"MM-dd–MM-dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                y{
+                    y{"U–U"}
+                }
+                yM{
+                    M{"y-MM–y-MM"}
+                    y{"y-MM–y-MM"}
+                }
+                yMEd{
+                    M{"y-MM-dd, E–y-MM-dd, E"}
+                    d{"y-MM-dd, E–y-MM-dd, E"}
+                    y{"y-MM-dd, E–y-MM-dd, E"}
+                }
+                yMMM{
+                    M{"U MMM–MMM"}
+                    y{"U MMM–U MMM"}
+                }
+                yMMMEd{
+                    M{"U MMM d, E–MMM d, E"}
+                    d{"U MMM d, E–MMM d, E"}
+                    y{"U MMM d, E–U MMM d, E"}
+                }
+                yMMMM{
+                    M{"U MMMM–MMMM"}
+                    y{"U MMMM–U MMMM"}
+                }
+                yMMMd{
+                    M{"U MMM d–MMM d"}
+                    d{"U MMM d–d"}
+                    y{"U MMM d–U MMM d"}
+                }
+                yMd{
+                    M{"y-MM-dd–y-MM-dd"}
+                    d{"y-MM-dd–y-MM-dd"}
+                    y{"y-MM-dd–y-MM-dd"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    wide{
+                        leap{"{0}bis"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"{0}bis"}
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        leap{"{0}b"}
+                    }
+                }
+            }
+        }
+        ethiopic{
+            eras{
+                abbreviated{
+                    "ERA0",
+                    "ERA1",
+                }
+                wide{
+                    "ERA0",
+                    "ERA1",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                }
+            }
+        }
+        ethiopic-amete-alem{
+            eras{
+                abbreviated{
+                    "ERA0",
+                }
+                wide{
+                    "ERA0",
                 }
             }
         }
@@ -480,8 +1270,8 @@ lt{
                     y{"y-MM-dd G, E – y-MM-dd G, E"}
                 }
                 yMMMM{
-                    M{"y MMMM – MMMM G"}
-                    y{"y MMMM – y MMMM G"}
+                    M{"y LLLL – y LLLL G"}
+                    y{"y LLLL – y LLLL G"}
                 }
                 yMMMd{
                     M{"y-MM-dd – MM-d G"}
@@ -500,6 +1290,14 @@ lt{
                 "priešpiet",
                 "popiet",
             }
+            AmPmMarkersAbbr{
+                "pr.p.",
+                "pop.",
+            }
+            AmPmMarkersNarrow{
+                "priešpiet",
+                "popiet",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -507,7 +1305,7 @@ lt{
                 "HH:mm",
                 "y 'm'. MMMM d 'd'., EEEE",
                 "y 'm'. MMMM d 'd'.",
-                "y MMM d",
+                "y-MM-dd",
                 "y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
@@ -515,27 +1313,36 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"perpiet"}
+            NoonMarkerNarrow{"perpiet"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
             availableFormats{
+                E{"ccc"}
                 EHm{"HH:mm, E"}
                 EHms{"HH:mm:ss, E"}
                 Ed{"d, E"}
                 Ehm{"hh:mm a, E"}
                 Ehms{"hh:mm:ss a, E"}
                 Gy{"y G"}
-                GyMMM{"y G MMM"}
-                GyMMMEd{"y G MMM d, E"}
-                GyMMMd{"y G MMM d"}
+                GyMMM{"y-MM G"}
+                GyMMMEd{"y-MM-dd G, E"}
+                GyMMMM{"y G LLLL"}
+                GyMMMMEd{"y G MMMM d, E"}
+                GyMMMMd{"y G MMMM d"}
+                GyMMMd{"y-MM-dd G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
-                M{"LL"}
+                M{"MM"}
                 MEd{"MM-dd, E"}
-                MMM{"LLL"}
-                MMMEd{"MMM d, E"}
-                MMMd{"MMM d"}
+                MMM{"MM"}
+                MMMEd{"MM-dd, E"}
+                MMMM{"LLLL"}
+                MMMMEd{"MMMM d, E"}
+                MMMMd{"MMMM d"}
+                MMMd{"MM-dd"}
                 MMdd{"MM-dd"}
                 Md{"MM-d"}
                 d{"dd"}
@@ -546,9 +1353,12 @@ lt{
                 y{"y"}
                 yM{"y-MM"}
                 yMEd{"y-MM-dd, E"}
-                yMMM{"y MMM"}
-                yMMMEd{"y MMM d, E"}
-                yMMMd{"y MMM d"}
+                yMMM{"y-MM"}
+                yMMMEd{"y-MM-dd, E"}
+                yMMMM{"y LLLL"}
+                yMMMMEd{"y MMMM d, E"}
+                yMMMMd{"y MMMM d"}
+                yMMMd{"y-MM-dd"}
                 yMd{"y-MM-dd"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
@@ -636,6 +1446,10 @@ lt{
                     "pr. Kr.",
                     "po Kr.",
                 }
+                abbreviated%variant{
+                    "pr. m. e.",
+                    "mūsų eroje",
+                }
                 narrow{
                     "pr. Kr.",
                     "po Kr.",
@@ -643,6 +1457,10 @@ lt{
                 wide{
                     "prieš Kristų",
                     "po Kristaus",
+                }
+                wide%variant{
+                    "prieš mūsų erą",
+                    "mūsų eroje",
                 }
             }
             intervalFormats{
@@ -668,15 +1486,26 @@ lt{
                     d{"MM-dd, E – MM-dd, E"}
                 }
                 MMM{
-                    M{"LLL–LLL"}
+                    M{"MM–MM"}
                 }
                 MMMEd{
-                    M{"MMM d, E – MMM d, E"}
-                    d{"MMM d, E – MMM d, E"}
+                    M{"MM-dd, E – MM-dd, E"}
+                    d{"MM-dd, E – MM-dd, E"}
+                }
+                MMMM{
+                    M{"LLLL–LLLL"}
+                }
+                MMMMEd{
+                    M{"MMMM d, E – MMMM d, E"}
+                    d{"MMMM d, E – MMMM d, E"}
+                }
+                MMMMd{
+                    M{"MMMM d – MMMM d"}
+                    d{"MMMM d–d"}
                 }
                 MMMd{
-                    M{"MMM d – MMM d"}
-                    d{"MMM d–d"}
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – MM-dd"}
                 }
                 Md{
                     M{"MM-dd – MM-dd"}
@@ -687,7 +1516,7 @@ lt{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"hh a–hh a"}
+                    a{"h a – h a"}
                     h{"hh–hh a"}
                 }
                 hm{
@@ -701,7 +1530,7 @@ lt{
                     m{"h:mm–h:mm a v"}
                 }
                 hv{
-                    a{"hh a–hh a v"}
+                    a{"h a – h a v"}
                     h{"hh–hh a v"}
                 }
                 y{
@@ -717,22 +1546,32 @@ lt{
                     y{"y-MM-dd, E – y-MM-dd, E"}
                 }
                 yMMM{
-                    M{"y 'm'. MMM–MMM"}
+                    M{"y-MM – y-MM"}
                     y{"y-MM – y-MM"}
                 }
                 yMMMEd{
-                    M{"y MMM d, E. – MMM d, E."}
-                    d{"y MMM d, E – MMM d, E"}
-                    y{"y MMM d, E. – y MMM d, E."}
+                    M{"y-MM-dd, E – y-MM-dd, E"}
+                    d{"y-MM-dd, E – y-MM-dd, E"}
+                    y{"y-MM-dd, E – y-MM-dd, E"}
                 }
                 yMMMM{
-                    M{"y MMMM–MMMM"}
-                    y{"y MMMM – y MMMM"}
+                    M{"y LLLL–LLLL"}
+                    y{"y LLLL – LLLL"}
+                }
+                yMMMMEd{
+                    M{"y MMMM d, E. – MMMM d, E."}
+                    d{"y MMMM d, E – MMMM d, E"}
+                    y{"y MMMM d, E. – y MMMM d, E."}
+                }
+                yMMMMd{
+                    M{"y MMMM d – MMMM d"}
+                    d{"y MMMM d–d"}
+                    y{"y MMMM d – y MMMM d"}
                 }
                 yMMMd{
-                    M{"y MMM d – MMM d"}
-                    d{"y MMM d–d"}
-                    y{"y MMM d – y MMM d"}
+                    M{"y-MM-dd – y-MM-dd"}
+                    d{"y-MM-dd – y-MM-dd"}
+                    y{"y-MM-dd – y-MM-dd"}
                 }
                 yMd{
                     M{"y-MM-dd – y-MM-dd"}
@@ -771,18 +1610,18 @@ lt{
                         "G",
                     }
                     wide{
-                        "sausis",
-                        "vasaris",
-                        "kovas",
-                        "balandis",
-                        "gegužė",
-                        "birželis",
-                        "liepa",
-                        "rugpjūtis",
-                        "rugsėjis",
-                        "spalis",
-                        "lapkritis",
-                        "gruodis",
+                        "sausio",
+                        "vasario",
+                        "kovo",
+                        "balandžio",
+                        "gegužės",
+                        "birželio",
+                        "liepos",
+                        "rugpjūčio",
+                        "rugsėjo",
+                        "spalio",
+                        "lapkričio",
+                        "gruodžio",
                     }
                 }
                 stand-alone{
@@ -873,6 +1712,657 @@ lt{
                 }
             }
         }
+        hebrew{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "y MMMM d G, EEEE",
+                "y MMMM d G",
+                "y MMM d G",
+                "y-MM-dd G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            eras{
+                abbreviated{
+                    "AM",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                        "7",
+                    }
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                        "7",
+                    }
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                }
+            }
+        }
+        indian{
+            eras{
+                abbreviated{
+                    "Saka",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                    wide{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                }
+            }
+        }
+        islamic{
+            eras{
+                abbreviated{
+                    "AH",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Jum. I",
+                        "Jum. II",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shaw.",
+                        "Dhuʻl-Q.",
+                        "Dhuʻl-H.",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Jum. I",
+                        "Jum. II",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shaw.",
+                        "Dhuʻl-Q.",
+                        "Dhuʻl-H.",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+            }
+        }
+        japanese{
+            eras{
+                abbreviated{
+                    "Taika (645–650)",
+                    "Hakuči (650–671)",
+                    "Hakuho (672–686)",
+                    "Šučo (686–701)",
+                    "Taiho (701–704)",
+                    "Keiun (704–708)",
+                    "Vado (708–715)",
+                    "Reiki (715–717)",
+                    "Joro (717–724)",
+                    "Jinki (724–729)",
+                    "Tempio (729–749)",
+                    "Tempio-kampo (749–749)",
+                    "Tempio-šoho (749–757)",
+                    "Tempio-hodzi (757–765)",
+                    "Tempo-dzingo (765–767)",
+                    "Dzingo-keiun (767–770)",
+                    "Hoki (770–780)",
+                    "Ten-o (781–782)",
+                    "Enrjaku (782–806)",
+                    "Daido (806–810)",
+                    "Konin (810–824)",
+                    "Tenčo (824–834)",
+                    "Šova (834–848)",
+                    "Kajo (848–851)",
+                    "Ninju (851–854)",
+                    "Saiko (854–857)",
+                    "Tenan (857–859)",
+                    "Jogan (859–877)",
+                    "Genkei (877–885)",
+                    "Ninja (885–889)",
+                    "Kampjo (889–898)",
+                    "Šotai (898–901)",
+                    "Engi (901–923)",
+                    "Enčo (923–931)",
+                    "Šohei (931–938)",
+                    "Tengjo (938–947)",
+                    "Tenriaku (947–957)",
+                    "Tentoku (957–961)",
+                    "Ova (961–964)",
+                    "Koho (964–968)",
+                    "Ana (968–970)",
+                    "Tenroku (970–973)",
+                    "Ten-en (973–976)",
+                    "Jogen (976–978)",
+                    "Tengen (978–983)",
+                    "Eikan (983–985)",
+                    "Kana (985–987)",
+                    "Ei-en (987–989)",
+                    "Eiso (989–990)",
+                    "Šorjaku (990–995)",
+                    "Čotoku (995–999)",
+                    "Čoho (999–1004)",
+                    "Kanko (1004–1012)",
+                    "Čova (1012–1017)",
+                    "Kanin (1017–1021)",
+                    "Džian (1021–1024)",
+                    "Mandžiu (1024–1028)",
+                    "Čogen (1028–1037)",
+                    "Čorjaku (1037–1040)",
+                    "Čokju (1040–1044)",
+                    "Kantoku (1044–1046)",
+                    "Eišo (1046–1053)",
+                    "Tengi (1053–1058)",
+                    "Kohei (1058–1065)",
+                    "Džirjaku (1065–1069)",
+                    "Enkju (1069–1074)",
+                    "Šoho (1074–1077)",
+                    "Šorjaku (1077–1081)",
+                    "Eiho (1081–084)",
+                    "Otoku (1084–1087)",
+                    "Kandži (1087–1094)",
+                    "Kaho (1094–1096)",
+                    "Eičo (1096–1097)",
+                    "Šotoku (1097–1099)",
+                    "Kova (1099–1104)",
+                    "Čodži (1104–1106)",
+                    "Kašo (1106–1108)",
+                    "Tenin (1108–1110)",
+                    "Ten-ei (1110–1113)",
+                    "Eikju (1113–1118)",
+                    "Gen-ei (1118–1120)",
+                    "Hoan (1120–1124)",
+                    "Tendži (1124–1126)",
+                    "Daidži (1126–1131)",
+                    "Tenšo (1131–1132)",
+                    "Čošo (1132–1135)",
+                    "Hoen (1135–1141)",
+                    "Eidži (1141–1142)",
+                    "Kodži (1142–1144)",
+                    "Tenjo (1144–1145)",
+                    "Kjuan (1145–1151)",
+                    "Ninpei (1151–1154)",
+                    "Kjuju (1154–1156)",
+                    "Hogen (1156–1159)",
+                    "Heidži (1159–1160)",
+                    "Eirjaku (1160–1161)",
+                    "Oho (1161–1163)",
+                    "Čokan (1163–1165)",
+                    "Eiman (1165–1166)",
+                    "Nin-an (1166–1169)",
+                    "Kao (1169–1171)",
+                    "Šoan (1171–1175)",
+                    "Angen (1175–1177)",
+                    "Džišo (1177–1181)",
+                    "Jova (1181–1182)",
+                    "Džuei (1182–1184)",
+                    "Genrjuku (1184–1185)",
+                    "Bundži (1185–1190)",
+                    "Kenkju (1190–1199)",
+                    "Šodži (1199–1201)",
+                    "Kenin (1201–1204)",
+                    "Genkju (1204–1206)",
+                    "Ken-ei (1206–1207)",
+                    "Šogen (1207–1211)",
+                    "Kenrjaku (1211–1213)",
+                    "Kenpo (1213–1219)",
+                    "Šokju (1219–1222)",
+                    "Džu (1222–1224)",
+                    "Genin (1224–1225)",
+                    "Karoku (1225–1227)",
+                    "Antei (1227–1229)",
+                    "Kanki (1229–1232)",
+                    "Džoei (1232–1233)",
+                    "Tempuku (1233–1234)",
+                    "Bunrjaku (1234–1235)",
+                    "Katei (1235–1238)",
+                    "Rjakunin (1238–1239)",
+                    "En-o (1239–1240)",
+                    "Nindži (1240–1243)",
+                    "Kangen (1243–1247)",
+                    "Hodži (1247–1249)",
+                    "Kenčo (1249–1256)",
+                    "Kogen (1256–1257)",
+                    "Šoka (1257–1259)",
+                    "Šogen (1259–1260)",
+                    "Bun-o (1260–1261)",
+                    "Kočo (1261–1264)",
+                    "Bun-ei (1264–1275)",
+                    "Kendži (1275–1278)",
+                    "Koan (1278–1288)",
+                    "Šu (1288–1293)",
+                    "Einin (1293–1299)",
+                    "Šoan (1299–1302)",
+                    "Kengen (1302–1303)",
+                    "Kagen (1303–1306)",
+                    "Tokudži (1306–1308)",
+                    "Enkei (1308–1311)",
+                    "Očo (1311–1312)",
+                    "Šova (1312–1317)",
+                    "Bunpo (1317–1319)",
+                    "Dženo (1319–1321)",
+                    "Dženkjo (1321–1324)",
+                    "Šoču (1324–1326)",
+                    "Kareki (1326–1329)",
+                    "Gentoku (1329–1331)",
+                    "Genko (1331–1334)",
+                    "Kemu (1334–1336)",
+                    "Engen (1336–1340)",
+                    "Kokoku (1340–1346)",
+                    "Šohei (1346–1370)",
+                    "Kentoku (1370–1372)",
+                    "Bunču (1372–1375)",
+                    "Tendžu (1375–1379)",
+                    "Korjaku (1379–1381)",
+                    "Kova (1381–1384)",
+                    "Genču (1384–1392)",
+                    "Meitoku (1384–1387)",
+                    "Kakei (1387–1389)",
+                    "Ku (1389–1390)",
+                    "Meitoku (1390–1394)",
+                    "Oei (1394–1428)",
+                    "Šočo (1428–1429)",
+                    "Eikjo (1429–1441)",
+                    "Kakitsu (1441–1444)",
+                    "Bun-an (1444–1449)",
+                    "Hotoku (1449–1452)",
+                    "Kjotoku (1452–1455)",
+                    "Košo (1455–1457)",
+                    "Čoroku (1457–1460)",
+                    "Kanšo (1460–1466)",
+                    "Bunšo (1466–1467)",
+                    "Onin (1467–1469)",
+                    "Bunmei (1469–1487)",
+                    "Čokjo (1487–1489)",
+                    "Entoku (1489–1492)",
+                    "Meio (1492–1501)",
+                    "Bunki (1501–1504)",
+                    "Eišo (1504–1521)",
+                    "Taiei (1521–1528)",
+                    "Kjoroku (1528–1532)",
+                    "Tenmon (1532–1555)",
+                    "Kodži (1555–1558)",
+                    "Eiroku (1558–1570)",
+                    "Genki (1570–1573)",
+                    "Tenšo (1573–1592)",
+                    "Bunroku (1592–1596)",
+                    "Keičo (1596–1615)",
+                    "Genva (1615–1624)",
+                    "Kan-ei (1624–1644)",
+                    "Šoho (1644–1648)",
+                    "Keian (1648–1652)",
+                    "Šu (1652–1655)",
+                    "Meirjaku (1655–1658)",
+                    "Mandži (1658–1661)",
+                    "Kanbun (1661–1673)",
+                    "Enpo (1673–1681)",
+                    "Tenva (1681–1684)",
+                    "Džokjo (1684–1688)",
+                    "Genroku (1688–1704)",
+                    "Hoei (1704–1711)",
+                    "Šotoku (1711–1716)",
+                    "Kjoho (1716–1736)",
+                    "Genbun (1736–1741)",
+                    "Kanpo (1741–1744)",
+                    "Enkjo (1744–1748)",
+                    "Kan-en (1748–1751)",
+                    "Horjaku (1751–1764)",
+                    "Meiva (1764–1772)",
+                    "An-ei (1772–1781)",
+                    "Tenmei (1781–1789)",
+                    "Kansei (1789–1801)",
+                    "Kjova (1801–1804)",
+                    "Bunka (1804–1818)",
+                    "Bunsei (1818–1830)",
+                    "Tenpo (1830–1844)",
+                    "Koka (1844–1848)",
+                    "Kaei (1848–1854)",
+                    "Ansei (1854–1860)",
+                    "Man-en (1860–1861)",
+                    "Bunkju (1861–1864)",
+                    "Gendži (1864–1865)",
+                    "Keiko (1865–1868)",
+                    "Meidži",
+                    "Taišo",
+                    "Šova",
+                    "Heisei",
+                }
+            }
+        }
+        persian{
+            eras{
+                abbreviated{
+                    "AP",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                }
+            }
+        }
+        roc{
+            eras{
+                abbreviated{
+                    "Prieš R.O.C.",
+                    "R.O.C.",
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"“"}
@@ -881,9 +2371,9 @@ lt{
         quotationStart{"„"}
     }
     durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
+        hm{"hh:mm"}
+        hms{"hh:mm:ss"}
+        ms{"mm:ss"}
     }
     fields{
         day{
@@ -910,6 +2400,40 @@ lt{
                 }
             }
         }
+        day-narrow{
+            dn{"d."}
+            relativeTime{
+                future{
+                    few{"po {0} d."}
+                    many{"po {0} d."}
+                    one{"po {0} d."}
+                    other{"po {0} d."}
+                }
+                past{
+                    few{"prieš {0} d."}
+                    many{"prieš {0} d."}
+                    one{"prieš {0} d."}
+                    other{"prieš {0} d."}
+                }
+            }
+        }
+        day-short{
+            dn{"d."}
+            relativeTime{
+                future{
+                    few{"po {0} d."}
+                    many{"po {0} d."}
+                    one{"po {0} d."}
+                    other{"po {0} d."}
+                }
+                past{
+                    few{"prieš {0} d."}
+                    many{"prieš {0} d."}
+                    one{"prieš {0} d."}
+                    other{"prieš {0} d."}
+                }
+            }
+        }
         dayperiod{
             dn{"Iki pietų / po pietų"}
         }
@@ -921,6 +2445,20 @@ lt{
                 "-1"{"praėjusį penktadienį"}
                 "0"{"šį penktadienį"}
                 "1"{"kitą penktadienį"}
+            }
+        }
+        fri-narrow{
+            relative{
+                "-1"{"praėjusį penkt."}
+                "0"{"šį penkt."}
+                "1"{"kitą penkt."}
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"praėjusį penkt."}
+                "0"{"šį penkt."}
+                "1"{"kitą penkt."}
             }
         }
         hour{
@@ -937,6 +2475,40 @@ lt{
                     many{"prieš {0} valandos"}
                     one{"prieš {0} valandą"}
                     other{"prieš {0} valandų"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"h"}
+            relativeTime{
+                future{
+                    few{"po {0} val."}
+                    many{"po {0} val."}
+                    one{"po {0} val."}
+                    other{"po {0} val."}
+                }
+                past{
+                    few{"prieš {0} val."}
+                    many{"prieš {0} val."}
+                    one{"prieš {0} val."}
+                    other{"prieš {0} val."}
+                }
+            }
+        }
+        hour-short{
+            dn{"val."}
+            relativeTime{
+                future{
+                    few{"po {0} val."}
+                    many{"po {0} val."}
+                    one{"po {0} val."}
+                    other{"po {0} val."}
+                }
+                past{
+                    few{"prieš {0} val."}
+                    many{"prieš {0} val."}
+                    one{"prieš {0} val."}
+                    other{"prieš {0} val."}
                 }
             }
         }
@@ -957,11 +2529,59 @@ lt{
                 }
             }
         }
+        minute-narrow{
+            dn{"min."}
+            relativeTime{
+                future{
+                    few{"po {0} min."}
+                    many{"po {0} min."}
+                    one{"po {0} min."}
+                    other{"po {0} min."}
+                }
+                past{
+                    few{"prieš {0} min."}
+                    many{"prieš {0} min."}
+                    one{"prieš {0} min."}
+                    other{"prieš {0} min."}
+                }
+            }
+        }
+        minute-short{
+            dn{"min."}
+            relativeTime{
+                future{
+                    few{"po {0} min."}
+                    many{"po {0} min."}
+                    one{"po {0} min."}
+                    other{"po {0} min."}
+                }
+                past{
+                    few{"prieš {0} min."}
+                    many{"prieš {0} min."}
+                    one{"prieš {0} min."}
+                    other{"prieš {0} min."}
+                }
+            }
+        }
         mon{
             relative{
                 "-1"{"praėjusį pirmadienį"}
                 "0"{"šį pirmadienį"}
                 "1"{"kitą pirmadienį"}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"praėjusį pirm."}
+                "0"{"šį pirm."}
+                "1"{"kitą pirm."}
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"praėjusį pirm."}
+                "0"{"šį pirm."}
+                "1"{"kitą pirm."}
             }
         }
         month{
@@ -986,11 +2606,110 @@ lt{
                 }
             }
         }
+        month-narrow{
+            dn{"mėn."}
+            relativeTime{
+                future{
+                    few{"po {0} mėn."}
+                    many{"po {0} mėn."}
+                    one{"po {0} mėn."}
+                    other{"po {0} mėn."}
+                }
+                past{
+                    few{"prieš {0} mėn."}
+                    many{"prieš {0} mėn."}
+                    one{"prieš {0} mėn."}
+                    other{"prieš {0} mėn."}
+                }
+            }
+        }
+        month-short{
+            dn{"mėn."}
+            relativeTime{
+                future{
+                    few{"po {0} mėn."}
+                    many{"po {0} mėn."}
+                    one{"po {0} mėn."}
+                    other{"po {0} mėn."}
+                }
+                past{
+                    few{"prieš {0} mėn."}
+                    many{"prieš {0} mėn."}
+                    one{"prieš {0} mėn."}
+                    other{"prieš {0} mėn."}
+                }
+            }
+        }
+        quarter{
+            dn{"Ketvirtis"}
+            relativeTime{
+                future{
+                    few{"po {0} ketvirčių"}
+                    many{"po {0} ketvirčio"}
+                    one{"po {0} ketvirčio"}
+                    other{"po {0} ketvirčių"}
+                }
+                past{
+                    few{"prieš {0} ketvirčius"}
+                    many{"prieš {0} ketvirčio"}
+                    one{"prieš {0} ketvirtį"}
+                    other{"prieš {0} ketvirčių"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"ketv."}
+            relativeTime{
+                future{
+                    few{"po {0} ketv."}
+                    many{"po {0} ketv."}
+                    one{"po {0} ketv."}
+                    other{"po {0} ketv."}
+                }
+                past{
+                    few{"prieš {0} ketv."}
+                    many{"prieš {0} ketv."}
+                    one{"prieš {0} ketv."}
+                    other{"prieš {0} ketv."}
+                }
+            }
+        }
+        quarter-short{
+            dn{"ketv."}
+            relativeTime{
+                future{
+                    few{"po {0} ketv."}
+                    many{"po {0} ketv."}
+                    one{"po {0} ketv."}
+                    other{"po {0} ketv."}
+                }
+                past{
+                    few{"prieš {0} ketv."}
+                    many{"prieš {0} ketv."}
+                    one{"prieš {0} ketv."}
+                    other{"prieš {0} ketv."}
+                }
+            }
+        }
         sat{
             relative{
                 "-1"{"praėjusį šeštadienį"}
                 "0"{"šį šeštadienį"}
                 "1"{"kitą šeštadienį"}
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"praėjusį šešt."}
+                "0"{"šį šešt."}
+                "1"{"kitą šešt."}
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"praėjusį šešt."}
+                "0"{"šį šešt."}
+                "1"{"kitą šešt."}
             }
         }
         second{
@@ -1013,11 +2732,59 @@ lt{
                 }
             }
         }
+        second-narrow{
+            dn{"s"}
+            relativeTime{
+                future{
+                    few{"po {0} s"}
+                    many{"po {0} s"}
+                    one{"po {0} s"}
+                    other{"po {0} s"}
+                }
+                past{
+                    few{"prieš {0} s"}
+                    many{"prieš {0} s"}
+                    one{"prieš {0} s"}
+                    other{"prieš {0} s"}
+                }
+            }
+        }
+        second-short{
+            dn{"sek."}
+            relativeTime{
+                future{
+                    few{"po {0} sek."}
+                    many{"po {0} sek."}
+                    one{"po {0} sek."}
+                    other{"po {0} sek."}
+                }
+                past{
+                    few{"prieš {0} sek."}
+                    many{"prieš {0} sek."}
+                    one{"prieš {0} sek."}
+                    other{"prieš {0} sek."}
+                }
+            }
+        }
         sun{
             relative{
                 "-1"{"praėjusį sekmadienį"}
                 "0"{"šį sekmadienį"}
                 "1"{"kitą sekmadienį"}
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"praėjusį sekm."}
+                "0"{"šį sekm."}
+                "1"{"kitą sekm."}
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"praėjusį sekm."}
+                "0"{"šį sekm."}
+                "1"{"kitą sekm."}
             }
         }
         thu{
@@ -1027,6 +2794,20 @@ lt{
                 "1"{"kitą ketvirtadienį"}
             }
         }
+        thu-narrow{
+            relative{
+                "-1"{"praėjusį ketv."}
+                "0"{"šį ketv."}
+                "1"{"kitą ketv."}
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"praėjusį ketv."}
+                "0"{"šį ketv."}
+                "1"{"kitą ketv."}
+            }
+        }
         tue{
             relative{
                 "-1"{"praėjusį antradienį"}
@@ -1034,11 +2815,39 @@ lt{
                 "1"{"kitą antradienį"}
             }
         }
+        tue-narrow{
+            relative{
+                "-1"{"praėjusį antr."}
+                "0"{"šį antr."}
+                "1"{"kitą antr."}
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"praėjusį antr."}
+                "0"{"šį antr."}
+                "1"{"kitą antr."}
+            }
+        }
         wed{
             relative{
                 "-1"{"praėjusį trečiadienį"}
                 "0"{"šį trečiadienį"}
                 "1"{"kitą trečiadienį"}
+            }
+        }
+        wed-narrow{
+            relative{
+                "-1"{"praėjusį treč."}
+                "0"{"šį treč."}
+                "1"{"kitą treč."}
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"praėjusį treč."}
+                "0"{"šį treč."}
+                "1"{"kitą treč."}
             }
         }
         week{
@@ -1060,6 +2869,40 @@ lt{
                     many{"prieš {0} savaitės"}
                     one{"prieš {0} savaitę"}
                     other{"prieš {0} savaičių"}
+                }
+            }
+        }
+        week-narrow{
+            dn{"sav."}
+            relativeTime{
+                future{
+                    few{"po {0} sav."}
+                    many{"po {0} sav."}
+                    one{"po {0} sav."}
+                    other{"po {0} sav."}
+                }
+                past{
+                    few{"prieš {0} sav."}
+                    many{"prieš {0} sav."}
+                    one{"prieš {0} sav."}
+                    other{"prieš {0} sav."}
+                }
+            }
+        }
+        week-short{
+            dn{"sav."}
+            relativeTime{
+                future{
+                    few{"po {0} sav."}
+                    many{"po {0} sav."}
+                    one{"po {0} sav."}
+                    other{"po {0} sav."}
+                }
+                past{
+                    few{"prieš {0} sav."}
+                    many{"prieš {0} sav."}
+                    one{"prieš {0} sav."}
+                    other{"prieš {0} sav."}
                 }
             }
         }
@@ -1088,6 +2931,40 @@ lt{
                 }
             }
         }
+        year-narrow{
+            dn{"m."}
+            relativeTime{
+                future{
+                    few{"po {0} m."}
+                    many{"po {0} m."}
+                    one{"po {0} m."}
+                    other{"po {0} m."}
+                }
+                past{
+                    few{"prieš {0} m."}
+                    many{"prieš {0} m."}
+                    one{"prieš {0} m."}
+                    other{"prieš {0} m."}
+                }
+            }
+        }
+        year-short{
+            dn{"m."}
+            relativeTime{
+                future{
+                    few{"po {0} m."}
+                    many{"po {0} m."}
+                    one{"po {0} m."}
+                    other{"po {0} m."}
+                }
+                past{
+                    few{"prieš {0} m."}
+                    many{"prieš {0} m."}
+                    one{"prieš {0} m."}
+                    other{"prieš {0} metų"}
+                }
+            }
+        }
         zone{
             dn{"Laiko juosta"}
         }
@@ -1102,20 +2979,20 @@ lt{
         unit{
             2{"{0} ir {1}"}
             end{"{0} ir {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
         }
         unit-narrow{
-            2{"{0}, {1}"}
-            end{"{0}, {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
         }
         unit-short{
-            2{"{0} ir {1}"}
-            end{"{0}, {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
         }
     }
     measurementSystemNames{
@@ -1138,225 +3015,638 @@ lt{
     units{
         acceleration{
             g-force{
+                dnam{"laisvojo kritimo pagreičiai"}
                 few{"{0} laisvojo kritimo pagreičiai"}
                 many{"{0} laisvojo kritimo pagreičio"}
                 one{"{0} laisvojo kritimo pagreitis"}
                 other{"{0} laisvojo kritimo pagreičių"}
             }
+            meter-per-second-squared{
+                dnam{"metrai per kvadratinę sekundę"}
+                few{"{0} metrai per kvadratinęsekundę"}
+                many{"{0} metro per kvadratinę sekundę"}
+                one{"{0} metras per kvadratinę sekundę"}
+                other{"{0} metrų per kvadratinę sekundę"}
+            }
         }
         angle{
             arc-minute{
+                dnam{"kampo minutės"}
                 few{"{0} kampo minutės"}
                 many{"{0} kampo minutės"}
                 one{"{0} kampo minutė"}
                 other{"{0} kampo minučių"}
             }
             arc-second{
+                dnam{"kampo sekundės"}
                 few{"{0} kampo sekundės"}
                 many{"{0} kampo sekundės"}
                 one{"{0} kampo sekundė"}
                 other{"{0} kampo sekundžių"}
             }
             degree{
+                dnam{"laipsniai"}
                 few{"{0} laipsniai"}
                 many{"{0} laipsnio"}
                 one{"{0} laipsnis"}
                 other{"{0} laipsnių"}
             }
+            radian{
+                dnam{"radianai"}
+                few{"{0} radianai"}
+                many{"{0} radiano"}
+                one{"{0} radianas"}
+                other{"{0} radianų"}
+            }
         }
         area{
             acre{
+                dnam{"akrai"}
                 few{"{0} akrai"}
                 many{"{0} akro"}
                 one{"{0} akras"}
                 other{"{0} akrų"}
             }
             hectare{
+                dnam{"hektarai"}
                 few{"{0} hektarai"}
                 many{"{0} hektaro"}
                 one{"{0} hektaras"}
                 other{"{0} hektarų"}
             }
+            square-centimeter{
+                dnam{"kvadratiniai centimetrai"}
+                few{"{0} kvadratiniai centimetrai"}
+                many{"{0} kvadratinio centimetro"}
+                one{"{0} kvadratinis centimetras"}
+                other{"{0} kvadratinių centimetrų"}
+            }
             square-foot{
+                dnam{"kvadratinės pėdos"}
                 few{"{0} kvadratinės pėdos"}
                 many{"{0} kvadratinės pėdos"}
                 one{"{0} kvadratinė pėda"}
                 other{"{0} kvadratinių pėdų"}
             }
+            square-inch{
+                dnam{"kvadratiniai coliai"}
+                few{"{0} kvadratiniai coliai"}
+                many{"{0} kvadratinio colio"}
+                one{"{0} kvadratinis colis"}
+                other{"{0} kvadratinių colių"}
+            }
             square-kilometer{
+                dnam{"kvadratiniai kilometrai"}
                 few{"{0} kvadratiniai kilometrai"}
                 many{"{0} kvadratinio kilometro"}
                 one{"{0} kvadratinis kilometras"}
                 other{"{0} kvadratinių kilometrų"}
             }
             square-meter{
+                dnam{"kvadratiniai metrai"}
                 few{"{0} kvadratiniai metrai"}
                 many{"{0} kvadratinio metro"}
                 one{"{0} kvadratinis metras"}
                 other{"{0} kvadratinių metrų"}
             }
             square-mile{
+                dnam{"kvadratinės mylios"}
                 few{"{0} kvadratinės mylios"}
                 many{"{0} kvadratinės mylios"}
                 one{"{0} kvadratinė mylia"}
                 other{"{0} kvadratinių mylių"}
             }
+            square-yard{
+                dnam{"kvadratiniai jardai"}
+                few{"{0} kvadratiniai jardai"}
+                many{"{0} kvadratinio jardo"}
+                one{"{0} kvadratinis jardas"}
+                other{"{0} yd²"}
+            }
         }
         compound{
             per{"{0} per {1}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"litrai kilometrui"}
+                few{"{0} litrai kilometrui"}
+                many{"{0} litro kilometrui"}
+                one{"{0} litras kilometrui"}
+                other{"{0} litrų kilometrui"}
+            }
+            mile-per-gallon{
+                dnam{"mylios už galoną"}
+                few{"{0} mylios už galoną"}
+                many{"{0} mylios už galoną"}
+                one{"{0} mylia už galoną"}
+                other{"{0} mylių už galoną"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"bitai"}
+                few{"{0} bitai"}
+                many{"{0} bito"}
+                one{"{0} bitas"}
+                other{"{0} bitų"}
+            }
+            byte{
+                dnam{"baitai"}
+                few{"{0} baitai"}
+                many{"{0} baito"}
+                one{"{0} baitas"}
+                other{"{0} baitų"}
+            }
+            gigabit{
+                dnam{"gigabitai"}
+                few{"{0} gigabitai"}
+                many{"{0} gigabito"}
+                one{"{0} gigabitas"}
+                other{"{0} gigabitų"}
+            }
+            gigabyte{
+                dnam{"gigabaitai"}
+                few{"{0} gigabaitai"}
+                many{"{0} gigabaito"}
+                one{"{0} gigabaitas"}
+                other{"{0} gigabaitų"}
+            }
+            kilobit{
+                dnam{"kilobitai"}
+                few{"{0} kilobitai"}
+                many{"{0} kilobito"}
+                one{"{0} kilobitas"}
+                other{"{0} kilobitų"}
+            }
+            kilobyte{
+                dnam{"kilobaitai"}
+                few{"{0} kilobaitai"}
+                many{"{0} kilobaito"}
+                one{"{0} kilobaitas"}
+                other{"{0} kilobaitų"}
+            }
+            megabit{
+                dnam{"megabitai"}
+                few{"{0} megabitai"}
+                many{"{0} megabito"}
+                one{"{0} megabitas"}
+                other{"{0} megabitų"}
+            }
+            megabyte{
+                dnam{"megabaitai"}
+                few{"{0} megabaitai"}
+                many{"{0} megabaito"}
+                one{"{0} megabaitas"}
+                other{"{0} megabaitų"}
+            }
+            terabit{
+                dnam{"terabitai"}
+                few{"{0} terabitai"}
+                many{"{0} terabito"}
+                one{"{0} terabitas"}
+                other{"{0} terabitų"}
+            }
+            terabyte{
+                dnam{"terabaitai"}
+                few{"{0} terabaitai"}
+                many{"{0} terabaito"}
+                one{"{0} terabaitas"}
+                other{"{0} terabaitų"}
+            }
+        }
         duration{
             day{
+                dnam{"dienos"}
                 few{"{0} dienos"}
                 many{"{0} dienos"}
                 one{"{0} diena"}
                 other{"{0} dienų"}
             }
             hour{
+                dnam{"valandos"}
                 few{"{0} valandos"}
                 many{"{0} valandos"}
                 one{"{0} valanda"}
                 other{"{0} valandų"}
+                per{"{0}/h"}
+            }
+            microsecond{
+                dnam{"mikrosekundės"}
+                few{"{0} mikrosekundės"}
+                many{"{0} mikrosekundės"}
+                one{"{0} mikrosekundė"}
+                other{"{0} mikrosekundžių"}
             }
             millisecond{
+                dnam{"milisekundės"}
                 few{"{0} milisekundės"}
                 many{"{0} milisekundės"}
                 one{"{0} milisekundė"}
-                other{"{0} milisekundzių"}
+                other{"{0} milisekundžių"}
             }
             minute{
+                dnam{"minutės"}
                 few{"{0} minutės"}
                 many{"{0} minutės"}
                 one{"{0} minutė"}
                 other{"{0} minučių"}
             }
             month{
+                dnam{"mėnesiai"}
                 few{"{0} mėnesiai"}
                 many{"{0} mėnesio"}
                 one{"{0} mėnuo"}
                 other{"{0} mėnesių"}
             }
+            nanosecond{
+                dnam{"nanosekundės"}
+                few{"{0} nanosekundės"}
+                many{"{0} nanosekundės"}
+                one{"{0} nanosekundė"}
+                other{"{0} nanosekundžių"}
+            }
             second{
+                dnam{"sekundės"}
                 few{"{0} sekundės"}
                 many{"{0} sekundės"}
                 one{"{0} sekundė"}
                 other{"{0} sekundžių"}
+                per{"{0}/s"}
             }
             week{
+                dnam{"savaitės"}
                 few{"{0} savaitės"}
                 many{"{0} savaitės"}
                 one{"{0} savaitė"}
                 other{"{0} savaičių"}
             }
             year{
+                dnam{"metai"}
                 few{"{0} metai"}
                 many{"{0} metų"}
                 one{"{0} metai"}
                 other{"{0} metų"}
             }
         }
+        electric{
+            ampere{
+                dnam{"amperai"}
+                few{"{0} amperai"}
+                many{"{0} ampero"}
+                one{"{0} amperas"}
+                other{"{0} amperų"}
+            }
+            milliampere{
+                dnam{"miliamperai"}
+                few{"{0} miliamperai"}
+                many{"{0} miliampero"}
+                one{"{0} miliamperas"}
+                other{"{0} miliamperų"}
+            }
+            ohm{
+                dnam{"omai"}
+                few{"{0} omai"}
+                many{"{0} omo"}
+                one{"{0} omas"}
+                other{"{0} omų"}
+            }
+            volt{
+                dnam{"voltai"}
+                few{"{0} voltai"}
+                many{"{0} volto"}
+                one{"{0} voltas"}
+                other{"{0} voltų"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"kalorijos"}
+                few{"{0} kalorijos"}
+                many{"{0} kalorijos"}
+                one{"{0} kalorija"}
+                other{"{0} kalorijų"}
+            }
+            foodcalorie{
+                dnam{"kalorijos"}
+                few{"{0} kalorijos"}
+                many{"{0} kalorijos"}
+                one{"{0} kalorija"}
+                other{"{0} kalorijų"}
+            }
+            joule{
+                dnam{"džauliai"}
+                few{"{0} džauliai"}
+                many{"{0} džaulio"}
+                one{"{0} džaulis"}
+                other{"{0} džaulių"}
+            }
+            kilocalorie{
+                dnam{"kilokalorijos"}
+                few{"{0} kilokalorijos"}
+                many{"{0} kilokalorijos"}
+                one{"{0} kilokalorija"}
+                other{"{0} kilokalorijų"}
+            }
+            kilojoule{
+                dnam{"kilodžauliai"}
+                few{"{0} kilodžauliai"}
+                many{"{0} kilodžaulio"}
+                one{"{0} kilodžaulis"}
+                other{"{0} kilodžaulių"}
+            }
+            kilowatt-hour{
+                dnam{"kilovatvalandės"}
+                few{"{0} kilovatvalandės"}
+                many{"{0} kilovatvalandės"}
+                one{"{0} kilovatvalandė"}
+                other{"{0} kilovatvalandžių"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"gigahercai"}
+                few{"{0} gigahercai"}
+                many{"{0} gigaherco"}
+                one{"{0} gigahercas"}
+                other{"{0} gigahercų"}
+            }
+            hertz{
+                dnam{"hercai"}
+                few{"{0} hercai"}
+                many{"{0} herco"}
+                one{"{0} hercas"}
+                other{"{0} hercų"}
+            }
+            kilohertz{
+                dnam{"kilohercai"}
+                few{"{0} kilohercai"}
+                many{"{0} kiloherco"}
+                one{"{0} kilohercas"}
+                other{"{0} kilohercų"}
+            }
+            megahertz{
+                dnam{"megahercai"}
+                few{"{0} megahercai"}
+                many{"{0} megaherco"}
+                one{"{0} megahercas"}
+                other{"{0} megahercų"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"astronominiai vienetai"}
+                few{"{0} astronominiai vienetai"}
+                many{"{0} astronominio vieneto"}
+                one{"{0} astronominis vienetas"}
+                other{"{0} astronominių vienetų"}
+            }
             centimeter{
+                dnam{"centimetrai"}
                 few{"{0} centimetrai"}
                 many{"{0} centimetro"}
                 one{"{0} centimetras"}
                 other{"{0} centimetrų"}
             }
+            decimeter{
+                dnam{"decimetrai"}
+                few{"{0} decimetrai"}
+                many{"{0} decimetro"}
+                one{"{0} decimetras"}
+                other{"{0} decimetrų"}
+            }
+            fathom{
+                dnam{"fadomai"}
+                few{"{0} fadomai"}
+                many{"{0} fadomo"}
+                one{"{0} fadomas"}
+                other{"{0} ftm"}
+            }
             foot{
+                dnam{"pėdos"}
                 few{"{0} pėdos"}
                 many{"{0} pėdos"}
                 one{"{0} pėda"}
                 other{"{0} pėdų"}
             }
+            furlong{
+                dnam{"furlongai"}
+                few{"{0} furlongai"}
+                many{"{0} furlongo"}
+                one{"{0} furlongas"}
+                other{"{0} furlongų"}
+            }
             inch{
+                dnam{"coliai"}
                 few{"{0} coliai"}
                 many{"{0} colio"}
                 one{"{0} colis"}
                 other{"{0} colių"}
             }
             kilometer{
+                dnam{"kilometrai"}
                 few{"{0} kilometrai"}
                 many{"{0} kilometro"}
                 one{"{0} kilometras"}
                 other{"{0} kilometrų"}
             }
             light-year{
+                dnam{"šviesmečiai"}
                 few{"{0} šviesmečiai"}
                 many{"{0} šviesmečio"}
                 one{"{0} šviesmetis"}
                 other{"{0} šviesmečių"}
             }
             meter{
+                dnam{"metrai"}
                 few{"{0} metrai"}
                 many{"{0} metro"}
                 one{"{0} metras"}
                 other{"{0} metrų"}
             }
+            micrometer{
+                dnam{"mikrometrai"}
+                few{"{0} mikrometrai"}
+                many{"{0} mikrometro"}
+                one{"{0} mikrometras"}
+                other{"{0} mikrometrų"}
+            }
             mile{
+                dnam{"mylios"}
                 few{"{0} mylios"}
                 many{"{0} mylios"}
                 one{"{0} mylia"}
                 other{"{0} mylių"}
             }
             millimeter{
+                dnam{"milimetrai"}
                 few{"{0} milimetrai"}
                 many{"{0} milimetro"}
                 one{"{0} milimetras"}
                 other{"{0} milimetrų"}
             }
+            nanometer{
+                dnam{"nanometrai"}
+                few{"{0} nanometrai"}
+                many{"{0} nanometro"}
+                one{"{0} nanometras"}
+                other{"{0} nanometrų"}
+            }
+            nautical-mile{
+                dnam{"jūrmylės"}
+                few{"{0} jūrmylės"}
+                many{"{0} jūrmylės"}
+                one{"{0} jūrmylė"}
+                other{"{0} jūrmylių"}
+            }
+            parsec{
+                dnam{"parsekas"}
+                few{"{0} parsekai"}
+                many{"{0} parseko"}
+                one{"{0} parsekas"}
+                other{"{0} parsekų"}
+            }
             picometer{
+                dnam{"pikometrai"}
                 few{"{0} pikometrai"}
                 many{"{0} pikometro"}
                 one{"{0} pikometras"}
                 other{"{0} pikometrų"}
             }
             yard{
+                dnam{"jardai"}
                 few{"{0} jardai"}
                 many{"{0} jardo"}
                 one{"{0} jardas"}
                 other{"{0} jardų"}
             }
         }
+        light{
+            lux{
+                dnam{"liuksai"}
+                few{"{0} liuksai"}
+                many{"{0} liukso"}
+                one{"{0} liuksas"}
+                other{"{0} liuksų"}
+            }
+        }
         mass{
+            carat{
+                dnam{"karatai"}
+                few{"{0} karatai"}
+                many{"{0} karato"}
+                one{"{0} karatas"}
+                other{"{0} karatų"}
+            }
             gram{
+                dnam{"gramai"}
                 few{"{0} gramai"}
                 many{"{0} gramo"}
                 one{"{0} gramas"}
                 other{"{0} gramų"}
             }
             kilogram{
+                dnam{"kilogramai"}
                 few{"{0} kilogramai"}
                 many{"{0} kilogramo"}
                 one{"{0} kilogramas"}
                 other{"{0} kilogramų"}
             }
+            metric-ton{
+                dnam{"metrinės tonos"}
+                few{"{0} metrinės tonos"}
+                many{"{0} metrinės tonos"}
+                one{"{0} metrinė tona"}
+                other{"{0} metrinių tonų"}
+            }
+            microgram{
+                dnam{"mikrogramai"}
+                few{"{0} mikrogramai"}
+                many{"{0} mikrogramo"}
+                one{"{0} mikrogramas"}
+                other{"{0} mikrogramų"}
+            }
+            milligram{
+                dnam{"miligramai"}
+                few{"{0} miligramai"}
+                many{"{0} miligramo"}
+                one{"{0} miligramas"}
+                other{"{0} miligramų"}
+            }
             ounce{
+                dnam{"uncijos"}
                 few{"{0} uncijos"}
                 many{"{0} uncijos"}
                 one{"{0} uncija"}
                 other{"{0} uncijų"}
             }
+            ounce-troy{
+                dnam{"Trojos uncijos"}
+                few{"{0} Trojos uncijos"}
+                many{"{0} Trojos uncijos"}
+                one{"{0} Trojos uncija"}
+                other{"{0} Trojos uncijų"}
+            }
             pound{
+                dnam{"svarai"}
                 few{"{0} svarai"}
                 many{"{0} svaro"}
                 one{"{0} svaras"}
                 other{"{0} svarų"}
             }
+            stone{
+                dnam{"stonai"}
+                few{"{0} stonai"}
+                many{"{0} stono"}
+                one{"{0} stonas"}
+                other{"{0} stonų"}
+            }
+            ton{
+                dnam{"tonos"}
+                few{"{0} tonos"}
+                many{"{0} tonos"}
+                one{"{0} tona"}
+                other{"{0} tonų"}
+            }
         }
         power{
+            gigawatt{
+                dnam{"gigavatai"}
+                few{"{0} gigavatai"}
+                many{"{0} gigavato"}
+                one{"{0} gigavatas"}
+                other{"{0} gigavatų"}
+            }
             horsepower{
+                dnam{"arklio galios"}
                 few{"{0} arklio galios"}
                 many{"{0} arklio galios"}
                 one{"{0} arklio galia"}
                 other{"{0} arklio galių"}
             }
             kilowatt{
+                dnam{"kilovatai"}
                 few{"{0} kilovatai"}
                 many{"{0} kilovato"}
                 one{"{0} kilovatas"}
                 other{"{0} kilovatų"}
             }
+            megawatt{
+                dnam{"megavatai"}
+                few{"{0} megavatai"}
+                many{"{0} megavato"}
+                one{"{0} megavatas"}
+                other{"{0} megavatų"}
+            }
+            milliwatt{
+                dnam{"milivatai"}
+                few{"{0} milivatai"}
+                many{"{0} milivato"}
+                one{"{0} milivatas"}
+                other{"{0} milivatų"}
+            }
             watt{
+                dnam{"vatai"}
                 few{"{0} vatai"}
                 many{"{0} vato"}
                 one{"{0} vatas"}
@@ -1365,38 +3655,67 @@ lt{
         }
         pressure{
             hectopascal{
+                dnam{"hektopaskaliai"}
                 few{"{0} hektopaskaliai"}
                 many{"{0} hektopaskalio"}
                 one{"{0} hektopaskalis"}
                 other{"{0} hektopaskalių"}
             }
             inch-hg{
+                dnam{"gyvsidabrio stulpelio coliai"}
                 few{"{0} gyvsidabrio stulpelio coliai"}
                 many{"{0} gyvsidabrio stulpelio colio"}
                 one{"{0} gyvsidabrio stulpelio colis"}
                 other{"{0} gyvsidabrio stulpelio colių"}
             }
             millibar{
+                dnam{"milbaras"}
                 few{"{0} milibarai"}
                 many{"{0} milibaro"}
                 one{"{0} milibaras"}
                 other{"{0} milibarų"}
             }
+            millimeter-of-mercury{
+                dnam{"gysidabrio stulpelio milimetrai"}
+                few{"{0} gysidabrio stulpelio milimetrai"}
+                many{"{0} gysidabrio stulpelio milimetro"}
+                one{"{0} gysidabrio stulpelio milimetras"}
+                other{"{0} gysidabrio stulpelio milimetrų"}
+            }
+            pound-per-square-inch{
+                dnam{"svarai kv. colyje"}
+                few{"{0} svarai kv. colyje"}
+                many{"{0} svaro kv. colyje"}
+                one{"{0} svaras kv. colyje"}
+                other{"{0} svarų kv. colyje"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"karatai"}
+                few{"{0} karatai"}
+                many{"{0} karato"}
+                one{"{0} karatas"}
+                other{"{0} karatų"}
+            }
         }
         speed{
             kilometer-per-hour{
+                dnam{"kilometrai per valandą"}
                 few{"{0} kilometrai per valandą"}
                 many{"{0} kilometro per valandą"}
                 one{"{0} kilometras per valandą"}
                 other{"{0} kilometrų per valandą"}
             }
             meter-per-second{
+                dnam{"metrai per sekundę"}
                 few{"{0} metrai per sekundę"}
                 many{"{0} metro per sekundę"}
                 one{"{0} metras per sekundę"}
                 other{"{0} metrų per sekundę"}
             }
             mile-per-hour{
+                dnam{"mylios per valandą"}
                 few{"{0} mylios per valandą"}
                 many{"{0} mylios per valandą"}
                 one{"{0} mylia per valandą"}
@@ -1405,36 +3724,181 @@ lt{
         }
         temperature{
             celsius{
+                dnam{"Celsijaus laipsniai"}
                 few{"{0} Celsijaus laipsniai"}
                 many{"{0} Celsijaus laipsnio"}
                 one{"{0} Celsijaus laipsnis"}
                 other{"{0} Celsijaus laipsnių"}
             }
             fahrenheit{
-                few{"{0}Farenheito laipsniai"}
-                many{"{0}Farenheito laipsnio"}
-                one{"{0}Farenheito laipsnis"}
-                other{"{0}Farenheito laipsnių"}
+                dnam{"Farenheito laipsniai"}
+                few{"{0} Farenheito laipsniai"}
+                many{"{0} Farenheito laipsnio"}
+                one{"{0} Farenheito laipsnis"}
+                other{"{0} Farenheito laipsnių"}
+            }
+            kelvin{
+                dnam{"kelvinai"}
+                few{"{0} kelvinai"}
+                many{"{0} kelvino"}
+                one{"{0} kelvinas"}
+                other{"{0} kelvinų"}
             }
         }
         volume{
+            acre-foot{
+                dnam{"pėdos akre"}
+                few{"{0} pėdos akre"}
+                many{"{0} pėdos akre"}
+                one{"{0} pėda akre"}
+                other{"{0} pėdų akre"}
+            }
+            bushel{
+                dnam{"bušeliai"}
+                few{"{0} bušeliai"}
+                many{"{0} bušelio"}
+                one{"{0} bušelis"}
+                other{"{0} bušelių"}
+            }
+            centiliter{
+                dnam{"centilitrai"}
+                few{"{0} centilitrai"}
+                many{"{0} centilitro"}
+                one{"{0} centilitras"}
+                other{"{0} centilitrų"}
+            }
+            cubic-centimeter{
+                dnam{"kubiniai centimetrai"}
+                few{"{0} kubiniai centimetrai"}
+                many{"{0} kubinio centimetro"}
+                one{"{0} kubinis centimetras"}
+                other{"{0} kubinių centimetrų"}
+            }
+            cubic-foot{
+                dnam{"kubinės pėdos"}
+                few{"{0} kubinės pėdos"}
+                many{"{0} kubinės pėdos"}
+                one{"{0} kubinė pėda"}
+                other{"{0} kubinių pėdų"}
+            }
+            cubic-inch{
+                dnam{"kubiniai coliai"}
+                few{"{0} kubiniai coliai"}
+                many{"{0} kubinio colio"}
+                one{"{0} kubinis colis"}
+                other{"{0} kubinių colių"}
+            }
             cubic-kilometer{
+                dnam{"kubiniai kilometrai"}
                 few{"{0} kubiniai kilimetrai"}
                 many{"{0} kubinio kilometro"}
                 one{"{0} kubinis kilometras"}
                 other{"{0} kubinių kilometrų"}
             }
+            cubic-meter{
+                dnam{"kubiniai metrai"}
+                few{"{0} kubiniai metrai"}
+                many{"{0} kubinio metro"}
+                one{"{0} kubinis metras"}
+                other{"{0} kubinių metrų"}
+            }
             cubic-mile{
+                dnam{"kubinės mylios"}
                 few{"{0} kubinės mylios"}
                 many{"{0} kubinės mylios"}
                 one{"{0} kubinė mylia"}
                 other{"{0} kubinių mylių"}
             }
+            cubic-yard{
+                dnam{"kubiniai jardai"}
+                few{"{0} kubiniai jardai"}
+                many{"{0} kubinio jardo"}
+                one{"{0} kubinis jardas"}
+                other{"{0} kubinių jardų"}
+            }
+            cup{
+                dnam{"stiklinės"}
+                few{"{0} stiklinės"}
+                many{"{0} stiklinės"}
+                one{"{0} stiklinė"}
+                other{"{0} stiklinių"}
+            }
+            deciliter{
+                dnam{"decilitrai"}
+                few{"{0} decilitrai"}
+                many{"{0} decilitro"}
+                one{"{0} decilitras"}
+                other{"{0} decilitrų"}
+            }
+            fluid-ounce{
+                dnam{"skysčio uncijos"}
+                few{"{0} skysčio uncijos"}
+                many{"{0} skysčio uncijos"}
+                one{"{0} skysčio uncija"}
+                other{"{0} skysčio uncijų"}
+            }
+            gallon{
+                dnam{"galonai"}
+                few{"{0} galonai"}
+                many{"{0} galono"}
+                one{"{0} galonas"}
+                other{"{0} galonų"}
+            }
+            hectoliter{
+                dnam{"hektolitrai"}
+                few{"{0} hektolitrai"}
+                many{"{0} hektolitro"}
+                one{"{0} hektolitras"}
+                other{"{0} hektolitrų"}
+            }
             liter{
+                dnam{"litrai"}
                 few{"{0} litrai"}
                 many{"{0} litro"}
                 one{"{0} litras"}
                 other{"{0} litrų"}
+            }
+            megaliter{
+                dnam{"megalitrai"}
+                few{"{0} megalitrai"}
+                many{"{0} megalitro"}
+                one{"{0} megalitras"}
+                other{"{0} megalitrų"}
+            }
+            milliliter{
+                dnam{"mililitrai"}
+                few{"{0} mililitrai"}
+                many{"{0} mililitro"}
+                one{"{0} mililitras"}
+                other{"{0} mililitrų"}
+            }
+            pint{
+                dnam{"pintos"}
+                few{"{0} pintos"}
+                many{"{0} pintos"}
+                one{"{0} pinta"}
+                other{"{0} pintų"}
+            }
+            quart{
+                dnam{"kvortos"}
+                few{"{0} kvortos"}
+                many{"{0} kvortos"}
+                one{"{0} kvorta"}
+                other{"{0} kvortų"}
+            }
+            tablespoon{
+                dnam{"valgomieji šaukštai"}
+                few{"{0} valgomieji šaukštai"}
+                many{"{0} valgomojo šaukšto"}
+                one{"{0} valgomasis šaukštas"}
+                other{"{0} valgomųjų šaukštų"}
+            }
+            teaspoon{
+                dnam{"arbatiniai šaukšteliai"}
+                few{"{0} arbatiniai šaukšteliai"}
+                many{"{0} arbatinio šaukštelio"}
+                one{"{0} arbatinis šaukštelis"}
+                other{"{0} arbatinių šaukštelių"}
             }
         }
     }
@@ -1508,50 +3972,66 @@ lt{
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            mile-per-gallon{
+                few{"{0} mi/gal"}
+                many{"{0} mi/gal"}
+                one{"{0} mi/gal"}
+                other{"{0} mi/gal"}
+            }
+        }
         duration{
             day{
+                dnam{"diena"}
                 few{"{0} d."}
                 many{"{0} d."}
                 one{"{0} d."}
                 other{"{0} d."}
             }
             hour{
+                dnam{"valanda"}
                 few{"{0} h"}
                 many{"{0} h"}
                 one{"{0} h"}
                 other{"{0} h"}
             }
             millisecond{
+                dnam{"milisek."}
                 few{"{0} ms"}
                 many{"{0} ms"}
                 one{"{0} ms"}
                 other{"{0} ms"}
             }
             minute{
+                dnam{"min."}
                 few{"{0} min."}
                 many{"{0} min."}
                 one{"{0} min."}
                 other{"{0} min."}
             }
             month{
+                dnam{"mėnuo"}
                 few{"{0} mėn."}
                 many{"{0} mėn."}
                 one{"{0} mėn."}
                 other{"{0} mėn."}
             }
             second{
+                dnam{"sek."}
                 few{"{0} s"}
                 many{"{0} s"}
                 one{"{0} s"}
                 other{"{0} s"}
             }
             week{
+                dnam{"sav."}
                 few{"{0} sav."}
                 many{"{0} sav."}
                 one{"{0} sav."}
                 other{"{0} sav."}
             }
             year{
+                dnam{"metai"}
                 few{"{0} m."}
                 many{"{0} m."}
                 one{"{0} m."}
@@ -1560,16 +4040,31 @@ lt{
         }
         length{
             centimeter{
+                dnam{"cm"}
                 few{"{0} cm"}
                 many{"{0} cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
+            }
+            fathom{
+                dnam{"ftm"}
+                few{"{0} ftm"}
+                many{"{0} ftm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
             }
             foot{
                 few{"{0} ft"}
                 many{"{0} ft"}
                 one{"{0} ft"}
                 other{"{0} ft"}
+            }
+            furlong{
+                dnam{"fur"}
+                few{"{0} fur"}
+                many{"{0} fur"}
+                one{"{0} fur"}
+                other{"{0} fur"}
             }
             inch{
                 few{"{0} in"}
@@ -1578,6 +4073,7 @@ lt{
                 other{"{0} in"}
             }
             kilometer{
+                dnam{"km"}
                 few{"{0} km"}
                 many{"{0} km"}
                 one{"{0} km"}
@@ -1590,6 +4086,7 @@ lt{
                 other{"{0} šm."}
             }
             meter{
+                dnam{"m"}
                 few{"{0} m"}
                 many{"{0} m"}
                 one{"{0} m"}
@@ -1602,6 +4099,7 @@ lt{
                 other{"{0} my"}
             }
             millimeter{
+                dnam{"mm"}
                 few{"{0} mm"}
                 many{"{0} mm"}
                 one{"{0} mm"}
@@ -1622,16 +4120,18 @@ lt{
         }
         mass{
             gram{
+                dnam{"g"}
                 few{"{0} g"}
                 many{"{0} g"}
                 one{"{0} g"}
                 other{"{0} g"}
             }
             kilogram{
-                few{"{0}kg"}
-                many{"{0}kg"}
-                one{"{0}kg"}
-                other{"{0}kg"}
+                dnam{"kg"}
+                few{"{0} kg"}
+                many{"{0} kg"}
+                one{"{0} kg"}
+                other{"{0} kg"}
             }
             ounce{
                 few{"{0} oz"}
@@ -1644,6 +4144,13 @@ lt{
                 many{"{0} lb"}
                 one{"{0} lb"}
                 other{"{0} lb"}
+            }
+            stone{
+                dnam{"st"}
+                few{"{0} st"}
+                many{"{0} st"}
+                one{"{0} st"}
+                other{"{0} st"}
             }
         }
         power{
@@ -1685,9 +4192,16 @@ lt{
                 one{"{0} mbar"}
                 other{"{0} mbar"}
             }
+            millimeter-of-mercury{
+                few{"{0} mm Hg"}
+                many{"{0} mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
+            }
         }
         speed{
             kilometer-per-hour{
+                dnam{"km/h"}
                 few{"{0} km/h"}
                 many{"{0} km/h"}
                 one{"{0} km/h"}
@@ -1708,6 +4222,7 @@ lt{
         }
         temperature{
             celsius{
+                dnam{"°C"}
                 few{"{0}°"}
                 many{"{0}°"}
                 one{"{0}°"}
@@ -1719,8 +4234,29 @@ lt{
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            kelvin{
+                dnam{"K"}
+                few{"{0} K"}
+                many{"{0} K"}
+                one{"{0} K"}
+                other{"{0} K"}
+            }
         }
         volume{
+            acre-foot{
+                dnam{"ft akre"}
+                few{"{0} ft akre"}
+                many{"{0} ft akre"}
+                one{"{0} ft akre"}
+                other{"{0} ft akre"}
+            }
+            bushel{
+                dnam{"bu"}
+                few{"{0} bu"}
+                many{"{0} bu"}
+                one{"{0} bu"}
+                other{"{0} bu"}
+            }
             cubic-kilometer{
                 few{"{0} km³"}
                 many{"{0} km³"}
@@ -1733,236 +4269,662 @@ lt{
                 one{"{0} mi³"}
                 other{"{0} mi³"}
             }
+            fluid-ounce{
+                few{"{0} fl oz"}
+                many{"{0} fl oz"}
+                one{"{0} fl oz"}
+                other{"{0} fl oz"}
+            }
             liter{
+                dnam{"l"}
                 few{"{0} l"}
                 many{"{0} l"}
                 one{"{0} l"}
                 other{"{0} l"}
+            }
+            quart{
+                few{"{0} kvortos"}
+                many{"{0} kvortos"}
+                one{"{0} kvorta"}
+                other{"{0} kvortų"}
             }
         }
     }
     unitsShort{
         acceleration{
             g-force{
+                dnam{"G"}
                 few{"{0} G"}
                 many{"{0} G"}
                 one{"{0} G"}
                 other{"{0} G"}
             }
+            meter-per-second-squared{
+                dnam{"m/s²"}
+                few{"{0} m/s²"}
+                many{"{0} m/s²"}
+                one{"{0} m/s²"}
+                other{"{0} m/s²"}
+            }
         }
         angle{
             arc-minute{
+                dnam{"kampo minutės"}
                 few{"{0}′"}
                 many{"{0}′"}
                 one{"{0}′"}
                 other{"{0}′"}
             }
             arc-second{
+                dnam{"kampo sekundės"}
                 few{"{0}″"}
                 many{"{0}″"}
                 one{"{0}″"}
                 other{"{0}″"}
             }
             degree{
+                dnam{"laipsniai"}
                 few{"{0}°"}
                 many{"{0}°"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
+            radian{
+                dnam{"rad"}
+                few{"{0} rad"}
+                many{"{0} rad"}
+                one{"{0} rad"}
+                other{"{0} rad"}
+            }
         }
         area{
             acre{
-                few{"{0} akrai"}
-                many{"{0} akro"}
-                one{"{0} akras"}
-                other{"{0} akrų"}
+                dnam{"a."}
+                few{"{0} a."}
+                many{"{0} a."}
+                one{"{0} a."}
+                other{"{0} a."}
             }
             hectare{
+                dnam{"ha"}
                 few{"{0} ha"}
                 many{"{0} ha"}
                 one{"{0} ha"}
                 other{"{0} ha"}
             }
+            square-centimeter{
+                dnam{"cm²"}
+                few{"{0} cm²"}
+                many{"{0} cm²"}
+                one{"{0} cm²"}
+                other{"{0} cm²"}
+            }
             square-foot{
+                dnam{"kv. pėda"}
                 few{"{0} kv. pėdos"}
                 many{"{0} kv. pėdos"}
                 one{"{0} kv. pėda"}
                 other{"{0} kv. pėdų"}
             }
+            square-inch{
+                dnam{"in²"}
+                few{"{0} in²"}
+                many{"{0} in²"}
+                one{"{0} in²"}
+                other{"{0} in²"}
+            }
             square-kilometer{
+                dnam{"kv. km"}
                 few{"{0} kv. km"}
                 many{"{0} kv. km"}
                 one{"{0} kv. km"}
                 other{"{0} kv. km"}
             }
             square-meter{
+                dnam{"kv. m"}
                 few{"{0} kv. m"}
                 many{"{0} kv. m"}
                 one{"{0} kv. m"}
                 other{"{0} kv. m"}
             }
             square-mile{
+                dnam{"kv. my"}
                 few{"{0} kv. my"}
                 many{"{0} kv. my"}
                 one{"{0} kv. my"}
                 other{"{0} kv. my"}
             }
+            square-yard{
+                dnam{"yd²"}
+                few{"{0} yd²"}
+                many{"{0} yd²"}
+                one{"{0} yd²"}
+                other{"{0} yd²"}
+            }
         }
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"l/km"}
+                few{"{0} l/km"}
+                many{"{0} l/km"}
+                one{"{0} l/km"}
+                other{"{0} l/km"}
+            }
+            mile-per-gallon{
+                dnam{"mi/gal"}
+                few{"{0} mi/gal"}
+                many{"{0} mi/gal"}
+                one{"{0} mi/gal"}
+                other{"{0} mi/gal"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"bitai"}
+                few{"{0} bitai"}
+                many{"{0} bito"}
+                one{"{0} bitas"}
+                other{"{0} bitų"}
+            }
+            byte{
+                dnam{"B"}
+                few{"{0} B"}
+                many{"{0} B"}
+                one{"{0} B"}
+                other{"{0} B"}
+            }
+            gigabit{
+                dnam{"Gb"}
+                few{"{0} Gb"}
+                many{"{0} Gb"}
+                one{"{0} Gb"}
+                other{"{0} Gb"}
+            }
+            gigabyte{
+                dnam{"GB"}
+                few{"{0} GB"}
+                many{"{0} GB"}
+                one{"{0} GB"}
+                other{"{0} GB"}
+            }
+            kilobit{
+                dnam{"kb"}
+                few{"{0} kb"}
+                many{"{0} kb"}
+                one{"{0} kb"}
+                other{"{0} kb"}
+            }
+            kilobyte{
+                dnam{"kB"}
+                few{"{0} kB"}
+                many{"{0} kB"}
+                one{"{0} kB"}
+                other{"{0} kB"}
+            }
+            megabit{
+                dnam{"Mb"}
+                few{"{0} Mb"}
+                many{"{0} Mb"}
+                one{"{0} Mb"}
+                other{"{0} Mb"}
+            }
+            megabyte{
+                dnam{"MB"}
+                few{"{0} MB"}
+                many{"{0} MB"}
+                one{"{0} MB"}
+                other{"{0} MB"}
+            }
+            terabit{
+                dnam{"Tb"}
+                few{"{0} Tb"}
+                many{"{0} Tb"}
+                one{"{0} Tb"}
+                other{"{0} Tb"}
+            }
+            terabyte{
+                dnam{"TB"}
+                few{"{0} TB"}
+                many{"{0} TB"}
+                one{"{0} TB"}
+                other{"{0} TB"}
+            }
+        }
         duration{
             day{
+                dnam{"dienos"}
                 few{"{0} d."}
                 many{"{0} d."}
                 one{"{0} d."}
                 other{"{0} d."}
             }
             hour{
+                dnam{"valandos"}
                 few{"{0} val."}
                 many{"{0} val."}
                 one{"{0} val."}
                 other{"{0} val."}
+                per{"{0}/h"}
+            }
+            microsecond{
+                dnam{"μs"}
+                few{"{0} μs"}
+                many{"{0} μs"}
+                one{"{0} μs"}
+                other{"{0} μs"}
             }
             millisecond{
+                dnam{"milisek."}
                 few{"{0} ms"}
                 many{"{0} ms"}
                 one{"{0} ms"}
                 other{"{0} ms"}
             }
             minute{
+                dnam{"min."}
                 few{"{0} min."}
                 many{"{0} min."}
                 one{"{0} min."}
                 other{"{0} min."}
             }
             month{
+                dnam{"mėnesiai"}
                 few{"{0} mėn."}
                 many{"{0} mėn."}
                 one{"{0} mėn."}
                 other{"{0} mėn."}
             }
+            nanosecond{
+                dnam{"nanosek."}
+                few{"{0} ns"}
+                many{"{0} ns"}
+                one{"{0} ns"}
+                other{"{0} ns"}
+            }
             second{
+                dnam{"sek."}
                 few{"{0} sek."}
                 many{"{0} sek."}
                 one{"{0} sek."}
                 other{"{0} sek."}
+                per{"{0}/s"}
             }
             week{
+                dnam{"savaitės"}
                 few{"{0} sav."}
                 many{"{0} sav."}
                 one{"{0} sav."}
                 other{"{0} sav."}
             }
             year{
+                dnam{"metai"}
                 few{"{0} m."}
                 many{"{0} m."}
                 one{"{0} m."}
                 other{"{0} m."}
             }
         }
+        electric{
+            ampere{
+                dnam{"A"}
+                few{"{0} A"}
+                many{"{0} A"}
+                one{"{0} A"}
+                other{"{0} A"}
+            }
+            milliampere{
+                dnam{"mA"}
+                few{"{0} mA"}
+                many{"{0} mA"}
+                one{"{0} mA"}
+                other{"{0} mA"}
+            }
+            ohm{
+                dnam{"Ω"}
+                few{"{0} Ω"}
+                many{"{0} Ω"}
+                one{"{0} Ω"}
+                other{"{0} Ω"}
+            }
+            volt{
+                dnam{"V"}
+                few{"{0} V"}
+                many{"{0} V"}
+                one{"{0} V"}
+                other{"{0} V"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"cal"}
+                few{"{0} cal"}
+                many{"{0} cal"}
+                one{"{0} cal"}
+                other{"{0} cal"}
+            }
+            foodcalorie{
+                dnam{"cal"}
+                few{"{0} cal"}
+                many{"{0} cal"}
+                one{"{0} cal"}
+                other{"{0} cal"}
+            }
+            joule{
+                dnam{"J"}
+                few{"{0} J"}
+                many{"{0} J"}
+                one{"{0} J"}
+                other{"{0} J"}
+            }
+            kilocalorie{
+                dnam{"kcal"}
+                few{"{0} kcal"}
+                many{"{0} kcal"}
+                one{"{0} kcal"}
+                other{"{0} kcal"}
+            }
+            kilojoule{
+                dnam{"kJ"}
+                few{"{0} kJ"}
+                many{"{0} kJ"}
+                one{"{0} kJ"}
+                other{"{0} kJ"}
+            }
+            kilowatt-hour{
+                dnam{"kWh"}
+                few{"{0} kWh"}
+                many{"{0} kWh"}
+                one{"{0} kWh"}
+                other{"{0} kWh"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"GHz"}
+                few{"{0} GHz"}
+                many{"{0} GHz"}
+                one{"{0} GHz"}
+                other{"{0} GHz"}
+            }
+            hertz{
+                dnam{"Hz"}
+                few{"{0} Hz"}
+                many{"{0} Hz"}
+                one{"{0} Hz"}
+                other{"{0} Hz"}
+            }
+            kilohertz{
+                dnam{"kHz"}
+                few{"{0} kHz"}
+                many{"{0} kHz"}
+                one{"{0} kHz"}
+                other{"{0} kHz"}
+            }
+            megahertz{
+                dnam{"MHz"}
+                few{"{0} MHz"}
+                many{"{0} MHz"}
+                one{"{0} MHz"}
+                other{"{0} MHz"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"AV"}
+                few{"{0} AV"}
+                many{"{0} AV"}
+                one{"{0} AV"}
+                other{"{0} AV"}
+            }
             centimeter{
+                dnam{"cm"}
                 few{"{0} cm"}
                 many{"{0} cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
             }
+            decimeter{
+                dnam{"dm"}
+                few{"{0} dm"}
+                many{"{0} dm"}
+                one{"{0} dm"}
+                other{"{0} dm"}
+            }
+            fathom{
+                dnam{"ftm"}
+                few{"{0} ftm"}
+                many{"{0} ftm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
+            }
             foot{
+                dnam{"pėda"}
                 few{"{0} ft"}
                 many{"{0} ft"}
                 one{"{0} ft"}
                 other{"{0} ft"}
             }
+            furlong{
+                dnam{"fur"}
+                few{"{0} fur"}
+                many{"{0} fur"}
+                one{"{0} fur"}
+                other{"{0} fur"}
+            }
             inch{
+                dnam{"coliai"}
                 few{"{0} in"}
                 many{"{0} in"}
                 one{"{0} in"}
                 other{"{0} in"}
             }
             kilometer{
+                dnam{"km"}
                 few{"{0} km"}
                 many{"{0} km"}
                 one{"{0} km"}
                 other{"{0} km"}
             }
             light-year{
+                dnam{"šviesmečiai"}
                 few{"{0} šm."}
                 many{"{0} šm."}
                 one{"{0} šm."}
                 other{"{0} šm."}
             }
             meter{
+                dnam{"m"}
                 few{"{0} m"}
                 many{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
             }
+            micrometer{
+                dnam{"µm"}
+                few{"{0} µm"}
+                many{"{0} µm"}
+                one{"{0} µm"}
+                other{"{0} µm"}
+            }
             mile{
-                few{"{0} my"}
-                many{"{0} my"}
-                one{"{0} my"}
-                other{"{0} my"}
+                dnam{"mi"}
+                few{"{0} mi"}
+                many{"{0} mi"}
+                one{"{0} mi"}
+                other{"{0} mi"}
             }
             millimeter{
+                dnam{"mm"}
                 few{"{0} mm"}
                 many{"{0} mm"}
                 one{"{0} mm"}
                 other{"{0} mm"}
             }
+            nanometer{
+                dnam{"nm"}
+                few{"{0} nm"}
+                many{"{0} nm"}
+                one{"{0} nm"}
+                other{"{0} nm"}
+            }
+            nautical-mile{
+                dnam{"M"}
+                few{"{0} M"}
+                many{"{0} M"}
+                one{"{0} M"}
+                other{"{0} M"}
+            }
+            parsec{
+                dnam{"pc"}
+                few{"{0} pc"}
+                many{"{0} pc"}
+                one{"{0} pc"}
+                other{"{0} pc"}
+            }
             picometer{
+                dnam{"pm"}
                 few{"{0} pm"}
                 many{"{0} pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
             }
             yard{
+                dnam{"yd"}
                 few{"{0} yd"}
                 many{"{0} yd"}
                 one{"{0} yd"}
                 other{"{0} yd"}
             }
         }
+        light{
+            lux{
+                dnam{"lx"}
+                few{"{0} lx"}
+                many{"{0} lx"}
+                one{"{0} lx"}
+                other{"{0} lx"}
+            }
+        }
         mass{
+            carat{
+                dnam{"ct"}
+                few{"{0} ct"}
+                many{"{0} ct"}
+                one{"{0} ct"}
+                other{"{0} ct"}
+            }
             gram{
+                dnam{"g"}
                 few{"{0} g"}
                 many{"{0} g"}
                 one{"{0} g"}
                 other{"{0} g"}
             }
             kilogram{
+                dnam{"kg"}
                 few{"{0} kg"}
                 many{"{0} kg"}
                 one{"{0} kg"}
                 other{"{0} kg"}
             }
+            metric-ton{
+                dnam{"mt"}
+                few{"{0} mt"}
+                many{"{0} mt"}
+                one{"{0} mt"}
+                other{"{0} mt"}
+            }
+            microgram{
+                dnam{"µg"}
+                few{"{0} µg"}
+                many{"{0} µg"}
+                one{"{0} µg"}
+                other{"{0} µg"}
+            }
+            milligram{
+                dnam{"mg"}
+                few{"{0} mg"}
+                many{"{0} mg"}
+                one{"{0} mg"}
+                other{"{0} mg"}
+            }
             ounce{
+                dnam{"oz"}
                 few{"{0} oz"}
                 many{"{0} oz"}
                 one{"{0} oz"}
                 other{"{0} oz"}
             }
+            ounce-troy{
+                dnam{"ozt"}
+                few{"{0} ozt"}
+                many{"{0} ozt"}
+                one{"{0} ozt"}
+                other{"{0} ozt"}
+            }
             pound{
+                dnam{"lb"}
                 few{"{0} lb"}
                 many{"{0} lb"}
                 one{"{0} lb"}
                 other{"{0} lb"}
             }
+            stone{
+                dnam{"st"}
+                few{"{0} st"}
+                many{"{0} st"}
+                one{"{0} st"}
+                other{"{0} st"}
+            }
+            ton{
+                dnam{"t"}
+                few{"{0} t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+            }
         }
         power{
+            gigawatt{
+                dnam{"GW"}
+                few{"{0} GW"}
+                many{"{0} GW"}
+                one{"{0} GW"}
+                other{"{0} GW"}
+            }
             horsepower{
+                dnam{"AG"}
                 few{"{0} AG"}
                 many{"{0} AG"}
                 one{"{0} AG"}
                 other{"{0} AG"}
             }
             kilowatt{
+                dnam{"kW"}
                 few{"{0} kW"}
                 many{"{0} kW"}
                 one{"{0} kW"}
                 other{"{0} kW"}
             }
+            megawatt{
+                dnam{"MW"}
+                few{"{0} MW"}
+                many{"{0} MW"}
+                one{"{0} MW"}
+                other{"{0} MW"}
+            }
+            milliwatt{
+                dnam{"mW"}
+                few{"{0} mW"}
+                many{"{0} mW"}
+                one{"{0} mW"}
+                other{"{0} mW"}
+            }
             watt{
+                dnam{"W"}
                 few{"{0} W"}
                 many{"{0} W"}
                 one{"{0} W"}
@@ -1971,76 +4933,250 @@ lt{
         }
         pressure{
             hectopascal{
+                dnam{"hPa"}
                 few{"{0} hPa"}
                 many{"{0} hPa"}
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
             inch-hg{
+                dnam{"inHg"}
                 few{"{0} inHg"}
                 many{"{0} inHg"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
             }
             millibar{
+                dnam{"mbar"}
                 few{"{0} mbar"}
                 many{"{0} mbar"}
                 one{"{0} mbar"}
                 other{"{0} mbar"}
             }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                few{"{0} mm Hg"}
+                many{"{0} mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"lb in²"}
+                few{"{0} lb in²"}
+                many{"{0} lb in²"}
+                one{"{0} lb in²"}
+                other{"{0} lb in²"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
         }
         speed{
             kilometer-per-hour{
+                dnam{"km/val."}
                 few{"{0} km/val."}
                 many{"{0} km/val."}
                 one{"{0} km/val."}
                 other{"{0} km/val."}
             }
             meter-per-second{
+                dnam{"m/sek."}
                 few{"{0} m/sek."}
                 many{"{0} m/sek."}
                 one{"{0} m/sek."}
                 other{"{0} m/sek."}
             }
             mile-per-hour{
-                few{"{0} my/val."}
-                many{"{0} my/val."}
-                one{"{0} my/val."}
-                other{"{0} my/val."}
+                dnam{"mi/h"}
+                few{"{0} mi/h"}
+                many{"{0} mi/h"}
+                one{"{0} mi/h"}
+                other{"{0} mi/h"}
             }
         }
         temperature{
             celsius{
+                dnam{"°C"}
                 few{"{0}°C"}
                 many{"{0}°C"}
                 one{"{0}°C"}
                 other{"{0}°C"}
             }
             fahrenheit{
+                dnam{"°F"}
                 few{"{0}°F"}
                 many{"{0}°F"}
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            kelvin{
+                dnam{"K"}
+                few{"{0} K"}
+                many{"{0} K"}
+                one{"{0} K"}
+                other{"{0} K"}
+            }
         }
         volume{
+            acre-foot{
+                dnam{"ft akre"}
+                few{"{0} ft akre"}
+                many{"{0} ft akre"}
+                one{"{0} ft akre"}
+                other{"{0} ft akre"}
+            }
+            bushel{
+                dnam{"bu"}
+                few{"{0} bu"}
+                many{"{0} bu"}
+                one{"{0} bu"}
+                other{"{0} bu"}
+            }
+            centiliter{
+                dnam{"cl"}
+                few{"{0} cl"}
+                many{"{0} cl"}
+                one{"{0} cl"}
+                other{"{0} cl"}
+            }
+            cubic-centimeter{
+                dnam{"cm³"}
+                few{"{0} cm³"}
+                many{"{0} cm³"}
+                one{"{0} cm³"}
+                other{"{0} cm³"}
+            }
+            cubic-foot{
+                dnam{"ft³"}
+                few{"{0} ft³"}
+                many{"{0} ft³"}
+                one{"{0} ft³"}
+                other{"{0} ft³"}
+            }
+            cubic-inch{
+                dnam{"in³"}
+                few{"{0} in³"}
+                many{"{0} in³"}
+                one{"{0} in³"}
+                other{"{0} in³"}
+            }
             cubic-kilometer{
+                dnam{"km³"}
                 few{"{0} km³"}
                 many{"{0} km³"}
                 one{"{0} km³"}
                 other{"{0} km³"}
             }
+            cubic-meter{
+                dnam{"m³"}
+                few{"{0} m³"}
+                many{"{0} m³"}
+                one{"{0} m³"}
+                other{"{0} m³"}
+            }
             cubic-mile{
+                dnam{"mi³"}
                 few{"{0} mi³"}
                 many{"{0} mi³"}
                 one{"{0} mi³"}
                 other{"{0} mi³"}
             }
+            cubic-yard{
+                dnam{"yd³"}
+                few{"{0} yd³"}
+                many{"{0} yd³"}
+                one{"{0} yd³"}
+                other{"{0} yd³"}
+            }
+            cup{
+                dnam{"stikl."}
+                few{"{0} stikl."}
+                many{"{0} stikl."}
+                one{"{0} stikl."}
+                other{"{0} stikl."}
+            }
+            deciliter{
+                dnam{"dl"}
+                few{"{0} dl"}
+                many{"{0} dl"}
+                one{"{0} dl"}
+                other{"{0} dl"}
+            }
+            fluid-ounce{
+                dnam{"skysčio oz"}
+                few{"{0} skysčio oz"}
+                many{"{0} skysčio oz"}
+                one{"{0} skysčio oz"}
+                other{"{0} skysčio oz"}
+            }
+            gallon{
+                dnam{"gal"}
+                few{"{0} gal"}
+                many{"{0} gal"}
+                one{"{0} gal"}
+                other{"{0} gal"}
+            }
+            hectoliter{
+                dnam{"hl"}
+                few{"{0} hl"}
+                many{"{0} hl"}
+                one{"{0} hl"}
+                other{"{0} hl"}
+            }
             liter{
+                dnam{"litrai"}
                 few{"{0} l"}
                 many{"{0} l"}
                 one{"{0} l"}
                 other{"{0} l"}
+            }
+            megaliter{
+                dnam{"Ml"}
+                few{"{0} Ml"}
+                many{"{0} Ml"}
+                one{"{0} Ml"}
+                other{"{0} Ml"}
+            }
+            milliliter{
+                dnam{"ml"}
+                few{"{0} ml"}
+                many{"{0} ml"}
+                one{"{0} ml"}
+                other{"{0} ml"}
+            }
+            pint{
+                dnam{"pt"}
+                few{"{0} pt"}
+                many{"{0} pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+            }
+            quart{
+                dnam{"kvortos"}
+                few{"{0} kvortos"}
+                many{"{0} kvortos"}
+                one{"{0} kvorta"}
+                other{"{0} kvortų"}
+            }
+            tablespoon{
+                dnam{"v. š."}
+                few{"{0} v. š."}
+                many{"{0} v. š."}
+                one{"{0} v. š."}
+                other{"{0} v. š."}
+            }
+            teaspoon{
+                dnam{"a. š."}
+                few{"{0} a. š."}
+                many{"{0} a. š."}
+                one{"{0} a. š."}
+                other{"{0} a. š."}
             }
         }
     }

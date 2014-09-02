@@ -141,7 +141,7 @@ pl{
         GU{"Guam"}
         GW{"Gwinea Bissau"}
         GY{"Gujana"}
-        HK{"Hongkong SAR"}
+        HK{"SRA Hongkong (Chiny)"}
         HM{"Wyspy Heard i McDonalda"}
         HN{"Honduras"}
         HR{"Chorwacja"}
@@ -195,7 +195,7 @@ pl{
         ML{"Mali"}
         MM{"Mjanma (Birma)"}
         MN{"Mongolia"}
-        MO{"Makau SAR"}
+        MO{"SRA Makau (Chiny)"}
         MP{"Mariany Północne"}
         MQ{"Martynika"}
         MR{"Mauretania"}
@@ -302,6 +302,12 @@ pl{
         ZW{"Zimbabwe"}
         ZZ{"Nieznany region"}
     }
+    Countries%variant{
+        CG{"Republika Konga"}
+        CI{"Wybrzeże Kości Słoniowej"}
+        FK{"Falklandy (Malwiny)"}
+        TL{"Timor-Leste"}
+    }
     CountriesShort{
         GB{"GB"}
         HK{"Hongkong"}
@@ -309,5 +315,5 @@ pl{
         PS{"Palestyna"}
         US{"USA"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.95"}
 }

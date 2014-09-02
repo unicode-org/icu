@@ -38,7 +38,7 @@ vai{
         }
         native{"vaii"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.6.69"}
     calendar{
         generic{
             DateTimePatterns{

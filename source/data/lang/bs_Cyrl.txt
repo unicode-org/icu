@@ -168,7 +168,7 @@ bs_Cyrl{
         gsw{"швајцарски немачки"}
         gu{"гуџарати"}
         gv{"манкс"}
-        gwi{"гвич'ин"}
+        gwi{"гвич’ин"}
         ha{"хауса"}
         hai{"хаида"}
         haw{"хавајски"}
@@ -461,6 +461,9 @@ bs_Cyrl{
         zxx{"без лингвистичког садржаја"}
         zza{"заза"}
     }
+    Languages%variant{
+        ps{"пашто"}
+    }
     LanguagesShort{
         az{"азерски"}
     }
@@ -600,6 +603,9 @@ bs_Cyrl{
         Hans{"поједностављени хан"}
         Hant{"традиционални хан"}
     }
+    Scripts%variant{
+        Arab{"персијско-арапско"}
+    }
     Types{
         calendar{
             buddhist{"Будистички календар"}
@@ -696,7 +702,7 @@ bs_Cyrl{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

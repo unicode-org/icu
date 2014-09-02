@@ -22,5 +22,5 @@ de_CH{
         ST{"Sao Tomé und Principe"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.8.21"}
 }

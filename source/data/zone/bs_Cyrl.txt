@@ -11,7 +11,7 @@
  */
 bs_Cyrl{
     %%Parent{"root"}
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}

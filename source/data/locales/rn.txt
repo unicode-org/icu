@@ -28,7 +28,7 @@ rn{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.7.39"}
     calendar{
         generic{
             DateTimePatterns{
@@ -127,7 +127,7 @@ rn{
                         "gnd.",
                     }
                     wide{
-                        "Ku w'indwi",
+                        "Ku w’indwi",
                         "Ku wa mbere",
                         "Ku wa kabiri",
                         "Ku wa gatatu",
@@ -188,10 +188,10 @@ rn{
                         "I4",
                     }
                     wide{
-                        "Igice ca mbere c'umwaka",
-                        "Igice ca kabiri c'umwaka",
-                        "Igice ca gatatu c'umwaka",
-                        "Igice ca kane c'umwaka",
+                        "Igice ca mbere c’umwaka",
+                        "Igice ca kabiri c’umwaka",
+                        "Igice ca gatatu c’umwaka",
+                        "Igice ca kane c’umwaka",
                     }
                 }
             }
@@ -234,7 +234,7 @@ rn{
             dn{"Indwi, Iyinga"}
         }
         weekday{
-            dn{"Iminsi y'iyinga"}
+            dn{"Iminsi y’iyinga"}
         }
         year{
             dn{"Umwaka"}

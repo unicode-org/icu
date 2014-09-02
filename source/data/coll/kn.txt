@@ -17,7 +17,7 @@ kn{
                 "[normalization on][reorder Knda Deva Beng Guru Gujr Orya Taml Telu Mlym Sinh]"
                 "&ಔ<ಂ<ಃ<ೱ<ೲ"
             }
-            Version{"25"}
+            Version{"26"}
         }
         traditional{
             Sequence{
@@ -658,7 +658,7 @@ kn{
                 "&ಫೋ<<<ಫ಼ೋ"
                 "&ಫೌ<<<ಫ಼ೌ"
             }
-            Version{"25"}
+            Version{"26"}
         }
     }
 }

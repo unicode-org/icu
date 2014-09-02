@@ -36,12 +36,14 @@ kk{
     }
     MoreInformation{"?"}
     NumberElements{
+        default{"latn"}
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -58,8 +60,8 @@ kk{
                         other{"00 мың"}
                     }
                     100000{
-                        one{"000 мың"}
-                        other{"000 мың"}
+                        one{"000м"}
+                        other{"000М"}
                     }
                     1000000{
                         one{"0 млн"}
@@ -82,8 +84,8 @@ kk{
                         other{"00 млрд"}
                     }
                     100000000000{
-                        one{"000 млрд"}
-                        other{"000 млрд"}
+                        one{"000МЛ"}
+                        other{"000Б"}
                     }
                     1000000000000{
                         one{"0 трлн"}
@@ -94,8 +96,8 @@ kk{
                         other{"00 трлн"}
                     }
                     100000000000000{
-                        one{"000 трлн"}
-                        other{"000 трлн"}
+                        one{"000T"}
+                        other{"000T"}
                     }
                 }
             }
@@ -110,10 +112,13 @@ kk{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
+        minimumGroupingDigits{"1"}
+        native{"latn"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     calendar{
         generic{
             DateTimePatterns{
@@ -249,17 +254,21 @@ kk{
         }
         gregorian{
             AmPmMarkers{
-                "түске дейін",
-                "түстен кейін",
+                "таңертеңгі",
+                "түстен кейінгі",
+            }
+            AmPmMarkersNarrow{
+                "тт",
+                "кш",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d MMMM y 'ж'.",
-                "d MMMM y 'ж'.",
-                "dd.MM.y",
+                "EEEE, d MMMM y",
+                "d MMMM y",
+                "y, dd-MMM",
                 "dd/MM/yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -267,10 +276,13 @@ kk{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"түскі"}
+            NoonMarkerNarrow{"тс"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
             availableFormats{
+                E{"ccc"}
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ed{"d, E"}
@@ -307,13 +319,13 @@ kk{
             dayNames{
                 format{
                     abbreviated{
-                        "жс.",
-                        "дс.",
-                        "сс.",
-                        "ср.",
-                        "бс.",
-                        "жм.",
-                        "сб.",
+                        "жек",
+                        "дүй",
+                        "сей",
+                        "сәр",
+                        "бей",
+                        "жұма",
+                        "сен",
                     }
                     narrow{
                         "Ж",
@@ -323,6 +335,15 @@ kk{
                         "Б",
                         "Ж",
                         "С",
+                    }
+                    short{
+                        "жс",
+                        "дс",
+                        "сс",
+                        "ср",
+                        "бс",
+                        "жм",
+                        "сб",
                     }
                     wide{
                         "жексенбі",
@@ -335,6 +356,15 @@ kk{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "жек",
+                        "дүй",
+                        "сей",
+                        "сәр",
+                        "бей",
+                        "жұма",
+                        "сб.",
+                    }
                     narrow{
                         "Ж",
                         "Д",
@@ -344,12 +374,42 @@ kk{
                         "Ж",
                         "С",
                     }
+                    short{
+                        "жс",
+                        "дс",
+                        "сс",
+                        "ср",
+                        "бс",
+                        "жм",
+                        "сб",
+                    }
+                    wide{
+                        "жексенбі",
+                        "дүйсенбі",
+                        "сейсенбі",
+                        "сәрсенбі",
+                        "бейсенбі",
+                        "жұма",
+                        "сенбі",
+                    }
                 }
             }
             eras{
                 abbreviated{
                     "б.з.д.",
                     "б.з.",
+                }
+                abbreviated%variant{
+                    "BCE",
+                    "ж.з.",
+                }
+                wide{
+                    "Біздің заманымызға дейін",
+                    "Біздің заманымыз",
+                }
+                wide%variant{
+                    "BCE",
+                    "Жаңа заман",
                 }
             }
             intervalFormats{
@@ -395,21 +455,21 @@ kk{
                 fallback{"{0} - {1}"}
                 h{
                     a{"h a – h a"}
-                    h{"h-h a"}
+                    h{"a h-h"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm-h:mm a"}
-                    m{"h:mm-h:mm a"}
+                    h{"a h:mm-h:mm"}
+                    m{"a h:mm-h:mm"}
                 }
                 hmv{
                     a{"h:mm a – h:mm a v"}
-                    h{"h:mm-h:mm a v"}
-                    m{"h:mm-h:mm a v"}
+                    h{"a h:mm – h:mm v"}
+                    m{"a h:mm – h:mm v"}
                 }
                 hv{
                     a{"h a – h a v"}
-                    h{"h-h a v"}
+                    h{"a h – h v"}
                 }
                 y{
                     y{"y-y"}
@@ -464,18 +524,18 @@ kk{
                         "желт.",
                     }
                     narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "Қ",
+                        "А",
+                        "Н",
+                        "С",
+                        "М",
+                        "М",
+                        "Ш",
+                        "Т",
+                        "Қ",
+                        "Қ",
+                        "Қ",
+                        "Ж",
                     }
                     wide{
                         "қаңтар",
@@ -493,29 +553,57 @@ kk{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "қаң.",
+                        "ақп.",
+                        "нау.",
+                        "сәу.",
+                        "мам.",
+                        "мау.",
+                        "шіл.",
+                        "там.",
+                        "қыр.",
+                        "қаз.",
+                        "қар.",
+                        "желт.",
+                    }
                     narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "Қ",
+                        "А",
+                        "Н",
+                        "С",
+                        "М",
+                        "М",
+                        "Ш",
+                        "Т",
+                        "Қ",
+                        "Қ",
+                        "Қ",
+                        "Ж",
+                    }
+                    wide{
+                        "қаңтар",
+                        "ақпан",
+                        "наурыз",
+                        "сәуір",
+                        "мамыр",
+                        "маусым",
+                        "шілде",
+                        "тамыз",
+                        "қыркүйек",
+                        "қазан",
+                        "қараша",
+                        "желтоқсан",
                     }
                 }
             }
             quarters{
                 format{
                     abbreviated{
-                        "1-тоқсан",
-                        "2-тоқсан",
-                        "3-тоқсан",
-                        "4-тоқсан",
+                        "Т1",
+                        "Т2",
+                        "Т3",
+                        "Т4",
                     }
                     narrow{
                         "1",
@@ -532,10 +620,10 @@ kk{
                 }
                 stand-alone{
                     abbreviated{
-                        "1-тоқсан",
-                        "2-тоқсан",
-                        "3-тоқсан",
-                        "4-тоқсан",
+                        "Т1",
+                        "Т2",
+                        "Т3",
+                        "Т4",
                     }
                     narrow{
                         "1",
@@ -556,7 +644,7 @@ kk{
     delimiters{
         alternateQuotationEnd{"’"}
         alternateQuotationStart{"‘"}
-        quotationEnd{"”"}
+        quotationEnd{"\u0022"}
         quotationStart{"“"}
     }
     durationUnits{
@@ -585,11 +673,37 @@ kk{
                 }
             }
         }
+        day-narrow{
+            dn{"к"}
+            relativeTime{
+                future{
+                    one{"{0} күннен кейін"}
+                    other{"{0} күннен кейін"}
+                }
+                past{
+                    one{"{0} күн бұрын"}
+                    other{"{0} күн бұрын"}
+                }
+            }
+        }
+        day-short{
+            dn{"к"}
+            relativeTime{
+                future{
+                    one{"{0} күннен кейін"}
+                    other{"{0} күннен кейін"}
+                }
+                past{
+                    one{"{0} күн бұрын"}
+                    other{"{0} күн бұрын"}
+                }
+            }
+        }
         dayperiod{
-            dn{"түске дейін/түстен кейін"}
+            dn{"таңертеңгі/түстен кейінгі/кешкі"}
         }
         era{
-            dn{"ғасыр"}
+            dn{"Кезең"}
         }
         fri{
             relative{
@@ -598,8 +712,48 @@ kk{
                 "1"{"келесі жұма"}
             }
         }
+        fri-narrow{
+            relative{
+                "-1"{"өткен жм"}
+                "0"{"осы жм"}
+                "1"{"келесі жм"}
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"өткен жұма"}
+                "0"{"осы жұма"}
+                "1"{"келесі жұма"}
+            }
+        }
         hour{
-            dn{"сағат"}
+            dn{"Сағат"}
+            relativeTime{
+                future{
+                    one{"{0} сағаттан кейін"}
+                    other{"{0} сағаттан кейін"}
+                }
+                past{
+                    one{"{0} сағат бұрын"}
+                    other{"{0} сағат бұрын"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"с"}
+            relativeTime{
+                future{
+                    one{"{0} сағ.кейін"}
+                    other{"{0} сағаттан кейін"}
+                }
+                past{
+                    one{"{0} сағ.бұрын"}
+                    other{"{0} сағат бұрын"}
+                }
+            }
+        }
+        hour-short{
+            dn{"сағ."}
             relativeTime{
                 future{
                     one{"{0} сағаттан кейін"}
@@ -612,7 +766,33 @@ kk{
             }
         }
         minute{
-            dn{"минут"}
+            dn{"Минут"}
+            relativeTime{
+                future{
+                    one{"{0} минуттан кейін"}
+                    other{"{0} минуттан кейін"}
+                }
+                past{
+                    one{"{0} минут бұрын"}
+                    other{"{0} минут бұрын"}
+                }
+            }
+        }
+        minute-narrow{
+            dn{"м"}
+            relativeTime{
+                future{
+                    one{"{0} мин.кейін"}
+                    other{"{0} мин.кейін"}
+                }
+                past{
+                    one{"{0} мин.бұрын"}
+                    other{"{0} минут бұрын"}
+                }
+            }
+        }
+        minute-short{
+            dn{"мин."}
             relativeTime{
                 future{
                     one{"{0} минуттан кейін"}
@@ -631,8 +811,22 @@ kk{
                 "1"{"келесі дүйсенбі"}
             }
         }
+        mon-narrow{
+            relative{
+                "-1"{"өткен дс"}
+                "0"{"осы дс"}
+                "1"{"келесі дс"}
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"өткен дүй"}
+                "0"{"осы дүй"}
+                "1"{"келесі дүй"}
+            }
+        }
         month{
-            dn{"ай"}
+            dn{"Ай"}
             relative{
                 "-1"{"өткен ай"}
                 "0"{"осы ай"}
@@ -649,6 +843,71 @@ kk{
                 }
             }
         }
+        month-narrow{
+            dn{"ай"}
+            relativeTime{
+                future{
+                    one{"{0} айдан кейін"}
+                    other{"{0} айдан кейін"}
+                }
+                past{
+                    one{"{0} ай бұрын"}
+                    other{"{0} ай бұрын"}
+                }
+            }
+        }
+        month-short{
+            dn{"ай"}
+            relativeTime{
+                future{
+                    one{"{0} айдан кейін"}
+                    other{"{0} айдан кейін"}
+                }
+                past{
+                    one{"{0} ай бұрын"}
+                    other{"{0} ай бұрын"}
+                }
+            }
+        }
+        quarter{
+            dn{"Тоқсан"}
+            relativeTime{
+                future{
+                    one{"{0} тоқсаннан кейін"}
+                    other{"{0} тоқсаннан кейін"}
+                }
+                past{
+                    one{"{0} тоқсан бұрын"}
+                    other{"{0} тоқсан бұрын"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"тоқ."}
+            relativeTime{
+                future{
+                    one{"{0} тоқ.кейін"}
+                    other{"{0} тоқ.кейін"}
+                }
+                past{
+                    one{"{0} тоқ. бұрын"}
+                    other{"{0} тоқ.бұрын"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"тоқ."}
+            relativeTime{
+                future{
+                    one{"{0} тоқ. кейін"}
+                    other{"{0} тоқ. кейін"}
+                }
+                past{
+                    one{"{0} тоқ. бұрын"}
+                    other{"{0} тоқ. бұрын"}
+                }
+            }
+        }
         sat{
             relative{
                 "-1"{"өткен сенбі"}
@@ -656,11 +915,51 @@ kk{
                 "1"{"келесі сенбі"}
             }
         }
+        sat-narrow{
+            relative{
+                "-1"{"өткен сб"}
+                "0"{"осы сб"}
+                "1"{"келесі сб"}
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"өткен сен"}
+                "0"{"осы сен"}
+                "1"{"келесі сен"}
+            }
+        }
         second{
-            dn{"секунд"}
+            dn{"Секунд"}
             relative{
                 "0"{"қазір"}
             }
+            relativeTime{
+                future{
+                    one{"{0} секундтан кейін"}
+                    other{"{0} секундтан кейін"}
+                }
+                past{
+                    one{"{0} секунд бұрын"}
+                    other{"{0} секунд бұрын"}
+                }
+            }
+        }
+        second-narrow{
+            dn{"с"}
+            relativeTime{
+                future{
+                    one{"{0} сек.кейін"}
+                    other{"{0} сек.кейін"}
+                }
+                past{
+                    one{"{0} сек.бұрын"}
+                    other{"{0} сек.бұрын"}
+                }
+            }
+        }
+        second-short{
+            dn{"сек."}
             relativeTime{
                 future{
                     one{"{0} секундтан кейін"}
@@ -679,11 +978,39 @@ kk{
                 "1"{"келесі жексенбі"}
             }
         }
+        sun-narrow{
+            relative{
+                "-1"{"өткен жк"}
+                "0"{"осы жк"}
+                "1"{"келесі жк"}
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"өткен жек"}
+                "0"{"осы жек"}
+                "1"{"келесі жек"}
+            }
+        }
         thu{
             relative{
                 "-1"{"өткен бейсенбі"}
                 "0"{"осы бейсенбі"}
                 "1"{"келесі бейсенбі"}
+            }
+        }
+        thu-narrow{
+            relative{
+                "-1"{"өткен бс"}
+                "0"{"осы бс"}
+                "1"{"келесі бс"}
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"өткен бейс"}
+                "0"{"осы бейс"}
+                "1"{"келесі бейс"}
             }
         }
         tue{
@@ -693,6 +1020,20 @@ kk{
                 "1"{"келесі сейсенбі"}
             }
         }
+        tue-narrow{
+            relative{
+                "-1"{"өткен сс"}
+                "0"{"осы сс"}
+                "1"{"келесі сс"}
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"өткен сейс"}
+                "0"{"осы сейс"}
+                "1"{"келесі сейс"}
+            }
+        }
         wed{
             relative{
                 "-1"{"өткен сәрсенбі"}
@@ -700,8 +1041,22 @@ kk{
                 "1"{"келесі сәрсенбі"}
             }
         }
+        wed-narrow{
+            relative{
+                "-1"{"өткен ср"}
+                "0"{"осы ср"}
+                "1"{"келесі ср"}
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"өткен сәрс"}
+                "0"{"осы сәрс"}
+                "1"{"келесі сәрс"}
+            }
+        }
         week{
-            dn{"апта"}
+            dn{"Апта"}
             relative{
                 "-1"{"өткен апта"}
                 "0"{"осы апта"}
@@ -718,11 +1073,37 @@ kk{
                 }
             }
         }
+        week-narrow{
+            dn{"ап."}
+            relativeTime{
+                future{
+                    one{"{0} ап.кейін"}
+                    other{"{0} ап.кейін"}
+                }
+                past{
+                    one{"{0} ап.бұрын"}
+                    other{"{0} ап.бұрын"}
+                }
+            }
+        }
+        week-short{
+            dn{"ап."}
+            relativeTime{
+                future{
+                    one{"{0} ап. кейін"}
+                    other{"{0} ап. кейін"}
+                }
+                past{
+                    one{"{0} ап. бұрын"}
+                    other{"{0} ап. бұрын"}
+                }
+            }
+        }
         weekday{
-            dn{"апта күні"}
+            dn{"Апта күні"}
         }
         year{
-            dn{"жыл"}
+            dn{"Жыл"}
             relative{
                 "-1"{"былтырғы жыл"}
                 "0"{"биылғы жыл"}
@@ -739,18 +1120,50 @@ kk{
                 }
             }
         }
+        year-narrow{
+            dn{"ж."}
+            relativeTime{
+                future{
+                    one{"+{0} ж."}
+                    other{"+{0} ж."}
+                }
+                past{
+                    one{"-{0} ж."}
+                    other{"-{0} ж."}
+                }
+            }
+        }
+        year-short{
+            dn{"ж."}
+            relativeTime{
+                future{
+                    one{"{0} ж. кейін"}
+                    other{"{0} ж. кейін"}
+                }
+                past{
+                    one{"{0} ж. бұрын"}
+                    other{"{0} ж. бұрын"}
+                }
+            }
+        }
         zone{
-            dn{"уақыт белдеуі"}
+            dn{"Уақыт белдеуі"}
         }
     }
     listPattern{
         standard{
-            2{"{0}, {1}"}
+            2{"{0} және {1}"}
             end{"{0}, {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
         unit{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
             middle{"{0}, {1}"}
@@ -764,218 +1177,635 @@ kk{
         }
     }
     measurementSystemNames{
-        UK{"ҰБ"}
+        UK{"БК"}
         US{"АҚШ"}
         metric{"метрикалық жүйе"}
     }
     units{
         acceleration{
             g-force{
+                dnam{"гравитациялық күш"}
                 one{"{0} гравитациялық күш"}
                 other{"{0} гравитациялық күш"}
+            }
+            meter-per-second-squared{
+                dnam{"шаршыланған секундқа шаққан метр"}
+                one{"{0} метр/шаршыланған секунд"}
+                other{"{0} метр/шаршыланған секунд"}
             }
         }
         angle{
             arc-minute{
-                one{"{0}минут"}
-                other{"{0}минут"}
+                dnam{"минут"}
+                one{"минут"}
+                other{"{0} минут"}
             }
             arc-second{
-                one{"{0}секунд"}
-                other{"{0}секунд"}
+                dnam{"секунд"}
+                one{"{0} секунд"}
+                other{"{0} секунд"}
             }
             degree{
-                one{"{0}градус"}
-                other{"{0}градус"}
+                dnam{"градус"}
+                one{"{0} градус"}
+                other{"{0} градус"}
+            }
+            radian{
+                dnam{"радиан"}
+                one{"{0} радиан"}
+                other{"{0} радиан"}
             }
         }
         area{
             acre{
+                dnam{"акр"}
                 one{"{0} акр"}
                 other{"{0} акр"}
             }
             hectare{
+                dnam{"гектар"}
                 one{"{0} гектар"}
                 other{"{0} гектар"}
             }
+            square-centimeter{
+                dnam{"шаршы сантиметр"}
+                one{"{0} шаршы сантиметр"}
+                other{"{0} шаршы сантиметр"}
+            }
             square-foot{
+                dnam{"шаршы фут"}
                 one{"{0} шаршы фут"}
                 other{"{0} шаршы фут"}
             }
+            square-inch{
+                dnam{"шаршы дюйм"}
+                one{"{0} шаршы дюйм"}
+                other{"{0} шаршы дюйм"}
+            }
             square-kilometer{
+                dnam{"шаршы километр"}
                 one{"{0} шаршы километр"}
                 other{"{0} шаршы километр"}
             }
             square-meter{
+                dnam{"шаршы метр"}
                 one{"{0} шаршы метр"}
                 other{"{0} шаршы метр"}
             }
             square-mile{
+                dnam{"шаршы миля"}
                 one{"{0} шаршы миля"}
                 other{"{0} шаршы миля"}
+            }
+            square-yard{
+                dnam{"шаршы ярд"}
+                one{"{0} шаршы ярд"}
+                other{"{0} шаршы ярд"}
             }
         }
         compound{
             per{"{0}{1}қатынасы"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"литр/километр"}
+                one{"{0} литр/километр"}
+                other{"{0} литр/километр"}
+            }
+            mile-per-gallon{
+                dnam{"миля/галлон"}
+                one{"{0} миля/галлон"}
+                other{"{0} миля/галллон"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"бит"}
+                one{"{0} бит"}
+                other{"{0} бит"}
+            }
+            byte{
+                dnam{"байт"}
+                one{"{0} байт"}
+                other{"{0} байт"}
+            }
+            gigabit{
+                dnam{"гигабит"}
+                one{"{0} гигабит"}
+                other{"{0} гигабит"}
+            }
+            gigabyte{
+                dnam{"гигабайт"}
+                one{"{0} гигабайт"}
+                other{"{0} гигабайт"}
+            }
+            kilobit{
+                dnam{"килобит"}
+                one{"{0} килобит"}
+                other{"{0} килобит"}
+            }
+            kilobyte{
+                dnam{"килобайт"}
+                one{"{0} килобайт"}
+                other{"{0} килобайт"}
+            }
+            megabit{
+                dnam{"мегабит"}
+                one{"{0} мегабит"}
+                other{"{0} мегабит"}
+            }
+            megabyte{
+                dnam{"мегабайт"}
+                one{"{0} мегабайт"}
+                other{"{0} мегабайт"}
+            }
+            terabit{
+                dnam{"терабит"}
+                one{"{0} терабит"}
+                other{"{0} терабит"}
+            }
+            terabyte{
+                dnam{"терабайт"}
+                one{"{0} терабайт"}
+                other{"{0} терабайт"}
+            }
+        }
         duration{
             day{
+                dnam{"тәулік"}
                 one{"{0} тәулік"}
                 other{"{0} тәулік"}
             }
             hour{
+                dnam{"сағат"}
                 one{"{0} сағат"}
                 other{"{0} сағат"}
+                per{"{0}/h"}
+            }
+            microsecond{
+                dnam{"микросекунд"}
+                one{"{0} микросекунд"}
+                other{"{0} микросекунд"}
             }
             millisecond{
+                dnam{"миллисекунд"}
                 one{"{0} миллисекунд"}
                 other{"{0} миллисекунд"}
             }
             minute{
+                dnam{"минут"}
                 one{"{0} минут"}
                 other{"{0} минут"}
             }
             month{
+                dnam{"ай"}
                 one{"{0} ай"}
                 other{"{0} ай"}
             }
+            nanosecond{
+                dnam{"наносекунд"}
+                one{"{0} наносекунд"}
+                other{"{0} наносекунд"}
+            }
             second{
+                dnam{"секунд"}
                 one{"{0} секунд"}
                 other{"{0} секунд"}
+                per{"{0}/s"}
             }
             week{
+                dnam{"апта"}
                 one{"{0} апта"}
                 other{"{0} апта"}
             }
             year{
+                dnam{"жыл"}
                 one{"{0} жыл"}
                 other{"{0} жыл"}
             }
         }
+        electric{
+            ampere{
+                dnam{"ампер"}
+                one{"{0} aмпер"}
+                other{"{0} aмпер"}
+            }
+            milliampere{
+                dnam{"миллиампер"}
+                one{"{0} миллиампер"}
+                other{"{0} миллиампер"}
+            }
+            ohm{
+                dnam{"ом"}
+                one{"{0} oм"}
+                other{"{0} oм"}
+            }
+            volt{
+                dnam{"вольт"}
+                one{"{0} вольт"}
+                other{"{0} вольт"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"калория"}
+                one{"{0} калория"}
+                other{"{0} калория"}
+            }
+            foodcalorie{
+                dnam{"Калория"}
+                one{"{0} Калория"}
+                other{"{0} Калория"}
+            }
+            joule{
+                dnam{"джоуль"}
+                one{"{0} джоуль"}
+                other{"{0} джоуль"}
+            }
+            kilocalorie{
+                dnam{"килокалория"}
+                one{"{0} килокалория"}
+                other{"{0} килокалория"}
+            }
+            kilojoule{
+                dnam{"килоджоуль"}
+                one{"{0} килоджуоль"}
+                other{"{0} килоджоуль"}
+            }
+            kilowatt-hour{
+                dnam{"сағатқа шаққандағы киловатт"}
+                one{"{0} киловатт-сағат"}
+                other{"{0} киловатт-сағат"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"гигагерц"}
+                one{"{0} гигагерц"}
+                other{"{0} гигагерц"}
+            }
+            hertz{
+                dnam{"герц"}
+                one{"{0} герц"}
+                other{"{0} герц"}
+            }
+            kilohertz{
+                dnam{"килогерц"}
+                one{"{0} килогерц"}
+                other{"{0} килогерц"}
+            }
+            megahertz{
+                dnam{"мегагерц"}
+                one{"{0} мегагерц"}
+                other{"{0} мегагерц"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"астрономиялық бірлік"}
+                one{"{0} a.б."}
+                other{"{0} а.б."}
+            }
             centimeter{
+                dnam{"сантиметр"}
                 one{"{0} сантиметр"}
                 other{"{0} сантиметр"}
             }
+            decimeter{
+                dnam{"дециметр"}
+                one{"{0} дм"}
+                other{"{0} дм"}
+            }
             foot{
+                dnam{"фут"}
                 one{"{0} фут"}
                 other{"{0} фут"}
             }
             inch{
+                dnam{"дюйм"}
                 one{"{0} дюйм"}
                 other{"{0} дюйм"}
             }
             kilometer{
+                dnam{"километр"}
                 one{"{0} километр"}
                 other{"{0} километр"}
             }
             light-year{
+                dnam{"жарық жылы"}
                 one{"{0} жарық жылы"}
                 other{"{0} жарық жылы"}
             }
             meter{
+                dnam{"метр"}
                 one{"{0} метр"}
                 other{"{0} метр"}
             }
+            micrometer{
+                dnam{"микрометр"}
+                one{"{0} микрометр"}
+                other{"{0} микрометр"}
+            }
             mile{
+                dnam{"миля"}
                 one{"{0} миля"}
                 other{"{0} миля"}
             }
             millimeter{
+                dnam{"миллиметр"}
                 one{"{0} миллиметр"}
                 other{"{0} миллиметр"}
             }
+            nanometer{
+                dnam{"нанометр"}
+                one{"{0} нанометр"}
+                other{"{0} нанометр"}
+            }
+            nautical-mile{
+                dnam{"теңіз милясы"}
+                one{"{0} теңіз милясы"}
+                other{"{0} теңіз милясы"}
+            }
+            parsec{
+                dnam{"парсек"}
+                one{"{0} парсек"}
+                other{"{0} парсек"}
+            }
             picometer{
+                dnam{"пикометр"}
                 one{"{0} пикометр"}
                 other{"{0} пикометр"}
             }
             yard{
+                dnam{"ярд"}
                 one{"{0} ярд"}
                 other{"{0} ярд"}
             }
         }
+        light{
+            lux{
+                dnam{"люкс"}
+                one{"{0} люкс"}
+                other{"{0} люкс"}
+            }
+        }
         mass{
+            carat{
+                dnam{"карат"}
+                one{"{0} карат"}
+                other{"{0} карат"}
+            }
             gram{
+                dnam{"грамм"}
                 one{"{0} грамм"}
                 other{"{0} грамм"}
             }
             kilogram{
+                dnam{"килограмм"}
                 one{"{0} килограмм"}
                 other{"{0} килограмм"}
             }
+            metric-ton{
+                dnam{"метр тонна"}
+                one{"{0} метр тонна"}
+                other{"{0} метр тонна"}
+            }
+            microgram{
+                dnam{"микрограмм"}
+                one{"{0} микрограмм"}
+                other{"{0} микрограмм"}
+            }
+            milligram{
+                dnam{"миллиграмм"}
+                one{"{0} миллиграмм"}
+                other{"{0} миллиграмм"}
+            }
             ounce{
+                dnam{"унция"}
                 one{"{0} унция"}
                 other{"{0} унция"}
             }
+            ounce-troy{
+                dnam{"трой унциясы"}
+                one{"{0} трой унциясы"}
+                other{"{0} трой унциясы"}
+            }
             pound{
+                dnam{"фунт"}
                 one{"{0} фунт"}
                 other{"{0} фунт"}
             }
+            ton{
+                dnam{"тонна"}
+                one{"{0} тонна"}
+                other{"{0} тонна"}
+            }
         }
         power{
+            gigawatt{
+                dnam{"гигаватт"}
+                one{"{0} гигаватт"}
+                other{"{0} гигаватт"}
+            }
             horsepower{
+                dnam{"ат күші"}
                 one{"{0} ат күші"}
                 other{"{0} ат күші"}
             }
             kilowatt{
+                dnam{"киловатт"}
                 one{"{0} киловатт"}
-                other{"{0}киловатт"}
+                other{"{0} киловатт"}
+            }
+            megawatt{
+                dnam{"мегаватт"}
+                one{"{0} мегаватт"}
+                other{"{0} мегаватт"}
+            }
+            milliwatt{
+                dnam{"милливатт"}
+                one{"{0} милливатт"}
+                other{"{0} милливатт"}
             }
             watt{
+                dnam{"ватт"}
                 one{"{0} ватт"}
                 other{"{0} ватт"}
             }
         }
         pressure{
             hectopascal{
+                dnam{"гектопаскаль"}
                 one{"{0} гектопаскаль"}
                 other{"{0} гектопаскаль"}
             }
             inch-hg{
+                dnam{"сынапты бағана дюймы"}
                 one{"{0} сынапты бағана дюймы"}
                 other{"{0} сынапты бағана дюймы"}
             }
             millibar{
+                dnam{"миллибар"}
                 one{"{0} миллибар"}
                 other{"{0} миллибар"}
+            }
+            millimeter-of-mercury{
+                dnam{"сынапты бағана миллиметрі"}
+                one{"{0} сынапты бағана миллиметрі"}
+                other{"{0} сынапты бағана миллиметрі"}
+            }
+            pound-per-square-inch{
+                dnam{"шаршы дюймға шаққандағы фунт"}
+                one{"{0} фунт/шаршы дюйм"}
+                other{"{0} фунт/шаршы дюйм"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"карат"}
+                one{"{0} карат"}
+                other{"{0} карат"}
             }
         }
         speed{
             kilometer-per-hour{
+                dnam{"километр/сағат"}
                 one{"{0} километр/сағат"}
                 other{"{0} километр/сағат"}
             }
             meter-per-second{
+                dnam{"метр/секунд"}
                 one{"{0} метр/секунд"}
                 other{"{0} метр/секунд"}
             }
             mile-per-hour{
+                dnam{"миля/сағат"}
                 one{"{0} миля/сағат"}
                 other{"{0} миля/сағат"}
             }
         }
         temperature{
             celsius{
-                one{"{0}Цельсий градусы"}
-                other{"{0}Цельсий градусы"}
+                dnam{"Цельсий градусы"}
+                one{"{0} Цельсий градусы"}
+                other{"{0} Цельсий градусы"}
             }
             fahrenheit{
+                dnam{"Фаренгейт бойынша градус"}
                 one{"{0} Фаренгейт бойынша градус"}
                 other{"{0} Фаренгейт бойынша градус"}
             }
+            kelvin{
+                dnam{"кельвин"}
+                one{"{0} кельвин"}
+                other{"{0} кельвин"}
+            }
         }
         volume{
+            acre-foot{
+                dnam{"акро-фут"}
+                one{"{0} aкро-фут"}
+                other{"{0} aкро-фут"}
+            }
+            centiliter{
+                dnam{"сантилитр"}
+                one{"{0} cантилитр"}
+                other{"{0} cантилитр"}
+            }
+            cubic-centimeter{
+                dnam{"текше сантиметр"}
+                one{"{0} текше сантиметр"}
+                other{"{0} текше сантиметр"}
+            }
+            cubic-foot{
+                dnam{"текше фут"}
+                one{"{0} текше фут"}
+                other{"{0} текше фут"}
+            }
+            cubic-inch{
+                dnam{"текше дюйм"}
+                one{"{0} текше дюйм"}
+                other{"{0} текше дюйм"}
+            }
             cubic-kilometer{
+                dnam{"текше километр"}
                 one{"{0} текше километр"}
                 other{"{0} текше километр"}
             }
+            cubic-meter{
+                dnam{"текше метр"}
+                one{"{0} текше метр"}
+                other{"{0} текше метр"}
+            }
             cubic-mile{
+                dnam{"текше миля"}
                 one{"{0} текше миля"}
                 other{"{0} текше миля"}
             }
+            cubic-yard{
+                dnam{"текше ярд"}
+                one{"{0} текше ярд"}
+                other{"{0} текше ярд"}
+            }
+            cup{
+                dnam{"кесе"}
+                one{"{0} кесе"}
+                other{"{0} кесе"}
+            }
+            deciliter{
+                dnam{"децилитр"}
+                one{"{0} децилитр"}
+                other{"{0} децилитр"}
+            }
+            fluid-ounce{
+                dnam{"сұйық унция"}
+                one{"{0} сұйық унция"}
+                other{"{0} сұйық унция"}
+            }
+            gallon{
+                dnam{"галлон"}
+                one{"{0} галлон"}
+                other{"{0} галлон"}
+            }
+            hectoliter{
+                dnam{"гектолитр"}
+                one{"{0} гектолитр"}
+                other{"{0} гектолитр"}
+            }
             liter{
+                dnam{"литр"}
                 one{"{0} литр"}
                 other{"{0} литр"}
+            }
+            megaliter{
+                dnam{"мегалитр"}
+                one{"{0} мегалитр"}
+                other{"{0} мегалитр"}
+            }
+            milliliter{
+                dnam{"миллилитр"}
+                one{"{0} миллилитр"}
+                other{"{0} миллилитр"}
+            }
+            pint{
+                dnam{"пинта"}
+                one{"{0} пинта"}
+                other{"{0} пинта"}
+            }
+            quart{
+                dnam{"кварта"}
+                one{"{0} кварта"}
+                other{"{0} кварта"}
+            }
+            tablespoon{
+                dnam{"ас қасық"}
+                one{"{0} ас қасық"}
+                other{"{0} ас қасық"}
+            }
+            teaspoon{
+                dnam{"шәй қасық"}
+                one{"{0} шәй қасық"}
+                other{"{0} шәй қасық"}
             }
         }
     }
@@ -1031,40 +1861,49 @@ kk{
         }
         duration{
             day{
-                one{"{0} тәулік"}
-                other{"{0} тәулік"}
+                dnam{"тәулік"}
+                one{"{0} т"}
+                other{"{0}т"}
             }
             hour{
+                dnam{"сағат"}
                 one{"{0} сағат"}
                 other{"{0} сағат"}
             }
             millisecond{
+                dnam{"миллисекунд"}
                 one{"{0} мс"}
                 other{"{0} мс"}
             }
             minute{
+                dnam{"минут"}
                 one{"{0} мин"}
                 other{"{0} мин"}
             }
             month{
+                dnam{"ай"}
                 one{"{0} ай"}
                 other{"{0} ай"}
             }
             second{
+                dnam{"секунд"}
                 one{"{0} сек."}
                 other{"{0} сек."}
             }
             week{
+                dnam{"апта"}
                 one{"{0} апта"}
                 other{"{0} апта"}
             }
             year{
+                dnam{"жыл"}
                 one{"{0} ж."}
                 other{"{0} ж."}
             }
         }
         length{
             centimeter{
+                dnam{"сантиметр"}
                 one{"{0} см"}
                 other{"{0} см"}
             }
@@ -1077,6 +1916,7 @@ kk{
                 other{"{0} дюйм"}
             }
             kilometer{
+                dnam{"километр"}
                 one{"{0} км"}
                 other{"{0} км"}
             }
@@ -1085,6 +1925,7 @@ kk{
                 other{"{0} ly"}
             }
             meter{
+                dnam{"метр"}
                 one{"{0} м"}
                 other{"{0} м"}
             }
@@ -1093,6 +1934,7 @@ kk{
                 other{"{0} миля"}
             }
             millimeter{
+                dnam{"миллиметр"}
                 one{"{0} мм"}
                 other{"{0} мм"}
             }
@@ -1107,10 +1949,12 @@ kk{
         }
         mass{
             gram{
+                dnam{"грамм"}
                 one{"{0} гр"}
                 other{"{0} гр"}
             }
             kilogram{
+                dnam{"килограмм"}
                 one{"{0} кг"}
                 other{"{0} кг"}
             }
@@ -1153,6 +1997,7 @@ kk{
         }
         speed{
             kilometer-per-hour{
+                dnam{"километр/сағат"}
                 one{"{0} км/сағ"}
                 other{"{0} км/сағ"}
             }
@@ -1167,6 +2012,7 @@ kk{
         }
         temperature{
             celsius{
+                dnam{"Цельсий градусы"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
@@ -1185,6 +2031,7 @@ kk{
                 other{"{0} миля³"}
             }
             liter{
+                dnam{"литр"}
                 one{"{0} л"}
                 other{"{0} л"}
             }
@@ -1193,211 +2040,628 @@ kk{
     unitsShort{
         acceleration{
             g-force{
+                dnam{"гравитациялық күш"}
                 one{"{0} грав. күш"}
                 other{"{0} грав. күш"}
+            }
+            meter-per-second-squared{
+                dnam{"метр/сек²"}
+                one{"{0} м/с²"}
+                other{"{0} м/с²"}
             }
         }
         angle{
             arc-minute{
+                dnam{"минут"}
                 one{"{0}мин"}
                 other{"{0}мин"}
             }
             arc-second{
+                dnam{"секунд"}
                 one{"{0}сек"}
                 other{"{0}сек"}
             }
             degree{
+                dnam{"градус"}
                 one{"{0}градус"}
                 other{"{0}градус"}
+            }
+            radian{
+                dnam{"радиан"}
+                one{"{0} рад"}
+                other{"{0} рад"}
             }
         }
         area{
             acre{
+                dnam{"акр"}
                 one{"{0} акр"}
                 other{"{0} акр"}
             }
             hectare{
+                dnam{"гектар"}
                 one{"{0} га"}
                 other{"{0} га"}
             }
+            square-centimeter{
+                dnam{"cм²"}
+                one{"{0} cм²"}
+                other{"{0} cм²"}
+            }
             square-foot{
+                dnam{"шаршы фут"}
                 one{"{0} фут²"}
                 other{"{0} фут²"}
             }
+            square-inch{
+                dnam{"дюйм²"}
+                one{"{0} дюйм²"}
+                other{"{0} дюйм²"}
+            }
             square-kilometer{
+                dnam{"шаршы километр"}
                 one{"{0} км²"}
                 other{"{0} км²"}
             }
             square-meter{
+                dnam{"шаршы метр"}
                 one{"{0} м²"}
                 other{"{0} м²"}
             }
             square-mile{
+                dnam{"шаршы миля"}
                 one{"{0} миля²"}
                 other{"{0} миля²"}
+            }
+            square-yard{
+                dnam{"ярд²"}
+                one{"{0} ярд²"}
+                other{"{0} ярд²"}
             }
         }
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"литр/км"}
+                one{"{0} л/км"}
+                other{"{0} л/км"}
+            }
+            mile-per-gallon{
+                dnam{"миля/гал"}
+                one{"{0} м/гал"}
+                other{"{0} м/гал"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"бит"}
+                one{"{0} бит"}
+                other{"{0} бит"}
+            }
+            byte{
+                dnam{"байт"}
+                one{"{0} байт"}
+                other{"{0} байт"}
+            }
+            gigabit{
+                dnam{"Гб"}
+                one{"{0} Гб"}
+                other{"{0} Гб"}
+            }
+            gigabyte{
+                dnam{"ГБ"}
+                one{"{0} ГБ"}
+                other{"{0} ГБ"}
+            }
+            kilobit{
+                dnam{"кбит"}
+                one{"{0} кб"}
+                other{"{0} кб"}
+            }
+            kilobyte{
+                dnam{"кБайт"}
+                one{"{0} кБ"}
+                other{"{0} кБ"}
+            }
+            megabit{
+                dnam{"Мбит"}
+                one{"{0} Mб"}
+                other{"{0} Mб"}
+            }
+            megabyte{
+                dnam{"МБайт"}
+                one{"{0} MБ"}
+                other{"{0} MБ"}
+            }
+            terabit{
+                dnam{"Тбит"}
+                one{"{0} Tб"}
+                other{"{0} Tб"}
+            }
+            terabyte{
+                dnam{"ТБайт"}
+                one{"{0} TБ"}
+                other{"{0} TБ"}
+            }
+        }
         duration{
             day{
+                dnam{"тәулік"}
                 one{"{0} тәулік"}
                 other{"{0} тәулік"}
             }
             hour{
+                dnam{"сағат"}
                 one{"{0} сағат"}
                 other{"{0} сағат"}
+                per{"{0}/h"}
+            }
+            microsecond{
+                dnam{"мкс"}
+                one{"{0} мкс"}
+                other{"{0} мкс"}
             }
             millisecond{
+                dnam{"миллисекунд"}
                 one{"{0} мс"}
                 other{"{0} мс"}
             }
             minute{
+                dnam{"минут"}
                 one{"{0} мин"}
                 other{"{0} мин"}
             }
             month{
+                dnam{"ай"}
                 one{"{0} ай"}
                 other{"{0} ай"}
             }
+            nanosecond{
+                dnam{"нс"}
+                one{"{0} нс"}
+                other{"{0} нс"}
+            }
             second{
+                dnam{"секунд"}
                 one{"{0} секунд"}
                 other{"{0} секунд"}
+                per{"{0}/s"}
             }
             week{
+                dnam{"апта"}
                 one{"{0} апта"}
                 other{"{0} апта"}
             }
             year{
+                dnam{"жыл"}
                 one{"{0} ж."}
                 other{"{0} ж."}
             }
         }
+        electric{
+            ampere{
+                dnam{"А"}
+                one{"{0} A"}
+                other{"{0} A"}
+            }
+            milliampere{
+                dnam{"миллиампер"}
+                one{"{0} мA"}
+                other{"{0} мA"}
+            }
+            ohm{
+                dnam{"ом"}
+                one{"{0} ом"}
+                other{"{0} ом"}
+            }
+            volt{
+                dnam{"вольт"}
+                one{"{0} В"}
+                other{"{0} В"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"кал"}
+                one{"{0} кал"}
+                other{"{0} кал"}
+            }
+            foodcalorie{
+                dnam{"Кал"}
+                one{"{0} Кал"}
+                other{"{0} Кал"}
+            }
+            joule{
+                dnam{"джоуль"}
+                one{"{0} дж"}
+                other{"{0} дж"}
+            }
+            kilocalorie{
+                dnam{"ккал"}
+                one{"{0} ккал"}
+                other{"{0} ккал"}
+            }
+            kilojoule{
+                dnam{"килоджоуль"}
+                one{"{0} кДж"}
+                other{"{0} кДж"}
+            }
+            kilowatt-hour{
+                dnam{"кВт-сағ"}
+                one{"{0} кВт-сағ"}
+                other{"{0} кВт-сағ"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"ГГц"}
+                one{"{0} ГГц"}
+                other{"{0} ГГц"}
+            }
+            hertz{
+                dnam{"герц"}
+                one{"{0} Гц"}
+                other{"{0} Гц"}
+            }
+            kilohertz{
+                dnam{"кГц"}
+                one{"{0} кГц"}
+                other{"{0} кГц"}
+            }
+            megahertz{
+                dnam{"МГц"}
+                one{"{0} MГц"}
+                other{"{0} MГц"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"а.б."}
+                one{"{0} а.б."}
+                other{"{0} а.б."}
+            }
             centimeter{
+                dnam{"сантиметр"}
                 one{"{0} см"}
                 other{"{0} см"}
             }
+            decimeter{
+                dnam{"дм"}
+                one{"{0} дм"}
+                other{"{0} дм"}
+            }
             foot{
+                dnam{"фут"}
                 one{"{0} фут"}
                 other{"{0} фут"}
             }
             inch{
+                dnam{"дюйм"}
                 one{"{0} дюйм"}
                 other{"{0} дюйм"}
             }
             kilometer{
+                dnam{"километр"}
                 one{"{0} км"}
                 other{"{0} км"}
             }
             light-year{
-                one{"{0} жарық жылы"}
-                other{"{0} жарық жылы"}
+                dnam{"жарық жылы"}
+                one{"{0} жж"}
+                other{"{0} жж"}
             }
             meter{
+                dnam{"метр"}
                 one{"{0} м"}
                 other{"{0} м"}
             }
+            micrometer{
+                dnam{"мкм"}
+                one{"{0} мкм"}
+                other{"{0} мкм"}
+            }
             mile{
+                dnam{"миля"}
                 one{"{0} миля"}
                 other{"{0} миля"}
             }
             millimeter{
+                dnam{"миллиметр"}
                 one{"{0} мм"}
                 other{"{0} мм"}
             }
+            nanometer{
+                dnam{"нм"}
+                one{"{0} нм"}
+                other{"{0} нм"}
+            }
+            nautical-mile{
+                dnam{"тмл"}
+                one{"{0} тмл"}
+                other{"{0} тмл"}
+            }
+            parsec{
+                dnam{"пк"}
+                one{"{0} пк"}
+                other{"{0} пк"}
+            }
             picometer{
+                dnam{"пикометр"}
                 one{"{0} пм"}
                 other{"{0} пм"}
             }
             yard{
+                dnam{"ярд"}
                 one{"{0} ярд"}
                 other{"{0} ярд"}
             }
         }
+        light{
+            lux{
+                dnam{"люкс"}
+                one{"{0} лк"}
+                other{"{0} лк"}
+            }
+        }
         mass{
+            carat{
+                dnam{"КТ"}
+                one{"{0} КТ"}
+                other{"{0} КТ"}
+            }
             gram{
+                dnam{"грамм"}
                 one{"{0} гр"}
                 other{"{0} гр"}
             }
             kilogram{
+                dnam{"килограмм"}
                 one{"{0} кг"}
                 other{"{0} кг"}
             }
+            metric-ton{
+                dnam{"т"}
+                one{"{0} т"}
+                other{"{0} т"}
+            }
+            microgram{
+                dnam{"мкг"}
+                one{"{0} мкг"}
+                other{"{0} мкг"}
+            }
+            milligram{
+                dnam{"мг"}
+                one{"{0} мг"}
+                other{"{0} мг"}
+            }
             ounce{
+                dnam{"унция"}
                 one{"{0} унция"}
                 other{"{0} унция"}
             }
+            ounce-troy{
+                dnam{"тр.ун"}
+                one{"{0} тр.ун"}
+                other{"{0} тр.ун"}
+            }
             pound{
+                dnam{"фунт"}
                 one{"{0} фунт"}
                 other{"{0} фунт"}
             }
+            ton{
+                dnam{"тонна"}
+                one{"{0} тн"}
+                other{"{0} тн"}
+            }
         }
         power{
+            gigawatt{
+                dnam{"ГВт"}
+                one{"{0} ГВт"}
+                other{"{0} ГВт"}
+            }
             horsepower{
+                dnam{"ат күші"}
                 one{"{0} ат күші"}
                 other{"{0} ат күші"}
             }
             kilowatt{
+                dnam{"киловатт"}
                 one{"{0}кВт"}
                 other{"{0}кВт"}
             }
+            megawatt{
+                dnam{"МВт"}
+                one{"{0} МВт"}
+                other{"{0} МВт"}
+            }
+            milliwatt{
+                dnam{"мвт"}
+                one{"{0} мвт"}
+                other{"{0} мвт"}
+            }
             watt{
+                dnam{"ватт"}
                 one{"{0} Вт"}
                 other{"{0} Вт"}
             }
         }
         pressure{
             hectopascal{
+                dnam{"гектопаскаль"}
                 one{"{0} гПа"}
                 other{"{0} гПа"}
             }
             inch-hg{
-                one{"{0} inHg"}
-                other{"{0} inHg"}
+                dnam{"сынапты бағана дюймы"}
+                one{"{0} с.б.д."}
+                other{"{0} с.б.д."}
             }
             millibar{
+                dnam{"миллибар"}
                 one{"{0} мб"}
                 other{"{0} мб"}
+            }
+            millimeter-of-mercury{
+                dnam{"с.б.мм."}
+                one{"{0} с.б.мм."}
+                other{"{0} с.б.мм."}
+            }
+            pound-per-square-inch{
+                dnam{"фт/шд"}
+                one{"{0} фт/шд"}
+                other{"{0} фт/шд"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"карат"}
+                one{"{0} кт"}
+                other{"{0} кт"}
             }
         }
         speed{
             kilometer-per-hour{
+                dnam{"километр/сағат"}
                 one{"{0} км/сағ"}
                 other{"{0} км/сағ"}
             }
             meter-per-second{
+                dnam{"метр/секунд"}
                 one{"{0} м/с"}
                 other{"{0} м/с"}
             }
             mile-per-hour{
+                dnam{"миля/сағат"}
                 one{"{0} миля/сағ"}
                 other{"{0} миля/сағ"}
             }
         }
         temperature{
             celsius{
+                dnam{"Цельсий градусы"}
                 one{"{0}°C"}
                 other{"{0}°C"}
             }
             fahrenheit{
+                dnam{"Фаренгейт бойынша градус"}
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            kelvin{
+                dnam{"K"}
+                one{"{0} К"}
+                other{"{0} К"}
+            }
         }
         volume{
+            acre-foot{
+                dnam{"акро фт"}
+                one{"{0} aк фт"}
+                other{"{0} aк фт"}
+            }
+            centiliter{
+                dnam{"сл"}
+                one{"{0} cл"}
+                other{"{0} cл"}
+            }
+            cubic-centimeter{
+                dnam{"cм³"}
+                one{"{0} cм³"}
+                other{"{0} cм³"}
+            }
+            cubic-foot{
+                dnam{"фут³"}
+                one{"{0} фт³"}
+                other{"{0} фт³"}
+            }
+            cubic-inch{
+                dnam{"дюйм³"}
+                one{"{0} дюйм³"}
+                other{"{0} дюйм³"}
+            }
             cubic-kilometer{
+                dnam{"текше километр"}
                 one{"{0} км³"}
                 other{"{0} км³"}
             }
+            cubic-meter{
+                dnam{"м³"}
+                one{"{0} м³"}
+                other{"{0} м³"}
+            }
             cubic-mile{
+                dnam{"текше миля"}
                 one{"{0} миля³"}
                 other{"{0} миля³"}
             }
+            cubic-yard{
+                dnam{"ярд³"}
+                one{"{0} ярд³"}
+                other{"{0} ярд³"}
+            }
+            cup{
+                dnam{"кесе"}
+                one{"{0} к"}
+                other{"{0} к"}
+            }
+            deciliter{
+                dnam{"дл"}
+                one{"{0} дц"}
+                other{"{0} дц"}
+            }
+            fluid-ounce{
+                dnam{"сқ унц"}
+                one{"{0} сқ унц"}
+                other{"{0} сқ унц"}
+            }
+            gallon{
+                dnam{"гал"}
+                one{"{0} гал"}
+                other{"{0} гал"}
+            }
+            hectoliter{
+                dnam{"гл"}
+                one{"{0} гл"}
+                other{"{0} гл"}
+            }
             liter{
+                dnam{"литр"}
                 one{"{0} л"}
                 other{"{0} л"}
+            }
+            megaliter{
+                dnam{"МЛ"}
+                one{"{0} МЛ"}
+                other{"{0} МЛ"}
+            }
+            milliliter{
+                dnam{"мЛ"}
+                one{"{0} мЛ"}
+                other{"{0} мЛ"}
+            }
+            pint{
+                dnam{"пт"}
+                one{"{0} пт"}
+                other{"{0} пт"}
+            }
+            quart{
+                dnam{"кв"}
+                one{"{0} кв"}
+                other{"{0} кв"}
+            }
+            tablespoon{
+                dnam{"ақ"}
+                one{"{0} ақ"}
+                other{"{0} ақ"}
+            }
+            teaspoon{
+                dnam{"шқ"}
+                one{"{0} шқ"}
+                other{"{0} шқ"}
             }
         }
     }

@@ -13,8 +13,6 @@ sv_FI{
     Languages{
         chm{"mari"}
         fj{"fiji"}
-        ha{"hausa"}
-        ig{"igbo"}
         km{"khmer"}
         ks{"kashmiri"}
         ky{"kirgiziska"}
@@ -34,6 +32,9 @@ sv_FI{
         Hrkt{"kana"}
         Mero{"meroitiska"}
     }
+    Scripts%variant{
+        Arab{"persisk-arabiska"}
+    }
     Types{
         calendar{
             buddhist{"buddhistisk kalender"}
@@ -42,5 +43,5 @@ sv_FI{
     Variants{
         1996{"1996 års stavning"}
     }
-    Version{"2.0.98.14"}
+    Version{"2.1.8.19"}
 }

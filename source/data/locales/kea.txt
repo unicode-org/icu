@@ -18,6 +18,9 @@ kea{
         final{"{0}…"}
         initial{"…{0}"}
         medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{"[a b d {dj} e f g h i j k l {lh} m n ñ {nh} o p r s t {tx} u v x y z]"}
     ExemplarCharactersIndex{"[A B D E F G H I J K L M N O P R S T U V X Z]"}
@@ -26,48 +29,103 @@ kea{
     }
     MoreInformation{"?"}
     NumberElements{
+        default{"latn"}
         latn{
+            miscPatterns{
+                atLeast{"+{0}"}
+                range{"{0}–{1}"}
+            }
             patterns{
-                currencyFormat{"#,##0.00¤"}
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        other{"0 mil"}
+                    }
+                    10000{
+                        other{"00 mil"}
+                    }
+                    100000{
+                        other{"000 mil"}
+                    }
+                    1000000{
+                        other{"0 milhãu"}
+                    }
+                    10000000{
+                        other{"00 milhãu"}
+                    }
+                    100000000{
+                        other{"000 milhãu"}
+                    }
+                    1000000000{
+                        other{"0 mil milhãu"}
+                    }
+                    10000000000{
+                        other{"00 mil milhãu"}
+                    }
+                    100000000000{
+                        other{"000 mil milhãu"}
+                    }
+                    1000000000000{
+                        other{"0 bilhãu"}
+                    }
+                    10000000000000{
+                        other{"00 bilhãu"}
+                    }
+                    100000000000000{
+                        other{"000 bilhãu"}
+                    }
+                }
+            }
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0K"}
+                        other{"0 mil"}
                     }
                     10000{
-                        other{"00K"}
+                        other{"00 mil"}
                     }
                     100000{
-                        other{"000K"}
+                        other{"000 mil"}
                     }
                     1000000{
-                        other{"0M"}
+                        other{"0 M"}
                     }
                     10000000{
-                        other{"00M"}
+                        other{"00 M"}
                     }
                     100000000{
-                        other{"000M"}
+                        other{"000 M"}
+                    }
+                    1000000000{
+                        other{"0 MM"}
+                    }
+                    10000000000{
+                        other{"00 MM"}
+                    }
+                    100000000000{
+                        other{"000 MM"}
                     }
                     1000000000000{
-                        other{"0T"}
+                        other{"0 Bi"}
                     }
                     10000000000000{
-                        other{"00T"}
+                        other{"00 Bi"}
                     }
                     100000000000000{
-                        other{"000T"}
+                        other{"000 Bi"}
                     }
                 }
             }
             symbols{
                 decimal{","}
                 exponential{"E"}
-                group{"."}
+                group{" "}
                 infinity{"∞"}
                 list{";"}
                 minusSign{"-"}
@@ -75,10 +133,14 @@ kea{
                 perMille{"‰"}
                 percentSign{"%"}
                 plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
+        minimumGroupingDigits{"1"}
+        native{"latn"}
     }
-    Version{"2.0.95.15"}
+    Version{"2.1.7.39"}
     calendar{
         generic{
             DateTimePatterns{
@@ -88,16 +150,20 @@ kea{
                 "HH:mm",
                 "EEEE, d 'di' MMMM 'di' y G",
                 "d 'di' MMMM 'di' y G",
-                "d 'di' MMM 'di' y G",
+                "d MMM y G",
                 "d/M/y GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 Ed{"E, d"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"HH"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
@@ -122,13 +188,22 @@ kea{
                 yM{"MM/y"}
                 yMEd{"E, dd/MM/y"}
                 yMM{"MM/y"}
-                yMMM{"MMM 'di' y"}
-                yMMMEd{"E, d 'di' MMM 'di' y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM 'di' y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd/MM/y"}
                 yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                yQQQQ{"QQQQ 'di' y"}
+                yyyy{"y G"}
+                yyyyM{"MM/y GGGGG"}
+                yyyyMEd{"E, dd/MM/y GGGGG"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMd{"d MMM y G"}
+                yyyyMd{"dd/MM/y GGGGG"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ 'di' y G"}
             }
             intervalFormats{
                 H{
@@ -146,29 +221,29 @@ kea{
                     H{"HH–HH v"}
                 }
                 M{
-                    M{"M–M"}
+                    M{"M – M"}
                 }
                 MEd{
                     M{"E, dd/MM – E, dd/MM"}
                     d{"E, dd/MM – E, dd/MM"}
                 }
                 MMM{
-                    M{"LLL–LLL"}
+                    M{"MMM – MMM"}
                 }
                 MMMEd{
-                    M{"E, dd/MM – E, dd/MM"}
-                    d{"E, dd/MM – E, dd/MM"}
+                    M{"E, d MMM – E, d MMM"}
+                    d{"E, d MMM – E, d MMM"}
                 }
                 MMMd{
-                    M{"dd/MM – dd/MM"}
-                    d{"d–d MMM"}
+                    M{"d MMM – d MMM"}
+                    d{"d – d MMM"}
                 }
                 Md{
                     M{"dd/MM – dd/MM"}
                     d{"dd/MM – dd/MM"}
                 }
                 d{
-                    d{"d–d"}
+                    d{"d – d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
@@ -190,7 +265,7 @@ kea{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"y – y"}
                 }
                 yM{
                     M{"MM/y – MM/y"}
@@ -202,7 +277,7 @@ kea{
                     y{"E, dd/MM/y – E, dd/MM/y"}
                 }
                 yMMM{
-                    M{"MMM–MMM y"}
+                    M{"MMM – MMM y"}
                     y{"MMM y – MMM y"}
                 }
                 yMMMEd{
@@ -211,12 +286,12 @@ kea{
                     y{"E, d MMM y – E, d MMM y"}
                 }
                 yMMMM{
-                    M{"MMMM–MMMM y"}
-                    y{"MMMM y – MMMM y"}
+                    M{"MMMM – MMMM 'di' y G"}
+                    y{"MMMM 'di' y – MMMM 'di' y G"}
                 }
                 yMMMd{
                     M{"d MMM – d MMM y"}
-                    d{"d–d MMM y"}
+                    d{"d – d MMM y"}
                     y{"d MMM y – d MMM y"}
                 }
                 yMd{
@@ -231,6 +306,10 @@ kea{
                 "am",
                 "pm",
             }
+            AmPmMarkersNarrow{
+                "a",
+                "p",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -238,7 +317,7 @@ kea{
                 "HH:mm",
                 "EEEE, d 'di' MMMM 'di' y",
                 "d 'di' MMMM 'di' y",
-                "d 'di' MMM 'di' y",
+                "d MMM y",
                 "d/M/y",
                 "{1} {0}",
                 "{1} {0}",
@@ -246,8 +325,22 @@ kea{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"mei-dia"}
+            NoonMarkerNarrow{"m"}
+            appendItems{
+                Timezone{"{0} {1}"}
+            }
             availableFormats{
+                E{"ccc"}
+                EHm{"E, HH:mm"}
+                EHms{"E, HH:mm:ss"}
                 Ed{"E, d"}
+                Ehm{"E, h:mm a"}
+                Ehms{"E, h:mm:ss a"}
+                Gy{"y G"}
+                GyMMM{"MMM 'di' y G"}
+                GyMMMEd{"E, d 'di' MMM 'di' y G"}
+                GyMMMd{"d 'di' MMM 'di' y G"}
                 H{"HH"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
@@ -273,12 +366,12 @@ kea{
                 yMEd{"E, dd/MM/y"}
                 yMM{"MM/y"}
                 yMMM{"MMM 'di' y"}
-                yMMMEd{"E, d 'di' MMM 'di' y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM 'di' y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd/MM/y"}
                 yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                yQQQQ{"QQQQ 'di' y"}
             }
             dayNames{
                 format{
@@ -292,13 +385,13 @@ kea{
                         "sab",
                     }
                     narrow{
-                        "d",
-                        "s",
-                        "t",
-                        "k",
-                        "k",
-                        "s",
-                        "s",
+                        "D",
+                        "S",
+                        "T",
+                        "K",
+                        "K",
+                        "S",
+                        "S",
                     }
                     short{
                         "du",
@@ -363,35 +456,43 @@ kea{
                     "AK",
                     "DK",
                 }
+                abbreviated%variant{
+                    "AEK",
+                    "EK",
+                }
                 wide{
                     "Antis di Kristu",
                     "Dispos di Kristu",
                 }
+                wide%variant{
+                    "Antis di Era Kumun",
+                    "Era Kumun",
+                }
             }
             intervalFormats{
                 H{
-                    H{"HH–HH"}
+                    H{"HH – HH"}
                 }
                 Hm{
-                    H{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
                 }
                 Hmv{
-                    H{"HH:mm–HH:mm v"}
-                    m{"HH:mm–HH:mm v"}
+                    H{"HH:mm – HH:mm v"}
+                    m{"HH:mm – HH:mm v"}
                 }
                 Hv{
-                    H{"HH–HH v"}
+                    H{"HH – HH v"}
                 }
                 M{
-                    M{"M–M"}
+                    M{"M – M"}
                 }
                 MEd{
                     M{"E, dd/MM – E, dd/MM"}
                     d{"E, dd/MM – E, dd/MM"}
                 }
                 MMM{
-                    M{"LLL–LLL"}
+                    M{"LLL – LLL"}
                 }
                 MMMEd{
                     M{"E, dd/MM – E, dd/MM"}
@@ -399,36 +500,36 @@ kea{
                 }
                 MMMd{
                     M{"dd/MM – dd/MM"}
-                    d{"d–d MMM"}
+                    d{"d – d MMM"}
                 }
                 Md{
                     M{"dd/MM – dd/MM"}
                     d{"dd/MM – dd/MM"}
                 }
                 d{
-                    d{"d–d"}
+                    d{"d – d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
-                    h{"h–h a"}
+                    h{"h – h a"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
+                    h{"h:mm – h:mm a"}
+                    m{"h:mm – h:mm a"}
                 }
                 hmv{
                     a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
                 }
                 hv{
                     a{"h a – h a v"}
-                    h{"h–h a v"}
+                    h{"h – h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"y – y"}
                 }
                 yM{
                     M{"MM/y – MM/y"}
@@ -440,7 +541,7 @@ kea{
                     y{"E, dd/MM/y – E, dd/MM/y"}
                 }
                 yMMM{
-                    M{"MMM–MMM y"}
+                    M{"MMM – MMM y"}
                     y{"MMM y – MMM y"}
                 }
                 yMMMEd{
@@ -449,12 +550,12 @@ kea{
                     y{"E, d MMM y – E, d MMM y"}
                 }
                 yMMMM{
-                    M{"MMMM–MMMM y"}
+                    M{"MMMM – MMMM 'di' y"}
                     y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
                     M{"d MMM – d MMM y"}
-                    d{"d–d MMM y"}
+                    d{"d – d MMM y"}
                     y{"d MMM y – d MMM y"}
                 }
                 yMd{
@@ -467,7 +568,7 @@ kea{
                 format{
                     abbreviated{
                         "Jan",
-                        "Fev",
+                        "Feb",
                         "Mar",
                         "Abr",
                         "Mai",
@@ -495,7 +596,7 @@ kea{
                     }
                     wide{
                         "Janeru",
-                        "Fevereru",
+                        "Febreru",
                         "Marsu",
                         "Abril",
                         "Maiu",
@@ -511,7 +612,7 @@ kea{
                 stand-alone{
                     abbreviated{
                         "Jan",
-                        "Fev",
+                        "Feb",
                         "Mar",
                         "Abr",
                         "Mai",
@@ -539,7 +640,7 @@ kea{
                     }
                     wide{
                         "Janeru",
-                        "Fevereru",
+                        "Febreru",
                         "Marsu",
                         "Abril",
                         "Maiu",
@@ -568,10 +669,10 @@ kea{
                         "4",
                     }
                     wide{
-                        "Primeru Trimestri",
-                        "Sigundu Trimestri",
-                        "Terseru Trimestri",
-                        "Kuartu Trimestri",
+                        "1º trimestri",
+                        "2º trimestri",
+                        "3º trimestri",
+                        "4º trimestri",
                     }
                 }
                 stand-alone{
@@ -588,10 +689,10 @@ kea{
                         "4",
                     }
                     wide{
-                        "Primeru Trimestri",
-                        "Sigundu Trimestri",
-                        "Terseru Trimestri",
-                        "Kuartu Trimestri",
+                        "1º trimestri",
+                        "2º trimestri",
+                        "3º trimestri",
+                        "4º trimestri",
                     }
                 }
             }
@@ -603,14 +704,41 @@ kea{
         quotationEnd{"”"}
         quotationStart{"“"}
     }
+    durationUnits{
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
+    }
     fields{
         day{
             dn{"Dia"}
             relative{
-                "-1"{"Onti"}
-                "0"{"Oji"}
-                "1"{"Manha"}
+                "-1"{"onti"}
+                "0"{"oji"}
+                "1"{"manha"}
             }
+            relativeTime{
+                future{
+                    other{"di li {0} dia"}
+                }
+                past{
+                    other{"a ten {0} dia"}
+                }
+            }
+        }
+        day-narrow{
+            dn{"dia"}
+            relativeTime{
+                future{
+                    other{"di li {0} dia"}
+                }
+                past{
+                    other{"a ten {0} dia"}
+                }
+            }
+        }
+        day-short{
+            dn{"dia"}
             relativeTime{
                 future{
                     other{"di li {0} dia"}
@@ -626,8 +754,50 @@ kea{
         era{
             dn{"Era"}
         }
+        fri{
+            relative{
+                "-1"{"sesta-fera pasadu"}
+                "0"{"es sesta-fera li"}
+                "1"{"prósimu sesta-fera"}
+            }
+        }
+        fri-narrow{
+            relative{
+                "-1"{"ses. pasadu"}
+                "0"{"es ses. li"}
+                "1"{"prósimu ses."}
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"ses. pasadu"}
+                "0"{"es ses. li"}
+                "1"{"prósimu ses."}
+            }
+        }
         hour{
             dn{"Ora"}
+            relativeTime{
+                future{
+                    other{"di li {0} ora"}
+                }
+                past{
+                    other{"a ten {0} ora"}
+                }
+            }
+        }
+        hour-narrow{
+            relativeTime{
+                future{
+                    other{"di li {0} ora"}
+                }
+                past{
+                    other{"a ten {0} ora"}
+                }
+            }
+        }
+        hour-short{
+            dn{"ora"}
             relativeTime{
                 future{
                     other{"di li {0} ora"}
@@ -648,8 +818,56 @@ kea{
                 }
             }
         }
+        minute-narrow{
+            dn{"m"}
+            relativeTime{
+                future{
+                    other{"di li {0} m"}
+                }
+                past{
+                    other{"a ten {0} m"}
+                }
+            }
+        }
+        minute-short{
+            dn{"min"}
+            relativeTime{
+                future{
+                    other{"di li {0} min"}
+                }
+                past{
+                    other{"a ten {0} min"}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"sigunda-fera pasadu"}
+                "0"{"es sigunda-fera li"}
+                "1"{"prósimu sigunda-fera"}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"sig. pasadu"}
+                "0"{"es sig. li"}
+                "1"{"prósimu sig."}
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"sig. pasadu"}
+                "0"{"es sig. li"}
+                "1"{"prósimu sig."}
+            }
+        }
         month{
             dn{"Mes"}
+            relative{
+                "-1"{"mes pasadu"}
+                "0"{"es mes li"}
+                "1"{"prósimu mes"}
+            }
             relativeTime{
                 future{
                     other{"di li {0} mes"}
@@ -657,6 +875,82 @@ kea{
                 past{
                     other{"a ten {0} mes"}
                 }
+            }
+        }
+        month-narrow{
+            dn{"mes"}
+            relativeTime{
+                future{
+                    other{"di li {0} mes"}
+                }
+                past{
+                    other{"a ten {0} mes"}
+                }
+            }
+        }
+        month-short{
+            dn{"mes"}
+            relativeTime{
+                future{
+                    other{"di li {0} mes"}
+                }
+                past{
+                    other{"a ten {0} mes"}
+                }
+            }
+        }
+        quarter{
+            dn{"Trimestri"}
+            relativeTime{
+                future{
+                    other{"di li {0} trimestri"}
+                }
+                past{
+                    other{"a ten {0} trimestri"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"trim."}
+            relativeTime{
+                future{
+                    other{"di li {0} trim."}
+                }
+                past{
+                    other{"a ten {0} trim."}
+                }
+            }
+        }
+        quarter-short{
+            dn{"trim."}
+            relativeTime{
+                future{
+                    other{"di li {0} trim."}
+                }
+                past{
+                    other{"a ten {0} trim."}
+                }
+            }
+        }
+        sat{
+            relative{
+                "-1"{"sabadu pasadu"}
+                "0"{"es sabadu li"}
+                "1"{"prósimu sabadu"}
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"sab. pasadu"}
+                "0"{"es sab. li"}
+                "1"{"prósimu sab."}
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"sab. pasadu"}
+                "0"{"es sab. li"}
+                "1"{"prósimu sab."}
             }
         }
         second{
@@ -670,8 +964,119 @@ kea{
                 }
             }
         }
+        second-narrow{
+            dn{"s"}
+            relativeTime{
+                future{
+                    other{"di li {0} s"}
+                }
+                past{
+                    other{"a ten {0} s"}
+                }
+            }
+        }
+        second-short{
+            dn{"sig"}
+            relativeTime{
+                future{
+                    other{"di li {0} sig"}
+                }
+                past{
+                    other{"a ten {0} sig"}
+                }
+            }
+        }
+        sun{
+            relative{
+                "-1"{"dumingu pasadu"}
+                "0"{"es dumingu li"}
+                "1"{"prósimu dumingu"}
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"dum. pasadu"}
+                "0"{"es dum. li"}
+                "1"{"prósimu dum."}
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"dum. pasadu"}
+                "0"{"es dum. li"}
+                "1"{"prósimu dum."}
+            }
+        }
+        thu{
+            relative{
+                "-1"{"kinta-fera pasadu"}
+                "0"{"es kinta-fera li"}
+                "1"{"prósimu kinta-fera"}
+            }
+        }
+        thu-narrow{
+            relative{
+                "-1"{"kin. pasadu"}
+                "0"{"es kin. li"}
+                "1"{"prósimu kin."}
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"kin. pasadu"}
+                "0"{"es kin. li"}
+                "1"{"prósimu kin."}
+            }
+        }
+        tue{
+            relative{
+                "-1"{"tersa-fera pasadu"}
+                "0"{"es tersa-fera li"}
+                "1"{"prósimu tersa-fera"}
+            }
+        }
+        tue-narrow{
+            relative{
+                "-1"{"ter. pasadu"}
+                "0"{"es ter. li"}
+                "1"{"prósimu ter."}
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"ter. pasadu"}
+                "0"{"es ter. li"}
+                "1"{"prósimu ter."}
+            }
+        }
+        wed{
+            relative{
+                "-1"{"kuarta-fera pasadu"}
+                "0"{"es kuarta-fera li"}
+                "1"{"prósimu kuarta-fera"}
+            }
+        }
+        wed-narrow{
+            relative{
+                "-1"{"kua. pasadu"}
+                "0"{"es kua. li"}
+                "1"{"prósimu kua."}
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"kua. pasadu"}
+                "0"{"es kua. li"}
+                "1"{"prósimu kua."}
+            }
+        }
         week{
             dn{"Simana"}
+            relative{
+                "-1"{"simana pasadu"}
+                "0"{"es simana li"}
+                "1"{"prósimu simana"}
+            }
             relativeTime{
                 future{
                     other{"di li {0} simana"}
@@ -681,11 +1086,60 @@ kea{
                 }
             }
         }
+        week-narrow{
+            dn{"sim."}
+            relativeTime{
+                future{
+                    other{"di li {0} sim."}
+                }
+                past{
+                    other{"a ten {0} sim."}
+                }
+            }
+        }
+        week-short{
+            dn{"sim."}
+            relativeTime{
+                future{
+                    other{"di li {0} sim."}
+                }
+                past{
+                    other{"a ten {0} sim."}
+                }
+            }
+        }
         weekday{
             dn{"Dia di simana"}
         }
         year{
             dn{"Anu"}
+            relative{
+                "-1"{"anu pasadu"}
+                "0"{"es anu li"}
+                "1"{"prósimu anu"}
+            }
+            relativeTime{
+                future{
+                    other{"di li {0} anu"}
+                }
+                past{
+                    other{"a ten {0} anu"}
+                }
+            }
+        }
+        year-narrow{
+            dn{"anu"}
+            relativeTime{
+                future{
+                    other{"di li {0} anu"}
+                }
+                past{
+                    other{"a ten {0} anu"}
+                }
+            }
+        }
+        year-short{
+            dn{"anu"}
             relativeTime{
                 future{
                     other{"di li {0} anu"}
@@ -706,6 +1160,16 @@ kea{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        unit{
+            2{"{0} y {1}"}
+            end{"{0} y {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit-short{
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
     }
     measurementSystemNames{
         UK{"Ingles"}
@@ -713,27 +1177,901 @@ kea{
         metric{"Metriku"}
     }
     units{
+        acceleration{
+            g-force{
+                dnam{"forsa G"}
+                other{"{0} forsa G"}
+            }
+            meter-per-second-squared{
+                dnam{"métru pur sigundu kuadradu"}
+                other{"{0} métru pur sigundu kuadradu"}
+            }
+        }
+        angle{
+            degree{
+                dnam{"grau"}
+                other{"{0} grau"}
+            }
+            radian{
+                dnam{"radianu"}
+                other{"{0} radianu"}
+            }
+        }
+        area{
+            acre{
+                dnam{"ákri"}
+                other{"{0} ákri"}
+            }
+            hectare{
+                dnam{"ektar"}
+                other{"{0} ektar"}
+            }
+            square-centimeter{
+                dnam{"sentímetru kuadradu"}
+                other{"{0} sentímetru kuadradu"}
+            }
+            square-foot{
+                dnam{"pé kuadradu"}
+                other{"{0} pé kuadradu"}
+            }
+            square-inch{
+                dnam{"pulegada kuadradu"}
+                other{"{0} pulegada kuadradu"}
+            }
+            square-kilometer{
+                dnam{"kilómetru kuadradu"}
+                other{"{0} kilómetru kuadradu"}
+            }
+            square-meter{
+                dnam{"métru kuadradu"}
+                other{"{0} métru kuadradu"}
+            }
+            square-mile{
+                dnam{"milha kuadradu"}
+                other{"{0} milha kuadradu"}
+            }
+            square-yard{
+                dnam{"jarda kuadradu"}
+                other{"{0} jarda kuadradu"}
+            }
+        }
+        consumption{
+            liter-per-kilometer{
+                dnam{"litru pur kilómetru"}
+                other{"{0} litru pur kilómetru"}
+            }
+            mile-per-gallon{
+                dnam{"milha pur galãu"}
+                other{"{0} milha pur galãu"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"bit"}
+                other{"{0} bit"}
+            }
+            byte{
+                dnam{"byte"}
+                other{"{0} byte"}
+            }
+            gigabit{
+                dnam{"jigabit"}
+                other{"{0} jigabit"}
+            }
+            gigabyte{
+                dnam{"jigabyte"}
+                other{"{0} jigabyte"}
+            }
+            kilobit{
+                dnam{"kilobit"}
+                other{"{0} kilobit"}
+            }
+            kilobyte{
+                dnam{"kilobyte"}
+                other{"{0} kilobyte"}
+            }
+            megabit{
+                dnam{"megabit"}
+                other{"{0} megabit"}
+            }
+            megabyte{
+                dnam{"megabyte"}
+                other{"{0} megabyte"}
+            }
+            terabit{
+                dnam{"terabit"}
+                other{"{0} terabit"}
+            }
+            terabyte{
+                dnam{"terabyte"}
+                other{"{0} terabyte"}
+            }
+        }
         duration{
             day{
+                dnam{"dia"}
                 other{"{0} dia"}
             }
             hour{
+                dnam{"ora"}
                 other{"{0} ora"}
+                per{"{0} pur ora"}
+            }
+            microsecond{
+                dnam{"mikrosigundu"}
+                other{"{0} mikrosigundu"}
+            }
+            millisecond{
+                dnam{"milisigundu"}
+                other{"{0} milisigundu"}
             }
             minute{
+                dnam{"minutu"}
                 other{"{0} minutu"}
             }
             month{
+                dnam{"mes"}
                 other{"{0} mes"}
             }
+            nanosecond{
+                dnam{"nanosigundu"}
+                other{"{0} nanosigundu"}
+            }
             second{
+                dnam{"sigundu"}
                 other{"{0} sigundu"}
+                per{"{0} pur sigundu"}
             }
             week{
+                dnam{"simana"}
                 other{"{0} simana"}
             }
             year{
+                dnam{"anu"}
                 other{"{0} anu"}
+            }
+        }
+        length{
+            astronomical-unit{
+                dnam{"unidadi astronómiku"}
+                other{"{0} unidadi astronómiku"}
+            }
+            centimeter{
+                dnam{"sentímetru"}
+                other{"{0} sentímetru"}
+            }
+            decimeter{
+                dnam{"desímetru"}
+                other{"{0} desímetru"}
+            }
+            foot{
+                dnam{"pé"}
+                other{"{0} pé"}
+            }
+            inch{
+                dnam{"pulegada"}
+                other{"{0} pulegada"}
+            }
+            kilometer{
+                dnam{"kilómetru"}
+                other{"{0} kilómetru"}
+            }
+            light-year{
+                dnam{"anu-lus"}
+                other{"{0} anu-lus"}
+            }
+            meter{
+                dnam{"métru"}
+                other{"{0} métru"}
+            }
+            micrometer{
+                dnam{"mikrómetru"}
+                other{"{0} mikrómetru"}
+            }
+            mile{
+                dnam{"milha"}
+                other{"{0} milha"}
+            }
+            millimeter{
+                dnam{"milímetru"}
+                other{"{0} milímetru"}
+            }
+            nanometer{
+                dnam{"nanómetru"}
+                other{"{0} nanómetru"}
+            }
+            nautical-mile{
+                dnam{"milha náutiku"}
+                other{"{0} milha náutiku"}
+            }
+            parsec{
+                dnam{"parsek"}
+                other{"{0} parsek"}
+            }
+            picometer{
+                dnam{"pikómetru"}
+                other{"{0} pikómetru"}
+            }
+            yard{
+                dnam{"jarda"}
+                other{"{0} jarda"}
+            }
+        }
+        light{
+            lux{
+                dnam{"lux"}
+                other{"{0} lux"}
+            }
+        }
+        power{
+            watt{
+                dnam{"watt"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"kilati"}
+                other{"{0} kilati"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                dnam{"kilómetru pur ora"}
+                other{"{0} kilómetru pur ora"}
+            }
+            meter-per-second{
+                dnam{"métru pur sigundu"}
+                other{"{0} métru pur sigundu"}
+            }
+            mile-per-hour{
+                dnam{"milha pur ora"}
+                other{"{0} milha pur ora"}
+            }
+        }
+        volume{
+            acre-foot{
+                dnam{"ákri-pé"}
+                other{"{0} ákri-pé"}
+            }
+            centiliter{
+                dnam{"sentilitru"}
+                other{"{0} sentilitru"}
+            }
+            cubic-centimeter{
+                dnam{"sentímetru kúbiku"}
+                other{"{0} sentímetru kúbiku"}
+            }
+            cubic-foot{
+                dnam{"pé kúbiku"}
+                other{"{0} pé kúbiku"}
+            }
+            cubic-inch{
+                dnam{"pulegada kúbiku"}
+                other{"{0} pulegada kúbiku"}
+            }
+            cubic-kilometer{
+                dnam{"kilómetru kúbiku"}
+                other{"{0} kilómetru kúbiku"}
+            }
+            cubic-meter{
+                dnam{"métru kúbiku"}
+                other{"{0} métru kúbiku"}
+            }
+            cubic-mile{
+                dnam{"milha kúbiku"}
+                other{"{0} milha kúbiku"}
+            }
+            cubic-yard{
+                dnam{"jarda kúbiku"}
+                other{"{0} jarda kúbiku"}
+            }
+            cup{
+                dnam{"xávina"}
+                other{"{0} xávina"}
+            }
+            deciliter{
+                dnam{"desilitru"}
+                other{"{0} desilitru"}
+            }
+            fluid-ounce{
+                dnam{"ónsa fluídu"}
+                other{"{0} ónsa fluídu"}
+            }
+            gallon{
+                dnam{"galãu"}
+                other{"{0} galãu"}
+            }
+            hectoliter{
+                dnam{"ektolitru"}
+                other{"{0} ektolitru"}
+            }
+            liter{
+                dnam{"litru"}
+                other{"{0} litru"}
+            }
+            megaliter{
+                dnam{"megalitru"}
+                other{"{0} megalitru"}
+            }
+            milliliter{
+                dnam{"mililitru"}
+                other{"{0} mililitru"}
+            }
+            pint{
+                dnam{"pint"}
+                other{"{0} pint"}
+            }
+            quart{
+                dnam{"kuart"}
+                other{"{0} kuart"}
+            }
+            tablespoon{
+                dnam{"kudjer di sopa"}
+                other{"{0} kudjer di sopa"}
+            }
+            teaspoon{
+                dnam{"kudjer di xá"}
+                other{"{0} kudjer di xá"}
+            }
+        }
+    }
+    unitsNarrow{
+        duration{
+            day{
+                dnam{"dia"}
+                other{"{0} dia"}
+            }
+            hour{
+                dnam{"ora"}
+                other{"{0} h"}
+            }
+            millisecond{
+                dnam{"ms"}
+                other{"{0} ms"}
+            }
+            minute{
+                dnam{"min."}
+            }
+            month{
+                dnam{"mes"}
+                other{"{0} mes"}
+            }
+            second{
+                dnam{"sig."}
+                other{"{0} s"}
+            }
+            week{
+                dnam{"sim."}
+                other{"{0} sim."}
+            }
+            year{
+                dnam{"anu"}
+                other{"{0} anu"}
+            }
+        }
+        length{
+            centimeter{
+                dnam{"cm"}
+                other{"{0} cm"}
+            }
+            kilometer{
+                dnam{"km"}
+                other{"{0} km"}
+            }
+            meter{
+                dnam{"m"}
+                other{"{0} m"}
+            }
+            millimeter{
+                dnam{"mm"}
+                other{"{0} mm"}
+            }
+        }
+        mass{
+            gram{
+                other{"{0} g"}
+            }
+            kilogram{
+                dnam{"kg"}
+                other{"{0} kg"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                dnam{"km/h"}
+                other{"{0} km/h"}
+            }
+        }
+        volume{
+            liter{
+                dnam{"l"}
+                other{"{0} l"}
+            }
+        }
+    }
+    unitsShort{
+        acceleration{
+            g-force{
+                dnam{"G"}
+                other{"{0} G"}
+            }
+            meter-per-second-squared{
+                dnam{"m/s²"}
+                other{"{0} m/s²"}
+            }
+        }
+        angle{
+            arc-minute{
+                dnam{"arcmin"}
+                other{"{0}′"}
+            }
+            arc-second{
+                dnam{"arcsec"}
+                other{"{0}″"}
+            }
+            degree{
+                dnam{"grau"}
+                other{"{0}°"}
+            }
+            radian{
+                dnam{"rad"}
+                other{"{0} rad"}
+            }
+        }
+        area{
+            acre{
+                dnam{"ac"}
+                other{"{0} ac"}
+            }
+            hectare{
+                dnam{"ha"}
+                other{"{0} ha"}
+            }
+            square-centimeter{
+                dnam{"cm²"}
+                other{"{0} cm²"}
+            }
+            square-foot{
+                dnam{"ft²"}
+                other{"{0} ft²"}
+            }
+            square-inch{
+                dnam{"in²"}
+                other{"{0} in²"}
+            }
+            square-kilometer{
+                dnam{"km²"}
+                other{"{0} km²"}
+            }
+            square-meter{
+                dnam{"m²"}
+                other{"{0} m²"}
+            }
+            square-mile{
+                dnam{"mi²"}
+                other{"{0} mi²"}
+            }
+            square-yard{
+                dnam{"yd²"}
+                other{"{0} yd²"}
+            }
+        }
+        consumption{
+            liter-per-kilometer{
+                dnam{"l/km"}
+                other{"{0} l/km"}
+            }
+            mile-per-gallon{
+                dnam{"mpg"}
+                other{"{0} mpg"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"b"}
+                other{"{0} b"}
+            }
+            byte{
+                dnam{"B"}
+                other{"{0} B"}
+            }
+            gigabit{
+                dnam{"Gb"}
+                other{"{0} Gb"}
+            }
+            gigabyte{
+                dnam{"GB"}
+                other{"{0} GB"}
+            }
+            kilobit{
+                dnam{"Kb"}
+                other{"{0} Kb"}
+            }
+            kilobyte{
+                dnam{"KB"}
+                other{"{0} KB"}
+            }
+            megabit{
+                dnam{"Mb"}
+                other{"{0} Mb"}
+            }
+            megabyte{
+                dnam{"MB"}
+                other{"{0} MB"}
+            }
+            terabit{
+                dnam{"Tb"}
+                other{"{0} Tb"}
+            }
+            terabyte{
+                dnam{"TB"}
+                other{"{0} TB"}
+            }
+        }
+        duration{
+            day{
+                dnam{"dia"}
+                other{"{0} dia"}
+            }
+            hour{
+                dnam{"ora"}
+                other{"{0} h"}
+                per{"{0}/h"}
+            }
+            microsecond{
+                dnam{"μs"}
+                other{"{0} μs"}
+            }
+            millisecond{
+                dnam{"ms"}
+                other{"{0} ms"}
+            }
+            minute{
+                dnam{"min."}
+                other{"{0} min."}
+            }
+            month{
+                dnam{"mes"}
+                other{"{0} mes"}
+            }
+            nanosecond{
+                dnam{"ns"}
+                other{"{0} ns"}
+            }
+            second{
+                dnam{"sig."}
+                other{"{0} sig."}
+                per{"{0}/s"}
+            }
+            week{
+                dnam{"sim."}
+                other{"{0} sim."}
+            }
+            year{
+                dnam{"anu"}
+                other{"{0} anu"}
+            }
+        }
+        electric{
+            ampere{
+                dnam{"amp"}
+                other{"{0} A"}
+            }
+            milliampere{
+                dnam{"mA"}
+                other{"{0} mA"}
+            }
+            ohm{
+                dnam{"ohm"}
+                other{"{0} Ω"}
+            }
+            volt{
+                dnam{"volt"}
+                other{"{0} V"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"cal"}
+                other{"{0} cal"}
+            }
+            foodcalorie{
+                dnam{"Cal"}
+                other{"{0} Cal"}
+            }
+            kilocalorie{
+                dnam{"kcal"}
+                other{"{0} kcal"}
+            }
+            kilojoule{
+                dnam{"kJ"}
+                other{"{0} kJ"}
+            }
+            kilowatt-hour{
+                dnam{"kWh"}
+                other{"{0} kWh"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"GHz"}
+                other{"{0} GHz"}
+            }
+            hertz{
+                dnam{"Hz"}
+                other{"{0} Hz"}
+            }
+            kilohertz{
+                dnam{"kHz"}
+                other{"{0} kHz"}
+            }
+            megahertz{
+                dnam{"MHz"}
+                other{"{0} MHz"}
+            }
+        }
+        length{
+            astronomical-unit{
+                dnam{"ua"}
+                other{"{0} ua"}
+            }
+            centimeter{
+                dnam{"cm"}
+                other{"{0} cm"}
+            }
+            decimeter{
+                dnam{"dm"}
+                other{"{0} dm"}
+            }
+            foot{
+                dnam{"pé"}
+                other{"{0} pé"}
+            }
+            inch{
+                dnam{"in"}
+                other{"{0} in"}
+            }
+            kilometer{
+                dnam{"km"}
+                other{"{0} km"}
+            }
+            light-year{
+                dnam{"anu-lus"}
+                other{"{0} anu-lus"}
+            }
+            meter{
+                dnam{"m"}
+                other{"{0} m"}
+            }
+            micrometer{
+                dnam{"µm"}
+                other{"{0} µm"}
+            }
+            mile{
+                dnam{"mi"}
+                other{"{0} mi"}
+            }
+            millimeter{
+                dnam{"mm"}
+                other{"{0} mm"}
+            }
+            nanometer{
+                dnam{"nm"}
+                other{"{0} nm"}
+            }
+            nautical-mile{
+                dnam{"nmi"}
+                other{"{0} nmi"}
+            }
+            parsec{
+                dnam{"pc"}
+                other{"{0} pc"}
+            }
+            picometer{
+                dnam{"pm"}
+                other{"{0} pm"}
+            }
+            yard{
+                dnam{"yd"}
+                other{"{0} yd"}
+            }
+        }
+        light{
+            lux{
+                dnam{"lux"}
+                other{"{0} lx"}
+            }
+        }
+        mass{
+            carat{
+                other{"{0} CD"}
+            }
+            gram{
+                other{"{0} g"}
+            }
+            metric-ton{
+                dnam{"t"}
+                other{"{0} t"}
+            }
+            microgram{
+                dnam{"µg"}
+                other{"{0} µg"}
+            }
+            milligram{
+                dnam{"mg"}
+                other{"{0} mg"}
+            }
+            ounce{
+                dnam{"oz"}
+                other{"{0} oz"}
+            }
+            ounce-troy{
+                dnam{"oz t"}
+                other{"{0} oz t"}
+            }
+            pound{
+                dnam{"lb"}
+                other{"{0} lb"}
+            }
+            ton{
+                dnam{"tn"}
+                other{"{0} tn"}
+            }
+        }
+        power{
+            gigawatt{
+                dnam{"GW"}
+                other{"{0} GW"}
+            }
+            kilowatt{
+                dnam{"kW"}
+                other{"{0} kW"}
+            }
+            megawatt{
+                dnam{"MW"}
+                other{"{0} MW"}
+            }
+            milliwatt{
+                dnam{"mW"}
+                other{"{0} mW"}
+            }
+            watt{
+                dnam{"watt"}
+                other{"{0} W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                dnam{"hPa"}
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                dnam{"inHg"}
+                other{"{0} inHg"}
+            }
+            millibar{
+                dnam{"mbar"}
+                other{"{0} mbar"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                other{"{0} mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                other{"{0} psi"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"kt"}
+                other{"{0} kt"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                dnam{"km/h"}
+                other{"{0} km/h"}
+            }
+            meter-per-second{
+                dnam{"m/s"}
+                other{"{0} m/s"}
+            }
+            mile-per-hour{
+                dnam{"mi/h"}
+                other{"{0} mi/h"}
+            }
+        }
+        temperature{
+            kelvin{
+                dnam{"K"}
+                other{"{0} K"}
+            }
+        }
+        volume{
+            acre-foot{
+                dnam{"ac ft"}
+                other{"{0} ac ft"}
+            }
+            centiliter{
+                dnam{"cl"}
+                other{"{0} cl"}
+            }
+            cubic-centimeter{
+                dnam{"cm³"}
+                other{"{0} cm³"}
+            }
+            cubic-foot{
+                dnam{"ft³"}
+                other{"{0} ft³"}
+            }
+            cubic-inch{
+                dnam{"in³"}
+                other{"{0} in³"}
+            }
+            cubic-kilometer{
+                dnam{"km³"}
+                other{"{0} km³"}
+            }
+            cubic-meter{
+                dnam{"m³"}
+                other{"{0} m³"}
+            }
+            cubic-mile{
+                dnam{"mi³"}
+                other{"{0} mi³"}
+            }
+            cubic-yard{
+                dnam{"yd³"}
+                other{"{0} yd³"}
+            }
+            cup{
+                dnam{"xáv."}
+                other{"{0} xáv."}
+            }
+            deciliter{
+                dnam{"dl"}
+                other{"{0} dl"}
+            }
+            fluid-ounce{
+                dnam{"fl oz"}
+                other{"{0} fl oz"}
+            }
+            gallon{
+                dnam{"gal"}
+                other{"{0} gal"}
+            }
+            hectoliter{
+                dnam{"hl"}
+                other{"{0} hl"}
+            }
+            liter{
+                dnam{"l"}
+                other{"{0} l"}
+            }
+            megaliter{
+                dnam{"Ml"}
+                other{"{0} Ml"}
+            }
+            milliliter{
+                dnam{"ml"}
+                other{"{0} ml"}
+            }
+            pint{
+                dnam{"pt"}
+                other{"{0} pt"}
+            }
+            quart{
+                dnam{"qt"}
+                other{"{0} qt"}
+            }
+            tablespoon{
+                dnam{"k.sp."}
+                other{"{0} k.sp."}
+            }
+            teaspoon{
+                dnam{"k.xá"}
+                other{"{0} k.xá"}
             }
         }
     }

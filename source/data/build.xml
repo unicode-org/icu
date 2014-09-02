@@ -114,15 +114,24 @@
 		  <remap sourcePath="/Keys" targetDir="lang" />
 		  <remap sourcePath="/Languages" targetDir="lang" />
 		  <remap sourcePath="/LanguagesShort" targetDir="lang" />
+		  <remap sourcePath="/Languages%secondary" targetDir="lang" />
+		  <remap sourcePath="/Languages%variant" targetDir="lang" />
 		  <remap sourcePath="/Scripts" targetDir="lang" />
+		  <remap sourcePath="/Scripts%secondary" targetDir="lang" />
+		  <remap sourcePath="/Scripts%short" targetDir="lang" />
 		  <remap sourcePath="/Scripts%stand-alone" targetDir="lang" />
+		  <remap sourcePath="/Scripts%variant" targetDir="lang" />
 		  <remap sourcePath="/Types" targetDir="lang" />
+		  <remap sourcePath="/Types%short" targetDir="lang" />
 		  <remap sourcePath="/Variants" targetDir="lang" />
 		  <remap sourcePath="/codePatterns" targetDir="lang" />
 		  <remap sourcePath="/localeDisplayPattern" targetDir="lang" />
 		  <remap sourcePath="/Countries" targetDir="region" />
+		  <remap sourcePath="/Countries%variant" targetDir="region" />
 		  <remap sourcePath="/CountriesShort" targetDir="region" />
 		  <remap sourcePath="/Currencies" targetDir="curr" />
+		  <remap sourcePath="/Currencies%narrow" targetDir="curr" />
+		  <remap sourcePath="/Currencies%variant" targetDir="curr" />
 		  <remap sourcePath="/CurrencyPlurals" targetDir="curr" />
 		  <remap sourcePath="/CurrencyUnitPatterns" targetDir="curr" />
 		  <remap sourcePath="/currencySpacing" targetDir="curr" />
@@ -364,6 +373,7 @@
                <include name="region/resfiles.mk" /> 
                <include name="zone/*.txt" /> 
                <include name="zone/resfiles.mk" /> 
+               <exclude name="zone/tzdbNames.txt" /> 
 	    </fileset>
             <fileset id="collation" dir="${env.ICU4C_DIR}/source/data/coll">
                 <include name="*.txt" />

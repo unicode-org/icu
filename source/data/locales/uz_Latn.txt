@@ -13,5 +13,5 @@ uz_Latn{
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.91.29"}
+    Version{"2.1.6.69"}
 }

@@ -46,7 +46,7 @@ kde{
         BZ{"Belize"}
         CA{"Kanada"}
         CD{"Jamuhuli ya Chidemoklasia ya kuKongo"}
-        CF{"Jamuhuli ya Afilika ya Paching'ati"}
+        CF{"Jamuhuli ya Afilika ya Paching’ati"}
         CG{"Kongo"}
         CH{"Uswisi"}
         CI{"Kodivaa"}
@@ -237,5 +237,5 @@ kde{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.7.39"}
 }

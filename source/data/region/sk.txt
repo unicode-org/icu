@@ -11,37 +11,37 @@
  */
 sk{
     Countries{
-        001{"Svet"}
+        001{"svet"}
         002{"Afrika"}
         003{"Severná Amerika"}
         005{"Južná Amerika"}
         009{"Oceánia"}
-        011{"Západná Afrika"}
+        011{"západná Afrika"}
         013{"Stredná Amerika"}
-        014{"Východná Afrika"}
-        015{"Severná Afrika"}
-        017{"Stredná Afrika"}
+        014{"východná Afrika"}
+        015{"severná Afrika"}
+        017{"stredná Afrika"}
         018{"južné územia Afriky"}
-        019{"Americký kontinent"}
+        019{"Amerika"}
         021{"severné územia Ameriky"}
         029{"Karibik"}
-        030{"Východná Ázia"}
-        034{"Južná Ázia"}
-        035{"Juhovýchodná Ázia"}
-        039{"Južná Európa"}
+        030{"východná Ázia"}
+        034{"južná Ázia"}
+        035{"juhovýchodná Ázia"}
+        039{"južná Európa"}
         053{"Australázia"}
         054{"Melanézia"}
-        057{"Mikronézia – oblasť"}
+        057{"oblasť Mikronézie"}
         061{"Polynézia"}
         142{"Ázia"}
-        143{"Stredná Ázia"}
-        145{"Západná Ázia"}
+        143{"stredná Ázia"}
+        145{"západná Ázia"}
         150{"Európa"}
-        151{"Východná Európa"}
-        154{"Severná Európa"}
-        155{"Západná Európa"}
+        151{"východná Európa"}
+        154{"severná Európa"}
+        155{"západná Európa"}
         419{"Latinská Amerika"}
-        AC{"Ostrov Ascensión"}
+        AC{"Ascensión"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
         AF{"Afganistan"}
@@ -57,7 +57,7 @@ sk{
         AT{"Rakúsko"}
         AU{"Austrália"}
         AW{"Aruba"}
-        AX{"Alandské ostrovy"}
+        AX{"Ålandy"}
         AZ{"Azerbajdžan"}
         BA{"Bosna a Hercegovina"}
         BB{"Barbados"}
@@ -92,7 +92,7 @@ sk{
         CM{"Kamerun"}
         CN{"Čína"}
         CO{"Kolumbia"}
-        CP{"Ostrov Clipperton"}
+        CP{"Clipperton"}
         CR{"Kostarika"}
         CU{"Kuba"}
         CV{"Kapverdy"}
@@ -101,7 +101,7 @@ sk{
         CY{"Cyprus"}
         CZ{"Česká republika"}
         DE{"Nemecko"}
-        DG{"Diego Garcia"}
+        DG{"Diego García"}
         DJ{"Džibutsko"}
         DK{"Dánsko"}
         DM{"Dominika"}
@@ -118,7 +118,7 @@ sk{
         EU{"Európska únia"}
         FI{"Fínsko"}
         FJ{"Fidži"}
-        FK{"Falklandské ostrovy"}
+        FK{"Falklandy"}
         FM{"Mikronézia"}
         FO{"Faerské ostrovy"}
         FR{"Francúzsko"}
@@ -141,7 +141,7 @@ sk{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guayana"}
-        HK{"Hongkong OAO Číny"}
+        HK{"Hongkong – OAO Číny"}
         HM{"Heardov ostrov a McDonaldove ostrovy"}
         HN{"Honduras"}
         HR{"Chorvátsko"}
@@ -167,7 +167,7 @@ sk{
         KH{"Kambodža"}
         KI{"Kiribati"}
         KM{"Komory"}
-        KN{"Saint Kitts a Nevis"}
+        KN{"Svätý Krištof a Nevis"}
         KP{"Severná Kórea"}
         KR{"Južná Kórea"}
         KW{"Kuvajt"}
@@ -188,14 +188,14 @@ sk{
         MC{"Monako"}
         MD{"Moldavsko"}
         ME{"Čierna Hora"}
-        MF{"Saint Martin"}
+        MF{"Svätý Martin"}
         MG{"Madagaskar"}
         MH{"Marshallove ostrovy"}
         MK{"Macedónsko"}
         ML{"Mali"}
         MM{"Mjanmarsko"}
         MN{"Mongolsko"}
-        MO{"Macao OAO Číny"}
+        MO{"Macao – OAO Číny"}
         MP{"Severné Mariány"}
         MQ{"Martinik"}
         MR{"Mauritánia"}
@@ -210,7 +210,7 @@ sk{
         NA{"Namíbia"}
         NC{"Nová Kaledónia"}
         NE{"Niger"}
-        NF{"Norfolkov ostrov"}
+        NF{"Norfolk"}
         NG{"Nigéria"}
         NI{"Nikaragua"}
         NL{"Holandsko"}
@@ -230,12 +230,12 @@ sk{
         PM{"Saint Pierre a Miquelon"}
         PN{"Pitcairnove ostrovy"}
         PR{"Portoriko"}
-        PS{"Palestínske územie"}
+        PS{"Palestínske územia"}
         PT{"Portugalsko"}
         PW{"Palau"}
         PY{"Paraguaj"}
         QA{"Katar"}
-        QO{"Tichomorie - ostatné"}
+        QO{"ostatné Tichomorie"}
         RE{"Réunion"}
         RO{"Rumunsko"}
         RS{"Srbsko"}
@@ -243,13 +243,13 @@ sk{
         RW{"Rwanda"}
         SA{"Saudská Arábia"}
         SB{"Šalamúnove ostrovy"}
-        SC{"Seychelské ostrovy"}
+        SC{"Seychely"}
         SD{"Sudán"}
         SE{"Švédsko"}
         SG{"Singapur"}
         SH{"Svätá Helena"}
         SI{"Slovinsko"}
-        SJ{"Špicbergy a Jan Mayen"}
+        SJ{"Svalbard a Jan Mayen"}
         SK{"Slovensko"}
         SL{"Sierra Leone"}
         SM{"San Maríno"}
@@ -257,8 +257,8 @@ sk{
         SO{"Somálsko"}
         SR{"Surinam"}
         SS{"Južný Sudán"}
-        ST{"Svätý Tomáš a Princove ostrovy"}
-        SV{"Salvador"}
+        ST{"Svätý Tomáš a Princov ostrov"}
+        SV{"Salvádor"}
         SX{"Sint Maarten"}
         SY{"Sýria"}
         SZ{"Svazijsko"}
@@ -288,8 +288,8 @@ sk{
         VA{"Vatikán"}
         VC{"Svätý Vincent a Grenadíny"}
         VE{"Venezuela"}
-        VG{"Britské panenské ostrovy"}
-        VI{"Panenské ostrovy - USA"}
+        VG{"Britské Panenské ostrovy"}
+        VI{"Americké Panenské ostrovy"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
         WF{"Wallis a Futuna"}
@@ -300,7 +300,13 @@ sk{
         ZA{"Južná Afrika"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
-        ZZ{"Neznámy región"}
+        ZZ{"neznámy región"}
+    }
+    Countries%variant{
+        CD{"Konžská demokratická republika"}
+        CG{"Konžská republika"}
+        FK{"Malvíny"}
+        MK{"Macedónsko (BJRM)"}
     }
     CountriesShort{
         GB{"UK"}
@@ -309,5 +315,5 @@ sk{
         PS{"Palestína"}
         US{"USA"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
 }

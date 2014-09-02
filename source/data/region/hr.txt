@@ -31,7 +31,7 @@ hr{
         039{"Južna Europa"}
         053{"Australazija"}
         054{"Melanezija"}
-        057{"Mikronezki oblast"}
+        057{"Mikronezijsko područje"}
         061{"Polinezija"}
         142{"Azija"}
         143{"Srednja Azija"}
@@ -82,7 +82,7 @@ hr{
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Kokosovi (Keeling) Otoci"}
-        CD{"Kongo (DRK)"}
+        CD{"Kongo - Kinshasa"}
         CF{"Srednjoafrička Republika"}
         CG{"Kongo - Brazzaville"}
         CH{"Švicarska"}
@@ -115,7 +115,7 @@ hr{
         ER{"Eritreja"}
         ES{"Španjolska"}
         ET{"Etiopija"}
-        EU{"Europska Unija"}
+        EU{"Europska unija"}
         FI{"Finska"}
         FJ{"Fidži"}
         FK{"Falklandski Otoci"}
@@ -302,6 +302,13 @@ hr{
         ZW{"Zimbabve"}
         ZZ{"nepoznato područje"}
     }
+    Countries%variant{
+        CD{"Kongo (DRK)"}
+        CG{"Kongo (RK)"}
+        CI{"Bjelokosna Obala"}
+        FK{"Falklandski Otoci (Malvini)"}
+        MK{"Makedonija (BJRM)"}
+    }
     CountriesShort{
         GB{"UK"}
         HK{"Hong Kong"}
@@ -309,5 +316,5 @@ hr{
         PS{"Palestina"}
         US{"SAD"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
 }

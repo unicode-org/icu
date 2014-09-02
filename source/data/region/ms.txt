@@ -53,7 +53,7 @@ ms{
         AO{"Angola"}
         AQ{"Antartika"}
         AR{"Argentina"}
-        AS{"American Samoa"}
+        AS{"Samoa Amerika"}
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
@@ -136,13 +136,13 @@ ms{
         GP{"Guadeloupe"}
         GQ{"Guinea Khatulistiwa"}
         GR{"Yunani"}
-        GS{"Kepualaun Georgia Selatan dan Sandwich Selatan"}
+        GS{"Kepulauan Georgia Selatan & Sandwich Selatan"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea Bissau"}
         GY{"Guyana"}
         HK{"Hong Kong SAR China"}
-        HM{"Pulau Heard dan Kepulauan McDonald"}
+        HM{"Kepulauan Heard & McDonald"}
         HN{"Honduras"}
         HR{"Croatia"}
         HT{"Haiti"}
@@ -206,11 +206,11 @@ ms{
         MW{"Malawi"}
         MX{"Mexico"}
         MY{"Malaysia"}
-        MZ{"Mozambik"}
+        MZ{"Mozambique"}
         NA{"Namibia"}
         NC{"New Caledonia"}
         NE{"Niger"}
-        NF{"Norfolk Island"}
+        NF{"Pulau Norfolk"}
         NG{"Nigeria"}
         NI{"Nicaragua"}
         NL{"Belanda"}
@@ -270,7 +270,7 @@ ms{
         TH{"Thailand"}
         TJ{"Tajikistan"}
         TK{"Tokelau"}
-        TL{"Timor Timur"}
+        TL{"Timor-Leste"}
         TM{"Turkmenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
@@ -302,6 +302,14 @@ ms{
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Diketahui"}
     }
+    Countries%variant{
+        CD{"Congo (DRC)"}
+        CG{"Congo (Republik)"}
+        CI{"Ivory Coast"}
+        FK{"Kepulauan Falkland (Islas Malvinas)"}
+        MK{"Macedonia (FYROM)"}
+        TL{"Timor Timur"}
+    }
     CountriesShort{
         GB{"GB"}
         HK{"Hong Kong"}
@@ -309,5 +317,5 @@ ms{
         PS{"Palestin"}
         US{"A.S"}
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.8.9"}
 }

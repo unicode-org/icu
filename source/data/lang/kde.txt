@@ -57,5 +57,5 @@ kde{
         zh{"Chichina"}
         zu{"Chizulu"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.7.39"}
 }

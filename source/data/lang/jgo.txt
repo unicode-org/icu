@@ -27,7 +27,7 @@ jgo{
     Scripts{
         Latn{"mík -ŋwaꞌnɛ yi ɛ́ líŋɛ́nɛ Latɛ̂ŋ"}
         Zxxx{"ntúu yi pɛ́ ká ŋwaꞌnε"}
-        Zzzz{"ntɛ-ŋwaꞌnɛ yí pɛ́ ká kɛ́ jí"}
+        Zzzz{"ntɛ-ŋwaꞌnɛ yí pɛ́ ká kɛ́ jí"}
     }
     Types{
         calendar{
@@ -37,5 +37,5 @@ jgo{
             latn{"pɛnɔ́mba"}
         }
     }
-    Version{"2.0.97.70"}
+    Version{"2.1.7.39"}
 }

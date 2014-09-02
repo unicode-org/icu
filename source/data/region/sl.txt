@@ -57,7 +57,7 @@ sl{
         AT{"Avstrija"}
         AU{"Avstralija"}
         AW{"Aruba"}
-        AX{"Alandsko otočje"}
+        AX{"Ålandski otoki"}
         AZ{"Azerbajdžan"}
         BA{"Bosna in Hercegovina"}
         BB{"Barbados"}
@@ -68,7 +68,7 @@ sl{
         BH{"Bahrajn"}
         BI{"Burundi"}
         BJ{"Benin"}
-        BL{"Saint Barthelemy"}
+        BL{"Saint Barthélemy"}
         BM{"Bermudi"}
         BN{"Brunej"}
         BO{"Bolivija"}
@@ -87,7 +87,7 @@ sl{
         CG{"Kongo - Brazzaville"}
         CH{"Švica"}
         CI{"Slonokoščena obala"}
-        CK{"Cookovo otočje"}
+        CK{"Cookovi otoki"}
         CL{"Čile"}
         CM{"Kamerun"}
         CN{"Kitajska"}
@@ -142,7 +142,7 @@ sl{
         GW{"Gvineja Bissau"}
         GY{"Gvajana"}
         HK{"Posebno administrativno območje LR Kitajske Hong Kong"}
-        HM{"Otok Heard in otočje McDonald"}
+        HM{"Heardov otok in McDonaldovi otoki"}
         HN{"Honduras"}
         HR{"Hrvaška"}
         HT{"Haiti"}
@@ -302,6 +302,12 @@ sl{
         ZW{"Zimbabve"}
         ZZ{"Neznano ali neveljavno območje"}
     }
+    Countries%variant{
+        CD{"Kongo (Demokratična republika Kongo)"}
+        CG{"Kongo (Republika)"}
+        FK{"Falklandski otoki (Malvinski otoki)"}
+        MK{"Makedonija (FYROM)"}
+    }
     CountriesShort{
         GB{"ZK"}
         HK{"Hongkong"}
@@ -309,5 +315,5 @@ sl{
         PS{"Palestina"}
         US{"ZDA"}
     }
-    Version{"2.0.99.67"}
+    Version{"2.1.8.9"}
 }

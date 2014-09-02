@@ -182,6 +182,7 @@ hr{
         fy{"zapadnofrizijski"}
         ga{"irski"}
         gaa{"ga"}
+        gag{"gagauski"}
         gay{"gayo"}
         gba{"gbaya"}
         gd{"škotski-galski"}
@@ -199,8 +200,8 @@ hr{
         gsw{"švicarski njemački"}
         gu{"gudžaratski"}
         guz{"gusii"}
-        gv{"manx"}
-        gwi{"gwich'in"}
+        gv{"manski"}
+        gwi{"gwich’in"}
         ha{"hausa"}
         hai{"haidi"}
         haw{"havajski"}
@@ -240,7 +241,7 @@ hr{
         jv{"javanski"}
         ka{"gruzijski"}
         kaa{"kara-kalpak"}
-        kab{"kabyle"}
+        kab{"kabilski"}
         kac{"kachin"}
         kaj{"kaje"}
         kam{"kamba"}
@@ -265,6 +266,7 @@ hr{
         kmb{"kimbundu"}
         kn{"kannadski"}
         ko{"korejski"}
+        koi{"komski ili permski"}
         kok{"konkani"}
         kos{"naurski"}
         kpe{"kpelle"}
@@ -291,6 +293,7 @@ hr{
         lez{"lezgiški"}
         lg{"ganda"}
         li{"limburgish"}
+        lkt{"lakota"}
         ln{"lingala"}
         lo{"laoski"}
         lol{"mongo"}
@@ -320,7 +323,7 @@ hr{
         mg{"malgaški"}
         mga{"irski, srednji"}
         mgh{"makhuwa-meetto"}
-        mgo{"meta'"}
+        mgo{"meta’"}
         mh{"maršalski"}
         mi{"maorski"}
         mic{"micmac"}
@@ -362,7 +365,7 @@ hr{
         no{"norveški"}
         nog{"nogajski"}
         non{"staronorveški"}
-        nqo{"n'ko"}
+        nqo{"n’ko"}
         nr{"južni ndebele"}
         nso{"sjeverni sotho"}
         nus{"nuer"}
@@ -397,6 +400,7 @@ hr{
         pt_BR{"brazilski portugalski"}
         pt_PT{"europski portugalski"}
         qu{"kečua"}
+        quc{"kiče"}
         raj{"rajasthani"}
         rap{"rapa nui"}
         rar{"rarotonški"}
@@ -473,7 +477,7 @@ hr{
         tet{"tetum"}
         tg{"tadžički"}
         th{"tajlandski"}
-        ti{"tigrinya"}
+        ti{"tigrinja"}
         tig{"tigriški"}
         tiv{"tiv"}
         tk{"turkmenski"}
@@ -499,7 +503,7 @@ hr{
         tyv{"tuvinian"}
         tzm{"marokanski tamazight"}
         udm{"udmurtski"}
-        ug{"uighur"}
+        ug{"ujgurski"}
         uga{"ugaritski"}
         uk{"ukrajinski"}
         umb{"umbundu"}
@@ -541,6 +545,9 @@ hr{
         zxx{"bez jezičnog sadržaja"}
         zza{"zazaki"}
     }
+    Languages%variant{
+        ps{"puštu"}
+    }
     LanguagesShort{
         az{"azerski"}
         en_GB{"engleski (UK)"}
@@ -578,7 +585,7 @@ hr{
         Egyd{"egipatsko narodno pismo"}
         Egyh{"egipatsko hijeratsko pismo"}
         Egyp{"egipatski hijeroglifi"}
-        Ethi{"etiopsko pimo"}
+        Ethi{"etiopsko pismo"}
         Geok{"gruzijsko khutsuri pismo"}
         Geor{"gruzijsko pismo"}
         Glag{"glagoljica"}
@@ -640,7 +647,7 @@ hr{
         Narb{"staro sjevernoarapsko pismo"}
         Nbat{"nabatejsko pismo"}
         Nkgb{"naxi geba pismo"}
-        Nkoo{"n'ko pismo"}
+        Nkoo{"n’ko pismo"}
         Nshu{"nushu pismo"}
         Ogam{"ogham pismo"}
         Olck{"ol chiki pismo"}
@@ -667,7 +674,7 @@ hr{
         Shaw{"shavian pismo"}
         Shrd{"sharada pismo"}
         Sind{"khudawadi pismo"}
-        Sinh{"singaleško pismo"}
+        Sinh{"sinhaleško pismo"}
         Sora{"sora sompeng pismo"}
         Sund{"sudansko pismo"}
         Sylo{"syloti nagri pismo"}
@@ -709,21 +716,25 @@ hr{
         Hans{"pojednostavljeno hansko pismo"}
         Hant{"tradicionalno hansko pismo"}
     }
+    Scripts%variant{
+        Arab{"perzijsko-arapsko pismo"}
+    }
     Types{
         calendar{
             buddhist{"budistički kalendar"}
             chinese{"kineski kalendar"}
             coptic{"Koptski kalendar"}
-            dangi{"Dangi kalendar"}
-            ethiopic{"Etiopski kalendar"}
+            dangi{"dangi kalendar"}
+            ethiopic{"etiopski kalendar"}
             ethiopic-amete-alem{"Etiopski kalendar \u0022Amete Alem\u0022"}
             gregorian{"gregorijanski kalendar"}
             hebrew{"hebrejski kalendar"}
             indian{"indijski nacionalni kalendar"}
             islamic{"islamski kalendar"}
             islamic-civil{"islamski civilni kalendar"}
+            iso8601{"ISO-8601 kalendar"}
             japanese{"japanski kalendar"}
-            persian{"Perzijski kalendar"}
+            persian{"perzijski kalendar"}
             roc{"kalendar Republike Kine"}
         }
         colAlternate{
@@ -863,7 +874,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

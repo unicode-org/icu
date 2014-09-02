@@ -140,7 +140,7 @@ cgg{
         ML{"Mari"}
         MM{"Myanamar"}
         MN{"Mongoria"}
-        MP{"Ebizinga by'amatemba ga Mariana"}
+        MP{"Ebizinga by’amatemba ga Mariana"}
         MQ{"Martinique"}
         MR{"Mauriteeniya"}
         MS{"Montserrati"}
@@ -235,5 +235,5 @@ cgg{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.7.39"}
 }

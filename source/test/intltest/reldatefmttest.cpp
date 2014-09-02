@@ -290,6 +290,12 @@ static WithQuantityExpected kSerbian[] = {
         {21.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "\\u0437\\u0430 21 \\u043c\\u0435\\u0441\\u0435\\u0446"}
 };
 
+static WithQuantityExpected kSerbianNarrow[] = {
+        {0.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "\\u0437\\u0430 0 \\u043c\\u0435\\u0441."},
+        {1.2, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "\\u0437\\u0430 1,2 \\u043c\\u0435\\u0441."},
+        {21.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "\\u0437\\u0430 21 \\u043c\\u0435\\u0441."}
+};
+
 static WithoutQuantityExpected kEnglishNoQuantity[] = {
         {UDAT_DIRECTION_NEXT_2, UDAT_ABSOLUTE_DAY, ""},
                 
@@ -645,7 +651,8 @@ void RelativeDateTimeFormatterTest::TestEnglishShort() {
 }
 
 void RelativeDateTimeFormatterTest::TestEnglishNarrow() {
-    RunTest("en", UDAT_STYLE_NARROW, kEnglishNarrow, UPRV_LENGTHOF(kEnglishNarrow));
+//  RunTest("en", UDAT_STYLE_NARROW, kEnglishNarrow, UPRV_LENGTHOF(kEnglishNarrow));
+    RunTest("en", UDAT_STYLE_NARROW, kEnglishShort, UPRV_LENGTHOF(kEnglishShort));
 }
 
 void RelativeDateTimeFormatterTest::TestSerbian() {
@@ -653,7 +660,7 @@ void RelativeDateTimeFormatterTest::TestSerbian() {
 }
 
 void RelativeDateTimeFormatterTest::TestSerbianFallback() {
-    RunTest("sr", UDAT_STYLE_NARROW, kSerbian, UPRV_LENGTHOF(kSerbian));
+    RunTest("sr", UDAT_STYLE_NARROW, kSerbianNarrow, UPRV_LENGTHOF(kSerbianNarrow));
 }
 
 void RelativeDateTimeFormatterTest::TestEnglishNoQuantity() {

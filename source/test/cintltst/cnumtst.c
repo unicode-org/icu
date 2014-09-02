@@ -2533,12 +2533,16 @@ static void TestContext(void) {
 
 static void TestCurrencyUsage(void) {
     static const char* DATA[][2] = {
-        // the data are:
-        // currency ISO code to be formatted,
-        // format result using CURRENCYSTYLE with CASH purpose,
+        /* the data are:
+         * currency ISO code to be formatted,
+         * format result using CURRENCYSTYLE with CASH purpose,-
+         * Note that as of CLDR 26:-
+         * - TWD switches from 0 decimals to 2; PKR still has 0, so change test to that
+         * - CAD and all other currencies that rounded to .05 no longer do
+         */
 
-        {"TWD", "NT$124"},
-        {"CAD", "CA$123.55"},
+        {"PKR", "PKR124"},
+        {"CAD", "CA$123.57"},
         {"USD", "$123.57"}
     };
 

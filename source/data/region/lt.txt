@@ -302,6 +302,12 @@ lt{
         ZW{"Zimbabvė"}
         ZZ{"nežinoma sritis"}
     }
+    Countries%variant{
+        CD{"Kongo Demokratinė Respublika"}
+        CG{"Kongo Respublika"}
+        FK{"Folklando (Malvinų) Salos"}
+        MK{"Makedonijos Respublika"}
+    }
     CountriesShort{
         GB{"Didžioji Britanija"}
         HK{"Honkongas"}
@@ -309,5 +315,5 @@ lt{
         PS{"Palestina"}
         US{"JAV"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
 }

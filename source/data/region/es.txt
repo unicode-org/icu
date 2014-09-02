@@ -59,7 +59,7 @@ es{
         AW{"Aruba"}
         AX{"Islas Åland"}
         AZ{"Azerbaiyán"}
-        BA{"Bosnia y Herzegovina"}
+        BA{"Bosnia-Herzegovina"}
         BB{"Barbados"}
         BD{"Bangladés"}
         BE{"Bélgica"}
@@ -302,12 +302,18 @@ es{
         ZW{"Zimbabue"}
         ZZ{"Región desconocida"}
     }
+    Countries%variant{
+        CD{"Congo (República Democrática del Congo)"}
+        CG{"Congo (República)"}
+        FK{"Islas Malvinas (Islas Falkland)"}
+        MK{"Macedonia (ERYM)"}
+    }
     CountriesShort{
-        GB{"UK"}
+        GB{"RU"}
         HK{"Hong Kong"}
         MO{"Macao"}
         PS{"Palestina"}
         US{"EE. UU."}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
 }

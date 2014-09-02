@@ -11,5 +11,5 @@
  */
 pa_Arab{
     %%Parent{"root"}
-    Version{"2.0.92.75"}
+    Version{"2.1.6.69"}
 }
