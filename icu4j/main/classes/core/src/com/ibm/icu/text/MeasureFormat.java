@@ -743,6 +743,7 @@ public class MeasureFormat extends UFormat {
                     ICUResourceBundle unitsRes = unitTypeRes.getWithFallback(unit.getType());
                     ICUResourceBundle oneUnitRes = unitsRes.getWithFallback(unit.getSubtype());
                     builder.reset();
+                    boolean havePluralItem = false;
                     int len = oneUnitRes.getSize();
                     for (int i = 0; i < len; i++) {
                         UResourceBundle countBundle;
@@ -751,9 +752,18 @@ public class MeasureFormat extends UFormat {
                         } catch (MissingResourceException e) {
                             continue;
                         }
-                        builder.add(countBundle.getKey(), countBundle.getString());
+                        String resKey = countBundle.getKey();
+                        if (resKey.equals("dnam") || resKey.equals("per")) {
+                            continue; // skip display name & per pattern (new in CLDR 26 / ICU 54) for now, not part of plurals
+                        }
+                        havePluralItem = true;
+                        builder.add(resKey, countBundle.getString());
                     }
-                    styleToCountToFormat.put(styleItem, builder.build());
+                    if (havePluralItem) {
+                        // might not have any plural items if countBundle only has "dnam" display name, for instance,
+                        // as with fr unitsNarrow/light/lux in CLDR 26
+                        styleToCountToFormat.put(styleItem, builder.build());
+                    }
                 } catch (MissingResourceException e) {
                     continue;
                 }

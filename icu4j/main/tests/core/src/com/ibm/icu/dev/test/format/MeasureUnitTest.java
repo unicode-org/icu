@@ -400,6 +400,7 @@ public class MeasureUnitTest extends TestFmwk {
         FormatWidth[] styles = new FormatWidth[] {FormatWidth.WIDE, FormatWidth.SHORT};
         int[] numbers = new int[] {1, 7};
         String[] expected = {
+                // "el_GR" 1 wide
                 "1 δευτερόλεπτο",
                 "1 λεπτό",
                 "1 ώρα",
@@ -407,13 +408,15 @@ public class MeasureUnitTest extends TestFmwk {
                 "1 εβδομάδα",
                 "1 μήνας",
                 "1 έτος",
+                // "el_GR" 1 short
                 "1 δευτ.",
                 "1 λεπ.",
                 "1 ώρα",
                 "1 ημέρα",
                 "1 εβδ.",
                 "1 μήν.",
-                "1 έτος",
+                "1 έτ.",	        // year (one)
+                // "el_GR" 7 wide
                 "7 δευτερόλεπτα",
                 "7 λεπτά",
                 "7 ώρες",
@@ -421,13 +424,15 @@ public class MeasureUnitTest extends TestFmwk {
                 "7 εβδομάδες",
                 "7 μήνες",
                 "7 έτη",
+                // "el_GR" 7 short
                 "7 δευτ.",
                 "7 λεπ.",
-                "7 ώρες",
+                "7 ώρ.",		    // hour (other)
                 "7 ημέρες",
                 "7 εβδ.",
                 "7 μήν.",
-                "7 έτη",
+                "7 έτ.",            // year (other)
+                // "el" 1 wide
                 "1 δευτερόλεπτο",
                 "1 λεπτό",
                 "1 ώρα",
@@ -435,13 +440,15 @@ public class MeasureUnitTest extends TestFmwk {
                 "1 εβδομάδα",
                 "1 μήνας",
                 "1 έτος",
+                // "el" 1 short
                 "1 δευτ.",
                 "1 λεπ.",
                 "1 ώρα",
                 "1 ημέρα",
                 "1 εβδ.",
                 "1 μήν.",
-                "1 έτος",
+                "1 έτ.",	        // year (one)
+                // "el" 7 wide
                 "7 δευτερόλεπτα",
                 "7 λεπτά",
                 "7 ώρες",
@@ -449,13 +456,14 @@ public class MeasureUnitTest extends TestFmwk {
                 "7 εβδομάδες",
                 "7 μήνες",
                 "7 έτη",
+                // "el" 7 short
                 "7 δευτ.",
                 "7 λεπ.",
-                "7 ώρες",
+                "7 ώρ.",		    // hour (other)
                 "7 ημέρες",
                 "7 εβδ.",
                 "7 μήν.",
-                "7 έτη"};
+                "7 έτ."};           // year (other
         int counter = 0;
         String formatted;
         for ( int locIndex = 0; locIndex < locales.length; ++locIndex ) {
@@ -516,7 +524,7 @@ public class MeasureUnitTest extends TestFmwk {
                 {ULocale.ENGLISH, FormatWidth.SHORT, "2 mi, 1 ft, 2.3 in"},
                 {ULocale.ENGLISH, FormatWidth.NARROW, "2mi 1\u2032 2.3\u2033"},
                 {russia, FormatWidth.WIDE, "2 \u043C\u0438\u043B\u0438, 1 \u0444\u0443\u0442 \u0438 2,3 \u0434\u044E\u0439\u043C\u0430"},
-                {russia, FormatWidth.SHORT, "2 \u043C\u0438\u043B\u0438, 1 \u0444\u0443\u0442, 2,3 \u0434\u044E\u0439\u043C\u0430"},
+                {russia, FormatWidth.SHORT, "2 \u043C\u0438\u043B\u0438, 1 \u0444\u0443\u0442, 2,3 \u0434\u044E\u0439\u043C."},
                 {russia, FormatWidth.NARROW, "2 \u043C\u0438\u043B\u044C 1 \u0444\u0443\u0442 2,3 \u0434\u044E\u0439\u043C\u0430"},
         };
         for (Object[] row : data) {

@@ -351,7 +351,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "", "", "", "",
 
              "", "1997", "ao\u00FBt", "13", "", "14", "34", "12", "", "mercredi",
-             "", "", "", "", "", "", "", "heure avanc\u00E9e du Pacifique", "", "",
+             "", "", "", "", "", "", "", "heure d\u2019\u00E9t\u00E9 du Pacifique", "", "",
              "", "", "", "", "", "", "", "", "", "",
              "", "", "", "",
 
@@ -409,7 +409,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {"", "13", "mercredi", "", "",
              "", "", "", "14", "",
              "", "", "", "", "",
-             "34", "ao\u00FBt", "", "12", "heure avanc\u00E9e du Pacifique",
+             "34", "ao\u00FBt", "", "12", "heure d\u2019\u00E9t\u00E9 du Pacifique",
              "", "", "1997", ""},
 
             {"PM", "13", "Wed", "2", "225",
@@ -732,7 +732,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-    private static final String GMT_BG = "\u0413\u0440\u0438\u0438\u043D\u0443\u0438\u0447";
+    private static final String GMT_BG = "\u0413\u0440\u0438\u043D\u0443\u0438\u0447";
     private static final String GMT_ZH = "GMT";
     //private static final String GMT_ZH = "\u683C\u6797\u5C3C\u6CBB\u6807\u51C6\u65F6\u95F4";
     //private static final String GMT_BG = "GMT";
@@ -1166,13 +1166,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "hi", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "hi", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "hi", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "IST", "+5:30" },
-        { "hi", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u092D\u093E\u0930\u0924\u0940\u092F \u0938\u092E\u092F", "+5:30" },
+        { "hi", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u092D\u093E\u0930\u0924\u0940\u092F \u092E\u093E\u0928\u0915 \u0938\u092E\u092F", "+5:30" },
         { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30"," +5:30" },
         { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "IST", "+05:30" },
-        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u092D\u093E\u0930\u0924\u0940\u092F \u0938\u092E\u092F", "+5:30" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u092D\u093E\u0930\u0924\u0940\u092F \u092E\u093E\u0928\u0915 \u0938\u092E\u092F", "+5:30" },
         { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "IST", "Asia/Calcutta" },
-        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u092D\u093E\u0930\u0924\u0940\u092F \u0938\u092E\u092F", "Asia/Calcutta" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u092D\u093E\u0930\u0924\u0940\u092F \u092E\u093E\u0928\u0915 \u0938\u092E\u092F", "Asia/Calcutta" },
 
         // ==========
 
@@ -1271,13 +1271,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", GMT_BG+"+05:30", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", GMT_BG+"+5:30", "+5:30" },
-        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u0418\u043d\u0434\u0438\u0439\u0441\u043a\u043e \u0432\u0440\u0435\u043c\u0435", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u0418\u043D\u0434\u0438\u0439\u0441\u043A\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", GMT_BG+"+05:30", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", GMT_BG+"+5:30", "+05:30" },
-        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u0418\u043d\u0434\u0438\u0439\u0441\u043a\u043e \u0432\u0440\u0435\u043c\u0435", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u0418\u043D\u0434\u0438\u0439\u0441\u043A\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u0418\u043D\u0434\u0438\u044F", "Asia/Calcutta" },
-        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u0418\u043d\u0434\u0438\u0439\u0441\u043a\u043e \u0432\u0440\u0435\u043c\u0435", "Asia/Calcutta" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u0418\u043D\u0434\u0438\u0439\u0441\u043A\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "Asia/Calcutta" },
 
     // ==========
 
@@ -1379,13 +1379,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ja", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "ja", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "ja", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+5:30", "+5:30" },
-        { "ja", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u30A4\u30F3\u30C9\u6642\u9593", "+5:30" },
+        { "ja", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u30A4\u30F3\u30C9\u6A19\u6E96\u6642", "+5:30" },
         { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+5:30", "+05:30" },
-        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u30A4\u30F3\u30C9\u6642\u9593", "+5:30" },
+        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u30A4\u30F3\u30C9\u6A19\u6E96\u6642", "+5:30" },
         { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u30A4\u30F3\u30C9\u6642\u9593", "Asia/Calcutta" },
-        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u30A4\u30F3\u30C9\u6642\u9593", "Asia/Calcutta" },
+        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u30A4\u30F3\u30C9\u6A19\u6E96\u6642", "Asia/Calcutta" },
 
     // ==========
     // - We want a locale here that doesn't have anything in the way of translations
@@ -1977,7 +1977,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         TimeZone tz = TimeZone.getTimeZone("PST");
         dfFrench.setTimeZone(tz);
         dfUS.setTimeZone(tz);
-        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00:00:00 heure avanc\u00E9e du Pacifique";
+        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00:00:00 heure d\u2019\u00E9t\u00E9 du Pacifique";
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
         String expectedUS = "Monday, September 15, 1997 at 12:00:00 AM Pacific Daylight Time";
         logln("Date set to : " + testDate);
@@ -2799,8 +2799,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String SV_DATA[] = {
             "yyyy MM dd HH:mm:ss",
 
-            "EEEEEE d MMM y",  "fp", "2013 01 13 0:00:00", "s\u00F6 13 jan 2013", "2013 01 13 0:00:00",
-            "EEEEEE d MMM y",  "fp", "2013 01 16 0:00:00", "on 16 jan 2013",      "2013 01 16 0:00:00",
+            "EEEEEE d MMM y",  "fp", "2013 01 13 0:00:00", "s\u00F6 13 jan. 2013", "2013 01 13 0:00:00",
+            "EEEEEE d MMM y",  "fp", "2013 01 16 0:00:00", "on 16 jan. 2013",      "2013 01 16 0:00:00",
             "EEEEEE d",        "fp", "1970 01 17 0:00:00", "l\u00F6 17",          "1970 01 17 0:00:00",
             "cccccc d",        "fp", "1970 01 17 0:00:00", "L\u00F6 17",          "1970 01 17 0:00:00",
             "cccccc",          "fp", "1970 01 03 0:00:00", "L\u00F6",             "1970 01 03 0:00:00",
@@ -2864,7 +2864,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             String CS_DATA[] = {
                 "yyyy MM dd HH:mm:ss",
 
-                "yyyy LLLLL dd H:mm:ss", "2004 04 10 16:36:31", "2004 d 10 16:36:31",
+                "yyyy LLLLL dd H:mm:ss", "2004 04 10 16:36:31", "2004 4 10 16:36:31",
                 "yyyy MMMMM dd H:mm:ss", "2004 04 10 16:36:31", "2004 4 10 16:36:31",
                 
                 "MMMMM", "1970 01 01 0:00:00", "1",
@@ -2880,18 +2880,18 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "MMMMM", "1970 11 01 0:00:00", "11",
                 "MMMMM", "1970 12 01 0:00:00", "12",
                 
-                "LLLLL", "1970 01 01 0:00:00", "l",
-                "LLLLL", "1970 02 01 0:00:00", "\u00FA",
-                "LLLLL", "1970 03 01 0:00:00", "b",
-                "LLLLL", "1970 04 01 0:00:00", "d",
-                "LLLLL", "1970 05 01 0:00:00", "k",
-                "LLLLL", "1970 06 01 0:00:00", "\u010D",
-                "LLLLL", "1970 07 01 0:00:00", "\u010D",
-                "LLLLL", "1970 08 01 0:00:00", "s",
-                "LLLLL", "1970 09 01 0:00:00", "z",
-                "LLLLL", "1970 10 01 0:00:00", "\u0159",
-                "LLLLL", "1970 11 01 0:00:00", "l",
-                "LLLLL", "1970 12 01 0:00:00", "p",
+                "LLLLL", "1970 01 01 0:00:00", "1",
+                "LLLLL", "1970 02 01 0:00:00", "2",
+                "LLLLL", "1970 03 01 0:00:00", "3",
+                "LLLLL", "1970 04 01 0:00:00", "4",
+                "LLLLL", "1970 05 01 0:00:00", "5",
+                "LLLLL", "1970 06 01 0:00:00", "6",
+                "LLLLL", "1970 07 01 0:00:00", "7",
+                "LLLLL", "1970 08 01 0:00:00", "8",
+                "LLLLL", "1970 09 01 0:00:00", "9",
+                "LLLLL", "1970 10 01 0:00:00", "10",
+                "LLLLL", "1970 11 01 0:00:00", "11",
+                "LLLLL", "1970 12 01 0:00:00", "12",
 
                 "EEEEE", "1970 01 04 0:00:00", "N",
                 "EEEEE", "1970 01 05 0:00:00", "P",
@@ -4085,10 +4085,12 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new MonthPatternItem( "en@calendar=dangi",        DateFormat.LONG,  "Month3bis 2, ren-chen",       "Month4 2, ren-chen",             "Month5 1, ren-chen" ),
             new MonthPatternItem( "en@calendar=dangi",        DateFormat.SHORT, "3bis/2/29",                   "4/2/29",                         "5/1/29" ),
             new MonthPatternItem( "en@calendar=dangi",        -2,               "78x29-3bis-2",                "78x29-4-2",                      "78x29-5-1" ),
-            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.LONG,  "\uC784\uC9C4\uB144 3bis\uC6D4 2\uC77C",
+            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.LONG,  "\uC784\uC9C4\uB144 \uC7243\uC6D4\uC6D4 2\uC77C",   // problem, see cldrbug 7868:
                                                                                 "\uC784\uC9C4\uB144 4\uC6D4 2\uC77C",
                                                                                 "\uC784\uC9C4\uB144 5\uC6D4 1\uC77C" ),
-            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.SHORT, "29. 3bis. 2.",                "29. 4. 2.",                      "29. 5. 1." ),
+            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.SHORT, "29. \uC7243\uC6D4. 2.",    // possible problem, see cldrbug 7868:
+                                                                                "29. 4. 2.",
+                                                                                "29. 5. 1." ),
         };
         //                         style: -1        -2            -3       -4
         final String[] customPatterns = { "y-Ml-d", "G'x'y-Ml-d", "U-M-d", "U MMM d" }; // previously G and l for chinese cal only handled by ChineseDateFormat
@@ -4176,6 +4178,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new TestNonGregoItem( "he@calendar=hebrew", DateFormat.LONG, cafti_he_hebrew_long ),
         };
         for (TestNonGregoItem item: items) {
+            if (item.locale.equals("he@calendar=hebrew") && logKnownIssue("11219", "Skip tests that depend on hebr numbers in the thousands")) {
+                continue;
+            }
             ULocale locale = new ULocale(item.locale);
             DateFormat dfmt = DateFormat.getDateInstance(item.style, locale);
             Calendar cal = dfmt.getCalendar();

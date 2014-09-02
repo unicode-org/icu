@@ -1258,8 +1258,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Date/Time - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_FULL);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("EEEE, d MMMM y HH:mm:ss zzzz")) {
-            errln("FAIL: FULL date/time pattern is " + pattern + " Expected: EEEE, d MMMM y HH:mm:ss zzzz");
+        if (!pattern.equals("EEEE, d MMMM y 'at' HH:mm:ss zzzz")) {
+            errln("FAIL: FULL date/time pattern is " + pattern + " Expected: EEEE, d MMMM y 'at' HH:mm:ss zzzz");
         }
 
         // Invalid style

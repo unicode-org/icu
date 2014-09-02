@@ -65,15 +65,15 @@ public class IBMCalendarTest extends CalendarTest {
                 2000, Calendar.MARCH, 20,  0,  0, 0, // Mon 00:00
                 2000, Calendar.MARCH, 20,  8,  0, 0, // Mon 08:00
             },
-            new Locale("ar", "OM"), new int[] { // Thursday:Friday
+            new Locale("ar", "OM"), new int[] { // Friday:Saturday
                 2000, Calendar.MARCH, 15, 23,  0, 0, // Wed 23:00
                 2000, Calendar.MARCH, 16,  0, -1, 0, // Wed 23:59:59.999
-                2000, Calendar.MARCH, 16,  0,  0, 1, // Thu 00:00
-                2000, Calendar.MARCH, 16, 15,  0, 1, // Thu 15:00
+                2000, Calendar.MARCH, 16,  0,  0, 0, // Thu 00:00
+                2000, Calendar.MARCH, 16, 15,  0, 0, // Thu 15:00
                 2000, Calendar.MARCH, 17, 23,  0, 1, // Fri 23:00
                 2000, Calendar.MARCH, 18,  0, -1, 1, // Fri 23:59:59.999
-                2000, Calendar.MARCH, 18,  0,  0, 0, // Sat 00:00
-                2000, Calendar.MARCH, 18,  8,  0, 0, // Sat 08:00
+                2000, Calendar.MARCH, 18,  0,  0, 1, // Sat 00:00
+                2000, Calendar.MARCH, 18,  8,  0, 1, // Sat 08:00
             },
         };
 
@@ -85,11 +85,11 @@ public class IBMCalendarTest extends CalendarTest {
                 Calendar.SATURDAY, Calendar.WEEKEND,
                 Calendar.SUNDAY,   Calendar.WEEKEND,
             },
-            new Locale("ar", "OM"), new int[] { // Thursday:Friday
+            new Locale("ar", "OM"), new int[] { // Friday:Saturday
                 Calendar.WEDNESDAY,Calendar.WEEKDAY,
-                Calendar.SATURDAY, Calendar.WEEKDAY,
-                Calendar.THURSDAY, Calendar.WEEKEND,
+                Calendar.THURSDAY, Calendar.WEEKDAY,
                 Calendar.FRIDAY,   Calendar.WEEKEND,
+                Calendar.SATURDAY, Calendar.WEEKEND,
             },
             new Locale("hi", "IN"), new int[] { // Sunday only
                 Calendar.MONDAY,   Calendar.WEEKDAY,

@@ -2989,8 +2989,8 @@ public class ULocaleTest extends TestFmwk {
                     "it_SM"
                 }, {
                     "und_SN",
-                    "fr_Latn_SN",
-                    "fr_SN"
+                    "wo_Latn_SN",
+                    "wo"
                 }, {
                     "und_SO",
                     "so_Latn_SO",
@@ -3101,8 +3101,8 @@ public class ULocaleTest extends TestFmwk {
                     "uz"
                 }, {
                     "und_VA",
-                    "la_Latn_VA",
-                    "la"
+                    "it_Latn_VA",
+                    "it_VA"
                 }, {
                     "und_VE",
                     "es_Latn_VE",

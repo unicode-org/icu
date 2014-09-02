@@ -61,7 +61,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
         SimpleDateFormat format = new SimpleDateFormat(gen.getBestPattern("MMMddHmm"), locale);
         format.setTimeZone(zone);
-        assertEquals("simple format: MMMddHmm", "14. Okt. 08:58", format.format(sampleDate)); // (fixed expected result per ticket 6872<-7180)
+        assertEquals("simple format: MMMddHmm", "14. Okt., 08:58", format.format(sampleDate));
         // (a generator can be built from scratch, but that is not a typical use case)
 
         // modify the generator by adding patterns
@@ -69,18 +69,18 @@ public class DateTimeGeneratorTest extends TestFmwk {
         gen.addPattern("d'. von' MMMM", true, returnInfo); 
         // the returnInfo is mostly useful for debugging problem cases
         format.applyPattern(gen.getBestPattern("MMMMdHmm"));
-        assertEquals("modified format: MMMdHmm", "14. von Oktober 08:58", format.format(sampleDate)); // (fixed expected result per ticket 6872<-7180)
+        assertEquals("modified format: MMMdHmm", "14. von Oktober, 08:58", format.format(sampleDate));
 
         // get a pattern and modify it
         format = (SimpleDateFormat)DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locale);
         format.setTimeZone(zone);
         String pattern = format.toPattern();
-        assertEquals("full-date", "Donnerstag, 14. Oktober 1999 08:58:59 Mitteleurop\u00E4ische Sommerzeit", format.format(sampleDate));
+        assertEquals("full-date", "Donnerstag, 14. Oktober 1999 um 08:58:59 Mitteleurop\u00E4ische Sommerzeit", format.format(sampleDate));
 
         // modify it to change the zone.
         String newPattern = gen.replaceFieldTypes(pattern, "vvvv");
         format.applyPattern(newPattern);
-        assertEquals("full-date: modified zone", "Donnerstag, 14. Oktober 1999 08:58:59 Mitteleurop\u00E4ische Zeit", format.format(sampleDate));
+        assertEquals("full-date: modified zone", "Donnerstag, 14. Oktober 1999 um 08:58:59 Mitteleurop\u00E4ische Zeit", format.format(sampleDate));
         
         // add test of basic cases
 
@@ -360,7 +360,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "enero de 1999"},
-        new String[] {"MMMEd", "mi\u00E9. 13 de ene."},
+        new String[] {"MMMEd", "mi\u00E9., 13 de ene."},
         new String[] {"Ed", "mi\u00E9. 13"},
         new String[] {"jmmssSSS", "23:58:59,123"},
         new String[] {"JJmm", "23:58"},
@@ -392,7 +392,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "1\u670813\u65E5"},
         new String[] {"MMMMd", "1\u670813\u65E5"},
-        new String[] {"yQQQ", "\u5E73\u6210 11 Q1"},
+        new String[] {"yQQQ", "\u5E73\u621011/Q1"},
         new String[] {"hhmm", "\u5348\u5F8C11:58"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
@@ -404,7 +404,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"JJmm", "23:58"},
 
         new ULocale("zh_Hans_CN"),
-        new String[] {"yM", "1999/1"},
+        new String[] {"yM", "1999\u5E741\u6708"},
         new String[] {"yMMM", "1999\u5E741\u6708"}, // (fixed expected result per ticket 6872<-6626)
         new String[] {"yMd", "1999/1/13"},
         new String[] {"yMMMd", "1999\u5E741\u670813\u65E5"}, // (fixed expected result per ticket 6872<-6626)
@@ -443,7 +443,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
         new ULocale("ru"),
         new String[] {"yM", "01.1999"},
-        new String[] {"yMMM", "\u042F\u043D\u0432. 1999"},
+        new String[] {"yMMM", "\u044F\u043D\u0432. 1999"},
         new String[] {"yMd", "13.01.1999"},
         new String[] {"yMMMd", "13 \u044F\u043D\u0432. 1999 \u0433."},
         new String[] {"Md", "13.01"},
@@ -454,7 +454,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
-        new String[] {"yyyyMMMM", "\u042F\u043D\u0432\u0430\u0440\u044C 1999"},
+        new String[] {"yyyyMMMM", "\u044F\u043D\u0432\u0430\u0440\u044C 1999"},
         new String[] {"MMMEd", "\u0421\u0440, 13 \u044F\u043D\u0432."},
         new String[] {"Ed", "\u0421\u0440, 13"},
         new String[] {"jmmssSSS", "23:58:59,123"},

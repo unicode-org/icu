@@ -686,9 +686,8 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 errln("Could not get English localized language for " + locales[i]);
             }
             if(!hasLocalizedCountryFor(locales[i], locales[i]) &&
-                    (locales[i].getLanguage().compareTo("ti") != 0) && // TODO: restore test for ti_* when cldrbug 3058 is fixed
-                    (locales[i].getBaseName().compareTo("nl_CW") != 0) && // TODO: restore test for nl_CW when cldrbug 4306 is fixed
-                    (locales[i].getBaseName().compareTo("nl_SX") != 0) ){ // TODO: restore test for nl_SX when cldrbug 4306 is fixed
+                    !(locales[i].getLanguage().equals("ti") || // TODO: restore test for ti_* when cldrbug 3058 is fixed
+                    ((locales[i].getBaseName().equals("sah_RU") || locales[i].getBaseName().equals("smn_FI")) && logKnownIssue("cldrbug:7872", "No localized region name for sah_RU, smn_FI")))) {
                 errln("Could not get native localized country for " + locales[i]);
                 hasLocalizedCountryFor(locales[i], locales[i]);
             }
@@ -867,7 +866,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
    
     public void TestLoadingStatus(){
         ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "yi_IL");
-        assertDefaultLoadingStatus("base/yi_IL", bundle.getLoadingStatus());
+        assertFallbackLoadingStatus("base/yi_IL", bundle.getLoadingStatus());
 
         bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "eo_DE");
         assertFallbackLoadingStatus("base/eo_DE", bundle.getLoadingStatus());

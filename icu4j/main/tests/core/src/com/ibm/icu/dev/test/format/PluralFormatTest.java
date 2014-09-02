@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -76,7 +76,7 @@ public class PluralFormatTest extends TestFmwk {
   }
   
   public void TestSingular1Locales() {
-    String localeIDs = "bem,da,de,el,en,eo,es,et,fi,fo,he,it,nb,nl,nn,no,pt,pt_PT,sv,af,bg,ca,eu,fur,fy,ha,ku,lb,ml," +
+    String localeIDs = "bem,da,de,el,en,eo,es,et,fi,fo,he,it,nb,nl,nn,no,pt_PT,sv,af,bg,ca,eu,fur,fy,ha,ku,lb,ml," +
         "nah,ne,om,or,pap,ps,so,sq,sw,ta,te,tk,ur,mn,gsw,rm";
     String testPattern = "one{one} other{other}";
     Map changes = new HashMap();
@@ -87,7 +87,7 @@ public class PluralFormatTest extends TestFmwk {
   }
   
   public void TestSingular01Locales() {
-    String localeIDs = "ff,fr,kab,gu,mr,pa,zu,bn";
+    String localeIDs = "ff,fr,kab,gu,mr,pa,pt,zu,bn";
     String testPattern = "one{one} other{other}";
     Map changes = new HashMap();
     changes.put(new Integer(0), "one");
