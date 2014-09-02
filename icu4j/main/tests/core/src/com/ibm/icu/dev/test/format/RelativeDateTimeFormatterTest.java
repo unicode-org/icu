@@ -320,9 +320,9 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
     
     public void TestRelativeDateWithQuantitySr() {
         Object[][] data = {
-                {0.0, Direction.NEXT, RelativeUnit.MONTHS, "за 0 месеци"},
-                {1.2, Direction.NEXT, RelativeUnit.MONTHS, "за 1,2 месеца"},
-                {21.0, Direction.NEXT, RelativeUnit.MONTHS, "за 21 месец"},      
+                {0.0, Direction.NEXT, RelativeUnit.MONTHS, "\u0437\u0430 0 \u043C\u0435\u0441\u0435\u0446\u0438"},
+                {1.2, Direction.NEXT, RelativeUnit.MONTHS, "\u0437\u0430 1,2 \u043C\u0435\u0441\u0435\u0446\u0430"},
+                {21.0, Direction.NEXT, RelativeUnit.MONTHS, "\u0437\u0430 21 \u043C\u0435\u0441\u0435\u0446"},      
         };
         RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(new ULocale("sr"));
         for (Object[] row : data) {
@@ -334,9 +334,9 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
     
     public void TestRelativeDateWithQuantitySrFallback() {
         Object[][] data = {
-                {0.0, Direction.NEXT, RelativeUnit.MONTHS, "за 0 месеци"},
-                {1.2, Direction.NEXT, RelativeUnit.MONTHS, "за 1,2 месеца"},
-                {21.0, Direction.NEXT, RelativeUnit.MONTHS, "за 21 месец"},      
+                {0.0, Direction.NEXT, RelativeUnit.MONTHS, "\u0437\u0430 0 \u043C."},
+                {1.2, Direction.NEXT, RelativeUnit.MONTHS, "\u0437\u0430 1,2 \u043C."},
+                {21.0, Direction.NEXT, RelativeUnit.MONTHS, "\u0437\u0430 21 \u043C."},      
         };
         RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(
                 new ULocale("sr"),

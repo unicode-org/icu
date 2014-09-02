@@ -250,6 +250,9 @@ public class MeasureUnit implements Serializable {
                 for ( int index = 0; index < size; ++index) {
                     UResourceBundle unitsRes = unitsTypeRes.get(index);
                     String type = unitsRes.getKey();
+                    if (type.equals("compound")) {
+                        continue; // special type, does not have any unit plurals
+                    }
                     int unitsSize = unitsRes.getSize();
                     for ( int index2 = 0; index2 < unitsSize; ++index2) {
                         ICUResourceBundle unitNameRes = (ICUResourceBundle)unitsRes.get(index2);

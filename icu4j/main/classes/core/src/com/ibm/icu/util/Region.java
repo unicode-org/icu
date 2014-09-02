@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2013, International Business Machines Corporation        *
+ * Copyright (C) 2011-2014, International Business Machines Corporation        *
  * All Rights Reserved.                                                        *
  *******************************************************************************
  */
@@ -287,8 +287,11 @@ public class Region implements Comparable<Region> {
         for ( int i = 0 ; i < territoryContainment.getSize(); i++ ) {
             UResourceBundle mapping = territoryContainment.get(i);
             String parent = mapping.getKey();
+            if (parent.equals("containedGroupings") || parent.equals("deprecated")) {
+                continue; // handle new pseudo-parent types added in ICU data per cldrbug 7808; for now just skip.
+                // #11232 is to do something useful with these.
+            }
             Region parentRegion = regionIDMap.get(parent);
-
             for ( int j = 0 ; j < mapping.getSize(); j++ ) {
                 String child = mapping.getString(j);
                 Region childRegion = regionIDMap.get(child);
