@@ -20,7 +20,7 @@ fil{
         colNormalization{"Normalized na Pag-uuri-uri"}
         colNumeric{"Numeric na Pag-uuri-uri"}
         colStrength{"Lakas ng Pag-uuri-uri"}
-        collation{"Ayos ng Pag-uuri-uri"}
+        collation{"Pagkakasunud-sunod ng Ayos"}
         currency{"Pera"}
         numbers{"Mga Numero"}
         timezone{"Time Zone"}
@@ -32,37 +32,49 @@ fil{
         ab{"Abkhazian"}
         ach{"Acoli"}
         af{"Afrikaans"}
+        agq{"Aghem"}
         ak{"Akan"}
         am{"Amharic"}
-        ar{"Arabic"}
-        ar_001{"Modern Standard Arabic"}
+        ar{"Arabe"}
+        ar_001{"Modernong Karaniwang Arabe"}
+        arn{"Mapuche"}
         as{"Assamese"}
+        asa{"Asu"}
         ay{"Aymara"}
         az{"Azerbaijani"}
+        ba{"Bashkir"}
         be{"Belarusian"}
         bem{"Bemba"}
+        bez{"Bena"}
         bg{"Bulgarian"}
+        bm{"Bambara"}
         bn{"Bengali"}
         bo{"Tibetan"}
         br{"Breton"}
+        brx{"Bodo"}
         bs{"Bosnian"}
         ca{"Catalan"}
+        cgg{"Chiga"}
         chr{"Cherokee"}
         ckb{"Sorani Kurdish"}
         co{"Corsican"}
         cs{"Czech"}
         cy{"Welsh"}
         da{"Danish"}
+        dav{"Taita"}
         de{"German"}
-        de_AT{"Austrian German"}
-        de_CH{"Swiss High German"}
+        dje{"Zarma"}
+        dsb{"Lower Sorbian"}
+        dua{"Duala"}
         dv{"Divehi"}
+        dyo{"Jola-Fonyi"}
         dz{"Dzongkha"}
+        ebu{"Embu"}
         ee{"Ewe"}
         efi{"Efik"}
         el{"Greek"}
         en{"Ingles"}
-        en_AU{"Ingles sa Australia"}
+        en_AU{"Ingles ng Australya"}
         en_CA{"Ingles sa Canada"}
         en_GB{"Ingles (UK)"}
         en_US{"Ingles (US)"}
@@ -84,16 +96,20 @@ fil{
         fy{"Western Frisian"}
         ga{"Irish"}
         gaa{"Ga"}
+        gag{"Gagauz"}
         gd{"Scots Gaelic"}
         gl{"Galician"}
         gn{"Guarani"}
         gsw{"Swiss German"}
         gu{"Gujarati"}
+        guz{"Gusii"}
+        gv{"Manx"}
         ha{"Hausa"}
         haw{"Hawaiian"}
         he{"Hebrew"}
         hi{"Hindi"}
         hr{"Croatian"}
+        hsb{"Upper Sorbian"}
         ht{"Haitian"}
         hu{"Hungarian"}
         hy{"Armenian"}
@@ -101,46 +117,78 @@ fil{
         id{"Indonesian"}
         ie{"Interlingue"}
         ig{"Igbo"}
+        ii{"Sichuan Yi"}
         is{"Icelandic"}
         it{"Italian"}
+        iu{"Inuktitut"}
         ja{"Japanese"}
+        jgo{"Ngomba"}
+        jmc{"Machame"}
         jv{"Javanese"}
         ka{"Georgian"}
+        kab{"Kabyle"}
+        kam{"Kamba"}
+        kde{"Makonde"}
+        kea{"Kabuverdianu"}
         kg{"Kongo"}
+        khq{"Koyra Chiini"}
+        ki{"Kikuyu"}
         kk{"Kazakh"}
+        kl{"Kalaallisut"}
+        kln{"Kalenjin"}
         km{"Khmer"}
         kn{"Kannada"}
         ko{"Korean"}
+        koi{"Komi-Permyak"}
+        kok{"Konkani"}
         ks{"Kashmiri"}
+        ksb{"Shambala"}
+        ksf{"Bafia"}
         ku{"Kurdish"}
+        kw{"Cornish"}
         ky{"Kirghiz"}
         la{"Latin"}
+        lag{"Langi"}
         lb{"Luxembourgish"}
         lg{"Ganda"}
+        lkt{"Lakota"}
         ln{"Lingala"}
         lo{"Lao"}
         loz{"Lozi"}
         lt{"Lithuanian"}
+        lu{"Luba-Katanga"}
         lua{"Luba-Lulua"}
+        luo{"Luo"}
+        luy{"Luyia"}
         lv{"Latvian"}
+        mas{"Masai"}
+        mer{"Meru"}
         mfe{"Morisyen"}
         mg{"Malagasy"}
+        mgh{"Makhuwa-Meetto"}
+        mgo{"Meta’"}
         mi{"Maori"}
         mk{"Macedonian"}
         ml{"Malayalam"}
         mn{"Mongolian"}
+        moh{"Mohawk"}
         mr{"Marathi"}
         ms{"Malay"}
         mt{"Maltese"}
+        mua{"Mundang"}
         my{"Burmese"}
+        naq{"Nama"}
         nb{"Norwegian Bokmal"}
         nd{"North Ndebele"}
         ne{"Nepali"}
         nl{"Dutch"}
         nl_BE{"Flemish"}
+        nmg{"Kwasio"}
         nn{"Norwegian Nynorsk"}
         no{"Norwegian"}
+        nqo{"N’Ko"}
         nso{"Northern Sotho"}
+        nus{"Nuer"}
         ny{"Nyanja"}
         nyn{"Nyankole"}
         oc{"Occitan"}
@@ -150,24 +198,37 @@ fil{
         pa{"Punjabi"}
         pl{"Polish"}
         ps{"Pashto"}
-        pt{"Portuguese"}
+        pt{"Portuges"}
         pt_BR{"Brazilian Portuguese"}
         pt_PT{"European Portuguese"}
         qu{"Quechua"}
+        quc{"Kʼicheʼ"}
         rm{"Romansh"}
         rn{"Rundi"}
         ro{"Romanian"}
+        ro_MD{"Moldavian"}
+        rof{"Rombo"}
         ru{"Russian"}
         rw{"Kinyarwanda"}
+        rwk{"Rwa"}
         sa{"Sanskrit"}
+        saq{"Samburu"}
+        sbp{"Sangu"}
         sd{"Sindhi"}
         se{"Northern Sami"}
+        seh{"Sena"}
+        ses{"Koyraboro Senni"}
         sg{"Sango"}
         sh{"Serbo-Croatian"}
+        shi{"Tachelhit"}
         si{"Sinhala"}
         sk{"Slovak"}
         sl{"Slovenian"}
         sm{"Samoan"}
+        sma{"Southern Sami"}
+        smj{"Lule Sami"}
+        smn{"Inari Sami"}
+        sms{"Skolt Sami"}
         sn{"Shona"}
         so{"Somali"}
         sq{"Albanian"}
@@ -178,8 +239,10 @@ fil{
         sv{"Swedish"}
         sw{"Swahili"}
         swb{"Comorian"}
+        swc{"Swahili (Congo)"}
         ta{"Tamil"}
         te{"Telugu"}
+        teo{"Teso"}
         tet{"Tetum"}
         tg{"Tajik"}
         th{"Thai"}
@@ -193,25 +256,33 @@ fil{
         ts{"Tsonga"}
         tt{"Tatar"}
         tum{"Tumbuka"}
+        twq{"Tasawaq"}
         ty{"Tahitian"}
+        tzm{"Tamazight ng Gitnang Atlas"}
         ug{"Uyghur"}
         uk{"Ukranian"}
         und{"Hindi Kilalang Wika"}
         ur{"Urdu"}
         uz{"Uzbek"}
+        vai{"Vai"}
         ve{"Venda"}
         vi{"Vietnamese"}
+        vun{"Vunjo"}
         wo{"Wolof"}
         xh{"Xhosa"}
+        xog{"Soga"}
         yi{"Yiddish"}
         yo{"Yoruba"}
         yue{"Cantonese"}
         zgh{"Standard Moroccan Tamazight"}
         zh{"Chinese"}
         zh_Hans{"Simplified Chinese"}
-        zh_Hant{"Traditional Chinese"}
         zu{"Zulu"}
-        zxx{"Walang nilalamang linguistic"}
+        zxx{"Walang nilalaman na ukol sa wika"}
+    }
+    Languages%variant{
+        ps{"Pushto"}
+        ug{"Uighur"}
     }
     LanguagesShort{
         az{"Azeri"}
@@ -255,26 +326,31 @@ fil{
         Thai{"Thai"}
         Tibt{"Tibetan"}
         Zsym{"Mga Simbolo"}
-        Zxxx{"Unwritten"}
-        Zyyy{"Common"}
+        Zxxx{"Hindi Nakasulat"}
+        Zyyy{"Karaniwan"}
         Zzzz{"Hindi Kilalang Script"}
     }
     Scripts%stand-alone{
         Hans{"Simplified Han"}
         Hant{"Traditional Han"}
     }
+    Scripts%variant{
+        Arab{"Perso-Arabic"}
+    }
     Types{
         calendar{
             buddhist{"Kalendaryo ng Buddhist"}
             chinese{"Kalendaryong Chinese"}
             coptic{"Coptic Calendar"}
-            ethiopic{"Kalendaryong Ethiopic"}
+            dangi{"Dangi na Kalendaryo"}
+            ethiopic{"Kalendaryo ng Ethiopia"}
             ethiopic-amete-alem{"Kalendaryong Ethiopic Amete Alem"}
-            gregorian{"Kalendaryong Gregorian"}
-            hebrew{"Hebrew Calendar"}
+            gregorian{"Gregorian na Kalendaryo"}
+            hebrew{"Hebrew na Kalendaryo"}
             indian{"Pambansang Kalendaryong Indian"}
             islamic{"Kalendaryong Islamic"}
             islamic-civil{"Kalendaryong Islamic-Civil"}
+            iso8601{"ISO-8601 na Kalendaryo"}
             japanese{"Kalendaryong Japanese"}
             persian{"Kalendaryong Persian"}
             roc{"Kalendaryong Minguo"}
@@ -318,58 +394,58 @@ fil{
         collation{
             big5han{"Pagkakasunod-sunod ng Pag-uuri ng Tradisyunal na Chinese - Big5"}
             dictionary{"Pagkakasunud-sunod ng Pag-uuri ng Diksyunaryo"}
-            ducet{"Default na Ayos ng Pag-uuri ng Unicode"}
+            ducet{"Default na Pagkakasunud-sunod ng Ayos ng Unicode"}
             gb2312han{"Pagkakasunud-sunod ng Pag-uuri ng Pinasimpleng Chinese - GB2312"}
             phonebook{"Pagkakasunud-sunod ng Pag-uuri ng Phonebook"}
             phonetic{"Phonetic na Ayos ng Pag-uuri-uri"}
             pinyin{"Pagkakasunud-sunod ng Pag-uuri ng Pinyin"}
             reformed{"Pagkakasunud-sunod ng Pag-uuri ng Na-reform"}
-            search{"Paghahanap na May Layuning Pangkalahatan"}
+            search{"Pangkalahatang Paghahanap"}
             searchjl{"Maghanap Ayon sa Unang Katinig ng Hangul"}
-            standard{"Karaniwang Ayos ng Pag-uuri-uri"}
+            standard{"Karaniwang Pagkakasunud-sunod ng Ayos"}
             stroke{"Pagkakasunud-sunod ng Pag-uuri ng Stroke"}
             traditional{"Tradisyunal na Pagkakasunud-sunod ng Pag-uuri"}
             unihan{"Pagkakasunud-sunod ng Pag-uuri ng Radical-Stroke"}
         }
         numbers{
-            arab{"Arabic-Indic Digits"}
-            arabext{"Extended Arabic-Indic Digits"}
-            armn{"Armenian Numerals"}
+            arab{"Arabic-Indic na Mga Digit"}
+            arabext{"Extendend Arabic-Indic na Mga Digit"}
+            armn{"Armenian na Mga Numeral"}
             armnlow{"Armenian Lowercase Numerals"}
-            beng{"Bengali Digits"}
-            deva{"Devanagari Digits"}
-            ethi{"Ethiopic Numerals"}
+            beng{"Bengali na Mga Digit"}
+            deva{"Devanagari na Mga Digit"}
+            ethi{"Mga Numeral ng Ethiopia"}
             finance{"Mga Pampinansyang Numeral"}
             fullwide{"Full Width Digits"}
-            geor{"Georgian Numerals"}
-            grek{"Greek Numerals"}
+            geor{"Georgian na Mga Numeral"}
+            grek{"Greek na Mga Numeral"}
             greklow{"Greek Lowercase Numerals"}
-            gujr{"Gujarati Digits"}
-            guru{"Gurmukhi Digits"}
-            hanidec{"Chinese Decimal Numerals"}
-            hans{"Simplified Chinese Numerals"}
-            hansfin{"Simplified Chinese Financial Numerals"}
-            hant{"Traditional Chinese Numerals"}
-            hantfin{"Traditional Chinese Financial Numerals"}
-            hebr{"Hebrew Numerals"}
-            jpan{"Japanese Numerals"}
-            jpanfin{"Japanese Financial Numerals"}
-            khmr{"Khmer Digits"}
-            knda{"Kannada Digits"}
-            laoo{"Lao Digits"}
+            gujr{"Gujarati na Mga Digit"}
+            guru{"Gurmukhi na Mga Digit"}
+            hanidec{"Chinese Decimal na Mga Numeral"}
+            hans{"Simplified Chinese na Mga Numeral"}
+            hansfin{"Simplified Chinese na Mga Numeral para sa Pananalapi"}
+            hant{"Traditional Chinese na Mga Numeral"}
+            hantfin{"Traditional Chinese na Mga Numeral para sa Pananalapi"}
+            hebr{"Hebrew na Mga Numeral"}
+            jpan{"Japanese na Mga Numeral"}
+            jpanfin{"Japanese na Mga Numeral para sa Pananalapi"}
+            khmr{"Khmer na Mga Digit"}
+            knda{"Kannada na Mga Digit"}
+            laoo{"Lao na Mga Digit"}
             latn{"Western Digits"}
-            mlym{"Malayalam Digits"}
+            mlym{"Malayalam na Mga Digit"}
             mong{"Mongolian Digits"}
-            mymr{"Myanmar Digits"}
+            mymr{"Myanmar na Mga Digit"}
             native{"Mga Native na Digit"}
-            orya{"Oriya Digits"}
-            roman{"Roman Numerals"}
+            orya{"Oriya na Mga Digit"}
+            roman{"Mga Roman Numeral"}
             romanlow{"Roman Lowercase Numerals"}
-            taml{"Tamil Numerals"}
-            tamldec{"Tamil Digits"}
-            telu{"Telugu Digits"}
-            thai{"Thai Digits"}
-            tibt{"Tibetan Digits"}
+            taml{"Tamil na Mga Numeral"}
+            tamldec{"Tamil na Mga Digit"}
+            telu{"Telugu na Mga Digit"}
+            thai{"Thai na Mga Digit"}
+            tibt{"Tibetan na Mga Digit"}
             traditional{"Mga Tradisyunal na Numeral"}
             vaii{"Mga Vai na Digit"}
         }
@@ -378,7 +454,7 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Wika: {0}"}
         script{"Script: {0}"}

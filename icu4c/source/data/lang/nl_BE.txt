@@ -8,7 +8,6 @@
 // ***************************************************************************
 nl_BE{
     Languages{
-        lv{"Lets"}
         oc{"Occitaans; Provençaals"}
         sh{"Servo-Kroatisch"}
     }
@@ -17,5 +16,5 @@ nl_BE{
             traditional{"Traditioneel"}
         }
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.8.19"}
 }

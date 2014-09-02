@@ -38,7 +38,7 @@ nn{
             }
         }
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.7.72"}
     calendar{
         generic{
             DateTimePatterns{
@@ -199,7 +199,7 @@ nn{
                 "EEEE d. MMMM y",
                 "d. MMMM y",
                 "d. MMM y",
-                "dd.MM.yy",
+                "dd.MM.y",
                 "{1}, {0}",
                 "{1} {0}",
                 "{1} 'kl.' {0}",

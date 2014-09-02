@@ -31,6 +31,14 @@
             errln("%s:%d: Test failure.  status=%s", __FILE__, __LINE__, u_errorName(status)); \
         } return;}}
 
+#define TEST_CHECK_STATUS_LOCALE(testlocale) { \
+    if (U_FAILURE(status)) { \
+        if (status == U_MISSING_RESOURCE_ERROR) { \
+            dataerrln("%s:%d: Test failure, locale %s.  status=%s", __FILE__, __LINE__, testlocale, u_errorName(status)); \
+        } else { \
+            errln("%s:%d: Test failure, locale %s.  status=%s", __FILE__, __LINE__, testlocale, u_errorName(status)); \
+        } return;}}
+
 #define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);};}
 
 // *****************************************************************************
@@ -374,12 +382,12 @@ CalendarTest::TestGenericAPI()
 
     SimpleTimeZone *zone = new SimpleTimeZone(tzoffset, tzid);
     Calendar *cal = Calendar::createInstance(zone->clone(), status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    if (failure(status, "Calendar::createInstance #1", TRUE)) return;
 
     if (*zone != cal->getTimeZone()) errln("FAIL: Calendar::getTimeZone failed");
 
     Calendar *cal2 = Calendar::createInstance(cal->getTimeZone(), status);
-    if (failure(status, "Calendar::createInstance")) return;
+    if (failure(status, "Calendar::createInstance #2")) return;
     cal->setTime(when, status);
     cal2->setTime(when, status);
     if (failure(status, "Calendar::setTime")) return;
@@ -524,17 +532,20 @@ CalendarTest::TestGenericAPI()
         for (i=0; i<count; ++i)
         {
             cal = Calendar::createInstance(loc[i], status);
-            if (failure(status, "Calendar::createInstance")) return;
+            if (U_FAILURE(status)) {
+                errcheckln(status, UnicodeString("FAIL: Calendar::createInstance #3, locale ") +  loc[i].getName() + " , error " + u_errorName(status));
+                return;
+            }
             delete cal;
         }
     }
 
     cal = Calendar::createInstance(TimeZone::createDefault(), Locale::getEnglish(), status);
-    if (failure(status, "Calendar::createInstance")) return;
+    if (failure(status, "Calendar::createInstance #4")) return;
     delete cal;
 
     cal = Calendar::createInstance(*zone, Locale::getEnglish(), status);
-    if (failure(status, "Calendar::createInstance")) return;
+    if (failure(status, "Calendar::createInstance #5")) return;
     delete cal;
 
     GregorianCalendar *gc = new GregorianCalendar(*zone, status);
@@ -576,7 +587,7 @@ CalendarTest::TestGenericAPI()
 
     /* Code coverage for Calendar class. */
     cal = Calendar::createInstance(status);
-    if (failure(status, "Calendar::createInstance")) {
+    if (failure(status, "Calendar::createInstance #6")) {
         return;
     }else {
         ((Calendar *)cal)->roll(UCAL_HOUR, (int32_t)100, status);
@@ -590,7 +601,7 @@ CalendarTest::TestGenericAPI()
 
     status = U_ZERO_ERROR;
     cal = Calendar::createInstance(Locale("he_IL@calendar=hebrew"), status);
-    if (failure(status, "Calendar::createInstance")) {
+    if (failure(status, "Calendar::createInstance #7")) {
         return;
     } else {
         cal->roll(Calendar::MONTH, (int32_t)100, status);
@@ -2968,7 +2979,7 @@ void CalendarTest::TestWeekData() {
         status = U_ZERO_ERROR;
         LocalPointer<Calendar>  cal1(Calendar::createInstance(LOCALE_PAIRS[i], status));
         LocalPointer<Calendar>  cal2(Calendar::createInstance(LOCALE_PAIRS[i + 1], status));
-        TEST_CHECK_STATUS;
+        TEST_CHECK_STATUS_LOCALE(LOCALE_PAIRS[i]);
 
         // First day of week
         UCalendarDaysOfWeek dow1 = cal1->getFirstDayOfWeek(status);

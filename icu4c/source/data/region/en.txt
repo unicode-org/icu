@@ -27,7 +27,7 @@ en{
         029{"Caribbean"}
         030{"Eastern Asia"}
         034{"Southern Asia"}
-        035{"South-Eastern Asia"}
+        035{"Southeast Asia"}
         039{"Southern Europe"}
         053{"Australasia"}
         054{"Melanesia"}
@@ -45,7 +45,7 @@ en{
         AD{"Andorra"}
         AE{"United Arab Emirates"}
         AF{"Afghanistan"}
-        AG{"Antigua and Barbuda"}
+        AG{"Antigua & Barbuda"}
         AI{"Anguilla"}
         AL{"Albania"}
         AM{"Armenia"}
@@ -59,7 +59,7 @@ en{
         AW{"Aruba"}
         AX{"Åland Islands"}
         AZ{"Azerbaijan"}
-        BA{"Bosnia and Herzegovina"}
+        BA{"Bosnia & Herzegovina"}
         BB{"Barbados"}
         BD{"Bangladesh"}
         BE{"Belgium"}
@@ -68,7 +68,7 @@ en{
         BH{"Bahrain"}
         BI{"Burundi"}
         BJ{"Benin"}
-        BL{"Saint Barthélemy"}
+        BL{"St. Barthélemy"}
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
@@ -107,7 +107,7 @@ en{
         DM{"Dominica"}
         DO{"Dominican Republic"}
         DZ{"Algeria"}
-        EA{"Ceuta and Melilla"}
+        EA{"Ceuta & Melilla"}
         EC{"Ecuador"}
         EE{"Estonia"}
         EG{"Egypt"}
@@ -167,7 +167,7 @@ en{
         KH{"Cambodia"}
         KI{"Kiribati"}
         KM{"Comoros"}
-        KN{"Saint Kitts and Nevis"}
+        KN{"St. Kitts & Nevis"}
         KP{"North Korea"}
         KR{"South Korea"}
         KW{"Kuwait"}
@@ -175,7 +175,7 @@ en{
         KZ{"Kazakhstan"}
         LA{"Laos"}
         LB{"Lebanon"}
-        LC{"Saint Lucia"}
+        LC{"St. Lucia"}
         LI{"Liechtenstein"}
         LK{"Sri Lanka"}
         LR{"Liberia"}
@@ -188,7 +188,7 @@ en{
         MC{"Monaco"}
         MD{"Moldova"}
         ME{"Montenegro"}
-        MF{"Saint Martin"}
+        MF{"St. Martin"}
         MG{"Madagascar"}
         MH{"Marshall Islands"}
         MK{"Macedonia"}
@@ -227,7 +227,7 @@ en{
         PH{"Philippines"}
         PK{"Pakistan"}
         PL{"Poland"}
-        PM{"Saint Pierre and Miquelon"}
+        PM{"St. Pierre & Miquelon"}
         PN{"Pitcairn Islands"}
         PR{"Puerto Rico"}
         PS{"Palestinian Territories"}
@@ -247,9 +247,9 @@ en{
         SD{"Sudan"}
         SE{"Sweden"}
         SG{"Singapore"}
-        SH{"Saint Helena"}
+        SH{"St. Helena"}
         SI{"Slovenia"}
-        SJ{"Svalbard and Jan Mayen"}
+        SJ{"Svalbard & Jan Mayen"}
         SK{"Slovakia"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
@@ -257,13 +257,13 @@ en{
         SO{"Somalia"}
         SR{"Suriname"}
         SS{"South Sudan"}
-        ST{"São Tomé and Príncipe"}
+        ST{"São Tomé & Príncipe"}
         SV{"El Salvador"}
         SX{"Sint Maarten"}
         SY{"Syria"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
-        TC{"Turks and Caicos Islands"}
+        TC{"Turks & Caicos Islands"}
         TD{"Chad"}
         TF{"French Southern Territories"}
         TG{"Togo"}
@@ -275,7 +275,7 @@ en{
         TN{"Tunisia"}
         TO{"Tonga"}
         TR{"Turkey"}
-        TT{"Trinidad and Tobago"}
+        TT{"Trinidad & Tobago"}
         TV{"Tuvalu"}
         TW{"Taiwan"}
         TZ{"Tanzania"}
@@ -292,7 +292,7 @@ en{
         VI{"U.S. Virgin Islands"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis and Futuna"}
+        WF{"Wallis & Futuna"}
         WS{"Samoa"}
         XK{"Kosovo"}
         YE{"Yemen"}
@@ -302,12 +302,22 @@ en{
         ZW{"Zimbabwe"}
         ZZ{"Unknown Region"}
     }
+    Countries%variant{
+        CD{"Congo (DRC)"}
+        CG{"Congo (Republic)"}
+        CI{"Ivory Coast"}
+        FK{"Falkland Islands (Islas Malvinas)"}
+        MK{"Macedonia (FYROM)"}
+        TL{"East Timor"}
+    }
     CountriesShort{
+        BA{"Bosnia"}
         GB{"U.K."}
         HK{"Hong Kong"}
+        MM{"Myanmar"}
         MO{"Macau"}
         PS{"Palestine"}
         US{"U.S."}
     }
-    Version{"2.0.98.76"}
+    Version{"2.1.8.87"}
 }

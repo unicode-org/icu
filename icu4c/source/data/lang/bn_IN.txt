@@ -31,5 +31,5 @@ bn_IN{
     Scripts{
         Hant{"ঐতিহ্যবাহী"}
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.8.19"}
 }

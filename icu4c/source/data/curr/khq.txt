@@ -236,5 +236,5 @@ khq{
             "Zimbabwe Dollar",
         }
     }
-    Version{"2.0.97.28"}
+    Version{"2.1.6.69"}
 }

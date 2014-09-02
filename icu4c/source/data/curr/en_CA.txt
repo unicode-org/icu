@@ -17,5 +17,5 @@ en_CA{
             "US Dollar",
         }
     }
-    Version{"2.0.95.26"}
+    Version{"2.1.8.19"}
 }

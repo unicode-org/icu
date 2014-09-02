@@ -1,17 +1,17 @@
 # *   Copyright (C) 1998-2014, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-COLLATION_CLDR_VERSION = 25
+COLLATION_CLDR_VERSION = %version%
 # A list of txt's to build
 # Note:
 #
 #   If you are thinking of modifying this file, READ THIS.
 #
 # Instead of changing this file [unless you want to check it back in],
-# you should consider creating a 'collocal.mk' file in this same directory.
+# you should consider creating a '%local%' file in this same directory.
 # Then, you can have your local changes remain even if you upgrade or
 # reconfigure ICU.
 #
-# Example 'collocal.mk' files:
+# Example '%local%' files:
 #
 #  * To add an additional locale to the list:
 #    _____________________________________________________
@@ -50,21 +50,22 @@ COLLATION_EMPTY_SOURCE =
 COLLATION_SOURCE = $(COLLATION_EMPTY_SOURCE) af.txt ar.txt as.txt\
  az.txt be.txt bg.txt bn.txt bs.txt\
  bs_Cyrl.txt ca.txt chr.txt cs.txt cy.txt\
- da.txt de.txt dz.txt ee.txt el.txt\
- en.txt en_US.txt en_US_POSIX.txt eo.txt es.txt\
- et.txt fa.txt fa_AF.txt fi.txt fil.txt\
- fo.txt fr.txt fr_CA.txt ga.txt gl.txt\
- gu.txt ha.txt haw.txt he.txt hi.txt\
- hr.txt hu.txt hy.txt id.txt ig.txt\
- is.txt it.txt ja.txt ka.txt kk.txt\
- kl.txt km.txt kn.txt ko.txt kok.txt\
- ky.txt lkt.txt ln.txt lt.txt lv.txt\
- mk.txt ml.txt mr.txt ms.txt mt.txt\
- my.txt nb.txt nl.txt nn.txt om.txt\
- or.txt pa.txt pl.txt ps.txt pt.txt\
- ro.txt ru.txt si.txt sk.txt sl.txt\
+ da.txt de.txt dsb.txt dz.txt ee.txt\
+ el.txt en.txt en_US.txt en_US_POSIX.txt eo.txt\
+ es.txt et.txt fa.txt fa_AF.txt fi.txt\
+ fil.txt fo.txt fr.txt fr_CA.txt ga.txt\
+ gl.txt gu.txt ha.txt haw.txt he.txt\
+ hi.txt hr.txt hsb.txt hu.txt hy.txt\
+ id.txt ig.txt is.txt it.txt ja.txt\
+ ka.txt kk.txt kl.txt km.txt kn.txt\
+ ko.txt kok.txt ky.txt lb.txt lkt.txt\
+ ln.txt lt.txt lv.txt mk.txt ml.txt\
+ mr.txt ms.txt mt.txt my.txt nb.txt\
+ nl.txt nn.txt om.txt or.txt pa.txt\
+ pl.txt ps.txt pt.txt ro.txt ru.txt\
+ se.txt si.txt sk.txt sl.txt smn.txt\
  sq.txt sr.txt sr_Latn.txt sv.txt sw.txt\
  ta.txt te.txt th.txt to.txt tr.txt\
- ug.txt uk.txt ur.txt vi.txt yo.txt\
- zh.txt zh_Hant.txt zu.txt
+ ug.txt uk.txt ur.txt vi.txt wae.txt\
+ yi.txt yo.txt zh.txt zh_Hant.txt zu.txt
 

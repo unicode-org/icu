@@ -35,7 +35,7 @@
 #include "sharedpluralrules.h"
 #include "unifiedcache.h"
 
-#define MEAS_UNIT_COUNT 46
+#define MEAS_UNIT_COUNT 121
 #define WIDTH_INDEX_COUNT (UMEASFMT_WIDTH_NARROW + 1)
 
 U_NAMESPACE_BEGIN
@@ -223,10 +223,14 @@ static UBool loadMeasureUnitData(
                     delete [] units;
                     return FALSE;
                 }
+                const char * resKey = ures_getKey(pluralBundle.getAlias());
+                if (uprv_strcmp(resKey, "dnam") == 0 || uprv_strcmp(resKey, "per") == 0) {
+                    continue; // skip display name & per pattern (new in CLDR 26 / ICU 54) for now, not part of plurals
+                }
                 UnicodeString rawPattern;
                 getString(pluralBundle.getAlias(), rawPattern, status);
                 cacheData.formatters[units[currentUnit].getIndex()][currentWidth].add(
-                        ures_getKey(pluralBundle.getAlias()),
+                        resKey,
                         rawPattern,
                         status);
             }

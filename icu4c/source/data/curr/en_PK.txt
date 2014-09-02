@@ -13,10 +13,6 @@ en_PK{
             "Rs",
             "Pakistani Rupee",
         }
-        USD{
-            "US$",
-            "US Dollar",
-        }
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.8.19"}
 }

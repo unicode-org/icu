@@ -33,7 +33,7 @@ be{
             }
         }
     }
-    Version{"2.0.97.92"}
+    Version{"2.1.7.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -393,6 +393,7 @@ be{
         }
     }
     measurementSystemNames{
+        UK{"брытанская"}
         US{"ЗША"}
         metric{"метрычная"}
     }

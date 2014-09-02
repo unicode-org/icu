@@ -11,7 +11,7 @@
  */
 uz_Cyrl{
     %%Parent{"root"}
-    Version{"2.0.92.87"}
+    Version{"2.1.7.39"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}
@@ -47,7 +47,7 @@ uz_Cyrl{
             ec{"Monticello, Kentucky"}
         }
         "America:Lower_Princes"{
-            ec{"Lower Prince's Quarter"}
+            ec{"Lower Princeʼs Quarter"}
         }
         "America:North_Dakota:Beulah"{
             ec{"Beulah, North Dakota"}

@@ -10,8 +10,8 @@ sq_MK{
     Currencies{
         MKD{
             "den",
-            "Denar maqedonas",
+            "Denari maqedonas",
         }
     }
-    Version{"2.0.90.61"}
+    Version{"2.1.6.69"}
 }

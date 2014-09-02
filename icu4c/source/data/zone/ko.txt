@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ko.xml
  */
 ko{
-    Version{"2.0.99.67"}
+    Version{"2.1.8.9"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -508,7 +508,7 @@ ko{
             ec{"포트오브스페인"}
         }
         "America:Porto_Velho"{
-            ec{"포르토 벨로"}
+            ec{"포르투벨류"}
         }
         "America:Puerto_Rico"{
             ec{"푸에르토리코"}
@@ -529,7 +529,7 @@ ko{
             ec{"리졸루트"}
         }
         "America:Rio_Branco"{
-            ec{"리오 브랑코"}
+            ec{"히우 브랑쿠"}
         }
         "America:Santa_Isabel"{
             ec{"산타 이사벨"}
@@ -632,6 +632,9 @@ ko{
         }
         "Antarctica:Syowa"{
             ec{"쇼와"}
+        }
+        "Antarctica:Troll"{
+            ec{"트롤"}
         }
         "Antarctica:Vostok"{
             ec{"보스토크"}
@@ -946,7 +949,7 @@ ko{
             ec{"알 수 없는 장소"}
         }
         "Europe:Amsterdam"{
-            ec{"암스텔담"}
+            ec{"암스테르담"}
         }
         "Europe:Andorra"{
             ec{"안도라"}
@@ -1029,7 +1032,7 @@ ko{
             ec{"몰타"}
         }
         "Europe:Mariehamn"{
-            ec{"마리에하먼"}
+            ec{"마리에함"}
         }
         "Europe:Minsk"{
             ec{"민스크"}
@@ -1324,6 +1327,11 @@ ko{
             lg{"아나디리 시간"}
             ls{"아나디리 표준시"}
         }
+        "meta:Apia"{
+            ld{"아피아 하계 표준시"}
+            lg{"아피아 시간"}
+            ls{"아피아 표준시"}
+        }
         "meta:Aqtau"{
             ld{"악타우 서머 타임"}
             lg{"악타우 표준 시간"}
@@ -1406,7 +1414,7 @@ ko{
             ls{"브라질리아 표준시"}
         }
         "meta:Brunei"{
-            ls{"브루나이 왕국 시간"}
+            ls{"브루나이 시간"}
         }
         "meta:Cape_Verde"{
             ld{"카보 베르데 하계 표준시"}
@@ -1420,7 +1428,7 @@ ko{
             ls{"차모로 시간"}
         }
         "meta:Chatham"{
-            ld{"채텀 일광 절약 시간대"}
+            ld{"채텀 하계 표준시"}
             lg{"채텀 시간"}
             ls{"채텀 표준시"}
         }
@@ -1486,6 +1494,9 @@ ko{
             ld{"동부유럽 하계 표준시"}
             lg{"동부유럽 시간"}
             ls{"동부유럽 표준시"}
+        }
+        "meta:Europe_Further_Eastern"{
+            ls{"극동 유럽 표준시"}
         }
         "meta:Europe_Western"{
             ld{"서유럽 서머 타임"}
@@ -1575,7 +1586,7 @@ ko{
             ls{"서부 인도네시아 시간"}
         }
         "meta:Iran"{
-            ld{"이란 일광 절약 시간대"}
+            ld{"이란 하계 표준시"}
             lg{"이란 시간"}
             ls{"이란 표준시"}
         }
@@ -1662,6 +1673,16 @@ ko{
         "meta:Mawson"{
             ls{"모슨 시간"}
         }
+        "meta:Mexico_Northwest"{
+            ld{"멕시코 북서부 하계 표준시"}
+            lg{"멕시코 북서부 시간"}
+            ls{"멕시코 북서부 표준시"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"멕시코 태평양 하계 표준시"}
+            lg{"멕시코 태평양 시간"}
+            ls{"멕시코 태평양 표준시"}
+        }
         "meta:Mongolia"{
             ld{"울란바토르 하계 표준시"}
             lg{"울란바토르 시간"}
@@ -1687,7 +1708,7 @@ ko{
             ls{"뉴칼레도니아 표준시"}
         }
         "meta:New_Zealand"{
-            ld{"뉴질랜드 일광 절약 시간대"}
+            ld{"뉴질랜드 하계 표준시"}
             lg{"뉴질랜드 시간"}
             ls{"뉴질랜드 표준시"}
         }
@@ -1805,7 +1826,7 @@ ko{
             ls{"타히티 시간"}
         }
         "meta:Taipei"{
-            ld{"대만 일광 절약 시간대"}
+            ld{"대만 하계 표준시"}
             lg{"대만 시간"}
             ls{"대만 표준시"}
         }
@@ -1878,12 +1899,12 @@ ko{
             lg{"예카테린부르크 시간"}
             ls{"예카테린부르크 표준시"}
         }
-        fallbackFormat{"{1} ({0})"}
+        fallbackFormat{"{1}({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} 시간"}
-        regionFormatDaylight{"{0} 일광 절약 시간"}
+        regionFormatDaylight{"{0} 하계 표준시"}
         regionFormatStandard{"{0} 표준시"}
     }
 }

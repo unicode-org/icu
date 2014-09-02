@@ -13,7 +13,7 @@ mt{
     Currencies{
         EUR{
             "€",
-            "Ewro",
+            "ewro",
         }
         MTL{
             "MTL",
@@ -24,7 +24,16 @@ mt{
             "Munita Mhux Magħrufa jew Mhux Valida",
         }
     }
+    Currencies%narrow{
+        EUR{"€"}
+    }
     CurrencyPlurals{
+        EUR{
+            few{"ewro"}
+            many{"ewro"}
+            one{"ewro"}
+            other{"ewro"}
+        }
         XXX{
             few{"Munita Mhux Magħruf jew Mhux Validu"}
             many{"Munita Mhux Magħruf jew Mhux Validu"}
@@ -32,5 +41,5 @@ mt{
             other{"Munita Mhux Magħruf jew Mhux Validu"}
         }
     }
-    Version{"2.0.97.92"}
+    Version{"2.1.8.22"}
 }

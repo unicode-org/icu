@@ -10,5 +10,5 @@
  * ICU <specials> source: <path>/common/main/uz_Latn.xml
  */
 uz_Latn{
-    Version{"2.0.91.29"}
+    Version{"2.1.6.69"}
 }

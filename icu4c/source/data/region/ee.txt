@@ -296,9 +296,17 @@ ee{
         ZW{"Zimbabwe nutome"}
         ZZ{"nutome manya"}
     }
+    Countries%variant{
+        CD{"Kongo demokratik repɔblik nutome"}
+        CG{"Kongo repɔblik nutome"}
+        CI{"Ivory Kost nutome"}
+        FK{"Falkland ƒudomekpowo (Islas Malvinas) nutome"}
+        MK{"Makedonia (FYROM) nutome"}
+        TL{"Ɣedzeƒe Timɔ nutome"}
+    }
     CountriesShort{
         HK{"Hɔng Kɔng nutome"}
         MO{"Macau nutome"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
 }

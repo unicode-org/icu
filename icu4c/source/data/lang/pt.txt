@@ -55,7 +55,7 @@ pt{
         arp{"arapaho"}
         arw{"arauaqui"}
         as{"assamês"}
-        asa{"asa"}
+        asa{"asu"}
         ast{"asturiano"}
         av{"avaric"}
         awa{"awadhi"}
@@ -66,8 +66,8 @@ pt{
         ban{"balinês"}
         bas{"basa"}
         bax{"bamum"}
-        bbj{"ghomala'"}
-        be{"bielo-russo"}
+        bbj{"ghomala’"}
+        be{"bielorrusso"}
         bej{"beja"}
         bem{"bemba"}
         bez{"bena"}
@@ -182,6 +182,7 @@ pt{
         fy{"frísio ocidental"}
         ga{"irlandês"}
         gaa{"ga"}
+        gag{"gagauz"}
         gay{"gayo"}
         gba{"gbaia"}
         gd{"gaélico escocês"}
@@ -261,10 +262,11 @@ pt{
         kkj{"kako"}
         kl{"groenlandês"}
         kln{"kalenjin"}
-        km{"cmer"}
+        km{"khmer"}
         kmb{"quimbundo"}
         kn{"canarês"}
         ko{"coreano"}
+        koi{"komi-permyak"}
         kok{"concani"}
         kos{"kosraean"}
         kpe{"kpelle"}
@@ -321,7 +323,7 @@ pt{
         mg{"malgaxe"}
         mga{"irlandês médio"}
         mgh{"macua"}
-        mgo{"meta'"}
+        mgo{"meta’"}
         mh{"marshalês"}
         mi{"maori"}
         mic{"miquemaque"}
@@ -331,7 +333,7 @@ pt{
         mn{"mongol"}
         mnc{"manchu"}
         mni{"manipuri"}
-        moh{"mohawk"}
+        moh{"moicano"}
         mos{"mossi"}
         mr{"marata"}
         ms{"malaio"}
@@ -363,7 +365,7 @@ pt{
         no{"norueguês"}
         nog{"nogai"}
         non{"nórdico arcaico"}
-        nqo{"n'ko"}
+        nqo{"n’ko"}
         nr{"ndebele do sul"}
         nso{"soto setentrional"}
         nus{"nuer"}
@@ -398,6 +400,7 @@ pt{
         pt_BR{"português do Brasil"}
         pt_PT{"português europeu"}
         qu{"quíchua"}
+        quc{"quiché"}
         raj{"rajastani"}
         rap{"rapanui"}
         rar{"rarotongano"}
@@ -409,7 +412,7 @@ pt{
         rom{"romani"}
         ru{"russo"}
         rup{"aromeno"}
-        rw{"kinyarwanda"}
+        rw{"ruanda"}
         rwk{"rwa"}
         sa{"sânscrito"}
         sad{"sandawe"}
@@ -471,12 +474,12 @@ pt{
         teo{"teso"}
         ter{"tereno"}
         tet{"tétum"}
-        tg{"tadjique"}
+        tg{"tajique"}
         th{"tailandês"}
         ti{"tigrínia"}
         tig{"tigré"}
         tiv{"tiv"}
-        tk{"turcomano"}
+        tk{"turcomeno"}
         tkl{"toquelauano"}
         tl{"tagalo"}
         tlh{"klingon"}
@@ -540,6 +543,9 @@ pt{
         zun{"zunhi"}
         zxx{"sem conteúdo linguístico"}
         zza{"zaza"}
+    }
+    Languages%variant{
+        ps{"pushto"}
     }
     LanguagesShort{
         az{"azeri"}
@@ -627,7 +633,7 @@ pt{
         Moon{"moon"}
         Mtei{"meitei mayek"}
         Mymr{"birmanês"}
-        Nkoo{"n'ko"}
+        Nkoo{"n’ko"}
         Ogam{"ogâmico"}
         Olck{"ol chiki"}
         Orkh{"orkhon"}
@@ -685,20 +691,25 @@ pt{
         Hans{"han simplificado"}
         Hant{"han tradicional"}
     }
+    Scripts%variant{
+        Arab{"perso-árabe"}
+    }
     Types{
         calendar{
             buddhist{"Calendário Budista"}
             chinese{"Calendário Chinês"}
             coptic{"Calendário Coptic"}
-            ethiopic{"Calendário etiópico"}
+            dangi{"Calendário Dangi"}
+            ethiopic{"Calendário etiopiano"}
             ethiopic-amete-alem{"Calendário Amete Alem da Etiópia"}
             gregorian{"Calendário Gregoriano"}
             hebrew{"Calendário Hebraico"}
             indian{"Calendário Nacional Indiano"}
             islamic{"Calendário Islâmico"}
             islamic-civil{"Calendário Civil Islâmico"}
+            iso8601{"Calendário ISO-8601"}
             japanese{"Calendário Japonês"}
-            persian{"Calendário persa"}
+            persian{"Calendário Persa"}
             roc{"Calendário da República da China"}
         }
         colAlternate{
@@ -760,7 +771,7 @@ pt{
             armnlow{"Algarismos armênios minúsculos"}
             beng{"Algarismos Bengali"}
             deva{"Algarismos Devanagari"}
-            ethi{"Algarismos etiópicos"}
+            ethi{"Algarismos etiopianos"}
             finance{"Numerais financeiros"}
             fullwide{"Algarismos em extensão total"}
             geor{"Algarismos georgianos"}
@@ -836,7 +847,7 @@ pt{
         VALENCIA{"valenciano"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

@@ -100,7 +100,7 @@ ff{
         HU{"Onngiri"}
         ID{"Enndonesii"}
         IE{"Irlannda"}
-        IL{"Israa'iila"}
+        IL{"Israa’iila"}
         IN{"Enndo"}
         IO{"Keeriindi britaani to maayo enndo"}
         IQ{"Iraak"}
@@ -237,5 +237,5 @@ ff{
         ZM{"Sammbi"}
         ZW{"Simbaabuwe"}
     }
-    Version{"2.0.97.28"}
+    Version{"2.1.7.39"}
 }

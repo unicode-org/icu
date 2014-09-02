@@ -111,7 +111,7 @@ vi{
         chr{"Tiếng Cherokee"}
         chy{"Tiếng Cheyenne"}
         ckb{"Tiếng Kurd Sorani"}
-        co{"Tiếng Corse"}
+        co{"Tiếng Corsica"}
         cop{"Tiếng Coptic"}
         cr{"Tiếng Cree"}
         crh{"Tiếng Thổ Nhĩ Kỳ Crimean"}
@@ -154,7 +154,6 @@ vi{
         eo{"Tiếng Quốc Tế Ngữ"}
         es{"Tiếng Tây Ban Nha"}
         es_419{"Tiếng Tây Ban Nha (Mỹ La tinh)"}
-        es_ES{"Tiếng Tây Ban Nha (I-bê-ri)"}
         et{"Tiếng Estonia"}
         eu{"Tiếng Basque"}
         ewo{"Tiếng Ewondo"}
@@ -176,6 +175,7 @@ vi{
         fy{"Tiếng Frisia"}
         ga{"Tiếng Ai-len"}
         gaa{"Tiếng Ga"}
+        gag{"Tiếng Gagauz"}
         gay{"Tiếng Gayo"}
         gba{"Tiếng Gbaya"}
         gd{"Tiếng Xentơ (Xcốt len)"}
@@ -245,6 +245,7 @@ vi{
         kde{"Tiếng Makonde"}
         kea{"Tiếng Kabuverdianu"}
         kfo{"Tiếng Koro"}
+        kg{"Tiếng Kongo"}
         kha{"Tiếng Khasi"}
         kho{"Tiếng Khotan"}
         khq{"Tiếng Koyra Chiini"}
@@ -254,10 +255,11 @@ vi{
         kkj{"Tiếng Kako"}
         kl{"Tiếng Kalaallisut"}
         kln{"Tiếng Kalenjin"}
-        km{"Tiếng Campuchia"}
+        km{"Tiếng Khơ-me"}
         kmb{"Tiếng Kimbundu"}
         kn{"Tiếng Kannada"}
-        ko{"Tiếng Hàn Quốc"}
+        ko{"Tiếng Hàn"}
+        koi{"Tiếng Komi-Permyak"}
         kok{"Tiếng Konkani"}
         kos{"Tiếng Kosrae"}
         kpe{"Tiếng Kpelle"}
@@ -273,7 +275,7 @@ vi{
         kum{"Tiếng Kumyk"}
         kut{"Tiếng Kutenai"}
         kv{"Tiếng Komi"}
-        kw{"Tiếng Cornish"}
+        kw{"Tiếng Cornwall"}
         ky{"Tiếng Kyrgyz"}
         la{"Tiếng La-tinh"}
         lad{"Tiếng Ladino"}
@@ -284,6 +286,7 @@ vi{
         lez{"Tiếng Lezghian"}
         lg{"Tiếng Ganda"}
         li{"Tiếng Limburg"}
+        lkt{"Tiếng Lakota"}
         ln{"Tiếng Lingala"}
         lo{"Tiếng Lào"}
         lol{"Tiếng Mongo"}
@@ -313,7 +316,7 @@ vi{
         mg{"Tiếng Malagasy"}
         mga{"Tiếng Ai-len Trung cổ"}
         mgh{"Tiếng Makhuwa-Meetto"}
-        mgo{"Tiếng Meta'"}
+        mgo{"Tiếng Meta’"}
         mh{"Tiếng Marshall"}
         mi{"Tiếng Maori"}
         mic{"Tiếng Micmac"}
@@ -340,7 +343,7 @@ vi{
         nap{"Tiếng Napoli"}
         naq{"Tiếng Nama"}
         nb{"Tiếng Na Uy (Bokmål)"}
-        nd{"Bắc Ndebele"}
+        nd{"Tiếng Ndebele Miền Bắc"}
         nds{"Tiếng Hạ Giéc-man"}
         ne{"Tiếng Nepal"}
         new{"Tiếng Newari"}
@@ -355,7 +358,7 @@ vi{
         no{"Tiếng Na Uy"}
         nog{"Tiếng Nogai"}
         non{"Tiếng Na Uy cổ"}
-        nqo{"Tiếng N'Ko"}
+        nqo{"Tiếng N’Ko"}
         nr{"Tiếng Ndebele Miền Nam"}
         nso{"Bắc Sotho"}
         nus{"Tiếng Nuer"}
@@ -369,7 +372,7 @@ vi{
         oc{"Tiếng Occitan"}
         oj{"Tiếng Ojibwa"}
         om{"Tiếng Oromo"}
-        or{"Tiếng Ô-ri-a"}
+        or{"Tiếng Oriya"}
         os{"Tiếng Ossetic"}
         osa{"Tiếng Osage"}
         ota{"Tiếng Thổ Nhĩ Kỳ Ottoman"}
@@ -388,17 +391,17 @@ vi{
         ps{"Tiếng Pashto"}
         pt{"Tiếng Bồ Đào Nha"}
         pt_BR{"Tiếng Bồ Đào Nha (Braxin)"}
-        pt_PT{"Tiếng Bồ Đào Nha (I-bê-ri)"}
         qu{"Tiếng Quechua"}
+        quc{"Tiếng Kʼicheʼ"}
         raj{"Tiếng Rajasthani"}
         rap{"Tiếng Rapanui"}
         rar{"Tiếng Rarotongan"}
         rm{"Tiếng Romansh"}
         rn{"Tiếng Rundi"}
-        ro{"Tiếng Romania"}
+        ro{"Tiếng Rumani"}
         ro_MD{"Tiếng Moldova"}
         rof{"Tiếng Rombo"}
-        rom{"Tiếng Rumani"}
+        rom{"Tiếng Romany"}
         root{"Tiếng Root"}
         ru{"Tiếng Nga"}
         rup{"Tiếng Aromania"}
@@ -417,7 +420,7 @@ vi{
         scn{"Tiếng Sicilia"}
         sco{"Tiếng Scots"}
         sd{"Tiếng Sindhi"}
-        se{"Bắc Sami"}
+        se{"Tiếng Sami Miền Bắc"}
         see{"Tiếng Seneca"}
         seh{"Tiếng Sena"}
         sel{"Tiếng Selkup"}
@@ -455,7 +458,7 @@ vi{
         sv{"Tiếng Thụy Điển"}
         sw{"Tiếng Swahili"}
         swb{"Tiếng Cômo"}
-        swc{"Tiếng Swahili Công-gô"}
+        swc{"Tiếng Swahili Congo"}
         syc{"Tiếng Syria Cổ điển"}
         syr{"Tiếng Syriac"}
         ta{"Tiếng Tamil"}
@@ -492,7 +495,7 @@ vi{
         tyv{"Tiếng Tuvinian"}
         tzm{"Tiếng Tamazight Miền Trung Ma-rốc"}
         udm{"Tiếng Udmurt"}
-        ug{"Tiếng Duy Ngô Nhĩ"}
+        ug{"Tiếng Uyghur"}
         uga{"Tiếng Ugaritic"}
         uk{"Tiếng Ucraina"}
         umb{"Tiếng Umbundu"}
@@ -527,12 +530,13 @@ vi{
         zen{"Tiếng Zenaga"}
         zgh{"Tiếng Tamazight Chuẩn của Ma-rốc"}
         zh{"Tiếng Trung"}
-        zh_Hans{"Tiếng Trung (Giản thể)"}
-        zh_Hant{"Tiếng Trung (Phồn thể)"}
         zu{"Tiếng Zulu"}
         zun{"Tiếng Zuni"}
         zxx{"Không có nội dung ngôn ngữ"}
         zza{"Tiếng Zaza"}
+    }
+    Languages%variant{
+        ps{"Tiếng Pushto"}
     }
     LanguagesShort{
         az{"Tiếng Azeri"}
@@ -584,8 +588,8 @@ vi{
         Hang{"Chữ Hangul"}
         Hani{"Chữ Hán"}
         Hano{"Chữ Hanunoo"}
-        Hans{"Giản thể"}
-        Hant{"Phồn thể"}
+        Hans{"Giản thể"}
+        Hant{"Phồn thể"}
         Hebr{"Chữ Do Thái"}
         Hira{"Chữ Hiragana"}
         Hluw{"Chữ tượng hình Anatolia"}
@@ -697,11 +701,14 @@ vi{
         Zsym{"Ký hiệu"}
         Zxxx{"Chưa có chữ viết"}
         Zyyy{"Chung"}
-        Zzzz{"Chữ viết Không xác định"}
+        Zzzz{"Chữ viết không xác định"}
     }
     Scripts%stand-alone{
         Hans{"Chữ Hán giản thể"}
         Hant{"Chữ Hán phồn thể"}
+    }
+    Scripts%variant{
+        Arab{"Chữ Ba Tư-Ả Rập"}
     }
     Types{
         calendar{
@@ -714,7 +721,7 @@ vi{
             gregorian{"Lịch Gregory"}
             hebrew{"Lịch Do Thái"}
             indian{"Lịch Quốc gia Ấn Độ"}
-            islamic{"Lịch Islamic"}
+            islamic{"Lịch Hồi Giáo"}
             islamic-civil{"Lịch Islamic-Civil"}
             islamic-rgsa{"Lịch Hồi Giáo - Ả Rập Xê-út"}
             islamic-tbla{"Lịch Hồi Giáo - Thiên văn"}
@@ -770,6 +777,7 @@ vi{
             pinyin{"Thứ tự sắp xếp theo bính âm"}
             reformed{"Thứ tự sắp xếp đã sửa đổi"}
             search{"Tìm kiếm mục đích chung"}
+            searchjl{"Tìm kiếm theo Phụ âm Đầu Hangul"}
             standard{"Thứ tự sắp xếp chuẩn"}
             stroke{"Thứ tự sắp xếp theo nét chữ"}
             traditional{"Thứ tự sắp xếp truyền thống"}
@@ -779,7 +787,7 @@ vi{
         numbers{
             arab{"Chữ số Ả Rập - Ấn Độ"}
             arabext{"Chữ số Ả Rập - Ấn Độ mở rộng"}
-            armn{"Chữ số Armeni"}
+            armn{"Chữ số Armenia"}
             armnlow{"Chữ số Armenia viết thường"}
             bali{"Chữ số Bali"}
             beng{"Chữ số Bangladesh"}
@@ -819,7 +827,7 @@ vi{
             mymr{"Chữ số Myanma"}
             mymrshan{"Chữ số Myanmar Shan"}
             native{"Chữ số tự nhiên"}
-            nkoo{"Chữ số N'Ko"}
+            nkoo{"Chữ số N’Ko"}
             olck{"Chữ số Ol Chiki"}
             orya{"Chữ số Oriya"}
             osma{"Chữ số Osmanya"}
@@ -831,7 +839,7 @@ vi{
             sund{"Chữ số Sudan"}
             takr{"Chữ số Takri"}
             talu{"Chữ số Thái Lặc mới"}
-            taml{"Chữ số Tamil"}
+            taml{"Chữ số Tamil Truyền thống"}
             tamldec{"Chữ số Tamil"}
             telu{"Chữ số Telugu"}
             thai{"Chữ số Thái"}
@@ -852,6 +860,8 @@ vi{
         AREVELA{"Tiếng Armenia Miền Đông"}
         AREVMDA{"Tiếng Armenia Miền Tây"}
         BAKU1926{"Bảng chữ cái La-tinh Tiếng Turk Hợp nhất"}
+        BAUDDHA{"BAUDDHA"}
+        BISCAYAN{"BISCAYAN"}
         BISKE{"Phương ngữ San Giorgio/Bila"}
         BOHORIC{"Bảng chữ cái Bohorič"}
         BOONT{"Tiếng Boontling"}
@@ -859,10 +869,17 @@ vi{
         EMODENG{"Tiếng Anh Hiện đại Thời kỳ đầu"}
         FONIPA{"Ngữ âm học IPA"}
         FONUPA{"Ngữ âm học UPA"}
+        FONXSAMP{"FONXSAMP"}
         HEPBURN{"La mã hóa Hepburn"}
+        HOGNORSK{"HOGNORSK"}
+        ITIHASA{"ITIHASA"}
+        JAUER{"JAUER"}
+        JYUTPING{"JYUTPING"}
         KKCOR{"Phép chính tả Chung"}
         KSCOR{"Phép chính tả Chuẩn"}
+        LAUKIKA{"LAUKIKA"}
         LIPAW{"Phương ngữ Lipovaz của người Resian"}
+        LUNA1918{"LUNA1918"}
         METELKO{"Bảng chữ cái Metelko"}
         MONOTON{"Đơn âm"}
         NDYUKA{"Phương ngữ Ndyuka"}
@@ -871,23 +888,32 @@ vi{
         NULIK{"Tiếng Volapük Hiện đại"}
         OSOJS{"Phương ngữ Oseacco/Osojane"}
         PAMAKA{"Phương ngữ Pamaka"}
+        PETR1708{"PETR1708"}
         PINYIN{"La Mã hóa Bính âm"}
         POLYTON{"Đa âm"}
         POSIX{"Máy tính"}
+        PUTER{"PUTER"}
         REVISED{"Phép chính tả Sửa đổi"}
         RIGIK{"Tiếng Volapük Cổ điển"}
         ROZAJ{"Tiếng Resian"}
+        RUMGR{"RUMGR"}
         SAAHO{"Tiếng Saho"}
         SCOTLAND{"Tiếng Anh chuẩn tại Scotland"}
         SCOUSE{"Phương ngữ Liverpool"}
         SOLBA{"Phương ngữ Stolvizza/Solbica"}
+        SURMIRAN{"SURMIRAN"}
+        SURSILV{"SURSILV"}
+        SUTSILV{"SUTSILV"}
         TARASK{"Phép chính tả Taraskievica"}
         UCCOR{"Phép chính tả Hợp nhất"}
         UCRCOR{"Phép chính tả Sửa đổi Hợp nhất"}
+        ULSTER{"ULSTER"}
+        VAIDIKA{"VAIDIKA"}
         VALENCIA{"Tiếng Valencia"}
+        VALLADER{"VALLADER"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"2.0.97.92"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}

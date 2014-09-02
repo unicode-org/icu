@@ -13,5 +13,5 @@ en_001{
             "US Dollar",
         }
     }
-    Version{"2.0.98.76"}
+    Version{"2.1.6.69"}
 }

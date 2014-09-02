@@ -146,7 +146,7 @@ eo{
         tr{"turka"}
         ts{"conga"}
         tt{"tatara"}
-        tw{"akana"}
+        tw{"tw"}
         ug{"ujgura"}
         uk{"ukraina"}
         und{"nekonata lingvo"}
@@ -165,5 +165,5 @@ eo{
         zu{"zulua"}
         zxx{"nelingvaĵo"}
     }
-    Version{"2.0.97.91"}
+    Version{"2.1.6.76"}
 }

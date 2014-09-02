@@ -8,7 +8,7 @@
 // ***************************************************************************
 sv_FI{
     AuxExemplarCharacters{"[ã ç ë í ñ ó š ÿ ü ž]"}
-    Version{"2.0.98.14"}
+    Version{"2.1.8.19"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -27,9 +27,9 @@ sv_FI{
                 "{1} {0}",
             }
             eras{
-                wide{
-                    "före Kristus",
-                    "efter Kristus",
+                wide%variant{
+                    "före vår tideräkning",
+                    "vår tideräkning",
                 }
             }
         }
@@ -70,27 +70,15 @@ sv_FI{
         unit{
             2{"{0} och {1}"}
             end{"{0} och {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
         unit-short{
             2{"{0} och {1}"}
             end{"{0} och {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
         UK{"engelska enheter (UK)"}
         US{"engelska enheter (USA)"}
-    }
-    units{
-        temperature{
-            celsius{
-                one{"{0} grad Celsius"}
-                other{"{0} grader Celsius"}
-            }
-        }
     }
     unitsNarrow{
         speed{

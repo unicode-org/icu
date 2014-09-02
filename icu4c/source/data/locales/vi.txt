@@ -25,17 +25,23 @@ vi{
         " ụ ư ừ ử ữ ứ ự v w x y ỳ ỷ ỹ ý ỵ z]"
     }
     ExemplarCharactersIndex{"[A Ă Â B C D Đ E Ê F G H I J K L M N O Ô Ơ P Q R S T U Ư V W X Y Z]"}
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
+        "″]"
+    }
     LocaleScript{
         "Latn",
     }
     MoreInformation{"?"}
     NumberElements{
+        default{"latn"}
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
                 range{"{0}-{1}"}
             }
             patterns{
+                accountingFormat{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -133,15 +139,36 @@ vi{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
+        minimumGroupingDigits{"1"}
+        native{"latn"}
     }
-    Version{"2.0.97.92"}
+    Version{"2.1.8.9"}
     calendar{
         buddhist{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, 'ngày' dd MMMM 'năm' y G",
+                "'Ngày' dd 'tháng' M 'năm' y G",
+                "dd-MM-y G",
+                "dd/MM/y GGGGG",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+            }
             availableFormats{
                 M{"'tháng' L"}
+                MEd{"E, dd-M"}
                 MMM{"LLL"}
+                MMMMEd{"E, dd MMMM"}
+                d{"'Ngày' dd"}
             }
             eras{
                 abbreviated{
@@ -164,6 +191,140 @@ vi{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            cyclicNameSets{
+                dayParts{
+                    format{
+                        abbreviated{
+                            "Tý",
+                            "Sửu",
+                            "Dần",
+                            "Mão",
+                            "Thìn",
+                            "Tỵ",
+                            "Ngọ",
+                            "Mùi",
+                            "Thân",
+                            "Dậu",
+                            "Tuất",
+                            "Hợi",
+                        }
+                    }
+                }
+                solarTerms{
+                    format{
+                        abbreviated{
+                            "Lập Xuân",
+                            "Vũ Thủy",
+                            "Kinh Trập",
+                            "Xuân Phân",
+                            "Thanh Minh",
+                            "Cốc Vũ",
+                            "Lập Hạ",
+                            "Tiểu Mãn",
+                            "Mang Chủng",
+                            "Hạ Chí",
+                            "Tiểu Thử",
+                            "Đại Thử",
+                            "Lập Thu",
+                            "Xử Thử",
+                            "Bạch Lộ",
+                            "Thu Phân",
+                            "Hàn Lộ",
+                            "Sương Giáng",
+                            "Lập Đông",
+                            "Tiểu Tuyết",
+                            "Đại Tuyết",
+                            "Đông Chí",
+                            "Tiểu Hàn",
+                            "Đại Hàn",
+                        }
+                    }
+                }
+                years{
+                    format{
+                        abbreviated{
+                            "Giáp Tý",
+                            "Ất Sửu",
+                            "Bính Dần",
+                            "Đinh Mão",
+                            "Mậu Thìn",
+                            "Kỷ Tỵ",
+                            "Canh Ngọ",
+                            "Tân Mùi",
+                            "Nhâm Thân",
+                            "Quý Dậu",
+                            "Giáp Tuất",
+                            "Ất Hợi",
+                            "Bính Tý",
+                            "Đinh Sửu",
+                            "Mậu Dần",
+                            "Kỷ Mão",
+                            "Canh Thìn",
+                            "Tân Tỵ",
+                            "Nhâm Ngọ",
+                            "Quý Mùi",
+                            "Giáp Thân",
+                            "Ất Dậu",
+                            "Bính Tuất",
+                            "Đinh Hợi",
+                            "Mậu Tý",
+                            "Kỷ Sửu",
+                            "Canh Dần",
+                            "Tân Mão",
+                            "Nhâm Thìn",
+                            "Quý Tỵ",
+                            "Giáp Ngọ",
+                            "Ất Mùi",
+                            "Bính Thân",
+                            "Đinh Dậu",
+                            "Mậu Tuất",
+                            "Kỷ Hợi",
+                            "Canh Tý",
+                            "Tân Sửu",
+                            "Nhâm Dần",
+                            "Quý Mão",
+                            "Giáp Thìn",
+                            "Ất Tỵ",
+                            "Bính Ngọ",
+                            "Đinh Mùi",
+                            "Mậu Thân",
+                            "Kỷ Dậu",
+                            "Canh Tuất",
+                            "Tân Hợi",
+                            "Nhâm Tý",
+                            "Quý Sửu",
+                            "Giáp Dần",
+                            "Ất Mão",
+                            "Bính Thìn",
+                            "Đinh Tỵ",
+                            "Mậu Ngọ",
+                            "Kỷ Mùi",
+                            "Canh Thân",
+                            "Tân Dậu",
+                            "Nhâm Tuất",
+                            "Quý Hợi",
+                        }
+                    }
+                }
+                zodiacs{
+                    format{
+                        abbreviated{
+                            "Chuột",
+                            "Trâu",
+                            "Hổ",
+                            "Mèo",
+                            "Rồng",
+                            "Rắn",
+                            "Ngựa",
+                            "Dê",
+                            "Khỉ",
+                            "Gà",
+                            "Chó",
+                            "Lợn",
+                        }
+                    }
+                }
             }
             monthNames{
                 format{
@@ -252,6 +413,23 @@ vi{
                         "10",
                         "11",
                         "12",
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    wide{
+                        leap{"{0} Nhuận"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"{0} Nhuận"}
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        leap{"{0} Nhuận"}
                     }
                 }
             }
@@ -545,6 +723,10 @@ vi{
                 "SA",
                 "CH",
             }
+            AmPmMarkersNarrow{
+                "s",
+                "c",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -560,16 +742,19 @@ vi{
                 "{0} {1}",
                 "{0} {1}",
             }
+            NoonMarker{"TR"}
+            NoonMarkerNarrow{"tr"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
             availableFormats{
+                E{"ccc"}
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ed{"E, dd"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
-                Gy{"'Năm' y G"}
+                Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, dd MMM y G"}
                 GyMMMd{"dd MMM, y G"}
@@ -580,9 +765,9 @@ vi{
                 MEd{"E, dd-M"}
                 MMM{"LLL"}
                 MMMEd{"E, dd MMM"}
-                MMMMEd{"E, dd MMMM"}
-                MMMMd{"dd MMMM"}
-                MMMd{"dd MMM"}
+                MMMMEd{"E, d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
                 MMdd{"dd-MM"}
                 Md{"dd-M"}
                 d{"d"}
@@ -591,13 +776,13 @@ vi{
                 hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"'Năm' y"}
+                y{"y"}
                 yM{"M/y"}
                 yMEd{"E, dd-M-y"}
-                yMM{"MM-y"}
+                yMM{"'tháng' MM, y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, dd MMM y"}
-                yMMMM{"MMMM y"}
+                yMMMM{"MMMM 'năm' y"}
                 yMMMd{"dd MMM, y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -697,7 +882,7 @@ vi{
             }
             intervalFormats{
                 H{
-                    H{"HH'h' - HH'h'"}
+                    H{"HH–HH"}
                 }
                 Hm{
                     H{"HH:mm-HH:mm"}
@@ -708,10 +893,10 @@ vi{
                     m{"HH:mm-HH:mm v"}
                 }
                 Hv{
-                    H{"HH'h'-HH'h' v"}
+                    H{"HH–HH v"}
                 }
                 M{
-                    M{"'Tháng' M - 'Tháng' M"}
+                    M{"'Tháng' M - M"}
                 }
                 MEd{
                     M{"EEEE, dd/MM - EEEE, dd/MM"}
@@ -726,7 +911,7 @@ vi{
                 }
                 MMMd{
                     M{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M"}
-                    d{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M"}
+                    d{"'Ngày' dd - 'Ngày' dd 'tháng' M"}
                 }
                 Md{
                     M{"dd/MM - dd/MM"}
@@ -738,7 +923,7 @@ vi{
                 fallback{"{0} - {1}"}
                 h{
                     a{"h'h' a - h'h' a"}
-                    h{"h'h' - h'h' a"}
+                    h{"h–h a"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
@@ -752,7 +937,7 @@ vi{
                 }
                 hv{
                     a{"h'h' a - h'h' a v"}
-                    h{"h'h'-h'h' a v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y-y"}
@@ -776,12 +961,12 @@ vi{
                     y{"E, dd 'tháng' M, y - E, dd 'tháng' M, y"}
                 }
                 yMMMM{
-                    M{"MMMM-MMMM y"}
+                    M{"MMMM-MMMM 'năm' y"}
                     y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
                     M{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M 'năm' y"}
-                    d{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M 'năm' y"}
+                    d{"'Ngày' dd - 'Ngày' dd 'tháng' M 'năm' y"}
                     y{"'Ngày' dd 'tháng' M 'năm' y - 'Ngày' dd 'tháng' M 'năm' y"}
                 }
                 yMd{
@@ -1132,9 +1317,27 @@ vi{
             }
         }
         roc{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, 'ngày' dd MMMM 'năm' y G",
+                "'Ngày' dd 'tháng' M 'năm' y G",
+                "dd-MM-y G",
+                "dd/MM/y GGGGG",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+            }
             availableFormats{
                 M{"'tháng' L"}
+                MEd{"E, dd-M"}
                 MMM{"LLL"}
+                Md{"dd-M"}
+                d{"'Ngày' dd"}
             }
             eras{
                 abbreviated{
@@ -1159,15 +1362,37 @@ vi{
         day{
             dn{"Ngày"}
             relative{
-                "-1"{"Hôm qua"}
-                "-2"{"Hôm kia"}
-                "0"{"Hôm nay"}
-                "1"{"Ngày mai"}
-                "2"{"Ngày kia"}
+                "-1"{"hôm qua"}
+                "-2"{"hôm kia"}
+                "0"{"hôm nay"}
+                "1"{"ngày mai"}
+                "2"{"ngày kia"}
             }
             relativeTime{
                 future{
-                    other{"Trong {0} ngày nữa"}
+                    other{"trong {0} ngày nữa"}
+                }
+                past{
+                    other{"{0} ngày trước"}
+                }
+            }
+        }
+        day-narrow{
+            dn{"Ngày"}
+            relativeTime{
+                future{
+                    other{"trong {0} ngày"}
+                }
+                past{
+                    other{"{0} ngày trước"}
+                }
+            }
+        }
+        day-short{
+            dn{"Ngày"}
+            relativeTime{
+                future{
+                    other{"trong {0} ngày nữa"}
                 }
                 past{
                     other{"{0} ngày trước"}
@@ -1187,11 +1412,47 @@ vi{
                 "1"{"Thứ Sáu tuần sau"}
             }
         }
+        fri-narrow{
+            relative{
+                "-1"{"Thứ Sáu tuần trước"}
+                "0"{"Thứ Sáu tuần này"}
+                "1"{"Thứ Sáu tuần sau"}
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"Thứ Sáu tuần trước"}
+                "0"{"Thứ Sáu tuần này"}
+                "1"{"Thứ Sáu tuần sau"}
+            }
+        }
         hour{
             dn{"Giờ"}
             relativeTime{
                 future{
-                    other{"Trong {0} giờ nữa"}
+                    other{"trong {0} giờ nữa"}
+                }
+                past{
+                    other{"{0} giờ trước"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"Giờ"}
+            relativeTime{
+                future{
+                    other{"trong {0} giờ"}
+                }
+                past{
+                    other{"{0} giờ trước"}
+                }
+            }
+        }
+        hour-short{
+            dn{"Giờ"}
+            relativeTime{
+                future{
+                    other{"trong {0} giờ nữa"}
                 }
                 past{
                     other{"{0} giờ trước"}
@@ -1202,7 +1463,29 @@ vi{
             dn{"Phút"}
             relativeTime{
                 future{
-                    other{"Trong {0} phút nữa"}
+                    other{"trong {0} phút nữa"}
+                }
+                past{
+                    other{"{0} phút trước"}
+                }
+            }
+        }
+        minute-narrow{
+            dn{"Phút"}
+            relativeTime{
+                future{
+                    other{"trong {0} phút"}
+                }
+                past{
+                    other{"{0} phút trước"}
+                }
+            }
+        }
+        minute-short{
+            dn{"Phút"}
+            relativeTime{
+                future{
+                    other{"trong {0} phút nữa"}
                 }
                 past{
                     other{"{0} phút trước"}
@@ -1210,6 +1493,20 @@ vi{
             }
         }
         mon{
+            relative{
+                "-1"{"Thứ Hai tuần trước"}
+                "0"{"Thứ Hai tuần này"}
+                "1"{"Thứ Hai tuần sau"}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"Thứ Hai tuần trước"}
+                "0"{"Thứ Hai tuần này"}
+                "1"{"Thứ Hai tuần sau"}
+            }
+        }
+        mon-short{
             relative{
                 "-1"{"Thứ Hai tuần trước"}
                 "0"{"Thứ Hai tuần này"}
@@ -1225,14 +1522,83 @@ vi{
             }
             relativeTime{
                 future{
-                    other{"Trong {0} tháng nữa"}
+                    other{"trong {0} tháng nữa"}
                 }
                 past{
                     other{"{0} tháng trước"}
                 }
             }
         }
+        month-narrow{
+            dn{"Tháng"}
+            relativeTime{
+                future{
+                    other{"trong {0} tháng nữa"}
+                }
+                past{
+                    other{"{0} tháng trước"}
+                }
+            }
+        }
+        month-short{
+            dn{"Tháng"}
+            relativeTime{
+                future{
+                    other{"trong {0} tháng nữa"}
+                }
+                past{
+                    other{"{0} tháng trước"}
+                }
+            }
+        }
+        quarter{
+            dn{"Quý"}
+            relativeTime{
+                future{
+                    other{"trong {0} quý nữa"}
+                }
+                past{
+                    other{"{0} quý trước"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"Quý"}
+            relativeTime{
+                future{
+                    other{"trong {0} quý nữa"}
+                }
+                past{
+                    other{"{0} quý trước"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"Quý"}
+            relativeTime{
+                future{
+                    other{"trong {0} quý nữa"}
+                }
+                past{
+                    other{"{0} quý trước"}
+                }
+            }
+        }
         sat{
+            relative{
+                "-1"{"Thứ Bảy tuần trước"}
+                "0"{"Thứ Bảy tuần này"}
+                "1"{"Thứ Bảy tuần sau"}
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"Thứ Bảy tuần trước"}
+                "0"{"Thứ Bảy tuần này"}
+                "1"{"Thứ Bảy tuần sau"}
+            }
+        }
+        sat-short{
             relative{
                 "-1"{"Thứ Bảy tuần trước"}
                 "0"{"Thứ Bảy tuần này"}
@@ -1246,7 +1612,29 @@ vi{
             }
             relativeTime{
                 future{
-                    other{"Trong {0} giây nữa"}
+                    other{"trong {0} giây nữa"}
+                }
+                past{
+                    other{"{0} giây trước"}
+                }
+            }
+        }
+        second-narrow{
+            dn{"Giây"}
+            relativeTime{
+                future{
+                    other{"trong {0} giây"}
+                }
+                past{
+                    other{"{0} giây trước"}
+                }
+            }
+        }
+        second-short{
+            dn{"Giây"}
+            relativeTime{
+                future{
+                    other{"trong {0} giây nữa"}
                 }
                 past{
                     other{"{0} giây trước"}
@@ -1260,7 +1648,35 @@ vi{
                 "1"{"Chủ Nhật tuần sau"}
             }
         }
+        sun-narrow{
+            relative{
+                "-1"{"Chủ Nhật tuần trước"}
+                "0"{"Chủ Nhật tuần này"}
+                "1"{"Chủ Nhật tuần sau"}
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"Chủ Nhật tuần trước"}
+                "0"{"Chủ Nhật tuần này"}
+                "1"{"Chủ Nhật tuần sau"}
+            }
+        }
         thu{
+            relative{
+                "-1"{"Thứ Năm tuần trước"}
+                "0"{"Thứ Năm tuần này"}
+                "1"{"Thứ Năm tuần sau"}
+            }
+        }
+        thu-narrow{
+            relative{
+                "-1"{"Thứ Năm tuần trước"}
+                "0"{"Thứ Năm tuần này"}
+                "1"{"Thứ Năm tuần sau"}
+            }
+        }
+        thu-short{
             relative{
                 "-1"{"Thứ Năm tuần trước"}
                 "0"{"Thứ Năm tuần này"}
@@ -1274,7 +1690,35 @@ vi{
                 "1"{"Thứ Ba tuần sau"}
             }
         }
+        tue-narrow{
+            relative{
+                "-1"{"Thứ Ba tuần trước"}
+                "0"{"Thứ Ba tuần này"}
+                "1"{"Thứ Ba tuần sau"}
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"Thứ Ba tuần trước"}
+                "0"{"Thứ Ba tuần này"}
+                "1"{"Thứ Ba tuần sau"}
+            }
+        }
         wed{
+            relative{
+                "-1"{"Thứ Tư tuần trước"}
+                "0"{"Thứ Tư tuần này"}
+                "1"{"Thứ Tư tuần sau"}
+            }
+        }
+        wed-narrow{
+            relative{
+                "-1"{"Thứ Tư tuần trước"}
+                "0"{"Thứ Tư tuần này"}
+                "1"{"Thứ Tư tuần sau"}
+            }
+        }
+        wed-short{
             relative{
                 "-1"{"Thứ Tư tuần trước"}
                 "0"{"Thứ Tư tuần này"}
@@ -1290,7 +1734,29 @@ vi{
             }
             relativeTime{
                 future{
-                    other{"Trong {0} tuần nữa"}
+                    other{"trong {0} tuần nữa"}
+                }
+                past{
+                    other{"{0} tuần trước"}
+                }
+            }
+        }
+        week-narrow{
+            dn{"Tuần"}
+            relativeTime{
+                future{
+                    other{"trong {0} tuần nữa"}
+                }
+                past{
+                    other{"{0} tuần trước"}
+                }
+            }
+        }
+        week-short{
+            dn{"Tuần"}
+            relativeTime{
+                future{
+                    other{"trong {0} tuần nữa"}
                 }
                 past{
                     other{"{0} tuần trước"}
@@ -1309,7 +1775,29 @@ vi{
             }
             relativeTime{
                 future{
-                    other{"Trong {0} năm nữa"}
+                    other{"trong {0} năm nữa"}
+                }
+                past{
+                    other{"{0} năm trước"}
+                }
+            }
+        }
+        year-narrow{
+            dn{"Năm"}
+            relativeTime{
+                future{
+                    other{"trong {0} năm nữa"}
+                }
+                past{
+                    other{"{0} năm trước"}
+                }
+            }
+        }
+        year-short{
+            dn{"Năm"}
+            relativeTime{
+                future{
+                    other{"trong {0} năm nữa"}
                 }
                 past{
                     other{"{0} năm trước"}
@@ -1328,8 +1816,8 @@ vi{
             start{"{0}, {1}"}
         }
         unit{
-            2{"{0} và {1}"}
-            end{"{0} và {1}"}
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
@@ -1366,165 +1854,511 @@ vi{
     units{
         acceleration{
             g-force{
+                dnam{"lực g"}
                 other{"{0} lực g"}
+            }
+            meter-per-second-squared{
+                dnam{"m/s²"}
+                other{"{0} m/s²"}
             }
         }
         angle{
             arc-minute{
+                dnam{"phút"}
                 other{"{0} phút"}
             }
             arc-second{
+                dnam{"giây"}
                 other{"{0} giây"}
             }
             degree{
+                dnam{"độ"}
                 other{"{0} độ"}
+            }
+            radian{
+                dnam{"radian"}
+                other{"{0} radian"}
             }
         }
         area{
             acre{
+                dnam{"mẫu"}
                 other{"{0} mẫu"}
             }
             hectare{
+                dnam{"héc-ta"}
                 other{"{0} héc-ta"}
             }
+            square-centimeter{
+                dnam{"xentimét vuông"}
+                other{"{0} xentimét vuông"}
+            }
             square-foot{
+                dnam{"feet vuông"}
                 other{"{0} feet vuông"}
             }
+            square-inch{
+                dnam{"inch vuông"}
+                other{"{0} inch vuông"}
+            }
             square-kilometer{
+                dnam{"kilômét vuông"}
                 other{"{0} kilômét vuông"}
             }
             square-meter{
+                dnam{"mét vuông"}
                 other{"{0} mét vuông"}
             }
             square-mile{
+                dnam{"dặm vuông"}
                 other{"{0} dặm vuông"}
+            }
+            square-yard{
+                dnam{"yard vuông"}
+                other{"{0} yard vuông"}
             }
         }
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"lít/km"}
+                other{"{0} lít/km"}
+            }
+            mile-per-gallon{
+                dnam{"dặm/gallon"}
+                other{"{0} dặm/gallon"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"bit"}
+                other{"{0} bit"}
+            }
+            byte{
+                dnam{"byte"}
+                other{"{0} byte"}
+            }
+            gigabit{
+                dnam{"gigabit"}
+                other{"{0} gigabit"}
+            }
+            gigabyte{
+                dnam{"gigabyte"}
+                other{"{0} gigabyte"}
+            }
+            kilobit{
+                dnam{"kilobit"}
+                other{"{0} kilobit"}
+            }
+            kilobyte{
+                dnam{"kilobyte"}
+                other{"{0} kilobyte"}
+            }
+            megabit{
+                dnam{"megabit"}
+                other{"{0} megabit"}
+            }
+            megabyte{
+                dnam{"megabyte"}
+                other{"{0} megabyte"}
+            }
+            terabit{
+                dnam{"terabit"}
+                other{"{0} terabit"}
+            }
+            terabyte{
+                dnam{"terabyte"}
+                other{"{0} terabyte"}
+            }
+        }
         duration{
             day{
+                dnam{"ngày"}
                 other{"{0} ngày"}
             }
             hour{
+                dnam{"giờ"}
                 other{"{0} giờ"}
+                per{"{0}/giờ"}
+            }
+            microsecond{
+                dnam{"micrô giây"}
+                other{"{0} micrô giây"}
             }
             millisecond{
+                dnam{"mili giây"}
                 other{"{0} mili giây"}
             }
             minute{
+                dnam{"phút"}
                 other{"{0} phút"}
             }
             month{
+                dnam{"tháng"}
                 other{"{0} tháng"}
             }
+            nanosecond{
+                dnam{"nano giây"}
+                other{"{0} nano giây"}
+            }
             second{
+                dnam{"giây"}
                 other{"{0} giây"}
+                per{"{0}/giây"}
             }
             week{
+                dnam{"tuần"}
                 other{"{0} tuần"}
             }
             year{
+                dnam{"năm"}
                 other{"{0} năm"}
             }
         }
+        electric{
+            ampere{
+                dnam{"ampe"}
+                other{"{0} ampe"}
+            }
+            milliampere{
+                dnam{"mili ampe"}
+                other{"{0} mili ampe"}
+            }
+            ohm{
+                dnam{"ohm"}
+                other{"{0} ohm"}
+            }
+            volt{
+                dnam{"vôn"}
+                other{"{0} vôn"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"calo"}
+                other{"{0} calo"}
+            }
+            foodcalorie{
+                dnam{"Calo"}
+                other{"{0} Calo"}
+            }
+            joule{
+                dnam{"jun"}
+                other{"{0} jun"}
+            }
+            kilocalorie{
+                dnam{"kilô calo"}
+                other{"{0} kilô calo"}
+            }
+            kilojoule{
+                dnam{"kilô jun"}
+                other{"{0} kilô jun"}
+            }
+            kilowatt-hour{
+                dnam{"kilôoát giờ"}
+                other{"{0} kilôoát giờ"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"GHz"}
+                other{"{0} GHz"}
+            }
+            hertz{
+                dnam{"Hz"}
+                other{"{0} Hz"}
+            }
+            kilohertz{
+                dnam{"kHz"}
+                other{"{0} kHz"}
+            }
+            megahertz{
+                dnam{"MHz"}
+                other{"{0} MHz"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"au"}
+                other{"{0} au"}
+            }
             centimeter{
+                dnam{"xentimét"}
                 other{"{0} xentimét"}
             }
+            decimeter{
+                dnam{"đềximét"}
+                other{"{0} đềximét"}
+            }
             foot{
+                dnam{"feet"}
                 other{"{0} feet"}
             }
             inch{
+                dnam{"inch"}
                 other{"{0} inch"}
             }
             kilometer{
+                dnam{"kilômét"}
                 other{"{0} kilômét"}
             }
             light-year{
+                dnam{"năm ánh sáng"}
                 other{"{0} năm ánh sáng"}
             }
             meter{
+                dnam{"mét"}
                 other{"{0} mét"}
             }
+            micrometer{
+                dnam{"micrômét"}
+                other{"{0} micrômét"}
+            }
             mile{
+                dnam{"dặm"}
                 other{"{0} dặm"}
             }
             millimeter{
+                dnam{"milimét"}
                 other{"{0} milimét"}
             }
+            nanometer{
+                dnam{"nanomét"}
+                other{"{0} nanomét"}
+            }
+            nautical-mile{
+                dnam{"hải lý"}
+                other{"{0} hải lý"}
+            }
+            parsec{
+                dnam{"parsec"}
+                other{"{0} parsec"}
+            }
             picometer{
+                dnam{"picômét"}
                 other{"{0} picômét"}
             }
             yard{
+                dnam{"yard"}
                 other{"{0} yard"}
             }
         }
+        light{
+            lux{
+                dnam{"lux"}
+                other{"{0} lux"}
+            }
+        }
         mass{
+            carat{
+                dnam{"carat"}
+                other{"{0} carat"}
+            }
             gram{
+                dnam{"gam"}
                 other{"{0} gam"}
             }
             kilogram{
+                dnam{"kilôgam"}
                 other{"{0} kilôgam"}
             }
+            metric-ton{
+                dnam{"MT"}
+                other{"{0} MT"}
+            }
+            microgram{
+                dnam{"micrôgam"}
+                other{"{0} micrô gam"}
+            }
+            milligram{
+                dnam{"miligam"}
+                other{"{0} miligam"}
+            }
             ounce{
+                dnam{"ao-xơ"}
                 other{"{0} ao-xơ"}
             }
+            ounce-troy{
+                dnam{"oz t"}
+                other{"{0} oz t"}
+            }
             pound{
+                dnam{"pao"}
                 other{"{0} pao"}
+            }
+            ton{
+                dnam{"tấn"}
+                other{"{0} tấn"}
             }
         }
         power{
+            gigawatt{
+                dnam{"gigaoát"}
+                other{"{0} gigaoát"}
+            }
             horsepower{
+                dnam{"mã lực"}
                 other{"{0} mã lực"}
             }
             kilowatt{
+                dnam{"kilôoát"}
                 other{"{0} kilôoát"}
             }
+            megawatt{
+                dnam{"Megaoát"}
+                other{"{0} Megaoát"}
+            }
+            milliwatt{
+                dnam{"milioát"}
+                other{"{0} milioát"}
+            }
             watt{
+                dnam{"oát"}
                 other{"{0} oát"}
             }
         }
         pressure{
             hectopascal{
+                dnam{"héctô pascal"}
                 other{"{0} héctô pascal"}
             }
             inch-hg{
+                dnam{"inch thủy ngân"}
                 other{"{0} inch thủy ngân"}
             }
             millibar{
+                dnam{"millibar"}
                 other{"{0} millibar"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                other{"{0} mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                other{"{0} psi"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"karat"}
+                other{"{0} karat"}
             }
         }
         speed{
             kilometer-per-hour{
+                dnam{"kilômét/giờ"}
                 other{"{0} kilômét/giờ"}
             }
             meter-per-second{
+                dnam{"mét/giây"}
                 other{"{0} mét/giây"}
             }
             mile-per-hour{
+                dnam{"dặm/giờ"}
                 other{"{0} dặm/giờ"}
             }
         }
         temperature{
             celsius{
+                dnam{"độ C"}
                 other{"{0} độ C"}
             }
             fahrenheit{
+                dnam{"độ F"}
                 other{"{0} độ F"}
+            }
+            kelvin{
+                dnam{"độ K"}
+                other{"{0} độ K"}
             }
         }
         volume{
+            acre-foot{
+                dnam{"ac ft"}
+                other{"{0} ac ft"}
+            }
+            centiliter{
+                dnam{"xentilít"}
+                other{"{0} xentilít"}
+            }
+            cubic-centimeter{
+                dnam{"xentimét khối"}
+                other{"{0} xentimét khối"}
+            }
+            cubic-foot{
+                dnam{"foot khối"}
+                other{"{0} foot khối"}
+            }
+            cubic-inch{
+                dnam{"inch khối"}
+                other{"{0} inch khối"}
+            }
             cubic-kilometer{
+                dnam{"kilômét khối"}
                 other{"{0} kilômét khối"}
             }
+            cubic-meter{
+                dnam{"mét khối"}
+                other{"{0} mét khối"}
+            }
             cubic-mile{
+                dnam{"dặm khối"}
                 other{"{0} dặm khối"}
             }
+            cubic-yard{
+                dnam{"yard khối"}
+                other{"{0} yard khối"}
+            }
+            cup{
+                dnam{"cup"}
+                other{"{0} cup"}
+            }
+            deciliter{
+                dnam{"đềxilít"}
+                other{"{0} đềxilít"}
+            }
+            fluid-ounce{
+                dnam{"fl oz"}
+                other{"{0} fl oz"}
+            }
+            gallon{
+                dnam{"gallon"}
+                other{"{0} gallon"}
+            }
+            hectoliter{
+                dnam{"hectolit"}
+                other{"{0} hectolit"}
+            }
             liter{
+                dnam{"lít"}
                 other{"{0} lít"}
+            }
+            megaliter{
+                dnam{"megalít"}
+                other{"{0} megalít"}
+            }
+            milliliter{
+                dnam{"mililít"}
+                other{"{0} mililít"}
+            }
+            pint{
+                dnam{"pint"}
+                other{"{0} pint"}
+            }
+            quart{
+                dnam{"quart"}
+                other{"{0} quart"}
+            }
+            tablespoon{
+                dnam{"muỗng canh"}
+                other{"{0} muỗng canh"}
+            }
+            teaspoon{
+                dnam{"muỗng cà phê"}
+                other{"{0} muỗng cà phê"}
             }
         }
     }
@@ -1570,32 +2404,41 @@ vi{
         }
         duration{
             day{
-                other{"{0}ng"}
+                dnam{"ngày"}
+                other{"{0} ngày"}
             }
             hour{
-                other{"{0}g"}
+                dnam{"giờ"}
+                other{"{0} giờ"}
             }
             millisecond{
+                dnam{"ms"}
                 other{"{0}ms"}
             }
             minute{
-                other{"{0}ph"}
+                dnam{"phút"}
+                other{"{0} phút"}
             }
             month{
-                other{"{0}th"}
+                dnam{"tháng"}
+                other{"{0} tháng"}
             }
             second{
-                other{"{0}gi"}
+                dnam{"giây"}
+                other{"{0} giây"}
             }
             week{
-                other{"{0}t"}
+                dnam{"tuần"}
+                other{"{0} tuần"}
             }
             year{
-                other{"{0} n"}
+                dnam{"năm"}
+                other{"{0} năm"}
             }
         }
         length{
             centimeter{
+                dnam{"cm"}
                 other{"{0}cm"}
             }
             foot{
@@ -1605,18 +2448,21 @@ vi{
                 other{"{0}\u0022"}
             }
             kilometer{
+                dnam{"km"}
                 other{"{0}km"}
             }
             light-year{
                 other{"{0}ly"}
             }
             meter{
+                dnam{"m"}
                 other{"{0}m"}
             }
             mile{
                 other{"{0}mi"}
             }
             millimeter{
+                dnam{"mm"}
                 other{"{0}mm"}
             }
             picometer{
@@ -1628,9 +2474,11 @@ vi{
         }
         mass{
             gram{
+                dnam{"g"}
                 other{"{0}g"}
             }
             kilogram{
+                dnam{"kg"}
                 other{"{0}kg"}
             }
             ounce{
@@ -1664,6 +2512,7 @@ vi{
         }
         speed{
             kilometer-per-hour{
+                dnam{"km/h"}
                 other{"{0}km/h"}
             }
             meter-per-second{
@@ -1675,7 +2524,8 @@ vi{
         }
         temperature{
             celsius{
-                other{"{0}°"}
+                dnam{"°C"}
+                other{"{0}°C"}
             }
             fahrenheit{
                 other{"{0}°F"}
@@ -1689,6 +2539,7 @@ vi{
                 other{"{0}mi³"}
             }
             liter{
+                dnam{"l"}
                 other{"{0}l"}
             }
         }
@@ -1696,165 +2547,511 @@ vi{
     unitsShort{
         acceleration{
             g-force{
+                dnam{"lực g"}
                 other{"{0} G"}
+            }
+            meter-per-second-squared{
+                dnam{"m/s²"}
+                other{"{0} m/s²"}
             }
         }
         angle{
             arc-minute{
-                other{"{0} ph"}
+                dnam{"phút"}
+                other{"{0}′"}
             }
             arc-second{
-                other{"{0} gi"}
+                dnam{"giây"}
+                other{"{0}″"}
             }
             degree{
-                other{"{0} độ"}
+                dnam{"độ"}
+                other{"{0}°"}
+            }
+            radian{
+                dnam{"rad"}
+                other{"{0} rad"}
             }
         }
         area{
             acre{
+                dnam{"mẫu"}
                 other{"{0} mẫu"}
             }
             hectare{
+                dnam{"ha"}
                 other{"{0} ha"}
             }
+            square-centimeter{
+                dnam{"cm²"}
+                other{"{0} cm²"}
+            }
             square-foot{
+                dnam{"ft²"}
                 other{"{0} feet vuông"}
             }
+            square-inch{
+                dnam{"in²"}
+                other{"{0} in²"}
+            }
             square-kilometer{
+                dnam{"km²"}
                 other{"{0} km²"}
             }
             square-meter{
+                dnam{"m²"}
                 other{"{0} m²"}
             }
             square-mile{
+                dnam{"dặm vuông"}
                 other{"{0} dặm vuông"}
+            }
+            square-yard{
+                dnam{"yd²"}
+                other{"{0} yd²"}
             }
         }
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"l/km"}
+                other{"{0} l/km"}
+            }
+            mile-per-gallon{
+                dnam{"mpg"}
+                other{"{0} mpg"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"bit"}
+                other{"{0} bit"}
+            }
+            byte{
+                dnam{"byte"}
+                other{"{0} byte"}
+            }
+            gigabit{
+                dnam{"Gb"}
+                other{"{0} Gb"}
+            }
+            gigabyte{
+                dnam{"GB"}
+                other{"{0} GB"}
+            }
+            kilobit{
+                dnam{"kb"}
+                other{"{0} kb"}
+            }
+            kilobyte{
+                dnam{"kB"}
+                other{"{0} kB"}
+            }
+            megabit{
+                dnam{"Mb"}
+                other{"{0} Mb"}
+            }
+            megabyte{
+                dnam{"MB"}
+                other{"{0} MB"}
+            }
+            terabit{
+                dnam{"Tb"}
+                other{"{0} Tb"}
+            }
+            terabyte{
+                dnam{"TB"}
+                other{"{0} TB"}
+            }
+        }
         duration{
             day{
+                dnam{"ngày"}
                 other{"{0} ngày"}
             }
             hour{
-                other{"{0} g"}
+                dnam{"giờ"}
+                other{"{0} giờ"}
+                per{"{0}/giờ"}
+            }
+            microsecond{
+                dnam{"μs"}
+                other{"{0} μs"}
             }
             millisecond{
+                dnam{"ms"}
                 other{"{0} ms"}
             }
             minute{
-                other{"{0} ph"}
+                dnam{"phút"}
+                other{"{0} phút"}
             }
             month{
+                dnam{"tháng"}
                 other{"{0} tháng"}
             }
+            nanosecond{
+                dnam{"ns"}
+                other{"{0} ns"}
+            }
             second{
+                dnam{"giây"}
                 other{"{0} giây"}
+                per{"{0}/giây"}
             }
             week{
+                dnam{"tuần"}
                 other{"{0} tuần"}
             }
             year{
+                dnam{"năm"}
                 other{"{0} năm"}
             }
         }
+        electric{
+            ampere{
+                dnam{"A"}
+                other{"{0} A"}
+            }
+            milliampere{
+                dnam{"mA"}
+                other{"{0} mA"}
+            }
+            ohm{
+                dnam{"Ω"}
+                other{"{0} Ω"}
+            }
+            volt{
+                dnam{"v"}
+                other{"{0} V"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"cal"}
+                other{"{0} cal"}
+            }
+            foodcalorie{
+                dnam{"Cal"}
+                other{"{0} Cal"}
+            }
+            joule{
+                dnam{"J"}
+                other{"{0} J"}
+            }
+            kilocalorie{
+                dnam{"kcal"}
+                other{"{0} kcal"}
+            }
+            kilojoule{
+                dnam{"kJ"}
+                other{"{0} kJ"}
+            }
+            kilowatt-hour{
+                dnam{"kWh"}
+                other{"{0} kWh"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"GHz"}
+                other{"{0} GHz"}
+            }
+            hertz{
+                dnam{"Hz"}
+                other{"{0} Hz"}
+            }
+            kilohertz{
+                dnam{"kHz"}
+                other{"{0} kHz"}
+            }
+            megahertz{
+                dnam{"MHz"}
+                other{"{0} MHz"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"au"}
+                other{"{0} au"}
+            }
             centimeter{
+                dnam{"cm"}
                 other{"{0} cm"}
             }
+            decimeter{
+                dnam{"dm"}
+                other{"{0} dm"}
+            }
             foot{
+                dnam{"ft"}
                 other{"{0} ft"}
             }
             inch{
-                other{"{0} in"}
+                dnam{"inch"}
+                other{"{0} inch"}
             }
             kilometer{
+                dnam{"km"}
                 other{"{0} km"}
             }
             light-year{
+                dnam{"ly"}
                 other{"{0} ly"}
             }
             meter{
+                dnam{"m"}
                 other{"{0} m"}
             }
+            micrometer{
+                dnam{"µm"}
+                other{"{0} µm"}
+            }
             mile{
-                other{"{0} mi"}
+                dnam{"dặm"}
+                other{"{0} dặm"}
             }
             millimeter{
+                dnam{"mm"}
                 other{"{0} mm"}
             }
+            nanometer{
+                dnam{"nm"}
+                other{"{0} nm"}
+            }
+            nautical-mile{
+                dnam{"hải lý"}
+                other{"{0} hải lý"}
+            }
+            parsec{
+                dnam{"pc"}
+                other{"{0} pc"}
+            }
             picometer{
+                dnam{"pm"}
                 other{"{0} pm"}
             }
             yard{
+                dnam{"yd"}
                 other{"{0} yd"}
             }
         }
+        light{
+            lux{
+                dnam{"lx"}
+                other{"{0} lx"}
+            }
+        }
         mass{
+            carat{
+                dnam{"CD"}
+                other{"{0} CD"}
+            }
             gram{
+                dnam{"g"}
                 other{"{0} g"}
             }
             kilogram{
+                dnam{"kg"}
                 other{"{0} kg"}
             }
+            metric-ton{
+                dnam{"t"}
+                other{"{0} t"}
+            }
+            microgram{
+                dnam{"µg"}
+                other{"{0} µg"}
+            }
+            milligram{
+                dnam{"mg"}
+                other{"{0} mg"}
+            }
             ounce{
+                dnam{"oz"}
                 other{"{0} oz"}
             }
+            ounce-troy{
+                dnam{"oz t"}
+                other{"{0} oz t"}
+            }
             pound{
+                dnam{"pao"}
                 other{"{0} lb"}
+            }
+            ton{
+                dnam{"tn"}
+                other{"{0} tn"}
             }
         }
         power{
+            gigawatt{
+                dnam{"GW"}
+                other{"{0} GW"}
+            }
             horsepower{
+                dnam{"hp"}
                 other{"{0} hp"}
             }
             kilowatt{
+                dnam{"kW"}
                 other{"{0} kW"}
             }
+            megawatt{
+                dnam{"MW"}
+                other{"{0} MW"}
+            }
+            milliwatt{
+                dnam{"mW"}
+                other{"{0} mW"}
+            }
             watt{
+                dnam{"W"}
                 other{"{0} W"}
             }
         }
         pressure{
             hectopascal{
+                dnam{"hPa"}
                 other{"{0} hPa"}
             }
             inch-hg{
+                dnam{"inHg"}
                 other{"{0} inHg"}
             }
             millibar{
-                other{"{0} mb"}
+                dnam{"mbar"}
+                other{"{0} mbar"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                other{"{0} mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                other{"{0} psi"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"kt"}
+                other{"{0} kt"}
             }
         }
         speed{
             kilometer-per-hour{
+                dnam{"km/h"}
                 other{"{0} km/h"}
             }
             meter-per-second{
+                dnam{"m/s"}
                 other{"{0} m/s"}
             }
             mile-per-hour{
+                dnam{"mi/h"}
                 other{"{0} mph"}
             }
         }
         temperature{
             celsius{
+                dnam{"°C"}
                 other{"{0}°C"}
             }
             fahrenheit{
+                dnam{"°F"}
                 other{"{0}°F"}
+            }
+            kelvin{
+                dnam{"K"}
+                other{"{0} K"}
             }
         }
         volume{
+            acre-foot{
+                dnam{"ac ft"}
+                other{"{0} ac ft"}
+            }
+            centiliter{
+                dnam{"cL"}
+                other{"{0} cL"}
+            }
+            cubic-centimeter{
+                dnam{"cm³"}
+                other{"{0} cm³"}
+            }
+            cubic-foot{
+                dnam{"ft³"}
+                other{"{0} ft³"}
+            }
+            cubic-inch{
+                dnam{"in³"}
+                other{"{0} in³"}
+            }
             cubic-kilometer{
+                dnam{"km³"}
                 other{"{0} km³"}
             }
+            cubic-meter{
+                dnam{"m³"}
+                other{"{0} m³"}
+            }
             cubic-mile{
+                dnam{"mi³"}
                 other{"{0} mi³"}
             }
+            cubic-yard{
+                dnam{"yd³"}
+                other{"{0} yd³"}
+            }
+            cup{
+                dnam{"c"}
+                other{"{0} c"}
+            }
+            deciliter{
+                dnam{"dL"}
+                other{"{0} dL"}
+            }
+            fluid-ounce{
+                dnam{"fl oz"}
+                other{"{0} fl oz"}
+            }
+            gallon{
+                dnam{"gal"}
+                other{"{0} gal"}
+            }
+            hectoliter{
+                dnam{"hL"}
+                other{"{0} hL"}
+            }
             liter{
+                dnam{"l"}
                 other{"{0} l"}
+            }
+            megaliter{
+                dnam{"ML"}
+                other{"{0} ML"}
+            }
+            milliliter{
+                dnam{"mL"}
+                other{"{0} mL"}
+            }
+            pint{
+                dnam{"pt"}
+                other{"{0} pt"}
+            }
+            quart{
+                dnam{"qt"}
+                other{"{0} qt"}
+            }
+            tablespoon{
+                dnam{"tbsp"}
+                other{"{0} tbsp"}
+            }
+            teaspoon{
+                dnam{"tsp"}
+                other{"{0} tsp"}
             }
         }
     }

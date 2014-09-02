@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/zh.xml
  */
 zh{
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -436,7 +436,7 @@ zh{
             ec{"门多萨"}
         }
         "America:Menominee"{
-            ec{"密诺米尼"}
+            ec{"梅诺米尼"}
         }
         "America:Merida"{
             ec{"梅里达"}
@@ -632,6 +632,9 @@ zh{
         }
         "Antarctica:Syowa"{
             ec{"昭和"}
+        }
+        "Antarctica:Troll"{
+            ec{"特罗尔"}
         }
         "Antarctica:Vostok"{
             ec{"沃斯托克"}
@@ -983,7 +986,7 @@ zh{
         }
         "Europe:Dublin"{
             ec{"都柏林"}
-            ld{"爱尔兰夏令时间"}
+            ld{"爱尔兰标准时间"}
         }
         "Europe:Gibraltar"{
             ec{"直布罗陀"}
@@ -1324,6 +1327,11 @@ zh{
             lg{"阿纳德尔时间"}
             ls{"阿纳德尔标准时间"}
         }
+        "meta:Apia"{
+            ld{"阿皮亚夏令时间"}
+            lg{"阿皮亚时间"}
+            ls{"阿皮亚标准时间"}
+        }
         "meta:Aqtau"{
             ld{"阿克套夏令时间"}
             lg{"阿克套时间"}
@@ -1487,6 +1495,9 @@ zh{
             lg{"东欧时间"}
             ls{"东欧标准时间"}
         }
+        "meta:Europe_Further_Eastern"{
+            ls{"远东标准时间"}
+        }
         "meta:Europe_Western"{
             ld{"西欧夏令时间"}
             lg{"西欧时间"}
@@ -1539,7 +1550,7 @@ zh{
             ls{"关岛时间"}
         }
         "meta:Gulf"{
-            ls{"海湾时间"}
+            ls{"海湾标准时间"}
         }
         "meta:Guyana"{
             ls{"圭亚那时间"}
@@ -1806,7 +1817,7 @@ zh{
             ls{"塞舌尔时间"}
         }
         "meta:Singapore"{
-            ls{"新加坡时间"}
+            ls{"新加坡标准时间"}
         }
         "meta:Solomon"{
             ls{"所罗门群岛时间"}

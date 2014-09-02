@@ -287,13 +287,14 @@ kea{
         UZ{"Uzbekistãu"}
         VA{"Vatikanu"}
         VC{"Sãu Bisenti i Granadinas"}
-        VE{"Vinizuea"}
+        VE{"Vinizuela"}
         VG{"Ilhas Virjens Britanikas"}
         VI{"Ilhas Virjens Merkanu"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
         WF{"Ualis i Futuna"}
         WS{"Samoa"}
+        XK{"Kozovu"}
         YE{"Iemen"}
         YT{"Maiote"}
         ZA{"Afrika di Sul"}
@@ -301,9 +302,17 @@ kea{
         ZW{"Zimbabui"}
         ZZ{"Rejiãu Diskonxedu"}
     }
+    Countries%variant{
+        CD{"Republika Dimokratika di Kongu"}
+        CG{"Republika di Kongu"}
+        CI{"Kosta di Marfin (Côte d’Ivoire)"}
+        MK{"Masidonia (FYROM)"}
+    }
     CountriesShort{
+        GB{"R.U."}
         HK{"Ong Kong"}
         MO{"Makau"}
+        US{"S.U."}
     }
-    Version{"2.0.95.15"}
+    Version{"2.1.7.39"}
 }

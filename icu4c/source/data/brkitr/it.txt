@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 it{
-    Version{"2.0.92.29"}
+    Version{"2.1.7.45"}
     exceptions{
         SentenceBreak:array{
             "N.B.",
@@ -16,6 +16,8 @@ it{
             "fig.",
             "d.p.R.",
             "c.c.p.",
+            "Cfr.",
+            "vol.",
             "Geom.",
             "O.d.G.",
             "S.p.A.",
@@ -27,22 +29,31 @@ it{
             "N.d.T.",
             "rag.",
             "Sig.",
+            "Mod.",
             "pag.",
             "dr.",
+            "tav.",
             "N.d.E.",
+            "DC.",
             "mitt.",
             "Ing.",
-            "vol.",
+            "int.",
             "on.",
             "C.P.",
             "ag.",
-            "int.",
+            "L.",
+            "U.S.",
+            "S.M.A.R.T.",
             "p.i.",
             "tab.",
-            "all.",
+            "Ltd.",
+            "Liv.",
+            "D.",
+            "U.S.A.",
             "sez.",
             "avv.",
-            "tav.",
+            "S.A.R.",
+            "all.",
             "p.",
         }
     }

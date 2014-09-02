@@ -18,7 +18,7 @@ nmg{
         AI{"Anguílla"}
         AL{"Albania"}
         AM{"Arménia"}
-        AN{"B'Antilles bó Nedɛrland"}
+        AN{"B’Antilles bó Nedɛrland"}
         AO{"Angola"}
         AR{"Argentína"}
         AS{"Samoa m ́Amɛ́rka"}
@@ -237,5 +237,5 @@ nmg{
         ZM{"Zambia"}
         ZW{"Zimbabwǝ"}
     }
-    Version{"2.0.98.62"}
+    Version{"2.1.7.39"}
 }

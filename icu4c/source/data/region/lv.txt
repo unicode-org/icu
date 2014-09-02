@@ -243,7 +243,7 @@ lv{
         RW{"Ruanda"}
         SA{"Saūda Arābija"}
         SB{"Zālamana salas"}
-        SC{"Seišeļu salas"}
+        SC{"Šeišelu salas"}
         SD{"Sudāna"}
         SE{"Zviedrija"}
         SG{"Singapūra"}
@@ -302,6 +302,13 @@ lv{
         ZW{"Zimbabve"}
         ZZ{"nezināms reģions"}
     }
+    Countries%variant{
+        CD{"Kongo Demokrātiskā Republika"}
+        CG{"Kongo (Republika)"}
+        CI{"Ziloņkaula krasts"}
+        FK{"Folklenda (Malvinu) salas"}
+        MK{"Maķedonija (BDRM)"}
+    }
     CountriesShort{
         GB{"Lielbritānija"}
         HK{"Honkonga"}
@@ -309,5 +316,5 @@ lv{
         PS{"Palestīna"}
         US{"ASV"}
     }
-    Version{"2.0.99.67"}
+    Version{"2.1.8.9"}
 }

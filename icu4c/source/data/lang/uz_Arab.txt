@@ -19,5 +19,5 @@ uz_Arab{
     Scripts{
         Arab{"عربی"}
     }
-    Version{"2.0.99.14"}
+    Version{"2.1.6.69"}
 }

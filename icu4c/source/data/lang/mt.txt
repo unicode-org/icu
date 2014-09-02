@@ -114,6 +114,9 @@ mt{
         el{"Grieg"}
         elx{"Elamit"}
         en{"Ingliż"}
+        en_AU{"Ingliż Awstraljan"}
+        en_GB{"Ingliż Brittaniku"}
+        en_US{"Ingliż Amerikan"}
         enm{"Ingliż, Medjevali"}
         eo{"Esperanto"}
         es{"Spanjol"}
@@ -130,6 +133,8 @@ mt{
         fo{"Fawriż"}
         fon{"Fon"}
         fr{"Franċiż"}
+        fr_CA{"Franċiż Kanadiż"}
+        fr_CH{"Franċiż Żvizzeru"}
         frm{"Franċiż, Medjevali"}
         fro{"Franċiż, Antik"}
         fur{"Frijuljan"}
@@ -401,7 +406,7 @@ mt{
         uga{"Ugaritiku"}
         uk{"Ukranjan"}
         umb{"Umbundu"}
-        und{"Indeterminat"}
+        und{"Lingwa Mhux Magħrufa"}
         ur{"Urdu"}
         uz{"Użbek"}
         vai{"Vai"}
@@ -424,32 +429,41 @@ mt{
         zap{"Żapotek"}
         zen{"Żenaga"}
         zh{"Ċiniż"}
+        zh_Hans{"Ċiniż Simplifikat"}
         zu{"Żulu"}
         zun{"Żuni"}
     }
+    LanguagesShort{
+        en_GB{"Ingliż (UK)"}
+        en_US{"Ingliż (US)"}
+    }
     Scripts{
         Arab{"Għarbi"}
+        Cyrl{"Ċirilliku"}
         Grek{"Grieg"}
-        Hans{"Sempliċi"}
+        Hans{"Simplifikat"}
         Hant{"Tradizzjonali"}
         Latn{"Latin"}
         Xpeo{"Persjan Antik"}
         Zxxx{"Mhux Miktub"}
         Zyyy{"Komuni"}
-        Zzzz{"Skritt Mhux Magħruf"}
+        Zzzz{"Kitba Mhux Magħrufa"}
     }
     Scripts%stand-alone{
-        Hans{"Ħan Sempliċi"}
-        Hant{"Ħan Tradizzjonali"}
+        Hans{"Han Simplifikat"}
+        Hant{"Han Tradizzjonali"}
     }
     Types{
         calendar{
             buddhist{"Kalendarju Buddist"}
             chinese{"Kalendarju Ċiniż"}
+            dangi{"Kalendarju Dangi"}
+            ethiopic{"Kalendarju Etjopiku"}
             gregorian{"Kalendarju Gregorjan"}
             hebrew{"Kalendarju Ebrajk"}
-            islamic{"Kalendarju Islamiku"}
+            islamic{"Kalendarju Iżlamiku"}
             islamic-civil{"Kalendarju Islamiku-Ċivili"}
+            iso8601{"Kalendarju ISO-8601"}
             japanese{"Kalendarju Ġappuniż"}
         }
         collation{
@@ -457,14 +471,18 @@ mt{
             gb2312han{"Ordni Ċiniż Sempliċi (GB2312)"}
             phonebook{"Ordni Telefonika"}
             pinyin{"Ordni tal-Pinjin"}
+            standard{"Ordni Standard"}
             stroke{"Ordni Maħżuża"}
             traditional{"Tradizzjonali"}
+        }
+        numbers{
+            latn{"Numri tal-Punent"}
         }
     }
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"2.0.97.92"}
+    Version{"2.1.8.22"}
     codePatterns{
         language{"Lingwa: {0}"}
         script{"Skritt: {0}"}

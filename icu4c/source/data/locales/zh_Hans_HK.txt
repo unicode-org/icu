@@ -10,38 +10,10 @@ zh_Hans_HK{
     NumberElements{
         latn{
             patterns{
-                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
             }
             patternsLong{
                 decimalFormat{
-                    1000{
-                        other{"0千"}
-                    }
-                    10000{
-                        other{"0万"}
-                    }
-                    100000{
-                        other{"00万"}
-                    }
-                    1000000{
-                        other{"000万"}
-                    }
-                    10000000{
-                        other{"0000万"}
-                    }
-                    100000000{
-                        other{"0亿"}
-                    }
-                    1000000000{
-                        other{"00亿"}
-                    }
-                    10000000000{
-                        other{"000亿"}
-                    }
-                    100000000000{
-                        other{"0000亿"}
-                    }
                     1000000000000{
                         other{"0万亿"}
                     }
@@ -55,33 +27,6 @@ zh_Hans_HK{
             }
             patternsShort{
                 decimalFormat{
-                    1000{
-                        other{"0千"}
-                    }
-                    10000{
-                        other{"0万"}
-                    }
-                    100000{
-                        other{"00万"}
-                    }
-                    1000000{
-                        other{"000万"}
-                    }
-                    10000000{
-                        other{"0000万"}
-                    }
-                    100000000{
-                        other{"0亿"}
-                    }
-                    1000000000{
-                        other{"00亿"}
-                    }
-                    10000000000{
-                        other{"000亿"}
-                    }
-                    100000000000{
-                        other{"0000亿"}
-                    }
                     1000000000000{
                         other{"0万亿"}
                     }
@@ -95,7 +40,7 @@ zh_Hans_HK{
             }
         }
     }
-    Version{"2.0.96.25"}
+    Version{"2.1.8.19"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -344,32 +289,32 @@ zh_Hans_HK{
                 other{"{0}秒"}
             }
         }
+        proportion{
+            karat{
+                dnam{"开"}
+                other{"{0}开"}
+            }
+        }
+        temperature{
+            kelvin{
+                dnam{"开氏度"}
+                other{"{0}开氏度"}
+            }
+        }
     }
     unitsNarrow{
         length{
-            centimeter{
-                other{"{0}厘米"}
-            }
             foot{
                 other{"{0}英尺"}
             }
             inch{
                 other{"{0}英寸"}
             }
-            kilometer{
-                other{"{0}公里"}
-            }
             light-year{
                 other{"{0}光年"}
             }
-            meter{
-                other{"{0}米"}
-            }
             mile{
                 other{"{0}英里"}
-            }
-            millimeter{
-                other{"{0}毫米"}
             }
             picometer{
                 other{"{0}皮米"}
@@ -378,38 +323,42 @@ zh_Hans_HK{
                 other{"{0}码"}
             }
         }
+        temperature{
+            celsius{
+                other{"{0}°C"}
+            }
+        }
     }
     unitsShort{
+        acceleration{
+            g-force{
+                other{"{0}G力"}
+            }
+        }
         length{
-            centimeter{
-                other{"{0}厘米"}
-            }
-            foot{
-                other{"{0}英尺"}
-            }
-            inch{
-                other{"{0}英寸"}
-            }
-            kilometer{
-                other{"{0}公里"}
-            }
             light-year{
                 other{"{0}光年"}
             }
             meter{
                 other{"{0}米"}
             }
-            mile{
-                other{"{0}英里"}
-            }
-            millimeter{
-                other{"{0}毫米"}
-            }
             picometer{
                 other{"{0}皮米"}
             }
             yard{
                 other{"{0}码"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"开"}
+                other{"{0}开"}
+            }
+        }
+        temperature{
+            kelvin{
+                dnam{"开氏度"}
+                other{"{0}°K"}
             }
         }
     }

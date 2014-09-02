@@ -72,10 +72,6 @@ yo_BJ{
             "ETB",
             "Biri ti Orílɛ́ède Eutopia",
         }
-        EUR{
-            "€",
-            "Uro",
-        }
         GBP{
             "£",
             "Pɔɔn ti Orílɛ́ède Bírítísì",
@@ -176,10 +172,6 @@ yo_BJ{
             "SHP",
             "Pɔɔun ti Orílɛ́ède ̣Elena",
         }
-        SLL{
-            "SLL",
-            "Lioni",
-        }
         SOS{
             "SOS",
             "Sile ti Orílɛ́ède Somali",
@@ -187,10 +179,6 @@ yo_BJ{
         STD{
             "STD",
             "Dobira ti Orílɛ́ède Sao tome Ati Pirisipe",
-        }
-        SZL{
-            "SZL",
-            "Lilangeni",
         }
         TND{
             "TND",
@@ -233,5 +221,5 @@ yo_BJ{
             "Dɔla ti Orílɛ́ède Siibabuwe",
         }
     }
-    Version{"2.0.98.62"}
+    Version{"2.1.8.19"}
 }

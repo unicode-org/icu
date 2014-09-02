@@ -49,7 +49,7 @@ kln{
         CF{"Emetab Afrika nebo Kwen"}
         CG{"Emetab Congo - Brazzaville"}
         CH{"Emetab Switzerland"}
-        CI{"Emetab Côte d'Ivoire"}
+        CI{"Emetab Côte d’Ivoire"}
         CK{"Ikwembeyotab Cook"}
         CL{"Emetab Chile"}
         CM{"Emetab Cameroon"}
@@ -237,5 +237,5 @@ kln{
         ZM{"Emetab Zambia"}
         ZW{"Emetab Zimbabwe"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.7.39"}
 }

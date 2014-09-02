@@ -1679,12 +1679,12 @@ static const TestWeekendDates weekendDates_en_US[] = {
 static const TestWeekendDates weekendDates_ar_OM[] = {
     { 2000, UCAL_MARCH, 15, 23,  0, 0 }, /* Wed 23:00        */
     { 2000, UCAL_MARCH, 16,  0, -1, 0 }, /* Wed 23:59:59.999 */
-    { 2000, UCAL_MARCH, 16,  0,  0, 1 }, /* Thu 00:00        */
-    { 2000, UCAL_MARCH, 16, 15,  0, 1 }, /* Thu 15:00        */
+    { 2000, UCAL_MARCH, 16,  0,  0, 0 }, /* Thu 00:00        */
+    { 2000, UCAL_MARCH, 16, 15,  0, 0 }, /* Thu 15:00        */
     { 2000, UCAL_MARCH, 17, 23,  0, 1 }, /* Fri 23:00        */
     { 2000, UCAL_MARCH, 18,  0, -1, 1 }, /* Fri 23:59:59.999 */
-    { 2000, UCAL_MARCH, 18,  0,  0, 0 }, /* Sat 00:00        */
-    { 2000, UCAL_MARCH, 18,  8,  0, 0 }, /* Sat 08:00        */
+    { 2000, UCAL_MARCH, 18,  0,  0, 1 }, /* Sat 00:00        */
+    { 2000, UCAL_MARCH, 18,  8,  0, 1 }, /* Sat 08:00        */
 };
 static const TestWeekendDatesList testDates[] = {
     { "en_US", weekendDates_en_US, sizeof(weekendDates_en_US)/sizeof(weekendDates_en_US[0]) },
@@ -1708,11 +1708,11 @@ static const TestDaysOfWeek daysOfWeek_en_US[] = {
     { UCAL_SATURDAY, UCAL_WEEKEND,       0        },
     { UCAL_SUNDAY,   UCAL_WEEKEND,       0        },
 };
-static const TestDaysOfWeek daysOfWeek_ar_OM[] = { /* Thursday:Friday */
+static const TestDaysOfWeek daysOfWeek_ar_OM[] = { /* Friday:Saturday */
     { UCAL_WEDNESDAY,UCAL_WEEKDAY,       0        },
-    { UCAL_SATURDAY, UCAL_WEEKDAY,       0        },
-    { UCAL_THURSDAY, UCAL_WEEKEND,       0        },
+    { UCAL_THURSDAY, UCAL_WEEKDAY,       0        },
     { UCAL_FRIDAY,   UCAL_WEEKEND,       0        },
+    { UCAL_SATURDAY, UCAL_WEEKEND,       0        },
 };
 static const TestDaysOfWeek daysOfWeek_hi_IN[] = { /* Sunday only */
     { UCAL_MONDAY,   UCAL_WEEKDAY,       0        },

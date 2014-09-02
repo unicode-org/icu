@@ -182,6 +182,7 @@ lv{
         fy{"rietumfrīzu"}
         ga{"īru"}
         gaa{"ga"}
+        gag{"gagauzu"}
         gay{"gajo"}
         gba{"gbaju"}
         gd{"gēlu"}
@@ -265,6 +266,7 @@ lv{
         kmb{"kimbundu"}
         kn{"kannadu"}
         ko{"korejiešu"}
+        koi{"komiešu-permiešu"}
         kok{"konkanu"}
         kos{"kosrājiešu"}
         kpe{"kpellu"}
@@ -291,6 +293,7 @@ lv{
         lez{"lezgīnu"}
         lg{"gandu"}
         li{"limburgiešu"}
+        lkt{"lakotu"}
         ln{"lingala"}
         lo{"laosiešu"}
         lol{"mongu"}
@@ -397,6 +400,7 @@ lv{
         pt_BR{"Brazīlijas portugāļu"}
         pt_PT{"Eiropas portugāļu"}
         qu{"kečvu"}
+        quc{"kiče"}
         raj{"radžastāņu"}
         rap{"rapanuju"}
         rar{"rarotongiešu"}
@@ -441,8 +445,8 @@ lv{
         sl{"slovēņu"}
         sm{"samoāņu"}
         sma{"dienvidsāmu"}
-        smj{"luleo sāmu"}
-        smn{"inari sāmu"}
+        smj{"Luleo sāmu"}
+        smn{"Inari sāmu"}
         sms{"skoltsāmu"}
         sn{"šonu"}
         snk{"soninku"}
@@ -625,20 +629,25 @@ lv{
         Hans{"hanu vienkāršotā"}
         Hant{"hanu tradicionālā"}
     }
+    Scripts%variant{
+        Arab{"persiešu-arābu"}
+    }
     Types{
         calendar{
             buddhist{"budistu kalendārs"}
             chinese{"ķīniešu kalendārs"}
             coptic{"Koptu kalendārs"}
-            ethiopic{"Etiopiešu kalendārs"}
+            dangi{"dangi kalendārs"}
+            ethiopic{"etiopiešu kalendārs"}
             ethiopic-amete-alem{"Etiopiešu kalendārs"}
             gregorian{"Gregora kalendārs"}
             hebrew{"ebreju kalendārs"}
             indian{"Indijas nacionālais kalendārs"}
             islamic{"islāma kalendārs"}
             islamic-civil{"islāma pilsoņu kalendārs"}
+            iso8601{"ISO 8601 kalendārs"}
             japanese{"japāņu kalendārs"}
-            persian{"Persiešu kalendārs"}
+            persian{"persiešu kalendārs"}
             roc{"Ķīnas Republikas kalendārs"}
         }
         colAlternate{
@@ -763,7 +772,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.0.99.67"}
+    Version{"2.1.8.9"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}

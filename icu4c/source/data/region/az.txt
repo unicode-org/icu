@@ -302,6 +302,13 @@ az{
         ZW{"Zimbabve"}
         ZZ{"Naməlum Region"}
     }
+    Countries%variant{
+        CD{"Konqo (KDR)"}
+        CG{"Konqo (Respublika)"}
+        FK{"Folklend Adaları (Malvin Adaları)"}
+        MK{"Makedoniya (FYROM)"}
+        TL{"Doğu Timor"}
+    }
     CountriesShort{
         GB{"B.K."}
         HK{"Honq Konq"}
@@ -309,5 +316,5 @@ az{
         PS{"Fələstin"}
         US{"A.B.Ş."}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
 }

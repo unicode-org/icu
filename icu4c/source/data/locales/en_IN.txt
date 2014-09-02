@@ -17,7 +17,7 @@ en_IN{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.1.8.19"}
     calendar{
         generic{
             DateTimePatterns{
@@ -51,11 +51,11 @@ en_IN{
                 "d MMMM y",
                 "dd-MMM-y",
                 "dd/MM/yy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 yMEd{"E d/M/y"}

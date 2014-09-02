@@ -17,7 +17,7 @@ sr{
                 "[reorder Cyrl][suppressContractions [АаӘәГгЕеЖжЗзИиІіОоӨөКкУуЧчЫыЭэѴ"
                 "ѵ]]"
             }
-            Version{"25"}
+            Version{"26"}
         }
     }
 }

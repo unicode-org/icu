@@ -194,12 +194,14 @@ zh{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
+        minimumGroupingDigits{"1"}
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -308,6 +310,36 @@ zh{
                             "酉",
                             "戌",
                             "亥",
+                        }
+                    }
+                }
+                solarTerms{
+                    format{
+                        abbreviated{
+                            "立春",
+                            "雨水",
+                            "惊蛰",
+                            "春分",
+                            "清明",
+                            "谷雨",
+                            "立夏",
+                            "小满",
+                            "芒种",
+                            "夏至",
+                            "小暑",
+                            "大暑",
+                            "立秋",
+                            "处暑",
+                            "白露",
+                            "秋分",
+                            "寒露",
+                            "霜降",
+                            "立冬",
+                            "小雪",
+                            "大雪",
+                            "冬至",
+                            "小寒",
+                            "大寒",
                         }
                     }
                 }
@@ -954,6 +986,7 @@ zh{
                 Timezone{"{1}{0}"}
             }
             availableFormats{
+                E{"ccc"}
                 EHm{"EHH:mm"}
                 EHms{"EHH:mm:ss"}
                 Ed{"d日E"}
@@ -980,7 +1013,7 @@ zh{
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
                 y{"y年"}
-                yM{"y/M"}
+                yM{"y年M月"}
                 yMEd{"y/M/dE"}
                 yMM{"y年M月"}
                 yMMM{"y年M月"}
@@ -2085,6 +2118,28 @@ zh{
                 }
             }
         }
+        day-narrow{
+            dn{"日"}
+            relativeTime{
+                future{
+                    other{"{0}天后"}
+                }
+                past{
+                    other{"{0}天前"}
+                }
+            }
+        }
+        day-short{
+            dn{"日"}
+            relativeTime{
+                future{
+                    other{"{0}天后"}
+                }
+                past{
+                    other{"{0}天前"}
+                }
+            }
+        }
         dayperiod{
             dn{"上午/下午"}
         }
@@ -2098,7 +2153,43 @@ zh{
                 "1"{"下周五"}
             }
         }
+        fri-narrow{
+            relative{
+                "-1"{"上周五"}
+                "0"{"本周五"}
+                "1"{"下周五"}
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"上周五"}
+                "0"{"本周五"}
+                "1"{"下周五"}
+            }
+        }
         hour{
+            dn{"小时"}
+            relativeTime{
+                future{
+                    other{"{0}小时后"}
+                }
+                past{
+                    other{"{0}小时前"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"小时"}
+            relativeTime{
+                future{
+                    other{"{0}小时后"}
+                }
+                past{
+                    other{"{0}小时前"}
+                }
+            }
+        }
+        hour-short{
             dn{"小时"}
             relativeTime{
                 future{
@@ -2120,7 +2211,43 @@ zh{
                 }
             }
         }
+        minute-narrow{
+            dn{"分钟"}
+            relativeTime{
+                future{
+                    other{"{0}分钟后"}
+                }
+                past{
+                    other{"{0}分钟前"}
+                }
+            }
+        }
+        minute-short{
+            dn{"分钟"}
+            relativeTime{
+                future{
+                    other{"{0}分钟后"}
+                }
+                past{
+                    other{"{0}分钟前"}
+                }
+            }
+        }
         mon{
+            relative{
+                "-1"{"上周一"}
+                "0"{"本周一"}
+                "1"{"下周一"}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"上周一"}
+                "0"{"本周一"}
+                "1"{"下周一"}
+            }
+        }
+        mon-short{
             relative{
                 "-1"{"上周一"}
                 "0"{"本周一"}
@@ -2143,7 +2270,76 @@ zh{
                 }
             }
         }
+        month-narrow{
+            dn{"月"}
+            relativeTime{
+                future{
+                    other{"{0}个月后"}
+                }
+                past{
+                    other{"{0}个月前"}
+                }
+            }
+        }
+        month-short{
+            dn{"月"}
+            relativeTime{
+                future{
+                    other{"{0}个月后"}
+                }
+                past{
+                    other{"{0}个月前"}
+                }
+            }
+        }
+        quarter{
+            dn{"季"}
+            relativeTime{
+                future{
+                    other{"{0}季度后"}
+                }
+                past{
+                    other{"{0}季度前"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"季"}
+            relativeTime{
+                future{
+                    other{"{0}季度后"}
+                }
+                past{
+                    other{"{0}季度前"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"季"}
+            relativeTime{
+                future{
+                    other{"{0}季度后"}
+                }
+                past{
+                    other{"{0}季度前"}
+                }
+            }
+        }
         sat{
+            relative{
+                "-1"{"上周六"}
+                "0"{"本周六"}
+                "1"{"下周六"}
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"上周六"}
+                "0"{"本周六"}
+                "1"{"下周六"}
+            }
+        }
+        sat-short{
             relative{
                 "-1"{"上周六"}
                 "0"{"本周六"}
@@ -2164,7 +2360,43 @@ zh{
                 }
             }
         }
+        second-narrow{
+            dn{"秒钟"}
+            relativeTime{
+                future{
+                    other{"{0}秒后"}
+                }
+                past{
+                    other{"{0}秒前"}
+                }
+            }
+        }
+        second-short{
+            dn{"秒钟"}
+            relativeTime{
+                future{
+                    other{"{0}秒后"}
+                }
+                past{
+                    other{"{0}秒前"}
+                }
+            }
+        }
         sun{
+            relative{
+                "-1"{"上周日"}
+                "0"{"本周日"}
+                "1"{"下周日"}
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"上周日"}
+                "0"{"本周日"}
+                "1"{"下周日"}
+            }
+        }
+        sun-short{
             relative{
                 "-1"{"上周日"}
                 "0"{"本周日"}
@@ -2178,6 +2410,20 @@ zh{
                 "1"{"下周四"}
             }
         }
+        thu-narrow{
+            relative{
+                "-1"{"上周四"}
+                "0"{"本周四"}
+                "1"{"下周四"}
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"上周四"}
+                "0"{"本周四"}
+                "1"{"下周四"}
+            }
+        }
         tue{
             relative{
                 "-1"{"上周二"}
@@ -2185,7 +2431,35 @@ zh{
                 "1"{"下周二"}
             }
         }
+        tue-narrow{
+            relative{
+                "-1"{"上周二"}
+                "0"{"本周二"}
+                "1"{"下周二"}
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"上周二"}
+                "0"{"本周二"}
+                "1"{"下周二"}
+            }
+        }
         wed{
+            relative{
+                "-1"{"上周三"}
+                "0"{"本周三"}
+                "1"{"下周三"}
+            }
+        }
+        wed-narrow{
+            relative{
+                "-1"{"上周三"}
+                "0"{"本周三"}
+                "1"{"下周三"}
+            }
+        }
+        wed-short{
             relative{
                 "-1"{"上周三"}
                 "0"{"本周三"}
@@ -2208,8 +2482,30 @@ zh{
                 }
             }
         }
+        week-narrow{
+            dn{"周"}
+            relativeTime{
+                future{
+                    other{"{0}周后"}
+                }
+                past{
+                    other{"{0}周前"}
+                }
+            }
+        }
+        week-short{
+            dn{"周"}
+            relativeTime{
+                future{
+                    other{"{0}周后"}
+                }
+                past{
+                    other{"{0}周前"}
+                }
+            }
+        }
         weekday{
-            dn{"星期"}
+            dn{"工作日"}
         }
         year{
             dn{"年"}
@@ -2218,6 +2514,28 @@ zh{
                 "0"{"今年"}
                 "1"{"明年"}
             }
+            relativeTime{
+                future{
+                    other{"{0}年后"}
+                }
+                past{
+                    other{"{0}年前"}
+                }
+            }
+        }
+        year-narrow{
+            dn{"年"}
+            relativeTime{
+                future{
+                    other{"{0}年后"}
+                }
+                past{
+                    other{"{0}年前"}
+                }
+            }
+        }
+        year-short{
+            dn{"年"}
             relativeTime{
                 future{
                     other{"{0}年后"}
@@ -2239,6 +2557,12 @@ zh{
             start{"{0}、{1}"}
         }
         unit{
+            2{"{0}{1}"}
+            end{"{0}{1}"}
+            middle{"{0}{1}"}
+            start{"{0}{1}"}
+        }
+        unit-narrow{
             2{"{0}{1}"}
             end{"{0}{1}"}
             middle{"{0}{1}"}
@@ -2271,165 +2595,511 @@ zh{
     units{
         acceleration{
             g-force{
+                dnam{"G力"}
                 other{"{0}G力"}
+            }
+            meter-per-second-squared{
+                dnam{"米/秒²"}
+                other{"{0}米/秒²"}
             }
         }
         angle{
             arc-minute{
-                other{"{0}分钟"}
+                dnam{"弧分"}
+                other{"{0}弧分"}
             }
             arc-second{
-                other{"{0}秒钟"}
+                dnam{"弧秒"}
+                other{"{0}弧秒"}
             }
             degree{
+                dnam{"度"}
                 other{"{0}度"}
+            }
+            radian{
+                dnam{"弧度"}
+                other{"{0}弧度"}
             }
         }
         area{
             acre{
+                dnam{"英亩"}
                 other{"{0}英亩"}
             }
             hectare{
+                dnam{"公顷"}
                 other{"{0}公顷"}
             }
+            square-centimeter{
+                dnam{"平方厘米"}
+                other{"{0}平方厘米"}
+            }
             square-foot{
+                dnam{"平方英尺"}
                 other{"{0}平方英尺"}
             }
+            square-inch{
+                dnam{"平方英寸"}
+                other{"{0}平方英寸"}
+            }
             square-kilometer{
+                dnam{"平方公里"}
                 other{"{0}平方公里"}
             }
             square-meter{
+                dnam{"平方米"}
                 other{"{0}平方米"}
             }
             square-mile{
+                dnam{"平方英里"}
                 other{"{0}平方英里"}
+            }
+            square-yard{
+                dnam{"平方码"}
+                other{"{0}平方码"}
             }
         }
         compound{
             per{"{0}每{1}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"升每公里"}
+                other{"{0}升每公里"}
+            }
+            mile-per-gallon{
+                dnam{"英里每加仑"}
+                other{"{0}英里每加仑"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"比特"}
+                other{"{0}比特"}
+            }
+            byte{
+                dnam{"字节"}
+                other{"{0}字节"}
+            }
+            gigabit{
+                dnam{"吉比特"}
+                other{"{0}吉比特"}
+            }
+            gigabyte{
+                dnam{"吉字节"}
+                other{"{0}吉字节"}
+            }
+            kilobit{
+                dnam{"千比特"}
+                other{"{0}千比特"}
+            }
+            kilobyte{
+                dnam{"千字节"}
+                other{"{0}千字节"}
+            }
+            megabit{
+                dnam{"兆比特"}
+                other{"{0}兆比特"}
+            }
+            megabyte{
+                dnam{"兆字节"}
+                other{"{0}兆字节"}
+            }
+            terabit{
+                dnam{"太比特"}
+                other{"{0}太比特"}
+            }
+            terabyte{
+                dnam{"太字节"}
+                other{"{0}太字节"}
+            }
+        }
         duration{
             day{
+                dnam{"天"}
                 other{"{0}天"}
             }
             hour{
+                dnam{"小时"}
                 other{"{0}小时"}
+                per{"{0}/小时"}
+            }
+            microsecond{
+                dnam{"微秒"}
+                other{"{0}微秒"}
             }
             millisecond{
+                dnam{"毫秒"}
                 other{"{0}毫秒"}
             }
             minute{
+                dnam{"分钟"}
                 other{"{0}分钟"}
             }
             month{
+                dnam{"个月"}
                 other{"{0}个月"}
             }
+            nanosecond{
+                dnam{"纳秒"}
+                other{"{0}纳秒"}
+            }
             second{
+                dnam{"秒钟"}
                 other{"{0}秒钟"}
+                per{"{0}/秒"}
             }
             week{
+                dnam{"周"}
                 other{"{0}周"}
             }
             year{
+                dnam{"年"}
                 other{"{0}年"}
             }
         }
+        electric{
+            ampere{
+                dnam{"安培"}
+                other{"{0}安培"}
+            }
+            milliampere{
+                dnam{"毫安"}
+                other{"{0}毫安"}
+            }
+            ohm{
+                dnam{"欧姆"}
+                other{"{0}欧姆"}
+            }
+            volt{
+                dnam{"伏特"}
+                other{"{0}伏特"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"卡路里"}
+                other{"{0}卡路里"}
+            }
+            foodcalorie{
+                dnam{"卡路里"}
+                other{"{0}卡路里"}
+            }
+            joule{
+                dnam{"焦耳"}
+                other{"{0}焦耳"}
+            }
+            kilocalorie{
+                dnam{"千卡"}
+                other{"{0}千卡"}
+            }
+            kilojoule{
+                dnam{"千焦"}
+                other{"{0}千焦"}
+            }
+            kilowatt-hour{
+                dnam{"千瓦时"}
+                other{"{0}千瓦时"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"吉赫"}
+                other{"{0}吉赫"}
+            }
+            hertz{
+                dnam{"赫兹"}
+                other{"{0}赫兹"}
+            }
+            kilohertz{
+                dnam{"千赫"}
+                other{"{0}千赫"}
+            }
+            megahertz{
+                dnam{"兆赫"}
+                other{"{0}兆赫"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"天文单位"}
+                other{"{0}天文单位"}
+            }
             centimeter{
+                dnam{"厘米"}
                 other{"{0}厘米"}
             }
+            decimeter{
+                dnam{"分米"}
+                other{"{0}分米"}
+            }
             foot{
+                dnam{"英尺"}
                 other{"{0}英尺"}
             }
             inch{
+                dnam{"英寸"}
                 other{"{0}英寸"}
             }
             kilometer{
+                dnam{"公里"}
                 other{"{0}公里"}
             }
             light-year{
+                dnam{"光年"}
                 other{"{0}光年"}
             }
             meter{
+                dnam{"米"}
                 other{"{0}米"}
             }
+            micrometer{
+                dnam{"微米"}
+                other{"{0}微米"}
+            }
             mile{
+                dnam{"英里"}
                 other{"{0}英里"}
             }
             millimeter{
+                dnam{"毫米"}
                 other{"{0}毫米"}
             }
+            nanometer{
+                dnam{"纳米"}
+                other{"{0}纳米"}
+            }
+            nautical-mile{
+                dnam{"海里"}
+                other{"{0}海里"}
+            }
+            parsec{
+                dnam{"秒差距"}
+                other{"{0}秒差距"}
+            }
             picometer{
+                dnam{"皮米"}
                 other{"{0}皮米"}
             }
             yard{
+                dnam{"码"}
                 other{"{0}码"}
             }
         }
+        light{
+            lux{
+                dnam{"勒克斯"}
+                other{"{0}勒克斯"}
+            }
+        }
         mass{
+            carat{
+                dnam{"克拉"}
+                other{"{0}克拉"}
+            }
             gram{
+                dnam{"克"}
                 other{"{0}克"}
             }
             kilogram{
+                dnam{"千克"}
                 other{"{0}千克"}
             }
+            metric-ton{
+                dnam{"公吨"}
+                other{"{0}公吨"}
+            }
+            microgram{
+                dnam{"微克"}
+                other{"{0}微克"}
+            }
+            milligram{
+                dnam{"毫克"}
+                other{"{0}毫克"}
+            }
             ounce{
+                dnam{"盎司"}
                 other{"{0}盎司"}
             }
+            ounce-troy{
+                dnam{"金衡制盎司"}
+                other{"{0}金衡制盎司"}
+            }
             pound{
+                dnam{"磅"}
                 other{"{0}磅"}
+            }
+            ton{
+                dnam{"吨"}
+                other{"{0}吨"}
             }
         }
         power{
+            gigawatt{
+                dnam{"吉瓦"}
+                other{"{0}吉瓦"}
+            }
             horsepower{
+                dnam{"马力"}
                 other{"{0}马力"}
             }
             kilowatt{
+                dnam{"千瓦"}
                 other{"{0}千瓦"}
             }
+            megawatt{
+                dnam{"兆瓦"}
+                other{"{0}兆瓦"}
+            }
+            milliwatt{
+                dnam{"毫瓦"}
+                other{"{0}毫瓦"}
+            }
             watt{
+                dnam{"瓦特"}
                 other{"{0}瓦特"}
             }
         }
         pressure{
             hectopascal{
+                dnam{"百帕斯卡"}
                 other{"{0}百帕斯卡"}
             }
             inch-hg{
+                dnam{"英寸汞柱"}
                 other{"{0}英寸汞柱"}
             }
             millibar{
+                dnam{"毫巴"}
                 other{"{0}毫巴"}
+            }
+            millimeter-of-mercury{
+                dnam{"毫米汞柱"}
+                other{"{0}毫米汞柱"}
+            }
+            pound-per-square-inch{
+                dnam{"磅/平方英寸"}
+                other{"{0}磅每平方英寸"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"克拉"}
+                other{"{0}克拉"}
             }
         }
         speed{
             kilometer-per-hour{
+                dnam{"千米每小时"}
                 other{"{0}千米每小时"}
             }
             meter-per-second{
+                dnam{"米每秒"}
                 other{"{0}米每秒"}
             }
             mile-per-hour{
+                dnam{"英里每小时"}
                 other{"{0}英里每小时"}
             }
         }
         temperature{
             celsius{
+                dnam{"摄氏度"}
                 other{"{0}摄氏度"}
             }
             fahrenheit{
+                dnam{"华氏度"}
                 other{"{0}华氏度"}
+            }
+            kelvin{
+                dnam{"开尔文"}
+                other{"{0}开尔文"}
             }
         }
         volume{
+            acre-foot{
+                dnam{"英亩英尺"}
+                other{"{0}英亩英尺"}
+            }
+            centiliter{
+                dnam{"厘升"}
+                other{"{0}厘升"}
+            }
+            cubic-centimeter{
+                dnam{"立方厘米"}
+                other{"{0}立方厘米"}
+            }
+            cubic-foot{
+                dnam{"立方英尺"}
+                other{"{0}立方英尺"}
+            }
+            cubic-inch{
+                dnam{"立方英寸"}
+                other{"{0}立方英寸"}
+            }
             cubic-kilometer{
+                dnam{"立方公里"}
                 other{"{0}立方公里"}
             }
+            cubic-meter{
+                dnam{"立方米"}
+                other{"{0}立方米"}
+            }
             cubic-mile{
+                dnam{"立方英里"}
                 other{"{0}立方英里"}
             }
+            cubic-yard{
+                dnam{"立方码"}
+                other{"{0}立方码"}
+            }
+            cup{
+                dnam{"杯"}
+                other{"{0}杯"}
+            }
+            deciliter{
+                dnam{"分升"}
+                other{"{0}分升"}
+            }
+            fluid-ounce{
+                dnam{"液盎司"}
+                other{"{0}液盎司"}
+            }
+            gallon{
+                dnam{"加仑"}
+                other{"{0}加仑"}
+            }
+            hectoliter{
+                dnam{"公石"}
+                other{"{0}公石"}
+            }
             liter{
+                dnam{"公升"}
                 other{"{0}公升"}
+            }
+            megaliter{
+                dnam{"兆升"}
+                other{"{0}兆升"}
+            }
+            milliliter{
+                dnam{"毫升"}
+                other{"{0}毫升"}
+            }
+            pint{
+                dnam{"品脱"}
+                other{"{0}品脱"}
+            }
+            quart{
+                dnam{"夸脱"}
+                other{"{0}夸脱"}
+            }
+            tablespoon{
+                dnam{"汤匙"}
+                other{"{0}汤匙"}
+            }
+            teaspoon{
+                dnam{"茶匙"}
+                other{"{0}茶匙"}
             }
         }
     }
@@ -2475,33 +3145,42 @@ zh{
         }
         duration{
             day{
+                dnam{"天"}
                 other{"{0}天"}
             }
             hour{
+                dnam{"小时"}
                 other{"{0}小时"}
             }
             millisecond{
+                dnam{"毫秒"}
                 other{"{0}毫秒"}
             }
             minute{
+                dnam{"分钟"}
                 other{"{0}分钟"}
             }
             month{
+                dnam{"个月"}
                 other{"{0}个月"}
             }
             second{
+                dnam{"秒"}
                 other{"{0}秒"}
             }
             week{
+                dnam{"周"}
                 other{"{0}周"}
             }
             year{
+                dnam{"年"}
                 other{"{0}年"}
             }
         }
         length{
             centimeter{
-                other{"{0}cm"}
+                dnam{"厘米"}
+                other{"{0}厘米"}
             }
             foot{
                 other{"{0}′"}
@@ -2510,19 +3189,22 @@ zh{
                 other{"{0}″"}
             }
             kilometer{
-                other{"{0}km"}
+                dnam{"公里"}
+                other{"{0}公里"}
             }
             light-year{
                 other{"{0}ly"}
             }
             meter{
-                other{"{0}m"}
+                dnam{"米"}
+                other{"{0}米"}
             }
             mile{
                 other{"{0}mi"}
             }
             millimeter{
-                other{"{0}mm"}
+                dnam{"毫米"}
+                other{"{0}毫米"}
             }
             picometer{
                 other{"{0}pm"}
@@ -2533,9 +3215,11 @@ zh{
         }
         mass{
             gram{
+                dnam{"克"}
                 other{"{0}克"}
             }
             kilogram{
+                dnam{"千克"}
                 other{"{0}千克"}
             }
             ounce{
@@ -2569,7 +3253,8 @@ zh{
         }
         speed{
             kilometer-per-hour{
-                other{"{0}km/h"}
+                dnam{"千米/小时"}
+                other{"{0}千米/小时"}
             }
             meter-per-second{
                 other{"{0}m/s"}
@@ -2580,6 +3265,7 @@ zh{
         }
         temperature{
             celsius{
+                dnam{"摄氏度"}
                 other{"{0}°"}
             }
             fahrenheit{
@@ -2594,172 +3280,519 @@ zh{
                 other{"{0}mi³"}
             }
             liter{
-                other{"{0}l"}
+                dnam{"升"}
+                other{"{0}升"}
             }
         }
     }
     unitsShort{
         acceleration{
             g-force{
+                dnam{"G力"}
                 other{"{0} G"}
+            }
+            meter-per-second-squared{
+                dnam{"米/秒²"}
+                other{"{0}米/秒²"}
             }
         }
         angle{
             arc-minute{
-                other{"{0}分"}
+                dnam{"弧分"}
+                other{"{0}弧分"}
             }
             arc-second{
-                other{"{0}秒"}
+                dnam{"弧秒"}
+                other{"{0}弧秒"}
             }
             degree{
+                dnam{"度"}
                 other{"{0}°"}
+            }
+            radian{
+                dnam{"弧度"}
+                other{"{0}弧度"}
             }
         }
         area{
             acre{
-                other{"{0} ac"}
+                dnam{"英亩"}
+                other{"{0}英亩"}
             }
             hectare{
+                dnam{"公顷"}
                 other{"{0} ha"}
             }
+            square-centimeter{
+                dnam{"平方厘米"}
+                other{"{0}平方厘米"}
+            }
             square-foot{
+                dnam{"平方英尺"}
                 other{"{0} ft²"}
             }
+            square-inch{
+                dnam{"平方英寸"}
+                other{"{0}平方英寸"}
+            }
             square-kilometer{
-                other{"{0} km²"}
+                dnam{"平方公里"}
+                other{"{0}平方公里"}
             }
             square-meter{
-                other{"{0} m²"}
+                dnam{"平方米"}
+                other{"{0}平方米"}
             }
             square-mile{
-                other{"{0} mi²"}
+                dnam{"平方英里"}
+                other{"{0}平方英里"}
+            }
+            square-yard{
+                dnam{"平方码"}
+                other{"{0}平方码"}
             }
         }
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            liter-per-kilometer{
+                dnam{"升/公里"}
+                other{"{0}升/公里"}
+            }
+            mile-per-gallon{
+                dnam{"英里/加仑"}
+                other{"{0}英里/加仑"}
+            }
+        }
+        digital{
+            bit{
+                dnam{"比特"}
+                other{"{0}比特"}
+            }
+            byte{
+                dnam{"字节"}
+                other{"{0}字节"}
+            }
+            gigabit{
+                dnam{"吉比特"}
+                other{"{0}吉比特"}
+            }
+            gigabyte{
+                dnam{"吉字节"}
+                other{"{0}吉字节"}
+            }
+            kilobit{
+                dnam{"千比特"}
+                other{"{0}千比特"}
+            }
+            kilobyte{
+                dnam{"千字节"}
+                other{"{0}千字节"}
+            }
+            megabit{
+                dnam{"兆比特"}
+                other{"{0}兆比特"}
+            }
+            megabyte{
+                dnam{"兆字节"}
+                other{"{0}兆字节"}
+            }
+            terabit{
+                dnam{"太比特"}
+                other{"{0}太比特"}
+            }
+            terabyte{
+                dnam{"太字节"}
+                other{"{0}太字节"}
+            }
+        }
         duration{
             day{
+                dnam{"天"}
                 other{"{0}天"}
             }
             hour{
+                dnam{"小时"}
                 other{"{0}小时"}
+                per{"{0}/小时"}
+            }
+            microsecond{
+                dnam{"微秒"}
+                other{"{0}微秒"}
             }
             millisecond{
+                dnam{"毫秒"}
                 other{"{0}毫秒"}
             }
             minute{
+                dnam{"分钟"}
                 other{"{0}分钟"}
             }
             month{
+                dnam{"个月"}
                 other{"{0}个月"}
             }
+            nanosecond{
+                dnam{"纳秒"}
+                other{"{0}纳秒"}
+            }
             second{
+                dnam{"秒"}
                 other{"{0}秒"}
+                per{"{0}/秒"}
             }
             week{
+                dnam{"周"}
                 other{"{0}周"}
             }
             year{
+                dnam{"年"}
                 other{"{0}年"}
             }
         }
+        electric{
+            ampere{
+                dnam{"安培"}
+                other{"{0}安"}
+            }
+            milliampere{
+                dnam{"毫安"}
+                other{"{0}毫安"}
+            }
+            ohm{
+                dnam{"欧姆"}
+                other{"{0}欧"}
+            }
+            volt{
+                dnam{"伏特"}
+                other{"{0}伏"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"卡"}
+                other{"{0}卡"}
+            }
+            foodcalorie{
+                dnam{"卡"}
+                other{"{0}卡"}
+            }
+            joule{
+                dnam{"焦耳"}
+                other{"{0}焦耳"}
+            }
+            kilocalorie{
+                dnam{"千卡"}
+                other{"{0}千卡"}
+            }
+            kilojoule{
+                dnam{"千焦"}
+                other{"{0}千焦"}
+            }
+            kilowatt-hour{
+                dnam{"千瓦时"}
+                other{"{0}千瓦时"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"吉赫"}
+                other{"{0}吉赫"}
+            }
+            hertz{
+                dnam{"赫兹"}
+                other{"{0}赫"}
+            }
+            kilohertz{
+                dnam{"千赫"}
+                other{"{0}千赫"}
+            }
+            megahertz{
+                dnam{"兆赫"}
+                other{"{0}兆赫"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"天文单位"}
+                other{"{0}天文单位"}
+            }
             centimeter{
-                other{"{0} cm"}
+                dnam{"厘米"}
+                other{"{0}厘米"}
+            }
+            decimeter{
+                dnam{"分米"}
+                other{"{0}分米"}
             }
             foot{
-                other{"{0} ft"}
+                dnam{"英尺"}
+                other{"{0}英尺"}
             }
             inch{
-                other{"{0} in"}
+                dnam{"英寸"}
+                other{"{0}英寸"}
             }
             kilometer{
-                other{"{0} km"}
+                dnam{"公里"}
+                other{"{0}公里"}
             }
             light-year{
+                dnam{"光年"}
                 other{"{0} ly"}
             }
             meter{
+                dnam{"米"}
                 other{"{0} m"}
             }
+            micrometer{
+                dnam{"微米"}
+                other{"{0}微米"}
+            }
             mile{
-                other{"{0} mi"}
+                dnam{"英里"}
+                other{"{0}英里"}
             }
             millimeter{
-                other{"{0} mm"}
+                dnam{"毫米"}
+                other{"{0}毫米"}
+            }
+            nanometer{
+                dnam{"纳米"}
+                other{"{0}纳米"}
+            }
+            nautical-mile{
+                dnam{"海里"}
+                other{"{0}海里"}
+            }
+            parsec{
+                dnam{"秒差距"}
+                other{"{0}秒差距"}
             }
             picometer{
+                dnam{"皮米"}
                 other{"{0} pm"}
             }
             yard{
+                dnam{"码"}
                 other{"{0} yd"}
             }
         }
+        light{
+            lux{
+                dnam{"勒克斯"}
+                other{"{0}勒克斯"}
+            }
+        }
         mass{
+            carat{
+                dnam{"克拉"}
+                other{"{0}克拉"}
+            }
             gram{
+                dnam{"克"}
                 other{"{0}克"}
             }
             kilogram{
+                dnam{"千克"}
                 other{"{0}千克"}
             }
+            metric-ton{
+                dnam{"公吨"}
+                other{"{0}公吨"}
+            }
+            microgram{
+                dnam{"微克"}
+                other{"{0}微克"}
+            }
+            milligram{
+                dnam{"毫克"}
+                other{"{0}毫克"}
+            }
             ounce{
+                dnam{"盎司"}
                 other{"{0}盎司"}
             }
+            ounce-troy{
+                dnam{"金衡制盎司"}
+                other{"{0}金衡制盎司"}
+            }
             pound{
+                dnam{"磅"}
                 other{"{0}磅"}
+            }
+            ton{
+                dnam{"吨"}
+                other{"{0}吨"}
             }
         }
         power{
+            gigawatt{
+                dnam{"吉瓦"}
+                other{"{0}吉瓦"}
+            }
             horsepower{
-                other{"{0} hp"}
+                dnam{"马力"}
+                other{"{0}马力"}
             }
             kilowatt{
-                other{"{0} kW"}
+                dnam{"千瓦"}
+                other{"{0}千瓦"}
+            }
+            megawatt{
+                dnam{"兆瓦"}
+                other{"{0}兆瓦"}
+            }
+            milliwatt{
+                dnam{"毫瓦"}
+                other{"{0}毫瓦"}
             }
             watt{
+                dnam{"瓦特"}
                 other{"{0}瓦"}
             }
         }
         pressure{
             hectopascal{
-                other{"{0} hPa"}
+                dnam{"百帕斯卡"}
+                other{"{0}百帕"}
             }
             inch-hg{
-                other{"{0} inHg"}
+                dnam{"英寸汞柱"}
+                other{"{0}英寸汞柱"}
             }
             millibar{
-                other{"{0} mb"}
+                dnam{"毫巴"}
+                other{"{0}毫巴"}
+            }
+            millimeter-of-mercury{
+                dnam{"毫米汞柱"}
+                other{"{0}毫米汞柱"}
+            }
+            pound-per-square-inch{
+                dnam{"磅/平方英寸"}
+                other{"{0}磅/平方英寸"}
+            }
+        }
+        proportion{
+            karat{
+                dnam{"克拉"}
+                other{"{0}克拉"}
             }
         }
         speed{
             kilometer-per-hour{
+                dnam{"千米/小时"}
                 other{"{0}千米/小时"}
             }
             meter-per-second{
+                dnam{"米/秒"}
                 other{"{0}米/秒"}
             }
             mile-per-hour{
+                dnam{"英里/小时"}
                 other{"{0}英里/小时"}
             }
         }
         temperature{
             celsius{
+                dnam{"摄氏度"}
                 other{"{0}°C"}
             }
             fahrenheit{
+                dnam{"华氏度"}
                 other{"{0}°F"}
+            }
+            kelvin{
+                dnam{"开"}
+                other{"{0}K"}
             }
         }
         volume{
+            acre-foot{
+                dnam{"英亩英尺"}
+                other{"{0}英亩英尺"}
+            }
+            centiliter{
+                dnam{"厘升"}
+                other{"{0}厘升"}
+            }
+            cubic-centimeter{
+                dnam{"立方厘米"}
+                other{"{0}立方厘米"}
+            }
+            cubic-foot{
+                dnam{"立方英尺"}
+                other{"{0}立方英尺"}
+            }
+            cubic-inch{
+                dnam{"立方英寸"}
+                other{"{0}立方英寸"}
+            }
             cubic-kilometer{
-                other{"{0} km³"}
+                dnam{"立方公里"}
+                other{"{0}立方公里"}
+            }
+            cubic-meter{
+                dnam{"立方米"}
+                other{"{0}立方米"}
             }
             cubic-mile{
-                other{"{0} mi³"}
+                dnam{"立方英里"}
+                other{"{0}立方英里"}
+            }
+            cubic-yard{
+                dnam{"立方码"}
+                other{"{0}立方码"}
+            }
+            cup{
+                dnam{"杯"}
+                other{"{0}杯"}
+            }
+            deciliter{
+                dnam{"分升"}
+                other{"{0}分升"}
+            }
+            fluid-ounce{
+                dnam{"液盎司"}
+                other{"{0}液盎司"}
+            }
+            gallon{
+                dnam{"加仑"}
+                other{"{0}加仑"}
+            }
+            hectoliter{
+                dnam{"公石"}
+                other{"{0}公石"}
             }
             liter{
+                dnam{"公升"}
                 other{"{0}升"}
+            }
+            megaliter{
+                dnam{"兆升"}
+                other{"{0}兆升"}
+            }
+            milliliter{
+                dnam{"毫升"}
+                other{"{0}毫升"}
+            }
+            pint{
+                dnam{"品脱"}
+                other{"{0}品脱"}
+            }
+            quart{
+                dnam{"夸脱"}
+                other{"{0}夸脱"}
+            }
+            tablespoon{
+                dnam{"汤匙"}
+                other{"{0}汤匙"}
+            }
+            teaspoon{
+                dnam{"茶匙"}
+                other{"{0}茶匙"}
             }
         }
     }

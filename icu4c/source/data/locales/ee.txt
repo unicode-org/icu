@@ -32,6 +32,14 @@ ee{
             }
             patternsShort{
                 decimalFormat{
+                    1000{
+                        one{"0K"}
+                        other{"0K"}
+                    }
+                    10000{
+                        one{"00K"}
+                        other{"00K"}
+                    }
                     100000{
                         one{"000K"}
                         other{"000K"}
@@ -79,7 +87,7 @@ ee{
             }
         }
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.8.9"}
     calendar{
         generic{
             DateTimePatterns{

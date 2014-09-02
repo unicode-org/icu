@@ -36,6 +36,7 @@ cy{
     }
     MoreInformation{"?"}
     NumberElements{
+        default{"latn"}
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
@@ -261,8 +262,9 @@ cy{
                 superscriptingExponent{"x"}
             }
         }
+        native{"latn"}
     }
-    Version{"2.0.98.52"}
+    Version{"2.1.7.80"}
     calendar{
         generic{
             DateTimePatterns{
@@ -327,7 +329,7 @@ cy{
                     H{"HH–HH v"}
                 }
                 M{
-                    M{"M-M"}
+                    M{"M - M"}
                 }
                 MEd{
                     M{"E, d/M – E, d/M"}
@@ -352,7 +354,7 @@ cy{
                     d{"d/M – d/M"}
                 }
                 d{
-                    d{"d-d"}
+                    d{"d - d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
@@ -415,6 +417,10 @@ cy{
                 "AM",
                 "PM",
             }
+            AmPmMarkersNarrow{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -423,13 +429,14 @@ cy{
                 "EEEE, d MMMM y",
                 "d MMMM y",
                 "d MMM y",
-                "dd/MM/y",
+                "dd/MM/yy",
                 "{1} {0}",
                 "{1} 'am' {0}",
                 "{1} 'am' {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"hanner dydd"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -610,12 +617,12 @@ cy{
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
+                    h{"h:mm h:mm a"}
+                    m{"h:mm - h:mm a"}
                 }
                 hmv{
                     a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
+                    h{"h:mm - h:mm a v"}
                     m{"h:mm–h:mm a v"}
                 }
                 hv{
@@ -832,6 +839,18 @@ cy{
                 }
             }
         }
+        day-short{
+            relativeTime{
+                past{
+                    few{"{0} diwrnod yn ôl"}
+                    many{"{0} diwrnod yn ôl"}
+                    one{"{0} diwrnod yn ôl"}
+                    other{"{0} diwrnod yn ôl"}
+                    two{"{0} diwrnod yn ôl"}
+                    zero{"{0} diwrnod yn ôl"}
+                }
+            }
+        }
         dayperiod{
             dn{"AM/PM"}
         }
@@ -916,6 +935,30 @@ cy{
                     one{"{0} mis yn ôl"}
                     other{"{0} mis yn ôl"}
                     two{"{0} fis yn ôl"}
+                    zero{"{0} mis yn ôl"}
+                }
+            }
+        }
+        month-narrow{
+            relativeTime{
+                past{
+                    few{"{0} mis yn ôl"}
+                    many{"{0} mis yn ôl"}
+                    one{"{0} mis yn ôl"}
+                    other{"{0} mis yn ôl"}
+                    two{"{0} mis yn ôl"}
+                    zero{"{0} mis yn ôl"}
+                }
+            }
+        }
+        month-short{
+            relativeTime{
+                past{
+                    few{"{0} mis yn ôl"}
+                    many{"{0} mis yn ôl"}
+                    one{"{0} mis yn ôl"}
+                    other{"{0} mis yn ôl"}
+                    two{"{0} mis yn ôl"}
                     zero{"{0} mis yn ôl"}
                 }
             }
@@ -1006,7 +1049,7 @@ cy{
             }
         }
         weekday{
-            dn{"Dydd o'r Wythnos"}
+            dn{"Dydd o’r Wythnos"}
         }
         year{
             dn{"Blwyddyn"}
@@ -1092,6 +1135,7 @@ cy{
                 zero{"{0} eiliad"}
             }
             degree{
+                dnam{"gradd"}
                 few{"{0} gradd"}
                 many{"{0} gradd"}
                 one{"{0} radd"}
@@ -1144,7 +1188,7 @@ cy{
             square-mile{
                 few{"{0} milltir sgwâr"}
                 many{"{0} milltir sgwâr"}
-                one{"filltir sgwâr"}
+                one{"{0} filltir sgwâr"}
                 other{"{0} milltir sgwâr"}
                 two{"{0} filltir sgwâr"}
                 zero{"{0} milltir sgwâr"}
@@ -1363,6 +1407,7 @@ cy{
         }
         pressure{
             hectopascal{
+                dnam{"hectopascal"}
                 few{"{0} hectopascal"}
                 many{"{0} hectopascal"}
                 one{"{0} hectopascal"}
@@ -1379,6 +1424,7 @@ cy{
                 zero{"{0} modfedd o fercwri"}
             }
             millibar{
+                dnam{"milibar"}
                 few{"{0} milibar"}
                 many{"{0} milibar"}
                 one{"{0} milibar"}
@@ -1423,6 +1469,7 @@ cy{
                 zero{"{0} gradd Celsius"}
             }
             fahrenheit{
+                dnam{"gradd Fahrenheit"}
                 few{"{0} gradd Fahrenheit"}
                 many{"{0} gradd Fahrenheit"}
                 one{"{0} radd Fahrenheit"}
@@ -1547,6 +1594,11 @@ cy{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        consumption{
+            liter-per-kilometer{
+                dnam{"L/km"}
+            }
         }
         duration{
             day{
@@ -1745,7 +1797,7 @@ cy{
                 one{"{0}kW"}
                 other{"{0}kW"}
                 two{"{0}kW"}
-                zero{"{0} kW"}
+                zero{"{0}kW"}
             }
             watt{
                 few{"{0}W"}
@@ -1780,6 +1832,18 @@ cy{
                 other{"{0}mb"}
                 two{"{0}mb"}
                 zero{"{0}mb"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                few{"{0}mm Hg"}
+                many{"{0}mm Hg"}
+                one{"{0}mm Hg"}
+                other{"{0}mm Hg"}
+                two{"{0}mm Hg"}
+                zero{"{0}mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
             }
         }
         speed{
@@ -1825,6 +1889,9 @@ cy{
                 two{"{0}°F"}
                 zero{"{0}°F"}
             }
+            kelvin{
+                dnam{"K"}
+            }
         }
         volume{
             cubic-kilometer{
@@ -1836,12 +1903,12 @@ cy{
                 zero{"{0}km³"}
             }
             cubic-mile{
-                few{"{0} mi³"}
-                many{"{0} mi³"}
-                one{"{0} mi³"}
-                other{"{0} mi³"}
-                two{"{0} mi³"}
-                zero{"{0} mi³"}
+                few{"{0}mi³"}
+                many{"{0}mi³"}
+                one{"{0}mi³"}
+                other{"{0}mi³"}
+                two{"{0}mi³"}
+                zero{"{0}mi³"}
             }
             liter{
                 few{"{0}l"}
@@ -1856,12 +1923,12 @@ cy{
     unitsShort{
         acceleration{
             g-force{
-                few{"{0} grym disgyrchedd"}
-                many{"{0} grym disgyrchedd"}
-                one{"{0} grym disgyrchedd"}
-                other{"{0} grym disgyrchedd"}
-                two{"{0} rym disgyrchedd"}
-                zero{"{0} grym disgyrchedd"}
+                few{"{0} G"}
+                many{"{0} G"}
+                one{"{0} G"}
+                other{"{0} G"}
+                two{"{0} G"}
+                zero{"{0} G"}
             }
         }
         angle{
@@ -1882,6 +1949,7 @@ cy{
                 zero{"{0}″"}
             }
             degree{
+                dnam{"gradd"}
                 few{"{0}°"}
                 many{"{0}°"}
                 one{"{0}°"}
@@ -1942,6 +2010,83 @@ cy{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        consumption{
+            liter-per-kilometer{
+                dnam{"L/km"}
+                few{"{0} L/km"}
+                many{"{0} L/km"}
+                one{"{0} L/km"}
+                other{"{0} L/km"}
+                two{"{0} L/km"}
+                zero{"{0} L/km"}
+            }
+        }
+        digital{
+            gigabit{
+                few{"{0} Gb"}
+                many{"{0} Gb"}
+                one{"{0} Gb"}
+                other{"{0} Gb"}
+                two{"{0} Gb"}
+                zero{"{0} Gb"}
+            }
+            gigabyte{
+                few{"{0} GB"}
+                many{"{0} GB"}
+                one{"{0} GB"}
+                other{"{0} GB"}
+                two{"{0} GB"}
+                zero{"{0} GB"}
+            }
+            kilobit{
+                few{"{0} kb"}
+                many{"{0} kb"}
+                one{"{0} kb"}
+                other{"{0} kb"}
+                two{"{0} kb"}
+                zero{"{0} kb"}
+            }
+            kilobyte{
+                few{"{0} kB"}
+                many{"{0} kB"}
+                one{"{0} kB"}
+                other{"{0} kB"}
+                two{"{0} kB"}
+                zero{"{0} kB"}
+            }
+            megabit{
+                few{"{0} Mb"}
+                many{"{0} Mb"}
+                one{"{0} Mb"}
+                other{"{0} Mb"}
+                two{"{0} Mb"}
+                zero{"{0} Mb"}
+            }
+            megabyte{
+                few{"{0} MB"}
+                many{"{0} MB"}
+                one{"{0} MB"}
+                other{"{0} MB"}
+                two{"{0} MB"}
+                zero{"{0} MB"}
+            }
+            terabit{
+                few{"{0} Tb"}
+                many{"{0} Tb"}
+                one{"{0} Tb"}
+                other{"{0} Tb"}
+                two{"{0} Tb"}
+                zero{"{0} Tb"}
+            }
+            terabyte{
+                few{"{0} TB"}
+                many{"{0} TB"}
+                one{"{0} TB"}
+                other{"{0} TB"}
+                two{"{0} TB"}
+                zero{"{0} TB"}
+            }
         }
         duration{
             day{
@@ -2019,12 +2164,12 @@ cy{
                 zero{"{0} cm"}
             }
             foot{
-                few{"{0} troedfedd"}
-                many{"{0} throedfedd"}
-                one{"{0} droedfedd"}
-                other{"{0} troedfedd"}
-                two{"{0} droedfedd"}
-                zero{"{0} troedfedd"}
+                few{"{0}′"}
+                many{"{0}′"}
+                one{"{0}′"}
+                other{"{0}′"}
+                two{"{0}′"}
+                zero{"{0}′"}
             }
             inch{
                 few{"{0} modfedd"}
@@ -2176,6 +2321,24 @@ cy{
                 two{"{0} mbar"}
                 zero{"{0} mbar"}
             }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                few{"{0} mm Hg"}
+                many{"{0} mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
+                two{"{0} mm Hg"}
+                zero{"{0} mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                few{"{0} psi"}
+                many{"{0} psi"}
+                one{"{0} psi"}
+                other{"{0} psi"}
+                two{"{0} psi"}
+                zero{"{0} psi"}
+            }
         }
         speed{
             kilometer-per-hour{
@@ -2219,6 +2382,15 @@ cy{
                 other{"{0}°F"}
                 two{"{0}°F"}
                 zero{"{0}°F"}
+            }
+            kelvin{
+                dnam{"K"}
+                few{"{0} K"}
+                many{"{0} K"}
+                one{"{0} K"}
+                other{"{0} K"}
+                two{"{0} K"}
+                zero{"{0} K"}
             }
         }
         volume{
