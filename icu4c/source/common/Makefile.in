@@ -105,7 +105,7 @@ serv.o servnotf.o servls.o servlk.o servlkf.o servrbf.o servslkf.o \
 uidna.o usprep.o uts46.o punycode.o \
 util.o util_props.o parsepos.o locbased.o cwchar.o wintz.o dtintrv.o ucnvsel.o propsvec.o \
 ulist.o uloc_tag.o icudataver.o icuplug.o listformatter.o \
-sharedobject.o simplepatternformatter.o unifiedcache.o
+sharedobject.o simplepatternformatter.o unifiedcache.o uloc_keytype.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h
