@@ -276,6 +276,7 @@ void Region::loadRegionData(UErrorCode &status) {
         UResourceBundle *mapping = ures_getNextResource(territoryContainment.getAlias(),NULL,&status);
         const char *parent = ures_getKey(mapping);
         if (uprv_strcmp(parent, "containedGroupings") == 0 || uprv_strcmp(parent, "deprecated") == 0) {
+            ures_close(mapping);
             continue; // handle new pseudo-parent types added in ICU data per cldrbug 7808; for now just skip.
             // #11232 is to do something useful with these.
         }
