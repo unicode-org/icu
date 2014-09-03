@@ -421,9 +421,6 @@
     <ClCompile Include="usetiter.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
-    <ClCompile Include="icuplug.c">
-      <Filter>registration</Filter>
-    </ClCompile>
     <ClCompile Include="serv.cpp">
       <Filter>registration</Filter>
     </ClCompile>
@@ -567,6 +564,10 @@
     </ClCompile>
     <ClCompile Include="stringtriebuilder.cpp">
       <Filter>collections</Filter>
+    </ClCompile>
+    <ClCompile Include="icuplug.cpp" />
+    <ClCompile Include="uloc_keytype.cpp">
+      <Filter>locales &amp; resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
