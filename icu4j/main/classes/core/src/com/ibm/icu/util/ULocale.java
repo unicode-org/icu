@@ -640,7 +640,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Sets the default ULocale.  This also sets the default Locale.
+     * Sets the default ULocale.  This also sets the default Locale.
      * If the caller does not have write permission to the
      * user.language property, a security exception will be thrown,
      * and the default ULocale will remain unchanged.
@@ -910,7 +910,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns the script code for this locale, which might be the empty string.
+     * Returns the script code for this locale, which might be the empty string.
      * @see #getDisplayScript()
      * @see #getDisplayScript(ULocale)
      * @stable ICU 3.0
@@ -942,7 +942,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns the country/region code for this locale, which will either be the empty string
+     * {@icu} Returns the country/region code for this locale, which will either be the empty string
      * or an uppercase ISO 3166 2-letter code.
      * @param localeID The locale identification string.
      * @see #getDisplayCountry()
@@ -964,7 +964,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns the variant code for the specified locale, which might be the empty string.
+     * {@icu} Returns the variant code for the specified locale, which might be the empty string.
      * @see #getDisplayVariant()
      * @see #getDisplayVariant(ULocale)
      * @stable ICU 3.0
@@ -1227,7 +1227,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Given a keyword and a value, return a new locale with an updated
+     * {@icu} Given a keyword and a value, return a new locale with an updated
      * keyword and value.  If the keyword is null, this removes all keywords from the locale id.
      * Otherwise, if the value is null, this removes the value for this keyword from the
      * locale id.  Otherwise, this adds/replaces the value for this keyword in the locale id.
@@ -1295,7 +1295,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns a three-letter abbreviation for this locale's language.  If the locale
+     * {@icu} Returns a three-letter abbreviation for this locale's language.  If the locale
      * doesn't specify a language, returns the empty string.  Otherwise, returns
      * a lowercase ISO 639-2/T language code.
      * The ISO 639-2 language codes can be found on-line at
@@ -1321,7 +1321,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns a three-letter abbreviation for this locale's country/region.  If the locale
+     * {@icu} Returns a three-letter abbreviation for this locale's country/region.  If the locale
      * doesn't specify a country, returns the empty string.  Otherwise, returns
      * an uppercase ISO 3166 3-letter country code.
      * @exception MissingResourceException Throws MissingResourceException if the
@@ -1340,7 +1340,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             "root-en-es-pt-zh-ja-ko-de-fr-it-ar+he+fa+ru-nl-pl-th-tr-";
 
     /**
-     * Returns whether this locale's script is written right-to-left.
+     * {@icu} Returns whether this locale's script is written right-to-left.
      * If there is no script subtag, then the likely script is used,
      * see {@link #addLikelySubtags(ULocale)}.
      * If no likely script is known, then false is returned.
@@ -1395,7 +1395,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns this locale's language localized for display in the provided locale.
+     * Returns this locale's language localized for display in the provided locale.
      * @param displayLocale the locale in which to display the name.
      * @return the localized language name.
      * @stable ICU 3.0
@@ -1405,7 +1405,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns a locale's language localized for display in the provided locale.
+     * {@icu} Returns a locale's language localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose language will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
@@ -1418,7 +1418,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns a locale's language localized for display in the provided locale.
+     * {@icu} Returns a locale's language localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose language will be displayed.
      * @param displayLocale the locale in which to display the name.
@@ -1484,7 +1484,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns this locale's script localized for display in the default <code>DISPLAY</code> locale.
+     * Returns this locale's script localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized script name.
      * @see Category#DISPLAY
      * @stable ICU 3.0
@@ -1506,7 +1506,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns this locale's script localized for display in the provided locale.
+     * Returns this locale's script localized for display in the provided locale.
      * @param displayLocale the locale in which to display the name.
      * @return the localized script name.
      * @stable ICU 3.0
@@ -1607,7 +1607,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns a locale's country localized for display in the provided locale.
+     * {@icu} Returns a locale's country localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose country will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
@@ -1619,7 +1619,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns a locale's country localized for display in the provided locale.
+     * {@icu} Returns a locale's country localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose country will be displayed.
      * @param displayLocale the locale in which to display the name.
@@ -1657,7 +1657,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns a locale's variant localized for display in the provided locale.
+     * {@icu} Returns a locale's variant localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose variant will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
@@ -1669,7 +1669,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns a locale's variant localized for display in the provided locale.
+     * {@icu} Returns a locale's variant localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose variant will be displayed.
      * @param displayLocale the locale in which to display the name.
@@ -1805,7 +1805,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns the locale ID localized for display in the provided locale.
+     * {@icu} Returns the locale ID localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the locale whose name is to be displayed.
      * @param displayLocaleID the id of the locale in which to display the locale name.
@@ -1817,7 +1817,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns the locale ID localized for display in the provided locale.
+     * {@icu} Returns the locale ID localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the locale whose name is to be displayed.
      * @param displayLocale the locale in which to display the locale name.
@@ -2936,7 +2936,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     // --------------------------------
 
     /**
-     * {@icu} The key for the private use locale extension ('x').
+     * The key for the private use locale extension ('x').
      *
      * @see #getExtension(char)
      * @see Builder#setExtension(char, String)
@@ -2946,7 +2946,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     public static final char PRIVATE_USE_EXTENSION = 'x';
 
     /**
-     * {@icu} The key for Unicode locale extension ('u').
+     * The key for Unicode locale extension ('u').
      *
      * @see #getExtension(char)
      * @see Builder#setExtension(char, String)
@@ -2956,7 +2956,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     public static final char UNICODE_LOCALE_EXTENSION = 'u';
 
     /**
-     * {@icu} Returns the extension (or private use) value associated with
+     * Returns the extension (or private use) value associated with
      * the specified key, or null if there is no extension
      * associated with the key. To be well-formed, the key must be one
      * of <code>[0-9A-Za-z]</code>. Keys are case-insensitive, so
@@ -2979,7 +2979,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns the set of extension keys associated with this locale, or the
+     * Returns the set of extension keys associated with this locale, or the
      * empty set if it has no extensions. The returned set is unmodifiable.
      * The keys will all be lower-case.
      *
@@ -2992,7 +2992,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns the set of unicode locale attributes associated with
+     * Returns the set of unicode locale attributes associated with
      * this locale, or the empty set if it has no attributes. The
      * returned set is unmodifiable.
      *
@@ -3004,7 +3004,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns the Unicode locale type associated with the specified Unicode locale key
+     * Returns the Unicode locale type associated with the specified Unicode locale key
      * for this locale. Returns the empty string for keys that are defined with no type.
      * Returns null if the key is not defined. Keys are case-insensitive. The key must
      * be two alphanumeric characters ([0-9a-zA-Z]), or an IllegalArgumentException is
@@ -3026,7 +3026,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns the set of Unicode locale keys defined by this locale, or the empty set if
+     * Returns the set of Unicode locale keys defined by this locale, or the empty set if
      * this locale has none.  The returned set is immutable.  Keys are all lower case.
      *
      * @return The set of Unicode locale keys, or the empty set if this locale has
@@ -3039,7 +3039,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns a well-formed IETF BCP 47 language tag representing
+     * Returns a well-formed IETF BCP 47 language tag representing
      * this locale.
      *
      * <p>If this <code>ULocale</code> has a language, script, country, or
@@ -3159,7 +3159,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns a locale for the specified IETF BCP 47 language tag string.
+     * Returns a locale for the specified IETF BCP 47 language tag string.
      *
      * <p>If the specified language tag contains any ill-formed subtags,
      * the first such subtag and all following subtags are ignored.  Compare
