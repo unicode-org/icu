@@ -115,15 +115,15 @@ initFromResourceBundle(UErrorCode& sts) {
     }
 
     // initialize vectors storing dynamically allocated objects
-    gKeyTypeStringPool = new UVector(uloc_deleteKeyTypeStringPoolEntry, NULL, sts);
+    gKeyTypeStringPool = new icu::UVector(uloc_deleteKeyTypeStringPoolEntry, NULL, sts);
     if (gKeyTypeStringPool == NULL || U_FAILURE(sts)) {
         goto close_bundles;
     }
-    gLocExtKeyDataEntries = new UVector(uloc_deleteKeyDataEntry, NULL, sts);
+    gLocExtKeyDataEntries = new icu::UVector(uloc_deleteKeyDataEntry, NULL, sts);
     if (gLocExtKeyDataEntries == NULL || U_FAILURE(sts)) {
         goto close_bundles;
     }
-    gLocExtTypeEntries = new UVector(uloc_deleteTypeEntry, NULL, sts);
+    gLocExtTypeEntries = new icu::UVector(uloc_deleteTypeEntry, NULL, sts);
     if (gLocExtTypeEntries == NULL || U_FAILURE(sts)) {
         goto close_bundles;
     }
