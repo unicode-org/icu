@@ -337,24 +337,25 @@ static void addTimeUnits(
         cacheData.relativeUnits[UDAT_STYLE_SHORT][relativeUnit],
         cacheData.absoluteUnits[UDAT_STYLE_SHORT][absoluteUnit],
         status);
-    UErrorCode prevStatus = status;
+    if (U_FAILURE(status)) {
+        return;
+    }
     addTimeUnit(
         resource,
         pathNarrow,
         cacheData.relativeUnits[UDAT_STYLE_NARROW][relativeUnit],
         cacheData.absoluteUnits[UDAT_STYLE_NARROW][absoluteUnit],
         status);
-    if (U_FAILURE(prevStatus) || status != U_MISSING_RESOURCE_ERROR) {
-        return; // no point trying the short-for-narrow hack
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        // retry addTimeUnit for UDAT_STYLE_NARROW using pathShort
+        status = U_ZERO_ERROR;
+        addTimeUnit(
+            resource,
+            pathShort,
+            cacheData.relativeUnits[UDAT_STYLE_NARROW][relativeUnit],
+            cacheData.absoluteUnits[UDAT_STYLE_NARROW][absoluteUnit],
+            status);
     }
-    // retry addTimeUnit for UDAT_STYLE_NARROW using pathShort
-    status = U_ZERO_ERROR;
-    addTimeUnit(
-        resource,
-        pathShort,
-        cacheData.relativeUnits[UDAT_STYLE_NARROW][relativeUnit],
-        cacheData.absoluteUnits[UDAT_STYLE_NARROW][absoluteUnit],
-        status);
 }
 
 static void initRelativeUnits(
@@ -373,22 +374,23 @@ static void initRelativeUnits(
             pathShort,
             relativeUnits[UDAT_STYLE_SHORT][relativeUnit],
             status);
-    UErrorCode prevStatus = status;
+    if (U_FAILURE(status)) {
+        return;
+    }
     initRelativeUnit(
             resource,
             pathNarrow,
             relativeUnits[UDAT_STYLE_NARROW][relativeUnit],
             status);
-    if (U_FAILURE(prevStatus) || status != U_MISSING_RESOURCE_ERROR) {
-        return; // no point trying the short-for-narrow hack
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        // retry initRelativeUnit for UDAT_STYLE_NARROW using pathShort
+        status = U_ZERO_ERROR;
+        initRelativeUnit(
+                resource,
+                pathShort,
+                relativeUnits[UDAT_STYLE_NARROW][relativeUnit],
+                status);
     }
-    // retry initRelativeUnit for UDAT_STYLE_NARROW using pathShort
-    status = U_ZERO_ERROR;
-    initRelativeUnit(
-            resource,
-            pathShort,
-            relativeUnits[UDAT_STYLE_NARROW][relativeUnit],
-            status);
 }
 
 static void addWeekDays(
@@ -412,7 +414,9 @@ static void addWeekDays(
             absoluteUnit,
             absoluteUnits[UDAT_STYLE_SHORT],
             status);
-    UErrorCode prevStatus = status;
+    if (U_FAILURE(status)) {
+        return;
+    }
     addWeekDay(
             resource,
             pathNarrow,
@@ -420,18 +424,17 @@ static void addWeekDays(
             absoluteUnit,
             absoluteUnits[UDAT_STYLE_NARROW],
             status);
-    if (U_FAILURE(prevStatus) || status != U_MISSING_RESOURCE_ERROR) {
-        return; // no point trying the short-for-narrow hack
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        // retry addWeekDay for UDAT_STYLE_NARROW using pathShort
+        status = U_ZERO_ERROR;
+        addWeekDay(
+                resource,
+                pathShort,
+                daysOfWeek[UDAT_STYLE_NARROW],
+                absoluteUnit,
+                absoluteUnits[UDAT_STYLE_NARROW],
+                status);
     }
-    // retry addWeekDay for UDAT_STYLE_NARROW using pathShort
-    status = U_ZERO_ERROR;
-    addWeekDay(
-            resource,
-            pathShort,
-            daysOfWeek[UDAT_STYLE_NARROW],
-            absoluteUnit,
-            absoluteUnits[UDAT_STYLE_NARROW],
-            status);
 }
 
 static UBool loadUnitData(
