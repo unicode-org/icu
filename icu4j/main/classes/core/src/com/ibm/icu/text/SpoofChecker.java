@@ -1456,7 +1456,7 @@ public class SpoofChecker {
     }
 
     /**
-     * Get a list of locales for the scripts that are acceptable in strings to be checked. If no limitations on scripts
+     * Get a read-only set of locales for the scripts that are acceptable in strings to be checked. If no limitations on scripts
      * have been specified, an empty set will be returned.
      *
      * setAllowedChars() will reset the list of allowed locales to be empty.
@@ -1469,11 +1469,11 @@ public class SpoofChecker {
      * @stable ICU 4.6
      */
     public Set<ULocale> getAllowedLocales() {
-        return fAllowedLocales;
+        return Collections.unmodifiableSet(fAllowedLocales);
     }
 
     /**
-     * Get a list of JDK locales for the scripts that are acceptable in strings to be checked. If no limitations on scripts
+     * Get a set of JDK locales for the scripts that are acceptable in strings to be checked. If no limitations on scripts
      * have been specified, an empty set will be returned.
      *
      * @return A set of locales corresponding to the acceptable scripts.
