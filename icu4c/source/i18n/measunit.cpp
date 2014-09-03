@@ -26,26 +26,26 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MeasureUnit)
 // Start generated code
 
 static const int32_t gOffsets[] = {
-    0,      // acceleration
-    2,      // angle
-    6,      // area
-    15,     // consumption
-    17,     // currency
-    277,    // digital
-    287,    // duration
-    297,    // electric
-    301,    // energy
-    307,    // frequency
-    311,    // length
-    329,    // light
-    330,    // mass
-    341,    // power
-    347,    // pressure
-    352,    // proportion
-    353,    // speed
-    356,    // temperature
-    359,    // volume
-    381     // total in gSubTypes
+    0,
+    2,
+    6,
+    15,
+    17,
+    277,
+    287,
+    297,
+    301,
+    307,
+    311,
+    329,
+    330,
+    341,
+    347,
+    352,
+    353,
+    356,
+    359,
+    381
 };
 
 static const int32_t gIndexes[] = {
@@ -54,7 +54,7 @@ static const int32_t gIndexes[] = {
     6,
     15,
     17,
-    17,     // from here, offsets less the number of currencies (260)
+    17,
     27,
     37,
     41,
@@ -68,7 +68,7 @@ static const int32_t gIndexes[] = {
     93,
     96,
     99,
-    121     // total in gSubTypes less number of currencies, should match MEAS_UNIT_COUNT in measfmt.cpp
+    121
 };
 
 static const char * const gTypes[] = {
@@ -94,13 +94,13 @@ static const char * const gTypes[] = {
 };
 
 static const char * const gSubTypes[] = {
-    "g-force",                  //  0 (was 0) acceleration/0
+    "g-force",
     "meter-per-second-squared",
-    "arc-minute",               //  2 (was 1) angle/1
+    "arc-minute",
     "arc-second",
     "degree",
     "radian",
-    "acre",                     //  6 (was 4) area/2
+    "acre",
     "hectare",
     "square-centimeter",
     "square-foot",
@@ -109,9 +109,9 @@ static const char * const gSubTypes[] = {
     "square-meter",
     "square-mile",
     "square-yard",
-    "liter-per-kilometer",      // 15 (new) consumption/3
+    "liter-per-kilometer",
     "mile-per-gallon",
-    "ADP",                      // 17 (was 10) currency/4
+    "ADP",
     "AED",
     "AFA",
     "AFN",
@@ -371,7 +371,7 @@ static const char * const gSubTypes[] = {
     "ZWL",
     "ZWN",
     "ZWR",
-    "bit",                      // 277 (new) digital/5
+    "bit",
     "byte",
     "gigabit",
     "gigabyte",
@@ -381,7 +381,7 @@ static const char * const gSubTypes[] = {
     "megabyte",
     "terabit",
     "terabyte",
-    "day",                      // 287 (was 270) duration/6
+    "day",
     "hour",
     "microsecond",
     "millisecond",
@@ -391,21 +391,21 @@ static const char * const gSubTypes[] = {
     "second",
     "week",
     "year",
-    "ampere",                   // 297 (new) electric/7
+    "ampere",
     "milliampere",
     "ohm",
     "volt",
-    "calorie",                  // 301 (new) energy/8
+    "calorie",
     "foodcalorie",
     "joule",
     "kilocalorie",
     "kilojoule",
     "kilowatt-hour",
-    "gigahertz",                // 307 (new) frequency/9
+    "gigahertz",
     "hertz",
     "kilohertz",
     "megahertz",
-    "astronomical-unit",        // 311 (was 278) length/10
+    "astronomical-unit",
     "centimeter",
     "decimeter",
     "fathom",
@@ -423,8 +423,8 @@ static const char * const gSubTypes[] = {
     "parsec",
     "picometer",
     "yard",
-    "lux",                      // 329 (new) light/11
-    "carat",                    // 330 (was 288) mass/12
+    "lux",
+    "carat",
     "gram",
     "kilogram",
     "metric-ton",
@@ -435,25 +435,25 @@ static const char * const gSubTypes[] = {
     "pound",
     "stone",
     "ton",
-    "gigawatt",                 // 341 (was 292) power/13
+    "gigawatt",
     "horsepower",
     "kilowatt",
     "megawatt",
     "milliwatt",
     "watt",
-    "hectopascal",              // 347 (was 295) pressure/14
+    "hectopascal",
     "inch-hg",
     "millibar",
     "millimeter-of-mercury",
     "pound-per-square-inch",
-    "karat",                    // 352 (new) proportion/15
-    "kilometer-per-hour",       // 353 (was 298) speed/16
+    "karat",
+    "kilometer-per-hour",
     "meter-per-second",
     "mile-per-hour",
-    "celsius",                  // 356 (was 301) temperature/17
+    "celsius",
     "fahrenheit",
     "kelvin",
-    "acre-foot",                // 359 (was 303) volume/18
+    "acre-foot",
     "bushel",
     "centiliter",
     "cubic-centimeter",
@@ -477,295 +477,731 @@ static const char * const gSubTypes[] = {
     "teaspoon"
 };
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createGForce(UErrorCode &status) {
     return MeasureUnit::create(0, 0, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "meter-per-second-squared", MeasureUnit::create(0, 1, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMeterPerSecondSquared(UErrorCode &status) {
+    return MeasureUnit::create(0, 1, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createArcMinute(UErrorCode &status) {
     return MeasureUnit::create(1, 0, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createArcSecond(UErrorCode &status) {
     return MeasureUnit::create(1, 1, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createDegree(UErrorCode &status) {
     return MeasureUnit::create(1, 2, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "radian",        MeasureUnit::create(1, 3, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createRadian(UErrorCode &status) {
+    return MeasureUnit::create(1, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createAcre(UErrorCode &status) {
     return MeasureUnit::create(2, 0, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHectare(UErrorCode &status) {
     return MeasureUnit::create(2, 1, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "square-centimeter", MeasureUnit::create(2, 2, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createSquareCentimeter(UErrorCode &status) {
+    return MeasureUnit::create(2, 2, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareFoot(UErrorCode &status) {
     return MeasureUnit::create(2, 3, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "square-inch",   MeasureUnit::create(2, 4, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createSquareInch(UErrorCode &status) {
+    return MeasureUnit::create(2, 4, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareKilometer(UErrorCode &status) {
     return MeasureUnit::create(2, 5, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareMeter(UErrorCode &status) {
     return MeasureUnit::create(2, 6, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareMile(UErrorCode &status) {
     return MeasureUnit::create(2, 7, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "square-yard",   MeasureUnit::create(2, 8, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createSquareYard(UErrorCode &status) {
+    return MeasureUnit::create(2, 8, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "liter-per-kilometer", MeasureUnit::create(3, 0, status);
-// missing "mile-per-gallon", MeasureUnit::create(3, 1, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createLiterPerKilometer(UErrorCode &status) {
+    return MeasureUnit::create(3, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "bit",           MeasureUnit::create(5, 0, status);
-// missing "byte",          MeasureUnit::create(5, 1, status);
-// missing "gigabit",       MeasureUnit::create(5, 2, status);
-// missing "gigabyte",      MeasureUnit::create(5, 3, status);
-// missing "kilobit",       MeasureUnit::create(5, 4, status);
-// missing "kilobyte",      MeasureUnit::create(5, 5, status);
-// missing "megabit",       MeasureUnit::create(5, 6, status);
-// missing "megabyte",      MeasureUnit::create(5, 7, status);
-// missing "terabit",       MeasureUnit::create(5, 8, status);
-// missing "terabyte",      MeasureUnit::create(5, 9, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMilePerGallon(UErrorCode &status) {
+    return MeasureUnit::create(3, 1, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createBit(UErrorCode &status) {
+    return MeasureUnit::create(5, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createByte(UErrorCode &status) {
+    return MeasureUnit::create(5, 1, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createGigabit(UErrorCode &status) {
+    return MeasureUnit::create(5, 2, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createGigabyte(UErrorCode &status) {
+    return MeasureUnit::create(5, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createKilobit(UErrorCode &status) {
+    return MeasureUnit::create(5, 4, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createKilobyte(UErrorCode &status) {
+    return MeasureUnit::create(5, 5, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMegabit(UErrorCode &status) {
+    return MeasureUnit::create(5, 6, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMegabyte(UErrorCode &status) {
+    return MeasureUnit::create(5, 7, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createTerabit(UErrorCode &status) {
+    return MeasureUnit::create(5, 8, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createTerabyte(UErrorCode &status) {
+    return MeasureUnit::create(5, 9, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createDay(UErrorCode &status) {
     return MeasureUnit::create(6, 0, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHour(UErrorCode &status) {
     return MeasureUnit::create(6, 1, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "microsecond",   MeasureUnit::create(6, 2, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMicrosecond(UErrorCode &status) {
+    return MeasureUnit::create(6, 2, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMillisecond(UErrorCode &status) {
     return MeasureUnit::create(6, 3, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMinute(UErrorCode &status) {
     return MeasureUnit::create(6, 4, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMonth(UErrorCode &status) {
     return MeasureUnit::create(6, 5, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "nanosecond",    MeasureUnit::create(6, 6, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createNanosecond(UErrorCode &status) {
+    return MeasureUnit::create(6, 6, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSecond(UErrorCode &status) {
     return MeasureUnit::create(6, 7, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createWeek(UErrorCode &status) {
     return MeasureUnit::create(6, 8, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createYear(UErrorCode &status) {
     return MeasureUnit::create(6, 9, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "ampere",        MeasureUnit::create(7, 0, status);
-// missing "milliampere",   MeasureUnit::create(7, 1, status);
-// missing "ohm",           MeasureUnit::create(7, 2, status);
-// missing "volt",          MeasureUnit::create(7, 3, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createAmpere(UErrorCode &status) {
+    return MeasureUnit::create(7, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "calorie",       MeasureUnit::create(8, 0, status);
-// missing "foodcalorie",   MeasureUnit::create(8, 1, status);
-// missing "joule",         MeasureUnit::create(8, 2, status);
-// missing "kilocalorie",   MeasureUnit::create(8, 3, status);
-// missing "kilojoule",     MeasureUnit::create(8, 4, status);
-// missing "kilowatt-hour", MeasureUnit::create(8, 5, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMilliampere(UErrorCode &status) {
+    return MeasureUnit::create(7, 1, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "gigahertz",     MeasureUnit::create(9, 0, status);
-// missing "hertz",         MeasureUnit::create(9, 1, status);
-// missing "kilohertz",     MeasureUnit::create(9, 2, status);
-// missing "megahertz",     MeasureUnit::create(9, 3, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createOhm(UErrorCode &status) {
+    return MeasureUnit::create(7, 2, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "astronomical-unit", MeasureUnit::create(10, 0, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createVolt(UErrorCode &status) {
+    return MeasureUnit::create(7, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createCalorie(UErrorCode &status) {
+    return MeasureUnit::create(8, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createFoodcalorie(UErrorCode &status) {
+    return MeasureUnit::create(8, 1, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createJoule(UErrorCode &status) {
+    return MeasureUnit::create(8, 2, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createKilocalorie(UErrorCode &status) {
+    return MeasureUnit::create(8, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createKilojoule(UErrorCode &status) {
+    return MeasureUnit::create(8, 4, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createKilowattHour(UErrorCode &status) {
+    return MeasureUnit::create(8, 5, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createGigahertz(UErrorCode &status) {
+    return MeasureUnit::create(9, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createHertz(UErrorCode &status) {
+    return MeasureUnit::create(9, 1, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createKilohertz(UErrorCode &status) {
+    return MeasureUnit::create(9, 2, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMegahertz(UErrorCode &status) {
+    return MeasureUnit::create(9, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createAstronomicalUnit(UErrorCode &status) {
+    return MeasureUnit::create(10, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCentimeter(UErrorCode &status) {
     return MeasureUnit::create(10, 1, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "decimeter",     MeasureUnit::create(10, 2, status);
-// missing "fathom",        MeasureUnit::create(10, 3, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createDecimeter(UErrorCode &status) {
+    return MeasureUnit::create(10, 2, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createFathom(UErrorCode &status) {
+    return MeasureUnit::create(10, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createFoot(UErrorCode &status) {
     return MeasureUnit::create(10, 4, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "furlong",       MeasureUnit::create(10, 5, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createFurlong(UErrorCode &status) {
+    return MeasureUnit::create(10, 5, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createInch(UErrorCode &status) {
     return MeasureUnit::create(10, 6, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilometer(UErrorCode &status) {
     return MeasureUnit::create(10, 7, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createLightYear(UErrorCode &status) {
     return MeasureUnit::create(10, 8, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMeter(UErrorCode &status) {
     return MeasureUnit::create(10, 9, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "micrometer",    MeasureUnit::create(10, 10, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMicrometer(UErrorCode &status) {
+    return MeasureUnit::create(10, 10, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMile(UErrorCode &status) {
     return MeasureUnit::create(10, 11, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMillimeter(UErrorCode &status) {
     return MeasureUnit::create(10, 12, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "nanometer",     MeasureUnit::create(10, 13, status);
-// missing "nautical-mile", MeasureUnit::create(10, 14, status);
-// missing "parsec",        MeasureUnit::create(10, 15, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createNanometer(UErrorCode &status) {
+    return MeasureUnit::create(10, 13, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createNauticalMile(UErrorCode &status) {
+    return MeasureUnit::create(10, 14, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createParsec(UErrorCode &status) {
+    return MeasureUnit::create(10, 15, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createPicometer(UErrorCode &status) {
     return MeasureUnit::create(10, 16, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createYard(UErrorCode &status) {
     return MeasureUnit::create(10, 17, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "lux",           MeasureUnit::create(11, 0, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createLux(UErrorCode &status) {
+    return MeasureUnit::create(11, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "carat",         MeasureUnit::create(12, 0, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createCarat(UErrorCode &status) {
+    return MeasureUnit::create(12, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createGram(UErrorCode &status) {
     return MeasureUnit::create(12, 1, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilogram(UErrorCode &status) {
     return MeasureUnit::create(12, 2, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "metric-ton",    MeasureUnit::create(12, 3, status);
-// missing "microgram",     MeasureUnit::create(12, 4, status);
-// missing "milligram",     MeasureUnit::create(12, 5, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMetricTon(UErrorCode &status) {
+    return MeasureUnit::create(12, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMicrogram(UErrorCode &status) {
+    return MeasureUnit::create(12, 4, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMilligram(UErrorCode &status) {
+    return MeasureUnit::create(12, 5, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createOunce(UErrorCode &status) {
     return MeasureUnit::create(12, 6, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "ounce-troy",    MeasureUnit::create(12, 7, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createOunceTroy(UErrorCode &status) {
+    return MeasureUnit::create(12, 7, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createPound(UErrorCode &status) {
     return MeasureUnit::create(12, 8, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "stone",         MeasureUnit::create(12, 9, status);
-// missing "ton",           MeasureUnit::create(12, 10, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createStone(UErrorCode &status) {
+    return MeasureUnit::create(12, 9, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "gigawatt",      MeasureUnit::create(13, 0, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createTon(UErrorCode &status) {
+    return MeasureUnit::create(12, 10, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createGigawatt(UErrorCode &status) {
+    return MeasureUnit::create(13, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHorsepower(UErrorCode &status) {
     return MeasureUnit::create(13, 1, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilowatt(UErrorCode &status) {
     return MeasureUnit::create(13, 2, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "megawatt",      MeasureUnit::create(13, 3, status);
-// missing "milliwatt",     MeasureUnit::create(13, 4, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMegawatt(UErrorCode &status) {
+    return MeasureUnit::create(13, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMilliwatt(UErrorCode &status) {
+    return MeasureUnit::create(13, 4, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createWatt(UErrorCode &status) {
     return MeasureUnit::create(13, 5, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHectopascal(UErrorCode &status) {
     return MeasureUnit::create(14, 0, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createInchHg(UErrorCode &status) {
     return MeasureUnit::create(14, 1, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMillibar(UErrorCode &status) {
     return MeasureUnit::create(14, 2, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "millimeter-of-mercury", MeasureUnit::create(14, 3, status);
-// missing "pound-per-square-inch", MeasureUnit::create(14, 4, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMillimeterOfMercury(UErrorCode &status) {
+    return MeasureUnit::create(14, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "karat",         MeasureUnit::create(15, 0, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createPoundPerSquareInch(UErrorCode &status) {
+    return MeasureUnit::create(14, 4, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createKarat(UErrorCode &status) {
+    return MeasureUnit::create(15, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilometerPerHour(UErrorCode &status) {
     return MeasureUnit::create(16, 0, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMeterPerSecond(UErrorCode &status) {
     return MeasureUnit::create(16, 1, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMilePerHour(UErrorCode &status) {
     return MeasureUnit::create(16, 2, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCelsius(UErrorCode &status) {
     return MeasureUnit::create(17, 0, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createFahrenheit(UErrorCode &status) {
     return MeasureUnit::create(17, 1, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "kelvin",        MeasureUnit::create(17, 2, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createKelvin(UErrorCode &status) {
+    return MeasureUnit::create(17, 2, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "acre-foot",         MeasureUnit::create(18, 0, status);
-// missing "bushel",            MeasureUnit::create(18, 1, status);
-// missing "centiliter",        MeasureUnit::create(18, 2, status);
-// missing "cubic-centimeter",  MeasureUnit::create(18, 3, status);
-// missing "cubic-foot",        MeasureUnit::create(18, 4, status);
-// missing "cubic-inch",        MeasureUnit::create(18, 5, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createAcreFoot(UErrorCode &status) {
+    return MeasureUnit::create(18, 0, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createBushel(UErrorCode &status) {
+    return MeasureUnit::create(18, 1, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createCentiliter(UErrorCode &status) {
+    return MeasureUnit::create(18, 2, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createCubicCentimeter(UErrorCode &status) {
+    return MeasureUnit::create(18, 3, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createCubicFoot(UErrorCode &status) {
+    return MeasureUnit::create(18, 4, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createCubicInch(UErrorCode &status) {
+    return MeasureUnit::create(18, 5, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCubicKilometer(UErrorCode &status) {
     return MeasureUnit::create(18, 6, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "cubic-meter",       MeasureUnit::create(18, 7, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createCubicMeter(UErrorCode &status) {
+    return MeasureUnit::create(18, 7, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCubicMile(UErrorCode &status) {
     return MeasureUnit::create(18, 8, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "cubic-yard",        MeasureUnit::create(18, 9, status);
-// missing "cup",               MeasureUnit::create(18, 10, status);
-// missing "deciliter",         MeasureUnit::create(18, 11, status);
-// missing "fluid-ounce",       MeasureUnit::create(18, 12, status);
-// missing "gallon",            MeasureUnit::create(18, 13, status);
-// missing "hectoliter",        MeasureUnit::create(18, 14, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createCubicYard(UErrorCode &status) {
+    return MeasureUnit::create(18, 9, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createCup(UErrorCode &status) {
+    return MeasureUnit::create(18, 10, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createDeciliter(UErrorCode &status) {
+    return MeasureUnit::create(18, 11, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createFluidOunce(UErrorCode &status) {
+    return MeasureUnit::create(18, 12, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createGallon(UErrorCode &status) {
+    return MeasureUnit::create(18, 13, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createHectoliter(UErrorCode &status) {
+    return MeasureUnit::create(18, 14, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createLiter(UErrorCode &status) {
     return MeasureUnit::create(18, 15, status);
 }
+#endif /* U_HIDE_DRAFT_API */
 
-// missing "megaliter",         MeasureUnit::create(18, 16, status);
-// missing "milliliter",        MeasureUnit::create(18, 17, status);
-// missing "pint",              MeasureUnit::create(18, 18, status);
-// missing "quart",             MeasureUnit::create(18, 19, status);
-// missing "tablespoon",        MeasureUnit::create(18, 20, status);
-// missing "teaspoon",          MeasureUnit::create(18, 21, status);
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMegaliter(UErrorCode &status) {
+    return MeasureUnit::create(18, 16, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createMilliliter(UErrorCode &status) {
+    return MeasureUnit::create(18, 17, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createPint(UErrorCode &status) {
+    return MeasureUnit::create(18, 18, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createQuart(UErrorCode &status) {
+    return MeasureUnit::create(18, 19, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createTablespoon(UErrorCode &status) {
+    return MeasureUnit::create(18, 20, status);
+}
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_DRAFT_API
+MeasureUnit *MeasureUnit::createTeaspoon(UErrorCode &status) {
+    return MeasureUnit::create(18, 21, status);
+}
+#endif /* U_HIDE_DRAFT_API */
 
 // End generated code
 
