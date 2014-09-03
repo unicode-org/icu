@@ -124,6 +124,7 @@
 		  <remap sourcePath="/Types" targetDir="lang" />
 		  <remap sourcePath="/Types%short" targetDir="lang" />
 		  <remap sourcePath="/Variants" targetDir="lang" />
+		  <remap sourcePath="/Variants%secondary" targetDir="lang" />
 		  <remap sourcePath="/codePatterns" targetDir="lang" />
 		  <remap sourcePath="/localeDisplayPattern" targetDir="lang" />
 		  <remap sourcePath="/Countries" targetDir="region" />

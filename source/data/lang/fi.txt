@@ -989,10 +989,7 @@ fi{
         BOONT{"englannin boontling-murre"}
         EMODENG{"varhaisnykyenglanti"}
         FONIPA{"kansainvälinen foneettinen aakkosto IPA"}
-        FONUPA{
-            "uralilainen foneettinen aakkosto UPA",
-            "suomalais-ugrilainen tarkekirjoitus",
-        }
+        FONUPA{"uralilainen foneettinen aakkosto UPA"}
         FONXSAMP{"foneettinen X-SAMPA-merkistö"}
         HEPBURN{"japanin Hepburn-latinaistus"}
         HOGNORSK{"norjan högnorsk"}
@@ -1035,6 +1032,9 @@ fi{
         VALENCIA{"katalaanin valencian murre"}
         VALLADER{"reoromaanin vallader-muoto"}
         WADEGILE{"kiinan Wade-Giles-latinaistus"}
+    }
+    Variants%secondary{
+        FONUPA{"suomalais-ugrilainen tarkekirjoitus"}
     }
     Version{"2.1.8.9"}
     codePatterns{
