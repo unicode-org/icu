@@ -319,10 +319,8 @@ fi{
             ec{"Glace Bay"}
         }
         "America:Godthab"{
-            ec{
-                "Nuuk",
-                "Godthåb",
-            }
+            ec{"Nuuk"}
+            ec%secondary{"Godthåb"}
         }
         "America:Goose_Bay"{
             ec{"Goose Bay"}
@@ -550,10 +548,8 @@ fi{
             ec{"São Paulo"}
         }
         "America:Scoresbysund"{
-            ec{
-                "Ittoqqortoormiit",
-                "Scoresbysund",
-            }
+            ec{"Ittoqqortoormiit"}
+            ec%secondary{"Scoresbysund"}
         }
         "America:Sitka"{
             ec{"Sitka"}
@@ -583,10 +579,8 @@ fi{
             ec{"Tegucigalpa"}
         }
         "America:Thule"{
-            ec{
-                "Thule",
-                "Qaanaaq",
-            }
+            ec{"Thule"}
+            ec%secondary{"Qaanaaq"}
         }
         "America:Thunder_Bay"{
             ec{"Thunder Bay"}
@@ -1041,10 +1035,8 @@ fi{
             ec{"Malta"}
         }
         "Europe:Mariehamn"{
-            ec{
-                "Maarianhamina",
-                "Mariehamn",
-            }
+            ec{"Maarianhamina"}
+            ec%secondary{"Mariehamn"}
         }
         "Europe:Minsk"{
             ec{"Minsk"}

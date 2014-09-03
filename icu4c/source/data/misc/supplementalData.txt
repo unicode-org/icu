@@ -10390,7 +10390,7 @@ supplementalData:table(nofallback){
         }
         PS{
             {
-                code{"970"}
+                code%limitedAvailability{"970"}
             }
             {
                 code{"972"}
