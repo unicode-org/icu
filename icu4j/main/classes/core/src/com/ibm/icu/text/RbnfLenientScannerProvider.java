@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,17 +12,19 @@ import com.ibm.icu.util.ULocale;
 /**
  * A provider for an RbnfLenientScanner.
  *
- * @stable ICU 4.4
+ * @deprecated ICU 54
  */
+@Deprecated
 public interface RbnfLenientScannerProvider {
-  /**
-   * Returns a scanner appropriate for the given locale, with optional extra data.
-   * in the form of collation rules.
-   *
-   * @param locale the locale to provide the default lenient rules.
-   * @param extras extra collation rules
-   * @return the lenient scanner, or null
-   * @stable ICU 4.4
-   */
-  RbnfLenientScanner get(ULocale locale, String extras);
+    /**
+     * Returns a scanner appropriate for the given locale, with optional extra data.
+     * in the form of collation rules.
+     *
+     * @param locale the locale to provide the default lenient rules.
+     * @param extras extra collation rules
+     * @return the lenient scanner, or null
+     * @deprecated ICU 54
+     */
+    @Deprecated
+    RbnfLenientScanner get(ULocale locale, String extras);
 }
