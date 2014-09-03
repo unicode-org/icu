@@ -84,11 +84,11 @@ public class TestFmwk extends AbstractTestLog {
         if(ex == null){
             ex = e;
         }
-//        if (ex instanceof OutOfMemoryError) {
-//            // Once OOM happens, it does not make sense to run
-//            // the rest of test cases.
-//            throw new RuntimeException(ex);
-//        }
+        if (ex instanceof OutOfMemoryError) {
+            // Once OOM happens, it does not make sense to run
+            // the rest of test cases.
+            throw new RuntimeException(ex);
+        }
         if (ex instanceof ICUTestError) {
             // ICUTestError is one produced by errln.
             // We don't need to include useless stack trace information for
