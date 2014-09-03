@@ -44,7 +44,7 @@ import com.ibm.icu.util.ULocale;
  */
 public class MeasureUnitTest extends TestFmwk {
     
-    private static final String[] DRAFT_VERSIONS = {"52", "53"};
+    private static final String[] DRAFT_VERSIONS = {"53", "54"};
     
     private static final HashSet<String> DRAFT_VERSION_SET = new HashSet<String>();
     
@@ -97,6 +97,81 @@ public class MeasureUnitTest extends TestFmwk {
         {"HOUR", "53"},
         {"MINUTE", "53"},
         {"SECOND", "53"},
+        {"METER_PER_SECOND_SQUARED", "54"},
+        {"RADIAN", "54"},
+        {"SQUARE_CENTIMETER", "54"},
+        {"SQUARE_INCH", "54"},
+        {"SQUARE_YARD", "54"},
+        {"LITER_PER_KILOMETER", "54"},
+        {"MILE_PER_GALLON", "54"},
+        {"BIT", "54"},
+        {"BYTE", "54"},
+        {"GIGABIT", "54"},
+        {"GIGABYTE", "54"},
+        {"KILOBIT", "54"},
+        {"KILOBYTE", "54"},
+        {"MEGABIT", "54"},
+        {"MEGABYTE", "54"},
+        {"TERABIT", "54"},
+        {"TERABYTE", "54"},
+        {"MICROSECOND", "54"},
+        {"NANOSECOND", "54"},
+        {"AMPERE", "54"},
+        {"MILLIAMPERE", "54"},
+        {"OHM", "54"},
+        {"VOLT", "54"},
+        {"CALORIE", "54"},
+        {"FOODCALORIE", "54"},
+        {"JOULE", "54"},
+        {"KILOCALORIE", "54"},
+        {"KILOJOULE", "54"},
+        {"KILOWATT_HOUR", "54"},
+        {"GIGAHERTZ", "54"},
+        {"HERTZ", "54"},
+        {"KILOHERTZ", "54"},
+        {"MEGAHERTZ", "54"},
+        {"ASTRONOMICAL_UNIT", "54"},
+        {"DECIMETER", "54"},
+        {"FATHOM", "54"},
+        {"FURLONG", "54"},
+        {"MICROMETER", "54"},
+        {"NANOMETER", "54"},
+        {"NAUTICAL_MILE", "54"},
+        {"PARSEC", "54"},
+        {"LUX", "54"},
+        {"CARAT", "54"},
+        {"METRIC_TON", "54"},
+        {"MICROGRAM", "54"},
+        {"MILLIGRAM", "54"},
+        {"OUNCE_TROY", "54"},
+        {"STONE", "54"},
+        {"TON", "54"},
+        {"GIGAWATT", "54"},
+        {"MEGAWATT", "54"},
+        {"MILLIWATT", "54"},
+        {"MILLIMETER_OF_MERCURY", "54"},
+        {"POUND_PER_SQUARE_INCH", "54"},
+        {"KARAT", "54"},
+        {"KELVIN", "54"},
+        {"ACRE_FOOT", "54"},
+        {"BUSHEL", "54"},
+        {"CENTILITER", "54"},
+        {"CUBIC_CENTIMETER", "54"},
+        {"CUBIC_FOOT", "54"},
+        {"CUBIC_INCH", "54"},
+        {"CUBIC_METER", "54"},
+        {"CUBIC_YARD", "54"},
+        {"CUP", "54"},
+        {"DECILITER", "54"},
+        {"FLUID_OUNCE", "54"},
+        {"GALLON", "54"},
+        {"HECTOLITER", "54"},
+        {"MEGALITER", "54"},
+        {"MILLILITER", "54"},
+        {"PINT", "54"},
+        {"QUART", "54"},
+        {"TABLESPOON", "54"},
+        {"TEASPOON", "54"},
     };
     
     private static final HashMap<String, String> JAVA_VERSION_MAP = new HashMap<String, String>();
@@ -176,6 +251,133 @@ public class MeasureUnitTest extends TestFmwk {
                 MeasureUnit.SECOND,
         };
         assertEquals("", 46, units.length);
+    }
+    
+    public void TestCompatible54_1() {
+        MeasureUnit[] units = {
+                MeasureUnit.G_FORCE,
+                MeasureUnit.METER_PER_SECOND_SQUARED,
+                MeasureUnit.ARC_MINUTE,
+                MeasureUnit.ARC_SECOND,
+                MeasureUnit.DEGREE,
+                MeasureUnit.RADIAN,
+                MeasureUnit.ACRE,
+                MeasureUnit.HECTARE,
+                MeasureUnit.SQUARE_CENTIMETER,
+                MeasureUnit.SQUARE_FOOT,
+                MeasureUnit.SQUARE_INCH,
+                MeasureUnit.SQUARE_KILOMETER,
+                MeasureUnit.SQUARE_METER,
+                MeasureUnit.SQUARE_MILE,
+                MeasureUnit.SQUARE_YARD,
+                MeasureUnit.LITER_PER_KILOMETER,
+                MeasureUnit.MILE_PER_GALLON,
+                MeasureUnit.BIT,
+                MeasureUnit.BYTE,
+                MeasureUnit.GIGABIT,
+                MeasureUnit.GIGABYTE,
+                MeasureUnit.KILOBIT,
+                MeasureUnit.KILOBYTE,
+                MeasureUnit.MEGABIT,
+                MeasureUnit.MEGABYTE,
+                MeasureUnit.TERABIT,
+                MeasureUnit.TERABYTE,
+                MeasureUnit.DAY,
+                MeasureUnit.HOUR,
+                MeasureUnit.MICROSECOND,
+                MeasureUnit.MILLISECOND,
+                MeasureUnit.MINUTE,
+                MeasureUnit.MONTH,
+                MeasureUnit.NANOSECOND,
+                MeasureUnit.SECOND,
+                MeasureUnit.WEEK,
+                MeasureUnit.YEAR,
+                MeasureUnit.AMPERE,
+                MeasureUnit.MILLIAMPERE,
+                MeasureUnit.OHM,
+                MeasureUnit.VOLT,
+                MeasureUnit.CALORIE,
+                MeasureUnit.FOODCALORIE,
+                MeasureUnit.JOULE,
+                MeasureUnit.KILOCALORIE,
+                MeasureUnit.KILOJOULE,
+                MeasureUnit.KILOWATT_HOUR,
+                MeasureUnit.GIGAHERTZ,
+                MeasureUnit.HERTZ,
+                MeasureUnit.KILOHERTZ,
+                MeasureUnit.MEGAHERTZ,
+                MeasureUnit.ASTRONOMICAL_UNIT,
+                MeasureUnit.CENTIMETER,
+                MeasureUnit.DECIMETER,
+                MeasureUnit.FATHOM,
+                MeasureUnit.FOOT,
+                MeasureUnit.FURLONG,
+                MeasureUnit.INCH,
+                MeasureUnit.KILOMETER,
+                MeasureUnit.LIGHT_YEAR,
+                MeasureUnit.METER,
+                MeasureUnit.MICROMETER,
+                MeasureUnit.MILE,
+                MeasureUnit.MILLIMETER,
+                MeasureUnit.NANOMETER,
+                MeasureUnit.NAUTICAL_MILE,
+                MeasureUnit.PARSEC,
+                MeasureUnit.PICOMETER,
+                MeasureUnit.YARD,
+                MeasureUnit.LUX,
+                MeasureUnit.CARAT,
+                MeasureUnit.GRAM,
+                MeasureUnit.KILOGRAM,
+                MeasureUnit.METRIC_TON,
+                MeasureUnit.MICROGRAM,
+                MeasureUnit.MILLIGRAM,
+                MeasureUnit.OUNCE,
+                MeasureUnit.OUNCE_TROY,
+                MeasureUnit.POUND,
+                MeasureUnit.STONE,
+                MeasureUnit.TON,
+                MeasureUnit.GIGAWATT,
+                MeasureUnit.HORSEPOWER,
+                MeasureUnit.KILOWATT,
+                MeasureUnit.MEGAWATT,
+                MeasureUnit.MILLIWATT,
+                MeasureUnit.WATT,
+                MeasureUnit.HECTOPASCAL,
+                MeasureUnit.INCH_HG,
+                MeasureUnit.MILLIBAR,
+                MeasureUnit.MILLIMETER_OF_MERCURY,
+                MeasureUnit.POUND_PER_SQUARE_INCH,
+                MeasureUnit.KARAT,
+                MeasureUnit.KILOMETER_PER_HOUR,
+                MeasureUnit.METER_PER_SECOND,
+                MeasureUnit.MILE_PER_HOUR,
+                MeasureUnit.CELSIUS,
+                MeasureUnit.FAHRENHEIT,
+                MeasureUnit.KELVIN,
+                MeasureUnit.ACRE_FOOT,
+                MeasureUnit.BUSHEL,
+                MeasureUnit.CENTILITER,
+                MeasureUnit.CUBIC_CENTIMETER,
+                MeasureUnit.CUBIC_FOOT,
+                MeasureUnit.CUBIC_INCH,
+                MeasureUnit.CUBIC_KILOMETER,
+                MeasureUnit.CUBIC_METER,
+                MeasureUnit.CUBIC_MILE,
+                MeasureUnit.CUBIC_YARD,
+                MeasureUnit.CUP,
+                MeasureUnit.DECILITER,
+                MeasureUnit.FLUID_OUNCE,
+                MeasureUnit.GALLON,
+                MeasureUnit.HECTOLITER,
+                MeasureUnit.LITER,
+                MeasureUnit.MEGALITER,
+                MeasureUnit.MILLILITER,
+                MeasureUnit.PINT,
+                MeasureUnit.QUART,
+                MeasureUnit.TABLESPOON,
+                MeasureUnit.TEASPOON,
+        };
+        assertEquals("",  121, units.length);
     }
     
     public void TestExamplesInDocs() {
@@ -767,6 +969,8 @@ public class MeasureUnitTest extends TestFmwk {
         
     }
     
+    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
+    // for MeasureFormat during the release process.
     static void generateCXXHConstants(String thisVersion) {
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
         System.out.println();
@@ -781,6 +985,9 @@ public class MeasureUnitTest extends TestFmwk {
                 String name = toCamelCase(unit);
                 String javaName = toJAVAName(unit);
                 checkForDup(seen, name, unit);
+                if (isDraft(javaName)) {
+                    System.out.println("#ifndef U_HIDE_DRAFT_API");
+                }
                 System.out.println("    /**");
                 System.out.println("     * Returns unit of " + type + ": " + code + ".");
                 System.out.println("     * Caller owns returned value and must free it.");
@@ -792,6 +999,9 @@ public class MeasureUnitTest extends TestFmwk {
                 }
                 System.out.println("     */");
                 System.out.printf("    static MeasureUnit *create%s(UErrorCode &status);\n\n", name);
+                if (isDraft(javaName)) {
+                    System.out.println("#endif /* U_HIDE_DRAFT_API */");
+                }
             }
         }    
     }
@@ -805,8 +1015,8 @@ public class MeasureUnitTest extends TestFmwk {
         }
     }
 
-    
-    
+    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
+    // for MeasureFormat during the release process.
     static void updateJAVAVersions(String thisVersion) {
         System.out.println();
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
@@ -844,6 +1054,8 @@ public class MeasureUnitTest extends TestFmwk {
         return allUnits;
     }
     
+    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
+    // for MeasureFormat during the release process.
     static void generateCXXConstants() {
         System.out.println("static final MeasureUnit");
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
@@ -905,10 +1117,17 @@ public class MeasureUnitTest extends TestFmwk {
             }
             for (MeasureUnit unit : entry.getValue()) {
                 String name = toCamelCase(unit);
+                String javaName = toJAVAName(unit);
                 checkForDup(seen, name, unit);
+                if (isDraft(javaName)) {
+                    System.out.println("#ifndef U_HIDE_DRAFT_API");
+                }
                 System.out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
                 System.out.printf("    return MeasureUnit::create(%d, %d, status);\n", typeIdx, subTypeIdx);
                 System.out.println("}");
+                if (isDraft(javaName)) {
+                    System.out.println("#endif /* U_HIDE_DRAFT_API */");
+                }
                 System.out.println();
                 subTypeIdx++;
             }
@@ -938,7 +1157,9 @@ public class MeasureUnitTest extends TestFmwk {
     static boolean isTypeHidden(String type) {
         return "currency".equals(type);
     }
-    
+ 
+    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
+    // for MeasureFormat during the release process.
     static void generateBackwardCompatibilityTest(String version) {
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
         System.out.println();
@@ -962,6 +1183,8 @@ public class MeasureUnitTest extends TestFmwk {
         System.out.println("    }");
     }
     
+    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
+    // for MeasureFormat during the release process.
     static void generateCXXBackwardCompatibilityTest(String version) {
         System.out.println();
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
@@ -995,6 +1218,8 @@ public class MeasureUnitTest extends TestFmwk {
         return name;
     }
 
+    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
+    // for MeasureFormat during the release process.
     static void generateConstants(String thisVersion) {
         System.out.println();
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
