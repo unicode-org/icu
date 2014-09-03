@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -236,6 +236,7 @@
     <ClCompile Include="ubidi_props.c" />
     <ClCompile Include="ubidiln.c" />
     <ClCompile Include="ubidiwrt.c" />
+    <ClCompile Include="uloc_keytype.cpp" />
     <ClCompile Include="ushape.cpp" />
     <ClCompile Include="brkeng.cpp">
     </ClCompile>
