@@ -367,8 +367,12 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   int32_t fwdCount = 0;
 
   int32_t subCount = fSet.size();
-  LocalArray<UnicodeString> ustrs(new UnicodeString[subCount]);
-  LocalArray<int> partials(new int[subCount]);
+  
+  LocalMemory<UnicodeString> ustrs;
+  ustrs.allocateInsteadAndReset(subCount);
+
+  LocalMemory<int> partials;
+  partials.allocateInsteadAndReset(subCount);
 
   LocalPointer<UCharsTrie>    backwardsTrie; //  i.e. ".srM" for Mrs.
   LocalPointer<UCharsTrie>    forwardsPartialTrie; //  Has ".a" for "a.M."
