@@ -3271,7 +3271,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Converts the specified keyword (legacy key, or BCP 47 Unicode locale
+     * {@icu} Converts the specified keyword (legacy key, or BCP 47 Unicode locale
      * extension key) to the equivalent BCP 47 Unicode locale extension key.
      * For example, BCP 47 Unicode locale extension key "co" is returned for
      * the input keyword "collation".
@@ -3301,7 +3301,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Converts the specified keyword value (legacy type, or BCP 47
+     * {@icu} Converts the specified keyword value (legacy type, or BCP 47
      * Unicode locale extension type) to the well-formed BCP 47 Unicode locale
      * extension type for the specified keyword (category). For example, BCP 47
      * Unicode locale extension type "phonebk" is returned for the input
@@ -3338,7 +3338,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Converts the specified keyword (BCP 47 Unicode locale extension key, or
+     * {@icu} Converts the specified keyword (BCP 47 Unicode locale extension key, or
      * legacy key) to the legacy key. For example, legacy key "collation" is
      * returned for the input BCP 47 Unicode locale extension key "co".
      * 
@@ -3369,7 +3369,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Converts the specified keyword value (BCP 47 Unicode locale extension type,
+     * {@icu} Converts the specified keyword value (BCP 47 Unicode locale extension type,
      * or legacy type or type alias) to the canonical legacy type. For example,
      * the legacy type "phonebook" is returned for the input BCP 47 Unicode
      * locale extension type "phonebk" with the keyword "collation" (or "co").
