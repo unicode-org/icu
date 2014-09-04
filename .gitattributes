@@ -3527,6 +3527,7 @@ icu4c/source/test/testdata/importtest.bin -text
 icu4c/source/test/testdata/iscii.bin -text svneol=native#application/octet-stream
 icu4c/source/test/testdata/letest.xml svneol=native#text/xml
 icu4c/source/test/testdata/mc.txt svneol=native#text/plain
+icu4c/source/test/testdata/metaZones.txt -text
 icu4c/source/test/testdata/nfs4_cis_prep.txt svneol=native#text/plain
 icu4c/source/test/testdata/nfs4_cs_prep_ci.txt svneol=native#text/plain
 icu4c/source/test/testdata/nfs4_cs_prep_cs.txt svneol=native#text/plain
@@ -3551,8 +3552,11 @@ icu4c/source/test/testdata/testaliases.txt svneol=native#text/plain
 icu4c/source/test/testdata/testempty.txt svneol=native#text/plain
 icu4c/source/test/testdata/testnorm.txt svneol=native#text/plain
 icu4c/source/test/testdata/testtypes.txt svneol=native#text/plain
+icu4c/source/test/testdata/timezoneTypes.txt -text
 icu4c/source/test/testdata/translit_rules.txt svneol=native#text/plain
 icu4c/source/test/testdata/uni-text.bin -text
+icu4c/source/test/testdata/windowsZones.txt -text
+icu4c/source/test/testdata/zoneinfo64.txt -text
 icu4c/source/test/testmap/readme.txt svneol=native#text/plain
 icu4c/source/test/thaitest/space.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/ctestfw.vcxproj -text
