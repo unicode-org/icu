@@ -306,6 +306,12 @@ public class MeasureUnit implements Serializable {
      * Useful constants. Not necessarily complete: see {@link #getAvailable()}.
      */
     
+// All code between the "Start generated MeasureUnit constants" comment and
+// the "End generated MeasureUnit constants" comment is auto generated code
+// and must not be edited manually. For instructions on how to correctly
+// update this code, refer to:
+// https://sites.google.com/site/icusite/design/formatting/measureformat/updating-measure-unit
+//
     // Start generated MeasureUnit constants
     
     /**
