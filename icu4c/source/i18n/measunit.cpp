@@ -23,6 +23,12 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MeasureUnit)
 
+// All code between the "Start generated code" comment and
+// the "End generated code" comment is auto generated code
+// and must not be edited manually. For instructions on how to correctly
+// update this code, refer to:
+// https://sites.google.com/site/icusite/design/formatting/measureformat/updating-measure-unit
+//
 // Start generated code
 
 static const int32_t gOffsets[] = {
