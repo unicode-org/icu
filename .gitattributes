@@ -339,9 +339,13 @@ icu4c/source/test/perf/utrie2perf/utrie2perf.vcxproj -text
 icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/importtest.bin -text
 icu4c/source/test/testdata/iscii.bin -text
+icu4c/source/test/testdata/metaZones.txt -text
 icu4c/source/test/testdata/old_e_testtypes.res -text
 icu4c/source/test/testdata/old_l_testtypes.res -text
+icu4c/source/test/testdata/timezoneTypes.txt -text
 icu4c/source/test/testdata/uni-text.bin -text
+icu4c/source/test/testdata/windowsZones.txt -text
+icu4c/source/test/testdata/zoneinfo64.txt -text
 icu4c/source/tools/ctestfw/ctestfw.vcxproj -text
 icu4c/source/tools/ctestfw/ctestfw.vcxproj.filters -text
 icu4c/source/tools/genbrk/genbrk.vcxproj -text

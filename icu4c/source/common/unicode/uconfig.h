@@ -246,6 +246,10 @@
 #   define UCONFIG_NO_FILE_IO 0
 #endif
 
+#if UCONFIG_NO_FILE_IO && defined(U_TIMEZONE_FILES_DIR) 
+#   error Contradictory file io switches in uconfig.h.
+#endif
+
 /**
  * \def UCONFIG_NO_CONVERSION
  * ICU will not completely build with this switch turned on.
