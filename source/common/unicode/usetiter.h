@@ -58,7 +58,7 @@ class UnicodeString;
  * @author M. Davis
  * @stable ICU 2.4
  */
-class U_COMMON_API UnicodeSetIterator U_FINAL : public UObject {
+class U_COMMON_API UnicodeSetIterator : public UObject {
 
  protected:
 
