@@ -8,10 +8,6 @@
 **********************************************************************
 */
 
-// AbbreviatedUnicodeSetIterator overrides UnicodeSetIterator.
-#define U_FINAL
-#define U_OVERRIDE
-
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_TRANSLITERATION

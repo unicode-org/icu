@@ -4,10 +4,6 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-// My4146160Collator overrides RBC. Disable U_FINAL for this test.
-#define U_FINAL
-#define U_OVERRIDE
-
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_COLLATION

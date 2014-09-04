@@ -121,8 +121,6 @@
  * Defined to the C++11 "override" keyword if available.
  * Denotes a class or member which is an override of the base class.
  * May result in an error if it applied to something not an override.
- * (NOTE: '#define U_OVERRIDE' at the top of a compilation unit will
- *  disable this keyword's use.)
  * @internal
  */
 
@@ -131,8 +129,6 @@
  * Defined to the C++11 "final" keyword if available.
  * Denotes a class or member which may not be overridden in subclasses.
  * May result in an error if subclasses attempt to override.
- * (NOTE: '#define U_FINAL' at the top of a compilation unit will
- *  disable this keyword's use.)
  * @internal
  */
 
