@@ -186,6 +186,12 @@ class U_I18N_API MeasureUnit: public UObject {
     static int32_t getIndexCount();
 #endif /* U_HIDE_INTERNAL_API */
 
+// All code between the "Start generated createXXX methods" comment and
+// the "End generated createXXX methods" comment is auto generated code
+// and must not be edited manually. For instructions on how to correctly
+// update this code, refer to:
+// https://sites.google.com/site/icusite/design/formatting/measureformat/updating-measure-unit
+//
 // Start generated createXXX methods
 
 #ifndef U_HIDE_DRAFT_API
