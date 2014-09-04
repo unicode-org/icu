@@ -579,7 +579,7 @@ void RBBIRuleScanner::error(UErrorCode e) {
             fRB->fParseError->line  = fLineNum;
             fRB->fParseError->offset = fCharNum;
             fRB->fParseError->preContext[0] = 0;
-            fRB->fParseError->preContext[0] = 0;
+            fRB->fParseError->postContext[0] = 0;
         }
     }
 }
