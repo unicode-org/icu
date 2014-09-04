@@ -40,7 +40,7 @@ The following names can be supplied as the argument for platform:
     Cygwin/MSVC         Use the Microsoft Visual C++ compiler on Cygwin
     Cygwin/MSVC2005     Use the Microsoft Visual C++ 2005 compiler on Cygwin
     Cygwin/ICL          Use the Intel C++ compiler on Cygwin
-    FreeBSD             Use the GNU gcc/g++ compilers on Free BSD
+    FreeBSD             Use the clang/clang++ or GNU gcc/g++ compilers on FreeBSD
     HP-UX/ACC           Use the HP ANSI C/Advanced C++ compilers on HP-UX 11
     IBMi                Use the iCC compilers on IBM i, i5/OS, OS/400
     Linux               Use the clang/clang++ or GNU gcc/g++ compilers on Linux
@@ -330,8 +330,6 @@ case $platform in
     *BSD)
         THE_OS="BSD"
         THE_COMP="the GNU C++"
-        CC=gcc; export CC
-        CXX=g++; export CXX
         DEBUG_CFLAGS='-g -O0'
         DEBUG_CXXFLAGS='-g -O0'
         ;;
