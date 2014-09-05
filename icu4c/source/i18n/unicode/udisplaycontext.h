@@ -35,7 +35,13 @@ enum UDisplayContextType {
      * UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, etc.
      * @stable ICU 51
      */
-    UDISPCTX_TYPE_CAPITALIZATION = 1
+    UDISPCTX_TYPE_CAPITALIZATION = 1,
+    /**
+     * Type to retrieve the display length setting, e.g.
+     * UDISPCTX_LENGTH_FULL, UDISPCTX_LENGTH_SHORT.
+     * @draft ICU 54
+     */
+    UDISPCTX_TYPE_DISPLAY_LENGTH = 2
 };
 /**
 *  @stable ICU 51
@@ -106,7 +112,27 @@ enum UDisplayContext {
      * isolated name on a calendar page.
      * @stable ICU 51
      */
-    UDISPCTX_CAPITALIZATION_FOR_STANDALONE = (UDISPCTX_TYPE_CAPITALIZATION<<8) + 4
+    UDISPCTX_CAPITALIZATION_FOR_STANDALONE = (UDISPCTX_TYPE_CAPITALIZATION<<8) + 4,
+    /**
+     * ================================
+     * DISPLAY_LENGTH can be set to one of UDISPCTX_LENGTH_FULL or
+     * UDISPCTX_LENGTH_SHORT. Use UDisplayContextType UDISPCTX_TYPE_DISPLAY_LENGTH
+     * to get the value.
+     */
+    /**
+     * A possible setting for DISPLAY_LENGTH:
+     * use full names when generating a locale name,
+     * e.g. "United States" for US.
+     * @draft ICU 54
+     */
+    UDISPCTX_LENGTH_FULL = (UDISPCTX_TYPE_DISPLAY_LENGTH<<8) + 0,
+    /**
+     * A possible setting for DISPLAY_LENGTH:
+     * use short names when generating a locale name,
+     * e.g. "U.S." for US.
+     * @draft ICU 54
+     */
+    UDISPCTX_LENGTH_SHORT = (UDISPCTX_TYPE_DISPLAY_LENGTH<<8) + 1
 };
 /**
 *  @stable ICU 51
