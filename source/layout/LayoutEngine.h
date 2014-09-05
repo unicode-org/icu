@@ -63,7 +63,7 @@ class LEGlyphStorage;
  * @see LEFontInstance
  * @see ScriptAndLanguageTags.h
  *
- * @deprecated ICU 54. See {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link icu::LayoutEngine}
  *  Instead, please use HarfBuzz.
  *         see http://www.freedesktop.org/wiki/Software/HarfBuzz/ 
  *         and http://userguide.icu-project.org/layoutengine
@@ -268,7 +268,7 @@ protected:
     virtual const void *getFontTable(LETag tableTag, size_t &length) const;
 
     /**
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual const void *getFontTable(LETag tableTag) const { size_t ignored; return getFontTable(tableTag, ignored); }
 
@@ -343,7 +343,7 @@ public:
      * method. It is declared virtual so that it will be invoked by the
      * subclass destructors.
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual ~LayoutEngine();
 
@@ -370,7 +370,7 @@ public:
      * method first to free the glyph, character index and position arrays
      * allocated by the previous call.
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y, LEErrorCode &success);
 
@@ -381,7 +381,7 @@ public:
      *
      * @return the number of glyphs in the glyph array
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     le_int32 getGlyphCount() const;
 
@@ -393,7 +393,7 @@ public:
      * @param glyphs - the destiniation glyph array
      * @param success - set to an error code if the operation fails
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const;
 
@@ -407,7 +407,7 @@ public:
      * @param extraBits - this value will be ORed with each glyph index
      * @param success - set to an error code if the operation fails
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
 
@@ -419,7 +419,7 @@ public:
      * @param charIndices - the destiniation character index array
      * @param success - set to an error code if the operation fails
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getCharIndices(le_int32 charIndices[], LEErrorCode &success) const;
 
@@ -432,7 +432,7 @@ public:
      * @param indexBase - an offset which will be added to each index
      * @param success - set to an error code if the operation fails
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const;
 
@@ -445,7 +445,7 @@ public:
      * @param positions - the destiniation position array
      * @param success - set to an error code if the operation fails
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getGlyphPositions(float positions[], LEErrorCode &success) const;
 
@@ -461,7 +461,7 @@ public:
      * @param y - the glyph's Y position
      * @param success - set to an error code if the operation fails
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const;
 
@@ -470,7 +470,7 @@ public:
      * so that the LayoutEngine can be reused to layout a different
      * characer array. (This method is also called by the destructor)
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual void reset();
 
@@ -488,27 +488,27 @@ public:
      *
      * @see LEFontInstance
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success);
 
     /**
      * Override of existing call that provides flags to control typography.
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typo_flags, LEErrorCode &success);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @deprecated ICU 54. See {@link LayoutEngine}
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static UClassID getStaticClassID();
 
