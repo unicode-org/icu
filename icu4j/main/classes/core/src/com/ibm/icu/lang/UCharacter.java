@@ -4640,13 +4640,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     @Deprecated
     public static int getPropertyValueEnumNoThrow(int property, CharSequence valueAlias) {
-        int propEnum;
-        try {
-            propEnum = UPropertyAliases.INSTANCE.getPropertyValueEnum(property, valueAlias);
-        } catch (Exception e) {
-            propEnum = UProperty.UNDEFINED;
-        }
-        return propEnum;
+        return UPropertyAliases.INSTANCE.getPropertyValueEnumNoThrow(property, valueAlias);
     }
 
 
