@@ -1246,6 +1246,8 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * Transforms the String into a CollationKey suitable for efficient
      * repeated comparison.  The resulting key depends on the collator's
      * rules, strength and decomposition mode.
+     * </p></p>Note that collation keys are often less efficient than simply doing comparison. 
+     * For more details, see the ICU User Guide.
      * </p>
      * <p>See the CollationKey class documentation for more information.</p>
      * @param source the string to be transformed into a CollationKey.
@@ -1264,6 +1266,8 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * the rules of this Collator and stores the result into the user provided argument
      * key.  If key has a internal byte array of length that's too small for the result,
      * the internal byte array will be grown to the exact required size.
+     * </p>Note that collation keys are often less efficient than simply doing comparison. 
+     * For more details, see the ICU User Guide.
      * @param source the text String to be transformed into a RawCollationKey
      * @return If key is null, a new instance of RawCollationKey will be
      *         created and returned, otherwise the user provided key will be

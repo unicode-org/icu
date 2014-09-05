@@ -24,7 +24,10 @@ import com.ibm.icu.impl.coll.Collation;
  * <code>CollationKey.compareTo(CollationKey)</code> and the method
  * <code>Collator.compare(String, String)</code> compare two strings
  * and returns their relative order.  The performance characterictics
- * of these two approaches can differ.</p>
+ * of these two approaches can differ.
+ * Note that collation keys are often less efficient than simply doing comparison. 
+ * For more details, see the ICU User Guide.
+ * </p>
  *
  * <p>During the construction of a <code>CollationKey</code>, the
  * entire source string is examined and processed into a series of
