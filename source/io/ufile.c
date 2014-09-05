@@ -27,6 +27,9 @@
 
 #include "locmap.h"
 #include "unicode/ustdio.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "ufile.h"
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
@@ -342,3 +345,4 @@ U_CAPI const UNumberFormat* U_EXPORT2 u_fgetNumberFormat(UFILE *file)
 }
 #endif
 
+#endif

@@ -17,6 +17,8 @@
 
 #include "unicode/unistr.h"
 
+#if !UCONFIG_NO_CONVERSION  // not available without conversion
+
 /**
  * \file
  * \brief C++ API: Unicode iostream like API
@@ -62,4 +64,5 @@ U_NAMESPACE_END
 
 /* No operator for UChar because it can conflict with wchar_t  */
 
+#endif
 #endif

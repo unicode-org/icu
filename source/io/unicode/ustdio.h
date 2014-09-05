@@ -31,6 +31,8 @@
 #include "unicode/localpointer.h"
 #include "unicode/unum.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 /*
     TODO
  The following is a small list as to what is currently wrong/suggestions for
@@ -1006,6 +1008,8 @@ u_vsscanf_u(const UChar *buffer,
         const UChar     *patternSpecification,
         va_list         ap);
 
+
+#endif
 #endif
 #endif
 
