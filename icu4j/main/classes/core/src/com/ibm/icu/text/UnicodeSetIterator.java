@@ -32,6 +32,8 @@ import java.util.Iterator;
  *   }
  * }
  * </pre>
+ * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification. 
+ * Do not alter the UnicodeSet while iterating.
  * @author M. Davis
  * @stable ICU 2.0
  */
@@ -104,7 +106,8 @@ public class UnicodeSetIterator {
      * calls to <tt>next()</tt> and <tt>nextRange()</tt> without
      * calling <tt>reset()</tt> between them.  The results of doing so
      * are undefined.
-     *
+     * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification. 
+     * Do not alter the UnicodeSet while iterating.
      * @return true if there was another element in the set and this
      * object contains the element.
      * @stable ICU 2.0

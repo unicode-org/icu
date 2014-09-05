@@ -4132,6 +4132,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * The UnicodeSet must not be altered during the iteration.
      * The EntryRange is the same each time; the contents are just reset.<br>
      * <b>Warning: </b>To iterate over the full contents, you have to also iterate over the strings.
+     * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification. 
+     * Do not alter the UnicodeSet while iterating.
      * 
      * <pre>
      * // Sample code
@@ -4180,6 +4182,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Returns a string iterator. Uses the same order of iteration as {@link UnicodeSetIterator}.
+     * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification. 
+     * Do not alter the UnicodeSet while iterating.
      * @see java.util.Set#iterator()
      * @stable ICU 4.4
      */
