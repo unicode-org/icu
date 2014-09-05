@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
  * this is just a list of languages which the LayoutEngine
  * supports.
  *
- * @deprecated ICU 54. See {@link LayoutEngine}
+ * @deprecated ICU 54. See {@link icu::LayoutEngine}
  */
 
 enum LanguageCodes {
@@ -60,7 +60,7 @@ enum LanguageCodes {
     zhsLanguageCode = 28,
     zhtLanguageCode = 29,
 
-    /** New language codes added 03/13/2008 @deprecated ICU 54. See {@link LayoutEngine}
+    /** New language codes added 03/13/2008 @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     afkLanguageCode = 30,
     belLanguageCode = 31,
