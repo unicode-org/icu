@@ -284,6 +284,7 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
     UnicodeString formatReplaceOpenParen;
     UnicodeString formatCloseParen;
     UnicodeString formatReplaceCloseParen;
+    UDisplayContext nameLength;
 
     // Constants for capitalization context usage types.
     enum CapContextUsage {
@@ -348,6 +349,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
     , keyTypeFormat(NULL)
     , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
     , capitalizationBrkIter(NULL)
+    , nameLength(UDISPCTX_LENGTH_FULL)
 {
     initialize();
 }
@@ -362,6 +364,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
     , keyTypeFormat(NULL)
     , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
     , capitalizationBrkIter(NULL)
+    , nameLength(UDISPCTX_LENGTH_FULL)
 {
     while (length-- > 0) {
         UDisplayContext value = *contexts++;
@@ -372,6 +375,9 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
                 break;
             case UDISPCTX_TYPE_CAPITALIZATION:
                 capitalizationContext = value;
+                break;
+            case UDISPCTX_TYPE_DISPLAY_LENGTH:
+                nameLength = value;
                 break;
             default:
                 break;
@@ -511,6 +517,8 @@ LocaleDisplayNamesImpl::getContext(UDisplayContextType type) const {
             return (UDisplayContext)dialectHandling;
         case UDISPCTX_TYPE_CAPITALIZATION:
             return capitalizationContext;
+        case UDISPCTX_TYPE_DISPLAY_LENGTH:
+            return nameLength;
         default:
             break;
     }
@@ -679,6 +687,12 @@ LocaleDisplayNamesImpl::localeDisplayName(const char* localeId,
 UnicodeString&
 LocaleDisplayNamesImpl::localeIdName(const char* localeId,
                                      UnicodeString& result) const {
+    if (nameLength == UDISPCTX_LENGTH_SHORT) {
+        langData.getNoFallback("LanguagesShort", localeId, result);
+        if (!result.isBogus()) {
+            return result;
+        }
+    }
     return langData.getNoFallback("Languages", localeId, result);
 }
 
@@ -688,6 +702,12 @@ LocaleDisplayNamesImpl::languageDisplayName(const char* lang,
     if (uprv_strcmp("root", lang) == 0 || uprv_strchr(lang, '_') != NULL) {
         return result = UnicodeString(lang, -1, US_INV);
     }
+    if (nameLength == UDISPCTX_LENGTH_SHORT) {
+        langData.get("LanguagesShort", lang, result);
+        if (!result.isBogus()) {
+            return adjustForUsageAndContext(kCapContextUsageLanguage, result);
+        }
+    }
     langData.get("Languages", lang, result);
     return adjustForUsageAndContext(kCapContextUsageLanguage, result);
 }
@@ -695,6 +715,12 @@ LocaleDisplayNamesImpl::languageDisplayName(const char* lang,
 UnicodeString&
 LocaleDisplayNamesImpl::scriptDisplayName(const char* script,
                                           UnicodeString& result) const {
+    if (nameLength == UDISPCTX_LENGTH_SHORT) {
+        langData.get("Scripts%short", script, result);
+        if (!result.isBogus()) {
+            return adjustForUsageAndContext(kCapContextUsageScript, result);
+        }
+    }
     langData.get("Scripts", script, result);
     return adjustForUsageAndContext(kCapContextUsageScript, result);
 }
@@ -703,6 +729,12 @@ UnicodeString&
 LocaleDisplayNamesImpl::scriptDisplayName(UScriptCode scriptCode,
                                           UnicodeString& result) const {
     const char* name = uscript_getName(scriptCode);
+    if (nameLength == UDISPCTX_LENGTH_SHORT) {
+        langData.get("Scripts%short", name, result);
+        if (!result.isBogus()) {
+            return adjustForUsageAndContext(kCapContextUsageScript, result);
+        }
+    }
     langData.get("Scripts", name, result);
     return adjustForUsageAndContext(kCapContextUsageScript, result);
 }
@@ -710,6 +742,12 @@ LocaleDisplayNamesImpl::scriptDisplayName(UScriptCode scriptCode,
 UnicodeString&
 LocaleDisplayNamesImpl::regionDisplayName(const char* region,
                                           UnicodeString& result) const {
+    if (nameLength == UDISPCTX_LENGTH_SHORT) {
+        regionData.get("CountriesShort", region, result);
+        if (!result.isBogus()) {
+            return adjustForUsageAndContext(kCapContextUsageTerritory, result);
+        }
+    }
     regionData.get("Countries", region, result);
     return adjustForUsageAndContext(kCapContextUsageTerritory, result);
 }
@@ -717,6 +755,7 @@ LocaleDisplayNamesImpl::regionDisplayName(const char* region,
 UnicodeString&
 LocaleDisplayNamesImpl::variantDisplayName(const char* variant,
                                            UnicodeString& result) const {
+    // don't have a resource for short variant names
     langData.get("Variants", variant, result);
     return adjustForUsageAndContext(kCapContextUsageVariant, result);
 }
@@ -724,6 +763,7 @@ LocaleDisplayNamesImpl::variantDisplayName(const char* variant,
 UnicodeString&
 LocaleDisplayNamesImpl::keyDisplayName(const char* key,
                                        UnicodeString& result) const {
+    // don't have a resource for short key names
     langData.get("Keys", key, result);
     return adjustForUsageAndContext(kCapContextUsageKey, result);
 }
@@ -732,6 +772,12 @@ UnicodeString&
 LocaleDisplayNamesImpl::keyValueDisplayName(const char* key,
                                             const char* value,
                                             UnicodeString& result) const {
+    if (nameLength == UDISPCTX_LENGTH_SHORT) {
+        langData.get("Types%short", key, value, result);
+        if (!result.isBogus()) {
+            return adjustForUsageAndContext(kCapContextUsageKeyValue, result);
+        }
+    }
     langData.get("Types", key, value, result);
     return adjustForUsageAndContext(kCapContextUsageKeyValue, result);
 }
