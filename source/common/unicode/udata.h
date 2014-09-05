@@ -96,7 +96,7 @@ U_CDECL_BEGIN
  *
  * <p>The <code>formatVersion</code> field should be used to
  * make sure that the format can be interpreted.
- * I may be a good idea to check only for the one or two highest
+ * It may be a good idea to check only for the one or two highest
  * of the version elements to allow the data memory to
  * get more or somewhat rearranged contents, for as long
  * as the using code can still interpret the older contents.</p>
