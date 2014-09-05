@@ -3833,12 +3833,23 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         public UnicodeMatcher lookupMatcher(int i) {
             return null;
         }
+
         /**
-         * Apply a new property alias. Is called when parsing [:xxx=yyy:]. Results are to put into result.
-         * @param propertyName the xxx in [:xxx=yyy:]
-         * @param propertyValue the yyy in [:xxx=yyy:]
-         * @param result where the result is placed
-         * @return true if handled
+         * Override the interpretation of the sequence [:propertyName=propertyValue:] (and its negated and Perl-style
+         * variant). The propertyName and propertyValue may be existing Unicode aliases, or may not be.
+         * <p>
+         * This routine will be called whenever the parsing of a UnicodeSet pattern finds such a
+         * propertyName+propertyValue combination.
+         * 
+         * @param propertyName
+         *            the name of the property
+         * @param propertyValue
+         *            the name of the property value
+         * @param result UnicodeSet value to change
+         *            a set to which the characters having the propertyName+propertyValue are to be added.
+         * @return returns true if the propertyName+propertyValue combination is to be overridden, and the characters
+         *         with that property have been added to the UnicodeSet, and returns false if the
+         *         propertyName+propertyValue combination is not recognized (in which case result is unaltered).
          * @draft ICU3.8
          * @provisional This API might change or be removed in a future release.
          */
