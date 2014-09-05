@@ -35,14 +35,15 @@ enum UDisplayContextType {
      * UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, etc.
      * @stable ICU 51
      */
-    UDISPCTX_TYPE_CAPITALIZATION = 1,
+    UDISPCTX_TYPE_CAPITALIZATION = 1
 #ifndef U_HIDE_DRAFT_API
+    ,
     /**
      * Type to retrieve the display length setting, e.g.
      * UDISPCTX_LENGTH_FULL, UDISPCTX_LENGTH_SHORT.
      * @draft ICU 54
      */
-    UDISPCTX_TYPE_DISPLAY_LENGTH = 2,
+    UDISPCTX_TYPE_DISPLAY_LENGTH = 2
 #endif  /* U_HIDE_DRAFT_API */
 };
 /**
@@ -114,8 +115,9 @@ enum UDisplayContext {
      * isolated name on a calendar page.
      * @stable ICU 51
      */
-    UDISPCTX_CAPITALIZATION_FOR_STANDALONE = (UDISPCTX_TYPE_CAPITALIZATION<<8) + 4,
+    UDISPCTX_CAPITALIZATION_FOR_STANDALONE = (UDISPCTX_TYPE_CAPITALIZATION<<8) + 4
 #ifndef U_HIDE_DRAFT_API
+    ,
     /**
      * ================================
      * DISPLAY_LENGTH can be set to one of UDISPCTX_LENGTH_FULL or
@@ -135,7 +137,7 @@ enum UDisplayContext {
      * e.g. "U.S." for US.
      * @draft ICU 54
      */
-    UDISPCTX_LENGTH_SHORT = (UDISPCTX_TYPE_DISPLAY_LENGTH<<8) + 1,
+    UDISPCTX_LENGTH_SHORT = (UDISPCTX_TYPE_DISPLAY_LENGTH<<8) + 1
 #endif  /* U_HIDE_DRAFT_API */
 };
 /**
