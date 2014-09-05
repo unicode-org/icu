@@ -1971,7 +1971,7 @@ public abstract class DateFormat extends UFormat {
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
         return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault(Category.FORMAT));
     }
-
+    
     /**
      * {@icu} Returns a {@link DateFormat} object that can be used to format dates and times in
      * the default locale.
@@ -1980,9 +1980,9 @@ public abstract class DateFormat extends UFormat {
      *              {@link DateTimePatternGenerator}.) This can be {@link DateFormat#ABBR_MONTH},
      *              {@link DateFormat#MONTH_WEEKDAY_DAY}, etc.
      *
-     * @stable ICU 4.0
+     * @draft ICU 54
      */
-    public final static DateFormat getPatternInstance(String skeleton) {
+    public final static DateFormat getInstanceForSkeleton(String skeleton) {
         return getPatternInstance(skeleton, ULocale.getDefault(Category.FORMAT));
     }
 
@@ -1996,9 +1996,9 @@ public abstract class DateFormat extends UFormat {
      *
      * @param locale The locale for which the date/time format is desired.
      *
-     * @stable ICU 4.0
+     * @draft ICU 54
      */
-    public final static DateFormat getPatternInstance(String skeleton, Locale locale) {
+    public final static DateFormat getInstanceForSkeleton(String skeleton, Locale locale) {
         return getPatternInstance(skeleton, ULocale.forLocale(locale));
     }
 
@@ -2012,9 +2012,9 @@ public abstract class DateFormat extends UFormat {
      *
      * @param locale The locale for which the date/time format is desired.
      *
-     * @stable ICU 4.0
+     * @draft ICU 54
      */
-    public final static DateFormat getPatternInstance(String skeleton, ULocale locale) {
+    public final static DateFormat getInstanceForSkeleton(String skeleton, ULocale locale) {
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
         final String bestPattern = generator.getBestPattern(skeleton);
         return new SimpleDateFormat(bestPattern, locale);
@@ -2033,9 +2033,9 @@ public abstract class DateFormat extends UFormat {
      *
      * @param locale The locale for which the date/time format is desired.
      *
-     * @stable ICU 4.0
+     * @draft ICU 54
      */
-    public final static DateFormat getPatternInstance(Calendar cal, String skeleton, Locale locale) {
+    public final static DateFormat getInstanceForSkeleton(Calendar cal, String skeleton, Locale locale) {
         return getPatternInstance(cal, skeleton, ULocale.forLocale(locale));
     }
 
@@ -2052,15 +2052,106 @@ public abstract class DateFormat extends UFormat {
      *
      * @param locale The locale for which the date/time format is desired.
      *
-     * @stable ICU 4.0
+     * @draft ICU 54
      */
-    public final static DateFormat getPatternInstance(
+    public final static DateFormat getInstanceForSkeleton(
         Calendar cal, String skeleton, ULocale locale) {
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
         final String bestPattern = generator.getBestPattern(skeleton);
         SimpleDateFormat format = new SimpleDateFormat(bestPattern, locale);
         format.setCalendar(cal);
         return format;
+    }
+
+
+    /**
+     * {@icu} Returns a {@link DateFormat} object that can be used to format dates and times in
+     * the default locale.
+     * The getInstanceForSkeleton methods are preferred over the getPatternInstance methods.
+     *
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
+     *              {@link DateTimePatternGenerator}.) This can be {@link DateFormat#ABBR_MONTH},
+     *              {@link DateFormat#MONTH_WEEKDAY_DAY}, etc.
+     *
+     * @stable ICU 4.0
+     */
+    public final static DateFormat getPatternInstance(String skeleton) {
+        return getInstanceForSkeleton(skeleton);
+    }
+
+    /**
+     * {@icu} Returns a {@link DateFormat} object that can be used to format dates and times in
+     * the given locale.
+     * The getInstanceForSkeleton methods are preferred over the getPatternInstance methods.
+     *
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
+     *              {@link DateTimePatternGenerator}.) This can be {@link DateFormat#ABBR_MONTH},
+     *              {@link DateFormat#MONTH_WEEKDAY_DAY}, etc.
+     *
+     * @param locale The locale for which the date/time format is desired.
+     *
+     * @stable ICU 4.0
+     */
+    public final static DateFormat getPatternInstance(String skeleton, Locale locale) {
+        return getInstanceForSkeleton(skeleton, locale);
+    }
+
+    /**
+     * {@icu} Returns a {@link DateFormat} object that can be used to format dates and times in
+     * the given locale.
+     * The getInstanceForSkeleton methods are preferred over the getPatternInstance methods.
+     *
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
+     *              {@link DateTimePatternGenerator}.) This can be {@link DateFormat#ABBR_MONTH},
+     *              {@link DateFormat#MONTH_WEEKDAY_DAY}, etc.
+     *
+     * @param locale The locale for which the date/time format is desired.
+     *
+     * @stable ICU 4.0
+     */
+    public final static DateFormat getPatternInstance(String skeleton, ULocale locale) {
+        return getInstanceForSkeleton(skeleton, locale);
+    }
+
+    /**
+     * {@icu} Creates a {@link DateFormat} object that can be used to format dates and
+     * times in the calendar system specified by <code>cal</code>.
+     * The getInstanceForSkeleton methods are preferred over the getPatternInstance methods.
+     *
+     * @param cal   The calendar system for which a date/time format is desired.
+     *
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
+     *              {@link DateTimePatternGenerator}.)  This can be
+     *              {@link DateFormat#ABBR_MONTH}, {@link DateFormat#MONTH_WEEKDAY_DAY},
+     *              etc.
+     *
+     * @param locale The locale for which the date/time format is desired.
+     *
+     * @stable ICU 4.0
+     */
+    public final static DateFormat getPatternInstance(Calendar cal, String skeleton, Locale locale) {
+        return getInstanceForSkeleton(cal, skeleton, locale);
+    }
+
+    /**
+     * {@icu} Creates a {@link DateFormat} object that can be used to format dates and
+     * times in the calendar system specified by <code>cal</code>.
+     * The getInstanceForSkeleton methods are preferred over the getPatternInstance methods.
+     *
+     * @param cal   The calendar system for which a date/time format is desired.
+     *
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
+     *              {@link DateTimePatternGenerator}.)  This can be
+     *              {@link DateFormat#ABBR_MONTH}, {@link DateFormat#MONTH_WEEKDAY_DAY},
+     *              etc.
+     *
+     * @param locale The locale for which the date/time format is desired.
+     *
+     * @stable ICU 4.0
+     */
+    public final static DateFormat getPatternInstance(
+        Calendar cal, String skeleton, ULocale locale) {
+        return getInstanceForSkeleton(cal, skeleton, locale);
     }
 
     /**
