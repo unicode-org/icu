@@ -1,5 +1,5 @@
 # -*-autoconf-*-
-AC_COPYRIGHT([ Copyright (c) 1999-2013, International Business Machines Corporation and others. All Rights Reserved. ])
+AC_COPYRIGHT([ Copyright (c) 1999-2014, International Business Machines Corporation and others. All Rights Reserved. ])
 # configure.in for ICU
 # Stephen F. Booth, heavily modified by Yves and others
 
@@ -1084,7 +1084,13 @@ AC_ARG_ENABLE(tools,
 ICU_CONDITIONAL(TOOLS, test "$tools" = true)
 
 AC_ARG_WITH(data-packaging,
-	[  --with-data-packaging=type specify how to package ICU data (files, archive, library, static, auto) [default=auto]],
+	[  --with-data-packaging     specify how to package ICU data. Possible values:
+        files    raw files (.res, etc)
+        archive  build a single icudtXX.dat file
+        library  shared library (.dll/.so/etc.)
+        static   static library (.a/.lib/etc.)
+        auto     build shared if possible (default)
+           See http://userguide.icu-project.org/icudata for more info.],
 	[case "${withval}" in
                 files|archive|library) datapackaging=$withval ;;
 		auto) datapackaging=$withval ;;
