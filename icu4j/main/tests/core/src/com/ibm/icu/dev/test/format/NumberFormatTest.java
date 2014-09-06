@@ -1544,9 +1544,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
 
         for (TestNumberingSystemItem item : DATA) {
-            if (item.localeName.equals("en_US@numbers=hebr") && logKnownIssue("11219", "Skip tests that depend on hebr numbers in the thousands")) {
-                continue;
-            }
             ULocale loc = new ULocale(item.localeName);
             NumberFormat fmt = NumberFormat.getInstance(loc);
             if (item.isRBNF) {
