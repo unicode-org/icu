@@ -7,14 +7,11 @@ AC_COPYRIGHT([ Copyright (c) 1999-2014, International Business Machines Corporat
 AC_PREREQ(2.68)
 
 # Process this file with autoconf to produce a configure script
-AC_INIT([ICU])
-
-#TODO: IcuBug:8502
-#AC_INIT([ICU],
-#        m4_esyscmd_s([sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "./common/unicode/uvernum.h]"),
-#        [http://icu-project.org/bugs],
-#        [International Components for Unicode],
-#        [http://icu-project.org])
+AC_INIT([ICU],
+        m4_esyscmd_s([sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "./common/unicode/uvernum.h]"),
+        [http://icu-project.org/bugs],
+        [International Components for Unicode],
+        [http://icu-project.org])
 
 AC_CONFIG_SRCDIR([common/unicode/utypes.h])
 
