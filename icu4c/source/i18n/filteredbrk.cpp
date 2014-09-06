@@ -5,15 +5,20 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
+#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILTERED_BREAK_ITERATION
+
+#include "cmemory.h"
+
 #include "unicode/filteredbrk.h"
+#include "unicode/ucharstriebuilder.h"
+#include "unicode/ures.h"
 
-#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING && !UCONFIG_NO_FILTERED_BREAK_ITERATION
-
-#include <unicode/ucharstriebuilder.h>
-
-#include "uresimp.h"
-#include "ubrkimpl.h"
+#include "uresimp.h" // ures_getByKeyWithFallback
+#include "ubrkimpl.h" // U_ICUDATA_BRKITR
 #include "uvector.h"
+#include "cmemory.h"
+
 U_NAMESPACE_BEGIN
 
 #ifndef FB_DEBUG
@@ -291,7 +296,7 @@ int32_t SimpleFilteredSentenceBreakIterator::next() {
 /**
  * Concrete implementation of builder class.
  */
-class SimpleFilteredBreakIteratorBuilder : public FilteredBreakIteratorBuilder {
+class U_I18N_API SimpleFilteredBreakIteratorBuilder : public FilteredBreakIteratorBuilder {
 public:
   virtual ~SimpleFilteredBreakIteratorBuilder();
   SimpleFilteredBreakIteratorBuilder(const Locale &fromLocale, UErrorCode &status);
@@ -352,6 +357,17 @@ SimpleFilteredBreakIteratorBuilder::unsuppressBreakAfter(const UnicodeString& ex
   return r;
 }
 
+/**
+ * Jitterbug 2974: MSVC has a bug whereby new X[0] behaves badly.
+ * Work around this.
+ *
+ * Note: "new UnicodeString[subCount]" ends up calling global operator new
+ * on MSVC2012 for some reason.
+ */
+static inline UnicodeString* newUnicodeStringArray(size_t count) {
+    return new UnicodeString[count ? count : 1];
+}
+
 BreakIterator *
 SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UErrorCode& status) {
   LocalPointer<BreakIterator> adopt(adoptBreakIterator);
@@ -367,9 +383,10 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   int32_t fwdCount = 0;
 
   int32_t subCount = fSet.size();
+
+  UnicodeString *ustrs_ptr = newUnicodeStringArray(subCount);
   
-  LocalMemory<UnicodeString> ustrs;
-  ustrs.allocateInsteadAndReset(subCount);
+  LocalArray<UnicodeString> ustrs(ustrs_ptr);
 
   LocalMemory<int> partials;
   partials.allocateInsteadAndReset(subCount);
