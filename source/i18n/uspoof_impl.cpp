@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2008-2013, International Business Machines
+*   Copyright (C) 2008-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -504,8 +504,22 @@ SpoofData::SpoofData(UDataMemory *udm, UErrorCode &status)
     if (U_FAILURE(status)) {
         return;
     }
+    const DataHeader *dh = udm->pHeader;
+    int32_t headerSize = dh->dataHeader.headerSize;
+    if (  !(headerSize >= 20 &&
+            dh->info.isBigEndian == U_IS_BIG_ENDIAN &&
+            dh->info.charsetFamily == U_CHARSET_FAMILY &&
+            dh->info.dataFormat[0] == 0x43 &&  // dataFormat="Cfu "
+            dh->info.dataFormat[1] == 0x66 &&
+            dh->info.dataFormat[2] == 0x75 &&
+            dh->info.dataFormat[3] == 0x20)
+        ) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+
     fRawData = reinterpret_cast<SpoofDataHeader *>
-                   ((char *)(udm->pHeader) + udm->pHeader->dataHeader.headerSize);
+                   ((char *)(udm->pHeader) + headerSize);
     fUDM = udm;
     validateDataVersion(fRawData, status);
     initPtrs(status);
