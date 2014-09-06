@@ -1439,6 +1439,21 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneNarrow, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesNarrowTag, tempStatus), tempStatus);
             initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternNumeric, calData.getByKey3(gMonthPatternsTag, gNamesNumericTag, gNamesAllTag, tempStatus), tempStatus);
             if (U_SUCCESS(tempStatus)) {
+                // Hack to fix bad C inheritance for dangi monthPatterns (OK in J); this should be handled by aliases in root, but isn't.
+                // The ordering of the following statements is important.
+                if (fLeapMonthPatterns[kLeapMonthPatternFormatAbbrev].isEmpty()) {
+                    fLeapMonthPatterns[kLeapMonthPatternFormatAbbrev].setTo(fLeapMonthPatterns[kLeapMonthPatternFormatWide]);
+                };
+                if (fLeapMonthPatterns[kLeapMonthPatternFormatNarrow].isEmpty()) {
+                    fLeapMonthPatterns[kLeapMonthPatternFormatNarrow].setTo(fLeapMonthPatterns[kLeapMonthPatternStandaloneNarrow]);
+                };
+                if (fLeapMonthPatterns[kLeapMonthPatternStandaloneWide].isEmpty()) {
+                    fLeapMonthPatterns[kLeapMonthPatternStandaloneWide].setTo(fLeapMonthPatterns[kLeapMonthPatternFormatWide]);
+                };
+                if (fLeapMonthPatterns[kLeapMonthPatternStandaloneAbbrev].isEmpty()) {
+                    fLeapMonthPatterns[kLeapMonthPatternStandaloneAbbrev].setTo(fLeapMonthPatterns[kLeapMonthPatternFormatAbbrev]);
+                };
+                // end of hack
                 fLeapMonthPatternsCount = kMonthPatternsCount;
             } else {
                 delete[] fLeapMonthPatterns;

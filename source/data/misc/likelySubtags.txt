@@ -183,6 +183,8 @@ likelySubtags:table(nofallback){
     fr{"fr_Latn_FR"}
     frc{"frc_Latn_US"}
     frp{"frp_Latn_FR"}
+    frr{"frr_Latn_DE"}
+    frs{"frs_Latn_DE"}
     fud{"fud_Latn_WF"}
     fuq{"fuq_Latn_NE"}
     fur{"fur_Latn_IT"}
@@ -342,6 +344,7 @@ likelySubtags:table(nofallback){
     ky_TR{"ky_Latn_TR"}
     la{"la_Latn_VA"}
     lab{"lab_Lina_GR"}
+    lad{"lad_Hebr_IL"}
     lag{"lag_Latn_TZ"}
     lah{"lah_Arab_PK"}
     laj{"laj_Latn_UG"}

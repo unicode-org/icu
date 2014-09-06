@@ -165,7 +165,7 @@ ko{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.9.31"}
     calendar{
         buddhist{
             eras{
@@ -180,8 +180,8 @@ ko{
                 "a h시 m분 s초 z",
                 "a h:mm:ss",
                 "a h:mm",
-                "U년 M월 d일 EEEE",
-                "U년 M월 d일",
+                "U년 MMM d일 EEEE",
+                "U년 MMM d일",
                 "y. M. d.",
                 "y. M. d.",
                 "{1} {0}",
@@ -200,7 +200,7 @@ ko{
                 GyMMMd{"U년 MMM d일"}
                 H{"H시"}
                 Hms{"H시 m분 s초"}
-                M{"M월"}
+                M{"MMM"}
                 MEEEEd{"M. d. EEEE"}
                 MEd{"M. d. (E)"}
                 MMM{"LLL"}
@@ -324,20 +324,68 @@ ko{
                     }
                 }
             }
-            monthPatterns{
+            monthNames{
                 format{
-                    wide{
-                        leap{"윤{0}월"}
+                    abbreviated{
+                        "1월",
+                        "2월",
+                        "3월",
+                        "4월",
+                        "5월",
+                        "6월",
+                        "7월",
+                        "8월",
+                        "9월",
+                        "10월",
+                        "11월",
+                        "12월",
                     }
-                }
-                numeric{
-                    all{
-                        leap{"윤{0}월"}
+                    wide{
+                        "1월",
+                        "2월",
+                        "3월",
+                        "4월",
+                        "5월",
+                        "6월",
+                        "7월",
+                        "8월",
+                        "9월",
+                        "10월",
+                        "11월",
+                        "12월",
                     }
                 }
                 stand-alone{
                     narrow{
-                        leap{"윤{0}월"}
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    wide{
+                        leap{"윤{0}"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"윤{0}"}
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        leap{"윤{0}"}
                     }
                 }
             }
@@ -401,8 +449,8 @@ ko{
                 "a h시 m분 s초 z",
                 "a h:mm:ss",
                 "a h:mm",
-                "U년 M월 d일 EEEE",
-                "U년 M월 d일",
+                "U년 MMM d일 EEEE",
+                "U년 MMM d일",
                 "y. M. d.",
                 "y. M. d.",
                 "{1} {0}",
@@ -638,17 +686,17 @@ ko{
             monthPatterns{
                 format{
                     wide{
-                        leap{"윤{0}월"}
+                        leap{"윤{0}"}
                     }
                 }
                 numeric{
                     all{
-                        leap{"윤{0}월"}
+                        leap{"윤{0}"}
                     }
                 }
                 stand-alone{
                     narrow{
-                        leap{"윤{0}월"}
+                        leap{"윤{0}"}
                     }
                 }
             }
