@@ -4085,10 +4085,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new MonthPatternItem( "en@calendar=dangi",        DateFormat.LONG,  "Month3bis 2, ren-chen",       "Month4 2, ren-chen",             "Month5 1, ren-chen" ),
             new MonthPatternItem( "en@calendar=dangi",        DateFormat.SHORT, "3bis/2/29",                   "4/2/29",                         "5/1/29" ),
             new MonthPatternItem( "en@calendar=dangi",        -2,               "78x29-3bis-2",                "78x29-4-2",                      "78x29-5-1" ),
-            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.LONG,  "\uC784\uC9C4\uB144 \uC7243\uC6D4\uC6D4 2\uC77C",   // problem, see cldrbug 7868:
+            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.LONG,  "\uC784\uC9C4\uB144 \uC7243\uC6D4 2\uC77C",
                                                                                 "\uC784\uC9C4\uB144 4\uC6D4 2\uC77C",
                                                                                 "\uC784\uC9C4\uB144 5\uC6D4 1\uC77C" ),
-            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.SHORT, "29. \uC7243\uC6D4. 2.",    // possible problem, see cldrbug 7868:
+            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.SHORT, "29. \uC7243. 2.",
                                                                                 "29. 4. 2.",
                                                                                 "29. 5. 1." ),
         };
@@ -4178,9 +4178,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new TestNonGregoItem( "he@calendar=hebrew", DateFormat.LONG, cafti_he_hebrew_long ),
         };
         for (TestNonGregoItem item: items) {
-            if (item.locale.equals("he@calendar=hebrew") && logKnownIssue("11219", "Skip tests that depend on hebr numbers in the thousands")) {
-                continue;
-            }
             ULocale locale = new ULocale(item.locale);
             DateFormat dfmt = DateFormat.getDateInstance(item.style, locale);
             Calendar cal = dfmt.getCalendar();
