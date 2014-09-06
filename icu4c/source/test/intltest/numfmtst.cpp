@@ -3139,9 +3139,6 @@ void NumberFormatTest::TestNumberingSystems() {
 
     const TestNumberingSystemItem *item;
     for (item = DATA; item->localeName != NULL; item++) {
-        if (uprv_strcmp(item->localeName, "en_US@numbers=hebr") == 0 && logKnownIssue("11219", "Skip tests that depend on hebr numbers in the thousands")) {
-            continue;
-        }
         ec = U_ZERO_ERROR;
         Locale loc = Locale::createFromName(item->localeName);
 
