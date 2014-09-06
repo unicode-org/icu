@@ -3910,10 +3910,10 @@ void DateFormatTest::TestMonthPatterns()
         { "en@calendar=dangi",        DateFormat::kLong,  { UnicodeString("Month3bis 2, 29"),  UnicodeString("Month4 2, 29"),       UnicodeString("Month5 1, 29") } },
         { "en@calendar=dangi",        DateFormat::kShort, { UnicodeString("3bis/2/29"),     UnicodeString("4/2/29"),                UnicodeString("5/1/29") } },
         { "en@calendar=dangi",        -2,                 { UnicodeString("78x29-3bis-2"),  UnicodeString("78x29-4-2"),             UnicodeString("78x29-5-1") } },
-        { "ko@calendar=dangi",        DateFormat::kLong,  { CharsToUnicodeString("\\uC784\\uC9C4\\uB144 \\uC7243\\uC6D4\\uC6D4 2\\uC77C"),  // problem, see cldrbug 7868:
+        { "ko@calendar=dangi",        DateFormat::kLong,  { CharsToUnicodeString("\\uC784\\uC9C4\\uB144 \\uC7243\\uC6D4 2\\uC77C"),
                                                             CharsToUnicodeString("\\uC784\\uC9C4\\uB144 4\\uC6D4 2\\uC77C"),
                                                             CharsToUnicodeString("\\uC784\\uC9C4\\uB144 5\\uC6D4 1\\uC77C") } },
-        { "ko@calendar=dangi",        DateFormat::kShort, { CharsToUnicodeString("29. \\uC7243\\uC6D4. 2."),    // possible problem, see cldrbug 7868:
+        { "ko@calendar=dangi",        DateFormat::kShort, { CharsToUnicodeString("29. \\uC7243. 2."),
                                                             CharsToUnicodeString("29. 4. 2."),
                                                             CharsToUnicodeString("29. 5. 1.") } },
         // terminator
@@ -4115,9 +4115,6 @@ void DateFormatTest::TestNonGregoFmtParse()
     };
     const TestNonGregoItem * itemPtr;
     for (itemPtr = items; itemPtr->locale != NULL; itemPtr++) {
-        if (uprv_strcmp(itemPtr->locale, "he@calendar=hebrew") == 0 && logKnownIssue("11219", "Skip tests that depend on hebr numbers in the thousands")) {
-            continue;
-        }
         Locale locale = Locale::createFromName(itemPtr->locale);
         DateFormat * dfmt = NULL;
         UErrorCode status = U_ZERO_ERROR;

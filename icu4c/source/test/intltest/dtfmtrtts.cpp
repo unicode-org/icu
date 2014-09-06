@@ -178,9 +178,6 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
     // special locales
     int32_t jCount = CalendarTest::testLocaleCount();
     for (int32_t j=0; j < jCount; ++j) {
-        if (uprv_strcmp(CalendarTest::testLocaleID(j), "he_IL@calendar=hebrew") == 0 && logKnownIssue("11219", "Skip tests that depend on hebr numbers in the thousands")) {
-            continue;
-        }
         test(Locale(CalendarTest::testLocaleID(j)));
     }
 #endif
