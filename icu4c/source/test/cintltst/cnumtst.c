@@ -60,6 +60,7 @@ static void TestUNumberingSystem(void);
 static void TestCurrencyIsoPluralFormat(void);
 static void TestContext(void);
 static void TestCurrencyUsage(void);
+static void TestCurrFmtNegSameAsPositive(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -87,6 +88,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestCurrencyIsoPluralFormat);
     TESTCASE(TestContext);
     TESTCASE(TestCurrencyUsage);
+    TESTCASE(TestCurrFmtNegSameAsPositive);
 }
 
 /* test Parse int 64 */
@@ -1155,7 +1157,7 @@ static void TestSpelloutNumberParse()
     const SpelloutParseTest * testPtr;
     for (testPtr = spelloutParseTests; testPtr->testname != NULL; ++testPtr) {
         UErrorCode status = U_ZERO_ERROR;
-        int32_t	value, position = testPtr->startPos;
+        int32_t value, position = testPtr->startPos;
         UNumberFormat *nf = unum_open(UNUM_SPELLOUT, NULL, 0, testPtr->locale, NULL, &status);
         if (U_FAILURE(status)) {
             log_err_status(status, "unum_open fails for UNUM_SPELLOUT with locale %s, status %s\n", testPtr->locale, myErrorName(status));
@@ -1219,8 +1221,8 @@ static void TestSigDigRounding()
     UErrorCode status = U_ZERO_ERROR;
     UChar expected[128];
     UChar result[128];
-    char		temp1[128];
-    char		temp2[128];
+    char  temp1[128];
+    char  temp2[128];
     UNumberFormat* fmt;
     double d = 123.4;
 
@@ -1483,8 +1485,8 @@ static void TestInt64Format() {
                 log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
             }
         }
-		
-		u_uastrcpy(result, "5.06e-27");
+
+        u_uastrcpy(result, "5.06e-27");
         parsepos = 0;
         valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
         if (U_FAILURE(status)) {
@@ -2605,6 +2607,52 @@ static void TestCurrencyUsage(void) {
         }
     
         unum_close(unumFmt);
+    }
+}
+
+static UChar currFmtNegSameAsPos[] = /* "\u00A4#,##0.00;\u00A4#,##0.00" */
+    {0xA4,0x23,0x2C,0x23,0x23,0x30,0x2E,0x30,0x30,0x3B,0xA4,0x23,0x2C,0x23,0x23,0x30,0x2E,0x30,0x30,0};
+
+static UChar currFmtToPatExpected[] = /* "\u00A4#,##0.00" */
+    {0xA4,0x23,0x2C,0x23,0x23,0x30,0x2E,0x30,0x30,0};
+
+static UChar currFmtResultExpected[] = /* "$100.00" */
+    {0x24,0x31,0x30,0x30,0x2E,0x30,0x30,0};
+
+static UChar emptyString[] = {0};
+
+enum { kUBufSize = 64 };
+
+static void TestCurrFmtNegSameAsPositive(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat* unumfmt = unum_open(UNUM_CURRENCY, NULL, 0, "en_US", NULL, &status);
+    if ( U_SUCCESS(status) ) {
+        unum_applyPattern(unumfmt, FALSE, currFmtNegSameAsPos, -1, NULL, &status);
+        if (U_SUCCESS(status)) {
+            UChar ubuf[kUBufSize];
+            int32_t ulen = unum_toPattern(unumfmt, FALSE, ubuf, kUBufSize, &status);
+            if (U_FAILURE(status)) {
+                log_err("unum_toPattern fails with status %s\n", myErrorName(status));
+            } else if (u_strcmp(ubuf, currFmtToPatExpected) != 0) {
+                log_err("unum_toPattern result wrong, expected %s, got %s\n", aescstrdup(currFmtToPatExpected,-1), aescstrdup(ubuf,ulen));
+            }
+            unum_setSymbol(unumfmt, UNUM_MINUS_SIGN_SYMBOL, emptyString, 0, &status);
+            if (U_SUCCESS(status)) {
+                ulen = unum_formatDouble(unumfmt, -100.0, ubuf, kUBufSize, NULL, &status);
+                if (U_FAILURE(status)) {
+                    log_err("unum_formatDouble fails with status %s\n", myErrorName(status));
+                } else if (u_strcmp(ubuf, currFmtResultExpected) != 0) {
+                    log_err("unum_formatDouble result wrong, expected %s, got %s\n", aescstrdup(currFmtResultExpected,-1), aescstrdup(ubuf,ulen));
+                }
+            } else {
+                log_err("unum_setSymbol fails with status %s\n", myErrorName(status));
+            }
+        } else {
+            log_err("unum_applyPattern fails with status %s\n", myErrorName(status));
+        }
+        unum_close(unumfmt);
+    } else {
+        log_data_err("unum_open UNUM_CURRENCY for en_US fails with status %s\n", myErrorName(status));
     }
 }
 
