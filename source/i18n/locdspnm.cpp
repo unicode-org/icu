@@ -728,15 +728,7 @@ LocaleDisplayNamesImpl::scriptDisplayName(const char* script,
 UnicodeString&
 LocaleDisplayNamesImpl::scriptDisplayName(UScriptCode scriptCode,
                                           UnicodeString& result) const {
-    const char* name = uscript_getName(scriptCode);
-    if (nameLength == UDISPCTX_LENGTH_SHORT) {
-        langData.get("Scripts%short", name, result);
-        if (!result.isBogus()) {
-            return adjustForUsageAndContext(kCapContextUsageScript, result);
-        }
-    }
-    langData.get("Scripts", name, result);
-    return adjustForUsageAndContext(kCapContextUsageScript, result);
+    return scriptDisplayName(uscript_getName(scriptCode), result);
 }
 
 UnicodeString&
