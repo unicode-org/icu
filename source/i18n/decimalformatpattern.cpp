@@ -647,6 +647,7 @@ DecimalFormatPatternParser::applyPatternWithoutExpandAffix(
          && out.fNegSuffixPattern == out.fPosSuffixPattern)) {
         out.fNegPatternsBogus = FALSE;
         out.fNegSuffixPattern = out.fPosSuffixPattern;
+        out.fNegPrefixPattern.remove();
         out.fNegPrefixPattern.append(kQuote).append(kPatternMinus)
             .append(out.fPosPrefixPattern);
     }
