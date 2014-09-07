@@ -68,7 +68,27 @@ public enum DisplayContext {
      * isolated name on a calendar page.
      * @stable ICU 51
      */
-    CAPITALIZATION_FOR_STANDALONE(Type.CAPITALIZATION, 4);
+    CAPITALIZATION_FOR_STANDALONE(Type.CAPITALIZATION, 4),
+    /**
+     * ================================
+     * Settings for DISPLAY_LENGTH (use one)
+     */
+    /**
+     * A possible setting for DISPLAY_LENGTH:
+     * use full names when generating a locale name,
+     * e.g. "United States" for US.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    LENGTH_FULL(Type.DISPLAY_LENGTH, 0),
+    /**
+     * A possible setting for DISPLAY_LENGTH:
+     * use short names when generating a locale name,
+     * e.g. "U.S." for US.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
+     */
+    LENGTH_SHORT(Type.DISPLAY_LENGTH, 1);
 
     /**
      * Type values for DisplayContext
@@ -85,7 +105,13 @@ public enum DisplayContext {
          * CAPITALIZATION_FOR_STANDALONE.
          * @stable ICU 51
          */
-        CAPITALIZATION
+        CAPITALIZATION,
+        /**
+         * DISPLAY_LENGTH can be set to LENGTH_FULL or LENGTH_SHORT.
+         * @draft ICU 54
+         * @provisional This API might change or be removed in a future release.
+         */
+        DISPLAY_LENGTH
     }
 
     private final Type type;

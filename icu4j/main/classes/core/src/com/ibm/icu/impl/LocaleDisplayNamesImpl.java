@@ -26,6 +26,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final ULocale locale;
     private final DialectHandling dialectHandling;
     private final DisplayContext capitalization;
+    private final DisplayContext nameLength;
     private final DataTable langData;
     private final DataTable regionData;
     private final MessageFormat separatorFormat;
@@ -93,6 +94,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     public LocaleDisplayNamesImpl(ULocale locale, DisplayContext... contexts) {
         DialectHandling dialectHandling = DialectHandling.STANDARD_NAMES;
         DisplayContext capitalization = DisplayContext.CAPITALIZATION_NONE;
+        DisplayContext nameLength = DisplayContext.LENGTH_FULL;
         for (DisplayContext contextItem : contexts) {
             switch (contextItem.type()) {
             case DIALECT_HANDLING:
@@ -102,6 +104,9 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             case CAPITALIZATION:
                 capitalization = contextItem;
                 break;
+            case DISPLAY_LENGTH:
+                nameLength = contextItem;
+                break;
             default:
                 break;
             }
@@ -109,6 +114,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
         this.dialectHandling = dialectHandling;
         this.capitalization = capitalization;
+        this.nameLength = nameLength;
         this.langData = LangDataTables.impl.get(locale);
         this.regionData = RegionDataTables.impl.get(locale);
         this.locale = ULocale.ROOT.equals(langData.getLocale()) ? regionData.getLocale() :
@@ -206,6 +212,9 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             break;
         case CAPITALIZATION:
             result = capitalization;
+            break;
+        case DISPLAY_LENGTH:
+            result = nameLength;
             break;
         default:
             result = DisplayContext.STANDARD_NAMES; // hmm, we should do something else here
@@ -367,6 +376,12 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     }
 
     private String localeIdName(String localeId) {
+        if (nameLength == DisplayContext.LENGTH_SHORT) {
+            String locIdName = langData.get("LanguagesShort", localeId);
+            if (!locIdName.equals(localeId)) {
+                return locIdName;
+            }
+        }
         return langData.get("Languages", localeId);
     }
 
@@ -376,13 +391,25 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         if (lang.equals("root") || lang.indexOf('_') != -1) {
             return lang;
         }
+        if (nameLength == DisplayContext.LENGTH_SHORT) {
+        	String langName = langData.get("LanguagesShort", lang);
+        	if (!langName.equals(lang)) {
+        	    return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langName);
+        	}
+        }
         return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langData.get("Languages", lang));
     }
 
     @Override
     public String scriptDisplayName(String script) {
         String str = langData.get("Scripts%stand-alone", script);
-        if (str.equals(script) ) {
+        if (str.equals(script)) {
+            if (nameLength == DisplayContext.LENGTH_SHORT) {
+                str = langData.get("Scripts%short", script);
+                if (!str.equals(script)) {
+                    return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, str);
+                }
+            }
             str = langData.get("Scripts", script);
         }
         return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, str);
@@ -390,31 +417,51 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
     @Override
     public String scriptDisplayNameInContext(String script) {
+        if (nameLength == DisplayContext.LENGTH_SHORT) {
+        	String scriptName = langData.get("Scripts%short", script);
+        	if (!scriptName.equals(script)) {
+        	    return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, scriptName);
+        	}
+        }
         return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, langData.get("Scripts", script));
     }
 
     @Override
     public String scriptDisplayName(int scriptCode) {
-        return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, scriptDisplayName(UScript.getShortName(scriptCode)));
+        return scriptDisplayName(UScript.getShortName(scriptCode));
     }
 
     @Override
     public String regionDisplayName(String region) {
+        if (nameLength == DisplayContext.LENGTH_SHORT) {
+        	String regionName = regionData.get("CountriesShort", region);
+        	if (!regionName.equals(region)) {
+        	    return adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionName);
+        	}
+        }
         return adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionData.get("Countries", region));
     }
 
     @Override
     public String variantDisplayName(String variant) {
+        // don't have a resource for short variant names
         return adjustForUsageAndContext(CapitalizationContextUsage.VARIANT, langData.get("Variants", variant));
     }
 
     @Override
     public String keyDisplayName(String key) {
+        // don't have a resource for short key names
         return adjustForUsageAndContext(CapitalizationContextUsage.KEY, langData.get("Keys", key));
     }
 
     @Override
     public String keyValueDisplayName(String key, String value) {
+        if (nameLength == DisplayContext.LENGTH_SHORT) {
+        	String keyValueName = langData.get("Types%short", key, value);
+        	if (!keyValueName.equals(value)) {
+        	    return adjustForUsageAndContext(CapitalizationContextUsage.KEYVALUE, keyValueName);
+        	}
+        }
         return adjustForUsageAndContext(CapitalizationContextUsage.KEYVALUE, langData.get("Types", key, value));
     }
 
@@ -514,12 +561,15 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         private ULocale locale;
         private DialectHandling dialectHandling;
         private DisplayContext capitalization;
+        private DisplayContext nameLength;
         private LocaleDisplayNames cache;
         public LocaleDisplayNames get(ULocale locale, DialectHandling dialectHandling) {
-            if (!(dialectHandling == this.dialectHandling && DisplayContext.CAPITALIZATION_NONE == this.capitalization && locale.equals(this.locale))) {
+            if (!(dialectHandling == this.dialectHandling && DisplayContext.CAPITALIZATION_NONE == this.capitalization &&
+                    DisplayContext.LENGTH_FULL == this.nameLength && locale.equals(this.locale))) {
                 this.locale = locale;
                 this.dialectHandling = dialectHandling;
                 this.capitalization = DisplayContext.CAPITALIZATION_NONE;
+                this.nameLength = DisplayContext.LENGTH_FULL;
                 this.cache = new LocaleDisplayNamesImpl(locale, dialectHandling);
             }
             return cache;
@@ -527,6 +577,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         public LocaleDisplayNames get(ULocale locale, DisplayContext... contexts) {
             DialectHandling dialectHandlingIn = DialectHandling.STANDARD_NAMES;
             DisplayContext capitalizationIn = DisplayContext.CAPITALIZATION_NONE;
+            DisplayContext nameLengthIn = DisplayContext.LENGTH_FULL;
             for (DisplayContext contextItem : contexts) {
                 switch (contextItem.type()) {
                 case DIALECT_HANDLING:
@@ -536,14 +587,19 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                 case CAPITALIZATION:
                     capitalizationIn = contextItem;
                     break;
+                case DISPLAY_LENGTH:
+                    nameLengthIn = contextItem;
+                    break;
                 default:
                     break;
                 }
             }
-            if (!(dialectHandlingIn == this.dialectHandling && capitalizationIn == this.capitalization && locale.equals(this.locale))) {
+            if (!(dialectHandlingIn == this.dialectHandling && capitalizationIn == this.capitalization &&
+                    nameLengthIn == this.nameLength && locale.equals(this.locale))) {
                 this.locale = locale;
                 this.dialectHandling = dialectHandlingIn;
                 this.capitalization = capitalizationIn;
+                this.nameLength = nameLengthIn;
                 this.cache = new LocaleDisplayNamesImpl(locale, contexts);
             }
             return cache;
