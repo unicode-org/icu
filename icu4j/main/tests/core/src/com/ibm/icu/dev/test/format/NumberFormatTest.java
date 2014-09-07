@@ -3721,5 +3721,15 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         
     }
-    
+
+    public void TestCurrFmtNegSameAsPositive() {
+        DecimalFormatSymbols decfmtsym = DecimalFormatSymbols.getInstance(Locale.US);
+        decfmtsym.setMinusSign('\u200B'); // ZERO WIDTH SPACE, in ICU4J cannot set to empty string
+        DecimalFormat decfmt = new DecimalFormat("\u00A4#,##0.00;\u00A4#,##0.00", decfmtsym);
+        String currFmtResult = decfmt.format(-100.0);
+        if (!currFmtResult.equals("\u200B$100.00")) {
+            errln("decfmt.toPattern results wrong, expected \u200B$100.00, got " + currFmtResult);
+        }
+    }
+
 }
