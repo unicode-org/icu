@@ -592,6 +592,30 @@ udat_getSymbols(const   UDateFormat     *fmt,
         res = syms->getQuarters(count, DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED);
         break;
 
+    case UDAT_CYCLIC_YEARS_WIDE:
+        res = syms->getYearNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
+        break;
+
+    case UDAT_CYCLIC_YEARS_ABBREVIATED:
+        res = syms->getYearNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+        break;
+
+    case UDAT_CYCLIC_YEARS_NARROW:
+        res = syms->getYearNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::NARROW);
+        break;
+
+    case UDAT_ZODIAC_NAMES_WIDE:
+        res = syms->getZodiacNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
+        break;
+
+    case UDAT_ZODIAC_NAMES_ABBREVIATED:
+        res = syms->getZodiacNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+        break;
+
+    case UDAT_ZODIAC_NAMES_NARROW:
+        res = syms->getZodiacNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::NARROW);
+        break;
+
     }
 
     if(index < count) {
@@ -704,6 +728,30 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 
     case UDAT_STANDALONE_SHORT_QUARTERS:
         syms->getQuarters(count, DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED);
+        break;
+
+    case UDAT_CYCLIC_YEARS_WIDE:
+        syms->getYearNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
+        break;
+
+    case UDAT_CYCLIC_YEARS_ABBREVIATED:
+        syms->getYearNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+        break;
+
+    case UDAT_CYCLIC_YEARS_NARROW:
+        syms->getYearNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::NARROW);
+        break;
+
+    case UDAT_ZODIAC_NAMES_WIDE:
+        syms->getZodiacNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
+        break;
+
+    case UDAT_ZODIAC_NAMES_ABBREVIATED:
+        syms->getZodiacNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+        break;
+
+    case UDAT_ZODIAC_NAMES_NARROW:
+        syms->getZodiacNames(count, DateFormatSymbols::FORMAT, DateFormatSymbols::NARROW);
         break;
 
     }
@@ -895,6 +943,20 @@ public:
     }
 
     static void
+        setShortYearNames(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fShortYearNames, syms->fShortYearNamesCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setShortZodiacNames(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fShortZodiacNames, syms->fShortZodiacNamesCount, index, value, valueLength, errorCode);
+    }
+
+    static void
         setAmPm(DateFormatSymbols *syms, int32_t index,
         const UChar *value, int32_t valueLength, UErrorCode &errorCode)
     {
@@ -1003,6 +1065,14 @@ udat_setSymbols(    UDateFormat             *format,
 
     case UDAT_STANDALONE_SHORT_QUARTERS:
         DateFormatSymbolsSingleSetter::setStandaloneShortQuarter(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_CYCLIC_YEARS_ABBREVIATED:
+        DateFormatSymbolsSingleSetter::setShortYearNames(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_ZODIAC_NAMES_ABBREVIATED:
+        DateFormatSymbolsSingleSetter::setShortZodiacNames(syms, index, value, valueLength, *status);
         break;
 
     case UDAT_AM_PMS:

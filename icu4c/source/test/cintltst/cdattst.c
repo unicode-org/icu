@@ -565,7 +565,7 @@ static void TestRelativeDateFormat()
 /*Testing udat_getSymbols() and udat_setSymbols() and udat_countSymbols()*/
 static void TestSymbols()
 {
-    UDateFormat *def, *fr;
+    UDateFormat *def, *fr, *zhChiCal;
     UErrorCode status = U_ZERO_ERROR;
     UChar *value=NULL; 
     UChar *result = NULL;
@@ -595,6 +595,15 @@ static void TestSymbols()
             myErrorName(status) );
         return;
     }
+    /*creating a dateformat with zh locale */
+    log_verbose("\ncreating a date format with zh locale for chinese calendar\n");
+    zhChiCal = udat_open(UDAT_NONE, UDAT_FULL, "zh@calendar=chinese", NULL, 0, NULL, 0, &status);
+    if(U_FAILURE(status))
+    {
+        log_data_err("error in creating the dateformat using full date, no time, locale zh@calendar=chinese -> %s (Are you missing data?)\n", 
+            myErrorName(status) );
+        return;
+    }
     
     
     /*Testing countSymbols, getSymbols and setSymbols*/
@@ -604,7 +613,8 @@ static void TestSymbols()
         udat_countSymbols(def, UDAT_SHORT_MONTHS)!=12 || udat_countSymbols(def, UDAT_WEEKDAYS)!=8 ||
         udat_countSymbols(def, UDAT_SHORT_WEEKDAYS)!=8 || udat_countSymbols(def, UDAT_AM_PMS)!=2 ||
         udat_countSymbols(def, UDAT_QUARTERS) != 4 || udat_countSymbols(def, UDAT_SHORT_QUARTERS) != 4 ||
-        udat_countSymbols(def, UDAT_LOCALIZED_CHARS)!=1 || udat_countSymbols(def, UDAT_SHORTER_WEEKDAYS)!=8)
+        udat_countSymbols(def, UDAT_LOCALIZED_CHARS)!=1 || udat_countSymbols(def, UDAT_SHORTER_WEEKDAYS)!=8 ||
+        udat_countSymbols(zhChiCal, UDAT_CYCLIC_YEARS_NARROW)!=60 || udat_countSymbols(zhChiCal, UDAT_ZODIAC_NAMES_NARROW)!=12)
     {
         log_err("FAIL: error in udat_countSymbols\n");
     }
@@ -659,6 +669,10 @@ static void TestSymbols()
     VerifygetSymbols(def, UDAT_QUARTERS, 3, "4th quarter");
     VerifygetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "T2");
     VerifygetSymbols(def, UDAT_SHORT_QUARTERS, 2, "Q3");
+    VerifygetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_ABBREVIATED, 0, "\\u7532\\u5B50");
+    VerifygetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_NARROW, 59, "\\u7678\\u4EA5");
+    VerifygetSymbols(zhChiCal, UDAT_ZODIAC_NAMES_ABBREVIATED, 0, "\\u9F20");
+    VerifygetSymbols(zhChiCal, UDAT_ZODIAC_NAMES_WIDE, 11, "\\u732A");
     VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr");
 
 
@@ -773,8 +787,10 @@ free(pattern);
     VerifysetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "QQ2");
     VerifysetSymbols(fr, UDAT_STANDALONE_QUARTERS, 2, "3rd Quar.");
     VerifysetSymbols(fr, UDAT_STANDALONE_SHORT_QUARTERS, 3, "4QQ");
+    VerifysetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_ABBREVIATED, 1, "yi-chou");
+    VerifysetSymbols(zhChiCal, UDAT_ZODIAC_NAMES_ABBREVIATED, 1, "Ox");
 
-    
+
     /*run series of tests to test get and setSymbols regressively*/
     log_verbose("\nTesting get and set symbols regressively\n");
     VerifygetsetSymbols(fr, def, UDAT_WEEKDAYS, 1);
@@ -792,6 +808,7 @@ free(pattern);
     
     udat_close(fr);
     udat_close(def);
+    udat_close(zhChiCal);
     if(result != NULL) {
         free(result);
         result = NULL;
@@ -1002,10 +1019,10 @@ static void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     UErrorCode status = U_ZERO_ERROR;
     UChar *result=NULL;
     int32_t resultlength, resultlengthout;
-
+    int32_t patternSize = strlen(expected) + 1;
     
-    pattern=(UChar*)malloc(sizeof(UChar) * (strlen(expected)+1));
-    u_uastrcpy(pattern, expected);
+    pattern=(UChar*)malloc(sizeof(UChar) * patternSize);
+    u_unescape(expected, pattern, patternSize);
     resultlength=0;
     resultlengthout=udat_getSymbols(datfor, type, idx , NULL, resultlength, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
@@ -1024,8 +1041,8 @@ static void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     if(u_strcmp(result, pattern)==0)
         log_verbose("PASS: getSymbols retrieved the right value\n");
     else{
-        log_data_err("FAIL: getSymbols retrieved the wrong value\n Expected %s Got %s\n", austrdup(pattern), 
-            austrdup(result) );
+        log_data_err("FAIL: getSymbols retrieved the wrong value\n Expected %s Got %s\n", expected, 
+            aescstrdup(result,-1) );
     }
     free(result);
     free(pattern);
@@ -1037,10 +1054,11 @@ static void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     UChar *value=NULL;
     int32_t resultlength, resultlengthout;
     UErrorCode status = U_ZERO_ERROR;
+    int32_t valueLen, valueSize = strlen(expected) + 1;
 
-    value=(UChar*)malloc(sizeof(UChar) * (strlen(expected) + 1));
-    u_uastrcpy(value, expected);
-    udat_setSymbols(datfor, type, idx, value, u_strlen(value), &status);
+    value=(UChar*)malloc(sizeof(UChar) * valueSize);
+    valueLen = u_unescape(expected, value, valueSize);
+    udat_setSymbols(datfor, type, idx, value, valueLen, &status);
     if(U_FAILURE(status))
         {
             log_err("FAIL: Error in udat_setSymbols()  %s\n", myErrorName(status) );
@@ -1062,8 +1080,8 @@ static void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     }
     
     if(u_strcmp(result, value)!=0){
-        log_err("FAIL:Error in setting and then getting symbols\n Expected %s Got %s\n", austrdup(value),
-            austrdup(result) );
+        log_err("FAIL:Error in setting and then getting symbols\n Expected %s Got %s\n", expected,
+            aescstrdup(result,-1) );
     }
     else
         log_verbose("PASS: setSymbols successful\n");
