@@ -850,7 +850,7 @@ typedef enum UDateFormatBooleanAttribute {
     UDAT_PARSE_ALLOW_WHITESPACE = 0,
     /**
      * indicates tolerance of numeric data when String data may be assumed. eg: UDAT_YEAR_NAME_FIELD,
-     * 		UDAT_STANDALONE_MONTH_FIELD, UDAT_DAY_OF_WEEK_FIELD
+     * UDAT_STANDALONE_MONTH_FIELD, UDAT_DAY_OF_WEEK_FIELD
      * @draft ICU 53
      */
     UDAT_PARSE_ALLOW_NUMERIC = 1,
@@ -1294,6 +1294,43 @@ typedef enum UDateFormatSymbolType {
      * @stable ICU 51
      */
     UDAT_STANDALONE_SHORTER_WEEKDAYS
+#ifndef U_HIDE_DRAFT_API
+    ,
+	/**
+	 * Cyclic year names (only supported for some calendars, and only for FORMAT usage;
+	 * udat_setSymbols not supported for UDAT_CYCLIC_YEARS_WIDE)
+	 * @draft ICU 54
+	 */
+	UDAT_CYCLIC_YEARS_WIDE,
+	/**
+	 * Cyclic year names (only supported for some calendars, and only for FORMAT usage)
+	 * @draft ICU 54
+	 */
+	UDAT_CYCLIC_YEARS_ABBREVIATED,
+	/**
+	 * Cyclic year names (only supported for some calendars, and only for FORMAT usage;
+	 * udat_setSymbols not supported for UDAT_CYCLIC_YEARS_NARROW)
+	 * @draft ICU 54
+	 */
+	UDAT_CYCLIC_YEARS_NARROW,
+	/**
+	 * Calendar zodiac  names (only supported for some calendars, and only for FORMAT usage;
+	 * udat_setSymbols not supported for UDAT_ZODIAC_NAMES_WIDE)
+	 * @draft ICU 54
+	 */
+	UDAT_ZODIAC_NAMES_WIDE,
+	/**
+	 * Calendar zodiac  names (only supported for some calendars, and only for FORMAT usage)
+	 * @draft ICU 54
+	 */
+	UDAT_ZODIAC_NAMES_ABBREVIATED,
+	/**
+	 * Calendar zodiac  names (only supported for some calendars, and only for FORMAT usage;
+	 * udat_setSymbols not supported for UDAT_ZODIAC_NAMES_NARROW)
+	 * @draft ICU 54
+	 */
+	UDAT_ZODIAC_NAMES_NARROW
+#endif  /* U_HIDE_DRAFT_API */
 } UDateFormatSymbolType;
 
 struct UDateFormatSymbols;
