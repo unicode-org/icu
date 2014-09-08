@@ -1105,7 +1105,7 @@ static const uint8_t norm2_nfc_data_smallFCD[256]={
 0,0,0,0,0,0,0,0,0,0,0,7,0,0,2,0
 };
 
-static const UTrie2 norm2_nfc_data_trie {
+static const UTrie2 norm2_nfc_data_trie={
     norm2_nfc_data_trieIndex,
     norm2_nfc_data_trieIndex+2608,
     NULL,
