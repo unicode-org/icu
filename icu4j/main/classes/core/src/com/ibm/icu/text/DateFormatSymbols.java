@@ -96,12 +96,21 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     public static final int STANDALONE = 1;
 
     /**
+     * {@icu} Constant for context. NUMERIC context
+     * is only supported for leapMonthPatterns.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final int NUMERIC = 2;
+
+    /**
      * {@icu} Constant for context.
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public static final int DT_CONTEXT_COUNT = 2;
+    public static final int DT_CONTEXT_COUNT = 3;
 
     // Constants for width
 
@@ -500,11 +509,22 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     String leapMonthPatterns[] = null;
 
      /**
-     * (Format) Short cyclic year names, for example: "jia-zi", "yi-chou", ... "gui-hai".
+     * Cyclic year names, for example: "jia-zi", "yi-chou", ... "gui-hai".
      * An array of (normally) 60 strings, corresponding to cyclic years 1-60 (in Calendar YEAR field).
+     * Currently we only have data for format/abbreviated.
+     * For the others, just get from format/abbreviated, ignore set.
      * @serial
      */
     String shortYearNames[] = null;
+
+     /**
+     * Cyclic zodiac names, for example: "Rat", "Ox", "Tiger", etc.
+     * An array of (normally) 12 strings.
+     * Currently we only have data for format/abbreviated.
+     * For the others, just get from format/abbreviated, ignore set.
+     * @serial
+     */
+    String shortZodiacNames[] = null;
 
    /**
      * Localized names of time zones in this locale.  This is a
@@ -1019,6 +1039,176 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
+     * Returns cyclic year name strings if the calendar has them,
+     * for example: "jia-zi", "yi-chou", etc.
+     * @param context   The usage context: FORMAT, STANDALONE.
+     * @param width     The requested name width: WIDE, ABBREVIATED, SHORT, NARROW.
+     * @return          The year name strings, or null if they are not
+     *                  available for this calendar.
+     * @draft ICU 54
+     */
+    public String[] getYearNames(int context, int width) {
+        // context & width ignored for now, one set of names for all uses
+        if (shortYearNames != null) {
+            return duplicate(shortYearNames);
+        }
+        return null;
+    }
+
+    /**
+     * Sets cyclic year name strings, for example: "jia-zi", "yi-chou", etc.
+     * @param yearNames The new cyclic year name strings.
+     * @param context   The usage context: FORMAT, STANDALONE (currently only FORMAT is supported).
+     * @param width     The name width: WIDE, ABBREVIATED, NARROW (currently only ABBREVIATED is supported).
+     * @draft ICU 54
+     */
+    public void setYearNames(String[] yearNames, int context, int width) {
+        if (context == FORMAT && width == ABBREVIATED) {
+            shortYearNames = duplicate(yearNames);
+        }
+    }
+
+    /**
+     * Returns calendar zodiac name strings if the calendar has them,
+     * for example: "Rat", "Ox", "Tiger", etc.
+     * @param context   The usage context: FORMAT, STANDALONE.
+     * @param width     The requested name width: WIDE, ABBREVIATED, SHORT, NARROW.
+     * @return          The zodiac name strings, or null if they are not
+     *                  available for this calendar.
+     * @draft ICU 54
+     */
+    public String[] getZodiacNames(int context, int width) {
+        // context & width ignored for now, one set of names for all uses
+        if (shortZodiacNames != null) {
+            return duplicate(shortZodiacNames);
+        }
+        return null;
+    }
+
+    /**
+     * Sets calendar zodiac name strings, for example: "Rat", "Ox", "Tiger", etc.
+     * @param zodiacNames   The new zodiac name strings.
+     * @param context   The usage context: FORMAT, STANDALONE (currently only FORMAT is supported).
+     * @param width     The name width: WIDE, ABBREVIATED, NARROW (currently only ABBREVIATED is supported).
+     * @draft ICU 54
+     */
+    public void setZodiacNames(String[] zodiacNames, int context, int width) {
+        if (context == FORMAT && width == ABBREVIATED) {
+            shortZodiacNames = duplicate(zodiacNames);
+        }
+    }
+
+    /**
+     * Returns the appropriate leapMonthPattern if the calendar has them,
+     * for example: "{0}bis"
+     * @param context   The usage context: FORMAT, STANDALONE, NUMERIC.
+     * @param width     The requested pattern width: WIDE, ABBREVIATED, SHORT, NARROW.
+     * @return          The leapMonthPattern, or null if not available for
+     *                  this calendar.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public String getLeapMonthPattern(int context, int width) {
+        if (leapMonthPatterns != null) {
+            int leapMonthPatternIndex = -1;
+            switch (context) {
+               case FORMAT :
+                  switch(width) {
+                     case WIDE :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_WIDE;
+                        break;
+                     case ABBREVIATED :
+                     case SHORT : // no month data for this, defaults to ABBREVIATED
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
+                        break;
+                     case NARROW :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_NARROW;
+                        break;
+                  }
+                  break;
+               case STANDALONE :
+                  switch(width) {
+                     case WIDE :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE;
+                        break;
+                     case ABBREVIATED :
+                     case SHORT : // no month data for this, defaults to ABBREVIATED
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
+                        break;
+                     case NARROW :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW;
+                        break;
+                  }
+                  break;
+               case NUMERIC :
+                  leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_NUMERIC;
+                  break;
+            }
+            if (leapMonthPatternIndex < 0) {
+                throw new IllegalArgumentException("Bad context or width argument");
+            }
+            return leapMonthPatterns[leapMonthPatternIndex];
+        }
+        return null;
+    }
+
+    /**
+     * Sets a leapMonthPattern, for example: "{0}bis"
+     * @param leapMonthPattern  The new leapMonthPattern.
+     * @param context   The usage context: FORMAT, STANDALONE, NUMERIC.
+     * @param width     The name width: WIDE, ABBREVIATED, NARROW.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public void setLeapMonthPattern(String leapMonthPattern, int context, int width) {
+        if (leapMonthPatterns != null) {
+            int leapMonthPatternIndex = -1;
+            switch (context) {
+               case FORMAT :
+                  switch(width) {
+                     case WIDE :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_WIDE;
+                        break;
+                     case ABBREVIATED :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
+                        break;
+                     case NARROW :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_NARROW;
+                        break;
+                     default : // HANDLE SHORT, etc.
+                        break;
+                  }
+                  break;
+               case STANDALONE :
+                  switch(width) {
+                     case WIDE :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE;
+                        break;
+                     case ABBREVIATED :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
+                        break;
+                     case NARROW :
+                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW;
+                        break;
+                     default : // HANDLE SHORT, etc.
+                        break;
+                  }
+                  break;
+               case NUMERIC :
+                  leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_NUMERIC;
+                  break;
+               default :
+                  break;
+            }
+            if (leapMonthPatternIndex >= 0) {
+                leapMonthPatterns[leapMonthPatternIndex] = leapMonthPattern;
+            }
+        }
+    }
+
+    /**
      * Returns am/pm strings. For example: "AM" and "PM".
      * @return the weekday strings.
      * @stable ICU 2.0
@@ -1258,6 +1448,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.standaloneQuarters = dfs.standaloneQuarters;
         this.leapMonthPatterns = dfs.leapMonthPatterns;
         this.shortYearNames = dfs.shortYearNames;
+        this.shortZodiacNames = dfs.shortZodiacNames;
 
         this.zoneStrings = dfs.zoneStrings; // always null at initialization time for now
         this.localPatternChars = dfs.localPatternChars;
@@ -1389,6 +1580,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
         if (cyclicNameSetsBundle != null) {
             shortYearNames = calData.get("cyclicNameSets", "years", "format", "abbreviated").getStringArray();
+            shortZodiacNames = calData.get("cyclicNameSets", "zodiacs", "format", "abbreviated").getStringArray();
         }
  
         requestedLocale = desiredLocale;
