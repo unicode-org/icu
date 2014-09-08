@@ -423,8 +423,8 @@ public:
     virtual void  setText(UText *text, UErrorCode &status);
 
     /**
-     * Sets the current iteration position to the beginning of the text.
-     * @return The offset of the beginning of the text.
+     * Sets the current iteration position to the beginning of the text, position zero.
+     * @return The offset of the beginning of the text, zero.
      *  @stable ICU 2.0
      */
     virtual int32_t first(void);
