@@ -106,7 +106,7 @@ static UBool changesWhenCasefolded(const BinaryProperty &, UChar32, UProperty) {
 static UBool changesWhenCasefolded(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
     UnicodeString nfd;
     UErrorCode errorCode=U_ZERO_ERROR;
-    const Normalizer2 *nfcNorm2=Normalizer2Factory::getNFCInstance(errorCode);
+    const Normalizer2 *nfcNorm2=Normalizer2::getNFCInstance(errorCode);
     if(U_FAILURE(errorCode)) {
         return FALSE;
     }
@@ -569,7 +569,7 @@ u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *p
     // (What could be useful is a custom normalization table that combines
     // case folding and NFKC.)
     // For the derivation, see Unicode's DerivedNormalizationProps.txt.
-    const Normalizer2 *nfkc=Normalizer2Factory::getNFKCInstance(*pErrorCode);
+    const Normalizer2 *nfkc=Normalizer2::getNFKCInstance(*pErrorCode);
     const UCaseProps *csp=ucase_getSingleton();
     if(U_FAILURE(*pErrorCode)) {
         return 0;

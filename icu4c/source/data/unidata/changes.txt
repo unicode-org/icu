@@ -236,13 +236,15 @@ http://www.unicode.org/reports/tr44/tr44-13.html
   ~/svn.icutools/trunk/src/unicode$ py/parsescriptmetadata.py $ICU_SRC_DIR/source/common/unicode/uscript.h ~/svn.cldr/trunk/common/properties/scriptMetadata.txt
 
 * generate normalization data files
-- ~/svn.icu/uni70/dbg$ export LD_LIBRARY_PATH=~/svn.icu/uni70/dbg/lib
-- ~/svn.icu/uni70/dbg$ SRC_DATA_IN=$ICU_SRC_DIR/source/data/in
-- ~/svn.icu/uni70/dbg$ UNIDATA=$ICU_SRC_DIR/source/data/unidata
-- ~/svn.icu/uni70/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfc.nrm     -s $UNIDATA/norm2 nfc.txt
-- ~/svn.icu/uni70/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfkc.nrm    -s $UNIDATA/norm2 nfc.txt nfkc.txt
-- ~/svn.icu/uni70/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfkc_cf.nrm -s $UNIDATA/norm2 nfc.txt nfkc.txt nfkc_cf.txt
-- ~/svn.icu/uni70/dbg$ bin/gennorm2 -o $SRC_DATA_IN/uts46.nrm   -s $UNIDATA/norm2 nfc.txt uts46.txt
+- cd $ICU_ROOT/dbg
+- export LD_LIBRARY_PATH=$ICU_ROOT/dbg/lib
+- SRC_DATA_IN=$ICU_SRC_DIR/source/data/in
+- UNIDATA=$ICU_SRC_DIR/source/data/unidata
+- bin/gennorm2 -o $ICU_SRC_DIR/source/common/norm2_nfc_data.h -s $UNIDATA/norm2 nfc.txt --csource
+- bin/gennorm2 -o $SRC_DATA_IN/nfc.nrm     -s $UNIDATA/norm2 nfc.txt
+- bin/gennorm2 -o $SRC_DATA_IN/nfkc.nrm    -s $UNIDATA/norm2 nfc.txt nfkc.txt
+- bin/gennorm2 -o $SRC_DATA_IN/nfkc_cf.nrm -s $UNIDATA/norm2 nfc.txt nfkc.txt nfkc_cf.txt
+- bin/gennorm2 -o $SRC_DATA_IN/uts46.nrm   -s $UNIDATA/norm2 nfc.txt uts46.txt
 
 * build ICU (make install)
   so that the tools build can pick up the new definitions from the installed header files.

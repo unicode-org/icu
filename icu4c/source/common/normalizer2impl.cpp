@@ -253,50 +253,12 @@ struct CanonIterData : public UMemory {
 };
 
 Normalizer2Impl::~Normalizer2Impl() {
-    udata_close(memory);
-    utrie2_close(normTrie);
     delete fCanonIterData;
 }
 
-UBool U_CALLCONV
-Normalizer2Impl::isAcceptable(void *context,
-                              const char * /* type */, const char * /*name*/,
-                              const UDataInfo *pInfo) {
-    if(
-        pInfo->size>=20 &&
-        pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
-        pInfo->charsetFamily==U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0]==0x4e &&    /* dataFormat="Nrm2" */
-        pInfo->dataFormat[1]==0x72 &&
-        pInfo->dataFormat[2]==0x6d &&
-        pInfo->dataFormat[3]==0x32 &&
-        pInfo->formatVersion[0]==2
-    ) {
-        Normalizer2Impl *me=(Normalizer2Impl *)context;
-        uprv_memcpy(me->dataVersion, pInfo->dataVersion, 4);
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-}
-
 void
-Normalizer2Impl::load(const char *packageName, const char *name, UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) {
-        return;
-    }
-    memory=udata_openChoice(packageName, "nrm", name, isAcceptable, this, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        return;
-    }
-    const uint8_t *inBytes=(const uint8_t *)udata_getMemory(memory);
-    const int32_t *inIndexes=(const int32_t *)inBytes;
-    int32_t indexesLength=inIndexes[IX_NORM_TRIE_OFFSET]/4;
-    if(indexesLength<=IX_MIN_MAYBE_YES) {
-        errorCode=U_INVALID_FORMAT_ERROR;  // Not enough indexes.
-        return;
-    }
-
+Normalizer2Impl::init(const int32_t *inIndexes, const UTrie2 *inTrie,
+                      const uint16_t *inExtraData, const uint8_t *inSmallFCD) {
     minDecompNoCP=inIndexes[IX_MIN_DECOMP_NO_CP];
     minCompNoMaybeCP=inIndexes[IX_MIN_COMP_NO_MAYBE_CP];
 
@@ -306,23 +268,12 @@ Normalizer2Impl::load(const char *packageName, const char *name, UErrorCode &err
     limitNoNo=inIndexes[IX_LIMIT_NO_NO];
     minMaybeYes=inIndexes[IX_MIN_MAYBE_YES];
 
-    int32_t offset=inIndexes[IX_NORM_TRIE_OFFSET];
-    int32_t nextOffset=inIndexes[IX_EXTRA_DATA_OFFSET];
-    normTrie=utrie2_openFromSerialized(UTRIE2_16_VALUE_BITS,
-                                       inBytes+offset, nextOffset-offset, NULL,
-                                       &errorCode);
-    if(U_FAILURE(errorCode)) {
-        return;
-    }
+    normTrie=inTrie;
 
-    offset=nextOffset;
-    nextOffset=inIndexes[IX_SMALL_FCD_OFFSET];
-    maybeYesCompositions=(const uint16_t *)(inBytes+offset);
+    maybeYesCompositions=inExtraData;
     extraData=maybeYesCompositions+(MIN_NORMAL_MAYBE_YES-minMaybeYes);
 
-    // smallFCD: new in formatVersion 2
-    offset=nextOffset;
-    smallFCD=inBytes+offset;
+    smallFCD=inSmallFCD;
 
     // Build tccc180[].
     // gennorm2 enforces lccc=0 for c<MIN_CCC_LCCC_CP=U+0300.

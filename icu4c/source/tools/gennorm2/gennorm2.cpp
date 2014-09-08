@@ -58,6 +58,7 @@ enum {
     SOURCEDIR,
     OUTPUT_FILENAME,
     UNICODE_VERSION,
+    WRITE_C_SOURCE,
     OPT_FAST
 };
 
@@ -69,6 +70,7 @@ static UOption options[]={
     UOPTION_SOURCEDIR,
     UOPTION_DEF("output", 'o', UOPT_REQUIRES_ARG),
     UOPTION_DEF("unicode", 'u', UOPT_REQUIRES_ARG),
+    UOPTION_DEF("csource", '\1', UOPT_NO_ARG),
     UOPTION_DEF("fast", '\1', UOPT_NO_ARG)
 };
 
@@ -100,7 +102,7 @@ main(int argc, char* argv[]) {
             "Usage: %s [-options] infiles+ -o outputfilename\n"
             "\n"
             "Reads the infiles with normalization data and\n"
-            "creates a binary file (outputfilename) with the data.\n"
+            "creates a binary or C source file (outputfilename) with the data.\n"
             "\n",
             argv[0]);
         fprintf(stderr,
@@ -111,9 +113,10 @@ main(int argc, char* argv[]) {
             "\t-u or --unicode     Unicode version, followed by the version like 5.2.0\n");
         fprintf(stderr,
             "\t-s or --sourcedir   source directory, followed by the path\n"
-            "\t-o or --output      output filename\n");
+            "\t-o or --output      output filename\n"
+            "\t      --csource     writes a C source file with initializers\n");
         fprintf(stderr,
-            "\t      --fast        optimize the .nrm file for fast normalization,\n"
+            "\t      --fast        optimize the data for fast normalization,\n"
             "\t                    which might increase its size  (Writes fully decomposed\n"
             "\t                    regular mappings instead of delta mappings.\n"
             "\t                    You should measure the runtime speed to make sure that\n"
@@ -174,7 +177,11 @@ main(int argc, char* argv[]) {
         filename.truncate(pathLength);
     }
 
-    builder->writeBinaryFile(options[OUTPUT_FILENAME].value);
+    if(options[WRITE_C_SOURCE].doesOccur) {
+        builder->writeCSourceFile(options[OUTPUT_FILENAME].value);
+    } else {
+        builder->writeBinaryFile(options[OUTPUT_FILENAME].value);
+    }
 
     return errorCode.get();
 
