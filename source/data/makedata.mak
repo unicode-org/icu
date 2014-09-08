@@ -739,11 +739,15 @@ CLEAN : GODATA
 
 $(ICUBRK)\thaidict.dict:
 	@echo Creating $(ICUBRK)\thaidict.dict
-	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0xe00 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\thaidict.txt "$(ICUBLD_PKG)\$(ICUBRK)\thaidict.dict"
+	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0x0e00 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\thaidict.txt "$(ICUBLD_PKG)\$(ICUBRK)\thaidict.dict"
 
 $(ICUBRK)\laodict.dict:
 	@echo Creating $(ICUBRK)\laodict.dict
-	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0xe00 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\laodict.txt "$(ICUBLD_PKG)\$(ICUBRK)\laodict.dict"
+	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0x0e80 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\laodict.txt "$(ICUBLD_PKG)\$(ICUBRK)\laodict.dict"
+
+$(ICUBRK)\burmesedict.dict:
+	@echo Creating $(ICUBRK)\burmesedict.dict
+	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0x1000 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\burmesedict.txt "$(ICUBLD_PKG)\$(ICUBRK)\burmesedict.dict"
 
 $(ICUBRK)\khmerdict.dict:
 	@echo Creating $(ICUBRK)\khmerdict.dict

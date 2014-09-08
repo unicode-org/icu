@@ -21,6 +21,7 @@ root{
         Kata:process(dependency){"cjdict.dict"}
         Khmr:process(dependency){"khmerdict.dict"}
         Laoo:process(dependency){"laodict.dict"}
+        Mymr:process(dependency){"burmesedict.dict"}
         Thai:process(dependency){"thaidict.dict"}
     }
 }

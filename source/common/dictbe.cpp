@@ -632,6 +632,199 @@ foundBest:
 
 /*
  ******************************************************************
+ * BurmeseBreakEngine
+ */
+
+// How many words in a row are "good enough"?
+static const int32_t BURMESE_LOOKAHEAD = 3;
+
+// Will not combine a non-word with a preceding dictionary word longer than this
+static const int32_t BURMESE_ROOT_COMBINE_THRESHOLD = 3;
+
+// Will not combine a non-word that shares at least this much prefix with a
+// dictionary word, with a preceding word
+static const int32_t BURMESE_PREFIX_COMBINE_THRESHOLD = 3;
+
+// Minimum word size
+static const int32_t BURMESE_MIN_WORD = 2;
+
+// Minimum number of characters for two words
+static const int32_t BURMESE_MIN_WORD_SPAN = BURMESE_MIN_WORD * 2;
+
+BurmeseBreakEngine::BurmeseBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status)
+    : DictionaryBreakEngine((1<<UBRK_WORD) | (1<<UBRK_LINE)),
+      fDictionary(adoptDictionary)
+{
+    fBurmeseWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Mymr:]&[:LineBreak=SA:]]"), status);
+    if (U_SUCCESS(status)) {
+        setCharacters(fBurmeseWordSet);
+    }
+    fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Mymr:]&[:LineBreak=SA:]&[:M:]]"), status);
+    fMarkSet.add(0x0020);
+    fEndWordSet = fBurmeseWordSet;
+    fBeginWordSet.add(0x1000, 0x102A);      // basic consonants and independent vowels
+
+    // Compact for caching.
+    fMarkSet.compact();
+    fEndWordSet.compact();
+    fBeginWordSet.compact();
+}
+
+BurmeseBreakEngine::~BurmeseBreakEngine() {
+    delete fDictionary;
+}
+
+int32_t
+BurmeseBreakEngine::divideUpDictionaryRange( UText *text,
+                                                int32_t rangeStart,
+                                                int32_t rangeEnd,
+                                                UStack &foundBreaks ) const {
+    if ((rangeEnd - rangeStart) < BURMESE_MIN_WORD_SPAN) {
+        return 0;       // Not enough characters for two words
+    }
+
+    uint32_t wordsFound = 0;
+    int32_t cpWordLength = 0;
+    int32_t cuWordLength = 0;
+    int32_t current;
+    UErrorCode status = U_ZERO_ERROR;
+    PossibleWord words[BURMESE_LOOKAHEAD];
+    
+    utext_setNativeIndex(text, rangeStart);
+    
+    while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) {
+        cuWordLength = 0;
+        cpWordLength = 0;
+
+        // Look for candidate words at the current position
+        int32_t candidates = words[wordsFound%BURMESE_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
+        
+        // If we found exactly one, use that
+        if (candidates == 1) {
+            cuWordLength = words[wordsFound % BURMESE_LOOKAHEAD].acceptMarked(text);
+            cpWordLength = words[wordsFound % BURMESE_LOOKAHEAD].markedCPLength();
+            wordsFound += 1;
+        }
+        // If there was more than one, see which one can take us forward the most words
+        else if (candidates > 1) {
+            // If we're already at the end of the range, we're done
+            if (utext_getNativeIndex(text) >= rangeEnd) {
+                goto foundBest;
+            }
+            do {
+                int32_t wordsMatched = 1;
+                if (words[(wordsFound + 1) % BURMESE_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) > 0) {
+                    if (wordsMatched < 2) {
+                        // Followed by another dictionary word; mark first word as a good candidate
+                        words[wordsFound%BURMESE_LOOKAHEAD].markCurrent();
+                        wordsMatched = 2;
+                    }
+                    
+                    // If we're already at the end of the range, we're done
+                    if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+                        goto foundBest;
+                    }
+                    
+                    // See if any of the possible second words is followed by a third word
+                    do {
+                        // If we find a third word, stop right away
+                        if (words[(wordsFound + 2) % BURMESE_LOOKAHEAD].candidates(text, fDictionary, rangeEnd)) {
+                            words[wordsFound % BURMESE_LOOKAHEAD].markCurrent();
+                            goto foundBest;
+                        }
+                    }
+                    while (words[(wordsFound + 1) % BURMESE_LOOKAHEAD].backUp(text));
+                }
+            }
+            while (words[wordsFound % BURMESE_LOOKAHEAD].backUp(text));
+foundBest:
+            cuWordLength = words[wordsFound % BURMESE_LOOKAHEAD].acceptMarked(text);
+            cpWordLength = words[wordsFound % BURMESE_LOOKAHEAD].markedCPLength();
+            wordsFound += 1;
+        }
+        
+        // We come here after having either found a word or not. We look ahead to the
+        // next word. If it's not a dictionary word, we will combine it withe the word we
+        // just found (if there is one), but only if the preceding word does not exceed
+        // the threshold.
+        // The text iterator should now be positioned at the end of the word we found.
+        if ((int32_t)utext_getNativeIndex(text) < rangeEnd && cpWordLength < BURMESE_ROOT_COMBINE_THRESHOLD) {
+            // if it is a dictionary word, do nothing. If it isn't, then if there is
+            // no preceding word, or the non-word shares less than the minimum threshold
+            // of characters with a dictionary word, then scan to resynchronize
+            if (words[wordsFound % BURMESE_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) <= 0
+                  && (cuWordLength == 0
+                      || words[wordsFound%BURMESE_LOOKAHEAD].longestPrefix() < BURMESE_PREFIX_COMBINE_THRESHOLD)) {
+                // Look for a plausible word boundary
+                int32_t remaining = rangeEnd - (current + cuWordLength);
+                UChar32 pc;
+                UChar32 uc;
+                int32_t chars = 0;
+                for (;;) {
+                    int32_t pcIndex = utext_getNativeIndex(text);
+                    pc = utext_next32(text);
+                    int32_t pcSize = utext_getNativeIndex(text) - pcIndex;
+                    chars += pcSize;
+                    remaining -= pcSize;
+                    if (remaining <= 0) {
+                        break;
+                    }
+                    uc = utext_current32(text);
+                    if (fEndWordSet.contains(pc) && fBeginWordSet.contains(uc)) {
+                        // Maybe. See if it's in the dictionary.
+                        // TODO: this looks iffy; compare with old code.
+                        int32_t candidates = words[(wordsFound + 1) % BURMESE_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
+                        utext_setNativeIndex(text, current + cuWordLength + chars);
+                        if (candidates > 0) {
+                            break;
+                        }
+                    }
+                }
+                
+                // Bump the word count if there wasn't already one
+                if (cuWordLength <= 0) {
+                    wordsFound += 1;
+                }
+                
+                // Update the length with the passed-over characters
+                cuWordLength += chars;
+            }
+            else {
+                // Back up to where we were for next iteration
+                utext_setNativeIndex(text, current + cuWordLength);
+            }
+        }
+        
+        // Never stop before a combining mark.
+        int32_t currPos;
+        while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
+            utext_next32(text);
+            cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
+        }
+        
+        // Look ahead for possible suffixes if a dictionary word does not follow.
+        // We do this in code rather than using a rule so that the heuristic
+        // resynch continues to function. For example, one of the suffix characters
+        // could be a typo in the middle of a word.
+        // NOT CURRENTLY APPLICABLE TO BURMESE
+
+        // Did we find a word on this iteration? If so, push it on the break stack
+        if (cuWordLength > 0) {
+            foundBreaks.push((current+cuWordLength), status);
+        }
+    }
+
+    // Don't return a break for the end of the dictionary range if there is one there.
+    if (foundBreaks.peeki() >= rangeEnd) {
+        (void) foundBreaks.popi();
+        wordsFound -= 1;
+    }
+
+    return wordsFound;
+}
+
+/*
+ ******************************************************************
  * KhmerBreakEngine
  */
 
