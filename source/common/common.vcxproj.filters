@@ -349,6 +349,9 @@
     <ClCompile Include="filterednormalizer2.cpp">
       <Filter>normalization</Filter>
     </ClCompile>
+    <ClCompile Include="loadednormalizer2impl.cpp">
+      <Filter>normalization</Filter>
+    </ClCompile>
     <ClCompile Include="normalizer2.cpp">
       <Filter>normalization</Filter>
     </ClCompile>
@@ -759,6 +762,9 @@
     </ClInclude>
     <ClInclude Include="ureslocs.h">
       <Filter>locales &amp; resources</Filter>
+    </ClInclude>
+    <ClInclude Include="norm2allmodes.h">
+      <Filter>normalization</Filter>
     </ClInclude>
     <ClInclude Include="normalizer2impl.h">
       <Filter>normalization</Filter>

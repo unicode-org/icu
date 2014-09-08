@@ -243,7 +243,7 @@ package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
 #  2010-dec Removed pnames.icu.
 # These are now hardcoded in ICU4C and only loaded in ICU4J.
 #
-DAT_FILES_SHORT=unames.icu cnvalias.icu coll/ucadata.icu nfc.nrm nfkc.nrm nfkc_cf.nrm uts46.nrm
+DAT_FILES_SHORT=unames.icu cnvalias.icu coll/ucadata.icu nfkc.nrm nfkc_cf.nrm uts46.nrm
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
 
 ## BRK files
@@ -431,7 +431,7 @@ COLL_FILES_LIST=$(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT)
 BRK_FILES_LIST=$(BRK_FILES_SHORT) $(BRK_RES_FILES_SHORT) $(BRK_RES_INDEX_RES_SHORT) $(DICT_FILES_SHORT)
 LOCALE_FILES_LIST= $(RES_FILES_SHORT) $(LANG_FILES_SHORT) $(REGION_FILES_SHORT) $(ZONE_FILES_SHORT)
 MISC_FILES_LIST=$(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(CNV_FILES_SHORT_SPECIAL) $(CURR_FILES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT) $(SPREP_FILES_SHORT) $(CFU_FILES_SHORT)
-UNI_CORE_DATA=pnames.icu uprops.icu ucase.icu ubidi.icu
+UNI_CORE_DATA=pnames.icu uprops.icu ucase.icu ubidi.icu nfc.nrm
 UNI_CORE_TARGET_DATA=$(UNI_CORE_DATA:%=$(BUILDDIR)/%)
 
 ifneq ($(INCLUDE_UNI_CORE_DATA),)
@@ -815,7 +815,7 @@ ICU4J_TZDATA_PATHS=$(ICU4J_TZDATA_FILES:%="$(ICU4J_DATA_DIRNAME)/%.res")
 generate-data: build-dir packagedata $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat uni-core-data
 	mkdir -p $(OUTDIR)/icu4j/$(ICU4J_DATA_DIRNAME)
 	mkdir -p $(OUTDIR)/icu4j/tzdata/$(ICU4J_DATA_DIRNAME)
-	echo pnames.icu ubidi.icu ucase.icu uprops.icu > $(OUTDIR)/icu4j/add.txt
+	echo $(UNI_CORE_DATA) > $(OUTDIR)/icu4j/add.txt
 	$(INVOKE) $(TOOLBINDIR)/icupkg $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat $(OUTDIR)/icu4j/$(ICUDATA_BASENAME_VERSION)b.dat -a $(OUTDIR)/icu4j/add.txt -s $(BUILDDIR) -x '*' -tb -d $(OUTDIR)/icu4j/$(ICU4J_DATA_DIRNAME)
 	mv $(ICU4J_TZDATA_PATHS:%=$(OUTDIR)/icu4j/%) "$(OUTDIR)/icu4j/tzdata/$(ICU4J_DATA_DIRNAME)"
 

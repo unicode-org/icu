@@ -1729,7 +1729,7 @@ void CollationTest::TestDataDriven() {
     IcuTestErrorCode errorCode(*this, "TestDataDriven");
 
     fcd = Normalizer2Factory::getFCDInstance(errorCode);
-    nfd = Normalizer2Factory::getNFDInstance(errorCode);
+    nfd = Normalizer2::getNFDInstance(errorCode);
     if(errorCode.logDataIfFailureAndReset("Normalizer2Factory::getFCDInstance() or getNFDInstance()")) {
         return;
     }
