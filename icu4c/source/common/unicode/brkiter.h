@@ -213,8 +213,8 @@ public:
     };
 
     /**
-     * Set the iterator position to the index of the first character in the text being scanned.
-     * @return The index of the first character in the text being scanned.
+     * Sets the current iteration position to the beginning of the text, position zero.
+     * @return The offset of the beginning of the text, zero.
      * @stable ICU 2.0
      */
     virtual int32_t first(void) = 0;
