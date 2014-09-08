@@ -1368,14 +1368,14 @@ static const struct {
      * to testdata) for code coverage in tests.
      * See Jitterbug 4497.
      *
-     * ICU4C 4.4 adds normalization data files again, e.g., nfc.nrm.
+     * ICU4C 4.4 adds normalization data files again, e.g., nfkc.nrm.
      */
     {"uprops",                   "icu", uprops_swap},
     {"ucase",                    "icu", ucase_swap},
     {"ubidi",                    "icu", ubidi_swap},
 #endif
 #if !UCONFIG_NO_NORMALIZATION && !UCONFIG_ONLY_COLLATION
-    {"nfc",                      "nrm", unorm2_swap},
+    {"nfkc",                     "nrm", unorm2_swap},
     {"confusables",              "cfu", uspoof_swap},
 #endif
     {"unames",                   "icu", uchar_swapNames}

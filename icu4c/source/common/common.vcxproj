@@ -381,10 +381,9 @@
     <ClCompile Include="caniter.cpp">
     </ClCompile>
     <ClCompile Include="filterednormalizer2.cpp" />
-    <ClCompile Include="normalizer2.cpp">
-    </ClCompile>
-    <ClCompile Include="normalizer2impl.cpp">
-    </ClCompile>
+    <ClCompile Include="loadednormalizer2impl.cpp" />
+    <ClCompile Include="normalizer2.cpp" />
+    <ClCompile Include="normalizer2impl.cpp" />
     <ClCompile Include="normlzr.cpp">
     </ClCompile>
     <ClCompile Include="unorm.cpp" />
@@ -1145,6 +1144,7 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="norm2allmodes.h" />
     <CustomBuild Include="unicode\normalizer2.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>

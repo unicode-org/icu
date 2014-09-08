@@ -1123,7 +1123,7 @@ BasicNormalizerTest::TestCompare() {
     }
 
     // test all of these precomposed characters
-    const Normalizer2 *nfcNorm2=Normalizer2Factory::getNFCInstance(errorCode);
+    const Normalizer2 *nfcNorm2=Normalizer2::getNFCInstance(errorCode);
     UnicodeSetIterator it(set);
     while(it.next() && !it.isString()) {
         UChar32 c=it.getCodepoint();
@@ -1484,9 +1484,9 @@ BasicNormalizerTest::TestCustomFCC() {
 void
 BasicNormalizerTest::TestFilteredNormalizer2Coverage() {
     UErrorCode errorCode = U_ZERO_ERROR;
-    const Normalizer2 *nfcNorm2=Normalizer2Factory::getNFCInstance(errorCode);
+    const Normalizer2 *nfcNorm2=Normalizer2::getNFCInstance(errorCode);
     if (U_FAILURE(errorCode)) {
-        dataerrln("Normalizer2Factory::getNFCInstance() call failed - %s", u_errorName(status));
+        dataerrln("Normalizer2::getNFCInstance() call failed - %s", u_errorName(status));
         return;
     }
     UnicodeSet filter(UNICODE_STRING_SIMPLE("[^\\u00a0-\\u00ff\\u0310-\\u031f]"), errorCode);

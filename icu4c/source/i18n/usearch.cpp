@@ -2685,7 +2685,7 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
                                                             UCOL_SHIFTED;
         result->variableTop = ucol_getVariableTop(collator, status);
 
-        result->nfd         = Normalizer2Factory::getNFDInstance(*status);
+        result->nfd         = Normalizer2::getNFDInstance(*status);
 
         if (U_FAILURE(*status)) {
             uprv_free(result);
