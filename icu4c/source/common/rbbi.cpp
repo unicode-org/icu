@@ -518,8 +518,8 @@ RuleBasedBreakIterator &RuleBasedBreakIterator::refreshInputText(UText *input, U
 
 
 /**
- * Sets the current iteration position to the beginning of the text.
- * @return The offset of the beginning of the text.
+ * Sets the current iteration position to the beginning of the text, position zero.
+ * @return The new iterator position, which is zero.
  */
 int32_t RuleBasedBreakIterator::first(void) {
     reset();
