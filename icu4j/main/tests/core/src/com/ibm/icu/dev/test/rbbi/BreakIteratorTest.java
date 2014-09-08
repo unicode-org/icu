@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.FilteredBreakIteratorBuilder;
 import com.ibm.icu.util.ULocale;
 
 public class BreakIteratorTest extends TestFmwk
@@ -905,5 +906,148 @@ public class BreakIteratorTest extends TestFmwk
             brk = BreakIterator.getWordInstance(uloc);
             errln("getWordInstance((ULocale)null) did not throw NPE.");
         } catch (NullPointerException e) { /* OK */ }
+    }
+    
+    /**
+     * Test FilteredBreakIteratorBuilder newly introduced
+     */
+    public void TestFilteredBreakIteratorBuilder() {
+        FilteredBreakIteratorBuilder builder;
+        BreakIterator baseBI;
+        BreakIterator filteredBI;
+
+        String text = "In the meantime Mr. Weston arrived with his small ship, which he had now recovered. Capt. Gorges, who informed the Sgt. here that one purpose of his going east was to meet with Mr. Weston, took this opportunity to call him to account for some abuses he had to lay to his charge."; // (William Bradford, public domain. http://catalog.hathitrust.org/Record/008651224 ) - edited.
+        String ABBR_MR = "Mr.";
+        String ABBR_CAPT = "Capt.";
+
+        {
+            logln("Constructing empty builder\n");
+            builder = FilteredBreakIteratorBuilder.createInstance();
+
+            logln("Constructing base BI\n");
+            baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
+
+            logln("Building new BI\n");
+            filteredBI = builder.build(baseBI);
+
+            logln("Testing:");
+            filteredBI.setText(text);
+            assertEquals("1st next", 20, filteredBI.next());
+            assertEquals("1st next", 84, filteredBI.next());
+            assertEquals("1st next", 90, filteredBI.next());
+            assertEquals("1st next", 181, filteredBI.next());
+            assertEquals("1st next", 278, filteredBI.next());
+            filteredBI.first();
+        }
+
+        {
+            logln("Constructing empty builder\n");
+            builder = FilteredBreakIteratorBuilder.createInstance();
+
+            logln("Adding Mr. as an exception\n");
+
+            assertEquals("2.1 suppressBreakAfter", true, builder.suppressBreakAfter(ABBR_MR));
+            assertEquals("2.2 suppressBreakAfter", false, builder.suppressBreakAfter(ABBR_MR));
+            assertEquals("2.3 unsuppressBreakAfter", true, builder.unsuppressBreakAfter(ABBR_MR));
+            assertEquals("2.4 unsuppressBreakAfter", false, builder.unsuppressBreakAfter(ABBR_MR));
+            assertEquals("2.5 suppressBreakAfter", true, builder.suppressBreakAfter(ABBR_MR));
+
+            logln("Constructing base BI\n");
+            baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
+
+            logln("Building new BI\n");
+            filteredBI = builder.build(baseBI);
+
+            logln("Testing:");
+            filteredBI.setText(text);
+            assertEquals("2nd next", 84, filteredBI.next());
+            assertEquals("2nd next", 90, filteredBI.next());
+            assertEquals("2nd next", 278, filteredBI.next());
+            filteredBI.first();
+        }
+        
+
+        {
+          logln("Constructing empty builder\n");
+          builder = FilteredBreakIteratorBuilder.createInstance();
+
+          logln("Adding Mr. and Capt as an exception\n");
+          assertEquals("3.1 suppressBreakAfter", true, builder.suppressBreakAfter(ABBR_MR));
+          assertEquals("3.2 suppressBreakAfter", true, builder.suppressBreakAfter(ABBR_CAPT));
+
+          logln("Constructing base BI\n");
+          baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
+
+          logln("Building new BI\n");
+          filteredBI = builder.build(baseBI);
+
+          logln("Testing:");
+          filteredBI.setText(text);
+          assertEquals("3rd next", 84, filteredBI.next());
+          assertEquals("3rd next", 278, filteredBI.next());
+          filteredBI.first();
+        }
+
+        {
+          logln("Constructing English builder\n");
+          builder = FilteredBreakIteratorBuilder.createInstance(ULocale.ENGLISH);
+
+          logln("Constructing base BI\n");
+          baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
+
+          logln("unsuppressing 'Capt'");
+          assertEquals("1st suppressBreakAfter", true, builder.unsuppressBreakAfter(ABBR_CAPT));
+
+          logln("Building new BI\n");
+          filteredBI = builder.build(baseBI);
+
+          if(filteredBI != null) {
+            logln("Testing:");
+            filteredBI.setText(text);
+            assertEquals("4th next", 84, filteredBI.next());
+            assertEquals("4th next", 90, filteredBI.next());
+            assertEquals("4th next", 278, filteredBI.next());
+            filteredBI.first();
+          }
+        }
+
+        {
+          logln("Constructing English builder\n");
+          builder = FilteredBreakIteratorBuilder.createInstance(ULocale.ENGLISH);
+
+          logln("Constructing base BI\n");
+          baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
+
+          logln("Building new BI\n");
+          filteredBI = builder.build(baseBI);
+
+          if(filteredBI != null) {
+            logln("Testing:");
+            filteredBI.setText(text);
+
+            assertEquals("5th next", 84, filteredBI.next());
+            assertEquals("5th next", 278, filteredBI.next());
+            filteredBI.first();
+          }
+        }
+
+        {
+          logln("Constructing French builder");
+          builder = FilteredBreakIteratorBuilder.createInstance(ULocale.FRENCH);
+
+          logln("Constructing base BI\n");
+          baseBI = BreakIterator.getSentenceInstance(Locale.FRENCH);
+
+          logln("Building new BI\n");
+          filteredBI = builder.build(baseBI);
+
+          if(filteredBI != null) {
+            logln("Testing:");
+            filteredBI.setText(text);
+            assertEquals("6th next", 20, filteredBI.next());
+            assertEquals("6th next", 84, filteredBI.next());
+            filteredBI.first();
+          }
+        }
     }
 }
