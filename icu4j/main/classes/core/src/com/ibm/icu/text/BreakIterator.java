@@ -50,7 +50,12 @@ import com.ibm.icu.util.ULocale;
  * various processes (especially text editors) to treat as characters the units of text
  * that a user would think of as characters, rather than the units of text that the
  * computer sees as "characters".</ul>
- *
+ * The text boundary positions are found according to the rules
+ * described in Unicode Standard Annex #29, Text Boundaries, and
+ * Unicode Standard Annex #14, Line Breaking Properties.  These
+ * are available at http://www.unicode.org/reports/tr14/ and
+ * http://www.unicode.org/reports/tr29/.
+ * <p>
  * BreakIterator's interface follows an "iterator" model (hence the name), meaning it
  * has a concept of a "current position" and methods like first(), last(), next(),
  * and previous() that update the current position.  All BreakIterators uphold the
