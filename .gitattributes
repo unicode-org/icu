@@ -56,6 +56,7 @@ icu4c/source/common/common.vcxproj.filters -text
 icu4c/source/common/uloc_keytype.cpp -text
 icu4c/source/common/unifiedcache.cpp -text
 icu4c/source/common/unifiedcache.h -text
+icu4c/source/data/brkitr/burmesedict.txt -text
 icu4c/source/data/coll/dsb.txt -text
 icu4c/source/data/coll/hsb.txt -text
 icu4c/source/data/coll/lb.txt -text
