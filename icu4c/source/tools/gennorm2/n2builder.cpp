@@ -1280,7 +1280,7 @@ Normalizer2DataBuilder::writeCSourceFile(const char *filename) {
         "  %s_extraData,\n"
         "  %s_smallFCD,\n",
         f);*/
-    sprintf(line, "static const UTrie2 %s_trie {\n", dataName.data());
+    sprintf(line, "static const UTrie2 %s_trie={\n", dataName.data());
     char line2[100];
     sprintf(line2, "%s_trieIndex", dataName.data());
     usrc_writeUTrie2Struct(f,
