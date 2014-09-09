@@ -6,7 +6,7 @@
 */
 
 /**
- * \file 
+ * \file
  * \brief C++ API: The RuleBasedCollator class implements the Collator abstract base class.
  */
 
@@ -343,34 +343,38 @@ public:
                                          UErrorCode &status) const;
 
     /**
-    * Transforms a specified region of the string into a series of characters
-    * that can be compared with CollationKey.compare. Use a CollationKey when
-    * you need to do repeated comparisions on the same string. For a single
-    * comparison the compare method will be faster.
-    * @param source the source string.
-    * @param key the transformed key of the source string.
-    * @param status the error code status.
-    * @return the transformed key.
-    * @see CollationKey
-    * @stable ICU 2.0
-    */
+     * Transforms the string into a series of characters
+     * that can be compared with CollationKey.compare().
+     *
+     * Note that sort keys are often less efficient than simply doing comparison.  
+     * For more details, see the ICU User Guide.
+     *
+     * @param source the source string.
+     * @param key the transformed key of the source string.
+     * @param status the error code status.
+     * @return the transformed key.
+     * @see CollationKey
+     * @stable ICU 2.0
+     */
     virtual CollationKey& getCollationKey(const UnicodeString& source,
                                           CollationKey& key,
                                           UErrorCode& status) const;
 
     /**
-    * Transforms a specified region of the string into a series of characters
-    * that can be compared with CollationKey.compare. Use a CollationKey when
-    * you need to do repeated comparisions on the same string. For a single
-    * comparison the compare method will be faster.
-    * @param source the source string.
-    * @param sourceLength the length of the source string.
-    * @param key the transformed key of the source string.
-    * @param status the error code status.
-    * @return the transformed key.
-    * @see CollationKey
-    * @stable ICU 2.0
-    */
+     * Transforms a specified region of the string into a series of characters
+     * that can be compared with CollationKey.compare.
+     *
+     * Note that sort keys are often less efficient than simply doing comparison.  
+     * For more details, see the ICU User Guide.
+     *
+     * @param source the source string.
+     * @param sourceLength the length of the source string.
+     * @param key the transformed key of the source string.
+     * @param status the error code status.
+     * @return the transformed key.
+     * @see CollationKey
+     * @stable ICU 2.0
+     */
     virtual CollationKey& getCollationKey(const UChar *source,
                                           int32_t sourceLength,
                                           CollationKey& key,
@@ -609,6 +613,10 @@ public:
 
     /**
      * Get the sort key as an array of bytes from a UnicodeString.
+     *
+     * Note that sort keys are often less efficient than simply doing comparison.  
+     * For more details, see the ICU User Guide.
+     *
      * @param source string to be processed.
      * @param result buffer to store result in. If NULL, number of bytes needed
      *        will be returned.
@@ -622,6 +630,10 @@ public:
 
     /**
      * Get the sort key as an array of bytes from a UChar buffer.
+     *
+     * Note that sort keys are often less efficient than simply doing comparison.  
+     * For more details, see the ICU User Guide.
+     *
      * @param source string to be processed.
      * @param sourceLength length of string to be processed. If -1, the string
      *        is 0 terminated and length will be decided by the function.
