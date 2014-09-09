@@ -3992,6 +3992,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/BreakCTDictionary.java svneol=nativ
 icu4j/main/classes/core/src/com/ibm/icu/text/BreakDictionary.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/BreakIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/BreakIteratorFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/BurmeseBreakEngine.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/BytesDictionaryMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CanonicalIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CharsDictionaryMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
