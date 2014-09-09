@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2013 International Business Machines Corporation and
+ * Copyright (C) 2003-2014 International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1847,6 +1847,17 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                 errorType = "preceding()";
             }
 
+
+            // Exclude Myanmar from tests, it is dictionary-based. Not sure how this is handled
+            // for other script with dictionary break, but it is not working for Myanmar.
+            if (errorType != null && errorType.equals("next()") && name.equals("line")) {
+                int cBefore = UTF16.charAt(testText, i-1);
+                int cAfter = UTF16.charAt(testText, i);
+                if (cBefore >= 0x1000 && cBefore <= 0x109F && cAfter >= 0x1000 && cAfter <= 0x109F &&
+                        logKnownIssue("11245", "Skip errors for unexpected line breaks between Myanmar characters")) {
+                    errorType = null;
+                }
+            }
 
             if (errorType != null) {
                 // Format a range of the test text that includes the failure as

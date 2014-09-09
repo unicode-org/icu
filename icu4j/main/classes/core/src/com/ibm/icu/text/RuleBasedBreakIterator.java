@@ -1113,6 +1113,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 case UScript.LAO:
                     eng = new LaoBreakEngine();
                     break;
+                case UScript.MYANMAR:
+                    eng = new BurmeseBreakEngine();
+                    break;
                 case UScript.KHMER:
                     eng = new KhmerBreakEngine();
                     break;
