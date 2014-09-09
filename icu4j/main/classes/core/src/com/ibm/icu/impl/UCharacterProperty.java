@@ -18,6 +18,7 @@ import com.ibm.icu.lang.UCharacter.NumericType;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ICUException;
@@ -489,7 +490,7 @@ public final class UCharacterProperty
         new IntProperty(0, BLOCK_MASK_, BLOCK_SHIFT_),
         new CombiningClassIntProperty(SRC_NFC) {  // CANONICAL_COMBINING_CLASS
             int getValue(int c) {
-                return Norm2AllModes.getNFCInstance().decomp.getCombiningClass(c);
+                return Normalizer2.getNFDInstance().getCombiningClass(c);
             }
         },
         new IntProperty(2, DECOMPOSITION_TYPE_MASK_, 0),

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2001-2010, International Business Machines
+ *   Copyright (C) 2001-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -27,38 +27,32 @@ final class NormalizationTransliterator extends Transliterator {
     static void register() {
         Transliterator.registerFactory("Any-NFC", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator(
-                        "NFC", Norm2AllModes.getNFCInstance().comp);
+                return new NormalizationTransliterator("NFC", Normalizer2.getNFCInstance());
             }
         });
         Transliterator.registerFactory("Any-NFD", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator(
-                        "NFD", Norm2AllModes.getNFCInstance().decomp);
+                return new NormalizationTransliterator("NFD", Normalizer2.getNFDInstance());
             }
         });
         Transliterator.registerFactory("Any-NFKC", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator(
-                        "NFKC", Norm2AllModes.getNFKCInstance().comp);
+                return new NormalizationTransliterator("NFKC", Normalizer2.getNFKCInstance());
             }
         });
         Transliterator.registerFactory("Any-NFKD", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator(
-                        "NFKD", Norm2AllModes.getNFKCInstance().decomp);
+                return new NormalizationTransliterator("NFKD", Normalizer2.getNFKDInstance());
             }
         });
         Transliterator.registerFactory("Any-FCD", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator(
-                        "FCD", Norm2AllModes.getFCDNormalizer2());
+                return new NormalizationTransliterator("FCD", Norm2AllModes.getFCDNormalizer2());
             }
         });
         Transliterator.registerFactory("Any-FCC", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator(
-                        "FCC", Norm2AllModes.getNFCInstance().fcc);
+                return new NormalizationTransliterator("FCC", Norm2AllModes.getNFCInstance().fcc);
             }
         });
         Transliterator.registerSpecialInverse("NFC", "NFD", true);
