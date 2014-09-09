@@ -483,731 +483,489 @@ static const char * const gSubTypes[] = {
     "teaspoon"
 };
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createGForce(UErrorCode &status) {
     return MeasureUnit::create(0, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMeterPerSecondSquared(UErrorCode &status) {
     return MeasureUnit::create(0, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createArcMinute(UErrorCode &status) {
     return MeasureUnit::create(1, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createArcSecond(UErrorCode &status) {
     return MeasureUnit::create(1, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createDegree(UErrorCode &status) {
     return MeasureUnit::create(1, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createRadian(UErrorCode &status) {
     return MeasureUnit::create(1, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createAcre(UErrorCode &status) {
     return MeasureUnit::create(2, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHectare(UErrorCode &status) {
     return MeasureUnit::create(2, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareCentimeter(UErrorCode &status) {
     return MeasureUnit::create(2, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareFoot(UErrorCode &status) {
     return MeasureUnit::create(2, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareInch(UErrorCode &status) {
     return MeasureUnit::create(2, 4, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareKilometer(UErrorCode &status) {
     return MeasureUnit::create(2, 5, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareMeter(UErrorCode &status) {
     return MeasureUnit::create(2, 6, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareMile(UErrorCode &status) {
     return MeasureUnit::create(2, 7, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSquareYard(UErrorCode &status) {
     return MeasureUnit::create(2, 8, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createLiterPerKilometer(UErrorCode &status) {
     return MeasureUnit::create(3, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMilePerGallon(UErrorCode &status) {
     return MeasureUnit::create(3, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createBit(UErrorCode &status) {
     return MeasureUnit::create(5, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createByte(UErrorCode &status) {
     return MeasureUnit::create(5, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createGigabit(UErrorCode &status) {
     return MeasureUnit::create(5, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createGigabyte(UErrorCode &status) {
     return MeasureUnit::create(5, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilobit(UErrorCode &status) {
     return MeasureUnit::create(5, 4, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilobyte(UErrorCode &status) {
     return MeasureUnit::create(5, 5, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMegabit(UErrorCode &status) {
     return MeasureUnit::create(5, 6, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMegabyte(UErrorCode &status) {
     return MeasureUnit::create(5, 7, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createTerabit(UErrorCode &status) {
     return MeasureUnit::create(5, 8, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createTerabyte(UErrorCode &status) {
     return MeasureUnit::create(5, 9, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createDay(UErrorCode &status) {
     return MeasureUnit::create(6, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHour(UErrorCode &status) {
     return MeasureUnit::create(6, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMicrosecond(UErrorCode &status) {
     return MeasureUnit::create(6, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMillisecond(UErrorCode &status) {
     return MeasureUnit::create(6, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMinute(UErrorCode &status) {
     return MeasureUnit::create(6, 4, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMonth(UErrorCode &status) {
     return MeasureUnit::create(6, 5, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createNanosecond(UErrorCode &status) {
     return MeasureUnit::create(6, 6, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createSecond(UErrorCode &status) {
     return MeasureUnit::create(6, 7, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createWeek(UErrorCode &status) {
     return MeasureUnit::create(6, 8, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createYear(UErrorCode &status) {
     return MeasureUnit::create(6, 9, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createAmpere(UErrorCode &status) {
     return MeasureUnit::create(7, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMilliampere(UErrorCode &status) {
     return MeasureUnit::create(7, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createOhm(UErrorCode &status) {
     return MeasureUnit::create(7, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createVolt(UErrorCode &status) {
     return MeasureUnit::create(7, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCalorie(UErrorCode &status) {
     return MeasureUnit::create(8, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createFoodcalorie(UErrorCode &status) {
     return MeasureUnit::create(8, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createJoule(UErrorCode &status) {
     return MeasureUnit::create(8, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilocalorie(UErrorCode &status) {
     return MeasureUnit::create(8, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilojoule(UErrorCode &status) {
     return MeasureUnit::create(8, 4, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilowattHour(UErrorCode &status) {
     return MeasureUnit::create(8, 5, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createGigahertz(UErrorCode &status) {
     return MeasureUnit::create(9, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHertz(UErrorCode &status) {
     return MeasureUnit::create(9, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilohertz(UErrorCode &status) {
     return MeasureUnit::create(9, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMegahertz(UErrorCode &status) {
     return MeasureUnit::create(9, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createAstronomicalUnit(UErrorCode &status) {
     return MeasureUnit::create(10, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCentimeter(UErrorCode &status) {
     return MeasureUnit::create(10, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createDecimeter(UErrorCode &status) {
     return MeasureUnit::create(10, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createFathom(UErrorCode &status) {
     return MeasureUnit::create(10, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createFoot(UErrorCode &status) {
     return MeasureUnit::create(10, 4, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createFurlong(UErrorCode &status) {
     return MeasureUnit::create(10, 5, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createInch(UErrorCode &status) {
     return MeasureUnit::create(10, 6, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilometer(UErrorCode &status) {
     return MeasureUnit::create(10, 7, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createLightYear(UErrorCode &status) {
     return MeasureUnit::create(10, 8, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMeter(UErrorCode &status) {
     return MeasureUnit::create(10, 9, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMicrometer(UErrorCode &status) {
     return MeasureUnit::create(10, 10, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMile(UErrorCode &status) {
     return MeasureUnit::create(10, 11, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMillimeter(UErrorCode &status) {
     return MeasureUnit::create(10, 12, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createNanometer(UErrorCode &status) {
     return MeasureUnit::create(10, 13, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createNauticalMile(UErrorCode &status) {
     return MeasureUnit::create(10, 14, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createParsec(UErrorCode &status) {
     return MeasureUnit::create(10, 15, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createPicometer(UErrorCode &status) {
     return MeasureUnit::create(10, 16, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createYard(UErrorCode &status) {
     return MeasureUnit::create(10, 17, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createLux(UErrorCode &status) {
     return MeasureUnit::create(11, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCarat(UErrorCode &status) {
     return MeasureUnit::create(12, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createGram(UErrorCode &status) {
     return MeasureUnit::create(12, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilogram(UErrorCode &status) {
     return MeasureUnit::create(12, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMetricTon(UErrorCode &status) {
     return MeasureUnit::create(12, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMicrogram(UErrorCode &status) {
     return MeasureUnit::create(12, 4, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMilligram(UErrorCode &status) {
     return MeasureUnit::create(12, 5, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createOunce(UErrorCode &status) {
     return MeasureUnit::create(12, 6, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createOunceTroy(UErrorCode &status) {
     return MeasureUnit::create(12, 7, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createPound(UErrorCode &status) {
     return MeasureUnit::create(12, 8, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createStone(UErrorCode &status) {
     return MeasureUnit::create(12, 9, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createTon(UErrorCode &status) {
     return MeasureUnit::create(12, 10, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createGigawatt(UErrorCode &status) {
     return MeasureUnit::create(13, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHorsepower(UErrorCode &status) {
     return MeasureUnit::create(13, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilowatt(UErrorCode &status) {
     return MeasureUnit::create(13, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMegawatt(UErrorCode &status) {
     return MeasureUnit::create(13, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMilliwatt(UErrorCode &status) {
     return MeasureUnit::create(13, 4, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createWatt(UErrorCode &status) {
     return MeasureUnit::create(13, 5, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHectopascal(UErrorCode &status) {
     return MeasureUnit::create(14, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createInchHg(UErrorCode &status) {
     return MeasureUnit::create(14, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMillibar(UErrorCode &status) {
     return MeasureUnit::create(14, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMillimeterOfMercury(UErrorCode &status) {
     return MeasureUnit::create(14, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createPoundPerSquareInch(UErrorCode &status) {
     return MeasureUnit::create(14, 4, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKarat(UErrorCode &status) {
     return MeasureUnit::create(15, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKilometerPerHour(UErrorCode &status) {
     return MeasureUnit::create(16, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMeterPerSecond(UErrorCode &status) {
     return MeasureUnit::create(16, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMilePerHour(UErrorCode &status) {
     return MeasureUnit::create(16, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCelsius(UErrorCode &status) {
     return MeasureUnit::create(17, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createFahrenheit(UErrorCode &status) {
     return MeasureUnit::create(17, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createKelvin(UErrorCode &status) {
     return MeasureUnit::create(17, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createAcreFoot(UErrorCode &status) {
     return MeasureUnit::create(18, 0, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createBushel(UErrorCode &status) {
     return MeasureUnit::create(18, 1, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCentiliter(UErrorCode &status) {
     return MeasureUnit::create(18, 2, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCubicCentimeter(UErrorCode &status) {
     return MeasureUnit::create(18, 3, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCubicFoot(UErrorCode &status) {
     return MeasureUnit::create(18, 4, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCubicInch(UErrorCode &status) {
     return MeasureUnit::create(18, 5, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCubicKilometer(UErrorCode &status) {
     return MeasureUnit::create(18, 6, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCubicMeter(UErrorCode &status) {
     return MeasureUnit::create(18, 7, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCubicMile(UErrorCode &status) {
     return MeasureUnit::create(18, 8, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCubicYard(UErrorCode &status) {
     return MeasureUnit::create(18, 9, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createCup(UErrorCode &status) {
     return MeasureUnit::create(18, 10, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createDeciliter(UErrorCode &status) {
     return MeasureUnit::create(18, 11, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createFluidOunce(UErrorCode &status) {
     return MeasureUnit::create(18, 12, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createGallon(UErrorCode &status) {
     return MeasureUnit::create(18, 13, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createHectoliter(UErrorCode &status) {
     return MeasureUnit::create(18, 14, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createLiter(UErrorCode &status) {
     return MeasureUnit::create(18, 15, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMegaliter(UErrorCode &status) {
     return MeasureUnit::create(18, 16, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createMilliliter(UErrorCode &status) {
     return MeasureUnit::create(18, 17, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createPint(UErrorCode &status) {
     return MeasureUnit::create(18, 18, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createQuart(UErrorCode &status) {
     return MeasureUnit::create(18, 19, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createTablespoon(UErrorCode &status) {
     return MeasureUnit::create(18, 20, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 MeasureUnit *MeasureUnit::createTeaspoon(UErrorCode &status) {
     return MeasureUnit::create(18, 21, status);
 }
-#endif /* U_HIDE_DRAFT_API */
 
 // End generated code
 
