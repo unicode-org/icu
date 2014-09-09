@@ -766,6 +766,7 @@ public final class UScript {
      * Typo, use DUPLOYAN
      * @deprecated ICU 54
      */
+    @Deprecated
     public static final int DUPLOYAN_SHORTAND             = DUPLOYAN;
     /**
      * ISO 15924 script code

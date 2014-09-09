@@ -2617,7 +2617,10 @@ public final class UTF16 {
      * @return the code point IF the string is non-null and consists of a single code point.
      * otherwise returns -1.
      * @param s to test
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static int getSingleCodePoint(CharSequence s) {
         if (s == null || s.length() == 0) {
             return -1;
@@ -2650,7 +2653,10 @@ public final class UTF16 {
      * @param codePoint to test
      * @param s to test
      * @return equivalent of code point comparator comparing two strings.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static int compareCodePoint(int codePoint, CharSequence s) {
         if (s == null) {
             return 1;

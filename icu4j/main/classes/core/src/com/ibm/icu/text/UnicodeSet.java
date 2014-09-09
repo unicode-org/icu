@@ -601,7 +601,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Append the <code>toPattern()</code> representation of a
      * string to the given <code>StringBuffer</code>.
-     * @return 
      */
     private static StringBuffer _appendToPat(StringBuffer buf, String s, boolean escapeUnprintable) {
         int cp;
@@ -615,7 +614,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Append the <code>toPattern()</code> representation of a
      * character to the given <code>StringBuffer</code>.
-     * @return 
      */
     private static StringBuffer _appendToPat(StringBuffer buf, int c, boolean escapeUnprintable) {
         // "Utility.isUnprintable(c)" seems redundant since the the call
@@ -4116,18 +4114,36 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * A struct-like class used for iteration through ranges, for faster iteration than by String.
-     * Read about the restrictions on usage in {@link #UnicodeSet.ranges()}.
+     * Read about the restrictions on usage in {@link UnicodeSet#ranges()}.
+     * 
+     * @draft ICU 54
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static class EntryRange {
         /**
          * The starting code point of the range.
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
          */
         public int codepoint;
         /**
          * The ending code point of the range
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
          */
         public int codepointEnd;
-        
+
+        EntryRange() {
+        }
+
+        /**
+         * {@inheritDoc}
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
+         */
         @Override
         public String toString() {
             StringBuffer b = new StringBuffer();
@@ -4155,6 +4171,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      *     // do something with each string;
      * }
      * </pre>
+     * 
+     * @draft ICU 54
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public Iterable<EntryRange> ranges() {
         return new EntryRanges();
