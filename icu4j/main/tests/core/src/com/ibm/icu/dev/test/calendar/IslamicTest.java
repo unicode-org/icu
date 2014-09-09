@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -417,14 +417,14 @@ public class IslamicTest extends CalendarTest {
             formatterIslamic.applyPattern("yyyy-MMMM-dd");
             String str = formatterIslamic.format(is_cal.getTime());
 
-            // 1395 - Rabi - 29
+            // 1395 - Rabi - 24
             int is_day = is_cal.get(Calendar.DAY_OF_MONTH);
             int is_month = is_cal.get(Calendar.MONTH);
             int is_year = is_cal.get(Calendar.YEAR);
-            if(is_day != 29 || is_month != IslamicCalendar.RABI_2 || is_year != 1395)
+            if(is_day != 24 || is_month != IslamicCalendar.RABI_2 || is_year != 1395)
                 errln("unexpected conversion date: "+is_day+" "+is_month+" "+is_year);
 
-            String expectedFormatResult = "\u0661\u0663\u0669\u0665-\u0631\u0628\u064A\u0639 \u0627\u0644\u0622\u062E\u0631-\u0662\u0669";
+            String expectedFormatResult = "\u0661\u0663\u0669\u0665-\u0631\u0628\u064A\u0639 \u0627\u0644\u0622\u062E\u0631-\u0662\u0664";
             if(!str.equals(expectedFormatResult))
                 errln("unexpected formatted result: "+str);
             
