@@ -3865,6 +3865,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/ResourceBundleWrapper.java svneol=n
 icu4j/main/classes/core/src/com/ibm/icu/impl/Row.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/RuleCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SimpleCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/SimpleFilteredSentenceBreakIterator.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/SimplePatternFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SoftCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SortedSetRelation.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4077,7 +4078,6 @@ icu4j/main/classes/core/src/com/ibm/icu/text/SCSU.java svneol=native#text/plain%
 icu4j/main/classes/core/src/com/ibm/icu/text/ScientificFormatHelper.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SelectFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SimpleDateFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/SimpleFilteredBreakIteratorBuilder.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/SpoofChecker.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/StringCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/StringPrep.java svneol=native#text/plain%3Bcharset%3Dutf-8

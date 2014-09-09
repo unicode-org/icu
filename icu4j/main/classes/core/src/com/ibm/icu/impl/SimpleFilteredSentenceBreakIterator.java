@@ -4,12 +4,14 @@
  * others. All Rights Reserved.
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.impl;
 
 import java.text.CharacterIterator;
 import java.util.HashSet;
 
-import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.FilteredBreakIteratorBuilder;
+import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
@@ -20,7 +22,7 @@ import com.ibm.icu.util.UResourceBundle;
 /**
  * @author tomzhang
  */
-class SimpleFilteredSentenceBreakIterator extends BreakIterator {
+public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
 
     private BreakIterator delegate;
     private UCharacterIterator text; // TODO(Tom): suffice to move into the local scope in next() ?
@@ -83,12 +85,12 @@ class SimpleFilteredSentenceBreakIterator extends BreakIterator {
             }
 
             if (bestPosn >= 0) {
-                if (bestValue == SimpleFilteredBreakIteratorBuilder.MATCH) { // exact match!
+                if (bestValue == Builder.MATCH) { // exact match!
                     n = delegate.next(); // skip this one. Find the next lowerlevel break.
                     if (n == BreakIterator.DONE)
                         return n;
                     continue; // See if the next is another exception.
-                } else if (bestValue == SimpleFilteredBreakIteratorBuilder.PARTIAL && forwardsPartialTrie != null) {
+                } else if (bestValue == Builder.PARTIAL && forwardsPartialTrie != null) {
                     // make sure there's a forward trie
                     // We matched the "Ph." in "Ph.D." - now we need to run everything through the forwards trie
                     // to see if it matches something going forward.
@@ -151,22 +153,31 @@ class SimpleFilteredSentenceBreakIterator extends BreakIterator {
 
     @Override
     public int next(int n) {
-        return delegate.next(n);
+        // TODO
+        throw new UnsupportedOperationException("next(int) is not yet implemented");
     }
 
     @Override
     public int previous() {
-        return delegate.previous();
+        // TODO
+        throw new UnsupportedOperationException("previous() is not yet implemented");
     }
 
     @Override
     public int following(int offset) {
-        return delegate.following(offset);
+        // TODO
+        throw new UnsupportedOperationException("following(int) is not yet implemented");
     }
 
     @Override
     public int current() {
         return delegate.current();
+    }
+
+    @Override
+    public int preceding(int offset) {
+        // TODO
+        throw new UnsupportedOperationException("preceding(int) is not yet implemented");
     }
 
     @Override
@@ -178,137 +189,137 @@ class SimpleFilteredSentenceBreakIterator extends BreakIterator {
     public void setText(CharacterIterator newText) {
         delegate.setText(newText);
     }
-}
 
-public class SimpleFilteredBreakIteratorBuilder extends FilteredBreakIteratorBuilder {
-    /**
-     * filter set to store all exceptions
-     */
-    private HashSet<String> filterSet;
+    public static class Builder extends FilteredBreakIteratorBuilder {
+        /**
+         * filter set to store all exceptions
+         */
+        private HashSet<String> filterSet;
 
-    static final int PARTIAL = (1 << 0); // < partial - need to run through forward trie
-    static final int MATCH = (1 << 1); // < exact match - skip this one.
-    static final int SuppressInReverse = (1 << 0);
-    static final int AddToForward = (1 << 1);
+        static final int PARTIAL = (1 << 0); // < partial - need to run through forward trie
+        static final int MATCH = (1 << 1); // < exact match - skip this one.
+        static final int SuppressInReverse = (1 << 0);
+        static final int AddToForward = (1 << 1);
 
-    /**
-     * Create SimpleFilteredBreakIteratorBuilder using given locale
-     * @param loc the locale to get filtered iterators
-     */
-    public SimpleFilteredBreakIteratorBuilder(ULocale loc) {
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BRKITR_BASE_NAME, loc);
-        ICUResourceBundle exceptions = rb.findWithFallback("exceptions");
-        ICUResourceBundle breaks = exceptions.findWithFallback("SentenceBreak");
+        /**
+         * Create SimpleFilteredBreakIteratorBuilder using given locale
+         * @param loc the locale to get filtered iterators
+         */
+        public Builder(ULocale loc) {
+            ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+                    ICUResourceBundle.ICU_BRKITR_BASE_NAME, loc);
+            ICUResourceBundle exceptions = rb.findWithFallback("exceptions");
+            ICUResourceBundle breaks = exceptions.findWithFallback("SentenceBreak");
 
-        filterSet = new HashSet<String>();
-        if (breaks != null) {
-            for (int index = 0, size = breaks.getSize(); index < size; ++index) {
-                ICUResourceBundle b = (ICUResourceBundle) breaks.get(index);
-                String br = b.getString();
-                filterSet.add(br);
+            filterSet = new HashSet<String>();
+            if (breaks != null) {
+                for (int index = 0, size = breaks.getSize(); index < size; ++index) {
+                    ICUResourceBundle b = (ICUResourceBundle) breaks.get(index);
+                    String br = b.getString();
+                    filterSet.add(br);
+                }
             }
         }
-    }
 
-    /**
-     * Create SimpleFilteredBreakIteratorBuilder with no exception
-     */
-    public SimpleFilteredBreakIteratorBuilder() {
-        filterSet = new HashSet<String>();
-    }
-
-    @Override
-    public boolean suppressBreakAfter(String str) {
-        if (filterSet == null) {
+        /**
+         * Create SimpleFilteredBreakIteratorBuilder with no exception
+         */
+        public Builder() {
             filterSet = new HashSet<String>();
         }
-        return filterSet.add(str);
-    }
 
-    @Override
-    public boolean unsuppressBreakAfter(String str) {
-        if (filterSet == null) {
-            return false;
-        } else {
-            return filterSet.remove(str);
-        }
-    }
-
-    @Override
-    public BreakIterator build(BreakIterator adoptBreakIterator) {
-        CharsTrieBuilder builder = new CharsTrieBuilder();
-        CharsTrieBuilder builder2 = new CharsTrieBuilder();
-
-        int revCount = 0;
-        int fwdCount = 0;
-
-        int subCount = filterSet.size();
-        String[] ustrs = new String[subCount];
-        int[] partials = new int[subCount];
-
-        CharsTrie backwardsTrie = null; // i.e. ".srM" for Mrs.
-        CharsTrie forwardsPartialTrie = null; // Has ".a" for "a.M."
-
-        int i = 0;
-        for (String s : filterSet) {
-            ustrs[i] = s; // copy by value?
-            partials[i] = 0; // default: no partial
-            i++;
+        @Override
+        public boolean suppressBreakAfter(String str) {
+            if (filterSet == null) {
+                filterSet = new HashSet<String>();
+            }
+            return filterSet.add(str);
         }
 
-        for (i = 0; i < subCount; i++) {
-            int nn = ustrs[i].indexOf('.'); // TODO: non-'.' abbreviations
-            if (nn > -1 && (nn + 1) != ustrs[i].length()) {
-                // is partial.
-                // is it unique?
-                int sameAs = -1;
-                for (int j = 0; j < subCount; j++) {
-                    if (j == i)
-                        continue;
-                    if (ustrs[i].regionMatches(0, ustrs[j], 0, nn + 1)) {
-                        if (partials[j] == 0) { // hasn't been processed yet
-                            partials[j] = SuppressInReverse | AddToForward;
-                        } else if ((partials[j] & SuppressInReverse) != 0) {
-                            sameAs = j; // the other entry is already in the reverse table.
+        @Override
+        public boolean unsuppressBreakAfter(String str) {
+            if (filterSet == null) {
+                return false;
+            } else {
+                return filterSet.remove(str);
+            }
+        }
+
+        @Override
+        public BreakIterator build(BreakIterator adoptBreakIterator) {
+            CharsTrieBuilder builder = new CharsTrieBuilder();
+            CharsTrieBuilder builder2 = new CharsTrieBuilder();
+
+            int revCount = 0;
+            int fwdCount = 0;
+
+            int subCount = filterSet.size();
+            String[] ustrs = new String[subCount];
+            int[] partials = new int[subCount];
+
+            CharsTrie backwardsTrie = null; // i.e. ".srM" for Mrs.
+            CharsTrie forwardsPartialTrie = null; // Has ".a" for "a.M."
+
+            int i = 0;
+            for (String s : filterSet) {
+                ustrs[i] = s; // copy by value?
+                partials[i] = 0; // default: no partial
+                i++;
+            }
+
+            for (i = 0; i < subCount; i++) {
+                int nn = ustrs[i].indexOf('.'); // TODO: non-'.' abbreviations
+                if (nn > -1 && (nn + 1) != ustrs[i].length()) {
+                    // is partial.
+                    // is it unique?
+                    int sameAs = -1;
+                    for (int j = 0; j < subCount; j++) {
+                        if (j == i)
+                            continue;
+                        if (ustrs[i].regionMatches(0, ustrs[j], 0, nn + 1)) {
+                            if (partials[j] == 0) { // hasn't been processed yet
+                                partials[j] = SuppressInReverse | AddToForward;
+                            } else if ((partials[j] & SuppressInReverse) != 0) {
+                                sameAs = j; // the other entry is already in the reverse table.
+                            }
                         }
                     }
-                }
 
-                if ((sameAs == -1) && (partials[i] == 0)) {
-                    StringBuilder prefix = new StringBuilder(ustrs[i].substring(0, nn + 1));
-                    // first one - add the prefix to the reverse table.
-                    prefix.reverse();
-                    builder.add(prefix, PARTIAL);
+                    if ((sameAs == -1) && (partials[i] == 0)) {
+                        StringBuilder prefix = new StringBuilder(ustrs[i].substring(0, nn + 1));
+                        // first one - add the prefix to the reverse table.
+                        prefix.reverse();
+                        builder.add(prefix, PARTIAL);
+                        revCount++;
+                        partials[i] = SuppressInReverse | AddToForward;
+                    }
+                }
+            }
+
+            for (i = 0; i < subCount; i++) {
+                if (partials[i] == 0) {
+                    StringBuilder reversed = new StringBuilder(ustrs[i]).reverse();
+                    builder.add(reversed, MATCH);
                     revCount++;
-                    partials[i] = SuppressInReverse | AddToForward;
+                } else {
+                    // an optimization would be to only add the portion after the '.'
+                    // for example, for "Ph.D." we store ".hP" in the reverse table. We could just store "D." in the
+                    // forward,
+                    // instead of "Ph.D." since we already know the "Ph." part is a match.
+                    // would need the trie to be able to hold 0-length strings, though.
+                    builder2.add(ustrs[i], MATCH); // forward
+                    fwdCount++;
                 }
             }
-        }
 
-        for (i = 0; i < subCount; i++) {
-            if (partials[i] == 0) {
-                StringBuilder reversed = new StringBuilder(ustrs[i]).reverse();
-                builder.add(reversed, MATCH);
-                revCount++;
-            } else {
-                // an optimization would be to only add the portion after the '.'
-                // for example, for "Ph.D." we store ".hP" in the reverse table. We could just store "D." in the
-                // forward,
-                // instead of "Ph.D." since we already know the "Ph." part is a match.
-                // would need the trie to be able to hold 0-length strings, though.
-                builder2.add(ustrs[i], MATCH); // forward
-                fwdCount++;
+            if (revCount > 0) {
+                backwardsTrie = builder.build(StringTrieBuilder.Option.FAST);
             }
-        }
 
-        if (revCount > 0) {
-            backwardsTrie = builder.build(StringTrieBuilder.Option.FAST);
+            if (fwdCount > 0) {
+                forwardsPartialTrie = builder2.build(StringTrieBuilder.Option.FAST);
+            }
+            return new SimpleFilteredSentenceBreakIterator(adoptBreakIterator, forwardsPartialTrie, backwardsTrie);
         }
-
-        if (fwdCount > 0) {
-            forwardsPartialTrie = builder2.build(StringTrieBuilder.Option.FAST);
-        }
-        return new SimpleFilteredSentenceBreakIterator(adoptBreakIterator, forwardsPartialTrie, backwardsTrie);
     }
 }
