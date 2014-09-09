@@ -2888,8 +2888,8 @@ void CalendarTest::TestIslamicUmAlQura() {
     int32_t is_month = is_cal->get(UCAL_MONTH,status);
     int32_t is_year = is_cal->get(UCAL_YEAR,status);
     TEST_CHECK_STATUS;
-    if(is_day != 29 || is_month != IslamicCalendar::RABI_2 || is_year != 1395)
-        errln("unexpected conversion date month %i not %i or day %i not 20 or year %i not 1395", is_month, IslamicCalendar::RABI_2, is_day, is_year);
+    if(is_day != 24 || is_month != IslamicCalendar::RABI_2 || is_year != 1395)
+        errln("unexpected conversion date month %i not %i or day %i not 24 or year %i not 1395", is_month, IslamicCalendar::RABI_2, is_day, is_year);
         
     UDate date2 = is_cal->getTime(status);
     TEST_CHECK_STATUS;
