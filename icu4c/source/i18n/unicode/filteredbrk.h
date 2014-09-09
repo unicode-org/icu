@@ -29,6 +29,18 @@ U_NAMESPACE_BEGIN
  *  but with "Mr." as an exception, a filtered break iterator
  *  would consider the string "Mr. Smith" to be a single segment.
  *
+ * <p><b>Note:</b> An instance of {@link BreakIterator} returned by this builder
+ * class currently does not support following operations in this technology preview
+ * version:
+ * <ul>
+ *   <li>{@link BreakIterator#next(int32_t) next(int32_t n)}</li>
+ *   <li>{@link BreakIterator#previous(void) previous(void)}</li>
+ *   <li>{@link BreakIterator#following(int32_t) following(int32_t offset)}</li>
+ *   <li>{@link BreakIterator#preceding(int32_t) preceding(int32_t offset)}</li>
+ * </ul>
+ * When one of above methods is called, BreakIterator.DONE will be returned immediately
+ * without updating the internal state.
+ *
  * @internal technology preview
  */
 class U_I18N_API FilteredBreakIteratorBuilder : public UObject {

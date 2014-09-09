@@ -161,15 +161,15 @@ public:
 
   /* -- ITERATION -- */
   virtual int32_t first(void) { return fDelegate->first(); }
-  virtual int32_t preceding(int32_t offset) { return fDelegate->preceding(offset); }
-  virtual int32_t previous(void) { return fDelegate->previous(); }
+  virtual int32_t preceding(int32_t offset) { /* TODO: not implemented */ return UBRK_DONE; }
+  virtual int32_t previous(void) { /* TODO: not implemented */ return UBRK_DONE; }
   virtual UBool isBoundary(int32_t offset) { return fDelegate->isBoundary(offset); }
   virtual int32_t current(void) const { return fDelegate->current(); }
 
   virtual int32_t next(void);
 
-  virtual int32_t next(int32_t n) { return fDelegate->next(n); }
-  virtual int32_t following(int32_t offset) { return fDelegate->following(offset); }
+  virtual int32_t next(int32_t n) { /* TODO: not implemented */ return UBRK_DONE; }
+  virtual int32_t following(int32_t offset) { /* TODO: not implemented */ return UBRK_DONE; }
   virtual int32_t last(void) { return fDelegate->last(); }
 
 };
