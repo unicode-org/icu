@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.SimpleFilteredSentenceBreakIterator;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -16,6 +17,18 @@ import com.ibm.icu.util.ULocale;
  *  in the string "Mr. Smith" (resulting in two segments),
  *  but with "Mr." as an exception, a filtered break iterator
  *  would consider the string "Mr. Smith" to be a single segment.
+ *  
+ * <p><b>Note:</b> An instance of {@link BreakIterator} returned by this builder
+ * class currently does not support following operations in this technology preview
+ * version:
+ * <ul>
+ *   <li>{@link BreakIterator#next(int) next(int n)}</li>
+ *   <li>{@link BreakIterator#previous() previous()}</li>
+ *   <li>{@link BreakIterator#following(int) following(int offset)}</li>
+ *   <li>{@link BreakIterator#preceding(int) preceding(int offset)}</li>
+ * </ul>
+ * When one of above methods is called, {@link UnsupportedOperationException} will be
+ * thrown.
  *
  * @author tomzhang
  * 
@@ -39,7 +52,7 @@ public abstract class FilteredBreakIteratorBuilder {
      */
     @Deprecated
     public static FilteredBreakIteratorBuilder createInstance(ULocale where) {
-        FilteredBreakIteratorBuilder ret = new SimpleFilteredBreakIteratorBuilder(where);
+        FilteredBreakIteratorBuilder ret = new SimpleFilteredSentenceBreakIterator.Builder(where);
         return ret;
     }
 
@@ -52,7 +65,7 @@ public abstract class FilteredBreakIteratorBuilder {
      */
     @Deprecated
     public static FilteredBreakIteratorBuilder createInstance() {
-        FilteredBreakIteratorBuilder ret = new SimpleFilteredBreakIteratorBuilder();
+        FilteredBreakIteratorBuilder ret = new SimpleFilteredSentenceBreakIterator.Builder();
         return ret;
     }
 
