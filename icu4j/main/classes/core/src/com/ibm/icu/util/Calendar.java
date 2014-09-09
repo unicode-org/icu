@@ -1126,8 +1126,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WEEKEND_ONSET
      * @see #WEEKEND_CEASE
      * @see #getDayOfWeekType
-     * @stable ICU 2.0
-     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
+     * @deprecated ICU 54 use {@link #getWeekDataForRegion(String)}, {@link #getWeekData()}, {@link #setWeekData(WeekData)}
      */
     @Deprecated
     public static final int WEEKDAY = 0;
@@ -1139,8 +1138,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WEEKEND_ONSET
      * @see #WEEKEND_CEASE
      * @see #getDayOfWeekType
-     * @stable ICU 2.0
-     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
+     * @deprecated  ICU 54 use {@link #getWeekDataForRegion(String)}, {@link #getWeekData()}, {@link #setWeekData(WeekData)}
      */
     @Deprecated
     public static final int WEEKEND = 1;
@@ -1153,8 +1151,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WEEKEND
      * @see #WEEKEND_CEASE
      * @see #getDayOfWeekType
-     * @stable ICU 2.0
-     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
+     * @deprecated ICU 54 use {@link #getWeekDataForRegion(String)}, {@link #getWeekData()}, {@link #setWeekData(WeekData)}
      */
     @Deprecated
     public static final int WEEKEND_ONSET = 2;
@@ -1167,8 +1164,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WEEKEND
      * @see #WEEKEND_ONSET
      * @see #getDayOfWeekType
-     * @stable ICU 2.0
-     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
+     * @deprecated ICU 54 use {@link #getWeekDataForRegion(String)}, {@link #getWeekData()}, {@link #setWeekData(WeekData)}
      */
     @Deprecated
     public static final int WEEKEND_CEASE = 3;
@@ -4338,8 +4334,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #getWeekendTransition
      * @see #isWeekend(Date)
      * @see #isWeekend()
-     * @stable ICU 2.0
-     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
+     * @deprecated ICU 54 use {@link #getWeekDataForRegion(String)}, {@link #getWeekData()}, {@link #setWeekData(WeekData)}
      */
     @Deprecated
     public int getDayOfWeekType(int dayOfWeek) {
@@ -4384,8 +4379,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #getDayOfWeekType
      * @see #isWeekend(Date)
      * @see #isWeekend()
-     * @stable ICU 2.0
-     * @deprecated use getWeekDataForRegion, getWeekData, setWeekData
+     * @deprecated ICU 54 use {@link #getWeekDataForRegion(String)}, {@link #getWeekData()}, {@link #setWeekData(WeekData)}
      */
     @Deprecated
     public int getWeekendTransition(int dayOfWeek) {
@@ -4517,37 +4511,68 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Simple, immutable struct-like class for access to the CLDR weekend data.
+     * 
+     * @draft ICU 54
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final class WeekData {
         
         /**
          * the first day of the week, where 1 = Sunday and 7 = Saturday
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
          */
         public final int firstDayOfWeek;
         /**
          * the minimal number of days in the first week
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
          */
         public final int minimalDaysInFirstWeek;
         /**
          * the onset day, where 1 = Sunday and 7 = Saturday
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
          */
         public final int weekendOnset;
         /**
          * the onset time in millis during the onset day
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
          */
         public final int weekendOnsetMillis;
         /**
          * the cease day, where 1 = Sunday and 7 = Saturday
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
          */
         public final int weekendCease;
         /**
          * the cease time in millis during the cease day. Exclusive, so the max is 24:00:00.000.
          * Note that this will format as 00:00 the next day.
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
          */
         public final int weekendCeaseMillis;
 
         /**
          * Constructor
+         * 
+         * @param fdow the first day of the week, where 1 = Sunday and 7 = Saturday
+         * @param mdifw the minimal number of days in the first week
+         * @param weekendOnset the onset day, where 1 = Sunday and 7 = Saturday
+         * @param weekendOnsetMillis the onset time in millis during the onset day
+         * @param weekendCease the cease day, where 1 = Sunday and 7 = Saturday
+         * @param weekendCeaseMillis the cease time in millis during the cease day.
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
          */
         public WeekData(int fdow, int mdifw,
                 int weekendOnset, int weekendOnsetMillis,
@@ -4560,11 +4585,24 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             this.weekendCeaseMillis = weekendCeaseMillis;
         }
 
+        /**
+         * {@inheritDoc}
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
+         */
         @Override
         public int hashCode() {
             return ((((firstDayOfWeek * 37 + minimalDaysInFirstWeek) * 37 + weekendOnset) * 37
                     + weekendOnsetMillis) * 37 + weekendCease) * 37 + weekendCeaseMillis;
         }
+
+        /**
+         * {@inheritDoc}
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
+         */
         @Override
         public boolean equals(Object other) {
             if (this == other) {
@@ -4581,6 +4619,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                     && weekendCease == that.weekendCease
                     && weekendCeaseMillis == that.weekendCeaseMillis;
         }
+
+        /**
+         * {@inheritDoc}
+         * 
+         * @draft ICU 54
+         * @provisional This is a draft API and might change in a future release of ICU.
+         */
         @Override
         public String toString() {
             return "{" + firstDayOfWeek
@@ -4594,26 +4639,35 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return simple, immutable struct-like class for access to the CLDR weekend data.
+     * {@icu} Return simple, immutable struct-like class for access to the CLDR weekend data.
      * @param region The input region. The results are undefined if the region code is not valid.
      * @return the WeekData for the input region
+     * 
+     * @draft ICU 54
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static WeekData getWeekDataForRegion(String region) {
         return WEEK_DATA_CACHE.createInstance(region, region);
     }
     
     /**
-     * Return simple, immutable struct-like class for access to the weekend data in this calendar.
+     * {@icu} Return simple, immutable struct-like class for access to the weekend data in this calendar.
      * @return the WeekData for this calendar.
+     * 
+     * @draft ICU 54
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public WeekData getWeekData() {
         return new WeekData(firstDayOfWeek, minimalDaysInFirstWeek, weekendOnset, weekendOnsetMillis, weekendCease, weekendCeaseMillis);
     }
     
     /**
-     * Set data in this calendar based on the WeekData input.
+     * {@icu} Set data in this calendar based on the WeekData input.
      * @param wdata The week data to use
      * @return this, for chaining
+     * 
+     * @draft ICU 54
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public Calendar setWeekData(WeekData wdata) {
         setFirstDayOfWeek(wdata.firstDayOfWeek);
