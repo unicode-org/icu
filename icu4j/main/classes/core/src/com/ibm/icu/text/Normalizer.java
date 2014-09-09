@@ -149,24 +149,19 @@ public final class Normalizer implements Cloneable {
         private final Normalizer2 normalizer2;
     }
     private static final class NFDModeImpl {
-        private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getNFCInstance().decomp);
+        private static final ModeImpl INSTANCE = new ModeImpl(Normalizer2.getNFDInstance());
     }
     private static final class NFKDModeImpl {
-        private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getNFKCInstance().decomp);
+        private static final ModeImpl INSTANCE = new ModeImpl(Normalizer2.getNFKDInstance());
     }
     private static final class NFCModeImpl {
-        private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getNFCInstance().comp);
+        private static final ModeImpl INSTANCE = new ModeImpl(Normalizer2.getNFCInstance());
     }
     private static final class NFKCModeImpl {
-        private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getNFKCInstance().comp);
+        private static final ModeImpl INSTANCE = new ModeImpl(Normalizer2.getNFKCInstance());
     }
     private static final class FCDModeImpl {
-        private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getFCDNormalizer2());
+        private static final ModeImpl INSTANCE = new ModeImpl(Norm2AllModes.getFCDNormalizer2());
     }
 
     private static final class Unicode32 {
@@ -174,22 +169,22 @@ public final class Normalizer implements Cloneable {
     }
     private static final class NFD32ModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFCInstance().decomp,
+            new ModeImpl(new FilteredNormalizer2(Normalizer2.getNFDInstance(),
                                                  Unicode32.INSTANCE));
     }
     private static final class NFKD32ModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFKCInstance().decomp,
+            new ModeImpl(new FilteredNormalizer2(Normalizer2.getNFKDInstance(),
                                                  Unicode32.INSTANCE));
     }
     private static final class NFC32ModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFCInstance().comp,
+            new ModeImpl(new FilteredNormalizer2(Normalizer2.getNFCInstance(),
                                                  Unicode32.INSTANCE));
     }
     private static final class NFKC32ModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFKCInstance().comp,
+            new ModeImpl(new FilteredNormalizer2(Normalizer2.getNFKCInstance(),
                                                  Unicode32.INSTANCE));
     }
     private static final class FCD32ModeImpl {
@@ -875,8 +870,7 @@ public final class Normalizer implements Cloneable {
      */
     public static String normalize(int char32, Mode mode, int options) {
         if(mode == NFD && options == 0) {
-            String decomposition =
-                Norm2AllModes.getNFCInstance().impl.getDecomposition(char32);
+            String decomposition = Normalizer2.getNFCInstance().getDecomposition(char32);
             if(decomposition == null) {
                 decomposition = UTF16.valueOf(char32);
             }
