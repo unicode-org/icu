@@ -970,6 +970,9 @@ ucol_normalizeShortDefinitionString(const char *source,
  * Get a sort key for a string from a UCollator.
  * Sort keys may be compared using <TT>strcmp</TT>.
  *
+ * Note that sort keys are often less efficient than simply doing comparison.  
+ * For more details, see the ICU User Guide.
+ *
  * Like ICU functions that write to an output buffer, the buffer contents
  * is undefined if the buffer capacity (resultLength parameter) is too small.
  * Unlike ICU functions that write a string to an output buffer,
