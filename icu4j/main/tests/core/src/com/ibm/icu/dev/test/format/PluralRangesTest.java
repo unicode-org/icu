@@ -12,7 +12,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.PluralRanges;
-import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.Factory;
 import com.ibm.icu.text.PluralRules.StandardPluralCategories;
 import com.ibm.icu.util.Currency;

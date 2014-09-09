@@ -848,6 +848,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }        
     }
     
+    @SuppressWarnings("unused")
     private void assertDefaultLoadingStatus(String msg, int result) {
         assertEqualLoadingStatus(msg, ICUResourceBundle.FROM_DEFAULT, result);
     }

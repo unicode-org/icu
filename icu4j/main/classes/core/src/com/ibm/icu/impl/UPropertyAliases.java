@@ -308,8 +308,6 @@ public final class UPropertyAliases {
     
     /**
      * Returns a value enum given a property enum and one of its value names. Does not throw.
-     * @param property 
-     * @param alias
      * @return value enum, or UProperty.UNDEFINED if not defined for that property
      * @internal
      * @deprecated This API is ICU internal only.

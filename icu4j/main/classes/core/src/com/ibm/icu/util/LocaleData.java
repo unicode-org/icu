@@ -6,7 +6,6 @@
  */
 package com.ibm.icu.util;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;

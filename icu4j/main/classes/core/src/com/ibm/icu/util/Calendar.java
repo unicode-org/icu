@@ -4567,6 +4567,12 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
         @Override
         public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (!(other instanceof WeekData)) {
+                return false;
+            }
             WeekData that = (WeekData) other;
             return firstDayOfWeek == that.firstDayOfWeek
                     && minimalDaysInFirstWeek == that.minimalDaysInFirstWeek

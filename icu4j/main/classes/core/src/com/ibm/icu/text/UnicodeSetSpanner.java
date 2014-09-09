@@ -16,9 +16,9 @@ import com.ibm.icu.util.OutputInt;
  * its inverse. That is, the code spans, then spans for the inverse, then spans, and so on.
  * For the inverse, the following mapping is used:</p>
  * <ul>
- * <li>{@link SpanCondition.SIMPLE} → {@link SpanCondition.NOT_CONTAINED}</li>
- * <li>{@link SpanCondition.CONTAINED} → {@link SpanCondition.NOT_CONTAINED}</li>
- * <li>{@link SpanCondition.NOT_CONTAINED} → {@link SpanCondition.SIMPLE}</li>
+ * <li>{@link UnicodeSet.SpanCondition#SIMPLE} → {@link UnicodeSet.SpanCondition#NOT_CONTAINED}</li>
+ * <li>{@link UnicodeSet.SpanCondition#CONTAINED} → {@link UnicodeSet.SpanCondition#NOT_CONTAINED}</li>
+ * <li>{@link UnicodeSet.SpanCondition#NOT_CONTAINED} → {@link UnicodeSet.SpanCondition#SIMPLE}</li>
  * </ul>
  * These are actually not complete inverses. However, the alternating works because there are no gaps.
  * For example, with [a{ab}{bc}], you get the following behavior when scanning forward:

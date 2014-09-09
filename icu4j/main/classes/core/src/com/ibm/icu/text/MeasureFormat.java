@@ -16,7 +16,6 @@ import java.io.InvalidObjectException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
-import java.nio.Buffer;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Arrays;
@@ -467,13 +466,6 @@ public class MeasureFormat extends UFormat {
         }
     }
 
-    /**
-     * @param affix
-     * @param unit
-     * @param resolvedCategory 
-     * @param result 
-     * @return
-     */
     private void appendReplacingCurrency(String affix, Currency unit, StandardPluralCategories resolvedCategory, StringBuilder result) {
         String replacement = "¤";
         int pos = affix.indexOf(replacement);
