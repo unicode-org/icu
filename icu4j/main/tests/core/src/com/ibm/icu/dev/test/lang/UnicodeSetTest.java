@@ -11,7 +11,6 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,11 +35,11 @@ import com.ibm.icu.text.UnicodeMatcher;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSet.ComparisonStyle;
 import com.ibm.icu.text.UnicodeSet.EntryRange;
+import com.ibm.icu.text.UnicodeSet.SpanCondition;
+import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.text.UnicodeSetSpanner;
 import com.ibm.icu.text.UnicodeSetSpanner.CountMethod;
-import com.ibm.icu.text.UnicodeSet.SpanCondition;
 import com.ibm.icu.text.UnicodeSetSpanner.TrimOption;
-import com.ibm.icu.text.UnicodeSetIterator;
 
 /**
  * @test
@@ -2408,10 +2407,10 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("", "M, a-c", CollectionUtilities.join(us1.ranges(), ", "));
         
         // Sample code
-        for (EntryRange range : us1.ranges()) { 
+        for (@SuppressWarnings("unused") EntryRange range : us1.ranges()) { 
             // do something with code points between range.codepointEnd and range.codepointEnd; 
         }
-        for (String s : us1.strings()) { 
+        for (@SuppressWarnings("unused") String s : us1.strings()) { 
             // do something with each string;
         }
 

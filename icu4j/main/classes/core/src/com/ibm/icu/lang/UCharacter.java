@@ -14,7 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.IllegalIcuArgumentException;
-import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;

@@ -5748,6 +5748,7 @@ public class TestCharset extends TestFmwk {
 
         int size = set.size();
         for (int i = 0; i < size; i++) {
+            @SuppressWarnings("unused")
             CharBuffer input = CharBuffer.wrap(Character.toChars(set.charAt(i)));
             encoder.reset();
             try {

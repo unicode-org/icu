@@ -11,7 +11,6 @@ import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -37,7 +36,6 @@ public class NumberFormatSpecificationTest extends TestFmwk {
     }
     
     public void TestNfSetters() {
-        double num = 1234.567;
         NumberFormat nf = nfWithPattern("#,##0.##");
         nf.setMaximumIntegerDigits(5);
         nf.setMinimumIntegerDigits(4);

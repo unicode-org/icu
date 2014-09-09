@@ -3926,7 +3926,7 @@ class CharsetMBCS extends CharsetICU {
 
             /* no mapping */
             cr[0] = CoderResult.unmappableForLength(length);
-            return (int) cp;
+            return cp;
         }
 
         /*

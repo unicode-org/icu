@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.text;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 
 import com.ibm.icu.text.PluralRules.StandardPluralCategories;
@@ -272,7 +273,14 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof PluralRanges ? matrix.equals((PluralRanges) other) : false;
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof PluralRanges)) {
+            return false;
+        }
+        PluralRanges otherPR = (PluralRanges)other;
+        return matrix.equals(otherPR.matrix) && Arrays.equals(explicit, otherPR.explicit);
     }
 
     @Override
