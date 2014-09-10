@@ -3839,13 +3839,13 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/ResourceBundleWrapper.java svneol=n
 icu4j/main/classes/core/src/com/ibm/icu/impl/Row.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/RuleCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SimpleCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/SimpleFilteredSentenceBreakIterator.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/SimpleFilteredSentenceBreakIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SimplePatternFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SoftCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/SortedSetRelation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringPrepDataReader.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/TZDBTimeZoneNames.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/TZDBTimeZoneNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TextTrieMap.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneAdapter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneGenericNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3935,7 +3935,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/locale/AsciiUtil.java svneol=native
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/BaseLocale.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/Extension.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/InternalLocaleBuilder.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/locale/KeyTypeData.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/locale/KeyTypeData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LanguageTag.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LocaleExtensions.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LocaleObjectCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3967,7 +3967,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/BreakCTDictionary.java svneol=nativ
 icu4j/main/classes/core/src/com/ibm/icu/text/BreakDictionary.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/BreakIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/BreakIteratorFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/BurmeseBreakEngine.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/BurmeseBreakEngine.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/BytesDictionaryMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CanonicalIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CharsDictionaryMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4002,7 +4002,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/DictionaryMatcher.java svneol=nativ
 icu4j/main/classes/core/src/com/ibm/icu/text/DigitList.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/DisplayContext.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/DurationFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/FilteredBreakIteratorBuilder.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/FilteredBreakIteratorBuilder.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/FilteredNormalizer2.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/IDNA.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/IdentifierInfo.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4446,7 +4446,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatRegistrationTe
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatRegressionTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatRoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatSerialTestData.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatSpecificationTest.java -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatSpecificationTest.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberRegression.java svneol=native#text/plain%3Bcharset%3Dutf-8
