@@ -1,4 +1,4 @@
-# Fractional UCA Table, generated from standard UCA
+﻿# Fractional UCA Table, generated from standard UCA
 # 2014-08-11 [MS]
 # VERSION: UCA=7.0.0, UCD=7.0.0
 # For a description of the format and usage, see
