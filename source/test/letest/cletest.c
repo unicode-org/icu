@@ -7,6 +7,8 @@
  *******************************************************************************
  */
 
+#ifndef USING_ICULEHB /* C API not available under HB */
+
 #include "unicode/utypes.h"
 #include "unicode/ubidi.h"
 #include "unicode/uscript.h"
@@ -742,3 +744,4 @@ U_CFUNC void addCTests(TestNode **root)
 }
 
 
+#endif

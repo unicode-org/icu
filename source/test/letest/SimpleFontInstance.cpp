@@ -17,7 +17,10 @@
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
 
+#ifndef USING_ICULEHB
 #include "CanonShaping.h"
+#endif
+
 #include "SimpleFontInstance.h"
 
 SimpleFontInstance::SimpleFontInstance(float pointSize, LEErrorCode &status)
@@ -40,6 +43,7 @@ SimpleFontInstance::~SimpleFontInstance()
 
 const void *SimpleFontInstance::getFontTable(LETag tableTag) const
 {
+#ifndef USING_ICULEHB
     if (tableTag == LE_GSUB_TABLE_TAG) {
         return CanonShaping::glyphSubstitutionTable;
     }
@@ -47,7 +51,7 @@ const void *SimpleFontInstance::getFontTable(LETag tableTag) const
     if (tableTag == LE_GDEF_TABLE_TAG) {
         return CanonShaping::glyphDefinitionTable;
     }
-
+#endif
     return NULL;
 }
 
