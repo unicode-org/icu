@@ -97,6 +97,13 @@ public:
     UBool startsWithPlaceholder(int32_t id) const;
 
     /**
+     * Returns this pattern with none of the placeholders.
+     */
+    const UnicodeString &getPatternWithNoPlaceholders() const {
+        return noPlaceholders;
+    }
+
+    /**
      * Formats given value.
      */
     UnicodeString &format(
