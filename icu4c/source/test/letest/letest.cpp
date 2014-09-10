@@ -972,7 +972,9 @@ static void addAllTests(TestNode **root)
     addTest(root, &DataDrivenTest,  "layout/DataDrivenTest");
     addTest(root, &GlyphToCharTest, "paragraph/GlyphToCharTest");
 
+#ifndef USING_ICULEHB
     addCTests(root);
+#endif
 }
 
 /* returns the path to icu/source/data/out */

@@ -13,6 +13,7 @@ AC_INIT([ICU],
         [International Components for Unicode],
         [http://icu-project.org])
 
+AC_CONFIG_MACRO_DIR([config/m4])
 AC_CONFIG_SRCDIR([common/unicode/utypes.h])
 
 PACKAGE="icu"
@@ -133,6 +134,10 @@ AC_PROG_CC([clang gcc cc c99 c89 xlc_r xlc cl.exe icc])
 # Make sure that we try clang++ first, which provides C++11 support.
 # The g++ compiler is less likely to support C++11.
 AC_PROG_CXX([clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC])
+
+# pkg-config is needed for harfbuzz support
+PKG_PROG_PKG_CONFIG([0.20])
+PKG_CHECK_MODULES(ICULEHB, icu-le-hb, have_icu_le_hb=true, :)
 
 # Ensure that if CXXFLAGS/CFLAGS were not set when calling configure, set it correctly based on (enable/disable) debug or release option
 # The release mode use is the default one for autoconf
@@ -1068,6 +1073,19 @@ AC_ARG_ENABLE(layout,
 		esac],
 	layout=true)
 ICU_CONDITIONAL(LAYOUT, test "$layout" = true)
+
+# Enable/disable layoutex
+AC_ARG_ENABLE(layoutex,
+	[  --enable-layoutex         build ICU's Paragraph Layout library [default=same-as-layout].
+            If not building with the ICU Layout library, then icu-le-hb must be installed via pkg-config.
+            See http://harfbuzz.org],
+	[case "${enableval}" in
+		yes) layoutex=true ;;
+		no)  layoutex=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-layoutex) ;;
+		esac],
+	layoutex=$layout)
+ICU_CONDITIONAL(LAYOUTEX, test "$layoutex" = true)
 
 # Enable/disable tools
 AC_ARG_ENABLE(tools,

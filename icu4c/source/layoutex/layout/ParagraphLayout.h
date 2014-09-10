@@ -38,11 +38,14 @@ U_NAMESPACE_BEGIN
  * same font, script and direction, and will create a <code>LayoutEngine</code> object for each run.
  * The <code>LayoutEngine</code> will transform the characters into glyph codes in visual order.
  *
- * Clients can use this to break a paragraph into lines, and to display the glyphs in each line. 
+ * Clients can use this to break a paragraph into lines, and to display the glyphs in each line.
  *
  * Note that {@link icu::LayoutEngine} is deprecated, but this class is not.
  * You may use this class with the HarfBuzz icu-le-hb wrapper,
  *  see http://www.freedesktop.org/wiki/Software/HarfBuzz/
+ *
+ *  See http://userguide.icu-project.org/layoutengine for special build instructions.
+ *
  * @see icu::LayoutEngine
  */
 class U_LAYOUTEX_API ParagraphLayout : public UObject

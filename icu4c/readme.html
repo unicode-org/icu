@@ -246,7 +246,13 @@
       In the future, passing "<tt>--enable-layout</tt>" to configure
       will be required to
      enable the layout engine.</p>
-    
+    <p>
+      Note that the ParagraphLayout (layoutex) library is not deprecated.
+      There is a new option, <tt>--enable-layoutex</tt> which will build
+      the ParagraphLayout library using <a href="http://harfbuzz.org">HarfBuzz</a>
+      instead of ICU as the layout engine. See <a href="http://userguide.icu-project.org/layoutengine">
+        the users' guide</a> for more information about how to build.
+    </p>
     <h3>Deprecation: Collation Short Strings</h3>
     <p>The collation short naming scheme and its API functions are deprecated. 
     Use ucol_open() with language tag collation keywords instead (see <a href="http://userguide.icu-project.org/collation/api">Collation API Details</a>). For example, <code>ucol_open("de-u-co-phonebk-ka-shifted", &amp;errorCode)</code>
