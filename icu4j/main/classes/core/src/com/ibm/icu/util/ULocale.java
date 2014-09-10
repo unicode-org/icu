@@ -3361,7 +3361,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             //  keys are using ASCII alphabetic letters only. We won't add any new key
             //  that is not compatible with the BCP 47 syntax. Therefore, we assume
             //  a valid key consist from [0-9a-zA-Z], no symbols.
-            if (keyword.matches("[0-9a-zA-Z]*")) {
+            if (keyword.matches("[0-9a-zA-Z]+")) {
                 legacyKey = AsciiUtil.toLowerString(keyword);
             }
         }

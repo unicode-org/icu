@@ -4563,7 +4563,7 @@ public class ULocaleTest extends TestFmwk {
                 {"variableTop",     "00A0",             "00a0"},        // valid codepoints type
                 {"variableTop",     "wxyz",             "wxyz"},        // invalid codepoints type - return as is for now
                 {"kr",              "space-punct",      "space-punct"}, // valid reordercode type
-                {"kr",              "digit-spacepunct", "digit-spacepunct"},    // invalid reordercode type, bad ok for legacy syntax
+                {"kr",              "digit-spacepunct", "digit-spacepunct"},    // invalid reordercode type, but ok for legacy syntax
         };
 
         for (String[] d : DATA) {
