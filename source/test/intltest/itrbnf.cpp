@@ -1961,7 +1961,7 @@ IntlTestRBNF::TestSetDecimalFormatSymbols() {
 
 void IntlTestRBNF::TestPluralRules() {
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeString enRules("%digits-ordinal:-x: −>>;0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th})$;");
+    UnicodeString enRules("%digits-ordinal:-x: ->>;0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th})$;");
     UParseError parseError;
     RuleBasedNumberFormat enFormatter(enRules, Locale::getEnglish(), parseError, status);
     if (U_FAILURE(status)) {
