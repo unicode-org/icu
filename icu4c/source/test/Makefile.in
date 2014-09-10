@@ -14,7 +14,11 @@ include $(top_builddir)/icudefs.mk
 subdir = test
 
 @ICUIO_TRUE@IOTEST = iotest
-@LAYOUT_TRUE@LETEST = letest
+
+# the letest directory depends on layoutex.
+# If you have layoutex but not layout, you will be using
+# harfbuzz.
+@LAYOUTEX_TRUE@LETEST = letest
 
 # status dir
 STATUS_TMP = tmp
