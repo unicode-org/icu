@@ -1081,6 +1081,7 @@ SimpleDateFormat::initNumberFormatters(const Locale &locale,UErrorCode &status) 
             }
         } else {
             status = U_MEMORY_ALLOCATION_ERROR;
+            return; // exit with the allocation error
         }
     }
     umtx_unlock(&LOCK);
