@@ -80,7 +80,17 @@ public class CharsetCallback {
     private static final String ESCAPE_CSS2  = "S";
 
     /*
+     * IS_DEFAULT_IGNORABLE_CODE_POINT
+     * This is to check if a code point has the default ignorable unicode property.
+     * As such, this list needs to be updated if the ignorable code point list ever
+     * changes.
+     * To avoid dependency on other code, this list is hard coded here.
+     * When an ignorable code point is found and is unmappable, the default callbacks
+     * will ignore them.
+     * For a list of the default ignorable code points, use this link: http://unicode.org/cldr/utility/list-unicodeset.jsp?a=[%3ADI%3A]&g=
+     *
      * This list should be sync with the one in ucnv_err.c
+     * 
      */
     private static boolean IS_DEFAULT_IGNORABLE_CODE_POINT(int c) {
         return ((c == 0x00AD) || 

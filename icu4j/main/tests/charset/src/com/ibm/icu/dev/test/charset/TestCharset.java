@@ -5738,25 +5738,41 @@ public class TestCharset extends TestFmwk {
     }
     
     public void TestDefaultIgnorableCallback() {
-        String name = "euc-jp-2007";
-        String pattern = "[:Default_Ignorable_Code_Point:]";
-        UnicodeSet set = new UnicodeSet(pattern);
-        CharsetEncoder encoder =  CharsetICU.forNameICU(name).newEncoder();
+        String cnv_name = "euc-jp-2007";
+        String pattern_ignorable = "[:Default_Ignorable_Code_Point:]";
+        String pattern_not_ignorable = "[:^Default_Ignorable_Code_Point:]";
+        UnicodeSet set_ignorable = new UnicodeSet(pattern_ignorable);
+        UnicodeSet set_not_ignorable = new UnicodeSet(pattern_not_ignorable);
+        CharsetEncoder encoder =  CharsetICU.forNameICU(cnv_name).newEncoder();
 
         // set callback for the converter
-        encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+        encoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+        encoder.onMalformedInput(CodingErrorAction.REPLACE);
 
-        int size = set.size();
+        // test ignorable code points are ignored
+        int size = set_ignorable.size();
         for (int i = 0; i < size; i++) {
-            @SuppressWarnings("unused")
-            CharBuffer input = CharBuffer.wrap(Character.toChars(set.charAt(i)));
             encoder.reset();
             try {
-                encoder.encode(CharBuffer.wrap(Character.toChars(set.charAt(i))));
+                if(encoder.encode(CharBuffer.wrap(Character.toChars(set_ignorable.charAt(i)))).position() > 0) {
+                    errln("Callback should have ignore default ignorable: 0x" + Integer.toHexString(set_ignorable.charAt(i)));
+                }
             } catch (Exception ex) {
-                errln("Callback should have ignore default ignorable: 0x" + Integer.toHexString(set.charAt(i)));
+                errln("Error received converting 0x" + Integer.toHexString(set_ignorable.charAt(i)));
             }
-
+        }
+        
+        // test non-ignorable code points are not ignored
+        size = set_not_ignorable.size();
+        for (int i = 0; i < size; i++) {
+            encoder.reset();
+            try {
+                if(encoder.encode(CharBuffer.wrap(Character.toChars(set_not_ignorable.charAt(i)))).position() > 0) {
+                    errln("Callback should not have ignored: 0x" + Integer.toHexString(set_not_ignorable.charAt(i)));
+                }
+            } catch (Exception ex) {
+                errln("Error received converting 0x" + Integer.toHexString(set_not_ignorable.charAt(i)));
+            }
         }
     }
 }
