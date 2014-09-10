@@ -112,6 +112,19 @@ UBool QuantityFormatter::isValid() const {
     return formatters[0] != NULL;
 }
 
+const SimplePatternFormatter *QuantityFormatter::getByVariant(
+        const char *variant) const {
+    int32_t pluralIndex = getPluralIndex(variant);
+    if (pluralIndex == -1) {
+        pluralIndex = 0;
+    }
+    const SimplePatternFormatter *pattern = formatters[pluralIndex];
+    if (pattern == NULL) {
+        pattern = formatters[0];
+    }
+    return pattern;
+}
+
 UnicodeString &QuantityFormatter::format(
             const Formattable& quantity,
             const NumberFormat &fmt,
@@ -147,14 +160,7 @@ UnicodeString &QuantityFormatter::format(
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    int32_t pluralIndex = getPluralIndex(buffer.data());
-    if (pluralIndex == -1) {
-        pluralIndex = 0;
-    }
-    const SimplePatternFormatter *pattern = formatters[pluralIndex];
-    if (pattern == NULL) {
-        pattern = formatters[0];
-    }
+    const SimplePatternFormatter *pattern = getByVariant(buffer.data());
     if (pattern == NULL) {
         status = U_INVALID_STATE_ERROR;
         return appendTo;

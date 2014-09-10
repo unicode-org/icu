@@ -81,6 +81,13 @@ public:
     UBool isValid() const;
 
     /**
+     * Gets the pattern formatter that would be used for a particular variant.
+     * If isValid() returns TRUE, this method is guaranteed to return a
+     * non-NULL value.
+     */
+    const SimplePatternFormatter *getByVariant(const char *variant) const;
+
+    /**
      * Formats a quantity with this object appending the result to appendTo.
      * At least the "other" variant must be added to this object for this
      * method to work.
