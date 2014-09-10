@@ -58,36 +58,10 @@
  * To avoid dependency on other code, this list is hard coded here.
  * When an ignorable code point is found and is unmappable, the default callbacks
  * will ignore them.
- *    (c == 0x00AD) || \                     (Latin-1 Punctuation and Symbols)
- *    (c == 0x034F) || \                     (Combining Diacritical Marks Grapheme Joiner)
- *    (c == 0x061C) || \                     (Arabic Format Character)
- *    (c == 0x115F) || \                     (Hangul Jamo Old Initial Consonants)
- *    (c == 0x1160) || \                     (Hangul Jamo Medial Vowels)
- *    (0x17B4 <= c && c <= 0x17B5) || \      (Khmer Inherent Vowels)
- *    (0x180B <= c && c <= 0x180E) || \      (Mongolian Format Controls)
- *    (0x200B <= c && c <= 0x200F) || \      (General Punctuation Format Characters)
- *    (0x202A <= c && c <= 0x202E) || \      (General Punctuation Format Characters)
- *    (c == 0x2060) || \                     (General Punctuation Format Characters)
- *    (0x2066 <= c && c <= 0x2069) || \      (General Punctuation Format Characters)
- *    (0x2061 <= c && c <= 0x2064) || \      (General Punctuation Invisible Operators)
- *    (0x206A <= c && c <= 0x206F) || \      (General Punctuation Deprecated)
- *    (c == 0x3164) || \                     (Hangul Compatibility Jamo)
- *    (0x0FE00 <= c && c <= 0x0FE0F) || \    (Variation Selectors)
- *    (c == 0x0FEFF) || \                    (Arabic Presentation Forms B)
- *    (c == 0x0FFA0) || \                    (Halfwidth and Fullwidth Forms)
- *    (0x01BCA0  <= c && c <= 0x01BCA3) || \ (Shorthand Format Controls)
- *    (0x01D173 <= c && c <= 0x01D17A) || \  (Musical Symbols)
- *    (c == 0x0E0001) || \                   (Tag Identifiers)
- *    (0x0E0020 <= c && c <= 0x0E007F) || \  (Tag Components)
- *    (0x0E0100 <= c && c <= 0x0E01EF) || \  (Variation Selectors Supplement)
- *    (c == 0x2065) || \                     (Unassigned)
- *    (0x0FFF0 <= c && c <= 0x0FFF8) || \    (Unassigned)
- *    (c == 0x0E0000) || \                   (Unassigned)
- *    (0x0E0002 <= c && c <= 0x0E001F) || \  (Unassigned)
- *    (0x0E0080 <= c && c <= 0x0E00FF) || \  (Unassigned)
- *    (0x0E01F0 <= c && c <= 0x0E0FFF) \     (Unassigned)
+ * For a list of the default ignorable code points, use this link: http://unicode.org/cldr/utility/list-unicodeset.jsp?a=[%3ADI%3A]&g=
+ *
+ * This list should be sync with the one in CharsetCallback.java
  */
-
 #define IS_DEFAULT_IGNORABLE_CODE_POINT(c) (\
     (c == 0x00AD) || \
     (c == 0x034F) || \
