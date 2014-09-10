@@ -788,7 +788,7 @@ namespace {
  * Abstract iterator for identical-level string comparisons.
  * Returns FCD code points and handles temporary switching to NFD.
  */
-class NFDIterator : public UMemory {
+class NFDIterator : public UObject {
 public:
     NFDIterator() : index(-1), length(0) {}
     virtual ~NFDIterator() {}
