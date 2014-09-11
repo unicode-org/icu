@@ -2546,14 +2546,15 @@ uloc_toUnicodeLocaleType(const char* keyword, const char* value)
     return bcpType;
 }
 
-#define ISALPHANUM(c) (uprv_isASCIILetter(c) || ((c) >= '0') && ((c) <= '9'))
+#define UPRV_ISDIGIT(c) (((c) >= '0') && ((c) <= '9'))
+#define UPRV_ISALPHANUM(c) (uprv_isASCIILetter(c) || UPRV_ISDIGIT(c) )
 
 static UBool
 isWellFormedLegacyKey(const char* legacyKey)
 {
     const char* p = legacyKey;
     while (*p) {
-        if (!ISALPHANUM(*p)) {
+        if (!UPRV_ISALPHANUM(*p)) {
             return FALSE;
         }
         p++;
@@ -2572,7 +2573,7 @@ isWellFormedLegacyType(const char* legacyType)
                 return FALSE;
             }
             alphaNumLen = 0;
-        } else if (ISALPHANUM(*p)) {
+        } else if (UPRV_ISALPHANUM(*p)) {
             alphaNumLen++;
         } else {
             return FALSE;
