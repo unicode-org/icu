@@ -3410,10 +3410,12 @@ int32_t Calendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t w
     if (first < 0) {
         first += 7;
     }
-    int32_t nextFirst = julianDayToDayOfWeek(nextJan1Start + 1) - firstDayOfWeek;
-    if (nextFirst < 0) {
-        nextFirst += 7;
-    }
+
+    //// (nextFirst was not used below)
+    // int32_t nextFirst = julianDayToDayOfWeek(nextJan1Start + 1) - firstDayOfWeek;
+    // if (nextFirst < 0) {
+    //     nextFirst += 7;
+    //}
 
     int32_t minDays = getMinimalDaysInFirstWeek();
     UBool jan1InPrevYear = FALSE;  // January 1st in the year of WOY is the 1st week?  (i.e. first week is < minimal )

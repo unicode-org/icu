@@ -43,6 +43,7 @@
 #include "pkg_gencmn.h"
 #include "flagparser.h"
 #include "filetools.h"
+#include "charstr.h"
 
 #if U_HAVE_POPEN
 # include <unistd.h>
@@ -2078,32 +2079,33 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
     FILE *p = NULL;
     size_t n;
     static char buf[512] = "";
-    char cmdBuf[1024];
+    CharString cmdBuf;
     UErrorCode status = U_ZERO_ERROR;
     const char cmd[] = "icu-config --incpkgdatafile";
-
+    char dirBuf[1024] = "";
     /* #1 try the same path where pkgdata was called from. */
-    findDirname(progname, cmdBuf, 1024, &status);
+    findDirname(progname, dirBuf, UPRV_LENGTHOF(dirBuf), &status);
     if(U_SUCCESS(status)) {
+      cmdBuf.append(dirBuf, status);
       if (cmdBuf[0] != 0) {
-          uprv_strncat(cmdBuf, U_FILE_SEP_STRING, 1024);
+        cmdBuf.append( U_FILE_SEP_STRING, status );
       }
-      uprv_strncat(cmdBuf, cmd, 1023);
+      cmdBuf.append( cmd, status );
       
       if(verbose) {
-        fprintf(stdout, "# Calling icu-config: %s\n", cmdBuf);
+        fprintf(stdout, "# Calling icu-config: %s\n", cmdBuf.data());
       }
-      p = popen(cmdBuf, "r");
+      p = popen(cmdBuf.data(), "r");
     }
 
-    if(p == NULL || (n = fread(buf, 1, 511, p)) <= 0) {
+      if(p == NULL || (n = fread(buf, 1, UPRV_LENGTHOF(buf)-1, p)) <= 0) {
       if(verbose) {
         fprintf(stdout, "# Calling icu-config: %s\n", cmd);
       }
       pclose(p);
 
       p = popen(cmd, "r");
-      if(p == NULL || (n = fread(buf, 1, 511, p)) <= 0) {
+      if(p == NULL || (n = fread(buf, 1, UPRV_LENGTHOF(buf)-1, p)) <= 0) {
           fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
           return -1;
       }

@@ -2533,7 +2533,7 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
         char loc[ULOC_FULLNAME_CAPACITY] = "";
         uloc_addLikelySubtags(locale, loc, sizeof(loc), status);
         
-        prefRegionLength = uloc_getCountry(loc, prefRegion, sizeof(prefRegion), status);
+        /*prefRegionLength = */ uloc_getCountry(loc, prefRegion, sizeof(prefRegion), status);
     }
     
     // Read value from supplementalData

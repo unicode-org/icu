@@ -4907,7 +4907,6 @@ testBracketOverflow(void) {
     UErrorCode status = U_ZERO_ERROR;
     UBiDi* bidi;
     UChar src[100];
-    UChar dest[100];
     int32_t len;
 
     bidi = ubidi_open();

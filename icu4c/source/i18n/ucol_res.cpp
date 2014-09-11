@@ -465,7 +465,7 @@ CollationLoader::getCacheEntry(UErrorCode &errorCode) {
 
 const CollationCacheEntry *
 CollationLoader::makeCacheEntryFromRoot(
-        const Locale &loc,
+        const Locale &/*loc*/,
         UErrorCode &errorCode) const {
     if (U_FAILURE(errorCode)) {
         return NULL;
