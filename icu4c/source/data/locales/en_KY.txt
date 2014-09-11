@@ -9,16 +9,4 @@
 en_KY{
     %%Parent{"en_001"}
     Version{"2.1.6.69"}
-    unitsNarrow{
-        temperature{
-            celsius{
-                one{"{0}°C"}
-                other{"{0}°C"}
-            }
-            fahrenheit{
-                one{"{0}°"}
-                other{"{0}°"}
-            }
-        }
-    }
 }

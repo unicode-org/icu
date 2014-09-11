@@ -159,14 +159,4 @@ ps{
     layout{
         characters{"right-to-left"}
     }
-    units{
-        duration{
-            day{
-                dnam{"ورځ"}
-            }
-            year{
-                dnam{"کالونه"}
-            }
-        }
-    }
 }

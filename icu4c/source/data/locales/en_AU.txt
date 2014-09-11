@@ -566,28 +566,4 @@ en_AU{
             2{"{0} and {1}"}
         }
     }
-    units{
-        mass{
-            metric-ton{
-                dnam{"tonnes"}
-                one{"tonne"}
-                other{"{0} tonnes"}
-            }
-        }
-    }
-    unitsNarrow{
-        duration{
-            millisecond{
-                one{"{0} ms"}
-                other{"{0} ms"}
-            }
-        }
-    }
-    unitsShort{
-        length{
-            micrometer{
-                dnam{"µmetres"}
-            }
-        }
-    }
 }

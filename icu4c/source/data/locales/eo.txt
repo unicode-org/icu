@@ -161,12 +161,4 @@ eo{
             }
         }
     }
-    unitsShort{
-        duration{
-            month{
-                one{"{0} mon."}
-                other{"{0} mon."}
-            }
-        }
-    }
 }
