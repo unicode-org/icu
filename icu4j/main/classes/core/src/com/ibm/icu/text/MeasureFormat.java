@@ -129,8 +129,12 @@ public class MeasureFormat extends UFormat {
 
     private final transient ImmutableNumberFormat integerFormat;
 
-    private static final SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>> localeToUnitToStyleToCountToFormat
-    = new SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>>();
+    private final transient Map<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter>> unitToStyleToPerUnitPattern;
+    
+    private final transient EnumMap<FormatWidth, SimplePatternFormatter> styleToPerPattern;
+
+    private static final SimpleCache<ULocale, MeasureFormatData> localeMeasureFormatData
+    = new SimpleCache<ULocale, MeasureFormatData>();
 
     private static final SimpleCache<ULocale, NumericFormatters> localeToNumericDurationFormatters
     = new SimpleCache<ULocale,NumericFormatters>();
@@ -253,12 +257,11 @@ public class MeasureFormat extends UFormat {
      */
     public static MeasureFormat getInstance(ULocale locale, FormatWidth formatWidth, NumberFormat format) {
         PluralRules rules = PluralRules.forLocale(locale);
-        Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat;
         NumericFormatters formatters = null;
-        unitToStyleToCountToFormat = localeToUnitToStyleToCountToFormat.get(locale);
-        if (unitToStyleToCountToFormat == null) {
-            unitToStyleToCountToFormat = loadLocaleData(locale, rules);
-            localeToUnitToStyleToCountToFormat.put(locale, unitToStyleToCountToFormat);
+        MeasureFormatData data = localeMeasureFormatData.get(locale);
+        if (data == null) {
+            data = loadLocaleData(locale);
+            localeMeasureFormatData.put(locale, data);
         }
         if (formatWidth == FormatWidth.NUMERIC) {
             formatters = localeToNumericDurationFormatters.get(locale);
@@ -276,10 +279,12 @@ public class MeasureFormat extends UFormat {
                 formatWidth,
                 new ImmutableNumberFormat(format),
                 rules,
-                unitToStyleToCountToFormat,
+                data.unitToStyleToCountToFormat,
                 formatters,
                 new ImmutableNumberFormat(NumberFormat.getInstance(locale, formatWidth.getCurrencyStyle())),
-                new ImmutableNumberFormat(intFormat));
+                new ImmutableNumberFormat(intFormat),
+                data.unitToStyleToPerUnitPattern,
+                data.styleToPerPattern);
     }
 
     /**
@@ -491,6 +496,35 @@ public class MeasureFormat extends UFormat {
             result.append(affix.substring(pos+replacement.length()));
         }
     }
+    
+    /**
+     * Like formatMeasures but formats with a per unit.
+     * 
+     * Will format to a string such as "5 kilometers, 300 meters per hour."
+     * 
+     * @param appendTo the formatted string appended here.
+     * @param fieldPosition Identifies a field in the formatted text.
+     * @param perUnit for the example above would be MeasureUnit.HOUR.
+     * @param measures the measures to format.
+     * @return appendTo.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public StringBuilder formatMeasuresPer(
+            StringBuilder appendTo, FieldPosition fieldPosition, MeasureUnit perUnit, Measure... measures) {
+        FieldPosition fpos = new FieldPosition(
+                fieldPosition.getFieldAttribute(), fieldPosition.getField());
+        int offset = withPerUnit(
+                formatMeasures(new StringBuilder(), fpos, measures),
+                perUnit,
+                appendTo);
+        if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
+            fieldPosition.setBeginIndex(fpos.getBeginIndex() + offset);
+            fieldPosition.setEndIndex(fpos.getEndIndex() + offset);
+        }
+        return appendTo;
+    }
 
     /**
      * Formats a sequence of measures.
@@ -650,7 +684,9 @@ public class MeasureFormat extends UFormat {
                 this.unitToStyleToCountToFormat,
                 this.numericFormatters,
                 this.currencyFormat,
-                this.integerFormat);
+                this.integerFormat,
+                this.unitToStyleToPerUnitPattern,
+                this.styleToPerPattern);
     }
 
     private MeasureFormat(
@@ -661,7 +697,9 @@ public class MeasureFormat extends UFormat {
             Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat,
             NumericFormatters formatters,
             ImmutableNumberFormat currencyFormat,
-            ImmutableNumberFormat integerFormat) {
+            ImmutableNumberFormat integerFormat,
+            Map<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter>> unitToStyleToPerUnitPattern,
+            EnumMap<FormatWidth, SimplePatternFormatter> styleToPerPattern) {
         setLocale(locale, locale);
         this.formatWidth = formatWidth;
         this.numberFormat = format;
@@ -670,6 +708,8 @@ public class MeasureFormat extends UFormat {
         this.numericFormatters = formatters;
         this.currencyFormat = currencyFormat;
         this.integerFormat = integerFormat;
+        this.unitToStyleToPerUnitPattern = unitToStyleToPerUnitPattern;
+        this.styleToPerPattern = styleToPerPattern;
     }
 
     MeasureFormat() {
@@ -681,6 +721,8 @@ public class MeasureFormat extends UFormat {
         this.numericFormatters = null;
         this.currencyFormat = null;
         this.integerFormat = null;
+        this.unitToStyleToPerUnitPattern = null;
+        this.styleToPerPattern = null;
     }
 
     static class NumericFormatters {
@@ -715,12 +757,27 @@ public class MeasureFormat extends UFormat {
     /**
      * Returns formatting data for all MeasureUnits except for currency ones.
      */
-    private static Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> loadLocaleData(
-            ULocale locale, PluralRules rules) {
+    private static MeasureFormatData loadLocaleData(
+            ULocale locale) {
         QuantityFormatter.Builder builder = new QuantityFormatter.Builder();
         Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat
         = new HashMap<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>();
+        Map<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter>> unitToStyleToPerUnitPattern
+        = new HashMap<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter>>();
         ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
+        EnumMap<FormatWidth, SimplePatternFormatter> styleToPerPattern = new EnumMap<FormatWidth, SimplePatternFormatter>(FormatWidth.class);
+        for (FormatWidth styleItem : FormatWidth.values()) {
+            try {
+                ICUResourceBundle unitTypeRes = resource.getWithFallback(styleItem.resourceKey);
+                ICUResourceBundle compoundRes = unitTypeRes.getWithFallback("compound");
+                ICUResourceBundle perRes = compoundRes.getWithFallback("per");
+                styleToPerPattern.put(styleItem, SimplePatternFormatter.compile(perRes.getString()));
+            } catch (MissingResourceException e) {
+                // may not have compound/per for every width.
+                continue;
+            }
+        }
+        fillInStyleMap(styleToPerPattern);
         for (MeasureUnit unit : MeasureUnit.getAvailable()) {
             // Currency data cannot be found here. Skip.
             if (unit instanceof Currency) {
@@ -730,6 +787,8 @@ public class MeasureFormat extends UFormat {
             if (styleToCountToFormat == null) {
                 unitToStyleToCountToFormat.put(unit, styleToCountToFormat = new EnumMap<FormatWidth, QuantityFormatter>(FormatWidth.class));
             }
+            EnumMap<FormatWidth, SimplePatternFormatter> styleToPerUnitPattern = new EnumMap<FormatWidth, SimplePatternFormatter>(FormatWidth.class);
+            unitToStyleToPerUnitPattern.put(unit, styleToPerUnitPattern);
             for (FormatWidth styleItem : FormatWidth.values()) {
                 try {
                     ICUResourceBundle unitTypeRes = resource.getWithFallback(styleItem.resourceKey);
@@ -746,8 +805,13 @@ public class MeasureFormat extends UFormat {
                             continue;
                         }
                         String resKey = countBundle.getKey();
-                        if (resKey.equals("dnam") || resKey.equals("per")) {
+                        if (resKey.equals("dnam")) {
                             continue; // skip display name & per pattern (new in CLDR 26 / ICU 54) for now, not part of plurals
+                        }
+                        if (resKey.equals("per")) {
+                            styleToPerUnitPattern.put(
+                                    styleItem, SimplePatternFormatter.compile(countBundle.getString()));
+                            continue;
                         }
                         havePluralItem = true;
                         builder.add(resKey, countBundle.getString());
@@ -761,25 +825,48 @@ public class MeasureFormat extends UFormat {
                     continue;
                 }
             }
-            // now fill in the holes
-            fillin:
-                if (styleToCountToFormat.size() != FormatWidth.values().length) {
-                    QuantityFormatter fallback = styleToCountToFormat.get(FormatWidth.SHORT);
-                    if (fallback == null) {
-                        fallback = styleToCountToFormat.get(FormatWidth.WIDE);
-                    }
-                    if (fallback == null) {
-                        break fillin; // TODO use root
-                    }
-                    for (FormatWidth styleItem : FormatWidth.values()) {
-                        QuantityFormatter countToFormat = styleToCountToFormat.get(styleItem);
-                        if (countToFormat == null) {
-                            styleToCountToFormat.put(styleItem, fallback);
-                        }
-                    }
-                }
+            // TODO: if no fallback available, get from root.
+            fillInStyleMap(styleToCountToFormat);
+            fillInStyleMap(styleToPerUnitPattern);
         }
-        return unitToStyleToCountToFormat;
+        return new MeasureFormatData(unitToStyleToCountToFormat, unitToStyleToPerUnitPattern, styleToPerPattern);
+    }
+    
+    private static <T> boolean fillInStyleMap(Map<FormatWidth, T> styleMap) {
+        if (styleMap.size() == FormatWidth.values().length) {
+            return true;
+        }
+        T fallback = styleMap.get(FormatWidth.SHORT);
+        if (fallback == null) {
+            fallback = styleMap.get(FormatWidth.WIDE);
+        }
+        if (fallback == null) {
+            return false;
+        }
+        for (FormatWidth styleItem : FormatWidth.values()) {
+            T item = styleMap.get(styleItem);
+            if (item == null) {
+                styleMap.put(styleItem, fallback);
+            }
+        }
+        return true;
+    }
+    
+    private int withPerUnit(CharSequence formatted, MeasureUnit perUnit, StringBuilder appendTo) {
+        int[] offsets = new int[1];
+        Map<FormatWidth, SimplePatternFormatter> styleToPerUnitPattern =
+                unitToStyleToPerUnitPattern.get(perUnit);
+        SimplePatternFormatter perUnitPattern = styleToPerUnitPattern.get(formatWidth);
+        if (perUnitPattern != null) {
+            perUnitPattern.format(appendTo, offsets, formatted);
+            return offsets[0];
+        }
+        SimplePatternFormatter perPattern = styleToPerPattern.get(formatWidth);
+        Map<FormatWidth, QuantityFormatter> styleToCountToFormat = unitToStyleToCountToFormat.get(perUnit);
+        QuantityFormatter countToFormat = styleToCountToFormat.get(formatWidth);
+        String perUnitString = countToFormat.getByVariant("one").getPatternWithNoPlaceholders().trim();
+        perPattern.format(appendTo, offsets, formatted, perUnitString);
+        return offsets[0];
     }
 
     private String formatMeasure(Measure measure, ImmutableNumberFormat nf) {
@@ -820,6 +907,20 @@ public class MeasureFormat extends UFormat {
             }
         }
         return appendTo;
+    }
+    
+    private static final class MeasureFormatData {
+        MeasureFormatData(
+                Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat,
+                Map<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter>> unitToStyleToPerUnitPattern,
+                EnumMap<FormatWidth, SimplePatternFormatter> styleToPerPattern) {
+            this.unitToStyleToCountToFormat = unitToStyleToCountToFormat;
+            this.unitToStyleToPerUnitPattern = unitToStyleToPerUnitPattern;
+            this.styleToPerPattern = styleToPerPattern;
+        }
+        final Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat;
+        final Map<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter>> unitToStyleToPerUnitPattern;
+        final EnumMap<FormatWidth, SimplePatternFormatter> styleToPerPattern;
     }
 
     // Wrapper around NumberFormat that provides immutability and thread-safety.

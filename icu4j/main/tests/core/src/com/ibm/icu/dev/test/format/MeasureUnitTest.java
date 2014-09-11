@@ -25,6 +25,7 @@ import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTest;
+import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MeasureFormat;
@@ -741,6 +742,31 @@ public class MeasureUnitTest extends TestFmwk {
                             new Measure(2.3, MeasureUnit.INCH)));
         }
     }
+    
+    public void testMultiplesPer() {
+        Object[][] data = new Object[][] {
+                {ULocale.ENGLISH, FormatWidth.WIDE, MeasureUnit.SECOND, "2 miles, 1 foot, 2.3 inches per second"},
+                {ULocale.ENGLISH, FormatWidth.SHORT, MeasureUnit.SECOND, "2 mi, 1 ft, 2.3 inps"},
+                {ULocale.ENGLISH, FormatWidth.NARROW, MeasureUnit.SECOND, "2mi 1\u2032 2.3\u2033/s"},
+                {ULocale.ENGLISH, FormatWidth.WIDE, MeasureUnit.MINUTE, "2 miles, 1 foot, 2.3 inches per minute"},
+                {ULocale.ENGLISH, FormatWidth.SHORT, MeasureUnit.MINUTE, "2 mi, 1 ft, 2.3 in/min"},
+                {ULocale.ENGLISH, FormatWidth.NARROW, MeasureUnit.MINUTE, "2mi 1\u2032 2.3\u2033/m"},
+        };
+        for (Object[] row : data) {
+            MeasureFormat mf = MeasureFormat.getInstance(
+                    (ULocale) row[0], (FormatWidth) row[1]);
+            assertEquals(
+                    "testMultiples",
+                    row[3],
+                    mf.formatMeasuresPer(
+                            new StringBuilder(),
+                            DontCareFieldPosition.INSTANCE,
+                            (MeasureUnit) row[2],
+                            new Measure(2, MeasureUnit.MILE), 
+                            new Measure(1, MeasureUnit.FOOT), 
+                            new Measure(2.3, MeasureUnit.INCH)).toString());
+        }
+    }
 
     public void testGram() {
         MeasureFormat mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
@@ -853,6 +879,64 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("beginIndex", 8, pos.getBeginIndex());
         assertEquals("endIndex", 10, pos.getEndIndex());
         
+    }
+    
+    public void testFieldPositionMultipleWithPer() {
+        MeasureFormat fmt = MeasureFormat.getInstance(
+                ULocale.ENGLISH, FormatWidth.SHORT);
+        FieldPosition pos = new FieldPosition(NumberFormat.Field.INTEGER);
+        String result = fmt.formatMeasuresPer(
+                new StringBuilder(),
+                pos,
+                MeasureUnit.SECOND,
+                new Measure(354, MeasureUnit.METER),
+                new Measure(23, MeasureUnit.CENTIMETER)).toString();
+        assertEquals("result", "354 m, 23 cmps", result);
+        
+        // According to javadocs for {@link Format#format} FieldPosition is set to
+        // beginning and end of first such field encountered instead of the last
+        // such field encountered.
+        assertEquals("beginIndex", 0, pos.getBeginIndex());
+        assertEquals("endIndex", 3, pos.getEndIndex());
+        
+        pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
+        result = fmt.formatMeasuresPer(
+                new StringBuilder("123456: "),
+                pos,
+                MeasureUnit.SECOND,
+                new Measure(354, MeasureUnit.METER),
+                new Measure(23, MeasureUnit.CENTIMETER),
+                new Measure(5.4, MeasureUnit.MILLIMETER)).toString();
+        assertEquals("result", "123456: 354 m, 23 cm, 5.4 mmps", result);
+        assertEquals("beginIndex", 23, pos.getBeginIndex());
+        assertEquals("endIndex", 24, pos.getEndIndex());
+  
+        pos = new FieldPosition(NumberFormat.Field.INTEGER);
+        result = fmt.formatMeasuresPer(
+                new StringBuilder(),
+                pos,
+                MeasureUnit.MINUTE,
+                new Measure(354, MeasureUnit.METER),
+                new Measure(23, MeasureUnit.CENTIMETER)).toString();
+        assertEquals("result", "354 m, 23 cm/min", result);
+        
+        // According to javadocs for {@link Format#format} FieldPosition is set to
+        // beginning and end of first such field encountered instead of the last
+        // such field encountered.
+        assertEquals("beginIndex", 0, pos.getBeginIndex());
+        assertEquals("endIndex", 3, pos.getEndIndex());
+        
+        pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
+        result = fmt.formatMeasuresPer(
+                new StringBuilder("123456: "),
+                pos,
+                MeasureUnit.MINUTE,
+                new Measure(354, MeasureUnit.METER),
+                new Measure(23, MeasureUnit.CENTIMETER),
+                new Measure(5.4, MeasureUnit.MILLIMETER)).toString();
+        assertEquals("result", "123456: 354 m, 23 cm, 5.4 mm/min", result);
+        assertEquals("beginIndex", 23, pos.getBeginIndex());
+        assertEquals("endIndex", 24, pos.getEndIndex());
     }
     
     public void testOldFormatWithList() {
