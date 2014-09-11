@@ -6014,7 +6014,7 @@ static void TestToLegacyType(void)
         {"variableTop",     "00A0",             "$IN"},     /* valid codepoints type */
         {"variableTop",     "wxyz",             "$IN"},    /* invalid codepoints type - return as is for now */
         {"kr",              "space-punct",      "space-punct"}, /* valid reordercode type */
-        {"kr",              "digit-spacepunct", "digit-spacepunct"},    /* invalid reordercode type, bad ok for legacy syntax */
+        {"kr",              "digit-spacepunct", "digit-spacepunct"},    /* invalid reordercode type, but ok for legacy syntax */
         {NULL,              NULL,               NULL}
     };
 
