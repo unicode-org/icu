@@ -193,7 +193,6 @@ public:
      */
     DecimalFormatSymbols(UErrorCode& status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a DecimalFormatSymbols object with last-resort data.
      * Intended for callers who cache the symbols data and
@@ -207,10 +206,9 @@ public:
      * @param status    Input/output parameter, set to success or
      *                  failure code upon return.
      * @return last-resort symbols
-     * @draft ICU 52
+     * @stable ICU 52
      */
     static DecimalFormatSymbols* createWithLastResortData(UErrorCode& status);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Copy constructor.

@@ -358,7 +358,6 @@ public:
     static UnicodeString& U_EXPORT2 getCanonicalID(const UnicodeString& id,
         UnicodeString& canonicalID, UBool& isSystemID, UErrorCode& status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
     * Converts a system time zone ID to an equivalent Windows time zone ID. For example,
     * Windows time zone ID "Pacific Standard Time" is returned for input "America/Los_Angeles".
@@ -379,7 +378,7 @@ public:
     * @return          A reference to the result (<code>winid</code>).
     * @see getIDForWindowsID
     *
-    * @draft ICU 52
+    * @stable ICU 52
     */
     static UnicodeString& U_EXPORT2 getWindowsID(const UnicodeString& id,
         UnicodeString& winid, UErrorCode& status);
@@ -408,12 +407,10 @@ public:
     * @return          A reference to the result (<code>id</code>).
     * @see getWindowsID
     *
-    * @draft ICU 52
+    * @stable ICU 52
     */
     static UnicodeString& U_EXPORT2 getIDForWindowsID(const UnicodeString& winid, const char* region,
         UnicodeString& id, UErrorCode& status);
-
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns true if the two TimeZones are equal.  (The TimeZone version only compares
