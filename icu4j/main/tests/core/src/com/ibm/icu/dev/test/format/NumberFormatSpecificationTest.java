@@ -81,9 +81,9 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "12,300E3", formatFrWithPattern(12300.1, "##0.0000E0"));
         assertEquals("", "12,30E3", formatFrWithPattern(12300.1, "##0.000#E0"));
         assertEquals("", "12,301E3", formatFrWithPattern(12301.0, "##0.000#E0"));
-        // rounding with scientific notation busted. ticket 11020
-        // assertEquals("", "1,25E4", formatFrWithPattern(12301.2, "0.05E0"));
-        assertEquals("", "170,0E-3", formatFrWithPattern(0.17, "##0.000#E0"));
+        if (!logKnownIssue("11020", "Rounding does not work with scientific notation.")) {
+            assertEquals("", "170,0E-3", formatFrWithPattern(0.17, "##0.000#E0"));
+        }
     }
     
     public void TestPercent() {
@@ -116,16 +116,17 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "ne1 234nx", formatFrWithPattern(-1234, "####,##0$*x;ne#n"));
         assertEquals("", "n1 234*xx", formatFrWithPattern(-1234, "####,##0$*x;n#'*'"));
         assertEquals("", "yyyy%432,6", formatFrWithPattern(4.33, "*y%4.2######"));
-        // Broken ticket 11025
-        // assertEquals("", "EUR *433,00", formatFrWithPattern(433.0, "¤¤ **####0.00"));
-        // Broken ticket 11025
-        // assertEquals("", "EUR *433,00", formatFrWithPattern(433.0, "¤¤ **#######0"));
+        if (!logKnownIssue("11025", "Padding broken when used with currencies")) {
+            assertEquals("", "EUR *433,00", formatFrWithPattern(433.0, "¤¤ **####0.00"));
+            assertEquals("", "EUR *433,00", formatFrWithPattern(433.0, "¤¤ **#######0"));
+        }
         {
             DecimalFormatSymbols sym = new DecimalFormatSymbols(ULocale.FRANCE);
             DecimalFormat fmt = new DecimalFormat("¤¤ **#######0", sym);
             fmt.setCurrency(Currency.getInstance("JPY"));
-            // Broken ticket 11025
-            // assertEquals("", "JPY ****433", fmt.format(433.22));   
+            if (!logKnownIssue("11025", "Padding broken when used with currencies")) {
+                assertEquals("", "JPY ****433", fmt.format(433.22)); 
+            }
         }
         {
             DecimalFormatSymbols sym = new DecimalFormatSymbols(ULocale.US);
