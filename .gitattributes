@@ -144,6 +144,7 @@ icu4c/source/test/cintltst/cintltst.vcxproj.filters -text
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
+icu4c/source/test/intltest/quantityformattertest.cpp -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/iotest/iotest.vcxproj.filters -text
 icu4c/source/test/letest/cletest.vcxproj -text
