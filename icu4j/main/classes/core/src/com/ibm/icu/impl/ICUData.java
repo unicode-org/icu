@@ -73,6 +73,7 @@ public final class ICUData {
     public static final String ICU_CURR_BASE_NAME = ICU_BASE_NAME + "/curr";
     public static final String ICU_REGION_BASE_NAME = ICU_BASE_NAME + "/region";
     public static final String ICU_ZONE_BASE_NAME = ICU_BASE_NAME + "/zone";
+    public static final String ICU_UNIT_BASE_NAME = ICU_BASE_NAME + "/unit";
 
     /**
      * For testing (otherwise false): When reading an InputStream from a Class or ClassLoader

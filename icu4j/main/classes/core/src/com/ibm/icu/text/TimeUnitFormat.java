@@ -18,6 +18,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.TimeUnit;
@@ -365,7 +366,7 @@ public class TimeUnitFormat extends MeasureFormat {
         // fill timeUnitToCountToPatterns from resource file
         try {
             ICUResourceBundle resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                    ICUResourceBundle.ICU_BASE_NAME, locale);
+                    ICUData.ICU_UNIT_BASE_NAME, locale);
             ICUResourceBundle unitsRes = resource.getWithFallback(resourceKey);
             int size = unitsRes.getSize();
             for (int index = 0; index < size; ++index) {
@@ -469,7 +470,7 @@ public class TimeUnitFormat extends MeasureFormat {
             try {
                 // look for pattern for srcPluralCount in locale tree
                 ICUResourceBundle unitsRes = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                        ICUResourceBundle.ICU_BASE_NAME, parentLocale);
+                        ICUData.ICU_UNIT_BASE_NAME, parentLocale);
                 unitsRes = unitsRes.getWithFallback(resourceKey);
                 ICUResourceBundle oneUnitRes = unitsRes.getWithFallback(srcTimeUnitName);
                 String pattern = oneUnitRes.getStringWithFallback(searchPluralCount);

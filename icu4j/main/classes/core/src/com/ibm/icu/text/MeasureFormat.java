@@ -29,6 +29,7 @@ import java.util.MissingResourceException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.impl.DontCareFieldPosition;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimplePatternFormatter;
@@ -704,7 +705,7 @@ public class MeasureFormat extends UFormat {
     private static NumericFormatters loadNumericFormatters(
             ULocale locale) {
         ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
-                getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+                getBundleInstance(ICUData.ICU_BASE_NAME, locale);
         return new NumericFormatters(
                 loadNumericDurationFormat(r, "hm"),
                 loadNumericDurationFormat(r, "ms"),
@@ -719,7 +720,7 @@ public class MeasureFormat extends UFormat {
         QuantityFormatter.Builder builder = new QuantityFormatter.Builder();
         Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat
         = new HashMap<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>();
-        ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+        ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
         for (MeasureUnit unit : MeasureUnit.getAvailable()) {
             // Currency data cannot be found here. Skip.
             if (unit instanceof Currency) {
@@ -1187,7 +1188,7 @@ public class MeasureFormat extends UFormat {
         SimplePatternFormatter result = localeIdToRangeFormat.get(forLocale);
         if (result == null) {
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
-                    getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, forLocale);
+                    getBundleInstance(ICUData.ICU_BASE_NAME, forLocale);
             ULocale realLocale = rb.getULocale();
             if (!forLocale.equals(realLocale)) { // if the child would inherit, then add a cache entry for it.
                 result = localeIdToRangeFormat.get(forLocale);
