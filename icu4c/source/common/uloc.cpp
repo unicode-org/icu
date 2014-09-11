@@ -2546,7 +2546,7 @@ uloc_toUnicodeLocaleType(const char* keyword, const char* value)
     return bcpType;
 }
 
-#define ISALPHANUM(c) ( (c) >= '0' && (c) <= '9' || (c) >= 'A' && (c) <= 'Z' || (c) >= 'a' && (c) <= 'z' )
+#define ISALPHANUM(c) (uprv_isASCIILetter(c) || ((c) >= '0') && ((c) <= '9'))
 
 static UBool
 isWellFormedLegacyKey(const char* legacyKey)
