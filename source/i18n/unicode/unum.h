@@ -580,7 +580,6 @@ unum_formatDoubleCurrency(const UNumberFormat* fmt,
                           UFieldPosition* pos,
                           UErrorCode* status);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Format a UFormattable into a string.
  * @param fmt the formatter to use
@@ -599,16 +598,15 @@ unum_formatDoubleCurrency(const UNumberFormat* fmt,
  * @return the total buffer size needed; if greater than resultLength,
  * the output was truncated. Will return 0 on error.
  * @see unum_parseToUFormattable
- * @draft ICU 52
+ * @stable ICU 52
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 unum_formatUFormattable(const UNumberFormat* fmt,
                         const UFormattable *number,
                         UChar *result,
                         int32_t resultLength,
                         UFieldPosition *pos,
                         UErrorCode *status);
-#endif  /* U_HIDE_DRAFT_API */
 
 /**
 * Parse a string into an integer using a UNumberFormat.
@@ -744,7 +742,6 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
                          UChar* currency,
                          UErrorCode* status);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Parse a UChar string into a UFormattable.
  * Example code:
@@ -761,16 +758,15 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
  * @return the UFormattable.  Will be ==result unless NULL was passed in for result, in which case it will be the newly opened UFormattable.
  * @see ufmt_getType
  * @see ufmt_close
- * @draft ICU 52
+ * @stable ICU 52
  */
-U_DRAFT UFormattable* U_EXPORT2
+U_STABLE UFormattable* U_EXPORT2
 unum_parseToUFormattable(const UNumberFormat* fmt,
                          UFormattable *result,
                          const UChar* text,
                          int32_t textLength,
                          int32_t* parsePos, /* 0 = start */
                          UErrorCode* status);
-#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Set the pattern used by a UNumberFormat.  This can only be used
