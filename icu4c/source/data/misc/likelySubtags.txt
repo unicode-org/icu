@@ -75,7 +75,7 @@ likelySubtags:table(nofallback){
     bik{"bik_Latn_PH"}
     bin{"bin_Latn_NG"}
     bjj{"bjj_Deva_IN"}
-    bjn{"bjn_Latn_MY"}
+    bjn{"bjn_Latn_ID"}
     bkm{"bkm_Latn_CM"}
     bku{"bku_Latn_PH"}
     blt{"blt_Tavt_VN"}
@@ -1007,7 +1007,7 @@ likelySubtags:table(nofallback){
     und_SJ{"nb_Latn_SJ"}
     und_SK{"sk_Latn_SK"}
     und_SM{"it_Latn_SM"}
-    und_SN{"wo_Latn_SN"}
+    und_SN{"fr_Latn_SN"}
     und_SO{"so_Latn_SO"}
     und_SR{"nl_Latn_SR"}
     und_ST{"pt_Latn_ST"}

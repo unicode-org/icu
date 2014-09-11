@@ -4616,8 +4616,8 @@ const char* const full_data[][3] = {
     "it_SM"
   }, {
     "und_SN",
-    "wo_Latn_SN",
-    "wo"
+    "fr_Latn_SN",
+    "fr_SN"
   }, {
     "und_SO",
     "so_Latn_SO",

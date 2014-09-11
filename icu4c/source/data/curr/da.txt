@@ -429,7 +429,7 @@ da{
         }
         IDR{
             "IDR",
-            "Indonesisk pupiah",
+            "Indonesisk rupiah",
         }
         IEP{
             "IEP",
@@ -2171,5 +2171,5 @@ da{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.9.62"}
 }
