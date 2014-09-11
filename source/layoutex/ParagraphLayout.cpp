@@ -383,7 +383,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     }
     else {
         // initialize
-        for (runStart = 0, run = 0; run < fStyleRunCount; run += 1) {
+        for (run = 0; run < fStyleRunCount; run += 1) {
             fStyleRunInfo[run].font = NULL;
             fStyleRunInfo[run].runBase = 0;
             fStyleRunInfo[run].runLimit = 0;

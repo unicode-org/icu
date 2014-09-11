@@ -55,11 +55,11 @@ getCodesFromLocale(const char *locale,
     UErrorCode internalErrorCode = U_ZERO_ERROR;
     char lang[8];
     char script[8];
-    int32_t langLength, scriptLength;
+    int32_t scriptLength;
     if(U_FAILURE(*err)) { return 0; }
     // Multi-script languages, equivalent to the LocaleScript data
     // that we used to load from locale resource bundles.
-    langLength = uloc_getLanguage(locale, lang, UPRV_LENGTHOF(lang), &internalErrorCode);
+    /*length = */ uloc_getLanguage(locale, lang, UPRV_LENGTHOF(lang), &internalErrorCode);
     if(U_FAILURE(internalErrorCode) || internalErrorCode == U_STRING_NOT_TERMINATED_WARNING) {
         return 0;
     }

@@ -834,8 +834,6 @@ void IntlTestDecimalFormatAPI::TestBadFastpath() {
 void IntlTestDecimalFormatAPI::TestRequiredDecimalPoint() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString text("99");
-    double expected = 99;
-    double whatIGot = 0.0;
     Formattable result1;
     UnicodeString pat1("##.0000");
     UnicodeString pat2("00.0");
@@ -845,7 +843,7 @@ void IntlTestDecimalFormatAPI::TestRequiredDecimalPoint() {
         dataerrln("Error creating new DecimalFormat - %s", u_errorName(status));
         return;
     }
-    
+
     status = U_ZERO_ERROR;
     df->applyPattern(pat1, status);
     if(U_FAILURE(status)) {
@@ -860,8 +858,8 @@ void IntlTestDecimalFormatAPI::TestRequiredDecimalPoint() {
     if(U_SUCCESS(status)) {
         errln((UnicodeString)"ERROR: unexpected parse()");
     }
-    
-    
+
+
     status = U_ZERO_ERROR;
     df->applyPattern(pat2, status);
     df->setDecimalPatternMatchRequired(FALSE);
