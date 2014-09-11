@@ -32,8 +32,8 @@ import com.ibm.icu.lang.UCharacter;
  * </pre>
  *
  * @see NumberFormat
- * @provisional
  * @draft ICU 54
+ * @provisional This API might change or be removed in a future release.
  *
  */
 public final class ScientificFormatHelper {
@@ -54,8 +54,8 @@ public final class ScientificFormatHelper {
     /**
      * Returns a new ScientificFormatHelper.
      * @param dfs comes from the DecimalFormat instance used for default scientific notation.
-     * @provisional
      * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
      */
     public static ScientificFormatHelper getInstance(DecimalFormatSymbols dfs) {
         StringBuilder preExponent = new StringBuilder();
@@ -76,8 +76,8 @@ public final class ScientificFormatHelper {
      * @param beginMarkup the start html for the exponent e.g "<sup>"
      * @param endMarkup the end html for the exponent e.g "</sup>"
      * @return the user-friendly scientific notation.
-     * @provisional
      * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
      */
     public String insertMarkup(
             AttributedCharacterIterator iterator,
@@ -146,8 +146,8 @@ public final class ScientificFormatHelper {
      * html.
      * @param iterator the value that DecimalFormat.formatToCharacterIterator() returned.
      * @return the user-friendly scientific notation.
-     * @provisional
      * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
      */
     public String toSuperscriptExponentDigits(AttributedCharacterIterator iterator) {
         int copyFromOffset = 0;
