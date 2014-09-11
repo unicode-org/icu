@@ -2081,7 +2081,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
     FILE *p = NULL;
     size_t n;
     static char buf[512] = "";
-    CharString cmdBuf;
+    icu::CharString cmdBuf;
     UErrorCode status = U_ZERO_ERROR;
     const char cmd[] = "icu-config --incpkgdatafile";
     char dirBuf[1024] = "";
