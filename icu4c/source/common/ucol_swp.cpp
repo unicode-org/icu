@@ -307,7 +307,6 @@ swapFormatVersion3(const UDataSwapper *ds,
              * if UCAConsts!=0 then contractionUCACombos because we are swapping
              * the UCA data file, and we know that the UCA contains contractions
              */
-            count=header.contractionUCACombos-header.UCAConsts;
             ds->swapArray32(ds, inBytes+header.UCAConsts, header.contractionUCACombos-header.UCAConsts,
                                outBytes+header.UCAConsts, pErrorCode);
         }

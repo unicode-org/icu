@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2013, International Business Machines
+ *   Copyright (C) 2003-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -903,7 +903,7 @@ usprep_swap(const UDataSwapper *ds,
         /* swap the uint16_t mappingTable[] */
         count=indexes[_SPREP_INDEX_MAPPING_DATA_SIZE];
         ds->swapArray16(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
-        offset+=count;
+        //offset+=count;
     }
 
     return headerSize+size;
