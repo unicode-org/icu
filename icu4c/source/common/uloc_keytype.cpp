@@ -85,6 +85,7 @@ U_CDECL_END
 
 static void U_CALLCONV
 initFromResourceBundle(UErrorCode& sts) {
+    U_NAMESPACE_USE
     ucln_common_registerCleanup(UCLN_COMMON_LOCALE_KEY_TYPE, uloc_key_type_cleanup);
 
     gLocExtKeyMap = uhash_open(uhash_hashIChars, uhash_compareIChars, NULL, &sts);
@@ -103,7 +104,7 @@ initFromResourceBundle(UErrorCode& sts) {
     LocalUResourceBundlePointer bcpTypeAliasRes(ures_getByKey(keyTypeDataRes.getAlias(), "bcpTypeAlias", NULL, &tmpSts));
 
     // initialize vectors storing dynamically allocated objects
-    gKeyTypeStringPool = new icu::UVector(uloc_deleteKeyTypeStringPoolEntry, NULL, sts);
+    gKeyTypeStringPool = new UVector(uloc_deleteKeyTypeStringPoolEntry, NULL, sts);
     if (gKeyTypeStringPool == NULL) {
         if (U_SUCCESS(sts)) {
             sts = U_MEMORY_ALLOCATION_ERROR;
@@ -112,7 +113,7 @@ initFromResourceBundle(UErrorCode& sts) {
     if (U_FAILURE(sts)) {
         return;
     }
-    gLocExtKeyDataEntries = new icu::UVector(uloc_deleteKeyDataEntry, NULL, sts);
+    gLocExtKeyDataEntries = new UVector(uloc_deleteKeyDataEntry, NULL, sts);
     if (gLocExtKeyDataEntries == NULL) {
         if (U_SUCCESS(sts)) {
             sts = U_MEMORY_ALLOCATION_ERROR;
@@ -121,7 +122,7 @@ initFromResourceBundle(UErrorCode& sts) {
     if (U_FAILURE(sts)) {
         return;
     }
-    gLocExtTypeEntries = new icu::UVector(uloc_deleteTypeEntry, NULL, sts);
+    gLocExtTypeEntries = new UVector(uloc_deleteTypeEntry, NULL, sts);
     if (gLocExtTypeEntries == NULL) {
         if (U_SUCCESS(sts)) {
             sts = U_MEMORY_ALLOCATION_ERROR;
