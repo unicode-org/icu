@@ -1081,21 +1081,26 @@ SimpleDateFormat::initNumberFormatters(const Locale &locale,UErrorCode &status) 
             }
         } else {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return; // exit with the allocation error
         }
     }
     umtx_unlock(&LOCK);
 
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     processOverrideString(locale,fDateOverride,kOvrStrDate,status);
     processOverrideString(locale,fTimeOverride,kOvrStrTime,status);
-
 }
 
 void
 SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeString &str, int8_t type, UErrorCode &status) {
-    if (str.isBogus()) {
+    if (str.isBogus() || U_FAILURE(status)) {
         return;
     }
+
+    U_ASSERT(fNumberFormatters != NULL);
+
     int32_t start = 0;
     int32_t len;
     UnicodeString nsName;
@@ -1177,7 +1182,6 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
 
         // Now that we have an appropriate number formatter, fill in the appropriate spaces in the
         // number formatters table.
-
         if (ovrField.isBogus()) {
             switch (type) {
                 case kOvrStrDate:
