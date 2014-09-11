@@ -283,4 +283,11 @@ public class SimplePatternFormatter {
             return result;
         }
     }
+
+    /**
+     * Returns this pattern with none of the placeholders.
+     */
+    public String getPatternWithNoPlaceholders() {
+        return patternWithoutPlaceholders;
+    }
 }
