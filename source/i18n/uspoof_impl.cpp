@@ -475,6 +475,30 @@ UBool SpoofData::validateDataVersion(const SpoofDataHeader *rawData, UErrorCode 
     return TRUE;
 }
 
+static UBool U_CALLCONV
+spoofDataIsAcceptable(void *context,
+                        const char * /* type */, const char * /*name*/,
+                        const UDataInfo *pInfo) {
+    if(
+        pInfo->size >= 20 &&
+        pInfo->isBigEndian == U_IS_BIG_ENDIAN &&
+        pInfo->charsetFamily == U_CHARSET_FAMILY &&
+        pInfo->dataFormat[0] == 0x43 &&  // dataFormat="Cfu "
+        pInfo->dataFormat[1] == 0x66 &&
+        pInfo->dataFormat[2] == 0x75 &&
+        pInfo->dataFormat[3] == 0x20 &&
+        pInfo->formatVersion[0] == 1
+    ) {
+        UVersionInfo *version = static_cast<UVersionInfo *>(context);
+        if(version != NULL) {
+            uprv_memcpy(version, pInfo->dataVersion, 4);
+        }
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
 //
 //  SpoofData::getDefault() - return a wrapper around the spoof data that is
 //                           baked into the default ICU data.
@@ -482,7 +506,10 @@ UBool SpoofData::validateDataVersion(const SpoofDataHeader *rawData, UErrorCode 
 SpoofData *SpoofData::getDefault(UErrorCode &status) {
     // TODO:  Cache it.  Lazy create, keep until cleanup.
 
-    UDataMemory *udm = udata_open(NULL, "cfu", "confusables", &status);
+    UDataMemory *udm = udata_openChoice(NULL, "cfu", "confusables",
+                                        spoofDataIsAcceptable, 
+                                        NULL,       // context, would receive dataVersion if supplied.
+                                        &status);
     if (U_FAILURE(status)) {
         return NULL;
     }
@@ -497,30 +524,17 @@ SpoofData *SpoofData::getDefault(UErrorCode &status) {
     return This;
 }
 
-
 SpoofData::SpoofData(UDataMemory *udm, UErrorCode &status)
 {
     reset();
     if (U_FAILURE(status)) {
         return;
     }
+    fUDM = udm;
     const DataHeader *dh = udm->pHeader;
     int32_t headerSize = dh->dataHeader.headerSize;
-    if (  !(headerSize >= 20 &&
-            dh->info.isBigEndian == U_IS_BIG_ENDIAN &&
-            dh->info.charsetFamily == U_CHARSET_FAMILY &&
-            dh->info.dataFormat[0] == 0x43 &&  // dataFormat="Cfu "
-            dh->info.dataFormat[1] == 0x66 &&
-            dh->info.dataFormat[2] == 0x75 &&
-            dh->info.dataFormat[3] == 0x20)
-        ) {
-        status = U_INVALID_FORMAT_ERROR;
-        return;
-    }
-
     fRawData = reinterpret_cast<SpoofDataHeader *>
-                   ((char *)(udm->pHeader) + headerSize);
-    fUDM = udm;
+                   ((char *)dh + headerSize);
     validateDataVersion(fRawData, status);
     initPtrs(status);
 }

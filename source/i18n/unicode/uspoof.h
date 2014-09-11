@@ -329,7 +329,7 @@ uspoof_open(UErrorCode *status);
 
 
 /**
- * Open a Spoof checker from its serialized from, stored in 32-bit-aligned memory.
+ * Open a Spoof checker from its serialized form, stored in 32-bit-aligned memory.
  * Inverse of uspoof_serialize().
  * The memory containing the serialized data must remain valid and unchanged
  * as long as the spoof checker, or any cloned copies of the spoof checker,
@@ -355,9 +355,9 @@ uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLeng
 
 /**
   * Open a Spoof Checker from the source form of the spoof data.
-  * The Three inputs correspond to the Unicode data files confusables.txt
-  * confusablesWholeScript.txt and xidmdifications.txt as described in
-  * Unicode UAX #39.  The syntax of the source data is as described in UAX #39 for
+  * The two inputs correspond to the Unicode data files confusables.txt
+  * and confusablesWholeScript.txt as described in Unicode UAX #39.
+  * The syntax of the source data is as described in UAX #39 for
   * these files, and the content of these files is acceptable input.
   *
   * The character encoding of the (char *) input text is UTF-8.
