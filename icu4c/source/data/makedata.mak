@@ -356,6 +356,7 @@ ZONE_SOURCE=$(ZONE_SOURCE) $(ZONE_SOURCE_LOCAL)
 !ELSE
 !MESSAGE Information: cannot find "zone\reslocal.mk". Not building user-additional resource bundle files.
 !ENDIF
+ZONE_SOURCE=$(ZONE_SOURCE) tzdbNames.txt
 !ELSE
 !MESSAGE Warning: cannot find "zone\resfiles.mk"
 !ENDIF
