@@ -15,7 +15,6 @@
 #include "cstring.h"
 #include "identifier_info.h"
 #include "scriptset.h"
-#include "udatamem.h"
 #include "umutex.h"
 #include "udataswp.h"
 #include "uassert.h"
@@ -531,10 +530,9 @@ SpoofData::SpoofData(UDataMemory *udm, UErrorCode &status)
         return;
     }
     fUDM = udm;
-    const DataHeader *dh = udm->pHeader;
-    int32_t headerSize = dh->dataHeader.headerSize;
-    fRawData = reinterpret_cast<SpoofDataHeader *>
-                   ((char *)dh + headerSize);
+    // fRawData is non-const because it may be constructed by the data builder.
+    fRawData = reinterpret_cast<SpoofDataHeader *>(
+            const_cast<void *>(udata_getMemory(udm)));
     validateDataVersion(fRawData, status);
     initPtrs(status);
 }
