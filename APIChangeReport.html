@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ICU4J API Comparison: ICU4J 53.1.0 with ICU4J 54.0.1</title>
+<!-- Copyright 2014, IBM, All Rights Reserved. -->
+</head>
+<body>
+<h1>ICU4J API Comparison: ICU4J 53.1.0 with ICU4J 54.0.1</h1>
+
+<hr/>
+<h2>Removed from ICU4J 53.1.0</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+Normalizer.Mode
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>Normalizer.Mode</i>()</li>
+</ul>
+PluralRules.Factory
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>PluralRules.Factory</i>()</li>
+</ul>
+TimeZoneNames.Factory
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>TimeZoneNames.Factory</i>()</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Deprecated or Obsoleted in ICU4J 54.0.1</h2>
+<p>(no API obsoleted)</p>
+
+<hr/>
+<h2>Changed in ICU4J 54.0.1 (old, new)</h2>
+<p>(no API changed)</p>
+
+<hr/>
+<h2>Promoted to stable in ICU4J 54.0.1</h2>
+<p>(no API promoted to stable)</p>
+
+<hr/>
+<h2>Added in ICU4J 54.0.1</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter
+<ul>
+<li><span style='color:orange'>(draft)</span> public static java.lang.String <i>toTitleCase</i>(java.util.Locale, java.lang.String, BreakIterator, int)</li>
+</ul>
+UCharacter.JoiningGroup
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_ALEPH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_AYIN</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_BETH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_DALETH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_DHAMEDH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_FIVE</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_GIMEL</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_HETH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_HUNDRED</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_KAPH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_LAMEDH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_MEM</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_NUN</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_ONE</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_PE</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_QOPH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_RESH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_SADHE</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_SAMEKH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_TAW</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_TEN</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_TETH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_THAMEDH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_TWENTY</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_WAW</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_YODH</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_ZAYIN</li>
+<li><span style='color:green'>(stable)</span> public static final int STRAIGHT_WAW</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock BASSA_VAH</li>
+<li><span style='color:green'>(stable)</span> public static final int BASSA_VAH_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock CAUCASIAN_ALBANIAN</li>
+<li><span style='color:green'>(stable)</span> public static final int CAUCASIAN_ALBANIAN_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock COMBINING_DIACRITICAL_MARKS_EXTENDED</li>
+<li><span style='color:green'>(stable)</span> public static final int COMBINING_DIACRITICAL_MARKS_EXTENDED_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock COPTIC_EPACT_NUMBERS</li>
+<li><span style='color:green'>(stable)</span> public static final int COPTIC_EPACT_NUMBERS_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock DUPLOYAN</li>
+<li><span style='color:green'>(stable)</span> public static final int DUPLOYAN_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock ELBASAN</li>
+<li><span style='color:green'>(stable)</span> public static final int ELBASAN_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock GEOMETRIC_SHAPES_EXTENDED</li>
+<li><span style='color:green'>(stable)</span> public static final int GEOMETRIC_SHAPES_EXTENDED_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock GRANTHA</li>
+<li><span style='color:green'>(stable)</span> public static final int GRANTHA_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock KHOJKI</li>
+<li><span style='color:green'>(stable)</span> public static final int KHOJKI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock KHUDAWADI</li>
+<li><span style='color:green'>(stable)</span> public static final int KHUDAWADI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock LATIN_EXTENDED_E</li>
+<li><span style='color:green'>(stable)</span> public static final int LATIN_EXTENDED_E_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock LINEAR_A</li>
+<li><span style='color:green'>(stable)</span> public static final int LINEAR_A_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MAHAJANI</li>
+<li><span style='color:green'>(stable)</span> public static final int MAHAJANI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MANICHAEAN</li>
+<li><span style='color:green'>(stable)</span> public static final int MANICHAEAN_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MENDE_KIKAKUI</li>
+<li><span style='color:green'>(stable)</span> public static final int MENDE_KIKAKUI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MODI</li>
+<li><span style='color:green'>(stable)</span> public static final int MODI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MRO</li>
+<li><span style='color:green'>(stable)</span> public static final int MRO_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MYANMAR_EXTENDED_B</li>
+<li><span style='color:green'>(stable)</span> public static final int MYANMAR_EXTENDED_B_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock NABATAEAN</li>
+<li><span style='color:green'>(stable)</span> public static final int NABATAEAN_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock OLD_NORTH_ARABIAN</li>
+<li><span style='color:green'>(stable)</span> public static final int OLD_NORTH_ARABIAN_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock OLD_PERMIC</li>
+<li><span style='color:green'>(stable)</span> public static final int OLD_PERMIC_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock ORNAMENTAL_DINGBATS</li>
+<li><span style='color:green'>(stable)</span> public static final int ORNAMENTAL_DINGBATS_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock PAHAWH_HMONG</li>
+<li><span style='color:green'>(stable)</span> public static final int PAHAWH_HMONG_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock PALMYRENE</li>
+<li><span style='color:green'>(stable)</span> public static final int PALMYRENE_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock PAU_CIN_HAU</li>
+<li><span style='color:green'>(stable)</span> public static final int PAU_CIN_HAU_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock PSALTER_PAHLAVI</li>
+<li><span style='color:green'>(stable)</span> public static final int PSALTER_PAHLAVI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SHORTHAND_FORMAT_CONTROLS</li>
+<li><span style='color:green'>(stable)</span> public static final int SHORTHAND_FORMAT_CONTROLS_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SIDDHAM</li>
+<li><span style='color:green'>(stable)</span> public static final int SIDDHAM_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SINHALA_ARCHAIC_NUMBERS</li>
+<li><span style='color:green'>(stable)</span> public static final int SINHALA_ARCHAIC_NUMBERS_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SUPPLEMENTAL_ARROWS_C</li>
+<li><span style='color:green'>(stable)</span> public static final int SUPPLEMENTAL_ARROWS_C_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock TIRHUTA</li>
+<li><span style='color:green'>(stable)</span> public static final int TIRHUTA_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock WARANG_CITI</li>
+<li><span style='color:green'>(stable)</span> public static final int WARANG_CITI_ID</li>
+</ul>
+UScript
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int AHOM</li>
+<li><span style='color:green'>(stable)</span> public static final int HATRAN</li>
+<li><span style='color:green'>(stable)</span> public static final int KHUDAWADI</li>
+<li><span style='color:green'>(stable)</span> public static final int MODI</li>
+<li><span style='color:green'>(stable)</span> public static final int MULTANI</li>
+<li><span style='color:green'>(stable)</span> public static final int PAU_CIN_HAU</li>
+<li><span style='color:green'>(stable)</span> public static final int SIDDHAM</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public final class <i>ScientificFormatHelper</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>RelativeDateTimeFormatter.Style</i></li>
+CurrencyDisplayNames
+<ul>
+<li><span style='color:orange'>(draft)</span> public static CurrencyDisplayNames <i>getInstance</i>(java.util.Locale)</li>
+<li><span style='color:orange'>(draft)</span> public static CurrencyDisplayNames <i>getInstance</i>(java.util.Locale, boolean)</li>
+</ul>
+CurrencyMetaInfo
+<ul>
+<li><span style='color:orange'>(draft)</span> public CurrencyMetaInfo.CurrencyDigits <i>currencyDigits</i>(java.lang.String, Currency.CurrencyUsage)</li>
+</ul>
+DateIntervalInfo
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>DateIntervalInfo</i>(java.util.Locale)</li>
+</ul>
+DateTimePatternGenerator
+<ul>
+<li><span style='color:orange'>(draft)</span> public static DateTimePatternGenerator <i>getInstance</i>(java.util.Locale)</li>
+</ul>
+DecimalFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public Currency.CurrencyUsage <i>getCurrencyUsage</i>()</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setCurrencyUsage</i>(Currency.CurrencyUsage)</li>
+</ul>
+DecimalFormatSymbols
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getExponentMultiplicationSign</i>()</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setExponentMultiplicationSign</i>(java.lang.String)</li>
+</ul>
+LocaleDisplayNames
+<ul>
+<li><span style='color:orange'>(draft)</span> public static LocaleDisplayNames <i>getInstance</i>(java.util.Locale)</li>
+<li><span style='color:orange'>(draft)</span> public static LocaleDisplayNames <i>getInstance</i>(java.util.Locale, DisplayContext...)</li>
+</ul>
+MeasureFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public static MeasureFormat <i>getCurrencyFormat</i>(java.util.Locale)</li>
+<li><span style='color:orange'>(draft)</span> public static MeasureFormat <i>getInstance</i>(java.util.Locale, MeasureFormat.FormatWidth)</li>
+<li><span style='color:orange'>(draft)</span> public static MeasureFormat <i>getInstance</i>(java.util.Locale, MeasureFormat.FormatWidth, NumberFormat)</li>
+</ul>
+NumberFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int CASHCURRENCYSTYLE</li>
+</ul>
+PluralFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>PluralFormat</i>(java.util.Locale)</li>
+<li><span style='color:orange'>(draft)</span> public <i>PluralFormat</i>(java.util.Locale, PluralRules)</li>
+<li><span style='color:orange'>(draft)</span> public <i>PluralFormat</i>(java.util.Locale, PluralRules.PluralType)</li>
+</ul>
+PluralRules
+<ul>
+<li><span style='color:orange'>(draft)</span> public static PluralRules <i>forLocale</i>(java.util.Locale)</li>
+<li><span style='color:orange'>(draft)</span> public static PluralRules <i>forLocale</i>(java.util.Locale, PluralRules.PluralType)</li>
+</ul>
+RelativeDateTimeFormatter
+<ul>
+<li><span style='color:orange'>(draft)</span> public DisplayContext <i>getCapitalizationContext</i>()</li>
+<li><span style='color:orange'>(draft)</span> public RelativeDateTimeFormatter.Style <i>getFormatStyle</i>()</li>
+<li><span style='color:orange'>(draft)</span> public static RelativeDateTimeFormatter <i>getInstance</i>(ULocale, NumberFormat, RelativeDateTimeFormatter.Style, DisplayContext)</li>
+<li><span style='color:orange'>(draft)</span> public static RelativeDateTimeFormatter <i>getInstance</i>(java.util.Locale)</li>
+<li><span style='color:orange'>(draft)</span> public static RelativeDateTimeFormatter <i>getInstance</i>(java.util.Locale, NumberFormat)</li>
+</ul>
+RelativeDateTimeFormatter.Style
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.Style LONG</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.Style NARROW</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.Style SHORT</li>
+</ul>
+SpoofChecker
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.util.Set&lt;java.util.Locale&gt; <i>getAllowedJavaLocales</i>()</li>
+</ul>
+SpoofChecker.Builder
+<ul>
+<li><span style='color:orange'>(draft)</span> public SpoofChecker.Builder <i>setAllowedJavaLocales</i>(java.util.Set&lt;java.util.Locale&gt;)</li>
+</ul>
+TimeZoneFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public static TimeZoneFormat <i>getInstance</i>(java.util.Locale)</li>
+</ul>
+TimeZoneNames
+<ul>
+<li><span style='color:orange'>(draft)</span> public static TimeZoneNames <i>getInstance</i>(java.util.Locale)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public static enum <i>Currency.CurrencyUsage</i></li>
+Currency
+<ul>
+<li><span style='color:orange'>(draft)</span> public static java.lang.String[] <i>getAvailableCurrencyCodes</i>(java.util.Locale, java.util.Date)</li>
+<li><span style='color:orange'>(draft)</span> public int <i>getDefaultFractionDigits</i>(Currency.CurrencyUsage)</li>
+<li><span style='color:orange'>(draft)</span> public double <i>getRoundingIncrement</i>(Currency.CurrencyUsage)</li>
+</ul>
+Currency.CurrencyUsage
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final Currency.CurrencyUsage CASH</li>
+<li><span style='color:orange'>(draft)</span> public static final Currency.CurrencyUsage STANDARD</li>
+</ul>
+VersionInfo
+<ul>
+<li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_7_0</li>
+</ul>
+</ul>
+
+<hr/>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Jun 30 14:32:32 EDT 2014<br/>Copyright (C) 2014, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+</body>
+</html>
