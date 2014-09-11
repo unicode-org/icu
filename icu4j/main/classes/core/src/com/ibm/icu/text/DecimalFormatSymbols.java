@@ -548,7 +548,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
     * Returns the multiplication sign
     * @draft ICU 54
-    * @provisional
+    * @provisional This API might change or be removed in a future release.
     */
     public String getExponentMultiplicationSign() {
         return exponentMultiplicationSign;
@@ -557,7 +557,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
     * Sets the multiplication sign
     * @draft ICU 54
-    * @provisional
+    * @provisional This API might change or be removed in a future release.
     */
     public void setExponentMultiplicationSign(String exponentMultiplicationSign) {
         this.exponentMultiplicationSign = exponentMultiplicationSign;
