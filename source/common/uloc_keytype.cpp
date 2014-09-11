@@ -88,58 +88,60 @@ initFromResourceBundle(UErrorCode& sts) {
     ucln_common_registerCleanup(UCLN_COMMON_LOCALE_KEY_TYPE, uloc_key_type_cleanup);
 
     gLocExtKeyMap = uhash_open(uhash_hashIChars, uhash_compareIChars, NULL, &sts);
+
+    LocalUResourceBundlePointer keyTypeDataRes(ures_openDirect(NULL, "keyTypeData", &sts));
+    LocalUResourceBundlePointer keyMapRes(ures_getByKey(keyTypeDataRes.getAlias(), "keyMap", NULL, &sts));
+    LocalUResourceBundlePointer typeMapRes(ures_getByKey(keyTypeDataRes.getAlias(), "typeMap", NULL, &sts));
+
     if (U_FAILURE(sts)) {
         return;
     }
 
-    UResourceBundle *keyTypeDataRes = NULL;
-    UResourceBundle *keyMapRes = NULL;
-    UResourceBundle *typeMapRes = NULL;
-    UResourceBundle *typeAliasRes = NULL;
-    UResourceBundle *bcpTypeAliasRes = NULL;
-
-    keyTypeDataRes = ures_openDirect(NULL, "keyTypeData", &sts);
-    keyMapRes = ures_getByKey(keyTypeDataRes, "keyMap", NULL, &sts);
-    typeMapRes = ures_getByKey(keyTypeDataRes, "typeMap", NULL, &sts);
-
     UErrorCode tmpSts = U_ZERO_ERROR;
-    typeAliasRes = ures_getByKey(keyTypeDataRes, "typeAlias", NULL, &tmpSts);
-    if (U_FAILURE(tmpSts)) {
-        typeAliasRes = NULL;
-        tmpSts = U_ZERO_ERROR;
-    }
-    bcpTypeAliasRes = ures_getByKey(keyTypeDataRes, "bcpTypeAlias", NULL, &tmpSts);
-    if (U_FAILURE(tmpSts)) {
-        bcpTypeAliasRes = NULL;
-        tmpSts = U_ZERO_ERROR;
-    }
+    LocalUResourceBundlePointer typeAliasRes(ures_getByKey(keyTypeDataRes.getAlias(), "typeAlias", NULL, &tmpSts));
+    tmpSts = U_ZERO_ERROR;
+    LocalUResourceBundlePointer bcpTypeAliasRes(ures_getByKey(keyTypeDataRes.getAlias(), "bcpTypeAlias", NULL, &tmpSts));
 
     // initialize vectors storing dynamically allocated objects
     gKeyTypeStringPool = new icu::UVector(uloc_deleteKeyTypeStringPoolEntry, NULL, sts);
-    if (gKeyTypeStringPool == NULL || U_FAILURE(sts)) {
-        goto close_bundles;
+    if (gKeyTypeStringPool == NULL) {
+        if (U_SUCCESS(sts)) {
+            sts = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+    if (U_FAILURE(sts)) {
+        return;
     }
     gLocExtKeyDataEntries = new icu::UVector(uloc_deleteKeyDataEntry, NULL, sts);
-    if (gLocExtKeyDataEntries == NULL || U_FAILURE(sts)) {
-        goto close_bundles;
+    if (gLocExtKeyDataEntries == NULL) {
+        if (U_SUCCESS(sts)) {
+            sts = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+    if (U_FAILURE(sts)) {
+        return;
     }
     gLocExtTypeEntries = new icu::UVector(uloc_deleteTypeEntry, NULL, sts);
-    if (gLocExtTypeEntries == NULL || U_FAILURE(sts)) {
-        goto close_bundles;
+    if (gLocExtTypeEntries == NULL) {
+        if (U_SUCCESS(sts)) {
+            sts = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+    if (U_FAILURE(sts)) {
+        return;
     }
 
     // iterate through keyMap resource
-    UResourceBundle keyMapEntry;
-    ures_initStackObject(&keyMapEntry);
+    LocalUResourceBundlePointer keyMapEntry;
 
-    while (ures_hasNext(keyMapRes)) {
-        ures_getNextResource(keyMapRes, &keyMapEntry, &sts);
+    while (ures_hasNext(keyMapRes.getAlias())) {
+        keyMapEntry.adoptInstead(ures_getNextResource(keyMapRes.getAlias(), keyMapEntry.orphan(), &sts));
         if (U_FAILURE(sts)) {
             break;
         }
-        const char* legacyKeyId = ures_getKey(&keyMapEntry);
+        const char* legacyKeyId = ures_getKey(keyMapEntry.getAlias());
         int32_t bcpKeyIdLen = 0;
-        const UChar* uBcpKeyId = ures_getString(&keyMapEntry, &bcpKeyIdLen, &sts);
+        const UChar* uBcpKeyId = ures_getString(keyMapEntry.getAlias(), &bcpKeyIdLen, &sts);
         if (U_FAILURE(sts)) {
             break;
         }
@@ -169,42 +171,39 @@ initFromResourceBundle(UErrorCode& sts) {
         }
         uint32_t specialTypes = SPECIALTYPE_NONE;
 
-        UResourceBundle* typeAliasResByKey = NULL;
-        UResourceBundle* bcpTypeAliasResByKey = NULL;
+        LocalUResourceBundlePointer typeAliasResByKey;
+        LocalUResourceBundlePointer bcpTypeAliasResByKey;
 
-        if (typeAliasRes != NULL) {
-            typeAliasResByKey = ures_getByKey(typeAliasRes, legacyKeyId, NULL, &tmpSts);
+        if (typeAliasRes.isValid()) {
+            tmpSts = U_ZERO_ERROR;
+            typeAliasResByKey.adoptInstead(ures_getByKey(typeAliasRes.getAlias(), legacyKeyId, NULL, &tmpSts));
             if (U_FAILURE(tmpSts)) {
-                // only a few keys have type alias mapping
-                typeAliasResByKey = NULL;
-                tmpSts = U_ZERO_ERROR;
+                typeAliasResByKey.orphan();
             }
         }
-        if (bcpTypeAliasRes != NULL) {
-            bcpTypeAliasResByKey = ures_getByKey(bcpTypeAliasRes, bcpKeyId, NULL, &tmpSts);
+        if (bcpTypeAliasRes.isValid()) {
+            tmpSts = U_ZERO_ERROR;
+            bcpTypeAliasResByKey.adoptInstead(ures_getByKey(bcpTypeAliasRes.getAlias(), bcpKeyId, NULL, &tmpSts));
             if (U_FAILURE(tmpSts)) {
-                // only a few keys have BCP type alias mapping
-                bcpTypeAliasResByKey = NULL;
-                tmpSts = U_ZERO_ERROR;
+                bcpTypeAliasResByKey.orphan();
             }
         }
 
         // look up type map for the key, and walk through the mapping data
-        UResourceBundle* typeMapResByKey = ures_getByKey(typeMapRes, legacyKeyId, NULL, &tmpSts);
+        tmpSts = U_ZERO_ERROR;
+        LocalUResourceBundlePointer typeMapResByKey(ures_getByKey(typeMapRes.getAlias(), legacyKeyId, NULL, &tmpSts));
         if (U_FAILURE(tmpSts)) {
             // type map for each key must exist
             U_ASSERT(FALSE);
-            tmpSts = U_ZERO_ERROR;
         } else {
-            UResourceBundle typeMapEntry;
-            ures_initStackObject(&typeMapEntry);
+            LocalUResourceBundlePointer typeMapEntry;
 
-            while (ures_hasNext(typeMapResByKey)) {
-                ures_getNextResource(typeMapResByKey, &typeMapEntry, &sts);
+            while (ures_hasNext(typeMapResByKey.getAlias())) {
+                typeMapEntry.adoptInstead(ures_getNextResource(typeMapResByKey.getAlias(), typeMapEntry.orphan(), &sts));
                 if (U_FAILURE(sts)) {
                     break;
                 }
-                const char* legacyTypeId = ures_getKey(&typeMapEntry);
+                const char* legacyTypeId = ures_getKey(typeMapEntry.getAlias());
 
                 // special types
                 if (uprv_strcmp(legacyTypeId, "CODEPOINTS") == 0) {
@@ -247,7 +246,7 @@ initFromResourceBundle(UErrorCode& sts) {
                 }
 
                 int32_t bcpTypeIdLen = 0;
-                const UChar* uBcpTypeId = ures_getString(&typeMapEntry, &bcpTypeIdLen, &sts);
+                const UChar* uBcpTypeId = ures_getString(typeMapEntry.getAlias(), &bcpTypeIdLen, &sts);
                 if (U_FAILURE(sts)) {
                     break;
                 }
@@ -295,21 +294,20 @@ initFromResourceBundle(UErrorCode& sts) {
                 }
 
                 // also put aliases in the map
-                if (typeAliasResByKey != NULL) {
-                    UResourceBundle typeAliasDataEntry;
-                    ures_initStackObject(&typeAliasDataEntry);
+                if (typeAliasResByKey.isValid()) {
+                    LocalUResourceBundlePointer typeAliasDataEntry;
 
-                    ures_resetIterator(typeAliasResByKey);
-                    while (ures_hasNext(typeAliasResByKey) && U_SUCCESS(sts)) {
+                    ures_resetIterator(typeAliasResByKey.getAlias());
+                    while (ures_hasNext(typeAliasResByKey.getAlias()) && U_SUCCESS(sts)) {
                         int32_t toLen;
-                        ures_getNextResource(typeAliasResByKey, &typeAliasDataEntry, &sts);
-                        const UChar* to = ures_getString(&typeAliasDataEntry, &toLen, &sts);
+                        typeAliasDataEntry.adoptInstead(ures_getNextResource(typeAliasResByKey.getAlias(), typeAliasDataEntry.orphan(), &sts));
+                        const UChar* to = ures_getString(typeAliasDataEntry.getAlias(), &toLen, &sts);
                         if (U_FAILURE(sts)) {
                             break;
                         }
                         // check if this is an alias of canoncal legacy type
                         if (uprv_compareInvAscii(NULL, legacyTypeId, -1, to, toLen) == 0) {
-                            const char* from = ures_getKey(&typeAliasDataEntry);
+                            const char* from = ures_getKey(typeAliasDataEntry.getAlias());
                             if (isTZ) {
                                 // replace colon with slash if necessary
                                 if (uprv_strchr(from, ':') != NULL) {
@@ -341,41 +339,34 @@ initFromResourceBundle(UErrorCode& sts) {
                             uhash_put(typeDataMap, (void*)from, t, &sts);
                         }
                     }
-                    ures_close(&typeAliasDataEntry);
                     if (U_FAILURE(sts)) {
                         break;
                     }
                 }
 
-                if (bcpTypeAliasResByKey != NULL) {
-                    UResourceBundle bcpTypeAliasDataEntry;
-                    ures_initStackObject(&bcpTypeAliasDataEntry);
+                if (bcpTypeAliasResByKey.isValid()) {
+                    LocalUResourceBundlePointer bcpTypeAliasDataEntry;
 
-                    ures_resetIterator(bcpTypeAliasResByKey);
-                    while (ures_hasNext(bcpTypeAliasResByKey) && U_SUCCESS(sts)) {
+                    ures_resetIterator(bcpTypeAliasResByKey.getAlias());
+                    while (ures_hasNext(bcpTypeAliasResByKey.getAlias()) && U_SUCCESS(sts)) {
                         int32_t toLen;
-                        ures_getNextResource(bcpTypeAliasResByKey, &bcpTypeAliasDataEntry, &sts);
-                        const UChar* to = ures_getString(&bcpTypeAliasDataEntry, &toLen, &sts);
+                        bcpTypeAliasDataEntry.adoptInstead(ures_getNextResource(bcpTypeAliasResByKey.getAlias(), bcpTypeAliasDataEntry.orphan(), &sts));
+                        const UChar* to = ures_getString(bcpTypeAliasDataEntry.getAlias(), &toLen, &sts);
                         if (U_FAILURE(sts)) {
                             break;
                         }
                         // check if this is an alias of bcp type
                         if (uprv_compareInvAscii(NULL, bcpTypeId, -1, to, toLen) == 0) {
-                            const char* from = ures_getKey(&bcpTypeAliasDataEntry);
+                            const char* from = ures_getKey(bcpTypeAliasDataEntry.getAlias());
                             uhash_put(typeDataMap, (void*)from, t, &sts);
                         }
                     }
-                    ures_close(&bcpTypeAliasDataEntry);
                     if (U_FAILURE(sts)) {
                         break;
                     }
                 }
             }
-            ures_close(&typeMapEntry);
         }
-        ures_close(typeMapResByKey);
-        ures_close(typeAliasResByKey);
-        ures_close(bcpTypeAliasResByKey);
         if (U_FAILURE(sts)) {
             break;
         }
@@ -404,15 +395,6 @@ initFromResourceBundle(UErrorCode& sts) {
             break;
         }
     }
-
-    ures_close(&keyMapEntry);
-
-close_bundles:
-    ures_close(bcpTypeAliasRes);
-    ures_close(typeAliasRes);
-    ures_close(typeMapRes);
-    ures_close(keyMapRes);
-    ures_close(keyTypeDataRes);
 }
 
 static UBool
@@ -435,8 +417,9 @@ isSpecialTypeCodepoints(const char* val) {
                 return FALSE;
             }
             subtagLen = 0;
-        } else if (('0' <= *p && *p <= '9') ||
-                    ('A' <= *p && *p <= 'F') || ('a' <= *p && *p <= 'f')) {
+        } else if ((*p >= '0' && *p <= '9') ||
+                    (*p >= 'A' && *p <= 'F') || // A-F/a-f are contiguous
+                    (*p >= 'a' && *p <= 'f')) { // also in EBCDIC
             subtagLen++;
         } else {
             return FALSE;
@@ -456,7 +439,7 @@ isSpecialTypeReorderCode(const char* val) {
                 return FALSE;
             }
             subtagLen = 0;
-        } else if (('A' <= *p && *p <= 'Z') || ('a' <= *p && *p <= 'z')) {
+        } else if (uprv_isASCIILetter(*p)) {
             subtagLen++;
         } else {
             return FALSE;
