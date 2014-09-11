@@ -58,7 +58,6 @@
 #include "uassert.h"
 #include "cmemory.h"
 #include "umutex.h"
-#include "mutex.h"
 #include <float.h>
 #include "smpdtfst.h"
 
@@ -1073,21 +1072,18 @@ SimpleDateFormat::initNumberFormatters(const Locale &locale,UErrorCode &status) 
     if ( fDateOverride.isBogus() && fTimeOverride.isBogus() ) {
         return;
     }
-
-    {
-      UMutex lock(&LOCK);
-      if (fNumberFormatters == NULL) {
+    umtx_lock(&LOCK);
+    if (fNumberFormatters == NULL) {
         fNumberFormatters = (NumberFormat**)uprv_malloc(UDAT_FIELD_COUNT * sizeof(NumberFormat*));
         if (fNumberFormatters) {
-          for (int32_t i = 0; i < UDAT_FIELD_COUNT; i++) {
-            fNumberFormatters[i] = fNumberFormat;
-          }
+            for (int32_t i = 0; i < UDAT_FIELD_COUNT; i++) {
+                fNumberFormatters[i] = fNumberFormat;
+            }
         } else {
-          status = U_MEMORY_ALLOCATION_ERROR;
+            status = U_MEMORY_ALLOCATION_ERROR;
         }
-      }
-      // exit mutex
     }
+    umtx_unlock(&LOCK);
 
     if (U_FAILURE(status)) {
         return;
