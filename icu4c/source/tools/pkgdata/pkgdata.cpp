@@ -1523,6 +1523,7 @@ enum {
     DATA_PREFIX_REGION,
     DATA_PREFIX_TRANSLIT,
     DATA_PREFIX_ZONE,
+    DATA_PREFIX_UNIT,
     DATA_PREFIX_LENGTH
 };
 
@@ -1534,7 +1535,8 @@ const static char DATA_PREFIX[DATA_PREFIX_LENGTH][10] = {
         "rbnf",
         "region",
         "translit",
-        "zone"
+        "zone",
+        "unit"
 };
 
 static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetDir, const char mode) {

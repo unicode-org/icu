@@ -115,12 +115,4 @@ ne_IN{
     measurementSystemNames{
         US{"अमेरिकेली"}
     }
-    units{
-        duration{
-            week{
-                one{"{0} साता"}
-                other{"{0} सप्ताह"}
-            }
-        }
-    }
 }

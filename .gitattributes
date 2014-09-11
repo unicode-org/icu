@@ -70,6 +70,7 @@ icu4c/source/data/locales/pool.res -text
 icu4c/source/data/makedata.vcxproj -text
 icu4c/source/data/makedata.vcxproj.filters -text
 icu4c/source/data/region/pool.res -text
+icu4c/source/data/unit/pool.res -text
 icu4c/source/data/zone/pool.res -text
 icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
