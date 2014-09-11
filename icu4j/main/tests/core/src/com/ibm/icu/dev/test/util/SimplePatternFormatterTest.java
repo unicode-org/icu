@@ -70,6 +70,14 @@ public class SimplePatternFormatterTest extends TestFmwk {
                 SimplePatternFormatter.compile("{0} meter").format("1"));
      }
      
+     public void TestGetPatternWithNoPlaceholders() {
+         assertEquals(
+                 "",
+                 "Templates  and  are here.",
+                 SimplePatternFormatter.compile(
+                         "Templates {1}{2} and {3} are here.").getPatternWithNoPlaceholders());
+     }
+     
      public void TestWithPlaceholders() {
          SimplePatternFormatter fmt = SimplePatternFormatter.compile(
                  "Templates {2}{1} and {4} are out of order.");
