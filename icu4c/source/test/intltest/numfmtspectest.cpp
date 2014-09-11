@@ -176,7 +176,6 @@ void NumberFormatSpecificationTest::TestPadding() {
     assertPatternFr("ne1 234nx", -1234, "####,##0$*x;ne#n");
     assertPatternFr("n1 234*xx", -1234, "####,##0$*x;n#'*'");
     assertPatternFr("yyyy%432,6", 4.33, "*y%4.2######");
-// Next 2 tests broken because of ticket 11025
     if (!logKnownIssue("11025")) {
         assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **####0.00");
         assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **#######0");
