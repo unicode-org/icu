@@ -65,13 +65,13 @@ class U_COMMON_API ListFormatter : public UObject{
 
     /**
      * Copy constructor.
-     * @draft ICU 52
+     * @stable ICU 52
      */
     ListFormatter(const ListFormatter&);
 
     /**
      * Assignment operator.
-     * @draft ICU 52
+     * @stable ICU 52
      */
     ListFormatter& operator=(const ListFormatter& other);
 

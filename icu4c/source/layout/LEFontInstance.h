@@ -186,7 +186,7 @@ public:
      * @param length - ignored on entry, on exit will be the length of the table if known, or -1 if unknown.
      * @return the address of the table in memory, or <code>NULL</code>
      *         if the table doesn't exist.
-     * @draft ICU 52
+     * @deprecated ICU 54. See {@link LayoutEngine}
      */
     virtual const void* getFontTable(LETag tableTag, size_t &length) const { length=-1; return getFontTable(tableTag); }  /* -1 = unknown length */
 
