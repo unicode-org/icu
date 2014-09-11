@@ -19,6 +19,7 @@ public:
     void TestNoPlaceholders();
     void TestOnePlaceholder();
     void TestManyPlaceholders();
+    void TestGetPatternWithNoPlaceholders();
     void TestOptimization();
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 private:
@@ -29,6 +30,7 @@ void SimplePatternFormatterTest::runIndexedTest(int32_t index, UBool exec, const
   TESTCASE_AUTO(TestNoPlaceholders);
   TESTCASE_AUTO(TestOnePlaceholder);
   TESTCASE_AUTO(TestManyPlaceholders);
+  TESTCASE_AUTO(TestGetPatternWithNoPlaceholders);
   TESTCASE_AUTO(TestOptimization);
   TESTCASE_AUTO_END;
 }
@@ -115,6 +117,8 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
         }
     }
     appendTo.remove();
+
+    // Not having enough placeholder params results in error.
     fmt.format(
             params,
             UPRV_LENGTHOF(params) - 1,
@@ -125,6 +129,8 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         errln("Expected U_ILLEGAL_ARGUMENT_ERROR");
     }
+
+    // Ensure we don't write to offsets array beyond its length.
     status = U_ZERO_ERROR;
     offsets[UPRV_LENGTHOF(offsets) - 1] = 289;
     appendTo.remove();
@@ -187,6 +193,12 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
             "foo, bar and baz",
             r.format("foo", "bar", "baz", appendTo, status));
     assertSuccess("Status", status);
+}
+
+void SimplePatternFormatterTest::TestGetPatternWithNoPlaceholders() {
+    SimplePatternFormatter fmt("{0} has no {1} placeholders.");
+    assertEquals(
+            "", " has no  placeholders.", fmt.getPatternWithNoPlaceholders());
 }
 
 void SimplePatternFormatterTest::TestOptimization() {
