@@ -265,6 +265,9 @@
     <ClCompile Include="pptest.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="quantityformattertest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="reldatefmttest.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

@@ -35,7 +35,6 @@ class FieldPosition;
  * 
  */
 class U_I18N_API QuantityFormatter : public UMemory {
-// TODO(Travis Keep): Add test for copy constructor, assignment, and reset.
 public:
     /**
      * Default constructor.
@@ -68,7 +67,7 @@ public:
       * @param variant "zero", "one", "two", "few", "many", "other"
       * @param rawPattern the pattern for the variant e.g "{0} meters"
       * @param status any error returned here.
-      * @return TRUE on success; FALSE otherwise.
+      * @return TRUE on success; FALSE if status was set to a non zero error.
       */
     UBool add(
             const char *variant,
