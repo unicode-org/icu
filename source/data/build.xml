@@ -137,6 +137,9 @@
 		  <remap sourcePath="/CurrencyUnitPatterns" targetDir="curr" />
 		  <remap sourcePath="/currencySpacing" targetDir="curr" />
 		  <remap sourcePath="/zoneStrings" targetDir="zone" />
+		  <remap sourcePath="/units" targetDir="unit" />
+		  <remap sourcePath="/unitsShort" targetDir="unit" />
+		  <remap sourcePath="/unitsNarrow" targetDir="unit" />
 		</remapper>
                 <!-- http://ant.apache.org/faq.html#xml-entity-include -->
                 &icu-config;
@@ -375,6 +378,8 @@
                <include name="zone/*.txt" /> 
                <include name="zone/resfiles.mk" /> 
                <exclude name="zone/tzdbNames.txt" /> 
+               <include name="unit/*.txt" /> 
+               <include name="unit/resfiles.mk" /> 
 	    </fileset>
             <fileset id="collation" dir="${env.ICU4C_DIR}/source/data/coll">
                 <include name="*.txt" />

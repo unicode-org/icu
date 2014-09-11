@@ -30,34 +30,4 @@ de_CH{
         quotationEnd{"»"}
         quotationStart{"«"}
     }
-    units{
-        area{
-            square-foot{
-                dnam{"Quadratfuss"}
-                one{"{0} Quadratfuss"}
-                other{"{0} Quadratfuss"}
-            }
-        }
-        length{
-            foot{
-                dnam{"Fuss"}
-                one{"{0} Fuss"}
-                other{"{0} Fuss"}
-            }
-        }
-        volume{
-            cubic-foot{
-                dnam{"Kubikfuss"}
-                one{"{0} Kubikfuss"}
-                other{"{0} Kubikfuss"}
-            }
-        }
-    }
-    unitsShort{
-        length{
-            foot{
-                dnam{"Fuss"}
-            }
-        }
-    }
 }

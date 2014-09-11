@@ -80,12 +80,4 @@ sv_FI{
         UK{"engelska enheter (UK)"}
         US{"engelska enheter (USA)"}
     }
-    unitsNarrow{
-        speed{
-            kilometer-per-hour{
-                one{"{0} km/h"}
-                other{"{0} km/h"}
-            }
-        }
-    }
 }
