@@ -919,7 +919,7 @@ da{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.9.62"}
     codePatterns{
         language{"Sprog: {0}"}
         script{"Instruks: {0}"}

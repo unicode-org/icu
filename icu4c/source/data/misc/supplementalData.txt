@@ -4520,10 +4520,7 @@ supplementalData:table(nofallback){
         bjn{
             primary{
                 scripts{"Latn"}
-                territories{
-                    "ID",
-                    "MY",
-                }
+                territories{"ID"}
             }
         }
         bkm{
