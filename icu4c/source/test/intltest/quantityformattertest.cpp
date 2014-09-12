@@ -109,7 +109,8 @@ void QuantityFormatterTest::TestBasic() {
 
     // Test format.
     {
-        LocalPointer<NumberFormat> numfmt(NumberFormat::createInstance(status));
+        LocalPointer<NumberFormat> numfmt(
+                NumberFormat::createInstance(Locale::getEnglish(), status));
         LocalPointer<PluralRules> plurrule(
                 PluralRules::forLocale("en", status));
         FieldPosition pos(FieldPosition::DONT_CARE);
