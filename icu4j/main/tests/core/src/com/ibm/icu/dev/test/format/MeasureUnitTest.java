@@ -25,7 +25,6 @@ import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTest;
-import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MeasureFormat;
@@ -745,12 +744,14 @@ public class MeasureUnitTest extends TestFmwk {
     
     public void testMultiplesPer() {
         Object[][] data = new Object[][] {
+                // perUnit pattern
                 {ULocale.ENGLISH, FormatWidth.WIDE, MeasureUnit.SECOND, "2 miles, 1 foot, 2.3 inches per second"},
                 {ULocale.ENGLISH, FormatWidth.SHORT, MeasureUnit.SECOND, "2 mi, 1 ft, 2.3 inps"},
                 {ULocale.ENGLISH, FormatWidth.NARROW, MeasureUnit.SECOND, "2mi 1\u2032 2.3\u2033/s"},
+                // global per pattern
                 {ULocale.ENGLISH, FormatWidth.WIDE, MeasureUnit.MINUTE, "2 miles, 1 foot, 2.3 inches per minute"},
                 {ULocale.ENGLISH, FormatWidth.SHORT, MeasureUnit.MINUTE, "2 mi, 1 ft, 2.3 in/min"},
-                {ULocale.ENGLISH, FormatWidth.NARROW, MeasureUnit.MINUTE, "2mi 1\u2032 2.3\u2033/m"},
+                {ULocale.ENGLISH, FormatWidth.NARROW, MeasureUnit.MINUTE, "2mi 1\u2032 2.3\u2033/m"}
         };
         for (Object[] row : data) {
             MeasureFormat mf = MeasureFormat.getInstance(
@@ -760,12 +761,59 @@ public class MeasureUnitTest extends TestFmwk {
                     row[3],
                     mf.formatMeasuresPer(
                             new StringBuilder(),
-                            DontCareFieldPosition.INSTANCE,
+                            new FieldPosition(0),
                             (MeasureUnit) row[2],
                             new Measure(2, MeasureUnit.MILE), 
                             new Measure(1, MeasureUnit.FOOT), 
                             new Measure(2.3, MeasureUnit.INCH)).toString());
         }
+    }
+    
+    public void testSimplePer() {
+        Object[][] data = new Object[][] {
+                // per unit singular
+                {1, MeasureUnit.SECOND, "1 lbps"},
+                // per unit plural
+                {2, MeasureUnit.SECOND, "2 lbps"},
+                // compound singular
+                {1, MeasureUnit.MINUTE, "1 lb/min"},
+                // compound plural
+                {2, MeasureUnit.MINUTE, "2 lb/min"},
+        };
+        
+        for (Object[] row : data) {
+            MeasureFormat mf = MeasureFormat.getInstance(
+                    ULocale.ENGLISH, FormatWidth.SHORT);
+            assertEquals(
+                    "",
+                    row[2],
+                    mf.formatMeasuresPer(
+                            new StringBuilder(),
+                            new FieldPosition(0),
+                            (MeasureUnit) row[1],
+                            new Measure((Number) row[0], MeasureUnit.POUND)).toString());
+        }        
+    }
+    
+    public void testNumeratorPlurals() {
+        ULocale polish = new ULocale("pl");
+        Object[][] data = new Object[][] {
+                {1, "1 stopa na sekundę"},
+                {2, "2 stopy na sekundę"},
+                {5, "5 stóp na sekundę"},
+                {1.5, "1,5 stopy na sekundę"}};
+                
+        for (Object[] row : data) {
+            MeasureFormat mf = MeasureFormat.getInstance(polish, FormatWidth.WIDE);
+            assertEquals(
+                    "",
+                    row[1],
+                    mf.formatMeasuresPer(
+                            new StringBuilder(),
+                            new FieldPosition(0),
+                            MeasureUnit.SECOND,
+                            new Measure((Number) row[0], MeasureUnit.FOOT)).toString());
+        }        
     }
 
     public void testGram() {
