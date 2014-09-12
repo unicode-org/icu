@@ -367,7 +367,6 @@ public class PluralFormat extends UFormat {
      * @param pattern the pattern for this <code>PluralFormat</code>.
      * @param numberFormat The number formatter to use.
      * @throws IllegalArgumentException if the pattern is invalid.
-     * @stable ICU 50
      */
     /*package*/ PluralFormat(ULocale ulocale, PluralType type, String pattern, NumberFormat numberFormat) {
         init(null, type, ulocale, numberFormat);
