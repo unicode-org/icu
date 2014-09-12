@@ -507,20 +507,6 @@ u_getCombiningClass(UChar32 c) {
     }
 }
 
-U_CFUNC UNormalizationCheckResult
-unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
-    if(mode<=UNORM_NONE || UNORM_FCD<=mode) {
-        return UNORM_YES;
-    }
-    UErrorCode errorCode=U_ZERO_ERROR;
-    const Normalizer2 *norm2=Normalizer2Factory::getInstance(mode, errorCode);
-    if(U_SUCCESS(errorCode)) {
-        return ((const Normalizer2WithImpl *)norm2)->getQuickCheck(c);
-    } else {
-        return UNORM_MAYBE;
-    }
-}
-
 U_CFUNC uint16_t
 unorm_getFCD16(UChar32 c) {
     UErrorCode errorCode=U_ZERO_ERROR;

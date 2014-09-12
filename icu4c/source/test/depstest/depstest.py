@@ -128,7 +128,7 @@ def _Resolve(name, parents):
     for file_name in files:
       if symbol in _obj_files[file_name]["imports"]:
         neededFile = _symbols_to_files.get(symbol)
-        if neededFile:
+        if neededFile in dependencies.file_to_item:
           neededItem = "but %s does not depend on %s (for %s)" % (name, dependencies.file_to_item[neededFile], neededFile)
         else:
           neededItem = "- is this a new system symbol?"
