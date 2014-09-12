@@ -127,8 +127,8 @@ static const UChar kFULLSTOP = 0x002E; // '.'
 class SimpleFilteredSentenceBreakIterator : public BreakIterator {
 public:
   SimpleFilteredSentenceBreakIterator(BreakIterator *adopt, UCharsTrie *forwards, UCharsTrie *backwards, UErrorCode &status);
-  virtual ~SimpleFilteredSentenceBreakIterator() {}
   SimpleFilteredSentenceBreakIterator(const SimpleFilteredSentenceBreakIterator& other);
+  virtual ~SimpleFilteredSentenceBreakIterator();
 private:
   LocalPointer<BreakIterator> fDelegate;
   LocalUTextPointer           fText;
@@ -197,6 +197,8 @@ SimpleFilteredSentenceBreakIterator::SimpleFilteredSentenceBreakIterator(BreakIt
 {
   // all set..
 }
+
+SimpleFilteredSentenceBreakIterator::~SimpleFilteredSentenceBreakIterator() {}
 
 int32_t SimpleFilteredSentenceBreakIterator::next() {
   int32_t n = fDelegate->next();

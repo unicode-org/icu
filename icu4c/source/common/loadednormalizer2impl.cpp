@@ -339,4 +339,18 @@ unorm2_getInstance(const char *packageName,
     return (const UNormalizer2 *)Normalizer2::getInstance(packageName, name, mode, *pErrorCode);
 }
 
+U_CFUNC UNormalizationCheckResult
+unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
+    if(mode<=UNORM_NONE || UNORM_FCD<=mode) {
+        return UNORM_YES;
+    }
+    UErrorCode errorCode=U_ZERO_ERROR;
+    const Normalizer2 *norm2=Normalizer2Factory::getInstance(mode, errorCode);
+    if(U_SUCCESS(errorCode)) {
+        return ((const Normalizer2WithImpl *)norm2)->getQuickCheck(c);
+    } else {
+        return UNORM_MAYBE;
+    }
+}
+
 #endif  // !UCONFIG_NO_NORMALIZATION
