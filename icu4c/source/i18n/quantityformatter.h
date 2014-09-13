@@ -12,6 +12,8 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 U_NAMESPACE_BEGIN
 
 class SimplePatternFormatter;
@@ -111,5 +113,7 @@ private:
 };
 
 U_NAMESPACE_END
+
+#endif
 
 #endif

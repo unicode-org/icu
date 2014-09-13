@@ -702,7 +702,7 @@ static char plugin_file[2048] = "";
 
 U_INTERNAL const char* U_EXPORT2
 uplug_getPluginFile() {
-#if U_ENABLE_DYLOAD
+#if U_ENABLE_DYLOAD && !UCONFIG_NO_FILE_IO
   return plugin_file;
 #else
   return NULL;
@@ -714,7 +714,7 @@ U_CAPI void U_EXPORT2
 uplug_init(UErrorCode *status) {
 #if !U_ENABLE_DYLOAD
   (void)status; /* unused */
-#else
+#elif !UCONFIG_NO_FILE_IO
   CharString plugin_dir;
   const char *env = getenv("ICU_PLUGINS");
 
