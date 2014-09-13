@@ -188,9 +188,9 @@ public final class LocaleData {
             // currency symbol exemplar is no longer available
             return noSubstitute ? null : UnicodeSet.EMPTY;
         }
-        final String aKey = exemplarSetTypes[extype]; // will throw an out-of-bounds exception
 
         try{
+            final String aKey = exemplarSetTypes[extype]; // will throw an out-of-bounds exception
             ICUResourceBundle stringBundle = (ICUResourceBundle) bundle.get(aKey);
 
             if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) ) {
@@ -198,8 +198,9 @@ public final class LocaleData {
             }
             String unicodeSetPattern = stringBundle.getString();
             return new UnicodeSet(unicodeSetPattern, UnicodeSet.IGNORE_SPACE | options);
-            
-        }catch (Exception ex){
+        } catch (ArrayIndexOutOfBoundsException aiooe) {
+            throw new IllegalArgumentException(aiooe);
+        } catch (Exception ex){
             return noSubstitute ? null : UnicodeSet.EMPTY;
         }
     }
