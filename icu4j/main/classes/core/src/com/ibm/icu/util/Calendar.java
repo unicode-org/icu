@@ -4058,9 +4058,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Sets what the first day of the week is; e.g., Sunday in US,
-     * Monday in France.
-     * @param value the given first day of the week.
+     * Sets what the first day of the week is,
+     * where 1 = {@link SUNDAY} and 7 = {@link SATURDAY}.
+     * @param value the given first day of the week, where 1 = {@link SUNDAY} and 7 = {@link SATURDAY}.
      * @stable ICU 2.0
      */
     public void setFirstDayOfWeek(int value)
@@ -4075,9 +4075,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Returns what the first day of the week is; e.g., Sunday in US,
-     * Monday in France.
-     * @return the first day of the week.
+     * Returns what the first day of the week is,      
+     * where 1 = {@link SUNDAY} and 7 = {@link SATURDAY}.
+     * e.g., Sunday in US, Monday in France
+     * @return the first day of the week, where 1 = {@link SUNDAY} and 7 = {@link SATURDAY}.
      * @stable ICU 2.0
      */
     public int getFirstDayOfWeek()
@@ -4111,8 +4112,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Returns what the minimal days required in the first week of the year are;
-     * e.g., if the first week is defined as one that contains the first day
+     * Returns what the minimal days required in the first week of the year are.
+     * That is, if the first week is defined as one that contains the first day
      * of the first month of a year, getMinimalDaysInFirstWeek returns 1. If
      * the minimal days required must be a full week, getMinimalDaysInFirstWeek
      * returns 7.
@@ -4507,8 +4508,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         return buffer.toString();
     }
 
-    // =======================privates===============================
-
     /**
      * Simple, immutable struct-like class for access to the CLDR weekend data.
      * 
@@ -4641,7 +4640,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * {@icu} Return simple, immutable struct-like class for access to the CLDR weekend data.
      * @param region The input region. The results are undefined if the region code is not valid.
-     * @return the WeekData for the input region
+     * @return the WeekData for the input region. It is never null.
      * 
      * @draft ICU 54
      * @provisional This is a draft API and might change in a future release of ICU.
