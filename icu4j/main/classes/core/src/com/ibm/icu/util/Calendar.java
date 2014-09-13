@@ -4059,8 +4059,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Sets what the first day of the week is,
-     * where 1 = {@link SUNDAY} and 7 = {@link SATURDAY}.
-     * @param value the given first day of the week, where 1 = {@link SUNDAY} and 7 = {@link SATURDAY}.
+     * where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}.
+     * @param value the given first day of the week, where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}.
      * @stable ICU 2.0
      */
     public void setFirstDayOfWeek(int value)
@@ -4076,9 +4076,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Returns what the first day of the week is,      
-     * where 1 = {@link SUNDAY} and 7 = {@link SATURDAY}.
+     * where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}.
      * e.g., Sunday in US, Monday in France
-     * @return the first day of the week, where 1 = {@link SUNDAY} and 7 = {@link SATURDAY}.
+     * @return the first day of the week, where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}.
      * @stable ICU 2.0
      */
     public int getFirstDayOfWeek()
