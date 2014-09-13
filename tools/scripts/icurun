@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (C) 2011-2012 IBM Corporation and Others. All Rights Reserved.
+# Copyright (C) 2011-2014 IBM Corporation and Others. All Rights Reserved.
 #
 # This is designed for building and running single-source-file ICU programs.
 #
@@ -9,8 +9,8 @@
 #
 # In its simplest usage,  simply type:
 #
-#     icurun  yourprogram.c 
-#       (or .cpp if it is a C++ program) 
+#     icurun  yourprogram.c
+#       (or .cpp if it is a C++ program)
 #
 #  The tool will compile and then run the program
 #
@@ -23,7 +23,7 @@
 #                 -i /opt/local
 #                 -i /opt/local/bin
 #                 -i /opt/local/bin/icu-config
-#         
+#
 #         Additionally, /icu/source is a built ICU source directory, either of the following will work:
 #
 #                 -i /icu
@@ -36,14 +36,14 @@
 #  2)    If there is an executable ~/.icurunrc script, it can set the variable "ICU_CONFIG" to point
 #        directly to the icu-config file.
 #        An example ~/.icurunrc script  contains just this line:
-#               
+#
 #              ICU_CONFIG=/home/srl/E/II/bin/icu-config
 #
 #  3)    ICU_CONFIG can be set in the environment to point to icu-config  ( it's overridden by the .icurunrc script )
 #
 #  4)    if "icu-config" is on the PATH, it will be used.
 #
-# 
+#
 #  RUNNING
 #   Any additional arguments following the file will be passed to the application.
 #
@@ -133,8 +133,8 @@ fi
 
 if [ ! -x "${ICU_CONFIG}" ];
 then
-        echo "$0: Error: \"${ICU_CONFIG}\" is not an icu-config script. Bailing." >&2
-        exit 1
+    echo "$0: Error: \"${ICU_CONFIG}\" is not an icu-config script. Goodbye." >&2
+    exit 1
 fi
 
 if [ -d "${IN_SOURCE}" ];
@@ -203,5 +203,4 @@ case "${FILE}" in
 esac
 
 echo "# ${COMP}" "${SRC_OPTS}" -o "${OUT}" "${FILE}" "${XTRA_OPTS}"
-( ${COMP} ${SRC_OPTS} -o "${OUT}" "${FILE}" ${XTRA_OPTS} || (rm -f "${OUT}" ; exit 1) )  && ( echo "# ${INVOKE} ./${OUT}" ; "${SHELL}" -c "${INVOKE} ./${OUT}" "$@")
-
+( ${COMP} ${SRC_OPTS} -o "${OUT}" "${FILE}" ${XTRA_OPTS} || (rm -f "${OUT}" ; exit 1) )  && ( echo "# ${INVOKE} ${LEAK_CHECKER} ./${OUT}" "$@" ; "${SHELL}" -c "${INVOKE} ${LEAK_CHECKER} ./${OUT} $*")

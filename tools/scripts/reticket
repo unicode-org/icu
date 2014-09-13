@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2012, International Business Machines Corporation and others.  All Rights Reserved.
+# Copyright (c) 2012-2014, International Business Machines Corporation and others.  All Rights Reserved.
 # for fixing misticketted
 # see http://bugs.icu-project.org/trac/wiki/MisTicketted
 # TODO:  cleanup ${TMPF}*
@@ -87,7 +87,7 @@ else
     fi
 fi
 
-( ( sed -e "s%^ticket:${from}%ticket:${to}%" ${TMPF}.1 && tail +2 ${TMPF} ) || exit 2 ) | tee ${TMPF}.fix | sed -e 's%^%> %g'
+( ( sed -e "s%^ticket:${from}%ticket:${to}%" ${TMPF}.1 && tail -n +2 ${TMPF} ) || exit 2 ) | tee ${TMPF}.fix | sed -e 's%^%> %g'
 
 CMD="svn ps svn:log --revprop -r ${rev} -F ${TMPF}.fix"
 echo "# ${CMD}"
