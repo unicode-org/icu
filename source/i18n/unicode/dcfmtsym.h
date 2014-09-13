@@ -423,8 +423,8 @@ DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
     return *strPtr;
 }
 
-#ifndef U_HIDE_INTERNAL_API
-
+//#ifndef U_HIDE_INTERNAL_API
+// See comments above for this function. Not hidden.
 inline const UnicodeString &
 DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     const UnicodeString *strPtr;
@@ -436,7 +436,7 @@ DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     return *strPtr;
 }
 
-#endif  /* U_HIDE_INTERNAL_API */
+//#endif  /* U_HIDE_INTERNAL_API */
 
 
 // -------------------------------------

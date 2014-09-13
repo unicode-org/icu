@@ -71,8 +71,9 @@ static void TestICUDataName(void);
 static void PointerTableOfContents(void);
 static void SetBadCommonData(void);
 static void TestUDataFileAccess(void);
+#if !UCONFIG_NO_FORMATTING
 static void TestTZDataDir(void); 
-
+#endif
 
 void addUDataTest(TestNode** root);
 
@@ -94,7 +95,9 @@ addUDataTest(TestNode** root)
     addTest(root, &PointerTableOfContents, "udatatst/PointerTableOfContents" );
     addTest(root, &SetBadCommonData, "udatatst/SetBadCommonData" );
     addTest(root, &TestUDataFileAccess, "udatatst/TestUDataFileAccess" );
+#if !UCONFIG_NO_FORMATTING
     addTest(root, &TestTZDataDir, "udatatst/TestTZDataDir" );
+#endif
 }
 
 #if 0
@@ -1376,7 +1379,10 @@ static const struct {
 #endif
 #if !UCONFIG_NO_NORMALIZATION && !UCONFIG_ONLY_COLLATION
     {"nfkc",                     "nrm", unorm2_swap},
-    {"confusables",              "cfu", uspoof_swap},
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+    {"confusables",              "cfu", uspoof_swap}, /* spoof data missing without regex */
+#endif
+
 #endif
     {"unames",                   "icu", uchar_swapNames}
     /* the last item should not be #if'ed so that it can reliably omit the last comma */
@@ -1824,6 +1830,7 @@ static void SetBadCommonData(void) {
 //        make check
 
 static void TestTZDataDir(void) {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     const char *tzDataVersion;
     const char *testDataPath;
@@ -1854,4 +1861,5 @@ static void TestTZDataDir(void) {
     if (strcmp("2014a", tzDataVersion) == 0) {
         log_err("File %s:%d - expected something newer than time zone data 2014a.\n", __FILE__, __LINE__, tzDataVersion);
     }
+#endif
 }

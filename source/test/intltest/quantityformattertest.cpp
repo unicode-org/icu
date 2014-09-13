@@ -15,6 +15,7 @@
 #include "unicode/numfmt.h"
 #include "unicode/plurrule.h"
 
+
 class QuantityFormatterTest : public IntlTest {
 public:
     QuantityFormatterTest() {
@@ -32,6 +33,7 @@ void QuantityFormatterTest::runIndexedTest(int32_t index, UBool exec, const char
 
 void QuantityFormatterTest::TestBasic() {
     UErrorCode status = U_ZERO_ERROR;
+#if !UCONFIG_NO_FORMATTING
     QuantityFormatter fmt;
     assertFalse(
             "adding bad variant",
@@ -139,6 +141,7 @@ void QuantityFormatterTest::TestBasic() {
     }
     fmt.reset();
     assertFalse("isValid after reset", fmt.isValid());
+#endif
     assertSuccess("", status);
 }
 
