@@ -226,7 +226,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
 
     /**
      * Returns the appropriate plural category for a range from start to end. If there is no available data, then
-     * 'other' is returned.
+     * 'end' is returned as an implicit value. (Such an implicit value can be tested for with {@link #isExplicit}.)
      * 
      * @param start
      *            plural category for the start of the range
@@ -243,14 +243,14 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
     }
 
     /**
-     * Returns the appropriate plural category for a range from start to end. If the combination does not explicitly
-     * occur in the data, returns null.
+     * Returns whether the appropriate plural category for a range from start to end
+     * is explicitly in the data (vs given an implicit value). See also {@link #get}.
      * 
      * @param start
      *            plural category for the start of the range
      * @param end
      *            plural category for the end of the range
-     * @return the resulting plural category
+     * @return whether the value for (start,end) is explicit or not.
      * @internal
      * @deprecated This API is ICU internal only.
      */
