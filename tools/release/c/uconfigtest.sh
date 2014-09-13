@@ -1,6 +1,6 @@
 #!/bin/sh
 # Exhaust(ive, ing)  (Mean, Multi)  (Test, Trouble)
-# Copyright (c) 2002-2011 IBM All Rights Reserved
+# Copyright (c) 2002-2014 IBM All Rights Reserved
 
 # Builds ICU a whole lotta times and with different options
 # Set the options below and execute this script with the shell.
@@ -31,6 +31,11 @@ S=$(pwd)
 # Build root - tools/release/c/uconfigtest
 BUILD_DIR=${BUILD_DIR:-${S}/uconfigtest}
 
+if [ ! -d ${BUILD_DIR} ];
+then
+    mkdir -p ${BUILD_DIR} || exit 1
+fi
+
 FAILS=${BUILD_DIR}/fails
 STATS=${BUILD_DIR}/stats
 
@@ -49,6 +54,8 @@ export COPTS=
 # Global testing options to use
 export INTLTESTOPTS=-w 
 export CINTLTEST_OPTS=-w
+
+
 # --- Probably will not need to modify the following variables ---
 
 # ICU directory is $S/../../../icu
@@ -134,8 +141,9 @@ EOF
 #endif
 EOF
     CPPFLAGS="${CPPFLAGS} -D${UCONFIG_USE_LOCAL} -I${BUILD_DIR}/${NAME}/emtinc"
-    echo "CPPFLAGS=\"$CPPFLAGS\" Configure $COPTS --srcdir=$SRC_DIR"
-    $SRC_DIR/runConfigureICU ${ICUPLATFORM} $COPTS --prefix=${BUILD_DIR}/I${NAME} --srcdir=$SRC_DIR 2>&1 > ${BUILD_DIR}/${NAME}/config.out
+    echo "CPPFLAGS=\"$CPPFLAGS\" Configure ${ICUPLATFORM} ${CONFIG_OPTS} $COPTS --srcdir=$SRC_DIR"
+    $SRC_DIR/runConfigureICU ${ICUPLATFORM} $CONFIG_OPTS $COPTS --prefix=${BUILD_DIR}/I${NAME} --srcdir=$SRC_DIR 2>&1 > ${BUILD_DIR}/${NAME}/config.out
+    CONFIG_OPTS=
 }
 
 stats()
@@ -153,6 +161,16 @@ fail()
     echo "[7m${FAILURE}[m"
 }
 
+TESTCPP=uconfig-simpleTest.cpp
+TESTCPPPATH=${S}/${TESTCPP}
+
+if [ ! -f ${TESTCPPPATH} ];
+then
+    echo error cannot load simple test ${TESTCPPPATH}
+    exit 1
+fi
+
+
 # Do an actual build
 bld()
 {
@@ -165,10 +183,21 @@ bld()
     stats install
     /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.install make -k install ${1}        DEPS=          INSTALL_DATA='ln -svf '  || fail install
     /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.il      make -k install-local ${1}  DEPS=          || fail install-local
-    stats check
-    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.chk     make -k ${JOPT} check ${1} INTLTEST_OPTS=-w CINTLTST_OPTS=-w DEPS= || fail check
+    stats tests
+    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.tst     make -k ${JOPT} tests ${1}  DEPS= || fail tests
+    if [ -f ${BUILD_DIR}/${NAME}/test/intltest/intltest ];
+    then
+        stats check
+        # use parallel check (pcheck)
+        /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.chk     make -k ${JOPT} pcheck ${1} INTLTEST_OPTS=-w CINTLTST_OPTS=-w DEPS= || fail check
+    else
+        stats check0
+    fi
     stats hdrtst
     PATH=${BUILD_DIR}/I${NAME}/bin:$PATH make -k -C ${BUILD_DIR}/${NAME}/test/hdrtst/  DEPS= check    || fail hdrtst
+    stats irun
+    cp ${TESTCPPPATH} ${TESTCPP}
+    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.irun ${S}/../../scripts/icurun -i ${BUILD_DIR}/I${NAME} ${TESTCPP} || fail irun
 }
 
 
@@ -184,9 +213,7 @@ NO_COL="NO_COLLATION"
 NO_BRK="NO_BREAK_ITERATION"
 NO_FMT="NO_FORMATTING"
 NO_UCM="NO_LEGACY_CONVERSION"
-# Since NO_CONVERSION is only meant to allow the common and i18n
-# libraries to be built, we don't test this configuration.
-#NO_CNV="NO_CONVERSION"
+NO_CNV="NO_CONVERSION"
 NO_FIO="NO_FILE_IO"
 NO_XLT="NO_TRANSLITERATION"
 NO_RGX="NO_REGULAR_EXPRESSIONS"
@@ -200,31 +227,46 @@ NO_ALL="$NO_MST $NO_SVC"
 # Now, come the actual test runs
 # Each one sets a NAME, and CPPFLAGS or other flags, and calls doit
 
+do_DEFAULT()
+{
 ######################
 # DEFAULT
 export NAME=DEFAULT
 export UCONFIGS=""
 export CPPFLAGS=""
 doit
+
+}
+# these are now valid:
 USE_PREBUILT_DATA="ICUDATA_SOURCE_ARCHIVE=`echo ${BUILD_DIR}/DEFAULT/data/out/tmp/*.dat`"
+# use cross build
+CROSS_BUILD="--with-cross-build=${BUILD_DIR}/DEFAULT --disable-tools --disable-extras --disable-samples"
 ######################
 
+do_NO_MST()
+{
 ######################
 # NO_MST
 export NAME=NO_MST
 export UCONFIGS="$NO_MST"
 export CPPFLAGS=""
-doit
+doit ${USE_PREBUILT_DATA}
 ######################
+}
 
+do_NO_RGX()
+{
 ######################
 # NO_RGX
 export NAME=NO_RGX
 export UCONFIGS="$NO_RGX"
 export CPPFLAGS=""
-doit ${USE_PREBUILT_DATA}
+doit
 ######################
+}
 
+do_NO_COL()
+{
 ######################
 # NO_COL
 export NAME=NO_COL
@@ -232,7 +274,10 @@ export UCONFIGS="$NO_COL"
 export CPPFLAGS=""
 doit
 ######################
+}
 
+do_NO_BRK()
+{
 ######################
 # NO_BRK
 export NAME=NO_BRK
@@ -240,7 +285,10 @@ export UCONFIGS="$NO_BRK"
 export CPPFLAGS=""
 doit
 ######################
+}
 
+do_NO_FMT()
+{
 ######################
 # NO_FMT
 export NAME=NO_FMT
@@ -248,7 +296,10 @@ export UCONFIGS="$NO_FMT"
 export CPPFLAGS=""
 doit
 ######################
+}
 
+do_NO_UCM()
+{
 ######################
 # NO_UCM
 export NAME=NO_UCM
@@ -256,7 +307,10 @@ export UCONFIGS="$NO_UCM"
 export CPPFLAGS=""
 doit
 ######################
+}
 
+do_NO_FIO()
+{
 ######################
 # NO_FIO
 export NAME=NO_FIO
@@ -264,7 +318,21 @@ export UCONFIGS="$NO_FIO"
 export CPPFLAGS=""
 doit ${USE_PREBUILT_DATA}
 ######################
+}
+do_NO_CNV()
+{
+######################
+# NO_FIO
+export NAME=NO_CNV
+export UCONFIGS="$NO_CNV"
+export CPPFLAGS=""
+CONFIG_OPTS="${CROSS_BUILD} --disable-tests"
+doit ${USE_PREBUILT_DATA}
+######################
+}
 
+do_NO_XLT()
+{
 ######################
 # NO_XLT
 export NAME=NO_XLT
@@ -272,7 +340,10 @@ export UCONFIGS="$NO_XLT"
 export CPPFLAGS=""
 doit
 ######################
+}
 
+do_NO_IDN()
+{
 ######################
 # NO_IDN
 export NAME=NO_IDN
@@ -280,7 +351,10 @@ export UCONFIGS="$NO_IDN"
 export CPPFLAGS=""
 doit
 ######################
+}
 
+do_NO_NRM()
+{
 ######################
 # NO_NRM
 export NAME=NO_NRM
@@ -288,7 +362,10 @@ export UCONFIGS="$NO_NRM"
 export CPPFLAGS=""
 doit
 ######################
+}
 
+do_NO_SVC()
+{
 ######################
 # NO_SVC
 export NAME=NO_SVC
@@ -296,7 +373,10 @@ export UCONFIGS="$NO_SVC"
 export CPPFLAGS=""
 doit
 ######################
+}
 
+do_JS_COL()
+{
 ######################
 # JS_COL
 export NAME=JS_COL
@@ -304,15 +384,37 @@ export UCONFIGS="$JS_COL"
 export CPPFLAGS=""
 doit
 ######################
+}
 
+do_NO_ALL()
+{
 ######################
 # NO_ALL
 export NAME=NO_ALL
 export UCONFIGS="$NO_ALL"
 export CPPFLAGS=""
-doit
+doit ${USE_PREBUILT_DATA}
 ######################
+}
 
+# now run them
+
+# Always needed - as the host
+do_DEFAULT
+do_NO_MST
+do_NO_RGX
+do_NO_COL
+do_NO_BRK
+do_NO_FMT
+do_NO_UCM
+do_NO_FIO
+do_NO_XLT
+do_NO_CNV
+do_NO_IDN
+do_NO_NRM
+do_NO_SVC
+do_JS_COL
+do_NO_ALL
 
 NAME=done
 ban
