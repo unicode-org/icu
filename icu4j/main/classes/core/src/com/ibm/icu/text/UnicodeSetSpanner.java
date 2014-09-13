@@ -95,8 +95,8 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Options for replaceFrom and countIn to control how to treat each matched span. The name is from "qualifier" as used in regex,
-     * since it is similar to whether one is replacing [abc] by x, or [abc]* by x.
+     * Options for replaceFrom and countIn to control how to treat each matched span. 
+     * It is similar to whether one is replacing [abc] by x, or [abc]* by x.
      * 
      * @draft ICU 54
      * @provisional This is a draft API and might change in a future release of ICU.
@@ -130,7 +130,7 @@ public class UnicodeSetSpanner {
 
     /**
      * Returns the number of matching characters found in a character sequence, 
-     * counting by Quantifier.MIN_ELEMENTS using SpanCondition.SIMPLE.
+     * counting by CountMethod.MIN_ELEMENTS using SpanCondition.SIMPLE.
      * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            the sequence to count characters in
@@ -148,13 +148,15 @@ public class UnicodeSetSpanner {
      * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            the sequence to count characters in
+     * @param countMethod
+     *            whether to treat an entire span as a match, or individual elements as matches
      * @return the count. Zero if there are none.
      * 
      * @draft ICU 54
      * @provisional This is a draft API and might change in a future release of ICU.
      */
-    public int countIn(CharSequence sequence, CountMethod quantifier) {
-        return countIn(sequence, quantifier, SpanCondition.SIMPLE);
+    public int countIn(CharSequence sequence, CountMethod countMethod) {
+        return countIn(sequence, countMethod, SpanCondition.SIMPLE);
     }
 
     /**
@@ -162,7 +164,8 @@ public class UnicodeSetSpanner {
      * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            the sequence to count characters in
-     * @param quantifier whether to treat an entire span as a match, or individual code points
+     * @param countMethod
+     *            whether to treat an entire span as a match, or individual elements as matches
      * @param spanCondition
      *            the spanCondition to use. SIMPLE or CONTAINED means only count the code points in the span;
      *            NOT_CONTAINED is the reverse.
@@ -172,20 +175,28 @@ public class UnicodeSetSpanner {
      * @draft ICU 54
      * @provisional This is a draft API and might change in a future release of ICU.
      */
-    public int countIn(CharSequence sequence, CountMethod quantifier, SpanCondition spanCondition) {
+    public int countIn(CharSequence sequence, CountMethod countMethod, SpanCondition spanCondition) {
         int count = 0;
         int start = 0;
         SpanCondition skipSpan = spanCondition == SpanCondition.NOT_CONTAINED ? SpanCondition.SIMPLE
                 : SpanCondition.NOT_CONTAINED;
         final int length = sequence.length();
-        OutputInt spanCount = new OutputInt();
+        OutputInt spanCount = null;
         while (start != length) {
-            int endNotContained = unicodeSet.span(sequence, start, skipSpan);
-            if (endNotContained == length) {
+            int endOfSpan = unicodeSet.span(sequence, start, skipSpan);
+            if (endOfSpan == length) {
                 break;
             }
-            start = unicodeSet.spanAndCount(sequence, endNotContained, spanCondition, spanCount);
-            count += quantifier == CountMethod.WHOLE_SPAN ? 1 : spanCount.value;
+            if (countMethod == CountMethod.WHOLE_SPAN) {
+                start = unicodeSet.span(sequence, endOfSpan, spanCondition);
+                count += 1;
+            } else {
+                if (spanCount == null) {
+                    spanCount = new OutputInt();
+                }
+                start = unicodeSet.spanAndCount(sequence, endOfSpan, spanCondition, spanCount);
+                count += spanCount.value;
+            }
         }
         return count;
     }
@@ -205,7 +216,7 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Delete all matching spans in sequence, according to the operations.
+     * Delete all matching spans in sequence, according to the spanCondition.
      * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            charsequence to replace matching spans in.
@@ -222,7 +233,7 @@ public class UnicodeSetSpanner {
 
     /**
      * Replace all matching spans in sequence by the replacement,
-     * counting by Quantifier.MIN_ELEMENTS using SpanCondition.SIMPLE.
+     * counting by CountMethod.MIN_ELEMENTS using SpanCondition.SIMPLE.
      * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            charsequence to replace matching spans in.
@@ -238,41 +249,42 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Replace all matching spans in sequence by replacement, according to the Quantifier, using SpanCondition.SIMPLE. 
+     * Replace all matching spans in sequence by replacement, according to the CountMethod, using SpanCondition.SIMPLE.
      * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
+     * 
      * @param sequence
      *            charsequence to replace matching spans in.
      * @param replacement
      *            replacement sequence. To delete, use ""
-     * @param quantifier
-     *            whether to treat an entire span as a match, or individual code points
+     * @param countMethod
+     *            whether to treat an entire span as a match, or individual elements as matches
      * @return modified string.
      * 
      * @draft ICU 54
      * @provisional This is a draft API and might change in a future release of ICU.
      */
-    public String replaceFrom(CharSequence sequence, CharSequence replacement, CountMethod quantifier) {
-        return replaceFrom(sequence, replacement, quantifier, SpanCondition.SIMPLE);
+    public String replaceFrom(CharSequence sequence, CharSequence replacement, CountMethod countMethod) {
+        return replaceFrom(sequence, replacement, countMethod, SpanCondition.SIMPLE);
     }
 
     /**
-     * Replace all matching spans in sequence by replacement, according to the operations quantifier and spanCondition.
+     * Replace all matching spans in sequence by replacement, according to the countMethod and spanCondition.
      * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
      * @param sequence
      *            charsequence to replace matching spans in.
      * @param replacement
      *            replacement sequence. To delete, use ""
+     * @param countMethod 
+     *            whether to treat an entire span as a match, or individual elements as matches
      * @param spanCondition
      *            specify whether to modify the matching spans (CONTAINED or SIMPLE) or the non-matching
      *            (NOT_CONTAINED)
-     * @param quantifier
-     *            specify whether to collapse or do codepoint by codepoint.
      * @return modified string.
      * 
      * @draft ICU 54
      * @provisional This is a draft API and might change in a future release of ICU.
      */
-    public String replaceFrom(CharSequence sequence, CharSequence replacement, CountMethod quantifier,
+    public String replaceFrom(CharSequence sequence, CharSequence replacement, CountMethod countMethod,
             SpanCondition spanCondition) {
         SpanCondition copySpan = spanCondition == SpanCondition.NOT_CONTAINED ? SpanCondition.SIMPLE
                 : SpanCondition.NOT_CONTAINED;
@@ -282,12 +294,20 @@ public class UnicodeSetSpanner {
         // avoid this allocation unless needed
 
         final int length = sequence.length();
-        OutputInt spanCount = new OutputInt();
+        OutputInt spanCount = null;
         for (int endCopy = 0; endCopy != length;) {
-            int endModify = unicodeSet.spanAndCount(sequence, endCopy, spanCondition, spanCount);
+            int endModify;
+            if (countMethod == CountMethod.WHOLE_SPAN) {
+                endModify = unicodeSet.span(sequence, endCopy, spanCondition);
+            } else {
+                if (spanCount == null) {
+                    spanCount = new OutputInt();
+                }
+                endModify = unicodeSet.spanAndCount(sequence, endCopy, spanCondition, spanCount);
+            }
             if (remove || endModify == 0) {
                 // do nothing
-            } else if (quantifier == CountMethod.WHOLE_SPAN) {
+            } else if (countMethod == CountMethod.WHOLE_SPAN) {
                 result.append(replacement);
             } else {
                 for (int i = spanCount.value; i > 0; --i) {
@@ -334,7 +354,7 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching code points at the start or
+     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching code points at the start and
      * end of the string, using TrimOption.BOTH and SpanCondition.SIMPLE. For example:
      * 
      * <pre>
@@ -343,7 +363,10 @@ public class UnicodeSetSpanner {
      *   new UnicodeSet("[ab]").trim("abacatbab")}
      * </pre>
      * 
-     * ... returns {@code "catbab"}.
+     * ... returns {@code "cat"}.
+     * @param sequence
+     *            the sequence to trim
+     * @return a subsequence
      * 
      * @draft ICU 54
      * @provisional This is a draft API and might change in a future release of ICU.
@@ -359,10 +382,16 @@ public class UnicodeSetSpanner {
      * <pre>
      * {@code
      * 
-     *   new UnicodeSet("[ab]").trim("abacatbab")}
+     *   new UnicodeSet("[ab]").trim("abacatbab", TrimOption.LEADING)}
      * </pre>
      * 
      * ... returns {@code "catbab"}.
+     * 
+     * @param sequence
+     *            the sequence to trim
+     * @param trimOption
+     *            LEADING, TRAILING, or BOTH
+     * @return a subsequence
      * 
      * @draft ICU 54
      * @provisional This is a draft API and might change in a future release of ICU.
@@ -378,7 +407,7 @@ public class UnicodeSetSpanner {
      * <pre>
      * {@code
      * 
-     *   new UnicodeSet("[ab]").trim("abacatbab")}
+     *   new UnicodeSet("[ab]").trim("abacatbab", TrimOption.LEADING, SpanCondition.SIMPLE)}
      * </pre>
      * 
      * ... returns {@code "catbab"}.

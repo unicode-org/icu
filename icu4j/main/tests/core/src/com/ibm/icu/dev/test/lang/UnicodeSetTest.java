@@ -2430,10 +2430,6 @@ public class UnicodeSetTest extends TestFmwk {
                 it.nextRange();
                 assertEquals(title, it.codepoint, range.codepoint);
                 assertEquals(title, it.codepointEnd, range.codepointEnd);
-//                if (range.codepoint != -1) {
-//                } else {
-//                    assertEquals(title, it.string, range.string);
-//                }
             }
             for (String s : us.strings()) {
                 it.nextRange();

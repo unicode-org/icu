@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.BMPSet;
@@ -1516,7 +1517,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     public final UnicodeSet remove(CharSequence s) {
         int cp = getSingleCP(s);
         if (cp < 0) {
-            strings.remove(s);
+            strings.remove(s.toString());
             pat = null;
         } else {
             remove(cp, cp);
@@ -1595,7 +1596,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         int cp = getSingleCP(s);
         if (cp < 0) {
             if (strings.contains(s)) {
-                strings.remove(s);
+                strings.remove(s.toString());
             } else {
                 strings.add(s.toString());
             }
@@ -4196,11 +4197,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             if (pos < len-1) {
                 result.codepoint = list[pos++];
                 result.codepointEnd = list[pos++]-1;
-//                result.string = null;
             } else {
-                throw new ArrayIndexOutOfBoundsException(pos);
-//                result.codepoint = -1;
-//                result.string = stringIterator.next();
+                throw new NoSuchElementException();
             }
             return result;
         }
