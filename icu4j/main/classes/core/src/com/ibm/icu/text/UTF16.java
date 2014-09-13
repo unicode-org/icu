@@ -2617,8 +2617,8 @@ public final class UTF16 {
      * @return the code point IF the string is non-null and consists of a single code point.
      * otherwise returns -1.
      * @param s to test
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
      */
     @Deprecated
     public static int getSingleCodePoint(CharSequence s) {
@@ -2631,7 +2631,7 @@ public final class UTF16 {
         }
 
         // at this point, len = 2
-        int cp = UTF16.charAt(s, 0); 
+        int cp = Character.codePointAt(s, 0); 
         if (cp > 0xFFFF) { // is surrogate pair
             return cp;
         }
@@ -2653,8 +2653,8 @@ public final class UTF16 {
      * @param codePoint to test
      * @param s to test
      * @return equivalent of code point comparator comparing two strings.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 54
+     * @provisional This API might change or be removed in a future release.
      */
     @Deprecated
     public static int compareCodePoint(int codePoint, CharSequence s) {
