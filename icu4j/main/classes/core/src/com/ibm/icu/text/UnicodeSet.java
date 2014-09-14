@@ -1595,10 +1595,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         checkFrozen();
         int cp = getSingleCP(s);
         if (cp < 0) {
-            if (strings.contains(s)) {
-                strings.remove(s.toString());
+            String s2 = s.toString();
+            if (strings.contains(s2)) {
+                strings.remove(s2);
             } else {
-                strings.add(s.toString());
+                strings.add(s2);
             }
             pat = null;
         } else {
