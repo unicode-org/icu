@@ -40,6 +40,7 @@ import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.text.UnicodeSetSpanner;
 import com.ibm.icu.text.UnicodeSetSpanner.CountMethod;
 import com.ibm.icu.text.UnicodeSetSpanner.TrimOption;
+import com.ibm.icu.util.OutputInt;
 
 /**
  * @test
@@ -2405,7 +2406,7 @@ public class UnicodeSetTest extends TestFmwk {
     public void TestIteration() {
         UnicodeSet us1 = new UnicodeSet("[abcM{xy}]");
         assertEquals("", "M, a-c", CollectionUtilities.join(us1.ranges(), ", "));
-        
+
         // Sample code
         for (@SuppressWarnings("unused") EntryRange range : us1.ranges()) { 
             // do something with code points between range.codepointEnd and range.codepointEnd; 
@@ -2464,27 +2465,48 @@ public class UnicodeSetTest extends TestFmwk {
         m = new UnicodeSetSpanner(new UnicodeSet("[{ab}]"));
         assertEquals("", "XXc acb", m.replaceFrom("ababc acb", "X"));
         assertEquals("", "Xc acb", m.replaceFrom("ababc acb", "X", CountMethod.WHOLE_SPAN));
+        assertEquals("", "ababX", m.replaceFrom("ababc acb", "X", CountMethod.WHOLE_SPAN, SpanCondition.NOT_CONTAINED));
     }
 
     public void TestCodePoints() {
         // test supplemental code points and strings clusters
-        checkCodePoints("x\u0308", "z\u0308", CountMethod.MIN_ELEMENTS, null, 1);
-        checkCodePoints("𣿡", "𣿢", CountMethod.MIN_ELEMENTS, null, 1);
-        checkCodePoints("👦", "👧", CountMethod.MIN_ELEMENTS, null, 1);
+        checkCodePoints("x\u0308", "z\u0308", CountMethod.MIN_ELEMENTS, SpanCondition.SIMPLE, null, 1);
+        checkCodePoints("𣿡", "𣿢", CountMethod.MIN_ELEMENTS, SpanCondition.SIMPLE, null, 1);
+        checkCodePoints("👦", "👧", CountMethod.MIN_ELEMENTS, SpanCondition.SIMPLE, null, 1);
     }
 
-    private void checkCodePoints(String a, String b, CountMethod quantifier, String expectedReplaced, int expectedCount) {
+    private void checkCodePoints(String a, String b, CountMethod quantifier, SpanCondition spanCondition, 
+            String expectedReplaced, int expectedCount) {
         final String ab = a+b;
         UnicodeSetSpanner m = new UnicodeSetSpanner(new UnicodeSet("[{" + a + "}]"));
         assertEquals("new UnicodeSetSpanner(\"[{" + a + "}]\").countIn(\"" + ab + "\")", 
                 expectedCount,
-                m.countIn(ab, quantifier));
-        
+                callCountIn(m, ab, quantifier, spanCondition)
+                );
+
         if (expectedReplaced == null) {
             expectedReplaced = "-" + b;
         }
         assertEquals("new UnicodeSetSpanner(\"[{" + a + "}]\").replaceFrom(\"" + ab + "\", \"-\")", 
                 expectedReplaced, m.replaceFrom(ab, "-", quantifier));
+    }
+
+    public void TestCountIn() {
+        UnicodeSetSpanner m = new UnicodeSetSpanner(new UnicodeSet("[ab]"));
+        checkCountIn(m, CountMethod.MIN_ELEMENTS, SpanCondition.SIMPLE, "abc", 2);
+        checkCountIn(m, CountMethod.WHOLE_SPAN, SpanCondition.SIMPLE, "abc", 1);
+        checkCountIn(m, CountMethod.MIN_ELEMENTS, SpanCondition.NOT_CONTAINED, "acccb", 3);
+    }
+
+    public void checkCountIn(UnicodeSetSpanner m, CountMethod countMethod, SpanCondition spanCondition, String target, int expected) {
+        final String message = "countIn " + countMethod + ", " + spanCondition;
+        assertEquals(message, callCountIn(m, target, countMethod, spanCondition), expected);
+    }
+
+    public int callCountIn(UnicodeSetSpanner m, final String ab, CountMethod countMethod, SpanCondition spanCondition) {
+        return spanCondition != SpanCondition.SIMPLE ? m.countIn(ab, countMethod, spanCondition)
+                : countMethod != CountMethod.MIN_ELEMENTS ? m.countIn(ab, countMethod)
+                        : m.countIn(ab);
     }
 
     public void testForSpanGaps() {
@@ -2559,5 +2581,59 @@ public class UnicodeSetTest extends TestFmwk {
             }
         }
         return result.toString();
+    }
+
+    public void TestCharSequenceArgs() {
+        // statics
+        assertEquals("CharSequence from", new UnicodeSet("[{abc}]"), UnicodeSet.from(new StringBuilder("abc")));
+        assertEquals("CharSequence fromAll", new UnicodeSet("[a-c]"), UnicodeSet.fromAll(new StringBuilder("abc")));
+        assertEquals("CharSequence compare", 1.0f, Math.signum(UnicodeSet.compare(new StringBuilder("abc"), 0x61)));
+        assertEquals("CharSequence compare", -1.0f, Math.signum(UnicodeSet.compare(0x61, new StringBuilder("abc"))));
+        assertEquals("CharSequence compare", 0.0f, Math.signum(UnicodeSet.compare(new StringBuilder("a"), 0x61)));
+        assertEquals("CharSequence compare", 0.0f, Math.signum(UnicodeSet.compare(0x61, new StringBuilder("a"))));
+        assertEquals("CharSequence getSingleCodePoint", 0x1F466, UnicodeSet.getSingleCodePoint(new StringBuilder("👦")));
+
+        // iterables/arrays
+        Iterable<StringBuilder> iterable = Arrays.asList(new StringBuilder("A"), new StringBuilder("B"));
+        assertEquals("CharSequence containsAll", true, new UnicodeSet("[AB]").containsAll(iterable));
+        assertEquals("CharSequence containsAll", false, new UnicodeSet("[a-cA]").containsAll(iterable));
+        assertEquals("CharSequence containsNone", true, new UnicodeSet("[a-c]").containsNone(iterable) );
+        assertEquals("CharSequence containsNone", false, new UnicodeSet("[a-cA]").containsNone(iterable) );
+        assertEquals("CharSequence containsSome", true, new UnicodeSet("[a-cA]").containsSome(iterable) );
+        assertEquals("CharSequence containsSome", false, new UnicodeSet("[a-c]").containsSome(iterable) );
+        assertEquals("CharSequence addAll", new UnicodeSet("[a-cAB]"), new UnicodeSet("[a-cA]").addAll(new StringBuilder("A"), new StringBuilder("B")) );
+        assertEquals("CharSequence removeAll", new UnicodeSet("[a-c]"), new UnicodeSet("[a-cA]").removeAll( iterable) );
+        assertEquals("CharSequence retainAll", new UnicodeSet("[A]"), new UnicodeSet("[a-cA]").retainAll( iterable) );
+
+        // UnicodeSet results
+        assertEquals("CharSequence add", new UnicodeSet("[Aa-c{abc}{qr}]"), new UnicodeSet("[a-cA{qr}]").add(new StringBuilder("abc")) );
+        assertEquals("CharSequence retain", new UnicodeSet("[{abc}]"), new UnicodeSet("[a-cA{abc}{qr}]").retain(new StringBuilder("abc")) );
+        assertEquals("CharSequence remove", new UnicodeSet("[Aa-c{qr}]"), new UnicodeSet("[a-cA{abc}{qr}]").remove(new StringBuilder("abc")) );
+        assertEquals("CharSequence complement", new UnicodeSet("[Aa-c{qr}]"), new UnicodeSet("[a-cA{abc}{qr}]").complement(new StringBuilder("abc")) );
+        assertEquals("CharSequence complement", new UnicodeSet("[Aa-c{abc}{qr}]"), new UnicodeSet("[a-cA{qr}]").complement(new StringBuilder("abc")) );
+        
+        assertEquals("CharSequence addAll", new UnicodeSet("[a-cABC]"), new UnicodeSet("[a-cA]").addAll(new StringBuilder("ABC")) );
+        assertEquals("CharSequence retainAll", new UnicodeSet("[a-c]"), new UnicodeSet("[a-cA]").retainAll(new StringBuilder("abcB")) );
+        assertEquals("CharSequence removeAll", new UnicodeSet("[Aab]"), new UnicodeSet("[a-cA]").removeAll(new StringBuilder("cC")) );
+        assertEquals("CharSequence complementAll", new UnicodeSet("[ABbc]"), new UnicodeSet("[a-cA]").complementAll(new StringBuilder("aB")) );
+
+        // containment
+        assertEquals("CharSequence contains", true, new UnicodeSet("[a-cA{ab}]"). contains(new StringBuilder("ab")) ); 
+        assertEquals("CharSequence containsNone", false, new UnicodeSet("[a-cA]"). containsNone(new StringBuilder("ab"))  );
+        assertEquals("CharSequence containsSome", true, new UnicodeSet("[a-cA{ab}]"). containsSome(new StringBuilder("ab"))  );
+        
+        // spanning
+        assertEquals("CharSequence span", 3, new UnicodeSet("[a-cA]"). span(new StringBuilder("abc"), SpanCondition.SIMPLE) );
+        assertEquals("CharSequence span", 3, new UnicodeSet("[a-cA]"). span(new StringBuilder("abc"), 1, SpanCondition.SIMPLE) );
+        assertEquals("CharSequence spanBack", 0, new UnicodeSet("[a-cA]"). spanBack(new StringBuilder("abc"), SpanCondition.SIMPLE) );
+        assertEquals("CharSequence spanBack", 0, new UnicodeSet("[a-cA]"). spanBack(new StringBuilder("abc"), 1, SpanCondition.SIMPLE) );
+
+        // internal
+        OutputInt outCount = new OutputInt();
+        assertEquals("CharSequence matchesAt", 2, new UnicodeSet("[a-cA]"). matchesAt(new StringBuilder("abc"), 1) );
+        assertEquals("CharSequence spanAndCount", 3, new UnicodeSet("[a-cA]"). spanAndCount(new StringBuilder("abc"), 1, SpanCondition.SIMPLE, outCount ) );
+        assertEquals("CharSequence findIn", 3, new UnicodeSet("[a-cA]"). findIn(new StringBuilder("abc"), 1, true) );
+        assertEquals("CharSequence findLastIn", -1, new UnicodeSet("[a-cA]"). findLastIn(new StringBuilder("abc"), 1, true) );
+        assertEquals("CharSequence add", "c", new UnicodeSet("[abA]"). stripFrom(new StringBuilder("abc"), true));
     }
 }
