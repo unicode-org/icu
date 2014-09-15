@@ -693,7 +693,7 @@ ConversionTest::TestDefaultIgnorableCallback() {
 
         outputLength = ucnv_fromUChars(cnv, output, 10, UnicodeString::fromUTF32(input, 1).getTerminatedBuffer(), -1, &status);
         if (U_FAILURE(status) || outputLength != 0) {
-            errln("Ignorable code point: 0x%06X not skipped as expected - %s", input[0], u_errorName(status));
+            errln("Ignorable code point: U+%06X not skipped as expected - %s", input[0], u_errorName(status));
         }
     }
 
@@ -711,7 +711,7 @@ ConversionTest::TestDefaultIgnorableCallback() {
 
         outputLength = ucnv_fromUChars(cnv, output, 10, UnicodeString::fromUTF32(input, 1).getTerminatedBuffer(), -1, &status);
         if (U_FAILURE(status) || outputLength <= 0) {
-            errln("Non-ignorable code point: 0x%06X skipped unexpectedly - %s", input[0], u_errorName(status));
+            errln("Non-ignorable code point: U+%06X skipped unexpectedly - %s", input[0], u_errorName(status));
         }
     }
     
