@@ -4515,9 +4515,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final class WeekData {
-        
         /**
-         * the first day of the week, where 1 = Sunday and 7 = Saturday
+         * the first day of the week, where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}
          * 
          * @draft ICU 54
          * @provisional This is a draft API and might change in a future release of ICU.
@@ -4531,7 +4530,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          */
         public final int minimalDaysInFirstWeek;
         /**
-         * the onset day, where 1 = Sunday and 7 = Saturday
+         * the onset day, where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}
          * 
          * @draft ICU 54
          * @provisional This is a draft API and might change in a future release of ICU.
@@ -4545,7 +4544,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          */
         public final int weekendOnsetMillis;
         /**
-         * the cease day, where 1 = Sunday and 7 = Saturday
+         * the cease day, where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}
          * 
          * @draft ICU 54
          * @provisional This is a draft API and might change in a future release of ICU.
@@ -4563,7 +4562,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         /**
          * Constructor
          * 
-         * @param fdow the first day of the week, where 1 = Sunday and 7 = Saturday
+         * @param fdow the first day of the week, where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}
          * @param mdifw the minimal number of days in the first week
          * @param weekendOnset the onset day, where 1 = Sunday and 7 = Saturday
          * @param weekendOnsetMillis the onset time in millis during the onset day
