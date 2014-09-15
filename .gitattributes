@@ -165,6 +165,8 @@ icu4c/source/test/perf/collperf2/collperf2.vcxproj.filters -text
 icu4c/source/test/perf/convperf/convperf.vcxproj -text
 icu4c/source/test/perf/convperf/convperf.vcxproj.filters -text
 icu4c/source/test/perf/icuperf2report.xsl -text
+icu4c/source/test/perf/normperf/dtfmtrtperf.vcxproj -text
+icu4c/source/test/perf/normperf/dtfmtrtperf.vcxproj.filters -text
 icu4c/source/test/perf/normperf/normperf.vcxproj -text
 icu4c/source/test/perf/normperf/normperf.vcxproj.filters -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.vcxproj -text
@@ -213,12 +215,15 @@ icu4c/source/tools/icuinfo/icuinfo.vcxproj -text
 icu4c/source/tools/icuinfo/testplug.vcxproj -text
 icu4c/source/tools/icuinfo/testplug.vcxproj.filters -text
 icu4c/source/tools/icupkg/icupkg.vcxproj -text
+icu4c/source/tools/icuswap/icuswap.vcxproj -text
 icu4c/source/tools/makeconv/makeconv.vcxproj -text
 icu4c/source/tools/makeconv/makeconv.vcxproj.filters -text
 icu4c/source/tools/pkgdata/pkgdata.vcxproj -text
 icu4c/source/tools/pkgdata/pkgdata.vcxproj.filters -text
 icu4c/source/tools/toolutil/toolutil.vcxproj -text
 icu4c/source/tools/tzcode/icuregions -text
+icu4c/source/tools/tzcode/icuzdump.vcxproj -text
+icu4c/source/tools/tzcode/icuzdump.vcxproj.filters -text
 icu4j/build.properties -text
 icu4j/demos/.settings/org.eclipse.core.resources.prefs -text
 icu4j/demos/manifest.stub -text
