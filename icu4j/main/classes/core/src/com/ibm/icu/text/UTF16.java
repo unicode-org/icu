@@ -2620,7 +2620,6 @@ public final class UTF16 {
      * @draft ICU 54
      * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
     public static int getSingleCodePoint(CharSequence s) {
         if (s == null || s.length() == 0) {
             return -1;
@@ -2656,7 +2655,6 @@ public final class UTF16 {
      * @draft ICU 54
      * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
     public static int compareCodePoint(int codePoint, CharSequence s) {
         if (s == null) {
             return 1;
