@@ -3889,6 +3889,8 @@ icu4c/source/test/perf/convperf/convperf.vcxproj -text
 icu4c/source/test/perf/convperf/convperf.vcxproj.filters -text
 icu4c/source/test/perf/howExpensiveIs/readme.txt svneol=native#text/plain
 icu4c/source/test/perf/icuperf2report.xsl -text
+icu4c/source/test/perf/normperf/dtfmtrtperf.vcxproj -text
+icu4c/source/test/perf/normperf/dtfmtrtperf.vcxproj.filters -text
 icu4c/source/test/perf/normperf/normperf.vcxproj -text
 icu4c/source/test/perf/normperf/normperf.vcxproj.filters -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.vcxproj -text
@@ -3991,12 +3993,15 @@ icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt svneol=native#text/plai
 icu4c/source/tools/icuinfo/testplug.vcxproj -text
 icu4c/source/tools/icuinfo/testplug.vcxproj.filters -text
 icu4c/source/tools/icupkg/icupkg.vcxproj -text
+icu4c/source/tools/icuswap/icuswap.vcxproj -text
 icu4c/source/tools/makeconv/makeconv.vcxproj -text
 icu4c/source/tools/makeconv/makeconv.vcxproj.filters -text
 icu4c/source/tools/pkgdata/pkgdata.vcxproj -text
 icu4c/source/tools/pkgdata/pkgdata.vcxproj.filters -text
 icu4c/source/tools/toolutil/toolutil.vcxproj -text
 icu4c/source/tools/tzcode/icuregions -text
+icu4c/source/tools/tzcode/icuzdump.vcxproj -text
+icu4c/source/tools/tzcode/icuzdump.vcxproj.filters -text
 icu4c/source/tools/tzcode/readme.txt svneol=native#text/plain
 icu4j/APIChangeReport.html svneol=native#text/html
 icu4j/build.properties -text
