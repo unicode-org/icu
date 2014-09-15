@@ -92,14 +92,23 @@
           depends="checkProps,initEclipseLauncher,initEclipseOSGiJar,initEclipsePDE"
           description="Initialize eclipse PDE build environment">
     <echo message="[PDE build configuration properties]"/>
+    <echo message="    Ant version:     ${ant.version}"/>
     <echo message="    Eclipse home:    ${eclipse.home}"/>
     <echo message="    Launcher jar:    ${eclipse.launcher}"/>
     <echo message="    OSGi bundle jar: ${eclipse.osgi.jar}"/>
     <echo message="    Base OS:         ${eclipse.baseos}"/>
     <echo message="    Base WS:         ${eclipse.basews}"/>
     <echo message="    Base ARCH:       ${eclipse.basearch}"/>
-  </target>
+    <echo message="    java.rt:         ${java.rt}"/>
+      
+    <!-- try and detect use of backslashes  -->
+    <condition property="java-rt-has-noSlashes">
+        <matches pattern="/" string="${java.rt}"/>
+    </condition>      
+    <fail message="java.rt variable has no slashes!" unless="java-rt-has-noSlashes"/>
 
+  </target>
+    
   <target name="initEclipseLauncher"
           if="eclipse.home"
           description="Locate org.eclipse.equinox.launcher jar file for eclipse 3.3 and beyond">
