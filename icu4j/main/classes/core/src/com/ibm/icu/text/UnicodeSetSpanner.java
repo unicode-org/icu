@@ -104,8 +104,8 @@ public class UnicodeSetSpanner {
     public enum CountMethod {
         /**
          * Collapse spans. That is, modify/count the entire matching span as a single item, instead of separate
-         * code points.
-         * 
+         * set elements.
+         *
          * @draft ICU 54
          * @provisional This is a draft API and might change in a future release of ICU.
          */
@@ -120,7 +120,7 @@ public class UnicodeSetSpanner {
          * <li>spanning with [{ab}] will count two MIN_ELEMENTS.</li>
          * <li>spanning with [ab{ab}] will also count two MIN_ELEMENTS.</li>
          * </ul>
-         * 
+         *
          * @draft ICU 54
          * @provisional This is a draft API and might change in a future release of ICU.
          */
@@ -167,7 +167,7 @@ public class UnicodeSetSpanner {
      * @param countMethod
      *            whether to treat an entire span as a match, or individual elements as matches
      * @param spanCondition
-     *            the spanCondition to use. SIMPLE or CONTAINED means only count the code points in the span;
+     *            the spanCondition to use. SIMPLE or CONTAINED means only count the elements in the span;
      *            NOT_CONTAINED is the reverse.
      *            <br><b>WARNING: </b> when a UnicodeSet contains strings, there may be unexpected behavior in edge cases.
      * @return the count. Zero if there are none.
@@ -354,7 +354,7 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching code points at the start and
+     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching elements at the start and
      * end of the string, using TrimOption.BOTH and SpanCondition.SIMPLE. For example:
      * 
      * <pre>
@@ -376,7 +376,7 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching code points at the start or
+     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching elements at the start or
      * end of the string, using the trimOption and SpanCondition.SIMPLE. For example:
      * 
      * <pre>
@@ -401,7 +401,7 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching code points at the start or
+     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching elements at the start or
      * end of the string, depending on the trimOption and spanCondition. For example:
      * 
      * <pre>
