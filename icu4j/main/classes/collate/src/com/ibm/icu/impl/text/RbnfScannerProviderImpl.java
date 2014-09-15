@@ -11,7 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ibm.icu.impl.ICUDebug;
-import com.ibm.icu.text.*;
+import com.ibm.icu.text.CollationElementIterator;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RbnfLenientScanner;
+import com.ibm.icu.text.RbnfLenientScannerProvider;
+import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.util.ULocale;
 
 /**

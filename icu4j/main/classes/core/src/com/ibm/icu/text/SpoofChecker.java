@@ -29,9 +29,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.ICUBinary;
+import com.ibm.icu.impl.ICUBinary.Authenticate;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.Trie2Writable;
-import com.ibm.icu.impl.ICUBinary.Authenticate;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
