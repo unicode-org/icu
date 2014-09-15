@@ -452,18 +452,17 @@ public abstract class BreakIterator implements Cloneable
     public static final int WORD_IDEO_LIMIT     = 500;
 
     /**
-     * For RuleBasedBreakIterators, return the status tag from the
-     * break rule that determined the most recently
-     * returned break position.
-     * <p>
-     * For break iterator types that do not support a rule status,
-     * a default value of 0 is returned.
+     * For RuleBasedBreakIterators, return the status tag from the
+     * break rule that determined the most recently
+     * returned break position.
+     * <p>
+     * For break iterator types that do not support a rule status,
+     * a default value of 0 is returned.
      * <p>
      * @return The status from the break rule that determined the most recently
      *         returned break position.
      *
-     * @draft ICU 52
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 54
      */
 
     public int  getRuleStatus() {
@@ -471,11 +470,11 @@ public abstract class BreakIterator implements Cloneable
     }
 
     /**
-     * For RuleBasedBreakIterators, get the status (tag) values from the break rule(s)
-     * that determined the most recently returned break position.
-     * <p>
-     * For break iterator types that do not support rule status,
-     * no values are returned.
+     * For RuleBasedBreakIterators, get the status (tag) values from the break rule(s)
+     * that determined the most recently returned break position.
+     * <p>
+     * For break iterator types that do not support rule status,
+     * no values are returned.
      * <p>
      * If the size  of the output array is insufficient to hold the data,
      *  the output will be truncated to the available length.  No exception
@@ -487,8 +486,7 @@ public abstract class BreakIterator implements Cloneable
      *                  In the event that the array is too small, the return value
      *                  is the total number of status values that were available,
      *                  not the reduced number that were actually returned.
-     * @draft ICU 52
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 54
      */
     public int getRuleStatusVec(int[] fillInArray) {
         if (fillInArray != null && fillInArray.length > 0) {

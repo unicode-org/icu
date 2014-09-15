@@ -683,8 +683,7 @@ public class IslamicCalendar extends Calendar {
      * determines the type of calculation to use for this instance
      * 
      * @serial
-     * @draft ICU 52
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     private CalculationType cType = CalculationType.ISLAMIC_CIVIL;
 
@@ -877,34 +876,29 @@ public class IslamicCalendar extends Calendar {
     /**
      *  enumeration of available calendar calculation types
      *  
-     * @draft ICU 52
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public enum CalculationType {
         /**
          * Religious calendar (atronomical simulation)
-         * @draft ICU 52
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         ISLAMIC             ("islamic"),
         /**
          * Tabular (intercalary years [2,5,7,10,13,16,18,21,24,26,29]) algorithm
          * with civil (Friday) epoch.
-         * @draft ICU 52
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         ISLAMIC_CIVIL       ("islamic-civil"),
         /**
          * Umm al-Qura calendar
-         * @draft ICU 52
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         ISLAMIC_UMALQURA    ("islamic-umalqura"),
         /**
          * Tabular (intercalary years [2,5,7,10,13,16,18,21,24,26,29]) algorithm
          * with astronomical (Thursday) epoch.
-         * @draft ICU 52
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         ISLAMIC_TBLA        ("islamic-tbla");
 
