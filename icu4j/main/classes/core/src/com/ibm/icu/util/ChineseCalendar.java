@@ -233,7 +233,7 @@ public class ChineseCalendar extends Calendar {
      */ 
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date) 
     { 
-        this(era, year, month, isLeapMonth, 0, 0, 0);
+        this(era, year, month, isLeapMonth, date, 0, 0, 0);
     } 
   
     /** 
