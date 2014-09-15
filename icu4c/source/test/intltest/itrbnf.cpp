@@ -1965,7 +1965,7 @@ void IntlTestRBNF::TestPluralRules() {
     UParseError parseError;
     RuleBasedNumberFormat enFormatter(enRules, Locale::getEnglish(), parseError, status);
     if (U_FAILURE(status)) {
-        errln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
+        dataerrln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
         return;
     }
     const char* const enTestData[][2] = {
