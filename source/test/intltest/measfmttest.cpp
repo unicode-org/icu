@@ -48,6 +48,8 @@ private:
     void TestFormatSingleArg();
     void TestFormatMeasuresZeroArg();
     void TestMultiplesWithPer();
+    void TestSimplePer();
+    void TestNumeratorPlurals();
     void TestMultiples();
     void TestGram();
     void TestCurrencies();
@@ -76,6 +78,13 @@ private:
         const MeasureFormat &fmt,
         const ExpectedResult *expectedResults,
         int32_t count);
+    void helperTestSimplePer(
+        const Locale &locale,
+        UMeasureFormatWidth width,
+        double value,
+        const MeasureUnit &unit,
+        const MeasureUnit &perUnit,
+        const char *expected);
     void helperTestMultiplesWithPer(
         const Locale &locale,
         UMeasureFormatWidth width,
@@ -123,6 +132,8 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestFormatSingleArg);
     TESTCASE_AUTO(TestFormatMeasuresZeroArg);
     TESTCASE_AUTO(TestMultiplesWithPer);
+    TESTCASE_AUTO(TestSimplePer);
+    TESTCASE_AUTO(TestNumeratorPlurals);
     TESTCASE_AUTO(TestMultiples);
     TESTCASE_AUTO(TestGram);
     TESTCASE_AUTO(TestCurrencies);
@@ -884,6 +895,81 @@ void MeasureFormatTest::TestMultiplesWithPer() {
             en, UMEASFMT_WIDTH_SHORT, *minute, "2 mi, 1 ft, 2.3 in/min");
     helperTestMultiplesWithPer(
             en, UMEASFMT_WIDTH_NARROW, *minute, "2mi 1\\u2032 2.3\\u2033/m");
+}
+
+void MeasureFormatTest::TestSimplePer() {
+    Locale en("en");
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<MeasureUnit> second(MeasureUnit::createSecond(status));
+    LocalPointer<MeasureUnit> minute(MeasureUnit::createMinute(status));
+    LocalPointer<MeasureUnit> pound(MeasureUnit::createPound(status));
+    if (!assertSuccess("", status)) {
+        return;
+    }
+
+    helperTestSimplePer(
+            en, UMEASFMT_WIDTH_SHORT, 1.0, *pound, *second, "1 lbps");
+    helperTestSimplePer(
+            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *second, "2 lbps");
+    helperTestSimplePer(
+            en, UMEASFMT_WIDTH_SHORT, 1.0, *pound, *minute, "1 lb/min");
+    helperTestSimplePer(
+            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *minute, "2 lb/min");
+}
+
+void MeasureFormatTest::TestNumeratorPlurals() {
+    Locale pl("pl");
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<MeasureUnit> second(MeasureUnit::createSecond(status));
+    LocalPointer<MeasureUnit> foot(MeasureUnit::createFoot(status));
+    if (!assertSuccess("", status)) {
+        return;
+    }
+
+    helperTestSimplePer(
+            pl, UMEASFMT_WIDTH_WIDE, 1.0, *foot, *second, "1 stopa na sekund\\u0119");
+    helperTestSimplePer(
+            pl, UMEASFMT_WIDTH_WIDE, 2.0, *foot, *second, "2 stopy na sekund\\u0119");
+    helperTestSimplePer(
+            pl, UMEASFMT_WIDTH_WIDE, 5.0, *foot, *second, "5 st\u00f3p na sekund\\u0119");
+    helperTestSimplePer(
+            pl, UMEASFMT_WIDTH_WIDE, 1.5, *foot, *second, "1,5 stopy na sekund\\u0119");
+}
+
+    
+
+void MeasureFormatTest::helperTestSimplePer(
+        const Locale &locale,
+        UMeasureFormatWidth width,
+        double value,
+        const MeasureUnit &unit,
+        const MeasureUnit &perUnit,
+        const char *expected) {
+    UErrorCode status = U_ZERO_ERROR;
+    FieldPosition pos(0);
+    MeasureFormat fmt(locale, width, status);
+    if (!assertSuccess("Error creating format object", status)) {
+        return;
+    }
+    Measure measure(value, (MeasureUnit *) unit.clone(), status);
+    if (!assertSuccess("Error creating measure object", status)) {
+        return;
+    }
+    UnicodeString buffer;
+    fmt.formatMeasuresPer(
+            &measure,
+            1,
+            perUnit,
+            buffer,
+            pos,
+            status);
+    if (!assertSuccess("Error formatting measures with per", status)) {
+        return;
+    }
+    assertEquals(
+            "TestSimplePer",
+            UnicodeString(expected).unescape(),
+            buffer);
 }
 
 void MeasureFormatTest::helperTestMultiplesWithPer(
