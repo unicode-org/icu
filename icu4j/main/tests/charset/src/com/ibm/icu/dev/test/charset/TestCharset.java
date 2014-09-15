@@ -5755,10 +5755,10 @@ public class TestCharset extends TestFmwk {
             encoder.reset();
             try {
                 if(encoder.encode(CharBuffer.wrap(Character.toChars(set_ignorable.charAt(i)))).limit() > 0) {
-                    errln("Callback should have ignore default ignorable: 0x" + Integer.toHexString(set_ignorable.charAt(i)));
+                    errln("Callback should have ignore default ignorable: U+" + Integer.toHexString(set_ignorable.charAt(i)));
                 }
             } catch (Exception ex) {
-                errln("Error received converting 0x" + Integer.toHexString(set_ignorable.charAt(i)));
+                errln("Error received converting +" + Integer.toHexString(set_ignorable.charAt(i)));
             }
         }
         
@@ -5768,10 +5768,10 @@ public class TestCharset extends TestFmwk {
             encoder.reset();
             try {
                 if(encoder.encode(CharBuffer.wrap(Character.toChars(set_not_ignorable.charAt(i)))).limit() == 0) {
-                    errln("Callback should not have ignored: 0x" + Integer.toHexString(set_not_ignorable.charAt(i)));
+                    errln("Callback should not have ignored: U+" + Integer.toHexString(set_not_ignorable.charAt(i)));
                 }
             } catch (Exception ex) {
-                errln("Error received converting 0x" + Integer.toHexString(set_not_ignorable.charAt(i)));
+                errln("Error received converting U+" + Integer.toHexString(set_not_ignorable.charAt(i)));
             }
         }
     }
