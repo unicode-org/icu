@@ -2542,10 +2542,10 @@ void LocaleTest::TestIsRightToLeft() {
     assertFalse("root LTR", Locale::getRoot().isRightToLeft());
     assertFalse("zh LTR", Locale::getChinese().isRightToLeft());
     assertTrue("ar RTL", Locale("ar").isRightToLeft());
-    assertTrue("und-EG RTL", Locale("und-EG").isRightToLeft());
+    assertTrue("und-EG RTL", Locale("und-EG").isRightToLeft(), FALSE, TRUE);
     assertFalse("fa-Cyrl LTR", Locale("fa-Cyrl").isRightToLeft());
     assertTrue("en-Hebr RTL", Locale("en-Hebr").isRightToLeft());
-    assertTrue("ckb RTL", Locale("ckb").isRightToLeft());  // Sorani Kurdish
+    assertTrue("ckb RTL", Locale("ckb").isRightToLeft(), FALSE, TRUE);  // Sorani Kurdish
     assertFalse("fil LTR", Locale("fil").isRightToLeft());
     assertFalse("he-Zyxw LTR", Locale("he-Zyxw").isRightToLeft());
 }

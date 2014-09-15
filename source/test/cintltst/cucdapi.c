@@ -39,7 +39,7 @@ static void assertEqualScripts(const char *msg,
     scriptsToString(scripts1, length1, s1);
     scriptsToString(scripts2, length2, s2);
     if(0!=strcmp(s1, s2)) {
-        log_err("Failed: %s: expected %s but got %s\n", msg, s1, s2);
+        log_data_err("Failed: %s: expected %s but got %s\n", msg, s1, s2);
     }
 }
 

@@ -1587,16 +1587,19 @@ static void TestOverrideNumberFormat(void) {
     int32_t i;
     unsigned j;
 
+    fmt=udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
+    if (!assertSuccess("udat_open()", &status)) {
+        return;
+    }
+
+    overrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
+    assertSuccess("unum_open()", &status);
+
     expected=(UChar*)malloc(sizeof(UChar) * 10);
     fields=(UChar*)malloc(sizeof(UChar) * 10);
     u_uastrcpy(fields, "d");
     u_uastrcpy(pattern,"MM d");
 
-    fmt=udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
-    assertSuccess("udat_open()", &status);
-
-    overrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
-    assertSuccess("unum_open()", &status);
 
     // loop 50 times to check getter/setter
     for (i = 0; i < 50; i++){

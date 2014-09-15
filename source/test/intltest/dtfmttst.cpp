@@ -4468,7 +4468,9 @@ void DateFormatTest::TestNumberFormatOverride() {
 
     LocalPointer<SimpleDateFormat> fmt;
     fmt.adoptInstead(new SimpleDateFormat((UnicodeString)"MM d", status));
-    assertSuccess("SimpleDateFormat with pattern MM d", status);
+    if (!assertSuccess("SimpleDateFormat with pattern MM d", status)) {
+        return;
+    }
 
     NumberFormat* check_nf = NumberFormat::createInstance(Locale("en_US"), status);
     assertSuccess("NumberFormat en_US", status);

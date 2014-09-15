@@ -394,7 +394,7 @@ static void TestQuickCheckResultYES()
     }
     if (unorm_quickCheck(&cp, 1, UNORM_NFKD, &error) != UNORM_YES)
     {
-      log_err("ERROR in NFKD quick check at U+%04x\n", cp);
+      log_data_err("ERROR in NFKD quick check at U+%04x\n", cp);
       return;
     }
     if (unorm_quickCheck(&cp, 1, UNORM_NFKC, &error) != 
@@ -460,7 +460,7 @@ static void TestQuickCheckResultMAYBE()
     if (unorm_quickCheck(&(CPNFKC[count]), 1, UNORM_NFKC, &error) != 
                                                            UNORM_MAYBE)
     {
-      log_err("ERROR in NFKC quick check at U+%04x\n", CPNFKC[count]);
+      log_data_err("ERROR in NFKC quick check at U+%04x\n", CPNFKC[count]);
       return;
     }
   }
@@ -502,7 +502,7 @@ static void TestQuickCheckStringResult()
     if (unorm_quickCheck(d, u_strlen(d), UNORM_NFKD, &error) != 
                                                             UNORM_YES)
     {
-      log_err("ERROR in NFKD quick check for string at count %d\n", count);
+      log_data_err("ERROR in NFKD quick check for string at count %d\n", count);
       return;
     }
 
@@ -1416,11 +1416,11 @@ TestQuickCheckPerCP() {
         tccc2=u_getCombiningClass(trail);
 
         if(lccc1!=lccc2) {
-            log_err("u_getIntPropertyValue(lccc)=%d != %d=u_getCombiningClass(lead) for U+%04x\n",
+            log_data_err("u_getIntPropertyValue(lccc)=%d != %d=u_getCombiningClass(lead) for U+%04x\n",
                     lccc1, lccc2, c);
         }
         if(tccc1!=tccc2) {
-            log_err("u_getIntPropertyValue(tccc)=%d != %d=u_getCombiningClass(trail) for U+%04x\n",
+            log_data_err("u_getIntPropertyValue(tccc)=%d != %d=u_getCombiningClass(trail) for U+%04x\n",
                     tccc1, tccc2, c);
         }
 

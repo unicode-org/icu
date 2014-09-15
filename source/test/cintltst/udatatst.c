@@ -1838,7 +1838,10 @@ static void TestTZDataDir(void) {
     // Verify that default ICU time zone data version is something newer than 2014a.
     tzDataVersion = ucal_getTZDataVersion(&status);
     // printf("tz data version is %s\n", tzDataVersion);
-    if (strcmp("2014a", tzDataVersion) == 0) {
+    if (U_FAILURE(status)) {
+        log_data_err("Failed call to ucal_getTZDataVersion - %s\n", u_errorName(status));
+        return;
+    } else if (strcmp("2014a", tzDataVersion) == 0) {
         log_err("File %s:%d - expected something newer than time zone data 2014a.\n", __FILE__, __LINE__, tzDataVersion);
     }
 

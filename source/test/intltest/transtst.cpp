@@ -1477,7 +1477,7 @@ void TransliteratorTest::TestNormalizationTransliterator() {
     Transliterator* NFKD = Transliterator::createInstance("NFKD", UTRANS_FORWARD, parseError, status);
     Transliterator* NFKC = Transliterator::createInstance("NFKC", UTRANS_FORWARD, parseError, status);
     if (!NFKD || !NFKC) {
-        errln("FAIL: createInstance failed");
+        dataerrln("FAIL: createInstance failed");
         delete NFKD;
         delete NFKC;
         return;
