@@ -2201,7 +2201,7 @@ public class PluralRules implements Serializable {
     /**
      * Returns the set of locales for which PluralRules are known.
      * @return the set of locales for which PluralRules are known, as a list
-     * @draft ICU 4.2
+     * @draft ICU 4.2 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
@@ -2222,7 +2222,7 @@ public class PluralRules implements Serializable {
      * @param isAvailable if not null and of length > 0, this will hold 'true' at
      * index 0 if locale is directly defined (without fallback) as having plural rules
      * @return the functionally-equivalent locale
-     * @draft ICU 4.2
+     * @draft ICU 4.2 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {

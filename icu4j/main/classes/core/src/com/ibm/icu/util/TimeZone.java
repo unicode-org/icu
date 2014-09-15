@@ -1132,8 +1132,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * or <code>null</code> when the input ID is unknown or unmappable.
      * @see #getIDForWindowsID(String, String)
      * 
-     * @draft ICU 52
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static String getWindowsID(String id) {
         // canonicalize the input ID
@@ -1194,8 +1193,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * or <code>null</code> when the input ID is unknown or unmappable.
      * @see #getWindowsID(String)
      * 
-     * @draft ICU 52
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static String getIDForWindowsID(String winid, String region) {
         String id = null;

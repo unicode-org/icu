@@ -982,7 +982,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @return the status from the break rule that determined the most recently
      * returned break position.
      *
-     * @draft ICU 3.0
+     * @draft ICU 3.0 (retain)
      * @provisional This is a draft API and might change in a future release of ICU.
      */
 
@@ -1020,7 +1020,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      *                  In the event that the array is too small, the return value
      *                  is the total number of status values that were available,
      *                  not the reduced number that were actually returned.
-     * @draft ICU 3.0
+     * @draft ICU 3.0 (retain)
      * @provisional This is a draft API and might change in a future release of ICU.
      */
     public int getRuleStatusVec(int[] fillInArray) {
