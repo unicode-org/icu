@@ -7,8 +7,8 @@
 
 package com.ibm.icu.text;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import com.ibm.icu.impl.ICUBinary;

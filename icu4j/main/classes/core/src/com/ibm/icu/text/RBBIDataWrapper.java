@@ -13,8 +13,8 @@ import java.nio.ByteOrder;
 
 import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.ICUBinary;
-import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.ICUBinary.Authenticate;
+import com.ibm.icu.impl.Trie;
 
 /**
 * <p>Internal class used for Rule Based Break Iterators</p>

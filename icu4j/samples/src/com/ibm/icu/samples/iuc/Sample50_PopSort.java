@@ -17,8 +17,8 @@ import java.util.TreeSet;
 import com.ibm.icu.samples.iuc.PopulationData.TerritoryEntry;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.LocaleDisplayNames;
-import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
+import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
