@@ -62,7 +62,7 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 private:
     void assertPatternFr(
-            const char *expected, double x, const char *pattern);
+            const char *expected, double x, const char *pattern, UBool possibleDataError=FALSE);
     
 };
 
@@ -84,98 +84,98 @@ void NumberFormatSpecificationTest::runIndexedTest(
 }
 
 void NumberFormatSpecificationTest::TestBasicPatterns() {
-    assertPatternFr("1 234,57", 1234.567, "#,##0.##");
-    assertPatternFr("1234,57", 1234.567, "0.##");
-    assertPatternFr("1235", 1234.567, "0");
-    assertPatternFr("1 234,567", 1234.567, "#,##0.###");
-    assertPatternFr("1234,567", 1234.567, "###0.#####");
-    assertPatternFr("1234,5670", 1234.567, "###0.0000#");
-    assertPatternFr("01234,5670", 1234.567, "00000.0000");
-    assertPatternFr("1 234,57 \\u20ac", 1234.567, "#,##0.00 \\u00a4");
+    assertPatternFr("1 234,57", 1234.567, "#,##0.##", TRUE);
+    assertPatternFr("1234,57", 1234.567, "0.##", TRUE);
+    assertPatternFr("1235", 1234.567, "0", TRUE);
+    assertPatternFr("1 234,567", 1234.567, "#,##0.###", TRUE);
+    assertPatternFr("1234,567", 1234.567, "###0.#####", TRUE);
+    assertPatternFr("1234,5670", 1234.567, "###0.0000#", TRUE);
+    assertPatternFr("01234,5670", 1234.567, "00000.0000", TRUE);
+    assertPatternFr("1 234,57 \\u20ac", 1234.567, "#,##0.00 \\u00a4", TRUE);
 }
 
 void NumberFormatSpecificationTest::TestNfSetters() {
     LocalPointer<NumberFormat> nf(nfWithPattern("#,##0.##"));
     nf->setMaximumIntegerDigits(5);
     nf->setMinimumIntegerDigits(4);
-    assertEquals("", "34 567,89", format(1234567.89, *nf));
-    assertEquals("", "0 034,56", format(34.56, *nf));
+    assertEquals("", "34 567,89", format(1234567.89, *nf), TRUE);
+    assertEquals("", "0 034,56", format(34.56, *nf), TRUE);
 }
 
 void NumberFormatSpecificationTest::TestRounding() {
-    assertPatternFr("1,0", 1.25, "0.5");
-    assertPatternFr("2,0", 1.75, "0.5");
-    assertPatternFr("-1,0", -1.25, "0.5");
-    assertPatternFr("-02,0", -1.75, "00.5");
-    assertPatternFr("0", 2.0, "4");
-    assertPatternFr("8", 6.0, "4");
-    assertPatternFr("8", 10.0, "4");
-    assertPatternFr("99,90", 99.0, "2.70");
-    assertPatternFr("273,00", 272.0, "2.73");
-    assertPatternFr("1 03,60", 104.0, "#,#3.70");
+    assertPatternFr("1,0", 1.25, "0.5", TRUE);
+    assertPatternFr("2,0", 1.75, "0.5", TRUE);
+    assertPatternFr("-1,0", -1.25, "0.5", TRUE);
+    assertPatternFr("-02,0", -1.75, "00.5", TRUE);
+    assertPatternFr("0", 2.0, "4", TRUE);
+    assertPatternFr("8", 6.0, "4", TRUE);
+    assertPatternFr("8", 10.0, "4", TRUE);
+    assertPatternFr("99,90", 99.0, "2.70", TRUE);
+    assertPatternFr("273,00", 272.0, "2.73", TRUE);
+    assertPatternFr("1 03,60", 104.0, "#,#3.70", TRUE);
 }
 
 void NumberFormatSpecificationTest::TestSignificantDigits() {
-    assertPatternFr("1230", 1234.0, "@@@");
-    assertPatternFr("1 234", 1234.0, "@,@@@");
-    assertPatternFr("1 235 000", 1234567.0, "@,@@@");
-    assertPatternFr("1 234 567", 1234567.0, "@@@@,@@@");
-    assertPatternFr("12 34 567,00", 1234567.0, "@@@@,@@,@@@");
-    assertPatternFr("12 34 567,0", 1234567.0, "@@@@,@@,@@#");
-    assertPatternFr("12 34 567", 1234567.0, "@@@@,@@,@##");
-    assertPatternFr("12 34 567", 1234567.001, "@@@@,@@,@##");
-    assertPatternFr("12 34 567", 1234567.001, "@@@@,@@,###");
-    assertPatternFr("1 200", 1234.0, "#,#@@");
+    assertPatternFr("1230", 1234.0, "@@@", TRUE);
+    assertPatternFr("1 234", 1234.0, "@,@@@", TRUE);
+    assertPatternFr("1 235 000", 1234567.0, "@,@@@", TRUE);
+    assertPatternFr("1 234 567", 1234567.0, "@@@@,@@@", TRUE);
+    assertPatternFr("12 34 567,00", 1234567.0, "@@@@,@@,@@@", TRUE);
+    assertPatternFr("12 34 567,0", 1234567.0, "@@@@,@@,@@#", TRUE);
+    assertPatternFr("12 34 567", 1234567.0, "@@@@,@@,@##", TRUE);
+    assertPatternFr("12 34 567", 1234567.001, "@@@@,@@,@##", TRUE);
+    assertPatternFr("12 34 567", 1234567.001, "@@@@,@@,###", TRUE);
+    assertPatternFr("1 200", 1234.0, "#,#@@", TRUE);
 }
 
 void NumberFormatSpecificationTest::TestScientificNotation() {
-    assertPatternFr("1,23E4", 12345.0, "0.00E0");
-    assertPatternFr("123,00E2", 12300.0, "000.00E0");
-    assertPatternFr("123,0E2", 12300.0, "000.0#E0");
-    assertPatternFr("123,0E2", 12300.1, "000.0#E0");
-    assertPatternFr("123,01E2", 12301.0, "000.0#E0");
-    assertPatternFr("123,01E+02", 12301.0, "000.0#E+00");
-    assertPatternFr("12,3E3", 12345.0, "##0.00E0");
-    assertPatternFr("12,300E3", 12300.1, "##0.0000E0");
-    assertPatternFr("12,30E3", 12300.1, "##0.000#E0");
-    assertPatternFr("12,301E3", 12301.0, "##0.000#E0");
+    assertPatternFr("1,23E4", 12345.0, "0.00E0", TRUE);
+    assertPatternFr("123,00E2", 12300.0, "000.00E0", TRUE);
+    assertPatternFr("123,0E2", 12300.0, "000.0#E0", TRUE);
+    assertPatternFr("123,0E2", 12300.1, "000.0#E0", TRUE);
+    assertPatternFr("123,01E2", 12301.0, "000.0#E0", TRUE);
+    assertPatternFr("123,01E+02", 12301.0, "000.0#E+00", TRUE);
+    assertPatternFr("12,3E3", 12345.0, "##0.00E0", TRUE);
+    assertPatternFr("12,300E3", 12300.1, "##0.0000E0", TRUE);
+    assertPatternFr("12,30E3", 12300.1, "##0.000#E0", TRUE);
+    assertPatternFr("12,301E3", 12301.0, "##0.000#E0", TRUE);
     if (!logKnownIssue("11020")) {
         assertPatternFr("1,25E4", 12301.2, "0.05E0");
     }
-    assertPatternFr("170,0E-3", 0.17, "##0.000#E0");
+    assertPatternFr("170,0E-3", 0.17, "##0.000#E0", TRUE);
 
 }
 
 void NumberFormatSpecificationTest::TestPercent() {
-    assertPatternFr("57,3%", 0.573, "0.0%");
-    assertPatternFr("%57,3", 0.573, "%0.0");
-    assertPatternFr("p%p57,3", 0.573, "p%p0.0");
-    assertPatternFr("p%p0,6", 0.573, "p'%'p0.0");
-    assertPatternFr("%3,260", 0.0326, "%@@@@");
-    assertPatternFr("%1 540", 15.43, "%#,@@@");
-    assertPatternFr("%1 656,4", 16.55, "%#,##4.1");
-    assertPatternFr("%16,3E3", 162.55, "%##0.00E0");  
+    assertPatternFr("57,3%", 0.573, "0.0%", TRUE);
+    assertPatternFr("%57,3", 0.573, "%0.0", TRUE);
+    assertPatternFr("p%p57,3", 0.573, "p%p0.0", TRUE);
+    assertPatternFr("p%p0,6", 0.573, "p'%'p0.0", TRUE);
+    assertPatternFr("%3,260", 0.0326, "%@@@@", TRUE);
+    assertPatternFr("%1 540", 15.43, "%#,@@@", TRUE);
+    assertPatternFr("%1 656,4", 16.55, "%#,##4.1", TRUE);
+    assertPatternFr("%16,3E3", 162.55, "%##0.00E0", TRUE);
 }
 
 void NumberFormatSpecificationTest::TestPerMilli() {
-    assertPatternFr("573,0\\u2030", 0.573, "0.0\\u2030");
-    assertPatternFr("\\u2030573,0", 0.573, "\\u20300.0");
-    assertPatternFr("p\\u2030p573,0", 0.573, "p\\u2030p0.0");
-    assertPatternFr("p\\u2030p0,6", 0.573, "p'\\u2030'p0.0");
-    assertPatternFr("\\u203032,60", 0.0326, "\\u2030@@@@");
-    assertPatternFr("\\u203015 400", 15.43, "\\u2030#,@@@");
-    assertPatternFr("\\u203016 551,7", 16.55, "\\u2030#,##4.1");
-    assertPatternFr("\\u2030163E3", 162.55, "\\u2030##0.00E0");
+    assertPatternFr("573,0\\u2030", 0.573, "0.0\\u2030", TRUE);
+    assertPatternFr("\\u2030573,0", 0.573, "\\u20300.0", TRUE);
+    assertPatternFr("p\\u2030p573,0", 0.573, "p\\u2030p0.0", TRUE);
+    assertPatternFr("p\\u2030p0,6", 0.573, "p'\\u2030'p0.0", TRUE);
+    assertPatternFr("\\u203032,60", 0.0326, "\\u2030@@@@", TRUE);
+    assertPatternFr("\\u203015 400", 15.43, "\\u2030#,@@@", TRUE);
+    assertPatternFr("\\u203016 551,7", 16.55, "\\u2030#,##4.1", TRUE);
+    assertPatternFr("\\u2030163E3", 162.55, "\\u2030##0.00E0", TRUE);
 }
 
 void NumberFormatSpecificationTest::TestPadding() {
-    assertPatternFr("$***1 234", 1234, "$**####,##0");
-    assertPatternFr("xxx$1 234", 1234, "*x$####,##0");
-    assertPatternFr("1 234xxx$", 1234, "####,##0*x$");
-    assertPatternFr("1 234$xxx", 1234, "####,##0$*x");
-    assertPatternFr("ne1 234nx", -1234, "####,##0$*x;ne#n");
-    assertPatternFr("n1 234*xx", -1234, "####,##0$*x;n#'*'");
-    assertPatternFr("yyyy%432,6", 4.33, "*y%4.2######");
+    assertPatternFr("$***1 234", 1234, "$**####,##0", TRUE);
+    assertPatternFr("xxx$1 234", 1234, "*x$####,##0", TRUE);
+    assertPatternFr("1 234xxx$", 1234, "####,##0*x$", TRUE);
+    assertPatternFr("1 234$xxx", 1234, "####,##0$*x", TRUE);
+    assertPatternFr("ne1 234nx", -1234, "####,##0$*x;ne#n", TRUE);
+    assertPatternFr("n1 234*xx", -1234, "####,##0$*x;n#'*'", TRUE);
+    assertPatternFr("yyyy%432,6", 4.33, "*y%4.2######",  TRUE);
     if (!logKnownIssue("11025")) {
         assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **####0.00");
         assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **#######0");
@@ -190,7 +190,7 @@ void NumberFormatSpecificationTest::TestPadding() {
         fmt.setCurrency(kJPY);
         fmt.format(433.22, result);
         assertSuccess("", status);
-        assertEquals("", "JPY ****433", result);
+        assertEquals("", "JPY ****433", result, TRUE);
     }
     {
         UnicodeString upattern(
@@ -204,10 +204,10 @@ void NumberFormatSpecificationTest::TestPadding() {
                 status);
         fmt.format(-433.22, result);
         assertSuccess("", status);
-        assertEquals("", "USD (433.22)", result);
+        assertEquals("", "USD (433.22)", result, TRUE);
     }
     const char *paddedSciPattern = "QU**00.#####E0";
-    assertPatternFr("QU***43,3E-1", 4.33, paddedSciPattern);
+    assertPatternFr("QU***43,3E-1", 4.33, paddedSciPattern, TRUE);
     {
         UErrorCode status = U_ZERO_ERROR;
         DecimalFormatSymbols *sym = new DecimalFormatSymbols("fr", status);
@@ -219,16 +219,17 @@ void NumberFormatSpecificationTest::TestPadding() {
         UnicodeString result;
         fmt.format(4.33, result);
         assertSuccess("", status);
-        assertEquals("", "QU**43,3EE-1", result);
+        assertEquals("", "QU**43,3EE-1", result, TRUE);
     }
     // padding cannot work as intended with scientific notation.
-    assertPatternFr("QU**43,32E-1", 4.332, paddedSciPattern);
+    assertPatternFr("QU**43,32E-1", 4.332, paddedSciPattern, TRUE);
 }
 
 void NumberFormatSpecificationTest::assertPatternFr(
         const char *expected,
         double x,
-        const char *pattern) {
+        const char *pattern,
+        UBool possibleDataError) {
     UnicodeString upattern(pattern, -1, US_INV);
     UnicodeString uexpected(expected, -1, US_INV);
     upattern = upattern.unescape();
@@ -240,7 +241,7 @@ void NumberFormatSpecificationTest::assertPatternFr(
     fmt.format(x, result);
     fixNonBreakingSpace(result);
     assertSuccess("", status);
-    assertEquals("", uexpected, result);
+    assertEquals("", uexpected, result, possibleDataError);
 }
 
 extern IntlTest *createNumberFormatSpecificationTest() {

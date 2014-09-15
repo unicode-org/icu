@@ -1244,15 +1244,17 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
     filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
     TEST_ASSERT_SUCCESS(status);
 
-    logln("Testing:");
-    filteredBI->setText(text);
-    TEST_ASSERT(20 == filteredBI->next()); // Mr.
-    TEST_ASSERT(84 == filteredBI->next()); // recovered.
-    TEST_ASSERT(90 == filteredBI->next()); // Capt.
-    TEST_ASSERT(181 == filteredBI->next()); // Mr.
-    TEST_ASSERT(278 == filteredBI->next()); // charge.
-    filteredBI->first();
-    prtbrks(filteredBI.getAlias(), text, *this);
+    if (U_SUCCESS(status)) {
+        logln("Testing:");
+        filteredBI->setText(text);
+        TEST_ASSERT(20 == filteredBI->next()); // Mr.
+        TEST_ASSERT(84 == filteredBI->next()); // recovered.
+        TEST_ASSERT(90 == filteredBI->next()); // Capt.
+        TEST_ASSERT(181 == filteredBI->next()); // Mr.
+        TEST_ASSERT(278 == filteredBI->next()); // charge.
+        filteredBI->first();
+        prtbrks(filteredBI.getAlias(), text, *this);
+    }
   }
 
   {
@@ -1260,29 +1262,31 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
     builder.adoptInstead(FilteredBreakIteratorBuilder::createInstance(status));
     TEST_ASSERT_SUCCESS(status);
 
-    logln("Adding Mr. as an exception\n");
-    TEST_ASSERT(TRUE == builder->suppressBreakAfter(ABBR_MR, status));
-    TEST_ASSERT(FALSE == builder->suppressBreakAfter(ABBR_MR, status)); // already have it
-    TEST_ASSERT(TRUE == builder->unsuppressBreakAfter(ABBR_MR, status));
-    TEST_ASSERT(FALSE == builder->unsuppressBreakAfter(ABBR_MR, status)); // already removed it
-    TEST_ASSERT(TRUE == builder->suppressBreakAfter(ABBR_MR, status));
-    TEST_ASSERT_SUCCESS(status);
+    if (U_SUCCESS(status)) {
+        logln("Adding Mr. as an exception\n");
+        TEST_ASSERT(TRUE == builder->suppressBreakAfter(ABBR_MR, status));
+        TEST_ASSERT(FALSE == builder->suppressBreakAfter(ABBR_MR, status)); // already have it
+        TEST_ASSERT(TRUE == builder->unsuppressBreakAfter(ABBR_MR, status));
+        TEST_ASSERT(FALSE == builder->unsuppressBreakAfter(ABBR_MR, status)); // already removed it
+        TEST_ASSERT(TRUE == builder->suppressBreakAfter(ABBR_MR, status));
+        TEST_ASSERT_SUCCESS(status);
 
-    logln("Constructing base BI\n");
-    baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
-    TEST_ASSERT_SUCCESS(status);
+        logln("Constructing base BI\n");
+        baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
+        TEST_ASSERT_SUCCESS(status);
 
-    logln("Building new BI\n");
-    filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
-    TEST_ASSERT_SUCCESS(status);
+        logln("Building new BI\n");
+        filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
+        TEST_ASSERT_SUCCESS(status);
 
-    logln("Testing:");
-    filteredBI->setText(text);
-    TEST_ASSERT(84 == filteredBI->next());
-    TEST_ASSERT(90 == filteredBI->next());// Capt.
-    TEST_ASSERT(278 == filteredBI->next());
-    filteredBI->first();
-    prtbrks(filteredBI.getAlias(), text, *this);
+        logln("Testing:");
+        filteredBI->setText(text);
+        TEST_ASSERT(84 == filteredBI->next());
+        TEST_ASSERT(90 == filteredBI->next());// Capt.
+        TEST_ASSERT(278 == filteredBI->next());
+        filteredBI->first();
+        prtbrks(filteredBI.getAlias(), text, *this);
+    }
   }
 
 
@@ -1291,52 +1295,26 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
     builder.adoptInstead(FilteredBreakIteratorBuilder::createInstance(status));
     TEST_ASSERT_SUCCESS(status);
 
-    logln("Adding Mr. and Capt as an exception\n");
-    TEST_ASSERT(TRUE == builder->suppressBreakAfter(ABBR_MR, status));
-    TEST_ASSERT(TRUE == builder->suppressBreakAfter(ABBR_CAPT, status));
-    TEST_ASSERT_SUCCESS(status);
+    if (U_SUCCESS(status)) {
+        logln("Adding Mr. and Capt as an exception\n");
+        TEST_ASSERT(TRUE == builder->suppressBreakAfter(ABBR_MR, status));
+        TEST_ASSERT(TRUE == builder->suppressBreakAfter(ABBR_CAPT, status));
+        TEST_ASSERT_SUCCESS(status);
 
-    logln("Constructing base BI\n");
-    baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
-    TEST_ASSERT_SUCCESS(status);
+        logln("Constructing base BI\n");
+        baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
+        TEST_ASSERT_SUCCESS(status);
 
-    logln("Building new BI\n");
-    filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
-    TEST_ASSERT_SUCCESS(status);
+        logln("Building new BI\n");
+        filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
+        TEST_ASSERT_SUCCESS(status);
 
-    logln("Testing:");
-    filteredBI->setText(text);
-    TEST_ASSERT(84 == filteredBI->next());
-    TEST_ASSERT(278 == filteredBI->next());
-    filteredBI->first();
-    prtbrks(filteredBI.getAlias(), text, *this);
-  }
-
-
-  {
-    logln("Constructing English builder\n");
-    builder.adoptInstead(FilteredBreakIteratorBuilder::createInstance(Locale::getEnglish(), status));
-    TEST_ASSERT_SUCCESS(status);
-
-    logln("Constructing base BI\n");
-    baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
-    TEST_ASSERT_SUCCESS(status);
-
-    logln("unsuppressing 'Capt'");
-    TEST_ASSERT(TRUE == builder->unsuppressBreakAfter(ABBR_CAPT, status));
-
-    logln("Building new BI\n");
-    filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
-    TEST_ASSERT_SUCCESS(status);
-
-    if(filteredBI.isValid()) {
-      logln("Testing:");
-      filteredBI->setText(text);
-      TEST_ASSERT(84 == filteredBI->next());
-      TEST_ASSERT(90 == filteredBI->next());
-      TEST_ASSERT(278 == filteredBI->next());
-      filteredBI->first();
-      prtbrks(filteredBI.getAlias(), text, *this);
+        logln("Testing:");
+        filteredBI->setText(text);
+        TEST_ASSERT(84 == filteredBI->next());
+        TEST_ASSERT(278 == filteredBI->next());
+        filteredBI->first();
+        prtbrks(filteredBI.getAlias(), text, *this);
     }
   }
 
@@ -1350,17 +1328,49 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
     baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
     TEST_ASSERT_SUCCESS(status);
 
-    logln("Building new BI\n");
-    filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
+    if (U_SUCCESS(status)) {
+        logln("unsuppressing 'Capt'");
+        TEST_ASSERT(TRUE == builder->unsuppressBreakAfter(ABBR_CAPT, status));
+
+        logln("Building new BI\n");
+        filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
+        TEST_ASSERT_SUCCESS(status);
+
+        if(filteredBI.isValid()) {
+          logln("Testing:");
+          filteredBI->setText(text);
+          TEST_ASSERT(84 == filteredBI->next());
+          TEST_ASSERT(90 == filteredBI->next());
+          TEST_ASSERT(278 == filteredBI->next());
+          filteredBI->first();
+          prtbrks(filteredBI.getAlias(), text, *this);
+        }
+    }
+  }
+
+
+  {
+    logln("Constructing English builder\n");
+    builder.adoptInstead(FilteredBreakIteratorBuilder::createInstance(Locale::getEnglish(), status));
     TEST_ASSERT_SUCCESS(status);
 
-    if(filteredBI.isValid()) {
-      logln("Testing:");
-      filteredBI->setText(text);
-      TEST_ASSERT(84 == filteredBI->next());
-      TEST_ASSERT(278 == filteredBI->next());
-      filteredBI->first();
-      prtbrks(filteredBI.getAlias(), text, *this);
+    logln("Constructing base BI\n");
+    baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
+    TEST_ASSERT_SUCCESS(status);
+
+    if (U_SUCCESS(status)) {
+        logln("Building new BI\n");
+        filteredBI.adoptInstead(builder->build(baseBI.orphan(), status));
+        TEST_ASSERT_SUCCESS(status);
+
+        if(filteredBI.isValid()) {
+          logln("Testing:");
+          filteredBI->setText(text);
+          TEST_ASSERT(84 == filteredBI->next());
+          TEST_ASSERT(278 == filteredBI->next());
+          filteredBI->first();
+          prtbrks(filteredBI.getAlias(), text, *this);
+        }
     }
   }
 

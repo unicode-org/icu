@@ -5852,7 +5852,7 @@ static void TestForLanguageTag(void) {
                 langtag_to_locale[i].bcpID, u_errorName(status));
         } else {
             if (uprv_strcmp(langtag_to_locale[i].locID, locale) != 0) {
-                log_err("uloc_forLanguageTag returned locale [%s] for input language tag [%s] - expected: [%s]\n",
+                log_data_err("uloc_forLanguageTag returned locale [%s] for input language tag [%s] - expected: [%s]\n",
                     locale, langtag_to_locale[i].bcpID, langtag_to_locale[i].locID);
             }
             if (parsedLen != expParsedLen) {
@@ -5888,7 +5888,7 @@ static void TestToUnicodeLocaleKey(void)
                 log_err("toUnicodeLocaleKey: keyword=%s => %s, expected=NULL\n", keyword, bcpKey);
             }
         } else if (bcpKey == NULL) {
-            log_err("toUnicodeLocaleKey: keyword=%s => NULL, expected=%s\n", keyword, expected);
+            log_data_err("toUnicodeLocaleKey: keyword=%s => NULL, expected=%s\n", keyword, expected);
         } else if (uprv_strcmp(expected, "$IN") == 0) {
             if (bcpKey != keyword) {
                 log_err("toUnicodeLocaleKey: keyword=%s => %s, expected=%s(input pointer)\n", keyword, bcpKey, keyword);
@@ -5931,7 +5931,7 @@ static void TestToLegacyKey(void)
                 log_err("toLegacyKey: keyword=%s => %s, expected=%s(input pointer)\n", keyword, legacyKey, keyword);
             }
         } else if (uprv_strcmp(legacyKey, expected) != 0) {
-            log_err("toUnicodeLocaleKey: keyword=%s, %s, expected=%s\n", keyword, legacyKey, expected);
+            log_data_err("toUnicodeLocaleKey: keyword=%s, %s, expected=%s\n", keyword, legacyKey, expected);
         }
     }
 }
@@ -5977,13 +5977,13 @@ static void TestToUnicodeLocaleType(void)
                 log_err("toUnicodeLocaleType: keyword=%s, value=%s => %s, expected=NULL\n", keyword, value, bcpType);
             }
         } else if (bcpType == NULL) {
-            log_err("toUnicodeLocaleType: keyword=%s, value=%s => NULL, expected=%s\n", keyword, value, expected);
+            log_data_err("toUnicodeLocaleType: keyword=%s, value=%s => NULL, expected=%s\n", keyword, value, expected);
         } else if (uprv_strcmp(expected, "$IN") == 0) {
             if (bcpType != value) {
                 log_err("toUnicodeLocaleType: keyword=%s, value=%s => %s, expected=%s(input pointer)\n", keyword, value, bcpType, value);
             }
         } else if (uprv_strcmp(bcpType, expected) != 0) {
-            log_err("toUnicodeLocaleType: keyword=%s, value=%s => %s, expected=%s\n", keyword, value, bcpType, expected);
+            log_data_err("toUnicodeLocaleType: keyword=%s, value=%s => %s, expected=%s\n", keyword, value, bcpType, expected);
         }
     }
 }
@@ -6037,7 +6037,7 @@ static void TestToLegacyType(void)
                 log_err("toLegacyType: keyword=%s, value=%s => %s, expected=%s(input pointer)\n", keyword, value, legacyType, value);
             }
         } else if (uprv_strcmp(legacyType, expected) != 0) {
-            log_err("toLegacyType: keyword=%s, value=%s => %s, expected=%s\n", keyword, value, legacyType, expected);
+            log_data_err("toLegacyType: keyword=%s, value=%s => %s, expected=%s\n", keyword, value, legacyType, expected);
         }
     }
 }

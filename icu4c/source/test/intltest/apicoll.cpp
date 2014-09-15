@@ -2437,7 +2437,7 @@ void CollationAPITest::TestBadKeywords() {
     errorCode = U_ZERO_ERROR;
     coll.adoptInstead(Collator::createInstance(localeID, errorCode));
     if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
-        errln("Collator::createInstance(%s) did not fail as expected - %s",
+        dataerrln("Collator::createInstance(%s) did not fail as expected - %s",
               localeID, u_errorName(errorCode));
     }
 
@@ -2458,10 +2458,10 @@ void CollationAPITest::TestBadKeywords() {
     errorCode = U_ZERO_ERROR;
     coll.adoptInstead(Collator::createInstance(localeID, errorCode));
     if(errorCode != U_UNSUPPORTED_ERROR) {
-        if (errorCode == U_ILLEGAL_ARGUMENT_ERROR) {
+        if (errorCode == U_ILLEGAL_ARGUMENT_ERROR || errorCode == U_FILE_ACCESS_ERROR) {
             dataerrln("Collator::createInstance(it-u-vt-u24) : %s", u_errorName(errorCode));
         } else {
-            errln("Collator::createInstance(%s) did not fail as expected - %s",
+           errln("Collator::createInstance(%s) did not fail as expected - %s",
                   localeID, u_errorName(errorCode));
         }
     }
