@@ -683,7 +683,7 @@ public class IslamicCalendar extends Calendar {
      * determines the type of calculation to use for this instance
      * 
      * @serial
-     * @stable ICU 54
+     * @stable ICU 52
      */
     private CalculationType cType = CalculationType.ISLAMIC_CIVIL;
 
@@ -876,29 +876,29 @@ public class IslamicCalendar extends Calendar {
     /**
      *  enumeration of available calendar calculation types
      *  
-     * @stable ICU 54
+     * @stable ICU 52
      */
     public enum CalculationType {
         /**
          * Religious calendar (atronomical simulation)
-         * @stable ICU 54
+         * @stable ICU 52
          */
         ISLAMIC             ("islamic"),
         /**
          * Tabular (intercalary years [2,5,7,10,13,16,18,21,24,26,29]) algorithm
          * with civil (Friday) epoch.
-         * @stable ICU 54
+         * @stable ICU 52
          */
         ISLAMIC_CIVIL       ("islamic-civil"),
         /**
          * Umm al-Qura calendar
-         * @stable ICU 54
+         * @stable ICU 52
          */
         ISLAMIC_UMALQURA    ("islamic-umalqura"),
         /**
          * Tabular (intercalary years [2,5,7,10,13,16,18,21,24,26,29]) algorithm
          * with astronomical (Thursday) epoch.
-         * @stable ICU 54
+         * @stable ICU 52
          */
         ISLAMIC_TBLA        ("islamic-tbla");
 

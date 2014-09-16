@@ -230,7 +230,7 @@ final public class ListFormatter {
      * @return the pattern with {0}, {1}, {2}, etc. For English,
      * getPatternForNumItems(3) == "{0}, {1}, and {2}"
      * @throws IllegalArgumentException when count is 0 or negative.
-     * @stable ICU 54
+     * @stable ICU 52
      */
     public String getPatternForNumItems(int count) {
         if (count <= 0) {
