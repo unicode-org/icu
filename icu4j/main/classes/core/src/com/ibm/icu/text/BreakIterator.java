@@ -462,7 +462,7 @@ public abstract class BreakIterator implements Cloneable
      * @return The status from the break rule that determined the most recently
      *         returned break position.
      *
-     * @stable ICU 54
+     * @stable ICU 52
      */
 
     public int  getRuleStatus() {
@@ -486,7 +486,7 @@ public abstract class BreakIterator implements Cloneable
      *                  In the event that the array is too small, the return value
      *                  is the total number of status values that were available,
      *                  not the reduced number that were actually returned.
-     * @stable ICU 54
+     * @stable ICU 52
      */
     public int getRuleStatusVec(int[] fillInArray) {
         if (fillInArray != null && fillInArray.length > 0) {
