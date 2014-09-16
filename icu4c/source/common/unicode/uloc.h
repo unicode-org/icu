@@ -886,6 +886,7 @@ uloc_setKeywordValue(const char* keywordName,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Returns whether the locale's script is written right-to-left.
  * If there is no script subtag, then the likely script is used, see uloc_addLikelySubtags().
@@ -902,6 +903,7 @@ uloc_setKeywordValue(const char* keywordName,
  */
 U_DRAFT UBool U_EXPORT2
 uloc_isRightToLeft(const char *locale);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * enums for the  return value for the character and line orientation

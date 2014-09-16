@@ -22,6 +22,7 @@
  * @draft ICU 54
  */
 enum UCurrencyUsage {
+#ifndef U_HIDE_DRAFT_API
     /**
      * a setting to specify currency usage which determines currency digit
      * and rounding for standard usage, for example: "50.00 NT$"
@@ -35,11 +36,12 @@ enum UCurrencyUsage {
      * @draft ICU 54
      */
     UCURR_USAGE_CASH=1,
+#endif  /* U_HIDE_DRAFT_API */
     /**
      * One higher than the last enum UCurrencyUsage constant.
      * @draft ICU 54
      */
-    UCURR_USAGE_COUNT
+    UCURR_USAGE_COUNT=2
 };
 typedef enum UCurrencyUsage UCurrencyUsage; 
 
@@ -202,6 +204,7 @@ U_STABLE int32_t U_EXPORT2
 ucurr_getDefaultFractionDigits(const UChar* currency,
                                UErrorCode* ec);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Returns the number of the number of fraction digits that should
  * be displayed for the given currency with usage.
@@ -216,6 +219,7 @@ U_DRAFT int32_t U_EXPORT2
 ucurr_getDefaultFractionDigitsForUsage(const UChar* currency, 
                                        const UCurrencyUsage usage,
                                        UErrorCode* ec);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Returns the rounding increment for the given currency, or 0.0 if no
@@ -231,6 +235,7 @@ U_STABLE double U_EXPORT2
 ucurr_getRoundingIncrement(const UChar* currency,
                            UErrorCode* ec);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Returns the rounding increment for the given currency, or 0.0 if no
  * rounding is done by the currency given usage.
@@ -245,6 +250,7 @@ U_DRAFT double U_EXPORT2
 ucurr_getRoundingIncrementForUsage(const UChar* currency,
                                    const UCurrencyUsage usage,
                                    UErrorCode* ec);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Selector constants for ucurr_openCurrencies().

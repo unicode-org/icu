@@ -233,7 +233,9 @@ typedef enum UTimeZoneFormatParseOption {
      * by other styles.
      * @stable ICU 50
      */
-    UTZFMT_PARSE_OPTION_ALL_STYLES  = 0x01,
+    UTZFMT_PARSE_OPTION_ALL_STYLES  = 0x01
+#ifndef U_HIDE_DRAFT_API
+    ,
      /**
       * When parsing a time zone display name in UTZFMT_STYLE_SPECIFIC_SHORT,
       * look for the IANA tz database compatible zone abbreviations in addition
@@ -242,6 +244,7 @@ typedef enum UTimeZoneFormatParseOption {
       * @draft ICU 54
       */
     UTZFMT_PARSE_OPTION_TZ_DATABASE_ABBREVIATIONS = 0x02
+#endif  /* U_HIDE_DRAFT_API */
 } UTimeZoneFormatParseOption;
 
 U_CDECL_END

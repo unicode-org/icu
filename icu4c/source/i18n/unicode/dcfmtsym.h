@@ -360,7 +360,7 @@ public:
      * The returned reference becomes invalid when the symbol is changed
      * or when the DecimalFormatSymbols are destroyed.
      * ### TODO markus 2002oct11: Consider proposing getConstSymbol() to be really public.
-     * Note: moved #ifndef U_HIDE_INTERNAL_API after this, it is needed for inline in DecimalFormat
+     * Note: moved #ifndef U_HIDE_INTERNAL_API after this, since this is needed for inline in DecimalFormat
      *
      * @param symbol Constant to indicate a number format symbol.
      * @return the format symbol by the param 'symbol'

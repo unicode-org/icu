@@ -1422,7 +1422,7 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     void initCurrency(const char *isoCurrency);
 
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
 private:
     int32_t fTypeId;

@@ -1631,6 +1631,7 @@ public:
      */
     virtual void setDecimalSeparatorAlwaysShown(UBool newValue);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Allows you to get the parse behavior of the pattern decimal mark.
      *
@@ -1638,6 +1639,7 @@ public:
      * @draft ICU 54
      */
     UBool isDecimalPatternMatchRequired(void) const;
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Allows you to set the behavior of the pattern decimal mark.
@@ -1892,6 +1894,7 @@ public:
      */
     virtual void setCurrency(const UChar* theCurrency);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Sets the <tt>Currency Context</tt> object used to display currency.
      * This takes effect immediately, if this format is a
@@ -1906,14 +1909,17 @@ public:
      * @draft ICU 54
      */
     UCurrencyUsage getCurrencyUsage() const;
+#endif  /* U_HIDE_DRAFT_API */
 
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * The resource tags we use to retrieve decimal format data from
      * locale resource bundles.
      * @deprecated ICU 3.4. This string has no public purpose. Please don't use it.
      */
     static const char fgNumberPatterns[];
+#endif  /* U_HIDE_DEPRECATED_API */
 
 #ifndef U_HIDE_INTERNAL_API
     /**
