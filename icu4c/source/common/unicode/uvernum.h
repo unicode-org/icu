@@ -157,6 +157,7 @@
  */
 #define UCOL_BUILDER_VERSION 9
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * Constant 1.
  * This was intended to be the version of collation tailorings,
@@ -164,5 +165,6 @@
  * @deprecated ICU 54
  */
 #define UCOL_TAILORINGS_VERSION 1
+#endif  /* U_HIDE_DEPRECATED_API */
 
 #endif

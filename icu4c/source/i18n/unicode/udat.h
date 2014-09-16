@@ -1084,6 +1084,7 @@ udat_setCalendar(            UDateFormat*    fmt,
 U_STABLE const UNumberFormat* U_EXPORT2 
 udat_getNumberFormat(const UDateFormat* fmt);
 
+#ifndef U_HIDE_DRAFT_API
 /**
 * Get the UNumberFormat for specific field associated with an UDateFormat.
 * For example: 'y' for year and 'M' for month
@@ -1116,6 +1117,7 @@ udat_adoptNumberFormatForFields(  UDateFormat* fmt,
                             const UChar* fields,
                                   UNumberFormat*  numberFormatToSet,
                                   UErrorCode* status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
 * Set the UNumberFormat associated with an UDateFormat.
@@ -1133,6 +1135,7 @@ U_STABLE void U_EXPORT2
 udat_setNumberFormat(            UDateFormat*    fmt,
                         const   UNumberFormat*  numberFormatToSet);
 
+#ifndef U_HIDE_DRAFT_API
 /**
 * Adopt the UNumberFormat associated with an UDateFormat.
 * A UDateFormat uses a UNumberFormat to format numbers within a date,
@@ -1145,6 +1148,7 @@ udat_setNumberFormat(            UDateFormat*    fmt,
 U_DRAFT void U_EXPORT2 
 udat_adoptNumberFormat(            UDateFormat*    fmt,
                                    UNumberFormat*  numberFormatToAdopt);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
 * Get a locale for which date/time formatting patterns are available.

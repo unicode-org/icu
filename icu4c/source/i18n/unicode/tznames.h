@@ -176,6 +176,7 @@ public:
      * Note: The input locale is used for resolving ambiguous names (e.g. "IST" is parsed
      * as Israel Standard Time for Israel, while it is parsed as India Standard Time for
      * all other regions). The zone names returned by this instance are not localized.
+     * @draft ICU 54
      */
      static TimeZoneNames* U_EXPORT2 createTZDBInstance(const Locale& locale, UErrorCode& status);
 #endif /* U_HIDE_DRAFT_API */

@@ -421,6 +421,7 @@ ucol_openRules( const UChar        *rules,
                 UParseError        *parseError,
                 UErrorCode         *status);
 
+#ifndef U_HIDE_DEPRECATED_API
 /** 
  * Open a collator defined by a short form string.
  * The structure and the syntax of the string is defined in the "Naming collators"
@@ -454,11 +455,12 @@ ucol_openRules( const UChar        *rules,
  * @see ucol_normalizeShortDefinitionString
  * @deprecated ICU 54 Use ucol_open() with language tag collation keywords instead.
  */
-U_STABLE UCollator* U_EXPORT2
+U_DEPRECATED UCollator* U_EXPORT2
 ucol_openFromShortString( const char *definition,
                           UBool forceDefaults,
                           UParseError *parseError,
                           UErrorCode *status);
+#endif  /* U_HIDE_DEPRECATED_API */
 
 #ifndef U_HIDE_DEPRECATED_API
 /**
@@ -911,6 +913,7 @@ U_STABLE const UChar* U_EXPORT2
 ucol_getRules(    const    UCollator    *coll, 
         int32_t            *length);
 
+#ifndef U_HIDE_DEPRECATED_API
 /** Get the short definition string for a collator. This API harvests the collator's
  *  locale and the attribute set and produces a string that can be used for opening 
  *  a collator with the same attributes using the ucol_openFromShortString API.
@@ -931,7 +934,7 @@ ucol_getRules(    const    UCollator    *coll,
  *  @see ucol_normalizeShortDefinitionString
  *  @deprecated ICU 54
  */
-U_STABLE int32_t U_EXPORT2
+U_DEPRECATED int32_t U_EXPORT2
 ucol_getShortDefinitionString(const UCollator *coll,
                               const char *locale,
                               char *buffer,
@@ -958,12 +961,13 @@ ucol_getShortDefinitionString(const UCollator *coll,
  *  @deprecated ICU 54
  */
 
-U_STABLE int32_t U_EXPORT2
+U_DEPRECATED int32_t U_EXPORT2
 ucol_normalizeShortDefinitionString(const char *source,
                                     char *destination,
                                     int32_t capacity,
                                     UParseError *parseError,
                                     UErrorCode *status);
+#endif  /* U_HIDE_DEPRECATED_API */
 
 
 /**
@@ -1220,6 +1224,7 @@ ucol_getMaxVariable(const UCollator *coll);
 
 #endif  /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * Sets the variable top to the primary weight of the specified string.
  *
@@ -1244,6 +1249,7 @@ U_DEPRECATED uint32_t U_EXPORT2
 ucol_setVariableTop(UCollator *coll, 
                     const UChar *varTop, int32_t len, 
                     UErrorCode *status);
+#endif  /* U_HIDE_DEPRECATED_API */
 
 /** 
  * Gets the variable top value of a Collator. 

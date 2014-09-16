@@ -736,7 +736,6 @@ inline int32_t Formattable::getLong(UErrorCode* status) const {
 }
 #endif  /* U_HIDE_DEPRECATED_API */
 
-#ifndef U_HIDE_DRAFT_API
 inline UFormattable* Formattable::toUFormattable() {
   return reinterpret_cast<UFormattable*>(this);
 }
@@ -752,7 +751,6 @@ inline Formattable* Formattable::fromUFormattable(UFormattable *fmt) {
 inline const Formattable* Formattable::fromUFormattable(const UFormattable *fmt) {
   return reinterpret_cast<const Formattable *>(fmt);
 }
-#endif  /* U_HIDE_DRAFT_API */
 
 U_NAMESPACE_END
 

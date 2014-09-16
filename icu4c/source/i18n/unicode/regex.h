@@ -608,7 +608,7 @@ private:
       * @internal
       */
     void        dumpPattern() const;
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 };
 
 

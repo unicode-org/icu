@@ -23,7 +23,6 @@
  * \brief C++ API: Formatter for measure objects.
  */
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Constants for various widths.
  * There are 4 widths: Wide, Short, Narrow, Numeric.
@@ -34,6 +33,7 @@
  */
 enum UMeasureFormatWidth {
 
+#ifndef U_HIDE_DRAFT_API
     // Wide, short, and narrow must be first and in this order.
     /**
      * Spell out measure units.
@@ -59,16 +59,16 @@ enum UMeasureFormatWidth {
      * @draft ICU 53
      */
     UMEASFMT_WIDTH_NUMERIC,
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Count of values in this enum.
      * @draft ICU 53
      */
-    UMEASFMT_WIDTH_COUNT
+    UMEASFMT_WIDTH_COUNT = 4
 };
 /** @draft ICU 53 */
 typedef enum UMeasureFormatWidth UMeasureFormatWidth; 
-#endif /* U_HIDE_DRAFT_API */
 
 U_NAMESPACE_BEGIN
 
@@ -271,7 +271,6 @@ class U_I18N_API MeasureFormat : public Format {
 
 #ifndef U_HIDE_INTERNAL_API 
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * ICU use only.
      * Initialize or change MeasureFormat class from subclass.
@@ -282,7 +281,6 @@ class U_I18N_API MeasureFormat : public Format {
             UMeasureFormatWidth width,
             NumberFormat *nfToAdopt,
             UErrorCode &status);
-#endif
     /**
      * ICU use only.
      * Allows subclass to change locale. Note that this method also changes
@@ -329,9 +327,7 @@ class U_I18N_API MeasureFormat : public Format {
     const MeasureFormatCacheData *cache;
     const SharedNumberFormat *numberFormat;
     const SharedPluralRules *pluralRules;
-#ifndef U_HIDE_DRAFT_API
     UMeasureFormatWidth width;    
-#endif
 
     // Declared outside of MeasureFormatSharedData because ListFormatter
     // objects are relatively cheap to copy; therefore, they don't need to be
