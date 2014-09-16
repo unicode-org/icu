@@ -14,17 +14,22 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h1>International Components for Unicode for Java (ICU4J)</h1>
-<h2>Read Me for ICU4J 54 Milestone 1</h2>
-(Last Update: 2014-Jun-30)
+<h2>Read Me for ICU4J 54 Release Candidate</h2>
+(Last Update: 2014-Sep-16)
 <hr size="2" width="100%">
 
 <p>
 <!-- <b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
 of inherited API and introduces new API or functionality. -->
-<b>Note:</b> This is a development release of ICU4J 54.
+<!-- <b>Note:</b> This is a development release of ICU4J 54.
 The contents of this document may not reflect the recent changes done
 for ICU 54 development. This milestone is intended for those wishing
 to get an early look at ICU4J 54 new features and API changes. It is not
+recommended for production use. -->
+<b>Note:</b> This is a release candidate of ICU4J 54.
+The contents of this document may not reflect the recent changes done
+for ICU 54 development. This release candiate is intended for those
+wishing to verify ICU 54 integration before final release. It is not
 recommended for production use.
 </p>
 <p>For the most recent release, see the <a
@@ -131,10 +136,10 @@ found in ICU4J.</p>
 
 <h2 class="doc"><a name="changes"></a>Changes In This Release</h2>
 
-<p>See the <a href="https://sites.google.com/site/icusite/download/54m1">ICU 54M1 download page</a>
+<p>See the <a href="https://sites.google.com/site/icusite/download/54">ICU 54 download page</a>
 about new features in this release.
 The list of API changes since the previous ICU4J release is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-54-0-1/APIChangeReport.html">here</a>.</p>
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-54-rc/APIChangeReport.html">here</a>.</p>
 
     <!-- ICU 54 items -->
     <!-- <h3>[Subject]</h3> -->
@@ -163,7 +168,7 @@ mean that projects using ICU become subject to GPL.
 <p>
  The IBM version contains the essential text of the license, omitting the
 X-specific trademarks and copyright notices. The full copy of <a
- href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-54-0-1/main/shared/licenses/license.html">ICU's license</a> is included in the download
+ href="http://source.icu-project.org/repos/icu/icu4j/tags/release-54-rc/main/shared/licenses/license.html">ICU's license</a> is included in the download
 package.
 </p>
 <h2 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h2>
@@ -1004,7 +1009,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h2 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h2>
-<p>ICU4J 54 Milestone 1 includes time zone data version 2014e, which is the latest one as of
+<p>ICU4J 54 RC includes time zone data version 2014g, which is the latest one as of
 the release date. However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
