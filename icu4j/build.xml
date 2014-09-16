@@ -1822,6 +1822,7 @@
                 <include name="**/*.nrm"/>
                 <include name="**/brkitr/*.res"/>
                 <include name="**/translit/*.res"/>
+                <include name="**/likelySubtags.res"/>
             </patternset>
         </unjar>
     </target>
