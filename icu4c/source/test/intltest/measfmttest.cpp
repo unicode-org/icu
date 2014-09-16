@@ -931,12 +931,10 @@ void MeasureFormatTest::TestNumeratorPlurals() {
     helperTestSimplePer(
             pl, UMEASFMT_WIDTH_WIDE, 2.0, *foot, *second, "2 stopy na sekund\\u0119");
     helperTestSimplePer(
-            pl, UMEASFMT_WIDTH_WIDE, 5.0, *foot, *second, "5 st\u00f3p na sekund\\u0119");
+            pl, UMEASFMT_WIDTH_WIDE, 5.0, *foot, *second, "5 st\\u00f3p na sekund\\u0119");
     helperTestSimplePer(
             pl, UMEASFMT_WIDTH_WIDE, 1.5, *foot, *second, "1,5 stopy na sekund\\u0119");
 }
-
-    
 
 void MeasureFormatTest::helperTestSimplePer(
         const Locale &locale,
