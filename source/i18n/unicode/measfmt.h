@@ -205,7 +205,7 @@ class U_I18N_API MeasureFormat : public Format {
      * @param status the error.
      * @return appendTo reference
      *
-     * @internal
+     * @internal Technology preview
      */
     UnicodeString &formatMeasuresPer(
             const Measure *measures,
