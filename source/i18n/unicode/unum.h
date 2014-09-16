@@ -151,73 +151,73 @@ typedef enum UNumberFormatStyle {
      * Currency format with a currency symbol, e.g., "$1.00".
      * @stable ICU 2.0
      */
-    UNUM_CURRENCY,
+    UNUM_CURRENCY=2,
     /**
      * Percent format
      * @stable ICU 2.0
      */
-    UNUM_PERCENT,
+    UNUM_PERCENT=3,
     /**
      * Scientific format
      * @stable ICU 2.1
      */
-    UNUM_SCIENTIFIC,
+    UNUM_SCIENTIFIC=4,
     /**
      * Spellout rule-based format
      * @stable ICU 2.0
      */
-    UNUM_SPELLOUT,
+    UNUM_SPELLOUT=5,
     /** 
      * Ordinal rule-based format 
      * @stable ICU 3.0
      */
-    UNUM_ORDINAL,
+    UNUM_ORDINAL=6,
     /** 
      * Duration rule-based format 
      * @stable ICU 3.0
      */
-    UNUM_DURATION,
+    UNUM_DURATION=7,
     /** 
      * Numbering system rule-based format
      * @stable ICU 4.2
      */
-    UNUM_NUMBERING_SYSTEM,
+    UNUM_NUMBERING_SYSTEM=8,
     /** 
      * Rule-based format defined by a pattern string.
      * @stable ICU 3.0
      */
-    UNUM_PATTERN_RULEBASED,
+    UNUM_PATTERN_RULEBASED=9,
     /**
      * Currency format with an ISO currency code, e.g., "USD1.00".
      * @stable ICU 4.8
      */
-    UNUM_CURRENCY_ISO,
+    UNUM_CURRENCY_ISO=10,
     /**
      * Currency format with a pluralized currency name,
      * e.g., "1.00 US dollar" and "3.00 US dollars".
      * @stable ICU 4.8
      */
-    UNUM_CURRENCY_PLURAL,
+    UNUM_CURRENCY_PLURAL=11,
 #ifndef U_HIDE_DRAFT_API
     /**
      * Currency format for accounting, e.g., "($3.00)" for
      * negative currency amount instead of "-$3.00" ({@link #UNUM_CURRENCY}).
      * @draft ICU 53
      */
-    UNUM_CURRENCY_ACCOUNTING,
+    UNUM_CURRENCY_ACCOUNTING=12,
     /**
      * Currency format with a currency symbol given CASH usage, e.g., 
      * "NT$3" instead of "NT$3.23".
      * @draft ICU 54
      */
-    UNUM_CASH_CURRENCY,
+    UNUM_CASH_CURRENCY=13,
 #endif /* U_HIDE_DRAFT_API */
 
     /**
      * One more than the highest number format style constant.
      * @stable ICU 4.8
      */
-    UNUM_FORMAT_STYLE_COUNT,
+    UNUM_FORMAT_STYLE_COUNT=14,
 
     /**
      * Default format
@@ -936,6 +936,7 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_PARSE_NO_EXPONENT,
 
+#ifndef U_HIDE_DRAFT_API
   /** 
    * if this attribute is set to 1, specifies that, if the pattern contains a 
    * decimal mark the input is required to have one. If this attribute is set to 0,
@@ -944,12 +945,13 @@ typedef enum UNumberFormatAttribute {
    * Default: 0 (unset)
    * @draft ICU 54
    */
-  UNUM_PARSE_DECIMAL_MARK_REQUIRED,
+  UNUM_PARSE_DECIMAL_MARK_REQUIRED = UNUM_PARSE_NO_EXPONENT+1,
+#endif  /* U_HIDE_DRAFT_API */
 
   /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
   /** Limit of boolean attributes.
    * @internal */
-  UNUM_LIMIT_BOOLEAN_ATTRIBUTE
+  UNUM_LIMIT_BOOLEAN_ATTRIBUTE = UNUM_PARSE_NO_EXPONENT+2
 } UNumberFormatAttribute;
 
 /**
@@ -1216,10 +1218,12 @@ typedef enum UNumberFormatSymbol {
    */
   UNUM_NINE_DIGIT_SYMBOL = 26,
 
+#ifndef U_HIDE_DRAFT_API
   /** Multiplication sign
    * @draft ICU 54
    */
   UNUM_EXPONENT_MULTIPLICATION_SYMBOL = 27,
+#endif  /* U_HIDE_DRAFT_API */
 
   /** count symbol constants */
   UNUM_FORMAT_SYMBOL_COUNT = 28

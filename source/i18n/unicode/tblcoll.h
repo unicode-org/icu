@@ -723,13 +723,13 @@ public:
             UCharIterator *iter, uint32_t state[2],
             uint8_t *dest, int32_t count, UErrorCode &errorCode) const;
 
-#ifndef U_HIDE_INTERNAL_API
     /**
      * Only for use in ucol_openRules().
      * @internal
      */
     RuleBasedCollator();
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Implements ucol_getLocaleByType().
      * Needed because the lifetime of the locale ID string must match that of the collator.

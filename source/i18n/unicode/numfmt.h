@@ -730,7 +730,7 @@ public:
     static const SharedNumberFormat* U_EXPORT2 createSharedInstance(
             const Locale& inLocale, UNumberFormatStyle style, UErrorCode& status);
 
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Returns a currency format for the current default locale.
