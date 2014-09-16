@@ -507,7 +507,7 @@ public class MeasureFormat extends UFormat {
      * @param perUnit for the example above would be MeasureUnit.HOUR.
      * @param measures the measures to format.
      * @return appendTo.
-     * @internal
+     * @internal Technology preview
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
