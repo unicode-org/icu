@@ -145,7 +145,7 @@ static void U_CALLCONV initSingletons(const char *what, UErrorCode &errorCode) {
     } else {
         U_ASSERT(FALSE);   // Unknown singleton
     }
-    ucln_common_registerCleanup(UCLN_COMMON_NORMALIZER2, uprv_loaded_normalizer2_cleanup);
+    ucln_common_registerCleanup(UCLN_COMMON_LOADED_NORMALIZER2, uprv_loaded_normalizer2_cleanup);
 }
 
 U_CDECL_BEGIN
