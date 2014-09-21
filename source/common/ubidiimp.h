@@ -122,11 +122,11 @@ ubidi_getParaLevelAtIndex(const UBiDi *pBiDi, int32_t index);
                          (ubidi)->paraLevel : ubidi_getParaLevelAtIndex((ubidi), (index))))
 
 /* number of paras entries allocated initially without malloc */
-#define SIMPLE_PARAS_SIZE   10
+#define SIMPLE_PARAS_COUNT      10
 /* number of isolate entries allocated initially without malloc */
-#define SIMPLE_ISOLATES_SIZE 5
+#define SIMPLE_ISOLATES_COUNT   5
 /* number of isolate run entries for paired brackets allocated initially without malloc */
-#define SIMPLE_OPENINGS_SIZE 20
+#define SIMPLE_OPENINGS_COUNT   20
 
 #define CR  0x000D
 #define LF  0x000A
@@ -171,7 +171,7 @@ typedef struct IsoRun {
 typedef struct BracketData {
     UBiDi   *pBiDi;
     /* array of opening entries which should be enough in most cases; no malloc() */
-    Opening simpleOpenings[SIMPLE_OPENINGS_SIZE];
+    Opening simpleOpenings[SIMPLE_OPENINGS_COUNT];
     Opening *openings;                  /* pointer to current array of entries */
     int32_t openingsCount;              /* number of allocated entries */
     int32_t isoRunLast;                 /* index of last used entry */
@@ -345,7 +345,7 @@ struct UBiDi {
     Para *paras;
 
     /* for relatively short text, we only need a tiny array of paras (no malloc()) */
-    Para simpleParas[SIMPLE_PARAS_SIZE];
+    Para simpleParas[SIMPLE_PARAS_COUNT];
 
     /* fields for line reordering */
     int32_t runCount;     /* ==-1: runs not set up yet */
@@ -363,7 +363,7 @@ struct UBiDi {
     Isolate *isolates;
 
     /* for simple text, have a small stack (no malloc()) */
-    Isolate simpleIsolates[SIMPLE_ISOLATES_SIZE];
+    Isolate simpleIsolates[SIMPLE_ISOLATES_COUNT];
 
     /* for inverse Bidi with insertion of directional marks */
     InsertPoints insertPoints;

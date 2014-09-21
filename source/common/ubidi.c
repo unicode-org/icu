@@ -403,12 +403,12 @@ static UBool
 checkParaCount(UBiDi *pBiDi) {
     int32_t count=pBiDi->paraCount;
     if(pBiDi->paras==pBiDi->simpleParas) {
-        if(count<=SIMPLE_PARAS_SIZE)
+        if(count<=SIMPLE_PARAS_COUNT)
             return TRUE;
-        if(!getInitialParasMemory(pBiDi, SIMPLE_PARAS_SIZE * 2))
+        if(!getInitialParasMemory(pBiDi, SIMPLE_PARAS_COUNT * 2))
             return FALSE;
         pBiDi->paras=pBiDi->parasMemory;
-        uprv_memcpy(pBiDi->parasMemory, pBiDi->simpleParas, SIMPLE_PARAS_SIZE * sizeof(Para));
+        uprv_memcpy(pBiDi->parasMemory, pBiDi->simpleParas, SIMPLE_PARAS_COUNT * sizeof(Para));
         return TRUE;
     }
     if(!getInitialParasMemory(pBiDi, count * 2))
@@ -682,7 +682,7 @@ bracketInit(UBiDi *pBiDi, BracketData *bd) {
         bd->openingsCount=pBiDi->openingsSize / sizeof(Opening);
     } else {
         bd->openings=bd->simpleOpenings;
-        bd->openingsCount=SIMPLE_OPENINGS_SIZE;
+        bd->openingsCount=SIMPLE_OPENINGS_COUNT;
     }
     bd->isNumbersSpecial=bd->pBiDi->reorderingMode==UBIDI_REORDER_NUMBERS_SPECIAL ||
                          bd->pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL;
@@ -749,7 +749,7 @@ bracketAddOpening(BracketData *bd, UChar match, int32_t position) {
             return FALSE;
         if(bd->openings==bd->simpleOpenings)
             uprv_memcpy(pBiDi->openingsMemory, bd->simpleOpenings,
-                        SIMPLE_OPENINGS_SIZE * sizeof(Opening));
+                        SIMPLE_OPENINGS_COUNT * sizeof(Opening));
         bd->openings=pBiDi->openingsMemory;     /* may have changed */
         bd->openingsCount=pBiDi->openingsSize / sizeof(Opening);
     }
@@ -2167,6 +2167,9 @@ resolveImplicitLevels(UBiDi *pBiDi,
         } else {
             DirProp prop, prop1;
             prop=dirProps[i];
+            if(prop==B) {
+                pBiDi->isolateCount=-1; /* current isolates stack entry == none */
+            }
             if(inverseRTL) {
                 if(prop==AL) {
                     /* AL before EN does not make it AN */
@@ -2634,7 +2637,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     }
 
     /* allocate isolate memory */
-    if(pBiDi->isolateCount<=SIMPLE_ISOLATES_SIZE)
+    if(pBiDi->isolateCount<=SIMPLE_ISOLATES_COUNT)
         pBiDi->isolates=pBiDi->simpleIsolates;
     else
         if((int32_t)(pBiDi->isolateCount*sizeof(Isolate))<=pBiDi->isolatesSize)
