@@ -1618,6 +1618,7 @@ static void TestOverrideNumberFormat(void) {
       overrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
       assertSuccess("unum_open()", &status);
       udat_setNumberFormat(fmt, overrideFmt); // test the same override NF will not crash
+      unum_close(overrideFmt);
     }
     udat_close(fmt);
     
@@ -1668,10 +1669,8 @@ static void TestOverrideNumberFormat(void) {
             log_err("fail: udat_format for locale, expected %s, got %s\n",
                     u_austrncpy(bbuf1,expected,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
 
+        udat_close(overrideFmt2);
         udat_close(fmt2);
-        if ( strcmp(overrideNumberFormat[i][0], "") == 0 ) { // set uses clone, so free up
-            udat_close(overrideFmt2);
-        }
     }
     free(expected);
     free(fields);
