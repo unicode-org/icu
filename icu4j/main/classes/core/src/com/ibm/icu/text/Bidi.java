@@ -544,7 +544,7 @@ public class Bidi {
     }
 
     static class BracketData {
-        Opening[] openings = new Opening[SIMPLE_OPENINGS_SIZE];
+        Opening[] openings = new Opening[SIMPLE_OPENINGS_COUNT];
         int   isoRunLast;               /* index of last used entry */
         /* array of nested isolated sequence entries; can never excess UBIDI_MAX_EXPLICIT_LEVEL
            + 1 for index 0, + 1 for before the first isolated sequence */
@@ -988,9 +988,9 @@ public class Bidi {
                                             .CHAR_DIRECTION_COUNT;
 
     /* number of paras entries allocated initially */
-    static final int SIMPLE_PARAS_SIZE = 10;
+    static final int SIMPLE_PARAS_COUNT = 10;
     /* number of isolate run entries for paired brackets allocated initially */
-    static final int SIMPLE_OPENINGS_SIZE = 20;
+    static final int SIMPLE_OPENINGS_COUNT = 20;
 
     private static final char CR = '\r';
     private static final char LF = '\n';
@@ -1089,8 +1089,8 @@ public class Bidi {
 
     /* fields for paragraph handling, set in getDirProps() */
     int                 paraCount;
-    int[]               paras_limit = new int[SIMPLE_PARAS_SIZE];
-    byte[]              paras_level = new byte[SIMPLE_PARAS_SIZE];
+    int[]               paras_limit = new int[SIMPLE_PARAS_COUNT];
+    byte[]              paras_level = new byte[SIMPLE_PARAS_COUNT];
 
     /* fields for line reordering */
     int                 runCount;     /* ==-1: runs not set up yet */
@@ -2050,7 +2050,7 @@ public class Bidi {
         bd.isoRuns[0].level = GetParaLevelAt(0);
         bd.isoRuns[0].lastStrong = bd.isoRuns[0].lastBase = bd.isoRuns[0].contextDir = (byte)(GetParaLevelAt(0) & 1);
         bd.isoRuns[0].contextPos = 0;
-        bd.openings = new Opening[SIMPLE_OPENINGS_SIZE];
+        bd.openings = new Opening[SIMPLE_OPENINGS_COUNT];
         bd.isNumbersSpecial = reorderingMode == REORDER_NUMBERS_SPECIAL ||
                               reorderingMode == REORDER_INVERSE_FOR_NUMBERS_SPECIAL;
     }
@@ -3443,6 +3443,8 @@ public class Bidi {
             } else {
                 byte prop, prop1;
                 prop = dirProps[i];
+                if (prop == B)
+                    isolateCount = -1;  /* current isolates stack entry == none */
                 if (inverseRTL) {
                     if (prop == AL) {
                         /* AL before EN does not make it AN */
