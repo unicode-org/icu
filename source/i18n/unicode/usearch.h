@@ -96,10 +96,6 @@
  * UTS #10 Unicode Collation Algorithm</a>, specifically the USearchAttribute
  * USEARCH_ELEMENT_COMPARISON and its values.
  * <p>
- * E.g. In English, overlapping matches produces the result 0 and 2 
- * for the pattern "abab" in the text "ababab", where else mutually 
- * exclusive matches only produce the result of 0.
- * <p>
  * Though collator attributes will be taken into consideration while 
  * performing matches, there are no APIs here for setting and getting the 
  * attributes. These attributes can be set by getting the collator
