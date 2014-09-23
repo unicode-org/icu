@@ -71,7 +71,8 @@ class TimeZoneFormat;
  * <a href="http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table">UTS#35
  * Unicode Locale Data Markup Language (LDML)</a> and further documented for ICU in the
  * <a href="https://sites.google.com/site/icuprojectuserguide/formatparse/datetime?pli=1#TOC-Date-Field-Symbol-Table">ICU
- * User Guide</a>. The following pattern letters are currently available:</p>
+ * User Guide</a>. The following pattern letters are currently available (note that the actual
+ * valus depend on CLDR and may change from the examples shown here):</p>
  *
  * <table border="1">
  *     <tr>
@@ -87,7 +88,7 @@ class TimeZoneFormat;
  *         <td style="text-align: center">1..3</td>
  *         <td>AD</td>
  *         <td rowspan="3">Era - Replaced with the Era string for the current date. One to three letters for the 
- *         abbreviated form, four letters for the long form, five for the narrow form.</td>
+ *         abbreviated form, four letters for the long (wide) form, five for the narrow form.</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">4</td>
@@ -182,7 +183,7 @@ class TimeZoneFormat;
  *         <td>&#30002;&#23376;</td>
  *         <td rowspan="3">Cyclic year name. Calendars such as the Chinese lunar calendar (and related calendars)
  *         and the Hindu calendars use 60-year cycles of year names. Use one through three letters for the abbreviated
- *         name, four for the full name, or five for the narrow name (currently the data only provides abbreviated names,
+ *         name, four for the full (wide) name, or five for the narrow name (currently the data only provides abbreviated names,
  *         which will be used for all requested name widths). If the calendar does not provide cyclic year name data,
  *         or if the year value to be formatted is out of the range of years for which cyclic name data is provided,
  *         then numeric formatting is used (behaves like 'y').</td>
@@ -200,8 +201,8 @@ class TimeZoneFormat;
  *         <td rowspan="3" style="text-align: center">Q</td>
  *         <td style="text-align: center">1..2</td>
  *         <td>02</td>
- *         <td rowspan="3">Quarter - Use one or two for the numerical quarter, three for the abbreviation, or four 
- *         for the full name.</td>
+ *         <td rowspan="3">Quarter - Use one or two for the numerical quarter, three for the abbreviation, or four for the
+ *         full (wide) name (five for the narrow name is not yet supported).</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">3</td>
@@ -216,7 +217,7 @@ class TimeZoneFormat;
  *         <td style="text-align: center">1..2</td>
  *         <td>02</td>
  *         <td rowspan="3"><b>Stand-Alone</b> Quarter - Use one or two for the numerical quarter, three for the abbreviation, 
- *         or four for the full name.</td>
+ *         or four for the full name (five for the narrow name is not yet supported).</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">3</td>
@@ -232,11 +233,12 @@ class TimeZoneFormat;
  *         <td style="text-align: center">1..2</td>
  *         <td>09</td>
  *         <td rowspan="4">Month - Use one or two for the numerical month, three for the abbreviation, four for
- *         the full name, or five for the narrow name.</td>
+ *         the full (wide) name, or five for the narrow name. With two ("MM"), the month number is zero-padded
+ *         if necessary (e.g. "08")</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">3</td>
- *         <td>Sept</td>
+ *         <td>Sep</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">4</td>
@@ -251,11 +253,12 @@ class TimeZoneFormat;
  *         <td style="text-align: center">1..2</td>
  *         <td>09</td>
  *         <td rowspan="4"><b>Stand-Alone</b> Month - Use one or two for the numerical month, three for the abbreviation, 
- *         or four for the full name, or 5 for the narrow name.</td>
+ *         four for the full (wide) name, or 5 for the narrow name. With two ("LL"), the month number is zero-padded if
+ *         necessary (e.g. "08")</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">3</td>
- *         <td>Sept</td>
+ *         <td>Sep</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">4</td>
@@ -270,7 +273,8 @@ class TimeZoneFormat;
  *         <td style="text-align: center">w</td>
  *         <td style="text-align: center">1..2</td>
  *         <td>27</td>
- *         <td>Week of Year.</td>
+ *         <td>Week of Year. Use "w" to show the minimum number of digits, or "ww" to always show two digits
+ *         (zero-padding if necessary, e.g. "08").</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">W</td>
@@ -283,7 +287,8 @@ class TimeZoneFormat;
  *         <td style="text-align: center">d</td>
  *         <td style="text-align: center">1..2</td>
  *         <td>1</td>
- *         <td>Date - Day of the month</td>
+ *         <td>Date - Day of the month. Use "d" to show the minimum number of digits, or "dd" to always show
+ *         two digits (zero-padding if necessary, e.g. "08").</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">D</td>
@@ -311,8 +316,8 @@ class TimeZoneFormat;
  *         day</th>
  *         <td rowspan="4" style="text-align: center">E</td>
  *         <td style="text-align: center">1..3</td>
- *         <td>Tues</td>
- *         <td rowspan="4">Day of week - Use one through three letters for the short day, or four for the full name, 
+ *         <td>Tue</td>
+ *         <td rowspan="4">Day of week - Use one through three letters for the short day, four for the full (wide) name, 
  *         five for the narrow name, or six for the short name.</td>
  *     </tr>
  *     <tr>
@@ -336,7 +341,7 @@ class TimeZoneFormat;
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">3</td>
- *         <td>Tues</td>
+ *         <td>Tue</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">4</td>
@@ -355,12 +360,12 @@ class TimeZoneFormat;
  *         <td style="text-align: center">1</td>
  *         <td>2</td>
  *         <td rowspan="5"><b>Stand-Alone</b> local day of week - Use one letter for the local numeric value (same
- *         as 'e'), three for the short day, four for the full name, five for the narrow name, or six for
+ *         as 'e'), three for the short day, four for the full (wide) name, five for the narrow name, or six for
  *         the short name.</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">3</td>
- *         <td>Tues</td>
+ *         <td>Tue</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">4</td>
@@ -415,14 +420,16 @@ class TimeZoneFormat;
  *         <td style="text-align: center">m</td>
  *         <td style="text-align: center">1..2</td>
  *         <td>59</td>
- *         <td>Minute. Use one or two for zero padding.</td>
+ *         <td>Minute. Use "m" to show the minimum number of digits, or "mm" to always show two digits
+ *         (zero-padding if necessary, e.g. "08").</td>
  *     </tr>
  *     <tr>
  *         <th rowspan="3">second</th>
  *         <td style="text-align: center">s</td>
  *         <td style="text-align: center">1..2</td>
  *         <td>12</td>
- *         <td>Second. Use one or two for zero padding.</td>
+ *         <td>Second. Use "s" to show the minimum number of digits, or "ss" to always show two digits
+ *         (zero-padding if necessary, e.g. "08").</td>
  *     </tr>
  *     <tr>
  *         <td style="text-align: center">S</td>
