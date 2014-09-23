@@ -867,31 +867,32 @@ ucol_getKeywordValuesForLocale(const char* key,
                                UErrorCode* status);
 
 /**
- * Return the functionally equivalent locale for the given
- * requested locale, with respect to given keyword, for the
- * collation service.  If two locales return the same result, then
- * collators instantiated for these locales will behave
- * equivalently.  The converse is not always true; two collators
+ * Return the functionally equivalent locale for the specified
+ * input locale, with respect to given keyword, for the
+ * collation service. If two different input locale + keyword
+ * combinations produce the same result locale, then collators
+ * instantiated for these two different input locales will behave
+ * equivalently. The converse is not always true; two collators
  * may in fact be equivalent, but return different results, due to
- * internal details.  The return result has no other meaning than
+ * internal details. The return result has no other meaning than
  * that stated above, and implies nothing as to the relationship
- * between the two locales.  This is intended for use by
+ * between the two locales. This is intended for use by
  * applications who wish to cache collators, or otherwise reuse
- * collators when possible.  The functional equivalent may change
- * over time.  For more information, please see the <a
+ * collators when possible. The functional equivalent may change
+ * over time. For more information, please see the <a
  * href="http://userguide.icu-project.org/locale#TOC-Locales-and-Services">
  * Locales and Services</a> section of the ICU User Guide.
- * @param result fillin for the functionally equivalent locale
+ * @param result fillin for the functionally equivalent result locale
  * @param resultCapacity capacity of the fillin buffer
  * @param keyword a particular keyword as enumerated by
  * ucol_getKeywords.
- * @param locale the requested locale
+ * @param locale the specified input locale
  * @param isAvailable if non-NULL, pointer to a fillin parameter that
- * indicates whether the requested locale was 'available' to the
- * collation service. A locale is defined as 'available' if it
+ * on return indicates whether the specified input locale was 'available'
+ * to the collation service. A locale is defined as 'available' if it
  * physically exists within the collation locale data.
  * @param status pointer to input-output error code
- * @return the actual buffer size needed for the locale.  If greater
+ * @return the actual buffer size needed for the locale. If greater
  * than resultCapacity, the returned full name will be truncated and
  * an error code will be returned.
  * @stable ICU 3.0
