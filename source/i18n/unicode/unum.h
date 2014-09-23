@@ -163,12 +163,16 @@ typedef enum UNumberFormatStyle {
      */
     UNUM_SCIENTIFIC=4,
     /**
-     * Spellout rule-based format
+     * Spellout rule-based format. The default ruleset can be specified/changed using
+     * unum_setTextAttribute with UNUM_DEFAULT_RULESET; the available public rulesets
+     * can be listed using unum_getTextAttribute with UNUM_PUBLIC_RULESETS.
      * @stable ICU 2.0
      */
     UNUM_SPELLOUT=5,
     /** 
-     * Ordinal rule-based format 
+     * Ordinal rule-based format . The default ruleset can be specified/changed using
+     * unum_setTextAttribute with UNUM_DEFAULT_RULESET; the available public rulesets
+     * can be listed using unum_getTextAttribute with UNUM_PUBLIC_RULESETS.
      * @stable ICU 3.0
      */
     UNUM_ORDINAL=6,
@@ -1052,14 +1056,20 @@ typedef enum UNumberFormatTextAttribute {
   /** The ISO currency code */
   UNUM_CURRENCY_CODE,
   /**
-   * The default rule set.  This is only available with rule-based formatters.
+   * The default rule set, such as "%spellout-numbering-year:", "%spellout-cardinal:",
+   * "%spellout-ordinal-masculine-plural:", "%spellout-ordinal-feminine:", or
+   * "%spellout-ordinal-neuter:". The available public rulesets can be listed using
+   * unum_getTextAttribute with UNUM_PUBLIC_RULESETS. This is only available with
+   * rule-based formatters.
    * @stable ICU 3.0
    */
   UNUM_DEFAULT_RULESET,
   /**
    * The public rule sets.  This is only available with rule-based formatters.
    * This is a read-only attribute.  The public rulesets are returned as a
-   * single string, with each ruleset name delimited by ';' (semicolon).
+   * single string, with each ruleset name delimited by ';' (semicolon). See the
+   * CLDR LDML spec for more information about RBNF rulesets:
+   * http://www.unicode.org/reports/tr35/tr35-numbers.html#Rule-Based_Number_Formatting
    * @stable ICU 3.0
    */
   UNUM_PUBLIC_RULESETS
