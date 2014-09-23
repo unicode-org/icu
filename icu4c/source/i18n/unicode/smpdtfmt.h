@@ -72,7 +72,7 @@ class TimeZoneFormat;
  * Unicode Locale Data Markup Language (LDML)</a> and further documented for ICU in the
  * <a href="https://sites.google.com/site/icuprojectuserguide/formatparse/datetime?pli=1#TOC-Date-Field-Symbol-Table">ICU
  * User Guide</a>. The following pattern letters are currently available (note that the actual
- * valus depend on CLDR and may change from the examples shown here):</p>
+ * values depend on CLDR and may change from the examples shown here):</p>
  *
  * <table border="1">
  *     <tr>
