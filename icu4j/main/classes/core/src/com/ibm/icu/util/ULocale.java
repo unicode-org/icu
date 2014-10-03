@@ -1588,6 +1588,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * Returns this locale's country localized for display in the default <code>DISPLAY</code> locale.
+     * <b>Warning: </b>this is for the region part of a valid locale ID; it cannot just be the region code (like "FR").
+     * To get the display name for a region alone, or for other options, use {@link LocaleDisplayNames} instead.
      * @return the localized country name.
      * @see Category#DISPLAY
      * @stable ICU 3.0
@@ -1598,6 +1600,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * Returns this locale's country localized for display in the provided locale.
+     * <b>Warning: </b>this is for the region part of a valid locale ID; it cannot just be the region code (like "FR").
+     * To get the display name for a region alone, or for other options, use {@link LocaleDisplayNames} instead.
      * @param displayLocale the locale in which to display the name.
      * @return the localized country name.
      * @stable ICU 3.0
@@ -1608,6 +1612,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * {@icu} Returns a locale's country localized for display in the provided locale.
+     * <b>Warning: </b>this is for the region part of a valid locale ID; it cannot just be the region code (like "FR").
+     * To get the display name for a region alone, or for other options, use {@link LocaleDisplayNames} instead.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose country will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
@@ -1620,6 +1626,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * {@icu} Returns a locale's country localized for display in the provided locale.
+     * <b>Warning: </b>this is for the region part of a valid locale ID; it cannot just be the region code (like "FR").
+     * To get the display name for a region alone, or for other options, use {@link LocaleDisplayNames} instead.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose country will be displayed.
      * @param displayLocale the locale in which to display the name.
