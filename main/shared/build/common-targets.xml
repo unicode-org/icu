@@ -7,6 +7,11 @@
 <project name="common-targets" basedir=".">
     <dirname property="common-targets.dir" file="${ant.file.common-targets}"/>
     <property file="${common-targets.dir}/locations.properties"/>
+
+    <!-- global (top-level) propeties - need locations.properties loaded first -->
+    <property file="${global.build-local.properties}"/>
+    <property file="${global.build.properties}"/>
+
     <property file="${common-targets.dir}/common.properties"/>
     <property environment="env"/>
 
@@ -17,9 +22,23 @@
     </target>
 
     <target name="@compile">
+        <echo message="build-local:     ${global.build-local.properties}"/>
+        <echo message="${java5.bootclasspath}"/>
+        <!-- set java5/6 bootclasspath to empty if not set -->
+        <property name="java5.bootclasspath" value=""/>
+        <property name="java6.bootclasspath" value=""/>
+
+        <condition property="javac.bootclasspath" value="${java5.bootclasspath}">
+            <equals arg1="${javac.target}" arg2="1.5"/>
+        </condition>
+        <condition property="javac.bootclasspath" value="${java6.bootclasspath}" else="">
+            <equals arg1="${javac.target}" arg2="1.6"/>
+        </condition>
+
         <echo message="--- java compiler arguments ------------------------"/>
         <echo message="source dir:     ${basedir}/${src.dir}"/>
         <echo message="output dir:     ${basedir}/${bin.dir}"/>
+        <echo message="bootclasspath:  ${javac.bootclasspath}"/>
         <echo message="classpath:      ${toString:javac.classpathref}"/>
         <echo message="source:         ${javac.source}"/>
         <echo message="target:         ${javac.target}"/>
@@ -32,6 +51,7 @@
         <javac
             srcdir="${src.dir}"
             destdir="${bin.dir}"
+            bootclasspath="${javac.bootclasspath}"
             classpathref="javac.classpathref"
             source="${javac.source}"
             target="${javac.target}"
