@@ -558,6 +558,7 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet  fSY;
         UnicodeSet  fAI;
         UnicodeSet  fAL;
+        UnicodeSet  fCJ;
         UnicodeSet  fHL;
         UnicodeSet  fID;
         UnicodeSet  fSA;
@@ -576,6 +577,8 @@ public class RBBITestMonkey extends TestFmwk {
         
         RBBILineMonkey()
         {
+            // TODO: fiix
+            
             fCharProperty  = UProperty.LINE_BREAK;
             fSets          = new ArrayList();
             
@@ -607,6 +610,7 @@ public class RBBITestMonkey extends TestFmwk {
             fSY    = new UnicodeSet("[\\p{Line_break=SY}]");
             fAI    = new UnicodeSet("[\\p{Line_break=AI}]");
             fAL    = new UnicodeSet("[\\p{Line_break=AL}]");
+            fCJ    = new UnicodeSet("[\\p{Line_break=CJ}]");
             fHL    = new UnicodeSet("[\\p{Line_break=HL}]");
             fID    = new UnicodeSet("[\\p{Line_break=ID}]");
             fSA    = new UnicodeSet("[\\p{Line_break=SA}]");
@@ -619,14 +623,20 @@ public class RBBITestMonkey extends TestFmwk {
             fRI    = new UnicodeSet("[\\p{Line_break=RI}]");
             fXX    = new UnicodeSet("[\\p{Line_break=XX}]");
 
-            
+            // Remove dictionary characters.
+            // The monkey test reference implementation of line break does not replicate the dictionary behavior,
+            // so dictionary characters are omitted from the monkey test data.
+            UnicodeSet dictionarySet = new UnicodeSet(
+                    "[[:LineBreak = Complex_Context:] & [[:Script = Thai:][:Script = Lao:][:Script = Khmer:] [:script = Myanmar:]]]");
+            fSA.removeAll(dictionarySet);
+
             fAL.addAll(fXX);     // Default behavior for XX is identical to AL
             fAL.addAll(fAI);     // Default behavior for AI is identical to AL
             fAL.addAll(fSA);     // Default behavior for SA is XX, which defaults to AL
             fAL.addAll(fSG);     // Default behavior for SG (unpaired surrogates) is AL
             
-            
-            
+            fNS.addAll(fCJ);     // Default behavior for CJ is identical to NS.
+                        
             fSets.add(fBK);
             fSets.add(fCR);
             fSets.add(fLF);
@@ -1846,18 +1856,6 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                 errorType = "following()";
             } else if (precedingBreaks[i] != expectedBreaks[i]) {
                 errorType = "preceding()";
-            }
-
-
-            // Exclude Myanmar from tests, it is dictionary-based. Not sure how this is handled
-            // for other script with dictionary break, but it is not working for Myanmar.
-            if (errorType != null && errorType.equals("next()") && name.equals("line")) {
-                int cBefore = UTF16.charAt(testText, i-1);
-                int cAfter = UTF16.charAt(testText, i);
-                if (UScript.getScript(cBefore) == UScript.MYANMAR && UScript.getScript(cAfter) == UScript.MYANMAR &&
-                        logKnownIssue("11245", "Skip errors for unexpected line breaks between Myanmar characters")) {
-                    errorType = null;
-                }
             }
 
             if (errorType != null) {
