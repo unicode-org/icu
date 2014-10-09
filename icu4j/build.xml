@@ -425,6 +425,35 @@
 
 
     <!-- release targets -->
+    <target name="_check_config_for_release">
+        <condition property="release.build.config.ok">
+            <and>
+                <isset property="java5.bootclasspath"/>
+                <isset property="java6.bootclasspath"/>
+                <isset property="jcite.libs"/>
+            </and>
+        </condition>
+    </target>
+
+    <target name="_verify_config_for_release" depends="_check_config_for_release" unless="release.build.config.ok">
+        <condition property="disp.java5.bootclasspath" value="${java5.bootclasspath}" else="Not Defined!">
+            <isset property="java5.bootclasspath"/>
+        </condition>
+        <condition property="disp.java6.bootclasspath" value="${java5.bootclasspath}" else="Not Defined!">
+            <isset property="java6.bootclasspath"/>
+        </condition>
+        <condition property="disp.jcite.libs" value="${jcite.libs}" else="Not Defined!">
+            <isset property="jcite.libs"/>
+        </condition>
+
+        <echo message="################################################################"/>
+        <echo message="[WARNING] Insufficient Build Configuration for ICU4J Release"/>
+        <echo message="JRE 5 System Library Path:      ${disp.java5.bootclasspath}"/>
+        <echo message="JRE 6 System Library Path:      ${disp.java6.bootclasspath}"/>
+        <echo message="JCite Library Path:             ${disp.jcite.libs}"/>
+        <echo message="################################################################"/>
+    </target>
+
     <target name="releaseVer" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz"
             description="Build all ICU4J release files for distribution with versioned file names">
         <!-- binaries -->
@@ -460,6 +489,8 @@
                 <fixcrlf eol="lf"/>
             </filterchain>
         </concat>
+
+        <antcall target="_verify_config_for_release"/>
     </target>
 
     <target name="release" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz" description="Build all ICU4J release files for distribution">
@@ -479,6 +510,8 @@
                 <fixcrlf eol="lf"/>
             </filterchain>
         </concat>
+
+        <antcall target="_verify_config_for_release"/>
     </target>
 
     <target name="releaseBinaries" depends="icu4jJar, charset, localespi" description="Build ICU4J binary files for distribution">
@@ -2000,6 +2033,8 @@
             <attach file="${maven.release.dir}/${maven.icu4jdocs.jar.file}" classifier="javadoc"/>
             <attach file="${maven.release.dir}/${maven.icu4jdocs.jar.file}.asc" classifier="javadoc" type="jar.asc"/>
         </deploy>
+
+        <antcall target="_verify_config_for_release"/>
     </target>
 
 </project>
