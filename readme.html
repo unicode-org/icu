@@ -14,13 +14,14 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h1>International Components for Unicode for Java (ICU4J)</h1>
-<h2>Read Me for ICU4J 54.1</h2>
-(Last Update: 2014-Sep-26)
+<h2>Read Me for ICU4J 54.1.1</h2>
+(Last Update: 2014-Oct-9)
 <hr size="2" width="100%">
 
 <p>
-<b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
-of inherited API and introduces new API or functionality.
+<b>Note:</b> This is an update release of ICU4J 54.1. This release fixes
+a critical problem on JRE 5 and 6 caused by a deficient build script. It
+does not include any new APIs, functional bug fixes and data changes.
 <!-- <b>Note:</b> This is a development release of ICU4J 54.
 The contents of this document may not reflect the recent changes done
 for ICU 54 development. This milestone is intended for those wishing
@@ -141,10 +142,18 @@ about new features in this release.
 The list of API changes since the previous ICU4J release is available
 <a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-54-rc/APIChangeReport.html">here</a>.</p>
 
-    <!-- ICU 54 items -->
-    <!-- <h3>[Subject]</h3> -->
+<h4>Summary of updates in 54.1.1 (2014-10-09)</h4>
+Fixed a resource loading problem on JRE 5 and 6. The ICU4J class files
+in the previous release were compiled with Java 7 system library. The
+return type of java.nio.CharBuffer#subSequence(int,int) is not backward
+compatible, therefore, the ICU4J class utilizing the method was failed
+on an older version of Java runtime. The build script was uppdated to
+use older Java system libarries, so the new binaries works well also on
+JRE 5 and 6. There are no other changes included in this update. An ICU4J
+user who runs an application on JRE 7 or later does not need this update.
+See ICU ticket <a href="http://bugs.icu-project.org/trac/ticket/11326">#11326</a>
+for more details.
 
-    <!-- end ICU 54 items -->
 
 <h2 class="doc"><a name="license"></a>License Information</h2>
 <p>
