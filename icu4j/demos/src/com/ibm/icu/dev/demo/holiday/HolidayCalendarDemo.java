@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -37,6 +37,7 @@ import java.util.Vector;
 import com.ibm.icu.dev.demo.impl.DemoApplet;
 import com.ibm.icu.dev.demo.impl.DemoTextBox;
 import com.ibm.icu.dev.demo.impl.DemoUtility;
+import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Holiday;
@@ -327,8 +328,11 @@ public class HolidayCalendarDemo extends DemoApplet
 
         private void updateMonthName()
         {
-            SimpleDateFormat f = new SimpleDateFormat("MMMM yyyyy",
-                                                        calendarPanel.getDisplayLocale());
+            final Locale displayLocale = calendarPanel.getDisplayLocale();
+            final String pattern = DateTimePatternGenerator.
+                    getInstance(displayLocale).getBestPattern("MMMMy");
+            SimpleDateFormat f = new SimpleDateFormat(pattern,
+                                                        displayLocale);
             f.setCalendar(calendarPanel.getCalendar());
             monthLabel.setText( f.format( calendarPanel.firstOfMonth() ));
         }
@@ -542,6 +546,10 @@ public class HolidayCalendarDemo extends DemoApplet
                 Date d = fStartOfMonth;
                 while ( (d = fAllHolidays[h].firstBetween(d, endOfMonth) ) != null)
                 {
+                    if(d.after(endOfMonth)) {
+                        throw new InternalError("Error: for " + fAllHolidays[h].getDisplayName()+
+                                "  #" + h + "/"+fAllHolidays.length+": " + d +" is after end of month " + endOfMonth);
+                    }
                     c.setTime(d);
                     fHolidays.addElement( new HolidayInfo(c.get(Calendar.DATE),
                                             fAllHolidays[h],

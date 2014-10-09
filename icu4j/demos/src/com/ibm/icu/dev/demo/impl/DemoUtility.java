@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,6 +18,8 @@ import java.awt.Panel;
 import java.awt.TextComponent;
 import java.util.Locale;
 
+import com.ibm.icu.util.Calendar;
+
 public class DemoUtility
 {
     public static final Font titleFont = new Font("TimesRoman",Font.BOLD,18);
@@ -30,8 +32,11 @@ public class DemoUtility
     public static final Color bgColor = Color.lightGray;
     public static final Color choiceColor = Color.white;
 
+    private static final int getCurrentYear() {
+        return Calendar.getInstance().get(Calendar.YEAR);
+    }
     public static final String copyright1 =
-        "Copyright (C) IBM Corp and others. 1997 - 2002 All Rights Reserved";
+        "Copyright (C) IBM Corp and others. 1997 - "+getCurrentYear()+" All Rights Reserved";
 
     /**
     Provides easy way to use basic functions of GridBagLayout, without
