@@ -720,6 +720,7 @@ CLEAN : GODATA
 	-@erase "*.brk"
 	-@erase "*.res"
 	-@erase "*.txt"
+	-@erase "*.dict"
 	@cd "$(ICUBLD_PKG)\$(ICUCOL)"
 	-@erase "*.res"
 	-@erase "*.txt"
