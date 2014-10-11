@@ -147,7 +147,7 @@ public:
   }
   virtual BreakIterator* clone(void) const { return new SimpleFilteredSentenceBreakIterator(*this); }
   virtual UClassID getDynamicClassID(void) const { return NULL; }
-  virtual UBool operator==(const BreakIterator& o) const { if(*this==o) return true; return false; }
+  virtual UBool operator==(const BreakIterator& o) const { if(this==&o) return true; return false; }
 
   /* -- text modifying -- */
   virtual void setText(UText *text, UErrorCode &status) { fDelegate->setText(text,status); }
