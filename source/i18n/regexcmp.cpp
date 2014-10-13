@@ -138,6 +138,9 @@ void    RegexCompile::compile(
 
     // Prepare the RegexPattern object to receive the compiled pattern.
     fRXPat->fPattern        = utext_clone(fRXPat->fPattern, pat, FALSE, TRUE, fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     fRXPat->fStaticSets     = RegexStaticSets::gStaticSets->fPropSets;
     fRXPat->fStaticSets8    = RegexStaticSets::gStaticSets->fPropSets8;
 
