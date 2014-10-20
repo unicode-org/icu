@@ -646,7 +646,9 @@ public final class ICUResourceBundleReader {
                     length=((int)b16BitUnits.charAt(offset+1)<<16)|b16BitUnits.charAt(offset+2);
                     offset+=3;
                 }
-                s = b16BitUnits.subSequence(offset, offset + length).toString();
+                // Cast up to CharSequence to insulate against the CharBuffer.subSequence() return type change
+                // which makes code compiled for a newer JDK not run on an older one.
+                s = ((CharSequence) b16BitUnits).subSequence(offset, offset + length).toString();
             }
         } else {
             offset=getResourceByteOffset(offset);

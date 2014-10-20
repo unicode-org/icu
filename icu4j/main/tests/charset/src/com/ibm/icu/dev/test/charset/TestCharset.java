@@ -2752,7 +2752,9 @@ public class TestCharset extends TestFmwk {
         };
         ByteBuffer bb = ByteBuffer.wrap(byteout);
         CharBuffer cb = CharBuffer.wrap(charin);
-        CharBuffer cb2 = CharBuffer.wrap(cb.subSequence(0, 2));
+        // Cast up to CharSequence to insulate against the CharBuffer.subSequence() return type change
+        // which makes code compiled for a newer JDK not run on an older one.
+        CharBuffer cb2 = CharBuffer.wrap(((CharSequence)cb).subSequence(0, 2));
         encoder.reset();
         if (!(encoder.encode(cb2, bb, true)).isOverflow()) {
             errln("Overflow error while encoding ASCII should have occurred.");
