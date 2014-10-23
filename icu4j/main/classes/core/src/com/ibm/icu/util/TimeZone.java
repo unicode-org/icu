@@ -246,14 +246,14 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * 
      * @stable ICU 49
      */
-    public static final TimeZone UNKNOWN_ZONE = new SimpleTimeZone(0, UNKNOWN_ZONE_ID).freeze();
+    public static final TimeZone UNKNOWN_ZONE = new ConstantZone(0, UNKNOWN_ZONE_ID).freeze();
 
     /**
      * {@icu} The immutable GMT (=UTC) time zone. Its ID is "Etc/GMT".
      *
      * @stable ICU 49
      */
-    public static final TimeZone GMT_ZONE = new SimpleTimeZone(0, GMT_ZONE_ID).freeze();
+    public static final TimeZone GMT_ZONE = new ConstantZone(0, GMT_ZONE_ID).freeze();
 
     /**
      * {@icu} System time zone type constants used by filtering zones in
@@ -1292,6 +1292,75 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         String type = ICUConfig.get(TZIMPL_CONFIG_KEY, TZIMPL_CONFIG_ICU);
         if (type.equalsIgnoreCase(TZIMPL_CONFIG_JDK)) {
             TZ_IMPL = TIMEZONE_JDK;
+        }
+    }
+
+    /*
+     * ConstantZone is a private TimeZone subclass dedicated for the two TimeZone class
+     * constants - TimeZone.GMT_ZONE and TimeZone.UNKNOWN_ZONE. Previously, these zones
+     * are instances of SimpleTimeZone. However, when the SimpleTimeZone constructor and
+     * TimeZone's static methods (such as TimeZone.getDefault()) are called from multiple
+     * threads at the same time, it causes a deadlock by TimeZone's static initializer
+     * and SimpleTimeZone's static initializer. To avoid this issue, these TimeZone
+     * constants (GMT/UNKNOWN) must be implemented by a class not visible from users.
+     * See ticket#11343.
+     */
+    private static final class ConstantZone extends TimeZone {
+        private static final long serialVersionUID = 1L;
+
+        private int rawOffset;
+
+        private ConstantZone(int rawOffset, String ID) {
+            super(ID);
+            this.rawOffset = rawOffset;
+        }
+
+        @Override
+        public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {
+            return rawOffset;
+        }
+
+        @Override
+        public void setRawOffset(int offsetMillis) {
+            if (isFrozen()) {
+                throw new UnsupportedOperationException("Attempt to modify a frozen TimeZone instance.");
+            }
+            rawOffset = offsetMillis;
+        }
+
+        @Override
+        public int getRawOffset() {
+            return rawOffset;
+        }
+
+        @Override
+        public boolean useDaylightTime() {
+            return false;
+        }
+
+        @Override
+        public boolean inDaylightTime(Date date) {
+            return false;
+        }
+
+        private volatile transient boolean isFrozen = false;
+
+        @Override
+        public boolean isFrozen() {
+            return isFrozen;
+        }
+
+        @Override
+        public TimeZone freeze() {
+            isFrozen = true;
+            return this;
+        }
+
+        @Override
+        public TimeZone cloneAsThawed() {
+            ConstantZone tz = (ConstantZone)super.cloneAsThawed();
+            tz.isFrozen = false;
+            return tz;
         }
     }
 }
