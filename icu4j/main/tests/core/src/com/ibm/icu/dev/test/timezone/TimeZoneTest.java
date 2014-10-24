@@ -1521,6 +1521,8 @@ public class TimeZoneTest extends TestFmwk
                 {"America/Tortola", "America/Anguilla"},
                 {"America/Virgin", "America/Anguilla"},
                 {"Antarctica/South_Pole", "Antarctica/McMurdo"},
+                {"Asia/Phnom_Penh", "Asia/Bangkok"},
+                {"Asia/Vientiane", "Asia/Bangkok"},
                 {"Arctic/Longyearbyen", "Europe/Oslo"},
                 {"Atlantic/Jan_Mayen", "Europe/Oslo"},
                 {"Atlantic/St_Helena", "Africa/Abidjan"},
