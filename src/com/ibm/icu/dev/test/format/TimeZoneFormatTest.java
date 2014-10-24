@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2012, Google, IBM and  *
+ * Copyright (C) 2007-2014, Google, IBM and  *
  * others. All Rights Reserved. *
  *******************************************************************************
  */
@@ -255,6 +255,14 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         // Skip aliases
                         continue;
                     }
+
+                    if(ids[zidx].equals("Asia/Chita") || ids[zidx].equals("Asia/Srednekolymsk")) {
+                        // These zones were added after ICU 3.8 and works fine with later
+                        // versions of ICU
+                        logln("INFO: Skipping " + ids[zidx] + " for now");
+                        continue;
+                    }
+
                     BasicTimeZone tz = (BasicTimeZone)TimeZone.getTimeZone(ids[zidx], 0);
                     sdf.setTimeZone(tz);
 

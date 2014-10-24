@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -436,6 +436,12 @@ public class TimeZoneRuleTest extends TestFmwk {
 
         String[] tzids = getTestZIDs();
         for (int i = 0; i < tzids.length; i++) {
+
+            if (tzids[i].equals("Africa/Cairo")) {
+                logln("INFO: Skipping Africa/Cairo - this is a known issue resolved by #7008 in later versions");
+                continue;
+            }
+
             BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], 0);
             VTimeZone vtz_org = VTimeZone.create(tzids[i]);
             vtz_org.setTZURL("http://source.icu-project.org/timezone");
@@ -510,6 +516,12 @@ public class TimeZoneRuleTest extends TestFmwk {
         for (int n = 0; n < startTimes.length; n++) {
             long startTime = startTimes[n];
             for (int i = 0; i < tzids.length; i++) {
+
+                if (tzids[i].equals("Africa/Cairo")) {
+                    logln("INFO: Skipping Africa/Cairo - this is a known issue resolved by #7008 in later versions");
+                    continue;
+                }
+
                 BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], 0);
                 VTimeZone vtz_org = VTimeZone.create(tzids[i]);
                 VTimeZone vtz_new = null;
