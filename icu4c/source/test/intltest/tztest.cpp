@@ -2020,6 +2020,8 @@ void TimeZoneTest::TestCanonicalID() {
         {"America/Virgin", "America/Anguilla"},
         {"Antarctica/South_Pole", "Antarctica/McMurdo"},
         {"Arctic/Longyearbyen", "Europe/Oslo"},
+        {"Asia/Phnom_Penh", "Asia/Bangkok"},
+        {"Asia/Vientiane", "Asia/Bangkok"},
         {"Atlantic/Jan_Mayen", "Europe/Oslo"},
         {"Atlantic/St_Helena", "Africa/Abidjan"},
         {"Europe/Bratislava", "Europe/Prague"},
