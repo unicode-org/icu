@@ -1201,6 +1201,14 @@
 "A|B|\U00012345"                "hello <0>\U00012345</0>"
 "A|B|\U00010000"                "hello \ud800"
 
+# Bug 11370
+#   Max match length computation of look-behind expression gives result that is too big to fit in the
+#   in the 24 bit operand portion of the compiled code. Expressions should fail to compile
+#   (Look-behind match length must be bounded. This case is treated as unbounded, an error.)
+
+"(?<!(0123456789a){10000000})x"         E  "no match"
+"(?<!\\ubeaf(\\ubeaf{11000}){11000})"   E  "no match"
+
 #  Random debugging, Temporary
 #
 
