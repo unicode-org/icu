@@ -2135,6 +2135,10 @@ void  RegexCompile::handleCloseParen() {
             int32_t patEnd   = fRXPat->fCompiledPat->size() - 1;
             int32_t minML    = minMatchLength(fMatchOpenParen, patEnd);
             int32_t maxML    = maxMatchLength(fMatchOpenParen, patEnd);
+            if (URX_TYPE(maxML) != 0) {
+                error(U_REGEX_LOOK_BEHIND_LIMIT);
+                break;
+            }
             if (maxML == INT32_MAX) {
                 error(U_REGEX_LOOK_BEHIND_LIMIT);
                 break;
@@ -2168,6 +2172,10 @@ void  RegexCompile::handleCloseParen() {
             int32_t patEnd   = fRXPat->fCompiledPat->size() - 1;
             int32_t minML    = minMatchLength(fMatchOpenParen, patEnd);
             int32_t maxML    = maxMatchLength(fMatchOpenParen, patEnd);
+            if (URX_TYPE(maxML) != 0) {
+                error(U_REGEX_LOOK_BEHIND_LIMIT);
+                break;
+            }
             if (maxML == INT32_MAX) {
                 error(U_REGEX_LOOK_BEHIND_LIMIT);
                 break;
