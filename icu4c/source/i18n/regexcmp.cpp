@@ -2339,7 +2339,15 @@ UBool RegexCompile::compileInlineInterval() {
     int32_t   topOfBlock = blockTopLoc(FALSE);
     if (fIntervalUpper == 0) {
         // Pathological case.  Attempt no matches, as if the block doesn't exist.
+        // Discard the generated code for the block.
+        // If the block included parens, discard the info pertaining to them as well.
         fRXPat->fCompiledPat->setSize(topOfBlock);
+        if (fMatchOpenParen >= topOfBlock) {
+            fMatchOpenParen = -1;
+        }
+        if (fMatchCloseParen >= topOfBlock) {
+            fMatchCloseParen = -1;
+        }
         return TRUE;
     }
 
