@@ -187,7 +187,9 @@ private:
     int32_t                       fMatchOpenParen;   // The position in the compiled pattern
                                                      //   of the slot reserved for a state save
                                                      //   at the start of the most recently processed
-                                                     //   parenthesized block.
+                                                     //   parenthesized block. Updated when processing
+                                                     //   a close to the location for the corresponding open.
+
     int32_t                       fMatchCloseParen;  // The position in the pattern of the first
                                                      //   location after the most recently processed
                                                      //   parenthesized block.
