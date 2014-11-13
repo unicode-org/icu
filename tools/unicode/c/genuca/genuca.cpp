@@ -25,6 +25,7 @@
 #include "unicode/utypes.h"
 #include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
+#include "unicode/utf8.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "collation.h"
@@ -60,7 +61,15 @@ main(int argc, char* argv[]) {
 
 U_NAMESPACE_USE
 
+enum HanOrderValue {
+    HAN_NO_ORDER = -1,
+    HAN_IMPLICIT,
+    HAN_RADICAL_STROKE
+};
+
 static UBool beVerbose=FALSE, withCopyright=TRUE;
+
+static HanOrderValue hanOrder = HAN_NO_ORDER;
 
 static UVersionInfo UCAVersion={ 0, 0, 0, 0 };
 
@@ -225,11 +234,54 @@ int32_t getReorderCode(const char* name) {
     return -1;  // Same as UCHAR_INVALID_CODE or USCRIPT_INVALID_CODE.
 }
 
+/**
+ * Maps Unified_Ideograph's to primary CEs in the given order of ranges.
+ */
+class HanOrder {
+public:
+    HanOrder(UErrorCode &errorCode) : ranges(errorCode), set(), done(FALSE) {}
+
+    void addRange(UChar32 start, UChar32 end, UErrorCode &errorCode) {
+        int32_t length = ranges.size();
+        if(length > 0 && (ranges.elementAti(length - 1) + 1) == start) {
+            // The previous range end is just before this range start: Merge adjacent ranges.
+            ranges.setElementAt(end, length - 1);
+        } else {
+            ranges.addElement(start, errorCode);
+            ranges.addElement(end, errorCode);
+        }
+        set.add(start, end);
+    }
+
+    void setBuilderHanOrder(CollationBaseDataBuilder &builder, UErrorCode &errorCode) {
+        if(U_FAILURE(errorCode)) { return; }
+        builder.initHanRanges(ranges.getBuffer(), ranges.size(), errorCode);
+        done = TRUE;
+    }
+
+    void setDone() {
+        done = TRUE;
+    }
+
+    UBool isDone() { return done; }
+
+    const UnicodeSet &getSet() { return set; }
+
+private:
+    UVector32 ranges;
+    UnicodeSet set;
+    UBool done;
+};
+
+static HanOrder *implicitHanOrder = NULL;
+static HanOrder *radicalStrokeOrder = NULL;
+
 enum ActionType {
   READCE,
   READPRIMARY,
   READBYTE,
   READUNIFIEDIDEOGRAPH,
+  READRADICAL,
   READUCAVERSION,
   READLEADBYTETOSCRIPTS,
   IGNORE
@@ -256,6 +308,7 @@ static struct {
     {"[last trailing",                0, READCE},
 
     {"[Unified_Ideograph",            0, READUNIFIEDIDEOGRAPH},
+    {"[radical",                      0, READRADICAL},
 
     {"[fixed first implicit byte",    0, IGNORE},
     {"[fixed last implicit byte",     0, IGNORE},
@@ -321,7 +374,12 @@ static void readAnOption(
                     return;
                 }
             } else if(what_to_do == READUNIFIEDIDEOGRAPH) {
-                UVector32 unihan(*status);
+                if(implicitHanOrder != NULL) {
+                    fprintf(stderr, "duplicate [Unified_Ideograph] lines\n");
+                    *status = U_INVALID_FORMAT_ERROR;
+                    return;
+                }
+                implicitHanOrder = new HanOrder(*status);
                 if(U_FAILURE(*status)) { return; }
                 for(;;) {
                     if(*pointer == ']') { break; }
@@ -342,11 +400,79 @@ static void readAnOption(
                         *status = U_INVALID_FORMAT_ERROR;
                         return;
                     }
-                    unihan.addElement((UChar32)start, *status);
-                    unihan.addElement((UChar32)end, *status);
+                    implicitHanOrder->addRange((UChar32)start, (UChar32)end, *status);
                     pointer = skipWhiteSpace(s);
                 }
-                builder.initHanRanges(unihan.getBuffer(), unihan.size(), *status);
+                if(hanOrder == HAN_IMPLICIT) {
+                    implicitHanOrder->setBuilderHanOrder(builder, *status);
+                }
+                implicitHanOrder->setDone();
+            } else if(what_to_do == READRADICAL) {
+                if(radicalStrokeOrder == NULL) {
+                    if(implicitHanOrder == NULL) {
+                        fprintf(stderr, "[radical] section before [Unified_Ideograph] line\n");
+                        *status = U_INVALID_FORMAT_ERROR;
+                        return;
+                    }
+                    radicalStrokeOrder = new HanOrder(*status);
+                    if(U_FAILURE(*status)) { return; }
+                } else if(radicalStrokeOrder->isDone()) {
+                    fprintf(stderr, "duplicate [radical] sections\n");
+                    *status = U_INVALID_FORMAT_ERROR;
+                    return;
+                }
+                UBool ok;
+                if(uprv_strcmp(pointer, "end]") == 0) {
+                    if(radicalStrokeOrder->getSet() != implicitHanOrder->getSet()) {
+                        fprintf(stderr, "[radical end]: "
+                                "some of [Unified_Ideograph] missing from [radical] lines\n");
+                        *status = U_INVALID_FORMAT_ERROR;
+                        return;
+                    }
+                    if(hanOrder == HAN_RADICAL_STROKE) {
+                        radicalStrokeOrder->setBuilderHanOrder(builder, *status);
+                    }
+                    radicalStrokeOrder->setDone();
+                } else {
+                    // Read Han characters and ranges between : and ].
+                    // Ignore the radical data before the :.
+                    char *startPointer = uprv_strchr(pointer, ':');
+                    char *limitPointer = uprv_strchr(pointer, ']');
+                    if(startPointer == NULL || limitPointer == NULL ||
+                            (startPointer + 1) >= limitPointer) {
+                        fprintf(stderr, "[radical]: no Han characters listed between : and ]\n");
+                        *status = U_INVALID_FORMAT_ERROR;
+                        return;
+                    }
+                    pointer = startPointer + 1;
+                    int32_t length = (int32_t)(limitPointer - pointer);
+                    for(int32_t i = 0; i < length;) {
+                        UChar32 start;
+                        U8_NEXT(pointer, i, length, start);
+                        UChar32 end;
+                        if(pointer[i] == '-') {
+                            ++i;
+                            U8_NEXT(pointer, i, length, end);
+                        } else {
+                            end = start;
+                        }
+                        if(radicalStrokeOrder->getSet().containsSome(start, end)) {
+                            fprintf(stderr, "[radical]: some of U+%04x..U+%04x occur "
+                                    "multiple times in the radical-stroke order\n",
+                                    start, end);
+                            *status = U_INVALID_FORMAT_ERROR;
+                            return;
+                        }
+                        if(!implicitHanOrder->getSet().contains(start, end)) {
+                            fprintf(stderr, "[radical]: some of U+%04x..U+%04x are "
+                                    "not Unified_Ideograph\n",
+                                    start, end);
+                            *status = U_INVALID_FORMAT_ERROR;
+                            return;
+                        }
+                        radicalStrokeOrder->addRange(start, end, *status);
+                    }
+                }
             } else if (what_to_do == READUCAVERSION) {
                 u_versionFromString(UCAVersion, pointer);
                 if(beVerbose) {
@@ -429,8 +555,8 @@ readAnElement(FILE *data,
     if(U_FAILURE(*status)) {
         return FALSE;
     }
-    char buffer[2048];
-    char *result = fgets(buffer, 2048, data);
+    char buffer[30000];
+    char *result = fgets(buffer, sizeof(buffer), data);
     if(result == NULL) {
         if(feof(data)) {
             return FALSE;
@@ -863,7 +989,10 @@ buildAndWriteBaseData(CollationBaseDataBuilder &builder,
            (long)totalSize + 32);  // 32 bytes = DataHeader rounded up to 16-byte boundary
 
     CollationTailoring::makeBaseVersion(UCAVersion, ucaDataInfo.dataVersion);
-    UNewDataMemory *pData=udata_create(path, "icu", "ucadata", &ucaDataInfo,
+    const char *dataName =
+        hanOrder == HAN_IMPLICIT ? "ucadata-implicithan" :
+        "ucadata-unihan";
+    UNewDataMemory *pData=udata_create(path, "icu", dataName, &ucaDataInfo,
                                        withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genuca: udata_create(%s, ucadata.icu) failed - %s\n",
@@ -1023,14 +1152,16 @@ enum {
     HELP_H,
     HELP_QUESTION_MARK,
     VERBOSE,
-    COPYRIGHT
+    COPYRIGHT,
+    HAN_ORDER
 };
 
 static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_VERBOSE,
-    UOPTION_COPYRIGHT
+    UOPTION_COPYRIGHT,
+    UOPTION_DEF("hanOrder", '\x01', UOPT_REQUIRES_ARG)
 };
 
 extern "C" int
@@ -1045,6 +1176,17 @@ main(int argc, char* argv[]) {
             "error in command line argument \"%s\"\n",
             argv[-argc]);
     }
+    if(options[HAN_ORDER].doesOccur) {
+        const char *order = options[HAN_ORDER].value;
+        if(uprv_strcmp(order, "implicit") == 0) {
+            hanOrder = HAN_IMPLICIT;
+        } else if(uprv_strcmp(order, "radical-stroke") == 0) {
+            hanOrder = HAN_RADICAL_STROKE;
+        }
+    }
+    if(hanOrder == HAN_NO_ORDER) {
+        argc = -1;
+    }
     if( argc<2 ||
         options[HELP_H].doesOccur || options[HELP_QUESTION_MARK].doesOccur
     ) {
@@ -1053,7 +1195,7 @@ main(int argc, char* argv[]) {
          * required supported string length is 509 bytes.
          */
         fprintf(stderr,
-            "Usage: %s [-options] path/to/ICU/src/root\n"
+            "Usage: %s [-options] --hanOrder (implicit|radical-stroke) path/to/ICU/src/root\n"
             "\n"
             "Reads path/to/ICU/src/root/source/data/unidata/FractionalUCA.txt and\n"
             "writes source and binary data files with the collation root data.\n"
@@ -1063,7 +1205,8 @@ main(int argc, char* argv[]) {
             "Options:\n"
             "\t-h or -? or --help  this usage text\n"
             "\t-v or --verbose     verbose output\n"
-            "\t-c or --copyright   include a copyright notice\n");
+            "\t-c or --copyright   include a copyright notice\n"
+            "\t      --hanOrder    implicit or radical-stroke\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
