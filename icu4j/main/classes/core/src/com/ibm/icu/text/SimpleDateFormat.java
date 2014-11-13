@@ -1995,6 +1995,10 @@ public class SimpleDateFormat extends DateFormat {
         }
     }
 
+    /*
+     * Initializes transient fields for fast simple numeric formatting
+     * code. This method should be called whenever number format is updated.
+     */
     private void initLocalZeroPaddingNumberFormat() {
         if (numberFormat instanceof DecimalFormat) {
             decDigits = ((DecimalFormat)numberFormat).getDecimalFormatSymbols().getDigits();
@@ -2007,14 +2011,15 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         if (useLocalZeroPaddingNumberFormat) {
-            decimalBuf = new char[10];  // sufficient for int numbers
+            decimalBuf = new char[DECIMAL_BUF_SIZE];
         }
     }
 
     // If true, use local version of zero padding number format
     private transient boolean useLocalZeroPaddingNumberFormat;
-    private transient char[] decDigits;
-    private transient char[] decimalBuf;
+    private transient char[] decDigits;     // read-only - can be shared by multiple instances
+    private transient char[] decimalBuf;    // mutable - one per instance
+    private static final int DECIMAL_BUF_SIZE = 10; // sufficient for int numbers
 
     /*
      * Lightweight zero padding integer number format function.
@@ -3470,6 +3475,11 @@ public class SimpleDateFormat extends DateFormat {
     public Object clone() {
         SimpleDateFormat other = (SimpleDateFormat) super.clone();
         other.formatData = (DateFormatSymbols) formatData.clone();
+        // We must create a new copy of work buffer used by
+        // the fast numeric field format code.
+        if (this.decimalBuf != null) {
+            other.decimalBuf = new char[DECIMAL_BUF_SIZE];
+        }
         return other;
     }
 

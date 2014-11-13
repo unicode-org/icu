@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007-2011, International Business Machines
+*   Copyright (C) 2007-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -23,6 +23,7 @@ import com.ibm.icu.util.UResourceBundle;
 /*
  * NumberFormat implementation dedicated/optimized for DateFormat,
  * used by SimpleDateFormat implementation.
+ * This class is not thread-safe.
  */
 public final class DateNumberFormat extends NumberFormat {
 
@@ -33,7 +34,8 @@ public final class DateNumberFormat extends NumberFormat {
     private char minusSign;
     private boolean positiveOnly = false;
 
-    private transient char[] decimalBuf = new char[20]; // 20 digits is good enough to store Long.MAX_VALUE
+    private static final int DECIMAL_BUF_SIZE = 20; // 20 digits is good enough to store Long.MAX_VALUE
+    private transient char[] decimalBuf = new char[DECIMAL_BUF_SIZE];
 
     private static SimpleCache<ULocale, char[]> CACHE = new SimpleCache<ULocale, char[]>();
 
@@ -123,7 +125,7 @@ public final class DateNumberFormat extends NumberFormat {
     }
 
     public char[] getDigits() {
-        return digits;
+        return digits.clone();
     }
 
     public StringBuffer format(double number, StringBuffer toAppendTo,
@@ -254,7 +256,15 @@ public final class DateNumberFormat extends NumberFormat {
             setZeroDigit(zeroDigit);
         }
         // re-allocate the work buffer
-        decimalBuf = new char[20];
+        decimalBuf = new char[DECIMAL_BUF_SIZE];
+    }
+
+    @Override
+    public Object clone() {
+        DateNumberFormat dnfmt = (DateNumberFormat)super.clone();
+        dnfmt.digits = this.digits.clone();
+        dnfmt.decimalBuf = new char[DECIMAL_BUF_SIZE];
+        return dnfmt;
     }
 }
 

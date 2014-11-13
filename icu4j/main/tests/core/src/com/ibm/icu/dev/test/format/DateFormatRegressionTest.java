@@ -1427,5 +1427,57 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
       }
 
   }
-    
+
+    // Test case for numeric field format threading problem
+    public void TestT11363() {
+
+        class TestThread extends Thread {
+            SimpleDateFormat fmt;
+            Date d;
+
+            TestThread(SimpleDateFormat fmt, Date d) {
+                this.fmt = fmt;
+                this.d = d;
+            }
+
+            public void run() {
+                String s0 = fmt.format(d);
+                for (int i = 0; i < 1000; i++) {
+                    String s = fmt.format(d);
+                    if (!s0.equals(s)) {
+                        errln("Result: " + s + ", Expected: " + s0);
+                    }
+                }
+            }
+        }
+
+        SimpleDateFormat fmt0 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+        Thread[] threads = new Thread[10];
+
+        GregorianCalendar cal = new GregorianCalendar(2014, Calendar.NOVEMBER, 5, 12, 34, 56);
+        cal.set(Calendar.MILLISECOND, 777);
+
+        // calls format() once on the base object to trigger
+        // lazy initialization stuffs.
+        fmt0.format(cal.getTime());
+
+        for (int i = 0; i < threads.length; i++) {
+            // Add 1 to all fields to use different numbers in each thread
+            cal.add(Calendar.YEAR, 1);
+            cal.add(Calendar.MONTH, 1);
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            cal.add(Calendar.HOUR_OF_DAY, 1);
+            cal.add(Calendar.MINUTE, 1);
+            cal.add(Calendar.SECOND, 1);
+            cal.add(Calendar.MILLISECOND, 1);
+            Date d = cal.getTime();
+            SimpleDateFormat fmt = (SimpleDateFormat)fmt0.clone();
+            threads[i] = new TestThread(fmt, d);
+        }
+
+        for (Thread t : threads) {
+            t.start();
+        }
+    }
 }
