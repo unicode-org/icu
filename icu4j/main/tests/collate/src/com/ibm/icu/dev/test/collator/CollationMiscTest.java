@@ -680,13 +680,18 @@ public class CollationMiscTest extends TestFmwk {
             "\u0410\u0306a",
             "\u04d0A"
         };
-        genericLocaleStarter(new Locale("en", ""), test);
-        genericRulesStarter("&\u0410 = \u0410", test);
-        genericRulesStarter("&Z < \u0410", test);
+
+        // Most of the following are commented out because UCA 8.0
+        // drops most of the Cyrillic contractions from the default order.
+        // See CLDR ticket #7246 "root collation: remove Cyrillic contractions".
+
+        // genericLocaleStarter(new Locale("en", ""), test);
+        // genericRulesStarter("&\u0410 = \u0410", test);
+        // genericRulesStarter("&Z < \u0410", test);
         genericRulesStarter("&\u0410 = \u0410 < \u04d0", test);
         genericRulesStarter("&Z < \u0410 < \u04d0", test);
-        genericRulesStarter("&\u0410 = \u0410 < \u0410\u0301", test);
-        genericRulesStarter("&Z < \u0410 < \u0410\u0301", test);
+        // genericRulesStarter("&\u0410 = \u0410 < \u0410\u0301", test);
+        // genericRulesStarter("&Z < \u0410 < \u0410\u0301", test);
     }
 
     public void TestSuppressContractions() {
