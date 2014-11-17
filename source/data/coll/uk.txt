@@ -10,14 +10,15 @@
  * ICU <specials> source: <path>/xml/collation/uk.xml
  */
 uk{
-    Version{"2.0.96.14"}
+    Version{"2.1.10.26"}
     collations{
         standard{
             Sequence{
-                "[reorder Cyrl][suppressContractions [АаӘәГгЕеЖжЗзОоӨөКкУуЧчЫыЭэѴѵ]]"
+                "[reorder Cyrl]"
                 "&Г<ґ<<<Ґ"
+                "&ꙇ<ї<<<\uA676<<<Ї"
             }
-            Version{"26"}
+            Version{"27"}
         }
     }
 }
