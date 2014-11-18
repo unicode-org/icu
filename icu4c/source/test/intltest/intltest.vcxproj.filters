@@ -274,6 +274,9 @@
     <ClCompile Include="scientificformathelpertest.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="scientificnumberformattertest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="sdtfmtts.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
