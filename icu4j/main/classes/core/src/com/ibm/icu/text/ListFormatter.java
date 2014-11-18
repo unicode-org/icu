@@ -195,9 +195,6 @@ final public class ListFormatter {
      * @stable ICU 50
      */
     public String format(Collection<?> items) {
-        // TODO optimize this for the common case that the patterns are all of the
-        // form {0}<sometext>{1}.
-        // We avoid MessageFormat, because there is no "sub" formatting.
         return format(items, -1).toString();
     }
     
@@ -334,23 +331,13 @@ final public class ListFormatter {
         private static ListFormatter load(ULocale ulocale, String style) {
             ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
                     getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
-            // TODO(Travis Keep): This try-catch is a hack to cover missing aliases
-            // for listPattern/duration and listPattern/duration-narrow in root.txt.
-            try {
-                return new ListFormatter(
-                    SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/2").getString()),
-                    SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/start").getString()),
-                    SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/middle").getString()),
-                    SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/end").getString()),
-                    ulocale);
-            } catch (MissingResourceException e) {
-                return new ListFormatter(
-                        SimplePatternFormatter.compile(r.getWithFallback("listPattern/standard/2").getString()),
-                        SimplePatternFormatter.compile(r.getWithFallback("listPattern/standard/start").getString()),
-                        SimplePatternFormatter.compile(r.getWithFallback("listPattern/standard/middle").getString()),
-                        SimplePatternFormatter.compile(r.getWithFallback("listPattern/standard/end").getString()),
-                        ulocale);
-            }
+           
+            return new ListFormatter(
+                SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/2").getString()),
+                SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/start").getString()),
+                SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/middle").getString()),
+                SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/end").getString()),
+                ulocale);
         }
     }
 
