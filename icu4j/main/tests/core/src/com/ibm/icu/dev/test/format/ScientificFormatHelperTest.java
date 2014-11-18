@@ -69,12 +69,7 @@ public class ScientificFormatHelperTest extends TestFmwk {
         AttributedCharacterIterator iterator = decfmt.formatToCharacterIterator(123456.0);
         ScientificFormatHelper helper = ScientificFormatHelper.getInstance(
                 decfmt.getDecimalFormatSymbols());
-        try {
-            helper.insertMarkup(iterator, "<sup>", "</sup>");
-            fail("expected illegal argument exception");
-        } catch (IllegalArgumentException expected) {
-            // do nothing
-        }
+        assertEquals("", "123,456", helper.insertMarkup(iterator, "<sup>", "</sup>"));
     }
     
     public void TestFixedDecimalSuperscript() {
@@ -83,11 +78,6 @@ public class ScientificFormatHelperTest extends TestFmwk {
         AttributedCharacterIterator iterator = decfmt.formatToCharacterIterator(123456.0);
         ScientificFormatHelper helper = ScientificFormatHelper.getInstance(
                 decfmt.getDecimalFormatSymbols());
-        try {
-            helper.toSuperscriptExponentDigits(iterator);
-            fail("expected illegal argument exception");
-        } catch (IllegalArgumentException expected) {
-            // do nothing
-        }
+        assertEquals("", "123,456", helper.toSuperscriptExponentDigits(iterator));
     }
 }
