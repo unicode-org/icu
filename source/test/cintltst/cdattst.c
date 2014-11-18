@@ -1591,18 +1591,17 @@ static void TestOverrideNumberFormat(void) {
     u_uastrcpy(fields, "d");
     u_uastrcpy(pattern,"MM d");
 
+
     fmt=udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
     if (!assertSuccess("udat_open()", &status)) {
         return;
     }
 
-
-    // loop 50 times to check getter/setter
+    // loop 5 times to check getter/setter
     for (i = 0; i < 5; i++){
         UNumberFormat* overrideFmt;
         overrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
         assertSuccess("unum_open()", &status);
-
         udat_adoptNumberFormatForFields(fmt, fields, overrideFmt, &status);
         overrideFmt = NULL; // no longer valid
         assertSuccess("udat_setNumberFormatForField()", &status);
@@ -1612,7 +1611,6 @@ static void TestOverrideNumberFormat(void) {
             log_err("FAIL: udat_getNumberFormatForField did not return a valid pointer\n");
         }
     }
-
     {
       UNumberFormat* overrideFmt;
       overrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);

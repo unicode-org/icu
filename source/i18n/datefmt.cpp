@@ -27,6 +27,9 @@
 #include "unicode/dtptngen.h"
 #include "unicode/udisplaycontext.h"
 #include "reldtfmt.h"
+#include "shareddatefmt.h"
+#include "shareddatetimepatterngenerator.h"
+#include "unifiedcache.h"
 
 #include "cstring.h"
 #include "windtfmt.h"
@@ -40,6 +43,174 @@
 // *****************************************************************************
 
 U_NAMESPACE_BEGIN
+
+SharedDateFormat::~SharedDateFormat() {
+    delete ptr;
+}
+
+// We must fully define LocaleCacheKey<SharedDateFormat>
+template<> U_I18N_API
+const SharedDateFormat *LocaleCacheKey<SharedDateFormat>::createObject(
+        const void * /*creationContext*/, UErrorCode &status) const {
+    status = U_UNSUPPORTED_ERROR;
+    return NULL;
+}
+
+class U_I18N_API DateFmtKeyByStyle : public LocaleCacheKey<SharedDateFormat> {
+ private:
+   DateFormat::EStyle fDateStyle;
+   DateFormat::EStyle fTimeStyle;
+ public:
+   DateFmtKeyByStyle(
+           const Locale &loc,
+           DateFormat::EStyle dateStyle,
+           DateFormat::EStyle timeStyle)
+           : LocaleCacheKey<SharedDateFormat>(loc),
+           fDateStyle(dateStyle),
+           fTimeStyle(timeStyle) { }
+   DateFmtKeyByStyle(const DateFmtKeyByStyle &other) :
+           LocaleCacheKey<SharedDateFormat>(other),
+           fDateStyle(other.fDateStyle),
+           fTimeStyle(other.fTimeStyle) { }
+   virtual ~DateFmtKeyByStyle();
+   virtual int32_t hashCode() const {
+       int32_t hash = 37 * LocaleCacheKey<SharedDateFormat>::hashCode() + fDateStyle;
+       hash = 37 * hash + fTimeStyle;
+       return hash;
+   }
+   virtual UBool operator==(const CacheKeyBase &other) const {
+       // reflexive
+       if (this == &other) {
+           return TRUE;
+       }
+       if (!LocaleCacheKey<SharedDateFormat>::operator==(other)) {
+           return FALSE;
+       }
+       // We know that this an other are of same class if we get this far.
+       const DateFmtKeyByStyle *realOther =
+               static_cast<const DateFmtKeyByStyle *>(&other);
+       return (realOther->fDateStyle == fDateStyle &&
+               realOther->fTimeStyle == fTimeStyle);
+   }
+   virtual CacheKeyBase *clone() const {
+       return new DateFmtKeyByStyle(*this);
+   }
+   virtual const SharedDateFormat *createObject(
+           const void * /*creationContext*/, UErrorCode &status) const {
+       DateFormat::EStyle dateStyle = fDateStyle;
+       if(dateStyle != DateFormat::kNone)
+       {
+           dateStyle = (DateFormat::EStyle) (dateStyle + DateFormat::kDateOffset);
+       }
+       DateFormat *fmt = DateFormat::create(fTimeStyle, dateStyle, fLoc);
+       if (fmt == NULL) {
+           status = U_MEMORY_ALLOCATION_ERROR;
+           return NULL;
+       }
+       SharedDateFormat *result = new SharedDateFormat(fmt);
+       if (result == NULL) {
+           delete fmt;
+           status = U_MEMORY_ALLOCATION_ERROR;
+           return NULL;
+       }
+       result->addRef();
+       return result;
+   }
+};
+
+DateFmtKeyByStyle::~DateFmtKeyByStyle() {
+}
+
+class U_I18N_API DateFmtKeyBySkeleton : public LocaleCacheKey<SharedDateFormat> {
+ private:
+    UnicodeString fSkeleton;
+ public:
+   DateFmtKeyBySkeleton(const Locale &loc, const UnicodeString &skeleton) :
+           LocaleCacheKey<SharedDateFormat>(loc),
+           fSkeleton(skeleton) { }
+   DateFmtKeyBySkeleton(const DateFmtKeyBySkeleton &other) :
+           LocaleCacheKey<SharedDateFormat>(other),
+           fSkeleton(other.fSkeleton) { }
+   virtual ~DateFmtKeyBySkeleton();
+   virtual int32_t hashCode() const {
+       return 37 * LocaleCacheKey<SharedDateFormat>::hashCode() + fSkeleton.hashCode();
+   }
+   virtual UBool operator==(const CacheKeyBase &other) const {
+       // reflexive
+       if (this == &other) {
+           return TRUE;
+       }
+       if (!LocaleCacheKey<SharedDateFormat>::operator==(other)) {
+           return FALSE;
+       }
+       // We know that this an other are of same class if we get this far.
+       const DateFmtKeyBySkeleton *realOther =
+               static_cast<const DateFmtKeyBySkeleton *>(&other);
+       return (realOther->fSkeleton == fSkeleton);
+   }
+   virtual CacheKeyBase *clone() const {
+       return new DateFmtKeyBySkeleton(*this);
+   }
+   virtual const SharedDateFormat *createObject(
+           const void *creationContext, UErrorCode &status) const {
+       void *mutableCreationContext = const_cast<void *>(creationContext);
+       DateTimePatternGenerator *ownedDtpg = NULL;
+       DateTimePatternGenerator *dtpg =
+               static_cast<DateTimePatternGenerator *>(mutableCreationContext);
+       if (dtpg == NULL) {
+           ownedDtpg = DateTimePatternGenerator::createInstance(fLoc, status);
+           if (U_FAILURE(status)) {
+               return NULL;
+           }
+           dtpg = ownedDtpg;
+       } 
+       DateFormat *fmt = new SimpleDateFormat(
+               dtpg->getBestPattern(fSkeleton, status),
+               fLoc,
+               status);
+       delete ownedDtpg;
+       if (fmt == NULL) {
+           status = U_MEMORY_ALLOCATION_ERROR;
+           return NULL;
+       }
+       if (U_FAILURE(status)) {
+           delete fmt;
+           return NULL;
+       }
+       SharedDateFormat *result = new SharedDateFormat(fmt);
+       if (result == NULL) {
+           delete fmt;
+           status = U_MEMORY_ALLOCATION_ERROR;
+           return NULL;
+       }
+       result->addRef();
+       return result;
+   }
+};
+
+DateFmtKeyBySkeleton::~DateFmtKeyBySkeleton() {
+}
+
+static DateFormat *createFromCache(
+        const CacheKey<SharedDateFormat> &key,
+        const void *context,
+        UErrorCode &status) {
+    const UnifiedCache *cache = UnifiedCache::getInstance(status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    const SharedDateFormat *ptr = NULL;
+    cache->get(key, context, ptr, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    DateFormat *result = static_cast<DateFormat *>((*ptr)->clone());
+    ptr->removeRef();
+    if (result == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
 
 DateFormat::DateFormat()
 :   fCalendar(0),
@@ -309,7 +480,9 @@ DateFormat* U_EXPORT2
 DateFormat::createTimeInstance(DateFormat::EStyle style,
                                const Locale& aLocale)
 {
-    return create(style, kNone, aLocale);
+    DateFmtKeyByStyle key(aLocale, kNone, style);
+    UErrorCode status = U_ZERO_ERROR;
+    return createFromCache(key, NULL, status);
 }
 
 //----------------------------------------------------------------------
@@ -318,13 +491,9 @@ DateFormat* U_EXPORT2
 DateFormat::createDateInstance(DateFormat::EStyle style,
                                const Locale& aLocale)
 {
-    // +4 to set the correct index for getting data out of
-    // LocaleElements.
-    if(style != kNone)
-    {
-        style = (EStyle) (style + kDateOffset);
-    }
-    return create(kNone, (EStyle) (style), aLocale);
+    DateFmtKeyByStyle key(aLocale, style, kNone);
+    UErrorCode status = U_ZERO_ERROR;
+    return createFromCache(key, NULL, status);
 }
 
 //----------------------------------------------------------------------
@@ -334,11 +503,9 @@ DateFormat::createDateTimeInstance(EStyle dateStyle,
                                    EStyle timeStyle,
                                    const Locale& aLocale)
 {
-    if(dateStyle != kNone)
-    {
-        dateStyle = (EStyle) (dateStyle + kDateOffset);
-    }
-    return create(timeStyle, dateStyle, aLocale);
+    DateFmtKeyByStyle key(aLocale, dateStyle, timeStyle);
+    UErrorCode status = U_ZERO_ERROR;
+    return createFromCache(key, NULL, status);
 }
 
 //----------------------------------------------------------------------
@@ -346,7 +513,70 @@ DateFormat::createDateTimeInstance(EStyle dateStyle,
 DateFormat* U_EXPORT2
 DateFormat::createInstance()
 {
-    return create(kShort, (EStyle) (kShort + kDateOffset), Locale::getDefault());
+    DateFmtKeyByStyle key(Locale::getDefault(), kShort, kShort);
+    UErrorCode status = U_ZERO_ERROR;
+    return createFromCache(key, NULL, status);
+}
+
+//----------------------------------------------------------------------
+
+DateFormat* U_EXPORT2
+DateFormat::createInstanceForSkeleton(
+        Calendar *calendarToAdopt,
+        const UnicodeString& skeleton,
+        const Locale &locale,
+        UErrorCode &status) {
+    LocalPointer<Calendar> calendar(calendarToAdopt);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    if (calendar.isNull()) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    DateFmtKeyBySkeleton key(locale, skeleton);
+    DateFormat *result = createFromCache(key, NULL, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    result->adoptCalendar(calendar.orphan());
+    return result;
+}
+
+DateFormat* U_EXPORT2
+DateFormat::createInstanceForSkeleton(
+        const UnicodeString& skeleton,
+        const Locale &locale,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    DateFmtKeyBySkeleton key(locale, skeleton);
+    return createFromCache(key, NULL, status);
+}
+
+DateFormat* U_EXPORT2
+DateFormat::createInstanceForSkeleton(
+        const UnicodeString& skeleton,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    DateFmtKeyBySkeleton key(Locale::getDefault(), skeleton);
+    return createFromCache(key, NULL, status);
+}
+
+DateFormat* U_EXPORT2
+DateFormat::internalCreateInstanceForSkeleton(
+        const UnicodeString& skeleton,
+        const Locale &locale,
+        DateTimePatternGenerator &gen,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    DateFmtKeyBySkeleton key(locale, skeleton);
+    return createFromCache(key, &gen, status);
 }
 
 //----------------------------------------------------------------------
