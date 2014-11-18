@@ -294,6 +294,11 @@ DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
  */
 void
 DateFormatSymbols::copyData(const DateFormatSymbols& other) {
+    UErrorCode status = U_ZERO_ERROR;
+    U_LOCALE_BASED(locBased, *this);
+    locBased.setLocaleIDs(
+        other.getLocale(ULOC_VALID_LOCALE, status),
+        other.getLocale(ULOC_ACTUAL_LOCALE, status));
     assignArray(fEras, fErasCount, other.fEras, other.fErasCount);
     assignArray(fEraNames, fEraNamesCount, other.fEraNames, other.fEraNamesCount);
     assignArray(fNarrowEras, fNarrowErasCount, other.fNarrowEras, other.fNarrowErasCount);
