@@ -76,8 +76,10 @@ icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
+icu4c/source/i18n/scientificnumberformatter.cpp -text
 icu4c/source/i18n/shareddatefmt.h -text
 icu4c/source/i18n/shareddatetimepatterngenerator.h -text
+icu4c/source/i18n/unicode/scientificnumberformatter.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text
@@ -147,6 +149,7 @@ icu4c/source/test/depstest/icu-dependencies-mode.el -text
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
 icu4c/source/test/intltest/quantityformattertest.cpp -text
+icu4c/source/test/intltest/scientificnumberformattertest.cpp -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/iotest/iotest.vcxproj.filters -text
 icu4c/source/test/letest/cletest.vcxproj -text
