@@ -78,12 +78,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RegionNameEnumeration)
  * anything meaningful.
  */
 void Region::loadRegionData(UErrorCode &status) {
-    LocalPointer<DecimalFormat> df(new DecimalFormat(status));
+    LocalPointer<DecimalFormat> df(new DecimalFormat(status), status);
     if (U_FAILURE(status)) {
-        return;
-    }
-    if (df == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     df->setParseIntegerOnly(TRUE);

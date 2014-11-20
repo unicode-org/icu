@@ -165,7 +165,7 @@ void DateIntervalFormatTest::testAPI() {
             errln("Failure encountered: %s", u_errorName(status));
             return;
         }
-        LocalPointer<DateIntervalInfo> dii(new DateIntervalInfo(Locale::getEnglish(), status));
+        LocalPointer<DateIntervalInfo> dii(new DateIntervalInfo(Locale::getEnglish(), status), status);
         if (U_FAILURE(status)) {
             errln("Failure encountered: %s", u_errorName(status));
             return;
@@ -1160,7 +1160,7 @@ void DateIntervalFormatTest::testFormatUserDII() {
 
 void DateIntervalFormatTest::testSetIntervalPatternNoSideEffect() {
     UErrorCode ec = U_ZERO_ERROR;
-    LocalPointer<DateIntervalInfo> dtitvinf(new DateIntervalInfo(ec));
+    LocalPointer<DateIntervalInfo> dtitvinf(new DateIntervalInfo(ec), ec);
     if (U_FAILURE(ec)) {
         errln("Failure encountered: %s", u_errorName(ec));
         return;
@@ -1172,7 +1172,7 @@ void DateIntervalFormatTest::testSetIntervalPatternNoSideEffect() {
         errln("Failure encountered: %s", u_errorName(ec));
         return;
     }
-    dtitvinf.adoptInstead(new DateIntervalInfo(ec));
+    dtitvinf.adoptInsteadAndCheckErrorCode(new DateIntervalInfo(ec), ec);
     if (U_FAILURE(ec)) {
         errln("Failure encountered: %s", u_errorName(ec));
         return;
