@@ -350,12 +350,8 @@ const MeasureFormatCacheData *LocaleCacheKey<MeasureFormatCacheData>::createObje
     LocalUResourceBundlePointer unitsBundle(ures_open(U_ICUDATA_UNIT, localeId, &status));
     static UNumberFormatStyle currencyStyles[] = {
             UNUM_CURRENCY_PLURAL, UNUM_CURRENCY_ISO, UNUM_CURRENCY};
+    LocalPointer<MeasureFormatCacheData> result(new MeasureFormatCacheData(), status);
     if (U_FAILURE(status)) {
-        return NULL;
-    }
-    LocalPointer<MeasureFormatCacheData> result(new MeasureFormatCacheData());
-    if (result.isNull()) {
-        status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
     if (!loadMeasureUnitData(

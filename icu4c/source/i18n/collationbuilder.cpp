@@ -1563,9 +1563,8 @@ CEFinalizer::~CEFinalizer() {}
 void
 CollationBuilder::finalizeCEs(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    LocalPointer<CollationDataBuilder> newBuilder(new CollationDataBuilder(errorCode));
-    if(newBuilder.isNull()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    LocalPointer<CollationDataBuilder> newBuilder(new CollationDataBuilder(errorCode), errorCode);
+    if(U_FAILURE(errorCode)) {
         return;
     }
     newBuilder->initForTailoring(baseData, errorCode);
