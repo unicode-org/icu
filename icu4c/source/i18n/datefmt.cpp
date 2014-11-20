@@ -208,6 +208,13 @@ static DateFormat *createFromCache(
     ptr->removeRef();
     if (result == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        // Set the currently active default TimeZone,
+        // because the cached instance might be created
+        // with another TimeZone.
+        // Note: We could do some optimization in SharedDateFormat
+        // to pick up the current default without cloning old default.
+        result->adoptTimeZone(TimeZone::createDefault());
     }
     return result;
 }
