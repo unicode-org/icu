@@ -483,7 +483,7 @@ private:
     };
 
     void initData(const Locale &locale, UErrorCode &status);
-    void addCanonicalItems(UErrorCode &status);
+    void addCanonicalItems();
     void addICUPatterns(const Locale& locale, UErrorCode& status);
     void hackTimes(const UnicodeString& hackPattern, UErrorCode& status);
     void addCLDRData(const Locale& locale, UErrorCode& status);
