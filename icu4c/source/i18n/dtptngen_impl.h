@@ -212,10 +212,10 @@ private:
     PtnElem*  getDuplicateElem(const UnicodeString &basePattern, const PtnSkeleton& skeleton, PtnElem *baseElem);
 }; // end  PatternMap
 
-class PatternMapIterator {
+class PatternMapIterator : public UMemory {
 public:
     PatternMapIterator();
-    ~PatternMapIterator();
+    virtual ~PatternMapIterator();
     void set(PatternMap& patternMap);
     PtnSkeleton* getSkeleton();
     UBool hasNext();
@@ -223,7 +223,7 @@ public:
 private:
     int32_t bootIndex;
     PtnElem *nodePtr;
-    DateTimeMatcher matcher;
+    DateTimeMatcher *matcher;
     PatternMap *patternMap;
 };
 
