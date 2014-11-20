@@ -138,17 +138,17 @@ void Region::loadRegionData(UErrorCode &status) {
         r->idStr.extract(0,r->idStr.length(),r->id,sizeof(r->id),US_INV);
         r->type = URGN_TERRITORY; // Only temporary - figure out the real type later once the aliases are known.
 
-        uhash_put(regionIDMap,(void *)&(r->idStr),(void *)r.orphan(),&status);
         Formattable result;
         UErrorCode ps = U_ZERO_ERROR;
         df->parse(r->idStr,result,ps);
         if ( U_SUCCESS(ps) ) {
             r->code = result.getLong(); // Convert string to number
-            uhash_iput(numericCodeMap,r->code,(void *)r,&status);
+            uhash_iput(numericCodeMap,r->code,(void *)r.getAlias(),&status);
             r->type = URGN_SUBCONTINENT;
         } else {
             r->code = -1;
         }
+        uhash_put(regionIDMap,(void *)&(r->idStr),(void *)r.orphan(),&status);
     }
 
 
