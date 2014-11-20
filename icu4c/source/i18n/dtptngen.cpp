@@ -25,6 +25,7 @@
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/rep.h"
+#include "uassert.h"
 #include "cpputils.h"
 #include "mutex.h"
 #include "cmemory.h"
@@ -430,7 +431,7 @@ DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status) {
 
     skipMatcher = NULL;
     fAvailableFormatKeyHash=NULL;
-    addCanonicalItems();
+    addCanonicalItems(status);
     addICUPatterns(locale, status);
     if (U_FAILURE(status)) {
         return;
@@ -554,8 +555,6 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
 
     UnicodeString defaultItemFormat(TRUE, UDATPG_ItemFormat, UPRV_LENGTHOF(UDATPG_ItemFormat)-1);  // Read-only alias.
 
-    err = U_ZERO_ERROR;
-    
     fDefaultHourFormatChar = 0;
     for (i=0; i<UDATPG_FIELD_COUNT; ++i ) {
         appendItemNames[i]=CAP_F;
@@ -584,11 +583,11 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
                                             "calendar", "calendar", locale.getName(), NULL, FALSE, &err);
         localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY-1] = 0; // ensure null termination
         // now get the calendar key value from that locale
-        int32_t calendarTypeLen = uloc_getKeywordValue(localeWithCalendarKey, "calendar", calendarType, ULOC_KEYWORDS_CAPACITY, &err);
-        if (U_SUCCESS(err) && calendarTypeLen < ULOC_KEYWORDS_CAPACITY) {
+        UErrorCode err2 = err;
+        int32_t calendarTypeLen = uloc_getKeywordValue(localeWithCalendarKey, "calendar", calendarType, ULOC_KEYWORDS_CAPACITY, &err2);
+        if (U_SUCCESS(err2) && calendarTypeLen < ULOC_KEYWORDS_CAPACITY) {
             calendarTypeToUse = calendarType;
         }
-        err = U_ZERO_ERROR;
     }
     calBundle = ures_getByKeyWithFallback(rb, DT_DateTimeCalendarTag, NULL, &err);
     calTypeBundle = ures_getByKeyWithFallback(calBundle, calendarTypeToUse, NULL, &err);
@@ -596,103 +595,111 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
     key=NULL;
     int32_t dtCount=0;
     patBundle = ures_getByKeyWithFallback(calTypeBundle, DT_DateTimePatternsTag, NULL, &err);
-    while (U_SUCCESS(err)) {
-        rbPattern = ures_getNextUnicodeString(patBundle, &key, &err);
+    {
+      UErrorCode err2 = err;
+      while (U_SUCCESS(err2)) {
+        rbPattern = ures_getNextUnicodeString(patBundle, &key, &err2);
         dtCount++;
         if (rbPattern.length()==0 ) {
-            break;  // no more pattern
+          break;  // no more pattern
         }
         else {
-            if (dtCount==9) {
-                setDateTimeFormat(rbPattern);
+          if (dtCount==9) {
+              setDateTimeFormat(rbPattern);
             } else if (dtCount==4) { // short time format
-                // set fDefaultHourFormatChar to the hour format character from this pattern
-                int32_t tfIdx, tfLen = rbPattern.length();
+              // set fDefaultHourFormatChar to the hour format character from this pattern
+              int32_t tfIdx, tfLen = rbPattern.length();
                 UBool ignoreChars = FALSE;
                 for (tfIdx = 0; tfIdx < tfLen; tfIdx++) {
-                    UChar tfChar = rbPattern.charAt(tfIdx);
+                  UChar tfChar = rbPattern.charAt(tfIdx);
                     if ( tfChar == SINGLE_QUOTE ) {
-                        ignoreChars = !ignoreChars; // toggle (handle quoted literals & '' for single quote)
+                      ignoreChars = !ignoreChars; // toggle (handle quoted literals & '' for single quote)
                     } else if ( !ignoreChars && u_strchr(hourFormatChars, tfChar) != NULL ) {
-                        fDefaultHourFormatChar = tfChar;
+                      fDefaultHourFormatChar = tfChar;
                         break;
                     }
                 }
             }
         }
-    }
-    ures_close(patBundle);
+      }
+      ures_close(patBundle);
 
-    err = U_ZERO_ERROR;
-    patBundle = ures_getByKeyWithFallback(calTypeBundle, DT_DateTimeAppendItemsTag, NULL, &err);
-    key=NULL;
-    UnicodeString itemKey;
-    while (U_SUCCESS(err)) {
-        rbPattern = ures_getNextUnicodeString(patBundle, &key, &err);
+    }
+    {
+      UErrorCode err2 = err;
+      patBundle = ures_getByKeyWithFallback(calTypeBundle, DT_DateTimeAppendItemsTag, NULL, &err2);
+      key=NULL;
+      UnicodeString itemKey;
+      while (U_SUCCESS(err2)) {
+        rbPattern = ures_getNextUnicodeString(patBundle, &key, &err2);
         if (rbPattern.length()==0 ) {
-            break;  // no more pattern
+          break;  // no more pattern
         }
         else {
-            setAppendItemFormat(getAppendFormatNumber(key), rbPattern);
+          setAppendItemFormat(getAppendFormatNumber(key), rbPattern);
         }
+      }
     }
     ures_close(patBundle);
 
     key=NULL;
-    err = U_ZERO_ERROR;
-    fBundle = ures_getByKeyWithFallback(rb, DT_DateTimeFieldsTag, NULL, &err);
-    for (i=0; i<MAX_RESOURCE_FIELD; ++i) {
-        err = U_ZERO_ERROR;
-        patBundle = ures_getByKeyWithFallback(fBundle, Resource_Fields[i], NULL, &err);
-        fieldBundle = ures_getByKeyWithFallback(patBundle, "dn", NULL, &err);
-        rbPattern = ures_getNextUnicodeString(fieldBundle, &key, &err);
+    {
+      UErrorCode err2 = err;
+      fBundle = ures_getByKeyWithFallback(rb, DT_DateTimeFieldsTag, NULL, &err2);
+      for (i=0; i<MAX_RESOURCE_FIELD; ++i) {
+        UErrorCode err3 = err2;
+        patBundle = ures_getByKeyWithFallback(fBundle, Resource_Fields[i], NULL, &err3);
+        fieldBundle = ures_getByKeyWithFallback(patBundle, "dn", NULL, &err3);
+        rbPattern = ures_getNextUnicodeString(fieldBundle, &key, &err3);
         ures_close(fieldBundle);
         ures_close(patBundle);
-        if (rbPattern.length()==0 ) {
-            continue;
+        if (U_FAILURE(err3) || rbPattern.length()==0 ) {
+          continue;
         }
         else {
-            setAppendItemName(getAppendNameNumber(Resource_Fields[i]), rbPattern);
+          setAppendItemName(getAppendNameNumber(Resource_Fields[i]), rbPattern);
         }
+      }
+      ures_close(fBundle);
     }
-    ures_close(fBundle);
 
     // add available formats
     UBool firstTimeThrough = TRUE;
-    err = U_ZERO_ERROR;
     initHashtable(err);
     UBool override = TRUE;
-    while (TRUE) {
+    {
+      while (TRUE) {
+        UErrorCode err2 = err;
         // At the start of the loop:
         // - rb is the open resource bundle for the current locale being processed,
         //   whose actual name is in curLocaleName.
         // - if U_SUCCESS(err), then calBundle and calTypeBundle are open;
         //   process contents of calTypeBundle, then close calBundle and calTypeBundle.
-        if (U_SUCCESS(err)) {
+        if (U_SUCCESS(err2)) {
             // process contents of calTypeBundle
-            patBundle = ures_getByKeyWithFallback(calTypeBundle, DT_DateTimeAvailableFormatsTag, NULL, &err);
-            if (U_SUCCESS(err)) {
+            patBundle = ures_getByKeyWithFallback(calTypeBundle, DT_DateTimeAvailableFormatsTag, NULL, &err2);
+            if (U_SUCCESS(err2)) {
                 int32_t numberKeys = ures_getSize(patBundle);
                 int32_t len;
                 const UChar *retPattern;
                 key=NULL;
 #if defined(U_USE_ASCII_BUNDLE_ITERATOR)
                 UResourceBundleAIterator aiter;
-                ures_a_open(&aiter, patBundle, &err);
+                ures_a_open(&aiter, patBundle, &err2);
 #endif
                 for(i=0; i<numberKeys; ++i) {
 #if defined(U_USE_ASCII_BUNDLE_ITERATOR)
-                    retPattern=ures_a_getNextString(&aiter, &len, &key, &err);
+                    retPattern=ures_a_getNextString(&aiter, &len, &key, &err2);
 #else
                     retPattern=ures_getNextString(patBundle, &len, &key, &err);
 #endif
                     UnicodeString format=UnicodeString(retPattern);
                     UnicodeString retKey=UnicodeString(key, -1, US_INV);
                     if ( firstTimeThrough || !isAvailableFormatSet(retKey) ) {
-                        setAvailableFormat(retKey, err);
+                        setAvailableFormat(retKey, err2);
                         // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
                         // but not a previous availableFormats entry:
-                        addPatternWithSkeleton(format, &retKey, override, conflictingPattern, err);
+                        addPatternWithSkeleton(format, &retKey, override, conflictingPattern, err2);
                     }
                 }
 #if defined(U_USE_ASCII_BUNDLE_ITERATOR)
@@ -713,32 +720,31 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
         // Find the name of the appropriate parent locale (from %%Parent if present, else
         // uloc_getParent on the actual locale name)
         // (It would be nice to have a ures function that did this...)
-        err = U_ZERO_ERROR;
+        UErrorCode err3 = err2;
         char parentLocale[ULOC_FULLNAME_CAPACITY];
         int32_t locNameLen;
-        const UChar * parentUName = ures_getStringByKey(rb, "%%Parent", &locNameLen, &err);
-        if (U_SUCCESS(err) && err != U_USING_FALLBACK_WARNING && locNameLen < ULOC_FULLNAME_CAPACITY) {
+        if(U_SUCCESS(err3)) err3 = U_ZERO_ERROR; // warning sensitive code
+        const UChar * parentUName = ures_getStringByKey(rb, "%%Parent", &locNameLen, &err3);
+        if (U_SUCCESS(err3) && err3 != U_USING_FALLBACK_WARNING && locNameLen < ULOC_FULLNAME_CAPACITY) {
             u_UCharsToChars(parentUName, parentLocale, locNameLen + 1);
         } else {
-            err = U_ZERO_ERROR;
-            uloc_getParent(curLocaleName, parentLocale, ULOC_FULLNAME_CAPACITY, &err);
-            if (U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
-                // just fallback to root, since we are not already there
-                parentLocale[0] = 0;
-                err = U_ZERO_ERROR;
-            }
+          UErrorCode err4 = err2;
+          uloc_getParent(curLocaleName, parentLocale, ULOC_FULLNAME_CAPACITY, &err4);
+          if (U_FAILURE(err4) || err4 == U_STRING_NOT_TERMINATED_WARNING) {
+            // just fallback to root, since we are not already there
+            parentLocale[0] = 0;
+          }
         }
         // Close current locale bundle
         ures_close(rb);
         // And open its parent, which becomes the new current locale being processed
-        rb = ures_open(NULL, parentLocale, &err);
-        if ( U_FAILURE(err) ) {
-            err = U_ZERO_ERROR;
-            break;
+        rb = ures_open(NULL, parentLocale, &err2);
+        if ( U_FAILURE(err2) ) {
+          break;
         }
         // Get the name of the parent / new current locale
-        curLocaleName=ures_getLocaleByType(rb, ULOC_ACTUAL_LOCALE, &err);
-        if ( U_FAILURE(err) ) {
+        curLocaleName=ures_getLocaleByType(rb, ULOC_ACTUAL_LOCALE, &err2);
+        if ( U_FAILURE(err2) ) {
             curLocaleName = parentLocale;
             err = U_ZERO_ERROR;
         }
@@ -746,15 +752,16 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
             override = FALSE;
         }
         // Open calBundle and calTypeBundle
-        calBundle = ures_getByKeyWithFallback(rb, DT_DateTimeCalendarTag, NULL, &err);
-        if (U_SUCCESS(err)) {
-            calTypeBundle = ures_getByKeyWithFallback(calBundle, calendarTypeToUse, NULL, &err);
-            if ( U_FAILURE(err) ) {
+        calBundle = ures_getByKeyWithFallback(rb, DT_DateTimeCalendarTag, NULL, &err2);
+        if (U_SUCCESS(err2)) {
+            calTypeBundle = ures_getByKeyWithFallback(calBundle, calendarTypeToUse, NULL, &err2);
+            if ( U_FAILURE(err2) ) {
                 ures_close(calBundle);
             }
         }
         // Go to the top of the loop to process contents of calTypeBundle
-    }    
+      }
+    }  
 
     if (hackPattern.length()>0) {
         hackTimes(hackPattern, err);
@@ -900,10 +907,8 @@ DateTimePatternGenerator::getDecimal() const {
 }
 
 void
-DateTimePatternGenerator::addCanonicalItems() {
+DateTimePatternGenerator::addCanonicalItems(UErrorCode &status) {
     UnicodeString  conflictingPattern;
-    UErrorCode status = U_ZERO_ERROR;
-
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; i++) {
         addPattern(UnicodeString(Canonical_Items[i]), FALSE, conflictingPattern, status);
     }
@@ -1947,12 +1952,10 @@ PatternMapIterator::PatternMapIterator() {
     bootIndex = 0;
     nodePtr = NULL;
     patternMap=NULL;
-    matcher= new DateTimeMatcher();
 }
 
 
 PatternMapIterator::~PatternMapIterator() {
-    delete matcher;
 }
 
 void
@@ -2029,12 +2032,12 @@ PatternMapIterator::next() {
         }
     }
     if (nodePtr!=NULL) {
-        matcher->copyFrom(*nodePtr->skeleton);
+        matcher.copyFrom(*nodePtr->skeleton);
     }
     else {
-        matcher->copyFrom();
+        matcher.copyFrom();
     }
-    return *matcher;
+    return matcher;
 }
 
 PtnSkeleton::PtnSkeleton() {
