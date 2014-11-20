@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2013, International Business Machines Corporation and
+* Copyright (C) 2007-2014, International Business Machines Corporation and
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -212,10 +212,10 @@ private:
     PtnElem*  getDuplicateElem(const UnicodeString &basePattern, const PtnSkeleton& skeleton, PtnElem *baseElem);
 }; // end  PatternMap
 
-class PatternMapIterator : public UMemory {
+class PatternMapIterator {
 public:
     PatternMapIterator();
-    virtual ~PatternMapIterator();
+    ~PatternMapIterator();
     void set(PatternMap& patternMap);
     PtnSkeleton* getSkeleton();
     UBool hasNext();
@@ -223,7 +223,7 @@ public:
 private:
     int32_t bootIndex;
     PtnElem *nodePtr;
-    DateTimeMatcher *matcher;
+    DateTimeMatcher matcher;
     PatternMap *patternMap;
 };
 
