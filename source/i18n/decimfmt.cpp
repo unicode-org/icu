@@ -2209,7 +2209,7 @@ CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text,
     parse(text, parseResult, pos, curbuf);
     if (pos.getIndex() != start) {
         UErrorCode ec = U_ZERO_ERROR;
-        LocalPointer<CurrencyAmount> currAmt(new CurrencyAmount(parseResult, curbuf, ec));
+        LocalPointer<CurrencyAmount> currAmt(new CurrencyAmount(parseResult, curbuf, ec), ec);
         if (U_FAILURE(ec)) {
             pos.setIndex(start); // indicate failure
         } else {

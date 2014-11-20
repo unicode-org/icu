@@ -4357,7 +4357,7 @@ void DateFormatTest::TestDateFormatLeniency() {
        Locale locale = Locale::createFromName(itemPtr->locale);
        status = U_ZERO_ERROR;
        ParsePosition pos(0);
-       sdmft.adoptInstead(new SimpleDateFormat(itemPtr->pattern, locale, status));
+       sdmft.adoptInsteadAndCheckErrorCode(new SimpleDateFormat(itemPtr->pattern, locale, status), status);
        if (U_FAILURE(status)) {
            dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
            continue;
@@ -4548,7 +4548,7 @@ void DateFormatTest::TestNumberFormatOverride() {
     UnicodeString fields = (UnicodeString) "M";
 
     LocalPointer<SimpleDateFormat> fmt;
-    fmt.adoptInstead(new SimpleDateFormat((UnicodeString)"MM d", status));
+    fmt.adoptInsteadAndCheckErrorCode(new SimpleDateFormat((UnicodeString)"MM d", status), status);
     if (!assertSuccess("SimpleDateFormat with pattern MM d", status)) {
         return;
     }
@@ -4582,7 +4582,7 @@ void DateFormatTest::TestNumberFormatOverride() {
         fields = DATA[i][0];
         
         LocalPointer<SimpleDateFormat> fmt;
-        fmt.adoptInstead(new SimpleDateFormat((UnicodeString)"MM d", status));
+        fmt.adoptInsteadAndCheckErrorCode(new SimpleDateFormat((UnicodeString)"MM d", status), status);
         assertSuccess("SimpleDateFormat with pattern MM d", status);
         NumberFormat* overrideNF = NumberFormat::createInstance(Locale::createFromName("zh@numbers=hanidays"),status);
         assertSuccess("NumberFormat zh@numbers=hanidays", status);
