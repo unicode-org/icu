@@ -132,12 +132,13 @@ void Region::loadRegionData(UErrorCode &status) {
 
     while ( ures_hasNext(regionCodes.getAlias()) ) {
         UnicodeString regionID = ures_getNextUnicodeString(regionCodes.getAlias(), NULL, &status);
-        Region *r = new Region();
+        LocalPointer<Region> r(new Region, status);
+        if(U_FAILURE(status)) return;
         r->idStr = regionID;
         r->idStr.extract(0,r->idStr.length(),r->id,sizeof(r->id),US_INV);
         r->type = URGN_TERRITORY; // Only temporary - figure out the real type later once the aliases are known.
 
-        uhash_put(regionIDMap,(void *)&(r->idStr),(void *)r,&status);
+        uhash_put(regionIDMap,(void *)&(r->idStr),(void *)r.orphan(),&status);
         Formattable result;
         UErrorCode ps = U_ZERO_ERROR;
         df->parse(r->idStr,result,ps);
@@ -167,6 +168,12 @@ void Region::loadRegionData(UErrorCode &status) {
         } else {
             if ( aliasFromRegion == NULL ) { // Deprecated region code not in the master codes list - so need to create a deprecated region for it.
                 aliasFromRegion = new Region();
+                if ( aliasFromRegion == NULL ) {
+                  if ( U_SUCCESS(status) ) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                  }
+                  return;
+                }
                 aliasFromRegion->idStr.setTo(*aliasFromStr);
                 aliasFromRegion->idStr.extract(0,aliasFromRegion->idStr.length(),aliasFromRegion->id,sizeof(aliasFromRegion->id),US_INV);
                 uhash_put(regionIDMap,(void *)&(aliasFromRegion->idStr),(void *)aliasFromRegion,&status);
