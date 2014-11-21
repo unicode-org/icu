@@ -480,7 +480,7 @@ testLCID(UResourceBundle *currentBundle,
             log_verbose("WARNING: %-5s resolves to %s (0x%.4x)\n",
                 localeName, lcidStringC, expectedLCID);
         }
-        else if (strncmp(localeName, "hsb", 3) != 0 || !log_knownIssue("11216", "Duplicate LCID mapping for language hsb")) {
+        else {
             log_err("ERROR:   %-5s has 0x%.4x and the number resolves wrongfully to %s\n",
                 localeName, expectedLCID, lcidStringC);
         }
