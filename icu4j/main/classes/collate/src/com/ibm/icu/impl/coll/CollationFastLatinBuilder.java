@@ -590,7 +590,7 @@ final class CollationFastLatinBuilder {
                 int miniCE = encodeTwoCEs(cce0, cce1);
                 if(miniCE == CollationFastLatin.BAIL_OUT) {
                     result.append((char)(x | (1 << CollationFastLatin.CONTR_LENGTH_SHIFT)));
-                } else if(miniCE <= 0xffff) {
+                } else if((miniCE >>> 16) == 0) {  // if ((unsigned)miniCE <= 0xffff)
                     result.append((char)(x | (2 << CollationFastLatin.CONTR_LENGTH_SHIFT)));
                     result.append((char)miniCE);
                 } else {
