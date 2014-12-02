@@ -3781,7 +3781,7 @@ void RegexTest::Errors() {
     REGEX_ERR("abc{1,,2}",1,7, U_REGEX_BAD_INTERVAL);
     REGEX_ERR("abc{1,2a}",1,8, U_REGEX_BAD_INTERVAL);
     REGEX_ERR("abc{222222222222222222222}",1,14, U_REGEX_NUMBER_TOO_BIG);
-    REGEX_ERR("abc{5,50000000000}", 1, 17, U_REGEX_NUMBER_TOO_BIG);        // Overflows int during scan
+    REGEX_ERR("abc{5,50000000000}", 1, 16, U_REGEX_NUMBER_TOO_BIG);        // Overflows int during scan
     REGEX_ERR("abc{5,687865858}", 1, 16, U_REGEX_NUMBER_TOO_BIG);          // Overflows regex binary format
     REGEX_ERR("abc{687865858,687865859}", 1, 24, U_REGEX_NUMBER_TOO_BIG);
 
