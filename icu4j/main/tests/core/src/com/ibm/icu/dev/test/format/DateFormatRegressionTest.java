@@ -1479,5 +1479,13 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         for (Thread t : threads) {
             t.start();
         }
+
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                errln(e.toString());
+            }
+        }
     }
 }
