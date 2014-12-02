@@ -647,6 +647,7 @@ typedef enum UErrorCode {
     U_REGEX_STACK_OVERFLOW,               /**< Regular expression backtrack stack overflow.       */
     U_REGEX_TIME_OUT,                     /**< Maximum allowed match time exceeded                */
     U_REGEX_STOPPED_BY_CALLER,            /**< Matching operation aborted by user callback fn.    */
+    U_REGEX_PATTERN_TOO_BIG,              /**< Pattern exceeds limits on size or complexity.   @draft ICU 55   */
     U_REGEX_ERROR_LIMIT,                  /**< This must always be the last value to indicate the limit for regexp errors */
 
     /*
