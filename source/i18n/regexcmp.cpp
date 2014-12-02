@@ -1029,9 +1029,11 @@ UBool RegexCompile::doParseActions(int32_t action)
         {
             int32_t digitValue = u_charDigitValue(fC.fChar);
             U_ASSERT(digitValue >= 0);
-            fIntervalLow = fIntervalLow*10 + digitValue;
-            if (fIntervalLow < 0) {
+            int64_t val = (int64_t)fIntervalLow*10 + digitValue;
+            if (val > INT32_MAX) {
                 error(U_REGEX_NUMBER_TOO_BIG);
+            } else {
+                fIntervalLow = (int32_t)val;
             }
         }
         break;
@@ -1044,9 +1046,11 @@ UBool RegexCompile::doParseActions(int32_t action)
             }
             int32_t digitValue = u_charDigitValue(fC.fChar);
             U_ASSERT(digitValue >= 0);
-            fIntervalUpper = fIntervalUpper*10 + digitValue;
-            if (fIntervalUpper < 0) {
+            int64_t val = (int64_t)fIntervalUpper*10 + digitValue;
+            if (val > INT32_MAX) {
                 error(U_REGEX_NUMBER_TOO_BIG);
+            } else {
+                fIntervalUpper = (int32_t)val;
             }
         }
         break;
