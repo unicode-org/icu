@@ -1218,6 +1218,21 @@
 "(?<!(0123456789a){10000000})x"         E  "no match"
 "(?<!\\ubeaf(\\ubeaf{11000}){11000})"   E  "no match"
 
+# Bug 11374 Bad integer overflow check in number conversion.
+#           4294967300 converts to 4 with 32 bit overflow.
+
+"x{4294967300}"                         E  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+"x{0,4294967300}"                       E  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Bug 11373
+#
+#    Overflow checking in max match length computation for loops.
+#    Value here is 10 * 100000 * 3000 = 3G, overflowing a 32 bit signed value.
+#    Before fixing, this case give an assertion failure.
+
+"(?<=((0123456789){100000}){3000})abc"          "abc"
+
+
 
 #  Random debugging, Temporary
 #
