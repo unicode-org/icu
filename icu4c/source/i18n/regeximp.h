@@ -1,5 +1,5 @@
 //
-//   Copyright (C) 2002-2012 International Business Machines Corporation
+//   Copyright (C) 2002-2014 International Business Machines Corporation
 //   and others. All rights reserved.
 //
 //   file:  regeximp.h
@@ -254,7 +254,6 @@ enum {
 //
 //  Convenience macros for assembling and disassembling a compiled operation.
 //
-#define URX_BUILD(type, val) (int32_t)((type << 24) | (val))
 #define URX_TYPE(x)          ((uint32_t)(x) >> 24)
 #define URX_VAL(x)           ((x) & 0xffffff)
 

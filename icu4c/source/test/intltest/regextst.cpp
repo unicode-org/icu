@@ -127,7 +127,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 20: name = "CheckInvBufSize";
             if (exec) CheckInvBufSize();
             break;
-
+        case 21: name = "TestBug11371";
+            if (exec) TestBug11371();
+            break;
         default: name = "";
             break; //needed to end loop
     }
@@ -5191,6 +5193,52 @@ void RegexTest::CheckInvBufSize() {
   } else {
     logln("%s: INV_BUFSIZ is %d, usage %d\n", __FILE__, INV_BUFSIZ, inv_next);
   }
+}
+
+
+
+void RegexTest::TestBug11371() {
+    if (quick) {
+        logln("Skipping test. Runs in exhuastive mode only.");
+        return;
+    }
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString patternString;
+
+    for (int i=0; i<8000000; i++) {
+        patternString.append(UnicodeString("()"));
+    }
+    LocalPointer<RegexPattern> compiledPat(RegexPattern::compile(patternString, 0, status));
+    if (status != U_REGEX_PATTERN_TOO_BIG) {
+        errln("File %s, line %d expected status=U_REGEX_PATTERN_TOO_BIG; got %s.",
+              __FILE__, __LINE__, u_errorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    patternString = "(";
+    for (int i=0; i<20000000; i++) {
+        patternString.append(UnicodeString("A++"));
+    }
+    patternString.append(UnicodeString("){0}B++"));
+    LocalPointer<RegexPattern> compiledPat2(RegexPattern::compile(patternString, 0, status));
+    if (status != U_REGEX_PATTERN_TOO_BIG) {
+        errln("File %s, line %d expected status=U_REGEX_PATTERN_TOO_BIG; got %s.",
+              __FILE__, __LINE__, u_errorName(status));
+    }
+
+    // Pattern with too much string data, such that string indexes overflow operand data field size
+    // in compiled instruction.
+    status = U_ZERO_ERROR;
+    patternString = "";
+    while (patternString.length() < 0x00ffffff) {
+        patternString.append(UnicodeString("stuff and things dont you know, these are a few of my favorite strings\n"));
+    }
+    patternString.append(UnicodeString("X? trailing string"));
+    LocalPointer<RegexPattern> compiledPat3(RegexPattern::compile(patternString, 0, status));
+    if (status != U_REGEX_PATTERN_TOO_BIG) {
+        errln("File %s, line %d expected status=U_REGEX_PATTERN_TOO_BIG; got %s.",
+              __FILE__, __LINE__, u_errorName(status));
+    }
 }
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
