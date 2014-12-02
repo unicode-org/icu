@@ -3472,12 +3472,13 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
                 }
 
                 U_ASSERT(loopEndLoc >= loc+4);
-                int32_t  blockLen = maxMatchLength(loc+4, loopEndLoc-1);  // Recursive call.
-                if (blockLen == INT32_MAX) {
-                    currentLen = blockLen;
+                int64_t blockLen = maxMatchLength(loc+4, loopEndLoc-1);  // Recursive call.
+                int64_t updatedLen = (int64_t)currentLen + blockLen * maxLoopCount; 
+                if (updatedLen >= INT32_MAX) {
+                    currentLen = INT32_MAX;
                     break;
                 }
-                currentLen += blockLen * maxLoopCount;
+                currentLen = (int32_t)updatedLen;
                 loc = loopEndLoc;
                 break;
             }
