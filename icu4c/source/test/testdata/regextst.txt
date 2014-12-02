@@ -1227,10 +1227,10 @@
 # Bug 11373
 #
 #    Overflow checking in max match length computation for loops.
-#    Value here is 10 * 100000 * 3000 = 3G, overflowing a 32 bit signed value.
-#    Before fixing, this case give an assertion failure.
+#    Value here is 10 * 100000 * 3000 = 3E9, overflowing a 32 bit signed value.
+#    Before fixing, this case gave an assertion failure.
 
-# "(?<=((0123456789){100000}){3000})abc"          "abc"
+"(?<=((0123456789){100000}){3000})abc"  E  "abc"
 
 
 
