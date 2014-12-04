@@ -1730,7 +1730,7 @@ void RBBITest::TestUnicodeFiles() {
 // See ticket #7270.
 
 UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *fileName) {
-    static const UChar badTestCases[][4] {                     // Line Numbers from Unicode 7.0.0 file.
+    static const UChar badTestCases[][4] = {                     // Line Numbers from Unicode 7.0.0 file.
         {(UChar)0x200B, (UChar)0x0020, (UChar)0x007D, (UChar)0x0000},   // Line 5198
         {(UChar)0x200B, (UChar)0x0020, (UChar)0x0029, (UChar)0x0000},   // Line 5202
         {(UChar)0x200B, (UChar)0x0020, (UChar)0x0021, (UChar)0x0000},   // Line 5214
