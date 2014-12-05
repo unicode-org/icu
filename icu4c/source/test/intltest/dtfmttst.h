@@ -244,6 +244,9 @@ public:
     void TestCreateInstanceForSkeleton();
     void TestCreateInstanceForSkeletonDefault();
     void TestCreateInstanceForSkeletonWithCalendar();
+    void TestDFSCreateForLocaleNonGregorianLocale();
+    void TestDFSCreateForLocaleWithCalendarInLocale();
+    void TestChangeCalendar();
 
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);

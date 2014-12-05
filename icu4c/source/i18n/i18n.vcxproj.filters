@@ -698,7 +698,10 @@
     <ClInclude Include="sharedbreakiterator.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="shareddatefmt.h">
+    <ClInclude Include="sharedcalendar.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="shareddateformatsymbols.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="shareddatetimepatterngenerator.h">

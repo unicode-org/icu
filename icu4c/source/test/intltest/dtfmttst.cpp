@@ -108,6 +108,9 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestCreateInstanceForSkeleton);
     TESTCASE_AUTO(TestCreateInstanceForSkeletonDefault);
     TESTCASE_AUTO(TestCreateInstanceForSkeletonWithCalendar);
+    TESTCASE_AUTO(TestDFSCreateForLocaleNonGregorianLocale);
+    TESTCASE_AUTO(TestDFSCreateForLocaleWithCalendarInLocale);
+    TESTCASE_AUTO(TestChangeCalendar);
 
     TESTCASE_AUTO_END;
 }
@@ -4685,6 +4688,63 @@ void DateFormatTest::TestCreateInstanceForSkeletonWithCalendar() {
     assertEquals("format yMdHm", "5/25/1998, 04:00", result);
     assertSuccess("", status);
 }
+
+void DateFormatTest::TestDFSCreateForLocaleNonGregorianLocale() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale fa("fa");
+    LocalPointer<DateFormatSymbols> sym(
+            DateFormatSymbols::createForLocale(fa, status));
+    if (!assertSuccess("", status)) {
+        return;
+    }
+
+    // Farsi should default to the persian calendar, not gregorian
+    int32_t count;
+    const UnicodeString *months = sym->getShortMonths(count);
+
+    // First persian month.
+    UnicodeString expected("\\u0641\\u0631\\u0648\\u0631\\u062f\\u06cc\\u0646");
+    assertEquals("", expected.unescape(), months[0]);
+}
+
+void DateFormatTest::TestDFSCreateForLocaleWithCalendarInLocale() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale en_heb("en@calendar=hebrew");
+    LocalPointer<DateFormatSymbols> sym(
+            DateFormatSymbols::createForLocale(en_heb, status));
+    if (!assertSuccess("", status)) {
+        return;
+    }
+
+    // We should get the months of the hebrew calendar, not the gregorian
+    // calendar.
+    int32_t count;
+    const UnicodeString *months = sym->getShortMonths(count);
+
+    // First hebrew month.
+    UnicodeString expected("Tishri");
+    assertEquals("", expected, months[0]);
+}
+
+void DateFormatTest::TestChangeCalendar() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale en("en");
+    Locale en_heb("en@calendar=hebrew");
+    LocalPointer<DateFormat> fmt(
+            DateFormat::createInstanceForSkeleton("yMMMd", en, status));
+    if (!assertSuccess("", status)) {
+        return;
+    }
+    fmt->adoptCalendar(Calendar::createInstance(en_heb, status));
+    if (!assertSuccess("", status)) {
+        return;
+    }
+    UnicodeString result;
+    FieldPosition pos(0);
+    fmt->format(date(98, 5-1, 25), result, pos);
+    assertEquals("format yMMMd", "Iyar 29, 5758", result);
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

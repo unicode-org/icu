@@ -394,7 +394,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
     initializeBooleanAttributes();
-    initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
+    initializeCalendar(NULL,fLocale,status);
+    fSymbols = DateFormatSymbols::createForLocale(fLocale, status);
     initialize(fLocale, status);
     initializeDefaultCentury();
 
@@ -414,7 +415,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
     initializeBooleanAttributes();
-    initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
+    initializeCalendar(NULL,fLocale,status);
+    fSymbols = DateFormatSymbols::createForLocale(fLocale, status);
     initialize(fLocale, status);
     initializeDefaultCentury();
 
@@ -438,7 +440,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeOverride.setToBogus();
     initializeBooleanAttributes();
 
-    initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
+    initializeCalendar(NULL,fLocale,status);
+    fSymbols = DateFormatSymbols::createForLocale(fLocale, status);
     initialize(fLocale, status);
     initializeDefaultCentury();
 }
@@ -460,7 +463,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeOverride.setToBogus();
     initializeBooleanAttributes();
 
-    initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
+    initializeCalendar(NULL,fLocale,status);
+    fSymbols = DateFormatSymbols::createForLocale(fLocale, status);
     initialize(fLocale, status);
     initializeDefaultCentury();
 
@@ -550,7 +554,8 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 {
     if (U_FAILURE(status)) return;
     initializeBooleanAttributes();
-    initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
+    initializeCalendar(NULL, fLocale, status);
+    fSymbols = DateFormatSymbols::createForLocale(fLocale, status);
     if (U_FAILURE(status))
     {
         status = U_ZERO_ERROR;
@@ -699,7 +704,7 @@ void SimpleDateFormat::construct(EStyle timeStyle,
                  ures_getLocaleByType(dateTimePatterns, ULOC_ACTUAL_LOCALE, &status));
 
     // create a symbols object from the locale
-    initializeSymbols(locale,fCalendar, status);
+    fSymbols = DateFormatSymbols::createForLocale(locale, status);
     if (U_FAILURE(status)) return;
     /* test for NULL */
     if (fSymbols == 0) {
@@ -870,26 +875,7 @@ SimpleDateFormat::initializeCalendar(TimeZone* adoptZone, const Locale& locale, 
     if(!U_FAILURE(status)) {
         fCalendar = Calendar::createInstance(adoptZone?adoptZone:TimeZone::createDefault(), locale, status);
     }
-    if (U_SUCCESS(status) && fCalendar == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
     return fCalendar;
-}
-
-void
-SimpleDateFormat::initializeSymbols(const Locale& locale, Calendar* calendar, UErrorCode& status)
-{
-  if(U_FAILURE(status)) {
-    fSymbols = NULL;
-  } else {
-    // pass in calendar type - use NULL (default) if no calendar set (or err).
-    fSymbols = new DateFormatSymbols(locale, calendar?calendar->getType() :NULL , status);
-    // Null pointer check
-    if (fSymbols == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-  }
 }
 
 void
@@ -3517,10 +3503,16 @@ SimpleDateFormat::setTimeZoneFormat(const TimeZoneFormat& newTimeZoneFormat)
 void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
 {
   UErrorCode status = U_ZERO_ERROR;
+  Locale calLocale(fLocale);
+  calLocale.setKeywordValue("calendar", calendarToAdopt->getType(), status);
+  DateFormatSymbols *newSymbols =
+          DateFormatSymbols::createForLocale(calLocale, status);
+  if (U_FAILURE(status)) {
+      return;
+  }
   DateFormat::adoptCalendar(calendarToAdopt);
   delete fSymbols;
-  fSymbols=NULL;
-  initializeSymbols(fLocale, fCalendar, status);  // we need new symbols
+  fSymbols = newSymbols;
   initializeDefaultCentury();  // we need a new century (possibly)
 }
 

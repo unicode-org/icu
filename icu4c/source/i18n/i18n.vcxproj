@@ -1152,7 +1152,8 @@
     <ClInclude Include="plurrule_impl.h" />
     <ClInclude Include="quantityformatter.h" />
     <ClInclude Include="sharedbreakiterator.h" />
-    <ClInclude Include="shareddatefmt.h" />
+    <ClInclude Include="sharedcalendar.h" />
+    <ClInclude Include="shareddateformatsymbols.h" />
     <ClInclude Include="shareddatetimepatterngenerator.h" />
     <ClInclude Include="sharednumberformat.h" />
     <ClInclude Include="sharedpluralrules.h" />
