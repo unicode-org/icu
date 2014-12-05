@@ -1311,14 +1311,6 @@ private:
     Calendar *initializeCalendar(TimeZone* adoptZone, const Locale& locale, UErrorCode& status);
 
     /**
-     * initializes fSymbols from parameters.
-     * @param locale Locale of the symbols
-     * @param calendar Alias to Calendar that will be used.
-     * @param status Error code
-     */
-    void initializeSymbols(const Locale& locale, Calendar* calendar, UErrorCode& status);
-
-    /**
      * Called by several of the constructors to load pattern data and formatting symbols
      * out of a resource bundle and initialize the locale based on it.
      * @param timeStyle     The time style, as passed to DateFormat::createDateInstance().
