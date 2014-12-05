@@ -2471,7 +2471,7 @@ public:
      * @return the new Calendar object with no time or timezone set.
      * @internal For ICU use only.
      */
-    static Calendar U_EXPORT2 *makeInstance(
+    static Calendar * U_EXPORT2 makeInstance(
             const Locale &locale, UErrorCode &status);
 
     /**
