@@ -4587,4 +4587,29 @@ public class ULocaleTest extends TestFmwk {
         assertFalse("fil LTR", new ULocale("fil").isRightToLeft());
         assertFalse("he-Zyxw LTR", new ULocale("he-Zyxw").isRightToLeft());
     }
+
+    public void TestChineseToLocale() {
+        final ULocale[][] LOCALES = {
+                {ULocale.CHINESE,               new ULocale("zh")},
+                {ULocale.SIMPLIFIED_CHINESE,    new ULocale("zh_Hans")},
+                {ULocale.TRADITIONAL_CHINESE,   new ULocale("zh_Hant")},
+                {ULocale.CHINA,                 new ULocale("zh_Hans_CN")},
+                {ULocale.PRC,                   new ULocale("zh_Hans_CN")},
+                {ULocale.TAIWAN,                new ULocale("zh_Hant_TW")},
+        };
+
+        // When two ULocales are equal, results of ULocale#toLocale() must be
+        // also equal.
+        for (ULocale[] pair : LOCALES) {
+            if (pair[0].equals(pair[1])) {
+                assertEquals(pair[0].toString(), pair[0].toLocale(), pair[1].toLocale());
+            } else {
+                // This could happen when the definition of ULocale constant is changed.
+                // When it happens, it could be a mistake. So we use errln below.
+                // If we change the definitioin for a legitimate reason, then the hardcoded
+                // test data above should be reviewed and updated.
+                errln("Error: " + pair[0] + " is not equal to " + pair[1]);
+            }
+        }
+    }
 }

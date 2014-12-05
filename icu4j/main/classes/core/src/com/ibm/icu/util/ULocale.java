@@ -113,6 +113,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = 3715177670352309217L;
 
+    private static ICUCache<String, String> nameCache = new SimpleCache<String, String>();
+
     /**
      * Useful constant for language.
      * @stable ICU 3.0
@@ -155,17 +157,41 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      */
     public static final ULocale CHINESE = new ULocale("zh", Locale.CHINESE);
 
-    /**
-     * Useful constant for language.
-     * @stable ICU 3.0
-     */
-    public static final ULocale SIMPLIFIED_CHINESE = new ULocale("zh_Hans", Locale.CHINESE);
+
+    // Special note about static initializer for
+    //   - SIMPLIFIED_CHINESE
+    //   - TRADTIONAL_CHINESE
+    //   - CHINA
+    //   - TAIWAN
+    //
+    // Equivalent JDK Locale for ULocale.SIMPLIFIED_CHINESE is different
+    // by JRE version. JRE 7 or later supports a script tag "Hans", while
+    // JRE 6 or older does not. JDK's Locale.SIMPLIFIED_CHINESE is actually
+    // zh_CN, not zh_Hans. This is same in Java 7 or later versions.
+    //
+    // ULocale#toLocale() implementation uses Java reflection to create a Locale
+    // with a script tag. When a new ULocale is constructed with the single arg
+    // constructor, the volatile field 'Locale locale' is initialized by
+    // #toLocale() method.
+    //
+    // Because we cannot hardcode corresponding JDK Locale representation below,
+    // SIMPLIFIED_CHINESE is constructed without JDK Locale argument, and
+    // #toLocale() is used for resolving the best matching JDK Locale at runtime.
+    //
+    // The same thing applies to TRADITIONAL_CHINESE.
 
     /**
      * Useful constant for language.
      * @stable ICU 3.0
      */
-    public static final ULocale TRADITIONAL_CHINESE = new ULocale("zh_Hant", Locale.CHINESE);
+    public static final ULocale SIMPLIFIED_CHINESE = new ULocale("zh_Hans");
+
+
+    /**
+     * Useful constant for language.
+     * @stable ICU 3.0
+     */
+    public static final ULocale TRADITIONAL_CHINESE = new ULocale("zh_Hant");
 
     /**
      * Useful constant for country/region.
@@ -201,7 +227,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * Useful constant for country/region.
      * @stable ICU 3.0
      */
-    public static final ULocale CHINA = new ULocale("zh_Hans_CN", Locale.CHINA);
+    public static final ULocale CHINA = new ULocale("zh_Hans_CN");
 
     /**
      * Useful constant for country/region.
@@ -213,7 +239,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * Useful constant for country/region.
      * @stable ICU 3.0
      */
-    public static final ULocale TAIWAN = new ULocale("zh_Hant_TW", Locale.TAIWAN);
+    public static final ULocale TAIWAN = new ULocale("zh_Hant_TW");
 
     /**
      * Useful constant for country/region.
@@ -526,8 +552,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         }
         return locale;
     }
-
-    private static ICUCache<String, String> nameCache = new SimpleCache<String, String>();
 
     /**
      * Keep our own default ULocale.
