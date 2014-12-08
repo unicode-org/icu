@@ -167,8 +167,6 @@ public:
                 const DecimalFormatStaticSets &decimalFormatSets,
                 UnicodeString &appendTo,
                 UErrorCode &status) const;
-    private:
-        friend class ScientificFormatHelper;
     };
 
     class U_I18N_API MarkupStyle : public Style {
@@ -191,7 +189,6 @@ public:
     private:
         UnicodeString fBeginMarkup;
         UnicodeString fEndMarkup;
-        friend class ScientificFormatHelper;
     };
 
     ScientificNumberFormatter(
@@ -215,7 +212,6 @@ public:
     Style *fStyle;
     const DecimalFormatStaticSets *fStaticSets;
 
-    friend class ScientificFormatHelper;
 };
 
 U_NAMESPACE_END
