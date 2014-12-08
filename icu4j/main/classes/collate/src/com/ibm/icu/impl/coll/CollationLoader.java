@@ -104,8 +104,9 @@ public final class CollationLoader {
 
         UResourceBundle bundle = null;
         try {
-            bundle = UResourceBundle.getBundleInstance(
-                    ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale);
+            bundle = ICUResourceBundle.getBundleInstance(
+                    ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale,
+                    ICUResourceBundle.OpenType.LOCALE_ROOT);
         } catch (MissingResourceException e) {
             outValidLocale.value = ULocale.ROOT;
             return root;

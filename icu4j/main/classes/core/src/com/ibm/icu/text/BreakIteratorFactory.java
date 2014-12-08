@@ -20,7 +20,6 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 /**
  * @author Ram
@@ -84,6 +83,19 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 
             markDefault();
         }
+
+        /**
+         * createBreakInstance() returns an appropriate BreakIterator for any locale.
+         * It falls back to root if there is no specific data.
+         *
+         * <p>Without this override, the service code would fall back to the default locale
+         * which is not desirable for an algorithm with a good Unicode default,
+         * like break iteration.
+         */
+        @Override
+        public String validateFallbackLocale() {
+            return "";
+        }
     }
     static final ICULocaleService service = new BFService();
 
@@ -101,7 +113,9 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
     private static BreakIterator createBreakInstance(ULocale locale, int kind) {
 
         RuleBasedBreakIterator    iter = null;
-        ICUResourceBundle rb           = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME, locale);
+        ICUResourceBundle rb           = (ICUResourceBundle)ICUResourceBundle.
+                getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME, locale,
+                        ICUResourceBundle.OpenType.LOCALE_ROOT);
 
         //
         //  Get the binary rules.

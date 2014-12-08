@@ -124,6 +124,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                     super(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
                 }
 
+                @Override
                 protected Object handleCreate(ULocale uloc, int kind, ICUService srvc) {
                     return makeInstance(uloc);
                 }
@@ -132,6 +133,20 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             this.registerFactory(new CollatorFactory());
             markDefault();
         }
+
+        /**
+         * makeInstance() returns an appropriate Collator for any locale.
+         * It falls back to root if there is no specific data.
+         *
+         * <p>Without this override, the service code would fall back to the default locale
+         * which is not desirable for an algorithm with a good Unicode default,
+         * like collation.
+         */
+        @Override
+        public String validateFallbackLocale() {
+            return "";
+        }
+
         ///CLOVER:OFF
         // The following method can not be reached by testing
         protected Object handleDefault(Key key, String[] actualIDReturn) {
