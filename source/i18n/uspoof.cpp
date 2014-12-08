@@ -58,6 +58,7 @@ static void U_CALLCONV initializeStatics(UErrorCode &status) {
            "[\\u0027\\u002D-\\u002E\\u003A\\u00B7\\u0375\\u058A\\u05F3-\\u05F4"
            "\\u06FD-\\u06FE\\u0F0B\\u200C-\\u200D\\u2010\\u2019\\u2027\\u30A0\\u30FB]";
     gInclusionSet = new UnicodeSet(UnicodeString(inclusionPat, -1, US_INV), status);
+    gInclusionSet->freeze();
     
     // Note: data from http://unicode.org/Public/security/latest/xidmodifications.txt version 7.0.0
     //       No tooling to generate this from the .txt file, hand extracted with editor macros.
@@ -127,6 +128,7 @@ static void U_CALLCONV initializeStatics(UErrorCode &status) {
             "\\uFA27-\\uFA29\\U0001B000-\\U0001B001\\U00020000-\\U0002A6D6\\U0002A700-\\U0002B734"
             "\\U0002B740-\\U0002B81D]";
     gRecommendedSet = new UnicodeSet(UnicodeString(recommendedPat, -1, US_INV), status);
+    gRecommendedSet->freeze();
     gNfdNormalizer = Normalizer2::getNFDInstance(status);
     ucln_i18n_registerCleanup(UCLN_I18N_SPOOF, uspoof_cleanup);
 }
