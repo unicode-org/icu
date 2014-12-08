@@ -1042,24 +1042,23 @@ public class CollationAPITest extends TestFmwk {
             }
         }
 
-        /* completely non-existent locale for collator should get a default collator */
+        /* completely non-existent locale for collator should get a root collator */
         {
-            Collator defaultColl = Collator.getInstance();
             try {
                 coll = Collator.getInstance(new ULocale("blahaha"));
             } catch(Exception e) {
                 errln("Failed to open collator with " + e);
                 return;
             }
-            if(!coll.getLocale(ULocale.VALID_LOCALE).equals(
-                    defaultColl.getLocale(ULocale.VALID_LOCALE))) {
-                errln("Valid locale for nonexisting locale locale collator differs " +
-                      "from valid locale for default collator");
+            ULocale valid = coll.getLocale(ULocale.VALID_LOCALE);
+            String name = valid.getName();
+            if(name.length() != 0 && !name.equals("root")) {
+                errln("Valid locale for nonexisting locale collator is \"" + name + "\" not root");
             }
-            if(!coll.getLocale(ULocale.ACTUAL_LOCALE).equals(
-                defaultColl.getLocale(ULocale.ACTUAL_LOCALE))) {
-                errln("Actual locale for nonexisting locale locale collator differs " +
-                      "from actual locale for default collator");
+            ULocale actual = coll.getLocale(ULocale.ACTUAL_LOCALE);
+            name = actual.getName();
+            if(name.length() != 0 && !name.equals("root")) {
+                errln("Actual locale for nonexisting locale collator is \"" + name + "\" not root");
             }
         }
 

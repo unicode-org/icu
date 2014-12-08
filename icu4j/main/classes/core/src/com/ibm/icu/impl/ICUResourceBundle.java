@@ -1077,19 +1077,80 @@ public  class ICUResourceBundle extends UResourceBundle {
         assert false : "hashCode not designed";
         return 42;
     }
-    
+
+    public enum OpenType {  // C++ uresbund.cpp: enum UResOpenType
+        /**
+         * Open a resource bundle for the locale;
+         * if there is not even a base language bundle, then fall back to the default locale;
+         * if there is no bundle for that either, then load the root bundle.
+         *
+         * <p>This is the default bundle loading behavior.
+         */
+        LOCALE_DEFAULT_ROOT,
+        // TODO: ICU ticket #11271 "consistent default locale across locale trees"
+        // Add an option to look at the main locale tree for whether to
+        // fall back to root directly (if the locale has main data) or
+        // fall back to the default locale first (if the locale does not even have main data).
+        /**
+         * Open a resource bundle for the locale;
+         * if there is not even a base language bundle, then load the root bundle;
+         * never fall back to the default locale.
+         *
+         * <p>This is used for algorithms that have good pan-Unicode default behavior,
+         * such as case mappings, collation, and segmentation (BreakIterator).
+         */
+        LOCALE_ROOT,
+        /**
+         * Open a resource bundle for the exact bundle name as requested;
+         * no fallbacks, do not load parent bundles.
+         *
+         * <p>This is used for supplemental (non-locale) data.
+         */
+        DIRECT
+    };
+
     // This method is for super class's instantiateBundle method
     public static UResourceBundle getBundleInstance(String baseName, String localeID,
                                                     ClassLoader root, boolean disableFallback){
-        UResourceBundle b = instantiateBundle(baseName, localeID, root, disableFallback);
+        UResourceBundle b = instantiateBundle(baseName, localeID, root,
+                disableFallback ? OpenType.DIRECT : OpenType.LOCALE_DEFAULT_ROOT);
         if(b==null){
             throw new MissingResourceException("Could not find the bundle "+ baseName+"/"+ localeID+".res","","");
         }
         return b;
     }
+
+    protected static UResourceBundle instantiateBundle(String baseName, String localeID,
+            ClassLoader root, boolean disableFallback){
+        return instantiateBundle(baseName, localeID, root,
+                disableFallback ? OpenType.DIRECT : OpenType.LOCALE_DEFAULT_ROOT);
+    }
+
+    public static UResourceBundle getBundleInstance(
+            String baseName, ULocale locale, OpenType openType) {
+        if (locale == null) {
+            locale = ULocale.getDefault();
+        }
+        return getBundleInstance(baseName, locale.toString(),
+                ICUResourceBundle.ICU_DATA_CLASS_LOADER, openType);
+    }
+
+    public static UResourceBundle getBundleInstance(String baseName, String localeID,
+            ClassLoader root, OpenType openType) {
+        if (baseName == null) {
+            baseName = ICUData.ICU_BASE_NAME;
+        }
+        UResourceBundle b = instantiateBundle(baseName, localeID, root, openType);
+        if(b==null){
+            throw new MissingResourceException(
+                    "Could not find the bundle "+ baseName+"/"+ localeID+".res","","");
+        }
+        return b;
+    }
+
     //  recursively build bundle
-    protected synchronized static UResourceBundle instantiateBundle(String baseName, String localeID,
-                                                                    ClassLoader root, boolean disableFallback){
+    private synchronized static UResourceBundle instantiateBundle(String baseName, String localeID,
+            ClassLoader root, OpenType openType) {
         ULocale defaultLocale = ULocale.getDefault();
         String localeName = localeID;
         if(localeName.indexOf('@')>=0){
@@ -1115,9 +1176,19 @@ public  class ICUResourceBundle extends UResourceBundle {
         if (b == null) {
             b = ICUResourceBundle.createBundle(baseName, localeName, root);
 
-            if(DEBUG)System.out.println("The bundle created is: "+b+" and disableFallback="+disableFallback+" and bundle.getNoFallback="+(b!=null && b.getNoFallback()));
-            if(disableFallback || (b!=null && b.getNoFallback())){
+            if(DEBUG)System.out.println("The bundle created is: "+b+" and openType="+openType+" and bundle.getNoFallback="+(b!=null && b.getNoFallback()));
+            if (openType == OpenType.DIRECT || (b != null && b.getNoFallback())) {
                 // no fallback because the caller said so or because the bundle says so
+                //
+                // TODO for b!=null: In C++, ures_openDirect() builds the parent chain
+                // for its bundle unless its nofallback flag is set.
+                // Otherwise we get test failures.
+                // For example, item aliases are followed via ures_openDirect(),
+                // and fail if the target bundle needs fallbacks but the chain is not set.
+                // Figure out why Java does not build the parent chain
+                // for a bundle that does not have nofallback.
+                // Are the relevant test cases just disabled?
+                // Do item aliases not get followed via "direct" loading?
                 return addToCache(root, fullName, defaultLocale, b);
             }
 
@@ -1126,13 +1197,14 @@ public  class ICUResourceBundle extends UResourceBundle {
                 int i = localeName.lastIndexOf('_');
                 if (i != -1) {
                     String temp = localeName.substring(0, i);
-                    b = (ICUResourceBundle)instantiateBundle(baseName, temp, root, disableFallback);
+                    b = (ICUResourceBundle)instantiateBundle(baseName, temp, root, openType);
                     if(b!=null && b.getULocale().getName().equals(temp)){
                         b.setLoadingStatus(ICUResourceBundle.FROM_FALLBACK);
                     }
                 }else{
-                    if(defaultID.indexOf(localeName)==-1){
-                        b = (ICUResourceBundle)instantiateBundle(baseName, defaultID, root, disableFallback);
+                    if(openType == OpenType.LOCALE_DEFAULT_ROOT &&
+                            !defaultLocale.getLanguage().equals(localeName)) {
+                        b = (ICUResourceBundle)instantiateBundle(baseName, defaultID, root, openType);
                         if(b!=null){
                             b.setLoadingStatus(ICUResourceBundle.FROM_DEFAULT);
                         }
@@ -1150,11 +1222,12 @@ public  class ICUResourceBundle extends UResourceBundle {
 
                 b = (ICUResourceBundle)addToCache(root, fullName, defaultLocale, b);
 
+                // TODO: C++ uresbund.cpp also checks for %%ParentIsRoot. Why not Java?
                 String parentLocaleName = ((ICUResourceBundleImpl.ResourceTable)b).findString("%%Parent");
                 if (parentLocaleName != null) {
-                    parent = instantiateBundle(baseName, parentLocaleName, root, disableFallback);
+                    parent = instantiateBundle(baseName, parentLocaleName, root, openType);
                 } else if (i != -1) {
-                    parent = instantiateBundle(baseName, localeName.substring(0, i), root, disableFallback);
+                    parent = instantiateBundle(baseName, localeName.substring(0, i), root, openType);
                 } else if (!localeName.equals(rootLocale)){
                     parent = instantiateBundle(baseName, rootLocale, root, true);
                 }

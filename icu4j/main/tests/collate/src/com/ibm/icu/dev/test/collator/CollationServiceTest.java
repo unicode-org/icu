@@ -247,8 +247,10 @@ public class CollationServiceTest extends TestFmwk {
     
             ULocale bar_BAR = new ULocale("bar_BAR");
             Collator col = Collator.getInstance(bar_BAR);
-            if (!col.getLocale(ULocale.VALID_LOCALE).equals(ULocale.getDefault())) {
-                errln("Collation from bar_BAR is really " + col.getLocale(ULocale.VALID_LOCALE));
+            ULocale valid = col.getLocale(ULocale.VALID_LOCALE);
+            String validName = valid.getName();
+            if(validName.length() != 0 && !validName.equals("root")) {
+                errln("Collation from bar_BAR is really \"" + validName + "\" but should be root");
             }
         }
 
