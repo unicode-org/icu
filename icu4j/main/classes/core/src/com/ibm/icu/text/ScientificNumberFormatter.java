@@ -128,9 +128,8 @@ public final class ScientificNumberFormatter {
     /**
      * A style type for ScientificNumberFormatter. All Style instances are immutable
      * and thread-safe.
-     * TODO: Make private once ScientificFormatHelper is deleted.
      */
-    static abstract class Style {
+    private static abstract class Style {
         abstract String format(
                 AttributedCharacterIterator iterator,
                 String preExponent); // '* 10^'
@@ -150,8 +149,7 @@ public final class ScientificNumberFormatter {
         }
     }
     
-    // TODO: make private
-    static class MarkupStyle extends Style {
+    private static class MarkupStyle extends Style {
         
         private final String beginMarkup;
         private final String endMarkup;
@@ -201,8 +199,7 @@ public final class ScientificNumberFormatter {
         }
     }
     
-    // TODO: Make private
-    static class SuperscriptStyle extends Style {
+    private static class SuperscriptStyle extends Style {
         
         private static final char[] SUPERSCRIPT_DIGITS = {
             0x2070, 0xB9, 0xB2, 0xB3, 0x2074, 0x2075, 0x2076, 0x2077, 0x2078, 0x2079
@@ -304,7 +301,7 @@ public final class ScientificNumberFormatter {
             
     }
     
-    static String getPreExponent(DecimalFormatSymbols dfs) {
+    private static String getPreExponent(DecimalFormatSymbols dfs) {
         StringBuilder preExponent = new StringBuilder();
         preExponent.append(dfs.getExponentMultiplicationSign());
         char[] digits = dfs.getDigits();
@@ -312,14 +309,14 @@ public final class ScientificNumberFormatter {
         return preExponent.toString();
     }
     
-    static ScientificNumberFormatter getInstance(
+    private static ScientificNumberFormatter getInstance(
             DecimalFormat decimalFormat, Style style) {
         DecimalFormatSymbols dfs = decimalFormat.getDecimalFormatSymbols();
         return new ScientificNumberFormatter(
                 (DecimalFormat) decimalFormat.clone(), getPreExponent(dfs), style);
     }
      
-    static ScientificNumberFormatter getInstanceForLocale(
+    private static ScientificNumberFormatter getInstanceForLocale(
             ULocale locale, Style style) {
         DecimalFormat decimalFormat =
                 (DecimalFormat) DecimalFormat.getScientificInstance(locale);
@@ -329,7 +326,7 @@ public final class ScientificNumberFormatter {
                 style);
     }
     
-    static final Style SUPER_SCRIPT = new SuperscriptStyle();
+    private static final Style SUPER_SCRIPT = new SuperscriptStyle();
     
     private ScientificNumberFormatter(
             DecimalFormat decimalFormat, String preExponent, Style style) {
