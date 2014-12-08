@@ -670,8 +670,8 @@ readAnElement(FILE *data,
                     fprintf(stderr, "Warning: invalid UCA weight byte 01 for %s\n", buffer);
                     return FALSE;
                 }
-                if ((j == 7 || j == 3 || j == 1) && b == 2) {
-                    fprintf(stderr, "Warning: invalid UCA weight lead byte 02 for %s\n", buffer);
+                if (j == 7 && b == 2) {
+                    fprintf(stderr, "Warning: invalid UCA primary weight lead byte 02 for %s\n", buffer);
                     return FALSE;
                 }
                 if (j == 7) {
