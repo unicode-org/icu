@@ -534,12 +534,15 @@ static void TestUSpoofCAPI(void) {
      * get Inclusion and Recommended sets
      */
     TEST_SETUP
-        USet *inclusions = uspoof_getInclusionSet(&status);
+        const USet *inclusions = NULL;
+        const USet *recommended = NULL;
+
+        inclusions = uspoof_getInclusionSet(&status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(TRUE, uset_isFrozen(inclusions));
 
         status = U_ZERO_ERROR;
-        USet *recommended = uspoof_getRecommendedSet(&status);
+        recommended = uspoof_getRecommendedSet(&status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(TRUE, uset_isFrozen(recommended));
     TEST_TEARDOWN;
