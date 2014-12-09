@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -485,6 +485,13 @@ U_CAPI const UHashElement* U_EXPORT2
 uhash_find(const UHashtable *hash, const void* key);
 
 /**
+ * \def UHASH_FIRST
+ * Constant for use with uhash_nextElement
+ * @see uhash_nextElement
+ */
+#define UHASH_FIRST (-1)
+
+/**
  * Iterate through the elements of a UHashtable.  The caller must not
  * modify the returned object.  However, uhash_removeElement() may be
  * called during iteration to remove an element from the table.
@@ -492,7 +499,7 @@ uhash_find(const UHashtable *hash, const void* key);
  * called during iteration the iteration will then be out of sync and
  * should be restarted.
  * @param hash The target UHashtable.
- * @param pos This should be set to -1 initially, and left untouched
+ * @param pos This should be set to UHASH_FIRST initially, and left untouched
  * thereafter.
  * @return a hash element, or NULL if no further key-value pairs
  * exist in the table.

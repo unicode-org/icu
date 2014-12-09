@@ -1261,7 +1261,7 @@ DateTimePatternGenerator::copyHashtable(Hashtable *other, UErrorCode &status) {
     if(U_FAILURE(status)){
         return;
     }
-    int32_t pos = -1;
+    int32_t pos = UHASH_FIRST;
     const UHashElement* elem = NULL;
     // walk through the hash table and create a deep clone
     while((elem = other->nextElement(pos))!= NULL){

@@ -187,7 +187,7 @@ static int32_t ures_flushCache()
     do {
         deletedMore = FALSE;
         /*creates an enumeration to iterate through every element in the table */
-        pos = -1;
+        pos = UHASH_FIRST;
         while ((e = uhash_nextElement(cache, &pos)) != NULL)
         {
             resB = (UResourceDataEntry *) e->value.pointer;
@@ -222,7 +222,7 @@ static int32_t ures_flushCache()
 
 U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
   UBool cacheNotEmpty = FALSE;
-  int32_t pos = -1;
+  int32_t pos = UHASH_FIRST;
   const UHashElement *e;
   UResourceDataEntry *resB;
   
