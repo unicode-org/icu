@@ -305,7 +305,7 @@ void Region::loadRegionData(UErrorCode &status) {
     }
 
     // Create the availableRegions lists
-    int32_t pos = -1;
+    int32_t pos = UHASH_FIRST;
     while ( const UHashElement* element = uhash_nextElement(regionIDMap,&pos)) {
         Region *ar = (Region *)element->value.pointer;
         if ( availableRegions[ar->type] == NULL ) {

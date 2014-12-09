@@ -997,9 +997,6 @@ CollationAPITest::TestCompare(/* char* par */)
 void
 CollationAPITest::TestGetAll(/* char* par */)
 {
-    if (logKnownIssue("10774","Side effects from utility/LocaleTest/TestGetLocale")) {
-        return;
-    }
     int32_t count1, count2;
     UErrorCode status = U_ZERO_ERROR;
 
