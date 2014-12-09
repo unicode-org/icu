@@ -867,39 +867,39 @@ Collator::getAvailableLocales(void)
     return NULL;
 }
 
-StringEnumeration* U_EXPORT2
-Collator::getKeywords(UErrorCode& status) {
-    // This is a wrapper over ucol_getKeywords
-    UEnumeration* uenum = ucol_getKeywords(&status);
+static StringEnumeration *
+newUStringEnumeration(UEnumeration *uenumToAdopt, UErrorCode &status) {
     if (U_FAILURE(status)) {
-        uenum_close(uenum);
+        uenum_close(uenumToAdopt);
         return NULL;
     }
-    return new UStringEnumeration(uenum);
+    StringEnumeration *result = new UStringEnumeration(uenumToAdopt);
+    if (result == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        uenum_close(uenumToAdopt);
+        return NULL;
+    }
+    return result;
+}
+
+StringEnumeration* U_EXPORT2
+Collator::getKeywords(UErrorCode& status) {
+    return newUStringEnumeration(ucol_getKeywords(&status), status);
 }
 
 StringEnumeration* U_EXPORT2
 Collator::getKeywordValues(const char *keyword, UErrorCode& status) {
-    // This is a wrapper over ucol_getKeywordValues
-    UEnumeration* uenum = ucol_getKeywordValues(keyword, &status);
-    if (U_FAILURE(status)) {
-        uenum_close(uenum);
-        return NULL;
-    }
-    return new UStringEnumeration(uenum);
+    return newUStringEnumeration(
+            ucol_getKeywordValues(keyword, &status), status);
 }
 
 StringEnumeration* U_EXPORT2
 Collator::getKeywordValuesForLocale(const char* key, const Locale& locale,
                                     UBool commonlyUsed, UErrorCode& status) {
-    // This is a wrapper over ucol_getKeywordValuesForLocale
-    UEnumeration *uenum = ucol_getKeywordValuesForLocale(key, locale.getName(),
-                                                        commonlyUsed, &status);
-    if (U_FAILURE(status)) {
-        uenum_close(uenum);
-        return NULL;
-    }
-    return new UStringEnumeration(uenum);
+    return newUStringEnumeration(
+            ucol_getKeywordValuesForLocale(
+                    key, locale.getName(), commonlyUsed, &status),
+            status);
 }
 
 Locale U_EXPORT2
