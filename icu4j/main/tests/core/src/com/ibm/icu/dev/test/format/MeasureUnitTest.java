@@ -1035,6 +1035,13 @@ public class MeasureUnitTest extends TestFmwk {
         verifyEqualsHashCode(mf, mfeq, mfne);
         verifyEqualsHashCode(mf, mfeq, mfne2);
     }
+
+    public void testEqHashCodeOfMeasure() {
+        Measure _3feetDouble = new Measure(3.0, MeasureUnit.FOOT);
+        Measure _3feetInt = new Measure(3, MeasureUnit.FOOT);
+        Measure _4feetInt = new Measure(4, MeasureUnit.FOOT);
+        verifyEqualsHashCode(_3feetDouble, _3feetInt, _4feetInt);
+    }
     
     public void testGetLocale() {
         MeasureFormat mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.SHORT);
