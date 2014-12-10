@@ -867,36 +867,22 @@ Collator::getAvailableLocales(void)
     return NULL;
 }
 
-static StringEnumeration *
-newUStringEnumeration(UEnumeration *uenumToAdopt, UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        uenum_close(uenumToAdopt);
-        return NULL;
-    }
-    StringEnumeration *result = new UStringEnumeration(uenumToAdopt);
-    if (result == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        uenum_close(uenumToAdopt);
-        return NULL;
-    }
-    return result;
-}
-
 StringEnumeration* U_EXPORT2
 Collator::getKeywords(UErrorCode& status) {
-    return newUStringEnumeration(ucol_getKeywords(&status), status);
+    return UStringEnumeration::fromUEnumeration(
+            ucol_getKeywords(&status), status);
 }
 
 StringEnumeration* U_EXPORT2
 Collator::getKeywordValues(const char *keyword, UErrorCode& status) {
-    return newUStringEnumeration(
+    return UStringEnumeration::fromUEnumeration(
             ucol_getKeywordValues(keyword, &status), status);
 }
 
 StringEnumeration* U_EXPORT2
 Collator::getKeywordValuesForLocale(const char* key, const Locale& locale,
                                     UBool commonlyUsed, UErrorCode& status) {
-    return newUStringEnumeration(
+    return UStringEnumeration::fromUEnumeration(
             ucol_getKeywordValuesForLocale(
                     key, locale.getName(), commonlyUsed, &status),
             status);
