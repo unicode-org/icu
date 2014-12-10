@@ -1,4 +1,4 @@
-# Fractional UCA Table, generated from standard UCA
+﻿# Fractional UCA Table, generated from standard UCA
 # 2014-10-09 [MS]
 # VERSION: UCA=8.0.0, UCD=7.0.0
 # UCA 7 data except Cyrillic contractions removed as in UCA 8
