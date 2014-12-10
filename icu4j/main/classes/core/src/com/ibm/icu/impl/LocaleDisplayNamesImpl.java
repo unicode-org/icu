@@ -12,6 +12,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
+import com.ibm.icu.impl.locale.AsciiUtil;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.BreakIterator;
@@ -36,6 +38,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final char formatReplaceOpenParen;
     private final char formatCloseParen;
     private final char formatReplaceCloseParen;
+    private final CurrencyDisplayInfo currencyDisplayInfo;
 
     private static final Cache cache = new Cache();
 
@@ -191,6 +194,8 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         if (needBrkIter || capitalization == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE) {
             capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
         }
+
+        this.currencyDisplayInfo = CurrencyData.provider.getInstance(locale, false);
     }
 
     @Override
@@ -456,13 +461,26 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
     @Override
     public String keyValueDisplayName(String key, String value) {
-        if (nameLength == DisplayContext.LENGTH_SHORT) {
-        	String keyValueName = langData.get("Types%short", key, value);
-        	if (!keyValueName.equals(value)) {
-        	    return adjustForUsageAndContext(CapitalizationContextUsage.KEYVALUE, keyValueName);
-        	}
+        String keyValueName = null;
+
+        if (key.equals("currency")) {
+            keyValueName = currencyDisplayInfo.getName(AsciiUtil.toUpperString(value));
+            if (keyValueName == null) {
+                keyValueName = value;
+            }
+        } else {
+            if (nameLength == DisplayContext.LENGTH_SHORT) {
+                String tmp = langData.get("Types%short", key, value);
+                if (!tmp.equals(value)) {
+                    keyValueName = tmp;
+                }
+            }
+            if (keyValueName == null) {
+                keyValueName = langData.get("Types", key, value);
+            }
         }
-        return adjustForUsageAndContext(CapitalizationContextUsage.KEYVALUE, langData.get("Types", key, value));
+
+        return adjustForUsageAndContext(CapitalizationContextUsage.KEYVALUE, keyValueName);
     }
 
     public static class DataTable {

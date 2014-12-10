@@ -1312,9 +1312,17 @@ public class ULocaleTest extends TestFmwk {
         target = "德文（電話簿排序）"; // \u5FB7\u6587\uFF08\u96FB\u8A71\u7C3F\u6392\u5E8F\uFF09
         assertEquals("collation", target, name);
 
+        name = dn.localeDisplayName("ja@currency=JPY");
+        target = "Japanese (Japanese Yen)";
+        assertEquals("currency (JPY)", target, name);
+
+        name = tdn.localeDisplayName("ja@currency=JPY");
+        target = "日文（日圓）"; // \u65E5\u6587\uFF08\u65E5\u5713\uFF09
+        assertEquals("currency (JPY)", target, name);
+
         name = dn.localeDisplayName("de@currency=XYZ");
         target = "German (Currency: XYZ)";
-        assertEquals("currency", target, name);
+        assertEquals("currency (XYZ)", target, name);
 
         name = dn.localeDisplayName("de@collation=phonebook;currency=XYZ");
         target = "German (Phonebook Sort Order, Currency: XYZ)";
