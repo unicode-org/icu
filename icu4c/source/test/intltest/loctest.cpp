@@ -2108,9 +2108,6 @@ void LocaleTest::checkRegisteredCollators(const char *expectExtra) {
     // 1. add all of OLD
     for(int32_t i=0;i<count1;i++) {
         const UnicodeString key(oldList[i].getName(), "");
-        if(!strcmp(oldList[i].getName(),"haw")) {
-            infoln("Note: old had 'haw'");
-        }
         int32_t oldI = oldHash.puti(key, 1, status);
         if( oldI == 1 ){
             errln("Error: duplicate key %s in Collator::getAvailableLocales(count) list.\n",
