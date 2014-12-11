@@ -7,8 +7,8 @@
 package com.ibm.icu.text;
 
 import java.text.AttributedCharacterIterator;
-import java.text.CharacterIterator;
 import java.text.AttributedCharacterIterator.Attribute;
+import java.text.CharacterIterator;
 import java.util.Map;
 
 import com.ibm.icu.lang.UCharacter;
