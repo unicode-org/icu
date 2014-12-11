@@ -201,7 +201,7 @@ UnicodeString &ScientificNumberFormatter::MarkupStyle::format(
         const UnicodeString &original,
         FieldPositionIterator &fpi,
         const UnicodeString &preExponent,
-        const DecimalFormatStaticSets &decimalFormatSets,
+        const DecimalFormatStaticSets & /*unusedDecimalFormatSets*/,
         UnicodeString &appendTo,
         UErrorCode &status) const {
     if (U_FAILURE(status)) {
