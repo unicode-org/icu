@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,7 +16,7 @@ class RemoveTransliterator extends Transliterator {
     /**
      * ID for this transliterator.
      */
-    private static String _ID = "Any-Remove";
+    private static final String _ID = "Any-Remove";
 
     /**
      * System registration hook.
