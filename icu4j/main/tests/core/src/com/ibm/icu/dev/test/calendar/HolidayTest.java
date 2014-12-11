@@ -152,7 +152,7 @@ public class HolidayTest extends TestFmwk {
 
             // Now find the # of days in the month
             c.roll(Calendar.DATE, false);
-            final int daysInMonth = c.get(Calendar.DATE);
+            // final int daysInMonth = c.get(Calendar.DATE);
 
             // Finally, find the end of the month, i.e. the start of the next one
             c.roll(Calendar.DATE, true);

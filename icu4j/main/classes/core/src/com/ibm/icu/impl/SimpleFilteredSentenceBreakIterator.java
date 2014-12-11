@@ -136,6 +136,12 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
     }
 
     @Override
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return -1;  // arbitrary constant
+    }
+
+    @Override
     public Object clone() {
         SimpleFilteredSentenceBreakIterator other = (SimpleFilteredSentenceBreakIterator) super.clone();
         return other;
