@@ -47051,7 +47051,7 @@ FDD1 FDD0;	[E4, 05, 05]	# unassigned first primary
 
 # SPECIAL MAX/MIN COLLATION ELEMENTS
 
-FFFE;	[02, 02, 02]	# Special LOWEST primary, for merge/interleaving
+FFFE;	[02, 05, 05]	# Special LOWEST primary, for merge/interleaving
 FFFF;	[EF FF, 05, 05]	# Special HIGHEST primary, for ranges
 
 

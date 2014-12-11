@@ -146,7 +146,7 @@
  * This value may change in subsequent releases of ICU.
  * @stable ICU 2.4
  */
-#define UCOL_RUNTIME_VERSION 8
+#define UCOL_RUNTIME_VERSION 9
 
 /**
  * Collation builder code version.
