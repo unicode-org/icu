@@ -178,9 +178,10 @@ public final class CollationKey implements Comparable<CollationKey>
     public CollationKey(String source, RawCollationKey key)
     {
         m_source_ = source;
+        m_length_ = key.size - 1;
         m_key_ = key.releaseBytes();
+        assert m_key_[m_length_] == 0;
         m_hashCode_ = 0;
-        m_length_ = -1;
     }
     
     // public getters -------------------------------------------------------

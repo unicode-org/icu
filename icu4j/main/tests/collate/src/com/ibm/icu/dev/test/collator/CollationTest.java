@@ -282,10 +282,9 @@ public class CollationTest extends TestFmwk {
         }
 
         long ce = ces[0];
-        long expected = (Collation.MERGE_SEPARATOR_PRIMARY << 32) |
-                Collation.MERGE_SEPARATOR_LOWER32;
+        long expected = Collation.makeCE(Collation.MERGE_SEPARATOR_PRIMARY);
         if (ce != expected) {
-            errln("CE(U+fffe)=0x" + Utility.hex(ce) + " != 02.02.02");
+            errln("CE(U+fffe)=0x" + Utility.hex(ce) + " != 02..");
         }
 
         ce = ces[1];
@@ -692,11 +691,8 @@ public class CollationTest extends TestFmwk {
         }
         // Minimum & maximum lead bytes.
         if ((p1 != 0 && p1 <= Collation.MERGE_SEPARATOR_BYTE)
-                || (s1 != 0 && s1 <= Collation.MERGE_SEPARATOR_BYTE)
-                || (t1 != 0 && t1 <= Collation.MERGE_SEPARATOR_BYTE)) {
-            return false;
-        }
-        if (t1 != 0 && t1 > 0x3f) {
+                || s1 == Collation.LEVEL_SEPARATOR_BYTE
+                || t1 == Collation.LEVEL_SEPARATOR_BYTE || t1 > 0x3f) {
             return false;
         }
         if (c > 2) {
@@ -1432,7 +1428,17 @@ public class CollationTest extends TestFmwk {
             return false;
         }
 
-        // If s contains U+FFFE, check that merged segments make the same key.
+        // No nextSortKeyPart support in ICU4J
+
+        return true;
+    }
+
+    /**
+     * Changes the key to the merged segments of the U+FFFE-separated substrings of s.
+     * Leaves key unchanged if s does not contain U+FFFE.
+     * @return true if the key was successfully changed
+     */
+    private boolean getMergedCollationKey(String s, Output<CollationKey> key) {
         CollationKey mergedKey = null;
         int sLength = s.length();
         int segmentStart = 0;
@@ -1440,7 +1446,7 @@ public class CollationTest extends TestFmwk {
             if (i == sLength) {
                 if (segmentStart == 0) {
                     // s does not contain any U+FFFE.
-                    break;
+                    return false;
                 }
             } else if (s.charAt(i) != '\uFFFE') {
                 ++i;
@@ -1458,19 +1464,31 @@ public class CollationTest extends TestFmwk {
             }
             segmentStart = ++i;
         }
-        if (segmentStart != 0 && key.compareTo(mergedKey) != 0) {
-            logln(fileTestName);
-            logln(line);
-            logln(printCollationKey(key));
-            logln(printCollationKey(mergedKey));
-            errln("Collator(" + norm
-                    + ").getCollationKey(with U+FFFE) != CollationKey.merge(segments)");
-            return false;
-        }
-
-        // No nextSortKeyPart support in ICU4J
-
+        key.value = mergedKey;
         return true;
+    }
+
+    private static int getDifferenceLevel(CollationKey prevKey, CollationKey key,
+            int order, boolean collHasCaseLevel) {
+        if (order == Collation.EQUAL) {
+            return Collation.NO_LEVEL;
+        }
+        byte[] prevBytes = prevKey.toByteArray();
+        byte[] bytes = key.toByteArray();
+        int level = Collation.PRIMARY_LEVEL;
+        for (int i = 0;; ++i) {
+            byte b = prevBytes[i];
+            if (b != bytes[i]) {
+                break;
+            }
+            if ((int)b == Collation.LEVEL_SEPARATOR_BYTE) {
+                ++level;
+                if (level == Collation.CASE_LEVEL && !collHasCaseLevel) {
+                    ++level;
+                }
+            }
+        }
+        return level;
     }
 
     private boolean checkCompareTwo(String norm, String prevFileLine, String prevString, String s,
@@ -1527,23 +1545,9 @@ public class CollationTest extends TestFmwk {
                     + order + " != " + expectedOrder);
             return false;
         }
+        boolean collHasCaseLevel = ((RuleBasedCollator)coll).isCaseLevel();
+        int level = getDifferenceLevel(prevKey, key, order, collHasCaseLevel);
         if (order != Collation.EQUAL && expectedLevel != Collation.NO_LEVEL) {
-            byte[] prevBytes = prevKey.toByteArray();
-            byte[] bytes = key.toByteArray();
-            int level = Collation.PRIMARY_LEVEL;
-            for (int i = 0;; ++i) {
-                byte b = prevBytes[i];
-                if (b != bytes[i]) {
-                    break;
-                }
-                if ((int)b == Collation.LEVEL_SEPARATOR_BYTE) {
-                    ++level;
-                    if (level == Collation.CASE_LEVEL
-                            && !((RuleBasedCollator)coll).isCaseLevel()) {
-                        ++level;
-                    }
-                }
-            }
             if (level != expectedLevel) {
                 logln(fileTestName);
                 logln(prevFileLine);
@@ -1552,8 +1556,51 @@ public class CollationTest extends TestFmwk {
                 logln(printCollationKey(key));
                 errln("line " + fileLineNumber
                         + " Collator(" + norm + ").getCollationKey(previous, current).compareTo()="
-                        + level + " wrong level: " + level + " != " + expectedLevel);
+                        + order + " wrong level: " + level + " != " + expectedLevel);
                 return false;
+            }
+        }
+
+        // If either string contains U+FFFE, then their sort keys must compare the same as
+        // the merged sort keys of each string's between-FFFE segments.
+        //
+        // It is not required that
+        //   sortkey(str1 + "\uFFFE" + str2) == mergeSortkeys(sortkey(str1), sortkey(str2))
+        // only that those two methods yield the same order.
+        //
+        // Use bit-wise OR so that getMergedCollationKey() is always called for both strings.
+        Output<CollationKey> outPrevKey = new Output<CollationKey>(prevKey);
+        Output<CollationKey> outKey = new Output<CollationKey>(key);
+        if (getMergedCollationKey(prevString, outPrevKey) | getMergedCollationKey(s, outKey)) {
+            prevKey = outPrevKey.value;
+            key = outKey.value;
+            order = prevKey.compareTo(key);
+            if (order != expectedOrder) {
+                logln(fileTestName);
+                errln("line " + fileLineNumber
+                        + " Collator(" + norm + ").getCollationKey"
+                        + "(previous, current segments between U+FFFE)).merge().compareTo() wrong order: "
+                        + order + " != " + expectedOrder);
+                logln(prevFileLine);
+                logln(fileLine);
+                logln(printCollationKey(prevKey));
+                logln(printCollationKey(key));
+                return false;
+            }
+            int mergedLevel = getDifferenceLevel(prevKey, key, order, collHasCaseLevel);
+            if (order != Collation.EQUAL && expectedLevel != Collation.NO_LEVEL) {
+                if(mergedLevel != level) {
+                    logln(fileTestName);
+                    errln("line " + fileLineNumber
+                        + " Collator(" + norm + ").getCollationKey"
+                        + "(previous, current segments between U+FFFE)).merge().compareTo()="
+                        + order + " wrong level: " + mergedLevel + " != " + level);
+                    logln(prevFileLine);
+                    logln(fileLine);
+                    logln(printCollationKey(prevKey));
+                    logln(printCollationKey(key));
+                    return false;
+                }
             }
         }
         return true;

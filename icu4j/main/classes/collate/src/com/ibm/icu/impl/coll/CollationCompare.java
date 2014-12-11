@@ -123,16 +123,15 @@ public final class CollationCompare /* all static */ {
                 int rightStart = 0;
                 for (;;) {
                     // Find the merge separator or the NO_CE terminator.
+                    long p;
                     int leftLimit = leftStart;
-                    long leftLower32;
-                    while ((leftLower32 = left.getCE(leftLimit) & 0xffffffffL) > Collation.MERGE_SEPARATOR_LOWER32
-                            || leftLower32 == 0) {
+                    while ((p = left.getCE(leftLimit) >>> 32) > Collation.MERGE_SEPARATOR_PRIMARY
+                            || p == 0) {
                         ++leftLimit;
                     }
                     int rightLimit = rightStart;
-                    long rightLower32;
-                    while ((rightLower32 = right.getCE(rightLimit) & 0xffffffffL) > Collation.MERGE_SEPARATOR_LOWER32
-                            || rightLower32 == 0) {
+                    while ((p = right.getCE(rightLimit) >>> 32) > Collation.MERGE_SEPARATOR_PRIMARY
+                            || p == 0) {
                         ++rightLimit;
                     }
 
@@ -162,7 +161,7 @@ public final class CollationCompare /* all static */ {
                     // Both strings have the same number of merge separators,
                     // or else there would have been a primary-level difference.
                     assert (left.getCE(leftLimit) == right.getCE(rightLimit));
-                    if (left.getCE(leftLimit) == Collation.NO_CE) {
+                    if (p == Collation.NO_CE_PRIMARY) {
                         break;
                     }
                     // Skip both merge separators and continue.
@@ -267,20 +266,19 @@ public final class CollationCompare /* all static */ {
 
             if (leftTertiary != rightTertiary) {
                 if (CollationSettings.sortsTertiaryUpperCaseFirst(options)) {
-                    // Pass through NO_CE and MERGE_SEPARATOR
-                    // and keep real tertiary weights larger than the MERGE_SEPARATOR.
+                    // Pass through NO_CE and keep real tertiary weights larger than that.
                     // Do not change the artificial uppercase weight of a tertiary CE (0.0.ut),
                     // to keep tertiary CEs well-formed.
                     // Their case+tertiary weights must be greater than those of
                     // primary and secondary CEs.
-                    if (leftTertiary > Collation.MERGE_SEPARATOR_WEIGHT16) {
+                    if (leftTertiary > Collation.NO_CE_WEIGHT16) {
                         if ((leftLower32 & 0xffff0000) != 0) {
                             leftTertiary ^= 0xc000;
                         } else {
                             leftTertiary += 0x4000;
                         }
                     }
-                    if (rightTertiary > Collation.MERGE_SEPARATOR_WEIGHT16) {
+                    if (rightTertiary > Collation.NO_CE_WEIGHT16) {
                         if ((rightLower32 & 0xffff0000) != 0) {
                             rightTertiary ^= 0xc000;
                         } else {
@@ -311,11 +309,9 @@ public final class CollationCompare /* all static */ {
             do {
                 long ce = left.getCE(leftIndex++);
                 leftQuaternary = ce & 0xffff;
-                if (leftQuaternary == 0) {
-                    // Variable primary or completely ignorable.
+                if (leftQuaternary <= Collation.NO_CE_WEIGHT16) {
+                    // Variable primary or completely ignorable or NO_CE.
                     leftQuaternary = ce >>> 32;
-                } else if (leftQuaternary <= Collation.MERGE_SEPARATOR_WEIGHT16) {
-                    // Leave NO_CE or MERGE_SEPARATOR as is.
                 } else {
                     // Regular CE, not tertiary ignorable.
                     // Preserve the quaternary weight in bits 7..6.
@@ -327,11 +323,9 @@ public final class CollationCompare /* all static */ {
             do {
                 long ce = right.getCE(rightIndex++);
                 rightQuaternary = ce & 0xffff;
-                if (rightQuaternary == 0) {
-                    // Variable primary or completely ignorable.
+                if (rightQuaternary <= Collation.NO_CE_WEIGHT16) {
+                    // Variable primary or completely ignorable or NO_CE.
                     rightQuaternary = ce >>> 32;
-                } else if (rightQuaternary <= Collation.MERGE_SEPARATOR_WEIGHT16) {
-                    // Leave NO_CE or MERGE_SEPARATOR as is.
                 } else {
                     // Regular CE, not tertiary ignorable.
                     // Preserve the quaternary weight in bits 7..6.
@@ -348,7 +342,7 @@ public final class CollationCompare /* all static */ {
                 }
                 return (leftQuaternary < rightQuaternary) ? Collation.LESS : Collation.GREATER;
             }
-            if (leftQuaternary == Collation.NO_CE_WEIGHT16) {
+            if (leftQuaternary == Collation.NO_CE_PRIMARY) {
                 break;
             }
         }

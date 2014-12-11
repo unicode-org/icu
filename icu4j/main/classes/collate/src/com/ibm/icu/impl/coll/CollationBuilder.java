@@ -256,8 +256,8 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
                 }
                 nodes.setElementAt(node, index);
                 int nextIndex = nextIndexFromNode(node);
-                // Insert default nodes with weights 02 and 05, reset to the 02 node.
-                node = nodeFromWeight16(BEFORE_WEIGHT16) | nodeFromStrength(strength);
+                // Insert default nodes with weights 01 and 05, reset to the 01 node.
+                node = nodeFromWeight16(Collation.BEFORE_WEIGHT16) | nodeFromStrength(strength);
                 index = insertNodeBetween(index, nextIndex, node);
                 node = nodeFromWeight16(Collation.COMMON_WEIGHT16) | hasBefore3 |
                         nodeFromStrength(strength);
@@ -728,7 +728,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
         index = nextIndexFromNode(node);
         node = nodes.elementAti(index);
         assert(!isTailoredNode(node) && strengthFromNode(node) == strength &&
-                weight16FromNode(node) == BEFORE_WEIGHT16);
+                weight16FromNode(node) == Collation.BEFORE_WEIGHT16);
         // Skip to the explicit common node.
         do {
             index = nextIndexFromNode(node);
@@ -1143,7 +1143,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
                                     // Gap at the beginning of the tertiary CE range.
                                     t = rootElements.getTertiaryBoundary() - 0x100;
                                     tLimit = (int)rootElements.getFirstTertiaryCE() & Collation.ONLY_TERTIARY_MASK;
-                                } else if(t == BEFORE_WEIGHT16) {
+                                } else if(t == Collation.BEFORE_WEIGHT16) {
                                     tLimit = Collation.COMMON_WEIGHT16;
                                 } else if(!pIsTailored && !sIsTailored) {
                                     // p and s are root weights.
@@ -1185,7 +1185,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
                                         // Gap at the beginning of the secondary CE range.
                                         s = rootElements.getSecondaryBoundary() - 0x100;
                                         sLimit = (int)(rootElements.getFirstSecondaryCE() >> 16);
-                                    } else if(s == BEFORE_WEIGHT16) {
+                                    } else if(s == Collation.BEFORE_WEIGHT16) {
                                         sLimit = Collation.COMMON_WEIGHT16;
                                     } else if(!pIsTailored) {
                                         // p is a root primary.
@@ -1373,9 +1373,6 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
             ce != 0 ? Collator.TERTIARY :
             Collator.IDENTICAL;
     }
-
-    /** The secondary/tertiary lower limit for tailoring before the common weight. */
-    private static final int BEFORE_WEIGHT16 = Collation.MERGE_SEPARATOR_WEIGHT16;
 
     /** At most 1M nodes, limited by the 20 bits in node bit fields. */
     private static final int MAX_INDEX = 0xfffff;
