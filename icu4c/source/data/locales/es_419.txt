@@ -13,6 +13,7 @@ es_419{
                 atLeast{"más de {0}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00"}
                 currencyFormat{"¤#,##0.00"}
             }
             patternsShort{
@@ -73,7 +74,7 @@ es_419{
             }
         }
     }
-    Version{"2.1.8.19"}
+    Version{"2.1.10.16"}
     calendar{
         generic{
             availableFormats{

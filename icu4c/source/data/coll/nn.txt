@@ -14,11 +14,11 @@ nn{
     collations{
         search{
             Sequence{"[import nb-u-co-search]"}
-            Version{"26"}
+            Version{"27"}
         }
         standard{
             Sequence{"[import nb-u-co-standard]"}
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

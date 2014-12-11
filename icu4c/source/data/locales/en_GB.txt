@@ -675,11 +675,6 @@ en_GB{
             }
         }
     }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
-    }
     fields{
         day-narrow{
             relativeTime{

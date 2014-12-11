@@ -14,7 +14,7 @@ se{
     collations{
         search{
             Sequence{"[import und-u-co-search][import se-u-co-standard]"}
-            Version{"26"}
+            Version{"27"}
         }
         standard{
             Sequence{
@@ -59,7 +59,7 @@ se{
                 "<<<Ô<<ǫ"
                 "<<<Ǫ"
             }
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

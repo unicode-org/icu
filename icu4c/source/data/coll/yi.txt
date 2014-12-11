@@ -128,7 +128,7 @@ yi{
                 "&ᅮᅵ"
                 "=ᅱ"
             }
-            Version{"26"}
+            Version{"27"}
         }
         standard{
             Sequence{
@@ -144,7 +144,7 @@ yi{
                 "&ש<שׂ"
                 "&[before 1]ת<תּ"
             }
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

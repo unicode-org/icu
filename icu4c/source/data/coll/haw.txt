@@ -17,7 +17,7 @@ haw{
                 "&a<e<<<E<i<<<I<o<<<O<u<<<U"
                 "&w<ʻ"
             }
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

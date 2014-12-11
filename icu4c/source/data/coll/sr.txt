@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/xml/collation/sr.xml
  */
 sr{
-    Version{"2.1.10.26"}
+    Version{"2.1.10.56"}
     collations{
         standard{
             Sequence{"[reorder Cyrl][suppressContractions [Ии]]"}

@@ -17,7 +17,7 @@ bn{
                 "[normalization on][reorder Beng Deva Guru Gujr Orya Taml Telu Knda Mlym Sinh]"
                 "&ঔ<ং<ঃ<ঁ"
             }
-            Version{"26"}
+            Version{"27"}
         }
         traditional{
             Sequence{
@@ -636,7 +636,7 @@ bn{
                 "&যৌ<<<য়ৌ"
                 "&য্<<<য়্"
             }
-            Version{"26"}
+            Version{"27"}
         }
     }
 }
