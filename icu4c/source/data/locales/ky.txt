@@ -20,6 +20,7 @@ ky{
         word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{"[а б г д е ё ж з и й к л м н ӊ о ө п р с т у ү х ч ш ъ ы э ю я]"}
+    ExemplarCharactersIndex{"[А Б В Г Д Е Ё Ж З И Й К Л М Н Ң О Ө П Р С Т У Ү Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я]"}
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ‚ \u0022 “ „ « » ( ) \\[ \\] \\{ \\} § @ * / "
         "\\& #]"
@@ -161,7 +162,7 @@ ky{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.10.49"}
     calendar{
         generic{
             DateTimePatterns{
@@ -653,11 +654,6 @@ ky{
         alternateQuotationStart{"„"}
         quotationEnd{"»"}
         quotationStart{"«"}
-    }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
     }
     fields{
         day{

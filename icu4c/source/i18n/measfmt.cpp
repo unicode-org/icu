@@ -346,7 +346,6 @@ template<> U_I18N_API
 const MeasureFormatCacheData *LocaleCacheKey<MeasureFormatCacheData>::createObject(
         const void * /*unused*/, UErrorCode &status) const {
     const char *localeId = fLoc.getName();
-    LocalUResourceBundlePointer topLevel(ures_open(NULL, localeId, &status));
     LocalUResourceBundlePointer unitsBundle(ures_open(U_ICUDATA_UNIT, localeId, &status));
     static UNumberFormatStyle currencyStyles[] = {
             UNUM_CURRENCY_PLURAL, UNUM_CURRENCY_ISO, UNUM_CURRENCY};
@@ -361,7 +360,7 @@ const MeasureFormatCacheData *LocaleCacheKey<MeasureFormatCacheData>::createObje
         return NULL;
     }
     result->adoptNumericDateFormatters(loadNumericDateFormatters(
-            topLevel.getAlias(), status));
+            unitsBundle.getAlias(), status));
     if (U_FAILURE(status)) {
         return NULL;
     }

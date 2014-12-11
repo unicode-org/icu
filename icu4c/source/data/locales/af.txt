@@ -717,11 +717,6 @@ af{
         quotationEnd{"”"}
         quotationStart{"“"}
     }
-    durationUnits{
-        hm{"hh:mm"}
-        hms{"hh:mm:ss"}
-        ms{"mm:ss"}
-    }
     fields{
         day{
             dn{"Dag"}

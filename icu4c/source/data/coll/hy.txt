@@ -17,7 +17,7 @@ hy{
                 "[reorder Armn]"
                 "&ք<և<<<Եւ"
             }
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

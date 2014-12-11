@@ -1085,6 +1085,10 @@ static void VerifyTranslation(void) {
                        if(measurementSystem != UMS_US){
                             log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                        }
+                   } else if ( strstr(fullLoc, "_GB")!=NULL ) {
+                       if(measurementSystem != UMS_UK){
+                            log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
+                       }
                    } else if (measurementSystem != UMS_SI) {
                        log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                    }

@@ -216,7 +216,7 @@ lt{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.10.42"}
     calendar{
         buddhist{
             eras{
@@ -2369,11 +2369,6 @@ lt{
         alternateQuotationStart{"„"}
         quotationEnd{"“"}
         quotationStart{"„"}
-    }
-    durationUnits{
-        hm{"hh:mm"}
-        hms{"hh:mm:ss"}
-        ms{"mm:ss"}
     }
     fields{
         day{

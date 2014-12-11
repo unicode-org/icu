@@ -264,7 +264,7 @@ cy{
         }
         native{"latn"}
     }
-    Version{"2.1.7.80"}
+    Version{"2.1.10.42"}
     calendar{
         generic{
             DateTimePatterns{
@@ -804,11 +804,6 @@ cy{
         alternateQuotationStart{"“"}
         quotationEnd{"’"}
         quotationStart{"‘"}
-    }
-    durationUnits{
-        hm{"h.mm"}
-        hms{"h.mm.ss"}
-        ms{"m.ss"}
     }
     fields{
         day{

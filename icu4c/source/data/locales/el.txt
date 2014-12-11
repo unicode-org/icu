@@ -166,7 +166,7 @@ el{
         native{"latn"}
         traditional{"grek"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.10.42"}
     calendar{
         buddhist{
             eras{
@@ -780,11 +780,6 @@ el{
         alternateQuotationStart{"\u0022"}
         quotationEnd{"»"}
         quotationStart{"«"}
-    }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
     }
     fields{
         day{

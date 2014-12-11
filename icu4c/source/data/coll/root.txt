@@ -552,7 +552,7 @@ root{
                 "&ք"
                 "<և"
             }
-            Version{"26"}
+            Version{"27"}
         }
         private-unihan{
             Sequence{
@@ -794,7 +794,7 @@ root{
                 "&龟=\uFDD0龟"
                 "&龠=\uFDD0龠"
             }
-            Version{"26"}
+            Version{"27"}
         }
         search{
             Sequence{
@@ -910,11 +910,11 @@ root{
                 "&ᅮᅵ"
                 "=ᅱ"
             }
-            Version{"26"}
+            Version{"27"}
         }
         standard{
             Sequence{""}
-            Version{"26"}
+            Version{"27"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

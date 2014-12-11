@@ -165,7 +165,7 @@ hy{
         native{"latn"}
         traditional{"armn"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.10.42"}
     calendar{
         generic{
             DateTimePatterns{
@@ -704,11 +704,6 @@ hy{
         alternateQuotationStart{"«"}
         quotationEnd{"»"}
         quotationStart{"«"}
-    }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
     }
     fields{
         day{

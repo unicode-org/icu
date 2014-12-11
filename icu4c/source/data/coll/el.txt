@@ -14,7 +14,7 @@ el{
     collations{
         standard{
             Sequence{"[normalization on][reorder Grek]"}
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

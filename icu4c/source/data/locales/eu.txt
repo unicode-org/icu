@@ -725,11 +725,6 @@ eu{
         quotationEnd{"\u0022"}
         quotationStart{"\u0022"}
     }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
-    }
     fields{
         day{
             dn{"Eguna"}

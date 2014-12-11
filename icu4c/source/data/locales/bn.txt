@@ -805,11 +805,6 @@ bn{
         quotationEnd{"”"}
         quotationStart{"“"}
     }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
-    }
     fields{
         day{
             dn{"দিন"}

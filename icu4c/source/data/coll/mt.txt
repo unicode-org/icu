@@ -21,7 +21,7 @@ mt{
                 "&[before 1]i<ħ<<<Ħ"
                 "&[before 1]z<ż<<<Ż"
             }
-            Version{"26"}
+            Version{"27"}
         }
     }
 }
