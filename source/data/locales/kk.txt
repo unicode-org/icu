@@ -647,11 +647,6 @@ kk{
         quotationEnd{"\u0022"}
         quotationStart{"“"}
     }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
-    }
     fields{
         day{
             dn{"күн"}

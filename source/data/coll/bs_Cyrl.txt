@@ -14,7 +14,7 @@ bs_Cyrl{
     collations{
         standard{
             Sequence{"[import sr]"}
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

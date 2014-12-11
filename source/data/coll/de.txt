@@ -18,11 +18,11 @@ de{
                 "&OE<<ö<<<Ö"
                 "&UE<<ü<<<Ü"
             }
-            Version{"26"}
+            Version{"27"}
         }
         search{
             Sequence{"[import und-u-co-search][import de-u-co-phonebk]"}
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

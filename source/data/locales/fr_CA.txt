@@ -342,11 +342,6 @@ fr_CA{
         alternateQuotationEnd{"›"}
         alternateQuotationStart{"‹"}
     }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
-    }
     fields{
         day{
             relativeTime{

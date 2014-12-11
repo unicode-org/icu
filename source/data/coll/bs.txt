@@ -14,11 +14,11 @@ bs{
     collations{
         search{
             Sequence{"[import hr-u-co-search]"}
-            Version{"26"}
+            Version{"27"}
         }
         standard{
             Sequence{"[import hr]"}
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

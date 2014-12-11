@@ -2391,11 +2391,6 @@ zh_Hant{
         quotationEnd{"」"}
         quotationStart{"「"}
     }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
-    }
     fields{
         day{
             dn{"日"}

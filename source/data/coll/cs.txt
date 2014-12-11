@@ -29,7 +29,7 @@ cs{
                 "&Y<ý<<<Ý"
                 "&Z<ž<<<Ž"
             }
-            Version{"26"}
+            Version{"27"}
         }
         standard{
             Sequence{
@@ -39,7 +39,7 @@ cs{
                 "&S<š<<<Š"
                 "&Z<ž<<<Ž"
             }
-            Version{"26"}
+            Version{"27"}
         }
     }
 }

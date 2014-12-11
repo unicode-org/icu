@@ -186,7 +186,7 @@ uz{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.10.42"}
     calendar{
         generic{
             DateTimePatterns{
@@ -706,11 +706,6 @@ uz{
         alternateQuotationStart{"'"}
         quotationEnd{"\u0022"}
         quotationStart{"\u0022"}
-    }
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
     }
     fields{
         day{
