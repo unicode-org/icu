@@ -2077,6 +2077,14 @@ void LocaleTest::TestGetLocale(void) {
 }
 
 #if !UCONFIG_NO_COLLATION
+/**
+ * Compare Collator::getAvailableLocales(int) [ "old", returning an array ]
+ *   with  Collator::getAvailableLocales()    [ "new", returning a StringEnumeration ]
+ * These should be identical (check their API docs) EXCEPT that
+ * if expectExtra is non-NULL, it will be in the "new" array but not "old".
+ * Does not return any status but calls errln on error.
+ * @param expectExtra an extra locale, will be in "new" but not "old". Or NULL.
+ */
 void LocaleTest::checkRegisteredCollators(const char *expectExtra) {
     UErrorCode status = U_ZERO_ERROR;
     int32_t count1=0,count2=0;
