@@ -363,6 +363,9 @@ public final class LocaleData {
         if(MeasurementSystem.US.equals(system)){
             return MeasurementSystem.US;
         }
+        if(MeasurementSystem.UK.equals(system)){
+            return MeasurementSystem.UK;
+        }
         if(MeasurementSystem.SI.equals(system)){
             return MeasurementSystem.SI;
         }

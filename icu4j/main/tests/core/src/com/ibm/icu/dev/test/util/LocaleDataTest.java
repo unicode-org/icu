@@ -90,6 +90,12 @@ public class LocaleDataTest extends TestFmwk{
                 }else{
                     errln("Did not get the expected measurement system for locale: "+ locale);
                 }
+            } else if(fullLoc.toString().indexOf("_GB") >= 0){
+                if(ms == LocaleData.MeasurementSystem.UK){
+                    logln("Got the expected measurement system for locale: " + locale);
+                }else{
+                    errln("Did not get the expected measurement system for locale: "+ locale);
+                }
             }else{
                 if(ms == LocaleData.MeasurementSystem.SI){
                     logln("Got the expected measurement system for locale: " + locale);

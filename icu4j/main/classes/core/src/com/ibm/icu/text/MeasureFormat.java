@@ -747,7 +747,7 @@ public class MeasureFormat extends UFormat {
     private static NumericFormatters loadNumericFormatters(
             ULocale locale) {
         ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
-                getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+                getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
         return new NumericFormatters(
                 loadNumericDurationFormat(r, "hm"),
                 loadNumericDurationFormat(r, "ms"),
