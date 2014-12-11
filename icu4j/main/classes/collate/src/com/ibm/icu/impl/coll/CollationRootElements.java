@@ -253,7 +253,7 @@ public final class CollationRootElements {
             sec = (int)(elements[index] >> 16);
         } else {
             index = findPrimary(p) + 1;
-            previousSec = Collation.MERGE_SEPARATOR_WEIGHT16;
+            previousSec = Collation.BEFORE_WEIGHT16;
             sec = Collation.COMMON_WEIGHT16;
         }
         assert(s >= sec);
@@ -279,12 +279,12 @@ public final class CollationRootElements {
                 previousTer = 0;
             } else {
                 index = (int)elements[IX_FIRST_SECONDARY_INDEX];
-                previousTer = Collation.MERGE_SEPARATOR_WEIGHT16;
+                previousTer = Collation.BEFORE_WEIGHT16;
             }
             secTer = elements[index] & ~SEC_TER_DELTA_FLAG;
         } else {
             index = findPrimary(p) + 1;
-            previousTer = Collation.MERGE_SEPARATOR_WEIGHT16;
+            previousTer = Collation.BEFORE_WEIGHT16;
             secTer = Collation.COMMON_SEC_AND_TER_CE;
         }
         long st = ((long)s << 16) | t;

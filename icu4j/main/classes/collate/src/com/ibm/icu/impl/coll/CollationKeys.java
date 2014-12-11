@@ -365,7 +365,7 @@ public final class CollationKeys /* all methods are static */ {
         int commonQuaternaries = 0;
 
         int prevSecondary = 0;
-        boolean anyMergeSeparators = false;
+        int secSegmentStart = 0;
 
         for (;;) {
             // No need to keep all CEs in the buffer when we write a sort key.
@@ -462,7 +462,11 @@ public final class CollationKeys /* all methods are static */ {
                 int s = lower32 >>> 16;  // 16 bits
                 if (s == 0) {
                     // secondary ignorable
-                } else if (s == Collation.COMMON_WEIGHT16) {
+                } else if (s == Collation.COMMON_WEIGHT16 &&
+                        ((options & CollationSettings.BACKWARD_SECONDARY) == 0 ||
+                            p != Collation.MERGE_SEPARATOR_PRIMARY)) {
+                    // s is a common secondary weight, and
+                    // backwards-secondary is off or the ce is not the merge separator.
                     ++commonSecondaries;
                 } else if ((options & CollationSettings.BACKWARD_SECONDARY) == 0) {
                     if (commonSecondaries != 0) {
@@ -501,16 +505,24 @@ public final class CollationKeys /* all methods are static */ {
                         }
                         // commonSecondaries == 0
                     }
-                    // Reduce separators so that we can look for byte<=1 later.
-                    if (s <= Collation.MERGE_SEPARATOR_WEIGHT16) {
-                        if (s == Collation.MERGE_SEPARATOR_WEIGHT16) {
-                            anyMergeSeparators = true;
+                    if (0 < p && p <= Collation.MERGE_SEPARATOR_PRIMARY) {
+                        // The backwards secondary level compares secondary weights backwards
+                        // within segments separated by the merge separator (U+FFFE).
+                        byte[] secs = secondaries.data();
+                        int last = secondaries.length() - 1;
+                        while (secSegmentStart < last) {
+                            byte b = secs[secSegmentStart];
+                            secs[secSegmentStart++] = secs[last];
+                            secs[last--] = b;
                         }
-                        secondaries.appendByte((s >>> 8) - 1);
+                        secondaries.appendByte(p == Collation.NO_CE_PRIMARY ?
+                            Collation.LEVEL_SEPARATOR_BYTE : Collation.MERGE_SEPARATOR_BYTE);
+                        prevSecondary = 0;
+                        secSegmentStart = secondaries.length();
                     } else {
                         secondaries.appendReverseWeight16(s);
+                        prevSecondary = s;
                     }
-                    prevSecondary = s;
                 }
             }
 
@@ -523,20 +535,24 @@ public final class CollationKeys /* all methods are static */ {
                 } else {
                     int c = (lower32 >>> 8) & 0xff; // case bits & tertiary lead byte
                     assert ((c & 0xc0) != 0xc0);
-                    if ((c & 0xc0) == 0 && c > Collation.MERGE_SEPARATOR_BYTE) {
+                    if ((c & 0xc0) == 0 && c > Collation.LEVEL_SEPARATOR_BYTE) {
                         ++commonCases;
                     } else {
                         if ((options & CollationSettings.UPPER_FIRST) == 0) {
                             // lowerFirst: Compress common weights to nibbles 1..7..13, mixed=14,
                             // upper=15.
-                            if (commonCases != 0) {
+                            // If there are only common (=lowest) weights in the whole level,
+                            // then we need not write anything.
+                            // Level length differences are handled already on the next-higher level.
+                            if (commonCases != 0 &&
+                                    (c > Collation.LEVEL_SEPARATOR_BYTE || !cases.isEmpty())) {
                                 --commonCases;
                                 while (commonCases >= CASE_LOWER_FIRST_COMMON_MAX_COUNT) {
                                     cases.appendByte(CASE_LOWER_FIRST_COMMON_MIDDLE << 4);
                                     commonCases -= CASE_LOWER_FIRST_COMMON_MAX_COUNT;
                                 }
                                 int b;
-                                if (c <= Collation.MERGE_SEPARATOR_BYTE) {
+                                if (c <= Collation.LEVEL_SEPARATOR_BYTE) {
                                     b = CASE_LOWER_FIRST_COMMON_LOW + commonCases;
                                 } else {
                                     b = CASE_LOWER_FIRST_COMMON_HIGH - commonCases;
@@ -544,7 +560,7 @@ public final class CollationKeys /* all methods are static */ {
                                 cases.appendByte(b << 4);
                                 commonCases = 0;
                             }
-                            if (c > Collation.MERGE_SEPARATOR_BYTE) {
+                            if (c > Collation.LEVEL_SEPARATOR_BYTE) {
                                 c = (CASE_LOWER_FIRST_COMMON_HIGH + (c >>> 6)) << 4; // 14 or 15
                             }
                         } else {
@@ -561,11 +577,11 @@ public final class CollationKeys /* all methods are static */ {
                                 cases.appendByte((CASE_UPPER_FIRST_COMMON_LOW + commonCases) << 4);
                                 commonCases = 0;
                             }
-                            if (c > Collation.MERGE_SEPARATOR_BYTE) {
+                            if (c > Collation.LEVEL_SEPARATOR_BYTE) {
                                 c = (CASE_UPPER_FIRST_COMMON_LOW - (c >>> 6)) << 4; // 2 or 1
                             }
                         }
-                        // c is a separator byte 01 or 02,
+                        // c is a separator byte 01,
                         // or a left-shifted nibble 0x10, 0x20, ... 0xf0.
                         cases.appendByte(c);
                     }
@@ -628,14 +644,14 @@ public final class CollationKeys /* all methods are static */ {
                     // Their case+tertiary weights must be greater than those of
                     // primary and secondary CEs.
                     //
-                    // Separators    01..02 -> 01..02  (unchanged)
-                    // Lowercase     03..04 -> 83..84  (includes uncased)
+                    // Separator         01 -> 01      (unchanged)
+                    // Lowercase     02..04 -> 82..84  (includes uncased)
                     // Common weight     05 -> 85..C5  (common-weight compression range)
                     // Lowercase     06..3F -> C6..FF
-                    // Mixed case    43..7F -> 43..7F
-                    // Uppercase     83..BF -> 03..3F
+                    // Mixed case    42..7F -> 42..7F
+                    // Uppercase     82..BF -> 02..3F
                     // Tertiary CE   86..BF -> C6..FF
-                    if (t <= Collation.MERGE_SEPARATOR_WEIGHT16) {
+                    if (t <= Collation.NO_CE_WEIGHT16) {
                         // Keep separators unchanged.
                     } else if ((lower32 >>> 16) != 0) {
                         // Invert case bits of primary & secondary CEs.
@@ -669,14 +685,13 @@ public final class CollationKeys /* all methods are static */ {
 
             if ((levels & Collation.QUATERNARY_LEVEL_FLAG) != 0) {
                 int q = lower32 & 0xffff;
-                if ((q & 0xc0) == 0 && q > Collation.MERGE_SEPARATOR_WEIGHT16) {
+                if ((q & 0xc0) == 0 && q > Collation.NO_CE_WEIGHT16) {
                     ++commonQuaternaries;
-                } else if (q <= Collation.MERGE_SEPARATOR_WEIGHT16
+                } else if (q == Collation.NO_CE_WEIGHT16
                         && (options & CollationSettings.ALTERNATE_MASK) == 0
-                        && (quaternaries.isEmpty() || quaternaries.getAt(quaternaries.length() - 1) == Collation.MERGE_SEPARATOR_BYTE)) {
-                    // If alternate=non-ignorable and there are only
-                    // common quaternary weights between two separators,
-                    // then we need not write anything between these separators.
+                        && quaternaries.isEmpty()) {
+                    // If alternate=non-ignorable and there are only common quaternary weights,
+                    // then we need not write anything.
                     // The only weights greater than the merge separator and less than the common
                     // weight
                     // are shifted primary weights, which are not generated for
@@ -684,10 +699,10 @@ public final class CollationKeys /* all methods are static */ {
                     // There are also exactly as many quaternary weights as tertiary weights,
                     // so level length differences are handled already on tertiary level.
                     // Any above-common quaternary weight will compare greater regardless.
-                    quaternaries.appendByte(q >>> 8);
+                    quaternaries.appendByte(Collation.LEVEL_SEPARATOR_BYTE);
                 } else {
-                    if (q <= Collation.MERGE_SEPARATOR_WEIGHT16) {
-                        q >>>= 8;
+                    if (q == Collation.NO_CE_WEIGHT16) {
+                        q = Collation.LEVEL_SEPARATOR_BYTE;
                     } else {
                         q = 0xfc + ((q >>> 6) & 3);
                     }
@@ -723,44 +738,7 @@ public final class CollationKeys /* all methods are static */ {
             }
             // not used in Java -- ok &= secondaries.isOk();
             sink.Append(Collation.LEVEL_SEPARATOR_BYTE);
-            byte[] secs = secondaries.data();
-            int length = secondaries.length() - 1; // Ignore the trailing NO_CE.
-            if ((options & CollationSettings.BACKWARD_SECONDARY) != 0) {
-                // The backwards secondary level compares secondary weights backwards
-                // within segments separated by the merge separator (U+FFFE, weight 02).
-                // The separator weights 01 & 02 were reduced to 00 & 01 so that
-                // we do not accidentally separate at a _second_ weight byte of 02.
-                int start = 0;
-                for (;;) {
-                    // Find the merge separator or the NO_CE terminator.
-                    int limit;
-                    if (anyMergeSeparators) {
-                        limit = start;
-                        while (((int)secs[limit] & 0xff) > 1) {
-                            ++limit;
-                        }
-                    } else {
-                        limit = length;
-                    }
-                    // Reverse this segment.
-                    if (start < limit) {
-                        for (int i = start, j = limit - 1; i < j; i++, j--) {
-                            byte tmp = secs[i];
-                            secs[i] = secs[j];
-                            secs[j] = tmp;
-                        }
-                    }
-                    // Did we reach the end of the string?
-                    if (secs[limit] == 0) {
-                        break;
-                    }
-                    // Restore the merge separator.
-                    secs[limit] = 2;
-                    // Skip the merge separator and continue.
-                    start = limit + 1;
-                }
-            }
-            sink.Append(secs, length);
+            secondaries.appendTo(sink);
         }
 
         if ((levels & Collation.CASE_LEVEL_FLAG) != 0) {
@@ -774,21 +752,12 @@ public final class CollationKeys /* all methods are static */ {
             byte b = 0;
             for (int i = 0; i < length; ++i) {
                 byte c = cases.getAt(i);
-                if (c <= Collation.MERGE_SEPARATOR_BYTE) {
-                    assert (c != 0);
-                    if (b != 0) {
-                        sink.Append(b);
-                        b = 0;
-                    }
-                    sink.Append(c);
+                assert ((c & 0xf) == 0 && c != 0);
+                if (b == 0) {
+                    b = c;
                 } else {
-                    assert ((c & 0xf) == 0);
-                    if (b == 0) {
-                        b = c;
-                    } else {
-                        sink.Append(b | (c >>> 4));
-                        b = 0;
-                    }
+                    sink.Append(b | ((c >> 4) & 0xf));
+                    b = 0;
                 }
             }
             if (b != 0) {

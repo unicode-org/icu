@@ -46,7 +46,7 @@ public final class CollationWeights {
         maxBytes[1] = 0;
         minBytes[2] = 0;
         maxBytes[2] = 0;
-        minBytes[3] = Collation.MERGE_SEPARATOR_BYTE + 1;
+        minBytes[3] = Collation.LEVEL_SEPARATOR_BYTE + 1;
         maxBytes[3] = 0xff;
         minBytes[4] = 2;
         maxBytes[4] = 0xff;
@@ -61,7 +61,7 @@ public final class CollationWeights {
         maxBytes[2] = 0;
         // We use only 6 bits per byte.
         // The other bits are used for case & quaternary weights.
-        minBytes[3] = Collation.MERGE_SEPARATOR_BYTE + 1;
+        minBytes[3] = Collation.LEVEL_SEPARATOR_BYTE + 1;
         maxBytes[3] = 0x3f;
         minBytes[4] = 2;
         maxBytes[4] = 0x3f;
