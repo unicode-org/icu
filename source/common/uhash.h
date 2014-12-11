@@ -16,6 +16,7 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "uelement.h"
+#include "unicode/localpointer.h"
 
 /**
  * UHashtable stores key-value pairs and does moderately fast lookup
@@ -669,5 +670,25 @@ uhash_deleteHashtable(void *obj);
  */
 U_CAPI UBool U_EXPORT2 
 uhash_equals(const UHashtable* hash1, const UHashtable* hash2);
+
+
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUResourceBundlePointer
+ * "Smart pointer" class, closes a UResourceBundle via ures_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @stable ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUHashtablePointer, UHashtable, uhash_close);
+
+U_NAMESPACE_END
+
+#endif
 
 #endif
