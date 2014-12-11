@@ -234,7 +234,6 @@ void SimplePatternFormatterTest::TestBadArguments() {
     SimplePatternFormatter fmt("pickle");
     UnicodeString appendTo;
     UErrorCode status = U_ZERO_ERROR;
-    int32_t offsets[1];
 
     // These succeed
     fmt.formatAndAppend(

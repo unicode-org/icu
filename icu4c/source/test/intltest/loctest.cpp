@@ -1827,7 +1827,6 @@ void LocaleTest::_checklocs(const char* label,
 
 void LocaleTest::TestGetLocale(void) {
 #if !UCONFIG_NO_SERVICE
-    UErrorCode ec = U_ZERO_ERROR;
     const char *req;
     Locale valid, actual, reqLoc;
     
