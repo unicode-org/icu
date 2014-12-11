@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1064,6 +1064,7 @@ public class TimeZoneRegression extends TestFmwk {
      * Test setRawOffset works OK with system timezone
      */
     public void TestT5280() {
+        boolean isJdkZone = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
         String[] tzids = TimeZone.getAvailableIDs();
         for (int i = 0; i < tzids.length; i++) {
             TimeZone tz = TimeZone.getTimeZone(tzids[i]);
@@ -1078,7 +1079,13 @@ public class TimeZoneRegression extends TestFmwk {
             }
             int offset = tz.getRawOffset();
             if (offset != newRawOffset) {
-                errln("FAIL: Modified zone(" + tz.getID() + ") - getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+                if (isJdkZone) {
+                    // JDK TimeZone#setRawOffset() only update the last rule, and getRawOffset() returns
+                    // the current raw offset. Therefore, they might be different.
+                    logln("Modified zone(" + tz.getID() + ") - getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+                } else {
+                    errln("FAIL: Modified zone(" + tz.getID() + ") - getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+                }
             }
             // Ticket#5917
             // Check if DST observation status is not unexpectedly changed.
@@ -1088,9 +1095,17 @@ public class TimeZoneRegression extends TestFmwk {
             }
             // Make sure the offset is preserved in a clone
             TimeZone tzClone = (TimeZone)tz.clone();
-            offset = tzClone.getRawOffset();
-            if (offset != newRawOffset) {
-                errln("FAIL: Cloned modified zone(" + tz.getID() + ") - getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+            int offsetC = tzClone.getRawOffset();
+            if (offsetC != newRawOffset) {
+                if (isJdkZone) {
+                    logln("Cloned modified zone(" + tz.getID() + ") - getRawOffset returns " + offsetC + "/ Expected: " + newRawOffset);
+                } else {
+                    errln("FAIL: Cloned modified zone(" + tz.getID() + ") - getRawOffset returns " + offsetC + "/ Expected: " + newRawOffset);
+                }
+            }
+
+            if (offset != offsetC) {
+                errln("FAIL: Different raw offset - Original:" + offset + ", Cloned:" + offsetC);
             }
         }
     }
