@@ -1385,9 +1385,11 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
     baseBI.adoptInstead(BreakIterator::createSentenceInstance(Locale::getFrench(), status));
     TEST_ASSERT_SUCCESS(status);
 
-    logln("Building new BI\n");
-    frenchBI.adoptInstead(builder->build(baseBI.orphan(), status));
-    TEST_ASSERT_SUCCESS(status);
+    if (U_SUCCESS(status)) {
+        logln("Building new BI\n");
+        frenchBI.adoptInstead(builder->build(baseBI.orphan(), status));
+        TEST_ASSERT_SUCCESS(status);
+    }
 
     if(frenchBI.isValid()) {
       logln("Testing:");

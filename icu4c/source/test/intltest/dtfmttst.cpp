@@ -2506,7 +2506,7 @@ void DateFormatTest::TestDateFormatSymbolsClone(void)
     Locale valid1;
     Locale actual1;
     if (!getActualAndValidLocales(*fmt, valid1, actual1)) {
-        errln("FAIL: Could not fetch valid + actual locales");
+        dataerrln("FAIL: Could not fetch valid + actual locales");
         return;
     }
     LocalPointer<Format> fmtClone(fmt->clone());
@@ -3835,7 +3835,9 @@ void DateFormatTest::TestFormalChineseDate() {
     
     // create formatter 
     SimpleDateFormat *sdf = new SimpleDateFormat(pattern,override,Locale::getChina(),status);
-    failure(status, "new SimpleDateFormat with override", TRUE); 
+    if (failure(status, "new SimpleDateFormat with override", TRUE)) {
+        return;
+    }
 
     UDate thedate = date(2009-1900, UCAL_JULY, 28);
     FieldPosition pos(0);
