@@ -2097,7 +2097,7 @@ void LocaleTest::checkRegisteredCollators(const char *expectExtra) {
     // the 'old' list (non enumeration)
     const Locale*  oldList = Collator::getAvailableLocales(count1);
     if(oldList == NULL) {
-        errln("Error: Collator::getAvailableLocales(count) returned NULL");
+        dataerrln("Error: Collator::getAvailableLocales(count) returned NULL");
         return;
     }
 
