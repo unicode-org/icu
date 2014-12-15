@@ -4482,7 +4482,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/ReplaceableString.java svneol=nativ
 icu4j/main/classes/core/src/com/ibm/icu/text/RuleBasedBreakIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RuleBasedNumberFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SCSU.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/ScientificNumberFormatter.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/ScientificNumberFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SelectFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SimpleDateFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/SpoofChecker.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4892,7 +4892,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RBNFParseTest.java svneol=
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RbnfRoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RbnfTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RelativeDateTimeFormatterTest.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/ScientificNumberFormatterTest.java -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/ScientificNumberFormatterTest.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/SelectFormatAPITest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/SelectFormatUnitTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
