@@ -570,7 +570,7 @@ enum {
  *         in which case it will be greater than destCapacity.
  * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
  */
-U_STABLE int32_t U_EXPORT2
+U_DEPRECATED int32_t U_EXPORT2
 uidna_toASCII(const UChar* src, int32_t srcLength, 
               UChar* dest, int32_t destCapacity,
               int32_t options,
@@ -618,7 +618,7 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
  *         in which case it will be greater than destCapacity.
  * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
  */
-U_STABLE int32_t U_EXPORT2
+U_DEPRECATED int32_t U_EXPORT2
 uidna_toUnicode(const UChar* src, int32_t srcLength,
                 UChar* dest, int32_t destCapacity,
                 int32_t options,
@@ -669,7 +669,7 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
  *         in which case it will be greater than destCapacity.
  * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
  */
-U_STABLE int32_t U_EXPORT2
+U_DEPRECATED int32_t U_EXPORT2
 uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
                    UChar* dest, int32_t destCapacity,
                    int32_t options,
@@ -716,7 +716,7 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
  *         in which case it will be greater than destCapacity.
  * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
  */
-U_STABLE int32_t U_EXPORT2
+U_DEPRECATED int32_t U_EXPORT2
 uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
                      UChar* dest, int32_t destCapacity,
                      int32_t options,
@@ -757,7 +757,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
  * @return <0 or 0 or >0 as usual for string comparisons
  * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
  */
-U_STABLE int32_t U_EXPORT2
+U_DEPRECATED int32_t U_EXPORT2
 uidna_compare(  const UChar *s1, int32_t length1,
                 const UChar *s2, int32_t length2,
                 int32_t options,

@@ -191,6 +191,7 @@ public:
      * @stable ICU 4.4
      */
     explicit LocalPointer(T *p=NULL) : LocalPointerBase<T>(p) {}
+#ifndef U_HIDE_DRAFT_API
     /**
      * Constructor takes ownership and reports an error if NULL.
      *
@@ -209,6 +210,7 @@ public:
             errorCode=U_MEMORY_ALLOCATION_ERROR;
         }
     }
+#endif  /* U_HIDE_DRAFT_API */
     /**
      * Destructor deletes the object it owns.
      * @stable ICU 4.4
@@ -226,6 +228,7 @@ public:
         delete LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=p;
     }
+#ifndef U_HIDE_DRAFT_API
     /**
      * Deletes the object it owns,
      * and adopts (takes ownership of) the one passed in.
@@ -252,6 +255,7 @@ public:
             delete p;
         }
     }
+#endif  /* U_HIDE_DRAFT_API */
 };
 
 /**
