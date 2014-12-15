@@ -903,6 +903,7 @@ private:
      */
     static UBool U_EXPORT2 isNumericPatternChar(UChar c, int32_t count);
 public:
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Gets a DateFormatSymbols by locale.
      * Unlike the constructors which always use gregorian calendar, this
@@ -916,6 +917,7 @@ public:
      */
     static DateFormatSymbols * U_EXPORT2 createForLocale(
             const Locale &locale, UErrorCode &status);
+#endif  /* U_HIDE_INTERNAL_API */
 };
 
 U_NAMESPACE_END
