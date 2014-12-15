@@ -961,6 +961,7 @@ udat_format(    const    UDateFormat*    format,
                         UFieldPosition* position,
                         UErrorCode*     status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
 * Format a date using an UDateFormat.
 * The date will be formatted using the conventions specified in {@link #udat_open }
@@ -990,6 +991,7 @@ udat_formatCalendar(    const UDateFormat*  format,
                         int32_t         capacity,
                         UFieldPosition* position,
                         UErrorCode*     status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
 * Parse a string into an date/time using a UDateFormat.

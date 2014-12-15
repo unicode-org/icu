@@ -2463,6 +2463,7 @@ private:
     UBool getImmediatePreviousZoneTransition(UDate base, UDate *transitionTime, UErrorCode& status) const;
 
 public:
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Creates a new Calendar from a Locale for the cache.
      * This method does not set the time or timezone in returned calendar.
@@ -2489,6 +2490,7 @@ public:
             char *typeBuffer,
             int32_t typeBufferSize,
             UErrorCode &status);
+#endif  /* U_HIDE_INTERNAL_API */
 };
 
 // -------------------------------------

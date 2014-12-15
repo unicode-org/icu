@@ -190,7 +190,9 @@ class U_I18N_API MeasureFormat : public Format {
             UnicodeString &appendTo,
             FieldPosition &pos,
             UErrorCode &status) const;
+#endif  /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Formats a single measure per unit. An example of such a
      * formatted string is 3.5 meters per second.
