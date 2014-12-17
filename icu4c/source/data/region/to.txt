@@ -302,17 +302,17 @@ to{
         ZW{"Simipapuei"}
         ZZ{"Potu fonua taʻeʻiloa pe hala"}
     }
-    Countries%variant{
-        CD{"Kongo (LTK)"}
-        CG{"Kongo (Lipapilika)"}
-        MK{"Masetōnia (FYROM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"Pilitānia"}
         HK{"Hongi Kongi"}
         MO{"Makau"}
         PS{"Palesitaine"}
         US{"ʻAmelika"}
+    }
+    Countries%variant{
+        CD{"Kongo (LTK)"}
+        CG{"Kongo (Lipapilika)"}
+        MK{"Masetōnia (FYROM)"}
     }
     Version{"2.1.8.9"}
 }

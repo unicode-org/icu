@@ -503,7 +503,7 @@ is{
         zun{"súní"}
         zxx{"ekkert tungumálaefni"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"aserska"}
     }
     Scripts{

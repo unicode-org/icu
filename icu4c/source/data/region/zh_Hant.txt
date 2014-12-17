@@ -303,18 +303,18 @@ zh_Hant{
         ZW{"辛巴威"}
         ZZ{"未知區域"}
     }
-    Countries%variant{
-        CD{"剛果民主共和國"}
-        CG{"剛果共和國"}
-        FK{"福克蘭群島（馬爾維納斯群島）"}
-        MK{"前南斯拉夫馬其頓共和國"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"英國"}
         HK{"香港"}
         MO{"澳門"}
         PS{"巴勒斯坦"}
         US{"美國"}
+    }
+    Countries%variant{
+        CD{"剛果民主共和國"}
+        CG{"剛果共和國"}
+        FK{"福克蘭群島（馬爾維納斯群島）"}
+        MK{"前南斯拉夫馬其頓共和國"}
     }
     Version{"2.1.8.95"}
 }

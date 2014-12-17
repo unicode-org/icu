@@ -302,19 +302,19 @@ da{
         ZW{"Zimbabwe"}
         ZZ{"Ukendt område"}
     }
+    Countries%short{
+        GB{"UK"}
+        HK{"Hongkong"}
+        MO{"Macao"}
+        PS{"Palæstina"}
+        US{"USA"}
+    }
     Countries%variant{
         CD{"Den Demokratiske Republik Congo"}
         CG{"Republikken Congo"}
         FK{"Falklandsøerne (Islas Malvinas)"}
         MK{"Makedonien (Den Tidligere Jugoslaviske Republik Makedonien)"}
         TL{"Østtimor"}
-    }
-    CountriesShort{
-        GB{"UK"}
-        HK{"Hongkong"}
-        MO{"Macao"}
-        PS{"Palæstina"}
-        US{"USA"}
     }
     Version{"2.1.9.62"}
 }

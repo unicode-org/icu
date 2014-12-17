@@ -634,11 +634,11 @@ nl{
         zxx{"geen linguïstische inhoud"}
         zza{"Zaza"}
     }
+    Languages%short{
+        az{"Azeri"}
+    }
     Languages%variant{
         ps{"Pashto"}
-    }
-    LanguagesShort{
-        az{"Azeri"}
     }
     Scripts{
         Afak{"Defaka"}

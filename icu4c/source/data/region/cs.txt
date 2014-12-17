@@ -302,18 +302,18 @@ cs{
         ZW{"Zimbabwe"}
         ZZ{"Neznámá oblast"}
     }
-    Countries%variant{
-        CD{"Kongo (DRK)"}
-        CG{"Kongo (republika)"}
-        FK{"Falklandské ostrovy (Malvíny)"}
-        MK{"Makedonie (FYROM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"VB"}
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palestina"}
         US{"USA"}
+    }
+    Countries%variant{
+        CD{"Kongo (DRK)"}
+        CG{"Kongo (republika)"}
+        FK{"Falklandské ostrovy (Malvíny)"}
+        MK{"Makedonie (FYROM)"}
     }
     Version{"2.1.8.9"}
 }

@@ -275,11 +275,11 @@ sw{
         zu{"Kizulu"}
         zxx{"Hakuna maudhui ya lugha"}
     }
+    Languages%short{
+        az{"Kiazeri"}
+    }
     Languages%variant{
         ps{"Kipushto"}
-    }
-    LanguagesShort{
-        az{"Kiazeri"}
     }
     Scripts{
         Arab{"Kiarabu"}

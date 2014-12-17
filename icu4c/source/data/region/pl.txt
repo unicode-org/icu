@@ -302,18 +302,18 @@ pl{
         ZW{"Zimbabwe"}
         ZZ{"Nieznany region"}
     }
-    Countries%variant{
-        CG{"Republika Konga"}
-        CI{"Wybrzeże Kości Słoniowej"}
-        FK{"Falklandy (Malwiny)"}
-        TL{"Timor-Leste"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"GB"}
         HK{"Hongkong"}
         MO{"Makau"}
         PS{"Palestyna"}
         US{"USA"}
+    }
+    Countries%variant{
+        CG{"Republika Konga"}
+        CI{"Wybrzeże Kości Słoniowej"}
+        FK{"Falklandy (Malwiny)"}
+        TL{"Timor-Leste"}
     }
     Version{"2.1.8.95"}
 }

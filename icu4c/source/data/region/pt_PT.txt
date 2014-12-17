@@ -63,13 +63,13 @@ pt_PT{
         YT{"Maiote"}
         ZW{"Zimbabué"}
     }
+    Countries%short{
+        GB{"RU"}
+    }
     Countries%variant{
         CG{"República do Congo"}
         FK{"Ilhas Malvinas"}
         MK{"Antiga República Jugoslava da Macedónia"}
-    }
-    CountriesShort{
-        GB{"RU"}
     }
     Version{"2.1.8.19"}
 }

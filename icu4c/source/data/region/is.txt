@@ -302,19 +302,19 @@ is{
         ZW{"Simbabve"}
         ZZ{"Óþekkt svæði"}
     }
+    Countries%short{
+        GB{"Bretland"}
+        HK{"Hong Kong"}
+        MO{"Makaó"}
+        PS{"Palestína"}
+        US{"BNA"}
+    }
     Countries%variant{
         CD{"Kongó (Lýðstjórnarlýðveldið)"}
         CG{"Kongó (Lýðveldið)"}
         FK{"Falklandseyjar (Malvinas)"}
         MK{"Makedónía (Fyrrverandi lýðveldi Júgóslavíu)"}
         TL{"Austur-Tímor"}
-    }
-    CountriesShort{
-        GB{"Bretland"}
-        HK{"Hong Kong"}
-        MO{"Makaó"}
-        PS{"Palestína"}
-        US{"BNA"}
     }
     Version{"2.1.8.9"}
 }

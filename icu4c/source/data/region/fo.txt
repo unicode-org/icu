@@ -299,15 +299,15 @@ fo{
         ZW{"Simbabvi"}
         ZZ{"(ukendt område)"}
     }
-    Countries%variant{
-        CG{"Kongo-Brazzaville"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"Stóra Bretland"}
         HK{"Hongkong"}
         MO{"Makao"}
         PS{"Palestina"}
         US{"USA"}
+    }
+    Countries%variant{
+        CG{"Kongo-Brazzaville"}
     }
     Version{"2.1.7.53"}
 }

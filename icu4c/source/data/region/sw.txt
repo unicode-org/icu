@@ -302,18 +302,18 @@ sw{
         ZW{"Zimbabwe"}
         ZZ{"Eneo lisilojulikana"}
     }
-    Countries%variant{
-        CG{"Jamhuri ya Kongo"}
-        CI{"Ivory Coast"}
-        FK{"Visiwa vya Falkland (Islas Malvinas)"}
-        MK{"Masedonia (FYROM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"Uingereza"}
         HK{"Hong Kong"}
         MO{"Macau"}
         PS{"Palestina"}
         US{"US"}
+    }
+    Countries%variant{
+        CG{"Jamhuri ya Kongo"}
+        CI{"Ivory Coast"}
+        FK{"Visiwa vya Falkland (Islas Malvinas)"}
+        MK{"Masedonia (FYROM)"}
     }
     Version{"2.1.8.9"}
 }

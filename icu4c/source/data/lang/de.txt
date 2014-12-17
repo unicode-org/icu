@@ -638,7 +638,7 @@ de{
         zxx{"Keine Sprachinhalte"}
         zza{"Zaza"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"Aserbaidschanisch"}
         en_GB{"UK-Englisch"}
         en_US{"US-Englisch"}

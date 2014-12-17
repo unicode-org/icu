@@ -302,18 +302,18 @@ af{
         ZW{"Zimbabwe"}
         ZZ{"Onbekende gebied"}
     }
-    Countries%variant{
-        CD{"Kongo (DRK)"}
-        CG{"Kongo (Republiek)"}
-        FK{"Falklandeilande (Malvinas)"}
-        MK{"Macedonië (VJRM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"VK"}
         HK{"Hongkong"}
         MO{"Macau"}
         PS{"Palestina"}
         US{"VSA"}
+    }
+    Countries%variant{
+        CD{"Kongo (DRK)"}
+        CG{"Kongo (Republiek)"}
+        FK{"Falklandeilande (Malvinas)"}
+        MK{"Macedonië (VJRM)"}
     }
     Version{"2.1.8.9"}
 }

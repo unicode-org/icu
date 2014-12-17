@@ -165,7 +165,7 @@ yi{
         zh{"כינעזיש"}
         zu{"זולו"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"ענגליש (GB)"}
         en_US{"ענגליש (US)"}
     }

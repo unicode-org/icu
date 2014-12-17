@@ -301,6 +301,13 @@ hsb{
         ZW{"Simbabwe"}
         ZZ{"njeznaty region"}
     }
+    Countries%short{
+        GB{"UK"}
+        HK{"Hongkong"}
+        MO{"Macao"}
+        PS{"Palestina"}
+        US{"USA"}
+    }
     Countries%variant{
         CD{"Kongo (Demokratiska republika)"}
         CG{"Kongo (Republika)"}
@@ -308,13 +315,6 @@ hsb{
         FK{"Falklandske kupy (Malwiny)"}
         MK{"Makedonska (FYROM)"}
         TL{"Wuchodny Timor"}
-    }
-    CountriesShort{
-        GB{"UK"}
-        HK{"Hongkong"}
-        MO{"Macao"}
-        PS{"Palestina"}
-        US{"USA"}
     }
     Version{"2.1.8.9"}
 }

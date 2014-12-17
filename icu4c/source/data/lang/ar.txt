@@ -524,14 +524,14 @@ ar{
         zxx{"بدون محتوى لغوي"}
         zza{"زازا"}
     }
-    Languages%variant{
-        ps{"بشتو"}
-        ug{"الأيغورية"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"الأذرية"}
         en_GB{"الإنجليزية المملكة المتحدة"}
         en_US{"الإنجليزية الولايات المتحدة"}
+    }
+    Languages%variant{
+        ps{"بشتو"}
+        ug{"الأيغورية"}
     }
     Scripts{
         Arab{"العربية"}

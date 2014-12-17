@@ -545,13 +545,13 @@ ca{
         zxx{"sense contingut lingüístic"}
         zza{"zaza"}
     }
-    Languages%variant{
-        ps{"pushtu"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"àzeri"}
         en_GB{"anglès (GB)"}
         en_US{"anglès (EUA)"}
+    }
+    Languages%variant{
+        ps{"pushtu"}
     }
     Scripts{
         Afak{"afaka"}

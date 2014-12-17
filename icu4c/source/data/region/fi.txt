@@ -302,6 +302,13 @@ fi{
         ZW{"Zimbabwe"}
         ZZ{"tuntematon alue"}
     }
+    Countries%short{
+        GB{"Britannia"}
+        HK{"Hongkong"}
+        MO{"Macao"}
+        PS{"Palestiina"}
+        US{"USA"}
+    }
     Countries%variant{
         CD{"Kongo-Kinshasa"}
         CG{"Kongo-Brazzaville"}
@@ -309,13 +316,6 @@ fi{
         FK{"Falklandinsaaret (Malvinassaaret)"}
         MK{"EJT Makedonia"}
         TL{"Timor-Leste"}
-    }
-    CountriesShort{
-        GB{"Britannia"}
-        HK{"Hongkong"}
-        MO{"Macao"}
-        PS{"Palestiina"}
-        US{"USA"}
     }
     Version{"2.1.8.9"}
 }

@@ -240,7 +240,7 @@ kk{
         zu{"зулу"}
         zxx{"тілдік мазмұны жоқ"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"ағылшын тілі (Біріккен Корольдік)"}
     }
     Scripts{

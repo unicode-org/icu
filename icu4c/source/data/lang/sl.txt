@@ -506,7 +506,7 @@ sl{
         zxx{"brez jezikoslovne vsebine"}
         zza{"zazajščina"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"azerščina"}
         en_GB{"angleščina (ZK)"}
         en_US{"angleščina (ZDA)"}

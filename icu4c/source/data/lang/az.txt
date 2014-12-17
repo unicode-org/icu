@@ -503,7 +503,7 @@ az{
         zxx{"dil məzmunu yoxdur"}
         zza{"zaza dili"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"azəri"}
         en_GB{"ingilis (B.K.)"}
         en_US{"ingilis (A.B.Ş.)"}

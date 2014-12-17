@@ -22,12 +22,12 @@ zh_Hant_HK{
         sd{"信德語"}
         zgh{"摩洛哥標準塔馬齊格特文"}
     }
+    Languages%short{
+        az{"阿澤里"}
+    }
     Languages%variant{
         ps{"普什圖語"}
         ug{"維吾爾語"}
-    }
-    LanguagesShort{
-        az{"阿澤里"}
     }
     Scripts{
         Cyrl{"西里爾語字母"}

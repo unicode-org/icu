@@ -503,13 +503,13 @@ bs{
         zxx{"bez lingvističkog sadržaja"}
         zza{"zaza"}
     }
-    Languages%variant{
-        ps{"pušto"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"azerski"}
         en_GB{"engleski (UK)"}
         en_US{"engleski (SAD)"}
+    }
+    Languages%variant{
+        ps{"pušto"}
     }
     Scripts{
         Arab{"arapsko pismo"}

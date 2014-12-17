@@ -640,15 +640,15 @@ en{
         zxx{"No linguistic content"}
         zza{"Zaza"}
     }
+    Languages%short{
+        az{"Azeri"}
+        en_GB{"U.K. English"}
+        en_US{"U.S. English"}
+    }
     Languages%variant{
         ky{"Kirghiz"}
         ps{"Pushto"}
         ug{"Uighur"}
-    }
-    LanguagesShort{
-        az{"Azeri"}
-        en_GB{"U.K. English"}
-        en_US{"U.S. English"}
     }
     Scripts{
         Afak{"Afaka"}

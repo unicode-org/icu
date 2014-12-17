@@ -630,14 +630,14 @@ ja{
         zxx{"言語的内容なし"}
         zza{"ザザ語"}
     }
-    Languages%variant{
-        ps{"パシュトゥ語"}
-        ug{"ウィグル語"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"アゼリー語"}
         en_GB{"英語(英国)"}
         en_US{"英語(米国)"}
+    }
+    Languages%variant{
+        ps{"パシュトゥ語"}
+        ug{"ウィグル語"}
     }
     Scripts{
         Afak{"アファカ文字"}

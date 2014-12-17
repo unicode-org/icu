@@ -302,6 +302,13 @@ br{
         ZW{"Zimbabwe"}
         ZZ{"Rannved dianav"}
     }
+    Countries%short{
+        GB{"R.U."}
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palestina"}
+        US{"S.U."}
+    }
     Countries%variant{
         CD{"Kongo (RDK)"}
         CG{"Kongo (Republik)"}
@@ -309,13 +316,6 @@ br{
         FK{"Inizi Falkland (Inizi Maloù)"}
         MK{"Makedonia (RYKM)"}
         TL{"Timor ar Reter"}
-    }
-    CountriesShort{
-        GB{"R.U."}
-        HK{"Hong Kong"}
-        MO{"Macau"}
-        PS{"Palestina"}
-        US{"S.U."}
     }
     Version{"2.1.10.42"}
 }

@@ -279,7 +279,7 @@ dsb{
         zu{"zulu"}
         zxx{"žedno rěcne wopśimjeśe"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"UK-engelšćina"}
         en_US{"US-engelšćina"}
     }

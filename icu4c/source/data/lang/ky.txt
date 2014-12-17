@@ -236,7 +236,7 @@ ky{
         zu{"зулуча"}
         zxx{"тилдик мазмун жок"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"англисче (УБ)"}
         en_US{"англисче (АКШ)"}
     }

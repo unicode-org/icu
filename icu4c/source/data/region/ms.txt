@@ -302,6 +302,13 @@ ms{
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Diketahui"}
     }
+    Countries%short{
+        GB{"GB"}
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palestin"}
+        US{"A.S"}
+    }
     Countries%variant{
         CD{"Congo (DRC)"}
         CG{"Congo (Republik)"}
@@ -309,13 +316,6 @@ ms{
         FK{"Kepulauan Falkland (Islas Malvinas)"}
         MK{"Macedonia (FYROM)"}
         TL{"Timor Timur"}
-    }
-    CountriesShort{
-        GB{"GB"}
-        HK{"Hong Kong"}
-        MO{"Macau"}
-        PS{"Palestin"}
-        US{"A.S"}
     }
     Version{"2.1.10.42"}
 }

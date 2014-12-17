@@ -302,18 +302,18 @@ sk{
         ZW{"Zimbabwe"}
         ZZ{"neznámy región"}
     }
-    Countries%variant{
-        CD{"Konžská demokratická republika"}
-        CG{"Konžská republika"}
-        FK{"Malvíny"}
-        MK{"Macedónsko (BJRM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"UK"}
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palestína"}
         US{"USA"}
+    }
+    Countries%variant{
+        CD{"Konžská demokratická republika"}
+        CG{"Konžská republika"}
+        FK{"Malvíny"}
+        MK{"Macedónsko (BJRM)"}
     }
     Version{"2.1.8.9"}
 }

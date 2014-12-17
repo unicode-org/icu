@@ -38,7 +38,7 @@ se_FI{
         vi{"vietnamagiella"}
         zh_Hans{"álkes kiinnágiella"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"brihttalaš eaŋgalsgiella"}
         en_US{"amerihkálaš eaŋgalsgiella"}
     }

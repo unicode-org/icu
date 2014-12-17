@@ -638,7 +638,7 @@ tr{
         zxx{"Dilbilim içeriği yok"}
         zza{"Zazaca"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"Azerice"}
         en_GB{"İngilizce (BK)"}
     }

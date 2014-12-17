@@ -305,7 +305,7 @@ ga{
         zun{"Zúinis"}
         zxx{"Gan ábhar teangeolaíoch"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"Béarla na R.A."}
         en_US{"Béarla S.A.M."}
     }
