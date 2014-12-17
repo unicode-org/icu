@@ -382,7 +382,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
     private String localeIdName(String localeId) {
         if (nameLength == DisplayContext.LENGTH_SHORT) {
-            String locIdName = langData.get("LanguagesShort", localeId);
+            String locIdName = langData.get("Languages%short", localeId);
             if (!locIdName.equals(localeId)) {
                 return locIdName;
             }
@@ -397,7 +397,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             return lang;
         }
         if (nameLength == DisplayContext.LENGTH_SHORT) {
-        	String langName = langData.get("LanguagesShort", lang);
+        	String langName = langData.get("Languages%short", lang);
         	if (!langName.equals(lang)) {
         	    return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langName);
         	}
@@ -439,7 +439,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     @Override
     public String regionDisplayName(String region) {
         if (nameLength == DisplayContext.LENGTH_SHORT) {
-        	String regionName = regionData.get("CountriesShort", region);
+        	String regionName = regionData.get("Countries%short", region);
         	if (!regionName.equals(region)) {
         	    return adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionName);
         	}
