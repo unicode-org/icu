@@ -66,7 +66,7 @@ public final class CollationLoader {
                     sb.append(s, 0, i).append((char)(c + 0x20));
                     while (++i < s.length()) {
                         c = s.charAt(i);
-                        if ('A' <= c && c <= 'Z') { c += 0x20; }
+                        if ('A' <= c && c <= 'Z') { c = (char)(c + 0x20); }
                         sb.append(c);
                     }
                     return sb.toString();
