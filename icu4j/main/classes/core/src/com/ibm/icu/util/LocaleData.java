@@ -334,8 +334,7 @@ public final class LocaleData {
 
         /**
          * Mix of metric and imperial units used in Great Britain.
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         public static final MeasurementSystem UK = new MeasurementSystem(2);
 
