@@ -25,6 +25,7 @@ import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTest;
+import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MeasureFormat;
@@ -43,6 +44,28 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  */
 public class MeasureUnitTest extends TestFmwk {
+    
+    static class OrderedPair<F extends Comparable, S extends Comparable> extends Pair<F, S> implements Comparable<OrderedPair<F, S>> {
+
+        OrderedPair(F first, S second) {
+            super(first, second);
+        }
+        
+        public static <F extends Comparable, S extends Comparable> OrderedPair<F, S> of(F first, S second) {
+            if (first == null || second == null) {
+                throw new IllegalArgumentException("OrderedPair.of requires non null values.");
+            }
+            return new OrderedPair<F, S>(first, second);            
+        }
+
+        public int compareTo(OrderedPair<F, S> other) {
+            int result = first.compareTo(other.first);
+            if (result != 0) {
+                return result;
+            }
+            return second.compareTo(other.second);
+        }
+    }
     
     private static final String[] DRAFT_VERSIONS = {"53", "54"};
     
@@ -742,56 +765,59 @@ public class MeasureUnitTest extends TestFmwk {
         }
     }
     
-    public void testMultiplesPer() {
-        Object[][] data = new Object[][] {
-                // perUnit pattern
-                {ULocale.ENGLISH, FormatWidth.WIDE, MeasureUnit.SECOND, "2 miles, 1 foot, 2.3 inches per second"},
-                {ULocale.ENGLISH, FormatWidth.SHORT, MeasureUnit.SECOND, "2 mi, 1 ft, 2.3 inps"},
-                {ULocale.ENGLISH, FormatWidth.NARROW, MeasureUnit.SECOND, "2mi 1\u2032 2.3\u2033/s"},
-                // global per pattern
-                {ULocale.ENGLISH, FormatWidth.WIDE, MeasureUnit.MINUTE, "2 miles, 1 foot, 2.3 inches per minute"},
-                {ULocale.ENGLISH, FormatWidth.SHORT, MeasureUnit.MINUTE, "2 mi, 1 ft, 2.3 in/min"},
-                {ULocale.ENGLISH, FormatWidth.NARROW, MeasureUnit.MINUTE, "2mi 1\u2032 2.3\u2033/m"}
-        };
-        for (Object[] row : data) {
-            MeasureFormat mf = MeasureFormat.getInstance(
-                    (ULocale) row[0], (FormatWidth) row[1]);
-            assertEquals(
-                    "testMultiples",
-                    row[3],
-                    mf.formatMeasuresPer(
-                            new StringBuilder(),
-                            new FieldPosition(0),
-                            (MeasureUnit) row[2],
-                            new Measure(2, MeasureUnit.MILE), 
-                            new Measure(1, MeasureUnit.FOOT), 
-                            new Measure(2.3, MeasureUnit.INCH)).toString());
-        }
-    }
-    
     public void testSimplePer() {
+        Object DONT_CARE = null;
         Object[][] data = new Object[][] {
-                // per unit singular
-                {1, MeasureUnit.SECOND, "1 lbps"},
-                // per unit plural
-                {2, MeasureUnit.SECOND, "2 lbps"},
-                // compound singular
-                {1, MeasureUnit.MINUTE, "1 lb/min"},
-                // compound plural
-                {2, MeasureUnit.MINUTE, "2 lb/min"},
+                // per unit pattern
+                {FormatWidth.WIDE, 1.0, MeasureUnit.SECOND, "1 pound per second", DONT_CARE, 0, 0},
+                {FormatWidth.WIDE, 2.0, MeasureUnit.SECOND, "2 pounds per second", DONT_CARE, 0, 0},
+                // compound pattern
+                {FormatWidth.WIDE, 1.0, MeasureUnit.MINUTE, "1 pound per minute", DONT_CARE, 0, 0},
+                {FormatWidth.WIDE, 2.0, MeasureUnit.MINUTE, "2 pounds per minute", DONT_CARE, 0, 0},
+                // per unit
+                {FormatWidth.SHORT, 1.0, MeasureUnit.SECOND, "1 lbps", DONT_CARE, 0, 0},
+                {FormatWidth.SHORT, 2.0, MeasureUnit.SECOND, "2 lbps", DONT_CARE, 0, 0},
+                // compound
+                {FormatWidth.SHORT, 1.0, MeasureUnit.MINUTE, "1 lb/min", DONT_CARE, 0, 0},
+                {FormatWidth.SHORT, 2.0, MeasureUnit.MINUTE, "2 lb/min", DONT_CARE, 0, 0},
+                // per unit
+                {FormatWidth.NARROW, 1.0, MeasureUnit.SECOND, "1#/s", DONT_CARE, 0, 0},
+                {FormatWidth.NARROW, 2.0, MeasureUnit.SECOND, "2#/s", DONT_CARE, 0, 0},
+                // compound
+                {FormatWidth.NARROW, 1.0, MeasureUnit.MINUTE, "1#/m", DONT_CARE, 0, 0},
+                {FormatWidth.NARROW, 2.0, MeasureUnit.MINUTE, "2#/m", DONT_CARE, 0, 0},
+                // field positions
+                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lbps", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lbps", NumberFormat.Field.INTEGER, 0, 2},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lb/min", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lb/min", NumberFormat.Field.INTEGER, 0, 2},
+
         };
         
         for (Object[] row : data) {
+            FormatWidth formatWidth = (FormatWidth) row[0];
+            Number amount = (Number) row[1];
+            MeasureUnit perUnit = (MeasureUnit) row[2];
+            String expected = row[3].toString();
+            NumberFormat.Field field = (NumberFormat.Field) row[4];
+            int startOffset = ((Integer) row[5]).intValue();
+            int endOffset = ((Integer) row[6]).intValue();
             MeasureFormat mf = MeasureFormat.getInstance(
-                    ULocale.ENGLISH, FormatWidth.SHORT);
+                    ULocale.ENGLISH, formatWidth);
+            FieldPosition pos = field != null ? new FieldPosition(field) : new FieldPosition(0);
+            String prefix = "Prefix: ";
             assertEquals(
                     "",
-                    row[2],
-                    mf.formatMeasuresPer(
-                            new StringBuilder(),
-                            new FieldPosition(0),
-                            (MeasureUnit) row[1],
-                            new Measure((Number) row[0], MeasureUnit.POUND)).toString());
+                    prefix + expected,
+                    mf.formatMeasurePerUnit(
+                            new Measure(amount, MeasureUnit.POUND),
+                            perUnit,
+                            new StringBuilder(prefix),
+                            pos).toString());
+            if (field != DONT_CARE) {
+                assertEquals("startOffset", startOffset, pos.getBeginIndex() - prefix.length());
+                assertEquals("endOffset", endOffset, pos.getEndIndex() - prefix.length());
+            }
         }        
     }
     
@@ -808,11 +834,11 @@ public class MeasureUnitTest extends TestFmwk {
             assertEquals(
                     "",
                     row[1],
-                    mf.formatMeasuresPer(
-                            new StringBuilder(),
-                            new FieldPosition(0),
+                    mf.formatMeasurePerUnit(
+                            new Measure((Number) row[0], MeasureUnit.FOOT),
                             MeasureUnit.SECOND,
-                            new Measure((Number) row[0], MeasureUnit.FOOT)).toString());
+                            new StringBuilder(),
+                            new FieldPosition(0)).toString());
         }        
     }
 
@@ -929,64 +955,6 @@ public class MeasureUnitTest extends TestFmwk {
         
     }
     
-    public void testFieldPositionMultipleWithPer() {
-        MeasureFormat fmt = MeasureFormat.getInstance(
-                ULocale.ENGLISH, FormatWidth.SHORT);
-        FieldPosition pos = new FieldPosition(NumberFormat.Field.INTEGER);
-        String result = fmt.formatMeasuresPer(
-                new StringBuilder(),
-                pos,
-                MeasureUnit.SECOND,
-                new Measure(354, MeasureUnit.METER),
-                new Measure(23, MeasureUnit.CENTIMETER)).toString();
-        assertEquals("result", "354 m, 23 cmps", result);
-        
-        // According to javadocs for {@link Format#format} FieldPosition is set to
-        // beginning and end of first such field encountered instead of the last
-        // such field encountered.
-        assertEquals("beginIndex", 0, pos.getBeginIndex());
-        assertEquals("endIndex", 3, pos.getEndIndex());
-        
-        pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
-        result = fmt.formatMeasuresPer(
-                new StringBuilder("123456: "),
-                pos,
-                MeasureUnit.SECOND,
-                new Measure(354, MeasureUnit.METER),
-                new Measure(23, MeasureUnit.CENTIMETER),
-                new Measure(5.4, MeasureUnit.MILLIMETER)).toString();
-        assertEquals("result", "123456: 354 m, 23 cm, 5.4 mmps", result);
-        assertEquals("beginIndex", 23, pos.getBeginIndex());
-        assertEquals("endIndex", 24, pos.getEndIndex());
-  
-        pos = new FieldPosition(NumberFormat.Field.INTEGER);
-        result = fmt.formatMeasuresPer(
-                new StringBuilder(),
-                pos,
-                MeasureUnit.MINUTE,
-                new Measure(354, MeasureUnit.METER),
-                new Measure(23, MeasureUnit.CENTIMETER)).toString();
-        assertEquals("result", "354 m, 23 cm/min", result);
-        
-        // According to javadocs for {@link Format#format} FieldPosition is set to
-        // beginning and end of first such field encountered instead of the last
-        // such field encountered.
-        assertEquals("beginIndex", 0, pos.getBeginIndex());
-        assertEquals("endIndex", 3, pos.getEndIndex());
-        
-        pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
-        result = fmt.formatMeasuresPer(
-                new StringBuilder("123456: "),
-                pos,
-                MeasureUnit.MINUTE,
-                new Measure(354, MeasureUnit.METER),
-                new Measure(23, MeasureUnit.CENTIMETER),
-                new Measure(5.4, MeasureUnit.MILLIMETER)).toString();
-        assertEquals("result", "123456: 354 m, 23 cm, 5.4 mm/min", result);
-        assertEquals("beginIndex", 23, pos.getBeginIndex());
-        assertEquals("endIndex", 24, pos.getEndIndex());
-    }
-    
     public void testOldFormatWithList() {
         List<Measure> measures = new ArrayList<Measure>(2);
         measures.add(new Measure(5, MeasureUnit.ACRE));
@@ -1025,6 +993,19 @@ public class MeasureUnitTest extends TestFmwk {
         } catch (IllegalArgumentException e) {
             // Expected
         }
+    }
+    
+    public void testUnitPerUnitResolution() {
+        // Ticket 11274
+        MeasureFormat fmt = MeasureFormat.getInstance(Locale.ENGLISH, FormatWidth.SHORT);
+        
+        // This fails unless we resolve to MeasureUnit.POUND_PER_SQUARE_INCH
+        assertEquals("", "50 psi",
+                fmt.formatMeasurePerUnit(
+                        new Measure(50, MeasureUnit.POUND),
+                        MeasureUnit.SQUARE_INCH,
+                        new StringBuilder(),
+                        new FieldPosition(0)).toString());
     }
     
     public void testEqHashCode() {
@@ -1106,6 +1087,42 @@ public class MeasureUnitTest extends TestFmwk {
                         new Measure(23, MeasureUnit.MINUTE),
                         new Measure(16, MeasureUnit.SECOND)));
         
+    }
+    
+    // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
+    // for MeasureFormat during the release process.
+    static Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> getUnitsToPerParts() {
+        TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+        Map<MeasureUnit, Pair<String, String>> unitsToPerStrings =
+                new HashMap<MeasureUnit, Pair<String, String>>();
+        Map<String, MeasureUnit> namesToUnits = new HashMap<String, MeasureUnit>();
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            String type = entry.getKey();
+            // Currency types are always atomic units, so we can skip these
+            if (type.equals("currency")) {
+                continue;
+            }
+            for (MeasureUnit unit : entry.getValue()) {
+                String javaName = toJAVAName(unit);
+                String[] nameParts = javaName.split("_PER_");
+                if (nameParts.length == 1) {
+                    namesToUnits.put(nameParts[0], unit);
+                } else if (nameParts.length == 2) {
+                    unitsToPerStrings.put(unit, Pair.of(nameParts[0], nameParts[1]));
+                }
+            }
+        }
+        Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> unitsToPerUnits =
+                new HashMap<MeasureUnit, Pair<MeasureUnit, MeasureUnit>>();
+        for (Map.Entry<MeasureUnit, Pair<String, String>> entry : unitsToPerStrings.entrySet()) {
+            Pair<String, String> perStrings = entry.getValue();
+            MeasureUnit unit = namesToUnits.get(perStrings.first);
+            MeasureUnit perUnit = namesToUnits.get(perStrings.second);
+            if (unit != null && perUnit != null) {
+                unitsToPerUnits.put(entry.getKey(), Pair.of(unit, perUnit));
+            }
+        }
+        return unitsToPerUnits;
     }
     
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
@@ -1196,9 +1213,9 @@ public class MeasureUnitTest extends TestFmwk {
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
     // for MeasureFormat during the release process.
     static void generateCXXConstants() {
-        System.out.println("static final MeasureUnit");
-        Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
+        System.out.println("");       
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
+        
         System.out.println("static const int32_t gOffsets[] = {");
         int index = 0;
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
@@ -1219,6 +1236,7 @@ public class MeasureUnitTest extends TestFmwk {
         System.out.printf("    %d\n", index);
         System.out.println("};");
         System.out.println();
+        System.out.println("// Must be sorted alphabetically.");
         System.out.println("static const char * const gTypes[] = {");
         boolean first = true;
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
@@ -1231,47 +1249,89 @@ public class MeasureUnitTest extends TestFmwk {
         System.out.println();
         System.out.println("};");
         System.out.println();
+        System.out.println("// Must be grouped by type and sorted alphabetically within each type.");
         System.out.println("static const char * const gSubTypes[] = {");
         first = true;
+        int offset = 0;
+        int typeIdx = 0;
+        Map<MeasureUnit, Integer> measureUnitToOffset = new HashMap<MeasureUnit, Integer>();
+        Map<MeasureUnit, Pair<Integer, Integer>> measureUnitToTypeSubType =
+                new HashMap<MeasureUnit, Pair<Integer, Integer>>();
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            int subTypeIdx = 0;
             for (MeasureUnit unit : entry.getValue()) {
                 if (!first) {
                     System.out.println(",");
                 }
                 System.out.print("    \"" + unit.getSubtype() + "\"");
                 first = false;
+                measureUnitToOffset.put(unit, offset);
+                measureUnitToTypeSubType.put(unit, Pair.of(typeIdx, subTypeIdx));
+                offset++;
+                subTypeIdx++;
             }
+            typeIdx++;
         }    
         System.out.println();
         System.out.println("};");
         System.out.println();
         
-        int typeIdx = 0;
+        // Build unit per unit offsets to corresponding type sub types sorted by
+        // unit first and then per unit.
+        TreeMap<OrderedPair<Integer, Integer>, Pair<Integer, Integer>> unitPerUnitOffsetsToTypeSubType
+                = new TreeMap<OrderedPair<Integer, Integer>, Pair<Integer, Integer>>();
+        for (Map.Entry<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> entry
+                : getUnitsToPerParts().entrySet()) {
+            Pair<MeasureUnit, MeasureUnit> unitPerUnit = entry.getValue();
+            unitPerUnitOffsetsToTypeSubType.put(
+                    OrderedPair.of(
+                            measureUnitToOffset.get(unitPerUnit.first),
+                            measureUnitToOffset.get(unitPerUnit.second)),
+                    measureUnitToTypeSubType.get(entry.getKey()));
+        }
+        
+        System.out.println("// Must be sorted by first value and then second value.");
+        System.out.println("static int32_t unitPerUnitToSingleUnit[][4] = {");
+        first = true;
+        for (Map.Entry<OrderedPair<Integer, Integer>, Pair<Integer, Integer>> entry
+                : unitPerUnitOffsetsToTypeSubType.entrySet()) {
+            if (!first) {
+                System.out.println(",");
+            }
+            first = false;
+            OrderedPair<Integer, Integer> unitPerUnitOffsets = entry.getKey();
+            Pair<Integer, Integer> typeSubType = entry.getValue();
+            System.out.printf("        {%d, %d, %d, %d}",
+                    unitPerUnitOffsets.first,
+                    unitPerUnitOffsets.second,
+                    typeSubType.first,
+                    typeSubType.second);
+        }
+        System.out.println();
+        System.out.println("};");
+        System.out.println();
+        
+        Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            int subTypeIdx = 0;
+            
             String type = entry.getKey();
             if (type.equals("currency")) {
-                typeIdx++;
                 continue;
             }
             for (MeasureUnit unit : entry.getValue()) {
                 String name = toCamelCase(unit);
-                String javaName = toJAVAName(unit);
+                Pair<Integer, Integer> typeSubType = measureUnitToTypeSubType.get(unit);
+                if (typeSubType == null) {
+                    throw new IllegalStateException();
+                }
                 checkForDup(seen, name, unit);
-                if (isDraft(javaName)) {
-                    System.out.println("#ifndef U_HIDE_DRAFT_API");
-                }
                 System.out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
-                System.out.printf("    return MeasureUnit::create(%d, %d, status);\n", typeIdx, subTypeIdx);
+                System.out.printf("    return MeasureUnit::create(%d, %d, status);\n",
+                        typeSubType.first, typeSubType.second);
                 System.out.println("}");
-                if (isDraft(javaName)) {
-                    System.out.println("#endif /* U_HIDE_DRAFT_API */");
-                }
-                System.out.println();
-                subTypeIdx++;
+                System.out.println();                
             }
-            typeIdx++;
-        }    
+        }
     }
 
     private static String toCamelCase(MeasureUnit unit) {
@@ -1403,6 +1463,16 @@ public class MeasureUnitTest extends TestFmwk {
                 System.out.println();
             }
         }
+        System.out.println("    private static HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>unitPerUnitToSingleUnit =");
+        System.out.println("            new HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>();");
+        System.out.println();
+        System.out.println("    static {");
+        for (Map.Entry<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> unitPerUnitEntry
+                : getUnitsToPerParts().entrySet()) {
+            Pair<MeasureUnit, MeasureUnit> unitPerUnit = unitPerUnitEntry.getValue();
+            System.out.println("        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit." + toJAVAName(unitPerUnit.first) + ", MeasureUnit." + toJAVAName(unitPerUnit.second) + "), MeasureUnit." + toJAVAName(unitPerUnitEntry.getKey()) + ");"); 
+        }
+        System.out.println("    }");
     }
     
     private static String getVersion(String javaName, String thisVersion) {
