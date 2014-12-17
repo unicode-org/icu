@@ -545,13 +545,13 @@ el{
         zxx{"Χωρίς γλωσσολογικό περιεχόμενο"}
         zza{"Ζάζα"}
     }
-    Languages%variant{
-        ug{"Ουιγκούρ"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"Αζερικά"}
         en_GB{"Αγγλικά ΗΒ"}
         en_US{"Αγγλικά ΗΠΑ"}
+    }
+    Languages%variant{
+        ug{"Ουιγκούρ"}
     }
     Scripts{
         Arab{"Αραβικό"}

@@ -231,7 +231,7 @@ ne{
         zu{"जुलु"}
         zxx{"भाषिक सामग्री छैन"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"अजेरी"}
         en_US{"अंग्रेजी (अमेरिका)"}
     }

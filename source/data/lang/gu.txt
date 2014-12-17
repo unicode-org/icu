@@ -533,13 +533,13 @@ gu{
         zxx{"કોઇ ભાષાશાસ્ત્રીય સામગ્રી નથી"}
         zza{"ઝાઝા"}
     }
-    Languages%variant{
-        ps{"પુશ્તો"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"અઝેરી"}
         en_GB{"યુ.કે. અંગ્રેજી"}
         en_US{"યુ. એસ. અંગ્રેજી"}
+    }
+    Languages%variant{
+        ps{"પુશ્તો"}
     }
     Scripts{
         Arab{"અરબી"}

@@ -241,7 +241,7 @@ sq{
         zu{"zulu"}
         zxx{"nuk ka përmbajtje gjuhësore"}
     }
-    LanguagesShort{
+    Languages%short{
         en_US{"anglisht (SHBA)"}
     }
     Scripts{

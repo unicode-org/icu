@@ -520,13 +520,13 @@ te{
         zxx{"లిపి లేదు"}
         zza{"జాజా"}
     }
-    Languages%variant{
-        ps{"పుష్టో"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"అజెరి"}
         en_GB{"యు.కె. ఇంగ్లీష్"}
         en_US{"యు.ఎస్. ఇంగ్లీష్"}
+    }
+    Languages%variant{
+        ps{"పుష్టో"}
     }
     Scripts{
         Arab{"అరబిక్"}

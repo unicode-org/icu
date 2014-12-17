@@ -280,7 +280,7 @@ hsb{
         zu{"zulušćina\u0022"}
         zxx{"žadyn rěčny wobsah"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"jendźelšćina (UK)"}
         en_US{"jendźelšćina (USA)"}
     }

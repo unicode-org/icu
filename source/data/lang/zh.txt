@@ -545,7 +545,7 @@ zh{
         zxx{"无语言内容"}
         zza{"扎扎文"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"阿塞拜疆文"}
         en_GB{"英式英文"}
         en_US{"美式英文"}

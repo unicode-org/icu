@@ -302,18 +302,18 @@ ko{
         ZW{"짐바브웨"}
         ZZ{"알려지지 않은 지역"}
     }
-    Countries%variant{
-        CD{"콩고민주공화국"}
-        CG{"콩고 공화국"}
-        FK{"포클랜드 제도(말비나스 군도)"}
-        MK{"마케도니아(FYROM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"영국"}
         HK{"홍콩"}
         MO{"마카오"}
         PS{"팔레스타인"}
         US{"미국"}
+    }
+    Countries%variant{
+        CD{"콩고민주공화국"}
+        CG{"콩고 공화국"}
+        FK{"포클랜드 제도(말비나스 군도)"}
+        MK{"마케도니아(FYROM)"}
     }
     Version{"2.1.9.31"}
 }

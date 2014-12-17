@@ -559,7 +559,7 @@ ko{
         zxx{"언어 관련 내용 없음"}
         zza{"자자어"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"아제리어"}
     }
     Scripts{

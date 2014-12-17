@@ -301,6 +301,13 @@ uz{
         ZW{"Zimbabve"}
         ZZ{"Nomaʼlum hudud"}
     }
+    Countries%short{
+        GB{"B.Q."}
+        HK{"Gonkong"}
+        MO{"Makao"}
+        PS{"Falastin"}
+        US{"AQSH"}
+    }
     Countries%variant{
         CD{"Kongo (KDR)"}
         CG{"Kongo (Respublika)"}
@@ -308,13 +315,6 @@ uz{
         FK{"Folklend orollari (Malvin orollari)"}
         MK{"Makedoniya (SYUR)"}
         TL{"Sharqiy Timor"}
-    }
-    CountriesShort{
-        GB{"B.Q."}
-        HK{"Gonkong"}
-        MO{"Makao"}
-        PS{"Falastin"}
-        US{"AQSH"}
     }
     Version{"2.1.10.42"}
 }

@@ -302,19 +302,19 @@ fr{
         ZW{"Zimbabwe"}
         ZZ{"région indéterminée"}
     }
+    Countries%short{
+        GB{"R.-U."}
+        HK{"Hong Kong"}
+        MO{"Macao"}
+        PS{"Palestine"}
+        US{"É.-U."}
+    }
     Countries%variant{
         CD{"Congo (RDC)"}
         CG{"République du Congo"}
         FK{"Îles Falkland"}
         MK{"Macédoine (ARYM)"}
         TL{"Timor-Oriental"}
-    }
-    CountriesShort{
-        GB{"R.-U."}
-        HK{"Hong Kong"}
-        MO{"Macao"}
-        PS{"Palestine"}
-        US{"É.-U."}
     }
     Version{"2.1.8.9"}
 }

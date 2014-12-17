@@ -302,19 +302,19 @@ pt{
         ZW{"Zimbábue"}
         ZZ{"Região desconhecida"}
     }
+    Countries%short{
+        GB{"Reino Unido"}
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palestina"}
+        US{"EUA"}
+    }
     Countries%variant{
         CD{"República Democrática do Congo"}
         CG{"Congo"}
         FK{"Ilhas Falkland (Ilhas Malvinas)"}
         MK{"Macedônia (Antiga República Iugoslava da Macedônia - ARIM)"}
         TL{"República Democrática de Timor-Leste"}
-    }
-    CountriesShort{
-        GB{"Reino Unido"}
-        HK{"Hong Kong"}
-        MO{"Macau"}
-        PS{"Palestina"}
-        US{"EUA"}
     }
     Version{"2.1.10.42"}
 }

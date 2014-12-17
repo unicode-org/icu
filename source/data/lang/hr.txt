@@ -545,13 +545,13 @@ hr{
         zxx{"bez jezičnog sadržaja"}
         zza{"zazaki"}
     }
-    Languages%variant{
-        ps{"puštu"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"azerski"}
         en_GB{"engleski (UK)"}
         en_US{"engleski (SAD)"}
+    }
+    Languages%variant{
+        ps{"puštu"}
     }
     Scripts{
         Afak{"afaka pismo"}

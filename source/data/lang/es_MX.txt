@@ -39,12 +39,12 @@ es_MX{
         vun{"vunjo"}
         zgh{"tamazight estándar marroquí"}
     }
+    Languages%short{
+        en_GB{"inglés (R.U.)"}
+    }
     Languages%variant{
         ps{"pashto"}
         ug{"uyghur"}
-    }
-    LanguagesShort{
-        en_GB{"inglés (R.U.)"}
     }
     Scripts{
         Hans{"han simplificado"}

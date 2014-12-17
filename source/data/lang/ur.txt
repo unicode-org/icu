@@ -279,7 +279,7 @@ ur{
         zu{"زولو"}
         zxx{"کوئی لسانی مواد نہیں"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"ازیری"}
         en_GB{"برطانوی انگلش"}
         en_US{"امریکی انگلش"}

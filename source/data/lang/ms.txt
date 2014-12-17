@@ -339,14 +339,14 @@ ms{
         zxx{"Tiada kandungan linguistik"}
         zza{"Zaza"}
     }
-    Languages%variant{
-        ps{"Pushto"}
-        ug{"Uighur"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"Azeri"}
         en_GB{"Inggeris U.K."}
         en_US{"Inggeris A.S."}
+    }
+    Languages%variant{
+        ps{"Pushto"}
+        ug{"Uighur"}
     }
     Scripts{
         Arab{"Arab"}

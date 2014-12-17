@@ -301,18 +301,18 @@ lb{
         ZW{"Simbabwe"}
         ZZ{"Onbekannt Regioun"}
     }
-    Countries%variant{
-        CD{"Kongo (Demokratesch Republik)"}
-        CG{"Kongo (Republik)"}
-        CI{"Côte d’Ivoire"}
-        MK{"Mazedonien (EJR)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"GB"}
         HK{"Hong Kong"}
         MO{"Macau"}
         PS{"Palestina"}
         US{"US"}
+    }
+    Countries%variant{
+        CD{"Kongo (Demokratesch Republik)"}
+        CG{"Kongo (Republik)"}
+        CI{"Côte d’Ivoire"}
+        MK{"Mazedonien (EJR)"}
     }
     Version{"2.1.10.42"}
 }

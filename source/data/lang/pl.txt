@@ -638,12 +638,12 @@ pl{
         zxx{"brak treści o charakterze językowym"}
         zza{"zazaki"}
     }
-    Languages%variant{
-        ps{"pasztuński"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"azerski"}
         en_US{"angielski (USA)"}
+    }
+    Languages%variant{
+        ps{"pasztuński"}
     }
     Scripts{
         Arab{"arabskie"}

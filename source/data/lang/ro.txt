@@ -545,13 +545,13 @@ ro{
         zxx{"fară conținut lingvistic"}
         zza{"zaza"}
     }
-    Languages%variant{
-        ps{"pushto"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"azeră"}
         en_GB{"engleză britanică"}
         en_US{"engleză (S.U.A)"}
+    }
+    Languages%variant{
+        ps{"pushto"}
     }
     Scripts{
         Arab{"arabă"}

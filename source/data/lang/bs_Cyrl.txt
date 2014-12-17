@@ -461,11 +461,11 @@ bs_Cyrl{
         zxx{"без лингвистичког садржаја"}
         zza{"заза"}
     }
+    Languages%short{
+        az{"азерски"}
+    }
     Languages%variant{
         ps{"пашто"}
-    }
-    LanguagesShort{
-        az{"азерски"}
     }
     Scripts{
         Arab{"арапско писмо"}

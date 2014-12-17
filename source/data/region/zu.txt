@@ -302,6 +302,13 @@ zu{
         ZW{"i-Zimbabwe"}
         ZZ{"iSifunda esingaziwa"}
     }
+    Countries%short{
+        GB{"i-U.K."}
+        HK{"i-Hong Kong"}
+        MO{"i-Macau"}
+        PS{"i-Phalestine"}
+        US{"i-U.S"}
+    }
     Countries%variant{
         CD{"i-Congo (DRC)"}
         CG{"i-Congo (Republic)"}
@@ -309,13 +316,6 @@ zu{
         FK{"i-Falkland Islands (Islas Malvinas)"}
         MK{"i-Macedonia (FYROM)"}
         TL{"i-East Timor"}
-    }
-    CountriesShort{
-        GB{"i-U.K."}
-        HK{"i-Hong Kong"}
-        MO{"i-Macau"}
-        PS{"i-Phalestine"}
-        US{"i-U.S"}
     }
     Version{"2.1.10.42"}
 }

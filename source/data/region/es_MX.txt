@@ -47,7 +47,7 @@ es_MX{
         UM{"Islas UltramarinasMenores de Estados Unidos"}
         VI{"Islas Vírgenes de los Estados Unidos"}
     }
-    CountriesShort{
+    Countries%short{
         GB{"RU"}
     }
     Version{"2.1.10.42"}

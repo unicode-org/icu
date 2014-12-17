@@ -545,7 +545,7 @@ hu{
         zxx{"nincs nyelvészeti tartalom"}
         zza{"zaza"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"azeri"}
         en_GB{"angol (UK)"}
         en_US{"angol (USA)"}

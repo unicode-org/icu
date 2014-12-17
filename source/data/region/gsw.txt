@@ -291,12 +291,12 @@ gsw{
         ZW{"Simbabwe"}
         ZZ{"Unbekannti oder ungültigi Regioon"}
     }
-    Countries%variant{
-        MK{"Mazedoonie (EJRM)"}
-    }
-    CountriesShort{
+    Countries%short{
         HK{"Hongkong"}
         MO{"Macao"}
+    }
+    Countries%variant{
+        MK{"Mazedoonie (EJRM)"}
     }
     Version{"2.1.7.41"}
 }

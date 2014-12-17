@@ -15,7 +15,7 @@ en_GB{
     Languages{
         wal{"Walamo"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"UK English"}
         en_US{"US English"}
     }

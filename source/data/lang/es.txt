@@ -545,14 +545,14 @@ es{
         zxx{"sin contenido lingüístico"}
         zza{"zazaki"}
     }
-    Languages%variant{
-        ps{"pastú"}
-        ug{"uygur"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"azerí"}
         en_GB{"inglés (RU)"}
         en_US{"inglés (EE. UU.)"}
+    }
+    Languages%variant{
+        ps{"pastú"}
+        ug{"uygur"}
     }
     Scripts{
         Arab{"árabe"}

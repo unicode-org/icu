@@ -635,14 +635,14 @@ th{
         zxx{"ไม่มีข้อมูลภาษา"}
         zza{"ซาซา"}
     }
-    Languages%variant{
-        ps{"พุชโต"}
-        ug{"อุยกูร์"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"อะเซอรี"}
         en_GB{"อังกฤษ - อังกฤษ"}
         en_US{"อังกฤษ - อเมริกัน"}
+    }
+    Languages%variant{
+        ps{"พุชโต"}
+        ug{"อุยกูร์"}
     }
     Scripts{
         Afak{"อะฟาคา"}

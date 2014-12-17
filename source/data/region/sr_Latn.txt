@@ -303,18 +303,18 @@ sr_Latn{
         ZW{"Zimbabve"}
         ZZ{"Nepoznat region"}
     }
-    Countries%variant{
-        CD{"Kongo (DRK)"}
-        CG{"Kongo (Republika)"}
-        FK{"Foklandska (Malvinska) ostrva"}
-        MK{"Makedonija (BJRM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"UK"}
         HK{"Hong Kong"}
         MO{"Makao"}
         PS{"Palestina"}
         US{"SAD"}
+    }
+    Countries%variant{
+        CD{"Kongo (DRK)"}
+        CG{"Kongo (Republika)"}
+        FK{"Foklandska (Malvinska) ostrva"}
+        MK{"Makedonija (BJRM)"}
     }
     Version{"2.1.10.42"}
 }

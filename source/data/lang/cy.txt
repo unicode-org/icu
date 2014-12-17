@@ -428,7 +428,7 @@ cy{
         zxx{"Dim cynnwys ieithyddol"}
         zza{"Zazäeg"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"Saesneg (DU)"}
         en_US{"Saesneg (UDA)"}
     }

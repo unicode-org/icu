@@ -545,7 +545,7 @@ sk{
         zxx{"bez jazykového obsahu"}
         zza{"zázá"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"azerbajdžančina"}
         en_GB{"angličtina (britská)"}
         en_US{"angličtina (americká)"}

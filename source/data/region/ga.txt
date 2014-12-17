@@ -302,18 +302,18 @@ ga{
         ZW{"An tSiombáib"}
         ZZ{"Réigiún Anaithnid"}
     }
-    Countries%variant{
-        CD{"An Congó (PDC)"}
-        CG{"An Congó (Poblacht)"}
-        FK{"Oileáin Fháclainne (Islas Malvinas)"}
-        MK{"An Mhacadóin (PIIM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"RA"}
         HK{"Hong Cong"}
         MO{"Macao"}
         PS{"An Phalaistín"}
         US{"SAM"}
+    }
+    Countries%variant{
+        CD{"An Congó (PDC)"}
+        CG{"An Congó (Poblacht)"}
+        FK{"Oileáin Fháclainne (Islas Malvinas)"}
+        MK{"An Mhacadóin (PIIM)"}
     }
     Version{"2.1.8.9"}
 }

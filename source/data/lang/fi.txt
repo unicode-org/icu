@@ -644,7 +644,7 @@ fi{
         kl{"grönlanti"}
         lad{"juutalaisespanja"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"azeri"}
         en_GB{"englanti (Britannia)"}
         en_US{"englanti (USA)"}

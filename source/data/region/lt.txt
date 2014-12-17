@@ -302,18 +302,18 @@ lt{
         ZW{"Zimbabvė"}
         ZZ{"nežinoma sritis"}
     }
-    Countries%variant{
-        CD{"Kongo Demokratinė Respublika"}
-        CG{"Kongo Respublika"}
-        FK{"Folklando (Malvinų) Salos"}
-        MK{"Makedonijos Respublika"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"Didžioji Britanija"}
         HK{"Honkongas"}
         MO{"Makao"}
         PS{"Palestina"}
         US{"JAV"}
+    }
+    Countries%variant{
+        CD{"Kongo Demokratinė Respublika"}
+        CG{"Kongo Respublika"}
+        FK{"Folklando (Malvinų) Salos"}
+        MK{"Makedonijos Respublika"}
     }
     Version{"2.1.10.42"}
 }

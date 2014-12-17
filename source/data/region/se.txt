@@ -296,7 +296,7 @@ se{
         ZW{"Zimbabwe"}
         ZZ{"dovdameahttun guovlu"}
     }
-    CountriesShort{
+    Countries%short{
         GB{"Stuorra-Británnia"}
         HK{"Hongkong"}
         MO{"Makáo"}

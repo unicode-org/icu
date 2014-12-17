@@ -302,6 +302,13 @@ gd{
         ZW{"An t-Sìombab"}
         ZZ{"Roinn-dùthcha neo-aithnichte"}
     }
+    Countries%short{
+        GB{"RA"}
+        HK{"Hong Kong"}
+        MO{"Macàthu"}
+        PS{"Palastain"}
+        US{"SA"}
+    }
     Countries%variant{
         CD{"A’ Chongo (Poblachd Dheamocratach)"}
         CG{"A’ Chongo (Poblachd)"}
@@ -309,13 +316,6 @@ gd{
         FK{"Na h-Eileanan Fàclannach (Islas Malvinas)"}
         MK{"A’ Mhasadon (FYROM)"}
         TL{"Tìomor an Ear"}
-    }
-    CountriesShort{
-        GB{"RA"}
-        HK{"Hong Kong"}
-        MO{"Macàthu"}
-        PS{"Palastain"}
-        US{"SA"}
     }
     Version{"2.1.8.9"}
 }

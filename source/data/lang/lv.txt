@@ -545,7 +545,7 @@ lv{
         zxx{"bez lingvistiska satura"}
         zza{"zazaki"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"azerbaidžāņu"}
         en_US{"angļu (ASV)"}
     }

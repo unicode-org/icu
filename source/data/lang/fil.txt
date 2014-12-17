@@ -280,14 +280,14 @@ fil{
         zu{"Zulu"}
         zxx{"Walang nilalaman na ukol sa wika"}
     }
-    Languages%variant{
-        ps{"Pushto"}
-        ug{"Uighur"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"Azeri"}
         en_GB{"Ingles (U.K.)"}
         en_US{"Ingles (U.S.)"}
+    }
+    Languages%variant{
+        ps{"Pushto"}
+        ug{"Uighur"}
     }
     Scripts{
         Arab{"Arabic"}

@@ -545,13 +545,13 @@ da{
         zxx{"intet sprogligt indhold"}
         zza{"zaza"}
     }
+    Languages%short{
+        az{"azeri"}
+        en_GB{"engelsk (UK)"}
+    }
     Languages%variant{
         ps{"pushto"}
         ug{"uighurisk"}
-    }
-    LanguagesShort{
-        az{"azeri"}
-        en_GB{"engelsk (UK)"}
     }
     Scripts{
         Afak{"afaka"}

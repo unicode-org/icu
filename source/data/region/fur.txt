@@ -296,15 +296,15 @@ fur{
         ZW{"Zimbabwe"}
         ZZ{"Regjon no cognossude o no valide"}
     }
+    Countries%short{
+        HK{"Hong Kong"}
+        MO{"Macao"}
+    }
     Countries%variant{
         CD{"Congo (RDC)"}
         CG{"Congo (Republiche)"}
         FK{"Isulis Falkland (Isulis Malvinas)"}
         MK{"Macedonie (FYROM)"}
-    }
-    CountriesShort{
-        HK{"Hong Kong"}
-        MO{"Macao"}
     }
     Version{"2.1.7.53"}
 }

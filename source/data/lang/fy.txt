@@ -542,11 +542,11 @@ fy{
         zxx{"Gjin linguïstyske ynhâld"}
         zza{"Zaza"}
     }
+    Languages%short{
+        az{"Azeri"}
+    }
     Languages%variant{
         ps{"Pashto"}
-    }
-    LanguagesShort{
-        az{"Azeri"}
     }
     Scripts{
         Afak{"Defaka"}

@@ -86,7 +86,7 @@ pt_PT{
         xog{"soga"}
         zgh{"tamazight padrão de Marrocos"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"inglês (RU)"}
         en_US{"inglês (EUA)"}
     }

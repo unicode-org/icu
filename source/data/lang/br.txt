@@ -467,7 +467,7 @@ br{
         zun{"zuni"}
         zxx{"diyezh"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"saozneg R.U."}
         en_US{"saozneg S.U."}
     }

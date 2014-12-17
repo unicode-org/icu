@@ -23,11 +23,11 @@ fr_CA{
         und{"indéterminé"}
         ybb{"yémba"}
     }
+    Languages%short{
+        en_GB{"anglais (GB)"}
+    }
     Languages%variant{
         ug{"ouïghour"}
-    }
-    LanguagesShort{
-        en_GB{"anglais (GB)"}
     }
     Scripts{
         Deva{"devanagari"}

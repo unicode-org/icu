@@ -301,18 +301,18 @@ sq{
         ZW{"Zimbabve"}
         ZZ{"I panjohur"}
     }
-    Countries%variant{
-        CD{"Kongo (RDK)"}
-        CG{"Kongo (Republika)"}
-        FK{"Ishujt Folklandë (Ishujt Malvine)"}
-        MK{"Maqedoni (IRJM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"Mbretëria e Bashkuar"}
         HK{"Hong Kong"}
         MO{"Makao"}
         PS{"Palestinë"}
         US{"SHBA"}
+    }
+    Countries%variant{
+        CD{"Kongo (RDK)"}
+        CG{"Kongo (Republika)"}
+        FK{"Ishujt Folklandë (Ishujt Malvine)"}
+        MK{"Maqedoni (IRJM)"}
     }
     Version{"2.1.8.9"}
 }

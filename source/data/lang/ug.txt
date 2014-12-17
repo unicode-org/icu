@@ -526,7 +526,7 @@ ug{
         zxx{"تىل مەزمۇنى يوق"}
         zza{"زازاچە"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"ئەنگلىيە ئىنگلىزچە"}
         en_US{"ئامېرىكا ئىنگلىزچە"}
     }

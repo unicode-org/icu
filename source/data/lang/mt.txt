@@ -433,7 +433,7 @@ mt{
         zu{"Żulu"}
         zun{"Żuni"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"Ingliż (UK)"}
         en_US{"Ingliż (US)"}
     }

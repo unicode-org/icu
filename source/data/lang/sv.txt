@@ -612,13 +612,13 @@ sv{
         zxx{"inget språkligt innehåll"}
         zza{"zazaiska"}
     }
+    Languages%short{
+        az{"azeriska"}
+        en_GB{"engelska (UK)"}
+    }
     Languages%variant{
         ps{"pashto"}
         ug{"östturkiska"}
-    }
-    LanguagesShort{
-        az{"azeriska"}
-        en_GB{"engelska (UK)"}
     }
     Scripts{
         Afak{"afakiska"}
