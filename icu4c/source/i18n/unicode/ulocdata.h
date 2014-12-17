@@ -188,10 +188,8 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type, UChar *re
 typedef enum UMeasurementSystem {
     UMS_SI,     /**< Measurement system specified by SI otherwise known as Metric system. @stable ICU 2.8 */
     UMS_US,     /**< Measurement system followed in the United States of America. @stable ICU 2.8 */
-#ifndef U_HIDE_DRAFT_API
-    UMS_UK,  /**< Mix of metric and imperial units used in Great Britain. @draft ICU 55 */
-#endif  /* U_HIDE_DRAFT_API */
-    UMS_LIMIT = 3  // TODO: remove explicit numeric value when UMS_UK becomes stable
+    UMS_UK,  /**< Mix of metric and imperial units used in Great Britain. @stable ICU 55 */
+    UMS_LIMIT
 } UMeasurementSystem;
 
 /**
