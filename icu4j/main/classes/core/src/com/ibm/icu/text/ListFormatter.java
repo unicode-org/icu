@@ -270,10 +270,8 @@ final public class ListFormatter {
                 throw new IllegalArgumentException("Need {0} and {1} only in pattern " + pattern);
             }
            int[] offsets = (recordOffset || offsetRecorded()) ? new int[2] : null;
-           StringBuilder nextBuilder =
-                   pattern.startsWithPlaceholder(0) ? current : new StringBuilder();
-           current = pattern.format(
-                   nextBuilder, offsets, current, next.toString());
+           pattern.formatAndReplace(
+                   current, offsets, current, next.toString());
            if (offsets != null) {
                if (offsets[0] == -1 || offsets[1] == -1) {
                    throw new IllegalArgumentException(

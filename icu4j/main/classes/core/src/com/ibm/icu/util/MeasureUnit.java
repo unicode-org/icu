@@ -21,6 +21,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.Pair;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -195,6 +196,16 @@ public class MeasureUnit implements Serializable {
             factory = UNIT_FACTORY;
         }
         return MeasureUnit.addUnit(type, subType, factory);
+    }
+    
+    /**
+     * For ICU use only.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static MeasureUnit resolveUnitPerUnit(MeasureUnit unit, MeasureUnit perUnit) {
+        return unitPerUnitToSingleUnit.get(Pair.of(unit, perUnit));
     }
 
     static final UnicodeSet ASCII = new UnicodeSet('a', 'z').freeze();
@@ -1153,6 +1164,18 @@ public class MeasureUnit implements Serializable {
      * @provisional This API might change or be removed in a future release.
     */
     public static final MeasureUnit TEASPOON = MeasureUnit.internalGetInstance("volume", "teaspoon");
+
+    private static HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>unitPerUnitToSingleUnit =
+            new HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>();
+
+    static {
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.KILOMETER, MeasureUnit.HOUR), MeasureUnit.KILOMETER_PER_HOUR);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.GALLON), MeasureUnit.MILE_PER_GALLON);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.HOUR), MeasureUnit.MILE_PER_HOUR);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.METER, MeasureUnit.SECOND), MeasureUnit.METER_PER_SECOND);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.LITER, MeasureUnit.KILOMETER), MeasureUnit.LITER_PER_KILOMETER);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.POUND, MeasureUnit.SQUARE_INCH), MeasureUnit.POUND_PER_SQUARE_INCH);
+    }
 
     // End generated MeasureUnit constants
     /* Private */

@@ -38,12 +38,15 @@ public class SimplePatternFormatter {
     // [0] first offset; [1] first placeholderId; [2] second offset;
     // [3] second placeholderId etc.
     private final int[] placeholderIdsOrderedByOffset;
+    
+    private final boolean firstPlaceholderReused;
 
     private SimplePatternFormatter(String pattern, PlaceholdersBuilder builder) {
         this.patternWithoutPlaceholders = pattern;
         this.placeholderIdsOrderedByOffset =
                 builder.getPlaceholderIdsOrderedByOffset();
         this.placeholderCount = builder.getPlaceholderCount();
+        this.firstPlaceholderReused = builder.getFirstPlaceholderReused();
     }
 
     /**
@@ -51,7 +54,7 @@ public class SimplePatternFormatter {
      * @param pattern The string.
      * @return the new SimplePatternFormatter object.
      */
-    public static SimplePatternFormatter compile(CharSequence pattern) {
+    public static SimplePatternFormatter compile(String pattern) {
         PlaceholdersBuilder placeholdersBuilder = new PlaceholdersBuilder();
         PlaceholderIdBuilder idBuilder =  new PlaceholderIdBuilder();
         StringBuilder newPattern = new StringBuilder();
@@ -122,86 +125,89 @@ public class SimplePatternFormatter {
     }
     
     /**
-     * Returns true if this instance starts with placeholder with given id.
-     */
-    public boolean startsWithPlaceholder(int id) {
-        if (placeholderIdsOrderedByOffset.length == 0) {
-            return false;
-        }
-        return (placeholderIdsOrderedByOffset[0] == 0 && placeholderIdsOrderedByOffset[1] == id);
-    }
-    
-    /**
      * Formats the given values.
      */
     public String format(CharSequence... values) {
-        return format(new StringBuilder(), null, values).toString();
+        return formatAndAppend(new StringBuilder(), null, values).toString();
     }
 
     /**
      * Formats the given values.
      * 
-     * @param appendTo the result appended here. Optimization: If the pattern this object
-     * represents starts with a placeholder AND appendTo references the value of that same
-     * placeholder (corresponding values parameter must also be a StringBuilder), then that
-     * placeholder value is not copied to appendTo (Its already there). If the value of the
-     * starting placeholder is very large, this optimization can offer huge savings.
+     * @param appendTo the result appended here. 
      * @param offsets position of first value in appendTo stored in offsets[0];
      *   second in offsets[1]; third in offsets[2] etc. An offset of -1 means that the
      *   corresponding value is not in appendTo. offsets.length and values.length may
-     *   differ. If caller is not interested in offsets, caller may pass null here.
-     * @param values the values
+     *   differ. If offsets.length < values.length then only the first offsets are written out;
+     *   If offsets.length > values.length then the extra offsets get -1.
+     *   If caller is not interested in offsets, caller may pass null here.
+     * @param values the placeholder values. A placeholder value may not be the same object as
+     *   appendTo.
      * @return appendTo
      */
-    public StringBuilder format(
+    public StringBuilder formatAndAppend(
             StringBuilder appendTo, int[] offsets, CharSequence... values) {
         if (values.length < placeholderCount) {
             throw new IllegalArgumentException("Too few values.");
         }
-        int offsetLen = offsets == null ? 0 : offsets.length;
-        for (int i = 0; i < offsetLen; i++) {
-            offsets[i] = -1;
+        PlaceholderValues placeholderValues = new PlaceholderValues(values);
+        if (placeholderValues.isAppendToInAnyIndexExcept(appendTo, -1)) {
+            throw new IllegalArgumentException("Parameter values cannot be the same as appendTo.");
         }
-        if (placeholderIdsOrderedByOffset.length == 0) {
-            appendTo.append(patternWithoutPlaceholders);
-            return appendTo;
-        }
-        if (placeholderIdsOrderedByOffset[0] > 0 ||
-                appendTo != values[placeholderIdsOrderedByOffset[1]]) {
-            appendTo.append(
-                    patternWithoutPlaceholders,
-                    0,
-                    placeholderIdsOrderedByOffset[0]);
-            setPlaceholderOffset(
-                    placeholderIdsOrderedByOffset[1],
-                    appendTo.length(),
-                    offsets,
-                    offsetLen);
-            appendTo.append(values[placeholderIdsOrderedByOffset[1]]);
-        } else {
-            setPlaceholderOffset(
-                    placeholderIdsOrderedByOffset[1],
-                    0,
-                    offsets,
-                    offsetLen);
-        }
-        for (int i = 2; i < placeholderIdsOrderedByOffset.length; i += 2) {
-            appendTo.append(
-                    patternWithoutPlaceholders,
-                    placeholderIdsOrderedByOffset[i - 2],
-                    placeholderIdsOrderedByOffset[i]);
-            setPlaceholderOffset(
-                    placeholderIdsOrderedByOffset[i + 1],
-                    appendTo.length(),
-                    offsets,
-                    offsetLen);
-            appendTo.append(values[placeholderIdsOrderedByOffset[i + 1]]);
-        }
-        appendTo.append(
-                patternWithoutPlaceholders,
-                placeholderIdsOrderedByOffset[placeholderIdsOrderedByOffset.length - 2],
-                patternWithoutPlaceholders.length());
+        formatReturningOffsetLength(appendTo, offsets, placeholderValues);
         return appendTo;
+    }
+    
+    /**
+     * Formats the given values.
+     * 
+     * @param result The result is stored here overwriting any previously stored value. 
+     * @param offsets position of first value in result stored in offsets[0];
+     *   second in offsets[1]; third in offsets[2] etc. An offset of -1 means that the
+     *   corresponding value is not in result. offsets.length and values.length may
+     *   differ. If offsets.length < values.length then only the first offsets are written out;
+     *   If offsets.length > values.length then the extra offsets get -1.
+     *   If caller is not interested in offsets, caller may pass null here.
+     * @param values the placeholder values. A placeholder value may be result itself in which case
+     *   The previous value of result is used.
+     * @return result
+     */
+    public StringBuilder formatAndReplace(
+            StringBuilder result, int[] offsets, CharSequence... values) {
+        if (values.length < placeholderCount) {
+            throw new IllegalArgumentException("Too few values.");
+        }
+        PlaceholderValues placeholderValues = new PlaceholderValues(values);
+        int placeholderAtStart = getUniquePlaceholderAtStart();
+        
+        // If patterns starts with a placeholder and the value for that placeholder
+        // is result, then we can may be able optimize by just appending to result.
+        if (placeholderAtStart >= 0 && values[placeholderAtStart] == result) {
+            
+            // If result is the value for other placeholders, call off optimization.
+            if (placeholderValues.isAppendToInAnyIndexExcept(result, placeholderAtStart)) {
+                placeholderValues.snapshotAppendTo(result);
+                result.setLength(0);
+                formatReturningOffsetLength(result, offsets, placeholderValues);
+                return result;
+            }
+            
+            // Otherwise we can optimize
+            int offsetLength = formatReturningOffsetLength(result, offsets, placeholderValues);
+            
+            // We have to make the offset for the placeholderAtStart placeholder be 0.
+            // Otherwise it would be the length of the previous value of result.
+            if (offsetLength > placeholderAtStart) {
+                offsets[placeholderAtStart] = 0;
+            }
+            return result;
+        }
+        if (placeholderValues.isAppendToInAnyIndexExcept(result, -1)) {
+            placeholderValues.snapshotAppendTo(result);
+        }
+        result.setLength(0);
+        formatReturningOffsetLength(result, offsets, placeholderValues);
+        return result;
     }
     
     /**
@@ -214,7 +220,81 @@ public class SimplePatternFormatter {
         for (int i = 0; i < values.length; i++) {
             values[i] = String.format("{%d}", i);
         }
-        return format(new StringBuilder(), null, values).toString();
+        return formatAndAppend(new StringBuilder(), null, values).toString();
+    }
+    
+    /**
+     * Returns this pattern with none of the placeholders.
+     */
+    public String getPatternWithNoPlaceholders() {
+        return patternWithoutPlaceholders;
+    }
+    
+    /**
+     * Just like format, but uses placeholder values exactly as they are.
+     * A placeholder value that is the same object as appendTo is treated
+     * as the empty string. In addition, returns the length of the offsets
+     * array. Returns 0 if offsets is null.
+     */
+    private int formatReturningOffsetLength(
+            StringBuilder appendTo,
+            int[] offsets,
+            PlaceholderValues values) {
+        int offsetLen = offsets == null ? 0 : offsets.length;
+        for (int i = 0; i < offsetLen; i++) {
+            offsets[i] = -1;
+        }
+        if (placeholderIdsOrderedByOffset.length == 0) {
+            appendTo.append(patternWithoutPlaceholders);
+            return offsetLen;
+        }
+        appendTo.append(
+                patternWithoutPlaceholders,
+                0,
+                placeholderIdsOrderedByOffset[0]);
+        setPlaceholderOffset(
+                placeholderIdsOrderedByOffset[1],
+                appendTo.length(),
+                offsets,
+                offsetLen);
+        CharSequence placeholderValue = values.get(placeholderIdsOrderedByOffset[1]);
+        if (placeholderValue != appendTo) {
+            appendTo.append(placeholderValue);
+        }
+        for (int i = 2; i < placeholderIdsOrderedByOffset.length; i += 2) {
+            appendTo.append(
+                    patternWithoutPlaceholders,
+                    placeholderIdsOrderedByOffset[i - 2],
+                    placeholderIdsOrderedByOffset[i]);
+            setPlaceholderOffset(
+                    placeholderIdsOrderedByOffset[i + 1],
+                    appendTo.length(),
+                    offsets,
+                    offsetLen);
+            placeholderValue = values.get(placeholderIdsOrderedByOffset[i + 1]);
+            if (placeholderValue != appendTo) {
+                appendTo.append(placeholderValue);
+            }
+        }
+        appendTo.append(
+                patternWithoutPlaceholders,
+                placeholderIdsOrderedByOffset[placeholderIdsOrderedByOffset.length - 2],
+                patternWithoutPlaceholders.length());
+        return offsetLen;
+    }
+    
+    
+    /**
+     * Returns the placeholder at the beginning of this pattern (e.g 3 for placeholder {3}).
+     * Returns -1 if the beginning of pattern is text or if the placeholder at beginning
+     * of this pattern is used again elsewhere in pattern.
+     */
+    private int getUniquePlaceholderAtStart() {
+        if (placeholderIdsOrderedByOffset.length == 0
+                || firstPlaceholderReused || placeholderIdsOrderedByOffset[0] != 0) {
+            return -1;
+        }
+        return placeholderIdsOrderedByOffset[1];
     }
     
     private static void setPlaceholderOffset(
@@ -262,12 +342,19 @@ public class SimplePatternFormatter {
     private static class PlaceholdersBuilder {
         private List<Integer> placeholderIdsOrderedByOffset = new ArrayList<Integer>();
         private int placeholderCount = 0;
+        private boolean firstPlaceholderReused = false;
         
         public void add(int placeholderId, int offset) {
             placeholderIdsOrderedByOffset.add(offset);
             placeholderIdsOrderedByOffset.add(placeholderId);
             if (placeholderId >= placeholderCount) {
                 placeholderCount = placeholderId + 1;
+            }
+            int len = placeholderIdsOrderedByOffset.size();
+            if (len > 2
+                    && placeholderIdsOrderedByOffset.get(len - 1)
+                            .equals(placeholderIdsOrderedByOffset.get(1))) {
+                firstPlaceholderReused = true;
             }
         }
         
@@ -282,12 +369,55 @@ public class SimplePatternFormatter {
             }
             return result;
         }
+        
+        public boolean getFirstPlaceholderReused() {
+            return firstPlaceholderReused;
+        }
     }
-
+    
     /**
-     * Returns this pattern with none of the placeholders.
+     * Represents placeholder values.
      */
-    public String getPatternWithNoPlaceholders() {
-        return patternWithoutPlaceholders;
+    private static class PlaceholderValues {
+        private final CharSequence[] values;
+        private CharSequence appendTo;
+        private String appendToCopy;
+        
+        public PlaceholderValues(CharSequence ...values) {
+            this.values = values;
+            this.appendTo = null;
+            this.appendToCopy = null;
+        }
+        
+        /**
+         * Returns true if appendTo value is at any index besides exceptIndex.
+         */
+        public boolean isAppendToInAnyIndexExcept(CharSequence appendTo, int exceptIndex) {
+            for (int i = 0; i < values.length; ++i) {
+                if (i != exceptIndex && values[i] == appendTo) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        /**
+         * For each appendTo value, stores the snapshot of it in its place.
+         */
+        public void snapshotAppendTo(CharSequence appendTo) {
+            this.appendTo = appendTo;
+            this.appendToCopy = appendTo.toString();
+        }
+        
+        /**
+         *  Return placeholder at given index.
+         */
+        public CharSequence get(int index) {
+            if (appendTo == null || appendTo != values[index]) {
+                return values[index];
+            }
+            return appendToCopy;
+        }       
     }
+   
 }

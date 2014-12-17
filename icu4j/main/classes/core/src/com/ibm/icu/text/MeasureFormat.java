@@ -498,30 +498,38 @@ public class MeasureFormat extends UFormat {
     }
     
     /**
-     * Like formatMeasures but formats with a per unit.
+     * Formats a single measure per unit. 
      * 
-     * Will format to a string such as "5 kilometers, 300 meters per hour."
-     * 
-     * @param appendTo the formatted string appended here.
-     * @param fieldPosition Identifies a field in the formatted text.
-     * @param perUnit for the example above would be MeasureUnit.HOUR.
-     * @param measures the measures to format.
+     * An example of such a formatted string is "3.5 meters per second."
+     *
+     * @param measure  the measure object. In above example, 3.5 meters.
+     * @param perUnit  the per unit. In above example, it is MeasureUnit.SECOND
+     * @param appendTo formatted string appended here.
+     * @param pos      The field position.
      * @return appendTo.
-     * @internal Technology preview
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 55
+     * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
-    public StringBuilder formatMeasuresPer(
-            StringBuilder appendTo, FieldPosition fieldPosition, MeasureUnit perUnit, Measure... measures) {
+    public StringBuilder formatMeasurePerUnit(
+            Measure measure,
+            MeasureUnit perUnit,
+            StringBuilder appendTo,
+            FieldPosition pos) {
+        MeasureUnit resolvedUnit = MeasureUnit.resolveUnitPerUnit(
+                measure.getUnit(), perUnit);
+        if (resolvedUnit != null) {
+            Measure newMeasure = new Measure(measure.getNumber(), resolvedUnit);
+            return formatMeasure(newMeasure, numberFormat, appendTo, pos);
+        }
         FieldPosition fpos = new FieldPosition(
-                fieldPosition.getFieldAttribute(), fieldPosition.getField());
-        int offset = withPerUnit(
-                formatMeasures(new StringBuilder(), fpos, measures),
+                pos.getFieldAttribute(), pos.getField());
+        int offset = withPerUnitAndAppend(
+                formatMeasure(measure, numberFormat, new StringBuilder(), fpos),
                 perUnit,
                 appendTo);
         if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
-            fieldPosition.setBeginIndex(fpos.getBeginIndex() + offset);
-            fieldPosition.setEndIndex(fpos.getEndIndex() + offset);
+            pos.setBeginIndex(fpos.getBeginIndex() + offset);
+            pos.setEndIndex(fpos.getEndIndex() + offset);
         }
         return appendTo;
     }
@@ -852,20 +860,21 @@ public class MeasureFormat extends UFormat {
         return true;
     }
     
-    private int withPerUnit(CharSequence formatted, MeasureUnit perUnit, StringBuilder appendTo) {
+    private int withPerUnitAndAppend(
+            CharSequence formatted, MeasureUnit perUnit, StringBuilder appendTo) {
         int[] offsets = new int[1];
         Map<FormatWidth, SimplePatternFormatter> styleToPerUnitPattern =
                 unitToStyleToPerUnitPattern.get(perUnit);
         SimplePatternFormatter perUnitPattern = styleToPerUnitPattern.get(formatWidth);
         if (perUnitPattern != null) {
-            perUnitPattern.format(appendTo, offsets, formatted);
+            perUnitPattern.formatAndAppend(appendTo, offsets, formatted);
             return offsets[0];
         }
         SimplePatternFormatter perPattern = styleToPerPattern.get(formatWidth);
         Map<FormatWidth, QuantityFormatter> styleToCountToFormat = unitToStyleToCountToFormat.get(perUnit);
         QuantityFormatter countToFormat = styleToCountToFormat.get(formatWidth);
         String perUnitString = countToFormat.getByVariant("one").getPatternWithNoPlaceholders().trim();
-        perPattern.format(appendTo, offsets, formatted, perUnitString);
+        perPattern.formatAndAppend(appendTo, offsets, formatted, perUnitString);
         return offsets[0];
     }
 
@@ -898,7 +907,7 @@ public class MeasureFormat extends UFormat {
         QuantityFormatter countToFormat = styleToCountToFormat.get(formatWidth);
         SimplePatternFormatter formatter = countToFormat.getByVariant(keyword);
         int[] offsets = new int[1];
-        formatter.format(appendTo, offsets, formattedNumber);
+        formatter.formatAndAppend(appendTo, offsets, formattedNumber);
         if (offsets[0] != -1) { // there is a number (may not happen with, say, Arabic dual)
             // Fix field position
             if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {

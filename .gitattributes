@@ -4261,6 +4261,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/Norm2AllModes.java svneol=native#te
 icu4j/main/classes/core/src/com/ibm/icu/impl/Normalizer2Impl.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/OlsonTimeZone.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/PVecToTrieCompactHandler.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/Pair.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/PatternProps.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/PatternTokenizer.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/PluralRulesLoader.java svneol=native#text/plain%3Bcharset%3Dutf-8
