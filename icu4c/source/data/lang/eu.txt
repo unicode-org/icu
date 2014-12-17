@@ -274,12 +274,12 @@ eu{
         zu{"zuluera"}
         zxx{"ez dago eduki linguistikorik"}
     }
-    Languages%variant{
-        ps{"pashtoera"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"azeriera"}
         en_US{"ingelesa (AEB)"}
+    }
+    Languages%variant{
+        ps{"pashtoera"}
     }
     Scripts{
         Arab{"arabiarra"}

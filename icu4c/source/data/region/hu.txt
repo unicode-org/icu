@@ -302,18 +302,18 @@ hu{
         ZW{"Zimbabwe"}
         ZZ{"Ismeretlen körzet"}
     }
-    Countries%variant{
-        CD{"Kongó (KDK)"}
-        CG{"Kongó (Köztársaság)"}
-        FK{"Falkland-szigetek (Malvin-szigetek)"}
-        MK{"Macedónia (MVJK)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"UK"}
         HK{"Hongkong"}
         MO{"Makaó"}
         PS{"Palesztina"}
         US{"USA"}
+    }
+    Countries%variant{
+        CD{"Kongó (KDK)"}
+        CG{"Kongó (Köztársaság)"}
+        FK{"Falkland-szigetek (Malvin-szigetek)"}
+        MK{"Macedónia (MVJK)"}
     }
     Version{"2.1.10.42"}
 }

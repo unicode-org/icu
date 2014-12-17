@@ -302,18 +302,18 @@ ksh{
         ZW{"Simbabwe"}
         ZZ{"- Jääjend onbikannt -"}
     }
+    Countries%short{
+        GB{"Jruußbrettannije"}
+        HK{"Hongkong"}
+        MO{"Makau"}
+        US{"USA"}
+    }
     Countries%variant{
         CD{"de Demmokraatesche Republik Konggo"}
         CG{"de Republik Konggo"}
         CI{"de Älfebeijnköß"}
         FK{"de malleviinesche Enselle"}
         MK{"de vörmaals ens jugoßlaawesch jewääse Republik Mazedoonije"}
-    }
-    CountriesShort{
-        GB{"Jruußbrettannije"}
-        HK{"Hongkong"}
-        MO{"Makau"}
-        US{"USA"}
     }
     Version{"2.1.7.53"}
 }

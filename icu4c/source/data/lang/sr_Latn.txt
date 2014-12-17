@@ -509,13 +509,13 @@ sr_Latn{
         zxx{"bez lingvističkog sadržaja"}
         zza{"Zaza"}
     }
-    Languages%variant{
-        ps{"pašto"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"azerski"}
         en_GB{"engleski (UK)"}
         en_US{"engleski (SAD)"}
+    }
+    Languages%variant{
+        ps{"pašto"}
     }
     Scripts{
         Arab{"arapsko pismo"}

@@ -270,13 +270,13 @@ af{
         zu{"Zoeloe"}
         zxx{"Geen linguistiese inhoud"}
     }
-    Languages%variant{
-        ps{"Pushto"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"Azeri"}
         en_GB{"Engels (VK)"}
         en_US{"Engels (VSA)"}
+    }
+    Languages%variant{
+        ps{"Pushto"}
     }
     Scripts{
         Arab{"Arabies"}

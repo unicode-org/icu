@@ -526,12 +526,12 @@ ta{
         zxx{"மொழி உள்ளடக்கம் ஏதுமில்லை"}
         zza{"ஜாஜா"}
     }
-    Languages%variant{
-        ps{"புஷ்தோ"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"அஸேரி"}
         en_GB{"ஆங்கிலம் (யூகே)"}
+    }
+    Languages%variant{
+        ps{"புஷ்தோ"}
     }
     Scripts{
         Arab{"அரபிக்"}

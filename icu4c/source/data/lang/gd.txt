@@ -335,7 +335,7 @@ gd{
         zu{"Zulu"}
         zxx{"Susbaint nach eil ‘na chànan"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"Azeri"}
         en_GB{"Beurla na RA"}
         en_US{"Beurla nan SA"}

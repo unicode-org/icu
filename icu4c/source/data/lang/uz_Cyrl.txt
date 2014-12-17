@@ -136,7 +136,7 @@ uz_Cyrl{
         zu{"Зулу"}
         zxx{"Тил таркиби йўқ"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"Бирлашган Қироллик"}
     }
     Scripts{

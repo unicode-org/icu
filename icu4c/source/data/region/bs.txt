@@ -302,6 +302,13 @@ bs{
         ZW{"Zimbabve"}
         ZZ{"Nepoznata ili nevažeća oblast"}
     }
+    Countries%short{
+        GB{"UK"}
+        HK{"Hong Kong"}
+        MO{"Makao"}
+        PS{"Palestina"}
+        US{"SAD"}
+    }
     Countries%variant{
         CD{"Kongo (DRC)"}
         CG{"Republika Kongo"}
@@ -309,13 +316,6 @@ bs{
         FK{"Folklandska ostrva (Malvinska ostrva)"}
         MK{"Makedonija (BJR)"}
         TL{"Istočni Timor"}
-    }
-    CountriesShort{
-        GB{"UK"}
-        HK{"Hong Kong"}
-        MO{"Makao"}
-        PS{"Palestina"}
-        US{"SAD"}
     }
     Version{"2.1.10.42"}
 }

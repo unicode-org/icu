@@ -616,7 +616,7 @@ mk{
         zxx{"без лингвистичка содржина"}
         zza{"заза"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"азерски"}
         en_GB{"англиски (во ОК)"}
         en_US{"англиски (САД)"}

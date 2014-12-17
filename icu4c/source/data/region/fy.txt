@@ -302,18 +302,18 @@ fy{
         ZW{"Zimbabwe"}
         ZZ{"Unbekend gebiet"}
     }
-    Countries%variant{
-        CD{"Congo (DRC)"}
-        CG{"Congo (Republyk)"}
-        FK{"Falklâneilannen (Islas Malvinas)"}
-        MK{"Macedonië (FYROM)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"VK"}
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palestina"}
         US{"VS"}
+    }
+    Countries%variant{
+        CD{"Congo (DRC)"}
+        CG{"Congo (Republyk)"}
+        FK{"Falklâneilannen (Islas Malvinas)"}
+        MK{"Macedonië (FYROM)"}
     }
     Version{"2.1.10.42"}
 }

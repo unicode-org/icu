@@ -302,6 +302,13 @@ fil{
         ZW{"Zimbabwe"}
         ZZ{"Hindi Kilalang Rehiyon"}
     }
+    Countries%short{
+        GB{"U.K."}
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palestine"}
+        US{"U.S."}
+    }
     Countries%variant{
         CD{"Congo (DRC)"}
         CG{"Congo (Republic)"}
@@ -309,13 +316,6 @@ fil{
         FK{"Falkland Islands (Islas Malvinas)"}
         MK{"Macedonia (FYROM)"}
         TL{"East Timor"}
-    }
-    CountriesShort{
-        GB{"U.K."}
-        HK{"Hong Kong"}
-        MO{"Macau"}
-        PS{"Palestine"}
-        US{"U.S."}
     }
     Version{"2.1.10.42"}
 }

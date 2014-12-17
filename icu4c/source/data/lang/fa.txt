@@ -530,14 +530,14 @@ fa{
     Languages%secondary{
         tr{"ترکی"}
     }
-    Languages%variant{
-        az{"آذربایجانی"}
-        ps{"پختو"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"آذری"}
         en_GB{"انگلیسی بریتانیا"}
         en_US{"انگلیسی امریکا"}
+    }
+    Languages%variant{
+        az{"آذربایجانی"}
+        ps{"پختو"}
     }
     Scripts{
         Aghb{"آلبانیایی قفقازی"}

@@ -519,13 +519,13 @@ hi{
         zxx{"कोई भाषा सामग्री नहीं"}
         zza{"ज़ाज़ा"}
     }
-    Languages%variant{
-        ps{"पुश्तो"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"अज़ेरी"}
         en_GB{"यू.के. अंग्रेज़ी"}
         en_US{"अमेरिकी अंग्रेज़ी"}
+    }
+    Languages%variant{
+        ps{"पुश्तो"}
     }
     Scripts{
         Arab{"अरबी"}

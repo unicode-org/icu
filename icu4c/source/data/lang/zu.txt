@@ -277,13 +277,13 @@ zu{
         zu{"isiZulu"}
         zxx{"Akukho okuqukethwe kolimi"}
     }
-    Languages%variant{
-        ps{"isi-Pushto"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"isi-Azeria"}
         en_GB{"i-U.K Englishi"}
         en_US{"i-English (US)"}
+    }
+    Languages%variant{
+        ps{"isi-Pushto"}
     }
     Scripts{
         Arab{"i-Arab"}

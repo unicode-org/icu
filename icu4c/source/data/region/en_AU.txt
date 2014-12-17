@@ -14,7 +14,7 @@ en_AU{
         UM{"U.S. Minor Outlying Islands"}
         VC{"Saint Vincent and the Grenadines"}
     }
-    CountriesShort{
+    Countries%short{
         GB{"U.K."}
         US{"U.S."}
     }

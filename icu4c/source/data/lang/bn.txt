@@ -518,13 +518,13 @@ bn{
         zxx{"ভাষাভিত্তিক বিষয়বস্তু নেই"}
         zza{"জাজা"}
     }
-    Languages%variant{
-        ps{"পুশতো"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"আজেরি"}
         en_GB{"যুক্তরাজ্যের ইংরেজি"}
         en_US{"যুক্তরাষ্ট্রের ইংরেজি"}
+    }
+    Languages%variant{
+        ps{"পুশতো"}
     }
     Scripts{
         Arab{"আরবি"}

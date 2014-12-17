@@ -25,7 +25,7 @@ sv_FI{
         ti{"tigrinska"}
         und{"okänt språk"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"azerbajdzjanska"}
     }
     Scripts{

@@ -291,14 +291,14 @@ am{
         zu{"ዙሉኛ"}
         zxx{"ቋንቋዊ ይዘት አይደለም"}
     }
-    Languages%variant{
-        ps{"ፑሽቶ"}
-        ug{"ኡይገር"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"አዜሪ"}
         en_GB{"የዩናይትድ ኪንግደም እንግሊዝኛ"}
         en_US{"የዩ ኤስ እንግሊዝኛ"}
+    }
+    Languages%variant{
+        ps{"ፑሽቶ"}
+        ug{"ኡይገር"}
     }
     Scripts{
         Arab{"ዓረብኛ"}

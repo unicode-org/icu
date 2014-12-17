@@ -537,7 +537,7 @@ et{
         zxx{"mittekeeleline"}
         zza{"zaza"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"aseri"}
         en_US{"inglise (USA)"}
     }

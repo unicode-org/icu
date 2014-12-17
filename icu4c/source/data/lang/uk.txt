@@ -534,7 +534,7 @@ uk{
         zxx{"немає мовного вмісту"}
         zza{"зазакі"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"азербайджанська"}
     }
     Scripts{

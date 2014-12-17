@@ -302,19 +302,19 @@ tr{
         ZW{"Zimbabve"}
         ZZ{"Bilinmeyen Bölge"}
     }
+    Countries%short{
+        GB{"BK"}
+        HK{"Hong Kong"}
+        MO{"Makao"}
+        PS{"Filistin"}
+        US{"ABD"}
+    }
     Countries%variant{
         CD{"Demokratik Kongo Cumhuriyeti"}
         CG{"Kongo Cumhuriyeti"}
         FK{"Falkland Adaları (Malvinas Adaları)"}
         MK{"Makedonya (EYMC)"}
         TL{"Doğu Timor"}
-    }
-    CountriesShort{
-        GB{"BK"}
-        HK{"Hong Kong"}
-        MO{"Makao"}
-        PS{"Filistin"}
-        US{"ABD"}
     }
     Version{"2.1.8.9"}
 }

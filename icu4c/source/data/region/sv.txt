@@ -302,18 +302,18 @@ sv{
         ZW{"Zimbabwe"}
         ZZ{"okänd region"}
     }
-    Countries%variant{
-        CD{"Demokratiska republiken Kongo"}
-        CG{"Republiken Kongo"}
-        FK{"Falklandsöarna (Malvinerna)"}
-        MK{"f.d. jugoslaviska republiken Makedonien"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"Storbritannien"}
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palestina"}
         US{"USA"}
+    }
+    Countries%variant{
+        CD{"Demokratiska republiken Kongo"}
+        CG{"Republiken Kongo"}
+        FK{"Falklandsöarna (Malvinerna)"}
+        MK{"f.d. jugoslaviska republiken Makedonien"}
     }
     Version{"2.1.10.33"}
 }

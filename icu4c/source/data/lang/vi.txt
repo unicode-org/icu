@@ -535,13 +535,13 @@ vi{
         zxx{"Không có nội dung ngôn ngữ"}
         zza{"Tiếng Zaza"}
     }
-    Languages%variant{
-        ps{"Tiếng Pushto"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"Tiếng Azeri"}
         en_GB{"Tiếng Anh (Anh)"}
         en_US{"Tiếng Anh (Mỹ)"}
+    }
+    Languages%variant{
+        ps{"Tiếng Pushto"}
     }
     Scripts{
         Afak{"Chữ Afaka"}

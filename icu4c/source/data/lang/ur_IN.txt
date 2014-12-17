@@ -52,7 +52,7 @@ ur_IN{
         zgh{"اسٹینڈرڈ مراقشی تمازیقی"}
         zh_Hans{"آسان چینی"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"برطانوی انگریزی"}
         en_US{"امریکی انگریزی"}
     }

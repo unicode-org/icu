@@ -24,7 +24,7 @@ en_GB{
         TT{"Trinidad and Tobago"}
         WF{"Wallis and Futuna"}
     }
-    CountriesShort{
+    Countries%short{
         GB{"UK"}
         US{"US"}
     }

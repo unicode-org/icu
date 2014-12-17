@@ -258,7 +258,7 @@ pa{
         zu{"ਜ਼ੁਲੂ"}
         zxx{"ਕੋਈ ਭਾਸ਼ਾਈ ਸਮੱਗਰੀ ਨਹੀਂ"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"ਅਜ਼ੇਰੀ"}
         en_GB{"ਯੂ.ਕੇ. ਅੰਗਰੇਜ਼ੀ"}
         en_US{"ਯੂ.ਐਸ. ਅੰਗਰੇਜ਼ੀ"}

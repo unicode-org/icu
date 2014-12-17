@@ -297,6 +297,10 @@ wae{
         ZW{"Simbabwe"}
         ZZ{"Unbekannti Regio"}
     }
+    Countries%short{
+        HK{"Hongkong"}
+        MO{"Makau"}
+    }
     Countries%variant{
         CD{"Kongo (Demokratiši Rebublik)"}
         CG{"Kongo (Rebublik)"}
@@ -304,10 +308,6 @@ wae{
         FK{"Falklandinslä (Malwine)"}
         MK{"Mazedonie (EJR)"}
         TL{"Wešttimor"}
-    }
-    CountriesShort{
-        HK{"Hongkong"}
-        MO{"Makau"}
     }
     Version{"2.1.7.53"}
 }

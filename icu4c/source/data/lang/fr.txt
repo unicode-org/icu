@@ -546,14 +546,14 @@ fr{
         zxx{"sans contenu linguistique"}
         zza{"zazaki"}
     }
-    Languages%variant{
-        ps{"pashto"}
-        ug{"ouïgour"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"azéri"}
         en_GB{"anglais (R.-U.)"}
         en_US{"anglais (É.-U.)"}
+    }
+    Languages%variant{
+        ps{"pashto"}
+        ug{"ouïgour"}
     }
     Scripts{
         Arab{"arabe"}

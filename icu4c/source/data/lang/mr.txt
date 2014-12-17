@@ -520,13 +520,13 @@ mr{
         zxx{"भाषावैज्ञानिक सामग्री नाही"}
         zza{"झाझा"}
     }
-    Languages%variant{
-        ps{"पुश्तो"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"अझेरी"}
         en_GB{"यू.के. इंग्रजी"}
         en_US{"यू.एस. इंग्रजी"}
+    }
+    Languages%variant{
+        ps{"पुश्तो"}
     }
     Scripts{
         Arab{"अरबी"}

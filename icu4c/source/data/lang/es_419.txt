@@ -20,12 +20,12 @@ es_419{
         mr{"maratí"}
         vai{"vai"}
     }
+    Languages%short{
+        en_GB{"inglés (R. U.)"}
+    }
     Languages%variant{
         ps{"Pastú"}
         ug{"Uyghur"}
-    }
-    LanguagesShort{
-        en_GB{"inglés (R. U.)"}
     }
     Scripts{
         Laoo{"laosiano"}

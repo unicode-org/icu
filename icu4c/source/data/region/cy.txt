@@ -302,19 +302,19 @@ cy{
         ZW{"Zimbabwe"}
         ZZ{"Rhanbarth Anhysbys"}
     }
+    Countries%short{
+        GB{"DU"}
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palesteina"}
+        US{"UDA"}
+    }
     Countries%variant{
         CD{"y Congo (G.Dd.C.)"}
         CG{"Y Congo (Gweriniaeth)"}
         FK{"Ynysoedd y Falkland (Ynysoedd y Malfinas)"}
         MK{"Macedonia (CWIM)"}
         TL{"Dwyrain Timor"}
-    }
-    CountriesShort{
-        GB{"DU"}
-        HK{"Hong Kong"}
-        MO{"Macau"}
-        PS{"Palesteina"}
-        US{"UDA"}
     }
     Version{"2.1.10.42"}
 }

@@ -518,14 +518,14 @@ kn{
         zxx{"ಯಾವುದೇ ಭಾಷಾಸಂಬಂಧಿ ವಿಷಯವಿಲ್ಲ"}
         zza{"ಜಾಝಾ"}
     }
-    Languages%variant{
-        ps{"ಪುಶ್ತೋ"}
-        ug{"ಉಯ್‌ಗರ್"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"ಅಝೆರಿ"}
         en_GB{"ಯು.ಕೆ. ಇಂಗ್ಲಿಷ್"}
         en_US{"ಯು.ಎಸ್. ಇಂಗ್ಲಿಷ್"}
+    }
+    Languages%variant{
+        ps{"ಪುಶ್ತೋ"}
+        ug{"ಉಯ್‌ಗರ್"}
     }
     Scripts{
         Arab{"ಅರೇಬಿಕ್"}

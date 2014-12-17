@@ -302,19 +302,19 @@ az{
         ZW{"Zimbabve"}
         ZZ{"Naməlum Region"}
     }
+    Countries%short{
+        GB{"B.K."}
+        HK{"Honq Konq"}
+        MO{"Makao"}
+        PS{"Fələstin"}
+        US{"A.B.Ş."}
+    }
     Countries%variant{
         CD{"Konqo (KDR)"}
         CG{"Konqo (Respublika)"}
         FK{"Folklend Adaları (Malvin Adaları)"}
         MK{"Makedoniya (FYROM)"}
         TL{"Doğu Timor"}
-    }
-    CountriesShort{
-        GB{"B.K."}
-        HK{"Honq Konq"}
-        MO{"Makao"}
-        PS{"Fələstin"}
-        US{"A.B.Ş."}
     }
     Version{"2.1.10.42"}
 }

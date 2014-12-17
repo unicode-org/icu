@@ -302,18 +302,18 @@ et{
         ZW{"Zimbabwe"}
         ZZ{"Tundmatu piirkond"}
     }
-    Countries%variant{
-        CD{"Kongo-Kinshasa"}
-        CG{"Kongo (Vabariik)"}
-        CI{"Elevandiluurannik"}
-        FK{"Falklandi saared (Malviini saared)"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"Suurbritannia"}
         HK{"Hongkong"}
         MO{"Macau"}
         PS{"Palestiina"}
         US{"USA"}
+    }
+    Countries%variant{
+        CD{"Kongo-Kinshasa"}
+        CG{"Kongo (Vabariik)"}
+        CI{"Elevandiluurannik"}
+        FK{"Falklandi saared (Malviini saared)"}
     }
     Version{"2.1.8.9"}
 }

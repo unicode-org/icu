@@ -240,7 +240,7 @@ ksh{
         zu{"Suulu"}
         zxx{"kein Schprooch"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"Brittesch Änglesch"}
         en_US{"Amärrekaanesch Änglesch"}
     }

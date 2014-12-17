@@ -302,19 +302,19 @@ hr{
         ZW{"Zimbabve"}
         ZZ{"nepoznato područje"}
     }
+    Countries%short{
+        GB{"UK"}
+        HK{"Hong Kong"}
+        MO{"Makao"}
+        PS{"Palestina"}
+        US{"SAD"}
+    }
     Countries%variant{
         CD{"Kongo (DRK)"}
         CG{"Kongo (RK)"}
         CI{"Bjelokosna Obala"}
         FK{"Falklandski Otoci (Malvini)"}
         MK{"Makedonija (BJRM)"}
-    }
-    CountriesShort{
-        GB{"UK"}
-        HK{"Hong Kong"}
-        MO{"Makao"}
-        PS{"Palestina"}
-        US{"SAD"}
     }
     Version{"2.1.8.9"}
 }

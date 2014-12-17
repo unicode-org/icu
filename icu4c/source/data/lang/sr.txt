@@ -508,13 +508,13 @@ sr{
         zxx{"без лингвистичког садржаја"}
         zza{"Заза"}
     }
-    Languages%variant{
-        ps{"пашто"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"азерски"}
         en_GB{"енглески (УК)"}
         en_US{"енглески (САД)"}
+    }
+    Languages%variant{
+        ps{"пашто"}
     }
     Scripts{
         Arab{"арапско писмо"}

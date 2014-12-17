@@ -516,13 +516,13 @@ bg{
         zxx{"без лингвистично съдържание"}
         zza{"заза"}
     }
-    Languages%variant{
-        ps{"пущунски"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"азерски"}
         en_GB{"английски (GB)"}
         en_US{"английски (US)"}
+    }
+    Languages%variant{
+        ps{"пущунски"}
     }
     Scripts{
         Arab{"арабска"}

@@ -626,7 +626,7 @@ lb{
         zxx{"Keng Sproochinhalter"}
         zza{"Zaza"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"Englesch (UK)"}
         en_US{"Englesch (US)"}
     }

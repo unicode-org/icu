@@ -574,14 +574,14 @@ id{
         zxx{"Tidak ada konten linguistik"}
         zza{"Zaza"}
     }
-    Languages%variant{
-        ps{"Pushto"}
-        ug{"Uighur"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"Azeri"}
         en_GB{"Inggris U.K."}
         en_US{"Inggris A.S."}
+    }
+    Languages%variant{
+        ps{"Pushto"}
+        ug{"Uighur"}
     }
     Scripts{
         Afak{"Afaka"}

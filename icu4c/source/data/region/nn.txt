@@ -297,7 +297,7 @@ nn{
         ZW{"Zimbabwe"}
         ZZ{"ukjent område"}
     }
-    CountriesShort{
+    Countries%short{
         HK{"Hongkong"}
         MO{"Macao"}
     }

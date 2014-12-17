@@ -545,14 +545,14 @@ he{
         zxx{"ללא תוכן לשוני"}
         zza{"זאזא"}
     }
-    Languages%variant{
-        ps{"פושטו"}
-        ug{"אויגור"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"אזרית"}
         en_GB{"אנגלית בריטית"}
         en_US{"אנגלית אמריקאית"}
+    }
+    Languages%variant{
+        ps{"פושטו"}
+        ug{"אויגור"}
     }
     Scripts{
         Arab{"ערבי"}

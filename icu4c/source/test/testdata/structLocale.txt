@@ -309,7 +309,7 @@ structLocale:table(nofallback){
         MK{""}
         TL{""}
     }
-    CountriesShort{
+    Countries%short{
         GB{""}
         HK{""}
         MO{""}
@@ -5493,7 +5493,7 @@ structLocale:table(nofallback){
         ps{""}
         ug{""}
     }
-    LanguagesShort{
+    Languages%short{
         az{""}
         en_GB{""}
         en_US{""}

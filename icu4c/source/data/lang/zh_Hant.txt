@@ -627,7 +627,7 @@ zh_Hant{
         zxx{"無語言內容"}
         zza{"扎扎文"}
     }
-    LanguagesShort{
+    Languages%short{
         az{"亞塞拜然文"}
     }
     Scripts{

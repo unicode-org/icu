@@ -626,7 +626,7 @@ to{
         zxx{"ʻikai ha lea"}
         zza{"lea fakasāsā"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"lea fakapilitānia"}
         en_US{"lea fakapālangi (ʻAmelika)"}
     }

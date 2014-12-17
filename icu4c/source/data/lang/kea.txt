@@ -178,7 +178,7 @@ kea{
         zu{"zulu"}
         zxx{"sem konteudo linguistiku"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"ingles (R.U.)"}
         en_US{"ingles (S.U.)"}
     }

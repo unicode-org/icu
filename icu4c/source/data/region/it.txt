@@ -302,18 +302,18 @@ it{
         ZW{"Zimbabwe"}
         ZZ{"Regione non valida o sconosciuta"}
     }
-    Countries%variant{
-        CD{"Congo (RDC)"}
-        CG{"Congo (repubblica)"}
-        FK{"Isole Falkland (isole Malvine)"}
-        MK{"Repubblica ex Jugoslava di Macedonia"}
-    }
-    CountriesShort{
+    Countries%short{
         GB{"GB"}
         HK{"Hong-Kong"}
         MO{"Macao"}
         PS{"Palestina"}
         US{"USA"}
+    }
+    Countries%variant{
+        CD{"Congo (RDC)"}
+        CG{"Congo (repubblica)"}
+        FK{"Isole Falkland (isole Malvine)"}
+        MK{"Repubblica ex Jugoslava di Macedonia"}
     }
     Version{"2.1.8.32"}
 }

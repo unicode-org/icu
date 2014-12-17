@@ -544,13 +544,13 @@ pt{
         zxx{"sem conteúdo linguístico"}
         zza{"zaza"}
     }
-    Languages%variant{
-        ps{"pushto"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"azeri"}
         en_GB{"inglês do Reino Unido"}
         en_US{"inglês dos Estados Unidos"}
+    }
+    Languages%variant{
+        ps{"pushto"}
     }
     Scripts{
         Arab{"árabe"}

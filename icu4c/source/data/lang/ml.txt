@@ -545,14 +545,14 @@ ml{
         zxx{"ഭാഷാപരമായ ഉള്ളടക്കമൊന്നുമില്ല"}
         zza{"സാസാ"}
     }
-    Languages%variant{
-        ps{"പുഷ്തോ"}
-        ug{"ഉയ്ഗൂർ"}
-    }
-    LanguagesShort{
+    Languages%short{
         az{"അസേരി"}
         en_GB{"യു.കെ. ഇംഗ്ലീഷ്"}
         en_US{"യു.എസ്. ഇംഗ്ലീഷ്"}
+    }
+    Languages%variant{
+        ps{"പുഷ്തോ"}
+        ug{"ഉയ്ഗൂർ"}
     }
     Scripts{
         Arab{"അറബിക്"}

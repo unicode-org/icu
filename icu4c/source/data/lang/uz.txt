@@ -239,7 +239,7 @@ uz{
         zu{"zuluancha"}
         zxx{"til tarkibi yoʻq"}
     }
-    LanguagesShort{
+    Languages%short{
         en_GB{"Britaniya inglizchasi"}
         en_US{"inglizcha (AQSH)"}
     }

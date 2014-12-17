@@ -302,6 +302,13 @@ de{
         ZW{"Simbabwe"}
         ZZ{"Unbekannte Region"}
     }
+    Countries%short{
+        GB{"UK"}
+        HK{"Hongkong"}
+        MO{"Macau"}
+        PS{"Palästina"}
+        US{"USA"}
+    }
     Countries%variant{
         CD{"Kongo (Demokratische Republik)"}
         CG{"Kongo (Republik)"}
@@ -309,13 +316,6 @@ de{
         FK{"Falklandinseln (Malwinen)"}
         MK{"Mazedonien (EJR)"}
         TL{"Osttimor"}
-    }
-    CountriesShort{
-        GB{"UK"}
-        HK{"Hongkong"}
-        MO{"Macau"}
-        PS{"Palästina"}
-        US{"USA"}
     }
     Version{"2.1.10.51"}
 }

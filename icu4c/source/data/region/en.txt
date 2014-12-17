@@ -302,15 +302,7 @@ en{
         ZW{"Zimbabwe"}
         ZZ{"Unknown Region"}
     }
-    Countries%variant{
-        CD{"Congo (DRC)"}
-        CG{"Congo (Republic)"}
-        CI{"Ivory Coast"}
-        FK{"Falkland Islands (Islas Malvinas)"}
-        MK{"Macedonia (FYROM)"}
-        TL{"East Timor"}
-    }
-    CountriesShort{
+    Countries%short{
         BA{"Bosnia"}
         GB{"U.K."}
         HK{"Hong Kong"}
@@ -318,6 +310,14 @@ en{
         MO{"Macau"}
         PS{"Palestine"}
         US{"U.S."}
+    }
+    Countries%variant{
+        CD{"Congo (DRC)"}
+        CG{"Congo (Republic)"}
+        CI{"Ivory Coast"}
+        FK{"Falkland Islands (Islas Malvinas)"}
+        MK{"Macedonia (FYROM)"}
+        TL{"East Timor"}
     }
     Version{"2.1.10.42"}
 }
