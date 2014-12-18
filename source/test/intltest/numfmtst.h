@@ -183,6 +183,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestEquality();
 
     void TestCurrencyUsage();
+    void TestDoubleLimit11439();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
