@@ -133,6 +133,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestAccountingCurrency);
   TESTCASE_AUTO(TestEquality);
   TESTCASE_AUTO(TestCurrencyUsage);
+  TESTCASE_AUTO(TestDoubleLimit11439);
   TESTCASE_AUTO_END;
 }
 
@@ -7736,4 +7737,41 @@ void NumberFormatTest::TestCurrencyUsage() {
         delete fmt;
     }
 }
+
+
+// Check the constant MAX_INT64_IN_DOUBLE.
+// The value should convert to a double with no loss of precision.
+// A failure may indicate a platform with a different double format, requiring
+// a revision to the constant.
+//
+// Note that this is actually hard to test, because the language standard gives
+//  compilers considerable flexibility to do unexpected things with rounding and
+//  with overflow in simple int to/from float conversions. Some compilers will completely optimize
+//  away a simple round-trip conversion from int64_t -> double -> int64_t.
+
+void NumberFormatTest::TestDoubleLimit11439() {
+    char  buf[50];
+    for (int64_t num = MAX_INT64_IN_DOUBLE-10; num<=MAX_INT64_IN_DOUBLE; num++) {
+        sprintf(buf, "%ld", num);
+        double fNum = 0.0;
+        sscanf(buf, "%lf", &fNum);
+        int64_t rtNum = fNum;
+        if (num != rtNum) {
+            errln("%s:%d MAX_INT64_IN_DOUBLE test, %ld did not round trip. Got %ld", __FILE__, __LINE__, num, rtNum);
+            return;
+        }
+    }
+    for (int64_t num = -MAX_INT64_IN_DOUBLE+10; num>=-MAX_INT64_IN_DOUBLE; num--) {
+        sprintf(buf, "%ld", num);
+        double fNum = 0.0;
+        sscanf(buf, "%lf", &fNum);
+        int64_t rtNum = fNum;
+        if (num != rtNum) {
+            errln("%s:%d MAX_INT64_IN_DOUBLE test, %ld did not round trip. Got %ld", __FILE__, __LINE__, num, rtNum);
+            return;
+        }
+    }
+}
+
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

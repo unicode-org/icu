@@ -72,6 +72,7 @@
 #include "dcfmtimp.h"
 #include "plurrule_impl.h"
 #include "decimalformatpattern.h"
+#include "fmtableimp.h"
 
 /*
  * On certain platforms, round is a macro defined in math.h
@@ -1138,11 +1139,6 @@ DecimalFormat::getFixedDecimal(double number, UErrorCode &status) const {
     return result;
 }
 
-// MSVC optimizer bug? 
-// turn off optimization as it causes different behavior in the int64->double->int64 conversion
-#if defined (_MSC_VER)
-#pragma optimize ( "", off )
-#endif
 FixedDecimal
 DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) const {
     if (U_FAILURE(status)) {
@@ -1164,17 +1160,9 @@ DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) co
         return getFixedDecimal(number.getDouble(status), status);
     }
 
-    if (type == Formattable::kInt64) {
-        // "volatile" here is a workaround to avoid optimization issues.
-        volatile double fdv = number.getDouble(status);
-        // Note: conversion of int64_t -> double rounds with some compilers to
-        //       values beyond what can be represented as a 64 bit int. Subsequent
-        //       testing or conversion with int64_t produces bad results.
-        //       So filter the problematic values, route them to DigitList.
-        if (fdv != (double)U_INT64_MAX && fdv != (double)U_INT64_MIN &&
-                number.getInt64() == (int64_t)fdv) {
-            return getFixedDecimal(number.getDouble(status), status);
-        }
+    if (type == Formattable::kInt64 && number.getInt64() <= MAX_INT64_IN_DOUBLE &&
+                                       number.getInt64() >= -MAX_INT64_IN_DOUBLE) {
+        return getFixedDecimal(number.getDouble(status), status);
     }
 
     // The only case left is type==int64_t, with a value with more digits than a double can represent.
@@ -1186,10 +1174,6 @@ DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) co
     digits.set(number.getInt64());
     return getFixedDecimal(digits, status);
 }
-// end workaround MSVC optimizer bug
-#if defined (_MSC_VER)
-#pragma optimize ( "", on )
-#endif
 
 
 // Create a fixed decimal from a DigitList.
