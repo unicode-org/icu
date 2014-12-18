@@ -666,8 +666,10 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @param laterDateFirst   whether the first date in intervalPattern
      *                         is earlier date or later date
      * @return                 pattern info object
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    static PatternInfo genPatternInfo(String intervalPattern, 
+    public static PatternInfo genPatternInfo(String intervalPattern, 
                                       boolean laterDateFirst) {
         int splitPoint = splitPatternInto2Part(intervalPattern);
         
