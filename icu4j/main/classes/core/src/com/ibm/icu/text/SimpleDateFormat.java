@@ -746,29 +746,81 @@ public class SimpleDateFormat extends DateFormat {
         /*A*/ 40
     };
 
-
-
     /*
      * From calendar field letter to its level.
      * Used to order calendar field.
      * For example, calendar fields can be defined in the following order:
      * year >  month > date > am-pm > hour >  minute
      * 'y' --> 10, 'M' -->20, 'd' --> 30; 'a' -->40, 'h' --> 50, 'm' -->60
-     * PATTERN_CHAR_BASE is the codepoint of the first entry in this array.
      */
     private static final int[] PATTERN_CHAR_TO_LEVEL =
     {
-    //   :   ;   <   =   >   ?
-         0, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    //
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    //       !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1, -1, -1, -1, -1,
     //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
         -1, 40, -1, -1, 20, 30, 30,  0, 50, -1, -1, 50, 20, 20, -1,  0,
     //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
         -1, 20, -1, 80, -1, 10,  0, 30,  0, 10,  0, -1, -1, -1, -1, -1,
     //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50, -1, 60, -1, -1,
-    //   p   q   r   s   t   u   v   w   x   y   z
-        -1, 20, -1, 70, -1, 10,  0, 20,  0, 10,  0
+    //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
+        -1, 20, -1, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1,
     };
+
+    /**
+     * Map calendar field letter into calendar field level.
+     */
+    private static int getLevelFromChar(char ch) {
+        return ch < PATTERN_CHAR_TO_LEVEL.length ? PATTERN_CHAR_TO_LEVEL[ch & 0xff] : -1;
+    }
+
+    private static final boolean[] PATTERN_CHAR_IS_SYNTAX =
+    {
+        //
+        false, false, false, false, false, false, false, false,
+        //
+        false, false, false, false, false, false, false, false,
+        //
+        false, false, false, false, false, false, false, false,
+        //
+        false, false, false, false, false, false, false, false,
+        //         !      "      #      $      %      &      '
+        false, false, false, false, false, false, false, false,
+        //  (      )      *      +      ,      -      .      /
+        false, false, false, false, false, false, false, false,
+        //  0      1      2      3      4      5      6      7
+        false, false, false, false, false, false, false, false,
+        //  8      9      :      ;      <      =      >      ?
+        false, false,  true, false, false, false, false, false,
+        //  @      A      B      C      D      E      F      G
+        false,  true,  true,  true,  true,  true,  true,  true,
+        //  H      I      J      K      L      M      N      O
+         true,  true,  true,  true,  true,  true,  true,  true,
+        //  P      Q      R      S      T      U      V      W
+         true,  true,  true,  true,  true,  true,  true,  true,
+        //  X      Y      Z      [      \      ]      ^      _
+         true,  true,  true, false, false, false, false, false,
+        //  `      a      b      c      d      e      f      g
+        false,  true,  true,  true,  true,  true,  true,  true,
+        //  h      i      j      k      l      m      n      o
+         true,  true,  true,  true,  true,  true,  true,  true,
+        //  p      q      r      s      t      u      v      w
+         true,  true,  true,  true,  true,  true,  true,  true,
+        //  x      y      z      {      |      }      ~
+         true,  true,  true, false, false, false, false, false,
+    };
+
+    /**
+     * Tell if a character can be used to define a field in a format string.
+     */
+    private static boolean isSyntaxChar(char ch) {
+        return ch < PATTERN_CHAR_IS_SYNTAX.length ? PATTERN_CHAR_IS_SYNTAX[ch & 0xff] : false;
+    }
 
     // When calendar uses hebr numbering (i.e. he@calendar=hebrew),
     // offset the years within the current millenium down to 1-999
@@ -1302,20 +1354,28 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     // Map pattern character to index
-    private static final int PATTERN_CHAR_BASE = 0x3a;
     private static final int[] PATTERN_CHAR_TO_INDEX =
     {
-    //   :   ;   <   =   >   ?
-        34, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    //
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    //       !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 34, -1, -1, -1, -1, -1,
     //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
         -1, 22, -1, -1, 10,  9, 11,  0,  5, -1, -1, 16, 26,  2, -1, 31,
     //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
         -1, 27, -1,  8, -1, 30, 29, 13, 32, 18, 23, -1, -1, -1, -1, -1,
     //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 14, -1, 25,  3, 19, -1, 21, 15, -1, -1,  4, -1,  6, -1, -1,
-    //   p   q   r   s   t   u   v   w   x   y   z
-        -1, 28, -1,  7, -1, 20, 24, 12, 33,  1, 17
+    //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
+        -1, 28, -1,  7, -1, 20, 24, 12, 33,  1, 17, -1, -1, -1, -1, -1,
     };
+
+    private static int getIndexFromChar(char ch) {
+        return ch < PATTERN_CHAR_TO_INDEX.length ? PATTERN_CHAR_TO_INDEX[ch & 0xff] : -1;
+    }
 
     // Map pattern character index to Calendar field number
     private static final int[] PATTERN_INDEX_TO_CALENDAR_FIELD =
@@ -1391,10 +1451,7 @@ public class SimpleDateFormat extends DateFormat {
      * @stable ICU 3.8
      */
     protected DateFormat.Field patternCharToDateFormatField(char ch) {
-        int patternCharIndex = -1;
-        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
-            patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
-        }
+        int patternCharIndex = getIndexFromChar(ch);
         if (patternCharIndex != -1) {
             return PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE[patternCharIndex];
         }
@@ -1466,12 +1523,7 @@ public class SimpleDateFormat extends DateFormat {
         long date = cal.getTimeInMillis();
         String result = null;
 
-        // final int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);
-        int patternCharIndex = -1;
-        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
-            patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
-        }
-
+        int patternCharIndex = getIndexFromChar(ch);
         if (patternCharIndex == -1) {
             if (ch == 'l') { // (SMALL LETTER L) deprecated placeholder for leap month marker, ignore
                 return;
@@ -1920,7 +1972,7 @@ public class SimpleDateFormat extends DateFormat {
                 if (inQuote) {
                     text.append(ch);
                 } else {
-                    if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
+                    if (isSyntaxChar(ch)) {
                         // a date/time pattern character
                         if (ch == itemType) {
                             itemLength++;
@@ -2765,12 +2817,7 @@ public class SimpleDateFormat extends DateFormat {
         int i;
         ParsePosition pos = new ParsePosition(0);
 
-        //int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);c
-        int patternCharIndex = -1;
-        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
-            patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
-        }
-
+        int patternCharIndex = getIndexFromChar(ch);
         if (patternCharIndex == -1) {
             return ~start;
         }
@@ -3384,7 +3431,7 @@ public class SimpleDateFormat extends DateFormat {
             } else {
                 if (c == '\'') {
                     inQuote = true;
-                } else if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || (c == ':')) {
+                } else if (isSyntaxChar(c)) {
                     int ci = from.indexOf(c);
                     if (ci != -1) {
                         c = to.charAt(ci);
@@ -3679,8 +3726,8 @@ public class SimpleDateFormat extends DateFormat {
         for (int i = 0; i < pattern.length(); ++i) {
             ch = pattern.charAt(i);
             if (ch != prevCh && count > 0) {
-                level = PATTERN_CHAR_TO_LEVEL[prevCh - PATTERN_CHAR_BASE];
-                if ( fieldLevel <= level ) {
+                level = getLevelFromChar(prevCh);
+                if (fieldLevel <= level) {
                     return false;
                 }
                 count = 0;
@@ -3691,15 +3738,15 @@ public class SimpleDateFormat extends DateFormat {
                 } else {
                     inQuote = ! inQuote;
                 }
-            } else if ( ! inQuote && (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) ) {
+            } else if (!inQuote && isSyntaxChar(ch)) {
                 prevCh = ch;
                 ++count;
             }
         }
         if (count > 0) {
             // last item
-            level = PATTERN_CHAR_TO_LEVEL[prevCh - PATTERN_CHAR_BASE];
-            if ( fieldLevel <= level ) {
+            level = getLevelFromChar(prevCh);
+            if (fieldLevel <= level) {
                 return false;
             }
         }
@@ -3784,11 +3831,7 @@ public class SimpleDateFormat extends DateFormat {
             }
             PatternItem item = (PatternItem)items[i];
             char ch = item.type;
-            int patternCharIndex = -1;
-            if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
-                patternCharIndex = PATTERN_CHAR_TO_LEVEL[(int)ch - PATTERN_CHAR_BASE];
-            }
-
+            int patternCharIndex = getIndexFromChar(ch);
             if (patternCharIndex == -1) {
                 throw new IllegalArgumentException("Illegal pattern character " +
                                                    "'" + ch + "' in \"" +
@@ -3899,11 +3942,7 @@ public class SimpleDateFormat extends DateFormat {
         }
         PatternItem item = (PatternItem)items[i];
         char ch = item.type;
-        int patternCharIndex = -1;
-        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
-            patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
-        }
-
+        int patternCharIndex = getIndexFromChar(ch);
         if (patternCharIndex == -1) {
             throw new IllegalArgumentException("Illegal pattern character " +
                                                "'" + ch + "' in \"" +
@@ -3936,23 +3975,19 @@ public class SimpleDateFormat extends DateFormat {
      */
     private boolean lowerLevel(Object[] items, int i, int level)
                     throws IllegalArgumentException {
-        if ( items[i] instanceof String) {
+        if (items[i] instanceof String) {
             return false;
         }
         PatternItem item = (PatternItem)items[i];
         char ch = item.type;
-        int patternCharIndex = -1;
-        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
-            patternCharIndex = PATTERN_CHAR_TO_LEVEL[(int)ch - PATTERN_CHAR_BASE];
-        }
-
+        int patternCharIndex = getLevelFromChar(ch);
         if (patternCharIndex == -1) {
             throw new IllegalArgumentException("Illegal pattern character " +
                                                "'" + ch + "' in \"" +
                                                pattern + '"');
         }
 
-        if ( patternCharIndex >= level ) {
+        if (patternCharIndex >= level) {
             return true;
         }
         return false;
