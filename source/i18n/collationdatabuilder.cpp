@@ -1377,7 +1377,7 @@ CollationDataBuilder::buildContext(ConditionalCE32 *head, UErrorCode &errorCode)
             // Build the contractions trie.
             contractionBuilder.clear();
             // Entry for an empty suffix, to be stored before the trie.
-            uint32_t emptySuffixCE32;
+            uint32_t emptySuffixCE32 = 0;
             uint32_t flags = 0;
             if(firstCond->context.length() == suffixStart) {
                 // There is a mapping for the prefix and the single character c. (p|c)
