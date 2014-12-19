@@ -29,7 +29,6 @@
 #include <float.h>
 #include <string.h>
 #include <stdlib.h>
-#include <inttypes.h>
 #include "cstring.h"
 #include "unicode/numsys.h"
 #include "fmtableimp.h"
@@ -7753,22 +7752,22 @@ void NumberFormatTest::TestCurrencyUsage() {
 void NumberFormatTest::TestDoubleLimit11439() {
     char  buf[50];
     for (int64_t num = MAX_INT64_IN_DOUBLE-10; num<=MAX_INT64_IN_DOUBLE; num++) {
-        sprintf(buf, "%" PRId64, num);
+        sprintf(buf, "%lld", (long long)num);
         double fNum = 0.0;
         sscanf(buf, "%lf", &fNum);
         int64_t rtNum = fNum;
         if (num != rtNum) {
-            errln("%s:%d MAX_INT64_IN_DOUBLE test, %" PRId64 " did not round trip. Got %" PRId64 , __FILE__, __LINE__, num, rtNum);
+            errln("%s:%d MAX_INT64_IN_DOUBLE test, %lld did not round trip. Got %lld", __FILE__, __LINE__, (long long)num, (long long)rtNum);
             return;
         }
     }
     for (int64_t num = -MAX_INT64_IN_DOUBLE+10; num>=-MAX_INT64_IN_DOUBLE; num--) {
-        sprintf(buf, "%" PRId64, num);
+        sprintf(buf, "%lld", (long long)num);
         double fNum = 0.0;
         sscanf(buf, "%lf", &fNum);
         int64_t rtNum = fNum;
         if (num != rtNum) {
-            errln("%s:%d MAX_INT64_IN_DOUBLE test, %" PRId64 "did not round trip. Got %" PRId64 , __FILE__, __LINE__, num, rtNum);
+            errln("%s:%d MAX_INT64_IN_DOUBLE test, %lld did not round trip. Got %lld", __FILE__, __LINE__, (long long)num, (long long)rtNum);
             return;
         }
     }
