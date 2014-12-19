@@ -422,7 +422,18 @@ enum UCalendarDateFields {
    * an example of this.
    */
   UCAL_IS_LEAP_MONTH,
-  
+
+ /**
+   * Field number indicating the separator between
+   * <code>HOUR</code>, <code>MINUTE</code> and <code>SECOND</code>.
+   * E.g., at 10:04 the <code>TIME_SEPARATOR</code> is <code>:</code>.
+   * @see #UCAL_HOUR
+   * @see #UCAL_MINUTE
+   * @see #UCAL_SECOND
+   * @internal
+   */
+  UCAL_TIME_SEPARATOR,
+
   /**
    * Field count
    * @stable ICU 2.6
