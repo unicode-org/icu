@@ -437,12 +437,18 @@ public abstract class DateFormat extends UFormat {
     public final static int TIMEZONE_ISO_LOCAL_FIELD = 33;
 
     /**
+     * {@icu} FieldPosition selector for ':' field alignment,
+     * corresponding to the {@link Calendar#TIME_SEPARATOR} field.
+     */
+    final static int TIME_SEPARATOR = 34;
+
+    /**
      * {@icu} Number of FieldPosition selectors for DateFormat.
      * Valid selectors range from 0 to FIELD_COUNT-1.
      * @stable ICU 3.0
      */
 
-    public final static int FIELD_COUNT = 34; // must == DateFormatSymbols.patternChars.length()
+    public final static int FIELD_COUNT = 35; // must == DateFormatSymbols.patternChars.length()
 
     
     /**
@@ -2341,6 +2347,14 @@ public abstract class DateFormat extends UFormat {
          * @stable ICU 3.8
          */
         public static final Field QUARTER = new Field("quarter", -1);
+
+        /**
+         * Constant identifying the time separator field.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final Field TIME_SEPARATOR = new Field("time separator", Calendar.TIME_SEPARATOR);
 
         // Stand alone types are variants for its base types.  So we do not define Field for
         // them.

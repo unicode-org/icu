@@ -754,17 +754,20 @@ public class SimpleDateFormat extends DateFormat {
      * For example, calendar fields can be defined in the following order:
      * year >  month > date > am-pm > hour >  minute
      * 'y' --> 10, 'M' -->20, 'd' --> 30; 'a' -->40, 'h' --> 50, 'm' -->60
+     * PATTERN_CHAR_BASE is the codepoint of the first entry in this array.
      */
     private static final int[] PATTERN_CHAR_TO_LEVEL =
     {
-    //       A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+    //   :   ;   <   =   >   ?
+         0, -1, -1, -1, -1, -1,
+    //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
         -1, 40, -1, -1, 20, 30, 30,  0, 50, -1, -1, 50, 20, 20, -1,  0,
-    //   P   Q   R   S   T   U   V   W   X   Y   Z
+    //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
         -1, 20, -1, 80, -1, 10,  0, 30,  0, 10,  0, -1, -1, -1, -1, -1,
-    //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+    //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50, -1, 60, -1, -1,
     //   p   q   r   s   t   u   v   w   x   y   z
-        -1, 20, -1, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1
+        -1, 20, -1, 70, -1, 10,  0, 20,  0, 10,  0
     };
 
     // When calendar uses hebr numbering (i.e. he@calendar=hebrew),
@@ -1299,17 +1302,19 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     // Map pattern character to index
-    private static final int PATTERN_CHAR_BASE = 0x40;
+    private static final int PATTERN_CHAR_BASE = 0x3a;
     private static final int[] PATTERN_CHAR_TO_INDEX =
     {
-    //       A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+    //   :   ;   <   =   >   ?
+        34, -1, -1, -1, -1, -1,
+    //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
         -1, 22, -1, -1, 10,  9, 11,  0,  5, -1, -1, 16, 26,  2, -1, 31,
-    //   P   Q   R   S   T   U   V   W   X   Y   Z
+    //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
         -1, 27, -1,  8, -1, 30, 29, 13, 32, 18, 23, -1, -1, -1, -1, -1,
-    //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+    //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 14, -1, 25,  3, 19, -1, 21, 15, -1, -1,  4, -1,  6, -1, -1,
     //   p   q   r   s   t   u   v   w   x   y   z
-        -1, 28, -1,  7, -1, 20, 24, 12, 33,  1, 17, -1, -1, -1, -1, -1
+        -1, 28, -1,  7, -1, 20, 24, 12, 33,  1, 17
     };
 
     // Map pattern character index to Calendar field number
@@ -1331,6 +1336,7 @@ public class SimpleDateFormat extends DateFormat {
         /*U*/   Calendar.YEAR,
         /*O*/   Calendar.ZONE_OFFSET,
         /*Xx*/  Calendar.ZONE_OFFSET, Calendar.ZONE_OFFSET,
+        /*:*/   Calendar.TIME_SEPARATOR,
     };
 
     // Map pattern character index to DateFormat field number
@@ -1351,6 +1357,7 @@ public class SimpleDateFormat extends DateFormat {
         /*U*/   DateFormat.YEAR_NAME_FIELD,
         /*O*/   DateFormat.TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD,
         /*Xx*/  DateFormat.TIMEZONE_ISO_FIELD, DateFormat.TIMEZONE_ISO_LOCAL_FIELD,
+        /*:*/   DateFormat.TIME_SEPARATOR,
     };
 
     // Map pattern character index to DateFormat.Field
@@ -1371,6 +1378,7 @@ public class SimpleDateFormat extends DateFormat {
         /*U*/   DateFormat.Field.YEAR,
         /*O*/   DateFormat.Field.TIME_ZONE,
         /*Xx*/  DateFormat.Field.TIME_ZONE, DateFormat.Field.TIME_ZONE,
+        /*:*/   DateFormat.Field.TIME_SEPARATOR,
     };
 
     /**
@@ -1384,7 +1392,7 @@ public class SimpleDateFormat extends DateFormat {
      */
     protected DateFormat.Field patternCharToDateFormatField(char ch) {
         int patternCharIndex = -1;
-        if ('A' <= ch && ch <= 'z') {
+        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
             patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
         }
         if (patternCharIndex != -1) {
@@ -1457,10 +1465,10 @@ public class SimpleDateFormat extends DateFormat {
         TimeZone tz = cal.getTimeZone();
         long date = cal.getTimeInMillis();
         String result = null;
-        
+
         // final int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);
         int patternCharIndex = -1;
-        if ('A' <= ch && ch <= 'z') {
+        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
             patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
         }
 
@@ -1773,6 +1781,9 @@ public class SimpleDateFormat extends DateFormat {
                 zeroPaddingNumber(currentNumberFormat,buf, (value/3)+1, count, maxIntCount);
             }
             break;
+        case 34: // ':' - TIME SEPARATOR
+            buf.append(formatData.getTimeSeparatorString());
+            break;
         default:
             // case 3: // 'd' - DATE
             // case 5: // 'H' - HOUR_OF_DAY (0..23)
@@ -1909,7 +1920,7 @@ public class SimpleDateFormat extends DateFormat {
                 if (inQuote) {
                     text.append(ch);
                 } else {
-                    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+                    if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
                         // a date/time pattern character
                         if (ch == itemType) {
                             itemLength++;
@@ -2241,7 +2252,7 @@ public class SimpleDateFormat extends DateFormat {
                             return;
                         }                              
                     }
-                    
+
                 }
             } else {
                 // Handle literal pattern text literal
@@ -2756,7 +2767,7 @@ public class SimpleDateFormat extends DateFormat {
 
         //int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);c
         int patternCharIndex = -1;
-        if ('A' <= ch && ch <= 'z') {
+        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
             patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
         }
 
@@ -3233,6 +3244,26 @@ public class SimpleDateFormat extends DateFormat {
                     return newStart;
                 }
 
+            case 34:
+            {
+                // Try matching a time separator.
+                ArrayList<String> data = new ArrayList<String>(3);
+                data.add(formatData.getTimeSeparatorString());
+
+                // Add the default, if different from the locale.
+                if (!formatData.getTimeSeparatorString().equals(DateFormatSymbols.DEFAULT_TIME_SEPARATOR)) {
+                    data.add(DateFormatSymbols.DEFAULT_TIME_SEPARATOR);
+                }
+
+                // If lenient, add also the alternate, if different from the locale.
+                if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH) &&
+                        !formatData.getTimeSeparatorString().equals(DateFormatSymbols.ALTERNATE_TIME_SEPARATOR)) {
+                    data.add(DateFormatSymbols.ALTERNATE_TIME_SEPARATOR);
+                }
+
+                return matchString(text, start, Calendar.TIME_SEPARATOR, data.toArray(new String[0]), cal);
+            }
+
             default:
                 // case 3: // 'd' - DATE
                 // case 5: // 'H' - HOUR_OF_DAY (0..23)
@@ -3353,7 +3384,7 @@ public class SimpleDateFormat extends DateFormat {
             } else {
                 if (c == '\'') {
                     inQuote = true;
-                } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                } else if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || (c == ':')) {
                     int ci = from.indexOf(c);
                     if (ci != -1) {
                         c = to.charAt(ci);
@@ -3660,8 +3691,7 @@ public class SimpleDateFormat extends DateFormat {
                 } else {
                     inQuote = ! inQuote;
                 }
-            } else if ( ! inQuote && ((ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/)
-                        || (ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/))) {
+            } else if ( ! inQuote && (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) ) {
                 prevCh = ch;
                 ++count;
             }
@@ -3755,7 +3785,7 @@ public class SimpleDateFormat extends DateFormat {
             PatternItem item = (PatternItem)items[i];
             char ch = item.type;
             int patternCharIndex = -1;
-            if ('A' <= ch && ch <= 'z') {
+            if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
                 patternCharIndex = PATTERN_CHAR_TO_LEVEL[(int)ch - PATTERN_CHAR_BASE];
             }
 
@@ -3870,7 +3900,7 @@ public class SimpleDateFormat extends DateFormat {
         PatternItem item = (PatternItem)items[i];
         char ch = item.type;
         int patternCharIndex = -1;
-        if ('A' <= ch && ch <= 'z') {
+        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
             patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
         }
 
@@ -3912,7 +3942,7 @@ public class SimpleDateFormat extends DateFormat {
         PatternItem item = (PatternItem)items[i];
         char ch = item.type;
         int patternCharIndex = -1;
-        if ('A' <= ch && ch <= 'z') {
+        if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || (ch == ':')) {
             patternCharIndex = PATTERN_CHAR_TO_LEVEL[(int)ch - PATTERN_CHAR_BASE];
         }
 
