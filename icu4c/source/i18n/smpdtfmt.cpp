@@ -337,7 +337,7 @@ class SimpleDateFormatMutableNFs : public UMemory {
         }
         U_ASSERT(idx < UDAT_FIELD_COUNT);
         nodes[idx].key = &nf;
-        nodes[idx].value = (&nf == NULL) ? NULL : (NumberFormat *) nf.clone();
+        nodes[idx].value = (NumberFormat *) nf.clone();
         return nodes[idx].value;
     }
  private:
