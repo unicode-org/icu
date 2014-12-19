@@ -427,15 +427,15 @@ TimeZone::createTimeZone(const UnicodeString& ID)
      */
     TimeZone* result = createSystemTimeZone(ID);
 
-    if (result == 0) {
+    if (result == NULL) {
         U_DEBUG_TZ_MSG(("failed to load system time zone with id - falling to custom"));
         result = createCustomTimeZone(ID);
     }
-    if (result == 0) {
+    if (result == NULL) {
         U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to Etc/Unknown(GMT)"));
         const TimeZone& unknown = getUnknown();
-        if (&unknown == NULL) { //  Illegal NULL reference!
-          U_DEBUG_TZ_MSG(("failed to getUnknown()"));
+        if (_UNKNOWN_ZONE == NULL) {                   // Cannot test (&unknown == NULL) because the
+          U_DEBUG_TZ_MSG(("failed to getUnknown()"));  // behavior of NULL references is undefined.
         } else {
           result = unknown.clone();
         }
