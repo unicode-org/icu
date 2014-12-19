@@ -758,6 +758,13 @@ typedef enum UDateFormatField {
      * @internal ICU 53
      */
     UDAT_RELATED_YEAR_FIELD = 34,
+
+    /**
+     * FieldPosition and UFieldPosition selector for ':' time separator,
+     * corresponding to the UCAL_TIME_SEPARATOR field.
+     * @internal
+     */
+    UDAT_TIME_SEPARATOR_FIELD = 35,
 #endif /* U_HIDE_INTERNAL_API */
 
    /**
@@ -768,7 +775,7 @@ typedef enum UDateFormatField {
      * in the future.
      * @stable ICU 3.0
      */
-    UDAT_FIELD_COUNT = 35
+    UDAT_FIELD_COUNT = 36
 
 } UDateFormatField;
 
