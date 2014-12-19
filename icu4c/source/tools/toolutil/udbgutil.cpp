@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2007-2013, International Business Machines Corporation and
+ * Copyright (c) 2007-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -106,6 +106,7 @@ static const Field names_UCalendarDateFields[] =
     FIELD_NAME_STR( LEN_UCAL, UCAL_JULIAN_DAY ),
     FIELD_NAME_STR( LEN_UCAL, UCAL_MILLISECONDS_IN_DAY ),
     FIELD_NAME_STR( LEN_UCAL, UCAL_IS_LEAP_MONTH ),
+    FIELD_NAME_STR( LEN_UCAL, UCAL_TIME_SEPARATOR ),
 };
 
 

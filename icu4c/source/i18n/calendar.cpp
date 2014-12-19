@@ -30,6 +30,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/uchar.h"
 #include "unicode/gregocal.h"
 #include "unicode/basictz.h"
 #include "unicode/simpletz.h"
@@ -635,8 +636,9 @@ static const int32_t kCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {           1,            1,             7,             7  }, // DOW_LOCAL
     {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // EXTENDED_YEAR
     { -0x7F000000,  -0x7F000000,    0x7F000000,    0x7F000000  }, // JULIAN_DAY
-    {           0,            0, 24*kOneHour-1, 24*kOneHour-1  },  // MILLISECONDS_IN_DAY
-    {           0,            0,             1,             1  },  // IS_LEAP_MONTH
+    {           0,            0, 24*kOneHour-1, 24*kOneHour-1  }, // MILLISECONDS_IN_DAY
+    {           0,            0,             1,             1  }, // IS_LEAP_MONTH
+    { UCHAR_MIN_VALUE, UCHAR_MIN_VALUE, UCHAR_MAX_VALUE, UCHAR_MAX_VALUE }, // TIME_SEPARATOR
 };
 
 // Resource bundle tags read by this class
@@ -2689,6 +2691,7 @@ int32_t Calendar::getLimit(UCalendarDateFields field, ELimitType limitType) cons
     case UCAL_JULIAN_DAY:
     case UCAL_MILLISECONDS_IN_DAY:
     case UCAL_IS_LEAP_MONTH:
+    case UCAL_TIME_SEPARATOR:
         return kCalendarLimits[field][limitType];
 
     case UCAL_WEEK_OF_MONTH:

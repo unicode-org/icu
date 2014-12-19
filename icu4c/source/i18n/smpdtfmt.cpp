@@ -72,7 +72,7 @@
 
 U_NAMESPACE_BEGIN
 
-static const UChar PATTERN_CHAR_BASE = 0x40;
+static const UChar PATTERN_CHAR_BASE = 0x3a;
 
 /**
  * Last-resort string to use for "GMT" when constructing time zone strings.
@@ -140,8 +140,9 @@ static const UDateFormatField kTimeFields[] = {
     UDAT_HOUR0_FIELD,
     UDAT_MILLISECONDS_IN_DAY_FIELD,
     UDAT_TIMEZONE_RFC_FIELD,
-    UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD };
-static const int8_t kTimeFieldsCount = 10;
+    UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD,
+    UDAT_TIME_SEPARATOR_FIELD };
+static const int8_t kTimeFieldsCount = 11;
 
 
 // This is a pattern-of-last-resort used when we can't load a usable pattern out
@@ -210,6 +211,7 @@ static const int32_t gFieldRangeBias[] = {
     -1,  // 'X' - UDAT_TIMEZONE_ISO_FIELD
     -1,  // 'x' - UDAT_TIMEZONE_ISO_LOCAL_FIELD
     -1,  // 'r' - UDAT_RELATED_YEAR_FIELD
+    -1,  // ':' - UDAT_TIME_SEPARATOR_FIELD
 };
 
 // When calendar uses hebr numbering (i.e. he@calendar=hebrew),
@@ -1030,8 +1032,9 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
                 inQuote = ! inQuote;
             }
         }
-        else if ( ! inQuote && ((ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/)
-                    || (ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/))) {
+        else if ( ! inQuote && ((ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/)
+                    || (ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/)
+                    || (ch == 0x003A /*':'*/))) {
             // ch is a date-time pattern character to be interpreted
             // by subFormat(); count the number of times it is repeated
             prevCh = ch;
@@ -1073,24 +1076,28 @@ SimpleDateFormat::fgCalendarFieldToLevel[] =
     /*sS*/ 70, 80,
     /*z?Y*/ 0, 0, 10,
     /*eug*/ 30, 10, 0,
-    /*A?.*/ 40, 0, 0
+    /*A?.*/ 40, 0, 0,
+    /*:*/ 0
 };
 
 
 /* Map calendar field LETTER into calendar field level.
  * the larger the level, the smaller the field unit.
  * NOTE: if new fields adds in, the table needs to update.
+ * PATTERN_CHAR_BASE is the codepoint of the first entry in this array.
  */
 const int32_t
 SimpleDateFormat::fgPatternCharToLevel[] = {
-    //       A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+    //   :   ;   <   =   >   ?
+         0, -1, -1, -1, -1, -1,
+    //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
         -1, 40, -1, -1, 20, 30, 30,  0, 50, -1, -1, 50, 20, 20, -1,  0,
-    //   P   Q   R   S   T   U   V   W   X   Y   Z
+    //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
         -1, 20, -1, 80, -1, 10,  0, 30,  0, 10,  0, -1, -1, -1, -1, -1,
     //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50, -1, 60, -1, -1,
     //   p   q   r   s   t   u   v   w   x   y   z
-        -1, 20, 10, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1
+        -1, 20, 10, 70, -1, 10,  0, 20,  0, 10,  0
 };
 
 
@@ -1116,6 +1123,7 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     /*O*/   UCAL_ZONE_OFFSET,
     /*Xx*/  UCAL_ZONE_OFFSET, UCAL_ZONE_OFFSET,
     /*r*/   UCAL_EXTENDED_YEAR,
+    /*:*/   UCAL_TIME_SEPARATOR,
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -1139,6 +1147,7 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
     /*O*/   UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD,
     /*Xx*/  UDAT_TIMEZONE_ISO_FIELD, UDAT_TIMEZONE_ISO_LOCAL_FIELD,
     /*r*/   UDAT_RELATED_YEAR_FIELD,
+    /*:*/   UDAT_TIME_SEPARATOR_FIELD,
 };
 
 //----------------------------------------------------------------------
@@ -1570,6 +1579,14 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                       fSymbols->fAmPmsCount);
         break;
 
+    // for ":", write out the time separator string
+    case UDAT_TIME_SEPARATOR_FIELD:
+        {
+            UnicodeString separator;
+            appendTo += fSymbols->getTimeSeparatorString(separator);
+        }
+        break;
+
     // for "h" and "hh", write out the hour, adjusting noon and midnight to show up
     // as "12"
     case UDAT_HOUR1_FIELD:
@@ -1937,7 +1954,9 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
         UChar ch = fPattern.charAt(i);
 
         // Handle alphabetic field characters.
-        if (!inQuote && ((ch >= 0x41 && ch <= 0x5A) || (ch >= 0x61 && ch <= 0x7A))) { // [A-Za-z]
+        if (!inQuote && ((ch >= 0x41 && ch <= 0x5A)
+                         || (ch >= 0x61 && ch <= 0x7A)
+                         || (ch == 0x3A))) { // [A-Za-z:]
             int32_t fieldPat = i;
 
             // Count the length of this field specifier
@@ -2329,7 +2348,9 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
     for ( ; i < pattern.length(); i += 1) {
         UChar ch = pattern.charAt(i);
         
-        if (!inQuote && ((ch >= 0x41 && ch <= 0x5A) || (ch >= 0x61 && ch <= 0x7A))) { // unquoted [A-Za-z]
+        if (!inQuote && ((ch >= 0x41 && ch <= 0x5A)
+                         || (ch >= 0x61 && ch <= 0x7A)
+                         || (ch == 0x3A))) { // unquoted [A-Za-z:]
             break;
         }
         
@@ -3236,6 +3257,28 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             }
             return -start;
         }
+    case UDAT_TIME_SEPARATOR_FIELD: // ':'
+        {
+            static const UChar def_sep = DateFormatSymbols::DEFAULT_TIME_SEPARATOR;
+            static const UChar alt_sep = DateFormatSymbols::ALTERNATE_TIME_SEPARATOR;
+
+            // Try matching a time separator.
+            int32_t count = 1;
+            UnicodeString data[3];
+            fSymbols->getTimeSeparatorString(data[0]);
+
+            // Add the default, if different from the locale.
+            if (data[0].compare(&def_sep, 1) != 0) {
+                data[count++].setTo(def_sep);
+            }
+
+            // If lenient, add also the alternate, if different from the locale.
+            if (isLenient() && data[0].compare(&alt_sep, 1) != 0) {
+                data[count++].setTo(alt_sep);
+            }
+
+            return matchString(text, start, UCAL_TIME_SEPARATOR, data, count, NULL, cal);
+        }
 
     default:
         // Handle "generic" fields
@@ -3395,8 +3438,9 @@ void SimpleDateFormat::translatePattern(const UnicodeString& originalPattern,
     else {
       if (c == QUOTE)
     inQuote = TRUE;
-      else if ((c >= 0x0061 /*'a'*/ && c <= 0x007A) /*'z'*/
-           || (c >= 0x0041 /*'A'*/ && c <= 0x005A /*'Z'*/)) {
+      else if ((c >= 0x0041 /*'A'*/ && c <= 0x005A /*'Z'*/)
+           || (c >= 0x0061 /*'a'*/ && c <= 0x007A /*'z'*/)
+           || (c == 0x003A /*':'*/)) {
     int32_t ci = from.indexOf(c);
     if (ci == -1) {
       status = U_INVALID_FORMAT_ERROR;
@@ -3581,8 +3625,9 @@ SimpleDateFormat::isFieldUnitIgnored(const UnicodeString& pattern,
                 inQuote = ! inQuote;
             }
         }
-        else if ( ! inQuote && ((ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/)
-                    || (ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/))) {
+        else if ( ! inQuote && ((ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/)
+                    || (ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/)
+                    || (ch == 0x003A /*':'*/))) {
             prevCh = ch;
             ++count;
         }

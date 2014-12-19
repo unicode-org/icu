@@ -408,6 +408,36 @@ public:
      */
     void setAmPmStrings(const UnicodeString* ampms, int32_t count);
 
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * This default time separator is used for formatting when the locale
+     * doesn't specify any time separator, and always recognized when parsing.
+     * @internal
+     */
+    static const UChar DEFAULT_TIME_SEPARATOR = 0x003a;  // ':'
+
+    /**
+     * This alternate time separator is always recognized when parsing.
+     * @internal
+     */
+    static const UChar ALTERNATE_TIME_SEPARATOR = 0x002e;  // '.'
+
+    /**
+     * Gets the time separator string. For example: ":".
+     * @param result Output param which will receive the time separator string.
+     * @return       A reference to 'result'.
+     * @internal
+     */
+    UnicodeString& getTimeSeparatorString(UnicodeString& result) const;
+
+    /**
+     * Sets the time separator string. For example: ":".
+     * @param newTimeSeparator the new time separator string.
+     * @internal
+     */
+    void setTimeSeparatorString(const UnicodeString& newTimeSeparator);
+#endif  /* U_HIDE_INTERNAL_API */
+
 #ifndef U_HIDE_DRAFT_API
     /**
      * Gets cyclic year name strings if the calendar has them, by width and context.
@@ -709,6 +739,11 @@ private:
      */
     UnicodeString*  fAmPms;
     int32_t         fAmPmsCount;
+
+    /**
+     * Time separator string. For example: ":".
+     */
+    UnicodeString   fTimeSeparator;
 
     /**
      * Quarter strings. For example: "1st quarter", "2nd quarter", etc.
