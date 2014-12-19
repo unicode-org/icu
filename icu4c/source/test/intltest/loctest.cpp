@@ -2136,6 +2136,7 @@ void LocaleTest::checkRegisteredCollators(const char *expectExtra) {
             foundExpected = TRUE;
             logln(UnicodeString("Found expected registered collator: ","") + expectStr);
         }
+        (void)foundExpected;    // Hush unused variable compiler warning.
 
         if( oldHash.geti(*locStr) == 0 ) {
             if(expectExtra != NULL && expectStr==*locStr) {
