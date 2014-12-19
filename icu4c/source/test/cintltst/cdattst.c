@@ -1650,13 +1650,13 @@ static void TestOverrideNumberFormat(void) {
     udat_close(fmt);
     
     for (i=0; i<UPRV_LENGTHOF(overrideNumberFormat); i++){
-        if ((i==1 || i==3 || i==4) && log_knownIssue("11454", "skipping overrideNumberFormat test case")) {
-            continue;
-        }
         UChar ubuf[kUbufMax];
         UDateFormat* fmt2;
         UNumberFormat* overrideFmt2;
 
+        if ((i==1 || i==3 || i==4) && log_knownIssue("11454", "skipping overrideNumberFormat test case")) {
+            continue;
+        }
         fmt2 =udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
         assertSuccess("udat_open() with en_US", &status);
 
