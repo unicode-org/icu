@@ -348,22 +348,22 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "", "1997", "August", "13", "", "", "34", "12", "", "Wednesday",
              "", "", "", "", "PM", "2", "", "Pacific Daylight Time", "", "",
              "", "", "", "", "", "", "", "", "", "",
-             "", "", "", "",
+             "", "", "", "", ":",
 
              "", "1997", "ao\u00FBt", "13", "", "14", "34", "12", "", "mercredi",
              "", "", "", "", "", "", "", "heure d\u2019\u00E9t\u00E9 du Pacifique", "", "",
              "", "", "", "", "", "", "", "", "", "",
-             "", "", "", "",
+             "", "", "", "", ":",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5", "Wed",
             "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4",
             "1997", "2450674", "52452513", "-0700", "PT", "4", "8", "3", "3", "uslax",
-            "1997", "GMT-7", "-07", "-07",
+            "1997", "GMT-7", "-07", "-07", ":",
 
             "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130", "Wednesday",
             "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "Wednesday",
             "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time", "Wednesday", "August", "3rd quarter", "3rd quarter", "Los Angeles Time",
-            "1997", "GMT-07:00", "-0700", "-0700",
+            "1997", "GMT-07:00", "-0700", "-0700", ":",
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -466,7 +466,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * This MUST be kept in sync with DateFormatSymbols.patternChars.
      */
-    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXx";
+    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXx:";
 
     /**
      * A list of the DateFormat.Field.
@@ -507,6 +507,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateFormat.Field.TIME_ZONE,     // O
         DateFormat.Field.TIME_ZONE,     // X
         DateFormat.Field.TIME_ZONE,     // x
+        DateFormat.Field.TIME_SEPARATOR,// :
     };
 
     /**
@@ -548,6 +549,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         "TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD",
         "TIMEZONE_ISO_FIELD",
         "TIMEZONE_ISO_LOCAL_FIELD",
+        "TIME_SEPARATOR",
     };
 
     /**
@@ -2002,6 +2004,30 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: Expected " + expectedUS+" Got "+out);
     }
 
+    public void TestFormattingLocaleTimeSeparator() {
+        Date date = new Date(874266720000L);  // Sun Sep 14 21:52:00 CET 1997
+        TimeZone tz = TimeZone.getTimeZone("CET");
+
+        DateFormat dfArab = DateFormat.getTimeInstance(DateFormat.SHORT, new ULocale("ar"));
+        DateFormat dfLatn = DateFormat.getTimeInstance(DateFormat.SHORT, new ULocale("ar-u-nu-latn"));
+
+        dfArab.setTimeZone(tz);
+        dfLatn.setTimeZone(tz);
+
+        String expectedArab = "\u0669\u060C\u0665\u0662 \u0645";
+        String expectedLatn = "9:52 \u0645";
+
+        String actualArab = dfArab.format(date);
+        String actualLatn = dfLatn.format(date);
+
+        if (!actualArab.equals(expectedArab)) {
+            errln("FAIL: Expected " + expectedArab + " Got " + actualArab);
+        }
+        if (!actualLatn.equals(expectedLatn)) {
+            errln("FAIL: Expected " + expectedLatn + " Got " + actualLatn);
+        }
+    }
+
     /**
      * Test the formatting of dates with the 'NONE' keyword.
      */
@@ -2098,15 +2124,20 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestSpaceParsing() {
 
         String DATA[] = {
-            "yyyy MM dd",
+            "yyyy MM dd HH:mm:ss",
 
             // pattern, input, expected output (in quotes)
             "MMMM d yy", " 04 05 06",  null, // MMMM wants Apr/April
             null,        "04 05 06",   null,
-            "MM d yy",   " 04 05 06",  "2006 04 05",
-            null,        "04 05 06",   "2006 04 05",
-            "MMMM d yy", " Apr 05 06", "2006 04 05",
-            null,        "Apr 05 06",  "2006 04 05",
+            "MM d yy",   " 04 05 06",  "2006 04 05 00:00:00",
+            null,        "04 05 06",   "2006 04 05 00:00:00",
+            "MMMM d yy", " Apr 05 06", "2006 04 05 00:00:00",
+            null,        "Apr 05 06",  "2006 04 05 00:00:00",
+
+            "hh:mm:ss a", "12:34:56 PM", "1970 01 01 12:34:56",
+            null,         "12:34:56PM",  "1970 01 01 12:34:56",
+            null,         "12.34.56PM",  "1970 01 01 12:34:56",
+            null,         "12 : 34 : 56  PM", "1970 01 01 12:34:56",
         };
 
         expectParse(DATA, new Locale("en", "", ""));

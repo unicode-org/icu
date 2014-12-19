@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2012, International Business Machines
+ * Copyright (C) 1996-2014, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -277,6 +277,8 @@ public class GregorianCalendar extends Calendar {
         { -5838269, -5838269, 5828963, 5838270 }, // EXTENDED_YEAR
         {/*                                  */}, // JULIAN_DAY
         {/*                                  */}, // MILLISECONDS_IN_DAY
+        {/*                                  */}, // IS_LEAP_MONTH
+        {/*                                  */}, // TIME_SEPARATOR
     };
 
     /**
