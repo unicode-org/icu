@@ -72,8 +72,6 @@
 
 U_NAMESPACE_BEGIN
 
-static const UChar PATTERN_CHAR_BASE = 0x3a;
-
 /**
  * Last-resort string to use for "GMT" when constructing time zone strings.
  */
@@ -1032,9 +1030,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
                 inQuote = ! inQuote;
             }
         }
-        else if ( ! inQuote && ((ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/)
-                    || (ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/)
-                    || (ch == 0x003A /*':'*/))) {
+        else if (!inQuote && isSyntaxChar(ch)) {
             // ch is a date-time pattern character to be interpreted
             // by subFormat(); count the number of times it is repeated
             prevCh = ch;
@@ -1080,26 +1076,69 @@ SimpleDateFormat::fgCalendarFieldToLevel[] =
     /*:*/ 0
 };
 
+int32_t SimpleDateFormat::getLevelFromChar(UChar ch) {
+    // Map calendar field LETTER into calendar field level.
+    // the larger the level, the smaller the field unit.
+    // NOTE: if new fields adds in, the table needs to update.
+    static const int32_t mapCharToLevel[] = {
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        //
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        //       !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1, -1, -1, -1, -1,
+        //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+            -1, 40, -1, -1, 20, 30, 30,  0, 50, -1, -1, 50, 20, 20, -1,  0,
+        //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
+            -1, 20, -1, 80, -1, 10,  0, 30,  0, 10,  0, -1, -1, -1, -1, -1,
+        //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+            -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50,  0, 60, -1, -1,
+        //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
+            -1, 20, 10, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1
+    };
 
-/* Map calendar field LETTER into calendar field level.
- * the larger the level, the smaller the field unit.
- * NOTE: if new fields adds in, the table needs to update.
- * PATTERN_CHAR_BASE is the codepoint of the first entry in this array.
- */
-const int32_t
-SimpleDateFormat::fgPatternCharToLevel[] = {
-    //   :   ;   <   =   >   ?
-         0, -1, -1, -1, -1, -1,
-    //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
-        -1, 40, -1, -1, 20, 30, 30,  0, 50, -1, -1, 50, 20, 20, -1,  0,
-    //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
-        -1, 20, -1, 80, -1, 10,  0, 30,  0, 10,  0, -1, -1, -1, -1, -1,
-    //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
-        -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50, -1, 60, -1, -1,
-    //   p   q   r   s   t   u   v   w   x   y   z
-        -1, 20, 10, 70, -1, 10,  0, 20,  0, 10,  0
-};
+    return ch < UPRV_LENGTHOF(mapCharToLevel) ? mapCharToLevel[ch] : -1;
+}
 
+UBool SimpleDateFormat::isSyntaxChar(UChar ch) {
+    static const UBool mapCharToIsSyntax[] = {
+        //
+        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        //
+        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        //
+        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        //
+        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        //         !      "      #      $      %      &      '
+        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        //  (      )      *      +      ,      -      .      /
+        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        //  0      1      2      3      4      5      6      7
+        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        //  8      9      :      ;      <      =      >      ?
+        FALSE, FALSE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        //  @      A      B      C      D      E      F      G
+        FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
+        //  H      I      J      K      L      M      N      O
+         TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
+        //  P      Q      R      S      T      U      V      W
+         TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
+        //  X      Y      Z      [      \      ]      ^      _
+         TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        //  `      a      b      c      d      e      f      g
+        FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
+        //  h      i      j      k      l      m      n      o
+         TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
+        //  p      q      r      s      t      u      v      w
+         TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
+        //  x      y      z      {      |      }      ~
+         TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE
+    };
+
+    return ch < UPRV_LENGTHOF(mapCharToIsSyntax) ? mapCharToIsSyntax[ch] : FALSE;
+}
 
 // Map index into pattern character string to Calendar field number.
 const UCalendarDateFields
@@ -1954,9 +1993,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
         UChar ch = fPattern.charAt(i);
 
         // Handle alphabetic field characters.
-        if (!inQuote && ((ch >= 0x41 && ch <= 0x5A)
-                         || (ch >= 0x61 && ch <= 0x7A)
-                         || (ch == 0x3A))) { // [A-Za-z:]
+        if (!inQuote && isSyntaxChar(ch)) {
             int32_t fieldPat = i;
 
             // Count the length of this field specifier
@@ -2348,9 +2385,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
     for ( ; i < pattern.length(); i += 1) {
         UChar ch = pattern.charAt(i);
         
-        if (!inQuote && ((ch >= 0x41 && ch <= 0x5A)
-                         || (ch >= 0x61 && ch <= 0x7A)
-                         || (ch == 0x3A))) { // unquoted [A-Za-z:]
+        if (!inQuote && isSyntaxChar(ch)) {
             break;
         }
         
@@ -3418,43 +3453,42 @@ void SimpleDateFormat::translatePattern(const UnicodeString& originalPattern,
                                         const UnicodeString& to,
                                         UErrorCode& status)
 {
-  // run through the pattern and convert any pattern symbols from the version
-  // in "from" to the corresponding character ion "to".  This code takes
-  // quoted strings into account (it doesn't try to translate them), and it signals
-  // an error if a particular "pattern character" doesn't appear in "from".
-  // Depending on the values of "from" and "to" this can convert from generic
-  // to localized patterns or localized to generic.
-  if (U_FAILURE(status))
-    return;
+    // run through the pattern and convert any pattern symbols from the version
+    // in "from" to the corresponding character ion "to".  This code takes
+    // quoted strings into account (it doesn't try to translate them), and it signals
+    // an error if a particular "pattern character" doesn't appear in "from".
+    // Depending on the values of "from" and "to" this can convert from generic
+    // to localized patterns or localized to generic.
+    if (U_FAILURE(status)) {
+        return;
+    }
 
-  translatedPattern.remove();
-  UBool inQuote = FALSE;
-  for (int32_t i = 0; i < originalPattern.length(); ++i) {
-    UChar c = originalPattern[i];
+    translatedPattern.remove();
+    UBool inQuote = FALSE;
+    for (int32_t i = 0; i < originalPattern.length(); ++i) {
+        UChar c = originalPattern[i];
+        if (inQuote) {
+            if (c == QUOTE) {
+                inQuote = FALSE;
+            }
+        } else {
+            if (c == QUOTE) {
+                inQuote = TRUE;
+            } else if (isSyntaxChar(c)) {
+                int32_t ci = from.indexOf(c);
+                if (ci == -1) {
+                    status = U_INVALID_FORMAT_ERROR;
+                    return;
+                }
+                c = to[ci];
+            }
+        }
+        translatedPattern += c;
+    }
     if (inQuote) {
-      if (c == QUOTE)
-    inQuote = FALSE;
+        status = U_INVALID_FORMAT_ERROR;
+        return;
     }
-    else {
-      if (c == QUOTE)
-    inQuote = TRUE;
-      else if ((c >= 0x0041 /*'A'*/ && c <= 0x005A /*'Z'*/)
-           || (c >= 0x0061 /*'a'*/ && c <= 0x007A /*'z'*/)
-           || (c == 0x003A /*':'*/)) {
-    int32_t ci = from.indexOf(c);
-    if (ci == -1) {
-      status = U_INVALID_FORMAT_ERROR;
-      return;
-    }
-    c = to[ci];
-      }
-    }
-    translatedPattern += c;
-  }
-  if (inQuote) {
-    status = U_INVALID_FORMAT_ERROR;
-    return;
-  }
 }
 
 //----------------------------------------------------------------------
@@ -3611,9 +3645,9 @@ SimpleDateFormat::isFieldUnitIgnored(const UnicodeString& pattern,
     for (int32_t i = 0; i < pattern.length(); ++i) {
         ch = pattern[i];
         if (ch != prevCh && count > 0) {
-            level = fgPatternCharToLevel[prevCh - PATTERN_CHAR_BASE];
+            level = getLevelFromChar(prevCh);
             // the larger the level, the smaller the field unit.
-            if ( fieldLevel <= level ) {
+            if (fieldLevel <= level) {
                 return FALSE;
             }
             count = 0;
@@ -3625,19 +3659,17 @@ SimpleDateFormat::isFieldUnitIgnored(const UnicodeString& pattern,
                 inQuote = ! inQuote;
             }
         }
-        else if ( ! inQuote && ((ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/)
-                    || (ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/)
-                    || (ch == 0x003A /*':'*/))) {
+        else if (!inQuote && isSyntaxChar(ch)) {
             prevCh = ch;
             ++count;
         }
     }
-    if ( count > 0 ) {
+    if (count > 0) {
         // last item
-        level = fgPatternCharToLevel[prevCh - PATTERN_CHAR_BASE];
-            if ( fieldLevel <= level ) {
-                return FALSE;
-            }
+        level = getLevelFromChar(prevCh);
+        if (fieldLevel <= level) {
+            return FALSE;
+        }
     }
     return TRUE;
 }
