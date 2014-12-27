@@ -277,15 +277,22 @@ CollationBaseDataBuilder::addRootElement(int64_t ce, UErrorCode &errorCode) {
     // We will add it later, as part of the Han ranges.
     uint32_t p = (uint32_t)(ce >> 32);
     uint32_t secTer = (uint32_t)ce;
-    if(secTer == Collation::COMMON_SEC_AND_TER_CE) {
-        if(firstHanPrimary <= p && p <= lastHanPrimary) {
+    if(firstHanPrimary <= p && p <= lastHanPrimary) {
+        if(secTer < Collation::COMMON_SEC_AND_TER_CE) {
+            // buildRootElementsTable() does not currently handle this case.
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-    } else {
-        // Check that secondary and tertiary weights are >= "common".
+        if(secTer == Collation::COMMON_SEC_AND_TER_CE) {
+            return;
+        }
+    }
+    if(secTer != Collation::COMMON_SEC_AND_TER_CE) {  // minor optimization
+        // Check that secondary and tertiary weights are > 01.
         uint32_t s = secTer >> 16;
         uint32_t t = secTer & Collation::ONLY_TERTIARY_MASK;
-        if((s != 0 && s < Collation::COMMON_WEIGHT16) || (t != 0 && t < Collation::COMMON_WEIGHT16)) {
+        if((s != 0 && s <= Collation::BEFORE_WEIGHT16) ||
+                (t != 0 && t <= Collation::BEFORE_WEIGHT16)) {
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
@@ -337,14 +344,26 @@ CollationBaseDataBuilder::build(CollationData &data, UErrorCode &errorCode) {
 
 void
 CollationBaseDataBuilder::buildRootElementsTable(UVector32 &table, UErrorCode &errorCode) {
+    // Limit sentinel for root elements.
+    // This allows us to reduce range checks at runtime.
+    rootElements.addElement(Collation::makeCE(CollationRootElements::PRIMARY_SENTINEL), errorCode);
     if(U_FAILURE(errorCode)) { return; }
     uint32_t nextHanPrimary = firstHanPrimary;  // Set to 0xffffffff after the last Han range.
     uint32_t prevPrimary = 0;  // Start with primary ignorable CEs.
-    UBool tryRange = FALSE;
+    UBool needCommonSecTerUnit = FALSE;
+    UBool hasDeltaUnit = FALSE;
     for(int32_t i = 0; i < rootElements.size(); ++i) {
         int64_t ce = rootElements.elementAti(i);
         uint32_t p = (uint32_t)(ce >> 32);
         uint32_t secTer = (uint32_t)ce & Collation::ONLY_SEC_TER_MASK;
+        if((p != prevPrimary || secTer > Collation::COMMON_SEC_AND_TER_CE) && needCommonSecTerUnit) {
+            // The last primary had low sec/ter weights but no common sec/ter combination.
+            // The next unit is either a new primary or an above-common sec/ter unit.
+            // Insert a common sec/ter unit so that the builder will reliably
+            // tailor to either before or after a common weight but not across it.
+            table.addElement((int32_t)Collation::COMMON_SEC_AND_TER_CE |
+                            CollationRootElements::SEC_TER_DELTA_FLAG, errorCode);
+        }
         if(p != prevPrimary) {
             U_ASSERT((p & 0xff) == 0);
             int32_t end;
@@ -352,7 +371,7 @@ CollationBaseDataBuilder::buildRootElementsTable(UVector32 &table, UErrorCode &e
                 // Add a Han primary weight or range.
                 // We omitted them initially, and omitted all CEs with Han primaries
                 // and common secondary/tertiary weights.
-                U_ASSERT(p > lastHanPrimary || secTer != Collation::COMMON_SEC_AND_TER_CE);
+                U_ASSERT(p > lastHanPrimary || secTer > Collation::COMMON_SEC_AND_TER_CE);
                 if(p == nextHanPrimary) {
                     // One single Han primary with non-common secondary/tertiary weights.
                     table.addElement((int32_t)p, errorCode);
@@ -370,6 +389,7 @@ CollationBaseDataBuilder::buildRootElementsTable(UVector32 &table, UErrorCode &e
                         // nextHanPrimary == lastHanPrimary < p
                         // We just wrote the single last Han primary.
                         nextHanPrimary = 0xffffffff;
+                        table.addElement((int32_t)p, errorCode);
                     } else if(p < lastHanPrimary) {
                         // nextHanPrimary < p < lastHanPrimary
                         // End the Han range on p, prepare for the next range.
@@ -388,7 +408,14 @@ CollationBaseDataBuilder::buildRootElementsTable(UVector32 &table, UErrorCode &e
                         table.addElement((int32_t)p, errorCode);
                     }
                 }
-            } else if(tryRange && secTer == Collation::COMMON_SEC_AND_TER_CE &&
+            } else if(prevPrimary != 0 &&
+                    // If there has not been an intervening delta unit,
+                    // then we will try to combine the previous primary and
+                    // the next several primaries into a range.
+                    !hasDeltaUnit &&
+                    // Might get a range with more than two primaries if the current CE
+                    // has common sec/ter weights.
+                    secTer == Collation::COMMON_SEC_AND_TER_CE &&
                     (end = writeRootElementsRange(prevPrimary, p, i + 1, table, errorCode)) != 0) {
                 // Multiple CEs with only common secondary/tertiary weights were
                 // combined into a primary range.
@@ -402,22 +429,24 @@ CollationBaseDataBuilder::buildRootElementsTable(UVector32 &table, UErrorCode &e
                 table.addElement((int32_t)p, errorCode);
             }
             prevPrimary = p;
+            needCommonSecTerUnit = FALSE;
+            hasDeltaUnit = FALSE;
         }
-        if(secTer == Collation::COMMON_SEC_AND_TER_CE) {
+        if(secTer == Collation::COMMON_SEC_AND_TER_CE && !needCommonSecTerUnit) {
             // The common secondar/tertiary weights are implied in the primary unit.
-            // If there is no intervening delta unit, then we will try to combine
-            // the next several primaries into a range.
-            tryRange = TRUE;
         } else {
+            if(secTer < Collation::COMMON_SEC_AND_TER_CE) {
+                // Remember to not suppress a common sec/ter unit if p!=0.
+                needCommonSecTerUnit = p != 0;
+            } else if(secTer == Collation::COMMON_SEC_AND_TER_CE) {
+                // Real common sec/ter unit, no need to insert an artificial one.
+                needCommonSecTerUnit = FALSE;
+            }
             // For each new set of secondary/tertiary weights we write a delta unit.
             table.addElement((int32_t)secTer | CollationRootElements::SEC_TER_DELTA_FLAG, errorCode);
-            tryRange = FALSE;
+            hasDeltaUnit = TRUE;
         }
     }
-
-    // Limit sentinel for root elements.
-    // This allows us to reduce range checks at runtime.
-    table.addElement(CollationRootElements::PRIMARY_SENTINEL, errorCode);
 }
 
 int32_t
