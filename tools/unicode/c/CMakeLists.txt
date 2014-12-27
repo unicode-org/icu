@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2012, International Business Machines
+# Copyright (C) 2010-2014, International Business Machines
 # Corporation and others.  All Rights Reserved.
 #
 # created on: 2010jun03
@@ -10,6 +10,7 @@ project(ICU_UNI_TOOLS)
 #set(ICU_INST_DIR /home/mscherer/svn.icu/trunk/bldinst)
 # Location of the ICU source tree.
 #set(ICU_SRC_DIR /home/mscherer/svn.icu/trunk/src)
+set(CMAKE_BUILD_TYPE Debug)
 include(icudefs.txt)
 include_directories(
   ${ICU_INST_DIR}/include
