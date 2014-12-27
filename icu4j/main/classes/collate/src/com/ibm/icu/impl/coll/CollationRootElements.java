@@ -254,7 +254,7 @@ public final class CollationRootElements {
         } else {
             index = findPrimary(p) + 1;
             previousSec = Collation.BEFORE_WEIGHT16;
-            sec = Collation.COMMON_WEIGHT16;
+            sec = (int)getFirstSecTerForPrimary(index) >>> 16;
         }
         assert(s >= sec);
         while(s > sec) {
@@ -285,7 +285,7 @@ public final class CollationRootElements {
         } else {
             index = findPrimary(p) + 1;
             previousTer = Collation.BEFORE_WEIGHT16;
-            secTer = Collation.COMMON_SEC_AND_TER_CE;
+            secTer = getFirstSecTerForPrimary(index);
         }
         long st = ((long)s << 16) | t;
         while(st > secTer) {
@@ -339,37 +339,54 @@ public final class CollationRootElements {
     /**
      * Returns the secondary weight after [p, s] where index=findPrimary(p)
      * except use index=0 for p=0.
+     *
+     * <p>Must return a weight for every root [p, s] as well as for every weight
+     * returned by getSecondaryBefore(). If p!=0 then s can be BEFORE_WEIGHT16.
+     *
+     * <p>Exception: [0, 0] is handled by the CollationBuilder:
+     * Both its lower and upper boundaries are special.
      */
     int getSecondaryAfter(int index, int s) {
+        long secTer;
         int secLimit;
         if(index == 0) {
             // primary = 0
+            assert(s != 0);
             index = (int)elements[IX_FIRST_SECONDARY_INDEX];
+            secTer = elements[index];
             // Gap at the end of the secondary CE range.
             secLimit = 0x10000;
         } else {
             assert(index >= (int)elements[IX_FIRST_PRIMARY_INDEX]);
-            ++index;
+            secTer = getFirstSecTerForPrimary(index + 1);
+            // If this is an explicit sec/ter unit, then it will be read once more.
             // Gap for secondaries of primary CEs.
             secLimit = getSecondaryBoundary();
         }
         for(;;) {
-            long secTer = elements[index];
-            if((secTer & SEC_TER_DELTA_FLAG) == 0) { return secLimit; }
             int sec = (int)(secTer >> 16);
             if(sec > s) { return sec; }
-            ++index;
+            secTer = elements[++index];
+            if((secTer & SEC_TER_DELTA_FLAG) == 0) { return secLimit; }
         }
     }
     /**
      * Returns the tertiary weight after [p, s, t] where index=findPrimary(p)
      * except use index=0 for p=0.
+     *
+     * <p>Must return a weight for every root [p, s, t] as well as for every weight
+     * returned by getTertiaryBefore(). If s!=0 then t can be BEFORE_WEIGHT16.
+     *
+     * <p>Exception: [0, 0, 0] is handled by the CollationBuilder:
+     * Both its lower and upper boundaries are special.
      */
     int getTertiaryAfter(int index, int s, int t) {
+        long secTer;
         int terLimit;
         if(index == 0) {
             // primary = 0
             if(s == 0) {
+                assert(t != 0);
                 index = (int)elements[IX_FIRST_TERTIARY_INDEX];
                 // Gap at the end of the tertiary CE range.
                 terLimit = 0x4000;
@@ -378,20 +395,42 @@ public final class CollationRootElements {
                 // Gap for tertiaries of primary/secondary CEs.
                 terLimit = getTertiaryBoundary();
             }
+            secTer = elements[index] & ~SEC_TER_DELTA_FLAG;
         } else {
             assert(index >= (int)elements[IX_FIRST_PRIMARY_INDEX]);
-            ++index;
+            secTer = getFirstSecTerForPrimary(index + 1);
+            // If this is an explicit sec/ter unit, then it will be read once more.
             terLimit = getTertiaryBoundary();
         }
         long st = (((long)s & 0xffffffffL) << 16) | t;
         for(;;) {
-            long secTer = elements[index];
+            if(secTer > st) {
+                assert((secTer >> 16) == s);
+                return (int)secTer & 0xffff;
+            }
+            secTer = elements[++index];
             // No tertiary greater than t for this primary+secondary.
             if((secTer & SEC_TER_DELTA_FLAG) == 0 || (secTer >> 16) > s) { return terLimit; }
             secTer &= ~SEC_TER_DELTA_FLAG;
-            if(secTer > st) { return (int)secTer & 0xffff; }
-            ++index;
         }
+    }
+
+    /**
+     * Returns the first secondary & tertiary weights for p where index=findPrimary(p)+1.
+     */
+    private long getFirstSecTerForPrimary(int index) {
+        long secTer = elements[index];
+        if((secTer & SEC_TER_DELTA_FLAG) == 0) {
+            // No sec/ter delta.
+            return Collation.COMMON_SEC_AND_TER_CE;
+        }
+        secTer &= ~SEC_TER_DELTA_FLAG;
+        if(secTer > Collation.COMMON_SEC_AND_TER_CE) {
+            // Implied sec/ter.
+            return Collation.COMMON_SEC_AND_TER_CE;
+        }
+        // Explicit sec/ter below common/common.
+        return secTer;
     }
 
     /**
