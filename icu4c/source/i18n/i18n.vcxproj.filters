@@ -518,9 +518,6 @@
     <ClCompile Include="collation.cpp">
       <Filter>collation</Filter>
     </ClCompile>
-    <ClCompile Include="collationbasedatabuilder.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
     <ClCompile Include="collationbuilder.cpp">
       <Filter>collation</Filter>
     </ClCompile>
@@ -897,9 +894,6 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="collation.h">
-      <Filter>collation</Filter>
-    </ClInclude>
-    <ClInclude Include="collationbasedatabuilder.h">
       <Filter>collation</Filter>
     </ClInclude>
     <ClInclude Include="collationbuilder.h">
