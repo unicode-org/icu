@@ -77,7 +77,7 @@ collationdatareader.o collationdatawriter.o collationfcd.o \
 collationiterator.o utf16collationiterator.o utf8collationiterator.o uitercollationiterator.o \
 collationsets.o \
 collationcompare.o collationfastlatin.o collationkeys.o rulebasedcollator.o collationroot.o \
-collationrootelements.o collationdatabuilder.o collationbasedatabuilder.o \
+collationrootelements.o collationdatabuilder.o \
 collationweights.o collationruleparser.o collationbuilder.o collationfastlatinbuilder.o \
 strmatch.o usearch.o search.o stsearch.o \
 translit.o utrans.o esctrn.o unesctrn.o funcrepl.o strrepl.o tridpars.o \

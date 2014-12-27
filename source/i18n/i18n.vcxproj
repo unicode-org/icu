@@ -252,7 +252,6 @@
     <ClCompile Include="coleitr.cpp" />
     <ClCompile Include="coll.cpp" />
     <ClCompile Include="collation.cpp" />
-    <ClCompile Include="collationbasedatabuilder.cpp" />
     <ClCompile Include="collationbuilder.cpp" />
     <ClCompile Include="collationcompare.cpp" />
     <ClCompile Include="collationdata.cpp" />
@@ -566,7 +565,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="collation.h" />
-    <ClInclude Include="collationbasedatabuilder.h" />
     <ClInclude Include="collationbuilder.h" />
     <ClInclude Include="collationcompare.h" />
     <ClInclude Include="collationdata.h" />
