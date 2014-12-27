@@ -2476,3 +2476,53 @@
 * compare
 <1 AA
 <2 aą
+
+** test: tailor tertiary-after a common tertiary where there is a lower one
+# Assume that Hiragana small A has a below-common tertiary, and Hiragana A has a common one.
+# See ICU ticket 11448 & CLDR ticket 7222.
+@ rules
+&あ<<<x<<<y<<<z
+* compare
+<1 ぁ
+<3 あ
+<3 x
+<3 y
+<3 z
+<3 ァ
+<1 い
+
+** test: tailor tertiary-after a below-common tertiary
+@ rules
+&ぁ<<<x<<<y<<<z
+* compare
+<1 ぁ
+<3 x
+<3 y
+<3 z
+<3 あ
+<3 ァ
+<1 い
+
+** test: tailor tertiary-before a common tertiary where there is a lower one
+@ rules
+&[before 3]あ<<<x<<<y<<<z
+* compare
+<1 ぁ
+<3 x
+<3 y
+<3 z
+<3 あ
+<3 ァ
+<1 い
+
+** test: tailor tertiary-before a below-common tertiary
+@ rules
+&[before 3]ぁ<<<x<<<y<<<z
+* compare
+<1 x
+<3 y
+<3 z
+<3 ぁ
+<3 あ
+<3 ァ
+<1 い
