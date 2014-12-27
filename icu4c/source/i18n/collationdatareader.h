@@ -109,7 +109,7 @@ private:
 
 /*
  * Format of collation data (ucadata.icu, binary data in coll/ *.res files).
- * Format version 4.0.
+ * Format version 4.1.
  *
  * The root collation data is stored in the ucadata.icu file.
  * Tailorings are stored inside .res resource bundle files, with a complete file header.
@@ -200,6 +200,17 @@ private:
  *
  * UBool compressibleBytes[]; -- empty in all tailorings
  *      Flag for getSortKey(), indicating primary weight lead bytes that are compressible.
+ *
+ * -----------------
+ * Changes for formatVersion 4.1
+ *
+ * The rootElements may contain secondary and tertiary weights below common=05.
+ * (Used for small Hiragana letters.)
+ * Where is occurs, there is also an explicit unit with common secondary & tertiary weights.
+ * There are no other data structure changes, but builder code needs to be able to handle such data.
+ *
+ * ICU 55 ucadata.icu uses formatVersion 4.1.
+ * ICU 55 tailoring data continues to use formatVersion 4.0.
  */
 
 U_NAMESPACE_END
