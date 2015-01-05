@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2012-2014, International Business Machines
+* Copyright (C) 2012-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * collationbasedatabuilder.h
@@ -18,6 +18,7 @@
 
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
+#include "unicode/uscript.h"
 #include "collation.h"
 #include "collationdata.h"
 #include "collationdatabuilder.h"
@@ -66,9 +67,7 @@ public:
     void addRootElements(const int64_t ces[], int32_t cesLength, UErrorCode &errorCode);
     void addRootElement(int64_t ce, UErrorCode &errorCode);
 
-    void addReorderingGroup(uint32_t firstByte, uint32_t lastByte,
-                            const UnicodeString &groupScripts,
-                            UErrorCode &errorCode);
+    void addScriptStart(int32_t script, uint32_t p);
 
     virtual void build(CollationData &data, UErrorCode &errorCode);
 
@@ -86,7 +85,9 @@ private:
     uint32_t lastHanPrimary;
     int32_t hanStep;
     UVector64 rootElements;
-    UnicodeString scripts;
+    uint16_t scriptsIndex[USCRIPT_CODE_LIMIT + 16];  // need exactly this many
+    uint16_t scriptStarts[USCRIPT_CODE_LIMIT + 16];  // should be safely more than needed
+    int32_t scriptStartsLength;
 };
 
 U_NAMESPACE_END
