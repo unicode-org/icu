@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2012-2014, International Business Machines
+* Copyright (C) 2012-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * collationbasedatabuilder.cpp
@@ -85,7 +85,10 @@ CollationBaseDataBuilder::CollationBaseDataBuilder(UErrorCode &errorCode)
         : CollationDataBuilder(errorCode),
           numericPrimary(0x12000000),
           firstHanPrimary(0), lastHanPrimary(0), hanStep(2),
-          rootElements(errorCode) {
+          rootElements(errorCode),
+          scriptStartsLength(1) {
+    uprv_memset(scriptsIndex, 0, sizeof(scriptsIndex));
+    uprv_memset(scriptStarts, 0, sizeof(scriptStarts));
 }
 
 CollationBaseDataBuilder::~CollationBaseDataBuilder() {
@@ -309,27 +312,43 @@ CollationBaseDataBuilder::addRootElement(int64_t ce, UErrorCode &errorCode) {
 }
 
 void
-CollationBaseDataBuilder::addReorderingGroup(uint32_t firstByte, uint32_t lastByte,
-                                             const UnicodeString &groupScripts,
-                                             UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return; }
-    if(groupScripts.isEmpty()) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+CollationBaseDataBuilder::addScriptStart(int32_t script, uint32_t p) {
+    // The primary weight must be the lowest possible for a two-byte prefix.
+    // It could be 2, 3, or 4 bytes long. We round down to the two-byte boundary.
+    U_ASSERT((p & 0xff) == 0 || (p & 0xff) == 2);
+    p >>= 8;
+    U_ASSERT((p & 0xff) == 0 || (p & 0xff) == 2);
+    p >>= 8;
+    uint32_t lowestP2 = compressibleBytes[p >> 8] ? 4 : 2;
+    if((p & 0xff) == lowestP2) {
+        // The script really starts on a lead byte boundary. Round down to that.
+        p &= 0xff00;
     }
-    if(groupScripts.indexOf((UChar)USCRIPT_UNKNOWN) >= 0) {
-        // Zzzz must not occur.
-        // It is the code used in the API to separate low and high scripts.
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+    // Script starts should be added in ascending order, otherwise we would need to sort them.
+    if(script < UCOL_REORDER_CODE_FIRST) {
+        U_ASSERT(0 <= script && script < USCRIPT_CODE_LIMIT);
+    } else {
+        U_ASSERT(script <= (UCOL_REORDER_CODE_FIRST + 15));
+        script = USCRIPT_CODE_LIMIT + script - UCOL_REORDER_CODE_FIRST;
     }
-    // Note: We are mostly trusting the input data,
-    // rather than verifying that reordering groups do not intersect
-    // with their lead byte ranges nor their sets of scripts,
-    // and that all script codes are valid.
-    scripts.append((UChar)((firstByte << 8) | lastByte));
-    scripts.append((UChar)groupScripts.length());
-    scripts.append(groupScripts);
+    if(scriptStartsLength != 0 && scriptStarts[scriptStartsLength - 1] == p) {
+        // Two scripts share a range (e.g., Hira & Kana).
+        scriptsIndex[script] = (uint16_t)(scriptStartsLength - 1);
+    } else {
+        U_ASSERT(scriptStartsLength == 0 || scriptStarts[scriptStartsLength - 1] <= p);
+        U_ASSERT(scriptStartsLength < UPRV_LENGTHOF(scriptStarts));
+        scriptsIndex[script] = (uint16_t)scriptStartsLength;
+        scriptStarts[scriptStartsLength++] = (uint16_t)p;
+    }
+    if(script == USCRIPT_UNKNOWN) {
+        // The last script start is for unassigned code points
+        // (with high implict primary weights).
+        // Add one more entry with the limit of this range,
+        // which is the start of the trailing-weights range.
+        U_ASSERT(scriptStartsLength < UPRV_LENGTHOF(scriptStarts));
+        scriptStarts[scriptStartsLength++] =
+                (uint16_t)((Collation::FIRST_TRAILING_PRIMARY >> 16) & 0xff00);
+    }
 }
 
 void
@@ -337,8 +356,18 @@ CollationBaseDataBuilder::build(CollationData &data, UErrorCode &errorCode) {
     buildMappings(data, errorCode);
     data.numericPrimary = numericPrimary;
     data.compressibleBytes = compressibleBytes;
-    data.scripts = reinterpret_cast<const uint16_t *>(scripts.getBuffer());
-    data.scriptsLength = scripts.length();
+
+    int32_t numScripts = USCRIPT_CODE_LIMIT;
+    while(numScripts > 0 && scriptsIndex[numScripts - 1] == 0) { --numScripts; }
+    // Move the 16 special groups (not all used)
+    // down for contiguous storage of the script and special-group indexes.
+    for(int32_t i = 0; i < 16; ++i) {
+        scriptsIndex[numScripts + i] = scriptsIndex[USCRIPT_CODE_LIMIT + i];
+    }
+    data.numScripts = numScripts;
+    data.scriptsIndex = scriptsIndex;
+    data.scriptStarts = scriptStarts;
+    data.scriptStartsLength = scriptStartsLength;
     buildFastLatinTable(data, errorCode);
 }
 
