@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2013 International Business Machines
+﻿# Copyright (c) 2001-2015 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -162,6 +162,7 @@
 #Hangul
 <data>•\uc5f0\ud569<200> •\uc7a5\ub85c\uad50\ud68c<200> •\u1109\u1161\u11bc\u1112\u1161\u11bc<200> •\u1112\u1161\u11ab\u110b\u1175\u11ab<200> •Hello<200>,• •how<200> •are<200> •you<200> •</data>
 
+<data>•Hello<200>,• •how<200> •are<200> •you<200> •\uc5f0\ud569<200> •\uc7a5\ub85c\uad50\ud68c<200> •\u1109\u1161\u11bc\u1112\u1161\u11bc<200> •\u1112\u1161\u11ab\u110b\u1175\u11ab<200> •</data>
 
 # Words containing non-BMP letters
 <data>•abc\U00010300<200> •abc\N{DESERET SMALL LETTER ENG}<200> •abc\N{MATHEMATICAL BOLD SMALL Z}<200> •abc\N{MATHEMATICAL SANS-SERIF BOLD ITALIC PI SYMBOL}<200> •</data>
@@ -714,7 +715,7 @@ Bangkok)•</data>
 
 <locale ja>
 <word>
-<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈<400>々<400>は<400>ワ<400>ー<400>ドで<400>あ<400>る<400>。•</data>
+<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈々<400>は<400>ワード<400>で<400>ある<400>。•</data>
 
 # Test for #10176 (in ja)
 <line>
@@ -725,7 +726,7 @@ Bangkok)•</data>
 
 <locale root>
 <word>
-<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈<400>々<400>は<400>ワ<400>ー<400>ドで<400>あ<400>る<400>。•</data>
+<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈々<400>は<400>ワード<400>で<400>ある<400>。•</data>
 
 # UBreakIteratorType UBRK_SENTENCE, Locale "el"
 # Add break after Greek question mark (cldrbug #2069).
