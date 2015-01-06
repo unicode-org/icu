@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2000-2014, International Business Machines
+ *   Copyright (C) 2000-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  pkgdata.cpp
@@ -888,7 +888,8 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
         }
 
 #if U_PLATFORM == U_PF_MINGW
-        sprintf(libFileNames[LIB_FILE_MINGW], "%s%s.lib", pkgDataFlags[LIBPREFIX], libName);
+        // Name the import library lib*.dll.a
+        sprintf(libFileNames[LIB_FILE_MINGW], "lib%s.dll.a", libName);
 #elif U_PLATFORM == U_PF_CYGWIN
         sprintf(libFileNames[LIB_FILE_CYGWIN], "cyg%s%s%s",
                 libName,
