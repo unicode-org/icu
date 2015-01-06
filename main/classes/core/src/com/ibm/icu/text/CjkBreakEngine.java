@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2013, International Business Machines Corporation and         *
+ * Copyright (C) 2012-2015, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -89,9 +89,10 @@ class CjkBreakEngine implements LanguageBreakEngine {
         String prenormstr = s.toString();
         boolean isNormalized = Normalizer.quickCheck(prenormstr, Normalizer.NFKC) == Normalizer.YES ||
                                Normalizer.isNormalized(prenormstr, Normalizer.NFKC, 0);
-        CharacterIterator text = inText;
+        CharacterIterator text;
         int numChars = 0;
         if (isNormalized) {
+            text = new java.text.StringCharacterIterator(prenormstr);
             int index = 0;
             charPositions[0] = 0;
             while (index < prenormstr.length()) {
