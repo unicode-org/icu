@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2012-2014, International Business Machines
+* Copyright (C) 2012-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * collationtest.cpp
@@ -190,7 +190,7 @@ void CollationTest::TestImplicits() {
     IcuTestErrorCode errorCode(*this, "TestImplicits");
 
     const CollationData *cd = CollationRoot::getData(errorCode);
-    if(errorCode.logDataIfFailureAndReset("CollationRoot::getBaseData()")) {
+    if(errorCode.logDataIfFailureAndReset("CollationRoot::getData()")) {
         return;
     }
 

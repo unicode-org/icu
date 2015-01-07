@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2012-2014 International Business Machines
+﻿# Copyright (c) 2012-2015 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # This file should be in UTF-8 with a signature byte sequence ("BOM").
@@ -2526,3 +2526,15 @@
 <3 あ
 <3 ァ
 <1 い
+
+** test: reorder single scripts not groups, ICU ticket 11449
+@ root
+% reorder Goth Latn
+* compare
+<1 4
+<1 𐌰  # Gothic
+<1 L
+<1 Ω
+# Before ICU 55, the following reordered together with Gothic.
+<1 𐌈  # Old Italic
+<1 𐑐  # Shavian
