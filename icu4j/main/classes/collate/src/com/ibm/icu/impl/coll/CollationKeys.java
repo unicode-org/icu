@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2014, International Business Machines
+ * Copyright (C) 2012-2015, International Business Machines
  * Corporation and others.  All Rights Reserved.
  *******************************************************************************
  * CollationKeys.java, ported from collationkeys.h/.cpp
@@ -348,7 +348,6 @@ public final class CollationKeys /* all methods are static */ {
             // +1 so that we can use "<" and primary ignorables test out early.
             variableTop = settings.variableTop + 1;
         }
-        byte[] reorderTable = settings.reorderTable;
 
         int tertiaryMask = CollationSettings.getTertiaryMask(options);
 
@@ -358,7 +357,7 @@ public final class CollationKeys /* all methods are static */ {
         SortKeyLevel tertiaries = getSortKeyLevel(levels, Collation.TERTIARY_LEVEL_FLAG);
         SortKeyLevel quaternaries = getSortKeyLevel(levels, Collation.QUATERNARY_LEVEL_FLAG);
 
-        int compressedP1 = 0; // 0==no compression; otherwise reordered compressible lead byte
+        long prevReorderedPrimary = 0;  // 0==no compression
         int commonCases = 0;
         int commonSecondaries = 0;
         int commonTertiaries = 0;
@@ -387,16 +386,15 @@ public final class CollationKeys /* all methods are static */ {
                 }
                 do {
                     if ((levels & Collation.QUATERNARY_LEVEL_FLAG) != 0) {
-                        int p1 = (int) p >>> 24;
-                        if (reorderTable != null) {
-                            p1 = reorderTable[p1] & 0xff;
+                        if (settings.hasReordering()) {
+                            p = settings.reorder(p);
                         }
-                        if (p1 >= QUAT_SHIFTED_LIMIT_BYTE) {
+                        if (((int) p >>> 24) >= QUAT_SHIFTED_LIMIT_BYTE) {
                             // Prevent shifted primary lead bytes from
                             // overlapping with the common compression range.
                             quaternaries.appendByte(QUAT_SHIFTED_LIMIT_BYTE);
                         }
-                        quaternaries.appendWeight32((p1 << 24) | (p & 0xffffff));
+                        quaternaries.appendWeight32(p);
                     }
                     do {
                         ce = iter.nextCE();
@@ -409,13 +407,15 @@ public final class CollationKeys /* all methods are static */ {
             // If ce==NO_CE, then write nothing for the primary level but
             // terminate compression on all levels and then exit the loop.
             if (p > Collation.NO_CE_PRIMARY && (levels & Collation.PRIMARY_LEVEL_FLAG) != 0) {
-                int p1 = (int) p >>> 24;
-                if (reorderTable != null) {
-                    p1 = reorderTable[p1] & 0xff;
+                // Test the un-reordered primary for compressibility.
+                boolean isCompressible = compressibleBytes[(int) p >>> 24];
+                if(settings.hasReordering()) {
+                    p = settings.reorder(p);
                 }
-                if (p1 != compressedP1) {
-                    if (compressedP1 != 0) {
-                        if (p1 < compressedP1) {
+                int p1 = (int) p >>> 24;
+                if (!isCompressible || p1 != ((int) prevReorderedPrimary >>> 24)) {
+                    if (prevReorderedPrimary != 0) {
+                        if (p < prevReorderedPrimary) {
                             // No primary compression terminator
                             // at the end of the level or merged segment.
                             if (p1 > Collation.MERGE_SEPARATOR_BYTE) {
@@ -426,12 +426,10 @@ public final class CollationKeys /* all methods are static */ {
                         }
                     }
                     sink.Append(p1);
-                    // Test the un-reordered lead byte for compressibility but
-                    // remember the reordered lead byte.
-                    if (compressibleBytes[(int) p >>> 24]) {
-                        compressedP1 = p1;
+                    if(isCompressible) {
+                        prevReorderedPrimary = p;
                     } else {
-                        compressedP1 = 0;
+                        prevReorderedPrimary = 0;
                     }
                 }
                 byte p2 = (byte) (p >>> 16);

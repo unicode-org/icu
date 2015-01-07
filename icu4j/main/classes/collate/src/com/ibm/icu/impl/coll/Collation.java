@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010-2014, International Business Machines
+* Copyright (C) 2010-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * Collation.java, ported from collation.h/.cpp
@@ -585,10 +585,6 @@ public final class Collation {
 
     static long unassignedCEFromCodePoint(int c) {
         return makeCE(unassignedPrimaryFromCodePoint(c));
-    }
-
-    static long reorder(byte[] reorderTable, long primary) {
-        return ((reorderTable[(int)primary >>> 24] & 0xffL) << 24) | (primary & 0xffffff);
     }
 
     // private Collation()  // No instantiation.

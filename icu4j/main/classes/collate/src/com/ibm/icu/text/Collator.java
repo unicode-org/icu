@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2014, International Business Machines Corporation and
+* Copyright (C) 1996-2015, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -399,27 +399,35 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
 
     /** 
      * Sets the reordering codes for this collator.
-     * <p>Collation reordering allows scripts and some other defined blocks of characters 
-     * to be moved relative to each other as a block. This reordering is done on top of 
+     * Collation reordering allows scripts and some other groups of characters
+     * to be moved relative to each other. This reordering is done on top of
      * the DUCET/CLDR standard collation order. Reordering can specify groups to be placed 
      * at the start and/or the end of the collation order. These groups are specified using
-     * UScript codes and UColReorderCode entries.
+     * UScript codes and {@link Collator.ReorderCodes} entries.
+     *
      * <p>By default, reordering codes specified for the start of the order are placed in the 
-     * order given after a group of "special" non-script blocks. These special groups of characters 
+     * order given after several special non-script blocks. These special groups of characters 
      * are space, punctuation, symbol, currency, and digit. These special groups are represented with
-     * UColReorderCode entries. Script groups can be intermingled with 
-     * these special non-script blocks if those special blocks are explicitly specified in the reordering.
-     * <p>The special code OTHERS stands for any script that is not explicitly 
+     * {@link Collator.ReorderCodes} entries. Script groups can be intermingled with
+     * these special non-script groups if those special groups are explicitly specified in the reordering.
+     *
+     * <p>The special code {@link Collator.ReorderCodes#OTHERS OTHERS}
+     * stands for any script that is not explicitly
      * mentioned in the list of reordering codes given. Anything that is after OTHERS
      * will go at the very end of the reordering in the order given.
-     * <p>The special reorder code DEFAULT will reset the reordering for this collator
+     *
+     * <p>The special reorder code {@link Collator.ReorderCodes#DEFAULT DEFAULT}
+     * will reset the reordering for this collator
      * to the default for this collator. The default reordering may be the DUCET/CLDR order or may be a reordering that
      * was specified when this collator was created from resource data or from rules. The 
-     * DEFAULT code <b>must</b> be the sole code supplied when it used. If not
-     * that will result in an U_ILLEGAL_ARGUMENT_ERROR being set.
-     * <p>The special reorder code NONE will remove any reordering for this collator.
+     * DEFAULT code <b>must</b> be the sole code supplied when it is used.
+     * If not, then an {@link IllegalArgumentException} will be thrown.
+     *
+     * <p>The special reorder code {@link Collator.ReorderCodes#NONE NONE}
+     * will remove any reordering for this collator.
      * The result of setting no reordering will be to have the DUCET/CLDR ordering used. The 
-     * NONE code <b>must</b> be the sole code supplied when it used.
+     * NONE code <b>must</b> be the sole code supplied when it is used.
+     *
      * @param order the reordering codes to apply to this collator; if this is null or an empty array
      * then this clears any existing reordering
      * @see #getReorderCodes
@@ -1401,7 +1409,9 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     /**
      * Retrieves all the reorder codes that are grouped with the given reorder code. Some reorder
      * codes are grouped and must reorder together.
-     * 
+     * Beginning with ICU 55, scripts only reorder together if they are primary-equal,
+     * for example Hiragana and Katakana.
+     *
      * @param reorderCode The reorder code to determine equivalence for. 
      * @return the set of all reorder codes in the same group as the given reorder code.
      * @see #setReorderCodes

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -34,6 +34,7 @@ import com.ibm.icu.impl.coll.FCDUTF16CollationIterator;
 import com.ibm.icu.impl.coll.SharedObject;
 import com.ibm.icu.impl.coll.TailoredSet;
 import com.ibm.icu.impl.coll.UTF16CollationIterator;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 
@@ -909,35 +910,18 @@ public final class RuleBasedCollator extends Collator {
         setFastLatinOptions(ownedSettings);
     }
 
-    /** 
-     * Sets the reordering codes for this collator.
-     * Collation reordering allows scripts and some other defined blocks of characters 
-     * to be moved relative to each other as a block. This reordering is done on top of 
-     * the DUCET/CLDR standard collation order. Reordering can specify groups to be placed 
-     * at the start and/or the end of the collation order.
-     * <p>By default, reordering codes specified for the start of the order are placed in the 
-     * order given after a group of “special” non-script blocks. These special groups of characters 
-     * are space, punctuation, symbol, currency, and digit. These special groups are represented with
-     * {@link Collator.ReorderCodes}. Script groups can be intermingled with 
-     * these special non-script blocks if those special blocks are explicitly specified in the reordering.
-     * <p>The special code {@link Collator.ReorderCodes#OTHERS OTHERS} stands for any script that is not explicitly 
-     * mentioned in the list of reordering codes given. Anything that is after {@link Collator.ReorderCodes#OTHERS OTHERS}
-     * will go at the very end of the reordering in the order given.
-     * <p>The special reorder code {@link Collator.ReorderCodes#DEFAULT DEFAULT} will reset the reordering for this collator
-     * to the default for this collator. The default reordering may be the DUCET/CLDR order or may be a reordering that
-     * was specified when this collator was created from resource data or from rules. The 
-     * {@link Collator.ReorderCodes#DEFAULT DEFAULT} code <b>must</b> be the sole code supplied when it used. If not
-     * that will result in an {@link IllegalArgumentException} being thrown.
-     * <p>The special reorder code {@link Collator.ReorderCodes#NONE NONE} will remove any reordering for this collator.
-     * The result of setting no reordering will be to have the DUCET/CLDR reordering used. The 
-     * {@link Collator.ReorderCodes#NONE NONE} code <b>must</b> be the sole code supplied when it used.
+    /**
+     * {@inheritDoc}
+     *
      * @param order the reordering codes to apply to this collator; if this is null or an empty array
      * then this clears any existing reordering
      * @throws IllegalArgumentException if the reordering codes are malformed in any way (e.g. duplicates, multiple reset codes, overlapping equivalent scripts)
      * @see #getReorderCodes
      * @see Collator#getEquivalentReorderCodes
+     * @see Collator.ReorderCodes
+     * @see UScript
      * @stable ICU 4.8
-     */ 
+     */
     @Override
     public void setReorderCodes(int... order) {
         checkNotFrozen();
@@ -954,8 +938,7 @@ public final class RuleBasedCollator extends Collator {
         if(length == 1 && order[0] == Collator.ReorderCodes.DEFAULT) {
             if(settings.readOnly() != defaultSettings) {
                 CollationSettings ownedSettings = getOwnedSettings();
-                ownedSettings.setReordering(defaultSettings.reorderCodes,
-                                            defaultSettings.reorderTable);
+                ownedSettings.copyReorderingFrom(defaultSettings);
                 setFastLatinOptions(ownedSettings);
             }
             return;
@@ -964,9 +947,7 @@ public final class RuleBasedCollator extends Collator {
         if(length == 0) {
             ownedSettings.resetReordering();
         } else {
-            byte[] reorderTable = new byte[256];
-            data.makeReorderTable(order, reorderTable);
-            ownedSettings.setReordering(order.clone(), reorderTable);
+            ownedSettings.setReordering(data, order.clone());
         }
         setFastLatinOptions(ownedSettings);
     }

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2013-2014, International Business Machines
+* Copyright (C) 2013-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * CollationDataReader.java, ported from collationdatareader.h/.cpp
@@ -13,6 +13,7 @@ package com.ibm.icu.impl.coll;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.util.Arrays;
 
 import com.ibm.icu.impl.ICUBinary;
@@ -143,6 +144,7 @@ final class CollationDataReader /* all static */ {
 
         CollationData baseData = base == null ? null : base.data;
         int[] reorderCodes;
+        int reorderCodesLength;
         index = IX_REORDER_CODES_OFFSET;
         offset = inIndexes[index];
         length = inIndexes[index + 1] - offset;
@@ -152,13 +154,27 @@ final class CollationDataReader /* all static */ {
                 // the base data does not have a reordering.
                 throw new ICUException("Collation base data must not reorder scripts");
             }
-            reorderCodes = new int[length / 4];
-            for(int i = 0; i < length / 4; ++i) {
+            reorderCodesLength = length / 4;
+            reorderCodes = new int[reorderCodesLength];
+            for(int i = 0; i < reorderCodesLength; ++i) {
                 reorderCodes[i] = inBytes.getInt();
             }
             length &= 3;
+
+            // The reorderRanges (if any) are the trailing reorderCodes entries.
+            // Split the array at the boundary.
+            // Script or reorder codes do not exceed 16-bit values.
+            // Range limits are stored in the upper 16 bits, and are never 0.
+            int reorderRangesLength = 0;
+            while(reorderRangesLength < reorderCodesLength &&
+                    (reorderCodes[reorderCodesLength - reorderRangesLength - 1] & 0xffff0000) != 0) {
+                ++reorderRangesLength;
+            }
+            assert(reorderRangesLength < reorderCodesLength);
+            reorderCodesLength -= reorderRangesLength;
         } else {
             reorderCodes = new int[0];
+            reorderCodesLength = 0;
         }
         ICUBinary.skipBytes(inBytes, length);
 
@@ -170,7 +186,7 @@ final class CollationDataReader /* all static */ {
         offset = inIndexes[index];
         length = inIndexes[index + 1] - offset;
         if(length >= 256) {
-            if(reorderCodes.length == 0) {
+            if(reorderCodesLength == 0) {
                 throw new ICUException("Reordering table without reordering codes");
             }
             reorderTable = new byte[256];
@@ -410,15 +426,28 @@ final class CollationDataReader /* all static */ {
             if(data == null) {
                 throw new ICUException("Script order data but no mappings");
             }
-            data.scripts = new char[length / 2];
-            for(int i = 0; i < length / 2; ++i) {
-                data.scripts[i] = inBytes.getChar();
+            int scriptsLength = length / 2;
+            CharBuffer inChars = inBytes.asCharBuffer();
+            data.numScripts = inChars.get();
+            // There must be enough entries for both arrays, including more than two range starts.
+            int scriptStartsLength = scriptsLength - (1 + data.numScripts + 16);
+            if(scriptStartsLength <= 2) {
+                throw new ICUException("Script order data too short");
             }
-            length &= 1;
+            inChars.get(data.scriptsIndex = new char[data.numScripts + 16]);
+            inChars.get(data.scriptStarts = new char[scriptStartsLength]);
+            if(!(data.scriptStarts[0] == 0 &&
+                    data.scriptStarts[1] == ((Collation.MERGE_SEPARATOR_BYTE + 1) << 8) &&
+                    data.scriptStarts[scriptStartsLength - 1] ==
+                            (Collation.TRAIL_WEIGHT_BYTE << 8))) {
+                throw new ICUException("Script order data not valid");
+            }
         } else if(data == null) {
             // Nothing to do.
         } else if(baseData != null) {
-            data.scripts = baseData.scripts;
+            data.numScripts = baseData.numScripts;
+            data.scriptsIndex = baseData.scriptsIndex;
+            data.scriptStarts = baseData.scriptStarts;
         }
         ICUBinary.skipBytes(inBytes, length);
 
@@ -470,12 +499,8 @@ final class CollationDataReader /* all static */ {
             throw new ICUException("The maxVariable could not be mapped to a variableTop");
         }
 
-        if(reorderCodes.length == 0 || reorderTable != null) {
-            settings.setReordering(reorderCodes, reorderTable);
-        } else {
-            byte[] table = new byte[256];
-            baseData.makeReorderTable(reorderCodes, table);
-            settings.setReordering(reorderCodes, table);
+        if(reorderCodesLength != 0) {
+            settings.aliasReordering(baseData, reorderCodes, reorderCodesLength, reorderTable);
         }
 
         settings.fastLatinOptions = CollationFastLatin.getOptions(
@@ -486,7 +511,7 @@ final class CollationDataReader /* all static */ {
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0] == 4;
+            return version[0] == 5;
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010-2014, International Business Machines
+* Copyright (C) 2010-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * CollationData.java, ported from collationdata.h/.cpp
@@ -16,6 +16,7 @@ import com.ibm.icu.impl.Trie2_32;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ICUException;
 
 /**
  * Collation data container.
@@ -25,6 +26,14 @@ import com.ibm.icu.text.UnicodeSet;
  * Includes data for the collation base (root/default), aliased if this is not the base.
  */
 public final class CollationData {
+    // Note: The ucadata.icu loader could discover the reserved ranges by setting an array
+    // parallel with the ranges, and resetting ranges that are indexed.
+    // The reordering builder code could clone the resulting template array.
+    static final int REORDER_RESERVED_BEFORE_LATIN = Collator.ReorderCodes.FIRST + 14;
+    static final int REORDER_RESERVED_AFTER_LATIN = Collator.ReorderCodes.FIRST + 15;
+
+    static final int MAX_NUM_SPECIAL_REORDER_CODES = 8;
+
     CollationData(Normalizer2Impl nfc) {
         nfcImpl = nfc;
     }
@@ -182,12 +191,8 @@ public final class CollationData {
      *         or 0 if the script is unknown
      */
     long getFirstPrimaryForGroup(int script) {
-        int index = findScript(script);
-        if(index < 0) {
-            return 0;
-        }
-        long head = scripts[index];
-        return (head & 0xff00) << 16;
+        int index = getScriptIndex(script);
+        return index == 0 ? 0 : (long)scriptStarts[index] << 16;
     }
 
     /**
@@ -197,13 +202,12 @@ public final class CollationData {
      *         or 0 if the script is unknown
      */
     public long getLastPrimaryForGroup(int script) {
-        int index = findScript(script);
-        if(index < 0) {
+        int index = getScriptIndex(script);
+        if(index == 0) {
             return 0;
         }
-        int head = scripts[index];
-        long lastByte = head & 0xff;
-        return ((lastByte + 1) << 24) - 1;
+        long limit = scriptStarts[index + 1];
+        return (limit << 16) - 1;
     }
 
     /**
@@ -211,108 +215,154 @@ public final class CollationData {
      * @return the first script of the group, or -1 if the weight is beyond the last group
      */
     public int getGroupForPrimary(long p) {
-        p >>= 24;  // Reordering groups are distinguished by primary lead bytes.
-        for(int i = 0; i < scripts.length; i = i + 2 + scripts[i + 1]) {
-            int lastByte = scripts[i] & 0xff;
-            if(p <= lastByte) {
-                return scripts[i + 2];
+        p >>= 16;
+        if(p < scriptStarts[1] || scriptStarts[scriptStarts.length - 1] <= p) {
+            return -1;
+        }
+        int index = 1;
+        while(p >= scriptStarts[index + 1]) { ++index; }
+        for(int i = 0; i < numScripts; ++i) {
+            if(scriptsIndex[i] == index) {
+                return i;
+            }
+        }
+        for(int i = 0; i < MAX_NUM_SPECIAL_REORDER_CODES; ++i) {
+            if(scriptsIndex[numScripts + i] == index) {
+                return Collator.ReorderCodes.FIRST + i;
             }
         }
         return -1;
     }
 
-    private int findScript(int script) {
-        if(script < 0 || 0xffff < script) { return -1; }
-        for(int i = 0; i < scripts.length;) {
-            int limit = i + 2 + scripts[i + 1];
-            for(int j = i + 2; j < limit; ++j) {
-                if(script == scripts[j]) { return i; }
+    private int getScriptIndex(int script) {
+        if(script < 0) {
+            return 0;
+        } else if(script < numScripts) {
+            return scriptsIndex[script];
+        } else if(script < Collator.ReorderCodes.FIRST) {
+            return 0;
+        } else {
+            script -= Collator.ReorderCodes.FIRST;
+            if(script < MAX_NUM_SPECIAL_REORDER_CODES) {
+                return scriptsIndex[numScripts + script];
+            } else {
+                return 0;
             }
-            i = limit;
         }
-        return -1;
     }
 
     public int[] getEquivalentScripts(int script) {
-        int i = findScript(script);
-        if(i < 0) { return EMPTY_INT_ARRAY; }
-        int length = scripts[i + 1];
-        assert(length != 0);
-        int dest[] = new int[length];
-        i += 2;
-        dest[0] = scripts[i++];
-        for(int j = 1; j < length; ++j) {
-            script = scripts[i++];
-            // Sorted insertion.
-            for(int k = j;; --k) {
-                // Invariant: dest[k] is free to receive either script or dest[k - 1].
-                if(k > 0 && script < dest[k - 1]) {
-                    dest[k] = dest[k - 1];
-                } else {
-                    dest[k] = script;
-                    break;
-                }
+        int index = getScriptIndex(script);
+        if(index == 0) { return EMPTY_INT_ARRAY; }
+        if(script >= Collator.ReorderCodes.FIRST) {
+            // Special groups have no aliases.
+            return new int[] { script };
+        }
+
+        int length = 0;
+        for(int i = 0; i < numScripts; ++i) {
+            if(scriptsIndex[i] == index) {
+                ++length;
+            }
+        }
+        int[] dest = new int[length];
+        if(length == 1) {
+            dest[0] = script;
+            return dest;
+        }
+        length = 0;
+        for(int i = 0; i < numScripts; ++i) {
+            if(scriptsIndex[i] == index) {
+                dest[length++] = i;
             }
         }
         return dest;
     }
 
     /**
-     * Writes the permutation table for the given reordering of scripts and groups,
-     * mapping from default-order primary-weight lead bytes to reordered lead bytes.
+     * Writes the permutation of primary-weight ranges
+     * for the given reordering of scripts and groups.
      * The caller checks for illegal arguments and
      * takes care of [DEFAULT] and memory allocation.
+     *
+     * <p>Each list element will be a (limit, offset) pair as described
+     * for the CollationSettings.reorderRanges.
+     * The list will be empty if no ranges are reordered.
      */
-    public void makeReorderTable(int[] reorder, byte[] table) {
+    void makeReorderRanges(int[] reorder, UVector32 ranges) {
+        makeReorderRanges(reorder, false, ranges);
+    }
+
+    private void makeReorderRanges(int[] reorder, boolean latinMustMove, UVector32 ranges) {
+        ranges.removeAllElements();
         int length = reorder.length;
-        // Initialize the table.
+        if(length == 0 || (length == 1 && reorder[0] == UScript.UNKNOWN)) {
+            return;
+        }
+
+        // Maps each script-or-group range to a new lead byte.
+        short[] table = new short[scriptStarts.length - 1];  // C++: uint8_t[]
+
+        {
+            // Set "don't care" values for reserved ranges.
+            int index = scriptsIndex[
+                    numScripts + REORDER_RESERVED_BEFORE_LATIN - Collator.ReorderCodes.FIRST];
+            if(index != 0) {
+                table[index] = 0xff;
+            }
+            index = scriptsIndex[
+                    numScripts + REORDER_RESERVED_AFTER_LATIN - Collator.ReorderCodes.FIRST];
+            if(index != 0) {
+                table[index] = 0xff;
+            }
+        }
+
         // Never reorder special low and high primary lead bytes.
-        int lowByte;
-        for(lowByte = 0; lowByte <= Collation.MERGE_SEPARATOR_BYTE; ++lowByte) {
-            table[lowByte] = (byte)lowByte;
-        }
-        // lowByte == 03
-
-        int highByte;
-        for(highByte = 0xff; highByte >= Collation.TRAIL_WEIGHT_BYTE; --highByte) {
-            table[highByte] = (byte)highByte;
-        }
-        // highByte == FE
-
-        // Set intermediate bytes to 0 to indicate that they have not been set yet.
-        for(int i = lowByte; i <= highByte; ++i) {
-            table[i] = 0;
-        }
+        assert(scriptStarts.length >= 2);
+        assert(scriptStarts[0] == 0);
+        int lowStart = scriptStarts[1];
+        assert(lowStart == ((Collation.MERGE_SEPARATOR_BYTE + 1) << 8));
+        int highLimit = scriptStarts[scriptStarts.length - 1];
+        assert(highLimit == (Collation.TRAIL_WEIGHT_BYTE << 8));
 
         // Get the set of special reorder codes in the input list.
-        // This supports up to 32 special reorder codes;
+        // This supports a fixed number of special reorder codes;
         // it works for data with codes beyond Collator.ReorderCodes.LIMIT.
         int specials = 0;
         for(int i = 0; i < length; ++i) {
             int reorderCode = reorder[i] - Collator.ReorderCodes.FIRST;
-            if(0 <= reorderCode && reorderCode <= 31) {
+            if(0 <= reorderCode && reorderCode < MAX_NUM_SPECIAL_REORDER_CODES) {
                 specials |= 1 << reorderCode;
             }
         }
 
         // Start the reordering with the special low reorder codes that do not occur in the input.
-        for(int i = 0;; i += 3) {
-            if(scripts[i + 1] != 1) { break; }  // Went beyond special single-code reorder codes.
-            int reorderCode = scripts[i + 2] - Collator.ReorderCodes.FIRST;
-            if(reorderCode < 0) { break; }  // Went beyond special reorder codes.
-            if((specials & (1 << reorderCode)) == 0) {
-                int head = scripts[i];
-                int firstByte = head >> 8;
-                int lastByte = head & 0xff;
-                do { table[firstByte++] = (byte)lowByte++; } while(firstByte <= lastByte);
+        for(int i = 0; i < MAX_NUM_SPECIAL_REORDER_CODES; ++i) {
+            int index = scriptsIndex[numScripts + i];
+            if(index != 0 && (specials & (1 << i)) == 0) {
+                lowStart = addLowScriptRange(table, index, lowStart);
             }
         }
 
-        // Reorder according to the input scripts, continuing from the bottom of the bytes range.
+        // Skip the reserved range before Latin if Latin is the first script,
+        // so that we do not move it unnecessarily.
+        int skippedReserved = 0;
+        if(specials == 0 && reorder[0] == UScript.LATIN && !latinMustMove) {
+            int index = scriptsIndex[UScript.LATIN];
+            assert(index != 0);
+            int start = scriptStarts[index];
+            assert(lowStart <= start);
+            skippedReserved = start - lowStart;
+            lowStart = start;
+        }
+
+        // Reorder according to the input scripts, continuing from the bottom of the primary range.
+        boolean hasReorderToEnd = false;
         for(int i = 0; i < length;) {
             int script = reorder[i++];
             if(script == UScript.UNKNOWN) {
                 // Put the remaining scripts at the top.
+                hasReorderToEnd = true;
                 while(i < length) {
                     script = reorder[--length];
                     if(script == UScript.UNKNOWN) {  // Must occur at most once.
@@ -323,17 +373,14 @@ public final class CollationData {
                         throw new IllegalArgumentException(
                                 "setReorderCodes(): UScript.DEFAULT together with other scripts");
                     }
-                    int index = findScript(script);
-                    if(index < 0) { continue; }
-                    int head = scripts[index];
-                    int firstByte = head >> 8;
-                    int lastByte = head & 0xff;
-                    if(table[firstByte] != 0) {  // Duplicate or equivalent script.
+                    int index = getScriptIndex(script);
+                    if(index == 0) { continue; }
+                    if(table[index] != 0) {  // Duplicate or equivalent script.
                         throw new IllegalArgumentException(
                                 "setReorderCodes(): duplicate or equivalent script " +
                                 scriptCodeString(script));
                     }
-                    do { table[lastByte--] = (byte)highByte--; } while(firstByte <= lastByte);
+                    highLimit = addHighScriptRange(table, index, highLimit);
                 }
                 break;
             }
@@ -343,25 +390,82 @@ public final class CollationData {
                 throw new IllegalArgumentException(
                         "setReorderCodes(): UScript.DEFAULT together with other scripts");
             }
-            int index = findScript(script);
-            if(index < 0) { continue; }
-            int head = scripts[index];
-            int firstByte = head >> 8;
-            int lastByte = head & 0xff;
-            if(table[firstByte] != 0) {  // Duplicate or equivalent script.
+            int index = getScriptIndex(script);
+            if(index == 0) { continue; }
+            if(table[index] != 0) {  // Duplicate or equivalent script.
                 throw new IllegalArgumentException(
                         "setReorderCodes(): duplicate or equivalent script " +
                         scriptCodeString(script));
             }
-            do { table[firstByte++] = (byte)lowByte++; } while(firstByte <= lastByte);
+            lowStart = addLowScriptRange(table, index, lowStart);
         }
 
         // Put all remaining scripts into the middle.
-        // Avoid table[0] which must remain 0.
-        for(int i = 1; i <= 0xff; ++i) {
-            if(table[i] == 0) { table[i] = (byte)lowByte++; }
+        for(int i = 1; i < scriptStarts.length - 1; ++i) {
+            int leadByte = table[i];
+            if(leadByte != 0) { continue; }
+            int start = scriptStarts[i];
+            if(!hasReorderToEnd && start > lowStart) {
+                // No need to move this script.
+                lowStart = start;
+            }
+            lowStart = addLowScriptRange(table, i, lowStart);
         }
-        assert(lowByte == highByte + 1);
+        if(lowStart > highLimit) {
+            if((lowStart - (skippedReserved & 0xff00)) <= highLimit) {
+                // Try not skipping the before-Latin reserved range.
+                makeReorderRanges(reorder, true, ranges);
+                return;
+            }
+            // We need more primary lead bytes than available, despite the reserved ranges.
+            throw new ICUException(
+                    "setReorderCodes(): reordering too many partial-primary-lead-byte scripts");
+        }
+
+        // Turn lead bytes into a list of (limit, offset) pairs.
+        // Encode each pair in one list element:
+        // Upper 16 bits = limit, lower 16 = signed lead byte offset.
+        int offset = 0;
+        for(int i = 1;; ++i) {
+            int nextOffset = offset;
+            while(i < scriptStarts.length - 1) {
+                int newLeadByte = table[i];
+                if(newLeadByte == 0xff) {
+                    // "Don't care" lead byte for reserved range, continue with current offset.
+                } else {
+                    nextOffset = newLeadByte - (scriptStarts[i] >> 8);
+                    if(nextOffset != offset) { break; }
+                }
+                ++i;
+            }
+            if(offset != 0 || i < scriptStarts.length - 1) {
+                ranges.addElement(((int)scriptStarts[i] << 16) | (offset & 0xffff));
+            }
+            if(i == scriptStarts.length - 1) { break; }
+            offset = nextOffset;
+        }
+    }
+
+    private int addLowScriptRange(short[] table, int index, int lowStart) {
+        int start = scriptStarts[index];
+        if((start & 0xff) < (lowStart & 0xff)) {
+            lowStart += 0x100;
+        }
+        table[index] = (short)(lowStart >> 8);
+        int limit = scriptStarts[index + 1];
+        lowStart = ((lowStart & 0xff00) + ((limit & 0xff00) - (start & 0xff00))) | (limit & 0xff);
+        return lowStart;
+    }
+
+    private int addHighScriptRange(short[] table, int index, int highLimit) {
+        int limit = scriptStarts[index + 1];
+        if((limit & 0xff) > (highLimit & 0xff)) {
+            highLimit -= 0x100;
+        }
+        int start = scriptStarts[index];
+        highLimit = ((highLimit & 0xff00) - ((limit & 0xff00) - (start & 0xff00))) | (start & 0xff);
+        table[index] = (short)(highLimit >> 8);
+        return highLimit;
     }
 
     private static String scriptCodeString(int script) {
@@ -423,21 +527,25 @@ public final class CollationData {
      * Data for scripts and reordering groups.
      * Uses include building a reordering permutation table and
      * providing script boundaries to AlphabeticIndex.
-     *
-     * This data is a sorted list of primary-weight lead byte ranges (reordering groups),
-     * each with a list of pairs sorted in base collation order;
-     * each pair contains a script/reorder code and the lowest primary weight for that script.
-     *
-     * Data structure:
-     * - Each reordering group is encoded in n+2 16-bit integers.
-     *   - First integer:
-     *     Bits 15..8: First byte of the reordering group's range.
-     *     Bits  7..0: Last byte of the reordering group's range.
-     *   - Second integer:
-     *     Length n of the list of script/reordering codes.
-     *   - Each further integer is a script or reordering code.
      */
-    char[] scripts;
+    int numScripts;
+    /**
+     * The length of scriptsIndex is numScripts+16.
+     * It maps from a UScriptCode or a special reorder code to an entry in scriptStarts.
+     * 16 special reorder codes (not all used) are mapped starting at numScripts.
+     * Up to MAX_NUM_SPECIAL_REORDER_CODES are codes for special groups like space/punct/digit.
+     * There are special codes at the end for reorder-reserved primary ranges.
+     *
+     * <p>Multiple scripts may share a range and index, for example Hira & Kana.
+     */
+    char[] scriptsIndex;
+    /**
+     * Start primary weight (top 16 bits only) for a group/script/reserved range
+     * indexed by scriptsIndex.
+     * The first range (separators & terminators) and the last range (trailing weights)
+     * are not reorderable, and no scriptsIndex entry points to them.
+     */
+    char[] scriptStarts;
 
     /**
      * Collation elements in the root collator.

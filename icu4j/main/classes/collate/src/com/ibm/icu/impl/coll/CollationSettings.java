@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2013-2014, International Business Machines
+* Copyright (C) 2013-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * CollationSettings.java, ported from collationsettings.h/.cpp
@@ -93,7 +93,7 @@ public final class CollationSettings extends SharedObject {
     @Override
     public CollationSettings clone() {
         CollationSettings newSettings = (CollationSettings)super.clone();
-        // Note: The reorderTable and reorderCodes need not be cloned
+        // Note: The reorderTable, reorderRanges, and reorderCodes need not be cloned
         // because, in Java, they only get replaced but not modified.
         newSettings.fastLatinPrimaries = fastLatinPrimaries.clone();
         return newSettings;
@@ -125,16 +125,180 @@ public final class CollationSettings extends SharedObject {
         // When we turn off reordering, we want to set a null permutation
         // rather than a no-op permutation.
         reorderTable = null;
+        minHighNoReorder = 0;
+        reorderRanges = null;
         reorderCodes = EMPTY_INT_ARRAY;
     }
-    // No aliasReordering() in Java. Use setReordering(). See comments near reorderCodes.
-    public void setReordering(int[] codes, byte[] table) {
+
+    void aliasReordering(CollationData data, int[] codesAndRanges, int codesLength, byte[] table) {
+        int[] codes;
+        if(codesLength == codesAndRanges.length) {
+            codes = codesAndRanges;
+        } else {
+            // TODO: Java 6: Arrays.copyOf(codes, codesLength);
+            codes = new int[codesLength];
+            System.arraycopy(codesAndRanges, 0, codes, 0, codesLength);
+        }
+        int rangesStart = codesLength;
+        int rangesLimit = codesAndRanges.length;
+        int rangesLength = rangesLimit - rangesStart;
+        if(table != null &&
+                (rangesLength == 0 ?
+                        !reorderTableHasSplitBytes(table) :
+                        rangesLength >= 2 &&
+                        // The first offset must be 0. The last offset must not be 0.
+                        (codesAndRanges[rangesStart] & 0xffff) == 0 &&
+                        (codesAndRanges[rangesLimit - 1] & 0xffff) != 0)) {
+            reorderTable = table;
+            reorderCodes = codes;
+            // Drop ranges before the first split byte. They are reordered by the table.
+            // This then speeds up reordering of the remaining ranges.
+            int firstSplitByteRangeIndex = rangesStart;
+            while(firstSplitByteRangeIndex < rangesLimit &&
+                    (codesAndRanges[firstSplitByteRangeIndex] & 0xff0000) == 0) {
+                // The second byte of the primary limit is 0.
+                ++firstSplitByteRangeIndex;
+            }
+            if(firstSplitByteRangeIndex == rangesLimit) {
+                assert(!reorderTableHasSplitBytes(table));
+                minHighNoReorder = 0;
+                reorderRanges = null;
+            } else {
+                assert(table[codesAndRanges[firstSplitByteRangeIndex] >>> 24] == 0);
+                minHighNoReorder = codesAndRanges[rangesLimit - 1] & 0xffff0000L;
+                setReorderRanges(codesAndRanges, firstSplitByteRangeIndex,
+                        rangesLimit - firstSplitByteRangeIndex);
+            }
+            return;
+        }
+        // Regenerate missing data.
+        setReordering(data, codes);
+    }
+
+    public void setReordering(CollationData data, int[] codes) {
+        if(codes.length == 0 || (codes.length == 1 && codes[0] == Collator.ReorderCodes.NONE)) {
+            resetReordering();
+            return;
+        }
+        UVector32 rangesList = new UVector32();
+        data.makeReorderRanges(codes, rangesList);
+        int rangesLength = rangesList.size();
+        if(rangesLength == 0) {
+            resetReordering();
+            return;
+        }
+        int[] ranges = rangesList.getBuffer();
+        // ranges[] contains at least two (limit, offset) pairs.
+        // The first offset must be 0. The last offset must not be 0.
+        // Separators (at the low end) and trailing weights (at the high end)
+        // are never reordered.
+        assert(rangesLength >= 2);
+        assert((ranges[0] & 0xffff) == 0 && (ranges[rangesLength - 1] & 0xffff) != 0);
+        minHighNoReorder = ranges[rangesLength - 1] & 0xffff0000L;
+
+        // Write the lead byte permutation table.
+        // Set a 0 for each lead byte that has a range boundary in the middle.
+        byte[] table = new byte[256];
+        int b = 0;
+        int firstSplitByteRangeIndex = -1;
+        for(int i = 0; i < rangesLength; ++i) {
+            int pair = ranges[i];
+            int limit1 = pair >>> 24;
+            while(b < limit1) {
+                table[b] = (byte)(b + pair);
+                ++b;
+            }
+            // Check the second byte of the limit.
+            if((pair & 0xff0000) != 0) {
+                table[limit1] = 0;
+                b = limit1 + 1;
+                if(firstSplitByteRangeIndex < 0) {
+                    firstSplitByteRangeIndex = i;
+                }
+            }
+        }
+        while(b <= 0xff) {
+            table[b] = (byte)b;
+            ++b;
+        }
+        int rangesStart;
+        if(firstSplitByteRangeIndex < 0) {
+            // The lead byte permutation table alone suffices for reordering.
+            rangesStart = rangesLength = 0;
+        } else {
+            // Remove the ranges below the first split byte.
+            rangesStart = firstSplitByteRangeIndex;
+            rangesLength -= firstSplitByteRangeIndex;
+        }
+        setReorderArrays(codes, ranges, rangesStart, rangesLength, table);
+    }
+
+    private void setReorderArrays(int[] codes,
+            int[] ranges, int rangesStart, int rangesLength, byte[] table) {
+        // Very different from C++. See the comments after the reorderCodes declaration.
         if(codes == null) {
             codes = EMPTY_INT_ARRAY;
         }
         assert (codes.length == 0) == (table == null);
         reorderTable = table;
         reorderCodes = codes;
+        setReorderRanges(ranges, rangesStart, rangesLength);
+    }
+
+    private void setReorderRanges(int[] ranges, int rangesStart, int rangesLength) {
+        if(rangesLength == 0) {
+            reorderRanges = null;
+        } else {
+            reorderRanges = new long[rangesLength];
+            int i = 0;
+            do {
+                reorderRanges[i++] = ranges[rangesStart++] & 0xffffffffL;
+            } while(i < rangesLength);
+        }
+    }
+
+    public void copyReorderingFrom(CollationSettings other) {
+        if(!other.hasReordering()) {
+            resetReordering();
+            return;
+        }
+        minHighNoReorder = other.minHighNoReorder;
+        reorderTable = other.reorderTable;
+        reorderRanges = other.reorderRanges;
+        reorderCodes = other.reorderCodes;
+    }
+
+    public boolean hasReordering() { return reorderTable != null; }
+
+    private static boolean reorderTableHasSplitBytes(byte[] table) {
+        assert(table[0] == 0);
+        for(int i = 1; i < 256; ++i) {
+            if(table[i] == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public long reorder(long p) {
+        byte b = reorderTable[(int)p >>> 24];
+        if(b != 0 || p <= Collation.NO_CE_PRIMARY) {
+            return ((b & 0xffL) << 24) | (p & 0xffffff);
+        } else {
+            return reorderEx(p);
+        }
+    }
+
+    private long reorderEx(long p) {
+        assert minHighNoReorder > 0;
+        if(p >= minHighNoReorder) { return p; }
+        // Round up p so that its lower 16 bits are >= any offset bits.
+        // Then compare q directly with (limit, offset) pairs.
+        long q = p | 0xffff;
+        long r;
+        int i = 0;
+        while(q >= (r = reorderRanges[i])) { ++i; }
+        return p + ((long)(short)r << 24);
     }
 
     // In C++, we use enums for attributes and their values, with a special value for the default.
@@ -276,11 +440,39 @@ public final class CollationSettings extends SharedObject {
             (MAX_VAR_PUNCT << MAX_VARIABLE_SHIFT);
     /** Variable-top primary weight. */
     public long variableTop;
-    /** 256-byte table for reordering permutation of primary lead bytes; null if no reordering. */
+    /**
+     * 256-byte table for reordering permutation of primary lead bytes; null if no reordering.
+     * A 0 entry at a non-zero index means that the primary lead byte is "split"
+     * (there are different offsets for primaries that share that lead byte)
+     * and the reordering offset must be determined via the reorderRanges.
+     */
     public byte[] reorderTable;
+    /** Limit of last reordered range. 0 if no reordering or no split bytes. */
+    long minHighNoReorder;
+    /**
+     * Primary-weight ranges for script reordering,
+     * to be used by reorder(p) for split-reordered primary lead bytes.
+     *
+     * <p>Each entry is a (limit, offset) pair.
+     * The upper 16 bits of the entry are the upper 16 bits of the
+     * exclusive primary limit of a range.
+     * Primaries between the previous limit and this one have their lead bytes
+     * modified by the signed offset (-0xff..+0xff) stored in the lower 16 bits.
+     *
+     * <p>CollationData.makeReorderRanges() writes a full list where the first range
+     * (at least for terminators and separators) has a 0 offset.
+     * The last range has a non-zero offset.
+     * minHighNoReorder is set to the limit of that last range.
+     *
+     * <p>In the settings object, the initial ranges before the first split lead byte
+     * are omitted for efficiency; they are handled by reorder(p) via the reorderTable.
+     * If there are no split-reordered lead bytes, then no ranges are needed.
+     */
+    long[] reorderRanges;
     /** Array of reorder codes; ignored if length == 0. */
     public int[] reorderCodes = EMPTY_INT_ARRAY;
-    // Note: In C++, we keep a memory block around for the reorder codes and the permutation table,
+    // Note: In C++, we keep a memory block around for the reorder codes,
+    // the ranges, and the permutation table,
     // and modify them for new codes.
     // In Java, we simply copy references and then never modify the array contents.
     // The caller must abandon the arrays.

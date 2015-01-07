@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2013-2014, International Business Machines
+* Copyright (C) 2013-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * CollationFastLatin.java, ported from collationfastlatin.h/.cpp
@@ -23,7 +23,7 @@ public final class CollationFastLatin /* all static */ {
      * When the major version number of the main data format changes,
      * we can reset this fast Latin version to 1.
      */
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     public static final int LATIN_MAX = 0x17f;
     public static final int LATIN_LIMIT = LATIN_MAX + 1;
@@ -211,33 +211,50 @@ public final class CollationFastLatin /* all static */ {
             // lowest long mini primary.
             miniVarTop = MIN_LONG - 1;
         } else {
-            int v1 = (int)(settings.variableTop >> 24);
             int headerLength = header[0] & 0xff;
-            int i = headerLength - 1;
-            if(i <= 0 || v1 > (header[i] & 0x7f)) {
+            int i = 1 + settings.getMaxVariable();
+            if(i >= headerLength) {
                 return -1;  // variableTop >= digits, should not occur
             }
-            while(i > 1 && v1 <= (header[i - 1] & 0x7f)) { --i; }
-            // In the table header, the miniVarTop is in bits 15..7, with 4 zero bits 19..16 implied.
-            // Shift right to make it comparable with long mini primaries in bits 15..3.
-            miniVarTop = (header[i] & 0xff80) >> 4;
+            miniVarTop = header[i];
         }
 
-        byte[] reorderTable = settings.reorderTable;
-        if(reorderTable != null) {
-            char[] scripts = data.scripts;
-            int length = data.scripts.length;
-            int prevLastByte = 0;
-            for(int i = 0; i < length;) {
-                // reordered last byte of the group
-                int lastByte = reorderTable[scripts[i] & 0xff] & 0xff;
-                if(lastByte < prevLastByte) {
-                    // The permutation affects the groups up to Latin.
-                    return -1;
+        boolean digitsAreReordered = false;
+        if(settings.hasReordering()) {
+            long prevStart = 0;
+            long beforeDigitStart = 0;
+            long digitStart = 0;
+            long afterDigitStart = 0;
+            for(int group = Collator.ReorderCodes.FIRST;
+                    group < Collator.ReorderCodes.FIRST + CollationData.MAX_NUM_SPECIAL_REORDER_CODES;
+                    ++group) {
+                long start = data.getFirstPrimaryForGroup(group);
+                start = settings.reorder(start);
+                if(group == Collator.ReorderCodes.DIGIT) {
+                    beforeDigitStart = prevStart;
+                    digitStart = start;
+                } else if(start != 0) {
+                    if(start < prevStart) {
+                        // The permutation affects the groups up to Latin.
+                        return -1;
+                    }
+                    // In the future, there might be a special group between digits & Latin.
+                    if(digitStart != 0 && afterDigitStart == 0 && prevStart == beforeDigitStart) {
+                        afterDigitStart = start;
+                    }
+                    prevStart = start;
                 }
-                if(scripts[i + 2] == UScript.LATIN) { break; }
-                i = i + 2 + scripts[i + 1];
-                prevLastByte = lastByte;
+            }
+            long latinStart = data.getFirstPrimaryForGroup(UScript.LATIN);
+            latinStart = settings.reorder(latinStart);
+            if(latinStart < prevStart) {
+                return -1;
+            }
+            if(afterDigitStart == 0) {
+                afterDigitStart = latinStart;
+            }
+            if(!(beforeDigitStart < digitStart && digitStart < afterDigitStart)) {
+                digitsAreReordered = true;
             }
         }
 
@@ -253,7 +270,7 @@ public final class CollationFastLatin /* all static */ {
             }
             primaries[c] = (char)p;
         }
-        if((settings.options & CollationSettings.NUMERIC) != 0) {
+        if(digitsAreReordered || (settings.options & CollationSettings.NUMERIC) != 0) {
             // Bail out for digits.
             for(int c = 0x30; c <= 0x39; ++c) { primaries[c] = 0; }
         }
