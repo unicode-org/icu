@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2012-2014, International Business Machines
+* Copyright (C) 2012-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * collationdatabuilder.cpp
@@ -1213,8 +1213,10 @@ CollationDataBuilder::build(CollationData &data, UErrorCode &errorCode) {
     if(base != NULL) {
         data.numericPrimary = base->numericPrimary;
         data.compressibleBytes = base->compressibleBytes;
-        data.scripts = base->scripts;
-        data.scriptsLength = base->scriptsLength;
+        data.numScripts = base->numScripts;
+        data.scriptsIndex = base->scriptsIndex;
+        data.scriptStarts = base->scriptStarts;
+        data.scriptStartsLength = base->scriptStartsLength;
     }
     buildFastLatinTable(data, errorCode);
 }
