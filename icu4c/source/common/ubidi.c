@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2014, International Business Machines
+*   Copyright (C) 1999-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -2340,7 +2340,7 @@ setParaSuccess(UBiDi *pBiDi) {
 static void
 setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
                 UBiDiLevel paraLevel, UErrorCode *pErrorCode) {
-    void *runsOnlyMemory;
+    void *runsOnlyMemory = NULL;
     int32_t *visualMap;
     UChar *visualText;
     int32_t saveLength, saveTrailingWSStart;
@@ -2514,12 +2514,13 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
     }
     uprv_memcpy(pBiDi->levels, saveLevels, saveLength*sizeof(UBiDiLevel));
     pBiDi->trailingWSStart=saveTrailingWSStart;
-    /* free memory for mapping table and visual text */
-    uprv_free(runsOnlyMemory);
     if(pBiDi->runCount>1) {
         pBiDi->direction=UBIDI_MIXED;
     }
   cleanup3:
+    /* free memory for mapping table and visual text */
+    uprv_free(runsOnlyMemory);
+
     pBiDi->reorderingMode=UBIDI_REORDER_RUNS_ONLY;
 }
 
