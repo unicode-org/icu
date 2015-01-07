@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1652,6 +1652,11 @@ public class TestFmwk extends AbstractTestLog {
 
             int testDelta = testCount - stack.tc;
             if (testDelta == 0) {
+                if (stack.included) {
+                    stack.flush();
+                    indent(indentLevel);
+                    log.println("} (0s) Empty");
+                }
                 return;
             }
 
