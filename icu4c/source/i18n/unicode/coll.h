@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1996-2014, International Business Machines
+*   Copyright (C) 1996-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 */
@@ -607,7 +607,7 @@ public:
      * Retrieves the reordering codes for this collator.
      * @param dest The array to fill with the script ordering.
      * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the function
-     *  will only return the length of the result without writing any of the result string (pre-flighting).
+     *  will only return the length of the result without writing any codes (pre-flighting).
      * @param status A reference to an error code value, which must not indicate
      * a failure before the function call.
      * @return The length of the script ordering array.
@@ -630,6 +630,7 @@ public:
      * length is also set to 0. An empty array will clear any reordering codes on the collator.
      * @param reorderCodesLength The length of reorderCodes.
      * @param status error code
+     * @see ucol_setReorderCodes
      * @see Collator#getReorderCodes
      * @see Collator#getEquivalentReorderCodes
      * @see UScriptCode
@@ -643,11 +644,13 @@ public:
     /**
      * Retrieves the reorder codes that are grouped with the given reorder code. Some reorder
      * codes will be grouped and must reorder together.
+     * Beginning with ICU 55, scripts only reorder together if they are primary-equal,
+     * for example Hiragana and Katakana.
+     *
      * @param reorderCode The reorder code to determine equivalence for. 
      * @param dest The array to fill with the script equivalence reordering codes.
      * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the 
-     * function will only return the length of the result without writing any of the result 
-     * string (pre-flighting).
+     * function will only return the length of the result without writing any codes (pre-flighting).
      * @param status A reference to an error code value, which must not indicate 
      * a failure before the function call.
      * @return The length of the of the reordering code equivalence array.
