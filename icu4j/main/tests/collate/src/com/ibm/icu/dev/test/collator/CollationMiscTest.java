@@ -1,7 +1,6 @@
-
- /*
+/*
  *******************************************************************************
- * Copyright (C) 2002-2014, International Business Machines Corporation and
+ * Copyright (C) 2002-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -3153,7 +3152,7 @@ public class CollationMiscTest extends TestFmwk {
     {
         Collator myCollation;
         int[] reorderCodes = {UScript.GREEK, UScript.HAN, ReorderCodes.PUNCTUATION};
-        int[] duplicateReorderCodes = {UScript.CUNEIFORM, UScript.GREEK, ReorderCodes.CURRENCY, UScript.EGYPTIAN_HIEROGLYPHS};
+        int[] duplicateReorderCodes = {UScript.HIRAGANA, UScript.GREEK, ReorderCodes.CURRENCY, UScript.KATAKANA};
         int[] reorderCodesStartingWithDefault = {ReorderCodes.DEFAULT, UScript.GREEK, UScript.HAN, ReorderCodes.PUNCTUATION};
         int[] retrievedReorderCodes;
         String greekString = "\u03b1";
@@ -3283,47 +3282,7 @@ public class CollationMiscTest extends TestFmwk {
             errln("ERROR: retrieved reorder codes do not match set reorder codes.");
         }
     }
-    
-    public void TestSameLeadBytScriptReorder(){
-        String[] testSourceCases = {
-                "\ud800\udf31", // Gothic
-                "\ud801\udc50", // Shavian
-        };
 
-        String[] testTargetCases = {
-                "\u0100",   // Latin Extended-A
-                "\u2c74",   // Latin Extended-C
-        };
-
-        int[] results = {
-                -1,
-                -1,
-        };
-
-        Collator  myCollation;
-        String rules = "[reorder Goth Latn]";
-        try {
-            myCollation = new RuleBasedCollator(rules);
-        } catch (Exception e) {
-            warnln("ERROR: in creation of rule based collator");
-            return;
-        }
-        myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-        myCollation.setStrength(Collator.TERTIARY);
-        for (int i = 0; i < testSourceCases.length ; i++)
-        {
-            CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-                    testSourceCases[i], testTargetCases[i], 
-                    results[i]);
-        }
-
-        // ensure that the non-reordered and reordered collation is the same
-        Collator nonReorderdCollator = RuleBasedCollator.getInstance();
-        int nonReorderedResults = nonReorderdCollator.compare(testSourceCases[0], testSourceCases[1]);
-        CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-                testSourceCases[0], testSourceCases[1], nonReorderedResults);   
-     }
-    
     static boolean containsExpectedScript(int[] scripts, int expectedScript) {
         for (int i = 0; i < scripts.length; ++i) {
             if (expectedScript == scripts[i]) { return true; }
@@ -3332,65 +3291,86 @@ public class CollationMiscTest extends TestFmwk {
     }
 
     public void TestEquivalentReorderingScripts() {
+        // Beginning with ICU 55, collation reordering moves single scripts
+        // rather than groups of scripts,
+        // except where scripts share a range and sort primary-equal.
         final int[] expectedScripts = {
-                UScript.BOPOMOFO,               //Bopo
-                UScript.LISU,                   //Lisu
-                UScript.LYCIAN,                 //Lyci
-                UScript.CARIAN,                 //Cari
-                UScript.LYDIAN,                 //Lydi
-                UScript.YI,                     //Yiii
-                UScript.OLD_ITALIC,             //Ital
-                UScript.GOTHIC,                 //Goth
-                UScript.DESERET,                //Dsrt
-                UScript.SHAVIAN,                //Shaw
-                UScript.OSMANYA,                //Osma
-                UScript.LINEAR_B,               //Linb
-                UScript.CYPRIOT,                //Cprt
-                UScript.OLD_SOUTH_ARABIAN,      //Sarb
-                UScript.AVESTAN,                //Avst
-                UScript.IMPERIAL_ARAMAIC,       //Armi
-                UScript.INSCRIPTIONAL_PARTHIAN, //Prti
-                UScript.INSCRIPTIONAL_PAHLAVI,  //Phli
-                UScript.UGARITIC,               //Ugar
-                UScript.OLD_PERSIAN,            //Xpeo
-                UScript.CUNEIFORM,              //Xsux
-                UScript.EGYPTIAN_HIEROGLYPHS,   //Egyp
-                UScript.PHONETIC_POLLARD,       //Plrd
-                UScript.SORA_SOMPENG,           //Sora
-                UScript.MEROITIC_CURSIVE,       //Merc
-                UScript.MEROITIC_HIEROGLYPHS    //Mero
+                UScript.HIRAGANA,
+                UScript.KATAKANA,
+                UScript.KATAKANA_OR_HIRAGANA
         };
 
         int[] equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.GOTHIC);
-        if (equivalentScripts.length < expectedScripts.length) {
-            errln(String.format("ERROR/Gothic: retrieved equivalent script length wrong: " +
-                    "expected at least %d, was = %d",
+        if (equivalentScripts.length != 1 || equivalentScripts[0] != UScript.GOTHIC) {
+            errln(String.format("ERROR/Gothic: retrieved equivalent scripts wrong: " +
+                    "length expected 1, was = %d; expected [%d] was [%d]",
+                    equivalentScripts.length, UScript.GOTHIC, equivalentScripts[0]));
+        }
+
+        equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.HIRAGANA);
+        if (equivalentScripts.length != expectedScripts.length) {
+            errln(String.format("ERROR/Hiragana: retrieved equivalent script length wrong: " +
+                    "expected %d, was = %d",
                     expectedScripts.length, equivalentScripts.length));
         }
         int prevScript = -1;
         for (int i = 0; i < equivalentScripts.length; ++i) {
             int script = equivalentScripts[i];
             if (script <= prevScript) {
-                errln("ERROR/Gothic: equivalent scripts out of order at index " + i);
+                errln("ERROR/Hiragana: equivalent scripts out of order at index " + i);
             }
             prevScript = script;
         }
         for (int code : expectedScripts) {
             if (!containsExpectedScript(equivalentScripts, code)) {
-                errln("ERROR/Gothic: equivalent scripts do not contain " + code);
+                errln("ERROR/Hiragana: equivalent scripts do not contain " + code);
             }
         }
 
-        equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.SHAVIAN);
-        if (equivalentScripts.length < expectedScripts.length) {
-            errln(String.format("ERROR/Shavian: retrieved equivalent script length wrong: " +
-                    "expected at least %d, was = %d",
+        equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.KATAKANA);
+        if (equivalentScripts.length != expectedScripts.length) {
+            errln(String.format("ERROR/Katakana: retrieved equivalent script length wrong: " +
+                    "expected %d, was = %d",
                     expectedScripts.length, equivalentScripts.length));
         }
         for (int code : expectedScripts) {
             if (!containsExpectedScript(equivalentScripts, code)) {
-                errln("ERROR/Shavian: equivalent scripts do not contain " + code);
+                errln("ERROR/Katakana: equivalent scripts do not contain " + code);
             }
+        }
+
+        equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.KATAKANA_OR_HIRAGANA);
+        if (equivalentScripts.length != expectedScripts.length) {
+            errln(String.format("ERROR/Hrkt: retrieved equivalent script length wrong: " +
+                    "expected %d, was = %d",
+                    expectedScripts.length, equivalentScripts.length));
+        }
+
+        equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.HAN);
+        if (equivalentScripts.length != 3) {
+            errln("ERROR/Hani: retrieved equivalent script length wrong: " +
+                    "expected 3, was = " + equivalentScripts.length);
+        }
+        equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.SIMPLIFIED_HAN);
+        if (equivalentScripts.length != 3) {
+            errln("ERROR/Hans: retrieved equivalent script length wrong: " +
+                    "expected 3, was = " + equivalentScripts.length);
+        }
+        equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.TRADITIONAL_HAN);
+        if (equivalentScripts.length != 3) {
+            errln("ERROR/Hant: retrieved equivalent script length wrong: " +
+                    "expected 3, was = " + equivalentScripts.length);
+        }
+
+        equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.MEROITIC_CURSIVE);
+        if (equivalentScripts.length != 2) {
+            errln("ERROR/Merc: retrieved equivalent script length wrong: " +
+                    "expected 2, was = " + equivalentScripts.length);
+        }
+        equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.MEROITIC_HIEROGLYPHS);
+        if (equivalentScripts.length != 2) {
+            errln("ERROR/Mero: retrieved equivalent script length wrong: " +
+                    "expected 2, was = " + equivalentScripts.length);
         }
     }
     

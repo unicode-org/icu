@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2013-2014, International Business Machines
+* Copyright (C) 2013-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * CollationRuleParser.java, ported from collationruleparser.h/.cpp
@@ -718,17 +718,14 @@ public final class CollationRuleParser {
             reorderCodes.add(code);
             i = limit;
         }
-        int length = reorderCodes.size();
-        if(length == 1 && reorderCodes.get(0) == Collator.ReorderCodes.NONE) {
+        if(reorderCodes.isEmpty()) {
             settings.resetReordering();
-            return;
+        } else {
+            int[] codes = new int[reorderCodes.size()];
+            int j = 0;
+            for(Integer code : reorderCodes) { codes[j++] = code; }
+            settings.setReordering(baseData, codes);
         }
-        int[] codes = new int[reorderCodes.size()];
-        int j = 0;
-        for(Integer code : reorderCodes) { codes[j++] = code; }
-        byte[] table = new byte[256];
-        baseData.makeReorderTable(codes, table);
-        settings.setReordering(codes, table);
     }
 
     private static final String[] gSpecialReorderCodes = {

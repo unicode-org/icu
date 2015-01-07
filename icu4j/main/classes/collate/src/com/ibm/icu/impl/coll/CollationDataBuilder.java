@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2012-2014, International Business Machines
+* Copyright (C) 2012-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * CollationDataBuilder.java, ported from collationdatabuilder.h/.cpp
@@ -310,7 +310,9 @@ final class CollationDataBuilder {  // not final in C++
         if(base != null) {
             data.numericPrimary = base.numericPrimary;
             data.compressibleBytes = base.compressibleBytes;
-            data.scripts = base.scripts;
+            data.numScripts = base.numScripts;
+            data.scriptsIndex = base.scriptsIndex;
+            data.scriptStarts = base.scriptStarts;
         }
         buildFastLatinTable(data);
     }

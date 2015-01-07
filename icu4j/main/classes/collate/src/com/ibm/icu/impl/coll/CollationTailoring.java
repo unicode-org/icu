@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2013-2014, International Business Machines
+* Copyright (C) 2013-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * CollationTailoring.java, ported from collationtailoring.h/.cpp
@@ -33,6 +33,7 @@ public final class CollationTailoring {
         if(baseSettings != null) {
             assert(baseSettings.readOnly().reorderCodes.length == 0);
             assert(baseSettings.readOnly().reorderTable == null);
+            assert(baseSettings.readOnly().minHighNoReorder == 0);
             settings = baseSettings.clone();
         } else {
             settings = new SharedObject.Reference<CollationSettings>(new CollationSettings());
