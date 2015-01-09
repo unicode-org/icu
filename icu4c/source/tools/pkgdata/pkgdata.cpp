@@ -2160,6 +2160,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 #ifdef CAN_WRITE_OBJ_CODE
  /* Create optMatchArch for genccode architecture detection */
 static void pkg_createOptMatchArch(char *optMatchArch) {
+#if !defined(WINDOWS_WITH_MSVC) || defined(USING_CYGWIN)
     const char* code = "void oma(){}";
     const char* source = "oma.c";
     const char* obj = "oma.obj";
@@ -2189,9 +2190,10 @@ static void pkg_createOptMatchArch(char *optMatchArch) {
     else {
         fprintf(stderr, "T_FileStream_open failed to open %s for writing\n", source);
     }
+#endif
 }
 static void pkg_destroyOptMatchArch(char *optMatchArch) {
-    if(!T_FileStream_remove(optMatchArch)){
+    if(T_FileStream_file_exists(optMatchArch) && !T_FileStream_remove(optMatchArch)){
         fprintf(stderr, "T_FileStream_remove failed to delete %s\n", optMatchArch);
     }
 }
