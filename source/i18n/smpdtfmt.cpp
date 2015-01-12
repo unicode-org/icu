@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2014, International Business Machines Corporation and    *
+* Copyright (C) 1997-2015, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -292,13 +292,13 @@ static void freeSharedNumberFormatters(const SharedNumberFormat ** list) {
     uprv_free(list);
 }
 
-const NumberFormat &SimpleDateFormat::getNumberFormatByIndex(
+const NumberFormat *SimpleDateFormat::getNumberFormatByIndex(
         UDateFormatField index) const {
     if (fSharedNumberFormatters == NULL ||
         fSharedNumberFormatters[index] == NULL) {
-        return *fNumberFormat;
+        return fNumberFormat;
     }
-    return **fSharedNumberFormatters[index];
+    return &(**fSharedNumberFormatters[index]);
 }
 
 class SimpleDateFormatMutableNFNode {
@@ -327,17 +327,17 @@ class SimpleDateFormatMutableNFs : public UMemory {
     // This object maintains ownership of all returned non-const
     // NumberFormat objects. On memory allocation error returns NULL.
     // Caller must check for NULL return value.
-    NumberFormat *get(const NumberFormat &nf) {
+    NumberFormat *get(const NumberFormat *nf) {
         int32_t idx = 0;
         while (nodes[idx].value) {
-            if (&nf == nodes[idx].key) {
+            if (nf == nodes[idx].key) {
                 return nodes[idx].value;
             }
             ++idx;
         }
         U_ASSERT(idx < UDAT_FIELD_COUNT);
-        nodes[idx].key = &nf;
-        nodes[idx].value = (NumberFormat *) nf.clone();
+        nodes[idx].key = nf;
+        nodes[idx].value = (nf == NULL) ? NULL : (NumberFormat *) nf->clone();
         return nodes[idx].value;
     }
  private:
@@ -1403,8 +1403,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         return;
     }
 
-    currentNumberFormat = mutableNFs.get(
-            getNumberFormatByIndex(patternCharIndex));
+    currentNumberFormat = mutableNFs.get(getNumberFormatByIndex(patternCharIndex));
     if (currentNumberFormat == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -1866,7 +1865,7 @@ SimpleDateFormat::getNumberFormatForField(UChar field) const {
     if (index == UDAT_FIELD_COUNT) {
         return NULL;
     }
-    return &getNumberFormatByIndex(index);
+    return getNumberFormatByIndex(index);
 }
 
 //----------------------------------------------------------------------
