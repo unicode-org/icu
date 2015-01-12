@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1606,8 +1606,8 @@ static const char * overrideNumberFormat[][2] = {
 static void TestOverrideNumberFormat(void) {
     UErrorCode status = U_ZERO_ERROR;
     UChar pattern[50];
-    UChar* expected;
-    UChar* fields;
+    UChar expected[50];
+    UChar fields[50];
     char bbuf1[kBbufMax];
     char bbuf2[kBbufMax];
     const char* localeString = "zh@numbers=hanidays";
@@ -1615,11 +1615,8 @@ static void TestOverrideNumberFormat(void) {
     const UNumberFormat* getter_result;
     int32_t i;
 
-    expected=(UChar*)malloc(sizeof(UChar) * 10);
-    fields=(UChar*)malloc(sizeof(UChar) * 10);
     u_uastrcpy(fields, "d");
     u_uastrcpy(pattern,"MM d");
-
 
     fmt=udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
     if (!assertSuccess("udat_open()", &status)) {
@@ -1654,9 +1651,6 @@ static void TestOverrideNumberFormat(void) {
         UDateFormat* fmt2;
         UNumberFormat* overrideFmt2;
 
-        if ((i==1 || i==3 || i==4) && log_knownIssue("11454", "skipping overrideNumberFormat test case")) {
-            continue;
-        }
         fmt2 =udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
         assertSuccess("udat_open() with en_US", &status);
 
@@ -1664,10 +1658,10 @@ static void TestOverrideNumberFormat(void) {
         assertSuccess("unum_open() in loop", &status);
 
         u_uastrcpy(fields, overrideNumberFormat[i][0]);
-        u_unescape(overrideNumberFormat[i][1], expected, 50);
+        u_unescape(overrideNumberFormat[i][1], expected, UPRV_LENGTHOF(expected));
 
         if ( strcmp(overrideNumberFormat[i][0], "") == 0 ) { // use the one w/o field
-            udat_setNumberFormat(fmt2, overrideFmt2);
+            udat_adoptNumberFormat(fmt2, overrideFmt2);
         } else if ( strcmp(overrideNumberFormat[i][0], "mixed") == 0 ) { // set 1 field at first but then full override, both(M & d) should be override
             const char* singleLocale = "en@numbers=hebr";
             UNumberFormat* singleOverrideFmt;
@@ -1679,7 +1673,7 @@ static void TestOverrideNumberFormat(void) {
             udat_adoptNumberFormatForFields(fmt2, fields, singleOverrideFmt, &status);
             assertSuccess("udat_setNumberFormatForField() in mixed", &status);
 
-            udat_setNumberFormat(fmt2, overrideFmt2);
+            udat_adoptNumberFormat(fmt2, overrideFmt2);
         } else if ( strcmp(overrideNumberFormat[i][0], "do") == 0 ) { // o is an invalid field
             udat_adoptNumberFormatForFields(fmt2, fields, overrideFmt2, &status);
             if(status == U_INVALID_FORMAT_ERROR) {
@@ -1699,11 +1693,8 @@ static void TestOverrideNumberFormat(void) {
             log_err("fail: udat_format for locale, expected %s, got %s\n",
                     u_austrncpy(bbuf1,expected,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
 
-        udat_close(overrideFmt2);
         udat_close(fmt2);
     }
-    free(expected);
-    free(fields);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
