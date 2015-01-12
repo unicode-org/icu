@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2014, International Business Machines Corporation and
+* Copyright (C) 1997-2015, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -1497,7 +1497,7 @@ private:
      */
     TimeZoneFormat *tzFormat() const;
 
-    const NumberFormat &getNumberFormatByIndex(UDateFormatField index) const;
+    const NumberFormat* getNumberFormatByIndex(UDateFormatField index) const;
 
     /**
      * Used to map Calendar field to field level.
