@@ -1,4 +1,4 @@
-# Copyright (C) 2007-2013 International Business Machines Corporation and Others. All Rights Reserved.
+# Copyright (C) 2007-2015 International Business Machines Corporation and Others. All Rights Reserved.
 
 # Review module.
 # TODO: refactor ticket manipulation items into ticketmgr.
@@ -100,7 +100,7 @@ class ReviewModule(Component):
         ul = tag.ul(els, class_='review')
         className = ''
         title = "Reviews"
-        add_ctxtnav(req, tag.span(tag.object(ul), id='icureview', title=title, class_=className))
+        add_ctxtnav(req, tag.span(ul, id='icureview', title=title, class_=className))
 
 
     def match_request(self, req):
