@@ -1618,7 +1618,7 @@ static void TestOverrideNumberFormat(void) {
     u_uastrcpy(fields, "d");
     u_uastrcpy(pattern,"MM d");
 
-    fmt=udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
+    fmt=udat_open(UDAT_PATTERN, UDAT_PATTERN, "en_US", zoneGMT, -1, pattern, u_strlen(pattern), &status);
     if (!assertSuccess("udat_open()", &status)) {
         return;
     }
@@ -1651,7 +1651,7 @@ static void TestOverrideNumberFormat(void) {
         UDateFormat* fmt2;
         UNumberFormat* overrideFmt2;
 
-        fmt2 =udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
+        fmt2 =udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US", zoneGMT, -1, pattern, u_strlen(pattern), &status);
         assertSuccess("udat_open() with en_US", &status);
 
         overrideFmt2 = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
