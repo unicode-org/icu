@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2014, International Business Machines Corporation and
+ * Copyright (c) 2002-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -38,6 +38,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "cmemory.h"
 #include "cstring.h"
 #include "uinvchar.h"
 
@@ -239,7 +240,12 @@ if (status!=errcode) {dataerrln("RegexTest failure at line %d.  Expected status=
 #define REGEX_ASSERT_L(expr, line) {if ((expr)==FALSE) { \
     errln("RegexTest failure at line %d, from %d.", __LINE__, (line)); return;}}
 
-#define REGEX_ASSERT_UNISTR(ustr,inv) {if (!(ustr==inv)) {errln("%s:%d: RegexTest failure: REGEX_ASSERT_UNISTR(%s,%s) failed \n", __FILE__, __LINE__, extractToAssertBuf(ustr),inv);};}
+// expected: const char * , restricted to invariant characters.
+// actual: const UnicodeString &
+#define REGEX_ASSERT_UNISTR(expected, actual) { \
+    if (UnicodeString(expected, -1, US_INV) != (actual)) { \
+        errln("%s:%d: RegexTest failure: REGEX_ASSERT_UNISTR(%s, %s) failed \n",  \
+                __FILE__, __LINE__, expected, extractToAssertBuf(actual));};}
 
 
 static UBool testUTextEqual(UText *uta, UText *utb) {
@@ -2050,47 +2056,72 @@ void RegexTest::API_Match_UTF8() {
         utext_close(&destText);
         utext_openUnicodeString(&destText, &dest, &status);
 
-        result = matcher->group(0, NULL, status);
+        int64_t length;
+        result = matcher->group(0, NULL, length, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT_UTEXT_UTF8(str_0123456789, result);
         utext_close(result);
-        result = matcher->group(0, &destText, status);
+        result = matcher->group(0, &destText, length, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &destText);
-        REGEX_ASSERT_UTEXT_UTF8(str_0123456789, result);
+        REGEX_ASSERT(utext_getNativeIndex(result) == 0);
+        REGEX_ASSERT(length == 10);
+        REGEX_ASSERT_UTEXT_INVARIANT("0123456789", result);
 
-        result = matcher->group(1, NULL, status);
+        // Capture Group 1 == "234567"
+        result = matcher->group(1, NULL, length, status);
         REGEX_CHECK_STATUS;
-        const char str_234567[] = { 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x00 }; /* 234567 */
-        REGEX_ASSERT_UTEXT_UTF8(str_234567, result);
+        REGEX_ASSERT(utext_getNativeIndex(result) == 2);
+        REGEX_ASSERT(length == 6);
+        REGEX_ASSERT_UTEXT_INVARIANT("0123456789", result);
         utext_close(result);
-        result = matcher->group(1, &destText, status);
+
+        result = matcher->group(1, &destText, length, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &destText);
-        REGEX_ASSERT_UTEXT_UTF8(str_234567, result);
-
-        result = matcher->group(2, NULL, status);
-        REGEX_CHECK_STATUS;
-        const char str_45[] = { 0x34, 0x35, 0x00 }; /* 45 */
-        REGEX_ASSERT_UTEXT_UTF8(str_45, result);
+        REGEX_ASSERT(utext_getNativeIndex(result) == 2);
+        REGEX_ASSERT(length == 6);
+        REGEX_ASSERT_UTEXT_INVARIANT("0123456789", result);
         utext_close(result);
-        result = matcher->group(2, &destText, status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(result == &destText);
-        REGEX_ASSERT_UTEXT_UTF8(str_45, result);
 
-        result = matcher->group(3, NULL, status);
+        // Capture Group 2 == "45"
+        result = matcher->group(2, NULL, length, status);
         REGEX_CHECK_STATUS;
-        const char str_89[] = { 0x38, 0x39, 0x00 }; /* 89 */
-        REGEX_ASSERT_UTEXT_UTF8(str_89, result);
+        REGEX_ASSERT(utext_getNativeIndex(result) == 4);
+        REGEX_ASSERT(length == 2);
+        REGEX_ASSERT_UTEXT_INVARIANT("0123456789", result);
         utext_close(result);
-        result = matcher->group(3, &destText, status);
+
+        result = matcher->group(2, &destText, length, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &destText);
-        REGEX_ASSERT_UTEXT_UTF8(str_89, result);
+        REGEX_ASSERT(utext_getNativeIndex(result) == 4);
+        REGEX_ASSERT(length == 2);
+        REGEX_ASSERT_UTEXT_INVARIANT("0123456789", result);
+        utext_close(result);
 
+        // Capture Group 3 == "89"
+        result = matcher->group(3, NULL, length, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(utext_getNativeIndex(result) == 8);
+        REGEX_ASSERT(length == 2);
+        REGEX_ASSERT_UTEXT_INVARIANT("0123456789", result);
+        utext_close(result);
+
+        result = matcher->group(3, &destText, length, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(result == &destText);
+        REGEX_ASSERT(utext_getNativeIndex(result) == 8);
+        REGEX_ASSERT(length == 2);
+        REGEX_ASSERT_UTEXT_INVARIANT("0123456789", result);
+        utext_close(result);
+
+        // Capture Group number out of range.
+        status = U_ZERO_ERROR;
         REGEX_ASSERT_FAIL(matcher->group(-1, status), U_INDEX_OUTOFBOUNDS_ERROR);
+        status = U_ZERO_ERROR;
         REGEX_ASSERT_FAIL(matcher->group( 4, status), U_INDEX_OUTOFBOUNDS_ERROR);
+        status = U_ZERO_ERROR;
         matcher->reset();
         REGEX_ASSERT_FAIL(matcher->group( 0, status), U_REGEX_INVALID_STATE);
 
@@ -3069,6 +3100,37 @@ void RegexTest::API_Pattern_UTF8() {
 
 
     //
+    // split of a UText based string, with library allocating output UTexts.
+    //
+    {
+        status = U_ZERO_ERROR;
+        RegexMatcher matcher(UnicodeString("(:)"), 0, status);
+        UnicodeString stringToSplit("first:second:third");
+        UText *textToSplit = utext_openUnicodeString(NULL, &stringToSplit, &status);
+        REGEX_CHECK_STATUS;
+        
+        UText *splits[10] = {NULL};
+        int32_t numFields = matcher.split(textToSplit, splits, UPRV_LENGTHOF(splits), status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(numFields == 5);
+        REGEX_ASSERT_UTEXT_INVARIANT("first", splits[0]);
+        REGEX_ASSERT_UTEXT_INVARIANT(":", splits[1]);
+        REGEX_ASSERT_UTEXT_INVARIANT("second", splits[2]);
+        REGEX_ASSERT_UTEXT_INVARIANT(":", splits[3]);
+        REGEX_ASSERT_UTEXT_INVARIANT("third", splits[4]);
+        REGEX_ASSERT(splits[5] == NULL);
+
+        for (int i=0; i<UPRV_LENGTHOF(splits); i++) {
+            if (splits[i]) {
+                utext_close(splits[i]);
+                splits[i] = NULL;
+            }
+        }
+        utext_close(textToSplit);
+    }
+
+
+    //
     // RegexPattern::pattern() and patternText()
     //
     pat1 = new RegexPattern();
@@ -3079,7 +3141,7 @@ void RegexTest::API_Pattern_UTF8() {
     regextst_openUTF8FromInvariant(&re1, helloWorldInvariant, -1, &status);
     pat1 = RegexPattern::compile(&re1, pe, status);
     REGEX_CHECK_STATUS;
-    REGEX_ASSERT_UNISTR(pat1->pattern(),"(Hello, world)*");
+    REGEX_ASSERT_UNISTR("(Hello, world)*", pat1->pattern());
     REGEX_ASSERT_UTEXT_INVARIANT("(Hello, world)*", pat1->patternText(status));
     delete pat1;
 
@@ -4995,7 +5057,11 @@ void RegexTest::PreAllocatedUTextCAPI () {
         UChar    text1[80];
         UText   *actual;
         UBool    result;
-        u_uastrncpy(text1, "noise abc interior def, and this is off the end",  sizeof(text1)/2);
+        int64_t  length = 0;
+
+        u_uastrncpy(text1, "noise abc interior def, and this is off the end",  UPRV_LENGTHOF(text1));
+        //                  012345678901234567890123456789012345678901234567
+        //                  0         1         2         3         4
 
         status = U_ZERO_ERROR;
         re = uregex_openC("abc(.*?)def", 0, NULL, &status);
@@ -5005,26 +5071,29 @@ void RegexTest::PreAllocatedUTextCAPI () {
         result = uregex_find(re, 0, &status);
         REGEX_ASSERT(result==TRUE);
 
-        /*  Capture Group 0, the full match.  Should succeed.  */
+        /*  Capture Group 0, the full match.  Should succeed. "abc interior def" */
         status = U_ZERO_ERROR;
-        actual = uregex_groupUTextDeep(re, 0, &bufferText, &status);
+        actual = uregex_groupUText(re, 0, &bufferText, &length, &status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(actual == &bufferText);
-        REGEX_ASSERT_UTEXT_INVARIANT("abc interior def", actual);
+        REGEX_ASSERT(utext_getNativeIndex(actual) == 6);
+        REGEX_ASSERT(length == 16);
+        REGEX_ASSERT(utext_nativeLength(actual) == 47);
 
-        /*  Capture group #1.  Should succeed. */
+        /*  Capture group #1.  Should succeed, matching " interior ". */
         status = U_ZERO_ERROR;
-        actual = uregex_groupUTextDeep(re, 1, &bufferText, &status);
+        actual = uregex_groupUText(re, 1, &bufferText, &length, &status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(actual == &bufferText);
-        REGEX_ASSERT_UTEXT_INVARIANT(" interior ", actual);
+        REGEX_ASSERT(utext_getNativeIndex(actual) == 9);   // position of " interior "
+        REGEX_ASSERT(length == 10);
+        REGEX_ASSERT(utext_nativeLength(actual) == 47);
 
         /*  Capture group out of range.  Error. */
         status = U_ZERO_ERROR;
-        actual = uregex_groupUTextDeep(re, 2, &bufferText, &status);
+        actual = uregex_groupUText(re, 2, &bufferText, &length, &status);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
         REGEX_ASSERT(actual == &bufferText);
-
         uregex_close(re);
 
     }
@@ -5037,10 +5106,12 @@ void RegexTest::PreAllocatedUTextCAPI () {
         UChar    text2[80];
         UText    replText = UTEXT_INITIALIZER;
         UText   *result;
+        status = U_ZERO_ERROR;
+        utext_openUnicodeString(&bufferText, &buffer, &status);
 
         status = U_ZERO_ERROR;
-        u_uastrncpy(text1, "Replace xaax x1x x...x.",  sizeof(text1)/2);
-        u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
+        u_uastrncpy(text1, "Replace xaax x1x x...x.",  UPRV_LENGTHOF(text1));
+        u_uastrncpy(text2, "No match here.",  UPRV_LENGTHOF(text2)/2);
         regextst_openUTF8FromInvariant(&replText, "<$1>", -1, &status);
 
         re = uregex_openC("x(.*?)x", 0, NULL, &status);
@@ -5048,7 +5119,9 @@ void RegexTest::PreAllocatedUTextCAPI () {
 
         /*  Normal case, with match */
         uregex_setText(re, text1, -1, &status);
+        REGEX_CHECK_STATUS;
         utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), NULL, 0, &status);
+        REGEX_CHECK_STATUS;
         result = uregex_replaceFirstUText(re, &replText, &bufferText, &status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &bufferText);

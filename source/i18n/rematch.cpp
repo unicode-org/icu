@@ -1,6 +1,6 @@
 /*
 **************************************************************************
-*   Copyright (C) 2002-2014 International Business Machines Corporation  *
+*   Copyright (C) 2002-2015 International Business Machines Corporation  *
 *   and others. All rights reserved.                                     *
 **************************************************************************
 */
@@ -1175,97 +1175,32 @@ UText *RegexMatcher::group(int32_t groupNum, UText *dest, int64_t &group_len, UE
 
 UnicodeString RegexMatcher::group(int32_t groupNum, UErrorCode &status) const {
     UnicodeString result;
-    if (U_FAILURE(status)) {
+    int64_t groupStart = start64(groupNum, status);
+    int64_t groupEnd = end64(groupNum, status);
+    if (U_FAILURE(status) || groupStart == -1 || groupStart == groupEnd) {
         return result;
     }
-    UText resultText = UTEXT_INITIALIZER;
-    utext_openUnicodeString(&resultText, &result, &status);
-    group(groupNum, &resultText, status);
-    utext_close(&resultText);
+
+    // Get the group length using a utext_extract preflight.
+    //    UText is actually pretty efficient at this when underlying encoding is UTF-16.
+    int32_t length = utext_extract(fInputText, groupStart, groupEnd, NULL, 0, &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR) {
+        return result;
+    }
+
+    status = U_ZERO_ERROR;
+    UChar *buf = result.getBuffer(length);
+    if (buf == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        int32_t extractLength = utext_extract(fInputText, groupStart, groupEnd, buf, length, &status);
+        result.releaseBuffer(extractLength);
+        U_ASSERT(length == extractLength);
+    }
     return result;
 }
 
 
-//  Return deep (mutable) clone
-//      Technology Preview (as an API), but note that the UnicodeString API is implemented
-//      using this function.
-UText *RegexMatcher::group(int32_t groupNum, UText *dest, UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return dest;
-    }
-
-    if (U_FAILURE(fDeferredStatus)) {
-        status = fDeferredStatus;
-    } else if (fMatch == FALSE) {
-        status = U_REGEX_INVALID_STATE;
-    } else if (groupNum < 0 || groupNum > fPattern->fGroupMap->size()) {
-        status = U_INDEX_OUTOFBOUNDS_ERROR;
-    }
-    if (U_FAILURE(status)) {
-        return dest;
-    }
-
-    int64_t s, e;
-    if (groupNum == 0) {
-        s = fMatchStart;
-        e = fMatchEnd;
-    } else {
-        int32_t groupOffset = fPattern->fGroupMap->elementAti(groupNum-1);
-        U_ASSERT(groupOffset < fPattern->fFrameSize);
-        U_ASSERT(groupOffset >= 0);
-        s = fFrame->fExtra[groupOffset];
-        e = fFrame->fExtra[groupOffset+1];
-    }
-
-    if (s < 0) {
-        // A capture group wasn't part of the match
-        if (dest) {
-            utext_replace(dest, 0, utext_nativeLength(dest), NULL, 0, &status);
-            return dest;
-        } else {
-            return utext_openUChars(NULL, NULL, 0, &status);
-        }
-    }
-    U_ASSERT(s <= e);
-
-    if (UTEXT_FULL_TEXT_IN_CHUNK(fInputText, fInputLength)) {
-        U_ASSERT(e <= fInputLength);
-        if (dest) {
-            utext_replace(dest, 0, utext_nativeLength(dest), fInputText->chunkContents+s, (int32_t)(e-s), &status);
-        } else {
-            UText groupText = UTEXT_INITIALIZER;
-            utext_openUChars(&groupText, fInputText->chunkContents+s, e-s, &status);
-            dest = utext_clone(NULL, &groupText, TRUE, FALSE, &status);
-            utext_close(&groupText);
-        }
-    } else {
-        int32_t len16;
-        if (UTEXT_USES_U16(fInputText)) {
-            len16 = (int32_t)(e-s);
-        } else {
-            UErrorCode lengthStatus = U_ZERO_ERROR;
-            len16 = utext_extract(fInputText, s, e, NULL, 0, &lengthStatus);
-        }
-        UChar *groupChars = (UChar *)uprv_malloc(sizeof(UChar)*(len16+1));
-        if (groupChars == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return dest;
-        }
-        utext_extract(fInputText, s, e, groupChars, len16+1, &status);
-
-        if (dest) {
-            utext_replace(dest, 0, utext_nativeLength(dest), groupChars, len16, &status);
-        } else {
-            UText groupText = UTEXT_INITIALIZER;
-            utext_openUChars(&groupText, groupChars, len16, &status);
-            dest = utext_clone(NULL, &groupText, TRUE, FALSE, &status);
-            utext_close(&groupText);
-        }
-
-        uprv_free(groupChars);
-    }
-    return dest;
-}
 
 //--------------------------------------------------------------------------------
 //
@@ -2001,6 +1936,67 @@ void RegexMatcher::setTrace(UBool state) {
 
 
 
+/**
+  *  UText, replace entire contents of the destination UText with a substring of the source UText.
+  *
+  *     @param src    The source UText
+  *     @param dest   The destination UText. Must be writable.
+  *                   May be NULL, in which case a new UText will be allocated.
+  *     @param start  Start index of source substring.
+  *     @param limit  Limit index of source substring.
+  *     @param status An error code.
+  */
+static UText *utext_extract_replace(UText *src, UText *dest, int64_t start, int64_t limit, UErrorCode *status) {
+    if (U_FAILURE(*status)) {
+        return dest;
+    }
+    if (start == limit) {
+        if (dest) {
+            utext_replace(dest, 0, utext_nativeLength(dest), NULL, 0, status);
+            return dest;
+        } else {
+            return utext_openUChars(NULL, NULL, 0, status);
+        }
+    }
+    int32_t length = utext_extract(src, start, limit, NULL, 0, status);
+    if (*status != U_BUFFER_OVERFLOW_ERROR && U_FAILURE(*status)) {
+        return dest;
+    }
+    *status = U_ZERO_ERROR;
+    MaybeStackArray<UChar, 40> buffer;
+    if (length >= buffer.getCapacity()) {
+        UChar *newBuf = buffer.resize(length+1);   // Leave space for terminating Nul.
+        if (newBuf == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+    utext_extract(src, start, limit, buffer.getAlias(), length+1, status);
+    if (dest) {
+        utext_replace(dest, 0, utext_nativeLength(dest), buffer.getAlias(), length, status);
+        return dest;
+    }
+
+    // Caller did not provide a prexisting UText.
+    // Open a new one, and have it adopt the text buffer storage.
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+    int32_t ownedLength = 0;
+    UChar *ownedBuf = buffer.orphanOrClone(length+1, ownedLength);
+    if (ownedBuf == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    UText *result = utext_openUChars(NULL, ownedBuf, length, status);
+    if (U_FAILURE(*status)) {
+        uprv_free(ownedBuf);
+        return NULL;
+    }
+    result->providerProperties |= (1 << UTEXT_PROVIDER_OWNS_TEXT);
+    return result;
+}
+
+
 //---------------------------------------------------------------------
 //
 //   split
@@ -2167,7 +2163,8 @@ int32_t  RegexMatcher::split(UText *input,
                     break;
                 }
                 i++;
-                dest[i] = group(groupNum, dest[i], status);
+                dest[i] = utext_extract_replace(fInputText, dest[i], 
+                                               start64(groupNum, status), end64(groupNum, status), &status);
             }
 
             if (nextOutputStringStart == fActiveLimit) {
