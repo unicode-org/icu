@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2014, International Business Machines
+*   Copyright (C) 2004-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  uregex.cpp
@@ -647,7 +647,7 @@ uregex_group(URegularExpression *regexp2,
 
     if (destCapacity == 0 || regexp->fText != NULL) {
         // If preflighting or if we already have the text as UChars,
-        // this is a little cheaper than going through uregex_groupUTextDeep()
+        // this is a little cheaper than extracting from the UText
 
         //
         // Pick up the range of characters from the matcher
@@ -680,14 +680,18 @@ uregex_group(URegularExpression *regexp2,
         }
         return fullLength;
     } else {
-        int32_t result = 0;
-        UText *groupText = uregex_groupUTextDeep(regexp2, groupNum, NULL, status);
-        if (U_SUCCESS(*status)) {
-            result = utext_extract(groupText, 0, utext_nativeLength(groupText), dest, destCapacity, status);
+        int64_t  start = regexp->fMatcher->start64(groupNum, *status);
+        int64_t  limit = regexp->fMatcher->end64(groupNum, *status);
+        if (U_FAILURE(*status)) {
+            return 0;
         }
-        utext_close(groupText);
-        return result;
+        // Note edge cases:
+        //   Group didn't match: start == end == -1. UText trims to 0, UText gives zero length result.
+        //   Zero Length Match: start == end.
+        int32_t length = utext_extract(regexp->fMatcher->inputText(), start, limit, dest, destCapacity, status);
+        return length;
     }
+
 }
 
 
@@ -709,49 +713,6 @@ uregex_groupUText(URegularExpression *regexp2,
     }
 
     return regexp->fMatcher->group(groupNum, dest, *groupLength, *status);
-}
-
-//------------------------------------------------------------------------------
-//
-//    uregex_groupUTextDeep
-//
-//------------------------------------------------------------------------------
-U_CAPI UText * U_EXPORT2
-uregex_groupUTextDeep(URegularExpression *regexp2,
-                  int32_t             groupNum,
-                  UText              *dest,
-                  UErrorCode         *status)  {
-    RegularExpression *regexp = (RegularExpression*)regexp2;
-    if (validateRE(regexp, TRUE, status) == FALSE) {
-        UErrorCode emptyTextStatus = U_ZERO_ERROR;
-        return (dest ? dest : utext_openUChars(NULL, NULL, 0, &emptyTextStatus));
-    }
-
-    if (regexp->fText != NULL) {
-        //
-        // Pick up the range of characters from the matcher
-        // and use our already-extracted characters
-        //
-        int32_t  startIx = regexp->fMatcher->start(groupNum, *status);
-        int32_t  endIx   = regexp->fMatcher->end  (groupNum, *status);
-        if (U_FAILURE(*status)) {
-            UErrorCode emptyTextStatus = U_ZERO_ERROR;
-            return (dest ? dest : utext_openUChars(NULL, NULL, 0, &emptyTextStatus));
-        }
-
-        if (dest) {
-            utext_replace(dest, 0, utext_nativeLength(dest), &regexp->fText[startIx], endIx - startIx, status);
-        } else {
-            UText groupText = UTEXT_INITIALIZER;
-            utext_openUChars(&groupText, &regexp->fText[startIx], endIx - startIx, status);
-            dest = utext_clone(NULL, &groupText, TRUE, FALSE, status);
-            utext_close(&groupText);
-        }
-
-        return dest;
-    } else {
-        return regexp->fMatcher->group(groupNum, dest, *status);
-    }
 }
 
 //------------------------------------------------------------------------------

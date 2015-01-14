@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2014, International Business Machines
+*   Copyright (C) 2002-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -895,24 +895,6 @@ public:
     *   @stable ICU 4.6
     */
     virtual UText *group(int32_t groupNum, UText *dest, int64_t &group_len, UErrorCode &status) const;
-
-   /**
-    *   Returns a string containing the text captured by the given group
-    *   during the previous match operation.  Group(0) is the entire match.
-    *
-    *   @param   groupNum    the capture group number
-    *   @param   dest        A mutable UText in which the matching text is placed.
-    *                        If NULL, a new UText will be created (which may not be mutable).
-    *   @param   status      A reference to a UErrorCode to receive any errors.
-    *                        Possible errors are  U_REGEX_INVALID_STATE if no match
-    *                        has been attempted or the last match failed.
-    *   @return  A string containing the matched input text. If a pre-allocated UText
-    *            was provided, it will always be used and returned.
-    *
-    *   @internal ICU 4.4 technology preview
-    */
-    virtual UText *group(int32_t groupNum, UText *dest, UErrorCode &status) const;
-
 
    /**
     *   Returns the index in the input string of the start of the text matched
