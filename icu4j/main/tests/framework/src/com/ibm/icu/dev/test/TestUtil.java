@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2001-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
@@ -212,7 +212,8 @@ public final class TestUtil {
     public enum JavaVendor {
         Unknown,
         Oracle,
-        IBM
+        IBM,
+        Android
     }
 
     public static JavaVendor getJavaVendor() {
@@ -222,6 +223,8 @@ public final class TestUtil {
             vendor = JavaVendor.IBM;
         } else if (javaVendorProp.startsWith("sun") || javaVendorProp.startsWith("oracle")) {
             vendor = JavaVendor.Oracle;
+        } else if (javaVendorProp.contains("android")) {
+            vendor = JavaVendor.Android;
         }
         return vendor;
     }
