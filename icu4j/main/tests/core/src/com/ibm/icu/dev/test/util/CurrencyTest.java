@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2014, International Business Machines
+ * Copyright (c) 2002-2015, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -20,6 +20,7 @@ import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.CurrencyMetaInfo;
@@ -575,7 +576,7 @@ public class CurrencyTest extends TestFmwk {
 
             // With Java Locale
             // Note: skip this test on Java 6 or older when keywords are available
-            if (locale.getKeywords() == null || TestUtil.getJavaVersion() >= 7) {
+            if (locale.getKeywords() == null || TestUtil.getJavaVendor() == JavaVendor.Android || TestUtil.getJavaVersion() >= 7) {
                 Locale javaloc = locale.toLocale();
                 String[] actualWithJavaLocale = Currency.getAvailableCurrencyCodes(javaloc, date);
                 // should be exactly same with the ULocale version

@@ -1,13 +1,15 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2000-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.timezone;
 import java.util.Date;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.SimpleTimeZone;
@@ -438,9 +440,7 @@ public class TimeZoneBoundaryTest extends TestFmwk
         // support historic transitions, therefore, the test below
         // will fail on such environment (with the latest TimeZone
         // patch for US 2007+ rule).
-        String javaver = System.getProperty("java.version", "1.3");
-        if (!javaver.startsWith("1.3"))
-        {
+        if (TestUtil.getJavaVendor() == JavaVendor.Android || TestUtil.getJavaVersion() > 3) {
             // This only works in PST/PDT
             TimeZone.setDefault(safeGetTimeZone("PST"));
             logln("========================================");
