@@ -1,9 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2014, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
+* Copyright (C) 2006-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */ 
 
@@ -33,7 +31,6 @@ import com.ibm.icu.text.UnicodeSet;
 public abstract class CharsetICU extends Charset{
 
      String icuCanonicalName;
-     String javaCanonicalName;
      int options;
 
      float  maxCharsPerByte;
@@ -87,7 +84,6 @@ public abstract class CharsetICU extends Charset{
         if(canonicalName.length() == 0){
             throw new IllegalCharsetNameException(canonicalName);
         }
-        this.javaCanonicalName = canonicalName;
         this.icuCanonicalName  = icuCanonicalName;
     }
     
