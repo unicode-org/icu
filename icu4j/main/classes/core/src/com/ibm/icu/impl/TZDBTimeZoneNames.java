@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014, International Business Machines Corporation and
+ * Copyright (C) 2014-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -338,7 +338,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
             synchronized(TZDBTimeZoneNames.class) {
                 if (TZDB_NAMES_TRIE == null) {
                     // loading all names into trie
-                    TZDB_NAMES_TRIE = new TextTrieMap<TZDBNameInfo>(true);
+                    TextTrieMap<TZDBNameInfo> trie = new TextTrieMap<TZDBNameInfo>(true);
                     Set<String> mzIDs = TimeZoneNamesImpl._getAvailableMetaZoneIDs();
                     for (String mzID : mzIDs) {
                         TZDBNames names = getMetaZoneNames(mzID);
@@ -363,7 +363,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
                             stdInf.type = NameType.SHORT_STANDARD;
                             stdInf.ambiguousType = ambiguousType;
                             stdInf.parseRegions = parseRegions;
-                            TZDB_NAMES_TRIE.put(std, stdInf);
+                            trie.put(std, stdInf);
                         }
                         if (dst != null) {
                             TZDBNameInfo dstInf = new TZDBNameInfo();
@@ -371,9 +371,10 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
                             dstInf.type = NameType.SHORT_DAYLIGHT;
                             dstInf.ambiguousType = ambiguousType;
                             dstInf.parseRegions = parseRegions;
-                            TZDB_NAMES_TRIE.put(dst, dstInf);
+                            trie.put(dst, dstInf);
                         }
                     }
+                    TZDB_NAMES_TRIE = trie;
                 }
             }
         }
