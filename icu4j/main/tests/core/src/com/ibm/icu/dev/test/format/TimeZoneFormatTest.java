@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2007-2014, Google, International Business Machines Corporation *
+ * Copyright (C) 2007-2015, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -9,6 +9,7 @@ package com.ibm.icu.dev.test.format;
 
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
@@ -16,8 +17,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -26,6 +29,7 @@ import com.ibm.icu.text.TimeZoneFormat.ParseOption;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.text.TimeZoneNames;
+import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Output;
@@ -975,6 +979,44 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
                         + "]; actual [output=" + out + ",type=" + timeType.value + "]");
             }
+        }
+    }
+
+    // This is a test case of Ticket#11487.
+    // Because the problem is reproduced for the very first time,
+    // the reported problem cannot be reproduced with regular test
+    // execution. Run this test alone reproduced the problem before
+    // the fix was merged.
+    public void TestTZDBNamesThreading() {
+        final TZDBTimeZoneNames names = new TZDBTimeZoneNames(ULocale.ENGLISH);
+        final AtomicInteger found = new AtomicInteger();
+        List<Thread> threads = new ArrayList<Thread>();
+        final int numIteration = 1000;
+
+        try {
+            for (int i = 0; i < numIteration; i++) {
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        int resultSize = names.find("GMT", 0, EnumSet.allOf(NameType.class)).size();
+                        if (resultSize > 0) {
+                            found.incrementAndGet();
+                        }
+                    }
+                };
+                thread.start();
+                threads.add(thread);
+            }
+
+            for(Thread thread: threads) {
+                thread.join();
+            }
+        } catch (Throwable t) {
+            errln(t.toString());
+        }
+
+        if (found.intValue() != numIteration) {
+            errln("Incorrect count: " + found.toString() + ", expected: " + numIteration);
         }
     }
 }
