@@ -1,12 +1,20 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2000-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ */
 /* Generated from 'DiagBigDecimal.nrx' 27 Mar 2000 22:38:44 [v1.162] */
 /* Options: Binary Comments Crossref Format Java Logo Trace1 Verbose3 */
+/* The generated code has been manually modified. */
 package com.ibm.icu.dev.test.bigdec;
 
 import java.math.BigInteger;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.util.VersionInfo;
 
 /* ------------------------------------------------------------------ */
 /* Decimal diagnostic tests mfc */
@@ -154,8 +162,9 @@ public class DiagBigDecimal extends TestFmwk {
         super();
     }
 
-    static final boolean isJDK15OrLater = VersionInfo.javaVersion().compareTo(
-            VersionInfo.getInstance(1, 5)) >= 0;
+    static final boolean isJDK15OrLater =
+            TestUtil.getJavaVendor() == JavaVendor.Android ||
+            TestUtil.getJavaVersion() >= 5;
 
     /**
      * Run the tests in the test suite.
