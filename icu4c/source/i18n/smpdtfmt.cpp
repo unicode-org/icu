@@ -328,6 +328,9 @@ class SimpleDateFormatMutableNFs : public UMemory {
     // NumberFormat objects. On memory allocation error returns NULL.
     // Caller must check for NULL return value.
     NumberFormat *get(const NumberFormat *nf) {
+        if (nf == NULL) {
+            return NULL;
+        }
         int32_t idx = 0;
         while (nodes[idx].value) {
             if (nf == nodes[idx].key) {
@@ -337,7 +340,7 @@ class SimpleDateFormatMutableNFs : public UMemory {
         }
         U_ASSERT(idx < UDAT_FIELD_COUNT);
         nodes[idx].key = nf;
-        nodes[idx].value = (nf == NULL) ? NULL : (NumberFormat *) nf->clone();
+        nodes[idx].value = (NumberFormat *) nf->clone();
         return nodes[idx].value;
     }
  private:
