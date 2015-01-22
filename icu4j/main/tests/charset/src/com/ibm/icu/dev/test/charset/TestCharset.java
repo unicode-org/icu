@@ -1610,30 +1610,7 @@ public class TestCharset extends TestFmwk {
         }
         logln("Total Number of chasets = " + map.size());
     }
-    /* ticket 5580 */
-    public void TestJavaCanonicalNameOnAvailableCharsets() {
-        CharsetProviderICU provider = new CharsetProviderICU();
-        Iterator allCharsets = provider.charsets();
-        String errorMessage = null;
-        
-        while (allCharsets.hasNext()) {
-            Charset _chset = (Charset)allCharsets.next();
-            Charset chset = Charset.forName(_chset.name());
-            
-            if (!chset.name().equals(_chset.name())) {
-                if (errorMessage == null) {
-                    errorMessage = new String("Error: Charset.forName( " + _chset.name() + " ) returned " + chset + " instead of " + _chset);
-                } else {
-                    errorMessage = errorMessage + "\nError: Charset.forName( " + _chset.name() + " ) returned " + chset + " instead of " + _chset;
-                }
-            }
-        }
-        
-        if (errorMessage != null) {
-            errln(errorMessage);
-        }
-    }
-    
+
     public void TestWindows936(){
         CharsetProviderICU icu = new CharsetProviderICU();
         Charset cs = icu.charsetForName("windows-936-2000");

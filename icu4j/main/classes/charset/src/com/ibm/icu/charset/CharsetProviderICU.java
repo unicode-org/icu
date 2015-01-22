@@ -12,11 +12,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.charset.spi.CharsetProvider;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import com.ibm.icu.impl.InvalidFormatException;
 
@@ -29,50 +27,10 @@ import com.ibm.icu.impl.InvalidFormatException;
 public final class CharsetProviderICU extends CharsetProvider{
     /**
      * List of available ICU Charsets, empty during static initialization.
+     * Not a Set or Map, so that we can add different Charset objects with the same name(),
+     * which means that they are .equals(). See ICU ticket #11493.
      */
     private static List<Charset> icuCharsets = Collections.<Charset>emptyList();
-    /**
-     * Maps uppercased Java charset names and aliases to canonical Java charset names.
-     */
-    private static final Map<String, String> javaNamesMap = new HashMap<String, String>();
-
-    static {
-        // This loop will exclude ICU charsets because Charset.availableCharsets() calls
-        // our charsets() which returns an empty iterator
-        // until we have tried to open all of the ICU charsets and built icuCharsets.
-        // We can only open ICU charsets when we have the javaNamesMap,
-        // for getting the Java canonical name.
-        for (Map.Entry<String, Charset> nameAndCharset : Charset.availableCharsets().entrySet()) {
-            String canonicalName = nameAndCharset.getKey();
-            javaNamesMap.put(ASCII.toUpperCase(canonicalName), canonicalName);
-            for (String alias : nameAndCharset.getValue().aliases()) {
-                javaNamesMap.put(ASCII.toUpperCase(alias), canonicalName);
-            }
-        }
-    }
-
-    /**
-     * Simpler/faster methods for ASCII than ones based on Unicode data.
-     * TODO: There should be code like this somewhere already??
-     */
-    private static final class ASCII {
-        static String toUpperCase(String s) {
-            for (int i = 0; i < s.length(); ++i) {
-                char c = s.charAt(i);
-                if ('a' <= c && c <= 'z') {
-                    StringBuilder sb = new StringBuilder(s.length());
-                    sb.append(s, 0, i).append((char)(c - 0x20));
-                    while (++i < s.length()) {
-                        c = s.charAt(i);
-                        if ('a' <= c && c <= 'z') { c = (char)(c - 0x20); }
-                        sb.append(c);
-                    }
-                    return sb.toString();
-                }
-            }
-            return s;
-        }
-    }
 
     /**
      * Default constructor 
@@ -259,20 +217,6 @@ public final class CharsetProviderICU extends CharsetProvider{
                     cName = "x-"+ name;
                 }
             }
-            /* After getting the Java canonical name from the ICU alias table, get the
-             * Java canonical name from the current JDK. This is necessary because
-             * different versions of the JVM (Sun and IBM) may have a different
-             * canonical name than the one given by ICU. So the Java canonical name
-             * will depend on the current JVM.  Since Java cannot use the ICU canonical name
-             * we have to try to use a Java compatible name.
-             */
-            if (cName != null) {
-                String testName = javaNamesMap.get(ASCII.toUpperCase(cName));
-                if (testName != null && !testName.equals(cName) &&
-                        getICUCanonicalName(testName).length() > 0) {
-                    cName = testName;
-                }
-            }
             return cName;
         }catch (IOException ex){
             
@@ -299,7 +243,7 @@ public final class CharsetProviderICU extends CharsetProvider{
             aliasNum = UConverterAlias.countAliases(encName);
             for(i=0,j=0;i<aliasNum;i++){
                 String name = UConverterAlias.getAlias(encName,i);
-                if(name.indexOf('+')==-1 && name.indexOf(',')==-1){
+                if(name.indexOf(',')==-1){
                     aliasArray[j++]= name;
                 }
             }
@@ -319,9 +263,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * were cheap enough. See ICU ticket #11481.
      */
     private static final synchronized void loadAvailableICUCharsets() {
-        // The Java names Map is empty during static initialization when we are
-        // just about to build it.
-        if (!icuCharsets.isEmpty() || javaNamesMap.isEmpty()) {
+        if (!icuCharsets.isEmpty()) {
             return;
         }
         List<Charset> icucs = new LinkedList<Charset>();
