@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2014, International Business Machines
+ * Copyright (C) 1996-2015, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -966,8 +966,17 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
                     String icuID = tz.getID();
                     jdkZone = java.util.TimeZone.getTimeZone(icuID);
                     if (!icuID.equals(jdkZone.getID())) {
-                        // JDK does not know the ID..
-                        jdkZone = null;
+                        // If the ID was unknown, retry with the canonicalized
+                        // ID instead. This will ensure that JDK 1.1.x
+                        // compatibility IDs supported by ICU (but not
+                        // necessarily supported by the platform) work.
+                        // Ticket#11483
+                        icuID = getCanonicalID(icuID);
+                        jdkZone = java.util.TimeZone.getTimeZone(icuID);
+                        if (!icuID.equals(jdkZone.getID())) {
+                            // JDK does not know the ID..
+                            jdkZone = null;
+                        }
                     }
                 }
                 if (jdkZone == null) {
