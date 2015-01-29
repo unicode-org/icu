@@ -1652,30 +1652,38 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-
     public void TestEncoderCreation(){
+        // Use CharsetICU.forNameICU() so that we get the ICU version
+        // even if the system or another provider also supports this charset.
+        String encoding = "GB_2312-80";
         try{
-            Charset cs = Charset.forName("GB_2312-80");
+            Charset cs = CharsetICU.forNameICU(encoding);
             CharsetEncoder enc = cs.newEncoder();
-            if(enc!=null && (enc instanceof CharsetEncoderICU) ){
-                logln("Successfully created the encoder: "+ enc);
+            if(enc!=null){
+                logln("Successfully created an encoder for " + encoding + ": " + enc);
+                if(!(enc instanceof CharsetEncoderICU)) {
+                    errln("Expected " + encoding +
+                            " to be implemented by ICU but got an instance of " + enc.getClass());
+                }
             }else{
-                errln("Error creating charset encoder.");
+                errln("Error creating charset encoder for " + encoding);
             }
         }catch(Exception e){
-            warnln("Error creating charset encoder."+ e.toString());
-           // e.printStackTrace();
+            warnln("Error creating charset encoder for " + encoding + ": " + e);
         }
+        // Use Charset.forName() which may return an ICU Charset or some other implementation.
+        encoding = "x-ibm-971_P100-1995";
         try{
-            Charset cs = Charset.forName("x-ibm-971_P100-1995");
+            Charset cs = Charset.forName(encoding);
             CharsetEncoder enc = cs.newEncoder();
-            if(enc!=null && (enc instanceof CharsetEncoderICU) ){
-                logln("Successfully created the encoder: "+ enc);
+            if(enc!=null){
+                logln("Successfully created an encoder for " + encoding + ": " + enc +
+                        " which is implemented by ICU? " + (enc instanceof CharsetEncoderICU));
             }else{
-                errln("Error creating charset encoder.");
+                errln("Error creating charset encoder for " + encoding);
             }
         }catch(Exception e){
-            warnln("Error creating charset encoder."+ e.toString());
+            warnln("Error creating charset encoder for " + encoding + ": " + e);
         }
     }
     public void TestSubBytes(){
