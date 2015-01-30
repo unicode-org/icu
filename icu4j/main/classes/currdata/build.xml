@@ -1,7 +1,7 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009-2011, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2009-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 -->
 <project name="currdata" default="build" basedir=".">
@@ -31,7 +31,7 @@
 
     <target name="findbugs" depends="@findbugs" description="Search the project for possible defects using FindBugs." />
 
-    <target name="copy-data" description="Extract pre-built ICU currency data files and copy them to the project's binary directory">
+    <target name="copy-data" unless="icu4c.data.path" description="Extract pre-built ICU currency data files and copy them to the project's binary directory">
         <unjar src="${icu4j.data.jar}" dest="${bin.dir}">
             <patternset includes="${icu4j.data.path}/curr/**"/>
         </unjar>
