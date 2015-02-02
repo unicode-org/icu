@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Copyright (c) 2005-2013 IBM Corporation and others. All rights reserved -->
+<!-- Copyright (c) 2005-2015 IBM Corporation and others. All rights reserved -->
 <!-- See individual test cases for their specific copyright. -->
 
 <charset-detection-tests>
@@ -392,8 +392,8 @@
 
     </test-case>
 
-    <!-- No ISO-2022-CN in this test because Java doesn't support it in both directions :-( -->
-    <test-case id="IUC10-zh-Hans" encodings="UTF-8 UTF-16LE UTF-16BE UTF-32BE UTF-32LE ISO-2022-CN GB18030/zh">
+    <test-case id="IUC10-zh-Hans" encodings="UTF-8 UTF-16LE UTF-16BE UTF-32BE UTF-32LE ISO-2022-CN//noroundtrip GB18030/zh">
+    <bytes encoding="ISO-2022-CN">\n\ \ \ \ \n\ \ \ \ \n\n\ \ \ \ \x1b$)A\x0eE7V^#,Hm\x3c~#+;%A*Mx\x0f\n\ \ \ \ \x1b$)A\x0eSCM3R;Bk\x0f\ (Unicode)\ \x0eW_1iJ@=g\x0f\n\ \ \ \ IUC10\n\ \ \ \ \x1b$)A\x0e=+SZ\x0f1997\x0eDj\x0f\ 3\ \x0eTB\x0f10\x0eHU#-\x0f12\x0eHUTZ5B9z\x0f\ Mainz\ \x0eJP\x3eYPP5D5ZJ.=lM3R;Bk9z\x3cJQPLV;aOVTZ?*J\x3cW"2a!#\x0f\n\ \ \ \ \x1b$)A\x0e1\x3e4N;aRi=+;c\x3c/8w7=Cf5DW(\x3cR!#If\x3c05DAlSr0|@(#:9z\x3cJ;%A*Mx:MM3R;Bk#,9z\x3cJ;/:M1\x3e5X;/#,\x0f\n\ \ \ \ \x1b$)A\x0eM3R;BkTZ2YWwO5M3:MS\x26SCHm\x3c~VP5DJ5OV#,WVPM#,ND1\x3e8qJ=RT\x3c06`NDVV\x3cFKc5H!#\x0f\n\n\ \ \ \ Unicode\n\ \ \ \ \x1b$)A\x0e51J@=gPhR*95M(J1#,GkSC\x0fUnicode\x0e#!\x0f\n\nConference\ Program\n\ \ \ \ </bytes>
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     欧洲，软件＋互联网
