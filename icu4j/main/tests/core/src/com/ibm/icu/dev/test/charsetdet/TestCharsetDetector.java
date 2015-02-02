@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2005-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2005-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.charsetdet;
@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,6 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
@@ -328,8 +331,6 @@ public class TestCharsetDetector extends TestFmwk
                 errln("Could not open test data file CharsetDetectionTests.xml");
                 return;
             }
-            
-            //isr = new InputStreamReader(is, "UTF-8"); 
 
             // Set up an xml parser.
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -345,6 +346,7 @@ public class TestCharsetDetector extends TestFmwk
             NodeList testCases = root.getElementsByTagName("test-case");
             
             // Process each test case
+            Map<String, byte[]> encToBytes = new TreeMap<String, byte[]>();
             for (int n = 0; n < testCases.getLength(); n += 1) {
                 Node testCase = testCases.item(n);
                 NamedNodeMap attrs = testCase.getAttributes();
@@ -352,20 +354,53 @@ public class TestCharsetDetector extends TestFmwk
                 StringBuffer testText = new StringBuffer();
                 String id = attrs.getNamedItem("id").getNodeValue();
                 String encodings = attrs.getNamedItem("encodings").getNodeValue();
-                
-                // Collect the test case text.
+
+                // Collect the test case text and optional bytes.
+                // A <bytes encoding="name">ASCII with \xhh</bytes> element
+                // specifies the byte sequence to be tested.
+                // This is useful when not all platforms encode the test text the same way
+                // (or do not support encoding for that charset).
                 for (int t = 0; t < testData.getLength(); t += 1) {
-                    Node textNode = testData.item(t);
-                    
-                    testText.append(textNode.getNodeValue());                    
+                    Node node = testData.item(t);
+                    if (node.getNodeType() == Node.TEXT_NODE) {
+                        testText.append(node.getNodeValue());
+                    } else if (node.getNodeType() == Node.ELEMENT_NODE &&
+                            node.getNodeName().equals("bytes")) {
+                        String name = node.getAttributes().getNamedItem("encoding").getNodeValue();
+                        Node valueNode = node.getFirstChild();
+                        if (valueNode.getNodeType() != Node.TEXT_NODE) {
+                            throw new IllegalArgumentException("<bytes> node does not contain text");
+                        }
+                        // The bytes are stored as ASCII characters and \xhh escaped bytes.
+                        // We unescape the string to turn the \xhh into chars U+0000..U+00ff,
+                        // then use the deprecated String.getBytes() to turn those into bytes
+                        // by essentially casting each char to a byte.
+                        String bytesString = Utility.unescape(valueNode.getNodeValue());
+                        byte[] bytes = new byte[bytesString.length()];
+                        bytesString.getBytes(0, bytesString.length(), bytes, 0);
+                        encToBytes.put(name, bytes);
+                    } else {
+                        throw new IllegalArgumentException("unknown <test-case> child node: " + node);
+                    }
                 }
-                
+
                 // Process test text with each encoding / language pair.
                 String testString = testText.toString();
                 String[] encodingList = encodings.split(" ");
                 for (int e = 0; e < encodingList.length; e += 1) {
-                    checkEncoding(testString, encodingList[e], id);
+                    String[] params = encodingList[e].split("/");
+                    String encoding = params[0];
+                    String language = params.length == 1 || params[1].length() == 0 ? null : params[1];
+
+                    // With a few charsets, the conversion back to Unicode
+                    // may depend on the implementation.
+                    boolean checkRoundtrip =
+                            !encoding.startsWith("UTF-32") &&
+                            !(params.length >= 3 && params[2].equals("noroundtrip"));
+                    checkEncoding(testString, encoding, language, checkRoundtrip,
+                            encToBytes.get(encoding), id);
                 }
+                encToBytes.clear();
             }
             
         } catch (Exception e) {
@@ -373,11 +408,9 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
 
-    private void checkMatch(CharsetDetector det, String testString, String encoding, String language, String id) throws Exception
-    {
+    private void checkMatch(CharsetDetector det, String testString,
+            String encoding, String language, boolean checkRoundtrip, String id) throws Exception {
         CharsetMatch m = det.detect();
-        String decoded;
-        
         if (! m.getName().equals(encoding)) {
             errln(id + ": encoding detection failure - expected " + encoding + ", got " + m.getName());
             return;
@@ -390,12 +423,12 @@ public class TestCharsetDetector extends TestFmwk
         {
             errln(id + ", " + encoding + ": language detection failure - expected " + language + ", got " + m.getLanguage());
         }
-        
-        if (encoding.startsWith("UTF-32")) {
+
+        if (!checkRoundtrip) {
             return;
         }
         
-        decoded = m.getString();
+        String decoded = m.getString();
         
         if (! testString.equals(decoded)) {
             errln(id + ", " + encoding + ": getString() didn't return the original string!");
@@ -408,62 +441,35 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
     
-    private void checkEncoding(String testString, String encoding, String id)
-    {
-        String enc = null, lang = null;
-        String[] split = encoding.split("/");
-        
-        enc = split[0];
-        
-        if (split.length > 1) {
-            lang = split[1];
+    private void checkEncoding(String testString,
+            String encoding, String language, boolean checkRoundtrip,
+            byte[] bytes, String id) {
+        if (bytes == null) {
+            try {
+                bytes = testString.getBytes(encoding);
+            } catch (UnsupportedOperationException uoe) {
+                // Ignore any converters that can't
+                // convert from Unicode.
+                logln("Unsupported encoding for conversion from Unicode: " + encoding);
+                return;
+            } catch (UnsupportedEncodingException uee) {
+                // Ignore any encodings that this runtime
+                // doesn't support.
+                logln("Unsupported encoding: " + encoding);
+                return;
+            }
         }
 
         try {
             CharsetDetector det = new CharsetDetector();
-            byte[] bytes;
-            
-            //if (enc.startsWith("UTF-32")) {
-            //    UTF32 utf32 = UTF32.getInstance(enc);
-                
-            //    bytes = utf32.toBytes(testString);
-            //} else {
-                String from = enc;
 
-                while (true) {
-                    try {
-                        bytes = testString.getBytes(from);
-                    } catch (UnsupportedOperationException uoe) {
-                         // In some runtimes, the ISO-2022-CN converter
-                         // only converts *to* Unicode - we have to use
-                         // x-ISO-2022-CN-GB to convert *from* Unicode.
-                        if (from.equals("ISO-2022-CN")) {
-                            from = "x-ISO-2022-CN-GB";
-                            continue;
-                        }
-                        
-                        // Ignore any other converters that can't
-                        // convert from Unicode.
-                        logln("Unsupported encoding" + from);
-                        return;
-                    } catch (UnsupportedEncodingException uee) {
-                        // Ignore any encodings that this runtime
-                        // doesn't support.
-                        logln("Unsupported encoding" + from);
-                        return;
-                    }
-                    
-                    break;
-                }
-            //}
-        
             det.setText(bytes);
-            checkMatch(det, testString, enc, lang, id);
-            
+            checkMatch(det, testString, encoding, language, checkRoundtrip, id);
+
             det.setText(new ByteArrayInputStream(bytes));
-            checkMatch(det, testString, enc, lang, id);
+            checkMatch(det, testString, encoding, language, checkRoundtrip, id);
          } catch (Exception e) {
-            errln(id + ": " + e.toString() + "enc=" + enc);
+            errln(id + ": " + e.toString() + "enc=" + encoding);
             e.printStackTrace();
         }
     }
