@@ -1,10 +1,13 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005-2012, International Business Machines Corporation and   *
+ * Copyright (C) 2005-2015, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
 package com.ibm.icu.tests;
+
+import java.io.PrintWriter;
+import java.util.Properties;
 
 import junit.framework.TestCase;
 
@@ -16,7 +19,19 @@ import com.ibm.icu.dev.test.TestFmwk.TestParams;
 public class UnitTest extends TestCase {
 
 	public void runUtility(String testname) throws Exception {
-        TestParams params = TestParams.create("-n", null);
+        String defaultOptions = "-n";
+        PrintWriter targetWriter = null;
+        Properties sysProps = System.getProperties();
+        String value = sysProps.getProperty("eclipse.commands");
+        if(value.contains("-icuLog")) {
+            targetWriter = new PrintWriter(System.out, true);
+            
+            // no sense being verbose if we're not displaying the log so don't check until now
+            if(value.contains("-verbose")) {
+                defaultOptions += " -v";
+            }
+        }
+        TestParams params = TestParams.create(defaultOptions, targetWriter);
         TestFmwk test = new TestAll();
         test.resolveTarget(params, testname).run();
         if (params.errorCount > 0) {
