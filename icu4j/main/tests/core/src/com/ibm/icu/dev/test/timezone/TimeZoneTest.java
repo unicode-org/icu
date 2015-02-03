@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1528,7 +1528,11 @@ public class TimeZoneTest extends TestFmwk
                 {"America/Virgin", "America/Anguilla"},
                 {"Antarctica/South_Pole", "Antarctica/McMurdo"},
                 {"Arctic/Longyearbyen", "Europe/Oslo"},
+                {"Asia/Kuwait", "Asia/Aden"},
+                {"Asia/Muscat", "Asia/Dubai"},
                 {"Asia/Phnom_Penh", "Asia/Bangkok"},
+                {"Asia/Qatar", "Asia/Bahrain"},
+                {"Asia/Riyadh", "Asia/Aden"},
                 {"Asia/Vientiane", "Asia/Bangkok"},
                 {"Atlantic/Jan_Mayen", "Europe/Oslo"},
                 {"Atlantic/St_Helena", "Africa/Abidjan"},
