@@ -1,6 +1,6 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2005-2014, International Business Machines Corporation and
+ * Copyright (C) 2005-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  * *****************************************************************************
  */
@@ -13,12 +13,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -336,7 +335,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public static final String[] getKeywordValues(String baseName, String keyword) {
         Set<String> keywords = new HashSet<String>();
-        ULocale locales[] = createULocaleList(baseName, ICU_DATA_CLASS_LOADER);
+        ULocale locales[] = getAvailEntry(baseName, ICU_DATA_CLASS_LOADER).getULocaleList();
         int i;
 
         for (i = 0; i < locales.length; i++) {
@@ -590,159 +589,134 @@ public  class ICUResourceBundle extends UResourceBundle {
         return locales;
     }
 
-    private static final Locale[] createLocaleList(String baseName, ClassLoader loader) {
-        ULocale[] ulocales = getAvailEntry(baseName, loader).getULocaleList();
-        return getLocaleList(ulocales);
-    }
-
-    private static final String[] createLocaleNameArray(String baseName,
-            ClassLoader root) {
-        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.instantiateBundle( baseName, ICU_RESOURCE_INDEX, root, true);
-        bundle = (ICUResourceBundle)bundle.get(INSTALLED_LOCALES);
-        int length = bundle.getSize();
-        int i = 0;
-        String[] locales = new String[length];
+    // Same as createULocaleList() but catches the MissingResourceException
+    // and returns the data in a different form.
+    private static final void addLocaleIDsFromIndexBundle(String baseName,
+            ClassLoader root, Set<String> locales) {
+        ICUResourceBundle bundle;
+        try {
+            bundle = (ICUResourceBundle) UResourceBundle.instantiateBundle(baseName, ICU_RESOURCE_INDEX, root, true);
+            bundle = (ICUResourceBundle) bundle.get(INSTALLED_LOCALES);
+        } catch (MissingResourceException e) {
+            if (DEBUG) {
+                System.out.println("couldn't find " + baseName + '/' + ICU_RESOURCE_INDEX + ".res");
+                Thread.dumpStack();
+            }
+            return;
+        }
         UResourceBundleIterator iter = bundle.getIterator();
         iter.reset();
         while (iter.hasNext()) {
             String locstr = iter.next(). getKey();
-            if (locstr.equals("root")) {
-                locales[i++] = ULocale.ROOT.toString();
-            } else {
-                locales[i++] = locstr;
-            }
+            locales.add(locstr);
         }
-        bundle = null;
-        return locales;
     }
 
-    private static final List<String> createFullLocaleNameArray(
-            final String baseName, final ClassLoader root) {
-
-        List<String> list = java.security.AccessController
-            .doPrivileged(new java.security.PrivilegedAction<List<String>>() {
-                public List<String> run() {
-                    // WebSphere class loader will return null for a raw
-                    // directory name without trailing slash
-                    String bn = baseName.endsWith("/")
-                        ? baseName
-                        : baseName + "/";
-
-                    List<String> resList = null;
-
-                    String skipScan = ICUConfig.get("com.ibm.icu.impl.ICUResourceBundle.skipRuntimeLocaleResourceScan", "false");
-                    if (!skipScan.equalsIgnoreCase("true")) {
-                        // scan available locale resources under the base url first
-                        try {
-                            Enumeration<URL> urls = root.getResources(bn);
-                            while (urls.hasMoreElements()) {
-                                URL url = urls.nextElement();
-                                URLHandler handler = URLHandler.get(url);
-                                if (handler != null) {
-                                    final List<String> lst = new ArrayList<String>();
-                                    URLVisitor v = new URLVisitor() {
-                                            public void visit(String s) {
-                                                //TODO: This is ugly hack.  We have to figure out how
-                                                // we can distinguish locale data from others
-                                                if (s.endsWith(".res")) {
-                                                    String locstr = s.substring(0, s.length() - 4);
-                                                    if (locstr.contains("_") && !locstr.equals("res_index")) {
-                                                        // locale data with country/script contain "_",
-                                                        // except for res_index.res
-                                                        lst.add(locstr);
-                                                    } else if (locstr.length() == 2 || locstr.length() == 3) {
-                                                        // all 2-letter or 3-letter entries are all locale
-                                                        // data at least for now
-                                                        lst.add(locstr);
-                                                    } else if (locstr.equalsIgnoreCase("root")) {
-                                                        // root locale is a special case
-                                                        lst.add(ULocale.ROOT.toString());
-                                                    }
-                                                }
-                                            }
-                                        };
-                                    handler.guide(v, false);
-
-                                    if (resList == null) {
-                                        resList = new ArrayList<String>(lst);
-                                    } else {
-                                        resList.addAll(lst);
-                                    }
-                                } else {
-                                    if (DEBUG) System.out.println("handler for " + url + " is null");
+    private static final void addBundleBaseNamesFromClassLoader(
+            final String bn, final ClassLoader root, final Set<String> names) {
+        java.security.AccessController
+            .doPrivileged(new java.security.PrivilegedAction<Void>() {
+                public Void run() {
+                    try {
+                        // bn has a trailing slash: The WebSphere class loader would return null
+                        // for a raw directory name without it.
+                        Enumeration<URL> urls = root.getResources(bn);
+                        if (urls == null) {
+                            return null;
+                        }
+                        URLVisitor v = new URLVisitor() {
+                            public void visit(String s) {
+                                if (s.endsWith(".res")) {
+                                    String locstr = s.substring(0, s.length() - 4);
+                                    names.add(locstr);
                                 }
                             }
-                        } catch (IOException e) {
-                            if (DEBUG) System.out.println("ouch: " + e.getMessage());
-                            resList = null;
-                        }
-                    }
-
-                    if (resList == null) {
-                        // look for prebuilt full locale names list next
-                        try {
-                            InputStream s = root.getResourceAsStream(bn + FULL_LOCALE_NAMES_LIST);
-                            if (s != null) {
-                                resList = new ArrayList<String>();
-                                BufferedReader br = new BufferedReader(new InputStreamReader(s, "ASCII"));
-                                String line;
-                                while ((line = br.readLine()) != null) {
-                                    if (line.length() != 0 && !line.startsWith("#")) {
-                                        if (line.equalsIgnoreCase("root")) {
-                                            resList.add(ULocale.ROOT.toString());
-                                        } else {
-                                            resList.add(line);
-                                        }
-                                    }
-                                }
-                                br.close();
+                        };
+                        while (urls.hasMoreElements()) {
+                            URL url = urls.nextElement();
+                            URLHandler handler = URLHandler.get(url);
+                            if (handler != null) {
+                                handler.guide(v, false);
+                            } else {
+                                if (DEBUG) System.out.println("handler for " + url + " is null");
                             }
-                        } catch (IOException e) {
-                            // swallow it
                         }
+                    } catch (IOException e) {
+                        if (DEBUG) System.out.println("ouch: " + e.getMessage());
                     }
-
-                    return resList;
+                    return null;
                 }
             });
+    }
 
-        return list;
+    private static void addLocaleIDsFromListFile(String bn, ClassLoader root, Set<String> locales) {
+        try {
+            InputStream s = root.getResourceAsStream(bn + FULL_LOCALE_NAMES_LIST);
+            if (s != null) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(s, "ASCII"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.length() != 0 && !line.startsWith("#")) {
+                        locales.add(line);
+                    }
+                }
+                br.close();
+            }
+        } catch (IOException e) {
+            // swallow it
+        }
     }
 
     private static Set<String> createFullLocaleNameSet(String baseName, ClassLoader loader) {
-        List<String> list = createFullLocaleNameArray(baseName, loader);
-        if(list == null){
-            if (DEBUG) System.out.println("createFullLocaleNameArray returned null");
-            // Use locale name set as the last resort fallback
-            Set<String> locNameSet = createLocaleNameSet(baseName, loader);
-            String rootLocaleID = ULocale.ROOT.toString();
-            if (!locNameSet.contains(rootLocaleID)) {
-                // We need to add the root locale in the set
-                Set<String> tmp = new HashSet<String>(locNameSet);
-                tmp.add(rootLocaleID);
-                locNameSet = Collections.unmodifiableSet(tmp);
+        String bn = baseName.endsWith("/") ? baseName : baseName + "/";
+        Set<String> set = new HashSet<String>();
+        String skipScan = ICUConfig.get("com.ibm.icu.impl.ICUResourceBundle.skipRuntimeLocaleResourceScan", "false");
+        if (!skipScan.equalsIgnoreCase("true")) {
+            // scan available locale resources under the base url first
+            addBundleBaseNamesFromClassLoader(baseName, loader, set);
+            if (baseName.startsWith(ICUData.ICU_BASE_NAME)) {
+                String folder;
+                if (baseName.length() == ICUData.ICU_BASE_NAME.length()) {
+                    folder = "";
+                } else if (baseName.charAt(ICUData.ICU_BASE_NAME.length()) == '/') {
+                    folder = baseName.substring(ICUData.ICU_BASE_NAME.length() + 1);
+                } else {
+                    folder = null;
+                }
+                if (folder != null) {
+                    ICUBinary.addBaseNamesInFileFolder(folder, ".res", set);
+                }
             }
-            return locNameSet;
+            set.remove(ICU_RESOURCE_INDEX);  // "res_index"
+            // HACK: TODO: Figure out how we can distinguish locale data from other data items.
+            Iterator<String> iter = set.iterator();
+            while (iter.hasNext()) {
+                String name = iter.next();
+                if ((name.length() == 1 || name.length() > 3) && name.indexOf('_') < 0) {
+                    // Does not look like a locale ID.
+                    iter.remove();
+                }
+            }
         }
-        Set<String> fullLocNameSet = new HashSet<String>();
-        fullLocNameSet.addAll(list);
-        return Collections.unmodifiableSet(fullLocNameSet);
+        // look for prebuilt full locale names list next
+        if (set.isEmpty()) {
+            if (DEBUG) System.out.println("unable to enumerate data files in " + baseName);
+            addLocaleIDsFromListFile(bn, loader, set);
+        }
+        if (set.isEmpty()) {
+            // Use locale name set as the last resort fallback
+            addLocaleIDsFromIndexBundle(baseName, loader, set);
+        }
+        // We need to have the root locale in the set, but not as "root".
+        set.remove("root");
+        set.add(ULocale.ROOT.toString());  // ""
+        return Collections.unmodifiableSet(set);
     }
 
     private static Set<String> createLocaleNameSet(String baseName, ClassLoader loader) {
-        try {
-            String[] locales = createLocaleNameArray(baseName, loader);
-
-            HashSet<String> set = new HashSet<String>();
-            set.addAll(Arrays.asList(locales));
-            return Collections.unmodifiableSet(set);
-        } catch (MissingResourceException e) {
-            if (DEBUG) {
-                System.out.println("couldn't find index for bundleName: " + baseName);
-                Thread.dumpStack();
-            }
-        }
-        return Collections.emptySet();
+        HashSet<String> set = new HashSet<String>();
+        addLocaleIDsFromIndexBundle(baseName, loader, set);
+        return Collections.unmodifiableSet(set);
     }
 
     /**
@@ -774,9 +748,10 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         Locale[] getLocaleList() {
             if (locales == null) {
+                getULocaleList();
                 synchronized(this) {
                     if (locales == null) {
-                        locales = createLocaleList(prefix, loader);
+                        locales = ICUResourceBundle.getLocaleList(ulocales);
                     }
                 }
             }

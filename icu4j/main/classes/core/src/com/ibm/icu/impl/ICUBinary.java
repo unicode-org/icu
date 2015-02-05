@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -19,6 +19,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.VersionInfo;
@@ -47,7 +48,7 @@ public final class ICUBinary {
          * Checks that the ByteBuffer contains a valid, usable ICU .dat package.
          * Moves the buffer position from 0 to after the data header.
          */
-        private static boolean validate(ByteBuffer bytes) {
+        static boolean validate(ByteBuffer bytes) {
             try {
                 readHeader(bytes, DATA_FORMAT, IS_ACCEPTABLE);
             } catch (IOException ignored) {
@@ -86,7 +87,34 @@ public final class ICUBinary {
             return true;
         }
 
-        private static ByteBuffer getData(ByteBuffer bytes, CharSequence key) {
+        static ByteBuffer getData(ByteBuffer bytes, CharSequence key) {
+            int index = binarySearch(bytes, key);
+            if (index >= 0) {
+                ByteBuffer data = bytes.duplicate();
+                data.position(getDataOffset(bytes, index));
+                data.limit(getDataOffset(bytes, index + 1));
+                return ICUBinary.sliceWithOrder(data);
+            } else {
+                return null;
+            }
+        }
+
+        static void addBaseNamesInFolder(ByteBuffer bytes, String folder, String suffix, Set<String> names) {
+            // Find the first data item name that starts with the folder name.
+            int index = binarySearch(bytes, folder);
+            if (index < 0) {
+                index = ~index;  // Normal: Otherwise the folder itself is the name of a data item.
+            }
+
+            int base = bytes.position();
+            int count = bytes.getInt(base);
+            StringBuilder sb = new StringBuilder();
+            while (index < count && addBaseName(bytes, index, folder, suffix, sb, names)) {
+                ++index;
+            }
+        }
+
+        private static int binarySearch(ByteBuffer bytes, CharSequence key) {
             int base = bytes.position();
             int count = bytes.getInt(base);
 
@@ -105,13 +133,10 @@ public final class ICUBinary {
                     start = mid + 1;
                 } else {
                     // We found it!
-                    ByteBuffer data = bytes.duplicate();
-                    data.position(getDataOffset(bytes, mid));
-                    data.limit(getDataOffset(bytes, mid + 1));
-                    return ICUBinary.sliceWithOrder(data);
+                    return mid;
                 }
             }
-            return null;  // Not found or table is empty.
+            return ~start;  // Not found or table is empty.
         }
 
         private static int getNameOffset(ByteBuffer bytes, int index) {
@@ -135,35 +160,121 @@ public final class ICUBinary {
             // The dataOffset follows the nameOffset (skip another 4 bytes).
             return base + bytes.getInt(base + 4 + 4 + index * 8);
         }
+
+        static boolean addBaseName(ByteBuffer bytes, int index,
+                String folder, String suffix, StringBuilder sb, Set<String> names) {
+            int offset = getNameOffset(bytes, index);
+            // Skip "icudt54b/".
+            offset += ICUData.PACKAGE_NAME.length() + 1;
+            if (folder.length() != 0) {
+                // Test name.startsWith(folder + '/').
+                for (int i = 0; i < folder.length(); ++i, ++offset) {
+                    if (bytes.get(offset) != folder.charAt(i)) {
+                        return false;
+                    }
+                }
+                if (bytes.get(offset++) != '/') {
+                    return false;
+                }
+            }
+            // Collect the NUL-terminated name and test for a subfolder, then test for the suffix.
+            sb.setLength(0);
+            byte b;
+            while ((b = bytes.get(offset++)) != 0) {
+                char c = (char) b;
+                if (c == '/') {
+                    return true;  // Skip subfolder contents.
+                }
+                sb.append(c);
+            }
+            int nameLimit = sb.length() - suffix.length();
+            if (sb.lastIndexOf(suffix, nameLimit) >= 0) {
+                names.add(sb.substring(0, nameLimit));
+            }
+            return true;
+        }
     }
 
-    private static final class DataFile {
-        public final String itemPath;
+    private static abstract class DataFile {
+        protected final String itemPath;
+
+        DataFile(String item) {
+            itemPath = item;
+        }
+        @Override
+        public String toString() {
+            return itemPath;
+        }
+
+        abstract ByteBuffer getData(String requestedPath);
+
         /**
-         * null if a .dat package.
+         * @param folder The relative ICU data folder, like "" or "coll".
+         * @param suffix Usually ".res".
+         * @param names File base names relative to the folder are added without the suffix,
+         *        for example "de_CH".
          */
-        public final File path;
+        abstract void addBaseNamesInFolder(String folder, String suffix, Set<String> names);
+    }
+
+    private static final class SingleDataFile extends DataFile {
+        private final File path;
+
+        SingleDataFile(String item, File path) {
+            super(item);
+            this.path = path;
+        }
+        @Override
+        public String toString() {
+            return path.toString();
+        }
+
+        @Override
+        ByteBuffer getData(String requestedPath) {
+            if (requestedPath.equals(itemPath)) {
+                return mapFile(path);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        void addBaseNamesInFolder(String folder, String suffix, Set<String> names) {
+            if (itemPath.length() > folder.length() + suffix.length() &&
+                    itemPath.startsWith(folder) &&
+                    itemPath.endsWith(suffix) &&
+                    itemPath.charAt(folder.length()) == '/' &&
+                    itemPath.indexOf('/', folder.length() + 1) < 0) {
+                names.add(itemPath.substring(folder.length() + 1,
+                        itemPath.length() - suffix.length()));
+            }
+        }
+    }
+
+    private static final class PackageDataFile extends DataFile {
         /**
          * .dat package bytes, or null if not a .dat package.
          * position() is after the header.
          * Do not modify the position or other state, for thread safety.
          */
-        public final ByteBuffer pkgBytes;
+        private final ByteBuffer pkgBytes;
 
-        public DataFile(String item, File path) {
-            itemPath = item;
-            this.path = path;
-            pkgBytes = null;
-        }
-        public DataFile(String item, ByteBuffer bytes) {
-            itemPath = item;
-            path = null;
+        PackageDataFile(String item, ByteBuffer bytes) {
+            super(item);
             pkgBytes = bytes;
         }
-        public String toString() {
-            return path.toString();
+
+        @Override
+        ByteBuffer getData(String requestedPath) {
+            return DatPackageReader.getData(pkgBytes, requestedPath);
+        }
+
+        @Override
+        void addBaseNamesInFolder(String folder, String suffix, Set<String> names) {
+            DatPackageReader.addBaseNamesInFolder(pkgBytes, folder, suffix, names);
         }
     }
+
     private static final List<DataFile> icuDataFiles = new ArrayList<DataFile>();
 
     static {
@@ -229,10 +340,10 @@ public final class ICUBinary {
             } else if (fileName.endsWith(".dat")) {
                 ByteBuffer pkgBytes = mapFile(file);
                 if (pkgBytes != null && DatPackageReader.validate(pkgBytes)) {
-                    dataFiles.add(new DataFile(itemPath.toString(), pkgBytes));
+                    dataFiles.add(new PackageDataFile(itemPath.toString(), pkgBytes));
                 }
             } else {
-                dataFiles.add(new DataFile(itemPath.toString(), file));
+                dataFiles.add(new SingleDataFile(itemPath.toString(), file));
             }
             itemPath.setLength(folderPathLength);
         }
@@ -370,13 +481,9 @@ public final class ICUBinary {
 
     private static ByteBuffer getDataFromFile(String itemPath) {
         for (DataFile dataFile : icuDataFiles) {
-            if (dataFile.pkgBytes != null) {
-                ByteBuffer data = DatPackageReader.getData(dataFile.pkgBytes, itemPath);
-                if (data != null) {
-                    return data;
-                }
-            } else if (itemPath.equals(dataFile.itemPath)) {
-                return mapFile(dataFile.path);
+            ByteBuffer data = dataFile.getData(itemPath);
+            if (data != null) {
+                return data;
             }
         }
         return null;
@@ -398,6 +505,18 @@ public final class ICUBinary {
             System.err.println(ignored);
         }
         return null;
+    }
+
+    /**
+     * @param folder The relative ICU data folder, like "" or "coll".
+     * @param suffix Usually ".res".
+     * @param names File base names relative to the folder are added without the suffix,
+     *        for example "de_CH".
+     */
+    public static void addBaseNamesInFileFolder(String folder, String suffix, Set<String> names) {
+        for (DataFile dataFile : icuDataFiles) {
+            dataFile.addBaseNamesInFolder(folder, suffix, names);
+        }
     }
 
     /**
