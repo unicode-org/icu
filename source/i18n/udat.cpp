@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2014, International Business Machines
+*   Copyright (C) 1996-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -313,19 +313,21 @@ udat_parseCalendar(const    UDateFormat*    format,
 
     const UnicodeString src((UBool)(textLength == -1), text, textLength);
     ParsePosition pp;
+    int32_t stackParsePos = 0;
 
-    if(parsePos != 0)
-        pp.setIndex(*parsePos);
+    if(parsePos == NULL) {
+        parsePos = &stackParsePos;
+    }
+
+    pp.setIndex(*parsePos);
 
     ((DateFormat*)format)->parse(src, *(Calendar*)calendar, pp);
 
-    if(parsePos != 0) {
-        if(pp.getErrorIndex() == -1)
-            *parsePos = pp.getIndex();
-        else {
-            *parsePos = pp.getErrorIndex();
-            *status = U_PARSE_ERROR;
-        }
+    if(pp.getErrorIndex() == -1)
+        *parsePos = pp.getIndex();
+    else {
+        *parsePos = pp.getErrorIndex();
+        *status = U_PARSE_ERROR;
     }
 }
 
