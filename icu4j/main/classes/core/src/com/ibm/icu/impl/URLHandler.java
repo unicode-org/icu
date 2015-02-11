@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005-2011, International Business Machines Corporation and   *
- * others. All Rights Reserved.                                               *
+ * Copyright (C) 2005-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  ******************************************************************************
  */
 
@@ -188,6 +188,9 @@ public abstract class URLHandler {
                 
                 if (ix >= 0) {
                     prefix = prefix.substring(ix + 2); // truncate after "!/"
+                }
+                if (!prefix.endsWith("/")) {
+                    prefix += '/';
                 }
 
                 String protocol = url.getProtocol();
