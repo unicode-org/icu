@@ -1435,6 +1435,8 @@ DecimalFormat::_format(int64_t number,
     U_ASSERT(destIdx >= 0);
     int32_t length = MAX_IDX - destIdx -1;
     /*int32_t prefixLen = */ appendAffix(appendTo, static_cast<double>(number), handler, number<0, TRUE);
+
+    // This will be at least 0 even if it was set to a negative number.
     int32_t maxIntDig = getMaximumIntegerDigits();
     int32_t destlength = length<=maxIntDig?length:maxIntDig; // dest length pinned to max int digits
 
@@ -1442,7 +1444,10 @@ DecimalFormat::_format(int64_t number,
       status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 
-    int32_t prependZero = getMinimumIntegerDigits() - destlength;
+    int32_t minDigits = getMinimumIntegerDigits();
+
+    // We always want at least one digit, even if it is just a 0.
+    int32_t prependZero = (minDigits < 1 ? 1 : minDigits) - destlength;
 
 #ifdef FMT_DEBUG
     printf("prependZero=%d, length=%d, minintdig=%d maxintdig=%d destlength=%d skip=%d\n", prependZero, length, getMinimumIntegerDigits(), maxIntDig, destlength, length-destlength);
