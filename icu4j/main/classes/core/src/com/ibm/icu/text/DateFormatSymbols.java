@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -584,7 +584,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
      * All locales use the same unlocalized pattern characters.
      */
-    static final String patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXx:";
+    static final String patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr:";
 
     /**
      * Localized date-time pattern characters. For example, a locale may
