@@ -1,13 +1,14 @@
 /**
-*******************************************************************************
-* Copyright (C) 1996-2014, International Business Machines Corporation and
-* others. All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.dev.test.lang;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -691,9 +692,9 @@ public final class UCharacterTest extends TestFmwk
         Normalizer2 nfc = Normalizer2.getNFCInstance();
         Normalizer2 nfkc = Normalizer2.getNFKCInstance();
 
-        try
-        {
-            BufferedReader input = TestUtil.getDataReader("unicode/UnicodeData.txt");
+        BufferedReader input = null;
+        try {
+            input = TestUtil.getDataReader("unicode/UnicodeData.txt");
             int numErrors = 0;
 
             for (;;) {
@@ -906,16 +907,19 @@ public final class UCharacterTest extends TestFmwk
                     break;
                 }
             }
-            input.close();
             if(numErrors > 0){
                 warnln("Could not find unames.icu");
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
-
 
         if (UCharacter.UnicodeBlock.of(0x0041)
                                         != UCharacter.UnicodeBlock.BASIC_LATIN

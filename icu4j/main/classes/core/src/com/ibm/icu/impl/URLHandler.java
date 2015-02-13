@@ -9,6 +9,7 @@ package com.ibm.icu.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
@@ -32,7 +33,9 @@ public abstract class URLHandler {
     static {
         Map<String, Method> h = null;
         
+        BufferedReader br = null;
         try {
+            @SuppressWarnings("resource")  // Closed by BufferedReader.
             InputStream is = URLHandler.class.getResourceAsStream(PROPNAME);
             if (is == null) {
                 ClassLoader loader = Utility.getFallbackClassLoader();
@@ -41,7 +44,7 @@ public abstract class URLHandler {
 
             if (is != null) {
                 Class<?>[] params = { URL.class };
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                br = new BufferedReader(new InputStreamReader(is));
                 
                 for (String line = br.readLine(); line != null; line = br.readLine()) {
                     line = line.trim();
@@ -84,11 +87,18 @@ public abstract class URLHandler {
             }
         } catch (Throwable t) {
             if (DEBUG) System.err.println(t);
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
-        
+
         handlers = h;
     }
-    
+
     public static URLHandler get(URL url) {
         if (url == null) {
             return null;

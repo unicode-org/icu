@@ -1,9 +1,9 @@
 /*
-******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 2007-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ******************************************************************************
+ */
 
 // Copyright 2006 Google Inc.  All Rights Reserved.
 
@@ -84,7 +84,11 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
                             + "' is null");
                 }
                 InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-                data = new FileTestData(isr);
+                try {
+                    data = new FileTestData(isr);
+                } finally {
+                    isr.close();
+                }
             } catch (Exception e) {
                 System.err.println(e.getMessage());
                 // swallow any exception
@@ -802,4 +806,3 @@ class Element {
         return null;
     }
 }
-      

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2014, International Business Machines Corporation and
+ * Copyright (C) 2009-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -90,13 +90,22 @@ public class SpoofCheckerTest extends TestFmwk {
         Reader confusablesWholeScript;
 
         try {
+            SpoofChecker rsc = null;
+
             fileName = "unicode/confusables.txt";
             confusables = TestUtil.getDataReader(fileName, "UTF-8");
-            fileName = "unicode/confusablesWholeScript.txt";
-            confusablesWholeScript = TestUtil.getDataReader(fileName, "UTF-8");
+            try {
+                fileName = "unicode/confusablesWholeScript.txt";
+                confusablesWholeScript = TestUtil.getDataReader(fileName, "UTF-8");
+                try {
+                    rsc = new SpoofChecker.Builder().setData(confusables, confusablesWholeScript).build();
+                } finally {
+                    confusablesWholeScript.close();
+                }
+            } finally {
+                confusables.close();
+            }
 
-            SpoofChecker rsc = new SpoofChecker.Builder().setData(confusables, confusablesWholeScript)
-               .build();
             if (rsc == null) {
                 errln("FAIL: null SpoofChecker");
                 return;

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.util;
@@ -23,7 +23,11 @@ public class FileUtilities {
         InputStreamReader isr = (encoding == UTF8_UNIX || encoding == UTF8_WINDOWS) ? new InputStreamReader(fis, "UTF8") :  new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr, 32*1024);
         */
-        appendBufferedReader(br, output, replacementList);
+        try {
+            appendBufferedReader(br, output, replacementList);
+        } finally {
+            br.close();
+        }
     }
 
     public static void appendBufferedReader(BufferedReader br,

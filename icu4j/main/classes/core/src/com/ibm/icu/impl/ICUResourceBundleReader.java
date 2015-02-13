@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2014, International Business Machines Corporation and
+ * Copyright (C) 2004-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -337,11 +337,12 @@ public final class ICUResourceBundleReader {
                         return NULL_READER;
                     }
                 } else {
+                    @SuppressWarnings("resource")  // Closed by getByteBufferFromInputStreamAndCloseStream().
                     InputStream stream = ICUData.getStream(data.loader, fullName);
                     if (stream == null) {
                         return NULL_READER;
                     }
-                    inBytes = ICUBinary.getByteBufferFromInputStream(stream);
+                    inBytes = ICUBinary.getByteBufferFromInputStreamAndCloseStream(stream);
                 }
                 return new ICUResourceBundleReader(inBytes, data.baseName, data.localeID, data.loader);
             } catch (IOException ex) {

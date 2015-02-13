@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2014, International Business Machines Corporation and
+ * Copyright (C) 2003-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -270,7 +270,7 @@ public final class StringPrep {
      */
     public StringPrep(InputStream inputStream) throws IOException{
         // TODO: Add a public constructor that takes ByteBuffer directly.
-        this(ICUBinary.getByteBufferFromInputStream(inputStream));
+        this(ICUBinary.getByteBufferFromInputStreamAndCloseStream(inputStream));
     }
 
     private StringPrep(ByteBuffer bytes) throws IOException {

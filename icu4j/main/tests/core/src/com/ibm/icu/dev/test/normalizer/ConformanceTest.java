@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -53,7 +53,6 @@ public class ConformanceTest extends TestFmwk {
     }
     
     public void runConformance(String fileName, int options) throws Exception{
-        BufferedReader input = null;
         String line = null;
         String[] fields = new String[5];
         StringBuffer buf = new StringBuffer();
@@ -61,6 +60,7 @@ public class ConformanceTest extends TestFmwk {
         int failCount = 0;
         UnicodeSet other = new UnicodeSet(0, 0x10ffff);
         int c=0;
+        BufferedReader input = null;
         try {
             input = TestUtil.getDataReader(fileName);
             for (int count = 0;;++count) {
@@ -108,18 +108,18 @@ public class ConformanceTest extends TestFmwk {
                 }
             }
         } catch (IOException ex) {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (Exception ex2) {
-                    System.out.print("");
-                }
-            }
             ex.printStackTrace();
             throw new IllegalArgumentException("Couldn't read file "
               + ex.getClass().getName() + " " + ex.getMessage()
               + " line = " + line
               );
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
 
         if (failCount != 0) {

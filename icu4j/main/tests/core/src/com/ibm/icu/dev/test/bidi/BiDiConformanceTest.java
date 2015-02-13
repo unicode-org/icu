@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010-2013, International Business Machines Corporation and
+ * Copyright (C) 2010-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -27,57 +27,65 @@ public class BiDiConformanceTest extends TestFmwk {
     public BiDiConformanceTest() {}
 
     public void TestBidiTest() throws IOException {
-        BufferedReader bidiTestFile=TestUtil.getDataReader("unicode/BidiTest.txt");
-        Bidi ubidi=new Bidi();
-        ubidi.setCustomClassifier(new ConfTestBidiClassifier());
-        lineNumber=0;
-        levelsCount=0;
-        orderingCount=0;
-        errorCount=0;
+        BufferedReader bidiTestFile = TestUtil.getDataReader("unicode/BidiTest.txt");
+        try {
+            Bidi ubidi = new Bidi();
+            ubidi.setCustomClassifier(new ConfTestBidiClassifier());
+            lineNumber = 0;
+            levelsCount = 0;
+            orderingCount = 0;
+            errorCount = 0;
 outerLoop:
-        while(errorCount<10 && (line=bidiTestFile.readLine())!=null) {
-            ++lineNumber;
-            lineIndex=0;
-            // Remove trailing comments and whitespace.
-            int commentStart=line.indexOf('#');
-            if(commentStart>=0) {
-                line=line.substring(0, commentStart);
-            }
-            if(!skipWhitespace()) {
-                continue;  // Skip empty and comment-only lines.
-            }
-            if(line.charAt(lineIndex)=='@') {
-                ++lineIndex;
-                if(line.startsWith("Levels:", lineIndex)) {
-                    lineIndex+=7;
-                    if(!parseLevels(line.substring(lineIndex))) { break; }
-                } else if(line.startsWith("Reorder:", lineIndex)) {
-                    lineIndex+=8;
-                    if(!parseOrdering(line.substring(lineIndex))) { break; }
+            while (errorCount < 10 && (line = bidiTestFile.readLine()) != null) {
+                ++lineNumber;
+                lineIndex = 0;
+                // Remove trailing comments and whitespace.
+                int commentStart = line.indexOf('#');
+                if (commentStart >= 0) {
+                    line = line.substring(0, commentStart);
                 }
-                // Skip unknown @Xyz: ...
-            } else {
-                parseInputStringFromBiDiClasses();
-                if(!skipWhitespace() || line.charAt(lineIndex++)!=';') {
-                    errln("missing ; separator on input line "+line);
-                    return;
+                if (!skipWhitespace()) {
+                    continue; // Skip empty and comment-only lines.
                 }
-                int bitset=Integer.parseInt(line.substring(lineIndex).trim(), 16);
-                // Loop over the bitset.
-                for(int i=0; i<=3; ++i) {
-                    if((bitset&(1<<i))!=0) {
-                        ubidi.setPara(inputString, paraLevels[i], null);
-                        byte actualLevels[]=ubidi.getLevels();
-                        paraLevelName=paraLevelNames[i];
-                        if(!checkLevels(actualLevels)) {
-                            continue outerLoop;
+                if (line.charAt(lineIndex) == '@') {
+                    ++lineIndex;
+                    if (line.startsWith("Levels:", lineIndex)) {
+                        lineIndex += 7;
+                        if (!parseLevels(line.substring(lineIndex))) {
+                            break;
                         }
-                        if(!checkOrdering(ubidi)) {
-                            continue outerLoop;
+                    } else if (line.startsWith("Reorder:", lineIndex)) {
+                        lineIndex += 8;
+                        if (!parseOrdering(line.substring(lineIndex))) {
+                            break;
+                        }
+                    }
+                    // Skip unknown @Xyz: ...
+                } else {
+                    parseInputStringFromBiDiClasses();
+                    if (!skipWhitespace() || line.charAt(lineIndex++) != ';') {
+                        errln("missing ; separator on input line " + line);
+                        return;
+                    }
+                    int bitset = Integer.parseInt(line.substring(lineIndex).trim(), 16);
+                    // Loop over the bitset.
+                    for (int i = 0; i <= 3; ++i) {
+                        if ((bitset & (1 << i)) != 0) {
+                            ubidi.setPara(inputString, paraLevels[i], null);
+                            byte actualLevels[] = ubidi.getLevels();
+                            paraLevelName = paraLevelNames[i];
+                            if (!checkLevels(actualLevels)) {
+                                continue outerLoop;
+                            }
+                            if (!checkOrdering(ubidi)) {
+                                continue outerLoop;
+                            }
                         }
                     }
                 }
             }
+        } finally {
+            bidiTestFile.close();
         }
     }
 
@@ -154,102 +162,101 @@ outerLoop:
     *******************************************************************************
     */
     public void TestBidiCharacterTest() throws IOException {
-        BufferedReader bidiTestFile=TestUtil.getDataReader("unicode/BidiCharacterTest.txt");
-        Bidi ubidi=new Bidi();
-        lineNumber=0;
-        levelsCount=0;
-        orderingCount=0;
-        errorCount=0;
+        BufferedReader bidiTestFile = TestUtil.getDataReader("unicode/BidiCharacterTest.txt");
+        try {
+            Bidi ubidi = new Bidi();
+            lineNumber = 0;
+            levelsCount = 0;
+            orderingCount = 0;
+            errorCount = 0;
 outerLoop:
-        while(errorCount<20 && (line=bidiTestFile.readLine())!=null) {
-            ++lineNumber;
-            paraLevelName="N/A";
-            inputString="N/A";
-            lineIndex=0;
-            // Remove trailing comments and whitespace.
-            int commentStart=line.indexOf('#');
-            if(commentStart>=0) {
-                line=line.substring(0, commentStart);
-            }
-            if(!skipWhitespace()) {
-                continue;  // Skip empty and comment-only lines.
-            }
-            String[] parts=line.split(";");
-            if(parts.length<4) {
-                errorCount++;
-                errln(" on line " + lineNumber + ": Missing ; separator on line: " + line);
-                continue;
-            }
-            // Parse the code point string in field 0.
-            try {
-                inputStringBuilder.delete(0, inputStringBuilder.length());
-                for(String cp : parts[0].trim().split("[ \t]+")) {
-                    inputStringBuilder.appendCodePoint(Integer.parseInt(cp, 16));
+            while (errorCount < 20 && (line = bidiTestFile.readLine()) != null) {
+                ++lineNumber;
+                paraLevelName = "N/A";
+                inputString = "N/A";
+                lineIndex = 0;
+                // Remove trailing comments and whitespace.
+                int commentStart = line.indexOf('#');
+                if (commentStart >= 0) {
+                    line = line.substring(0, commentStart);
                 }
-                inputString=inputStringBuilder.toString();
-            } catch(Exception e) {
-                errln(" ------------ Invalid string in field 0 on line '"+line+"'");
-                ++errorCount;
-                continue;
-            }
-            int paraDirection=intFromString(parts[1].trim());
-            byte paraLevel;
-            if(paraDirection==0) {
-                paraLevel=0;
-                paraLevelName="LTR";
-            }
-            else if(paraDirection==1) {
-                paraLevel=1;
-                paraLevelName="RTL";
-            }
-            else if(paraDirection==2) {
-                paraLevel=Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT;
-                paraLevelName="Auto/LTR";
-            }
-            else if(paraDirection==3) {
-                paraLevel=Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT;
-                paraLevelName="Auto/RTL";
-            }
-            else if(paraDirection<0 && -paraDirection<=(Bidi.MAX_EXPLICIT_LEVEL+1)) {
-                paraLevel=(byte)(-paraDirection);
-                paraLevelName=Byte.toString(paraLevel);
-            }
-            else {
-                errorCount++;
-                errln(" on line " + lineNumber + ": Input paragraph direction incorrect at " + line);
-                continue;
-            }
-            int resolvedParaLevel=intFromString(parts[2].trim());
-            if(resolvedParaLevel<0 || resolvedParaLevel>(Bidi.MAX_EXPLICIT_LEVEL+1)) {
-                errorCount++;
-                errln(" on line " + lineNumber + ": Resolved paragraph level incorrect at " + line);
-                continue;
-            }
-            if(!parseLevels(parts[3])) {
-                continue;
-            }
-            if(parts.length>4) {
-                if(!parseOrdering(parts[4]))
+                if (!skipWhitespace()) {
+                    continue; // Skip empty and comment-only lines.
+                }
+                String[] parts = line.split(";");
+                if (parts.length < 4) {
+                    errorCount++;
+                    errln(" on line " + lineNumber + ": Missing ; separator on line: " + line);
                     continue;
-            }
-            else
-                orderingCount=-1;
+                }
+                // Parse the code point string in field 0.
+                try {
+                    inputStringBuilder.delete(0, inputStringBuilder.length());
+                    for (String cp : parts[0].trim().split("[ \t]+")) {
+                        inputStringBuilder.appendCodePoint(Integer.parseInt(cp, 16));
+                    }
+                    inputString = inputStringBuilder.toString();
+                } catch (Exception e) {
+                    errln(" ------------ Invalid string in field 0 on line '" + line + "'");
+                    ++errorCount;
+                    continue;
+                }
+                int paraDirection = intFromString(parts[1].trim());
+                byte paraLevel;
+                if (paraDirection == 0) {
+                    paraLevel = 0;
+                    paraLevelName = "LTR";
+                } else if (paraDirection == 1) {
+                    paraLevel = 1;
+                    paraLevelName = "RTL";
+                } else if (paraDirection == 2) {
+                    paraLevel = Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT;
+                    paraLevelName = "Auto/LTR";
+                } else if (paraDirection == 3) {
+                    paraLevel = Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT;
+                    paraLevelName = "Auto/RTL";
+                } else if (paraDirection < 0 && -paraDirection <= (Bidi.MAX_EXPLICIT_LEVEL + 1)) {
+                    paraLevel = (byte) (-paraDirection);
+                    paraLevelName = Byte.toString(paraLevel);
+                } else {
+                    errorCount++;
+                    errln(" on line " + lineNumber + ": Input paragraph direction incorrect at " + line);
+                    continue;
+                }
+                int resolvedParaLevel = intFromString(parts[2].trim());
+                if (resolvedParaLevel < 0 || resolvedParaLevel > (Bidi.MAX_EXPLICIT_LEVEL + 1)) {
+                    errorCount++;
+                    errln(" on line " + lineNumber + ": Resolved paragraph level incorrect at " + line);
+                    continue;
+                }
+                if (!parseLevels(parts[3])) {
+                    continue;
+                }
+                if (parts.length > 4) {
+                    if (!parseOrdering(parts[4])) {
+                        continue;
+                    }
+                } else {
+                    orderingCount = -1;
+                }
 
-            ubidi.setPara(inputString, paraLevel, null);
-            byte actualParaLevel=ubidi.getParaLevel();
-            if(actualParaLevel!=resolvedParaLevel) {
-                errln(" ------------ Wrong resolved paragraph level; expected "
-                                     +resolvedParaLevel+" actual "
-                                     +actualParaLevel);
-                printErrorLine();
+                ubidi.setPara(inputString, paraLevel, null);
+                byte actualParaLevel = ubidi.getParaLevel();
+                if (actualParaLevel != resolvedParaLevel) {
+                    errln(" ------------ Wrong resolved paragraph level; expected " + resolvedParaLevel + " actual "
+                            + actualParaLevel);
+                    printErrorLine();
+                }
+                byte[] actualLevels = ubidi.getLevels();
+                if (!checkLevels(actualLevels)) {
+                    continue outerLoop;
+                }
+                if (!checkOrdering(ubidi)) {
+                    continue outerLoop;
+                }
             }
-            byte[] actualLevels=ubidi.getLevels();
-            if(!checkLevels(actualLevels)) {
-                continue outerLoop;
-            }
-            if(!checkOrdering(ubidi)) {
-                continue outerLoop;
-            }
+        } finally {
+            bidiTestFile.close();
         }
     }
 

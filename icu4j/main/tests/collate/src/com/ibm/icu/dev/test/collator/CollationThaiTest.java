@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2014, International Business Machines Corporation and
+ * Copyright (C) 2002-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -125,88 +125,75 @@ public class CollationThaiTest extends TestFmwk {
             warnln("could not construct Thai collator");
             return;
         }
-     
+
         // Read in a dictionary of Thai words
-        BufferedReader in = null;
-        String fileName = "riwords.txt";
-        try {
-            in = TestUtil.getDataReader(fileName, "UTF-8");
-        } catch (SecurityException e) {
-            warnln("Security exception encountered reading test data file.");
-                   return;
-        } catch (Exception e) {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ioe) {}
-            errln("Error: could not open test file: " + fileName 
-                  + ". Aborting test.");
-            return;        
-        }
-    
-        //
-        // Loop through each word in the dictionary and compare it to the previous
-        // word.  They should be in sorted order.
-        //
-        String lastWord = "";
         int line = 0;
         int failed = 0;
         int wordCount = 0;
+        BufferedReader in = null;
         try {
-        String word = in.readLine();
-        while (word != null) {
-            line++;
-             
-            // Skip comments and blank lines
-            if (word.length() == 0 || word.charAt(0) == 0x23) {
-                word = in.readLine();
-                continue;
-            }
-    
-            // Show the first 8 words being compared, so we can see what's happening
-            ++wordCount;
-            if (wordCount <= 8) {
-                logln("Word " + wordCount + ": " + word);
-            }
-    
-            if (lastWord.length() > 0) {
-                // CollationTest.doTest isn't really set up to handle situations where
-                // the result can be equal or greater than the previous, so have to skip for now.
-                // Not a big deal, since we're still testing to make sure everything sorts out
-                // right, just not looking at the colation keys in detail...
-                // CollationTest.doTest(this, coll, lastWord, word, -1);
-                int result = coll.compare(lastWord, word); 
-        
-                if (result > 0) {
-                    failed++;
-                    if (MAX_FAILURES_TO_SHOW < 0 || failed <= MAX_FAILURES_TO_SHOW) {
-                        String msg = "--------------------------------------------\n"
-                                    + line
-                                    + " compare(" + lastWord
-                                    + ", " + word + ") returned " + result
-                                    + ", expected -1\n";
-                        CollationKey k1, k2;
-                        try {
+            String fileName = "riwords.txt";
+            in = TestUtil.getDataReader(fileName, "UTF-8");
+
+            //
+            // Loop through each word in the dictionary and compare it to the previous
+            // word. They should be in sorted order.
+            //
+            String lastWord = "";
+            String word = in.readLine();
+            while (word != null) {
+                line++;
+
+                // Skip comments and blank lines
+                if (word.length() == 0 || word.charAt(0) == 0x23) {
+                    word = in.readLine();
+                    continue;
+                }
+
+                // Show the first 8 words being compared, so we can see what's happening
+                ++wordCount;
+                if (wordCount <= 8) {
+                    logln("Word " + wordCount + ": " + word);
+                }
+
+                if (lastWord.length() > 0) {
+                    // CollationTest.doTest isn't really set up to handle situations where
+                    // the result can be equal or greater than the previous, so have to skip for now.
+                    // Not a big deal, since we're still testing to make sure everything sorts out
+                    // right, just not looking at the colation keys in detail...
+                    // CollationTest.doTest(this, coll, lastWord, word, -1);
+                    int result = coll.compare(lastWord, word);
+
+                    if (result > 0) {
+                        failed++;
+                        if (MAX_FAILURES_TO_SHOW < 0 || failed <= MAX_FAILURES_TO_SHOW) {
+                            String msg = "--------------------------------------------\n" + line + " compare("
+                                    + lastWord + ", " + word + ") returned " + result + ", expected -1\n";
+                            CollationKey k1, k2;
                             k1 = coll.getCollationKey(lastWord);
                             k2 = coll.getCollationKey(word);
-                        } catch (Exception e) {
-                            errln("Fail: getCollationKey returned ");
-                            return;
+                            msg += "key1: " + CollationTest.prettify(k1) + "\n" + "key2: " + CollationTest.prettify(k2);
+                            errln(msg);
                         }
-                        msg += "key1: " + CollationTest.prettify(k1) + "\n"
-                                    + "key2: " + CollationTest.prettify(k2);
-                        errln(msg);
                     }
                 }
+                lastWord = word;
+                word = in.readLine();
             }
-            lastWord = word;
-            word = in.readLine();
-        }
         } catch (IOException e) {
             errln("IOException " + e.getMessage());
+        } finally {
+            if (in == null) {
+                errln("Error: could not open test file. Aborting test.");
+                return;
+            } else {
+                try {
+                    in.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
-    
+
         if (failed != 0) {
             if (failed > MAX_FAILURES_TO_SHOW) {
                 errln("Too many failures; only the first " +

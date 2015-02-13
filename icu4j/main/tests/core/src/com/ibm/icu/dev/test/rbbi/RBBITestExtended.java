@@ -1,7 +1,7 @@
 /*
  * Created on May 5, 2004
  *
- * Copyright (C) 2004-2013 International Business Machines Corporation and others.
+ * Copyright (C) 2004-2015 International Business Machines Corporation and others.
  * All Rights Reserved.
  *
  */
@@ -56,33 +56,40 @@ public void TestExtended() {
     //
     //  Open and read the test data file.
     //
-    InputStreamReader isr = null;
-    StringBuffer  testFileBuf = new StringBuffer();
+    StringBuffer testFileBuf = new StringBuffer();
+    InputStream is = null;
     try {
-        InputStream is = RBBITestExtended.class.getResourceAsStream("rbbitst.txt");
+        is = RBBITestExtended.class.getResourceAsStream("rbbitst.txt");
         if (is == null) {
             errln("Could not open test data file rbbitst.txt");
             return;
         }
-        isr = new InputStreamReader(is, "UTF-8");
-        int c;
-        int count = 0;
-        for (;;) {
-            c = isr.read();
-            if (c < 0) {
-                break;
-            }
-            count++;
-            if (c==0xFEFF && count==1) {
-               // BOM in the test data file.  Discard it.
-               continue;
-            }
+        InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+        try {
+            int c;
+            int count = 0;
+            for (;;) {
+                c = isr.read();
+                if (c < 0) {
+                    break;
+                }
+                count++;
+                if (c == 0xFEFF && count == 1) {
+                    // BOM in the test data file. Discard it.
+                    continue;
+                }
 
-            UTF16.append(testFileBuf, c);
+                UTF16.append(testFileBuf, c);
+            }
+        } finally {
+            isr.close();
         }
-
     } catch (IOException e) {
         errln(e.toString());
+        try {
+            is.close();
+        } catch (IOException ignored) {
+        }
         return;
     }
 

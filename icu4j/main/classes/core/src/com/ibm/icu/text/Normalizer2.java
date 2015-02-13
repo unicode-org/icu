@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 2009-2014, International Business Machines
+ *   Copyright (C) 2009-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -192,7 +192,7 @@ public abstract class Normalizer2 {
         ByteBuffer bytes = null;
         if (data != null) {
             try {
-                bytes = ICUBinary.getByteBufferFromInputStream(data);
+                bytes = ICUBinary.getByteBufferFromInputStreamAndCloseStream(data);
             } catch (IOException e) {
                 throw new ICUUncheckedIOException(e);
             }

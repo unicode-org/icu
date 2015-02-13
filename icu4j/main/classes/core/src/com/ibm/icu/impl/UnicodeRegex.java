@@ -1,8 +1,8 @@
 /*
- ********************************************************************************
- * Copyright (C) 2009-2011, Google, International Business Machines Corporation *
- * and others. All Rights Reserved.                                             *
- ********************************************************************************
+ *******************************************************************************
+ * Copyright (C) 2009-2015, Google, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ *******************************************************************************
  */
 package com.ibm.icu.impl;
 
@@ -269,7 +269,12 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
      * @throws IOException If there were problems opening the file for input stream.
      */
     public static List<String> appendLines(List<String> result, String file, String encoding) throws IOException {
-        return appendLines(result, new FileInputStream(file), encoding);
+        InputStream is = new FileInputStream(file);
+        try {
+            return appendLines(result, is, encoding);
+        } finally {
+            is.close();
+        }
     }
 
     /**

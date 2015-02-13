@@ -1,13 +1,14 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2001-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
 package com.ibm.icu.impl.data;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,8 +29,8 @@ import com.ibm.icu.impl.PatternProps;
  *
  * @author Alan Liu
  */
-public class ResourceReader {
-    private BufferedReader reader;
+public class ResourceReader implements Closeable {
+    private BufferedReader reader = null;
     private String resourceName;
     private String encoding; // null for default encoding
     private Class<?> root;
@@ -229,6 +230,9 @@ public class ResourceReader {
      * are large, e.g., 400k.
      */
     private void _reset() throws UnsupportedEncodingException {
+        try {
+            close();
+        } catch (IOException e) {}
         if (lineNo == 0) {
             return;
         }
@@ -242,5 +246,17 @@ public class ResourceReader {
                                  new InputStreamReader(is, encoding);
         reader = new BufferedReader(isr);
         lineNo = 0;
+    }
+
+    /**
+     * Closes the underlying reader and releases any system resources
+     * associated with it. If the stream is already closed then invoking
+     * this method has no effect.
+     */
+    public void close() throws IOException {
+        if (reader != null) {
+            reader.close();
+            reader = null;
+        }
     }
 }

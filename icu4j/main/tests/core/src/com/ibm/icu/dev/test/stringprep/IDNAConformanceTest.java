@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2005-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
 
  *******************************************************************************
@@ -10,7 +10,6 @@
 package com.ibm.icu.dev.test.stringprep;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -246,9 +245,8 @@ public class IDNAConformanceTest extends TestFmwk {
                 UnsupportedEncodingException {
 
             TreeMap result = new TreeMap();
+            BufferedReader in = TestUtil.getDataReader("IDNATestInput.txt", "utf-8");
             try {
-                BufferedReader in = TestUtil.getDataReader("IDNATestInput.txt", "utf-8");
-
                 String tempStr = null;
                 int records = 0;
                 boolean firstLine = true;
@@ -270,7 +268,7 @@ public class IDNAConformanceTest extends TestFmwk {
                     String attr = "";//attribute
                     String body = "";//value
 
-                    //get attr and body from line input, and then set them into each hash item.                    
+                    //get attr and body from line input, and then set them into each hash item.
                     int postion = tempStr.indexOf(":");
                     if (postion > -1) {
                         attr = tempStr.substring(0, postion).trim();
@@ -298,12 +296,8 @@ public class IDNAConformanceTest extends TestFmwk {
                         continue;
                     }
                 }
-            } catch (UnsupportedEncodingException e) {
-                throw e;
-            } catch (FileNotFoundException e) {
-                throw e;
-            } catch (IOException e) {
-                throw e;
+            } finally {
+                in.close();
             }
             return result;
         }

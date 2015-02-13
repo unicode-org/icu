@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl.javaspi;
@@ -232,7 +232,11 @@ public class ICULocaleServiceProvider {
         Properties spiConfigProps = new Properties();
         try {
             InputStream is = ClassLoader.getSystemResourceAsStream(SPI_PROP_FILE);
-            spiConfigProps.load(is);
+            try {
+                spiConfigProps.load(is);
+            } finally {
+                is.close();
+            }
 
             String val = (String)spiConfigProps.get(SUFFIX_KEY);
             if (val != null && val.length() > 0) {

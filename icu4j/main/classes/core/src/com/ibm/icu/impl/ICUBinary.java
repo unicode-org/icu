@@ -468,15 +468,18 @@ public final class ICUBinary {
         if (resourceName == null) {
             resourceName = ICUData.ICU_BASE_NAME + '/' + itemPath;
         }
-        InputStream is = ICUData.getStream(loader, resourceName, required);
-        if (is == null) {
-            return null;
-        }
+        ByteBuffer buffer = null;
         try {
-            return getByteBufferFromInputStream(is);
+            @SuppressWarnings("resource")  // Closed by getByteBufferFromInputStreamAndCloseStream().
+            InputStream is = ICUData.getStream(loader, resourceName, required);
+            if (is == null) {
+                return null;
+            }
+            buffer = getByteBufferFromInputStreamAndCloseStream(is);
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
         }
+        return buffer;
     }
 
     private static ByteBuffer getDataFromFile(String itemPath) {
@@ -489,17 +492,20 @@ public final class ICUBinary {
         return null;
     }
 
+    @SuppressWarnings("resource")  // Closing a file closes its channel.
     private static ByteBuffer mapFile(File path) {
         FileInputStream file;
         try {
             file = new FileInputStream(path);
             FileChannel channel = file.getChannel();
-            ByteBuffer bytes = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-            // Close the file and its channel; this seems to keep the ByteBuffer valid.
-            // If not, then we will need to return the pair of (file, bytes).
-            file.close();
+            ByteBuffer bytes = null;
+            try {
+                bytes = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+            } finally {
+                file.close();
+            }
             return bytes;
-        } catch(FileNotFoundException ignored) {
+        } catch (FileNotFoundException ignored) {
             System.err.println(ignored);
         } catch (IOException ignored) {
             System.err.println(ignored);
@@ -636,7 +642,7 @@ public final class ICUBinary {
      * Reads the entire contents from the stream into a byte array
      * and wraps it into a ByteBuffer. Closes the InputStream at the end.
      */
-    public static ByteBuffer getByteBufferFromInputStream(InputStream is) throws IOException {
+    public static ByteBuffer getByteBufferFromInputStreamAndCloseStream(InputStream is) throws IOException {
         try {
             // is.available() may return 0, or 1, or the total number of bytes in the stream,
             // or some other number.
