@@ -1,8 +1,7 @@
 /*
  *******************************************************************************
-
- * Copyright (C) 2001-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2001-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -13,6 +12,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
@@ -1709,6 +1709,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         /*9*/ "strict=", // true or false
     };
 
+    @SuppressWarnings("resource")  // InputStream is will be closed by the ResourceReader.
     public void TestCases() {
         String caseFileName = "NumberFormatTestCases.txt";
         java.io.InputStream is = NumberFormatTest.class.getResourceAsStream(caseFileName);
@@ -1886,6 +1887,11 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ignored) {
+            }
         }
     }
 

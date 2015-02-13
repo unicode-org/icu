@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006-2014, International Business Machines Corporation and
+ * Copyright (C) 2006-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  *
@@ -211,11 +211,13 @@ class CharsetMBCS extends CharsetICU {
             ByteBuffer b;
 
             if (loader != null) {
+                @SuppressWarnings("resource")  // Closed by getByteBufferFromInputStreamAndCloseStream().
                 InputStream i = ICUData.getRequiredStream(loader, resourceName);
-                b = ICUBinary.getByteBufferFromInputStream(i);
+                b = ICUBinary.getByteBufferFromInputStreamAndCloseStream(i);
             } else if (!classPath.equals(ICUData.ICU_BUNDLE)) {
+                @SuppressWarnings("resource")  // Closed by getByteBufferFromInputStreamAndCloseStream().
                 InputStream i = ICUData.getRequiredStream(resourceName);
-                b = ICUBinary.getByteBufferFromInputStream(i);
+                b = ICUBinary.getByteBufferFromInputStreamAndCloseStream(i);
             } else {
                 b = ICUBinary.getRequiredData(itemName);
             }

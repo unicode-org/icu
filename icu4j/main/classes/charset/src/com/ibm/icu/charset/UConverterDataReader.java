@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006-2014, International Business Machines Corporation and
+ * Copyright (C) 2006-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -415,7 +415,7 @@ final class UConverterDataReader {
     /*
      *  UConverterDataReader(UConverterDataReader r)
         {
-            byteBuffer = ICUBinary.getByteBufferFromInputStream(r.byteBuffer);
+            byteBuffer = ICUBinary.getByteBufferFromInputStreamAndCloseStream(r.byteBuffer);
             unicodeVersion = r.unicodeVersion;
         }
         */

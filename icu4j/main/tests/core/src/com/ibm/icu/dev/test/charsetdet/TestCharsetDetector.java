@@ -177,7 +177,11 @@ public class TestCharsetDetector extends TestFmwk
         CheckAssert(s.equals(retrievedS));
         
         reader = det.getReader(new ByteArrayInputStream(bytes), "UTF-8");
-        CheckAssert(s.equals(stringFromReader(reader)));
+        try {
+            CheckAssert(s.equals(stringFromReader(reader)));
+        } finally {
+            reader.close();
+        }
         det.setDeclaredEncoding("UTF-8"); // Jitterbug 4451, for coverage
     }
     
@@ -340,7 +344,12 @@ public class TestCharsetDetector extends TestFmwk
             DocumentBuilder builder = factory.newDocumentBuilder();
             
             // Parse the xml content from the test case file.
-            Document doc = builder.parse(is, null);
+            Document doc;
+            try {
+                doc = builder.parse(is, null);
+            } finally {
+                is.close();
+            }
             Element root = doc.getDocumentElement();
             
             NodeList testCases = root.getElementsByTagName("test-case");

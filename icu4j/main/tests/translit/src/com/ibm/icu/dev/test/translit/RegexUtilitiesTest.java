@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
@@ -170,7 +170,12 @@ public class RegexUtilitiesTest extends TestFmwk {
                 String result;
                 if (test.endsWith(".txt")) {
                     java.io.InputStream is = RegexUtilitiesTest.class.getResourceAsStream(test);
-                    List lines = UnicodeRegex.appendLines(new ArrayList(), is, "UTF-8");
+                    List lines;
+                    try {
+                        lines = UnicodeRegex.appendLines(new ArrayList(), is, "UTF-8");
+                    } finally {
+                        is.close();
+                    }
                     result = regex.compileBnf(lines);
                 } else {
                     result = regex.compileBnf(test);

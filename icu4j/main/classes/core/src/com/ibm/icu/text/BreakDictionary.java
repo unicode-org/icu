@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -49,8 +49,9 @@ class BreakDictionary {
     static void writeToFile(String inFile, String outFile)
             throws FileNotFoundException, UnsupportedEncodingException, IOException {
 
+        @SuppressWarnings("resource")  // Closed by getByteBufferFromInputStreamAndCloseStream().
         BreakDictionary dictionary = new BreakDictionary(
-                ICUBinary.getByteBufferFromInputStream(new FileInputStream(inFile)));
+                ICUBinary.getByteBufferFromInputStreamAndCloseStream(new FileInputStream(inFile)));
 
         PrintWriter out = null;
 
@@ -311,4 +312,3 @@ class BreakDictionary {
         return table[row * numCols + col];
     }
 }
-

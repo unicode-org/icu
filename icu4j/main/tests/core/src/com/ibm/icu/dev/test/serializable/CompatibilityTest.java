@@ -1,16 +1,19 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  *
  */
 
 package com.ibm.icu.dev.test.serializable;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.JarURLConnection;
@@ -83,40 +86,45 @@ public class CompatibilityTest extends TestFmwk
         
         protected void execute() throws Exception
         {
-            if (params.inDocMode()) {
-                // nothing to execute
-            } else if (!params.stack.included) {
-                ++params.invalidCount;
-            } else {
-                params.testCount += 1;
+            try {
+                if (params.inDocMode()) {
+                    // nothing to execute
+                } else if (!params.stack.included) {
+                    ++params.invalidCount;
+                } else {
+                    params.testCount += 1;
 
-                try {
-                    ObjectInputStream in = new ObjectInputStream(inputStream);
-                    Object inputObjects[] = (Object[]) in.readObject();
-                    Object testObjects[] = handler.getTestObjects();
-                    
-                    in.close();
-                    inputStream.close();
-                    
-                    // TODO: add equality test...
-                    // The commented out code below does that,
-                    // but some test objects don't define an equals() method,
-                    // and the default method is the same as the "==" operator...
-                    for (int i = 0; i < testObjects.length; i += 1) {
-    //                    if (! inputObjects[i].equals(testObjects[i])) {
-    //                        errln("Input object " + i + " failed equality test.");
-    //                    }
-                        
-                        if (! handler.hasSameBehavior(inputObjects[i], testObjects[i])) {
-                            warnln("Input object " + i + " failed behavior test.");
+                    try {
+                        ObjectInputStream in = new ObjectInputStream(inputStream);
+                        Object inputObjects[] = (Object[]) in.readObject();
+                        Object testObjects[] = handler.getTestObjects();
+
+                        in.close();
+                        inputStream.close();
+
+                        // TODO: add equality test...
+                        // The commented out code below does that,
+                        // but some test objects don't define an equals() method,
+                        // and the default method is the same as the "==" operator...
+                        for (int i = 0; i < testObjects.length; i += 1) {
+                            // if (! inputObjects[i].equals(testObjects[i])) {
+                            // errln("Input object " + i + " failed equality test.");
+                            // }
+
+                            if (!handler.hasSameBehavior(inputObjects[i], testObjects[i])) {
+                                warnln("Input object " + i + " failed behavior test.");
+                            }
                         }
+                    } catch (MissingResourceException e) {
+                        warnln("Could not load the data. " + e.getMessage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        errln("Exception: " + e.toString());
                     }
-                }catch (MissingResourceException e){
-                    warnln("Could not load the data. "+e.getMessage());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    errln("Exception: " + e.toString());
                 }
+            } finally {
+                inputStream.close();
+                inputStream = null;
             }
         }
     }
@@ -178,10 +186,9 @@ public class CompatibilityTest extends TestFmwk
                             }
                         }
 
-                        InputStream is;
-
                         try {
-                            is = new FileInputStream(file);
+                            @SuppressWarnings("resource")  // Closed by HandlerTarget.execute().
+                            InputStream is = new FileInputStream(file);
                             target.add(className, is);
                         } catch (FileNotFoundException e) {
                             errln("Exception: " + e.toString());
@@ -194,13 +201,29 @@ public class CompatibilityTest extends TestFmwk
             
         return target;
     }
-    
+
+    private static InputStream copyInputStream(InputStream in) throws IOException {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+            while (true) {
+                int r = in.read(buf);
+                if (r == -1) {
+                    break;
+                }
+                out.write(buf, 0, r);
+            }
+            return new ByteArrayInputStream(out.toByteArray());
+        } finally {
+            in.close();
+        }
+    }
+
     private Target getJarTargets(URL jarURL)
     {
         String prefix = jarURL.getPath();
         String currentDir = null;
         int ix = prefix.indexOf("!/");
-        JarFile jarFile;
         FolderTarget target = null;
 
         if (ix >= 0) {
@@ -209,55 +232,59 @@ public class CompatibilityTest extends TestFmwk
 
         try {
             JarURLConnection conn = (JarURLConnection) jarURL.openConnection();
+            JarFile jarFile = conn.getJarFile();
+            try {
+                Enumeration entries = jarFile.entries();
+element_loop:
+                while (entries.hasMoreElements()) {
+                    JarEntry entry = (JarEntry) entries.nextElement();
+                    String name = entry.getName();
 
-            jarFile = conn.getJarFile();
+                    if (name.startsWith(prefix)) {
+                        name = name.substring(prefix.length());
 
-            Enumeration entries = jarFile.entries();
+                        if (!entry.isDirectory()) {
+                            int dx = name.lastIndexOf("/");
+                            String dirName = name.substring(1, dx);
+                            String filename = name.substring(dx + 1);
 
-            element_loop:
-            while (entries.hasMoreElements()) {
-                JarEntry entry = (JarEntry)entries.nextElement();
-                String name = entry.getName();
-                
-                if (name.startsWith(prefix)) {
-                    name = name.substring(prefix.length());
+                            if (!dirName.equals(currentDir)) {
+                                currentDir = dirName;
 
-                    if (! entry.isDirectory()) {
-                        int dx = name.lastIndexOf("/");
-                        String dirName  = name.substring(1, dx);
-                        String filename = name.substring(dx + 1);
+                                FolderTarget newTarget = new FolderTarget(currentDir);
 
-                        if (! dirName.equals(currentDir)) {
-                            currentDir = dirName;
-
-                            FolderTarget newTarget = new FolderTarget(currentDir);
-
-                            newTarget.setNext(target);
-                            target = newTarget;
-                        }
-
-                        int xx = filename.indexOf(".dat");
-                        
-                        if (xx > 0) {
-                            String className = filename.substring(0, xx);
-
-                            // Skip some cases which do not work well
-                            for (int i = 0; i < SKIP_CASES.length; i++) {
-                                if (dirName.equals(SKIP_CASES[i][0]) && filename.equals(SKIP_CASES[i][1])) {
-                                    logln("Skipping test case - " + dirName + "/" + className);
-                                    continue element_loop;
-                                }
+                                newTarget.setNext(target);
+                                target = newTarget;
                             }
 
-                            target.add(className, jarFile.getInputStream(entry));
+                            int xx = filename.indexOf(".dat");
+
+                            if (xx > 0) {
+                                String className = filename.substring(0, xx);
+
+                                // Skip some cases which do not work well
+                                for (int i = 0; i < SKIP_CASES.length; i++) {
+                                    if (dirName.equals(SKIP_CASES[i][0]) && filename.equals(SKIP_CASES[i][1])) {
+                                        logln("Skipping test case - " + dirName + "/" + className);
+                                        continue element_loop;
+                                    }
+                                }
+
+                                // The InputStream object returned by JarFile.getInputStream() will
+                                // no longer be useable after JarFile.close() has been called. It's
+                                // therefore necessary to make a copy of it here.
+                                target.add(className, copyInputStream(jarFile.getInputStream(entry)));
+                            }
                         }
                     }
                 }
+            } finally {
+                jarFile.close();
             }
         } catch (Exception e) {
             errln("jar error: " + e.getMessage());
         }
-        
+
         return target;
     }
     

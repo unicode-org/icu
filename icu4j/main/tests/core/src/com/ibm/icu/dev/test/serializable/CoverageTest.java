@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2005-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  *
  */
@@ -66,18 +66,22 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
     private void writeFile(String className, byte bytes[])
     {
         File file = new File(path + File.separator + className + ".dat");
-        FileOutputStream stream;
-        
+        FileOutputStream stream = null;
         try {
             stream = new FileOutputStream(file);
-            
             stream.write(bytes);
-            stream.close();
         } catch (Exception e) {
             System.out.print(" - can't write file!");
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
     }
-    
+
     private void add(String className, int classModifiers, byte bytes[])
     {
         CoverageTarget newTarget = new CoverageTarget(className, classModifiers, bytes);

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -26,7 +26,11 @@ public class ICUConfig {
         try {
             InputStream is = ICUData.getStream(CONFIG_PROPS_FILE);
             if (is != null) {
-                CONFIG_PROPS.load(is);
+                try {
+                    CONFIG_PROPS.load(is);
+                } finally {
+                    is.close();
+                }
             }
         } catch (MissingResourceException mre) {
             // If it does not exist, ignore.

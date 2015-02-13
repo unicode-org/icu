@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2014, International Business Machines Corporation and
+ * Copyright (C) 2009-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -715,14 +715,23 @@ public class Trie2Test extends TestFmwk {
          String fileName32 = "Trie2Test." + serializedName + ".32.tri2";
          
          InputStream is = Trie2Test.class.getResourceAsStream(fileName16);
-         Trie2  trie16 = Trie2.createFromSerialized(ICUBinary.getByteBufferFromInputStream(is));
-         
+         Trie2 trie16;
+         try {
+             trie16 = Trie2.createFromSerialized(ICUBinary.getByteBufferFromInputStreamAndCloseStream(is));
+         } finally {
+             is.close();
+         }
          trieGettersTest(testName, trie16, checkRanges);
+
          is = Trie2Test.class.getResourceAsStream(fileName32);
-         Trie2  trie32 = Trie2.createFromSerialized(ICUBinary.getByteBufferFromInputStream(is));
-         
+         Trie2 trie32;
+         try {
+             trie32 = Trie2.createFromSerialized(ICUBinary.getByteBufferFromInputStreamAndCloseStream(is));
+         } finally {
+             is.close();
+         }
          trieGettersTest(testName, trie32, checkRanges);
-         
+
          // Run the same tests against locally contructed Tries.
          Trie2Writable trieW = genTrieFromSetRanges(setRanges);
          trieGettersTest(testName, trieW,  checkRanges);

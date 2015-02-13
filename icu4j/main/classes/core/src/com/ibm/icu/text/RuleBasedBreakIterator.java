@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2014 International Business Machines Corporation and
+ * Copyright (C) 2005-2015 International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -66,7 +66,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     public static RuleBasedBreakIterator getInstanceFromCompiledRules(InputStream is) throws IOException {
         RuleBasedBreakIterator  This = new RuleBasedBreakIterator();
-        This.fRData = RBBIDataWrapper.get(ICUBinary.getByteBufferFromInputStream(is));
+        This.fRData = RBBIDataWrapper.get(ICUBinary.getByteBufferFromInputStreamAndCloseStream(is));
         return This;   
     }
 
