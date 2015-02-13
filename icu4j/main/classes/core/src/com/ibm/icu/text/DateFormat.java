@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 1996-2014, International Business Machines
+ *   Copyright (C) 1996-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -437,10 +437,20 @@ public abstract class DateFormat extends UFormat {
     public final static int TIMEZONE_ISO_LOCAL_FIELD = 33;
 
     /**
+     * {@icu} FieldPosition selector for 'r' field alignment,
+     * corresponding to the {@link Calendar#RELATED_YEAR} field.
+     * TODO: http://bugs.icu-project.org/trac/ticket/10761
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    final static int RELATED_YEAR = 34;
+
+    /**
      * {@icu} FieldPosition selector for ':' field alignment,
      * corresponding to the {@link Calendar#TIME_SEPARATOR} field.
      */
-    final static int TIME_SEPARATOR = 34;
+    final static int TIME_SEPARATOR = 35;
 
     /**
      * {@icu} Number of FieldPosition selectors for DateFormat.
@@ -448,7 +458,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 3.0
      */
 
-    public final static int FIELD_COUNT = 35; // must == DateFormatSymbols.patternChars.length()
+    public final static int FIELD_COUNT = 36; // must == DateFormatSymbols.patternChars.length()
 
     
     /**
@@ -2347,6 +2357,14 @@ public abstract class DateFormat extends UFormat {
          * @stable ICU 3.8
          */
         public static final Field QUARTER = new Field("quarter", -1);
+
+        /**
+         * Constant identifying the related year field.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final Field RELATED_YEAR = new Field("related year", Calendar.RELATED_YEAR);
 
         /**
          * Constant identifying the time separator field.

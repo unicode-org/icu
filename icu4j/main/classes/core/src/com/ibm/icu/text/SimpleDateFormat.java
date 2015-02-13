@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -769,7 +769,7 @@ public class SimpleDateFormat extends DateFormat {
     //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50, -1, 60, -1, -1,
     //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
-        -1, 20, -1, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1,
+        -1, 20, 10, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1,
     };
 
     /**
@@ -1362,7 +1362,7 @@ public class SimpleDateFormat extends DateFormat {
     //       !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 34, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 35, -1, -1, -1, -1, -1,
     //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
         -1, 22, -1, -1, 10,  9, 11,  0,  5, -1, -1, 16, 26,  2, -1, 31,
     //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
@@ -1370,7 +1370,7 @@ public class SimpleDateFormat extends DateFormat {
     //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 14, -1, 25,  3, 19, -1, 21, 15, -1, -1,  4, -1,  6, -1, -1,
     //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
-        -1, 28, -1,  7, -1, 20, 24, 12, 33,  1, 17, -1, -1, -1, -1, -1,
+        -1, 28, 34,  7, -1, 20, 24, 12, 33,  1, 17, -1, -1, -1, -1, -1,
     };
 
     private static int getIndexFromChar(char ch) {
@@ -1396,6 +1396,7 @@ public class SimpleDateFormat extends DateFormat {
         /*U*/   Calendar.YEAR,
         /*O*/   Calendar.ZONE_OFFSET,
         /*Xx*/  Calendar.ZONE_OFFSET, Calendar.ZONE_OFFSET,
+        /*r*/   Calendar.RELATED_YEAR,
         /*:*/   Calendar.TIME_SEPARATOR,
     };
 
@@ -1417,6 +1418,7 @@ public class SimpleDateFormat extends DateFormat {
         /*U*/   DateFormat.YEAR_NAME_FIELD,
         /*O*/   DateFormat.TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD,
         /*Xx*/  DateFormat.TIMEZONE_ISO_FIELD, DateFormat.TIMEZONE_ISO_LOCAL_FIELD,
+        /*r*/   DateFormat.RELATED_YEAR,
         /*:*/   DateFormat.TIME_SEPARATOR,
     };
 
@@ -1438,6 +1440,7 @@ public class SimpleDateFormat extends DateFormat {
         /*U*/   DateFormat.Field.YEAR,
         /*O*/   DateFormat.Field.TIME_ZONE,
         /*Xx*/  DateFormat.Field.TIME_ZONE, DateFormat.Field.TIME_ZONE,
+        /*r*/   DateFormat.Field.RELATED_YEAR,
         /*:*/   DateFormat.Field.TIME_SEPARATOR,
     };
 
@@ -1833,7 +1836,7 @@ public class SimpleDateFormat extends DateFormat {
                 zeroPaddingNumber(currentNumberFormat,buf, (value/3)+1, count, maxIntCount);
             }
             break;
-        case 34: // ':' - TIME SEPARATOR
+        case 35: // ':' - TIME SEPARATOR
             buf.append(formatData.getTimeSeparatorString());
             break;
         default:
@@ -3291,7 +3294,7 @@ public class SimpleDateFormat extends DateFormat {
                     return newStart;
                 }
 
-            case 34:
+            case 35:
             {
                 // Try matching a time separator.
                 ArrayList<String> data = new ArrayList<String>(3);
