@@ -55,6 +55,8 @@
 
 // Forward Declarations
 
+struct UHashtable;
+
 U_NAMESPACE_BEGIN
 
 struct Regex8BitSet;
@@ -136,7 +138,7 @@ public:
 
     /**
      * Create an exact copy of this RegexPattern object.  Since RegexPattern is not
-     * intended to be subclasses, <code>clone()</code> and the copy construction are
+     * intended to be subclassed, <code>clone()</code> and the copy construction are
      * equivalent operations.
      * @return the copy of this RegexPattern
      * @stable ICU 2.4
@@ -438,6 +440,41 @@ public:
 
 
     /**
+     * Get the group number corresponding to a named capture group.
+     * The returned number can be used with any function that access
+     * capture groups by number.
+     *
+     * The function returns an error status if the specified name does not
+     * appear in the pattern.
+     *
+     * @param  groupName   The capture group name.
+     * @param  status      A UErrorCode to receive any errors.
+     *
+     * @draft ICU 55
+     */
+    virtual int32_t groupNumberFromName(const UnicodeString &groupName, UErrorCode &status) const;
+
+
+    /**
+     * Get the group number corresponding to a named capture group.
+     * The returned number can be used with any function that access
+     * capture groups by number.
+     *
+     * The function returns an error status if the specified name does not
+     * appear in the pattern.
+     *
+     * @param  groupName   The capture group name,
+     *                     platform invariant characters only.
+     * @param  nameLength  The length of the name, or -1 if the name is
+     *                     nul-terminated.
+     * @param  status      A UErrorCode to receive any errors.
+     *
+     * @draft ICU 55
+     */
+    virtual int32_t groupNumberFromName(const char *groupName, int32_t nameLength, UErrorCode &status) const;
+
+
+    /**
      * Split a string into fields.  Somewhat like split() from Perl or Java.
      * Pattern matches identify delimiters that separate the input
      * into fields.  The input data between the delimiters becomes the
@@ -573,8 +610,6 @@ private:
     UVector32       *fGroupMap;    // Map from capture group number to position of
                                    //   the group's variables in the matcher stack frame.
 
-    int32_t         fMaxCaptureDigits;
-
     UnicodeSet     **fStaticSets;  // Ptr to static (shared) sets for predefined
                                    //   regex character classes, e.g. Word.
 
@@ -588,6 +623,8 @@ private:
     UChar32         fInitialChar;
     Regex8BitSet   *fInitialChars8;
     UBool           fNeedsAltInput;
+
+    UHashtable     *fNamedCaptureMap;  // Map from capture group names to numbers.
 
     friend class RegexCompile;
     friend class RegexMatcher;
@@ -854,7 +891,6 @@ public:
     */
     virtual UnicodeString group(int32_t groupNum, UErrorCode &status) const;
 
-
    /**
     *   Returns the number of capturing groups in this matcher's pattern.
     *   @return the number of capture groups
@@ -945,7 +981,6 @@ public:
     */
     virtual int64_t start64(int32_t group, UErrorCode &status) const;
 
-
    /**
     *    Returns the index in the input string of the first character following the
     *    text matched during the previous match operation.
@@ -1014,7 +1049,6 @@ public:
     *   @stable ICU 4.6
     */
     virtual int64_t end64(int32_t group, UErrorCode &status) const;
-
 
    /**
     *   Resets this matcher.  The effect is to remove any memory of previous matches,
