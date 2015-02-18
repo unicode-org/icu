@@ -7782,6 +7782,7 @@ void NumberFormatTest::TestFastPathConsistent11524() {
     assertEquals("", "0", fmt->format(123, appendTo));
     appendTo.remove();
     assertEquals("", "0", fmt->format(12345, appendTo));
+    delete fmt;
 }
 
 
