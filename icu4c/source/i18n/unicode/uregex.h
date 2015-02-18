@@ -607,6 +607,53 @@ U_STABLE int32_t U_EXPORT2
 uregex_groupCount(URegularExpression *regexp,
                   UErrorCode         *status);
 
+/**
+  * Get the group number corresponding to a named capture group.
+  * The returned number can be used with any function that access
+  * capture groups by number.
+  *
+  * The function returns an error status if the specified name does not
+  * appear in the pattern.
+  *
+  * @param  regexp      The compiled regular expression.
+  * @param  groupName   The capture group name.
+  * @param  nameLength  The length of the name, or -1 if the name is a
+  *                     nul-terminated string.
+  * @param  status      A pointer to a UErrorCode to receive any errors.
+  *
+  * @draft ICU 55
+  */
+U_DRAFT int32_t U_EXPORT2
+uregex_groupNumberFromName(URegularExpression *regexp,
+                           const UChar        *groupName,
+                           int32_t             nameLength,
+                           UErrorCode          *status);
+
+
+/**
+  * Get the group number corresponding to a named capture group.
+  * The returned number can be used with any function that access
+  * capture groups by number.
+  *
+  * The function returns an error status if the specified name does not
+  * appear in the pattern.
+  *
+  * @param  regexp      The compiled regular expression.
+  * @param  groupName   The capture group name,
+  *                     platform invariant characters only.
+  * @param  nameLength  The length of the name, or -1 if the name is
+  *                     nul-terminated.
+  * @param  status      A pointer to a UErrorCode to receive any errors.
+  *
+  * @draft ICU 55
+  */
+U_DRAFT int32_t U_EXPORT2
+uregex_groupNumberFromCName(URegularExpression *regexp,
+                            const char         *groupName,
+                            int32_t             nameLength,
+                            UErrorCode          *status);
+
+
 /** Extract the string for the specified matching expression or subexpression.
   * Group #0 is the complete string of matched text.
   * Group #1 is the text matched by the first set of capturing parentheses.
@@ -630,8 +677,8 @@ uregex_group(URegularExpression *regexp,
              int32_t             destCapacity,
              UErrorCode          *status);
 
-/** Returns a shallow immutable clone of the entire input string.  The returned UText current native index
-  *   is set to the beginning of the requested capture group.  The capture group length is also
+/** Returns a shallow immutable clone of the entire input string with the current index set
+  *   to the beginning of the requested capture group.  The capture group length is also
   *   returned via groupLength.
   * Group #0 is the complete string of matched text.
   * Group #1 is the text matched by the first set of capturing parentheses.
@@ -644,7 +691,7 @@ uregex_group(URegularExpression *regexp,
   *   @param   dest         A mutable UText in which to store the current input.
   *                         If NULL, a new UText will be created as an immutable shallow clone
   *                         of the entire input string.
-  *   @param   groupLength  The group length of the desired capture group.
+  *   @param   groupLength  The group length of the desired capture group. Output parameter.
   *   @param   status       A reference to a UErrorCode to receive any errors.
   *   @return               The subject text currently associated with this regular expression.
   *                         If a pre-allocated UText was provided, it will always be used and returned.

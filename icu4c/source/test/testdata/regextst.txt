@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2014 International Business Machines
+﻿# Copyright (c) 2001-2015 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #  file:
@@ -512,6 +512,15 @@
 "ab(?:(c)|(d))\1"              "<0>ab<1>c</1>c</0>e"
 "ab(?:(c)|(d))\1"            i "abde"
 "ab(?:(c)|(d))\1"            i "<0>ab<1>c</1>c</0>e"
+
+# Named back references
+"(?<one>abcd)\k<one>"          "<0><1>abcd</1>abcd</0>"
+"(no)?(?<one>abcd)\k<one>"     "<0><2>abcd</2>abcd</0>"
+
+"(?<a_1>...)"               E  "  "   # backref names are ascii letters & numbers only"
+"(?<1a>...)"                E  "  "   # backref names must begin with a letter"
+"(?<a>.)(?<a>.)"            E  "  "   # Repeated names are illegal.
+
 
 # Case Insensitive
 "aBc"                    i      "<0>ABC</0>"

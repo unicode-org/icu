@@ -257,6 +257,9 @@ void RegexMatcher::init2(UText *input, UErrorCode &status) {
 
 static const UChar BACKSLASH  = 0x5c;
 static const UChar DOLLARSIGN = 0x24;
+static const UChar LEFTBRACKET = 0x7b;
+static const UChar RIGHTBRACKET = 0x7d;
+
 //--------------------------------------------------------------------------------
 //
 //    appendReplacement
@@ -331,8 +334,7 @@ RegexMatcher &RegexMatcher::appendReplacement(UText *dest,
     //  TODO:  optimize this loop by efficiently scanning for '$' or '\',
     //         move entire ranges not containing substitutions.
     UTEXT_SETNATIVEINDEX(replacement, 0);
-    UChar32 c = UTEXT_NEXT32(replacement);
-    while (c != U_SENTINEL) {
+    for (UChar32 c = UTEXT_NEXT32(replacement); U_SUCCESS(status) && c != U_SENTINEL;  c = UTEXT_NEXT32(replacement)) {
         if (c == BACKSLASH) {
             // Backslash Escape.  Copy the following char out without further checks.
             //                    Note:  Surrogate pairs don't need any special handling
@@ -398,51 +400,69 @@ RegexMatcher &RegexMatcher::appendReplacement(UText *dest,
                 }
             }
         } else {
-            // We've got a $.  Pick up a capture group number if one follows.
-            // Consume at most the number of digits necessary for the largest capture
-            // number that is valid for this pattern.
+            // We've got a $.  Pick up a capture group name or number if one follows.
+            // Consume digits so long as the resulting group number <= the number of
+            // number of capture groups in the pattern.
 
-            int32_t numDigits = 0;
             int32_t groupNum  = 0;
-            UChar32 digitC;
-            for (;;) {
-                digitC = UTEXT_CURRENT32(replacement);
-                if (digitC == U_SENTINEL) {
-                    break;
+            int32_t numDigits = 0;
+            UChar32 nextChar = utext_current32(replacement);
+            if (nextChar == LEFTBRACKET) {
+                // Scan for a Named Capture Group, ${name}.
+                UnicodeString groupName;
+                utext_next32(replacement);
+                while(U_SUCCESS(status) && nextChar != RIGHTBRACKET) {
+                    nextChar = utext_next32(replacement);
+                    if (nextChar == U_SENTINEL) {
+                        status = U_REGEX_INVALID_CAPTURE_GROUP_NAME;
+                    } else if ((nextChar >= 0x41 && nextChar <= 0x5a) ||       // A..Z
+                               (nextChar >= 0x61 && nextChar <= 0x7a) ||       // a..z
+                               (nextChar >= 0x31 && nextChar <= 0x39)) {       // 0..9
+                        groupName.append(nextChar);
+                    } else if (nextChar == RIGHTBRACKET) {
+                        groupNum = uhash_geti(fPattern->fNamedCaptureMap, &groupName);
+                        if (groupNum == 0) {
+                            status = U_REGEX_INVALID_CAPTURE_GROUP_NAME;
+                        }
+                    } else {
+                        // Character was something other than a name char or a closing '}'
+                        status = U_REGEX_INVALID_CAPTURE_GROUP_NAME;
+                    }
                 }
-                if (u_isdigit(digitC) == FALSE) {
-                    break;
+                        
+            } else if (u_isdigit(nextChar)) {
+                // $n    Scan for a capture group number
+                int32_t numCaptureGroups = fPattern->fGroupMap->size();
+                for (;;) {
+                    nextChar = UTEXT_CURRENT32(replacement);
+                    if (nextChar == U_SENTINEL) {
+                        break;
+                    }
+                    if (u_isdigit(nextChar) == FALSE) {
+                        break;
+                    }
+                    int32_t nextDigitVal = u_charDigitValue(nextChar);
+                    if (groupNum*10 + nextDigitVal > numCaptureGroups) {
+                        // Don't consume the next digit if it makes the capture group number too big.
+                        if (numDigits == 0) {
+                            status = U_INDEX_OUTOFBOUNDS_ERROR;
+                        }
+                        break;
+                    }
+                    (void)UTEXT_NEXT32(replacement);
+                    groupNum=groupNum*10 + nextDigitVal; 
+                    ++numDigits;
                 }
-                (void)UTEXT_NEXT32(replacement);
-                groupNum=groupNum*10 + u_charDigitValue(digitC);
-                numDigits++;
-                if (numDigits >= fPattern->fMaxCaptureDigits) {
-                    break;
-                }
-            }
-
-
-            if (numDigits == 0) {
-                // The $ didn't introduce a group number at all.
-                // Treat it as just part of the substitution text.
-                UChar c16 = DOLLARSIGN;
-                destLen += utext_replace(dest, destLen, destLen, &c16, 1, &status);
             } else {
-                // Finally, append the capture group data to the destination.
-                destLen += appendGroup(groupNum, dest, status);
-                if (U_FAILURE(status)) {
-                    // Can fail if group number is out of range.
-                    break;
-                }
+                // $ not followed by capture group name or number.
+                status = U_REGEX_INVALID_CAPTURE_GROUP_NAME;
             }
-        }
 
-        if (U_FAILURE(status)) {
-            break;
-        } else {
-            c = UTEXT_NEXT32(replacement);
-        }
-    }
+            if (U_SUCCESS(status)) {
+                destLen += appendGroup(groupNum, dest, status);
+            }
+        }  // End of $ capture group handling
+    }  // End of per-character loop through the replacement string.
 
     return *this;
 }
@@ -1201,7 +1221,6 @@ UnicodeString RegexMatcher::group(int32_t groupNum, UErrorCode &status) const {
 }
 
 
-
 //--------------------------------------------------------------------------------
 //
 //  appendGroup() -- currently internal only, appends a group to a UText rather
@@ -1281,8 +1300,6 @@ int64_t RegexMatcher::appendGroup(int32_t groupNum, UText *dest, UErrorCode &sta
 int32_t RegexMatcher::groupCount() const {
     return fPattern->fGroupMap->size();
 }
-
-
 
 //--------------------------------------------------------------------------------
 //
