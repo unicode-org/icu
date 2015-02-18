@@ -1,19 +1,25 @@
 # Copyright (c) 2002-2015  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
-#  file:  line.txt
+#  file:  line_loose.txt
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by 
 #         Unicode Standard Annex #14 Revision 29 for Unicode 6.2
 #         http://www.unicode.org/reports/tr14/
+#         tailored as noted in 2nd paragraph below..
 #
 #         TODO:  Rule LB 8 remains as it was in Unicode 5.2
 #         This is only because of a limitation of ICU break engine implementation,
 #         not because the older behavior is desirable.
 #
-#         This corresponds to CSS line-break=strict (BCP47 -u-lb-strict).
-#         It sets characters of class CJ to behave like NS.
+#         This tailors the line break behavior to correspond to CSS
+#         line-break=loose (BCP47 -u-lb-loose) as defined for languages other than 
+#         Chinese & Japanese.
+#         It sets characters of class CJ to behave like ID.
+#         In addition, it allows breaks:
+#         * before iteration marks 3005, 303B, 309D, 309E, 30FD, 30FE (all NS)
+#         * between characters of LineBreak class IN
 
 #
 #  Character Classes defined by TR 14.
@@ -77,7 +83,7 @@ $HL = [:LineBreak =  Hebrew_Letter:];
 $HY = [:LineBreak =  Hyphen:];
 $H2 = [:LineBreak =  H2:];
 $H3 = [:LineBreak =  H3:];
-$ID = [:LineBreak =  Ideographic:];
+$ID = [[:LineBreak =  Ideographic:] $CJ];
 $IN = [:LineBreak =  Inseperable:];
 $IS = [:LineBreak =  Infix_Numeric:];
 $JL = [:LineBreak =  JL:];
@@ -85,7 +91,8 @@ $JV = [:LineBreak =  JV:];
 $JT = [:LineBreak =  JT:];
 $LF = [:LineBreak =  Line_Feed:];
 $NL = [:LineBreak =  Next_Line:];
-$NS = [[:LineBreak =  Nonstarter:] $CJ];
+$NSX = [\u3005 \u303B \u309D \u309E \u30FD \u30FE];
+$NS = [[:LineBreak =  Nonstarter:] - $NSX];
 $NU = [:LineBreak =  Numeric:];
 $OP = [:LineBreak =  Open_Punctuation:];
 $PO = [:LineBreak =  Postfix_Numeric:];
@@ -138,6 +145,7 @@ $JLcm = $JL $CM*;
 $JVcm = $JV $CM*;
 $JTcm = $JT $CM*;
 $NScm = $NS $CM*;
+$NSXcm = $NSX $CM*;
 $NUcm = $NU $CM*;
 $OPcm = $OP $CM*;
 $POcm = $PO $CM*;
@@ -173,6 +181,7 @@ $JL $CM+;
 $JV $CM+;
 $JT $CM+;
 $NS $CM+;
+$NSX $CM+;
 $NU $CM+;
 $OP $CM+;
 $PO $CM+;
@@ -200,7 +209,7 @@ $CANT_CM = [ $SP $BK $CR $LF $NL $ZW $CM];       # Bases that can't take CMs
 #            so for this one case we need to manually list out longer sequences.
 #
 $AL_FOLLOW_NOCM = [$BK $CR $LF $NL $ZW $SP];
-$AL_FOLLOW_CM   = [$CL $CP $EX $HL $IS $SY $WJ $GL $OP $QU $BA $HY $NS $IN $NU $ALPlus];
+$AL_FOLLOW_CM   = [$CL $CP $EX $HL $IS $SY $WJ $GL $OP $QU $BA $HY $NS $NSX $IN $NU $ALPlus];
 $AL_FOLLOW      = [$AL_FOLLOW_NOCM $AL_FOLLOW_CM];
 
 
@@ -303,6 +312,8 @@ $OPcm $SP+ $CM+ $AL_FOLLOW?;    # by rule 10, stand-alone CM behaves as AL
 $QUcm $SP* $OPcm;
 
 # LB 16
+# Do not break between closing punctuation and $NS, even with intervening spaces
+# But DO allow a break between closing punctuation and $NSX, don't include it here
 ($CLcm | $CPcm) $SP* $NScm;
 
 # LB 17
@@ -335,6 +346,7 @@ $LB20NonBreaks = [$LB18NonBreaks - $CB];
 # LB 21        x   (BA | HY | NS)
 #           BB x
 #
+# DO allow breaks here before NSXcm, so don't include it
 $LB20NonBreaks $CM* ($BAcm | $HYcm | $NScm); 
 
 $BBcm [^$CB];                                  #  $BB  x
@@ -353,7 +365,7 @@ $SYcm $HLcm;
 ($ALcm | $HLcm) $INcm;
 $CM+     $INcm;     #  by rule 10, any otherwise unattached CM behaves as AL
 $IDcm    $INcm;
-$INcm    $INcm;
+# $INcm  $INcm; # delete this rule for CSS loose
 $NUcm    $INcm;
 
 
@@ -431,6 +443,7 @@ $CM+ $JL;
 $CM+ $JV;
 $CM+ $JT;
 $CM+ $NS;
+$CM+ $NSX;
 $CM+ $NU;
 $CM+ $OP;
 $CM+ $PO;
@@ -549,6 +562,7 @@ $SY $CM $SP+ $OP;   # TODO:  Experiment.  Remove.
 $CM* $OP $SP* $CM* $QU;
 
 # LB 16
+# Don't include $NSX here
 $CM* $NS $SP* $CM* ($CL | $CP);
 
 # LB 17
@@ -574,6 +588,7 @@ $CM* $CAN_CM  $CM* $QU;                               #   QU x .
 #
 
 # LB 21
+# Don't include $NSX here
 $CM* ($BA | $HY | $NS) $CM* [$LB20NonBreaks-$CM];     #  . x (BA | HY | NS)
 
 $CM* [$LB20NonBreaks-$CM] $CM* $BB;                   #  BB x .
@@ -588,7 +603,7 @@ $CM* $HL $CM* $SY;
 # LB 22
 $CM* $IN $CM* ($ALPlus | $HL);
 $CM* $IN $CM* $ID;
-$CM* $IN $CM* $IN;
+# $CM* $IN $CM* $IN; # delete this rule for CSS loose
 $CM* $IN $CM* $NU;
 
 # LB 23

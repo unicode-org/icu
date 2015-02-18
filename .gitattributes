@@ -26,6 +26,12 @@ icu4c/source/data/brkitr/laodict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/line.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_fi.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_ja.txt svneol=native#text/plain
+icu4c/source/data/brkitr/line_loose.txt -text
+icu4c/source/data/brkitr/line_loose_cj.txt -text
+icu4c/source/data/brkitr/line_loose_fi.txt -text
+icu4c/source/data/brkitr/line_normal.txt -text
+icu4c/source/data/brkitr/line_normal_cj.txt -text
+icu4c/source/data/brkitr/line_normal_fi.txt -text
 icu4c/source/data/brkitr/pt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/root.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/ru.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -35,6 +41,8 @@ icu4c/source/data/brkitr/thaidict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/title.txt svneol=native#text/plain
 icu4c/source/data/brkitr/word.txt svneol=native#text/plain
 icu4c/source/data/brkitr/word_POSIX.txt svneol=native#text/plain
+icu4c/source/data/brkitr/zh.txt -text
+icu4c/source/data/brkitr/zh_Hant.txt -text
 icu4c/source/data/build.xml svneol=native#text/xml
 icu4c/source/data/cldr-icu-readme.txt svneol=native#text/plain
 icu4c/source/data/coll/af.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3070,6 +3078,8 @@ icu4c/source/data/xml/brkitr/ja.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/pt.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/root.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/ru.xml svneol=native#text/xml
+icu4c/source/data/xml/brkitr/zh.xml -text
+icu4c/source/data/xml/brkitr/zh_Hant.xml -text
 icu4c/source/data/xml/collation/ar.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/as.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/be.xml svneol=native#text/xml
