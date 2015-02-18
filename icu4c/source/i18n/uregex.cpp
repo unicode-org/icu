@@ -17,13 +17,13 @@
 #include "unicode/uchar.h"
 #include "unicode/uobject.h"
 #include "unicode/utf16.h"
-#include "umutex.h"
-#include "uassert.h"
 #include "cmemory.h"
+#include "uassert.h"
+#include "uhash.h"
+#include "umutex.h"
+#include "uvectr32.h"
 
 #include "regextxt.h"
-
-#include <stdio.h>
 
 U_NAMESPACE_BEGIN
 
@@ -624,6 +624,36 @@ uregex_groupCount(URegularExpression *regexp2,
     return result;
 }
 
+
+//------------------------------------------------------------------------------
+//
+//    uregex_groupNumberFromName
+//
+//------------------------------------------------------------------------------
+int32_t
+uregex_groupNumberFromName(URegularExpression *regexp2,
+                           const UChar        *groupName,
+                           int32_t             nameLength,
+                           UErrorCode          *status) {
+    RegularExpression *regexp = (RegularExpression*)regexp2;
+    if (validateRE(regexp, FALSE, status) == FALSE) {
+        return 0;
+    }
+    int32_t  result = regexp->fPat->groupNumberFromName(UnicodeString(groupName, nameLength), *status);
+    return result;
+}
+
+int32_t
+uregex_groupNumberFromCName(URegularExpression *regexp2,
+                            const char         *groupName,
+                            int32_t             nameLength,
+                            UErrorCode          *status) {
+    RegularExpression *regexp = (RegularExpression*)regexp2;
+    if (validateRE(regexp, FALSE, status) == FALSE) {
+        return 0;
+    }
+    return regexp->fPat->groupNumberFromName(groupName, nameLength, *status);
+}
 
 //------------------------------------------------------------------------------
 //
@@ -1285,6 +1315,8 @@ U_NAMESPACE_END
 
 static const UChar BACKSLASH  = 0x5c;
 static const UChar DOLLARSIGN = 0x24;
+static const UChar LEFTBRACKET = 0x7b;
+static const UChar RIGHTBRACKET = 0x7d;
 
 //
 //  Move a character to an output buffer, with bounds checking on the index.
@@ -1359,10 +1391,10 @@ int32_t RegexCImpl::appendReplacement(RegularExpression    *regexp,
             matchStart = (int32_t)m->fMatchStart;
         } else {
             // !!!: Would like a better way to do this!
-            UErrorCode status = U_ZERO_ERROR;
-            lastMatchEnd = utext_extract(m->fInputText, 0, m->fLastMatchEnd, NULL, 0, &status);
-            status = U_ZERO_ERROR;
-            matchStart = lastMatchEnd + utext_extract(m->fInputText, m->fLastMatchEnd, m->fMatchStart, NULL, 0, &status);
+            UErrorCode tempStatus = U_ZERO_ERROR;
+            lastMatchEnd = utext_extract(m->fInputText, 0, m->fLastMatchEnd, NULL, 0, &tempStatus);
+            tempStatus = U_ZERO_ERROR;
+            matchStart = lastMatchEnd + utext_extract(m->fInputText, m->fLastMatchEnd, m->fMatchStart, NULL, 0, &tempStatus);
         }
         for (i=lastMatchEnd; i<matchStart; i++) {
             appendToBuf(regexp->fText[i], &destIdx, dest, capacity);
@@ -1377,7 +1409,7 @@ int32_t RegexCImpl::appendReplacement(RegularExpression    *regexp,
 
     // scan the replacement text, looking for substitutions ($n) and \escapes.
     int32_t  replIdx = 0;
-    while (replIdx < replacementLength) {
+    while (replIdx < replacementLength && U_SUCCESS(*status)) {
         UChar  c = replacementText[replIdx];
         replIdx++;
         if (c != DOLLARSIGN && c != BACKSLASH) {
@@ -1426,55 +1458,84 @@ int32_t RegexCImpl::appendReplacement(RegularExpression    *regexp,
             continue;
         }
 
+        // We've got a $.  Pick up the following capture group name or number.
+        // For numbers, consume only digits that produce a valid capture group for the pattern.
 
-
-        // We've got a $.  Pick up a capture group number if one follows.
-        // Consume at most the number of digits necessary for the largest capture
-        // number that is valid for this pattern.
-
-        int32_t numDigits = 0;
         int32_t groupNum  = 0;
-        UChar32 digitC;
-        for (;;) {
-            if (replIdx >= replacementLength) {
-                break;
-            }
-            U16_GET(replacementText, 0, replIdx, replacementLength, digitC);
-            if (u_isdigit(digitC) == FALSE) {
-                break;
-            }
+        U_ASSERT(c == DOLLARSIGN);
+        UChar32 c32;
+        U16_GET(replacementText, 0, replIdx, replacementLength, c32);
+        if (u_isdigit(c32)) {
+            int32_t numDigits = 0;
+            int32_t numCaptureGroups = m->fPattern->fGroupMap->size();
+            for (;;) {
+                if (replIdx >= replacementLength) {
+                    break;
+                }
+                U16_GET(replacementText, 0, replIdx, replacementLength, c32);
+                if (u_isdigit(c32) == FALSE) {
+                    break;
+                }
 
+                int32_t digitVal = u_charDigitValue(c32);
+                if (groupNum * 10 + digitVal <= numCaptureGroups) {
+                    groupNum = groupNum * 10 + digitVal;
+                    U16_FWD_1(replacementText, replIdx, replacementLength);
+                    numDigits++;
+                } else {
+                    if (numDigits == 0) {
+                        *status = U_INDEX_OUTOFBOUNDS_ERROR;
+                    }
+                    break;
+                }
+            }
+        } else if (c32 == LEFTBRACKET) {
+            // Scan for Named Capture Group, ${name}.
+            UnicodeString groupName;
             U16_FWD_1(replacementText, replIdx, replacementLength);
-            groupNum=groupNum*10 + u_charDigitValue(digitC);
-            numDigits++;
-            if (numDigits >= m->fPattern->fMaxCaptureDigits) {
-                break;
+            while (U_SUCCESS(*status) && c32 != RIGHTBRACKET) { 
+                if (replIdx >= replacementLength) {
+                    *status = U_REGEX_INVALID_CAPTURE_GROUP_NAME;
+                    break;
+                }
+                U16_NEXT(replacementText, replIdx, replacementLength, c32);
+                if ((c32 >= 0x41 && c32 <= 0x5a) ||           // A..Z
+                        (c32 >= 0x61 && c32 <= 0x7a) ||       // a..z
+                        (c32 >= 0x31 && c32 <= 0x39)) {       // 0..9
+                    groupName.append(c32);
+                } else if (c32 == RIGHTBRACKET) {
+                    groupNum = uhash_geti(regexp->fPat->fNamedCaptureMap, &groupName);
+                    if (groupNum == 0) {
+                        // Name not defined by pattern.
+                        *status = U_REGEX_INVALID_CAPTURE_GROUP_NAME;
+                    }
+                } else {
+                    // Character was something other than a name char or a closing '}'
+                    *status = U_REGEX_INVALID_CAPTURE_GROUP_NAME;
+                }
             }
+        } else {
+            // $ not followed by {name} or digits.
+            *status = U_REGEX_INVALID_CAPTURE_GROUP_NAME;
         }
 
-
-        if (numDigits == 0) {
-            // The $ didn't introduce a group number at all.
-            // Treat it as just part of the substitution text.
-            appendToBuf(DOLLARSIGN, &destIdx, dest, capacity);
-            continue;
-        }
 
         // Finally, append the capture group data to the destination.
-        destIdx += uregex_group((URegularExpression*)regexp, groupNum,
-                                dest==NULL?NULL:&dest[destIdx], REMAINING_CAPACITY(destIdx, capacity), status);
-        if (*status == U_BUFFER_OVERFLOW_ERROR) {
-            // Ignore buffer overflow when extracting the group.  We need to
-            //   continue on to get full size of the untruncated result.  We will
-            //   raise our own buffer overflow error at the end.
-            *status = U_ZERO_ERROR;
+        if (U_SUCCESS(*status)) {
+            destIdx += uregex_group((URegularExpression*)regexp, groupNum,
+                                    dest==NULL?NULL:&dest[destIdx], REMAINING_CAPACITY(destIdx, capacity), status);
+            if (*status == U_BUFFER_OVERFLOW_ERROR) {
+                // Ignore buffer overflow when extracting the group.  We need to
+                //   continue on to get full size of the untruncated result.  We will
+                //   raise our own buffer overflow error at the end.
+                *status = U_ZERO_ERROR;
+            }
         }
 
         if (U_FAILURE(*status)) {
-            // Can fail if group number is out of range.
+            // bad group number or name.
             break;
         }
-
     }
 
     //
@@ -1483,10 +1544,12 @@ int32_t RegexCImpl::appendReplacement(RegularExpression    *regexp,
     //
     if (destIdx < capacity) {
         dest[destIdx] = 0;
-    } else if (destIdx == *destCapacity) {
-        *status = U_STRING_NOT_TERMINATED_WARNING;
-    } else {
-        *status = U_BUFFER_OVERFLOW_ERROR;
+    } else if (U_SUCCESS(*status)) {
+        if (destIdx == *destCapacity) {
+            *status = U_STRING_NOT_TERMINATED_WARNING;
+        } else {
+            *status = U_BUFFER_OVERFLOW_ERROR;
+        }
     }
 
     //

@@ -70,6 +70,7 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) :
 
     fMatchOpenParen   = -1;
     fMatchCloseParen  = -1;
+    fCaptureName      = NULL;
 
     if (U_SUCCESS(status) && U_FAILURE(rxp->fDeferredStatus)) {
         status = rxp->fDeferredStatus;
@@ -86,6 +87,8 @@ static const UChar      chDash      = 0x2d;      // '-'
 //
 //------------------------------------------------------------------------------
 RegexCompile::~RegexCompile() {
+    delete fCaptureName;         // Normally will be NULL, but can exist if pattern
+                                 //   compilation stops with a syntax error.
 }
 
 static inline void addCategory(UnicodeSet *set, int32_t value, UErrorCode& ec) {
@@ -287,17 +290,6 @@ void    RegexCompile::compile(
     //
 
     //
-    // Compute the number of digits requried for the largest capture group number.
-    //
-    fRXPat->fMaxCaptureDigits = 1;
-    int32_t  n = 10;
-    int32_t  groupCount = fRXPat->fGroupMap->size();
-    while (n <= groupCount) {
-        fRXPat->fMaxCaptureDigits++;
-        n *= 10;
-    }
-
-    //
     // The pattern's fFrameSize so far has accumulated the requirements for
     //   storage for capture parentheses, counters, etc. that are encountered
     //   in the pattern.  Add space for the two variables that are always
@@ -438,8 +430,25 @@ UBool RegexCompile::doParseActions(int32_t action)
         break;
 
 
+    case doBeginNamedCapture:
+        // Scanning (?<letter.
+        //   The first letter of the name will come through again under doConinueNamedCapture.
+        fCaptureName = new UnicodeString();
+        if (fCaptureName == NULL) {
+            error(U_MEMORY_ALLOCATION_ERROR);
+        }
+        break;
+
+    case  doContinueNamedCapture:
+        fCaptureName->append(fC.fChar);
+        break;
+
+    case doBadNamedCapture:
+        error(U_REGEX_INVALID_CAPTURE_GROUP_NAME);
+        break;
+        
     case doOpenCaptureParen:
-        // Open Paren.
+        // Open Capturing Paren, possibly named.
         //   Compile to a
         //      - NOP, which later may be replaced by a save-state if the
         //         parenthesized group gets a * quantifier, followed by
@@ -474,8 +483,18 @@ UBool RegexCompile::doParseActions(int32_t action)
 
             // Save the mapping from group number to stack frame variable position.
             fRXPat->fGroupMap->addElement(varsLoc, *fStatus);
+
+            // If this is a named capture group, add the name->group number mapping.
+            if (fCaptureName != NULL) {
+                int32_t groupNumber = fRXPat->fGroupMap->size();
+                int32_t previousMapping = uhash_puti(fRXPat->fNamedCaptureMap, fCaptureName, groupNumber, fStatus);
+                fCaptureName = NULL;    // hash table takes ownership of the name (key) string.
+                if (previousMapping > 0 && U_SUCCESS(*fStatus)) {
+                    error(U_REGEX_INVALID_CAPTURE_GROUP_NAME);
+                }
+            }
         }
-         break;
+        break;
 
     case doOpenNonCaptureParen:
         // Open non-caputuring (grouping only) Paren.
@@ -1270,7 +1289,41 @@ UBool RegexCompile::doParseActions(int32_t action)
         }
         break;
 
+    case doBeginNamedBackRef:
+        U_ASSERT(fCaptureName == NULL);
+        fCaptureName = new UnicodeString;
+        if (fCaptureName == NULL) {
+            error(U_MEMORY_ALLOCATION_ERROR);
+        }
+        break;
+            
+    case doContinueNamedBackRef:
+        fCaptureName->append(fC.fChar);
+        break;
 
+    case doCompleteNamedBackRef:
+        {
+        int32_t groupNumber = uhash_geti(fRXPat->fNamedCaptureMap, fCaptureName);
+        if (groupNumber == 0) {
+            // Group name has not been defined.
+            //   Could be a forward reference. If we choose to support them at some
+            //   future time, extra mechanism will be required at this point.
+            error(U_REGEX_INVALID_CAPTURE_GROUP_NAME);
+        } else {
+            // Given the number, handle identically to a \n numbered back reference.
+            // See comments above, under doBackRef
+            fixLiterals(FALSE);
+            if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
+                appendOp(URX_BACKREF_I, groupNumber);
+            } else {
+                appendOp(URX_BACKREF, groupNumber);
+            }
+        }
+        delete fCaptureName;
+        fCaptureName = NULL;
+        break;
+        }
+       
     case doPossessivePlus:
         // Possessive ++ quantifier.
         // Compiles to
