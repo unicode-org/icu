@@ -1,19 +1,22 @@
 # Copyright (c) 2002-2015  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
-#  file:  line.txt
+#  file:  line_normal.txt
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by 
 #         Unicode Standard Annex #14 Revision 29 for Unicode 6.2
 #         http://www.unicode.org/reports/tr14/
+#         tailored as noted in 2nd paragraph below..
 #
 #         TODO:  Rule LB 8 remains as it was in Unicode 5.2
 #         This is only because of a limitation of ICU break engine implementation,
 #         not because the older behavior is desirable.
 #
-#         This corresponds to CSS line-break=strict (BCP47 -u-lb-strict).
-#         It sets characters of class CJ to behave like NS.
+#         This tailors the line break behavior to correspond to CSS
+#         line-break=normal (BCP47 -u-lb-normal) as defined for languages other than 
+#         Chinese & Japanese.
+#         It sets characters of class CJ to behave like ID.
 
 #
 #  Character Classes defined by TR 14.
@@ -77,7 +80,7 @@ $HL = [:LineBreak =  Hebrew_Letter:];
 $HY = [:LineBreak =  Hyphen:];
 $H2 = [:LineBreak =  H2:];
 $H3 = [:LineBreak =  H3:];
-$ID = [:LineBreak =  Ideographic:];
+$ID = [[:LineBreak =  Ideographic:] $CJ];
 $IN = [:LineBreak =  Inseperable:];
 $IS = [:LineBreak =  Infix_Numeric:];
 $JL = [:LineBreak =  JL:];
@@ -85,7 +88,7 @@ $JV = [:LineBreak =  JV:];
 $JT = [:LineBreak =  JT:];
 $LF = [:LineBreak =  Line_Feed:];
 $NL = [:LineBreak =  Next_Line:];
-$NS = [[:LineBreak =  Nonstarter:] $CJ];
+$NS = [:LineBreak =  Nonstarter:];
 $NU = [:LineBreak =  Numeric:];
 $OP = [:LineBreak =  Open_Punctuation:];
 $PO = [:LineBreak =  Postfix_Numeric:];

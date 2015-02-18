@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2013  International Business Machines Corporation and
+# Copyright (c) 2002-2015  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line_fi.txt
@@ -7,10 +7,15 @@
 #         Implement default line breaking as defined by 
 #         Unicode Standard Annex #14 Revision 29 for Unicode 6.2
 #         http://www.unicode.org/reports/tr14/
+#         tailored as noted in 2nd paragraph below..
 #
 #         TODO:  Rule LB 8 remains as it was in Unicode 5.2
 #         This is only because of a limitation of ICU break engine implementation,
 #         not because the older behavior is desirable.
+#
+#         This tailors the line break behavior for Finnish, while otherwise behaving
+#         per UAX 14 which corresponds to CSS line-break=strict (BCP47 -u-lb-strict).
+#         It sets characters of class CJ to behave like NS.
 
 #
 #  Character Classes defined by TR 14.

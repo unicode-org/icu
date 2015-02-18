@@ -53,6 +53,14 @@ icu4c/source/aclocal.m4 -text
 icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
+icu4c/source/data/brkitr/line_loose.txt -text
+icu4c/source/data/brkitr/line_loose_cj.txt -text
+icu4c/source/data/brkitr/line_loose_fi.txt -text
+icu4c/source/data/brkitr/line_normal.txt -text
+icu4c/source/data/brkitr/line_normal_cj.txt -text
+icu4c/source/data/brkitr/line_normal_fi.txt -text
+icu4c/source/data/brkitr/zh.txt -text
+icu4c/source/data/brkitr/zh_Hant.txt -text
 icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/coll/ucadata-implicithan.icu -text
 icu4c/source/data/in/coll/ucadata-unihan.icu -text
@@ -71,6 +79,8 @@ icu4c/source/data/makedata.vcxproj -text
 icu4c/source/data/makedata.vcxproj.filters -text
 icu4c/source/data/region/pool.res -text
 icu4c/source/data/unit/pool.res -text
+icu4c/source/data/xml/brkitr/zh.xml -text
+icu4c/source/data/xml/brkitr/zh_Hant.xml -text
 icu4c/source/data/zone/pool.res -text
 icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
