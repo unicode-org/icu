@@ -449,8 +449,10 @@ public abstract class DateFormat extends UFormat {
     /**
      * {@icu} FieldPosition selector for ':' field alignment,
      * corresponding to the {@link Calendar#TIME_SEPARATOR} field.
+     * @draft ICU 55
+     * @provisional This API might change or be removed in a future release.
      */
-    final static int TIME_SEPARATOR = 35;
+    public final static int TIME_SEPARATOR = 35;
 
     /**
      * {@icu} Number of FieldPosition selectors for DateFormat.
@@ -2368,10 +2370,9 @@ public abstract class DateFormat extends UFormat {
 
         /**
          * Constant identifying the time separator field.
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 55
+         * @provisional This API might change or be removed in a future release.
          */
-        @Deprecated
         public static final Field TIME_SEPARATOR = new Field("time separator", Calendar.TIME_SEPARATOR);
 
         // Stand alone types are variants for its base types.  So we do not define Field for

@@ -966,10 +966,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #HOUR
      * @see #MINUTE
      * @see #SECOND
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 55
+     * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
     public static final int TIME_SEPARATOR = 24;
 
     /**
