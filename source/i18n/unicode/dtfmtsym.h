@@ -1,6 +1,6 @@
 /*  
 ********************************************************************************
-*   Copyright (C) 1997-2014, International Business Machines
+*   Copyright (C) 1997-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -421,24 +421,24 @@ public:
      * @internal
      */
     static const UChar ALTERNATE_TIME_SEPARATOR = 0x002e;  // '.'
+#endif  /* U_HIDE_INTERNAL_API */
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Gets the time separator string. For example: ":".
      * @param result Output param which will receive the time separator string.
      * @return       A reference to 'result'.
-     * @internal
+     * @draft ICU 55
      */
     UnicodeString& getTimeSeparatorString(UnicodeString& result) const;
 
     /**
      * Sets the time separator string. For example: ":".
      * @param newTimeSeparator the new time separator string.
-     * @internal
+     * @draft ICU 55
      */
     void setTimeSeparatorString(const UnicodeString& newTimeSeparator);
-#endif  /* U_HIDE_INTERNAL_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Gets cyclic year name strings if the calendar has them, by width and context.
      * For example: "jia-zi", "yi-chou", etc.

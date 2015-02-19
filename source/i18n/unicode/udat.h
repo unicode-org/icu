@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines
+ * Copyright (C) 1996-2015, International Business Machines
  * Corporation and others. All Rights Reserved.
  *******************************************************************************
 */
@@ -758,14 +758,16 @@ typedef enum UDateFormatField {
      * @internal ICU 53
      */
     UDAT_RELATED_YEAR_FIELD = 34,
+#endif /* U_HIDE_INTERNAL_API */
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * FieldPosition and UFieldPosition selector for ':' time separator,
      * corresponding to the UCAL_TIME_SEPARATOR field.
-     * @internal
+     * @draft ICU 55
      */
     UDAT_TIME_SEPARATOR_FIELD = 35,
-#endif /* U_HIDE_INTERNAL_API */
+#endif  /* U_HIDE_DRAFT_API */
 
    /**
      * Number of FieldPosition and UFieldPosition selectors for
