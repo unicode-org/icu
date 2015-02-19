@@ -1252,16 +1252,20 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Returns the time separator string. For example: ":".
      * @return the time separator string.
+     * @draft ICU 55
+     * @provisional This API might change or be removed in a future release.
      */
-    String getTimeSeparatorString() {
+    public String getTimeSeparatorString() {
         return timeSeparator;
     }
 
     /**
      * Sets the time separator string. For example: ":".
      * @param newTimeSeparator the new time separator string.
+     * @draft ICU 55
+     * @provisional This API might change or be removed in a future release.
      */
-    void setTimeSeparatorString(String newTimeSeparator) {
+    public void setTimeSeparatorString(String newTimeSeparator) {
         timeSeparator = newTimeSeparator;
     }
 
