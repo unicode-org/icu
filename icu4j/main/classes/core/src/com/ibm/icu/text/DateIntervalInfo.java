@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -259,7 +259,10 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         "w", "W", "d", 
         "D", "E", "F",
         "a", "h", "H",
-        "m",
+        "m", "s", "S",  // MINUTE, SECOND, MILLISECOND
+        "z", " ", "Y",  // ZONE_OFFSET, DST_OFFSET, YEAR_WOY
+        "e", "u", "g",  // DOW_LOCAL, EXTENDED_YEAR, JULIAN_DAY
+        "A", " ", " ",  // MILLISECONDS_IN_DAY, IS_LEAP_MONTH.
     };
 
 

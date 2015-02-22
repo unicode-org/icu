@@ -358,12 +358,12 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5", "Wed",
             "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4",
             "1997", "2450674", "52452513", "-0700", "PT", "4", "8", "3", "3", "uslax",
-            "1997", "GMT-7", "-07", "-07", "0", ":",
+            "1997", "GMT-7", "-07", "-07", "1997", ":",
 
             "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130", "Wednesday",
             "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "Wednesday",
             "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time", "Wednesday", "August", "3rd quarter", "3rd quarter", "Los Angeles Time",
-            "1997", "GMT-07:00", "-0700", "-0700", "0000", ":",
+            "1997", "GMT-07:00", "-0700", "-0700", "1997", ":",
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -4171,6 +4171,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     
     public void TestNonGregoFmtParse() {
         class CalAndFmtTestItem {
+            public int era;
             public int year;
             public int month;
             public int day;
@@ -4178,7 +4179,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             public int minute;
             public String formattedDate;
              // Simple constructor
-            public CalAndFmtTestItem(int yr, int mo, int da, int hr, int mi, String fd) {
+            public CalAndFmtTestItem(int er, int yr, int mo, int da, int hr, int mi, String fd) {
+                era = er;
                 year = yr;
                 month = mo;
                 day = da;
@@ -4189,34 +4191,73 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         };
         // test items for he@calendar=hebrew, long date format
         final CalAndFmtTestItem[] cafti_he_hebrew_long = {
-            //                       yr  mo  da  hr  mi  formattedDate
-            new CalAndFmtTestItem( 4999, 12, 29, 12,  0, "\u05DB\u05F4\u05D8 \u05D1\u05D0\u05DC\u05D5\u05DC \u05D3\u05F3\u05EA\u05EA\u05E7\u05E6\u05F4\u05D8" ),
-            new CalAndFmtTestItem( 5100,  0,  1, 12,  0, "\u05D0\u05F3 \u05D1\u05EA\u05E9\u05E8\u05D9 \u05E7\u05F3" ),
-            new CalAndFmtTestItem( 5774,  5,  1, 12,  0, "\u05D0\u05F3 \u05D1\u05D0\u05D3\u05E8 \u05D0\u05F3 \u05EA\u05E9\u05E2\u05F4\u05D3" ),
-            new CalAndFmtTestItem( 5999, 12, 29, 12,  0, "\u05DB\u05F4\u05D8 \u05D1\u05D0\u05DC\u05D5\u05DC \u05EA\u05EA\u05E7\u05E6\u05F4\u05D8" ),
-            new CalAndFmtTestItem( 6100,  0,  1, 12,  0, "\u05D0\u05F3 \u05D1\u05EA\u05E9\u05E8\u05D9 \u05D5\u05F3\u05E7\u05F3" ),
+            //                     era    yr  mo  da  hr  mi  formattedDate
+            new CalAndFmtTestItem(   0, 4999, 12, 29, 12,  0, "\u05DB\u05F4\u05D8 \u05D1\u05D0\u05DC\u05D5\u05DC \u05D3\u05F3\u05EA\u05EA\u05E7\u05E6\u05F4\u05D8" ),
+            new CalAndFmtTestItem(   0, 5100,  0,  1, 12,  0, "\u05D0\u05F3 \u05D1\u05EA\u05E9\u05E8\u05D9 \u05E7\u05F3" ),
+            new CalAndFmtTestItem(   0, 5774,  5,  1, 12,  0, "\u05D0\u05F3 \u05D1\u05D0\u05D3\u05E8 \u05D0\u05F3 \u05EA\u05E9\u05E2\u05F4\u05D3" ),
+            new CalAndFmtTestItem(   0, 5999, 12, 29, 12,  0, "\u05DB\u05F4\u05D8 \u05D1\u05D0\u05DC\u05D5\u05DC \u05EA\u05EA\u05E7\u05E6\u05F4\u05D8" ),
+            new CalAndFmtTestItem(   0, 6100,  0,  1, 12,  0, "\u05D0\u05F3 \u05D1\u05EA\u05E9\u05E8\u05D9 \u05D5\u05F3\u05E7\u05F3" ),
+        };
+        final CalAndFmtTestItem[] cafti_zh_chinese_custU = {
+            //                     era    yr  mo  da  hr  mi  formattedDate
+            new CalAndFmtTestItem(  78,   31,  0,  1, 12,  0, "2014\u7532\u5348\u5E74\u6B63\u67081" ),
+            new CalAndFmtTestItem(  77,   31,  0,  1, 12,  0, "1954\u7532\u5348\u5E74\u6B63\u67081" ),
+        };
+        final CalAndFmtTestItem[] cafti_zh_chinese_custNoU = {
+            //                     era    yr  mo  da  hr  mi  formattedDate
+            new CalAndFmtTestItem(  78,   31,  0,  1, 12, 0, "2014\u5E74\u6B63\u67081" ),
+            new CalAndFmtTestItem(  77,   31,  0,  1, 12, 0, "1954\u5E74\u6B63\u67081" ),
+        };
+        final CalAndFmtTestItem[] cafti_ja_japanese_custGy = {
+            //                     era    yr  mo  da  hr  mi  formattedDate
+            new CalAndFmtTestItem( 235,   26,  2,  5, 12, 0, "2014(\u5E73\u621026)\u5E743\u67085\u65E5" ),
+            new CalAndFmtTestItem( 234,   60,  2,  5, 12, 0, "1985(\u662D\u548C60)\u5E743\u67085\u65E5" ),
+        };
+        final CalAndFmtTestItem[] cafti_ja_japanese_custNoGy = {
+            //                     era    yr  mo  da  hr  mi  formattedDate
+            new CalAndFmtTestItem( 235,   26,  2,  5, 12, 0, "2014\u5E743\u67085\u65E5" ),
+            new CalAndFmtTestItem( 234,   60,  2,  5, 12, 0, "1985\u5E743\u67085\u65E5" ),
+        };
+        final CalAndFmtTestItem[] cafti_en_islamic_cust = {
+            //                     era    yr  mo  da  hr  mi  formattedDate
+            new CalAndFmtTestItem(   0, 1384,  0,  1, 12, 0, "1 Muh. 1384 AH, 1964" ),
+            new CalAndFmtTestItem(   0, 1436,  0,  1, 12, 0, "1 Muh. 1436 AH, 2014" ),
+            new CalAndFmtTestItem(   0, 1487,  0,  1, 12, 0, "1 Muh. 1487 AH, 2064" ),
         };
         class TestNonGregoItem {
             public String locale;
             public int style;
+            public String pattern;  // ignored unless style == DateFormat.NONE
             public CalAndFmtTestItem[] caftItems;
              // Simple constructor
-            public TestNonGregoItem(String loc, int styl, CalAndFmtTestItem[] items) {
+            public TestNonGregoItem(String loc, int styl, String pat, CalAndFmtTestItem[] items) {
                 locale = loc;
                 style = styl;
+                pattern = pat;
                 caftItems = items;
             }
         };
         final TestNonGregoItem[] items = {
-            new TestNonGregoItem( "he@calendar=hebrew", DateFormat.LONG, cafti_he_hebrew_long ),
+            new TestNonGregoItem( "he@calendar=hebrew",   DateFormat.LONG, "",                          cafti_he_hebrew_long ),
+            new TestNonGregoItem( "zh@calendar=chinese",  DateFormat.NONE, "rU\u5E74MMMd",              cafti_zh_chinese_custU ),
+            new TestNonGregoItem( "zh@calendar=chinese",  DateFormat.NONE, "r\u5E74MMMd",               cafti_zh_chinese_custNoU ),
+            new TestNonGregoItem( "ja@calendar=japanese", DateFormat.NONE, "r(Gy)\u5E74M\u6708d\u65E5", cafti_ja_japanese_custGy ),
+            new TestNonGregoItem( "ja@calendar=japanese", DateFormat.NONE, "r\u5E74M\u6708d\u65E5",     cafti_ja_japanese_custNoGy ),
+            new TestNonGregoItem( "en@calendar=islamic",  DateFormat.NONE, "d MMM y G, r",              cafti_en_islamic_cust ),
         };
         for (TestNonGregoItem item: items) {
             ULocale locale = new ULocale(item.locale);
-            DateFormat dfmt = DateFormat.getDateInstance(item.style, locale);
+            DateFormat dfmt = null;
+            if (item.style != DateFormat.NONE) {
+                dfmt = DateFormat.getDateInstance(item.style, locale);
+            } else {
+                dfmt = new SimpleDateFormat(item.pattern, locale);
+            }
             Calendar cal = dfmt.getCalendar();
 
             for (CalAndFmtTestItem caftItem: item.caftItems) {
                 cal.clear();
+                cal.set(Calendar.ERA, caftItem.era);
                 cal.set(caftItem.year, caftItem.month, caftItem.day, caftItem.hour, caftItem.minute, 0);
                 StringBuffer result = new StringBuffer();
                 FieldPosition fpos = new FieldPosition(0);
@@ -4228,12 +4269,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     // formatted OK, try parse
                     ParsePosition ppos = new ParsePosition(0);
                     dfmt.parse(result.toString(), cal, ppos);
+                    int era = cal.get(Calendar.ERA);
                     int year = cal.get(Calendar.YEAR);
                     int month = cal.get(Calendar.MONTH);
                     int day = cal.get(Calendar.DATE);
-                    if ( ppos.getIndex() < result.length() || year != caftItem.year || month != caftItem.month || day != caftItem.day) {
+                    if ( ppos.getIndex() < result.length() || era != caftItem.era || year != caftItem.year || month != caftItem.month || day != caftItem.day) {
                         errln("FAIL: date parse for locale " + item.locale +  ", style " + item.style +
-                                ", string \"" + result + "\", expected " + caftItem.year+"-"+caftItem.month+"-"+caftItem.day +
+                                ", string \"" + result + "\", expected " + caftItem.era+":" +caftItem.year+"-"+caftItem.month+"-"+caftItem.day +
                                 ", got pos " + ppos.getIndex() + " "+year+"-"+month+"-"+day );
                     }
                 }

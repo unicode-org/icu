@@ -740,10 +740,10 @@ public class SimpleDateFormat extends DateFormat {
         /*wW*/ 20, 30,
         /*dDEF*/ 30, 20, 30, 30,
         /*ahHm*/ 40, 50, 50, 60,
-        /*sS..*/ 70, 80,
+        /*sS*/ 70, 80,
         /*z?Y*/ 0, 0, 10,
         /*eug*/ 30, 10, 0,
-        /*A*/ 40
+        /*A?*/ 40, 0, 0
     };
 
     /*
@@ -1387,16 +1387,16 @@ public class SimpleDateFormat extends DateFormat {
         /*wWa*/ Calendar.WEEK_OF_YEAR, Calendar.WEEK_OF_MONTH, Calendar.AM_PM,
         /*hKz*/ Calendar.HOUR, Calendar.HOUR, Calendar.ZONE_OFFSET,
         /*Yeu*/ Calendar.YEAR_WOY, Calendar.DOW_LOCAL, Calendar.EXTENDED_YEAR,
-        /*gAZ*/ Calendar.JULIAN_DAY, Calendar.MILLISECONDS_IN_DAY, Calendar.ZONE_OFFSET,
-        /*v*/   Calendar.ZONE_OFFSET,
+        /*gAZ*/ Calendar.JULIAN_DAY, Calendar.MILLISECONDS_IN_DAY, Calendar.ZONE_OFFSET /* also DST_OFFSET */,
+        /*v*/   Calendar.ZONE_OFFSET /* also DST_OFFSET */,
         /*c*/   Calendar.DOW_LOCAL,
         /*L*/   Calendar.MONTH,
         /*Qq*/  Calendar.MONTH, Calendar.MONTH,
-        /*V*/   Calendar.ZONE_OFFSET,
+        /*V*/   Calendar.ZONE_OFFSET /* also DST_OFFSET */,
         /*U*/   Calendar.YEAR,
-        /*O*/   Calendar.ZONE_OFFSET,
-        /*Xx*/  Calendar.ZONE_OFFSET, Calendar.ZONE_OFFSET,
-        /*r*/   Calendar.RELATED_YEAR,
+        /*O*/   Calendar.ZONE_OFFSET /* also DST_OFFSET */,
+        /*Xx*/  Calendar.ZONE_OFFSET /* also DST_OFFSET */, Calendar.ZONE_OFFSET /* also DST_OFFSET */,
+        /*r*/   Calendar.EXTENDED_YEAR /* not an exact match */,
         /*:*/   Calendar.TIME_SEPARATOR,
     };
 
@@ -1538,7 +1538,7 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         final int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
-        int value = cal.get(field);
+        int value = (patternCharIndex != DateFormat.RELATED_YEAR)? cal.get(field): cal.getRelatedYear();
 
         NumberFormat currentNumberFormat = getNumberFormat(ch);
         DateFormatSymbols.CapitalizationContextUsage capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.OTHER;
@@ -3327,6 +3327,7 @@ public class SimpleDateFormat extends DateFormat {
                 // case 20: // 'u' - EXTENDED_YEAR
                 // case 21: // 'g' - JULIAN_DAY
                 // case 22: // 'A' - MILLISECONDS_IN_DAY
+                // case 34: //
 
                 // Handle "generic" fields
                 if (obeyCount) {
@@ -3336,7 +3337,11 @@ public class SimpleDateFormat extends DateFormat {
                     number = parseInt(text, pos, allowNegative,currentNumberFormat);
                 }
                 if (number != null) {
-                    cal.set(field, number.intValue());
+                    if (patternCharIndex != DateFormat.RELATED_YEAR) {
+                        cal.set(field, number.intValue());
+                    } else {
+                        cal.setRelatedYear(number.intValue());
+                    }
                     return pos.getIndex();
                 }
                 return ~start;
