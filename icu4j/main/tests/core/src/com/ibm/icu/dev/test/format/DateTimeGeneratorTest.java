@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006-2014, Google, International Business Machines Corporation *
+ * Copyright (C) 2006-2015, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                            *
  *******************************************************************************
  */
@@ -560,7 +560,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
     }
     
     public void TestVariableCharacters() {
-        UnicodeSet valid = new UnicodeSet("[G y Y u U Q q M L l w W d D F g E e c a h H K k m s S A z Z O v V X x]");
+        UnicodeSet valid = new UnicodeSet("[G y Y u U r Q q M L l w W d D F g E e c a h H K k m s S A z Z O v V X x]");
         for (char c = 0; c < 0xFF; ++c) {
             boolean works = false;
             try {

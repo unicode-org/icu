@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2006-2014, Google, International Business Machines Corporation *
+ * Copyright (C) 2006-2015, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -1954,6 +1954,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         {'y', YEAR, NUMERIC, 1, 20},
         {'Y', YEAR, NUMERIC + DELTA, 1, 20},
         {'u', YEAR, NUMERIC + 2*DELTA, 1, 20},
+        {'r', YEAR, NUMERIC + 3*DELTA, 1, 20},
         {'U', YEAR, SHORT, 1, 3},
         {'U', YEAR, LONG, 4},
         {'U', YEAR, NARROW, 5},

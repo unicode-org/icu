@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2008-2014, International Business Machines
+*   Copyright (C) 2008-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -1270,6 +1270,8 @@ public class DateIntervalFormat extends UFormat {
               case 'g':
               case 'e':
               case 'c':
+              case 'U':
+              case 'r':
                 normalizedDateSkeleton.append(ch);
                 dateSkeleton.append(ch);
                 break;
