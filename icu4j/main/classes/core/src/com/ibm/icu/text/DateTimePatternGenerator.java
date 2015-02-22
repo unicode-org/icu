@@ -2107,7 +2107,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 int[] row = types[canonicalIndex];
                 int typeValue = row[1];
                 if (original[typeValue].length() != 0) {
-                    if (allowDuplicateFields) {
+                    if ( allowDuplicateFields ||
+                          (original[typeValue].charAt(0) == 'r' && field.charAt(0) == 'U') ||
+                          (original[typeValue].charAt(0) == 'U' && field.charAt(0) == 'r') ) {
                         continue;
                     }
                     throw new IllegalArgumentException("Conflicting fields:\t"
