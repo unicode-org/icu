@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/root.xml
@@ -324,7 +324,7 @@ root{
             }
         }
     }
-    Version{"2.1.7.12"}
+    Version{"2.1.12.90"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -354,10 +354,10 @@ root{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "U MMMM d, EEEE",
-                "U MMMM d",
-                "U MMM d",
-                "y-MM-dd",
+                "r(U) MMMM d, EEEE",
+                "r(U) MMMM d",
+                "r MMM d",
+                "r-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -382,10 +382,10 @@ root{
             availableFormats{
                 E{"ccc"}
                 Ed{"d, E"}
-                Gy{"U"}
-                GyMMM{"U MMM"}
-                GyMMMEd{"U MMM d, E"}
-                GyMMMd{"U MMM d"}
+                Gy{"r U"}
+                GyMMM{"r(U) MMM"}
+                GyMMMEd{"r(U) MMM d, E"}
+                GyMMMd{"r MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -395,22 +395,26 @@ root{
                 MMMEd{"MMM d, E"}
                 MMMd{"MMM d"}
                 Md{"MM-dd"}
+                UM{"U MM"}
+                UMMM{"U MMM"}
+                UMMMd{"U MMM d"}
+                UMd{"U MM-d"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"U"}
-                yMd{"y-MM-dd"}
-                yyyy{"U"}
-                yyyyM{"y-MM"}
-                yyyyMEd{"y-MM-dd, E"}
-                yyyyMMM{"U MMM"}
-                yyyyMMMEd{"U MMM d, E"}
-                yyyyMMMd{"U MMM d"}
-                yyyyMd{"y-MM-dd"}
-                yyyyQQQ{"U QQQ"}
-                yyyyQQQQ{"U QQQQ"}
+                y{"r(U)"}
+                yMd{"r-MM-dd"}
+                yyyy{"r(U)"}
+                yyyyM{"r-MM"}
+                yyyyMEd{"r-MM-dd, E"}
+                yyyyMMM{"r(U) MMM"}
+                yyyyMMMEd{"r(U) MMM d, E"}
+                yyyyMMMd{"r MMM d"}
+                yyyyMd{"r-MM-dd"}
+                yyyyQQQ{"r(U) QQQ"}
+                yyyyQQQQ{"r(U) QQQQ"}
             }
             cyclicNameSets{
                 dayParts{
