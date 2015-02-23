@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 1997-2014, International Business Machines Corporation and    *
+* Copyright (C) 1997-2015, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -159,28 +159,28 @@
     <property name="jvm_options" value="${env.JVM_OPTIONS}"/>
     <target name="check" description="Run the standard ICU4J test suite">
         <antcall target="_runCheck">
-            <param name="runcheck.arg" value="-n"/>
+            <param name="runcheck.arg" value=""/>
             <param name="runcheck.jvmarg" value="${jvm_options} -ea"/>
         </antcall>
     </target>
 
     <target name="exhaustiveCheck" description="Run the standard ICU4J test suite in exhaustive mode">
         <antcall target="_runCheck">
-            <param name="runcheck.arg" value="-n -e10"/>
+            <param name="runcheck.arg" value="-e10"/>
             <param name="runcheck.jvmarg" value="${jvm_options} -ea"/>
         </antcall>
     </target>
 
     <target name="timeZoneCheck" description="Run the complete test for TimeZoneRoundTripAll">
         <antcall target="_runCheck">
-            <param name="runcheck.arg" value="-n -prop:TimeZoneRoundTripAll=true Core/Format/DateFormat/TimeZoneFormatTest -v"/>
+            <param name="runcheck.arg" value="-prop:TimeZoneRoundTripAll=true Core/Format/DateFormat/TimeZoneFormatTest -v"/>
             <param name="runcheck.jvmarg" value="${jvm_options}"/>
         </antcall>
     </target>
 
     <target name="jdktzCheck" description="Run the standard ICU4J test suite with JDK TimeZone">
         <antcall target="_runCheck">
-            <param name="runcheck.arg" value="-n"/>
+            <param name="runcheck.arg" value=""/>
             <param name="runcheck.jvmarg" value="${jvm_options} -Dcom.ibm.icu.util.TimeZone.DefaultTimeZoneType=JDK"/>
         </antcall>
     </target>
@@ -211,12 +211,11 @@
     </target>
 
     <target name="_runTestArgCheck" unless="testarg">
-        <echo message="No test arguments are supplied. Using the default argument '-n'."/>
+        <echo message="No test arguments are supplied."/>
         <echo message="For specifying test arguments, use '-Dtestarg=[test args]' as"/>
         <echo message="ant command line argument. For example:"/>
         <echo message="  &#x3E;ant runTest -Dtestarg=&#x22;Core/Format -e10&#x22;"/>
         <echo message="for running ICU4J core format test suite in exhaustive mode."/>
-        <property name="testarg" value="-n"/>
     </target>
 
     <target name="runTest" depends="_runTestArgCheck" description="Run a ICU4J test case, without calling any other build targets">
@@ -247,7 +246,7 @@
     <target name="packagingCheck" depends="info, core, packaging-tests" description="Run packaging tests">
         <!-- region data but no language data -->
         <java classname="com.ibm.icu.dev.test.TestPackaging" fork="yes" failonerror="true">
-            <arg line="-n -w"/>
+            <arg line="-w"/>
             <classpath>
                 <pathelement location="${icu4j.core.jar}"/>
                 <pathelement location="${icu4j.charset.jar}"/>
@@ -258,7 +257,7 @@
         </java>
         <!-- language data but no region data -->
         <java classname="com.ibm.icu.dev.test.TestPackaging" fork="yes" failonerror="true">
-            <arg line="-n -w"/>
+            <arg line="-w"/>
             <classpath>
                 <pathelement location="${icu4j.core.jar}"/>
                 <pathelement location="${icu4j.charset.jar}"/>
@@ -269,7 +268,7 @@
         </java>
         <!-- neither region nor language data -->
         <java classname="com.ibm.icu.dev.test.TestPackaging" fork="yes" failonerror="true">
-            <arg line="-n -w"/>
+            <arg line="-w"/>
             <classpath>
                 <pathelement location="${icu4j.core.jar}"/>
                 <pathelement location="${icu4j.charset.jar}"/>
@@ -281,7 +280,6 @@
 
     <target name="coreCheck" depends="info, core, currdata, langdata, regiondata, core-tests" description="Run only the core tests">
         <java classname="com.ibm.icu.dev.test.TestAllCore" fork="yes" failonerror="true">
-            <arg line="-n"/>
             <classpath>
                 <pathelement location="${icu4j.core.jar}"/>
                 <pathelement location="${icu4j.currdata.jar}"/>
@@ -295,7 +293,6 @@
 
     <target name="collateCheck" depends="info, core, collate, currdata, langdata, regiondata, core-tests, collate-tests" description="Run only the collation tests">
         <java classname="com.ibm.icu.dev.test.TestAllCollate" fork="yes" failonerror="true">
-            <arg line="-n"/>
             <classpath>
                 <pathelement location="${icu4j.core.jar}"/>
                 <pathelement location="${icu4j.collate.jar}"/>
@@ -313,7 +310,6 @@
 
     <target name="translitCheck" depends="info, core, translit, translit-tests" description="Run the ICU4J Translit test suite">
         <java classname="com.ibm.icu.dev.test.TestAllTranslit" fork="yes" failonerror="true">
-            <arg line="-n"/>
             <classpath>
                 <pathelement location="${icu4j.core.jar}"/>
                 <pathelement location="${icu4j.translit.jar}"/>
@@ -330,7 +326,6 @@
     <target name="_runLocalespiCheck" depends="localespi, localespi-tests">
         <java classname="com.ibm.icu.dev.test.localespi.TestAll" fork="yes" failonerror="true">
             <jvmarg line="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${icu4j.currdata.dir}/${jar.dir}${path.separator}${icu4j.langdata.dir}/${jar.dir}${path.separator}${icu4j.regiondata.dir}/${jar.dir}${path.separator}${java.ext.dirs}"/>
-            <arg value="-n"/>
             <classpath>
                 <pathelement location="${icu4j.localespi-tests.jar}"/>
                 <pathelement location="${icu4j.test-framework.jar}"/>
@@ -339,7 +334,7 @@
     </target>
 
     <target name="secureCheck" depends="main, jar, icu4jtestsJar" description="Run the secure (applet-like) ICU4J test suite">
-        <property name="securecheck.arg" value="-n -w"/>
+        <property name="securecheck.arg" value="-w"/>
         <property name="securecheck.jvmarg"
                 value="${jvm_options} -Djava.security.manager -Djava.security.policy=${shared.dir}/data/security.policy -Djava.awt.headless=true"/>
 
@@ -870,7 +865,6 @@
 
         <jacoco:coverage destfile="${jacoco.exec.data.file}">
             <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-                <arg value="-n"/>
                 <jvmarg line="${jvm_options} -ea -Djava.awt.headless=true"/>
                 <classpath>
                     <pathelement location="${icu4j.jar.file}"/>
@@ -973,7 +967,6 @@
 
         <!-- Run the test suites -->
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-            <arg value="-n"/>
             <classpath>
                 <pathelement location="${icu4j.core.jar}"/>
                 <pathelement location="${icu4j.collate.jar}"/>
@@ -1370,7 +1363,6 @@
 
     <target name="moduleCheck" description="Run tests for a ICU4J module jar">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-            <arg value="-nothrow"/>
             <arg value="-nodata"/>
             <classpath>
                 <pathelement location="${module.jar}"/>
