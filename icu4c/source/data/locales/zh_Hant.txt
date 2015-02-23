@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh_Hant.xml
@@ -207,7 +207,7 @@ zh_Hant{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.1.8.95"}
+    Version{"2.1.12.90"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -262,18 +262,18 @@ zh_Hant{
                 "ah:mm:ss",
                 "ah:mm",
                 {
-                    "U年MMMdEEEE",
+                    "rU年MMMdEEEE",
                     "d=hanidays",
                 }
                 {
-                    "U年MMMd",
+                    "rU年MMMd",
                     "d=hanidays",
                 }
                 {
-                    "U年MMMd",
+                    "r年MMMd",
                     "d=hanidays",
                 }
-                "U/M/d",
+                "r/M/d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -282,27 +282,31 @@ zh_Hant{
             }
             availableFormats{
                 Ed{"d日E"}
-                Gy{"U年"}
-                GyMMM{"U年MMM"}
-                GyMMMEd{"U年MMMd日E"}
-                GyMMMd{"U年MMMd日"}
+                Gy{"rU年"}
+                GyMMM{"rU年MMM"}
+                GyMMMEd{"rU年MMMdE"}
+                GyMMMd{"r年MMMd"}
                 M{"MMM"}
                 MEd{"M/dE"}
                 MMMEd{"MMMd日E"}
                 MMMd{"MMMd日"}
                 Md{"M/d"}
+                UM{"U年MMM"}
+                UMMM{"U年MMM"}
+                UMMMd{"U年MMMd"}
+                UMd{"U年MMMd"}
                 d{"d日"}
-                y{"U年"}
-                yMd{"U年MMMd日"}
-                yyyy{"U年"}
-                yyyyM{"U年MMM"}
-                yyyyMEd{"U年MMMd日，E"}
-                yyyyMMM{"U年MMM"}
-                yyyyMMMEd{"U年MMMd日E"}
-                yyyyMMMd{"U年MMMd日"}
-                yyyyMd{"U年MMMd日"}
-                yyyyQQQ{"U年QQQQ"}
-                yyyyQQQQ{"U年QQQQ"}
+                y{"rU年"}
+                yMd{"r年MMMd"}
+                yyyy{"rU年"}
+                yyyyM{"rU年MMM"}
+                yyyyMEd{"rU年MMMd，E"}
+                yyyyMMM{"rU年MMM"}
+                yyyyMMMEd{"rU年MMMdE"}
+                yyyyMMMd{"r年MMMd"}
+                yyyyMd{"r年MMMd"}
+                yyyyQQQ{"rU年QQQQ"}
+                yyyyQQQQ{"rU年QQQQ"}
             }
             cyclicNameSets{
                 dayParts{
@@ -494,39 +498,39 @@ zh_Hant{
                     h{"ah時至h時 [v]"}
                 }
                 y{
-                    y{"U至U"}
+                    y{"rU至rU"}
                 }
                 yM{
-                    M{"U/M至U/M"}
-                    y{"U/M至U/M"}
+                    M{"r/M至r/M"}
+                    y{"r/M至r/M"}
                 }
                 yMEd{
-                    M{"U/M/dE至U/M/dE"}
-                    d{"U/M/dE至U/M/dE"}
-                    y{"U/M/dE至U/M/dE"}
+                    M{"r/M/dE至r/M/dE"}
+                    d{"r/M/dE至r/M/dE"}
+                    y{"r/M/dE至r/M/dE"}
                 }
                 yMMM{
-                    M{"U年MMM至MMM"}
-                    y{"U年MMM至U年MMM"}
+                    M{"rU年MMM至MMM"}
+                    y{"rU年MMM至rU年MMM"}
                 }
                 yMMMEd{
-                    M{"U年MMMd日E至MMMd日E"}
-                    d{"U年MMMd日E至d日E"}
-                    y{"U年MMMd日E至U年MMMd日E"}
+                    M{"rU年MMMdE至MMMdE"}
+                    d{"rU年MMMdE至dE"}
+                    y{"rU年MMMdE至rU年MMMdE"}
                 }
                 yMMMM{
-                    M{"U年MMMM至MMMM"}
-                    y{"U年MMMM至U年MMMM"}
+                    M{"rU年MMMM至MMMM"}
+                    y{"rU年MMMM至rU年MMMM"}
                 }
                 yMMMd{
-                    M{"U年MMMd日至MMMd日"}
-                    d{"U年MMMd日至d日"}
-                    y{"U年MMMd日至U年MMMd日"}
+                    M{"r年MMMd至MMMd"}
+                    d{"r年MMMd至d"}
+                    y{"r年MMMd至r年MMMd"}
                 }
                 yMd{
-                    M{"U/M/d至U/M/d"}
-                    d{"U/M/d至U/M/d"}
-                    y{"U/M/d至U/M/d"}
+                    M{"r/M/d至r/M/d"}
+                    d{"r/M/d至r/M/d"}
+                    y{"r/M/d至r/M/d"}
                 }
             }
             monthNames{
