@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1199,7 +1199,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         Date d = gcal.getTime();
 
         String dangiDateStr = fmt.format(d);
-        assertEquals("Bad date format", "Mo1 20, gui-si", dangiDateStr);
+        assertEquals("Bad date format", "Mo1 20, 2013", dangiDateStr);
     }
     
     public void TestT10110() {
