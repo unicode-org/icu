@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -127,7 +127,6 @@ public class TestUtilities extends TestFmwk {
         // check boilerplate
         List argList = new ArrayList();
         argList.add("TestMain");
-        if (params.nothrow) argList.add("-nothrow");
         if (params.verbose) argList.add("-verbose");
         String[] args = new String[argList.size()];
         argList.toArray(args);

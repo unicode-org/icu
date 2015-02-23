@@ -93,9 +93,6 @@ public class TestFmwk extends AbstractTestLog {
             // ICUTestError is one produced by errln.
             // We don't need to include useless stack trace information for
             // such case.
-            if (!params.nothrow) {
-                throw new RuntimeException(ex);
-            }
             return;
         }
         if (ex instanceof ExceptionInInitializerError){
@@ -114,19 +111,11 @@ public class TestFmwk extends AbstractTestLog {
                 msg.indexOf("java.util.MissingResourceException") >= 0) {
             if (params.warnings || params.nodata) {
                 warnln(msg);
-            } else if (params.nothrow) {
-                errln(msg);
             } else {
-                ex.printStackTrace();
-                throw new RuntimeException(ex);
+                errln(msg);
             }
         } else {
-            if (params.nothrow) {
-                errln(msg);
-            } else {
-                errln(msg);
-                throw new RuntimeException(ex);
-            }
+            errln(msg);
         }
     }
     // use this instead of new random so we get a consistent seed
@@ -968,7 +957,8 @@ public class TestFmwk extends AbstractTestLog {
         // calls
         //      pw.println(" -m[emory] print memory usage and force gc for
         // each test");
-        pw.println(" -n[othrow] Message on test failure rather than exception");
+        pw.println(" -n[othrow] Message on test failure rather than exception.\n");
+        pw.println("      This is the default behavior and has no effects on ICU 55+.");
         pw.println(" -p[rompt] Prompt before exiting");
         pw.println(" -prop:<key>=<value> Set optional property used by this test");
         pw.println(" -q[uiet] Do not show warnings");
@@ -1161,7 +1151,6 @@ public class TestFmwk extends AbstractTestLog {
 
     public static class TestParams {
         public boolean prompt;
-        public boolean nothrow;
         public boolean verbose;
         public boolean quiet;
         public int listlevel;
@@ -1177,7 +1166,7 @@ public class TestFmwk extends AbstractTestLog {
 
         public State stack;
 
-        public StringBuffer errorSummary;
+        public StringBuffer errorSummary = new StringBuffer();
         private StringBuffer timeLog;
         private Map<String, List<String>> knownIssues;
 
@@ -1256,8 +1245,7 @@ public class TestFmwk extends AbstractTestLog {
                         } else if (arg.equals("-memory") || arg.equals("-m")) {
                             params.memusage = true;
                         } else if (arg.equals("-nothrow") || arg.equals("-n")) {
-                            params.nothrow = true;
-                            params.errorSummary = new StringBuffer();
+                            // Default since ICU 55. This option has no effects.
                         } else if (arg.equals("-describe") || arg.equals("-d")) {
                             params.describe = true;
                         } else if (arg.startsWith("-r")) {
@@ -1584,9 +1572,6 @@ public class TestFmwk extends AbstractTestLog {
             }
 
             if (level == ERR) {
-                if (!nothrow) {
-                    throw new ICUTestError(message);
-                }
                 if (!suppressIndent && errorSummary != null && stack !=null
                         && (errorCount == stack.ec + 1)) {
                     stack.appendPath(errorSummary);
