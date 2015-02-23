@@ -199,9 +199,6 @@ public abstract class URLHandler {
                 if (ix >= 0) {
                     prefix = prefix.substring(ix + 2); // truncate after "!/"
                 }
-                if (!prefix.endsWith("/")) {
-                    prefix += '/';
-                }
 
                 String protocol = url.getProtocol();
                 if (!protocol.equals("jar")) {
@@ -235,19 +232,13 @@ public abstract class URLHandler {
                         
                         if (name.startsWith(prefix)) {
                             name = name.substring(prefix.length());
-                            
                             int ix = name.lastIndexOf('/');
-                            
-                            if (ix != -1) {
-                                if (!recurse) {
-                                    continue;
-                                }
-                                
-                                if (strip) {
-                                    name = name.substring(ix+1);
-                                }
+                            if (ix > 0 && !recurse) {
+                                continue;
                             }
-                            
+                            if (strip && ix != -1) {
+                                name = name.substring(ix+1);
+                            }
                             v.visit(name);
                         }
                     }
