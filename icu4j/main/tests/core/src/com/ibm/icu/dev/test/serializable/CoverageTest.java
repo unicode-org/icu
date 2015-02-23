@@ -137,7 +137,7 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
         int ix = str.lastIndexOf(".class");
         
         if (ix >= 0) {
-            String className = "com.ibm.icu" + str.substring(0, ix).replace('/', '.');
+            String className = "com.ibm.icu." + str.substring(0, ix).replace('/', '.');
             
             // Skip things in com.ibm.icu.dev; they're not relevant.
             if (className.startsWith("com.ibm.icu.dev.")) {
