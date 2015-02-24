@@ -49,6 +49,15 @@ static const int32_t DEFAULT_BACKTRACK_STACK_CAPACITY = 8000000;
 //   This constant determines that state saves per tick number.
 static const int32_t TIMER_INITIAL_VALUE = 10000;
 
+
+// Test for any of the Unicode line terminating characters.
+static inline UBool isLineTerminator(UChar32 c) {
+    if (c & ~(0x0a | 0x0b | 0x0c | 0x0d | 0x85 | 0x2028 | 0x2029)) {
+        return false;
+    }
+    return (c<=0x0d && c>=0x0a) || c==0x85 || c==0x2028 || c==0x2029;
+}
+
 //-----------------------------------------------------------------------------
 //
 //   Constructor and Destructor
@@ -837,20 +846,19 @@ UBool RegexMatcher::find(UErrorCode &status) {
                 }
             } else {
                 for (;;) {
-                    if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                        ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029 )) {
-                            if (c == 0x0d && startPos < fActiveLimit && UTEXT_CURRENT32(fInputText) == 0x0a) {
-                                (void)UTEXT_NEXT32(fInputText);
-                                startPos = UTEXT_GETNATIVEINDEX(fInputText);
-                            }
-                            MatchAt(startPos, FALSE, status);
-                            if (U_FAILURE(status)) {
-                                return FALSE;
-                            }
-                            if (fMatch) {
-                                return TRUE;
-                            }
-                            UTEXT_SETNATIVEINDEX(fInputText, startPos);
+                    if (isLineTerminator(c)) {
+                        if (c == 0x0d && startPos < fActiveLimit && UTEXT_CURRENT32(fInputText) == 0x0a) {
+                            (void)UTEXT_NEXT32(fInputText);
+                            startPos = UTEXT_GETNATIVEINDEX(fInputText);
+                        }
+                        MatchAt(startPos, FALSE, status);
+                        if (U_FAILURE(status)) {
+                            return FALSE;
+                        }
+                        if (fMatch) {
+                            return TRUE;
+                        }
+                        UTEXT_SETNATIVEINDEX(fInputText, startPos);
                     }
                     if (startPos >= testStartLimit) {
                         fMatch = FALSE;
@@ -1098,8 +1106,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
         } else {
             for (;;) {
                 c = inputBuf[startPos-1];
-                if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                    ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029 )) {
+                if (isLineTerminator(c)) {
                     if (c == 0x0d && startPos < fActiveLimit && inputBuf[startPos] == 0x0a) {
                         startPos++;
                     }
@@ -2927,9 +2934,9 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
                 //   end of input, succeed.
                 UChar32 c = UTEXT_NEXT32(fInputText);
                 if (UTEXT_GETNATIVEINDEX(fInputText) >= fAnchorLimit) {
-                    if ((c>=0x0a && c<=0x0d) || c==0x85 || c==0x2028 || c==0x2029) {
+                    if (isLineTerminator(c)) {
                         // If not in the middle of a CR/LF sequence
-                      if ( !(c==0x0a && fp->fInputIdx>fAnchorStart && ((void)UTEXT_PREVIOUS32(fInputText), UTEXT_PREVIOUS32(fInputText))==0x0d)) {
+                        if ( !(c==0x0a && fp->fInputIdx>fAnchorStart && ((void)UTEXT_PREVIOUS32(fInputText), UTEXT_PREVIOUS32(fInputText))==0x0d)) {
                             // At new-line at end of input. Success
                             fHitEnd = TRUE;
                             fRequireEnd = TRUE;
@@ -2985,7 +2992,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
                  // It makes no difference where the new-line is within the input.
                  UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
                  UChar32 c = UTEXT_CURRENT32(fInputText);
-                 if ((c>=0x0a && c<=0x0d) || c==0x85 ||c==0x2028 || c==0x2029) {
+                 if (isLineTerminator(c)) {
                      // At a line end, except for the odd chance of  being in the middle of a CR/LF sequence
                      //  In multi-line mode, hitting a new-line just before the end of input does not
                      //   set the hitEnd or requireEnd flags
@@ -3034,8 +3041,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
                //   unless we are at the end of input
                UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
                UChar32  c = UTEXT_PREVIOUS32(fInputText);
-               if ((fp->fInputIdx < fAnchorLimit) &&
-                   ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
+               if ((fp->fInputIdx < fAnchorLimit) && isLineTerminator(c)) {
                    //  It's a new-line.  ^ is true.  Success.
                    //  TODO:  what should be done with positions between a CR and LF?
                    break;
@@ -3112,6 +3118,68 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
         case URX_BACKSLASH_G:          // Test for position at end of previous match
             if (!((fMatch && fp->fInputIdx==fMatchEnd) || (fMatch==FALSE && fp->fInputIdx==fActiveStart))) {
                 fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+            }
+            break;
+
+
+        case URX_BACKSLASH_H:            // Test for \h, horizontal white space.
+            {
+                if (fp->fInputIdx >= fActiveLimit) {
+                    fHitEnd = TRUE;
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                    break;
+                }
+                UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
+                UChar32 c = UTEXT_NEXT32(fInputText);
+                int8_t ctype = u_charType(c);
+                UBool success = (ctype == U_SPACE_SEPARATOR || c == 9);  // SPACE_SEPARATOR || TAB
+                success ^= (UBool)(opValue != 0);        // flip sense for \H
+                if (success) {
+                    fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
+                } else {
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                }
+            }
+            break;
+
+
+        case URX_BACKSLASH_R:            // Test for \R, any line break sequence.
+            {
+                if (fp->fInputIdx >= fActiveLimit) {
+                    fHitEnd = TRUE;
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                    break;
+                }
+                UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
+                UChar32 c = UTEXT_NEXT32(fInputText);
+                if (isLineTerminator(c)) {
+                    if (c == 0x0d && utext_current32(fInputText) == 0x0a) {
+                        utext_next32(fInputText);
+                    }
+                    fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
+                } else {
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                }
+            }
+            break;
+
+
+        case URX_BACKSLASH_V:            // \v, any single line ending character.
+            {
+                if (fp->fInputIdx >= fActiveLimit) {
+                    fHitEnd = TRUE;
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                    break;
+                }
+                UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
+                UChar32 c = UTEXT_NEXT32(fInputText);
+                UBool success = isLineTerminator(c);
+                success ^= (UBool)(opValue != 0);        // flip sense for \V
+                if (success) {
+                    fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
+                } else {
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                }
             }
             break;
 
@@ -3343,8 +3411,7 @@ GC_Done:
 
                 // There is input left.  Advance over one char, unless we've hit end-of-line
                 UChar32 c = UTEXT_NEXT32(fInputText);
-                if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                    ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
+                if (isLineTerminator(c)) {
                     // End of line in normal mode.   . does not match.
                         fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
@@ -4101,7 +4168,7 @@ GC_Done:
                         if ((c & 0x7f) <= 0x29) {          // Fast filter of non-new-line-s
                             if ((c == 0x0a) ||             //  0x0a is newline in both modes.
                                (((opValue & 2) == 0) &&    // IF not UNIX_LINES mode
-                                    (c<=0x0d && c>=0x0a)) || c==0x85 ||c==0x2028 || c==0x2029) {
+                                    isLineTerminator(c))) {
                                 //  char is a line ending.  Exit the scanning loop.
                                 break;
                             }
@@ -4432,7 +4499,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                 UChar32 c;
                 U16_GET(inputBuf, fAnchorStart, fp->fInputIdx, fAnchorLimit, c);
 
-                if ((c>=0x0a && c<=0x0d) || c==0x85 || c==0x2028 || c==0x2029) {
+                if (isLineTerminator(c)) {
                     if ( !(c==0x0a && fp->fInputIdx>fAnchorStart && inputBuf[fp->fInputIdx-1]==0x0d)) {
                         // At new-line at end of input. Success
                         fHitEnd = TRUE;
@@ -4486,7 +4553,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                 // If we are positioned just before a new-line, succeed.
                 // It makes no difference where the new-line is within the input.
                 UChar32 c = inputBuf[fp->fInputIdx];
-                if ((c>=0x0a && c<=0x0d) || c==0x85 ||c==0x2028 || c==0x2029) {
+                if (isLineTerminator(c)) {
                     // At a line end, except for the odd chance of  being in the middle of a CR/LF sequence
                     //  In multi-line mode, hitting a new-line just before the end of input does not
                     //   set the hitEnd or requireEnd flags
@@ -4534,7 +4601,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                 //   unless we are at the end of input
                 UChar  c = inputBuf[fp->fInputIdx - 1];
                 if ((fp->fInputIdx < fAnchorLimit) &&
-                    ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
+                    isLineTerminator(c)) {
                     //  It's a new-line.  ^ is true.  Success.
                     //  TODO:  what should be done with positions between a CR and LF?
                     break;
@@ -4609,6 +4676,69 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                 fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             }
             break;
+
+
+        case URX_BACKSLASH_H:            // Test for \h, horizontal white space.
+            {
+                if (fp->fInputIdx >= fActiveLimit) {
+                    fHitEnd = TRUE;
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                    break;
+                }
+                UChar32 c;
+                U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
+                int8_t ctype = u_charType(c);
+                UBool success = (ctype == U_SPACE_SEPARATOR || c == 9);  // SPACE_SEPARATOR || TAB
+                success ^= (UBool)(opValue != 0);        // flip sense for \H
+                if (!success) {
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                }
+            }
+            break;
+
+
+        case URX_BACKSLASH_R:            // Test for \R, any line break sequence.
+            {
+                if (fp->fInputIdx >= fActiveLimit) {
+                    fHitEnd = TRUE;
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                    break;
+                }
+                UChar32 c;
+                U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
+                if (isLineTerminator(c)) {
+                    if (c == 0x0d && fp->fInputIdx < fActiveLimit) {
+                        // Check for CR/LF sequence. Consume both together when found.
+                        UChar c2;
+                        U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c2);
+                        if (c2 != 0x0a) {
+                            U16_PREV(inputBuf, 0, fp->fInputIdx, c2);
+                        }
+                    }
+                } else {
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                }
+            }
+            break;
+
+
+        case URX_BACKSLASH_V:         // Any single code point line ending.
+            {
+                if (fp->fInputIdx >= fActiveLimit) {
+                    fHitEnd = TRUE;
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                    break;
+                }
+                UChar32 c;
+                U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
+                UBool success = isLineTerminator(c);
+                success ^= (UBool)(opValue != 0);        // flip sense for \V
+                if (!success) {
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                }
+            }
+            break;
+
 
 
         case URX_BACKSLASH_X:
@@ -4820,8 +4950,7 @@ GC_Done:
                 // There is input left.  Advance over one char, unless we've hit end-of-line
                 UChar32  c;
                 U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
-                if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                    ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
+                if (isLineTerminator(c)) {
                     // End of line in normal mode.   . does not match.
                     fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
@@ -5535,7 +5664,7 @@ GC_Done:
                         if ((c & 0x7f) <= 0x29) {          // Fast filter of non-new-line-s
                             if ((c == 0x0a) ||             //  0x0a is newline in both modes.
                                 (((opValue & 2) == 0) &&    // IF not UNIX_LINES mode
-                                   ((c<=0x0d && c>=0x0a) || c==0x85 || c==0x2028 || c==0x2029))) {
+                                   isLineTerminator(c))) {
                                 //  char is a line ending.  Put the input pos back to the
                                 //    line ending char, and exit the scanning loop.
                                 U16_BACK_1(inputBuf, 0, ix);

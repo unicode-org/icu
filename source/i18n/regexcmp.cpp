@@ -1188,6 +1188,21 @@ UBool RegexCompile::doParseActions(int32_t action)
         appendOp(URX_BACKSLASH_G, 0);
         break;
 
+    case doBackslashH:
+        fixLiterals(FALSE);
+        appendOp(URX_BACKSLASH_H, 1);
+        break;
+
+    case doBackslashh:
+        fixLiterals(FALSE);
+        appendOp(URX_BACKSLASH_H, 0);
+        break;
+
+    case doBackslashR:
+        fixLiterals(FALSE);
+        appendOp(URX_BACKSLASH_R, 0);
+        break;
+
     case doBackslashS:
         fixLiterals(FALSE);
         appendOp(URX_STAT_SETREF_N, URX_ISSPACE_SET);
@@ -1196,6 +1211,16 @@ UBool RegexCompile::doParseActions(int32_t action)
     case doBackslashs:
         fixLiterals(FALSE);
         appendOp(URX_STATIC_SETREF, URX_ISSPACE_SET);
+        break;
+
+    case doBackslashV:
+        fixLiterals(FALSE);
+        appendOp(URX_BACKSLASH_V, 1);
+        break;
+
+    case doBackslashv:
+        fixLiterals(FALSE);
+        appendOp(URX_BACKSLASH_V, 0);
         break;
 
     case doBackslashW:
@@ -1545,6 +1570,48 @@ UBool RegexCompile::doParseActions(int32_t action)
             digits.applyIntPropertyValue(UCHAR_GENERAL_CATEGORY_MASK, U_GC_ND_MASK, *fStatus);
             digits.complement();
             set->addAll(digits);
+            break;
+        }
+
+    case doSetBackslash_h:
+        {
+            UnicodeSet *set = (UnicodeSet *)fSetStack.peek();
+            UnicodeSet h;
+            h.applyIntPropertyValue(UCHAR_GENERAL_CATEGORY_MASK, U_GC_ZS_MASK, *fStatus);
+            h.add((UChar32)9);   // Tab
+            set->addAll(h);
+            break;
+        }
+
+    case doSetBackslash_H:
+        {
+            UnicodeSet *set = (UnicodeSet *)fSetStack.peek();
+            UnicodeSet h;
+            h.applyIntPropertyValue(UCHAR_GENERAL_CATEGORY_MASK, U_GC_ZS_MASK, *fStatus);
+            h.add((UChar32)9);   // Tab
+            h.complement();
+            set->addAll(h);
+            break;
+        }
+
+    case doSetBackslash_v:
+        {
+            UnicodeSet *set = (UnicodeSet *)fSetStack.peek();
+            set->add((UChar32)0x0a, (UChar32)0x0d);  // add range
+            set->add((UChar32)0x85);
+            set->add((UChar32)0x2028, (UChar32)0x2029);
+            break;
+        }
+
+    case doSetBackslash_V:
+        {
+            UnicodeSet *set = (UnicodeSet *)fSetStack.peek();
+            UnicodeSet v;
+            v.add((UChar32)0x0a, (UChar32)0x0d);  // add range
+            v.add((UChar32)0x85);
+            v.add((UChar32)0x2028, (UChar32)0x2029);
+            v.complement();
+            set->addAll(v);
             break;
         }
 
@@ -2749,6 +2816,43 @@ void   RegexCompile::matchStartType() {
             break;
 
 
+        case URX_BACKSLASH_H:
+            // Horiz white space
+            if (currentLen == 0) {
+                UnicodeSet s;
+                s.applyIntPropertyValue(UCHAR_GENERAL_CATEGORY_MASK, U_GC_ZS_MASK, *fStatus);
+                s.add((UChar32)9);   // Tab
+                if (URX_VAL(op) != 0) {
+                    s.complement();
+                }
+                fRXPat->fInitialChars->addAll(s);
+                numInitialStrings += 2;
+            }
+            currentLen++;
+            atStart = FALSE;
+            break;
+
+
+        case URX_BACKSLASH_R:       // Any line ending sequence
+        case URX_BACKSLASH_V:       // Any line ending code point, with optional negation
+            if (currentLen == 0) {
+                UnicodeSet s;
+                s.add((UChar32)0x0a, (UChar32)0x0d);  // add range
+                s.add((UChar32)0x85);
+                s.add((UChar32)0x2028, (UChar32)0x2029);
+                if (URX_VAL(op) != 0) {
+                     // Complement option applies to URX_BACKSLASH_V only.
+                     s.complement();
+                }
+                fRXPat->fInitialChars->addAll(s);
+                numInitialStrings += 2;
+            }
+            currentLen++;
+            atStart = FALSE;
+            break;
+
+
+
         case URX_ONECHAR_I:
             // Case Insensitive Single Character.
             if (currentLen == 0) {
@@ -3137,6 +3241,9 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_STAT_SETREF_N:
         case URX_SETREF:
         case URX_BACKSLASH_D:
+        case URX_BACKSLASH_H:
+        case URX_BACKSLASH_R:
+        case URX_BACKSLASH_V:
         case URX_ONECHAR_I:
         case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
         case URX_DOTANY_ALL:    // . matches one or two.
@@ -3418,6 +3525,9 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_STAT_SETREF_N:
         case URX_SETREF:
         case URX_BACKSLASH_D:
+        case URX_BACKSLASH_H:
+        case URX_BACKSLASH_R:
+        case URX_BACKSLASH_V:
         case URX_ONECHAR_I:
         case URX_DOTANY_ALL:
         case URX_DOTANY:
@@ -3746,6 +3856,9 @@ void RegexCompile::stripNOPs() {
         case URX_LOOP_C:
         case URX_DOLLAR_D:
         case URX_DOLLAR_MD:
+        case URX_BACKSLASH_H:
+        case URX_BACKSLASH_R:
+        case URX_BACKSLASH_V:
             // These instructions are unaltered by the relocation.
             fRXPat->fCompiledPat->setElementAt(op, dst);
             dst++;
