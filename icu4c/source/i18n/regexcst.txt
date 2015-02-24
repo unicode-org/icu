@@ -250,13 +250,18 @@ backslash:
    'd'                   n  expr-quant                              doBackslashd
    'D'                   n  expr-quant                              doBackslashD
    'G'                   n  term                                    doBackslashG
+   'h'                   n  expr-quant                              doBackslashh
+   'H'                   n  expr-quant                              doBackslashH
    'k'                   n  named-backref
    'N'                      expr-quant                              doNamedChar      #   \N{NAME}  named char
    'p'                      expr-quant                              doProperty       #   \p{Lu}  style property
    'P'                      expr-quant                              doProperty
+   'R'                   n  expr-quant                              doBackslashR
    'Q'                   n  term                                    doEnterQuoteMode
    'S'                   n  expr-quant                              doBackslashS
    's'                   n  expr-quant                              doBackslashs
+   'v'                   n  expr-quant                              doBackslashv
+   'V'                   n  expr-quant                              doBackslashV
    'W'                   n  expr-quant                              doBackslashW
    'w'                   n  expr-quant                              doBackslashw
    'X'                   n  expr-quant                              doBackslashX
@@ -472,6 +477,10 @@ set-escape:
    'W'                   n  set-after-range                         doSetBackslash_W
    'd'                   n  set-after-range                         doSetBackslash_d
    'D'                   n  set-after-range                         doSetBackslash_D
+   'h'                   n  set-after-range                         doSetBackslash_h
+   'H'                   n  set-after-range                         doSetBackslash_H
+   'v'                   n  set-after-range                         doSetBackslash_v
+   'V'                   n  set-after-range                         doSetBackslash_V
    default               n  set-after-lit                           doSetLiteralEscaped 
 
 #
