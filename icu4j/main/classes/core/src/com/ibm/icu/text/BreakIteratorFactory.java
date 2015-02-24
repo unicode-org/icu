@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2014, International Business Machines Corporation and
+ * Copyright (C) 2002-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -121,8 +121,15 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         //  Get the binary rules.
         //
         ByteBuffer bytes = null;
+        String typeKeyExt = null;
+        if (kind == BreakIterator.KIND_LINE) {
+            String lbKeyValue = locale.getKeywordValue("lb");
+            if ( lbKeyValue != null && (lbKeyValue.equals("strict") || lbKeyValue.equals("normal") || lbKeyValue.equals("loose")) ) {
+                typeKeyExt = "_" + lbKeyValue;
+            }
+        }
         try {
-            String         typeKey       = KIND_NAMES[kind];
+            String         typeKey       = (typeKeyExt == null)? KIND_NAMES[kind]: KIND_NAMES[kind] + typeKeyExt;
             String         brkfname      = rb.getStringWithFallback("boundaries/" + typeKey);
             String         rulesFileName = ICUData.ICU_BRKITR_NAME+ '/' + brkfname;
                            bytes         = ICUBinary.getData(rulesFileName);
