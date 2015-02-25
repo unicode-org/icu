@@ -950,6 +950,7 @@ public class TestFmwk extends AbstractTestLog {
                 + "    -filter:A,B,^C,^D -- tests matching A or B and not C and not D are run\n"
                 + "       Note: Filters are case insensitive.");
         pw.println(" -h[elp] Print this help text and exit.");
+        pw.println(" -hex Display non-ASCII characters in hexadecimal format");
         pw.println(" -l[ist] List immediate targets of this test");
         pw.println("   -la, -listAll List immediate targets of this test, and all subtests");
         pw.println("   -le, -listExaustive List all subtests and targets");
@@ -957,8 +958,8 @@ public class TestFmwk extends AbstractTestLog {
         // calls
         //      pw.println(" -m[emory] print memory usage and force gc for
         // each test");
-        pw.println(" -n[othrow] Message on test failure rather than exception.\n");
-        pw.println("      This is the default behavior and has no effects on ICU 55+.");
+        pw.println(" -n[othrow] Message on test failure rather than exception.\n"
+                + "       This is the default behavior and has no effects on ICU 55+.");
         pw.println(" -p[rompt] Prompt before exiting");
         pw.println(" -prop:<key>=<value> Set optional property used by this test");
         pw.println(" -q[uiet] Do not show warnings");
@@ -969,7 +970,7 @@ public class TestFmwk extends AbstractTestLog {
         pw.println(" -tfilter:<str> Transliterator Test filter of ids.");
         pw.println(" -t[ime]:<n> Print elapsed time only for tests exceeding n milliseconds.");
         pw.println(" -v[erbose] Show log messages");
-        pw.println(" -u[nicode] Don't escape error or log messages");
+        pw.println(" -u[nicode] Don't escape error or log messages (Default on ICU 55+)");
         pw.println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
         pw.println(" -nodata | -nd Do not warn if resource data is not present.");
         pw.println();
@@ -1206,10 +1207,10 @@ public class TestFmwk extends AbstractTestLog {
         public static TestParams create(String[] args, PrintWriter log) {
             TestParams params = new TestParams();
 
-            if(log == null){
+            if (log == null) {
                 params.log = new NullWriter();
-            }else{
-                params.log =  new ASCIIWriter(log, true);
+            } else {
+                params.log = log;
             }
 
             boolean usageError = false;
@@ -1230,6 +1231,8 @@ public class TestFmwk extends AbstractTestLog {
                         } else if (arg.equals("-quiet") || arg.equals("-q")) {
                             params.quiet = true;
                             params.verbose = false;
+                        } else if (arg.equals("-hex")) {
+                            params.log =  new ASCIIWriter(log, true);
                         } else if (arg.equals("-help") || arg.equals("-h")) {
                             usageError = true;
                         } else if (arg.equals("-warning") || arg.equals("-w")) {
