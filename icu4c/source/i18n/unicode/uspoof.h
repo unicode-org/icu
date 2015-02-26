@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 2008-2014, International Business Machines Corporation
+* Copyright (C) 2008-2015, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   file name:  uspoof.h
@@ -139,6 +139,14 @@
  *  identifying new pairs or sequences of characters that are visually
  *  confusable, and thus must be mapped to the same skeleton character(s).
  *
+ *  Skeletons are computed using the algorithm and data describe in Unicode UAX 39.
+ *  The latest proposed update, UAX 39 Version 8 draft 1, says "the tables SL, SA, and ML
+ *  were still problematic, and discouraged from use in [Uniocde] 7.0.
+ *  They were thus removed from version 8.0"
+ *
+ *  In light of this, the default mapping data included with ICU 55 uses the
+ *  Unicode 7 MA (Multi script Any case) table data for the other type options
+ *  (Single Script, Any Case), (Single Script, Lower Case) and (Multi Script, Lower Case).
  */
 
 struct USpoofChecker;
@@ -872,7 +880,7 @@ uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
   *                of the Unicode confusable data tables to use.
   *                The default is Mixed-Script, Lowercase.
   *                Allowed options are USPOOF_SINGLE_SCRIPT_CONFUSABLE and
-  *                USPOOF_ANY_CASE_CONFUSABLE.  The two flags may be ORed.
+  *                USPOOF_ANY_CASE.  The two flags may be ORed.
   * @param id      The input identifier whose skeleton will be computed.
   * @param length  The length of the input identifier, expressed in 16 bit
   *                UTF-16 code units, or -1 if the string is zero terminated.
@@ -954,7 +962,7 @@ uspoof_getSkeletonUTF8(const USpoofChecker *sc,
   *                of the Unicode confusable data tables to use.
   *                The default is Mixed-Script, Lowercase.
   *                Allowed options are USPOOF_SINGLE_SCRIPT_CONFUSABLE and
-  *                USPOOF_ANY_CASE_CONFUSABLE.  The two flags may be ORed.
+  *                USPOOF_ANY_CASE.  The two flags may be ORed.
   * @param id      The input identifier whose skeleton will be computed.
   * @param dest    The output identifier, to receive the skeleton string.
   * @param status  The error code, set if an error occurred while attempting to
