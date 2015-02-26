@@ -4879,6 +4879,15 @@ void RegexTest::Callbacks() {
         REGEX_ASSERT(matcher.matches(status)==FALSE);
         REGEX_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
         REGEX_ASSERT(cbInfo.numCalls == 4);
+
+        // A longer running find that the callback function will abort.
+        status = U_ZERO_ERROR;
+        cbInfo.reset(4);
+        s = "aaaaaaaaaaaaaaaaaaaaaaab";
+        matcher.reset(s);
+        REGEX_ASSERT(matcher.find(status)==FALSE);
+        REGEX_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
+        REGEX_ASSERT(cbInfo.numCalls == 4);
     }
 
 
