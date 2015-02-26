@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.ibm.icu.impl.ClassLoaderUtil;
 import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.Normalizer2Impl.ReorderingBuffer;
 import com.ibm.icu.impl.Utility;
@@ -232,7 +233,7 @@ public final class RuleBasedCollator extends Collator {
         // Most code using Collator does not need to build a Collator from rules.
         // By using reflection, most code will not have a static dependency on the builder code.
         // CollationBuilder builder = new CollationBuilder(base);
-        ClassLoader classLoader = getClass().getClassLoader();
+        ClassLoader classLoader = ClassLoaderUtil.getClassLoader(getClass());
         CollationTailoring t;
         try {
             Class<?> builderClass = classLoader.loadClass("com.ibm.icu.impl.coll.CollationBuilder");

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -576,11 +576,7 @@ public class ICULocaleService extends ICUService {
         }
 
         protected ClassLoader loader() {
-            ClassLoader cl = getClass().getClassLoader();
-            if (cl == null) {
-                cl = Utility.getFallbackClassLoader();
-            }
-            return cl;
+            return ClassLoaderUtil.getClassLoader(getClass());
         }
 
         public String toString() {

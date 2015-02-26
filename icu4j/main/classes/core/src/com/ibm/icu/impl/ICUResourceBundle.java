@@ -104,14 +104,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     /**
      * The class loader constant to be used with getBundleInstance API
      */
-    public static final ClassLoader ICU_DATA_CLASS_LOADER;
-    static {
-        ClassLoader loader = ICUData.class.getClassLoader();
-        if (loader == null) {
-            loader = Utility.getFallbackClassLoader();
-        }
-        ICU_DATA_CLASS_LOADER = loader;
-    }
+    public static final ClassLoader ICU_DATA_CLASS_LOADER = ClassLoaderUtil.getClassLoader(ICUData.class);
 
     /**
      * The name of the resource containing the installed locales
