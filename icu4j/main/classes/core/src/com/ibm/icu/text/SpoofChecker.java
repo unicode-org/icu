@@ -1,6 +1,6 @@
 /*
  ***************************************************************************
- * Copyright (C) 2008-2014 International Business Machines Corporation
+ * Copyright (C) 2008-2015 International Business Machines Corporation
  * and others. All Rights Reserved.
  ***************************************************************************
  *
@@ -1808,6 +1808,15 @@ public class SpoofChecker {
      *
      * Using skeletons directly makes it possible to quickly check whether an identifier is confusable with any of some
      * large set of existing identifiers, by creating an efficiently searchable collection of the skeletons.
+     *
+     * Skeletons are computed using the algorithm and data describe in Unicode UAX 39.
+     * The latest proposed update, UAX 39 Version 8 draft 1, says "the tables SL, SA, and ML
+     * were still problematic, and discouraged from use in [Uniocde] 7.0.
+     * They were thus removed from version 8.0"
+     * 
+     * In light of this, the default mapping data included with ICU 55 uses the
+     * Unicode 7 MA (Multi script Any case) table data for the other type options
+     * (Single Script, Any Case), (Single Script, Lower Case) and (Multi Script, Lower Case).
      *
      * @param type
      *            The type of skeleton, corresponding to which of the Unicode confusable data tables to use. The default
