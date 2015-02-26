@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1872,7 +1872,7 @@ public abstract class Transliterator implements StringTransform  {
                                                          String target) {
         return registry.getAvailableVariants(source, target);
     }
-    private static final String INDEX = "index",
+    private static final String ROOT = "root",
                                 RB_RULE_BASED_IDS ="RuleBasedTransliteratorIDs";
     static {
         registry = new TransliteratorRegistry();
@@ -1914,7 +1914,7 @@ public abstract class Transliterator implements StringTransform  {
          * The extra blank field on "alias" lines is to make the array square.
          */
         UResourceBundle bundle, transIDs, colBund;
-        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_TRANSLIT_BASE_NAME, INDEX);
+        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_TRANSLIT_BASE_NAME, ROOT);
         transIDs = bundle.get(RB_RULE_BASED_IDS);
 
         int row, maxRows;
