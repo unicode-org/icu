@@ -407,39 +407,42 @@ public class SpoofCheckerTest extends TestFmwk {
 
         checkSkeleton(sc, MA, "\\u02b9identifier'",  "'identifier'",  testName);
 
-        checkSkeleton(sc, SL, "nochange", "\\u213C\\u2134\\U0001D41C\\u210E\\u237A\\u213C\\u210A\\u212E", testName);
-        checkSkeleton(sc, SA, "nochange", "\\u213C\\u2134\\U0001D41C\\u210E\\u237A\\u213C\\u210A\\u212E", testName);
-        checkSkeleton(sc, ML, "nochange", "\\u213C\\u2134\\U0001D41C\\u210E\\u237A\\u213C\\u210A\\u212E", testName);
+        checkSkeleton(sc, SL, "nochange", "nochange", testName);
+        checkSkeleton(sc, SA, "nochange", "nochange", testName);
+        checkSkeleton(sc, ML, "nochange", "nochange", testName);
         checkSkeleton(sc, MA, "nochange", "nochange", testName);
         checkSkeleton(sc, MA, "love", "love", testName);
         checkSkeleton(sc, MA, "1ove", "love", testName);   // Digit 1 to letter l
         checkSkeleton(sc, ML, "OOPS", "OOPS", testName);
-        checkSkeleton(sc, ML, "00PS", "00PS", testName);   // Digit 0 unchanged in lower case mode.
+        checkSkeleton(sc, ML, "00PS", "OOPS", testName);
         checkSkeleton(sc, MA, "OOPS", "OOPS", testName);
-        checkSkeleton(sc, MA, "00PS", "OOPS", testName);   // Digit 0 to letter O in any case mode only
+        checkSkeleton(sc, MA, "00PS", "OOPS", testName);   // Digit 0 to letter O
         checkSkeleton(sc, SL, "\\u059c", "\\u0301", testName);
         checkSkeleton(sc, SL, "\\u2A74", "\\u003A\\u003A\\u003D", testName);
-        checkSkeleton(sc, SL, "\\u247E", "\\u0028\\u0031\\u0031\\u0029", testName);  // "(11)"
-        checkSkeleton(sc, SL, "\\uFDFB", "\\u062C\\u0644\\u0020\\u062C\\u0644\\u0031\\u0644\\u2134", testName);
+        checkSkeleton(sc, SL, "\\u247E", "(ll)", testName);
+        checkSkeleton(sc, SL, "\\uFDFB", "\\u062C\\u0644\\u0020\\u062C\\u0644\\u006c\\u0644\\u006f", testName);
 
-        // This mapping exists in the ML and MA tables, does not exist in SL, SA
+        // 0C83 mapping existed in the ML and MA tables, did not exist in SL, SA (Original Unicode 7)
+        //   mapping exists in all tables (ICU 55).
         // 0C83 ; 0983 ; ML #  KANNADA SIGN VISARGA to
-        checkSkeleton(sc, SL, "\\u0C83", "\\u0C83", testName);
-        checkSkeleton(sc, SA, "\\u0C83", "\\u0C83", testName);
+        checkSkeleton(sc, SL, "\\u0C83", "\\u0983", testName);
+        checkSkeleton(sc, SA, "\\u0C83", "\\u0983", testName);
         checkSkeleton(sc, ML, "\\u0C83", "\\u0983", testName);
         checkSkeleton(sc, MA, "\\u0C83", "\\u0983", testName);
 
-        // 0391 mappings exist only in MA and SA tables.
+        // 0391 mappings existed only in MA and SA tables (Original Unicode 7).
+        //      mappings exist in all tables (ICU 55)
         checkSkeleton(sc, MA, "\\u0391", "A", testName);
-        checkSkeleton(sc, SA, "\\u0391", "\\U0001D400", testName);
-        checkSkeleton(sc, ML, "\\u0391", "\\u0391", testName);
-        checkSkeleton(sc, SL, "\\u0391", "\\u0391", testName);
+        checkSkeleton(sc, SA, "\\u0391", "A", testName);
+        checkSkeleton(sc, ML, "\\u0391", "A", testName);
+        checkSkeleton(sc, SL, "\\u0391", "A", testName);
 
-        // 13CF Mappings in all four tables, different in MA.
-        checkSkeleton(sc, ML, "\\u13CF", "\\U0001D41B", testName);
+        // 13CF Mappings in all four tables, different in MA (Original Unicode 7).
+        //      Mapping same in all tables (ICU 55)
+        checkSkeleton(sc, ML, "\\u13CF", "b", testName);
         checkSkeleton(sc, MA, "\\u13CF", "b", testName);
-        checkSkeleton(sc, SL, "\\u13CF", "\\U0001D41B", testName);
-        checkSkeleton(sc, SA, "\\u13CF", "\\U0001D41B", testName);
+        checkSkeleton(sc, SL, "\\u13CF", "b", testName);
+        checkSkeleton(sc, SA, "\\u13CF", "b", testName);
 
         // 0022 ; 0027 0027 ;
         // all tables
