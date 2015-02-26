@@ -1,6 +1,6 @@
 //#
 //#*******************************************************************************
-//#* Copyright (C) 1997-2014, International Business Machines Corporation and    *
+//#* Copyright (C) 1997-2015, International Business Machines Corporation and    *
 //#* others. All Rights Reserved.                                                *
 //#*******************************************************************************
 //#* This is the ant build file for ICU4J.  See readme.html for more information.
@@ -28,6 +28,9 @@ grant
 
     // for setting the default time zone by the test framework
     permission java.util.PropertyPermission "user.timezone", "write";
+
+    // for creating a fallback class loader
+    permission java.lang.RuntimePermission "createClassLoader";
 };
 
 // there must be a way for code in one jar file to call code in another jar

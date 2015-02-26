@@ -463,7 +463,7 @@ public final class ICUBinary {
             return bytes;
         }
         if (loader == null) {
-            loader = ICUData.class.getClassLoader();
+            loader = ClassLoaderUtil.getClassLoader(ICUData.class);
         }
         if (resourceName == null) {
             resourceName = ICUData.ICU_BASE_NAME + '/' + itemPath;

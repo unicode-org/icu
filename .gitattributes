@@ -278,6 +278,7 @@ icu4j/main/classes/core/.settings/edu.umd.cs.findbugs.core.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/ClassLoaderUtil.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/Pair.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.core.resources.prefs -text

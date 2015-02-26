@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004-2010, International Business Machines Corporation and   *
+* Copyright (C) 2004-2015, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -114,7 +114,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
      protected static synchronized UResourceBundle instantiateBundle(String baseName, String localeID,
                                                                     ClassLoader root, boolean disableFallback) {
         if (root == null) {
-            root = Utility.getFallbackClassLoader();
+            root = ClassLoaderUtil.getClassLoader();
         }
         final ClassLoader cl = root;
         String name = baseName;

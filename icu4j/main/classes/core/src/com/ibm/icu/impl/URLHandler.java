@@ -36,11 +36,8 @@ public abstract class URLHandler {
         BufferedReader br = null;
         try {
             @SuppressWarnings("resource")  // Closed by BufferedReader.
-            InputStream is = URLHandler.class.getResourceAsStream(PROPNAME);
-            if (is == null) {
-                ClassLoader loader = Utility.getFallbackClassLoader();
-                is = loader.getResourceAsStream(PROPNAME);
-            }
+            ClassLoader loader = ClassLoaderUtil.getClassLoader(URLHandler.class);
+            InputStream is = loader.getResourceAsStream(PROPNAME);
 
             if (is != null) {
                 Class<?>[] params = { URL.class };
