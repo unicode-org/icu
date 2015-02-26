@@ -2560,8 +2560,8 @@ matchStringWithOptionalDot(const UnicodeString &text,
     U_ASSERT (U_SUCCESS(sts));
 
     if (matchLenData == data.length() /* normal match */
-        || data.charAt(data.length() - 1) == 0x2e
-            && matchLenData == data.length() - 1 /* match witout trailing dot */) {
+        || (data.charAt(data.length() - 1) == 0x2e
+            && matchLenData == data.length() - 1 /* match without trailing dot */)) {
         return matchLenText;
     }
 
