@@ -3934,12 +3934,12 @@ icu4c/source/test/testdata/conversion.txt svneol=native#text/plain
 icu4c/source/test/testdata/csdetest.xml svneol=native#text/xml
 icu4c/source/test/testdata/dcfmtest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/default.txt svneol=native#text/plain
+icu4c/source/test/testdata/encoded.utf16be -text
 icu4c/source/test/testdata/format.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/icuio.txt svneol=native#text/plain
 icu4c/source/test/testdata/idna_conf.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/idna_rules.txt svneol=native#text/plain
 icu4c/source/test/testdata/importtest.bin -text
-icu4c/source/test/testdata/iscii.bin -text svneol=native#application/octet-stream
 icu4c/source/test/testdata/letest.xml svneol=native#text/xml
 icu4c/source/test/testdata/mc.txt svneol=native#text/plain
 icu4c/source/test/testdata/metaZones.txt svneol=native#text/plain%3Bcharset%3Dutf-8
