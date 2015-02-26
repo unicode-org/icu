@@ -192,8 +192,8 @@ icu4c/source/test/perf/utfperf/utfperf.vcxproj -text
 icu4c/source/test/perf/utfperf/utfperf.vcxproj.filters -text
 icu4c/source/test/perf/utrie2perf/utrie2perf.vcxproj -text
 icu4c/source/test/testdata/TestFont1.otf -text
+icu4c/source/test/testdata/encoded.utf16be -text
 icu4c/source/test/testdata/importtest.bin -text
-icu4c/source/test/testdata/iscii.bin -text
 icu4c/source/test/testdata/old_e_testtypes.res -text
 icu4c/source/test/testdata/old_l_testtypes.res -text
 icu4c/source/test/testdata/uni-text.bin -text

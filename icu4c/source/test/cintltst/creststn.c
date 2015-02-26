@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -424,14 +424,10 @@ static void TestDecodedBundle(){
     /* pre-flight */
     int32_t num =0;
     const char *testdatapath = loadTestData(&error);
-    resB = ures_open(testdatapath, "iscii", &error);
+    resB = ures_open(testdatapath, "encoded", &error);
     srcFromRes=tres_getString(resB,-1,"str",&len,&error);
     if(U_FAILURE(error)){
-#if UCONFIG_NO_LEGACY_CONVERSION
-        log_info("Couldn't load iscii.bin from test data bundle, (because UCONFIG_NO_LEGACY_CONVERSION  is turned on)\n");
-#else
-        log_data_err("Could not find iscii.bin from test data bundle. Error: %s\n", u_errorName(error));
-#endif
+        log_data_err("Could not find encoded.res from test data bundle. Error: %s\n", u_errorName(error));
         ures_close(resB);
         return;
     }
