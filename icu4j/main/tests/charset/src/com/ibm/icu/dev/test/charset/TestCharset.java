@@ -1751,25 +1751,28 @@ public class TestCharset extends TestFmwk {
         
     }
     public void TestUTF8Encode() {
-        CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName("utf-8").newEncoder();
-        ByteBuffer out = ByteBuffer.allocate(30);
         // Test with a lead surrogate in the middle of the input text.
         // Java API behavior is unclear for surrogates at the end, see ticket #11546.
-        CoderResult result = encoderICU.encode(CharBuffer.wrap("\ud800a"), out, true);
-        
+        CharBuffer in = CharBuffer.wrap("\ud800a");
+        ByteBuffer out = ByteBuffer.allocate(30);
+        CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName("utf-8").newEncoder();
+        CoderResult result = encoderICU.encode(in, out, true);
+
         if (result.isMalformed()) {
             logln("\\ud800 is malformed for ICU4JNI utf-8 encoder");
         } else if (result.isUnderflow()) {
-            errln("\\ud800 is OK for ICU4JNI utf-8 encoder");
+            errln("FAIL: \\ud800 is OK for ICU4JNI utf-8 encoder");
         }
 
+        in.position(0);
+        out.clear();
+
         CharsetEncoder encoderJDK = Charset.forName("utf-8").newEncoder();
-        result = encoderJDK.encode(CharBuffer.wrap("\ud800"), ByteBuffer
-                .allocate(10), true);
-        if (result.isUnderflow()) {
-            errln("\\ud800 is OK for JDK utf-8 encoder");
-        } else if (result.isMalformed()) {
+        result = encoderJDK.encode(in, out, true);
+        if (result.isMalformed()) {
             logln("\\ud800 is malformed for JDK utf-8 encoder");
+        } else if (result.isUnderflow()) {
+            errln("BAD: \\ud800 is OK for JDK utf-8 encoder");
         }
     }
 
