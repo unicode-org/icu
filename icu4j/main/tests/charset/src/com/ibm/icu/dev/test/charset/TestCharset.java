@@ -1753,7 +1753,9 @@ public class TestCharset extends TestFmwk {
     public void TestUTF8Encode() {
         CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName("utf-8").newEncoder();
         ByteBuffer out = ByteBuffer.allocate(30);
-        CoderResult result = encoderICU.encode(CharBuffer.wrap("\ud800"), out, true);
+        // Test with a lead surrogate in the middle of the input text.
+        // Java API behavior is unclear for surrogates at the end, see ticket #11546.
+        CoderResult result = encoderICU.encode(CharBuffer.wrap("\ud800a"), out, true);
         
         if (result.isMalformed()) {
             logln("\\ud800 is malformed for ICU4JNI utf-8 encoder");
