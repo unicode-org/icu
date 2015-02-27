@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -4157,10 +4157,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
-     * Provide for faster iteration than by String. Returns an iterator over a ranges of code points.
+     * Provide for faster iteration than by String. Returns an Iterable/Iterator over ranges of code points.
      * The UnicodeSet must not be altered during the iteration.
-     * The EntryRange is the same each time; the contents are just reset.<br>
-     * <b>Warning: </b>To iterate over the full contents, you have to also iterate over the strings.
+     * The EntryRange instance is the same each time; the contents are just reset.
+     *
+     * <p><b>Warning: </b>To iterate over the full contents, you have to also iterate over the strings.
+     *
      * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification. 
      * Do not alter the UnicodeSet while iterating.
      * 
@@ -4178,21 +4180,21 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @provisional This is a draft API and might change in a future release of ICU.
      */
     public Iterable<EntryRange> ranges() {
-        return new EntryRanges();
+        return new EntryRangeIterable();
     }
 
-    private class EntryRanges implements Iterable<EntryRange>, Iterator<EntryRange> {
+    private class EntryRangeIterable implements Iterable<EntryRange> {
+        public Iterator<EntryRange> iterator() {
+            return new EntryRangeIterator();
+        }
+    }
+
+    private class EntryRangeIterator implements Iterator<EntryRange> {
         int pos;
         EntryRange result = new EntryRange();
-        // Iterator<String> stringIterator = strings == null ? null : strings.iterator();
 
-        public Iterator<EntryRange> iterator() {
-            return this;
-        }
         public boolean hasNext() {
-            return pos < len-1 
-                    // || (stringIterator != null && stringIterator.hasNext())
-                    ;
+            return pos < len-1;
         }
         public EntryRange next() {
             if (pos < len-1) {
