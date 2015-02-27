@@ -493,11 +493,13 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
         if(myLocale[0]=='j' && (myLocale[1]=='a'|| myLocale[1]=='p') &&
             (myLocale[2]=='_' || myLocale[2]=='\0'))
         {
-            size_t len=0;
             /* open the required converters and cache them */
             if(version>MAX_JA_VERSION) {
-                /* prevent indexing beyond jpCharsetMasks[] */
-                myConverterData->version = version = 0;
+                // ICU 55 fails to open a converter for an unsupported version.
+                // Previously, it fell back to version 0, but that would yield
+                // unexpected behavior.
+                *errorCode = U_MISSING_RESOURCE_ERROR;
+                return;
             }
             if(jpCharsetMasks[version]&CSM(ISO8859_7)) {
                 myConverterData->myConverterArray[ISO8859_7] =
@@ -523,7 +525,7 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
             uprv_strcpy(myConverterData->locale,"ja");
 
             (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=");
-            len = uprv_strlen(myConverterData->name);
+            size_t len = uprv_strlen(myConverterData->name);
             myConverterData->name[len]=(char)(myConverterData->version+(int)'0');
             myConverterData->name[len+1]='\0';
         }
@@ -531,6 +533,13 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
         else if(myLocale[0]=='k' && (myLocale[1]=='o'|| myLocale[1]=='r') &&
             (myLocale[2]=='_' || myLocale[2]=='\0'))
         {
+            if(version>1) {
+                // ICU 55 fails to open a converter for an unsupported version.
+                // Previously, it fell back to version 0, but that would yield
+                // unexpected behavior.
+                *errorCode = U_MISSING_RESOURCE_ERROR;
+                return;
+            }
             const char *cnvName;
             if(version==1) {
                 cnvName="icu-internal-25546";
@@ -570,6 +579,13 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
         else if(((myLocale[0]=='z' && myLocale[1]=='h') || (myLocale[0]=='c'&& myLocale[1]=='n'))&&
             (myLocale[2]=='_' || myLocale[2]=='\0'))
         {
+            if(version>2) {
+                // ICU 55 fails to open a converter for an unsupported version.
+                // Previously, it fell back to version 0, but that would yield
+                // unexpected behavior.
+                *errorCode = U_MISSING_RESOURCE_ERROR;
+                return;
+            }
 
             /* open the required converters and cache them */
             myConverterData->myConverterArray[GB2312_1] =
@@ -612,7 +628,9 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
             /* initialize the state variables */
             uprv_strcpy(myConverterData->name,"ISO_2022");
 #else
-            *errorCode = U_UNSUPPORTED_ERROR;
+            *errorCode = U_MISSING_RESOURCE_ERROR;
+            // Was U_UNSUPPORTED_ERROR but changed in ICU 55 to a more standard
+            // data loading error code.
             return;
 #endif
         }
