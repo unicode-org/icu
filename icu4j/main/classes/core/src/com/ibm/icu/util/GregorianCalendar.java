@@ -278,8 +278,6 @@ public class GregorianCalendar extends Calendar {
         {/*                                  */}, // JULIAN_DAY
         {/*                                  */}, // MILLISECONDS_IN_DAY
         {/*                                  */}, // IS_LEAP_MONTH
-        {        1,        1, 5828963, 5838270 }, // RELATED_YEAR
-        {/*                                  */}, // TIME_SEPARATOR
     };
 
     /**

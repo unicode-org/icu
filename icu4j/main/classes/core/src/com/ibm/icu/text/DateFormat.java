@@ -438,8 +438,9 @@ public abstract class DateFormat extends UFormat {
 
     /**
      * {@icu} FieldPosition selector for 'r' field alignment,
-     * corresponding to the {@link Calendar#RELATED_YEAR} field.
-     * TODO: http://bugs.icu-project.org/trac/ticket/10761
+     * corresponding to the {@link Calendar#EXTENDED_YEAR} field
+     * of the *related* calendar which may be different than the
+     * one used by the DateFormat.
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -448,7 +449,7 @@ public abstract class DateFormat extends UFormat {
 
     /**
      * {@icu} FieldPosition selector for ':' field alignment,
-     * corresponding to the {@link Calendar#TIME_SEPARATOR} field.
+     * no related Calendar field.
      * @draft ICU 55
      * @provisional This API might change or be removed in a future release.
      */
@@ -2366,14 +2367,14 @@ public abstract class DateFormat extends UFormat {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
-        public static final Field RELATED_YEAR = new Field("related year", Calendar.RELATED_YEAR);
+        public static final Field RELATED_YEAR = new Field("related year", -1);
 
         /**
          * Constant identifying the time separator field.
          * @draft ICU 55
          * @provisional This API might change or be removed in a future release.
          */
-        public static final Field TIME_SEPARATOR = new Field("time separator", Calendar.TIME_SEPARATOR);
+        public static final Field TIME_SEPARATOR = new Field("time separator", -1);
 
         // Stand alone types are variants for its base types.  So we do not define Field for
         // them.
