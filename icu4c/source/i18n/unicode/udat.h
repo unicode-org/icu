@@ -763,7 +763,7 @@ typedef enum UDateFormatField {
 #ifndef U_HIDE_DRAFT_API
     /**
      * FieldPosition and UFieldPosition selector for ':' time separator,
-     * corresponding to the UCAL_TIME_SEPARATOR field.
+     * no corresponding UCAL_ field.
      * @draft ICU 55
      */
     UDAT_TIME_SEPARATOR_FIELD = 35,

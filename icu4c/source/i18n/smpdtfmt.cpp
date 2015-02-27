@@ -139,9 +139,8 @@ static const UDateFormatField kTimeFields[] = {
     UDAT_HOUR0_FIELD,
     UDAT_MILLISECONDS_IN_DAY_FIELD,
     UDAT_TIMEZONE_RFC_FIELD,
-    UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD,
-    UDAT_TIME_SEPARATOR_FIELD };
-static const int8_t kTimeFieldsCount = 11;
+    UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD };
+static const int8_t kTimeFieldsCount = 10;
 
 
 // This is a pattern-of-last-resort used when we can't load a usable pattern out
@@ -1076,12 +1075,11 @@ SimpleDateFormat::fgCalendarFieldToLevel[] =
     /*sS*/ 70, 80,
     /*z?Y*/ 0, 0, 10,
     /*eug*/ 30, 10, 0,
-    /*A?.*/ 40, 0, 0,
-    /*:*/ 0
+    /*A?.*/ 40, 0, 0
 };
 
 int32_t SimpleDateFormat::getLevelFromChar(UChar ch) {
-    // Map calendar field LETTER into calendar field level.
+    // Map date field LETTER into calendar field level.
     // the larger the level, the smaller the field unit.
     // NOTE: if new fields adds in, the table needs to update.
     static const int32_t mapCharToLevel[] = {
@@ -1166,7 +1164,7 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     /*O*/   UCAL_ZONE_OFFSET,
     /*Xx*/  UCAL_ZONE_OFFSET, UCAL_ZONE_OFFSET,
     /*r*/   UCAL_EXTENDED_YEAR,
-    /*:*/   UCAL_TIME_SEPARATOR,
+    /*:*/   UCAL_FIELD_COUNT, /* => no useful mapping to any calendar field */
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -1402,7 +1400,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     }
 
     UCalendarDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
-    int32_t value = (patternCharIndex != UDAT_RELATED_YEAR_FIELD)? cal.get(field, status): cal.getRelatedYear(status);
+    int32_t value = 0;
+    // Don't get value unless it is useful
+    if (field < UCAL_FIELD_COUNT) {
+        value = (patternCharIndex != UDAT_RELATED_YEAR_FIELD)? cal.get(field, status): cal.getRelatedYear(status);
+    }
     if (U_FAILURE(status)) {
         return;
     }
@@ -2525,17 +2527,19 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
     }
 
     if (bestMatch >= 0) {
-        // Adjustment for Hebrew Calendar month Adar II
-        if (!strcmp(cal.getType(),"hebrew") && field==UCAL_MONTH && bestMatch==13) {
-            cal.set(field,6);
-        } else {
-            if (field == UCAL_YEAR) {
-                bestMatch++; // only get here for cyclic year names, which match 1-based years 1-60
+        if (field < UCAL_FIELD_COUNT) {
+            // Adjustment for Hebrew Calendar month Adar II
+            if (!strcmp(cal.getType(),"hebrew") && field==UCAL_MONTH && bestMatch==13) {
+                cal.set(field,6);
+            } else {
+                if (field == UCAL_YEAR) {
+                    bestMatch++; // only get here for cyclic year names, which match 1-based years 1-60
+                }
+                cal.set(field, bestMatch);
             }
-            cal.set(field, bestMatch);
-        }
-        if (monthPattern != NULL) {
-            cal.set(UCAL_IS_LEAP_MONTH, isLeapMonth);
+            if (monthPattern != NULL) {
+                cal.set(UCAL_IS_LEAP_MONTH, isLeapMonth);
+            }
         }
 
         return start + bestMatchLength;
@@ -2607,7 +2611,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     if (currentNumberFormat == NULL) {
         return -start;
     }
-    UCalendarDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
+    UCalendarDateFields field = fgPatternIndexToCalendarField[patternCharIndex]; // UCAL_FIELD_COUNT if irrelevant
     UnicodeString hebr("hebr", 4, US_INV);
 
     if (numericLeapMonthFormatter != NULL) {
@@ -3234,7 +3238,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 data[count++].setTo(alt_sep);
             }
 
-            return matchString(text, start, UCAL_TIME_SEPARATOR, data, count, NULL, cal);
+            return matchString(text, start, UCAL_FIELD_COUNT /* => nothing to set */, data, count, NULL, cal);
         }
 
     default:
