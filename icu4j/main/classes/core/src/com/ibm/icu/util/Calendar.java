@@ -951,32 +951,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int IS_LEAP_MONTH = 22;
 
     /**
-     * Field number for related year.
-     * TODO: http://bugs.icu-project.org/trac/ticket/10761
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static final int RELATED_YEAR = 23;
-
-    /**
-     * Field number for <code>get</code> and <code>set</code> separating
-     * <code>HOUR</code>, <code>MINUTE</code> and <code>SECOND</code>.
-     * E.g., at 10:04 the <code>TIME_SEPARATOR</code> is <code>:</code>.
-     * @see #HOUR
-     * @see #MINUTE
-     * @see #SECOND
-     * @draft ICU 55
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final int TIME_SEPARATOR = 24;
-
-    /**
      * The number of fields defined by this class.  Subclasses may define
      * addition fields starting with this number.
      * @stable ICU 2.0
      */
-    protected static final int BASE_FIELD_COUNT = 25;
+    protected static final int BASE_FIELD_COUNT = 23;
 
     /**
      * The maximum number of fields possible.  Subclasses must not define
@@ -3167,12 +3146,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case JULIAN_DAY:
             set(field, internalGet(field) + amount);
             return;
-        case RELATED_YEAR:
-            // Ignore.
-            break;
-        case TIME_SEPARATOR:
-            // Ignore.
-            break;
         default:
             // Other fields cannot be rolled by this method
             throw new IllegalArgumentException("Calendar.roll(" + fieldName(field) +
@@ -3340,14 +3313,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case MILLISECOND:
         case MILLISECONDS_IN_DAY:
             keepWallTimeInvariant = false;
-            break;
-
-        case RELATED_YEAR:
-            // Ignore.
-            break;
-
-        case TIME_SEPARATOR:
-            // Ignore.
             break;
 
         default:
@@ -4334,8 +4299,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         { -0x7F000000,  -0x7F000000,    0x7F000000,    0x7F000000  }, // JULIAN_DAY
         {           0,            0, 24*ONE_HOUR-1, 24*ONE_HOUR-1  }, // MILLISECONDS_IN_DAY
         {           0,            0,             1,             1  }, // IS_LEAP_MONTH
-        {/*                                                      */}, // RELATED_YEAR
-        { Character.MIN_VALUE, Character.MIN_VALUE, Character.MAX_VALUE, Character.MAX_VALUE }, // TIME_SEPARATOR
     };
 
     /**
@@ -4386,7 +4349,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case JULIAN_DAY:
         case MILLISECONDS_IN_DAY:
         case IS_LEAP_MONTH:
-        case TIME_SEPARATOR:
             return LIMITS[field][limitType];
 
         case WEEK_OF_MONTH:

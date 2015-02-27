@@ -1397,7 +1397,7 @@ public class SimpleDateFormat extends DateFormat {
         /*O*/   Calendar.ZONE_OFFSET /* also DST_OFFSET */,
         /*Xx*/  Calendar.ZONE_OFFSET /* also DST_OFFSET */, Calendar.ZONE_OFFSET /* also DST_OFFSET */,
         /*r*/   Calendar.EXTENDED_YEAR /* not an exact match */,
-        /*:*/   Calendar.TIME_SEPARATOR,
+        /*:*/   -1, /* => no useful mapping to any calendar field, can't use protected Calendar.BASE_FIELD_COUNT */
     };
 
     // Map pattern character index to DateFormat field number
@@ -1538,7 +1538,11 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         final int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
-        int value = (patternCharIndex != DateFormat.RELATED_YEAR)? cal.get(field): cal.getRelatedYear();
+        int value = 0;
+        // Don't get value unless it is useful
+        if (field >= 0) {
+            value = (patternCharIndex != DateFormat.RELATED_YEAR)? cal.get(field): cal.getRelatedYear();
+        }
 
         NumberFormat currentNumberFormat = getNumberFormat(ch);
         DateFormatSymbols.CapitalizationContextUsage capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.OTHER;
@@ -2683,12 +2687,14 @@ public class SimpleDateFormat extends DateFormat {
             }
         if (bestMatch >= 0)
             {
-                if (field == Calendar.YEAR) {
-                    bestMatch++; // only get here for cyclic year names, which match 1-based years 1-60
-                }
-                cal.set(field, bestMatch);
-                if (monthPattern != null) {
-                    cal.set(Calendar.IS_LEAP_MONTH, isLeapMonth);
+                if (field >= 0) {
+                    if (field == Calendar.YEAR) {
+                        bestMatch++; // only get here for cyclic year names, which match 1-based years 1-60
+                    }
+                    cal.set(field, bestMatch);
+                    if (monthPattern != null) {
+                        cal.set(Calendar.IS_LEAP_MONTH, isLeapMonth);
+                    }
                 }
                 return start + bestMatchLength;
             }
@@ -2827,7 +2833,7 @@ public class SimpleDateFormat extends DateFormat {
 
         currentNumberFormat = getNumberFormat(ch);
 
-        int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
+        int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex]; // -1 if irrelevant
         
         if (numericLeapMonthFormatter != null) {
             numericLeapMonthFormatter.setFormatByArgumentIndex(0, currentNumberFormat);
@@ -3311,7 +3317,7 @@ public class SimpleDateFormat extends DateFormat {
                     data.add(DateFormatSymbols.ALTERNATE_TIME_SEPARATOR);
                 }
 
-                return matchString(text, start, Calendar.TIME_SEPARATOR, data.toArray(new String[0]), cal);
+                return matchString(text, start, -1 /* => nothing to set */, data.toArray(new String[0]), cal);
             }
 
             default:
@@ -3958,10 +3964,12 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         final int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
-        int value = fromCalendar.get(field);
-        int value_2 = toCalendar.get(field);
-        if ( value != value_2 ) {
-            return true;
+        if (field >= 0) {
+            int value = fromCalendar.get(field);
+            int value_2 = toCalendar.get(field);
+            if ( value != value_2 ) {
+                return true;
+            }
         }
         return false;
     }
