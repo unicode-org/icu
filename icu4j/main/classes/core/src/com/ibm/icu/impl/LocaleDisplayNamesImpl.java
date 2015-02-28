@@ -1,16 +1,23 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
 import com.ibm.icu.impl.locale.AsciiUtil;
@@ -18,6 +25,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.DisplayContext;
+import com.ibm.icu.text.DisplayContext.Type;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.ULocale;
@@ -180,11 +188,11 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                         CapitalizationContextUsage usage = contextUsageTypeMap.get(usageKey);
                         if (usage != null) {
                             int titlecaseInt = (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
-                                                        intVector[0]: intVector[1];
-                            if (titlecaseInt != 0) {
-                                capitalizationUsage[usage.ordinal()] = true;
-                                needBrkIter = true;
-                            }
+                                    intVector[0]: intVector[1];
+                                    if (titlecaseInt != 0) {
+                                        capitalizationUsage[usage.ordinal()] = true;
+                                        needBrkIter = true;
+                                    }
                         }
                     }
                 }
@@ -230,7 +238,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
     private String adjustForUsageAndContext(CapitalizationContextUsage usage, String name) {
         if (name != null && name.length() > 0 && UCharacter.isLowerCase(name.codePointAt(0)) &&
-              (capitalization==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+                (capitalization==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
                 (capitalizationUsage != null && capitalizationUsage[usage.ordinal()]) )) {
             // Note, won't have capitalizationUsage != null && capitalizationUsage[usage.ordinal()]
             // unless capitalization is CAPITALIZATION_FOR_UI_LIST_OR_MENU or CAPITALIZATION_FOR_STANDALONE
@@ -397,10 +405,10 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             return lang;
         }
         if (nameLength == DisplayContext.LENGTH_SHORT) {
-        	String langName = langData.get("Languages%short", lang);
-        	if (!langName.equals(lang)) {
-        	    return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langName);
-        	}
+            String langName = langData.get("Languages%short", lang);
+            if (!langName.equals(lang)) {
+                return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langName);
+            }
         }
         return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langData.get("Languages", lang));
     }
@@ -423,10 +431,10 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     @Override
     public String scriptDisplayNameInContext(String script) {
         if (nameLength == DisplayContext.LENGTH_SHORT) {
-        	String scriptName = langData.get("Scripts%short", script);
-        	if (!scriptName.equals(script)) {
-        	    return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, scriptName);
-        	}
+            String scriptName = langData.get("Scripts%short", script);
+            if (!scriptName.equals(script)) {
+                return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, scriptName);
+            }
         }
         return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, langData.get("Scripts", script));
     }
@@ -439,10 +447,10 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     @Override
     public String regionDisplayName(String region) {
         if (nameLength == DisplayContext.LENGTH_SHORT) {
-        	String regionName = regionData.get("Countries%short", region);
-        	if (!regionName.equals(region)) {
-        	    return adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionName);
-        	}
+            String regionName = regionData.get("Countries%short", region);
+            if (!regionName.equals(region)) {
+                return adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionName);
+            }
         }
         return adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionData.get("Countries", region));
     }
@@ -482,6 +490,84 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
         return adjustForUsageAndContext(CapitalizationContextUsage.KEYVALUE, keyValueName);
     }
+
+    @Override
+    public List<UiListItem> getUiListCompareWholeItems(Set<ULocale> localeSet, Comparator<UiListItem> comparator) {
+        DisplayContext capContext = getContext(Type.CAPITALIZATION);
+
+        List<UiListItem> result = new ArrayList<UiListItem>();
+        Map<ULocale,Set<ULocale>> baseToLocales = new HashMap<ULocale,Set<ULocale>>();
+        for (ULocale locOriginal : localeSet) {
+            ULocale loc = ULocale.addLikelySubtags(locOriginal);
+            ULocale base = new ULocale(loc.getLanguage());
+            Set<ULocale> locales = baseToLocales.get(base);
+            if (locales == null) {
+                baseToLocales.put(base, locales = new HashSet<ULocale>());
+            }
+            locales.add(loc);
+        }
+        for (Entry<ULocale, Set<ULocale>> entry : baseToLocales.entrySet()) {
+            ULocale base = entry.getKey();
+            Set<ULocale> values = entry.getValue();
+            if (values.size() == 1) {
+                ULocale locale = values.iterator().next();
+                result.add(newRow(ULocale.minimizeSubtags(locale, ULocale.Minimize.FAVOR_SCRIPT), capContext));
+            } else {
+                Set<String> scripts = new HashSet<String>();
+                Set<String> regions = new HashSet<String>();
+                // need the follow two steps to make sure that unusual scripts or regions are displayed
+                ULocale maxBase = ULocale.addLikelySubtags(base);
+                scripts.add(maxBase.getScript());
+                regions.add(maxBase.getCountry());
+                for (ULocale locale : values) {
+                    scripts.add(locale.getScript());
+                    regions.add(locale.getCountry());
+                }
+                boolean hasScripts = scripts.size() > 1;
+                boolean hasRegions = regions.size() > 1;
+                for (ULocale locale : values) {
+                    ULocale.Builder modified = new ULocale.Builder().setLocale(locale);
+                    if (!hasScripts) {
+                        modified.setScript("");
+                    }
+                    if (!hasRegions) {
+                        modified.setRegion("");
+                    }
+                    result.add(newRow(modified.build(), capContext));
+                }
+            }
+        }
+        Collections.sort(result, comparator);
+        return result;
+    }
+
+    /**
+     * @param minimizeSubtags
+     * @param locale2
+     * @param breakIterator
+     * @return
+     */
+    private UiListItem newRow(ULocale modified, DisplayContext capContext) {
+        ULocale minimized = ULocale.minimizeSubtags(modified, ULocale.Minimize.FAVOR_SCRIPT); 
+        String tempName = modified.getDisplayName(locale);
+        boolean titlecase = capContext == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU;
+        String nameInDisplayLocale =  titlecase ? UCharacter.toTitleFirst(locale, tempName) : tempName;
+        tempName = modified.getDisplayName(modified);
+        String nameInSelf = capContext == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU ? UCharacter.toTitleFirst(modified, tempName) : tempName;
+        return new UiListItem(minimized, modified, nameInDisplayLocale, nameInSelf);
+    }
+
+    //    private static class MyComparator implements Comparator<UiListItem> {
+    //        private final Comparator<Object> collator;
+    //        MyComparator(Comparator<Object> collator) {
+    //            this.collator = collator;
+    //        }
+    //        public int compare(UiListItem o1, UiListItem o2) {
+    //            int result = collator.compare(o1.nameInDisplayLocale, o2.nameInDisplayLocale);
+    //            return result != 0 ? result : o1.minimized.compareTo(o2.minimized); // just in case
+    //        }
+    //    }
+    //
 
     public static class DataTable {
         ULocale getLocale() {
