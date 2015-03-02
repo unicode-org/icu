@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -639,6 +639,102 @@ public class RbnfTest extends TestFmwk {
         String result = new RuleBasedNumberFormat(ruRules, new ULocale("ru")).format(21000);
         if (!"двадцать один тысяча".equals(result)) {
             errln("Got " + result + " for 21000");
+        }
+    }
+
+    /**
+     * Perform a simple spot check on the parsing going into an infinite loop for alternate rules.
+     */
+    public void TestMultiplePluralRules() {
+        // This is trying to model the feminine form, but don't worry about the details too much.
+        // We're trying to test the plural rules where there are different prefixes.
+        String ruRules = "%spellout-cardinal-feminine-genitive:"
+                + "-x: минус >>;"
+                + "x.x: << запятая >>;"
+                + "0: ноля;"
+                + "1: одной;"
+                + "2: двух;"
+                + "3: трех;"
+                + "4: четырех;"
+                + "5: пяти;"
+                + "6: шести;"
+                + "7: семи;"
+                + "8: восьми;"
+                + "9: девяти;"
+                + "10: десяти;"
+                + "11: одиннадцати;"
+                + "12: двенадцати;"
+                + "13: тринадцати;"
+                + "14: четырнадцати;"
+                + "15: пятнадцати;"
+                + "16: шестнадцати;"
+                + "17: семнадцати;"
+                + "18: восемнадцати;"
+                + "19: девятнадцати;"
+                + "20: двадцати[ >>];"
+                + "30: тридцати[ >>];"
+                + "40: сорока[ >>];"
+                + "50: пятидесяти[ >>];"
+                + "60: шестидесяти[ >>];"
+                + "70: семидесяти[ >>];"
+                + "80: восемидесяти[ >>];"
+                + "90: девяноста[ >>];"
+                + "100: ста[ >>];"
+                + "200: <<сот[ >>];"
+                + "1000: << $(cardinal,one{тысяча}few{тысячи}other{тысяч})$[ >>];"
+                + "1000000: =#,##0=;"
+                + "%spellout-cardinal-feminine:"
+                + "-x: минус >>;"
+                + "x.x: << запятая >>;"
+                + "0: ноль;"
+                + "1: одна;"
+                + "2: две;"
+                + "3: три;"
+                + "4: четыре;"
+                + "5: пять;"
+                + "6: шесть;"
+                + "7: семь;"
+                + "8: восемь;"
+                + "9: девять;"
+                + "10: десять;"
+                + "11: одиннадцать;"
+                + "12: двенадцать;"
+                + "13: тринадцать;"
+                + "14: четырнадцать;"
+                + "15: пятнадцать;"
+                + "16: шестнадцать;"
+                + "17: семнадцать;"
+                + "18: восемнадцать;"
+                + "19: девятнадцать;"
+                + "20: двадцать[ >>];"
+                + "30: тридцать[ >>];"
+                + "40: сорок[ >>];"
+                + "50: пятьдесят[ >>];"
+                + "60: шестьдесят[ >>];"
+                + "70: семьдесят[ >>];"
+                + "80: восемьдесят[ >>];"
+                + "90: девяносто[ >>];"
+                + "100: сто[ >>];"
+                + "200: <<сти[ >>];"
+                + "300: <<ста[ >>];"
+                + "500: <<сот[ >>];"
+                + "1000: << $(cardinal,one{тысяча}few{тысячи}other{тысяч})$[ >>];"
+                + "1000000: =#,##0=;";
+        RuleBasedNumberFormat ruFormatter = new RuleBasedNumberFormat(ruRules, new ULocale("ru"));
+        try {
+            Number result;
+            if (1000 != (result = ruFormatter.parse(ruFormatter.format(1000))).doubleValue()) {
+                errln("RuleBasedNumberFormat did not return the correct value. Got: " + result);
+            }
+            if (1000 != (result = ruFormatter.parse(ruFormatter.format(1000, "%spellout-cardinal-feminine-genitive"))).doubleValue()) {
+                errln("RuleBasedNumberFormat did not return the correct value. Got: " + result);
+            }
+            if (1000 != (result = ruFormatter.parse(ruFormatter.format(1000, "%spellout-cardinal-feminine"))).doubleValue()) {
+                errln("RuleBasedNumberFormat did not return the correct value. Got: " + result);
+            }
+        }
+        catch (ParseException e) {
+            errln(e.toString());
         }
     }
 
