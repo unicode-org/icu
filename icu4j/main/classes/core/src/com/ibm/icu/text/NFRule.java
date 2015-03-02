@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,6 +8,7 @@ package com.ibm.icu.text;
 
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.List;
 
 import com.ibm.icu.impl.PatternProps;
 
@@ -107,10 +108,11 @@ final class NFRule {
      * rule set that owns the new rule(s)
      * @return An instance of NFRule, or an array of NFRules
      */
-    public static Object makeRules(String                description,
+    public static void makeRules(String                description,
                                    NFRuleSet             owner,
                                    NFRule                predecessor,
-                                   RuleBasedNumberFormat ownersOwner) {
+                                   RuleBasedNumberFormat ownersOwner,
+                                   List<NFRule>          returnList) {
         // we know we're making at least one rule, so go ahead and
         // new it up and initialize its basevalue and divisor
         // (this also strips the rule descriptor, if any, off the
@@ -132,7 +134,6 @@ final class NFRule {
             || rule1.getBaseValue() == NEGATIVE_NUMBER_RULE)
         {
             rule1.extractSubstitutions(owner, description, predecessor);
-            return rule1;
         }
         else {
             // if the description does contain a matched pair of brackets,
@@ -205,12 +206,11 @@ final class NFRule {
             // BEFORE rule1 in the list: in all cases, rule2 OMITS the
             // material in the brackets and rule1 INCLUDES the material
             // in the brackets)
-            if (rule2 == null) {
-                return rule1;
-            } else {
-                return new NFRule[] { rule2, rule1 };
+            if (rule2 != null) {
+                returnList.add(rule2);
             }
         }
+        returnList.add(rule1);
     }
 
     /**
