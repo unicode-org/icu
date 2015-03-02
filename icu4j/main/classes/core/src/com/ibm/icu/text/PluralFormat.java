@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2014, International Business Machines Corporation and
+ * Copyright (C) 2007-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -752,7 +752,7 @@ public class PluralFormat extends UFormat {
                 currMatchIndex = scannerMatchResult[0];
             }
             else {
-                currMatchIndex = source.indexOf(currArg);
+                currMatchIndex = source.indexOf(currArg, startingAt);
             }
             if (currMatchIndex >= 0 && currMatchIndex >= matchedIndex && (matchedWord == null || currArg.length() > matchedWord.length())) {
                 matchedIndex = currMatchIndex;
