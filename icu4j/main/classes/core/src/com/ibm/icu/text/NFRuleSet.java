@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -140,28 +140,6 @@ final class NFRuleSet {
      */
     public void parseRules(String                description,
                            RuleBasedNumberFormat owner) {
-        // start by creating a Vector whose elements are Strings containing
-        // the descriptions of the rules (one rule per element).  The rules
-        // are separated by semicolons (there's no escape facility: ALL
-        // semicolons are rule delimiters)
-        List<String> ruleDescriptions = new ArrayList<String>();
-
-        int oldP = 0;
-        int p = description.indexOf(';');
-        while (oldP != -1) {
-            if (p != -1) {
-                ruleDescriptions.add(description.substring(oldP, p));
-                oldP = p + 1;
-            } else {
-                if (oldP < description.length()) {
-                    ruleDescriptions.add(description.substring(oldP));
-                }
-                oldP = p;
-            }
-            p = description.indexOf(';', p + 1);
-        }
-
-        // now go back through and build a vector of the rules themselves
         // (the number of elements in the description list isn't necessarily
         // the number of rules-- some descriptions may expend into two rules)
         List<NFRule> tempRules = new ArrayList<NFRule>();
@@ -169,28 +147,29 @@ final class NFRuleSet {
         // we keep track of the rule before the one we're currently working
         // on solely to support >>> substitutions
         NFRule predecessor = null;
-        for (String ruleDescription : ruleDescriptions) {
+
+        // Iterate through the rules.  The rules
+        // are separated by semicolons (there's no escape facility: ALL
+        // semicolons are rule delimiters)
+        int oldP = 0;
+        int descriptionLen = description.length();
+        int p;
+        do {
+            p = description.indexOf(';', oldP);
+            if (p < 0) {
+                p = descriptionLen;
+            }
+
             // makeRules (a factory method on NFRule) will return either
             // a single rule or an array of rules.  Either way, add them
             // to our rule vector
-            Object temp = NFRule.makeRules(ruleDescription,
-                    this, predecessor, owner);
+            NFRule.makeRules(description.substring(oldP, p),
+                    this, predecessor, owner, tempRules);
+            predecessor = tempRules.get(tempRules.size() - 1);
 
-            if (temp instanceof NFRule) {
-                tempRules.add((NFRule) temp);
-                predecessor = (NFRule) temp;
-            }
-            else if (temp instanceof NFRule[]) {
-                NFRule[] rulesToAdd = (NFRule[]) temp;
-
-                for (int j = 0; j < rulesToAdd.length; j++) {
-                    tempRules.add(rulesToAdd[j]);
-                    predecessor = rulesToAdd[j];
-                }
-            }
+            oldP = p + 1;
         }
-        // now we can bag the description list
-        ruleDescriptions = null;
+        while (oldP < descriptionLen);
 
         // for rules that didn't specify a base value, their base values
         // were initialized to 0.  Make another pass through the list and
