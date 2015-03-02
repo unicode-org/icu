@@ -405,10 +405,10 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     case UBRK_LINE:
         uprv_strcpy(lbType, "line");
         {
-            char lbKeyValue[kLBTypeLenMax];
+            char lbKeyValue[kLBTypeLenMax] = {0};
             UErrorCode kvStatus = U_ZERO_ERROR;
-            loc.getKeywordValue("lb", lbKeyValue, kLBTypeLenMax, kvStatus);
-            if (U_SUCCESS(kvStatus) && (uprv_strcmp(lbKeyValue,"strict")==0 || uprv_strcmp(lbKeyValue,"normal")==0 || uprv_strcmp(lbKeyValue,"loose")==0)) {
+            int32_t kLen = loc.getKeywordValue("lb", lbKeyValue, kLBTypeLenMax, kvStatus);
+            if (U_SUCCESS(kvStatus) && kLen > 0 && (uprv_strcmp(lbKeyValue,"strict")==0 || uprv_strcmp(lbKeyValue,"normal")==0 || uprv_strcmp(lbKeyValue,"loose")==0)) {
                 uprv_strcat(lbType, "_");
                 uprv_strcat(lbType, lbKeyValue);
             }
