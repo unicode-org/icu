@@ -8,6 +8,8 @@ icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
+icu4c/source/common/ulistformatter.cpp -text
+icu4c/source/common/unicode/ulistformatter.h -text
 icu4c/source/data/brkitr/burmesedict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/char.txt svneol=native#text/plain
 icu4c/source/data/brkitr/cjdict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3864,6 +3866,7 @@ icu4c/source/stubdata/stubdata.vcxproj -text
 icu4c/source/stubdata/stubdata.vcxproj.filters -text
 icu4c/source/test/cintltst/cintltst.vcxproj -text
 icu4c/source/test/cintltst/cintltst.vcxproj.filters -text
+icu4c/source/test/cintltst/ulistfmttest.c -text
 icu4c/source/test/compat/readme.txt svneol=native#text/plain
 icu4c/source/test/depstest/dependencies.txt svneol=native#text/plain
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
