@@ -1110,6 +1110,8 @@ static const struct {
 };
 
 void CollationTest::parseAndSetAttribute(IcuTestErrorCode &errorCode) {
+    // Parse attributes even if the Collator could not be created,
+    // in order to report syntax errors.
     int32_t start = skipSpaces(1);
     int32_t equalPos = fileLine.indexOf(0x3d);
     if(equalPos < 0) {
@@ -1141,12 +1143,14 @@ void CollationTest::parseAndSetAttribute(IcuTestErrorCode &errorCode) {
             errorCode.set(U_PARSE_ERROR);
             return;
         }
-        coll->setMaxVariable(max, errorCode);
-        if(errorCode.isFailure()) {
-            errln("setMaxVariable() failed on line %d: %s",
-                  (int)fileLineNumber, errorCode.errorName());
-            infoln(fileLine);
-            return;
+        if(coll != NULL) {
+            coll->setMaxVariable(max, errorCode);
+            if(errorCode.isFailure()) {
+                errln("setMaxVariable() failed on line %d: %s",
+                      (int)fileLineNumber, errorCode.errorName());
+                infoln(fileLine);
+                return;
+            }
         }
         fileLine.remove();
         return;
@@ -1180,12 +1184,14 @@ void CollationTest::parseAndSetAttribute(IcuTestErrorCode &errorCode) {
         }
     }
 
-    coll->setAttribute(attr, value, errorCode);
-    if(errorCode.isFailure()) {
-        errln("illegal attribute=value combination on line %d: %s",
-              (int)fileLineNumber, errorCode.errorName());
-        infoln(fileLine);
-        return;
+    if(coll != NULL) {
+        coll->setAttribute(attr, value, errorCode);
+        if(errorCode.isFailure()) {
+            errln("illegal attribute=value combination on line %d: %s",
+                  (int)fileLineNumber, errorCode.errorName());
+            infoln(fileLine);
+            return;
+        }
     }
     fileLine.remove();
 }
@@ -1212,11 +1218,14 @@ void CollationTest::parseAndSetReorderCodes(int32_t start, IcuTestErrorCode &err
         reorderCodes.addElement(code, errorCode);
         start = limit;
     }
-    coll->setReorderCodes(reorderCodes.getBuffer(), reorderCodes.size(), errorCode);
-    if(errorCode.isFailure()) {
-        errln("setReorderCodes() failed on line %d: %s", (int)fileLineNumber, errorCode.errorName());
-        infoln(fileLine);
-        return;
+    if(coll != NULL) {
+        coll->setReorderCodes(reorderCodes.getBuffer(), reorderCodes.size(), errorCode);
+        if(errorCode.isFailure()) {
+            errln("setReorderCodes() failed on line %d: %s",
+                  (int)fileLineNumber, errorCode.errorName());
+            infoln(fileLine);
+            return;
+        }
     }
     fileLine.remove();
 }
@@ -1248,6 +1257,9 @@ void CollationTest::buildTailoring(UCHARBUF *f, IcuTestErrorCode &errorCode) {
             infoln(UnicodeString("  snippet: ...") +
                 parseError.preContext + "(!)" + parseError.postContext + "...");
         }
+        delete coll;
+        coll = NULL;
+        errorCode.reset();
     } else {
         assertEquals("no error reason when RuleBasedCollator(rules) succeeds",
                      UnicodeString(), reason);
@@ -1266,6 +1278,8 @@ void CollationTest::setRootCollator(IcuTestErrorCode &errorCode) {
 
 void CollationTest::setLocaleCollator(IcuTestErrorCode &errorCode) {
     if(errorCode.isFailure()) { return; }
+    delete coll;
+    coll = NULL;
     int32_t at = fileLine.indexOf((UChar)0x40, 9);  // @ is not invariant
     if(at >= 0) {
         fileLine.setCharAt(at, (UChar)0x2a);  // *
@@ -1284,15 +1298,15 @@ void CollationTest::setLocaleCollator(IcuTestErrorCode &errorCode) {
     }
 
     logln("creating a collator for locale ID %s", locale.getName());
-    Collator *newColl = Collator::createInstance(locale, errorCode);
+    coll = Collator::createInstance(locale, errorCode);
     if(errorCode.isFailure()) {
         dataerrln("unable to create a collator for locale %s on line %d",
                   locale.getName(), (int)fileLineNumber);
         infoln(fileLine);
-        return;
+        delete coll;
+        coll = NULL;
+        errorCode.reset();
     }
-    delete coll;
-    coll = newColl;
 }
 
 UBool CollationTest::needsNormalization(const UnicodeString &s, UErrorCode &errorCode) const {
@@ -1750,10 +1764,18 @@ void CollationTest::checkCompareStrings(UCHARBUF *f, IcuTestErrorCode &errorCode
     while(readLine(f, errorCode)) {
         if(fileLine.isEmpty()) { continue; }
         if(isSectionStarter(fileLine[0])) { break; }
+        // Parse the line even if it will be ignored (when we do not have a Collator)
+        // in order to report syntax issues.
         Collation::Level relation = parseRelationAndString(s, errorCode);
         if(errorCode.isFailure()) {
             errorCode.reset();
             break;
+        }
+        if(coll == NULL) {
+            // We were unable to create the Collator but continue with tests.
+            // Ignore test data for this Collator.
+            // The next Collator creation might work.
+            continue;
         }
         UCollationResult expectedOrder = (relation == Collation::ZERO_LEVEL) ? UCOL_EQUAL : UCOL_LESS;
         Collation::Level expectedLevel = relation;
