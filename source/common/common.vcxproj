@@ -466,9 +466,8 @@
     <ClCompile Include="ustrtrns.cpp" />
     <ClCompile Include="utext.cpp" />
     <ClCompile Include="utf_impl.c" />
-    <ClCompile Include="listformatter.cpp">
-    <ClCompile Include="ulistformatter.cpp">
-    </ClCompile>
+    <ClCompile Include="listformatter.cpp" />
+    <ClCompile Include="ulistformatter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="unicode\ubidi.h">
