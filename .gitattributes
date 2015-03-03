@@ -53,6 +53,8 @@ icu4c/source/aclocal.m4 -text
 icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
+icu4c/source/common/ulistformatter.cpp -text
+icu4c/source/common/unicode/ulistformatter.h -text
 icu4c/source/data/brkitr/line_loose.txt -text
 icu4c/source/data/brkitr/line_loose_cj.txt -text
 icu4c/source/data/brkitr/line_loose_fi.txt -text
@@ -151,6 +153,7 @@ icu4c/source/stubdata/stubdata.vcxproj -text
 icu4c/source/stubdata/stubdata.vcxproj.filters -text
 icu4c/source/test/cintltst/cintltst.vcxproj -text
 icu4c/source/test/cintltst/cintltst.vcxproj.filters -text
+icu4c/source/test/cintltst/ulistfmttest.c -text
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
