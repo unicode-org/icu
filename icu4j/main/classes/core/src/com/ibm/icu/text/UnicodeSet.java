@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.text;
 
+import java.io.IOException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +31,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.Freezable;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.OutputInt;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
@@ -600,10 +602,40 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
-     * Append the <code>toPattern()</code> representation of a
-     * string to the given <code>StringBuffer</code>.
+     * TODO: create Appendable version of UTF16.append(buf, c),
+     * maybe in new class Appendables?
+     * @throws IOException
      */
-    private static StringBuffer _appendToPat(StringBuffer buf, String s, boolean escapeUnprintable) {
+    private static void appendCodePoint(Appendable app, int c) {
+        assert 0 <= c && c <= 0x10ffff;
+        try {
+            if (c <= 0xffff) {
+                app.append((char) c);
+            } else {
+                app.append(UTF16.getLeadSurrogate(c)).append(UTF16.getTrailSurrogate(c));
+            }
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
+    }
+
+    /**
+     * TODO: create class Appendables?
+     * @throws IOException
+     */
+    private static void append(Appendable app, CharSequence s) {
+        try {
+            app.append(s);
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
+    }
+
+    /**
+     * Append the <code>toPattern()</code> representation of a
+     * string to the given <code>Appendable</code>.
+     */
+    private static <A extends Appendable> A _appendToPat(A buf, String s, boolean escapeUnprintable) {
         int cp;
         for (int i = 0; i < s.length(); i += Character.charCount(cp)) {
             cp = s.codePointAt(i);
@@ -614,41 +646,43 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Append the <code>toPattern()</code> representation of a
-     * character to the given <code>StringBuffer</code>.
+     * character to the given <code>Appendable</code>.
      */
-    private static StringBuffer _appendToPat(StringBuffer buf, int c, boolean escapeUnprintable) {
-        // "Utility.isUnprintable(c)" seems redundant since the the call
-        //      "Utility.escapeUnprintable(buf, c)" does it again inside the if statement
-        if (escapeUnprintable && Utility.isUnprintable(c)) {
-            // Use hex escape notation (<backslash>uxxxx or <backslash>Uxxxxxxxx) for anything
-            // unprintable
-            if (Utility.escapeUnprintable(buf, c)) {
-                return buf;
+    private static <A extends Appendable> A _appendToPat(A buf, int c, boolean escapeUnprintable) {
+        try {
+            if (escapeUnprintable && Utility.isUnprintable(c)) {
+                // Use hex escape notation (<backslash>uxxxx or <backslash>Uxxxxxxxx) for anything
+                // unprintable
+                if (Utility.escapeUnprintable(buf, c)) {
+                    return buf;
+                }
             }
-        }
-        // Okay to let ':' pass through
-        switch (c) {
-        case '[': // SET_OPEN:
-        case ']': // SET_CLOSE:
-        case '-': // HYPHEN:
-        case '^': // COMPLEMENT:
-        case '&': // INTERSECTION:
-        case '\\': //BACKSLASH:
-        case '{':
-        case '}':
-        case '$':
-        case ':':
-            buf.append('\\');
-            break;
-        default:
-            // Escape whitespace
-            if (PatternProps.isWhiteSpace(c)) {
+            // Okay to let ':' pass through
+            switch (c) {
+            case '[': // SET_OPEN:
+            case ']': // SET_CLOSE:
+            case '-': // HYPHEN:
+            case '^': // COMPLEMENT:
+            case '&': // INTERSECTION:
+            case '\\': //BACKSLASH:
+            case '{':
+            case '}':
+            case '$':
+            case ':':
                 buf.append('\\');
+                break;
+            default:
+                // Escape whitespace
+                if (PatternProps.isWhiteSpace(c)) {
+                    buf.append('\\');
+                }
+                break;
             }
-            break;
+            appendCodePoint(buf, c);
+            return buf;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
         }
-        UTF16.append(buf, c);
-        return buf;
     }
 
     /**
@@ -658,7 +692,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 2.0
      */
     public String toPattern(boolean escapeUnprintable) {
-        StringBuffer result = new StringBuffer();
+        if (pat != null && !escapeUnprintable) {
+            return pat;
+        }
+        StringBuilder result = new StringBuilder();
         return _toPattern(result, escapeUnprintable).toString();
     }
 
@@ -667,37 +704,44 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * a cleaned version of the string passed to applyPattern(), if there
      * is one.  Otherwise it will be generated.
      */
-    private StringBuffer _toPattern(StringBuffer result,
+    private <A extends Appendable> A _toPattern(A result,
             boolean escapeUnprintable) {
-        if (pat != null) {
-            int i;
-            int backslashCount = 0;
-            for (i=0; i<pat.length(); ) {
-                int c = UTF16.charAt(pat, i);
-                i += UTF16.getCharCount(c);
-                if (escapeUnprintable && Utility.isUnprintable(c)) {
+        if (pat == null) {
+            return appendNewPattern(result, escapeUnprintable, true);
+        }
+        try {
+            if (!escapeUnprintable) {
+                result.append(pat);
+                return result;
+            }
+            boolean oddNumberOfBackslashes = false;
+            for (int i=0; i<pat.length(); ) {
+                int c = pat.codePointAt(i);
+                i += Character.charCount(c);
+                if (Utility.isUnprintable(c)) {
                     // If the unprintable character is preceded by an odd
-                    // number of backslashes, then it has been escaped.
-                    // Before unescaping it, we delete the final
-                    // backslash.
-                    if (backslashCount % 2 != 0) {
-                        result.setLength(result.length() - 1);
-                    }
+                    // number of backslashes, then it has been escaped
+                    // and we omit the last backslash.
                     Utility.escapeUnprintable(result, c);
-                    backslashCount = 0;
+                    oddNumberOfBackslashes = false;
+                } else if (!oddNumberOfBackslashes && c == '\\') {
+                    // Temporarily withhold an odd-numbered backslash.
+                    oddNumberOfBackslashes = true;
                 } else {
-                    UTF16.append(result, c);
-                    if (c == '\\') {
-                        ++backslashCount;
-                    } else {
-                        backslashCount = 0;
+                    if (oddNumberOfBackslashes) {
+                        result.append('\\');
                     }
+                    appendCodePoint(result, c);
+                    oddNumberOfBackslashes = false;
                 }
             }
+            if (oddNumberOfBackslashes) {
+                result.append('\\');
+            }
             return result;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
         }
-
-        return _generatePattern(result, escapeUnprintable, true);
     }
 
     /**
@@ -721,66 +765,66 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     public StringBuffer _generatePattern(StringBuffer result,
             boolean escapeUnprintable, boolean includeStrings) {
-        result.append('[');
+        return appendNewPattern(result, escapeUnprintable, includeStrings);
+    }
 
-        //      // Check against the predefined categories.  We implicitly build
-        //      // up ALL category sets the first time toPattern() is called.
-        //      for (int cat=0; cat<CATEGORY_COUNT; ++cat) {
-        //          if (this.equals(getCategorySet(cat))) {
-        //              result.append(':');
-        //              result.append(CATEGORY_NAMES.substring(cat*2, cat*2+2));
-        //              return result.append(":]");
-        //          }
-        //      }
-
-        int count = getRangeCount();
-
-        // If the set contains at least 2 intervals and includes both
-        // MIN_VALUE and MAX_VALUE, then the inverse representation will
-        // be more economical.
-        if (count > 1 &&
-                getRangeStart(0) == MIN_VALUE &&
-                getRangeEnd(count-1) == MAX_VALUE) {
-
-            // Emit the inverse
-            result.append('^');
-
-            for (int i = 1; i < count; ++i) {
-                int start = getRangeEnd(i-1)+1;
-                int end = getRangeStart(i)-1;
-                _appendToPat(result, start, escapeUnprintable);
-                if (start != end) {
-                    if ((start+1) != end) {
-                        result.append('-');
+    private <A extends Appendable> A appendNewPattern(
+            A result, boolean escapeUnprintable, boolean includeStrings) {
+        try {
+            result.append('[');
+    
+            int count = getRangeCount();
+    
+            // If the set contains at least 2 intervals and includes both
+            // MIN_VALUE and MAX_VALUE, then the inverse representation will
+            // be more economical.
+            if (count > 1 &&
+                    getRangeStart(0) == MIN_VALUE &&
+                    getRangeEnd(count-1) == MAX_VALUE) {
+    
+                // Emit the inverse
+                result.append('^');
+    
+                for (int i = 1; i < count; ++i) {
+                    int start = getRangeEnd(i-1)+1;
+                    int end = getRangeStart(i)-1;
+                    _appendToPat(result, start, escapeUnprintable);
+                    if (start != end) {
+                        if ((start+1) != end) {
+                            result.append('-');
+                        }
+                        _appendToPat(result, end, escapeUnprintable);
                     }
-                    _appendToPat(result, end, escapeUnprintable);
                 }
             }
-        }
-
-        // Default; emit the ranges as pairs
-        else {
-            for (int i = 0; i < count; ++i) {
-                int start = getRangeStart(i);
-                int end = getRangeEnd(i);
-                _appendToPat(result, start, escapeUnprintable);
-                if (start != end) {
-                    if ((start+1) != end) {
-                        result.append('-');
+    
+            // Default; emit the ranges as pairs
+            else {
+                for (int i = 0; i < count; ++i) {
+                    int start = getRangeStart(i);
+                    int end = getRangeEnd(i);
+                    _appendToPat(result, start, escapeUnprintable);
+                    if (start != end) {
+                        if ((start+1) != end) {
+                            result.append('-');
+                        }
+                        _appendToPat(result, end, escapeUnprintable);
                     }
-                    _appendToPat(result, end, escapeUnprintable);
                 }
             }
-        }
-
-        if (includeStrings && strings.size() > 0) {
-            for (String s : strings) {
-                result.append('{');
-                _appendToPat(result, s, escapeUnprintable);
-                result.append('}');
+    
+            if (includeStrings && strings.size() > 0) {
+                for (String s : strings) {
+                    result.append('{');
+                    _appendToPat(result, s, escapeUnprintable);
+                    result.append('}');
+                }
             }
+            result.append(']');
+            return result;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
         }
-        return result.append(']');
     }
 
     /**
@@ -1974,8 +2018,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         if (strings.size() == 0) {
             return toString();
         }
-        StringBuffer result = new StringBuffer("(?:");
-        _generatePattern(result, true, false);
+        StringBuilder result = new StringBuilder("(?:");
+        appendNewPattern(result, true, false);
         for (String s : strings) {
             result.append('|');
             _appendToPat(result, s, true);
@@ -2363,7 +2407,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             pos = new ParsePosition(0);
         }
 
-        StringBuffer rebuiltPat = new StringBuffer();
+        StringBuilder rebuiltPat = new StringBuilder();
         RuleCharacterIterator chars =
                 new RuleCharacterIterator(pattern, symbols, pos);
         applyPattern(chars, symbols, rebuiltPat, options);
@@ -2401,8 +2445,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param options a bit mask of zero or more of the following:
      * IGNORE_SPACE, CASE.
      */
-    void applyPattern(RuleCharacterIterator chars, SymbolTable symbols,
-            StringBuffer rebuiltPat, int options) {
+    private void applyPattern(RuleCharacterIterator chars, SymbolTable symbols,
+            Appendable rebuiltPat, int options) {
 
         // Syntax characters: [ ] ^ - & { }
 
@@ -2414,7 +2458,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             opts |= RuleCharacterIterator.SKIP_WHITESPACE;
         }
 
-        StringBuffer patBuf = new StringBuffer(), buf = null;
+        StringBuilder patBuf = new StringBuilder(), buf = null;
         boolean usePat = false;
         UnicodeSet scratch = null;
         Object backup = null;
@@ -2634,7 +2678,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     }
                     lastItem = 0;
                     if (buf == null) {
-                        buf = new StringBuffer();
+                        buf = new StringBuilder();
                     } else {
                         buf.setLength(0);
                     }
@@ -2646,7 +2690,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                             ok = true;
                             break;
                         }
-                        UTF16.append(buf, c);
+                        appendCodePoint(buf, c);
                     }
                     if (buf.length() < 1 || !ok) {
                         syntaxError(chars, "Invalid multicharacter string");
@@ -2752,9 +2796,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         // Use the rebuilt pattern (pat) only if necessary.  Prefer the
         // generated pattern.
         if (usePat) {
-            rebuiltPat.append(patBuf.toString());
+            append(rebuiltPat, patBuf.toString());
         } else {
-            _generatePattern(rebuiltPat, false, true);
+            appendNewPattern(rebuiltPat, false, true);
         }
     }
 
@@ -3624,7 +3668,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param symbols TODO
      */
     private void applyPropertyPattern(RuleCharacterIterator chars,
-            StringBuffer rebuiltPat, SymbolTable symbols) {
+            Appendable rebuiltPat, SymbolTable symbols) {
         String patStr = chars.lookahead();
         ParsePosition pos = new ParsePosition(0);
         applyPropertyPattern(patStr, pos, symbols);
@@ -3632,7 +3676,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             syntaxError(chars, "Invalid property pattern");
         }
         chars.jumpahead(pos.getIndex());
-        rebuiltPat.append(patStr.substring(0, pos.getIndex()));
+        append(rebuiltPat, patStr.substring(0, pos.getIndex()));
     }
 
     //----------------------------------------------------------------
@@ -4148,7 +4192,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          */
         @Override
         public String toString() {
-            StringBuffer b = new StringBuffer();
+            StringBuilder b = new StringBuilder();
             return ( 
                     codepoint == codepointEnd ? _appendToPat(b, codepoint, false)
                             : _appendToPat(_appendToPat(b, codepoint, false).append('-'), codepointEnd, false))
