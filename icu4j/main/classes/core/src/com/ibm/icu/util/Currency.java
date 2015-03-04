@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2001-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.util;
@@ -950,6 +950,7 @@ public class Currency extends MeasureUnit {
         
         private Map<T, Set<T>> data = new HashMap<T, Set<T>>();
         
+        @SuppressWarnings("unchecked")  // See ticket #11395, this is safe.
         public EquivalenceRelation<T> add(T... items) {
             Set<T> group = new HashSet<T>();
             for (T item : items) {

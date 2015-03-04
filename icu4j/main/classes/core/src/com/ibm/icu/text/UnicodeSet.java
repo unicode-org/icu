@@ -4381,6 +4381,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @see #addAll(com.ibm.icu.text.UnicodeSet)
      * @stable ICU 4.4
      */
+    @SuppressWarnings("unchecked")  // See ticket #11395, this is safe.
     public <T extends CharSequence> UnicodeSet addAll(T... collection) {
         checkFrozen();
         for (T str : collection) {
