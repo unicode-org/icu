@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -158,7 +158,7 @@ public class IslamicTest extends CalendarTest {
         // rounding errors after year AH3954 - about 2500 years out.
 
         IslamicCalendar islamic2 = new IslamicCalendar();
-        islamic2.setType(CalculationType.ISLAMIC);
+        islamic2.setCalculationType(CalculationType.ISLAMIC);
         int testTime = getInclusion() <= 5 ? 20000 : 800000;
         doLimitsTest(islamic2, null, cal.getTime(), testTime);
         doTheoreticalLimitsTest(islamic2, true);
@@ -238,10 +238,23 @@ public class IslamicTest extends CalendarTest {
         // since setCivil/isCivil are now deprecated, make sure same test works for setType
         // operations on non-civil calendar
         cal = new IslamicCalendar(800, IslamicCalendar.RAMADAN, 1, 1, 1, 1);
-        cal.setType(CalculationType.ISLAMIC);
+        cal.setCalculationType(CalculationType.ISLAMIC);
         if (cal.isCivil()) {
         errln("islamic calendar is civil");
         }
+        
+        // ensure calculation type getter returns correct object and value
+        cal.setCalculationType(CalculationType.ISLAMIC_UMALQURA);
+        Object ctObj = cal.getCalculationType();
+        if(ctObj instanceof CalculationType) {
+            CalculationType ct = (CalculationType)ctObj;
+            if(ct != CalculationType.ISLAMIC_UMALQURA) {
+                errln("wrong calculation type returned from getCalculationType");
+            }
+        } else {
+            errln("wrong object type returned from getCalculationType");
+        }
+        
 
         Date now = new Date();
         cal.setTime(now);
@@ -290,18 +303,18 @@ public class IslamicTest extends CalendarTest {
 
     private static IslamicCalendar newCivil() {
         IslamicCalendar civilCalendar = new IslamicCalendar();
-        civilCalendar.setType(CalculationType.ISLAMIC_CIVIL);
+        civilCalendar.setCalculationType(CalculationType.ISLAMIC_CIVIL);
         return civilCalendar;
     }
     private static IslamicCalendar newIslamic() {
         IslamicCalendar civilCalendar = new IslamicCalendar();
-        civilCalendar.setType(CalculationType.ISLAMIC);
+        civilCalendar.setCalculationType(CalculationType.ISLAMIC);
         return civilCalendar;
     }
     
     private static IslamicCalendar newIslamicUmalqura() {
         IslamicCalendar civilCalendar = new IslamicCalendar();
-        civilCalendar.setType(CalculationType.ISLAMIC_UMALQURA);
+        civilCalendar.setCalculationType(CalculationType.ISLAMIC_UMALQURA);
         return civilCalendar;
     }
 
@@ -411,7 +424,7 @@ public class IslamicTest extends CalendarTest {
             Date date = formatter.parse("1975-05-06");
             ULocale islamicLoc = new ULocale("ar_SA@calendar=islamic-umalqura"); 
             IslamicCalendar is_cal = new IslamicCalendar();
-            is_cal.setType(CalculationType.ISLAMIC_UMALQURA);
+            is_cal.setCalculationType(CalculationType.ISLAMIC_UMALQURA);
             is_cal.setTime(date);
             SimpleDateFormat formatterIslamic = (SimpleDateFormat) is_cal.getDateTimeFormat(0,0,islamicLoc);
             formatterIslamic.applyPattern("yyyy-MMMM-dd");
@@ -504,10 +517,10 @@ public class IslamicTest extends CalendarTest {
         }
 
         IslamicCalendar is_cal = new IslamicCalendar();
-        is_cal.setType(CalculationType.ISLAMIC_CIVIL);
+        is_cal.setCalculationType(CalculationType.ISLAMIC_CIVIL);
         is_cal.setTime(date);
         IslamicCalendar is_cal2 = new IslamicCalendar();
-        is_cal2.setType(CalculationType.ISLAMIC_TBLA);
+        is_cal2.setCalculationType(CalculationType.ISLAMIC_TBLA);
         is_cal2.setTime(date);
 
         int is_month = is_cal.get(Calendar.MONTH);

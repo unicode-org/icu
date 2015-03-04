@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -916,13 +916,10 @@ public class IslamicCalendar extends Calendar {
     /**
      * sets the calculation type for this calendar.
      * 
-     * @draft ICU 52
+     * @draft ICU 55
      * @provisional This API might change or be removed in a future release.
      */
-    // TODO: We should change the method name to setCalculationType, because
-    // corresponding getter (not yet available) will collide with String getType().
-    // See ticket#10426.
-    public void setType(CalculationType type) {
+    public void setCalculationType(CalculationType type) {
         cType = type;
         
         // ensure civil property is up-to-date
@@ -933,20 +930,30 @@ public class IslamicCalendar extends Calendar {
     }
 
     /**
+     * gets the calculation type for this calendar.
+     * 
+     * @draft ICU 55
+     * @provisional This API might change or be removed in a future release.
+     */
+    public CalculationType getCalculationType() {
+        return cType;
+    }
+
+    /**
      * set type based on locale
      */
     private void setCalcTypeForLocale(ULocale locale) {
         String localeCalType = CalendarUtil.getCalendarType(locale);
         if("islamic-civil".equals(localeCalType)) 
-            setType(CalculationType.ISLAMIC_CIVIL);
+            setCalculationType(CalculationType.ISLAMIC_CIVIL);
         else if("islamic-umalqura".equals(localeCalType)) 
-            setType(CalculationType.ISLAMIC_UMALQURA);
+            setCalculationType(CalculationType.ISLAMIC_UMALQURA);
         else if("islamic-tbla".equals(localeCalType)) 
-            setType(CalculationType.ISLAMIC_TBLA);
+            setCalculationType(CalculationType.ISLAMIC_TBLA);
         else if(localeCalType.startsWith("islamic"))
-            setType(CalculationType.ISLAMIC);       // needs to be last so it's always the default if it's islamic-something-unhandled  
+            setCalculationType(CalculationType.ISLAMIC);       // needs to be last so it's always the default if it's islamic-something-unhandled  
         else 
-            setType(CalculationType.ISLAMIC_CIVIL); // default for any non-islamic calendar locale
+            setCalculationType(CalculationType.ISLAMIC_CIVIL); // default for any non-islamic calendar locale
     }
 
     
