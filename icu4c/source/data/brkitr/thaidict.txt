@@ -1,4 +1,4 @@
-﻿  #  	Copyright (c) 2006-2014 International Business Machines Corporation,
+﻿  #  	Copyright (c) 2006-2015 International Business Machines Corporation,
   #  	Apple Inc., and others. All Rights Reserved.
 กก
 กกขนาก
@@ -21995,6 +21995,7 @@
 เบรก
 เบรค
 เบรลล์
+เบราว์เซอร์
 เบริง
 เบริล
 เบริลเลียม
@@ -25234,6 +25235,7 @@
 โพล่ง
 โพล้ง
 โพล้เพล้
+โพสต์
 โพสท์
 โพสพ
 โพสสิเบิล
