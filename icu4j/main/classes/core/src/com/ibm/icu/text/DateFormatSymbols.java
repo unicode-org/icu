@@ -487,6 +487,14 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     String ampms[] = null;
 
     /**
+     * narrow AM and PM strings. For example: "a" and "p".  An array of
+     * 2 strings, indexed by <code>Calendar.AM</code> and
+     * <code>Calendar.PM</code>.
+     * @serial
+     */
+    String ampmsNarrow[] = null;
+
+    /**
      * Time separator string. For example: ":".
      * @serial
      */
@@ -1415,6 +1423,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 && Utility.arrayEquals(standaloneShorterWeekdays, that.standaloneShorterWeekdays)
                 && Utility.arrayEquals(standaloneNarrowWeekdays, that.standaloneNarrowWeekdays)
                 && Utility.arrayEquals(ampms, that.ampms)
+                && Utility.arrayEquals(ampmsNarrow, that.ampmsNarrow)
                 && Utility.arrayEquals(timeSeparator, that.timeSeparator)
                 && arrayOfArrayEquals(zoneStrings, that.zoneStrings)
                 // getDiplayName maps deprecated country and language codes to the current ones
@@ -1490,6 +1499,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.standaloneShorterWeekdays = dfs.standaloneShorterWeekdays;
         this.standaloneNarrowWeekdays = dfs.standaloneNarrowWeekdays;
         this.ampms = dfs.ampms;
+        this.ampmsNarrow = dfs.ampmsNarrow;
         this.timeSeparator = dfs.timeSeparator;
         this.shortQuarters = dfs.shortQuarters;
         this.quarters = dfs.quarters;
@@ -1593,6 +1603,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         System.arraycopy(snWeekdays, 0, standaloneNarrowWeekdays, 1, snWeekdays.length);
 
         ampms = calData.getStringArray("AmPmMarkers");
+        ampmsNarrow = calData.getStringArray("AmPmMarkersNarrow");
 
         quarters = calData.getStringArray("quarters", "wide");
         shortQuarters = calData.getStringArray("quarters", "abbreviated");
