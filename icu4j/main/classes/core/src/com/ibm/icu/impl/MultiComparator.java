@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -11,6 +11,7 @@ import java.util.Comparator;
 public class MultiComparator<T> implements Comparator<T> {
     private Comparator<T>[] comparators;
 
+    @SuppressWarnings("unchecked")  // See ticket #11395, this is safe.
     public MultiComparator (Comparator<T>... comparators) {
         this.comparators = comparators;
     }
