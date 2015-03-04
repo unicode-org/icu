@@ -2892,6 +2892,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "ccccc", "1970 01 01 0:00:00", "T",
                 "ccccc", "1970 01 02 0:00:00", "F",
                 "ccccc", "1970 01 03 0:00:00", "S",
+            
+                "h:mm a",     "2015 01 01 10:00:00", "10:00 AM",
+                "h:mm a",     "2015 01 01 22:00:00", "10:00 PM",
+                "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a",
+                "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p",
             };
             
             String CS_DATA[] = {
@@ -2941,10 +2946,25 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "ccccc", "1970 01 01 0:00:00", "\u010C",
                 "ccccc", "1970 01 02 0:00:00", "P",
                 "ccccc", "1970 01 03 0:00:00", "S",
+            
+                "h:mm a",     "2015 01 01 10:00:00", "10:00 AM",
+                "h:mm a",     "2015 01 01 22:00:00", "10:00 PM",
+                "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 AM",
+                "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 PM",
             };
             
+            String CA_DATA[] = {
+                "yyyy MM dd HH:mm:ss",
+
+                "h:mm a",     "2015 01 01 10:00:00", "10:00 a. m.",
+                "h:mm a",     "2015 01 01 22:00:00", "10:00 p. m.",
+                "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a.m.",
+                "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p.m.",
+            };
+
             expectFormat(EN_DATA, new Locale("en", "", ""));
             expectFormat(CS_DATA, new Locale("cs", "", ""));
+            expectFormat(CA_DATA, new Locale("ca", "", ""));
     }
     
     public void TestEras()

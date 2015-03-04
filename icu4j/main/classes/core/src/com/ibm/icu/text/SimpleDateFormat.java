@@ -1686,7 +1686,12 @@ public class SimpleDateFormat extends DateFormat {
             }
             break;
         case 14: // 'a' - AM_PM
-            safeAppend(formatData.ampms, value, buf);
+            // formatData.ampmsNarrow may be null when deserializing DateFormatSymbolsfrom old version
+            if (count < 5 || formatData.ampmsNarrow == null) {
+                safeAppend(formatData.ampms, value, buf);
+            } else {
+                safeAppend(formatData.ampmsNarrow, value, buf);
+            }
             break;
         case 15: // 'h' - HOUR (1..12)
             if (value == 0) {
@@ -3120,8 +3125,26 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 return newStart;
             }
-            case 14: // 'a' - AM_PM
-                return matchString(text, start, Calendar.AM_PM, formatData.ampms, null, cal);
+            case 14: { // 'a' - AM_PM
+                // Optionally try both wide/abbrev and narrow forms.
+                // formatData.ampmsNarrow may be null when deserializing DateFormatSymbolsfrom old version,
+                // in which case our only option is wide form
+                int newStart = 0;
+                // try wide/abbrev a-aaaa
+                if(formatData.ampmsNarrow == null || count < 5 || getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)) {
+                    if ((newStart = matchString(text, start, Calendar.AM_PM, formatData.ampms, null, cal)) > 0) {
+                        return newStart;
+                    }
+                }
+                // try narrow aaaaa
+                if(formatData.ampmsNarrow != null && (count >= 5 || getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH))) {
+                    if ((newStart = matchString(text, start, Calendar.AM_PM, formatData.ampmsNarrow, null, cal)) > 0) {
+                        return newStart;
+                    }
+                }
+                // no matches for given options
+                return ~start;
+            }
             case 15: // 'h' - HOUR (1..12)
                 // [We computed 'value' above.]
                 if (value == cal.getLeastMaximum(Calendar.HOUR)+1) {
