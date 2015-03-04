@@ -741,6 +741,12 @@ private:
     int32_t         fAmPmsCount;
 
     /**
+     * Narrow Ampm strings. For example: "a" and "p".
+     */
+    UnicodeString*  fNarrowAmPms;
+    int32_t         fNarrowAmPmsCount;
+
+    /**
      * Time separator string. For example: ":".
      */
     UnicodeString   fTimeSeparator;

@@ -1617,10 +1617,15 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         }
         break;
 
-    // for and "a" symbol, write out the whole AM/PM string
+    // for "a" symbol, write out the whole AM/PM string
     case UDAT_AM_PM_FIELD:
-        _appendSymbol(appendTo, value, fSymbols->fAmPms,
-                      fSymbols->fAmPmsCount);
+        if (count < 5) {
+            _appendSymbol(appendTo, value, fSymbols->fAmPms,
+                          fSymbols->fAmPmsCount);
+        } else {
+            _appendSymbol(appendTo, value, fSymbols->fNarrowAmPms,
+                          fSymbols->fNarrowAmPmsCount);
+        }
         break;
 
     // for ":", write out the time separator string
@@ -3022,7 +3027,24 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         break;
 
     case UDAT_AM_PM_FIELD:
-        return matchString(text, start, UCAL_AM_PM, fSymbols->fAmPms, fSymbols->fAmPmsCount, NULL, cal);
+        {
+            // optionally try both wide/abbrev and narrow forms
+            int32_t newStart = 0;
+            // try wide/abbrev
+            if( getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count < 5 ) {
+                if ((newStart = matchString(text, start, UCAL_AM_PM, fSymbols->fAmPms, fSymbols->fAmPmsCount, NULL, cal)) > 0) {
+                    return newStart;
+                }
+            }
+            // try narrow
+            if( getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count >= 5 ) {
+                if ((newStart = matchString(text, start, UCAL_AM_PM, fSymbols->fNarrowAmPms, fSymbols->fNarrowAmPmsCount, NULL, cal)) > 0) {
+                    return newStart;
+                }
+            }
+            // no matches for given options
+            return -start;
+        }
 
     case UDAT_HOUR1_FIELD:
         // [We computed 'value' above.]
