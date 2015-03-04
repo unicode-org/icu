@@ -88,6 +88,8 @@ icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
+icu4c/source/i18n/ufieldpositer.cpp -text
+icu4c/source/i18n/unicode/ufieldpositer.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text

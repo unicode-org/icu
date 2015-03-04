@@ -282,6 +282,9 @@
     <ClCompile Include="udatpg.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="ufieldpositer.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="ulocdata.c">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -1132,6 +1135,9 @@
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\ugender.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\ufieldpositer.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\uldnames.h">
