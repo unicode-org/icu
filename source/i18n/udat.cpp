@@ -22,6 +22,7 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/ustring.h"
 #include "unicode/udisplaycontext.h"
+#include "unicode/ufieldpositer.h"
 #include "cpputils.h"
 #include "reldtfmt.h"
 #include "umutex.h"
@@ -265,6 +266,50 @@ udat_formatCalendar(const UDateFormat*  format,
         position->beginIndex = fp.getBeginIndex();
         position->endIndex = fp.getEndIndex();
     }
+
+    return res.extract(result, resultLength, *status);
+}
+
+U_CAPI int32_t U_EXPORT2
+udat_formatForFields(    const    UDateFormat*    format,
+        UDate           dateToFormat,
+        UChar*          result,
+        int32_t         resultLength,
+        UFieldPositionIterator* fpositer,
+        UErrorCode*     status)
+{
+    if(U_FAILURE(*status)) return -1;
+
+    UnicodeString res;
+    if(!(result==NULL && resultLength==0)) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer
+        res.setTo(result, 0, resultLength);
+    }
+
+    ((DateFormat*)format)->format(dateToFormat, res, (FieldPositionIterator*)fpositer, *status);
+
+    return res.extract(result, resultLength, *status);
+}
+
+U_CAPI int32_t U_EXPORT2
+udat_formatCalendarForFields(const UDateFormat*  format,
+        UCalendar*      calendar,
+        UChar*          result,
+        int32_t         resultLength,
+        UFieldPositionIterator* fpositer,
+        UErrorCode*     status)
+{
+    if(U_FAILURE(*status)) return -1;
+
+    UnicodeString res;
+    if(!(result==NULL && resultLength==0)) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer
+        res.setTo(result, 0, resultLength);
+    }
+
+    ((DateFormat*)format)->format(*(Calendar*)calendar, res, (FieldPositionIterator*)fpositer, *status);
 
     return res.extract(result, resultLength, *status);
 }

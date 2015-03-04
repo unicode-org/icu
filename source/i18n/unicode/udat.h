@@ -16,6 +16,7 @@
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
 #include "unicode/udisplaycontext.h"
+#include "unicode/ufieldpositer.h"
 /**
  * \file
  * \brief C API: DateFormat
@@ -945,7 +946,7 @@ udat_clone(const UDateFormat *fmt,
        UErrorCode *status);
 
 /**
-* Format a date using an UDateFormat.
+* Format a date using a UDateFormat.
 * The date will be formatted using the conventions specified in {@link #udat_open }
 * @param format The formatter to use
 * @param dateToFormat The date to format
@@ -976,8 +977,8 @@ udat_format(    const    UDateFormat*    format,
 * The date will be formatted using the conventions specified in {@link #udat_open }
 * @param format The formatter to use
 * @param calendar The calendar to format. The calendar instance might be
-*                 mutated when fields are not fully calculated yet, although
-*                 this function won't change the logical date and time held
+*                 mutated if fields are not yet fully calculated, though
+*                 the function won't change the logical date and time held
 *                 by the instance.
 * @param result A pointer to a buffer to receive the formatted number.
 * @param capacity The maximum size of result.
@@ -1000,6 +1001,80 @@ udat_formatCalendar(    const UDateFormat*  format,
                         int32_t         capacity,
                         UFieldPosition* position,
                         UErrorCode*     status);
+
+/**
+* Format a date using a UDateFormat.
+* The date will be formatted using the conventions specified in {@link #udat_open}
+* @param format
+*          The formatter to use
+* @param dateToFormat
+*          The date to format
+* @param result
+*          A pointer to a buffer to receive the formatted number.
+* @param resultLength
+*          The maximum size of result.
+* @param fpositer
+*          A pointer to a UFieldPositionIterator created by {@link #ufieldpositer_open}
+*          (may be NULL if field position information is not needed). Any
+*          iteration information already present in the UFieldPositionIterator
+*          will be deleted, and the iterator will be reset to apply to the
+*          fields in the formatted string created by this function call; the
+*          field values provided by {@link #ufieldpositer_next} will be from the
+*          UDateFormatField enum.
+* @param status
+*          A pointer to a UErrorCode to receive any errors
+* @return
+*          The total buffer size needed; if greater than resultLength, the output was truncated.
+* @see udat_parse
+* @see UFieldPositionIterator
+* @draft ICU 55
+*/
+U_DRAFT int32_t U_EXPORT2 
+udat_formatForFields(   const UDateFormat* format,
+                        UDate           dateToFormat,
+                        UChar*          result,
+                        int32_t         resultLength,
+                        UFieldPositionIterator* fpositer,
+                        UErrorCode*     status);
+
+/**
+* Format a date using a UDateFormat.
+* The date will be formatted using the conventions specified in {@link #udat_open }
+* @param format
+*          The formatter to use
+* @param calendar
+*          The calendar to format. The calendar instance might be mutated if fields
+*          are not yet fully calculated, though the function won't change the logical
+*          date and time held by the instance.
+* @param result
+*          A pointer to a buffer to receive the formatted number.
+* @param capacity
+*          The maximum size of result.
+* @param fpositer
+*          A pointer to a UFieldPositionIterator created by {@link #ufieldpositer_open}
+*          (may be NULL if field position information is not needed). Any
+*          iteration information already present in the UFieldPositionIterator
+*          will be deleted, and the iterator will be reset to apply to the
+*          fields in the formatted string created by this function call; the
+*          field values provided by {@link #ufieldpositer_next} will be from the
+*          UDateFormatField enum.
+* @param status
+*          A pointer to a UErrorCode to receive any errors
+* @return
+*          The total buffer size needed; if greater than resultLength, the output was truncated.
+* @see udat_format
+* @see udat_parseCalendar
+* @see UFieldPositionIterator
+* @draft ICU 55
+*/
+U_DRAFT int32_t U_EXPORT2
+udat_formatCalendarForFields( const UDateFormat* format,
+                        UCalendar*      calendar,
+                        UChar*          result,
+                        int32_t         capacity,
+                        UFieldPositionIterator* fpositer,
+                        UErrorCode*     status);
+
 #endif  /* U_HIDE_DRAFT_API */
 
 /**
@@ -1341,40 +1416,40 @@ typedef enum UDateFormatSymbolType {
     UDAT_STANDALONE_SHORTER_WEEKDAYS
 #ifndef U_HIDE_DRAFT_API
     ,
-	/**
-	 * Cyclic year names (only supported for some calendars, and only for FORMAT usage;
-	 * udat_setSymbols not supported for UDAT_CYCLIC_YEARS_WIDE)
-	 * @draft ICU 54
-	 */
-	UDAT_CYCLIC_YEARS_WIDE,
-	/**
-	 * Cyclic year names (only supported for some calendars, and only for FORMAT usage)
-	 * @draft ICU 54
-	 */
-	UDAT_CYCLIC_YEARS_ABBREVIATED,
-	/**
-	 * Cyclic year names (only supported for some calendars, and only for FORMAT usage;
-	 * udat_setSymbols not supported for UDAT_CYCLIC_YEARS_NARROW)
-	 * @draft ICU 54
-	 */
-	UDAT_CYCLIC_YEARS_NARROW,
-	/**
-	 * Calendar zodiac  names (only supported for some calendars, and only for FORMAT usage;
-	 * udat_setSymbols not supported for UDAT_ZODIAC_NAMES_WIDE)
-	 * @draft ICU 54
-	 */
-	UDAT_ZODIAC_NAMES_WIDE,
-	/**
-	 * Calendar zodiac  names (only supported for some calendars, and only for FORMAT usage)
-	 * @draft ICU 54
-	 */
-	UDAT_ZODIAC_NAMES_ABBREVIATED,
-	/**
-	 * Calendar zodiac  names (only supported for some calendars, and only for FORMAT usage;
-	 * udat_setSymbols not supported for UDAT_ZODIAC_NAMES_NARROW)
-	 * @draft ICU 54
-	 */
-	UDAT_ZODIAC_NAMES_NARROW
+    /**
+     * Cyclic year names (only supported for some calendars, and only for FORMAT usage;
+     * udat_setSymbols not supported for UDAT_CYCLIC_YEARS_WIDE)
+     * @draft ICU 54
+     */
+    UDAT_CYCLIC_YEARS_WIDE,
+    /**
+     * Cyclic year names (only supported for some calendars, and only for FORMAT usage)
+     * @draft ICU 54
+     */
+    UDAT_CYCLIC_YEARS_ABBREVIATED,
+    /**
+     * Cyclic year names (only supported for some calendars, and only for FORMAT usage;
+     * udat_setSymbols not supported for UDAT_CYCLIC_YEARS_NARROW)
+     * @draft ICU 54
+     */
+    UDAT_CYCLIC_YEARS_NARROW,
+    /**
+     * Calendar zodiac  names (only supported for some calendars, and only for FORMAT usage;
+     * udat_setSymbols not supported for UDAT_ZODIAC_NAMES_WIDE)
+     * @draft ICU 54
+     */
+    UDAT_ZODIAC_NAMES_WIDE,
+    /**
+     * Calendar zodiac  names (only supported for some calendars, and only for FORMAT usage)
+     * @draft ICU 54
+     */
+    UDAT_ZODIAC_NAMES_ABBREVIATED,
+    /**
+     * Calendar zodiac  names (only supported for some calendars, and only for FORMAT usage;
+     * udat_setSymbols not supported for UDAT_ZODIAC_NAMES_NARROW)
+     * @draft ICU 54
+     */
+    UDAT_ZODIAC_NAMES_NARROW
 #endif  /* U_HIDE_DRAFT_API */
 } UDateFormatSymbolType;
 
