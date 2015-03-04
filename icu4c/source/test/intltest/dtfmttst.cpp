@@ -1752,6 +1752,11 @@ void DateFormatTest::TestNarrowNames()
             "ccccc", "1970 01 01 0:00:00", "T",
             "ccccc", "1970 01 02 0:00:00", "F",
             "ccccc", "1970 01 03 0:00:00", "S",
+            
+            "h:mm a",     "2015 01 01 10:00:00", "10:00 AM",
+            "h:mm a",     "2015 01 01 22:00:00", "10:00 PM",
+            "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a",
+            "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p",
         };
 
         const char *CS_DATA[] = {
@@ -1801,10 +1806,25 @@ void DateFormatTest::TestNarrowNames()
             "ccccc", "1970 01 01 0:00:00", "\\u010C",
             "ccccc", "1970 01 02 0:00:00", "P",
             "ccccc", "1970 01 03 0:00:00", "S",
+            
+            "h:mm a",     "2015 01 01 10:00:00", "10:00 AM",
+            "h:mm a",     "2015 01 01 22:00:00", "10:00 PM",
+            "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 AM",
+            "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 PM",
+        };
+
+        const char *CA_DATA[] = {
+            "yyyy MM dd HH:mm:ss",
+
+            "h:mm a",     "2015 01 01 10:00:00", "10:00 a. m.",
+            "h:mm a",     "2015 01 01 22:00:00", "10:00 p. m.",
+            "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a.m.",
+            "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p.m.",
         };
 
       expectFormat(EN_DATA, ARRAY_SIZE(EN_DATA), Locale("en", "", ""));
       expectFormat(CS_DATA, ARRAY_SIZE(CS_DATA), Locale("cs", "", ""));
+      expectFormat(CA_DATA, ARRAY_SIZE(CA_DATA), Locale("ca", "", ""));
 }
 
 void DateFormatTest::TestEras()
