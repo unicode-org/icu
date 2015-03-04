@@ -110,12 +110,12 @@ public class TestFmwk extends AbstractTestLog {
         if (ex instanceof MissingResourceException || ex instanceof NoClassDefFoundError ||
                 msg.indexOf("java.util.MissingResourceException") >= 0) {
             if (params.warnings || params.nodata) {
-                warnln(msg);
+                warnln(ex.toString() + '\n' + msg);
             } else {
-                errln(msg);
+                errln(ex.toString() + '\n' + msg);
             }
         } else {
-            errln(msg);
+            errln(ex.toString() + '\n' + msg);
         }
     }
     // use this instead of new random so we get a consistent seed
@@ -635,8 +635,11 @@ public class TestFmwk extends AbstractTestLog {
                 _params.errorSummary = summary;
             }
         } catch (Exception e) {
+            // We should normally not get here because
+            // MethodTarget.execute() calls handleException().
             ec++;
-            _params.log.println("encountered a test failure, exiting");
+            _params.log.println("\nencountered a test failure, exiting\n" + e);
+            e.printStackTrace(_params.log);
         }
 
         return ec;
