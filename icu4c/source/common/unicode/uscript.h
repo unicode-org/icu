@@ -426,6 +426,7 @@ typedef enum UScriptCode {
 
       /**
        * One higher than the last script code constant.
+       * This value increases as constants for script codes are added.
        *
        * There are constants for Unicode 7 script property values.
        * There are constants for ISO 15924 script codes assigned on or before 2013-10-12.
