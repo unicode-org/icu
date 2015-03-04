@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2014 International Business Machines Corporation and
+ * Copyright (C) 2001-2015 International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -14,10 +14,30 @@ import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.ULocale;
 
 /**
- * A class to reflect UTR #24: Script Names
- * (based on ISO 15924:2000, "Code for the representation of names of
- * scripts").  UTR #24 describes the basis for a new Unicode data file,
- * Scripts.txt.
+ * Constants for ISO 15924 script codes, and related functions.
+ *
+ * <p>The current set of script code constants supports at least all scripts
+ * that are encoded in the version of Unicode which ICU currently supports.
+ * The names of the constants are usually derived from the
+ * Unicode script property value aliases.
+ * See UAX #24 Unicode Script Property (http://www.unicode.org/reports/tr24/)
+ * and http://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt .
+ *
+ * <p>Starting with ICU 3.6, constants for most ISO 15924 script codes
+ * are included, for use with language tags, CLDR data, and similar.
+ * Some of those codes are not used in the Unicode Character Database (UCD).
+ * For example, there are no characters that have a UCD script property value of
+ * Hans or Hant. All Han ideographs have the Hani script property value in Unicode.
+ *
+ * <p>Private-use codes Qaaa..Qabx are not included.
+ *
+ * <p>Starting with ICU 55, script codes are only added when their scripts
+ * have been or will certainly be encoded in Unicode,
+ * and have been assigned Unicode script property value aliases,
+ * to ensure that their script names are stable and match the names of the constants.
+ * Script codes like Latf and Aran that are not subject to separate encoding
+ * may be added at any time.
+ *
  * @stable ICU 2.4
  */
 public final class UScript {
@@ -933,12 +953,15 @@ public final class UScript {
      */
     public static final int SIDDHAM = 166; /* Sidd */
 
-    /* Private use codes from Qaaa - Qabx are not supported */
-
     /**
-     * One higher than the last ISO 15924 script code integer.
-     * This value will increase as ISO 15924 adds script codes
-     * for which integer constants are added above.
+     * <p>One higher than the last script code constant.
+     * This value increases as constants for script codes are added.
+     *
+     * <p>There are constants for Unicode 7 script property values.
+     * There are constants for ISO 15924 script codes assigned on or before 2013-10-12.
+     * There are no constants for private use codes from Qaaa - Qabx
+     * except as used in the UCD.
+     *
      * @stable ICU 2.4
      */
     public static final int CODE_LIMIT   = 167;
