@@ -33,10 +33,6 @@ static UMemAllocFn    *pAlloc;
 static UMemReallocFn  *pRealloc;
 static UMemFreeFn     *pFree;
 
-/* Flag indicating whether any heap allocations have happened.
- *   Used to prevent changing out the heap functions after allocations have been made */
-static UBool   gHeapInUse;
-
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
 #include <stdio.h>
 static int n=0;
