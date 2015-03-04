@@ -25,6 +25,7 @@
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
+#include "unicode/ufieldpositer.h"
 #include "cintltst.h"
 #include "cdattst.h"
 #include "cformtst.h"
@@ -38,6 +39,7 @@ static void TestRelativeCrash(void);
 static void TestContext(void);
 static void TestCalendarDateParse(void);
 static void TestParseErrorReturnValue(void);
+static void TestFormatForFields(void);
 
 #define LEN(a) (sizeof(a)/sizeof(a[0]))
 
@@ -58,6 +60,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestCalendarDateParse);
     TESTCASE(TestOverrideNumberFormat);
     TESTCASE(TestParseErrorReturnValue);
+    TESTCASE(TestFormatForFields);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -1732,6 +1735,105 @@ static void TestParseErrorReturnValue(void) {
 
     ucal_close(cal);
     udat_close(df);
+}
+
+/*
+ * Ticket #11553
+ * Test new udat_formatForFields, udat_formatCalendarForFields (and UFieldPositionIterator)
+ */
+static const char localeForFields[] = "en_US";
+/* zoneGMT[]defined above */
+static const UDate date2015Feb25 = 1424841000000.0; /* Wednesday, February 25, 2015 at 5:10:00 AM GMT */
+
+typedef struct {
+    int32_t field;
+    int32_t beginPos;
+    int32_t endPos;
+} FieldsData;
+static const FieldsData expectedFields[] = {
+    { UDAT_DAY_OF_WEEK_FIELD /* 9*/,      0,  9 },
+    { UDAT_MONTH_FIELD /* 2*/,           11, 19 },
+    { UDAT_DATE_FIELD /* 3*/,            20, 22 },
+    { UDAT_YEAR_FIELD /* 1*/,            24, 28 },
+    { UDAT_HOUR1_FIELD /*15*/,           32, 33 },
+    { UDAT_TIME_SEPARATOR_FIELD /*35*/,  33, 34 },
+    { UDAT_MINUTE_FIELD /* 6*/,          34, 36 },
+    { UDAT_TIME_SEPARATOR_FIELD /*35*/,  36, 37 },
+    { UDAT_SECOND_FIELD /* 7*/,          37, 39 },
+    { UDAT_AM_PM_FIELD /*14*/,           40, 42 },
+    { UDAT_TIMEZONE_FIELD /*17*/,        43, 46 },
+    { -1,                                -1, -1 },
+};
+
+enum {kUBufFieldsLen = 128, kBBufFieldsLen = 256 };
+
+static void TestFormatForFields(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UFieldPositionIterator* fpositer = ufieldpositer_open(&status);
+    if ( U_FAILURE(status) ) {
+        log_err("ufieldpositer_open fails, status %s\n", u_errorName(status));
+    } else {
+        UDateFormat* udfmt = udat_open(UDAT_LONG, UDAT_FULL, localeForFields, zoneGMT, -1, NULL, 0, &status);
+        UCalendar* ucal = ucal_open(zoneGMT, -1, localeForFields, UCAL_DEFAULT, &status);
+        if ( U_FAILURE(status) ) {
+            log_data_err("udat_open or ucal_open fails for locale %s, status %s (Are you missing data?)\n", localeForFields, u_errorName(status));
+        } else {
+            int32_t ulen, field, beginPos, endPos;
+            UChar ubuf[kUBufFieldsLen];
+            const FieldsData * fptr;
+        
+            status = U_ZERO_ERROR;
+            ulen = udat_formatForFields(udfmt, date2015Feb25, ubuf, kUBufFieldsLen, fpositer, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("udat_formatForFields fails, status %s\n", u_errorName(status));
+            } else {
+                for (fptr = expectedFields; ; fptr++) {
+                    field = ufieldpositer_next(fpositer, &beginPos, &endPos);
+                    if (field != fptr->field || (field >= 0 && (beginPos != fptr->beginPos || endPos != fptr->endPos))) {
+                        if (fptr->field >= 0) {
+                            log_err("udat_formatForFields as \"%s\"; expect field %d range %d-%d, get field %d range %d-%d\n",
+                                    aescstrdup(ubuf, ulen), fptr->field, fptr->beginPos, fptr->endPos, field, beginPos, endPos);
+                        } else {
+                            log_err("udat_formatForFields as \"%s\"; expect field < 0, get field %d range %d-%d\n",
+                                    aescstrdup(ubuf, ulen), field, beginPos, endPos);
+                        }
+                        break;
+                    }
+                    if (field < 0) {
+                        break;
+                    }
+                }
+            }
+            
+            ucal_setMillis(ucal, date2015Feb25, &status);
+            status = U_ZERO_ERROR;
+            ulen = udat_formatCalendarForFields(udfmt, ucal, ubuf, kUBufFieldsLen, fpositer, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("udat_formatCalendarForFields fails, status %s\n", u_errorName(status));
+            } else {
+                for (fptr = expectedFields; ; fptr++) {
+                    field = ufieldpositer_next(fpositer, &beginPos, &endPos);
+                    if (field != fptr->field || (field >= 0 && (beginPos != fptr->beginPos || endPos != fptr->endPos))) {
+                        if (fptr->field >= 0) {
+                            log_err("udat_formatFudat_formatCalendarForFieldsorFields as \"%s\"; expect field %d range %d-%d, get field %d range %d-%d\n",
+                                    aescstrdup(ubuf, ulen), fptr->field, fptr->beginPos, fptr->endPos, field, beginPos, endPos);
+                        } else {
+                            log_err("udat_formatCalendarForFields as \"%s\"; expect field < 0, get field %d range %d-%d\n",
+                                    aescstrdup(ubuf, ulen), field, beginPos, endPos);
+                        }
+                        break;
+                    }
+                    if (field < 0) {
+                        break;
+                    }
+                }
+            }
+
+            ucal_close(ucal);
+            udat_close(udfmt);
+        }
+        ufieldpositer_close(fpositer);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
