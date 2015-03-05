@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2014, International Business Machines
+ *   Copyright (C) 1999-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -248,12 +248,6 @@ const void *PortableFontInstance::readTable(LETag tag, le_uint32 *length) const
     }
 
     return table;
-}
-
-const void *PortableFontInstance::getFontTable(LETag tableTag) const
-{
-  size_t ignored;
-  return getFontTable(tableTag, ignored);
 }
 
 const void *PortableFontInstance::getFontTable(LETag tableTag, size_t &length) const
