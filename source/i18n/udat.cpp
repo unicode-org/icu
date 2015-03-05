@@ -214,10 +214,16 @@ udat_format(    const    UDateFormat*    format,
         UFieldPosition* position,
         UErrorCode*     status)
 {
-    if(U_FAILURE(*status)) return -1;
+    if(U_FAILURE(*status)) {
+        return -1;
+    }
+    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
     UnicodeString res;
-    if(!(result==NULL && resultLength==0)) {
+    if (result != NULL) {
         // NULL destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
@@ -246,10 +252,16 @@ udat_formatCalendar(const UDateFormat*  format,
         UFieldPosition* position,
         UErrorCode*     status)
 {
-    if(U_FAILURE(*status)) return -1;
+    if(U_FAILURE(*status)) {
+        return -1;
+    }
+    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
     UnicodeString res;
-    if(!(result==NULL && resultLength==0)) {
+    if (result != NULL) {
         // NULL destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
@@ -278,10 +290,16 @@ udat_formatForFields(    const    UDateFormat*    format,
         UFieldPositionIterator* fpositer,
         UErrorCode*     status)
 {
-    if(U_FAILURE(*status)) return -1;
+    if(U_FAILURE(*status)) {
+        return -1;
+    }
+    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
     UnicodeString res;
-    if(!(result==NULL && resultLength==0)) {
+    if (result != NULL) {
         // NULL destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
@@ -300,10 +318,16 @@ udat_formatCalendarForFields(const UDateFormat*  format,
         UFieldPositionIterator* fpositer,
         UErrorCode*     status)
 {
-    if(U_FAILURE(*status)) return -1;
+    if(U_FAILURE(*status)) {
+        return -1;
+    }
+    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
     UnicodeString res;
-    if(!(result==NULL && resultLength==0)) {
+    if (result != NULL) {
         // NULL destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
@@ -504,10 +528,16 @@ udat_toPattern(    const   UDateFormat     *fmt,
         int32_t         resultLength,
         UErrorCode      *status)
 {
-    if(U_FAILURE(*status)) return -1;
+    if(U_FAILURE(*status)) {
+        return -1;
+    }
+    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
     UnicodeString res;
-    if(!(result==NULL && resultLength==0)) {
+    if (result != NULL) {
         // NULL destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
@@ -1223,10 +1253,16 @@ udat_toPatternRelativeDate(const UDateFormat *fmt,
                            UErrorCode        *status)
 {
     verifyIsRelativeDateFormat(fmt, status);
-    if(U_FAILURE(*status)) return -1;
+    if(U_FAILURE(*status)) {
+        return -1;
+    }
+    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
     UnicodeString datePattern;
-    if(!(result==NULL && resultLength==0)) {
+    if (result != NULL) {
         // NULL destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         datePattern.setTo(result, 0, resultLength);
@@ -1242,10 +1278,16 @@ udat_toPatternRelativeTime(const UDateFormat *fmt,
                            UErrorCode        *status)
 {
     verifyIsRelativeDateFormat(fmt, status);
-    if(U_FAILURE(*status)) return -1;
+    if(U_FAILURE(*status)) {
+        return -1;
+    }
+    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
     UnicodeString timePattern;
-    if(!(result==NULL && resultLength==0)) {
+    if (result != NULL) {
         // NULL destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         timePattern.setTo(result, 0, resultLength);
