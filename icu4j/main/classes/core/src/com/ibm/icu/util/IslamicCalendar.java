@@ -515,6 +515,41 @@ public class IslamicCalendar extends Calendar {
     // Assorted calculation utilities
     //
 
+	// we could compress this down more if we need to
+	private static final byte[] UMALQURA_YEAR_START_ESTIMATE_FIX = {
+		 0,  0, -1,  0, -1,  0,  0,  0,  0,  0, // 1300..
+		-1,  0,  0,  0,  0,  0,  0,  0, -1,  0, // 1310..
+		 1,  0,  1,  1,  0,  0,  0,  0,  1,  0, // 1320..
+		 0,  0,  0,  0,  0,  0,  1,  0,  0,  0, // 1330..
+		 0,  0,  1,  0,  0, -1, -1,  0,  0,  0, // 1340..
+		 1,  0,  0, -1,  0,  0,  0,  1,  1,  0, // 1350..
+		 0,  0,  0,  0,  0,  0,  0, -1,  0,  0, // 1360..
+		 0,  1,  1,  0,  0, -1,  0,  1,  0,  1, // 1370..
+		 1,  0,  0, -1,  0,  1,  0,  0,  0, -1, // 1380..
+		 0,  1,  0,  1,  0,  0,  0, -1,  0,  0, // 1390..
+		 0,  0, -1, -1,  0, -1,  0,  1,  0,  0, // 1400..
+		 0, -1,  0,  0,  0,  1,  0,  0,  0,  0, // 1410..
+		 0,  1,  0,  0, -1, -1,  0,  0,  0,  1, // 1420..
+		 0,  0, -1, -1,  0, -1,  0,  0, -1, -1, // 1430..
+		 0, -1,  0, -1,  0,  0, -1, -1,  0,  0, // 1440..
+		 0,  0,  0,  0, -1,  0,  1,  0,  1,  1, // 1450..
+		 0,  0, -1,  0,  1,  0,  0,  0,  0,  0, // 1460..
+		 1,  0,  1,  0,  0,  0, -1,  0,  1,  0, // 1470..
+		 0, -1, -1,  0,  0,  0,  1,  0,  0,  0, // 1480..
+		 0,  0,  0,  0,  1,  0,  0,  0,  0,  0, // 1490..
+		 1,  0,  0, -1,  0,  0,  0,  1,  1,  0, // 1500..
+		 0, -1,  0,  1,  0,  1,  1,  0,  0,  0, // 1510..
+		 0,  1,  0,  0,  0, -1,  0,  0,  0,  1, // 1520..
+		 0,  0,  0, -1,  0,  0,  0,  0,  0, -1, // 1530..
+		 0, -1,  0,  1,  0,  0,  0, -1,  0,  1, // 1540..
+		 0,  1,  0,  0,  0,  0,  0,  1,  0,  0, // 1550..
+		-1,  0,  0,  0,  0,  1,  0,  0,  0, -1, // 1560..
+		 0,  0,  0,  0, -1, -1,  0, -1,  0,  1, // 1570..
+		 0,  0, -1, -1,  0,  0,  1,  1,  0,  0, // 1580..
+		-1,  0,  0,  0,  0,  1,  0,  0,  0,  0, // 1590..
+		 1 // 1600
+	};
+
 // Unused code - Alan 2003-05
 //    /**
 //     * Find the day of the week for a given day
@@ -550,15 +585,15 @@ public class IslamicCalendar extends Calendar {
         if (cType == CalculationType.ISLAMIC_CIVIL
                 || cType == CalculationType.ISLAMIC_TBLA
                 || (cType == CalculationType.ISLAMIC_UMALQURA && (year < UMALQURA_YEAR_START || year > UMALQURA_YEAR_END))) {
-             ys = (year-1)*354 + (long)Math.floor((3+11*year)/30.0);
+            ys = (year-1)*354 + (long)Math.floor((3+11*year)/30.0);
         } else if(cType == CalculationType.ISLAMIC) {
-             ys = trueMonthStart(12*(year-1));
+            ys = trueMonthStart(12*(year-1));
         } else if(cType == CalculationType.ISLAMIC_UMALQURA){
-             ys = yearStart(UMALQURA_YEAR_START -1);  
-             ys += handleGetYearLength(UMALQURA_YEAR_START -1);
-             for(int i=UMALQURA_YEAR_START; i< year; i++) {
-                ys+= handleGetYearLength(i);
-            }
+            year -= UMALQURA_YEAR_START;
+            // rounded least-squares fit of the dates previously calculated from UMALQURA_MONTHLENGTH iteration
+            int yrStartLinearEstimate = (int)((354.36720 * (double)year) + 460322.05 + 0.5);
+            // need a slight correction to some
+            ys = yrStartLinearEstimate + UMALQURA_YEAR_START_ESTIMATE_FIX[year];
         }
         return ys;
     }
