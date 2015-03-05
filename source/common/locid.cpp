@@ -446,10 +446,7 @@ Locale &Locale::operator=(const Locale &other)
         baseName = fullName;
     } else {
         if (other.baseName) {
-            baseName = (char *)uprv_malloc(uprv_strlen(other.baseName)+1);
-            if (baseName) {
-                uprv_strcpy(baseName, other.baseName);
-            }
+            baseName = uprv_strdup(other.baseName);
         }
     }
 
