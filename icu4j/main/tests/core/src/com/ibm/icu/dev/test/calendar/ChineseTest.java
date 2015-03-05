@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2013, International Business Machines Corporation and
+ * Copyright (C) 2000-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -278,8 +278,6 @@ public class ChineseTest extends CalendarTest {
                 Date e = fmt.parse(s);
                 if (e.equals(DATA[i])) {
                     logln("Ok: " + DATA[i] + " -> " + s + " -> " + e);
-                } else if (logKnownIssue("9043", "Ambiguous Chinese era parsing")) {
-                    logln("Ambiguous parse fails: " + DATA[i] + " -> " + s + " -> " + e);
                 } else {
                     errln("FAIL: " + DATA[i] + " -> " + s + " -> " + e);
                 }
