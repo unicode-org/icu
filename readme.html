@@ -5,7 +5,7 @@
   <head>
     <title>ReadMe for ICU 55.0.1 (55m1)</title>
     <meta name="COPYRIGHT" content=
-    "Copyright (c) 1997-2014 IBM Corporation and others. All Rights Reserved." />
+    "Copyright (c) 1997-2015 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
     "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;" />
     <meta name="DESCRIPTION" content=
@@ -238,6 +238,22 @@
     <h3>API Changes</h3>
     <p>See the <a href="APIChangeReport.html">API Change Report</a> for a complete 
     list of APIs added, removed, or changed in this release.</p>
+
+    <!-- ICU 55 items -->
+    <h3>Layout Engine: breaking API change</h3>
+    <p>The LayoutEngine (already deprecated) has had the function
+      <tt>LEFontInstance::getFontTable(LETag, size_t &length)</tt>
+      since ICU 52. Its implementation was optional. In ICU 55, this
+      version
+      of <tt>getFontTable</tt> has been made pure virtual, and the
+      version without a length (<tt>getFontTable(LETag)</tt>) has been
+      completely removed. This is a breaking change for users who have
+      not implemented the two-argument <tt>getFontTable()</tt>
+      function in their <tt>LEFontInstance</tt> subclasses.
+      The break is intentional, as the one-argument version cannot be
+      made secure. See <tt>LEFontInstance</tt> api docs for more detail.
+    </p>
+
 
     <!-- ICU 54 items -->
     <h3>Deprecation: Layout Engine</h3>
