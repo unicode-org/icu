@@ -135,6 +135,13 @@ TimeZoneTest::TestGenericAPI()
         infoln("WARNING: t_timezone may be incorrect. It is not a multiple of 15min.", tzoffset);
     }
 
+    TimeZone* hostZone = TimeZone::detectHostTimeZone();
+    /* Host time zone's offset should match the offset returned by uprv_timezone() */
+    if (hostZone->getRawOffset() != tzoffset * (-1000)) {
+        errln("FAIL: detectHostTimeZone()'s raw offset != host timezone's offset");
+    }
+    delete hostZone;
+
     UErrorCode status = U_ZERO_ERROR;
     const char* tzver = TimeZone::getTZDataVersion(status);
     if (U_FAILURE(status)) {
