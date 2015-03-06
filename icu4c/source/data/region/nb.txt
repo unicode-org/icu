@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nb.xml
@@ -153,7 +153,7 @@ nb{
         IL{"Israel"}
         IM{"Man"}
         IN{"India"}
-        IO{"Britiske territorier i Indiahavet"}
+        IO{"Det britiske territoriet i Indiahavet"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Island"}
@@ -167,7 +167,7 @@ nb{
         KH{"Kambodsja"}
         KI{"Kiribati"}
         KM{"Komorene"}
-        KN{"St. Kitts og Nevis"}
+        KN{"Saint Kitts og Nevis"}
         KP{"Nord-Korea"}
         KR{"Sør-Korea"}
         KW{"Kuwait"}
@@ -315,5 +315,5 @@ nb{
         FK{"Falklandsøyene (Islas Malvinas)"}
         MK{"Makedonia (FYROM)"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.12.94"}
 }

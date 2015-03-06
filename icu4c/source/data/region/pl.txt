@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pl.xml
@@ -127,7 +127,7 @@ pl{
         GD{"Grenada"}
         GE{"Gruzja"}
         GF{"Gujana Francuska"}
-        GG{"Wyspa Guernsey"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltar"}
         GL{"Grenlandia"}
@@ -158,7 +158,7 @@ pl{
         IR{"Iran"}
         IS{"Islandia"}
         IT{"Włochy"}
-        JE{"Wyspa Jersey"}
+        JE{"Jersey"}
         JM{"Jamajka"}
         JO{"Jordania"}
         JP{"Japonia"}
@@ -265,7 +265,7 @@ pl{
         TA{"Tristan da Cunha"}
         TC{"Turks i Caicos"}
         TD{"Czad"}
-        TF{"Francuskie Terytoria Południowe"}
+        TF{"Francuskie Terytoria Południowe i Antarktyczne"}
         TG{"Togo"}
         TH{"Tajlandia"}
         TJ{"Tadżykistan"}
@@ -315,5 +315,5 @@ pl{
         FK{"Falklandy (Malwiny)"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.8.95"}
+    Version{"2.1.12.94"}
 }
