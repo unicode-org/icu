@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -373,13 +373,13 @@ public class LocaleDataTest extends TestFmwk{
 
     public void TestFallback(){
         LocaleData fr_FR = LocaleData.getInstance(ULocale.FRANCE);
-        LocaleData fr_CA = LocaleData.getInstance(ULocale.CANADA_FRENCH);
+        LocaleData fr_CH = LocaleData.getInstance(new ULocale("fr_CH"));
 
         // This better not crash when only some values are overridden
-        assertEquals("Start quotes are not equal", fr_FR.getDelimiter(LocaleData.QUOTATION_START), fr_CA.getDelimiter(LocaleData.QUOTATION_START));
-        assertEquals("End quotes are not equals", fr_FR.getDelimiter(LocaleData.QUOTATION_END), fr_CA.getDelimiter(LocaleData.QUOTATION_END));
-        assertNotEquals("Alt start quotes are equal", fr_FR.getDelimiter(LocaleData.ALT_QUOTATION_START), fr_CA.getDelimiter(LocaleData.ALT_QUOTATION_START));
-        assertNotEquals("Alt end quotes are equals", fr_FR.getDelimiter(LocaleData.ALT_QUOTATION_END), fr_CA.getDelimiter(LocaleData.ALT_QUOTATION_END));
+        assertEquals("Start quotes are not equal", fr_FR.getDelimiter(LocaleData.QUOTATION_START), fr_CH.getDelimiter(LocaleData.QUOTATION_START));
+        assertEquals("End quotes are not equals", fr_FR.getDelimiter(LocaleData.QUOTATION_END), fr_CH.getDelimiter(LocaleData.QUOTATION_END));
+        assertNotEquals("Alt start quotes are equal", fr_FR.getDelimiter(LocaleData.ALT_QUOTATION_START), fr_CH.getDelimiter(LocaleData.ALT_QUOTATION_START));
+        assertNotEquals("Alt end quotes are equals", fr_FR.getDelimiter(LocaleData.ALT_QUOTATION_END), fr_CH.getDelimiter(LocaleData.ALT_QUOTATION_END));
     }
 
     public void TestLocaleDisplayPattern(){

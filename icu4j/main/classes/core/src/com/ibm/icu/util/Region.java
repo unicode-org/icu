@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2014, International Business Machines Corporation        *
+ * Copyright (C) 2011-2015, International Business Machines Corporation        *
  * All Rights Reserved.                                                        *
  *******************************************************************************
  */
@@ -154,20 +154,22 @@ public class Region implements Comparable<Region> {
 
 
         UResourceBundle regionCodes = null;
+        UResourceBundle metadataAlias = null;
         UResourceBundle territoryAlias = null;
         UResourceBundle codeMappings = null;
         UResourceBundle worldContainment = null;
         UResourceBundle territoryContainment = null;
         UResourceBundle groupingContainment = null;
 
-        UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"metadata",ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        regionCodes = rb.get("regionCodes");
-        territoryAlias = rb.get("territoryAlias");
+        UResourceBundle metadata = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"metadata",ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        regionCodes = metadata.get("regionCodes");
+        metadataAlias = metadata.get("alias");
+        territoryAlias = metadataAlias.get("territory");
 
-        UResourceBundle rb2 = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        codeMappings = rb2.get("codeMappings");
+        UResourceBundle supplementalData = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        codeMappings = supplementalData.get("codeMappings");
 
-        territoryContainment = rb2.get("territoryContainment");
+        territoryContainment = supplementalData.get("territoryContainment");
         worldContainment = territoryContainment.get("001");
         groupingContainment = territoryContainment.get("grouping");
 
@@ -200,7 +202,7 @@ public class Region implements Comparable<Region> {
         for ( int i = 0 ; i < territoryAlias.getSize(); i++ ) {
             UResourceBundle res = territoryAlias.get(i);
             String aliasFrom = res.getKey();
-            String aliasTo = res.getString();
+            String aliasTo = res.get("replacement").getString();
 
             if ( regionIDMap.containsKey(aliasTo) && !regionIDMap.containsKey(aliasFrom) ) { // This is just an alias from some string to a region
                 regionAliases.put(aliasFrom, regionIDMap.get(aliasTo));

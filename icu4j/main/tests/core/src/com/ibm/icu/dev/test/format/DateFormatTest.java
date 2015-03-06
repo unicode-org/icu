@@ -2947,10 +2947,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "ccccc", "1970 01 02 0:00:00", "P",
                 "ccccc", "1970 01 03 0:00:00", "S",
             
-                "h:mm a",     "2015 01 01 10:00:00", "10:00 AM",
-                "h:mm a",     "2015 01 01 22:00:00", "10:00 PM",
-                "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 AM",
-                "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 PM",
+                "h:mm a",     "2015 01 01 10:00:00", "10:00 dopoledne",
+                "h:mm a",     "2015 01 01 22:00:00", "10:00 odpoledne",
+                "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 dop.",
+                "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 odp.",
             };
             
             String CA_DATA[] = {
