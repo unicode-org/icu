@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ms.xml
@@ -512,7 +512,7 @@ ms{
             vaii{"Digit Vai"}
         }
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.12.94"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

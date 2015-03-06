@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fr.xml
@@ -157,7 +157,7 @@ fr{
         eo{"espéranto"}
         es{"espagnol"}
         es_419{"espagnol latino-américain"}
-        es_ES{"espagnol d’Europe"}
+        es_ES{"espagnol européen"}
         es_MX{"espagnol mexicain"}
         et{"estonien"}
         eu{"basque"}
@@ -198,7 +198,7 @@ fr{
         got{"gotique"}
         grb{"grebo"}
         grc{"grec ancien"}
-        gsw{"alémanique"}
+        gsw{"suisse allemand"}
         gu{"gujarati"}
         guz{"gusii"}
         gv{"manx"}
@@ -399,7 +399,7 @@ fr{
         ps{"pachto"}
         pt{"portugais"}
         pt_BR{"portugais brésilien"}
-        pt_PT{"portugais d’Europe"}
+        pt_PT{"portugais européen"}
         qu{"quechua"}
         quc{"k’iche’"}
         raj{"rajasthani"}
@@ -769,7 +769,7 @@ fr{
             standard{"ordre de tri standard"}
             stroke{"Ordre des traits"}
             traditional{"Ordre traditionnel"}
-            unihan{"Ordre par radical et nombre de traits"}
+            unihan{"Ordre de tri radical-traits"}
         }
         numbers{
             arab{"chiffres arabes"}
@@ -845,7 +845,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.13.46"}
     codePatterns{
         language{"langue : {0}"}
         script{"écriture : {0}"}
