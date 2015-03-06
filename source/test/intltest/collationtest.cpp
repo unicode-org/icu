@@ -97,7 +97,7 @@ private:
         return i;
     }
 
-    UBool readLine(UCHARBUF *f, IcuTestErrorCode &errorCode);
+    UBool readNonEmptyLine(UCHARBUF *f, IcuTestErrorCode &errorCode);
     void parseString(int32_t &start, UnicodeString &prefix, UnicodeString &s, UErrorCode &errorCode);
     Collation::Level parseRelationAndString(UnicodeString &s, IcuTestErrorCode &errorCode);
     void parseAndSetAttribute(IcuTestErrorCode &errorCode);
@@ -969,24 +969,29 @@ UnicodeString CollationTest::printCollationKey(const CollationKey &key) {
     return printSortKey(p, length);
 }
 
-UBool CollationTest::readLine(UCHARBUF *f, IcuTestErrorCode &errorCode) {
-    int32_t lineLength;
-    const UChar *line = ucbuf_readline(f, &lineLength, errorCode);
-    if(line == NULL || errorCode.isFailure()) {
-        fileLine.remove();
-        return FALSE;
+UBool CollationTest::readNonEmptyLine(UCHARBUF *f, IcuTestErrorCode &errorCode) {
+    for(;;) {
+        int32_t lineLength;
+        const UChar *line = ucbuf_readline(f, &lineLength, errorCode);
+        if(line == NULL || errorCode.isFailure()) {
+            fileLine.remove();
+            return FALSE;
+        }
+        ++fileLineNumber;
+        // Strip trailing CR/LF, comments, and spaces.
+        const UChar *comment = u_memchr(line, 0x23, lineLength);  // '#'
+        if(comment != NULL) {
+            lineLength = (int32_t)(comment - line);
+        } else {
+            while(lineLength > 0 && isCROrLF(line[lineLength - 1])) { --lineLength; }
+        }
+        while(lineLength > 0 && isSpace(line[lineLength - 1])) { --lineLength; }
+        if(lineLength != 0) {
+            fileLine.setTo(FALSE, line, lineLength);
+            return TRUE;
+        }
+        // Empty line, continue.
     }
-    ++fileLineNumber;
-    // Strip trailing CR/LF, comments, and spaces.
-    const UChar *comment = u_memchr(line, 0x23, lineLength);  // '#'
-    if(comment != NULL) {
-        lineLength = (int32_t)(comment - line);
-    } else {
-        while(lineLength > 0 && isCROrLF(line[lineLength - 1])) { --lineLength; }
-    }
-    while(lineLength > 0 && isSpace(line[lineLength - 1])) { --lineLength; }
-    fileLine.setTo(FALSE, line, lineLength);
-    return TRUE;
 }
 
 void CollationTest::parseString(int32_t &start, UnicodeString &prefix, UnicodeString &s,
@@ -1232,9 +1237,7 @@ void CollationTest::parseAndSetReorderCodes(int32_t start, IcuTestErrorCode &err
 
 void CollationTest::buildTailoring(UCHARBUF *f, IcuTestErrorCode &errorCode) {
     UnicodeString rules;
-    while(readLine(f, errorCode)) {
-        if(fileLine.isEmpty()) { continue; }
-        if(isSectionStarter(fileLine[0])) { break; }
+    while(readNonEmptyLine(f, errorCode) && !isSectionStarter(fileLine[0])) {
         rules.append(fileLine.unescape());
     }
     if(errorCode.isFailure()) { return; }
@@ -1761,9 +1764,7 @@ void CollationTest::checkCompareStrings(UCHARBUF *f, IcuTestErrorCode &errorCode
     UnicodeString prevFileLine = UNICODE_STRING("(none)", 6);
     UnicodeString prevString, s;
     prevString.getTerminatedBuffer();  // Ensure NUL-termination.
-    while(readLine(f, errorCode)) {
-        if(fileLine.isEmpty()) { continue; }
-        if(isSectionStarter(fileLine[0])) { break; }
+    while(readNonEmptyLine(f, errorCode) && !isSectionStarter(fileLine[0])) {
         // Parse the line even if it will be ignored (when we do not have a Collator)
         // in order to report syntax issues.
         Collation::Level relation = parseRelationAndString(s, errorCode);
@@ -1825,13 +1826,9 @@ void CollationTest::TestDataDriven() {
     if(errorCode.logIfFailureAndReset("ucbuf_open(collationtest.txt)")) {
         return;
     }
-    while(errorCode.isSuccess()) {
-        // Read a new line if necessary.
-        // Sub-parsers leave the first line set that they do not handle.
-        if(fileLine.isEmpty()) {
-            if(!readLine(f.getAlias(), errorCode)) { break; }
-            continue;
-        }
+    // Read a new line if necessary.
+    // Sub-parsers leave the first line set that they do not handle.
+    while(errorCode.isSuccess() && (!fileLine.isEmpty() || readNonEmptyLine(f.getAlias(), errorCode))) {
         if(!isSectionStarter(fileLine[0])) {
             errln("syntax error on line %d", (int)fileLineNumber);
             infoln(fileLine);
