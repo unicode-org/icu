@@ -63,6 +63,7 @@ icu4c/source/data/coll/cy.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/da.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/de.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/de_.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/coll/de_AT.txt svneol=native#text/plain
 icu4c/source/data/coll/de__PHONEBOOK.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/dsb.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/dz.txt svneol=native#text/plain%3Bcharset%3Dutf-8
