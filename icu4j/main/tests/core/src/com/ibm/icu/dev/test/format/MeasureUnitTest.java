@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013-2014, International Business Machines Corporation and         *
+ * Copyright (C) 2013-2015, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -500,11 +500,11 @@ public class MeasureUnitTest extends TestFmwk {
                 {_1h_0m_23s, "1 hour, 0 minutes, 23 seconds"},
                 {_2y_5M_3w_4d, "2 years, 5 months, 3 weeks, 4 days"}};
         Object[][] abbrevData = {
-                {_1m_59_9996s, "1 min, 59.9996 secs"},
-                {_19m, "19 mins"},
-                {_1h_23_5s, "1 hr, 23.5 secs"},
-                {_1h_23_5m, "1 hr, 23.5 mins"},
-                {_1h_0m_23s, "1 hr, 0 mins, 23 secs"},
+                {_1m_59_9996s, "1 min, 59.9996 sec"},
+                {_19m, "19 min"},
+                {_1h_23_5s, "1 hr, 23.5 sec"},
+                {_1h_23_5m, "1 hr, 23.5 min"},
+                {_1h_0m_23s, "1 hr, 0 min, 23 sec"},
                 {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"}};
         Object[][] narrowData = {
                 {_1m_59_9996s, "1m 59.9996s"},
@@ -876,9 +876,9 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("numeric currency", "$2.00", mf.format(USD_2));
         
         mf = MeasureFormat.getInstance(ULocale.JAPAN, FormatWidth.WIDE);
-        assertEquals("Wide currency", "-1.00 \u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
-        assertEquals("Wide currency", "1.00 \u7C73\u30C9\u30EB", mf.format(USD_1));
-        assertEquals("Wide currency", "2.00 \u7C73\u30C9\u30EB", mf.format(USD_2));
+        assertEquals("Wide currency", "-1.00\u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
+        assertEquals("Wide currency", "1.00\u7C73\u30C9\u30EB", mf.format(USD_1));
+        assertEquals("Wide currency", "2.00\u7C73\u30C9\u30EB", mf.format(USD_2));
     }
     
     public void testFieldPosition() {

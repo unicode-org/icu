@@ -2556,8 +2556,8 @@ public class ULocaleTest extends TestFmwk {
                     "fi"
                 }, {
                     "und_FM",
-                    "chk_Latn_FM",
-                    "chk"
+                    "en_Latn_FM",
+                    "en_FM"
                 }, {
                     "und_FO",
                     "fo_Latn_FO",

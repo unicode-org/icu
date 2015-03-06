@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2013-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -628,7 +628,7 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
     public void TestTwoBeforeTwoAfter() {
         Object[][] data = {
                 {Direction.NEXT_2, AbsoluteUnit.DAY, "pasado ma\u00F1ana"},
-                {Direction.LAST_2, AbsoluteUnit.DAY, "antes de ayer"},
+                {Direction.LAST_2, AbsoluteUnit.DAY, "anteayer"},
         };
         RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(new ULocale("es"));
         for (Object[] row : data) {
