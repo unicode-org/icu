@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ne.xml
@@ -261,7 +261,7 @@ ne{
         }
         INR{
             "₹",
-            "भारती रूपिँया",
+            "भारतीय रूपिँया",
         }
         IQD{
             "IQD",
@@ -890,8 +890,8 @@ ne{
             other{"इजरायली नयाँ शेकेल"}
         }
         INR{
-            one{"भारती रूपिँया"}
-            other{"भारती रूपिँया"}
+            one{"भारतीय रूपिँया"}
+            other{"भारतीय रूपिँया"}
         }
         IQD{
             one{"इराकी डिनार"}
@@ -1278,5 +1278,5 @@ ne{
             other{"जाम्बियाली क्वाचा"}
         }
     }
-    Version{"2.1.8.95"}
+    Version{"2.1.12.94"}
 }
