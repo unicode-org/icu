@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh.xml
@@ -76,7 +76,7 @@ zh{
         BR{"巴西"}
         BS{"巴哈马"}
         BT{"不丹"}
-        BV{"布维特岛"}
+        BV{"布维岛"}
         BW{"博茨瓦纳"}
         BY{"白俄罗斯"}
         BZ{"伯利兹"}
@@ -187,7 +187,7 @@ zh{
         MA{"摩洛哥"}
         MC{"摩纳哥"}
         MD{"摩尔多瓦"}
-        ME{"黑山共和国"}
+        ME{"黑山"}
         MF{"法属圣马丁"}
         MG{"马达加斯加"}
         MH{"马绍尔群岛"}
@@ -316,5 +316,5 @@ zh{
         FK{"福克兰群岛（马尔维纳斯群岛）"}
         MK{"马其顿（前南斯拉夫的马其顿共和国）"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.12.94"}
 }

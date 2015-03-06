@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sv.xml
@@ -315,5 +315,5 @@ sv{
         FK{"Falklandsöarna (Malvinerna)"}
         MK{"f.d. jugoslaviska republiken Makedonien"}
     }
-    Version{"2.1.10.33"}
+    Version{"2.1.12.94"}
 }

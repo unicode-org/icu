@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nl.xml
@@ -265,7 +265,7 @@ nl{
         TA{"Tristan da Cunha"}
         TC{"Turks- en Caicoseilanden"}
         TD{"Tsjaad"}
-        TF{"Franse Gebieden in de zuidelijke Indische Oceaan"}
+        TF{"Franse Zuidelijke Gebieden"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tadzjikistan"}
@@ -315,5 +315,5 @@ nl{
         FK{"Falklandeilanden (Islas Malvinas)"}
         MK{"Macedonië (FYROM)"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.12.94"}
 }

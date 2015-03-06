@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/es.xml
@@ -97,7 +97,7 @@ es{
         CU{"Cuba"}
         CV{"Cabo Verde"}
         CW{"Curazao"}
-        CX{"Isla Christmas"}
+        CX{"Isla de Navidad (Christmas)"}
         CY{"Chipre"}
         CZ{"República Checa"}
         DE{"Alemania"}
@@ -154,7 +154,7 @@ es{
         IM{"Isla de Man"}
         IN{"India"}
         IO{"Territorio Británico del Océano Índico"}
-        IQ{"Iraq"}
+        IQ{"Irak"}
         IR{"Irán"}
         IS{"Islandia"}
         IT{"Italia"}
@@ -217,7 +217,7 @@ es{
         NO{"Noruega"}
         NP{"Nepal"}
         NR{"Nauru"}
-        NU{"Isla Niue"}
+        NU{"Niue"}
         NZ{"Nueva Zelanda"}
         OM{"Omán"}
         PA{"Panamá"}
@@ -315,5 +315,5 @@ es{
         FK{"Islas Malvinas (Islas Falkland)"}
         MK{"Macedonia (ERYM)"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.13.21"}
 }

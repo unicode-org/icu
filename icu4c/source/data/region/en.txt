@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/en.xml
@@ -304,12 +304,12 @@ en{
     }
     Countries%short{
         BA{"Bosnia"}
-        GB{"U.K."}
+        GB{"UK"}
         HK{"Hong Kong"}
         MM{"Myanmar"}
         MO{"Macau"}
         PS{"Palestine"}
-        US{"U.S."}
+        US{"US"}
     }
     Countries%variant{
         CD{"Congo (DRC)"}
@@ -319,5 +319,5 @@ en{
         MK{"Macedonia (FYROM)"}
         TL{"East Timor"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.13.48"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bn.xml
@@ -124,7 +124,7 @@ bn{
         FR{"ফ্রান্স"}
         GA{"গ্যাবন"}
         GB{"যুক্তরাজ্য"}
-        GD{"গ্রেনাডা"}
+        GD{"গ্রেনেডা"}
         GE{"জর্জিয়া"}
         GF{"ফরাসী গায়ানা"}
         GG{"গ্রাঞ্জি"}
@@ -137,7 +137,7 @@ bn{
         GQ{"নিরক্ষীয় গিনি"}
         GR{"গ্রীস"}
         GS{"দক্ষিণ জর্জিয়া ও দক্ষিণ স্যান্ডউইচ দ্বীপপুঞ্জ"}
-        GT{"গোয়াটিমালা"}
+        GT{"গোয়াতেমালা"}
         GU{"গুয়াম"}
         GW{"গিনি-বিসাউ"}
         GY{"গিয়ানা"}
@@ -159,7 +159,7 @@ bn{
         IS{"আইসল্যান্ড"}
         IT{"ইতালী"}
         JE{"জার্সি"}
-        JM{"জ্যামাইকা"}
+        JM{"জামাইকা"}
         JO{"জর্ডন"}
         JP{"জাপান"}
         KE{"কেনিয়া"}
@@ -316,5 +316,5 @@ bn{
         MK{"মেসিডোনিয়া(FYROM)"}
         TL{"পূর্ব তিমুর"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.12.94"}
 }
