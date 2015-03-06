@@ -635,7 +635,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Append the <code>toPattern()</code> representation of a
      * string to the given <code>Appendable</code>.
      */
-    private static <A extends Appendable> A _appendToPat(A buf, String s, boolean escapeUnprintable) {
+    private static <T extends Appendable> T _appendToPat(T buf, String s, boolean escapeUnprintable) {
         int cp;
         for (int i = 0; i < s.length(); i += Character.charCount(cp)) {
             cp = s.codePointAt(i);
@@ -648,7 +648,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Append the <code>toPattern()</code> representation of a
      * character to the given <code>Appendable</code>.
      */
-    private static <A extends Appendable> A _appendToPat(A buf, int c, boolean escapeUnprintable) {
+    private static <T extends Appendable> T _appendToPat(T buf, int c, boolean escapeUnprintable) {
         try {
             if (escapeUnprintable && Utility.isUnprintable(c)) {
                 // Use hex escape notation (<backslash>uxxxx or <backslash>Uxxxxxxxx) for anything
@@ -704,7 +704,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * a cleaned version of the string passed to applyPattern(), if there
      * is one.  Otherwise it will be generated.
      */
-    private <A extends Appendable> A _toPattern(A result,
+    private <T extends Appendable> T _toPattern(T result,
             boolean escapeUnprintable) {
         if (pat == null) {
             return appendNewPattern(result, escapeUnprintable, true);
@@ -768,8 +768,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         return appendNewPattern(result, escapeUnprintable, includeStrings);
     }
 
-    private <A extends Appendable> A appendNewPattern(
-            A result, boolean escapeUnprintable, boolean includeStrings) {
+    private <T extends Appendable> T appendNewPattern(
+            T result, boolean escapeUnprintable, boolean includeStrings) {
         try {
             result.append('[');
     
