@@ -20,9 +20,9 @@
                 <icu:grapheme icu:dependency="char.brk"/>
                 <icu:word     icu:dependency="word.brk"/>
                 <icu:line     icu:dependency="line.brk"/>
-                <icu:line     icu:alt="loose"  icu:dependency="line_loose.brk"/>
-                <icu:line     icu:alt="normal" icu:dependency="line_normal.brk"/>
-                <icu:line     icu:alt="strict" icu:dependency="line.brk"/>
+                <icu:line     alt="loose"  icu:dependency="line_loose.brk"/>
+                <icu:line     alt="normal" icu:dependency="line_normal.brk"/>
+                <icu:line     alt="strict" icu:dependency="line.brk"/>
                 <icu:sentence icu:dependency="sent.brk"/>
                 <icu:title    icu:dependency="title.brk"/>
             </icu:boundaries>
