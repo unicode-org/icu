@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ur.xml
@@ -183,7 +183,7 @@ ur{
         minimumGroupingDigits{"1"}
         native{"arabext"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.12.94"}
     calendar{
         generic{
             DateTimePatterns{
@@ -318,12 +318,12 @@ ur{
                 }
                 yMMMd{
                     M{"d MMM – d MMM، y G"}
-                    d{"d-d MMM، y G"}
+                    d{"d–d MMM، y G"}
                     y{"d MMM، y – d MMM، y G"}
                 }
                 yMd{
                     M{"d/M/y – d/M/y G"}
-                    d{"d/M/y - d/M/y G"}
+                    d{"d/M/y – d/M/y G"}
                     y{"d/M/y – d/M/y G"}
                 }
             }
@@ -334,8 +334,8 @@ ur{
                 "بعد دوپہر",
             }
             AmPmMarkersAbbr{
-                "قبل دوپہر",
-                "بعد دوپہر",
+                "ق.د.",
+                "ب.د.",
             }
             AmPmMarkersNarrow{
                 "a",
@@ -578,12 +578,12 @@ ur{
                 }
                 yMMMd{
                     M{"d MMM – d MMM، y"}
-                    d{"d-d MMM، y"}
+                    d{"d–d MMM، y"}
                     y{"d MMM، y – d MMM، y"}
                 }
                 yMd{
                     M{"d/M/y – d/M/y"}
-                    d{"d/M/y - d/M/y"}
+                    d{"d/M/y – d/M/y"}
                     y{"d/M/y – d/M/y"}
                 }
             }
@@ -776,8 +776,8 @@ ur{
                     other{"{0} دنوں میں"}
                 }
                 past{
-                    one{"-{0} دن"}
-                    other{"-{0} دن"}
+                    one{"{0} دن پہلے"}
+                    other{"{0} دن پہلے"}
                 }
             }
         }
@@ -842,8 +842,8 @@ ur{
                     other{"{0} گھنٹوں میں"}
                 }
                 past{
-                    one{"-{0} گھنٹہ"}
-                    other{"-{0} گھنٹے"}
+                    one{"{0} گھنٹہ پہلے"}
+                    other{"{0} گھنٹے پہلے"}
                 }
             }
         }
@@ -901,9 +901,9 @@ ur{
         }
         mon{
             relative{
-                "-1"{"گزشتہ پیر"}
-                "0"{"یہ پیر"}
-                "1"{"اگلے پیر"}
+                "-1"{"گزشتہ سوموار"}
+                "0"{"اس سوموار"}
+                "1"{"اگلے سوموار"}
             }
         }
         mon-narrow{
@@ -939,15 +939,15 @@ ur{
             }
         }
         month-narrow{
-            dn{"مہ"}
+            dn{"ماہ"}
             relativeTime{
                 future{
                     one{"+{0} ماہ میں"}
                     other{"+{0} ماہ میں"}
                 }
                 past{
-                    one{"-{0} ماہ میں"}
-                    other{"-{0} ماہ میں"}
+                    one{"{0} ماہ پہلے"}
+                    other{"{0} ماہ پہلے"}
                 }
             }
         }
@@ -985,8 +985,8 @@ ur{
                     other{"{0} سہ ماہی میں"}
                 }
                 past{
-                    one{"-{0}سہ ماہی"}
-                    other{"-{0}سہ ماہی"}
+                    one{"{0} سہ ماہی پہلے"}
+                    other{"{0} سہ ماہی پہلے"}
                 }
             }
         }
@@ -1048,8 +1048,8 @@ ur{
                     other{"{0} سیکنڈ میں"}
                 }
                 past{
-                    one{"-{0} سیکنڈ"}
-                    other{"-{0} سیکنڈ"}
+                    one{"{0} سیکنڈ پہلے"}
+                    other{"{0} سیکنڈ پہلے"}
                 }
             }
         }
@@ -1176,8 +1176,8 @@ ur{
                     other{"{0} ہفتے میں"}
                 }
                 past{
-                    one{"-{0} ہفتہ"}
-                    other{"-{0} ہفتے"}
+                    one{"{0} ہفتہ پہلے"}
+                    other{"{0} ہفتے پہلے"}
                 }
             }
         }

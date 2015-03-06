@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/vi.xml
@@ -145,7 +145,7 @@ vi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.12.94"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -627,12 +627,12 @@ vi{
                     H{"HH'h' - HH'h'"}
                 }
                 Hm{
-                    H{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
-                    H{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
                 Hv{
                     H{"HH'h'-HH'h' v"}
@@ -641,69 +641,69 @@ vi{
                     M{"'Tháng' M - 'Tháng' M"}
                 }
                 MEd{
-                    M{"EEEE, dd/MM - EEEE, dd/MM"}
-                    d{"EEEE, dd/MM - EEEE, dd/MM"}
+                    M{"EEEE, dd/MM – EEEE, dd/MM"}
+                    d{"EEEE, dd/MM – EEEE, dd/MM"}
                 }
                 MMM{
-                    M{"MMM-MMM"}
+                    M{"MMM–MMM"}
                 }
                 MMMEd{
-                    M{"EEEE, 'ngày' dd 'tháng' M - EEEE, 'ngày' dd 'tháng' M"}
-                    d{"EEEE, 'ngày' dd - EEEE, 'ngày' dd 'tháng' M"}
+                    M{"EEEE, 'ngày' dd 'tháng' M – EEEE, 'ngày' dd 'tháng' M"}
+                    d{"EEEE, 'ngày' dd – EEEE, 'ngày' dd 'tháng' M"}
                 }
                 MMMd{
                     M{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M"}
                     d{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M"}
                 }
                 Md{
-                    M{"dd/MM - dd/MM"}
-                    d{"dd/MM - dd/MM"}
+                    M{"dd/MM – dd/MM"}
+                    d{"dd/MM – dd/MM"}
                 }
                 d{
-                    d{"'Ngày' dd-dd"}
+                    d{"'Ngày' dd–dd"}
                 }
                 fallback{"{0} - {1}"}
                 h{
-                    a{"h'h' a - h'h' a"}
+                    a{"h'h' a – h'h' a"}
                     h{"h'h' - h'h' a"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm-h:mm a"}
-                    m{"h:mm-h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
                     a{"h:mm a – h:mm a v"}
-                    h{"h:mm-h:mm a v"}
-                    m{"h:mm-h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
                 hv{
-                    a{"h'h' a - h'h' a v"}
+                    a{"h'h' a – h'h' a v"}
                     h{"h'h'-h'h' a v"}
                 }
                 y{
-                    y{"y-y G"}
+                    y{"y–y G"}
                 }
                 yM{
-                    M{"MM/y - MM/y G"}
-                    y{"MM/y - MM/y G"}
+                    M{"MM/y – MM/y G"}
+                    y{"MM/y – MM/y G"}
                 }
                 yMEd{
-                    M{"EEEE, dd/MM/y - EEEE, dd/MM/y G"}
-                    d{"EEEE, dd/MM/y - EEEE, dd/MM/y G"}
-                    y{"EEEE, dd/MM/y - EEEE, dd/MM/y G"}
+                    M{"EEEE, dd/MM/y – EEEE, dd/MM/y G"}
+                    d{"EEEE, dd/MM/y – EEEE, dd/MM/y G"}
+                    y{"EEEE, dd/MM/y – EEEE, dd/MM/y G"}
                 }
                 yMMM{
                     M{"'Tháng' M - 'Tháng' M 'năm' y G"}
                     y{"'Tháng' M 'năm' y - 'Tháng' M 'năm' y G"}
                 }
                 yMMMEd{
-                    M{"E, dd 'tháng' M - E, dd 'tháng' M, y G"}
-                    d{"EEEE, 'ngày' dd MMM - EEEE, 'ngày' dd MMM 'năm' y G"}
-                    y{"E, dd 'tháng' M, y - E, dd 'tháng' M, y G"}
+                    M{"E, dd 'tháng' M – E, dd 'tháng' M, y G"}
+                    d{"EEEE, 'ngày' dd MMM – EEEE, 'ngày' dd MMM 'năm' y G"}
+                    y{"E, dd 'tháng' M, y – E, dd 'tháng' M, y G"}
                 }
                 yMMMM{
-                    M{"MMMM-MMMM y G"}
+                    M{"MMMM–MMMM y G"}
                     y{"MMMM y – MMMM y G"}
                 }
                 yMMMd{
@@ -712,9 +712,9 @@ vi{
                     y{"'Ngày' dd 'tháng' M 'năm' y - 'Ngày' dd 'tháng' M 'năm' y G"}
                 }
                 yMd{
-                    M{"dd/MM/y - dd/MM/y G"}
-                    d{"dd/MM/y - dd/MM/y G"}
-                    y{"dd/MM/y - dd/MM/y G"}
+                    M{"dd/MM/y – dd/MM/y G"}
+                    d{"dd/MM/y – dd/MM/y G"}
+                    y{"dd/MM/y – dd/MM/y G"}
                 }
             }
         }
@@ -885,83 +885,83 @@ vi{
                     H{"HH–HH"}
                 }
                 Hm{
-                    H{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
-                    H{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
                 Hv{
                     H{"HH–HH v"}
                 }
                 M{
-                    M{"'Tháng' M - M"}
+                    M{"'Tháng' M – M"}
                 }
                 MEd{
-                    M{"EEEE, dd/MM - EEEE, dd/MM"}
-                    d{"EEEE, dd/MM - EEEE, dd/MM"}
+                    M{"EEEE, dd/MM – EEEE, dd/MM"}
+                    d{"EEEE, dd/MM – EEEE, dd/MM"}
                 }
                 MMM{
-                    M{"MMM-MMM"}
+                    M{"MMM–MMM"}
                 }
                 MMMEd{
-                    M{"EEEE, 'ngày' dd 'tháng' M - EEEE, 'ngày' dd 'tháng' M"}
-                    d{"EEEE, 'ngày' dd - EEEE, 'ngày' dd 'tháng' M"}
+                    M{"EEEE, 'ngày' dd 'tháng' M – EEEE, 'ngày' dd 'tháng' M"}
+                    d{"EEEE, 'ngày' dd – EEEE, 'ngày' dd 'tháng' M"}
                 }
                 MMMd{
                     M{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M"}
                     d{"'Ngày' dd - 'Ngày' dd 'tháng' M"}
                 }
                 Md{
-                    M{"dd/MM - dd/MM"}
-                    d{"dd/MM - dd/MM"}
+                    M{"dd/MM – dd/MM"}
+                    d{"dd/MM – dd/MM"}
                 }
                 d{
-                    d{"'Ngày' dd-dd"}
+                    d{"'Ngày' dd–dd"}
                 }
                 fallback{"{0} - {1}"}
                 h{
-                    a{"h'h' a - h'h' a"}
+                    a{"h'h' a – h'h' a"}
                     h{"h–h a"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm-h:mm a"}
-                    m{"h:mm-h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
                     a{"h:mm a – h:mm a v"}
-                    h{"h:mm-h:mm a v"}
-                    m{"h:mm-h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
                 hv{
-                    a{"h'h' a - h'h' a v"}
+                    a{"h'h' a – h'h' a v"}
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y–y"}
                 }
                 yM{
-                    M{"MM/y - MM/y"}
-                    y{"MM/y - MM/y"}
+                    M{"MM/y – MM/y"}
+                    y{"MM/y – MM/y"}
                 }
                 yMEd{
-                    M{"EEEE, dd/MM/y - EEEE, dd/MM/y"}
-                    d{"EEEE, dd/MM/y - EEEE, dd/MM/y"}
-                    y{"EEEE, dd/MM/y - EEEE, dd/MM/y"}
+                    M{"EEEE, dd/MM/y – EEEE, dd/MM/y"}
+                    d{"EEEE, dd/MM/y – EEEE, dd/MM/y"}
+                    y{"EEEE, dd/MM/y – EEEE, dd/MM/y"}
                 }
                 yMMM{
                     M{"'Tháng' M - 'Tháng' M 'năm' y"}
                     y{"'Tháng' M 'năm' y - 'Tháng' M 'năm' y"}
                 }
                 yMMMEd{
-                    M{"E, dd 'tháng' M - E, dd 'tháng' M, y"}
-                    d{"EEEE, 'ngày' dd MMM - EEEE, 'ngày' dd MMM 'năm' y"}
-                    y{"E, dd 'tháng' M, y - E, dd 'tháng' M, y"}
+                    M{"E, dd 'tháng' M – E, dd 'tháng' M, y"}
+                    d{"EEEE, 'ngày' dd MMM – EEEE, 'ngày' dd MMM 'năm' y"}
+                    y{"E, dd 'tháng' M, y – E, dd 'tháng' M, y"}
                 }
                 yMMMM{
-                    M{"MMMM-MMMM 'năm' y"}
+                    M{"MMMM–MMMM 'năm' y"}
                     y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
@@ -970,9 +970,9 @@ vi{
                     y{"'Ngày' dd 'tháng' M 'năm' y - 'Ngày' dd 'tháng' M 'năm' y"}
                 }
                 yMd{
-                    M{"dd/MM/y - dd/MM/y"}
-                    d{"dd/MM/y - dd/MM/y"}
-                    y{"dd/MM/y - dd/MM/y"}
+                    M{"dd/MM/y – dd/MM/y"}
+                    d{"dd/MM/y – dd/MM/y"}
+                    y{"dd/MM/y – dd/MM/y"}
                 }
             }
             monthNames{

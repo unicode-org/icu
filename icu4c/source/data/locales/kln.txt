@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/kln.xml
@@ -24,7 +24,7 @@ kln{
             }
         }
     }
-    Version{"2.1.7.39"}
+    Version{"2.1.11.39"}
     calendar{
         generic{
             DateTimePatterns{
@@ -68,12 +68,12 @@ kln{
         }
         gregorian{
             AmPmMarkers{
-                "Beet",
-                "Kemo",
+                "karoon",
+                "kooskoliny",
             }
             AmPmMarkersAbbr{
-                "BE",
-                "KE",
+                "krn",
+                "koosk",
             }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -90,6 +90,8 @@ kln{
                 "{1} {0}",
                 "{1} {0}",
             }
+            NoonMarker{"beetkween"}
+            NoonMarkerAbbr{"beet"}
             availableFormats{
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -116,29 +118,29 @@ kln{
             dayNames{
                 format{
                     abbreviated{
-                        "Tis",
-                        "Tai",
-                        "Aen",
-                        "Som",
-                        "Ang",
-                        "Mut",
-                        "Loh",
+                        "Kts",
+                        "Kot",
+                        "Koo",
+                        "Kos",
+                        "Koa",
+                        "Kom",
+                        "Kol",
                     }
                     wide{
-                        "Betutab tisap",
-                        "Betut netai",
-                        "Betutab aeng’",
-                        "Betutab somok",
-                        "Betutab ang’wan",
-                        "Betutab mut",
-                        "Betutab lo",
+                        "Kotisap",
+                        "Kotaai",
+                        "Koaeng’",
+                        "Kosomok",
+                        "Koang’wan",
+                        "Komuut",
+                        "Kolo",
                     }
                 }
                 stand-alone{
                     narrow{
                         "T",
                         "T",
-                        "A",
+                        "O",
                         "S",
                         "A",
                         "M",
@@ -160,43 +162,43 @@ kln{
                 format{
                     abbreviated{
                         "Mul",
-                        "Nga",
-                        "Kip",
-                        "Iwa",
+                        "Ngat",
+                        "Taa",
+                        "Iwo",
+                        "Mam",
+                        "Paa",
                         "Nge",
-                        "Wak",
-                        "Rop",
-                        "Kog",
+                        "Roo",
                         "Bur",
                         "Epe",
-                        "Tai",
-                        "Aen",
+                        "Kpt",
+                        "Kpa",
                     }
                     wide{
                         "Mulgul",
-                        "Ng’atyato",
-                        "Kiptamo",
-                        "Iwat kut",
-                        "Ng’eiyet",
-                        "Waki",
-                        "Roptui",
-                        "Kipkogaga",
-                        "Buret",
-                        "Epeso",
-                        "Kipsunde netai",
-                        "Kipsunde nebo aeng",
+                        "Ng’atyaato",
+                        "Kiptaamo",
+                        "Iwootkuut",
+                        "Mamuut",
+                        "Paagi",
+                        "Ng’eiyeet",
+                        "Rooptui",
+                        "Bureet",
+                        "Epeeso",
+                        "Kipsuunde ne taai",
+                        "Kipsuunde nebo aeng’",
                     }
                 }
                 stand-alone{
                     narrow{
                         "M",
                         "N",
-                        "K",
+                        "T",
                         "I",
+                        "M",
+                        "P",
                         "N",
-                        "W",
                         "R",
-                        "K",
                         "B",
                         "E",
                         "K",

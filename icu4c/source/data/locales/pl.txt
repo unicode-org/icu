@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pl.xml
@@ -213,7 +213,7 @@ pl{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.8.95"}
+    Version{"2.1.12.94"}
     calendar{
         buddhist{
             eras{
@@ -600,7 +600,7 @@ pl{
                 "HH:mm",
                 "EEEE, d MMMM y",
                 "d MMMM y",
-                "d MMM y",
+                "dd.MM.y",
                 "dd.MM.y",
                 "{1}, {0}",
                 "{1} {0}",
@@ -621,33 +621,41 @@ pl{
                 Ehm{"E, h:mm a"}
                 Ehms{"E, h:mm:ss a"}
                 Gy{"y G"}
-                GyMMM{"MMM y G"}
-                GyMMMEd{"E, d MMM y G"}
-                GyMMMd{"d MMM y G"}
+                GyMMM{"MM.y G"}
+                GyMMMEd{"E, d.MM.y G"}
+                GyMMMM{"LLLL y G"}
+                GyMMMMEd{"E, d MMMM y G"}
+                GyMMMMd{"d MMMM y G"}
+                GyMMMd{"d.MM.y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hmsv{"HH:mm:ss v"}
+                Hmv{"HH:mm v"}
                 M{"L"}
                 MEd{"E, d.MM"}
                 MMM{"LLL"}
-                MMMEd{"E, d MMM"}
+                MMMEd{"E, d.MM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                MMdd{"d.MM"}
+                MMMd{"d.MM"}
                 Md{"d.MM"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmv{"h:mm a v"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"MM.y"}
                 yMEd{"E, d.MM.y"}
-                yMM{"MM.y"}
-                yMMM{"LLL y"}
-                yMMMEd{"E, d MMM y"}
+                yMMM{"MM.y"}
+                yMMMEd{"E, d.MM.y"}
                 yMMMM{"LLLL y"}
-                yMMMd{"d MMM y"}
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM y"}
+                yMMMd{"d.MM.y"}
                 yMd{"d.MM.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
@@ -774,12 +782,20 @@ pl{
                     M{"LLL–LLL"}
                 }
                 MMMEd{
-                    M{"E, d MMM – E, d MMM"}
-                    d{"E, d MMM – E, d MMM"}
+                    M{"E, dd.MM – E, dd.MM"}
+                    d{"E, dd.MM – E, dd.MM"}
+                }
+                MMMMEd{
+                    M{"E, d MMMM – E, d MMMM"}
+                    d{"E, d MMMM – E, d MMMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
                 }
                 MMMd{
-                    M{"d MMM – d MMM"}
-                    d{"d–d MMM"}
+                    M{"dd.MM–dd.MM"}
+                    d{"dd.MM–dd.MM"}
                 }
                 Md{
                     M{"dd.MM–dd.MM"}
@@ -820,22 +836,32 @@ pl{
                     y{"E, dd.MM.y – E, dd.MM.y"}
                 }
                 yMMM{
-                    M{"LLL–LLL y"}
-                    y{"LLL y – LLL y"}
+                    M{"MM.y – MM.y"}
+                    y{"MM.y – MM.y"}
                 }
                 yMMMEd{
-                    M{"E, d MMM – E, d MMM y"}
-                    d{"E, d – E, d MMM y"}
-                    y{"E, d MMM y – E, d MMM y"}
+                    M{"E, dd.MM.y – E, dd.MM.y"}
+                    d{"E, dd.MM.y – E, dd.MM.y"}
+                    y{"E, dd.MM.y – E, dd.MM.y"}
                 }
                 yMMMM{
                     M{"LLLL–LLLL y"}
                     y{"LLLL y – LLLL y"}
                 }
+                yMMMMEd{
+                    M{"E, d MMMM – E, d MMMM y"}
+                    d{"E, d – E, d MMMM y"}
+                    y{"E, d MMMM y – E, d MMMM y"}
+                }
+                yMMMMd{
+                    M{"d MMMM – d MMMM y"}
+                    d{"d–d MMMM y"}
+                    y{"d MMMM y – d MMMM y"}
+                }
                 yMMMd{
-                    M{"d MMM – d MMM y"}
-                    d{"d–d MMM y"}
-                    y{"d MMM y – d MMM y"}
+                    M{"dd.MM–dd.MM.y"}
+                    d{"dd–dd.MM.y"}
+                    y{"dd.MM.y–dd.MM.y"}
                 }
                 yMd{
                     M{"dd.MM–dd.MM.y"}
@@ -1295,6 +1321,14 @@ pl{
         }
     }
     contextTransforms{
+        day-format-except-narrow:intvector{
+            0,
+            1,
+        }
+        day-standalone-except-narrow:intvector{
+            0,
+            1,
+        }
         month-format-except-narrow:intvector{
             0,
             1,

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fo.xml
@@ -151,7 +151,7 @@ fo{
             }
         }
     }
-    Version{"2.1.7.53"}
+    Version{"2.1.12.27"}
     calendar{
         generic{
             DateTimePatterns{
@@ -617,52 +617,52 @@ fo{
         day{
             dn{"dagur"}
             relative{
-                "-1"{"í gær"}
-                "-2"{"í fyrradag"}
+                "-1"{"í gjár"}
+                "-2"{"fyrradagin"}
                 "0"{"í dag"}
-                "1"{"á morgunn"}
-                "2"{"á yfirmorgunn"}
+                "1"{"í morgin"}
+                "2"{"í ovurmorgin"}
             }
         }
         dayperiod{
-            dn{"samdøgurperiode"}
+            dn{"AM/PM"}
         }
         era{
-            dn{"tímabil"}
+            dn{"tíðarrokning"}
         }
         fri{
             relative{
-                "-1"{"fríggjadagur síðstu vika"}
-                "0"{"fríggjadagur henda viku"}
-                "1"{"fríggjadagur næstu vika"}
+                "-1"{"seinasta fríggjadag"}
+                "0"{"næsta fríggjadag"}
+                "1"{"fríggjadagin í næstu viku"}
             }
         }
         hour{
-            dn{"klukkustund"}
+            dn{"tími"}
         }
         minute{
-            dn{"mínúta"}
+            dn{"minuttur"}
         }
         mon{
             relative{
-                "-1"{"mánadagur síðstu vika"}
-                "0"{"mánadagur henda viku"}
-                "1"{"mánadagur næstu vika"}
+                "-1"{"seinasta mánadag"}
+                "0"{"næsta mánadag"}
+                "1"{"mánadagin í næstu viku"}
             }
         }
         month{
-            dn{"mánuður"}
+            dn{"mánaður"}
             relative{
-                "-1"{"síðstu mánuður"}
-                "0"{"henda mánuður"}
-                "1"{"næstu mánuður"}
+                "-1"{"seinasta mánað"}
+                "0"{"henda mánaðin"}
+                "1"{"næsta mánað"}
             }
         }
         sat{
             relative{
-                "-1"{"leygardagur síðstu vika"}
-                "0"{"leygardagur henda viku"}
-                "1"{"leygardagur næstu vika"}
+                "-1"{"seinasta leygardag"}
+                "0"{"næsta leygardag"}
+                "1"{"leygardagin í næstu viku"}
             }
         }
         second{
@@ -670,53 +670,53 @@ fo{
         }
         sun{
             relative{
-                "-1"{"sunnudagu síðstu vika"}
-                "0"{"sunnudagu henda viku"}
-                "1"{"sunnudagu næstu vika"}
+                "-1"{"seinasta sunnudag"}
+                "0"{"næsta sunnudag"}
+                "1"{"sunnudagin í næstu viku"}
             }
         }
         thu{
             relative{
-                "-1"{"hósdagur síðstu vika"}
-                "0"{"hósdagur henda viku"}
-                "1"{"hósdagur næstu vika"}
+                "-1"{"seinasta hósdag"}
+                "0"{"næsta hósdag"}
+                "1"{"hósdagin í næstu viku"}
             }
         }
         tue{
             relative{
-                "-1"{"týsdagur síðstu vika"}
-                "0"{"týsdagur henda viku"}
-                "1"{"týsdagur næstu vika"}
+                "-1"{"seinasta týsdag"}
+                "0"{"næsta týsdag"}
+                "1"{"týsdagin í næstu viku"}
             }
         }
         wed{
             relative{
-                "-1"{"mikudagur síðstu vika"}
-                "0"{"mikudagur henda viku"}
-                "1"{"mikudagur næstu vika"}
+                "-1"{"seinasta mikudag"}
+                "0"{"næsta mikudag"}
+                "1"{"mikudagin í næstu viku"}
             }
         }
         week{
             dn{"vika"}
             relative{
-                "-1"{"síðstu vika"}
-                "0"{"henda viku"}
-                "1"{"næstu vika"}
+                "-1"{"seinastu viku"}
+                "0"{"hesu viku"}
+                "1"{"næstu viku"}
             }
         }
         weekday{
-            dn{"vikudagur"}
+            dn{"gerandisdagur"}
         }
         year{
             dn{"ár"}
             relative{
-                "-1"{"síðstu ár"}
-                "0"{"hetta ár"}
-                "1"{"næstu ár"}
+                "-1"{"í fjør"}
+                "0"{"í ár"}
+                "1"{"næsta ár"}
             }
         }
         zone{
-            dn{"tímabelti"}
+            dn{"tíðarøki"}
         }
     }
     listPattern{

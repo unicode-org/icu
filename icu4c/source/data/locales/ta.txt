@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ta.xml
@@ -168,7 +168,7 @@ ta{
         native{"tamldec"}
         traditional{"taml"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.12.94"}
     calendar{
         chinese{
             DateTimePatterns{
@@ -634,11 +634,11 @@ ta{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"a h - a h"}
+                    a{"a h – a h"}
                     h{"a h–h"}
                 }
                 hm{
-                    a{"a h:mm - a h:mm"}
+                    a{"a h:mm – a h:mm"}
                     h{"a h:mm–h:mm"}
                     m{"a h:mm–h:mm"}
                 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/de.xml
@@ -113,28 +113,28 @@ de{
                         other{"000 Tsd'.'"}
                     }
                     1000000{
-                        one{"0 Mio"}
-                        other{"0 Mio"}
+                        one{"0 Mio'.'"}
+                        other{"0 Mio'.'"}
                     }
                     10000000{
-                        one{"00 Mio"}
-                        other{"00 Mio"}
+                        one{"00 Mio'.'"}
+                        other{"00 Mio'.'"}
                     }
                     100000000{
-                        one{"000 Mio"}
-                        other{"000 Mio"}
+                        one{"000 Mio'.'"}
+                        other{"000 Mio'.'"}
                     }
                     1000000000{
-                        one{"0 Mrd"}
-                        other{"0 Mrd"}
+                        one{"0 Mrd'.'"}
+                        other{"0 Mrd'.'"}
                     }
                     10000000000{
-                        one{"00 Mrd"}
-                        other{"00 Mrd"}
+                        one{"00 Mrd'.'"}
+                        other{"00 Mrd'.'"}
                     }
                     100000000000{
-                        one{"000 Mrd"}
-                        other{"000 Mrd"}
+                        one{"000 Mrd'.'"}
+                        other{"000 Mrd'.'"}
                     }
                     1000000000000{
                         one{"0 Bio'.'"}
@@ -168,7 +168,7 @@ de{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.10.51"}
+    Version{"2.1.13.4"}
     calendar{
         buddhist{
             eras{
@@ -399,8 +399,8 @@ de{
                 "nachm.",
             }
             AmPmMarkersNarrow{
-                "vorm.",
-                "nachm.",
+                "vm.",
+                "nm.",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -417,8 +417,8 @@ de{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"Mittag"}
-            NoonMarkerNarrow{"Mittag"}
+            NoonMarker{"mittags"}
+            NoonMarkerNarrow{"m."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -436,6 +436,8 @@ de{
                 H{"HH 'Uhr'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hmsv{"HH:mm:ss v"}
+                Hmv{"HH:mm v"}
                 M{"L"}
                 MEd{"E, d.M."}
                 MMM{"LLL"}
@@ -449,6 +451,8 @@ de{
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmv{"h:mm a v"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M.y"}

@@ -1,14 +1,91 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/en_CA.xml
 // *
 // ***************************************************************************
 en_CA{
-    Version{"2.1.8.19"}
+    %%Parent{"en_001"}
+    Version{"2.1.12.93"}
     calendar{
+        chinese{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, U",
+                "MMMM d, U",
+                "MMM d, U",
+                "y-MM-dd",
+                "{1}, {0}",
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                GyMMMEd{"E, MMM d, U"}
+                GyMMMd{"MMM d, U"}
+                MEd{"E, MM-dd"}
+                MMMEd{"E, MMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"MM-dd"}
+                yMd{"y-MM-dd"}
+                yyyy{"U"}
+                yyyyM{"y-MM"}
+                yyyyMEd{"E, y-MM-dd"}
+                yyyyMMMEd{"E, MMM d, U"}
+                yyyyMMMd{"MMM d, U"}
+                yyyyMd{"y-MM-dd"}
+            }
+            intervalFormats{
+                MEd{
+                    M{"E, MM-dd – E, MM-dd"}
+                    d{"E, MM-dd – E, MM-dd"}
+                }
+                MMMEd{
+                    M{"E, MMM d – E, MMM d"}
+                    d{"E, MMM d – E, MMM d"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d – d"}
+                }
+                Md{
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – MM-dd"}
+                }
+                yM{
+                    M{"y-MM – y-MM"}
+                    y{"y-MM – y-MM"}
+                }
+                yMEd{
+                    M{"E, y-MM-dd – E, y-MM-dd"}
+                    d{"E, y-MM-dd – E, y-MM-dd"}
+                    y{"E, y-MM-dd – E, y-MM-dd"}
+                }
+                yMMMEd{
+                    M{"E, MMM d – E, MMM d, U"}
+                    d{"E, MMM d – E, MMM d, U"}
+                    y{"E, MMM d, U – E, MMM d, U"}
+                }
+                yMMMd{
+                    M{"MMM d – MMM d, U"}
+                    d{"MMM d – d, U"}
+                    y{"MMM d, U – MMM d, U"}
+                }
+                yMd{
+                    M{"y-MM-dd – y-MM-dd"}
+                    d{"y-MM-dd – y-MM-dd"}
+                    y{"y-MM-dd – y-MM-dd"}
+                }
+            }
+        }
         generic{
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -26,16 +103,31 @@ en_CA{
                 "{1}, {0}",
             }
             availableFormats{
+                Ed{"d E"}
+                GyMMMEd{"E, MMM d, y G"}
+                GyMMMd{"MMM d, y G"}
                 MEd{"E, MM-dd"}
+                MMMEd{"E, MMM d"}
+                MMMd{"MMM d"}
                 Md{"MM-dd"}
                 yyyyM{"GGGGG y-MM"}
                 yyyyMEd{"E, GGGGG y-MM-dd"}
+                yyyyMMMEd{"E, MMM d, y G"}
+                yyyyMMMd{"MMM d, y G"}
                 yyyyMd{"GGGGG y-MM-dd"}
             }
             intervalFormats{
                 MEd{
                     M{"E, MM-dd – E, MM-dd"}
                     d{"E, MM-dd – E, MM-dd"}
+                }
+                MMMEd{
+                    M{"E, MMM d – E, MMM d"}
+                    d{"E, MMM d – E, MMM d"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d – d"}
                 }
                 Md{
                     M{"MM-dd – MM-dd"}
@@ -50,6 +142,16 @@ en_CA{
                     d{"E, y-MM-dd – E, y-MM-dd"}
                     y{"E, y-MM-dd – E, y-MM-dd"}
                 }
+                yMMMEd{
+                    M{"E, MMM d – E, MMM d, y G"}
+                    d{"E, MMM d – E, MMM d, y G"}
+                    y{"E, MMM d, y – E, MMM d, y G"}
+                }
+                yMMMd{
+                    M{"MMM d – MMM d, y G"}
+                    d{"MMM d – d, y G"}
+                    y{"MMM d, y – MMM d, y G"}
+                }
                 yMd{
                     M{"GGGGG y-MM-dd – y-MM-dd"}
                     d{"GGGGG y-MM-dd – y-MM-dd"}
@@ -63,9 +165,9 @@ en_CA{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, MMMM d, y",
-                "MMMM d, y",
-                "MMM d, y",
+                "EEEE, d MMMM y",
+                "d MMMM y",
+                "d MMM y",
                 "y-MM-dd",
                 "{1}, {0}",
                 "{1} 'at' {0}",
@@ -74,16 +176,32 @@ en_CA{
                 "{1}, {0}",
             }
             availableFormats{
+                GyMMMEd{"E, MMM d, y G"}
+                GyMMMd{"MMM d, y G"}
                 MEd{"E, MM-dd"}
+                MMMEd{"E, MMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                MMdd{"MM-dd"}
                 Md{"MM-dd"}
                 yM{"y-MM"}
                 yMEd{"E, y-MM-dd"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMd{"MMM d, y"}
                 yMd{"y-MM-dd"}
             }
             intervalFormats{
                 MEd{
                     M{"E, MM-dd – E, MM-dd"}
                     d{"E, MM-dd – E, MM-dd"}
+                }
+                MMMEd{
+                    M{"E, MMM d – E, MMM d"}
+                    d{"E, MMM d – E, MMM d"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d – d"}
                 }
                 Md{
                     M{"MM-dd – MM-dd"}
@@ -97,6 +215,16 @@ en_CA{
                     M{"E, y-MM-dd – E, y-MM-dd"}
                     d{"E, y-MM-dd – E, y-MM-dd"}
                     y{"E, y-MM-dd – E, y-MM-dd"}
+                }
+                yMMMEd{
+                    M{"E, MMM d – E, MMM d, y"}
+                    d{"E, MMM d – E, MMM d, y"}
+                    y{"E, MMM d, y – E, MMM d, y"}
+                }
+                yMMMd{
+                    M{"MMM d – MMM d, y"}
+                    d{"MMM d – d, y"}
+                    y{"MMM d, y – MMM d, y"}
                 }
                 yMd{
                     M{"y-MM-dd – y-MM-dd"}

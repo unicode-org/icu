@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/be.xml
@@ -33,7 +33,7 @@ be{
             }
         }
     }
-    Version{"2.1.7.39"}
+    Version{"2.1.10.93"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -122,15 +122,15 @@ be{
             }
             intervalFormats{
                 MMM{
-                    M{"LLL-LLL"}
+                    M{"LLL–LLL"}
                 }
                 yMMM{
-                    M{"LLL-LLL y G"}
-                    y{"LLL y - LLL y G"}
+                    M{"LLL–LLL y G"}
+                    y{"LLL y – LLL y G"}
                 }
                 yMMMM{
-                    M{"LLLL-LLLL y G"}
-                    y{"LLLL y - LLLL y G"}
+                    M{"LLLL–LLLL y G"}
+                    y{"LLLL y – LLLL y G"}
                 }
             }
         }
@@ -225,15 +225,15 @@ be{
             }
             intervalFormats{
                 MMM{
-                    M{"LLL-LLL"}
+                    M{"LLL–LLL"}
                 }
                 yMMM{
-                    M{"LLL-LLL y"}
-                    y{"LLL y - LLL y"}
+                    M{"LLL–LLL y"}
+                    y{"LLL y – LLL y"}
                 }
                 yMMMM{
-                    M{"LLLL-LLLL y"}
-                    y{"LLLL y - LLLL y"}
+                    M{"LLLL–LLLL y"}
+                    y{"LLLL y – LLLL y"}
                 }
             }
             monthNames{
