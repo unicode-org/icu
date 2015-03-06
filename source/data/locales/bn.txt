@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bn.xml
@@ -173,7 +173,7 @@ bn{
         minimumGroupingDigits{"1"}
         native{"beng"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.12.94"}
     calendar{
         generic{
             DateTimePatterns{
@@ -243,14 +243,14 @@ bn{
                     H{"HH–HH v"}
                 }
                 M{
-                    M{"M-M"}
+                    M{"M–M"}
                 }
                 MEd{
                     M{"E, d/M – E, d/M"}
                     d{"E, d/M – E, d/M"}
                 }
                 MMM{
-                    M{"LLL-LLL"}
+                    M{"LLL–LLL"}
                 }
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
@@ -261,11 +261,11 @@ bn{
                     d{"d–d MMM"}
                 }
                 Md{
-                    M{"d/M - d/M"}
-                    d{"d/M - d/M"}
+                    M{"d/M – d/M"}
+                    d{"d/M – d/M"}
                 }
                 d{
-                    d{"d-d"}
+                    d{"d–d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
@@ -287,7 +287,7 @@ bn{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y-y G"}
+                    y{"y–y G"}
                 }
                 yM{
                     M{"M/y – M/y G"}
@@ -504,14 +504,14 @@ bn{
                     H{"HH–HH v"}
                 }
                 M{
-                    M{"M-M"}
+                    M{"M–M"}
                 }
                 MEd{
                     M{"E, d/M – E, d/M"}
                     d{"E, d/M – E, d/M"}
                 }
                 MMM{
-                    M{"LLL-LLL"}
+                    M{"LLL–LLL"}
                 }
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
@@ -522,11 +522,11 @@ bn{
                     d{"d–d MMM"}
                 }
                 Md{
-                    M{"d/M - d/M"}
-                    d{"d/M - d/M"}
+                    M{"d/M – d/M"}
+                    d{"d/M – d/M"}
                 }
                 d{
-                    d{"d-d"}
+                    d{"d–d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
@@ -548,7 +548,7 @@ bn{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y–y"}
                 }
                 yM{
                     M{"M/y – M/y"}
@@ -676,10 +676,10 @@ bn{
             quarters{
                 format{
                     abbreviated{
-                        "প্র. ত্রৈ. এক. চতুর্থাংশ",
-                        "দ্বি.ত্রৈ.এক. চতুর্থাংশ",
-                        "তৃ.ত্রৈ.এক.চতুর্থাংশ",
-                        "চ.ত্রৈ.এক চতুর্থাংশ",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                     narrow{
                         "১",
@@ -688,18 +688,18 @@ bn{
                         "৪",
                     }
                     wide{
-                        "প্রথম ত্রৈমাসিকের এক চতুর্থাংশ",
-                        "দ্বিতীয় ত্রৈমাসিকের এক চতুর্থাংশ",
-                        "তৃতীয় ত্রৈমাসিকের এক চতুর্থাংশ",
-                        "চতুর্থ ত্রৈমাসিকের এক চতুর্থাংশ",
+                        "ত্রৈমাসিক",
+                        "ষাণ্মাসিক",
+                        "তৃতীয় চতুর্থাংশ",
+                        "চতুর্থ ত্রৈমাসিক",
                     }
                 }
                 stand-alone{
                     abbreviated{
-                        "প্র.ত্রৈ.এক.চতুর্থাংশ",
-                        "দ্বি.ত্রৈ.এক চতুর্থাংশ",
-                        "তৃ.ত্রৈ.এক.চতুর্থাংশ",
-                        "চ.ত্রৈ.এক.চতুর্থাংশ",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                     narrow{
                         "১",
@@ -708,10 +708,10 @@ bn{
                         "৪",
                     }
                     wide{
-                        "প্রথম ত্রৈমাসিকের এক চতুর্থাংশ",
-                        "দ্বিতীয় ত্রৈমাসিকের এক চতুর্থাংশ",
-                        "তৃতীয় ত্রৈমাসিকের এক চতুর্থাংশ",
-                        "চতুর্থ ত্রৈমাসিকের এক চতুর্থাংশ",
+                        "ত্রৈমাসিক",
+                        "ষাণ্মাসিক",
+                        "তৃতীয় চতুর্থাংশ",
+                        "চতুর্থ ত্রৈমাসিক",
                     }
                 }
             }
@@ -853,7 +853,7 @@ bn{
             }
         }
         dayperiod{
-            dn{"পূর্বাহ্ণ/অপরাহ্ণ"}
+            dn{"AM/PM"}
         }
         era{
             dn{"যুগ"}

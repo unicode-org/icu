@@ -154,7 +154,7 @@ en{
             }
         }
     }
-    Version{"2.1.12.90"}
+    Version{"2.1.13.48"}
     calendar{
         buddhist{
             eras{
@@ -586,6 +586,8 @@ en{
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hmsv{"HH:mm:ss v"}
+                Hmv{"HH:mm v"}
                 M{"L"}
                 MEd{"E, M/d"}
                 MMM{"LLL"}
@@ -596,6 +598,8 @@ en{
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmv{"h:mm a v"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
@@ -1022,6 +1026,7 @@ en{
         }
         dayperiod{
             dn{"AM/PM"}
+            dn%variant{"am/pm"}
         }
         era{
             dn{"Era"}

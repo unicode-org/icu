@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pt_PT.xml
@@ -108,7 +108,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.1.8.19"}
+    Version{"2.1.13.23"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -209,26 +209,26 @@ pt_PT{
             }
             intervalFormats{
                 MMM{
-                    M{"MMM-MMM"}
+                    M{"MMM–MMM"}
                 }
                 MMMEd{
-                    d{"E, d 'de' MMM - E, d 'de' MMM"}
+                    d{"E, d 'de' MMM – E, d 'de' MMM"}
                 }
                 h{
-                    a{"h a - h a"}
-                    h{"h-h a"}
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
                 hm{
-                    h{"h:mm - h:mm a"}
+                    h{"h:mm – h:mm a"}
                 }
                 y{
-                    y{"y-y G"}
+                    y{"y–y G"}
                 }
                 yMMMEd{
-                    d{"E, d 'de' MMM - E, d 'de' MMM 'de' y G"}
+                    d{"E, d 'de' MMM – E, d 'de' MMM 'de' y G"}
                 }
                 yMMMM{
-                    M{"MMMM - MMMM 'de' y G"}
+                    M{"MMMM – MMMM 'de' y G"}
                 }
             }
         }
@@ -276,30 +276,6 @@ pt_PT{
                 yQQQ{"QQQQ 'de' y"}
                 yQQQQ{"QQQQ 'de' y"}
             }
-            dayNames{
-                format{
-                    short{
-                        "do",
-                        "sg",
-                        "te",
-                        "qu",
-                        "qi",
-                        "sx",
-                        "sb",
-                    }
-                }
-                stand-alone{
-                    short{
-                        "do",
-                        "sg",
-                        "te",
-                        "qu",
-                        "qi",
-                        "sx",
-                        "sb",
-                    }
-                }
-            }
             eras{
                 abbreviated%variant{
                     "a.E.C.",
@@ -318,91 +294,36 @@ pt_PT{
                 H{
                     H{"HH–HH"}
                 }
-                Hm{
-                    H{"HH:mm - HH:mm"}
-                    m{"HH:mm - HH:mm"}
-                }
-                Hmv{
-                    H{"HH:mm - HH:mm v"}
-                    m{"HH:mm - HH:mm v"}
-                }
-                Hv{
-                    H{"HH - HH v"}
-                }
                 M{
-                    M{"M-M"}
+                    M{"M–M"}
                 }
                 MMM{
-                    M{"MMM-MMM"}
+                    M{"MMM–MMM"}
                 }
                 MMMEd{
-                    d{"E, d 'de' MMM - E, d 'de' MMM"}
+                    d{"E, d 'de' MMM – E, d 'de' MMM"}
                 }
                 MMMd{
-                    d{"d-d 'de' MMM"}
+                    d{"d–d 'de' MMM"}
                 }
                 d{
                     d{"d–d"}
                 }
                 h{
-                    a{"h a - h a"}
-                    h{"h-h a"}
-                }
-                hm{
-                    a{"h:mm a - h:mm a"}
-                    h{"h:mm - h:mm a"}
-                    m{"h:mm - h:mm a"}
-                }
-                hmv{
-                    h{"h:mm - h:mm a v"}
-                    m{"h:mm - h:mm a v"}
-                }
-                hv{
-                    h{"h - h a v"}
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y–y"}
                 }
                 yMMM{
-                    M{"MMM-MMM 'de' y"}
+                    M{"MMM–MMM 'de' y"}
                 }
                 yMMMEd{
-                    d{"E, d 'de' MMM - E, d 'de' MMM 'de' y"}
+                    d{"E, d 'de' MMM – E, d 'de' MMM 'de' y"}
                 }
                 yMMMd{
-                    d{"d-d 'de' MMM 'de' y"}
-                }
-            }
-            monthNames{
-                stand-alone{
-                    abbreviated{
-                        "Jan",
-                        "Fev",
-                        "Mar",
-                        "Abr",
-                        "Mai",
-                        "Jun",
-                        "Jul",
-                        "Ago",
-                        "Set",
-                        "Out",
-                        "Nov",
-                        "Dez",
-                    }
-                    wide{
-                        "Janeiro",
-                        "Fevereiro",
-                        "Março",
-                        "Abril",
-                        "Maio",
-                        "Junho",
-                        "Julho",
-                        "Agosto",
-                        "Setembro",
-                        "Outubro",
-                        "Novembro",
-                        "Dezembro",
-                    }
+                    d{"d–d 'de' MMM 'de' y"}
                 }
             }
             quarters{
@@ -529,9 +450,6 @@ pt_PT{
                     other{"há {0} dias"}
                 }
             }
-        }
-        dayperiod{
-            dn{"Da manhã/da tarde"}
         }
         hour{
             relativeTime{
@@ -740,14 +658,9 @@ pt_PT{
             }
         }
     }
-    measurementSystemNames{
-        UK{"Reino Unido"}
-        US{"Estados Unidos"}
-        metric{"Métrico"}
-    }
     transformNames{
         x-Accents{"Acentos"}
-        x-Fullwidth{"Largura Completa"}
-        x-Halfwidth{"Meia Largura"}
+        x-Fullwidth{"Largura completa"}
+        x-Halfwidth{"Meia largura"}
     }
 }

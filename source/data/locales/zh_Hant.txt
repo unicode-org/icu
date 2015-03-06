@@ -207,7 +207,7 @@ zh_Hant{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.1.12.90"}
+    Version{"2.1.12.94"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1236,6 +1236,8 @@ zh_Hant{
                 H{"H時"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hmsv{"HH:mm:ss [v]"}
+                Hmv{"HH:mm [v]"}
                 M{"M月"}
                 MEd{"M/d（E）"}
                 MMM{"LLL"}
@@ -1248,6 +1250,8 @@ zh_Hant{
                 h{"ah時"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
+                hmsv{"ah:mm:ss [v]"}
+                hmv{"ah:mm [v]"}
                 ms{"mm:ss"}
                 y{"y年"}
                 yM{"y/M"}
@@ -2853,10 +2857,10 @@ zh_Hant{
             start{"{0}、{1}"}
         }
         unit{
-            2{"{0}{1}"}
-            end{"{0}{1}"}
-            middle{"{0}{1}"}
-            start{"{0}{1}"}
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
         }
         unit-narrow{
             2{"{0}{1}"}
@@ -2865,10 +2869,10 @@ zh_Hant{
             start{"{0}{1}"}
         }
         unit-short{
-            2{"{0}{1}"}
-            end{"{0}{1}"}
-            middle{"{0}{1}"}
-            start{"{0}{1}"}
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
         }
     }
     measurementSystemNames{
