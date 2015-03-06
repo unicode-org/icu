@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/segments/pt.xml ../../xml/brkitr/pt.xml
 // *
 // ***************************************************************************
 pt{
-    Version{"2.1.7.45"}
+    Version{"2.1.11.67"}
     exceptions{
         SentenceBreak:array{
             "psicol.",
@@ -47,7 +47,8 @@ pt{
             "cf.",
             "adm.",
             "fot.",
-            "p.m. ; P.M.",
+            "p.m.",
+            "P.M.",
             "cr\u00E9d.",
             "jur.",
             "com.",
@@ -170,7 +171,8 @@ pt{
             "prod.",
             "ref.",
             "fil.",
-            "a.m. ; A.M",
+            "a.m.",
+            "A.M",
             "obs.",
             "N.T.",
             "contab.",

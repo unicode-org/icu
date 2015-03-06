@@ -1,4 +1,4 @@
-# *   Copyright (C) 1998-2014, International Business Machines
+# *   Copyright (C) 1998-2015, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 RBNF_CLDR_VERSION = %version%
 # A list of txt's to build

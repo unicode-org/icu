@@ -88,14 +88,15 @@ void Region::loadRegionData(UErrorCode &status) {
     LocalPointer<UVector> continents(new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status), status);
     LocalPointer<UVector> groupings(new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status), status);
 
-    LocalUResourceBundlePointer rb(ures_openDirect(NULL,"metadata",&status));
-    LocalUResourceBundlePointer regionCodes(ures_getByKey(rb.getAlias(),"regionCodes",NULL,&status));
-    LocalUResourceBundlePointer territoryAlias(ures_getByKey(rb.getAlias(),"territoryAlias",NULL,&status));
+    LocalUResourceBundlePointer metadata(ures_openDirect(NULL,"metadata",&status));
+    LocalUResourceBundlePointer regionCodes(ures_getByKey(metadata.getAlias(),"regionCodes",NULL,&status));
+    LocalUResourceBundlePointer metadataAlias(ures_getByKey(metadata.getAlias(),"alias",NULL,&status));
+    LocalUResourceBundlePointer territoryAlias(ures_getByKey(metadataAlias.getAlias(),"territory",NULL,&status));
 
-    LocalUResourceBundlePointer rb2(ures_openDirect(NULL,"supplementalData",&status));
-    LocalUResourceBundlePointer codeMappings(ures_getByKey(rb2.getAlias(),"codeMappings",NULL,&status));
+    LocalUResourceBundlePointer supplementalData(ures_openDirect(NULL,"supplementalData",&status));
+    LocalUResourceBundlePointer codeMappings(ures_getByKey(supplementalData.getAlias(),"codeMappings",NULL,&status));
 
-    LocalUResourceBundlePointer territoryContainment(ures_getByKey(rb2.getAlias(),"territoryContainment",NULL,&status));
+    LocalUResourceBundlePointer territoryContainment(ures_getByKey(supplementalData.getAlias(),"territoryContainment",NULL,&status));
     LocalUResourceBundlePointer worldContainment(ures_getByKey(territoryContainment.getAlias(),"001",NULL,&status));
     LocalUResourceBundlePointer groupingContainment(ures_getByKey(territoryContainment.getAlias(),"grouping",NULL,&status));
 
@@ -148,7 +149,7 @@ void Region::loadRegionData(UErrorCode &status) {
         LocalUResourceBundlePointer res(ures_getNextResource(territoryAlias.getAlias(),NULL,&status));
         const char *aliasFrom = ures_getKey(res.getAlias());
         LocalPointer<UnicodeString> aliasFromStr(new UnicodeString(aliasFrom, -1, US_INV), status);
-        UnicodeString aliasTo = ures_getUnicodeString(res.getAlias(),&status);
+        UnicodeString aliasTo = ures_getUnicodeStringByKey(res.getAlias(),"replacement",&status);
         res.adoptInstead(NULL);
 
         const Region *aliasToRegion = (Region *) uhash_get(newRegionIDMap.getAlias(),&aliasTo);
