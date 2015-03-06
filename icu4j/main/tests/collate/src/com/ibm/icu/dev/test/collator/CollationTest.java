@@ -1058,26 +1058,33 @@ public class CollationTest extends TestFmwk {
         return printSortKey(p);
     }
 
-    private boolean readLine(BufferedReader in) throws IOException {
-        String line = in.readLine();
-        if (line == null) {
-            fileLine = null;
-            return false;
-        }
-        ++fileLineNumber;
-        // Strip trailing comments and spaces
-        int idx = line.indexOf('#');
-        if (idx < 0) {
-            idx = line.length();
-        }
-        for (; idx > 0; idx--) {
-            if (!isSpace(line.charAt(idx -1))) {
-                break;
+    private boolean readNonEmptyLine(BufferedReader in) throws IOException {
+        for (;;) {
+            String line = in.readLine();
+            if (line == null) {
+                fileLine = null;
+                return false;
             }
+            if (fileLineNumber == 0 && line.length() != 0 && line.charAt(0) == '\uFEFF') {
+                line = line.substring(1);  // Remove the BOM.
+            }
+            ++fileLineNumber;
+            // Strip trailing comments and spaces
+            int idx = line.indexOf('#');
+            if (idx < 0) {
+                idx = line.length();
+            }
+            for (; idx > 0; idx--) {
+                if (!isSpace(line.charAt(idx -1))) {
+                    break;
+                }
+            }
+            if (idx != 0) {
+                fileLine = idx < line.length() ? line.substring(0, idx) : line;
+                return true;
+            }
+            // Empty line, continue.
         }
-
-        fileLine = idx < line.length() ? line.substring(0, idx) : line;
-        return true;
     }
 
     private int parseString(int start, Output<String> prefix, Output<String> s) throws ParseException {
@@ -1324,13 +1331,7 @@ public class CollationTest extends TestFmwk {
 
     private void buildTailoring(BufferedReader in) throws IOException {
         StringBuilder rules = new StringBuilder();
-        while (readLine(in)) {
-            if (fileLine.length() == 0) {
-                continue;
-            }
-            if (isSectionStarter(fileLine.charAt(0))) {
-                break;
-            }
+        while (readNonEmptyLine(in) && !isSectionStarter(fileLine.charAt(0))) {
             rules.append(Utility.unescape(fileLine));
         }
 
@@ -1621,13 +1622,7 @@ public class CollationTest extends TestFmwk {
         String prevFileLine = "(none)";
         String prevString = "";
         Output<String> sOut = new Output<String>();
-        while (readLine(in)) {
-            if (fileLine.length() == 0) {
-                continue;
-            }
-            if (isSectionStarter(fileLine.charAt(0))) {
-                break;
-            }
+        while (readNonEmptyLine(in) && !isSectionStarter(fileLine.charAt(0))) {
             // Parse the line even if it will be ignored (when we do not have a Collator)
             // in order to report syntax issues.
             int relation;
@@ -1677,19 +1672,7 @@ public class CollationTest extends TestFmwk {
         try {
             in = TestUtil.getDataReader("collationtest.txt", "UTF-8");
 
-            // read first line and remove BOM if present
-            readLine(in);
-            if (fileLine != null && fileLine.charAt(0) == '\uFEFF') {
-                fileLine = fileLine.substring(1);
-            }
-
-            while (true) {
-                if (fileLine == null || fileLine.length() == 0) {
-                    if (!readLine(in)) {
-                        break;
-                    }
-                    continue;
-                }
+            while (fileLine != null || readNonEmptyLine(in)) {
                 if (!isSectionStarter(fileLine.charAt(0))) {
                     logln(fileLine);
                     errln("syntax error on line " + fileLineNumber);
