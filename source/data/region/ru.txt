@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ru.xml
@@ -202,7 +202,7 @@ ru{
         MS{"Монтсеррат"}
         MT{"Мальта"}
         MU{"Маврикий"}
-        MV{"Мальдивские о-ва"}
+        MV{"Мальдивы"}
         MW{"Малави"}
         MX{"Мексика"}
         MY{"Малайзия"}
@@ -228,7 +228,7 @@ ru{
         PK{"Пакистан"}
         PL{"Польша"}
         PM{"Сен-Пьер и Микелон"}
-        PN{"Питкэрн"}
+        PN{"Питкерн"}
         PR{"Пуэрто-Рико"}
         PS{"Палестинские территории"}
         PT{"Португалия"}
@@ -316,5 +316,5 @@ ru{
         FK{"Фолклендские (Мальвинские) о-ва"}
         MK{"Македония (БЮРМ)"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.12.94"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/wae.xml
@@ -309,5 +309,5 @@ wae{
         MK{"Mazedonie (EJR)"}
         TL{"Wešttimor"}
     }
-    Version{"2.1.7.53"}
+    Version{"2.1.10.93"}
 }

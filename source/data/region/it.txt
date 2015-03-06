@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/it.xml
@@ -142,7 +142,7 @@ it{
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
         HK{"RAS di Hong Kong"}
-        HM{"Isole Heard ed Isole McDonald"}
+        HM{"Isole Heard e McDonald"}
         HN{"Honduras"}
         HR{"Croazia"}
         HT{"Haiti"}
@@ -315,5 +315,5 @@ it{
         FK{"Isole Falkland (isole Malvine)"}
         MK{"Repubblica ex Jugoslava di Macedonia"}
     }
-    Version{"2.1.8.32"}
+    Version{"2.1.13.6"}
 }
