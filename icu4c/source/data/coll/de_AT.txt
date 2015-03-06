@@ -3,12 +3,20 @@
 // * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/icu-locale-deprecates.xml & build.xml
+// * Source File: <path>/common/collation/de_AT.xml
 // *
 // ***************************************************************************
-/**
- * generated alias target
- */
-de_{
-    ___{""}
+de_AT{
+    Version{"2.1.12.50"}
+    collations{
+        phonebook{
+            Sequence{
+                "&a<ä<<<Ä"
+                "&o<ö<<<Ö"
+                "&u<ü<<<Ü"
+                "&ss<ß<<<ẞ"
+            }
+            Version{"27"}
+        }
+    }
 }
