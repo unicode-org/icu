@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -525,8 +525,8 @@ public final class VersionInfo implements Comparable<VersionInfo>
         UNICODE_6_3   = getInstance(6, 3, 0, 0);
         UNICODE_7_0   = getInstance(7, 0, 0, 0);
 
-        ICU_VERSION   = getInstance(55, 0, 1, 0);
-        ICU_DATA_VERSION = getInstance(55, 0, 1, 0);
+        ICU_VERSION   = getInstance(55, 1, 0, 0);
+        ICU_DATA_VERSION = getInstance(55, 1, 0, 0);
         UNICODE_VERSION = UNICODE_7_0;
 
         UCOL_RUNTIME_VERSION = getInstance(9);
