@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ar.xml
@@ -283,7 +283,7 @@ ar{
         minimumGroupingDigits{"1"}
         native{"arab"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.12.94"}
     calendar{
         buddhist{
             eras{
@@ -582,7 +582,7 @@ ar{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"ظ"}
+            NoonMarker{"ظهرا"}
             NoonMarkerNarrow{"ظ"}
             appendItems{
                 Timezone{"{0} {1}"}
@@ -601,6 +601,8 @@ ar{
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hmsv{"HH:mm:ss v"}
+                Hmv{"HH:mm v"}
                 M{"L"}
                 MEd{"E، d/M"}
                 MMM{"LLL"}
@@ -614,6 +616,8 @@ ar{
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmv{"h:mm a v"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M‏/y"}

@@ -201,12 +201,12 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.1.12.90"}
+    Version{"2.1.12.94"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "zah:mm:ss",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
                 "ah:mm",
                 "Gy年M月d日EEEE",
@@ -247,8 +247,8 @@ zh{
         }
         chinese{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "zah:mm:ss",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
                 "ah:mm",
                 {
@@ -822,8 +822,8 @@ zh{
         }
         generic{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "zah:mm:ss",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
                 "ah:mm",
                 "Gy年M月d日EEEE",
@@ -970,8 +970,8 @@ zh{
                 "下午",
             }
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "zah:mm:ss",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
                 "ah:mm",
                 "y年M月d日EEEE",
@@ -1003,6 +1003,8 @@ zh{
                 H{"H时"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hmsv{"v HH:mm:ss"}
+                Hmv{"v HH:mm"}
                 M{"M月"}
                 MEd{"M/dE"}
                 MMM{"LLL"}
@@ -1015,6 +1017,8 @@ zh{
                 h{"ah时"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
+                hmsv{"v ah:mm:ss"}
+                hmv{"v ah:mm"}
                 ms{"mm:ss"}
                 y{"y年"}
                 yM{"y年M月"}
@@ -1350,8 +1354,8 @@ zh{
         }
         hebrew{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "zah:mm:ss",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
                 "ah:mm",
                 "Gy年M月d日EEEE",
@@ -1539,8 +1543,8 @@ zh{
         }
         islamic{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "zah:mm:ss",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
                 "ah:mm",
                 "Gy年M月d日EEEE",
@@ -1660,8 +1664,8 @@ zh{
         }
         japanese{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "zah:mm:ss",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
                 "ah:mm",
                 "Gy年M月d日EEEE",
@@ -2045,8 +2049,8 @@ zh{
         }
         roc{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "zah:mm:ss",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
                 "ah:mm",
                 "Gy年M月d日EEEE",

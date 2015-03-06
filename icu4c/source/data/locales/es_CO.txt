@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/es_CO.xml
@@ -16,11 +16,11 @@ es_CO{
             }
         }
     }
-    Version{"2.1.8.19"}
+    Version{"2.1.13.23"}
     calendar{
         generic{
             DateTimePatterns{
-                "h:mm:ss a (zzzz)",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -41,7 +41,7 @@ es_CO{
                 "p. m.",
             }
             DateTimePatterns{
-                "h:mm:ss a (zzzz)",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",

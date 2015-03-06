@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh_Hans_SG.xml
@@ -14,14 +14,14 @@ zh_Hans_SG{
             }
         }
     }
-    Version{"2.1.8.19"}
+    Version{"2.1.13.23"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
-                "ahh:mm",
+                "ah:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",
@@ -35,10 +35,10 @@ zh_Hans_SG{
         }
         chinese{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
-                "ahh:mm",
+                "ah:mm",
                 {
                     "U年MMMd日EEEE",
                     "hanidec",
@@ -51,7 +51,7 @@ zh_Hans_SG{
                     "U年MMMd日",
                     "hanidec",
                 }
-                "U-M-d",
+                "r-M-d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -61,10 +61,10 @@ zh_Hans_SG{
         }
         generic{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
-                "ahh:mm",
+                "ah:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",
@@ -120,17 +120,17 @@ zh_Hans_SG{
         }
         gregorian{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
-                "ahh:mm",
+                "ah:mm",
                 "y年M月d日EEEE",
                 "y年M月d日",
                 "y年M月d日",
                 "dd/MM/yy",
                 "{1} {0}",
-                "{1}{0}",
-                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
@@ -183,10 +183,10 @@ zh_Hans_SG{
         }
         islamic{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
-                "ahh:mm",
+                "ah:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",
@@ -200,10 +200,10 @@ zh_Hans_SG{
         }
         japanese{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
-                "ahh:mm",
+                "ah:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",
@@ -221,10 +221,10 @@ zh_Hans_SG{
         }
         roc{
             DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
+                "zzzz ah:mm:ss",
+                "z ah:mm:ss",
                 "ah:mm:ss",
-                "ahh:mm",
+                "ah:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mr.xml
@@ -190,7 +190,7 @@ mr{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.12.94"}
     calendar{
         generic{
             DateTimePatterns{
@@ -319,9 +319,9 @@ mr{
                     y{"MMM y – MMM y G"}
                 }
                 yMMMEd{
-                    M{"E, d MMM - E, d MMM y G"}
+                    M{"E, d MMM – E, d MMM y G"}
                     d{"E, d MMM y – E, d MMM, y G"}
-                    y{"E, d MMM y - E, d MMM y G"}
+                    y{"E, d MMM y – E, d MMM y G"}
                 }
                 yMMMM{
                     M{"MMMM – MMMM y G"}
@@ -526,23 +526,23 @@ mr{
                     M{"M – M"}
                 }
                 MEd{
-                    M{"E, d/M - E, d/M"}
-                    d{"E, d/M - E, d/M"}
+                    M{"E, d/M – E, d/M"}
+                    d{"E, d/M – E, d/M"}
                 }
                 MMM{
                     M{"MMM – MMM"}
                 }
                 MMMEd{
-                    M{"E, d MMM - E, d MMM"}
-                    d{"E, d MMM - E, d MMM"}
+                    M{"E, d MMM – E, d MMM"}
+                    d{"E, d MMM – E, d MMM"}
                 }
                 MMMd{
-                    M{"d MMM - d MMM"}
-                    d{"d - d MMM"}
+                    M{"d MMM – d MMM"}
+                    d{"d – d MMM"}
                 }
                 Md{
-                    M{"d/M - d/M"}
-                    d{"d/M - d/M"}
+                    M{"d/M – d/M"}
+                    d{"d/M – d/M"}
                 }
                 d{
                     d{"d – d"}
@@ -593,7 +593,7 @@ mr{
                 }
                 yMMMd{
                     M{"d MMM – d MMM, y"}
-                    d{"d - d MMM, y"}
+                    d{"d – d MMM, y"}
                     y{"d MMM, y – d MMM, y"}
                 }
                 yMd{

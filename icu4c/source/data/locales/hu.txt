@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hu.xml
@@ -172,7 +172,7 @@ hu{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.12.94"}
     calendar{
         buddhist{
             eras{
@@ -432,18 +432,18 @@ hu{
             }
             intervalFormats{
                 H{
-                    H{"H-H"}
+                    H{"H–H"}
                 }
                 Hm{
-                    H{"H:mm-H:mm"}
-                    m{"H:mm-H:mm"}
+                    H{"H:mm–H:mm"}
+                    m{"H:mm–H:mm"}
                 }
                 Hmv{
-                    H{"H:mm-H:mm v"}
-                    m{"H:mm-H:mm v"}
+                    H{"H:mm–H:mm v"}
+                    m{"H:mm–H:mm v"}
                 }
                 Hv{
-                    H{"H-H v"}
+                    H{"H–H v"}
                 }
                 M{
                     M{"M–M."}
@@ -691,7 +691,7 @@ hu{
             }
             intervalFormats{
                 H{
-                    H{"H-H"}
+                    H{"H–H"}
                 }
                 Hm{
                     H{"H:mm–H:mm"}

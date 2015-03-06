@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/es.xml
@@ -98,52 +98,52 @@ es{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0K"}
-                        other{"0K"}
+                        one{"0 K"}
+                        other{"0 K"}
                     }
                     10000{
-                        one{"00K"}
-                        other{"00K"}
+                        one{"00 K"}
+                        other{"00 K"}
                     }
                     100000{
-                        one{"000K"}
-                        other{"000K"}
+                        one{"000 K"}
+                        other{"000 K"}
                     }
                     1000000{
-                        one{"0M"}
-                        other{"0M"}
+                        one{"0 M"}
+                        other{"0 M"}
                     }
                     10000000{
-                        one{"00M"}
-                        other{"00M"}
+                        one{"00 M"}
+                        other{"00 M"}
                     }
                     100000000{
-                        one{"000M"}
-                        other{"000M"}
+                        one{"000 M"}
+                        other{"000 M"}
                     }
                     1000000000{
-                        one{"0000M"}
-                        other{"0000M"}
+                        one{"0000 M"}
+                        other{"0000 M"}
                     }
                     10000000000{
-                        one{"00MRD"}
-                        other{"00MRD"}
+                        one{"00 MRD"}
+                        other{"00 MRD"}
                     }
                     100000000000{
-                        one{"000MRD"}
-                        other{"000MRD"}
+                        one{"000 MRD"}
+                        other{"000 MRD"}
                     }
                     1000000000000{
-                        one{"0B"}
-                        other{"0B"}
+                        one{"0 B"}
+                        other{"0 B"}
                     }
                     10000000000000{
-                        one{"00B"}
-                        other{"00B"}
+                        one{"00 B"}
+                        other{"00 B"}
                     }
                     100000000000000{
-                        one{"000B"}
-                        other{"000B"}
+                        one{"000 B"}
+                        other{"000 B"}
                     }
                 }
             }
@@ -165,7 +165,7 @@ es{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.13.21"}
     calendar{
         buddhist{
             eras{
@@ -243,7 +243,10 @@ es{
                 Ed{"E d"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
-                GyMMMEd{"E, d 'de' MMMM 'de' y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMM{"MMMM 'de' y G"}
+                GyMMMMEd{"E, d 'de' MMMM 'de' y G"}
+                GyMMMMd{"d 'de' MMMM 'de' y G"}
                 GyMMMd{"d MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -252,9 +255,9 @@ es{
                 MEd{"E, d/M"}
                 MMM{"LLL"}
                 MMMEd{"E, d MMM"}
+                MMMMEd{"E, d 'de' MMMM"}
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d MMM"}
-                MMMdd{"dd-MMM"}
                 Md{"d/M"}
                 d{"d"}
                 h{"hh a"}
@@ -265,10 +268,12 @@ es{
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E, d/M/y GGGGG"}
-                yyyyMMM{"MMM 'de' y G"}
-                yyyyMMMEd{"E, d 'de' MMMM 'de' y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"EEE, d MMM y G"}
                 yyyyMMMM{"MMMM 'de' y G"}
-                yyyyMMMd{"d 'de' MMM 'de' y G"}
+                yyyyMMMMEd{"EEE, d 'de' MMMM 'de' y G"}
+                yyyyMMMMd{"d 'de' MMMM 'de' y G"}
+                yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ 'de' y G"}
@@ -301,7 +306,7 @@ es{
                 }
                 MMMd{
                     M{"d 'de' MMM–d 'de' MMM"}
-                    d{"d-d 'de' MMM"}
+                    d{"d–d 'de' MMM"}
                 }
                 Md{
                     M{"d/M–d/M"}
@@ -382,7 +387,7 @@ es{
                 "H:mm",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
-                "d 'de' MMM 'de' y",
+                "d MMM y",
                 "d/M/yy",
                 "{1} {0}",
                 "{1}, {0}",
@@ -403,19 +408,25 @@ es{
                 Ehm{"E, h:mm a"}
                 Ehms{"E, h:mm:ss a"}
                 Gy{"y G"}
-                GyMMM{"MMM 'de' y G"}
-                GyMMMEd{"E, d 'de' MMMM 'de' y G"}
-                GyMMMd{"d MMM 'de' y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMM{"MMMM 'de' y G"}
+                GyMMMMEd{"E, d 'de' MMMM 'de' y G"}
+                GyMMMMd{"d 'de' MMMM 'de' y G"}
+                GyMMMd{"d MMM y G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
+                Hmsv{"H:mm:ss v"}
+                Hmsvvvv{"H:mm:ss (vvvv)"}
+                Hmv{"H:mm v"}
                 M{"L"}
                 MEd{"E, d/M"}
                 MMM{"LLL"}
-                MMMEd{"E, d 'de' MMM"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d 'de' MMMM"}
                 MMMMd{"d 'de' MMMM"}
-                MMMd{"d 'de' MMM"}
-                MMMdd{"d 'de' MMM"}
+                MMMd{"d MMM"}
                 MMd{"d/M"}
                 MMdd{"d/M"}
                 Md{"d/M"}
@@ -423,15 +434,20 @@ es{
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmsvvvv{"h:mm:ss a (vvvv)"}
+                hmv{"h:mm a v"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
                 yMEd{"EEE, d/M/y"}
                 yMM{"M/y"}
-                yMMM{"MMM 'de' y"}
-                yMMMEd{"EEE, d 'de' MMMM 'de' y"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, d MMM y"}
                 yMMMM{"MMMM 'de' y"}
-                yMMMd{"d 'de' MMM 'de' y"}
+                yMMMMEd{"EEE, d 'de' MMMM 'de' y"}
+                yMMMMd{"d 'de' MMMM 'de' y"}
+                yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ 'de' y"}
@@ -525,11 +541,11 @@ es{
                 }
                 wide{
                     "antes de Cristo",
-                    "anno Dómini",
+                    "después de Cristo",
                 }
                 wide%variant{
-                    "a. e. c.",
-                    "e. c.",
+                    "antes de la era común",
+                    "era común",
                 }
             }
             intervalFormats{
@@ -560,6 +576,14 @@ es{
                 MMMEd{
                     M{"E, d MMM–E, d MMM"}
                     d{"E, d MMM–E, d MMM"}
+                }
+                MMMMEd{
+                    M{"E, d 'de' MMMM–E, d 'de' MMMM"}
+                    d{"E, d 'de' MMMM–E, d 'de' MMMM"}
+                }
+                MMMMd{
+                    M{"d 'de' MMMM–d 'de' MMMM"}
+                    d{"d–d 'de' MMMM"}
                 }
                 MMMd{
                     M{"d MMM–d MMM"}
@@ -604,22 +628,32 @@ es{
                     y{"E, d/M/y–E, d/M/y"}
                 }
                 yMMM{
-                    M{"MMM-MMM 'de' y"}
+                    M{"MMM–MMM y"}
                     y{"MMM y–MMM y"}
                 }
                 yMMMEd{
-                    M{"E, d MMM–E, d MMM 'de' y"}
-                    d{"E, d MMM–E, d MMM 'de' y"}
-                    y{"E, d MMM 'de' y–E, d MMM 'de' y"}
+                    M{"E, d MMM–E, d MMM y"}
+                    d{"E, d MMM–E, d MMM y"}
+                    y{"E, d MMM y–E, d MMM y"}
                 }
                 yMMMM{
                     M{"MMMM–MMMM 'de' y"}
                     y{"MMMM 'de' y–MMMM 'de' y"}
                 }
+                yMMMMEd{
+                    M{"E, d 'de' MMMM–E, d 'de' MMMM 'de' y"}
+                    d{"E, d 'de' MMMM–E, d 'de' MMMM 'de' y"}
+                    y{"E, d 'de' MMMM 'de' y–E, d 'de' MMMM 'de' y"}
+                }
+                yMMMMd{
+                    M{"d 'de' MMMM–d 'de' MMMM 'de' y"}
+                    d{"d–d 'de' MMMM 'de' y"}
+                    y{"d 'de' MMMM 'de' y–d 'de' MMMM 'de' y"}
+                }
                 yMMMd{
-                    M{"d MMM–d MMM 'de' y"}
-                    d{"d–d 'de' MMM 'de' y"}
-                    y{"d MMM 'de' y–d MMM 'de' y"}
+                    M{"d MMM–d MMM y"}
+                    d{"d–d MMM y"}
+                    y{"d MMM y–d MMM y"}
                 }
                 yMd{
                     M{"d/M/y–d/M/y"}
@@ -725,12 +759,6 @@ es{
                         "T3",
                         "T4",
                     }
-                    narrow{
-                        "1T",
-                        "2T",
-                        "3T",
-                        "4T",
-                    }
                     wide{
                         "1.er trimestre",
                         "2.º trimestre",
@@ -739,23 +767,11 @@ es{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
                     narrow{
-                        "1T",
-                        "2T",
-                        "3T",
-                        "4T",
-                    }
-                    wide{
-                        "1.er trimestre",
-                        "2.º trimestre",
-                        "3.er trimestre",
-                        "4.º trimestre",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
                     }
                 }
             }
@@ -833,7 +849,7 @@ es{
             dn{"Día"}
             relative{
                 "-1"{"ayer"}
-                "-2"{"antes de ayer"}
+                "-2"{"anteayer"}
                 "0"{"hoy"}
                 "1"{"mañana"}
                 "2"{"pasado mañana"}
@@ -1340,10 +1356,10 @@ es{
             start{"{0}, {1}"}
         }
         unit-narrow{
-            2{"{0} y {1}"}
-            end{"{0}, {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
         }
         unit-short{
             2{"{0} y {1}"}

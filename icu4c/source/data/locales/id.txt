@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/id.xml
@@ -138,7 +138,7 @@ id{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.12.94"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -754,7 +754,7 @@ id{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y-y G"}
+                    y{"y–y G"}
                 }
                 yM{
                     M{"M/y – M/y GGGGG"}
@@ -780,7 +780,7 @@ id{
                 }
                 yMMMd{
                     M{"d MMM – d MMM y G"}
-                    d{"d-d MMM y G"}
+                    d{"d–d MMM y G"}
                     y{"d MMM y – d MMM y G"}
                 }
                 yMd{
@@ -1016,7 +1016,7 @@ id{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y–y"}
                 }
                 yM{
                     M{"M/y – M/y"}
@@ -1042,7 +1042,7 @@ id{
                 }
                 yMMMd{
                     M{"d MMM – d MMM y"}
-                    d{"d-d MMM y"}
+                    d{"d–d MMM y"}
                     y{"d MMM y – d MMM y"}
                 }
                 yMd{
@@ -1973,9 +1973,9 @@ id{
         }
         sun{
             relative{
-                "-1"{"Minggu lalu"}
-                "0"{"Minggu ini"}
-                "1"{"Minggu berikutnya"}
+                "-1"{"hari Minggu lalu"}
+                "0"{"hari Minggu ini"}
+                "1"{"hari Minggu berikutnya"}
             }
         }
         sun-narrow{
@@ -2060,7 +2060,7 @@ id{
             relative{
                 "-1"{"minggu lalu"}
                 "0"{"minggu ini"}
-                "1"{"Minggu berikutnya"}
+                "1"{"minggu berikutnya"}
             }
             relativeTime{
                 future{

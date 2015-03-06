@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/br.xml
@@ -40,7 +40,7 @@ br{
         }
         native{"latn"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.10.93"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -140,20 +140,20 @@ br{
                     M{"MM–MM"}
                 }
                 MEd{
-                    M{"E dd/MM - E dd/MM"}
-                    d{"E dd/MM - E dd/MM"}
+                    M{"E dd/MM – E dd/MM"}
+                    d{"E dd/MM – E dd/MM"}
                 }
                 MMMEd{
-                    M{"E d MMM - E d MMM"}
-                    d{"E d MMM - E d MMM"}
+                    M{"E d MMM – E d MMM"}
+                    d{"E d MMM – E d MMM"}
                 }
                 MMMd{
-                    M{"d MMM - d MMM"}
-                    d{"d-d MMM"}
+                    M{"d MMM – d MMM"}
+                    d{"d–d MMM"}
                 }
                 Md{
-                    M{"dd/MM - dd/MM"}
-                    d{"dd/MM - dd/MM"}
+                    M{"dd/MM – dd/MM"}
+                    d{"dd/MM – dd/MM"}
                 }
                 d{
                     d{"d–d"}
@@ -162,36 +162,36 @@ br{
                     y{"y–y"}
                 }
                 yM{
-                    M{"MM/y - MM/y"}
-                    y{"MM/y - MM/y"}
+                    M{"MM/y – MM/y"}
+                    y{"MM/y – MM/y"}
                 }
                 yMEd{
-                    M{"E dd/MM/y - E dd/MM/y"}
-                    d{"E dd/MM/y - E dd/MM/y"}
-                    y{"E dd/MM/y - E dd/MM/y"}
+                    M{"E dd/MM/y – E dd/MM/y"}
+                    d{"E dd/MM/y – E dd/MM/y"}
+                    y{"E dd/MM/y – E dd/MM/y"}
                 }
                 yMMM{
-                    M{"MMM - MMM y"}
-                    y{"MMM y - MMM y"}
+                    M{"MMM – MMM y"}
+                    y{"MMM y – MMM y"}
                 }
                 yMMMEd{
-                    M{"E d MMM - E d MMM y"}
-                    d{"E d MMM - E d MMM y"}
-                    y{"E d MMM y - E d MMM y"}
+                    M{"E d MMM – E d MMM y"}
+                    d{"E d MMM – E d MMM y"}
+                    y{"E d MMM y – E d MMM y"}
                 }
                 yMMMM{
-                    M{"MMMM - MMMM y"}
-                    y{"MMMM y - MMMM y"}
+                    M{"MMMM – MMMM y"}
+                    y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM y"}
-                    d{"d-d MMM y"}
-                    y{"d MMM y - d MMM y"}
+                    M{"d MMM – d MMM y"}
+                    d{"d–d MMM y"}
+                    y{"d MMM y – d MMM y"}
                 }
                 yMd{
-                    M{"dd/MM/y - dd/MM/y"}
-                    d{"dd/MM/y - dd/MM/y"}
-                    y{"dd/MM/y - dd/MM/y"}
+                    M{"dd/MM/y – dd/MM/y"}
+                    d{"dd/MM/y – dd/MM/y"}
+                    y{"dd/MM/y – dd/MM/y"}
                 }
             }
             monthNames{

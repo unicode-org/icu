@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ne.xml
@@ -184,7 +184,7 @@ ne{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"2.1.8.95"}
+    Version{"2.1.12.94"}
     calendar{
         generic{
             DateTimePatterns{
@@ -292,8 +292,8 @@ ne{
         }
         gregorian{
             AmPmMarkers{
-                "पूर्व मध्यान्ह",
-                "उत्तर मध्यान्ह",
+                "पूर्वाह्न",
+                "अपराह्न",
             }
             AmPmMarkersNarrow{
                 "a",
@@ -388,7 +388,7 @@ ne{
                         "सोमबार",
                         "मङ्गलबार",
                         "बुधबार",
-                        "बिहीबार",
+                        "बिहिबार",
                         "शुक्रबार",
                         "शनिबार",
                     }
@@ -426,7 +426,7 @@ ne{
                         "सोमबार",
                         "मङ्गलबार",
                         "बुधबार",
-                        "बिहीबार",
+                        "बिहिबार",
                         "शुक्रबार",
                         "शनिबार",
                     }
@@ -576,7 +576,7 @@ ne{
                         "फेब्रुअरी",
                         "मार्च",
                         "अप्रिल",
-                        "मे",
+                        "मई",
                         "जुन",
                         "जुलाई",
                         "अगस्ट",
@@ -674,6 +674,26 @@ ne{
                 }
             }
         }
+        indian{
+            monthNames{
+                format{
+                    wide{
+                        "वैशाख",
+                        "जेठ",
+                        "असार",
+                        "साउन",
+                        "भदौ",
+                        "असोज",
+                        "कात्तिक",
+                        "मङसिर",
+                        "पुस",
+                        "माघ",
+                        "फागुन",
+                        "चैत",
+                    }
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"’"}
@@ -689,6 +709,7 @@ ne{
                 "-2"{"अस्ति"}
                 "0"{"आज"}
                 "1"{"भोली"}
+                "2"{"पर्सि"}
             }
             relativeTime{
                 future{
@@ -728,7 +749,7 @@ ne{
             }
         }
         dayperiod{
-            dn{"पूर्व मध्यान्ह/उत्तर मध्यान्ह"}
+            dn{"पूर्वाह्न / अपराह्न"}
         }
         era{
             dn{"काल"}
@@ -944,7 +965,7 @@ ne{
             }
         }
         second{
-            dn{"दोस्रो"}
+            dn{"सेकेन्ड"}
             relative{
                 "0"{"अब"}
             }
@@ -1101,7 +1122,7 @@ ne{
             dn{"हप्ताको बार"}
         }
         year{
-            dn{"बर्ष"}
+            dn{"वर्ष"}
             relative{
                 "-1"{"पहिलो वर्ष"}
                 "0"{"यो वर्ष"}
@@ -1145,7 +1166,7 @@ ne{
             }
         }
         zone{
-            dn{"क्षेत्र"}
+            dn{"समय क्षेत्र"}
         }
     }
     listPattern{
