@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sv.xml
@@ -207,7 +207,7 @@ sv{
         gay{"gayo"}
         gba{"gbaya"}
         gbz{"zoroastrisk dari"}
-        gd{"höglandsskotska"}
+        gd{"skotsk gäliska"}
         gez{"etiopiska"}
         gil{"gilbertiska"}
         gl{"galiciska"}
@@ -708,7 +708,7 @@ sv{
         Maya{"mayahieroglyfer"}
         Mend{"mende"}
         Merc{"kursiv-meroitiska"}
-        Mero{"meriotiska"}
+        Mero{"meroitiska"}
         Mlym{"malayalam"}
         Modi{"modiska"}
         Mong{"mongoliska"}
@@ -1000,7 +1000,7 @@ sv{
         VALLADER{"vallader-dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.10.33"}
+    Version{"2.1.12.94"}
     codePatterns{
         language{"språk: {0}"}
         script{"skrift: {0}"}

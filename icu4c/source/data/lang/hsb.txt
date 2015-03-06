@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hsb.xml
@@ -61,6 +61,7 @@ hsb{
         dav{"taita"}
         de{"němčina"}
         de_AT{"awstriska němčina"}
+        de_CH{"šwicarska wysokoněmčina"}
         dje{"zarma"}
         dsb{"delnjoserbšćina"}
         dua{"duala"}
@@ -277,7 +278,7 @@ hsb{
         zh{"chinšćina"}
         zh_Hans{"chinšćina (zjednorjena)"}
         zh_Hant{"chinšćina (tradicionalna)"}
-        zu{"zulušćina\u0022"}
+        zu{"zulušćina"}
         zxx{"žadyn rěčny wobsah"}
     }
     Languages%short{
@@ -386,7 +387,7 @@ hsb{
             tibt{"tibetske cyfry"}
         }
     }
-    Version{"2.1.8.9"}
+    Version{"2.1.12.94"}
     codePatterns{
         language{"rěč: {0}"}
         script{"pismo: {0}"}
