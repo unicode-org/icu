@@ -1074,10 +1074,8 @@ public class CollationTest extends TestFmwk {
             if (idx < 0) {
                 idx = line.length();
             }
-            for (; idx > 0; idx--) {
-                if (!isSpace(line.charAt(idx -1))) {
-                    break;
-                }
+            while (idx > 0 && isSpace(line.charAt(idx - 1))) {
+                --idx;
             }
             if (idx != 0) {
                 fileLine = idx < line.length() ? line.substring(0, idx) : line;
@@ -1672,6 +1670,8 @@ public class CollationTest extends TestFmwk {
         try {
             in = TestUtil.getDataReader("collationtest.txt", "UTF-8");
 
+            // Read a new line if necessary.
+            // Sub-parsers leave the first line set that they do not handle.
             while (fileLine != null || readNonEmptyLine(in)) {
                 if (!isSectionStarter(fileLine.charAt(0))) {
                     logln(fileLine);
