@@ -106,7 +106,7 @@ final class NFRule {
      * rule list
      * @param ownersOwner The RuleBasedNumberFormat that owns the
      * rule set that owns the new rule(s)
-     * @return An instance of NFRule, or an array of NFRules
+     * @param returnList A list of NFRules
      */
     public static void makeRules(String                description,
                                    NFRuleSet             owner,
