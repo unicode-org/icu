@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/tr.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/tr.xml
- */
 tr{
     AuxExemplarCharacters{
         "[á à ă â å ä ã ā æ é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ q ß ú ù ŭ û ū w x"
@@ -27,9 +24,6 @@ tr{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
         "″]"
-    }
-    LocaleScript{
-        "Latn",
     }
     MoreInformation{"?"}
     NumberElements{

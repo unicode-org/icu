@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/kw.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kw.xml
- */
 kw{
     Countries{
         GB{"Rywvaneth Unys"}

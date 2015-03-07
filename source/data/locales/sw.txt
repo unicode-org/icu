@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sw.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sw.xml
- */
 sw{
     AuxExemplarCharacters{"[c q x]"}
     Ellipsis{
@@ -20,9 +17,6 @@ sw{
         word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{"[a b {ch} d e f g h i j k l m n o p r s t u v w y z]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

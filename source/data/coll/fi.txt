@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/fi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/fi.xml
- */
 fi{
     Version{"2.1.8.12"}
     collations{

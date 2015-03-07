@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/nmg.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/nmg.xml
- */
 nmg{
     Countries{
         AD{"Andɔ́ra"}

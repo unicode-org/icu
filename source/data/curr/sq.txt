@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sq.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sq.xml
- */
 sq{
     Currencies{
         AED{

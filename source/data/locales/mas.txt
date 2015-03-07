@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mas.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mas.xml
- */
 mas{
     AuxExemplarCharacters{"[f q v x z]"}
     ExemplarCharacters{
@@ -16,9 +13,6 @@ mas{
         "r {rr} s {sh} t u ú ù û ū ʉ {ʉ\u0301} w {wu} y {yi}]"
     }
     ExemplarCharactersIndex{"[A B C D E Ɛ G H I Ɨ J K L M N Ŋ O Ɔ P R S T U Ʉ W Y]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

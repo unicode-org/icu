@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/ko.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/ko.xml
- */
 ko{
     Version{"2.1.7.95"}
     collations{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/kam.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kam.xml
- */
 kam{
     Version{"2.1.6.69"}
 }

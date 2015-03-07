@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/vai_Latn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/vai_Latn.xml
- */
 vai_Latn{
     %%Parent{"root"}
     ExemplarCharacters{
@@ -16,9 +13,6 @@ vai_Latn{
         " {ɔ\u0301} {ɔ\u0303} p q r s t u ú ũ v w x y z]"
     }
     ExemplarCharactersIndex{"[A B Ɓ C D Ɗ E Ɛ F G H I J K L M N Ŋ O Ɔ P Q R S T U V W X Y Z]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         default{"latn"}
         latn{

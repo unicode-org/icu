@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/am.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/am.xml
- */
 am{
     AuxExemplarCharacters{"[]"}
     Ellipsis{
@@ -30,9 +27,6 @@ am{
         " ፈ ፉ ፊ ፋ ፌ ፍ ፎ ፏ ፐ ፑ ፒ ፓ ፔ ፕ ፖ ፗ]"
     }
     ExemplarCharactersPunctuation{"[‐ – , ፡ ፣ ፤ ፥ ፦ ! ? . ። ‹ › « » ( ) \\[ \\]]"}
-    LocaleScript{
-        "Ethi",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/lo.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/lo.xml
- */
 lo{
     AuxExemplarCharacters{"[\u200B ໐ ໑ ໒ ໓ ໔ ໕ ໖ ໗ ໘ ໙]"}
     Ellipsis{
@@ -27,9 +24,6 @@ lo{
     ExemplarCharactersIndex{
         "[ກ ຂ ຄ ງ ຈ ສ ຊ ຍ ດ ຕ ຖ ທ ນ ບ ປ ຜ ຝ ພ ຟ ມ ຢ ຣ ລ ວ ຫ {ຫງ} {ຫຍ} {ຫນ} {ຫມ} {ຫລ} "
         "{ຫວ} ອ ຮ]"
-    }
-    LocaleScript{
-        "Laoo",
     }
     MoreInformation{"ຂໍ້ມູນເພີ່ມເຕີມ"}
     NumberElements{

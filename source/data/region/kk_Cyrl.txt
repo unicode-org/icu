@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/kk_Cyrl.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kk_Cyrl.xml
- */
 kk_Cyrl{
     Version{"2.1.6.69"}
 }

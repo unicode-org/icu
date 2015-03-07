@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/hu.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/hu.xml
- */
 hu{
     AuxExemplarCharacters{"[à ă â å ä ã ā æ ç è ĕ ê ë ē ì ĭ î ï ī ñ ò ŏ ô ø ō œ q ù ŭ û ū w x y ÿ]"}
     Ellipsis{
@@ -31,9 +28,6 @@ hu{
     ExemplarCharactersPunctuation{
         "[\\- – , ; \\: ! ? . … ' ’ \u0022 ” „ « » ( ) \\[ \\] \\{ \\} ⟨ ⟩ § @ * / "
         "\\& # ~ ⁒]"
-    }
-    LocaleScript{
-        "Latn",
     }
     MoreInformation{"?"}
     NumberElements{

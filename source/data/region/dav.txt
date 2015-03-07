@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/dav.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/dav.xml
- */
 dav{
     Countries{
         AD{"Andora"}

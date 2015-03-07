@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ti.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ti.xml
- */
 ti{
     Languages{
         af{"አፍሪቃንሰኛ"}

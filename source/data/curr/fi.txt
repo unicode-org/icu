@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/fi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/fi.xml
- */
 fi{
     Currencies{
         ADP{

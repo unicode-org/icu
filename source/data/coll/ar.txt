@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/ar.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/ar.xml
- */
 ar{
     Version{"2.1.7.40"}
     collations{

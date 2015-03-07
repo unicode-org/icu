@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/sk.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/sk.xml
- */
 sk{
     Version{"2.1.6.32"}
     collations{

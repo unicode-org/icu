@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ml.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ml.xml
- */
 ml{
     Version{"2.1.12.94"}
     durationUnits{

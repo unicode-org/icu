@@ -6,18 +6,12 @@
 // * Source File: <path>/common/main/pa_Arab.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/pa_Arab.xml
- */
 pa_Arab{
     %%Parent{"root"}
     AuxExemplarCharacters{"[\u200E\u200F أ ٻ ة ٺ ټ ٽ]"}
     ExemplarCharacters{
         "[\u064F ء آ ؤ ئ ا ب پ ت ث ٹ ج چ ح خ د ذ ڈ ر ز ڑ ژ س ش ص ض ط ظ ع غ ف ق ک گ ل "
         "م ن ں ه ھ ہ و ی ے]"
-    }
-    LocaleScript{
-        "Arab",
     }
     NumberElements{
         default{"arabext"}

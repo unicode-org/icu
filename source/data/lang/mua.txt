@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mua.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mua.xml
- */
 mua{
     Languages{
         ak{"akaŋ"}

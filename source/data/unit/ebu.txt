@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ebu.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ebu.xml
- */
 ebu{
     Version{"2.1.6.69"}
 }

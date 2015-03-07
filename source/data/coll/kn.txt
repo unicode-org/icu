@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/kn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/kn.xml
- */
 kn{
     Version{"2.0.96.14"}
     collations{

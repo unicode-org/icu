@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ksb.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ksb.xml
- */
 ksb{
     Version{"2.1.7.39"}
 }

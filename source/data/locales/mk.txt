@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mk.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mk.xml
- */
 mk{
     AuxExemplarCharacters{"[ѐ ѝ]"}
     Ellipsis{
@@ -22,9 +19,6 @@ mk{
     ExemplarCharacters{"[а б в г д ѓ е ж з ѕ и ј к л љ м н њ о п р с т ќ у ф х ц ч џ ш]"}
     ExemplarCharactersIndex{"[А Б В Г Д Ѓ Е Ж З Ѕ И Ј К Л Љ М Н Њ О П Р С Т Ќ У Ф Х Ц Ч Џ Ш]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . … ‘ ‚ “ „ ( ) \\[ \\] \\{ \\}]"}
-    LocaleScript{
-        "Cyrl",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

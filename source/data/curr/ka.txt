@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ka.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ka.xml
- */
 ka{
     Currencies{
         ADP{

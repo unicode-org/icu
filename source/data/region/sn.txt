@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sn.xml
- */
 sn{
     Countries{
         AD{"Andora"}

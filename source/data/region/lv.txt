@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/lv.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/lv.xml
- */
 lv{
     Countries{
         001{"pasaule"}

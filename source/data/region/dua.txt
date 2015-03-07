@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/dua.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/dua.xml
- */
 dua{
     Countries{
         CM{"Cameroun"}

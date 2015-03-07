@@ -6,9 +6,6 @@
 // * Source File: <path>/common/rbnf/hy.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/rbnf/hy.xml
- */
 hy{
     RBNFRules{
         SpelloutRules{

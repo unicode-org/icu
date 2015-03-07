@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sr.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sr.xml
- */
 sr{
     AuxExemplarCharacters{"[ё й щ ъ ы ь э ю я]"}
     Ellipsis{
@@ -22,9 +19,6 @@ sr{
     ExemplarCharacters{"[а б в г д ђ е ж з и ј к л љ м н њ о п р с т ћ у ф х ц ч џ ш]"}
     ExemplarCharactersIndex{"[А Б В Г Д Ђ Е Ж З И Ј К Л Љ М Н Њ О П Р С Т Ћ У Ф Х Ц Ч Џ Ш]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – , ; \\: ! ? . … ‘ ‚ “ „ ( ) \\[ \\] \\{ \\} * #]"}
-    LocaleScript{
-        "Cyrl",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/he.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/he.xml
- */
 he{
     Countries{
         001{"העולם"}

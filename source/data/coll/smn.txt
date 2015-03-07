@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/smn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/smn.xml
- */
 smn{
     Version{"2.1.8.44"}
     collations{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/agq.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/agq.xml
- */
 agq{
     Version{"2.1.10.42"}
 }

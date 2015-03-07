@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/fo.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/fo.xml
- */
 fo{
     AuxExemplarCharacters{"[c q w z]"}
     Ellipsis{
@@ -21,9 +18,6 @@ fo{
     }
     ExemplarCharacters{"[a á b d ð e f g h i í j k l m n o ó p r s t u ú v x y ý æ ø]"}
     ExemplarCharactersIndex{"[A Á B C D Ð E F G H I Í J K L M N O Ó P Q R S T U Ú V W X Y Ý Z Æ Ø]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         latn{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/af.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/af.xml
- */
 af{
     Version{"2.1.12.94"}
     durationUnits{

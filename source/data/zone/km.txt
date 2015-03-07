@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/km.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/km.xml
- */
 km{
     Version{"2.1.13.51"}
     zoneStrings{

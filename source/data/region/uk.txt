@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/uk.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/uk.xml
- */
 uk{
     Countries{
         001{"Світ"}

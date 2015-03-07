@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/seh.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/seh.xml
- */
 seh{
     Countries{
         AD{"Andorra"}

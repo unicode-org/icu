@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/so.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/so.xml
- */
 so{
     Languages{
         ak{"Akan"}

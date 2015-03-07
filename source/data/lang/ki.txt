@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ki.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ki.xml
- */
 ki{
     Languages{
         ak{"Kiakan"}

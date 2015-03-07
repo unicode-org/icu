@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mgo.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mgo.xml
- */
 mgo{
     Currencies{
         XAF{

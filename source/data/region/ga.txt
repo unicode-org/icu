@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ga.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ga.xml
- */
 ga{
     Countries{
         001{"An Domhan"}

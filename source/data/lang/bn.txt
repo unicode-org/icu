@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/bn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/bn.xml
- */
 bn{
     Keys{
         calendar{"ক্যালেন্ডার"}

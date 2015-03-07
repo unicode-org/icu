@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/zh_Hant.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/zh_Hant.xml
- */
 zh_Hant{
     %%Parent{"root"}
     AuxExemplarCharacters{
@@ -87,10 +84,6 @@ zh_Hant{
         " ． ﹒ ‥ ︰ … 。 · ＇ ‘ ’ \u0022 ＂ “ ” 〝 〞 ( （ ﹙ ︵ ) ） ﹚ ︶ \\[ ［ \\] ］ \\{ ｛ ﹛ ︷ "
         "\\} ｝ ﹜ ︸ 〈 ︿ 〉 ﹀ 《 ︽ 》 ︾ 「 ﹁ 」 ﹂ 『 ﹃ 』 ﹄ 【 ︻ 】 ︼ 〔 ﹝ ︹ 〕 ﹞ ︺ § @ ＠ ﹫ * ＊ ﹡ "
         "/ ／ \\\\ ＼ ﹨ \\& ＆ ﹠ # ＃ ﹟ % ％ ﹪ ‰ † ‡ ‧ ′ ″ ‵ 〃 ※]"
-    }
-    LocaleScript{
-        "Hani",
-        "Bopo",
     }
     MoreInformation{"？"}
     NumberElements{

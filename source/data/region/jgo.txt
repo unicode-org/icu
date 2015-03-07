@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/jgo.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/jgo.xml
- */
 jgo{
     Countries{
         001{"Mbí"}

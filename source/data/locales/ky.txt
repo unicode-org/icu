@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ky.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ky.xml
- */
 ky{
     AuxExemplarCharacters{"[в ф ц щ ь]"}
     Ellipsis{
@@ -24,9 +21,6 @@ ky{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ‚ \u0022 “ „ « » ( ) \\[ \\] \\{ \\} § @ * / "
         "\\& #]"
-    }
-    LocaleScript{
-        "Cyrl",
     }
     MoreInformation{"?"}
     NumberElements{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/bo.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/bo.xml
- */
 bo{
     AuxExemplarCharacters{"[ༀ]"}
     ExemplarCharacters{
@@ -23,9 +20,6 @@ bo{
         "\u0F80} \u0F79 \u0F7A \u0F7B \u0F7C \u0F7D \u0F84]"
     }
     ExemplarCharactersIndex{"[ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཨ]"}
-    LocaleScript{
-        "Tibt",
-    }
     NumberElements{
         default{"latn"}
         latn{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ti.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ti.xml
- */
 ti{
     AuxExemplarCharacters{
         "[᎐ ᎑ ᎒ ᎓ ᎔ ᎕ ᎖ ᎗ ᎘ ᎙ ሇ ⶀ ᎀ ᎁ ᎂ ᎃ ⶁ ⶂ ⶃ ⶄ ቇ ᎄ ᎅ ᎆ ᎇ ⶅ ⶆ ⶇ ኇ ⶈ ⶉ ⶊ ኯ ዏ ⶋ ዯ ⶌ ዸ"
@@ -23,9 +20,6 @@ ti{
     ExemplarCharactersIndex{
         "[ሀ ለ ሐ መ ሠ ረ ሰ ሸ ቀ ቈ ቐ ቘ በ ቨ ተ ቸ ኀ ኈ ነ ኘ አ ከ ኰ ኸ ዀ ወ ዐ ዘ ዠ የ ደ ጀ ገ ጐ ጠ ጨ ጰ ጸ"
         " ፀ ፈ ፐ]"
-    }
-    LocaleScript{
-        "Ethi",
     }
     NumberElements{
         default{"latn"}

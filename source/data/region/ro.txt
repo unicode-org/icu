@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ro.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ro.xml
- */
 ro{
     Countries{
         001{"Lume"}

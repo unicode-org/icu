@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ewo.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ewo.xml
- */
 ewo{
     AuxExemplarCharacters{"[c j q x]"}
     ExemplarCharacters{
@@ -18,9 +15,6 @@ ewo{
         "ù û ǔ v w y z]"
     }
     ExemplarCharactersIndex{"[A B D E Ə Ɛ F G H I K L M N Ŋ O Ɔ P R S T U V W Y Z]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

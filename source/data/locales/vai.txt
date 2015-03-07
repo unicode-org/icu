@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/vai.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/vai.xml
- */
 vai{
     AuxExemplarCharacters{"[ꘓ ꘔ ꘕ ꘖ ꘗ ꘘ ꘙ ꘚ ꘛ ꘜ ꘝ ꘞ ꘟ]"}
     ExemplarCharacters{
@@ -20,9 +17,6 @@ vai{
         " ꖺ ꖻ ꖼ ꖽ ꖾ ꖿ ꗀ ꗁ ꗂ ꗃ ꗄ ꗅ ꗆ ꗇ ꗈ ꗉ ꗊ ꗋ ꗌ ꗍ ꗎ ꗏ ꗐ ꗑ ꘫ ꗒ ꗓ ꗔ ꗕ ꗖ ꗗ ꗘ ꗙ ꗚ ꗛ ꗜ ꗝ ꗞ"
         " ꗟ ꗠ ꗡ ꗢ ꗣ ꗤ ꗥ ꗦ ꗧ ꗨ ꗩ ꗪ ꗫ ꗬ ꗭ ꗮ ꗯ ꗰ ꗱ ꗲ ꗳ ꗴ ꗵ ꗶ ꗷ ꗸ ꗹ ꗺ ꗻ ꗼ ꗽ ꗾ ꗿ ꘀ ꘁ ꘂ ꘃ ꘄ"
         " ꘅ ꘆ ꘇ ꘈ ꘉ ꘊ ꘋ ꘌ]"
-    }
-    LocaleScript{
-        "Vaii",
     }
     NumberElements{
         default{"latn"}

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sv.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sv.xml
- */
 sv{
     AuxExemplarCharacters{"[á â ã ā ç ë í î ï ī ñ ó ú ÿ ü æ ø]"}
     Ellipsis{
@@ -24,9 +21,6 @@ sv{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
         "″]"
-    }
-    LocaleScript{
-        "Latn",
     }
     MoreInformation{"?"}
     NumberElements{

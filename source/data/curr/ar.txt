@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ar.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ar.xml
- */
 ar{
     Currencies{
         ADP{

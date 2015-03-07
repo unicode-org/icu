@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mn_Cyrl.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mn_Cyrl.xml
- */
 mn_Cyrl{
     Version{"2.1.6.69"}
 }

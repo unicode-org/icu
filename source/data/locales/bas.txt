@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/bas.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/bas.xml
- */
 bas{
     AuxExemplarCharacters{"[q x]"}
     ExemplarCharacters{
@@ -19,9 +16,6 @@ bas{
         "t u ú ù û ǔ ū {u\u1DC6}{u\u1DC7} v w y z]"
     }
     ExemplarCharactersIndex{"[A B Ɓ C D E Ɛ F G H I J K L M N Ŋ O Ɔ P R S T U V W Y Z]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/en_US_POSIX.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/en_US_POSIX.xml
- */
 en_US_POSIX{
     Version{"2.0.89.0"}
     collations{

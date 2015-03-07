@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/fur.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/fur.xml
- */
 fur{
     Keys{
         calendar{"calendari"}

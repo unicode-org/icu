@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/rm.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/rm.xml
- */
 rm{
     Version{"2.1.12.94"}
     durationUnits{

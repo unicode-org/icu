@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ki.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ki.xml
- */
 ki{
     Version{"2.1.6.69"}
 }

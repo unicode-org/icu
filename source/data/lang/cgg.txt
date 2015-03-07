@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/cgg.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/cgg.xml
- */
 cgg{
     Languages{
         ak{"Orukani"}

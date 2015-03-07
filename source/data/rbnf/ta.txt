@@ -6,9 +6,6 @@
 // * Source File: <path>/common/rbnf/ta.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/rbnf/ta.xml
- */
 ta{
     RBNFRules{
         OrdinalRules{

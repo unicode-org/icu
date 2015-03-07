@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mn.xml
- */
 mn{
     AuxExemplarCharacters{"[ә җ ӊ һ]"}
     Ellipsis{
@@ -23,9 +20,6 @@ mn{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
         "″]"
-    }
-    LocaleScript{
-        "Cyrl",
     }
     MoreInformation{"?"}
     NumberElements{

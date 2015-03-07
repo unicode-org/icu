@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/hy.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/hy.xml
- */
 hy{
     AuxExemplarCharacters{"[]"}
     Ellipsis{
@@ -24,9 +21,6 @@ hy{
         " ֆ]"
     }
     ExemplarCharactersPunctuation{"[֊ , ՝ \\: ՜ ՞ . « » ՚ ՛ ՟]"}
-    LocaleScript{
-        "Armn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

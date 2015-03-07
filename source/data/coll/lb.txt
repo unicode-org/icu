@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/lb.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/lb.xml
- */
 lb{
     Version{"2.1.6.71"}
 }

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/fy.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/fy.xml
- */
 fy{
     Countries{
         001{"Wrâld"}

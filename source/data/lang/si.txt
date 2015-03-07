@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/si.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/si.xml
- */
 si{
     Keys{
         calendar{"දින දර්ශනය"}

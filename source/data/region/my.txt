@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/my.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/my.xml
- */
 my{
     Countries{
         001{"ကမ္ဘာ"}

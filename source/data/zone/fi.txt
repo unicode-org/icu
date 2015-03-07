@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/fi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/fi.xml
- */
 fi{
     Version{"2.1.13.33"}
     zoneStrings{

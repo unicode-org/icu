@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/to.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/to.xml
- */
 to{
     Keys{
         calendar{"tohi māhina"}

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/uz.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/uz.xml
- */
 uz{
     Keys{
         calendar{"Taqvim"}

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/th.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/th.xml
- */
 th{
     AuxExemplarCharacters{"[\u200B]"}
     Ellipsis{
@@ -29,9 +26,6 @@ th{
         " ว ศ ษ ส ห ฬ อ ฮ]"
     }
     ExemplarCharactersPunctuation{"[\\- ‐ – — , \\: ! . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] @ * / # ′ ″]"}
-    LocaleScript{
-        "Thai",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

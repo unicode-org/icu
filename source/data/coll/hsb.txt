@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/hsb.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/hsb.xml
- */
 hsb{
     Version{"2.1.6.71"}
     collations{

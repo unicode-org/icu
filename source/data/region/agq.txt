@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/agq.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/agq.xml
- */
 agq{
     Countries{
         AD{"Àndolà"}
