@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/dz.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/dz.xml
- */
 dz{
     AuxExemplarCharacters{
         "[\u0F84 ཊ ཋ ཌ ཎ \u0F7E ཥ \u0F80 \u0F7B \u0F7D \u0F9A \u0F9B \u0F9C \u0F9E "
@@ -29,9 +26,6 @@ dz{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] ༼ ༽ § @ * / \\& # † "
         "‡ ༄ ༅ ༆ ༈ ༉ ༊ ࿐ ࿑ ༒ ࿒ ࿓ ࿔ ༶ ྾ ྿ ༌ ། ༎ ༏ ༐ ༑ ༔ ༴]"
-    }
-    LocaleScript{
-        "Tibt",
     }
     MoreInformation{"?"}
     NumberElements{

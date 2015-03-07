@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/az.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/az.xml
- */
 az{
     Keys{
         calendar{"Təqvim"}

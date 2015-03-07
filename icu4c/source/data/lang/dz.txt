@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/dz.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/dz.xml
- */
 dz{
     Keys{
         calendar{"ཟླ་ཐོ"}

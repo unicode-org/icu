@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ml.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ml.xml
- */
 ml{
     AuxExemplarCharacters{"[]"}
     Ellipsis{
@@ -29,9 +26,6 @@ ml{
         " യ ര ല വ ശ ഷ സ ഹ ള ഴ റ]"
     }
     ExemplarCharactersPunctuation{"[\\- , ; \\: ! ? . ' ‘ ’ \u0022 “ ” ( ) \\[ \\] \\{ \\}]"}
-    LocaleScript{
-        "Mlym",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

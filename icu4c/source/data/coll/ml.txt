@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/ml.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/ml.xml
- */
 ml{
     Version{"2.1.8.15"}
     collations{

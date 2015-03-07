@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mas.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mas.xml
- */
 mas{
     Languages{
         ak{"nkʉtʉ́k ɔ́ɔ̄ lAkan"}

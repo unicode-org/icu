@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sr_Latn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sr_Latn.xml
- */
 sr_Latn{
     %%Parent{"root"}
     Keys{

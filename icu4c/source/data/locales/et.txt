@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/et.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/et.xml
- */
 et{
     AuxExemplarCharacters{"[á à â å ā æ ç é è ê ë ē í ì î ï ī ñ ó ò ŏ ô ø ō œ ú ù û ū]"}
     Ellipsis{
@@ -21,9 +18,6 @@ et{
     }
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s š z ž t u v w õ ä ö ü x y]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S Š Z Ž T U V Õ Ä Ö Ü X Y]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

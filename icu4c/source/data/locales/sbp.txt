@@ -6,16 +6,10 @@
 // * Source File: <path>/common/main/sbp.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sbp.xml
- */
 sbp{
     AuxExemplarCharacters{"[q r x z]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p s t u v w y]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P S T U V W Y]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

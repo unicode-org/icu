@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/pa.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/pa.xml
- */
 pa{
     Countries{
         001{"ਸੰਸਾਰ"}

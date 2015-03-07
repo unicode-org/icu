@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/bs_Cyrl.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/bs_Cyrl.xml
- */
 bs_Cyrl{
     %%Parent{"root"}
     AuxExemplarCharacters{"[]"}
@@ -18,9 +15,6 @@ bs_Cyrl{
     }
     ExemplarCharacters{"[а б в г д ђ е ж з и ј к л љ м н њ о п р с т ћ у ф х ц ч џ ш]"}
     ExemplarCharactersIndex{"[А Б В Г Д Ђ Е Ж З И Ј К Л Љ М Н Њ О П Р С Т Ћ У Ф Х Ц Ч Џ Ш]"}
-    LocaleScript{
-        "Cyrl",
-    }
     NumberElements{
         latn{
             patterns{

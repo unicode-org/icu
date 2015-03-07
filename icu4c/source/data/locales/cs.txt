@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/cs.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/cs.xml
- */
 cs{
     AuxExemplarCharacters{"[à ă â å ä ã ā æ ç è ĕ ê ë ē ì ĭ î ï ī ľ ł ñ ò ŏ ô ö ø ō œ ŕ ù ŭ û ü ū ÿ]"}
     Ellipsis{
@@ -25,9 +22,6 @@ cs{
     }
     ExemplarCharactersIndex{"[A B C Č D E F G H {CH} I J K L M N O P Q R Ř S Š T U V W X Y Z Ž]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – , ; \\: ! ? . … ‘ ‚ “ „ ( ) \\[ \\] § @ * / \\&]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

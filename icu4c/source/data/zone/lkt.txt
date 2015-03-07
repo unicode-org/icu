@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/lkt.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/lkt.xml
- */
 lkt{
     Version{"2.1.6.69"}
 }

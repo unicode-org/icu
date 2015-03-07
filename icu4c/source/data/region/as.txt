@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/as.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/as.xml
- */
 as{
     Countries{
         AQ{"এন্টাৰ্টিকা"}

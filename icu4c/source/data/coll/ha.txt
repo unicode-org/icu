@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/ha.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/ha.xml
- */
 ha{
     Version{"2.0.96.14"}
     collations{

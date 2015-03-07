@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ca.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ca.xml
- */
 ca{
     AuxExemplarCharacters{"[á ă â å ä ã ā æ ĕ ê ë ē ì ĭ î ī ŀ ñ º ŏ ô ö ø ō œ ù ŭ û ū ÿ]"}
     Ellipsis{
@@ -24,9 +21,6 @@ ca{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ¡ ? ¿ . … ' ‘ ’ \u0022 “ ” « » ( ) \\[ \\] § @ * / "
         "\\\\ \\& # † ‡ ′ ″]"
-    }
-    LocaleScript{
-        "Latn",
     }
     MoreInformation{"?"}
     NumberElements{

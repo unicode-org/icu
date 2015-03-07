@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/et.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/et.xml
- */
 et{
     Keys{
         calendar{"kalender"}

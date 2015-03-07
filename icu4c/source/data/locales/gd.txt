@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/gd.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/gd.xml
- */
 gd{
     AuxExemplarCharacters{
         "[á ă â å ä ã ā æ ċ ç ḋ é ĕ ê ë ē ḟ ġ í ĭ î ï ī ı j k ł ṁ ñ ó ŏ ô ö ø ō œ ṗ q"
@@ -24,9 +21,6 @@ gd{
     }
     ExemplarCharacters{"[a à b c d e è f g h i ì l m n o ò p r s t u ù]"}
     ExemplarCharactersIndex{"[A B C D E F G H I L M N O P R S T U]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

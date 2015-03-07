@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/uz_Cyrl.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/uz_Cyrl.xml
- */
 uz_Cyrl{
     %%Parent{"root"}
     AuxExemplarCharacters{"[ц щ ы ь]"}
@@ -21,9 +18,6 @@ uz_Cyrl{
         word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{"[а б в г ғ д е ё ж з и й к қ л м н о п р с т у ў ф х ҳ ч ш ъ э ю я]"}
-    LocaleScript{
-        "Cyrl",
-    }
     MoreInformation{"?"}
     NumberElements{
         arabext{

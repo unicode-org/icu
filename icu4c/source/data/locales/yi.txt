@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/yi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/yi.xml
- */
 yi{
     AuxExemplarCharacters{"[\u200E\u200F]"}
     ExemplarCharacters{
@@ -18,9 +15,6 @@ yi{
     }
     ExemplarCharactersIndex{"[\u05C2 \u05BC \u05BF א ב ג ד ה ו ז ח ט י כ ל מ נ ס ע פ צ ק ר ש ת]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . ׳ ' \u0022 ( ) \\[ \\] / ״ ־]"}
-    LocaleScript{
-        "Hebr",
-    }
     NumberElements{
         default{"latn"}
         latn{

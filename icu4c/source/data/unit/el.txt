@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/el.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/el.xml
- */
 el{
     Version{"2.1.12.94"}
     durationUnits{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sah.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sah.xml
- */
 sah{
     Languages{
         ab{"Абхаастыы"}

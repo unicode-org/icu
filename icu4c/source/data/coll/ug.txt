@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/ug.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/ug.xml
- */
 ug{
     Version{"2.0.98.40"}
     collations{

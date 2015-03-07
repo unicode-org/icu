@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sl.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sl.xml
- */
 sl{
     AuxExemplarCharacters{
         "[á à ă â å ä ā æ ç ć đ é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ q ú ù ŭ û ü"
@@ -24,9 +21,6 @@ sl{
     }
     ExemplarCharacters{"[a b c č d e f g h i j k l m n o p r s š t u v z ž]"}
     ExemplarCharactersIndex{"[A B C Č Ć D Đ E F G H I J K L M N O P Q R S Š T U V W X Y Z Ž]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

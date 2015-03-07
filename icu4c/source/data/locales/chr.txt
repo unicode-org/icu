@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/chr.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/chr.xml
- */
 chr{
     AuxExemplarCharacters{"[]"}
     ExemplarCharacters{
@@ -17,9 +14,6 @@ chr{
         " Ꮼ Ꮽ Ꮾ Ꮿ Ᏸ Ᏹ Ᏺ Ᏻ Ᏼ]"
     }
     ExemplarCharactersIndex{"[Ꭰ Ꭶ Ꭽ Ꮃ Ꮉ Ꮎ Ꮖ Ꮜ Ꮣ Ꮬ Ꮳ Ꮹ Ꮿ]"}
-    LocaleScript{
-        "Cher",
-    }
     NumberElements{
         latn{
             patterns{

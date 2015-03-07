@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/yi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/yi.xml
- */
 yi{
     Version{"2.1.12.2"}
     collations{

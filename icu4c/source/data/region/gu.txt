@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/gu.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/gu.xml
- */
 gu{
     Countries{
         001{"વિશ્વ"}

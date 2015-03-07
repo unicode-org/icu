@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/lb.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/lb.xml
- */
 lb{
     Countries{
         001{"Welt"}

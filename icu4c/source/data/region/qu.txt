@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/qu.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/qu.xml
- */
 qu{
     Countries{
         AD{"Andorra"}

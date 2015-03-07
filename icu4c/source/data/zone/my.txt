@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/my.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/my.xml
- */
 my{
     Version{"2.1.13.21"}
     zoneStrings{

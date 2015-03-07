@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/en.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/en.xml
- */
 en{
     AuxExemplarCharacters{
         "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ"
@@ -19,9 +16,6 @@ en{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
         "″]"
-    }
-    LocaleScript{
-        "Latn",
     }
     NumberElements{
         latn{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sr_Latn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sr_Latn.xml
- */
 sr_Latn{
     %%Parent{"root"}
     AuxExemplarCharacters{"[å q w x y]"}
@@ -23,9 +20,6 @@ sr_Latn{
     ExemplarCharacters{"[a b c ć č d đ {dž} e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
     ExemplarCharactersIndex{"[A B C Ć Č D {DŽ} E F G H I J K L {LJ} M N {NJ} O P Q R S Š T U V W X Y Z Ž]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – , ; \\: ! ? . … ‘ ‚ “ „ ( ) \\[ \\] \\{ \\} * #]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/kok.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kok.xml
- */
 kok{
     AuxExemplarCharacters{"[\u200C\u200D]"}
     ExemplarCharacters{
@@ -16,9 +13,6 @@ kok{
         "{क\u093C} ख {ख\u093C} ग {ग\u093C} घ ङ च छ ज {ज\u093C} झ ञ ट ठ ड {ड\u093C} ढ "
         "{ढ\u093C} ण त थ द ध न प फ {फ\u093C} ब भ म य {य\u093C} र ल व श ष स ह ळ ऽ ा ि "
         "ी \u0941 \u0942 \u0943 \u0944 \u0945 \u0947 \u0948 ॉ ो ौ \u094D]"
-    }
-    LocaleScript{
-        "Deva",
     }
     NumberElements{
         default{"latn"}

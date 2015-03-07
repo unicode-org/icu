@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/hi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/hi.xml
- */
 hi{
     Keys{
         calendar{"कैलेंडर"}

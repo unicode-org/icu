@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/dsb.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/dsb.xml
- */
 dsb{
     AuxExemplarCharacters{
         "[á à ă â å ä ã ą ā æ ç ď đ é è ĕ ê ë ė ę ē ğ í ì ĭ î ï İ ī ı ĺ ľ ň ñ ò ŏ ô ö"
@@ -22,9 +19,6 @@ dsb{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ ‚ \u0022 “ „ « » ( ) \\[ \\] \\{ \\} § @ * "
         "/ \\& #]"
-    }
-    LocaleScript{
-        "Latn",
     }
     NumberElements{
         latn{

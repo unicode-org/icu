@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/ru.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/ru.xml
- */
 ru{
     Version{"2.1.10.56"}
     collations{

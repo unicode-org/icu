@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/nb.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/nb.xml
- */
 nb{
     AuxExemplarCharacters{"[á ǎ ã č ç đ è ê í ń ñ ŋ š ŧ ü ž ä ö]"}
     Ellipsis{
@@ -22,9 +19,6 @@ nb{
     ExemplarCharacters{"[a à b c d e é f g h i j k l m n o ó ò ô p q r s t u v w x y z æ ø å]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å]"}
     ExemplarCharactersPunctuation{"[\\- – , ; \\: ! ? . ' \u0022 « » ( ) \\[ \\] \\{ \\} § @ * / \\\\]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

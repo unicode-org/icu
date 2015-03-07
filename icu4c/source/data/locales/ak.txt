@@ -6,16 +6,10 @@
 // * Source File: <path>/common/main/ak.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ak.xml
- */
 ak{
     AuxExemplarCharacters{"[c j q v z]"}
     ExemplarCharacters{"[a b d e ɛ f g h i k l m n o ɔ p r s t u w y]"}
     ExemplarCharactersIndex{"[A B C D E Ɛ F G H I J K L M N O Ɔ P Q R S T U V W X Y Z]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

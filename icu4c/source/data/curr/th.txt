@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/th.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/th.xml
- */
 th{
     Currencies{
         ADP{

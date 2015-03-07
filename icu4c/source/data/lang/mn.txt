@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mn.xml
- */
 mn{
     Keys{
         calendar{"хуанли"}

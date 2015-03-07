@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sq.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sq.xml
- */
 sq{
     AuxExemplarCharacters{"[w]"}
     Ellipsis{
@@ -22,9 +19,6 @@ sq{
     ExemplarCharactersIndex{
         "[A B C Ç D {DH} E Ë F G {GJ} H I J K L {LL} M N {NJ} O P Q R {RR} S {SH} T {"
         "TH} U V X {XH} Y Z {ZH}]"
-    }
-    LocaleScript{
-        "Latn",
     }
     MoreInformation{"?"}
     NumberElements{

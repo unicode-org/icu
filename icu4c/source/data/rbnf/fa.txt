@@ -6,9 +6,6 @@
 // * Source File: <path>/common/rbnf/fa.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/rbnf/fa.xml
- */
 fa{
     RBNFRules{
         SpelloutRules{

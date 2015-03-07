@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/it.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/it.xml
- */
 it{
     Countries{
         001{"Mondo"}

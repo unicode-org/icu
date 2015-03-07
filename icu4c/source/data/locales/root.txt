@@ -21,9 +21,6 @@ root{
     }
     ExemplarCharacters{"[]"}
     ExemplarCharactersPunctuation{"[\\- , ; \\: ! ? . ( ) \\[ \\] \\{ \\}]"}
-    LocaleScript{
-        "Zyyy",
-    }
     MoreInformation{"?"}
     NumberElements{
         arab{

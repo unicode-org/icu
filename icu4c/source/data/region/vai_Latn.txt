@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/vai_Latn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/vai_Latn.xml
- */
 vai_Latn{
     %%Parent{"root"}
     Countries{

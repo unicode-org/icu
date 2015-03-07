@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/os.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/os.xml
- */
 os{
     Currencies{
         BRL{

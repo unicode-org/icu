@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/wae.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/wae.xml
- */
 wae{
     Countries{
         001{"Wäld"}

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/zh_Hans.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/zh_Hans.xml
- */
 zh_Hans{
     Version{"2.1.6.69"}
 }

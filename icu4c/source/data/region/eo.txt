@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/eo.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/eo.xml
- */
 eo{
     Countries{
         AD{"Andoro"}

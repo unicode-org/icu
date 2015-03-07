@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ko.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ko.xml
- */
 ko{
     Currencies{
         ADP{

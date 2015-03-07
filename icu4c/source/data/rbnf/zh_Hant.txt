@@ -6,9 +6,6 @@
 // * Source File: <path>/common/rbnf/zh_Hant.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/rbnf/zh_Hant.xml
- */
 zh_Hant{
     %%Parent{"root"}
     RBNFRules{

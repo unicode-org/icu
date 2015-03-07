@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/mt.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/mt.xml
- */
 mt{
     Version{"2.1.7.49"}
     collations{

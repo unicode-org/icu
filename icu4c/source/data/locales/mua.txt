@@ -6,16 +6,10 @@
 // * Source File: <path>/common/main/mua.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mua.xml
- */
 mua{
     AuxExemplarCharacters{"[q x]"}
     ExemplarCharacters{"[a ã b ɓ c d ɗ e ë ǝ f g h i ĩ j k l m n ŋ o õ p r s t u v ṽ w y z]"}
     ExemplarCharactersIndex{"[A B Ɓ C D Ɗ E Ǝ F G H I J K L M N Ŋ O P R S T U V W Y Z]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

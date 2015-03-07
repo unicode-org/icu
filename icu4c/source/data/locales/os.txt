@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/os.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/os.xml
- */
 os{
     AuxExemplarCharacters{"[]"}
     Ellipsis{
@@ -27,9 +24,6 @@ os{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ‚ \u0022 “ „ « » ( ) \\[ \\] \\{ \\} § @ * / "
         "\\& #]"
-    }
-    LocaleScript{
-        "Cyrl",
     }
     MoreInformation{"?"}
     NumberElements{

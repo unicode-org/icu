@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/fa.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/fa.xml
- */
 fa{
     Keys{
         calendar{"تقویم"}

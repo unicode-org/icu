@@ -6,18 +6,12 @@
 // * Source File: <path>/common/main/ks.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ks.xml
- */
 ks{
     AuxExemplarCharacters{"[\u200E\u200F]"}
     ExemplarCharacters{
         "[\u06EA\u06ED \u064E \u064F \u0650 \u0654 \u0655 \u0656 \u0657 \u065A \u065B"
         " ء آ أ ٲ ؤ ا ٮ ب پ ت ث ٹ ج چ ح خ د ذ ڈ ر ز ڑ ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن"
         " ں ھ ہ و ۄ ی ۍ ے]"
-    }
-    LocaleScript{
-        "Arab",
     }
     NumberElements{
         default{"arabext"}

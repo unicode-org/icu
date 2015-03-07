@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/gd.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/gd.xml
- */
 gd{
     Keys{
         calendar{"Mìosachan"}

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/xog.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/xog.xml
- */
 xog{
     Currencies{
         AED{

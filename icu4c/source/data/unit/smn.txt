@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/smn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/smn.xml
- */
 smn{
     Version{"2.1.8.11"}
     units{

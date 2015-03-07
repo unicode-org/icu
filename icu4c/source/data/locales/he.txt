@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/he.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/he.xml
- */
 he{
     AuxExemplarCharacters{
         "[\u05BD\u05C4\u200E\u200F \u05B0 \u05B1 \u05B2 \u05B3 \u05B4 \u05B5 \u05B6 "
@@ -25,9 +22,6 @@ he{
     ExemplarCharacters{"[א ב ג ד ה ו ז ח ט י כ ך ל מ ם נ ן ס ע פ ף צ ץ ק ר ש ת]"}
     ExemplarCharactersIndex{"[א ב ג ד ה ו ז ח ט י כ ל מ נ ס ע פ צ ק ר ש ת]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . ׳ ' \u0022 ( ) \\[ \\] / ״ ־]"}
-    LocaleScript{
-        "Hebr",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

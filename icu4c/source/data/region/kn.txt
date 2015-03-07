@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/kn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kn.xml
- */
 kn{
     Countries{
         001{"ಪ್ರಪಂಚ"}

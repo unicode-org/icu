@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/zh.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/zh.xml
- */
 zh{
     Currencies{
         ADP{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ro.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ro.xml
- */
 ro{
     AuxExemplarCharacters{"[á à å ä ç é è ê ë ñ ö q ş ţ ü w y]"}
     Ellipsis{
@@ -22,9 +19,6 @@ ro{
     ExemplarCharacters{"[a ă â b c d e f g h i î j k l m n o p r s ș t ț u v x z]"}
     ExemplarCharactersIndex{"[A Ă Â B C D E F G H I Î J K L M N O P Q R S Ș T Ț U V W X Y Z]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . … ' ‘ \u0022 “ ” „ « » ( ) \\[ \\] @ * /]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"..."}
     NumberElements{
         default{"latn"}

@@ -6,16 +6,10 @@
 // * Source File: <path>/common/main/dje.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/dje.xml
- */
 dje{
     AuxExemplarCharacters{"[v]"}
     ExemplarCharacters{"[a ã b c d e ẽ f g h i j k l m n ɲ ŋ o õ p q r s š t u w x y z ž]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N Ɲ Ŋ O P Q R S T U W X Y Z]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

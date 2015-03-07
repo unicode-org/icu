@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mr.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mr.xml
- */
 mr{
     Keys{
         calendar{"दिनदर्शिका"}

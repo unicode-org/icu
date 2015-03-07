@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/es.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/es.xml
- */
 es{
     Currencies{
         ADP{

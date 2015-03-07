@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/brx.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/brx.xml
- */
 brx{
     Keys{
         calendar{"पंचाग"}
