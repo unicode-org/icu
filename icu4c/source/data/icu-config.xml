@@ -648,11 +648,10 @@
 		<include locales="sv_FI"/>
 		<include locales="sv_SE"/>
 		<include locales="sw"/>
+		<include locales="sw_CD"/>
 		<include locales="sw_KE"/>
 		<include locales="sw_TZ"/>
 		<include locales="sw_UG"/>
-		<include locales="swc"/>
-		<include locales="swc_CD"/>
 		<include locales="ta"/>
 		<include locales="ta_IN"/>
 		<include locales="ta_LK"/>
