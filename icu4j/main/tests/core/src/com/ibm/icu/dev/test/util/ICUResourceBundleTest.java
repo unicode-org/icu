@@ -469,7 +469,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
             sub = rb.get("referencingalias");
             s1 = sub.getString();
-            if(s1.equals("Hani")){
+            if(s1.equals("H:mm:ss")){
                 logln("Alias mechanism works for referencingalias");
             }else{
                 errln("Did not get the expected output for referencingalias");
