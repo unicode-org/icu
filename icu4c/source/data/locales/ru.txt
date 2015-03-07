@@ -216,7 +216,7 @@ ru{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.13.53"}
     calendar{
         buddhist{
             eras{
@@ -575,7 +575,7 @@ ru{
                     d{"E, dd.MM – E, dd.MM"}
                 }
                 MMM{
-                    M{"LLL-MMM"}
+                    M{"LLL-LLL"}
                 }
                 MMMEd{
                     M{"ccc, d MMM – ccc, d MMM"}
@@ -842,7 +842,7 @@ ru{
                     d{"E, dd.MM – E, dd.MM"}
                 }
                 MMM{
-                    M{"LLL-MMM"}
+                    M{"LLL-LLL"}
                 }
                 MMMEd{
                     M{"ccc, d MMM – ccc, d MMM"}

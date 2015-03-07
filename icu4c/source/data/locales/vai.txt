@@ -10,6 +10,7 @@
  * ICU <specials> source: <path>/common/main/vai.xml
  */
 vai{
+    AuxExemplarCharacters{"[ꘓ ꘔ ꘕ ꘖ ꘗ ꘘ ꘙ ꘚ ꘛ ꘜ ꘝ ꘞ ꘟ]"}
     ExemplarCharacters{
         "[ꔀ ꔁ ꔂ ꔃ ꔄ ꔅ ꔆ ꔇ ꔈ ꔉ ꔊ ꔋ ꔌ ꔍ ꔎ ꔏ ꔐ ꔑ ꔒ ꔓ ꔔ ꔕ ꔖ ꔗ ꔘ ꔙ ꔚ ꔛ ꔜ ꔝ ꔞ ꔟ ꔠ ꔡ ꔢ ꔣ ꔤ ꔥ"
         " ꔦ ꔧ ꔨ ꔩ ꔪ ꔫ ꔬ ꔭ ꔮ ꔯ ꔰ ꔱ ꔲ ꔳ ꔴ ꔵ ꔶ ꔷ ꔸ ꔹ ꔺ ꔻ ꔼ ꔽ ꔾ ꔿ ꕀ ꕁ ꕂ ꕃ ꕄ ꕅ ꕆ ꕇ ꕈ ꕉ ꕊ ꕋ"
@@ -38,7 +39,7 @@ vai{
         }
         native{"vaii"}
     }
-    Version{"2.1.13.21"}
+    Version{"2.1.13.51"}
     calendar{
         generic{
             DateTimePatterns{
