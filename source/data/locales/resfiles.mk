@@ -165,20 +165,20 @@ GENRB_SOURCE = af.txt af_NA.txt af_ZA.txt agq.txt\
  sr.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt\
  sr_Cyrl_XK.txt sr_Latn.txt sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt\
  sr_Latn_XK.txt sv.txt sv_AX.txt sv_FI.txt sv_SE.txt\
- sw.txt sw_KE.txt sw_TZ.txt sw_UG.txt ta.txt\
- ta_IN.txt ta_LK.txt ta_MY.txt ta_SG.txt te.txt\
- te_IN.txt teo.txt teo_KE.txt teo_UG.txt th.txt\
- th_TH.txt ti.txt ti_ER.txt ti_ET.txt to.txt\
- to_TO.txt tr.txt tr_CY.txt tr_TR.txt twq.txt\
- twq_NE.txt tzm.txt tzm_Latn.txt tzm_Latn_MA.txt ug.txt\
- ug_Arab.txt ug_Arab_CN.txt uk.txt uk_UA.txt ur.txt\
- ur_IN.txt ur_PK.txt uz.txt uz_Arab.txt uz_Arab_AF.txt\
- uz_Cyrl.txt uz_Cyrl_UZ.txt uz_Latn.txt uz_Latn_UZ.txt vai.txt\
- vai_Latn.txt vai_Latn_LR.txt vai_Vaii.txt vai_Vaii_LR.txt vi.txt\
- vi_VN.txt vun.txt vun_TZ.txt wae.txt wae_CH.txt\
- xog.txt xog_UG.txt yav.txt yav_CM.txt yi.txt\
- yi_001.txt yo.txt yo_BJ.txt yo_NG.txt zgh.txt\
- zgh_MA.txt zh.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_HK.txt\
- zh_Hans_MO.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt\
- zh_Hant_TW.txt zu.txt zu_ZA.txt
+ sw.txt sw_CD.txt sw_KE.txt sw_TZ.txt sw_UG.txt\
+ ta.txt ta_IN.txt ta_LK.txt ta_MY.txt ta_SG.txt\
+ te.txt te_IN.txt teo.txt teo_KE.txt teo_UG.txt\
+ th.txt th_TH.txt ti.txt ti_ER.txt ti_ET.txt\
+ to.txt to_TO.txt tr.txt tr_CY.txt tr_TR.txt\
+ twq.txt twq_NE.txt tzm.txt tzm_Latn.txt tzm_Latn_MA.txt\
+ ug.txt ug_Arab.txt ug_Arab_CN.txt uk.txt uk_UA.txt\
+ ur.txt ur_IN.txt ur_PK.txt uz.txt uz_Arab.txt\
+ uz_Arab_AF.txt uz_Cyrl.txt uz_Cyrl_UZ.txt uz_Latn.txt uz_Latn_UZ.txt\
+ vai.txt vai_Latn.txt vai_Latn_LR.txt vai_Vaii.txt vai_Vaii_LR.txt\
+ vi.txt vi_VN.txt vun.txt vun_TZ.txt wae.txt\
+ wae_CH.txt xog.txt xog_UG.txt yav.txt yav_CM.txt\
+ yi.txt yi_001.txt yo.txt yo_BJ.txt yo_NG.txt\
+ zgh.txt zgh_MA.txt zh.txt zh_Hans.txt zh_Hans_CN.txt\
+ zh_Hans_HK.txt zh_Hans_MO.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt\
+ zh_Hant_MO.txt zh_Hant_TW.txt zu.txt zu_ZA.txt
 
