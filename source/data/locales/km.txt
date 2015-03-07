@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/km.xml
  */
 km{
-    AuxExemplarCharacters{"[\u17B4\u17B5\u200B ឝ ឞ]"}
+    AuxExemplarCharacters{"[\u17CC \u17CE \u17CF \u17D1 \u17B4 \u17B5 \u200B ឝ ឞ]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -141,7 +141,7 @@ km{
         minimumGroupingDigits{"1"}
         native{"khmr"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.13.51"}
     calendar{
         generic{
             DateTimePatterns{
