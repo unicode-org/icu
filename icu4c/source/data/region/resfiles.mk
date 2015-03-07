@@ -111,12 +111,13 @@ REGION_SOURCE = af.txt agq.txt ak.txt am.txt\
  seh.txt ses.txt sg.txt shi.txt shi_Latn.txt\
  shi_Tfng.txt si.txt sk.txt sl.txt smn.txt\
  sn.txt so.txt sq.txt sr.txt sr_Cyrl.txt\
- sr_Latn.txt sv.txt sw.txt ta.txt te.txt\
- teo.txt th.txt ti.txt to.txt tr.txt\
- twq.txt tzm.txt tzm_Latn.txt ug.txt ug_Arab.txt\
- uk.txt ur.txt ur_IN.txt uz.txt uz_Arab.txt\
- uz_Cyrl.txt uz_Latn.txt vai.txt vai_Latn.txt vai_Vaii.txt\
- vi.txt vun.txt wae.txt xog.txt yav.txt\
- yi.txt yo.txt yo_BJ.txt zgh.txt zh.txt\
- zh_Hans.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zu.txt
+ sr_Latn.txt sv.txt sw.txt sw_CD.txt ta.txt\
+ te.txt teo.txt th.txt ti.txt to.txt\
+ tr.txt twq.txt tzm.txt tzm_Latn.txt ug.txt\
+ ug_Arab.txt uk.txt ur.txt ur_IN.txt uz.txt\
+ uz_Arab.txt uz_Cyrl.txt uz_Latn.txt vai.txt vai_Latn.txt\
+ vai_Vaii.txt vi.txt vun.txt wae.txt xog.txt\
+ yav.txt yi.txt yo.txt yo_BJ.txt zgh.txt\
+ zh.txt zh_Hans.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt\
+ zu.txt
 
