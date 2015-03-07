@@ -10,5 +10,5 @@
  * ICU <specials> source: <path>/common/main/vai.xml
  */
 vai{
-    Version{"2.1.13.21"}
+    Version{"2.1.13.51"}
 }

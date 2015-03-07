@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/kn.xml
  */
 kn{
-    AuxExemplarCharacters{"[\u200C\u200D]"}
+    AuxExemplarCharacters{"[ೞ \u200C\u200D]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -169,7 +169,7 @@ kn{
         minimumGroupingDigits{"1"}
         native{"knda"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.13.51"}
     calendar{
         generic{
             DateTimePatterns{
