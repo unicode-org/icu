@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sbp.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sbp.xml
- */
 sbp{
     Version{"2.1.7.39"}
 }

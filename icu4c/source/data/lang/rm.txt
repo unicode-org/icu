@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/rm.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/rm.xml
- */
 rm{
     Keys{
         calendar{"chalender"}

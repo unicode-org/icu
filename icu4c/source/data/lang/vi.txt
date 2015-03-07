@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/vi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/vi.xml
- */
 vi{
     Keys{
         calendar{"Lịch"}

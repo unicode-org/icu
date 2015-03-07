@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/kkj.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kkj.xml
- */
 kkj{
     AuxExemplarCharacters{"[q x z]"}
     ExemplarCharacters{
@@ -22,9 +19,6 @@ kkj{
         "Nd} ǋ {Ny} Ŋ {Ŋg} {Ŋgb} {Ŋgw} O Ɔ {Ɔ\u0327} P R S T U {U\u0327} V W Y]"
     }
     ExemplarCharactersPunctuation{"[, \\: ! ? . … ‘ ‹ › “ ” « » ( ) *]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         default{"latn"}
         latn{

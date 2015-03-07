@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/qu.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/qu.xml
- */
 qu{
     AuxExemplarCharacters{
         "[á à ă â å ä ã ā æ b c ç d e é è ĕ ê ë ē f g í ì ĭ î ï ī j o ó ò ŏ ô ö ø ō œ"
@@ -16,9 +13,6 @@ qu{
     }
     ExemplarCharacters{"[a {ch} {chʼ} h i k {kʼ} l {ll} m n ñ p {pʼ} q {qʼ} s t {tʼ} u w y]"}
     ExemplarCharactersIndex{"[A {Ch} H I K L {Ll} M N Ñ P Q S T U W Y]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

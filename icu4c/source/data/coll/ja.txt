@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/ja.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/ja.xml
- */
 ja{
     Version{"2.1.8.16"}
     collations{

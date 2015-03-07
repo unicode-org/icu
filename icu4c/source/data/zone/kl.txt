@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/kl.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kl.xml
- */
 kl{
     Version{"2.1.6.69"}
 }

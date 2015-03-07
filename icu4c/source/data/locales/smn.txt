@@ -6,16 +6,10 @@
 // * Source File: <path>/common/main/smn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/smn.xml
- */
 smn{
     AuxExemplarCharacters{"[à ç é è í ñ ń ó ò q ú ü w x æ ø å ã ö]"}
     ExemplarCharacters{"[a â b c č d đ e f g h i j k l m n ŋ o p r s š t u v y z ž ä á]"}
     ExemplarCharactersIndex{"[A Â B C Č D Đ E F G H I J K L M N Ŋ O P R S Š T U V Y Z Ž Ä Á]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             miscPatterns{

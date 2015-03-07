@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ga.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ga.xml
- */
 ga{
     AuxExemplarCharacters{"[å ḃ ċ ḋ ḟ ġ j k ṁ ṗ q ṡ ṫ v w x y z]"}
     Ellipsis{
@@ -20,9 +17,6 @@ ga{
         word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{"[a á b c d e é f g h i í l m n o ó p r s t u ú]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

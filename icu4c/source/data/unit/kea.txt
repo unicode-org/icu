@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/kea.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kea.xml
- */
 kea{
     Version{"2.1.10.42"}
     durationUnits{

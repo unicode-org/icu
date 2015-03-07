@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ln.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ln.xml
- */
 ln{
     Currencies{
         AED{

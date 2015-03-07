@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/jgo.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/jgo.xml
- */
 jgo{
     AuxExemplarCharacters{"[e o q r x]"}
     ExemplarCharacters{
@@ -22,9 +19,6 @@ jgo{
         "Z Ꞌ]"
     }
     ExemplarCharactersPunctuation{"[\\- , ; \\: ! ? . ‹ › « »]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

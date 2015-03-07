@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/zh.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/zh.xml
- */
 zh{
     Version{"2.1.7.95"}
     collations{

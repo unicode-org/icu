@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/hu.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/hu.xml
- */
 hu{
     Version{"2.0.96.14"}
     collations{

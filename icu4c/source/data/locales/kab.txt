@@ -6,16 +6,10 @@
 // * Source File: <path>/common/main/kab.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kab.xml
- */
 kab{
     AuxExemplarCharacters{"[o v]"}
     ExemplarCharacters{"[a b c č d ḍ e ɛ f g ǧ ɣ h ḥ i j k l m n p q r ṛ s ṣ t ṭ u w x y z ẓ]"}
     ExemplarCharactersIndex{"[A B C Č D Ḍ E Ɛ F G Ǧ Ɣ H Ḥ I J K L M N P Q R Ṛ S Ṣ T Ṭ U W X Y Z Ẓ]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

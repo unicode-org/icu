@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/zu.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/zu.xml
- */
 zu{
     Countries{
         001{"Umhlaba"}

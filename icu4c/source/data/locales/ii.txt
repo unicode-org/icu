@@ -6,14 +6,8 @@
 // * Source File: <path>/common/main/ii.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ii.xml
- */
 ii{
     ExemplarCharacters{"[ꀀ-ꒌ]"}
-    LocaleScript{
-        "Yiii",
-    }
     NumberElements{
         latn{
             symbols{

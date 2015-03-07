@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/lv.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/lv.xml
- */
 lv{
     Version{"2.0.96.14"}
     collations{

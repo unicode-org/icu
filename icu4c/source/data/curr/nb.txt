@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/nb.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/nb.xml
- */
 nb{
     Currencies{
         ADP{

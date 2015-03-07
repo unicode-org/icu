@@ -6,12 +6,6 @@
 // * Source File: <path>/common/main/ks_Arab.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ks_Arab.xml
- */
 ks_Arab{
-    LocaleScript{
-        "Arab",
-    }
     Version{"2.1.6.69"}
 }

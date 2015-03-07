@@ -6,9 +6,6 @@
 // * Source File: <path>/common/rbnf/sq.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/rbnf/sq.xml
- */
 sq{
     RBNFRules{
         SpelloutRules{

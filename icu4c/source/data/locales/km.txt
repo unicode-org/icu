@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/km.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/km.xml
- */
 km{
     AuxExemplarCharacters{"[\u17CC \u17CE \u17CF \u17D1 \u17B4 \u17B5 \u200B ឝ ឞ]"}
     Ellipsis{
@@ -25,9 +22,6 @@ km{
         "\u17B8 \u17B9 \u17BA \u17BB \u17BC \u17BD ើ ឿ ៀ េ ែ ៃ ោ ៅ \u17C6 ះ \u17D2]"
     }
     ExemplarCharactersPunctuation{"[\\- , ៖ ! ? . ។ ៕ ‘ ’ \u0022 “ ” ( ) \\[ \\] \\{ \\} ៙ ៚]"}
-    LocaleScript{
-        "Khmr",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

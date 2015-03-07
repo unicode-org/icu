@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/hr.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/hr.xml
- */
 hr{
     Keys{
         calendar{"kalendar"}

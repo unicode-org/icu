@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/shi_Tfng.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/shi_Tfng.xml
- */
 shi_Tfng{
     Version{"2.1.6.69"}
 }

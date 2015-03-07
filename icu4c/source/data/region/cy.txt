@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/cy.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/cy.xml
- */
 cy{
     Countries{
         001{"Y Byd"}

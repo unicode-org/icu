@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/jmc.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/jmc.xml
- */
 jmc{
     Version{"2.1.6.69"}
 }

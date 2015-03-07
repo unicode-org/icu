@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/fi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/fi.xml
- */
 fi{
     AuxExemplarCharacters{
         "[á à ă â ã ą ā ć č ċ ç ď ð đ é è ê ě ë ė ę ē ğ ǧ ģ ǥ ȟ ħ í î ï İ į ī ı ǩ ķ ĺ"
@@ -26,9 +23,6 @@ fi{
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s š t u v w x y z ž å ä ö]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Å Ä Ö]"}
     ExemplarCharactersPunctuation{"[‐ – , ; \\: ! ? . … ’ ” » ( ) \\[ \\] § @ * / \\\\ \\& #]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

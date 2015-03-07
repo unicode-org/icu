@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/zu.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/zu.xml
- */
 zu{
     AuxExemplarCharacters{
         "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ"
@@ -27,9 +24,6 @@ zu{
         "} {kp} l m n {nc} {ngc} {ngq} {ngx} {nhl} {nk} {nkc} {nkq} {nkx} {nq} {ntsh}"
         " {nx} {ny} o p {ph} q {qh} r {rh} s {sh} t {th} {tl} {ts} {tsh} u v w x {xh}"
         " y z]"
-    }
-    LocaleScript{
-        "Latn",
     }
     MoreInformation{"?"}
     NumberElements{

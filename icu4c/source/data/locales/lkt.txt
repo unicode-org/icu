@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/lkt.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/lkt.xml
- */
 lkt{
     AuxExemplarCharacters{"[c d f {ȟʼ} j q r {sʼ} {šʼ} v x]"}
     ExemplarCharacters{
@@ -17,9 +14,6 @@ lkt{
     }
     ExemplarCharactersIndex{"[A B Č E G Ǧ H Ȟ I K L M N Ŋ O P S Š T U W Y Z Ž]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . \u0022 “ ” ( ) \\[ \\] @ * / \\& #]"}
-    LocaleScript{
-        "Latn",
-    }
     Version{"2.1.6.69"}
     calendar{
         gregorian{

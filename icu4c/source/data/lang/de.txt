@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/de.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/de.xml
- */
 de{
     Keys{
         calendar{"Kalender"}

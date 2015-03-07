@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/gv.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/gv.xml
- */
 gv{
     Languages{
         gv{"Gaelg"}

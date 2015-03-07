@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/dyo.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/dyo.xml
- */
 dyo{
     Version{"2.1.6.69"}
 }

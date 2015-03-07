@@ -6,9 +6,6 @@
 // * Source File: <path>/common/rbnf/it.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/rbnf/it.xml
- */
 it{
     RBNFRules{
         OrdinalRules{

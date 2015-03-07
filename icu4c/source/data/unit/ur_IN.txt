@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ur_IN.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ur_IN.xml
- */
 ur_IN{
     Version{"2.1.13.23"}
     units{

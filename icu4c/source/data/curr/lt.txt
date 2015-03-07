@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/lt.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/lt.xml
- */
 lt{
     Currencies{
         ADP{

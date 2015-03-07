@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/lt.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/lt.xml
- */
 lt{
     AuxExemplarCharacters{
         "[á à ã {ą\u0301} {ą\u0303} {ch} {dz} {dž} é è ẽ {ę\u0301} {ę\u0303} {ė\u0301"
@@ -28,9 +25,6 @@ lt{
     ExemplarCharacters{"[a ą b c č d e ę ė f g h i į y j k l m n o p r s š t u ų ū v z ž]"}
     ExemplarCharactersIndex{"[A Ą B C Č D E Ę Ė F G H I Į Y J K L M N O P R S Š T U Ų Ū V Z Ž]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . … “ „ ( ) \\[ \\] \\{ \\}]"}
-    LocaleScript{
-        "Latn",
-    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/cy.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/cy.xml
- */
 cy{
     Version{"2.0.96.14"}
     collations{

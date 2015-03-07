@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/vun.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/vun.xml
- */
 vun{
     Countries{
         AD{"Andora"}

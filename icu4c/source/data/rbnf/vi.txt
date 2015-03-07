@@ -6,9 +6,6 @@
 // * Source File: <path>/common/rbnf/vi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/rbnf/vi.xml
- */
 vi{
     RBNFRules{
         OrdinalRules{

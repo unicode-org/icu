@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/az.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/az.xml
- */
 az{
     AuxExemplarCharacters{"[w]"}
     Ellipsis{
@@ -24,9 +21,6 @@ az{
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
         "″]"
-    }
-    LocaleScript{
-        "Latn",
     }
     MoreInformation{"?"}
     NumberElements{

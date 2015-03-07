@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/ln.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/ln.xml
- */
 ln{
     AuxExemplarCharacters{"[j q x]"}
     ExemplarCharacters{
@@ -19,9 +16,6 @@ ln{
     ExemplarCharactersIndex{
         "[A B C D E Ɛ F G {Gb} H I K L M {Mb} {Mp} N {Nd} {Ng} {Nk} {Ns} {Nt} {Ny} {N"
         "z} O Ɔ P R S T U V W Y Z]"
-    }
-    LocaleScript{
-        "Latn",
     }
     NumberElements{
         latn{

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/rbnf/cs.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/rbnf/cs.xml
- */
 cs{
     RBNFRules{
         SpelloutRules{

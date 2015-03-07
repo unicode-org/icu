@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/zh.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/zh.xml
- */
 zh{
     AuxExemplarCharacters{"[仂 侣 傈 傣 僳 卑 卞 厘 吕 坝 堤 奎 屿 巽 撤 楔 楠 滕 瑚 甫 盲 碑 禄 粟 脚 艮 谬 钯 铂 锑 镑 魁]"}
     Ellipsis{
@@ -82,9 +79,6 @@ zh{
         " ‥ ︰ … 。 · ＇ ‘ ’ \u0022 ＂ “ ” 〝 〞 ( （ ﹙ ︵ ) ） ﹚ ︶ \\[ ［ \\] ］ \\{ ｛ ﹛ ︷ \\} "
         "｝ ﹜ ︸ 〈 ︿ 〉 ﹀ 《 ︽ 》 ︾ 「 ﹁ 」 ﹂ 『 ﹃ 』 ﹄ 【 ︻ 】 ︼ 〔 ﹝ ︹ 〕 ﹞ ︺ 〖 〗 ‖ § @ ＠ ﹫ * ＊ "
         "﹡ / ／ \\\\ ＼ ﹨ \\& ＆ ﹠ # ＃ ﹟ % ％ ﹪ ‰ ′ ″ ‵ 〃 ※]"
-    }
-    LocaleScript{
-        "Hani",
     }
     MoreInformation{"？"}
     NumberElements{

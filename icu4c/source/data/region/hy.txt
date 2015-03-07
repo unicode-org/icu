@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/hy.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/hy.xml
- */
 hy{
     Countries{
         001{"Աշխարհ"}

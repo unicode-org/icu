@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/mt.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/mt.xml
- */
 mt{
     Countries{
         001{"Dinja"}

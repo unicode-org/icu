@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/pa_Guru.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/pa_Guru.xml
- */
 pa_Guru{
     Version{"2.1.6.69"}
 }

@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/nmg.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/nmg.xml
- */
 nmg{
     AuxExemplarCharacters{"[q x z]"}
     ExemplarCharacters{
@@ -17,9 +14,6 @@ nmg{
         " ǒ ö ō ɔ {ɔ\u0301} {ɔ\u0302} {ɔ\u030C} {ɔ\u0304} p r ŕ s t u ú û ǔ ū v w y]"
     }
     ExemplarCharactersIndex{"[A B Ɓ C D E Ǝ Ɛ F G H I J K L M N Ŋ O Ɔ P R S T U V W Y]"}
-    LocaleScript{
-        "Latn",
-    }
     NumberElements{
         latn{
             patterns{

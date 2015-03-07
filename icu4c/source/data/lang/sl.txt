@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sl.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sl.xml
- */
 sl{
     Keys{
         calendar{"koledar"}

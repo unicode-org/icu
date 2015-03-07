@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/hsb.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/hsb.xml
- */
 hsb{
     Currencies{
         ADP{

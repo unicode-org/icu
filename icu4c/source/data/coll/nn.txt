@@ -6,9 +6,6 @@
 // * Source File: <path>/common/collation/nn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/xml/collation/nn.xml
- */
 nn{
     Version{"2.1.6.31"}
     collations{

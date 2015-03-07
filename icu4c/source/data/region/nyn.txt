@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/nyn.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/nyn.xml
- */
 nyn{
     Countries{
         AD{"Andora"}

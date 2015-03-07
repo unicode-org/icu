@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/yi.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/yi.xml
- */
 yi{
     Currencies{
         BZD{

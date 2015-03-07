@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/sr.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/sr.xml
- */
 sr{
     Currencies{
         ADP{

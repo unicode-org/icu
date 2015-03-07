@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/kkj.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/kkj.xml
- */
 kkj{
     Currencies{
         XAF{

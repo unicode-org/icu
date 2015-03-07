@@ -6,9 +6,6 @@
 // * Source File: <path>/common/main/se.xml
 // *
 // ***************************************************************************
-/**
- * ICU <specials> source: <path>/common/main/se.xml
- */
 se{
     Countries{
         001{"máilbmi"}
