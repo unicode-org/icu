@@ -5206,7 +5206,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 // Using 0 is safe, since any change in titling will not have first initial character 
                 break; 
             } 
-            StringBuilder result = new StringBuilder().append(str.substring(0, i)); 
+            StringBuilder result = new StringBuilder(str.length()).append(str, 0, i); 
             int startOfSuffix; 
 
             // handle dutch, but check first for 'i', since that's faster. Should be built into UCaseProps. 
@@ -5220,7 +5220,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             } 
 
             // add the remainder, and return 
-            return result.append(str.substring(startOfSuffix, str.length())).toString(); 
+            return result.append(str, startOfSuffix, str.length()).toString(); 
         } 
         return str; // no change 
     } 

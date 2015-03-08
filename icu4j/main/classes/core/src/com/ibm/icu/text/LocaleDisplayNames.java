@@ -17,6 +17,7 @@ import java.util.Set;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.DisplayContext.Type;
+import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -266,6 +267,8 @@ public abstract class LocaleDisplayNames {
      * If both are to show up in the UI, then it should be the one used for the primary sort order. 
      * @param localeSet a list of locales to present in a UI list. The casing uses the settings in the LocaleDisplayNames instance. 
      * @return an ordered list of UiListItems. 
+     * @throws IllformedLocaleException if any of the locales in localeSet are malformed.
+     * @draft ICU 55
      */ 
     public List<UiListItem> getUiList(Set<ULocale> localeSet, boolean inSelf, Comparator<Object> collator) { 
         return getUiListCompareWholeItems(localeSet, UiListItem.getComparator(collator, inSelf)); 
@@ -277,27 +280,34 @@ public abstract class LocaleDisplayNames {
      * @param comparator how to sort the UiListItems in the result. 
      * @param localeSet a list of locales to present in a UI list. The casing uses the settings in the LocaleDisplayNames instance. 
      * @return an ordered list of UiListItems. 
+     * @throws IllformedLocaleException if any of the locales in localeSet are malformed.
+     * @draft ICU 55
      */ 
     public abstract List<UiListItem> getUiListCompareWholeItems(Set<ULocale> localeSet, Comparator<UiListItem> comparator);
 
     /** 
      * Struct-like class used to return information for constructing a UI list, each corresponding to a locale. 
+     * @draft ICU 55
      */ 
     public static class UiListItem { 
         /** 
          * Returns the minimized locale for an input locale, such as sr-Cyrl → sr 
+         * @draft ICU 55
          */ 
         public final ULocale minimized; 
         /** 
          * Returns the modified locale for an input locale, such as sr → sr-Cyrl, where there is also an sr-Latn in the list 
+         * @draft ICU 55
          */ 
         public final ULocale modified; 
         /** 
          * Returns the name of the modified locale in the display locale, such as "Englisch (VS)" (for 'en-US', where the display locale is 'de'). 
+         * @draft ICU 55
          */ 
         public final String nameInDisplayLocale; 
         /** 
          * Returns the name of the modified locale in itself, such as "English (US)" (for 'en-US'). 
+         * @draft ICU 55
          */ 
         public final String nameInSelf; 
 
@@ -307,6 +317,7 @@ public abstract class LocaleDisplayNames {
          * @param modified modified for an input locale 
          * @param nameInDisplayLocale name of the modified locale in the display locale 
          * @param nameInSelf name of the modified locale in itself 
+         * @draft ICU 55
          */ 
         public UiListItem(ULocale minimized, ULocale modified, String nameInDisplayLocale, String nameInSelf) { 
             this.minimized = minimized; 
@@ -340,6 +351,7 @@ public abstract class LocaleDisplayNames {
          * @param inSelf if true, compares the nameInSelf, otherwise the nameInDisplayLocale
          * @param comparator (meant for strings, but because Java Collator doesn't have &lt;String>...)
          * @return UiListItem comparator
+         * @draft ICU 55
          */
         public static Comparator<UiListItem> getComparator(Comparator<Object> comparator, boolean inSelf) {
             return new UiListItemComparator(comparator, inSelf);
