@@ -497,7 +497,9 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
         List<UiListItem> result = new ArrayList<UiListItem>();
         Map<ULocale,Set<ULocale>> baseToLocales = new HashMap<ULocale,Set<ULocale>>();
+        ULocale.Builder builder = new ULocale.Builder();
         for (ULocale locOriginal : localeSet) {
+            builder.setLocale(locOriginal); // verify well-formed. We do this here so that we consistently throw exception
             ULocale loc = ULocale.addLikelySubtags(locOriginal);
             ULocale base = new ULocale(loc.getLanguage());
             Set<ULocale> locales = baseToLocales.get(base);
@@ -526,7 +528,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                 boolean hasScripts = scripts.size() > 1;
                 boolean hasRegions = regions.size() > 1;
                 for (ULocale locale : values) {
-                    ULocale.Builder modified = new ULocale.Builder().setLocale(locale);
+                    ULocale.Builder modified = builder.setLocale(locale);
                     if (!hasScripts) {
                         modified.setScript("");
                     }
@@ -541,12 +543,6 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         return result;
     }
 
-    /**
-     * @param minimizeSubtags
-     * @param locale2
-     * @param breakIterator
-     * @return
-     */
     private UiListItem newRow(ULocale modified, DisplayContext capContext) {
         ULocale minimized = ULocale.minimizeSubtags(modified, ULocale.Minimize.FAVOR_SCRIPT); 
         String tempName = modified.getDisplayName(locale);
@@ -556,18 +552,6 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         String nameInSelf = capContext == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU ? UCharacter.toTitleFirst(modified, tempName) : tempName;
         return new UiListItem(minimized, modified, nameInDisplayLocale, nameInSelf);
     }
-
-    //    private static class MyComparator implements Comparator<UiListItem> {
-    //        private final Comparator<Object> collator;
-    //        MyComparator(Comparator<Object> collator) {
-    //            this.collator = collator;
-    //        }
-    //        public int compare(UiListItem o1, UiListItem o2) {
-    //            int result = collator.compare(o1.nameInDisplayLocale, o2.nameInDisplayLocale);
-    //            return result != 0 ? result : o1.minimized.compareTo(o2.minimized); // just in case
-    //        }
-    //    }
-    //
 
     public static class DataTable {
         ULocale getLocale() {

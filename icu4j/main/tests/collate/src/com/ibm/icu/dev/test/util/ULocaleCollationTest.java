@@ -13,6 +13,8 @@ package com.ibm.icu.dev.test.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -24,6 +26,7 @@ import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.DisplayContext.Type;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.UiListItem;
+import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
 
 public class ULocaleCollationTest extends TestFmwk {
@@ -316,4 +319,19 @@ public class ULocaleCollationTest extends TestFmwk {
         } 
     } 
 
+    public void TestIllformedLocale() {
+        ULocale french = ULocale.FRENCH; 
+        Collator collator = Collator.getInstance(french); 
+        LocaleDisplayNames names = LocaleDisplayNames.getInstance(french,  
+                DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU); 
+        for (String malformed : Arrays.asList("en-a", "$", "ü--a", "en--US")) {
+            try {
+                Set<ULocale> supported = Collections.singleton(new ULocale(malformed));
+                names.getUiList(supported, false, collator);
+                assertNull("Failed to detect bogus locale «" + malformed + "»", supported);
+            } catch (IllformedLocaleException e) {
+                logln("Successfully detected ill-formed locale «" + malformed + "»:" + e.getMessage());
+            } 
+        }
+    }
 }
