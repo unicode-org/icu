@@ -1,5 +1,5 @@
 # -*- icu-dependencies -*-
-# Copyright (C) 2011-2014, International Business Machines
+# Copyright (C) 2011-2015, International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # file name: dependencies.txt
@@ -506,7 +506,7 @@ group: service_registration
     hashtable uvector
 
 group: listformatter
-    listformatter.o
+    listformatter.o ulistformatter.o
   deps
     resourcebundle simplepatternformatter
 
@@ -873,7 +873,7 @@ group: formattable_cnv
     formattable unistr_cnv conversion
 
 group: format
-    format.o fphdlimp.o fpositer.o
+    format.o fphdlimp.o fpositer.o ufieldpositer.o
   deps
     resourcebundle parsepos uvector32
 
