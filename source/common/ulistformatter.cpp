@@ -12,6 +12,7 @@
 #include "unicode/ulistformatter.h"
 #include "unicode/listformatter.h"
 #include "unicode/localpointer.h"
+#include "cmemory.h"
 
 U_NAMESPACE_USE
 
@@ -49,22 +50,25 @@ ulistfmt_format(const UListFormatter* listfmt,
     if (U_FAILURE(*status)) {
         return -1;
     }
-    if (strings == NULL || stringCount < 1 || ((result == NULL)? resultCapacity != 0 : resultCapacity < 0)) {
+    if (stringCount < 0 || (strings == NULL && stringCount > 0) || ((result == NULL)? resultCapacity != 0 : resultCapacity < 0)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
-    UnicodeString* ustrings = new UnicodeString[stringCount];
-    if (ustrings == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return -1;
+    UnicodeString ustringsStackBuf[4];
+    UnicodeString* ustrings = ustringsStackBuf;
+    if (stringCount > UPRV_LENGTHOF(ustringsStackBuf)) {
+        ustrings = new UnicodeString[stringCount];
+        if (ustrings == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return -1;
+        }
     }
-    int32_t stringIndex;
     if (stringLengths == NULL) {
-        for (stringIndex = 0; stringIndex < stringCount; stringIndex++) {
+        for (int32_t stringIndex = 0; stringIndex < stringCount; stringIndex++) {
             ustrings[stringIndex].setTo(TRUE, strings[stringIndex], -1);
         }
     } else {
-        for (stringIndex = 0; stringIndex < stringCount; stringIndex++) {
+        for (int32_t stringIndex = 0; stringIndex < stringCount; stringIndex++) {
             ustrings[stringIndex].setTo(stringLengths[stringIndex] < 0, strings[stringIndex], stringLengths[stringIndex]);
         }
     }
@@ -75,9 +79,8 @@ ulistfmt_format(const UListFormatter* listfmt,
         res.setTo(result, 0, resultCapacity);
     }
     ((const ListFormatter*)listfmt)->format( ustrings, stringCount, res, *status );
-    delete[] ustrings;
-    if (U_FAILURE(*status)) {
-        return -1;
+    if (ustrings != ustringsStackBuf) {
+        delete[] ustrings;
     }
     return res.extract(result, resultCapacity, *status);
 }
