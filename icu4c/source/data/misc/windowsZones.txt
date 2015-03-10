@@ -206,6 +206,10 @@ windowsZones:table(nofallback){
             001{"America/Sao_Paulo"}
             BR{"America/Sao_Paulo"}
         }
+        "Eastern Standard Time (Mexico)"{
+            001{"America/Cancun"}
+            MX{"America/Cancun"}
+        }
         "Eastern Standard Time"{
             001{"America/New_York"}
             BS{"America/Nassau"}
@@ -468,7 +472,6 @@ windowsZones:table(nofallback){
             EC{"America/Guayaquil"}
             JM{"America/Jamaica"}
             KY{"America/Cayman"}
-            MX{"America/Cancun"}
             PA{"America/Panama"}
             PE{"America/Lima"}
             ZZ{"Etc/GMT+5"}
