@@ -531,7 +531,7 @@ public:
      *                  function chaining. (See User Guide for details.)
      * @return *this
      * @see getMaxVariable
-     * @draft ICU 53
+     * @stable ICU 53
      */
     virtual Collator &setMaxVariable(UColReorderCode group, UErrorCode &errorCode);
 
@@ -539,7 +539,7 @@ public:
      * Returns the maximum reordering group whose characters are affected by UCOL_ALTERNATE_HANDLING.
      * @return the maximum variable reordering group.
      * @see setMaxVariable
-     * @draft ICU 53
+     * @stable ICU 53
      */
     virtual UColReorderCode getMaxVariable() const;
 
