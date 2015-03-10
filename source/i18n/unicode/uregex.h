@@ -607,6 +607,7 @@ U_STABLE int32_t U_EXPORT2
 uregex_groupCount(URegularExpression *regexp,
                   UErrorCode         *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * Get the group number corresponding to a named capture group.
   * The returned number can be used with any function that access
@@ -652,7 +653,7 @@ uregex_groupNumberFromCName(URegularExpression *regexp,
                             const char         *groupName,
                             int32_t             nameLength,
                             UErrorCode          *status);
-
+#endif  /* U_HIDE_DRAFT_API */
 
 /** Extract the string for the specified matching expression or subexpression.
   * Group #0 is the complete string of matched text.

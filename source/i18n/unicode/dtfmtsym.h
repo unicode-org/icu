@@ -438,7 +438,9 @@ public:
      * @draft ICU 55
      */
     void setTimeSeparatorString(const UnicodeString& newTimeSeparator);
+#endif  /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Gets cyclic year name strings if the calendar has them, by width and context.
      * For example: "jia-zi", "yi-chou", etc.

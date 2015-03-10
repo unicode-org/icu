@@ -278,14 +278,12 @@ typedef enum USpoofChecks {
          * @stable ICU 51
          */
         USPOOF_ASCII = 0x10000000,
-#ifndef U_HIDE_DRAFT_API
         /**
           * All characters in each identifier must be from a single script.
           *
-          * @draft ICU 53
+          * @stable ICU 53
           */
         USPOOF_SINGLE_SCRIPT_RESTRICTIVE = 0x20000000,
-#endif /* U_HIDE_DRAFT_API */
         /**
          * All characters in each identifier must be from a single script, or from the combinations: Latin + Han +
          * Hiragana + Katakana; Latin + Han + Bopomofo; or Latin + Han + Hangul. Note that this level will satisfy the
@@ -312,14 +310,12 @@ typedef enum USpoofChecks {
          * @stable ICU 51
          */
         USPOOF_UNRESTRICTIVE = 0x60000000,
-#ifndef U_HIDE_DRAFT_API
         /**
           * Mask for selecting the Restriction Level bits from the return value of uspoof_check().
           * 
-          * @draft ICU 53
+          * @stable ICU 53
           */
          USPOOF_RESTRICTION_LEVEL_MASK = 0x7F000000 
-#endif /* U_HIDE_DRAFT_API */
     } URestrictionLevel;
 
 /**
