@@ -67,7 +67,7 @@ public class MeasureUnitTest extends TestFmwk {
         }
     }
     
-    private static final String[] DRAFT_VERSIONS = {"53", "54"};
+    private static final String[] DRAFT_VERSIONS = {"54"};
     
     private static final HashSet<String> DRAFT_VERSION_SET = new HashSet<String>();
     
