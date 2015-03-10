@@ -1200,8 +1200,6 @@ ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value,
 U_STABLE UColAttributeValue  U_EXPORT2 
 ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status);
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Sets the variable top to the top of the specified reordering group.
  * The variable top determines the highest-sorting character
@@ -1216,9 +1214,9 @@ ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status)
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
  * @see ucol_getMaxVariable
- * @draft ICU 53
+ * @stable ICU 53
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucol_setMaxVariable(UCollator *coll, UColReorderCode group, UErrorCode *pErrorCode);
 
 /**
@@ -1226,12 +1224,10 @@ ucol_setMaxVariable(UCollator *coll, UColReorderCode group, UErrorCode *pErrorCo
  * @param coll the collator
  * @return the maximum variable reordering group.
  * @see ucol_setMaxVariable
- * @draft ICU 53
+ * @stable ICU 53
  */
-U_DRAFT UColReorderCode U_EXPORT2
+U_STABLE UColReorderCode U_EXPORT2
 ucol_getMaxVariable(const UCollator *coll);
-
-#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DEPRECATED_API
 /**
