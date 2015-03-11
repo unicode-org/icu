@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014, International Business Machines Corporation and
+ * Copyright (C) 2014-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -11,8 +11,7 @@ package com.ibm.icu.util;
  * Some ICU APIs do not throw the standard exception but instead wrap it
  * into this unchecked version.
  *
- * @draft ICU 53
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 53
  */
 public class ICUCloneNotSupportedException extends ICUException {
     private static final long serialVersionUID = -4824446458488194964L;
@@ -20,8 +19,7 @@ public class ICUCloneNotSupportedException extends ICUException {
     /**
      * Default constructor.
      *
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public ICUCloneNotSupportedException() {
     }
@@ -30,8 +28,7 @@ public class ICUCloneNotSupportedException extends ICUException {
      * Constructor.
      *
      * @param message exception message string
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public ICUCloneNotSupportedException(String message) {
         super(message);
@@ -41,8 +38,7 @@ public class ICUCloneNotSupportedException extends ICUException {
      * Constructor.
      *
      * @param cause original exception (normally a {@link CloneNotSupportedException})
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public ICUCloneNotSupportedException(Throwable cause) {
         super(cause);
@@ -53,8 +49,7 @@ public class ICUCloneNotSupportedException extends ICUException {
      *
      * @param message exception message string
      * @param cause original exception (normally a {@link CloneNotSupportedException})
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public ICUCloneNotSupportedException(String message, Throwable cause) {
         super(message, cause);

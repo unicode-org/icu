@@ -875,8 +875,7 @@ public class DateIntervalFormat extends UFormat {
     /**
      * Get the TimeZone
      * @return A copy of the TimeZone associated with this date interval formatter.
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public TimeZone getTimeZone()
     {
@@ -894,8 +893,7 @@ public class DateIntervalFormat extends UFormat {
     /**
      * Set the TimeZone for the calendar used by this DateIntervalFormat object.
      * @param zone The new TimeZone, will be cloned for use by this DateIntervalFormat.
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public void setTimeZone(TimeZone zone)
     {

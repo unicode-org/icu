@@ -148,22 +148,19 @@ public class SpoofChecker {
 
     /**
      * Constants from UAX 31 for use in setRestrictionLevel.
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public enum RestrictionLevel {
         /**
          * Only ASCII characters: U+0000..U+007F
          *
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         ASCII,
         /**
          * All characters in each identifier must be from a single script.
          * 
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         SINGLE_SCRIPT_RESTRICTIVE,
          /**
@@ -171,30 +168,26 @@ public class SpoofChecker {
          * Hiragana + Katakana; Latin + Han + Bopomofo; or Latin + Han + Hangul. Note that this level will satisfy the
          * vast majority of Latin-script users; also that TR36 has ASCII instead of Latin.
          *
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
-       HIGHLY_RESTRICTIVE,
+        HIGHLY_RESTRICTIVE,
         /**
          * Allow Latin with other scripts except Cyrillic, Greek, Cherokee Otherwise, the same as Highly Restrictive
          *
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         MODERATELY_RESTRICTIVE,
         /**
          * Allow arbitrary mixtures of scripts, such as Ωmega, Teχ, HλLF-LIFE, Toys-Я-Us. Otherwise, the same as
          * Moderately Restrictive
          *
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         MINIMALLY_RESTRICTIVE,
         /**
          * Any valid identifiers, including characters outside of the Identifier Profile, such as I♥NY.org
          *
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         UNRESTRICTIVE
     }

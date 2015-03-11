@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014, International Business Machines Corporation and
+ * Copyright (C) 2014-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -9,8 +9,7 @@ package com.ibm.icu.util;
 /**
  * Base class for unchecked, ICU-specific exceptions.
  *
- * @draft ICU 53
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 53
  */
 public class ICUException extends RuntimeException {
     private static final long serialVersionUID = -3067399656455755650L;
@@ -18,8 +17,7 @@ public class ICUException extends RuntimeException {
     /**
      * Default constructor.
      *
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public ICUException() {
     }
@@ -28,8 +26,7 @@ public class ICUException extends RuntimeException {
      * Constructor.
      *
      * @param message exception message string
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public ICUException(String message) {
         super(message);
@@ -39,8 +36,7 @@ public class ICUException extends RuntimeException {
      * Constructor.
      *
      * @param cause original exception
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public ICUException(Throwable cause) {
         super(cause);
@@ -51,8 +47,7 @@ public class ICUException extends RuntimeException {
      *
      * @param message exception message string
      * @param cause original exception
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public ICUException(String message, Throwable cause) {
         super(message, cause);

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -732,15 +732,13 @@ public abstract class SearchIterator
      * 
      * @see #setElementComparisonType(ElementComparisonType)
      * @see #getElementComparisonType()
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public enum ElementComparisonType {
         /**
          * Standard collation element comparison at the specified collator strength.
          * 
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         STANDARD_ELEMENT_COMPARISON,
         /**
@@ -755,8 +753,7 @@ public abstract class SearchIterator
          * diacritic in the pattern will only match an e with the same diacritic in
          * the searched text.
          * 
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         PATTERN_BASE_WEIGHT_IS_WILDCARD,
 
@@ -772,8 +769,7 @@ public abstract class SearchIterator
          * diacritic in the pattern will only match an e with the same diacritic or a
          * plain e in the searched text.
          * 
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         ANY_BASE_WEIGHT_IS_WILDCARD
     }
@@ -785,8 +781,7 @@ public abstract class SearchIterator
      * 
      * @see ElementComparisonType
      * @see #getElementComparisonType()
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public void setElementComparisonType(ElementComparisonType type) {
         search_.elementComparisonType_ = type;
@@ -797,8 +792,7 @@ public abstract class SearchIterator
      * 
      * @see ElementComparisonType
      * @see #setElementComparisonType(ElementComparisonType)
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public ElementComparisonType getElementComparisonType() {
         return search_.elementComparisonType_;

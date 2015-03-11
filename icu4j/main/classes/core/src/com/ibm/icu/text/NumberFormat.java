@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -212,8 +212,7 @@ public abstract class NumberFormat extends UFormat {
      * {@icu} Constant to specify currency style of format which uses currency symbol
      * to represent currency for accounting, for example: "($3.00), instead of
      * "-$3.00" ({@link #CURRENCYSTYLE}).
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public static final int ACCOUNTINGCURRENCYSTYLE = 7;
     /**
@@ -520,8 +519,7 @@ public abstract class NumberFormat extends UFormat {
      * such as CAPITALIZATION_FOR_STANDALONE. 
      * 
      * @param context The DisplayContext value to set. 
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public void setContext(DisplayContext context) {
         if (context.type() == DisplayContext.Type.CAPITALIZATION) {
@@ -535,8 +533,7 @@ public abstract class NumberFormat extends UFormat {
      * 
      * @param type the DisplayContext.Type whose value to return
      * @return the current DisplayContext setting for the specified type
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public DisplayContext getContext(DisplayContext.Type type) {
         return (type == DisplayContext.Type.CAPITALIZATION && capitalizationSetting != null)?
