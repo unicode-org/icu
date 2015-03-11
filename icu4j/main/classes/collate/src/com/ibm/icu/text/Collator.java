@@ -1303,8 +1303,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      *              or Collator.ReorderCodes.DEFAULT to restore the default max variable group
      * @return this
      * @see #getMaxVariable
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public Collator setMaxVariable(int group) {
         throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
@@ -1317,8 +1316,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * <p>The base class implementation returns Collator.ReorderCodes.PUNCTUATION.
      * @return the maximum variable reordering group.
      * @see #setMaxVariable
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public int getMaxVariable() {
         return Collator.ReorderCodes.PUNCTUATION;

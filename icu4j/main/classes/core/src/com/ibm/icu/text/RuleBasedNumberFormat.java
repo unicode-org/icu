@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1423,8 +1423,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * NumberFormat.
      * 
      * @param context The DisplayContext value to set. 
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     // Here we override the NumberFormat implementation in order to
     // lazily initialize relevant items 

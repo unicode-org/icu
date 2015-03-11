@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -382,72 +382,62 @@ public abstract class BreakIterator implements Cloneable
     /** 
      * Tag value for "words" that do not fit into any of other categories. 
      * Includes spaces and most punctuation. 
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_NONE           = 0;
 
     /**
      * Upper bound for tags for uncategorized words. 
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_NONE_LIMIT     = 100;
 
     /**
      * Tag value for words that appear to be numbers, lower limit. 
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_NUMBER         = 100;
 
     /** 
      * Tag value for words that appear to be numbers, upper limit.
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_NUMBER_LIMIT   = 200;
 
     /** 
      * Tag value for words that contain letters, excluding
      * hiragana, katakana or ideographic characters, lower limit. 
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_LETTER         = 200;
 
     /** 
      * Tag value for words containing letters, upper limit 
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_LETTER_LIMIT   = 300;
 
     /** 
      * Tag value for words containing kana characters, lower limit
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_KANA           = 300;
 
     /** 
      * Tag value for words containing kana characters, upper limit
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_KANA_LIMIT     = 400;
 
     /**
      * Tag value for words containing ideographic characters, lower limit
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_IDEO           = 400;
 
     /**
      * Tag value for words containing ideographic characters, upper limit
-     * @draft ICU 53
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 53
      */
     public static final int WORD_IDEO_LIMIT     = 500;
 

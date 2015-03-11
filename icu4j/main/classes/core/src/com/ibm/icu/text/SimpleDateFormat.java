@@ -1259,8 +1259,7 @@ public class SimpleDateFormat extends DateFormat {
      * DateFormat.
      * 
      * @param context The DisplayContext value to set. 
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     // Here we override the DateFormat implementation in order to lazily initialize relevant items
     public void setContext(DisplayContext context) {

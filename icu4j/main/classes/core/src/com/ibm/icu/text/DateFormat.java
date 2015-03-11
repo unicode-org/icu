@@ -467,21 +467,18 @@ public abstract class DateFormat extends UFormat {
     /**
      * boolean attributes
      * 
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public enum BooleanAttribute { 
         /** 
          * indicates whitespace tolerance. Also included is trailing dot tolerance. 
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         PARSE_ALLOW_WHITESPACE,
         /** 
          * indicates tolerance of numeric data when String data may be assumed. 
          * e.g. YEAR_NAME_FIELD 
-         * @draft ICU 53
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 53
          */
         PARSE_ALLOW_NUMERIC, 
         /** 
@@ -1556,8 +1553,7 @@ public abstract class DateFormat extends UFormat {
      * inputs must match this object's format more closely.
      * @param lenient when true, Calendar parsing is lenient 
      * @see com.ibm.icu.util.Calendar#setLenient 
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */ 
     public void setCalendarLenient(boolean lenient)
     {
@@ -1567,8 +1563,7 @@ public abstract class DateFormat extends UFormat {
     
     /** 
      * Returns whether date/time parsing in the encapsulated Calendar object is lenient. 
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */ 
     public boolean isCalendarLenient()
     {
@@ -1580,8 +1575,7 @@ public abstract class DateFormat extends UFormat {
      * boolean attributes. 
      * 
      * @see BooleanAttribute
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public DateFormat setBooleanAttribute(BooleanAttribute key, boolean value) 
     {
@@ -1603,8 +1597,7 @@ public abstract class DateFormat extends UFormat {
      * if attribute is missing false is returned.
      * 
      * @see BooleanAttribute
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public boolean getBooleanAttribute(BooleanAttribute key) 
     {
@@ -1617,8 +1610,7 @@ public abstract class DateFormat extends UFormat {
      * such as CAPITALIZATION_FOR_STANDALONE. 
      * 
      * @param context The DisplayContext value to set. 
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public void setContext(DisplayContext context) {
         if (context.type() == DisplayContext.Type.CAPITALIZATION) {
@@ -1632,8 +1624,7 @@ public abstract class DateFormat extends UFormat {
      * 
      * @param type the DisplayContext.Type whose value to return
      * @return the current DisplayContext setting for the specified type
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public DisplayContext getContext(DisplayContext.Type type) {
         return (type == DisplayContext.Type.CAPITALIZATION && capitalizationSetting != null)?

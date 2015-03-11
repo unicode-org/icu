@@ -810,8 +810,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * than the specified ULocale.
      * @throws NullPointerException if <code>other</code> is null.
      * 
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     public int compareTo(ULocale other) {
         if (this == other) {

@@ -739,8 +739,7 @@ public final class RuleBasedCollator extends Collator {
      *              or Collator.ReorderCodes.DEFAULT to restore the default max variable group
      * @return this
      * @see #getMaxVariable
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     @Override
     public RuleBasedCollator setMaxVariable(int group) {
@@ -781,8 +780,7 @@ public final class RuleBasedCollator extends Collator {
      * the alternate handling behavior.
      * @return the maximum variable reordering group.
      * @see #setMaxVariable
-     * @draft ICU 53
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 53
      */
     @Override
     public int getMaxVariable() {
