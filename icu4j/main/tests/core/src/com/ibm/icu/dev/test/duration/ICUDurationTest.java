@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
 
-import javax.xml.datatype.DatatypeConstants.Field;
 import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeConstants.Field;
 import javax.xml.datatype.Duration;
 
 import com.ibm.icu.dev.test.TestFmwk;

@@ -2496,8 +2496,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * 
      * "sr_Cyrl_RS" minimizes to "sr" 
      * 
-     * "zh_Hant_TW" minimizes to "zh_TW" if fieldToFavor == {@link Minimize.FAVOR_REGION} 
-     * "zh_Hant_TW" minimizes to "zh_Hant" if fieldToFavor == {@link Minimize.FAVOR_SCRIPT} 
+     * "zh_Hant_TW" minimizes to "zh_TW" if fieldToFavor == {@link Minimize#FAVOR_REGION} 
+     * "zh_Hant_TW" minimizes to "zh_Hant" if fieldToFavor == {@link Minimize#FAVOR_SCRIPT} 
      * </pre> 
      * The fieldToFavor only has an effect if either the region or the script could be suppressed, but not both. 
      * @param loc The ULocale to minimize 
