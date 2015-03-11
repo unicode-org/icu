@@ -2465,13 +2465,23 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /** 
      * Options for minimizeSubtags. 
      * @internal
-     * @deprecated ICU internal only
+     * @deprecated This API is ICU internal only.
      */ 
     @Deprecated
     public enum Minimize { 
-        /** Favor including the script, when either the region <b>or</b> the script could be suppressed, but not both.*/  
+        /** 
+         * Favor including the script, when either the region <b>or</b> the script could be suppressed, but not both.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         FAVOR_SCRIPT,  
-        /** Favor including the region, when either the region <b>or</b> the script could be suppressed, but not both.*/  
+        /**
+         * Favor including the region, when either the region <b>or</b> the script could be suppressed, but not both.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         FAVOR_REGION 
     } 
 
@@ -2503,7 +2513,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @param fieldToFavor Indicate which should be preferred, when either the region <b>or</b> the script could be suppressed, but not both. 
      * @return The minimized ULocale instance. 
      * @internal
-     * @deprecated ICU internal only
+     * @deprecated This API is ICU internal only.
      */ 
     @Deprecated
     public static ULocale minimizeSubtags(ULocale loc, Minimize fieldToFavor) { 

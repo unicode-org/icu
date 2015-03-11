@@ -672,6 +672,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static PatternInfo genPatternInfo(String intervalPattern, 
                                       boolean laterDateFirst) {
         int splitPoint = splitPatternInto2Part(intervalPattern);
