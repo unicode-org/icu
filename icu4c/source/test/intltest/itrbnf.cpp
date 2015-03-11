@@ -362,6 +362,12 @@ void IntlTestRBNF::TestMultiplePluralRules() {
     Formattable result;
     UnicodeString resultStr;
     FieldPosition pos;
+
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create formatter - %s", u_errorName(status));
+        return;
+    }
+
     formatter.parse(formatter.format(1000.0, resultStr, pos, status), result, status);
     if (1000 != result.getLong() || resultStr != UNICODE_STRING_SIMPLE("one thousand")) {
         errln("RuleBasedNumberFormat did not return the correct value. Got: %d", result.getLong());

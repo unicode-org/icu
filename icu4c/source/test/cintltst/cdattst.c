@@ -1713,7 +1713,7 @@ static void TestParseErrorReturnValue(void) {
     UCalendar* cal;
 
     df = udat_open(UDAT_DEFAULT, UDAT_DEFAULT, NULL, NULL, -1, NULL, -1, &status);
-    if (!assertSuccess("udat_open()", &status)) {
+    if (!assertSuccessCheck("udat_open()", &status, TRUE)) {
         return;
     }
 

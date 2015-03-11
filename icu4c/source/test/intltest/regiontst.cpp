@@ -667,7 +667,7 @@ void RegionTest::TestAvailableTerritories() {
     UErrorCode status = U_ZERO_ERROR;
     StringEnumeration *availableTerritories = Region::getAvailable(URGN_TERRITORY, status);
     if (U_FAILURE(status)) {
-        errln("Region::getAvailable(URGN_TERRITORY,status) failed: %s", u_errorName(status));
+        dataerrln("Region::getAvailable(URGN_TERRITORY,status) failed: %s", u_errorName(status));
         return;
     }
     const Region *world = Region::getInstance("001",status);
