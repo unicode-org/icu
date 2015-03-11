@@ -7777,6 +7777,10 @@ void NumberFormatTest::TestDoubleLimit11439() {
 void NumberFormatTest::TestFastPathConsistent11524() {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createInstance("en", status);
+    if (U_FAILURE(status) || fmt == NULL) {
+        dataerrln("Failed call to NumberFormat::createInstance() - %s", u_errorName(status));
+        return;
+    }
     fmt->setMaximumIntegerDigits(INT32_MIN);
     UnicodeString appendTo;
     assertEquals("", "0", fmt->format(123, appendTo));
