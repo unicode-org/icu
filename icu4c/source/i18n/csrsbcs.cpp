@@ -28,6 +28,10 @@ NGramParser::NGramParser(const int32_t *theNgramList, const uint8_t *theCharMap)
     ngramCount = hitCount = 0;
 }
 
+NGramParser::~NGramParser()
+{
+}
+
 /*
  * Binary search for value in table, which must have exactly 64 entries.
  */
