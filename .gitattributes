@@ -1,5 +1,5 @@
 * text=auto !eol
-icu4c/APIChangeReport.html svneol=native#text/html
+icu4c/APIChangeReport.html svneol=native#text/html%3Bcharset%3Dutf-8
 icu4c/icu4c.css -text svneol=unset#text/css
 icu4c/license.html svneol=native#text/html%3Bcharset%3Dutf-8
 icu4c/readme.html svneol=native#text/html
@@ -8,8 +8,6 @@ icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
-icu4c/source/common/ulistformatter.cpp -text
-icu4c/source/common/unicode/ulistformatter.h -text
 icu4c/source/data/brkitr/burmesedict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/char.txt svneol=native#text/plain
 icu4c/source/data/brkitr/cjdict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -28,12 +26,12 @@ icu4c/source/data/brkitr/laodict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/line.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_fi.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_ja.txt svneol=native#text/plain
-icu4c/source/data/brkitr/line_loose.txt -text
-icu4c/source/data/brkitr/line_loose_cj.txt -text
-icu4c/source/data/brkitr/line_loose_fi.txt -text
-icu4c/source/data/brkitr/line_normal.txt -text
-icu4c/source/data/brkitr/line_normal_cj.txt -text
-icu4c/source/data/brkitr/line_normal_fi.txt -text
+icu4c/source/data/brkitr/line_loose.txt svneol=native#text/plain
+icu4c/source/data/brkitr/line_loose_cj.txt svneol=native#text/plain
+icu4c/source/data/brkitr/line_loose_fi.txt svneol=native#text/plain
+icu4c/source/data/brkitr/line_normal.txt svneol=native#text/plain
+icu4c/source/data/brkitr/line_normal_cj.txt svneol=native#text/plain
+icu4c/source/data/brkitr/line_normal_fi.txt svneol=native#text/plain
 icu4c/source/data/brkitr/pt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/root.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/ru.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -43,8 +41,8 @@ icu4c/source/data/brkitr/thaidict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/title.txt svneol=native#text/plain
 icu4c/source/data/brkitr/word.txt svneol=native#text/plain
 icu4c/source/data/brkitr/word_POSIX.txt svneol=native#text/plain
-icu4c/source/data/brkitr/zh.txt -text
-icu4c/source/data/brkitr/zh_Hant.txt -text
+icu4c/source/data/brkitr/zh.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/brkitr/zh_Hant.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/build.xml svneol=native#text/xml
 icu4c/source/data/cldr-icu-readme.txt svneol=native#text/plain
 icu4c/source/data/coll/af.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -63,7 +61,7 @@ icu4c/source/data/coll/cy.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/da.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/de.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/de_.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/coll/de_AT.txt svneol=native#text/plain
+icu4c/source/data/coll/de_AT.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/de__PHONEBOOK.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/dsb.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/dz.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -614,7 +612,7 @@ icu4c/source/data/curr/sr_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/supplementalData.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/sv.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/sw.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/curr/sw_CD.txt svneol=native#text/plain
+icu4c/source/data/curr/sw_CD.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/sw_UG.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/ta.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/ta_LK.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -753,7 +751,7 @@ icu4c/source/data/lang/en_BM.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/en_BS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/en_BW.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/en_BZ.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/lang/en_CA.txt svneol=native#text/plain
+icu4c/source/data/lang/en_CA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/en_CC.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/en_CK.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/en_CM.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1063,7 +1061,7 @@ icu4c/source/data/lang/sr_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/sv.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/sv_FI.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/sw.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/lang/sw_CD.txt svneol=native#text/plain
+icu4c/source/data/lang/sw_CD.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/ta.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/te.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/teo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1772,7 +1770,7 @@ icu4c/source/data/locales/sv_AX.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/sv_FI.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/sv_SE.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/sw.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/locales/sw_CD.txt svneol=native#text/plain
+icu4c/source/data/locales/sw_CD.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/sw_KE.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/sw_TZ.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/sw_UG.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -2011,7 +2009,7 @@ icu4c/source/data/region/en_BM.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/en_BS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/en_BW.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/en_BZ.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/region/en_CA.txt svneol=native#text/plain
+icu4c/source/data/region/en_CA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/en_CC.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/en_CK.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/en_CM.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -2320,7 +2318,7 @@ icu4c/source/data/region/sr_XK.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/sr_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/sv.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/sw.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/region/sw_CD.txt svneol=native#text/plain
+icu4c/source/data/region/sw_CD.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/ta.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/te.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/teo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -2687,7 +2685,7 @@ icu4c/source/data/unit/en_BM.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/unit/en_BS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/unit/en_BW.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/unit/en_BZ.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/unit/en_CA.txt svneol=native#text/plain
+icu4c/source/data/unit/en_CA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/unit/en_CC.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/unit/en_CK.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/unit/en_CM.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3067,8 +3065,6 @@ icu4c/source/data/xml/brkitr/ja.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/pt.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/root.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/ru.xml svneol=native#text/xml
-icu4c/source/data/xml/brkitr/zh.xml -text
-icu4c/source/data/xml/brkitr/zh_Hant.xml -text
 icu4c/source/data/xml/collation/root.xml svneol=native#text/xml
 icu4c/source/data/xml/main/root.xml svneol=native#text/xml
 icu4c/source/data/zone/af.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3534,8 +3530,6 @@ icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
 icu4c/source/i18n/regexcst.txt svneol=native#text/plain
-icu4c/source/i18n/ufieldpositer.cpp -text
-icu4c/source/i18n/unicode/ufieldpositer.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text
@@ -3629,7 +3623,6 @@ icu4c/source/stubdata/stubdata.vcxproj -text
 icu4c/source/stubdata/stubdata.vcxproj.filters -text
 icu4c/source/test/cintltst/cintltst.vcxproj -text
 icu4c/source/test/cintltst/cintltst.vcxproj.filters -text
-icu4c/source/test/cintltst/ulistfmttest.c -text
 icu4c/source/test/compat/readme.txt svneol=native#text/plain
 icu4c/source/test/depstest/dependencies.txt svneol=native#text/plain
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
