@@ -486,7 +486,9 @@ private:
     const RelativeDateTimeCacheData* fCache;
     const SharedNumberFormat *fNumberFormat;
     const SharedPluralRules *fPluralRules;
+#ifndef U_HIDE_DRAFT_API
     UDateRelativeDateTimeFormatterStyle fStyle;
+#endif  /* U_HIDE_DRAFT_API */
     UDisplayContext fContext;
     const SharedBreakIterator *fOptBreakIterator;
     Locale fLocale;
