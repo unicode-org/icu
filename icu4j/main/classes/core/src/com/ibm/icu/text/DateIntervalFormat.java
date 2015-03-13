@@ -11,8 +11,10 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUCache;
@@ -1724,5 +1726,16 @@ public class DateIntervalFormat extends UFormat {
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         initializePattern(isDateIntervalInfoDefault ? LOCAL_PATTERN_CACHE : null);
+    }
+    
+    /**
+     * Get the internal patterns for the skeleton
+     * @internal CLDR
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public Map<String, PatternInfo> getRawPatterns() {
+        // this is unmodifiable, so ok to return directly
+        return fIntervalPatterns;
     }
 }

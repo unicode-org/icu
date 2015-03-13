@@ -9,7 +9,6 @@ package com.ibm.icu.text;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -150,6 +149,12 @@ import com.ibm.icu.util.UResourceBundle;
  */
 
 public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>, Serializable {
+    
+    /** 
+     * Set to pattern for debugging, otherwise make null to strip dead code
+     */
+    private static final String DEBUG_SKELETON = null; // "yMMM";
+
     /* Save the interval pattern information.
      * Interval pattern consists of 2 single date patterns and the separator.
      * For example, interval pattern "MMM d - MMM d, yyyy" consists
@@ -249,6 +254,13 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
             }
             return hash;
         }
+
+        @Override
+        public String toString() {
+            // TODO Auto-generated method stub
+            return "{first=«" + fIntervalPatternFirstPart + "», second=«" + fIntervalPatternSecondPart + "», reversed:" + fFirstDateInPtnIsLaterDate + "}";
+
+        }
     }
 
     // Following is package protected since 
@@ -277,6 +289,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
 
     // DateIntervalInfo cache
     private final static ICUCache<String, DateIntervalInfo> DIICACHE = new SimpleCache<String, DateIntervalInfo>();
+
 
     // default interval pattern on the skeleton, {0} - {1}
     private String fFallbackIntervalPattern;
@@ -387,7 +400,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         // initialize to guard if there is no interval date format defined in 
         // resource files
         fFallbackIntervalPattern = "{0} \u2013 {1}";
-        HashSet<String> skeletonSet = new HashSet<String>();
+        HashMap<String,String> skeletonKeyMap = new HashMap<String,String>();
         try {
             // loop through all locales to get all available skeletons'
             // interval format
@@ -424,17 +437,18 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                 int size = itvDtPtnResource.getSize();
                 for ( int index = 0; index < size; ++index ) {
                     String skeleton = itvDtPtnResource.get(index).getKey();
-                    if ( skeletonSet.contains(skeleton) ) {
-                        continue;
-                    }
-                    skeletonSet.add(skeleton);
                     if ( skeleton.compareTo(FALLBACK_STRING) == 0 ) {
                         continue;
                     }
+                    String preexistingKey = skeletonKeyMap.get(skeleton);
                     ICUResourceBundle intervalPatterns = (ICUResourceBundle)itvDtPtnResource.get(skeleton);
                     int ptnNum = intervalPatterns.getSize();
                     for ( int ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex) {
                         String key = intervalPatterns.get(ptnIndex).getKey();
+                        if (key.equals(preexistingKey)) {
+                            continue;
+                        }
+                        skeletonKeyMap.put(skeleton,key);
                         String pattern = intervalPatterns.get(ptnIndex).getString();
     
                         int calendarField = -1; // initialize with an invalid value.
@@ -453,7 +467,16 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                         }
              
                         if ( calendarField != -1 ) {
-                            setIntervalPatternInternally(skeleton, key, pattern);
+                            if (DEBUG_SKELETON != null && DEBUG_SKELETON.equals(skeleton)) {
+                                Map<String, PatternInfo> oldValue = fIntervalPatterns.get(skeleton);
+                                setIntervalPatternInternally(skeleton, key, pattern);
+                                Map<String, PatternInfo> newValue = fIntervalPatterns.get(skeleton);
+                                if (!Utility.objectEquals(oldValue, newValue)) {
+                                    System.out.println("\n" + currentLocale + ", skeleton: " + skeleton + ", oldValue: " + oldValue + ", newValue: " + newValue);
+                                }
+                            } else {
+                                setIntervalPatternInternally(skeleton, key, pattern);
+                            }
                         }
                     }
                 }
@@ -1012,6 +1035,20 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         LinkedHashMap<String,Set<String>> result = new LinkedHashMap<String,Set<String>>();
         for (Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {
             result.put(entry.getKey(), new LinkedHashSet<String>(entry.getValue().keySet()));
+        }
+        return result;
+    }
+    
+    /**
+     * Get the internal patterns, with a deep clone for safety.
+     * @internal CLDR
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public Map<String, Map<String, PatternInfo>> getRawPatterns() {
+        LinkedHashMap<String, Map<String, PatternInfo>> result = new LinkedHashMap<String, Map<String, PatternInfo>>();
+        for (Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {
+            result.put(entry.getKey(), new LinkedHashMap<String, PatternInfo>(entry.getValue()));
         }
         return result;
     }
