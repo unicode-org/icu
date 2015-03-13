@@ -1486,7 +1486,13 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 String firstPart = patternInfo.getFirstPart();
                 String secondPart = patternInfo.getSecondPart();
                 if (!matches(dateFormatPattern, firstPart, secondPart)) {
-                    warnln("For skeleton " + skeleton + ": mismatch between date format «" + dateFormatPattern + "» and date interval format «" + firstPart + secondPart + "».");
+                    if (logKnownIssue("11585", "incompatible pattern between date format and date interval format")) {
+                        logln("For skeleton " + skeleton + "/locale " + locale + ": mismatch between date format «"
+                                + dateFormatPattern + "» and date interval format «" + firstPart + secondPart + "».");
+                    } else {
+                        errln("For skeleton " + skeleton + "/locale " + locale + ": mismatch between date format «"
+                                + dateFormatPattern + "» and date interval format «" + firstPart + secondPart + "».");
+                    }
                 }
                 
                 logln(locale
@@ -1500,7 +1506,6 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         + "»"
                         );
             }
-            System.out.println();
         }
     }
 

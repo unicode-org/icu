@@ -255,11 +255,15 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
             return hash;
         }
 
+        /**
+         * {@inheritDoc}
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         @Override
         public String toString() {
-            // TODO Auto-generated method stub
             return "{first=«" + fIntervalPatternFirstPart + "», second=«" + fIntervalPatternSecondPart + "», reversed:" + fFirstDateInPtnIsLaterDate + "}";
-
         }
     }
 
