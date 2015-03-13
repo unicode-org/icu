@@ -16,9 +16,6 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DateFormat;
