@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 55.0.1 (55m1)</title>
+    <title>ReadMe for ICU 55.1 (55rc)</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2015 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -17,38 +17,34 @@
 <!-- 
     classes to use with the "body" - 
         draft - if the release note is itself a draft (May be combined with the other two)
-        
-        
         rc  - if the release note is a release candidate
         milestone - if the release note is a milestone release
 -->
 
-  <!--<body class="rc">-->
-  <body class="milestone">
+  <body class="rc">
+  <!--<body class="milestone">-->
     <p class="only-draft"><b>Note:</b> This is a draft readme.</p>
 
     <h1>
-        <span class="only-draft">DRAFT</span>
-        International Components for Unicode<br/>
+      <span class="only-draft">DRAFT</span>
+      International Components for Unicode<br/>
+      <span class="only-rc">Release Candidate</span>
+      <span class="only-milestone">(Milestone Release)</span>
+      <abbr title="International Components for Unicode">ICU</abbr> 55.1 (55rc) ReadMe
+    </h1>
 
-        <span class="only-rc">Release Candidate</span>
-        <span class="only-milestone">(Milestone Release)</span>
-         <abbr title="International Components for Unicode">ICU</abbr> 55.0.1 (55M1) ReadMe
-     </h1>
-
-    
     <!-- Shouldn't need to comment/uncomment this paragraph, just change the body class -->
     <p class="note only-milestone">This is a development milestone release of ICU
-    This milestone is intended for those wishing to get an early look at new features and API changes.
-    It is not recommended for production use.</p>
+      This milestone is intended for those wishing to get an early look at new features and API changes.
+      It is not recommended for production use.</p>
 
     <!-- Shouldn't need to comment/uncomment this paragraph, just change the body class -->
     <p class="note only-rc">This is a release candidate version of ICU4C.
-     It is not recommended for production use.</p>
+      It is not recommended for production use.</p>
 
-    <p>Last updated: 2014-Dec-15<br />
-     Copyright &copy; 1997-2014 International Business Machines Corporation and
-    others. All Rights Reserved.</p>
+    <p>Last updated: 2015-Mar-13<br />
+      Copyright &copy; 1997-2015 International Business Machines Corporation and
+      others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
     <hr/>
 
@@ -242,7 +238,7 @@
     <!-- ICU 55 items -->
     <h3>Layout Engine: breaking API change</h3>
     <p>The LayoutEngine (already deprecated) has had the function
-      <tt>LEFontInstance::getFontTable(LETag, size_t &length)</tt>
+      <tt>LEFontInstance::getFontTable(LETag, size_t &amp;length)</tt>
       since ICU 52. Its implementation was optional. In ICU 55, this
       version
       of <tt>getFontTable</tt> has been made pure virtual, and the
@@ -254,9 +250,30 @@
       made secure. See <tt>LEFontInstance</tt> api docs for more detail.
     </p>
 
+    <h3>Deprecations in PluralRules (plurrule.h)</h3>
+    <p>The following PluralRules methods never had an implementation
+      but were inadvertently marked @stable; they have now been
+      deprecated. [#<a href="http://bugs.icu-project.org/trac/ticket/10759">10759</a>]</p>
+    <ul>
+      <li><tt>double icu::PluralRules::getUniqueKeywordValue(const UnicodeString&amp;)</tt></li>
+      <li><tt>int32_t icu::PluralRules::getAllKeywordValues(const UnicodeString&amp;, double*, int32_t, UErrorCode&amp;)</tt></li>
+    </ul>
+
+    <h3>Deprecate uidna.h functions for IDNA2003 support</h3>
+    <p>The IDNA2003 API has been deprecated; use the API for IDNA2008 / UTS #46 instead via
+      uidna_openUTS46() or class IDNA [#<a href="http://bugs.icu-project.org/trac/ticket/v">8477</a>].
+      This applies to the following:</p>
+    <ul>
+      <li><tt>enum  value UIDNA_ALLOW_UNASSIGNED</tt></li>
+      <li><tt>uidna_IDNToASCII</tt></li>
+      <li><tt>uidna_IDNToUnicode</tt></li>
+      <li><tt>uidna_compare</tt></li>
+      <li><tt>uidna_toASCII</tt></li>
+      <li><tt>uidna_toUnicode</tt></li>
+    </ul>
 
     <!-- ICU 54 items -->
-    <h3>Deprecation: Layout Engine</h3>
+    <h3>Deprecation (in ICU 54): Layout Engine</h3>
     <p>The LayoutEngine is now deprecated. Please
     see <a href='http://userguide.icu-project.org/layoutengine'>the
     User's Guide</a> for more details and migration recommendations.
@@ -270,12 +287,12 @@
       instead of ICU as the layout engine. See <a href="http://userguide.icu-project.org/layoutengine">
         the users' guide</a> for more information about how to build.
     </p>
-    <h3>Deprecation: Collation Short Strings</h3>
+    <h3>Deprecation (in ICU 54): Collation Short Strings</h3>
     <p>The collation short naming scheme and its API functions are deprecated. 
     Use ucol_open() with language tag collation keywords instead (see <a href="http://userguide.icu-project.org/collation/api">Collation API Details</a>). For example, <code>ucol_open("de-u-co-phonebk-ka-shifted", &amp;errorCode)</code>
      for German Phonebook order with "ignore punctuation" mode.</p>
 
-    <h3>Deprecation: UCOL_TAILORINGS_VERSION</h3>
+    <h3>Deprecation (in ICU 54): UCOL_TAILORINGS_VERSION</h3>
     <p>This was originally intended to be the version of collation tailorings,
     but that information is actually in the tailorings data and this
     constant has always been (and now will continue to be) 1.</p>
@@ -283,8 +300,8 @@
     <h3>Deprecation (in ICU 53): TimeUnitFormat</h3>
     <p>The TimeUnitFormat and its methods were actually deprecated in ICU 53 and the
     class as a whole was tagged as deprecated in that release, but the status tags for
-    the individual methods did not correctly indicate the deprecated status; now they do.
-    Use the MeasureFormat class and its methods instead.</p>
+    the individual methods did not correctly indicate the deprecated status; they
+    do as of ICU 54. Use the MeasureFormat class and its methods instead.</p>
 
     <!-- standing item -->
     <h3>Full release notes and the latest updates</h3>
@@ -1809,7 +1826,7 @@ gnumake</pre>
     </ul>
     <hr />
 
-    <p>Copyright &copy; 1997-2014 International Business Machines Corporation and
+    <p>Copyright &copy; 1997-2015 International Business Machines Corporation and
     others. All Rights Reserved.<br />
      IBM Globalization Center of Competency - San Jos&eacute;<br />
      4400 North First Street<br />
