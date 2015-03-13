@@ -11,10 +11,8 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUCache;
