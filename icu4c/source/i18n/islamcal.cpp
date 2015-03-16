@@ -386,7 +386,7 @@ int32_t IslamicCalendar::yearStart(int32_t year) const{
 * from the Hijri epoch, origin 0.
 *
 * @param year  The hijri year
-* @param year  The hijri month, 0-based (assumed to be in range 0..11)
+* @param month The hijri month, 0-based (assumed to be in range 0..11)
 */
 int32_t IslamicCalendar::monthStart(int32_t year, int32_t month) const {
     if (cType == CIVIL || cType == TBLA) {
