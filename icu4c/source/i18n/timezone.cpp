@@ -1547,7 +1547,6 @@ TimeZone::getCanonicalID(const UnicodeString& id, UnicodeString& canonicalID, UB
     return canonicalID;
 }
 
-#ifndef U_HIDE_DRAFT_API
 UnicodeString&
 TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode& status) {
     winid.remove();
@@ -1688,7 +1687,6 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
     ures_close(zones);
     return id;
 }
-#endif /* U_HIDE_DRAFT_API */
 
 
 U_NAMESPACE_END
