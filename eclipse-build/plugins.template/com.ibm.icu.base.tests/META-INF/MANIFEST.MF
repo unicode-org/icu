@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: com.ibm.icu.base.tests
+Bundle-Version: @BUILD_VERSION@
+Bundle-Vendor: %providerName
+Fragment-Host: com.ibm.icu.base
+Bundle-Copyright: @COPYRIGHT@
+Require-Bundle: org.junit
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
