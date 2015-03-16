@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_CA{
     %%Parent{"en_001"}
-    Version{"2.1.12.93"}
+    Version{"2.1.14.16"}
     calendar{
         chinese{
             DateTimePatterns{
@@ -16,10 +16,10 @@ en_CA{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, MMMM d, U",
-                "MMMM d, U",
-                "MMM d, U",
-                "y-MM-dd",
+                "EEEE, MMMM d, r(U)",
+                "MMMM d, r(U)",
+                "MMM d, r",
+                "r-MM-dd",
                 "{1}, {0}",
                 "{1} 'at' {0}",
                 "{1} 'at' {0}",
@@ -28,20 +28,21 @@ en_CA{
             }
             availableFormats{
                 Ed{"d E"}
-                GyMMMEd{"E, MMM d, U"}
-                GyMMMd{"MMM d, U"}
+                GyMMMEd{"E, MMM d, r(U)"}
+                GyMMMd{"MMM d, r"}
                 MEd{"E, MM-dd"}
                 MMMEd{"E, MMM d"}
                 MMMMd{"MMMM d"}
                 MMMd{"MMM d"}
                 Md{"MM-dd"}
-                yMd{"y-MM-dd"}
-                yyyy{"U"}
-                yyyyM{"y-MM"}
-                yyyyMEd{"E, y-MM-dd"}
-                yyyyMMMEd{"E, MMM d, U"}
-                yyyyMMMd{"MMM d, U"}
-                yyyyMd{"y-MM-dd"}
+                UMMMd{"MMM d, U"}
+                UMd{"U-MM-dd"}
+                yMd{"r-MM-dd"}
+                yyyyM{"r-MM"}
+                yyyyMEd{"E, r-MM-dd"}
+                yyyyMMMEd{"E, MMM d, r(U)"}
+                yyyyMMMd{"MMM d, r"}
+                yyyyMd{"r-MM-dd"}
             }
             intervalFormats{
                 MEd{
@@ -165,9 +166,9 @@ en_CA{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, d MMMM y",
-                "d MMMM y",
-                "d MMM y",
+                "EEEE, MMMM d, y",
+                "MMMM d, y",
+                "MMM d, y",
                 "y-MM-dd",
                 "{1}, {0}",
                 "{1} 'at' {0}",
