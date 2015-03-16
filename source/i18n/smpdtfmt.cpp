@@ -181,7 +181,7 @@ static const int32_t gFieldRangeBias[] = {
     -1,  // 'k' - UDAT_HOUR_OF_DAY1_FIELD
     -1,  // 'H' - UDAT_HOUR_OF_DAY0_FIELD
      0,  // 'm' - UDAT_MINUTE_FIELD
-     0,  // 's' - UDAT_SEOND_FIELD
+     0,  // 's' - UDAT_SECOND_FIELD
     -1,  // 'S' - UDAT_FRACTIONAL_SECOND_FIELD (0-999?)
     -1,  // 'E' - UDAT_DAY_OF_WEEK_FIELD (1-7?)
     -1,  // 'D' - UDAT_DAY_OF_YEAR_FIELD (1 - 366?)

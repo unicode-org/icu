@@ -301,7 +301,6 @@ TimeZoneNames::createInstance(const Locale& locale, UErrorCode& status) {
     return instance;
 }
 
-#ifndef U_HIDE_DRAFT_API
 TimeZoneNames*
 TimeZoneNames::createTZDBInstance(const Locale& locale, UErrorCode& status) {
     TimeZoneNames *instance = NULL;
@@ -313,7 +312,6 @@ TimeZoneNames::createTZDBInstance(const Locale& locale, UErrorCode& status) {
     }
     return instance;
 }
-#endif /* U_HIDE_DRAFT_API */
 
 UnicodeString&
 TimeZoneNames::getExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) const {
