@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -404,7 +405,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         // initialize to guard if there is no interval date format defined in 
         // resource files
         fFallbackIntervalPattern = "{0} \u2013 {1}";
-        HashMap<String,String> skeletonKeyMap = new HashMap<String,String>();
+        HashSet<String> skeletonKeyPairs = new HashSet<String>();
         try {
             // loop through all locales to get all available skeletons'
             // interval format
@@ -444,15 +445,18 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                     if ( skeleton.compareTo(FALLBACK_STRING) == 0 ) {
                         continue;
                     }
-                    String preexistingKey = skeletonKeyMap.get(skeleton);
                     ICUResourceBundle intervalPatterns = (ICUResourceBundle)itvDtPtnResource.get(skeleton);
                     int ptnNum = intervalPatterns.getSize();
                     for ( int ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex) {
                         String key = intervalPatterns.get(ptnIndex).getKey();
-                        if (key.equals(preexistingKey)) {
+                        
+                        // hack because Relation isn't available, and it will probably port more easily than Pair<String,String>
+                        String skeletonKeyPair = skeleton + "\u0001" + key;
+                        if (skeletonKeyPairs.contains(skeletonKeyPair)) {
                             continue;
                         }
-                        skeletonKeyMap.put(skeleton,key);
+                        skeletonKeyPairs.add(skeletonKeyPair);
+                        
                         String pattern = intervalPatterns.get(ptnIndex).getString();
     
                         int calendarField = -1; // initialize with an invalid value.
