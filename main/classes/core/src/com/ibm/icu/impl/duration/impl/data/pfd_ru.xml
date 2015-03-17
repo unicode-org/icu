@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and        *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>PAUCAL</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>лет</pluralName>
+            <pluralName>год</pluralName>
+            <pluralName>Null</pluralName>
+            <pluralName>года</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>месяцев</pluralName>
+            <pluralName>месяц</pluralName>
+            <pluralName>Null</pluralName>
+            <pluralName>месяца</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>недель</pluralName>
+            <pluralName>неделя</pluralName>
+            <pluralName>Null</pluralName>
+            <pluralName>недели</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>дней</pluralName>
+            <pluralName>день</pluralName>
+            <pluralName>Null</pluralName>
+            <pluralName>дня</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>часов</pluralName>
+            <pluralName>час</pluralName>
+            <pluralName>Null</pluralName>
+            <pluralName>часа</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>минут</pluralName>
+            <pluralName>минута</pluralName>
+            <pluralName>Null</pluralName>
+            <pluralName>минуты</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>секунд</pluralName>
+            <pluralName>секунда</pluralName>
+            <pluralName>Null</pluralName>
+            <pluralName>секунды</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>миллисекунд</pluralName>
+            <pluralName>миллисекунда</pluralName>
+            <pluralName>Null</pluralName>
+            <pluralName>миллисекунды</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <mediumNameList>
+        <mediumName>г</mediumName>
+        <mediumName>мес</mediumName>
+        <mediumName>нед</mediumName>
+        <mediumName>дн</mediumName>
+        <mediumName>ч</mediumName>
+        <mediumName>мин</mediumName>
+        <mediumName>с</mediumName>
+        <mediumName>мс</mediumName>
+        <mediumName>мкс</mediumName>
+    </mediumNameList>
+    <shortNameList>
+        <shortName>г</shortName>
+        <shortName>m</shortName>
+        <shortName>н</shortName>
+        <shortName>д</shortName>
+        <shortName>ч</shortName>
+        <shortName>м</shortName>
+        <shortName>с</shortName>
+        <shortName>x</shortName>
+    </shortNameList>
+    <halvesList>
+        <halves>½</halves>
+        <halves>½</halves>
+    </halvesList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep> </countSep>
+    <shortUnitSep> </shortUnitSep>
+    <unitSepList>
+        <unitSep>, </unitSep>
+        <unitSep> и </unitSep>
+        <unitSep>, </unitSep>
+        <unitSep> и </unitSep>
+    </unitSepList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>true</omitDualCount>
+    <decimalHandling>DPAUCAL</decimalHandling>
+    <fractionHandling>FPAUCAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> назад</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>через </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>меньше, чем </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>меньше, чем </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> назад</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>через </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>больше, чем </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>больше, чем </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> назад</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>через </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>
