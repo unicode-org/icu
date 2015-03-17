@@ -49,6 +49,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(3, testSetIntervalPatternNoSideEffect);
         TESTCASE(4, testYearFormats);
         TESTCASE(5, testStress);
+        TESTCASE(6, testTicket11583_2);
         default: name = ""; break;
     }
 }
@@ -1506,6 +1507,26 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
             ec = U_ZERO_ERROR;
         }
         delete dtitvfmt;
+    }
+}
+
+void DateIntervalFormatTest::testTicket11583_2() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DateIntervalFormat> fmt(
+            DateIntervalFormat::createInstance("yMMM", "es-US", status));
+    if (!assertSuccess("Error create format object", status)) {
+        return;
+    }
+    DateInterval interval((UDate) 1232364615000.0, (UDate) 1328787015000.0);
+    UnicodeString appendTo;
+    FieldPosition fpos(FieldPosition::DONT_CARE);
+    UnicodeString expected("ene. de 2009 \u2013 feb. de 2012");
+    assertEquals(
+            "",
+            expected.unescape(),
+            fmt->format(&interval, appendTo, fpos, status));
+    if (!assertSuccess("Error formatting", status)) {
+        return;
     }
 }
 
