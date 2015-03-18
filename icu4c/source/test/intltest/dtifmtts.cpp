@@ -1520,7 +1520,7 @@ void DateIntervalFormatTest::testTicket11583_2() {
     DateInterval interval((UDate) 1232364615000.0, (UDate) 1328787015000.0);
     UnicodeString appendTo;
     FieldPosition fpos(FieldPosition::DONT_CARE);
-    UnicodeString expected("ene. de 2009 \u2013 feb. de 2012");
+    UnicodeString expected("ene. de 2009 \\u2013 feb. de 2012");
     assertEquals(
             "",
             expected.unescape(),
