@@ -11,7 +11,7 @@
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"2.1.12.67"}
+    Version{"2.1.14.33"}
     collations{
         default{"standard"}
         emoji{
@@ -103,7 +103,7 @@ root{
                 "<*🆎🅱🆑🆒🆓ℹ🆔Ⓜ🆕🆖🅾🆗🅿🆘™🆙🆚🈁🈂🈹🉑🈴🈺🉐"
                 "<*🈯🈷🈶🈵🈚🈸㊗🈲㊙🈳"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
         eor{
             Sequence{
@@ -643,7 +643,7 @@ root{
                 "&ք"
                 "<և"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
         private-unihan{
             Sequence{
@@ -885,7 +885,7 @@ root{
                 "&龟=\uFDD0龟"
                 "&龠=\uFDD0龠"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
         search{
             Sequence{
@@ -1001,11 +1001,11 @@ root{
                 "&ᅮᅵ"
                 "=ᅱ"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
         standard{
             Sequence{""}
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
     depends:process(dependency){"ucadata.icu"}
