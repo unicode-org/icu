@@ -1,6 +1,6 @@
 /*
  ****************************************************************************************
- * Copyright (C) 2009-2014, Google, Inc.; International Business Machines Corporation   *
+ * Copyright (C) 2009-2015, Google, Inc.; International Business Machines Corporation   *
  * and others. All Rights Reserved.                                                     *
  ****************************************************************************************
  */
@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +18,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R2;
 import com.ibm.icu.impl.Row.R3;
+import com.ibm.icu.impl.Utility;
 
 /**
  * Provides a way to match the languages (locales) supported by a product to the
@@ -382,6 +382,29 @@ public class LocaleMatcher {
             }
             return result;
         }
+        
+        /* (non-Javadoc)
+        * @see java.lang.Object#equals(java.lang.Object)
+        */
+       @Override
+       public boolean equals(Object obj) {
+           LocalePatternMatcher other = (LocalePatternMatcher) obj;
+           return Utility.objectEquals(level, other.level)
+                   && Utility.objectEquals(lang, other.lang)
+                   && Utility.objectEquals(script, other.script)
+                   && Utility.objectEquals(region, other.region);
+       }
+       
+       /* (non-Javadoc)
+        * @see java.lang.Object#hashCode()
+        */
+       @Override
+       public int hashCode() {
+           return level.ordinal()
+                   ^ (lang == null ? 0 : lang.hashCode())
+                   ^ (script == null ? 0 : script.hashCode())
+                   ^ (region == null ? 0 : region.hashCode());
+       }
     }
 
     enum Level {
@@ -420,7 +443,10 @@ public class LocaleMatcher {
             //                lang_result.put(supported, result = new LinkedHashSet());
             //            }
             //            result.add(data);
-            scores.add(data);
+             boolean added = scores.add(data);
+             if (!added) {
+                 throw new ICUException("trying to add duplicate data: " +  data);
+             }
         }
 
         double getScore(ULocale desiredLocale, ULocale dMax, String desiredRaw, String desiredMax, 
@@ -605,6 +631,7 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @SuppressWarnings("unused")
         @Deprecated
         private LanguageMatcherData addDistance(String desired, String supported, int percent) {
             return addDistance(desired, supported, percent, false, null);
@@ -654,12 +681,13 @@ public class LocaleMatcher {
             }
             R3<LocalePatternMatcher,LocalePatternMatcher,Double> data = Row.of(desiredMatcher, supportedMatcher, score);
             R3<LocalePatternMatcher,LocalePatternMatcher,Double> data2 = oneway ? null : Row.of(supportedMatcher, desiredMatcher, score);
+             boolean desiredEqualsSupported = desiredMatcher.equals(supportedMatcher);
             switch (desiredLen) {
             case language:
                 String dlanguage = desiredMatcher.getLanguage();
                 String slanguage = supportedMatcher.getLanguage();
                 languageScores.addDataToScores(dlanguage, slanguage, data);
-                if (!oneway) {
+                 if (!oneway && !desiredEqualsSupported) {
                     languageScores.addDataToScores(slanguage, dlanguage, data2);
                 }
                 break;
@@ -667,7 +695,7 @@ public class LocaleMatcher {
                 String dscript = desiredMatcher.getScript();
                 String sscript = supportedMatcher.getScript();
                 scriptScores.addDataToScores(dscript, sscript, data);
-                if (!oneway) {
+                 if (!oneway && !desiredEqualsSupported) {
                     scriptScores.addDataToScores(sscript, dscript, data2);
                 }
                 break;
@@ -675,7 +703,7 @@ public class LocaleMatcher {
                 String dregion = desiredMatcher.getRegion();
                 String sregion = supportedMatcher.getRegion();
                 regionScores.addDataToScores(dregion, sregion, data);
-                if (!oneway) {
+                 if (!oneway && !desiredEqualsSupported) {
                     regionScores.addDataToScores(sregion, dregion, data2);
                 }
                 break;
@@ -832,12 +860,12 @@ public class LocaleMatcher {
         defaultWritten = new LanguageMatcherData();
         // HACK
         // The data coming from ICU may be old, and badly ordered.
-        TreeSet<DataHack> hack = new TreeSet<DataHack>();
-        defaultWritten.addDistance("en_*_US", "en_*_*", 97);
-        defaultWritten.addDistance("en_*_GB", "en_*_*", 98);
-        defaultWritten.addDistance("es_*_ES", "es_*_*", 97);
-        defaultWritten.addDistance("es_*_419", "es_*_*", 99);
-        defaultWritten.addDistance("es_*_*", "es_*_*", 98);
+         //        TreeSet<DataHack> hack = new TreeSet<DataHack>();
+         //        defaultWritten.addDistance("en_*_US", "en_*_*", 97);
+         //        defaultWritten.addDistance("en_*_GB", "en_*_*", 98);
+         //        defaultWritten.addDistance("es_*_ES", "es_*_*", 97);
+         //        defaultWritten.addDistance("es_*_419", "es_*_*", 99);
+         //        defaultWritten.addDistance("es_*_*", "es_*_*", 98);
 
         for(UResourceBundleIterator iter = written.getIterator(); iter.hasNext();) {
             ICUResourceBundle item = (ICUResourceBundle) iter.next();
@@ -846,11 +874,14 @@ public class LocaleMatcher {
             "*_*_*",
             "96",
              */
-            hack.add(new DataHack(item.getString(0), item.getString(1), Integer.parseInt(item.getString(2))));
+             // <languageMatch desired="gsw" supported="de" percent="96" oneway="true" />
+             boolean oneway = item.getSize() > 3 && "1".equals(item.getString(3));
+             //hack.add(new DataHack(item.getString(0), item.getString(1), Integer.parseInt(item.getString(2))));
+             defaultWritten.addDistance(item.getString(0), item.getString(1), Integer.parseInt(item.getString(2)), oneway);
         }
-        for (DataHack dataHack : hack) {
-            defaultWritten.addDistance(dataHack.source, dataHack.target, dataHack.percent);
-        }
+         //        for (DataHack dataHack : hack) {
+         //            defaultWritten.addDistance(dataHack.source, dataHack.target, dataHack.percent);
+         //        }
         defaultWritten.freeze();
     }
     
