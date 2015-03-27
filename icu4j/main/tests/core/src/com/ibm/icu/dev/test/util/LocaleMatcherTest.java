@@ -1,6 +1,6 @@
 /*
  ******************************************************************************************
- * Copyright (C) 2009-2014, Google, Inc.; International Business Machines Corporation and *
+ * Copyright (C) 2009-2015, Google, Inc.; International Business Machines Corporation and *
  * others. All Rights Reserved.                                                           *
  ******************************************************************************************
  */
@@ -285,12 +285,29 @@ public class LocaleMatcherTest extends TestFmwk {
         LocaleMatcher matcher = new LocaleMatcher("es_AR, es");
         assertEquals("es_AR", matcher.getBestMatch("es_MX").toString());
 
-        matcher = new LocaleMatcher("fr, en, en_CA");
-        assertEquals("en_CA", matcher.getBestMatch("en_GB").toString());
+        matcher = new LocaleMatcher("fr, en, en_GB");
+        assertEquals("en_GB", matcher.getBestMatch("en_CA").toString());
 
         matcher = new LocaleMatcher("de_AT, de_DE, de_CH");
         assertEquals("de_DE", matcher.getBestMatch("de").toString());
+        
+        showDistance(matcher, "en", "en_CA");
+        showDistance(matcher, "en_CA", "en");
+        showDistance(matcher, "en_US", "en_CA");
+        showDistance(matcher, "en_CA", "en_US");
+        showDistance(matcher, "en_GB", "en_CA");
+        showDistance(matcher, "en_CA", "en_GB");
+        showDistance(matcher, "en", "en_UM");
+        showDistance(matcher, "en_UM", "en");
     }
+    
+    private void showDistance(LocaleMatcher matcher, String desired, String supported) {
+        ULocale desired2 = new ULocale(desired);
+        ULocale supported2 = new ULocale(supported);
+        double distance = matcher.match(desired2, ULocale.addLikelySubtags(desired2), supported2, ULocale.addLikelySubtags(supported2));
+        logln(desired + " to " + supported + " :\t" + distance);
+    }
+
 
     /**
      * If all the base languages are the same, then each sublocale matches itself most closely
@@ -334,6 +351,15 @@ public class LocaleMatcherTest extends TestFmwk {
             String stringLoc = loc.toString();
             assertEquals(stringLoc, matcher.getBestMatch(stringLoc).toString());
         }
+    }
+
+    public void testAsymmetry() {
+        LocaleMatcher matcher;
+        matcher = new LocaleMatcher("mul, nl");
+        assertEquals("nl", matcher.getBestMatch("af").toString()); // af => nl
+        
+        matcher = new LocaleMatcher("mul, af");
+        assertEquals("mul", matcher.getBestMatch("nl").toString()); // but nl !=> af
     }
 
 
