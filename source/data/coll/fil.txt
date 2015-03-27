@@ -11,7 +11,7 @@ fil{
     collations{
         standard{
             Sequence{"&N<ñ<<<Ñ<ng<<<Ng<<<NG"}
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
 }

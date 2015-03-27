@@ -14,11 +14,11 @@ es{
                 "[import und-u-co-search]"
                 "&N<ñ<<<Ñ"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
         standard{
             Sequence{"&N<ñ<<<Ñ"}
-            Version{"27"}
+            Version{"27.0.1"}
         }
         traditional{
             Sequence{
@@ -26,7 +26,7 @@ es{
                 "&C<ch<<<Ch<<<CH"
                 "&l<ll<<<Ll<<<LL"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
 }

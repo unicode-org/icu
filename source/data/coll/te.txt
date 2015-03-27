@@ -14,7 +14,7 @@ te{
                 "[normalization on][reorder Telu Deva Beng Guru Gujr Orya Taml Knda Mlym Sinh]"
                 "&ఔ<ఁ<ం<ః"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
 }
