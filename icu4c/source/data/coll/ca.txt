@@ -14,7 +14,7 @@ ca{
                 "[import und-u-co-search]"
                 "&L<ŀ=l·<<<Ŀ=L·"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
 }
