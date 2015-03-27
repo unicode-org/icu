@@ -18,7 +18,7 @@ mt{
                 "&[before 1]i<ħ<<<Ħ"
                 "&[before 1]z<ż<<<Ż"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
 }

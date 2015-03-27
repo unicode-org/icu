@@ -11,7 +11,7 @@ az{
     collations{
         search{
             Sequence{"[import und-u-co-search][import az-u-co-standard][reorder others]"}
-            Version{"27"}
+            Version{"27.0.1"}
         }
         standard{
             Sequence{
@@ -28,7 +28,7 @@ az{
                 "&H<x<<<X"
                 "&Z<w<<<W"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
 }

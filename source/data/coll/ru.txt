@@ -11,7 +11,7 @@ ru{
     collations{
         standard{
             Sequence{"[reorder Cyrl]"}
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
 }

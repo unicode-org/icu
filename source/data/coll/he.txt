@@ -17,7 +17,7 @@ he{
                 "‎&״"
                 "<<'\u0022'"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
         standard{
             Sequence{
@@ -25,7 +25,7 @@ he{
                 "&[before 2]''<<׳"
                 "&[before 2]'\u0022'<<״"
             }
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
 }

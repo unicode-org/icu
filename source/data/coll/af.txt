@@ -11,7 +11,7 @@ af{
     collations{
         standard{
             Sequence{"&N<<<ŉ"}
-            Version{"27"}
+            Version{"27.0.1"}
         }
     }
 }
