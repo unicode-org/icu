@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2014, International Business Machines
+*   Copyright (C) 1997-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -228,6 +228,26 @@ typedef size_t uintptr_t;
 #   endif
 #endif
 
+
+/**
+ *  \def U_HAVE_CLANG_ATOMICS
+ *  Defines whether Clang c11 style built-in atomics are avaialable.
+ *  These are used in preference to gcc atomics when both are available.
+ */
+#ifdef U_HAVE_CLANG_ATOMICS
+    /* Use the predefined value. */
+#elif !defined(__clang__)
+#    define U_HAVE_CLANG_ATOMICS 0
+#else
+#if __has_builtin(__c11_atomic_load) && \
+    __has_builtin(__c11_atomic_store) && \
+    __has_builtin(__c11_atomic_fetch_add) && \
+    __has_builtin(__c11_atomic_fetch_sub)
+#    define U_HAVE_CLANG_ATOMICS 1
+#else
+#    define U_HAVE_CLANG_ATOMICS 0
+#endif
+#endif
 
 /*===========================================================================*/
 /** @{ Code alignment                                                        */
