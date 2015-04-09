@@ -460,17 +460,23 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                         String pattern = intervalPatterns.get(ptnIndex).getString();
     
                         int calendarField = -1; // initialize with an invalid value.
-                        if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR]) == 0 ) {
+                        if ( key.equals(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR])) {
                             calendarField = Calendar.YEAR;    
-                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MONTH]) == 0 ) {
+                        } else if ( key.equals(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MONTH])) {
                             calendarField = Calendar.MONTH;
-                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.DATE]) == 0 ) {
+                        } else if ( key.equals(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.DATE])) {
                             calendarField = Calendar.DATE;
-                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.AM_PM]) == 0 ) {
+                        } else if ( key.equals(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.AM_PM]) ) {
                             calendarField = Calendar.AM_PM;    
-                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR]) == 0 ) {
-                            calendarField = Calendar.HOUR;    
-                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MINUTE]) == 0 ) {
+                        } else if ( key.equals(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR]) ) {
+                            calendarField = Calendar.HOUR;
+                            key = CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR];
+                        } else if ( key.equals(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR_OF_DAY]) ) {
+                            // HOUR_OF_DAY is 'H' for 24 hour clock; HOUR is 'h' for 12 hour clock. We use HOUR
+                            // here instead of HOUR_OF_DAY because setIntervalPatternInternally understand HOUR.
+                            calendarField = Calendar.HOUR;
+                            key = CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR];
+                        } else if ( key.equals(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MINUTE]) ) {
                             calendarField = Calendar.MINUTE;    
                         }
              
