@@ -412,7 +412,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 "en", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hms", "10:10:10 AM", 
 
-
+                "en", "2007 01 01 22:00:00", "2007 01 01 23:00:00", "yMMMMdHm", "January 1, 2007, 22:00 \u2013 23:00", 
 
                 "zh", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "EEEEdMMMMy", "2007\\u5e7410\\u670810\\u65e5\\u661f\\u671f\\u4e09\\u81f32008\\u5e7410\\u670810\\u65e5\\u661f\\u671f\\u4e94", 
 
@@ -1252,8 +1252,8 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateInterval dtitv = new DateInterval(date1, date2);
         TimeZone tzCalif = TimeZone.getFrozenTimeZone("US/Pacific");
         TimeZone tzTokyo = TimeZone.getFrozenTimeZone("Asia/Tokyo");
-        String fmtCalif = "Mar 2, 10:30 \u2013 Mar 2, 17:30"; // ICU4C result is "Mar 2, 10:30 \u2013 17:30" (does not duplicate day)
-        String fmtTokyo = "Mar 3, 03:30 \u2013 Mar 3, 10:30"; // ICU4C result is "Mar 3, 03:30 \u2013 10:30" (does not duplicate day)
+        String fmtCalif = "Mar 2, 10:30 \u2013 17:30"; // ICU4C result is "Mar 2, 10:30 \u2013 17:30" (does not duplicate day)
+        String fmtTokyo = "Mar 3, 03:30 \u2013 10:30"; // ICU4C result is "Mar 3, 03:30 \u2013 10:30" (does not duplicate day)
 
         StringBuffer buf = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
