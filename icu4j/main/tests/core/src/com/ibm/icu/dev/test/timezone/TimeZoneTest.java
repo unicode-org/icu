@@ -1526,6 +1526,7 @@ public class TimeZoneTest extends TestFmwk
                 {"America/St_Lucia", "America/Port_of_Spain"},
                 {"America/St_Thomas", "America/Port_of_Spain"},
                 {"America/St_Vincent", "America/Port_of_Spain"},
+                {"America/Toronto", "America/Montreal"},
                 {"America/Tortola", "America/Port_of_Spain"},
                 {"America/Virgin", "America/Port_of_Spain"},
                 {"Antarctica/South_Pole", "Antarctica/McMurdo"},
