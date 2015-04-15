@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2014, International Business Machines Corporation
+#* Copyright (C) 1999-2015, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 # nmake file for creating data files on win32
@@ -10,7 +10,7 @@
 
 ##############################################################################
 # Keep the following in sync with the version - see common/unicode/uvernum.h
-U_ICUDATA_NAME=icudt55
+U_ICUDATA_NAME=icudt56
 ##############################################################################
 U_ICUDATA_ENDIAN_SUFFIX=l
 UNICODE_VERSION=7.0
