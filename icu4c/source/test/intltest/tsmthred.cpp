@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2014, International Business Machines Corporation and
+ * Copyright (c) 1999-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -102,6 +102,8 @@
 
 #define TSMTHREAD_FAIL(msg) errln("%s at file %s, line %d", msg, __FILE__, __LINE__)
 #define TSMTHREAD_ASSERT(expr) {if (!(expr)) {TSMTHREAD_FAIL("Fail");}}
+#define TSMTHREAD_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
+                  errln("file: %s:%d status = %s\n", __FILE__, __LINE__, u_errorName(status));}}
 
 MultithreadTest::MultithreadTest()
 {
@@ -213,6 +215,12 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
         name = "TestUnifiedCache";
         if (exec) {
             TestUnifiedCache();
+        }
+        break;
+    case 9:
+        name = "TestBreakTranslit";
+        if (exec) {
+            TestBreakTranslit();
         }
         break;
     default:
@@ -1799,6 +1807,62 @@ void MultithreadTest::TestUnifiedCache() {
             delete threads[i][j];
         }
     }
+}
+
+
+//
+//  BreakTransliterator Threading Test
+//     This is a test for bug #11603. Test verified to fail prior to fix.
+//
+
+static const Transliterator *gSharedTransliterator;
+static const UnicodeString *gTranslitInput;
+static const UnicodeString *gTranslitExpected;
+
+class BreakTranslitThread: public SimpleThread {
+  public:
+    BreakTranslitThread() {};
+    ~BreakTranslitThread() {};
+    void run();
+};
+
+void BreakTranslitThread::run() {
+    for (int i=0; i<10; i++) {
+        icu::UnicodeString s(*gTranslitInput);
+        gSharedTransliterator->transliterate(s);
+        if (*gTranslitExpected != s) {
+            IntlTest::gTest->errln("%s:%d Transliteration threading failure.", __FILE__, __LINE__);
+            break;
+        }
+    }
+}
+
+void MultithreadTest::TestBreakTranslit() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString input(
+        "\\u0E42\\u0E14\\u0E22\\u0E1E\\u0E37\\u0E49\\u0E19\\u0E10\\u0E32\\u0E19\\u0E41\\u0E25\\u0E49\\u0E27,");
+    input = input.unescape();
+    gTranslitInput = &input;
+
+    gSharedTransliterator = Transliterator::createInstance(
+        UNICODE_STRING_SIMPLE("Any-Latin; Lower; NFD; [:Diacritic:]Remove; NFC; Latin-ASCII;"), UTRANS_FORWARD, status);
+    TSMTHREAD_ASSERT_SUCCESS(status); 
+
+    UnicodeString expected(*gTranslitInput);
+    gSharedTransliterator->transliterate(expected);
+    gTranslitExpected = &expected;
+
+    BreakTranslitThread threads[4];
+    for (int i=0; i<UPRV_LENGTHOF(threads); ++i) {
+        threads[i].start();
+    }
+    for (int i=0; i<UPRV_LENGTHOF(threads); ++i) {
+        threads[i].join();
+    }
+
+    delete gSharedTransliterator;
+    gTranslitInput = NULL;
+    gTranslitExpected = NULL;
 }
 
 #endif // ICU_USE_THREADS
