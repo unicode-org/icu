@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2008-2009, International Business Machines
+*   Copyright (C) 2008-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -61,14 +61,6 @@ public:
     virtual void setInsertion(const UnicodeString &insertion);
 
     /**
-      *  Return the break iterator used by this transliterator.
-      *  Caution, this is the live break iterator; it must not be used while
-      *     there is any possibility that this transliterator is using it.
-      */
-    virtual BreakIterator *getBreakIterator();
-
-
-    /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      */
     virtual UClassID getDynamicClassID() const;
@@ -93,10 +85,9 @@ public:
                                      UBool isIncremental) const;
 
  private:
-     BreakIterator     *bi;
+     BreakIterator     *cachedBI;
+     UVector32         *cachedBoundaries;
      UnicodeString      fInsertion;
-     UVector32         *boundaries;
-     UnicodeString      sText;  // text from handleTransliterate().
 
      static UnicodeString replaceableAsString(Replaceable &r);
 

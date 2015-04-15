@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2013, International Business Machines
+*   Copyright (C) 1999-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -244,18 +244,25 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
     //   so no concurrent access from multiple threads is possible.
     UBool    lockedMutexAtThisLevel = FALSE;
     if (isDataOwned == FALSE) {
-        // Test whether this request is operating on the same text string as some
+        // Test whether this request is operating on the same text string as
         //   some other transliteration that is still in progress and holding the 
         //   transliteration mutex.  If so, do not lock the transliteration
         //    mutex again.
+        //
+        //  gLockedText variable is protected by the global ICU mutex.
+        //  Shared RBT data protected by transliteratorDataMutex.
+        //
         // TODO(andy): Need a better scheme for handling this.
         UBool needToLock;
         umtx_lock(NULL);
         needToLock = (&text != gLockedText);
         umtx_unlock(NULL);
+
         if (needToLock) {
             umtx_lock(&transliteratorDataMutex);
+            umtx_lock(NULL);
             gLockedText = &text;
+            umtx_unlock(NULL);
             lockedMutexAtThisLevel = TRUE;
         }
     }
@@ -269,7 +276,9 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
 	    }
     }
     if (lockedMutexAtThisLevel) {
+        umtx_lock(NULL);
         gLockedText = NULL;
+        umtx_unlock(NULL);
         umtx_unlock(&transliteratorDataMutex);
     }
 }

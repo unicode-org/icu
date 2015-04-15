@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2008-2010, International Business Machines
+*   Copyright (C) 2008-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -21,6 +21,7 @@
 #include "cmemory.h"
 #include "uprops.h"
 #include "uinvchar.h"
+#include "umutex.h"
 #include "util.h"
 #include "uvectr32.h"
 
@@ -38,9 +39,8 @@ static const UChar SPACE       = 32;  // ' '
 BreakTransliterator::BreakTransliterator(UnicodeFilter* adoptedFilter) :
     Transliterator(UNICODE_STRING("Any-BreakInternal", 17), adoptedFilter),
     fInsertion(SPACE) {
-        bi = NULL;
-        UErrorCode status = U_ZERO_ERROR;
-        boundaries = new UVector32(status);
+        cachedBI = NULL;
+        cachedBoundaries = NULL;
     }
 
 
@@ -48,25 +48,21 @@ BreakTransliterator::BreakTransliterator(UnicodeFilter* adoptedFilter) :
  * Destructor.
  */
 BreakTransliterator::~BreakTransliterator() {
-    delete bi;
-    bi = NULL;
-    delete boundaries;
-    boundaries = NULL;
+    delete cachedBI;
+    cachedBI = NULL;
+    delete cachedBoundaries;
+    cachedBoundaries = NULL;
 }
 
 /**
  * Copy constructor.
  */
 BreakTransliterator::BreakTransliterator(const BreakTransliterator& o) :
-    Transliterator(o) {
-        bi = NULL;
-        if (o.bi != NULL) {
-            bi = o.bi->clone();
-        }
-        fInsertion = o.fInsertion;
-        UErrorCode status = U_ZERO_ERROR;
-        boundaries = new UVector32(status);
-    }
+        Transliterator(o) {
+    cachedBI = NULL;
+    cachedBoundaries = NULL;
+    fInsertion = o.fInsertion;
+}
 
 
 /**
@@ -83,9 +79,28 @@ void BreakTransliterator::handleTransliterate(Replaceable& text, UTransPosition&
                                                     UBool isIncremental ) const {
 
         UErrorCode status = U_ZERO_ERROR;
+        BreakIterator *bi = NULL;
+        UVector32 *boundaries = NULL;
+
+        umtx_lock(NULL);
+        if (cachedBI) {
+            bi = cachedBI;
+            boundaries = cachedBoundaries;
+            BreakTransliterator *nonConstThis = const_cast<BreakTransliterator *>(this);
+            nonConstThis->cachedBI = NULL;
+            nonConstThis->cachedBoundaries = NULL;
+        }
+        umtx_unlock(NULL);
+        if (bi == NULL) {
+            boundaries = new UVector32(status);
+            bi = BreakIterator::createWordInstance(Locale::getEnglish(), status);
+        }    
+
+        if (bi == NULL || boundaries == NULL || U_FAILURE(status)) {
+            return;
+        }
+            
         boundaries->removeAllElements();
-        BreakTransliterator *nonConstThis = (BreakTransliterator *)this;
-        nonConstThis->getBreakIterator(); // Lazy-create it if necessary
         UnicodeString sText = replaceableAsString(text);
         bi->setText(sText);
         bi->preceding(offsets.start);
@@ -132,6 +147,25 @@ void BreakTransliterator::handleTransliterate(Replaceable& text, UTransPosition&
         offsets.limit += delta;
         offsets.start = isIncremental ? lastBoundary + delta : offsets.limit;
 
+        // Return break iterator & boundaries vector to the cache.
+        umtx_lock(NULL);
+        BreakTransliterator *nonConstThis = const_cast<BreakTransliterator *>(this);
+        if (nonConstThis->cachedBI == NULL) {
+            nonConstThis->cachedBI = bi;
+            bi = NULL;
+        }
+        if (nonConstThis->cachedBoundaries == NULL) {
+            nonConstThis->cachedBoundaries = boundaries;
+            boundaries = NULL;
+        }
+        umtx_unlock(NULL);
+        if (bi) {
+            delete bi;
+        }
+        if (boundaries) {
+            delete boundaries;
+        }
+
         // TODO:  do something with U_FAILURE(status);
         //        (need to look at transliterators overall, not just here.)
 }
@@ -148,21 +182,6 @@ const UnicodeString &BreakTransliterator::getInsertion() const {
 //
 void BreakTransliterator::setInsertion(const UnicodeString &insertion) {
     this->fInsertion = insertion;
-}
-
-//
-//  getBreakIterator     Lazily create the break iterator if it does
-//                       not already exist.  Copied from Java, probably
-//                       better to just create it in the constructor.
-//
-BreakIterator *BreakTransliterator::getBreakIterator() {
-    UErrorCode status = U_ZERO_ERROR;
-    if (bi == NULL) {
-        // Note:  Thai breaking behavior is universal, it is not
-        //        tied to the Thai locale.
-        bi = BreakIterator::createWordInstance(Locale::getEnglish(), status);
-    }
-    return bi;
 }
 
 //
