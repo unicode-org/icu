@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1166,6 +1166,10 @@ IntlTest::run_phase2( char* name, char* par ) // supports reporting memory leaks
 #   define TRY_CNV_2 "sjis"
 #endif
 
+#ifdef UNISTR_COUNT_FINAL_STRING_LENGTHS
+U_CAPI void unistr_printLengths();
+#endif
+
 int
 main(int argc, char* argv[])
 {
@@ -1523,6 +1527,10 @@ main(int argc, char* argv[])
         /* Call afterwards to display errors. */
         u_cleanup();
     }
+
+#ifdef UNISTR_COUNT_FINAL_STRING_LENGTHS
+    unistr_printLengths();
+#endif
 
     fprintf(stdout, "--------------------------------------\n");
 

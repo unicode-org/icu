@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2014, International Business Machines
+*   Copyright (C) 1998-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -174,14 +174,51 @@ class UnicodeStringAppendable;  // unicode/appendable.h
 #endif
 
 /**
+ * \def UNISTR_OBJECT_SIZE
+ * Desired sizeof(UnicodeString) in bytes.
+ * It should be a multiple of sizeof(pointer) to avoid unusable space for padding.
+ * The object size may want to be a multiple of 16 bytes,
+ * which is a common granularity for heap allocation.
+ *
+ * Any space inside the object beyond sizeof(vtable pointer) + 2
+ * is available for storing short strings inside the object.
+ * The bigger the object, the longer a string that can be stored inside the object,
+ * without additional heap allocation.
+ *
+ * Depending on a platform's pointer size, pointer alignment requirements,
+ * and struct padding, the compiler will usually round up sizeof(UnicodeString)
+ * to 4 * sizeof(pointer) (or 3 * sizeof(pointer) for P128 data models),
+ * to hold the fields for heap-allocated strings.
+ * Such a minimum size also ensures that the object is easily large enough
+ * to hold at least 2 UChars, for one supplementary code point (U16_MAX_LENGTH).
+ *
+ * sizeof(UnicodeString) >= 48 should work for all known platforms.
+ *
+ * For example, on a 64-bit machine where sizeof(vtable pointer) is 8,
+ * sizeof(UnicodeString) = 64 would leave space for
+ * (64 - sizeof(vtable pointer) - 2) / U_SIZEOF_UCHAR = (64 - 8 - 2) / 2 = 27
+ * UChars stored inside the object.
+ *
+ * The minimum object size on a 64-bit machine would be
+ * 4 * sizeof(pointer) = 4 * 8 = 32 bytes,
+ * and the internal buffer would hold up to 11 UChars in that case.
+ *
+ * @see U16_MAX_LENGTH
+ * @draft ICU 56
+ */
+#ifndef UNISTR_OBJECT_SIZE
+# define UNISTR_OBJECT_SIZE 64
+#endif
+
+/**
  * UnicodeString is a string class that stores Unicode characters directly and provides
- * similar functionality as the Java String and StringBuffer classes.
+ * similar functionality as the Java String and StringBuffer/StringBuilder classes.
  * It is a concrete implementation of the abstract class Replaceable (for transliteration).
  *
  * The UnicodeString class is not suitable for subclassing.
  *
  * <p>For an overview of Unicode strings in C and C++ see the
- * <a href="http://icu-project.org/userguide/strings.html">User Guide Strings chapter</a>.</p>
+ * <a href="http://userguide.icu-project.org/strings#TOC-Strings-in-C-C-">User Guide Strings chapter</a>.</p>
  *
  * <p>In ICU, a Unicode string consists of 16-bit Unicode <em>code units</em>.
  * A Unicode character may be stored with either one code unit
@@ -3474,9 +3511,12 @@ private:
 
   // constants
   enum {
-    // Set the stack buffer size so that sizeof(UnicodeString) is,
-    // naturally (without padding), a multiple of sizeof(pointer).
-    US_STACKBUF_SIZE= sizeof(void *)==4 ? 13 : 15, // Size of stack buffer for short strings
+    /**
+     * Size of stack buffer for short strings.
+     * Must be at least U16_MAX_LENGTH for the single-code point constructor to work.
+     * @see UNISTR_OBJECT_SIZE
+     */
+    US_STACKBUF_SIZE=(int32_t)(UNISTR_OBJECT_SIZE-sizeof(void *)-2)/U_SIZEOF_UCHAR,
     kInvalidUChar=0xffff, // U+FFFF returned by charAt(invalid index)
     kGrowSize=128, // grow size for this buffer
     kInvalidHashCode=0, // invalid hash code
@@ -3544,9 +3584,10 @@ private:
    * (Padding at the end of fFields is ok:
    * As long as it is no larger than fStackFields, it is not wasted space.)
    *
-   * For some of the history of the UnicodeString class fields layout,
-   * see ICU ticket #11336 "UnicodeString: recombine stack buffer arrays"
-   * and ticket #8322 "why is sizeof(UnicodeString)==48?".
+   * For some of the history of the UnicodeString class fields layout, see
+   * - ICU ticket #11551 "longer UnicodeString contents in stack buffer"
+   * - ICU ticket #11336 "UnicodeString: recombine stack buffer arrays"
+   * - ICU ticket #8322 "why is sizeof(UnicodeString)==48?"
    */
   // (implicit) *vtable;
   union StackBufferOrFields {
@@ -3558,9 +3599,11 @@ private:
     } fStackFields;
     struct {
       int16_t fLengthAndFlags;          // bit fields: see constants above
-      UChar   *fArray;    // the Unicode data
-      int32_t fCapacity;  // capacity of fArray (in UChars)
       int32_t fLength;    // number of characters in fArray if >127; else undefined
+      int32_t fCapacity;  // capacity of fArray (in UChars)
+      // array pointer last to minimize padding for machines with P128 data model
+      // or pointer sizes that are not a power of 2
+      UChar   *fArray;    // the Unicode data
     } fFields;
   } fUnion;
 };
