@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -72,6 +72,10 @@ void ctest_setICU_DATA(void);
 
 static int gOrigArgc;
 static const char* const * gOrigArgv;
+
+#ifdef UNISTR_COUNT_FINAL_STRING_LENGTHS
+U_CAPI void unistr_printLengths();
+#endif
 
 int main(int argc, const char* const argv[])
 {
@@ -232,6 +236,10 @@ int main(int argc, const char* const argv[])
 #endif
 
     }  /* End of loop that repeats the entire test, if requested.  (Normally doesn't loop)  */
+
+#ifdef UNISTR_COUNT_FINAL_STRING_LENGTHS
+    unistr_printLengths();
+#endif
 
     endTime = uprv_getRawUTCtime();
     diffTime = (int32_t)(endTime - startTime);
