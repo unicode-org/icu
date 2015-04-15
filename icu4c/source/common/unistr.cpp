@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2014, International Business Machines Corporation and
+* Copyright (C) 1999-2015, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 *
@@ -367,8 +367,40 @@ UnicodeString::allocate(int32_t capacity) {
 //========================================
 // Destructor
 //========================================
+
+#ifdef UNISTR_COUNT_FINAL_STRING_LENGTHS
+static u_atomic_int32_t finalLengthCounts[0x400];  // UnicodeString::kMaxShortLength+1
+static u_atomic_int32_t beyondCount(0);
+
+U_CAPI void unistr_printLengths() {
+  int32_t i;
+  for(i = 0; i <= 59; ++i) {
+    printf("%2d,  %9d\n", i, (int32_t)finalLengthCounts[i]);
+  }
+  int32_t beyond = beyondCount;
+  for(; i < UPRV_LENGTHOF(finalLengthCounts); ++i) {
+    beyond += finalLengthCounts[i];
+  }
+  printf(">59, %9d\n", beyond);
+}
+#endif
+
 UnicodeString::~UnicodeString()
 {
+#ifdef UNISTR_COUNT_FINAL_STRING_LENGTHS
+  // Count lengths of strings at the end of their lifetime.
+  // Useful for discussion of a desirable stack buffer size.
+  // Count the contents length, not the optional NUL terminator nor further capacity.
+  // Ignore open-buffer strings and strings which alias external storage.
+  if((fUnion.fFields.fLengthAndFlags&(kOpenGetBuffer|kReadonlyAlias|kWritableAlias)) == 0) {
+    if(hasShortLength()) {
+      umtx_atomic_inc(finalLengthCounts + getShortLength());
+    } else {
+      umtx_atomic_inc(&beyondCount);
+    }
+  }
+#endif
+
   releaseArray();
 }
 
