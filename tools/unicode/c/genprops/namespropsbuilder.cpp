@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2012, International Business Machines
+*   Copyright (C) 1999-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -129,7 +129,7 @@
 #include "unewdata.h"
 #include "uoptions.h"
 
-#define STRING_STORE_SIZE 1000000
+#define STRING_STORE_SIZE 2000000
 #define GROUP_STORE_SIZE 5000
 
 #define GROUP_SHIFT 5
@@ -1097,7 +1097,7 @@ allocLine(int32_t length) {
     uint8_t *p;
 
     if(top>wordBottom) {
-        fprintf(stderr, "gennames: out of memory\n");
+        fprintf(stderr, "gennames allocLine(): out of memory\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
     p=stringStore+lineTop;
@@ -1110,7 +1110,7 @@ allocWord(uint32_t length) {
     uint32_t bottom=wordBottom-length;
 
     if(lineTop>bottom) {
-        fprintf(stderr, "gennames: out of memory\n");
+        fprintf(stderr, "gennames allocWord(): out of memory\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
     wordBottom=bottom;

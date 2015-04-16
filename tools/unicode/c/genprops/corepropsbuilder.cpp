@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2012, International Business Machines
+*   Copyright (C) 1999-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -431,7 +431,7 @@ CorePropsBuilder::setGcAndNumeric(const UniProps &props, const UnicodeSet &newVa
     }
 
     int32_t ntv=UPROPS_NTV_NONE;  // numeric type & value
-    if(nvString!=NULL) {
+    if(nvString!=NULL && uprv_strcmp(nvString, "NaN")!=0) {
         int32_t digitValue=props.digitValue;
         if( type<=U_NT_NONE || U_NT_NUMERIC<type ||
             ((type==U_NT_DECIMAL || type==U_NT_DIGIT) && digitValue<0)
