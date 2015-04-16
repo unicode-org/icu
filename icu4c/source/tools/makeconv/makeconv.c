@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1998-2014, International Business Machines
+ *   Copyright (C) 1998-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -76,6 +76,7 @@ extern const UConverterStaticData * ucnv_converterStaticData[UCNV_NUMBER_OF_SUPP
  * Global - verbosity
  */
 UBool VERBOSE = FALSE;
+UBool QUIET = FALSE;
 UBool SMALL = FALSE;
 UBool IGNORE_SISO_CHECK = FALSE;
 
@@ -174,6 +175,8 @@ enum {
     OPT_VERBOSE,
     OPT_SMALL,
     OPT_IGNORE_SISO_CHECK,
+    OPT_QUIET,
+
     OPT_COUNT
 };
 
@@ -185,7 +188,8 @@ static UOption options[]={
     UOPTION_DESTDIR,
     UOPTION_VERBOSE,
     { "small", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0 },
-    { "ignore-siso-check", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0 }
+    { "ignore-siso-check", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0 },
+    UOPTION_QUIET,
 };
 
 int main(int argc, char* argv[])
@@ -231,7 +235,8 @@ int main(int argc, char* argv[])
             "\t-V or --version     show a version message\n"
             "\t-c or --copyright   include a copyright notice\n"
             "\t-d or --destdir     destination directory, followed by the path\n"
-            "\t-v or --verbose     Turn on verbose output\n",
+            "\t-v or --verbose     Turn on verbose output\n"
+            "\t-q or --quiet       do not display warnings and progress\n",
             argv[0]);
         fprintf(stdfile,
             "\t      --small       Generate smaller .cnv files. They will be\n"
@@ -253,6 +258,7 @@ int main(int argc, char* argv[])
     haveCopyright = options[OPT_COPYRIGHT].doesOccur;
     destdir = options[OPT_DESTDIR].value;
     VERBOSE = options[OPT_VERBOSE].doesOccur;
+    QUIET = options[OPT_QUIET].doesOccur;
     SMALL = options[OPT_SMALL].doesOccur;
 
     if (options[OPT_IGNORE_SISO_CHECK].doesOccur) {
@@ -361,7 +367,7 @@ int main(int argc, char* argv[])
             {
                 p++;   /* If found separtor, don't include it in compare */
             }
-            if(uprv_stricmp(p,data.staticData.name))
+            if(uprv_stricmp(p,data.staticData.name) && !QUIET)
             {
                 fprintf(stderr, "Warning: %s%s claims to be '%s'\n",
                     cnvName,  CONVERTER_FILE_EXTENSION,
