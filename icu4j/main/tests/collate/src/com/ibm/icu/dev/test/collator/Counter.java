@@ -1,12 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
- *******************************************************************************
- *
- * $Date: 2009-08-07 15:01:31 -0700 (Fri, 07 Aug 2009) $
- * $Revision: 4231 $
- *
  *******************************************************************************
  */
 
