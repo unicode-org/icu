@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- Copyright (c) 2010-2014 International Business Machines Corporation and others. All rights reserved.
+ Copyright (c) 2010-2015 International Business Machines Corporation and others. All rights reserved.
 
  See http://bugs.icu-project.org/trac/ticket/10750#comment:5 - this file is needed to emit break iterator rules properly.
 -->
@@ -13,7 +13,6 @@
 <ldml>
     <identity>
         <version number="$Revision$"/>
-        <generation date="$Date$"/>
         <language type="it"/>
     </identity>
 </ldml>
