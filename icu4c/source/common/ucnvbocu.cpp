@@ -399,8 +399,6 @@ _Bocu1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     int32_t sourceIndex, nextSourceIndex;
 
-U_ALIGN_CODE(16)
-
     /* set up the local pointers */
     cnv=pArgs->converter;
     source=pArgs->source;
@@ -1170,8 +1168,6 @@ _Bocu1ToUnicode(UConverterToUnicodeArgs *pArgs,
 
     int8_t byteIndex;
     uint8_t *bytes;
-
-U_ALIGN_CODE(16)
 
     /* set up the local pointers */
     cnv=pArgs->converter;
