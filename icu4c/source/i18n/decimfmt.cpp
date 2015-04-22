@@ -448,7 +448,7 @@ DecimalFormat::construct(UErrorCode&            status,
     fSymbols = symbolsToAdopt; // Do this BEFORE aborting on status failure!!!
     fRoundingIncrement = NULL;
     fRoundingMode = kRoundHalfEven;
-    fPad = kPatternPadEscape;
+    fPad = kDefaultPad;
     fPadPosition = kPadBeforePrefix;
     if (U_FAILURE(status))
         return;

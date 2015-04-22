@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2014, International Business Machines Corporation and    *
+* Copyright (C) 1997-2015, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -91,7 +91,7 @@ DecimalFormatPattern::DecimalFormatPattern()
           fFormatWidth(0),
           fRoundingIncrementUsed(FALSE),
           fRoundingIncrement(),
-          fPad(kPatternPadEscape),
+          fPad(kDefaultPad),
           fNegPatternsBogus(TRUE),
           fPosPatternsBogus(TRUE),
           fNegPrefixPattern(),
