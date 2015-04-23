@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2013, International Business Machines Corporation and
+ * Copyright (c) 1999-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -62,15 +62,7 @@
 #if defined(POSIX)
 #define HAVE_IMP
 
-#if (ICU_USE_THREADS == 1)
 #include <pthread.h>
-#endif
-
-#if defined(__hpux) && defined(HPUX_CMA)
-# if defined(read)  // read being defined as cma_read causes trouble with iostream::read
-#  undef read
-# endif
-#endif
 
 #if U_PLATFORM == U_PF_OS390
 #include <sys/types.h>
@@ -103,31 +95,6 @@
 #undef sleep
 #endif
 
-
-#if (ICU_USE_THREADS==0)
-    SimpleThread::SimpleThread()
-    {}
-
-    SimpleThread::~SimpleThread()
-    {}
-
-    int32_t 
-    SimpleThread::start()
-    { return -1; }
-
-    void 
-    SimpleThread::run()
-    {}
-
-    void 
-    SimpleThread::sleep(int32_t millis)
-    {}
-
-    UBool  
-    SimpleThread::isRunning() {
-        return FALSE;
-    }
-#else
 
 #include "unicode/putil.h"
 
@@ -223,77 +190,13 @@ int32_t SimpleThread::start()
 }
 
 
-UBool  SimpleThread::isRunning() {
-    //
-    //  Test whether the thread associated with the SimpleThread object is
-    //    still actually running.  
-    //
-    //  NOTE:  on Win64 on Itanium processors, a crashes
-    //    occur if the main thread of a process exits concurrently with some
-    //    other thread(s) exiting.  To avoid the possibility, we wait until the
-    //    OS indicates that all threads have  terminated, rather than waiting
-    //    only until the end of the user's Run function has been reached.
-    //
-    //   I don't know whether the crashes represent a Windows bug, or whether
-    //    main() programs are supposed to have to wait for their threads.
-    //
+void SimpleThread::join() {
     Win32ThreadImplementation *imp = (Win32ThreadImplementation*)fImplementation;
-    
-    bool      success;
-    DWORD     threadExitCode;
-
     if (imp->fHandle == 0) {
         // No handle, thread must not be running.
-        return FALSE;
+        return;
     }
-    success = GetExitCodeThread(imp->fHandle,   &threadExitCode) != 0;
-    if (! success) {
-        // Can't get status, thread must not be running.
-        return FALSE;
-    }
-    return (threadExitCode == STILL_ACTIVE);
-}
-
-
-void SimpleThread::sleep(int32_t millis)
-{
-    ::Sleep(millis);
-}
-
-//-----------------------------------------------------------------------------------
-//
-//   class SimpleThread   NULL  Implementation
-//
-//-----------------------------------------------------------------------------------
-#elif U_PLATFORM == U_PF_CLASSIC_MACOS
-
-// since the Mac has no preemptive threading (at least on MacOS 8), only
-// cooperative threading, threads are a no-op.  We have no yield() calls
-// anywhere in the ICU, so we are guaranteed to be thread-safe.
-
-#define HAVE_IMP
-
-SimpleThread::SimpleThread()
-{}
-
-SimpleThread::~SimpleThread()
-{}
-
-int32_t 
-SimpleThread::start()
-{ return 0; }
-
-void 
-SimpleThread::run()
-{}
-
-void 
-SimpleThread::sleep(int32_t millis)
-{}
-
-UBool  
-SimpleThread::isRunning() {
-    return FALSE;
+    WaitForSingleObject(imp->fHandle, INFINITE);
 }
 
 #endif
@@ -303,22 +206,6 @@ SimpleThread::isRunning() {
 //
 //   class SimpleThread   POSIX implementation
 //
-//        A note on the POSIX vs the Windows implementations of this class..
-//        On Windows, the main thread must verify that other threads have finished
-//        before exiting, or crashes occasionally occur.  (Seen on Itanium Win64 only)
-//        The function SimpleThread::isRunning() is used for this purpose.
-//
-//        On POSIX, there is NO reliable non-blocking mechanism to determine
-//        whether a thread has exited.  pthread_kill(thread, 0) almost works,
-//        but the system can recycle thread ids immediately, so seeing that a
-//        thread exists with this call could mean that the original thread has
-//        finished and a new one started with the same ID.  Useless.
-//
-//        So we need to do the check with user code, by setting a flag just before
-//        the thread function returns.  A technique that is guaranteed to fail
-//        on Windows, because it indicates that the thread is done before all
-//        system level cleanup has happened.
-//
 //-----------------------------------------------------------------------------------
 #if defined(POSIX)
 #define HAVE_IMP
@@ -326,40 +213,25 @@ SimpleThread::isRunning() {
 struct PosixThreadImplementation
 {
     pthread_t        fThread;
-    UBool            fRunning;
-    UBool            fRan;          // True if the thread was successfully started
 };
 
 extern "C" void* SimpleThreadProc(void *arg)
 {
     // This is the code that is run in the new separate thread.
     SimpleThread *This = (SimpleThread *)arg;
-    This->run();      // Run the user code.
-
-    // The user function has returned.  Set the flag indicating that this thread
-    // is done.  Need a mutex for memory barrier purposes only, so that other thread
-    //   will reliably see that the flag has changed.
-    PosixThreadImplementation *imp = (PosixThreadImplementation*)This->fImplementation;
-    umtx_lock(NULL);
-    imp->fRunning = FALSE;
-    umtx_unlock(NULL);
+    This->run();
     return 0;
 }
 
 SimpleThread::SimpleThread() 
 {
     PosixThreadImplementation *imp = new PosixThreadImplementation;
-    imp->fRunning   = FALSE;
-    imp->fRan       = FALSE;
     fImplementation = imp;
 }
 
 SimpleThread::~SimpleThread()
 {
     PosixThreadImplementation *imp = (PosixThreadImplementation*)fImplementation;
-    if (imp->fRan) {
-        pthread_join(imp->fThread, NULL);
-    }
     delete imp;
     fImplementation = (void *)0xdeadbeef;
 }
@@ -371,16 +243,7 @@ int32_t SimpleThread::start()
     static UBool attrIsInitialized = FALSE;
 
     PosixThreadImplementation *imp = (PosixThreadImplementation*)fImplementation;
-    imp->fRunning = TRUE;
-    imp->fRan     = TRUE;
 
-#ifdef HPUX_CMA
-    if (attrIsInitialized == FALSE) {
-        rc = pthread_attr_create(&attr);
-        attrIsInitialized = TRUE;
-    }
-    rc = pthread_create(&(imp->fThread),attr,&SimpleThreadProc,(void*)this);
-#else
     if (attrIsInitialized == FALSE) {
         rc = pthread_attr_init(&attr);
 #if U_PLATFORM == U_PF_OS390
@@ -398,53 +261,18 @@ int32_t SimpleThread::start()
 #endif
         attrIsInitialized = TRUE;
     }
-    rc = pthread_create(&(imp->fThread),&attr,&SimpleThreadProc,(void*)this);
-#endif
+    rc = pthread_create(&(imp->fThread), &attr, &SimpleThreadProc, (void*)this);
     
     if (rc != 0) {
         // some kind of error occured, the thread did not start.
-        imp->fRan     = FALSE;
-        imp->fRunning = FALSE;
     }
 
     return rc;
 }
 
-
-UBool  
-SimpleThread::isRunning() {
-    // Note:  Mutex functions are used here not for synchronization, 
-    //        but to force memory barriors to exist, to ensure that one thread
-    //        can see changes made by another when running on processors
-    //        with memory models having weak coherency.
+void SimpleThread::join() {
     PosixThreadImplementation *imp = (PosixThreadImplementation*)fImplementation;
-    umtx_lock(NULL);
-    UBool retVal = imp->fRunning;
-    umtx_unlock(NULL);
-    return retVal;
-}
-
-
-void SimpleThread::sleep(int32_t millis)
-{
-#if U_PLATFORM == U_PF_SOLARIS
-    sigignore(SIGALRM);
-#endif
-
-#ifdef HPUX_CMA
-    cma_sleep(millis/100);
-#elif U_PLATFORM == U_PF_HPUX || U_PLATFORM == U_PF_OS390
-    millis *= 1000;
-    while(millis >= 1000000) {
-        usleep(999999);
-        millis -= 1000000;
-    }
-    if(millis > 0) {
-        usleep(millis);
-    }
-#else
-    usleep(millis * 1000);
-#endif
+    pthread_join(imp->fThread, NULL);
 }
 
 #endif
@@ -453,30 +281,4 @@ void SimpleThread::sleep(int32_t millis)
 
 #ifndef HAVE_IMP
 #error  No implementation for threads! Cannot test.
-0 = 216; //die
 #endif
-
-//-------------------------------------------------------------------------------------------
-//
-// class ThreadWithStatus - a thread that we can check the status and error condition of
-//
-//-------------------------------------------------------------------------------------------
-class ThreadWithStatus : public SimpleThread
-{
-public:
-    UBool  getError() { return (fErrors > 0); } 
-    UBool  getError(UnicodeString& fillinError) { fillinError = fErrorString; return (fErrors > 0); } 
-    virtual ~ThreadWithStatus(){}
-protected:
-    ThreadWithStatus() :  fErrors(0) {}
-    void error(const UnicodeString &error) { 
-        fErrors++; fErrorString = error; 
-        SimpleThread::errorFunc();  
-    }
-    void error() { error("An error occured."); }
-private:
-    int32_t fErrors;
-    UnicodeString fErrorString;
-};
-
-#endif // ICU_USE_THREADS
