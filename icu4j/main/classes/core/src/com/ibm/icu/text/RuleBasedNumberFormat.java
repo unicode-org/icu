@@ -543,12 +543,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * The formatter's rule sets.
      */
     private transient NFRuleSet[] ruleSets = null;
-    
+
     /**
-     * The formatter's rule sets' descriptions.
+     * The formatter's rule names mapped to rule sets.
      */
-    private transient String[] ruleSetDescriptions = null;
-    
+    private transient Map<String, NFRuleSet> ruleSetsMap = null;
+
     /**
      * A pointer to the formatter's default rule set.  This is always included
      * in ruleSets.
@@ -910,8 +910,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // accumulate the descriptions of all the rule sets in a
         // StringBuffer, then cast it to a String and return it
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < ruleSets.length; i++) {
-            result.append(ruleSets[i].toString());
+        for (NFRuleSet ruleSet : ruleSets) {
+            result.append(ruleSet.toString());
         }
         return result.toString();
     }
@@ -951,6 +951,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // get swept up by the garbage collector
         RuleBasedNumberFormat temp = new RuleBasedNumberFormat(description, loc);
         ruleSets = temp.ruleSets;
+        ruleSetsMap = temp.ruleSetsMap;
         defaultRuleSet = temp.defaultRuleSet;
         publicRuleSetNames = temp.publicRuleSetNames;
         decimalFormatSymbols = temp.decimalFormatSymbols;
@@ -995,8 +996,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     private String[] getNameListForLocale(ULocale loc) {
         if (loc != null && ruleSetDisplayNames != null) {
             String[] localeNames = { loc.getBaseName(), ULocale.getDefault(Category.DISPLAY).getBaseName() };
-            for (int i = 0; i < localeNames.length; ++i) {
-                String lname = localeNames[i];
+            for (String lname : localeNames) {
                 while (lname.length() > 0) {
                     String[] names = ruleSetDisplayNames.get(lname);
                     if (names != null) {
@@ -1411,8 +1411,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
             }
             
             // Apply the new decimalFormatSymbols by reparsing the rulesets
-            for (int i = 0; i < ruleSets.length; i++) {
-                ruleSets[i].parseRules(ruleSetDescriptions[i], this);
+            for (NFRuleSet ruleSet : ruleSets) {
+                ruleSet.setDecimalFormatSymbols(decimalFormatSymbols);
             }
         }
     }
@@ -1579,15 +1579,21 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // pre-flight parsing the description and count the number of
         // rule sets (";%" marks the end of one rule set and the beginning
         // of the next)
-        int numRuleSets = 0;
-        for (int p = descBuf.indexOf(";%"); p != -1; p = descBuf.indexOf(";%", p)) {
+        int numRuleSets = 1;
+        int p = 0;
+        while ((p = descBuf.indexOf(";%", p)) != -1) {
             ++numRuleSets;
-            ++p;
+            p += 2; // Skip the length of ";%"
         }
-        ++numRuleSets;
 
         // our rule list is an array of the appropriate size
         ruleSets = new NFRuleSet[numRuleSets];
+        ruleSetsMap = new HashMap<String, NFRuleSet>(numRuleSets * 2 + 1);
+        defaultRuleSet = null;
+
+        // Used to count the number of public rule sets
+        // Public rule sets have names that begin with % instead of %%.
+        int publicRuleSetCount = 0;
 
         // divide up the descriptions into individual rule-set descriptions
         // and store them in a temporary array.  At each step, we also
@@ -1596,18 +1602,34 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // the rest of the descriptions and finish initializing everything
         // because we have to know the names and locations of all the rule
         // sets before we can actually set everything up
-        ruleSetDescriptions = new String[numRuleSets];
+        String[] ruleSetDescriptions = new String[numRuleSets];
 
         int curRuleSet = 0;
         int start = 0;
-        for (int p = descBuf.indexOf(";%"); p != -1; p = descBuf.indexOf(";%", start)) {
+
+        while (curRuleSet < ruleSets.length) {
+            p = descBuf.indexOf(";%", start);
+            if (p < 0) {
+                p = descBuf.length() - 1;
+            }
             ruleSetDescriptions[curRuleSet] = descBuf.substring(start, p + 1);
-            ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet);
+            NFRuleSet ruleSet = new NFRuleSet(ruleSetDescriptions, curRuleSet);
+            ruleSets[curRuleSet] = ruleSet;
+            String currentName = ruleSet.getName();
+            ruleSetsMap.put(currentName, ruleSet);
+            if (!currentName.startsWith("%%")) {
+                ++publicRuleSetCount;
+                if (defaultRuleSet == null
+                        && currentName.equals("%spellout-numbering")
+                        || currentName.equals("%digits-ordinal")
+                        || currentName.equals("%duration"))
+                {
+                    defaultRuleSet = ruleSet;
+                }
+            }
             ++curRuleSet;
             start = p + 1;
         }
-        ruleSetDescriptions[curRuleSet] = descBuf.substring(start);
-        ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet);
 
         // now we can take note of the formatter's default rule set, which
         // is the last public rule set in the description (it's the last
@@ -1622,26 +1644,16 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // Set the default ruleset to the last public ruleset, unless one of the predefined
         // ruleset names %spellout-numbering, %digits-ordinal, or %duration is found
 
-        boolean defaultNameFound = false;
-        int n = ruleSets.length;
-        defaultRuleSet = ruleSets[ruleSets.length - 1];
-
-        while (--n >= 0) {
-            String currentName = ruleSets[n].getName();
-            if (currentName.equals("%spellout-numbering") || currentName.equals("%digits-ordinal") || currentName.equals("%duration")) {
-                defaultRuleSet = ruleSets[n];
-                defaultNameFound = true;
-                break;
-            }
-        }
-
-        if ( !defaultNameFound ) {
+        if (defaultRuleSet == null) {
             for (int i = ruleSets.length - 1; i >= 0; --i) {
                 if (!ruleSets[i].getName().startsWith("%%")) {
                     defaultRuleSet = ruleSets[i];
                     break;
                 }
             }
+        }
+        if (defaultRuleSet == null) {
+            defaultRuleSet = ruleSets[ruleSets.length - 1];
         }
 
         // finally, we can go back through the temporary descriptions
@@ -1652,15 +1664,6 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // Now that the rules are initialized, the 'real' default rule
         // set can be adjusted by the localization data.
-
-        // count the number of public rule sets
-        // (public rule sets have names that begin with % instead of %%)
-        int publicRuleSetCount = 0;
-        for (int i = 0; i < ruleSets.length; i++) {
-            if (!ruleSets[i].getName().startsWith("%%")) {
-                ++publicRuleSetCount;
-            }
-        }
 
         // prepare an array of the proper size and copy the names into it
         String[] publicRuleSetTemp = new String[publicRuleSetCount];
@@ -1787,26 +1790,6 @@ public class RuleBasedNumberFormat extends NumberFormat {
         return result;
     }
 
-//    /**
-//     * This function is called ONLY DURING CONSTRUCTION to fill in the
-//     * defaultRuleSet variable once we've set up all the rule sets.
-//     * The default rule set is the last public rule set in the description.
-//     * (It's the last rather than the first so that a caller can append
-//     * text to the end of an existing formatter description to change its
-//     * behavior.)
-//     */
-//    private void initDefaultRuleSet() {
-//        // seek backward from the end of the list until we reach a rule set
-//        // whose name DOESN'T begin with %%.  That's the default rule set
-//        for (int i = ruleSets.length - 1; i >= 0; --i) {
-//            if (!ruleSets[i].getName().startsWith("%%")) {
-//                defaultRuleSet = ruleSets[i];
-//                return;
-//            }
-//        }
-//        defaultRuleSet = ruleSets[ruleSets.length - 1];
-//    }
-
     //-----------------------------------------------------------------------
     // formatting implementation
     //-----------------------------------------------------------------------
@@ -1826,7 +1809,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // position of 0 and the number being formatted) to the rule set
         // for formatting
         StringBuffer result = new StringBuffer();
-        ruleSet.format(number, result, 0);
+        ruleSet.format(number, result, 0, 0);
         postProcess(result, ruleSet);
         return result.toString();
     }
@@ -1851,7 +1834,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // position of 0 and the number being formatted) to the rule set
         // for formatting
         StringBuffer result = new StringBuffer();
-        ruleSet.format(number, result, 0);
+        ruleSet.format(number, result, 0, 0);
         postProcess(result, ruleSet);
         return result.toString();
     }
@@ -1913,11 +1896,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return The rule set with that name
      */
     NFRuleSet findRuleSet(String name) throws IllegalArgumentException {
-        for (int i = 0; i < ruleSets.length; i++) {
-            if (ruleSets[i].getName().equals(name)) {
-                return ruleSets[i];
-            }
+        NFRuleSet result = ruleSetsMap.get(name);
+        if (result == null) {
+            throw new IllegalArgumentException("No rule set named " + name);
         }
-        throw new IllegalArgumentException("No rule set named " + name);
+        return result;
     }
 }
