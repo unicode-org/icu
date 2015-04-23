@@ -561,6 +561,7 @@ void IntlTest::setCaller( IntlTest* callingTest )
         verbose = caller->verbose;
         no_err_msg = caller->no_err_msg;
         quick = caller->quick;
+        threadCount = caller->threadCount;
         testoutfp = caller->testoutfp;
         LL_indentlevel = caller->LL_indentlevel + indentLevel_offset;
         numProps = caller->numProps;
