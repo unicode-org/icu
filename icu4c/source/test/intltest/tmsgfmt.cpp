@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  * File TMSGFMT.CPP
@@ -1525,7 +1525,7 @@ void TestMessageFormat::TestRBNF(void) {
         "There are {0,spellout} files to search.",
         "There are {0,spellout,%simplified} files to search.",
         "The bogus spellout {0,spellout,%BOGUS} files behaves like the default.",
-        "This is the {0,ordinal} file to search.", // TODO fix bug, ordinal does not parse
+        "This is the {0,ordinal} file to search.",
         "Searching this file will take {0,duration} to complete.",
         "Searching this file will take {0,duration,%with-words} to complete.",
     };
@@ -1554,16 +1554,14 @@ void TestMessageFormat::TestRBNF(void) {
                 fmt->format(args, 1, result, fp, ec);
                 logln((UnicodeString)"value: " + toString(args[0]) + " --> " + result + UnicodeString(" ec: ") + u_errorName(ec));
                
-                if (i != 3) { // TODO: fix this, for now skip ordinal parsing (format string at index 3)
-                    int32_t count = 0;
-                    Formattable* parseResult = fmt->parse(result, count, ec);
-                    if (count != 1) {
-                        errln((UnicodeString)"parse returned " + count + " args");
-                    } else if (parseResult[0] != args[0]) {
-                        errln((UnicodeString)"parsed argument " + toString(parseResult[0]) + " != " + toString(args[0]));
-                    }
-                    delete []parseResult;
+                int32_t count = 0;
+                Formattable* parseResult = fmt->parse(result, count, ec);
+                if (count != 1) {
+                    errln((UnicodeString)"parse returned " + count + " args");
+                } else if (parseResult[0] != args[0]) {
+                    errln((UnicodeString)"parsed argument " + toString(parseResult[0]) + " != " + toString(args[0]));
                 }
+                delete []parseResult;
             }
         }
         delete fmt;
