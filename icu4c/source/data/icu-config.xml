@@ -227,6 +227,7 @@
 		<include locales="en_ZW"/>
 		<include locales="eo"/>
 		<include locales="es"/>
+		<include locales="es_003"/>
 		<include locales="es_419"/>
 		<include locales="es_AR"/>
 		<include locales="es_BO"/>
