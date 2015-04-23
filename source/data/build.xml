@@ -2,11 +2,12 @@
     <!ENTITY icu-config SYSTEM "./icu-config.xml">
     <!ENTITY icu-locale-deprecates SYSTEM "./icu-locale-deprecates.xml">
     <!ENTITY icu-coll-deprecates SYSTEM "./icu-coll-deprecates.xml">
+    <!ENTITY icu-rbnf-deprecates SYSTEM "./icu-rbnf-deprecates.xml">
 ]>
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2014, International Business Machines Corporation and    *
+* Copyright (C) 2005-2015, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -176,6 +177,7 @@
                 </args>
                 <!-- http://ant.apache.org/faq.html#xml-entity-include -->
                 &icu-config;
+                &icu-rbnf-deprecates;
             </run>
         </cldr-build>
     </target>
