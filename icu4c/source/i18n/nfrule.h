@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2014, International Business Machines
+* Copyright (C) 1997-2015, International Business Machines
 * Corporation and others. All Rights Reserved.
 *******************************************************************************
 */
@@ -62,8 +62,8 @@ public:
 
     double getDivisor() const { return uprv_pow(radix, exponent); }
 
-    void doFormat(int64_t number, UnicodeString& toAppendTo, int32_t pos, UErrorCode& status) const;
-    void doFormat(double  number, UnicodeString& toAppendTo, int32_t pos, UErrorCode& status) const;
+    void doFormat(int64_t number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
+    void doFormat(double  number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
 
     UBool doParse(const UnicodeString& text, 
                   ParsePosition& pos, 
@@ -77,6 +77,8 @@ public:
 
     int32_t findTextLenient(const UnicodeString& str, const UnicodeString& key, 
                      int32_t startingAt, int32_t* resultCount) const;
+
+    void setDecimalFormatSymbols(const DecimalFormatSymbols &newSymbols, UErrorCode& status);
 
 private:
     void parseRuleDescriptor(UnicodeString& descriptor, UErrorCode& status);

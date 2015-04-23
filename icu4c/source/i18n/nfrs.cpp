@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2014, International Business Machines
+*   Copyright (C) 1997-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrs.cpp
@@ -125,7 +125,6 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
   , fIsFractionRuleSet(FALSE)
   , fIsPublic(FALSE)
   , fIsParseable(TRUE)
-  , fRecursionCount(0)
 {
     for (int i = 0; i < 3; ++i) {
         fractionRules[i] = NULL;
@@ -332,36 +331,39 @@ NFRuleSet::operator==(const NFRuleSet& rhs) const
     return FALSE;
 }
 
-#define RECURSION_LIMIT 50
+void
+NFRuleSet::setDecimalFormatSymbols(const DecimalFormatSymbols &newSymbols, UErrorCode& status) {
+    for (uint32_t i = 0; i < rules.size(); ++i) {
+        rules[i]->setDecimalFormatSymbols(newSymbols, status);
+    }
+}
+
+#define RECURSION_LIMIT 64
 
 void
-NFRuleSet::format(int64_t number, UnicodeString& toAppendTo, int32_t pos, UErrorCode& status) const
+NFRuleSet::format(int64_t number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const
 {
     NFRule *rule = findNormalRule(number);
     if (rule) { // else error, but can't report it
-        NFRuleSet* ncThis = (NFRuleSet*)this;
-        if (ncThis->fRecursionCount++ >= RECURSION_LIMIT) {
+        if (recursionCount >= RECURSION_LIMIT) {
             // stop recursion
-            ncThis->fRecursionCount = 0;
+            status = U_INVALID_STATE_ERROR;
         } else {
-            rule->doFormat(number, toAppendTo, pos, status);
-            ncThis->fRecursionCount--;
+            rule->doFormat(number, toAppendTo, pos, ++recursionCount, status);
         }
     }
 }
 
 void
-NFRuleSet::format(double number, UnicodeString& toAppendTo, int32_t pos, UErrorCode& status) const
+NFRuleSet::format(double number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const
 {
     NFRule *rule = findDoubleRule(number);
     if (rule) { // else error, but can't report it
-        NFRuleSet* ncThis = (NFRuleSet*)this;
-        if (ncThis->fRecursionCount++ >= RECURSION_LIMIT) {
+        if (recursionCount >= RECURSION_LIMIT) {
             // stop recursion
-            ncThis->fRecursionCount = 0;
+            status = U_INVALID_STATE_ERROR;
         } else {
-            rule->doFormat(number, toAppendTo, pos, status);
-            ncThis->fRecursionCount--;
+            rule->doFormat(number, toAppendTo, pos, ++recursionCount, status);
         }
     }
 }

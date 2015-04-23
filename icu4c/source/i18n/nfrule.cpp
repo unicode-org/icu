@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2014, International Business Machines
+*   Copyright (C) 1997-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrule.cpp
@@ -682,7 +682,7 @@ NFRule::_appendRuleText(UnicodeString& result) const
 * should be inserted
 */
 void
-NFRule::doFormat(int64_t number, UnicodeString& toInsertInto, int32_t pos, UErrorCode& status) const
+NFRule::doFormat(int64_t number, UnicodeString& toInsertInto, int32_t pos, int32_t recursionCount, UErrorCode& status) const
 {
     // first, insert the rule's rule text into toInsertInto at the
     // specified position, then insert the results of the substitutions
@@ -710,10 +710,10 @@ NFRule::doFormat(int64_t number, UnicodeString& toInsertInto, int32_t pos, UErro
     }
 
     if (!sub2->isNullSubstitution()) {
-        sub2->doSubstitution(number, toInsertInto, pos - (sub2->getPos() > pluralRuleStart ? lengthOffset : 0), status);
+        sub2->doSubstitution(number, toInsertInto, pos - (sub2->getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount, status);
     }
     if (!sub1->isNullSubstitution()) {
-        sub1->doSubstitution(number, toInsertInto, pos - (sub1->getPos() > pluralRuleStart ? lengthOffset : 0), status);
+        sub1->doSubstitution(number, toInsertInto, pos - (sub1->getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount, status);
     }
 }
 
@@ -727,7 +727,7 @@ NFRule::doFormat(int64_t number, UnicodeString& toInsertInto, int32_t pos, UErro
 * should be inserted
 */
 void
-NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos, UErrorCode& status) const
+NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos, int32_t recursionCount, UErrorCode& status) const
 {
     // first, insert the rule's rule text into toInsertInto at the
     // specified position, then insert the results of the substitutions
@@ -756,10 +756,10 @@ NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos, UError
     }
 
     if (!sub2->isNullSubstitution()) {
-        sub2->doSubstitution(number, toInsertInto, pos - (sub2->getPos() > pluralRuleStart ? lengthOffset : 0), status);
+        sub2->doSubstitution(number, toInsertInto, pos - (sub2->getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount, status);
     }
     if (!sub1->isNullSubstitution()) {
-        sub1->doSubstitution(number, toInsertInto, pos - (sub1->getPos() > pluralRuleStart ? lengthOffset : 0), status);
+        sub1->doSubstitution(number, toInsertInto, pos - (sub1->getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount, status);
     }
 }
 
@@ -1520,6 +1520,16 @@ NFRule::allIgnorable(const UnicodeString& str, UErrorCode& status) const
     // if lenient parsing is turned off, there is no such thing as
     // an ignorable character: return true only if the string is empty
     return FALSE;
+}
+
+void
+NFRule::setDecimalFormatSymbols(const DecimalFormatSymbols& newSymbols, UErrorCode& status) {
+    if (sub1 != NULL) {
+        sub1->setDecimalFormatSymbols(newSymbols, status);
+    }
+    if (sub2 != NULL) {
+        sub2->setDecimalFormatSymbols(newSymbols, status);
+    }
 }
 
 U_NAMESPACE_END

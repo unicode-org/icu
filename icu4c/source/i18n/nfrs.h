@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2014, International Business Machines
+*   Copyright (C) 1997-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrs.h
@@ -48,12 +48,14 @@ public:
     void  getName(UnicodeString& result) const { result.setTo(name); }
     UBool isNamed(const UnicodeString& _name) const { return this->name == _name; }
 
-    void  format(int64_t number, UnicodeString& toAppendTo, int32_t pos, UErrorCode& status) const;
-    void  format(double number, UnicodeString& toAppendTo, int32_t pos, UErrorCode& status) const;
+    void  format(int64_t number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
+    void  format(double number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
 
     UBool parse(const UnicodeString& text, ParsePosition& pos, double upperBound, Formattable& result) const;
 
     void appendRules(UnicodeString& result) const; // toString
+
+    void setDecimalFormatSymbols(const DecimalFormatSymbols &newSymbols, UErrorCode& status);
 
 private:
     NFRule * findNormalRule(int64_t number) const;
@@ -68,7 +70,6 @@ private:
     UBool fIsFractionRuleSet;
     UBool fIsPublic;
     UBool fIsParseable;
-    int32_t fRecursionCount;
 
     NFRuleSet(const NFRuleSet &other); // forbid copying of this class
     NFRuleSet &operator=(const NFRuleSet &other); // forbid copying of this class
