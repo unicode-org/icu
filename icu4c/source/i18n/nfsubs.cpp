@@ -518,8 +518,7 @@ NFSubstitution::NFSubstitution(int32_t _pos,
 
 NFSubstitution::~NFSubstitution()
 {
-    // cast away const
-    delete (NumberFormat*)numberFormat;
+    delete numberFormat;
     numberFormat = NULL;
 }
 
