@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2014, International Business Machines Corporation
+* Copyright (C) 1997-2015, International Business Machines Corporation
 * and others. All Rights Reserved.
 *******************************************************************************
 */
@@ -1068,7 +1068,7 @@ RuleBasedNumberFormat::format(int32_t number,
     if (defaultRuleSet) {
         UErrorCode status = U_ZERO_ERROR;
         int32_t startPos = toAppendTo.length();
-        defaultRuleSet->format((int64_t)number, toAppendTo, toAppendTo.length(), status);
+        defaultRuleSet->format((int64_t)number, toAppendTo, toAppendTo.length(), 0, status);
         adjustForCapitalizationContext(startPos, toAppendTo);
     }
     return toAppendTo;
@@ -1083,7 +1083,7 @@ RuleBasedNumberFormat::format(int64_t number,
     if (defaultRuleSet) {
         UErrorCode status = U_ZERO_ERROR;
         int32_t startPos = toAppendTo.length();
-        defaultRuleSet->format(number, toAppendTo, toAppendTo.length(), status);
+        defaultRuleSet->format(number, toAppendTo, toAppendTo.length(), 0, status);
         adjustForCapitalizationContext(startPos, toAppendTo);
     }
     return toAppendTo;
@@ -1104,7 +1104,7 @@ RuleBasedNumberFormat::format(double number,
         }
     } else if (defaultRuleSet) {
         UErrorCode status = U_ZERO_ERROR;
-        defaultRuleSet->format(number, toAppendTo, toAppendTo.length(), status);
+        defaultRuleSet->format(number, toAppendTo, toAppendTo.length(), 0, status);
     }
     return adjustForCapitalizationContext(startPos, toAppendTo);
 }
@@ -1126,7 +1126,7 @@ RuleBasedNumberFormat::format(int32_t number,
             NFRuleSet *rs = findRuleSet(ruleSetName, status);
             if (rs) {
                 int32_t startPos = toAppendTo.length();
-                rs->format((int64_t)number, toAppendTo, toAppendTo.length(), status);
+                rs->format((int64_t)number, toAppendTo, toAppendTo.length(), 0, status);
                 adjustForCapitalizationContext(startPos, toAppendTo);
             }
         }
@@ -1150,7 +1150,7 @@ RuleBasedNumberFormat::format(int64_t number,
             NFRuleSet *rs = findRuleSet(ruleSetName, status);
             if (rs) {
                 int32_t startPos = toAppendTo.length();
-                rs->format(number, toAppendTo, toAppendTo.length(), status);
+                rs->format(number, toAppendTo, toAppendTo.length(), 0, status);
                 adjustForCapitalizationContext(startPos, toAppendTo);
             }
         }
@@ -1174,7 +1174,7 @@ RuleBasedNumberFormat::format(double number,
             NFRuleSet *rs = findRuleSet(ruleSetName, status);
             if (rs) {
                 int32_t startPos = toAppendTo.length();
-                rs->format(number, toAppendTo, toAppendTo.length(), status);
+                rs->format(number, toAppendTo, toAppendTo.length(), 0, status);
                 adjustForCapitalizationContext(startPos, toAppendTo);
             }
         }
@@ -1735,7 +1735,7 @@ RuleBasedNumberFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsTo
         UErrorCode status = U_ZERO_ERROR;
 
         for (int32_t i = 0; i < numRuleSets; i++) {
-            ruleSets[i]->parseRules(ruleSetDescriptions[i], this, status);
+            ruleSets[i]->setDecimalFormatSymbols(*symbolsToAdopt, status);
         }
     }
 }
