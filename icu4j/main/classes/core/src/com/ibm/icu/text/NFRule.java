@@ -106,7 +106,7 @@ final class NFRule {
      * rule list
      * @param ownersOwner The RuleBasedNumberFormat that owns the
      * rule set that owns the new rule(s)
-     * @param returnList A list of NFRules
+     * @param returnList One or more instances of NFRule are added and returned here
      */
     public static void makeRules(String                description,
                                    NFRuleSet             owner,
@@ -684,7 +684,7 @@ final class NFRule {
      * @param pos The position in toInsertInto where the resultant text
      * should be inserted
      */
-    public void doFormat(long number, StringBuffer toInsertInto, int pos) {
+    public void doFormat(long number, StringBuffer toInsertInto, int pos, int recursionCount) {
         // first, insert the rule's rule text into toInsertInto at the
         // specified position, then insert the results of the substitutions
         // into the right places in toInsertInto (notice we do the
@@ -709,10 +709,10 @@ final class NFRule {
             lengthOffset = ruleText.length() - (toInsertInto.length() - initialLength);
         }
         if (!sub2.isNullSubstitution()) {
-            sub2.doSubstitution(number, toInsertInto, pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0));
+            sub2.doSubstitution(number, toInsertInto, pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount);
         }
         if (!sub1.isNullSubstitution()) {
-            sub1.doSubstitution(number, toInsertInto, pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0));
+            sub1.doSubstitution(number, toInsertInto, pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount);
         }
     }
 
@@ -725,7 +725,7 @@ final class NFRule {
      * @param pos The position in toInsertInto where the resultant text
      * should be inserted
      */
-    public void doFormat(double number, StringBuffer toInsertInto, int pos) {
+    public void doFormat(double number, StringBuffer toInsertInto, int pos, int recursionCount) {
         // first, insert the rule's rule text into toInsertInto at the
         // specified position, then insert the results of the substitutions
         // into the right places in toInsertInto
@@ -751,10 +751,10 @@ final class NFRule {
             lengthOffset = ruleText.length() - (toInsertInto.length() - initialLength);
         }
         if (!sub2.isNullSubstitution()) {
-            sub2.doSubstitution(number, toInsertInto, pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0));
+            sub2.doSubstitution(number, toInsertInto, pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount);
         }
         if (!sub1.isNullSubstitution()) {
-            sub1.doSubstitution(number, toInsertInto, pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0));
+            sub1.doSubstitution(number, toInsertInto, pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount);
         }
     }
 
@@ -1202,5 +1202,14 @@ final class NFRule {
         }
         RbnfLenientScanner scanner = formatter.getLenientScanner();
         return scanner != null && scanner.allIgnorable(str);
+    }
+
+    public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
+        if (sub1 != null) {
+            sub1.setDecimalFormatSymbols(newSymbols);
+        }
+        if (sub2 != null) {
+            sub2.setDecimalFormatSymbols(newSymbols);
+        }
     }
 }

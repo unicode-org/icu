@@ -29,7 +29,7 @@ final class NFRuleSet {
     /**
      * The rule set's name
      */
-    private String name;
+    private final String name;
 
     /**
      * The rule set's regular rules
@@ -61,17 +61,12 @@ final class NFRuleSet {
     /**
      * True if the rule set is parseable.
      */
-    private boolean isParseable = true;
+    private final boolean isParseable;
 
     /**
-     * Used to limit recursion for bad rule sets.
+     * Limit of recursion. It's about a 64 bit number formatted in base 2.
      */
-    private int recursionCount = 0;
-
-    /**
-     * Limit of recursion.
-     */
-    private static final int RECURSION_LIMIT = 50;
+    private static final int RECURSION_LIMIT = 64;
 
     //-----------------------------------------------------------------------
     // construction
@@ -102,7 +97,13 @@ final class NFRuleSet {
                 throw new IllegalArgumentException("Rule set name doesn't end in colon");
             }
             else {
-                name = description.substring(0, pos);
+                String name = description.substring(0, pos);
+                this.isParseable = !name.endsWith("@noparse");
+                if (!this.isParseable) {
+                    name = name.substring(0,name.length()-8); // Remove the @noparse from the name
+                }
+                this.name = name;
+
                 while (pos < description.length() && PatternProps.isWhiteSpace(description.charAt(++pos))) {
                 }
                 description = description.substring(pos);
@@ -113,15 +114,11 @@ final class NFRuleSet {
             // if the description doesn't begin with a rule set name, its
             // name is "%default"
             name = "%default";
+            isParseable = true;
         }
 
         if (description.length() == 0) {
             throw new IllegalArgumentException("Empty rule set description");
-        }
-
-        if ( name.endsWith("@noparse")) {
-            name = name.substring(0,name.length()-8); // Remove the @noparse from the name
-            isParseable = false;
         }
 
         // all of the other members of NFRuleSet are initialized
@@ -389,15 +386,13 @@ final class NFRuleSet {
      * @param pos The position in toInsertInto where the result of
      * this operation is to be inserted
      */
-    public void format(long number, StringBuffer toInsertInto, int pos) {
+    public void format(long number, StringBuffer toInsertInto, int pos, int recursionCount) {
         NFRule applicableRule = findNormalRule(number);
 
-        if (++recursionCount >= RECURSION_LIMIT) {
-            recursionCount = 0;
+        if (recursionCount >= RECURSION_LIMIT) {
             throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
         }
-        applicableRule.doFormat(number, toInsertInto, pos);
-        --recursionCount;
+        applicableRule.doFormat(number, toInsertInto, pos, ++recursionCount);
     }
 
     /**
@@ -408,15 +403,13 @@ final class NFRuleSet {
      * @param pos The position in toInsertInto where the result of
      * this operation is to be inserted
      */
-    public void format(double number, StringBuffer toInsertInto, int pos) {
+    public void format(double number, StringBuffer toInsertInto, int pos, int recursionCount) {
         NFRule applicableRule = findRule(number);
 
-        if (++recursionCount >= RECURSION_LIMIT) {
-            recursionCount = 0;
+        if (recursionCount >= RECURSION_LIMIT) {
             throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
         }
-        applicableRule.doFormat(number, toInsertInto, pos);
-        --recursionCount;
+        applicableRule.doFormat(number, toInsertInto, pos, ++recursionCount);
     }
 
     /**
@@ -778,5 +771,11 @@ final class NFRuleSet {
 //        }
 
         return result;
+    }
+
+    public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
+        for (NFRule rule : rules) {
+            rule.setDecimalFormatSymbols(newSymbols);
+        }
     }
 }
