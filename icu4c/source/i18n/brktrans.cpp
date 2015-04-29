@@ -12,16 +12,17 @@
 
 #if  !UCONFIG_NO_TRANSLITERATION && !UCONFIG_NO_BREAK_ITERATION
 
-#include "unicode/unifilt.h"
-#include "unicode/uchar.h"
-#include "unicode/uniset.h"
 #include "unicode/brkiter.h"
-#include "brktrans.h"
+#include "unicode/localpointer.h"
 #include "unicode/uchar.h"
+#include "unicode/unifilt.h"
+#include "unicode/uniset.h"
+
+#include "brktrans.h"
 #include "cmemory.h"
+#include "mutex.h"
 #include "uprops.h"
 #include "uinvchar.h"
-#include "umutex.h"
 #include "util.h"
 #include "uvectr32.h"
 
@@ -37,10 +38,8 @@ static const UChar SPACE       = 32;  // ' '
  * '}'.
  */
 BreakTransliterator::BreakTransliterator(UnicodeFilter* adoptedFilter) :
-    Transliterator(UNICODE_STRING("Any-BreakInternal", 17), adoptedFilter),
-    fInsertion(SPACE) {
-        cachedBI = NULL;
-        cachedBoundaries = NULL;
+        Transliterator(UNICODE_STRING("Any-BreakInternal", 17), adoptedFilter),
+        cachedBI(NULL), cachedBoundaries(NULL), fInsertion(SPACE) {
     }
 
 
@@ -48,20 +47,13 @@ BreakTransliterator::BreakTransliterator(UnicodeFilter* adoptedFilter) :
  * Destructor.
  */
 BreakTransliterator::~BreakTransliterator() {
-    delete cachedBI;
-    cachedBI = NULL;
-    delete cachedBoundaries;
-    cachedBoundaries = NULL;
 }
 
 /**
  * Copy constructor.
  */
 BreakTransliterator::BreakTransliterator(const BreakTransliterator& o) :
-        Transliterator(o) {
-    cachedBI = NULL;
-    cachedBoundaries = NULL;
-    fInsertion = o.fInsertion;
+        Transliterator(o), cachedBI(NULL), cachedBoundaries(NULL), fInsertion(o.fInsertion) {
 }
 
 
@@ -79,27 +71,26 @@ void BreakTransliterator::handleTransliterate(Replaceable& text, UTransPosition&
                                                     UBool isIncremental ) const {
 
         UErrorCode status = U_ZERO_ERROR;
-        BreakIterator *bi = NULL;
-        UVector32 *boundaries = NULL;
+        LocalPointer<BreakIterator> bi;
+        LocalPointer<UVector32> boundaries;
 
-        umtx_lock(NULL);
-        if (cachedBI) {
-            bi = cachedBI;
-            boundaries = cachedBoundaries;
+        {
+            Mutex m;
             BreakTransliterator *nonConstThis = const_cast<BreakTransliterator *>(this);
-            nonConstThis->cachedBI = NULL;
-            nonConstThis->cachedBoundaries = NULL;
+            boundaries.adoptInstead(nonConstThis->cachedBoundaries.orphan());
+            bi.adoptInstead(nonConstThis->cachedBI.orphan());
         }
-        umtx_unlock(NULL);
-        if (bi == NULL) {
-            boundaries = new UVector32(status);
-            bi = BreakIterator::createWordInstance(Locale::getEnglish(), status);
-        }    
+        if (bi.isNull()) {
+            bi.adoptInstead(BreakIterator::createWordInstance(Locale::getEnglish(), status));
+        }
+        if (boundaries.isNull()) {
+            boundaries.adoptInstead(new UVector32(status));
+        }
 
-        if (bi == NULL || boundaries == NULL || U_FAILURE(status)) {
+        if (bi.isNull() || boundaries.isNull() || U_FAILURE(status)) {
             return;
         }
-            
+
         boundaries->removeAllElements();
         UnicodeString sText = replaceableAsString(text);
         bi->setText(sText);
@@ -148,22 +139,15 @@ void BreakTransliterator::handleTransliterate(Replaceable& text, UTransPosition&
         offsets.start = isIncremental ? lastBoundary + delta : offsets.limit;
 
         // Return break iterator & boundaries vector to the cache.
-        umtx_lock(NULL);
-        BreakTransliterator *nonConstThis = const_cast<BreakTransliterator *>(this);
-        if (nonConstThis->cachedBI == NULL) {
-            nonConstThis->cachedBI = bi;
-            bi = NULL;
-        }
-        if (nonConstThis->cachedBoundaries == NULL) {
-            nonConstThis->cachedBoundaries = boundaries;
-            boundaries = NULL;
-        }
-        umtx_unlock(NULL);
-        if (bi) {
-            delete bi;
-        }
-        if (boundaries) {
-            delete boundaries;
+        {
+            Mutex m;
+            BreakTransliterator *nonConstThis = const_cast<BreakTransliterator *>(this);
+            if (nonConstThis->cachedBI.isNull()) {
+                nonConstThis->cachedBI.adoptInstead(bi.orphan());
+            }
+            if (nonConstThis->cachedBoundaries.isNull()) {
+                nonConstThis->cachedBoundaries.adoptInstead(boundaries.orphan());
+            }
         }
 
         // TODO:  do something with U_FAILURE(status);
