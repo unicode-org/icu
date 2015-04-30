@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -19,23 +19,6 @@
 #if U_NO_DEFAULT_INCLUDE_UTF_HEADERS
 /* deprecated  - make tests pass with U_NO_DEFAULT_INCLUDE_UTF_HEADERS */
 #include "unicode/utf_old.h" 
-#endif
-
-/**
- * \def ICU_USE_THREADS
- *
- * Enables multi-threaded testing. Moved here from uconfig.h.
- * Default: enabled
- *
- * This switch used to allow thread support (use of mutexes) to be compiled out of ICU.
- */
-#ifdef ICU_USE_THREADS
-    /* Use the predefined value. */
-#elif defined(APP_NO_THREADS)
-    /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
-#   define ICU_USE_THREADS 0
-#else
-#   define ICU_USE_THREADS 1
 #endif
 
 U_NAMESPACE_USE
