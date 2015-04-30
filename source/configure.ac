@@ -1,5 +1,5 @@
 # -*-autoconf-*-
-AC_COPYRIGHT([ Copyright (c) 1999-2014, International Business Machines Corporation and others. All Rights Reserved. ])
+AC_COPYRIGHT([ Copyright (c) 1999-2015, International Business Machines Corporation and others. All Rights Reserved. ])
 # configure.in for ICU
 # Stephen F. Booth, heavily modified by Yves and others
 
@@ -519,75 +519,71 @@ AC_SUBST(U_HAVE_ATOMIC)
 AC_LANG_POP([C++])
 
 # Always build ICU with multi-threading support.
-threads=true
-ICU_USE_THREADS=1
 OLD_LIBS=${LIBS}
 
-if test $threads = true; then
-  # For Compaq Tru64 (OSF1), we must look for pthread_attr_init
-  # and must do this before seaching for pthread_mutex_destroy, or
-  # we will pick up libpthreads.so not libpthread.so
-  # If this fails, then we must test for HPUX specials, before
-  # moving on to a more generic test
+# For Compaq Tru64 (OSF1), we must look for pthread_attr_init
+# and must do this before seaching for pthread_mutex_destroy, or
+# we will pick up libpthreads.so not libpthread.so
+# If this fails, then we must test for HPUX specials, before
+# moving on to a more generic test
 
-  AC_CHECK_LIB(pthread, pthread_attr_init)
-  if test $ac_cv_lib_pthread_pthread_attr_init = yes; then
-    ICU_USE_THREADS=1
+AC_CHECK_LIB(pthread, pthread_attr_init)
+if test $ac_cv_lib_pthread_pthread_attr_init = yes; then
+  :
+else
+  # Locate the right library for POSIX threads. We look for the
+  # symbols in the libraries first, because on Solaris libc provides
+  # pthread_create but libpthread has the real code :(
+  # AIX uses libpthreads instead of libpthread, and HP/UX uses libpthread
+  # FreeBSD users may need libpthread if they do not have libc_r.
+
+  AC_SEARCH_LIBS_FIRST(pthread_mutex_destroy, pthread pthreads c_r )
+
+  if test "$ac_cv_search_pthread_mutex_destroy" != no; then
+    :
   else
-    # Locate the right library for POSIX threads. We look for the
-    # symbols in the libraries first, because on Solaris libc provides
-    # pthread_create but libpthread has the real code :(
-    # AIX uses libpthreads instead of libpthread, and HP/UX uses libpthread
-    # FreeBSD users may need libpthread if they do not have libc_r.
-
-    AC_SEARCH_LIBS_FIRST(pthread_mutex_destroy, pthread pthreads c_r )
-
-    if test "$ac_cv_search_pthread_mutex_destroy" != no; then
-      ICU_USE_THREADS=1
-    else
-      # For HP 11
-      AC_CHECK_LIB(pthread, pthread_mutex_init)
-      if test $ac_cv_lib_pthread_pthread_mutex_init = yes; then
-        ICU_USE_THREADS=1
-      fi
-    fi
-
-    AC_CHECK_FUNC(pthread_mutex_lock)
-
-    if test $ac_cv_func_pthread_mutex_lock = yes; then
-      ICU_USE_THREADS=1
+    # For HP 11
+    AC_CHECK_LIB(pthread, pthread_mutex_init)
+    if test $ac_cv_lib_pthread_pthread_mutex_init = yes; then
+      :
     fi
   fi
-  # Check to see if we are using CygWin with MSVC
-  case "${host}" in
-  *-pc-cygwin*|*-pc-mingw*)
-    # For gcc, the thread options are set by mh-mingw/mh-cygwin
-    # For msvc, the thread options are set by runConfigureICU
-    ICU_USE_THREADS=1
-    ;;
-  *-*-hpux*)
-    # Add -mt because it does several nice things on newer compilers.
-    case "${icu_cv_host_frag}" in
-      mh-hpux-acc)
-        OLD_CXXFLAGS="${CXXFLAGS}"
-        CXXFLAGS="${CXXFLAGS} -mt"
-        if test x"`${CXX} ${CXXFLAGS} 2>&1`" != x""; then
-           CXXFLAGS="${OLD_CXXFLAGS}"
-        else
-           UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -mt"
-        fi
-      ;;
-    esac
-    ;;
-  *-*-solaris*)
-    case "${icu_cv_host_frag}" in
-      mh-solaris)
-           LIBS="${LIBS} -mt"
-      ;;
-    esac
+
+  AC_CHECK_FUNC(pthread_mutex_lock)
+
+  if test $ac_cv_func_pthread_mutex_lock = yes; then
+    :
+  fi
+fi
+# Check to see if we are using CygWin with MSVC
+case "${host}" in
+*-pc-cygwin*|*-pc-mingw*)
+  # For gcc, the thread options are set by mh-mingw/mh-cygwin
+  # For msvc, the thread options are set by runConfigureICU
+  :
+  ;;
+*-*-hpux*)
+  # Add -mt because it does several nice things on newer compilers.
+  case "${icu_cv_host_frag}" in
+    mh-hpux-acc)
+      OLD_CXXFLAGS="${CXXFLAGS}"
+      CXXFLAGS="${CXXFLAGS} -mt"
+      if test x"`${CXX} ${CXXFLAGS} 2>&1`" != x""; then
+         CXXFLAGS="${OLD_CXXFLAGS}"
+      else
+         UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -mt"
+      fi
     ;;
   esac
-fi
+  ;;
+*-*-solaris*)
+  case "${icu_cv_host_frag}" in
+    mh-solaris)
+         LIBS="${LIBS} -mt"
+    ;;
+  esac
+  ;;
+esac
 
 AC_ARG_ENABLE(weak-threads,
 	[  --enable-weak-threads   weakly reference the threading library [default=no]],
