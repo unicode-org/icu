@@ -1336,11 +1336,7 @@ main(int argc, char* argv[])
     fprintf(stdout, "   notime (T)               : %s\n", (no_time?             "On" : "Off"));
     fprintf(stdout, "   noknownissues (K)        : %s\n", (noKnownIssues?      "On" : "Off"));
     fprintf(stdout, "   Warn on missing data (w) : %s\n", (warnOnMissingData? "On" : "Off"));
-#if (ICU_USE_THREADS==0)
-    fprintf(stdout, "   Threads                  : Disabled\n");
-#else
     fprintf(stdout, "   Threads                  : %d\n", threadCount);
-#endif
     for (int32_t i = 0; i < nProps; i++) {
         fprintf(stdout, "   Custom property (prop:)  : %s\n", props[i]);
     }
