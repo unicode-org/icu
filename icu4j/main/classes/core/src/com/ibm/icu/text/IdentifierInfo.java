@@ -1,6 +1,6 @@
 /*
  ***************************************************************************
- * Copyright (C) 2008-2014, Google, International Business Machines Corporation
+ * Copyright (C) 2008-2015, Google, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***************************************************************************
  */
@@ -109,7 +109,7 @@ public class IdentifierInfo {
         clear();
         BitSet scriptsForCP = new BitSet();
         int cp;
-        for (int i = 0; i < identifier.length(); i += Character.charCount(i)) {
+        for (int i = 0; i < identifier.length(); i += Character.charCount(cp)) {
             cp = Character.codePointAt(identifier, i);
             // Store a representative character for each kind of decimal digit
             if (UCharacter.getType(cp) == UCharacterCategory.DECIMAL_DIGIT_NUMBER) {
