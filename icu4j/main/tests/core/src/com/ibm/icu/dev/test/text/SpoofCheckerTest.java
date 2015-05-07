@@ -622,6 +622,17 @@ public class SpoofCheckerTest extends TestFmwk {
 //        getIdentifierProfile()
 //        setIdentifierProfile(UnicodeSet)
     }
+    
+    public void TestBug11635() {
+        // The bug was an error in iterating through supplementary characters in IdentifierInfo.
+        //  The three supplemental chars in the string are "123" from the mathematical bold digit range.
+        //  Common script, Nd general category, and no other restrictions on allowed characters
+        //  leaves "ABC123" as SINGLE_SCRIPT_RESTRICTIVE.  
+        String identifier = Utility.unescape("ABC\\U0001D7CF\\U0001D7D0\\U0001D7D1");
+        IdentifierInfo idInfo = new IdentifierInfo();
+        idInfo.setIdentifier(identifier);
+        assertEquals("", RestrictionLevel.SINGLE_SCRIPT_RESTRICTIVE, idInfo.getRestrictionLevel());
+    }
 
     public void TestComparator() {
         Random random = new Random(0);
