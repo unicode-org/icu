@@ -573,7 +573,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
         // Note: The "user.script" property is only used by initialization.
         // 
-        if (JDKLocaleHelper.isJava7orNewer()) {
+        if (JDKLocaleHelper.hasLocaleCategories()) {
             for (Category cat: Category.values()) {
                 int idx = cat.ordinal();
                 defaultCategoryLocales[idx] = JDKLocaleHelper.getDefault(cat);
@@ -648,7 +648,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 defaultLocale = currentDefault;
                 defaultULocale = forLocale(currentDefault);
 
-                if (!JDKLocaleHelper.isJava7orNewer()) {
+                if (!JDKLocaleHelper.hasLocaleCategories()) {
                     // Detected Java default Locale change.
                     // We need to update category defaults to match the
                     // Java 7's behavior on Java 6 or older environment.
@@ -706,7 +706,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 // cyclic dependency for category default.
                 return ULocale.ROOT;
             }
-            if (JDKLocaleHelper.isJava7orNewer()) {
+            if (JDKLocaleHelper.hasLocaleCategories()) {
                 Locale currentCategoryDefault = JDKLocaleHelper.getDefault(category);
                 if (!defaultCategoryLocales[idx].equals(currentCategoryDefault)) {
                     defaultCategoryLocales[idx] = currentCategoryDefault;
@@ -4018,7 +4018,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * JDK Locale Helper
      */
     private static final class JDKLocaleHelper {
-        private static boolean isJava7orNewer = false;
+        private static boolean hasScriptsAndUnicodeExtensions = false;
+        private static boolean hasLocaleCategories = false;
 
         /*
          * New methods in Java 7 Locale class
@@ -4062,6 +4063,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                     mGetUnicodeLocaleType = Locale.class.getMethod("getUnicodeLocaleType", String.class);
                     mForLanguageTag = Locale.class.getMethod("forLanguageTag", String.class);
 
+                    hasScriptsAndUnicodeExtensions = true;
+                } catch (NoSuchMethodException e) {
+                } catch (IllegalArgumentException e) {
+                } catch (SecurityException e) {
+                    // TODO : report?
+                }
+
+                try {
                     Class<?> cCategory = null;
                     Class<?>[] classes = Locale.class.getDeclaredClasses();
                     for (Class<?> c : classes) {
@@ -4088,8 +4097,9 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                     }
                     if (eDISPLAY == null || eFORMAT == null) {
                         break;
-                    }    
-                    isJava7orNewer = true;
+                    }
+
+                    hasLocaleCategories = true;
                 } catch (NoSuchMethodException e) {
                 } catch (IllegalArgumentException e) {
                 } catch (IllegalAccessException e) {
@@ -4103,16 +4113,16 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         private JDKLocaleHelper() {
         }
 
-        public static boolean isJava7orNewer() {
-            return isJava7orNewer;
+        public static boolean hasLocaleCategories() {
+            return hasLocaleCategories;
         }
 
         public static ULocale toULocale(Locale loc) {
-            return isJava7orNewer ? toULocale7(loc) : toULocale6(loc);
+            return hasScriptsAndUnicodeExtensions ? toULocale7(loc) : toULocale6(loc);
         }
 
         public static Locale toLocale(ULocale uloc) {
-            return isJava7orNewer ? toLocale7(uloc) : toLocale6(uloc);
+            return hasScriptsAndUnicodeExtensions ? toLocale7(uloc) : toLocale6(uloc);
         }
 
         private static ULocale toULocale7(Locale loc) {
@@ -4335,7 +4345,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
         public static Locale getDefault(Category category) {
             Locale loc = Locale.getDefault();
-            if (isJava7orNewer) {
+            if (hasLocaleCategories) {
                 Object cat = null;
                 switch (category) {
                 case DISPLAY:
@@ -4361,7 +4371,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         }
 
         public static void setDefault(Category category, Locale newLocale) {
-            if (isJava7orNewer) {
+            if (hasLocaleCategories) {
                 Object cat = null;
                 switch (category) {
                 case DISPLAY:
@@ -4390,7 +4400,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         // system properties. When the system properties are not accessible,
         // this method returns false.
         public static boolean isOriginalDefaultLocale(Locale loc) {
-            if (isJava7orNewer) {
+            if (hasScriptsAndUnicodeExtensions) {
                 String script = "";
                 try {
                     script = (String) mGetScript.invoke(loc, (Object[]) null);
