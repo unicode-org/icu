@@ -23,6 +23,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
@@ -44,7 +46,9 @@ import com.ibm.icu.util.VersionInfo;
 
 public class ULocaleTest extends TestFmwk {
 
-    private static final boolean JAVA7_OR_LATER = (VersionInfo.javaVersion().compareTo(VersionInfo.getInstance(1, 7)) >= 0);
+    // Ticket #8078 and #11674
+    private static final boolean JAVA7_OR_LATER =
+            TestUtil.getJavaVendor() == JavaVendor.Android || TestUtil.getJavaVersion() >= 7;
 
     public static void main(String[] args) throws Exception {
         new ULocaleTest().run(args);
