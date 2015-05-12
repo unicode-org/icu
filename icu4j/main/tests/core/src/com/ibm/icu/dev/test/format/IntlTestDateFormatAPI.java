@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2012, International Business Machines
+ *   Copyright (C) 1996-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -22,6 +22,8 @@ import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
@@ -151,9 +153,10 @@ public class IntlTestDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         long count = locales.length;
         logln("Got " + count + " locales" );
 
-        // Ticket#6280
+        // Ticket #6280, #8078 and #11674
         // These locales should be included in the result
-        boolean java7orLater = (VersionInfo.javaVersion().compareTo(VersionInfo.getInstance(1, 7)) >= 0);
+        boolean missingLocaleNotFatal =
+                TestUtil.getJavaVendor() == JavaVendor.Android || TestUtil.getJavaVersion() >= 7;
         final Locale[] samples = {
                 new Locale("zh", "CN"),
                 new Locale("zh", "TW"),
@@ -174,7 +177,7 @@ public class IntlTestDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         }
         for (int i = 0; i < available.length; i++) {
             if (!available[i]) {
-                if (java7orLater) {
+                if (missingLocaleNotFatal) {
                     // Java 7 supports script field, so zh_Hans_CN is included
                     // in the available locale list.
                     logln("INFO: missing Locale: " + samples[i]);
