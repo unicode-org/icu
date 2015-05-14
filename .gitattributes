@@ -23,7 +23,6 @@ icu4c/source/data/brkitr/khmerdict.txt svneol=native#text/plain%3Bcharset%3Dutf-
 icu4c/source/data/brkitr/laodict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/line.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_fi.txt svneol=native#text/plain
-icu4c/source/data/brkitr/line_ja.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_loose.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_loose_cj.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_loose_fi.txt svneol=native#text/plain
