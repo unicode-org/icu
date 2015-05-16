@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -31,6 +31,7 @@
 #include "unicode/utext.h"
 #include "cintltst.h"
 #include "cbiapts.h"
+#include "cmemory.h"
 
 #define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
 log_data_err("Failure at file %s, line %d, error = %s (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status));}}
@@ -47,6 +48,7 @@ static void TestBreakIteratorStatusVec(void);
 static void TestBreakIteratorUText(void);
 static void TestBreakIteratorTailoring(void);
 static void TestBreakIteratorRefresh(void);
+static void TestBug11665(void);
 
 void addBrkIterAPITest(TestNode** root);
 
@@ -62,6 +64,7 @@ void addBrkIterAPITest(TestNode** root)
     addTest(root, &TestBreakIteratorStatusVec, "tstxtbd/cbiapts/TestBreakIteratorStatusVec");
     addTest(root, &TestBreakIteratorTailoring, "tstxtbd/cbiapts/TestBreakIteratorTailoring");
     addTest(root, &TestBreakIteratorRefresh, "tstxtbd/cbiapts/TestBreakIteratorRefresh");
+    addTest(root, &TestBug11665, "tstxtbd/cbiapts/TestBug11665");
 }
 
 #define CLONETEST_ITERATOR_COUNT 2
@@ -878,5 +881,55 @@ static void TestBreakIteratorRefresh(void) {
     }
     ubrk_close(bi);
 }
+
+
+static void TestBug11665(void) {
+    // The problem was with the incorrect breaking of Japanese text beginning
+    // with Katakana characters when no prior Japanese or Chinese text had been
+    // encountered.
+    //
+    // Tested here in cintltst, rather than in intltest, because only cintltst
+    // tests have the ability to reset ICU, which is needed to get the bug
+    // to manifest itself.
+
+    static UChar japaneseText[] = {0x30A2, 0x30EC, 0x30EB, 0x30AE, 0x30FC, 0x6027, 0x7D50, 0x819C, 0x708E};
+    int32_t boundaries[10] = {0};
+    UBreakIterator *bi = NULL;
+    int32_t brk;
+    int32_t brkIdx = 0;
+    int32_t totalBreaks = 0;
+    UErrorCode status = U_ZERO_ERROR;
+
+    ctest_resetICU();
+    bi = ubrk_open(UBRK_WORD, "en_US", japaneseText, UPRV_LENGTHOF(japaneseText), &status);
+    TEST_ASSERT_SUCCESS(status);
+    for (brk=ubrk_first(bi); brk != UBRK_DONE; brk=ubrk_next(bi)) {
+        boundaries[brkIdx] = brk;
+        if (++brkIdx >= UPRV_LENGTHOF(boundaries) - 1) {
+            break;
+        }
+    }
+    if (brkIdx <= 2 || brkIdx >= UPRV_LENGTHOF(boundaries)) {
+        log_err("%s:%d too few or many breaks found.\n", __FILE__, __LINE__);
+    } else {
+        totalBreaks = brkIdx;
+        brkIdx = 0;
+        for (brk=ubrk_first(bi); brk != UBRK_DONE; brk=ubrk_next(bi)) {
+            if (brk != boundaries[brkIdx]) {
+                log_err("%s:%d Break #%d differs between first and second iteration.\n", __FILE__, __LINE__, brkIdx);
+                break;
+            }
+            if (++brkIdx >= UPRV_LENGTHOF(boundaries) - 1) {
+                log_err("%s:%d Too many breaks.\n", __FILE__, __LINE__);
+                break;
+            }
+        }
+        if (totalBreaks != brkIdx) {
+            log_err("%s:%d Number of breaks differ between first and second iteration.\n", __FILE__, __LINE__);
+        }
+    }
+    ubrk_close(bi);
+}
+
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
