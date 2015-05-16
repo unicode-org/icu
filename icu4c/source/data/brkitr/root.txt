@@ -21,7 +21,7 @@ root{
     dictionaries{
         Hani:process(dependency){"cjdict.dict"}
         Hira:process(dependency){"cjdict.dict"}
-        Kata:process(dependency){"cjdict.dict"}
+        Kana:process(dependency){"cjdict.dict"}
         Khmr:process(dependency){"khmerdict.dict"}
         Laoo:process(dependency){"laodict.dict"}
         Mymr:process(dependency){"burmesedict.dict"}
