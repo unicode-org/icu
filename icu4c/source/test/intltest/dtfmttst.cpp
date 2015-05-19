@@ -1860,6 +1860,9 @@ void DateFormatTest::TestQuarters()
         "qq",   "fp", "1970 04 01", "02",          "1970 04 01",
         "qqq",  "fp", "1970 07 01", "Q3",          "1970 07 01",
         "qqqq", "fp", "1970 10 01", "4th quarter", "1970 10 01",
+
+        "Qyy",  "fp", "2015 04 01", "215",         "2015 04 01",
+        "QQyy", "fp", "2015 07 01", "0315",        "2015 07 01",
     };
 
     expect(EN_DATA, ARRAY_SIZE(EN_DATA), Locale("en", "", ""));
