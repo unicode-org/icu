@@ -2143,18 +2143,23 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * Format characters that indicate numeric fields.  The character
-     * at index 0 is treated specially.
+     * Format characters that indicate numeric fields always.
      */
-    private static final String NUMERIC_FORMAT_CHARS = "MYyudehHmsSDFwWkK";
+    private static final String NUMERIC_FORMAT_CHARS = "ADdFgHhKkmrSsuWwYy";
+
+    /**
+     * Format characters that indicate numeric fields when pattern lengh
+     * is up to 2.
+     */
+    private static final String NUMEIRC_FORMAT_CHARS2 = "ceLMMQq";
 
     /**
      * Return true if the given format character, occuring count
      * times, represents a numeric field.
      */
     private static final boolean isNumeric(char formatChar, int count) {
-        int i = NUMERIC_FORMAT_CHARS.indexOf(formatChar);
-        return (i > 0 || (i == 0 && count < 3));
+        return NUMERIC_FORMAT_CHARS.indexOf(formatChar) >= 0
+                || (count <= 2 && NUMEIRC_FORMAT_CHARS2.indexOf(formatChar) >= 0);
     }
 
     /**
