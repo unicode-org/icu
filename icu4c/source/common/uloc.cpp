@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2014, International Business Machines
+*   Copyright (C) 1997-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -694,7 +694,7 @@ _getKeywords(const char *localeID,
             }
 
             /* Premature end or zero-length value */
-            if (!equalSign || equalSign == semicolon) {
+            if (!*equalSign || equalSign == semicolon) {
                 *status = U_INVALID_FORMAT_ERROR;
                 return 0;
             }
