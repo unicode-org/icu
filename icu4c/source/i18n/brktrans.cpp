@@ -77,8 +77,8 @@ void BreakTransliterator::handleTransliterate(Replaceable& text, UTransPosition&
         {
             Mutex m;
             BreakTransliterator *nonConstThis = const_cast<BreakTransliterator *>(this);
-            boundaries.adoptInstead(nonConstThis->cachedBoundaries.orphan());
-            bi.adoptInstead(nonConstThis->cachedBI.orphan());
+            boundaries.moveFrom(nonConstThis->cachedBoundaries);
+            bi.moveFrom(nonConstThis->cachedBI);
         }
         if (bi.isNull()) {
             bi.adoptInstead(BreakIterator::createWordInstance(Locale::getEnglish(), status));
@@ -143,10 +143,10 @@ void BreakTransliterator::handleTransliterate(Replaceable& text, UTransPosition&
             Mutex m;
             BreakTransliterator *nonConstThis = const_cast<BreakTransliterator *>(this);
             if (nonConstThis->cachedBI.isNull()) {
-                nonConstThis->cachedBI.adoptInstead(bi.orphan());
+                nonConstThis->cachedBI.moveFrom(bi);
             }
             if (nonConstThis->cachedBoundaries.isNull()) {
-                nonConstThis->cachedBoundaries.adoptInstead(boundaries.orphan());
+                nonConstThis->cachedBoundaries.moveFrom(boundaries);
             }
         }
 
