@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -112,6 +112,10 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     DecimalFormat noGrouping("###0.##", status);
     if (noGrouping.getGroupingSize() != 0) {
       errln("Grouping size should be 0 for no grouping.");
+    }
+    noGrouping.setGroupingUsed(TRUE);
+    if (noGrouping.getGroupingSize() != 0) {
+      errln("Grouping size should still be 0.");
     }
     // end bug 10864
 
@@ -828,6 +832,7 @@ void IntlTestDecimalFormatAPI::TestBadFastpath() {
     fmt.remove();
     assertEquals("Format 1234", "1234", df->format(1234, fmt));
     df->setGroupingUsed(TRUE);
+    df->setGroupingSize(3);
     fmt.remove();
     assertEquals("Format 1234 w/ grouping", "1,234", df->format(1234, fmt));
 }
