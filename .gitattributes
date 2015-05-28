@@ -3660,6 +3660,7 @@ icu4c/source/test/testdata/nfs4_cs_prep_ci.txt svneol=native#text/plain
 icu4c/source/test/testdata/nfs4_cs_prep_cs.txt svneol=native#text/plain
 icu4c/source/test/testdata/nfs4_mixed_prep_p.txt svneol=native#text/plain
 icu4c/source/test/testdata/nfs4_mixed_prep_s.txt svneol=native#text/plain
+icu4c/source/test/testdata/numberformattestspecification.txt svneol=native#text/plain
 icu4c/source/test/testdata/old_e_testtypes.res -text
 icu4c/source/test/testdata/old_l_testtypes.res -text
 icu4c/source/test/testdata/ra.txt svneol=native#text/plain
