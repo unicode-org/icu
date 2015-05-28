@@ -538,7 +538,8 @@ inline void swap(LocalArray<T> &p1, LocalArray<T> &p2) U_NOEXCEPT {
     }; \
     inline void swap(LocalPointerClassName &p1, LocalPointerClassName &p2) U_NOEXCEPT { \
         p1.swap(p2); \
-    }
+    } \
+    class LocalPointerClassName
 #else
 #define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
     class LocalPointerClassName : public LocalPointerBase<Type> { \
@@ -563,8 +564,12 @@ inline void swap(LocalArray<T> &p1, LocalArray<T> &p2) U_NOEXCEPT {
     }; \
     inline void swap(LocalPointerClassName &p1, LocalPointerClassName &p2) U_NOEXCEPT { \
         p1.swap(p2); \
-    }
+    } \
+    class LocalPointerClassName
 #endif
+// The trailing class forward declaration at the end of U_DEFINE_LOCAL_OPEN_POINTER
+// prevents a warning or error from -pedantic compilation
+// due to an extra ';' after the non-member swap function definition.
 
 U_NAMESPACE_END
 
