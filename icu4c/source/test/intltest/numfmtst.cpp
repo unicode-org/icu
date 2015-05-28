@@ -32,6 +32,317 @@
 #include "cstring.h"
 #include "unicode/numsys.h"
 #include "fmtableimp.h"
+#include "numberformattesttuple.h"
+#include "datadrivennumberformattestsuite.h"
+
+class NumberFormatTestDataDriven : public DataDrivenNumberFormatTestSuite {
+protected:
+UBool isFormatPass(
+        const NumberFormatTestTuple &tuple,
+        UnicodeString &appendErrorMessage,
+        UErrorCode &status);
+UBool isToPatternPass(
+        const NumberFormatTestTuple &tuple,
+        UnicodeString &appendErrorMessage,
+        UErrorCode &status);
+UBool isParsePass(
+        const NumberFormatTestTuple &tuple,
+        UnicodeString &appendErrorMessage,
+        UErrorCode &status);
+};
+
+static DigitList &strToDigitList(
+        const UnicodeString &str,
+        DigitList &digitList,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return digitList;
+    }
+    if (str == "NaN") {
+        digitList.set(uprv_getNaN());
+        return digitList;
+    }
+    if (str == "-Inf") {
+        digitList.set(-1*uprv_getInfinity());
+        return digitList;
+    }
+    if (str == "Inf") {
+        digitList.set(uprv_getInfinity());
+        return digitList;
+    }
+    CharString formatValue;
+    formatValue.appendInvariantChars(str, status);
+    digitList.set(StringPiece(formatValue.data()), status, 0);
+    return digitList;
+}
+
+static UnicodeString &format(
+        const DecimalFormat &fmt,
+        const DigitList &digitList,
+        UnicodeString &appendTo,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    FieldPosition fpos(FieldPosition::DONT_CARE);
+    return fmt.format(digitList, appendTo, fpos, status);
+}
+
+static void adjustDecimalFormat(
+        const NumberFormatTestTuple &tuple,
+        DecimalFormat &fmt,
+        UnicodeString &appendErrorMessage) {
+    if (tuple.minIntegerDigitsFlag) {
+        fmt.setMinimumIntegerDigits(tuple.minIntegerDigits);
+    }
+    if (tuple.maxIntegerDigitsFlag) {
+        fmt.setMaximumIntegerDigits(tuple.maxIntegerDigits);
+    }
+    if (tuple.minFractionDigitsFlag) {
+        fmt.setMinimumFractionDigits(tuple.minFractionDigits);
+    }
+    if (tuple.maxFractionDigitsFlag) {
+        fmt.setMaximumFractionDigits(tuple.maxFractionDigits);
+    }
+    if (tuple.currencyFlag) {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString currency(tuple.currency);
+        const UChar *terminatedCurrency = currency.getTerminatedBuffer();
+        fmt.setCurrency(terminatedCurrency, status);
+        if (U_FAILURE(status)) {
+            appendErrorMessage.append("Error setting currency.");
+        }
+    }
+    if (tuple.minGroupingDigitsFlag) {
+        // Oops, not supported
+    }
+    if (tuple.useSigDigitsFlag) {
+        fmt.setSignificantDigitsUsed(tuple.useSigDigits != 0);
+    }
+    if (tuple.minSigDigitsFlag) {
+        fmt.setMinimumSignificantDigits(tuple.minSigDigits);
+    }
+    if (tuple.maxSigDigitsFlag) {
+        fmt.setMaximumSignificantDigits(tuple.maxSigDigits);
+    }
+    if (tuple.useGroupingFlag) {
+        fmt.setGroupingUsed(tuple.useGrouping != 0);
+    }
+    if (tuple.multiplierFlag) {
+        fmt.setMultiplier(tuple.multiplier);
+    }
+    if (tuple.roundingIncrementFlag) {
+        fmt.setRoundingIncrement(tuple.roundingIncrement);
+    }
+    if (tuple.formatWidthFlag) {
+        fmt.setFormatWidth(tuple.formatWidth);
+    }
+    if (tuple.padCharacterFlag) {
+        fmt.setPadCharacter(tuple.padCharacter);
+    }
+    if (tuple.useScientificFlag) {
+        fmt.setScientificNotation(tuple.useScientific != 0);
+    }
+    if (tuple.groupingFlag) {
+        fmt.setGroupingSize(tuple.grouping);
+    }
+    if (tuple.grouping2Flag) {
+        fmt.setSecondaryGroupingSize(tuple.grouping2);
+    }
+    if (tuple.roundingModeFlag) {
+        fmt.setRoundingMode(tuple.roundingMode);
+    }
+    if (tuple.currencyUsageFlag) {
+        UErrorCode status = U_ZERO_ERROR;
+        fmt.setCurrencyUsage(tuple.currencyUsage, &status);
+        if (U_FAILURE(status)) {
+            appendErrorMessage.append("CurrencyUsage: error setting.");
+        }
+    }
+    if (tuple.minimumExponentDigitsFlag) {
+        fmt.setMinimumExponentDigits(tuple.minimumExponentDigits);
+    }
+    if (tuple.exponentSignAlwaysShownFlag) {
+        fmt.setExponentSignAlwaysShown(tuple.exponentSignAlwaysShown != 0);
+    }
+    if (tuple.decimalSeparatorAlwaysShownFlag) {
+        fmt.setDecimalSeparatorAlwaysShown(
+                tuple.decimalSeparatorAlwaysShown != 0);
+    }
+    if (tuple.padPositionFlag) {
+        fmt.setPadPosition(tuple.padPosition);
+    }
+    if (tuple.positivePrefixFlag) {
+        fmt.setPositivePrefix(tuple.positivePrefix);
+    }
+    if (tuple.positiveSuffixFlag) {
+        fmt.setPositiveSuffix(tuple.positiveSuffix);
+    }
+    if (tuple.negativePrefixFlag) {
+        fmt.setNegativePrefix(tuple.negativePrefix);
+    }
+    if (tuple.negativeSuffixFlag) {
+        fmt.setNegativeSuffix(tuple.negativeSuffix);
+    }
+    if (tuple.localizedPatternFlag) {
+        UErrorCode status = U_ZERO_ERROR;
+        fmt.applyLocalizedPattern(tuple.localizedPattern, status);
+        if (U_FAILURE(status)) {
+            appendErrorMessage.append("Error setting localized pattern.");
+        }
+    }
+}
+
+static DecimalFormat *newDecimalFormat(
+        const Locale &locale,
+        const UnicodeString &pattern,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    LocalPointer<DecimalFormatSymbols> symbols(
+            new DecimalFormatSymbols(locale, status), status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    UParseError perror;
+    LocalPointer<DecimalFormat> result(new DecimalFormat(
+            pattern, symbols.getAlias(), perror, status), status);
+    if (!result.isNull()) {
+        symbols.orphan();
+    }
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    return result.orphan();
+}
+
+static DecimalFormat *newDecimalFormat(
+        const NumberFormatTestTuple &tuple,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    Locale en("en");
+    return newDecimalFormat(
+            NFTT_GET_FIELD(tuple, locale, en),
+            NFTT_GET_FIELD(tuple, pattern, "0"),
+            status);
+}
+
+UBool NumberFormatTestDataDriven::isFormatPass(
+        const NumberFormatTestTuple &tuple,
+        UnicodeString &appendErrorMessage,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    LocalPointer<DecimalFormat> fmtPtr(newDecimalFormat(tuple, status));
+    if (U_FAILURE(status)) {
+        appendErrorMessage.append("Error creating DecimalFormat.");
+        return FALSE;
+    }
+    adjustDecimalFormat(tuple, *fmtPtr, appendErrorMessage);
+    if (appendErrorMessage.length() > 0) {
+        return FALSE;
+    }
+    DigitList digitList;
+    strToDigitList(tuple.format, digitList, status);
+    UnicodeString appendTo;
+    format(*fmtPtr, digitList, appendTo, status);
+    if (U_FAILURE(status)) {
+        appendErrorMessage.append("Error formatting.");
+        return FALSE;
+    }
+    if (appendTo != tuple.output) {
+        appendErrorMessage.append(
+                UnicodeString("Expected: ") + tuple.output + ", got: " + appendTo);
+        return FALSE;
+    }
+    return TRUE;
+}
+
+UBool NumberFormatTestDataDriven::isToPatternPass(
+        const NumberFormatTestTuple &tuple,
+        UnicodeString &appendErrorMessage,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    LocalPointer<DecimalFormat> fmtPtr(newDecimalFormat(tuple, status));
+    if (U_FAILURE(status)) {
+        appendErrorMessage.append("Error creating DecimalFormat.");
+        return FALSE;
+    }
+    adjustDecimalFormat(tuple, *fmtPtr, appendErrorMessage);
+    if (appendErrorMessage.length() > 0) {
+        return FALSE;
+    }
+    if (tuple.toPatternFlag) {
+        UnicodeString actual;
+        fmtPtr->toPattern(actual);
+        if (actual != tuple.toPattern) {
+            appendErrorMessage.append(
+                    UnicodeString("Expected: ") + tuple.toPattern + ", got: " + actual + ". ");
+        }
+    }
+    if (tuple.toLocalizedPatternFlag) {
+        UnicodeString actual;
+        fmtPtr->toLocalizedPattern(actual);
+        if (actual != tuple.toLocalizedPattern) {
+            appendErrorMessage.append(
+                    UnicodeString("Expected: ") + tuple.toLocalizedPattern + ", got: " + actual + ". ");
+        }
+    }
+    return appendErrorMessage.length() == 0;
+}
+
+UBool NumberFormatTestDataDriven::isParsePass(
+        const NumberFormatTestTuple &tuple,
+        UnicodeString &appendErrorMessage,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    LocalPointer<DecimalFormat> fmtPtr(newDecimalFormat(tuple, status));
+    if (U_FAILURE(status)) {
+        appendErrorMessage.append("Error creating DecimalFormat.");
+        return FALSE;
+    }
+    adjustDecimalFormat(tuple, *fmtPtr, appendErrorMessage);
+    if (appendErrorMessage.length() > 0) {
+        return FALSE;
+    }
+    fmtPtr->setLenient(NFTT_GET_FIELD(tuple, lenient, 1) != 0 ? TRUE : FALSE);
+    Formattable result;
+    ParsePosition ppos;
+    fmtPtr->parse(tuple.parse, result, ppos);
+    if (ppos.getIndex() == 0) {
+        if (tuple.output != "fail") {
+            appendErrorMessage.append("Parse error expected.");
+            return FALSE;
+        }
+        return TRUE;
+    }
+    UnicodeString resultStr(UnicodeString::fromUTF8(result.getDecimalNumber(status)));
+    if (tuple.output == "fail") {
+        appendErrorMessage.append(UnicodeString("Parse succeeded: ") + resultStr + ", but was expected to fail.");
+        return FALSE;
+    }
+    DigitList expected;
+    strToDigitList(tuple.output, expected, status);
+    if (U_FAILURE(status)) {
+        appendErrorMessage.append("Error parsing.");
+        return FALSE;
+    }
+    if (expected != *result.getDigitList()) {
+        appendErrorMessage.append(
+                    UnicodeString("Expected: ") + tuple.output + ", got: " + resultStr + ". ");
+        return FALSE;
+    }
+    return TRUE;
+}
+
 
 //#define NUMFMTST_CACHE_DEBUG 1
 #include "stdio.h" /* for sprintf */
@@ -133,6 +444,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestAccountingCurrency);
   TESTCASE_AUTO(TestEquality);
   TESTCASE_AUTO(TestCurrencyUsage);
+  TESTCASE_AUTO(TestNumberFormatTestTuple);
+  TESTCASE_AUTO(TestDataDriven);
   TESTCASE_AUTO(TestDoubleLimit11439);
   TESTCASE_AUTO(TestFastPathConsistent11524);
   TESTCASE_AUTO_END;
@@ -7737,6 +8050,70 @@ void NumberFormatTest::TestCurrencyUsage() {
         assertEquals("Test Currency Usage 6", UnicodeString("PKR124"), PKR_changed);
         delete fmt;
     }
+}
+
+void NumberFormatTest::TestNumberFormatTestTuple() {
+    NumberFormatTestTuple tuple;
+    UErrorCode status = U_ZERO_ERROR;
+
+    tuple.setField(
+            NumberFormatTestTuple::getFieldByName("locale"),
+            "en",
+            status);
+    tuple.setField(
+            NumberFormatTestTuple::getFieldByName("pattern"),
+            "#,##0.00",
+            status);
+    tuple.setField(
+            NumberFormatTestTuple::getFieldByName("minIntegerDigits"),
+            "-10",
+            status);
+    if (!assertSuccess("", status)) {
+        return;
+    }
+
+    // only what we set should be set.
+    assertEquals("", "en", tuple.locale.getName());
+    assertEquals("", "#,##0.00", tuple.pattern);
+    assertEquals("", -10, tuple.minIntegerDigits);
+    assertTrue("", tuple.localeFlag);
+    assertTrue("", tuple.patternFlag);
+    assertTrue("", tuple.minIntegerDigitsFlag);
+    assertFalse("", tuple.formatFlag);
+
+    UnicodeString appendTo;
+    assertEquals(
+            "",
+            "{locale: en, pattern: #,##0.00, minIntegerDigits: -10}",
+            tuple.toString(appendTo));
+
+    tuple.clear();
+    appendTo.remove();
+    assertEquals(
+            "",
+            "{}",
+            tuple.toString(appendTo));
+    tuple.setField(
+            NumberFormatTestTuple::getFieldByName("aBadFieldName"),
+            "someValue",
+            status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("Expected U_ILLEGAL_ARGUMENT_ERROR");
+    }
+    status = U_ZERO_ERROR;
+    tuple.setField(
+            NumberFormatTestTuple::getFieldByName("minIntegerDigits"),
+            "someBadValue",
+            status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("Expected U_ILLEGAL_ARGUMENT_ERROR");
+    }
+}
+
+void
+NumberFormatTest::TestDataDriven() {
+    NumberFormatTestDataDriven dd;
+    dd.run("numberformattestspecification.txt", FALSE);
 }
 
 

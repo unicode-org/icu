@@ -293,6 +293,7 @@
     <ClCompile Include="compactdecimalformattest.cpp" />
     <ClCompile Include="dadrcal.cpp" />
     <ClCompile Include="dadrfmt.cpp" />
+    <ClCompile Include="datadrivennumberformattestsuite.cpp" />
     <ClCompile Include="dcfmapts.cpp" />
     <ClCompile Include="dcfmtest.cpp" />
     <ClCompile Include="dtfmapts.cpp" />
@@ -314,6 +315,7 @@
     <ClCompile Include="msfmrgts.cpp" />
     <ClCompile Include="nmfmapts.cpp" />
     <ClCompile Include="nmfmtrt.cpp" />
+    <ClCompile Include="numberformattesttuple.cpp" />
     <ClCompile Include="numfmtst.cpp" />
     <ClCompile Include="numrgts.cpp" />
     <ClCompile Include="plurfmts.cpp" />
@@ -471,6 +473,7 @@
     <ClInclude Include="caltztst.h" />
     <ClInclude Include="dadrcal.h" />
     <ClInclude Include="dadrfmt.h" />
+    <ClInclude Include="datadrivennumberformattestsuite.h" />
     <ClInclude Include="dcfmapts.h" />
     <ClInclude Include="dcfmtest.h" />
     <ClInclude Include="dtfmapts.h" />
@@ -490,6 +493,7 @@
     <ClInclude Include="msfmrgts.h" />
     <ClInclude Include="nmfmapts.h" />
     <ClInclude Include="nmfmtrt.h" />
+    <ClInclude Include="numberformattesttuple.h" />
     <ClInclude Include="numfmtst.h" />
     <ClInclude Include="numrgts.h" />
     <ClInclude Include="plurfmts.h" />
