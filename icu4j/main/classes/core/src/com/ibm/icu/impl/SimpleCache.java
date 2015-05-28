@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (c) 2007-2009 International Business Machines Corporation and  *
+ * Copyright (c) 2007-2015 International Business Machines Corporation and  *
  * others.  All rights reserved.                                            *
  ****************************************************************************
  */
@@ -17,7 +17,7 @@ import java.util.Map;
 public class SimpleCache<K, V> implements ICUCache<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
 
-    private Reference<Map<K, V>> cacheRef = null;
+    private volatile Reference<Map<K, V>> cacheRef = null;
     private int type = ICUCache.SOFT;
     private int capacity = DEFAULT_CAPACITY;
 
