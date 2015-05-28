@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2014, International Business Machines Corporation and
+* Copyright (C) 1996-2015, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -609,13 +609,13 @@ public class TestUScript extends TestFmwk {
         String[] expectedLong = new String[]{
             "Balinese", "Batak", "Blis", "Brahmi", "Cham", "Cirt", "Cyrs",
             "Egyd", "Egyh", "Egyptian_Hieroglyphs",
-            "Geok", "Hans", "Hant", "Pahawh_Hmong", "Hung", "Inds",
+            "Geok", "Hans", "Hant", "Pahawh_Hmong", "Old_Hungarian", "Inds",
             "Javanese", "Kayah_Li", "Latf", "Latg",
             "Lepcha", "Linear_A", "Mandaic", "Maya", "Meroitic_Hieroglyphs",
             "Nko", "Old_Turkic", "Old_Permic", "Phags_Pa", "Phoenician", 
             "Miao", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
             "Zxxx", "Unknown",
-            "Carian", "Jpan", "Tai_Tham", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
+            "Carian", "Jpan", "Tai_Tham", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "SignWriting", "Sundanese",
             "Moon", "Meetei_Mayek",
             /* new in ICU 4.0 */
             "Imperial_Aramaic", "Avestan", "Chakma", "Kore",
@@ -631,11 +631,11 @@ public class TestUScript extends TestFmwk {
             /* new in ICU 4.8 */
             "Afak", "Jurc", "Mro", "Nshu", "Sharada", "Sora_Sompeng", "Takri", "Tang", "Wole",
             /* new in ICU 49 */
-            "Hluw", "Khojki", "Tirhuta",
+            "Anatolian_Hieroglyphs", "Khojki", "Tirhuta",
             /* new in ICU 52 */
             "Caucasian_Albanian", "Mahajani",
             /* new in ICU 54 */
-            "Ahom", "Hatr", "Modi", "Mult", "Pau_Cin_Hau", "Siddham"
+            "Ahom", "Hatran", "Modi", "Multani", "Pau_Cin_Hau", "Siddham"
         };
         String[] expectedShort = new String[]{
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp",

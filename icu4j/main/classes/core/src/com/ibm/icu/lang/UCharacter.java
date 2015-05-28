@@ -1116,10 +1116,33 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 54 */
         public static final int WARANG_CITI_ID = 252; /*[118A0]*/
 
+        /* New blocks in Unicode 8.0 */
+
+        /** @stable ICU 56 */
+        public static final int AHOM_ID = 253; /*[11700]*/
+        /** @stable ICU 56 */
+        public static final int ANATOLIAN_HIEROGLYPHS_ID = 254; /*[14400]*/
+        /** @stable ICU 56 */
+        public static final int CHEROKEE_SUPPLEMENT_ID = 255; /*[AB70]*/
+        /** @stable ICU 56 */
+        public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E_ID = 256; /*[2B820]*/
+        /** @stable ICU 56 */
+        public static final int EARLY_DYNASTIC_CUNEIFORM_ID = 257; /*[12480]*/
+        /** @stable ICU 56 */
+        public static final int HATRAN_ID = 258; /*[108E0]*/
+        /** @stable ICU 56 */
+        public static final int MULTANI_ID = 259; /*[11280]*/
+        /** @stable ICU 56 */
+        public static final int OLD_HUNGARIAN_ID = 260; /*[10C80]*/
+        /** @stable ICU 56 */
+        public static final int SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS_ID = 261; /*[1F900]*/
+        /** @stable ICU 56 */
+        public static final int SUTTON_SIGNWRITING_ID = 262; /*[1D800]*/
+
         /**
          * @stable ICU 2.4
          */
-        public static final int COUNT = 253;
+        public static final int COUNT = 263;
 
         // blocks objects ---------------------------------------------------
 
@@ -2314,6 +2337,38 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock TIRHUTA = new UnicodeBlock("TIRHUTA", TIRHUTA_ID); /*[11480]*/
         /** @stable ICU 54 */
         public static final UnicodeBlock WARANG_CITI = new UnicodeBlock("WARANG_CITI", WARANG_CITI_ID); /*[118A0]*/
+
+        /* New blocks in Unicode 8.0 */
+
+        /** @stable ICU 56 */
+        public static final UnicodeBlock AHOM = new UnicodeBlock("AHOM", AHOM_ID); /*[11700]*/
+        /** @stable ICU 56 */
+        public static final UnicodeBlock ANATOLIAN_HIEROGLYPHS =
+                new UnicodeBlock("ANATOLIAN_HIEROGLYPHS", ANATOLIAN_HIEROGLYPHS_ID); /*[14400]*/
+        /** @stable ICU 56 */
+        public static final UnicodeBlock CHEROKEE_SUPPLEMENT =
+                new UnicodeBlock("CHEROKEE_SUPPLEMENT", CHEROKEE_SUPPLEMENT_ID); /*[AB70]*/
+        /** @stable ICU 56 */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E =
+                new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E",
+                        CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E_ID); /*[2B820]*/
+        /** @stable ICU 56 */
+        public static final UnicodeBlock EARLY_DYNASTIC_CUNEIFORM =
+                new UnicodeBlock("EARLY_DYNASTIC_CUNEIFORM", EARLY_DYNASTIC_CUNEIFORM_ID); /*[12480]*/
+        /** @stable ICU 56 */
+        public static final UnicodeBlock HATRAN = new UnicodeBlock("HATRAN", HATRAN_ID); /*[108E0]*/
+        /** @stable ICU 56 */
+        public static final UnicodeBlock MULTANI = new UnicodeBlock("MULTANI", MULTANI_ID); /*[11280]*/
+        /** @stable ICU 56 */
+        public static final UnicodeBlock OLD_HUNGARIAN =
+                new UnicodeBlock("OLD_HUNGARIAN", OLD_HUNGARIAN_ID); /*[10C80]*/
+        /** @stable ICU 56 */
+        public static final UnicodeBlock SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS =
+                new UnicodeBlock("SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS",
+                        SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS_ID); /*[1F900]*/
+        /** @stable ICU 56 */
+        public static final UnicodeBlock SUTTON_SIGNWRITING =
+                new UnicodeBlock("SUTTON_SIGNWRITING", SUTTON_SIGNWRITING_ID); /*[1D800]*/
 
         /**
          * @stable ICU 2.4

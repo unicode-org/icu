@@ -1,10 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2006, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1998-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
+
+import com.ibm.icu.lang.UScript;
 
 public class ScriptTagModuleWriter extends ScriptModuleWriter
 {
@@ -29,6 +31,39 @@ public class ScriptTagModuleWriter extends ScriptModuleWriter
             output.print("' (");
             output.print(data.getName(value));
             output.println(") */");
+            if(kind.equals("Script")) {
+                switch(value) {
+                case UScript.BENGALI:
+                    output.println("const LETag bng2ScriptTag = 0x626E6732; /* 'bng2' (BENGALI v.2) (manually added) */");
+                    break;
+                case UScript.DEVANAGARI:
+                    output.println("const LETag dev2ScriptTag = 0x64657632; /* 'dev2' (DEVANAGARI v.2) (manually added) */");
+                    break;
+                case UScript.GUJARATI:
+                    output.println("const LETag gjr2ScriptTag = 0x676A7232; /* 'gjr2' (GUJARATI v.2) (manually added) */");
+                    break;
+                case UScript.GURMUKHI:
+                    output.println("const LETag gur2ScriptTag = 0x67757232; /* 'gur2' (GURMUKHI v.2) (manually added) */");
+                    break;
+                case UScript.KANNADA:
+                    output.println("const LETag knd2ScriptTag = 0x6B6E6432; /* 'knd2' (KANNADA v.2) (manually added) */");
+                    break;
+                case UScript.MALAYALAM:
+                    output.println("const LETag mlm2ScriptTag = 0x6D6C6D32; /* 'mlm2' (MALAYALAM v.2) (manually added) */");
+                    break;
+                case UScript.ORIYA:
+                    output.println("const LETag ory2ScriptTag = 0x6F727932; /* 'ory2' (ORIYA v.2) (manually added) */");
+                    break;
+                case UScript.TAMIL:
+                    output.println("const LETag tml2ScriptTag = 0x746D6C32; /* 'tml2' (TAMIL v.2) (manually added) */");
+                    break;
+                case UScript.TELUGU:
+                    output.println("const LETag tel2ScriptTag = 0x74656C32; /* 'tel2' (TELUGU v.2) (manually added) */");
+                    break;
+                default:
+                    break;
+                }
+            }
         }
     }
     

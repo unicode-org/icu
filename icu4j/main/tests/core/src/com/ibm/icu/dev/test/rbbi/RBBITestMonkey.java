@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2014 International Business Machines Corporation and
+ * Copyright (C) 2003-2015 International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -949,6 +949,7 @@ public class RBBITestMonkey extends TestFmwk {
                 
                // LB 22
                 if (fAL.contains(prevChar) && fIN.contains(thisChar) ||
+                        fEX.contains(prevChar) && fIN.contains(thisChar) ||
                         fHL.contains(prevChar) && fIN.contains(thisChar) ||
                         fID.contains(prevChar) && fIN.contains(thisChar) ||
                         fIN.contains(prevChar) && fIN.contains(thisChar) ||
@@ -1407,8 +1408,9 @@ public class RBBITestMonkey extends TestFmwk {
                     continue;
                 }
 
-                // Rule (7).  Upper ATerm  x  Uppper
-                if (fUpperSet.contains(c0) && fATermSet.contains(c1) && fUpperSet.contains(c2)) {
+                // Rule (7).  (Upper | Lower) ATerm  x  Uppper
+                if ((fUpperSet.contains(c0) || fLowerSet.contains(c0)) &&
+                        fATermSet.contains(c1) && fUpperSet.contains(c2)) {
                     continue;
                 }
 

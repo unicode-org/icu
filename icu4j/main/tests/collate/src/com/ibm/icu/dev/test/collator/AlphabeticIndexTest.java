@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2014, International Business Machines Corporation and
+ * Copyright (C) 2008-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -246,7 +246,11 @@ public class AlphabeticIndexTest extends TestFmwk {
         collator.setStrength(Collator.IDENTICAL);
         Collection<String> firsts = alphabeticIndex.getFirstCharactersInScripts();
         // Verify that each script is represented exactly once.
-        UnicodeSet missingScripts = new UnicodeSet("[^[:sc=inherited:][:sc=unknown:][:sc=common:][:Script=Braille:]]");
+        // Exclude pseudo-scripts like Common (no letters).
+        // Exclude scripts like Braille and Sutton SignWriting
+        // because they only have symbols, not letters.
+        UnicodeSet missingScripts = new UnicodeSet(
+                "[^[:inherited:][:unknown:][:common:][:Braille:][:SignWriting:]]");
         String last = "";
         for (String index : firsts) {
             if (collator.compare(last,index) >= 0) {
@@ -1039,7 +1043,8 @@ public class AlphabeticIndexTest extends TestFmwk {
         // bucketIndex = radical number, adjusted for simplified radicals in lower buckets.
         int bucketIndex = index.getBucketIndex("\u4e5d");
         assertEquals("getBucketIndex(U+4E5D)", 5, bucketIndex);
+        // radical 100, and there is a 90' since Unicode 8
         bucketIndex = index.getBucketIndex("\u7527");
-        assertEquals("getBucketIndex(U+7527)", 100, bucketIndex);
+        assertEquals("getBucketIndex(U+7527)", 101, bucketIndex);
     }
 }
