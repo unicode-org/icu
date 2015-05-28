@@ -4128,7 +4128,7 @@ void DecimalFormat::setExponentSignAlwaysShown(UBool expSignAlways) {
 int32_t
 DecimalFormat::getGroupingSize() const
 {
-    return isGroupingUsed() ? fGroupingSize : 0;
+    return fGroupingSize;
 }
 
 //------------------------------------------------------------------------------
@@ -4985,6 +4985,9 @@ DecimalFormat::applyPatternWithoutExpandAffix(const UnicodeString& pattern,
     if (out.fGroupingUsed) {
         fGroupingSize = out.fGroupingSize;
         fGroupingSize2 = out.fGroupingSize2;
+    } else {
+        fGroupingSize = 0;
+        fGroupingSize2 = 0;
     }
     setMultiplier(out.fMultiplier);
     fDecimalSeparatorAlwaysShown = out.fDecimalSeparatorAlwaysShown;
