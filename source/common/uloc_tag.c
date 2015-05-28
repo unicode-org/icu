@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2009-2014, International Business Machines
+*   Copyright (C) 2009-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -1833,6 +1833,8 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 tagBuf = (char*)uprv_malloc(newTagLength + 1);
                 if (tagBuf == NULL) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
+                    uprv_free(t->buf);
+                    uprv_free(t);
                     return NULL;
                 }
                 t->buf = tagBuf;
