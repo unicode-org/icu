@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2014. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2015. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 10/26/2010 02:53:33 PM PDT
+ * Generated on: 04/27/2015 10:39:37 AM PDT
  */
 
 #ifndef __LELANGUAGES_H
@@ -59,9 +59,6 @@ enum LanguageCodes {
     zhpLanguageCode = 27,
     zhsLanguageCode = 28,
     zhtLanguageCode = 29,
-
-    /** New language codes added 03/13/2008 @deprecated ICU 54. See {@link icu::LayoutEngine}
-     */
     afkLanguageCode = 30,
     belLanguageCode = 31,
     bgrLanguageCode = 32,

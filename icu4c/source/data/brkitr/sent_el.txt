@@ -1,12 +1,12 @@
 #
-#   Copyright (C) 2002-2011, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2015, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  sent_el.txt
 #
 #   ICU Sentence Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on UAX #29 Revision 19 for Unicode Version 6.1
+#      These rules are based on UAX #29 Revision 26 for Unicode Version 8.0
 #
 
 
@@ -64,7 +64,7 @@ $CR $LF;
 $ATermEx $NumericEx;
 
 # Rule 7
-$UpperEx $ATermEx $UpperEx;
+($UpperEx | $LowerEx) $ATermEx $UpperEx;
 
 #Rule 8
 $NotLettersEx = [^$OLetter $Upper $Lower $Sep $CR $LF $ATerm $STerm] ($Extend | $Format)*;
