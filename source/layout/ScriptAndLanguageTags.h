@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2014. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2015. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 04/08/2014 03:20:04 PM PDT
+ * Generated on: 04/27/2015 10:39:37 AM PDT
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -105,7 +105,7 @@ const LETag geokScriptTag = 0x67656F6B; /* 'geok' (GEOK) */
 const LETag hansScriptTag = 0x68616E73; /* 'hans' (HANS) */
 const LETag hantScriptTag = 0x68616E74; /* 'hant' (HANT) */
 const LETag hmngScriptTag = 0x686D6E67; /* 'hmng' (PAHAWH_HMONG) */
-const LETag hungScriptTag = 0x68756E67; /* 'hung' (HUNG) */
+const LETag hungScriptTag = 0x68756E67; /* 'hung' (OLD_HUNGARIAN) */
 const LETag indsScriptTag = 0x696E6473; /* 'inds' (INDS) */
 const LETag javaScriptTag = 0x6A617661; /* 'java' (JAVANESE) */
 const LETag kaliScriptTag = 0x6B616C69; /* 'kali' (KAYAH_LI) */
@@ -141,7 +141,7 @@ const LETag lydiScriptTag = 0x6C796469; /* 'lydi' (LYDIAN) */
 const LETag olckScriptTag = 0x6F6C636B; /* 'olck' (OL_CHIKI) */
 const LETag rjngScriptTag = 0x726A6E67; /* 'rjng' (REJANG) */
 const LETag saurScriptTag = 0x73617572; /* 'saur' (SAURASHTRA) */
-const LETag sgnwScriptTag = 0x73676E77; /* 'sgnw' (SGNW) */
+const LETag sgnwScriptTag = 0x73676E77; /* 'sgnw' (SIGNWRITING) */
 const LETag sundScriptTag = 0x73756E64; /* 'sund' (SUNDANESE) */
 const LETag moonScriptTag = 0x6D6F6F6E; /* 'moon' (MOON) */
 const LETag mteiScriptTag = 0x6D746569; /* 'mtei' (MEETEI_MAYEK) */
@@ -185,15 +185,15 @@ const LETag soraScriptTag = 0x736F7261; /* 'sora' (SORA_SOMPENG) */
 const LETag takrScriptTag = 0x74616B72; /* 'takr' (TAKRI) */
 const LETag tangScriptTag = 0x74616E67; /* 'tang' (TANG) */
 const LETag woleScriptTag = 0x776F6C65; /* 'wole' (WOLE) */
-const LETag hluwScriptTag = 0x686C7577; /* 'hluw' (HLUW) */
+const LETag hluwScriptTag = 0x686C7577; /* 'hluw' (ANATOLIAN_HIEROGLYPHS) */
 const LETag khojScriptTag = 0x6B686F6A; /* 'khoj' (KHOJKI) */
 const LETag tirhScriptTag = 0x74697268; /* 'tirh' (TIRHUTA) */
 const LETag aghbScriptTag = 0x61676862; /* 'aghb' (CAUCASIAN_ALBANIAN) */
 const LETag mahjScriptTag = 0x6D61686A; /* 'mahj' (MAHAJANI) */
 const LETag ahomScriptTag = 0x61686F6D; /* 'ahom' (AHOM) */
-const LETag hatrScriptTag = 0x68617472; /* 'hatr' (HATR) */
+const LETag hatrScriptTag = 0x68617472; /* 'hatr' (HATRAN) */
 const LETag modiScriptTag = 0x6D6F6469; /* 'modi' (MODI) */
-const LETag multScriptTag = 0x6D756C74; /* 'mult' (MULT) */
+const LETag multScriptTag = 0x6D756C74; /* 'mult' (MULTANI) */
 const LETag paucScriptTag = 0x70617563; /* 'pauc' (PAU_CIN_HAU) */
 const LETag siddScriptTag = 0x73696464; /* 'sidd' (SIDDHAM) */
 
