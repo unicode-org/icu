@@ -30,41 +30,33 @@ UnicodeStringTest::~UnicodeStringTest() {}
 void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char *par)
 {
     if (exec) logln("TestSuite UnicodeStringTest: ");
-    switch (index) {
-        case 0:
-            name = "StringCaseTest";
-            if (exec) {
-                logln("StringCaseTest---"); logln("");
-                StringCaseTest test;
-                callTest(test, par);
-            }
-            break;
-        case 1: name = "TestBasicManipulation"; if (exec) TestBasicManipulation(); break;
-        case 2: name = "TestCompare"; if (exec) TestCompare(); break;
-        case 3: name = "TestExtract"; if (exec) TestExtract(); break;
-        case 4: name = "TestRemoveReplace"; if (exec) TestRemoveReplace(); break;
-        case 5: name = "TestSearching"; if (exec) TestSearching(); break;
-        case 6: name = "TestSpacePadding"; if (exec) TestSpacePadding(); break;
-        case 7: name = "TestPrefixAndSuffix"; if (exec) TestPrefixAndSuffix(); break;
-        case 8: name = "TestFindAndReplace"; if (exec) TestFindAndReplace(); break;
-        case 9: name = "TestBogus"; if (exec) TestBogus(); break;
-        case 10: name = "TestReverse"; if (exec) TestReverse(); break;
-        case 11: name = "TestMiscellaneous"; if (exec) TestMiscellaneous(); break;
-        case 12: name = "TestStackAllocation"; if (exec) TestStackAllocation(); break;
-        case 13: name = "TestUnescape"; if (exec) TestUnescape(); break;
-        case 14: name = "TestCountChar32"; if (exec) TestCountChar32(); break;
-        case 15: name = "TestStringEnumeration"; if (exec) TestStringEnumeration(); break;
-        case 16: name = "TestNameSpace"; if (exec) TestNameSpace(); break;
-        case 17: name = "TestUTF32"; if (exec) TestUTF32(); break;
-        case 18: name = "TestUTF8"; if (exec) TestUTF8(); break;
-        case 19: name = "TestReadOnlyAlias"; if (exec) TestReadOnlyAlias(); break;
-        case 20: name = "TestAppendable"; if (exec) TestAppendable(); break;
-        case 21: name = "TestUnicodeStringImplementsAppendable"; if (exec) TestUnicodeStringImplementsAppendable(); break;
-        case 22: name = "TestSizeofUnicodeString"; if (exec) TestSizeofUnicodeString(); break;
-        case 23: name = "TestStartsWithAndEndsWithNulTerminated"; if (exec) TestStartsWithAndEndsWithNulTerminated(); break;
-
-        default: name = ""; break; //needed to end loop
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO_CLASS(StringCaseTest);
+    TESTCASE_AUTO(TestBasicManipulation);
+    TESTCASE_AUTO(TestCompare);
+    TESTCASE_AUTO(TestExtract);
+    TESTCASE_AUTO(TestRemoveReplace);
+    TESTCASE_AUTO(TestSearching);
+    TESTCASE_AUTO(TestSpacePadding);
+    TESTCASE_AUTO(TestPrefixAndSuffix);
+    TESTCASE_AUTO(TestFindAndReplace);
+    TESTCASE_AUTO(TestBogus);
+    TESTCASE_AUTO(TestReverse);
+    TESTCASE_AUTO(TestMiscellaneous);
+    TESTCASE_AUTO(TestStackAllocation);
+    TESTCASE_AUTO(TestUnescape);
+    TESTCASE_AUTO(TestCountChar32);
+    TESTCASE_AUTO(TestStringEnumeration);
+    TESTCASE_AUTO(TestNameSpace);
+    TESTCASE_AUTO(TestUTF32);
+    TESTCASE_AUTO(TestUTF8);
+    TESTCASE_AUTO(TestReadOnlyAlias);
+    TESTCASE_AUTO(TestAppendable);
+    TESTCASE_AUTO(TestUnicodeStringImplementsAppendable);
+    TESTCASE_AUTO(TestSizeofUnicodeString);
+    TESTCASE_AUTO(TestStartsWithAndEndsWithNulTerminated);
+    TESTCASE_AUTO(TestMoveSwap);
+    TESTCASE_AUTO_END;
 }
 
 void
@@ -2128,5 +2120,68 @@ UnicodeStringTest::TestSizeofUnicodeString() {
     if(terminatedBuffer==emptyBuffer) {
         errln("unexpected keeping stack buffer when overfilling assumed stack buffer size of %d",
               expectedStackBufferLength);
+    }
+}
+
+void
+UnicodeStringTest::TestMoveSwap() {
+    static const UChar abc[3] = { 0x61, 0x62, 0x63 };  // "abc"
+    UnicodeString s1(FALSE, abc, UPRV_LENGTHOF(abc));  // read-only alias
+    UnicodeString s2(100, 0x7a, 100);  // 100 * 'z' should be on the heap
+    UnicodeString s3("defg", 4, US_INV);  // in stack buffer
+    const UChar *p = s2.getBuffer();
+    s1.swap(s2);
+    if(s1.getBuffer() != p || s1.length() != 100 || s2.getBuffer() != abc || s2.length() != 3) {
+        errln("UnicodeString.swap() did not swap");
+    }
+    swap(s2, s3);
+    if(s2 != UNICODE_STRING_SIMPLE("defg") || s3.getBuffer() != abc || s3.length() != 3) {
+        errln("swap(UnicodeString) did not swap back");
+    }
+    UnicodeString s4;
+    s4.moveFrom(s1);
+    if(s4.getBuffer() != p || s4.length() != 100 || !s1.isBogus()) {
+        errln("UnicodeString.moveFrom(heap) did not move");
+    }
+    UnicodeString s5;
+    s5.moveFrom(s2);
+    if(s5 != UNICODE_STRING_SIMPLE("defg")) {
+        errln("UnicodeString.moveFrom(stack) did not move");
+    }
+    UnicodeString s6;
+    s6.moveFrom(s3);
+    if(s6.getBuffer() != abc || s6.length() != 3) {
+        errln("UnicodeString.moveFrom(alias) did not move");
+    }
+#if U_HAVE_RVALUE_REFERENCES
+    infoln("TestMoveSwap() with rvalue references");
+    s1 = static_cast<UnicodeString &&>(s6);
+    if(s1.getBuffer() != abc || s1.length() != 3) {
+        errln("UnicodeString move assignment operator did not move");
+    }
+    UnicodeString s7(static_cast<UnicodeString &&>(s4));
+    if(s7.getBuffer() != p || s7.length() != 100 || !s4.isBogus()) {
+        errln("UnicodeString move constructor did not move");
+    }
+#else
+    infoln("TestMoveSwap() without rvalue references");
+    UnicodeString s7;
+#endif
+
+    // Move self assignment leaves the object valid but in an undefined state.
+    // Do it to make sure there is no crash,
+    // but do not check for any particular resulting value.
+    s1.moveFrom(s1);
+    s2.moveFrom(s2);
+    s3.moveFrom(s3);
+    s4.moveFrom(s4);
+    s5.moveFrom(s5);
+    s6.moveFrom(s6);
+    s7.moveFrom(s7);
+    // Simple copy assignment must work.
+    UnicodeString simple = UNICODE_STRING_SIMPLE("simple");
+    s1 = s6 = s4 = s7 = simple;
+    if(s1 != simple || s4 != simple || s6 != simple || s7 != simple) {
+        errln("UnicodeString copy after self-move did not work");
     }
 }

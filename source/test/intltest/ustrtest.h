@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -88,6 +88,7 @@ public:
     void TestAppendable();
     void TestUnicodeStringImplementsAppendable();
     void TestSizeofUnicodeString();
+    void TestMoveSwap();
 };
 
 class StringCaseTest: public IntlTest {

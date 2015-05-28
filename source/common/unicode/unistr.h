@@ -1877,6 +1877,40 @@ public:
    */
   UnicodeString &fastCopyFrom(const UnicodeString &src);
 
+#ifndef U_HIDE_DRAFT_API
+#if U_HAVE_RVALUE_REFERENCES
+  /**
+   * Move assignment operator, might leave src in bogus state.
+   * This string will have the same contents and state that the source string had.
+   * The behavior is undefined if *this and src are the same object.
+   * @param src source string
+   * @return *this
+   * @draft ICU 56
+   */
+  UnicodeString &operator=(UnicodeString &&src) U_NOEXCEPT {
+    return moveFrom(src);
+  }
+#endif
+  /**
+   * Move assignment, might leave src in bogus state.
+   * This string will have the same contents and state that the source string had.
+   * The behavior is undefined if *this and src are the same object.
+   *
+   * Can be called explicitly, does not need C++11 support.
+   * @param src source string
+   * @return *this
+   * @draft ICU 56
+   */
+  UnicodeString &moveFrom(UnicodeString &src) U_NOEXCEPT;
+
+  /**
+   * Swap strings.
+   * @param other other string
+   * @draft ICU 56
+   */
+  void swap(UnicodeString &other) U_NOEXCEPT;
+#endif  /* U_HIDE_DRAFT_API */
+
   /**
    * Assignment operator.  Replace the characters in this UnicodeString
    * with the code unit <TT>ch</TT>.
@@ -3131,6 +3165,18 @@ public:
    */
   UnicodeString(const UnicodeString& that);
 
+#ifndef U_HIDE_DRAFT_API
+#if U_HAVE_RVALUE_REFERENCES
+  /**
+   * Move constructor, might leave src in bogus state.
+   * This string will have the same contents and state that the source string had.
+   * @param src source string
+   * @draft ICU 56
+   */
+  UnicodeString(UnicodeString &&src) U_NOEXCEPT;
+#endif
+#endif  /* U_HIDE_DRAFT_API */
+
   /**
    * 'Substring' constructor from tail of source string.
    * @param src The UnicodeString object to copy.
@@ -3440,6 +3486,9 @@ private:
   // implements assigment operator, copy constructor, and fastCopyFrom()
   UnicodeString &copyFrom(const UnicodeString &src, UBool fastCopy=FALSE);
 
+  // Copies just the fields without memory management.
+  void copyFieldsFrom(UnicodeString &src, UBool setSrcToBogus) U_NOEXCEPT;
+
   // Pin start and limit to acceptable values.
   inline void pinIndex(int32_t& start) const;
   inline void pinIndices(int32_t& start,
@@ -3618,6 +3667,19 @@ private:
  */
 U_COMMON_API UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2);
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Non-member UnicodeString swap function.
+ * @param s1 will get s2's contents and state
+ * @param s2 will get s1's contents and state
+ * @draft ICU 56
+ */
+U_COMMON_API inline void U_EXPORT2
+swap(UnicodeString &s1, UnicodeString &s2) U_NOEXCEPT {
+    s1.swap(s2);
+}
+#endif  /* U_HIDE_DRAFT_API */
 
 //========================================
 // Inline members
