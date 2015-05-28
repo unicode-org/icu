@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2014. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2015. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 04/08/2014 03:20:04 PM PDT
+ * Generated on: 04/27/2015 10:39:37 AM PDT
  */
 
 #ifndef __LESCRIPTS_H
@@ -69,24 +69,12 @@ enum ScriptCodes {
     thaaScriptCode = 37,
     thaiScriptCode = 38,
     tibtScriptCode = 39,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     cansScriptCode = 40,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     yiiiScriptCode = 41,
     tglgScriptCode = 42,
     hanoScriptCode = 43,
     buhdScriptCode = 44,
     tagbScriptCode = 45,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     braiScriptCode = 46,
     cprtScriptCode = 47,
     limbScriptCode = 48,
@@ -95,15 +83,7 @@ enum ScriptCodes {
     shawScriptCode = 51,
     taleScriptCode = 52,
     ugarScriptCode = 53,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     hrktScriptCode = 54,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     bugiScriptCode = 55,
     glagScriptCode = 56,
     kharScriptCode = 57,
@@ -111,10 +91,6 @@ enum ScriptCodes {
     taluScriptCode = 59,
     tfngScriptCode = 60,
     xpeoScriptCode = 61,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     baliScriptCode = 62,
     batkScriptCode = 63,
     blisScriptCode = 64,
@@ -157,10 +133,6 @@ enum ScriptCodes {
     xsuxScriptCode = 101,
     zxxxScriptCode = 102,
     zzzzScriptCode = 103,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     cariScriptCode = 104,
     jpanScriptCode = 105,
     lanaScriptCode = 106,
@@ -173,10 +145,6 @@ enum ScriptCodes {
     sundScriptCode = 113,
     moonScriptCode = 114,
     mteiScriptCode = 115,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     armiScriptCode = 116,
     avstScriptCode = 117,
     cakmScriptCode = 118,
@@ -191,18 +159,10 @@ enum ScriptCodes {
     tavtScriptCode = 127,
     zmthScriptCode = 128,
     zsymScriptCode = 129,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     bamuScriptCode = 130,
     lisuScriptCode = 131,
     nkgbScriptCode = 132,
     sarbScriptCode = 133,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     bassScriptCode = 134,
     duplScriptCode = 135,
     elbaScriptCode = 136,
@@ -216,10 +176,6 @@ enum ScriptCodes {
     palmScriptCode = 144,
     sindScriptCode = 145,
     waraScriptCode = 146,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     afakScriptCode = 147,
     jurcScriptCode = 148,
     mrooScriptCode = 149,
@@ -229,23 +185,11 @@ enum ScriptCodes {
     takrScriptCode = 153,
     tangScriptCode = 154,
     woleScriptCode = 155,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     hluwScriptCode = 156,
     khojScriptCode = 157,
     tirhScriptCode = 158,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     aghbScriptCode = 159,
     mahjScriptCode = 160,
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-
     ahomScriptCode = 161,
     hatrScriptCode = 162,
     modiScriptCode = 163,
@@ -253,10 +197,7 @@ enum ScriptCodes {
     paucScriptCode = 165,
     siddScriptCode = 166,
 
-/**
- * @deprecated ICU 54. See {@link icu::LayoutEngine}
- */
-    scriptCodeCount
+    scriptCodeCount = 167
 };
 
 U_NAMESPACE_END
