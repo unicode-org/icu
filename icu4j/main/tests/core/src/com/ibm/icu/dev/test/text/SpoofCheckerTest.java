@@ -132,7 +132,7 @@ public class SpoofCheckerTest extends TestFmwk {
 
             String stubConfusables =
                 "# Stub confusables data\n" +
-                "05AD ; 0596 ;  SL  # ( ֭ → ֖ ) HEBREW ACCENT DEHI → HEBREW ACCENT TIPEHA   #\n";
+                "05AD ; 0596 ;  MA  # ( ֭ → ֖ ) HEBREW ACCENT DEHI → HEBREW ACCENT TIPEHA   #\n";
 
             // Verify that re-using a builder doesn't alter SpoofCheckers that were
             //  previously created by that builder. (The builder could modify data

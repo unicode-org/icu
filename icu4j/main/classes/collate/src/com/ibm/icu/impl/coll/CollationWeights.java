@@ -1,7 +1,7 @@
 /*  
 *******************************************************************************
 *
-*   Copyright (C) 1999-2014, International Business Machines
+*   Copyright (C) 1999-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -367,33 +367,53 @@ public final class CollationWeights {
             middle.count=(int)((middle.end-middle.start)>>(8*(4-middleLength)))+1;
         } else {
             /* no middle range, eliminate overlaps */
-
-            /* reduce or remove the lower ranges that go beyond upperLimit */
             for(int length=4; length>middleLength; --length) {
                 if(lower[length] != null && upper[length] != null &&
                         lower[length].count>0 && upper[length].count>0) {
-                    long start=upper[length].start;
-                    long end=lower[length].end;
+                    // Note: The lowerEnd and upperStart weights are versions of
+                    // lowerLimit and upperLimit (which are lowerLimit<upperLimit),
+                    // truncated (still less-or-equal)
+                    // and then with their last bytes changed to the
+                    // maxByte (for lowerEnd) or minByte (for upperStart).
+                    final long lowerEnd=lower[length].end;
+                    final long upperStart=upper[length].start;
+                    boolean merged=false;
 
-                    if(end>=start || incWeight(end, length)==start) {
-                        /* lower and upper ranges collide or are directly adjacent: merge these two and remove all shorter ranges */
-                        start=lower[length].start;
-                        end=lower[length].end=upper[length].end;
-                        /*
-                         * merging directly adjacent ranges needs to subtract the 0/1 gaps in between;
-                         * it may result in a range with count>countBytes
-                         */
+                    if(lowerEnd>upperStart) {
+                        // These two lower and upper ranges collide.
+                        // Since lowerLimit<upperLimit and lowerEnd and upperStart
+                        // are versions with only their last bytes modified
+                        // (and following ones removed/reset to 0),
+                        // lowerEnd>upperStart is only possible
+                        // if the leading bytes are equal
+                        // and lastByte(lowerEnd)>lastByte(upperStart).
+                        assert(truncateWeight(lowerEnd, length-1)==
+                                truncateWeight(upperStart, length-1));
+                        // Intersect these two ranges.
+                        lower[length].end=upper[length].end;
                         lower[length].count=
-                                getWeightTrail(end, length)-getWeightTrail(start, length)+1+
-                                countBytes(length)*(getWeightByte(end, length-1)-getWeightByte(start, length-1));
+                                getWeightTrail(lower[length].end, length)-
+                                getWeightTrail(lower[length].start, length)+1;
+                        // count might be <=0 in which case there is no room,
+                        // and the range-collecting code below will ignore this range.
+                        merged=true;
+                    } else if(lowerEnd==upperStart) {
+                        // Not possible, unless minByte==maxByte which is not allowed.
+                        assert(minBytes[length]<maxBytes[length]);
+                    } else /* lowerEnd<upperStart */ {
+                        if(incWeight(lowerEnd, length)==upperStart) {
+                            // Merge adjacent ranges.
+                            lower[length].end=upper[length].end;
+                            lower[length].count+=upper[length].count;  // might be >countBytes
+                            merged=true;
+                        }
+                    }
+                    if(merged) {
+                        // Remove all shorter ranges.
+                        // There was no room available for them between the ranges we just merged.
                         upper[length].count=0;
                         while(--length>middleLength) {
-                            if(lower[length] != null) {
-                                lower[length].count = 0;
-                            }
-                            if(upper[length] != null) {
-                                upper[length].count = 0;
-                            }
+                            lower[length]=upper[length]=null;
                         }
                         break;
                     }
