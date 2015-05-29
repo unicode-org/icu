@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2014 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2015 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  07/02/2001   synwee      Creation.
@@ -75,18 +75,22 @@ inline uint32_t getMask(UCollationStrength strength)
 }
 
 /**
-* This is to squeeze the 21bit ces into a 256 table
-* @param ce collation element
-* @return collapsed version of the collation element
+* @param ce 32-bit collation element
+* @return hash code
 */
 static
-inline int hash(uint32_t ce)
+inline int hashFromCE32(uint32_t ce)
 {
-    // the old value UCOL_PRIMARYORDER(ce) % MAX_TABLE_SIZE_ does not work
-    // well with the new collation where most of the latin 1 characters
-    // are of the value xx000xxx. their hashes will most of the time be 0
-    // to be discussed on the hash algo.
-    return UCOL_PRIMARYORDER(ce) % MAX_TABLE_SIZE_;
+    int hc = (int)(
+            ((((((ce >> 24) * 37) +
+            (ce >> 16)) * 37) +
+            (ce >> 8)) * 37) +
+            ce);
+    hc %= MAX_TABLE_SIZE_;
+    if (hc < 0) {
+        hc += MAX_TABLE_SIZE_;
+    }
+    return hc;
 }
 
 U_CDECL_BEGIN
@@ -492,22 +496,22 @@ inline void setShiftTable(int16_t   shift[], int16_t backshift[],
     for (count = 0; count < cesize; count ++) {
         // number of ces from right of array to the count
         int temp = defaultforward - count - 1;
-        shift[hash(cetable[count])] = temp > 1 ? temp : 1;
+        shift[hashFromCE32(cetable[count])] = temp > 1 ? temp : 1;
     }
-    shift[hash(cetable[cesize])] = 1;
+    shift[hashFromCE32(cetable[cesize])] = 1;
     // for ignorables we just shift by one. see test examples.
-    shift[hash(0)] = 1;
+    shift[hashFromCE32(0)] = 1;
 
     for (count = 0; count < MAX_TABLE_SIZE_; count ++) {
         backshift[count] = defaultbackward;
     }
     for (count = cesize; count > 0; count --) {
         // the original value count does not seem to work
-        backshift[hash(cetable[count])] = count > expansionsize ?
+        backshift[hashFromCE32(cetable[count])] = count > expansionsize ?
                                           (int16_t)(count - expansionsize) : 1;
     }
-    backshift[hash(cetable[0])] = 1;
-    backshift[hash(0)] = 1;
+    backshift[hashFromCE32(cetable[0])] = 1;
+    backshift[hashFromCE32(0)] = 1;
 }
 
 /**
@@ -730,7 +734,7 @@ inline int32_t shiftForward(UStringSearch *strsrch,
 {
     UPattern *pattern = &(strsrch->pattern);
     if (ce != UCOL_NULLORDER) {
-        int32_t shift = pattern->shift[hash(ce)];
+        int32_t shift = pattern->shift[hashFromCE32(ce)];
         // this is to adjust for characters in the middle of the
         // substring for matching that failed.
         int32_t adjust = pattern->cesLength - patternceindex;
@@ -1971,7 +1975,7 @@ inline int32_t reverseShift(UStringSearch *strsrch,
     }
     else {
         if (ce != UCOL_NULLORDER) {
-            int32_t shift = strsrch->pattern.backShift[hash(ce)];
+            int32_t shift = strsrch->pattern.backShift[hashFromCE32(ce)];
 
             // this is to adjust for characters in the middle of the substring
             // for matching that failed.
