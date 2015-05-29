@@ -57,7 +57,7 @@ enum ENumberFormatTestTupleField {
     kParse,
     kLenient,
     kPlural,
-    kNumberFormatTestTupleFieldCount,
+    kNumberFormatTestTupleFieldCount
 };
 
 /**
