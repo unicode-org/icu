@@ -120,7 +120,7 @@ test permille
 set locale fr
 begin
 pattern	format	output	breaks
-0.0\u2030	0.573	573,0\u2030
+0.0\u2030	0.573	573,0‰
 \u20300.0	0.573	\u2030573,0
 p\u2030p0.0	0.573	p\u2030p573,0
 p'\u2030'p0.0	0.573	p\u2030p0,6
