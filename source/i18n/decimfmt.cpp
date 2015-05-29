@@ -4982,13 +4982,8 @@ DecimalFormat::applyPatternWithoutExpandAffix(const UnicodeString& pattern,
     fExponentSignAlwaysShown = out.fExponentSignAlwaysShown;
     fCurrencySignCount = out.fCurrencySignCount;
     setGroupingUsed(out.fGroupingUsed);
-    if (out.fGroupingUsed) {
-        fGroupingSize = out.fGroupingSize;
-        fGroupingSize2 = out.fGroupingSize2;
-    } else {
-        fGroupingSize = 0;
-        fGroupingSize2 = 0;
-    }
+    fGroupingSize = out.fGroupingSize;
+    fGroupingSize2 = out.fGroupingSize2;
     setMultiplier(out.fMultiplier);
     fDecimalSeparatorAlwaysShown = out.fDecimalSeparatorAlwaysShown;
     fFormatWidth = out.fFormatWidth;
