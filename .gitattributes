@@ -4350,6 +4350,7 @@ icu4j/main/tests/collate/src/com/ibm/icu/dev/test/util/LocaleAliasCollationTest.
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/util/ULocaleCollationTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/IDNATestInput.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/TestDataElements_testtypes.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/numberformattestspecification.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/words.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestDataElements.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4458,6 +4459,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Han
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/CompactDecimalFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/DataDrivenFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/DataDrivenNumberFormatTestSuite.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/DateFormatMiscTests.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/DateFormatRegressionTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/DateFormatRegressionTestJ.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4487,6 +4489,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatSerialTestData
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatSpecificationTest.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTestTuple.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberRegression.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralFormatUnitTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
