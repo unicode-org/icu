@@ -96,8 +96,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 @Override
                 public String parse(NumberFormatTestTuple tuple) {
                     DecimalFormat fmt = newDecimalFormat(tuple);
-                    int lenient = tuple.lenient == null ? 1 : tuple.lenient.intValue();
-                    fmt.setParseStrict(lenient == 0 ? true : false);
                     ParsePosition ppos = new ParsePosition(0);
                     Number actual = fmt.parse(tuple.parse, ppos);
                     if (ppos.getIndex() == 0) {
@@ -107,7 +105,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         return null;
                     }
                     if (tuple.output.equals("fail")) {
-                        return "Parse succeeded, but was expected to fail.";
+                        return "Parse succeeded: "+actual+", but was expected to fail.";
                     }
                     Number expected = toNumber(tuple.output);
                     // number types cannot be compared, this is the best we can do.
@@ -220,6 +218,17 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     }
                     if (tuple.localizedPattern != null) {
                         fmt.applyLocalizedPattern(tuple.localizedPattern);
+                    }
+                    int lenient = tuple.lenient == null ? 1 : tuple.lenient.intValue();
+                    fmt.setParseStrict(lenient == 0);
+                    if (tuple.parseIntegerOnly != null) {
+                        fmt.setParseIntegerOnly(tuple.parseIntegerOnly != 0);
+                    }
+                    if (tuple.decimalPatternMatchRequired != null) {
+                        fmt.setDecimalPatternMatchRequired(tuple.decimalPatternMatchRequired != 0);
+                    }
+                    if (tuple.parseNoExponent != null) {
+                        // Oops, not supported for now
                     }
                 }
     };
@@ -386,6 +395,17 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     }
                     if (tuple.localizedPattern != null) {
                         fmt.applyLocalizedPattern(tuple.localizedPattern);
+                    }
+                    
+                    // lenient parsing not supported by JDK
+                    if (tuple.parseIntegerOnly != null) {
+                        fmt.setParseIntegerOnly(tuple.parseIntegerOnly != 0);
+                    }
+                    if (tuple.decimalPatternMatchRequired != null) {
+                       // Oops, not supported
+                    }
+                    if (tuple.parseNoExponent != null) {
+                        // Oops, not supported for now
                     }
                 }
     };
@@ -4095,6 +4115,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!currFmtResult.equals("\u200B$100.00")) {
             errln("decfmt.toPattern results wrong, expected \u200B$100.00, got " + currFmtResult);
         }
+    }
+    
+    public void TestNumberFormatTestTupleToString() {
+        new NumberFormatTestTuple().toString();
     }
 
 }
