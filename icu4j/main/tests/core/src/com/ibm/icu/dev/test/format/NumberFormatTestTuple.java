@@ -113,6 +113,9 @@ public class NumberFormatTestTuple {
     public String parse = null;
     public Integer lenient = null;
     public String plural = null;
+    public Integer parseIntegerOnly = null;
+    public Integer decimalPatternMatchRequired = null;
+    public Integer parseNoExponent = null;
     
     
     
@@ -213,6 +216,9 @@ public class NumberFormatTestTuple {
         "parse",
         "lenient",
         "plural",
+        "parseIntegerOnly",
+        "decimalPatternMatchRequired",
+        "parseNoExponent",
     };
     
     static {
@@ -393,6 +399,18 @@ public class NumberFormatTestTuple {
     
     public void setPlural(String value) {
         plural = value;
+    }
+    
+    public void setParseIntegerOnly(String value) {
+        parseIntegerOnly = Integer.valueOf(value);
+    }
+    
+    public void setDecimalPatternMatchRequired(String value) {
+        decimalPatternMatchRequired = Integer.valueOf(value);
+    }
+    
+    public void setParseNoExponent(String value) {
+        parseNoExponent = Integer.valueOf(value);
     }
     
     // end field setters.
