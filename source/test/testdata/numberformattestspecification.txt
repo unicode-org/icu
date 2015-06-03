@@ -9,6 +9,7 @@
 // For more information on the format of this file, including all the available
 // field names, please see
 // https://docs.google.com/document/d/1T2P0p953_Lh1pRwo-5CuPVrHlIBa_wcXElG-Hhg_WHM/edit?usp=sharing
+
 test basic patterns
 set locale fr_FR
 set format 1234.567
@@ -696,6 +697,31 @@ parse	output	breaks
 // JDK parses as -1945
 (1,945d1)	fail	K
 
+test parse integer only
+set locale en
+set pattern 0.00
+set parseIntegerOnly 1
+begin
+parse	output	breaks
+35	35
++35	fail
+-35	-35
+2.63	2
+-39.99	-39
+
+test parse no exponent flag
+set pattern 0
+set locale en
+begin
+parseNoExponent	parse	output	breaks
+// JDK doesn't allow lowercase exponent but ICU4J and ICU4C do.
+0	5e2	500	K
+0	5.3E2	530
+// See ticket 11725
+1	5e2	5	J
+1	5.3E2	5.3	JK
+
+
 test parse strange prefix
 set locale en
 set positivePrefix dd
@@ -755,4 +781,5 @@ NaN	0.0	other
 2	0E0	other
 5.1	0.0	one
 5.09	0.0	one
+
 

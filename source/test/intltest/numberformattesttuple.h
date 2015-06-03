@@ -57,6 +57,9 @@ enum ENumberFormatTestTupleField {
     kParse,
     kLenient,
     kPlural,
+    kParseIntegerOnly,
+    kDecimalPatternMatchRequired,
+    kParseNoExponent,
     kNumberFormatTestTupleFieldCount
 };
 
@@ -115,6 +118,9 @@ public:
     UnicodeString parse;
     int32_t lenient;
     UnicodeString plural;
+    int32_t parseIntegerOnly;
+    int32_t decimalPatternMatchRequired;
+    int32_t parseNoExponent;
 
     UBool localeFlag;
     UBool currencyFlag;
@@ -156,6 +162,9 @@ public:
     UBool parseFlag;
     UBool lenientFlag;
     UBool pluralFlag;
+    UBool parseIntegerOnlyFlag;
+    UBool decimalPatternMatchRequiredFlag;
+    UBool parseNoExponentFlag;
 
     NumberFormatTestTuple() {
         clear();

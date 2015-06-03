@@ -326,7 +326,10 @@ const NumberFormatTestTupleFieldData gFieldData[] = {
     FIELD_INIT(style, &gFormatStyleOps),
     FIELD_INIT(parse, &gStrOps),
     FIELD_INIT(lenient, &gIntOps),
-    FIELD_INIT(plural, &gStrOps)
+    FIELD_INIT(plural, &gStrOps),
+    FIELD_INIT(parseIntegerOnly, &gIntOps),
+    FIELD_INIT(decimalPatternMatchRequired, &gIntOps),
+    FIELD_INIT(parseNoExponent, &gIntOps)
 };
 
 UBool
