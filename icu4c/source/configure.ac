@@ -645,7 +645,10 @@ sparc-*-solaris*)
     GENCCODE_ASSEMBLY="-a sun"
     ;;
 ia64-*-hpux*)
-    GENCCODE_ASSEMBLY="-a aCC-ia64"
+# There has been some issues with building ICU data on HPUX ia64 aCC
+# when using the assemble code setting below.  For now, build without
+# assemble code for this platform.  This will increase the build time.   
+#    GENCCODE_ASSEMBLY="-a aCC-ia64"
     ;;
 esac
 AC_SUBST(GENCCODE_ASSEMBLY)
