@@ -266,6 +266,15 @@ public:
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
     }
+    /**
+     * Non-member LocalPointer swap function.
+     * @param p1 will get p2's pointer
+     * @param p2 will get p1's pointer
+     * @draft ICU 56
+     */
+    friend inline void swap(LocalPointer<T> &p1, LocalPointer<T> &p2) U_NOEXCEPT {
+        p1.swap(p2);
+    }
 #endif  /* U_HIDE_DRAFT_API */
     /**
      * Deletes the object it owns,
@@ -306,19 +315,6 @@ public:
     }
 #endif  /* U_HIDE_DRAFT_API */
 };
-
-#ifndef U_HIDE_DRAFT_API
-/**
- * Non-member LocalPointer swap function.
- * @param p1 will get p2's pointer
- * @param p2 will get p1's pointer
- * @draft ICU 56
- */
-template<typename T>
-inline void swap(LocalPointer<T> &p1, LocalPointer<T> &p2) U_NOEXCEPT {
-    p1.swap(p2);
-}
-#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * "Smart pointer" class, deletes objects via the C++ array delete[] operator.
@@ -422,6 +418,15 @@ public:
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
     }
+    /**
+     * Non-member LocalArray swap function.
+     * @param p1 will get p2's pointer
+     * @param p2 will get p1's pointer
+     * @draft ICU 56
+     */
+    friend inline void swap(LocalArray<T> &p1, LocalArray<T> &p2) U_NOEXCEPT {
+        p1.swap(p2);
+    }
 #endif  /* U_HIDE_DRAFT_API */
     /**
      * Deletes the array it owns,
@@ -471,19 +476,6 @@ public:
     T &operator[](ptrdiff_t i) const { return LocalPointerBase<T>::ptr[i]; }
 };
 
-#ifndef U_HIDE_DRAFT_API
-/**
- * Non-member LocalArray swap function.
- * @param p1 will get p2's pointer
- * @param p2 will get p1's pointer
- * @draft ICU 56
- */
-template<typename T>
-inline void swap(LocalArray<T> &p1, LocalArray<T> &p2) U_NOEXCEPT {
-    p1.swap(p2);
-}
-#endif  /* U_HIDE_DRAFT_API */
-
 /**
  * \def U_DEFINE_LOCAL_OPEN_POINTER
  * "Smart pointer" definition macro, deletes objects via the closeFunction.
@@ -531,15 +523,14 @@ inline void swap(LocalArray<T> &p1, LocalArray<T> &p2) U_NOEXCEPT {
             LocalPointerBase<Type>::ptr=other.ptr; \
             other.ptr=temp; \
         } \
+        friend inline void swap(LocalPointerClassName &p1, LocalPointerClassName &p2) U_NOEXCEPT { \
+            p1.swap(p2); \
+        } \
         void adoptInstead(Type *p) { \
             closeFunction(ptr); \
             ptr=p; \
         } \
-    }; \
-    inline void swap(LocalPointerClassName &p1, LocalPointerClassName &p2) U_NOEXCEPT { \
-        p1.swap(p2); \
-    } \
-    class LocalPointerClassName
+    }
 #else
 #define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
     class LocalPointerClassName : public LocalPointerBase<Type> { \
@@ -557,19 +548,15 @@ inline void swap(LocalArray<T> &p1, LocalArray<T> &p2) U_NOEXCEPT {
             LocalPointerBase<Type>::ptr=other.ptr; \
             other.ptr=temp; \
         } \
+        friend inline void swap(LocalPointerClassName &p1, LocalPointerClassName &p2) U_NOEXCEPT { \
+            p1.swap(p2); \
+        } \
         void adoptInstead(Type *p) { \
             closeFunction(ptr); \
             ptr=p; \
         } \
-    }; \
-    inline void swap(LocalPointerClassName &p1, LocalPointerClassName &p2) U_NOEXCEPT { \
-        p1.swap(p2); \
-    } \
-    class LocalPointerClassName
+    }
 #endif
-// The trailing class forward declaration at the end of U_DEFINE_LOCAL_OPEN_POINTER
-// prevents a warning or error from -pedantic compilation
-// due to an extra ';' after the non-member swap function definition.
 
 U_NAMESPACE_END
 

@@ -208,6 +208,14 @@ public:
         other.ptr=temp;
     }
     /**
+     * Non-member LocalMemory swap function.
+     * @param p1 will get p2's pointer
+     * @param p2 will get p1's pointer
+     */
+    friend inline void swap(LocalMemory<T> &p1, LocalMemory<T> &p2) U_NOEXCEPT {
+        p1.swap(p2);
+    }
+    /**
      * Deletes the array it owns,
      * and adopts (takes ownership of) the one passed in.
      * @param p simple pointer to an array of T items that is adopted
@@ -245,16 +253,6 @@ public:
      */
     T &operator[](ptrdiff_t i) const { return LocalPointerBase<T>::ptr[i]; }
 };
-
-/**
- * Non-member LocalMemory swap function.
- * @param p1 will get p2's pointer
- * @param p2 will get p1's pointer
- */
-template<typename T>
-inline void swap(LocalMemory<T> &p1, LocalMemory<T> &p2) U_NOEXCEPT {
-    p1.swap(p2);
-}
 
 template<typename T>
 inline T *LocalMemory<T>::allocateInsteadAndReset(int32_t newCapacity) {
