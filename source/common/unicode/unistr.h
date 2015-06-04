@@ -1909,6 +1909,17 @@ public:
    * @draft ICU 56
    */
   void swap(UnicodeString &other) U_NOEXCEPT;
+
+  /**
+   * Non-member UnicodeString swap function.
+   * @param s1 will get s2's contents and state
+   * @param s2 will get s1's contents and state
+   * @draft ICU 56
+   */
+  friend U_COMMON_API inline void U_EXPORT2
+  swap(UnicodeString &s1, UnicodeString &s2) U_NOEXCEPT {
+    s1.swap(s2);
+  }
 #endif  /* U_HIDE_DRAFT_API */
 
   /**
@@ -3667,19 +3678,6 @@ private:
  */
 U_COMMON_API UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2);
-
-#ifndef U_HIDE_DRAFT_API
-/**
- * Non-member UnicodeString swap function.
- * @param s1 will get s2's contents and state
- * @param s2 will get s1's contents and state
- * @draft ICU 56
- */
-U_COMMON_API inline void U_EXPORT2
-swap(UnicodeString &s1, UnicodeString &s2) U_NOEXCEPT {
-    s1.swap(s2);
-}
-#endif  /* U_HIDE_DRAFT_API */
 
 //========================================
 // Inline members
