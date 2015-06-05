@@ -143,7 +143,7 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
                     if (!readLine(in)) {
                         break;
                     }
-                    if (fileLine.isEmpty() && state == 2) {
+                    if (fileLine.length() == 0 && state == 2) {
                         state = 0;
                     }
                     continue;
