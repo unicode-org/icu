@@ -213,6 +213,9 @@ UBool DataDrivenNumberFormatTestSuite::isPass(
     }
     else if (tuple.toPatternFlag || tuple.toLocalizedPatternFlag) {
         result = isToPatternPass(tuple, appendErrorMessage, status);
+    } else if (tuple.parseFlag && tuple.outputFlag && tuple.outputCurrencyFlag) {
+        result = isParseCurrencyPass(tuple, appendErrorMessage, status);
+
     } else if (tuple.parseFlag && tuple.outputFlag) {
         result = isParsePass(tuple, appendErrorMessage, status);
     } else if (tuple.pluralFlag) {
@@ -268,6 +271,16 @@ UBool DataDrivenNumberFormatTestSuite::isToPatternPass(
 }
 
 UBool DataDrivenNumberFormatTestSuite::isParsePass(
+        const NumberFormatTestTuple & /* tuple */,
+        UnicodeString & /*appendErrorMessage*/,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+UBool DataDrivenNumberFormatTestSuite::isParseCurrencyPass(
         const NumberFormatTestTuple & /* tuple */,
         UnicodeString & /*appendErrorMessage*/,
         UErrorCode &status) {

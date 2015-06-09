@@ -97,6 +97,14 @@ class DataDrivenNumberFormatTestSuite : IntlTest {
             UErrorCode &status);
 
     /**
+     * Test parsing with currency.
+     */
+    virtual UBool isParseCurrencyPass(
+            const NumberFormatTestTuple &tuple,
+            UnicodeString &appendErrorMessage,
+            UErrorCode &status);
+
+    /**
      * Test plural selection.
      */
     virtual UBool isSelectPass(
