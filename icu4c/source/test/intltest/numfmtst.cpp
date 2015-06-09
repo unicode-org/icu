@@ -49,6 +49,10 @@ UBool isParsePass(
         const NumberFormatTestTuple &tuple,
         UnicodeString &appendErrorMessage,
         UErrorCode &status);
+UBool isParseCurrencyPass(
+        const NumberFormatTestTuple &tuple,
+        UnicodeString &appendErrorMessage,
+        UErrorCode &status);
 };
 
 static DigitList &strToDigitList(
@@ -360,6 +364,57 @@ UBool NumberFormatTestDataDriven::isParsePass(
     return TRUE;
 }
 
+UBool NumberFormatTestDataDriven::isParseCurrencyPass(
+        const NumberFormatTestTuple &tuple,
+        UnicodeString &appendErrorMessage,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    LocalPointer<DecimalFormat> fmtPtr(newDecimalFormat(tuple, status));
+    if (U_FAILURE(status)) {
+        appendErrorMessage.append("Error creating DecimalFormat.");
+        return FALSE;
+    }
+    adjustDecimalFormat(tuple, *fmtPtr, appendErrorMessage);
+    if (appendErrorMessage.length() > 0) {
+        return FALSE;
+    }
+    ParsePosition ppos;
+    LocalPointer<CurrencyAmount> currAmt(
+            fmtPtr->parseCurrency(tuple.parse, ppos));
+    if (ppos.getIndex() == 0) {
+        if (tuple.output != "fail") {
+            appendErrorMessage.append("Parse failed but was expected to succeed.");
+            return FALSE;
+        }
+        return TRUE;
+    }
+    UnicodeString currStr(currAmt->getISOCurrency());
+    Formattable resultFormattable(currAmt->getNumber());
+    UnicodeString resultStr(UnicodeString::fromUTF8(resultFormattable.getDecimalNumber(status)));
+    if (tuple.output == "fail") {
+        appendErrorMessage.append(UnicodeString("Parse succeeded: ") + resultStr + ", but was expected to fail.");
+        return FALSE;
+    }
+    DigitList expected;
+    strToDigitList(tuple.output, expected, status);
+    if (U_FAILURE(status)) {
+        appendErrorMessage.append("Error parsing.");
+        return FALSE;
+    }
+    if (expected != *currAmt->getNumber().getDigitList()) {
+        appendErrorMessage.append(
+                    UnicodeString("Expected: ") + tuple.output + ", got: " + resultStr + ". ");
+        return FALSE;
+    }
+    if (currStr != tuple.outputCurrency) {
+        appendErrorMessage.append(UnicodeString(
+                "Expected currency: ") + tuple.outputCurrency + ", got: " + currStr + ". ");
+        return FALSE;
+    }
+    return TRUE;
+}
 
 //#define NUMFMTST_CACHE_DEBUG 1
 #include "stdio.h" /* for sprintf */
