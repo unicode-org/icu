@@ -831,9 +831,6 @@ public class MeasureFormat extends UFormat {
         }
         T fallback = styleMap.get(FormatWidth.SHORT);
         if (fallback == null) {
-            fallback = styleMap.get(FormatWidth.WIDE);
-        }
-        if (fallback == null) {
             return false;
         }
         for (FormatWidth styleItem : FormatWidth.values()) {
@@ -1257,7 +1254,7 @@ public class MeasureFormat extends UFormat {
     private static FormatWidth fromFormatWidthOrdinal(int ordinal) {
         FormatWidth[] values = FormatWidth.values();
         if (ordinal < 0 || ordinal >= values.length) {
-            return FormatWidth.WIDE;
+            return FormatWidth.SHORT;
         }
         return values[ordinal];
     }
