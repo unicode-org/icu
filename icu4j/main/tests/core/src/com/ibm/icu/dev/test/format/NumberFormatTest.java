@@ -114,6 +114,33 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     }
                     return null;
                 }
+                
+                @Override
+                public String parseCurrency(NumberFormatTestTuple tuple) {
+                    DecimalFormat fmt = newDecimalFormat(tuple);
+                    ParsePosition ppos = new ParsePosition(0);
+                    CurrencyAmount currAmt = fmt.parseCurrency(tuple.parse, ppos);
+                    if (ppos.getIndex() == 0) {
+                        if (!tuple.output.equals("fail")) {
+                            return "Parse error expected.";
+                        }
+                        return null;
+                    }
+                    if (tuple.output.equals("fail")) {
+                        return "Parse succeeded: "+currAmt+", but was expected to fail.";
+                    }
+                    Number expected = toNumber(tuple.output);
+                    Number actual = currAmt.getNumber();
+                    // number types cannot be compared, this is the best we can do.
+                    if (expected.doubleValue() != (actual.doubleValue())) {
+                        return "Expected: " + expected + ", got: " + actual;
+                    }
+                
+                    if (!tuple.outputCurrency.equals(currAmt.getCurrency().toString())) {
+                        return "Expected currency: " + tuple.outputCurrency + ", got: " + currAmt.getCurrency();
+                    }
+                    return null;
+                }
 
                 /**
                  * @param tuple
@@ -292,6 +319,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     }
                     return null;
                 }
+                
+               
 
                 /**
                  * @param tuple

@@ -67,6 +67,16 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
         }
         
         /**
+         *  Runs a single parse currency test. On success, returns null.
+         *  On failure, returns the error. This implementation just returns null.
+         *  Subclasses should override.
+         *  @param tuple contains the parameters of the format test.
+         */
+        public String parseCurrency(NumberFormatTestTuple tuple) {
+            return null;
+        }
+        
+        /**
          * Runs a single select test. On success, returns null.
          *  On failure, returns the error. This implementation just returns null.
          *  Subclasses should override.
@@ -301,6 +311,11 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
             }
         } else if (tuple.toPattern != null || tuple.toLocalizedPattern != null) {
             String errorMessage = codeUnderTest.toPattern(tuple);
+            if (errorMessage != null) {
+                result.append(errorMessage);
+            }
+        } else if (tuple.parse != null && tuple.output != null && tuple.outputCurrency != null) {
+            String errorMessage = codeUnderTest.parseCurrency(tuple);
             if (errorMessage != null) {
                 result.append(errorMessage);
             }

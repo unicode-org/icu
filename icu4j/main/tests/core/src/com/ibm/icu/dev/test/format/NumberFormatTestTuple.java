@@ -116,6 +116,7 @@ public class NumberFormatTestTuple {
     public Integer parseIntegerOnly = null;
     public Integer decimalPatternMatchRequired = null;
     public Integer parseNoExponent = null;
+    public String outputCurrency = null;
     
     
     
@@ -219,6 +220,7 @@ public class NumberFormatTestTuple {
         "parseIntegerOnly",
         "decimalPatternMatchRequired",
         "parseNoExponent",
+        "outputCurrency"
     };
     
     static {
@@ -411,6 +413,10 @@ public class NumberFormatTestTuple {
     
     public void setParseNoExponent(String value) {
         parseNoExponent = Integer.valueOf(value);
+    }
+    
+    public void setOutputCurrency(String value) {
+        outputCurrency = value;
     }
     
     // end field setters.
