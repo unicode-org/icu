@@ -1032,9 +1032,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {"zh_CN", "1234.56", "USD", "US$\u00A01,234.56", "USD\u00A01,234.56", "1,234.56美元"}, 
                 {"zh_CN", "1", "CNY", "￥\u00A01.00", "CNY\u00A01.00", "1.00人民币"}, 
                 {"zh_CN", "1234.56", "CNY", "￥\u00A01,234.56", "CNY\u00A01,234.56", "1,234.56人民币"}, 
-                {"ru_RU", "1", "RUB", "1,00 руб.", "1,00 RUB", "1,00 российского рубля"}, 
-                {"ru_RU", "2", "RUB", "2,00 руб.", "2,00 RUB", "2,00 российского рубля"}, 
-                {"ru_RU", "5", "RUB", "5,00 руб.", "5,00 RUB", "5,00 российского рубля"}, 
+                {"ru_RU", "1", "RUB", "1,00 \u20BD", "1,00 RUB", "1,00 российского рубля"}, 
+                {"ru_RU", "2", "RUB", "2,00 \u20BD", "2,00 RUB", "2,00 российского рубля"}, 
+                {"ru_RU", "5", "RUB", "5,00 \u20BD", "5,00 RUB", "5,00 российского рубля"}, 
                 // test locale without currency information 
                 {"root", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, 
                 {"root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers 
