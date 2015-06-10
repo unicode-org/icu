@@ -1,0 +1,403 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+main/shared/data/icudata.jar -text
+main/shared/data/icutzdata.jar -text
+main/shared/data/testdata.jar -text
+main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text
+main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.MathContext.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.ArabicShapingException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.ChineseDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.ChineseDateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DecimalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DecimalFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.MessageFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.NumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.RuleBasedNumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.SimpleDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.StringPrepParseException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.BuddhistCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.Calendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ChineseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.CopticCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.Currency.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.EthiopicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.GregorianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.HebrewCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.IslamicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.JapaneseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.SimpleTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.TimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ULocale.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.DateNumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.IllegalIcuArgumentException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.InvalidFormatException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.JavaTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.OlsonTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.RelativeDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.TimeZoneAdapter.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.TimeZoneGenericNames.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.TimeZoneNamesImpl.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.duration.BasicDurationFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.impl.locale.LocaleSyntaxException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.math.BigDecimal.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.math.MathContext.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.ArabicShapingException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.ChineseDateFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.ChineseDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.ChineseDateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.CompactDecimalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.CurrencyPluralInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.DateFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.DateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.DateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.DateIntervalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.DateIntervalInfo$PatternInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.DateIntervalInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.DecimalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.DecimalFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.GeneralMeasureFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.MessageFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.MessageFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.NumberFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.NumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.PluralFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.PluralRules.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.RuleBasedNumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.SelectFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.SimpleDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.StringPrepParseException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.TimeUnitFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.text.TimeZoneFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.AnnualTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.BuddhistCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.Calendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.ChineseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.CopticCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.Currency.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.DangiCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.DateInterval.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.DateTimeRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.EthiopicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.GregorianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.HebrewCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.IllformedLocaleException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.IndianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.InitialTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.IslamicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.JapaneseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.MeasureUnit.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.PersianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.RuleBasedTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.SimpleTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.TaiwanCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.TimeArrayTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.TimeUnit.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.TimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.ULocale.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_52.1/com.ibm.icu.util.VTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.DateNumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.IllegalIcuArgumentException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.InvalidFormatException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.JavaTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.OlsonTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.RelativeDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.TimeZoneAdapter.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.TimeZoneGenericNames.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.TimeZoneNamesImpl.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.duration.BasicDurationFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.impl.locale.LocaleSyntaxException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.math.BigDecimal.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.math.MathContext.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.ArabicShapingException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.ChineseDateFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.ChineseDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.ChineseDateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.CompactDecimalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.CurrencyPluralInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.DateFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.DateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.DateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.DateIntervalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.DateIntervalInfo$PatternInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.DateIntervalInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.DecimalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.DecimalFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.MeasureFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.MessageFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.MessageFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.NumberFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.NumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.PluralFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.PluralRules.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.RuleBasedNumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.SelectFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.SimpleDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.StringPrepParseException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.TimeUnitFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.text.TimeZoneFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.AnnualTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.BuddhistCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.Calendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.ChineseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.CopticCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.Currency.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.DangiCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.DateInterval.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.DateTimeRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.EthiopicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.GregorianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.HebrewCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.ICUCloneNotSupportedException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.ICUException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.ICUUncheckedIOException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.IllformedLocaleException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.IndianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.InitialTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.IslamicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.JapaneseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.MeasureUnit.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.PersianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.RuleBasedTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.SimpleTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.TaiwanCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.TimeArrayTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.TimeUnit.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.TimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.ULocale.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_53.1/com.ibm.icu.util.VTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.DateNumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.IllegalIcuArgumentException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.InvalidFormatException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.JavaTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.OlsonTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.RelativeDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.TZDBTimeZoneNames.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.TimeZoneAdapter.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.TimeZoneGenericNames.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.TimeZoneNamesImpl.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.duration.BasicDurationFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.impl.locale.LocaleSyntaxException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.math.BigDecimal.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.math.MathContext.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.ArabicShapingException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.ChineseDateFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.ChineseDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.ChineseDateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.CompactDecimalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.CurrencyPluralInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.DateFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.DateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.DateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.DateIntervalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.DateIntervalInfo$PatternInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.DateIntervalInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.DecimalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.DecimalFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.MeasureFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.MessageFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.MessageFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.NumberFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.NumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.PluralFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.PluralRules.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.RuleBasedNumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.SelectFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.SimpleDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.StringPrepParseException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.TimeUnitFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.text.TimeZoneFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.AnnualTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.BuddhistCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.Calendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.ChineseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.CopticCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.Currency.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.DangiCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.DateInterval.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.DateTimeRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.EthiopicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.GregorianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.HebrewCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.ICUCloneNotSupportedException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.ICUException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.ICUUncheckedIOException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.IllformedLocaleException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.IndianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.InitialTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.IslamicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.JapaneseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.MeasureUnit.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.PersianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.RuleBasedTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.SimpleTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.TaiwanCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.TimeArrayTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.TimeUnit.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.TimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.ULocale.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_54.1/com.ibm.icu.util.VTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.DateNumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.IllegalIcuArgumentException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.InvalidFormatException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.JavaTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.OlsonTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.RelativeDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.TZDBTimeZoneNames.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.TimeZoneAdapter.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.TimeZoneGenericNames.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.TimeZoneNamesImpl.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.duration.BasicDurationFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.impl.locale.LocaleSyntaxException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.math.BigDecimal.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.math.MathContext.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.ArabicShapingException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.ChineseDateFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.ChineseDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.ChineseDateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.CompactDecimalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.CurrencyPluralInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.DateFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.DateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.DateFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.DateIntervalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.DateIntervalInfo$PatternInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.DateIntervalInfo.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.DecimalFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.DecimalFormatSymbols.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.MeasureFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.MessageFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.MessageFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.NumberFormat$Field.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.NumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.PluralFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.PluralRules.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.RuleBasedNumberFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.SelectFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.SimpleDateFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.StringPrepParseException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.TimeUnitFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.text.TimeZoneFormat.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.AnnualTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.BuddhistCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.Calendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.ChineseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.CopticCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.Currency.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.DangiCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.DateInterval.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.DateTimeRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.EthiopicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.GregorianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.HebrewCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.ICUCloneNotSupportedException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.ICUException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.ICUUncheckedIOException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.IllformedLocaleException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.IndianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.InitialTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.IslamicCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.JapaneseCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.MeasureUnit.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.PersianCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.RuleBasedTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.SimpleTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.TaiwanCalendar.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.TimeArrayTimeZoneRule.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.TimeUnit.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.TimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.ULocale.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_55.1/com.ibm.icu.util.VTimeZone.dat -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.16.tri2 -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.32.tri2 -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges2.16.tri2 -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges2.32.tri2 -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges3.16.tri2 -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges3.32.tri2 -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesEmpty.16.tri2 -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesEmpty.32.tri2 -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesSingleValue.16.tri2 -text
+main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesSingleValue.32.tri2 -text
+samples/src/com/ibm/icu/samples/iuc/data/popmsg/en.res -text
+samples/src/com/ibm/icu/samples/iuc/data/popmsg/es.res -text
+samples/src/com/ibm/icu/samples/iuc/data/popmsg/res_index.res -text
+samples/src/com/ibm/icu/samples/iuc/data/popmsg/root.res -text
+samples/src/com/ibm/icu/samples/iuc/data/reshello/es.res -text
+samples/src/com/ibm/icu/samples/iuc/data/reshello/mt.res -text
+samples/src/com/ibm/icu/samples/iuc/data/reshello/res_index.res -text
+samples/src/com/ibm/icu/samples/iuc/data/reshello/root.res -text
+tools/build/icu4j48.api3.gz -text
+tools/build/icu4j49.api3.gz -text
+tools/build/icu4j50.api3.gz -text
+tools/build/icu4j51.api3.gz -text
+tools/build/icu4j52.api3.gz -text
+tools/build/icu4j53.api3.gz -text
+tools/build/icu4j54.api3.gz -text
+tools/build/icu4j55.api3.gz -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+
