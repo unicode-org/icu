@@ -166,7 +166,7 @@ gu{
         minimumGroupingDigits{"1"}
         native{"gujr"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.80"}
     calendar{
         generic{
             DateTimePatterns{
@@ -339,8 +339,6 @@ gu{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"મધ્યાહ્ન"}
-            NoonMarkerNarrow{"મધ્યાહ્ન"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -461,9 +459,29 @@ gu{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"મધ્યાહ્ન"}
+                    }
+                    wide{
+                        noon{"મધ્યાહ્ન"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"બપોર"}
+                        evening1{"સાંજ"}
+                        midnight{"અડધી રાત"}
+                        morning1{"સવાર"}
+                        night1{"રાત"}
+                        noon{"બપોર"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
-                    "ઈસુના જન્મ પહેલા",
+                    "ઈસવીસન પૂર્વે",
                     "ઇસવીસન",
                 }
                 abbreviated%variant{
@@ -475,7 +493,7 @@ gu{
                     "ઇસ",
                 }
                 wide{
-                    "ઈસવીસન પૂર્વે",
+                    "ઈસુના જન્મ પહેલા",
                     "ઇસવીસન",
                 }
                 wide%variant{

@@ -8,13 +8,6 @@
 // ***************************************************************************
 tr{
     RBNFRules{
-        OrdinalRules{
-            "%%digits-ordinal-indicator:",
-            "0: ''inci;",
-            "%digits-ordinal:",
-            "-x: \u2212>>;",
-            "0: =#,##0==%%digits-ordinal-indicator=;",
-        }
         SpelloutRules{
             "%spellout-numbering-year:",
             "x.x: =#,###0.#=;",
@@ -74,7 +67,7 @@ tr{
             "1: birinci;",
             "2: ikinci;",
             "3: \u00FC\u00E7\u00FCnc\u00FC;",
-            "4: d\u00F6rt\u00FCnc\u00FC;",
+            "4: d\u00F6rd\u00FCnc\u00FC;",
             "5: be\u015Finci;",
             "6: alt\u0131nc\u0131;",
             "7: yedinci;",
@@ -100,5 +93,5 @@ tr{
             "1000000000000000000: =#,##0='inci;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.1.15.33"}
 }

@@ -919,7 +919,7 @@ nb{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

@@ -180,7 +180,7 @@ fa{
         minimumGroupingDigits{"1"}
         native{"arabext"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.0"}
     calendar{
         chinese{
             cyclicNameSets{
@@ -379,8 +379,6 @@ fa{
                 "{1}،‏ {0}",
                 "{1}،‏ {0}",
             }
-            NoonMarker{"ظهر"}
-            NoonMarkerNarrow{"ظ"}
             appendItems{
                 Day-Of-Week{"{1} {0}"}
                 Timezone{"{0} ({1})"}
@@ -501,6 +499,29 @@ fa{
                         "پنجشنبه",
                         "جمعه",
                         "شنبه",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"ظ"}
+                    }
+                    wide{
+                        evening1{"عصر"}
+                        morning1{"صبح"}
+                        night1{"شب"}
+                        noon{"ظهر"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"بعد از ظهر"}
+                        evening1{"عصر"}
+                        midnight{"نیمه‌شب"}
+                        morning1{"صبح"}
+                        night1{"شب"}
+                        noon{"ظهر"}
                     }
                 }
             }

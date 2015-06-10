@@ -156,7 +156,7 @@ da{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             eras{
@@ -333,9 +333,6 @@ da{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"middag"}
-            NoonMarkerAbbr{"middag"}
-            NoonMarkerNarrow{"middag"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -456,6 +453,18 @@ da{
                         "torsdag",
                         "fredag",
                         "lørdag",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        afternoon1{"eftermiddag"}
+                        evening1{"aften"}
+                        midnight{"midnat"}
+                        morning1{"morgen"}
+                        morning2{"formiddag"}
+                        night1{"nat"}
                     }
                 }
             }

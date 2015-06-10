@@ -156,7 +156,7 @@ bg{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     calendar{
         generic{
             DateTimePatterns{
@@ -355,8 +355,6 @@ bg{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"пладне"}
-            NoonMarkerNarrow{"пл."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -483,6 +481,18 @@ bg{
                     }
                 }
             }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        afternoon1{"следобяд"}
+                        evening1{"вечерта"}
+                        midnight{"полунощ"}
+                        morning1{"сутринта"}
+                        morning2{"на обяд"}
+                        night1{"нощ"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "пр.Хр.",
@@ -490,10 +500,6 @@ bg{
                 }
                 abbreviated%variant{
                     "пр.н.е.",
-                    "сл.н.е.",
-                }
-                narrow{
-                    "пр.Хр.",
                     "сл.н.е.",
                 }
                 wide{

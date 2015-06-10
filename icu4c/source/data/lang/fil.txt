@@ -451,7 +451,7 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"Wika: {0}"}
         script{"Script: {0}"}

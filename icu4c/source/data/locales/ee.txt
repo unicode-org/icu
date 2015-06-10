@@ -81,11 +81,11 @@ ee{
             }
         }
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     calendar{
         generic{
             DateTimePatterns{
-                "a h:mm:ss zzzz",
+                "a 'ga' h:mm:ss zzzz",
                 "a 'ga' h:mm:ss z",
                 "a 'ga' h:mm:ss",
                 "a 'ga' h:mm",
@@ -232,7 +232,7 @@ ee{
                 "ɣetrɔ",
             }
             DateTimePatterns{
-                "a h:mm:ss zzzz",
+                "a 'ga' h:mm:ss zzzz",
                 "a 'ga' h:mm:ss z",
                 "a 'ga' h:mm:ss",
                 "a 'ga' h:mm",
@@ -354,6 +354,18 @@ ee{
                         "yawoɖa",
                         "fiɖa",
                         "memleɖa",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    wide{
+                        afternoon1{"ŋdɔ"}
+                        afternoon2{"ɣetrɔ"}
+                        evening1{"fiẽ"}
+                        morning1{"fɔŋli"}
+                        morning2{"ŋdi"}
+                        night1{"zã"}
                     }
                 }
             }

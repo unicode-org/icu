@@ -73,16 +73,16 @@ it{
                         other{"000 miliardi"}
                     }
                     1000000000000{
-                        one{"0 mille di miliardi"}
-                        other{"0 mila di miliardi"}
+                        one{"0 mille miliardi"}
+                        other{"0 mila miliardi"}
                     }
                     10000000000000{
-                        one{"00 mila di miliardi"}
-                        other{"00 mila di miliardi"}
+                        one{"00 mila miliardi"}
+                        other{"00 mila miliardi"}
                     }
                     100000000000000{
-                        one{"000 mila di miliardi"}
-                        other{"000 mila di miliardi"}
+                        one{"000 mila miliardi"}
+                        other{"000 mila miliardi"}
                     }
                 }
             }
@@ -156,7 +156,7 @@ it{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.13.6"}
+    Version{"2.1.15.95"}
     calendar{
         buddhist{
             eras{
@@ -350,8 +350,6 @@ it{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"mezzogiorno"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -470,6 +468,26 @@ it{
                         "Giovedì",
                         "Venerdì",
                         "Sabato",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"n"}
+                    }
+                    wide{
+                        noon{"mezzogiorno"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"pomeriggio"}
+                        evening1{"sera"}
+                        midnight{"mezzanotte"}
+                        morning1{"mattina"}
+                        night1{"notte"}
+                        noon{"mezzogiorno"}
                     }
                 }
             }

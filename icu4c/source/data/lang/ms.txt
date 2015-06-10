@@ -509,7 +509,7 @@ ms{
             vaii{"Digit Vai"}
         }
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

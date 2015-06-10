@@ -795,7 +795,7 @@ sr_Latn{
         TARASK{"Taraskijevička ortografija"}
         VALENCIA{"Valencijska"}
     }
-    Version{"2.1.13.24"}
+    Version{"2.1.15.91"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"pismo: {0}"}

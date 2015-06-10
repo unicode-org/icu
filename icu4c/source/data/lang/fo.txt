@@ -178,5 +178,5 @@ fo{
         POLYTON{"polytonísk"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.12.27"}
+    Version{"2.1.15.93"}
 }

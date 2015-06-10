@@ -167,7 +167,7 @@ bn{
         minimumGroupingDigits{"1"}
         native{"beng"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -341,8 +341,6 @@ bn{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"দুপুর"}
-            NoonMarkerNarrow{"দুপুর"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -461,6 +459,18 @@ bn{
                         "বৃহষ্পতিবার",
                         "শুক্রবার",
                         "শনিবার",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        afternoon1{"দুপুর"}
+                        afternoon2{"বিকাল"}
+                        evening1{"সন্ধ্যা"}
+                        morning1{"ভোর"}
+                        morning2{"সকাল"}
+                        night1{"রাত্রি"}
                     }
                 }
             }

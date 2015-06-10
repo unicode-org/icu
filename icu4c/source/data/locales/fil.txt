@@ -155,14 +155,14 @@ fil{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE, MMMM d, y G",
                 "MMMM d, y G",
                 "MMM d, y G",
@@ -318,10 +318,10 @@ fil{
                 "p",
             }
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE, MMMM d, y",
                 "MMMM d, y",
                 "MMM d, y",
@@ -332,8 +332,6 @@ fil{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"tanghali"}
-            NoonMarkerNarrow{"tanghali"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -451,6 +449,27 @@ fil{
                         "Huwebes",
                         "Biyernes",
                         "Sabado",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"tanghali"}
+                    }
+                    wide{
+                        noon{"tanghali"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"tanghali"}
+                        evening1{"hapon"}
+                        midnight{"hating-gabi"}
+                        morning1{"madaling-araw"}
+                        morning2{"umaga"}
+                        night1{"gabi"}
+                        noon{"tangaling-tapat"}
                     }
                 }
             }

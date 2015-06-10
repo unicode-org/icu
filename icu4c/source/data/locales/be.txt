@@ -24,10 +24,11 @@ be{
             symbols{
                 decimal{","}
                 group{" "}
+                timeSeparator{"."}
             }
         }
     }
-    Version{"2.1.10.93"}
+    Version{"2.1.15.45"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -208,6 +209,14 @@ be{
                         "ч",
                         "п",
                         "с",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    abbreviated{
+                        am{"раніцы"}
+                        pm{"вечара"}
                     }
                 }
             }

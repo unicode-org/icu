@@ -162,7 +162,7 @@ tr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.77"}
     calendar{
         buddhist{
             eras{
@@ -239,13 +239,13 @@ tr{
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"dd/MM E"}
+                MEd{"dd.MM E"}
                 MMM{"LLL"}
                 MMMEd{"d MMM E"}
                 MMMMEd{"dd MMMM E"}
                 MMMMd{"dd MMMM"}
                 MMMd{"d MMM"}
-                Md{"dd/MM"}
+                Md{"dd.MM"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
@@ -254,7 +254,7 @@ tr{
                 ms{"mm:ss"}
                 y{"G y"}
                 yyyy{"G y"}
-                yyyyM{"GGGGG M/y"}
+                yyyyM{"GGGGG MM.y"}
                 yyyyMEd{"GGGGG dd.MM.y E"}
                 yyyyMM{"MM.y G"}
                 yyyyMMM{"G MMM y"}
@@ -284,8 +284,8 @@ tr{
                     M{"MM–MM"}
                 }
                 MEd{
-                    M{"dd/MM E – dd/MM E"}
-                    d{"dd/MM E – dd/MM E"}
+                    M{"dd.MM E – dd.MM E"}
+                    d{"dd.MM E – dd.MM E"}
                 }
                 MMM{
                     M{"MMM–MMM"}
@@ -299,8 +299,8 @@ tr{
                     d{"d – d MMM"}
                 }
                 Md{
-                    M{"dd/MM – dd/MM"}
-                    d{"dd/MM – dd/MM"}
+                    M{"dd.MM – dd.MM"}
+                    d{"dd.MM – dd.MM"}
                 }
                 d{
                     d{"d–d"}
@@ -328,8 +328,8 @@ tr{
                     y{"G y–y"}
                 }
                 yM{
-                    M{"GGGGG M/y – M/y"}
-                    y{"GGGGG M/y – M/y"}
+                    M{"GGGGG MM.y – MM.y"}
+                    y{"GGGGG MM.y – MM.y"}
                 }
                 yMEd{
                     M{"GGGGG dd.MM.y E – dd.MM.y E"}
@@ -385,8 +385,6 @@ tr{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"öğle"}
-            NoonMarkerNarrow{"ö"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -407,13 +405,13 @@ tr{
                 Hmsv{"HH:mm:ss v"}
                 Hmv{"HH:mm v"}
                 M{"L"}
-                MEd{"dd/MM E"}
+                MEd{"dd.MM E"}
                 MMM{"LLL"}
                 MMMEd{"d MMMM E"}
                 MMMMEd{"dd MMMM E"}
                 MMMMd{"dd MMMM"}
                 MMMd{"d MMM"}
-                Md{"dd/MM"}
+                Md{"dd.MM"}
                 d{"d"}
                 h{"a h"}
                 hm{"a h:mm"}
@@ -423,7 +421,7 @@ tr{
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"MM/y"}
+                yM{"MM.y"}
                 yMEd{"dd.MM.y E"}
                 yMM{"MM.y"}
                 yMMM{"MMM y"}
@@ -512,6 +510,28 @@ tr{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"ö"}
+                    }
+                    wide{
+                        noon{"öğle"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"öğleden sonra"}
+                        afternoon2{"akşamüstü"}
+                        evening1{"akşam"}
+                        midnight{"gece yarısı"}
+                        morning1{"sabah"}
+                        morning2{"öğleden önce"}
+                        night1{"gece"}
+                        noon{"öğlen"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "MÖ",
@@ -549,8 +569,8 @@ tr{
                     M{"MM–MM"}
                 }
                 MEd{
-                    M{"dd/MM E – dd/MM E"}
-                    d{"dd/MM E – dd/MM E"}
+                    M{"dd.MM E – dd.MM E"}
+                    d{"dd.MM E – dd.MM E"}
                 }
                 MMM{
                     M{"MMM–MMM"}
@@ -564,8 +584,8 @@ tr{
                     d{"d – d MMM"}
                 }
                 Md{
-                    M{"dd/MM – dd/MM"}
-                    d{"dd/MM – dd/MM"}
+                    M{"dd.MM – dd.MM"}
+                    d{"dd.MM – dd.MM"}
                 }
                 d{
                     d{"d–d"}
@@ -593,8 +613,8 @@ tr{
                     y{"y–y"}
                 }
                 yM{
-                    M{"MM/y – MM/y"}
-                    y{"MM/y – MM/y"}
+                    M{"MM.y – MM.y"}
+                    y{"MM.y – MM.y"}
                 }
                 yMEd{
                     M{"dd.MM.y E – dd.MM.y E"}

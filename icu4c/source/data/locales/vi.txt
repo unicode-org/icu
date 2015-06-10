@@ -139,7 +139,7 @@ vi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -736,8 +736,6 @@ vi{
                 "{0} {1}",
                 "{0} {1}",
             }
-            NoonMarker{"TR"}
-            NoonMarkerNarrow{"tr"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -857,6 +855,26 @@ vi{
                         "Thứ Năm",
                         "Thứ Sáu",
                         "Thứ Bảy",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"tr"}
+                    }
+                    wide{
+                        noon{"TR"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"chiều"}
+                        evening1{"tối"}
+                        midnight{"nửa đêm"}
+                        morning1{"sáng"}
+                        night1{"đêm"}
+                        noon{"trưa"}
                     }
                 }
             }

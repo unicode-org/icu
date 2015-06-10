@@ -19,13 +19,13 @@ es_003{
             "100: >>;",
             "%digits-ordinal-masculine-adjective:",
             "-x: \u2212>>;",
-            "0: =#,##0==%%dord-mascabbrev=;",
+            "0: =#,##0==%%dord-mascabbrev=.;",
             "%digits-ordinal-masculine:",
             "-x: \u2212>>;",
-            "0: =#,##0=\u00BA;",
+            "0: =#,##0=\u00BA.;",
             "%digits-ordinal-feminine:",
             "-x: \u2212>>;",
-            "0: =#,##0=\u00AA;",
+            "0: =#,##0=\u00AA.;",
             "%digits-ordinal:",
             "0: =%digits-ordinal-masculine=;",
         }
@@ -213,9 +213,7 @@ es_003{
             "8: octavo;",
             "9: noveno;",
             "10: d\u00E9cimo;",
-            "11: und\u00E9cimo;",
-            "12: duod\u00E9cimo;",
-            "13: decimo>>;",
+            "11: decimo>>;",
             "20: vig\u00E9simo[ >>];",
             "30: trig\u00E9simo[ >>];",
             "40: cuadrag\u00E9simo[ >>];",
@@ -260,9 +258,7 @@ es_003{
             "8: octava;",
             "9: novena;",
             "10: d\u00E9cima;",
-            "11: und\u00E9cima;",
-            "12: duod\u00E9cima;",
-            "13: decimo>>;",
+            "11: decimo>>;",
             "20: vig\u00E9sima[ >>];",
             "30: trig\u00E9sima[ >>];",
             "40: cuadrag\u00E9sima[ >>];",
@@ -289,5 +285,5 @@ es_003{
             "1000000000000000000: =#,##0=\u00AA;",
         }
     }
-    Version{"2.1.3.1"}
+    Version{"2.1.16.52"}
 }

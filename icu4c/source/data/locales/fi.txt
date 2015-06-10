@@ -160,7 +160,7 @@ fi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.13.33"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -422,8 +422,6 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} {0}",
             }
-            NoonMarker{"keskipäivä"}
-            NoonMarkerNarrow{"kp."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -544,6 +542,27 @@ fi{
                         "torstai",
                         "perjantai",
                         "lauantai",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"kp."}
+                    }
+                    wide{
+                        noon{"keskipäivä"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"iltapäivä"}
+                        evening1{"ilta"}
+                        midnight{"keskiyö"}
+                        morning1{"aamu"}
+                        morning2{"aamupäivä"}
+                        night1{"yö"}
+                        noon{"keskipäivä"}
                     }
                 }
             }

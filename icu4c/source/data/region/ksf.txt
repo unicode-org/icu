@@ -234,5 +234,5 @@ ksf{
         ZM{"zambí"}
         ZW{"zimbabwɛ́"}
     }
-    Version{"2.1.6.69"}
+    Version{"2.1.15.45"}
 }

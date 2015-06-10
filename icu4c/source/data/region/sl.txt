@@ -312,5 +312,5 @@ sl{
         FK{"Falklandski otoki (Malvinski otoki)"}
         MK{"Makedonija (FYROM)"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
 }

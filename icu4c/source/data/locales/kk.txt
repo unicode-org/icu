@@ -112,7 +112,7 @@ kk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.91"}
     calendar{
         generic{
             DateTimePatterns{
@@ -270,8 +270,6 @@ kk{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"түскі"}
-            NoonMarkerNarrow{"тс"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -357,7 +355,7 @@ kk{
                         "сәр",
                         "бей",
                         "жұма",
-                        "сб.",
+                        "сен",
                     }
                     narrow{
                         "Ж",
@@ -385,6 +383,26 @@ kk{
                         "бейсенбі",
                         "жұма",
                         "сенбі",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"тс"}
+                    }
+                    wide{
+                        noon{"түскі"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"түс"}
+                        evening1{"кеш"}
+                        midnight{"түн жарымы"}
+                        morning1{"таң"}
+                        night1{"түн"}
+                        noon{"талтүс"}
                     }
                 }
             }

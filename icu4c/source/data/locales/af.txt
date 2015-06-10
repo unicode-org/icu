@@ -159,7 +159,7 @@ af{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.91"}
     calendar{
         generic{
             DateTimePatterns{
@@ -332,8 +332,6 @@ af{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"middag"}
-            NoonMarkerNarrow{"m"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -451,6 +449,17 @@ af{
                         "Donderdag",
                         "Vrydag",
                         "Saterdag",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        afternoon1{"middag"}
+                        evening1{"aand"}
+                        midnight{"middernag"}
+                        morning1{"oggend"}
+                        night1{"nag"}
                     }
                 }
             }
@@ -574,9 +583,9 @@ af{
             monthNames{
                 format{
                     abbreviated{
-                        "Jan.",
-                        "Feb.",
-                        "Mrt.",
+                        "Jan",
+                        "Feb",
+                        "Mrt",
                         "Apr",
                         "Mei",
                         "Jun",
@@ -618,9 +627,9 @@ af{
                 }
                 stand-alone{
                     abbreviated{
-                        "Jan.",
-                        "Feb.",
-                        "Mrt.",
+                        "Jan",
+                        "Feb",
+                        "Mrt",
                         "Apr",
                         "Mei",
                         "Jun",

@@ -193,7 +193,7 @@ ja{
         native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.7"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1241,8 +1241,6 @@ ja{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"正午"}
-            NoonMarkerNarrow{"正午"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -1367,6 +1365,27 @@ ja{
                         "木曜日",
                         "金曜日",
                         "土曜日",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"正午"}
+                    }
+                    wide{
+                        noon{"正午"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"昼"}
+                        evening1{"夕方"}
+                        midnight{"真夜中"}
+                        morning1{"朝"}
+                        night1{"夜"}
+                        night2{"夜中"}
+                        noon{"正午"}
                     }
                 }
             }

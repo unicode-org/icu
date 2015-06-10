@@ -135,7 +135,7 @@ km{
         minimumGroupingDigits{"1"}
         native{"khmr"}
     }
-    Version{"2.1.13.51"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -304,8 +304,6 @@ km{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"ថ្ងៃ"}
-            NoonMarkerNarrow{"ថ្ងៃ"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -419,6 +417,26 @@ km{
                         "ព្រហស្បតិ៍",
                         "សុក្រ",
                         "សៅរ៍",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"ថ្ងៃ"}
+                    }
+                    wide{
+                        noon{"ថ្ងៃ"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"រសៀល"}
+                        evening1{"ល្ងាច"}
+                        midnight{"អាធ្រាត្រ"}
+                        morning1{"ព្រឹក"}
+                        night1{"យប់"}
+                        noon{"ថ្ងៃ​ត្រង់"}
                     }
                 }
             }

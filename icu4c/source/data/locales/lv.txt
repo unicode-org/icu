@@ -183,7 +183,7 @@ lv{
         minimumGroupingDigits{"3"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.80"}
     calendar{
         generic{
             DateTimePatterns{
@@ -355,8 +355,6 @@ lv{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"pusdienlaikā"}
-            NoonMarkerNarrow{"pusd."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -474,6 +472,26 @@ lv{
                         "Ceturtdiena",
                         "Piektdiena",
                         "Sestdiena",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"pusd."}
+                    }
+                    wide{
+                        noon{"pusdienlaikā"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"pēcpusdiena"}
+                        evening1{"vakars"}
+                        midnight{"pusnakts"}
+                        morning1{"rīts"}
+                        night1{"nakts"}
+                        noon{"pusdienlaiks"}
                     }
                 }
             }

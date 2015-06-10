@@ -888,7 +888,7 @@ fy{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.10.93"}
+    Version{"2.1.15.91"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Skrift: {0}"}

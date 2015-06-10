@@ -784,7 +784,7 @@ te{
         REVISED{"సవరించబడిన వర్ణక్రమం"}
         WADEGILE{"వేడ్-గైల్స్ రోమనైజేషన్"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.80"}
     codePatterns{
         language{"భాష: {0}"}
         script{"లిపి: {0}"}

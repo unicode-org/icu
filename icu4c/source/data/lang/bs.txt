@@ -741,7 +741,7 @@ bs{
         TARASK{"Taraskijevica ortografija"}
         VALENCIA{"Valencijski"}
     }
-    Version{"2.1.13.46"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

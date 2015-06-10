@@ -134,7 +134,7 @@ ms{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             eras{
@@ -423,8 +423,6 @@ ms{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"t/hari"}
-            NoonMarkerNarrow{"t"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -541,6 +539,27 @@ ms{
                         "Khamis",
                         "Jumaat",
                         "Sabtu",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"t"}
+                    }
+                    wide{
+                        noon{"t/hari"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"tengah hari"}
+                        evening1{"petang"}
+                        midnight{"Tengah malam"}
+                        morning1{"tengah malam"}
+                        morning2{"pagi"}
+                        night1{"malam"}
+                        noon{"Tengah hari"}
                     }
                 }
             }

@@ -32,10 +32,9 @@ COLLATION_SYNTHETIC_ALIAS = de_.txt de__PHONEBOOK.txt es_.txt es__TRADITIONAL.tx
  pa_Guru.txt pa_Guru_IN.txt pa_IN.txt ro_MD.txt sh.txt\
  sh_BA.txt sh_CS.txt sh_YU.txt sr_BA.txt sr_Cyrl.txt\
  sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt sr_Latn_BA.txt sr_Latn_RS.txt\
- sr_ME.txt sr_RS.txt ug_Arab.txt ug_Arab_CN.txt ug_CN.txt\
- zh_CN.txt zh_HK.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt\
- zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt zh_MO.txt zh_SG.txt\
- zh_TW.txt
+ sr_ME.txt sr_RS.txt zh_CN.txt zh_HK.txt zh_Hans.txt\
+ zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt\
+ zh_MO.txt zh_SG.txt zh_TW.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.

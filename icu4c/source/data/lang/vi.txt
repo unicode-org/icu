@@ -910,7 +910,7 @@ vi{
         VALLADER{"VALLADER"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}

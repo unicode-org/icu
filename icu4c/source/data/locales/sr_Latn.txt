@@ -175,13 +175,13 @@ sr_Latn{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
-                timeSeparator{":"}
+                timeSeparator{"."}
             }
         }
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.13.24"}
+    Version{"2.1.15.91"}
     calendar{
         buddhist{
             eras{
@@ -406,8 +406,6 @@ sr_Latn{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"u podne"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -528,6 +526,16 @@ sr_Latn{
                         "četvrtak",
                         "petak",
                         "subota",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"n"}
+                    }
+                    wide{
+                        noon{"u podne"}
                     }
                 }
             }

@@ -987,7 +987,7 @@ it{
         VALENCIA{"valenziano"}
         WADEGILE{"romanizzazione Wade-Giles"}
     }
-    Version{"2.1.13.6"}
+    Version{"2.1.15.95"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Scrittura: {0}"}

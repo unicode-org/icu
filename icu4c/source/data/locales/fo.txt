@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fo{
-    AuxExemplarCharacters{"[c q w z]"}
+    AuxExemplarCharacters{"[c q w x z]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -16,7 +16,7 @@ fo{
         word-initial{"… {0}"}
         word-medial{"{0} … {1}"}
     }
-    ExemplarCharacters{"[a á b d ð e f g h i í j k l m n o ó p r s t u ú v x y ý æ ø]"}
+    ExemplarCharacters{"[a á b d ð e f g h i í j k l m n o ó p r s t u ú v y ý æ ø]"}
     ExemplarCharactersIndex{"[A Á B C D Ð E F G H I Í J K L M N O Ó P Q R S T U Ú V W X Y Ý Z Æ Ø]"}
     MoreInformation{"?"}
     NumberElements{
@@ -145,7 +145,7 @@ fo{
             }
         }
     }
-    Version{"2.1.12.27"}
+    Version{"2.1.15.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -294,6 +294,10 @@ fo{
                 "f.p.",
                 "s.p.",
             }
+            AmPmMarkersNarrow{
+                "f.p.",
+                "s.p.",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -383,6 +387,14 @@ fo{
                         "hó",
                         "fr",
                         "le",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        am{"fyrrapartur"}
+                        pm{"seinnapartur"}
                     }
                 }
             }

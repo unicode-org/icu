@@ -46,5 +46,5 @@ haw{
         zh_Hans{"Pākē Hoʻomaʻalahi ʻia"}
         zh_Hant{"Pākē Kuʻuna"}
     }
-    Version{"2.1.6.69"}
+    Version{"2.1.15.45"}
 }

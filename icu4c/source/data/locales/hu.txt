@@ -166,7 +166,7 @@ hu{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.91"}
     calendar{
         buddhist{
             eras{
@@ -544,8 +544,6 @@ hu{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"dél"}
-            NoonMarkerNarrow{"dél"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -662,6 +660,28 @@ hu{
                         "csütörtök",
                         "péntek",
                         "szombat",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"dél"}
+                    }
+                    wide{
+                        noon{"dél"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"délután"}
+                        evening1{"este"}
+                        midnight{"éjfél"}
+                        morning1{"reggel"}
+                        morning2{"délelőtt"}
+                        night1{"éjjel"}
+                        night2{"hajnal"}
+                        noon{"dél"}
                     }
                 }
             }
@@ -1063,8 +1083,8 @@ hu{
                     abbreviated{
                         "Moh.",
                         "Saf.",
-                        "Rébi I",
-                        "Rébi II",
+                        "Réb. I",
+                        "Réb. II",
                         "Dsem. I",
                         "Dsem. II",
                         "Red.",

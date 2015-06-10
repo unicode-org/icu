@@ -47,7 +47,7 @@ es_419{
             }
         }
     }
-    Version{"2.1.13.23"}
+    Version{"2.1.14.95"}
     calendar{
         generic{
             availableFormats{
@@ -76,10 +76,10 @@ es_419{
         }
         gregorian{
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
                 "d MMM y",

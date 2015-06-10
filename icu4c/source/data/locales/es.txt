@@ -159,7 +159,7 @@ es{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.13.21"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             eras{
@@ -389,8 +389,6 @@ es{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"mediodía"}
-            NoonMarkerNarrow{"m."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -521,6 +519,26 @@ es{
                         "Jueves",
                         "Viernes",
                         "Sábado",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"m."}
+                    }
+                    wide{
+                        noon{"mediodía"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        evening1{"tarde"}
+                        midnight{"medianoche"}
+                        morning1{"madrugada"}
+                        morning2{"mañana"}
+                        night1{"noche"}
+                        noon{"mediodía"}
                     }
                 }
             }

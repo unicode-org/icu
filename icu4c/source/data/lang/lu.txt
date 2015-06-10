@@ -52,5 +52,5 @@ lu{
         zh{"shinɛ"}
         zu{"Nzulu"}
     }
-    Version{"2.1.6.69"}
+    Version{"2.1.15.45"}
 }

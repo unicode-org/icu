@@ -400,7 +400,7 @@ my{
         REVISED{"ပြန်လည်စီစစ်ထားသော ရေးထုံး"}
         SCOTLAND{"စကော့ စံ အင်္ဂလိပ်"}
     }
-    Version{"2.1.13.21"}
+    Version{"2.1.15.64"}
     codePatterns{
         language{"ဘာသာစကား - {0}"}
         script{"စာ - {0}"}

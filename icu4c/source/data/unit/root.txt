@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/root.xml
  */
 root{
-    Version{"2.1.12.90"}
+    Version{"2.1.16.69"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -46,6 +46,10 @@ root{
                 dnam{"rad"}
                 other{"{0} rad"}
             }
+            revolution{
+                dnam{"rev"}
+                other{"{0} rev"}
+            }
         }
         area{
             acre{
@@ -59,6 +63,7 @@ root{
             square-centimeter{
                 dnam{"cm²"}
                 other{"{0} cm²"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"ft²"}
@@ -67,6 +72,7 @@ root{
             square-inch{
                 dnam{"in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"km²"}
@@ -75,6 +81,7 @@ root{
             square-meter{
                 dnam{"m²"}
                 other{"{0} m²"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"mi²"}
@@ -89,6 +96,10 @@ root{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                other{"{0} L/100km"}
+            }
             liter-per-kilometer{
                 dnam{"L/km"}
                 other{"{0} L/km"}
@@ -97,6 +108,12 @@ root{
                 dnam{"mpg"}
                 other{"{0} mpg"}
             }
+        }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
         }
         digital{
             bit{
@@ -141,9 +158,14 @@ root{
             }
         }
         duration{
+            century{
+                dnam{"c"}
+                other{"{0} c"}
+            }
             day{
                 dnam{"day"}
                 other{"{0} d"}
+                per{"{0}/d"}
             }
             hour{
                 dnam{"hr"}
@@ -161,10 +183,12 @@ root{
             minute{
                 dnam{"min"}
                 other{"{0} min"}
+                per{"{0}/min"}
             }
             month{
                 dnam{"mon"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             nanosecond{
                 dnam{"ns"}
@@ -178,10 +202,12 @@ root{
             week{
                 dnam{"wk"}
                 other{"{0} w"}
+                per{"{0}/w"}
             }
             year{
                 dnam{"yr"}
                 other{"{0} y"}
+                per{"{0}/y"}
             }
         }
         electric{
@@ -254,6 +280,7 @@ root{
             centimeter{
                 dnam{"cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"dm"}
@@ -266,6 +293,7 @@ root{
             foot{
                 dnam{"ft"}
                 other{"{0} ft"}
+                per{"{0}/ft"}
             }
             furlong{
                 dnam{"fur"}
@@ -274,10 +302,12 @@ root{
             inch{
                 dnam{"in"}
                 other{"{0} in"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"ly"}
@@ -286,6 +316,7 @@ root{
             meter{
                 dnam{"meter"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"µm"}
@@ -294,6 +325,10 @@ root{
             mile{
                 dnam{"mi"}
                 other{"{0} mi"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"mm"}
@@ -334,10 +369,12 @@ root{
             gram{
                 dnam{"gram"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"t"}
@@ -354,6 +391,7 @@ root{
             ounce{
                 dnam{"oz"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"oz t"}
@@ -362,6 +400,7 @@ root{
             pound{
                 dnam{"lb"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
             }
             stone{
                 dnam{"st"}
@@ -431,6 +470,10 @@ root{
                 dnam{"km/h"}
                 other{"{0} km/h"}
             }
+            knot{
+                dnam{"kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
                 dnam{"m/s"}
                 other{"{0} m/s"}
@@ -474,6 +517,7 @@ root{
             cubic-centimeter{
                 dnam{"cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ft³"}
@@ -490,6 +534,7 @@ root{
             cubic-meter{
                 dnam{"m³"}
                 other{"{0} m³"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"mi³"}
@@ -503,6 +548,10 @@ root{
                 dnam{"cup"}
                 other{"{0} c"}
             }
+            cup-metric{
+                dnam{"mcup"}
+                other{"{0} mc"}
+            }
             deciliter{
                 dnam{"dL"}
                 other{"{0} dL"}
@@ -514,6 +563,7 @@ root{
             gallon{
                 dnam{"gal"}
                 other{"{0} gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hL"}
@@ -522,6 +572,7 @@ root{
             liter{
                 dnam{"liter"}
                 other{"{0} l"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"ML"}
@@ -535,6 +586,10 @@ root{
                 dnam{"pt"}
                 other{"{0} pt"}
             }
+            pint-metric{
+                dnam{"mpt"}
+                other{"{0} mpt"}
+            }
             quart{
                 dnam{"qt"}
                 other{"{0} qt"}
@@ -546,6 +601,10 @@ root{
             teaspoon{
                 dnam{"tsp"}
                 other{"{0} tsp"}
+            }
+            teaspoon-au{
+                dnam{"atsp"}
+                other{"{0} atsp"}
             }
         }
     }
