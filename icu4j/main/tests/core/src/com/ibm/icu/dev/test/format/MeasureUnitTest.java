@@ -776,10 +776,10 @@ public class MeasureUnitTest extends TestFmwk {
                 {FormatWidth.WIDE, 2.0, MeasureUnit.MINUTE, "2 pounds per minute", DONT_CARE, 0, 0},
                 // per unit
                 {FormatWidth.SHORT, 1.0, MeasureUnit.SECOND, "1 lbps", DONT_CARE, 0, 0},
-                {FormatWidth.SHORT, 2.0, MeasureUnit.SECOND, "2 lbps", DONT_CARE, 0, 0},
+                {FormatWidth.SHORT, 2.0, MeasureUnit.SECOND, "2 lbsps", DONT_CARE, 0, 0},
                 // compound
                 {FormatWidth.SHORT, 1.0, MeasureUnit.MINUTE, "1 lb/min", DONT_CARE, 0, 0},
-                {FormatWidth.SHORT, 2.0, MeasureUnit.MINUTE, "2 lb/min", DONT_CARE, 0, 0},
+                {FormatWidth.SHORT, 2.0, MeasureUnit.MINUTE, "2 lbs/min", DONT_CARE, 0, 0},
                 // per unit
                 {FormatWidth.NARROW, 1.0, MeasureUnit.SECOND, "1#/s", DONT_CARE, 0, 0},
                 {FormatWidth.NARROW, 2.0, MeasureUnit.SECOND, "2#/s", DONT_CARE, 0, 0},
@@ -787,10 +787,10 @@ public class MeasureUnitTest extends TestFmwk {
                 {FormatWidth.NARROW, 1.0, MeasureUnit.MINUTE, "1#/m", DONT_CARE, 0, 0},
                 {FormatWidth.NARROW, 2.0, MeasureUnit.MINUTE, "2#/m", DONT_CARE, 0, 0},
                 // field positions
-                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lbps", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
-                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lbps", NumberFormat.Field.INTEGER, 0, 2},
-                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lb/min", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
-                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lb/min", NumberFormat.Field.INTEGER, 0, 2},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lbsps", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lbsps", NumberFormat.Field.INTEGER, 0, 2},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lbs/min", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lbs/min", NumberFormat.Field.INTEGER, 0, 2},
 
         };
         

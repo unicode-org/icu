@@ -2016,7 +2016,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         dfArab.setTimeZone(tz);
         dfLatn.setTimeZone(tz);
 
-        String expectedArab = "\u0669\u060C\u0665\u0662 \u0645";
+        String expectedArab = "\u0669:\u0665\u0662 \u0645";
         String expectedLatn = "9:52 \u0645";
 
         String actualArab = dfArab.format(date);
