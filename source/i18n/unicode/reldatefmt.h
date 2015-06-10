@@ -24,14 +24,12 @@
 
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_BREAK_ITERATION
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * The formatting style
  * @draft ICU 54
  */
 typedef enum UDateRelativeDateTimeFormatterStyle {
-
+#ifndef U_HIDE_DRAFT_API
   /**
    * Everything spelled out.
    * @draft ICU 54
@@ -55,9 +53,11 @@ typedef enum UDateRelativeDateTimeFormatterStyle {
    * @draft ICU 54
    */
   UDAT_STYLE_COUNT
-} UDateRelativeDateTimeFormatterStyle; 
-
+#else
+  /** @internal */
+  UDAT_RELATIVE_DATE_TIME_FORMATTER_STYLE_HIDDEN
 #endif /* U_HIDE_DRAFT_API */
+} UDateRelativeDateTimeFormatterStyle;
 
 /**
  * Represents the unit for formatting a relative date. e.g "in 5 days"
