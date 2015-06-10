@@ -156,14 +156,14 @@ sq{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     calendar{
         generic{
             DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
                 "EEEE, d MMM y G",
                 "d MMM y G",
                 "d MMM y G",
@@ -282,10 +282,10 @@ sq{
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
                 "EEEE, d MMMM y",
                 "d MMMM y",
                 "d MMM y",
@@ -296,8 +296,6 @@ sq{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"mesditë"}
-            NoonMarkerNarrow{"MD"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -418,13 +416,34 @@ sq{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"MD"}
+                    }
+                    wide{
+                        noon{"mesditë"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"pasdite"}
+                        evening1{"mbrëmje"}
+                        midnight{"mesnatë"}
+                        morning1{"mëngjes"}
+                        morning2{"paradite"}
+                        night1{"natë"}
+                        noon{"mesditë"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "p.e.r.",
                     "e.r.",
                 }
                 abbreviated%variant{
-                    "p.e.s",
+                    "p.e.s.",
                     "e.s.",
                 }
                 narrow{

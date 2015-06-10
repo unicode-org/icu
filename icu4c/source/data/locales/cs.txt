@@ -207,7 +207,7 @@ cs{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     calendar{
         buddhist{
             availableFormats{
@@ -526,9 +526,6 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"poledne"}
-            NoonMarkerAbbr{"pol."}
-            NoonMarkerNarrow{"pol."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -652,6 +649,30 @@ cs{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    abbreviated{
+                        noon{"pol."}
+                    }
+                    narrow{
+                        noon{"pol."}
+                    }
+                    wide{
+                        noon{"poledne"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"odpoledne"}
+                        evening1{"večer"}
+                        midnight{"půlnoc"}
+                        morning1{"ráno"}
+                        morning2{"dopoledne"}
+                        night1{"noc"}
+                        noon{"poledne"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "př. n. l.",
@@ -660,10 +681,6 @@ cs{
                 narrow{
                     "př.n.l.",
                     "n.l.",
-                }
-                narrow%variant{
-                    "BCE",
-                    "n. l.",
                 }
                 wide{
                     "př. n. l.",

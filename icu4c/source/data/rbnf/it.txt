@@ -80,7 +80,6 @@ it{
             "4: i\u00AD=%spellout-numbering=;",
             "8: \u00ADotto;",
             "9: i\u00ADnove;",
-            "10: ERROR;",
             "%%msco-with-a:",
             "0: a;",
             "1: \u00ADuno;",
@@ -89,7 +88,6 @@ it{
             "4: a\u00AD=%spellout-numbering=;",
             "8: \u00ADotto;",
             "9: a\u00ADnove;",
-            "10: ERROR;",
             "%%msco-with-o:",
             "0: o;",
             "1: o\u00ADuno;",
@@ -146,8 +144,7 @@ it{
             "80: \u00AD=%spellout-numbering=;",
             "90: o\u00AD=%spellout-numbering=;",
             "%%msc-no-final:",
-            "0: ERROR;",
-            "2: =%spellout-cardinal-masculine=;",
+            "0: =%spellout-cardinal-masculine=;",
             "20: vent>%%msc-with-i-nofinal>;",
             "30: trent>%%msc-with-a-nofinal>;",
             "40: quarant>%%msc-with-a-nofinal>;",
@@ -158,7 +155,6 @@ it{
             "90: novant>%%msc-with-a-nofinal>;",
             "100: cent>%%msc-with-o-nofinal>;",
             "200: <<\u00ADcent>%%msc-with-o-nofinal>;",
-            "1000: ERROR;",
             "%%msc-with-i-nofinal:",
             "0: =%%msc-with-i=;",
             "3: a\u00ADtre;",
@@ -247,7 +243,7 @@ it{
             "2000: <%spellout-cardinal-masculine<\u00ADmille\u00AD>%%ordinal-esimo>;",
             "2001: <%spellout-cardinal-masculine<\u00ADmila\u00AD>%%ordinal-esimo>;",
             "1000000: milione\u00AD>%%ordinal-esimo>;",
-            "2000000: <%spellout-cardinal-masculine<milion\u00AD>%%ordinal-esimo>;",
+            "2000000: <%spellout-cardinal-masculine<milione\u00AD>%%ordinal-esimo>;",
             "1000000000: miliard\u00AD>%%ordinal-esimo-with-o>;",
             "2000000000: <%spellout-cardinal-masculine<miliard\u00AD>%%ordinal-esimo-with-o>;",
             "1000000000000: bilione\u00AD>%%ordinal-esimo>;",
@@ -340,7 +336,7 @@ it{
             "2000: <%spellout-cardinal-feminine<\u00ADmille\u00AD>%%ordinal-esima>;",
             "2001: <%spellout-cardinal-feminine<\u00ADmila\u00AD>%%ordinal-esima>;",
             "1000000: milione\u00AD>%%ordinal-esima>;",
-            "2000000: <%spellout-cardinal-feminine<milion\u00AD>%%ordinal-esima>;",
+            "2000000: <%spellout-cardinal-feminine<milione\u00AD>%%ordinal-esima>;",
             "1000000000: miliard\u00AD>%%ordinal-esima-with-o>;",
             "2000000000: <%spellout-cardinal-feminine<miliard\u00AD>%%ordinal-esima-with-o>;",
             "1000000000000: bilione\u00AD>%%ordinal-esima>;",
@@ -398,5 +394,5 @@ it{
             "10: o\u00AD=%spellout-ordinal-feminine=;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.1.15.34"}
 }

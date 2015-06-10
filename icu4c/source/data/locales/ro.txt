@@ -180,7 +180,7 @@ ro{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             eras{
@@ -425,8 +425,6 @@ ro{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"la prânz"}
-            NoonMarkerNarrow{"prânz"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -545,6 +543,26 @@ ro{
                         "Joi",
                         "Vineri",
                         "Sâmbătă",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"prânz"}
+                    }
+                    wide{
+                        noon{"la prânz"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"după-amiază"}
+                        evening1{"seară"}
+                        midnight{"miezul nopții"}
+                        morning1{"dimineață"}
+                        night1{"noapte"}
+                        noon{"amiază"}
                     }
                 }
             }

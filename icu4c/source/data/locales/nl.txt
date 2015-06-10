@@ -162,7 +162,7 @@ nl{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1298,9 +1298,6 @@ nl{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"12 uur ‘s middags"}
-            NoonMarkerAbbr{"12 uur ‘s middags"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -1420,6 +1417,17 @@ nl{
                         "Donderdag",
                         "Vrijdag",
                         "Zaterdag",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        afternoon1{"middag"}
+                        evening1{"avond"}
+                        midnight{"middernacht"}
+                        morning1{"ochtend"}
+                        night1{"nacht"}
                     }
                 }
             }

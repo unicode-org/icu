@@ -163,7 +163,7 @@ hi{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         ethiopic{
             monthNames{
@@ -359,8 +359,6 @@ hi{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"दोपहर"}
-            NoonMarkerNarrow{"दोप"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -480,6 +478,26 @@ hi{
                         "गुरुवार",
                         "शुक्रवार",
                         "शनिवार",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"दोप"}
+                    }
+                    wide{
+                        noon{"दोपहर"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"दोपहर"}
+                        evening1{"शाम"}
+                        midnight{"आधी रात"}
+                        morning1{"सुबह"}
+                        night1{"रात"}
+                        noon{"दोपहर"}
                     }
                 }
             }

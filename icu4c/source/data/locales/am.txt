@@ -165,7 +165,7 @@ am{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         ethiopic{
             monthNames{
@@ -443,8 +443,6 @@ am{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"ቀትር"}
-            NoonMarkerNarrow{"ቀ"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -561,6 +559,26 @@ am{
                         "ሐሙስ",
                         "ዓርብ",
                         "ቅዳሜ",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"ቀ"}
+                    }
+                    wide{
+                        noon{"ቀትር"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"ከሰዓት በኋላ"}
+                        evening1{"ማታ"}
+                        midnight{"እኩለ ሌሊት"}
+                        morning1{"ጥዋት"}
+                        night1{"ሌሊት"}
+                        noon{"ቀትር"}
                     }
                 }
             }

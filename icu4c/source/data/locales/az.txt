@@ -159,7 +159,7 @@ az{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -289,8 +289,6 @@ az{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"günorta"}
-            NoonMarkerNarrow{"g"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -404,6 +402,28 @@ az{
                         "cümə axşamı",
                         "cümə",
                         "şənbə",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"g"}
+                    }
+                    wide{
+                        noon{"günorta"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"gündüz"}
+                        evening1{"axşamüstü"}
+                        midnight{"gecəyarı"}
+                        morning1{"sübh"}
+                        morning2{"səhər"}
+                        night1{"axşam"}
+                        night2{"gecə"}
+                        noon{"günorta"}
                     }
                 }
             }

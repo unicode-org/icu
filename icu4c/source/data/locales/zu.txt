@@ -162,7 +162,7 @@ zu{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.10.93"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -343,8 +343,6 @@ zu{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"Emini"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -458,6 +456,17 @@ zu{
                         "Lwesine",
                         "Lwesihlanu",
                         "Mgqibelo",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        afternoon1{"emini"}
+                        evening1{"ntambama"}
+                        morning1{"ntathakusa"}
+                        morning2{"ekuseni"}
+                        night1{"ebusuku"}
                     }
                 }
             }

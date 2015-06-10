@@ -43,7 +43,7 @@ ar{
                 percentSign{"٪"}
                 plusSign{"‏+"}
                 superscriptingExponent{"×"}
-                timeSeparator{"،"}
+                timeSeparator{":"}
             }
         }
         default{"arab"}
@@ -277,7 +277,7 @@ ar{
         minimumGroupingDigits{"1"}
         native{"arab"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.87"}
     calendar{
         buddhist{
             eras{
@@ -576,8 +576,6 @@ ar{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"ظهرا"}
-            NoonMarkerNarrow{"ظ"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -700,6 +698,29 @@ ar{
                         "الخميس",
                         "الجمعة",
                         "السبت",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"ظ"}
+                    }
+                    wide{
+                        noon{"ظهرا"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"ظهرا"}
+                        afternoon2{"بعد الظهر"}
+                        evening1{"مساء"}
+                        midnight{"منتصف الليل"}
+                        morning1{"فجرا"}
+                        morning2{"صباحا"}
+                        night1{"منتصف الليل"}
+                        night2{"ليلا"}
+                        noon{"ظهرا"}
                     }
                 }
             }
@@ -2156,26 +2177,26 @@ ar{
     }
     listPattern{
         standard{
-            2{"{0} و {1}"}
-            end{"{0}، و {1}"}
+            2{"{0} و{1}"}
+            end{"{0}، و{1}"}
             middle{"{0}، {1}"}
             start{"{0}، {1}"}
         }
         unit{
-            2{"{0} و {1}"}
-            end{"{0}، و {1}"}
+            2{"{0} و{1}"}
+            end{"{0}، و{1}"}
             middle{"{0}، {1}"}
             start{"{0}، {1}"}
         }
         unit-narrow{
-            2{"{0} و {1}"}
-            end{"{0}، و {1}"}
+            2{"{0} و{1}"}
+            end{"{0}، و{1}"}
             middle{"{0}، {1}"}
             start{"{0}، {1}"}
         }
         unit-short{
-            2{"{0} و {1}"}
-            end{"{0}، و {1}"}
+            2{"{0} و{1}"}
+            end{"{0}، و{1}"}
             middle{"{0}، {1}"}
             start{"{0}، {1}"}
         }

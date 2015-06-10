@@ -154,14 +154,14 @@ sw{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE, d MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
@@ -310,10 +310,10 @@ sw{
                 "pm",
             }
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE, d MMMM y",
                 "d MMMM y",
                 "d MMM y",
@@ -324,8 +324,6 @@ sw{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"PM"}
-            NoonMarkerNarrow{"PM"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -442,6 +440,27 @@ sw{
                         "Alhamisi",
                         "Ijumaa",
                         "Jumamosi",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"PM"}
+                    }
+                    wide{
+                        noon{"PM"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"mchana"}
+                        evening1{"jioni"}
+                        midnight{"saa sita za usiku"}
+                        morning1{"alfajiri"}
+                        morning2{"asubuhi"}
+                        night1{"usiku"}
+                        noon{"saa sita za mchana"}
                     }
                 }
             }

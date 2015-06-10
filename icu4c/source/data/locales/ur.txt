@@ -177,7 +177,7 @@ ur{
         minimumGroupingDigits{"1"}
         native{"arabext"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -350,8 +350,6 @@ ur{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"دوپہر"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -465,6 +463,18 @@ ur{
                         "جمعرات",
                         "جمعہ",
                         "ہفتہ",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        afternoon1{"دوپہر"}
+                        afternoon2{"سہ پہر"}
+                        evening1{"شام"}
+                        midnight{"آدھی رات"}
+                        morning1{"صبح"}
+                        night1{"رات"}
                     }
                 }
             }

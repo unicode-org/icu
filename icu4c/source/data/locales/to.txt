@@ -137,14 +137,14 @@ to{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.80"}
     calendar{
         generic{
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE d MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
@@ -288,10 +288,10 @@ to{
                 "PM",
             }
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE d MMMM y",
                 "d MMMM y",
                 "d MMM y",
@@ -302,8 +302,6 @@ to{
                 "{1}, {0}",
                 "{1} {0}",
             }
-            NoonMarker{"hoʻatā"}
-            NoonMarkerNarrow{"h"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -433,17 +431,13 @@ to{
                     "BCE",
                     "CE",
                 }
-                narrow{
-                    "KāMā",
-                    "TāSā",
-                }
                 wide{
                     "ki muʻa",
                     "taʻu ʻo Sīsū",
                 }
                 wide%variant{
-                    "KM",
-                    "TS",
+                    "BCE",
+                    "CE",
                 }
             }
             intervalFormats{

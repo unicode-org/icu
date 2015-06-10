@@ -134,7 +134,7 @@ kea{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.15.45"}
     calendar{
         generic{
             DateTimePatterns{
@@ -319,8 +319,6 @@ kea{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"mei-dia"}
-            NoonMarkerNarrow{"m"}
             appendItems{
                 Timezone{"{0} {1}"}
             }

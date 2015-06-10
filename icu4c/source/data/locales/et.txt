@@ -155,7 +155,7 @@ et{
         minimumGroupingDigits{"3"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     calendar{
         generic{
             DateTimePatterns{
@@ -310,8 +310,8 @@ et{
                 "PM",
             }
             AmPmMarkersAbbr{
-                "e.k.",
-                "p.k.",
+                "AM",
+                "PM",
             }
             AmPmMarkersNarrow{
                 "a",
@@ -332,8 +332,6 @@ et{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"keskpäev"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -454,6 +452,26 @@ et{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"n"}
+                    }
+                    wide{
+                        noon{"keskpäev"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"pärastlõuna"}
+                        evening1{"õhtu"}
+                        midnight{"kesköö"}
+                        morning1{"hommik"}
+                        night1{"öö"}
+                        noon{"keskpäev"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "e.m.a.",
@@ -466,6 +484,10 @@ et{
                 narrow{
                     "e.m.a.",
                     "m.a.j.",
+                }
+                narrow%variant{
+                    "EMA",
+                    "MA",
                 }
                 wide{
                     "enne meie aega",

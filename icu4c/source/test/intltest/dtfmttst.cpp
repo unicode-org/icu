@@ -1318,6 +1318,8 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
 void
 DateFormatTest::TestFormattingLocaleTimeSeparator()
 {
+    // This test not as useful is it once was, since timeSeparator
+    // in the Arabic is changed back to ":" in CLDR 28.
     const UDate testDate = 874266720000.;  // Sun Sep 14 21:52:00 CET 1997
     logln((UnicodeString)"Date set to : " + dateToString(testDate));
 
@@ -1338,7 +1340,7 @@ DateFormatTest::TestFormattingLocaleTimeSeparator()
     dfLatn->setTimeZone(*tz);
 
     const UnicodeString expectedArab = UnicodeString(
-            "\\u0669\\u060C\\u0665\\u0662 \\u0645", -1, US_INV).unescape();
+            "\\u0669:\\u0665\\u0662 \\u0645", -1, US_INV).unescape();
 
     const UnicodeString expectedLatn = UnicodeString(
             "9:52 \\u0645", -1, US_INV).unescape();

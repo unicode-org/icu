@@ -313,5 +313,5 @@ uz{
         MK{"Makedoniya (SYUR)"}
         TL{"Sharqiy Timor"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
 }

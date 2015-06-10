@@ -665,7 +665,7 @@ is{
             vaii{"Vai-tölustafir"}
         }
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"tungumál: {0}"}
         script{"leturgerð: {0}"}

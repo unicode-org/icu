@@ -177,7 +177,7 @@ ml{
         }
         native{"mlym"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -354,8 +354,6 @@ ml{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"ഉച്ച"}
-            NoonMarkerNarrow{"ഉച്ച"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -474,6 +472,29 @@ ml{
                         "വ്യാഴാഴ്‌ച",
                         "വെള്ളിയാഴ്‌ച",
                         "ശനിയാഴ്‌ച",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"ഉച്ച"}
+                    }
+                    wide{
+                        noon{"ഉച്ച"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"ഉച്ചയ്ക്ക്"}
+                        afternoon2{"ഉച്ചതിരിഞ്ഞ്"}
+                        evening1{"വൈകുന്നേരം"}
+                        evening2{"സന്ധ്യയ്ക്ക്"}
+                        midnight{"അർദ്ധരാത്രി"}
+                        morning1{"പുലർച്ചെ"}
+                        morning2{"രാവിലെ"}
+                        night1{"രാത്രി"}
+                        noon{"ഉച്ചയ്ക്ക്"}
                     }
                 }
             }

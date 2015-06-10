@@ -180,7 +180,7 @@ pa{
         minimumGroupingDigits{"1"}
         native{"guru"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -314,8 +314,6 @@ pa{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"ਦੁਪਹਿਰ"}
-            NoonMarkerNarrow{"ਦੁ."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -431,6 +429,26 @@ pa{
                         "ਵੀਰਵਾਰ",
                         "ਸ਼ੁੱਕਰਵਾਰ",
                         "ਸ਼ਨਿੱਚਰਵਾਰ",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"ਦੁ."}
+                    }
+                    wide{
+                        noon{"ਦੁਪਹਿਰ"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"ਦੁਪਹਿਰ"}
+                        evening1{"ਸ਼ਾਮ"}
+                        midnight{"ਅੱਧੀ ਰਾਤ"}
+                        morning1{"ਸਵੇਰ"}
+                        night1{"ਰਾਤ"}
+                        noon{"ਦੁਪਹਿਰ"}
                     }
                 }
             }

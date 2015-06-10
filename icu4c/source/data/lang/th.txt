@@ -1021,7 +1021,7 @@ th{
         VALLADER{"วัลลาเดอร์"}
         WADEGILE{"การถอดอักษรแบบเวด-ไจลส์"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.91"}
     codePatterns{
         language{"ภาษา: {0}"}
         script{"สคริปต์: {0}"}

@@ -82,6 +82,56 @@ en{
                 }
             }
             patternsShort{
+                currencyFormat{
+                    1000{
+                        one{"¤0K"}
+                        other{"¤0K"}
+                    }
+                    10000{
+                        one{"¤00K"}
+                        other{"¤00K"}
+                    }
+                    100000{
+                        one{"¤000K"}
+                        other{"¤000K"}
+                    }
+                    1000000{
+                        one{"¤0M"}
+                        other{"¤0M"}
+                    }
+                    10000000{
+                        one{"¤00M"}
+                        other{"¤00M"}
+                    }
+                    100000000{
+                        one{"¤000M"}
+                        other{"¤000M"}
+                    }
+                    1000000000{
+                        one{"¤0B"}
+                        other{"¤0B"}
+                    }
+                    10000000000{
+                        one{"¤00B"}
+                        other{"¤00B"}
+                    }
+                    100000000000{
+                        one{"¤000B"}
+                        other{"¤000B"}
+                    }
+                    1000000000000{
+                        one{"¤0T"}
+                        other{"¤0T"}
+                    }
+                    10000000000000{
+                        one{"¤00T"}
+                        other{"¤00T"}
+                    }
+                    100000000000000{
+                        one{"¤000T"}
+                        other{"¤000T"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"0K"}
@@ -148,7 +198,7 @@ en{
             }
         }
     }
-    Version{"2.1.13.48"}
+    Version{"2.1.16.69"}
     calendar{
         buddhist{
             eras{
@@ -551,8 +601,6 @@ en{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"noon"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Day{"{0} ({2}: {1})"}
                 Day-Of-Week{"{0} {1}"}
@@ -644,6 +692,28 @@ en{
                         "T",
                         "F",
                         "S",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"n"}
+                    }
+                    wide{
+                        noon{"noon"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"afternoon"}
+                        am{"AM"}
+                        evening1{"evening"}
+                        midnight{"midnight"}
+                        morning1{"morning"}
+                        night1{"night"}
+                        noon{"noon"}
+                        pm{"PM"}
                     }
                 }
             }
@@ -998,7 +1068,7 @@ en{
     }
     fields{
         day{
-            dn{"Day"}
+            dn{"day"}
             relative{
                 "-1"{"yesterday"}
                 "0"{"today"}
@@ -1023,7 +1093,7 @@ en{
             dn%variant{"am/pm"}
         }
         era{
-            dn{"Era"}
+            dn{"era"}
         }
         fri{
             relative{
@@ -1047,7 +1117,7 @@ en{
             }
         }
         hour{
-            dn{"Hour"}
+            dn{"hour"}
             relativeTime{
                 future{
                     one{"in {0} hour"}
@@ -1073,7 +1143,7 @@ en{
             }
         }
         minute{
-            dn{"Minute"}
+            dn{"minute"}
             relativeTime{
                 future{
                     one{"in {0} minute"}
@@ -1120,7 +1190,7 @@ en{
             }
         }
         month{
-            dn{"Month"}
+            dn{"month"}
             relative{
                 "-1"{"last month"}
                 "0"{"this month"}
@@ -1156,7 +1226,7 @@ en{
             }
         }
         quarter{
-            dn{"Quarter"}
+            dn{"quarter"}
             relative{
                 "-1"{"last quarter"}
                 "0"{"this quarter"}
@@ -1213,7 +1283,7 @@ en{
             }
         }
         second{
-            dn{"Second"}
+            dn{"second"}
             relative{
                 "0"{"now"}
             }
@@ -1329,7 +1399,7 @@ en{
             }
         }
         week{
-            dn{"Week"}
+            dn{"week"}
             relative{
                 "-1"{"last week"}
                 "0"{"this week"}
@@ -1365,10 +1435,10 @@ en{
             }
         }
         weekday{
-            dn{"Day of the Week"}
+            dn{"day of the week"}
         }
         year{
-            dn{"Year"}
+            dn{"year"}
             relative{
                 "-1"{"last year"}
                 "0"{"this year"}
@@ -1404,7 +1474,7 @@ en{
             }
         }
         zone{
-            dn{"Time Zone"}
+            dn{"time zone"}
         }
     }
     listPattern{

@@ -260,7 +260,6 @@ pt_PT{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarkerNarrow{"m.d."}
             availableFormats{
                 MMMEd{"E, d/MM"}
                 MMMMEd{"E, d 'de' MMMM"}
@@ -275,6 +274,23 @@ pt_PT{
                 yMMMd{"d/MM/y"}
                 yQQQ{"QQQQ 'de' y"}
                 yQQQQ{"QQQQ 'de' y"}
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"m.d."}
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        am{"a.m."}
+                        pm{"p.m."}
+                    }
+                    wide{
+                        am{"a.m."}
+                        pm{"p.m."}
+                    }
+                }
             }
             eras{
                 abbreviated%variant{

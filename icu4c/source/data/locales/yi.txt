@@ -34,7 +34,7 @@ yi{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"2.1.7.41"}
+    Version{"2.1.15.45"}
     calendar{
         generic{
             intervalFormats{
@@ -57,7 +57,6 @@ yi{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"האַלבערטאָג"}
             appendItems{
                 Timezone{"{1} {0}"}
             }

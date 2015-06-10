@@ -163,7 +163,7 @@ te{
         minimumGroupingDigits{"1"}
         native{"telu"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.80"}
     calendar{
         generic{
             DateTimePatterns{
@@ -336,8 +336,6 @@ te{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"మధ్యాహ్నం"}
-            NoonMarkerNarrow{"మధ్యా"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -458,6 +456,28 @@ te{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"మధ్యా"}
+                    }
+                    wide{
+                        morning1{"ఉదయం"}
+                        night1{"రాత్రి"}
+                        noon{"మధ్యాహ్నం"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"మధ్యాహ్నం"}
+                        evening1{"సాయంత్రం"}
+                        midnight{"అర్థరాత్రి"}
+                        morning1{"ఉదయం"}
+                        night1{"రాత్రి"}
+                        noon{"మధ్యాహ్నం"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "క్రీపూ",
@@ -466,10 +486,6 @@ te{
                 abbreviated%variant{
                     "[BCE]",
                     "[CE]",
-                }
-                narrow{
-                    "ఈసాపూర్వ.",
-                    "సన్.",
                 }
                 wide{
                     "క్రీస్తు పూర్వం",

@@ -312,5 +312,5 @@ sw{
         FK{"Visiwa vya Falkland (Islas Malvinas)"}
         MK{"Masedonia (FYROM)"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
 }

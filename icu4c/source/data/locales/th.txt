@@ -139,7 +139,7 @@ th{
         minimumGroupingDigits{"1"}
         native{"thai"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.91"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1136,8 +1136,6 @@ th{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"เที่ยง"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -1266,6 +1264,28 @@ th{
                         "วันพฤหัสบดี",
                         "วันศุกร์",
                         "วันเสาร์",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"n"}
+                    }
+                    wide{
+                        noon{"เที่ยง"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"เที่ยง"}
+                        afternoon2{"บ่าย"}
+                        evening1{"เย็น"}
+                        evening2{"ค่ำ"}
+                        midnight{"เที่ยงคืน"}
+                        morning1{"เช้า"}
+                        night1{"กลางคืน"}
+                        noon{"เที่ยง"}
                     }
                 }
             }
@@ -1821,10 +1841,10 @@ th{
                     abbreviated{
                         "มุฮัร.",
                         "เศาะ.",
-                        "รอบี 1",
-                        "รอบี 2",
-                        "ญุมา 1",
-                        "ญุมา 2",
+                        "รอบี I",
+                        "รอบี II",
+                        "จุมาดา I",
+                        "จุมาดา II",
                         "เราะ.",
                         "ชะอ์.",
                         "เราะมะ.",
@@ -1865,10 +1885,10 @@ th{
                     abbreviated{
                         "มุฮัร.",
                         "เศาะ.",
-                        "รอบี 1",
-                        "รอบี 2",
-                        "ญุมา 1",
-                        "ญุมา 2",
+                        "รอบี I",
+                        "รอบี II",
+                        "จุมาดา I",
+                        "จุมาดา II",
                         "เราะ.",
                         "ชะอ์.",
                         "เราะมะ.",

@@ -107,5 +107,5 @@ yo_BJ{
         zh{"Èdè Mandari"}
         zu{"Èdè Shulu"}
     }
-    Version{"2.1.13.24"}
+    Version{"2.1.14.95"}
 }

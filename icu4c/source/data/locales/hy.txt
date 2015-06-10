@@ -159,7 +159,7 @@ hy{
         native{"latn"}
         traditional{"armn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -328,8 +328,6 @@ hy{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"կեսօրին"}
-            NoonMarkerNarrow{"կ"}
             appendItems{
                 Timezone{"{0}, {1}"}
             }
@@ -443,6 +441,26 @@ hy{
                         "հինգշաբթի",
                         "ուրբաթ",
                         "շաբաթ",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"կ"}
+                    }
+                    wide{
+                        noon{"կեսօրին"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"ցերեկ"}
+                        evening1{"երեկո"}
+                        midnight{"կեսգիշեր"}
+                        morning1{"առավոտ"}
+                        night1{"գիշեր"}
+                        noon{"կեսօր"}
                     }
                 }
             }

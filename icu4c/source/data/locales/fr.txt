@@ -159,7 +159,7 @@ fr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.13.46"}
+    Version{"2.1.16.1"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -553,8 +553,6 @@ fr{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"midi"}
-            NoonMarkerNarrow{"midi"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -673,6 +671,31 @@ fr{
                         "Jeudi",
                         "Vendredi",
                         "Samedi",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        evening1{"soir"}
+                        morning1{"matin"}
+                        noon{"midi"}
+                    }
+                    wide{
+                        afternoon1{"après-midi"}
+                        evening1{"soir"}
+                        morning1{"matin"}
+                        noon{"midi"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"après-midi"}
+                        evening1{"soir"}
+                        midnight{"minuit"}
+                        morning1{"matin"}
+                        night1{"nuit"}
+                        noon{"midi"}
                     }
                 }
             }

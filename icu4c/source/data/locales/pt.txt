@@ -162,7 +162,7 @@ pt{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.98"}
     calendar{
         buddhist{
             eras{
@@ -585,8 +585,6 @@ pt{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"meio-dia"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -709,6 +707,29 @@ pt{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"n"}
+                    }
+                    wide{
+                        afternoon1{"tarde"}
+                        evening1{"noite"}
+                        morning1{"manhã"}
+                        noon{"meio-dia"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"tarde"}
+                        evening1{"noite"}
+                        midnight{"meia-noite"}
+                        morning1{"manhã"}
+                        night1{"madrugada"}
+                        noon{"meio-dia"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "a.C.",
@@ -719,11 +740,11 @@ pt{
                     "EC",
                 }
                 wide{
-                    "Antes de Cristo",
-                    "Ano do Senhor",
+                    "antes de Cristo",
+                    "depois de Cristo",
                 }
                 wide%variant{
-                    "Antes da Era Comum",
+                    "antes da Era Comum",
                     "Era Comum",
                 }
             }

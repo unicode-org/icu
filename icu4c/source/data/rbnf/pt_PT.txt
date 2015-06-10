@@ -108,7 +108,7 @@ pt_PT{
             "800: oitocentas[ e >>];",
             "900: novecentas[ e >>];",
             "1000: mil[ e >>];",
-            "2000: <%spellout-cardinal-masculine< mil[ e >>];",
+            "2000: << mil[ e >>];",
             "1000000: um milh\u00E3o[ e >>];",
             "2000000: <%spellout-cardinal-masculine< milh\u00F5es[ e >>];",
             "1000000000: um bili\u00E3o[ e >>];",
@@ -204,5 +204,5 @@ pt_PT{
             "1000000000000000000: =#,##0=\u00AA;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.1.15.32"}
 }

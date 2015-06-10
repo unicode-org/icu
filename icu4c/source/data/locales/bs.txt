@@ -177,7 +177,7 @@ bs{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.13.46"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -315,8 +315,6 @@ bs{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"podne"}
-            NoonMarkerNarrow{"podne"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -435,6 +433,26 @@ bs{
                         "četvrtak",
                         "petak",
                         "subota",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"podne"}
+                    }
+                    wide{
+                        noon{"podne"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"popodne"}
+                        evening1{"veče"}
+                        midnight{"u ponoć"}
+                        morning1{"jutro"}
+                        night1{"noć"}
+                        noon{"u podne"}
                     }
                 }
             }

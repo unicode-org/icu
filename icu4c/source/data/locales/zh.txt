@@ -195,7 +195,7 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -978,8 +978,6 @@ zh{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"中午"}
-            NoonMarkerNarrow{"中午"}
             appendItems{
                 Timezone{"{1}{0}"}
             }
@@ -1101,6 +1099,40 @@ zh{
                         "星期四",
                         "星期五",
                         "星期六",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        afternoon1{"中午"}
+                        afternoon2{"下午"}
+                        evening1{"晚上"}
+                        morning1{"清晨"}
+                        morning2{"上午"}
+                        night1{"凌晨"}
+                        noon{"中午"}
+                    }
+                    wide{
+                        afternoon1{"中午"}
+                        afternoon2{"下午"}
+                        evening1{"晚上"}
+                        morning1{"清晨"}
+                        morning2{"上午"}
+                        night1{"凌晨"}
+                        noon{"中午"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"中午"}
+                        afternoon2{"下午"}
+                        evening1{"晚上"}
+                        midnight{"半夜"}
+                        morning1{"早上"}
+                        morning2{"上午"}
+                        night1{"凌晨"}
+                        noon{"中午"}
                     }
                 }
             }

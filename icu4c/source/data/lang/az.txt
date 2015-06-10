@@ -45,7 +45,7 @@ az{
         av{"avarikcə"}
         awa{"avadicə"}
         ay{"aymarca"}
-        az{"azərbaycan"}
+        az{"azərbaycanca"}
         ba{"başqırd"}
         bal{"baluc dili"}
         ban{"balincə"}
@@ -696,7 +696,7 @@ az{
             tibt{"Tibet Rəqəmləri"}
         }
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Skript: {0}"}

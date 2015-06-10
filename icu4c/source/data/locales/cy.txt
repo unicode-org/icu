@@ -258,7 +258,7 @@ cy{
         }
         native{"latn"}
     }
-    Version{"2.1.10.93"}
+    Version{"2.1.15.45"}
     calendar{
         generic{
             DateTimePatterns{
@@ -430,7 +430,6 @@ cy{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"hanner dydd"}
             appendItems{
                 Timezone{"{0} {1}"}
             }

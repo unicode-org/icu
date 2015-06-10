@@ -37,7 +37,7 @@ chr{
             }
         }
     }
-    Version{"2.1.6.69"}
+    Version{"2.1.15.48"}
     calendar{
         generic{
             DateTimePatterns{
@@ -150,7 +150,6 @@ chr{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"ᎢᎦ"}
             availableFormats{
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
@@ -203,6 +202,13 @@ chr{
                         "Ꮕ",
                         "Ꮷ",
                         "Ꭴ",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    wide{
+                        noon{"ᎢᎦ"}
                     }
                 }
             }

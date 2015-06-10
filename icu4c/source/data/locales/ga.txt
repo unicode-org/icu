@@ -225,7 +225,7 @@ ga{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.45"}
     calendar{
         generic{
             DateTimePatterns{
@@ -355,8 +355,6 @@ ga{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"meán lae"}
-            NoonMarkerNarrow{"ml"}
             appendItems{
                 Timezone{"{0} {1}"}
             }

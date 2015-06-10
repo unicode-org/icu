@@ -159,7 +159,7 @@ is{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -334,8 +334,6 @@ is{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"hádegi"}
-            NoonMarkerNarrow{"h."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -452,6 +450,26 @@ is{
                         "fimmtudagur",
                         "föstudagur",
                         "laugardagur",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"h."}
+                    }
+                    wide{
+                        noon{"hádegi"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"eftir hádegi"}
+                        evening1{"kvöld"}
+                        midnight{"miðnætti"}
+                        morning1{"morgunn"}
+                        night1{"nótt"}
+                        noon{"hádegi"}
                     }
                 }
             }

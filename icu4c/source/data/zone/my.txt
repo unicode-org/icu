@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 my{
-    Version{"2.1.13.21"}
+    Version{"2.1.15.64"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"အာဘီဂျွန်း"}
@@ -687,9 +687,6 @@ my{
         "Asia:Choibalsan"{
             ec{"ချွဲဘောဆန်"}
         }
-        "Asia:Chongqing"{
-            ec{"ချောင်ချင်း"}
-        }
         "Asia:Colombo"{
             ec{"ကိုလံဘို"}
         }
@@ -710,9 +707,6 @@ my{
         }
         "Asia:Gaza"{
             ec{"ဂါဇာ"}
-        }
-        "Asia:Harbin"{
-            ec{"ဟာဘင်"}
         }
         "Asia:Hebron"{
             ec{"ဟီဘရွန်"}
@@ -743,9 +737,6 @@ my{
         }
         "Asia:Karachi"{
             ec{"ကာရာချီ"}
-        }
-        "Asia:Kashgar"{
-            ec{"ခါရှီးဂ်"}
         }
         "Asia:Katmandu"{
             ec{"ခတ္တမန္ဒူ"}

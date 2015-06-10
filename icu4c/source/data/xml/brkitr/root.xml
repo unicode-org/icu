@@ -28,7 +28,7 @@
             <icu:dictionaries>
                 <icu:dictionary type="Hani" icu:dependency="cjdict.dict"/>
                 <icu:dictionary type="Hira" icu:dependency="cjdict.dict"/>
-                <icu:dictionary type="Kata" icu:dependency="cjdict.dict"/>
+                <icu:dictionary type="Kana" icu:dependency="cjdict.dict"/>
                 <icu:dictionary type="Khmr" icu:dependency="khmerdict.dict"/>
                 <icu:dictionary type="Laoo" icu:dependency="laodict.dict"/>
                 <icu:dictionary type="Mymr" icu:dependency="burmesedict.dict"/>

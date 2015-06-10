@@ -34,7 +34,7 @@ br{
         }
         native{"latn"}
     }
-    Version{"2.1.10.93"}
+    Version{"2.1.15.45"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -45,8 +45,6 @@ br{
                 "am",
                 "gm",
             }
-            NoonMarker{"kreisteiz"}
-            NoonMarkerNarrow{"k"}
             availableFormats{
                 Ed{"E d"}
                 Gy{"y G"}

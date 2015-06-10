@@ -1020,7 +1020,7 @@ nl{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Schrift: {0}"}

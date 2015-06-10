@@ -207,7 +207,7 @@ uk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     calendar{
         coptic{
             monthNames{
@@ -402,8 +402,6 @@ uk{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"полудня"}
-            NoonMarkerNarrow{"п"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -525,8 +523,39 @@ uk{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        afternoon1{"дня"}
+                        evening1{"вечора"}
+                        morning1{"ранку"}
+                        noon{"п"}
+                    }
+                    wide{
+                        afternoon1{"дня"}
+                        evening1{"вечора"}
+                        morning1{"ранку"}
+                        night1{"ночі"}
+                        noon{"полудня"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"день"}
+                        evening1{"вечір"}
+                        midnight{"північ"}
+                        morning1{"ранок"}
+                        night1{"ніч"}
+                        noon{"полудень"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
+                    "до н.е.",
+                    "н.е.",
+                }
+                abbreviated%variant{
                     "до н.е.",
                     "н.е.",
                 }
@@ -535,8 +564,8 @@ uk{
                     "н.е.",
                 }
                 narrow%variant{
-                    "до н. е.",
-                    "н. е.",
+                    "до н.е.",
+                    "н.е.",
                 }
                 wide{
                     "до нашої ери",
