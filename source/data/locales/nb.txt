@@ -156,7 +156,7 @@ nb{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             eras{
@@ -339,8 +339,6 @@ nb{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"kl. 12"}
-            NoonMarkerNarrow{"12"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -461,6 +459,18 @@ nb{
                         "torsdag",
                         "fredag",
                         "lørdag",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        afternoon1{"ettermiddag"}
+                        evening1{"kveld"}
+                        midnight{"midnatt"}
+                        morning1{"morgen"}
+                        morning2{"formiddag"}
+                        night1{"natt"}
                     }
                 }
             }

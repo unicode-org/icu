@@ -210,7 +210,7 @@ ru{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.13.53"}
+    Version{"2.1.15.94"}
     calendar{
         buddhist{
             eras{
@@ -673,8 +673,6 @@ ru{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"полдень"}
-            NoonMarkerNarrow{"полдень"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -796,6 +794,26 @@ ru{
                         "Четверг",
                         "Пятница",
                         "Суббота",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"полдень"}
+                    }
+                    wide{
+                        noon{"полдень"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"день"}
+                        evening1{"вечер"}
+                        midnight{"полночь"}
+                        morning1{"утро"}
+                        night1{"ночь"}
+                        noon{"полдень"}
                     }
                 }
             }

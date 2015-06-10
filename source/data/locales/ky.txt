@@ -156,7 +156,7 @@ ky{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.80"}
     calendar{
         generic{
             DateTimePatterns{
@@ -286,8 +286,6 @@ ky{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"чак түш"}
-            NoonMarkerNarrow{"чт"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -401,6 +399,26 @@ ky{
                         "бейшемби",
                         "жума",
                         "ишемби",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"чт"}
+                    }
+                    wide{
+                        noon{"чак түш"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"түштөн кийин"}
+                        evening1{"кечкурун"}
+                        midnight{"түн ортосу"}
+                        morning1{"эртең менен"}
+                        night1{"түн"}
+                        noon{"чак түш"}
                     }
                 }
             }

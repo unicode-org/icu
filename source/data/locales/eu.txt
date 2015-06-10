@@ -155,7 +155,7 @@ eu{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             eras{
@@ -345,8 +345,6 @@ eu{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"eguerdia"}
-            NoonMarkerNarrow{"e"}
             appendItems{
                 Timezone{"{0} ({1})"}
             }
@@ -463,6 +461,28 @@ eu{
                         "Osteguna",
                         "Ostirala",
                         "Larunbata",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"e"}
+                    }
+                    wide{
+                        noon{"eguerdia"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"eguerdia"}
+                        afternoon2{"arratsaldea"}
+                        evening1{"iluntzea"}
+                        midnight{"gauerdia"}
+                        morning1{"goizaldea"}
+                        morning2{"goiza"}
+                        night1{"gaua"}
+                        noon{"eguerdia"}
                     }
                 }
             }

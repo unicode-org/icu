@@ -184,7 +184,7 @@ mr{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     calendar{
         generic{
             DateTimePatterns{
@@ -361,8 +361,6 @@ mr{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"मध्यान्ह"}
-            NoonMarkerNarrow{"दु"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -483,14 +481,36 @@ mr{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"दु"}
+                    }
+                    wide{
+                        noon{"मध्यान्ह"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"दुपारी"}
+                        evening1{"संध्याकाळी"}
+                        midnight{"मध्यरात्री"}
+                        morning1{"पहाटे"}
+                        morning2{"सकाळी"}
+                        night1{"रात्री"}
+                        night2{"रात्र"}
+                        noon{"मध्यान्ह"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "इ. स. पू.",
                     "इ. स.",
                 }
                 abbreviated%variant{
-                    "इ. स. पू. युग",
-                    "ख्रि. यु.",
+                    "ईसापूर्व युग",
+                    "ईसायुग",
                 }
                 wide{
                     "ईसवीसनपूर्व",

@@ -206,7 +206,7 @@ sl{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -377,8 +377,6 @@ sl{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"poldne"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -494,6 +492,27 @@ sl{
                         "četrtek",
                         "petek",
                         "sobota",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"n"}
+                    }
+                    wide{
+                        noon{"poldne"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"popoldne"}
+                        evening1{"večer"}
+                        midnight{"polnoč"}
+                        morning1{"jutro"}
+                        morning2{"dopoldne"}
+                        night1{"noč"}
+                        noon{"poldne"}
                     }
                 }
             }

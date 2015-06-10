@@ -491,7 +491,7 @@ gd{
             tibt{"Àireamhan na Tibeitise"}
         }
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.45"}
     codePatterns{
         language{"Cànan: {0}"}
         script{"Litreadh: {0}"}

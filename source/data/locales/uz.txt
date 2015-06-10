@@ -180,7 +180,7 @@ uz{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -310,8 +310,6 @@ uz{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"tush payti"}
-            NoonMarkerNarrow{"t.p."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -425,6 +423,26 @@ uz{
                         "payshanba",
                         "juma",
                         "shanba",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"t.p."}
+                    }
+                    wide{
+                        noon{"tush payti"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"kunduzi"}
+                        evening1{"kechqurun"}
+                        midnight{"yarim tun"}
+                        morning1{"ertalab"}
+                        night1{"tun"}
+                        noon{"tush"}
                     }
                 }
             }

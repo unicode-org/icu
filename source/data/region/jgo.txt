@@ -91,5 +91,5 @@ jgo{
         ZW{"Zimbámbwɛ"}
         ZZ{"ŋgɔŋ yi pɛ́ ká kɛ́ jʉɔ"}
     }
-    Version{"2.1.7.39"}
+    Version{"2.1.15.45"}
 }

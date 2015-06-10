@@ -452,7 +452,7 @@ gl{
             vaii{"Díxitos Vai"}
         }
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

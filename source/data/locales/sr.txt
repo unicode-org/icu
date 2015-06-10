@@ -174,13 +174,13 @@ sr{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
-                timeSeparator{":"}
+                timeSeparator{"."}
             }
         }
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.91"}
     calendar{
         buddhist{
             eras{
@@ -405,8 +405,6 @@ sr{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"у подне"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -527,6 +525,26 @@ sr{
                         "четвртак",
                         "петак",
                         "субота",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"n"}
+                    }
+                    wide{
+                        noon{"у подне"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"поподне"}
+                        evening1{"вече"}
+                        midnight{"поноћ"}
+                        morning1{"јутро"}
+                        night1{"ноћ"}
+                        noon{"подне"}
                     }
                 }
             }

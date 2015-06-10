@@ -776,7 +776,7 @@ kn{
             vaii{"ವಾಯ್ ಅಂಕೆಗಳು"}
         }
     }
-    Version{"2.1.13.51"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"ಭಾಷೆ: {0}"}
         script{"ಲಿಪಿ : {0}"}

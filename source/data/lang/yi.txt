@@ -173,7 +173,7 @@ yi{
         Grek{"גריכיש"}
         Latn{"גַלחיש"}
     }
-    Version{"2.1.7.41"}
+    Version{"2.1.15.45"}
     codePatterns{
         language{"שפראַך: {0}"}
         script{"שריפֿט: {0}"}

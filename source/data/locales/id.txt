@@ -132,7 +132,7 @@ id{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -537,6 +537,32 @@ id{
                             "minor cold",
                             "major cold",
                         }
+                        wide{
+                            "mulai musim semi",
+                            "air hujan",
+                            "serangga bangun",
+                            "ekuinoks musim semi",
+                            "bright and clear",
+                            "hujan butiran",
+                            "mulai musim panas",
+                            "grain full",
+                            "grain in ear",
+                            "summer solstice",
+                            "minor heat",
+                            "major heat",
+                            "mulai musim gugur",
+                            "akhir panas",
+                            "embun putih",
+                            "ekuinoks musim gugur",
+                            "embun dingin",
+                            "embun beku turun",
+                            "mulai musim dingin",
+                            "mulai turun salju",
+                            "major snow",
+                            "winter solstice",
+                            "minor cold",
+                            "major cold",
+                        }
                     }
                 }
             }
@@ -808,8 +834,6 @@ id{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"tengah hari"}
-            NoonMarkerNarrow{"tengah hari"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -925,6 +949,26 @@ id{
                         "Kamis",
                         "Jumat",
                         "Sabtu",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"tengah hari"}
+                    }
+                    wide{
+                        noon{"tengah hari"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"siang"}
+                        evening1{"sore"}
+                        midnight{"tengah malam"}
+                        morning1{"pagi"}
+                        night1{"malam"}
+                        noon{"tengah hari"}
                     }
                 }
             }

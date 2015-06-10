@@ -904,7 +904,7 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.80"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

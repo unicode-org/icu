@@ -12,5 +12,5 @@ en_AU{
         bax{"Bamum"}
         en_US{"United States English"}
     }
-    Version{"2.1.11.59"}
+    Version{"2.1.15.12"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 en_001{
-    Version{"2.1.12.90"}
+    Version{"2.1.15.81"}
     units{
         acceleration{
             meter-per-second-squared{
@@ -150,6 +150,12 @@ en_001{
         }
     }
     unitsNarrow{
+        duration{
+            minute{
+                one{"{0}min"}
+                other{"{0}min"}
+            }
+        }
         mass{
             pound{
                 one{"{0}lb"}
@@ -167,8 +173,35 @@ en_001{
             }
         }
         volume{
+            centiliter{
+                dnam{"cl"}
+                one{"{0}cl"}
+                other{"{0}cl"}
+            }
+            deciliter{
+                dnam{"dl"}
+                one{"{0}dl"}
+                other{"{0}dl"}
+            }
+            hectoliter{
+                dnam{"hl"}
+                one{"{0}hl"}
+                other{"{0}hl"}
+            }
             liter{
                 dnam{"litre"}
+                one{"{0}l"}
+                other{"{0}l"}
+            }
+            megaliter{
+                dnam{"Ml"}
+                one{"{0}Ml"}
+                other{"{0}Ml"}
+            }
+            milliliter{
+                dnam{"ml"}
+                one{"{0}ml"}
+                other{"{0}ml"}
             }
         }
     }
@@ -208,8 +241,35 @@ en_001{
             }
         }
         volume{
+            centiliter{
+                dnam{"cl"}
+                one{"{0} cl"}
+                other{"{0} cl"}
+            }
+            deciliter{
+                dnam{"dl"}
+                one{"{0} dl"}
+                other{"{0} dl"}
+            }
+            hectoliter{
+                dnam{"hl"}
+                one{"{0} hl"}
+                other{"{0} hl"}
+            }
             liter{
                 dnam{"litres"}
+                one{"{0} l"}
+                other{"{0} l"}
+            }
+            megaliter{
+                dnam{"Ml"}
+                one{"{0} Ml"}
+                other{"{0} Ml"}
+            }
+            milliliter{
+                dnam{"ml"}
+                one{"{0} ml"}
+                other{"{0} ml"}
             }
         }
     }

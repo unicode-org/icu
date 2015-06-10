@@ -73,7 +73,7 @@ smn{
         zh_Hans{"oovtâkiärdánis kiinakielâ"}
         zh_Hant{"ärbivuáválâš kiinakielâ"}
     }
-    Version{"2.1.8.11"}
+    Version{"2.1.16.1"}
     codePatterns{
         language{"kielâ: {0}"}
         script{"čäällimvuáhádâh: {0}"}

@@ -20,8 +20,11 @@ en{
         colStrength{"Sorting Strength"}
         collation{"Sort Order"}
         currency{"Currency"}
+        fw{"First day of week"}
+        hc{"Hour Cycle (12 vs 24)"}
         kv{"Highest Ignored"}
         lb{"Line Break Style"}
+        ms{"Measurement System"}
         numbers{"Numbers"}
         timezone{"Time Zone"}
         va{"Locale Variant"}
@@ -87,6 +90,7 @@ en{
         bfd{"Bafut"}
         bfq{"Badaga"}
         bg{"Bulgarian"}
+        bgn{"Western Balochi"}
         bho{"Bhojpuri"}
         bi{"Bislama"}
         bik{"Bikol"}
@@ -186,6 +190,7 @@ en{
         ewo{"Ewondo"}
         ext{"Extremaduran"}
         fa{"Persian"}
+        fa_AF{"Dari"}
         fan{"Fang"}
         fat{"Fanti"}
         ff{"Fulah"}
@@ -346,6 +351,7 @@ en{
         lo{"Lao"}
         lol{"Mongo"}
         loz{"Lozi"}
+        lrc{"Northern Luri"}
         lt{"Lithuanian"}
         ltg{"Latgalian"}
         lu{"Luba-Katanga"}
@@ -407,6 +413,7 @@ en{
         nb{"Norwegian Bokmål"}
         nd{"North Ndebele"}
         nds{"Low German"}
+        nds_NL{"Low Saxon"}
         ne{"Nepali"}
         new{"Newari"}
         ng{"Ndonga"}
@@ -500,6 +507,7 @@ en{
         sco{"Scots"}
         sd{"Sindhi"}
         sdc{"Sassarese Sardinian"}
+        sdh{"Southern Kurdish"}
         se{"Northern Sami"}
         see{"Seneca"}
         seh{"Sena"}
@@ -646,12 +654,14 @@ en{
     }
     Languages%variant{
         ky{"Kirghiz"}
+        my{"Myanmar Language"}
         ps{"Pushto"}
         ug{"Uighur"}
     }
     Scripts{
         Afak{"Afaka"}
         Aghb{"Caucasian Albanian"}
+        Ahom{"Ahom"}
         Arab{"Arabic"}
         Armi{"Imperial Aramaic"}
         Armn{"Armenian"}
@@ -698,6 +708,7 @@ en{
         Hano{"Hanunoo"}
         Hans{"Simplified"}
         Hant{"Traditional"}
+        Hatr{"Hatran"}
         Hebr{"Hebrew"}
         Hira{"Hiragana"}
         Hluw{"Anatolian Hieroglyphs"}
@@ -744,6 +755,7 @@ en{
         Moon{"Moon"}
         Mroo{"Mro"}
         Mtei{"Meitei Mayek"}
+        Mult{"Multani"}
         Mymr{"Myanmar"}
         Narb{"Old North Arabian"}
         Nbat{"Nabataean"}
@@ -903,10 +915,21 @@ en{
             unihan{"Radical-Stroke Sort Order"}
             zhuyin{"Zhuyin Sort Order"}
         }
+        hc{
+            h11{"12 Hour System (0-11)"}
+            h12{"12 Hour System (1-12)"}
+            h23{"24 Hour System (0-23)"}
+            h24{"24 Hour System (1-24)"}
+        }
         lb{
             loose{"Loose Line Break Style"}
             normal{"Normal Line Break Style"}
             strict{"Strict Line Break Style"}
+        }
+        ms{
+            metric{"Metric System"}
+            uksystem{"Imperial Measurement System"}
+            ussystem{"US Measurement System"}
         }
         numbers{
             arab{"Arabic-Indic Digits"}
@@ -1034,7 +1057,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.13.48"}
+    Version{"2.1.16.69"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

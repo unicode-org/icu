@@ -46,10 +46,10 @@ RBNF_SOURCE = af.txt am.txt ar.txt az.txt\
  hi.txt hr.txt hu.txt hy.txt id.txt\
  is.txt it.txt ja.txt ka.txt kl.txt\
  km.txt ko.txt ky.txt lo.txt lt.txt\
- lv.txt mk.txt ms.txt mt.txt nb.txt\
- nl.txt nn.txt pl.txt pt.txt pt_PT.txt\
- ro.txt ru.txt se.txt sk.txt sl.txt\
- sq.txt sr.txt sr_Latn.txt sv.txt ta.txt\
- th.txt tr.txt uk.txt vi.txt zh.txt\
- zh_Hant.txt zh_Hant_HK.txt
+ lv.txt mk.txt ms.txt mt.txt my.txt\
+ nb.txt nl.txt nn.txt pl.txt pt.txt\
+ pt_PT.txt ro.txt ru.txt se.txt sk.txt\
+ sl.txt sq.txt sr.txt sr_Latn.txt sv.txt\
+ ta.txt th.txt tr.txt uk.txt vi.txt\
+ zh.txt zh_Hant.txt zh_Hant_HK.txt
 

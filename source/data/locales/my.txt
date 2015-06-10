@@ -132,7 +132,7 @@ my{
         }
         native{"mymr"}
     }
-    Version{"2.1.13.21"}
+    Version{"2.1.15.64"}
     calendar{
         generic{
             DateTimePatterns{
@@ -301,8 +301,6 @@ my{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"မွန်းတည့်"}
-            NoonMarkerNarrow{"မွန်းတည့်"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -405,6 +403,26 @@ my{
                         "ကြာသပတေး",
                         "သောကြာ",
                         "စနေ",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"မွန်းတည့်"}
+                    }
+                    wide{
+                        noon{"မွန်းတည့်"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"နေ့လည်"}
+                        evening1{"ညနေ"}
+                        midnight{"သန်းခေါင်ယံ"}
+                        morning1{"နံနက်"}
+                        night1{"ည"}
+                        noon{"မွန်းတည့်"}
                     }
                 }
             }

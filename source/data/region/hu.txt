@@ -312,5 +312,5 @@ hu{
         FK{"Falkland-szigetek (Malvin-szigetek)"}
         MK{"Macedónia (MVJK)"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.91"}
 }

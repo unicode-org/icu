@@ -314,5 +314,5 @@ bs{
         MK{"Makedonija (BJR)"}
         TL{"Istočni Timor"}
     }
-    Version{"2.1.13.46"}
+    Version{"2.1.15.60"}
 }

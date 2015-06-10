@@ -890,11 +890,11 @@ void MeasureFormatTest::TestSimplePer() {
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT, 1.0, *pound, *second, "1 lbps");
     helperTestSimplePer(
-            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *second, "2 lbps");
+            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *second, "2 lbsps");
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT, 1.0, *pound, *minute, "1 lb/min");
     helperTestSimplePer(
-            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *minute, "2 lb/min");
+            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *minute, "2 lbs/min");
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_NARROW, 1.0, *pound, *second, "1#/s");
@@ -907,25 +907,25 @@ void MeasureFormatTest::TestSimplePer() {
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT,
-            23.3, *pound, *second, "23.3 lbps",
+            23.3, *pound, *second, "23.3 lbsps",
             NumberFormat::kDecimalSeparatorField,
             2, 3);
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT,
-            23.3, *pound, *second, "23.3 lbps",
+            23.3, *pound, *second, "23.3 lbsps",
             NumberFormat::kIntegerField,
             0, 2);
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT,
-            23.3, *pound, *minute, "23.3 lb/min",
+            23.3, *pound, *minute, "23.3 lbs/min",
             NumberFormat::kDecimalSeparatorField,
             2, 3);
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT,
-            23.3, *pound, *minute, "23.3 lb/min",
+            23.3, *pound, *minute, "23.3 lbs/min",
             NumberFormat::kIntegerField,
             0, 2);
 }

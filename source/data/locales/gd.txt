@@ -205,7 +205,7 @@ gd{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.45"}
     calendar{
         generic{
             DateTimePatterns{
@@ -339,8 +339,6 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"meadhan-latha"}
-            NoonMarkerNarrow{"f"}
             appendItems{
                 Timezone{"{0} {1}"}
             }

@@ -232,7 +232,7 @@ kea{
             latn{"Numerus Arabikus"}
         }
     }
-    Version{"2.1.10.42"}
+    Version{"2.1.15.45"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Skrita: {0}"}

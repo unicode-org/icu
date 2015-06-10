@@ -986,7 +986,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.13.4"}
+    Version{"2.1.15.60"}
     codePatterns{
         language{"Sprache: {0}"}
         script{"Schrift: {0}"}

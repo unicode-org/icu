@@ -10,8 +10,8 @@ th{
     RBNFRules{
         OrdinalRules{
             "%digits-ordinal:",
-            "-x: \u0E17\u0E35\u0E48\u2212>#,##0>;",
-            "0: \u0E17\u0E35\u0E48\u200B=#,##0=;",
+            "-x: \u0E17\u0E35\u0E48\u00A0\u2212>#,##0>;",
+            "0: \u0E17\u0E35\u0E48\u00A0=#,##0=;",
         }
         SpelloutRules{
             "%spellout-numbering-year:",
@@ -49,5 +49,5 @@ th{
             "0: \u0E17\u0E35\u0E48\u200B=%spellout-cardinal=;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.1.15.40"}
 }

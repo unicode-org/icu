@@ -885,7 +885,7 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     codePatterns{
         language{"언어: {0}"}
         script{"스크립트: {0}"}

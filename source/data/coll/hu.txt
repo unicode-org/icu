@@ -50,7 +50,7 @@ hu{
                 "&Zs<<<Zzs/zs"
                 "&ZS<<<ZZS/ZS"
             }
-            Version{"27.0.1"}
+            Version{"28"}
         }
     }
 }

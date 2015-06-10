@@ -207,7 +207,7 @@ sk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.9"}
     calendar{
         generic{
             DateTimePatterns{
@@ -363,12 +363,12 @@ sk{
         }
         gregorian{
             AmPmMarkers{
-                "dopoludnia",
-                "odpoludnia",
+                "AM",
+                "PM",
             }
             AmPmMarkersNarrow{
-                "dop.",
-                "odp.",
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "H:mm:ss zzzz",
@@ -385,8 +385,6 @@ sk{
                 "{1}, {0}",
                 "{1} {0}",
             }
-            NoonMarker{"poludnie"}
-            NoonMarkerNarrow{"pol."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -506,6 +504,27 @@ sk{
                         "štvrtok",
                         "piatok",
                         "sobota",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"pol."}
+                    }
+                    wide{
+                        noon{"poludnie"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"popoludnie"}
+                        evening1{"večer"}
+                        midnight{"polnoc"}
+                        morning1{"ráno"}
+                        morning2{"dopoludnie"}
+                        night1{"noc"}
+                        noon{"poludnie"}
                     }
                 }
             }

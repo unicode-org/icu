@@ -781,7 +781,7 @@ mr{
         PINYIN{"पिनयिन रोमनायझेशन"}
         WADEGILE{"वादे-गिलेस रोमनायझेशन"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपी: {0}"}

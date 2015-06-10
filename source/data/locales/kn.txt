@@ -163,7 +163,7 @@ kn{
         minimumGroupingDigits{"1"}
         native{"knda"}
     }
-    Version{"2.1.13.51"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -340,8 +340,6 @@ kn{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"ಮಧ್ಯಾಹ್ನ"}
-            NoonMarkerNarrow{"ಮ"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -459,6 +457,26 @@ kn{
                         "ಗುರುವಾರ",
                         "ಶುಕ್ರವಾರ",
                         "ಶನಿವಾರ",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"ಮ"}
+                    }
+                    wide{
+                        noon{"ಮಧ್ಯಾಹ್ನ"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"ಮಧ್ಯಾಹ್ನ"}
+                        evening1{"ಸಂಜೆ"}
+                        midnight{"ಮಧ್ಯರಾತ್ರಿ"}
+                        morning1{"ಬೆಳಗ್ಗೆ"}
+                        night1{"ರಾತ್ರಿ"}
+                        noon{"ಮಧ್ಯಾಹ್ನ"}
                     }
                 }
             }

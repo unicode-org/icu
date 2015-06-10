@@ -162,7 +162,7 @@ ta{
         native{"tamldec"}
         traditional{"taml"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         chinese{
             DateTimePatterns{
@@ -446,8 +446,6 @@ ta{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"நண்பகல்"}
-            NoonMarkerNarrow{"ம"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -565,6 +563,29 @@ ta{
                         "வியாழன்",
                         "வெள்ளி",
                         "சனி",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"ம"}
+                    }
+                    wide{
+                        noon{"நண்பகல்"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"மதியம்"}
+                        afternoon2{"பிற்பகல்"}
+                        evening1{"மாலை"}
+                        evening2{"அந்தி மாலை"}
+                        midnight{"நள்ளிரவு"}
+                        morning1{"அதிகாலை"}
+                        morning2{"காலை"}
+                        night1{"இரவு"}
+                        noon{"நன்பகல்"}
                     }
                 }
             }

@@ -938,7 +938,7 @@ id{
         VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.1"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

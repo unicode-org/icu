@@ -163,7 +163,7 @@ ka{
         native{"latn"}
         traditional{"geor"}
     }
-    Version{"2.1.13.22"}
+    Version{"2.1.15.60"}
     calendar{
         generic{
             DateTimePatterns{
@@ -336,8 +336,6 @@ ka{
                 "{1} {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"შუადღე"}
-            NoonMarkerNarrow{"შუადღე"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -451,6 +449,26 @@ ka{
                         "ხუთშაბათი",
                         "პარასკევი",
                         "შაბათი",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"შუადღე"}
+                    }
+                    wide{
+                        noon{"შუადღე"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"ნაშუადღევი"}
+                        evening1{"საღამო"}
+                        midnight{"შუაღამე"}
+                        morning1{"დილა"}
+                        night1{"ღამე"}
+                        noon{"შუადღე"}
                     }
                 }
             }

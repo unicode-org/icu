@@ -140,7 +140,7 @@ ug{
         }
         native{"arabext"}
     }
-    Version{"2.1.7.39"}
+    Version{"2.1.15.45"}
     calendar{
         buddhist{
             eras{
@@ -346,8 +346,6 @@ ug{
                 "{1}، {0}",
                 "{1}، {0}",
             }
-            NoonMarker{"چۈش"}
-            NoonMarkerNarrow{"چۈش"}
             appendItems{
                 Timezone{"{0} {1}"}
             }

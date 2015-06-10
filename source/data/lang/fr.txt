@@ -842,7 +842,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.13.46"}
+    Version{"2.1.16.1"}
     codePatterns{
         language{"langue : {0}"}
         script{"écriture : {0}"}

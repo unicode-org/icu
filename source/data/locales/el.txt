@@ -160,7 +160,7 @@ el{
         native{"latn"}
         traditional{"grek"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.16.8"}
     calendar{
         buddhist{
             eras{
@@ -188,7 +188,7 @@ el{
             availableFormats{
                 Ed{"E d"}
                 Gy{"y G"}
-                GyMMM{"MMM y G"}
+                GyMMM{"LLL y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 H{"HH"}
@@ -213,9 +213,9 @@ el{
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E, d/M/y GGGGG"}
-                yyyyMMM{"MMM y G"}
+                yyyyMMM{"LLL y G"}
                 yyyyMMMEd{"E, d MMM y G"}
-                yyyyMMMM{"MMMM y G"}
+                yyyyMMMM{"LLLL y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
                 yyyyQQQ{"G y QQQ"}
@@ -244,7 +244,7 @@ el{
                     d{"E, dd/MM – E, dd/MM"}
                 }
                 MMM{
-                    M{"MMM–MMM"}
+                    M{"LLL–LLL"}
                 }
                 MMMEd{
                     M{"E, dd MMM – E, dd MMM"}
@@ -293,8 +293,8 @@ el{
                     y{"E, dd/MM/y – E, dd/MM/y GGGGG"}
                 }
                 yMMM{
-                    M{"MMM–MMM y G"}
-                    y{"MMM y – MMM y G"}
+                    M{"LLL–LLL y G"}
+                    y{"LLL y – LLL y G"}
                 }
                 yMMMEd{
                     M{"E, dd MMM – E, dd MMM y G"}
@@ -302,8 +302,8 @@ el{
                     y{"E, dd MMM y – E, dd MMM y G"}
                 }
                 yMMMM{
-                    M{"MMMM–MMMM y G"}
-                    y{"MMMM y – MMMM y G"}
+                    M{"LLLL–LLLL y G"}
+                    y{"LLLL y – LLLL y G"}
                 }
                 yMMMd{
                     M{"dd MMM – dd MMM y G"}
@@ -341,8 +341,6 @@ el{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"μεσημέρι"}
-            NoonMarkerNarrow{"μεσ."}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -378,9 +376,9 @@ el{
                 y{"y"}
                 yM{"M/y"}
                 yMEd{"E, d/M/y"}
-                yMMM{"MMM y"}
+                yMMM{"LLL y"}
                 yMMMEd{"E, d MMM y"}
-                yMMMM{"MMMM y"}
+                yMMMM{"LLLL y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"y QQQ"}
@@ -464,6 +462,25 @@ el{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"μεσ."}
+                    }
+                    wide{
+                        noon{"μεσημέρι"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"μεσημέρι"}
+                        evening1{"απόγευμα"}
+                        morning1{"πρωί"}
+                        night1{"βράδυ"}
+                        noon{"μεσημέρι"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "π.Χ.",
@@ -505,7 +522,7 @@ el{
                     d{"E, dd/MM – E, dd/MM"}
                 }
                 MMM{
-                    M{"MMM–MMM"}
+                    M{"LLL–LLL"}
                 }
                 MMMEd{
                     M{"E, dd MMM – E, dd MMM"}
@@ -554,8 +571,8 @@ el{
                     y{"E, dd/MM/y – E, dd/MM/y"}
                 }
                 yMMM{
-                    M{"MMM–MMM y"}
-                    y{"MMM y – MMM y"}
+                    M{"LLL–LLL y"}
+                    y{"LLL y – LLL y"}
                 }
                 yMMMEd{
                     M{"E, dd MMM – E, dd MMM y"}
@@ -563,8 +580,8 @@ el{
                     y{"E, dd MMM y – E, dd MMM y"}
                 }
                 yMMMM{
-                    M{"MMMM–MMMM y"}
-                    y{"MMMM y – MMMM y"}
+                    M{"LLLL–LLLL y"}
+                    y{"LLLL y – LLLL y"}
                 }
                 yMMMd{
                     M{"dd MMM – dd MMM y"}

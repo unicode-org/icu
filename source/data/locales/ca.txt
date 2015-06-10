@@ -159,7 +159,7 @@ ca{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.80"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -589,8 +589,6 @@ ca{
                 "{1} , {0}",
                 "{1} {0}",
             }
-            NoonMarker{"migdia"}
-            NoonMarkerNarrow{"md"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -715,6 +713,28 @@ ca{
                     }
                 }
             }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"md"}
+                    }
+                    wide{
+                        noon{"migdia"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"migdia"}
+                        afternoon2{"tarda"}
+                        evening1{"vespre"}
+                        midnight{"mitjanit"}
+                        morning1{"matinada"}
+                        morning2{"matí"}
+                        night1{"nit"}
+                        noon{"migdia"}
+                    }
+                }
+            }
             eras{
                 abbreviated{
                     "aC",
@@ -729,8 +749,8 @@ ca{
                     "dC",
                 }
                 narrow%variant{
-                    "a. de la n. e.",
-                    "de la n.e.",
+                    "AEC",
+                    "EC",
                 }
                 wide{
                     "abans de Crist",

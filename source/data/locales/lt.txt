@@ -210,7 +210,7 @@ lt{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.13.46"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             eras{
@@ -1307,8 +1307,6 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"perpiet"}
-            NoonMarkerNarrow{"perpiet"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -1432,6 +1430,26 @@ lt{
                         "ketvirtadienis",
                         "penktadienis",
                         "šeštadienis",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"perpiet"}
+                    }
+                    wide{
+                        noon{"perpiet"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"diena"}
+                        evening1{"vakaras"}
+                        midnight{"vidurnaktis"}
+                        morning1{"rytas"}
+                        night1{"naktis"}
+                        noon{"vidurdienis"}
                     }
                 }
             }

@@ -207,7 +207,7 @@ pl{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             eras{
@@ -602,8 +602,6 @@ pl{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            NoonMarker{"w południe"}
-            NoonMarkerNarrow{"n"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -729,6 +727,32 @@ pl{
                         "czwartek",
                         "piątek",
                         "sobota",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    narrow{
+                        noon{"n"}
+                    }
+                    wide{
+                        afternoon1{"po południu"}
+                        evening1{"wieczorem"}
+                        morning1{"rano"}
+                        morning2{"przed południem"}
+                        night1{"w nocy"}
+                        noon{"w południe"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"popołudnie"}
+                        evening1{"wieczór"}
+                        midnight{"północ"}
+                        morning1{"rano"}
+                        morning2{"przedpołudnie"}
+                        night1{"noc"}
+                        noon{"południe"}
                     }
                 }
             }

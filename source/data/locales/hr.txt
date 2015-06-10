@@ -183,7 +183,7 @@ hr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.12.94"}
+    Version{"2.1.15.60"}
     calendar{
         buddhist{
             eras{
@@ -527,9 +527,6 @@ hr{
                 "{1} {0}",
                 "{1} {0}",
             }
-            NoonMarker{"podne"}
-            NoonMarkerAbbr{"podne"}
-            NoonMarkerNarrow{"P"}
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -648,6 +645,33 @@ hr{
                         "četvrtak",
                         "petak",
                         "subota",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    abbreviated{
+                        noon{"podne"}
+                    }
+                    narrow{
+                        afternoon1{"popodne"}
+                        evening1{"navečer"}
+                        morning1{"ujutro"}
+                        night1{"noću"}
+                        noon{"P"}
+                    }
+                    wide{
+                        noon{"podne"}
+                    }
+                }
+                stand-alone{
+                    wide{
+                        afternoon1{"popodne"}
+                        evening1{"večer"}
+                        midnight{"ponoć"}
+                        morning1{"jutro"}
+                        night1{"noć"}
+                        noon{"podne"}
                     }
                 }
             }
