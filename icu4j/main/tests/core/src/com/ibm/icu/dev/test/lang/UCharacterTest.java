@@ -1844,7 +1844,7 @@ public final class UCharacterTest extends TestFmwk
 
             { 0x0149, UProperty.DEPRECATED, 1 },         /* changed in Unicode 5.2 */
             { 0x0341, UProperty.DEPRECATED, 0 },        /* changed in Unicode 5.2 */
-            { 0xe0041, UProperty.DEPRECATED, 1 },       /* Changed from Unicode 5 to 5.1 */
+            { 0xe0001, UProperty.DEPRECATED, 1 },       /* Changed from Unicode 5 to 5.1 */
             { 0xe0100, UProperty.DEPRECATED, 0 },
 
             { 0x00a0, UProperty.GRAPHEME_BASE, 1 },
