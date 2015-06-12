@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -2395,7 +2395,7 @@ TestAdditionalProperties() {
 
         { 0x0149, UCHAR_DEPRECATED, TRUE },         /* changed in Unicode 5.2 */
         { 0x0341, UCHAR_DEPRECATED, FALSE },        /* changed in Unicode 5.2 */
-        { 0xe0041, UCHAR_DEPRECATED, TRUE },        /* changed from Unicode 5 to 5.1 */
+        { 0xe0001, UCHAR_DEPRECATED, TRUE },        /* changed from Unicode 5 to 5.1 */
         { 0xe0100, UCHAR_DEPRECATED, FALSE },
 
         { 0x00a0, UCHAR_GRAPHEME_BASE, TRUE },
