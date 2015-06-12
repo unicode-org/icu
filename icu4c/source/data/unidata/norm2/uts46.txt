@@ -1,6 +1,6 @@
 # Original file:
 # IdnaMappingTable-8.0.0.txt
-# Date: 2015-02-06 12:20:37 GMT [MD]
+# Date: 2015-05-02 12:42:14 GMT [MD]
 #
 # Unicode IDNA Compatible Preprocessing (UTS #46)
 # Copyright (c) 1991-2015 Unicode, Inc.
@@ -1543,10 +1543,15 @@
 # 1380..138F  valid                     # 4.1  ETHIOPIC SYLLABLE SEBATBEIT MWA..ETHIOPIC SYLLABLE PWE
 # 1390..1399  valid                     # 4.1  ETHIOPIC TONAL MARK YIZET..ETHIOPIC TONAL MARK KURT
 139A..139F    >FFFD                     # NA   <reserved-139A>..<reserved-139F>
-13A0..13F4    >FFFD                     # 3.0  CHEROKEE LETTER A..CHEROKEE LETTER YV
-13F5          >13FD                     # 8.0  CHEROKEE LETTER MV
+# 13A0..13F4  valid                     # 3.0  CHEROKEE LETTER A..CHEROKEE LETTER YV
+# 13F5        valid                     # 8.0  CHEROKEE LETTER MV
 13F6..13F7    >FFFD                     # NA   <reserved-13F6>..<reserved-13F7>
-# 13F8..13FD  valid                     # 8.0  CHEROKEE SMALL LETTER YE..CHEROKEE SMALL LETTER MV
+13F8          >13F0                     # 8.0  CHEROKEE SMALL LETTER YE
+13F9          >13F1                     # 8.0  CHEROKEE SMALL LETTER YI
+13FA          >13F2                     # 8.0  CHEROKEE SMALL LETTER YO
+13FB          >13F3                     # 8.0  CHEROKEE SMALL LETTER YU
+13FC          >13F4                     # 8.0  CHEROKEE SMALL LETTER YV
+13FD          >13F5                     # 8.0  CHEROKEE SMALL LETTER MV
 13FE..13FF    >FFFD                     # NA   <reserved-13FE>..<reserved-13FF>
 # 1400        valid                     # 5.2  CANADIAN SYLLABICS HYPHEN
 # 1401..166C  valid                     # 3.0  CANADIAN SYLLABICS E..CANADIAN SYLLABICS CARRIER TTSA
@@ -4160,7 +4165,86 @@ AB5F          >AB52                     # 7.0  MODIFIER LETTER SMALL U WITH LEFT
 # AB60..AB63  valid                     # 8.0  LATIN SMALL LETTER SAKHA YAT..LATIN SMALL LETTER UO
 # AB64..AB65  valid                     # 7.0  LATIN SMALL LETTER INVERTED ALPHA..GREEK LETTER SMALL CAPITAL OMEGA
 AB66..AB6F    >FFFD                     # NA   <reserved-AB66>..<reserved-AB6F>
-# AB70..ABBF  valid                     # 8.0  CHEROKEE SMALL LETTER A..CHEROKEE SMALL LETTER YA
+AB70          >13A0                     # 8.0  CHEROKEE SMALL LETTER A
+AB71          >13A1                     # 8.0  CHEROKEE SMALL LETTER E
+AB72          >13A2                     # 8.0  CHEROKEE SMALL LETTER I
+AB73          >13A3                     # 8.0  CHEROKEE SMALL LETTER O
+AB74          >13A4                     # 8.0  CHEROKEE SMALL LETTER U
+AB75          >13A5                     # 8.0  CHEROKEE SMALL LETTER V
+AB76          >13A6                     # 8.0  CHEROKEE SMALL LETTER GA
+AB77          >13A7                     # 8.0  CHEROKEE SMALL LETTER KA
+AB78          >13A8                     # 8.0  CHEROKEE SMALL LETTER GE
+AB79          >13A9                     # 8.0  CHEROKEE SMALL LETTER GI
+AB7A          >13AA                     # 8.0  CHEROKEE SMALL LETTER GO
+AB7B          >13AB                     # 8.0  CHEROKEE SMALL LETTER GU
+AB7C          >13AC                     # 8.0  CHEROKEE SMALL LETTER GV
+AB7D          >13AD                     # 8.0  CHEROKEE SMALL LETTER HA
+AB7E          >13AE                     # 8.0  CHEROKEE SMALL LETTER HE
+AB7F          >13AF                     # 8.0  CHEROKEE SMALL LETTER HI
+AB80          >13B0                     # 8.0  CHEROKEE SMALL LETTER HO
+AB81          >13B1                     # 8.0  CHEROKEE SMALL LETTER HU
+AB82          >13B2                     # 8.0  CHEROKEE SMALL LETTER HV
+AB83          >13B3                     # 8.0  CHEROKEE SMALL LETTER LA
+AB84          >13B4                     # 8.0  CHEROKEE SMALL LETTER LE
+AB85          >13B5                     # 8.0  CHEROKEE SMALL LETTER LI
+AB86          >13B6                     # 8.0  CHEROKEE SMALL LETTER LO
+AB87          >13B7                     # 8.0  CHEROKEE SMALL LETTER LU
+AB88          >13B8                     # 8.0  CHEROKEE SMALL LETTER LV
+AB89          >13B9                     # 8.0  CHEROKEE SMALL LETTER MA
+AB8A          >13BA                     # 8.0  CHEROKEE SMALL LETTER ME
+AB8B          >13BB                     # 8.0  CHEROKEE SMALL LETTER MI
+AB8C          >13BC                     # 8.0  CHEROKEE SMALL LETTER MO
+AB8D          >13BD                     # 8.0  CHEROKEE SMALL LETTER MU
+AB8E          >13BE                     # 8.0  CHEROKEE SMALL LETTER NA
+AB8F          >13BF                     # 8.0  CHEROKEE SMALL LETTER HNA
+AB90          >13C0                     # 8.0  CHEROKEE SMALL LETTER NAH
+AB91          >13C1                     # 8.0  CHEROKEE SMALL LETTER NE
+AB92          >13C2                     # 8.0  CHEROKEE SMALL LETTER NI
+AB93          >13C3                     # 8.0  CHEROKEE SMALL LETTER NO
+AB94          >13C4                     # 8.0  CHEROKEE SMALL LETTER NU
+AB95          >13C5                     # 8.0  CHEROKEE SMALL LETTER NV
+AB96          >13C6                     # 8.0  CHEROKEE SMALL LETTER QUA
+AB97          >13C7                     # 8.0  CHEROKEE SMALL LETTER QUE
+AB98          >13C8                     # 8.0  CHEROKEE SMALL LETTER QUI
+AB99          >13C9                     # 8.0  CHEROKEE SMALL LETTER QUO
+AB9A          >13CA                     # 8.0  CHEROKEE SMALL LETTER QUU
+AB9B          >13CB                     # 8.0  CHEROKEE SMALL LETTER QUV
+AB9C          >13CC                     # 8.0  CHEROKEE SMALL LETTER SA
+AB9D          >13CD                     # 8.0  CHEROKEE SMALL LETTER S
+AB9E          >13CE                     # 8.0  CHEROKEE SMALL LETTER SE
+AB9F          >13CF                     # 8.0  CHEROKEE SMALL LETTER SI
+ABA0          >13D0                     # 8.0  CHEROKEE SMALL LETTER SO
+ABA1          >13D1                     # 8.0  CHEROKEE SMALL LETTER SU
+ABA2          >13D2                     # 8.0  CHEROKEE SMALL LETTER SV
+ABA3          >13D3                     # 8.0  CHEROKEE SMALL LETTER DA
+ABA4          >13D4                     # 8.0  CHEROKEE SMALL LETTER TA
+ABA5          >13D5                     # 8.0  CHEROKEE SMALL LETTER DE
+ABA6          >13D6                     # 8.0  CHEROKEE SMALL LETTER TE
+ABA7          >13D7                     # 8.0  CHEROKEE SMALL LETTER DI
+ABA8          >13D8                     # 8.0  CHEROKEE SMALL LETTER TI
+ABA9          >13D9                     # 8.0  CHEROKEE SMALL LETTER DO
+ABAA          >13DA                     # 8.0  CHEROKEE SMALL LETTER DU
+ABAB          >13DB                     # 8.0  CHEROKEE SMALL LETTER DV
+ABAC          >13DC                     # 8.0  CHEROKEE SMALL LETTER DLA
+ABAD          >13DD                     # 8.0  CHEROKEE SMALL LETTER TLA
+ABAE          >13DE                     # 8.0  CHEROKEE SMALL LETTER TLE
+ABAF          >13DF                     # 8.0  CHEROKEE SMALL LETTER TLI
+ABB0          >13E0                     # 8.0  CHEROKEE SMALL LETTER TLO
+ABB1          >13E1                     # 8.0  CHEROKEE SMALL LETTER TLU
+ABB2          >13E2                     # 8.0  CHEROKEE SMALL LETTER TLV
+ABB3          >13E3                     # 8.0  CHEROKEE SMALL LETTER TSA
+ABB4          >13E4                     # 8.0  CHEROKEE SMALL LETTER TSE
+ABB5          >13E5                     # 8.0  CHEROKEE SMALL LETTER TSI
+ABB6          >13E6                     # 8.0  CHEROKEE SMALL LETTER TSO
+ABB7          >13E7                     # 8.0  CHEROKEE SMALL LETTER TSU
+ABB8          >13E8                     # 8.0  CHEROKEE SMALL LETTER TSV
+ABB9          >13E9                     # 8.0  CHEROKEE SMALL LETTER WA
+ABBA          >13EA                     # 8.0  CHEROKEE SMALL LETTER WE
+ABBB          >13EB                     # 8.0  CHEROKEE SMALL LETTER WI
+ABBC          >13EC                     # 8.0  CHEROKEE SMALL LETTER WO
+ABBD          >13ED                     # 8.0  CHEROKEE SMALL LETTER WU
+ABBE          >13EE                     # 8.0  CHEROKEE SMALL LETTER WV
+ABBF          >13EF                     # 8.0  CHEROKEE SMALL LETTER YA
 # ABC0..ABEA  valid                     # 5.2  MEETEI MAYEK LETTER KOK..MEETEI MAYEK VOWEL SIGN NUNG
 # ABEB        valid                     # 5.2  MEETEI MAYEK CHEIKHEI
 # ABEC..ABED  valid                     # 5.2  MEETEI MAYEK LUM IYEK..MEETEI MAYEK APUN IYEK
@@ -7465,7 +7549,7 @@ FFFE..FFFF    >FFFD                     # 1.1  <noncharacter-FFFE>..<noncharacte
 # 1F3D4..1F3DFvalid                     # 7.0  SNOW CAPPED MOUNTAIN..STADIUM
 # 1F3E0..1F3F0valid                     # 6.0  HOUSE BUILDING..EUROPEAN CASTLE
 # 1F3F1..1F3F7valid                     # 7.0  WHITE PENNANT..LABEL
-# 1F3F8..1F3FFvalid                     # 8.0  BADMINTON RACQUET AND BIRDIE..EMOJI MODIFIER FITZPATRICK TYPE-6
+# 1F3F8..1F3FFvalid                     # 8.0  BADMINTON RACQUET AND SHUTTLECOCK..EMOJI MODIFIER FITZPATRICK TYPE-6
 # 1F400..1F43Evalid                     # 6.0  RAT..PAW PRINTS
 # 1F43F       valid                     # 7.0  CHIPMUNK
 # 1F440       valid                     # 6.0  EYES
@@ -7534,9 +7618,7 @@ FFFE..FFFF    >FFFD                     # 1.1  <noncharacter-FFFE>..<noncharacte
 # 1F860..1F887valid                     # 7.0  WIDE-HEADED LEFTWARDS LIGHT BARB ARROW..WIDE-HEADED SOUTH WEST VERY HEAVY BARB ARROW
 1F888..1F88F  >FFFD                     # NA   <reserved-1F888>..<reserved-1F88F>
 # 1F890..1F8ADvalid                     # 7.0  LEFTWARDS TRIANGLE ARROWHEAD..WHITE ARROW SHAFT WIDTH TWO THIRDS
-1F8AE..1F8FF  >FFFD                     # NA   <reserved-1F8AE>..<reserved-1F8FF>
-# 1F900       valid                     # 8.0  DHYANI BUDDHA
-1F901..1F90F  >FFFD                     # NA   <reserved-1F901>..<reserved-1F90F>
+1F8AE..1F90F  >FFFD                     # NA   <reserved-1F8AE>..<reserved-1F90F>
 # 1F910..1F918valid                     # 8.0  ZIPPER-MOUTH FACE..SIGN OF THE HORNS
 1F919..1F97F  >FFFD                     # NA   <reserved-1F919>..<reserved-1F97F>
 # 1F980..1F984valid                     # 8.0  CRAB..UNICORN FACE
