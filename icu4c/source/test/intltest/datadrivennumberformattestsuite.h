@@ -19,7 +19,7 @@ class IntlTest;
 /**
  * Performs various in-depth test on NumberFormat
  **/
-class DataDrivenNumberFormatTestSuite : IntlTest {
+class DataDrivenNumberFormatTestSuite : public IntlTest {
 
  public:
      DataDrivenNumberFormatTestSuite() {
