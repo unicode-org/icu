@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2012, International Business Machines
+ * Copyright (C) 2000-2015, International Business Machines
  * Corporation and others. All Rights Reserved.
  *********************************************************************
  */
@@ -1021,6 +1021,15 @@ public class ChineseCalendar extends Calendar {
      */
     public String getType() {
         return "chinese";
+    }
+
+    /**
+     * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public boolean haveDefaultCentury() {
+        return false;
     }
 
     /**

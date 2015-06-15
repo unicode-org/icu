@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2236,7 +2236,7 @@ public class SimpleDateFormat extends DateFormat {
                 // is treated literally:  "2250", "-1", "1", "002".
                 /* 'yy' is the only special case, 'y' is interpreted as number. [Richard/GCL]*/
                 /* Skip this for Chinese calendar, moved from ChineseDateFormat */
-                if (count == 2 && (pos.getIndex() - start) == 2 && !cal.getType().equals("chinese")
+                if (count == 2 && (pos.getIndex() - start) == 2 && cal.haveDefaultCentury()
                     && UCharacter.isDigit(text.charAt(start))
                     && UCharacter.isDigit(text.charAt(start+1)))
                     {
