@@ -8184,6 +8184,7 @@ void NumberFormatTest::TestNumberFormatTestTuple() {
 void
 NumberFormatTest::TestDataDriven() {
     NumberFormatTestDataDriven dd;
+    dd.setCaller(this);
     dd.run("numberformattestspecification.txt", FALSE);
 }
 
