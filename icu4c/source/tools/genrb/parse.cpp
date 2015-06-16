@@ -73,6 +73,7 @@
 #define CLOSESQBRACKET   0x005D
 
 using icu::CharString;
+using icu::LocalMemory;
 using icu::LocalPointer;
 using icu::LocalUCHARBUFPointer;
 using icu::StringPiece;
@@ -1585,15 +1586,8 @@ parseInteger(ParseState* state, char *tag, uint32_t startline, const struct UStr
 static struct SResource *
 parseImport(ParseState* state, char *tag, uint32_t startline, const struct UString* comment, UErrorCode *status)
 {
-    struct SResource *result;
-    FileStream       *file;
-    int32_t           len;
-    uint8_t          *data;
-    char             *filename;
     uint32_t          line;
-    char     *fullname = NULL;
-    filename = getInvariantString(state, &line, NULL, status);
-
+    LocalMemory<char> filename(getInvariantString(state, &line, NULL, status));
     if (U_FAILURE(*status))
     {
         return NULL;
@@ -1603,7 +1597,6 @@ parseImport(ParseState* state, char *tag, uint32_t startline, const struct UStri
 
     if (U_FAILURE(*status))
     {
-        uprv_free(filename);
         return NULL;
     }
 
@@ -1612,90 +1605,36 @@ parseImport(ParseState* state, char *tag, uint32_t startline, const struct UStri
     }
 
     /* Open the input file for reading */
-    if (state->inputdir == NULL)
-    {
-#if 1
-        /* 
-         * Always save file file name, even if there's
-         * no input directory specified. MIGHT BREAK SOMETHING
-         */
-        int32_t filenameLength = uprv_strlen(filename);
-
-        fullname = (char *) uprv_malloc(filenameLength + 1);
-        uprv_strcpy(fullname, filename);
-#endif
-
-        file = T_FileStream_open(filename, "rb");
+    CharString fullname;
+    if (state->inputdir != NULL) {
+        fullname.append(state->inputdir, *status);
     }
-    else
-    {
-
-        int32_t  count     = (int32_t)uprv_strlen(filename);
-
-        if (state->inputdir[state->inputdirLength - 1] != U_FILE_SEP_CHAR)
-        {
-            fullname = (char *) uprv_malloc(state->inputdirLength + count + 2);
-
-            /* test for NULL */
-            if(fullname == NULL)
-            {
-                *status = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
-            }
-
-            uprv_strcpy(fullname, state->inputdir);
-
-            fullname[state->inputdirLength]      = U_FILE_SEP_CHAR;
-            fullname[state->inputdirLength + 1] = '\0';
-
-            uprv_strcat(fullname, filename);
-        }
-        else
-        {
-            fullname = (char *) uprv_malloc(state->inputdirLength + count + 1);
-
-            /* test for NULL */
-            if(fullname == NULL)
-            {
-                *status = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
-            }
-
-            uprv_strcpy(fullname, state->inputdir);
-            uprv_strcat(fullname, filename);
-        }
-
-        file = T_FileStream_open(fullname, "rb");
-
+    fullname.appendPathPart(filename.getAlias(), *status);
+    if (U_FAILURE(*status)) {
+        return NULL;
     }
 
+    FileStream *file = T_FileStream_open(fullname.data(), "rb");
     if (file == NULL)
     {
-        error(line, "couldn't open input file %s", filename);
+        error(line, "couldn't open input file %s", filename.getAlias());
         *status = U_FILE_ACCESS_ERROR;
         return NULL;
     }
 
-    len  = T_FileStream_size(file);
-    data = (uint8_t*)uprv_malloc(len * sizeof(uint8_t));
-    /* test for NULL */
-    if(data == NULL)
+    int32_t len  = T_FileStream_size(file);
+    LocalMemory<uint8_t> data;
+    if(data.allocateInsteadAndCopy(len) == NULL)
     {
         *status = U_MEMORY_ALLOCATION_ERROR;
         T_FileStream_close (file);
         return NULL;
     }
 
-    /* int32_t numRead = */ T_FileStream_read  (file, data, len);
+    /* int32_t numRead = */ T_FileStream_read(file, data.getAlias(), len);
     T_FileStream_close (file);
 
-    result = bin_open(state->bundle, tag, len, data, fullname, comment, status);
-
-    uprv_free(data);
-    uprv_free(filename);
-    uprv_free(fullname);
-
-    return result;
+    return bin_open(state->bundle, tag, len, data.getAlias(), fullname.data(), comment, status);
 }
 
 static struct SResource *
