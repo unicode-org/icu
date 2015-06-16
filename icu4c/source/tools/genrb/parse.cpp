@@ -1454,28 +1454,16 @@ parseIntVector(ParseState* state, char *tag, uint32_t startline, const struct US
 static struct SResource *
 parseBinary(ParseState* state, char *tag, uint32_t startline, const struct UString *comment, UErrorCode *status)
 {
-    struct SResource *result = NULL;
-    uint8_t          *value;
-    char             *string;
-    char              toConv[3] = {'\0', '\0', '\0'};
-    uint32_t          count;
-    uint32_t          i;
-    uint32_t          line;
-    char             *stopstring;
-    uint32_t          len;
-
-    string = getInvariantString(state, &line, NULL, status);
-
-    if (string == NULL || U_FAILURE(*status))
+    uint32_t line;
+    LocalMemory<char> string(getInvariantString(state, &line, NULL, status));
+    if (string.isNull() || U_FAILURE(*status))
     {
         return NULL;
     }
 
     expect(state, TOK_CLOSE_BRACE, NULL, NULL, NULL, status);
-
     if (U_FAILURE(*status))
     {
-        uprv_free(string);
         return NULL;
     }
 
@@ -1483,54 +1471,47 @@ parseBinary(ParseState* state, char *tag, uint32_t startline, const struct UStri
         printf(" binary %s at line %i \n",  (tag == NULL) ? "(null)" : tag, (int)startline);
     }
 
-    count = (uint32_t)uprv_strlen(string);
+    uint32_t count = (uint32_t)uprv_strlen(string.getAlias());
     if (count > 0){
         if((count % 2)==0){
-            value = static_cast<uint8_t *>(uprv_malloc(sizeof(uint8_t) * count));
-
-            if (value == NULL)
+            LocalMemory<uint8_t> value;
+            if (value.allocateInsteadAndCopy(count) == NULL)
             {
-                uprv_free(string);
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
 
-            for (i = 0; i < count; i += 2)
+            char toConv[3] = {'\0', '\0', '\0'};
+            for (uint32_t i = 0; i < count; i += 2)
             {
                 toConv[0] = string[i];
                 toConv[1] = string[i + 1];
 
+                char *stopstring;
                 value[i >> 1] = (uint8_t) uprv_strtoul(toConv, &stopstring, 16);
-                len=(uint32_t)(stopstring-toConv);
+                uint32_t len=(uint32_t)(stopstring-toConv);
 
-                if(len!=uprv_strlen(toConv))
+                if(len!=2)
                 {
-                    uprv_free(string);
                     *status=U_INVALID_CHAR_FOUND;
                     return NULL;
                 }
             }
 
-            result = bin_open(state->bundle, tag, (i >> 1), value,NULL, comment, status);
-
-            uprv_free(value);
+            return bin_open(state->bundle, tag, count >> 1, value.getAlias(), NULL, comment, status);
         }
         else
         {
             *status = U_INVALID_CHAR_FOUND;
-            uprv_free(string);
-            error(line, "Encountered invalid binary string");
+            error(line, "Encountered invalid binary value (length is odd)");
             return NULL;
         }
     }
     else
     {
-        result = bin_open(state->bundle, tag, 0, NULL, "",comment,status);
-        warning(startline, "Encountered empty binary tag");
+        warning(startline, "Encountered empty binary value");
+        return bin_open(state->bundle, tag, 0, NULL, "", comment, status);
     }
-    uprv_free(string);
-
-    return result;
 }
 
 static struct SResource *
