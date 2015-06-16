@@ -10,8 +10,6 @@
 #include "unicode/localpointer.h"
 #include "ustrfmt.h"
 
-U_DEFINE_LOCAL_OPEN_POINTER(LocalUCHARBUFPointer, UCHARBUF, ucbuf_close);
-
 static UBool isCROrLF(UChar c) { return c == 0xa || c == 0xd; }
 static UBool isSpace(UChar c) { return c == 9 || c == 0x20 || c == 0x3000; }
 
