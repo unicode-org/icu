@@ -39,10 +39,12 @@
 #include "reslist.h"
 #include "rbt_pars.h"
 #include "genrb.h"
+#include "unicode/stringpiece.h"
 #include "unicode/ustring.h"
 #include "unicode/uscript.h"
 #include "unicode/utf16.h"
 #include "unicode/putil.h"
+#include "charstr.h"
 #include "collationbuilder.h"
 #include "collationdata.h"
 #include "collationdatareader.h"
@@ -70,7 +72,10 @@
 #define OPENSQBRACKET    0x005B
 #define CLOSESQBRACKET   0x005D
 
+using icu::CharString;
 using icu::LocalPointer;
+using icu::LocalUCHARBUFPointer;
+using icu::StringPiece;
 using icu::UnicodeString;
 
 struct Lookahead
@@ -690,47 +695,20 @@ GenrbImporter::getRules(
         const char *localeID, const char *collationType,
         UnicodeString &rules,
         const char *& /*errorReason*/, UErrorCode &errorCode) {
-    struct SRBRoot *data         = NULL;
-    UCHARBUF       *ucbuf        = NULL;
-    int localeLength = strlen(localeID);
-    char* filename = (char*)uprv_malloc(localeLength+5);
-    char           *inputDirBuf  = NULL;
-    char           *openFileName = NULL;
-    const char* cp = "";
-    int32_t i = 0;
-    int32_t dirlen  = 0;
-    int32_t filelen = 0;
-    struct SResource* root;
-    struct SResource* collations;
-    struct SResource* collation;
-    struct SResource* sequence;
-
-    memcpy(filename, localeID, localeLength);
-    for(i = 0; i < localeLength; i++){
+    CharString filename(localeID, errorCode);
+    for(int32_t i = 0; i < filename.length(); i++){
         if(filename[i] == '-'){
-            filename[i] = '_';
+            filename.data()[i] = '_';
         }
     }
-    filename[localeLength]   = '.';
-    filename[localeLength+1] = 't';
-    filename[localeLength+2] = 'x';
-    filename[localeLength+3] = 't';
-    filename[localeLength+4] = 0;
-
-
+    filename.append(".txt", errorCode);
     if (U_FAILURE(errorCode)) {
         return;
     }
-    if(filename==NULL){
-        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }else{
-        filelen = (int32_t)uprv_strlen(filename);
-    }
+    CharString inputDirBuf;
+    CharString openFileName;
     if(inputDir == NULL) {
-        const char *filenameBegin = uprv_strrchr(filename, U_FILE_SEP_CHAR);
-        openFileName = (char *) uprv_malloc(dirlen + filelen + 2);
-        openFileName[0] = '\0';
+        const char *filenameBegin = uprv_strrchr(filename.data(), U_FILE_SEP_CHAR);
         if (filenameBegin != NULL) {
             /*
              * When a filename ../../../data/root.txt is specified,
@@ -738,36 +716,19 @@ GenrbImporter::getRules(
              * This is very important when the resource file includes
              * another file, like UCARules.txt or thaidict.brk.
              */
-            int32_t filenameSize = (int32_t)(filenameBegin - filename + 1);
-            inputDirBuf = (char *)uprv_malloc(filenameSize);
-
-            /* test for NULL */
-            if(inputDirBuf == NULL) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-                goto finish;
-            }
-
-            uprv_strncpy(inputDirBuf, filename, filenameSize);
-            inputDirBuf[filenameSize - 1] = 0;
-            inputDir = inputDirBuf;
-            dirlen  = (int32_t)uprv_strlen(inputDir);
+            StringPiece dir = filename.toStringPiece();
+            const char *filenameLimit = filename.data() + filename.length();
+            dir.remove_suffix((int32_t)(filenameLimit - filenameBegin));
+            inputDirBuf.append(dir, errorCode);
+            inputDir = inputDirBuf.data();
         }
     }else{
-        dirlen  = (int32_t)uprv_strlen(inputDir);
+        int32_t dirlen  = (int32_t)uprv_strlen(inputDir);
 
-        if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
-            openFileName = (char *) uprv_malloc(dirlen + filelen + 2);
-
-            /* test for NULL */
-            if(openFileName == NULL) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-                goto finish;
-            }
-
-            openFileName[0] = '\0';
+        if((filename[0] != U_FILE_SEP_CHAR) && (inputDir[dirlen-1] !='.')) {
             /*
              * append the input dir to openFileName if the first char in
-             * filename is not file seperation char and the last char input directory is  not '.'.
+             * filename is not file separator char and the last char input directory is  not '.'.
              * This is to support :
              * genrb -s. /home/icu/data
              * genrb -s. icu/data
@@ -776,69 +737,47 @@ GenrbImporter::getRules(
              * user should use
              * genrb -s. icu/data  --- start from CWD and look in icu/data dir
              */
-            if( (filename[0] != U_FILE_SEP_CHAR) && (inputDir[dirlen-1] !='.')){
-                uprv_strcpy(openFileName, inputDir);
-                openFileName[dirlen]     = U_FILE_SEP_CHAR;
+            openFileName.append(inputDir, dirlen, errorCode);
+            if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
+                openFileName.append(U_FILE_SEP_CHAR, errorCode);
             }
-            openFileName[dirlen + 1] = '\0';
-        } else {
-            openFileName = (char *) uprv_malloc(dirlen + filelen + 1);
-
-            /* test for NULL */
-            if(openFileName == NULL) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-                goto finish;
-            }
-
-            uprv_strcpy(openFileName, inputDir);
-
         }
     }
-    uprv_strcat(openFileName, filename);
-    /* printf("%s\n", openFileName);  */
-    errorCode = U_ZERO_ERROR;
-    ucbuf = ucbuf_open(openFileName, &cp,getShowWarning(),TRUE, &errorCode);
-
-    if(errorCode == U_FILE_ACCESS_ERROR) {
-
-        fprintf(stderr, "couldn't open file %s\n", openFileName == NULL ? filename : openFileName);
-        goto finish;
+    openFileName.append(filename, errorCode);
+    if(U_FAILURE(errorCode)) {
+        return;
     }
-    if (ucbuf == NULL || U_FAILURE(errorCode)) {
-        fprintf(stderr, "An error occured processing file %s. Error: %s\n", openFileName == NULL ? filename : openFileName,u_errorName(errorCode));
-        goto finish;
+    // printf("GenrbImporter::getRules(%s, %s) reads %s\n", localeID, collationType, openFileName.data());
+    const char* cp = "";
+    LocalUCHARBUFPointer ucbuf(
+            ucbuf_open(openFileName.data(), &cp, getShowWarning(), TRUE, &errorCode));
+    if(errorCode == U_FILE_ACCESS_ERROR) {
+        fprintf(stderr, "couldn't open file %s\n", openFileName.data());
+        return;
+    }
+    if (ucbuf.isNull() || U_FAILURE(errorCode)) {
+        fprintf(stderr, "An error occured processing file %s. Error: %s\n", openFileName.data(), u_errorName(errorCode));
+        return;
     }
 
     /* Parse the data into an SRBRoot */
-    data = parse(ucbuf, inputDir, outputDir, filename, FALSE, FALSE, &errorCode);
+    struct SRBRoot *data =
+            parse(ucbuf.getAlias(), inputDir, outputDir, filename.data(), FALSE, FALSE, &errorCode);
     if (U_FAILURE(errorCode)) {
-        goto finish;
+        return;
     }
 
-    root = data->fRoot;
-    collations = resLookup(root, "collations");
+    struct SResource *root = data->fRoot;
+    struct SResource *collations = resLookup(root, "collations");
     if (collations != NULL) {
-      collation = resLookup(collations, collationType);
+      struct SResource *collation = resLookup(collations, collationType);
       if (collation != NULL) {
-        sequence = resLookup(collation, "Sequence");
+        struct SResource *sequence = resLookup(collation, "Sequence");
         if (sequence != NULL) {
           // No string pointer aliasing so that we need not hold onto the resource bundle.
           rules.setTo(sequence->u.fString.fChars, sequence->u.fString.fLength);
         }
       }
-    }
-
-finish:
-    if (inputDirBuf != NULL) {
-        uprv_free(inputDirBuf);
-    }
-
-    if (openFileName != NULL) {
-        uprv_free(openFileName);
-    }
-
-    if(ucbuf) {
-        ucbuf_close(ucbuf);
     }
 }
 
@@ -1027,7 +966,7 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
             escape(parseError.postContext, postBuffer);
             error(line, "  error context: \"...%s\" ! \"%s...\"", preBuffer, postBuffer);
         }
-        if(isStrict()) {
+        if(isStrict() || t.isNull()) {
             *status = intStatus;
             res_close(result);
             return NULL;
