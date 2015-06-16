@@ -48,9 +48,6 @@
 #include "uvectr64.h"
 #include "writesrc.h"
 
-// TODO: Move to ucbuf.h
-U_DEFINE_LOCAL_OPEN_POINTER(LocalUCHARBUFPointer, UCHARBUF, ucbuf_close);
-
 class CodePointIterator;
 
 // TODO: try to share code with IntlTestCollator; for example, prettify(CollationKey)
