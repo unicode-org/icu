@@ -225,6 +225,12 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * For details see the description of storage models at the end of the class API docs
  * and in the User Guide chapter linked from there.
  *
+ * A UnicodeString is memmovable, that is,
+ * it can be copied byte for byte via memcpy() or memmove() or similar,
+ * as long as the original object
+ * is either abandoned without invoking its destructor
+ * or overwritten with the copy of a default-constructed UnicodeString.
+ *
  * The UnicodeString class is not suitable for subclassing.
  *
  * <p>For an overview of Unicode strings in C and C++ see the
