@@ -215,6 +215,16 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * similar functionality as the Java String and StringBuffer/StringBuilder classes.
  * It is a concrete implementation of the abstract class Replaceable (for transliteration).
  *
+ * A UnicodeString may also "alias" an external array of characters
+ * (that is, point to it, rather than own the array)
+ * whose lifetime must then at least match the lifetime of the aliasing object.
+ * This aliasing may be preserved when returning a UnicodeString by value,
+ * depending on the compiler and the function implementation,
+ * via Return Value Optimization (RVO) or the move assignment operator.
+ * (However, the copy assignment operator does not preserve aliasing.)
+ * For details see the description of storage models at the end of the class API docs
+ * and in the User Guide chapter linked from there.
+ *
  * The UnicodeString class is not suitable for subclassing.
  *
  * <p>For an overview of Unicode strings in C and C++ see the
@@ -273,7 +283,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * significant performance improvements.
  * Also, the internal buffer is accessible via special functions.
  * For details see the
- * <a href="http://icu-project.org/userguide/strings.html">User Guide Strings chapter</a>.</p>
+ * <a href="http://userguide.icu-project.org/strings#TOC-Maximizing-Performance-with-the-UnicodeString-Storage-Model">User Guide Strings chapter</a>.</p>
  *
  * @see utf.h
  * @see CharacterIterator
@@ -1847,9 +1857,20 @@ public:
   /**
    * Assignment operator.  Replace the characters in this UnicodeString
    * with the characters from <TT>srcText</TT>.
+   *
+   * Starting with ICU 2.4, the assignment operator and the copy constructor
+   * allocate a new buffer and copy the buffer contents even for readonly aliases.
+   * By contrast, the fastCopyFrom() function implements the old,
+   * more efficient but less safe behavior
+   * of making this string also a readonly alias to the same buffer.
+   *
+   * If the source object has an "open" buffer from getBuffer(minCapacity),
+   * then the copy is an empty string.
+   *
    * @param srcText The text containing the characters to replace
    * @return a reference to this
    * @stable ICU 2.0
+   * @see fastCopyFrom
    */
   UnicodeString &operator=(const UnicodeString &srcText);
 
@@ -1870,6 +1891,9 @@ public:
    * this UnicodeString does not exceed the lifetime of the aliased buffer
    * including its contents, for example for strings from resource bundles
    * or aliases to string constants.
+   *
+   * If the source object has an "open" buffer from getBuffer(minCapacity),
+   * then the copy is an empty string.
    *
    * @param src The text containing the characters to replace.
    * @return a reference to this
@@ -3171,8 +3195,19 @@ public:
 
   /**
    * Copy constructor.
+   *
+   * Starting with ICU 2.4, the assignment operator and the copy constructor
+   * allocate a new buffer and copy the buffer contents even for readonly aliases.
+   * By contrast, the fastCopyFrom() function implements the old,
+   * more efficient but less safe behavior
+   * of making this string also a readonly alias to the same buffer.
+   *
+   * If the source object has an "open" buffer from getBuffer(minCapacity),
+   * then the copy is an empty string.
+   *
    * @param that The UnicodeString object to copy.
    * @stable ICU 2.0
+   * @see fastCopyFrom
    */
   UnicodeString(const UnicodeString& that);
 
