@@ -3494,6 +3494,9 @@ private:
                int32_t srcStart,
                int32_t srcLength);
 
+  UnicodeString& doAppend(const UnicodeString& src, int32_t srcStart, int32_t srcLength);
+  UnicodeString& doAppend(const UChar *srcChars, int32_t srcStart, int32_t srcLength);
+
   UnicodeString& doReverse(int32_t start,
                int32_t length);
 
@@ -4529,30 +4532,30 @@ inline UnicodeString&
 UnicodeString::append(const UnicodeString& srcText,
               int32_t srcStart,
               int32_t srcLength)
-{ return doReplace(length(), 0, srcText, srcStart, srcLength); }
+{ return doAppend(srcText, srcStart, srcLength); }
 
 inline UnicodeString&
 UnicodeString::append(const UnicodeString& srcText)
-{ return doReplace(length(), 0, srcText, 0, srcText.length()); }
+{ return doAppend(srcText, 0, srcText.length()); }
 
 inline UnicodeString&
 UnicodeString::append(const UChar *srcChars,
               int32_t srcStart,
               int32_t srcLength)
-{ return doReplace(length(), 0, srcChars, srcStart, srcLength); }
+{ return doAppend(srcChars, srcStart, srcLength); }
 
 inline UnicodeString&
 UnicodeString::append(const UChar *srcChars,
               int32_t srcLength)
-{ return doReplace(length(), 0, srcChars, 0, srcLength); }
+{ return doAppend(srcChars, 0, srcLength); }
 
 inline UnicodeString&
 UnicodeString::append(UChar srcChar)
-{ return doReplace(length(), 0, &srcChar, 0, 1); }
+{ return doAppend(&srcChar, 0, 1); }
 
 inline UnicodeString&
 UnicodeString::operator+= (UChar ch)
-{ return doReplace(length(), 0, &ch, 0, 1); }
+{ return doAppend(&ch, 0, 1); }
 
 inline UnicodeString&
 UnicodeString::operator+= (UChar32 ch) {
@@ -4561,7 +4564,7 @@ UnicodeString::operator+= (UChar32 ch) {
 
 inline UnicodeString&
 UnicodeString::operator+= (const UnicodeString& srcText)
-{ return doReplace(length(), 0, srcText, 0, srcText.length()); }
+{ return doAppend(srcText, 0, srcText.length()); }
 
 inline UnicodeString&
 UnicodeString::insert(int32_t start,

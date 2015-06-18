@@ -208,13 +208,13 @@ UnicodeString::UnicodeString(UChar32 ch) {
 
 UnicodeString::UnicodeString(const UChar *text) {
   fUnion.fFields.fLengthAndFlags = kShortString;
-  doReplace(0, 0, text, 0, -1);
+  doAppend(text, 0, -1);
 }
 
 UnicodeString::UnicodeString(const UChar *text,
                              int32_t textLength) {
   fUnion.fFields.fLengthAndFlags = kShortString;
-  doReplace(0, 0, text, 0, textLength);
+  doAppend(text, 0, textLength);
 }
 
 UnicodeString::UnicodeString(UBool isTerminated,
@@ -1357,8 +1357,8 @@ UnicodeString::append(UChar32 srcChar) {
   UBool isError = FALSE;
   U16_APPEND(buffer, _length, U16_MAX_LENGTH, srcChar, isError);
   // We test isError so that the compiler does not complain that we don't.
-  // If isError then _length==0 which turns the doReplace() into a no-op anyway.
-  return isError ? *this : doReplace(length(), 0, buffer, 0, _length);
+  // If isError then _length==0 which turns the doAppend() into a no-op anyway.
+  return isError ? *this : doAppend(buffer, 0, _length);
 }
 
 UnicodeString&
@@ -1368,17 +1368,12 @@ UnicodeString::doReplace( int32_t start,
               int32_t srcStart,
               int32_t srcLength)
 {
-  if(!src.isBogus()) {
-    // pin the indices to legal values
-    src.pinIndices(srcStart, srcLength);
+  // pin the indices to legal values
+  src.pinIndices(srcStart, srcLength);
 
-    // get the characters from src
-    // and replace the range in ourselves with them
-    return doReplace(start, length, src.getArrayStart(), srcStart, srcLength);
-  } else {
-    // remove the range
-    return doReplace(start, length, 0, 0, 0);
-  }
+  // get the characters from src
+  // and replace the range in ourselves with them
+  return doReplace(start, length, src.getArrayStart(), srcStart, srcLength);
 }
 
 UnicodeString&
@@ -1414,6 +1409,10 @@ UnicodeString::doReplace(int32_t start,
     }
   }
 
+  if(start == oldLength) {
+    return doAppend(srcChars, srcStart, srcLength);
+  }
+
   if(srcChars == 0) {
     srcStart = srcLength = 0;
   } else if(srcLength < 0) {
@@ -1421,42 +1420,13 @@ UnicodeString::doReplace(int32_t start,
     srcLength = u_strlen(srcChars + srcStart);
   }
 
+  // pin the indices to legal values
+  pinIndices(start, length);
+
   // calculate the size of the string after the replace
-  int32_t newLength;
+  int32_t newLength = oldLength - length + srcLength;
 
-  // optimize append() onto a large-enough, owned string
-  if(start >= oldLength) {
-    if(srcLength == 0) {
-      return *this;
-    }
-    newLength = oldLength + srcLength;
-    if(newLength <= getCapacity() && isBufferWritable()) {
-      UChar *oldArray = getArrayStart();
-      // Do not copy characters when
-      //   UChar *buffer=str.getAppendBuffer(...);
-      // is followed by
-      //   str.append(buffer, length);
-      // or
-      //   str.appendString(buffer, length)
-      // or similar.
-      if(srcChars + srcStart != oldArray + start || start > oldLength) {
-        us_arrayCopy(srcChars, srcStart, oldArray, oldLength, srcLength);
-      }
-      setLength(newLength);
-      return *this;
-    } else {
-      // pin the indices to legal values
-      start = oldLength;
-      length = 0;
-    }
-  } else {
-    // pin the indices to legal values
-    pinIndices(start, length);
-
-    newLength = oldLength - length + srcLength;
-  }
-
-  // the following may change fArray but will not copy the current contents;
+  // cloneArrayIfNeeded(doCopyArray=FALSE) may change fArray but will not copy the current contents;
   // therefore we need to keep the current fArray
   UChar oldStackBuffer[US_STACKBUF_SIZE];
   UChar *oldArray;
@@ -1504,6 +1474,54 @@ UnicodeString::doReplace(int32_t start,
     uprv_free(bufferToDelete);
   }
 
+  return *this;
+}
+
+// Versions of doReplace() only for append() variants.
+// doReplace() and doAppend() optimize for different cases.
+
+UnicodeString&
+UnicodeString::doAppend(const UnicodeString& src, int32_t srcStart, int32_t srcLength) {
+  if(srcLength == 0) {
+    return *this;
+  }
+
+  // pin the indices to legal values
+  src.pinIndices(srcStart, srcLength);
+  return doAppend(src.getArrayStart(), srcStart, srcLength);
+}
+
+UnicodeString&
+UnicodeString::doAppend(const UChar *srcChars, int32_t srcStart, int32_t srcLength) {
+  if(!isWritable() || srcLength == 0 || srcChars == NULL) {
+    return *this;
+  }
+
+  if(srcLength < 0) {
+    // get the srcLength if necessary
+    if((srcLength = u_strlen(srcChars + srcStart)) == 0) {
+      return *this;
+    }
+  }
+
+  int32_t oldLength = length();
+  int32_t newLength = oldLength + srcLength;
+  // optimize append() onto a large-enough, owned string
+  if((newLength <= getCapacity() && isBufferWritable()) ||
+      cloneArrayIfNeeded(newLength, newLength + (newLength >> 2) + kGrowSize)) {
+    UChar *newArray = getArrayStart();
+    // Do not copy characters when
+    //   UChar *buffer=str.getAppendBuffer(...);
+    // is followed by
+    //   str.append(buffer, length);
+    // or
+    //   str.appendString(buffer, length)
+    // or similar.
+    if(srcChars + srcStart != newArray + oldLength) {
+      us_arrayCopy(srcChars, srcStart, newArray, oldLength, srcLength);
+    }
+    setLength(newLength);
+  }
   return *this;
 }
 
@@ -1806,7 +1824,7 @@ UnicodeStringAppendable::~UnicodeStringAppendable() {}
 
 UBool
 UnicodeStringAppendable::appendCodeUnit(UChar c) {
-  return str.doReplace(str.length(), 0, &c, 0, 1).isWritable();
+  return str.doAppend(&c, 0, 1).isWritable();
 }
 
 UBool
@@ -1815,12 +1833,12 @@ UnicodeStringAppendable::appendCodePoint(UChar32 c) {
   int32_t cLength = 0;
   UBool isError = FALSE;
   U16_APPEND(buffer, cLength, U16_MAX_LENGTH, c, isError);
-  return !isError && str.doReplace(str.length(), 0, buffer, 0, cLength).isWritable();
+  return !isError && str.doAppend(buffer, 0, cLength).isWritable();
 }
 
 UBool
 UnicodeStringAppendable::appendString(const UChar *s, int32_t length) {
-  return str.doReplace(str.length(), 0, s, 0, length).isWritable();
+  return str.doAppend(s, 0, length).isWritable();
 }
 
 UBool
