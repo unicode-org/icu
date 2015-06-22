@@ -2151,7 +2151,7 @@ public class SimpleDateFormat extends DateFormat {
      * Format characters that indicate numeric fields when pattern lengh
      * is up to 2.
      */
-    private static final String NUMEIRC_FORMAT_CHARS2 = "ceLMMQq";
+    private static final String NUMERIC_FORMAT_CHARS2 = "ceLMQq";
 
     /**
      * Return true if the given format character, occuring count
@@ -2159,7 +2159,7 @@ public class SimpleDateFormat extends DateFormat {
      */
     private static final boolean isNumeric(char formatChar, int count) {
         return NUMERIC_FORMAT_CHARS.indexOf(formatChar) >= 0
-                || (count <= 2 && NUMEIRC_FORMAT_CHARS2.indexOf(formatChar) >= 0);
+                || (count <= 2 && NUMERIC_FORMAT_CHARS2.indexOf(formatChar) >= 0);
     }
 
     /**
