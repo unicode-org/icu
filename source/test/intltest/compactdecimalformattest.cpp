@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2014, International Business Machines Corporation and    *
+* Copyright (C) 1997-2015, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -185,6 +185,7 @@ private:
     void TestArabicLong();
     void TestFieldPosition();
     void TestSignificantDigits();
+    void TestAPIVariants();
     void CheckLocale(
         const Locale& locale, UNumberCompactStyle style,
         const ExpectedResult* expectedResult, int32_t expectedResultLength);
@@ -213,6 +214,7 @@ void CompactDecimalFormatTest::runIndexedTest(
   TESTCASE_AUTO(TestArabicLong);
   TESTCASE_AUTO(TestFieldPosition);
   TESTCASE_AUTO(TestSignificantDigits);
+  TESTCASE_AUTO(TestAPIVariants);
   TESTCASE_AUTO_END;
 }
 
@@ -292,6 +294,102 @@ void CompactDecimalFormatTest::TestSignificantDigits() {
   if (actual != expected) {
     errln(UnicodeString("Fail: Expected: ") + expected + UnicodeString(" Got: ") + actual);
   }
+}
+
+void CompactDecimalFormatTest::TestAPIVariants() {
+  UErrorCode status = U_ZERO_ERROR;
+  LocalPointer<CompactDecimalFormat> cdf(CompactDecimalFormat::createInstance("en", UNUM_SHORT, status));
+  if (U_FAILURE(status)) {
+    dataerrln("Unable to create format object - %s", u_errorName(status));
+    return;
+  }
+  UnicodeString actual;
+  FieldPosition pos;
+  FieldPositionIterator posIter;
+  UnicodeString expected("123K", -1, US_INV);
+  pos.setField(UNUM_INTEGER_FIELD);
+  
+  actual.remove();
+  pos.setBeginIndex(0);
+  pos.setEndIndex(0);
+  cdf->format((double)123456.0, actual, pos);
+  if (actual != expected || pos.getEndIndex() != 3) {
+    errln(UnicodeString("Fail format(double,UnicodeString&,FieldPosition&): Expected: \"") + expected + "\", pos 3; " +
+                                                                           "Got: \"" + actual + "\", pos " + pos.getEndIndex());
+  }
+  
+  actual.remove();
+  pos.setBeginIndex(0);
+  pos.setEndIndex(0);
+  status = U_ZERO_ERROR;
+  cdf->format((double)123456.0, actual, pos, status);
+  if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
+    errln(UnicodeString("Fail format(double,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", pos 3, status U_ZERO_ERROR; " +
+                                                              "Got: \"" + actual + "\", pos " + pos.getEndIndex() + ", status " + u_errorName(status));
+  }
+  
+  actual.remove();
+  status = U_ZERO_ERROR;
+  cdf->format((double)123456.0, actual, &posIter, status);
+  if (status != U_UNSUPPORTED_ERROR) {
+    errln(UnicodeString("Fail format(double,UnicodeString&,FieldPositionIterator*,UErrorCode&): Expected status U_UNSUPPORTED_ERROR;") +
+                                                              "Got status " + u_errorName(status));
+  }
+
+  actual.remove();
+  pos.setBeginIndex(0);
+  pos.setEndIndex(0);
+  cdf->format((int32_t)123456, actual, pos);
+  if (actual != expected || pos.getEndIndex() != 3) {
+    errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&): Expected: \"") + expected + "\", pos 3; " +
+                                                                           "Got: \"" + actual + "\", pos " + pos.getEndIndex());
+  }
+  
+  actual.remove();
+  pos.setBeginIndex(0);
+  pos.setEndIndex(0);
+  status = U_ZERO_ERROR;
+  cdf->format((int32_t)123456, actual, pos, status);
+  if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
+    errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", pos 3, status U_ZERO_ERROR; " +
+                                                              "Got: \"" + actual + "\", pos " + pos.getEndIndex() + ", status " + u_errorName(status));
+  }
+  
+  actual.remove();
+  status = U_ZERO_ERROR;
+  cdf->format((int32_t)123456, actual, &posIter, status);
+  if (status != U_UNSUPPORTED_ERROR) {
+    errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPositionIterator*,UErrorCode&): Expected status U_UNSUPPORTED_ERROR;") +
+                                                              "Got status " + u_errorName(status));
+  }
+
+  actual.remove();
+  pos.setBeginIndex(0);
+  pos.setEndIndex(0);
+  cdf->format((int64_t)123456, actual, pos);
+  if (actual != expected || pos.getEndIndex() != 3) {
+    errln(UnicodeString("Fail format(int64_t,UnicodeString&,FieldPosition&): Expected: \"") + expected + "\", pos 3; " +
+                                                                           "Got: \"" + actual + "\", pos " + pos.getEndIndex());
+  }
+  
+  actual.remove();
+  pos.setBeginIndex(0);
+  pos.setEndIndex(0);
+  status = U_ZERO_ERROR;
+  cdf->format((int64_t)123456, actual, pos, status);
+  if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
+    errln(UnicodeString("Fail format(int64_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", pos 3, status U_ZERO_ERROR; " +
+                                                              "Got: \"" + actual + "\", pos " + pos.getEndIndex() + ", status " + u_errorName(status));
+  }
+  
+  actual.remove();
+  status = U_ZERO_ERROR;
+  cdf->format((int64_t)123456, actual, &posIter, status);
+  if (status != U_UNSUPPORTED_ERROR) {
+    errln(UnicodeString("Fail format(int64_t,UnicodeString&,FieldPositionIterator*,UErrorCode&): Expected status U_UNSUPPORTED_ERROR;") +
+                                                              "Got status " + u_errorName(status));
+  }
+
 }
 
 void CompactDecimalFormatTest::CheckLocale(const Locale& locale, UNumberCompactStyle style, const ExpectedResult* expectedResults, int32_t expectedResultLength) {
