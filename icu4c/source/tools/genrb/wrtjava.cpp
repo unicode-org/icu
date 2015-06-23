@@ -1,12 +1,12 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2012, International Business Machines
+*   Copyright (C) 2000-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
 *
-* File wrtjava.c
+* File wrtjava.cpp
 *
 * Modification History:
 *
@@ -380,7 +380,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
 }
 
 static void
-intvector_write_java( struct SResource *res, UErrorCode *status) {
+intvector_write_java(struct SResource *res, UErrorCode * /*status*/) {
     uint32_t i = 0;
     const char* intArr = "new int[] {\n";
     /* const char* intC   = "new Integer(";   */
@@ -422,7 +422,7 @@ intvector_write_java( struct SResource *res, UErrorCode *status) {
 }
 
 static void
-int_write_java(struct SResource *res,UErrorCode *status) {
+int_write_java(struct SResource *res,UErrorCode * /*status*/) {
     const char* intC   =  "new Integer(";
     char buf[100];
     int len =0;
@@ -438,7 +438,7 @@ int_write_java(struct SResource *res,UErrorCode *status) {
 }
 
 static void
-bytes_write_java( struct SResource *res, UErrorCode *status) {
+bytes_write_java( struct SResource *res, UErrorCode * /*status*/) {
 	const char* type  = "new byte[] {";
 	const char* byteDecl = "%i, ";
     char byteBuffer[100] = { 0 };

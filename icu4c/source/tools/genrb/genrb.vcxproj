@@ -246,10 +246,10 @@
     <ClCompile Include="prscmnts.cpp" />
     <ClCompile Include="rbutil.c" />
     <ClCompile Include="read.c" />
-    <ClCompile Include="reslist.c" />
+    <ClCompile Include="reslist.cpp" />
     <ClCompile Include="rle.c" />
     <ClCompile Include="ustr.c" />
-    <ClCompile Include="wrtjava.c" />
+    <ClCompile Include="wrtjava.cpp" />
     <ClCompile Include="wrtxml.cpp" />
   </ItemGroup>
   <ItemGroup>
