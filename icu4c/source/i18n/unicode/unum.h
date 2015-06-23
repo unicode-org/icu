@@ -216,12 +216,28 @@ typedef enum UNumberFormatStyle {
      */
     UNUM_CASH_CURRENCY=13,
 #endif /* U_HIDE_DRAFT_API */
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Decimal format expressed using compact notation
+     * (short form, corresponds to UNumberCompactStyle=UNUM_SHORT)
+     * e.g. "23K", "45B"
+     * @draft ICU 56
+     */
+    UNUM_DECIMAL_COMPACT_SHORT=14,
+    /**
+     * Decimal format expressed using compact notation
+     * (long form, corresponds to UNumberCompactStyle=UNUM_LONG)
+     * e.g. "23 thousand", "45 billion"
+     * @draft ICU 56
+     */
+    UNUM_DECIMAL_COMPACT_LONG=15,
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * One more than the highest number format style constant.
      * @stable ICU 4.8
      */
-    UNUM_FORMAT_STYLE_COUNT=14,
+    UNUM_FORMAT_STYLE_COUNT=16,
 
     /**
      * Default format
@@ -615,6 +631,8 @@ unum_formatUFormattable(const UNumberFormat* fmt,
 /**
 * Parse a string into an integer using a UNumberFormat.
 * The string will be parsed according to the UNumberFormat's locale.
+* Note: parsing is not supported for styles UNUM_DECIMAL_COMPACT_SHORT
+* and UNUM_DECIMAL_COMPACT_LONG.
 * @param fmt The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
@@ -639,6 +657,8 @@ unum_parse(    const   UNumberFormat*  fmt,
 /**
 * Parse a string into an int64 using a UNumberFormat.
 * The string will be parsed according to the UNumberFormat's locale.
+* Note: parsing is not supported for styles UNUM_DECIMAL_COMPACT_SHORT
+* and UNUM_DECIMAL_COMPACT_LONG.
 * @param fmt The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
@@ -663,6 +683,8 @@ unum_parseInt64(const UNumberFormat*  fmt,
 /**
 * Parse a string into a double using a UNumberFormat.
 * The string will be parsed according to the UNumberFormat's locale.
+* Note: parsing is not supported for styles UNUM_DECIMAL_COMPACT_SHORT
+* and UNUM_DECIMAL_COMPACT_LONG.
 * @param fmt The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
@@ -691,6 +713,8 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 * The syntax of the output is a "numeric string"
 * as defined in the Decimal Arithmetic Specification, available at
 * http://speleotrove.com/decimal
+* Note: parsing is not supported for styles UNUM_DECIMAL_COMPACT_SHORT
+* and UNUM_DECIMAL_COMPACT_LONG.
 * @param fmt The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
@@ -750,6 +774,8 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
  * Parse a UChar string into a UFormattable.
  * Example code:
  * \snippet test/cintltst/cnumtst.c unum_parseToUFormattable
+ * Note: parsing is not supported for styles UNUM_DECIMAL_COMPACT_SHORT
+ * and UNUM_DECIMAL_COMPACT_LONG.
  * @param fmt the formatter to use
  * @param result the UFormattable to hold the result. If NULL, a new UFormattable will be allocated (which the caller must close with ufmt_close).
  * @param text the text to parse
