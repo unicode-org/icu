@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2014, International Business Machines Corporation and
+* Copyright (C) 1997-2015, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -120,6 +120,8 @@ static const UChar * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = 
     gLastResortPluralCurrencyPat,  // UNUM_CURRENCY_PLURAL
     gLastResortAccountingCurrencyPat, // UNUM_CURRENCY_ACCOUNTING
     gLastResortCurrencyPat,  // UNUM_CASH_CURRENCY 
+    NULL,  // UNUM_DECIMAL_COMPACT_SHORT
+    NULL,  // UNUM_DECIMAL_COMPACT_LONG
 };
 
 // Keys used for accessing resource bundles
@@ -145,7 +147,9 @@ static const char *gFormatKeys[UNUM_FORMAT_STYLE_COUNT] = {
     "currencyFormat",  // UNUM_CURRENCY_ISO
     "currencyFormat",  // UNUM_CURRENCY_PLURAL
     "accountingFormat",  // UNUM_CURRENCY_ACCOUNTING
-    "currencyFormat"  // UNUM_CASH_CURRENCY
+    "currencyFormat",  // UNUM_CASH_CURRENCY
+    NULL,  // UNUM_DECIMAL_COMPACT_SHORT
+    NULL,  // UNUM_DECIMAL_COMPACT_LONG
 };
 
 // Static hashtable cache of NumberingSystem objects used by NumberFormat
