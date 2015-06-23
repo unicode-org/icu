@@ -1,12 +1,12 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2014, International Business Machines
+*   Copyright (C) 2000-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
 *
-* File reslist.c
+* File reslist.cpp
 *
 * Modification History:
 *
@@ -56,7 +56,12 @@ enum {
  * for use in non-error cases when no resource is to be added to the bundle.
  * (NULL is used in error cases.)
  */
-static const struct SResource kNoResource = { URES_NONE };
+static const struct SResource kNoResource = {
+    URES_NONE, FALSE, 0, 0, 0,
+    NULL,  // fNext
+    { NULL, 0, 0 },  // UString fComment
+    {}
+};
 
 static UDataInfo dataInfo= {
     sizeof(UDataInfo),
@@ -158,7 +163,7 @@ res_write(UNewDataMemory *mem, uint32_t *byteOffset,
 static void
 string_preflightStrings(struct SRBRoot *bundle, struct SResource *res, UHashtable *stringSet,
                         UErrorCode *status) {
-    res->u.fString.fSame = uhash_get(stringSet, res);
+    res->u.fString.fSame = static_cast<struct SResource *>(uhash_get(stringSet, res));
     if (res->u.fString.fSame != NULL) {
         return;  /* This is a duplicate of an earlier-visited string. */
     }
@@ -317,7 +322,7 @@ makeKey16(struct SRBRoot *bundle, int32_t key) {
  * and exits early.
  */
 static void
-string_write16(struct SRBRoot *bundle, struct SResource *res, UErrorCode *status) {
+string_write16(struct SRBRoot * /*bundle*/, struct SResource *res, UErrorCode * /*status*/) {
     struct SResource *same;
     if ((same = res->u.fString.fSame) != NULL) {
         /* This is a duplicate. */
@@ -471,8 +476,8 @@ res_write16(struct SRBRoot *bundle, struct SResource *res,
  */
 static void
 string_preWrite(uint32_t *byteOffset,
-                struct SRBRoot *bundle, struct SResource *res,
-                UErrorCode *status) {
+                struct SRBRoot * /*bundle*/, struct SResource *res,
+                UErrorCode * /*status*/) {
     /* Write the UTF-16 v1 string. */
     res->fRes = URES_MAKE_RESOURCE(URES_STRING, *byteOffset >> 2);
     *byteOffset += 4 + (res->u.fString.fLength + 1) * U_SIZEOF_UCHAR;
@@ -480,8 +485,8 @@ string_preWrite(uint32_t *byteOffset,
 
 static void
 bin_preWrite(uint32_t *byteOffset,
-             struct SRBRoot *bundle, struct SResource *res,
-             UErrorCode *status) {
+             struct SRBRoot * /*bundle*/, struct SResource *res,
+             UErrorCode * /*status*/) {
     uint32_t pad       = 0;
     uint32_t dataStart = *byteOffset + sizeof(res->u.fBinaryValue.fLength);
 
@@ -588,8 +593,8 @@ res_preWrite(uint32_t *byteOffset,
  * res_write() sees fWritten and exits early.
  */
 static void string_write(UNewDataMemory *mem, uint32_t *byteOffset,
-                         struct SRBRoot *bundle, struct SResource *res,
-                         UErrorCode *status) {
+                         struct SRBRoot * /*bundle*/, struct SResource *res,
+                         UErrorCode * /*status*/) {
     /* Write the UTF-16 v1 string. */
     int32_t length = res->u.fString.fLength;
     udata_write32(mem, length);
@@ -599,8 +604,8 @@ static void string_write(UNewDataMemory *mem, uint32_t *byteOffset,
 }
 
 static void alias_write(UNewDataMemory *mem, uint32_t *byteOffset,
-                        struct SRBRoot *bundle, struct SResource *res,
-                        UErrorCode *status) {
+                        struct SRBRoot * /*bundle*/, struct SResource *res,
+                        UErrorCode * /*status*/) {
     int32_t length = res->u.fString.fLength;
     udata_write32(mem, length);
     udata_writeUString(mem, res->u.fString.fChars, length + 1);
@@ -630,8 +635,8 @@ static void array_write(UNewDataMemory *mem, uint32_t *byteOffset,
 }
 
 static void intvector_write(UNewDataMemory *mem, uint32_t *byteOffset,
-                            struct SRBRoot *bundle, struct SResource *res,
-                            UErrorCode *status) {
+                            struct SRBRoot * /*bundle*/, struct SResource *res,
+                            UErrorCode * /*status*/) {
     uint32_t i = 0;
     udata_write32(mem, res->u.fIntVector.fCount);
     for(i = 0; i<res->u.fIntVector.fCount; i++) {
@@ -641,8 +646,8 @@ static void intvector_write(UNewDataMemory *mem, uint32_t *byteOffset,
 }
 
 static void bin_write(UNewDataMemory *mem, uint32_t *byteOffset,
-                      struct SRBRoot *bundle, struct SResource *res,
-                      UErrorCode *status) {
+                      struct SRBRoot * /*bundle*/, struct SResource *res,
+                      UErrorCode * /*status*/) {
     uint32_t pad       = 0;
     uint32_t dataStart = *byteOffset + sizeof(res->u.fBinaryValue.fLength);
 
@@ -1204,7 +1209,7 @@ static void intvector_close(struct SResource *intvector) {
     }
 }
 
-static void int_close(struct SResource *intres) {
+static void int_close(struct SResource * /*intres*/) {
     /* Intentionally left blank */
 }
 
@@ -1253,7 +1258,7 @@ void res_close(struct SResource *res) {
     }
 }
 
-void bundle_close(struct SRBRoot *bundle, UErrorCode *status) {
+void bundle_close(struct SRBRoot *bundle, UErrorCode * /*status*/) {
     res_close(bundle->fRoot);
     uprv_free(bundle->fLocale);
     uprv_free(bundle->fKeys);
@@ -1393,7 +1398,7 @@ getKeyString(const struct SRBRoot *bundle, int32_t key) {
 }
 
 const char *
-res_getKeyString(const struct SRBRoot *bundle, const struct SResource *res, char temp[8]) {
+res_getKeyString(const struct SRBRoot *bundle, const struct SResource *res, char /*temp*/[8]) {
     if (res->fKey == -1) {
         return NULL;
     }
@@ -1426,7 +1431,7 @@ bundle_addKeyBytes(struct SRBRoot *bundle, const char *keyBytes, int32_t length,
     if (bundle->fKeysTop >= bundle->fKeysCapacity) {
         /* overflow - resize the keys buffer */
         bundle->fKeysCapacity += KEY_SPACE_SIZE;
-        bundle->fKeys = uprv_realloc(bundle->fKeys, bundle->fKeysCapacity);
+        bundle->fKeys = static_cast<char *>(uprv_realloc(bundle->fKeys, bundle->fKeysCapacity));
         if(bundle->fKeys == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return -1;
@@ -1502,12 +1507,12 @@ compareKeySuffixes(const void *context, const void *l, const void *r) {
 }
 
 static int32_t U_CALLCONV
-compareKeyNewpos(const void *context, const void *l, const void *r) {
+compareKeyNewpos(const void * /*context*/, const void *l, const void *r) {
     return compareInt32(((const KeyMapEntry *)l)->newpos, ((const KeyMapEntry *)r)->newpos);
 }
 
 static int32_t U_CALLCONV
-compareKeyOldpos(const void *context, const void *l, const void *r) {
+compareKeyOldpos(const void * /*context*/, const void *l, const void *r) {
     return compareInt32(((const KeyMapEntry *)l)->oldpos, ((const KeyMapEntry *)r)->oldpos);
 }
 
@@ -1632,7 +1637,7 @@ bundle_compactKeys(struct SRBRoot *bundle, UErrorCode *status) {
 }
 
 static int32_t U_CALLCONV
-compareStringSuffixes(const void *context, const void *l, const void *r) {
+compareStringSuffixes(const void * /*context*/, const void *l, const void *r) {
     struct SResource *left = *((struct SResource **)l);
     struct SResource *right = *((struct SResource **)r);
     const UChar *lStart = left->u.fString.fChars;
@@ -1652,7 +1657,7 @@ compareStringSuffixes(const void *context, const void *l, const void *r) {
 }
 
 static int32_t U_CALLCONV
-compareStringLengths(const void *context, const void *l, const void *r) {
+compareStringLengths(const void * /*context*/, const void *l, const void *r) {
     struct SResource *left = *((struct SResource **)l);
     struct SResource *right = *((struct SResource **)r);
     int32_t diff;
