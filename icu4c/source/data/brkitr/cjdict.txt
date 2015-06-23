@@ -1,5 +1,5 @@
 ﻿ # 
- # Copyright (C) 2012-2013,  Google Inc, International Business Machines Corporation 
+ # Copyright (C) 2012-2015,  Google Inc, International Business Machines Corporation 
  # and others. All Rights Reserved. 
  # 
  # Note: This data file (cjdict.txt) was originally developed by Chromium project.
@@ -24438,6 +24438,7 @@
 ジョーカー	108
 ジョーク	99
 ジョージ	92
+ジョージア	105
 ジョージ広場	243
 ジョーゼット	123
 ジョーダン	103
