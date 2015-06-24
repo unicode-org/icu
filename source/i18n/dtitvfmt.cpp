@@ -435,6 +435,15 @@ DateIntervalFormat::setDateIntervalInfo(const DateIntervalInfo& newItvPattern,
                                         UErrorCode& status) {
     delete fInfo;
     fInfo = new DateIntervalInfo(newItvPattern);
+
+    // Delete patterns that get reset by initializePattern
+    delete fDatePattern;
+    fDatePattern = NULL;
+    delete fTimePattern;
+    fTimePattern = NULL;
+    delete fDateTimeFormat;
+    fDateTimeFormat = NULL;
+
     if ( fDateFormat ) {
         initializePattern(status);
     }
