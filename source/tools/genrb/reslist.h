@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2014, International Business Machines
+*   Copyright (C) 2000-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,6 +22,7 @@
 #define RESLIST_MAX_INT_VECTOR 2048
 
 #include "unicode/utypes.h"
+#include "unicode/unistr.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "uresdata.h"
@@ -53,6 +54,7 @@ struct SRBRoot {
   int32_t fKeysCount;
   int32_t fLocalKeyLimit; /* key offset < limit fits into URES_TABLE */
 
+  // TODO: UnicodeString
   uint16_t *f16BitUnits;
   int32_t f16BitUnitsCapacity;
   int32_t f16BitUnitsLength;
@@ -120,14 +122,6 @@ struct SResArray {
 struct SResource* array_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
 void array_add(struct SResource *array, struct SResource *res, UErrorCode *status);
 
-struct SResString {
-    struct SResource *fSame;  /* used for duplicates */
-    UChar *fChars;
-    int32_t fLength;
-    int32_t fSuffixOffset;  /* this string is a suffix of fSame at this offset */
-    int8_t fNumCharsForLength;
-};
-
 struct SResource *string_open(struct SRBRoot *bundle, const char *tag, const UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
 
 struct SResource *alias_open(struct SRBRoot *bundle, const char *tag, UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
@@ -157,9 +151,18 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
 /* Resource place holder */
 
 struct SResource {
+    SResource();
+    SResource(SRBRoot *bundle, const char *tag, int8_t type, const UString* comment,
+              UErrorCode &errorCode);
+    virtual ~SResource();
+
+    UBool isString() const { return fType == URES_STRING; }
+
+    // TODO: subclasses by type, virtual methods for dispatch, maybe remove fType
+
     int8_t   fType;     /* nominal type: fRes (when != 0xffffffff) may use subtype */
     UBool    fWritten;  /* res_write() can exit early */
-    uint32_t fRes;      /* resource item word; 0xffffffff if not known yet */
+    uint32_t fRes;      /* resource item word; RES_BOGUS=0xffffffff if not known yet */
     int32_t  fKey;      /* Index into bundle->fKeys; -1 if no key. */
     int      line;      /* used internally to report duplicate keys in tables */
     struct SResource *fNext; /*This is for internal chaining while building*/
@@ -167,11 +170,45 @@ struct SResource {
     union {
         struct SResTable fTable;
         struct SResArray fArray;
-        struct SResString fString;
         struct SResIntVector fIntVector;
         struct SResInt fIntValue;
         struct SResBinary fBinaryValue;
     } u;
+};
+
+class StringBaseResource : public SResource {
+public:
+    StringBaseResource(SRBRoot *bundle, const char *tag, int8_t type,
+                       const UChar *value, int32_t len,
+                       const UString* comment, UErrorCode &errorCode);
+    virtual ~StringBaseResource();
+
+    const UChar *getBuffer() const { return fString.getBuffer(); }
+    int32_t length() const { return fString.length(); }
+
+    // TODO: private with getter?
+    icu::UnicodeString fString;
+};
+
+class StringResource : public StringBaseResource {
+public:
+    StringResource(SRBRoot *bundle, const char *tag, const UChar *value, int32_t len,
+                   const UString* comment, UErrorCode &errorCode)
+            : StringBaseResource(bundle, tag, URES_STRING, value, len, comment, errorCode),
+              fSame(NULL), fSuffixOffset(0), fNumCharsForLength(0) {}
+    virtual ~StringResource();
+
+    StringResource *fSame;  // used for duplicates
+    int32_t fSuffixOffset;  // this string is a suffix of fSame at this offset
+    int8_t fNumCharsForLength;
+};
+
+class AliasResource : public StringBaseResource {
+public:
+    AliasResource(SRBRoot *bundle, const char *tag, const UChar *value, int32_t len,
+                  const UString* comment, UErrorCode &errorCode)
+            : StringBaseResource(bundle, tag, URES_ALIAS, value, len, comment, errorCode) {}
+    virtual ~AliasResource();
 };
 
 const char *

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2014, International Business Machines
+*   Copyright (C) 2002-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -419,7 +419,7 @@ print(UChar* src, int32_t srcLen,const char *tagStart,const char *tagEnd,  UErro
     }
 }
 static void
-printNoteElements(struct UString *src, UErrorCode *status){
+printNoteElements(const UString *src, UErrorCode *status){
 
 #if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when no RegularExpressions are available */
 
@@ -500,6 +500,7 @@ printComments(struct UString *src, const char *resName, UBool printTranslate, UE
         uprv_free(trans);
         return;
     }
+    // TODO: make src const, stop modifying it in-place, make printContainer() take const resource, etc.
     src->fLength = removeCmtText(src->fChars, src->fLength, status);
     descLen  = getDescription(src->fChars,src->fLength, &desc, capacity, status);
     transLen = getTranslate(src->fChars,src->fLength, &trans, capacity, status);
@@ -543,7 +544,7 @@ printComments(struct UString *src, const char *resName, UBool printTranslate, UE
  * <trans-unit id = "blah" resname = "blah" restype = "x-id-alias" translate = "no">
  * <group id "calendar_gregorian" resname = "gregorian" restype = "x-icu-array">
  */
-static char *printContainer(struct SResource *res, const char *container, const char *restype, const char *mimetype, const char *id, UErrorCode *status)
+static char *printContainer(SResource *res, const char *container, const char *restype, const char *mimetype, const char *id, UErrorCode *status)
 {
     char resKeyBuffer[8];
     const char *resname = NULL;
@@ -613,7 +614,7 @@ static const char *intvector_restype = "x-icu-intvector";
 static const char *table_restype     = "x-icu-table";
 
 static void
-string_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
+string_write_xml(StringResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
 
     char *sid = NULL;
     char* buf = NULL;
@@ -629,7 +630,7 @@ string_write_xml(struct SResource *res, const char* id, const char* /*language*/
 
     write_utf8_file(out, UnicodeString(source));
 
-    buf = convertAndEscape(&buf, 0, &bufLen, res->u.fString.fChars, res->u.fString.fLength, status);
+    buf = convertAndEscape(&buf, 0, &bufLen, res->getBuffer(), res->length(), status);
 
     if (U_FAILURE(*status)) {
         return;
@@ -650,7 +651,7 @@ string_write_xml(struct SResource *res, const char* id, const char* /*language*/
 }
 
 static void
-alias_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
+alias_write_xml(AliasResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
     char *sid = NULL;
     char* buf = NULL;
     int32_t bufLen=0;
@@ -661,7 +662,7 @@ alias_write_xml(struct SResource *res, const char* id, const char* /*language*/,
 
     write_utf8_file(out, UnicodeString(source));
 
-    buf = convertAndEscape(&buf, 0, &bufLen, res->u.fString.fChars, res->u.fString.fLength, status);
+    buf = convertAndEscape(&buf, 0, &bufLen, res->getBuffer(), res->length(), status);
 
     if(U_FAILURE(*status)){
         return;
@@ -965,11 +966,11 @@ res_write_xml(struct SResource *res, const char* id,  const char* language, UBoo
     if (res != NULL) {
         switch (res->fType) {
         case URES_STRING:
-             string_write_xml    (res, id, language, status);
+             string_write_xml    (static_cast<StringResource *>(res), id, language, status);
              return;
 
         case URES_ALIAS:
-             alias_write_xml     (res, id, language, status);
+             alias_write_xml     (static_cast<AliasResource *>(res), id, language, status);
              return;
 
         case URES_INT_VECTOR:

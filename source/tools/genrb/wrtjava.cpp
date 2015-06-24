@@ -18,6 +18,7 @@
 */
 
 #include <assert.h>
+#include "unicode/unistr.h"
 #include "reslist.h"
 #include "unewdata.h"
 #include "unicode/ures.h"
@@ -100,7 +101,7 @@ static const char* enc ="";
 static UConverter* conv = NULL;
 
 static int32_t
-uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,UErrorCode* status){
+uCharsToChars(char *target, int32_t targetLen, const UChar *source, int32_t sourceLen, UErrorCode *status) {
     int i=0, j=0;
     char str[30]={'\0'};
     while(i<sourceLen){
@@ -225,7 +226,7 @@ static int32_t getColumnCount(int32_t len){
     return columnCount;
 }
 static void
-str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *status){
+str_write_java(const UChar *src, int32_t srcLen, UBool printEndLine, UErrorCode *status) {
 
     uint32_t length = srcLen*8;
     uint32_t bufLen = 0;
@@ -304,19 +305,11 @@ str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *s
 
 /* Writing Functions */
 static void
-string_write_java(struct SResource *res,UErrorCode *status) {
+string_write_java(const StringResource *res,UErrorCode *status) {
     char resKeyBuffer[8];
-    const char *resname = res_getKeyString(srBundle, res, resKeyBuffer);
+    (void)res_getKeyString(srBundle, res, resKeyBuffer);
 
-    str_write_java(res->u.fString.fChars,res->u.fString.fLength,TRUE,status);
-    
-	if(resname != NULL && uprv_strcmp(resname,"Rule")==0)
-	{
-        UChar* buf = (UChar*) uprv_malloc(sizeof(UChar)*res->u.fString.fLength);
-        uprv_memcpy(buf,res->u.fString.fChars,res->u.fString.fLength);
-        uprv_free(buf);
-    }
-
+    str_write_java(res->getBuffer(), res->length(), TRUE, status);
 }
 
 static void
@@ -336,7 +329,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
         current = res->u.fArray.fFirst;
         i = 0;
         while(current != NULL){
-            if(current->fType!=URES_STRING){
+            if(!current->isString()){
                 allStrings = FALSE;
                 break;
             }
@@ -355,7 +348,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
             tabCount++;
         }
         while (current != NULL) {
-            /*if(current->fType==URES_STRING){
+            /*if(current->isString()){
                 write_tabs(out);
             }*/
             res_write_java(current, status);
@@ -582,7 +575,7 @@ res_write_java(struct SResource *res,UErrorCode *status) {
     if (res != NULL) {
         switch (res->fType) {
         case URES_STRING:
-             string_write_java    (res, status);
+             string_write_java    (static_cast<const StringResource *>(res), status);
              return;
         case URES_ALIAS:
              printf("Encountered unsupported resource type %d of alias\n", res->fType);

@@ -1,12 +1,12 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2014, International Business Machines
+*   Copyright (C) 1998-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
 *
-* File genrb.c
+* File genrb.cpp
 *
 * Modification History:
 *
@@ -18,7 +18,7 @@
 
 #include "genrb.h"
 #include "unicode/uclean.h"
-
+#include "reslist.h"
 #include "ucmndata.h"  /* TODO: for reading the pool bundle */
 
 /* Protos */
@@ -103,7 +103,7 @@ typedef struct ResFile {
   int32_t fChecksum;
 } ResFile;
 
-static ResFile poolBundle = { NULL };
+static ResFile poolBundle = { NULL, NULL, NULL, 0, 0, 0 };
 
 /*added by Jing*/
 static     const char* language = NULL;
@@ -293,7 +293,7 @@ main(int argc,
             return status;
         } else {
             const char *poolResName = "pool.res";
-            char *nameWithoutSuffix = uprv_malloc(uprv_strlen(poolResName) + 1);
+            char *nameWithoutSuffix = static_cast<char *>(uprv_malloc(uprv_strlen(poolResName) + 1));
             if (nameWithoutSuffix == NULL) {
                 fprintf(stderr, "out of memory error\n");
                 return U_MEMORY_ALLOCATION_ERROR;
