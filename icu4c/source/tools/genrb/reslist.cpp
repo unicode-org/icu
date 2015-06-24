@@ -17,6 +17,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include "unicode/localpointer.h"
 #include "reslist.h"
 #include "unewdata.h"
 #include "unicode/ures.h"
@@ -35,11 +36,11 @@
  */
 #define BIN_ALIGNMENT 16
 
+U_NAMESPACE_USE
+
 static UBool gIncludeCopyright = FALSE;
 static UBool gUsePoolBundle = FALSE;
 static int32_t gFormatVersion = 2;
-
-static UChar gEmptyString = 0;
 
 /* How do we store string values? */
 enum {
@@ -56,12 +57,7 @@ enum {
  * for use in non-error cases when no resource is to be added to the bundle.
  * (NULL is used in error cases.)
  */
-static const struct SResource kNoResource = {
-    URES_NONE, FALSE, 0, 0, 0,
-    NULL,  // fNext
-    { NULL, 0, 0 },  // UString fComment
-    {}
-};
+static SResource kNoResource;  // TODO: const
 
 static UDataInfo dataInfo= {
     sizeof(UDataInfo),
@@ -107,6 +103,53 @@ void setUsePoolBundle(UBool use) {
 
 static void
 bundle_compactStrings(struct SRBRoot *bundle, UErrorCode *status);
+
+// TODO: return const pointer, or find another way to express "none"
+struct SResource* res_none() {
+    return &kNoResource;
+}
+
+SResource::SResource()
+        : fType(URES_NONE), fWritten(FALSE), fRes(RES_BOGUS), fKey(-1), line(0),
+          fNext(NULL) {
+    ustr_init(&fComment);
+    uprv_memset(&u, 0, sizeof(u));
+}
+
+SResource::SResource(SRBRoot *bundle, const char *tag, int8_t type, const UString* comment,
+                     UErrorCode &errorCode)
+        : fType(type), fWritten(FALSE), fRes(RES_BOGUS),
+          fKey(bundle_addtag(bundle, tag, &errorCode)),
+          line(0), fNext(NULL) {
+    ustr_init(&fComment);
+    uprv_memset(&u, 0, sizeof(u));
+    if(comment != NULL) {
+        ustr_cpy(&fComment, comment, &errorCode);
+    }
+}
+
+StringBaseResource::StringBaseResource(SRBRoot *bundle, const char *tag, int8_t type,
+                                       const UChar *value, int32_t len,
+                                       const UString* comment, UErrorCode &errorCode)
+        : SResource(bundle, tag, type, comment, errorCode) {
+    if (len == 0 && gFormatVersion > 1) {
+        fRes = URES_MAKE_EMPTY_RESOURCE(type);
+        fWritten = TRUE;
+        return;
+    }
+
+    fString.setTo(value, len);
+    fString.getTerminatedBuffer();  // Some code relies on NUL-termination.
+    if (U_SUCCESS(errorCode) && fString.isBogus()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+}
+
+StringBaseResource::~StringBaseResource() {}
+
+StringResource::~StringResource() {}
+
+AliasResource::~AliasResource() {}
 
 /* Writing Functions */
 
@@ -161,32 +204,32 @@ res_write(UNewDataMemory *mem, uint32_t *byteOffset,
           UErrorCode *status);
 
 static void
-string_preflightStrings(struct SRBRoot *bundle, struct SResource *res, UHashtable *stringSet,
+string_preflightStrings(struct SRBRoot *bundle, StringResource *res, UHashtable *stringSet,
                         UErrorCode *status) {
-    res->u.fString.fSame = static_cast<struct SResource *>(uhash_get(stringSet, res));
-    if (res->u.fString.fSame != NULL) {
+    res->fSame = static_cast<StringResource *>(uhash_get(stringSet, res));
+    if (res->fSame != NULL) {
         return;  /* This is a duplicate of an earlier-visited string. */
     }
     /* Put this string into the set for finding duplicates. */
     uhash_put(stringSet, res, res, status);
 
     if (bundle->fStringsForm != STRINGS_UTF16_V1) {
-        const UChar *s = res->u.fString.fChars;
-        int32_t len = res->u.fString.fLength;
+        const UChar *s = res->getBuffer();
+        int32_t len = res->length();
         if (len <= MAX_IMPLICIT_STRING_LENGTH && !U16_IS_TRAIL(s[0]) && len == u_strlen(s)) {
             /*
              * This string will be stored without an explicit length.
              * Runtime will detect !U16_IS_TRAIL(s[0]) and call u_strlen().
              */
-            res->u.fString.fNumCharsForLength = 0;
+            res->fNumCharsForLength = 0;
         } else if (len <= 0x3ee) {
-            res->u.fString.fNumCharsForLength = 1;
+            res->fNumCharsForLength = 1;
         } else if (len <= 0xfffff) {
-            res->u.fString.fNumCharsForLength = 2;
+            res->fNumCharsForLength = 2;
         } else {
-            res->u.fString.fNumCharsForLength = 3;
+            res->fNumCharsForLength = 3;
         }
-        bundle->f16BitUnitsLength += res->u.fString.fNumCharsForLength + len + 1;  /* +1 for the NUL */
+        bundle->f16BitUnitsLength += res->fNumCharsForLength + len + 1;  /* +1 for the NUL */
     }
 }
 
@@ -232,7 +275,7 @@ res_preflightStrings(struct SRBRoot *bundle, struct SResource *res, UHashtable *
     }
     switch (res->fType) {
     case URES_STRING:
-        string_preflightStrings(bundle, res, stringSet, status);
+        string_preflightStrings(bundle, static_cast<StringResource *>(res), stringSet, status);
         break;
     case URES_ARRAY:
         array_preflightStrings(bundle, res, stringSet, status);
@@ -322,9 +365,9 @@ makeKey16(struct SRBRoot *bundle, int32_t key) {
  * and exits early.
  */
 static void
-string_write16(struct SRBRoot * /*bundle*/, struct SResource *res, UErrorCode * /*status*/) {
+string_write16(struct SRBRoot * /*bundle*/, StringResource *res, UErrorCode * /*status*/) {
     struct SResource *same;
-    if ((same = res->u.fString.fSame) != NULL) {
+    if ((same = res->fSame) != NULL) {
         /* This is a duplicate. */
         assert(same->fRes != RES_BOGUS && same->fWritten);
         res->fRes = same->fRes;
@@ -455,7 +498,7 @@ res_write16(struct SRBRoot *bundle, struct SResource *res,
     }
     switch (res->fType) {
     case URES_STRING:
-        string_write16(bundle, res, status);
+        string_write16(bundle, static_cast<StringResource *>(res), status);
         break;
     case URES_ARRAY:
         array_write16(bundle, res, status);
@@ -476,11 +519,11 @@ res_write16(struct SRBRoot *bundle, struct SResource *res,
  */
 static void
 string_preWrite(uint32_t *byteOffset,
-                struct SRBRoot * /*bundle*/, struct SResource *res,
+                struct SRBRoot * /*bundle*/, StringResource *res,
                 UErrorCode * /*status*/) {
     /* Write the UTF-16 v1 string. */
     res->fRes = URES_MAKE_RESOURCE(URES_STRING, *byteOffset >> 2);
-    *byteOffset += 4 + (res->u.fString.fLength + 1) * U_SIZEOF_UCHAR;
+    *byteOffset += 4 + (res->length() + 1) * U_SIZEOF_UCHAR;
 }
 
 static void
@@ -555,11 +598,11 @@ res_preWrite(uint32_t *byteOffset,
     }
     switch (res->fType) {
     case URES_STRING:
-        string_preWrite(byteOffset, bundle, res, status);
+        string_preWrite(byteOffset, bundle, static_cast<StringResource *>(res), status);
         break;
     case URES_ALIAS:
         res->fRes = URES_MAKE_RESOURCE(URES_ALIAS, *byteOffset >> 2);
-        *byteOffset += 4 + (res->u.fString.fLength + 1) * U_SIZEOF_UCHAR;
+        *byteOffset += 4 + (static_cast<AliasResource *>(res)->length() + 1) * U_SIZEOF_UCHAR;
         break;
     case URES_INT_VECTOR:
         if (res->u.fIntVector.fCount == 0 && gFormatVersion > 1) {
@@ -593,22 +636,22 @@ res_preWrite(uint32_t *byteOffset,
  * res_write() sees fWritten and exits early.
  */
 static void string_write(UNewDataMemory *mem, uint32_t *byteOffset,
-                         struct SRBRoot * /*bundle*/, struct SResource *res,
+                         struct SRBRoot * /*bundle*/, StringResource *res,
                          UErrorCode * /*status*/) {
     /* Write the UTF-16 v1 string. */
-    int32_t length = res->u.fString.fLength;
+    int32_t length = res->length();
     udata_write32(mem, length);
-    udata_writeUString(mem, res->u.fString.fChars, length + 1);
+    udata_writeUString(mem, res->getBuffer(), length + 1);
     *byteOffset += 4 + (length + 1) * U_SIZEOF_UCHAR;
     res->fWritten = TRUE;
 }
 
 static void alias_write(UNewDataMemory *mem, uint32_t *byteOffset,
-                        struct SRBRoot * /*bundle*/, struct SResource *res,
+                        struct SRBRoot * /*bundle*/, AliasResource *res,
                         UErrorCode * /*status*/) {
-    int32_t length = res->u.fString.fLength;
+    int32_t length = res->length();
     udata_write32(mem, length);
-    udata_writeUString(mem, res->u.fString.fChars, length + 1);
+    udata_writeUString(mem, res->getBuffer(), length + 1);
     *byteOffset += 4 + (length + 1) * U_SIZEOF_UCHAR;
 }
 
@@ -717,10 +760,10 @@ void res_write(UNewDataMemory *mem, uint32_t *byteOffset,
     }
     switch (res->fType) {
     case URES_STRING:
-        string_write    (mem, byteOffset, bundle, res, status);
+        string_write    (mem, byteOffset, bundle, static_cast<StringResource *>(res), status);
         break;
     case URES_ALIAS:
-        alias_write     (mem, byteOffset, bundle, res, status);
+        alias_write     (mem, byteOffset, bundle, static_cast<AliasResource *>(res), status);
         break;
     case URES_INT_VECTOR:
         intvector_write (mem, byteOffset, bundle, res, status);
@@ -932,149 +975,77 @@ void bundle_write(struct SRBRoot *bundle,
 
 /* Opening Functions */
 
-/* gcc 4.2 complained "no previous prototype for res_open" without this prototype... */
-struct SResource* res_open(struct SRBRoot *bundle, const char *tag,
-                           const struct UString* comment, UErrorCode* status);
-
-struct SResource* res_open(struct SRBRoot *bundle, const char *tag,
-                           const struct UString* comment, UErrorCode* status){
-    struct SResource *res;
-    int32_t key = bundle_addtag(bundle, tag, status);
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    res = (struct SResource *) uprv_malloc(sizeof(struct SResource));
-    if (res == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    uprv_memset(res, 0, sizeof(struct SResource));
-    res->fKey = key;
-    res->fRes = RES_BOGUS;
-
-    ustr_init(&res->fComment);
-    if(comment != NULL){
-        ustr_cpy(&res->fComment, comment, status);
-        if (U_FAILURE(*status)) {
-            res_close(res);
-            return NULL;
-        }
-    }
-    return res;
-}
-
-struct SResource* res_none() {
-    return (struct SResource*)&kNoResource;
-}
-
 struct SResource* table_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status) {
-    struct SResource *res = res_open(bundle, tag, comment, status);
+    LocalPointer<SResource> res(new SResource(bundle, tag, URES_TABLE, comment, *status), *status);
     if (U_FAILURE(*status)) {
         return NULL;
     }
-    res->fType = URES_TABLE;
     res->u.fTable.fRoot = bundle;
-    return res;
+    return res.orphan();
 }
 
 struct SResource* array_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status) {
-    struct SResource *res = res_open(bundle, tag, comment, status);
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
-    res->fType = URES_ARRAY;
-    return res;
+    LocalPointer<SResource> res(new SResource(bundle, tag, URES_ARRAY, comment, *status), *status);
+    return U_SUCCESS(*status) ? res.orphan() : NULL;
 }
 
 static int32_t U_CALLCONV
 string_hash(const UElement key) {
-    const struct SResource *res = (struct SResource *)key.pointer;
-    return ustr_hashUCharsN(res->u.fString.fChars, res->u.fString.fLength);
+    const StringResource *res = static_cast<const StringResource *>(key.pointer);
+    return res->fString.hashCode();
 }
 
 static UBool U_CALLCONV
 string_comp(const UElement key1, const UElement key2) {
-    const struct SResource *res1 = (struct SResource *)key1.pointer;
-    const struct SResource *res2 = (struct SResource *)key2.pointer;
-    return 0 == u_strCompare(res1->u.fString.fChars, res1->u.fString.fLength,
-                             res2->u.fString.fChars, res2->u.fString.fLength,
-                             FALSE);
-}
-
-static struct SResource *
-stringbase_open(struct SRBRoot *bundle, const char *tag, int8_t type,
-                const UChar *value, int32_t len, const struct UString* comment,
-                UErrorCode *status) {
-    struct SResource *res = res_open(bundle, tag, comment, status);
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
-    res->fType = type;
-
-    if (len == 0 && gFormatVersion > 1) {
-        res->u.fString.fChars = &gEmptyString;
-        res->fRes = URES_MAKE_EMPTY_RESOURCE(type);
-        res->fWritten = TRUE;
-        return res;
-    }
-
-    res->u.fString.fLength = len;
-    res->u.fString.fChars = (UChar *) uprv_malloc(sizeof(UChar) * (len + 1));
-    if (res->u.fString.fChars == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(res);
-        return NULL;
-    }
-    uprv_memcpy(res->u.fString.fChars, value, sizeof(UChar) * len);
-    res->u.fString.fChars[len] = 0;
-    return res;
+    const StringResource *res1 = static_cast<const StringResource *>(key1.pointer);
+    const StringResource *res2 = static_cast<const StringResource *>(key2.pointer);
+    return res1->fString == res2->fString;
 }
 
 struct SResource *string_open(struct SRBRoot *bundle, const char *tag, const UChar *value, int32_t len, const struct UString* comment, UErrorCode *status) {
-    return stringbase_open(bundle, tag, URES_STRING, value, len, comment, status);
+    LocalPointer<SResource> res(
+            new StringResource(bundle, tag, value, len, comment, *status), *status);
+    return U_SUCCESS(*status) ? res.orphan() : NULL;
 }
 
 struct SResource *alias_open(struct SRBRoot *bundle, const char *tag, UChar *value, int32_t len, const struct UString* comment, UErrorCode *status) {
-    return stringbase_open(bundle, tag, URES_ALIAS, value, len, comment, status);
+    LocalPointer<SResource> res(
+            new AliasResource(bundle, tag, value, len, comment, *status), *status);
+    return U_SUCCESS(*status) ? res.orphan() : NULL;
 }
 
 
 struct SResource* intvector_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status) {
-    struct SResource *res = res_open(bundle, tag, comment, status);
+    LocalPointer<SResource> res(new SResource(bundle, tag, URES_INT_VECTOR, comment, *status), *status);
     if (U_FAILURE(*status)) {
         return NULL;
     }
-    res->fType = URES_INT_VECTOR;
 
     res->u.fIntVector.fCount = 0;
     res->u.fIntVector.fArray = (uint32_t *) uprv_malloc(sizeof(uint32_t) * RESLIST_MAX_INT_VECTOR);
     if (res->u.fIntVector.fArray == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(res);
         return NULL;
     }
-    return res;
+    return res.orphan();
 }
 
 struct SResource *int_open(struct SRBRoot *bundle, const char *tag, int32_t value, const struct UString* comment, UErrorCode *status) {
-    struct SResource *res = res_open(bundle, tag, comment, status);
+    LocalPointer<SResource> res(new SResource(bundle, tag, URES_INT, comment, *status), *status);
     if (U_FAILURE(*status)) {
         return NULL;
     }
-    res->fType = URES_INT;
     res->u.fIntValue.fValue = value;
     res->fRes = URES_MAKE_RESOURCE(URES_INT, value & 0x0FFFFFFF);
     res->fWritten = TRUE;
-    return res;
+    return res.orphan();
 }
 
 struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t length, uint8_t *data, const char* fileName, const struct UString* comment, UErrorCode *status) {
-    struct SResource *res = res_open(bundle, tag, comment, status);
+    LocalPointer<SResource> res(new SResource(bundle, tag, URES_BINARY, comment, *status), *status);
     if (U_FAILURE(*status)) {
         return NULL;
     }
-    res->fType = URES_BINARY;
 
     res->u.fBinaryValue.fLength = length;
     res->u.fBinaryValue.fFileName = NULL;
@@ -1087,7 +1058,6 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
 
         if (res->u.fBinaryValue.fData == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            uprv_free(res);
             return NULL;
         }
 
@@ -1101,7 +1071,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
         }
     }
 
-    return res;
+    return res.orphan();
 }
 
 struct SRBRoot *bundle_open(const struct UString* comment, UBool isPoolBundle, UErrorCode *status) {
@@ -1187,30 +1157,11 @@ static void array_close(struct SResource *array) {
     array->u.fArray.fFirst = NULL;
 }
 
-static void string_close(struct SResource *string) {
-    if (string->u.fString.fChars != NULL &&
-            string->u.fString.fChars != &gEmptyString) {
-        uprv_free(string->u.fString.fChars);
-        string->u.fString.fChars =NULL;
-    }
-}
-
-static void alias_close(struct SResource *alias) {
-    if (alias->u.fString.fChars != NULL) {
-        uprv_free(alias->u.fString.fChars);
-        alias->u.fString.fChars =NULL;
-    }
-}
-
 static void intvector_close(struct SResource *intvector) {
     if (intvector->u.fIntVector.fArray != NULL) {
         uprv_free(intvector->u.fIntVector.fArray);
         intvector->u.fIntVector.fArray =NULL;
     }
-}
-
-static void int_close(struct SResource * /*intres*/) {
-    /* Intentionally left blank */
 }
 
 static void bin_close(struct SResource *binres) {
@@ -1224,38 +1175,36 @@ static void bin_close(struct SResource *binres) {
     }
 }
 
-void res_close(struct SResource *res) {
-    if (res != NULL) {
-        switch(res->fType) {
-        case URES_STRING:
-            string_close(res);
-            break;
-        case URES_ALIAS:
-            alias_close(res);
-            break;
-        case URES_INT_VECTOR:
-            intvector_close(res);
-            break;
-        case URES_BINARY:
-            bin_close(res);
-            break;
-        case URES_INT:
-            int_close(res);
-            break;
-        case URES_ARRAY:
-            array_close(res);
-            break;
-        case URES_TABLE:
-            table_close(res);
-            break;
-        default:
-            /* Shouldn't happen */
-            break;
-        }
-
-        ustr_deinit(&res->fComment);
-        uprv_free(res);
+SResource::~SResource() {
+    switch(fType) {
+    case URES_STRING:
+        break;
+    case URES_ALIAS:
+        break;
+    case URES_INT_VECTOR:
+        intvector_close(this);
+        break;
+    case URES_BINARY:
+        bin_close(this);
+        break;
+    case URES_INT:
+        break;
+    case URES_ARRAY:
+        array_close(this);
+        break;
+    case URES_TABLE:
+        table_close(this);
+        break;
+    default:
+        /* Shouldn't happen */
+        break;
     }
+
+    ustr_deinit(&fComment);
+}
+
+void res_close(struct SResource *res) {
+    delete res;
 }
 
 void bundle_close(struct SRBRoot *bundle, UErrorCode * /*status*/) {
@@ -1638,12 +1587,12 @@ bundle_compactKeys(struct SRBRoot *bundle, UErrorCode *status) {
 
 static int32_t U_CALLCONV
 compareStringSuffixes(const void * /*context*/, const void *l, const void *r) {
-    struct SResource *left = *((struct SResource **)l);
-    struct SResource *right = *((struct SResource **)r);
-    const UChar *lStart = left->u.fString.fChars;
-    const UChar *lLimit = lStart + left->u.fString.fLength;
-    const UChar *rStart = right->u.fString.fChars;
-    const UChar *rLimit = rStart + right->u.fString.fLength;
+    const StringResource *left = *((const StringResource **)l);
+    const StringResource *right = *((const StringResource **)r);
+    const UChar *lStart = left->getBuffer();
+    const UChar *lLimit = lStart + left->length();
+    const UChar *rStart = right->getBuffer();
+    const UChar *rLimit = rStart + right->length();
     int32_t diff;
     /* compare keys in reverse character order */
     while (lStart < lLimit && rStart < rLimit) {
@@ -1653,29 +1602,29 @@ compareStringSuffixes(const void * /*context*/, const void *l, const void *r) {
         }
     }
     /* sort equal suffixes by descending string length */
-    return right->u.fString.fLength - left->u.fString.fLength;
+    return right->length() - left->length();
 }
 
 static int32_t U_CALLCONV
 compareStringLengths(const void * /*context*/, const void *l, const void *r) {
-    struct SResource *left = *((struct SResource **)l);
-    struct SResource *right = *((struct SResource **)r);
+    const StringResource *left = *((const StringResource **)l);
+    const StringResource *right = *((const StringResource **)r);
     int32_t diff;
     /* Make "is suffix of another string" compare greater than a non-suffix. */
-    diff = (int)(left->u.fString.fSame != NULL) - (int)(right->u.fString.fSame != NULL);
+    diff = (int)(left->fSame != NULL) - (int)(right->fSame != NULL);
     if (diff != 0) {
         return diff;
     }
     /* sort by ascending string length */
-    return left->u.fString.fLength - right->u.fString.fLength;
+    return left->length() - right->length();
 }
 
 static int32_t
-string_writeUTF16v2(struct SRBRoot *bundle, struct SResource *res, int32_t utf16Length) {
-    int32_t length = res->u.fString.fLength;
+string_writeUTF16v2(struct SRBRoot *bundle, StringResource *res, int32_t utf16Length) {
+    int32_t length = res->length();
     res->fRes = URES_MAKE_RESOURCE(URES_STRING_V2, utf16Length);
     res->fWritten = TRUE;
-    switch(res->u.fString.fNumCharsForLength) {
+    switch(res->fNumCharsForLength) {
     case 0:
         break;
     case 1:
@@ -1695,7 +1644,7 @@ string_writeUTF16v2(struct SRBRoot *bundle, struct SResource *res, int32_t utf16
     default:
         break;  /* will not occur */
     }
-    u_memcpy(bundle->f16BitUnits + utf16Length, res->u.fString.fChars, length + 1);
+    u_memcpy(bundle->f16BitUnits + utf16Length, res->getBuffer(), length + 1);
     return utf16Length + length + 1;
 }
 
@@ -1715,7 +1664,7 @@ bundle_compactStrings(struct SRBRoot *bundle, UErrorCode *status) {
     switch(bundle->fStringsForm) {
     case STRINGS_UTF16_V2:
         if (bundle->f16BitUnitsLength > 0) {
-            struct SResource **array;
+            StringResource **array;
             int32_t count = uhash_count(stringSet);
             int32_t i, pos;
             /*
@@ -1725,7 +1674,8 @@ bundle_compactStrings(struct SRBRoot *bundle, UErrorCode *status) {
              */
             int32_t utf16Length = (bundle->f16BitUnitsLength + 20000) & ~1;
             bundle->f16BitUnits = (UChar *)uprv_malloc(utf16Length * U_SIZEOF_UCHAR);
-            array = (struct SResource **)uprv_malloc(count * sizeof(struct SResource **));
+            // TODO: LocalArray
+            array = (StringResource **)uprv_malloc(count * sizeof(StringResource **));
             if (bundle->f16BitUnits == NULL || array == NULL) {
                 uprv_free(bundle->f16BitUnits);
                 bundle->f16BitUnits = NULL;
@@ -1740,7 +1690,7 @@ bundle_compactStrings(struct SRBRoot *bundle, UErrorCode *status) {
             utf16Length = 1;
             ++bundle->f16BitUnitsLength;
             for (pos = UHASH_FIRST, i = 0; i < count; ++i) {
-                array[i] = (struct SResource *)uhash_nextElement(stringSet, &pos)->key.pointer;
+                array[i] = (StringResource *)uhash_nextElement(stringSet, &pos)->key.pointer;
             }
             /* Sort the strings so that each one is immediately followed by all of its suffixes. */
             uprv_sortArray(array, count, (int32_t)sizeof(struct SResource **),
@@ -1757,25 +1707,25 @@ bundle_compactStrings(struct SRBRoot *bundle, UErrorCode *status) {
                      * write this one and subsume the following ones that are
                      * suffixes of this one.
                      */
-                    struct SResource *res = array[i];
-                    const UChar *strLimit = res->u.fString.fChars + res->u.fString.fLength;
+                    StringResource *res = array[i];
+                    const UChar *strLimit = res->getBuffer() + res->length();
                     int32_t j;
                     for (j = i + 1; j < count; ++j) {
-                        struct SResource *suffixRes = array[j];
+                        StringResource *suffixRes = array[j];
                         const UChar *s;
-                        const UChar *suffix = suffixRes->u.fString.fChars;
-                        const UChar *suffixLimit = suffix + suffixRes->u.fString.fLength;
-                        int32_t offset = res->u.fString.fLength - suffixRes->u.fString.fLength;
+                        const UChar *suffix = suffixRes->getBuffer();
+                        const UChar *suffixLimit = suffix + suffixRes->length();
+                        int32_t offset = res->length() - suffixRes->length();
                         if (offset < 0) {
                             break;  /* suffix cannot be longer than the original */
                         }
                         /* Is it a suffix of the earlier, longer key? */
                         for (s = strLimit; suffix < suffixLimit && *--s == *--suffixLimit;) {}
                         if (suffix == suffixLimit && *s == *suffixLimit) {
-                            if (suffixRes->u.fString.fNumCharsForLength == 0) {
+                            if (suffixRes->fNumCharsForLength == 0) {
                                 /* yes, point to the earlier string */
-                                suffixRes->u.fString.fSame = res;
-                                suffixRes->u.fString.fSuffixOffset = offset;
+                                suffixRes->fSame = res;
+                                suffixRes->fSuffixOffset = offset;
                             } else {
                                 /* write the suffix by itself if we need explicit length */
                             }
@@ -1795,15 +1745,15 @@ bundle_compactStrings(struct SRBRoot *bundle, UErrorCode *status) {
                            compareStringLengths, NULL, FALSE, status);
             if (U_SUCCESS(*status)) {
                 /* Write the non-suffix strings. */
-                for (i = 0; i < count && array[i]->u.fString.fSame == NULL; ++i) {
+                for (i = 0; i < count && array[i]->fSame == NULL; ++i) {
                     utf16Length = string_writeUTF16v2(bundle, array[i], utf16Length);
                 }
                 /* Write the suffix strings. Make each point to the real string. */
                 for (; i < count; ++i) {
-                    struct SResource *res = array[i];
-                    struct SResource *same = res->u.fString.fSame;
-                    res->fRes = same->fRes + same->u.fString.fNumCharsForLength + res->u.fString.fSuffixOffset;
-                    res->u.fString.fSame = NULL;
+                    StringResource *res = array[i];
+                    StringResource *same = res->fSame;
+                    res->fRes = same->fRes + same->fNumCharsForLength + res->fSuffixOffset;
+                    res->fSame = NULL;
                     res->fWritten = TRUE;
                 }
             }

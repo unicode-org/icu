@@ -40,6 +40,7 @@
 #include "rbt_pars.h"
 #include "genrb.h"
 #include "unicode/stringpiece.h"
+#include "unicode/unistr.h"
 #include "unicode/ustring.h"
 #include "unicode/uscript.h"
 #include "unicode/utf16.h"
@@ -774,9 +775,10 @@ GenrbImporter::getRules(
       struct SResource *collation = resLookup(collations, collationType);
       if (collation != NULL) {
         struct SResource *sequence = resLookup(collation, "Sequence");
-        if (sequence != NULL) {
+        if (sequence != NULL && sequence->isString()) {
           // No string pointer aliasing so that we need not hold onto the resource bundle.
-          rules.setTo(sequence->u.fString.fChars, sequence->u.fString.fLength);
+          StringResource *sr = static_cast<StringResource *>(sequence);
+          rules = sr->fString;
         }
       }
     }
@@ -871,17 +873,18 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
         {
             // Ignore the parsed resources, continue parsing.
         }
-        else if (uprv_strcmp(subtag, "Version") == 0)
+        else if (uprv_strcmp(subtag, "Version") == 0 && member->isString())
         {
+            StringResource *sr = static_cast<StringResource *>(member);
             char     ver[40];
-            int32_t length = member->u.fString.fLength;
+            int32_t length = sr->length();
 
-            if (length >= (int32_t) sizeof(ver))
+            if (length >= UPRV_LENGTHOF(ver))
             {
-                length = (int32_t) sizeof(ver) - 1;
+                length = UPRV_LENGTHOF(ver) - 1;
             }
 
-            u_UCharsToChars(member->u.fString.fChars, ver, length + 1); /* +1 for copying NULL */
+            sr->fString.extract(0, length, ver, UPRV_LENGTHOF(ver), US_INV);
             u_versionFromString(version, ver);
 
             table_add(result, member, line, status);
@@ -891,9 +894,10 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
         {
             /* discard duplicate %%CollationBin if any*/
         }
-        else if (uprv_strcmp(subtag, "Sequence") == 0)
+        else if (uprv_strcmp(subtag, "Sequence") == 0 && member->isString())
         {
-            rules.setTo(member->u.fString.fChars, member->u.fString.fLength);
+            StringResource *sr = static_cast<StringResource *>(member);
+            rules = sr->fString;
             haveRules = TRUE;
             // Defer building the collator until we have seen
             // all sub-elements of the collation table, including the Version.
