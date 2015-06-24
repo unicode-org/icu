@@ -1535,11 +1535,11 @@ public:
 
   /**
    * Copy the characters in the range 
-   * [<tt>start</TT>, <tt>start + length</TT>) into an array of characters.
+   * [<tt>start</TT>, <tt>start + startLength</TT>) into an array of characters.
    * All characters must be invariant (see utypes.h).
    * Use US_INV as the last, signature-distinguishing parameter.
    *
-   * This function does not write any more than <code>targetLength</code>
+   * This function does not write any more than <code>targetCapacity</code>
    * characters but returns the length of the entire output string
    * so that one can allocate a larger buffer and call the function again
    * if necessary.

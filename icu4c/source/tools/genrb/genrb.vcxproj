@@ -239,7 +239,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="errmsg.c" />
-    <ClCompile Include="genrb.c" />
+    <ClCompile Include="genrb.cpp" />
     <ClCompile Include="parse.cpp">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>

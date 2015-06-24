@@ -18,7 +18,7 @@
     <ClCompile Include="errmsg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="genrb.c">
+    <ClCompile Include="genrb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="parse.cpp">
