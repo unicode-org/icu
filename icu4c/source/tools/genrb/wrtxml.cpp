@@ -682,7 +682,7 @@ alias_write_xml(AliasResource *res, const char* id, const char* /*language*/, UE
 }
 
 static void
-array_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+array_write_xml(ArrayResource *res, const char* id, const char* language, UErrorCode *status) {
     char* sid = NULL;
     int index = 0;
 
@@ -690,7 +690,7 @@ array_write_xml(struct SResource *res, const char* id, const char* language, UEr
 
     sid = printContainer(res, group, array_restype, NULL, id, status);
 
-    current = res->u.fArray.fFirst;
+    current = res->fFirst;
 
     while (current != NULL) {
         char c[256] = {0};
@@ -719,7 +719,7 @@ array_write_xml(struct SResource *res, const char* id, const char* language, UEr
 }
 
 static void
-intvector_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
+intvector_write_xml(IntVectorResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
     char* sid = NULL;
     char* ivd = NULL;
     uint32_t i=0;
@@ -728,12 +728,12 @@ intvector_write_xml(struct SResource *res, const char* id, const char* /*languag
 
     sid = printContainer(res, group, intvector_restype, NULL, id, status);
 
-    for(i = 0; i < res->u.fIntVector.fCount; i += 1) {
+    for(i = 0; i < res->fCount; i += 1) {
         char c[256] = {0};
 
         itostr(c, i, 10, 0);
         ivd = getID(sid, c, ivd);
-        len = itostr(buf, res->u.fIntVector.fArray[i], 10, 0);
+        len = itostr(buf, res->fArray[i], 10, 0);
 
         write_tabs(out);
         write_utf8_file(out, UnicodeString("<"));
@@ -768,7 +768,7 @@ intvector_write_xml(struct SResource *res, const char* id, const char* /*languag
 }
 
 static void
-int_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
+int_write_xml(IntResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
     char* sid = NULL;
     char buf[256] = {0};
     uint32_t len = 0;
@@ -779,7 +779,7 @@ int_write_xml(struct SResource *res, const char* id, const char* /*language*/, U
 
     write_utf8_file(out, UnicodeString(source));
 
-    len = itostr(buf, res->u.fIntValue.fValue, 10, 0);
+    len = itostr(buf, res->fValue, 10, 0);
     write_utf8_file(out, UnicodeString(buf, len));
 
     write_utf8_file(out, UnicodeString(close_source));
@@ -796,7 +796,7 @@ int_write_xml(struct SResource *res, const char* id, const char* /*language*/, U
 }
 
 static void
-bin_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
+bin_write_xml(BinaryResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
     const char* m_type = application_mimetype;
     char* sid = NULL;
     uint32_t crc = 0xFFFFFFFF;
@@ -804,16 +804,16 @@ bin_write_xml(struct SResource *res, const char* id, const char* /*language*/, U
     char fileName[1024] ={0};
     int32_t tLen = ( outDir == NULL) ? 0 :(int32_t)uprv_strlen(outDir);
     char* fn =  (char*) uprv_malloc(sizeof(char) * (tLen+1024 +
-                                                    (res->u.fBinaryValue.fFileName !=NULL ?
-                                                    uprv_strlen(res->u.fBinaryValue.fFileName) :0)));
+                                                    (res->fFileName !=NULL ?
+                                                    uprv_strlen(res->fFileName) :0)));
     const char* ext = NULL;
 
     char* f = NULL;
 
     fn[0]=0;
 
-    if(res->u.fBinaryValue.fFileName != NULL){
-        uprv_strcpy(fileName, res->u.fBinaryValue.fFileName);
+    if(res->fFileName != NULL){
+        uprv_strcpy(fileName, res->fFileName);
         f = uprv_strrchr(fileName, '\\');
 
         if (f != NULL) {
@@ -876,8 +876,8 @@ bin_write_xml(struct SResource *res, const char* id, const char* /*language*/, U
         write_utf8_file(out, UnicodeString(internal_file));
         printAttribute("form", application_mimetype, (int32_t) uprv_strlen(application_mimetype));
 
-        while(i <res->u.fBinaryValue.fLength){
-            len = itostr(temp, res->u.fBinaryValue.fData[i], 16, 2);
+        while(i <res->fLength){
+            len = itostr(temp, res->fData[i], 16, 2);
             crc = computeCRC(temp, len, crc);
             i++;
         }
@@ -888,8 +888,8 @@ bin_write_xml(struct SResource *res, const char* id, const char* /*language*/, U
         write_utf8_file(out, UnicodeString(">"));
 
         i = 0;
-        while(i <res->u.fBinaryValue.fLength){
-            len = itostr(temp, res->u.fBinaryValue.fData[i], 16, 2);
+        while(i <res->fLength){
+            len = itostr(temp, res->fData[i], 16, 2);
             write_utf8_file(out, UnicodeString(temp));
             i += 1;
         }
@@ -916,7 +916,7 @@ bin_write_xml(struct SResource *res, const char* id, const char* /*language*/, U
 
 
 static void
-table_write_xml(struct SResource *res, const char* id, const char* language, UBool isTopLevel, UErrorCode *status) {
+table_write_xml(TableResource *res, const char* id, const char* language, UBool isTopLevel, UErrorCode *status) {
 
     uint32_t  i         = 0;
 
@@ -933,7 +933,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UBo
         sid[0] = '\0';
     }
 
-    current = res->u.fTable.fFirst;
+    current = res->fFirst;
     i = 0;
 
     while (current != NULL) {
@@ -974,23 +974,23 @@ res_write_xml(struct SResource *res, const char* id,  const char* language, UBoo
              return;
 
         case URES_INT_VECTOR:
-             intvector_write_xml (res, id, language, status);
+             intvector_write_xml (static_cast<IntVectorResource *>(res), id, language, status);
              return;
 
         case URES_BINARY:
-             bin_write_xml       (res, id, language, status);
+             bin_write_xml       (static_cast<BinaryResource *>(res), id, language, status);
              return;
 
         case URES_INT:
-             int_write_xml       (res, id, language, status);
+             int_write_xml       (static_cast<IntResource *>(res), id, language, status);
              return;
 
         case URES_ARRAY:
-             array_write_xml     (res, id, language, status);
+             array_write_xml     (static_cast<ArrayResource *>(res), id, language, status);
              return;
 
         case URES_TABLE:
-             table_write_xml     (res, id, language, isTopLevel, status);
+             table_write_xml     (static_cast<TableResource *>(res), id, language, isTopLevel, status);
              return;
 
         default:
