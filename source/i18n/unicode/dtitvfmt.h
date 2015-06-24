@@ -389,6 +389,9 @@ public:
      *                          Result is appended to existing contents.
      * @param fieldPosition     On input: an alignment field, if desired.
      *                          On output: the offsets of the alignment field.
+     *                          There may be multiple instances of a given field type
+     *                          in an interval format; in this case the fieldPosition
+     *                          offsets refer to the first instance.
      * @param status            Output param filled with success/failure status.
      * @return                  Reference to 'appendTo' parameter.
      * @stable ICU 4.0
@@ -408,6 +411,9 @@ public:
      *                          Result is appended to existing contents.
      * @param fieldPosition     On input: an alignment field, if desired.
      *                          On output: the offsets of the alignment field.
+     *                          There may be multiple instances of a given field type
+     *                          in an interval format; in this case the fieldPosition
+     *                          offsets refer to the first instance.
      * @param status            Output param filled with success/failure status.
      * @return                  Reference to 'appendTo' parameter.
      * @stable ICU 4.0
@@ -432,6 +438,9 @@ public:
      *                          Result is appended to existing contents.
      * @param fieldPosition     On input: an alignment field, if desired.
      *                          On output: the offsets of the alignment field.
+     *                          There may be multiple instances of a given field type
+     *                          in an interval format; in this case the fieldPosition
+     *                          offsets refer to the first instance.
      * @param status            Output param filled with success/failure status.
      *                          Caller needs to make sure it is SUCCESS
      *                          at the function entrance
@@ -667,19 +676,26 @@ private:
      */
 
     /**
-     * @param combiningPattern  xxx
-     * @param pat0              xxx
-     * @param pos0              xxx
-     * @param pat1              xxx
-     * @param pos1              xxx
-     * @param posResult         xxx
+     * Provide an updated FieldPosition posResult based on two formats,
+     * the FieldPosition values for each of them, and the pattern used
+     * to combine them. The idea is for posResult to indicate the first
+     * instance (if any) of the specified field in the combined result,
+     * with correct offsets.
+     *
+     * @param combiningPattern  Pattern used to combine pat0 and pat1
+     * @param pat0              Formatted date/time value to replace {0}
+     * @param pos0              FieldPosition within pat0
+     * @param pat1              Formatted date/time value to replace {1}
+     * @param pos1              FieldPosition within pat1
+     * @param posResult         FieldPosition to be set to the correct
+     *                          position of the first field instance when
+     *                          pat0 and pat1 are combined using combiningPattern
      */
     static void
     adjustPosition(UnicodeString& combiningPattern, // has {0} and {1} in it
                    UnicodeString& pat0, FieldPosition& pos0, // pattern and pos corresponding to {0}
                    UnicodeString& pat1, FieldPosition& pos1, // pattern and pos corresponding to {1}
                    FieldPosition& posResult);
-
 
 
     /**
