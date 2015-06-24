@@ -85,9 +85,11 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * <P>
  * The calendar fields we support for interval formatting are:
- * year, month, date, day-of-week, am-pm, hour, hour-of-day, and minute.
+ * year, month, date, day-of-week, am-pm, hour, hour-of-day, minute, and
+ * second (though we do not currently have specific intervalFormat data for
+ * skeletons with seconds). 
  * Those calendar fields can be defined in the following order:
- * year >  month > date > hour (in day) >  minute 
+ * year >  month > date > hour (in day) > minute > second
  *  
  * The largest different calendar fields between 2 calendars is the
  * first different calendar field in above order.
@@ -216,7 +218,8 @@ import com.ibm.icu.util.ULocale.Category;
  *     dtitvinf = new DateIntervalInfo();
  *     
  *     // a series of set interval patterns.
- *     // Only ERA, YEAR, MONTH, DATE,  DAY_OF_MONTH, DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY, and MINUTE  are supported.
+ *     // Only ERA, YEAR, MONTH, DATE,  DAY_OF_MONTH, DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY,
+ *     MINUTE and SECOND are supported.
  *     dtitvinf.setIntervalPattern("yMMMd", Calendar.YEAR, "'y ~ y'"); 
  *     dtitvinf.setIntervalPattern("yMMMd", Calendar.MONTH, "yyyy 'diff' MMM d - MMM d");
  *     dtitvinf.setIntervalPattern("yMMMd", Calendar.DATE, "yyyy MMM d ~ d");
@@ -307,7 +310,7 @@ public class DateIntervalFormat extends UFormat {
 
     /*
      * Following are transient interval information
-     * relavent (locale) to this formatter.
+     * relevant (locale) to this formatter.
      */
     private String fSkeleton = null;
     
@@ -321,6 +324,13 @@ public class DateIntervalFormat extends UFormat {
      *  Interval patterns for this instance's locale.
      */
     private transient Map<String, PatternInfo> fIntervalPatterns = null;
+
+    /*
+     * Patterns for fallback formatting. 
+     */
+    private String fDatePattern = null;
+    private String fTimePattern = null;
+    private String fDateTimeFormat = null;
     
    
     /*
@@ -556,6 +566,9 @@ public class DateIntervalFormat extends UFormat {
         other.fInfo = (DateIntervalInfo) fInfo.clone();
         other.fFromCalendar = (Calendar) fFromCalendar.clone();
         other.fToCalendar = (Calendar) fToCalendar.clone();
+        other.fDatePattern = fDatePattern;
+        other.fTimePattern = fTimePattern;
+        other.fDateTimeFormat = fDateTimeFormat;
         return other;
     }
 
@@ -572,6 +585,9 @@ public class DateIntervalFormat extends UFormat {
      *                          Result is appended to existing contents.
      * @param fieldPosition     On input: an alignment field, if desired.
      *                          On output: the offsets of the alignment field.
+     *                          There may be multiple instances of a given field type
+     *                          in an interval format; in this case the fieldPosition
+     *                          offsets refer to the first instance.
      * @return                  Reference to 'appendTo' parameter.
      * @throws    IllegalArgumentException  if the formatted object is not 
      *                                      DateInterval object
@@ -596,6 +612,9 @@ public class DateIntervalFormat extends UFormat {
      *                          Result is appended to existing contents.
      * @param fieldPosition     On input: an alignment field, if desired.
      *                          On output: the offsets of the alignment field.
+     *                          There may be multiple instances of a given field type
+     *                          in an interval format; in this case the fieldPosition
+     *                          offsets refer to the first instance.
      * @return                  Reference to 'appendTo' parameter.
      * @stable ICU 4.0
      */
@@ -638,6 +657,9 @@ public class DateIntervalFormat extends UFormat {
         } else if ( fromCalendar.get(Calendar.MINUTE) !=
                     toCalendar.get(Calendar.MINUTE) ) {
             field = Calendar.MINUTE;
+        } else if ( fromCalendar.get(Calendar.SECOND) !=
+                    toCalendar.get(Calendar.SECOND) ) {
+            field = Calendar.SECOND;
         } else {
             return null;
         }
@@ -657,6 +679,9 @@ public class DateIntervalFormat extends UFormat {
      *                          Result is appended to existing contents.
      * @param pos               On input: an alignment field, if desired.
      *                          On output: the offsets of the alignment field.
+     *                          There may be multiple instances of a given field type
+     *                          in an interval format; in this case the fieldPosition
+     *                          offsets refer to the first instance.
      * @return                  Reference to 'appendTo' parameter.
      * @throws    IllegalArgumentException  if the two calendars are not equivalent.
      * @stable ICU 4.0
@@ -694,12 +719,16 @@ public class DateIntervalFormat extends UFormat {
         } else if ( fromCalendar.get(Calendar.MINUTE) !=
                     toCalendar.get(Calendar.MINUTE) ) {
             field = Calendar.MINUTE;
-        } else {
-            /* ignore the second/millisecond etc. small fields' difference.
+         } else if ( fromCalendar.get(Calendar.SECOND) !=
+                    toCalendar.get(Calendar.SECOND) ) {
+            field = Calendar.SECOND;
+       } else {
+            /* ignore the millisecond etc. small fields' difference.
              * use single date when all the above are the same.
              */
             return fDateFormat.format(fromCalendar, appendTo, pos);
         }
+        boolean fromToOnSameDay = (field==Calendar.AM_PM || field==Calendar.HOUR || field==Calendar.MINUTE || field==Calendar.SECOND);
         
         // get interval pattern
         PatternInfo intervalPattern = fIntervalPatterns.get(
@@ -714,7 +743,7 @@ public class DateIntervalFormat extends UFormat {
                 return fDateFormat.format(fromCalendar, appendTo, pos);
             }
 
-            return fallbackFormat(fromCalendar, toCalendar, appendTo, pos);
+            return fallbackFormat(fromCalendar, toCalendar, fromToOnSameDay, appendTo, pos);
         }
 
         // If the first part in interval pattern is empty, 
@@ -722,7 +751,7 @@ public class DateIntervalFormat extends UFormat {
         // For a 'real' interval pattern, the first part will never be empty.
         if ( intervalPattern.getFirstPart() == null ) {
             // fall back
-            return fallbackFormat(fromCalendar, toCalendar, appendTo, pos,
+            return fallbackFormat(fromCalendar, toCalendar, fromToOnSameDay, appendTo, pos,
                                     intervalPattern.getSecondPart());
         }
         Calendar firstCal;
@@ -741,12 +770,48 @@ public class DateIntervalFormat extends UFormat {
         fDateFormat.format(firstCal, appendTo, pos);
         if ( intervalPattern.getSecondPart() != null ) {
             fDateFormat.applyPattern(intervalPattern.getSecondPart());
-            fDateFormat.format(secondCal, appendTo, pos);
+            FieldPosition otherPos = new FieldPosition(pos.getField());
+            fDateFormat.format(secondCal, appendTo, otherPos);
+            if (pos.getEndIndex() == 0 && otherPos.getEndIndex() > 0) {
+                pos = otherPos;
+            }
         }
         fDateFormat.applyPattern(originalPattern);
         return appendTo;
     }
 
+    private void adjustPosition(String combiningPattern, // has {0} and {1} in it
+                                String pat0, FieldPosition pos0, // pattern and pos corresponding to {0}
+                                String pat1, FieldPosition pos1, // pattern and pos corresponding to {1}
+                                FieldPosition posResult) {
+        int index0 = combiningPattern.indexOf("{0}");
+        int index1 = combiningPattern.indexOf("{1}");
+        if (index0 < 0 || index1 < 0) {
+            return;
+        }
+        int placeholderLen = 3; // length of "{0}" or "{1}"
+        if (index0 < index1) {
+            if (pos0.getEndIndex() > 0) {
+                posResult.setBeginIndex(pos0.getBeginIndex() + index0);
+                posResult.setEndIndex(pos0.getEndIndex() + index0);
+            } else if (pos1.getEndIndex() > 0) {
+                // here index1 >= 3
+                index1 += pat0.length() - placeholderLen; // adjust for pat0 replacing {0}
+                posResult.setBeginIndex(pos1.getBeginIndex() + index1);
+                posResult.setEndIndex(pos1.getEndIndex() + index1);
+            }
+        } else {
+            if (pos1.getEndIndex() > 0) {
+                posResult.setBeginIndex(pos1.getBeginIndex() + index1);
+                posResult.setEndIndex(pos1.getEndIndex() + index1);
+            } else if (pos0.getEndIndex() > 0) {
+                // here index0 >= 3
+                index0 += pat1.length() - placeholderLen; // adjust for pat1 replacing {1}
+                posResult.setBeginIndex(pos0.getBeginIndex() + index0);
+                posResult.setEndIndex(pos0.getEndIndex() + index0);
+            }
+        }
+    }
 
     /*
      * Format 2 Calendars to using fall-back interval pattern
@@ -766,17 +831,41 @@ public class DateIntervalFormat extends UFormat {
      */
     private final StringBuffer fallbackFormat(Calendar fromCalendar,
                                               Calendar toCalendar,
+                                              boolean fromToOnSameDay,
                                               StringBuffer appendTo,
                                               FieldPosition pos)  {
+            String fullPattern = null; // for saving the pattern in fDateFormat
+            boolean formatDatePlusTimeRange = (fromToOnSameDay && fDatePattern != null && fTimePattern != null);
             // the fall back
+            if (formatDatePlusTimeRange) {
+                fullPattern = fDateFormat.toPattern(); // save current pattern, restore later
+                fDateFormat.applyPattern(fTimePattern);
+            }
+            FieldPosition otherPos = new FieldPosition(pos.getField());
             StringBuffer earlierDate = new StringBuffer(64);
             earlierDate = fDateFormat.format(fromCalendar, earlierDate, pos);
             StringBuffer laterDate = new StringBuffer(64);
-            laterDate = fDateFormat.format(toCalendar, laterDate, pos);
+            laterDate = fDateFormat.format(toCalendar, laterDate, otherPos);
             String fallbackPattern = fInfo.getFallbackIntervalPattern();
-            String fallback = MessageFormat.format(fallbackPattern, new Object[]
+            adjustPosition(fallbackPattern, earlierDate.toString(), pos, laterDate.toString(), otherPos, pos);
+            String fallbackRange = MessageFormat.format(fallbackPattern, new Object[]
                             {earlierDate.toString(), laterDate.toString()});
-            appendTo.append(fallback);
+            if (formatDatePlusTimeRange) {
+                // fallbackRange has just the time range, need to format the date part and combine that
+                fDateFormat.applyPattern(fDatePattern);
+                StringBuffer datePortion = new StringBuffer(64);
+                otherPos.setBeginIndex(0);
+                otherPos.setEndIndex(0);
+                datePortion = fDateFormat.format(fromCalendar, datePortion, otherPos);
+                adjustPosition(fDateTimeFormat, fallbackRange, pos, datePortion.toString(), otherPos, pos);
+                fallbackRange = MessageFormat.format(fDateTimeFormat, new Object[]
+                            {fallbackRange, datePortion.toString()});
+            }
+            appendTo.append(fallbackRange);
+            if (formatDatePlusTimeRange) {
+                // restore full pattern
+                fDateFormat.applyPattern(fullPattern);
+            }
             return appendTo;
     }
 
@@ -800,12 +889,13 @@ public class DateIntervalFormat extends UFormat {
      */
     private final StringBuffer fallbackFormat(Calendar fromCalendar,
                                               Calendar toCalendar,
+                                              boolean fromToOnSameDay,
                                               StringBuffer appendTo,
                                               FieldPosition pos, 
                                               String fullPattern)  {
             String originalPattern = fDateFormat.toPattern();
             fDateFormat.applyPattern(fullPattern);
-            fallbackFormat(fromCalendar, toCalendar, appendTo, pos);
+            fallbackFormat(fromCalendar, toCalendar, fromToOnSameDay, appendTo, pos);
             fDateFormat.applyPattern(originalPattern);
             return appendTo;
     }
@@ -1030,10 +1120,22 @@ public class DateIntervalFormat extends UFormat {
         String normalizedDateSkeleton = normalizedDate.toString();
         String normalizedTimeSkeleton = normalizedTime.toString();
 
+        // move this up here since we need it for fallbacks
+        if (time.length() != 0 && date.length() != 0) {
+            // Need the Date/Time pattern for concatnation the date with
+            // the time interval.
+            // The date/time pattern ( such as {0} {1} ) is saved in
+            // calendar, that is why need to get the CalendarData here.
+            CalendarData calData = new CalendarData(locale, null);
+            String[] patterns = calData.getDateTimePatterns();
+            fDateTimeFormat = patterns[8];
+        }
+
         boolean found = genSeparateDateTimePtn(normalizedDateSkeleton, 
                                                normalizedTimeSkeleton,
-                                               intervalPatterns);
+                                               intervalPatterns, dtpng);
 
+        // for skeletons with seconds, found is false and we enter this block
         if ( found == false ) {
             // use fallback
             // TODO: if user asks "m", but "d" differ
@@ -1137,16 +1239,13 @@ public class DateIntervalFormat extends UFormat {
              * 2) otherwise, present the date followed by the 
              * range expression for the time. 
              */
-            // Need the Date/Time pattern for concatnation the date with
-            // the time interval.
-            // The date/time pattern ( such as {0} {1} ) is saved in
-            // calendar, that is why need to get the CalendarData here.
-            CalendarData calData = new CalendarData(locale, null);
-            String[] patterns = calData.getDateTimePatterns();
+            if (fDateTimeFormat == null) {
+                fDateTimeFormat = "{1} {0}";
+            }
             String datePattern =dtpng.getBestPattern(dateSkeleton);
-            concatSingleDate2TimeInterval(patterns[8], datePattern, Calendar.AM_PM, intervalPatterns);
-            concatSingleDate2TimeInterval(patterns[8], datePattern, Calendar.HOUR, intervalPatterns);
-            concatSingleDate2TimeInterval(patterns[8], datePattern, Calendar.MINUTE, intervalPatterns);
+            concatSingleDate2TimeInterval(fDateTimeFormat, datePattern, Calendar.AM_PM, intervalPatterns);
+            concatSingleDate2TimeInterval(fDateTimeFormat, datePattern, Calendar.HOUR, intervalPatterns);
+            concatSingleDate2TimeInterval(fDateTimeFormat, datePattern, Calendar.MINUTE, intervalPatterns);
         }
 
         return intervalPatterns;
@@ -1383,12 +1482,13 @@ public class DateIntervalFormat extends UFormat {
      */
     private boolean genSeparateDateTimePtn(String dateSkeleton, 
                                            String timeSkeleton,
-                                           Map<String, PatternInfo> intervalPatterns)
+                                           Map<String, PatternInfo> intervalPatterns,
+                                           DateTimePatternGenerator dtpng)
     {
         String skeleton;
         // if both date and time skeleton present,
         // the final interval pattern might include time interval patterns
-        // ( when, am_pm, hour, minute differ ),
+        // ( when, am_pm, hour, minute, second differ ),
         // but not date interval patterns ( when year, month, day differ ).
         // For year/month/day differ, it falls back to fall-back pattern.
         if ( timeSkeleton.length() != 0  ) {
@@ -1410,11 +1510,22 @@ public class DateIntervalFormat extends UFormat {
         String bestSkeleton = retValue.bestMatchSkeleton;
         int differenceInfo =  retValue.bestMatchDistanceInfo;
    
+        // Set patterns for fallback use, need to do this
+        // before returning if differenceInfo == -1
+        if (dateSkeleton.length() != 0  ) {
+            fDatePattern = dtpng.getBestPattern(dateSkeleton);
+        }
+        if (timeSkeleton.length() != 0  ) {
+            fTimePattern = dtpng.getBestPattern(timeSkeleton);
+        }
+
         // difference:
         // 0 means the best matched skeleton is the same as input skeleton
         // 1 means the fields are the same, but field width are different
         // 2 means the only difference between fields are v/z,
         // -1 means there are other fields difference 
+        // (this will happen, for instance, if the supplied skeleton has seconds,
+        //  but no skeletons in the intervalFormats data do)
         if ( differenceInfo == -1 ) { 
             // skeleton has different fields, not only  v/z difference
             return false;
