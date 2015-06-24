@@ -459,10 +459,10 @@ DateIntervalFormat::adoptTimeZone(TimeZone* zone)
     // work clones of that calendar (and should not also be given ownership of the
     // adopted TimeZone).
     if (fFromCalendar) {
-    	fFromCalendar->setTimeZone(*zone);
+        fFromCalendar->setTimeZone(*zone);
     }
     if (fToCalendar) {
-    	fToCalendar->setTimeZone(*zone);
+        fToCalendar->setTimeZone(*zone);
     }
 }
 
@@ -475,10 +475,10 @@ DateIntervalFormat::setTimeZone(const TimeZone& zone)
     // The fDateFormat has the master calendar for the DateIntervalFormat;
     // fFromCalendar and fToCalendar are internal work clones of that calendar.
     if (fFromCalendar) {
-    	fFromCalendar->setTimeZone(zone);
+        fFromCalendar->setTimeZone(zone);
     }
     if (fToCalendar) {
-    	fToCalendar->setTimeZone(zone);
+        fToCalendar->setTimeZone(zone);
     }
 }
 
@@ -1386,25 +1386,21 @@ DateIntervalFormat::fallbackFormat(Calendar& fromCalendar,
     
     UnicodeString fallbackRange;
     MessageFormat::format(fallbackPattern, fmtArray, 2, fallbackRange, status);
+    if ( U_SUCCESS(status) && formatDatePlusTimeRange ) {
+        // fallbackRange has just the time range, need to format the date part and combine that
+        fDateFormat->applyPattern(*fDatePattern);
+        UnicodeString* datePortion = new UnicodeString();
+        otherPos.setBeginIndex(0);
+        otherPos.setEndIndex(0);
+        fDateFormat->format(fromCalendar, *datePortion, otherPos);
+        adjustPosition(*fDateTimeFormat, fallbackRange, pos, *datePortion, otherPos, pos);
+        fmtArray[0].setString(fallbackRange); // {0} is time range
+        fmtArray[1].adoptString(datePortion); // {1} is single date portion
+        fallbackRange.remove();
+        MessageFormat::format(*fDateTimeFormat, fmtArray, 2, fallbackRange, status);
+    }
     if ( U_SUCCESS(status) ) {
-        if (!formatDatePlusTimeRange) {
-            appendTo.append(fallbackRange);
-        } else {
-            // fallbackRange has just the time range, need to format the date part and combine that
-            fDateFormat->applyPattern(*fDatePattern);
-            UnicodeString* datePortion = new UnicodeString();
-            otherPos.setBeginIndex(0);
-            otherPos.setEndIndex(0);
-            fDateFormat->format(fromCalendar, *datePortion, otherPos);
-            adjustPosition(*fDateTimeFormat, fallbackRange, pos, *datePortion, otherPos, pos);
-            fmtArray[0].setString(fallbackRange); // {0} is time range
-            fmtArray[1].adoptString(datePortion); // {1} is single date portion
-            fallbackRange.remove();
-            MessageFormat::format(*fDateTimeFormat, fmtArray, 2, fallbackRange, status);
-            if ( U_SUCCESS(status) ) {
-                appendTo.append(fallbackRange);
-            }
-        }
+        appendTo.append(fallbackRange);
     }
     if (formatDatePlusTimeRange) {
         // restore full pattern
