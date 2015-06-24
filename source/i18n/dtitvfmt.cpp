@@ -1330,13 +1330,14 @@ DateIntervalFormat::adjustPosition(UnicodeString& combiningPattern, // has {0} a
     if (index0 < 0 || index1 < 0) {
         return;
     }
+    int32_t placeholderLen = 3; // length of "{0}" or "{1}"
     if (index0 < index1) {
         if (pos0.getEndIndex() > 0) {
             posResult.setBeginIndex(pos0.getBeginIndex() + index0);
             posResult.setEndIndex(pos0.getEndIndex() + index0);
         } else if (pos1.getEndIndex() > 0) {
             // here index1 >= 3
-            index1 += pat0.length() - 3; // adjust for pat0 replacing {0}
+            index1 += pat0.length() - placeholderLen; // adjust for pat0 replacing {0}
             posResult.setBeginIndex(pos1.getBeginIndex() + index1);
             posResult.setEndIndex(pos1.getEndIndex() + index1);
         }
@@ -1346,7 +1347,7 @@ DateIntervalFormat::adjustPosition(UnicodeString& combiningPattern, // has {0} a
             posResult.setEndIndex(pos1.getEndIndex() + index1);
         } else if (pos0.getEndIndex() > 0) {
             // here index0 >= 3
-            index0 += pat1.length() - 3; // adjust for pat1 replacing {1}
+            index0 += pat1.length() - placeholderLen; // adjust for pat1 replacing {1}
             posResult.setBeginIndex(pos0.getBeginIndex() + index0);
             posResult.setEndIndex(pos0.getEndIndex() + index0);
         }
