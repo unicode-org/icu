@@ -33,13 +33,15 @@
 
 U_CDECL_BEGIN
 
+class TableResource;
+
 typedef struct KeyMapEntry {
     int32_t oldpos, newpos;
 } KeyMapEntry;
 
 /* Resource bundle root table */
 struct SRBRoot {
-  struct SResource *fRoot;
+  TableResource *fRoot;
   char *fLocale;
   int32_t fIndexLength;
   int32_t fMaxTableLength;
@@ -103,48 +105,20 @@ bundle_compactKeys(struct SRBRoot *bundle, UErrorCode *status);
  */
 struct SResource* res_none(void);
 
-struct SResTable {
-    uint32_t fCount;
-    int8_t fType;  /* determined by table_write16() for table_preWrite() & table_write() */
-    struct SResource *fFirst;
-    struct SRBRoot *fRoot;
-};
+class ArrayResource;
+class IntVectorResource;
 
-struct SResource* table_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
-void table_add(struct SResource *table, struct SResource *res, int linenumber, UErrorCode *status);
+TableResource *table_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
 
-struct SResArray {
-    uint32_t fCount;
-    struct SResource *fFirst;
-    struct SResource *fLast;
-};
-
-struct SResource* array_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
-void array_add(struct SResource *array, struct SResource *res, UErrorCode *status);
+ArrayResource *array_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
 
 struct SResource *string_open(struct SRBRoot *bundle, const char *tag, const UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
 
 struct SResource *alias_open(struct SRBRoot *bundle, const char *tag, UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
 
-struct SResIntVector {
-    uint32_t fCount;
-    uint32_t *fArray;
-};
-
-struct SResource* intvector_open(struct SRBRoot *bundle, const char *tag,  const struct UString* comment, UErrorCode *status);
-void intvector_add(struct SResource *intvector, int32_t value, UErrorCode *status);
-
-struct SResInt {
-    uint32_t fValue;
-};
+IntVectorResource *intvector_open(struct SRBRoot *bundle, const char *tag,  const struct UString* comment, UErrorCode *status);
 
 struct SResource *int_open(struct SRBRoot *bundle, const char *tag, int32_t value, const struct UString* comment, UErrorCode *status);
-
-struct SResBinary {
-    uint32_t fLength;
-    uint8_t *fData;
-    char* fFileName; /* file name for binary or import binary tags if any */
-};
 
 struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t length, uint8_t *data, const char* fileName, const struct UString* comment, UErrorCode *status);
 
@@ -156,9 +130,10 @@ struct SResource {
               UErrorCode &errorCode);
     virtual ~SResource();
 
+    UBool isTable() const { return fType == URES_TABLE; }
     UBool isString() const { return fType == URES_STRING; }
 
-    // TODO: subclasses by type, virtual methods for dispatch, maybe remove fType
+    // TODO: virtual methods for dispatch, maybe remove fType
 
     int8_t   fType;     /* nominal type: fRes (when != 0xffffffff) may use subtype */
     UBool    fWritten;  /* res_write() can exit early */
@@ -167,13 +142,46 @@ struct SResource {
     int      line;      /* used internally to report duplicate keys in tables */
     struct SResource *fNext; /*This is for internal chaining while building*/
     struct UString fComment;
-    union {
-        struct SResTable fTable;
-        struct SResArray fArray;
-        struct SResIntVector fIntVector;
-        struct SResInt fIntValue;
-        struct SResBinary fBinaryValue;
-    } u;
+};
+
+class ContainerResource : public SResource {
+public:
+    ContainerResource(SRBRoot *bundle, const char *tag, int8_t type,
+                      const UString* comment, UErrorCode &errorCode)
+            : SResource(bundle, tag, type, comment, errorCode),
+              fCount(0), fFirst(NULL) {}
+    virtual ~ContainerResource();
+
+    // TODO: private with getter?
+    uint32_t fCount;
+    SResource *fFirst;
+};
+
+class TableResource : public ContainerResource {
+public:
+    TableResource(SRBRoot *bundle, const char *tag,
+                  const UString* comment, UErrorCode &errorCode)
+            : ContainerResource(bundle, tag, URES_TABLE, comment, errorCode),
+              fTableType(URES_TABLE), fRoot(bundle) {}
+    virtual ~TableResource();
+
+    void add(SResource *res, int linenumber, UErrorCode &errorCode);
+
+    int8_t fTableType;  // determined by table_write16() for table_preWrite() & table_write()
+    SRBRoot *fRoot;
+};
+
+class ArrayResource : public ContainerResource {
+public:
+    ArrayResource(SRBRoot *bundle, const char *tag,
+                  const UString* comment, UErrorCode &errorCode)
+            : ContainerResource(bundle, tag, URES_ARRAY, comment, errorCode),
+              fLast(NULL) {}
+    virtual ~ArrayResource();
+
+    void add(SResource *res);
+
+    SResource *fLast;
 };
 
 class StringBaseResource : public SResource {
@@ -209,6 +217,43 @@ public:
                   const UString* comment, UErrorCode &errorCode)
             : StringBaseResource(bundle, tag, URES_ALIAS, value, len, comment, errorCode) {}
     virtual ~AliasResource();
+};
+
+class IntResource : public SResource {
+public:
+    IntResource(SRBRoot *bundle, const char *tag, int32_t value,
+                const UString* comment, UErrorCode &errorCode);
+    virtual ~IntResource();
+
+    // TODO: private with getter?
+    int32_t fValue;
+};
+
+class IntVectorResource : public SResource {
+public:
+    IntVectorResource(SRBRoot *bundle, const char *tag,
+                      const UString* comment, UErrorCode &errorCode);
+    virtual ~IntVectorResource();
+
+    void add(int32_t value, UErrorCode &errorCode);
+
+    // TODO: UVector32
+    uint32_t fCount;
+    uint32_t *fArray;
+};
+
+class BinaryResource : public SResource {
+public:
+    BinaryResource(SRBRoot *bundle, const char *tag,
+                   uint32_t length, uint8_t *data, const char* fileName,
+                   const UString* comment, UErrorCode &errorCode);
+    virtual ~BinaryResource();
+
+    // TODO: CharString?
+    uint32_t fLength;
+    uint8_t *fData;
+    // TODO: CharString
+    char* fFileName;  // file name for binary or import binary tags if any
 };
 
 const char *

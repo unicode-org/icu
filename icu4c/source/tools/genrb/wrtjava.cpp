@@ -313,7 +313,7 @@ string_write_java(const StringResource *res,UErrorCode *status) {
 }
 
 static void
-array_write_java( struct SResource *res, UErrorCode *status) {
+array_write_java(const ArrayResource *res, UErrorCode *status) {
 
     uint32_t  i         = 0;
     const char* arr ="new String[] { \n";
@@ -324,9 +324,9 @@ array_write_java( struct SResource *res, UErrorCode *status) {
         return;
     }
 
-    if (res->u.fArray.fCount > 0) {
+    if (res->fCount > 0) {
 
-        current = res->u.fArray.fFirst;
+        current = res->fFirst;
         i = 0;
         while(current != NULL){
             if(!current->isString()){
@@ -336,7 +336,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
             current= current->fNext;
         }
 
-        current = res->u.fArray.fFirst;
+        current = res->fFirst;
         if(allStrings==FALSE){
             const char* object = "new Object[]{\n";
             write_tabs(out);
@@ -373,7 +373,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
 }
 
 static void
-intvector_write_java(struct SResource *res, UErrorCode * /*status*/) {
+intvector_write_java(const IntVectorResource *res, UErrorCode * /*status*/) {
     uint32_t i = 0;
     const char* intArr = "new int[] {\n";
     /* const char* intC   = "new Integer(";   */
@@ -388,9 +388,9 @@ intvector_write_java(struct SResource *res, UErrorCode * /*status*/) {
     if(resname != NULL && uprv_strcmp(resname,"DateTimeElements")==0){
         T_FileStream_write(out, stringArr, (int32_t)uprv_strlen(stringArr));
         tabCount++;
-        for(i = 0; i<res->u.fIntVector.fCount; i++) {
+        for(i = 0; i<res->fCount; i++) {
             write_tabs(out);
-            len=itostr(buf,res->u.fIntVector.fArray[i],10,0);
+            len=itostr(buf,res->fArray[i],10,0);
             T_FileStream_write(out,"\"",1);
             T_FileStream_write(out,buf,len);
             T_FileStream_write(out,"\",",2);
@@ -399,10 +399,10 @@ intvector_write_java(struct SResource *res, UErrorCode * /*status*/) {
     }else{
         T_FileStream_write(out, intArr, (int32_t)uprv_strlen(intArr));
         tabCount++;
-        for(i = 0; i<res->u.fIntVector.fCount; i++) {
+        for(i = 0; i<res->fCount; i++) {
             write_tabs(out);
             /* T_FileStream_write(out, intC, (int32_t)uprv_strlen(intC)); */
-            len=itostr(buf,res->u.fIntVector.fArray[i],10,0);
+            len=itostr(buf,res->fArray[i],10,0);
             T_FileStream_write(out,buf,len);
             /* T_FileStream_write(out,"),",2);  */
             /* T_FileStream_write(out,"\n",1);  */
@@ -415,7 +415,7 @@ intvector_write_java(struct SResource *res, UErrorCode * /*status*/) {
 }
 
 static void
-int_write_java(struct SResource *res,UErrorCode * /*status*/) {
+int_write_java(const IntResource *res, UErrorCode * /*status*/) {
     const char* intC   =  "new Integer(";
     char buf[100];
     int len =0;
@@ -424,25 +424,25 @@ int_write_java(struct SResource *res,UErrorCode * /*status*/) {
     /* write the binary data */
     write_tabs(out);
     T_FileStream_write(out, intC, (int32_t)uprv_strlen(intC));
-    len=itostr(buf, res->u.fIntValue.fValue, 10, 0);
+    len=itostr(buf, res->fValue, 10, 0);
     T_FileStream_write(out,buf,len);
     T_FileStream_write(out,"),\n",3 );
 
 }
 
 static void
-bytes_write_java( struct SResource *res, UErrorCode * /*status*/) {
+bytes_write_java(const BinaryResource *res, UErrorCode * /*status*/) {
 	const char* type  = "new byte[] {";
 	const char* byteDecl = "%i, ";
     char byteBuffer[100] = { 0 };
 	uint8_t*  byteArray = NULL;
     int byteIterator = 0;
 	
-    int32_t srcLen=res->u.fBinaryValue.fLength;
+    int32_t srcLen=res->fLength;
 	
     if(srcLen>0 )
 	{
-        byteArray = res->u.fBinaryValue.fData;
+        byteArray = res->fData;
 
         write_tabs(out);
         T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
@@ -497,7 +497,7 @@ bytes_write_java( struct SResource *res, UErrorCode * /*status*/) {
 static UBool start = TRUE;
 
 static void
-table_write_java(struct SResource *res, UErrorCode *status) {
+table_write_java(const TableResource *res, UErrorCode *status) {
     uint32_t  i         = 0;
     struct SResource *current = NULL;
     const char* obj = "new Object[][]{\n";
@@ -506,14 +506,14 @@ table_write_java(struct SResource *res, UErrorCode *status) {
         return ;
     }
 
-    if (res->u.fTable.fCount > 0) {
+    if (res->fCount > 0) {
         if(start==FALSE){
             write_tabs(out);
             T_FileStream_write(out, obj, (int32_t)uprv_strlen(obj));
             tabCount++;
         }
         start = FALSE;
-        current = res->u.fTable.fFirst;
+        current = res->fFirst;
         i       = 0;
 
 
@@ -521,7 +521,7 @@ table_write_java(struct SResource *res, UErrorCode *status) {
             char currentKeyBuffer[8];
             const char *currentKeyString = res_getKeyString(srBundle, current, currentKeyBuffer);
 
-            assert(i < res->u.fTable.fCount);
+            assert(i < res->fCount);
             write_tabs(out);
 
             T_FileStream_write(out, openBrace, 2);
@@ -582,19 +582,19 @@ res_write_java(struct SResource *res,UErrorCode *status) {
              *status = U_UNSUPPORTED_ERROR;
 			 return;
         case URES_INT_VECTOR:
-             intvector_write_java (res, status);
+             intvector_write_java (static_cast<const IntVectorResource *>(res), status);
              return;
         case URES_BINARY:
-             bytes_write_java     (res, status);
+             bytes_write_java     (static_cast<const BinaryResource *>(res), status);
              return;
         case URES_INT:
-             int_write_java       (res, status);
+             int_write_java       (static_cast<const IntResource *>(res), status);
              return;
         case URES_ARRAY:
-             array_write_java     (res, status);
+             array_write_java     (static_cast<const ArrayResource *>(res), status);
              return;
         case URES_TABLE:
-             table_write_java     (res, status);
+             table_write_java     (static_cast<const TableResource *>(res), status);
              return;
         default:
             break;

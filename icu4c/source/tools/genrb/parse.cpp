@@ -523,7 +523,7 @@ parseTransliterator(ParseState* state, char *tag, uint32_t startline, const stru
 
     return result;
 }
-static struct SResource* dependencyArray = NULL;
+static ArrayResource* dependencyArray = NULL;
 
 static struct SResource *
 parseDependency(ParseState* state, char *tag, uint32_t startline, const struct UString* comment, UErrorCode *status)
@@ -578,7 +578,7 @@ parseDependency(ParseState* state, char *tag, uint32_t startline, const struct U
     }
     elem = string_open(state->bundle, NULL, tokenValue->fChars, tokenValue->fLength, comment, status);
 
-    array_add(dependencyArray, elem, status);
+    dependencyArray->add(elem);
 
     if (U_FAILURE(*status))
     {
@@ -658,15 +658,12 @@ parseAlias(ParseState* state, char *tag, uint32_t startline, const struct UStrin
 namespace {
 
 static struct SResource* resLookup(struct SResource* res, const char* key){
-    struct SResource *current = NULL;
-    struct SResTable *list;
-    if (res == res_none()) {
+    if (res == res_none() || !res->isTable()) {
         return NULL;
     }
 
-    list = &(res->u.fTable);
-
-    current = list->fFirst;
+    TableResource *list = static_cast<TableResource *>(res);
+    SResource *current = list->fFirst;
     while (current != NULL) {
         if (uprv_strcmp(((list->fRoot->fKeys) + (current->fKey)), key) == 0) {
             return current;
@@ -809,8 +806,8 @@ escape(const UChar *s, char *buffer) {
 
 #endif  // !UCONFIG_NO_COLLATION
 
-static struct SResource *
-addCollation(ParseState* state, struct SResource  *result, const char *collationType,
+static TableResource *
+addCollation(ParseState* state, TableResource  *result, const char *collationType,
              uint32_t startline, UErrorCode *status)
 {
     // TODO: Use LocalPointer for result, or make caller close it when there is a failure.
@@ -887,7 +884,7 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
             sr->fString.extract(0, length, ver, UPRV_LENGTHOF(ver), US_INV);
             u_versionFromString(version, ver);
 
-            table_add(result, member, line, status);
+            result->add(member, line, *status);
             member = NULL;
         }
         else if(uprv_strcmp(subtag, "%%CollationBin")==0)
@@ -904,13 +901,13 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
             /* in order to achieve smaller data files, we can direct genrb */
             /* to omit collation rules */
             if(!state->omitCollationRules) {
-                table_add(result, member, line, status);
+                result->add(member, line, *status);
                 member = NULL;
             }
         }
         else  // Just copy non-special items.
         {
-            table_add(result, member, line, status);
+            result->add(member, line, *status);
             member = NULL;
         }
         res_close(member);  // TODO: use LocalPointer
@@ -1020,7 +1017,7 @@ addCollation(ParseState* state, struct SResource  *result, const char *collation
         }
     }
     struct SResource *collationBin = bin_open(state->bundle, "%%CollationBin", totalSize, dest, NULL, NULL, status);
-    table_add(result, collationBin, line, status);
+    result->add(collationBin, line, *status);
     if (U_FAILURE(*status)) {
         res_close(result);
         return NULL;
@@ -1037,9 +1034,8 @@ keepCollationType(const char * /*type*/) {
 static struct SResource *
 parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool newCollation, UErrorCode *status)
 {
-    struct SResource  *result = NULL;
+    TableResource  *result = NULL;
     struct SResource  *member = NULL;
-    struct SResource  *collationRes = NULL;
     struct UString    *tokenValue;
     struct UString     comment;
     enum   ETokenType  token;
@@ -1103,7 +1099,7 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
                     return NULL;
                 }
 
-                table_add(result, member, line, status);
+                result->add(member, line, *status);
             }
             else
             {
@@ -1113,6 +1109,7 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
                 /* then, we cannot handle aliases */
                 if(token == TOK_OPEN_BRACE) {
                     token = getToken(state, &tokenValue, &comment, &line, status);
+                    TableResource *collationRes;
                     if (keepCollationType(subtag)) {
                         collationRes = table_open(state->bundle, subtag, NULL, status);
                     } else {
@@ -1121,7 +1118,7 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
                     // need to parse the collation data regardless
                     collationRes = addCollation(state, collationRes, subtag, startline, status);
                     if (collationRes != NULL) {
-                        table_add(result, collationRes, startline, status);
+                        result->add(collationRes, startline, *status);
                     }
                 } else if(token == TOK_COLON) { /* right now, we'll just try to see if we have aliases */
                     /* we could have a table too */
@@ -1135,7 +1132,7 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
                             return NULL;
                         }
 
-                        table_add(result, member, line, status);
+                        result->add(member, line, *status);
                     } else {
                         res_close(result);
                         *status = U_INVALID_FORMAT_ERROR;
@@ -1164,7 +1161,7 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
 /* Necessary, because CollationElements requires the bundle->fRoot member to be present which,
    if this weren't special-cased, wouldn't be set until the entire file had been processed. */
 static struct SResource *
-realParseTable(ParseState* state, struct SResource *table, char *tag, uint32_t startline, UErrorCode *status)
+realParseTable(ParseState* state, TableResource *table, char *tag, uint32_t startline, UErrorCode *status)
 {
     struct SResource  *member = NULL;
     struct UString    *tokenValue=NULL;
@@ -1230,7 +1227,7 @@ realParseTable(ParseState* state, struct SResource *table, char *tag, uint32_t s
             return NULL;
         }
 
-        table_add(table, member, line, status);
+        table->add(member, line, *status);
 
         if (U_FAILURE(*status))
         {
@@ -1250,8 +1247,6 @@ realParseTable(ParseState* state, struct SResource *table, char *tag, uint32_t s
 static struct SResource *
 parseTable(ParseState* state, char *tag, uint32_t startline, const struct UString *comment, UErrorCode *status)
 {
-    struct SResource *result;
-
     if (tag != NULL && uprv_strcmp(tag, "CollationElements") == 0)
     {
         return parseCollationElements(state, tag, startline, FALSE, status);
@@ -1264,7 +1259,7 @@ parseTable(ParseState* state, char *tag, uint32_t startline, const struct UStrin
         printf(" table %s at line %i \n",  (tag == NULL) ? "(null)" : tag, (int)startline);
     }
 
-    result = table_open(state->bundle, tag, comment, status);
+    TableResource *result = table_open(state->bundle, tag, comment, status);
 
     if (result == NULL || U_FAILURE(*status))
     {
@@ -1276,14 +1271,13 @@ parseTable(ParseState* state, char *tag, uint32_t startline, const struct UStrin
 static struct SResource *
 parseArray(ParseState* state, char *tag, uint32_t startline, const struct UString *comment, UErrorCode *status)
 {
-    struct SResource  *result = NULL;
     struct SResource  *member = NULL;
     struct UString    *tokenValue;
     struct UString    memberComments;
     enum   ETokenType token;
     UBool             readToken = FALSE;
 
-    result = array_open(state->bundle, tag, comment, status);
+    ArrayResource  *result = array_open(state->bundle, tag, comment, status);
 
     if (result == NULL || U_FAILURE(*status))
     {
@@ -1339,13 +1333,7 @@ parseArray(ParseState* state, char *tag, uint32_t startline, const struct UStrin
             return NULL;
         }
 
-        array_add(result, member, status);
-
-        if (U_FAILURE(*status))
-        {
-            res_close(result);
-            return NULL;
-        }
+        result->add(member);
 
         /* eat optional comma if present */
         token = peekToken(state, 0, NULL, NULL, NULL, status);
@@ -1370,7 +1358,6 @@ parseArray(ParseState* state, char *tag, uint32_t startline, const struct UStrin
 static struct SResource *
 parseIntVector(ParseState* state, char *tag, uint32_t startline, const struct UString *comment, UErrorCode *status)
 {
-    struct SResource  *result = NULL;
     enum   ETokenType  token;
     char              *string;
     int32_t            value;
@@ -1379,7 +1366,7 @@ parseIntVector(ParseState* state, char *tag, uint32_t startline, const struct US
     uint32_t           len;
     struct UString     memberComments;
 
-    result = intvector_open(state->bundle, tag, comment, status);
+    IntVectorResource *result = intvector_open(state->bundle, tag, comment, status);
 
     if (result == NULL || U_FAILURE(*status))
     {
@@ -1423,7 +1410,7 @@ parseIntVector(ParseState* state, char *tag, uint32_t startline, const struct US
 
         if(len==uprv_strlen(string))
         {
-            intvector_add(result, value, status);
+            result->add(value, *status);
             uprv_free(string);
             token = peekToken(state, 0, NULL, NULL, NULL, status);
         }
@@ -2061,7 +2048,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
     /* top-level tables need not handle special table names like "collations" */
     realParseTable(&state, state.bundle->fRoot, NULL, line, status);
     if(dependencyArray!=NULL){
-        table_add(state.bundle->fRoot, dependencyArray, 0, status);
+        state.bundle->fRoot->add(dependencyArray, 0, *status);
         dependencyArray = NULL;
     }
    if (U_FAILURE(*status))
