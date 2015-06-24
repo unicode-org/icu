@@ -1564,7 +1564,7 @@ string_writeUTF16v2(struct SRBRoot *bundle, StringResource *res, int32_t utf16Le
     }
     // u_memcpy note: Type of bundle->f16BitUnits is (uint16_t *). u_memcpy wants (UChar *).
     //                On Windows, these are different, UChar is typedefed to wchar_t.
-    u_memcpy(static_cast<UChar *>(bundle->f16BitUnits + utf16Length), res->getBuffer(), length + 1);
+    u_memcpy((UChar *)(bundle->f16BitUnits + utf16Length), res->getBuffer(), length + 1);
     return utf16Length + length + 1;
 }
 
