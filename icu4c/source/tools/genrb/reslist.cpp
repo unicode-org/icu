@@ -1562,7 +1562,9 @@ string_writeUTF16v2(struct SRBRoot *bundle, StringResource *res, int32_t utf16Le
     default:
         break;  /* will not occur */
     }
-    u_memcpy(bundle->f16BitUnits + utf16Length, res->getBuffer(), length + 1);
+    // u_memcpy note: Type of bundle->f16BitUnits is (uint16_t *). u_memcpy wants (UChar *).
+    //                On Windows, these are different, UChar is typedefed to wchar_t.
+    u_memcpy(static_cast<UChar *>(bundle->f16BitUnits + utf16Length), res->getBuffer(), length + 1);
     return utf16Length + length + 1;
 }
 
@@ -1591,7 +1593,7 @@ bundle_compactStrings(struct SRBRoot *bundle, UErrorCode *status) {
              * Round down to an even number.
              */
             int32_t utf16Length = (bundle->f16BitUnitsLength + 20000) & ~1;
-            bundle->f16BitUnits = (UChar *)uprv_malloc(utf16Length * U_SIZEOF_UCHAR);
+            bundle->f16BitUnits = (uint16_t *)uprv_malloc(utf16Length * U_SIZEOF_UCHAR);
             // TODO: LocalArray
             array = (StringResource **)uprv_malloc(count * sizeof(StringResource **));
             if (bundle->f16BitUnits == NULL || array == NULL) {
