@@ -28,7 +28,6 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.VersionInfo;
 
 public class IntlTestDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 {

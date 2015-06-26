@@ -1615,6 +1615,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new ExpectPosAndFormat( 13, 15, "11/20/14, 09:00:00 \u2013 02/28/15, 09:00:00" )
         };
 
+        @SuppressWarnings("unused")
         final ExpectPosAndFormat[] exp_en_yMMMdhmmssz = {
             new ExpectPosAndFormat( 16, 18, "Nov 20, 2014, 9:00:00 AM GMT" ),
             new ExpectPosAndFormat( 16, 18, "Nov 20, 2014, 9:00:00 AM GMT" ),
