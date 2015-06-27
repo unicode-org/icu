@@ -491,7 +491,7 @@
  */
 #ifdef U_HAVE_RVALUE_REFERENCES
     /* Use the predefined value. */
-#elif U_CPLUSPLUS_VERSION >= 11 || __has_feature(cxx_rvalue_references) || __has_extension(cxx_rvalue_references) \
+#elif U_CPLUSPLUS_VERSION >= 11 || __has_feature(cxx_rvalue_references) \
         || defined(__GXX_EXPERIMENTAL_CXX0X__) \
         || (defined(_MSC_VER) && _MSC_VER >= 1600)  /* Visual Studio 2010 */
 #   define U_HAVE_RVALUE_REFERENCES 1
@@ -509,7 +509,7 @@
 #ifdef U_NOEXCEPT
     /* Use the predefined value. */
 #elif U_CPLUSPLUS_VERSION >= 11 || __has_feature(cxx_noexcept) || __has_extension(cxx_noexcept) \
-        || U_GCC_MAJOR_MINOR >= 406 \
+        || (U_GCC_MAJOR_MINOR >= 406 && U_CPLUSPLUS_VERSION >= 11) \
         || (defined(_MSC_VER) && _MSC_VER >= 1900)  /* Visual Studio 2015 */
 #   define U_NOEXCEPT noexcept
 #else
