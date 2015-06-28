@@ -181,7 +181,7 @@ public class MeasureUnit implements Serializable {
             throw new NullPointerException("Type and subType must be non-null");
         }
         if (!"currency".equals(type)) {
-            if (!ASCII.containsAll(type) || !ASCII_HYPHEN.containsAll(subType)) {
+            if (!ASCII.containsAll(type) || !ASCII_HYPHEN_DIGITS.containsAll(subType)) {
                 throw new IllegalArgumentException("The type or subType are invalid.");
             }
         }
@@ -207,7 +207,7 @@ public class MeasureUnit implements Serializable {
     }
 
     static final UnicodeSet ASCII = new UnicodeSet('a', 'z').freeze();
-    static final UnicodeSet ASCII_HYPHEN = new UnicodeSet('-', '-', 'a', 'z').freeze();
+    static final UnicodeSet ASCII_HYPHEN_DIGITS = new UnicodeSet('-', '-', '0', '9', 'a', 'z').freeze();
 
     /**
      * @internal
@@ -362,6 +362,13 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit RADIAN = MeasureUnit.internalGetInstance("angle", "radian");
 
     /**
+     * Constant for unit of angle: revolution
+     * @draft ICU 56
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit REVOLUTION = MeasureUnit.internalGetInstance("angle", "revolution");
+
+    /**
      * Constant for unit of area: acre
      * @stable ICU 53
      */
@@ -417,6 +424,13 @@ public class MeasureUnit implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit SQUARE_YARD = MeasureUnit.internalGetInstance("area", "square-yard");
+
+    /**
+     * Constant for unit of consumption: liter-per-100kilometers
+     * @draft ICU 56
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit LITER_PER_100KILOMETERS = MeasureUnit.internalGetInstance("consumption", "liter-per-100kilometers");
 
     /**
      * Constant for unit of consumption: liter-per-kilometer
@@ -503,6 +517,13 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit TERABYTE = MeasureUnit.internalGetInstance("digital", "terabyte");
 
     /**
+     * Constant for unit of duration: century
+     * @draft ICU 56
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit CENTURY = MeasureUnit.internalGetInstance("duration", "century");
+
+    /**
      * Constant for unit of duration: day
      * @stable ICU 4.0
      */
@@ -535,7 +556,6 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of duration: month
-     * 
      * @stable ICU 4.0
      */
     public static final TimeUnit MONTH = (TimeUnit) MeasureUnit.internalGetInstance("duration", "month");
@@ -741,6 +761,13 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit MILE = MeasureUnit.internalGetInstance("length", "mile");
 
     /**
+     * Constant for unit of length: mile-scandinavian
+     * @draft ICU 56
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILE_SCANDINAVIAN = MeasureUnit.internalGetInstance("length", "mile-scandinavian");
+
+    /**
      * Constant for unit of length: millimeter
      * @stable ICU 53
      */
@@ -944,6 +971,13 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit KILOMETER_PER_HOUR = MeasureUnit.internalGetInstance("speed", "kilometer-per-hour");
 
     /**
+     * Constant for unit of speed: knot
+     * @draft ICU 56
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit KNOT = MeasureUnit.internalGetInstance("speed", "knot");
+
+    /**
      * Constant for unit of speed: meter-per-second
      * @stable ICU 53
      */
@@ -966,6 +1000,13 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 53
      */
     public static final MeasureUnit FAHRENHEIT = MeasureUnit.internalGetInstance("temperature", "fahrenheit");
+
+    /**
+     * Constant for unit of temperature: generic
+     * @draft ICU 55
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit GENERIC = MeasureUnit.internalGetInstance("temperature", "generic");
 
     /**
      * Constant for unit of temperature: kelvin
@@ -1050,6 +1091,13 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit CUP = MeasureUnit.internalGetInstance("volume", "cup");
 
     /**
+     * Constant for unit of volume: cup-metric
+     * @draft ICU 56
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit CUP_METRIC = MeasureUnit.internalGetInstance("volume", "cup-metric");
+
+    /**
      * Constant for unit of volume: deciliter
      * @draft ICU 54
      * @provisional This API might change or be removed in a future release.
@@ -1103,6 +1151,13 @@ public class MeasureUnit implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit PINT = MeasureUnit.internalGetInstance("volume", "pint");
+
+    /**
+     * Constant for unit of volume: pint-metric
+     * @draft ICU 56
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit PINT_METRIC = MeasureUnit.internalGetInstance("volume", "pint-metric");
 
     /**
      * Constant for unit of volume: quart
