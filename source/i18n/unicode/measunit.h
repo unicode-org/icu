@@ -251,6 +251,16 @@ class U_I18N_API MeasureUnit: public UObject {
     static MeasureUnit *createRadian(UErrorCode &status);
 
 #endif /* U_HIDE_DRAFT_API */
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns unit of angle: revolution.
+     * Caller owns returned value and must free it.
+     * @param status ICU error code.
+     * @draft ICU 56
+     */
+    static MeasureUnit *createRevolution(UErrorCode &status);
+
+#endif /* U_HIDE_DRAFT_API */
     /**
      * Returns unit of area: acre.
      * Caller owns returned value and must free it.
@@ -327,6 +337,16 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 54
      */
     static MeasureUnit *createSquareYard(UErrorCode &status);
+
+#endif /* U_HIDE_DRAFT_API */
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns unit of consumption: liter-per-100kilometers.
+     * Caller owns returned value and must free it.
+     * @param status ICU error code.
+     * @draft ICU 56
+     */
+    static MeasureUnit *createLiterPer100Kilometers(UErrorCode &status);
 
 #endif /* U_HIDE_DRAFT_API */
 #ifndef U_HIDE_DRAFT_API
@@ -447,6 +467,16 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 54
      */
     static MeasureUnit *createTerabyte(UErrorCode &status);
+
+#endif /* U_HIDE_DRAFT_API */
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns unit of duration: century.
+     * Caller owns returned value and must free it.
+     * @param status ICU error code.
+     * @draft ICU 56
+     */
+    static MeasureUnit *createCentury(UErrorCode &status);
 
 #endif /* U_HIDE_DRAFT_API */
     /**
@@ -779,6 +809,16 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMile(UErrorCode &status);
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns unit of length: mile-scandinavian.
+     * Caller owns returned value and must free it.
+     * @param status ICU error code.
+     * @draft ICU 56
+     */
+    static MeasureUnit *createMileScandinavian(UErrorCode &status);
+
+#endif /* U_HIDE_DRAFT_API */
     /**
      * Returns unit of length: millimeter.
      * Caller owns returned value and must free it.
@@ -1061,6 +1101,16 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilometerPerHour(UErrorCode &status);
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns unit of speed: knot.
+     * Caller owns returned value and must free it.
+     * @param status ICU error code.
+     * @draft ICU 56
+     */
+    static MeasureUnit *createKnot(UErrorCode &status);
+
+#endif /* U_HIDE_DRAFT_API */
     /**
      * Returns unit of speed: meter-per-second.
      * Caller owns returned value and must free it.
@@ -1093,6 +1143,16 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createFahrenheit(UErrorCode &status);
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns unit of temperature: generic.
+     * Caller owns returned value and must free it.
+     * @param status ICU error code.
+     * @draft ICU 55
+     */
+    static MeasureUnit *createGeneric(UErrorCode &status);
+
+#endif /* U_HIDE_DRAFT_API */
 #ifndef U_HIDE_DRAFT_API
     /**
      * Returns unit of temperature: kelvin.
@@ -1211,6 +1271,16 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif /* U_HIDE_DRAFT_API */
 #ifndef U_HIDE_DRAFT_API
     /**
+     * Returns unit of volume: cup-metric.
+     * Caller owns returned value and must free it.
+     * @param status ICU error code.
+     * @draft ICU 56
+     */
+    static MeasureUnit *createCupMetric(UErrorCode &status);
+
+#endif /* U_HIDE_DRAFT_API */
+#ifndef U_HIDE_DRAFT_API
+    /**
      * Returns unit of volume: deciliter.
      * Caller owns returned value and must free it.
      * @param status ICU error code.
@@ -1285,6 +1355,16 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 54
      */
     static MeasureUnit *createPint(UErrorCode &status);
+
+#endif /* U_HIDE_DRAFT_API */
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns unit of volume: pint-metric.
+     * Caller owns returned value and must free it.
+     * @param status ICU error code.
+     * @draft ICU 56
+     */
+    static MeasureUnit *createPintMetric(UErrorCode &status);
 
 #endif /* U_HIDE_DRAFT_API */
 #ifndef U_HIDE_DRAFT_API
