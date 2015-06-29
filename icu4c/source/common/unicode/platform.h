@@ -509,7 +509,6 @@
 #ifdef U_NOEXCEPT
     /* Use the predefined value. */
 #elif U_CPLUSPLUS_VERSION >= 11 || __has_feature(cxx_noexcept) || __has_extension(cxx_noexcept) \
-        || (U_GCC_MAJOR_MINOR >= 406 && U_CPLUSPLUS_VERSION >= 11) \
         || (defined(_MSC_VER) && _MSC_VER >= 1900)  /* Visual Studio 2015 */
 #   define U_NOEXCEPT noexcept
 #else
