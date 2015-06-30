@@ -903,6 +903,9 @@ static void TestBug11665(void) {
     ctest_resetICU();
     bi = ubrk_open(UBRK_WORD, "en_US", japaneseText, UPRV_LENGTHOF(japaneseText), &status);
     TEST_ASSERT_SUCCESS(status);
+    if (!bi) {
+        return;
+    }
     for (brk=ubrk_first(bi); brk != UBRK_DONE; brk=ubrk_next(bi)) {
         boundaries[brkIdx] = brk;
         if (++brkIdx >= UPRV_LENGTHOF(boundaries) - 1) {
