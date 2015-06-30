@@ -6,6 +6,9 @@
 */
 
 #include "numberformattesttuple.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "ustrfmt.h"
 #include "charstr.h"
 #include "cstring.h"
@@ -441,4 +444,4 @@ NumberFormatTestTuple::isFlag(int32_t fieldId) const {
     return *static_cast<const UBool *>(flagAddr);
 }
 
-
+#endif /* !UCONFIG_NO_FORMATTING */

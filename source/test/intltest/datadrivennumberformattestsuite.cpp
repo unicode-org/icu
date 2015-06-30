@@ -5,6 +5,9 @@
  ********************************************************************/
 
 #include "datadrivennumberformattestsuite.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "charstr.h"
 #include "ucbuf.h"
 #include "unicode/localpointer.h"
@@ -297,4 +300,4 @@ UBool DataDrivenNumberFormatTestSuite::isSelectPass(
     }
     return TRUE;
 }
-
+#endif /* !UCONFIG_NO_FORMATTING */

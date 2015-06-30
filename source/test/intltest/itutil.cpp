@@ -645,13 +645,12 @@ void LocalPointerTest::TestLocalXyzPointerMoveSwap() {
 #else
     infoln("TestLocalXyzPointerMoveSwap() without rvalue references");
 #endif
-#endif /* !UCONFIG_NO_NORMALIZATION */
-
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
     // but do not check for any particular resulting value.
     f1.moveFrom(f1);
     f3.moveFrom(f3);
+#endif /* !UCONFIG_NO_NORMALIZATION */
 }
 
 // Try LocalXyzPointer types with NULL pointers.
