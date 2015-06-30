@@ -2814,7 +2814,7 @@ static void TestVariousStylesAndAttributes(void) {
         UErrorCode status = U_ZERO_ERROR;
         UNumberFormat * unum = unum_open(lsaTestPtr->style, NULL, 0, lsaTestPtr->locale, NULL, &status);
         if ( U_FAILURE(status) ) {
-            log_err("FAIL: unum_open style %d, locale %s: error %s\n", (int)lsaTestPtr->style, lsaTestPtr->locale, u_errorName(status));
+            log_data_err("FAIL: unum_open style %d, locale %s: error %s\n", (int)lsaTestPtr->style, lsaTestPtr->locale, u_errorName(status));
         } else {
             const ValueAndExpectedString * veItemPtr;
             if (lsaTestPtr->attribute >= 0) {
