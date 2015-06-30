@@ -168,7 +168,7 @@ void DataDrivenNumberFormatTestSuite::showFailure(const UnicodeString &message) 
     uprv_itou(
             lineStr, UPRV_LENGTHOF(lineStr), (uint32_t) fFileLineNumber, 10, 1);
     UnicodeString fullMessage("line ");
-    errln(fullMessage.append(lineStr).append(": ")
+    dataerrln(fullMessage.append(lineStr).append(": ")
             .append(prettify(message)));
     showLineInfo();
 }

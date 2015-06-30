@@ -691,7 +691,7 @@ public:
         status = U_ZERO_ERROR;
         LocalPointer<NumberFormat> formatter(NumberFormat::createInstance(Locale::getEnglish(),status));
         if(U_FAILURE(status)) {
-            IntlTest::gTest->errln("%s:%d Error %s on NumberFormat::createInstance().",
+            IntlTest::gTest->dataerrln("%s:%d Error %s on NumberFormat::createInstance().",
                     __FILE__, __LINE__, u_errorName(status));
             goto cleanupAndReturn;
         }
@@ -1460,6 +1460,9 @@ void MultithreadTest::TestBreakTranslit() {
 
     gSharedTransliterator = Transliterator::createInstance(
         UNICODE_STRING_SIMPLE("Any-Latin; Lower; NFD; [:Diacritic:]Remove; NFC; Latin-ASCII;"), UTRANS_FORWARD, status);
+    if (!gSharedTransliterator) {
+         return;
+     }
     TSMTHREAD_ASSERT_SUCCESS(status); 
 
     UnicodeString expected(*gTranslitInput);
