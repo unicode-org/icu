@@ -8,6 +8,9 @@
 #define _DATADRIVENNUMBERFORMATTESTSUITE_H__
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "numberformattesttuple.h"
@@ -134,5 +137,5 @@ class DataDrivenNumberFormatTestSuite : public IntlTest {
             UnicodeString &appendErrorMessage,
             UErrorCode &status);
 };
-
+#endif /* !UCONFIG_NO_FORMATTING */
 #endif // _DATADRIVENNUMBERFORMATTESTSUITE_

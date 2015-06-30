@@ -8,6 +8,9 @@
 #define _NUMBER_FORMAT_TEST_TUPLE
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "decimalformatpattern.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
@@ -221,5 +224,5 @@ private:
     UBool isFlag(int32_t fieldId) const;
 };
 
-
+#endif /* !UCONFIG_NO_FORMATTING */
 #endif

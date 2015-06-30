@@ -124,12 +124,14 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
             TestUnifiedCache();
         }
         break;
+#if !UCONFIG_NO_TRANSLITERATION
     case 9:
         name = "TestBreakTranslit";
         if (exec) {
             TestBreakTranslit();
         }
         break;
+#endif
     default:
         name = "";
         break; //needed to end loop
@@ -1421,7 +1423,7 @@ void MultithreadTest::TestUnifiedCache() {
     }
 }
 
-
+#if !UCONFIG_NO_TRANSLITERATION
 //
 //  BreakTransliterator Threading Test
 //     This is a test for bug #11603. Test verified to fail prior to fix.
@@ -1476,3 +1478,5 @@ void MultithreadTest::TestBreakTranslit() {
     gTranslitInput = NULL;
     gTranslitExpected = NULL;
 }
+
+#endif /* !UCONFIG_NO_TRANSLITERATION */
