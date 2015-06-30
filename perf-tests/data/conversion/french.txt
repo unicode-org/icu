@@ -1,0 +1,20 @@
+﻿Qu'est ce qu'Unicode?
+
+Unicode spécifie un numéro unique pour chaque caractère,
+quelle que soit la plate-forme,
+quel que soit le logiciel,
+quelle que soit la langue.
+
+Fondamentalement, les ordinateurs ne comprennent que les nombres. Ils codent les lettres et autres caractères sous formes de nombres. Avant l'invention d'Unicode, des centaines de systèmes de codage de caractères ont été créés. Pas un seul d'entre eux n'était satisfaisant : par exemple, l'Union Européenne a besoin de plusieurs systèmes de codage pour couvrir toutes ses langues d'usage. Même pour une seule langue comme le français, aucun système de codage ne couvrait toutes les lettres, les signes de ponctuation et les symboles techniques en usage courant.
+
+Ces systèmes de codage sont souvent incompatibles entre eux. Ainsi, deux systèmes peuvent utiliser le même nombre pour deux caractères différents ou utiliser différents nombres pour le même caractère. Les ordinateurs, et plus particulièrement les serveurs, doivent supporter plusieurs systèmes de codage de caractères, ce qui crée un risque de corruption des données à chaque transition.
+Unicode transforme tout cela !
+
+Unicode spécifie un numéro unique pour chaque caractère, quelle que soit la plate-forme, quel que soit le logiciel et quelle que soit la langue. Le standard Unicode a été choisi par des pionniers technologiques tels que Apple, HP, IBM, JustSystem, Microsoft, Oracle, SAP, Sun, Sybase, Unisys et bien d'autres. Unicode est exigé par de nombreux standards récents tels que XML, Java, ECMAScript (JavaScript), LDAP, CORBA 3.0, WML, etc. Le développement d'Unicode est synchronisé avec celui de la norme ISO/CÉI 10646, la version 3.0 d'Unicode est identique code pour code avec l'ISO/CÉI 10646:2000 mais contient de nombreux éléments supplémentaires d'implantation. Unicode est utilisé dans de nombreux systèmes d'exploitation, dans tous les navigateurs récents, et dans de nombreux autres produits. L'apparition du standard Unicode, ainsi que la disponibilité d'outils le gérant, sont parmi les faits les plus marquants de la globalisation récente du développement logiciel.
+
+L'incorporation d'Unicode dans les applications client-serveur, les applications distribuées et les sites Internet permet une simplification de l'architecture et une réduction des coûts par rapport à l'utilisation des systèmes de codage traditionnels. Grâce à Unicode, un seul logiciel ou site Internet peut satisfaire simultanément et sans modification les demandes de plusieurs plate-formes, langues et pays. Unicode permet aussi à des logiciels de provenance variée d'échanger des caractères sans pertes de données.
+À propos du Consortium Unicode
+
+Le Consortium Unicode est une organisation sans but lucratif, ayant pour mission de développer, d'étendre et de promouvoir Unicode. Les membres du consortium sont issus d'un large éventail d'entreprises et d'organisations dans le domaine de l'informatique et des technologies de l'information. Le consortium est financé uniquement par les cotisations de ses membres. L'adhésion au consortium Unicode est ouverte à toutes les organisations et individus qui soutiennent le standard Unicode et souhaitent favoriser son extension et son utilisation.
+
+On trouvera des renseignements additionnels dans le glossaire, la liste partielle de produits gérant Unicode, l'aperçu technique et les ressources utiles [liens en Anglais].
