@@ -666,7 +666,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         String skipScan = ICUConfig.get("com.ibm.icu.impl.ICUResourceBundle.skipRuntimeLocaleResourceScan", "false");
         if (!skipScan.equalsIgnoreCase("true")) {
             // scan available locale resources under the base url first
-            addBundleBaseNamesFromClassLoader(baseName, loader, set);
+            addBundleBaseNamesFromClassLoader(bn, loader, set);
             if (baseName.startsWith(ICUData.ICU_BASE_NAME)) {
                 String folder;
                 if (baseName.length() == ICUData.ICU_BASE_NAME.length()) {
