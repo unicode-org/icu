@@ -1988,7 +1988,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
     ustr_init(&comment);
     expect(&state, TOK_STRING, &tokenValue, &comment, NULL, status);
 
-    state.bundle = bundle_open(&comment, FALSE, status);
+    state.bundle = new SRBRoot(&comment, FALSE, *status);
 
     if (state.bundle == NULL || U_FAILURE(*status))
     {
@@ -1996,7 +1996,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
     }
 
 
-    bundle_setlocale(state.bundle, tokenValue->fChars, status);
+    state.bundle->setLocale(tokenValue->fChars, *status);
 
     /* The following code is to make Empty bundle work no matter with :table specifer or not */
     token = getToken(&state, NULL, NULL, &line, status);
@@ -2033,7 +2033,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
 
     if (U_FAILURE(*status))
     {
-        bundle_close(state.bundle, status);
+        delete state.bundle;
         return NULL;
     }
 
@@ -2053,7 +2053,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
     }
    if (U_FAILURE(*status))
     {
-        bundle_close(state.bundle, status);
+        delete state.bundle;
         res_close(dependencyArray);
         return NULL;
     }

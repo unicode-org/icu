@@ -17,9 +17,12 @@
 */
 
 #include "genrb.h"
+#include "unicode/localpointer.h"
 #include "unicode/uclean.h"
 #include "reslist.h"
 #include "ucmndata.h"  /* TODO: for reading the pool bundle */
+
+U_NAMESPACE_USE
 
 /* Protos */
 void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir,
@@ -287,9 +290,10 @@ main(int argc,
     }
 
     if(options[WRITE_POOL_BUNDLE].doesOccur) {
-        newPoolBundle = bundle_open(NULL, TRUE, &status);
-        if(U_FAILURE(status)) {
+        newPoolBundle = new SRBRoot(NULL, TRUE, status);
+        if(newPoolBundle == NULL || U_FAILURE(status)) {
             fprintf(stderr, "unable to create an empty bundle for the pool keys: %s\n", u_errorName(status));
+            delete newPoolBundle;
             return status;
         } else {
             const char *poolResName = "pool.res";
@@ -430,8 +434,8 @@ main(int argc,
 
     if(options[WRITE_POOL_BUNDLE].doesOccur) {
         char outputFileName[256];
-        bundle_write(newPoolBundle, outputDir, NULL, outputFileName, sizeof(outputFileName), &status);
-        bundle_close(newPoolBundle, &status);
+        newPoolBundle->write(outputDir, NULL, outputFileName, sizeof(outputFileName), status);
+        delete newPoolBundle;
         if(U_FAILURE(status)) {
             fprintf(stderr, "unable to write the pool bundle: %s\n", u_errorName(status));
         }
@@ -449,11 +453,10 @@ main(int argc,
 
 /* Process a file */
 void
-processFile(
-    const char *filename, const char *cp, const char *inputDir, const char *outputDir, const char *packageName,
-    UBool omitBinaryCollation, UErrorCode *status) {
-    /*FileStream     *in           = NULL;*/
-    struct SRBRoot *data         = NULL;
+processFile(const char *filename, const char *cp,
+            const char *inputDir, const char *outputDir, const char *packageName,
+            UBool omitBinaryCollation, UErrorCode *status) {
+    LocalPointer<SRBRoot> data;
     UCHARBUF       *ucbuf        = NULL;
     char           *rbname       = NULL;
     char           *openFileName = NULL;
@@ -559,19 +562,19 @@ processFile(
         printf("autodetected encoding %s\n", cp);
     }
     /* Parse the data into an SRBRoot */
-    data = parse(ucbuf, inputDir, outputDir, filename,
-                 !omitBinaryCollation, options[NO_COLLATION_RULES].doesOccur, status);
+    data.adoptInstead(parse(ucbuf, inputDir, outputDir, filename,
+            !omitBinaryCollation, options[NO_COLLATION_RULES].doesOccur, status));
 
-    if (data == NULL || U_FAILURE(*status)) {
+    if (data.isNull() || U_FAILURE(*status)) {
         fprintf(stderr, "couldn't parse the file %s. Error:%s\n", filename,u_errorName(*status));
         goto finish;
     }
     if(options[WRITE_POOL_BUNDLE].doesOccur) {
         int32_t newKeysLength;
         const char *newKeys, *newKeysLimit;
-        bundle_compactKeys(data, status);
-        newKeys = bundle_getKeyBytes(data, &newKeysLength);
-        bundle_addKeyBytes(newPoolBundle, newKeys, newKeysLength, status);
+        data->compactKeys(*status);
+        newKeys = data->getKeyBytes(&newKeysLength);
+        newPoolBundle->addKeyBytes(newKeys, newKeysLength, *status);
         if(U_FAILURE(*status)) {
             fprintf(stderr, "bundle_compactKeys(%s) or bundle_getKeyBytes() failed: %s\n",
                     filename, u_errorName(*status));
@@ -599,18 +602,20 @@ processFile(
         goto finish;
     }
     if(write_java== TRUE){
-        bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName),
+        bundle_write_java(data.getAlias(), outputDir, outputEnc,
+                          outputFileName, sizeof(outputFileName),
                           options[JAVA_PACKAGE].value, options[BUNDLE_NAME].value, status);
     }else if(write_xliff ==TRUE){
-        bundle_write_xml(data,outputDir,outputEnc, filename, outputFileName, sizeof(outputFileName),language, xliffOutputFileName,status);
+        bundle_write_xml(data.getAlias(), outputDir, outputEnc,
+                         filename, outputFileName, sizeof(outputFileName),
+                         language, xliffOutputFileName, status);
     }else{
         /* Write the data to the file */
-        bundle_write(data, outputDir, packageName, outputFileName, sizeof(outputFileName), status);
+        data->write(outputDir, packageName, outputFileName, sizeof(outputFileName), *status);
     }
     if (U_FAILURE(*status)) {
         fprintf(stderr, "couldn't write bundle %s. Error:%s\n", outputFileName,u_errorName(*status));
     }
-    bundle_close(data, status);
 
 finish:
 
