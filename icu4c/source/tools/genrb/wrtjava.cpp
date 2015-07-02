@@ -306,8 +306,7 @@ str_write_java(const UChar *src, int32_t srcLen, UBool printEndLine, UErrorCode 
 /* Writing Functions */
 static void
 string_write_java(const StringResource *res,UErrorCode *status) {
-    char resKeyBuffer[8];
-    (void)res_getKeyString(srBundle, res, resKeyBuffer);
+    (void)res->getKeyString(srBundle);
 
     str_write_java(res->getBuffer(), res->length(), TRUE, status);
 }
@@ -378,8 +377,7 @@ intvector_write_java(const IntVectorResource *res, UErrorCode * /*status*/) {
     const char* intArr = "new int[] {\n";
     /* const char* intC   = "new Integer(";   */
     const char* stringArr = "new String[]{\n";
-    char resKeyBuffer[8];
-    const char *resname = res_getKeyString(srBundle, res, resKeyBuffer);
+    const char *resname = res->getKeyString(srBundle);
     char buf[100];
     int len =0;
     buf[0]=0;
@@ -518,8 +516,7 @@ table_write_java(const TableResource *res, UErrorCode *status) {
 
 
         while (current != NULL) {
-            char currentKeyBuffer[8];
-            const char *currentKeyString = res_getKeyString(srBundle, current, currentKeyBuffer);
+            const char *currentKeyString = current->getKeyString(srBundle);
 
             assert(i < res->fCount);
             write_tabs(out);

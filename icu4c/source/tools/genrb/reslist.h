@@ -25,10 +25,11 @@
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
-#include "uresdata.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uhash.h"
 #include "unewdata.h"
+#include "uresdata.h"
 #include "ustr.h"
 
 U_CDECL_BEGIN
@@ -41,6 +42,34 @@ typedef struct KeyMapEntry {
 
 /* Resource bundle root table */
 struct SRBRoot {
+    SRBRoot(const UString *comment, UBool isPoolBundle, UErrorCode &errorCode);
+    ~SRBRoot();
+
+    void write(const char *outputDir, const char *outputPkg,
+               char *writtenFilename, int writtenFilenameLen, UErrorCode &errorCode);
+
+    void setLocale(UChar *locale, UErrorCode &errorCode);
+    int32_t addTag(const char *tag, UErrorCode &errorCode);
+
+    // TODO: private for SResource
+    const char *getKeyString(int32_t key) const;
+    const char *getKeyBytes(int32_t *pLength) const;
+
+    int32_t addKeyBytes(const char *keyBytes, int32_t length, UErrorCode &errorCode);
+
+    void compactKeys(UErrorCode &errorCode);
+
+    // TODO: private for some subclasses of SResource
+    uint16_t *reserve16BitUnits(int32_t length, UErrorCode &errorCode);
+    int32_t mapKey(int32_t oldpos) const;
+    uint16_t makeKey16(int32_t key) const;
+
+private:
+    void compactStrings(UErrorCode &errorCode);
+
+public:
+    // TODO: private
+
   TableResource *fRoot;
   char *fLocale;
   int32_t fIndexLength;
@@ -67,34 +96,15 @@ struct SRBRoot {
   int32_t fPoolChecksum;
 };
 
-struct SRBRoot *bundle_open(const struct UString* comment, UBool isPoolBundle, UErrorCode *status);
-void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *outputPkg, char *writtenFilename, int writtenFilenameLen, UErrorCode *status);
-
 /* write a java resource file */
+// TODO: C++ify
 void bundle_write_java(struct SRBRoot *bundle, const char *outputDir, const char* outputEnc, char *writtenFilename, 
                        int writtenFilenameLen, const char* packageName, const char* bundleName, UErrorCode *status);
 
 /* write a xml resource file */
-/* commented by Jing*/
-/* void bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, 
-                  char *writtenFilename, int writtenFilenameLen,UErrorCode *status); */
-
-/* added by Jing*/
+// TODO: C++ify
 void bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, const char* rbname,
                   char *writtenFilename, int writtenFilenameLen, const char* language, const char* package, UErrorCode *status);
-
-void bundle_close(struct SRBRoot *bundle, UErrorCode *status);
-void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status);
-int32_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status);
-
-const char *
-bundle_getKeyBytes(struct SRBRoot *bundle, int32_t *pLength);
-
-int32_t
-bundle_addKeyBytes(struct SRBRoot *bundle, const char *keyBytes, int32_t length, UErrorCode *status);
-
-void
-bundle_compactKeys(struct SRBRoot *bundle, UErrorCode *status);
 
 /* Various resource types */
 
@@ -133,14 +143,59 @@ struct SResource {
     UBool isTable() const { return fType == URES_TABLE; }
     UBool isString() const { return fType == URES_STRING; }
 
-    // TODO: virtual methods for dispatch, maybe remove fType
+    const char *getKeyString(const SRBRoot *bundle) const;
+
+    /**
+     * Preflights strings.
+     * Finds duplicates and counts the total number of string code units
+     * so that they can be written first to the 16-bit array,
+     * for minimal string and container storage.
+     *
+     * We walk the final parse tree, rather than collecting this information while building it,
+     * so that we need not deal with changes to the parse tree (especially removing resources).
+     */
+    void preflightStrings(SRBRoot *bundle, UHashtable *stringSet, UErrorCode &errorCode);
+    virtual void handlePreflightStrings(SRBRoot *bundle, UHashtable *stringSet, UErrorCode &errorCode);
+
+    /**
+     * Writes resource values into f16BitUnits
+     * and determines the resource item word, if possible.
+     */
+    void write16(SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handleWrite16(SRBRoot *bundle, UErrorCode &errorCode);
+
+    /**
+     * Calculates ("preflights") and advances the *byteOffset
+     * by the size of the resource's data in the binary file and
+     * determines the resource item word.
+     *
+     * Most handlePreWrite() functions may add any number of bytes, but preWrite()
+     * will always pad it to a multiple of 4.
+     * The resource item type may be a related subtype of the fType.
+     *
+     * The preWrite() and write() functions start and end at the same
+     * byteOffset values.
+     * Prewriting allows bundle.write() to determine the root resource item word,
+     * before actually writing the bundle contents to the file,
+     * which is necessary because the root item is stored at the beginning.
+     */
+    void preWrite(uint32_t *byteOffset, SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handlePreWrite(uint32_t *byteOffset, SRBRoot *bundle, UErrorCode &errorCode);
+
+    /**
+     * Writes the resource's data to mem and updates the byteOffset
+     * in parallel.
+     */
+    void write(UNewDataMemory *mem, uint32_t *byteOffset, SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handleWrite(UNewDataMemory *mem, uint32_t *byteOffset, SRBRoot *bundle,
+                             UErrorCode &errorCode);
 
     int8_t   fType;     /* nominal type: fRes (when != 0xffffffff) may use subtype */
     UBool    fWritten;  /* res_write() can exit early */
     uint32_t fRes;      /* resource item word; RES_BOGUS=0xffffffff if not known yet */
     int32_t  fKey;      /* Index into bundle->fKeys; -1 if no key. */
     int      line;      /* used internally to report duplicate keys in tables */
-    struct SResource *fNext; /*This is for internal chaining while building*/
+    SResource *fNext;   /* This is for internal chaining while building */
     struct UString fComment;
 };
 
@@ -151,6 +206,8 @@ public:
             : SResource(bundle, tag, type, comment, errorCode),
               fCount(0), fFirst(NULL) {}
     virtual ~ContainerResource();
+
+    virtual void handlePreflightStrings(SRBRoot *bundle, UHashtable *stringSet, UErrorCode &errorCode);
 
     // TODO: private with getter?
     uint32_t fCount;
@@ -167,6 +224,11 @@ public:
 
     void add(SResource *res, int linenumber, UErrorCode &errorCode);
 
+    virtual void handleWrite16(SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handlePreWrite(uint32_t *byteOffset, SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handleWrite(UNewDataMemory *mem, uint32_t *byteOffset, SRBRoot *bundle,
+                             UErrorCode &errorCode);
+
     int8_t fTableType;  // determined by table_write16() for table_preWrite() & table_write()
     SRBRoot *fRoot;
 };
@@ -181,6 +243,11 @@ public:
 
     void add(SResource *res);
 
+    virtual void handleWrite16(SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handlePreWrite(uint32_t *byteOffset, SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handleWrite(UNewDataMemory *mem, uint32_t *byteOffset, SRBRoot *bundle,
+                             UErrorCode &errorCode);
+
     SResource *fLast;
 };
 
@@ -194,6 +261,10 @@ public:
     const UChar *getBuffer() const { return fString.getBuffer(); }
     int32_t length() const { return fString.length(); }
 
+    virtual void handlePreWrite(uint32_t *byteOffset, SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handleWrite(UNewDataMemory *mem, uint32_t *byteOffset, SRBRoot *bundle,
+                             UErrorCode &errorCode);
+
     // TODO: private with getter?
     icu::UnicodeString fString;
 };
@@ -205,6 +276,11 @@ public:
             : StringBaseResource(bundle, tag, URES_STRING, value, len, comment, errorCode),
               fSame(NULL), fSuffixOffset(0), fNumCharsForLength(0) {}
     virtual ~StringResource();
+
+    virtual void handlePreflightStrings(SRBRoot *bundle, UHashtable *stringSet, UErrorCode &errorCode);
+    virtual void handleWrite16(SRBRoot *bundle, UErrorCode &errorCode);
+
+    int32_t writeUTF16v2(SRBRoot *bundle, int32_t utf16Length);
 
     StringResource *fSame;  // used for duplicates
     int32_t fSuffixOffset;  // this string is a suffix of fSame at this offset
@@ -237,6 +313,10 @@ public:
 
     void add(int32_t value, UErrorCode &errorCode);
 
+    virtual void handlePreWrite(uint32_t *byteOffset, SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handleWrite(UNewDataMemory *mem, uint32_t *byteOffset, SRBRoot *bundle,
+                             UErrorCode &errorCode);
+
     // TODO: UVector32
     uint32_t fCount;
     uint32_t *fArray;
@@ -249,6 +329,10 @@ public:
                    const UString* comment, UErrorCode &errorCode);
     virtual ~BinaryResource();
 
+    virtual void handlePreWrite(uint32_t *byteOffset, SRBRoot *bundle, UErrorCode &errorCode);
+    virtual void handleWrite(UNewDataMemory *mem, uint32_t *byteOffset, SRBRoot *bundle,
+                             UErrorCode &errorCode);
+
     // TODO: CharString?
     uint32_t fLength;
     uint8_t *fData;
@@ -256,9 +340,7 @@ public:
     char* fFileName;  // file name for binary or import binary tags if any
 };
 
-const char *
-res_getKeyString(const struct SRBRoot *bundle, const struct SResource *res, char temp[8]);
-
+// TODO: use LocalPointer or delete
 void res_close(struct SResource *res);
 
 void setIncludeCopyright(UBool val);

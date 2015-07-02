@@ -546,13 +546,12 @@ printComments(struct UString *src, const char *resName, UBool printTranslate, UE
  */
 static char *printContainer(SResource *res, const char *container, const char *restype, const char *mimetype, const char *id, UErrorCode *status)
 {
-    char resKeyBuffer[8];
     const char *resname = NULL;
     char *sid = NULL;
 
     write_tabs(out);
 
-    resname = res_getKeyString(srBundle, res, resKeyBuffer);
+    resname = res->getKeyString(srBundle);
     if (resname != NULL && *resname != 0) {
         sid = getID(id, resname, sid);
     } else {
