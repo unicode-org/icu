@@ -51,7 +51,6 @@ struct SRBRoot {
     void setLocale(UChar *locale, UErrorCode &errorCode);
     int32_t addTag(const char *tag, UErrorCode &errorCode);
 
-    // TODO: private for SResource
     const char *getKeyString(int32_t key) const;
     const char *getKeyBytes(int32_t *pLength) const;
 
@@ -59,8 +58,6 @@ struct SRBRoot {
 
     void compactKeys(UErrorCode &errorCode);
 
-    // TODO: private for some subclasses of SResource
-    uint16_t *reserve16BitUnits(int32_t length, UErrorCode &errorCode);
     int32_t mapKey(int32_t oldpos) const;
     uint16_t makeKey16(int32_t key) const;
 
@@ -74,7 +71,7 @@ public:
   char *fLocale;
   int32_t fIndexLength;
   int32_t fMaxTableLength;
-  UBool noFallback; /* see URES_ATT_NO_FALLBACK */
+  UBool fNoFallback; /* see URES_ATT_NO_FALLBACK */
   int8_t fStringsForm; /* default STRINGS_UTF16_V1 */
   UBool fIsPoolBundle;
 
@@ -85,10 +82,8 @@ public:
   int32_t fKeysCount;
   int32_t fLocalKeyLimit; /* key offset < limit fits into URES_TABLE */
 
-  // TODO: UnicodeString
-  uint16_t *f16BitUnits;
-  int32_t f16BitUnitsCapacity;
-  int32_t f16BitUnitsLength;
+  icu::UnicodeString f16BitUnits;
+  int32_t f16BitStringsLength;
 
   const char *fPoolBundleKeys;
   int32_t fPoolBundleKeysLength;
@@ -280,7 +275,7 @@ public:
     virtual void handlePreflightStrings(SRBRoot *bundle, UHashtable *stringSet, UErrorCode &errorCode);
     virtual void handleWrite16(SRBRoot *bundle, UErrorCode &errorCode);
 
-    int32_t writeUTF16v2(SRBRoot *bundle, int32_t utf16Length);
+    void writeUTF16v2(icu::UnicodeString &dest);
 
     StringResource *fSame;  // used for duplicates
     int32_t fSuffixOffset;  // this string is a suffix of fSame at this offset
