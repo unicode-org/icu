@@ -2043,7 +2043,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
          * This is the same as a regular table, but also sets the
          * URES_ATT_NO_FALLBACK flag in indexes[URES_INDEX_ATTRIBUTES] .
          */
-        state.bundle->noFallback=TRUE;
+        state.bundle->fNoFallback=TRUE;
     }
     /* top-level tables need not handle special table names like "collations" */
     realParseTable(&state, state.bundle->fRoot, NULL, line, status);

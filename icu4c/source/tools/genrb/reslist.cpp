@@ -333,7 +333,7 @@ StringResource::handlePreflightStrings(SRBRoot *bundle, UHashtable *stringSet,
         } else {
             fNumCharsForLength = 3;
         }
-        bundle->f16BitUnitsLength += fNumCharsForLength + len + 1;  /* +1 for the NUL */
+        bundle->f16BitStringsLength += fNumCharsForLength + len + 1;  /* +1 for the NUL */
     }
 }
 
@@ -365,33 +365,6 @@ void
 SResource::handlePreflightStrings(SRBRoot * /*bundle*/, UHashtable * /*stringSet*/,
                                   UErrorCode & /*errorCode*/) {
     /* Neither a string nor a container. */
-}
-
-uint16_t *
-SRBRoot::reserve16BitUnits(int32_t length, UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return NULL;
-    }
-    if ((f16BitUnitsLength + length) > f16BitUnitsCapacity) {
-        uint16_t *newUnits;
-        int32_t capacity = 2 * f16BitUnitsCapacity + length + 1024;
-        capacity &= ~1;  /* ensures padding fits if f16BitUnitsLength needs it */
-        newUnits = (uint16_t *)uprv_malloc(capacity * 2);
-        if (newUnits == NULL) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-        if (f16BitUnitsLength > 0) {
-            uprv_memcpy(newUnits, f16BitUnits, f16BitUnitsLength * 2);
-        } else {
-            newUnits[0] = 0;
-            f16BitUnitsLength = 1;
-        }
-        uprv_free(f16BitUnits);
-        f16BitUnits = newUnits;
-        f16BitUnitsCapacity = capacity;
-    }
-    return f16BitUnits + f16BitUnitsLength;
 }
 
 static int32_t
@@ -442,7 +415,7 @@ SRBRoot::makeKey16(int32_t key) const {
 
 /*
  * Only called for UTF-16 v1 strings and duplicate UTF-16 v2 strings.
- * For unique UTF-16 v2 strings, res_write16() sees fRes != RES_BOGUS
+ * For unique UTF-16 v2 strings, write16() sees fRes != RES_BOGUS
  * and exits early.
  */
 void
@@ -470,15 +443,14 @@ ArrayResource::handleWrite16(SRBRoot *bundle, UErrorCode &errorCode) {
         res16 |= makeRes16(current->fRes);
     }
     if (U_SUCCESS(errorCode) && fCount <= 0xffff && res16 >= 0 && gFormatVersion > 1) {
-        uint16_t *p16 = bundle->reserve16BitUnits(1 + fCount, errorCode);
-        if (U_SUCCESS(errorCode)) {
-            fRes = URES_MAKE_RESOURCE(URES_ARRAY16, bundle->f16BitUnitsLength);
-            *p16++ = (uint16_t)fCount;
-            for (SResource *current = fFirst; current != NULL; current = current->fNext) {
-                *p16++ = (uint16_t)makeRes16(current->fRes);
-            }
-            bundle->f16BitUnitsLength += 1 + fCount;
-            fWritten = TRUE;
+        fRes = URES_MAKE_RESOURCE(URES_ARRAY16, bundle->f16BitUnits.length());
+        bundle->f16BitUnits.append((UChar)fCount);
+        for (SResource *current = fFirst; current != NULL; current = current->fNext) {
+            bundle->f16BitUnits.append((UChar)makeRes16(current->fRes));
+        }
+        fWritten = TRUE;
+        if (bundle->f16BitUnits.isBogus()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
         }
     }
 }
@@ -524,19 +496,18 @@ TableResource::handleWrite16(SRBRoot *bundle, UErrorCode &errorCode) {
         (!hasPoolKeys || maxPoolKey < (0x10000 - bundle->fLocalKeyLimit))
     ) {
         if (res16 >= 0 && gFormatVersion > 1) {
-            uint16_t *p16 = bundle->reserve16BitUnits(1 + fCount * 2, errorCode);
-            if (U_SUCCESS(errorCode)) {
-                /* 16-bit count, key offsets and values */
-                fRes = URES_MAKE_RESOURCE(URES_TABLE16, bundle->f16BitUnitsLength);
-                *p16++ = (uint16_t)fCount;
-                for (SResource *current = fFirst; current != NULL; current = current->fNext) {
-                    *p16++ = bundle->makeKey16(current->fKey);
-                }
-                for (SResource *current = fFirst; current != NULL; current = current->fNext) {
-                    *p16++ = (uint16_t)makeRes16(current->fRes);
-                }
-                bundle->f16BitUnitsLength += 1 + fCount * 2;
-                fWritten = TRUE;
+            /* 16-bit count, key offsets and values */
+            fRes = URES_MAKE_RESOURCE(URES_TABLE16, bundle->f16BitUnits.length());
+            bundle->f16BitUnits.append((UChar)fCount);
+            for (SResource *current = fFirst; current != NULL; current = current->fNext) {
+                bundle->f16BitUnits.append((UChar)bundle->makeKey16(current->fKey));
+            }
+            for (SResource *current = fFirst; current != NULL; current = current->fNext) {
+                bundle->f16BitUnits.append((UChar)makeRes16(current->fRes));
+            }
+            fWritten = TRUE;
+            if (bundle->f16BitUnits.isBogus()) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
             }
         } else {
             /* 16-bit count, 16-bit key offsets, 32-bit values */
@@ -572,7 +543,7 @@ SResource::handleWrite16(SRBRoot * /*bundle*/, UErrorCode & /*errorCode*/) {
 
 /*
  * Only called for UTF-16 v1 strings, and for aliases.
- * For UTF-16 v2 strings, res_preWrite() sees fRes != RES_BOGUS
+ * For UTF-16 v2 strings, preWrite() sees fRes != RES_BOGUS
  * and exits early.
  */
 void
@@ -660,7 +631,7 @@ SResource::handlePreWrite(uint32_t * /*byteOffset*/, SRBRoot * /*bundle*/,
 
 /*
  * Only called for UTF-16 v1 strings, and for aliases. For UTF-16 v2 strings,
- * res_write() sees fWritten and exits early.
+ * write() sees fWritten and exits early.
  */
 void
 StringBaseResource::handleWrite(UNewDataMemory *mem, uint32_t *byteOffset,
@@ -814,14 +785,14 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
 
     compactStrings(errorCode);
     fRoot->write16(this, errorCode);
-    if (f16BitUnitsLength & 1) {
-        f16BitUnits[f16BitUnitsLength++] = 0xaaaa;  /* pad to multiple of 4 bytes */
+    if (f16BitUnits.length() & 1) {
+        f16BitUnits.append((UChar)0xaaaa);  /* pad to multiple of 4 bytes */
     }
     /* all keys have been mapped */
     uprv_free(fKeyMap);
     fKeyMap = NULL;
 
-    byteOffset = fKeysTop + f16BitUnitsLength * 2;
+    byteOffset = fKeysTop + f16BitUnits.length() * 2;
     fRoot->preWrite(&byteOffset, this, errorCode);
 
     /* total size including the root item */
@@ -913,7 +884,7 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
      * write indexes[URES_INDEX_ATTRIBUTES] with URES_ATT_NO_FALLBACK set or not set
      * the memset() above initialized all indexes[] to 0
      */
-    if (noFallback) {
+    if (fNoFallback) {
         indexes[URES_INDEX_ATTRIBUTES]=URES_ATT_NO_FALLBACK;
     }
     /*
@@ -921,7 +892,7 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
      * more compact string value storage, optional pool bundle
      */
     if (URES_INDEX_16BIT_TOP < fIndexLength) {
-        indexes[URES_INDEX_16BIT_TOP] = (fKeysTop>>2) + (f16BitUnitsLength>>1);
+        indexes[URES_INDEX_16BIT_TOP] = (fKeysTop>>2) + (f16BitUnits.length()>>1);
     }
     if (URES_INDEX_POOL_CHECKSUM < fIndexLength) {
         if (fIsPoolBundle) {
@@ -944,10 +915,10 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
                           fKeysTop-fKeysBottom);
 
     /* write the v2 UTF-16 strings, URES_TABLE16 and URES_ARRAY16 */
-    udata_writeBlock(mem, f16BitUnits, f16BitUnitsLength*2);
+    udata_writeBlock(mem, f16BitUnits.getBuffer(), f16BitUnits.length()*2);
 
     /* write all of the bundle contents: the root item and its children */
-    byteOffset = fKeysTop + f16BitUnitsLength * 2;
+    byteOffset = fKeysTop + f16BitUnits.length() * 2;
     fRoot->write(mem, &byteOffset, this, errorCode);
     assert(byteOffset == top);
 
@@ -1015,11 +986,11 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
 }
 
 SRBRoot::SRBRoot(const UString *comment, UBool isPoolBundle, UErrorCode &errorCode)
-        : fRoot(NULL), fLocale(NULL), fIndexLength(0), fMaxTableLength(0), noFallback(FALSE),
+        : fRoot(NULL), fLocale(NULL), fIndexLength(0), fMaxTableLength(0), fNoFallback(FALSE),
           fStringsForm(0), fIsPoolBundle(FALSE),
           fKeys(NULL), fKeyMap(NULL),
           fKeysBottom(0), fKeysTop(0), fKeysCapacity(0), fKeysCount(0), fLocalKeyLimit(0),
-          f16BitUnits(NULL), f16BitUnitsCapacity(0), f16BitUnitsLength(0),
+          f16BitUnits(), f16BitStringsLength(0),
           fPoolBundleKeys(NULL), fPoolBundleKeysLength(0), fPoolBundleKeysCount(0),
           fPoolChecksum(0) {
     if (U_FAILURE(errorCode)) {
@@ -1067,7 +1038,6 @@ SRBRoot::~SRBRoot() {
     uprv_free(fLocale);
     uprv_free(fKeys);
     uprv_free(fKeyMap);
-    uprv_free(f16BitUnits);
 }
 
 /* Misc Functions */
@@ -1369,35 +1339,31 @@ compareStringLengths(const void * /*context*/, const void *l, const void *r) {
     return left->length() - right->length();
 }
 
-int32_t
-StringResource::writeUTF16v2(SRBRoot *bundle, int32_t utf16Length) {
+void
+StringResource::writeUTF16v2(UnicodeString &dest) {
     int32_t len = length();
-    fRes = URES_MAKE_RESOURCE(URES_STRING_V2, utf16Length);
+    fRes = URES_MAKE_RESOURCE(URES_STRING_V2, dest.length());
     fWritten = TRUE;
     switch(fNumCharsForLength) {
     case 0:
         break;
     case 1:
-        bundle->f16BitUnits[utf16Length++] = (uint16_t)(0xdc00 + len);
+        dest.append((UChar)(0xdc00 + len));
         break;
     case 2:
-        bundle->f16BitUnits[utf16Length] = (uint16_t)(0xdfef + (len >> 16));
-        bundle->f16BitUnits[utf16Length + 1] = (uint16_t)len;
-        utf16Length += 2;
+        dest.append((UChar)(0xdfef + (len >> 16)));
+        dest.append((UChar)len);
         break;
     case 3:
-        bundle->f16BitUnits[utf16Length] = 0xdfff;
-        bundle->f16BitUnits[utf16Length + 1] = (uint16_t)(len >> 16);
-        bundle->f16BitUnits[utf16Length + 2] = (uint16_t)len;
-        utf16Length += 3;
+        dest.append((UChar)0xdfff);
+        dest.append((UChar)(len >> 16));
+        dest.append((UChar)len);
         break;
     default:
         break;  /* will not occur */
     }
-    // u_memcpy note: Type of bundle->f16BitUnits is (uint16_t *). u_memcpy wants (UChar *).
-    //                On Windows, these are different, UChar is typedefed to wchar_t.
-    u_memcpy((UChar *)(bundle->f16BitUnits + utf16Length), getBuffer(), len + 1);
-    return utf16Length + len + 1;
+    dest.append(fString);
+    dest.append((UChar)0);
 }
 
 void
@@ -1415,37 +1381,23 @@ SRBRoot::compactStrings(UErrorCode &errorCode) {
     }
     switch(fStringsForm) {
     case STRINGS_UTF16_V2:
-        if (f16BitUnitsLength > 0) {
-            StringResource **array;
+        if (f16BitStringsLength > 0) {
             int32_t count = uhash_count(stringSet);
             int32_t i, pos;
-            /*
-             * Allocate enough space for the initial NUL and the UTF-16 v2 strings,
-             * and some extra for URES_TABLE16 and URES_ARRAY16 values.
-             * Round down to an even number.
-             */
-            int32_t utf16Length = (f16BitUnitsLength + 20000) & ~1;
-            f16BitUnits = (uint16_t *)uprv_malloc(utf16Length * U_SIZEOF_UCHAR);
-            // TODO: LocalArray
-            array = (StringResource **)uprv_malloc(count * sizeof(StringResource **));
-            if (f16BitUnits == NULL || array == NULL) {
-                uprv_free(f16BitUnits);
-                f16BitUnits = NULL;
-                uprv_free(array);
+            LocalArray<StringResource *> array(new StringResource *[count], errorCode);
+            if (array.isNull()) {
                 uhash_close(stringSet);
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
-            f16BitUnitsCapacity = utf16Length;
             /* insert the initial NUL */
-            f16BitUnits[0] = 0;
-            utf16Length = 1;
-            ++f16BitUnitsLength;
+            f16BitUnits.append((UChar)0);
+            ++f16BitStringsLength;
             for (pos = UHASH_FIRST, i = 0; i < count; ++i) {
                 array[i] = (StringResource *)uhash_nextElement(stringSet, &pos)->key.pointer;
             }
             /* Sort the strings so that each one is immediately followed by all of its suffixes. */
-            uprv_sortArray(array, count, (int32_t)sizeof(struct SResource **),
+            uprv_sortArray(array.getAlias(), count, (int32_t)sizeof(struct SResource **),
                            compareStringSuffixes, NULL, FALSE, &errorCode);
             /*
              * Make suffixes point into earlier, longer strings that contain them.
@@ -1493,12 +1445,15 @@ SRBRoot::compactStrings(UErrorCode &errorCode) {
              * to optimize for URES_TABLE16 and URES_ARRAY16:
              * Keep as many as possible within reach of 16-bit offsets.
              */
-            uprv_sortArray(array, count, (int32_t)sizeof(struct SResource **),
+            uprv_sortArray(array.getAlias(), count, (int32_t)sizeof(struct SResource **),
                            compareStringLengths, NULL, FALSE, &errorCode);
             if (U_SUCCESS(errorCode)) {
                 /* Write the non-suffix strings. */
                 for (i = 0; i < count && array[i]->fSame == NULL; ++i) {
-                    utf16Length = array[i]->writeUTF16v2(this, utf16Length);
+                    array[i]->writeUTF16v2(f16BitUnits);
+                }
+                if (f16BitUnits.isBogus()) {
+                    errorCode = U_MEMORY_ALLOCATION_ERROR;
                 }
                 /* Write the suffix strings. Make each point to the real string. */
                 for (; i < count; ++i) {
@@ -1509,9 +1464,7 @@ SRBRoot::compactStrings(UErrorCode &errorCode) {
                     res->fWritten = TRUE;
                 }
             }
-            assert(utf16Length <= f16BitUnitsLength);
-            f16BitUnitsLength = utf16Length;
-            uprv_free(array);
+            assert(f16BitUnits.length() <= f16BitStringsLength);
         }
         break;
     default:
