@@ -34,6 +34,22 @@
 
 U_CDECL_BEGIN
 
+struct ResFile {
+    ResFile()
+            : fBytes(NULL), fIndexes(NULL),
+              fKeys(NULL), fKeysLength(0), fKeysCount(0), fChecksum(0) {}
+    ~ResFile() { close(); }
+
+    void close();
+
+    uint8_t *fBytes;
+    const int32_t *fIndexes;
+    const char *fKeys;
+    int32_t fKeysLength;
+    int32_t fKeysCount;
+    int32_t fChecksum;
+};
+
 class TableResource;
 
 typedef struct KeyMapEntry {
@@ -62,7 +78,7 @@ struct SRBRoot {
     uint16_t makeKey16(int32_t key) const;
 
 private:
-    void compactStrings(UErrorCode &errorCode);
+    void compactStringsV2(UHashtable *stringSet, UErrorCode &errorCode);
 
 public:
     // TODO: private
@@ -85,10 +101,7 @@ public:
   icu::UnicodeString f16BitUnits;
   int32_t f16BitStringsLength;
 
-  const char *fPoolBundleKeys;
-  int32_t fPoolBundleKeysLength;
-  int32_t fPoolBundleKeysCount;
-  int32_t fPoolChecksum;
+  const ResFile *fUsePoolBundle;
 };
 
 /* write a java resource file */

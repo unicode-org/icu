@@ -40,6 +40,11 @@ const char *gCurrentFileName = theCurrentFileName;
 #include <console.h>
 #endif
 
+void ResFile::close() {
+    uprv_free(fBytes);
+    fBytes = NULL;
+}
+
 enum
 {
     HELP1,
@@ -96,17 +101,7 @@ static     UBool       write_xliff = FALSE;
 static     const char* outputEnc ="";
 static     struct SRBRoot *newPoolBundle = NULL;
 
-/* TODO: separate header file for ResFile? */
-typedef struct ResFile {
-  uint8_t *fBytes;
-  const int32_t *fIndexes;
-  const char *fKeys;
-  int32_t fKeysLength;
-  int32_t fKeysCount;
-  int32_t fChecksum;
-} ResFile;
-
-static ResFile poolBundle = { NULL, NULL, NULL, 0, 0, 0 };
+static ResFile poolBundle;
 
 /*added by Jing*/
 static     const char* language = NULL;
@@ -430,7 +425,7 @@ main(int argc,
                     &status);
     }
 
-    uprv_free(poolBundle.fBytes);
+    poolBundle.close();
 
     if(options[WRITE_POOL_BUNDLE].doesOccur) {
         char outputFileName[256];
@@ -589,10 +584,7 @@ processFile(const char *filename, const char *cp,
     }
 
     if(options[USE_POOL_BUNDLE].doesOccur) {
-        data->fPoolBundleKeys = poolBundle.fKeys;
-        data->fPoolBundleKeysLength = poolBundle.fKeysLength;
-        data->fPoolBundleKeysCount = poolBundle.fKeysCount;
-        data->fPoolChecksum = poolBundle.fChecksum;
+        data->fUsePoolBundle = &poolBundle;
     }
 
     /* Determine the target rb filename */
