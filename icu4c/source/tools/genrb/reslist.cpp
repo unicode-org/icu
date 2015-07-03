@@ -52,6 +52,8 @@ enum {
     MAX_IMPLICIT_STRING_LENGTH = 40  /* do not store the length explicitly for such strings */
 };
 
+static const ResFile kNoPoolBundle;
+
 /*
  * res_none() returns the address of kNoResource,
  * for use in non-error cases when no resource is to be added to the bundle.
@@ -235,6 +237,19 @@ StringBaseResource::StringBaseResource(SRBRoot *bundle, const char *tag, int8_t 
 
 StringBaseResource::~StringBaseResource() {}
 
+static int32_t U_CALLCONV
+string_hash(const UElement key) {
+    const StringResource *res = static_cast<const StringResource *>(key.pointer);
+    return res->fString.hashCode();
+}
+
+static UBool U_CALLCONV
+string_comp(const UElement key1, const UElement key2) {
+    const StringResource *res1 = static_cast<const StringResource *>(key1.pointer);
+    const StringResource *res2 = static_cast<const StringResource *>(key2.pointer);
+    return res1->fString == res2->fString;
+}
+
 StringResource::~StringResource() {}
 
 AliasResource::~AliasResource() {}
@@ -390,7 +405,7 @@ SRBRoot::mapKey(int32_t oldpos) const {
     int32_t i, start, limit;
 
     /* do a binary search for the old, pre-compactKeys() key offset */
-    start = fPoolBundleKeysCount;
+    start = fUsePoolBundle->fKeysCount;
     limit = start + fKeysCount;
     while (start < limit - 1) {
         i = (start + limit) / 2;
@@ -783,7 +798,21 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
         fLocalKeyLimit = 0;
     }
 
-    compactStrings(errorCode);
+    UHashtable *stringSet;
+    if (gFormatVersion > 1) {
+        stringSet = uhash_open(string_hash, string_comp, string_comp, &errorCode);
+        fRoot->preflightStrings(this, stringSet, errorCode);
+    } else {
+        stringSet = NULL;
+    }
+    if (fStringsForm == STRINGS_UTF16_V2 && f16BitStringsLength > 0) {
+        compactStringsV2(stringSet, errorCode);
+    }
+    uhash_close(stringSet);
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+
     fRoot->write16(this, errorCode);
     if (f16BitUnits.length() & 1) {
         f16BitUnits.append((UChar)0xaaaa);  /* pad to multiple of 4 bytes */
@@ -903,7 +932,7 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
                                     0);
         } else if (gUsePoolBundle) {
             indexes[URES_INDEX_ATTRIBUTES] |= URES_ATT_USES_POOL_BUNDLE;
-            indexes[URES_INDEX_POOL_CHECKSUM] = fPoolChecksum;
+            indexes[URES_INDEX_POOL_CHECKSUM] = fUsePoolBundle->fChecksum;
         }
     }
 
@@ -942,19 +971,6 @@ ArrayResource* array_open(struct SRBRoot *bundle, const char *tag, const struct 
     return U_SUCCESS(*status) ? res.orphan() : NULL;
 }
 
-static int32_t U_CALLCONV
-string_hash(const UElement key) {
-    const StringResource *res = static_cast<const StringResource *>(key.pointer);
-    return res->fString.hashCode();
-}
-
-static UBool U_CALLCONV
-string_comp(const UElement key1, const UElement key2) {
-    const StringResource *res1 = static_cast<const StringResource *>(key1.pointer);
-    const StringResource *res2 = static_cast<const StringResource *>(key2.pointer);
-    return res1->fString == res2->fString;
-}
-
 struct SResource *string_open(struct SRBRoot *bundle, const char *tag, const UChar *value, int32_t len, const struct UString* comment, UErrorCode *status) {
     LocalPointer<SResource> res(
             new StringResource(bundle, tag, value, len, comment, *status), *status);
@@ -966,7 +982,6 @@ struct SResource *alias_open(struct SRBRoot *bundle, const char *tag, UChar *val
             new AliasResource(bundle, tag, value, len, comment, *status), *status);
     return U_SUCCESS(*status) ? res.orphan() : NULL;
 }
-
 
 IntVectorResource *intvector_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status) {
     LocalPointer<IntVectorResource> res(
@@ -991,8 +1006,7 @@ SRBRoot::SRBRoot(const UString *comment, UBool isPoolBundle, UErrorCode &errorCo
           fKeys(NULL), fKeyMap(NULL),
           fKeysBottom(0), fKeysTop(0), fKeysCapacity(0), fKeysCount(0), fLocalKeyLimit(0),
           f16BitUnits(), f16BitStringsLength(0),
-          fPoolBundleKeys(NULL), fPoolBundleKeysLength(0), fPoolBundleKeysCount(0),
-          fPoolChecksum(0) {
+          fUsePoolBundle(&kNoPoolBundle) {
     if (U_FAILURE(errorCode)) {
         return;
     }
@@ -1060,7 +1074,7 @@ void SRBRoot::setLocale(UChar *locale, UErrorCode &errorCode) {
 const char *
 SRBRoot::getKeyString(int32_t key) const {
     if (key < 0) {
-        return fPoolBundleKeys + (key & 0x7fffffff);
+        return fUsePoolBundle->fKeys + (key & 0x7fffffff);
     } else {
         return fKeys + key;
     }
@@ -1190,7 +1204,7 @@ SRBRoot::compactKeys(UErrorCode &errorCode) {
     KeyMapEntry *map;
     char *keys;
     int32_t i;
-    int32_t keysCount = fPoolBundleKeysCount + fKeysCount;
+    int32_t keysCount = fUsePoolBundle->fKeysCount + fKeysCount;
     if (U_FAILURE(errorCode) || fKeysCount == 0 || fKeyMap != NULL) {
         return;
     }
@@ -1199,10 +1213,10 @@ SRBRoot::compactKeys(UErrorCode &errorCode) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    keys = (char *)fPoolBundleKeys;
-    for (i = 0; i < fPoolBundleKeysCount; ++i) {
+    keys = (char *)fUsePoolBundle->fKeys;
+    for (i = 0; i < fUsePoolBundle->fKeysCount; ++i) {
         map[i].oldpos =
-            (int32_t)(keys - fPoolBundleKeys) | 0x80000000;  /* negative oldpos */
+            (int32_t)(keys - fUsePoolBundle->fKeys) | 0x80000000;  /* negative oldpos */
         map[i].newpos = 0;
         while (*keys != 0) { ++keys; }  /* skip the key */
         ++keys;  /* skip the NUL */
@@ -1367,108 +1381,82 @@ StringResource::writeUTF16v2(UnicodeString &dest) {
 }
 
 void
-SRBRoot::compactStrings(UErrorCode &errorCode) {
-    UHashtable *stringSet;
-    if (gFormatVersion > 1) {
-        stringSet = uhash_open(string_hash, string_comp, string_comp, &errorCode);
-        fRoot->preflightStrings(this, stringSet, errorCode);
-    } else {
-        stringSet = NULL;
-    }
+SRBRoot::compactStringsV2(UHashtable *stringSet, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
-        uhash_close(stringSet);
         return;
     }
-    switch(fStringsForm) {
-    case STRINGS_UTF16_V2:
-        if (f16BitStringsLength > 0) {
-            int32_t count = uhash_count(stringSet);
-            int32_t i, pos;
-            LocalArray<StringResource *> array(new StringResource *[count], errorCode);
-            if (array.isNull()) {
-                uhash_close(stringSet);
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-            /* insert the initial NUL */
-            f16BitUnits.append((UChar)0);
-            ++f16BitStringsLength;
-            for (pos = UHASH_FIRST, i = 0; i < count; ++i) {
-                array[i] = (StringResource *)uhash_nextElement(stringSet, &pos)->key.pointer;
-            }
-            /* Sort the strings so that each one is immediately followed by all of its suffixes. */
-            uprv_sortArray(array.getAlias(), count, (int32_t)sizeof(struct SResource **),
-                           compareStringSuffixes, NULL, FALSE, &errorCode);
-            /*
-             * Make suffixes point into earlier, longer strings that contain them.
-             * Temporarily use fSame and fSuffixOffset for suffix strings to
-             * refer to the remaining ones.
-             */
-            if (U_SUCCESS(errorCode)) {
-                for (i = 0; i < count;) {
-                    /*
-                     * This string is not a suffix of the previous one;
-                     * write this one and subsume the following ones that are
-                     * suffixes of this one.
-                     */
-                    StringResource *res = array[i];
-                    const UChar *strLimit = res->getBuffer() + res->length();
-                    int32_t j;
-                    for (j = i + 1; j < count; ++j) {
-                        StringResource *suffixRes = array[j];
-                        const UChar *s;
-                        const UChar *suffix = suffixRes->getBuffer();
-                        const UChar *suffixLimit = suffix + suffixRes->length();
-                        int32_t offset = res->length() - suffixRes->length();
-                        if (offset < 0) {
-                            break;  /* suffix cannot be longer than the original */
-                        }
-                        /* Is it a suffix of the earlier, longer key? */
-                        for (s = strLimit; suffix < suffixLimit && *--s == *--suffixLimit;) {}
-                        if (suffix == suffixLimit && *s == *suffixLimit) {
-                            if (suffixRes->fNumCharsForLength == 0) {
-                                /* yes, point to the earlier string */
-                                suffixRes->fSame = res;
-                                suffixRes->fSuffixOffset = offset;
-                            } else {
-                                /* write the suffix by itself if we need explicit length */
-                            }
-                        } else {
-                            break;  /* not a suffix, restart from here */
-                        }
-                    }
-                    i = j;
-                }
-            }
-            /*
-             * Re-sort the strings by ascending length (except suffixes last)
-             * to optimize for URES_TABLE16 and URES_ARRAY16:
-             * Keep as many as possible within reach of 16-bit offsets.
-             */
-            uprv_sortArray(array.getAlias(), count, (int32_t)sizeof(struct SResource **),
-                           compareStringLengths, NULL, FALSE, &errorCode);
-            if (U_SUCCESS(errorCode)) {
-                /* Write the non-suffix strings. */
-                for (i = 0; i < count && array[i]->fSame == NULL; ++i) {
-                    array[i]->writeUTF16v2(f16BitUnits);
-                }
-                if (f16BitUnits.isBogus()) {
-                    errorCode = U_MEMORY_ALLOCATION_ERROR;
-                }
-                /* Write the suffix strings. Make each point to the real string. */
-                for (; i < count; ++i) {
-                    StringResource *res = array[i];
-                    StringResource *same = res->fSame;
-                    res->fRes = same->fRes + same->fNumCharsForLength + res->fSuffixOffset;
-                    res->fSame = NULL;
-                    res->fWritten = TRUE;
-                }
-            }
-            assert(f16BitUnits.length() <= f16BitStringsLength);
-        }
-        break;
-    default:
-        break;
+    int32_t count = uhash_count(stringSet);
+    LocalArray<StringResource *> array(new StringResource *[count], errorCode);
+    if (U_FAILURE(errorCode)) {
+        return;
     }
-    uhash_close(stringSet);
+    /* insert the initial NUL */
+    f16BitUnits.append((UChar)0);
+    ++f16BitStringsLength;
+    for (int32_t pos = UHASH_FIRST, i = 0; i < count; ++i) {
+        array[i] = (StringResource *)uhash_nextElement(stringSet, &pos)->key.pointer;
+    }
+    /* Sort the strings so that each one is immediately followed by all of its suffixes. */
+    uprv_sortArray(array.getAlias(), count, (int32_t)sizeof(struct SResource **),
+                   compareStringSuffixes, NULL, FALSE, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    /*
+     * Make suffixes point into earlier, longer strings that contain them.
+     * Temporarily use fSame and fSuffixOffset for suffix strings to
+     * refer to the remaining ones.
+     */
+    for (int32_t i = 0; i < count;) {
+        /*
+         * This string is not a suffix of the previous one;
+         * write this one and subsume the following ones that are
+         * suffixes of this one.
+         */
+        StringResource *res = array[i];
+        int32_t j;
+        for (j = i + 1; j < count; ++j) {
+            StringResource *suffixRes = array[j];
+            /* Is it a suffix of the earlier, longer key? */
+            if (res->fString.endsWith(suffixRes->fString)) {
+                if (suffixRes->fNumCharsForLength == 0) {
+                    /* yes, point to the earlier string */
+                    suffixRes->fSame = res;
+                    suffixRes->fSuffixOffset = res->length() - suffixRes->length();
+                } else {
+                    /* write the suffix by itself if we need explicit length */
+                }
+            } else {
+                break;  /* not a suffix, restart from here */
+            }
+        }
+        i = j;
+    }
+    /*
+     * Re-sort the strings by ascending length (except suffixes last)
+     * to optimize for URES_TABLE16 and URES_ARRAY16:
+     * Keep as many as possible within reach of 16-bit offsets.
+     */
+    uprv_sortArray(array.getAlias(), count, (int32_t)sizeof(struct SResource **),
+                   compareStringLengths, NULL, FALSE, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    /* Write the non-suffix strings. */
+    int32_t i;
+    for (i = 0; i < count && array[i]->fSame == NULL; ++i) {
+        array[i]->writeUTF16v2(f16BitUnits);
+    }
+    if (f16BitUnits.isBogus()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    /* Write the suffix strings. Make each point to the real string. */
+    for (; i < count; ++i) {
+        StringResource *res = array[i];
+        StringResource *same = res->fSame;
+        res->fRes = same->fRes + same->fNumCharsForLength + res->fSuffixOffset;
+        res->fSame = NULL;
+        res->fWritten = TRUE;
+    }
+    assert(f16BitUnits.length() <= f16BitStringsLength);
 }
