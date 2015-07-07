@@ -565,10 +565,9 @@ processFile(const char *filename, const char *cp,
         goto finish;
     }
     if(options[WRITE_POOL_BUNDLE].doesOccur) {
-        int32_t newKeysLength;
-        const char *newKeys, *newKeysLimit;
         data->compactKeys(*status);
-        newKeys = data->getKeyBytes(&newKeysLength);
+        int32_t newKeysLength;
+        const char *newKeys = data->getKeyBytes(&newKeysLength);
         newPoolBundle->addKeyBytes(newKeys, newKeysLength, *status);
         if(U_FAILURE(*status)) {
             fprintf(stderr, "bundle_compactKeys(%s) or bundle_getKeyBytes() failed: %s\n",
@@ -576,7 +575,7 @@ processFile(const char *filename, const char *cp,
             goto finish;
         }
         /* count the number of just-added key strings */
-        for(newKeysLimit = newKeys + newKeysLength; newKeys < newKeysLimit; ++newKeys) {
+        for(const char *newKeysLimit = newKeys + newKeysLength; newKeys < newKeysLimit; ++newKeys) {
             if(*newKeys == 0) {
                 ++newPoolBundle->fKeysCount;
             }

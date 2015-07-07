@@ -2046,9 +2046,12 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
         state.bundle->fNoFallback=TRUE;
     }
     /* top-level tables need not handle special table names like "collations" */
-    realParseTable(&state, state.bundle->fRoot, NULL, line, status);
+    assert(!state.bundle->fIsPoolBundle);
+    assert(state.bundle->fRoot->fType == URES_TABLE);
+    TableResource *rootTable = static_cast<TableResource *>(state.bundle->fRoot);
+    realParseTable(&state, rootTable, NULL, line, status);
     if(dependencyArray!=NULL){
-        state.bundle->fRoot->add(dependencyArray, 0, *status);
+        rootTable->add(dependencyArray, 0, *status);
         dependencyArray = NULL;
     }
    if (U_FAILURE(*status))
