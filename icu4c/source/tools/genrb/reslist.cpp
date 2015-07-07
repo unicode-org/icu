@@ -1002,7 +1002,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
 
 SRBRoot::SRBRoot(const UString *comment, UBool isPoolBundle, UErrorCode &errorCode)
         : fRoot(NULL), fLocale(NULL), fIndexLength(0), fMaxTableLength(0), fNoFallback(FALSE),
-          fStringsForm(0), fIsPoolBundle(FALSE),
+          fStringsForm(0), fIsPoolBundle(isPoolBundle),
           fKeys(NULL), fKeyMap(NULL),
           fKeysBottom(0), fKeysTop(0), fKeysCapacity(0), fKeysCount(0), fLocalKeyLimit(0),
           f16BitUnits(), f16BitStringsLength(0),
@@ -1022,7 +1022,6 @@ SRBRoot::SRBRoot(const UString *comment, UBool isPoolBundle, UErrorCode &errorCo
 
     fKeysCapacity = KEY_SPACE_SIZE;
     /* formatVersion 1.1: start fKeysTop after the root item and indexes[] */
-    fIsPoolBundle = isPoolBundle;
     if (gUsePoolBundle || isPoolBundle) {
         fIndexLength = URES_INDEX_POOL_CHECKSUM + 1;
     } else if (gFormatVersion >= 2) {
@@ -1417,9 +1416,9 @@ SRBRoot::compactStringsV2(UHashtable *stringSet, UErrorCode &errorCode) {
         int32_t j;
         for (j = i + 1; j < count; ++j) {
             StringResource *suffixRes = array[j];
-            /* Is it a suffix of the earlier, longer key? */
+            /* Is it a suffix of the earlier, longer string? */
             if (res->fString.endsWith(suffixRes->fString)) {
-                if (suffixRes->fNumCharsForLength == 0) {
+                if (suffixRes->fNumCharsForLength == 0 || res->length() == suffixRes->length()) {
                     /* yes, point to the earlier string */
                     suffixRes->fSame = res;
                     suffixRes->fSuffixOffset = res->length() - suffixRes->length();
@@ -1449,12 +1448,17 @@ SRBRoot::compactStringsV2(UHashtable *stringSet, UErrorCode &errorCode) {
     }
     if (f16BitUnits.isBogus()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
     /* Write the suffix strings. Make each point to the real string. */
     for (; i < count; ++i) {
         StringResource *res = array[i];
         StringResource *same = res->fSame;
-        res->fRes = same->fRes + same->fNumCharsForLength + res->fSuffixOffset;
+        if (res->length() == same->length()) {
+            res->fRes = same->fRes;
+        } else {
+            res->fRes = same->fRes + same->fNumCharsForLength + res->fSuffixOffset;
+        }
         res->fSame = NULL;
         res->fWritten = TRUE;
     }

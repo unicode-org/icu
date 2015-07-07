@@ -50,7 +50,7 @@ struct ResFile {
     int32_t fChecksum;
 };
 
-class TableResource;
+struct SResource;
 
 typedef struct KeyMapEntry {
     int32_t oldpos, newpos;
@@ -83,7 +83,7 @@ private:
 public:
     // TODO: private
 
-  TableResource *fRoot;
+  SResource *fRoot;  // Normally a TableResource.
   char *fLocale;
   int32_t fIndexLength;
   int32_t fMaxTableLength;
@@ -124,6 +124,7 @@ void bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* 
 struct SResource* res_none(void);
 
 class ArrayResource;
+class TableResource;
 class IntVectorResource;
 
 TableResource *table_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
