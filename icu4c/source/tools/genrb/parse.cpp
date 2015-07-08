@@ -28,6 +28,7 @@
 #   define UNISTR_FROM_STRING_EXPLICIT explicit
 #endif
 
+#include <assert.h>
 #include "parse.h"
 #include "errmsg.h"
 #include "uhash.h"
