@@ -1011,6 +1011,12 @@ SRBRoot::SRBRoot(const UString *comment, UBool isPoolBundle, UErrorCode &errorCo
         return;
     }
 
+    if (gFormatVersion > 1) {
+        // f16BitUnits must start with a zero for empty resources.
+        // We might be able to omit it if there are no empty 16-bit resources.
+        f16BitUnits.append((UChar)0);
+    }
+
     fKeys = (char *) uprv_malloc(sizeof(char) * KEY_SPACE_SIZE);
     fRoot = new TableResource(this, NULL, comment, errorCode);
     if (fKeys == NULL || fRoot == NULL || U_FAILURE(errorCode)) {
@@ -1389,9 +1395,6 @@ SRBRoot::compactStringsV2(UHashtable *stringSet, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
-    /* insert the initial NUL */
-    f16BitUnits.append((UChar)0);
-    ++f16BitStringsLength;
     for (int32_t pos = UHASH_FIRST, i = 0; i < count; ++i) {
         array[i] = (StringResource *)uhash_nextElement(stringSet, &pos)->key.pointer;
     }
@@ -1462,5 +1465,6 @@ SRBRoot::compactStringsV2(UHashtable *stringSet, UErrorCode &errorCode) {
         res->fSame = NULL;
         res->fWritten = TRUE;
     }
-    assert(f16BitUnits.length() <= f16BitStringsLength);
+    // +1 to account for the initial zero in f16BitUnits
+    assert(f16BitUnits.length() <= (f16BitStringsLength + 1));
 }
