@@ -1012,7 +1012,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
 
 SRBRoot::SRBRoot(const UString *comment, UBool isPoolBundle, UErrorCode &errorCode)
         : fRoot(NULL), fLocale(NULL), fIndexLength(0), fMaxTableLength(0), fNoFallback(FALSE),
-          fStringsForm(0), fIsPoolBundle(isPoolBundle),
+          fStringsForm(STRINGS_UTF16_V1), fIsPoolBundle(isPoolBundle),
           fKeys(NULL), fKeyMap(NULL),
           fKeysBottom(0), fKeysTop(0), fKeysCapacity(0), fKeysCount(0), fLocalKeyLimit(0),
           f16BitUnits(), f16BitStringsLength(0),
