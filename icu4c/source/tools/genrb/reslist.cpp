@@ -1400,6 +1400,9 @@ SRBRoot::compactStringsV2(UHashtable *stringSet, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
+    // Store the StringResource pointers in an array for
+    // easy sorting and processing.
+    // We enumerate a set of strings, so there are no duplicates.
     int32_t count = uhash_count(stringSet);
     LocalArray<StringResource *> array(new StringResource *[count], errorCode);
     if (U_FAILURE(errorCode)) {
@@ -1431,7 +1434,8 @@ SRBRoot::compactStringsV2(UHashtable *stringSet, UErrorCode &errorCode) {
             StringResource *suffixRes = array[j];
             /* Is it a suffix of the earlier, longer string? */
             if (res->fString.endsWith(suffixRes->fString)) {
-                if (suffixRes->fNumCharsForLength == 0 || res->length() == suffixRes->length()) {
+                assert(res->length() != suffixRes->length());  // Set strings are unique.
+                if (suffixRes->fNumCharsForLength == 0) {
                     /* yes, point to the earlier string */
                     suffixRes->fSame = res;
                     suffixRes->fSuffixOffset = res->length() - suffixRes->length();
@@ -1467,11 +1471,8 @@ SRBRoot::compactStringsV2(UHashtable *stringSet, UErrorCode &errorCode) {
     for (; i < count; ++i) {
         StringResource *res = array[i];
         StringResource *same = res->fSame;
-        if (res->length() == same->length()) {
-            res->fRes = same->fRes;
-        } else {
-            res->fRes = same->fRes + same->fNumCharsForLength + res->fSuffixOffset;
-        }
+        assert(res->length() != same->length());  // Set strings are unique.
+        res->fRes = same->fRes + same->fNumCharsForLength + res->fSuffixOffset;
         res->fSame = NULL;
         res->fWritten = TRUE;
     }
