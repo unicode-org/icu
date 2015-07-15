@@ -212,7 +212,7 @@ typedef size_t uintptr_t;
  */
 #ifdef U_HAVE_STD_ATOMICS
     /* Use the predefined value. */
-#elif !defined(__cplusplus) || __cplusplus<201103L
+#elif U_CPLUSPLUS_VERSION < 11
     /* Not C++11, disable use of atomics */
 #   define U_HAVE_STD_ATOMICS 0
 #elif __clang__ && __clang_major__==3 && __clang_minor__<=1
@@ -236,17 +236,13 @@ typedef size_t uintptr_t;
  */
 #ifdef U_HAVE_CLANG_ATOMICS
     /* Use the predefined value. */
-#elif !defined(__clang__)
-#    define U_HAVE_CLANG_ATOMICS 0
-#else
-#if __has_builtin(__c11_atomic_load) && \
+#elif __has_builtin(__c11_atomic_load) && \
     __has_builtin(__c11_atomic_store) && \
     __has_builtin(__c11_atomic_fetch_add) && \
     __has_builtin(__c11_atomic_fetch_sub)
 #    define U_HAVE_CLANG_ATOMICS 1
 #else
 #    define U_HAVE_CLANG_ATOMICS 0
-#endif
 #endif
 
 /*===========================================================================*/
