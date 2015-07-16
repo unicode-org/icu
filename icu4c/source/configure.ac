@@ -3,10 +3,12 @@ AC_COPYRIGHT([ Copyright (c) 1999-2015, International Business Machines Corporat
 # configure.in for ICU
 # Stephen F. Booth, heavily modified by Yves and others
 
-# Check for autoconf version
-AC_PREREQ(2.68)
+# NOTE: please use 'autoreconf' to rebuild, otherwise 'aclocal && autoconf'.
 
-# Process this file with autoconf to produce a configure script
+# Check for autoconf version
+AC_PREREQ(2.69)
+
+# Process this file with autoreconf to produce a configure script
 AC_INIT([ICU],
         m4_esyscmd_s([sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "./common/unicode/uvernum.h]"),
         [http://icu-project.org/bugs],
@@ -409,9 +411,25 @@ if test "x$ac_cv_header_elf_h" = "xyes"; then
     CONFIG_CPPFLAGS="$CONFIG_CPPFLAGS -DU_HAVE_ELF_H=1";
 fi
 
+# Enable/disable plugins
+AC_ARG_ENABLE(plugins,
+	[  --enable-plugins        enable plugins [default=no]],
+	[case "${enableval}" in
+		yes) plugins=true ;;
+		no)  plugins=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-plugins) ;;
+		esac],
+	plugins=false)
+ICU_CONDITIONAL(PLUGINS, test "$plugins" = true)
+
+if test "x$plugins" = "xtrue"; then
+   UCONFIG_CPPFLAGS="$UCONFIG_CPPFLAGS -DUCONFIG_ENABLE_PLUGINS=1"
+fi
+
+
 U_ENABLE_DYLOAD=1
 enable=yes
-AC_MSG_CHECKING([whether to enable dynamic loading of plugins])
+AC_MSG_CHECKING([whether to enable dynamic loading of plugins. Ignored if plugins disabled.])
 AC_ARG_ENABLE(dyload,
     [  --disable-dyload        disable dynamic loading [default=no]],
     [ case "${enableval}" in
