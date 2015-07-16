@@ -510,9 +510,6 @@
     <ClCompile Include="uregion.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="filteredbrk.cpp">
-      <Filter>misc</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bocsu.cpp">
@@ -1212,10 +1209,5 @@
     <CustomBuild Include="unicode\uformattable.h">
       <Filter>formatting</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="unicode\filteredbrk.h">
-      <Filter>misc</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
