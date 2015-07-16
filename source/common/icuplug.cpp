@@ -14,6 +14,11 @@
 */
 
 #include "unicode/icuplug.h"
+
+
+#if UCONFIG_ENABLE_PLUGINS
+
+
 #include "icuplugimp.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -870,3 +875,7 @@ uplug_init(UErrorCode *status) {
   gCurrentLevel = UPLUG_LEVEL_HIGH;
   ucln_registerCleanup(UCLN_UPLUG, uplug_cleanup);
 }
+
+#endif
+
+

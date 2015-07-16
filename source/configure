@@ -635,7 +635,9 @@ platform_make_fragment
 platform_make_fragment_name
 platform
 ICUDATA_CHAR
+U_HAVE_SAMPLES
 SAMPLES_TRUE
+U_HAVE_TESTS
 TESTS_TRUE
 ICULIBSUFFIXCNAME
 U_HAVE_LIB_SUFFIX
@@ -643,10 +645,15 @@ ICULIBSUFFIX
 DATA_PACKAGING_MODE
 thepkgicudatadir
 pkgicudatadir
+U_HAVE_TOOLS
 TOOLS_TRUE
+U_HAVE_LAYOUTEX
 LAYOUTEX_TRUE
+U_HAVE_LAYOUT
 LAYOUT_TRUE
+U_HAVE_ICUIO
 ICUIO_TRUE
+U_HAVE_EXTRAS
 EXTRAS_TRUE
 U_HAVE_WCSCPY
 U_HAVE_WCHAR_H
@@ -671,6 +678,8 @@ U_HAVE_ATOMIC
 U_HAVE_STD_STRING
 ENABLE_RPATH
 U_ENABLE_DYLOAD
+U_HAVE_PLUGINS
+PLUGINS_TRUE
 U_ENABLE_TRACING
 U_DISABLE_RENAMING
 AR
@@ -694,6 +703,8 @@ INSTALL_PROGRAM
 CPP
 ICULEHB_LIBS
 ICULEHB_CFLAGS
+PKG_CONFIG_LIBDIR
+PKG_CONFIG_PATH
 PKG_CONFIG
 ac_ct_CXX
 CXXFLAGS
@@ -776,6 +787,7 @@ enable_auto_cleanup
 enable_draft
 enable_renaming
 enable_tracing
+enable_plugins
 enable_dyload
 enable_rpath
 enable_weak_threads
@@ -801,6 +813,8 @@ CXX
 CXXFLAGS
 CCC
 PKG_CONFIG
+PKG_CONFIG_PATH
+PKG_CONFIG_LIBDIR
 ICULEHB_CFLAGS
 ICULEHB_LIBS
 CPP'
@@ -1428,6 +1442,7 @@ Optional Features:
   --enable-draft          enable draft APIs (and internal APIs) default=yes
   --enable-renaming       add a version suffix to symbols default=yes
   --enable-tracing        enable function and data tracing default=no
+  --enable-plugins        enable plugins default=no
   --disable-dyload        disable dynamic loading default=no
   --enable-rpath          use rpath when linking default is only if necessary
   --enable-weak-threads   weakly reference the threading library default=no
@@ -1469,6 +1484,10 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
   ICULEHB_CFLAGS
               C compiler flags for ICULEHB, overriding pkg-config
   ICULEHB_LIBS
@@ -3667,6 +3686,11 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # pkg-config is needed for harfbuzz support
 
 
+
+
+
+
+
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
 	if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
@@ -3779,7 +3803,6 @@ $as_echo "yes" >&6; }
 $as_echo "no" >&6; }
 		PKG_CONFIG=""
 	fi
-
 fi
 
 pkg_failed=no
@@ -3796,6 +3819,7 @@ if test -n "$ICULEHB_CFLAGS"; then
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_ICULEHB_CFLAGS=`$PKG_CONFIG --cflags "icu-le-hb" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
@@ -3812,6 +3836,7 @@ if test -n "$ICULEHB_LIBS"; then
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_ICULEHB_LIBS=`$PKG_CONFIG --libs "icu-le-hb" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
@@ -3822,6 +3847,8 @@ fi
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -3829,17 +3856,17 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        ICULEHB_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "icu-le-hb" 2>&1`
+	        ICULEHB_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "icu-le-hb" 2>&1`
         else
-	        ICULEHB_PKG_ERRORS=`$PKG_CONFIG --print-errors "icu-le-hb" 2>&1`
+	        ICULEHB_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "icu-le-hb" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$ICULEHB_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                :
+	:
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 	:
 else
 	ICULEHB_CFLAGS=$pkg_cv_ICULEHB_CFLAGS
@@ -5682,10 +5709,37 @@ if test "x$ac_cv_header_elf_h" = "xyes"; then
     CONFIG_CPPFLAGS="$CONFIG_CPPFLAGS -DU_HAVE_ELF_H=1";
 fi
 
+# Enable/disable plugins
+# Check whether --enable-plugins was given.
+if test "${enable_plugins+set}" = set; then :
+  enableval=$enable_plugins; case "${enableval}" in
+		yes) plugins=true ;;
+		no)  plugins=false ;;
+		*) as_fn_error $? "bad value ${enableval} for --enable-plugins" "$LINENO" 5 ;;
+		esac
+else
+  plugins=false
+fi
+
+
+
+if test "$plugins" = true; then
+  PLUGINS_TRUE=
+  U_HAVE_PLUGINS=1
+else
+  PLUGINS_TRUE='#'
+  U_HAVE_PLUGINS=0
+fi
+
+if test "x$plugins" = "xtrue"; then
+   UCONFIG_CPPFLAGS="$UCONFIG_CPPFLAGS -DUCONFIG_ENABLE_PLUGINS=1"
+fi
+
+
 U_ENABLE_DYLOAD=1
 enable=yes
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable dynamic loading of plugins" >&5
-$as_echo_n "checking whether to enable dynamic loading of plugins... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable dynamic loading of plugins. Ignored if plugins disabled." >&5
+$as_echo_n "checking whether to enable dynamic loading of plugins. Ignored if plugins disabled.... " >&6; }
 # Check whether --enable-dyload was given.
 if test "${enable_dyload+set}" = set; then :
   enableval=$enable_dyload;  case "${enableval}" in
@@ -7426,10 +7480,13 @@ else
 fi
 
 
+
 if test "$extras" = true; then
   EXTRAS_TRUE=
+  U_HAVE_EXTRAS=1
 else
   EXTRAS_TRUE='#'
+  U_HAVE_EXTRAS=0
 fi
 # Check whether --enable-icuio was given.
 if test "${enable_icuio+set}" = set; then :
@@ -7443,10 +7500,13 @@ else
 fi
 
 
+
 if test "$icuio" = true; then
   ICUIO_TRUE=
+  U_HAVE_ICUIO=1
 else
   ICUIO_TRUE='#'
+  U_HAVE_ICUIO=0
 fi
 
 # Enable/disable layout
@@ -7462,10 +7522,13 @@ else
 fi
 
 
+
 if test "$layout" = true; then
   LAYOUT_TRUE=
+  U_HAVE_LAYOUT=1
 else
   LAYOUT_TRUE='#'
+  U_HAVE_LAYOUT=0
 fi
 
 # Enable/disable layoutex
@@ -7481,10 +7544,13 @@ else
 fi
 
 
+
 if test "$layoutex" = true; then
   LAYOUTEX_TRUE=
+  U_HAVE_LAYOUTEX=1
 else
   LAYOUTEX_TRUE='#'
+  U_HAVE_LAYOUTEX=0
 fi
 
 # Enable/disable tools
@@ -7500,10 +7566,13 @@ else
 fi
 
 
+
 if test "$tools" = true; then
   TOOLS_TRUE=
+  U_HAVE_TOOLS=1
 else
   TOOLS_TRUE='#'
+  U_HAVE_TOOLS=0
 fi
 
 
@@ -7622,10 +7691,13 @@ else
 fi
 
 
+
 if test "$tests" = true; then
   TESTS_TRUE=
+  U_HAVE_TESTS=1
 else
   TESTS_TRUE='#'
+  U_HAVE_TESTS=0
 fi
 
 # Enable/disable samples
@@ -7641,10 +7713,13 @@ else
 fi
 
 
+
 if test "$samples" = true; then
   SAMPLES_TRUE=
+  U_HAVE_SAMPLES=1
 else
   SAMPLES_TRUE='#'
+  U_HAVE_SAMPLES=0
 fi
 
 ICUDATA_CHAR=$U_ENDIAN_CHAR
