@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2014, International Business Machines Corporation and
+* Copyright (C) 2014-2015, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -52,7 +52,7 @@ static int8_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
 /**
  * A UVector which implements a set of strings.
  */
-class U_I18N_API UStringSet : public UVector {
+class U_COMMON_API UStringSet : public UVector {
  public:
   UStringSet(UErrorCode &status) : UVector(uprv_deleteUObject,
                                            uhash_compareUnicodeString,
@@ -298,7 +298,7 @@ int32_t SimpleFilteredSentenceBreakIterator::next() {
 /**
  * Concrete implementation of builder class.
  */
-class U_I18N_API SimpleFilteredBreakIteratorBuilder : public FilteredBreakIteratorBuilder {
+class U_COMMON_API SimpleFilteredBreakIteratorBuilder : public FilteredBreakIteratorBuilder {
 public:
   virtual ~SimpleFilteredBreakIteratorBuilder();
   SimpleFilteredBreakIteratorBuilder(const Locale &fromLocale, UErrorCode &status);

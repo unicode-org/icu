@@ -232,6 +232,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="filteredbrk.cpp" />
     <ClCompile Include="ubidi.c" />
     <ClCompile Include="ubidi_props.c" />
     <ClCompile Include="ubidiln.c" />
@@ -398,7 +399,7 @@
     <ClCompile Include="uchar.c" />
     <ClCompile Include="unames.cpp" />
     <ClCompile Include="unifiedcache.cpp">
-    <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="unifilt.cpp" />
     <ClCompile Include="unifunct.cpp" />
@@ -624,6 +625,7 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="unicode\filteredbrk.h" />
     <ClInclude Include="ustrenum.h" />
     <ClInclude Include="utrie.h" />
     <ClInclude Include="utrie2.h" />

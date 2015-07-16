@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2014, International Business Machines
+*   Copyright (C) 1997-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 */
@@ -44,7 +44,7 @@ U_NAMESPACE_BEGIN
  *
  * @internal technology preview
  */
-class U_I18N_API FilteredBreakIteratorBuilder : public UObject {
+class U_COMMON_API FilteredBreakIteratorBuilder : public UObject {
  public:
   /**
    *  destructor.
