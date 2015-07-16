@@ -43,7 +43,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2015-Jul-1<br />
+    <p>Last updated: 2015-Jul-16<br />
       Copyright &copy; 1997-2015 International Business Machines Corporation and
       others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -234,7 +234,14 @@
 
     <h3>API Changes</h3>
     <p>See the <a href="APIChangeReport.html">API Change Report</a> for a complete 
-    list of APIs added, removed, or changed in this release.</p>
+      list of APIs added, removed, or changed in this release.</p>
+
+    <!-- ICU 56 items -->
+    <h3>ICU Plugins: disabled by default</h3>
+    <p>ICU Plugins are now disabled by default. They may be enabled
+      with the configure option
+      <tt>--enable-plugins</tt> or by means of
+      <tt>#define UCONFIG_ENABLE_PLUGINS</tt>.
 
     <!-- ICU 55 items -->
     <h3>Layout Engine: breaking API change</h3>

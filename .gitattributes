@@ -6,6 +6,7 @@ icu4c/readme.html svneol=native#text/html
 icu4c/source/aclocal.m4 -text
 icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
+icu4c/source/config/m4/icu-conditional.m4 -text
 icu4c/source/data/brkitr/burmesedict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/char.txt svneol=native#text/plain
 icu4c/source/data/brkitr/cjdict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
