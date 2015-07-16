@@ -175,6 +175,11 @@ group: breakiterator
     rbbi.o rbbinode.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o
     rbbidata.o rbbirb.o
     dictionarydata.o dictbe.o
+
+    # Folded 'filteredbrk' in to this group.
+    # it depends on global new/delete and STL. Not recording these here.
+    # http://bugs.icu-project.org/trac/ticket/10990
+    filteredbrk.o
   deps
     resourcebundle service_registration
     schriter utext uniset_core uniset_props
@@ -740,7 +745,6 @@ library: i18n
     region localedata genderinfo charset_detector spoof_detection
     alphabetic_index collation collation_builder string_search
     formatting formattable_cnv regex regex_cnv translit
-    filteredbreakiterator
     universal_time_scale
     uclean_i18n
 
@@ -906,17 +910,6 @@ group: translit
     common
     formatting  # for Transliterator::getDisplayName()
     uclean_i18n
-
-# This is off by default, UCONFIG_NO_FILTERED_BREAK_ITERATION=0
-# so, you will see warnings:
-#Info:  group filteredbreakiterator  does not need to depend on  breakiterator
-#Info:  group filteredbreakiterator  does not need to depend on  ucharstriebuilder
-group: filteredbreakiterator
-    filteredbrk.o
-  deps
-    breakiterator ucharstriebuilder
-    # depends on global new/delete and STL. Not recording these here.
-    # http://bugs.icu-project.org/trac/ticket/10990
 
 group: universal_time_scale
     utmscale.o

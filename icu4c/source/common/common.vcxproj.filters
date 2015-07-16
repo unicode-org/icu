@@ -575,6 +575,9 @@
     <ClCompile Include="uloc_keytype.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
+    <ClCompile Include="filteredbrk.cpp">
+      <Filter>break iteration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ubidi_props.h">
@@ -861,6 +864,9 @@
     </ClInclude>
     <ClInclude Include="patternprops.h">
       <Filter>properties &amp; sets</Filter>
+    </ClInclude>
+    <ClInclude Include="unicode\filteredbrk.h">
+      <Filter>break iteration</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
