@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014, International Business Machines Corporation and
+ * Copyright (C) 2014-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -137,8 +137,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
 
     @Override
     public int hashCode() {
-        assert false : "hashCode not designed";
-        return -1;  // arbitrary constant
+        return (forwardsPartialTrie.hashCode() * 39) + (backwardsTrie.hashCode() * 11) + delegate.hashCode();
     }
 
     @Override
