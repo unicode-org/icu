@@ -1213,7 +1213,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
 
             // Map every position in the normalized chunk to the start of the chunk
             //   in the original input.
-            int32_t fragmentOriginalStart = inputMap? inputMap->elementAti(fragmentStartI) : fragmentStartI+rangeStart;
+            int32_t fragmentOriginalStart = (inputMap.isValid())? inputMap->elementAti(fragmentStartI) : fragmentStartI+rangeStart;
             while (normalizedMap->size() < normalizedInput->length()) {
                 normalizedMap->addElement(fragmentOriginalStart, status);
                 if (U_FAILURE(status)) {
@@ -1225,7 +1225,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         int32_t nativeEnd = (inputMap.isValid())? inputMap->elementAti(inString->length()) : inString->length()+rangeStart;
         normalizedMap->addElement(nativeEnd, status);
 
-        inputMap.adoptInstead(normalizedMap);
+        inputMap.adoptInstead(normalizedMap.orphan());
         inString.adoptInstead(normalizedInput.orphan());
     }
 
