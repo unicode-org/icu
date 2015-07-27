@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2014, International Business Machines Corporation
+ * Copyright (C) 2006-2015, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1139,11 +1139,11 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     }
 
     // UnicodeString version of input UText, NFKC normalized in necessary.
-    UnicodeString *inString;
+    LocalPointer<UnicodeString> inString;
 
     // inputMap[inStringIndex] = corresponding native index from UText inText.
     // If NULL then mapping is 1:1
-    UVector32     *inputMap    = NULL;
+    LocalPointer<UVector32>     inputMap;
 
     UErrorCode     status      = U_ZERO_ERROR;
 
@@ -1156,9 +1156,9 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
          
         // Input UTtxt is in one contiguous UTF-16 chunk.
         // Use Read-only aliasing UnicodeString constructor on it.
-        inString = new UnicodeString(FALSE, 
+        inString.adoptInstead(new UnicodeString(FALSE, 
                               inText->chunkContents + rangeStart - inText->chunkNativeStart,
-                              rangeEnd - rangeStart);
+                                              rangeEnd - rangeStart));
     } else {
         // Copy the text from the original inText (UText) to inString (UnicodeString).
         // Create a map from UnicodeString indices -> UText offsets.
@@ -1168,8 +1168,8 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         if (limit > utext_nativeLength(inText)) {
             limit = utext_nativeLength(inText);
         }
-        inString = new UnicodeString;
-        inputMap = new UVector32(status);
+        inString.adoptInstead(new UnicodeString);
+        inputMap.adoptInsteadAndCheckErrorCode(new UVector32(status), status);
         while (utext_getNativeIndex(inText) < limit) {
             int32_t nativePosition = utext_getNativeIndex(inText);
             UChar32 c = utext_next32(inText);
@@ -1184,9 +1184,9 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
 
 
     if (!nfkcNorm2->isNormalized(*inString, status)) {
-        UnicodeString *normalizedInput = new UnicodeString();   
+        LocalPointer<UnicodeString> normalizedInput(new UnicodeString(), status);
         //  normalizedMap[normalizedInput position] ==  original UText position.
-        UVector32 *normalizedMap = new UVector32(status);
+        LocalPointer<UVector32> normalizedMap(new UVector32(status), status);
         if (U_FAILURE(status)) {
             return 0;
         }
@@ -1222,13 +1222,11 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
             }
         }
         U_ASSERT(normalizedMap->size() == normalizedInput->length());
-        int32_t nativeEnd = inputMap? inputMap->elementAti(inString->length()) : inString->length()+rangeStart;
+        int32_t nativeEnd = (inputMap.isValid())? inputMap->elementAti(inString->length()) : inString->length()+rangeStart;
         normalizedMap->addElement(nativeEnd, status);
 
-        delete inputMap;
-        inputMap = normalizedMap;
-        delete inString;
-        inString = normalizedInput;
+        inputMap.adoptInstead(normalizedMap);
+        inString.adoptInstead(normalizedInput.orphan());
     }
 
     int32_t numCodePts = inString->countChar32();
@@ -1238,9 +1236,9 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         //   not in terms of code unit string indexes.
         // Use the inputMap mechanism to take care of this in addition to indexing differences
         //    from normalization and/or UTF-8 input.
-        UBool hadExistingMap = (inputMap != NULL);
+        UBool hadExistingMap = (inputMap.isValid());
         if (!hadExistingMap) {
-            inputMap = new UVector32(status);
+          inputMap.adoptInsteadAndCheckErrorCode(new UVector32(status), status);
         }
         int32_t cpIdx = 0;
         for (int32_t cuIdx = 0; ; cuIdx = inString->moveIndex32(cuIdx, 1)) {
@@ -1280,7 +1278,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     lengths.setSize(numCodePts);
 
     UText fu = UTEXT_INITIALIZER;
-    utext_openUnicodeString(&fu, inString, &status);
+    utext_openUnicodeString(&fu, inString.getAlias(), &status);
 
     // Dynamic programming to find the best segmentation.
 
@@ -1380,14 +1378,14 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     // while reversing t_boundary and pushing values to foundBreaks.
     for (int32_t i = numBreaks-1; i >= 0; i--) {
         int32_t cpPos = t_boundary.elementAti(i);
-        int32_t utextPos =  inputMap ? inputMap->elementAti(cpPos) : cpPos + rangeStart;
+        int32_t utextPos =  inputMap.isValid() ? inputMap->elementAti(cpPos) : cpPos + rangeStart;
         // Boundaries are added to foundBreaks output in ascending order.
         U_ASSERT(foundBreaks.size() == 0 ||foundBreaks.peeki() < utextPos);
         foundBreaks.push(utextPos, status);
     }
 
-    delete inString;
-    delete inputMap;
+    // inString goes out of scope
+    // inputMap goes out of scope
     return numBreaks;
 }
 #endif
