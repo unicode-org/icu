@@ -825,6 +825,10 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
                     pkgDataFlags[i][0] = 0;
                 } else {
                     fprintf(stderr,"Error allocating memory for pkgDataFlags.\n");
+                    /* If an error occurs, ensure that the rest of the array is NULL */
+                    for (int32_t n = i + 1; n < PKGDATA_FLAGS_SIZE; n++) {
+                        pkgDataFlags[n] = NULL;
+                    }
                     return -1;
                 }
             }
@@ -846,7 +850,10 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
         tmpResult = parseFlagsFile(o->options, pkgDataFlags, currentBufferSize, FLAG_NAMES, (int32_t)PKGDATA_FLAGS_SIZE, &status);
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
-                uprv_free(pkgDataFlags[i]);
+                if (pkgDataFlags[i]) {
+                    uprv_free(pkgDataFlags[i]);
+                    pkgDataFlags[i] = NULL;
+                }
             }
             currentBufferSize = tmpResult;
         } else if (U_FAILURE(status)) {
