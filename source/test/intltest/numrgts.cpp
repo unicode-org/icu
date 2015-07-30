@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2014, International Business Machines Corporation
+ * Copyright (c) 1997-2015, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -2710,6 +2710,12 @@ void NumberFormatRegressionTest::TestJ691(void) {
     if ((expr)==FALSE) {\
         errln("File %s, line %d: Assertion Failed: " #expr "\n", __FILE__, __LINE__);\
     }
+#define TEST_ASSERT_EQUALS(x,y)                  \
+    {                                                                     \
+      char _msg[100]; \
+      sprintf (_msg,"File %s, line %d: Assertion Failed: " #x "==" #y "\n", __FILE__, __LINE__); \
+      assertEquals((const char*)_msg, x,y);                             \
+    }
 
 
 // Ticket 8199:  Parse failure for numbers in the range of 1E10 - 1E18
@@ -2827,8 +2833,8 @@ void NumberFormatRegressionTest::Test8199(void) {
     nf->parse(numStr, val, status); //    the ones digit, putting it up to ...994
     TEST_CHECK_STATUS(status);
     TEST_ASSERT(Formattable::kDouble == val.getType());
-    TEST_ASSERT(9007199254740993LL == val.getInt64(status));
-    TEST_ASSERT(9007199254740994.0 == val.getDouble(status));
+    TEST_ASSERT_EQUALS((int64_t)9007199254740993LL,val.getInt64(status));
+    TEST_ASSERT_EQUALS((double)9007199254740994.0,(double)val.getDouble(status));
     TEST_CHECK_STATUS(status);
 
     delete nf;
