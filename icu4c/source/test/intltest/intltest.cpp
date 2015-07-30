@@ -1932,6 +1932,24 @@ UBool IntlTest::assertEquals(const char* message,
 }
 
 UBool IntlTest::assertEquals(const char* message,
+                             double expected,
+                             double actual) {
+    if (expected != actual) {
+        errln((UnicodeString)"FAIL: " + message + "; got " +
+              actual + 
+              "; expected " + expected);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)"Ok: " + message + "; got " + actual);
+    }
+#endif
+    return TRUE;
+}
+
+
+UBool IntlTest::assertEquals(const char* message,
                              UBool expected,
                              UBool actual) {
     if (expected != actual) {

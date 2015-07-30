@@ -275,6 +275,7 @@ protected:
                        UBool actual);
     UBool assertEquals(const char* message, int32_t expected, int32_t actual);
     UBool assertEquals(const char* message, int64_t expected, int64_t actual);
+    UBool assertEquals(const char* message, double expected, double actual);
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual, UBool possibleDataError=FALSE);
