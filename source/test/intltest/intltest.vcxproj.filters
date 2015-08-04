@@ -463,12 +463,9 @@
     <ClCompile Include="bidiconf.cpp">
       <Filter>bidi</Filter>
     </ClCompile>
-    <ClCompile Include="bytestrietest.cpp" />
-    <ClCompile Include="ucharstrietest.cpp" />
     <ClCompile Include="alphaindextst.cpp">
       <Filter>collation</Filter>
     </ClCompile>
-    <ClCompile Include="listformattertest.cpp" />
     <ClCompile Include="colldata.cpp">
       <Filter>collation</Filter>
     </ClCompile>
@@ -480,6 +477,15 @@
     </ClCompile>
     <ClCompile Include="numfmtspectest.cpp">
       <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="listformattertest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="bytestrietest.cpp">
+      <Filter>data &amp; memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ucharstrietest.cpp">
+      <Filter>data &amp; memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -849,11 +855,13 @@
     <ClInclude Include="alphaindextst.h">
       <Filter>collation</Filter>
     </ClInclude>
-    <ClInclude Include="listformattertest.h" />
     <ClInclude Include="colldata.h">
       <Filter>collation</Filter>
     </ClInclude>
     <ClInclude Include="regiontst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="listformattertest.h">
       <Filter>formatting</Filter>
     </ClInclude>
   </ItemGroup>
