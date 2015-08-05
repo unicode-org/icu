@@ -32,6 +32,25 @@
 # TODO:  figure out how to have a single copy of the file for use by both C and Java.
 
 
+## FILTERED BREAK TESTS
+
+# (William Bradford, public domain. http://catalog.hathitrust.org/Record/008651224 ) - edited.
+<locale en>
+<sent>
+<data>\
+•In the meantime Mr. •Weston arrived with his small ship, which he had now recovered. •Capt. •Gorges, who informed the Sgt. here that one purpose of his going east was to meet with Mr. •Weston, took this opportunity to call him to account for some abuses he had to lay to his charge.•</data>
+
+# Remove 'x-uli=true' when http://bugs.icu-project.org/trac/ticket/11770 fixed - replace wiht ss=standard
+# also fix rbbitest.cpp
+<locale en@x-uli=true&ss=standard>
+<sent>
+<data>\
+•In the meantime Mr. Weston arrived with his small ship, which he had now recovered. •Capt. Gorges, who informed the Sgt. here that one purpose of his going east was to meet with Mr. Weston, took this opportunity to call him to account for some abuses he had to lay to his charge.•</data>
+
+## END FILTERED BREAK TESTS
+
+<locale>
+
 #   Temp debugging tests 
 <sent>
 <data>•\u00c0.•</data>
