@@ -1319,7 +1319,19 @@ void MultithreadTest::TestConditionVariables() {
 // Unified Cache Test
 //
 
-static const char *gCacheLocales[] = {"en_US", "en_GB", "fr_FR", "fr"};
+// Each thread fetches a pair of objects. There are 8 distinct pairs:
+// ("en_US", "bs"), ("en_GB", "ca"), ("fr_FR", "ca_AD") etc.
+// These pairs represent 8 distinct languages
+
+// Note that only one value per language gets created in the cache.
+// In particular each cached value can have multiple keys.
+static const char *gCacheLocales[] = {
+    "en_US", "en_GB", "fr_FR", "fr",
+    "de", "sr_ME", "sr_BA", "sr_CS"};
+static const char *gCacheLocales2[] = {
+    "bs", "ca", "ca_AD", "ca_ES",
+    "en_US", "fi", "ff_CM", "ff_GN"};
+
 static int32_t gObjectsCreated = 0;  // protected by gCTMutex
 static const int32_t CACHE_LOAD = 3;
 
@@ -1338,7 +1350,19 @@ U_NAMESPACE_BEGIN
 
 template<> U_EXPORT
 const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
-        const void * /*unused*/, UErrorCode & /* status */) const {
+        const void *context, UErrorCode &status) const {
+    const UnifiedCache *cacheContext = (const UnifiedCache *) context;
+
+    if (uprv_strcmp(fLoc.getLanguage(), fLoc.getName()) != 0) {
+        const UCTMultiThreadItem *result = NULL;
+        if (cacheContext == NULL) {
+            UnifiedCache::getByLocale(fLoc.getLanguage(), result, status);
+            return result;
+        }
+        cacheContext->get(LocaleCacheKey<UCTMultiThreadItem>(fLoc.getLanguage()), result, status);
+        return result;
+    }
+
     umtx_lock(&gCTMutex);
     bool firstObject = (gObjectsCreated == 0);
     if (firstObject) {
@@ -1355,9 +1379,14 @@ const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
     }
     umtx_unlock(&gCTMutex);
 
-    UCTMultiThreadItem *result = new UCTMultiThreadItem(fLoc.getName());
-    result->addRef();
-
+    const UCTMultiThreadItem *result =
+        new UCTMultiThreadItem(fLoc.getLanguage());
+    if (result == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        result->addRef();
+    }
+    
     // Log that we created an object. The first object was already counted,
     //    don't do it again.
     umtx_lock(&gCTMutex);
@@ -1366,6 +1395,7 @@ const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
     }
     umtx_condBroadcast(&gCTConditionVar);
     umtx_unlock(&gCTMutex);
+
     return result;
 }
 
@@ -1373,37 +1403,78 @@ U_NAMESPACE_END
 
 class UnifiedCacheThread: public SimpleThread {
   public:
-    UnifiedCacheThread(const char *loc) : fLoc(loc) {};
+    UnifiedCacheThread(
+            const UnifiedCache *cache,
+            const char *loc,
+            const char *loc2) : fCache(cache), fLoc(loc), fLoc2(loc2) {};
     ~UnifiedCacheThread() {};
     void run();
-    const char *fLoc;
+    void exerciseByLocale(const Locale &);
+    const UnifiedCache *fCache;
+    Locale fLoc;
+    Locale fLoc2;
 };
 
-void UnifiedCacheThread::run() {
+void UnifiedCacheThread::exerciseByLocale(const Locale &locale) {
     UErrorCode status = U_ZERO_ERROR;
-    const UnifiedCache *cache = UnifiedCache::getInstance(status);
-    U_ASSERT(status == U_ZERO_ERROR);
-    const UCTMultiThreadItem *item = NULL;
-    cache->get(LocaleCacheKey<UCTMultiThreadItem>(fLoc), item, status);
-    U_ASSERT(item != NULL);
-    if (uprv_strcmp(fLoc, item->value)) {
-      IntlTest::gTest->errln("Expected %s, got %s", fLoc, item->value);
+    const UCTMultiThreadItem *origItem = NULL;
+    fCache->get(
+            LocaleCacheKey<UCTMultiThreadItem>(locale), fCache, origItem, status);
+    U_ASSERT(U_SUCCESS(status));
+    if (uprv_strcmp(locale.getLanguage(), origItem->value)) {
+      IntlTest::gTest->errln(
+              "%s:%d Expected %s, got %s", __FILE__, __LINE__,
+              locale.getLanguage(),
+              origItem->value);
     }
-    item->removeRef();
+
+    // Fetch the same item again many times. We should always get the same
+    // pointer since this client is already holding onto it
+    for (int32_t i = 0; i < 1000; ++i) {
+        const UCTMultiThreadItem *item = NULL;
+        fCache->get(
+                LocaleCacheKey<UCTMultiThreadItem>(locale), fCache, item, status);
+        if (item != origItem) {
+            IntlTest::gTest->errln(
+                    "%s:%d Expected to get the same pointer",
+                     __FILE__,
+                     __LINE__);
+        }
+        if (item != NULL) {
+            item->removeRef();
+        }
+    }
+    origItem->removeRef();
+}
+
+void UnifiedCacheThread::run() {
+    // Run the exercise with 2 different locales so that we can exercise
+    // eviction more. If each thread exerices just one locale, then
+    // eviction can't start until the threads end.
+    exerciseByLocale(fLoc);
+    exerciseByLocale(fLoc2);
 }
 
 void MultithreadTest::TestUnifiedCache() {
+
+    // Start with our own local cache so that we have complete control
+    // and set the eviction policy to evict starting with 2 unused
+    // values
     UErrorCode status = U_ZERO_ERROR;
-    const UnifiedCache *cache = UnifiedCache::getInstance(status);
-    U_ASSERT(cache != NULL);
-    cache->flush();
+    UnifiedCache::getInstance(status);
+    UnifiedCache cache(status);
+    cache.setEvictionPolicy(2, 0, status);
+    U_ASSERT(U_SUCCESS(status));
+
     gFinishedThreads = 0;
     gObjectsCreated = 0;
 
     UnifiedCacheThread *threads[CACHE_LOAD][UPRV_LENGTHOF(gCacheLocales)];
     for (int32_t i=0; i<CACHE_LOAD; ++i) {
         for (int32_t j=0; j<UPRV_LENGTHOF(gCacheLocales); ++j) {
-            threads[i][j] = new UnifiedCacheThread(gCacheLocales[j]);
+            // Each thread works with a pair of locales.
+            threads[i][j] = new UnifiedCacheThread(
+                    &cache, gCacheLocales[j], gCacheLocales2[j]);
             threads[i][j]->start();
         }
     }
@@ -1413,7 +1484,21 @@ void MultithreadTest::TestUnifiedCache() {
             threads[i][j]->join();
         }
     }
-    assertEquals("Objects created", UPRV_LENGTHOF(gCacheLocales), gObjectsCreated);
+    // Because of cache eviction, we can't assert exactly how many
+    // distinct objects get created over the course of this run.
+    // However we know that at least 8 objects get created because that
+    // is how many distinct languages we have in our test.
+    if (gObjectsCreated < 8) {
+        errln("%s:%d Too few objects created.", __FILE__, __LINE__);
+    }
+    // We know that each thread cannot create more than 2 objects in
+    // the cache, and there are UPRV_LENGTHOF(gCacheLocales) pairs of
+    // objects fetched from the cache
+    if (gObjectsCreated > 2 * UPRV_LENGTHOF(gCacheLocales)) {
+        errln("Too many objects created.", __FILE__, __LINE__);
+    }
+
+    assertEquals("unused values", 2, cache.unusedCount());
 
     // clean up threads
     for (int32_t i=0; i<CACHE_LOAD; ++i) {
