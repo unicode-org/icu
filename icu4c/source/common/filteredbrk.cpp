@@ -43,6 +43,9 @@ static void _fb_trace(const char *m, const UnicodeString *s, UBool b, int32_t d,
 #define FB_TRACE(m,s,b,d)
 #endif
 
+/**
+ * Used with sortedInsert()
+ */
 static int8_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
     const UnicodeString &a = *(const UnicodeString*)t1.pointer;
     const UnicodeString &b = *(const UnicodeString*)t2.pointer;
@@ -117,23 +120,43 @@ class U_COMMON_API UStringSet : public UVector {
  */
 UStringSet::~UStringSet() {}
 
+/* ----------------------------------------------------------- */
 
+
+/* Filtered Break constants */
 static const int32_t kPARTIAL = (1<<0); //< partial - need to run through forward trie
 static const int32_t kMATCH   = (1<<1); //< exact match - skip this one.
 static const int32_t kSuppressInReverse = (1<<0);
 static const int32_t kAddToForward = (1<<1);
-static const UChar kFULLSTOP = 0x002E; // '.'
+static const UChar   kFULLSTOP = 0x002E; // '.'
 
+/**
+ * Shared data for SimpleFilteredSentenceBreakIterator
+ */
+class SimpleFilteredSentenceBreakData : public UMemory {
+public:
+  LocalPointer<UCharsTrie>    fBackwardsTrie; //  i.e. ".srM" for Mrs.
+  LocalPointer<UCharsTrie>    fForwardsPartialTrie; //  Has ".a" for "a.M."
+  int32_t                     refcount;
+  SimpleFilteredSentenceBreakData(UCharsTrie *forwards, UCharsTrie *backwards ) 
+      : fForwardsPartialTrie(forwards), fBackwardsTrie(backwards), refcount(1) { }
+  virtual ~SimpleFilteredSentenceBreakData() {}
+  SimpleFilteredSentenceBreakData *incr() { refcount++;  return this; }
+  SimpleFilteredSentenceBreakData *decr() { if((--refcount) <= 0) delete this; return 0; }
+};
+
+/**
+ * Concrete implementation
+ */
 class SimpleFilteredSentenceBreakIterator : public BreakIterator {
 public:
   SimpleFilteredSentenceBreakIterator(BreakIterator *adopt, UCharsTrie *forwards, UCharsTrie *backwards, UErrorCode &status);
   SimpleFilteredSentenceBreakIterator(const SimpleFilteredSentenceBreakIterator& other);
   virtual ~SimpleFilteredSentenceBreakIterator();
 private:
+  SimpleFilteredSentenceBreakData *fData;
   LocalPointer<BreakIterator> fDelegate;
   LocalUTextPointer           fText;
-  LocalPointer<UCharsTrie>    fBackwardsTrie; //  i.e. ".srM" for Mrs.
-  LocalPointer<UCharsTrie>    fForwardsPartialTrie; //  Has ".a" for "a.M."
 
   /* -- subclass interface -- */
 public:
@@ -160,62 +183,82 @@ public:
   virtual CharacterIterator& getText(void) const { return fDelegate->getText(); }
 
   /* -- ITERATION -- */
-  virtual int32_t first(void) { return fDelegate->first(); }
-  virtual int32_t preceding(int32_t /*offset*/) { /* TODO: not implemented */ return UBRK_DONE; }
-  virtual int32_t previous(void) { /* TODO: not implemented */ return UBRK_DONE; }
-  virtual UBool isBoundary(int32_t offset) { return fDelegate->isBoundary(offset); }
-  virtual int32_t current(void) const { return fDelegate->current(); }
+  virtual int32_t first(void);
+  virtual int32_t preceding(int32_t offset);
+  virtual int32_t previous(void);
+  virtual UBool isBoundary(int32_t offset);
+  virtual int32_t current(void) const { return fDelegate->current(); } // we keep the delegate current, so this should be correct.
 
   virtual int32_t next(void);
 
-  virtual int32_t next(int32_t /*n*/) { /* TODO: not implemented */ return UBRK_DONE; }
-  virtual int32_t following(int32_t /*offset*/) { /* TODO: not implemented */ return UBRK_DONE; }
-  virtual int32_t last(void) { return fDelegate->last(); }
+  virtual int32_t next(int32_t n);
+  virtual int32_t following(int32_t offset);
+  virtual int32_t last(void);
 
+private:
+    /**
+     * Given that the fDelegate has already given its "initial" answer,
+     * find the NEXT actual (non-excepted) break.
+     * @param n initial position from delegate
+     * @return new break position or UBRK_DONE
+     */
+    int32_t internalNext(int32_t n);
+    /**
+     * Given that the fDelegate has already given its "initial" answer,
+     * find the PREV actual (non-excepted) break.
+     * @param n initial position from delegate
+     * @return new break position or UBRK_DONE
+     */
+    int32_t internalPrev(int32_t n);
+    /**
+     * set up the UText with the value of the fDelegate.
+     * Call this before calling breakExceptionAt. 
+     * May be able to avoid excess calls
+     */
+    void resetState(UErrorCode &status);
+    /**
+     * Is there a match  (exception) at this spot?
+     */
+    enum EFBMatchResult { kNoExceptionHere, kExceptionHere };
+    /**
+     * Determine if there is an exception at this spot
+     * @param n spot to check
+     * @return kNoExceptionHere or kExceptionHere
+     **/
+    enum EFBMatchResult breakExceptionAt(int32_t n);
 };
 
 SimpleFilteredSentenceBreakIterator::SimpleFilteredSentenceBreakIterator(const SimpleFilteredSentenceBreakIterator& other)
-  : BreakIterator(other), fDelegate(other.fDelegate->clone())
+  : BreakIterator(other), fDelegate(other.fDelegate->clone()), fData(other.fData->incr())
 {
-  /*
-    TODO: not able to clone Tries. Should be a refcounted hidden master instead.
-  if(other.fBackwardsTrie.isValid()) {
-    fBackwardsTrie.adoptInstead(other.fBackwardsTrie->clone());
-  }
-  if(other.fForwardsPartialTrie.isValid()) {
-    fForwardsPartialTrie.adoptInstead(other.fForwardsPartialTrie->clone());
-  }
-  */
 }
 
 
 SimpleFilteredSentenceBreakIterator::SimpleFilteredSentenceBreakIterator(BreakIterator *adopt, UCharsTrie *forwards, UCharsTrie *backwards, UErrorCode &status) :
   BreakIterator(adopt->getLocale(ULOC_VALID_LOCALE,status),adopt->getLocale(ULOC_ACTUAL_LOCALE,status)),
   fDelegate(adopt),
-  fBackwardsTrie(backwards),
-  fForwardsPartialTrie(forwards)
+  fData(new SimpleFilteredSentenceBreakData(forwards, backwards))
 {
   // all set..
 }
 
-SimpleFilteredSentenceBreakIterator::~SimpleFilteredSentenceBreakIterator() {}
+SimpleFilteredSentenceBreakIterator::~SimpleFilteredSentenceBreakIterator() {
+    fData = fData->decr();
+}
 
-int32_t SimpleFilteredSentenceBreakIterator::next() {
-  int32_t n = fDelegate->next();
-  if(n == UBRK_DONE || // at end  or
-     fBackwardsTrie.isNull()) { // .. no backwards table loaded == no exceptions
-    return n;
-  }
-  // OK, do we need to break here?
-  UErrorCode status = U_ZERO_ERROR;
-  // refresh text
+void SimpleFilteredSentenceBreakIterator::resetState(UErrorCode &status) {
   fText.adoptInstead(fDelegate->getUText(fText.orphan(), status));
-  //if(debug2) u_printf("str, native len=%d\n", utext_nativeLength(fText.getAlias()));
-  do { // outer loop runs once per underlying break (from fDelegate).
+}
+
+SimpleFilteredSentenceBreakIterator::EFBMatchResult
+SimpleFilteredSentenceBreakIterator::breakExceptionAt(int32_t n) {
+    int64_t bestPosn = -1;
+    int32_t bestValue = -1;
     // loops while 'n' points to an exception.
     utext_setNativeIndex(fText.getAlias(), n); // from n..
-    fBackwardsTrie->reset();
+    fData->fBackwardsTrie->reset();
     UChar32 uch;
+
     //if(debug2) u_printf(" n@ %d\n", n);
     // Assume a space is following the '.'  (so we handle the case:  "Mr. /Brown")
     if((uch=utext_previous32(fText.getAlias()))==(UChar32)0x0020) {  // TODO: skip a class of chars here??
@@ -226,23 +269,21 @@ int32_t SimpleFilteredSentenceBreakIterator::next() {
       uch = utext_next32(fText.getAlias());
       //if(debug2) u_printf(" -> : |%C| \n", (UChar)uch);
     }
+
     UStringTrieResult r = USTRINGTRIE_INTERMEDIATE_VALUE;
 
-    int32_t bestPosn = -1;
-    int32_t bestValue = -1;
-
     while((uch=utext_previous32(fText.getAlias()))!=U_SENTINEL  &&   // more to consume backwards and..
-          USTRINGTRIE_HAS_NEXT(r=fBackwardsTrie->nextForCodePoint(uch))) {// more in the trie
+          USTRINGTRIE_HAS_NEXT(r=fData->fBackwardsTrie->nextForCodePoint(uch))) {// more in the trie
       if(USTRINGTRIE_HAS_VALUE(r)) { // remember the best match so far
         bestPosn = utext_getNativeIndex(fText.getAlias());
-        bestValue = fBackwardsTrie->getValue();
+        bestValue = fData->fBackwardsTrie->getValue();
       }
       //if(debug2) u_printf("rev< /%C/ cont?%d @%d\n", (UChar)uch, r, utext_getNativeIndex(fText.getAlias()));
     }
 
     if(USTRINGTRIE_MATCHES(r)) { // exact match?
       //if(debug2) u_printf("rev<?/%C/?end of seq.. r=%d, bestPosn=%d, bestValue=%d\n", (UChar)uch, r, bestPosn, bestValue);
-      bestValue = fBackwardsTrie->getValue();
+      bestValue = fData->fBackwardsTrie->getValue();
       bestPosn = utext_getNativeIndex(fText.getAlias());
       //if(debug2) u_printf("rev<+/%C/+end of seq.. r=%d, bestPosn=%d, bestValue=%d\n", (UChar)uch, r, bestPosn, bestValue);
     }
@@ -256,44 +297,151 @@ int32_t SimpleFilteredSentenceBreakIterator::next() {
 
       if(bestValue == kMATCH) { // exact match!
         //if(debug2) u_printf(" exact backward match\n");
-        n = fDelegate->next(); // skip this one. Find the next lowerlevel break.
-        if(n==UBRK_DONE) return n;
-        continue; // See if the next is another exception.
+        return kExceptionHere; // See if the next is another exception.
       } else if(bestValue == kPARTIAL
-                && fForwardsPartialTrie.isValid()) { // make sure there's a forward trie
+                && fData->fForwardsPartialTrie.isValid()) { // make sure there's a forward trie
         //if(debug2) u_printf(" partial backward match\n");
         // We matched the "Ph." in "Ph.D." - now we need to run everything through the forwards trie
         // to see if it matches something going forward.
-        fForwardsPartialTrie->reset();
+        fData->fForwardsPartialTrie->reset();
         UStringTrieResult rfwd = USTRINGTRIE_INTERMEDIATE_VALUE;
         utext_setNativeIndex(fText.getAlias(), bestPosn); // hope that's close ..
         //if(debug2) u_printf("Retrying at %d\n", bestPosn);
         while((uch=utext_next32(fText.getAlias()))!=U_SENTINEL &&
-              USTRINGTRIE_HAS_NEXT(rfwd=fForwardsPartialTrie->nextForCodePoint(uch))) {
+              USTRINGTRIE_HAS_NEXT(rfwd=fData->fForwardsPartialTrie->nextForCodePoint(uch))) {
           //if(debug2) u_printf("fwd> /%C/ cont?%d @%d\n", (UChar)uch, rfwd, utext_getNativeIndex(fText.getAlias()));
         }
         if(USTRINGTRIE_MATCHES(rfwd)) {
           //if(debug2) u_printf("fwd> /%C/ == forward match!\n", (UChar)uch);
           // only full matches here, nothing to check
           // skip the next:
-          n = fDelegate->next();
-          if(n==UBRK_DONE) return n;
-          continue;
+            return kExceptionHere;
         } else {
           //if(debug2) u_printf("fwd> /%C/ no match.\n", (UChar)uch);
           // no match (no exception) -return the 'underlying' break
-          return n;
+          return kNoExceptionHere;
         }
       } else {
-        return n; // internal error and/or no forwards trie
+        return kNoExceptionHere; // internal error and/or no forwards trie
       }
     } else {
       //if(debug2) u_printf("rev< /%C/ .. no match..%d\n", (UChar)uch, r);  // no best match
-      return n; // No match - so exit. Not an exception.
+      return kNoExceptionHere; // No match - so exit. Not an exception.
     }
-  } while(n != UBRK_DONE);
+}
+
+// the workhorse single next.
+int32_t
+SimpleFilteredSentenceBreakIterator::internalNext(int32_t n) {
+  if(n == UBRK_DONE || // at end  or
+    fData->fBackwardsTrie.isNull()) { // .. no backwards table loaded == no exceptions
+      return n;
+  }
+  // OK, do we need to break here?
+  UErrorCode status = U_ZERO_ERROR;
+  // refresh text
+  resetState(status);
+  if(U_FAILURE(status)) return UBRK_DONE; // bail out
+
+  //if(debug2) u_printf("str, native len=%d\n", utext_nativeLength(fText.getAlias()));
+  while (n != UBRK_DONE) { // outer loop runs once per underlying break (from fDelegate).
+    SimpleFilteredSentenceBreakIterator::EFBMatchResult m = breakExceptionAt(n);
+
+    switch(m) {
+    case kExceptionHere:
+      n = fDelegate->next(); // skip this one. Find the next lowerlevel break.
+      continue;
+
+    default:
+    case kNoExceptionHere:
+      return n;
+    }    
+  }
   return n;
 }
+
+int32_t
+SimpleFilteredSentenceBreakIterator::internalPrev(int32_t n) {
+  if(n == 0 || n == UBRK_DONE || // at end  or
+    fData->fBackwardsTrie.isNull()) { // .. no backwards table loaded == no exceptions
+      return n;
+  }
+  // OK, do we need to break here?
+  UErrorCode status = U_ZERO_ERROR;
+  // refresh text
+  resetState(status);
+  if(U_FAILURE(status)) return UBRK_DONE; // bail out
+
+  //if(debug2) u_printf("str, native len=%d\n", utext_nativeLength(fText.getAlias()));
+  while (n != UBRK_DONE) { // outer loop runs once per underlying break (from fDelegate).
+    SimpleFilteredSentenceBreakIterator::EFBMatchResult m = breakExceptionAt(n);
+
+    switch(m) {
+    case kExceptionHere:
+      n = fDelegate->previous(); // skip this one. Find the next lowerlevel break.
+      continue;
+
+    default:
+    case kNoExceptionHere:
+      return n;
+    }    
+  }
+  return n;
+}
+
+
+int32_t
+SimpleFilteredSentenceBreakIterator::next() {
+  return internalNext(fDelegate->next());
+}
+
+int32_t
+SimpleFilteredSentenceBreakIterator::first(void) {
+  return internalNext(fDelegate->first());
+}
+
+int32_t
+SimpleFilteredSentenceBreakIterator::preceding(int32_t offset) {
+  return internalPrev(fDelegate->preceding(offset));
+}
+
+int32_t
+SimpleFilteredSentenceBreakIterator::previous(void) {
+  return internalPrev(fDelegate->previous());
+}
+
+UBool SimpleFilteredSentenceBreakIterator::isBoundary(int32_t offset) {
+  if(!fDelegate->isBoundary(offset)) return false; // no break to suppress
+
+  UErrorCode status = U_ZERO_ERROR;
+  resetState(status);
+
+  SimpleFilteredSentenceBreakIterator::EFBMatchResult m = breakExceptionAt(offset);
+
+  switch(m) {
+  case kExceptionHere:
+    return false;
+  default:
+  case kNoExceptionHere:
+    return true;
+  }    
+}
+ 
+int32_t
+SimpleFilteredSentenceBreakIterator::next(int32_t offset) {
+  return internalNext(fDelegate->next(offset));
+}
+
+int32_t
+SimpleFilteredSentenceBreakIterator::following(int32_t offset) {
+  return internalNext(fDelegate->following(offset));
+}
+
+int32_t
+SimpleFilteredSentenceBreakIterator::last(void) {
+  return internalPrev(fDelegate->last());
+}
+
 
 /**
  * Concrete implementation of builder class.
