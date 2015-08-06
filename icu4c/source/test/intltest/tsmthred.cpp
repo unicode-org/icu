@@ -1495,7 +1495,8 @@ void MultithreadTest::TestUnifiedCache() {
     // the cache, and there are UPRV_LENGTHOF(gCacheLocales) pairs of
     // objects fetched from the cache
     if (gObjectsCreated > 2 * UPRV_LENGTHOF(gCacheLocales)) {
-        errln("Too many objects created.", __FILE__, __LINE__);
+        errln("%s:%d Too many objects created, got %d, expected %d", __FILE__, __LINE__, gObjectsCreated, 2 * UPRV_LENGTHOF(gCacheLocales));
+
     }
 
     assertEquals("unused values", 2, cache.unusedCount());
