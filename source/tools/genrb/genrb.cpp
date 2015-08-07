@@ -16,9 +16,11 @@
 *******************************************************************************
 */
 
+#include <assert.h>
 #include "genrb.h"
 #include "unicode/localpointer.h"
 #include "unicode/uclean.h"
+#include "unicode/utf16.h"
 #include "reslist.h"
 #include "ucmndata.h"  /* TODO: for reading the pool bundle */
 
@@ -41,8 +43,10 @@ const char *gCurrentFileName = theCurrentFileName;
 #endif
 
 void ResFile::close() {
-    uprv_free(fBytes);
+    delete[] fBytes;
     fBytes = NULL;
+    delete fStrings;
+    fStrings = NULL;
 }
 
 enum
@@ -136,7 +140,7 @@ main(int argc,
     }
     if(options[FORMAT_VERSION].doesOccur) {
         const char *s = options[FORMAT_VERSION].value;
-        if(uprv_strlen(s) != 1 || (s[0] != '1' && s[0] != '2')) {
+        if(uprv_strlen(s) != 1 || (s[0] < '1' && '3' < s[0])) {
             fprintf(stderr, "%s: unsupported --formatVersion %s\n", argv[0], s);
             argc = -1;
         } else if(s[0] == '1' &&
@@ -336,62 +340,141 @@ main(int argc,
             fprintf(stderr, "the pool bundle file %s is too small\n", theCurrentFileName);
             return 1;
         }
-        poolBundle.fBytes = (uint8_t *)uprv_malloc((poolFileSize + 15) & ~15);
+        poolBundle.fBytes = new uint8_t[(poolFileSize + 15) & ~15];
         if (poolFileSize > 0 && poolBundle.fBytes == NULL) {
             fprintf(stderr, "unable to allocate memory for the pool bundle file %s\n", theCurrentFileName);
             return U_MEMORY_ALLOCATION_ERROR;
-        } else {
-            UDataSwapper *ds;
-            const DataHeader *header;
-            int32_t bytesRead = T_FileStream_read(poolFile, poolBundle.fBytes, poolFileSize);
-            int32_t keysBottom;
-            if (bytesRead != poolFileSize) {
-                fprintf(stderr, "unable to read the pool bundle file %s\n", theCurrentFileName);
-                return 1;
-            }
-            /*
-             * Swap the pool bundle so that a single checked-in file can be used.
-             * The swapper functions also test that the data looks like
-             * a well-formed .res file.
-             */
-            ds = udata_openSwapperForInputData(poolBundle.fBytes, bytesRead,
-                                               U_IS_BIG_ENDIAN, U_CHARSET_FAMILY, &status);
-            if (U_FAILURE(status)) {
-                fprintf(stderr, "udata_openSwapperForInputData(pool bundle %s) failed: %s\n",
-                        theCurrentFileName, u_errorName(status));
-                return status;
-            }
-            ures_swap(ds, poolBundle.fBytes, bytesRead, poolBundle.fBytes, &status);
-            udata_closeSwapper(ds);
-            if (U_FAILURE(status)) {
-                fprintf(stderr, "ures_swap(pool bundle %s) failed: %s\n",
-                        theCurrentFileName, u_errorName(status));
-                return status;
-            }
-            header = (const DataHeader *)poolBundle.fBytes;
-            if (header->info.formatVersion[0]!=2) {
-                fprintf(stderr, "invalid format of pool bundle file %s\n", theCurrentFileName);
-                return U_INVALID_FORMAT_ERROR;
-            }
-            poolBundle.fKeys = (const char *)header + header->dataHeader.headerSize;
-            poolBundle.fIndexes = (const int32_t *)poolBundle.fKeys + 1;
-            indexLength = poolBundle.fIndexes[URES_INDEX_LENGTH] & 0xff;
-            if (indexLength <= URES_INDEX_POOL_CHECKSUM) {
-                fprintf(stderr, "insufficient indexes[] in pool bundle file %s\n", theCurrentFileName);
-                return U_INVALID_FORMAT_ERROR;
-            }
-            keysBottom = (1 + indexLength) * 4;
-            poolBundle.fKeys += keysBottom;
-            poolBundle.fKeysLength = (poolBundle.fIndexes[URES_INDEX_KEYS_TOP] * 4) - keysBottom;
-            poolBundle.fChecksum = poolBundle.fIndexes[URES_INDEX_POOL_CHECKSUM];
         }
+
+        UDataSwapper *ds;
+        const DataHeader *header;
+        int32_t bytesRead = T_FileStream_read(poolFile, poolBundle.fBytes, poolFileSize);
+        if (bytesRead != poolFileSize) {
+            fprintf(stderr, "unable to read the pool bundle file %s\n", theCurrentFileName);
+            return 1;
+        }
+        /*
+         * Swap the pool bundle so that a single checked-in file can be used.
+         * The swapper functions also test that the data looks like
+         * a well-formed .res file.
+         */
+        ds = udata_openSwapperForInputData(poolBundle.fBytes, bytesRead,
+                                           U_IS_BIG_ENDIAN, U_CHARSET_FAMILY, &status);
+        if (U_FAILURE(status)) {
+            fprintf(stderr, "udata_openSwapperForInputData(pool bundle %s) failed: %s\n",
+                    theCurrentFileName, u_errorName(status));
+            return status;
+        }
+        ures_swap(ds, poolBundle.fBytes, bytesRead, poolBundle.fBytes, &status);
+        udata_closeSwapper(ds);
+        if (U_FAILURE(status)) {
+            fprintf(stderr, "ures_swap(pool bundle %s) failed: %s\n",
+                    theCurrentFileName, u_errorName(status));
+            return status;
+        }
+        header = (const DataHeader *)poolBundle.fBytes;
+        if (header->info.formatVersion[0] < 2) {
+            fprintf(stderr, "invalid format of pool bundle file %s\n", theCurrentFileName);
+            return U_INVALID_FORMAT_ERROR;
+        }
+        const int32_t *pRoot = (const int32_t *)(
+                (const char *)header + header->dataHeader.headerSize);
+        poolBundle.fIndexes = pRoot + 1;
+        indexLength = poolBundle.fIndexes[URES_INDEX_LENGTH] & 0xff;
+        if (indexLength <= URES_INDEX_POOL_CHECKSUM) {
+            fprintf(stderr, "insufficient indexes[] in pool bundle file %s\n", theCurrentFileName);
+            return U_INVALID_FORMAT_ERROR;
+        }
+        int32_t keysBottom = 1 + indexLength;
+        int32_t keysTop = poolBundle.fIndexes[URES_INDEX_KEYS_TOP];
+        poolBundle.fKeys = (const char *)(pRoot + keysBottom);
+        poolBundle.fKeysLength = (keysTop - keysBottom) * 4;
+        poolBundle.fChecksum = poolBundle.fIndexes[URES_INDEX_POOL_CHECKSUM];
+
         for (i = 0; i < poolBundle.fKeysLength; ++i) {
             if (poolBundle.fKeys[i] == 0) {
                 ++poolBundle.fKeysCount;
             }
         }
+
+        // 16BitUnits[] begins with strings-v2.
+        // The strings-v2 may optionally be terminated by what looks like
+        // an explicit string length that exceeds the number of remaining 16-bit units.
+        int32_t stringUnitsLength = (poolBundle.fIndexes[URES_INDEX_16BIT_TOP] - keysTop) * 2;
+        if (stringUnitsLength >= 2 && getFormatVersion() >= 3) {
+            poolBundle.fStrings = new PseudoListResource(NULL, status);
+            if (poolBundle.fStrings == NULL) {
+                fprintf(stderr, "unable to allocate memory for the pool bundle strings %s\n", theCurrentFileName);
+                return U_MEMORY_ALLOCATION_ERROR;
+            }
+            // The PseudoListResource constructor call did not allocate further memory.
+            assert(U_SUCCESS(status));
+            const UChar *p = (const UChar *)(pRoot + keysTop);
+            int32_t remaining = stringUnitsLength;
+            do {
+                int32_t first = *p;
+                int8_t numCharsForLength;
+                int32_t length;
+                if (!U16_IS_TRAIL(first)) {
+                    // NUL-terminated
+                    numCharsForLength = 0;
+                    for (length = 0;
+                         length < remaining && p[length] != 0;
+                         ++length) {}
+                } else if (first < 0xdfef) {
+                    numCharsForLength = 1;
+                    length = first & 0x3ff;
+                } else if (first < 0xdfff && remaining >= 2) {
+                    numCharsForLength = 2;
+                    length = ((first - 0xdfef) << 16) | p[1];
+                } else if (first == 0xdfff && remaining >= 3) {
+                    numCharsForLength = 3;
+                    length = ((int32_t)p[1] << 16) | p[2];
+                } else {
+                    break;  // overrun
+                }
+                // Check for overrun before changing remaining,
+                // so that it is always accurate after the loop body.
+                if ((numCharsForLength + length) >= remaining ||
+                        p[numCharsForLength + length] != 0) {
+                    break;  // overrun or explicitly terminated
+                }
+                int32_t poolStringIndex = stringUnitsLength - remaining;
+                // Maximum pool string index when suffix-sharing the last character.
+                int32_t maxStringIndex = poolStringIndex + numCharsForLength + length - 1;
+                if (maxStringIndex >= RES_MAX_OFFSET) {
+                    // pool string index overrun
+                    break;
+                }
+                p += numCharsForLength;
+                remaining -= numCharsForLength;
+                if (length != 0) {
+                    StringResource *sr =
+                            new StringResource(poolStringIndex, numCharsForLength,
+                                               p, length, status);
+                    if (sr == NULL) {
+                        fprintf(stderr, "unable to allocate memory for a pool bundle string %s\n",
+                                theCurrentFileName);
+                        return U_MEMORY_ALLOCATION_ERROR;
+                    }
+                    poolBundle.fStrings->add(sr);
+                    poolBundle.fStringIndexLimit = maxStringIndex + 1;
+                    // The StringResource constructor did not allocate further memory.
+                    assert(U_SUCCESS(status));
+                }
+                p += length + 1;
+                remaining -= length + 1;
+            } while (remaining > 0);
+        }
+
         T_FileStream_close(poolFile);
         setUsePoolBundle(TRUE);
+        if (isVerbose() && poolBundle.fStrings != NULL) {
+            printf("number of shared strings: %d\n", (int)poolBundle.fStrings->fCount);
+            int32_t length = poolBundle.fStringIndexLimit + 1;  // incl. last NUL
+            printf("16-bit units for strings: %6d = %6d bytes\n",
+                   (int)length, (int)length * 2);
+        }
     }
 
     if(options[INCLUDE_UNIHAN_COLL].doesOccur) {
@@ -565,6 +648,7 @@ processFile(const char *filename, const char *cp,
         goto finish;
     }
     if(options[WRITE_POOL_BUNDLE].doesOccur) {
+        data->fWritePoolBundle = newPoolBundle;
         data->compactKeys(*status);
         int32_t newKeysLength;
         const char *newKeys = data->getKeyBytes(&newKeysLength);

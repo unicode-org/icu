@@ -136,7 +136,7 @@ static char* getID(const char* id, const char* curKey, char* result) {
  * conversion is not portable across platforms with different endianess.
  */
 
-uint32_t computeCRC(char *ptr, uint32_t len, uint32_t lastcrc){
+uint32_t computeCRC(const char *ptr, uint32_t len, uint32_t lastcrc){
     int32_t crc;
     uint32_t temp1;
     uint32_t temp2;
