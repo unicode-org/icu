@@ -1493,9 +1493,10 @@ void MultithreadTest::TestUnifiedCache() {
     }
     // We know that each thread cannot create more than 2 objects in
     // the cache, and there are UPRV_LENGTHOF(gCacheLocales) pairs of
-    // objects fetched from the cache
-    if (gObjectsCreated > 2 * UPRV_LENGTHOF(gCacheLocales)) {
-        errln("%s:%d Too many objects created, got %d, expected %d", __FILE__, __LINE__, gObjectsCreated, 2 * UPRV_LENGTHOF(gCacheLocales));
+    // objects fetched from the cache. If the threads run in series because
+    // of eviction, at worst case each thread creates two objects.
+    if (gObjectsCreated > 2 * CACHE_LOAD * UPRV_LENGTHOF(gCacheLocales)) {
+        errln("%s:%d Too many objects created, got %d, expected %d", __FILE__, __LINE__, gObjectsCreated, 2 * CACHE_LOAD * UPRV_LENGTHOF(gCacheLocales));
 
     }
 
