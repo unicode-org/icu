@@ -465,6 +465,10 @@ main(int argc,
                 p += length + 1;
                 remaining -= length + 1;
             } while (remaining > 0);
+            if (poolBundle.fStrings->fCount == 0) {
+                delete poolBundle.fStrings;
+                poolBundle.fStrings = NULL;
+            }
         }
 
         T_FileStream_close(poolFile);
@@ -475,6 +479,16 @@ main(int argc,
             printf("16-bit units for strings: %6d = %6d bytes\n",
                    (int)length, (int)length * 2);
         }
+    }
+
+    if(!options[FORMAT_VERSION].doesOccur && getFormatVersion() == 3 &&
+            poolBundle.fStrings == NULL &&
+            !options[WRITE_POOL_BUNDLE].doesOccur) {
+        // If we just default to formatVersion 3
+        // but there are no pool bundle strings to share
+        // and we do not write a pool bundle,
+        // then write formatVersion 2 which is just as good.
+        setFormatVersion(2);
     }
 
     if(options[INCLUDE_UNIHAN_COLL].doesOccur) {
