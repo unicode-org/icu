@@ -12,19 +12,15 @@ public class DebugUtilitiesData extends Object {
     public static final int UCalendarDateFields = 1;
     public static final int UCalendarMonths = 2;
     public static final int UDateFormatStyle = 3;
-    public static final int UPlugReason = 4;
-    public static final int UPlugLevel = 5;
-    public static final int UAcceptResult = 6;
-    public static final int UColAttributeValue = 7;
+    public static final int UAcceptResult = 4;
+    public static final int UColAttributeValue = 5;
     public static final String [] TYPES = { 
         "UDebugEnumType", /* 0 */
         "UCalendarDateFields", /* 1 */
         "UCalendarMonths", /* 2 */
         "UDateFormatStyle", /* 3 */
-        "UPlugReason", /* 4 */
-        "UPlugLevel", /* 5 */
-        "UAcceptResult", /* 6 */
-        "UColAttributeValue", /* 7 */
+        "UAcceptResult", /* 4 */
+        "UColAttributeValue", /* 5 */
     };
 
     public static final String [][] NAMES = { 
@@ -34,10 +30,8 @@ public class DebugUtilitiesData extends Object {
            "UCalendarDateFields", /* 1 */ 
            "UCalendarMonths", /* 2 */ 
            "UDateFormatStyle", /* 3 */ 
-           "UPlugReason", /* 4 */ 
-           "UPlugLevel", /* 5 */ 
-           "UAcceptResult", /* 6 */ 
-           "UColAttributeValue", /* 7 */ 
+           "UAcceptResult", /* 4 */ 
+           "UColAttributeValue", /* 5 */ 
         },
         /* UCalendarDateFields, 1 */
         { 
@@ -88,26 +82,13 @@ public class DebugUtilitiesData extends Object {
            "MEDIUM", /* 2 */ 
            "SHORT", /* 3 */ 
         },
-        /* UPlugReason, 4 */
-        { 
-           "QUERY", /* 0 */ 
-           "LOAD", /* 1 */ 
-           "UNLOAD", /* 2 */ 
-        },
-        /* UPlugLevel, 5 */
-        { 
-           "INVALID", /* 0 */ 
-           "UNKNOWN", /* 1 */ 
-           "LOW", /* 2 */ 
-           "HIGH", /* 3 */ 
-        },
-        /* UAcceptResult, 6 */
+        /* UAcceptResult, 4 */
         { 
            "FAILED", /* 0 */ 
            "VALID", /* 1 */ 
            "FALLBACK", /* 2 */ 
         },
-        /* UColAttributeValue, 7 */
+        /* UColAttributeValue, 5 */
         { 
            "PRIMARY", /* 0 */ 
            "SECONDARY", /* 1 */ 
@@ -130,10 +111,8 @@ public class DebugUtilitiesData extends Object {
            1, /* UCalendarDateFields */
            2, /* UCalendarMonths */
            3, /* UDateFormatStyle */
-           4, /* UPlugReason */
-           5, /* UPlugLevel */
-           6, /* UAcceptResult */
-           7, /* UColAttributeValue */
+           4, /* UAcceptResult */
+           5, /* UColAttributeValue */
         },
         /* UCalendarDateFields, 1 */
         { 
@@ -184,26 +163,13 @@ public class DebugUtilitiesData extends Object {
            2, /* MEDIUM */
            3, /* SHORT */
         },
-        /* UPlugReason, 4 */
-        { 
-           0, /* QUERY */
-           1, /* LOAD */
-           2, /* UNLOAD */
-        },
-        /* UPlugLevel, 5 */
-        { 
-           0, /* INVALID */
-           1, /* UNKNOWN */
-           2, /* LOW */
-           3, /* HIGH */
-        },
-        /* UAcceptResult, 6 */
+        /* UAcceptResult, 4 */
         { 
            0, /* FAILED */
            1, /* VALID */
            2, /* FALLBACK */
         },
-        /* UColAttributeValue, 7 */
+        /* UColAttributeValue, 5 */
         { 
            0, /* PRIMARY */
            1, /* SECONDARY */

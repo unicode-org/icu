@@ -1238,6 +1238,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * (The type of RES_BOGUS is RES_RESERVED=15 which was defined in ICU4C ures.h.)
      */
     public static final int RES_BOGUS = 0xffffffff;
+    //blic static final int RES_MAX_OFFSET = 0x0fffffff;
 
     /**
      * Resource type constant for aliases;
@@ -1264,6 +1265,8 @@ public  class ICUResourceBundle extends UResourceBundle {
      * All values are STRING_V2 strings.
      */
     public static final int ARRAY16 = 9;
+
+    /* Resource type 15 is not defined but effectively used by RES_BOGUS=0xffffffff. */
 
     /**
     * Create a bundle using a reader.
