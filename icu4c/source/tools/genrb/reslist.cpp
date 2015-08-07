@@ -64,6 +64,7 @@ U_NAMESPACE_USE
 
 static UBool gIncludeCopyright = FALSE;
 static UBool gUsePoolBundle = FALSE;
+static UBool gIsDefaultFormatVersion = TRUE;
 static int32_t gFormatVersion = 3;
 
 /* How do we store string values? */
@@ -121,6 +122,7 @@ UBool getIncludeCopyright(void){
 }
 
 void setFormatVersion(int32_t formatVersion) {
+    gIsDefaultFormatVersion = FALSE;
     gFormatVersion = formatVersion;
 }
 
@@ -885,6 +887,7 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
         return;
     }
 
+    int32_t formatVersion = gFormatVersion;
     if (fPoolStringIndexLimit != 0) {
         int32_t sum = fPoolStringIndexLimit + fLocalStringIndexLimit;
         if ((sum - 1) > RES_MAX_OFFSET) {
@@ -900,6 +903,12 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
             fPoolStringIndex16Limit = (int32_t)(
                     ((int64_t)fPoolStringIndexLimit * 0xffff) / sum);
         }
+    } else if (gIsDefaultFormatVersion && formatVersion == 3 && !fIsPoolBundle) {
+        // If we just default to formatVersion 3
+        // but there are no pool bundle strings to share
+        // and we do not write a pool bundle,
+        // then write formatVersion 2 which is just as good.
+        formatVersion = 2;
     }
 
     fRoot->write16(this);
@@ -974,7 +983,7 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
         uprv_strcpy(dataName, fLocale);
     }
 
-    uprv_memcpy(dataInfo.formatVersion, gFormatVersions + gFormatVersion, sizeof(UVersionInfo));
+    uprv_memcpy(dataInfo.formatVersion, gFormatVersions + formatVersion, sizeof(UVersionInfo));
 
     mem = udata_create(outputDir, "res", dataName,
                        &dataInfo, (gIncludeCopyright==TRUE)? U_COPYRIGHT_STRING:NULL, &errorCode);
