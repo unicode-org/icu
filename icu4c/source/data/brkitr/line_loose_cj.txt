@@ -228,7 +228,7 @@ $CANT_CM = [ $SP $BK $CR $LF $NL $ZW $CM];       # Bases that can't take CMs
 #            so for this one case we need to manually list out longer sequences.
 #
 $AL_FOLLOW_NOCM = [$BK $CR $LF $NL $ZW $SP];
-$AL_FOLLOW_CM   = [$CL $CP $EX $EXX $HL $IS $SY $WJ $GL $OP $QU $BA $BAX $HY $NS $NSX $IN $NU $ALPlus];
+$AL_FOLLOW_CM   = [$CL $CP $EX $HL $IS $SY $WJ $GL $OP $QU $BA $HY $NS $IN $NU $ALPlus];
 $AL_FOLLOW      = [$AL_FOLLOW_NOCM $AL_FOLLOW_CM];
 
 
@@ -625,7 +625,7 @@ $CM* [$LB20NonBreaks-$CM] $CM* $BB;                   #  BB x .
 [^$CB] $CM* $BB;                                      # 
 
 # LB21a
-[^$CB] $CM* ($HY | $BA | $BAX) $CM* $HL;
+[^$CB]? $CM* ($HY | $BA | $BAX) $CM* $HL;
 
 # LB21b (reverse)
 $CM* $HL $CM* $SY;
@@ -700,7 +700,7 @@ $SP+ $CM* ($CL | $CP);
 $SP+ $CM* $B2;
 
 # LB 21
-$CM* ($HY | $BA) $CM* $HL;
+$CM* ($HY | $BA | $BAX) $CM* $HL;
 
 # LB 25
 ($CM* ($IS | $SY))+ $CM* $NU;
@@ -722,6 +722,6 @@ $dictionary $dictionary;
 #  turn off rule chaining.  We don't want to move more
 #  than necessary.
 #
-[$CM $OP $QU $CL $CP $B2 $PR $PRX $HY $BA $SP $dictionary]+ [^$CM $OP $QU $CL $CP $B2 $PR $PRX $HY $BA $dictionary];
+[$CM $OP $QU $CL $CP $B2 $PR $PRX $HY $BA $BAX $SP $dictionary]+ [^$CM $OP $QU $CL $CP $B2 $PR $PRX $HY $BA $BAX $dictionary];
 $dictionary $dictionary;
 
