@@ -114,7 +114,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // this tests tests loading of root bundle when a resource bundle
         // for the default locale is requested
         try {
-            UResourceBundle bundle = (UResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault().toString(), testLoader);
+            UResourceBundle bundle = (UResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault(), testLoader);
             if(bundle==null){
                 errln("could not create the resource bundle");
             }
@@ -564,7 +564,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
         // Test case for #7996
         {
-            UResourceBundle bundle = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "te");
+            UResourceBundle bundle = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "te", testLoader);
             UResourceBundle table = bundle.get("tableT7996");
             try {
                 String s = table.getString("a7996");
@@ -815,7 +815,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
         logln("Testing CLDR style aliases......\n");
 
-        UResourceBundle rb = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "te_IN_REVISED",testLoader);
+        UResourceBundle rb = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "te_IN_REVISED", testLoader);
         ICUResourceBundle alias = (ICUResourceBundle)rb.get("a");
 
         for(int i = 1; i < 5 ; i++) {
@@ -995,7 +995,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(i!=4){
             errln("Did not get the expected number of keys: got " + i + ", expected 4");
         }
-        UResourceBundle bundle4 = UResourceBundle.getBundleInstance(baseName,"fr_Latn_FR", testLoader);
+        UResourceBundle bundle4 = UResourceBundle.getBundleInstance(baseName, "fr_Latn_FR", testLoader);
         if(bundle4==null){
             errln("Could not load bundle fr_Latn_FR");
         }
@@ -1065,11 +1065,11 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestT6844() {
         try {
             UResourceBundle rb1
-                = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.TestMessages");
+                = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.TestMessages", ULocale.getDefault(), testLoader);
             assertEquals("bundleContainer in TestMessages", "TestMessages.class", rb1.getString("bundleContainer"));
 
             UResourceBundle rb2
-                = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.testmessages");
+                = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.testmessages", ULocale.getDefault(), testLoader);
             assertEquals("bundleContainer in testmessages", "testmessages.properties", rb2.getString("bundleContainer"));
         } catch (Throwable t) {
             errln(t.getMessage());
@@ -1087,10 +1087,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
         rb3 = UResourceBundle.getBundleInstance(baseName, ulocale);
         rb4 = UResourceBundle.getBundleInstance(baseName, locale);
         
-        rb5 = UResourceBundle.getBundleInstance(baseName, ulocale, this.getClass().getClassLoader());
-        rb6 = UResourceBundle.getBundleInstance(baseName, locale, this.getClass().getClassLoader());
+        rb5 = UResourceBundle.getBundleInstance(baseName, ulocale, testLoader);
+        rb6 = UResourceBundle.getBundleInstance(baseName, locale, testLoader);
         try {
-            rb7 = UResourceBundle.getBundleInstance("bogus", Locale.getDefault(), this.getClass().getClassLoader());
+            rb7 = UResourceBundle.getBundleInstance("bogus", Locale.getDefault(), testLoader);
             errln("Should have thrown exception with bogus baseName.");
         } catch (java.util.MissingResourceException ex) {
         }
@@ -1098,7 +1098,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("Error getting resource bundle.");
         }
         
-        rb7 = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.TestDataElements");
+        rb7 = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.TestDataElements", Locale.getDefault(), testLoader);
         
         UResourceBundle.resetBundleCache();
         
