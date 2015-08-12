@@ -1,9 +1,9 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2004-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
-*/
+ */
 
 package com.ibm.icu.dev.test.format;
 
@@ -401,7 +401,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales);
 
         try {
-            rb = gp.getResourceBundle(baseName);
+            rb = gp.getResourceBundle(baseName, Thread.currentThread().getContextClassLoader());
             String str = rb.getString("from_en_US");
             if (!str.equals("This data comes from en_US")) {
                 errln("FAIL: from_en_US is not from en_US bundle");
@@ -433,7 +433,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         logln("Get a resource bundle which does not exist");
         boolean bException = false;
         try {
-            rb = gp.getResourceBundle("foo.bar.XXX");
+            rb = gp.getResourceBundle("foo.bar.XXX", Thread.currentThread().getContextClassLoader());
         } catch (MissingResourceException mre) {
             logln("Missing resource exception for getting resource bundle - foo.bar.XXX");
             bException = true;
