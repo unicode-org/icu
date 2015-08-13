@@ -259,7 +259,7 @@ udatpg_getBestPatternWithOptions(UDateTimePatternGenerator *dtpg,
   * Consecutive calls to this function do not affect each other,
   * but this function cannot be used concurrently on a single generator object.
   *
-  * @param dtpg     a pointer to UDateTimePatternGenerator.
+  * @param unusedDtpg     a pointer to UDateTimePatternGenerator.
   *    This parameter is no longer used. Callers may pass NULL.
   * @param pattern  input pattern, such as "dd/MMM".
   * @param length   the length of pattern.
@@ -289,7 +289,7 @@ udatpg_getSkeleton(UDateTimePatternGenerator *unusedDtpg,
  * Consecutive calls to this function do not affect each other,
  * but this function cannot be used concurrently on a single generator object.
  *
- * @param dtpg     a pointer to UDateTimePatternGenerator.
+ * @param unusedDtpg     a pointer to UDateTimePatternGenerator.
  *    This parameter is no longer used. Callers may pass NULL.
  * @param pattern  input pattern, such as "dd/MMM".
  * @param length   the length of pattern.
