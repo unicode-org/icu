@@ -636,7 +636,8 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
 #endif
         // fSkeleton is already set by createDateIntervalInstance()
         // or by createInstance(UnicodeString skeleton, .... )
-        fSkeleton = fDtpng->getSkeleton(fullPattern, status);
+        fSkeleton = DateTimePatternGenerator::staticGetSkeleton(
+                fullPattern, status);
         if ( U_FAILURE(status) ) {
             return;    
         }
