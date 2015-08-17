@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -697,7 +697,11 @@ public class DecimalFormat extends NumberFormat {
     private void createFromPatternAndSymbols(String pattern, DecimalFormatSymbols inputSymbols) {
         // Always applyPattern after the symbols are set
         symbols = (DecimalFormatSymbols) inputSymbols.clone();
-        setCurrencyForSymbols();
+        if (pattern.indexOf(CURRENCY_SIGN) >= 0) {
+            // Only spend time with currency symbols when we're going to display it.
+            // Also set some defaults before the apply pattern.
+            setCurrencyForSymbols();
+        }
         applyPatternWithoutExpandAffix(pattern, false);
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
             currencyPluralInfo = new CurrencyPluralInfo(symbols.getULocale());
@@ -2332,7 +2336,7 @@ public class DecimalFormat extends NumberFormat {
      * @param negSuffix negative suffix pattern
      * @param posPrefix positive prefix pattern
      * @param negSuffix negative suffix pattern
-     * @param complexCurrencyParsing whether it is complex currency parsing or not.
+     * @param parseComplexCurrency whether it is complex currency parsing or not.
      * @param type type of currency to parse against, LONG_NAME only or not.
      */
     private final boolean subparse(
@@ -2779,7 +2783,7 @@ public class DecimalFormat extends NumberFormat {
      * @param isNegative
      * @param isPrefix
      * @param affixPat affix pattern used for currency affix comparison
-     * @param copmplexCurrencyParsing whether it is currency parsing or not
+     * @param complexCurrencyParsing whether it is currency parsing or not
      * @param type compare against currency type, LONG_NAME only or not.
      * @param currency return value for parsed currency, for generic currency parsing
      * mode, or null for normal parsing.  In generic currency parsing mode, any currency

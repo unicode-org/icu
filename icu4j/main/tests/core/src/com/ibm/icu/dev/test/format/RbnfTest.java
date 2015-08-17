@@ -1487,4 +1487,72 @@ public class RbnfTest extends TestFmwk {
         }
     }
 
+    public void TestInfinityNaN() {
+        String enRules = "%default:"
+                + "-x: minus >>;"
+                + "Inf: infinite;"
+                + "NaN: not a number;"
+                + "0: =#,##0=;";
+        RuleBasedNumberFormat enFormatter = new RuleBasedNumberFormat(enRules, ULocale.ENGLISH);
+        String[][] enTestData = {
+                {"1", "1"},
+                {"\u221E", "infinite"},
+                {"-\u221E", "minus infinite"},
+                {"NaN", "not a number"},
+
+        };
+
+        doTest(enFormatter, enTestData, true);
+
+        // Test the default behavior when the rules are undefined.
+        enRules = "%default:"
+                + "-x: ->>;"
+                + "0: =#,##0=;";
+        enFormatter = new RuleBasedNumberFormat(enRules, ULocale.ENGLISH);
+        String[][] enDefaultTestData = {
+                {"1", "1"},
+                {"\u221E", "∞"},
+                {"-\u221E", "-∞"},
+                {"NaN", "NaN"},
+
+        };
+
+        doTest(enFormatter, enDefaultTestData, true);
+    }
+
+    public void TestVariableDecimalPoint() {
+        String enRules = "%spellout-numbering:"
+                + "-x: minus >>;"
+                + "x.x: << point >>;"
+                + "x,x: << comma >>;"
+                + "0.x: xpoint >>;"
+                + "0,x: xcomma >>;"
+                + "0: zero;"
+                + "1: one;"
+                + "2: two;"
+                + "3: three;"
+                + "4: four;"
+                + "5: five;"
+                + "6: six;"
+                + "7: seven;"
+                + "8: eight;"
+                + "9: nine;";
+        RuleBasedNumberFormat enFormatter = new RuleBasedNumberFormat(enRules, ULocale.ENGLISH);
+        String[][] enTestPointData = {
+                {"1.1", "one point one"},
+                {"1.23", "one point two three"},
+                {"0.4", "xpoint four"},
+        };
+        doTest(enFormatter, enTestPointData, true);
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(ULocale.ENGLISH);
+        decimalFormatSymbols.setDecimalSeparator(',');
+        enFormatter.setDecimalFormatSymbols(decimalFormatSymbols);
+        String[][] enTestCommaData = {
+                {"1.1", "one comma one"},
+                {"1.23", "one comma two three"},
+                {"0.4", "xcomma four"},
+        };
+        doTest(enFormatter, enTestCommaData, true);
+    }
+
 }
