@@ -8,6 +8,7 @@ package com.ibm.icu.text;
 
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.ibm.icu.impl.PatternProps;
@@ -37,16 +38,33 @@ final class NFRuleSet {
     private NFRule[] rules;
 
     /**
-     * The rule set's negative-number rule
+     * The rule set's non-numerical rules like negative, fractions, infinity and NaN
      */
-    private NFRule negativeNumberRule = null;
+    final NFRule[] nonNumericalRules = new NFRule[6];
 
     /**
-     * The rule set's fraction rules: element 0 is the proper fraction
-     * (0.x) rule, element 1 is the improper fraction (x.x) rule, and
-     * element 2 is the master (x.0) rule.
+     * These are a pile of fraction rules in declared order. They may have alternate
+     * ways to represent fractions.
      */
-    private NFRule[] fractionRules = new NFRule[3];
+    LinkedList<NFRule> fractionRules;
+
+    /** -x */
+    static final int NEGATIVE_RULE_INDEX = 0;
+    /** x.x */
+    static final int IMPROPER_FRACTION_RULE_INDEX = 1;
+    /** 0.x */
+    static final int PROPER_FRACTION_RULE_INDEX = 2;
+    /** x.0 */
+    static final int MASTER_RULE_INDEX = 3;
+    /** Inf */
+    static final int INFINITY_RULE_INDEX = 4;
+    /** NaN */
+    static final int NAN_RULE_INDEX = 5;
+
+    /**
+     * The RuleBasedNumberFormat that owns this rule
+     */
+    final RuleBasedNumberFormat owner;
 
     /**
      * True if the rule set is a fraction rule set.  A fraction rule set
@@ -72,15 +90,17 @@ final class NFRuleSet {
     // construction
     //-----------------------------------------------------------------------
 
-    /*
+    /**
      * Constructs a rule set.
+     * @param owner The formatter that owns this rule set
      * @param descriptions An array of Strings representing rule set
      * descriptions.  On exit, this rule set's entry in the array will
      * have been stripped of its rule set name and any trailing whitespace.
      * @param index The index into "descriptions" of the description
      * for the rule to be constructed
      */
-    public NFRuleSet(String[] descriptions, int index) throws IllegalArgumentException {
+    public NFRuleSet(RuleBasedNumberFormat owner, String[] descriptions, int index) throws IllegalArgumentException {
+        this.owner = owner;
         String description = descriptions[index];
 
         if (description.length() == 0) {
@@ -104,6 +124,7 @@ final class NFRuleSet {
                 }
                 this.name = name;
 
+                //noinspection StatementWithEmptyBody
                 while (pos < description.length() && PatternProps.isWhiteSpace(description.charAt(++pos))) {
                 }
                 description = description.substring(pos);
@@ -133,10 +154,8 @@ final class NFRuleSet {
      * can refer to any other rule set, we have to have created all of
      * them before we can create anything else.
      * @param description The textual description of this rule set
-     * @param owner The formatter that owns this rule set
      */
-    public void parseRules(String                description,
-                           RuleBasedNumberFormat owner) {
+    public void parseRules(String description) {
         // (the number of elements in the description list isn't necessarily
         // the number of rules-- some descriptions may expend into two rules)
         List<NFRule> tempRules = new ArrayList<NFRule>();
@@ -162,7 +181,9 @@ final class NFRuleSet {
             // to our rule vector
             NFRule.makeRules(description.substring(oldP, p),
                     this, predecessor, owner, tempRules);
-            predecessor = tempRules.get(tempRules.size() - 1);
+            if (!tempRules.isEmpty()) {
+                predecessor = tempRules.get(tempRules.size() - 1);
+            }
 
             oldP = p + 1;
         }
@@ -174,69 +195,28 @@ final class NFRuleSet {
         // rules from the list and put them into their own member variables
         long defaultBaseValue = 0;
 
-        // (this isn't a for loop because we might be deleting items from
-        // the vector-- we want to make sure we only increment i when
-        // we _didn't_ delete anything from the vector)
-        int i = 0;
-        while (i < tempRules.size()) {
-            NFRule rule = tempRules.get(i);
-
-            switch ((int)rule.getBaseValue()) {
-                case 0:
-                    // if the rule's base value is 0, fill in a default
-                    // base value (this will be 1 plus the preceding
-                    // rule's base value for regular rule sets, and the
-                    // same as the preceding rule's base value in fraction
-                    // rule sets)
-                    rule.setBaseValue(defaultBaseValue);
-                    if (!isFractionRuleSet) {
-                        ++defaultBaseValue;
-                    }
-                    ++i;
-                    break;
-
-                case NFRule.NEGATIVE_NUMBER_RULE:
-                    // if it's the negative-number rule, copy it into its own
-                    // data member and delete it from the list
-                    negativeNumberRule = rule;
-                    tempRules.remove(i);
-                    break;
-
-                case NFRule.IMPROPER_FRACTION_RULE:
-                    // if it's the improper fraction rule, copy it into the
-                    // correct element of fractionRules
-                    fractionRules[0] = rule;
-                    tempRules.remove(i);
-                    break;
-
-                case NFRule.PROPER_FRACTION_RULE:
-                    // if it's the proper fraction rule, copy it into the
-                    // correct element of fractionRules
-                    fractionRules[1] = rule;
-                    tempRules.remove(i);
-                    break;
-
-                case NFRule.MASTER_RULE:
-                    // if it's the master rule, copy it into the
-                    // correct element of fractionRules
-                    fractionRules[2] = rule;
-                    tempRules.remove(i);
-                    break;
-
-                default:
-                    // if it's a regular rule that already knows its base value,
-                    // check to make sure the rules are in order, and update
-                    // the default base value for the next rule
-                    if (rule.getBaseValue() < defaultBaseValue) {
-                        throw new IllegalArgumentException("Rules are not in order, base: " +
-                                rule.getBaseValue() + " < " + defaultBaseValue);
-                    }
-                    defaultBaseValue = rule.getBaseValue();
-                    if (!isFractionRuleSet) {
-                        ++defaultBaseValue;
-                    }
-                    ++i;
-                    break;
+        for (NFRule rule : tempRules) {
+            long baseValue = rule.getBaseValue();
+            if (baseValue == 0) {
+                // if the rule's base value is 0, fill in a default
+                // base value (this will be 1 plus the preceding
+                // rule's base value for regular rule sets, and the
+                // same as the preceding rule's base value in fraction
+                // rule sets)
+                rule.setBaseValue(defaultBaseValue);
+            }
+            else {
+                // if it's a regular rule that already knows its base value,
+                // check to make sure the rules are in order, and update
+                // the default base value for the next rule
+                if (baseValue < defaultBaseValue) {
+                    throw new IllegalArgumentException("Rules are not in order, base: " +
+                            baseValue + " < " + defaultBaseValue);
+                }
+                defaultBaseValue = baseValue;
+            }
+            if (!isFractionRuleSet) {
+                ++defaultBaseValue;
             }
         }
 
@@ -244,6 +224,60 @@ final class NFRuleSet {
         // fixed-length array
         rules = new NFRule[tempRules.size()];
         tempRules.toArray(rules);
+    }
+
+    /**
+     * Set one of the non-numerical rules.
+     * @param rule The rule to set.
+     */
+    void setNonNumericalRule(NFRule rule) {
+        long baseValue = rule.getBaseValue();
+        if (baseValue == NFRule.NEGATIVE_NUMBER_RULE) {
+            nonNumericalRules[NFRuleSet.NEGATIVE_RULE_INDEX] = rule;
+        }
+        else if (baseValue == NFRule.IMPROPER_FRACTION_RULE) {
+            setBestFractionRule(NFRuleSet.IMPROPER_FRACTION_RULE_INDEX, rule, true);
+        }
+        else if (baseValue == NFRule.PROPER_FRACTION_RULE) {
+            setBestFractionRule(NFRuleSet.PROPER_FRACTION_RULE_INDEX, rule, true);
+        }
+        else if (baseValue == NFRule.MASTER_RULE) {
+            setBestFractionRule(NFRuleSet.MASTER_RULE_INDEX, rule, true);
+        }
+        else if (baseValue == NFRule.INFINITY_RULE) {
+            nonNumericalRules[NFRuleSet.INFINITY_RULE_INDEX] = rule;
+        }
+        else if (baseValue == NFRule.NAN_RULE) {
+            nonNumericalRules[NFRuleSet.NAN_RULE_INDEX] = rule;
+        }
+    }
+
+    /**
+     * Determine the best fraction rule to use. Rules matching the decimal point from
+     * DecimalFormatSymbols become the main set of rules to use.
+     * @param originalIndex The index into nonNumericalRules
+     * @param newRule The new rule to consider
+     * @param rememberRule Should the new rule be added to fractionRules.
+     */
+    private void setBestFractionRule(int originalIndex, NFRule newRule, boolean rememberRule) {
+        if (rememberRule) {
+            if (fractionRules == null) {
+                fractionRules = new LinkedList<NFRule>();
+            }
+            fractionRules.add(newRule);
+        }
+        NFRule bestResult = nonNumericalRules[originalIndex];
+        if (bestResult == null) {
+            nonNumericalRules[originalIndex] = newRule;
+        }
+        else {
+            // We have more than one. Which one is better?
+            DecimalFormatSymbols decimalFormatSymbols = owner.getDecimalFormatSymbols();
+            if (decimalFormatSymbols.getDecimalSeparator() == newRule.getDecimalPoint()) {
+                nonNumericalRules[originalIndex] = newRule;
+            }
+            // else leave it alone
+        }
     }
 
     /**
@@ -276,14 +310,17 @@ final class NFRuleSet {
             NFRuleSet that2 = (NFRuleSet)that;
 
             if (!name.equals(that2.name)
-                    || !Utility.objectEquals(negativeNumberRule, that2.negativeNumberRule)
-                    || !Utility.objectEquals(fractionRules[0], that2.fractionRules[0])
-                    || !Utility.objectEquals(fractionRules[1], that2.fractionRules[1])
-                    || !Utility.objectEquals(fractionRules[2], that2.fractionRules[2])
                     || rules.length != that2.rules.length
                     || isFractionRuleSet != that2.isFractionRuleSet)
             {
                 return false;
+            }
+
+            // ...then compare the non-numerical rule lists...
+            for (int i = 0; i < nonNumericalRules.length; i++) {
+                if (!Utility.objectEquals(nonNumericalRules[i], that2.nonNumericalRules[i])) {
+                    return false;
+                }
             }
 
             // ...then compare the rule lists...
@@ -317,22 +354,27 @@ final class NFRuleSet {
         result.append(name).append(":\n");
 
         // followed by the regular rules...
-        for (int i = 0; i < rules.length; i++) {
-            result.append("    ").append(rules[i].toString()).append("\n");
+        for (NFRule rule : rules) {
+            result.append(rule.toString()).append("\n");
         }
 
         // followed by the special rules (if they exist)
-        if (negativeNumberRule != null) {
-            result.append("    ").append(negativeNumberRule.toString()).append("\n");
-        }
-        if (fractionRules[0] != null) {
-            result.append("    ").append(fractionRules[0].toString()).append("\n");
-        }
-        if (fractionRules[1] != null) {
-            result.append("    ").append(fractionRules[1].toString()).append("\n");
-        }
-        if (fractionRules[2] != null) {
-            result.append("    ").append(fractionRules[2].toString()).append("\n");
+        for (NFRule rule : nonNumericalRules) {
+            if (rule != null) {
+                if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
+                    || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
+                    || rule.getBaseValue() == NFRule.MASTER_RULE)
+                {
+                    for (NFRule fractionRule : fractionRules) {
+                        if (fractionRule.getBaseValue() == rule.getBaseValue()) {
+                            result.append(fractionRule.toString()).append("\n");
+                        }
+                    }
+                }
+                else {
+                    result.append(rule.toString()).append("\n");
+                }
+            }
         }
 
         return result.toString();
@@ -387,11 +429,10 @@ final class NFRuleSet {
      * this operation is to be inserted
      */
     public void format(long number, StringBuffer toInsertInto, int pos, int recursionCount) {
-        NFRule applicableRule = findNormalRule(number);
-
         if (recursionCount >= RECURSION_LIMIT) {
             throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
         }
+        NFRule applicableRule = findNormalRule(number);
         applicableRule.doFormat(number, toInsertInto, pos, ++recursionCount);
     }
 
@@ -404,11 +445,10 @@ final class NFRuleSet {
      * this operation is to be inserted
      */
     public void format(double number, StringBuffer toInsertInto, int pos, int recursionCount) {
-        NFRule applicableRule = findRule(number);
-
         if (recursionCount >= RECURSION_LIMIT) {
             throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
         }
+        NFRule applicableRule = findRule(number);
         applicableRule.doFormat(number, toInsertInto, pos, ++recursionCount);
     }
 
@@ -417,42 +457,57 @@ final class NFRuleSet {
      * @param number The number being formatted.
      * @return The rule that should be used to format it
      */
-    private NFRule findRule(double number) {
+    NFRule findRule(double number) {
         // if this is a fraction rule set, use findFractionRuleSetRule()
         if (isFractionRuleSet) {
             return findFractionRuleSetRule(number);
+        }
+
+        if (Double.isNaN(number)) {
+            NFRule rule = nonNumericalRules[NAN_RULE_INDEX];
+            if (rule == null) {
+                rule = owner.getDefaultNaNRule();
+            }
+            return rule;
         }
 
         // if the number is negative, return the negative number rule
         // (if there isn't a negative-number rule, we pretend it's a
         // positive number)
         if (number < 0) {
-            if (negativeNumberRule != null) {
-                return negativeNumberRule;
+            if (nonNumericalRules[NEGATIVE_RULE_INDEX] != null) {
+                return nonNumericalRules[NEGATIVE_RULE_INDEX];
             } else {
                 number = -number;
             }
         }
 
-        // if the number isn't an integer, we use one f the fraction rules...
-        if (number != Math.floor(number)) {
-            // if the number is between 0 and 1, return the proper
-            // fraction rule
-            if (number < 1 && fractionRules[1] != null) {
-                return fractionRules[1];
+        if (Double.isInfinite(number)) {
+            NFRule rule = nonNumericalRules[INFINITY_RULE_INDEX];
+            if (rule == null) {
+                rule = owner.getDefaultInfinityRule();
             }
+            return rule;
+        }
 
-            // otherwise, return the improper fraction rule
-            else if (fractionRules[0] != null) {
-                return fractionRules[0];
+        // if the number isn't an integer, we use one f the fraction rules...
+        if (nonNumericalRules != null && number != Math.floor(number)) {
+            if (number < 1 && nonNumericalRules[PROPER_FRACTION_RULE_INDEX] != null) {
+                // if the number is between 0 and 1, return the proper
+                // fraction rule
+                return nonNumericalRules[PROPER_FRACTION_RULE_INDEX];
+            }
+            else if (nonNumericalRules[IMPROPER_FRACTION_RULE_INDEX] != null) {
+                // otherwise, return the improper fraction rule
+                return nonNumericalRules[IMPROPER_FRACTION_RULE_INDEX];
             }
         }
 
         // if there's a master rule, use it to format the number
-        if (fractionRules[2] != null) {
-            return fractionRules[2];
-
-        } else {
+        if (nonNumericalRules != null && nonNumericalRules[MASTER_RULE_INDEX] != null) {
+            return nonNumericalRules[MASTER_RULE_INDEX];
+        }
+        else {
             // and if we haven't yet returned a rule, use findNormalRule()
             // to find the applicable rule
             return findNormalRule(Math.round(number));
@@ -486,8 +541,8 @@ final class NFRuleSet {
         // if the number is negative, return the negative-number rule
         // (if there isn't one, pretend the number is positive)
         if (number < 0) {
-            if (negativeNumberRule != null) {
-                return negativeNumberRule;
+            if (nonNumericalRules[NEGATIVE_RULE_INDEX] != null) {
+                return nonNumericalRules[NEGATIVE_RULE_INDEX];
             } else {
                 number = -number;
             }
@@ -541,7 +596,7 @@ final class NFRuleSet {
             return result;
         }
         // else use the master rule
-        return fractionRules[2];
+        return nonNumericalRules[MASTER_RULE_INDEX];
     }
 
     /**
@@ -697,32 +752,18 @@ final class NFRuleSet {
         // that determines the value we return.
 
         ParsePosition highWaterMark = new ParsePosition(0);
-        Number result = Long.valueOf(0);
-        Number tempResult = null;
+        Number result = NFRule.ZERO;
+        Number tempResult;
 
         // dump out if there's no text to parse
         if (text.length() == 0) {
             return result;
         }
 
-        // start by trying the negative number rule (if there is one)
-        if (negativeNumberRule != null) {
-            tempResult = negativeNumberRule.doParse(text, parsePosition, false, upperBound);
-            if (parsePosition.getIndex() > highWaterMark.getIndex()) {
-                result = tempResult;
-                highWaterMark.setIndex(parsePosition.getIndex());
-            }
-// commented out because the error-index API on ParsePosition isn't there in 1.1.x
-//            if (parsePosition.getErrorIndex() > highWaterMark.getErrorIndex()) {
-//                highWaterMark.setErrorIndex(parsePosition.getErrorIndex());
-//            }
-            parsePosition.setIndex(0);
-        }
-
-        // then try each of the fraction rules
-        for (int i = 0; i < 3; i++) {
-            if (fractionRules[i] != null) {
-                tempResult = fractionRules[i].doParse(text, parsePosition, false, upperBound);
+        // Try each of the negative rules, fraction rules, infinity rules and NaN rules
+        for (NFRule fractionRule : nonNumericalRules) {
+            if (fractionRule != null) {
+                tempResult = fractionRule.doParse(text, parsePosition, false, upperBound);
                 if (parsePosition.getIndex() > highWaterMark.getIndex()) {
                     result = tempResult;
                     highWaterMark.setIndex(parsePosition.getIndex());
@@ -776,6 +817,24 @@ final class NFRuleSet {
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
         for (NFRule rule : rules) {
             rule.setDecimalFormatSymbols(newSymbols);
+        }
+        // Switch the fraction rules to mirror the DecimalFormatSymbols.
+        if (fractionRules != null) {
+            for (int nonNumericalIdx = IMPROPER_FRACTION_RULE_INDEX; nonNumericalIdx <= MASTER_RULE_INDEX; nonNumericalIdx++) {
+                if (nonNumericalRules[nonNumericalIdx] != null) {
+                    for (NFRule rule : fractionRules) {
+                        if (nonNumericalRules[nonNumericalIdx].getBaseValue() == rule.getBaseValue()) {
+                            setBestFractionRule(nonNumericalIdx, rule, false);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (NFRule rule : nonNumericalRules) {
+            if (rule != null) {
+                rule.setDecimalFormatSymbols(newSymbols);
+            }
         }
     }
 }

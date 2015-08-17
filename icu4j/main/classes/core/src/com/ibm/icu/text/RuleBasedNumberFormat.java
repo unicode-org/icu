@@ -247,17 +247,48 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   <tr>
  *     <td width="5%" valign="top"></td>
  *     <td width="8%" valign="top">x.x:</td>
- *     <td valign="top">The rule is an <em>improper fraction rule.</em></td>
+ *     <td valign="top">The rule is an <em>improper fraction rule</em>. If the full stop in
+ *     the middle of the rule name is replaced with the decimal point
+ *     that is used in the language or DecimalFormatSymbols, then that rule will
+ *     have precedence when formatting and parsing this rule. For example, some
+ *     languages use the comma, and can thus be written as x,x instead. For example,
+ *     you can use "x.x: &lt;&lt; point &gt;&gt;;x,x: &lt;&lt; comma &gt;&gt;;" to
+ *     handle the decimal point that matches the language's natural spelling of
+ *     the punctuation of either the full stop or comma.</td>
  *   </tr>
  *   <tr>
  *     <td width="5%" valign="top"></td>
  *     <td width="8%" valign="top">0.x:</td>
- *     <td valign="top">The rule is a <em>proper fraction rule.</em></td>
+ *     <td valign="top">The rule is a <em>proper fraction rule</em>. If the full stop in
+ *     the middle of the rule name is replaced with the decimal point
+ *     that is used in the language or DecimalFormatSymbols, then that rule will
+ *     have precedence when formatting and parsing this rule. For example, some
+ *     languages use the comma, and can thus be written as 0,x instead. For example,
+ *     you can use "0.x: point &gt;&gt;;0,x: comma &gt;&gt;;" to
+ *     handle the decimal point that matches the language's natural spelling of
+ *     the punctuation of either the full stop or comma</td>
  *   </tr>
  *   <tr>
  *     <td width="5%" valign="top"></td>
  *     <td width="8%" valign="top">x.0:</td>
- *     <td valign="top">The rule is a <em>master rule.</em></td>
+ *     <td valign="top">The rule is a <em>master rule</em>. If the full stop in
+ *     the middle of the rule name is replaced with the decimal point
+ *     that is used in the language or DecimalFormatSymbols, then that rule will
+ *     have precedence when formatting and parsing this rule. For example, some
+ *     languages use the comma, and can thus be written as x,0 instead. For example,
+ *     you can use "x.0: &lt;&lt; point;x,0: &lt;&lt; comma;" to
+ *     handle the decimal point that matches the language's natural spelling of
+ *     the punctuation of either the full stop or comma</td>
+ *   </tr>
+ *   <tr>
+ *     <td width="5%" valign="top"></td>
+ *     <td width="8%" valign="top">Inf:</td>
+ *     <td valign="top">The rule for infinity.</td>
+ *   </tr>
+ *   <tr>
+ *     <td width="5%" valign="top"></td>
+ *     <td width="8%" valign="top">NaN:</td>
+ *     <td valign="top">The rule for an IEEE 754 NaN (not a number).</td>
  *   </tr>
  *   <tr>
  *     <td width="5%" valign="top"></td>
@@ -587,6 +618,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
     private transient DecimalFormat decimalFormat = null;
 
     /**
+     * The rule used when dealing with infinity. This is lazy-evaluated, and derived from decimalFormat.
+     * It is here so it can be shared by different NFRuleSets.
+     */
+    private transient NFRule defaultInfinityRule = null;
+
+    /**
+     * The rule used when dealing with IEEE 754 NaN. This is lazy-evaluated, and derived from decimalFormat.
+     * It is here so it can be shared by different NFRuleSets.
+     */
+    private transient NFRule defaultNaNRule = null;
+
+    /**
      * Flag specifying whether lenient parse mode is on or off.  Off by default.
      * @serial
      */
@@ -797,19 +840,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
         catch (MissingResourceException e1) {
         }
 
-        try {
-            UResourceBundle locb = bundle.get(locnames[format-1]);
-            localizations = new String[locb.getSize()][];
+        // We use findTopLevel() instead of get() because
+        // it's faster when we know that it's usually going to fail.
+        UResourceBundle locNamesBundle = bundle.findTopLevel(locnames[format - 1]);
+        if (locNamesBundle != null) {
+            localizations = new String[locNamesBundle.getSize()][];
             for (int i = 0; i < localizations.length; ++i) {
-                localizations[i] = locb.get(i).getStringArray();
+                localizations[i] = locNamesBundle.get(i).getStringArray();
             }
         }
-        catch (MissingResourceException e) {
-            // might have description and no localizations, or no description...
-        }
+        // else there are no localized names. It's not that important.
 
         init(description.toString(), localizations);
-
     }
 
     private static final String[] rulenames = {
@@ -1228,7 +1270,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // keep track of the largest number of characters consumed in
         // the various trials, and the result that corresponds to it
-        Number result = Long.valueOf(0);
+        Number result = NFRule.ZERO;
         ParsePosition highWaterMark = new ParsePosition(workingPos.getIndex());
 
         // iterate over the public rule sets (beginning with the default one)
@@ -1409,7 +1451,15 @@ public class RuleBasedNumberFormat extends NumberFormat {
             if (decimalFormat != null) {
                 decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
             }
-            
+            if (defaultInfinityRule != null) {
+                defaultInfinityRule = null;
+                getDefaultInfinityRule(); // Reset with the new DecimalFormatSymbols
+            }
+            if (defaultNaNRule != null) {
+                defaultNaNRule = null;
+                getDefaultNaNRule(); // Reset with the new DecimalFormatSymbols
+            }
+
             // Apply the new decimalFormatSymbols by reparsing the rulesets
             for (NFRuleSet ruleSet : ruleSets) {
                 ruleSet.setDecimalFormatSymbols(decimalFormatSymbols);
@@ -1490,17 +1540,37 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
     DecimalFormat getDecimalFormat() {
         if (decimalFormat == null) {
-            decimalFormat = (DecimalFormat)NumberFormat.getInstance(locale);
-
-            if (decimalFormatSymbols != null) {
-                decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
-            }
+            // Don't use NumberFormat.getInstance, which can cause a recursive call
+            String pattern = getPattern(locale, NUMBERSTYLE);
+            decimalFormat = new DecimalFormat(pattern, getDecimalFormatSymbols());
         }
         return decimalFormat;
     }
 
     PluralFormat createPluralFormat(PluralRules.PluralType pluralType, String pattern) {
         return new PluralFormat(locale, pluralType, pattern, getDecimalFormat());
+    }
+
+    /**
+     * Returns the default rule for infinity. This object is lazily created: this function
+     * creates it the first time it's called.
+     */
+    NFRule getDefaultInfinityRule() {
+        if (defaultInfinityRule == null) {
+            defaultInfinityRule = new NFRule(this, "Inf: " + getDecimalFormatSymbols().getInfinity());
+        }
+        return defaultInfinityRule;
+    }
+
+    /**
+     * Returns the default rule for NaN. This object is lazily created: this function
+     * creates it the first time it's called.
+     */
+    NFRule getDefaultNaNRule() {
+        if (defaultNaNRule == null) {
+            defaultNaNRule = new NFRule(this, "NaN: " + getDecimalFormatSymbols().getNaN());
+        }
+        return defaultNaNRule;
     }
 
     //-----------------------------------------------------------------------
@@ -1613,7 +1683,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 p = descBuf.length() - 1;
             }
             ruleSetDescriptions[curRuleSet] = descBuf.substring(start, p + 1);
-            NFRuleSet ruleSet = new NFRuleSet(ruleSetDescriptions, curRuleSet);
+            NFRuleSet ruleSet = new NFRuleSet(this, ruleSetDescriptions, curRuleSet);
             ruleSets[curRuleSet] = ruleSet;
             String currentName = ruleSet.getName();
             ruleSetsMap.put(currentName, ruleSet);
@@ -1659,7 +1729,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // finally, we can go back through the temporary descriptions
         // list and finish setting up the substructure
         for (int i = 0; i < ruleSets.length; i++) {
-            ruleSets[i].parseRules(ruleSetDescriptions[i], this);
+            ruleSets[i].parseRules(ruleSetDescriptions[i]);
         }
 
         // Now that the rules are initialized, the 'real' default rule
