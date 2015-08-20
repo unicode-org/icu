@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2011, International Business Machines
+*   Copyright (C) 2010-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  charstr.cpp
@@ -16,6 +16,7 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uinvchar.h"
 
 U_NAMESPACE_BEGIN
 
@@ -101,6 +102,13 @@ char *CharString::getAppendBuffer(int32_t minCapacity,
 }
 
 CharString &CharString::appendInvariantChars(const UnicodeString &s, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) {
+        return *this;
+    }
+    if (!uprv_isInvariantUString(s.getBuffer(), s.length())) {
+        errorCode = U_INVARIANT_CONVERSION_ERROR;
+        return *this;
+    }
     if(ensureCapacity(len+s.length()+1, 0, errorCode)) {
         len+=s.extract(0, 0x7fffffff, buffer.getAlias()+len, buffer.getCapacity()-len, US_INV);
     }
