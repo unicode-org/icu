@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  strtest.cpp
@@ -520,5 +520,15 @@ StringTest::TestCharString() {
     strcat(expected, "**");
     if (0 != strcmp(expected, chStr.data()) || (int32_t)strlen(expected) != chStr.length()) {
         errln("CharString.getAppendBuffer().append(**) failed.");
+    }
+
+    UErrorCode ec = U_ZERO_ERROR;
+    chStr.clear();
+    chStr.appendInvariantChars(UnicodeString("The '@' character is not invariant."), ec);
+    if (ec != U_INVARIANT_CONVERSION_ERROR) {
+        errln("%s:%d expected U_INVARIANT_CONVERSION_ERROR, got %s", __FILE__, __LINE__, u_errorName(ec));
+    }
+    if (chStr.length() != 0) {
+        errln("%s:%d expected length() = 0, got %d", __FILE__, __LINE__, chStr.length());
     }
 }
