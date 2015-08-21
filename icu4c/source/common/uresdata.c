@@ -145,7 +145,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x65 &&
         pInfo->dataFormat[2]==0x73 &&
         pInfo->dataFormat[3]==0x42 &&
-        (1<=pInfo->formatVersion[0] || pInfo->formatVersion[0]<=3));
+        (1<=pInfo->formatVersion[0] && pInfo->formatVersion[0]<=3));
 }
 
 /* semi-public functions ---------------------------------------------------- */
