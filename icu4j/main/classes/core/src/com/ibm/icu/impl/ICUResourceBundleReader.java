@@ -32,7 +32,7 @@ public final class ICUResourceBundleReader {
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
         public boolean isDataVersionAcceptable(byte formatVersion[]) {
-            return (1 <= formatVersion[0] || formatVersion[0] <= 3);
+            return (1 <= formatVersion[0] && formatVersion[0] <= 3);
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
