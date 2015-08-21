@@ -40,8 +40,8 @@ U_NAMESPACE_USE
 static UnicodeSet *gInclusionSet = NULL;
 static UnicodeSet *gRecommendedSet = NULL;
 static const Normalizer2 *gNfdNormalizer = NULL;
+static SpoofData *gDefaultSpoofData = NULL;
 static UInitOnce gSpoofInitOnce = U_INITONCE_INITIALIZER;
-
 static UBool U_CALLCONV
 uspoof_cleanup(void) {
     delete gInclusionSet;
@@ -49,6 +49,10 @@ uspoof_cleanup(void) {
     delete gRecommendedSet;
     gRecommendedSet = NULL;
     gNfdNormalizer = NULL;
+    if (gDefaultSpoofData) {
+        gDefaultSpoofData->removeReference();   // Will delete, assuming all user-level spoof checkers were closed.
+    }
+    gDefaultSpoofData = NULL;
     gSpoofInitOnce.reset();
     return TRUE;
 }
@@ -125,17 +129,24 @@ static void U_CALLCONV initializeStatics(UErrorCode &status) {
     gRecommendedSet = new UnicodeSet(UnicodeString(recommendedPat, -1, US_INV), status);
     gRecommendedSet->freeze();
     gNfdNormalizer = Normalizer2::getNFDInstance(status);
+    gDefaultSpoofData = SpoofData::getDefault(status);
     ucln_i18n_registerCleanup(UCLN_I18N_SPOOF, uspoof_cleanup);
 }
 
 
 U_CAPI USpoofChecker * U_EXPORT2
 uspoof_open(UErrorCode *status) {
+    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
     if (U_FAILURE(*status)) {
         return NULL;
     }
-    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
-    SpoofImpl *si = new SpoofImpl(SpoofData::getDefault(*status), *status);
+    SpoofImpl *si = new SpoofImpl(gDefaultSpoofData, *status);
+    if (si) {
+        gDefaultSpoofData->addReference();
+    }
+    if (U_SUCCESS(*status) && si == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+    }
     if (U_FAILURE(*status)) {
         delete si;
         si = NULL;
