@@ -105,7 +105,7 @@ CharString &CharString::appendInvariantChars(const UnicodeString &s, UErrorCode 
     if(U_FAILURE(errorCode)) {
         return *this;
     }
-    if (!uprv_isInvariantUString(s.getBuffer(), s.length())) {
+    if (!uprv_isInvariantUnicodeString(s)) {
         errorCode = U_INVARIANT_CONVERSION_ERROR;
         return *this;
     }
