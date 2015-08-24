@@ -182,13 +182,10 @@ class BreakDictionary {
         // read in the column map (this is serialized in its internal form:
         // an index array followed by a data array)
         l = bytes.getInt();
-        char[] temp = new char[l];
-        for (int i = 0; i < temp.length; i++)
-            temp[i] = (char)bytes.getShort();
+        char[] temp = ICUBinary.getChars(bytes, l, 0);
         l = bytes.getInt();
         byte[] temp2 = new byte[l];
-        for (int i = 0; i < temp2.length; i++)
-            temp2[i] = bytes.get();
+        bytes.get(temp2);
         columnMap = new CompactByteArray(temp, temp2);
 
         // read in numCols and numColGroups
@@ -197,31 +194,22 @@ class BreakDictionary {
 
         // read in the row-number index
         l = bytes.getInt();
-        rowIndex = new short[l];
-        for (int i = 0; i < rowIndex.length; i++)
-            rowIndex[i] = bytes.getShort();
+        rowIndex = ICUBinary.getShorts(bytes, l, 0);
 
         // load in the populated-cells bitmap: index first, then bitmap list
         l = bytes.getInt();
-        rowIndexFlagsIndex = new short[l];
-        for (int i = 0; i < rowIndexFlagsIndex.length; i++)
-            rowIndexFlagsIndex[i] = bytes.getShort();
+        rowIndexFlagsIndex = ICUBinary.getShorts(bytes, l, 0);
         l = bytes.getInt();
-        rowIndexFlags = new int[l];
-        for (int i = 0; i < rowIndexFlags.length; i++)
-            rowIndexFlags[i] = bytes.getInt();
+        rowIndexFlags = ICUBinary.getInts(bytes, l, 0);
 
         // load in the row-shift index
         l = bytes.getInt();
         rowIndexShifts = new byte[l];
-        for (int i = 0; i < rowIndexShifts.length; i++)
-            rowIndexShifts[i] = bytes.get();
+        bytes.get(rowIndexShifts);
 
         // finally, load in the actual state table
         l = bytes.getInt();
-        table = new short[l];
-        for (int i = 0; i < table.length; i++)
-            table[i] = bytes.getShort();
+        table = ICUBinary.getShorts(bytes, l, 0);
 
         // this data structure is only necessary for testing and debugging purposes
         reverseColumnMap = new char[numCols];

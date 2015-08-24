@@ -550,9 +550,8 @@ final class UConverterDataReader {
             case CharsetMBCS.MBCS_OUTPUT_2:
             case CharsetMBCS.MBCS_OUTPUT_2_SISO:
             case CharsetMBCS.MBCS_OUTPUT_3_EUC:
-                mbcsTable.fromUnicodeChars = new char[header.fromUBytesLength / 2];
-                byteBuffer.asCharBuffer().get(mbcsTable.fromUnicodeChars);
-                ICUBinary.skipBytes(byteBuffer, header.fromUBytesLength & ~1);
+                mbcsTable.fromUnicodeChars = ICUBinary.getChars(
+                        byteBuffer, header.fromUBytesLength / 2, 0);
                 break;
             case CharsetMBCS.MBCS_OUTPUT_3:
             case CharsetMBCS.MBCS_OUTPUT_4_EUC:
@@ -560,9 +559,8 @@ final class UConverterDataReader {
                 byteBuffer.get(mbcsTable.fromUnicodeBytes);
                 break;
             case CharsetMBCS.MBCS_OUTPUT_4:
-                mbcsTable.fromUnicodeInts = new int[header.fromUBytesLength / 4];
-                byteBuffer.asIntBuffer().get(mbcsTable.fromUnicodeInts);
-                ICUBinary.skipBytes(byteBuffer, header.fromUBytesLength & ~3);
+                mbcsTable.fromUnicodeInts = ICUBinary.getInts(
+                        byteBuffer, header.fromUBytesLength / 4, 0);
                 break;
             default:
                 // Cannot occur, caller checked already.

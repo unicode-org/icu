@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2014, International Business Machines
+ * Copyright (c) 2002-2015, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -91,10 +91,7 @@ public final class UPropertyAliases {
         int offset=inIndexes[IX_VALUE_MAPS_OFFSET];
         int nextOffset=inIndexes[IX_BYTE_TRIES_OFFSET];
         int numInts=(nextOffset-offset)/4;
-        valueMaps=new int[numInts];
-        for(int i=0; i<numInts; ++i) {
-            valueMaps[i]=bytes.getInt();
-        }
+        valueMaps=ICUBinary.getInts(bytes, numInts, 0);
 
         // Read the bytesTries.
         offset=nextOffset;

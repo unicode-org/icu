@@ -372,6 +372,25 @@ public final class ICUBinary {
         }
     }
 
+    static int compareKeys(CharSequence key, byte[] bytes, int offset) {
+        for (int i = 0;; ++i, ++offset) {
+            int c2 = bytes[offset];
+            if (c2 == 0) {
+                if (i == key.length()) {
+                    return 0;
+                } else {
+                    return 1;  // key > table key because key is longer.
+                }
+            } else if (i == key.length()) {
+                return -1;  // key < table key because key is shorter.
+            }
+            int diff = (int)key.charAt(i) - c2;
+            if (diff != 0) {
+                return diff;
+            }
+        }
+    }
+
     // public inner interface ------------------------------------------------
 
     /**
@@ -628,6 +647,41 @@ public final class ICUBinary {
         if (skipLength > 0) {
             bytes.position(bytes.position() + skipLength);
         }
+    }
+
+    public static String getString(ByteBuffer bytes, int length, int additionalSkipLength) {
+        CharSequence cs = bytes.asCharBuffer();
+        String s = cs.subSequence(0, length).toString();
+        skipBytes(bytes, length * 2 + additionalSkipLength);
+        return s;
+    }
+
+    public static char[] getChars(ByteBuffer bytes, int length, int additionalSkipLength) {
+        char[] dest = new char[length];
+        bytes.asCharBuffer().get(dest);
+        skipBytes(bytes, length * 2 + additionalSkipLength);
+        return dest;
+    }
+
+    public static short[] getShorts(ByteBuffer bytes, int length, int additionalSkipLength) {
+        short[] dest = new short[length];
+        bytes.asShortBuffer().get(dest);
+        skipBytes(bytes, length * 2 + additionalSkipLength);
+        return dest;
+    }
+
+    public static int[] getInts(ByteBuffer bytes, int length, int additionalSkipLength) {
+        int[] dest = new int[length];
+        bytes.asIntBuffer().get(dest);
+        skipBytes(bytes, length * 4 + additionalSkipLength);
+        return dest;
+    }
+
+    public static long[] getLongs(ByteBuffer bytes, int length, int additionalSkipLength) {
+        long[] dest = new long[length];
+        bytes.asLongBuffer().get(dest);
+        skipBytes(bytes, length * 8 + additionalSkipLength);
+        return dest;
     }
 
     /**

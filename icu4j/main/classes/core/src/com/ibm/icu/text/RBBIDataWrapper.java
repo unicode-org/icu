@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -164,8 +164,6 @@ final class RBBIDataWrapper {
      *  of RBBI rules.
      */
     static RBBIDataWrapper get(ByteBuffer bytes) throws IOException {
-        int i;
-
         RBBIDataWrapper This = new RBBIDataWrapper();
 
         ICUBinary.readHeader(bytes, DATA_FORMAT, IS_ACCEPTABLE);
@@ -224,11 +222,9 @@ final class RBBIDataWrapper {
         ICUBinary.skipBytes(bytes, This.fHeader.fFTable - pos);
         pos = This.fHeader.fFTable;
 
-        This.fFTable = new short[This.fHeader.fFTableLen / 2];
-        for ( i=0; i<This.fFTable.length; i++) {
-            This.fFTable[i] = bytes.getShort();
-            pos += 2;
-        }
+        This.fFTable = ICUBinary.getShorts(
+                bytes, This.fHeader.fFTableLen / 2, This.fHeader.fFTableLen & 1);
+        pos += This.fHeader.fFTableLen;
 
         //
         // Read in the Reverse state table
@@ -239,11 +235,9 @@ final class RBBIDataWrapper {
         pos = This.fHeader.fRTable;
 
         // Create & fill the table itself.
-        This.fRTable = new short[This.fHeader.fRTableLen / 2];
-        for (i=0; i<This.fRTable.length; i++) {
-            This.fRTable[i] = bytes.getShort();
-            pos += 2;
-        }
+        This.fRTable = ICUBinary.getShorts(
+                bytes, This.fHeader.fRTableLen / 2, This.fHeader.fRTableLen & 1);
+        pos += This.fHeader.fRTableLen;
 
         //
         // Read in the Safe Forward state table
@@ -254,11 +248,9 @@ final class RBBIDataWrapper {
             pos = This.fHeader.fSFTable;
 
             // Create & fill the table itself.
-            This.fSFTable = new short[This.fHeader.fSFTableLen / 2];
-            for (i=0; i<This.fSFTable.length; i++) {
-                This.fSFTable[i] = bytes.getShort();
-                pos += 2;
-            }
+            This.fSFTable = ICUBinary.getShorts(
+                    bytes, This.fHeader.fSFTableLen / 2, This.fHeader.fSFTableLen & 1);
+            pos += This.fHeader.fSFTableLen;
         }
 
         //
@@ -270,11 +262,9 @@ final class RBBIDataWrapper {
             pos = This.fHeader.fSRTable;
 
             // Create & fill the table itself.
-            This.fSRTable = new short[This.fHeader.fSRTableLen / 2];
-            for (i=0; i<This.fSRTable.length; i++) {
-                This.fSRTable[i] = bytes.getShort();
-                pos += 2;
-            }
+            This.fSRTable = ICUBinary.getShorts(
+                    bytes, This.fHeader.fSRTableLen / 2, This.fHeader.fSRTableLen & 1);
+            pos += This.fHeader.fSRTableLen;
         }
 
         //
@@ -309,11 +299,9 @@ final class RBBIDataWrapper {
         }
         ICUBinary.skipBytes(bytes, This.fHeader.fStatusTable - pos);
         pos = This.fHeader.fStatusTable;
-        This.fStatusTable = new int[This.fHeader.fStatusTableLen / 4];
-        for (i=0; i<This.fStatusTable.length; i++) {
-            This.fStatusTable[i] = bytes.getInt();
-            pos += 4;
-        }
+        This.fStatusTable = ICUBinary.getInts(
+                bytes, This.fHeader.fStatusTableLen / 4, This.fHeader.fStatusTableLen & 3);
+        pos += This.fHeader.fStatusTableLen;
 
         //
         // Put the break rule source into a String
@@ -323,12 +311,8 @@ final class RBBIDataWrapper {
         }
         ICUBinary.skipBytes(bytes, This.fHeader.fRuleSource - pos);
         pos = This.fHeader.fRuleSource;
-        StringBuilder sb = new StringBuilder(This.fHeader.fRuleSourceLen / 2);
-        for (i=0; i<This.fHeader.fRuleSourceLen; i+=2) {
-            sb.append(bytes.getChar());
-            pos += 2;
-        }
-        This.fRuleSource = sb.toString();
+        This.fRuleSource = ICUBinary.getString(
+                bytes, This.fHeader.fRuleSourceLen / 2, This.fHeader.fRuleSourceLen & 1);
 
         if (RuleBasedBreakIterator.fDebugEnv!=null && RuleBasedBreakIterator.fDebugEnv.indexOf("data")>=0) {
             This.dump();

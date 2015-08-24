@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2014, International Business Machines Corporation and
+ * Copyright (C) 2009-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -151,27 +151,17 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
             if (width == ValueWidth.BITS_16) {
                 indexArraySize += This.dataLength;
             }
-            This.index = new char[indexArraySize];
 
             /* Read in the index */
-            int i;
-            for (i=0; i<This.indexLength; i++) {
-                This.index[i] = bytes.getChar();
-            }
+            This.index = ICUBinary.getChars(bytes, indexArraySize, 0);
 
             /* Read in the data. 16 bit data goes in the same array as the index.
              * 32 bit data goes in its own separate data array.
              */
             if (width == ValueWidth.BITS_16) {
                 This.data16 = This.indexLength;
-                for (i=0; i<This.dataLength; i++) {
-                    This.index[This.data16 + i] = bytes.getChar();
-                }
             } else {
-                This.data32 = new int[This.dataLength];
-                for (i=0; i<This.dataLength; i++) {
-                    This.data32[i] = bytes.getInt();
-                }
+                This.data32 = ICUBinary.getInts(bytes, This.dataLength, 0);
             }
 
             switch(width) {

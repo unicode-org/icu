@@ -224,9 +224,9 @@ class CharsetMBCS extends CharsetICU {
             reader = new UConverterDataReader(b);
             reader.readStaticData(staticData);
         } catch (IOException e) {
-            throw new InvalidFormatException();
+            throw new InvalidFormatException(e);
         } catch (Exception e) {
-            throw new InvalidFormatException();
+            throw new InvalidFormatException(e);
         }
 
         UConverterSharedData data = null;
