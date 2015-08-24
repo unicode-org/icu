@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ******************************************************************************
  */
@@ -248,10 +248,7 @@ public class IntTrie extends Trie
     {
         super.unserialize(bytes);
         // one used for initial value
-        m_data_               = new int[m_dataLength_];
-        for (int i = 0; i < m_dataLength_; i ++) {
-            m_data_[i] = bytes.getInt();
-        }
+        m_data_ = ICUBinary.getInts(bytes, m_dataLength_, 0);
         m_initialValue_ = m_data_[0];
     }
 

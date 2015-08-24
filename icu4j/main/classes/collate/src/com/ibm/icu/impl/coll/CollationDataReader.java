@@ -155,11 +155,7 @@ final class CollationDataReader /* all static */ {
                 throw new ICUException("Collation base data must not reorder scripts");
             }
             reorderCodesLength = length / 4;
-            reorderCodes = new int[reorderCodesLength];
-            for(int i = 0; i < reorderCodesLength; ++i) {
-                reorderCodes[i] = inBytes.getInt();
-            }
-            length &= 3;
+            reorderCodes = ICUBinary.getInts(inBytes, reorderCodesLength, length & 3);
 
             // The reorderRanges (if any) are the trailing reorderCodes entries.
             // Split the array at the boundary.
@@ -175,8 +171,8 @@ final class CollationDataReader /* all static */ {
         } else {
             reorderCodes = new int[0];
             reorderCodesLength = 0;
+            ICUBinary.skipBytes(inBytes, length);
         }
-        ICUBinary.skipBytes(inBytes, length);
 
         // There should be a reorder table only if there are reorder codes.
         // However, when there are reorder codes the reorder table may be omitted to reduce
@@ -237,13 +233,10 @@ final class CollationDataReader /* all static */ {
             if(data == null) {
                 throw new ICUException("Tailored ces without tailored trie");
             }
-            data.ces = new long[length / 8];
-            for(int i = 0; i < length / 8; ++i) {
-                data.ces[i] = inBytes.getLong();
-            }
-            length &= 7;
+            data.ces = ICUBinary.getLongs(inBytes, length / 8, length & 7);
+        } else {
+            ICUBinary.skipBytes(inBytes, length);
         }
-        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_RESERVED10_OFFSET;
         offset = inIndexes[index];
@@ -257,13 +250,10 @@ final class CollationDataReader /* all static */ {
             if(data == null) {
                 throw new ICUException("Tailored ce32s without tailored trie");
             }
-            data.ce32s = new int[length / 4];
-            for(int i = 0; i < length / 4; ++i) {
-                data.ce32s[i] = inBytes.getInt();
-            }
-            length &= 3;
+            data.ce32s = ICUBinary.getInts(inBytes, length / 4, length & 3);
+        } else {
+            ICUBinary.skipBytes(inBytes, length);
         }
-        ICUBinary.skipBytes(inBytes, length);
 
         int jamoCE32sStart = inIndexes[IX_JAMO_CE32S_START];
         if(jamoCE32sStart >= 0) {
@@ -316,14 +306,10 @@ final class CollationDataReader /* all static */ {
             if(data == null) {
                 throw new ICUException("Tailored contexts without tailored trie");
             }
-            StringBuilder sb = new StringBuilder(length / 2);
-            for(int i = 0; i < length / 2; ++i) {
-                sb.append(inBytes.getChar());
-            }
-            data.contexts = sb.toString();
-            length &= 1;
+            data.contexts = ICUBinary.getString(inBytes, length / 2, length & 1);
+        } else {
+            ICUBinary.skipBytes(inBytes, length);
         }
-        ICUBinary.skipBytes(inBytes, length);
 
         index = IX_UNSAFE_BWD_OFFSET;
         offset = inIndexes[index];
@@ -352,11 +338,8 @@ final class CollationDataReader /* all static */ {
             }
             // Add the ranges from the data file to the unsafe-backward set.
             USerializedSet sset = new USerializedSet();
-            char[] unsafeData = new char[length / 2];
-            for(int i = 0; i < length / 2; ++i) {
-                unsafeData[i] = inBytes.getChar();
-            }
-            length &= 1;
+            char[] unsafeData = ICUBinary.getChars(inBytes, length / 2, length & 1);
+            length = 0;
             sset.getSet(unsafeData, 0);
             int count = sset.countRanges();
             int[] range = new int[2];
@@ -403,11 +386,8 @@ final class CollationDataReader /* all static */ {
                         data.fastLatinTableHeader[i] = inBytes.getChar();
                     }
                     int tableLength = length / 2 - headerLength;
-                    data.fastLatinTable = new char[tableLength];
-                    for(int i = 0; i < tableLength; ++i) {
-                        data.fastLatinTable[i] = inBytes.getChar();
-                    }
-                    length &= 1;
+                    data.fastLatinTable = ICUBinary.getChars(inBytes, tableLength, length & 1);
+                    length = 0;
                     if((header0 >> 8) != CollationFastLatin.VERSION) {
                         throw new ICUException("Fast-Latin table version differs from version in data header");
                     }

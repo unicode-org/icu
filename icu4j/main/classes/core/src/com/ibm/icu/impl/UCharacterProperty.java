@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1227,19 +1227,13 @@ public final class UCharacterProperty
 
             // additional properties
             int size = scriptExtensionsOffset - additionalVectorsOffset;
-            m_additionalVectors_ = new int[size];
-            for (int i = 0; i < size; i ++) {
-                m_additionalVectors_[i] = bytes.getInt();
-            }
+            m_additionalVectors_ = ICUBinary.getInts(bytes, size, 0);
         }
 
         // Script_Extensions
         int numChars = (reservedOffset7 - scriptExtensionsOffset) * 2;
         if(numChars > 0) {
-            m_scriptExtensions_ = new char[numChars];
-            for(int i = 0; i < numChars; ++i) {
-                m_scriptExtensions_[i] = bytes.getChar();
-            }
+            m_scriptExtensions_ = ICUBinary.getChars(bytes, numChars, 0);
         }
     }
 

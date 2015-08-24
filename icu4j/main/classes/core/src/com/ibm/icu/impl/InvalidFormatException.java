@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2006-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 *
 *******************************************************************************
@@ -14,8 +14,12 @@ public class InvalidFormatException extends Exception {
     static final long serialVersionUID = 8883328905089345791L;
     
     public InvalidFormatException(){}
-    
-    public InvalidFormatException(String message){
+
+    public InvalidFormatException(Throwable cause) {
+        super(cause);
+    }
+
+    public InvalidFormatException(String message) {
         super(message);
     }
 }

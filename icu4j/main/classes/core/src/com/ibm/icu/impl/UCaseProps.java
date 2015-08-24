@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2004-2014, International Business Machines
+ *   Copyright (C) 2004-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -45,15 +45,14 @@ public final class UCaseProps {
         ICUBinary.readHeader(bytes, FMT, new IsAcceptable());
 
         // read indexes[]
-        int i, count;
-        count=bytes.getInt();
+        int count=bytes.getInt();
         if(count<IX_TOP) {
             throw new IOException("indexes[0] too small in "+DATA_FILE_NAME);
         }
         indexes=new int[count];
 
         indexes[0]=count;
-        for(i=1; i<count; ++i) {
+        for(int i=1; i<count; ++i) {
             indexes[i]=bytes.getInt();
         }
 
@@ -70,19 +69,13 @@ public final class UCaseProps {
         // read exceptions[]
         count=indexes[IX_EXC_LENGTH];
         if(count>0) {
-            exceptions=new char[count];
-            for(i=0; i<count; ++i) {
-                exceptions[i]=bytes.getChar();
-            }
+            exceptions=ICUBinary.getChars(bytes, count, 0);
         }
 
         // read unfold[]
         count=indexes[IX_UNFOLD_LENGTH];
         if(count>0) {
-            unfold=new char[count];
-            for(i=0; i<count; ++i) {
-                unfold[i]=bytes.getChar();
-            }
+            unfold=ICUBinary.getChars(bytes, count, 0);
         }
     }
 

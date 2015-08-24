@@ -179,7 +179,11 @@ public abstract class CharsetICU extends Charset{
                    return conv;
                }
            }catch (InvocationTargetException e) {
-               throw new UnsupportedCharsetException( icuCanonicalName+": "+"Could not load " + className+ ". Exception:" + e.getTargetException());    
+               Throwable cause = e.getCause();
+               UnsupportedCharsetException e2 = new UnsupportedCharsetException(
+                       icuCanonicalName + ": " + "Could not load " + className + ". Exception: " + cause);
+               e2.initCause(cause);
+               throw e2;
            }
        }catch(ClassNotFoundException ex){
        }catch(NoSuchMethodException ex){

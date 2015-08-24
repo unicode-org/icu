@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -65,10 +65,7 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
         
         // reading tokens
         int count = m_byteBuffer_.getChar();
-        char token[] = new char[count];
-        for (char i = 0; i < count; i ++) {
-            token[i] = m_byteBuffer_.getChar();
-        }
+        char token[] = ICUBinary.getChars(m_byteBuffer_, count, 0);
         int size = m_groupindex_ - m_tokenstringindex_;
         byte tokenstr[] = new byte[size];
         m_byteBuffer_.get(tokenstr);
@@ -78,11 +75,8 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
         count = m_byteBuffer_.getChar();
         data.setGroupCountSize(count, GROUP_INFO_SIZE_);
         count *= GROUP_INFO_SIZE_;
-        char group[] = new char[count];
-        for (int i = 0; i < count; i ++) {
-            group[i] = m_byteBuffer_.getChar();
-        }
-        
+        char group[] = ICUBinary.getChars(m_byteBuffer_, count, 0);
+
         size = m_algnamesindex_ - m_groupstringindex_;
         byte groupstring[] = new byte[size];
         m_byteBuffer_.get(groupstring);
@@ -174,11 +168,8 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
         int size = m_byteBuffer_.getChar();
         if (type == UCharacterName.AlgorithmName.TYPE_1_)
         {
-            char factor[] = new char[variant];
-            for (int j = 0; j < variant; j ++) {
-                factor[j] = m_byteBuffer_.getChar();
-            }
-                  
+            char factor[] = ICUBinary.getChars(m_byteBuffer_, variant, 0);
+
             result.setFactor(factor);
             size -= (variant << 1);
         }

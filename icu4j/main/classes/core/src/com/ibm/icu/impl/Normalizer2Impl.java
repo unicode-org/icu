@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 2009-2014, International Business Machines
+ *   Copyright (C) 2009-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -454,22 +454,15 @@ public final class Normalizer2Impl {
             offset=nextOffset;
             nextOffset=inIndexes[IX_SMALL_FCD_OFFSET];
             int numChars=(nextOffset-offset)/2;
-            char[] chars;
             if(numChars!=0) {
-                chars=new char[numChars];
-                for(int i=0; i<numChars; ++i) {
-                    chars[i]=bytes.getChar();
-                }
-                maybeYesCompositions=new String(chars);
+                maybeYesCompositions=ICUBinary.getString(bytes, numChars, 0);
                 extraData=maybeYesCompositions.substring(MIN_NORMAL_MAYBE_YES-minMaybeYes);
             }
 
             // smallFCD: new in formatVersion 2
             offset=nextOffset;
             smallFCD=new byte[0x100];
-            for(int i=0; i<0x100; ++i) {
-                smallFCD[i]=bytes.get();
-            }
+            bytes.get(smallFCD);
 
             // Build tccc180[].
             // gennorm2 enforces lccc=0 for c<MIN_CCC_LCCC_CP=U+0300.

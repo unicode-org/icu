@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ******************************************************************************
  */
@@ -361,10 +361,7 @@ public abstract class Trie
      */
     protected void unserialize(ByteBuffer bytes)
     {
-        m_index_ = new char[m_dataOffset_];
-        for (int i = 0; i < m_dataOffset_; i ++) {
-             m_index_[i] = bytes.getChar();
-        }
+        m_index_ = ICUBinary.getChars(bytes, m_dataOffset_, 0);
     }
 
     /**

@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ******************************************************************************
  */
@@ -237,10 +237,7 @@ public class CharTrie extends Trie
     protected final void unserialize(ByteBuffer bytes)
     {
         int indexDataLength = m_dataOffset_ + m_dataLength_;
-        m_index_ = new char[indexDataLength];
-        for (int i = 0; i < indexDataLength; i ++) {
-            m_index_[i] = bytes.getChar();
-        }
+        m_index_ = ICUBinary.getChars(bytes, indexDataLength, 0);
         m_data_           = m_index_;
         m_initialValue_   = m_data_[m_dataOffset_];
     }

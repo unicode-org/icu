@@ -2313,25 +2313,15 @@ public class SpoofChecker {
 
             bytes.reset();
             ICUBinary.skipBytes(bytes, CFUKeysOffset);
-            fCFUKeys = new int[CFUKeysSize];
-            for (i = 0; i < CFUKeysSize; i++) {
-                fCFUKeys[i] = bytes.getInt();
-            }
+            fCFUKeys = ICUBinary.getInts(bytes, CFUKeysSize, 0);
 
             bytes.reset();
             ICUBinary.skipBytes(bytes, CFUValuesOffset);
-            fCFUValues = new short[CFUValuesSize];
-            for (i = 0; i < CFUValuesSize; i++) {
-                fCFUValues[i] = bytes.getShort();
-            }
+            fCFUValues = ICUBinary.getShorts(bytes, CFUValuesSize, 0);
 
             bytes.reset();
             ICUBinary.skipBytes(bytes, CFUStringTableOffset);
-            StringBuffer CFUStringB = new StringBuffer();
-            for (i = 0; i < CFUStringTableSize; i++) {
-                CFUStringB.append(bytes.getChar());
-            }
-            fCFUStrings = CFUStringB.toString();
+            fCFUStrings = ICUBinary.getString(bytes, CFUStringTableSize, 0);
 
             bytes.reset();
             ICUBinary.skipBytes(bytes, CFUStringLengthsOffset);

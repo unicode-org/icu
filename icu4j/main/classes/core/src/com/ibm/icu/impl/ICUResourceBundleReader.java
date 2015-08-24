@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.IntBuffer;
 
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ICUUncheckedIOException;
@@ -32,7 +33,9 @@ public final class ICUResourceBundleReader {
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
         public boolean isDataVersionAcceptable(byte formatVersion[]) {
-            return (1 <= formatVersion[0] && formatVersion[0] <= 3);
+            return
+                    (formatVersion[0] == 1 && (formatVersion[1] & 0xff) >= 1) ||
+                    (2 <= formatVersion[0] && formatVersion[0] <= 3);
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
@@ -123,6 +126,7 @@ public final class ICUResourceBundleReader {
      * (equivalent of C++ pRoot)
      */
     private ByteBuffer bytes;
+    private byte[] keyBytes;
     private CharBuffer b16BitUnits;
     private ICUResourceBundleReader poolBundleReader;
     private int rootRes;
@@ -234,7 +238,6 @@ public final class ICUResourceBundleReader {
     private void init(ByteBuffer inBytes) throws IOException {
         dataVersion = ICUBinary.readHeader(inBytes, DATA_FORMAT, IS_ACCEPTABLE);
         int majorFormatVersion = inBytes.get(16);
-        boolean isFormatVersion10 = majorFormatVersion == 1 && inBytes.get(17) == 0;
         bytes = ICUBinary.sliceWithOrder(inBytes);
         int dataLength = bytes.remaining();
 
@@ -243,11 +246,8 @@ public final class ICUResourceBundleReader {
 
         rootRes = bytes.getInt(0);
 
-        if(isFormatVersion10) {
-            localKeyLimit = 0x10000;  /* greater than any 16-bit key string offset */
-            resourceCache = new ResourceCache(dataLength / 4 - 1);
-            return;
-        }
+        // Bundles with formatVersion 1.1 and later contain an indexes[] array.
+        // We need it so that we can read the key string bytes up front, for lookup performance.
 
         // read the variable-length indexes[] array
         int indexes0 = getIndexesInt(URES_INDEX_LENGTH);
@@ -280,9 +280,27 @@ public final class ICUResourceBundleReader {
             poolStringIndex16Limit = att >>> 16;
         }
 
+        int keysBottom = 1 + indexLength;
+        int keysTop = getIndexesInt(URES_INDEX_KEYS_TOP);
+        if(keysTop > keysBottom) {
+            // Deserialize the key strings up front.
+            // Faster table item search at the cost of slower startup and some heap memory.
+            if(isPoolBundle) {
+                // Shift the key strings down:
+                // Pool bundle key strings are used with a 0-based index,
+                // unlike regular bundles' key strings for which indexes
+                // are based on the start of the bundle data.
+                keyBytes = new byte[(keysTop - keysBottom) << 2];
+                bytes.position(keysBottom << 2);
+            } else {
+                localKeyLimit = keysTop << 2;
+                keyBytes = new byte[localKeyLimit];
+            }
+            bytes.get(keyBytes);
+        }
+
         // Read the array of 16-bit units.
         if(indexLength > URES_INDEX_16BIT_TOP) {
-            int keysTop = getIndexesInt(URES_INDEX_KEYS_TOP);
             int _16BitTop = getIndexesInt(URES_INDEX_16BIT_TOP);
             if(_16BitTop > keysTop) {
                 int num16BitUnits = (_16BitTop - keysTop) * 2;
@@ -301,25 +319,12 @@ public final class ICUResourceBundleReader {
             poolCheckSum = getIndexesInt(URES_INDEX_POOL_CHECKSUM);
         }
 
-        // Handle key strings last:
-        // If this is a pool bundle, then we shift all bytes down,
-        // and getIndexesInt() will not work any more.
-        if(getIndexesInt(URES_INDEX_KEYS_TOP) > (1 + indexLength)) {
-            if(isPoolBundle) {
-                // Shift the key strings down:
-                // Pool bundle key strings are used with a 0-based index,
-                // unlike regular bundles' key strings for which indexes
-                // are based on the start of the bundle data.
-                bytes.position((1 + indexLength) << 2);
-                bytes = ICUBinary.sliceWithOrder(bytes);
-            } else {
-                localKeyLimit = getIndexesInt(URES_INDEX_KEYS_TOP) << 2;
-            }
-        }
-
         if(!isPoolBundle || b16BitUnits.length() > 1) {
             resourceCache = new ResourceCache(maxOffset);
         }
+
+        // Reset the position for future .asCharBuffer() etc.
+        bytes.position(0);
     }
 
     private int getIndexesInt(int i) {
@@ -371,13 +376,16 @@ public final class ICUResourceBundleReader {
     private static final Container EMPTY_ARRAY = new Container();
     private static final Table EMPTY_TABLE = new Table();
 
-    private char getChar(int offset) {
-        return bytes.getChar(offset);
-    }
     private char[] getChars(int offset, int count) {
         char[] chars = new char[count];
-        for(int i = 0; i < count; offset += 2, ++i) {
-            chars[i] = bytes.getChar(offset);
+        if (count <= 16) {
+            for(int i = 0; i < count; offset += 2, ++i) {
+                chars[i] = bytes.getChar(offset);
+            }
+        } else {
+            CharBuffer temp = bytes.asCharBuffer();
+            temp.position(offset / 2);
+            temp.get(chars);
         }
         return chars;
     }
@@ -386,8 +394,14 @@ public final class ICUResourceBundleReader {
     }
     private int[] getInts(int offset, int count) {
         int[] ints = new int[count];
-        for(int i = 0; i < count; offset += 4, ++i) {
-            ints[i] = bytes.getInt(offset);
+        if (count <= 16) {
+            for(int i = 0; i < count; offset += 4, ++i) {
+                ints[i] = bytes.getInt(offset);
+            }
+        } else {
+            IntBuffer temp = bytes.asIntBuffer();
+            temp.position(offset / 4);
+            temp.get(ints);
         }
         return ints;
     }
@@ -410,7 +424,7 @@ public final class ICUResourceBundleReader {
         }
     }
     private char[] getTableKeyOffsets(int offset) {
-        int length = getChar(offset);
+        int length = bytes.getChar(offset);
         if(length > 0) {
             return getChars(offset + 2, length);
         } else {
@@ -426,10 +440,10 @@ public final class ICUResourceBundleReader {
         }
     }
 
-    private static String makeKeyStringFromBytes(ByteBuffer keyBytes, int keyOffset) {
+    private static String makeKeyStringFromBytes(byte[] keyBytes, int keyOffset) {
         StringBuilder sb = new StringBuilder();
         byte b;
-        while((b = keyBytes.get(keyOffset)) != 0) {
+        while((b = keyBytes[keyOffset]) != 0) {
             ++keyOffset;
             sb.append((char)b);
         }
@@ -437,30 +451,30 @@ public final class ICUResourceBundleReader {
     }
     private String getKey16String(int keyOffset) {
         if(keyOffset < localKeyLimit) {
-            return makeKeyStringFromBytes(bytes, keyOffset);
+            return makeKeyStringFromBytes(keyBytes, keyOffset);
         } else {
-            return makeKeyStringFromBytes(poolBundleReader.bytes, keyOffset - localKeyLimit);
+            return makeKeyStringFromBytes(poolBundleReader.keyBytes, keyOffset - localKeyLimit);
         }
     }
     private String getKey32String(int keyOffset) {
         if(keyOffset >= 0) {
-            return makeKeyStringFromBytes(bytes, keyOffset);
+            return makeKeyStringFromBytes(keyBytes, keyOffset);
         } else {
-            return makeKeyStringFromBytes(poolBundleReader.bytes, keyOffset & 0x7fffffff);
+            return makeKeyStringFromBytes(poolBundleReader.keyBytes, keyOffset & 0x7fffffff);
         }
     }
     private int compareKeys(CharSequence key, char keyOffset) {
         if(keyOffset < localKeyLimit) {
-            return ICUBinary.compareKeys(key, bytes, keyOffset);
+            return ICUBinary.compareKeys(key, keyBytes, keyOffset);
         } else {
-            return ICUBinary.compareKeys(key, poolBundleReader.bytes, keyOffset - localKeyLimit);
+            return ICUBinary.compareKeys(key, poolBundleReader.keyBytes, keyOffset - localKeyLimit);
         }
     }
     private int compareKeys32(CharSequence key, int keyOffset) {
         if(keyOffset >= 0) {
-            return ICUBinary.compareKeys(key, bytes, keyOffset);
+            return ICUBinary.compareKeys(key, keyBytes, keyOffset);
         } else {
-            return ICUBinary.compareKeys(key, poolBundleReader.bytes, keyOffset & 0x7fffffff);
+            return ICUBinary.compareKeys(key, poolBundleReader.keyBytes, keyOffset & 0x7fffffff);
         }
     }
 
@@ -506,10 +520,24 @@ public final class ICUResourceBundleReader {
                 offset+=3;
             }
             // Cast up to CharSequence to insulate against the CharBuffer.subSequence() return type change
-            // which makes code compiled for a newer JDK not run on an older one.
+            // which makes code compiled for a newer JDK (7 and up) not run on an older one (6 and below).
             s = ((CharSequence) b16BitUnits).subSequence(offset, offset + length).toString();
         }
         return (String)resourceCache.putIfAbsent(res, s, s.length() * 2);
+    }
+
+    private String makeStringFromBytes(int offset, int length) {
+        if (length <= 16) {
+            StringBuilder sb = new StringBuilder(length);
+            for (int i = 0; i < length; offset += 2, ++i) {
+                sb.append(bytes.getChar(offset));
+            }
+            return sb.toString();
+        } else {
+            CharSequence cs = bytes.asCharBuffer();
+            offset /= 2;
+            return cs.subSequence(offset, offset + length).toString();
+        }
     }
 
     String getString(int res) {
@@ -534,7 +562,7 @@ public final class ICUResourceBundleReader {
         }
         offset=getResourceByteOffset(offset);
         int length = getInt(offset);
-        String s = new String(getChars(offset+4, length));
+        String s = makeStringFromBytes(offset+4, length);
         return (String)resourceCache.putIfAbsent(res, s, s.length() * 2);
     }
 
@@ -551,7 +579,7 @@ public final class ICUResourceBundleReader {
                 }
                 offset=getResourceByteOffset(offset);
                 length=getInt(offset);
-                String s = new String(getChars(offset + 4, length));
+                String s = makeStringFromBytes(offset + 4, length);
                 return (String)resourceCache.putIfAbsent(res, s, length * 2);
             }
         } else {

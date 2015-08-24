@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006-2014, International Business Machines Corporation and
+ * Copyright (C) 2006-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  *
@@ -29,19 +29,19 @@ final class UConverterAlias {
 
     static final int NUM_HIDDEN_TAGS = 1;
 
-    static int[] gConverterList = null;
+    static char[] gConverterList = null;
 
-    static int[] gTagList = null;
+    static char[] gTagList = null;
 
-    static int[] gAliasList = null;
+    static char[] gAliasList = null;
 
-    static int[] gUntaggedConvArray = null;
+    static char[] gUntaggedConvArray = null;
 
-    static int[] gTaggedAliasArray = null;
+    static char[] gTaggedAliasArray = null;
 
-    static int[] gTaggedAliasLists = null;
+    static char[] gTaggedAliasLists = null;
 
-    static int[] gOptionTable = null;
+    static char[] gOptionTable = null;
 
     static byte[] gStringTable = null;
 
@@ -134,20 +134,18 @@ final class UConverterAlias {
             if (tableStart < minTocLength) {
                 throw new IOException("Invalid data format.");
             }
-            gConverterList = new int[tableArray[converterListIndex]];
-            gTagList= new int[tableArray[tagListIndex]];
-            gAliasList = new int[tableArray[aliasListIndex]];
-            gUntaggedConvArray = new int[tableArray[untaggedConvArrayIndex]];
-            gTaggedAliasArray = new int[tableArray[taggedAliasArrayIndex]];
-            gTaggedAliasLists = new int[tableArray[taggedAliasListsIndex]];
-            gOptionTable = new int[tableArray[optionTableIndex]];
+            gConverterList = ICUBinary.getChars(b, tableArray[converterListIndex], 0);
+            gTagList = ICUBinary.getChars(b, tableArray[tagListIndex], 0);
+            gAliasList = ICUBinary.getChars(b, tableArray[aliasListIndex], 0);
+            gUntaggedConvArray = ICUBinary.getChars(b, tableArray[untaggedConvArrayIndex], 0);
+            gTaggedAliasArray = ICUBinary.getChars(b, tableArray[taggedAliasArrayIndex], 0);
+            gTaggedAliasLists = ICUBinary.getChars(b, tableArray[taggedAliasListsIndex], 0);
+            gOptionTable = ICUBinary.getChars(b, tableArray[optionTableIndex], 0);
             gStringTable = new byte[tableArray[stringTableIndex]*2];
+            b.get(gStringTable);
             gNormalizedStringTable = new byte[tableArray[normalizedStringTableIndex]*2];
+            b.get(gNormalizedStringTable);
 
-            reader.read(gConverterList, gTagList,
-                    gAliasList, gUntaggedConvArray,
-                    gTaggedAliasArray, gTaggedAliasLists,
-                    gOptionTable, gStringTable, gNormalizedStringTable);
             data =  ByteBuffer.allocate(0); // dummy UDataMemory object in absence
                                         // of memory mapping
 
@@ -445,11 +443,9 @@ final class UConverterAlias {
                 if (listOffset != 0) {
                     //int listCount = gTaggedAliasListsArray[listOffset];
                     /* +1 to skip listCount */
-                    int[] currListArray = gTaggedAliasLists;
                     int currListArrayIndex = listOffset + 1;
 
-                    return GET_STRING(currListArray[currListArrayIndex + n]);
-                    
+                    return GET_STRING(gTaggedAliasLists[currListArrayIndex + n]);
                 }
                 /* else this shouldn't happen. internal program error */
             }
@@ -482,10 +478,9 @@ final class UConverterAlias {
             int listOffset = findTaggedAliasListsOffset(alias, standard);
 
             if (0 < listOffset && listOffset < gTaggedAliasLists.length) {
-                int[] currListArray = gTaggedAliasLists;
                 int currListArrayIndex = listOffset + 1;
-                if (currListArray[0] != 0) {
-                    return GET_STRING(currListArray[currListArrayIndex]);
+                if (gTaggedAliasLists[0] != 0) {
+                    return GET_STRING(gTaggedAliasLists[currListArrayIndex]);
                 }
             }
         }
@@ -686,13 +681,12 @@ final class UConverterAlias {
             int currAlias;
             int listCount = gTaggedAliasLists[listOffset];
             /* +1 to skip listCount */
-            int[] currList = gTaggedAliasLists;
             int currListArrayIndex = listOffset + 1;
             for (currAlias = 0; currAlias < listCount; currAlias++) {
-                if (currList[currAlias + currListArrayIndex] != 0
+                if (gTaggedAliasLists[currAlias + currListArrayIndex] != 0
                         && compareNames(
                                 alias,
-                                GET_STRING(currList[currAlias + currListArrayIndex])) == 0) {
+                                GET_STRING(gTaggedAliasLists[currAlias + currListArrayIndex])) == 0) {
                     return true;
                 }
             }

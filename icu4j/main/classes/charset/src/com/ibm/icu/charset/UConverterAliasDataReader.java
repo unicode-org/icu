@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006-2014, International Business Machines Corporation and
+ * Copyright (C) 2006-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -144,42 +144,8 @@ final class UConverterAliasDataReader implements ICUBinary.Authenticate {
 
     protected int[] readToc(int n)throws IOException
     {
-        int[] toc = new int[n];
         //Read the toc
-        for (int i = 0; i < n ; ++i) {
-            toc[i] = byteBuffer.getInt() & UNSIGNED_INT_MASK;
-        }
-        return toc;
-    } 
-
-    protected void read(int[] convList, int[] tagList, int[] aliasList, int[]untaggedConvArray, int[] taggedAliasArray, int[] taggedAliasLists, int[] optionTable, byte[] stringTable, byte[] normalizedStringTable) throws IOException{
-        int i;
-        //int listnum = 1;
-        //long listsize;
-
-        for(i = 0; i < convList.length; ++i)
-            convList[i] = byteBuffer.getChar();
-
-        for(i = 0; i < tagList.length; ++i)
-            tagList[i] = byteBuffer.getChar();
-
-        for(i = 0; i < aliasList.length; ++i)
-            aliasList[i] = byteBuffer.getChar();
-
-        for(i = 0; i < untaggedConvArray.length; ++i)
-            untaggedConvArray[i] = byteBuffer.getChar();
-
-        for(i = 0; i < taggedAliasArray.length; ++i)
-            taggedAliasArray[i] = byteBuffer.getChar();
-
-        for(i = 0; i < taggedAliasLists.length; ++i)
-            taggedAliasLists[i] = byteBuffer.getChar();
-
-        for(i = 0; i < optionTable.length; ++i)
-            optionTable[i] = byteBuffer.getChar();
-
-        byteBuffer.get(stringTable);
-        byteBuffer.get(normalizedStringTable);
+        return ICUBinary.getInts(byteBuffer, n, 0);
     }
 
     public boolean isDataVersionAcceptable(byte version[])
@@ -211,7 +177,4 @@ final class UConverterAliasDataReader implements ICUBinary.Authenticate {
         // DATA_FORMAT_ID_ values taken from icu4c isAcceptable (ucnv_io.c)
     private static final int DATA_FORMAT_ID = 0x4376416c; // dataFormat="CvAl"
     private static final byte DATA_FORMAT_VERSION[] = {3, 0, 1};
-
-    //private static final int UNSIGNED_SHORT_MASK = 0xffff;
-    private static final int UNSIGNED_INT_MASK = 0xffffffff;
 }

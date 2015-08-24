@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2003-2014, International Business Machines Corporation and
+ * Copyright (C) 2003-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ******************************************************************************
  *
@@ -40,11 +40,9 @@ public final class StringPrepDataReader implements ICUBinary.Authenticate {
         if(debug) System.out.println("Bytes left in byteBuffer " + byteBuffer.remaining());
     }
 
-    public void read(char[] mappingTable) throws IOException{
+    public char[] read(int length) throws IOException{
         //Read the extra data
-        for(int i=0;i<mappingTable.length;i++){
-            mappingTable[i]=byteBuffer.getChar();
-        }
+        return ICUBinary.getChars(byteBuffer, length, 0);
     }
 
     public byte[] getDataFormatVersion(){

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2004-2014, International Business Machines
+ *   Copyright (C) 2004-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -67,25 +67,18 @@ public final class UBiDiProps {
         // read mirrors[]
         count=indexes[IX_MIRROR_LENGTH];
         if(count>0) {
-            mirrors=new int[count];
-            for(i=0; i<count; ++i) {
-                mirrors[i]=bytes.getInt();
-            }
+            mirrors=ICUBinary.getInts(bytes, count, 0);
         }
 
         // read jgArray[]
         count=indexes[IX_JG_LIMIT]-indexes[IX_JG_START];
         jgArray=new byte[count];
-        for(i=0; i<count; ++i) {
-            jgArray[i]=bytes.get();
-        }
+        bytes.get(jgArray);
 
         // read jgArray2[]
         count=indexes[IX_JG_LIMIT2]-indexes[IX_JG_START2];
         jgArray2=new byte[count];
-        for(i=0; i<count; ++i) {
-            jgArray2[i]=bytes.get();
-        }
+        bytes.get(jgArray2);
     }
 
     // implement ICUBinary.Authenticate

@@ -282,9 +282,8 @@ public final class StringPrep {
         sprepTrie = new CharTrie(bytes, null);
 
         //indexes[INDEX_MAPPING_DATA_SIZE] store the size of mappingData in bytes
-        mappingData = new char[indexes[INDEX_MAPPING_DATA_SIZE]/2];
         // load the rest of the data data and initialize the data members
-        reader.read(mappingData);
+        mappingData = reader.read(indexes[INDEX_MAPPING_DATA_SIZE]/2);
 
         // get the data format version
         /*formatVersion = */reader.getDataFormatVersion();

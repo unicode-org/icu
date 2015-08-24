@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.charset;
@@ -12,6 +12,7 @@ import java.nio.IntBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
+import java.nio.charset.UnsupportedCharsetException;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -32,6 +33,9 @@ class CharsetHZ extends CharsetICU {
     public CharsetHZ(String icuCanonicalName, String canonicalName, String[] aliases) {
         super(icuCanonicalName, canonicalName, aliases);
         gbCharset = (CharsetMBCS) new CharsetProviderICU().charsetForName("GBK");
+        if (gbCharset == null) {
+            throw new UnsupportedCharsetException("unable to open ICU GBK Charset, required for HZ");
+        }
 
         maxBytesPerChar = 4;
         minBytesPerChar = 1;

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2014, International Business Machines Corporation and
+ * Copyright (C) 2012-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -64,20 +64,12 @@ final class DictionaryData {
         if (trieType == TRIE_TYPE_BYTES) {
             int transform = indexes[IX_TRANSFORM];
             byte[] data = new byte[totalSize];
-            int i;
-            for (i = 0; i < data.length; i++) {
-                data[i] = bytes.get();
-            }
-            Assert.assrt(i == totalSize);
+            bytes.get(data);
             m = new BytesDictionaryMatcher(data, transform);
         } else if (trieType == TRIE_TYPE_UCHARS) {
             Assert.assrt(totalSize % 2 == 0);
-            int num = totalSize / 2;
-            char[] data = new char[totalSize / 2];
-            for (int i = 0; i < num; i++) {
-                data[i] = bytes.getChar();
-            }
-            m = new CharsDictionaryMatcher(new String(data));
+            String data = ICUBinary.getString(bytes, totalSize / 2, totalSize & 1);
+            m = new CharsDictionaryMatcher(data);
         } else {
             m = null;
         }
