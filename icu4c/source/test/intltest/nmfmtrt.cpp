@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation
+ * Copyright (c) 1997-2015, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -26,7 +26,7 @@
 UBool NumberFormatRoundTripTest::verbose                  = FALSE;
 UBool NumberFormatRoundTripTest::STRING_COMPARE           = TRUE;
 UBool NumberFormatRoundTripTest::EXACT_NUMERIC_COMPARE    = FALSE;
-UBool NumberFormatRoundTripTest::DEBUG                    = FALSE;
+UBool NumberFormatRoundTripTest::DEBUG_VAR                = FALSE;
 double NumberFormatRoundTripTest::MAX_ERROR               = 1e-14;
 double NumberFormatRoundTripTest::max_numeric_error       = 0.0;
 double NumberFormatRoundTripTest::min_numeric_error       = 1.0;
@@ -243,12 +243,12 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
 
     Formattable n;
     UBool show = verbose;
-    if(DEBUG)
+    if(DEBUG_VAR)
         logln(/*value.getString(temp) +*/ " F> " + escape(s));
 
     fmt->parse(s, n, status);
     failure(status, "fmt->parse");
-    if(DEBUG) 
+    if(DEBUG_VAR) 
         logln(escape(s) + " P> " /*+ n.getString(temp)*/);
 
     if(isDouble(n))
@@ -256,7 +256,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
     else
         s2 = fmt->format(n.getLong(), s2);
     
-    if(DEBUG) 
+    if(DEBUG_VAR) 
         logln(/*n.getString(temp) +*/ " F> " + escape(s2));
 
     if(STRING_COMPARE) {

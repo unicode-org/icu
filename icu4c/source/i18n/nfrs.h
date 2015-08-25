@@ -28,10 +28,14 @@
 
 U_NAMESPACE_BEGIN
 
+class NFSubstitution;
+
 class NFRuleSet : public UMemory {
 public:
-    NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& status);
-    void parseRules(UnicodeString& rules, const RuleBasedNumberFormat* owner, UErrorCode& status);
+    NFRuleSet(RuleBasedNumberFormat *owner, UnicodeString* descriptions, int32_t index, UErrorCode& status);
+    void parseRules(UnicodeString& rules, UErrorCode& status);
+    void setNonNumericalRule(NFRule *rule);
+    void setBestFractionRule(int32_t originalIndex, NFRule *newRule, UBool rememberRule);
     void makeIntoFractionRuleSet() { fIsFractionRuleSet = TRUE; }
 
     ~NFRuleSet();
@@ -57,16 +61,20 @@ public:
 
     void setDecimalFormatSymbols(const DecimalFormatSymbols &newSymbols, UErrorCode& status);
 
+    const RuleBasedNumberFormat *getOwner() const { return owner; }
 private:
-    NFRule * findNormalRule(int64_t number) const;
-    NFRule * findDoubleRule(double number) const;
-    NFRule * findFractionRuleSetRule(double number) const;
+    const NFRule * findNormalRule(int64_t number) const;
+    const NFRule * findDoubleRule(double number) const;
+    const NFRule * findFractionRuleSetRule(double number) const;
+    
+    friend NFSubstitution;
 
 private:
     UnicodeString name;
     NFRuleList rules;
-    NFRule *negativeNumberRule;
-    NFRule *fractionRules[3];
+    NFRule *nonNumericalRules[6];
+    RuleBasedNumberFormat *owner;
+    NFRuleList fractionRules;
     UBool fIsFractionRuleSet;
     UBool fIsPublic;
     UBool fIsParseable;
