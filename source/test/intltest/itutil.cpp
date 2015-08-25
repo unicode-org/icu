@@ -37,6 +37,8 @@ static IntlTest *createEnumSetTest();
 extern IntlTest *createSimplePatternFormatterTest();
 extern IntlTest *createUnifiedCacheTest();
 extern IntlTest *createQuantityFormatterTest();
+extern IntlTest *createPluralMapTest(); 
+
 
 #define CASE(id, test) case id:                               \
                           name = #test;                       \
@@ -122,6 +124,13 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
                 LocalPointer<IntlTest> test(createQuantityFormatterTest());
                 callTest(*test, par);
             }
+        case 23: 
+            name = "PluralMapTest"; 
+            if (exec) { 
+                logln("TestSuite PluralMapTest---"); logln(); 
+                LocalPointer<IntlTest> test(createPluralMapTest()); 
+                callTest(*test, par); 
+            } 
             break;
         default: name = ""; break; //needed to end loop
     }

@@ -103,6 +103,9 @@
     <ClCompile Include="ucol_swp.cpp">
       <Filter>collation</Filter>
     </ClCompile>
+    <ClCompile Include="pluralmap.cpp">
+      <Filter>collections</Filter>
+    </ClCompile>
     <ClCompile Include="propsvec.c">
       <Filter>collections</Filter>
     </ClCompile>
@@ -625,6 +628,9 @@
     <ClInclude Include="hash.h">
       <Filter>collections</Filter>
     </ClInclude>
+    <ClInclude Include="pluralmap.h">
+      <Filter>collections</Filter>
+    </ClInclude>
     <ClInclude Include="propsvec.h">
       <Filter>collections</Filter>
     </ClInclude>
@@ -827,6 +833,9 @@
       <Filter>strings</Filter>
     </ClInclude>
     <ClInclude Include="uinvchar.h">
+      <Filter>strings</Filter>
+    </ClInclude>
+    <ClInclude Include="unistrappender.h">
       <Filter>strings</Filter>
     </ClInclude>
     <ClInclude Include="ustr_cnv.h">
