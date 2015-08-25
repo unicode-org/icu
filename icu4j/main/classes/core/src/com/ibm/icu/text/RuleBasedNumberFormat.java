@@ -21,6 +21,7 @@ import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
@@ -594,6 +595,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
     private ULocale locale = null;
 
     /**
+     * The formatter's rounding mode.
+     * @serial
+     */
+    private int roundingMode = BigDecimal.ROUND_UNNECESSARY;
+
+    /**
      * Collator to be used in lenient parsing.  This variable is lazy-evaluated:
      * the collator is actually created the first time the client does a parse
      * with lenient-parse mode turned on.
@@ -968,6 +975,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // have an implementation-independent streaming format
         out.writeUTF(this.toString());
         out.writeObject(this.locale);
+        out.writeInt(this.roundingMode);
     }
 
     /**
@@ -986,6 +994,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
         } catch (Exception e) {
             loc = ULocale.getDefault(Category.FORMAT);
         }
+        try {
+            roundingMode = in.readInt();
+        } catch (Exception ignored) {
+        }
 
         // build a brand-new RuleBasedNumberFormat from the description,
         // then steal its substructure.  This object's substructure and
@@ -999,6 +1011,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
         decimalFormatSymbols = temp.decimalFormatSymbols;
         decimalFormat = temp.decimalFormat;
         locale = temp.locale;
+        defaultInfinityRule = temp.defaultInfinityRule;
+        defaultNaNRule = temp.defaultNaNRule;
     }
 
 
@@ -1491,6 +1505,41 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
     }
 
+    /**
+     * Returns the rounding mode.
+     *
+     * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
+     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * @see #setRoundingMode
+     * @see java.math.BigDecimal
+     * @draft ICU 56
+     */
+    @Override
+    public int getRoundingMode() {
+        return roundingMode;
+    }
+
+    /**
+     * Sets the rounding mode. This has no effect unless the rounding increment is greater
+     * than zero.
+     *
+     * @param roundingMode A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
+     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * @exception IllegalArgumentException if <code>roundingMode</code> is unrecognized.
+     * @see #getRoundingMode
+     * @see java.math.BigDecimal
+     * @draft ICU 56
+     */
+    @Override
+    public void setRoundingMode(int roundingMode) {
+        if (roundingMode < BigDecimal.ROUND_UP || roundingMode > BigDecimal.ROUND_UNNECESSARY) {
+            throw new IllegalArgumentException("Invalid rounding mode: " + roundingMode);
+        }
+
+        this.roundingMode = roundingMode;
+    }
+
+
     //-----------------------------------------------------------------------
     // package-internal API
     //-----------------------------------------------------------------------
@@ -1879,6 +1928,9 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // position of 0 and the number being formatted) to the rule set
         // for formatting
         StringBuffer result = new StringBuffer();
+        if (getRoundingMode() != BigDecimal.ROUND_UNNECESSARY) {
+            number = new BigDecimal(number).setScale(getMaximumFractionDigits(), roundingMode).doubleValue();
+        }
         ruleSet.format(number, result, 0, 0);
         postProcess(result, ruleSet);
         return result.toString();
