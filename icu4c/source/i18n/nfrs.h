@@ -28,8 +28,6 @@
 
 U_NAMESPACE_BEGIN
 
-class NFSubstitution;
-
 class NFRuleSet : public UMemory {
 public:
     NFRuleSet(RuleBasedNumberFormat *owner, UnicodeString* descriptions, int32_t index, UErrorCode& status);
@@ -67,7 +65,7 @@ private:
     const NFRule * findDoubleRule(double number) const;
     const NFRule * findFractionRuleSetRule(double number) const;
     
-    friend NFSubstitution;
+    friend class NFSubstitution;
 
 private:
     UnicodeString name;
