@@ -34,6 +34,7 @@
 #include "fmtableimp.h"
 #include "numberformattesttuple.h"
 #include "datadrivennumberformattestsuite.h"
+#include "unicode/msgfmt.h"
 
 class NumberFormatTestDataDriven : public DataDrivenNumberFormatTestSuite {
 protected:
@@ -90,6 +91,19 @@ static UnicodeString &format(
     }
     FieldPosition fpos(FieldPosition::DONT_CARE);
     return fmt.format(digitList, appendTo, fpos, status);
+}
+
+template<class T>
+static UnicodeString &format(
+        const DecimalFormat &fmt,
+        T value,
+        UnicodeString &appendTo,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    FieldPosition fpos(FieldPosition::DONT_CARE);
+    return fmt.format(value, appendTo, fpos, status);
 }
 
 static void adjustDecimalFormat(
@@ -270,16 +284,48 @@ UBool NumberFormatTestDataDriven::isFormatPass(
     }
     DigitList digitList;
     strToDigitList(tuple.format, digitList, status);
-    UnicodeString appendTo;
-    format(*fmtPtr, digitList, appendTo, status);
-    if (U_FAILURE(status)) {
-        appendErrorMessage.append("Error formatting.");
-        return FALSE;
+    {
+        UnicodeString appendTo;
+        format(*fmtPtr, digitList, appendTo, status);
+        if (U_FAILURE(status)) {
+            appendErrorMessage.append("Error formatting.");
+            return FALSE;
+        }
+        if (appendTo != tuple.output) {
+            appendErrorMessage.append(
+                    UnicodeString("Expected: ") + tuple.output + ", got: " + appendTo);
+            return FALSE;
+        }
     }
-    if (appendTo != tuple.output) {
-        appendErrorMessage.append(
-                UnicodeString("Expected: ") + tuple.output + ", got: " + appendTo);
-        return FALSE;
+    double doubleVal = digitList.getDouble();
+    {
+        UnicodeString appendTo;
+        format(*fmtPtr, doubleVal, appendTo, status);
+        if (U_FAILURE(status)) {
+            appendErrorMessage.append("Error formatting.");
+            return FALSE;
+        }
+        if (appendTo != tuple.output) {
+            appendErrorMessage.append(
+                    UnicodeString("double Expected: ") + tuple.output + ", got: " + appendTo);
+            return FALSE;
+        }
+    }
+    if (!uprv_isNaN(doubleVal) && !uprv_isInfinite(doubleVal) && doubleVal == uprv_floor(doubleVal)) {
+        int64_t intVal = digitList.getInt64();
+        {
+            UnicodeString appendTo;
+            format(*fmtPtr, intVal, appendTo, status);
+            if (U_FAILURE(status)) {
+                appendErrorMessage.append("Error formatting.");
+                return FALSE;
+            }
+            if (appendTo != tuple.output) {
+                appendErrorMessage.append(
+                        UnicodeString("int64 Expected: ") + tuple.output + ", got: " + appendTo);
+                return FALSE;
+            }
+        }
     }
     return TRUE;
 }
@@ -520,6 +566,12 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestDataDriven);
   TESTCASE_AUTO(TestDoubleLimit11439);
   TESTCASE_AUTO(TestFastPathConsistent11524);
+  TESTCASE_AUTO(TestGetAffixes);
+  TESTCASE_AUTO(TestToPatternScientific11648);
+  TESTCASE_AUTO(TestBenchmark);
+  TESTCASE_AUTO(TestCtorApplyPatternDifference);
+  TESTCASE_AUTO(TestFractionalDigitsForCurrency);
+  TESTCASE_AUTO(TestFormatCurrencyPlural);
   TESTCASE_AUTO_END;
 }
 
@@ -8237,6 +8289,166 @@ void NumberFormatTest::TestFastPathConsistent11524() {
     assertEquals("", "0", fmt->format(12345, appendTo));
     delete fmt;
 }
+
+void NumberFormatTest::TestGetAffixes() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols sym("en_US", status);
+    UnicodeString pattern("\\u00a4\\u00a4\\u00a4 0.00 %\\u00a4\\u00a4");
+    pattern = pattern.unescape();
+    DecimalFormat fmt(pattern, sym, status);
+    assertSuccess("", status);
+    UnicodeString affixStr;
+    assertEquals("", "US dollars ", fmt.getPositivePrefix(affixStr));
+    assertEquals("", " %USD", fmt.getPositiveSuffix(affixStr));
+    assertEquals("", "-US dollars ", fmt.getNegativePrefix(affixStr));
+    assertEquals("", " %USD", fmt.getNegativeSuffix(affixStr));
+
+    // Test equality with affixes. set affix methods can't capture special
+    // characters which is why equality should fail.
+    {
+        DecimalFormat fmtCopy(fmt);
+        assertTrue("", fmt == fmtCopy);
+        UnicodeString someAffix;
+        fmtCopy.setPositivePrefix(fmtCopy.getPositivePrefix(someAffix));
+        assertTrue("", fmt != fmtCopy);
+    }
+    {
+        DecimalFormat fmtCopy(fmt);
+        assertTrue("", fmt == fmtCopy);
+        UnicodeString someAffix;
+        fmtCopy.setPositiveSuffix(fmtCopy.getPositiveSuffix(someAffix));
+        assertTrue("", fmt != fmtCopy);
+    }
+    {
+        DecimalFormat fmtCopy(fmt);
+        assertTrue("", fmt == fmtCopy);
+        UnicodeString someAffix;
+        fmtCopy.setNegativePrefix(fmtCopy.getNegativePrefix(someAffix));
+        assertTrue("", fmt != fmtCopy);
+    }
+    {
+        DecimalFormat fmtCopy(fmt);
+        assertTrue("", fmt == fmtCopy);
+        UnicodeString someAffix;
+        fmtCopy.setNegativeSuffix(fmtCopy.getNegativeSuffix(someAffix));
+        assertTrue("", fmt != fmtCopy);
+    }
+    fmt.setPositivePrefix("Don't");
+    fmt.setPositiveSuffix("do");
+    UnicodeString someAffix("be''eet\\u00a4\\u00a4\\u00a4 it.");
+    someAffix = someAffix.unescape();
+    fmt.setNegativePrefix(someAffix);
+    fmt.setNegativeSuffix("%");
+    assertEquals("", "Don't", fmt.getPositivePrefix(affixStr));
+    assertEquals("", "do", fmt.getPositiveSuffix(affixStr));
+    assertEquals("", someAffix, fmt.getNegativePrefix(affixStr));
+    assertEquals("", "%", fmt.getNegativeSuffix(affixStr));
+}
+
+void NumberFormatTest::TestToPatternScientific11648() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale en("en");
+    DecimalFormatSymbols sym(en, status);
+    DecimalFormat fmt("0.00", sym, status);
+    fmt.setScientificNotation(TRUE);
+    UnicodeString pattern;
+    assertEquals("", "0.00E0", fmt.toPattern(pattern));
+    DecimalFormat fmt2(pattern, sym, status);
+    assertSuccess("", status);
+}
+
+void NumberFormatTest::TestBenchmark() {
+/*
+    UErrorCode status = U_ZERO_ERROR;
+    Locale en("en");
+    DecimalFormatSymbols sym(en, status);
+    DecimalFormat fmt("0.0000000", new DecimalFormatSymbols(sym), status);
+//    DecimalFormat fmt("0.00000E0", new DecimalFormatSymbols(sym), status);
+//    DecimalFormat fmt("0", new DecimalFormatSymbols(sym), status);
+    FieldPosition fpos(0);
+    clock_t start = clock();
+    for (int32_t i = 0; i < 1000000; ++i) {
+        UnicodeString append;
+        fmt.format(3.0, append, fpos, status);
+//        fmt.format(4.6692016, append, fpos, status);
+//        fmt.format(1234567.8901, append, fpos, status);
+//        fmt.format(2.99792458E8, append, fpos, status);
+//        fmt.format(31, append);
+    }
+    errln("Took %f", (double) (clock() - start) / CLOCKS_PER_SEC);
+    assertSuccess("", status);
+
+    UErrorCode status = U_ZERO_ERROR;
+    MessageFormat fmt("{0, plural, one {I have # friend.} other {I have # friends.}}", status);
+    FieldPosition fpos(0);
+    Formattable one(1.0);
+    Formattable three(3.0);
+    clock_t start = clock();
+    for (int32_t i = 0; i < 500000; ++i) {
+        UnicodeString append;
+        fmt.format(&one, 1, append, fpos, status);
+        UnicodeString append2;
+        fmt.format(&three, 1, append2, fpos, status);
+    }
+    errln("Took %f", (double) (clock() - start) / CLOCKS_PER_SEC);
+    assertSuccess("", status);
+
+    UErrorCode status = U_ZERO_ERROR;
+    Locale en("en");
+    Measure measureC(23, MeasureUnit::createCelsius(status), status);
+    MeasureFormat fmt(en, UMEASFMT_WIDTH_WIDE, status);
+    FieldPosition fpos(0);
+    clock_t start = clock();
+    for (int32_t i = 0; i < 1000000; ++i) {
+        UnicodeString appendTo;
+        fmt.formatMeasures(
+                &measureC, 1, appendTo, fpos, status);
+    }
+    errln("Took %f", (double) (clock() - start) / CLOCKS_PER_SEC);
+    assertSuccess("", status);
+*/
+}
+
+void NumberFormatTest::TestFractionalDigitsForCurrency() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<NumberFormat> fmt(NumberFormat::createCurrencyInstance("en", status));
+    UChar JPY[] = {0x4A, 0x50, 0x59, 0x0};
+    fmt->setCurrency(JPY, status);
+    if (!assertSuccess("", status)) {
+        return;
+    }
+    assertEquals("", 0, fmt->getMaximumFractionDigits());
+}
+
+
+void NumberFormatTest::TestFormatCurrencyPlural() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale locale = Locale::createCanonical("en_US");
+    NumberFormat *fmt = NumberFormat::createInstance(locale, UNUM_CURRENCY_PLURAL, status);
+   UnicodeString formattedNum;
+   fmt->format(11234.567, formattedNum, NULL, status);
+   assertEquals("", "11,234.57 US dollars", formattedNum);
+   delete fmt;
+}
+
+void NumberFormatTest::TestCtorApplyPatternDifference() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols sym("en_US", status);
+    UnicodeString pattern("\\u00a40");
+    DecimalFormat fmt(pattern.unescape(), sym, status);
+    UnicodeString result;
+    assertEquals(
+            "ctor favors precision of currency",
+            "$5.00",
+            fmt.format(5, result));
+    result.remove();
+    fmt.applyPattern(pattern.unescape(), status);
+    assertEquals(
+            "applyPattern favors precision of pattern",
+            "$5",
+            fmt.format(5, result));
+}
+
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

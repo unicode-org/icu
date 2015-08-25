@@ -244,6 +244,7 @@
     <ClCompile Include="brkiter.cpp">
     </ClCompile>
     <ClCompile Include="dictbe.cpp" />
+    <ClCompile Include="pluralmap.cpp" />
     <ClCompile Include="rbbi.cpp">
     </ClCompile>
     <ClCompile Include="rbbidata.cpp">
@@ -487,6 +488,7 @@
     </CustomBuild>
     <ClInclude Include="localsvc.h" />
     <ClInclude Include="msvcres.h" />
+    <ClInclude Include="pluralmap.h" />
     <ClInclude Include="propname_data.h" />
     <ClInclude Include="ubidi_props.h" />
     <ClInclude Include="ubidiimp.h" />
@@ -576,6 +578,7 @@
     <ClInclude Include="uchar_props_data.h" />
     <ClInclude Include="ucol_data.h" />
     <ClInclude Include="ucol_swp.h" />
+    <ClInclude Include="unistrappender.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="propsvec.h" />
     <CustomBuild Include="unicode\strenum.h">
