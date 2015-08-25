@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DisplayContext;
@@ -1404,7 +1405,7 @@ public class RbnfTest extends TestFmwk {
         String[] ruleNames = rbnf.getRuleSetNames();
         try{
             // Test with "null" rules
-            rbnf.format(0.0,null);
+            rbnf.format(0.0, null);
             errln("This was suppose to return an exception for a null format");
         } catch(Exception e){}
         for(int i=0; i<ruleNames.length; i++){
@@ -1555,4 +1556,38 @@ public class RbnfTest extends TestFmwk {
         doTest(enFormatter, enTestCommaData, true);
     }
 
+    public void TestRounding() {
+        RuleBasedNumberFormat enFormatter = new RuleBasedNumberFormat(ULocale.ENGLISH, RuleBasedNumberFormat.SPELLOUT);
+        String[][] enTestPointData = {
+                {"0", "zero"},
+                {"0.4", "zero point four"},
+                {"0.49", "zero point four nine"},
+                {"0.5", "zero point five"},
+                {"0.51", "zero point five one"},
+                {"0.99", "zero point nine nine"},
+                {"1", "one"},
+                {"1.01", "one point zero one"},
+                {"1.49", "one point four nine"},
+                {"1.5", "one point five"},
+                {"1.51", "one point five one"},
+        };
+        doTest(enFormatter, enTestPointData, false);
+
+        enFormatter.setMaximumFractionDigits(0);
+        enFormatter.setRoundingMode(BigDecimal.ROUND_HALF_EVEN);
+        String[][] enTestCommaData = {
+                {"0", "zero"},
+                {"0.4", "zero"},
+                {"0.49", "zero"},
+                {"0.5", "zero"},
+                {"0.51", "one"},
+                {"0.99", "one"},
+                {"1", "one"},
+                {"1.01", "one"},
+                {"1.49", "one"},
+                {"1.5", "two"},
+                {"1.51", "two"},
+        };
+        doTest(enFormatter, enTestCommaData, false);
+    }
 }
