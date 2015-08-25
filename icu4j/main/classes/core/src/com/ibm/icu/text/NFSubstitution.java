@@ -175,7 +175,7 @@ abstract class NFSubstitution {
         // if the description was just two paired token characters
         // (i.e., "<<" or ">>"), it uses the rule set it belongs to to
         // format its result
-        if (description.isEmpty()) {
+        if (description.length() == 0) {
             this.ruleSet = ruleSet;
             this.numberFormat = null;
         }
