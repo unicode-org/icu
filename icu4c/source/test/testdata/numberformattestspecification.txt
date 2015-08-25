@@ -10,6 +10,14 @@
 // field names, please see
 // https://docs.google.com/document/d/1T2P0p953_Lh1pRwo-5CuPVrHlIBa_wcXElG-Hhg_WHM/edit?usp=sharing
 
+test plus sign
+set locale ar
+set pattern +0;-#
+begin
+format	output
+6	\u200F+\u0666
+-6	\u200F-\u0666
+
 test basic patterns
 set locale fr_FR
 set format 1234.567
@@ -38,9 +46,18 @@ format	output
 6	06.000
 6.000005	06.000
 6.000006	06.00001
+1002003004005	4005.000
+-1002003004005	-4005.000
 12	12.000
 12345	2345.000
 72.1234	72.1234
+
+test int64
+set locale en
+begin
+format	output
+1002003004005	1002003004005
+-1002003004005	-1002003004005
 
 test rounding
 set locale fr

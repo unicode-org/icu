@@ -316,8 +316,10 @@
     <ClCompile Include="nmfmapts.cpp" />
     <ClCompile Include="nmfmtrt.cpp" />
     <ClCompile Include="numberformattesttuple.cpp" />
+    <ClCompile Include="numberformat2test.cpp" />
     <ClCompile Include="numfmtst.cpp" />
     <ClCompile Include="numrgts.cpp" />
+    <ClCompile Include="pluralmaptest.cpp" />
     <ClCompile Include="plurfmts.cpp" />
     <ClCompile Include="plurults.cpp" />
     <ClCompile Include="pptest.cpp" />
