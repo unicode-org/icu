@@ -135,8 +135,8 @@ static const UChar   kFULLSTOP = 0x002E; // '.'
  */
 class SimpleFilteredSentenceBreakData : public UMemory {
 public:
-  LocalPointer<UCharsTrie>    fBackwardsTrie; //  i.e. ".srM" for Mrs.
   LocalPointer<UCharsTrie>    fForwardsPartialTrie; //  Has ".a" for "a.M."
+  LocalPointer<UCharsTrie>    fBackwardsTrie; //  i.e. ".srM" for Mrs.
   int32_t                     refcount;
   SimpleFilteredSentenceBreakData(UCharsTrie *forwards, UCharsTrie *backwards ) 
       : fForwardsPartialTrie(forwards), fBackwardsTrie(backwards), refcount(1) { }
@@ -229,15 +229,15 @@ private:
 };
 
 SimpleFilteredSentenceBreakIterator::SimpleFilteredSentenceBreakIterator(const SimpleFilteredSentenceBreakIterator& other)
-  : BreakIterator(other), fDelegate(other.fDelegate->clone()), fData(other.fData->incr())
+  : BreakIterator(other), fData(other.fData->incr()), fDelegate(other.fDelegate->clone())
 {
 }
 
 
 SimpleFilteredSentenceBreakIterator::SimpleFilteredSentenceBreakIterator(BreakIterator *adopt, UCharsTrie *forwards, UCharsTrie *backwards, UErrorCode &status) :
   BreakIterator(adopt->getLocale(ULOC_VALID_LOCALE,status),adopt->getLocale(ULOC_ACTUAL_LOCALE,status)),
-  fDelegate(adopt),
-  fData(new SimpleFilteredSentenceBreakData(forwards, backwards))
+  fData(new SimpleFilteredSentenceBreakData(forwards, backwards)),
+  fDelegate(adopt)
 {
   // all set..
 }
