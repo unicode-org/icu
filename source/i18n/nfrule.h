@@ -38,17 +38,19 @@ public:
         kImproperFractionRule = -2,
         kProperFractionRule = -3,
         kMasterRule = -4,
-        kOtherRule = -5
+        kInfinityRule = -5,
+        kNaNRule = -6,
+        kOtherRule = -7
     };
 
     static void makeRules(UnicodeString& definition,
-                          const NFRuleSet* ruleSet, 
+                          NFRuleSet* ruleSet, 
                           const NFRule* predecessor, 
                           const RuleBasedNumberFormat* rbnf, 
                           NFRuleList& ruleList,
                           UErrorCode& status);
 
-    NFRule(const RuleBasedNumberFormat* rbnf);
+    NFRule(const RuleBasedNumberFormat* rbnf, const UnicodeString &ruleText, UErrorCode &status);
     ~NFRule();
 
     UBool operator==(const NFRule& rhs) const;
@@ -59,6 +61,8 @@ public:
 
     int64_t getBaseValue() const { return baseValue; }
     void setBaseValue(int64_t value, UErrorCode& status);
+
+    UChar getDecimalPoint() const { return decimalPoint; }
 
     double getDivisor() const { return uprv_pow(radix, exponent); }
 
@@ -86,7 +90,7 @@ private:
     NFSubstitution* extractSubstitution(const NFRuleSet* ruleSet, const NFRule* predecessor, UErrorCode& status);
     
     int16_t expectedExponent() const;
-    int32_t indexOfAny(const UChar* const strings[]) const;
+    int32_t indexOfAnyRulePrefix() const;
     double matchToDelimiter(const UnicodeString& text, int32_t startPos, double baseValue,
                             const UnicodeString& delimiter, ParsePosition& pp, const NFSubstitution* sub, 
                             double upperBound) const;
@@ -101,6 +105,7 @@ private:
     int64_t baseValue;
     int32_t radix;
     int16_t exponent;
+    UChar decimalPoint;
     UnicodeString ruleText;
     NFSubstitution* sub1;
     NFSubstitution* sub2;

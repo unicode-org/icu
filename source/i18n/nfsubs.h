@@ -37,7 +37,6 @@ class NFSubstitution : public UObject {
 protected:
     NFSubstitution(int32_t pos,
         const NFRuleSet* ruleSet,
-        const RuleBasedNumberFormat* rbnf,
         const UnicodeString& description,
         UErrorCode& status);
     
@@ -233,14 +232,6 @@ public:
      * @return This substitution's token character.
      */
     virtual UChar tokenChar() const = 0;
-    
-    /**
-     * Returns true if this is a null substitution.  (We didn't do this
-     * with instanceof partially because it causes source files to
-     * proliferate and partially because we have to port this to C++.)
-     * @return true if this object is an instance of NullSubstitution
-     */
-    virtual UBool isNullSubstitution() const;
     
     /**
      * Returns true if this is a modulus substitution.  (We didn't do this
