@@ -12,6 +12,7 @@
 #include "digitlst.h"
 #include "fmtableimp.h"
 #include "precision.h"
+#include "putilimp.h"
 #include "visibledigits.h"
 
 U_NAMESPACE_BEGIN
@@ -239,7 +240,7 @@ FixedPrecision::initVisibleDigits(
         digits.fAbsDoubleValueSet = U_SUCCESS(status) && !digits.isOverMaxDigits();
         // Adjust for negative 0 becuase when we cast to an int64,
         // negative 0 becomes positive 0.
-        if (scaled == 0.0 && signbit(scaled)) {
+        if (scaled == 0.0 && uprv_isNegative(scaled)) {
             digits.setNegative();
         }
         return digits;
