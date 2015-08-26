@@ -354,11 +354,17 @@ void IntlTestRBNF::TestMultiplePluralRules() {
     UnicodeString rules("%spellout-cardinal-feminine-genitive:"
                 "0: zero;"
                 "1: ono;"
+                "2: two;"
                 "1000: << $(cardinal,one{thousand}few{thousanF}other{thousanO})$[ >>];"
                 "%spellout-cardinal-feminine:"
+                "x.x: [<< $(cardinal,one{singleton}other{plurality})$ ]>%%fractions>;"
                 "0: zero;"
                 "1: one;"
-                "1000: << $(cardinal,one{thousand}few{thousanF}other{thousanO})$[ >>];");
+                "2: two;"
+                "1000: << $(cardinal,one{thousand}few{thousanF}other{thousanO})$[ >>];"
+                "%%fractions:"
+                "10: <%spellout-cardinal-feminine< $(cardinal,one{oneth}other{tenth})$;"
+                "100: <%spellout-cardinal-feminine< $(cardinal,one{1hundredth}other{hundredth})$;");
     UErrorCode status = U_ZERO_ERROR;
     UParseError pError;
     RuleBasedNumberFormat formatter(rules, Locale("ru"), pError, status);
@@ -388,6 +394,21 @@ void IntlTestRBNF::TestMultiplePluralRules() {
         errln("RuleBasedNumberFormat(spellout-cardinal-feminine) did not return the correct value. Got: %d", result.getLong());
         errln(resultStr);
     }
+    static const char* const testData[][2] = {
+        { "0", "zero" },
+        { "1", "one" },
+        { "2", "two" },
+        { "0.1", "one oneth" },
+        { "0.2", "two tenth" },
+        { "1.1", "one singleton one oneth" },
+        { "1.2", "one singleton two tenth" },
+        { "2.1", "two plurality one oneth" },
+        { "2.2", "two plurality two tenth" },
+        { "0.01", "one 1hundredth" },
+        { "0.02", "two hundredth" },
+        { NULL, NULL }
+    };
+    doTest(&formatter, testData, TRUE);
 }
 
 void IntlTestRBNF::TestFractionalRuleSet()
@@ -475,7 +496,7 @@ void IntlTestRBNF::TestFractionalRuleSet()
             { "1.2856", "1 2/7" },
             { NULL, NULL }
         };
-       doTest(&formatter, testData, FALSE); // exact values aren't parsable from fractions
+        doTest(&formatter, testData, FALSE); // exact values aren't parsable from fractions
     }
 }
 

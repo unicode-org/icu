@@ -142,6 +142,7 @@ class IntlTestRBNF : public IntlTest {
 
     void TestInfinityNaN();
     void TestVariableDecimalPoint();
+    void TestRounding();
 
 protected:
   virtual void doTest(RuleBasedNumberFormat* formatter, const char* const testData[][2], UBool testParsing);
