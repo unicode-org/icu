@@ -140,6 +140,9 @@ public:
     UBool isNaN() const { return fMantissa.isNaN(); }
     UBool isInfinite() const { return fMantissa.isInfinite(); }
 private:
+    VisibleDigitsWithExponent(const VisibleDigitsWithExponent &);
+    VisibleDigitsWithExponent &operator=(
+        const VisibleDigitsWithExponent &);
     VisibleDigits fMantissa;
     VisibleDigits fExponent;
     UBool fHasExponent;
