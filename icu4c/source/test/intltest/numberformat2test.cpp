@@ -152,7 +152,6 @@ private:
         const UnicodeString &expected,
         UBool bNegative,
         const VisibleDigitsWithExponent &digits);
-    DigitFormatter formatter;
     void verifyDigitFormatter(
             const UnicodeString &expected,
             const DigitFormatter &formatter,
@@ -1395,9 +1394,9 @@ void NumberFormat2Test::TestPluralAffix() {
 void NumberFormat2Test::TestCurrencyAffixInfo() {
     CurrencyAffixInfo info;
     assertTrue("", info.isDefault());
-    UnicodeString expectedSymbol("\u00a4");
-    UnicodeString expectedSymbolIso("\u00a4\u00a4");
-    UnicodeString expectedSymbols("\u00a4\u00a4\u00a4");
+    UnicodeString expectedSymbol("\\u00a4");
+    UnicodeString expectedSymbolIso("\\u00a4\\u00a4");
+    UnicodeString expectedSymbols("\\u00a4\\u00a4\\u00a4");
     assertEquals("", expectedSymbol.unescape(), info.getSymbol());
     assertEquals("", expectedSymbolIso.unescape(), info.getISO());
     assertEquals("", expectedSymbols.unescape(), info.getLong().getByCategory("one").toString());
@@ -1496,7 +1495,7 @@ void NumberFormat2Test::TestAffixPatternParser() {
     CurrencyAffixInfo currencyAffixInfo;
     currencyAffixInfo.set("en", rules.getAlias(), USD, status);
     PluralAffix affix;
-    UnicodeString str("'--y'''dz'%'\u00a4\u00a4\u00a4\u00a4 y '\u00a4\u00a4\u00a4 or '\u00a4\u00a4 but '\u00a4");
+    UnicodeString str("'--y'''dz'%'\\u00a4\\u00a4\\u00a4\\u00a4 y '\\u00a4\\u00a4\\u00a4 or '\\u00a4\\u00a4 but '\\u00a4");
     str = str.unescape();
     assertSuccess("", status);
     AffixPattern affixPattern;
@@ -1507,11 +1506,11 @@ void NumberFormat2Test::TestAffixPatternParser() {
             status);
     UnicodeString formattedStr;
     affixPattern.toString(formattedStr);
-    UnicodeString expectedFormattedStr("'--y''dz'%'\u00a4\u00a4\u00a4\u00a4 y '\u00a4\u00a4\u00a4 or '\u00a4\u00a4 but '\u00a4");
+    UnicodeString expectedFormattedStr("'--y''dz'%'\\u00a4\\u00a4\\u00a4\\u00a4 y '\\u00a4\\u00a4\\u00a4 or '\\u00a4\\u00a4 but '\\u00a4");
     expectedFormattedStr = expectedFormattedStr.unescape();
     assertEquals("", expectedFormattedStr, formattedStr);
     AffixPattern userAffixPattern;
-    UnicodeString userStr("-'-'y'''d'z%\u00a4\u00a4\u00a4'\u00a4' y \u00a4\u00a4\u00a4 or \u00a4\u00a4 but \u00a4");
+    UnicodeString userStr("-'-'y'''d'z%\\u00a4\\u00a4\\u00a4'\\u00a4' y \\u00a4\\u00a4\\u00a4 or \\u00a4\\u00a4 but \\u00a4");
     AffixPattern::parseUserAffixString(userStr, userAffixPattern, status),
     assertTrue("", affixPattern.equals(userAffixPattern));
     AffixPattern userAffixPattern2;
@@ -1521,7 +1520,7 @@ void NumberFormat2Test::TestAffixPatternParser() {
             userAffixPattern2,
             status);
     UnicodeString expectedFormattedUserStr(
-            "-'-'y''dz%\u00a4\u00a4\u00a4'\u00a4' y \u00a4\u00a4\u00a4 or \u00a4\u00a4 but \u00a4");
+            "-'-'y''dz%\\u00a4\\u00a4\\u00a4'\\u00a4' y \\u00a4\\u00a4\\u00a4 or \\u00a4\\u00a4 but \\u00a4");
     assertEquals("", expectedFormattedUserStr.unescape(), formattedUserStr);
     assertTrue("", userAffixPattern2.equals(userAffixPattern));
     assertSuccess("", status);
@@ -1540,7 +1539,7 @@ void NumberFormat2Test::TestAffixPatternParser() {
             {UNUM_CURRENCY_FIELD, 43, 44},
             {0, -1, 0}};
         verifyAffix(
-                "--y'dz%US dollars\u00a4 y US dollars or USD but $",
+                "--y'dz%US dollars\\u00a4 y US dollars or USD but $",
                 affix.getByCategory("other"),
                 expectedAttributes);
     }
@@ -1555,7 +1554,7 @@ void NumberFormat2Test::TestAffixPatternParser() {
             {UNUM_CURRENCY_FIELD, 41, 42},
             {0, -1, 0}};
         verifyAffix(
-                "--y'dz%US dollar\u00a4 y US dollar or USD but $",
+                "--y'dz%US dollar\\u00a4 y US dollar or USD but $",
                 affix.getByCategory("one"),
                 expectedAttributes);
     }
@@ -1582,13 +1581,13 @@ void NumberFormat2Test::TestAffixPatternParser() {
                 affix.getByCategory("other"),
                 expectedAttributes);
     }
-    UnicodeString a4("\u00a4");
+    UnicodeString a4("\\u00a4");
     AffixPattern scratchPattern;
     AffixPattern::parseAffixString(a4.unescape(), scratchPattern, status);
     assertFalse("", scratchPattern.usesCurrency());
 
     // Test really long string > 256 chars.
-    str = "'\u2030012345678901234567890123456789012345678901234567890123456789"
+    str = "'\\u2030012345678901234567890123456789012345678901234567890123456789"
           "012345678901234567890123456789012345678901234567890123456789"
           "012345678901234567890123456789012345678901234567890123456789"
           "012345678901234567890123456789012345678901234567890123456789"
@@ -1608,7 +1607,7 @@ void NumberFormat2Test::TestAffixPatternParser() {
     assertFalse("", affix.hasMultipleVariants());
     {
        UnicodeString expected =
-           "\u2030012345678901234567890123456789012345678901234567890123456789"
+           "\\u2030012345678901234567890123456789012345678901234567890123456789"
            "012345678901234567890123456789012345678901234567890123456789"
            "012345678901234567890123456789012345678901234567890123456789"
            "012345678901234567890123456789012345678901234567890123456789"
@@ -1627,17 +1626,17 @@ void NumberFormat2Test::TestAffixPatternParser() {
 void NumberFormat2Test::TestAffixPatternAppend() {
   AffixPattern pattern;
   UErrorCode status = U_ZERO_ERROR;
-  UnicodeString patternStr("%\u2030");
+  UnicodeString patternStr("%\\u2030");
   AffixPattern::parseUserAffixString(
           patternStr.unescape(), pattern, status);
 
   AffixPattern appendPattern;
-  UnicodeString appendPatternStr("-\u00a4\u00a4*");
+  UnicodeString appendPatternStr("-\\u00a4\\u00a4*");
   AffixPattern::parseUserAffixString(
           appendPatternStr.unescape(), appendPattern, status);
 
   AffixPattern expectedPattern;
-  UnicodeString expectedPatternStr("%\u2030-\u00a4\u00a4*");
+  UnicodeString expectedPatternStr("%\\u2030-\\u00a4\\u00a4*");
   AffixPattern::parseUserAffixString(
           expectedPatternStr, expectedPattern, status);
   
