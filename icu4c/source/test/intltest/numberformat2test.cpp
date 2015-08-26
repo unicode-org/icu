@@ -1508,9 +1508,10 @@ void NumberFormat2Test::TestAffixPatternParser() {
     affixPattern.toString(formattedStr);
     UnicodeString expectedFormattedStr("'--y''dz'%'\\u00a4\\u00a4\\u00a4\\u00a4 y '\\u00a4\\u00a4\\u00a4 or '\\u00a4\\u00a4 but '\\u00a4");
     expectedFormattedStr = expectedFormattedStr.unescape();
-    assertEquals("", expectedFormattedStr, formattedStr);
+    assertEquals("1", expectedFormattedStr, formattedStr);
     AffixPattern userAffixPattern;
     UnicodeString userStr("-'-'y'''d'z%\\u00a4\\u00a4\\u00a4'\\u00a4' y \\u00a4\\u00a4\\u00a4 or \\u00a4\\u00a4 but \\u00a4");
+    userStr = userStr.unescape();
     AffixPattern::parseUserAffixString(userStr, userAffixPattern, status),
     assertTrue("", affixPattern.equals(userAffixPattern));
     AffixPattern userAffixPattern2;
@@ -1521,7 +1522,7 @@ void NumberFormat2Test::TestAffixPatternParser() {
             status);
     UnicodeString expectedFormattedUserStr(
             "-'-'y''dz%\\u00a4\\u00a4\\u00a4'\\u00a4' y \\u00a4\\u00a4\\u00a4 or \\u00a4\\u00a4 but \\u00a4");
-    assertEquals("", expectedFormattedUserStr.unescape(), formattedUserStr);
+    assertEquals("2", expectedFormattedUserStr.unescape(), formattedUserStr);
     assertTrue("", userAffixPattern2.equals(userAffixPattern));
     assertSuccess("", status);
     assertTrue("", affixPattern.usesCurrency());
@@ -1638,7 +1639,7 @@ void NumberFormat2Test::TestAffixPatternAppend() {
   AffixPattern expectedPattern;
   UnicodeString expectedPatternStr("%\\u2030-\\u00a4\\u00a4*");
   AffixPattern::parseUserAffixString(
-          expectedPatternStr, expectedPattern, status);
+          expectedPatternStr.unescape(), expectedPattern, status);
   
   assertTrue("", pattern.append(appendPattern).equals(expectedPattern));
   assertSuccess("", status);
