@@ -792,8 +792,16 @@ NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos, int32_
         if (pluralRuleEnd < ruleText.length() - 1) {
             toInsertInto.insert(pos, ruleText.tempSubString(pluralRuleEnd + 2));
         }
-        toInsertInto.insert(pos,
-            rulePatternFormat->format((int32_t)(number/uprv_pow(radix, exponent)), status));
+        double pluralVal = number;
+        if (0 <= pluralVal && pluralVal < 1) {
+            // We're in a fractional rule, and we have to match the NumeratorSubstitution behavior.
+            // 2.3 can become 0.2999999999999998 for the fraction due to rounding errors.
+            pluralVal = uprv_round(pluralVal * uprv_pow(radix, exponent));
+        }
+        else {
+            pluralVal = pluralVal / uprv_pow(radix, exponent);
+        }
+        toInsertInto.insert(pos, rulePatternFormat->format((int32_t)(pluralVal), status));
         if (pluralRuleStart > 0) {
             toInsertInto.insert(pos, ruleText.tempSubString(0, pluralRuleStart));
         }
