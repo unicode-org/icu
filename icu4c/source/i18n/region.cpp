@@ -448,9 +448,8 @@ Region::getInstance (int32_t code, UErrorCode &status) {
     Region *r = (Region *)uhash_iget(numericCodeMap,code);
 
     if ( !r ) { // Just in case there's an alias that's numeric, try to find it.
-        UErrorCode fs = U_ZERO_ERROR;
-        UnicodeString pat = UNICODE_STRING_SIMPLE("00#");
-        LocalPointer<DecimalFormat> df(new DecimalFormat(pat,fs), status);
+        UnicodeString pat = UNICODE_STRING_SIMPLE("0");
+        LocalPointer<DecimalFormat> df(new DecimalFormat(pat,status), status);
         if( U_FAILURE(status) ) {
             return NULL;
         }
