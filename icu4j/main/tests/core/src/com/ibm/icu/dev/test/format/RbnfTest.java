@@ -580,7 +580,7 @@ public class RbnfTest extends TestFmwk {
         // We're trying to test the plural rules.
         String ruRules = "%spellout-numbering:"
                 + "-x: минус >>;"
-                + "x.x: << запятая >>;"
+                + "x.x: [<< $(cardinal,one{целый}other{целых})$ ]>%%fractions-feminine>;"
                 + "0: ноль;"
                 + "1: один;"
                 + "2: два;"
@@ -614,7 +614,10 @@ public class RbnfTest extends TestFmwk {
                 + "300: <<ста[ >>];"
                 + "500: <<сот[ >>];"
                 + "1000: << $(cardinal,one{тысяча}few{тысячи}other{тысяч})$[ >>];"
-                + "1000000: << $(cardinal,one{миллион}few{миллионы}other{миллионов})$[ >>];";
+                + "1000000: << $(cardinal,one{миллион}few{миллионы}other{миллионов})$[ >>];"
+                + "%%fractions-feminine:"
+                + "10: <%spellout-numbering< $(cardinal,one{десятая}other{десятых})$;"
+                + "100: <%spellout-numbering< $(cardinal,one{сотая}other{сотых})$;";
         RuleBasedNumberFormat ruFormatter = new RuleBasedNumberFormat(ruRules, new ULocale("ru"));
         String[][] ruTestData = {
                 { "1", "один" },
@@ -632,6 +635,12 @@ public class RbnfTest extends TestFmwk {
                 { "21,000", "двадцать один тысяча" },
                 { "22,000", "двадцать два тысячи" },
                 { "25,001", "двадцать пять тысяч один" },
+                { "0.1", "один десятая" },
+                { "0.2", "два десятых" },
+                { "0.21", "двадцать один сотая" },
+                { "0.22", "двадцать два сотых" },
+                { "21.1", "двадцать один целый один десятая" },
+                { "22.2", "двадцать два целых два десятых" },
         };
 
         doTest(ruFormatter, ruTestData, true);
@@ -1558,7 +1567,7 @@ public class RbnfTest extends TestFmwk {
 
     public void TestRounding() {
         RuleBasedNumberFormat enFormatter = new RuleBasedNumberFormat(ULocale.ENGLISH, RuleBasedNumberFormat.SPELLOUT);
-        String[][] enTestPointData = {
+        String[][] enTestFullData = {
                 {"0", "zero"},
                 {"0.4", "zero point four"},
                 {"0.49", "zero point four nine"},
@@ -1571,11 +1580,11 @@ public class RbnfTest extends TestFmwk {
                 {"1.5", "one point five"},
                 {"1.51", "one point five one"},
         };
-        doTest(enFormatter, enTestPointData, false);
+        doTest(enFormatter, enTestFullData, false);
 
         enFormatter.setMaximumFractionDigits(0);
         enFormatter.setRoundingMode(BigDecimal.ROUND_HALF_EVEN);
-        String[][] enTestCommaData = {
+        String[][] enTestIntegerData = {
                 {"0", "zero"},
                 {"0.4", "zero"},
                 {"0.49", "zero"},
@@ -1587,6 +1596,24 @@ public class RbnfTest extends TestFmwk {
                 {"1.49", "one"},
                 {"1.5", "two"},
                 {"1.51", "two"},
+        };
+        doTest(enFormatter, enTestIntegerData, false);
+
+        // This is BigDecimal behavior
+        enFormatter.setMaximumFractionDigits(2);
+        enFormatter.setRoundingMode(BigDecimal.ROUND_HALF_EVEN);
+        String[][] enTestCommaData = {
+                {"0", "zero"},
+                {"0.004", "zero"},
+                {"0.0049", "zero"},
+                {"0.005", "zero point zero one"},
+                {"0.0051", "zero point zero one"},
+                {"0.0099", "zero point zero one"},
+                {"1", "one"},
+                {"1.0001", "one"},
+                {"1.0049", "one"},
+                {"1.005", "one"},
+                {"1.0051", "one point zero one"},
         };
         doTest(enFormatter, enTestCommaData, false);
     }

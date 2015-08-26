@@ -798,7 +798,16 @@ final class NFRule {
             if (pluralRuleEnd < ruleText.length() - 1) {
                 toInsertInto.insert(pos, ruleText.substring(pluralRuleEnd + 2));
             }
-            toInsertInto.insert(pos, rulePatternFormat.format((long)(number/Math.pow(radix, exponent))));
+            double pluralVal = number;
+            if (0 <= pluralVal && pluralVal < 1) {
+                // We're in a fractional rule, and we have to match the NumeratorSubstitution behavior.
+                // 2.3 can become 0.2999999999999998 for the fraction due to rounding errors.
+                pluralVal = Math.round(pluralVal * Math.pow(radix, exponent));
+            }
+            else {
+                pluralVal = pluralVal / Math.pow(radix, exponent);
+            }
+            toInsertInto.insert(pos, rulePatternFormat.format((long)(pluralVal)));
             if (pluralRuleStart > 0) {
                 toInsertInto.insert(pos, ruleText.substring(0, pluralRuleStart));
             }
