@@ -128,7 +128,7 @@ public:
         kPerMill,
         kCurrency,
         kNegative,
-        kPositive,
+        kPositive
     };
 
     /**
