@@ -19,6 +19,9 @@ vi{
         colStrength{"Cường độ sắp xếp"}
         collation{"Thứ tự sắp xếp"}
         currency{"Tiền tệ"}
+        hc{"Chu kỳ giờ (12 vs 24)"}
+        lb{"Kiểu xuống dòng"}
+        ms{"Hệ thống đo lường"}
         numbers{"Số"}
         timezone{"Múi giờ"}
         va{"Biến thể ngôn ngữ"}
@@ -39,7 +42,9 @@ vi{
         ain{"Tiếng Ainu"}
         ak{"Tiếng Akan"}
         akk{"Tiếng Akkadia"}
+        akz{"Tiếng Alabama"}
         ale{"Tiếng Aleut"}
+        aln{"Tiếng Gheg Albani"}
         alt{"Tiếng Altai Miền Nam"}
         am{"Tiếng Amharic"}
         an{"Tiếng Aragon"}
@@ -49,10 +54,14 @@ vi{
         ar_001{"Tiếng Ả Rập Hiện đại"}
         arc{"Tiếng Aramaic"}
         arn{"Tiếng Araucanian"}
+        aro{"Tiếng Araona"}
         arp{"Tiếng Arapaho"}
+        arq{"Tiếng Ả Rập Algeria"}
         arw{"Tiếng Arawak"}
+        arz{"Tiếng Ả Rập Ai Cập"}
         as{"Tiếng Assam"}
         asa{"Tiếng Asu"}
+        ase{"Ngôn ngữ Ký hiệu Mỹ"}
         ast{"Tiếng Asturias"}
         av{"Tiếng Avaric"}
         awa{"Tiếng Awadhi"}
@@ -61,26 +70,35 @@ vi{
         ba{"Tiếng Bashkir"}
         bal{"Tiếng Baluchi"}
         ban{"Tiếng Bali"}
+        bar{"Tiếng Bavaria"}
         bas{"Tiếng Basaa"}
         bax{"Tiếng Bamun"}
+        bbc{"Tiếng Batak Toba"}
         bbj{"Tiếng Ghomala"}
         be{"Tiếng Belarus"}
         bej{"Tiếng Beja"}
         bem{"Tiếng Bemba"}
+        bew{"Tiếng Betawi"}
         bez{"Tiếng Bena"}
         bfd{"Tiếng Bafut"}
+        bfq{"Tiếng Badaga"}
         bg{"Tiếng Bulgaria"}
+        bgn{"Tiếng Tây Balochi"}
         bho{"Tiếng Bhojpuri"}
         bi{"Tiếng Bislama"}
         bik{"Tiếng Bikol"}
         bin{"Tiếng Bini"}
+        bjn{"Tiếng Banjar"}
         bkm{"Tiếng Kom"}
         bla{"Tiếng Siksika"}
         bm{"Tiếng Bambara"}
         bn{"Tiếng Bengali"}
         bo{"Tiếng Tây Tạng"}
+        bpy{"Tiếng Bishnupriya"}
+        bqi{"Tiếng Bakhtiari"}
         br{"Tiếng Breton"}
         bra{"Tiếng Braj"}
+        brh{"Tiếng Brahui"}
         brx{"Tiếng Bodo"}
         bs{"Tiếng Nam Tư"}
         bss{"Tiếng Akoose"}
@@ -107,9 +125,10 @@ vi{
         chp{"Tiếng Chipewyan"}
         chr{"Tiếng Cherokee"}
         chy{"Tiếng Cheyenne"}
-        ckb{"Tiếng Kurd Sorani"}
+        ckb{"Tiếng Kurd Miền Trung"}
         co{"Tiếng Corsica"}
         cop{"Tiếng Coptic"}
+        cps{"Tiếng Capiznon"}
         cr{"Tiếng Cree"}
         crh{"Tiếng Thổ Nhĩ Kỳ Crimean"}
         cs{"Tiếng Séc"}
@@ -130,6 +149,7 @@ vi{
         dje{"Tiếng Zarma"}
         doi{"Tiếng Dogri"}
         dsb{"Tiếng Hạ Sorbia"}
+        dtp{"Tiếng Dusun Miền Trung"}
         dua{"Tiếng Duala"}
         dum{"Tiếng Hà Lan Trung cổ"}
         dv{"Tiếng Divehi"}
@@ -140,6 +160,7 @@ vi{
         ebu{"Tiếng Embu"}
         ee{"Tiếng Ewe"}
         efi{"Tiếng Efik"}
+        egl{"Tiếng Emilia"}
         egy{"Tiếng Ai Cập cổ"}
         eka{"Tiếng Ekajuk"}
         el{"Tiếng Hy Lạp"}
@@ -151,9 +172,12 @@ vi{
         eo{"Tiếng Quốc Tế Ngữ"}
         es{"Tiếng Tây Ban Nha"}
         es_419{"Tiếng Tây Ban Nha (Mỹ La tinh)"}
+        es_ES{"Tiếng Tây Ban Nha (Châu Âu)"}
+        esu{"Tiếng Yupik Miền Trung"}
         et{"Tiếng Estonia"}
         eu{"Tiếng Basque"}
         ewo{"Tiếng Ewondo"}
+        ext{"Tiếng Extremadura"}
         fa{"Tiếng Ba Tư"}
         fan{"Tiếng Fang"}
         fat{"Tiếng Fanti"}
@@ -164,8 +188,10 @@ vi{
         fo{"Tiếng Faore"}
         fon{"Tiếng Fon"}
         fr{"Tiếng Pháp"}
+        frc{"Tiếng Pháp Cajun"}
         frm{"Tiếng Pháp Trung cổ"}
         fro{"Tiếng Pháp cổ"}
+        frp{"Tiếng Arpitan"}
         frr{"Tiếng Frisian Miền Bắc"}
         frs{"Tiếng Frisian Miền Đông"}
         fur{"Tiếng Friulian"}
@@ -179,9 +205,11 @@ vi{
         gez{"Tiếng Geez"}
         gil{"Tiếng Gilbert"}
         gl{"Tiếng Galician"}
+        glk{"Tiếng Gilaki"}
         gmh{"Tiếng Thượng Giéc-man Trung cổ"}
         gn{"Tiếng Guarani"}
         goh{"Tiếng Thượng Giéc-man cổ"}
+        gom{"Tiếng Goan Konkani"}
         gon{"Tiếng Gondi"}
         gor{"Tiếng Gorontalo"}
         got{"Tiếng Gô-tích"}
@@ -189,14 +217,17 @@ vi{
         grc{"Tiếng Hy Lạp cổ"}
         gsw{"Tiếng Đức (Thụy Sĩ)"}
         gu{"Tiếng Gujarati"}
+        gur{"Tiếng Frafra"}
         guz{"Tiếng Gusii"}
         gv{"Tiếng Manx"}
         gwi{"Tiếng Gwichʼin"}
         ha{"Tiếng Hausa"}
         hai{"Tiếng Haida"}
+        hak{"Tiếng Trung Hakka"}
         haw{"Tiếng Hawaii"}
         he{"Tiếng Do Thái"}
         hi{"Tiếng Hindi"}
+        hif{"Tiếng Fiji Hindi"}
         hil{"Tiếng Hiligaynon"}
         hit{"Tiếng Hittite"}
         hmn{"Tiếng Hmông"}
@@ -222,12 +253,15 @@ vi{
         is{"Tiếng Iceland"}
         it{"Tiếng Ý"}
         iu{"Tiếng Inuktitut"}
+        izh{"Tiếng Ingria"}
         ja{"Tiếng Nhật"}
+        jam{"Tiếng Anh Jamaica Creole"}
         jbo{"Tiếng Lojban"}
         jgo{"Tiếng Ngomba"}
         jmc{"Tiếng Machame"}
         jpr{"Tiếng Judeo-Ba Tư"}
         jrb{"Tiếng Judeo-Ả Rập"}
+        jut{"Tiếng Jutish"}
         jv{"Tiếng Java"}
         ka{"Tiếng Gruzia"}
         kaa{"Tiếng Kara-Kalpak"}
@@ -288,6 +322,7 @@ vi{
         lo{"Tiếng Lào"}
         lol{"Tiếng Mongo"}
         loz{"Tiếng Lozi"}
+        lrc{"Tiếng Bắc Luri"}
         lt{"Tiếng Lít-va"}
         lu{"Tiếng Luba-Katanga"}
         lua{"Tiếng Luba-Lulua"}
@@ -336,17 +371,20 @@ vi{
         my{"Tiếng Miến Điện"}
         mye{"Tiếng Myene"}
         myv{"Tiếng Erzya"}
+        mzn{"Tiếng Mazanderani"}
         na{"Tiếng Nauru"}
         nap{"Tiếng Napoli"}
         naq{"Tiếng Nama"}
         nb{"Tiếng Na Uy (Bokmål)"}
         nd{"Tiếng Ndebele Miền Bắc"}
         nds{"Tiếng Hạ Giéc-man"}
+        nds_NL{"Tiếng Hạ Saxon"}
         ne{"Tiếng Nepal"}
         new{"Tiếng Newari"}
         ng{"Tiếng Ndonga"}
         nia{"Tiếng Nias"}
         niu{"Tiếng Niuean"}
+        njo{"Tiếng Ao Naga"}
         nl{"Tiếng Hà Lan"}
         nl_BE{"Tiếng Flemish"}
         nmg{"Tiếng Kwasio"}
@@ -388,8 +426,10 @@ vi{
         ps{"Tiếng Pashto"}
         pt{"Tiếng Bồ Đào Nha"}
         pt_BR{"Tiếng Bồ Đào Nha (Braxin)"}
+        pt_PT{"Tiếng Bồ Đào Nha (Châu Âu)"}
         qu{"Tiếng Quechua"}
         quc{"Tiếng Kʼicheʼ"}
+        qug{"Tiếng Quechua ở Cao nguyên Chimborazo"}
         raj{"Tiếng Rajasthani"}
         rap{"Tiếng Rapanui"}
         rar{"Tiếng Rarotongan"}
@@ -417,6 +457,7 @@ vi{
         scn{"Tiếng Sicilia"}
         sco{"Tiếng Scots"}
         sd{"Tiếng Sindhi"}
+        sdh{"Tiếng Kurd Miền Nam"}
         se{"Tiếng Sami Miền Bắc"}
         see{"Tiếng Seneca"}
         seh{"Tiếng Sena"}
@@ -448,7 +489,7 @@ vi{
         ss{"Tiếng Swati"}
         ssy{"Tiếng Saho"}
         st{"Tiếng Sesotho"}
-        su{"Tiếng Sudan"}
+        su{"Tiếng Sunda"}
         suk{"Tiếng Sukuma"}
         sus{"Tiếng Susu"}
         sux{"Tiếng Sumeria"}
@@ -510,6 +551,7 @@ vi{
         wal{"Tiếng Walamo"}
         war{"Tiếng Waray"}
         was{"Tiếng Washo"}
+        wbp{"Tiếng Warlpiri"}
         wo{"Tiếng Wolof"}
         xal{"Tiếng Kalmyk"}
         xh{"Tiếng Xhosa"}
@@ -781,6 +823,22 @@ vi{
             unihan{"Trình tự sắp xếp theo bộ-nét"}
             zhuyin{"Thứ tự sắp xếp Zhuyin"}
         }
+        hc{
+            h11{"Hệ thống 12 giờ (0–11)"}
+            h12{"Hệ thống 12 giờ (1–12)"}
+            h23{"Hệ thống 24 giờ (0–23)"}
+            h24{"Hệ thống 24 giờ (1–24)"}
+        }
+        lb{
+            loose{"Kiểu xuống dòng thoáng"}
+            normal{"Kiểu xuống dòng thường"}
+            strict{"Kiểu xuống dòng hẹp"}
+        }
+        ms{
+            metric{"Hệ mét"}
+            uksystem{"Hệ đo lường Anh"}
+            ussystem{"Hệ đo lường Mỹ"}
+        }
         numbers{
             arab{"Chữ số Ả Rập - Ấn Độ"}
             arabext{"Chữ số Ả Rập - Ấn Độ mở rộng"}
@@ -910,7 +968,7 @@ vi{
         VALLADER{"VALLADER"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}

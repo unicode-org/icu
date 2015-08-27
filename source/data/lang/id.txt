@@ -17,8 +17,11 @@ id{
         colNormalization{"Penyortiran Dinormalisasi"}
         colNumeric{"Penyortiran Numerik"}
         colStrength{"Kekuatan Penyortiran"}
-        collation{"Urutan Sortir"}
+        collation{"Aturan Pengurutan"}
         currency{"Mata Uang"}
+        hc{"Siklus Jam (12 vs 24)"}
+        lb{"Gaya Pemisah Baris"}
+        ms{"Sistem Pengukuran"}
         numbers{"Angka"}
         timezone{"Zona Waktu"}
         va{"Varian Lokal"}
@@ -64,7 +67,6 @@ id{
         awa{"Awadhi"}
         ay{"Aymara"}
         az{"Azerbaijan"}
-        azb{"Azerbaijani Selatan"}
         ba{"Bashkir"}
         bal{"Baluchi"}
         ban{"Bali"}
@@ -79,7 +81,8 @@ id{
         bew{"Betawi"}
         bez{"Bena"}
         bfd{"Bafut"}
-        bg{"Bulgar"}
+        bg{"Bulgaria"}
+        bgn{"Balochi Barat"}
         bho{"Bhojpuri"}
         bi{"Bislama"}
         bik{"Bikol"}
@@ -133,8 +136,7 @@ id{
         dar{"Dargwa"}
         dav{"Taita"}
         de{"Jerman"}
-        de_AT{"Jerman Austria"}
-        de_CH{"Jerman Tinggi Swiss"}
+        de_CH{"Jerman Tinggi (Swiss)"}
         del{"Delaware"}
         den{"Slave"}
         dgr{"Dogrib"}
@@ -157,15 +159,11 @@ id{
         el{"Yunani"}
         elx{"Elam"}
         en{"Inggris"}
-        en_AU{"Inggris Australia"}
-        en_CA{"Inggris Kanada"}
-        en_GB{"Inggris Inggris"}
-        en_US{"Inggris Amerika"}
         enm{"Inggris Abad Pertengahan"}
         eo{"Esperanto"}
         es{"Spanyol"}
         es_419{"Spanyol Amerika Latin"}
-        es_ES{"Spanyol Eropa"}
+        es_ES{"Spanyol (Eropa)"}
         es_MX{"Spanyol Meksiko"}
         et{"Esti"}
         eu{"Bask"}
@@ -180,8 +178,6 @@ id{
         fo{"Faro"}
         fon{"Fon"}
         fr{"Prancis"}
-        fr_CA{"Prancis Kanada"}
-        fr_CH{"Prancis Swiss"}
         frm{"Prancis Abad Pertengahan"}
         fro{"Prancis Kuno"}
         frp{"Arpitan"}
@@ -207,7 +203,7 @@ id{
         got{"Gothik"}
         grb{"Grebo"}
         grc{"Yunani Kuno"}
-        gsw{"Jerman Swiss"}
+        gsw{"Jerman (Swiss)"}
         gu{"Gujarati"}
         guz{"Gusii"}
         gv{"Manx"}
@@ -232,7 +228,7 @@ id{
         ia{"Interlingua"}
         iba{"Iban"}
         ibb{"Ibibio"}
-        id{"Bahasa Indonesia"}
+        id{"Indonesia"}
         ie{"Interlingue"}
         ig{"Igbo"}
         ii{"Sichuan Yi"}
@@ -312,6 +308,7 @@ id{
         lo{"Lao"}
         lol{"Mongo"}
         loz{"Lozi"}
+        lrc{"Luri Utara"}
         lt{"Lituavi"}
         lu{"Luba-Katanga"}
         lua{"Luba-Lulua"}
@@ -359,9 +356,10 @@ id{
         mwl{"Miranda"}
         mwr{"Marwari"}
         mwv{"Mentawai"}
-        my{"Burma"}
+        my{"Myanmar"}
         mye{"Myene"}
         myv{"Eryza"}
+        mzn{"Mazanderani"}
         na{"Nauru"}
         nap{"Neapolitan"}
         naq{"Nama"}
@@ -374,7 +372,6 @@ id{
         nia{"Nias"}
         niu{"Niuea"}
         nl{"Belanda"}
-        nl_BE{"Flemish"}
         nmg{"Kwasio"}
         nn{"Nynorsk Norwegia"}
         nnh{"Ngiemboon"}
@@ -414,8 +411,7 @@ id{
         pro{"Provencal Lama"}
         ps{"Pashto"}
         pt{"Portugis"}
-        pt_BR{"Portugis Brasil"}
-        pt_PT{"Portugis Eropa"}
+        pt_PT{"Portugis (Eropa)"}
         qu{"Quechua"}
         quc{"Kʼicheʼ"}
         raj{"Rajasthani"}
@@ -446,6 +442,7 @@ id{
         scn{"Sisilia"}
         sco{"Skotlandia"}
         sd{"Sindhi"}
+        sdh{"Kurdi Selatan"}
         se{"Sami Utara"}
         see{"Seneca"}
         seh{"Sena"}
@@ -547,6 +544,7 @@ id{
         wal{"Walamo"}
         war{"Warai"}
         was{"Washo"}
+        wbp{"Warlpiri"}
         wo{"Wolof"}
         xal{"Kalmuk"}
         xh{"Xhosa"}
@@ -573,8 +571,8 @@ id{
     }
     Languages%short{
         az{"Azeri"}
-        en_GB{"Inggris U.K."}
-        en_US{"Inggris A.S."}
+        en_GB{"Inggris (U.K.)"}
+        en_US{"Inggris (A.S.)"}
     }
     Languages%variant{
         ps{"Pushto"}
@@ -808,7 +806,7 @@ id{
         collation{
             big5han{"Urutan Sortir China Tradisional - Big5"}
             dictionary{"Urutan Sortir Kamus"}
-            ducet{"Urutan Sortir Unicode Default"}
+            ducet{"Aturan Pengurutan Unicode Default"}
             eor{"Aturan Pengurutan Eropa"}
             gb2312han{"Urutan Sortir China Aks. Sederhana - GB2312"}
             phonebook{"Urutan Sortir Buku Telepon"}
@@ -817,10 +815,26 @@ id{
             reformed{"Urutan Sortir yang Diubah Bentuknya"}
             search{"Pencarian Tujuan Umum"}
             searchjl{"Pencarian Menurut Konsonan Awal Hangul"}
-            standard{"Urutan Sortir Standar"}
+            standard{"Aturan Pengurutan Standar"}
             stroke{"Urutan Sortir Guratan"}
             traditional{"Urutan Sortir Tradisional"}
             unihan{"Urutan Sortir Guratan Radikal"}
+        }
+        hc{
+            h11{"Sistem 12 Jam (0–11)"}
+            h12{"Sistem 12 Jam (1–12)"}
+            h23{"Sistem 24 Jam (0–23)"}
+            h24{"Sistem 24 Jam (1–24)"}
+        }
+        lb{
+            loose{"Gaya Pemisah Baris Renggang"}
+            normal{"Gaya Pemisah Baris Normal"}
+            strict{"Gaya Pemisah Baris Rapat"}
+        }
+        ms{
+            metric{"Sistem Metrik"}
+            uksystem{"Sistem Pengukuran Imperial"}
+            ussystem{"Sistem Pengukuran A.S."}
         }
         numbers{
             arab{"Angka Arab Timur"}
@@ -938,7 +952,7 @@ id{
         VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.1.16.1"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

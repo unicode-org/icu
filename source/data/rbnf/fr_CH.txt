@@ -205,5 +205,5 @@ fr_CH{
             "2: =%%spellout-ordinal=;",
         }
     }
-    Version{"2.0.90.54"}
+    Version{"2.1.19.14"}
 }

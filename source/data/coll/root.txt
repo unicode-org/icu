@@ -11,7 +11,7 @@
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"2.1.16.39"}
+    Version{"2.1.19.14"}
     collations{
         default{"standard"}
         emoji{

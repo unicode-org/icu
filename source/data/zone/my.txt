@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 my{
-    Version{"2.1.15.64"}
+    Version{"2.1.19.17"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"အာဘီဂျွန်း"}
@@ -684,6 +684,9 @@ my{
         "Asia:Calcutta"{
             ec{"ကိုလ်ကာတာ"}
         }
+        "Asia:Chita"{
+            ec{"ချီတာ"}
+        }
         "Asia:Choibalsan"{
             ec{"ချွဲဘောဆန်"}
         }
@@ -824,6 +827,9 @@ my{
         }
         "Asia:Singapore"{
             ec{"စင်္ဂပူ"}
+        }
+        "Asia:Srednekolymsk"{
+            ec{"ဆရီနီကိုလူ့ဇ်"}
         }
         "Asia:Taipei"{
             ec{"ထိုင်ပေ"}
@@ -1144,6 +1150,9 @@ my{
         }
         "Pacific:Auckland"{
             ec{"အော့ကလန်"}
+        }
+        "Pacific:Bougainville"{
+            ec{"ဘူဂန်ဗီးလီးယား"}
         }
         "Pacific:Chatham"{
             ec{"ချားသမ်"}

@@ -83,7 +83,7 @@ mt{
         CL{"Ċili"}
         CM{"Kamerun"}
         CN{"Iċ-Ċina"}
-        CO{"Kolumbja"}
+        CO{"Kolombja"}
         CR{"Kosta Rika"}
         CU{"Kuba"}
         CV{"Kape Verde"}
@@ -100,7 +100,7 @@ mt{
         EE{"Estonja"}
         EG{"Eġittu"}
         EH{"Sahara tal-Punent"}
-        ER{"Eritreja"}
+        ER{"Eritrea"}
         ES{"Spanja"}
         ET{"Etijopja"}
         EU{"Unjoni Ewropea"}
@@ -113,13 +113,13 @@ mt{
         GA{"Gabon"}
         GB{"L-Ingilterra"}
         GD{"Grenada"}
-        GE{"Ġorġja"}
+        GE{"Ġeorġja"}
         GF{"Gujana Franċiża"}
         GH{"Gana"}
         GI{"Gibraltar"}
         GL{"Grinlandja"}
         GM{"Gambja"}
-        GN{"Gineja"}
+        GN{"Ginea"}
         GP{"Gwadelupe"}
         GQ{"Ginea Ekwatorjali"}
         GR{"Greċja"}
@@ -171,7 +171,7 @@ mt{
         LY{"Libja"}
         MA{"Marokk"}
         MC{"Monako"}
-        MD{"Maldova"}
+        MD{"Moldova"}
         MG{"Madagaskar"}
         MH{"Gżejjer ta’ Marshall"}
         MK{"Maċedonja"}
@@ -279,5 +279,5 @@ mt{
         ZW{"Żimbabwe"}
         ZZ{"Reġjun Mhux Magħruf"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.94"}
 }

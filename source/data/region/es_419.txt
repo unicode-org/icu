@@ -10,5 +10,5 @@ es_419{
     Countries%short{
         GB{"R. U."}
     }
-    Version{"2.1.14.95"}
+    Version{"2.1.19.14"}
 }

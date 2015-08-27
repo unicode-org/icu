@@ -13,5 +13,5 @@ fr_DJ{
             "franc djiboutien",
         }
     }
-    Version{"2.1.14.95"}
+    Version{"2.1.19.14"}
 }

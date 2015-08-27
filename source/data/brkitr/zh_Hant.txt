@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hant{
-    Version{"2.1.12.96"}
+    Version{"2.1.19.14"}
     boundaries{
         line:process(dependency){"line.brk"}
         line_loose:process(dependency){"line_loose_cj.brk"}

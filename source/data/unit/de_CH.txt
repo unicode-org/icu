@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 de_CH{
-    Version{"2.1.11.70"}
+    Version{"2.1.19.87"}
     units{
         area{
             square-foot{
@@ -21,6 +21,7 @@ de_CH{
                 dnam{"Fuss"}
                 one{"{0} Fuss"}
                 other{"{0} Fuss"}
+                per{"{0} pro Fuss"}
             }
         }
         volume{

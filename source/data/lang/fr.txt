@@ -19,6 +19,9 @@ fr{
         colStrength{"Priorité du tri"}
         collation{"ordre de tri"}
         currency{"devise"}
+        hc{"système horaire (12 ou 24 heures)"}
+        lb{"style de saut de ligne"}
+        ms{"système de mesure"}
         numbers{"nombres"}
         timezone{"Fuseau horaire"}
         va{"Variante locale"}
@@ -48,7 +51,7 @@ fr{
         ar{"arabe"}
         ar_001{"arabe standard moderne"}
         arc{"araméen"}
-        arn{"araukan"}
+        arn{"mapuche"}
         arp{"arapaho"}
         arw{"arawak"}
         as{"assamais"}
@@ -70,6 +73,7 @@ fr{
         bez{"béna"}
         bfd{"bafut"}
         bg{"bulgare"}
+        bgn{"baloutchi occidental"}
         bho{"bhojpuri"}
         bi{"bichelamar"}
         bik{"bikol"}
@@ -211,7 +215,7 @@ fr{
         ho{"hiri motu"}
         hr{"croate"}
         hsb{"haut-sorabe"}
-        ht{"haïtien"}
+        ht{"créole haïtien"}
         hu{"hongrois"}
         hup{"hupa"}
         hy{"arménien"}
@@ -296,6 +300,7 @@ fr{
         lo{"lao"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"lori du Nord"}
         lt{"lituanien"}
         lu{"luba-katanga"}
         lua{"luba-lulua"}
@@ -344,12 +349,14 @@ fr{
         my{"birman"}
         mye{"myènè"}
         myv{"erzya"}
+        mzn{"mazandérani"}
         na{"nauruan"}
         nap{"napolitain"}
         naq{"nama"}
         nb{"norvégien bokmål"}
         nd{"ndébélé du Nord"}
         nds{"bas-allemand"}
+        nds_NL{"bas-saxon néerlandais"}
         ne{"népalais"}
         new{"newari"}
         ng{"ndonga"}
@@ -426,6 +433,7 @@ fr{
         scn{"sicilien"}
         sco{"écossais"}
         sd{"sindhi"}
+        sdh{"kurde du Sud"}
         se{"sami du Nord"}
         see{"seneca"}
         seh{"sena"}
@@ -519,6 +527,7 @@ fr{
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
+        wbp{"warlpiri"}
         wo{"wolof"}
         xal{"kalmouk"}
         xh{"xhosa"}
@@ -762,11 +771,28 @@ fr{
             pinyin{"Ordre pinyin"}
             reformed{"Ordre réformé"}
             search{"recherche générique"}
-            searchjl{"Rechercher par consonne initiale en hangeul"}
+            searchjl{"rechercher par consonne initiale en hangeul"}
             standard{"ordre de tri standard"}
             stroke{"Ordre des traits"}
             traditional{"Ordre traditionnel"}
             unihan{"Ordre de tri radical-traits"}
+            zhuyin{"ordre zhuyin"}
+        }
+        hc{
+            h11{"système horaire de 12 heures (0–11)"}
+            h12{"système horaire de 12 heures (1–12)"}
+            h23{"système horaire de 24 heures (0–23)"}
+            h24{"système horaire de 24 heures (1–24)"}
+        }
+        lb{
+            loose{"style de saut de ligne permissif"}
+            normal{"style de saut de ligne normal"}
+            strict{"style de saut de ligne strict"}
+        }
+        ms{
+            metric{"système métrique"}
+            uksystem{"système impérial"}
+            ussystem{"système américain"}
         }
         numbers{
             arab{"chiffres arabes"}
@@ -842,7 +868,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.16.1"}
+    Version{"2.1.19.72"}
     codePatterns{
         language{"langue : {0}"}
         script{"écriture : {0}"}

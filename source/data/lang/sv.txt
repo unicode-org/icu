@@ -19,6 +19,9 @@ sv{
         colStrength{"Sorteringsstyrka"}
         collation{"sorteringsordning"}
         currency{"valuta"}
+        hc{"12- eller 24-timmarsklocka"}
+        lb{"radbrytningstyp"}
+        ms{"enhetssystem"}
         numbers{"siffror"}
         timezone{"Tidszon"}
         va{"Språkvariant"}
@@ -40,6 +43,7 @@ sv{
         ain{"ainu"}
         ak{"akan"}
         akk{"akkadiska"}
+        akz{"Alabama-muskogee"}
         ale{"aleutiska"}
         aln{"gegiska"}
         alt{"sydaltaiska"}
@@ -66,13 +70,13 @@ sv{
         awa{"awadhi"}
         ay{"aymara"}
         az{"azerbajdzjanska"}
-        azb{"sydazerbadjanska"}
         ba{"basjkiriska"}
         bal{"baluchiska"}
         ban{"balinesiska"}
         bar{"bayerska"}
         bas{"basa"}
         bax{"bamunska"}
+        bbc{"batak-toba"}
         bbj{"ghomala"}
         be{"vitryska"}
         bej{"beja"}
@@ -82,6 +86,7 @@ sv{
         bfd{"bafut"}
         bfq{"bagada"}
         bg{"bulgariska"}
+        bgn{"västbaluchiska"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -126,6 +131,7 @@ sv{
         ckb{"soranisk kurdiska"}
         co{"korsikanska"}
         cop{"koptiska"}
+        cps{"kapisnon"}
         cr{"cree"}
         crh{"krimtatariska"}
         cs{"tjeckiska"}
@@ -147,6 +153,7 @@ sv{
         dje{"zarma"}
         doi{"dogri"}
         dsb{"lågsorbiska"}
+        dtp{"centraldusun"}
         dua{"duala"}
         dum{"medelnederländska"}
         dv{"divehi"}
@@ -173,9 +180,11 @@ sv{
         es_419{"latinamerikansk spanska"}
         es_ES{"europeisk spanska"}
         es_MX{"mexikansk spanska"}
+        esu{"centralalaskisk jupiska"}
         et{"estniska"}
         eu{"baskiska"}
         ewo{"ewondo"}
+        ext{"extremaduriska"}
         fa{"persiska"}
         fan{"fang"}
         fat{"fanti"}
@@ -220,6 +229,8 @@ sv{
         grc{"forngrekiska"}
         gsw{"schweizertyska"}
         gu{"gujarati"}
+        guc{"wayuu"}
+        gur{"farefare"}
         guz{"gusii"}
         gv{"manx"}
         gwi{"gwichin"}
@@ -278,13 +289,16 @@ sv{
         kcg{"tyap"}
         kde{"makonde"}
         kea{"kapverdiska"}
+        ken{"kenjang"}
         kfo{"koro"}
         kg{"kikongo"}
+        kgp{"kaingang"}
         kha{"khasi"}
         kho{"khotanesiska"}
         khq{"Timbuktu-songhoy"}
         khw{"khowar"}
         ki{"kikuyu"}
+        kiu{"kirmanjki"}
         kj{"kuanyama"}
         kk{"kazakiska"}
         kkj{"mkako"}
@@ -300,6 +314,8 @@ sv{
         kpe{"kpelle"}
         kr{"kanuri"}
         krc{"karachay-balkar"}
+        kri{"krio"}
+        krj{"kinaray-a"}
         krl{"karelska"}
         kru{"kurukh"}
         ks{"kashmiriska"}
@@ -319,6 +335,7 @@ sv{
         lam{"lamba"}
         lb{"luxemburgiska"}
         lez{"lezghien"}
+        lfn{"lingua franca nova"}
         lg{"luganda"}
         li{"limburgiska"}
         lij{"liguriska"}
@@ -329,6 +346,7 @@ sv{
         lo{"laotiska"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"nordluri"}
         lt{"litauiska"}
         ltg{"lettgalliska"}
         lu{"luba-katanga"}
@@ -339,6 +357,8 @@ sv{
         lus{"lushai"}
         luy{"luhya"}
         lv{"lettiska"}
+        lzh{"litterär kineiska"}
+        lzz{"laziska"}
         mad{"maduresiska"}
         maf{"mafa"}
         mag{"magahi"}
@@ -376,6 +396,7 @@ sv{
         mus{"muskogee"}
         mwl{"mirandesiska"}
         mwr{"marwari"}
+        mwv{"mentawai"}
         my{"burmesiska"}
         mye{"myene"}
         myv{"erjya"}
@@ -387,11 +408,13 @@ sv{
         nb{"norskt bokmål"}
         nd{"nordndebele"}
         nds{"lågtyska"}
+        nds_NL{"lågsaxiska"}
         ne{"nepalesiska"}
         new{"newariska"}
         ng{"ndonga"}
         nia{"nias"}
         niu{"niueanska"}
+        njo{"ao-naga"}
         nl{"nederländska"}
         nl_BE{"flamländska"}
         nmg{"kwasio"}
@@ -400,6 +423,7 @@ sv{
         no{"norska"}
         nog{"nogai"}
         non{"fornnordiska"}
+        nov{"novial"}
         nqo{"n-kå"}
         nr{"sydndebele"}
         nso{"nordsotho"}
@@ -442,7 +466,7 @@ sv{
         pt_BR{"brasiliansk portugisiska"}
         pt_PT{"europeisk portugisiska"}
         qu{"quechua"}
-        quc{"kʼicheʼ"}
+        quc{"quiché"}
         qug{"Chimborazo-höglandskichwa"}
         raj{"rajasthani"}
         rap{"rapanui"}
@@ -478,9 +502,11 @@ sv{
         sco{"skotska"}
         sd{"sindhi"}
         sdc{"sassaresisk sardiska"}
+        sdh{"sydkurdiska"}
         se{"nordsamiska"}
         see{"seneca"}
         seh{"sena"}
+        sei{"seri"}
         sel{"selkup"}
         ses{"Gao-songhay"}
         sg{"sango"}
@@ -495,6 +521,7 @@ sv{
         sk{"slovakiska"}
         sl{"slovenska"}
         sli{"lågsilesiska"}
+        sly{"selayar"}
         sm{"samoanska"}
         sma{"sydsamiska"}
         smj{"lulesamiska"}
@@ -537,6 +564,7 @@ sv{
         tiv{"tivi"}
         tk{"turkmeniska"}
         tkl{"tokelauiska"}
+        tkr{"tsakhur"}
         tl{"tagalog"}
         tlh{"klingonska"}
         tli{"tlingit"}
@@ -547,11 +575,13 @@ sv{
         tog{"nyasatonganska"}
         tpi{"tok pisin"}
         tr{"turkiska"}
+        tru{"turoyo"}
         trv{"taroko"}
         ts{"tsonga"}
         tsd{"tsakodiska"}
         tsi{"tsimshian"}
         tt{"tatariska"}
+        ttt{"muslimsk tatariska"}
         tum{"tumbuka"}
         tvl{"tuvaluanska"}
         tw{"twi"}
@@ -583,10 +613,12 @@ sv{
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
+        wbp{"warlpiri"}
         wo{"wolof"}
         wuu{"wu"}
         xal{"kalmuckiska"}
         xh{"xhosa"}
+        xmf{"mingrelianska"}
         xog{"lusoga"}
         yao{"kiyao"}
         yap{"japetiska"}
@@ -594,6 +626,7 @@ sv{
         ybb{"bamileké-jemba"}
         yi{"jiddisch"}
         yo{"yoruba"}
+        yrl{"nheengatu"}
         yue{"kantonesiska"}
         za{"zhuang"}
         zap{"zapotek"}
@@ -611,7 +644,6 @@ sv{
     }
     Languages%short{
         az{"azeriska"}
-        en_GB{"engelska (UK)"}
     }
     Languages%variant{
         ps{"pashto"}
@@ -620,6 +652,7 @@ sv{
     Scripts{
         Afak{"afakiska"}
         Aghb{"kaukasiska albanska"}
+        Ahom{"ahom"}
         Arab{"arabiska"}
         Armi{"imperisk arameiska"}
         Armn{"armeniska"}
@@ -666,6 +699,7 @@ sv{
         Hano{"hanunå"}
         Hans{"förenklade"}
         Hant{"traditionella"}
+        Hatr{"hatran"}
         Hebr{"hebreiska"}
         Hira{"hiragana"}
         Hluw{"hittitiska hieroglyfer"}
@@ -712,6 +746,7 @@ sv{
         Moon{"moon"}
         Mroo{"mru"}
         Mtei{"meitei-mayek"}
+        Mult{"multaniska"}
         Mymr{"burmesiska"}
         Narb{"fornnordarabiska"}
         Nbat{"nabatateiska"}
@@ -846,8 +881,10 @@ sv{
         }
         collation{
             big5han{"big5-sorteringsordning"}
+            compat{"bakåtkompatibel sortering"}
             dictionary{"ordbokssorteringsordning"}
             ducet{"grundläggande Unicode-sorteringsordning"}
+            emoji{"emojisortering"}
             eor{"sorteringsordning för flerspråkliga europeiska dokument"}
             gb2312han{"gb2312-sorteringsordning"}
             phonebook{"telefonkatalogssorteringsordning"}
@@ -861,6 +898,22 @@ sv{
             traditional{"traditionell ordning"}
             unihan{"radikal-streck-sorteringsordning"}
             zhuyin{"zhuyin-sorteringsordning"}
+        }
+        hc{
+            h11{"12-timmarsklocka (0–11)"}
+            h12{"12-timmarsklocka (1–12)"}
+            h23{"24-timmarsklocka (0–23)"}
+            h24{"24-timmarsklocka (1–24)"}
+        }
+        lb{
+            loose{"fri radbrytning"}
+            normal{"normal radbrytning"}
+            strict{"strikt radbrytning"}
+        }
+        ms{
+            metric{"SI-enheter"}
+            uksystem{"brittiskt måttsystem"}
+            ussystem{"USA:s måttsystem"}
         }
         numbers{
             arab{"indo-arabiska siffror"}
@@ -958,6 +1011,7 @@ sv{
         JAUER{"jauer-dialekt"}
         JYUTPING{"jyutping"}
         KKCOR{"vanlig stavning"}
+        KOCIEWIE{"kociewiska"}
         KSCOR{"standardstavning"}
         LAUKIKA{"laukika-dialekt"}
         LIPAW{"Lipovaz-dialekt"}
@@ -997,7 +1051,7 @@ sv{
         VALLADER{"vallader-dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.94"}
     codePatterns{
         language{"språk: {0}"}
         script{"skrift: {0}"}

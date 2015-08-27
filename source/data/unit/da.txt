@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 da{
-    Version{"2.1.15.60"}
+    Version{"2.1.19.44"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -47,6 +47,11 @@ da{
                 one{"{0} radian"}
                 other{"{0} radianer"}
             }
+            revolution{
+                dnam{"omdrejning"}
+                one{"{0} omdrejning"}
+                other{"{0} omdrejninger"}
+            }
         }
         area{
             acre{
@@ -63,6 +68,7 @@ da{
                 dnam{"kvadratcentimeter"}
                 one{"{0} kvadratcentimeter"}
                 other{"{0} kvadratcentimeter"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"kvadratfod"}
@@ -73,6 +79,7 @@ da{
                 dnam{"kvadrattommer"}
                 one{"{0} kvadrattomme"}
                 other{"{0} kvadrattommer"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"kvadratkilometer"}
@@ -83,6 +90,7 @@ da{
                 dnam{"kvadratmeter"}
                 one{"{0} kvadratmeter"}
                 other{"{0} kvadratmeter"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"kvadrat-engelske mil"}
@@ -99,6 +107,11 @@ da{
             per{"{0} pr. {1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"liter pr. 100 kilometer"}
+                one{"{0} liter pr. 100 kilometer"}
+                other{"{0} liter pr. 100 kilometer"}
+            }
             liter-per-kilometer{
                 dnam{"liter pr. kilometer"}
                 one{"{0} liter pr. kilometer"}
@@ -109,6 +122,12 @@ da{
                 one{"mil pr. gallon"}
                 other{"{0} mil pr. gallon"}
             }
+        }
+        coordinate{
+            east{"{0}Ø"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}V"}
         }
         digital{
             bit{
@@ -163,10 +182,16 @@ da{
             }
         }
         duration{
+            century{
+                dnam{"århundreder"}
+                one{"{0} århundrede"}
+                other{"{0} århundreder"}
+            }
             day{
                 dnam{"dage"}
                 one{"{0} dag"}
                 other{"{0} dage"}
+                per{"{0} pr. dag"}
             }
             hour{
                 dnam{"timer"}
@@ -188,11 +213,13 @@ da{
                 dnam{"minutter"}
                 one{"{0} minut"}
                 other{"{0} minutter"}
+                per{"{0} pr. min."}
             }
             month{
                 dnam{"måneder"}
                 one{"{0} måned"}
                 other{"{0} måneder"}
+                per{"{0} pr. måned"}
             }
             nanosecond{
                 dnam{"nanosekunder"}
@@ -209,11 +236,13 @@ da{
                 dnam{"uger"}
                 one{"{0} uge"}
                 other{"{0} uger"}
+                per{"{0} pr. uge"}
             }
             year{
                 dnam{"år"}
                 one{"{0} år"}
                 other{"{0} år"}
+                per{"{0} om året"}
             }
         }
         electric{
@@ -302,6 +331,7 @@ da{
                 dnam{"centimeter"}
                 one{"{0} centimeter"}
                 other{"{0} centimeter"}
+                per{"{0} pr. centimeter"}
             }
             decimeter{
                 dnam{"decimeter"}
@@ -312,16 +342,19 @@ da{
                 dnam{"fod"}
                 one{"{0} fod"}
                 other{"{0} fod"}
+                per{"{0} pr. fod"}
             }
             inch{
                 dnam{"tommer"}
                 one{"{0} tomme"}
                 other{"{0} tommer"}
+                per{"{0} pr. tomme"}
             }
             kilometer{
                 dnam{"kilometer"}
                 one{"{0} kilometer"}
                 other{"{0} kilometer"}
+                per{"{0} pr. kilometer"}
             }
             light-year{
                 dnam{"lysår"}
@@ -332,6 +365,7 @@ da{
                 dnam{"meter"}
                 one{"{0} meter"}
                 other{"{0} meter"}
+                per{"{0} pr. meter"}
             }
             micrometer{
                 dnam{"mikrometer"}
@@ -342,6 +376,11 @@ da{
                 dnam{"engelske mil"}
                 one{"{0} engelsk mil"}
                 other{"{0} engelske mil"}
+            }
+            mile-scandinavian{
+                dnam{"svensk mil"}
+                one{"{0} svensk mil"}
+                other{"{0} svenske mil"}
             }
             millimeter{
                 dnam{"millimeter"}
@@ -391,11 +430,13 @@ da{
                 dnam{"gram"}
                 one{"{0} gram"}
                 other{"{0} gram"}
+                per{"{0} pr. gram"}
             }
             kilogram{
                 dnam{"kilogram"}
                 one{"{0} kilogram"}
                 other{"{0} kilogram"}
+                per{"{0} pr. kg"}
             }
             metric-ton{
                 dnam{"tons"}
@@ -416,6 +457,7 @@ da{
                 dnam{"ounces"}
                 one{"{0} ounce"}
                 other{"{0} ounces"}
+                per{"{0} pr. ounce"}
             }
             ounce-troy{
                 dnam{"troy ounces"}
@@ -426,6 +468,7 @@ da{
                 dnam{"pund"}
                 one{"{0} pund"}
                 other{"{0} pund"}
+                per{"{0} pr. pund"}
             }
             ton{
                 dnam{"short ton"}
@@ -505,6 +548,11 @@ da{
                 one{"kilometer i timen"}
                 other{"{0} kilometer i timen"}
             }
+            knot{
+                dnam{"knob"}
+                one{"{0} knob"}
+                other{"{0} knob"}
+            }
             meter-per-second{
                 dnam{"meter per sekund"}
                 one{"{0} meter i sekundet"}
@@ -519,13 +567,18 @@ da{
         temperature{
             celsius{
                 dnam{"grader celsius"}
-                one{"{0} grad Celsius"}
-                other{"{0} grader Celsius"}
+                one{"{0} grad celsius"}
+                other{"{0} grader celsius"}
             }
             fahrenheit{
-                dnam{"grader Fahrenheit"}
-                one{"{0} grad Fahrenheit"}
-                other{"{0} grader Fahrenheit"}
+                dnam{"grader fahrenheit"}
+                one{"{0} grad fahrenheit"}
+                other{"{0} grader fahrenheit"}
+            }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             kelvin{
                 dnam{"kelvin"}
@@ -548,6 +601,7 @@ da{
                 dnam{"kubikcentimeter"}
                 one{"{0} kubikcentimeter"}
                 other{"{0} kubikcentimeter"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"kubikfod"}
@@ -568,6 +622,7 @@ da{
                 dnam{"kubikmeter"}
                 one{"{0} kubikmeter"}
                 other{"{0} kubikmeter"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"kubik-engelske mil"}
@@ -580,9 +635,14 @@ da{
                 other{"{0} kubik-engelske yard"}
             }
             cup{
-                dnam{"engelske kopper"}
-                one{"engelsk kop"}
-                other{"{0} engelske kopper"}
+                dnam{"cups"}
+                one{"cup"}
+                other{"{0} cups"}
+            }
+            cup-metric{
+                dnam{"metrisk kop"}
+                one{"{0} metrisk kop"}
+                other{"{0} metriske kopper"}
             }
             deciliter{
                 dnam{"deciliter"}
@@ -598,6 +658,7 @@ da{
                 dnam{"gallons"}
                 one{"{0} gallon"}
                 other{"{0} gallons"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hektoliter"}
@@ -608,6 +669,7 @@ da{
                 dnam{"liter"}
                 one{"{0} liter"}
                 other{"{0} liter"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"megaliter"}
@@ -623,6 +685,11 @@ da{
                 dnam{"pints"}
                 one{"{0} pint"}
                 other{"{0} pints"}
+            }
+            pint-metric{
+                dnam{"metrisk pint"}
+                one{"{0} metrisk pint"}
+                other{"{0} metriske pints"}
             }
             quart{
                 dnam{"engelske quarts"}
@@ -691,6 +758,19 @@ da{
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"l/100 km"}
+                one{"{0} l/100 km"}
+                other{"{0} l/100 km"}
+            }
+        }
+        coordinate{
+            east{"{0}Ø"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}V"}
+        }
         duration{
             day{
                 dnam{"dag"}
@@ -757,7 +837,7 @@ da{
                 other{"{0} lysår"}
             }
             meter{
-                dnam{"m"}
+                dnam{"meter"}
                 one{"{0} m"}
                 other{"{0} m"}
             }
@@ -911,6 +991,11 @@ da{
                 one{"{0} radian"}
                 other{"{0} radian"}
             }
+            revolution{
+                dnam{"omdrejning"}
+                one{"{0} omdrejning"}
+                other{"{0} omdrejninger"}
+            }
         }
         area{
             acre{
@@ -927,6 +1012,7 @@ da{
                 dnam{"cm²"}
                 one{"{0} cm²"}
                 other{"{0} cm²"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"kvadratfod"}
@@ -937,6 +1023,7 @@ da{
                 dnam{"in²"}
                 one{"{0} in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"km²"}
@@ -947,6 +1034,7 @@ da{
                 dnam{"m²"}
                 one{"{0} m²"}
                 other{"{0} m²"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"mi²"}
@@ -963,6 +1051,11 @@ da{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"l/100 km"}
+                one{"{0} l/100 km"}
+                other{"{0} l/100 km"}
+            }
             liter-per-kilometer{
                 dnam{"l/km"}
                 one{"{0} l/km"}
@@ -973,6 +1066,12 @@ da{
                 one{"{0} mpg"}
                 other{"{0} mpg"}
             }
+        }
+        coordinate{
+            east{"{0}Ø"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}V"}
         }
         digital{
             bit{
@@ -1027,10 +1126,16 @@ da{
             }
         }
         duration{
+            century{
+                dnam{"årh."}
+                one{"{0} årh."}
+                other{"{0} årh."}
+            }
             day{
                 dnam{"dage"}
                 one{"{0} dag"}
                 other{"{0} dage"}
+                per{"{0}/dag"}
             }
             hour{
                 dnam{"timer"}
@@ -1050,13 +1155,15 @@ da{
             }
             minute{
                 dnam{"minutter"}
-                one{"{0} min"}
-                other{"{0} min"}
+                one{"{0} min."}
+                other{"{0} min."}
+                per{"{0}/min."}
             }
             month{
                 dnam{"måneder"}
                 one{"{0} md."}
                 other{"{0} mdr."}
+                per{"{0}/md."}
             }
             nanosecond{
                 dnam{"ns"}
@@ -1065,19 +1172,21 @@ da{
             }
             second{
                 dnam{"sekunder"}
-                one{"{0} sek"}
-                other{"{0} sek"}
-                per{"{0} /sek"}
+                one{"{0} sek."}
+                other{"{0} sek."}
+                per{"{0}/sek."}
             }
             week{
                 dnam{"uger"}
                 one{"{0} uge"}
                 other{"{0} uger"}
+                per{"{0}/uge"}
             }
             year{
                 dnam{"år"}
                 one{"{0} år"}
                 other{"{0} år"}
+                per{"{0}/år"}
             }
         }
         electric{
@@ -1166,6 +1275,7 @@ da{
                 dnam{"cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"dm"}
@@ -1176,16 +1286,19 @@ da{
                 dnam{"fod"}
                 one{"{0} fod"}
                 other{"{0} fod"}
+                per{"{0}/ft"}
             }
             inch{
                 dnam{"tommer"}
                 one{"{0} tomme"}
                 other{"{0} tommer"}
+                per{"{0}/tomme"}
             }
             kilometer{
                 dnam{"km"}
                 one{"{0} km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"lysår"}
@@ -1196,6 +1309,7 @@ da{
                 dnam{"meter"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"µm"}
@@ -1206,6 +1320,11 @@ da{
                 dnam{"engelske mil"}
                 one{"{0} mil"}
                 other{"{0} mil"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"mm"}
@@ -1255,11 +1374,13 @@ da{
                 dnam{"gram"}
                 one{"{0} g"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kilogram"}
                 one{"{0} kg"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"t"}
@@ -1280,6 +1401,7 @@ da{
                 dnam{"oz"}
                 one{"{0} oz"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"oz t"}
@@ -1290,6 +1412,7 @@ da{
                 dnam{"pund"}
                 one{"{0} lb"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
             }
             ton{
                 dnam{"tn"}
@@ -1369,6 +1492,11 @@ da{
                 one{"{0} km/t."}
                 other{"{0} km/t."}
             }
+            knot{
+                dnam{"knob"}
+                one{"{0} knob"}
+                other{"{0} knob"}
+            }
             meter-per-second{
                 dnam{"m/s"}
                 one{"{0} m/s"}
@@ -1391,6 +1519,11 @@ da{
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"K"}
                 one{"{0} K"}
@@ -1412,6 +1545,7 @@ da{
                 dnam{"cm³"}
                 one{"{0} cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ft³"}
@@ -1432,6 +1566,7 @@ da{
                 dnam{"m³"}
                 one{"{0} m³"}
                 other{"{0} m³"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"mi³"}
@@ -1444,9 +1579,14 @@ da{
                 other{"{0} yd³"}
             }
             cup{
-                dnam{"engelsk kop"}
+                dnam{"cups"}
                 one{"{0} c"}
                 other{"{0} c"}
+            }
+            cup-metric{
+                dnam{"mcup"}
+                one{"{0} mc"}
+                other{"{0} mc"}
             }
             deciliter{
                 dnam{"dl"}
@@ -1462,6 +1602,7 @@ da{
                 dnam{"gal"}
                 one{"{0} gal"}
                 other{"{0} gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hl"}
@@ -1472,6 +1613,7 @@ da{
                 dnam{"liter"}
                 one{"{0} l"}
                 other{"{0} l"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"ML"}
@@ -1487,6 +1629,11 @@ da{
                 dnam{"pt"}
                 one{"{0} pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                one{"mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"qt"}

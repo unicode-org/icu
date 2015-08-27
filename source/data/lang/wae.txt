@@ -199,7 +199,7 @@ wae{
             latn{"Arabiši Zálä"}
         }
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"Sprač: {0}"}
         script{"Alfabét: {0}"}

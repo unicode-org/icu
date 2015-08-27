@@ -39,7 +39,7 @@ lb{
         ar{"Arabesch"}
         ar_001{"Modernt Héicharabesch"}
         arc{"Aramäesch"}
-        arn{"Araukanesch"}
+        arn{"Mapudungun"}
         aro{"Araona"}
         arp{"Arapaho-Sprooch"}
         arq{"Algerescht Arabesch"}
@@ -55,7 +55,6 @@ lb{
         awa{"Awadhi"}
         ay{"Aymara"}
         az{"Aserbaidschanesch"}
-        azb{"Süd-Aserbaidschanesch"}
         ba{"Baschkiresch"}
         bal{"Belutschesch"}
         ban{"Balinesesch"}
@@ -882,7 +881,7 @@ lb{
         VALENCIA{"Valencianesch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"Sprooch: {0}"}
         script{"Schrëft: {0}"}

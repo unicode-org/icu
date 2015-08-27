@@ -19,7 +19,10 @@ sl{
         colStrength{"Moč razvrščanja"}
         collation{"razvrščanje"}
         currency{"valuta"}
-        numbers{"Številke"}
+        hc{"urni prikaz (12 ali 24)"}
+        lb{"Slog preloma vrstic"}
+        ms{"merski sistem"}
+        numbers{"številke"}
         timezone{"Časovni pas"}
         va{"Različica območnih nastavitev"}
         variableTop{"Razvrščanje kot simboli"}
@@ -67,6 +70,7 @@ sl{
         bem{"bemba"}
         bez{"benajščina"}
         bg{"bolgarščina"}
+        bgn{"zahodnobalučijščina"}
         bho{"bodžpuri"}
         bi{"bislamščina"}
         bik{"bikolski jezik"}
@@ -277,6 +281,7 @@ sl{
         lo{"laoščina"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"severnolurijščina"}
         lt{"litovščina"}
         lu{"luba-katanga"}
         lua{"luba-lulua"}
@@ -321,12 +326,14 @@ sl{
         mwr{"marvarščina"}
         my{"burmanščina"}
         myv{"erzjanščina"}
+        mzn{"mazanderanščina"}
         na{"naurujščina"}
         nap{"napolitanščina"}
         naq{"khoekhoe"}
         nb{"knjižna norveščina"}
         nd{"severna ndebelščina"}
         nds{"nizka nemščina"}
+        nds_NL{"nizka saščina"}
         ne{"nepalščina"}
         new{"nevarščina"}
         nia{"niaščina"}
@@ -397,6 +404,7 @@ sl{
         scn{"sicilijanščina"}
         sco{"škotščina"}
         sd{"sindščina"}
+        sdh{"južna kurdščina"}
         se{"severna samijščina"}
         seh{"sena"}
         sel{"selkupščina"}
@@ -482,9 +490,10 @@ sl{
         wal{"valamščina"}
         war{"varajščina"}
         was{"vašajščina"}
+        wbp{"varlpirščina"}
         wo{"volofščina"}
         xal{"kalmiščina"}
-        xh{"xhosa"}
+        xh{"koščina"}
         xog{"sogščina"}
         yao{"jaojščina"}
         yap{"japščina"}
@@ -579,7 +588,7 @@ sl{
         Maya{"majevska slikovna pisava"}
         Mero{"meroitski"}
         Mlym{"malajalamski"}
-        Mong{"mongolski"}
+        Mong{"mongolska"}
         Moon{"Moonova pisava za slepe"}
         Mtei{"manipurski"}
         Mymr{"mjanmarski"}
@@ -635,7 +644,7 @@ sl{
         Hant{"tradicionalna pisava han"}
     }
     Scripts%variant{
-        Arab{"Perzijskoarabski"}
+        Arab{"perzijskoarabski"}
     }
     Types{
         calendar{
@@ -643,7 +652,7 @@ sl{
             chinese{"kitajski koledar"}
             coptic{"Koptski koledar"}
             dangi{"stari korejski koledar"}
-            ethiopic{"Etiopski koledar"}
+            ethiopic{"etiopski koledar"}
             ethiopic-amete-alem{"Etiopsko ametsko alemski koledar"}
             gregorian{"gregorijanski koledar"}
             hebrew{"hebrejski koledar"}
@@ -652,7 +661,7 @@ sl{
             islamic-civil{"islamski civilni koledar"}
             iso8601{"koledar ISO-8601"}
             japanese{"japonski koledar"}
-            persian{"Perzijski koledar"}
+            persian{"perzijski koledar"}
             roc{"kitajski državni koledar"}
         }
         colAlternate{
@@ -707,45 +716,61 @@ sl{
             traditional{"razvrščanje po tradicionalnem sistemu"}
             unihan{"Razvrščanje koren-poteza"}
         }
+        hc{
+            h11{"12-urni sistem (0–11)"}
+            h12{"12-urni sistem (1–12)"}
+            h23{"24-urni sistem (0–23)"}
+            h24{"24-urni sistem (1–24)"}
+        }
+        lb{
+            loose{"Prosti slog preloma vrstic"}
+            normal{"Običajni slog preloma vrstic"}
+            strict{"Strogi slog preloma vrstic"}
+        }
+        ms{
+            metric{"metrični sistem"}
+            uksystem{"imperialni merski sistem"}
+            ussystem{"merski sistem Združenih držav"}
+        }
         numbers{
-            arab{"Arabskoindijske števke"}
-            arabext{"Razširjene arabskoindijske števke"}
-            armn{"Armenske številke"}
-            armnlow{"Armenske majhne številke"}
+            arab{"arabskoindijske števke"}
+            arabext{"razširjene arabskoindijske števke"}
+            armn{"armenske številke"}
+            armnlow{"armenske majhne številke"}
             beng{"Bengalske števke"}
-            deva{"Devangarske števke"}
+            deva{"devangarske števke"}
             ethi{"Etiopijske številke"}
             finance{"Finančne številke"}
-            fullwide{"Števke polne širine"}
-            geor{"Gruzijske številke"}
-            grek{"Grške številke"}
-            greklow{"Grške male številke"}
-            gujr{"Gudžaratske števke"}
-            guru{"Gurmuške števke"}
-            hanidec{"Kitajske decimalne številke"}
-            hans{"Poenostavljene kitajske številke"}
-            hansfin{"Poenostavljene kitajske finančne številke"}
-            hant{"Tradicionalne kitajske številke"}
-            hantfin{"Tradicionalne kitajske finančne številke"}
-            hebr{"Hebrejske številke"}
-            jpan{"Japonske številke"}
-            jpanfin{"Japonske finančne številke"}
-            khmr{"Kmerske števke"}
+            fullwide{"števke polne širine"}
+            geor{"gruzijske številke"}
+            grek{"grške številke"}
+            greklow{"grške male številke"}
+            gujr{"gudžaratske števke"}
+            guru{"gurmuške števke"}
+            hanidec{"kitajske decimalne številke"}
+            hans{"poenostavljene kitajske številke"}
+            hansfin{"poenostavljene kitajske finančne številke"}
+            hant{"tradicionalne kitajske številke"}
+            hantfin{"tradicionalne kitajske finančne številke"}
+            hebr{"hebrejske številke"}
+            jpan{"japonske številke"}
+            jpanfin{"japonske finančne številke"}
+            khmr{"kmerske števke"}
             knda{"Kanaredske števke"}
-            laoo{"Laoške števke"}
-            latn{"Zahodne števke"}
-            mlym{"Malajalamske števke"}
+            laoo{"laoške števke"}
+            latn{"zahodne števke"}
+            mlym{"malajalamske števke"}
             mong{"Mongolske števke"}
-            mymr{"Mjanmarske števke"}
+            mymr{"mjanmarske števke"}
             native{"Domače števke"}
-            orya{"Orijske števke"}
-            roman{"Rimske številke"}
-            romanlow{"Rimske male številke"}
-            taml{"Tamilske številke"}
-            tamldec{"Tamilske števke"}
-            telu{"Teluške števke"}
-            thai{"Tajske števke"}
-            tibt{"Tibetanske števke"}
+            orya{"orijske števke"}
+            roman{"rimske številke"}
+            romanlow{"rimske male številke"}
+            taml{"tamilske številke"}
+            tamldec{"tamilske števke"}
+            telu{"teluške števke"}
+            thai{"tajske števke"}
+            tibt{"tibetanske števke"}
             traditional{"Tradicionalne številke"}
             vaii{"Številke vai"}
         }
@@ -780,7 +805,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"{0}"}

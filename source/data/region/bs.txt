@@ -26,7 +26,7 @@ bs{
         034{"Južna Azija"}
         035{"Jugoistočna Azija"}
         039{"Južna Evropa"}
-        053{"Australija i Novi Zeland"}
+        053{"Australazija"}
         054{"Melanezija"}
         057{"Mikronezijski Region"}
         061{"Polinezija"}
@@ -65,7 +65,7 @@ bs{
         BH{"Bahrein"}
         BI{"Burundi"}
         BJ{"Benin"}
-        BL{"Sv. Bartolomej"}
+        BL{"Sveti Bartolomej"}
         BM{"Bermuda"}
         BN{"Brunej"}
         BO{"Bolivija"}
@@ -78,7 +78,7 @@ bs{
         BY{"Bjelorusija"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kokos (Keling) Ostrva"}
+        CC{"Kokosova (Kilingova) ostrva"}
         CD{"Demokratska Republika Kongo"}
         CF{"Centralnoafrička Republika"}
         CG{"Kongo"}
@@ -139,7 +139,7 @@ bs{
         GW{"Gvineja-Bisao"}
         GY{"Gvajana"}
         HK{"Hong Kong (S. A. R. Kina)"}
-        HM{"Herd i Mekdonald Ostrva"}
+        HM{"Heard i arhipelag McDonald"}
         HN{"Honduras"}
         HR{"Hrvatska"}
         HT{"Haiti"}
@@ -172,7 +172,7 @@ bs{
         KZ{"Kazahstan"}
         LA{"Laos"}
         LB{"Liban"}
-        LC{"Sent Lucija"}
+        LC{"Sveta Lucija"}
         LI{"Lihtenštajn"}
         LK{"Šri Lanka"}
         LR{"Liberija"}
@@ -224,7 +224,7 @@ bs{
         PH{"Filipini"}
         PK{"Pakistan"}
         PL{"Poljska"}
-        PM{"Sen Pjer i Mikelon"}
+        PM{"Sveti Petar i Mikelon"}
         PN{"Pitkern"}
         PR{"Porto Riko"}
         PS{"Palestinska Teritorija"}
@@ -246,7 +246,7 @@ bs{
         SG{"Singapur"}
         SH{"Sveta Helena"}
         SI{"Slovenija"}
-        SJ{"Svalbard i Janmajen Ostrva"}
+        SJ{"Svalbard i Jan Majen"}
         SK{"Slovačka"}
         SL{"Sijera Leone"}
         SM{"San Marino"}
@@ -260,7 +260,7 @@ bs{
         SY{"Sirija"}
         SZ{"Svazilend"}
         TA{"Tristan da Kunja"}
-        TC{"Turks i Kajkos Ostrva"}
+        TC{"Ostrva Turks i Caicos"}
         TD{"Čad"}
         TF{"Francuske Južne Teritorije"}
         TG{"Togo"}
@@ -278,18 +278,18 @@ bs{
         TZ{"Tanzanija"}
         UA{"Ukrajina"}
         UG{"Uganda"}
-        UM{"Manja Udaljena Ostrva SAD"}
+        UM{"Udaljena ostrva SAD"}
         US{"Sjedinjene Američke Države"}
         UY{"Urugvaj"}
         UZ{"Uzbekistan"}
         VA{"Vatikan"}
-        VC{"Sent Vinsent i Grenadini"}
+        VC{"Sveti Vincent i Grenadini"}
         VE{"Venecuela"}
         VG{"Britanska Djevičanska Ostrva"}
         VI{"Djevičanska Ostrva SAD"}
         VN{"Vijetnam"}
         VU{"Vanuatu"}
-        WF{"Valis i Futuna Ostrva"}
+        WF{"Wallis i Futuna"}
         WS{"Samoa"}
         XK{"Kosovo"}
         YE{"Jemen"}
@@ -297,7 +297,7 @@ bs{
         ZA{"Južnoafrička Republika"}
         ZM{"Zambija"}
         ZW{"Zimbabve"}
-        ZZ{"Nepoznata ili nevažeća oblast"}
+        ZZ{"Nepoznata oblast"}
     }
     Countries%short{
         GB{"UK"}
@@ -310,9 +310,9 @@ bs{
         CD{"Kongo (DRC)"}
         CG{"Republika Kongo"}
         CI{"Bjelokosna Obala"}
-        FK{"Folklandska ostrva (Malvinska ostrva)"}
+        FK{"Falklandska ostrva (Malvinska ostrva)"}
         MK{"Makedonija (BJR)"}
         TL{"Istočni Timor"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.77"}
 }

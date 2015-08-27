@@ -8,344 +8,375 @@
 // ***************************************************************************
 uz{
     Keys{
-        calendar{"Taqvim"}
-        collation{"Saralash tartibi"}
-        currency{"Valyuta"}
-        numbers{"Raqamlar"}
+        calendar{"taqvim"}
+        collation{"saralash tartibi"}
+        currency{"valyuta"}
+        hc{"soat tizimi (12 yoki 24)"}
+        lb{"qatorni uzish uslubi"}
+        ms{"o‘lchov tizimi"}
+        numbers{"raqamlar"}
     }
     Languages{
-        ab{"abxazcha"}
-        af{"afrikancha"}
-        agq{"ag‘emcha"}
-        ak{"akancha"}
-        am{"amxarcha"}
-        ar{"arabcha"}
-        ar_001{"zamonavij standart arabcha"}
-        arn{"mapuchiycha"}
-        as{"assamcha"}
-        asa{"asucha"}
-        az{"ozarbayjoncha"}
-        ba{"boshqircha"}
-        be{"belaruscha"}
-        bem{"bembacha"}
-        bez{"benacha"}
-        bg{"bolgarcha"}
-        bm{"bambarcha"}
-        bn{"bengalcha"}
-        bo{"tibetcha"}
-        br{"bretoncha"}
-        brx{"bodocha"}
-        bs{"bosniycha"}
-        ca{"katalancha"}
-        cgg{"chigcha"}
-        chr{"cherokcha"}
-        ckb{"sorani kurd tili"}
-        co{"korsiancha"}
-        cs{"chexcha"}
-        cy{"uelscha"}
-        da{"datcha"}
-        dav{"taitcha"}
+        ab{"abxaz"}
+        af{"afrikaans"}
+        agq{"agem"}
+        ak{"akan"}
+        am{"amxar"}
+        ar{"arab"}
+        ar_001{"standart arab"}
+        arn{"araukan"}
+        as{"assam"}
+        asa{"asu"}
+        az{"ozarbayjon"}
+        ba{"boshqird"}
+        be{"belarus"}
+        bem{"bemba"}
+        bez{"bena"}
+        bg{"bolgar"}
+        bgn{"g‘arbiy beluji"}
+        bm{"bambar"}
+        bn{"bengal"}
+        bo{"tibet"}
+        br{"breton"}
+        brx{"bodo"}
+        bs{"bosniy"}
+        ca{"katalan"}
+        ce{"chechen"}
+        cgg{"chiga"}
+        chr{"cheroki"}
+        ckb{"sorani-kurd"}
+        co{"korsikan"}
+        cs{"chex"}
+        cv{"chuvash"}
+        cy{"valliy"}
+        da{"dat"}
+        dav{"taita"}
         de{"nemischa"}
-        de_AT{"Avstriya olmonchasi"}
-        de_CH{"Shvesariya olmonchasi"}
-        dje{"zarmacha"}
+        de_AT{"nemis (Avstriya)"}
+        de_CH{"yuqori nemis (Shveytsariya)"}
+        dje{"zarma"}
         dsb{"quyi sorbcha"}
-        dua{"dualcha"}
-        dyo{"yola-fonyicha"}
-        dz{"yovoncha"}
-        ebu{"embucha"}
-        ee{"ivicha"}
-        el{"yunoncha"}
+        dua{"duala"}
+        dyo{"diola-fogni"}
+        dz{"dzongka"}
+        ebu{"embu"}
+        ee{"eve"}
+        el{"grek"}
         en{"inglizcha"}
-        en_AU{"Avstraliya inglizchasi"}
-        en_CA{"Kanada inglizchasi"}
-        en_GB{"Britaniya inglizchasi"}
-        eo{"esperantocha"}
+        en_AU{"ingliz (Avstraliya)"}
+        en_CA{"ingliz (Kanada)"}
+        en_GB{"ingliz (Britaniya)"}
+        en_US{"ingliz (Amerika)"}
+        eo{"esperanto"}
         es{"ispancha"}
-        es_419{"Lotin Amerika ispanchasi"}
-        es_ES{"Yevropa ispanchasi"}
-        es_MX{"Meksika ispanchasi"}
+        es_419{"ispan (Lotin Amerikasi)"}
+        es_ES{"ispan (Yevropa)"}
+        es_MX{"ispan (Meksika)"}
         et{"estoncha"}
-        eu{"baskcha"}
-        fa{"forscha"}
+        eu{"bask"}
+        fa{"fors"}
         fi{"fincha"}
         fil{"filipincha"}
-        fj{"fijcha"}
+        fj{"fiji"}
         fo{"farercha"}
         fr{"fransuzcha"}
-        fr_CA{"Kanada fransuzchasi"}
-        fr_CH{"Shvesariya fransuzchasi"}
-        fy{"gʻarbiy friziancha"}
-        ga{"irlandcha"}
-        gag{"gagozcha"}
-        gl{"galitsiycha"}
-        gn{"gorancha"}
-        gsw{"shveysariya nemischasi"}
-        gu{"gujoratcha"}
-        guz{"guzcha"}
-        gv{"mencha"}
-        ha{"xauscha"}
+        fr_CA{"fransuz (Kanada)"}
+        fr_CH{"fransuz (Shveytsariya)"}
+        fy{"g‘arbiy friz"}
+        ga{"irland"}
+        gag{"gagauz"}
+        gl{"galisiy"}
+        gn{"guarani"}
+        gsw{"nemis (Shveytsariya)"}
+        gu{"gujarot"}
+        guz{"gusii"}
+        gv{"men"}
+        ha{"xausa"}
         haw{"gavaycha"}
         he{"ibroniy"}
-        hi{"hindcha"}
-        hr{"xorvatcha"}
-        hsb{"yuqori sorbcha"}
-        ht{"gaitcha"}
-        hu{"vengrcha"}
-        hy{"armancha"}
-        id{"indoneyzcha"}
-        ig{"igbocha"}
-        ii{"zichuan yicha"}
-        is{"islandcha"}
-        it{"italyancha"}
-        iu{"inuktitutcha"}
-        ja{"yaponcha"}
-        jgo{"ngombcha"}
-        jmc{"machamcha"}
-        jv{"yavancha"}
+        hi{"hind"}
+        hr{"xorvat"}
+        hsb{"yuqori sorb"}
+        ht{"gaityan"}
+        hu{"venger"}
+        hy{"arman"}
+        id{"indonez"}
+        ig{"igbo"}
+        ii{"sichuan"}
+        is{"island"}
+        it{"italyan"}
+        iu{"inuktitut"}
+        ja{"yapon"}
+        jgo{"ngomba"}
+        jmc{"machame"}
+        jv{"yavan"}
         ka{"gruzincha"}
-        kab{"qobilcha"}
-        kam{"kambcha"}
-        kde{"maqondiy"}
-        kea{"kabuverdiancha"}
-        khq{"qoyra-chincha"}
-        ki{"kikuycha"}
+        kab{"kabil"}
+        kam{"kamba"}
+        kde{"makonde"}
+        kea{"kabuverdianu"}
+        khq{"koyra-chiini"}
+        ki{"kikuyu"}
         kk{"qozoqcha"}
-        kl{"kalallisutcha"}
-        kln{"kalenjincha"}
+        kl{"grenland"}
+        kln{"kalenjin"}
         km{"xmercha"}
-        kn{"kannadcha"}
+        kn{"kannada"}
         ko{"koreyscha"}
-        koi{"komi-permyakcha"}
-        kok{"konkancha"}
+        koi{"komi-permyak"}
+        kok{"konkan"}
         ks{"kashmircha"}
-        ksb{"shambalacha"}
-        ksf{"bafiycha"}
+        ksb{"shambala"}
+        ksf{"bafiya"}
         ku{"kurdcha"}
-        kw{"kornishcha"}
+        kw{"korn"}
         ky{"qirgʻizcha"}
         la{"lotincha"}
-        lag{"langcha"}
+        lag{"langi"}
         lb{"lyuksemburgcha"}
-        lg{"gandcha"}
-        lkt{"lakotcha"}
-        ln{"lingalcha"}
+        lg{"ganda"}
+        lkt{"lakota"}
+        ln{"lingala"}
         lo{"laoscha"}
-        lt{"litovcha"}
-        lu{"luba-katangcha"}
-        luo{"luocha"}
-        luy{"luycha"}
+        lrc{"shimoliy luri"}
+        lt{"litva"}
+        lu{"luba-katanga"}
+        luo{"luo"}
+        luy{"luhya"}
         lv{"latishcha"}
-        mas{"masaycha"}
-        mer{"merucha"}
-        mfe{"morisyencha"}
-        mg{"malagasiycha"}
-        mgh{"makuva-mittocha"}
-        mgo{"metacha"}
-        mi{"maoriycha"}
-        mk{"makedoncha"}
-        ml{"malayamcha"}
-        mn{"mo‘g‘ulcha"}
-        moh{"mohaukcha"}
-        mr{"maratcha"}
-        ms{"malaycha"}
-        mt{"maltacha"}
-        mua{"mundangcha"}
-        my{"birmancha"}
-        naq{"namacha"}
-        nb{"norvegcha bokmal"}
-        nd{"shimoliy ndebelcha"}
-        ne{"nepalcha"}
-        nl{"gollandcha"}
-        nl_BE{"flamandcha"}
-        nmg{"kvaziycha"}
-        nn{"norvegcha ninorsk"}
-        nqo{"nqoancha"}
-        nus{"noyrcha"}
-        nyn{"nyankolcha"}
-        om{"oromocha"}
-        or{"oriycha"}
+        mas{"masay"}
+        men{"mende"}
+        mer{"meru"}
+        mfe{"morisyen"}
+        mg{"malagasiy"}
+        mgh{"maxuva-mitto"}
+        mgo{"meta"}
+        mi{"maori"}
+        mk{"makedon"}
+        ml{"malayalam"}
+        mn{"mo‘g‘ul"}
+        moh{"mohauk"}
+        mr{"maratxi"}
+        ms{"malay"}
+        mt{"maltiy"}
+        mua{"mundang"}
+        my{"birman"}
+        mzn{"mazanderan"}
+        naq{"nama"}
+        nb{"norveg-bokmal"}
+        nd{"shimoliy ndebele"}
+        nds{"quyi nemis"}
+        nds_NL{"quyi sakson"}
+        ne{"nepal"}
+        nl{"golland"}
+        nl_BE{"flamand"}
+        nmg{"kvasio"}
+        nn{"norveg-nyunorsk"}
+        nqo{"nko"}
+        nus{"nuer"}
+        nyn{"nyankole"}
+        om{"oromo"}
+        or{"oriya"}
         pa{"panjobcha"}
         pl{"polyakcha"}
-        ps{"pushtu tili"}
+        ps{"pushtu"}
         pt{"portugalcha"}
-        pt_BR{"Braziliya portugalchasi"}
-        pt_PT{"Yevropa portugalchasi"}
-        qu{"qvechuancha"}
-        quc{"qichiancha"}
-        rm{"romancha"}
-        rn{"rundcha"}
+        pt_BR{"portugal (Braziliya)"}
+        pt_PT{"portugal (Yevropa)"}
+        qu{"kechua"}
+        quc{"kiche"}
+        rm{"romansh"}
+        rn{"rundi"}
         ro{"rumincha"}
-        ro_MD{"moldovan rumincha"}
-        rof{"rombacha"}
+        ro_MD{"moldovan"}
+        rof{"rombo"}
         ru{"ruscha"}
-        rw{"kinyarvandcha"}
-        rwk{"ruandcha"}
-        sa{"sanskritcha"}
-        saq{"samburcha"}
-        sbp{"sanguancha"}
-        sd{"sindxiycha"}
-        se{"shimoliy semiycha"}
-        seh{"seniycha"}
-        ses{"koryaboro senniycha"}
-        sg{"sangoancha"}
-        shi{"tachilgitcha"}
-        si{"sinholcha"}
+        rw{"kinyaruanda"}
+        rwk{"ruanda"}
+        sa{"sanskrit"}
+        saq{"samburu"}
+        sbp{"sangu"}
+        sd{"sindxi"}
+        sdh{"janubiy kurd"}
+        se{"shimoliy saam"}
+        seh{"sena"}
+        ses{"koyraboro-senni"}
+        sg{"sango"}
+        shi{"tashelxit"}
+        si{"singal"}
         sk{"slovakcha"}
         sl{"slovencha"}
-        sma{"janubiy semiycha"}
-        smj{"luli semiycha"}
-        smn{"inari semiycha"}
-        sms{"shkolt semiycha"}
-        sn{"shoniycha"}
+        sma{"janubiy saam"}
+        smj{"lule-saam"}
+        smn{"inari-saam"}
+        sms{"skolt-saam"}
+        sn{"shona"}
         so{"somalicha"}
-        sq{"albancha"}
+        sq{"alban"}
         sr{"serbcha"}
-        su{"sundancha"}
-        sv{"shvedcha"}
-        sw{"svahilcha"}
-        swc{"kongo svahiliycha"}
-        ta{"tamilcha"}
-        te{"telugvancha"}
-        teo{"tesoancha"}
-        tg{"tojikcha"}
-        th{"taycha"}
-        ti{"tigrincha"}
-        tk{"turkmancha"}
-        to{"tongocha"}
-        tr{"turkcha"}
-        tt{"tatarcha"}
-        twq{"tosovoqcha"}
-        tzm{"markaziy atlas vaqt zonasi"}
-        ug{"uygʻurcha"}
-        uk{"ukraincha"}
-        und{"nomaʼlum til"}
-        ur{"urducha"}
-        uz{"oʻzbekcha"}
-        vai{"vayancha"}
-        vi{"vyetnamcha"}
-        vun{"vunjoancha"}
-        wo{"volofcha"}
-        xh{"xosancha"}
-        xog{"sogancha"}
-        yo{"yorubcha"}
-        zgh{"standart marokash tamazit"}
-        zh{"xitoycha"}
-        zh_Hans{"soddalashtirilgan xitoycha"}
-        zh_Hant{"anʼanaviy xitoycha"}
-        zu{"zuluancha"}
-        zxx{"til tarkibi yoʻq"}
+        su{"sundan"}
+        sv{"shved"}
+        sw{"suaxili"}
+        swc{"kongo-suaxili"}
+        ta{"tamil"}
+        te{"telugu"}
+        teo{"teso"}
+        tg{"tojik"}
+        th{"tay"}
+        ti{"tigrinya"}
+        tk{"turkman"}
+        to{"tongan"}
+        tr{"turk"}
+        tt{"tatar"}
+        twq{"tasavaq"}
+        tzm{"markaziy atlas tamazigxt"}
+        ug{"uyg‘ur"}
+        uk{"ukrain"}
+        und{"noma’lum til"}
+        ur{"urdu"}
+        uz{"o‘zbek"}
+        vai{"vai"}
+        vi{"vyetnam"}
+        vun{"vunjo"}
+        wbp{"valbiri"}
+        wo{"volof"}
+        xh{"kxosa"}
+        xog{"soga"}
+        yo{"yoruba"}
+        zgh{"tamazigxt"}
+        zh{"xitoy"}
+        zh_Hans{"soddalashgan xitoy"}
+        zh_Hant{"an’anaviy xitoy"}
+        zu{"zulu"}
+        zxx{"til tarkibi yo‘q"}
     }
     Languages%short{
-        en_GB{"Britaniya inglizchasi"}
-        en_US{"inglizcha (AQSH)"}
+        az{"ozar"}
+        en_GB{"ingliz (Buyuk Britaniya)"}
+        en_US{"ingliz (AQSH)"}
     }
     Scripts{
-        Arab{"Arab"}
-        Armn{"Arman"}
-        Beng{"Bengali"}
-        Bopo{"Bopomofo"}
-        Brai{"Braille"}
-        Cyrl{"Kiril"}
-        Deva{"Devangari"}
-        Ethi{"Habash"}
-        Geor{"Gruzin"}
-        Grek{"Yunon"}
-        Gujr{"Gujarati"}
-        Guru{"Gurmuxi"}
-        Hang{"Xangul"}
-        Hani{"Xan"}
-        Hans{"Soddalashtirilgan"}
-        Hant{"Anʼanaviy"}
-        Hebr{"Ibroniy"}
-        Hira{"Xiragana"}
-        Jpan{"Yapon"}
-        Kana{"Katakana"}
-        Khmr{"Xmer"}
-        Knda{"Kannada"}
-        Kore{"Koreya"}
-        Laoo{"Lao"}
-        Latn{"Lotin"}
-        Mlym{"Malayalam"}
-        Mong{"Moʻgʻulcha"}
-        Mymr{"Myanma"}
-        Orya{"Oriya"}
-        Sinh{"Sinxala"}
-        Taml{"Tamil"}
-        Telu{"Telugu"}
-        Thaa{"Taana"}
-        Thai{"Tay"}
-        Tibt{"Tibet"}
-        Zsym{"Ramzlar"}
-        Zxxx{"Yozilmagan"}
-        Zyyy{"Umumiy"}
-        Zzzz{"Nomaʼlum shrift"}
+        Arab{"arab"}
+        Armn{"arman"}
+        Beng{"bengal"}
+        Bopo{"bopomofo"}
+        Brai{"Brayl"}
+        Cyrl{"kirill"}
+        Deva{"devanagar"}
+        Ethi{"habash"}
+        Geor{"gruzin"}
+        Grek{"grek"}
+        Gujr{"gujarot"}
+        Guru{"gurmukxi"}
+        Hang{"hangul"}
+        Hani{"xitoy"}
+        Hans{"soddalashgan xitoy"}
+        Hant{"an’anaviy xitoy"}
+        Hebr{"ibroniy"}
+        Hira{"hiragana"}
+        Jpan{"yapon"}
+        Kana{"katakana"}
+        Khmr{"xmer"}
+        Knda{"kannada"}
+        Kore{"koreys"}
+        Laoo{"laos"}
+        Latn{"lotin"}
+        Mlym{"malayalam"}
+        Mong{"mo‘g‘ul"}
+        Mymr{"myanma"}
+        Orya{"oriya"}
+        Sinh{"singal"}
+        Taml{"tamil"}
+        Telu{"telugu"}
+        Thaa{"taana"}
+        Thai{"tay"}
+        Tibt{"tibet"}
+        Zsym{"belgilar"}
+        Zxxx{"yozuvsiz"}
+        Zyyy{"umumiy"}
+        Zzzz{"noma’lum yozuv"}
     }
     Scripts%stand-alone{
-        Hans{"Soddalashtirilgan"}
-        Hant{"Anʼanaviy"}
+        Hans{"soddalashgan xitoy"}
+        Hant{"an’anaviy xitoy"}
     }
     Types{
         calendar{
-            buddhist{"buddistcha taqvim"}
-            chinese{"xitoycha taqvim"}
-            dangi{"dangiycha taqvim"}
-            ethiopic{"efiopcha taqvim"}
-            gregorian{"grigoriancha taqvim"}
+            buddhist{"buddistlar taqvimi"}
+            chinese{"xitoy taqvimi"}
+            dangi{"dangi taqvimi"}
+            ethiopic{"habash taqvimi"}
+            gregorian{"grigorian taqvimi"}
             hebrew{"ibroniy taqvim"}
             islamic{"islomiy taqvim"}
-            iso8601{"iso8601 taqvimi"}
-            japanese{"yaponcha taqvim"}
-            persian{"forscha taqvim"}
-            roc{"xitoy respublikasi taqvimi"}
+            iso8601{"ISO-8601 taqvimi"}
+            japanese{"yapon taqvimi"}
+            persian{"fors taqvimi"}
+            roc{"xitoy taqvimi"}
         }
         collation{
-            ducet{"standart yunikod saralash tartibi"}
-            search{"umumiy qidiruv"}
-            standard{"Standart tariblash"}
+            ducet{"standart YUNIKOD saralash tartibi"}
+            search{"qidiruv"}
+            standard{"standart saralash tartibi"}
+        }
+        hc{
+            h11{"12 soatlik tizim (0–11)"}
+            h12{"12 soatlik tizim (1–12)"}
+            h23{"24 soatlik tizim (0–23)"}
+            h24{"24 soatlik tizim (1–24)"}
+        }
+        lb{
+            loose{"qatorni yumshoq uzish"}
+            normal{"qatorni odatiy uzish"}
+            strict{"qatorni qat’iy uzish"}
+        }
+        ms{
+            metric{"metrik tizim"}
+            uksystem{"Britaniya o‘lchov tizimi"}
+            ussystem{"AQSH o‘lchov tizimi"}
         }
         numbers{
-            arab{"Arab-hind raqamlari"}
-            arabext{"Kengaytirilgan arab-hind raqamlari"}
-            armn{"Arman sonlari"}
-            armnlow{"Arman kichik sonlari"}
-            beng{"Bengali raqamlari"}
-            deva{"Devanagari raqamlari"}
-            ethi{"Habash sonlari"}
-            fullwide{"Toʻliq kenglikdagi raqamlar"}
-            geor{"Gruzin sonlari"}
-            grek{"Yunon sonlari"}
-            greklow{"Yunon kichik raqamlari"}
-            gujr{"Gujarati raqamlari"}
-            guru{"Gurmuxi raqamlari"}
-            hanidec{"Xitoy oʻnlik sonlari"}
-            hans{"Soddalashtirilgan Xitoy sonlari"}
-            hansfin{"Soddalashtirilgan Xitoy moliya sonlari"}
-            hant{"Anʼanaviy Xitoy sonlari"}
-            hantfin{"Anʼanaviy Xitoy moliya sonlari"}
-            hebr{"Ibroniy sonlari"}
-            jpan{"Yaponiya sonlari"}
-            jpanfin{"Yaponiya moliya sonlari"}
-            khmr{"Xmer raqamlari"}
-            knda{"Kannada raqamlari"}
-            laoo{"Lao raqamlari"}
-            latn{"Gʻarb raqamlari"}
-            mlym{"Malayalam raqamlari"}
-            mymr{"Myanma raqamlari"}
-            orya{"Oriya raqamlari"}
-            roman{"Rim sonlari"}
-            romanlow{"Rim kichik sonlari"}
-            taml{"Anʼanaviy Tamil sonlari"}
-            tamldec{"Tamil raqamlari"}
-            telu{"Telugu raqamlari"}
-            thai{"Tay raqamlari"}
-            tibt{"Tibet raqamlari"}
+            arab{"arab-hind raqamlari"}
+            arabext{"kengaytirilgan arab-hind raqamlari"}
+            armn{"arman raqamlari"}
+            armnlow{"arman kichik raqamlari"}
+            beng{"bengal raqamlari"}
+            deva{"devanagar raqamlari"}
+            ethi{"habash raqamlari"}
+            fullwide{"to‘liq kenglikdagi raqamlar"}
+            geor{"gruzin raqamlari"}
+            grek{"grek raqamlari"}
+            greklow{"kichik grek raqamlari"}
+            gujr{"gujarot raqamlari"}
+            guru{"gurmukxi raqamlari"}
+            hanidec{"xitoy o‘nli raqamlari"}
+            hans{"soddalashgan xitoy raqamlari"}
+            hansfin{"soddalashgan xitoy raqamlari (moliyaviy)"}
+            hant{"an’anaviy xitoy raqamlari"}
+            hantfin{"an’anaviy xitoy raqamlari (moliyaviy)"}
+            hebr{"ibroniy raqamlar"}
+            jpan{"yapon raqamlari"}
+            jpanfin{"yapon raqamlari (moliyaviy)"}
+            khmr{"xmer raqamlari"}
+            knda{"kannada raqamlari"}
+            laoo{"laos raqamlari"}
+            latn{"zamonaviy arab raqamlari"}
+            mlym{"malayalam raqamlari"}
+            mymr{"birman raqamlari"}
+            orya{"oriya raqamlari"}
+            roman{"rim raqamlari"}
+            romanlow{"kichik rim raqamlari"}
+            taml{"an’anaviy tamil raqamlari"}
+            tamldec{"tamil raqamlari"}
+            telu{"telugu raqamlari"}
+            thai{"tay raqamlari"}
+            tibt{"tibet raqamlari"}
         }
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"Til: {0}"}
-        script{"Skript: {0}"}
+        script{"Yozuv: {0}"}
         territory{"Mintaqa: {0}"}
     }
     localeDisplayPattern{

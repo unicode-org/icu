@@ -394,5 +394,5 @@ it{
             "10: o\u00AD=%spellout-ordinal-feminine=;",
         }
     }
-    Version{"2.1.15.34"}
+    Version{"2.1.19.14"}
 }

@@ -39,7 +39,7 @@ ksh{
         av{"Avahresch"}
         ay{"Aimahresch"}
         az{"Asserbaidschahnesch"}
-        azb{"Södasserbaidschahnesch"}
+        az_Arab{"Södasserbaidschahnesch"}
         ba{"Baschkihresch"}
         bal{"Beluhtschesch"}
         ban{"Balinehsesch"}
@@ -392,7 +392,7 @@ ksh{
         VALENCIA{"valenzijaanesche Dijaläk"}
         WADEGILE{"lateijnesche Ömschreff noh Wade-Giles"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"de Schprooch afjekööz met „{0}“"}
         script{"de Schreff afjekööz met „{0}“"}

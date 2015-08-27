@@ -312,7 +312,7 @@ fi{
             "1000000000000: << biljoonalle[ >>];",
             "2000000000000: << biljoonalle[ >>];",
             "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-genetive-plural:",
+            "%spellout-cardinal-genitive-plural:",
             "-x: miinus >>;",
             "x.x: << pilkku >>;",
             "0: nollien;",
@@ -1277,5 +1277,5 @@ fi{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"2.1.15.47"}
+    Version{"2.1.19.33"}
 }

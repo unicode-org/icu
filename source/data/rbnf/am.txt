@@ -53,5 +53,5 @@ am{
             "0: =%spellout-numbering=\u129B;",
         }
     }
-    Version{"2.0.87.33"}
+    Version{"2.1.19.14"}
 }

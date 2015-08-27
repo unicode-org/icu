@@ -21,7 +21,7 @@ sw{
         018{"Afrika ya Kusini"}
         019{"Amerika"}
         021{"Amerika ya Kaskazini"}
-        029{"Karibi"}
+        029{"Karibiani"}
         030{"Asia Mashariki"}
         034{"Asia ya Kusini"}
         035{"Asia ya Kusini Mashariki"}
@@ -72,7 +72,7 @@ sw{
         BQ{"Uholanzi ya Karibiani"}
         BR{"Brazili"}
         BS{"Bahama"}
-        BT{"Butani"}
+        BT{"Bhutan"}
         BV{"Kisiwa cha Bouvet"}
         BW{"Botswana"}
         BY{"Belarusi"}
@@ -95,12 +95,12 @@ sw{
         CV{"Kepuvede"}
         CW{"Kurakao"}
         CX{"Kisiwa cha Krismasi"}
-        CY{"Saiprasi"}
+        CY{"Cyprus"}
         CZ{"Jamhuri ya Cheki"}
         DE{"Ujerumani"}
         DG{"Diego Garcia"}
         DJ{"Jibuti"}
-        DK{"Denmaki"}
+        DK{"Denmark"}
         DM{"Dominika"}
         DO{"Jamhuri ya Dominika"}
         DZ{"Aljeria"}
@@ -119,7 +119,7 @@ sw{
         FM{"Mikronesia"}
         FO{"Visiwa vya Faroe"}
         FR{"Ufaransa"}
-        GA{"Gaboni"}
+        GA{"Gabon"}
         GB{"Uingereza"}
         GD{"Grenada"}
         GE{"Jojia"}
@@ -174,11 +174,11 @@ sw{
         LB{"Lebanoni"}
         LC{"Santalusia"}
         LI{"Liechtenstein"}
-        LK{"Sirilanka"}
+        LK{"Sri Lanka"}
         LR{"Liberia"}
         LS{"Lesoto"}
         LT{"Litwania"}
-        LU{"Lasembagi"}
+        LU{"Luxembourg"}
         LV{"Lativia"}
         LY{"Libya"}
         MA{"Moroko"}
@@ -187,7 +187,7 @@ sw{
         ME{"Montenegro"}
         MF{"Saint Martin"}
         MG{"Madagaska"}
-        MH{"Visiwa vya Marshal"}
+        MH{"Visiwa vya Marshall"}
         MK{"Masedonia"}
         ML{"Mali"}
         MM{"Myanmar (Burma)"}
@@ -199,20 +199,20 @@ sw{
         MS{"Montserrati"}
         MT{"Malta"}
         MU{"Morisi"}
-        MV{"Modivu"}
+        MV{"Maldives"}
         MW{"Malawi"}
         MX{"Meksiko"}
         MY{"Malesia"}
         MZ{"Msumbiji"}
         NA{"Namibia"}
         NC{"Nyukaledonia"}
-        NE{"Nijeri"}
+        NE{"Niger"}
         NF{"Kisiwa cha Norfolk"}
         NG{"Nigeria"}
         NI{"Nikaragwa"}
         NL{"Uholanzi"}
         NO{"Norwe"}
-        NP{"Nepali"}
+        NP{"Nepal"}
         NR{"Nauru"}
         NU{"Niue"}
         NZ{"Nyuzilandi"}
@@ -220,18 +220,18 @@ sw{
         PA{"Panama"}
         PE{"Peru"}
         PF{"Polinesia ya Ufaransa"}
-        PG{"Papua"}
-        PH{"Filipino"}
+        PG{"Papua New Guinea"}
+        PH{"Ufilipino"}
         PK{"Pakistani"}
         PL{"Polandi"}
-        PM{"Santapieri na Mikeloni"}
-        PN{"Pitkairni"}
-        PR{"Pwetoriko"}
+        PM{"Santapierre na Miquelon"}
+        PN{"Visiwa vya Pitcairn"}
+        PR{"Puerto Rico"}
         PS{"Maeneo ya Palestina"}
         PT{"Ureno"}
         PW{"Palau"}
         PY{"Paragwai"}
-        QA{"Katari"}
+        QA{"Qatar"}
         QO{"Oceania ya Nje"}
         RE{"Riyunioni"}
         RO{"Romania"}
@@ -243,38 +243,38 @@ sw{
         SC{"Shelisheli"}
         SD{"Sudani"}
         SE{"Uswidi"}
-        SG{"Singapoo"}
+        SG{"Singapore"}
         SH{"Santahelena"}
         SI{"Slovenia"}
         SJ{"Svalbard na Jan Mayen"}
         SK{"Slovakia"}
         SL{"Siera Leoni"}
-        SM{"Samarino"}
+        SM{"San Marino"}
         SN{"Senegali"}
         SO{"Somalia"}
         SR{"Surinamu"}
         SS{"Sudani Kusini"}
         ST{"São Tomé na Príncipe"}
         SV{"Elsavado"}
-        SX{"Santamatini"}
-        SY{"Siria"}
+        SX{"Sint Maarten"}
+        SY{"Syria"}
         SZ{"Uswazi"}
         TA{"Tristan da Cunha"}
         TC{"Visiwa vya Turki na Kaiko"}
-        TD{"Chadi"}
+        TD{"Chad"}
         TF{"Maeneo ya Kusini ya Ufaransa"}
         TG{"Togo"}
         TH{"Tailandi"}
         TJ{"Tajikistani"}
         TK{"Tokelau"}
-        TL{"Timor ya Mashariki"}
+        TL{"Timor-Leste"}
         TM{"Turukimenistani"}
         TN{"Tunisia"}
         TO{"Tonga"}
         TR{"Uturuki"}
         TT{"Trinidad na Tobago"}
         TV{"Tuvalu"}
-        TW{"Taiwani"}
+        TW{"Taiwan"}
         TZ{"Tanzania"}
         UA{"Ukraini"}
         UG{"Uganda"}
@@ -287,7 +287,7 @@ sw{
         VE{"Venezuela"}
         VG{"Visiwa vya Virgin vya Uingereza"}
         VI{"Visiwa vya Virgin vya Marekani"}
-        VN{"Vietinamu"}
+        VN{"Vietnam"}
         VU{"Vanuatu"}
         WF{"Walis na Futuna"}
         WS{"Samoa"}
@@ -307,10 +307,12 @@ sw{
         US{"US"}
     }
     Countries%variant{
+        CD{"Kongo (DRC)"}
         CG{"Jamhuri ya Kongo"}
         CI{"Ivory Coast"}
         FK{"Visiwa vya Falkland (Islas Malvinas)"}
         MK{"Masedonia (FYROM)"}
+        TL{"Timor ya Mashariki"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.14"}
 }

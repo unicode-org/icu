@@ -20,6 +20,7 @@ sr_Latn{
         colStrength{"Sortiranje prema jačini"}
         collation{"Sortiranje"}
         currency{"valuta"}
+        lb{"stil preloma reda"}
         numbers{"brojevi"}
         timezone{"Vremenska zona"}
         va{"Varijanta lokaliteta"}
@@ -68,6 +69,7 @@ sr_Latn{
         bem{"bemba"}
         bez{"bena"}
         bg{"bugarski"}
+        bgn{"zapadni belučki"}
         bho{"Bojpuri"}
         bi{"Bislama"}
         bik{"Bikol"}
@@ -179,7 +181,7 @@ sr_Latn{
         gsw{"Švajcarski nemački"}
         gu{"gudžarati"}
         guz{"gusi"}
-        gv{"Manks"}
+        gv{"manski"}
         gwi{"Gvič’in"}
         ha{"hausa"}
         hai{"Haida"}
@@ -192,7 +194,7 @@ sr_Latn{
         ho{"Hiri Motu"}
         hr{"hrvatski"}
         hsb{"gornji lužičkosrpski"}
-        ht{"Haitski"}
+        ht{"haićanski"}
         hu{"mađarski"}
         hup{"Hupa"}
         hy{"jermenski"}
@@ -273,6 +275,7 @@ sr_Latn{
         lo{"laoški"}
         lol{"Mongo"}
         loz{"Lozi"}
+        lrc{"severni luri"}
         lt{"litvanski"}
         lu{"luba-katanga"}
         lua{"Luba-lulua"}
@@ -318,12 +321,14 @@ sr_Latn{
         mwr{"Marvari"}
         my{"burmanski"}
         myv{"Erzija"}
+        mzn{"mazanderanski"}
         na{"Nauru"}
         nap{"Neapolitanski"}
         naq{"nama"}
         nb{"norveški bokmal"}
         nd{"severni ndebele"}
         nds{"Niski nemački"}
+        nds_NL{"niskosaksonski"}
         ne{"nepalski"}
         new{"Nevari"}
         ng{"Ndonga"}
@@ -336,7 +341,7 @@ sr_Latn{
         no{"Norveški"}
         nog{"Nogai"}
         non{"Stari norski"}
-        nqo{"N’ko"}
+        nqo{"n’ko"}
         nr{"Južni ndebele"}
         nso{"Severni soto"}
         nus{"nuer"}
@@ -398,6 +403,7 @@ sr_Latn{
         scn{"Sicilijanski"}
         sco{"Škotski"}
         sd{"sindi"}
+        sdh{"južnokurdski"}
         se{"severni sami"}
         seh{"sena"}
         sel{"Selkap"}
@@ -426,7 +432,7 @@ sr_Latn{
         srr{"Serer"}
         ss{"Svati"}
         st{"Sesoto"}
-        su{"sudanski"}
+        su{"sundanski"}
         suk{"Sukuma"}
         sus{"Susu"}
         sux{"Sumerski"}
@@ -442,7 +448,7 @@ sr_Latn{
         teo{"teso"}
         ter{"Tereno"}
         tet{"Tetum"}
-        tg{"Tađik"}
+        tg{"tadžički"}
         th{"tajlandski"}
         ti{"tigrinja"}
         tig{"Tigre"}
@@ -486,6 +492,7 @@ sr_Latn{
         wal{"Valamo"}
         war{"Varaj"}
         was{"Vašo"}
+        wbp{"varlpiri"}
         wo{"volof"}
         xal{"Kalmik"}
         xh{"kosa"}
@@ -615,7 +622,7 @@ sr_Latn{
         Sgnw{"znakovno pismo"}
         Shaw{"šavijansko pismo"}
         Sinh{"sinhalsko pismo"}
-        Sund{"sudansko pismo"}
+        Sund{"sundansko pismo"}
         Sylo{"siloti nagri pismo"}
         Syrc{"sirijsko pismo"}
         Syre{"sirijsko estrangelo pismo"}
@@ -795,7 +802,7 @@ sr_Latn{
         TARASK{"Taraskijevička ortografija"}
         VALENCIA{"Valencijska"}
     }
-    Version{"2.1.15.91"}
+    Version{"2.1.19.80"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"pismo: {0}"}

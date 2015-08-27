@@ -19,6 +19,9 @@ ms{
         colStrength{"Kekuatan Pengisihan"}
         collation{"Urutan Isihan"}
         currency{"Mata wang"}
+        hc{"Kitaran Jam (12 berbanding 24)"}
+        lb{"Gaya Pemisah Baris"}
+        ms{"Sistem Ukuran"}
         numbers{"Nombor"}
         timezone{"Zon Waktu"}
         va{"Varian Tempat"}
@@ -47,9 +50,9 @@ ms{
         av{"Avaric"}
         ay{"Aymara"}
         az{"Azerbaijan"}
-        azb{"Azerbaijan Selatan"}
         ba{"Bashkir"}
         bal{"Baluchi"}
+        bas{"Basaa"}
         bax{"Bamun"}
         bbj{"Ghomala"}
         be{"Belarus"}
@@ -58,6 +61,7 @@ ms{
         bez{"Bena"}
         bfd{"Bafut"}
         bg{"Bulgaria"}
+        bgn{"Balochi Barat"}
         bkm{"Kom"}
         bm{"Bambara"}
         bn{"Benggala"}
@@ -114,6 +118,7 @@ ms{
         es_MX{"Sepanyol Mexico"}
         et{"Estonia"}
         eu{"Basque"}
+        ewo{"Ewondo"}
         fa{"Parsi"}
         fi{"Finland"}
         fil{"Filipina"}
@@ -122,7 +127,7 @@ ms{
         fr{"Perancis"}
         fr_CA{"Perancis Kanada"}
         fr_CH{"Perancis Switzerland"}
-        fy{"Frisian"}
+        fy{"Frisian Barat"}
         ga{"Ireland"}
         gaa{"Ga"}
         gag{"Gagauz"}
@@ -141,7 +146,7 @@ ms{
         haw{"Hawaii"}
         he{"Ibrani"}
         hi{"Hindi"}
-        hr{"Croat"}
+        hr{"Croatia"}
         hsb{"Upper Sorbian"}
         ht{"Haiti"}
         hu{"Hungary"}
@@ -194,6 +199,7 @@ ms{
         ln{"Lingala"}
         lo{"Laos"}
         loz{"Lozi"}
+        lrc{"Luri Utara"}
         lt{"Lithuania"}
         lu{"Luba-Katanga"}
         lua{"Luba-Lulua"}
@@ -225,11 +231,14 @@ ms{
         naq{"Nama"}
         nb{"Bokmål Norway"}
         nd{"Ndebele Utara"}
+        nds{"Jerman Rendah"}
+        nds_NL{"Saxon Rendah"}
         ne{"Nepal"}
         nl{"Belanda"}
         nl_BE{"Flemish"}
         nmg{"Kwasio"}
         nn{"Nynorsk Norway"}
+        nnh{"Ngiemboon"}
         no{"Norway"}
         nqo{"N’ko"}
         nso{"Sotho Utara"}
@@ -261,6 +270,7 @@ ms{
         sba{"Ngambay"}
         sbp{"Sangu"}
         sd{"Sindhi"}
+        sdh{"Kurdish Selatan"}
         se{"Sami Utara"}
         see{"Seneca"}
         seh{"Sena"}
@@ -321,6 +331,7 @@ ms{
         vi{"Vietnam"}
         vun{"Vunjo"}
         wae{"Walser"}
+        wbp{"Warlpiri"}
         wo{"Wolof"}
         xh{"Xhosa"}
         xog{"Soga"}
@@ -466,6 +477,22 @@ ms{
             traditional{"Aturan Isih Tradisional"}
             unihan{"Aturan Isih Coretan Radikal"}
         }
+        hc{
+            h11{"Sistem 12 Jam (0–11)"}
+            h12{"Sistem 12 Jam (1–12)"}
+            h23{"Sistem 24 Jam (0–23)"}
+            h24{"Sistem 24 Jam (1–24)"}
+        }
+        lb{
+            loose{"Gaya Pemisah Baris Bebas"}
+            normal{"Gaya Pemisah Baris Biasa"}
+            strict{"Gaya Pemisah Baris Ketat"}
+        }
+        ms{
+            metric{"Sistem Metrik"}
+            uksystem{"Sistem Ukuran Imperial"}
+            ussystem{"Sistem Ukuran AS"}
+        }
         numbers{
             arab{"Digit Indi-Arab"}
             arabext{"Digit Indi Arab Lanjutan"}
@@ -509,7 +536,7 @@ ms{
             vaii{"Digit Vai"}
         }
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.94"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

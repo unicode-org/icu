@@ -54,5 +54,5 @@ ses{
         zh{"Sinuwa senni, Mandareŋ"}
         zu{"Zulu senni"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.14"}
 }

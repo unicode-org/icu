@@ -8,7 +8,10 @@
 // ***************************************************************************
 fr_CA{
     Languages{
+        arn{"araukan"}
         luo{"luo"}
+        mgo{"Meta’"}
+        nds{"bas allemand"}
     }
     Scripts{
         Deva{"devanagari"}
@@ -21,11 +24,13 @@ fr_CA{
         collation{
             dictionary{"Ordre de tri du dictionnaire"}
             reformed{"Ordre de tri réformé"}
+            searchjl{"Rechercher par consonne initiale en hangeul"}
         }
         numbers{
+            gujr{"chiffres gujaratis"}
             mong{"Chiffres mongols"}
             taml{"chiffres tamouls traditionnels"}
         }
     }
-    Version{"2.1.13.23"}
+    Version{"2.1.19.14"}
 }

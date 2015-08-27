@@ -19,6 +19,9 @@ hu{
         colStrength{"Rendezés erőssége"}
         collation{"Rendezési sorrend"}
         currency{"Pénznem"}
+        hc{"Óraformátum (12 – 24)"}
+        lb{"Sortörés stílusa"}
+        ms{"Mértékegységrendszer"}
         numbers{"Számok"}
         timezone{"Időzóna"}
         va{"Földrajzi helyvariáns"}
@@ -70,6 +73,7 @@ hu{
         bez{"bena"}
         bfd{"bafut"}
         bg{"bolgár"}
+        bgn{"nyugati beludzs"}
         bho{"bodzspuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -295,6 +299,7 @@ hu{
         lo{"laoszi"}
         lol{"mongó"}
         loz{"lozi"}
+        lrc{"északi luri"}
         lt{"litván"}
         lu{"luba-katanga"}
         lua{"luba-lulua"}
@@ -343,12 +348,14 @@ hu{
         my{"burmai"}
         mye{"myene"}
         myv{"erzjány"}
+        mzn{"mázanderáni"}
         na{"naurui"}
         nap{"nápolyi"}
         naq{"nama"}
         nb{"norvég bokmal"}
         nd{"északi ndebele"}
         nds{"alsónémet"}
+        nds_NL{"alsószász"}
         ne{"nepáli"}
         new{"nevari"}
         ng{"ndonga"}
@@ -425,6 +432,7 @@ hu{
         scn{"szicíliai"}
         sco{"skót"}
         sd{"szindhi"}
+        sdh{"dél-kurd"}
         se{"északi számi"}
         see{"szeneka"}
         seh{"szena"}
@@ -518,6 +526,7 @@ hu{
         wal{"valamo"}
         war{"varaó"}
         was{"vasó"}
+        wbp{"warlpiri"}
         wo{"volof"}
         xal{"kalmük"}
         xh{"hosza"}
@@ -679,7 +688,7 @@ hu{
         Zzzz{"Ismeretlen írásrendszer"}
     }
     Scripts%stand-alone{
-        Hans{"Egyszerűsített Han"}
+        Hans{"Egyszerűsített kínai"}
         Hant{"Hagyományos kínai"}
     }
     Scripts%variant{
@@ -754,6 +763,22 @@ hu{
             stroke{"Vonássorrend"}
             traditional{"Hagyományos"}
             unihan{"Szótővonás rendezési sorrend"}
+        }
+        hc{
+            h11{"12 órás rendszer (0–11)"}
+            h12{"12 órás rendszer (0–12)"}
+            h23{"24 órás rendszer (0–23)"}
+            h24{"24 órás rendszer (0–24)"}
+        }
+        lb{
+            loose{"Tág stílusú sortörés"}
+            normal{"Normál stílusú sortörés"}
+            strict{"Szűk stílusú sortörés"}
+        }
+        ms{
+            metric{"Méterrendszer"}
+            uksystem{"Angolszász mértékegységrendszer"}
+            ussystem{"Amerikai mértékegységrendszer"}
         }
         numbers{
             arab{"Arab-indiai számjegyek"}
@@ -856,7 +881,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.15.91"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

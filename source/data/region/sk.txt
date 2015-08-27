@@ -309,8 +309,8 @@ sk{
     Countries%variant{
         CD{"Konžská demokratická republika"}
         CG{"Konžská republika"}
-        FK{"Malvíny"}
+        FK{"Falklandy (Malvíny)"}
         MK{"Macedónsko (BJRM)"}
     }
-    Version{"2.1.16.9"}
+    Version{"2.1.19.14"}
 }

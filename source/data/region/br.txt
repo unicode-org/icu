@@ -69,7 +69,7 @@ br{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
-        BQ{"Nederlandat Karib"}
+        BQ{"Karib Nederlandat"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhoutan"}
@@ -92,7 +92,7 @@ br{
         CP{"Enez Clipperton"}
         CR{"Costa Rica"}
         CU{"Kuba"}
-        CV{"Kab Glas"}
+        CV{"Kab-Glas"}
         CW{"Curaçao"}
         CX{"Enez Christmas"}
         CY{"Kiprenez"}
@@ -233,13 +233,13 @@ br{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Oseania diabell"}
-        RE{"Reünion"}
+        RE{"Ar Reünion"}
         RO{"Roumania"}
         RS{"Serbia"}
         RU{"Rusia"}
         RW{"Rwanda"}
         SA{"Arabia Saoudat"}
-        SB{"Salomon"}
+        SB{"Inizi Salomon"}
         SC{"Sechelez"}
         SD{"Soudan"}
         SE{"Sveden"}
@@ -300,11 +300,11 @@ br{
         ZZ{"Rannved dianav"}
     }
     Countries%short{
-        GB{"R.U."}
+        GB{"RU"}
         HK{"Hong Kong"}
         MO{"Macau"}
         PS{"Palestina"}
-        US{"S.U."}
+        US{"SU"}
     }
     Countries%variant{
         CD{"Kongo (RDK)"}
@@ -314,5 +314,5 @@ br{
         MK{"Makedonia (RYKM)"}
         TL{"Timor ar Reter"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.94"}
 }

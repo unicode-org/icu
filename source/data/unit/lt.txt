@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 lt{
-    Version{"2.1.15.60"}
+    Version{"2.1.19.14"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -59,6 +59,13 @@ lt{
                 one{"{0} radianas"}
                 other{"{0} radianų"}
             }
+            revolution{
+                dnam{"pilnas apsisukimas"}
+                few{"{0} pilni apsisukimai"}
+                many{"{0} pilno apsisukimo"}
+                one{"{0} pilnas apsisukimas"}
+                other{"{0} pilnų apsisukimų"}
+            }
         }
         area{
             acre{
@@ -81,6 +88,7 @@ lt{
                 many{"{0} kvadratinio centimetro"}
                 one{"{0} kvadratinis centimetras"}
                 other{"{0} kvadratinių centimetrų"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"kvadratinės pėdos"}
@@ -95,6 +103,7 @@ lt{
                 many{"{0} kvadratinio colio"}
                 one{"{0} kvadratinis colis"}
                 other{"{0} kvadratinių colių"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"kvadratiniai kilometrai"}
@@ -109,6 +118,7 @@ lt{
                 many{"{0} kvadratinio metro"}
                 one{"{0} kvadratinis metras"}
                 other{"{0} kvadratinių metrų"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"kvadratinės mylios"}
@@ -126,9 +136,16 @@ lt{
             }
         }
         compound{
-            per{"{0} per {1}"}
+            per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"litrai 100 kilometrų"}
+                few{"{0} litrai 100 kilometrų"}
+                many{"{0} litro 100 kilometrų"}
+                one{"{0} litras 100 kilometrų"}
+                other{"{0} litrų 100 kilometrų"}
+            }
             liter-per-kilometer{
                 dnam{"litrai kilometrui"}
                 few{"{0} litrai kilometrui"}
@@ -143,6 +160,12 @@ lt{
                 one{"{0} mylia už galoną"}
                 other{"{0} mylių už galoną"}
             }
+        }
+        coordinate{
+            east{"{0} E"}
+            north{"{0} N"}
+            south{"{0} S"}
+            west{"{0} W"}
         }
         digital{
             bit{
@@ -217,12 +240,20 @@ lt{
             }
         }
         duration{
+            century{
+                dnam{"amžiai"}
+                few{"{0} amžiai"}
+                many{"{0} amžiaus"}
+                one{"{0} amžius"}
+                other{"{0} amžių"}
+            }
             day{
                 dnam{"dienos"}
                 few{"{0} dienos"}
                 many{"{0} dienos"}
                 one{"{0} diena"}
                 other{"{0} dienų"}
+                per{"{0} per dieną"}
             }
             hour{
                 dnam{"valandos"}
@@ -252,6 +283,7 @@ lt{
                 many{"{0} minutės"}
                 one{"{0} minutė"}
                 other{"{0} minučių"}
+                per{"{0} per minutę"}
             }
             month{
                 dnam{"mėnesiai"}
@@ -259,6 +291,7 @@ lt{
                 many{"{0} mėnesio"}
                 one{"{0} mėnuo"}
                 other{"{0} mėnesių"}
+                per{"{0} per mėnesį"}
             }
             nanosecond{
                 dnam{"nanosekundės"}
@@ -281,6 +314,7 @@ lt{
                 many{"{0} savaitės"}
                 one{"{0} savaitė"}
                 other{"{0} savaičių"}
+                per{"{0} per savaitę"}
             }
             year{
                 dnam{"metai"}
@@ -288,6 +322,7 @@ lt{
                 many{"{0} metų"}
                 one{"{0} metai"}
                 other{"{0} metų"}
+                per{"{0} per metus"}
             }
         }
         electric{
@@ -408,6 +443,7 @@ lt{
                 many{"{0} centimetro"}
                 one{"{0} centimetras"}
                 other{"{0} centimetrų"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"decimetrai"}
@@ -429,6 +465,7 @@ lt{
                 many{"{0} pėdos"}
                 one{"{0} pėda"}
                 other{"{0} pėdų"}
+                per{"{0}/ft"}
             }
             furlong{
                 dnam{"furlongai"}
@@ -443,6 +480,7 @@ lt{
                 many{"{0} colio"}
                 one{"{0} colis"}
                 other{"{0} colių"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"kilometrai"}
@@ -450,6 +488,7 @@ lt{
                 many{"{0} kilometro"}
                 one{"{0} kilometras"}
                 other{"{0} kilometrų"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"šviesmečiai"}
@@ -464,6 +503,7 @@ lt{
                 many{"{0} metro"}
                 one{"{0} metras"}
                 other{"{0} metrų"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"mikrometrai"}
@@ -478,6 +518,13 @@ lt{
                 many{"{0} mylios"}
                 one{"{0} mylia"}
                 other{"{0} mylių"}
+            }
+            mile-scandinavian{
+                dnam{"ilgoji mylia"}
+                few{"{0} ilgosios mylios"}
+                many{"{0} ilgosios mylios"}
+                one{"{0} ilgoji mylia"}
+                other{"{0} ilgųjų mylių"}
             }
             millimeter{
                 dnam{"milimetrai"}
@@ -545,6 +592,7 @@ lt{
                 many{"{0} gramo"}
                 one{"{0} gramas"}
                 other{"{0} gramų"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kilogramai"}
@@ -552,6 +600,7 @@ lt{
                 many{"{0} kilogramo"}
                 one{"{0} kilogramas"}
                 other{"{0} kilogramų"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"metrinės tonos"}
@@ -580,6 +629,7 @@ lt{
                 many{"{0} uncijos"}
                 one{"{0} uncija"}
                 other{"{0} uncijų"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"Trojos uncijos"}
@@ -594,6 +644,7 @@ lt{
                 many{"{0} svaro"}
                 one{"{0} svaras"}
                 other{"{0} svarų"}
+                per{"{0}/lb"}
             }
             stone{
                 dnam{"stonai"}
@@ -670,7 +721,7 @@ lt{
                 other{"{0} gyvsidabrio stulpelio colių"}
             }
             millibar{
-                dnam{"milbaras"}
+                dnam{"milibarai"}
                 few{"{0} milibarai"}
                 many{"{0} milibaro"}
                 one{"{0} milibaras"}
@@ -708,6 +759,13 @@ lt{
                 one{"{0} kilometras per valandą"}
                 other{"{0} kilometrų per valandą"}
             }
+            knot{
+                dnam{"mazgas"}
+                few{"{0} mazgai"}
+                many{"{0} mazgo"}
+                one{"{0} mazgas"}
+                other{"{0} mazgų"}
+            }
             meter-per-second{
                 dnam{"metrai per sekundę"}
                 few{"{0} metrai per sekundę"}
@@ -737,6 +795,13 @@ lt{
                 many{"{0} Farenheito laipsnio"}
                 one{"{0} Farenheito laipsnis"}
                 other{"{0} Farenheito laipsnių"}
+            }
+            generic{
+                dnam{"°"}
+                few{"{0}°"}
+                many{"{0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             kelvin{
                 dnam{"kelvinai"}
@@ -774,6 +839,7 @@ lt{
                 many{"{0} kubinio centimetro"}
                 one{"{0} kubinis centimetras"}
                 other{"{0} kubinių centimetrų"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"kubinės pėdos"}
@@ -802,6 +868,7 @@ lt{
                 many{"{0} kubinio metro"}
                 one{"{0} kubinis metras"}
                 other{"{0} kubinių metrų"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"kubinės mylios"}
@@ -824,6 +891,13 @@ lt{
                 one{"{0} stiklinė"}
                 other{"{0} stiklinių"}
             }
+            cup-metric{
+                dnam{"matavimo puodeliai"}
+                few{"{0} matavimo puodeliai"}
+                many{"{0} matavimo puodelio"}
+                one{"{0} matavimo puodelis"}
+                other{"{0} matavimo puodelių"}
+            }
             deciliter{
                 dnam{"decilitrai"}
                 few{"{0} decilitrai"}
@@ -844,6 +918,7 @@ lt{
                 many{"{0} galono"}
                 one{"{0} galonas"}
                 other{"{0} galonų"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hektolitrai"}
@@ -858,6 +933,7 @@ lt{
                 many{"{0} litro"}
                 one{"{0} litras"}
                 other{"{0} litrų"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"megalitrai"}
@@ -879,6 +955,13 @@ lt{
                 many{"{0} pintos"}
                 one{"{0} pinta"}
                 other{"{0} pintų"}
+            }
+            pint-metric{
+                dnam{"metrinės pintos"}
+                few{"{0} metrinės pintos"}
+                many{"{0} metrinės pintos"}
+                one{"{0} metrinė pinta"}
+                other{"{0} metrinių pintų"}
             }
             quart{
                 dnam{"kvortos"}
@@ -974,12 +1057,25 @@ lt{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"l/100 km"}
+                few{"{0} l/100 km"}
+                many{"{0} l/100 km"}
+                one{"{0} l/100 km"}
+                other{"{0} l/100 km"}
+            }
             mile-per-gallon{
                 few{"{0} mi/gal"}
                 many{"{0} mi/gal"}
                 one{"{0} mi/gal"}
                 other{"{0} mi/gal"}
             }
+        }
+        coordinate{
+            east{"{0} E"}
+            north{"{0} N"}
+            south{"{0} S"}
+            west{"{0} W"}
         }
         duration{
             day{
@@ -1277,7 +1373,7 @@ lt{
                 other{"{0} fl oz"}
             }
             liter{
-                dnam{"l"}
+                dnam{"litrai"}
                 few{"{0} l"}
                 many{"{0} l"}
                 one{"{0} l"}
@@ -1337,17 +1433,24 @@ lt{
                 one{"{0} rad"}
                 other{"{0} rad"}
             }
+            revolution{
+                dnam{"apsisuk."}
+                few{"{0} apsisuk."}
+                many{"{0} apsisuk."}
+                one{"{0} apsisuk."}
+                other{"{0} apsisuk."}
+            }
         }
         area{
             acre{
-                dnam{"a."}
+                dnam{"akrai"}
                 few{"{0} a."}
                 many{"{0} a."}
                 one{"{0} a."}
                 other{"{0} a."}
             }
             hectare{
-                dnam{"ha"}
+                dnam{"hektarai"}
                 few{"{0} ha"}
                 many{"{0} ha"}
                 one{"{0} ha"}
@@ -1359,6 +1462,7 @@ lt{
                 many{"{0} cm²"}
                 one{"{0} cm²"}
                 other{"{0} cm²"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"kv. pėda"}
@@ -1373,6 +1477,7 @@ lt{
                 many{"{0} in²"}
                 one{"{0} in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"kv. km"}
@@ -1387,9 +1492,10 @@ lt{
                 many{"{0} kv. m"}
                 one{"{0} kv. m"}
                 other{"{0} kv. m"}
+                per{"{0}/m²"}
             }
             square-mile{
-                dnam{"kv. my"}
+                dnam{"kv. mylios"}
                 few{"{0} kv. my"}
                 many{"{0} kv. my"}
                 one{"{0} kv. my"}
@@ -1407,6 +1513,13 @@ lt{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"l/100 km"}
+                few{"{0} l/100 km"}
+                many{"{0} l/100 km"}
+                one{"{0} l/100 km"}
+                other{"{0} l/100 km"}
+            }
             liter-per-kilometer{
                 dnam{"l/km"}
                 few{"{0} l/km"}
@@ -1422,13 +1535,19 @@ lt{
                 other{"{0} mi/gal"}
             }
         }
+        coordinate{
+            east{"{0} E"}
+            north{"{0} N"}
+            south{"{0} S"}
+            west{"{0} W"}
+        }
         digital{
             bit{
                 dnam{"bitai"}
-                few{"{0} bitai"}
-                many{"{0} bito"}
-                one{"{0} bitas"}
-                other{"{0} bitų"}
+                few{"{0} b"}
+                many{"{0} b"}
+                one{"{0} b"}
+                other{"{0} b"}
             }
             byte{
                 dnam{"B"}
@@ -1495,12 +1614,20 @@ lt{
             }
         }
         duration{
+            century{
+                dnam{"a."}
+                few{"{0} a."}
+                many{"{0} a."}
+                one{"{0} a."}
+                other{"{0} a."}
+            }
             day{
                 dnam{"dienos"}
                 few{"{0} d."}
                 many{"{0} d."}
                 one{"{0} d."}
                 other{"{0} d."}
+                per{"{0}/d."}
             }
             hour{
                 dnam{"valandos"}
@@ -1530,6 +1657,7 @@ lt{
                 many{"{0} min."}
                 one{"{0} min."}
                 other{"{0} min."}
+                per{"{0}/min."}
             }
             month{
                 dnam{"mėnesiai"}
@@ -1537,6 +1665,7 @@ lt{
                 many{"{0} mėn."}
                 one{"{0} mėn."}
                 other{"{0} mėn."}
+                per{"{0}/mėn."}
             }
             nanosecond{
                 dnam{"nanosek."}
@@ -1559,6 +1688,7 @@ lt{
                 many{"{0} sav."}
                 one{"{0} sav."}
                 other{"{0} sav."}
+                per{"{0}/sav."}
             }
             year{
                 dnam{"metai"}
@@ -1566,6 +1696,7 @@ lt{
                 many{"{0} m."}
                 one{"{0} m."}
                 other{"{0} m."}
+                per{"{0}/m."}
             }
         }
         electric{
@@ -1686,6 +1817,7 @@ lt{
                 many{"{0} cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"dm"}
@@ -1707,6 +1839,7 @@ lt{
                 many{"{0} ft"}
                 one{"{0} ft"}
                 other{"{0} ft"}
+                per{"{0}/ft"}
             }
             furlong{
                 dnam{"fur"}
@@ -1721,6 +1854,7 @@ lt{
                 many{"{0} in"}
                 one{"{0} in"}
                 other{"{0} in"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
@@ -1728,6 +1862,7 @@ lt{
                 many{"{0} km"}
                 one{"{0} km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"šviesmečiai"}
@@ -1742,6 +1877,7 @@ lt{
                 many{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"µm"}
@@ -1756,6 +1892,13 @@ lt{
                 many{"{0} mi"}
                 one{"{0} mi"}
                 other{"{0} mi"}
+            }
+            mile-scandinavian{
+                dnam{"IM"}
+                few{"{0} IM"}
+                many{"{0} IM"}
+                one{"{0} IM"}
+                other{"{0} IM"}
             }
             millimeter{
                 dnam{"mm"}
@@ -1823,6 +1966,7 @@ lt{
                 many{"{0} g"}
                 one{"{0} g"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
@@ -1830,6 +1974,7 @@ lt{
                 many{"{0} kg"}
                 one{"{0} kg"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"mt"}
@@ -1858,6 +2003,7 @@ lt{
                 many{"{0} oz"}
                 one{"{0} oz"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"ozt"}
@@ -1872,6 +2018,7 @@ lt{
                 many{"{0} lb"}
                 one{"{0} lb"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
             }
             stone{
                 dnam{"st"}
@@ -1986,6 +2133,13 @@ lt{
                 one{"{0} km/val."}
                 other{"{0} km/val."}
             }
+            knot{
+                dnam{"mazgas"}
+                few{"{0} KN"}
+                many{"{0} KN"}
+                one{"{0} KN"}
+                other{"{0} KN"}
+            }
             meter-per-second{
                 dnam{"m/sek."}
                 few{"{0} m/sek."}
@@ -2016,6 +2170,13 @@ lt{
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            generic{
+                dnam{"°"}
+                few{"{0}°"}
+                many{"{0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"K"}
                 few{"{0} K"}
@@ -2026,7 +2187,7 @@ lt{
         }
         volume{
             acre-foot{
-                dnam{"ft akre"}
+                dnam{"pėda akre"}
                 few{"{0} ft akre"}
                 many{"{0} ft akre"}
                 one{"{0} ft akre"}
@@ -2052,6 +2213,7 @@ lt{
                 many{"{0} cm³"}
                 one{"{0} cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ft³"}
@@ -2080,6 +2242,7 @@ lt{
                 many{"{0} m³"}
                 one{"{0} m³"}
                 other{"{0} m³"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"mi³"}
@@ -2102,6 +2265,13 @@ lt{
                 one{"{0} stikl."}
                 other{"{0} stikl."}
             }
+            cup-metric{
+                dnam{"mat. puodelis"}
+                few{"{0} mat. puodeliai"}
+                many{"{0} mat. puodelio"}
+                one{"{0} mat. puodelis"}
+                other{"{0} mat. puodelių"}
+            }
             deciliter{
                 dnam{"dl"}
                 few{"{0} dl"}
@@ -2122,6 +2292,7 @@ lt{
                 many{"{0} gal"}
                 one{"{0} gal"}
                 other{"{0} gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hl"}
@@ -2136,6 +2307,7 @@ lt{
                 many{"{0} l"}
                 one{"{0} l"}
                 other{"{0} l"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"Ml"}
@@ -2152,11 +2324,18 @@ lt{
                 other{"{0} ml"}
             }
             pint{
-                dnam{"pt"}
+                dnam{"pintos"}
                 few{"{0} pt"}
                 many{"{0} pt"}
                 one{"{0} pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                few{"{0} mpt"}
+                many{"{0} mpt"}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"kvortos"}

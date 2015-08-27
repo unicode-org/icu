@@ -34,7 +34,7 @@ fr{
         143{"Asie centrale"}
         145{"Asie occidentale"}
         150{"Europe"}
-        151{"Europe orientale"}
+        151{"Europe de l’Est"}
         154{"Europe septentrionale"}
         155{"Europe occidentale"}
         419{"Amérique latine"}
@@ -190,7 +190,7 @@ fr{
         MH{"Îles Marshall"}
         MK{"Macédoine"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar (Birmanie)"}
         MN{"Mongolie"}
         MO{"R.A.S. chinoise de Macao"}
         MP{"Îles Mariannes du Nord"}
@@ -266,7 +266,7 @@ fr{
         TG{"Togo"}
         TH{"Thaïlande"}
         TJ{"Tadjikistan"}
-        TK{"Tokelau"}
+        TK{"Tokélaou"}
         TL{"Timor oriental"}
         TM{"Turkménistan"}
         TN{"Tunisie"}
@@ -313,5 +313,5 @@ fr{
         MK{"Macédoine (ARYM)"}
         TL{"Timor-Oriental"}
     }
-    Version{"2.1.16.1"}
+    Version{"2.1.19.72"}
 }

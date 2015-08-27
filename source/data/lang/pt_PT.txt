@@ -14,17 +14,22 @@ pt_PT{
         colNormalization{"Ordenação normalizada"}
         colNumeric{"Ordenação numérica"}
         colStrength{"Força da ordenação"}
+        hc{"Ciclo horário (12 vs. 24)"}
+        ms{"Sistema de medida"}
         variableTop{"Ordenar como símbolos"}
         x{"Utilização privada"}
     }
     Languages{
         af{"africânder"}
+        ar_001{"árabe moderno padrão"}
         arn{"mapuche"}
+        az_Arab{"azeri meridional"}
         bax{"bamun"}
         bbj{"ghomala"}
         chn{"jargão chinook"}
         ckb{"sorani curdo"}
         cs{"checo"}
+        cv{"chuvash"}
         dsb{"baixo sórabio"}
         ee{"ewe"}
         egy{"egípcio clássico"}
@@ -47,18 +52,26 @@ pt_PT{
         kn{"canarim"}
         lez{"lezghiano"}
         lg{"ganda"}
+        lrc{"luri do norte"}
         luo{"luo"}
         mga{"irlandês, medieval"}
         mk{"macedónio"}
+        moh{"mohawk"}
         nb{"norueguês bokmål"}
+        nds{"baixo-alemão"}
         nn{"norueguês nynorsk"}
         oc{"provençal"}
         os{"ossético"}
         pl{"polaco"}
         ps{"pastó"}
         rom{"romanês"}
+        root{"root"}
+        rw{"kinyarwanda"}
         sah{"sakha"}
         shu{"árabe do Chade"}
+        smj{"lule sami"}
+        smn{"inari sami"}
+        sms{"skolt sami"}
         tk{"turcomano"}
         to{"tonga"}
         vai{"vai"}
@@ -86,7 +99,6 @@ pt_PT{
             chinese{"Calendário chinês"}
             coptic{"Calendário copta"}
             dangi{"Calendário dangi"}
-            ethiopic{"Calendário etíope"}
             ethiopic-amete-alem{"Calendário Etíope Amete Alem"}
             gregorian{"Calendário gregoriano"}
             hebrew{"Calendário hebraico"}
@@ -141,6 +153,15 @@ pt_PT{
             traditional{"Ordem tradicional"}
             unihan{"Ordem por radical e traços"}
         }
+        lb{
+            loose{"Estilo solto de quebra de linha"}
+            normal{"Estilo padrão de quebra de linha"}
+            strict{"Estilo estrito de quebra de linha"}
+        }
+        ms{
+            uksystem{"Sistema de medida imperial"}
+            ussystem{"Sistema de medida americano"}
+        }
         numbers{
             armn{"Numeração arménia"}
             armnlow{"Numeração arménia minúscula"}
@@ -181,7 +202,7 @@ pt_PT{
         MONOTON{"monotónico"}
         POLYTON{"politónico"}
     }
-    Version{"2.1.13.23"}
+    Version{"2.1.19.79"}
     codePatterns{
         script{"Escrita: {0}"}
     }

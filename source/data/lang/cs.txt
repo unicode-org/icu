@@ -19,6 +19,9 @@ cs{
         colStrength{"Míra řazení"}
         collation{"Řazení"}
         currency{"Měna"}
+        hc{"Hodinový cyklus (12 vs. 24)"}
+        lb{"Styl zalamování řádků"}
+        ms{"Měrná soustava"}
         numbers{"Čísla"}
         timezone{"Časové pásmo"}
         va{"Varianta národního prostředí"}
@@ -67,7 +70,6 @@ cs{
         awa{"awadhština"}
         ay{"ajmarština"}
         az{"ázerbájdžánština"}
-        azb{"ázerbájdžánština (jižní)"}
         ba{"baškirština"}
         bal{"balúčština"}
         ban{"balijština"}
@@ -84,6 +86,7 @@ cs{
         bfd{"bafut"}
         bfq{"badagština"}
         bg{"bulharština"}
+        bgn{"balúčština (západní)"}
         bho{"bhojpurština"}
         bi{"bislamština"}
         bik{"bikolština"}
@@ -248,7 +251,7 @@ cs{
         id{"indonéština"}
         ie{"interlingue"}
         ig{"igboština"}
-        ii{"s’-čchuan i"}
+        ii{"iština (sečuánská)"}
         ik{"inupiakština"}
         ilo{"ilokánština"}
         inh{"inguština"}
@@ -335,6 +338,7 @@ cs{
         lo{"laoština"}
         lol{"mongština"}
         loz{"lozština"}
+        lrc{"lúrština (severní)"}
         lt{"litevština"}
         ltg{"latgalština"}
         lu{"lubu-katanžština"}
@@ -396,6 +400,7 @@ cs{
         nb{"norština (bokmål)"}
         nd{"ndebele (Zimbabwe)"}
         nds{"dolnoněmčina"}
+        nds_NL{"dolnosaština"}
         ne{"nepálština"}
         new{"névárština"}
         ng{"ndondština"}
@@ -465,6 +470,7 @@ cs{
         ro_MD{"moldavština"}
         rof{"rombo"}
         rom{"romština"}
+        root{"kořen"}
         rtm{"rotumanština"}
         ru{"ruština"}
         rue{"rusínština"}
@@ -487,6 +493,7 @@ cs{
         sco{"skotština"}
         sd{"sindhština"}
         sdc{"sassarština"}
+        sdh{"kurdština (jižní)"}
         se{"sámština (severní)"}
         see{"seneca"}
         seh{"sena"}
@@ -597,6 +604,7 @@ cs{
         wal{"wolajtština"}
         war{"warajština"}
         was{"waština"}
+        wbp{"warlpiri"}
         wo{"wolofština"}
         wuu{"čínština (dialekty Wu)"}
         xal{"kalmyčtina"}
@@ -873,6 +881,22 @@ cs{
             unihan{"Řazení podle radikálů"}
             zhuyin{"Ču-jin"}
         }
+        hc{
+            h11{"12hodinový systém (0–11)"}
+            h12{"12hodinový systém (1–12)"}
+            h23{"24hodinový systém (0–23)"}
+            h24{"24hodinový systém (1–24)"}
+        }
+        lb{
+            loose{"Volný styl zalamování řádků"}
+            normal{"Běžný styl zalamování řádků"}
+            strict{"Striktní styl zalamování řádků"}
+        }
+        ms{
+            metric{"Metrická soustava"}
+            uksystem{"Britská měrná soustava"}
+            ussystem{"Americká měrná soustava"}
+        }
         numbers{
             arab{"Arabsko-indické číslice"}
             arabext{"Rozšířené arabsko-indické číslice"}
@@ -925,7 +949,7 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.16.1"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

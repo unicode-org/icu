@@ -20,7 +20,7 @@ cy{
         017{"Canol Affrica"}
         018{"Deheudir Affrica"}
         019{"Yr Amerig"}
-        021{"America i’r Gogledd o Mecsico"}
+        021{"America i’r Gogledd o Fecsico"}
         029{"Y Caribî"}
         030{"Dwyrain Asia"}
         034{"De Asia"}
@@ -117,7 +117,7 @@ cy{
         FJ{"Fiji"}
         FK{"Ynysoedd y Falkland/Malvinas"}
         FM{"Micronesia"}
-        FO{"Føroyar"}
+        FO{"Ynysoedd Ffaro"}
         FR{"Ffrainc"}
         GA{"Gabon"}
         GB{"Y Deyrnas Unedig"}
@@ -221,7 +221,7 @@ cy{
         PE{"Periw"}
         PF{"Polynesia Ffrengig"}
         PG{"Papua Guinea Newydd"}
-        PH{"Pilipinas"}
+        PH{"Y Philipinau"}
         PK{"Pakistan"}
         PL{"Gwlad Pwyl"}
         PM{"Saint-Pierre-et-Miquelon"}
@@ -250,7 +250,7 @@ cy{
         SK{"Slofacia"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
-        SN{"Sénégal"}
+        SN{"Senegal"}
         SO{"Somalia"}
         SR{"Suriname"}
         SS{"De Swdan"}
@@ -309,9 +309,10 @@ cy{
     Countries%variant{
         CD{"y Congo (G.Dd.C.)"}
         CG{"Y Congo (Gweriniaeth)"}
+        CI{"Arfordir Ifori"}
         FK{"Ynysoedd y Falkland (Ynysoedd y Malfinas)"}
         MK{"Macedonia (CWIM)"}
         TL{"Dwyrain Timor"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.94"}
 }

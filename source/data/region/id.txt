@@ -13,30 +13,30 @@ id{
         003{"Amerika Utara"}
         005{"Amerika Selatan"}
         009{"Oseania"}
-        011{"Afrika Barat"}
+        011{"Afrika Bagian Barat"}
         013{"Amerika Tengah"}
-        014{"Afrika Timur"}
-        015{"Afrika Utara"}
-        017{"Afrika Tengah"}
+        014{"Afrika Bagian Timur"}
+        015{"Afrika Bagian Utara"}
+        017{"Afrika Bagian Tengah"}
         018{"Afrika Bagian Selatan"}
         019{"Amerika"}
         021{"Amerika Bagian Utara"}
         029{"Kepulauan Karibia"}
-        030{"Asia Timur"}
-        034{"Asia Selatan"}
+        030{"Asia Bagian Timur"}
+        034{"Asia Bagian Selatan"}
         035{"Asia Tenggara"}
-        039{"Eropa Selatan"}
+        039{"Eropa Bagian Selatan"}
         053{"Australasia"}
         054{"Melanesia"}
         057{"Wilayah Mikronesia"}
         061{"Polinesia"}
         142{"Asia"}
         143{"Asia Tengah"}
-        145{"Asia Barat"}
+        145{"Asia Bagian Barat"}
         150{"Eropa"}
-        151{"Eropa Timur"}
-        154{"Eropa Utara"}
-        155{"Eropa Barat"}
+        151{"Eropa Bagian Timur"}
+        154{"Eropa Bagian Utara"}
+        155{"Eropa Bagian Barat"}
         419{"Amerika Latin"}
         AC{"Pulau Ascension"}
         AD{"Andorra"}
@@ -314,5 +314,5 @@ id{
         MK{"Makedonia (BRY)"}
         TL{"Timor Timur"}
     }
-    Version{"2.1.16.1"}
+    Version{"2.1.19.17"}
 }

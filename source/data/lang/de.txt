@@ -19,6 +19,9 @@ de{
         colStrength{"Sortierstärke"}
         collation{"Sortierung"}
         currency{"Währung"}
+        hc{"Stundenzählung (12 vs. 24)"}
+        lb{"Zeilenumbruchstil"}
+        ms{"Maßsystem"}
         numbers{"Zahlen"}
         timezone{"Zeitzone"}
         va{"Lokale Variante"}
@@ -51,7 +54,7 @@ de{
         ar{"Arabisch"}
         ar_001{"Modernes Hocharabisch"}
         arc{"Aramäisch"}
-        arn{"Araukanisch"}
+        arn{"Mapudungun"}
         aro{"Araona"}
         arp{"Arapaho-Sprache"}
         arq{"Algerisches Arabisch"}
@@ -67,7 +70,6 @@ de{
         awa{"Awadhi"}
         ay{"Aymara"}
         az{"Aserbaidschanisch"}
-        azb{"Südaserbaidschanisch"}
         ba{"Baschkirisch"}
         bal{"Belutschisch"}
         ban{"Balinesisch"}
@@ -78,12 +80,13 @@ de{
         bbj{"Ghomala"}
         be{"Weißrussisch"}
         bej{"Bedauye"}
-        bem{"Bemba-Sprache"}
+        bem{"Bemba"}
         bew{"Betawi"}
         bez{"Bena"}
         bfd{"Bafut"}
         bfq{"Badaga"}
         bg{"Bulgarisch"}
+        bgn{"Westliches Belutschi"}
         bho{"Bhodschpuri"}
         bi{"Bislama"}
         bik{"Bikol-Sprache"}
@@ -91,7 +94,7 @@ de{
         bjn{"Banjaresisch"}
         bkm{"Kom"}
         bla{"Blackfoot-Sprache"}
-        bm{"Bambara-Sprache"}
+        bm{"Bambara"}
         bn{"Bengalisch"}
         bo{"Tibetisch"}
         bpy{"Bishnupriya"}
@@ -125,7 +128,7 @@ de{
         chp{"Chipewyan"}
         chr{"Cherokee"}
         chy{"Cheyenne"}
-        ckb{"Sorani"}
+        ckb{"Zentralkurdisch"}
         co{"Korsisch"}
         cop{"Koptisch"}
         cps{"Capiznon"}
@@ -156,7 +159,7 @@ de{
         dv{"Maledivisch"}
         dyo{"Diola"}
         dyu{"Dyula-Sprache"}
-        dz{"Bhutanisch"}
+        dz{"Dzongkha"}
         dzg{"Dazaga"}
         ebu{"Embu"}
         ee{"Ewe"}
@@ -231,7 +234,7 @@ de{
         guz{"Gusii"}
         gv{"Manx"}
         gwi{"Kutchin-Sprache"}
-        ha{"Hausa"}
+        ha{"Haussa"}
         hai{"Haida-Sprache"}
         hak{"Hakka"}
         haw{"Hawaiisch"}
@@ -245,7 +248,7 @@ de{
         hr{"Kroatisch"}
         hsb{"Obersorbisch"}
         hsn{"Xiang"}
-        ht{"Haitianisch"}
+        ht{"Haiti-Kreolisch"}
         hu{"Ungarisch"}
         hup{"Hupa"}
         hy{"Armenisch"}
@@ -301,7 +304,7 @@ de{
         kkj{"Kako"}
         kl{"Grönländisch"}
         kln{"Kalenjin"}
-        km{"Kambodschanisch"}
+        km{"Khmer"}
         kmb{"Kimbundu-Sprache"}
         kn{"Kannada"}
         ko{"Koreanisch"}
@@ -315,7 +318,7 @@ de{
         krj{"Kinaray-a"}
         krl{"Karelisch"}
         kru{"Oraon-Sprache"}
-        ks{"Kaschmirisch"}
+        ks{"Kaschmiri"}
         ksb{"Shambala"}
         ksf{"Bafia"}
         ksh{"Kölsch"}
@@ -343,6 +346,7 @@ de{
         lo{"Laotisch"}
         lol{"Mongo"}
         loz{"Rotse-Sprache"}
+        lrc{"Nördliches Luri"}
         lt{"Litauisch"}
         ltg{"Lettgallisch"}
         lu{"Luba-Katanga"}
@@ -361,7 +365,7 @@ de{
         mai{"Maithili"}
         mak{"Makassarisch"}
         man{"Manding-Sprache"}
-        mas{"Massai-Sprache"}
+        mas{"Massai"}
         mde{"Maba"}
         mdf{"Moksha"}
         mdr{"Mandaresisch"}
@@ -402,8 +406,9 @@ de{
         nap{"Neapolitanisch"}
         naq{"Nama"}
         nb{"Norwegisch Bokmål"}
-        nd{"Nord-Ndebele-Sprache"}
+        nd{"Nord-Ndebele"}
         nds{"Niederdeutsch"}
+        nds_NL{"Niedersächsisch"}
         ne{"Nepalesisch"}
         new{"Newari"}
         ng{"Ndonga"}
@@ -437,7 +442,7 @@ de{
         os{"Ossetisch"}
         osa{"Osage-Sprache"}
         ota{"Osmanisch"}
-        pa{"Panjabi"}
+        pa{"Punjabi"}
         pag{"Pangasinan-Sprache"}
         pal{"Mittelpersisch"}
         pam{"Pampanggan-Sprache"}
@@ -469,7 +474,7 @@ de{
         rgn{"Romagnol"}
         rif{"Tarifit"}
         rm{"Rätoromanisch"}
-        rn{"Rundi-Sprache"}
+        rn{"Rundi"}
         ro{"Rumänisch"}
         ro_MD{"Moldauisch"}
         rof{"Rombo"}
@@ -480,7 +485,7 @@ de{
         rue{"Russinisch"}
         rug{"Roviana"}
         rup{"Aromunisch"}
-        rw{"Ruandisch"}
+        rw{"Kinyarwanda"}
         rwk{"Rwa"}
         sa{"Sanskrit"}
         sad{"Sandawe-Sprache"}
@@ -497,7 +502,8 @@ de{
         sco{"Schottisch"}
         sd{"Sindhi"}
         sdc{"Sassarisch"}
-        se{"Nord-Samisch"}
+        sdh{"Südkurdisch"}
+        se{"Nordsamisch"}
         see{"Seneca"}
         seh{"Sena"}
         sei{"Seri"}
@@ -517,10 +523,10 @@ de{
         sli{"Schlesisch"}
         sly{"Selayar"}
         sm{"Samoanisch"}
-        sma{"Süd-Samisch"}
-        smj{"Lule-Lappisch"}
-        smn{"Inari-Lappisch"}
-        sms{"Skolt-Lappisch"}
+        sma{"Südsamisch"}
+        smj{"Lule-Samisch"}
+        smn{"Inari-Samisch"}
+        sms{"Skolt-Samisch"}
         sn{"Shona"}
         snk{"Soninke-Sprache"}
         so{"Somali"}
@@ -544,7 +550,7 @@ de{
         syc{"Altsyrisch"}
         syr{"Syrisch"}
         szl{"Schlesisch (Polen)"}
-        ta{"Tamilisch"}
+        ta{"Tamil"}
         tcy{"Tulu"}
         te{"Telugu"}
         tem{"Temne"}
@@ -553,7 +559,7 @@ de{
         tet{"Tetum-Sprache"}
         tg{"Tadschikisch"}
         th{"Thailändisch"}
-        ti{"Tigrinja"}
+        ti{"Tigrinya"}
         tig{"Tigre"}
         tiv{"Tiv-Sprache"}
         tk{"Turkmenisch"}
@@ -607,6 +613,7 @@ de{
         wal{"Walamo-Sprache"}
         war{"Waray"}
         was{"Washo-Sprache"}
+        wbp{"Warlpiri"}
         wo{"Wolof"}
         wuu{"Wu"}
         xal{"Kalmückisch"}
@@ -888,6 +895,22 @@ de{
             unihan{"Radikal-Strich-Sortierregeln"}
             zhuyin{"Zhuyin-Sortierregeln"}
         }
+        hc{
+            h11{"12-Stunden-Zählung (0-11)"}
+            h12{"12-Stunden-Zählung (1-12)"}
+            h23{"24-Stunden-Zählung (0-23)"}
+            h24{"24-Stunden-System (1-24)"}
+        }
+        lb{
+            loose{"lockerer Zeilenumbruch"}
+            normal{"normaler Zeilenumbruch"}
+            strict{"fester Zeilenumbruch"}
+        }
+        ms{
+            metric{"metrisches System"}
+            uksystem{"britisches Maßsystem"}
+            ussystem{"US-Maßsystem"}
+        }
         numbers{
             arab{"Arabisch-indische Ziffern"}
             arabext{"Erweiterte arabisch-indische Ziffern"}
@@ -986,7 +1009,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.72"}
     codePatterns{
         language{"Sprache: {0}"}
         script{"Schrift: {0}"}

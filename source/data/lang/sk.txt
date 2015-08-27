@@ -19,6 +19,9 @@ sk{
         colStrength{"Sila radenia"}
         collation{"zoradenie"}
         currency{"mena"}
+        hc{"hodinový cyklus (12 vs 24)"}
+        lb{"štýl koncov riadka"}
+        ms{"merná sústava"}
         numbers{"čísla"}
         timezone{"Časové pásmo"}
         va{"Variant miestneho nastavenia"}
@@ -70,6 +73,7 @@ sk{
         bez{"bena"}
         bfd{"bafut"}
         bg{"bulharčina"}
+        bgn{"západná balúčtina"}
         bho{"bhódžpurčina"}
         bi{"bislama"}
         bik{"bikol"}
@@ -139,7 +143,7 @@ sk{
         dz{"dzongkä"}
         dzg{"dazaga"}
         ebu{"embu"}
-        ee{"ewe"}
+        ee{"eweština"}
         efi{"efik"}
         egy{"staroegyptský"}
         eka{"ekadžuk"}
@@ -187,7 +191,7 @@ sk{
         gil{"kiribatčina"}
         gl{"galícijčina"}
         gmh{"stredná horná nemčina"}
-        gn{"guaraní"}
+        gn{"guaraníjčina"}
         goh{"stará horná nemčina"}
         gon{"góndčina"}
         gor{"gorontalo"}
@@ -295,8 +299,9 @@ sk{
         lo{"laoština"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"severné luri"}
         lt{"litovčina"}
-        lu{"luba-katanga"}
+        lu{"lubčina (katanžská)"}
         lua{"luba-luluánčina"}
         lui{"luiseňo"}
         lun{"lunda"}
@@ -343,12 +348,14 @@ sk{
         my{"barmčina"}
         mye{"myene"}
         myv{"erzjančina"}
+        mzn{"mázandaránčina"}
         na{"nauru"}
         nap{"neapolčina"}
         naq{"nama"}
-        nb{"nórsky bokmål"}
+        nb{"nórčina (bokmål)"}
         nd{"severné ndebele"}
         nds{"dolná nemčina"}
+        nds_NL{"dolná saština"}
         ne{"nepálčina"}
         new{"nevárčina"}
         ng{"ndonga"}
@@ -357,7 +364,7 @@ sk{
         nl{"holandčina"}
         nl_BE{"flámčina"}
         nmg{"kwasio"}
-        nn{"nórsky nynorsk"}
+        nn{"nórčina (nynorsk)"}
         nnh{"ngiemboon"}
         no{"nórčina"}
         nog{"nogajčina"}
@@ -397,7 +404,7 @@ sk{
         pt_BR{"portugalčina (brazílska)"}
         pt_PT{"portugalčina (európska)"}
         qu{"kečuánčina"}
-        quc{"kʼicheʼ"}
+        quc{"kičé"}
         raj{"radžastančina"}
         rap{"rapanujčina"}
         rar{"rarotongan"}
@@ -425,7 +432,8 @@ sk{
         scn{"sicílčina"}
         sco{"škótčina"}
         sd{"sindhčina"}
-        se{"severné sami"}
+        sdh{"kurdčina (južná)"}
+        se{"lapončina (severná)"}
         see{"seneca"}
         seh{"sena"}
         sel{"selkupčina"}
@@ -441,10 +449,10 @@ sk{
         sk{"slovenčina"}
         sl{"slovinčina"}
         sm{"samojčina"}
-        sma{"južné sami"}
-        smj{"sami (lule)"}
-        smn{"sami (inari)"}
-        sms{"sami (skolt)"}
+        sma{"lapončina (južná)"}
+        smj{"lapončina (lulská)"}
+        smn{"lapončina (inarijská)"}
+        sms{"lapončina (skoltská)"}
         sn{"šončina"}
         snk{"soninke"}
         so{"somálčina"}
@@ -518,9 +526,10 @@ sk{
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
-        wo{"wolof"}
+        wbp{"warlpiri"}
+        wo{"wolofčina"}
         xal{"kalmyčtina"}
-        xh{"xhosa"}
+        xh{"xhoština"}
         xog{"soga"}
         yao{"jao"}
         yap{"japčina"}
@@ -553,7 +562,7 @@ sk{
         Bali{"balijský"}
         Beng{"bengálske"}
         Bopo{"bopomofo"}
-        Brai{"braillovo písmo"}
+        Brai{"braillovo"}
         Cyrl{"cyrilika"}
         Deva{"dévanágarí"}
         Egyp{"egyptské hieroglyfy"}
@@ -565,7 +574,7 @@ sk{
         Gujr{"gudžarátí"}
         Guru{"gurmukhi"}
         Hang{"hangul"}
-        Hani{"han"}
+        Hani{"čínske"}
         Hans{"zjednodušené"}
         Hant{"tradičné"}
         Hebr{"hebrejské"}
@@ -598,8 +607,8 @@ sk{
         Zzzz{"neznáme písmo"}
     }
     Scripts%stand-alone{
-        Hans{"han – zjednodušené"}
-        Hant{"han – tradičné"}
+        Hans{"čínske zjednodušené"}
+        Hant{"čínske tradičné"}
     }
     Scripts%variant{
         Arab{"perzsko-arabské"}
@@ -674,6 +683,22 @@ sk{
             traditional{"Tradičné"}
             unihan{"Usporiadanie podľa znakov radikál"}
         }
+        hc{
+            h11{"12-hodinový cyklus (0 – 11)"}
+            h12{"12-hodinový cyklus (1 – 12)"}
+            h23{"24-hodinový cyklus (0 – 23)"}
+            h24{"24-hodinový cyklus (1 – 24)"}
+        }
+        lb{
+            loose{"voľný štýl koncov riadka"}
+            normal{"bežný štýl koncov riadka"}
+            strict{"presný štýl koncov riadka"}
+        }
+        ms{
+            metric{"metrická sústava"}
+            uksystem{"britská merná sústava"}
+            ussystem{"americká merná sústava"}
+        }
         numbers{
             arab{"arabsko-indické číslice"}
             arabext{"rozšírené arabsko-indické číslice"}
@@ -720,7 +745,7 @@ sk{
     Variants{
         SCOTLAND{"škótska štandardná angličtina"}
     }
-    Version{"2.1.16.9"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

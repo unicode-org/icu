@@ -267,7 +267,7 @@ to{
         TH{"Tailani"}
         TJ{"Tasikitani"}
         TK{"Tokelau"}
-        TL{"Timoa Hahake"}
+        TL{"Timoa hahake"}
         TM{"Tūkimenisitani"}
         TN{"Tunīsia"}
         TO{"Tonga"}
@@ -311,5 +311,5 @@ to{
         CG{"Kongo (Lipapilika)"}
         MK{"Masetōnia (FYROM)"}
     }
-    Version{"2.1.15.80"}
+    Version{"2.1.19.14"}
 }

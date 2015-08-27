@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 en_US_POSIX{
-    Version{"2.0.82.42"}
+    Version{"2.1.19.14"}
     boundaries{
         word:process(dependency){"word_POSIX.brk"}
     }

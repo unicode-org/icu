@@ -62,5 +62,5 @@ fil{
             "0: ika =%spellout-cardinal=;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.1.19.14"}
 }

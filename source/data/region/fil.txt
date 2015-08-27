@@ -11,7 +11,7 @@ fil{
         001{"Mundo"}
         002{"Africa"}
         003{"Hilagang Amerika"}
-        005{"South America"}
+        005{"Timog Amerika"}
         009{"Oceania"}
         011{"Kanlurang Africa"}
         013{"Gitnang Amerika"}
@@ -20,7 +20,7 @@ fil{
         017{"Gitnang Africa"}
         018{"Katimugang Africa"}
         019{"Americas"}
-        021{"Rehiyon ng Hilagang Amerika"}
+        021{"Northern America"}
         029{"Carribbean"}
         030{"Silangang Asya"}
         034{"Katimugang Asya"}
@@ -165,8 +165,8 @@ fil{
         KI{"Kiribati"}
         KM{"Comoros"}
         KN{"Saint Kitts and Nevis"}
-        KP{"North Korea"}
-        KR{"South Korea"}
+        KP{"Hilagang Korea"}
+        KR{"Timog Korea"}
         KW{"Kuwait"}
         KY{"Cayman Islands"}
         KZ{"Kazakhstan"}
@@ -308,11 +308,11 @@ fil{
     }
     Countries%variant{
         CD{"Congo (DRC)"}
-        CG{"Congo (Republic)"}
+        CG{"Congo (Republika)"}
         CI{"Ivory Coast"}
         FK{"Falkland Islands (Islas Malvinas)"}
         MK{"Macedonia (FYROM)"}
         TL{"East Timor"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.94"}
 }

@@ -190,7 +190,7 @@ gd{
         MH{"Eileanan Mharshall"}
         MK{"A’ Mhasadon"}
         ML{"Màili"}
-        MM{"Miànmar (Burma)"}
+        MM{"Miànmar"}
         MN{"Dùthaich nam Mongol"}
         MO{"Macàthu SAR na Sìne"}
         MP{"Na h-Eileanan Mairianach a Tuath"}
@@ -278,7 +278,7 @@ gd{
         TZ{"An Tansan"}
         UA{"An Ucràin"}
         UG{"Uganda"}
-        UM{"Meanbh-Eileanan Iomallach nan Stàitean Aonaichte"}
+        UM{"Meanbh-Eileanan Iomallach nan SA"}
         US{"Na Stàitean Aonaichte"}
         UY{"Uruguaidh"}
         UZ{"Usbagastàn"}
@@ -307,12 +307,12 @@ gd{
         US{"SA"}
     }
     Countries%variant{
-        CD{"A’ Chongo (Poblachd Dheamocratach)"}
+        CD{"A’ Chongo (PDC)"}
         CG{"A’ Chongo (Poblachd)"}
         CI{"An Costa Ìbhri"}
         FK{"Na h-Eileanan Fàclannach (Islas Malvinas)"}
         MK{"A’ Mhasadon (FYROM)"}
         TL{"Tìomor an Ear"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.17"}
 }
