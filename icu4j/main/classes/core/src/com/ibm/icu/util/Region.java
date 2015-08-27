@@ -153,21 +153,29 @@ public class Region implements Comparable<Region> {
         availableRegions = new ArrayList<Set<Region>>(RegionType.values().length);
 
 
-        UResourceBundle regionCodes = null;
         UResourceBundle metadataAlias = null;
         UResourceBundle territoryAlias = null;
         UResourceBundle codeMappings = null;
+        UResourceBundle idValidity = null;
+        UResourceBundle regionList = null;
+        UResourceBundle regionRegular = null;
+        UResourceBundle regionMacro = null;
+        UResourceBundle regionUnknown = null;
         UResourceBundle worldContainment = null;
         UResourceBundle territoryContainment = null;
         UResourceBundle groupingContainment = null;
 
         UResourceBundle metadata = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"metadata",ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        regionCodes = metadata.get("regionCodes");
         metadataAlias = metadata.get("alias");
         territoryAlias = metadataAlias.get("territory");
 
         UResourceBundle supplementalData = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         codeMappings = supplementalData.get("codeMappings");
+        idValidity = supplementalData.get("idValidity");
+        regionList = idValidity.get("region");
+        regionRegular = regionList.get("regular");
+        regionMacro = regionList.get("macroregion");
+        regionUnknown = regionList.get("unknown");
 
         territoryContainment = supplementalData.get("territoryContainment");
         worldContainment = territoryContainment.get("001");
@@ -177,13 +185,36 @@ public class Region implements Comparable<Region> {
         List<String> continents = Arrays.asList(continentsArr);
         String[] groupingArr = groupingContainment.getStringArray();
         List<String> groupings = Arrays.asList(groupingArr);
+        List<String> regionCodes = new ArrayList<String>();
+
+        List<String> allRegions = new ArrayList<String>();
+        allRegions.addAll(Arrays.asList(regionRegular.getStringArray()));
+        allRegions.addAll(Arrays.asList(regionMacro.getStringArray()));
+        allRegions.add(regionUnknown.getString());
+        
+        for ( String r : allRegions ) {
+            int rangeMarkerLocation = r.indexOf("~");
+            if ( rangeMarkerLocation > 0 ) {
+                StringBuilder regionName = new StringBuilder(r);
+                char endRange = regionName.charAt(rangeMarkerLocation+1);
+                regionName.setLength(rangeMarkerLocation);
+                char lastChar = regionName.charAt(rangeMarkerLocation-1);
+                while ( lastChar <= endRange ) {
+                    String newRegion = regionName.toString();
+                    regionCodes.add(newRegion);
+                    lastChar++;
+                    regionName.setCharAt(rangeMarkerLocation-1,lastChar);
+                }
+            } else {
+                regionCodes.add(r);
+            }
+        }
+
+        regions = new ArrayList<Region>(regionCodes.size());
 
         // First process the region codes and create the master array of regions.
-        int regionCodeSize = regionCodes.getSize();
-        regions = new ArrayList<Region>(regionCodeSize);
-        for ( int i = 0 ; i < regionCodeSize ; i++ ) {
+        for ( String id : regionCodes) {
             Region r = new Region();
-            String id = regionCodes.getString(i);
             r.id = id;
             r.type = RegionType.TERRITORY; // Only temporary - figure out the real type later once the aliases are known.
             regionIDMap.put(id, r);

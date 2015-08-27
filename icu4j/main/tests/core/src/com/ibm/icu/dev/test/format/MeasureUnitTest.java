@@ -1024,8 +1024,8 @@ public class MeasureUnitTest extends TestFmwk {
                 {ULocale.ENGLISH, FormatWidth.WIDE, "2 miles, 1 foot, 2.3 inches"},
                 {ULocale.ENGLISH, FormatWidth.SHORT, "2 mi, 1 ft, 2.3 in"},
                 {ULocale.ENGLISH, FormatWidth.NARROW, "2mi 1\u2032 2.3\u2033"},
-                {russia, FormatWidth.WIDE, "2 \u043C\u0438\u043B\u0438, 1 \u0444\u0443\u0442 \u0438 2,3 \u0434\u044E\u0439\u043C\u0430"},
-                {russia, FormatWidth.SHORT, "2 \u043C\u0438\u043B\u0438, 1 \u0444\u0443\u0442, 2,3 \u0434\u044E\u0439\u043C."},
+                {russia, FormatWidth.WIDE,   "2 \u043C\u0438\u043B\u0438 1 \u0444\u0443\u0442 \u0438 2,3 \u0434\u044E\u0439\u043C\u0430"},
+                {russia, FormatWidth.SHORT,  "2 \u043C\u0438\u043B\u0438 1 \u0444\u0443\u0442 \u0438 2,3 \u0434\u044E\u0439\u043C."},
                 {russia, FormatWidth.NARROW, "2 \u043C\u0438\u043B\u044C 1 \u0444\u0443\u0442 2,3 \u0434\u044E\u0439\u043C\u0430"},
         };
         for (Object[] row : data) {
@@ -1051,22 +1051,22 @@ public class MeasureUnitTest extends TestFmwk {
                 {FormatWidth.WIDE, 1.0, MeasureUnit.MINUTE, "1 pound per minute", DONT_CARE, 0, 0},
                 {FormatWidth.WIDE, 2.0, MeasureUnit.MINUTE, "2 pounds per minute", DONT_CARE, 0, 0},
                 // per unit
-                {FormatWidth.SHORT, 1.0, MeasureUnit.SECOND, "1 lbps", DONT_CARE, 0, 0},
-                {FormatWidth.SHORT, 2.0, MeasureUnit.SECOND, "2 lbsps", DONT_CARE, 0, 0},
+                {FormatWidth.SHORT, 1.0, MeasureUnit.SECOND, "1 lb/s", DONT_CARE, 0, 0},
+                {FormatWidth.SHORT, 2.0, MeasureUnit.SECOND, "2 lb/s", DONT_CARE, 0, 0},
                 // compound
                 {FormatWidth.SHORT, 1.0, MeasureUnit.MINUTE, "1 lb/min", DONT_CARE, 0, 0},
-                {FormatWidth.SHORT, 2.0, MeasureUnit.MINUTE, "2 lbs/min", DONT_CARE, 0, 0},
+                {FormatWidth.SHORT, 2.0, MeasureUnit.MINUTE, "2 lb/min", DONT_CARE, 0, 0},
                 // per unit
                 {FormatWidth.NARROW, 1.0, MeasureUnit.SECOND, "1#/s", DONT_CARE, 0, 0},
                 {FormatWidth.NARROW, 2.0, MeasureUnit.SECOND, "2#/s", DONT_CARE, 0, 0},
                 // compound
-                {FormatWidth.NARROW, 1.0, MeasureUnit.MINUTE, "1#/m", DONT_CARE, 0, 0},
-                {FormatWidth.NARROW, 2.0, MeasureUnit.MINUTE, "2#/m", DONT_CARE, 0, 0},
+                {FormatWidth.NARROW, 1.0, MeasureUnit.MINUTE, "1#/min", DONT_CARE, 0, 0},
+                {FormatWidth.NARROW, 2.0, MeasureUnit.MINUTE, "2#/min", DONT_CARE, 0, 0},
                 // field positions
-                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lbsps", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
-                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lbsps", NumberFormat.Field.INTEGER, 0, 2},
-                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lbs/min", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
-                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lbs/min", NumberFormat.Field.INTEGER, 0, 2},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lb/s", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lb/s", NumberFormat.Field.INTEGER, 0, 2},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lb/min", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
+                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lb/min", NumberFormat.Field.INTEGER, 0, 2},
 
         };
         

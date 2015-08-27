@@ -7,7 +7,7 @@
 
 /**
  * Port From:   ICU4C v1.8.1 : format : NumberFormatTest
- * Source File: $ICU4CRoot/source/test/intltest/numfmtst.cpp
+ * Source File: $ICU4oot/source/test/intltest/numfmtst.cpp
  **/
 
 package com.ibm.icu.dev.test.format;
@@ -1028,10 +1028,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollars"}, 
                 {"en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars"}, 
                 {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD1,234.56", "-1,234.56 US dollars"}, 
-                {"zh_CN", "1", "USD", "US$\u00A01.00", "USD\u00A01.00", "1.00美元"}, 
-                {"zh_CN", "1234.56", "USD", "US$\u00A01,234.56", "USD\u00A01,234.56", "1,234.56美元"}, 
-                {"zh_CN", "1", "CNY", "￥\u00A01.00", "CNY\u00A01.00", "1.00人民币"}, 
-                {"zh_CN", "1234.56", "CNY", "￥\u00A01,234.56", "CNY\u00A01,234.56", "1,234.56人民币"}, 
+                {"zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00美元"}, 
+                {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56美元"}, 
+                {"zh_CN", "1", "CNY", "￥1.00", "CNY1.00", "1.00人民币"}, 
+                {"zh_CN", "1234.56", "CNY", "￥1,234.56", "CNY1,234.56", "1,234.56人民币"}, 
                 {"ru_RU", "1", "RUB", "1,00 \u20BD", "1,00 RUB", "1,00 российского рубля"}, 
                 {"ru_RU", "2", "RUB", "2,00 \u20BD", "2,00 RUB", "2,00 российского рубля"}, 
                 {"ru_RU", "5", "RUB", "5,00 \u20BD", "5,00 RUB", "5,00 российского рубля"}, 
@@ -1039,7 +1039,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {"root", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, 
                 {"root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers 
                 {"root@numbers=arab", "-1.23", "USD", "\u200F-US$ ١٫٢٣", "\u200F-USD ١٫٢٣", "\u200F-١٫٢٣ USD"}, // ensure that the root locale is still used with modifiers 
-                {"es_AR", "1", "INR", "INR1,00", "INR1,00", "1,00 rupia india"}, 
+                {"es_AR", "1", "INR", "INR\u00A01,00", "INR\u00A01,00", "1,00 rupia india"}, 
                 {"ar_EG", "1", "USD", "US$ ١٫٠٠", "USD ١٫٠٠", "١٫٠٠ دولار أمريكي"}, 
         };
 
@@ -3535,7 +3535,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // starting with CLDR 2.0
         String[] DATA = {
                 "es", "CO", "", "1.250,75",
-                "es", "CR", "", "1.250,75",
                 "es", "ES", "", "1.250,75",
                 "es", "GQ", "", "1.250,75",
                 "es", "MX", "", "1,250.75",

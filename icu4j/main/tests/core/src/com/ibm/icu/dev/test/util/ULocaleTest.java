@@ -1388,10 +1388,10 @@ public class ULocaleTest extends TestFmwk {
         h[1].put("collation", "\u6392\u5E8F");
         h[1].put("calendar", "\u65E5\u5386");
         h[1].put("currency", "\u8D27\u5E01");
-        h[1].put("phonebook", "\u7535\u8BDD\u7C3F\u6392\u5E8F\u987A\u5E8F");
+        h[1].put("phonebook", "\u7535\u8BDD\u7C3F\u6392\u5E8F");
         h[1].put("pinyin", "\u62FC\u97F3\u6392\u5E8F");
         h[1].put("stroke", "\u7B14\u5212\u987A\u5E8F");
-        h[1].put("traditional", "\u4F20\u7EDF\u6392\u5E8F\u987A\u5E8F");
+        h[1].put("traditional", "\u4F20\u7EDF\u6392\u5E8F");
         h[1].put("japanese", "\u65E5\u672C\u65E5\u5386");
         h[1].put("buddhist", "\u4F5B\u6559\u65E5\u5386");
         h[1].put("islamic", "\u4F0A\u65AF\u5170\u65E5\u5386");
