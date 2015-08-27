@@ -1142,7 +1142,7 @@ void NumberFormat2Test::TestValueFormatterIsFastFormattable() {
     assertTrue("", vf.isFastFormattable(-48));
     assertTrue("", vf.isFastFormattable(2147483647));
     assertTrue("", vf.isFastFormattable(-2147483647));
-    assertFalse("", vf.isFastFormattable(-2147483648));
+    assertFalse("", vf.isFastFormattable(-2147483648L));
     {
         DigitGrouping grouping;
         grouping.fGrouping = 3;
@@ -2090,7 +2090,7 @@ void NumberFormat2Test::TestSpecialInitVisibleDigits() {
         FixedPrecision precision;
         precision.fSignificant.setMax(3);
         precision.fMin.setFracDigitCount(2);
-        precision.initVisibleDigits(-5.0 / 0.0, digits, status);
+        precision.initVisibleDigits(-uprv_getInfinity(), digits, status);
         assertFalse("", digits.isNaN());
         assertTrue("", digits.isInfinite());
         assertTrue("", digits.isNegative());
@@ -2099,7 +2099,7 @@ void NumberFormat2Test::TestSpecialInitVisibleDigits() {
     {
         UErrorCode status = U_ZERO_ERROR;
         FixedPrecision precision;
-        precision.initVisibleDigits(5.0 / 0.0, digits, status);
+        precision.initVisibleDigits(uprv_getInfinity(), digits, status);
         assertFalse("", digits.isNaN());
         assertTrue("", digits.isInfinite());
         assertFalse("", digits.isNegative());
