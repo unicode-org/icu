@@ -395,7 +395,7 @@ be{
             tibt{"тыбецкія лічбы"}
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.20.4"}
     codePatterns{
         language{"Мова: {0}"}
         script{"Пісьмо: {0}"}

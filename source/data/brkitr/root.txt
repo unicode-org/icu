@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 root{
-    Version{"2.1.19.14"}
+    Version{"2.1.20.0"}
     boundaries{
         grapheme:process(dependency){"char.brk"}
         line:process(dependency){"line.brk"}

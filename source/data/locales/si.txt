@@ -211,14 +211,14 @@ si{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.20.4"}
     calendar{
         generic{
             DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
                 "G y MMMM d, EEEE",
                 "G y MMMM d",
                 "G y MMM d",
@@ -268,12 +268,12 @@ si{
                     H{"HH–HH"}
                 }
                 Hm{
-                    H{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    H{"HH.mm–HH.mm"}
+                    m{"HH.mm–HH.mm"}
                 }
                 Hmv{
-                    H{"HH:mm–HH:mm v"}
-                    m{"HHmm–HHmm v"}
+                    H{"HH.mm–HH.mm v"}
+                    m{"HH.mm–HH.mm v"}
                 }
                 Hv{
                     H{"HH–HH v"}
@@ -309,14 +309,14 @@ si{
                     h{"a h–h"}
                 }
                 hm{
-                    a{"a h:mm – a h:mm"}
+                    a{"a h.mm – a h.mm"}
                     h{"a h.mm – h.mm"}
                     m{"a h.mm – h.mm"}
                 }
                 hmv{
                     a{"a h.mm – a hhh.mm v"}
                     h{"a h.mm – h.mm v"}
-                    m{"a h:mm – h.mm v"}
+                    m{"a h.mm – h.mm v"}
                 }
                 hv{
                     a{"a h – a h v"}
@@ -373,10 +373,10 @@ si{
                 "ප",
             }
             DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
                 "y MMMM d, EEEE",
                 "y MMMM d",
                 "y MMM d",
@@ -392,8 +392,8 @@ si{
             }
             availableFormats{
                 E{"ccc"}
-                EHm{"E HH:mm"}
-                EHms{"E HH:mm:ss"}
+                EHm{"E HH.mm"}
+                EHms{"E HH.mm.ss"}
                 Ed{"d E"}
                 Ehm{"E a h.mm"}
                 Ehms{"E a h.mm.ss"}
@@ -402,10 +402,10 @@ si{
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
                 H{"HH"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                Hmsv{"HH:mm:ss v"}
-                Hmv{"HH:mm v"}
+                Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
+                Hmsv{"HH.mm.ss v"}
+                Hmv{"HH.mm v"}
                 M{"L"}
                 MEd{"M-d, E"}
                 MMM{"LLL"}
@@ -417,8 +417,8 @@ si{
                 h{"a h"}
                 hm{"a h.mm"}
                 hms{"a h.mm.ss"}
-                hmsv{"h:mm:ss a v"}
-                hmv{"h:mm a v"}
+                hmsv{"h.mm.ss a v"}
+                hmv{"h.mm a v"}
                 ms{"mm.ss"}
                 y{"y"}
                 yM{"y-M"}
@@ -604,12 +604,12 @@ si{
                     H{"HH–HH"}
                 }
                 Hm{
-                    H{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    H{"HH.mm–HH.mm"}
+                    m{"HH.mm–HH.mm"}
                 }
                 Hmv{
-                    H{"HH:mm–HH:mm v"}
-                    m{"HH:mm–HH:mm v"}
+                    H{"HH.mm–HH.mm v"}
+                    m{"HH.mm–HH.mm v"}
                 }
                 Hv{
                     H{"HH–HH v"}

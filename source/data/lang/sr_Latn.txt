@@ -802,7 +802,7 @@ sr_Latn{
         TARASK{"Taraskijevička ortografija"}
         VALENCIA{"Valencijska"}
     }
-    Version{"2.1.19.80"}
+    Version{"2.1.20.4"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"pismo: {0}"}

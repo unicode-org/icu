@@ -313,5 +313,5 @@ sr_Latn{
         FK{"Foklandska (Malvinska) ostrva"}
         MK{"Makedonija (BJRM)"}
     }
-    Version{"2.1.19.80"}
+    Version{"2.1.20.4"}
 }

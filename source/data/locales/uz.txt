@@ -45,7 +45,6 @@ uz{
                 percentSign{"٪"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
-                timeSeparator{"٫"}
             }
         }
         default{"latn"}
@@ -232,7 +231,7 @@ uz{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.20.4"}
     calendar{
         generic{
             DateTimePatterns{

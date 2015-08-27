@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 be{
-    Version{"2.1.19.14"}
+    Version{"2.1.20.4"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -1851,7 +1851,7 @@ be{
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
-        hourFormat{"+HH:mm;-HH:mm"}
+        hourFormat{"+HH.mm;-HH.mm"}
         regionFormat{"Час: {0}"}
         regionFormatDaylight{"{0} (+1)"}
         regionFormatStandard{"{0} (+0)"}

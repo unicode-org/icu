@@ -52,7 +52,6 @@ gd{
                 percentSign{"٪"}
                 plusSign{"‎+‎"}
                 superscriptingExponent{"×"}
-                timeSeparator{"٫"}
             }
         }
         bali{
@@ -908,7 +907,7 @@ gd{
             }
         }
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.20.4"}
     calendar{
         buddhist{
             intervalFormats{
