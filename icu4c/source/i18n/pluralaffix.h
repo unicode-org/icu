@@ -23,6 +23,19 @@ U_NAMESPACE_BEGIN
 
 class FieldPositionHandler;
 
+// Export an explicit template instantiation.
+//
+//    MSVC requires this, even though it should not be necessary. 
+//    No direct access leaks out of the i18n library.
+//
+//    Macintosh produces duplicate definition linker errors with the explicit template
+//    instantiation.
+//
+#if !U_PLATFORM_IS_DARWIN_BASED
+template class U_I18N_API PluralMap<DigitAffix>;
+#endif
+
+
 /**
  * A plural aware prefix or suffix of a formatted number.
  *
