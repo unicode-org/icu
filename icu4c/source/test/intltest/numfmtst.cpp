@@ -572,6 +572,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestCtorApplyPatternDifference);
   TESTCASE_AUTO(TestFractionalDigitsForCurrency);
   TESTCASE_AUTO(TestFormatCurrencyPlural);
+  TESTCASE_AUTO(Test11868);
   TESTCASE_AUTO_END;
 }
 
@@ -8449,6 +8450,83 @@ void NumberFormatTest::TestCtorApplyPatternDifference() {
             fmt.format(5, result));
 }
 
+void NumberFormatTest::Test11868() {
+    double posAmt = 34.567;
+    double negAmt = -9876.543;
+
+    Locale selectedLocale("en_US");
+    UErrorCode status = U_ZERO_ERROR;
+
+    UnicodeString result;
+    FieldPosition fpCurr(UNUM_CURRENCY_FIELD);
+    LocalPointer<NumberFormat> fmt(
+            NumberFormat::createInstance(
+                    selectedLocale, UNUM_CURRENCY_PLURAL, status));
+    if (!assertSuccess("Format creation", status)) {
+        return;
+    }
+    fmt->format(posAmt, result, fpCurr, status);
+    assertEquals("", "34.57 US dollars", result);
+    assertEquals("begin index", 6, fpCurr.getBeginIndex());
+    assertEquals("end index", 16, fpCurr.getEndIndex());
+
+    // Test field position iterator
+    {
+        NumberFormatTest_Attributes attributes[] = {
+                {UNUM_INTEGER_FIELD, 0, 2},
+                {UNUM_DECIMAL_SEPARATOR_FIELD, 2, 3},
+                {UNUM_FRACTION_FIELD, 3, 5},
+                {UNUM_CURRENCY_FIELD, 6, 16},
+                {0, -1, 0}};
+        UnicodeString result;
+        FieldPositionIterator iter;
+        fmt->format(posAmt, result, &iter, status);
+        assertEquals("", "34.57 US dollars", result);
+        verifyFieldPositionIterator(attributes, iter);
+    }
+
+    result.remove();
+    fmt->format(negAmt, result, fpCurr, status);
+    assertEquals("", "-9,876.54 US dollars", result);
+    assertEquals("begin index", 10, fpCurr.getBeginIndex());
+    assertEquals("end index", 20, fpCurr.getEndIndex());
+
+    // Test field position iterator
+    {
+        NumberFormatTest_Attributes attributes[] = {
+                {UNUM_SIGN_FIELD, 0, 1},
+                {UNUM_GROUPING_SEPARATOR_FIELD, 2, 3},
+                {UNUM_INTEGER_FIELD, 1, 6},
+                {UNUM_DECIMAL_SEPARATOR_FIELD, 6, 7},
+                {UNUM_FRACTION_FIELD, 7, 9},
+                {UNUM_CURRENCY_FIELD, 10, 20},
+                {0, -1, 0}};
+        UnicodeString result;
+        FieldPositionIterator iter;
+        fmt->format(negAmt, result, &iter, status);
+        assertEquals("", "-9,876.54 US dollars", result);
+        verifyFieldPositionIterator(attributes, iter);
+    }
+}
+
+void NumberFormatTest::verifyFieldPositionIterator(
+        NumberFormatTest_Attributes *expected, FieldPositionIterator &iter) {
+    int32_t idx = 0;
+    FieldPosition fp;
+    while (iter.next(fp)) {
+        if (expected[idx].spos == -1) {
+            errln("Iterator should have ended. got %d", fp.getField());
+            return;
+        }
+        assertEquals("id", expected[idx].id, fp.getField());
+        assertEquals("start", expected[idx].spos, fp.getBeginIndex());
+        assertEquals("end", expected[idx].epos, fp.getEndIndex());
+        ++idx;
+    }
+    if (expected[idx].spos != -1) {
+        errln("Premature end of iterator. expected %d", expected[idx].id);
+    }
+}
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
