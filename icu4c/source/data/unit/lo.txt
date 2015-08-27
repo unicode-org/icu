@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 lo{
-    Version{"2.1.16.1"}
+    Version{"2.1.19.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -16,8 +16,8 @@ lo{
     units{
         acceleration{
             g-force{
-                dnam{"ແຮງຈີ"}
-                other{"{0} ແຮງຈີ"}
+                dnam{"ແຮງຕົກຕາມລຳພັງ"}
+                other{"{0} ແຮງຕົກຕາມລຳພັງ"}
             }
             meter-per-second-squared{
                 dnam{"m/s²"}
@@ -41,6 +41,10 @@ lo{
                 dnam{"radians"}
                 other{"{0} radians"}
             }
+            revolution{
+                dnam{"rev"}
+                other{"{0} rev"}
+            }
         }
         area{
             acre{
@@ -52,8 +56,9 @@ lo{
                 other{"{0} ເຮັກຕາ"}
             }
             square-centimeter{
-                dnam{"ຕາຊັງຕີແມັດ"}
-                other{"{0} ຕາຊັງຕາແມັດ"}
+                dnam{"ຊັງຕີຕາແມັດ"}
+                other{"{0} ຊັງຕີຕາແມັດ"}
+                per{"{0} ຕໍ່ຊັງຕີຕາແມັດ"}
             }
             square-foot{
                 dnam{"ຕາ​ຟຸດ"}
@@ -62,6 +67,7 @@ lo{
             square-inch{
                 dnam{"ຕານິ້ວ"}
                 other{"{0} ຕາລາງນິ້ວ"}
+                per{"{0} ຕໍ່ຕາລາງນິ້ວ"}
             }
             square-kilometer{
                 dnam{"ກິໂລຕາແມັດ"}
@@ -70,10 +76,11 @@ lo{
             square-meter{
                 dnam{"ຕາແມັດ"}
                 other{"{0} ຕາແມັດ"}
+                per{"{0} ຕໍ່ຕາແມັດ"}
             }
             square-mile{
-                dnam{"ຕາ​ໄມລ໌"}
-                other{"{0} ຕາ​ໄມລ໌"}
+                dnam{"ຕາ​ລາງໄມລ໌"}
+                other{"{0} ຕາ​ລາງໄມລ໌"}
             }
             square-yard{
                 dnam{"square yards"}
@@ -84,13 +91,24 @@ lo{
             per{"{0} ຕໍ່ {1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"ລິດ ຕໍ່ 100 ກິໂລເເມັດ"}
+                other{"{0} ລິດຕໍ່ 100 ກີໂລແມັດ"}
+            }
             liter-per-kilometer{
+                dnam{"ລ/ກມ"}
                 other{"{0} ລິດຕໍ່ກິໂລແມັດ"}
             }
             mile-per-gallon{
                 dnam{"ໄມລ໌ຕໍ່ແກລອນ"}
                 other{"{0} ໄມລ໌ຕໍ່ແກລອນ"}
             }
+        }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
         }
         digital{
             bit{
@@ -135,9 +153,14 @@ lo{
             }
         }
         duration{
+            century{
+                dnam{"ສັດຕະວັດ"}
+                other{"{0} ສັດຕະວັດ"}
+            }
             day{
                 dnam{"ມື້"}
                 other{"{0} ມື້"}
+                per{"{0} ຕໍ່ມື້"}
             }
             hour{
                 dnam{"ຊົ່ວໂມງ"}
@@ -155,10 +178,12 @@ lo{
             minute{
                 dnam{"ນາທີ"}
                 other{"{0} ນາທີ"}
+                per{"{0} ຕໍ່ນາທີ"}
             }
             month{
                 dnam{"ເດືອນ"}
                 other{"{0} ເດືອນ"}
+                per{"{0}/ເດືອນ"}
             }
             nanosecond{
                 dnam{"ນາ​ໂນ​ວິ​ນາ​ທີ"}
@@ -172,10 +197,12 @@ lo{
             week{
                 dnam{"ອາທິດ"}
                 other{"{0} ອາທິດ"}
+                per{"{0} ຕໍ່ອາທິດ"}
             }
             year{
                 dnam{"ປີ"}
                 other{"{0} ປີ"}
+                per{"{0} /ປີ"}
             }
         }
         electric{
@@ -248,21 +275,26 @@ lo{
             centimeter{
                 dnam{"ຊັງຕີແມັດ"}
                 other{"{0} ຊັງຕີແມັດ"}
+                per{"{0} ຕໍ່ຊັງຕີແມັດ"}
             }
             decimeter{
-                other{"{0} decimeters"}
+                dnam{"ເດຊີແມັດ"}
+                other{"{0} ເດຊີແມັດ"}
             }
             foot{
                 dnam{"ຟຸດ"}
                 other{"{0} ຟຸດ"}
+                per{"{0} ຕໍ່ຟຸດ"}
             }
             inch{
                 dnam{"ນິ້ວ"}
                 other{"{0} ນິ້ວ"}
+                per{"{0} ຕໍ່ນິ້ວ"}
             }
             kilometer{
                 dnam{"ກິໂລແມັດ"}
                 other{"{0} ກິໂລແມັດ"}
+                per{"{0} ຕໍ່ກິໂລແມັດ"}
             }
             light-year{
                 dnam{"ປີແສງ"}
@@ -271,6 +303,7 @@ lo{
             meter{
                 dnam{"ແມັດ"}
                 other{"{0} ແມັດ"}
+                per{"{0} ຕໍ່ແມັດ"}
             }
             micrometer{
                 dnam{"micrometers"}
@@ -279,6 +312,10 @@ lo{
             mile{
                 dnam{"ໄມ"}
                 other{"{0} ໄມ"}
+            }
+            mile-scandinavian{
+                dnam{"ໄມລ໌ສະກັງດີນາວຽນ"}
+                other{"{0} ໄມລ໌ສະກັງດີນາວຽນ"}
             }
             millimeter{
                 dnam{"ມິນລິແມັດ"}
@@ -289,7 +326,8 @@ lo{
                 other{"{0} ນາໂນແມັດ"}
             }
             nautical-mile{
-                other{"{0} nautical miles"}
+                dnam{"ໄມລ໌ທະເລ"}
+                other{"{0} ໄມລ໌ທະເລ"}
             }
             parsec{
                 dnam{"parsecs"}
@@ -318,10 +356,12 @@ lo{
             gram{
                 dnam{"ກຣາມ"}
                 other{"{0} ກຣາມ"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"ກິໂລກຣາມ"}
                 other{"{0} ກິໂລກຣາມ"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"t"}
@@ -338,6 +378,7 @@ lo{
             ounce{
                 dnam{"ອອນ"}
                 other{"{0} ອອນ"}
+                per{"{0} ຕໍ່ ອອນ"}
             }
             ounce-troy{
                 dnam{"oz t"}
@@ -346,6 +387,7 @@ lo{
             pound{
                 dnam{"ປອນ"}
                 other{"{0} ປອນ"}
+                per{"{0}/lb"}
             }
             ton{
                 dnam{"tn"}
@@ -384,7 +426,7 @@ lo{
                 other{"{0} hectopascals"}
             }
             inch-hg{
-                dnam{"inches of mercury"}
+                dnam{"in Hg"}
                 other{"{0} inches of mercury"}
             }
             millibar{
@@ -411,6 +453,10 @@ lo{
                 dnam{"ກິໂລແມັດຕໍ່ຊົ່ວໂມງ"}
                 other{"{0} ກິໂລແມັດຕໍ່ຊົ່ວໂມງ"}
             }
+            knot{
+                dnam{"knot"}
+                other{"{0} knots"}
+            }
             meter-per-second{
                 dnam{"ແມັດຕໍ່ນາທີ"}
                 other{"{0} ແມັດຕໍ່ນາທີ"}
@@ -429,6 +475,10 @@ lo{
                 dnam{"ອົງສາຟາເຣນຮາຍ"}
                 other{"{0} ອົງສາຟາເຣນຮາຍ"}
             }
+            generic{
+                dnam{"°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"ອົງສາເຄວິນ"}
                 other{"{0} ອົງສາເຄວິນ"}
@@ -446,6 +496,7 @@ lo{
             cubic-centimeter{
                 dnam{"cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ft³"}
@@ -460,8 +511,9 @@ lo{
                 other{"{0} ກິໂລແມັດກ້ອນ"}
             }
             cubic-meter{
-                dnam{"m³"}
-                other{"{0} m³"}
+                dnam{"ແມັດກ້ອນ"}
+                other{"{0} ແມັດກ້ອນ"}
+                per{"{0} ຕໍ່ມ³"}
             }
             cubic-mile{
                 dnam{"ໄມລ໌ກ້ອນ"}
@@ -475,6 +527,10 @@ lo{
                 dnam{"cup"}
                 other{"{0} c"}
             }
+            cup-metric{
+                dnam{"mcup"}
+                other{"{0} metric cups"}
+            }
             deciliter{
                 dnam{"dL"}
                 other{"{0} dL"}
@@ -486,6 +542,7 @@ lo{
             gallon{
                 dnam{"gal"}
                 other{"{0} gal"}
+                per{"{0} per gallon"}
             }
             hectoliter{
                 dnam{"hL"}
@@ -494,6 +551,7 @@ lo{
             liter{
                 dnam{"ລິດ"}
                 other{"{0} ລິດ"}
+                per{"{0} ຕໍ່ລິດ"}
             }
             megaliter{
                 dnam{"ML"}
@@ -506,6 +564,10 @@ lo{
             pint{
                 dnam{"pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"metric pints"}
+                other{"{0} metric pints"}
             }
             quart{
                 dnam{"qt"}
@@ -557,6 +619,18 @@ lo{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"ລ/ 100 ກມ"}
+                other{"{0} ລ / 100 ກມ"}
+            }
+        }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
         }
         duration{
             day{
@@ -713,7 +787,7 @@ lo{
     unitsShort{
         acceleration{
             g-force{
-                dnam{"ແຮງຈີ"}
+                dnam{"ແຮງຕົກຕາມລຳພັງ"}
                 other{"{0} G"}
             }
             meter-per-second-squared{
@@ -738,6 +812,10 @@ lo{
                 dnam{"radians"}
                 other{"{0} rad"}
             }
+            revolution{
+                dnam{"rev"}
+                other{"{0} rev"}
+            }
         }
         area{
             acre{
@@ -751,6 +829,7 @@ lo{
             square-centimeter{
                 dnam{"ຊມ²"}
                 other{"{0} ຊມ²"}
+                per{"{0}/ຊມ²"}
             }
             square-foot{
                 dnam{"ຟຸດ²"}
@@ -759,6 +838,7 @@ lo{
             square-inch{
                 dnam{"ນິ້ວ²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"ກມ²"}
@@ -766,7 +846,8 @@ lo{
             }
             square-meter{
                 dnam{"ແມັດ²"}
-                other{"{0} ແມັດ²"}
+                other{"{0} ມ²"}
+                per{"{0}/ມ²"}
             }
             square-mile{
                 dnam{"sq miles"}
@@ -781,6 +862,10 @@ lo{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"ລ/ 100 ກມ"}
+                other{"{0} L/100km"}
+            }
             liter-per-kilometer{
                 dnam{"ລ/ກມ"}
                 other{"{0} ລ/ກມ"}
@@ -789,6 +874,12 @@ lo{
                 dnam{"ໄມລ໌/ແກລ"}
                 other{"{0} mpg"}
             }
+        }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
         }
         digital{
             bit{
@@ -833,9 +924,14 @@ lo{
             }
         }
         duration{
+            century{
+                dnam{"c"}
+                other{"{0} c"}
+            }
             day{
                 dnam{"ມື້"}
                 other{"{0} ມື້"}
+                per{"{0}/ມື້"}
             }
             hour{
                 dnam{"ຊົ່ວໂມງ"}
@@ -853,10 +949,12 @@ lo{
             minute{
                 dnam{"ນທ."}
                 other{"{0} ນທ."}
+                per{"{0}/ນາທີ"}
             }
             month{
                 dnam{"ເດືອນ"}
                 other{"{0} ດ."}
+                per{"{0}/ເດືອນ"}
             }
             nanosecond{
                 dnam{"ນາ​ໂນ​ວິ​"}
@@ -870,10 +968,12 @@ lo{
             week{
                 dnam{"ອາທິດ"}
                 other{"{0} ອທ."}
+                per{"{0}/ອາທິດ"}
             }
             year{
                 dnam{"ປີ"}
                 other{"{0} ປີ"}
+                per{"{0}/y"}
             }
         }
         electric{
@@ -946,6 +1046,7 @@ lo{
             centimeter{
                 dnam{"ຊມ"}
                 other{"{0} ຊມ"}
+                per{"{0}/ຊັງຕີແມັດ"}
             }
             decimeter{
                 dnam{"dm"}
@@ -954,14 +1055,17 @@ lo{
             foot{
                 dnam{"ຟຸດ"}
                 other{"{0} ຟ"}
+                per{"{0}/ຟຸດ"}
             }
             inch{
                 dnam{"ນິ້ວ"}
                 other{"{0} ນິ"}
+                per{"{0}/ນີວ"}
             }
             kilometer{
                 dnam{"ກມ"}
                 other{"{0} ກມ"}
+                per{"{0}/ກິໂລແມັດ"}
             }
             light-year{
                 dnam{"ປີແສງ"}
@@ -970,6 +1074,7 @@ lo{
             meter{
                 dnam{"ແມັດ"}
                 other{"{0} ມ"}
+                per{"{0}/ແມັດ"}
             }
             micrometer{
                 dnam{"µm"}
@@ -978,6 +1083,10 @@ lo{
             mile{
                 dnam{"ໄມ"}
                 other{"{0} ໄມ"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"ມມ"}
@@ -1018,10 +1127,12 @@ lo{
             gram{
                 dnam{"ກຣາມ"}
                 other{"{0} ກຼ"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"ກິໂລກຣາມ"}
                 other{"{0} ກິໂລ"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"t"}
@@ -1038,6 +1149,7 @@ lo{
             ounce{
                 dnam{"ອອນ"}
                 other{"{0} ອ"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"oz t"}
@@ -1046,6 +1158,7 @@ lo{
             pound{
                 dnam{"ປອນ"}
                 other{"{0} ປ"}
+                per{"{0}/lb"}
             }
             ton{
                 dnam{"tn"}
@@ -1111,6 +1224,10 @@ lo{
                 dnam{"ກມ/ຊມ"}
                 other{"{0} ກມ/ຊມ"}
             }
+            knot{
+                dnam{"kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
                 dnam{"ແມັດ/ນທ."}
                 other{"{0} ມ/ນທ."}
@@ -1129,6 +1246,10 @@ lo{
                 dnam{"ອົງ​ສາ ຟ."}
                 other{"{0} ອົງສາ ຟ."}
             }
+            generic{
+                dnam{"°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"ອົງສາ ເຄ."}
                 other{"{0}°K"}
@@ -1146,6 +1267,7 @@ lo{
             cubic-centimeter{
                 dnam{"cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ft³"}
@@ -1160,8 +1282,9 @@ lo{
                 other{"{0} km³"}
             }
             cubic-meter{
-                dnam{"m³"}
-                other{"{0} m³"}
+                dnam{"ມ³"}
+                other{"{0} ມ³"}
+                per{"{0}/ມ³"}
             }
             cubic-mile{
                 dnam{"mi³"}
@@ -1175,6 +1298,10 @@ lo{
                 dnam{"cup"}
                 other{"{0} c"}
             }
+            cup-metric{
+                dnam{"mcup"}
+                other{"{0} mc"}
+            }
             deciliter{
                 dnam{"dL"}
                 other{"{0} dL"}
@@ -1186,6 +1313,7 @@ lo{
             gallon{
                 dnam{"gal"}
                 other{"{0} gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hL"}
@@ -1194,6 +1322,7 @@ lo{
             liter{
                 dnam{"ລິດ"}
                 other{"{0} ລິດ"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"ML"}
@@ -1206,6 +1335,10 @@ lo{
             pint{
                 dnam{"pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"qt"}

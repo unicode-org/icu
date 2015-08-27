@@ -10,6 +10,7 @@ de_CH{
     Keys{
         colCaseFirst{"Sortierung nach Gross- bzw. Kleinbuchstaben"}
         colCaseLevel{"Sortierung nach Gross- oder Kleinschreibung"}
+        ms{"Mass-System"}
     }
     Languages{
         be{"Weissrussisch"}
@@ -23,6 +24,10 @@ de_CH{
             no{"Ohne Gross-/Kleinschreibung sortieren"}
             yes{"Nach Gross-/Kleinschreibung sortieren"}
         }
+        ms{
+            uksystem{"britisches Mass-System"}
+            ussystem{"US Mass-System"}
+        }
     }
-    Version{"2.1.11.70"}
+    Version{"2.1.19.87"}
 }

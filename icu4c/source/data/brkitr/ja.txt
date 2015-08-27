@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ja{
-    Version{"2.0.82.42"}
+    Version{"2.1.19.14"}
     boundaries{
         line:process(dependency){"line_normal.brk"}
         line_loose:process(dependency){"line_loose_cj.brk"}

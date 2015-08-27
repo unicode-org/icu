@@ -19,6 +19,9 @@ tr{
         colStrength{"Sıralama Gücü"}
         collation{"Sıralama Düzeni"}
         currency{"Para Birimi"}
+        hc{"Saat Sistemi (12 - 24)"}
+        lb{"lb"}
+        ms{"Ölçü Sistemi"}
         numbers{"Rakamlar"}
         timezone{"Saat Dilimi"}
         va{"Yerel Varyant"}
@@ -67,7 +70,7 @@ tr{
         awa{"Awadhi"}
         ay{"Aymara"}
         az{"Azerice"}
-        azb{"Güney Azerice"}
+        az_Arab{"Güney Azerice"}
         ba{"Başkırtça"}
         bal{"Baluchi"}
         ban{"Bali Dili"}
@@ -84,6 +87,7 @@ tr{
         bfd{"Bafut"}
         bfq{"Badaga"}
         bg{"Bulgarca"}
+        bgn{"Batı Balochi"}
         bho{"Arayanice"}
         bi{"Bislama"}
         bik{"Bikol"}
@@ -343,7 +347,8 @@ tr{
         lo{"Laoca"}
         lol{"Mongo"}
         loz{"Lozi"}
-        lt{"Litvanyaca"}
+        lrc{"Kuzey Luri"}
+        lt{"Litvanca"}
         ltg{"Latgalian"}
         lu{"Luba-Katanga"}
         lua{"Luba-Lulua"}
@@ -404,6 +409,7 @@ tr{
         nb{"Norveççe Bokmål"}
         nd{"Kuzey Ndebele"}
         nds{"Aşağı Almanca"}
+        nds_NL{"Aşağı Saksonca"}
         ne{"Nepalce"}
         new{"Nevari"}
         ng{"Ndonga"}
@@ -497,6 +503,7 @@ tr{
         sco{"Scots"}
         sd{"Sindhi"}
         sdc{"Sassari Sarduca"}
+        sdh{"Güney Kürtçesi"}
         se{"Kuzey Sami"}
         see{"Seneca"}
         seh{"Sena"}
@@ -607,6 +614,7 @@ tr{
         wal{"Valamo"}
         war{"Varay"}
         was{"Vaşo"}
+        wbp{"Warlpiri"}
         wo{"Volofça"}
         wuu{"Wu Çincesi"}
         xal{"Kalmıkça"}
@@ -637,7 +645,6 @@ tr{
     }
     Languages%short{
         az{"Azerice"}
-        en_GB{"İngilizce (BK)"}
     }
     Scripts{
         Afak{"Afaka"}
@@ -887,6 +894,21 @@ tr{
             unihan{"Radical-Stroke Sıralama Düzeni"}
             zhuyin{"Zhuyin Sıralaması"}
         }
+        hc{
+            h11{"12 Saat Sistemi (0–11)"}
+            h12{"12 Saat Sistemi (1–12)"}
+            h23{"24 Saat Sistemi (0–23)"}
+            h24{"24 Saat Sistemi (1–24)"}
+        }
+        lb{
+            loose{"loose"}
+            normal{"normal"}
+            strict{"strict"}
+        }
+        ms{
+            metric{"Metrik Sistem"}
+            ussystem{"ABD Ölçü Sistemi"}
+        }
         numbers{
             arab{"Hint-Arap Rakamları"}
             arabext{"Genişletilmiş Hint-Arap Rakamları"}
@@ -979,7 +1001,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.1.15.77"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Alfabe: {0}"}

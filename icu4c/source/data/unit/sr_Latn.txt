@@ -8,11 +8,11 @@
 // ***************************************************************************
 sr_Latn{
     %%Parent{"root"}
-    Version{"2.1.15.91"}
+    Version{"2.1.19.80"}
     durationUnits{
         hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
+        hms{"h.mm.ss"}
+        ms{"m.ss"}
     }
     units{
         acceleration{
@@ -31,16 +31,16 @@ sr_Latn{
         }
         angle{
             arc-minute{
-                dnam{"minuti"}
-                few{"{0} minuta"}
-                one{"{0} minut"}
-                other{"{0} minuta"}
+                dnam{"lučni minuti"}
+                few{"{0} lučna minuta"}
+                one{"{0} lučni minut"}
+                other{"{0} lučnih minuta"}
             }
             arc-second{
-                dnam{"sekunde"}
-                few{"{0} sekunde"}
-                one{"{0} sekunda"}
-                other{"{0} sekundi"}
+                dnam{"lučne sekunde"}
+                few{"{0} lučne sekunde"}
+                one{"{0} lučna sekunda"}
+                other{"{0} lučnih sekundi"}
             }
             degree{
                 dnam{"stepeni"}
@@ -53,6 +53,12 @@ sr_Latn{
                 few{"{0} radijana"}
                 one{"{0} radijan"}
                 other{"{0} radijana"}
+            }
+            revolution{
+                dnam{"obrtaj"}
+                few{"{0} obrtaja"}
+                one{"{0} obrtaj"}
+                other{"{0} obrtaja"}
             }
         }
         area{
@@ -73,6 +79,7 @@ sr_Latn{
                 few{"{0} kvadratna centimetra"}
                 one{"{0} kvadratni centimetar"}
                 other{"{0} kvadratnih centimetara"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"kvadratne stope"}
@@ -85,6 +92,7 @@ sr_Latn{
                 few{"{0} kvadratna inča"}
                 one{"{0} kvadratni inč"}
                 other{"{0} kvadratnih inča"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"kvadratni kilometri"}
@@ -97,6 +105,7 @@ sr_Latn{
                 few{"{0} kvadratna metra"}
                 one{"{0} kvadratni metar"}
                 other{"{0} kvadratnih metara"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"kvadratne milje"}
@@ -115,6 +124,12 @@ sr_Latn{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                few{"{0} litra na 100 kilometara"}
+                one{"{0} litar na 100 kilometara"}
+                other{"{0} litara na 100 kilometara"}
+            }
             liter-per-kilometer{
                 dnam{"litri po kilometru"}
                 few{"{0} litra po kilometru"}
@@ -191,11 +206,18 @@ sr_Latn{
             }
         }
         duration{
+            century{
+                dnam{"vekovi"}
+                few{"{0} veka"}
+                one{"{0} vek"}
+                other{"{0} vekova"}
+            }
             day{
                 dnam{"dani"}
                 few{"{0} dana"}
                 one{"{0} dan"}
                 other{"{0} dana"}
+                per{"{0}/dnevno"}
             }
             hour{
                 dnam{"sati"}
@@ -221,12 +243,14 @@ sr_Latn{
                 few{"{0} minuta"}
                 one{"{0} minut"}
                 other{"{0} minuta"}
+                per{"{0} u minutu"}
             }
             month{
                 dnam{"meseci"}
                 few{"{0} meseca"}
                 one{"{0} mesec"}
                 other{"{0} meseci"}
+                per{"{0} mesečno"}
             }
             nanosecond{
                 dnam{"nanosekunde"}
@@ -246,12 +270,14 @@ sr_Latn{
                 few{"{0} nedelje"}
                 one{"{0} nedelja"}
                 other{"{0} nedelja"}
+                per{"{0} nedeljno"}
             }
             year{
                 dnam{"godine"}
                 few{"{0} godine"}
                 one{"{0} godina"}
                 other{"{0} godina"}
+                per{"{0} godišnje"}
             }
         }
         electric{
@@ -356,6 +382,7 @@ sr_Latn{
                 few{"{0} centimentra"}
                 one{"{0} centimetar"}
                 other{"{0} centimetara"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"decimetri"}
@@ -368,18 +395,21 @@ sr_Latn{
                 few{"{0} stope"}
                 one{"{0} stopa"}
                 other{"{0} stopa"}
+                per{"{0}/ft"}
             }
             inch{
                 dnam{"inči"}
                 few{"{0} inča"}
                 one{"{0} inč"}
                 other{"{0} inča"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"kilometri"}
                 few{"{0} kilometra"}
                 one{"{0} kilometar"}
                 other{"{0} kilometara"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"svetlosne godine"}
@@ -392,6 +422,7 @@ sr_Latn{
                 few{"{0} metra"}
                 one{"{0} metar"}
                 other{"{0} metara"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"mikrometri"}
@@ -404,6 +435,9 @@ sr_Latn{
                 few{"{0} milje"}
                 one{"{0} milja"}
                 other{"{0} milja"}
+            }
+            mile-scandinavian{
+                dnam{"skandinavska milja"}
             }
             millimeter{
                 dnam{"milimetri"}
@@ -462,12 +496,14 @@ sr_Latn{
                 few{"{0} grama"}
                 one{"{0} gram"}
                 other{"{0} grama"}
+                per{"{0} po gramu"}
             }
             kilogram{
                 dnam{"kilogrami"}
                 few{"{0} kilograma"}
                 one{"{0} kilogram"}
                 other{"{0} kilograma"}
+                per{"{0} po kilogramu"}
             }
             metric-ton{
                 dnam{"metričke tone"}
@@ -492,6 +528,7 @@ sr_Latn{
                 few{"{0} unce"}
                 one{"{0} unca"}
                 other{"{0} unci"}
+                per{"{0} po unci"}
             }
             ounce-troy{
                 dnam{"fine unce"}
@@ -504,6 +541,7 @@ sr_Latn{
                 few{"{0} funte"}
                 one{"{0} funta"}
                 other{"{0} funti"}
+                per{"{0} po funti"}
             }
             ton{
                 dnam{"tone"}
@@ -623,6 +661,12 @@ sr_Latn{
                 one{"{0} stepen Farenhajta"}
                 other{"{0} stepeni Farenhajta"}
             }
+            generic{
+                dnam{"°"}
+                few{"{0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"kelvin"}
                 few{"{0} kelvina"}
@@ -648,6 +692,7 @@ sr_Latn{
                 few{"{0} kubna centimetra"}
                 one{"{0} kubni centimetar"}
                 other{"{0} kubnih centimetara"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"kubne stope"}
@@ -672,6 +717,7 @@ sr_Latn{
                 few{"{0} kubna metra"}
                 one{"{0} kubni metar"}
                 other{"{0} kubnih metara"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"kubne milje"}
@@ -691,6 +737,12 @@ sr_Latn{
                 one{"{0} šolja"}
                 other{"{0} šolja"}
             }
+            cup-metric{
+                dnam{"metrička šolja"}
+                few{"{0} metričke šolje"}
+                one{"{0} metrička šolja"}
+                other{"{0} metričkih šolja"}
+            }
             deciliter{
                 dnam{"decilitri"}
                 few{"{0} decilitra"}
@@ -708,6 +760,7 @@ sr_Latn{
                 few{"{0} galona"}
                 one{"{0} galon"}
                 other{"{0} galona"}
+                per{"{0} po galonu"}
             }
             hectoliter{
                 dnam{"hektolitri"}
@@ -720,6 +773,7 @@ sr_Latn{
                 few{"{0} litra"}
                 one{"{0} litar"}
                 other{"{0} litara"}
+                per{"po litri"}
             }
             megaliter{
                 dnam{"megalitri"}
@@ -738,6 +792,12 @@ sr_Latn{
                 few{"{0} pinte"}
                 one{"{0} pinta"}
                 other{"{0} pinti"}
+            }
+            pint-metric{
+                dnam{"metričke pinte"}
+                few{"{0} metričke pinte"}
+                one{"{0} metrička pinta"}
+                other{"{0} metričkih pinti"}
             }
             quart{
                 dnam{"kvarti"}
@@ -819,6 +879,14 @@ sr_Latn{
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                few{"{0} L/100km"}
+                one{"{0} L/100km"}
+                other{"{0} L/100km"}
+            }
+        }
         duration{
             day{
                 dnam{"d."}
@@ -827,7 +895,7 @@ sr_Latn{
                 other{"{0} d"}
             }
             hour{
-                dnam{"sati"}
+                dnam{"sat"}
                 few{"{0} sata"}
                 one{"{0} sat"}
                 other{"{0} sati"}
@@ -1051,7 +1119,7 @@ sr_Latn{
         }
         angle{
             arc-minute{
-                dnam{"minuti"}
+                dnam{"lučni min"}
                 few{"{0}′"}
                 one{"{0}′"}
                 other{"{0}′"}
@@ -1074,6 +1142,12 @@ sr_Latn{
                 one{"{0} rad"}
                 other{"{0} rad"}
             }
+            revolution{
+                dnam{"rev"}
+                few{"{0} rev"}
+                one{"{0} rev"}
+                other{"{0} rev"}
+            }
         }
         area{
             acre{
@@ -1093,6 +1167,7 @@ sr_Latn{
                 few{"{0} cm²"}
                 one{"{0} cm²"}
                 other{"{0} cm²"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"kvadratne stope"}
@@ -1105,6 +1180,7 @@ sr_Latn{
                 few{"{0} in²"}
                 one{"{0} in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"kvadratni kilometri"}
@@ -1117,6 +1193,7 @@ sr_Latn{
                 few{"{0} m²"}
                 one{"{0} m²"}
                 other{"{0} m²"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"mi²"}
@@ -1135,6 +1212,12 @@ sr_Latn{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                few{"{0} L/100km"}
+                one{"{0} L/100km"}
+                other{"{0} L/100km"}
+            }
             liter-per-kilometer{
                 dnam{"L/km"}
                 few{"{0} L/km"}
@@ -1211,11 +1294,18 @@ sr_Latn{
             }
         }
         duration{
+            century{
+                dnam{"v."}
+                few{"{0} v"}
+                one{"{0} v"}
+                other{"{0} v"}
+            }
             day{
                 dnam{"d."}
                 few{"{0} dana"}
                 one{"{0} dan"}
                 other{"{0} dana"}
+                per{"{0}/d"}
             }
             hour{
                 dnam{"sati"}
@@ -1241,12 +1331,14 @@ sr_Latn{
                 few{"{0} min"}
                 one{"{0} min"}
                 other{"{0} min"}
+                per{"{0}/min"}
             }
             month{
                 dnam{"meseci"}
                 few{"{0} mes."}
                 one{"{0} mes."}
                 other{"{0} mes."}
+                per{"{0}/m"}
             }
             nanosecond{
                 dnam{"ns"}
@@ -1266,12 +1358,14 @@ sr_Latn{
                 few{"{0} ned."}
                 one{"{0} ned."}
                 other{"{0} ned."}
+                per{"{0}/n"}
             }
             year{
                 dnam{"god."}
                 few{"{0} god."}
                 one{"{0} god"}
                 other{"{0} god."}
+                per{"{0}/god"}
             }
         }
         electric{
@@ -1376,6 +1470,7 @@ sr_Latn{
                 few{"{0} cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"dm"}
@@ -1388,18 +1483,21 @@ sr_Latn{
                 few{"{0} ft"}
                 one{"{0} ft"}
                 other{"{0} ft"}
+                per{"{0}/ft"}
             }
             inch{
                 dnam{"inči"}
                 few{"{0} inča"}
                 one{"{0} inč"}
                 other{"{0} inča"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
                 few{"{0} km"}
                 one{"{0} km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"svetlosne god."}
@@ -1412,6 +1510,7 @@ sr_Latn{
                 few{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"µm"}
@@ -1424,6 +1523,12 @@ sr_Latn{
                 few{"{0} mi"}
                 one{"{0} mi"}
                 other{"{0} mi"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                few{"{0} smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"mm"}
@@ -1482,12 +1587,14 @@ sr_Latn{
                 few{"{0} g"}
                 one{"{0} g"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 few{"{0} kg"}
                 one{"{0} kg"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"t"}
@@ -1512,6 +1619,7 @@ sr_Latn{
                 few{"{0} unce"}
                 one{"{0} unca"}
                 other{"{0} unci"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"oz t"}
@@ -1524,6 +1632,7 @@ sr_Latn{
                 few{"{0} lb"}
                 one{"{0} lb"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
             }
             ton{
                 dnam{"tn"}
@@ -1643,6 +1752,12 @@ sr_Latn{
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            generic{
+                dnam{"°"}
+                few{"{0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"K"}
                 few{"{0} K"}
@@ -1668,6 +1783,7 @@ sr_Latn{
                 few{"{0} cm³"}
                 one{"{0} cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ft³"}
@@ -1692,6 +1808,7 @@ sr_Latn{
                 few{"{0} m³"}
                 one{"{0} m³"}
                 other{"{0} m³"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"mi³"}
@@ -1711,6 +1828,12 @@ sr_Latn{
                 one{"{0} š."}
                 other{"{0} š."}
             }
+            cup-metric{
+                dnam{"mcup"}
+                few{"{0} mc"}
+                one{"{0} mc"}
+                other{"{0} mc"}
+            }
             deciliter{
                 dnam{"dL"}
                 few{"{0} dL"}
@@ -1728,6 +1851,7 @@ sr_Latn{
                 few{"{0} gal"}
                 one{"{0} gal"}
                 other{"{0} gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hL"}
@@ -1740,6 +1864,7 @@ sr_Latn{
                 few{"{0} l"}
                 one{"{0} l"}
                 other{"{0} l"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"ML"}
@@ -1758,6 +1883,12 @@ sr_Latn{
                 few{"{0} pt"}
                 one{"{0} pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                few{"{0} mpt"}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"qt"}

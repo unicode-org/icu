@@ -19,6 +19,9 @@ it{
         colStrength{"Sicurezza ordinamento"}
         collation{"Ordinamento"}
         currency{"Valuta"}
+        hc{"Sistema orario (12 o 24 ore)"}
+        lb{"Tipo di interruzione di riga"}
+        ms{"Sistema di misurazione"}
         numbers{"Numeri"}
         timezone{"Fuso orario"}
         va{"Variante lingua"}
@@ -67,7 +70,6 @@ it{
         awa{"awadhi"}
         ay{"aymara"}
         az{"azerbaigiano"}
-        azb{"azero meridionale"}
         ba{"baschiro"}
         bal{"beluci"}
         ban{"balinese"}
@@ -84,6 +86,7 @@ it{
         bfd{"bafut"}
         bfq{"badaga"}
         bg{"bulgaro"}
+        bgn{"beluci occidentale"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bicol"}
@@ -134,7 +137,7 @@ it{
         cs{"ceco"}
         csb{"kashubian"}
         cu{"slavo della Chiesa"}
-        cv{"chuvash"}
+        cv{"ciuvascio"}
         cy{"gallese"}
         da{"danese"}
         dak{"dakota"}
@@ -228,7 +231,7 @@ it{
         gu{"gujarati"}
         guc{"wayuu"}
         guz{"gusii"}
-        gv{"manx"}
+        gv{"mannese"}
         gwi{"gwichʼin"}
         ha{"hausa"}
         hai{"haida"}
@@ -297,7 +300,7 @@ it{
         kj{"kuanyama"}
         kk{"kazako"}
         kkj{"kako"}
-        kl{"kalaallisut"}
+        kl{"groenlandese"}
         kln{"kalenjin"}
         km{"khmer"}
         kmb{"kimbundu"}
@@ -339,6 +342,7 @@ it{
         lo{"lao"}
         lol{"lolo bantu"}
         loz{"lozi"}
+        lrc{"luri settentrionale"}
         lt{"lituano"}
         ltg{"letgallo"}
         lu{"luba-katanga"}
@@ -400,6 +404,7 @@ it{
         nb{"norvegese bokmål"}
         nd{"ndebele del nord"}
         nds{"basso tedesco"}
+        nds_NL{"basso tedesco olandese"}
         ne{"nepalese"}
         new{"newari"}
         ng{"ndonga"}
@@ -492,6 +497,7 @@ it{
         sco{"scozzese"}
         sd{"sindhi"}
         sdc{"sassarese"}
+        sdh{"curdo meridionale"}
         se{"sami del nord"}
         see{"seneca"}
         seh{"sena"}
@@ -601,6 +607,7 @@ it{
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
+        wbp{"warlpiri"}
         wo{"wolof"}
         wuu{"wu"}
         xal{"kalmyk"}
@@ -792,11 +799,11 @@ it{
         Zsym{"simboli"}
         Zxxx{"non scritto"}
         Zyyy{"comune"}
-        Zzzz{"ignoto o non valido"}
+        Zzzz{"scrittura sconosciuta"}
     }
     Scripts%stand-alone{
-        Hans{"Han semplificato"}
-        Hant{"Han tradizionale"}
+        Hans{"han semplificato"}
+        Hant{"han tradizionale"}
     }
     Scripts%variant{
         Arab{"arabo-persiano"}
@@ -875,6 +882,22 @@ it{
             traditional{"ordine tradizionale"}
             unihan{"Ordinamento in base ai radicali"}
             zhuyin{"Ordinamento Zhuyin"}
+        }
+        hc{
+            h11{"Sistema orario a 12 ore (0–11)"}
+            h12{"Sistema orario a 12 ore (1–12)"}
+            h23{"Sistema orario a 24 ore (0–23)"}
+            h24{"Sistema orario a 24 ore (1–24)"}
+        }
+        lb{
+            loose{"Interruzione di riga facoltativa"}
+            normal{"Interruzione di riga normale"}
+            strict{"Interruzione di riga forzata"}
+        }
+        ms{
+            metric{"Sistema metrico"}
+            uksystem{"Sistema imperiale britannico"}
+            ussystem{"Sistema consuetudinario statunitense"}
         }
         numbers{
             arab{"Cifre indo-arabe"}
@@ -987,7 +1010,7 @@ it{
         VALENCIA{"valenziano"}
         WADEGILE{"romanizzazione Wade-Giles"}
     }
-    Version{"2.1.15.95"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Scrittura: {0}"}

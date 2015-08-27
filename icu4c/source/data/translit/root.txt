@@ -1346,6 +1346,13 @@ root {
             }
         }
 
+        am-am_FONIPA {
+            file {
+                resource:process(transliterator) {"am_am_FONIPA.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         az-Lower {
             file {
                 resource:process(transliterator) {"az_Lower.txt"}
@@ -1437,6 +1444,13 @@ root {
             }
         }
 
+        eo-eo_FONIPA {
+            file {
+                resource:process(transliterator) {"eo_eo_FONIPA.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         es-am {
             file {
                 resource:process(transliterator) {"es_am.txt"}
@@ -1507,6 +1521,13 @@ root {
             }
         }
 
+        ia-ia_FONIPA {
+            file {
+                resource:process(transliterator) {"ia_ia_FONIPA.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         it-am {
             file {
                 resource:process(transliterator) {"it_am.txt"}
@@ -1531,6 +1552,13 @@ root {
         ja_Latn-ru {
             file {
                 resource:process(transliterator) {"ja_Latn_ru.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ky-ky_FONIPA {
+            file {
+                resource:process(transliterator) {"ky_ky_FONIPA.txt"}
                 direction {"FORWARD"}
             }
         }

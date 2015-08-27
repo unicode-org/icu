@@ -11,11 +11,14 @@ en_GB{
     Keys{
         colNormalization{"Normalised Sorting"}
     }
+    Languages{
+        nds_NL{"West Low German"}
+    }
     Types{
         colNormalization{
             no{"Sort Without Normalisation"}
             yes{"Sort Unicode Normalised"}
         }
     }
-    Version{"2.1.11.59"}
+    Version{"2.1.19.79"}
 }

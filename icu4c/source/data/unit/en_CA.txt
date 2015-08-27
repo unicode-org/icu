@@ -8,8 +8,20 @@
 // ***************************************************************************
 en_CA{
     %%Parent{"en_001"}
-    Version{"2.1.15.12"}
+    Version{"2.1.19.79"}
     unitsNarrow{
+        consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                one{"{0}L/100km"}
+                other{"{0}L/100km"}
+            }
+            liter-per-kilometer{
+                dnam{"L/km"}
+                one{"{0}L/km"}
+                other{"{0}L/km"}
+            }
+        }
         volume{
             centiliter{
                 dnam{"cL"}
@@ -29,6 +41,7 @@ en_CA{
             liter{
                 one{"{0}L"}
                 other{"{0}L"}
+                per{"{0}/L"}
             }
             megaliter{
                 dnam{"ML"}
@@ -43,6 +56,17 @@ en_CA{
         }
     }
     unitsShort{
+        consumption{
+            liter-per-100kilometers{
+                dnam{"L/100 km"}
+                one{"{0} L/100 km"}
+                other{"{0} L/100 km"}
+            }
+            liter-per-kilometer{
+                one{"{0} L/km"}
+                other{"{0} L/km"}
+            }
+        }
         volume{
             centiliter{
                 dnam{"cL"}

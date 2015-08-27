@@ -306,5 +306,5 @@ wae{
         MK{"Mazedonie (EJR)"}
         TL{"Wešttimor"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.14"}
 }

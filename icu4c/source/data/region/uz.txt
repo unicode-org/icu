@@ -10,21 +10,21 @@ uz{
     Countries{
         001{"Dunyo"}
         002{"Afrika"}
-        003{"Shimoli-Amerika"}
+        003{"Shimoliy Amerika"}
         005{"Janubiy Amerika"}
         009{"Okeaniya"}
-        011{"Gʻarbiy Afrika"}
+        011{"G‘arbiy Afrika"}
         013{"Markaziy Amerika"}
         014{"Sharqiy Afrika"}
         015{"Shimoliy Afrika"}
         017{"Markaziy Afrika"}
         018{"Janubiy Afrika"}
         019{"Amerika"}
-        021{"Shimoliy Amerika"}
+        021{"Shimoliy Amerika – AQSH va Kanada"}
         029{"Karib havzasi"}
         030{"Sharqiy Osiyo"}
         034{"Janubiy Osiyo"}
-        035{"Janubiy-Sharqiy Osiyo"}
+        035{"Janubi-sharqiy Osiyo"}
         039{"Janubiy Yevropa"}
         053{"Avstralaziya"}
         054{"Melaneziya"}
@@ -32,22 +32,22 @@ uz{
         061{"Polineziya"}
         142{"Osiyo"}
         143{"Markaziy Osiyo"}
-        145{"Gʻarbiy Osiyo"}
+        145{"G‘arbiy Osiyo"}
         150{"Yevropa"}
         151{"Sharqiy Yevropa"}
         154{"Shimoliy Yevropa"}
-        155{"Gʻarbiy Yevropa"}
+        155{"G‘arbiy Yevropa"}
         419{"Lotin Amerikasi"}
-        AC{"Vozneseniye oroli"}
+        AC{"Me’roj oroli"}
         AD{"Andorra"}
         AE{"Birlashgan Arab Amirliklari"}
         AF{"Afgʻoniston"}
         AG{"Antigua va Barbados"}
-        AI{"Angila"}
+        AI{"Angilya"}
         AL{"Albaniya"}
         AM{"Armaniston"}
         AO{"Angola"}
-        AQ{"Antarktika"}
+        AQ{"Antarktida"}
         AR{"Argentina"}
         AS{"Amerika Samoasi"}
         AT{"Avstriya"}
@@ -64,25 +64,25 @@ uz{
         BH{"Bahrayn"}
         BI{"Burundi"}
         BJ{"Benin"}
-        BL{"Avliyo Varfolomey"}
-        BM{"Bermuda"}
+        BL{"Sen-Bartelemi"}
+        BM{"Bermuda orollari"}
         BN{"Bruney"}
         BO{"Boliviya"}
-        BQ{"Karib Niderlandiyasi"}
+        BQ{"Boneyr, Sint-Estatius va Saba"}
         BR{"Braziliya"}
         BS{"Bagama orollari"}
         BT{"Butan"}
-        BV{"Buvet oroli"}
-        BW{"Botsvanna"}
-        BY{"Belorusiya"}
+        BV{"Buve oroli"}
+        BW{"Botsvana"}
+        BY{"Belarus"}
         BZ{"Beliz"}
         CA{"Kanada"}
         CC{"Kokos (Kiling) orollari"}
-        CD{"Kongo-Kinshasa"}
+        CD{"Kongo – Kinshasa"}
         CF{"Markaziy Afrika Respublikasi"}
-        CG{"Kongo Brazzavil"}
-        CH{"Shveysariya"}
-        CI{"Kot-d-Ivuar"}
+        CG{"Kongo – Brazzavil"}
+        CH{"Shveytsariya"}
+        CI{"Kot-d’Ivuar"}
         CK{"Kuk orollari"}
         CL{"Chili"}
         CM{"Kamerun"}
@@ -92,28 +92,28 @@ uz{
         CR{"Kosta-Rika"}
         CU{"Kuba"}
         CV{"Kabo-Verde"}
-        CW{"Kurasao"}
+        CW{"Kyurasao"}
         CX{"Rojdestvo oroli"}
         CY{"Kipr"}
         CZ{"Chexiya Respublikasi"}
         DE{"Germaniya"}
-        DG{"Diyego Garsiya"}
-        DJ{"Djibuti"}
+        DG{"Diyego-Garsiya"}
+        DJ{"Jibuti"}
         DK{"Daniya"}
         DM{"Dominika"}
         DO{"Dominikan Respublikasi"}
         DZ{"Jazoir"}
-        EA{"Seyta va Melilla"}
+        EA{"Seuta va Melilya"}
         EC{"Ekvador"}
         EE{"Estoniya"}
         EG{"Misr"}
-        EH{"Gʻarbiy Sahroi Kabir"}
+        EH{"G‘arbiy Sahroi Kabir"}
         ER{"Eritreya"}
         ES{"Ispaniya"}
         ET{"Efiopiya"}
         EU{"Yevropa Ittifoqi"}
-        FI{"Finlyandiya"}
-        FJ{"Fiji orollari"}
+        FI{"Finlandiya"}
+        FJ{"Fiji"}
         FK{"Folklend orollari"}
         FM{"Mikroneziya"}
         FO{"Farer orollari"}
@@ -122,7 +122,7 @@ uz{
         GB{"Birlashgan Qirollik"}
         GD{"Grenada"}
         GE{"Gruziya"}
-        GF{"Frantsuz Gvianasi"}
+        GF{"Fransuz Gvianasi"}
         GG{"Gernsi"}
         GH{"Gana"}
         GI{"Gibraltar"}
@@ -132,13 +132,13 @@ uz{
         GP{"Gvadelupe"}
         GQ{"Ekvatorial Gvineya"}
         GR{"Gretsiya"}
-        GS{"Janubiy Djordjiya va Janubiy Sendvich orollari"}
+        GS{"Janubiy Georgiya va Janubiy Sendvich orollari"}
         GT{"Gvatemala"}
         GU{"Guam"}
         GW{"Gvineya-Bisau"}
         GY{"Gayana"}
-        HK{"Gonkong Xitoy MMH"}
-        HM{"Gerd oroli va MakDonald orollari"}
+        HK{"Gonkong (Xitoy MMH)"}
+        HM{"Xerd va Makdonald orollari"}
         HN{"Gonduras"}
         HR{"Xorvatiya"}
         HT{"Gaiti"}
@@ -149,12 +149,12 @@ uz{
         IL{"Isroil"}
         IM{"Men oroli"}
         IN{"Hindiston"}
-        IO{"Britaniya Hind okeani hududi"}
+        IO{"Britaniyaning Hind okeanidagi hududi"}
         IQ{"Iroq"}
         IR{"Eron"}
         IS{"Islandiya"}
         IT{"Italiya"}
-        JE{"Djersi"}
+        JE{"Jersi"}
         JM{"Yamayka"}
         JO{"Iordaniya"}
         JP{"Yaponiya"}
@@ -166,7 +166,7 @@ uz{
         KN{"Sent-Kits va Nevis"}
         KP{"Shimoliy Koreya"}
         KR{"Janubiy Koreya"}
-        KW{"Quveyt"}
+        KW{"Quvayt"}
         KY{"Kayman orollari"}
         KZ{"Qozogʻiston"}
         LA{"Laos"}
@@ -186,13 +186,13 @@ uz{
         ME{"Chernogoriya"}
         MF{"Sent-Martin"}
         MG{"Madagaskar"}
-        MH{"Marshal orollari"}
+        MH{"Marshall orollari"}
         MK{"Makedoniya"}
         ML{"Mali"}
         MM{"Myanma (Birma)"}
-        MN{"Mo‘g‘uliston"}
-        MO{"Makao Xitoy MMH"}
-        MP{"Shimoliy Marianna orollari"}
+        MN{"Mongoliya"}
+        MO{"Makao (Xitoy MMH)"}
+        MP{"Shimoliy Mariana orollari"}
         MQ{"Martinika"}
         MR{"Mavritaniya"}
         MS{"Montserrat"}
@@ -206,25 +206,25 @@ uz{
         NA{"Namibiya"}
         NC{"Yangi Kaledoniya"}
         NE{"Niger"}
-        NF{"Norfolk orollari"}
+        NF{"Norfolk oroli"}
         NG{"Nigeriya"}
         NI{"Nikaragua"}
         NL{"Niderlandiya"}
         NO{"Norvegiya"}
         NP{"Nepal"}
         NR{"Nauru"}
-        NU{"Niuye"}
+        NU{"Niue"}
         NZ{"Yangi Zelandiya"}
-        OM{"Omon"}
+        OM{"Ummon"}
         PA{"Panama"}
         PE{"Peru"}
-        PF{"Frantsuz Polineziyasi"}
-        PG{"Papua Yangi Gvineya"}
+        PF{"Fransuz Polineziyasi"}
+        PG{"Papua – Yangi Gvineya"}
         PH{"Filippin"}
         PK{"Pokiston"}
         PL{"Polsha"}
         PM{"Sent-Pyer va Mikelon"}
-        PN{"Pitkarin orollari"}
+        PN{"Pitkern orollari"}
         PR{"Puerto-Riko"}
         PS{"Falastin hududi"}
         PT{"Portugaliya"}
@@ -232,7 +232,7 @@ uz{
         PY{"Paragvay"}
         QA{"Qatar"}
         QO{"Yondosh Okeaniya"}
-        RE{"Reyunon"}
+        RE{"Reyunion"}
         RO{"Ruminiya"}
         RS{"Serbiya"}
         RU{"Rossiya"}
@@ -243,9 +243,9 @@ uz{
         SD{"Sudan"}
         SE{"Shvetsiya"}
         SG{"Singapur"}
-        SH{"Muqaddas Yelena orollari"}
+        SH{"Muqaddas Yelena oroli"}
         SI{"Sloveniya"}
-        SJ{"Savlbard va Jan Mayen"}
+        SJ{"Svalbard va Yan-Mayen"}
         SK{"Slovakiya"}
         SL{"Syerra-Leone"}
         SM{"San-Marino"}
@@ -255,18 +255,18 @@ uz{
         SS{"Janubiy Sudan"}
         ST{"San-Tome va Prinsipi"}
         SV{"Salvador"}
-        SX{"Sint Martin"}
+        SX{"Sint-Marten"}
         SY{"Suriya"}
         SZ{"Svazilend"}
-        TA{"Tristan de Kuna"}
+        TA{"Tristan-da-Kunya"}
         TC{"Turks va Kaykos orollari"}
         TD{"Chad"}
-        TF{"Frantsiya janubiy xududlari"}
+        TF{"Fransuz Janubiy hududlari"}
         TG{"Togo"}
-        TH{"Tayland"}
+        TH{"Tailand"}
         TJ{"Tojikiston"}
         TK{"Tokelau"}
-        TL{"Sharqiy-Timor"}
+        TL{"Timor"}
         TM{"Turkmaniston"}
         TN{"Tunis"}
         TO{"Tonga"}
@@ -284,19 +284,19 @@ uz{
         VA{"Vatikan"}
         VC{"Sent-Vinsent va Grenadin"}
         VE{"Venesuela"}
-        VG{"Britaniya Virdjiniya orollari"}
-        VI{"AQSH Virdjiniya orollari"}
+        VG{"Britaniya Virgin orollari"}
+        VI{"AQSH Virgin orollari"}
         VN{"Vyetnam"}
         VU{"Vanuatu"}
-        WF{"Uellis va Futuna"}
+        WF{"Uollis va Futuna"}
         WS{"Samoa"}
         XK{"Kosovo"}
         YE{"Yaman"}
         YT{"Mayotta"}
-        ZA{"Janubi-Afrika"}
+        ZA{"Janubiy Afrika Respublikasi"}
         ZM{"Zambiya"}
         ZW{"Zimbabve"}
-        ZZ{"Nomaʼlum hudud"}
+        ZZ{"Noma’lum mintaqa"}
     }
     Countries%short{
         GB{"B.Q."}
@@ -308,10 +308,10 @@ uz{
     Countries%variant{
         CD{"Kongo (KDR)"}
         CG{"Kongo (Respublika)"}
-        CI{"Fil Suyagi Qirgʻogʻi"}
-        FK{"Folklend orollari (Malvin orollari)"}
-        MK{"Makedoniya (SYUR)"}
+        CI{"Fil suyagi qirg‘og‘i"}
+        FK{"Folklend (Malvin) orollari"}
+        MK{"Makedoniya (SYRM)"}
         TL{"Sharqiy Timor"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.17"}
 }

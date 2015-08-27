@@ -36,5 +36,5 @@ ur_IN{
     Countries%variant{
         FK{"جزائر فاکلینڈ (اسلاس مالویناس)"}
     }
-    Version{"2.1.13.23"}
+    Version{"2.1.19.14"}
 }

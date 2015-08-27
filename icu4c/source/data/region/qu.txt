@@ -21,7 +21,7 @@ qu{
         BD{"Bangladesh"}
         BE{"Bélgica"}
         BG{"Bulgaria"}
-        BH{"Bahréin"}
+        BH{"Baréin"}
         BI{"Burundi"}
         BJ{"Benín"}
         BN{"Brunéi"}
@@ -36,7 +36,7 @@ qu{
         CD{"Congo (RDC)"}
         CG{"Congo"}
         CH{"Suiza"}
-        CI{"Côte dʼIvoire"}
+        CI{"Côte d’Ivoire"}
         CL{"Chile"}
         CM{"Camerún"}
         CN{"China"}
@@ -63,7 +63,7 @@ qu{
         FR{"Francia"}
         GA{"Gabón"}
         GB{"Reino Unido"}
-        GG{"Guernsey"}
+        GG{"Guernesey"}
         GH{"Ghana"}
         GM{"Gambia"}
         GN{"Guinea"}
@@ -71,7 +71,7 @@ qu{
         GR{"Grecia"}
         GT{"Guatemala"}
         GU{"Guam"}
-        GW{"Guinea-Bissau"}
+        GW{"Guinea-Bisáu"}
         GY{"Guyana"}
         HK{"Hong Kong (RAE)"}
         HM{"Islas Heard y McDonald"}
@@ -81,7 +81,7 @@ qu{
         ID{"Indonesia"}
         IL{"Israel"}
         IN{"India"}
-        IQ{"Iraq"}
+        IQ{"Irak"}
         IR{"Irán"}
         IS{"Islandia"}
         IT{"Italia"}
@@ -96,7 +96,7 @@ qu{
         KP{"Corea del Norte"}
         KR{"Corea del Sur"}
         KW{"Kuwait"}
-        KZ{"Kazajistan"}
+        KZ{"Kazajistán"}
         LA{"Laos"}
         LB{"Líbano"}
         LI{"Liechtenstein"}
@@ -172,7 +172,7 @@ qu{
         SY{"Siria"}
         SZ{"Suazilandia"}
         TD{"Chad"}
-        TF{"Tierras Australes y Antárticas Francesas"}
+        TF{"Territorios Australes Franceses"}
         TG{"Togo"}
         TH{"Tailandia"}
         TJ{"Tayikistán"}
@@ -192,12 +192,12 @@ qu{
         VI{"EE.UU. Islas Vírgenes"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis, Futuna"}
+        WF{"Wallis y Futuna"}
         WS{"Samoa"}
         YE{"Yemen"}
         ZA{"Sudáfrica"}
         ZM{"Zambia"}
         ZW{"Zimbabue"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.14"}
 }

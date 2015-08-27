@@ -309,8 +309,9 @@ cs{
     Countries%variant{
         CD{"Kongo (DRK)"}
         CG{"Kongo (republika)"}
+        CI{"Côte d’Ivoire"}
         FK{"Falklandské ostrovy (Malvíny)"}
         MK{"Makedonie (FYROM)"}
     }
-    Version{"2.1.16.1"}
+    Version{"2.1.19.14"}
 }

@@ -19,6 +19,9 @@ fi{
         colStrength{"lajittelun taso"}
         collation{"lajittelujärjestys"}
         currency{"valuutta"}
+        hc{"tuntijärjestelmä"}
+        lb{"rivinvaihtotyyli"}
+        ms{"mittajärjestelmä"}
         numbers{"numerot"}
         timezone{"aikavyöhyke"}
         va{"maavalinnan muunnelma"}
@@ -67,7 +70,6 @@ fi{
         awa{"awadhi"}
         ay{"aimara"}
         az{"azeri"}
-        azb{"eteläazeri"}
         ba{"baškiiri"}
         bal{"belutši"}
         ban{"bali"}
@@ -84,6 +86,7 @@ fi{
         bfd{"fut"}
         bfq{"badaga"}
         bg{"bulgaria"}
+        bgn{"länsibelutši"}
         bho{"bhodžpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -175,7 +178,7 @@ fi{
         eo{"esperanto"}
         es{"espanja"}
         es_419{"amerikanespanja"}
-        es_ES{"espanjanespanja"}
+        es_ES{"euroopanespanja"}
         es_MX{"meksikonespanja"}
         esu{"alaskanjupik"}
         et{"viro"}
@@ -343,6 +346,7 @@ fi{
         lo{"lao"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"pohjoisluri"}
         lt{"liettua"}
         ltg{"latgalli"}
         lu{"katanganluba"}
@@ -404,6 +408,7 @@ fi{
         nb{"norjan bokmål"}
         nd{"pohjois-ndebele"}
         nds{"alasaksa"}
+        nds_NL{"alankomaidenalasaksa"}
         ne{"nepali"}
         new{"newari"}
         ng{"ndonga"}
@@ -459,7 +464,7 @@ fi{
         ps{"paštu"}
         pt{"portugali"}
         pt_BR{"brasilianportugali"}
-        pt_PT{"portugalinportugali"}
+        pt_PT{"euroopanportugali"}
         qu{"ketšua"}
         quc{"kʼicheʼ"}
         qug{"chimborazonylänköketšua"}
@@ -497,6 +502,7 @@ fi{
         sco{"skotti"}
         sd{"sindhi"}
         sdc{"sassarinsardi"}
+        sdh{"eteläkurdi"}
         se{"pohjoissaame"}
         see{"seneca"}
         seh{"sena"}
@@ -607,6 +613,7 @@ fi{
         wal{"wolaitta"}
         war{"waray"}
         was{"washo"}
+        wbp{"warlpiri"}
         wo{"wolof"}
         wuu{"wu-kiina"}
         xal{"kalmukki"}
@@ -649,6 +656,7 @@ fi{
     Scripts{
         Afak{"afaka"}
         Aghb{"kaukasianalbanialainen"}
+        Ahom{"ahom"}
         Arab{"arabialainen"}
         Armi{"valtakunnanaramealainen"}
         Armn{"armenialainen"}
@@ -695,6 +703,7 @@ fi{
         Hano{"hanunoolainen"}
         Hans{"yksinkertaistettu han"}
         Hant{"perinteinen han"}
+        Hatr{"hatralainen"}
         Hebr{"heprealainen"}
         Hira{"hiragana"}
         Hluw{"anatolialaiset hieroglyfit"}
@@ -741,6 +750,7 @@ fi{
         Moon{"moon-kohokirjoitus"}
         Mroo{"mro"}
         Mtei{"meitei"}
+        Mult{"multanilainen"}
         Mymr{"burmalainen"}
         Narb{"muinaispohjoisarabialainen"}
         Nbat{"nabatealainen"}
@@ -888,8 +898,10 @@ fi{
         }
         collation{
             big5han{"perinteinen kiinalainen järjestys Big5"}
+            compat{"aiempi lajittelujärjestys yhteensopivuutta varten"}
             dictionary{"sanakirjajärjestys"}
             ducet{"Unicoden oletusjärjestys"}
+            emoji{"emojien lajittelujärjestys"}
             eor{"yleiseurooppalainen lajittelujärjestys"}
             gb2312han{"yksinkertaistettu kiinalainen järjestys GB2312"}
             phonebook{"puhelinluettelojärjestys"}
@@ -903,6 +915,22 @@ fi{
             traditional{"perinteinen järjestys"}
             unihan{"radikaali- ja piirtojärjestys"}
             zhuyin{"zhuyin-järjestys"}
+        }
+        hc{
+            h11{"12 tunnin järjestelmä (0–11)"}
+            h12{"12 tunnin järjestelmä (1–12)"}
+            h23{"24 tunnin järjestelmä (0–23)"}
+            h24{"24 tunnin järjestelmä (1–24)"}
+        }
+        lb{
+            loose{"väljä rivinvaihto"}
+            normal{"normaali rivinvaihto"}
+            strict{"tarkka rivinvaihto"}
+        }
+        ms{
+            metric{"metrijärjestelmä"}
+            uksystem{"brittiläinen mittajärjestelmä"}
+            ussystem{"yhdysvaltalainen mittajärjestelmä"}
         }
         numbers{
             arab{"arabialaiset numerot"}
@@ -980,24 +1008,32 @@ fi{
         AREVELA{"itäarmenialainen"}
         AREVMDA{"länsiarmenialainen"}
         BAKU1926{"yhtenäistetty turkkilainen latinalainen aakkosto"}
+        BALANKA{"aniin balankalaismurre"}
+        BARLA{"kapverdenkreolin barlaventolainen murreryhmä"}
         BAUDDHA{"sanskriitin buddhalainen sekamuoto"}
         BISCAYAN{"baskin biskajalaismurre"}
         BISKE{"sloveenin resian San Giorgion/Bilan alamurre"}
+        BOHORIC{"sloveenin Bohorič-aakkosto"}
         BOONT{"englannin boontling-murre"}
+        DAJNKO{"sloveenin Dajnko-aakkosto"}
+        EKAVSK{"serbian ekavialainen ääntämys"}
         EMODENG{"varhaisnykyenglanti"}
         FONIPA{"kansainvälinen foneettinen aakkosto IPA"}
         FONUPA{"uralilainen foneettinen aakkosto UPA"}
         FONXSAMP{"foneettinen X-SAMPA-merkistö"}
         HEPBURN{"japanin Hepburn-latinaistus"}
         HOGNORSK{"norjan högnorsk"}
+        IJEKAVSK{"serbian ijekavialainen ääntämiys"}
         ITIHASA{"sanskriitin eeppinen muoto"}
         JAUER{"retoromaanin jauer-murre"}
         JYUTPING{"kantoninkiinan jyutping-latinaistus"}
         KKCOR{"kornin yleiskirjoitus"}
+        KOCIEWIE{"puolan kociewielainen murre"}
         KSCOR{"kornin standardikirjoitus"}
         LAUKIKA{"klassinen sanskriitti"}
         LIPAW{"sloveenin resian Lipovazin/Lipovecin alamurre"}
         LUNA1918{"venäjän ortografia 1918"}
+        METELKO{"sloveenin Metelko-aakkosto"}
         MONOTON{"monotoninen kreikka"}
         NDYUKA{"ndyukan kreolimurre"}
         NEDIS{"sloveenin natisonen murre"}
@@ -1018,6 +1054,7 @@ fi{
         SCOTLAND{"skotlanninenglanti"}
         SCOUSE{"englannin scouse-murre"}
         SOLBA{"sloveenin resian Stolvizzan/Solbican alamurre"}
+        SOTAV{"kapverdenkreolin sotaventolainen murreryhmä"}
         SURMIRAN{"retoromaanin surmiran-muoto"}
         SURSILV{"retoromaanin sursilvan-muoto"}
         SUTSILV{"retoromaanin sutsilvan-muoto"}
@@ -1025,6 +1062,7 @@ fi{
         UCCOR{"kornin yhtenäiskirjoitus"}
         UCRCOR{"kornin uusittu yhtenäiskirjoitus"}
         ULSTER{"skotin ulster-murre"}
+        UNIFON{"englannin foneeminen unifon-aakkosto"}
         VAIDIKA{"sanskriitin veda-murre"}
         VALENCIA{"katalaanin valencian murre"}
         VALLADER{"reoromaanin vallader-muoto"}
@@ -1033,7 +1071,7 @@ fi{
     Variants%secondary{
         FONUPA{"suomalais-ugrilainen tarkekirjoitus"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"kieli: {0}"}
         script{"kirjoitusjärjestelmä: {0}"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 pt_PT{
-    Version{"2.1.13.23"}
+    Version{"2.1.19.79"}
     units{
         acceleration{
             g-force{
@@ -29,6 +29,11 @@ pt_PT{
             }
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"litros por 100 quilómetros"}
+                one{"{0} litro por 100 quilómetros"}
+                other{"{0} litros por 100 quilómetros"}
+            }
             liter-per-kilometer{
                 dnam{"litros por quilómetro"}
                 one{"{0} litro por quilómetro"}
@@ -36,6 +41,9 @@ pt_PT{
             }
         }
         duration{
+            century{
+                other{"{0} séculos"}
+            }
             hour{
                 per{"{0}/h"}
             }
@@ -60,11 +68,15 @@ pt_PT{
                 dnam{"quilómetros"}
                 one{"{0} quilómetro"}
                 other{"{0} quilómetros"}
+                per{"{0} por quilómetro"}
             }
             micrometer{
                 dnam{"micrómetros"}
                 one{"{0} micrómetro"}
                 other{"{0} micrómetros"}
+            }
+            mile-scandinavian{
+                dnam{"milha escandinava"}
             }
             nanometer{
                 dnam{"nanómetros"}
@@ -91,15 +103,34 @@ pt_PT{
                 other{"{0} quilómetros por hora"}
             }
         }
+        temperature{
+            generic{
+                other{"{0}°"}
+            }
+        }
         volume{
+            cubic-centimeter{
+                per{"por centímetro cúbico"}
+            }
             cubic-kilometer{
                 dnam{"quilómetros cúbicos"}
                 one{"{0} quilómetro cúbico"}
                 other{"{0} quilómetros cúbicos"}
             }
+            cup{
+                dnam{"chávenas"}
+                one{"{0} chávena"}
+                other{"{0} chávenas"}
+            }
         }
     }
     unitsNarrow{
+        consumption{
+            liter-per-100kilometers{
+                one{"{0}l/100km"}
+                other{"{0}l/100km"}
+            }
+        }
         duration{
             second{
                 dnam{"s"}
@@ -134,6 +165,9 @@ pt_PT{
                 one{"{0} acre"}
                 other{"{0} acres"}
             }
+            square-centimeter{
+                per{"{0}/cm²"}
+            }
             square-foot{
                 dnam{"pés quadrados"}
             }
@@ -141,9 +175,11 @@ pt_PT{
                 dnam{"in²"}
                 one{"{0} in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-meter{
                 dnam{"m²"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"mi²"}
@@ -153,6 +189,11 @@ pt_PT{
             }
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"l/100km"}
+                one{"{0} l/100km"}
+                other{"{0} l/100km"}
+            }
             mile-per-gallon{
                 dnam{"milhas/galão"}
             }
@@ -162,6 +203,7 @@ pt_PT{
                 dnam{"minutos"}
             }
             second{
+                dnam{"s"}
                 one{"{0} s"}
                 other{"{0} s"}
             }
@@ -180,6 +222,9 @@ pt_PT{
             mile{
                 one{"{0} milha"}
                 other{"{0} milhas"}
+            }
+            mile-scandinavian{
+                other{"{0} smi"}
             }
             nautical-mile{
                 dnam{"nmi"}
@@ -244,11 +289,6 @@ pt_PT{
                 one{"{0} ac ft"}
                 other{"{0} ac ft"}
             }
-            centiliter{
-                dnam{"cL"}
-                one{"{0} cL"}
-                other{"{0} cL"}
-            }
             cubic-foot{
                 dnam{"ft³"}
             }
@@ -259,6 +299,11 @@ pt_PT{
             }
             cubic-yard{
                 dnam{"yd³"}
+            }
+            cup{
+                dnam{"chávenas"}
+                one{"{0} cháv."}
+                other{"{0} cháv."}
             }
             tablespoon{
                 dnam{"cs"}

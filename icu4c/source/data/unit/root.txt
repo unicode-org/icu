@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/root.xml
  */
 root{
-    Version{"2.1.16.69"}
+    Version{"2.1.19.19"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -601,10 +601,6 @@ root{
             teaspoon{
                 dnam{"tsp"}
                 other{"{0} tsp"}
-            }
-            teaspoon-au{
-                dnam{"atsp"}
-                other{"{0} atsp"}
             }
         }
     }

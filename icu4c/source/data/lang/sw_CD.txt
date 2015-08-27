@@ -14,5 +14,5 @@ sw_CD{
         en{"Kingereza"}
         swc{"Kiswahili ya Kongo"}
     }
-    Version{"2.1.11.52"}
+    Version{"2.1.19.14"}
 }

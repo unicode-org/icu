@@ -19,6 +19,9 @@ hr{
         colStrength{"Jačina poredavanja"}
         collation{"Redoslijed razvrstavanja"}
         currency{"valuta"}
+        hc{"format vremena (12 ili 24)"}
+        lb{"stil prijeloma retka"}
+        ms{"sustav mjernih jedinica"}
         numbers{"brojevi"}
         timezone{"Vremenska zona"}
         va{"Varijanta zemlje/jezika"}
@@ -58,6 +61,7 @@ hr{
         awa{"awadhi"}
         ay{"aymara"}
         az{"azerbajdžanski"}
+        az_Arab{"južnoazerbajdžanski"}
         ba{"baškirski"}
         bal{"baluchi"}
         ban{"balinezijski"}
@@ -70,6 +74,7 @@ hr{
         bez{"bena"}
         bfd{"bafut"}
         bg{"bugarski"}
+        bgn{"zapadnobaludžijski"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -295,6 +300,7 @@ hr{
         lo{"laoski"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"sjevernolurski"}
         lt{"litavski"}
         lu{"luba-katanga"}
         lua{"luba-lulua"}
@@ -343,12 +349,14 @@ hr{
         my{"burmanski"}
         mye{"myene"}
         myv{"mordvinski"}
+        mzn{"mazanderanski"}
         na{"nauru"}
         nap{"napolitanski"}
         naq{"nama"}
         nb{"književni norveški"}
         nd{"sjeverni ndebele"}
         nds{"donjonjemački"}
+        nds_NL{"donjosaksonski"}
         ne{"nepalski"}
         new{"newari"}
         ng{"ndonga"}
@@ -425,6 +433,7 @@ hr{
         scn{"sicilijski"}
         sco{"škotski"}
         sd{"sindhi"}
+        sdh{"južnokurdski"}
         se{"južni sami"}
         see{"seneca"}
         seh{"sena"}
@@ -518,6 +527,7 @@ hr{
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
+        wbp{"warlpiri"}
         wo{"wolof"}
         xal{"kalmyk"}
         xh{"xhosa"}
@@ -673,7 +683,7 @@ hr{
         Sind{"khudawadi pismo"}
         Sinh{"sinhaleško pismo"}
         Sora{"sora sompeng pismo"}
-        Sund{"sudansko pismo"}
+        Sund{"sundansko pismo"}
         Sylo{"syloti nagri pismo"}
         Syrc{"sirijsko pismo"}
         Syre{"sirijsko estrangelo pismo"}
@@ -781,11 +791,27 @@ hr{
             reformed{"reformirano razvrstavanje"}
             search{"Općenito pretraživanje"}
             searchjl{"Pretraživanje po početnom suglasniku hangula"}
-            standard{"Standardno razvrstavanje"}
+            standard{"standardno razvrstavanje"}
             stroke{"razvrstavanje po redoslijedu poteza za kineski"}
             traditional{"tradicionalno razvrstavanje"}
             unihan{"razvrstavanje prema korijenu i potezu"}
             zhuyin{"zhuyin razvrstavanje"}
+        }
+        hc{
+            h11{"12-satni format (0-11)"}
+            h12{"12-satni format (1-12)"}
+            h23{"24-satni format (0-23)"}
+            h24{"24-satni format (1-24)"}
+        }
+        lb{
+            loose{"slobodni stil prijeloma retka"}
+            normal{"normalni stil prijeloma retka"}
+            strict{"strogi stil prijeloma retka"}
+        }
+        ms{
+            metric{"metrički sustav"}
+            uksystem{"imperijalni sustav mjera"}
+            ussystem{"američki sustav mjera"}
         }
         numbers{
             arab{"arapsko-indijske znamenke"}
@@ -871,7 +897,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

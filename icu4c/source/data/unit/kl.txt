@@ -7,11 +7,25 @@
 // *
 // ***************************************************************************
 kl{
-    Version{"2.1.15.45"}
+    Version{"2.1.19.28"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
         ms{"m:ss"}
+    }
+    units{
+        length{
+            fathom{
+                dnam{"fm"}
+                one{"{0} fm"}
+                other{"{0} fm"}
+            }
+            furlong{
+                dnam{"fur"}
+                one{"{0} fur"}
+                other{"{0} fur"}
+            }
+        }
     }
     unitsNarrow{
         area{
@@ -29,6 +43,16 @@ kl{
             }
         }
         length{
+            fathom{
+                dnam{"fm"}
+                one{"{0} fm"}
+                other{"{0} fm"}
+            }
+            furlong{
+                dnam{"fur"}
+                one{"{0} fur"}
+                other{"{0} fur"}
+            }
             mile{
                 one{"{0} mi"}
                 other{"{0} mi"}
@@ -73,6 +97,16 @@ kl{
             }
         }
         length{
+            fathom{
+                dnam{"fm"}
+                one{"{0} fm"}
+                other{"{0} fm"}
+            }
+            furlong{
+                dnam{"fur"}
+                one{"{0} fur"}
+                other{"{0} fur"}
+            }
             mile{
                 one{"{0} mi"}
                 other{"{0} mi"}

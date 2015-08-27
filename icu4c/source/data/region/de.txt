@@ -139,7 +139,7 @@ de{
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
         HK{"Sonderverwaltungszone Hongkong"}
-        HM{"Heard- und McDonald-Inseln"}
+        HM{"Heard und McDonaldinseln"}
         HN{"Honduras"}
         HR{"Kroatien"}
         HT{"Haiti"}
@@ -278,7 +278,7 @@ de{
         TZ{"Tansania"}
         UA{"Ukraine"}
         UG{"Uganda"}
-        UM{"Amerikanisch-Ozeanien"}
+        UM{"Amerikanische Überseeinseln"}
         US{"Vereinigte Staaten"}
         UY{"Uruguay"}
         UZ{"Usbekistan"}
@@ -300,7 +300,7 @@ de{
         ZZ{"Unbekannte Region"}
     }
     Countries%short{
-        GB{"UK"}
+        GB{"GB"}
         HK{"Hongkong"}
         MO{"Macau"}
         PS{"Palästina"}
@@ -314,5 +314,5 @@ de{
         MK{"Mazedonien (EJR)"}
         TL{"Osttimor"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.72"}
 }

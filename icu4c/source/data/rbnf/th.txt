@@ -49,5 +49,5 @@ th{
             "0: \u0E17\u0E35\u0E48\u200B=%spellout-cardinal=;",
         }
     }
-    Version{"2.1.15.40"}
+    Version{"2.1.19.14"}
 }

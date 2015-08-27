@@ -11,7 +11,7 @@ es{
         001{"Mundo"}
         002{"África"}
         003{"América del Norte"}
-        005{"Suramérica"}
+        005{"Sudamérica"}
         009{"Oceanía"}
         011{"África occidental"}
         013{"Centroamérica"}
@@ -94,7 +94,7 @@ es{
         CU{"Cuba"}
         CV{"Cabo Verde"}
         CW{"Curazao"}
-        CX{"Isla de Navidad (Christmas)"}
+        CX{"Isla de Navidad"}
         CY{"Chipre"}
         CZ{"República Checa"}
         DE{"Alemania"}
@@ -144,7 +144,7 @@ es{
         HR{"Croacia"}
         HT{"Haití"}
         HU{"Hungría"}
-        IC{"islas Canarias"}
+        IC{"Canarias"}
         ID{"Indonesia"}
         IE{"Irlanda"}
         IL{"Israel"}
@@ -229,7 +229,7 @@ es{
         PR{"Puerto Rico"}
         PS{"Territorios Palestinos"}
         PT{"Portugal"}
-        PW{"Palau"}
+        PW{"Palaos"}
         PY{"Paraguay"}
         QA{"Catar"}
         QO{"Territorios alejados de Oceanía"}
@@ -312,5 +312,5 @@ es{
         FK{"Islas Malvinas (Islas Falkland)"}
         MK{"Macedonia (ERYM)"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.94"}
 }

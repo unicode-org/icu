@@ -75,7 +75,7 @@ nl{
         BT{"Bhutan"}
         BV{"Bouveteiland"}
         BW{"Botswana"}
-        BY{"Wit-Rusland"}
+        BY{"Belarus"}
         BZ{"Belize"}
         CA{"Canada"}
         CC{"Cocoseilanden"}
@@ -262,7 +262,7 @@ nl{
         TA{"Tristan da Cunha"}
         TC{"Turks- en Caicoseilanden"}
         TD{"Tsjaad"}
-        TF{"Franse Zuidelijke Gebieden"}
+        TF{"Franse Gebieden in de zuidelijke Indische Oceaan"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tadzjikistan"}
@@ -312,5 +312,5 @@ nl{
         FK{"Falklandeilanden (Islas Malvinas)"}
         MK{"Macedonië (FYROM)"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.96"}
 }

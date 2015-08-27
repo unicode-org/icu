@@ -1155,44 +1155,44 @@ void MeasureFormatTest::TestSimplePer() {
             2.0, *pound, *minute, "2 pounds per minute");
 
     helperTestSimplePer(
-            en, UMEASFMT_WIDTH_SHORT, 1.0, *pound, *second, "1 lbps");
+            en, UMEASFMT_WIDTH_SHORT, 1.0, *pound, *second, "1 lb/s");
     helperTestSimplePer(
-            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *second, "2 lbsps");
+            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *second, "2 lb/s");
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT, 1.0, *pound, *minute, "1 lb/min");
     helperTestSimplePer(
-            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *minute, "2 lbs/min");
+            en, UMEASFMT_WIDTH_SHORT, 2.0, *pound, *minute, "2 lb/min");
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_NARROW, 1.0, *pound, *second, "1#/s");
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_NARROW, 2.0, *pound, *second, "2#/s");
     helperTestSimplePer(
-            en, UMEASFMT_WIDTH_NARROW, 1.0, *pound, *minute, "1#/m");
+            en, UMEASFMT_WIDTH_NARROW, 1.0, *pound, *minute, "1#/min");
     helperTestSimplePer(
-            en, UMEASFMT_WIDTH_NARROW, 2.0, *pound, *minute, "2#/m");
+            en, UMEASFMT_WIDTH_NARROW, 2.0, *pound, *minute, "2#/min");
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT,
-            23.3, *pound, *second, "23.3 lbsps",
+            23.3, *pound, *second, "23.3 lb/s",
             NumberFormat::kDecimalSeparatorField,
             2, 3);
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT,
-            23.3, *pound, *second, "23.3 lbsps",
+            23.3, *pound, *second, "23.3 lb/s",
             NumberFormat::kIntegerField,
             0, 2);
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT,
-            23.3, *pound, *minute, "23.3 lbs/min",
+            23.3, *pound, *minute, "23.3 lb/min",
             NumberFormat::kDecimalSeparatorField,
             2, 3);
 
     helperTestSimplePer(
             en, UMEASFMT_WIDTH_SHORT,
-            23.3, *pound, *minute, "23.3 lbs/min",
+            23.3, *pound, *minute, "23.3 lb/min",
             NumberFormat::kIntegerField,
             0, 2);
 }
@@ -1293,8 +1293,8 @@ void MeasureFormatTest::TestMultiples() {
     helperTestMultiples(en, UMEASFMT_WIDTH_WIDE, "2 miles, 1 foot, 2.3 inches");
     helperTestMultiples(en, UMEASFMT_WIDTH_SHORT, "2 mi, 1 ft, 2.3 in");
     helperTestMultiples(en, UMEASFMT_WIDTH_NARROW, "2mi 1\\u2032 2.3\\u2033");
-    helperTestMultiples(ru, UMEASFMT_WIDTH_WIDE, "2 \\u043C\\u0438\\u043B\\u0438, 1 \\u0444\\u0443\\u0442 \\u0438 2,3 \\u0434\\u044E\\u0439\\u043C\\u0430");
-    helperTestMultiples(ru, UMEASFMT_WIDTH_SHORT, "2 \\u043C\\u0438\\u043B\\u0438, 1 \\u0444\\u0443\\u0442, 2,3 \\u0434\\u044E\\u0439\\u043C.");
+    helperTestMultiples(ru, UMEASFMT_WIDTH_WIDE, "2 \\u043C\\u0438\\u043B\\u0438 1 \\u0444\\u0443\\u0442 \\u0438 2,3 \\u0434\\u044E\\u0439\\u043C\\u0430");
+    helperTestMultiples(ru, UMEASFMT_WIDTH_SHORT, "2 \\u043C\\u0438\\u043B\\u0438 1 \\u0444\\u0443\\u0442 \\u0438 2,3 \\u0434\\u044E\\u0439\\u043C.");
     helperTestMultiples(ru, UMEASFMT_WIDTH_NARROW, "2 \\u043C\\u0438\\u043B\\u044C 1 \\u0444\\u0443\\u0442 2,3 \\u0434\\u044E\\u0439\\u043C\\u0430");
 }
 

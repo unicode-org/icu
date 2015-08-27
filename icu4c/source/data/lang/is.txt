@@ -19,6 +19,9 @@ is{
         colStrength{"Röðunarstyrkur"}
         collation{"Röðun"}
         currency{"Gjaldmiðill"}
+        hc{"Tímakerfi (12 eða 24)"}
+        lb{"Línuskipting"}
+        ms{"Mælingakerfi"}
         numbers{"Tölur"}
         timezone{"Tímabelti"}
         va{"Landsstaðalsafbrigði"}
@@ -63,6 +66,7 @@ is{
         bem{"bemba"}
         bez{"bena"}
         bg{"búlgarska"}
+        bgn{"vesturbalotsí"}
         bho{"bojpúrí"}
         bi{"bíslama"}
         bik{"bíkol"}
@@ -139,7 +143,7 @@ is{
         enm{"miðenska"}
         eo{"esperantó"}
         es{"spænska"}
-        es_419{"rómanskamerísk spænska"}
+        es_419{"rómönsk-amerísk spænska"}
         es_ES{"evrópsk spænska"}
         es_MX{"mexíkósk spænska"}
         et{"eistneska"}
@@ -273,6 +277,7 @@ is{
         lo{"laó"}
         lol{"mongó"}
         loz{"lozi"}
+        lrc{"norðurlúrí"}
         lt{"litháíska"}
         lu{"lúbakatanga"}
         lua{"luba-lulua"}
@@ -317,12 +322,14 @@ is{
         mwr{"marvarí"}
         my{"burmneska"}
         myv{"ersja"}
+        mzn{"masanderaní"}
         na{"nárúska"}
         nap{"napólíska"}
         naq{"nama"}
         nb{"norskt bókmál"}
         nd{"norður-ndebele"}
         nds{"lágþýska; lágsaxneska"}
+        nds_NL{"lágsaxneska"}
         ne{"nepalska"}
         new{"nevarí"}
         ng{"ndonga"}
@@ -395,6 +402,7 @@ is{
         scn{"sikileyska"}
         sco{"skoska"}
         sd{"sindí"}
+        sdh{"suðurkúrdíska"}
         se{"norðursamíska"}
         seh{"sena"}
         sel{"selkúp"}
@@ -480,6 +488,7 @@ is{
         wal{"valamó"}
         war{"varaí"}
         was{"vasjó"}
+        wbp{"varlpiri"}
         wo{"volof"}
         xal{"kalmúkska"}
         xh{"sósa"}
@@ -502,6 +511,8 @@ is{
     }
     Languages%short{
         az{"aserska"}
+        en_GB{"enska (bresk)"}
+        en_US{"enska (BNA)"}
     }
     Scripts{
         Arab{"arabískt"}
@@ -622,6 +633,22 @@ is{
             traditional{"Hefðbundin"}
             unihan{"Röðun eftir grunnstrikum"}
         }
+        hc{
+            h11{"12 tíma kerfi (0–11)"}
+            h12{"12 tíma kerfi (1–12)"}
+            h23{"24 tíma kerfi (0–23)"}
+            h24{"24 tíma kerfi (1–24)"}
+        }
+        lb{
+            loose{"Laus línuskipting"}
+            normal{"Venjuleg línuskipting"}
+            strict{"Ströng línuskipting"}
+        }
+        ms{
+            metric{"Metrakerfi"}
+            uksystem{"Breskt mælingakerfi"}
+            ussystem{"Bandarískt mælingakerfi"}
+        }
         numbers{
             arab{"Arabískar-indverskar tölur"}
             arabext{"Auknar arabískar-indverskar tölur"}
@@ -665,7 +692,7 @@ is{
             vaii{"Vai-tölustafir"}
         }
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"tungumál: {0}"}
         script{"leturgerð: {0}"}

@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation
+ * Copyright (c) 1997-2015, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -435,6 +435,19 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                 // If zone display name is used, fallback format might be used before 1970
                 else if (hasZoneDisplayName && d[0] < 0) {
                     maxSmatch = 2;
+                }
+                else if (timeOnly && !isGregorian && hasZoneDisplayName && maxSmatch == 1) {
+                    int32_t startRaw, startDst;
+                    fmt->getTimeZone().getOffset(d[1], FALSE, startRaw, startDst, status);
+                    failure(status, "TimeZone::getOffset");
+                    // If the calendar type is not Gregorian and the pattern is time only,
+                    // the calendar implementation may use a date before 1970 as day 0.
+                    // In this case, time zone offset of the default year might be
+                    // different from the one at 1970-01-01 in PST and string match requires
+                    // one more iteration.
+                    if (startRaw + startDst != -28800000) {
+                        maxSmatch = 2;
+                    }
                 }
             }
 

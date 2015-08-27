@@ -20,6 +20,10 @@ sq{
         "[A B C Ç D {DH} E Ë F G {GJ} H I J K L {LL} M N {NJ} O P Q R {RR} S {SH} T {"
         "TH} U V X {XH} Y Z {ZH}]"
     }
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” « » ( ) \\[ \\] § @ * / \\& # ′ "
+        "″ ~]"
+    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}
@@ -88,6 +92,56 @@ sq{
                 }
             }
             patternsShort{
+                currencyFormat{
+                    1000{
+                        one{"0 mijë ¤"}
+                        other{"0 mijë ¤"}
+                    }
+                    10000{
+                        one{"00 mijë ¤"}
+                        other{"00 mijë ¤"}
+                    }
+                    100000{
+                        one{"000 mijë ¤"}
+                        other{"000 mijë ¤"}
+                    }
+                    1000000{
+                        one{"0 Mln ¤"}
+                        other{"0 Mln ¤"}
+                    }
+                    10000000{
+                        one{"00 Mln ¤"}
+                        other{"00 Mln ¤"}
+                    }
+                    100000000{
+                        one{"000 Mln ¤"}
+                        other{"000 Mln ¤"}
+                    }
+                    1000000000{
+                        one{"0 Mld ¤"}
+                        other{"0 Mld ¤"}
+                    }
+                    10000000000{
+                        one{"00 Mld ¤"}
+                        other{"00 Mld ¤"}
+                    }
+                    100000000000{
+                        one{"000 Mld ¤"}
+                        other{"000 Mld ¤"}
+                    }
+                    1000000000000{
+                        one{"0 Bln ¤"}
+                        other{"0 Bln ¤"}
+                    }
+                    10000000000000{
+                        one{"00 Bln ¤"}
+                        other{"00 Bln ¤"}
+                    }
+                    100000000000000{
+                        one{"000 Bln ¤"}
+                        other{"000 Bln ¤"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"0 mijë"}
@@ -156,12 +210,12 @@ sq{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.16.1"}
+    Version{"2.1.19.14"}
     calendar{
         generic{
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
+                "h:mm:ss a, zzzz",
+                "h:mm:ss a, z",
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE, d MMM y G",
@@ -175,6 +229,7 @@ sq{
                 "{1}, {0}",
             }
             availableFormats{
+                E{"ccc"}
                 Ed{"E, d"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
@@ -274,16 +329,20 @@ sq{
         }
         gregorian{
             AmPmMarkers{
-                "paradite",
-                "pasdite",
+                "e paradites",
+                "e pasdites",
+            }
+            AmPmMarkersAbbr{
+                "e paradites",
+                "e pasdites",
             }
             AmPmMarkersNarrow{
-                "AM",
-                "PM",
+                "e paradites",
+                "e pasdites",
             }
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
+                "h:mm:ss a, zzzz",
+                "h:mm:ss a, z",
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE, d MMMM y",
@@ -313,6 +372,8 @@ sq{
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hmsv{"HH:mm:ss, v"}
+                Hmv{"HH:mm, v"}
                 M{"L"}
                 MEd{"E, d.M"}
                 MMM{"LLL"}
@@ -326,6 +387,8 @@ sq{
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a, v"}
+                hmv{"h:mm a, v"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M.y"}
@@ -418,22 +481,67 @@ sq{
             }
             dayPeriod{
                 format{
+                    abbreviated{
+                        afternoon1{"e pasdites"}
+                        evening1{"mbrëmje"}
+                        midnight{"mesnatë"}
+                        morning1{"mëngjes"}
+                        morning2{"e paradites"}
+                        night1{"natë"}
+                        noon{"mesditë"}
+                    }
                     narrow{
-                        noon{"MD"}
+                        afternoon1{"e pasdites"}
+                        evening1{"mbrëmje"}
+                        midnight{"mesnatë"}
+                        morning1{"mëngjes"}
+                        morning2{"e paradites"}
+                        night1{"natë"}
+                        noon{"mesditë"}
                     }
                     wide{
+                        afternoon1{"e pasdites"}
+                        evening1{"mbrëmje"}
+                        midnight{"mesnatë"}
+                        morning1{"mëngjes"}
+                        morning2{"e paradites"}
+                        night1{"natë"}
                         noon{"mesditë"}
                     }
                 }
                 stand-alone{
-                    wide{
+                    abbreviated{
                         afternoon1{"pasdite"}
+                        am{"paradite"}
                         evening1{"mbrëmje"}
                         midnight{"mesnatë"}
                         morning1{"mëngjes"}
                         morning2{"paradite"}
                         night1{"natë"}
                         noon{"mesditë"}
+                        pm{"pasdite"}
+                    }
+                    narrow{
+                        afternoon1{"pasdite"}
+                        am{"paradite"}
+                        evening1{"mbrëmje"}
+                        midnight{"mesnatë"}
+                        morning1{"mëngjes"}
+                        morning2{"paradite"}
+                        night1{"natë"}
+                        noon{"mesditë"}
+                        pm{"pasdite"}
+                    }
+                    wide{
+                        afternoon1{"pasdite"}
+                        am{"paradite"}
+                        evening1{"mbrëmje"}
+                        midnight{"mesnatë"}
+                        morning1{"mëngjes"}
+                        morning2{"paradite"}
+                        night1{"natë"}
+                        noon{"mesditë"}
+                        pm{"pasdite"}
                     }
                 }
             }
@@ -472,11 +580,11 @@ sq{
                     m{"HH:mm – HH:mm"}
                 }
                 Hmv{
-                    H{"HH:mm – HH:mm v"}
-                    m{"HH:mm – HH:mm v"}
+                    H{"HH:mm – HH:mm, v"}
+                    m{"HH:mm – HH:mm, v"}
                 }
                 Hv{
-                    H{"HH – HH v"}
+                    H{"HH – HH, v"}
                 }
                 M{
                     M{"M – M"}
@@ -514,13 +622,13 @@ sq{
                     m{"h:mm – h:mm a"}
                 }
                 hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm – h:mm a v"}
-                    m{"h:mm – h:mm a v"}
+                    a{"h:mm a – h:mm a, v"}
+                    h{"h:mm – h:mm a, v"}
+                    m{"h:mm – h:mm a, v"}
                 }
                 hv{
-                    a{"h a – h a v"}
-                    h{"h – h a v"}
+                    a{"h a – h a, v"}
+                    h{"h – h a, v"}
                 }
                 y{
                     y{"y – y"}
@@ -712,8 +820,8 @@ sq{
                     other{"pas {0} ditësh"}
                 }
                 past{
-                    one{"para {0} dite"}
-                    other{"para {0} ditësh"}
+                    one{"{0} ditë më parë"}
+                    other{"{0} ditë më parë"}
                 }
             }
         }
@@ -725,8 +833,8 @@ sq{
                     other{"pas {0} ditësh"}
                 }
                 past{
-                    one{"para {0} dite"}
-                    other{"para {0} ditësh"}
+                    one{"{0} ditë më parë"}
+                    other{"{0} ditë më parë"}
                 }
             }
         }
@@ -738,13 +846,13 @@ sq{
                     other{"pas {0} ditësh"}
                 }
                 past{
-                    one{"para {0} dite"}
-                    other{"para {0} ditësh"}
+                    one{"{0} ditë më parë"}
+                    other{"{0} ditë më parë"}
                 }
             }
         }
         dayperiod{
-            dn{"periudhë e ditës"}
+            dn{"paradite/pasdite"}
         }
         era{
             dn{"erë"}
@@ -778,8 +886,8 @@ sq{
                     other{"pas {0} orësh"}
                 }
                 past{
-                    one{"para {0} ore"}
-                    other{"para {0} orësh"}
+                    one{"{0} orë më parë"}
+                    other{"{0} orë më parë"}
                 }
             }
         }
@@ -791,8 +899,8 @@ sq{
                     other{"pas {0} orësh"}
                 }
                 past{
-                    one{"para {0} ore"}
-                    other{"para {0} orësh"}
+                    one{"{0} orë më parë"}
+                    other{"{0} orë më parë"}
                 }
             }
         }
@@ -804,8 +912,8 @@ sq{
                     other{"pas {0} orësh"}
                 }
                 past{
-                    one{"para {0} ore"}
-                    other{"para {0} orësh"}
+                    one{"{0} orë më parë"}
+                    other{"{0} orë më parë"}
                 }
             }
         }
@@ -817,8 +925,8 @@ sq{
                     other{"pas {0} minutash"}
                 }
                 past{
-                    one{"para {0} minute"}
-                    other{"para {0} minutash"}
+                    one{"{0} minutë më parë"}
+                    other{"{0} minuta më parë"}
                 }
             }
         }
@@ -830,8 +938,8 @@ sq{
                     other{"pas {0} min."}
                 }
                 past{
-                    one{"para {0} min."}
-                    other{"para {0} min."}
+                    one{"{0} min. më parë"}
+                    other{"{0} min. më parë"}
                 }
             }
         }
@@ -843,8 +951,8 @@ sq{
                     other{"pas {0} min."}
                 }
                 past{
-                    one{"para {0} min."}
-                    other{"para {0} min."}
+                    one{"{0} min. më parë"}
+                    other{"{0} min. më parë"}
                 }
             }
         }
@@ -882,8 +990,8 @@ sq{
                     other{"pas {0} muajsh"}
                 }
                 past{
-                    one{"para {0} muaji"}
-                    other{"para {0} muajsh"}
+                    one{"{0} muaj më parë"}
+                    other{"{0} muaj më parë"}
                 }
             }
         }
@@ -895,8 +1003,8 @@ sq{
                     other{"pas {0} muajsh"}
                 }
                 past{
-                    one{"para {0} muaji"}
-                    other{"para {0} muajsh"}
+                    one{"{0} muaj më parë"}
+                    other{"{0} muaj më parë"}
                 }
             }
         }
@@ -908,8 +1016,8 @@ sq{
                     other{"pas {0} muajsh"}
                 }
                 past{
-                    one{"para {0} muaji"}
-                    other{"para {0} muajsh"}
+                    one{"{0} muaj më parë"}
+                    other{"{0} muaj më parë"}
                 }
             }
         }
@@ -921,8 +1029,8 @@ sq{
                     other{"pas {0} tremujorësh"}
                 }
                 past{
-                    one{"para {0} tremujori"}
-                    other{"para {0} tremujorësh"}
+                    one{"{0} tremujor më parë"}
+                    other{"{0} tremujorë më parë"}
                 }
             }
         }
@@ -934,8 +1042,8 @@ sq{
                     other{"pas {0} tremujorësh"}
                 }
                 past{
-                    one{"para {0} tremujori"}
-                    other{"para {0} tremujorësh"}
+                    one{"{0} tremujor më parë"}
+                    other{"{0} tremujorë më parë"}
                 }
             }
         }
@@ -947,8 +1055,8 @@ sq{
                     other{"pas {0} tremujorësh"}
                 }
                 past{
-                    one{"para {0} tremujori"}
-                    other{"para {0} tremujorësh"}
+                    one{"{0} tremujor më parë"}
+                    other{"{0} tremujorë më parë"}
                 }
             }
         }
@@ -984,8 +1092,8 @@ sq{
                     other{"pas {0} sekondash"}
                 }
                 past{
-                    one{"para {0} sekonde"}
-                    other{"para {0} sekondash"}
+                    one{"{0} sekondë më parë"}
+                    other{"{0} sekonda më parë"}
                 }
             }
         }
@@ -997,8 +1105,8 @@ sq{
                     other{"pas {0} sek."}
                 }
                 past{
-                    one{"para {0} sek."}
-                    other{"para {0} sek."}
+                    one{"{0} sek. më parë"}
+                    other{"{0} sek. më parë"}
                 }
             }
         }
@@ -1010,8 +1118,8 @@ sq{
                     other{"pas {0} sek."}
                 }
                 past{
-                    one{"para {0} sek."}
-                    other{"para {0} sek."}
+                    one{"{0} sek. më parë"}
+                    other{"{0} sek. më parë"}
                 }
             }
         }
@@ -1112,8 +1220,8 @@ sq{
                     other{"pas {0} javësh"}
                 }
                 past{
-                    one{"para {0} jave"}
-                    other{"para {0} javësh"}
+                    one{"{0} javë më parë"}
+                    other{"{0} javë më parë"}
                 }
             }
         }
@@ -1125,8 +1233,8 @@ sq{
                     other{"pas {0} javësh"}
                 }
                 past{
-                    one{"para {0} jave"}
-                    other{"para {0} javësh"}
+                    one{"{0} javë më parë"}
+                    other{"{0} javë më parë"}
                 }
             }
         }
@@ -1138,8 +1246,8 @@ sq{
                     other{"pas {0} javësh"}
                 }
                 past{
-                    one{"para {0} jave"}
-                    other{"para {0} javësh"}
+                    one{"{0} javë më parë"}
+                    other{"{0} javë më parë"}
                 }
             }
         }
@@ -1159,8 +1267,8 @@ sq{
                     other{"pas {0} vjetësh"}
                 }
                 past{
-                    one{"para {0} viti"}
-                    other{"para {0} vjetësh"}
+                    one{"{0} vit më parë"}
+                    other{"{0} vjet më parë"}
                 }
             }
         }
@@ -1172,8 +1280,8 @@ sq{
                     other{"pas {0} vjetësh"}
                 }
                 past{
-                    one{"para {0} viti"}
-                    other{"para {0} vjetësh"}
+                    one{"{0} vit më parë"}
+                    other{"{0} vjet më parë"}
                 }
             }
         }
@@ -1185,8 +1293,8 @@ sq{
                     other{"pas {0} vjetësh"}
                 }
                 past{
-                    one{"para {0} viti"}
-                    other{"para {0} vjetësh"}
+                    one{"{0} vit më parë"}
+                    other{"{0} vjet më parë"}
                 }
             }
         }
@@ -1221,7 +1329,7 @@ sq{
         }
     }
     measurementSystemNames{
-        UK{"britanik"}
+        UK{"britanik (imperial)"}
         US{"amerikan"}
         metric{"metrik"}
     }

@@ -19,6 +19,9 @@ lv{
         colStrength{"Kārtošanas pakāpe"}
         collation{"Kārtošanas secība"}
         currency{"Valūta"}
+        hc{"Stundu formāts (12 vai 24)"}
+        lb{"Rindiņas pārtraukuma stils"}
+        ms{"mērvienību sistēma"}
         numbers{"Cipari"}
         timezone{"Laika josla"}
         va{"Lokalizācijas variants"}
@@ -58,6 +61,7 @@ lv{
         awa{"avadhu"}
         ay{"aimaru"}
         az{"azerbaidžāņu"}
+        az_Arab{"dienvidazerbaidžāņu"}
         ba{"baškīru"}
         bal{"beludžu"}
         ban{"baliešu"}
@@ -70,6 +74,7 @@ lv{
         bez{"bena"}
         bfd{"bafutu"}
         bg{"bulgāru"}
+        bgn{"rietumbeludžu"}
         bho{"bhodžpūru"}
         bi{"bišlamā"}
         bik{"bikolu"}
@@ -295,6 +300,7 @@ lv{
         lo{"laosiešu"}
         lol{"mongu"}
         loz{"lozu"}
+        lrc{"ziemeļluru"}
         lt{"lietuviešu"}
         lu{"lubakatanga"}
         lua{"lubalulva"}
@@ -343,12 +349,14 @@ lv{
         my{"birmiešu"}
         mye{"mjenu"}
         myv{"erzju"}
+        mzn{"mazanderāņu"}
         na{"nauruiešu"}
         nap{"neapoliešu"}
         naq{"nama"}
         nb{"norvēģu bukmols"}
         nd{"ziemeļndebelu"}
         nds{"lejasvācu"}
+        nds_NL{"lejassakšu"}
         ne{"nepāliešu"}
         new{"nevaru"}
         ng{"ndongu"}
@@ -425,6 +433,7 @@ lv{
         scn{"sicīliešu"}
         sco{"skotu"}
         sd{"sindhu"}
+        sdh{"dienvidkurdu"}
         se{"ziemeļsāmu"}
         see{"seneku"}
         seh{"senu"}
@@ -518,6 +527,7 @@ lv{
         wal{"valamu"}
         war{"varaju"}
         was{"vašo"}
+        wbp{"varlpirī"}
         wo{"volofu"}
         xal{"kalmiku"}
         xh{"khosu"}
@@ -705,6 +715,22 @@ lv{
             traditional{"tradicionālā kārtošanas secība"}
             unihan{"Radikālā kārtošanas secība pēc vilkumu skaita"}
         }
+        hc{
+            h11{"12 stundu sistēma (0–11)"}
+            h12{"12 stundu sistēma (1–12)"}
+            h23{"24 stundu sistēma (0–23)"}
+            h24{"24 stundu sistēma (1–24)"}
+        }
+        lb{
+            loose{"Brīvais rindiņas pārtraukuma stils"}
+            normal{"Parastais rindiņas pārtraukuma stils"}
+            strict{"Stingrais rindiņas pārtraukuma stils"}
+        }
+        ms{
+            metric{"metriskā sistēma"}
+            uksystem{"britu mērvienību sistēma"}
+            ussystem{"amerikāņu mērvienību sistēma"}
+        }
         numbers{
             arab{"Arābu-indiešu cipari"}
             arabext{"Izvērstie arābu-indiešu cipari"}
@@ -769,7 +795,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.1.15.80"}
+    Version{"2.1.19.19"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}

@@ -9,8 +9,7 @@
 es_CL{
     %%Parent{"es_419"}
     Countries{
-        005{"Sudamérica"}
         EH{"Sahara Occidental"}
     }
-    Version{"2.1.13.23"}
+    Version{"2.1.19.14"}
 }

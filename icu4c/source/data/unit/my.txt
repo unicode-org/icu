@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 my{
-    Version{"2.1.15.64"}
+    Version{"2.1.19.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -41,6 +41,10 @@ my{
                 dnam{"ရေဒီအန်းစ်"}
                 other{"{0}ရေဒီအန်းစ်"}
             }
+            revolution{
+                dnam{"rev"}
+                other{"{0} rev"}
+            }
         }
         area{
             acre{
@@ -54,6 +58,7 @@ my{
             square-centimeter{
                 dnam{"စတုရန်းစင်တီမီတာ"}
                 other{"{0}စတုရန်းစင်တီမီတာ"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"စတုရန်းပေ"}
@@ -62,6 +67,7 @@ my{
             square-inch{
                 dnam{"စတုရန်းလက်မ"}
                 other{"{0}စတုရန်းလက်မ"}
+                per{"{0}တစ်စတုရန်းလက်မလျှင်"}
             }
             square-kilometer{
                 dnam{"စတုရန်းကီလိုမီတာ"}
@@ -84,6 +90,10 @@ my{
             per{"{0}လျှင်{1}နှုန်း"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                other{"{0} L/100km"}
+            }
             liter-per-kilometer{
                 dnam{"လီတာ/ကီလိုမီတာ"}
                 other{"၁ကီလိုမီတာ {0}လီတာနှုန်း"}
@@ -92,6 +102,12 @@ my{
                 dnam{"မိုင်/ဂါလန်"}
                 other{"၁ ဂါလန် {0} မိုင်နှုန်း"}
             }
+        }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
         }
         digital{
             bit{
@@ -136,9 +152,14 @@ my{
             }
         }
         duration{
+            century{
+                dnam{"c"}
+                other{"{0} c"}
+            }
             day{
                 dnam{"ရက်"}
                 other{"{0}ရက်"}
+                per{"{0}တစ်နေ့လျှင်"}
             }
             hour{
                 dnam{"နာရီ"}
@@ -156,10 +177,12 @@ my{
             minute{
                 dnam{"မိနစ်"}
                 other{"{0} မိနစ်"}
+                per{"{0}မိနစ်လျှင်"}
             }
             month{
                 dnam{"လ"}
                 other{"{0}လ"}
+                per{"{0}တစ်လလျှင်"}
             }
             nanosecond{
                 dnam{"နာနိုစက္ကန့်"}
@@ -173,10 +196,12 @@ my{
             week{
                 dnam{"ပတ်"}
                 other{"{0}ပတ်"}
+                per{"{0}တစ်ပတ်လျှင်"}
             }
             year{
                 dnam{"နှစ်"}
                 other{"{0}နှစ်"}
+                per{"{0}နှစ်လျှင်"}
             }
         }
         electric{
@@ -249,6 +274,7 @@ my{
             centimeter{
                 dnam{"စင်တီမီတာ"}
                 other{"{0} စင်တီမီတာ"}
+                per{"{0} တစ်စင်တီမီတာလျှင်"}
             }
             decimeter{
                 dnam{"ဒါစီမီတာ"}
@@ -257,14 +283,17 @@ my{
             foot{
                 dnam{"ပေ"}
                 other{"{0} ပေ"}
+                per{"{0}/ft"}
             }
             inch{
                 dnam{"လက်မ"}
                 other{"{0} လက်မ"}
+                per{"{0}တစ်လက်မလျှင်"}
             }
             kilometer{
                 dnam{"ကီလိုမီတာ"}
                 other{"{0} ကီလိုမီတာ"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"အလင်းနှစ်"}
@@ -273,6 +302,7 @@ my{
             meter{
                 dnam{"မီတာ"}
                 other{"{0}မီတာ"}
+                per{"{0}တစ်မီတာလျှင်"}
             }
             micrometer{
                 dnam{"မိုက်ခရိုမီတာ"}
@@ -281,6 +311,10 @@ my{
             mile{
                 dnam{"မိုင်"}
                 other{"{0} မိုင်"}
+            }
+            mile-scandinavian{
+                dnam{"စကန်ဒီနေးဗီးရန်း မိုင်"}
+                other{"{0}စကန်ဒီနေးဗီးရန်း မိုင်များ"}
             }
             millimeter{
                 dnam{"မီလီမီတာ"}
@@ -321,10 +355,12 @@ my{
             gram{
                 dnam{"ဂရမ်"}
                 other{"{0} ဂရမ်"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"ကီလိုဂရမ်"}
                 other{"{0}ကီလိုဂရမ်"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"မက်ထရစ်တန်"}
@@ -341,6 +377,7 @@ my{
             ounce{
                 dnam{"အောင်စ"}
                 other{"{0}အောင်စ"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"ထရိုအောင်စ"}
@@ -349,6 +386,7 @@ my{
             pound{
                 dnam{"ပေါင်"}
                 other{"{0}ပေါင်"}
+                per{"တစ်ပေါင်လျှင်"}
             }
             ton{
                 dnam{"တန်"}
@@ -414,6 +452,10 @@ my{
                 dnam{"ကီလိုမီတာ/နာရီ"}
                 other{"တစ်နာရီလျှင်{0}ကီလိုမီတာနှုန်း"}
             }
+            knot{
+                dnam{"ရေမိုင်နော့"}
+                other{"{0}ရေမိုင်နော့များ"}
+            }
             meter-per-second{
                 dnam{"မီတာ/စက္ကန့်"}
                 other{"တစ်စက္ကန့်လျှင်{0}မီတာနှုန်း"}
@@ -432,6 +474,10 @@ my{
                 dnam{"ဖာရင်ဟိုက်"}
                 other{"{0}ဖာရင်ဟိုက်"}
             }
+            generic{
+                dnam{"°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"ကယ်လ်ဗင်"}
                 other{"{0}ကယ်လ်ဗင်"}
@@ -449,6 +495,7 @@ my{
             cubic-centimeter{
                 dnam{"ကုဗစင်တီမီတာ"}
                 other{"{0}ကုဗစင်တီမီတာ"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ကုဗပေ"}
@@ -465,6 +512,7 @@ my{
             cubic-meter{
                 dnam{"ကုဗမီတာ"}
                 other{"{0}ကုဗမီတာ"}
+                per{"တစ်ကုဗစင်တီမီတာလျှင်"}
             }
             cubic-mile{
                 dnam{"ကုဗမိုင်"}
@@ -478,6 +526,10 @@ my{
                 dnam{"ခွက်"}
                 other{"{0} ခွက်"}
             }
+            cup-metric{
+                dnam{"မထ္ထရစ်ကပ်"}
+                other{"{0}မထ္ထရစ်ကပ်စ်"}
+            }
             deciliter{
                 dnam{"ဒါစီလီတာ"}
                 other{"{0} ဒါစီလီတာ"}
@@ -489,6 +541,7 @@ my{
             gallon{
                 dnam{"ဂါလန်"}
                 other{"{0}ဂါလန်"}
+                per{"{0}တစ်ဂါလံလျှင်"}
             }
             hectoliter{
                 dnam{"ဟက်တိုလီတာ"}
@@ -497,6 +550,7 @@ my{
             liter{
                 dnam{"လီတာ"}
                 other{"{0}လီတာ"}
+                per{"{0} တစ်လီတာလျှင်"}
             }
             megaliter{
                 dnam{"မက်ဂါလီတာ"}
@@ -509,6 +563,10 @@ my{
             pint{
                 dnam{"ပိုင့်"}
                 other{"{0}ပိုင့်"}
+            }
+            pint-metric{
+                dnam{"မထ္ထရစ်ပို့င်"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"ကွတ်"}
@@ -563,6 +621,18 @@ my{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                other{"{0} L/100km"}
+            }
+        }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
         }
         duration{
             day{
@@ -734,6 +804,10 @@ my{
                 dnam{"ရေဒီအန်းစ်"}
                 other{"{0} rad"}
             }
+            revolution{
+                dnam{"rev"}
+                other{"{0} rev"}
+            }
         }
         area{
             acre{
@@ -747,6 +821,7 @@ my{
             square-centimeter{
                 dnam{"စတုရန်းစင်တီမီတာ"}
                 other{"{0} cm²"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"စတုရန်းပေ"}
@@ -755,6 +830,7 @@ my{
             square-inch{
                 dnam{"စတုရန်းလက်မ"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"စတုရန်းကီလိုမီတာ"}
@@ -763,6 +839,7 @@ my{
             square-meter{
                 dnam{"စတုရန်းမီတာ"}
                 other{"{0} m²"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"စတုရန်းမိုင်"}
@@ -777,6 +854,10 @@ my{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                other{"{0} L/100km"}
+            }
             liter-per-kilometer{
                 dnam{"လီတာ/ကီလိုမီတာ"}
                 other{"{0} L/km"}
@@ -785,6 +866,12 @@ my{
                 dnam{"မိုင်/ဂါလန်"}
                 other{"{0} mpg"}
             }
+        }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
         }
         digital{
             bit{
@@ -829,9 +916,14 @@ my{
             }
         }
         duration{
+            century{
+                dnam{"c"}
+                other{"{0} c"}
+            }
             day{
                 dnam{"ရက်"}
                 other{"{0}ရက်"}
+                per{"{0}/d"}
             }
             hour{
                 dnam{"နာရီ"}
@@ -849,10 +941,12 @@ my{
             minute{
                 dnam{"မိနစ်"}
                 other{"{0}မိနစ်"}
+                per{"{0}မိနစ်လျှင်"}
             }
             month{
                 dnam{"လ"}
                 other{"{0}လ"}
+                per{"{0}/လ"}
             }
             nanosecond{
                 dnam{"နာနိုစက္ကန့်"}
@@ -866,10 +960,12 @@ my{
             week{
                 dnam{"ပတ်"}
                 other{"{0}ပတ်"}
+                per{"{0}/w"}
             }
             year{
                 dnam{"နှစ်"}
                 other{"{0} y"}
+                per{"{0}/y"}
             }
         }
         electric{
@@ -942,6 +1038,7 @@ my{
             centimeter{
                 dnam{"စင်တီမီတာ"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"ဒါစီမီတာ"}
@@ -950,14 +1047,17 @@ my{
             foot{
                 dnam{"ပေ"}
                 other{"{0} ပေ"}
+                per{"{0}/ft"}
             }
             inch{
                 dnam{"လက်မ"}
                 other{"{0} လက်မ"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"ကီလိုမီတာ"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"အလင်းနှစ်"}
@@ -966,6 +1066,7 @@ my{
             meter{
                 dnam{"မီတာ"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"မိုက်ခရိုမီတာ"}
@@ -974,6 +1075,10 @@ my{
             mile{
                 dnam{"မိုင်"}
                 other{"{0}မိုင်"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"မီလီမီတာ"}
@@ -1014,10 +1119,12 @@ my{
             gram{
                 dnam{"ဂရမ်"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"ကီလိုဂရမ်"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"t"}
@@ -1034,6 +1141,7 @@ my{
             ounce{
                 dnam{"အောင်စ"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"ထရိုအောင်စ"}
@@ -1042,6 +1150,7 @@ my{
             pound{
                 dnam{"ပေါင်"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
             }
             ton{
                 dnam{"တန်"}
@@ -1107,6 +1216,10 @@ my{
                 dnam{"ကီလိုမီတာ/နာရီ"}
                 other{"{0} km/h"}
             }
+            knot{
+                dnam{"kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
                 dnam{"မီတာ/စက္ကန့်"}
                 other{"{0} m/s"}
@@ -1125,6 +1238,10 @@ my{
                 dnam{"°F"}
                 other{"{0}°F"}
             }
+            generic{
+                dnam{"°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"K"}
                 other{"{0} K"}
@@ -1142,6 +1259,7 @@ my{
             cubic-centimeter{
                 dnam{"ကုဗစင်တီမီတာ"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ကုဗပေ"}
@@ -1158,6 +1276,7 @@ my{
             cubic-meter{
                 dnam{"ကုဗမီတာ"}
                 other{"{0} m³"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"ကုဗမိုင်"}
@@ -1171,6 +1290,10 @@ my{
                 dnam{"ခွက်"}
                 other{"{0} c"}
             }
+            cup-metric{
+                dnam{"mcup"}
+                other{"{0} mc"}
+            }
             deciliter{
                 dnam{"ဒါစီလီတာ"}
                 other{"{0} dL"}
@@ -1182,6 +1305,7 @@ my{
             gallon{
                 dnam{"ဂါလန်"}
                 other{"{0}ဂါလန်"}
+                per{"{0}/ဂါလံ"}
             }
             hectoliter{
                 dnam{"ဟက်တိုလီတာ"}
@@ -1190,6 +1314,7 @@ my{
             liter{
                 dnam{"လီတာ"}
                 other{"{0} l"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"မက်ဂါလီတာ"}
@@ -1202,6 +1327,10 @@ my{
             pint{
                 dnam{"ပိုင့်"}
                 other{"{0}ပိုင့်"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"ကွတ်"}

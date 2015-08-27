@@ -7,11 +7,11 @@
 // *
 // ***************************************************************************
 ky{
-    Version{"2.1.15.80"}
+    Version{"2.1.19.19"}
     durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
+        hm{"ст:мүн"}
+        hms{"ст:мүн:сек"}
+        ms{"мүн:сек"}
     }
     units{
         acceleration{
@@ -21,21 +21,21 @@ ky{
                 other{"{0} оордук күчү"}
             }
             meter-per-second-squared{
-                dnam{"метр/квадраттык секунд"}
-                one{"{0} метр/квадраттык секунд"}
-                other{"{0} метр/квадраттык секунд"}
+                dnam{"квадраттык секундасына метр"}
+                one{"квадраттык секундасына {0} метр"}
+                other{"квадраттык секундасына {0} метр"}
             }
         }
         angle{
             arc-minute{
-                dnam{"′"}
-                one{"{0}′"}
-                other{"{0}′"}
+                dnam{"аркмүнөт"}
+                one{"{0} аркмүнөт"}
+                other{"{0} аркмүнөт"}
             }
             arc-second{
                 dnam{"арксекунд"}
-                one{"{0}″"}
-                other{"{0}″"}
+                one{"{0} арксекунд"}
+                other{"{0} арксекунд"}
             }
             degree{
                 dnam{"градус"}
@@ -46,6 +46,11 @@ ky{
                 dnam{"радиан"}
                 one{"{0} радиан"}
                 other{"{0} радиан"}
+            }
+            revolution{
+                dnam{"rev"}
+                one{"{0} rev"}
+                other{"{0} rev"}
             }
         }
         area{
@@ -63,6 +68,7 @@ ky{
                 dnam{"чарчы сантиметр"}
                 one{"{0} чарчы сантиметр"}
                 other{"{0} чарчы сантиметр"}
+                per{"чарчы сантиметрине {0}"}
             }
             square-foot{
                 dnam{"чарчы фут"}
@@ -73,6 +79,7 @@ ky{
                 dnam{"чарчы дюйм"}
                 one{"{0} чарчы дюйм"}
                 other{"{0} чарчы дюйм"}
+                per{"чарчы дюймуна {0}"}
             }
             square-kilometer{
                 dnam{"чарчы километр"}
@@ -83,6 +90,7 @@ ky{
                 dnam{"чарчы метр"}
                 one{"{0} чарчы метр"}
                 other{"{0} чарчы метр"}
+                per{"чарчы метрине {0}"}
             }
             square-mile{
                 dnam{"чарчы мил"}
@@ -96,19 +104,30 @@ ky{
             }
         }
         compound{
-            per{"{0}/{1}"}
+            per{"{1}/{0}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"100 километрге литр"}
+                one{"100 километрге {0} литр"}
+                other{"100 километрге {0} литр"}
+            }
             liter-per-kilometer{
-                dnam{"л/км"}
-                one{"{0} л/км"}
-                other{"{0} л/км"}
+                dnam{"километрине литр"}
+                one{"километрине {0} литр"}
+                other{"километрине {0} литр"}
             }
             mile-per-gallon{
                 dnam{"милге/галон"}
                 one{"{0} милге/галон"}
                 other{"{0} милге/галон"}
             }
+        }
+        coordinate{
+            east{"{0}Ч"}
+            north{"{0}Тн"}
+            south{"{0}Тш"}
+            west{"{0}Б"}
         }
         digital{
             bit{
@@ -163,16 +182,22 @@ ky{
             }
         }
         duration{
+            century{
+                dnam{"кылым"}
+                one{"{0} кылым"}
+                other{"{0} кылым"}
+            }
             day{
                 dnam{"күн"}
                 one{"{0} күн"}
                 other{"{0} күн"}
+                per{"күнүнө {0}"}
             }
             hour{
                 dnam{"саат"}
                 one{"{0} саат"}
                 other{"{0} саат"}
-                per{"{0} саатына"}
+                per{"саатына {0}"}
             }
             microsecond{
                 dnam{"микросекунд"}
@@ -188,11 +213,13 @@ ky{
                 dnam{"мүнөт"}
                 one{"{0} мүнөт"}
                 other{"{0} мүнөт"}
+                per{"мүнөтүнө {0}"}
             }
             month{
                 dnam{"ай"}
                 one{"{0} ай"}
                 other{"{0} ай"}
+                per{"айына {0}"}
             }
             nanosecond{
                 dnam{"наносекунд"}
@@ -203,17 +230,19 @@ ky{
                 dnam{"секунд"}
                 one{"{0} секунд"}
                 other{"{0} секунд"}
-                per{"{0} секундуна"}
+                per{"секундуна {0}"}
             }
             week{
                 dnam{"апта"}
                 one{"{0} апта"}
                 other{"{0} апта"}
+                per{"аптасына {0}"}
             }
             year{
                 dnam{"жыл"}
                 one{"{0} жыл"}
                 other{"{0} жыл"}
+                per{"жылына {0}"}
             }
         }
         electric{
@@ -302,6 +331,7 @@ ky{
                 dnam{"сантиметр"}
                 one{"{0} сантиметр"}
                 other{"{0} сантиметр"}
+                per{"сантиметрине {0}"}
             }
             decimeter{
                 dnam{"дм"}
@@ -312,16 +342,19 @@ ky{
                 dnam{"фут"}
                 one{"{0} фут"}
                 other{"{0} фут"}
+                per{"футуна {0}"}
             }
             inch{
                 dnam{"дюйм"}
                 one{"{0} дюйм"}
                 other{"{0} дюйм"}
+                per{"дюймуна {0}"}
             }
             kilometer{
                 dnam{"километр"}
                 one{"{0} километр"}
                 other{"{0} километр"}
+                per{"километрине {0}"}
             }
             light-year{
                 dnam{"жарык жыл"}
@@ -332,6 +365,7 @@ ky{
                 dnam{"метр"}
                 one{"{0} метр"}
                 other{"{0} метр"}
+                per{"метрине {0}"}
             }
             micrometer{
                 dnam{"микрометр"}
@@ -342,6 +376,11 @@ ky{
                 dnam{"мил"}
                 one{"{0} мил"}
                 other{"{0} мил"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"миллиметр"}
@@ -391,11 +430,13 @@ ky{
                 dnam{"грамм"}
                 one{"{0} грамм"}
                 other{"{0} грамм"}
+                per{"граммына {0}"}
             }
             kilogram{
                 dnam{"килограмм"}
                 one{"{0} килограмм"}
                 other{"{0} килограмм"}
+                per{"килограммына {0}"}
             }
             metric-ton{
                 dnam{"метр тонна"}
@@ -416,6 +457,7 @@ ky{
                 dnam{"унция"}
                 one{"{0} унция"}
                 other{"{0} унция"}
+                per{"унциясына {0}"}
             }
             ounce-troy{
                 dnam{"троя унциясы"}
@@ -426,6 +468,7 @@ ky{
                 dnam{"фунт"}
                 one{"{0} фунт"}
                 other{"{0} фунт"}
+                per{"фунтуна {0}"}
             }
             ton{
                 dnam{"тонна"}
@@ -472,9 +515,9 @@ ky{
                 other{"{0} гектопаскаль"}
             }
             inch-hg{
-                dnam{"дүйм сымап мамычасы"}
-                one{"{0} дүйм сымап мамычасы"}
-                other{"{0} дүйм сымап мамычасы"}
+                dnam{"дюйм сымап мамычасы"}
+                one{"{0} дюйм сымап мамычасы"}
+                other{"{0} дюйм сымап мамычасы"}
             }
             millibar{
                 dnam{"миллибар"}
@@ -482,14 +525,14 @@ ky{
                 other{"{0} миллибар"}
             }
             millimeter-of-mercury{
-                dnam{"сымап мамычасынын миллиметри"}
-                one{"{0} сымап мамычасынын миллиметри"}
-                other{"{0} сымап мамычасынын миллиметри"}
+                dnam{"миллиметр сымап мамычасы"}
+                one{"{0} миллиметр сымап мамычасы"}
+                other{"{0} миллиметр сымап мамычасы"}
             }
             pound-per-square-inch{
-                dnam{"фунт чарчы дюймга"}
-                one{"{0} фунт чарчы дюймга"}
-                other{"{0} фунт чарчы дюймга"}
+                dnam{"чарчы дюймга фунт"}
+                one{"чарчы дюймга {0} фунт"}
+                other{"чарчы дюймга {0} фунт"}
             }
         }
         proportion{
@@ -505,15 +548,20 @@ ky{
                 one{"саатына {0} километр"}
                 other{"саатына {0} километр"}
             }
+            knot{
+                dnam{"түйүн"}
+                one{"{0} түйүн"}
+                other{"{0} түйүн"}
+            }
             meter-per-second{
-                dnam{"метр/секунд"}
-                one{"{0} метр/секунд"}
-                other{"{0} метр/секунд"}
+                dnam{"секундасына метр"}
+                one{"секундасына {0} метр"}
+                other{"секундасына {0} метр"}
             }
             mile-per-hour{
-                dnam{"мил/саат"}
-                one{"{0} мил/саат"}
-                other{"{0} мил/саат"}
+                dnam{"милине саат"}
+                one{"саатына {0} миль"}
+                other{"саатына {0} миль"}
             }
         }
         temperature{
@@ -526,6 +574,11 @@ ky{
                 dnam{"Фаренгейт градусу"}
                 one{"{0} Фаренгейт градусу"}
                 other{"{0} Фаренгейт градусу"}
+            }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             kelvin{
                 dnam{"Келвин градусу"}
@@ -548,6 +601,7 @@ ky{
                 dnam{"куб сантиметр"}
                 one{"{0} куб сантиметр"}
                 other{"{0} куб сантиметр"}
+                per{"куб сантиметрине {0}"}
             }
             cubic-foot{
                 dnam{"куб фут"}
@@ -568,6 +622,7 @@ ky{
                 dnam{"куб метр"}
                 one{"{0} куб метр"}
                 other{"{0} куб метр"}
+                per{"куб метрине {0}"}
             }
             cubic-mile{
                 dnam{"куб мил"}
@@ -584,10 +639,15 @@ ky{
                 one{"{0} чөйчөк"}
                 other{"{0} чөйчөк"}
             }
+            cup-metric{
+                dnam{"mcup"}
+                one{"{0} mc"}
+                other{"{0} mc"}
+            }
             deciliter{
-                dnam{"декалитр"}
-                one{"{0} декалитр"}
-                other{"{0} декалитр"}
+                dnam{"децилитр"}
+                one{"{0} децилитр"}
+                other{"{0} децилитр"}
             }
             fluid-ounce{
                 dnam{"суюк унция"}
@@ -598,6 +658,7 @@ ky{
                 dnam{"галон"}
                 one{"{0} галон"}
                 other{"{0} гал"}
+                per{"галонуна {0}"}
             }
             hectoliter{
                 dnam{"гектолитр"}
@@ -608,6 +669,7 @@ ky{
                 dnam{"литр"}
                 one{"{0} литр"}
                 other{"{0} литр"}
+                per{"литрине {0}"}
             }
             megaliter{
                 dnam{"мегалитр"}
@@ -623,6 +685,11 @@ ky{
                 dnam{"пинта"}
                 one{"{0} пинта"}
                 other{"{0} пинта"}
+            }
+            pint-metric{
+                dnam{"метрикалык пинта"}
+                one{"{0} метрикалык пинта"}
+                other{"{0} метрикалык пинта"}
             }
             quart{
                 dnam{"кварта"}
@@ -689,18 +756,31 @@ ky{
             }
         }
         compound{
-            per{"{0}/{1}"}
+            per{"{1}/{0}"}
+        }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"100 км/л"}
+                one{"100 км/{0}л"}
+                other{"100 км/{0}л"}
+            }
+        }
+        coordinate{
+            east{"{0}Ч"}
+            north{"{0}Тн"}
+            south{"{0}Тш"}
+            west{"{0}Б"}
         }
         duration{
             day{
                 dnam{"күн"}
-                one{"{0} к"}
-                other{"{0} к"}
+                one{"{0} кн"}
+                other{"{0} кн"}
             }
             hour{
                 dnam{"саат"}
-                one{"{0} с"}
-                other{"{0} с"}
+                one{"{0} ст"}
+                other{"{0} ст"}
             }
             millisecond{
                 dnam{"миллисек"}
@@ -723,7 +803,7 @@ ky{
                 other{"{0} сек"}
             }
             week{
-                dnam{"ап"}
+                dnam{"апт"}
                 one{"{0} ап"}
                 other{"{0} ап"}
             }
@@ -782,8 +862,8 @@ ky{
         mass{
             gram{
                 dnam{"грамм"}
-                one{"{0} г"}
-                other{"{0} г"}
+                one{"{0} гр"}
+                other{"{0} гр"}
             }
             kilogram{
                 dnam{"килограмм"}
@@ -884,14 +964,14 @@ ky{
         }
         angle{
             arc-minute{
-                dnam{"′"}
-                one{"{0}′"}
-                other{"{0}′"}
+                dnam{"аркмүн"}
+                one{"{0} аркмүн"}
+                other{"{0} аркмүн"}
             }
             arc-second{
-                dnam{"″"}
-                one{"{0}″"}
-                other{"{0}″"}
+                dnam{"арксек"}
+                one{"{0} арксек"}
+                other{"{0} арксек"}
             }
             degree{
                 dnam{"градус"}
@@ -902,6 +982,11 @@ ky{
                 dnam{"рад."}
                 one{"{0} рад"}
                 other{"{0} рад."}
+            }
+            revolution{
+                dnam{"rev"}
+                one{"{0} rev"}
+                other{"{0} rev"}
             }
         }
         area{
@@ -919,6 +1004,7 @@ ky{
                 dnam{"см²"}
                 one{"{0} см²"}
                 other{"{0} см²"}
+                per{"см²/{0}"}
             }
             square-foot{
                 dnam{"чарчы фут"}
@@ -929,6 +1015,7 @@ ky{
                 dnam{"дюйм²"}
                 one{"{0} дюйм²"}
                 other{"{0} дюйм²"}
+                per{"дюйм²/{0}"}
             }
             square-kilometer{
                 dnam{"км²"}
@@ -939,6 +1026,7 @@ ky{
                 dnam{"метр²"}
                 one{"{0} м²"}
                 other{"{0} м²"}
+                per{"м²/{0}"}
             }
             square-mile{
                 dnam{"чарчы мил"}
@@ -952,11 +1040,16 @@ ky{
             }
         }
         compound{
-            per{"{0}/{1}"}
+            per{"{1}/{0}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"100 км/л"}
+                one{"100 км/{0} л"}
+                other{"100 км/{0} л"}
+            }
             liter-per-kilometer{
-                dnam{"л/км"}
+                dnam{"км/литр"}
                 one{"{0} л/км"}
                 other{"{0} л/км"}
             }
@@ -965,6 +1058,12 @@ ky{
                 one{"{0} мил/гал"}
                 other{"{0} мил/гал"}
             }
+        }
+        coordinate{
+            east{"{0}Ч"}
+            north{"{0}Тн"}
+            south{"{0}Тш"}
+            west{"{0}Б"}
         }
         digital{
             bit{
@@ -1019,16 +1118,22 @@ ky{
             }
         }
         duration{
+            century{
+                dnam{"к."}
+                one{"{0} к."}
+                other{"{0} к."}
+            }
             day{
                 dnam{"күн"}
                 one{"{0} күн"}
                 other{"{0} күн"}
+                per{"күн/{0}"}
             }
             hour{
                 dnam{"саат"}
-                one{"{0} с"}
-                other{"{0} с"}
-                per{"{0}/с"}
+                one{"{0} ст"}
+                other{"{0} ст"}
+                per{"ст/{0}"}
             }
             microsecond{
                 dnam{"μсек"}
@@ -1044,11 +1149,13 @@ ky{
                 dnam{"мүнөт"}
                 one{"{0} мүн"}
                 other{"{0} мүн"}
+                per{"мүн/{0}"}
             }
             month{
                 dnam{"ай"}
                 one{"{0} ай"}
                 other{"{0} ай"}
+                per{"а/{0}"}
             }
             nanosecond{
                 dnam{"наносек"}
@@ -1059,17 +1166,19 @@ ky{
                 dnam{"секунд"}
                 one{"{0} сек"}
                 other{"{0} сек"}
-                per{"{0}/сек"}
+                per{"сек/{0}"}
             }
             week{
                 dnam{"апта"}
-                one{"{0} ап"}
-                other{"{0} ап"}
+                one{"{0} апт"}
+                other{"{0} апт"}
+                per{"апт/{0}"}
             }
             year{
                 dnam{"жыл"}
                 one{"{0} ж."}
                 other{"{0} ж."}
+                per{"ж/{0}"}
             }
         }
         electric{
@@ -1158,6 +1267,7 @@ ky{
                 dnam{"см"}
                 one{"{0} см"}
                 other{"{0} см"}
+                per{"см/{0}"}
             }
             decimeter{
                 dnam{"дм"}
@@ -1168,16 +1278,19 @@ ky{
                 dnam{"фут"}
                 one{"{0} фут"}
                 other{"{0} фут"}
+                per{"ф/{0}"}
             }
             inch{
                 dnam{"дюйм"}
                 one{"{0} дюйм"}
                 other{"{0} дюйм"}
+                per{"д/{0}"}
             }
             kilometer{
                 dnam{"км"}
                 one{"{0} км"}
                 other{"{0} км"}
+                per{"км/{0}"}
             }
             light-year{
                 dnam{"жарык жыл"}
@@ -1188,6 +1301,7 @@ ky{
                 dnam{"метр"}
                 one{"{0} м"}
                 other{"{0} м"}
+                per{"м/{0}"}
             }
             micrometer{
                 dnam{"µметр"}
@@ -1198,6 +1312,11 @@ ky{
                 dnam{"мил"}
                 one{"{0} мил"}
                 other{"{0} мил"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"миллиметр"}
@@ -1245,13 +1364,15 @@ ky{
             }
             gram{
                 dnam{"грамм"}
-                one{"{0} г"}
-                other{"{0} г"}
+                one{"{0} гр"}
+                other{"{0} гр"}
+                per{"гр/{0}"}
             }
             kilogram{
                 dnam{"килограмм"}
                 one{"{0} кг"}
                 other{"{0} кг"}
+                per{"кг/{0}"}
             }
             metric-ton{
                 dnam{"т"}
@@ -1272,6 +1393,7 @@ ky{
                 dnam{"унц."}
                 one{"{0} унц."}
                 other{"{0} унц."}
+                per{"унц/{0}"}
             }
             ounce-troy{
                 dnam{"тр. унц."}
@@ -1282,6 +1404,7 @@ ky{
                 dnam{"фунт"}
                 one{"{0} фунт"}
                 other{"{0} фунт"}
+                per{"фунт/{0}"}
             }
             ton{
                 dnam{"тонна"}
@@ -1328,7 +1451,7 @@ ky{
                 other{"{0} гПа"}
             }
             inch-hg{
-                dnam{"дүйм сымап мамычасы"}
+                dnam{"дюйм сымап мамычасы"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
             }
@@ -1338,9 +1461,9 @@ ky{
                 other{"{0} мбар"}
             }
             millimeter-of-mercury{
-                dnam{"с. м. мм"}
-                one{"{0} с. м. мм"}
-                other{"{0} с. м. мм"}
+                dnam{"мм.с.м."}
+                one{"{0} мм.с. м."}
+                other{"{0} мм.с. м."}
             }
             pound-per-square-inch{
                 dnam{"фчд"}
@@ -1361,13 +1484,18 @@ ky{
                 one{"{0} км/с"}
                 other{"{0} км/с"}
             }
+            knot{
+                dnam{"тн"}
+                one{"{0} тн"}
+                other{"{0} тн"}
+            }
             meter-per-second{
                 dnam{"метр/сек."}
                 one{"{0} м/сек."}
                 other{"{0} м/сек."}
             }
             mile-per-hour{
-                dnam{"мил/саат"}
+                dnam{"миль/саат"}
                 one{"{0} мил/с"}
                 other{"{0} мил/с"}
             }
@@ -1382,6 +1510,11 @@ ky{
                 dnam{"Ф. град"}
                 one{"{0}°F"}
                 other{"{0}°F"}
+            }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             kelvin{
                 dnam{"К град."}
@@ -1404,6 +1537,7 @@ ky{
                 dnam{"см³"}
                 one{"{0} см³"}
                 other{"{0} см³"}
+                per{"см³/{0}"}
             }
             cubic-foot{
                 dnam{"фут³"}
@@ -1424,6 +1558,7 @@ ky{
                 dnam{"м³"}
                 one{"{0} м³"}
                 other{"{0} м³"}
+                per{"м³/{0}"}
             }
             cubic-mile{
                 dnam{"мил³"}
@@ -1440,10 +1575,15 @@ ky{
                 one{"{0} чөй."}
                 other{"{0} чөй."}
             }
+            cup-metric{
+                dnam{"mcup"}
+                one{"{0} mc"}
+                other{"{0} mc"}
+            }
             deciliter{
-                dnam{"дал"}
-                one{"{0} дал"}
-                other{"{0} дал"}
+                dnam{"дл"}
+                one{"{0} дл"}
+                other{"{0} дл"}
             }
             fluid-ounce{
                 dnam{"с. унц."}
@@ -1454,6 +1594,7 @@ ky{
                 dnam{"гал"}
                 one{"{0} гал"}
                 other{"{0} гал"}
+                per{"гал/{0}"}
             }
             hectoliter{
                 dnam{"гл"}
@@ -1464,21 +1605,27 @@ ky{
                 dnam{"литр"}
                 one{"{0} л"}
                 other{"{0} л"}
+                per{"л/{0}"}
             }
             megaliter{
-                dnam{"Мл"}
-                one{"{0} Мл"}
-                other{"{0} Мл"}
+                dnam{"мгл"}
+                one{"{0} мгл"}
+                other{"{0} мгл"}
             }
             milliliter{
-                dnam{"мЛ"}
-                one{"{0} мЛ"}
-                other{"{0} мЛ"}
+                dnam{"мл"}
+                one{"{0} мл"}
+                other{"{0} мл"}
             }
             pint{
                 dnam{"пт"}
                 one{"{0} пт"}
                 other{"{0} пт"}
+            }
+            pint-metric{
+                dnam{"мпт"}
+                one{"{0} мпт"}
+                other{"{0} мпт"}
             }
             quart{
                 dnam{"квр"}

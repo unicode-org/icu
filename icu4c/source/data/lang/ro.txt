@@ -19,6 +19,9 @@ ro{
         colStrength{"Puterea ordonării"}
         collation{"ordine de sortare"}
         currency{"monedă"}
+        hc{"ciclu orar (12 sau 24)"}
+        lb{"stil de întrerupere a liniei"}
+        ms{"sistem de unități de măsură"}
         numbers{"numere"}
         timezone{"Fusul orar"}
         va{"Varianta locală"}
@@ -48,7 +51,7 @@ ro{
         ar{"arabă"}
         ar_001{"arabă standard modernă"}
         arc{"aramaică"}
-        arn{"araucaniană"}
+        arn{"mapuche"}
         arp{"arapaho"}
         arw{"arawak"}
         as{"asameză"}
@@ -70,6 +73,7 @@ ro{
         bez{"bena"}
         bfd{"bafut"}
         bg{"bulgară"}
+        bgn{"baluchi occidentală"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -295,6 +299,7 @@ ro{
         lo{"laoțiană"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"luri de nord"}
         lt{"lituaniană"}
         lu{"luba-katanga"}
         lua{"luba-lulua"}
@@ -343,18 +348,20 @@ ro{
         my{"birmaneză"}
         mye{"myene"}
         myv{"erzya"}
+        mzn{"mazanderani"}
         na{"nauru"}
         nap{"napolitană"}
         naq{"nama"}
         nb{"norvegiană bokmål"}
         nd{"ndebele de nord"}
         nds{"germana de jos"}
+        nds_NL{"saxona de jos"}
         ne{"nepaleză"}
         new{"newari"}
         ng{"ndonga"}
         nia{"nias"}
         niu{"niueană"}
-        nl{"olandeză"}
+        nl{"neerlandeză"}
         nl_BE{"flamandă"}
         nmg{"kwasio"}
         nn{"norvegiană nynorsk"}
@@ -397,7 +404,7 @@ ro{
         pt_BR{"portugheză braziliană"}
         pt_PT{"portugheză europeană"}
         qu{"quechua"}
-        quc{"kʼicheʼ"}
+        quc{"quiché"}
         raj{"rajasthani"}
         rap{"rapanui"}
         rar{"rarotongan"}
@@ -425,6 +432,7 @@ ro{
         scn{"siciliană"}
         sco{"scots"}
         sd{"sindhi"}
+        sdh{"kurdă de sud"}
         se{"sami de nord"}
         see{"seneca"}
         seh{"sena"}
@@ -518,6 +526,7 @@ ro{
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
+        wbp{"warlpiri"}
         wo{"wolof"}
         xal{"calmucă"}
         xh{"xhosa"}
@@ -701,6 +710,22 @@ ro{
             traditional{"sortare tradițională"}
             unihan{"Ordine de sortare a liniilor ideogramelor"}
         }
+        hc{
+            h11{"sistem cu 12 ore (0–11)"}
+            h12{"sistem cu 12 ore (0–12)"}
+            h23{"sistem cu 24 de ore (0–23)"}
+            h24{"sistem cu 24 de ore (1–24)"}
+        }
+        lb{
+            loose{"stil liber de întrerupere a liniei"}
+            normal{"stil normal de întrerupere a liniei"}
+            strict{"stil strict de întrerupere a liniei"}
+        }
+        ms{
+            metric{"sistemul metric"}
+            uksystem{"sistemul imperial de unități de măsură"}
+            ussystem{"sistemul american de unități de măsură"}
+        }
         numbers{
             arab{"cifre indo-arabe"}
             arabext{"cifre indo-arabe extinse"}
@@ -749,7 +774,7 @@ ro{
         SCOTLAND{"engleză standard scoțiană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"Limbă: {0}"}
         script{"Scriere: {0}"}
