@@ -801,7 +801,7 @@ sr{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.20.4"}
     codePatterns{
         language{"Језик: {0}"}
         script{"писмо: {0}"}

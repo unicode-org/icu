@@ -7,11 +7,11 @@
 // *
 // ***************************************************************************
 cy{
-    Version{"2.1.19.94"}
+    Version{"2.1.20.4"}
     durationUnits{
-        hm{"h.mm"}
-        hms{"h.mm.ss"}
-        ms{"m.ss"}
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
     }
     units{
         acceleration{

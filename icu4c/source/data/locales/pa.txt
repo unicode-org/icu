@@ -43,7 +43,6 @@ pa{
                 percentSign{"٪"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
-                timeSeparator{"٫"}
             }
         }
         default{"latn"}
@@ -230,7 +229,7 @@ pa{
         minimumGroupingDigits{"1"}
         native{"guru"}
     }
-    Version{"2.1.19.74"}
+    Version{"2.1.20.4"}
     calendar{
         generic{
             DateTimePatterns{

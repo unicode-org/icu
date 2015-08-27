@@ -7,11 +7,11 @@
 // *
 // ***************************************************************************
 et{
-    Version{"2.1.19.17"}
+    Version{"2.1.20.4"}
     durationUnits{
         hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
+        hms{"h:mm.ss"}
+        ms{"m.ss"}
     }
     units{
         acceleration{
