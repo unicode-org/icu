@@ -9,30 +9,30 @@
 kea{
     Countries{
         001{"Mundu"}
-        002{"Afrika"}
+        002{"Áfrika"}
         003{"Merka di Norti"}
         005{"Merka di Sul"}
         009{"Oseania"}
-        011{"Afrika Osidental"}
+        011{"Áfrika Osidental"}
         013{"Merka Sentral"}
-        014{"Afrika Oriental"}
-        015{"Norti di Afrika"}
-        017{"Afrika Sentral"}
-        018{"Sul di Afrika"}
+        014{"Áfrika Oriental"}
+        015{"Norti di Áfrika"}
+        017{"Áfrika Sentral"}
+        018{"Sul di Áfrika"}
         019{"Merkas"}
         021{"Norti di Merka"}
         029{"Karaibas"}
-        030{"Azia Oriental"}
-        034{"Sul di Azia"}
-        035{"Sudesti Aziatiku"}
+        030{"Ázia Oriental"}
+        034{"Sul di Ázia"}
+        035{"Sudesti Aziátiku"}
         039{"Europa di Sul"}
-        053{"Australazia"}
-        054{"Melanezia"}
-        057{"Rejiãu di Mikronezia"}
-        061{"Polinezia"}
-        142{"Azia"}
-        143{"Azia Sentral"}
-        145{"Azia Osidental"}
+        053{"Australázia"}
+        054{"Melanézia"}
+        057{"Rejiãu di Mikronézia"}
+        061{"Polinézia"}
+        142{"Ázia"}
+        143{"Ázia Sentral"}
+        145{"Ázia Osidental"}
         150{"Europa"}
         151{"Europa Oriental"}
         154{"Europa di Norti"}
@@ -68,8 +68,8 @@ kea{
         BL{"Sãu Bartolomeu"}
         BM{"Bermudas"}
         BN{"Brunei"}
-        BO{"Bolivia"}
-        BQ{"Karaibas olandes"}
+        BO{"Bolívia"}
+        BQ{"Karaibas Olandezas"}
         BR{"Brazil"}
         BS{"Baamas"}
         BT{"Butãu"}
@@ -88,7 +88,7 @@ kea{
         CL{"Xili"}
         CM{"Kamarõis"}
         CN{"Xina"}
-        CO{"Kulombia"}
+        CO{"Kolômbia"}
         CP{"Ilha Kliperton"}
         CR{"Kosta Rika"}
         CU{"Kuba"}
@@ -127,7 +127,7 @@ kea{
         GG{"Gernzi"}
         GH{"Gana"}
         GI{"Jibraltar"}
-        GL{"Gronelandia"}
+        GL{"Gronelándia"}
         GM{"Gambia"}
         GN{"Gine"}
         GP{"Guadalupi"}
@@ -138,11 +138,11 @@ kea{
         GU{"Guam"}
         GW{"Gine-Bisau"}
         GY{"Giana"}
-        HK{"Rejiãu Administrativu Special di Ong Kong"}
+        HK{"Rejiãu Administrativu Special di Hong Kong"}
         HM{"Ilha Heard i Ilhas McDonald"}
         HN{"Onduras"}
         HR{"Kroasia"}
-        HT{"Aiti"}
+        HT{"Aití"}
         HU{"Ungria"}
         IC{"Kanárias"}
         ID{"Indonezia"}
@@ -201,7 +201,7 @@ kea{
         MU{"Ilhas Maurisia"}
         MV{"Maldivas"}
         MW{"Malaui"}
-        MX{"Mexiku"}
+        MX{"Méxiku"}
         MY{"Malazia"}
         MZ{"Musambiki"}
         NA{"Namibia"}
@@ -209,7 +209,7 @@ kea{
         NE{"Nijer"}
         NF{"Ilhas Norfolk"}
         NG{"Nijeria"}
-        NI{"Nikaragua"}
+        NI{"Nikarágua"}
         NL{"Olanda"}
         NO{"Noruega"}
         NP{"Nepal"}
@@ -217,7 +217,7 @@ kea{
         NU{"Niue"}
         NZ{"Nova Zilandia"}
         OM{"Oman"}
-        PA{"Panama"}
+        PA{"Panamá"}
         PE{"Peru"}
         PF{"Polinezia Franseza"}
         PG{"Papua-Nova Gine"}
@@ -232,7 +232,7 @@ kea{
         PW{"Palau"}
         PY{"Paraguai"}
         QA{"Katar"}
-        QO{"Oseania Insular"}
+        QO{"Ilhas di Oseania"}
         RE{"Runion"}
         RO{"Romenia"}
         RS{"Servia"}
@@ -286,7 +286,7 @@ kea{
         VC{"Sãu Bisenti i Granadinas"}
         VE{"Vinizuela"}
         VG{"Ilhas Virjens Britanikas"}
-        VI{"Ilhas Virjens Merkanu"}
+        VI{"Ilhas Virjens Merkanas"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
         WF{"Ualis i Futuna"}
@@ -301,7 +301,7 @@ kea{
     }
     Countries%short{
         GB{"R.U."}
-        HK{"Ong Kong"}
+        HK{"Hong Kong"}
         MO{"Makau"}
         US{"S.U."}
     }
@@ -309,7 +309,8 @@ kea{
         CD{"Republika Dimokratika di Kongu"}
         CG{"Republika di Kongu"}
         CI{"Kosta di Marfin (Côte d’Ivoire)"}
+        FK{"Ilhas Falkland (Ilhas Malvinas)"}
         MK{"Masidonia (FYROM)"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.74"}
 }

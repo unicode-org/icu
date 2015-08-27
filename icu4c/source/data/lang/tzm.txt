@@ -46,7 +46,7 @@ tzm{
         ta{"Tatamilt"}
         th{"Taṭayt"}
         tr{"Taturkit"}
-        tzm{"Tamaziɣt"}
+        tzm{"Tamaziɣt n laṭlaṣ"}
         uk{"Tukranit"}
         ur{"Turdut"}
         vi{"Taviṭnamit"}
@@ -54,5 +54,5 @@ tzm{
         zh{"Tacinwit,Mandarin"}
         zu{"tazulut"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.14"}
 }

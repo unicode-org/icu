@@ -9,40 +9,40 @@
 fo{
     Countries{
         001{"heimur"}
-        002{"Africa"}
+        002{"Afrika"}
         003{"Norðuramerika"}
         005{"Suðuramerika"}
-        009{"Kyrrahavsoyggjarnar"}
+        009{"Osiania"}
         011{"Vesturafrika"}
-        013{"Sentralamerika"}
+        013{"Miðamerika"}
         014{"Eysturafrika"}
         015{"Norðurafrika"}
         017{"Miðafrika"}
-        018{"Suður Afrika"}
+        018{"sunnari partur av Afrika"}
         019{"Amerika"}
-        021{"Amerika norður Meksiko"}
+        021{"Amerika norðanfyri Meksiko"}
         029{"Karibia"}
         030{"Eysturasia"}
         034{"Suðurasia"}
-        035{"Suðureysturasia"}
+        035{"Útsynningsasia"}
         039{"Suðurevropa"}
-        053{"Avstralia og Nýsæland"}
+        053{"Avstralasia"}
         054{"Melanesia"}
-        057{"Mikronesiske regionen"}
+        057{"Mikronesi øki"}
         061{"Polynesia"}
         142{"Asia"}
-        143{"Sentralasia"}
+        143{"Miðasia"}
         145{"Vesturasia"}
         150{"Evropa"}
         151{"Eysturevropa"}
         154{"Norðurevropa"}
         155{"Vesturevropa"}
         419{"Latínamerika"}
-        AC{"Ascensionoyggjin"}
+        AC{"Ascension"}
         AD{"Andorra"}
         AE{"Sameindu Emirríkini"}
         AF{"Afganistan"}
-        AG{"Antigua og Barbuda"}
+        AG{"Antigua & Barbuda"}
         AI{"Anguilla"}
         AL{"Albania"}
         AM{"Armenia"}
@@ -50,59 +50,59 @@ fo{
         AO{"Angola"}
         AQ{"Antarktis"}
         AR{"Argentina"}
-        AS{"Amerikanska Sámoa"}
+        AS{"Amerikanska Samoa"}
         AT{"Eysturríki"}
         AU{"Avstralia"}
         AW{"Aruba"}
         AX{"Áland"}
-        AZ{"Aserbajdsjan"}
+        AZ{"Aserbadjan"}
         BA{"Bosnia-Hersegovina"}
         BB{"Barbados"}
         BD{"Bangladesj"}
         BE{"Belgia"}
         BF{"Burkina Faso"}
         BG{"Bulgaria"}
-        BH{"Bahrain"}
+        BH{"Barein"}
         BI{"Burundi"}
         BJ{"Benin"}
-        BL{"Saint Barthélemy"}
+        BL{"St-Barthélemy"}
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
         BQ{"Niðurlonds Karibia"}
-        BR{"Brasilia"}
-        BS{"Bahamas"}
+        BR{"Brasil"}
+        BS{"Bahamaoyggjar"}
         BT{"Butan"}
-        BV{"Bouvetoyggjin"}
+        BV{"Bouvetoyggj"}
         BW{"Botsvana"}
         BY{"Hvítarussland"}
         BZ{"Belis"}
         CA{"Kanada"}
-        CC{"Kokosoyggjarnar"}
-        CD{"Kongo-Kinshasa"}
+        CC{"Kokosoyggjar"}
+        CD{"Kongo, Dem. Lýðveldið"}
         CF{"Miðafrikalýðveldið"}
         CG{"Kongo"}
         CH{"Sveis"}
         CI{"Fílabeinsstrondin"}
-        CK{"Cooksoyggjarnar"}
+        CK{"Cooksoyggjar"}
         CL{"Kili"}
         CM{"Kamerun"}
         CN{"Kina"}
         CO{"Kolombia"}
-        CP{"Clippertonoyggjin"}
+        CP{"Clipperton"}
         CR{"Kosta Rika"}
         CU{"Kuba"}
-        CV{"Grønhøvdaoyggjarnar"}
+        CV{"Grønhøvdaoyggjar"}
         CW{"Curaçao"}
         CX{"Jólaoyggjin"}
         CY{"Kýpros"}
         CZ{"Kekkia"}
         DE{"Týskland"}
         DG{"Diego Garcia"}
-        DJ{"Djibouti"}
-        DK{"Danmørk"}
+        DJ{"Djibuti"}
+        DK{"Danmark"}
         DM{"Dominika"}
-        DO{"Domingo lýðveldið"}
+        DO{"Dominikalýðveldið"}
         DZ{"Algeria"}
         EA{"Ceuta og Melilla"}
         EC{"Ekvador"}
@@ -115,65 +115,65 @@ fo{
         EU{"Evropasamveldið"}
         FI{"Finnland"}
         FJ{"Fiji"}
-        FK{"Falklandsoyggjarnar"}
-        FM{"Mikronesia"}
+        FK{"Falklandsoyggjar"}
+        FM{"Mikronesiasamveldið"}
         FO{"Føroyar"}
         FR{"Frakland"}
         GA{"Gabon"}
-        GB{"Stóra Bretland"}
+        GB{"Stórabretland"}
         GD{"Grenada"}
         GE{"Georgia"}
-        GF{"Fransk Gujana"}
+        GF{"Franska Gujana"}
         GG{"Guernsey"}
-        GH{"Ghana"}
+        GH{"Gana"}
         GI{"Gibraltar"}
         GL{"Grønland"}
         GM{"Gambia"}
         GN{"Guinea"}
         GP{"Guadeloupe"}
-        GQ{"Ekvator Guinea"}
+        GQ{"Ekvatorguinea"}
         GR{"Grikkaland"}
-        GS{"Suðurgeorgia"}
+        GS{"Suðurgeorgia og Suðursandwichoyggjar"}
         GT{"Guatemala"}
         GU{"Guam"}
-        GW{"Guinea Bissau"}
+        GW{"Guinea-Bissau"}
         GY{"Gujana"}
-        HK{"Hongkong"}
-        HM{"Heard- og McDonald-oyggjarnar"}
+        HK{"Hong Kong SAR Kina"}
+        HM{"Heard og McDonaldoyggjar"}
         HN{"Honduras"}
         HR{"Kroatia"}
         HT{"Haiti"}
         HU{"Ungarn"}
-        IC{"Kanaríoyggjarnar"}
+        IC{"Kanariuoyggjar"}
         ID{"Indonesia"}
         IE{"Írland"}
         IL{"Ísrael"}
-        IM{"Mann"}
+        IM{"Isle of Man"}
         IN{"India"}
-        IO{"Bretsku Indiahavsoyggjarnar"}
+        IO{"Stóra Bretlands Indiahavoyggjar"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Ísland"}
         IT{"Italia"}
         JE{"Jersey"}
-        JM{"Jameika"}
-        JO{"Jordania"}
+        JM{"Jamaika"}
+        JO{"Jordan"}
         JP{"Japan"}
         KE{"Kenja"}
         KG{"Kirgisia"}
         KH{"Kambodja"}
         KI{"Kiribati"}
-        KM{"Komorooyggjarnar"}
-        KN{"Saint Kitts og Nevis"}
-        KP{"Norður-Korea"}
-        KR{"Suður-Korea"}
+        KM{"Komoroyggjar"}
+        KN{"St. Kitts & Nevis"}
+        KP{"Norðurkorea"}
+        KR{"Suðurkorea"}
         KW{"Kuvait"}
-        KY{"Caymanoyggjarnar"}
+        KY{"Caymanoyggjar"}
         KZ{"Kasakstan"}
         LA{"Laos"}
         LB{"Libanon"}
-        LC{"Saint Lusia"}
-        LI{"Liktenstein"}
+        LC{"St. Lusia"}
+        LI{"Liktinstein"}
         LK{"Sri Lanka"}
         LR{"Liberia"}
         LS{"Lesoto"}
@@ -185,29 +185,29 @@ fo{
         MC{"Monako"}
         MD{"Moldova"}
         ME{"Montenegro"}
-        MF{"Fransk Saint Martin"}
+        MF{"St-Martin"}
         MG{"Madagaskar"}
-        MH{"Marshalloyggjarnar"}
+        MH{"Marshalloyggjar"}
         MK{"Makedónia"}
         ML{"Mali"}
-        MM{"Burma"}
+        MM{"Myanmar (Burma)"}
         MN{"Mongolia"}
-        MO{"Makao"}
-        MP{"Norðurmarianoyggjarnar"}
+        MO{"Makao SAR Kina"}
+        MP{"Norðaru Mariuoyggjar"}
         MQ{"Martinique"}
         MR{"Móritania"}
         MS{"Montserrat"}
         MT{"Malta"}
         MU{"Móritius"}
-        MV{"Maldivuoyggjarnar"}
+        MV{"Maldivoyggjar"}
         MW{"Malavi"}
         MX{"Meksiko"}
-        MY{"Maleisia"}
+        MY{"Malaisia"}
         MZ{"Mosambik"}
         NA{"Namibia"}
-        NC{"Ný-Kaledonia"}
+        NC{"Nýkaledónia"}
         NE{"Niger"}
-        NF{"Norfolkoyggjin"}
+        NF{"Norfolksoyggj"}
         NG{"Nigeria"}
         NI{"Nikaragua"}
         NL{"Niðurlond"}
@@ -215,96 +215,99 @@ fo{
         NP{"Nepal"}
         NR{"Nauru"}
         NU{"Niue"}
-        NZ{"Ný Sæland"}
+        NZ{"Nýsæland"}
         OM{"Oman"}
         PA{"Panama"}
-        PE{"Perú"}
+        PE{"Peru"}
         PF{"Franska Polynesia"}
         PG{"Papua Nýguinea"}
         PH{"Filipsoyggjar"}
         PK{"Pakistan"}
         PL{"Pólland"}
         PM{"Saint Pierre og Miquelon"}
-        PN{"Pitcairn"}
-        PR{"Puerto Rico"}
-        PS{"Palestinskt territorium"}
+        PN{"Pitcairnoyggjar"}
+        PR{"Puerto Riko"}
+        PS{"Palestinskt landøki"}
         PT{"Portugal"}
         PW{"Palau"}
-        PY{"Paraguei"}
+        PY{"Paraguai"}
         QA{"Katar"}
+        QO{"fjarskoti Osiania"}
         RE{"Réunion"}
         RO{"Rumenia"}
         RS{"Serbia"}
         RU{"Russland"}
         RW{"Ruanda"}
-        SA{"Saudi-Arábia"}
-        SB{"Sálomonoyggjarnar"}
-        SC{"Seyskelloyggjarnar"}
-        SD{"Norðursudan"}
+        SA{"Saudiarabia"}
+        SB{"Salomonoyggjar"}
+        SC{"Seyskelloyggjar"}
+        SD{"Sudan"}
         SE{"Svøríki"}
         SG{"Singapor"}
-        SH{"Saint Helena"}
+        SH{"St. Helena"}
         SI{"Slovenia"}
-        SJ{"Svalbard og Jan Mayen"}
+        SJ{"Svalbard & Jan Mayen"}
         SK{"Slovakia"}
-        SL{"Sierra Leone"}
+        SL{"Sierra Leona"}
         SM{"San Marino"}
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
         SS{"Suðursudan"}
-        ST{"Sao Tome og Prinsipi"}
+        ST{"Sao Tome & Prinsipi"}
         SV{"El Salvador"}
-        SX{"Niðurlonds Saint Martin"}
-        SY{"Syria"}
+        SX{"Sint Maarten"}
+        SY{"Sýria"}
         SZ{"Svasiland"}
         TA{"Tristan da Cunha"}
-        TC{"Turks- og Caicosoyggjarnar"}
+        TC{"Turks- og Caicosoyggjar"}
         TD{"Kjad"}
+        TF{"Fronsku sunnaru landaøki"}
         TG{"Togo"}
-        TH{"Teiland"}
+        TH{"Tailand"}
         TJ{"Tadsjikistan"}
         TK{"Tokelau"}
-        TL{"Eystur-Timor"}
+        TL{"Eysturtimor"}
         TM{"Turkmenistan"}
         TN{"Tunesia"}
         TO{"Tonga"}
         TR{"Turkaland"}
-        TT{"Trinidad og Tobago"}
+        TT{"Trinidad & Tobago"}
         TV{"Tuvalu"}
-        TW{"Teivan"}
+        TW{"Taivan"}
         TZ{"Tansania"}
-        UA{"Ukreina"}
+        UA{"Ukraina"}
         UG{"Uganda"}
+        UM{"Sambandsríki Amerikas fjarskotnu oyggjar"}
         US{"Sambandsríki Amerika"}
-        UY{"Uruguei"}
+        UY{"Uruguai"}
         UZ{"Usbekistan"}
-        VA{"Vatikan"}
-        VC{"Saint Vinsent og Grenadinoyggjar"}
+        VA{"Vatikanbýur"}
+        VC{"St. Vinsent & Grenadinoyggjar"}
         VE{"Venesuela"}
-        VG{"Stóra Bretlands Jómfrúoyggjarnar"}
-        VI{"Sambandsríki Amerikas Jómfrúoyggjarnar"}
-        VN{"Vietnam"}
+        VG{"Stóra Bretlands Jomfrúoyggjar"}
+        VI{"Sambandsríki Amerikas Jomfrúoyggjar"}
+        VN{"Vjetnam"}
         VU{"Vanuatu"}
-        WF{"Wallis og Futuna"}
-        WS{"Sámoa"}
+        WF{"Wallis- og Futunaoyggjar"}
+        WS{"Samoa"}
         XK{"Kosovo"}
         YE{"Jemen"}
         YT{"Mayotte"}
-        ZA{"Suðurafrikalýðveldið"}
+        ZA{"Suðurafrika"}
         ZM{"Sambia"}
         ZW{"Simbabvi"}
-        ZZ{"(ukendt område)"}
+        ZZ{"ókent øki"}
     }
     Countries%short{
-        GB{"Stóra Bretland"}
-        HK{"Hongkong"}
+        GB{"UK"}
+        HK{"Hong Kong"}
         MO{"Makao"}
         PS{"Palestina"}
         US{"USA"}
     }
     Countries%variant{
-        CG{"Kongo-Brazzaville"}
+        MK{"Makedónia (FJM)"}
     }
-    Version{"2.1.15.93"}
+    Version{"2.1.19.17"}
 }

@@ -82,7 +82,7 @@ lb{
         CF{"Zentralafrikanesch Republik"}
         CG{"Kongo-Brazzaville"}
         CH{"Schwäiz"}
-        CI{"Elfebeeküst"}
+        CI{"Côte d’Ivoire"}
         CK{"Cookinselen"}
         CL{"Chile"}
         CM{"Kamerun"}
@@ -308,8 +308,8 @@ lb{
     Countries%variant{
         CD{"Kongo (Demokratesch Republik)"}
         CG{"Kongo (Republik)"}
-        CI{"Côte d’Ivoire"}
+        CI{"Elfebeeküst"}
         MK{"Mazedonien (EJR)"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.14"}
 }

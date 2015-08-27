@@ -19,6 +19,9 @@ lt{
         colStrength{"Rikiavimo intensyvumas"}
         collation{"rikiavimas"}
         currency{"valiuta"}
+        hc{"valandų ciklas (12 ir 24)"}
+        lb{"teksto laužymo stilius"}
+        ms{"matų sistema"}
         numbers{"skaičiai"}
         timezone{"Laiko juosta"}
         va{"Lokalės variantas"}
@@ -67,7 +70,6 @@ lt{
         awa{"avadhi"}
         ay{"aimarų"}
         az{"azerbaidžaniečių"}
-        azb{"pietų Azerbaidžano"}
         ba{"baškirų"}
         bal{"baluči"}
         ban{"balinezų"}
@@ -84,6 +86,7 @@ lt{
         bfd{"bafutų"}
         bfq{"badaga"}
         bg{"bulgarų"}
+        bgn{"vakarų beludžių"}
         bho{"baučpuri"}
         bi{"bislama"}
         bik{"bikolų"}
@@ -343,6 +346,7 @@ lt{
         lo{"laosiečių"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"šiaurės luri"}
         lt{"lietuvių"}
         ltg{"latgalių"}
         lu{"luba katanga"}
@@ -404,6 +408,7 @@ lt{
         nb{"Norvegijos rašytinė – būkmolų"}
         nd{"šiaurės ndebelų"}
         nds{"Žemutinės Vokietijos"}
+        nds_NL{"Žemutinės Saksonijos (Nyderlandai)"}
         ne{"nepaliečių"}
         new{"nevari"}
         ng{"ndongų"}
@@ -497,6 +502,7 @@ lt{
         sco{"škotų"}
         sd{"sindų"}
         sdc{"sasaresų sardinų"}
+        sdh{"pietų kurdų"}
         se{"šiaurės samių"}
         see{"senecų"}
         seh{"senų"}
@@ -607,6 +613,7 @@ lt{
         wal{"valamo"}
         war{"varai"}
         was{"vašo"}
+        wbp{"valrpiri"}
         wo{"volofų"}
         wuu{"kinų kalbos vu tarmė"}
         xal{"kalmukų"}
@@ -892,6 +899,22 @@ lt{
             unihan{"Šaknies ženklų ir brūkšnių rūšiavimo tvarka"}
             zhuyin{"Zhuyin rikiavimo tvarka"}
         }
+        hc{
+            h11{"12 valandų sistema (0–11)"}
+            h12{"12 valandų sistema (1–12)"}
+            h23{"24 valandų sistema (0–23)"}
+            h24{"24 valandų sistema (1–24)"}
+        }
+        lb{
+            loose{"laisvas teksto laužymo stilius"}
+            normal{"įprastas teksto laužymo stilius"}
+            strict{"griežtas teksto laužymo stilius"}
+        }
+        ms{
+            metric{"metrinė sistema"}
+            uksystem{"angliška matų sistema"}
+            ussystem{"amerikietiška matų sistema"}
+        }
         numbers{
             arab{"arabų-indų skaitmenys"}
             arabext{"išplėstiniai arabų-indų skaitmenys"}
@@ -990,7 +1013,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}

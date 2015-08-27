@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fil{
-    Version{"2.1.15.60"}
+    Version{"2.1.19.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -23,29 +23,34 @@ fil{
             meter-per-second-squared{
                 dnam{"metro kada segundo kwadrado"}
                 one{"{0} metro kada segundo kwadrado"}
-                other{"{0} metro kada segundo kwadrado"}
+                other{"{0} na metro kada segundo kwadrado"}
             }
         }
         angle{
             arc-minute{
                 dnam{"arcminutes"}
-                one{"{0} minute"}
-                other{"{0} minutes"}
+                one{"{0} arcminute"}
+                other{"{0} na arcminute"}
             }
             arc-second{
                 dnam{"arcseconds"}
-                one{"{0} second"}
-                other{"{0} seconds"}
+                one{"{0} arcsecond"}
+                other{"{0} na arcsecond"}
             }
             degree{
                 dnam{"degrees"}
                 one{"{0} degree"}
-                other{"{0} degrees"}
+                other{"{0} na degree"}
             }
             radian{
                 dnam{"radians"}
                 one{"{0} radian"}
-                other{"{0} radians"}
+                other{"{0} na radian"}
+            }
+            revolution{
+                dnam{"pag-ikot"}
+                one{"{0} pag-ikot"}
+                other{"{0} na pag-ikot"}
             }
         }
         area{
@@ -56,122 +61,142 @@ fil{
             }
             hectare{
                 dnam{"hektarya"}
-                one{"{0} ektarya"}
-                other{"{0} ektarya"}
+                one{"{0} hektarya"}
+                other{"{0} na hektarya"}
             }
             square-centimeter{
                 dnam{"sentimetro kwadrado"}
-                one{"{0} sentimetro kwadrado"}
-                other{"{0} sentimetro kwadrado"}
+                one{"{0} sentimetro kwadrado"}
+                other{"{0} na sentimetro kwadrado"}
+                per{"{0} kada sentimetro kwadrado"}
             }
             square-foot{
                 dnam{"talampakan parisukat"}
                 one{"{0} talampakan parisukat"}
-                other{"{0} talampakan parisukat"}
+                other{"{0} na talampakan parisukat"}
             }
             square-inch{
                 dnam{"pulgada kwadrado"}
                 one{"{0} pulgada kwadrado"}
-                other{"{0} pulgada kwadrado"}
+                other{"{0} na pulgada kwadrado"}
+                per{"{0} kada pulgada kwadrado"}
             }
             square-kilometer{
                 dnam{"kilometro kwadrado"}
                 one{"{0} kilometro kwadrado"}
-                other{"{0} square kilometer"}
+                other{"{0} na kilometro kwadrado"}
             }
             square-meter{
                 dnam{"metro kwadrado"}
                 one{"{0} metro kwadrado"}
-                other{"{0} square meter"}
+                other{"{0} na metro kwadrado"}
+                per{"{0} kada metro kwadrado"}
             }
             square-mile{
                 dnam{"milya kwadrado"}
-                one{"{0} milya parisukat"}
-                other{"{0} milya parisukat"}
+                one{"{0} milya kwadrado"}
+                other{"{0} na milya kwadrado"}
             }
             square-yard{
-                dnam{"yarda parisukat"}
-                one{"{0} yarda parisukat"}
-                other{"{0} yarda parisukat"}
+                dnam{"yardang parisukat"}
+                one{"{0} yardang parisukat"}
+                other{"{0} na yardang parisukat"}
             }
         }
         compound{
-            per{"{0} bawat {1}"}
+            per{"{0} kada {1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"litro kada 100 kilometro"}
+                one{"{0} litro kada 100 kilometro"}
+                other{"{0} na litro kada 100 kilometer"}
+            }
             liter-per-kilometer{
                 dnam{"litro kada kilometro"}
-                one{"{0} litro kada kilometro"}
+                one{"{0} litro kada kilometro"}
                 other{"{0} litro kada kilometro"}
             }
             mile-per-gallon{
                 dnam{"milya kada galon"}
-                one{"{0} milya kada galon"}
-                other{"{0} milya kada galon"}
+                one{"{0} milya kada galon"}
+                other{"{0} na milya kada galon"}
             }
+        }
+        coordinate{
+            east{"{0}S"}
+            north{"{0}H"}
+            south{"{0}T"}
+            west{"{0}K"}
         }
         digital{
             bit{
                 dnam{"bits"}
                 one{"{0} bit"}
-                other{"{0} bits"}
+                other{"{0} na bit"}
             }
             byte{
                 dnam{"bytes"}
                 one{"{0} byte"}
-                other{"{0} byte"}
+                other{"{0} na byte"}
             }
             gigabit{
                 dnam{"gigabits"}
                 one{"{0} gigabit"}
-                other{"{0} gigabits"}
+                other{"{0} na gigabit"}
             }
             gigabyte{
                 dnam{"gigabytes"}
                 one{"{0} gigabyte"}
-                other{"{0} gigabytes"}
+                other{"{0} na gigabyte"}
             }
             kilobit{
                 dnam{"kilobits"}
                 one{"{0} kilobit"}
-                other{"{0} kilobits"}
+                other{"{0} na kilobit"}
             }
             kilobyte{
                 dnam{"kilobytes"}
                 one{"{0} kilobyte"}
-                other{"{0} kilobytes"}
+                other{"{0} na kilobyte"}
             }
             megabit{
                 dnam{"megabits"}
                 one{"{0} megabit"}
-                other{"{0} megabits"}
+                other{"{0} na megabit"}
             }
             megabyte{
                 dnam{"megabytes"}
                 one{"{0} megabyte"}
-                other{"{0} megabytes"}
+                other{"{0} na megabyte"}
             }
             terabit{
                 dnam{"terabits"}
                 one{"{0} terabit"}
-                other{"{0} terabits"}
+                other{"{0} na terabit"}
             }
             terabyte{
                 dnam{"terabytes"}
                 one{"{0} terabyte"}
-                other{"{0} terabytes"}
+                other{"{0} na terabyte"}
             }
         }
         duration{
+            century{
+                dnam{"mga siglo"}
+                one{"{0} siglo"}
+                other{"{0} siglo"}
+            }
             day{
                 dnam{"araw"}
                 one{"{0} araw"}
-                other{"{0} araw"}
+                other{"{0} na araw"}
+                per{"{0} kada araw"}
             }
             hour{
-                dnam{"oras"}
+                dnam{"mga oras"}
                 one{"{0} oras"}
-                other{"{0} oras"}
+                other{"{0} na oras"}
                 per{"{0} kada oras"}
             }
             microsecond{
@@ -185,14 +210,16 @@ fil{
                 other{"{0} milisegundo"}
             }
             minute{
-                dnam{"minuto"}
+                dnam{"mga minuto"}
                 one{"{0} minuto"}
-                other{"{0} minuto"}
+                other{"{0} na minuto"}
+                per{"{0} kada minuto"}
             }
             month{
-                dnam{"buwan"}
+                dnam{"mga buwan"}
                 one{"{0} buwan"}
                 other{"{0} buwan"}
+                per{"{0} kada buwan"}
             }
             nanosecond{
                 dnam{"nanosegundo"}
@@ -200,95 +227,97 @@ fil{
                 other{"{0} nanosegundo"}
             }
             second{
-                dnam{"segundo"}
+                dnam{"mga segundo"}
                 one{"{0} segundo"}
-                other{"{0} segundo"}
+                other{"{0} na segundo"}
                 per{"{0} kada segundo"}
             }
             week{
-                dnam{"linggo"}
+                dnam{"mga linggo"}
                 one{"{0} linggo"}
-                other{"{0} linggo"}
+                other{"{0} na linggo"}
+                per{"{0} kada linggo"}
             }
             year{
-                dnam{"taon"}
+                dnam{"mga taon"}
                 one{"{0} taon"}
-                other{"{0} taon"}
+                other{"{0} na taon"}
+                per{"{0} kada taon"}
             }
         }
         electric{
             ampere{
                 dnam{"amperes"}
                 one{"{0} ampere"}
-                other{"{0} amperes"}
+                other{"{0} na ampere"}
             }
             milliampere{
                 dnam{"milliamperes"}
                 one{"{0} milliampere"}
-                other{"{0} milliamperes"}
+                other{"{0} na milliampere"}
             }
             ohm{
                 dnam{"ohms"}
                 one{"{0} ohm"}
-                other{"{0} ohms"}
+                other{"{0} na ohm"}
             }
             volt{
                 dnam{"volts"}
                 one{"{0} volt"}
-                other{"{0} volts"}
+                other{"{0} na volt"}
             }
         }
         energy{
             calorie{
                 dnam{"calories"}
                 one{"{0} calorie"}
-                other{"{0} calories"}
+                other{"{0} na calories"}
             }
             foodcalorie{
                 dnam{"Calories"}
                 one{"{0} Calorie"}
-                other{"{0} Calories"}
+                other{"{0} na Calories"}
             }
             joule{
                 dnam{"joules"}
                 one{"{0} joule"}
-                other{"{0} joules"}
+                other{"{0} na joules"}
             }
             kilocalorie{
                 dnam{"kilocalories"}
                 one{"{0} kilocalorie"}
-                other{"{0} kilocalories"}
+                other{"{0} na kilocalorie"}
             }
             kilojoule{
                 dnam{"kilojoules"}
                 one{"{0} kilojoule"}
-                other{"{0} kilojoules"}
+                other{"{0} na kilojoule"}
             }
             kilowatt-hour{
                 dnam{"kilowatt-hours"}
                 one{"{0} kilowatt hour"}
-                other{"{0} kilowatt-hours"}
+                other{"{0} na kilowatt-hour"}
             }
         }
         frequency{
             gigahertz{
                 dnam{"gigahertz"}
                 one{"{0} gigahertz"}
-                other{"{0} gigahertz"}
+                other{"{0} na gigahertz"}
             }
             hertz{
                 dnam{"hertz"}
                 one{"{0} hertz"}
-                other{"{0} hertz"}
+                other{"{0} na hertz"}
             }
             kilohertz{
                 dnam{"kilohertz"}
                 one{"{0} kilohertz"}
-                other{"{0} kilohertz"}
+                other{"{0} na kilohertz"}
             }
             megahertz{
                 dnam{"megahertz"}
-                one{"{0} megahertz"}
+                one{"{0} na megahertz"}
                 other{"{0} megahertz"}
             }
         }
@@ -296,42 +325,47 @@ fil{
             astronomical-unit{
                 dnam{"astronomical units"}
                 one{"{0} astronomical unit"}
-                other{"{0} astronomical units"}
+                other{"{0} na astronomical units"}
             }
             centimeter{
                 dnam{"sentimetro"}
                 one{"{0} sentimetro"}
                 other{"{0} sentimetro"}
+                per{"{0} kada sentimetro"}
             }
             decimeter{
                 dnam{"decimetro"}
                 one{"{0} decimetro"}
-                other{"{0} decimetro"}
+                other{"{0} na decimetro"}
             }
             foot{
                 dnam{"talampakan"}
                 one{"{0} talampakan"}
-                other{"{0} talampakan"}
+                other{"{0} na talampakan"}
+                per{"{0} kada talampakan"}
             }
             inch{
                 dnam{"pulgada"}
                 one{"{0} pulgada"}
-                other{"{0} pulgada"}
+                other{"{0} na pulgada"}
+                per{"{0} kada pulgada"}
             }
             kilometer{
                 dnam{"kilometro"}
                 one{"{0} kilometro"}
-                other{"{0} kilometro"}
+                other{"{0} na kilometro"}
+                per{"{0} kada kilometro"}
             }
             light-year{
                 dnam{"light year"}
                 one{"{0} light year"}
-                other{"{0} light year"}
+                other{"{0} na light year"}
             }
             meter{
                 dnam{"metro"}
                 one{"{0} metro"}
-                other{"{0} metro"}
+                other{"{0} na metro"}
+                per{"{0} kada metro"}
             }
             micrometer{
                 dnam{"micrometro"}
@@ -341,12 +375,17 @@ fil{
             mile{
                 dnam{"milya"}
                 one{"{0} milya"}
-                other{"{0} milya"}
+                other{"{0} na milya"}
+            }
+            mile-scandinavian{
+                dnam{"milya-scandinavian"}
+                one{"{0} milya-scandinavian"}
+                other{"{0} na milya-scandinavian"}
             }
             millimeter{
                 dnam{"milimetro"}
                 one{"{0} milimetro"}
-                other{"{0} milimetro"}
+                other{"{0} na milimetro"}
             }
             nanometer{
                 dnam{"nanometro"}
@@ -371,14 +410,14 @@ fil{
             yard{
                 dnam{"yarda"}
                 one{"{0} yarda"}
-                other{"{0} yarda"}
+                other{"{0} na yarda"}
             }
         }
         light{
             lux{
                 dnam{"lux"}
                 one{"{0} lux"}
-                other{"{0} lux"}
+                other{"{0} na lux"}
             }
         }
         mass{
@@ -390,17 +429,19 @@ fil{
             gram{
                 dnam{"gramo"}
                 one{"{0} gramo"}
-                other{"{0} gramo"}
+                other{"{0} na gramo"}
+                per{"{0} kada gramo"}
             }
             kilogram{
                 dnam{"kilo"}
                 one{"{0} kilo"}
                 other{"{0} kilo"}
+                per{"{0} kada kilo"}
             }
             metric-ton{
-                dnam{"metrikong tonelada"}
-                one{"{0} metrikong tonelada"}
-                other{"{0} metrikong tonelada"}
+                dnam{"toneladang metriko"}
+                one{"{0} toneladang metriko"}
+                other{"{0} na toneladang metriko"}
             }
             microgram{
                 dnam{"micrograms"}
@@ -413,19 +454,21 @@ fil{
                 other{"{0} milligrams"}
             }
             ounce{
-                dnam{"ounce"}
-                one{"{0} ounce"}
-                other{"{0} ounce"}
+                dnam{"onsa"}
+                one{"{0} onsa"}
+                other{"{0} na onsa"}
+                per{"{0} kada onsa"}
             }
             ounce-troy{
-                dnam{"troy ounces"}
-                one{"{0} troy ounce"}
-                other{"{0} troy ounces"}
+                dnam{"troy na onsa"}
+                one{"{0} troy na onsa"}
+                other{"{0} na troy na onsa"}
             }
             pound{
-                dnam{"pound"}
-                one{"{0} pound"}
-                other{"{0} pound"}
+                dnam{"libra"}
+                one{"{0} libra"}
+                other{"{0} na libra"}
+                per{"{0} kada libra"}
             }
             ton{
                 dnam{"tonelada"}
@@ -437,7 +480,7 @@ fil{
             gigawatt{
                 dnam{"gigawatts"}
                 one{"{0} gigawatt"}
-                other{"{0} gigawatts"}
+                other{"{0} na gigawatt"}
             }
             horsepower{
                 dnam{"horsepower"}
@@ -452,58 +495,63 @@ fil{
             megawatt{
                 dnam{"megawatts"}
                 one{"{0} megawatt"}
-                other{"{0} megawatts"}
+                other{"{0} na megawatt"}
             }
             milliwatt{
                 dnam{"milliwatts"}
                 one{"{0} milliwatt"}
-                other{"{0} milliwatts"}
+                other{"{0} na milliwatt"}
             }
             watt{
                 dnam{"watts"}
                 one{"{0} watt"}
-                other{"{0} watts"}
+                other{"{0} na watt"}
             }
         }
         pressure{
             hectopascal{
-                dnam{"hectopascal"}
+                dnam{"hectopascals"}
                 one{"{0} hectopascal"}
-                other{"{0} hectopascal"}
+                other{"{0} na hectopascal"}
             }
             inch-hg{
-                dnam{"inch of mercury"}
+                dnam{"pulgada ng asoge"}
                 one{"{0} pulgada ng asoge"}
-                other{"{0} inch of mercury"}
+                other{"{0} na pulgada ng asoge"}
             }
             millibar{
                 dnam{"millibar"}
                 one{"{0} millibar"}
-                other{"{0} millibar"}
+                other{"{0} na millibar"}
             }
             millimeter-of-mercury{
                 dnam{"milimetro ng asoge"}
-                one{"{0} milimetro ng asoge"}
-                other{"{0} milimetro ng asoge"}
+                one{"{0} millimetro ng mercury"}
+                other{"{0} na milimetro ng asoge"}
             }
             pound-per-square-inch{
-                dnam{"libra kada isang pulgadang parisukat"}
-                one{"{0} libra bawa't isang pulgadang parisukat"}
-                other{"{0} libra bawa't isang pulgadang parisukat"}
+                dnam{"libra kada pulgadang parisukat"}
+                one{"{0} libra kada pulgadang parisukat"}
+                other{"{0} na libra kada pulgadang parisukat"}
             }
         }
         proportion{
             karat{
                 dnam{"karat"}
                 one{"{0} karat"}
-                other{"{0} karat"}
+                other{"{0} na karat"}
             }
         }
         speed{
             kilometer-per-hour{
                 dnam{"kilometro kada oras"}
                 one{"{0} kilometro kada oras"}
-                other{"{0} kilometro kada oras"}
+                other{"{0} na kilometro kada oras"}
+            }
+            knot{
+                dnam{"knot"}
+                one{"{0} knot"}
+                other{"{0} na knot"}
             }
             meter-per-second{
                 dnam{"metro kada segundo"}
@@ -527,6 +575,11 @@ fil{
                 one{"{0} degree Fahrenheit"}
                 other{"{0} degrees Fahrenheit"}
             }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"degrees kelvin"}
                 one{"{0} degree kelvin"}
@@ -547,7 +600,8 @@ fil{
             cubic-centimeter{
                 dnam{"kubiko sentimetro"}
                 one{"{0} kubiko sentimetro"}
-                other{"{0} kubiko sentimetro"}
+                other{"{0} na sentimetro kubiko"}
+                per{"{0} kada sentimetro kubiko"}
             }
             cubic-foot{
                 dnam{"kubiko talampakan"}
@@ -567,7 +621,8 @@ fil{
             cubic-meter{
                 dnam{"kubiko metro"}
                 one{"{0} kubiko metro"}
-                other{"{0} kubiko metro"}
+                other{"{0} na metro kubiko"}
+                per{"{0} kada metro kubiko"}
             }
             cubic-mile{
                 dnam{"kubiko milya"}
@@ -576,28 +631,34 @@ fil{
             }
             cubic-yard{
                 dnam{"kubiko yarda"}
-                one{"{0} kubiko yarda"}
+                one{"{0} kubiko yarda"}
                 other{"{0} kubiko yarda"}
             }
             cup{
                 dnam{"tasa"}
                 one{"{0} tasa"}
-                other{"{0} tasa"}
+                other{"{0} na tasa"}
+            }
+            cup-metric{
+                dnam{"metric cups"}
+                one{"{0} metric cup"}
+                other{"{0} na metric cup"}
             }
             deciliter{
                 dnam{"decilitro"}
                 one{"{0} decilitro"}
-                other{"{0} decilitro"}
+                other{"{0} na decilitro"}
             }
             fluid-ounce{
                 dnam{"fluid ounces"}
                 one{"{0} fluid ounce"}
-                other{"{0} fluid ounces"}
+                other{"{0} na fluid ounce"}
             }
             gallon{
                 dnam{"galon"}
                 one{"{0} galon"}
-                other{"{0} galon"}
+                other{"{0} na galon"}
+                per{"{0} kada galon"}
             }
             hectoliter{
                 dnam{"hektolitro"}
@@ -607,7 +668,8 @@ fil{
             liter{
                 dnam{"litro"}
                 one{"{0} litro"}
-                other{"{0} litro"}
+                other{"{0} na litro"}
+                per{"{0} kada litro"}
             }
             megaliter{
                 dnam{"megalitro"}
@@ -624,20 +686,25 @@ fil{
                 one{"{0} pint"}
                 other{"{0} pints"}
             }
+            pint-metric{
+                dnam{"metric pints"}
+                one{"{0} metric pint"}
+                other{"{0} na metric pint"}
+            }
             quart{
                 dnam{"quarts"}
                 one{"{0} quart"}
-                other{"{0} quarts"}
+                other{"{0} na quarts"}
             }
             tablespoon{
                 dnam{"kutsara"}
                 one{"{0} kutsara"}
-                other{"{0} kutsara"}
+                other{"{0} na kutsara"}
             }
             teaspoon{
                 dnam{"kutsarita"}
                 one{"{0} kutsarita"}
-                other{"{0} kutsarita"}
+                other{"{0} na kutsarita"}
             }
         }
     }
@@ -691,16 +758,29 @@ fil{
         compound{
             per{"{0}/{1}"}
         }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                one{"{0}L/100km"}
+                other{"{0}L/100km"}
+            }
+        }
+        coordinate{
+            east{"{0}S"}
+            north{"{0}H"}
+            south{"{0}T"}
+            west{"{0}K"}
+        }
         duration{
             day{
                 dnam{"araw"}
                 one{"{0} araw"}
-                other{"{0}d"}
+                other{"{0} na araw"}
             }
             hour{
                 dnam{"oras"}
-                one{"{0}h"}
-                other{"{0}h"}
+                one{"{0} oras"}
+                other{"{0} oras"}
             }
             millisecond{
                 dnam{"mseg"}
@@ -714,8 +794,8 @@ fil{
             }
             month{
                 dnam{"buwan"}
-                one{"{0}m"}
-                other{"{0}m"}
+                one{"{0}buwan"}
+                other{"{0} buwan"}
             }
             second{
                 dnam{"seg."}
@@ -723,14 +803,14 @@ fil{
                 other{"{0}s"}
             }
             week{
-                dnam{"wk"}
-                one{"{0}w"}
-                other{"{0}w"}
+                dnam{"linggo"}
+                one{"{0}linggo"}
+                other{"{0}linggo"}
             }
             year{
-                dnam{"yr"}
-                one{"{0}y"}
-                other{"{0}y"}
+                dnam{"taon"}
+                one{"{0}taon"}
+                other{"{0}taon"}
             }
         }
         length{
@@ -845,8 +925,8 @@ fil{
         temperature{
             celsius{
                 dnam{"⁰C"}
-                one{"{0}°"}
-                other{"{0}°"}
+                one{"{0}°C"}
+                other{"{0}°C"}
             }
             fahrenheit{
                 one{"{0}°F"}
@@ -864,8 +944,8 @@ fil{
             }
             liter{
                 dnam{"litro"}
-                one{"{0}l"}
-                other{"{0}l"}
+                one{"{0}L"}
+                other{"{0}L"}
             }
         }
     }
@@ -885,23 +965,28 @@ fil{
         angle{
             arc-minute{
                 dnam{"arcmins"}
-                one{"{0} min"}
-                other{"{0} arcmins"}
+                one{"{0} arcmin"}
+                other{"{0} na arcmin"}
             }
             arc-second{
                 dnam{"arcsecs"}
-                one{"{0} sec"}
-                other{"{0} secs"}
+                one{"{0} arcsec"}
+                other{"{0} na arcsec"}
             }
             degree{
                 dnam{"degrees"}
                 one{"{0} deg"}
-                other{"{0} deg"}
+                other{"{0} na deg"}
             }
             radian{
                 dnam{"radians"}
                 one{"{0} rad"}
-                other{"{0} rad"}
+                other{"{0} na rad"}
+            }
+            revolution{
+                dnam{"rev"}
+                one{"{0} rev"}
+                other{"{0} na rev"}
             }
         }
         area{
@@ -919,6 +1004,7 @@ fil{
                 dnam{"cm²"}
                 one{"{0} cm²"}
                 other{"{0} cm²"}
+                per{"{0} kada cm²"}
             }
             square-foot{
                 dnam{"sq feet"}
@@ -929,6 +1015,7 @@ fil{
                 dnam{"pulgada²"}
                 one{"{0} in²"}
                 other{"{0} in²"}
+                per{"{0} kada in²"}
             }
             square-kilometer{
                 dnam{"km²"}
@@ -936,9 +1023,10 @@ fil{
                 other{"{0} km²"}
             }
             square-meter{
-                dnam{"meter²"}
+                dnam{"metro²"}
                 one{"{0} m²"}
                 other{"{0} m²"}
+                per{"{0} kada m²"}
             }
             square-mile{
                 dnam{"sq mile"}
@@ -955,16 +1043,27 @@ fil{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                one{"{0} na L/100km"}
+                other{"{0} na L/100km"}
+            }
             liter-per-kilometer{
                 dnam{"litro/km"}
                 one{"{0} L/km"}
                 other{"{0} L/km"}
             }
             mile-per-gallon{
-                dnam{"milya kada galon"}
+                dnam{"milya/gal"}
                 one{"{0} mpg"}
-                other{"{0} mpg"}
+                other{"{0} na mpg"}
             }
+        }
+        coordinate{
+            east{"{0}S"}
+            north{"{0}H"}
+            south{"{0}T"}
+            west{"{0}K"}
         }
         digital{
             bit{
@@ -1019,16 +1118,22 @@ fil{
             }
         }
         duration{
+            century{
+                dnam{"siglo"}
+                one{"{0} siglo"}
+                other{"{0} siglo"}
+            }
             day{
                 dnam{"araw"}
                 one{"{0} araw"}
                 other{"{0} araw"}
+                per{"{0}/araw"}
             }
             hour{
                 dnam{"oras"}
-                one{"{0} hr"}
-                other{"{0} hrs"}
-                per{"{0}/h"}
+                one{"{0} oras"}
+                other{"{0} na oras"}
+                per{"{0} kada oras"}
             }
             microsecond{
                 dnam{"μseg"}
@@ -1044,11 +1149,13 @@ fil{
                 dnam{"min."}
                 one{"{0} min."}
                 other{"{0} min."}
+                per{"{0}/min"}
             }
             month{
                 dnam{"buwan"}
-                one{"{0} mth"}
-                other{"{0} mths"}
+                one{"{0} buwan"}
+                other{"{0} buwan"}
+                per{"{0}/buwan"}
             }
             nanosecond{
                 dnam{"nanoseg"}
@@ -1063,13 +1170,15 @@ fil{
             }
             week{
                 dnam{"linggo"}
-                one{"{0} wk"}
-                other{"{0} wks"}
+                one{"{0} linggo"}
+                other{"{0} na linggo"}
+                per{"{0}/linggo"}
             }
             year{
                 dnam{"taon"}
-                one{"{0} yr"}
-                other{"{0} yrs"}
+                one{"{0} taon"}
+                other{"{0} taon"}
+                per{"{0}/taon"}
             }
         }
         electric{
@@ -1158,6 +1267,7 @@ fil{
                 dnam{"cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"dm"}
@@ -1168,26 +1278,30 @@ fil{
                 dnam{"talampakan"}
                 one{"{0} ft"}
                 other{"{0} ft"}
+                per{"{0}/ft"}
             }
             inch{
                 dnam{"pulgada"}
                 one{"{0} in"}
                 other{"{0} in"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
                 one{"{0} km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
-                dnam{"light yr"}
+                dnam{"light yrs"}
                 one{"{0} ly"}
-                other{"{0} ly"}
+                other{"{0} na ly"}
             }
             meter{
                 dnam{"metro"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"µmetro"}
@@ -1198,6 +1312,11 @@ fil{
                 dnam{"milya"}
                 one{"{0} mi"}
                 other{"{0} mi"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"mm"}
@@ -1212,22 +1331,22 @@ fil{
             nautical-mile{
                 dnam{"nmi"}
                 one{"{0} nmi"}
-                other{"{0} nmi"}
+                other{"{0} na nmi"}
             }
             parsec{
                 dnam{"parsecs"}
                 one{"{0} pc"}
-                other{"{0} pc"}
+                other{"{0} na pc"}
             }
             picometer{
                 dnam{"pm"}
                 one{"{0} pm"}
-                other{"{0} pm"}
+                other{"{0} na pm"}
             }
             yard{
                 dnam{"yarda"}
                 one{"{0} yd"}
-                other{"{0} yd"}
+                other{"{0} na yd"}
             }
         }
         light{
@@ -1247,11 +1366,13 @@ fil{
                 dnam{"gramo"}
                 one{"{0} g"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 one{"{0} kg"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"t"}
@@ -1272,6 +1393,7 @@ fil{
                 dnam{"oz"}
                 one{"{0} oz"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"oz troy"}
@@ -1279,9 +1401,10 @@ fil{
                 other{"{0} oz t"}
             }
             pound{
-                dnam{"pound"}
+                dnam{"libra"}
                 one{"{0} lb"}
-                other{"{0} lb"}
+                other{"{0} lbs"}
+                per{"{0}/lb"}
             }
             ton{
                 dnam{"tonelada"}
@@ -1361,8 +1484,13 @@ fil{
                 one{"{0} kph"}
                 other{"{0} kph"}
             }
+            knot{
+                dnam{"kn"}
+                one{"{0} kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
-                dnam{"meter/sec"}
+                dnam{"metro/seg"}
                 one{"{0} m/s"}
                 other{"{0} m/s"}
             }
@@ -1382,6 +1510,11 @@ fil{
                 dnam{"deg. F"}
                 one{"{0}°F"}
                 other{"{0}°F"}
+            }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             kelvin{
                 dnam{"deg. K"}
@@ -1404,6 +1537,7 @@ fil{
                 dnam{"cm³"}
                 one{"{0} cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"talampakan³"}
@@ -1424,6 +1558,7 @@ fil{
                 dnam{"m³"}
                 one{"{0} m³"}
                 other{"{0} m³"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"mi³"}
@@ -1440,6 +1575,11 @@ fil{
                 one{"{0} c"}
                 other{"{0} c"}
             }
+            cup-metric{
+                dnam{"mcup"}
+                one{"{0} mc"}
+                other{"{0} na mc"}
+            }
             deciliter{
                 dnam{"dL"}
                 one{"{0} dL"}
@@ -1453,7 +1593,8 @@ fil{
             gallon{
                 dnam{"gal"}
                 one{"{0} gal"}
-                other{"{0} gal"}
+                other{"{0} na gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hL"}
@@ -1462,8 +1603,9 @@ fil{
             }
             liter{
                 dnam{"litro"}
-                one{"{0} l"}
-                other{"{0} l"}
+                one{"{0} L"}
+                other{"{0} L"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"ML"}
@@ -1479,6 +1621,11 @@ fil{
                 dnam{"pints"}
                 one{"{0} pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                one{"{0} na mpt"}
+                other{"{0} na mpt"}
             }
             quart{
                 dnam{"qts"}

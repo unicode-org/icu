@@ -100,7 +100,7 @@ static ExpectedResult kSerbianLongNegative[] = {
   {-1.23456789E15, "-1200 \\u0442\\u0440\\u0438\\u043B\\u0438\\u043E\\u043D\\u0430"}};
 
 static ExpectedResult kJapaneseShort[] = {
-  {1234.0, "1.2\\u5343"},
+  {1234.0, "1200"},
   {12345.0, "1.2\\u4E07"},
   {123456.0, "12\\u4E07"},
   {1234567.0, "120\\u4E07"},
@@ -145,8 +145,8 @@ static ExpectedResult kCsShort[] = {
 
 static ExpectedResult kSkLong[] = {
   {1000.0, "1 tis\\u00edc"},
-  {1572.0, "1,6 tis\\u00edc"},
-  {5184.0, "5,2 tis\\u00edc"}};
+  {1572.0, "1,6 tis\\u00edca"},
+  {5184.0, "5,2 tis\\u00edca"}};
 
 static ExpectedResult kSwahiliShortNegative[] = {
   {-1234.0, "elfu\\u00a0-1.2"},

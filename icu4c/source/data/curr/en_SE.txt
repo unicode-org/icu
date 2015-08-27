@@ -3,9 +3,16 @@
 // * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/nus_SD.xml
+// * Source File: <path>/common/main/en_SE.xml
 // *
 // ***************************************************************************
-nus_SD{
-    Version{"2.1.6.69"}
+en_SE{
+    %%Parent{"en_150"}
+    Currencies{
+        SEK{
+            "kr",
+            "Swedish Krona",
+        }
+    }
+    Version{"2.1.19.69"}
 }

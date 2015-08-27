@@ -19,6 +19,9 @@ pl{
         colStrength{"Siła sortowania"}
         collation{"Porządek sortowania"}
         currency{"waluta"}
+        hc{"cykl (12- lub 24-godzinny)"}
+        lb{"styl podziału wiersza"}
+        ms{"układ miar"}
         numbers{"cyfry"}
         timezone{"Strefa czasowa"}
         va{"Wariant regionalny"}
@@ -67,7 +70,6 @@ pl{
         awa{"awadhi"}
         ay{"ajmara"}
         az{"azerski"}
-        azb{"południowoazerski"}
         ba{"baszkirski"}
         bal{"beludżi"}
         ban{"balijski"}
@@ -84,6 +86,7 @@ pl{
         bfd{"bafut"}
         bfq{"badaga"}
         bg{"bułgarski"}
+        bgn{"beludżi północny"}
         bho{"bhodźpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -343,6 +346,7 @@ pl{
         lo{"laotański"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"luryjski północny"}
         lt{"litewski"}
         ltg{"łatgalski"}
         lu{"luba-katanga"}
@@ -403,7 +407,7 @@ pl{
         naq{"nama"}
         nb{"norweski (bokmål)"}
         nd{"ndebele północny"}
-        nds{"dolnosaksoński"}
+        nds{"dolnoniemiecki"}
         ne{"nepalski"}
         new{"newarski"}
         ng{"ndonga"}
@@ -411,7 +415,7 @@ pl{
         niu{"niue"}
         njo{"ao"}
         nl{"niderlandzki"}
-        nl_BE{"flamandzki (Belgia)"}
+        nl_BE{"flamandzki"}
         nmg{"ngumba"}
         nn{"norweski (nynorsk)"}
         nnh{"ngiemboon"}
@@ -497,6 +501,7 @@ pl{
         sco{"szkocki"}
         sd{"sindhi"}
         sdc{"sassarski"}
+        sdh{"południowokurdyjski"}
         se{"lapoński północny"}
         see{"seneka"}
         seh{"sena"}
@@ -607,6 +612,7 @@ pl{
         wal{"walamo"}
         war{"waraj"}
         was{"washo"}
+        wbp{"Warlpiri"}
         wo{"wolof"}
         wuu{"wu"}
         xal{"kałmucki"}
@@ -626,7 +632,7 @@ pl{
         zbl{"bliss"}
         zea{"zelandzki"}
         zen{"zenaga"}
-        zgh{"zgh"}
+        zgh{"standardowy marokański tamazight"}
         zh{"chiński"}
         zh_Hans{"chiński (uproszczony)"}
         zh_Hant{"chiński (tradycyjny)"}
@@ -856,6 +862,22 @@ pl{
             traditional{"tradycyjny porządek sortowania"}
             unihan{"sortowanie wg kluczy i ich liczby kresek"}
         }
+        hc{
+            h11{"system 12-godzinny (0-11)"}
+            h12{"system 12-godzinny (1-12)"}
+            h23{"system 24-godzinny (0-23)"}
+            h24{"system 24-godzinny (1-24)"}
+        }
+        lb{
+            loose{"luźny styl podziału wiersza"}
+            normal{"normalny styl podziału wiersza"}
+            strict{"ścisły styl podziału wiersza"}
+        }
+        ms{
+            metric{"system metryczny"}
+            uksystem{"imperialny system miar"}
+            ussystem{"amerykański system miar"}
+        }
         numbers{
             arab{"cyfry arabsko-indyjskie"}
             arabext{"rozszerzone cyfry arabsko-indyjskie"}
@@ -932,7 +954,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade’a i Gilesa"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010-2013, International Business Machines Corporation and
+* Copyright (C) 2010-2015, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -85,7 +85,7 @@ NumberingSystem::createInstance(int32_t radix_in, UBool isAlgorithmic_in, const 
     }
 
     if ( !isAlgorithmic_in ) {
-       if ( desc_in.countChar32() != radix_in || !isValidDigitString(desc_in)) {
+       if ( desc_in.countChar32() != radix_in ) {
            status = U_ILLEGAL_ARGUMENT_ERROR;
            return NULL;
        }
@@ -280,22 +280,6 @@ StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
     }
 
     return availableNames;
-}
-
-UBool NumberingSystem::isValidDigitString(const UnicodeString& str) {
-
-    StringCharacterIterator it(str);
-    UChar32 c;
-    int32_t i = 0;
-
-    for ( it.setToStart(); it.hasNext(); ) {
-       c = it.next32PostInc();
-       if ( c > 0xFFFF ) { // Digits outside the BMP are not currently supported
-          return FALSE;
-       }
-       i++;
-    }
-    return TRUE;   
 }
 
 NumsysNameEnumeration::NumsysNameEnumeration(UVector *fNameList, UErrorCode& /*status*/) {

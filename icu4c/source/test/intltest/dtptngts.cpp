@@ -251,20 +251,20 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
         // ru                                                             // 9 ru
         UnicodeString("01.1999"),                                         // 00: yM    -> MM.y
-        CharsToUnicodeString("\\u044F\\u043D\\u0432. 1999"),              // 01: yMMM  -> LLL y
+        CharsToUnicodeString("\\u044F\\u043D\\u0432. 1999 \\u0433."),     // 01: yMMM  -> LLL y
         UnicodeString("13.01.1999"),                                      // 02: yMd   -> dd.MM.y
         CharsToUnicodeString("13 \\u044F\\u043D\\u0432. 1999 \\u0433."),  // 03: yMMMd -> d MMM y
         UnicodeString("13.01"),                                           // 04: Md    -> dd.MM
         CharsToUnicodeString("13 \\u044F\\u043D\\u0432."),                // 05: MMMd  -> d MMM
         CharsToUnicodeString("13 \\u044F\\u043D\\u0432\\u0430\\u0440\\u044F"), // 06: MMMMd  -> d MMMM
         CharsToUnicodeString("1-\\u0439 \\u043A\\u0432. 1999 \\u0433."),  // 07: yQQQ  -> y QQQ
-        UnicodeString("11:58 PM"),                                        // 07: hhmm  -> hh:mm a
+        CharsToUnicodeString("11:58 \\u041F\\u041F"),                     // 08: hhmm  -> hh:mm a
         UnicodeString("23:58"),                                           // 09: HHmm  -> HH:mm
         UnicodeString("23:58"),                                           // 10: jjmm  -> HH:mm
         UnicodeString("58:59"),                                           // 11: mmss  -> mm:ss
-        CharsToUnicodeString("\\u044F\\u043D\\u0432\\u0430\\u0440\\u044C 1999"), // 12: yyyyMMMM -> LLLL y
-        CharsToUnicodeString("\\u0421\\u0440, 13 \\u044F\\u043D\\u0432."), // 13: MMMEd -> ccc, d MMM
-        CharsToUnicodeString("\\u0421\\u0440, 13"),                       // 14: Ed    -> EEE, d
+        CharsToUnicodeString("\\u044F\\u043D\\u0432\\u0430\\u0440\\u044C 1999 \\u0433."), // 12: yyyyMMMM -> LLLL y
+        CharsToUnicodeString("\\u0441\\u0440, 13 \\u044F\\u043D\\u0432."), // 13: MMMEd -> ccc, d MMM
+        CharsToUnicodeString("\\u0441\\u0440, 13"),                       // 14: Ed    -> EEE, d
         UnicodeString("23:58:59,123"),                                    // 15: jmmssSSS -> "H:mm:ss,SSS"
         UnicodeString("23:58"),                                           // 16: JJmm
 
@@ -856,12 +856,12 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
         { "en", "Hmm",  "HH:mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
         { "en", "HHmm", "HH:mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
         { "en", "hhmm", "hh:mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
-        { "be", "Hmm",  "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
-        { "be", "HHmm", "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
-        { "be", "hhmm", "h.mm a",  UDATPG_MATCH_NO_OPTIONS        },
-        { "be", "Hmm",  "H.mm",    UDATPG_MATCH_HOUR_FIELD_LENGTH },
-        { "be", "HHmm", "HH.mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
-        { "be", "hhmm", "hh.mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "da", "Hmm",  "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
+        { "da", "HHmm", "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
+        { "da", "hhmm", "h.mm a",  UDATPG_MATCH_NO_OPTIONS        },
+        { "da", "Hmm",  "H.mm",    UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "da", "HHmm", "HH.mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "da", "hhmm", "hh.mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
         //
         { "en",                   "yyyy",  "yyyy",  UDATPG_MATCH_NO_OPTIONS },
         { "en",                   "YYYY",  "YYYY",  UDATPG_MATCH_NO_OPTIONS },

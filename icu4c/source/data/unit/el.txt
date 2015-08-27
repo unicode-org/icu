@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 el{
-    Version{"2.1.16.8"}
+    Version{"2.1.19.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -47,6 +47,11 @@ el{
                 one{"{0} ακτίνιο"}
                 other{"{0} ακτίνιο"}
             }
+            revolution{
+                dnam{"στροφή"}
+                one{"{0} στροφή"}
+                other{"{0} στροφές"}
+            }
         }
         area{
             acre{
@@ -63,6 +68,7 @@ el{
                 dnam{"τετραγωνικά εκατοστά"}
                 one{"{0} τετραγωνικό εκατοστό"}
                 other{"{0} τετραγωνικά εκατοστά"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"τετραγωνικά πόδια"}
@@ -73,6 +79,7 @@ el{
                 dnam{"τετραγωνικές ίντσες"}
                 one{"{0} τετραγωνική ίντσα"}
                 other{"{0} τετραγωνικές ίντσες"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"τετραγωνικά χιλιόμετρα"}
@@ -83,6 +90,7 @@ el{
                 dnam{"τετραγωνικά μέτρα"}
                 one{"{0} τετραγωνικό μέτρο"}
                 other{"{0} τετραγωνικά μέτρα"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"τετραγωνικά μίλια"}
@@ -99,6 +107,11 @@ el{
             per{"{0} ανά {1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"λίτρα ανά 100 χιλιόμετρα"}
+                one{"{0} λίτρο ανά 100 χιλιόμετρα"}
+                other{"{0} λίτρα ανά 100 χιλιόμετρα"}
+            }
             liter-per-kilometer{
                 dnam{"λίτρα ανά χιλιόμετρο"}
                 one{"{0} λίτρο ανά χιλιόμετρο"}
@@ -109,6 +122,12 @@ el{
                 one{"{0} μίλι ανά γαλόνι"}
                 other{"{0} μίλια ανά γαλόνι"}
             }
+        }
+        coordinate{
+            east{"{0} Α"}
+            north{"{0} Β"}
+            south{"{0} Ν"}
+            west{"{0} Δ"}
         }
         digital{
             bit{
@@ -163,10 +182,16 @@ el{
             }
         }
         duration{
+            century{
+                dnam{"αιώνες"}
+                one{"{0} αιώνας"}
+                other{"{0} αιώνες"}
+            }
             day{
                 dnam{"ημέρες"}
                 one{"{0} ημέρα"}
                 other{"{0} ημέρες"}
+                per{"{0} ανά ημέρα"}
             }
             hour{
                 dnam{"ώρες"}
@@ -188,11 +213,13 @@ el{
                 dnam{"λεπτά"}
                 one{"{0} λεπτό"}
                 other{"{0} λεπτά"}
+                per{"{0} ανά λεπτό"}
             }
             month{
                 dnam{"μήνες"}
                 one{"{0} μήνας"}
                 other{"{0} μήνες"}
+                per{"{0}/μήνα"}
             }
             nanosecond{
                 dnam{"νανοδευτερόλεπτα"}
@@ -209,11 +236,13 @@ el{
                 dnam{"εβδομάδες"}
                 one{"{0} εβδομάδα"}
                 other{"{0} εβδομάδες"}
+                per{"{0} ανά εβδομάδα"}
             }
             year{
                 dnam{"έτη"}
                 one{"{0} έτος"}
                 other{"{0} έτη"}
+                per{"{0} ανά έτος"}
             }
         }
         electric{
@@ -302,6 +331,7 @@ el{
                 dnam{"εκατοστά"}
                 one{"{0} εκατοστό"}
                 other{"{0} εκατοστά"}
+                per{"{0}/εκ."}
             }
             decimeter{
                 dnam{"δεκατόμετρα"}
@@ -312,16 +342,19 @@ el{
                 dnam{"πόδια"}
                 one{"{0} πόδι"}
                 other{"{0} πόδια"}
+                per{"{0}/ft"}
             }
             inch{
                 dnam{"ίντσες"}
                 one{"{0} ίντσα"}
                 other{"{0} ίντσες"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"χιλιόμετρα"}
                 one{"{0} χιλιόμετρο"}
                 other{"{0} χιλιόμετρα"}
+                per{"{0}/χλμ."}
             }
             light-year{
                 dnam{"έτη φωτός"}
@@ -332,6 +365,7 @@ el{
                 dnam{"μέτρα"}
                 one{"{0} μέτρο"}
                 other{"{0} μέτρα"}
+                per{"{0}/μ."}
             }
             micrometer{
                 dnam{"µm"}
@@ -342,6 +376,11 @@ el{
                 dnam{"μίλια"}
                 one{"{0} μίλι"}
                 other{"{0} μίλια"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"χιλιοστόμετρα"}
@@ -391,11 +430,13 @@ el{
                 dnam{"γραμμάρια"}
                 one{"{0} γραμμάριο"}
                 other{"{0} γραμμάρια"}
+                per{"{0} ανά γραμ."}
             }
             kilogram{
                 dnam{"χιλιόγραμμα"}
                 one{"{0} χιλιόγραμμο"}
                 other{"{0} χιλιόγραμμα"}
+                per{"{0}/κιλό"}
             }
             metric-ton{
                 dnam{"μετρικοί τόνοι"}
@@ -416,6 +457,7 @@ el{
                 dnam{"ουγγιές"}
                 one{"{0} ουγγιά"}
                 other{"{0} ουγγιές"}
+                per{"{0} ανά ουγγιά"}
             }
             ounce-troy{
                 dnam{"ευγενείς ουγγιές"}
@@ -426,6 +468,7 @@ el{
                 dnam{"λίβρες"}
                 one{"{0} λίβρα"}
                 other{"{0} λίβρες"}
+                per{"{0} ανά λίβρα"}
             }
             ton{
                 dnam{"τόνοι"}
@@ -505,6 +548,11 @@ el{
                 one{"{0} χιλιόμετρο ανά ώρα"}
                 other{"{0} χιλιόμετρα ανά ώρα"}
             }
+            knot{
+                dnam{"κόμβος"}
+                one{"{0} κόμβος"}
+                other{"{0} κόμβοι"}
+            }
             meter-per-second{
                 dnam{"μέτρα ανά δευτερόλεπτο"}
                 one{"{0} μέτρο ανά δευτερόλεπτο"}
@@ -527,10 +575,15 @@ el{
                 one{"{0} βαθμός Φαρενάιτ"}
                 other{"{0} βαθμοί Φαρενάιτ"}
             }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
-                dnam{"κέλβιν"}
-                one{"{0} κέλβιν"}
-                other{"{0} κέλβιν"}
+                dnam{"βαθμοί Κέλβιν"}
+                one{"{0} βαθμός Κέλβιν"}
+                other{"{0} βαθμοί Κέλβιν"}
             }
         }
         volume{
@@ -548,6 +601,7 @@ el{
                 dnam{"κυβικά εκατοστά"}
                 one{"{0} κυβικό εκατοστό"}
                 other{"{0} κυβικά εκατοστά"}
+                per{"{0} ανά κυβικό εκατοστό"}
             }
             cubic-foot{
                 dnam{"κυβικά πόδια"}
@@ -568,6 +622,7 @@ el{
                 dnam{"κυβικά μέτρα"}
                 one{"{0} κυβικό μέτρο"}
                 other{"{0} κυβικό μέτρο"}
+                per{"{0} ανά κυβικό μέτρο"}
             }
             cubic-mile{
                 dnam{"κυβικά μίλια"}
@@ -584,6 +639,11 @@ el{
                 one{"{0} κύπελλο"}
                 other{"{0} κύπελλα"}
             }
+            cup-metric{
+                dnam{"μετρικό κύπελλο"}
+                one{"{0} μετρικό κύπελλο"}
+                other{"{0} μετρικά κύπελλα"}
+            }
             deciliter{
                 dnam{"δεκατόλιτρα"}
                 one{"{0} δεκατόλιτρο"}
@@ -598,6 +658,7 @@ el{
                 dnam{"γαλόνια"}
                 one{"{0} γαλόνι"}
                 other{"{0} γαλόνια"}
+                per{"{0} ανά γαλόνι"}
             }
             hectoliter{
                 dnam{"εκτόλιτρα"}
@@ -608,6 +669,7 @@ el{
                 dnam{"λίτρα"}
                 one{"{0} λίτρο"}
                 other{"{0} λίτρα"}
+                per{"{0}/λ."}
             }
             megaliter{
                 dnam{"μεγαλίτρα"}
@@ -623,6 +685,11 @@ el{
                 dnam{"πίντες"}
                 one{"{0} πίντα"}
                 other{"{0} πίντες"}
+            }
+            pint-metric{
+                dnam{"μετρική πίντα"}
+                one{"{0} μετρική πίντα"}
+                other{"{0} μετρικές πίντες"}
             }
             quart{
                 dnam{"τέταρτα του γαλονιού"}
@@ -690,6 +757,19 @@ el{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"λ/100 χλμ"}
+                one{"{0} λ/100 χλμ"}
+                other{"{0} λ/100 χλμ"}
+            }
+        }
+        coordinate{
+            east{"{0} Α"}
+            north{"{0} Β"}
+            south{"{0} Ν"}
+            west{"{0} Δ"}
         }
         duration{
             day{
@@ -891,9 +971,9 @@ el{
                 other{"{0} λεπ. τόξου"}
             }
             arc-second{
-                dnam{"δευτερόλεπτα του τόξου"}
-                one{"{0} δευτ."}
-                other{"{0} δευτ."}
+                dnam{"arcsec"}
+                one{"{0} arcsec"}
+                other{"{0} arcsec"}
             }
             degree{
                 dnam{"μοίρες"}
@@ -904,6 +984,11 @@ el{
                 dnam{"ακτίνια"}
                 one{"{0} rad"}
                 other{"{0} rad"}
+            }
+            revolution{
+                dnam{"rev"}
+                one{"{0} rev"}
+                other{"{0} rev"}
             }
         }
         area{
@@ -921,6 +1006,7 @@ el{
                 dnam{"τ. εκ."}
                 one{"{0} τ. εκ."}
                 other{"{0} τ. εκ."}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"τετρ. πόδια"}
@@ -931,6 +1017,7 @@ el{
                 dnam{"τετρ. ίντσες"}
                 one{"{0} in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"τ. χλμ."}
@@ -941,6 +1028,7 @@ el{
                 dnam{"τ. μέτρα"}
                 one{"{0} τ.μ."}
                 other{"{0} τ.μ."}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"τ. μίλια"}
@@ -957,6 +1045,11 @@ el{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"λ./100 χλμ."}
+                one{"{0} λ./100 χλμ."}
+                other{"{0} λ./100 χλμ."}
+            }
             liter-per-kilometer{
                 dnam{"λίτρα/χλμ."}
                 one{"{0} λίτρο/χλμ"}
@@ -967,6 +1060,12 @@ el{
                 one{"{0} mpg"}
                 other{"{0} mpg"}
             }
+        }
+        coordinate{
+            east{"{0} Α"}
+            north{"{0} Β"}
+            south{"{0} Ν"}
+            west{"{0} Δ"}
         }
         digital{
             bit{
@@ -1021,10 +1120,16 @@ el{
             }
         }
         duration{
+            century{
+                dnam{"αιών."}
+                one{"{0} αιών."}
+                other{"{0} αιών."}
+            }
             day{
                 dnam{"ημέρες"}
                 one{"{0} ημέρα"}
                 other{"{0} ημέρες"}
+                per{"{0}/ημ."}
             }
             hour{
                 dnam{"ώρες"}
@@ -1046,11 +1151,13 @@ el{
                 dnam{"λεπ."}
                 one{"{0} λεπ."}
                 other{"{0} λεπ."}
+                per{"{0}/λ."}
             }
             month{
                 dnam{"μήνες"}
                 one{"{0} μήν."}
                 other{"{0} μήν."}
+                per{"{0}/μ."}
             }
             nanosecond{
                 dnam{"νανοδεύτερα"}
@@ -1067,11 +1174,13 @@ el{
                 dnam{"εβδομάδες"}
                 one{"{0} εβδ."}
                 other{"{0} εβδ."}
+                per{"{0}/εβδ."}
             }
             year{
                 dnam{"έτη"}
                 one{"{0} έτ."}
                 other{"{0} έτ."}
+                per{"{0}/έτ."}
             }
         }
         electric{
@@ -1160,6 +1269,7 @@ el{
                 dnam{"εκ."}
                 one{"{0} εκ."}
                 other{"{0} εκ."}
+                per{"{0}/εκ."}
             }
             decimeter{
                 dnam{"δεκ."}
@@ -1170,16 +1280,19 @@ el{
                 dnam{"πόδια"}
                 one{"{0} ft"}
                 other{"{0} ft"}
+                per{"{0}/ft"}
             }
             inch{
                 dnam{"ίντσες"}
                 one{"{0} in"}
                 other{"{0} in"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"χλμ."}
                 one{"{0} χλμ."}
                 other{"{0} χλμ."}
+                per{"{0}/χλμ."}
             }
             light-year{
                 dnam{"έτη φωτός"}
@@ -1190,6 +1303,7 @@ el{
                 dnam{"μέτρα"}
                 one{"{0} μ."}
                 other{"{0} μ."}
+                per{"{0}/μ."}
             }
             micrometer{
                 dnam{"μικρόμετρα"}
@@ -1200,6 +1314,11 @@ el{
                 dnam{"μίλια"}
                 one{"{0} μίλ."}
                 other{"{0} μίλ."}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"χιλιοστόμ."}
@@ -1212,9 +1331,9 @@ el{
                 other{"{0} nm"}
             }
             nautical-mile{
-                dnam{"nmi"}
-                one{"{0} nmi"}
-                other{"{0} nmi"}
+                dnam{"ν.μ."}
+                one{"{0} ν.μ."}
+                other{"{0} ν.μ."}
             }
             parsec{
                 dnam{"παρσέκ"}
@@ -1249,11 +1368,13 @@ el{
                 dnam{"γραμμάρια"}
                 one{"{0} γρ."}
                 other{"{0} γρ."}
+                per{"{0}/γρ."}
             }
             kilogram{
-                dnam{"κιλά"}
+                dnam{"kg"}
                 one{"{0} κιλό"}
                 other{"{0} κιλά"}
+                per{"{0}/κιλό"}
             }
             metric-ton{
                 dnam{"mt"}
@@ -1274,6 +1395,7 @@ el{
                 dnam{"oz"}
                 one{"{0} oz"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"ευγενής ουγγιά"}
@@ -1284,6 +1406,7 @@ el{
                 dnam{"λίβρες"}
                 one{"{0} lb"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
             }
             ton{
                 dnam{"τόνοι"}
@@ -1363,6 +1486,11 @@ el{
                 one{"{0} χλμ./ώρα"}
                 other{"{0} χλμ./ώρα"}
             }
+            knot{
+                dnam{"kn"}
+                one{"{0} kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
                 dnam{"μέτρα/δευτερόλεπτο"}
                 one{"{0} μέτρο/δευτ."}
@@ -1385,6 +1513,11 @@ el{
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"K"}
                 one{"{0} K"}
@@ -1406,6 +1539,7 @@ el{
                 dnam{"cm³"}
                 one{"{0} cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ft³"}
@@ -1426,6 +1560,7 @@ el{
                 dnam{"m³"}
                 one{"{0} m³"}
                 other{"{0} m³"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"mi³"}
@@ -1442,6 +1577,11 @@ el{
                 one{"{0} c"}
                 other{"{0} c"}
             }
+            cup-metric{
+                dnam{"μετρ. κύπελλο"}
+                one{"{0} μετρ. κύπελλο"}
+                other{"{0} μετρ. κύπελλα"}
+            }
             deciliter{
                 dnam{"dL"}
                 one{"{0} dL"}
@@ -1456,6 +1596,7 @@ el{
                 dnam{"gal"}
                 one{"{0} gal"}
                 other{"{0} gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hL"}
@@ -1466,6 +1607,7 @@ el{
                 dnam{"λίτρα"}
                 one{"{0} λίτ."}
                 other{"{0} λίτ."}
+                per{"{0}/λ."}
             }
             megaliter{
                 dnam{"ML"}
@@ -1481,6 +1623,11 @@ el{
                 dnam{"πίντες"}
                 one{"{0} pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"μετρικές πίντες"}
+                one{"{0} μετρική πίντα"}
+                other{"{0} μετρικές πίντες"}
             }
             quart{
                 dnam{"τέταρτα γαλονιού"}

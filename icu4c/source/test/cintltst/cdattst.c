@@ -192,7 +192,7 @@ static void TestDateFormat()
     }
     /*format using fr */
     
-    u_unescape("10 juil. 1996 16:05:28 heure d\\u2019\\u00E9t\\u00E9 du Pacifique", temp, 50);
+    u_unescape("10 juil. 1996 \\u00E0 16:05:28 heure d\\u2019\\u00E9t\\u00E9 du Pacifique", temp, 50);
     if(result != NULL) {
         free(result);
         result = NULL;

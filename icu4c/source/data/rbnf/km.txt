@@ -53,5 +53,5 @@ km{
             "0: \u1791\u17B8=%spellout-cardinal=;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.1.19.14"}
 }

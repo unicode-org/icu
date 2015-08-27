@@ -79,7 +79,7 @@ sr_Latn{
         BY{"Belorusija"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kokos (Keling) Ostrva"}
+        CC{"Kokosova (Kilingova) Ostrva"}
         CD{"Kongo - Kinšasa"}
         CF{"Centralnoafrička Republika"}
         CG{"Kongo - Brazavil"}
@@ -139,7 +139,7 @@ sr_Latn{
         GU{"Guam"}
         GW{"Gvineja-Bisao"}
         GY{"Gvajana"}
-        HK{"Hong Kong S. A. R. Kina"}
+        HK{"SAR Hongkong (Kina)"}
         HM{"Ostrva Herd i Mekdonald"}
         HN{"Honduras"}
         HR{"Hrvatska"}
@@ -208,7 +208,7 @@ sr_Latn{
         NA{"Namibija"}
         NC{"Nova Kaledonija"}
         NE{"Niger"}
-        NF{"Norfolk Ostrvo"}
+        NF{"Ostrvo Norfok"}
         NG{"Nigerija"}
         NI{"Nikaragva"}
         NL{"Holandija"}
@@ -313,5 +313,5 @@ sr_Latn{
         FK{"Foklandska (Malvinska) ostrva"}
         MK{"Makedonija (BJRM)"}
     }
-    Version{"2.1.15.91"}
+    Version{"2.1.19.80"}
 }

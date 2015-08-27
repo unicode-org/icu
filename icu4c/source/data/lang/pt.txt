@@ -19,6 +19,9 @@ pt{
         colStrength{"Intensidade da classificação"}
         collation{"Ordenação"}
         currency{"Moeda"}
+        hc{"Ciclo de horário (12 vs. 24)"}
+        lb{"Estilo de quebra de linha"}
+        ms{"Sistema de medição"}
         numbers{"Números"}
         timezone{"Fuso horário"}
         va{"Variante de localidade"}
@@ -48,7 +51,7 @@ pt{
         ar{"árabe"}
         ar_001{"árabe moderno"}
         arc{"aramaico"}
-        arn{"araucano"}
+        arn{"mapudungun"}
         arp{"arapaho"}
         arw{"arauaqui"}
         as{"assamês"}
@@ -58,6 +61,7 @@ pt{
         awa{"awadhi"}
         ay{"aimara"}
         az{"azerbaijano"}
+        az_Arab{"azeri sul"}
         ba{"bashkir"}
         bal{"balúchi"}
         ban{"balinês"}
@@ -70,6 +74,7 @@ pt{
         bez{"bena"}
         bfd{"bafut"}
         bg{"búlgaro"}
+        bgn{"balúchi ocidental"}
         bho{"bhojpuri"}
         bi{"bislamá"}
         bik{"bikol"}
@@ -115,7 +120,7 @@ pt{
         cs{"tcheco"}
         csb{"kashubian"}
         cu{"eslavo eclesiástico"}
-        cv{"chuvash"}
+        cv{"tchuvache"}
         cy{"galês"}
         da{"dinamarquês"}
         dak{"dacota"}
@@ -295,6 +300,7 @@ pt{
         lo{"laosiano"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"luri setentrional"}
         lt{"lituano"}
         lu{"luba-catanga"}
         lua{"luba-lulua"}
@@ -343,12 +349,14 @@ pt{
         my{"birmanês"}
         mye{"myene"}
         myv{"erzya"}
+        mzn{"mazandarani"}
         na{"nauruano"}
         nap{"napolitano"}
         naq{"nama"}
         nb{"bokmål norueguês"}
         nd{"ndebele do norte"}
         nds{"baixo alemão"}
+        nds_NL{"baixo-saxão"}
         ne{"nepali"}
         new{"newari"}
         ng{"dongo"}
@@ -409,7 +417,7 @@ pt{
         rom{"romani"}
         ru{"russo"}
         rup{"aromeno"}
-        rw{"kinyarwanda"}
+        rw{"quiniaruanda"}
         rwk{"rwa"}
         sa{"sânscrito"}
         sad{"sandawe"}
@@ -424,6 +432,7 @@ pt{
         scn{"siciliano"}
         sco{"escocês"}
         sd{"sindi"}
+        sdh{"curdo meridional"}
         se{"sami do norte"}
         see{"seneca"}
         seh{"sena"}
@@ -441,9 +450,9 @@ pt{
         sl{"esloveno"}
         sm{"samoano"}
         sma{"sami do sul"}
-        smj{"lule sami"}
-        smn{"inari sami"}
-        sms{"skolt sami"}
+        smj{"sami de Lule"}
+        smn{"sami de Inari"}
+        sms{"sami de Skolt"}
         sn{"shona"}
         snk{"soninquê"}
         so{"somali"}
@@ -517,6 +526,7 @@ pt{
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
+        wbp{"warlpiri"}
         wo{"uólofe"}
         xal{"kalmyk"}
         xh{"xosa"}
@@ -697,7 +707,7 @@ pt{
             chinese{"Calendário Chinês"}
             coptic{"Calendário Coptic"}
             dangi{"Calendário Dangi"}
-            ethiopic{"Calendário etiópico"}
+            ethiopic{"Calendário etíope"}
             ethiopic-amete-alem{"Calendário Amete Alem da Etiópia"}
             gregorian{"Calendário Gregoriano"}
             hebrew{"Calendário Hebraico"}
@@ -760,6 +770,22 @@ pt{
             stroke{"Ordem dos Traços"}
             traditional{"Ordem Tradicional"}
             unihan{"Ordem por Radical-Traços"}
+        }
+        hc{
+            h11{"Sistema de 12 horas (0–11)"}
+            h12{"Sistema de 12 horas (1–12)"}
+            h23{"Sistema de 24 horas (0–23)"}
+            h24{"Sistema de 24 horas (1–24)"}
+        }
+        lb{
+            loose{"Quebra de linha com estilo solto"}
+            normal{"Quebra de linha com estilo normal"}
+            strict{"Quebra de linha com estilo estrito"}
+        }
+        ms{
+            metric{"Sistema métrico"}
+            uksystem{"Sistema de medição imperial"}
+            ussystem{"Sistema de medição americano"}
         }
         numbers{
             arab{"Algarismos indo-arábicos"}
@@ -844,7 +870,7 @@ pt{
         VALENCIA{"valenciano"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.1.15.98"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ro{
-    Version{"2.1.15.60"}
+    Version{"2.1.19.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -31,15 +31,15 @@ ro{
         angle{
             arc-minute{
                 dnam{"minute de arc"}
-                few{"{0} minute"}
-                one{"{0} minut"}
-                other{"{0} de minute"}
+                few{"{0} minute de arc"}
+                one{"{0} minut de arc"}
+                other{"{0} de minute de arc"}
             }
             arc-second{
                 dnam{"secunde de arc"}
-                few{"{0} secunde"}
-                one{"{0} secundă"}
-                other{"{0} de secunde"}
+                few{"{0} secunde de arc"}
+                one{"{0} secundă de arc"}
+                other{"{0} de secunde de arc"}
             }
             degree{
                 dnam{"grade"}
@@ -52,6 +52,12 @@ ro{
                 few{"{0} radiani"}
                 one{"{0} radian"}
                 other{"{0} de radiani"}
+            }
+            revolution{
+                dnam{"revoluție"}
+                few{"{0} revoluții"}
+                one{"{0} revoluție"}
+                other{"{0} de revoluții"}
             }
         }
         area{
@@ -72,18 +78,20 @@ ro{
                 few{"{0} centimetri pătrați"}
                 one{"{0} centimetru pătrat"}
                 other{"{0} de centimetri pătrați"}
+                per{"{0} pe centimetru pătrat"}
             }
             square-foot{
                 dnam{"picioare pătrate"}
                 few{"{0} picioare pătrate"}
                 one{"{0} picior pătrat"}
-                other{"{0} picioare pătrate"}
+                other{"{0} de picioare pătrate"}
             }
             square-inch{
                 dnam{"inchi pătrați"}
                 few{"{0} inchi pătrați"}
                 one{"{0} inch pătrat"}
                 other{"{0} de inchi pătrați"}
+                per{"{0} pe inchi pătrat"}
             }
             square-kilometer{
                 dnam{"kilometri pătrați"}
@@ -96,6 +104,7 @@ ro{
                 few{"{0} metri pătrați"}
                 one{"{0} metru pătrat"}
                 other{"{0} de metri pătrați"}
+                per{"{0} pe metru pătrat"}
             }
             square-mile{
                 dnam{"mile pătrate"}
@@ -114,6 +123,12 @@ ro{
             per{"{0} pe {1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"litri la suta de kilometri"}
+                few{"{0} litri la suta de kilometri"}
+                one{"{0} litru la suta de kilometri"}
+                other{"{0} de litri la suta de kilometri"}
+            }
             liter-per-kilometer{
                 dnam{"litri pe kilometru"}
                 few{"{0} litri pe kilometru"}
@@ -126,6 +141,12 @@ ro{
                 one{"{0} milă pe galon"}
                 other{"{0} de mile pe galon"}
             }
+        }
+        coordinate{
+            east{"{0} E"}
+            north{"{0} N"}
+            south{"{0} S"}
+            west{"{0} V"}
         }
         digital{
             bit{
@@ -190,11 +211,18 @@ ro{
             }
         }
         duration{
+            century{
+                dnam{"secole"}
+                few{"{0} secole"}
+                one{"{0} secol"}
+                other{"{0} de secole"}
+            }
             day{
                 dnam{"zile"}
                 few{"{0} zile"}
                 one{"{0} zi"}
                 other{"{0} de zile"}
+                per{"{0} pe zi"}
             }
             hour{
                 dnam{"ore"}
@@ -220,12 +248,14 @@ ro{
                 few{"{0} minute"}
                 one{"{0} minut"}
                 other{"{0} de minute"}
+                per{"{0} pe minut"}
             }
             month{
                 dnam{"luni"}
                 few{"{0} luni"}
                 one{"{0} lună"}
                 other{"{0} de luni"}
+                per{"{0} pe lună"}
             }
             nanosecond{
                 dnam{"nanosecunde"}
@@ -245,12 +275,14 @@ ro{
                 few{"{0} săptămâni"}
                 one{"{0} săptămână"}
                 other{"{0} de săptămâni"}
+                per{"{0} pe săptămână"}
             }
             year{
                 dnam{"ani"}
                 few{"{0} ani"}
                 one{"{0} an"}
                 other{"{0} de ani"}
+                per{"{0} pe an"}
             }
         }
         electric{
@@ -355,6 +387,7 @@ ro{
                 few{"{0} centimetri"}
                 one{"{0} centimetru"}
                 other{"{0} de centimetri"}
+                per{"{0} pe centimetru"}
             }
             decimeter{
                 dnam{"decimetri"}
@@ -367,18 +400,21 @@ ro{
                 few{"{0} picioare"}
                 one{"{0} picior"}
                 other{"{0} de picioare"}
+                per{"{0} pe picior"}
             }
             inch{
                 dnam{"inchi"}
                 few{"{0} inchi"}
                 one{"{0} inch"}
                 other{"{0} de inchi"}
+                per{"{0} pe inch"}
             }
             kilometer{
                 dnam{"kilometri"}
                 few{"{0} kilometri"}
                 one{"{0} kilometru"}
                 other{"{0} de kilometri"}
+                per{"{0} pe kilometru"}
             }
             light-year{
                 dnam{"ani lumină"}
@@ -391,6 +427,7 @@ ro{
                 few{"{0} metri"}
                 one{"{0} metru"}
                 other{"{0} de metri"}
+                per{"{0} pe metru"}
             }
             micrometer{
                 dnam{"micrometri"}
@@ -403,6 +440,12 @@ ro{
                 few{"{0} mile"}
                 one{"{0} milă"}
                 other{"{0} de mile"}
+            }
+            mile-scandinavian{
+                dnam{"milă scandinavă"}
+                few{"{0} mile scandinave"}
+                one{"{0} milă scandinavă"}
+                other{"{0} de mile scandinave"}
             }
             millimeter{
                 dnam{"milimetri"}
@@ -461,12 +504,14 @@ ro{
                 few{"{0} grame"}
                 one{"{0} gram"}
                 other{"{0} de grame"}
+                per{"per gram"}
             }
             kilogram{
                 dnam{"kilograme"}
                 few{"{0} kilograme"}
                 one{"{0} kilogram"}
                 other{"{0} de kilograme"}
+                per{"{0} per kilogram"}
             }
             metric-ton{
                 dnam{"tone"}
@@ -491,6 +536,7 @@ ro{
                 few{"{0} uncii"}
                 one{"{0} uncie"}
                 other{"{0} de uncii"}
+                per{"{0} per uncie"}
             }
             ounce-troy{
                 dnam{"uncii monetare"}
@@ -503,6 +549,7 @@ ro{
                 few{"{0} livre"}
                 one{"{0} livră"}
                 other{"{0} de livre"}
+                per{"{0} per livră"}
             }
             ton{
                 dnam{"tone scurte"}
@@ -596,6 +643,12 @@ ro{
                 one{"{0} kilometru pe oră"}
                 other{"{0} de kilometri pe oră"}
             }
+            knot{
+                dnam{"nod"}
+                few{"{0} noduri"}
+                one{"{0} nod"}
+                other{"{0} de noduri"}
+            }
             meter-per-second{
                 dnam{"metri pe secundă"}
                 few{"{0} metri pe secundă"}
@@ -622,6 +675,12 @@ ro{
                 one{"{0} grad Fahrenheit"}
                 other{"{0} de grade Fahrenheit"}
             }
+            generic{
+                dnam{"°"}
+                few{"{0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"kelvini"}
                 few{"{0} kelvini"}
@@ -647,6 +706,7 @@ ro{
                 few{"{0} centimetri cubi"}
                 one{"{0} centimetru cub"}
                 other{"{0} de centimetri cubi"}
+                per{"{0} pe centimetru cub"}
             }
             cubic-foot{
                 dnam{"picioare cubice"}
@@ -671,6 +731,7 @@ ro{
                 few{"{0} metri cubi"}
                 one{"{0} metru cub"}
                 other{"{0} de metri cubi"}
+                per{"{0} pe metru cub"}
             }
             cubic-mile{
                 dnam{"mile cubice"}
@@ -690,6 +751,12 @@ ro{
                 one{"{0} cană"}
                 other{"{0} de căni"}
             }
+            cup-metric{
+                dnam{"căni metrice"}
+                few{"{0} căni metrice"}
+                one{"{0} cană metrică"}
+                other{"{0} de căni metrice"}
+            }
             deciliter{
                 dnam{"decilitri"}
                 few{"{0} decilitri"}
@@ -707,6 +774,7 @@ ro{
                 few{"{0} galoane"}
                 one{"{0} galon"}
                 other{"{0} de galoane"}
+                per{"{0} per galon"}
             }
             hectoliter{
                 dnam{"hectolitri"}
@@ -719,6 +787,7 @@ ro{
                 few{"{0} litri"}
                 one{"{0} litru"}
                 other{"{0} de litri"}
+                per{"{0} pe litru"}
             }
             megaliter{
                 dnam{"megalitri"}
@@ -737,6 +806,12 @@ ro{
                 few{"{0} pinte"}
                 one{"{0} pintă"}
                 other{"{0} de pinte"}
+            }
+            pint-metric{
+                dnam{"pinte metrice"}
+                few{"{0} pinte metrice"}
+                one{"{0} pintă metrică"}
+                other{"{0} de pinte metrice"}
             }
             quart{
                 dnam{"quarte"}
@@ -817,6 +892,20 @@ ro{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"l/100 km"}
+                few{"{0} l/100 km"}
+                one{"{0} l/100 km"}
+                other{"{0} l/100 km"}
+            }
+        }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}V"}
         }
         duration{
             day{
@@ -1072,6 +1161,12 @@ ro{
                 one{"{0} rad"}
                 other{"{0} rad"}
             }
+            revolution{
+                dnam{"rev."}
+                few{"{0} rev."}
+                one{"{0} rev."}
+                other{"{0} rev."}
+            }
         }
         area{
             acre{
@@ -1091,6 +1186,7 @@ ro{
                 few{"{0} cm²"}
                 one{"{0} cm²"}
                 other{"{0} cm²"}
+                per{"{0} pe cm²"}
             }
             square-foot{
                 dnam{"ft²"}
@@ -1103,6 +1199,7 @@ ro{
                 few{"{0} in²"}
                 one{"{0} in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"km²"}
@@ -1115,6 +1212,7 @@ ro{
                 few{"{0} m²"}
                 one{"{0} m²"}
                 other{"{0} m²"}
+                per{"{0} pe m²"}
             }
             square-mile{
                 dnam{"mi²"}
@@ -1133,6 +1231,12 @@ ro{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"l/100 km"}
+                few{"{0} l/100 km"}
+                one{"l/100 km"}
+                other{"{0} l/100 km"}
+            }
             liter-per-kilometer{
                 dnam{"l/km"}
                 few{"{0} l/km"}
@@ -1145,6 +1249,12 @@ ro{
                 one{"{0} milă/gal."}
                 other{"{0} mile/gal."}
             }
+        }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}V"}
         }
         digital{
             bit{
@@ -1209,11 +1319,18 @@ ro{
             }
         }
         duration{
+            century{
+                dnam{"sec."}
+                few{"{0} sec."}
+                one{"{0} sec."}
+                other{"{0} sec."}
+            }
             day{
                 dnam{"zile"}
                 few{"{0} zile"}
                 one{"{0} zi"}
                 other{"{0} zile"}
+                per{"{0}/zi"}
             }
             hour{
                 dnam{"ore"}
@@ -1239,12 +1356,14 @@ ro{
                 few{"{0} min."}
                 one{"{0} min."}
                 other{"{0} min."}
+                per{"{0}/min."}
             }
             month{
                 dnam{"luni"}
                 few{"{0} luni"}
                 one{"{0} lună"}
                 other{"{0} luni"}
+                per{"{0}/lună"}
             }
             nanosecond{
                 dnam{"ns"}
@@ -1253,10 +1372,10 @@ ro{
                 other{"{0} ns"}
             }
             second{
-                dnam{"sec."}
-                few{"{0} sec."}
-                one{"{0} sec."}
-                other{"{0} sec."}
+                dnam{"s"}
+                few{"{0} s"}
+                one{"{0} s"}
+                other{"{0} s"}
                 per{"{0}/s"}
             }
             week{
@@ -1264,12 +1383,14 @@ ro{
                 few{"{0} săpt."}
                 one{"{0} săpt."}
                 other{"{0} săpt."}
+                per{"{0}/săpt."}
             }
             year{
                 dnam{"ani"}
                 few{"{0} ani"}
                 one{"{0} an"}
                 other{"{0} ani"}
+                per{"{0}/an"}
             }
         }
         electric{
@@ -1374,6 +1495,7 @@ ro{
                 few{"{0} cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"dm"}
@@ -1386,18 +1508,21 @@ ro{
                 few{"{0} ft"}
                 one{"{0} ft"}
                 other{"{0} ft"}
+                per{"{0}/ft"}
             }
             inch{
                 dnam{"in"}
                 few{"{0} in"}
                 one{"{0} in"}
                 other{"{0} in"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
                 few{"{0} km"}
                 one{"{0} km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"a.l."}
@@ -1410,6 +1535,7 @@ ro{
                 few{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"µm"}
@@ -1422,6 +1548,12 @@ ro{
                 few{"{0} mi"}
                 one{"{0} mi"}
                 other{"{0} mi"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                few{"{0} smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"mm"}
@@ -1480,12 +1612,14 @@ ro{
                 few{"{0} g"}
                 one{"{0} g"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 few{"{0} kg"}
                 one{"{0} kg"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"t"}
@@ -1510,6 +1644,7 @@ ro{
                 few{"{0} oz"}
                 one{"{0} oz"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"oz t"}
@@ -1522,6 +1657,7 @@ ro{
                 few{"{0} lb"}
                 one{"{0} lb"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
             }
             ton{
                 dnam{"t.s."}
@@ -1615,6 +1751,12 @@ ro{
                 one{"{0} km/h"}
                 other{"{0} km/h"}
             }
+            knot{
+                dnam{"kn"}
+                few{"{0} kn"}
+                one{"{0} kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
                 dnam{"m/s"}
                 few{"{0} m/s"}
@@ -1641,6 +1783,12 @@ ro{
                 one{"{0} °F"}
                 other{"{0} °F"}
             }
+            generic{
+                dnam{"°"}
+                few{"{0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"K"}
                 few{"{0} K"}
@@ -1666,6 +1814,7 @@ ro{
                 few{"{0} cm³"}
                 one{"{0} cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ft³"}
@@ -1690,6 +1839,7 @@ ro{
                 few{"{0} m³"}
                 one{"{0} m³"}
                 other{"{0} m³"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"mi³"}
@@ -1709,6 +1859,12 @@ ro{
                 one{"{0} c"}
                 other{"{0} c"}
             }
+            cup-metric{
+                dnam{"mcup"}
+                few{"{0} mc"}
+                one{"{0} mc"}
+                other{"{0} mc"}
+            }
             deciliter{
                 dnam{"dl"}
                 few{"{0} dl"}
@@ -1726,6 +1882,7 @@ ro{
                 few{"{0} gal"}
                 one{"{0} gal"}
                 other{"{0} gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hl"}
@@ -1738,6 +1895,7 @@ ro{
                 few{"{0} l"}
                 one{"{0} l"}
                 other{"{0} l"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"Ml"}
@@ -1756,6 +1914,12 @@ ro{
                 few{"{0} pt"}
                 one{"{0} pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                few{"{0} mpt"}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"qt"}

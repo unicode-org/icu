@@ -8,7 +8,7 @@
 // ***************************************************************************
 es_PE{
     %%Parent{"es_419"}
-    Version{"2.1.13.23"}
+    Version{"2.1.19.14"}
     calendar{
         generic{
             DateTimePatterns{
@@ -18,7 +18,7 @@ es_PE{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "dd/MM/y G",
+                "d/M/y G",
                 "d/MM/yy GGGGG",
                 "{1} {0}",
                 "{1}, {0}",

@@ -170,5 +170,5 @@ hi{
             "7: =%spellout-cardinal=\u0935\u0940;",
         }
     }
-    Version{"2.1.7.78"}
+    Version{"2.1.19.14"}
 }

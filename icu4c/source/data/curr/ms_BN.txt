@@ -13,5 +13,5 @@ ms_BN{
             "Dolar Brunei",
         }
     }
-    Version{"2.1.14.79"}
+    Version{"2.1.19.14"}
 }

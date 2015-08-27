@@ -19,6 +19,9 @@ da{
         colStrength{"Sorteringsstyrke"}
         collation{"sorteringsrækkefølge"}
         currency{"valuta"}
+        hc{"timeur (12 vs. 24)"}
+        lb{"linjeskift"}
+        ms{"målesystem"}
         numbers{"tal"}
         timezone{"Tidszone"}
         va{"Sprogvariant"}
@@ -48,7 +51,7 @@ da{
         ar{"arabisk"}
         ar_001{"moderne standardarabisk"}
         arc{"aramæisk"}
-        arn{"araukansk"}
+        arn{"mapuche"}
         arp{"arapaho"}
         arw{"arawak"}
         as{"assamesisk"}
@@ -58,6 +61,7 @@ da{
         awa{"awadhi"}
         ay{"aymara"}
         az{"aserbajdsjansk"}
+        az_Arab{"sydaserbajdsjansk"}
         ba{"bashkir"}
         bal{"baluchi"}
         ban{"balinesisk"}
@@ -70,6 +74,7 @@ da{
         bez{"bena"}
         bfd{"bafut"}
         bg{"bulgarsk"}
+        bgn{"vestbaluchi"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -295,6 +300,7 @@ da{
         lo{"lao"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"nordluri"}
         lt{"litauisk"}
         lu{"luba-Katanga"}
         lua{"luba-Lulua"}
@@ -343,6 +349,7 @@ da{
         my{"burmesisk"}
         mye{"myene"}
         myv{"erzya"}
+        mzn{"mazenisk"}
         na{"nauru"}
         nap{"neapolitansk"}
         naq{"nama"}
@@ -425,6 +432,7 @@ da{
         scn{"siciliansk"}
         sco{"skotsk"}
         sd{"sindhi"}
+        sdh{"sydkurdisk"}
         se{"nordsamisk"}
         see{"seneca"}
         seh{"sena"}
@@ -473,7 +481,7 @@ da{
         ter{"tereno"}
         tet{"tetum"}
         tg{"tajik"}
-        th{"thailandsk"}
+        th{"thai"}
         ti{"tigrinya"}
         tig{"tigre"}
         tiv{"tivi"}
@@ -518,6 +526,7 @@ da{
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
+        wbp{"walbiri"}
         wo{"wolof"}
         xal{"kalmyk"}
         xh{"xhosa"}
@@ -792,6 +801,22 @@ da{
             unihan{"sortering efter streger i rodtegn"}
             zhuyin{"zhuyin-sorteringsrækkefølge"}
         }
+        hc{
+            h11{"12-timersur (0-11)"}
+            h12{"12-timersur (1-12)"}
+            h23{"24-timersur (0-23)"}
+            h24{"24-timersur (1-24)"}
+        }
+        lb{
+            loose{"løst linjeskift"}
+            normal{"normalt linjeskift"}
+            strict{"hårdt linjeskift"}
+        }
+        ms{
+            metric{"metersystem"}
+            uksystem{"britisk målesystem"}
+            ussystem{"amerikansk målesystem"}
+        }
         numbers{
             arab{"hindu-arabiske tal"}
             arabext{"udvidede hindu-arabiske tal"}
@@ -916,10 +941,10 @@ da{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.44"}
     codePatterns{
         language{"Sprog: {0}"}
-        script{"Instruks: {0}"}
+        script{"Skrift: {0}"}
         territory{"Område: {0}"}
     }
     localeDisplayPattern{

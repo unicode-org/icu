@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 hu{
-    Version{"2.1.15.91"}
+    Version{"2.1.19.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -16,9 +16,9 @@ hu{
     units{
         acceleration{
             g-force{
-                dnam{"G gyorsulás"}
-                one{"{0} G gyorsulás"}
-                other{"{0} G gyorsulás"}
+                dnam{"g gyorsulás"}
+                one{"{0} g gyorsulás"}
+                other{"{0} g gyorsulás"}
             }
             meter-per-second-squared{
                 dnam{"méter per másodpercnégyzet"}
@@ -47,6 +47,11 @@ hu{
                 one{"{0} radián"}
                 other{"{0} radián"}
             }
+            revolution{
+                dnam{"fordulat"}
+                one{"{0} fordulat"}
+                other{"{0} fordulat"}
+            }
         }
         area{
             acre{
@@ -63,6 +68,7 @@ hu{
                 dnam{"négyzetcentiméter"}
                 one{"{0} négyzetcentiméter"}
                 other{"{0} négyzetcentiméter"}
+                per{"{0}/négyzetcentiméter"}
             }
             square-foot{
                 dnam{"négyzetláb"}
@@ -73,6 +79,7 @@ hu{
                 dnam{"négyzethüvelyk"}
                 one{"{0} négyzethüvelyk"}
                 other{"{0} négyzethüvelyk"}
+                per{"{0}/négyzethüvelyk"}
             }
             square-kilometer{
                 dnam{"négyzetkilométer"}
@@ -83,6 +90,7 @@ hu{
                 dnam{"négyzetméter"}
                 one{"{0} négyzetméter"}
                 other{"{0} négyzetméter"}
+                per{"{0}/négyzetméter"}
             }
             square-mile{
                 dnam{"négyzetmérföld"}
@@ -99,6 +107,11 @@ hu{
             per{"{0} per {1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"liter/100 km"}
+                one{"{0} liter/100 km"}
+                other{"{0} liter/100 km"}
+            }
             liter-per-kilometer{
                 dnam{"liter per kilométer"}
                 one{"{0} liter per kilométer"}
@@ -109,6 +122,12 @@ hu{
                 one{"{0} mérföld per gallon"}
                 other{"{0} mérföld per gallon"}
             }
+        }
+        coordinate{
+            east{"{0} K"}
+            north{"{0} É"}
+            south{"{0} D"}
+            west{"{0} Ny"}
         }
         digital{
             bit{
@@ -163,10 +182,16 @@ hu{
             }
         }
         duration{
+            century{
+                dnam{"évszázad"}
+                one{"{0} évszázad"}
+                other{"{0} évszázad"}
+            }
             day{
                 dnam{"nap"}
                 one{"{0} nap"}
                 other{"{0} nap"}
+                per{"{0}/nap"}
             }
             hour{
                 dnam{"óra"}
@@ -188,11 +213,13 @@ hu{
                 dnam{"perc"}
                 one{"{0} perc"}
                 other{"{0} perc"}
+                per{"{0}/perc"}
             }
             month{
                 dnam{"hónap"}
                 one{"{0} hónap"}
                 other{"{0} hónap"}
+                per{"{0}/hónap"}
             }
             nanosecond{
                 dnam{"nanoszekundum"}
@@ -209,11 +236,13 @@ hu{
                 dnam{"hét"}
                 one{"{0} hét"}
                 other{"{0} hét"}
+                per{"{0}/hét"}
             }
             year{
                 dnam{"év"}
                 one{"{0} év"}
                 other{"{0} év"}
+                per{"{0}/év"}
             }
         }
         electric{
@@ -302,6 +331,7 @@ hu{
                 dnam{"centiméter"}
                 one{"{0} centiméter"}
                 other{"{0} centiméter"}
+                per{"{0}/centimeter"}
             }
             decimeter{
                 dnam{"deciméter"}
@@ -312,16 +342,19 @@ hu{
                 dnam{"láb"}
                 one{"{0} láb"}
                 other{"{0} láb"}
+                per{"{0}/láb"}
             }
             inch{
                 dnam{"hüvelyk"}
                 one{"{0} hüvelyk"}
                 other{"{0} hüvelyk"}
+                per{"{0}/hüvelyk"}
             }
             kilometer{
                 dnam{"kilométer"}
                 one{"{0} kilométer"}
                 other{"{0} kilométer"}
+                per{"{0}/kilométer"}
             }
             light-year{
                 dnam{"fényév"}
@@ -332,6 +365,7 @@ hu{
                 dnam{"méter"}
                 one{"{0} méter"}
                 other{"{0} méter"}
+                per{"{0}/méter"}
             }
             micrometer{
                 dnam{"mikrométer"}
@@ -342,6 +376,11 @@ hu{
                 dnam{"mérföld"}
                 one{"{0} mérföld"}
                 other{"{0} mérföld"}
+            }
+            mile-scandinavian{
+                dnam{"svéd mérföld"}
+                one{"{0} svéd mérföld"}
+                other{"{0} svéd mérföld"}
             }
             millimeter{
                 dnam{"milliméter"}
@@ -391,11 +430,13 @@ hu{
                 dnam{"gramm"}
                 one{"{0} gramm"}
                 other{"{0} gramm"}
+                per{"{0}/gramm"}
             }
             kilogram{
                 dnam{"kilogramm"}
                 one{"{0} kilogramm"}
                 other{"{0} kilogramm"}
+                per{"{0}/kilogramm"}
             }
             metric-ton{
                 dnam{"metrikus tonna"}
@@ -416,6 +457,7 @@ hu{
                 dnam{"uncia"}
                 one{"{0} uncia"}
                 other{"{0} uncia"}
+                per{"{0}/uncia"}
             }
             ounce-troy{
                 dnam{"troy uncia"}
@@ -426,6 +468,7 @@ hu{
                 dnam{"font"}
                 one{"{0} font"}
                 other{"{0} font"}
+                per{"{0}/font"}
             }
             ton{
                 dnam{"tonna"}
@@ -505,6 +548,11 @@ hu{
                 one{"{0} kilométer per óra"}
                 other{"{0} kilométer per óra"}
             }
+            knot{
+                dnam{"csomó"}
+                one{"{0} csomó"}
+                other{"{0} csomó"}
+            }
             meter-per-second{
                 dnam{"méter per másodperc"}
                 one{"{0} méter per másodperc"}
@@ -527,6 +575,11 @@ hu{
                 one{"{0} Fahrenheit-fok"}
                 other{"{0} Fahrenheit-fok"}
             }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"kelvin"}
                 one{"{0} kelvin"}
@@ -548,6 +601,7 @@ hu{
                 dnam{"köbcentiméter"}
                 one{"{0} köbcentiméter"}
                 other{"{0} köbcentiméter"}
+                per{"{0}/köbcentiméter"}
             }
             cubic-foot{
                 dnam{"köbláb"}
@@ -568,6 +622,7 @@ hu{
                 dnam{"köbméter"}
                 one{"{0} köbméter"}
                 other{"{0} köbméter"}
+                per{"{0}/köbméter"}
             }
             cubic-mile{
                 dnam{"köbmérföld"}
@@ -584,6 +639,11 @@ hu{
                 one{"{0} csésze"}
                 other{"{0} csésze"}
             }
+            cup-metric{
+                dnam{"bögre"}
+                one{"{0} bögre"}
+                other{"{0} bögre"}
+            }
             deciliter{
                 dnam{"deciliter"}
                 one{"{0} deciliter"}
@@ -598,6 +658,7 @@ hu{
                 dnam{"gallon"}
                 one{"{0} gallon"}
                 other{"{0} gallon"}
+                per{"{0}/gallon"}
             }
             hectoliter{
                 dnam{"hektoliter"}
@@ -608,6 +669,7 @@ hu{
                 dnam{"liter"}
                 one{"{0} liter"}
                 other{"{0} liter"}
+                per{"{0}/liter"}
             }
             megaliter{
                 dnam{"megaliter"}
@@ -623,6 +685,11 @@ hu{
                 dnam{"pint"}
                 one{"{0} pint"}
                 other{"{0} pint"}
+            }
+            pint-metric{
+                dnam{"metrikus pint"}
+                one{"{0} metrikus pint"}
+                other{"{0} metrikus pint"}
             }
             quart{
                 dnam{"quart"}
@@ -690,6 +757,19 @@ hu{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"l/100 km"}
+                one{"{0} l/100 km"}
+                other{"{0} l/100 km"}
+            }
+        }
+        coordinate{
+            east{"{0} K"}
+            north{"{0} É"}
+            south{"{0} D"}
+            west{"{0} Ny"}
         }
         duration{
             day{
@@ -872,7 +952,7 @@ hu{
     unitsShort{
         acceleration{
             g-force{
-                dnam{"G gyorsulás"}
+                dnam{"g gyorsulás"}
                 one{"{0} G"}
                 other{"{0} G"}
             }
@@ -903,6 +983,11 @@ hu{
                 one{"{0} rad"}
                 other{"{0} rad"}
             }
+            revolution{
+                dnam{"ford."}
+                one{"{0} ford."}
+                other{"{0} ford."}
+            }
         }
         area{
             acre{
@@ -919,6 +1004,7 @@ hu{
                 dnam{"cm²"}
                 one{"{0} cm²"}
                 other{"{0} cm²"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"ft²"}
@@ -929,6 +1015,7 @@ hu{
                 dnam{"in²"}
                 one{"{0} in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"km²"}
@@ -939,6 +1026,7 @@ hu{
                 dnam{"m²"}
                 one{"{0} m²"}
                 other{"{0} m²"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"mf²"}
@@ -955,6 +1043,11 @@ hu{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"l/100 km"}
+                one{"{0} l/100 km"}
+                other{"{0} l/100km"}
+            }
             liter-per-kilometer{
                 dnam{"l/km"}
                 one{"{0} l/km"}
@@ -965,6 +1058,12 @@ hu{
                 one{"{0} mpg"}
                 other{"{0} mpg"}
             }
+        }
+        coordinate{
+            east{"{0} K"}
+            north{"{0} É"}
+            south{"{0} D"}
+            west{"{0} Ny"}
         }
         digital{
             bit{
@@ -1019,10 +1118,16 @@ hu{
             }
         }
         duration{
+            century{
+                dnam{"sz."}
+                one{"{0} sz."}
+                other{"{0} sz."}
+            }
             day{
                 dnam{"nap"}
                 one{"{0} nap"}
                 other{"{0} nap"}
+                per{"{0}/nap"}
             }
             hour{
                 dnam{"h"}
@@ -1044,11 +1149,13 @@ hu{
                 dnam{"min"}
                 one{"{0} min"}
                 other{"{0} min"}
+                per{"{0}/min"}
             }
             month{
                 dnam{"hónap"}
                 one{"{0} hónap"}
                 other{"{0} hónap"}
+                per{"{0}/hó"}
             }
             nanosecond{
                 dnam{"ns"}
@@ -1065,11 +1172,13 @@ hu{
                 dnam{"hét"}
                 one{"{0} hét"}
                 other{"{0} hét"}
+                per{"{0}/hét"}
             }
             year{
                 dnam{"év"}
                 one{"{0} év"}
                 other{"{0} év"}
+                per{"{0}/év"}
             }
         }
         electric{
@@ -1158,6 +1267,7 @@ hu{
                 dnam{"cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"dm"}
@@ -1168,16 +1278,19 @@ hu{
                 dnam{"láb"}
                 one{"{0} láb"}
                 other{"{0} láb"}
+                per{"{0}/láb"}
             }
             inch{
                 dnam{"hüvelyk"}
                 one{"{0} hüvelyk"}
                 other{"{0} hüvelyk"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
                 one{"{0} km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"fényév"}
@@ -1188,6 +1301,7 @@ hu{
                 dnam{"m"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"µm"}
@@ -1198,6 +1312,11 @@ hu{
                 dnam{"mf"}
                 one{"{0} mf"}
                 other{"{0} mf"}
+            }
+            mile-scandinavian{
+                dnam{"mil"}
+                one{"{0} mil"}
+                other{"{0} mil"}
             }
             millimeter{
                 dnam{"mm"}
@@ -1244,14 +1363,16 @@ hu{
                 other{"{0} Kt"}
             }
             gram{
-                dnam{"g"}
+                dnam{"gram"}
                 one{"{0} g"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 one{"{0} kg"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 dnam{"t"}
@@ -1272,6 +1393,7 @@ hu{
                 dnam{"oz"}
                 one{"{0} oz"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"oz t"}
@@ -1282,6 +1404,7 @@ hu{
                 dnam{"lb"}
                 one{"{0} lb"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
             }
             ton{
                 dnam{"tn"}
@@ -1361,6 +1484,11 @@ hu{
                 one{"{0} km/h"}
                 other{"{0} km/h"}
             }
+            knot{
+                dnam{"kn"}
+                one{"{0} kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
                 dnam{"m/s"}
                 one{"{0} m/s"}
@@ -1383,6 +1511,11 @@ hu{
                 one{"{0} °F"}
                 other{"{0} °F"}
             }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"K"}
                 one{"{0} K"}
@@ -1404,6 +1537,7 @@ hu{
                 dnam{"cm³"}
                 one{"{0} cm³"}
                 other{"{0} cm³"}
+                per{"{0}/cm³"}
             }
             cubic-foot{
                 dnam{"ft³"}
@@ -1424,6 +1558,7 @@ hu{
                 dnam{"m³"}
                 one{"{0} m³"}
                 other{"{0} m³"}
+                per{"{0}/m³"}
             }
             cubic-mile{
                 dnam{"mi³"}
@@ -1440,6 +1575,11 @@ hu{
                 one{"{0} cs."}
                 other{"{0} cs."}
             }
+            cup-metric{
+                dnam{"bg"}
+                one{"{0} bg"}
+                other{"{0} bg"}
+            }
             deciliter{
                 dnam{"dl"}
                 one{"{0} dl"}
@@ -1454,6 +1594,7 @@ hu{
                 dnam{"gal"}
                 one{"{0} gal"}
                 other{"{0} gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hl"}
@@ -1464,6 +1605,7 @@ hu{
                 dnam{"l"}
                 one{"{0} l"}
                 other{"{0} l"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"Ml"}
@@ -1479,6 +1621,11 @@ hu{
                 dnam{"pt"}
                 one{"{0} pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"qt"}

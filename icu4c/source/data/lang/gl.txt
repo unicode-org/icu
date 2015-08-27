@@ -19,6 +19,9 @@ gl{
         colStrength{"Forza de clasificación"}
         collation{"Orde de clasificación"}
         currency{"Moeda"}
+        hc{"Ciclo horario (12 vs. 24)"}
+        lb{"Estilo de quebra de liña"}
+        ms{"Sistema de unidades"}
         numbers{"Números"}
         timezone{"Fuso horario"}
         va{"Variante local"}
@@ -29,7 +32,7 @@ gl{
         ab{"abkhazo"}
         ach{"acoli"}
         af{"afrikaans"}
-        agq{"aghem"}
+        agq{"agq"}
         ak{"akán"}
         am{"amárico"}
         an{"aragonés"}
@@ -45,21 +48,24 @@ gl{
         ba{"baskir"}
         be{"bielorruso"}
         bem{"bemba"}
-        bez{"bena"}
+        bez{"bez"}
         bg{"búlgaro"}
-        bm{"bambara"}
+        bgn{"Baluchi occidental"}
+        bm{"bm"}
         bn{"bengalí"}
         bo{"tibetano"}
         br{"bretón"}
-        brx{"bodo"}
+        brx{"brx"}
         bs{"bosnio"}
         ca{"catalán"}
+        ce{"Checheno"}
         cgg{"kiga"}
         chr{"cheroqui"}
         ckb{"curdo soraní"}
         co{"corso"}
         cs{"checo"}
         cu{"eslavo eclesiástico"}
+        cv{"Chuvash"}
         cy{"galés"}
         da{"dinamarqués"}
         dav{"taita"}
@@ -67,7 +73,7 @@ gl{
         de_AT{"alemán de austria"}
         de_CH{"alto alemán suízo"}
         dje{"zarma"}
-        dsb{"baixo sorabio"}
+        dsb{"dsb"}
         dua{"duala"}
         dv{"divehi"}
         dyo{"jola-fonyi"}
@@ -114,7 +120,7 @@ gl{
         he{"hebreo"}
         hi{"hindi"}
         hr{"croata"}
-        hsb{"alto sorabio"}
+        hsb{"hsb"}
         ht{"haitiano"}
         hu{"húngaro"}
         hy{"armenio"}
@@ -124,10 +130,10 @@ gl{
         ii{"yi sichuanés"}
         is{"islandés"}
         it{"italiano"}
-        iu{"inuit"}
+        iu{"iu"}
         ja{"xaponés"}
         jgo{"ngomba"}
-        jmc{"machame"}
+        jmc{"mapache"}
         jv{"xavanés"}
         ka{"xeorxiano"}
         kab{"kabile"}
@@ -135,11 +141,11 @@ gl{
         kde{"makonde"}
         kea{"caboverdiano"}
         kg{"kongo"}
-        khq{"koyra chiini"}
+        khq{"koyra Chiini"}
         ki{"kikuyu"}
         kk{"casaco"}
-        kl{"groenlandés"}
-        kln{"kalenjin"}
+        kl{"kl"}
+        kln{"kln"}
         km{"cambodiano"}
         kn{"kannada"}
         ko{"coreano"}
@@ -149,18 +155,19 @@ gl{
         ksb{"shambala"}
         ksf{"bafia"}
         ku{"kurdo"}
-        kw{"córnico"}
+        kw{"kw"}
         ky{"quirguiz"}
         la{"latín"}
-        lag{"langi"}
+        lag{"Langi"}
         lb{"luxemburgués"}
         lg{"ganda"}
-        lkt{"lakota"}
+        lkt{"Lakota"}
         ln{"lingala"}
         lo{"laotiano"}
         loz{"lozi"}
+        lrc{"Lurí do norte"}
         lt{"lituano"}
-        lu{"luba-katanga"}
+        lu{"luba-Katanga"}
         lua{"luba-lulua"}
         luo{"luo"}
         luy{"luyia"}
@@ -169,8 +176,8 @@ gl{
         mer{"meru"}
         mfe{"crioulo mauritano"}
         mg{"malgaxe"}
-        mgh{"makhuwa-meetto"}
-        mgo{"meta’"}
+        mgh{"mgh"}
+        mgo{"mgo"}
         mi{"maorí"}
         mk{"macedonio"}
         ml{"malabar"}
@@ -182,18 +189,21 @@ gl{
         mua{"mundang"}
         mul{"varias linguas"}
         my{"birmano"}
-        naq{"nama"}
+        mzn{"Mazandaraní"}
+        naq{"naq"}
         nb{"noruegués bokmal"}
         nd{"ndebele do norte"}
+        nds{"Baixo alemán"}
+        nds_NL{"Baixo saxón"}
         ne{"nepalí"}
         nl{"holandés"}
         nl_BE{"flamenco"}
-        nmg{"kwasio"}
+        nmg{"nmg"}
         nn{"noruegués nynorsk"}
         no{"noruegués"}
-        nqo{"n’ko"}
+        nqo{"nqo"}
         nso{"sesotho sa leboa"}
-        nus{"nuer"}
+        nus{"nus"}
         ny{"chewa"}
         nyn{"nyankole"}
         oc{"occitano"}
@@ -214,14 +224,15 @@ gl{
         rof{"rombo"}
         ru{"ruso"}
         rw{"ruandés"}
-        rwk{"rwa"}
+        rwk{"rwk"}
         sa{"sánscrito"}
-        saq{"samburu"}
-        sbp{"sangu"}
+        saq{"saq"}
+        sbp{"sbp"}
         sd{"sindhi"}
+        sdh{"Kurdo meridional"}
         se{"sami do norte"}
         seh{"sena"}
-        ses{"koyraboro senni"}
+        ses{"ses"}
         sg{"sango"}
         sh{"serbocroata"}
         shi{"tachelhit"}
@@ -229,10 +240,10 @@ gl{
         sk{"eslovaco"}
         sl{"esloveno"}
         sm{"samoano"}
-        sma{"saami do sur"}
-        smj{"saami lule"}
-        smn{"saami inari"}
-        sms{"saami skolt"}
+        sma{"sma"}
+        smj{"smj"}
+        smn{"smn"}
+        sms{"sms"}
         sn{"shona"}
         so{"somalí"}
         sq{"albanés"}
@@ -242,7 +253,7 @@ gl{
         su{"sondanés"}
         sv{"sueco"}
         sw{"swahili"}
-        swc{"suahili congolés"}
+        swc{"swc"}
         ta{"tamil"}
         te{"telugu"}
         teo{"teso"}
@@ -260,18 +271,19 @@ gl{
         ts{"xitsonga"}
         tt{"tártaro"}
         tum{"tumbuka"}
-        twq{"tasawaq"}
+        twq{"twq"}
         ty{"tahitiano"}
-        tzm{"tamazight marroquí central"}
+        tzm{"tzm"}
         ug{"uigur"}
         uk{"ucraíno"}
-        und{"lingua descoñecida ou non válida"}
+        und{"Lingua descoñecida"}
         ur{"urdú"}
         uz{"uzbeco"}
         vai{"vai"}
         ve{"venda"}
         vi{"vietnamita"}
         vun{"vunjo"}
+        wbp{"Warlpiri"}
         wo{"wólof"}
         xh{"xhosa"}
         xog{"soga"}
@@ -409,6 +421,22 @@ gl{
             traditional{"Orde de clasificación tradicional"}
             unihan{"Criterio de ordenación radical-trazo"}
         }
+        hc{
+            h11{"Sistema de 12 horas (0–11)"}
+            h12{"Sistema de 12 horas (1–12)"}
+            h23{"Sistema de 24 horas (0–23)"}
+            h24{"Sistema de 24 horas (1–24)"}
+        }
+        lb{
+            loose{"Estilo de quebra de liña separada"}
+            normal{"Estilo de quebra de liña normal"}
+            strict{"Estilo de quebra de liña estrita"}
+        }
+        ms{
+            metric{"Sistema métrico"}
+            uksystem{"Sistema imperial de unidades"}
+            ussystem{"Sistema de unidades dos EUA"}
+        }
         numbers{
             arab{"Díxitos do árabe oriental"}
             arabext{"Díxitos arábicos orientais"}
@@ -452,7 +480,7 @@ gl{
             vaii{"Díxitos Vai"}
         }
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.94"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

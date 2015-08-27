@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 sr_Latn{
-    Version{"2.1.14.96"}
+    Version{"2.1.19.14"}
     collations{
         search{
             Sequence{"[import hr-u-co-search]"}

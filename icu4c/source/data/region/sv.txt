@@ -138,7 +138,7 @@ sv{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hongkong (S.A.R. Kina)"}
+        HK{"Hongkong, S.A.R. Kina"}
         HM{"Heardön och McDonaldöarna"}
         HN{"Honduras"}
         HR{"Kroatien"}
@@ -192,7 +192,7 @@ sv{
         ML{"Mali"}
         MM{"Myanmar (Burma)"}
         MN{"Mongoliet"}
-        MO{"Macao (S.A.R. Kina)"}
+        MO{"Macao, S.A.R. Kina"}
         MP{"Nordmarianerna"}
         MQ{"Martinique"}
         MR{"Mauretanien"}
@@ -312,5 +312,5 @@ sv{
         FK{"Falklandsöarna (Malvinerna)"}
         MK{"f.d. jugoslaviska republiken Makedonien"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.94"}
 }

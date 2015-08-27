@@ -68,7 +68,7 @@ se_FI{
             fullwide{"fullwide"}
         }
     }
-    Version{"2.1.8.19"}
+    Version{"2.1.19.14"}
     codePatterns{
         script{"čállin: {0}"}
     }

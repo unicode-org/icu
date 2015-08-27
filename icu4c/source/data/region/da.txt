@@ -40,7 +40,7 @@ da{
         419{"Latinamerika"}
         AC{"Ascensionøen"}
         AD{"Andorra"}
-        AE{"Forenede Arabiske Emirater"}
+        AE{"De Forenede Arabiske Emirater"}
         AF{"Afghanistan"}
         AG{"Antigua og Barbuda"}
         AI{"Anguilla"}
@@ -69,7 +69,7 @@ da{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
-        BQ{"Nederlandske antiller"}
+        BQ{"De Nederlandske Antiller"}
         BR{"Brasilien"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -80,7 +80,7 @@ da{
         CA{"Canada"}
         CC{"Cocosøerne"}
         CD{"Congo-Kinshasa"}
-        CF{"Centralafrikanske Republik"}
+        CF{"Den Centralafrikanske Republik"}
         CG{"Congo-Brazzaville"}
         CH{"Schweiz"}
         CI{"Elfenbenskysten"}
@@ -210,7 +210,7 @@ da{
         NF{"Norfolk Island"}
         NG{"Nigeria"}
         NI{"Nicaragua"}
-        NL{"Holland"}
+        NL{"Nederlandene"}
         NO{"Norge"}
         NP{"Nepal"}
         NR{"Nauru"}
@@ -254,7 +254,7 @@ da{
         SO{"Somalia"}
         SR{"Surinam"}
         SS{"Sydsudan"}
-        ST{"Sao Tome og Principe"}
+        ST{"São Tomé og Príncipe"}
         SV{"El Salvador"}
         SX{"Sint Maarten"}
         SY{"Syrien"}
@@ -310,8 +310,8 @@ da{
         CD{"Den Demokratiske Republik Congo"}
         CG{"Republikken Congo"}
         FK{"Falklandsøerne (Islas Malvinas)"}
-        MK{"Makedonien (Den Tidligere Jugoslaviske Republik Makedonien)"}
+        MK{"Den tidligere jugoslaviske republik Makedonien"}
         TL{"Østtimor"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.44"}
 }

@@ -43,5 +43,5 @@ chr{
             gregorian{"ᏅᏙ ᏗᏎᏗ"}
         }
     }
-    Version{"2.1.15.48"}
+    Version{"2.1.19.77"}
 }

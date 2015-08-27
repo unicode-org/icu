@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2007-2014 International Business Machines
+﻿// Copyright (c) 2007-2015 International Business Machines
 // Corporation and others. All Rights Reserved.
 format:table(nofallback) {
     Info {
@@ -162,7 +162,7 @@ format:table(nofallback) {
                     "GMT",
                     "DATE=RELATIVE_LONG,TIME=MEDIUM",
                     "RELATIVE_ADD:DATE=-1,HOUR_OF_DAY=17,MINUTE=0,SECOND=0", // one day before now at specified time
-                    "17:00:00 hôm qua"
+                    "17:00:00 Hôm qua"
                },
                // el combines formats using hyphen
                {

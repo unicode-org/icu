@@ -19,6 +19,9 @@ af{
         colStrength{"Sorteringssterkte"}
         collation{"Sorteervolgorde"}
         currency{"Geldeenheid"}
+        hc{"Uursiklus (12 vs 24)"}
+        lb{"Reëlbreek-styl"}
+        ms{"Meetstelsel"}
         numbers{"Syfers"}
         timezone{"Tydsone"}
         va{"Lokaalvariant"}
@@ -41,10 +44,11 @@ af{
         ay{"Aymara"}
         az{"Azerbeidjans"}
         ba{"Baskir"}
-        be{"Wit-Russies"}
+        be{"Belo-Russies"}
         bem{"Bemba"}
         bez{"Bena"}
         bg{"Bulgaars"}
+        bgn{"Wes-Balochi"}
         bm{"Bambara"}
         bn{"Bengaals"}
         bo{"Tibettaans"}
@@ -52,11 +56,13 @@ af{
         brx{"Bodo"}
         bs{"Bosnies"}
         ca{"Katalaans"}
+        ce{"Tsjetsjen"}
         cgg{"Sjiga"}
         chr{"Cherokees"}
         ckb{"Sorani Koerdies"}
         co{"Korsikaans"}
         cs{"Tsjeggies"}
+        cv{"Chuvash"}
         cy{"Wallies"}
         da{"Deens"}
         dav{"Taita"}
@@ -147,6 +153,7 @@ af{
         ln{"Lingaals"}
         lo{"Lao"}
         loz{"Lozi"}
+        lrc{"Noord-Luri"}
         lt{"Litaus"}
         lu{"Luba-Katanga"}
         lua{"Luba-Lulua"}
@@ -170,9 +177,12 @@ af{
         mua{"Mundang"}
         mul{"Veelvuldige tale"}
         my{"Birmaans"}
+        mzn{"Masanderani"}
         naq{"Nama"}
         nb{"Noorse Bokmål"}
         nd{"Noord-Ndebele"}
+        nds{"Lae Duits"}
+        nds_NL{"Nedersaksies"}
         ne{"Nepalees"}
         nl{"Nederlands"}
         nl_BE{"Vlaams"}
@@ -206,7 +216,8 @@ af{
         saq{"Samburu"}
         sbp{"Sangu"}
         sd{"Sindhi"}
-        se{"Noordelike Sami"}
+        sdh{"Suid-Koerdies"}
+        se{"Noord-Sami"}
         seh{"Sena"}
         ses{"Koyraboro Senni"}
         sg{"Sango"}
@@ -230,7 +241,7 @@ af{
         sw{"Swahili"}
         swc{"Swahili (Kongo)"}
         ta{"Tamil"}
-        te{"Telugu"}
+        te{"Teloegoe"}
         teo{"Teso"}
         tet{"Tetum"}
         tg{"Tadzjieks"}
@@ -257,6 +268,7 @@ af{
         ve{"Venda"}
         vi{"Viëtnamees"}
         vun{"Vunjo"}
+        wbp{"Warlpiri"}
         wo{"Wolof"}
         xh{"Xhosa"}
         xog{"Soga"}
@@ -307,7 +319,7 @@ af{
         Orya{"Oriya"}
         Sinh{"Sinhala"}
         Taml{"Tamil"}
-        Telu{"Telugu"}
+        Telu{"Teloegoe"}
         Thaa{"Thaana"}
         Thai{"Thai"}
         Tibt{"Tibettaans"}
@@ -393,6 +405,22 @@ af{
             traditional{"Tradisionele sorteervolgorde"}
             unihan{"Radikale-slag-sorteervolgorde"}
         }
+        hc{
+            h11{"12-uur-stelsel (0-11)"}
+            h12{"112-uur-stelsel (1-12)"}
+            h23{"24-uur-stelsel"}
+            h24{"24-uur-stelsel (1-24)"}
+        }
+        lb{
+            loose{"Los reëlbreek-styl"}
+            normal{"Normale reëlbreek-styl"}
+            strict{"Streng reëlbreek-styl"}
+        }
+        ms{
+            metric{"Metriese stelsel"}
+            uksystem{"Imperiale meetstelsel"}
+            ussystem{"VS-meetstelsel"}
+        }
         numbers{
             arab{"Arabies-Indiese syfers"}
             arabext{"Uitgebreide Arabies-Indiese syfers"}
@@ -409,10 +437,10 @@ af{
             gujr{"Goedjarati-syfers"}
             guru{"Gurmukhi-syfers"}
             hanidec{"Chinese desimale syfers"}
-            hans{"Vereenvoudigde Chinese syfers"}
-            hansfin{"Vereenvoudigde Chinese finansiële syfers"}
-            hant{"Tradisionele Chinese syfers"}
-            hantfin{"Tradisionele Chinese finansiële syfers"}
+            hans{"Vereenvoudigde Sjinese syfers"}
+            hansfin{"Vereenvoudigde Sjinese finansiële syfers"}
+            hant{"Tradisionele Sjinese syfers"}
+            hantfin{"Tradisionele Sjinese finansiële syfers"}
             hebr{"Hebreeuse syfers"}
             jpan{"Japannese syfers"}
             jpanfin{"Japannese finansiële syfers"}
@@ -429,14 +457,14 @@ af{
             romanlow{"Romeinse kleinletter-syfers"}
             taml{"Tradisionele Tamil-syfers"}
             tamldec{"Tamil-syfers"}
-            telu{"Telugu-syfers"}
+            telu{"Teloegoe-syfers"}
             thai{"Thaise syfers"}
             tibt{"Tibettaanse syfers"}
             traditional{"Tradisionele syfers"}
             vaii{"Vai-syfers"}
         }
     }
-    Version{"2.1.15.91"}
+    Version{"2.1.19.94"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Skrif: {0}"}

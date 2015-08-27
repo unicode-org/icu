@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 mk{
-    Version{"2.1.15.80"}
+    Version{"2.1.19.14"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -47,6 +47,11 @@ mk{
                 one{"{0} радијан"}
                 other{"{0} радијани"}
             }
+            revolution{
+                dnam{"револуција"}
+                one{"{0} револуција"}
+                other{"{0} револуции"}
+            }
         }
         area{
             acre{
@@ -63,6 +68,7 @@ mk{
                 dnam{"квадратни сантиметри"}
                 one{"{0} квадратен сантиметар"}
                 other{"{0} квадратни сантиметри"}
+                per{"{0} по квадратен сантиметар"}
             }
             square-foot{
                 dnam{"квадратни стапки"}
@@ -73,6 +79,7 @@ mk{
                 dnam{"квадратни инчи"}
                 one{"{0} квадратен инч"}
                 other{"{0} квадратни инчи"}
+                per{"{0} по квадратен инч"}
             }
             square-kilometer{
                 dnam{"квадратни километри"}
@@ -83,6 +90,7 @@ mk{
                 dnam{"квадратни метри"}
                 one{"{0} квадратен метар"}
                 other{"{0} квадратни метри"}
+                per{"{0} по метар квадратен"}
             }
             square-mile{
                 dnam{"квадратни милји"}
@@ -99,6 +107,11 @@ mk{
             per{"{0} на {1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"литри на 100 километри"}
+                one{"{0} литар на 100 километри"}
+                other{"{0} литри на 100 километри"}
+            }
             liter-per-kilometer{
                 dnam{"литри на километар"}
                 one{"{0} литар на километар"}
@@ -109,6 +122,12 @@ mk{
                 one{"{0} милја на галон"}
                 other{"{0} милји на галон"}
             }
+        }
+        coordinate{
+            east{"{0}И"}
+            north{"{0}С"}
+            south{"{0}Ј"}
+            west{"{0}З"}
         }
         digital{
             bit{
@@ -163,10 +182,16 @@ mk{
             }
         }
         duration{
+            century{
+                dnam{"векови"}
+                one{"{0} век"}
+                other{"{0} векови"}
+            }
             day{
                 dnam{"дена"}
                 one{"{0} ден"}
                 other{"{0} дена"}
+                per{"{0} дневно"}
             }
             hour{
                 dnam{"часа"}
@@ -188,11 +213,13 @@ mk{
                 dnam{"минути"}
                 one{"{0} минута"}
                 other{"{0} минути"}
+                per{"{0} на минута"}
             }
             month{
                 dnam{"месеци"}
                 one{"{0} месец"}
                 other{"{0} месеци"}
+                per{"{0} месечно"}
             }
             nanosecond{
                 dnam{"наносекунди"}
@@ -209,11 +236,13 @@ mk{
                 dnam{"седмици"}
                 one{"{0} седмица"}
                 other{"{0} седмици"}
+                per{"{0} неделно"}
             }
             year{
                 dnam{"години"}
                 one{"{0} година"}
                 other{"{0} години"}
+                per{"{0} годишно"}
             }
         }
         electric{
@@ -302,6 +331,7 @@ mk{
                 dnam{"сантиметри"}
                 one{"{0} сантиметар"}
                 other{"{0} сантиметри"}
+                per{"{0} на сантиметар"}
             }
             decimeter{
                 dnam{"дециметри"}
@@ -317,6 +347,7 @@ mk{
                 dnam{"стапки"}
                 one{"{0} стапка"}
                 other{"{0} стапки"}
+                per{"{0} на стапка"}
             }
             furlong{
                 dnam{"фурлонзи"}
@@ -327,11 +358,13 @@ mk{
                 dnam{"инчи"}
                 one{"{0} инч"}
                 other{"{0} инчи"}
+                per{"{0} на инч"}
             }
             kilometer{
                 dnam{"километри"}
                 one{"{0} километар"}
                 other{"{0} километри"}
+                per{"{0} на километар"}
             }
             light-year{
                 dnam{"светлосни години"}
@@ -342,6 +375,7 @@ mk{
                 dnam{"метри"}
                 one{"{0} метар"}
                 other{"{0} метри"}
+                per{"{0} на метар"}
             }
             micrometer{
                 dnam{"микрометри"}
@@ -352,6 +386,11 @@ mk{
                 dnam{"милји"}
                 one{"{0} милја"}
                 other{"{0} милји"}
+            }
+            mile-scandinavian{
+                dnam{"скандинавска милја"}
+                one{"{0} скандинавска милја"}
+                other{"{0} скандинавски милји"}
             }
             millimeter{
                 dnam{"милиметри"}
@@ -401,11 +440,13 @@ mk{
                 dnam{"грама"}
                 one{"{0} грам"}
                 other{"{0} грама"}
+                per{"{0} од грам"}
             }
             kilogram{
                 dnam{"килограми"}
                 one{"{0} килограм"}
                 other{"{0} килограми"}
+                per{"{0} од килограм"}
             }
             metric-ton{
                 dnam{"метрички тони"}
@@ -426,6 +467,7 @@ mk{
                 dnam{"унци"}
                 one{"{0} унца"}
                 other{"{0} унци"}
+                per{"{0} од унца"}
             }
             ounce-troy{
                 dnam{"тројски унци"}
@@ -436,6 +478,7 @@ mk{
                 dnam{"фунти"}
                 one{"{0} фунта"}
                 other{"{0} фунти"}
+                per{"{0} од фунта"}
             }
             stone{
                 dnam{"стоуни"}
@@ -520,6 +563,11 @@ mk{
                 one{"{0} километар на час"}
                 other{"{0} километри на час"}
             }
+            knot{
+                dnam{"јазол"}
+                one{"{0} јазол"}
+                other{"{0} јазли"}
+            }
             meter-per-second{
                 dnam{"метри во секунда"}
                 one{"{0} метар во секунда"}
@@ -542,6 +590,11 @@ mk{
                 one{"{0} фаренхајтов степен"}
                 other{"{0} фаренхајтови степени"}
             }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"келвини"}
                 one{"{0} келвин"}
@@ -550,9 +603,9 @@ mk{
         }
         volume{
             acre-foot{
-                dnam{"акр-стапки"}
-                one{"{0} акр-стапка"}
-                other{"{0} акр-стапки"}
+                dnam{"ар-стапка"}
+                one{"{0} ар-стапка"}
+                other{"{0} ар-стапки"}
             }
             bushel{
                 dnam{"бушели"}
@@ -560,14 +613,15 @@ mk{
                 other{"{0} бушели"}
             }
             centiliter{
-                dnam{"сантилитри"}
-                one{"{0} сантилитар"}
-                other{"{0} сантилитри"}
+                dnam{"центилитри"}
+                one{"{0} центилитар"}
+                other{"{0} центилитри"}
             }
             cubic-centimeter{
                 dnam{"кубни сантиметри"}
                 one{"{0} кубен сантиметар"}
                 other{"{0} кубни сантиметри"}
+                per{"{0} на кубен сантиметар"}
             }
             cubic-foot{
                 dnam{"кубни стапки"}
@@ -588,6 +642,7 @@ mk{
                 dnam{"кубни метри"}
                 one{"{0} кубен метар"}
                 other{"{0} кубни метри"}
+                per{"{0} на кубен метар"}
             }
             cubic-mile{
                 dnam{"кубни милји"}
@@ -604,6 +659,11 @@ mk{
                 one{"{0} шолја"}
                 other{"{0} шолји"}
             }
+            cup-metric{
+                dnam{"метрички шолји"}
+                one{"{0} метричка шолја"}
+                other{"{0} метрички шолји"}
+            }
             deciliter{
                 dnam{"децилитри"}
                 one{"{0} децилитар"}
@@ -618,6 +678,7 @@ mk{
                 dnam{"галони"}
                 one{"{0} галон"}
                 other{"{0} галони"}
+                per{"{0} по галон"}
             }
             hectoliter{
                 dnam{"хектолитри"}
@@ -628,6 +689,7 @@ mk{
                 dnam{"литри"}
                 one{"{0} литар"}
                 other{"{0} литри"}
+                per{"{0} по литар"}
             }
             megaliter{
                 dnam{"мегалитри"}
@@ -643,6 +705,11 @@ mk{
                 dnam{"пинти"}
                 one{"{0} пинта"}
                 other{"{0} пинти"}
+            }
+            pint-metric{
+                dnam{"метрички пинти"}
+                one{"{0} метричка пинта"}
+                other{"{0} метрички пинти"}
             }
             quart{
                 dnam{"кварти"}
@@ -682,6 +749,7 @@ mk{
                 other{"{0}″"}
             }
             degree{
+                dnam{"степени"}
                 one{"{0} степ."}
                 other{"{0} степ."}
             }
@@ -729,6 +797,11 @@ mk{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                one{"{0} L/100km"}
+                other{"{0} L/100km"}
+            }
             liter-per-kilometer{
                 one{"{0} л/км"}
                 other{"{0} л/км"}
@@ -737,6 +810,12 @@ mk{
                 one{"{0} ми/гал"}
                 other{"{0} ми/гал"}
             }
+        }
+        coordinate{
+            east{"{0}И"}
+            north{"{0}С"}
+            south{"{0}Ј"}
+            west{"{0}З"}
         }
         digital{
             bit{
@@ -927,8 +1006,8 @@ mk{
             }
             gram{
                 dnam{"грам"}
-                one{"{0} г"}
-                other{"{0} г"}
+                one{"{0}г"}
+                other{"{0}г"}
             }
             kilogram{
                 dnam{"кг"}
@@ -976,6 +1055,7 @@ mk{
                 other{"{0} кс"}
             }
             kilowatt{
+                dnam{"kW"}
                 one{"{0} kW"}
                 other{"{0} kW"}
             }
@@ -1032,6 +1112,7 @@ mk{
                 other{"{0}°C"}
             }
             fahrenheit{
+                dnam{"°F"}
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
@@ -1160,8 +1241,13 @@ mk{
             }
             radian{
                 dnam{"радијани"}
-                one{"{0} рад"}
-                other{"{0} рад"}
+                one{"{0} rad"}
+                other{"{0} rad"}
+            }
+            revolution{
+                dnam{"rev"}
+                one{"{0} rev"}
+                other{"{0} rev"}
             }
         }
         area{
@@ -1179,6 +1265,7 @@ mk{
                 dnam{"см²"}
                 one{"{0} см²"}
                 other{"{0} см²"}
+                per{"{0}/см²"}
             }
             square-foot{
                 dnam{"квадратни стапки"}
@@ -1189,6 +1276,7 @@ mk{
                 dnam{"in²"}
                 one{"{0} in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"км²"}
@@ -1196,9 +1284,10 @@ mk{
                 other{"{0} км²"}
             }
             square-meter{
-                dnam{"м²"}
+                dnam{"метри²"}
                 one{"{0} м²"}
                 other{"{0} м²"}
+                per{"{0}/м²"}
             }
             square-mile{
                 dnam{"кв. милји"}
@@ -1215,16 +1304,27 @@ mk{
             per{"{0}/{1}"}
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"L/100km"}
+                one{"{0} L/100km"}
+                other{"{0} L/100km"}
+            }
             liter-per-kilometer{
                 dnam{"литри/км"}
-                one{"{0} л/км"}
-                other{"{0} л/км"}
+                one{"{0} L/km"}
+                other{"{0} L/km"}
             }
             mile-per-gallon{
                 dnam{"милји/гал"}
                 one{"{0} mpg"}
                 other{"{0} mpg"}
             }
+        }
+        coordinate{
+            east{"{0}И"}
+            north{"{0}С"}
+            south{"{0}Ј"}
+            west{"{0}З"}
         }
         digital{
             bit{
@@ -1248,7 +1348,7 @@ mk{
                 other{"{0} GB"}
             }
             kilobit{
-                dnam{"kb"}
+                dnam{"kbit"}
                 one{"{0} kb"}
                 other{"{0} kb"}
             }
@@ -1258,31 +1358,37 @@ mk{
                 other{"{0} kB"}
             }
             megabit{
-                dnam{"Mb"}
+                dnam{"Mbit"}
                 one{"{0} Mb"}
                 other{"{0} Mb"}
             }
             megabyte{
-                dnam{"MB"}
+                dnam{"MByte"}
                 one{"{0} MB"}
                 other{"{0} MB"}
             }
             terabit{
-                dnam{"Tb"}
+                dnam{"Tbit"}
                 one{"{0} Tb"}
                 other{"{0} Tb"}
             }
             terabyte{
-                dnam{"TB"}
+                dnam{"TByte"}
                 one{"{0} TB"}
                 other{"{0} TB"}
             }
         }
         duration{
+            century{
+                dnam{"в."}
+                one{"{0} в."}
+                other{"{0} в."}
+            }
             day{
                 dnam{"дена"}
                 one{"{0} ден"}
                 other{"{0} дена"}
+                per{"{0}/ден"}
             }
             hour{
                 dnam{"часа"}
@@ -1304,11 +1410,13 @@ mk{
                 dnam{"минути"}
                 one{"{0} мин."}
                 other{"{0} мин."}
+                per{"{0}/мин."}
             }
             month{
                 dnam{"месеци"}
                 one{"{0} мес."}
                 other{"{0} мес."}
+                per{"{0}/мес."}
             }
             nanosecond{
                 dnam{"наносек"}
@@ -1325,11 +1433,13 @@ mk{
                 dnam{"седмици"}
                 one{"{0} сед."}
                 other{"{0} сед."}
+                per{"{0}/сед."}
             }
             year{
                 dnam{"години"}
                 one{"{0} год."}
                 other{"{0} год."}
+                per{"{0}/год."}
             }
         }
         electric{
@@ -1339,7 +1449,7 @@ mk{
                 other{"{0} A"}
             }
             milliampere{
-                dnam{"mA"}
+                dnam{"милиамп."}
                 one{"{0} mA"}
                 other{"{0} mA"}
             }
@@ -1418,6 +1528,7 @@ mk{
                 dnam{"см"}
                 one{"{0} см"}
                 other{"{0} см"}
+                per{"{0}/см"}
             }
             decimeter{
                 dnam{"дм"}
@@ -1433,6 +1544,7 @@ mk{
                 dnam{"стапки"}
                 one{"{0} ст"}
                 other{"{0} ст"}
+                per{"{0}/ст"}
             }
             furlong{
                 dnam{"фурлонзи"}
@@ -1443,11 +1555,13 @@ mk{
                 dnam{"инчи"}
                 one{"{0} инч"}
                 other{"{0} инчи"}
+                per{"{0}/ин"}
             }
             kilometer{
                 dnam{"км"}
                 one{"{0} км"}
                 other{"{0} км"}
+                per{"{0}/км"}
             }
             light-year{
                 dnam{"свет. год."}
@@ -1458,6 +1572,7 @@ mk{
                 dnam{"метри"}
                 one{"{0} м"}
                 other{"{0} м"}
+                per{"{0}/м"}
             }
             micrometer{
                 dnam{"µm"}
@@ -1468,6 +1583,11 @@ mk{
                 dnam{"милји"}
                 one{"{0} ми"}
                 other{"{0} ми"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"мм"}
@@ -1503,8 +1623,8 @@ mk{
         light{
             lux{
                 dnam{"лукс"}
-                one{"{0} лк"}
-                other{"{0} лк"}
+                one{"{0} lx"}
+                other{"{0} lx"}
             }
         }
         mass{
@@ -1517,11 +1637,13 @@ mk{
                 dnam{"грама"}
                 one{"{0} г"}
                 other{"{0} г"}
+                per{"{0}/г"}
             }
             kilogram{
                 dnam{"кг"}
                 one{"{0} кг"}
                 other{"{0} кг"}
+                per{"{0}/кг"}
             }
             metric-ton{
                 dnam{"т"}
@@ -1542,6 +1664,7 @@ mk{
                 dnam{"унци"}
                 one{"{0} унца"}
                 other{"{0} унци"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 dnam{"тројска унца"}
@@ -1552,6 +1675,7 @@ mk{
                 dnam{"фунти"}
                 one{"{0} фунта"}
                 other{"{0} фунти"}
+                per{"{0}/lb"}
             }
             stone{
                 dnam{"стоуни"}
@@ -1610,7 +1734,7 @@ mk{
             millibar{
                 dnam{"мбар"}
                 one{"{0} мбар"}
-                other{"{0} мбар"}
+                other{"{0} мб."}
             }
             millimeter-of-mercury{
                 dnam{"мм жива"}
@@ -1636,6 +1760,11 @@ mk{
                 one{"{0} к/ч"}
                 other{"{0} к/ч"}
             }
+            knot{
+                dnam{"kn"}
+                one{"{0} kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
                 dnam{"метри/сек"}
                 one{"{0} м/с"}
@@ -1658,6 +1787,11 @@ mk{
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             kelvin{
                 dnam{"K"}
                 one{"{0} K"}
@@ -1666,9 +1800,9 @@ mk{
         }
         volume{
             acre-foot{
-                dnam{"акр ст"}
-                one{"{0} ак ст"}
-                other{"{0} ак ст"}
+                dnam{"ар-ст."}
+                one{"{0} ар-ст."}
+                other{"{0} ар-ст."}
             }
             bushel{
                 dnam{"бушели"}
@@ -1676,14 +1810,15 @@ mk{
                 other{"{0} бу"}
             }
             centiliter{
-                dnam{"сл"}
-                one{"{0} сл"}
-                other{"{0} сл"}
+                dnam{"cL"}
+                one{"{0} cL"}
+                other{"{0} cL"}
             }
             cubic-centimeter{
                 dnam{"см³"}
                 one{"{0} см³"}
                 other{"{0} см³"}
+                per{"{0}/см³"}
             }
             cubic-foot{
                 dnam{"стапки³"}
@@ -1704,6 +1839,7 @@ mk{
                 dnam{"м³"}
                 one{"{0} м³"}
                 other{"{0} м³"}
+                per{"{0}/м³"}
             }
             cubic-mile{
                 dnam{"ми³"}
@@ -1720,10 +1856,15 @@ mk{
                 one{"{0} ш."}
                 other{"{0} ш."}
             }
+            cup-metric{
+                dnam{"mcup"}
+                one{"{0} mc"}
+                other{"{0} mc"}
+            }
             deciliter{
-                dnam{"дл"}
-                one{"{0} дл"}
-                other{"{0} дл"}
+                dnam{"dL"}
+                one{"{0} dL"}
+                other{"{0} dL"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
@@ -1734,16 +1875,18 @@ mk{
                 dnam{"гал"}
                 one{"{0} гал"}
                 other{"{0} гал"}
+                per{"{0}/gal"}
             }
             hectoliter{
-                dnam{"хл"}
-                one{"{0} хл"}
-                other{"{0} хл"}
+                dnam{"hL"}
+                one{"{0} hL"}
+                other{"{0} hL"}
             }
             liter{
                 dnam{"литри"}
                 one{"{0} л"}
                 other{"{0} л"}
+                per{"{0}/л"}
             }
             megaliter{
                 dnam{"ML"}
@@ -1751,14 +1894,19 @@ mk{
                 other{"{0} ML"}
             }
             milliliter{
-                dnam{"мл"}
-                one{"{0} мл"}
-                other{"{0} мл"}
+                dnam{"mL"}
+                one{"{0} mL"}
+                other{"{0} mL"}
             }
             pint{
                 dnam{"пинти"}
-                one{"{0} пт"}
-                other{"{0} пт"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"qt"}
@@ -1766,14 +1914,14 @@ mk{
                 other{"{0} qt"}
             }
             tablespoon{
-                dnam{"суп. лаж."}
-                one{"{0} суп. лаж."}
-                other{"{0} суп. лаж."}
+                dnam{"tbsp"}
+                one{"{0} tbsp"}
+                other{"{0} tbsp"}
             }
             teaspoon{
-                dnam{"каф. лаж."}
-                one{"{0} каф. лаж."}
-                other{"{0} каф. лаж."}
+                dnam{"tsp"}
+                one{"{0} tsp"}
+                other{"{0} tsp"}
             }
         }
     }

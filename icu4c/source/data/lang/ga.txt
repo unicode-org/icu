@@ -11,6 +11,9 @@ ga{
         calendar{"Féilire"}
         collation{"Ord Sórtála"}
         currency{"Airgeadra"}
+        hc{"Timthriall Uaire (12 vs 24)"}
+        lb{"Stíl Briseadh Líne"}
+        ms{"Córas Tomhais"}
         numbers{"Uimhreacha"}
     }
     Languages{
@@ -47,7 +50,7 @@ ga{
         bua{"Buiriáitis"}
         bug{"Buiginis"}
         ca{"Catalóinis"}
-        ce{"Sisinis"}
+        ce{"Seisnis"}
         ceb{"Seabúáinis"}
         ch{"Seamóiris"}
         chm{"Mairis"}
@@ -194,6 +197,7 @@ ga{
         nb{"Ioruais Bokmål"}
         nd{"Ndeibéilis an Tuaiscirt"}
         nds{"Gearmáinis Íochtarach"}
+        nds_NL{"Sacsainis Íochtarach"}
         ne{"Neipeailis"}
         ng{"Ndongais"}
         niu{"Níobhais"}
@@ -303,6 +307,7 @@ ga{
         zxx{"Gan ábhar teangeolaíoch"}
     }
     Languages%short{
+        az{"Asairis"}
         en_GB{"Béarla na R.A."}
         en_US{"Béarla S.A.M."}
     }
@@ -397,6 +402,7 @@ ga{
             buddhist{"Féilire Búdaíoch"}
             chinese{"Féilire Síneach"}
             coptic{"Féilire Coptach"}
+            dangi{"Féilire Dangi"}
             ethiopic{"Féilire Aetóipice"}
             gregorian{"Féilire Ghréagóra"}
             hebrew{"Féilire na nEabhrach"}
@@ -410,6 +416,22 @@ ga{
             ducet{"Ord Réamhshocraithe Sórtála Unicode"}
             search{"Cuardach Ilfhóinteach"}
             standard{"Ord Caighdeánach Sórtála"}
+        }
+        hc{
+            h11{"Córas 12 Uair (0–11)"}
+            h12{"Córas 12 Uair (1–12)"}
+            h23{"Córas 24 Uair (0–23)"}
+            h24{"Córas 24 Uair (1–24)"}
+        }
+        lb{
+            loose{"Stíl Briseadh Líne Scaoilte"}
+            normal{"Stíl Gnáthbhriseadh Líne"}
+            strict{"Stíl Briseadh Líne Docht"}
+        }
+        ms{
+            metric{"Córas Méadrach"}
+            uksystem{"Córas Impiriúil Tomhais"}
+            ussystem{"Córas SAM Tomhais"}
         }
         numbers{
             arab{"Digití Ind-Arabacha"}
@@ -453,7 +475,7 @@ ga{
         VALENCIA{"Vaileinsis"}
         WADEGILE{"Rómhánú Wade-Giles"}
     }
-    Version{"2.1.15.45"}
+    Version{"2.1.19.17"}
     codePatterns{
         language{"Teanga: {0}"}
         script{"Script: {0}"}

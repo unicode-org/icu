@@ -11,7 +11,10 @@ bs{
         calendar{"Kalendar"}
         collation{"Sortiranje"}
         currency{"Valuta"}
-        numbers{"brojevi"}
+        hc{"Satni ciklus (12 ili 24)"}
+        lb{"Stil završetka reda"}
+        ms{"Mjerni sistem"}
+        numbers{"Brojevi"}
     }
     Languages{
         aa{"afarski"}
@@ -55,6 +58,7 @@ bs{
         bem{"bemba"}
         bez{"bena"}
         bg{"bugarski"}
+        bgn{"zapadni belučki"}
         bho{"bojpuri"}
         bi{"bislama"}
         bik{"bikol"}
@@ -96,7 +100,7 @@ bs{
         csb{"kašubijanski"}
         cu{"staroslovenski"}
         cv{"čuvaški"}
-        cy{"cy"}
+        cy{"velški"}
         da{"danski"}
         dak{"dakota"}
         dar{"dargva"}
@@ -269,6 +273,7 @@ bs{
         lo{"laoški"}
         lol{"mongo"}
         loz{"lozi"}
+        lrc{"sjeverni luri"}
         lt{"litvanski"}
         lu{"luba-katanga"}
         lua{"luba-lulua"}
@@ -314,12 +319,14 @@ bs{
         mwr{"marvari"}
         my{"burmanski"}
         myv{"erzija"}
+        mzn{"mazanderanski"}
         na{"nauru"}
         nap{"neapolitanski"}
         naq{"nama"}
         nb{"norveški bokmal"}
         nd{"sjeverni ndebele"}
         nds{"niski nemački"}
+        nds_NL{"niskosaksonski"}
         ne{"nepalski"}
         new{"nevari"}
         ng{"ndonga"}
@@ -392,6 +399,7 @@ bs{
         scn{"sicilijanski"}
         sco{"škotski"}
         sd{"sindi"}
+        sdh{"južnokurdski"}
         se{"sjeverni sami"}
         seh{"sena"}
         sel{"selkap"}
@@ -420,7 +428,7 @@ bs{
         srr{"serer"}
         ss{"svati"}
         st{"sesoto"}
-        su{"sudanski"}
+        su{"sundanski"}
         suk{"sukuma"}
         sus{"susu"}
         sux{"sumerski"}
@@ -447,7 +455,7 @@ bs{
         tli{"tlingit"}
         tmh{"tamašek"}
         tn{"tsvana"}
-        to{"tonga"}
+        to{"tonganski"}
         tog{"njasa tonga"}
         tpi{"tok pisin"}
         tr{"turski"}
@@ -466,7 +474,7 @@ bs{
         uga{"ugaritski"}
         uk{"ukrajinski"}
         umb{"umbundu"}
-        und{"nepoznati ili nevažeći jezik"}
+        und{"nepoznati jezik"}
         ur{"urdu"}
         uz{"uzbečki"}
         vai{"vai"}
@@ -479,6 +487,7 @@ bs{
         wal{"valamo"}
         war{"varej"}
         was{"vašo"}
+        wbp{"varlpiri"}
         wo{"volof"}
         xal{"kalmik"}
         xh{"kosa"}
@@ -548,8 +557,8 @@ bs{
         Hang{"hangul pismo"}
         Hani{"han pismo"}
         Hano{"hanuno pismo"}
-        Hans{"pojednostavljeno kinesko pismo"}
-        Hant{"tradicionalno kinesko pismo"}
+        Hans{"pojednostavljeno"}
+        Hant{"tradicionalno"}
         Hebr{"hebrejsko pismo"}
         Hira{"hiragana"}
         Hmng{"pahawh hmong pismo"}
@@ -609,7 +618,6 @@ bs{
         Sgnw{"znakovno pismo"}
         Shaw{"šavian pismo"}
         Sinh{"sinhala pismo"}
-        Sund{"sudansko pismo"}
         Sylo{"siloti nagri pismo"}
         Syrc{"sirijsko pismo"}
         Syre{"sirijsko estrangelo pismo"}
@@ -638,7 +646,7 @@ bs{
         Zsym{"simboli"}
         Zxxx{"nepisani jezik"}
         Zyyy{"zajedničko pismo"}
-        Zzzz{"nepoznato ili nevažeće pismo"}
+        Zzzz{"nepoznato pismo"}
     }
     Scripts%stand-alone{
         Hans{"pojednostavljeno hansko pismo"}
@@ -674,20 +682,36 @@ bs{
             stroke{"Sortiranje po broju crta"}
             traditional{"Tradicionalno sortiranje"}
         }
+        hc{
+            h11{"12-satni sistem (0-11)"}
+            h12{"12-satni sistem (1-12)"}
+            h23{"24- satni sistem (0-23)"}
+            h24{"24-satni sistem (1-24)"}
+        }
+        lb{
+            loose{"Opušteni stil završetka reda"}
+            normal{"Normalni stil završetka reda"}
+            strict{"Strogi stil završetka reda"}
+        }
+        ms{
+            metric{"Metrički sistem"}
+            uksystem{"Imperijalni mjerni sistem"}
+            ussystem{"Američki mjerni sistem"}
+        }
         numbers{
-            arab{"arapsko-indijske znamenke"}
-            arabext{"proširene arapsko-indijske znamenke"}
+            arab{"arapsko-indijske brojke"}
+            arabext{"proširene arapsko-indijske brojke"}
             armn{"jermenski brojevi"}
             armnlow{"mali jermenski brojevi"}
-            beng{"znamenke bengalskog pisma"}
-            deva{"znamenke pisma devanagari"}
+            beng{"brojke bengalskog pisma"}
+            deva{"brojke pisma devanagari"}
             ethi{"etiopski brojevi"}
-            fullwide{"široki brojevi"}
+            fullwide{"Široki brojevi"}
             geor{"gruzijski brojevi"}
             grek{"grčki brojevi"}
             greklow{"mali grčki brojevi"}
-            gujr{"gudžaratske znamenke"}
-            guru{"znamenke pisma gurmuki"}
+            gujr{"gudžaratske brojke"}
+            guru{"brojke pisma gurmuki"}
             hanidec{"kineski decimalni brojevi"}
             hans{"pojednostavljeni kineski brojevi"}
             hansfin{"pojednostavljeni kineski finansijski brojevi"}
@@ -696,20 +720,20 @@ bs{
             hebr{"hebrejski brojevi"}
             jpan{"japanski brojevi"}
             jpanfin{"japanski finansijski brojevi"}
-            khmr{"kmerske znamenke"}
-            knda{"znamenke pisma kanada"}
-            laoo{"laoske znamenke"}
+            khmr{"kmerske brojke"}
+            knda{"brojke pisma kanada"}
+            laoo{"laoske brojke"}
             latn{"arapski brojevi"}
-            mlym{"malajalamske znamenke"}
-            mymr{"mijanmarske znamenke"}
-            orya{"orijske znamenke"}
+            mlym{"malajalamske brojke"}
+            mymr{"mijanmarske brojke"}
+            orya{"orijske brojke"}
             roman{"rimski brojevi"}
             romanlow{"mali rimski brojevi"}
             taml{"tamilski brojevi"}
-            tamldec{"tamilske znamenke"}
-            telu{"znamenke teluškog pisma"}
-            thai{"tajske znamenke"}
-            tibt{"tibetske znamenke"}
+            tamldec{"tamilske brojke"}
+            telu{"brojke teluškog pisma"}
+            thai{"tajlandske brojke"}
+            tibt{"tibetske brojke"}
         }
     }
     Variants{
@@ -741,7 +765,7 @@ bs{
         TARASK{"Taraskijevica ortografija"}
         VALENCIA{"Valencijski"}
     }
-    Version{"2.1.15.60"}
+    Version{"2.1.19.77"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

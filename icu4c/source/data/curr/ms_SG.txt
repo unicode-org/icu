@@ -13,5 +13,5 @@ ms_SG{
             "Dolar Singapura",
         }
     }
-    Version{"2.1.14.79"}
+    Version{"2.1.19.14"}
 }

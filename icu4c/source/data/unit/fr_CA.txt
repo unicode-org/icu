@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fr_CA{
-    Version{"2.1.13.23"}
+    Version{"2.1.19.14"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -17,6 +17,12 @@ fr_CA{
         acceleration{
             g-force{
                 dnam{"force G"}
+            }
+        }
+        angle{
+            arc-second{
+                one{"{0} seconde d’angle"}
+                other{"{0} secondes d’angle"}
             }
         }
         area{
@@ -60,6 +66,11 @@ fr_CA{
                 other{"{0} verges"}
             }
         }
+        mass{
+            kilogram{
+                per{"{0} par kilogramme"}
+            }
+        }
         speed{
             kilometer-per-hour{
                 dnam{"kilomètres à l’heure"}
@@ -68,6 +79,12 @@ fr_CA{
                 dnam{"milles à l’heure"}
                 one{"{0} mille à l’heure"}
                 other{"{0} milles à l’heure"}
+            }
+        }
+        temperature{
+            generic{
+                one{"{0}°"}
+                other{"{0}°"}
             }
         }
         volume{
@@ -105,6 +122,13 @@ fr_CA{
                 other{"{0} °C"}
             }
         }
+        volume{
+            liter{
+                dnam{"L"}
+                one{"{0}L"}
+                other{"{0}L"}
+            }
+        }
     }
     unitsShort{
         area{
@@ -127,11 +151,6 @@ fr_CA{
                 one{"{0} pi"}
                 other{"{0} pi"}
             }
-            light-year{
-                dnam{"al"}
-                one{"{0} al"}
-                other{"{0} al"}
-            }
             nautical-mile{
                 dnam{"NM"}
                 one{"{0} NM"}
@@ -150,9 +169,21 @@ fr_CA{
                 other{"{0} tc"}
             }
         }
+        pressure{
+            pound-per-square-inch{
+                dnam{"psi"}
+                one{"{0} psi"}
+                other{"{0} psi"}
+            }
+        }
         proportion{
             karat{
                 dnam{"carats"}
+            }
+        }
+        temperature{
+            generic{
+                one{"{0}°"}
             }
         }
         volume{
@@ -184,6 +215,11 @@ fr_CA{
                 dnam{"hL"}
                 one{"{0} hL"}
                 other{"{0} hL"}
+            }
+            liter{
+                dnam{"L"}
+                one{"{0} L"}
+                other{"{0} L"}
             }
             megaliter{
                 dnam{"ML"}

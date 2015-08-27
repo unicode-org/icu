@@ -7,8 +7,31 @@
 // *
 // ***************************************************************************
 es_419{
+    Keys{
+        ms{"sm"}
+    }
+    Languages{
+        eu{"vasco"}
+        luo{"luo"}
+        sw{"swahili"}
+        swc{"swahili del Congo"}
+        vai{"vai"}
+    }
     Languages%short{
         en_GB{"inglés (R. U.)"}
     }
-    Version{"2.1.14.95"}
+    Languages%variant{
+        ps{"pashtún"}
+        ug{"uighur"}
+    }
+    Types{
+        numbers{
+            knda{"números en kannada"}
+            laoo{"números en lao"}
+        }
+    }
+    Version{"2.1.19.14"}
+    codePatterns{
+        script{"Alfabeto: {0}"}
+    }
 }

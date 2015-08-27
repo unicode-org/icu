@@ -14,5 +14,5 @@ es_PR{
             "dólar estadounidense",
         }
     }
-    Version{"2.1.14.95"}
+    Version{"2.1.19.14"}
 }

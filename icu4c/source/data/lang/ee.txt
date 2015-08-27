@@ -16,9 +16,10 @@ ee{
     Languages{
         ab{"abkhaziagbe"}
         af{"afrikaangbe"}
+        agq{"aghemgbe"}
         ak{"blugbe"}
         am{"amhariagbe"}
-        ar{"arabiagbe"}
+        ar{"Arabiagbe"}
         as{"assamegbe"}
         asa{"asagbe"}
         ay{"aymargbe"}
@@ -28,7 +29,7 @@ ee{
         bez{"benagbe"}
         bg{"bulgariagbe"}
         bm{"bambaragbe"}
-        bn{"bengalgbe"}
+        bn{"Bengaligbe"}
         bo{"tibetagbe"}
         br{"bretongbe"}
         brx{"bodogbe"}
@@ -37,33 +38,34 @@ ee{
         cs{"tsɛkgbe"}
         cy{"walesgbe"}
         da{"denmarkgbe"}
-        de{"germaniagbe"}
-        de_AT{"austriatɔwo ƒe germaniagbe"}
-        de_CH{"swizerlanɖ germaniagbe kɔkɔtɔ"}
+        de{"Germaniagbe"}
+        de_AT{"Germaniagbe (Austria)"}
+        de_CH{"Germaniagbe (Switzerland)"}
         dv{"divehgbe"}
         dz{"dzongkhagbe"}
         ebu{"embugbe"}
-        ee{"eʋegbe"}
+        ee{"Eʋegbe"}
         efi{"efigbe"}
         el{"grisigbe"}
-        en{"yevugbe"}
-        en_AU{"australiatɔwo ƒe yevugbe"}
-        en_CA{"kanadatɔwo ƒe yevugbe"}
-        en_GB{"britaintɔwo ƒe yevugbe"}
-        en_US{"u.s.dukɔmetɔwo ƒe yevugbe"}
+        en{"Yevugbe"}
+        en_AU{"Yevugbe (Australia)"}
+        en_CA{"Yevugbe (Canada)"}
+        en_GB{"Yevugbe (Britain)"}
+        en_US{"Yevugbe (America)"}
         eo{"esperantogbe"}
-        es{"spaniagbe"}
-        es_419{"latin amerikatɔwo ƒe spaniagbe"}
-        es_ES{"iberiatɔwo ƒe spaniagbe"}
+        es{"Spanishgbe"}
+        es_419{"Spanishgbe (Latin America)"}
+        es_ES{"Spanishgbe (Europe)"}
+        es_MX{"Spanishgbe (Mexico)"}
         et{"estoniagbe"}
         eu{"basqugbe"}
         fa{"persiagbe"}
         fi{"finlanɖgbe"}
         fil{"filipingbe"}
         fj{"fidzigbe"}
-        fr{"fransegbe"}
-        fr_CA{"kanadatɔwo ƒe fransegbe"}
-        fr_CH{"swizerlanɖtɔwo ƒe fransegbe"}
+        fr{"Fransegbe"}
+        fr_CA{"Fransegbe (Canada)"}
+        fr_CH{"Fransegbe (Switzerland)"}
         ga{"irelanɖgbe"}
         gl{"galatagbe"}
         gn{"guarangbe"}
@@ -72,23 +74,23 @@ ee{
         ha{"hausagbe"}
         haw{"hawaigbe"}
         he{"hebrigbe"}
-        hi{"hindigbe"}
+        hi{"Hindigbe"}
         hr{"kroatiagbe"}
         ht{"haitigbe"}
         hu{"hungarigbe"}
         hy{"armeniagbe"}
-        id{"indonesiagbe"}
+        id{"Indonesiagbe"}
         ig{"igbogbe"}
         is{"icelanɖgbe"}
-        it{"italiagbe"}
-        ja{"dzapangbe"}
+        it{"Italiagbe"}
+        ja{"Japangbe"}
         jv{"dzavangbe"}
         ka{"gɔgiagbe"}
         kea{"cape verdegbe"}
         kk{"kazakhstangbe"}
         km{"khmergbe"}
         kn{"kannadagbe"}
-        ko{"koreagbe"}
+        ko{"Koreagbe"}
         ks{"kashmirgbe"}
         ku{"kurdiagbe"}
         ky{"kirghistangbe"}
@@ -113,8 +115,8 @@ ee{
         nb{"nɔweigbe bokmål"}
         nd{"dziehe ndebelegbe"}
         ne{"nepalgbe"}
-        nl{"hɔlandgbe"}
-        nl_BE{"flemiagbe"}
+        nl{"Hollandgbe"}
+        nl_BE{"Flemishgbe"}
         nn{"nɔweigbe ninɔsk"}
         no{"nɔweigbe"}
         nso{"dziehe sothogbe"}
@@ -122,17 +124,17 @@ ee{
         or{"oriyagbe"}
         os{"ossetiagbe"}
         pa{"pundzabgbe"}
-        pl{"polandgbe"}
+        pl{"Polishgbe"}
         ps{"pashtogbe"}
-        pt{"pɔtugalgbe"}
-        pt_BR{"braziltɔwo ƒe portugalgbe"}
-        pt_PT{"iberiatɔwo ƒe portugalgbe"}
+        pt{"Portuguesegbe"}
+        pt_BR{"Portuguesegbe (Brazil)"}
+        pt_PT{"Portuguesegbe (Europe)"}
         qu{"kwetsuagbe"}
         rm{"romanshgbe"}
         rn{"rundigbe"}
         ro{"romaniagbe"}
         rof{"rombogbe"}
-        ru{"rɔtsiagbe"}
+        ru{"Russiagbe"}
         rw{"ruwandagbe"}
         rwk{"rwagbe"}
         sa{"sanskrigbe"}
@@ -151,7 +153,6 @@ ee{
         sr{"serbiagbe"}
         ss{"swatgbe"}
         st{"anyiehe sothogbe"}
-        su{"sudangbe"}
         sv{"swedengbe"}
         sw{"swahili"}
         swb{"komorogbe"}
@@ -159,14 +160,14 @@ ee{
         te{"telegugbe"}
         tet{"tetumgbe"}
         tg{"tadzikistangbe"}
-        th{"tailandgbe"}
+        th{"Thailandgbe"}
         ti{"tigrinyagbe"}
         tk{"tɛkmengbe"}
         tl{"tagalogbe"}
         tn{"tswanagbe"}
         to{"tongagbe"}
         tpi{"tok pisigbe"}
-        tr{"tɛkigbe"}
+        tr{"Turkishgbe"}
         ts{"tsongagbe"}
         ty{"tahitigbe"}
         ug{"uighurgbe"}
@@ -181,19 +182,23 @@ ee{
         xh{"xhosagbe"}
         yo{"yorubagbe"}
         yue{"cantongbe"}
-        zh{"kinagbe"}
+        zh{"Chinagbe"}
         zh_Hans{"tsainagbe"}
         zh_Hant{"blema tsainagbe"}
         zu{"zulugbe"}
         zxx{"gbegbɔgblɔ manɔmee"}
     }
+    Languages%short{
+        en_GB{"Yevugbe (GB)"}
+        en_US{"Yevugbe (US)"}
+    }
     Scripts{
-        Arab{"arabiagbeŋɔŋlɔ"}
+        Arab{"Arabiagbeŋɔŋlɔ"}
         Armn{"armeniagbeŋɔŋlɔ"}
         Beng{"bengaligbeŋɔŋlɔ"}
         Bopo{"bopomfogbeŋɔŋlɔ"}
         Brai{"braillegbeŋɔŋlɔ"}
-        Cyrl{"syrilliagbeŋɔŋlɔ"}
+        Cyrl{"Cyrillicgbeŋɔŋlɔ"}
         Deva{"devanagarigbeŋɔŋlɔ"}
         Ethi{"ethiopiagbeŋɔŋlɔ"}
         Geor{"gɔgiagbeŋɔŋlɔ"}
@@ -202,17 +207,17 @@ ee{
         Guru{"gurmukhigbeŋɔŋlɔ"}
         Hang{"hangulgbeŋɔŋlɔ"}
         Hani{"hangbeŋɔŋlɔ"}
-        Hans{"tsainagbeŋɔŋlɔ"}
-        Hant{"blema tsainagbeŋɔŋlɔ"}
+        Hans{"Chinesegbeŋɔŋlɔ"}
+        Hant{"Blema Chinesegbeŋɔŋlɔ"}
         Hebr{"hebrigbeŋɔŋlɔ"}
         Hira{"hiraganagbeŋɔŋlɔ"}
-        Jpan{"dzapangbeŋɔŋlɔ"}
+        Jpan{"Japanesegbeŋɔŋlɔ"}
         Kana{"katakanagbeŋɔŋlɔ"}
         Khmr{"khmergbeŋɔŋlɔ"}
         Knda{"kannadagbeŋɔŋlɔ"}
-        Kore{"koreagbeŋɔŋlɔ"}
+        Kore{"Koreagbeŋɔŋlɔ"}
         Laoo{"laogbeŋɔŋlɔ"}
-        Latn{"latingbeŋɔŋlɔ"}
+        Latn{"Latingbeŋɔŋlɔ"}
         Mlym{"malayagbeŋɔŋlɔ"}
         Mong{"mongoliagbeŋɔŋlɔ"}
         Mymr{"myanmargbeŋɔŋlɔ"}
@@ -228,6 +233,10 @@ ee{
         Zyyy{"gbeŋɔŋlɔ bɔbɔ"}
         Zzzz{"gbeŋɔŋlɔ manya"}
     }
+    Scripts%stand-alone{
+        Hans{"Hansgbeŋɔŋlɔ"}
+        Hant{"Blema Hantgbeŋcŋlɔ"}
+    }
     Types{
         calendar{
             buddhist{"buddha subɔlawo ƒe kalenda"}
@@ -235,7 +244,7 @@ ee{
             coptic{"coptia kalenda"}
             ethiopic{"ethiopiatɔwo ƒe kalenda"}
             ethiopic-amete-alem{"ethiopia amate alemtɔwo ƒe kalenda"}
-            gregorian{"gregoria kalenda"}
+            gregorian{"Gregorian kalenda"}
             hebrew{"hebritɔwo ƒe kalenda"}
             indian{"india dukɔ ƒe kalenda"}
             islamic{"islam subɔlawo ƒe kalenda"}
@@ -253,6 +262,7 @@ ee{
             pinyin{"pinyin ɖoɖomɔ nu"}
             reformed{"nugbugbɔtoɖo ƒe ɖoɖomɔ nu"}
             search{"nudidi hena zazã gbadza"}
+            standard{"standard"}
             stroke{"stroke ɖoɖomɔ nu"}
             traditional{"blema ɖoɖomɔ nu"}
             unihan{"ɖoɖomɔnutɔxɛ manɔŋu stroke ƒe ɖoɖo nu"}
@@ -282,7 +292,7 @@ ee{
             khmr{"khmertɔwo ƒe nɔmbawo"}
             knda{"kannadatɔwo ƒe digitwo"}
             laoo{"laotɔwo ƒe digitwo"}
-            latn{"nɔmbawo le latingbe ƒe ɖoɖo nu"}
+            latn{"Nɔmbawo le Latingbe ƒe ɖoɖo nu"}
             mlym{"malaya digitwo"}
             mong{"mongolia digitwo"}
             mymr{"myanmar digitwo"}
@@ -295,7 +305,7 @@ ee{
             tibt{"tibet digitwo"}
         }
     }
-    Version{"2.1.16.1"}
+    Version{"2.1.19.14"}
     codePatterns{
         language{"gbegbɔgblɔ {0}"}
         script{"gbeŋɔŋlɔ {0}"}

@@ -81,7 +81,7 @@ af{
         CC{"Kokos-eilande"}
         CD{"Demokratiese Republiek van die Kongo"}
         CF{"Sentraal-Afrikaanse Republiek"}
-        CG{"Republiek van die Kongo"}
+        CG{"Kongo - Brazzaville"}
         CH{"Switserland"}
         CI{"Ivoorkus"}
         CK{"Cookeilande"}
@@ -185,7 +185,7 @@ af{
         MC{"Monaco"}
         MD{"Moldowa"}
         ME{"Montenegro"}
-        MF{"Sint Martin"}
+        MF{"St. Martin"}
         MG{"Madagaskar"}
         MH{"Marshalleilande"}
         MK{"Macedonië"}
@@ -308,9 +308,9 @@ af{
     }
     Countries%variant{
         CD{"Kongo (DRK)"}
-        CG{"Kongo (Republiek)"}
+        CG{"Kongo (Republiek die)"}
         FK{"Falklandeilande (Malvinas)"}
         MK{"Macedonië (VJRM)"}
     }
-    Version{"2.1.15.91"}
+    Version{"2.1.19.94"}
 }

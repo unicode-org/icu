@@ -40,7 +40,7 @@ hu{
         419{"Latin-Amerika"}
         AC{"Ascension-sziget"}
         AD{"Andorra"}
-        AE{"Egyesült Arab Emirátus"}
+        AE{"Egyesült Arab Emírségek"}
         AF{"Afganisztán"}
         AG{"Antigua és Barbuda"}
         AI{"Anguilla"}
@@ -114,7 +114,7 @@ hu{
         ET{"Etiópia"}
         EU{"Európai Unió"}
         FI{"Finnország"}
-        FJ{"Fidzsi-szigetek"}
+        FJ{"Fidzsi"}
         FK{"Falkland-szigetek"}
         FM{"Mikronézia"}
         FO{"Feröer-szigetek"}
@@ -136,7 +136,7 @@ hu{
         GS{"Déli-Georgia és Déli-Sandwich-szigetek"}
         GT{"Guatemala"}
         GU{"Guam"}
-        GW{"Guinea-Bissau"}
+        GW{"Bissau-Guinea"}
         GY{"Guyana"}
         HK{"Hongkong SAR Kína"}
         HM{"Heard-sziget és McDonald-szigetek"}
@@ -312,5 +312,5 @@ hu{
         FK{"Falkland-szigetek (Malvin-szigetek)"}
         MK{"Macedónia (MVJK)"}
     }
-    Version{"2.1.15.91"}
+    Version{"2.1.19.17"}
 }

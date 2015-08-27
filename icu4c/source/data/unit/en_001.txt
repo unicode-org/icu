@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 en_001{
-    Version{"2.1.15.81"}
+    Version{"2.1.19.14"}
     units{
         acceleration{
             meter-per-second-squared{
@@ -21,6 +21,7 @@ en_001{
                 dnam{"square centimetres"}
                 one{"{0} square centimetre"}
                 other{"{0} square centimetres"}
+                per{"{0} per square centimetre"}
             }
             square-kilometer{
                 dnam{"square kilometres"}
@@ -31,9 +32,15 @@ en_001{
                 dnam{"square metres"}
                 one{"{0} square metre"}
                 other{"{0} square metres"}
+                per{"{0} per square metre"}
             }
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"litres per 100 kilometres"}
+                one{"{0} litre per 100 kilometres"}
+                other{"{0} litres per 100 kilometres"}
+            }
             liter-per-kilometer{
                 dnam{"litres per kilometre"}
                 one{"{0} litre per kilometre"}
@@ -45,6 +52,7 @@ en_001{
                 dnam{"centimetres"}
                 one{"{0} centimetre"}
                 other{"{0} centimetres"}
+                per{"{0} per centimetre"}
             }
             decimeter{
                 dnam{"decimetre"}
@@ -55,11 +63,13 @@ en_001{
                 dnam{"kilometres"}
                 one{"{0} kilometre"}
                 other{"{0} kilometres"}
+                per{"{0} per kilometre"}
             }
             meter{
                 dnam{"metres"}
                 one{"{0} metre"}
                 other{"{0} metres"}
+                per{"{0} per metre"}
             }
             micrometer{
                 dnam{"micrometre"}
@@ -111,6 +121,7 @@ en_001{
                 dnam{"cubic centimetres"}
                 one{"{0} cubic centimetre"}
                 other{"{0} cubic centimetres"}
+                per{"{0} per cubic centimetre"}
             }
             cubic-kilometer{
                 dnam{"cubic kilometres"}
@@ -121,6 +132,7 @@ en_001{
                 dnam{"cubic metres"}
                 one{"{0} cubic metre"}
                 other{"{0} cubic metres"}
+                per{"{0} per cubic metre"}
             }
             deciliter{
                 dnam{"decilitres"}
@@ -136,6 +148,7 @@ en_001{
                 dnam{"litres"}
                 one{"{0} litre"}
                 other{"{0} litres"}
+                per{"{0} per litre"}
             }
             megaliter{
                 dnam{"megalitres"}
@@ -150,10 +163,16 @@ en_001{
         }
     }
     unitsNarrow{
-        duration{
-            minute{
-                one{"{0}min"}
-                other{"{0}min"}
+        consumption{
+            liter-per-100kilometers{
+                dnam{"l/100km"}
+                one{"{0}l/100km"}
+                other{"{0}l/100km"}
+            }
+            liter-per-kilometer{
+                dnam{"l/km"}
+                one{"{0}l/km"}
+                other{"{0}l/km"}
             }
         }
         mass{
@@ -192,6 +211,7 @@ en_001{
                 dnam{"litre"}
                 one{"{0}l"}
                 other{"{0}l"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"Ml"}
@@ -212,8 +232,15 @@ en_001{
             }
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"l/100 km"}
+                one{"{0} l/100 km"}
+                other{"{0} l/100 km"}
+            }
             liter-per-kilometer{
                 dnam{"litres/km"}
+                one{"{0} l/km"}
+                other{"{0} l/km"}
             }
         }
         duration{
@@ -233,6 +260,9 @@ en_001{
         length{
             meter{
                 dnam{"metres"}
+            }
+            micrometer{
+                dnam{"µmetres"}
             }
         }
         speed{

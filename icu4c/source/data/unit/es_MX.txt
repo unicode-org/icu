@@ -8,7 +8,7 @@
 // ***************************************************************************
 es_MX{
     %%Parent{"es_419"}
-    Version{"2.1.13.23"}
+    Version{"2.1.19.94"}
     units{
         angle{
             arc-minute{
@@ -23,12 +23,6 @@ es_MX{
             }
         }
         energy{
-            joule{
-                dnam{"joules"}
-            }
-            kilojoule{
-                dnam{"kilojoules"}
-            }
             kilowatt-hour{
                 dnam{"kilowatt-hora"}
                 one{"kilowatt-hora"}
@@ -224,10 +218,6 @@ es_MX{
             }
             pint{
                 dnam{"pt"}
-            }
-            tablespoon{
-                one{"{0} cda."}
-                other{"{0} cdas."}
             }
         }
     }

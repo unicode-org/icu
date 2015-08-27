@@ -9,6 +9,7 @@
 en{
     Keys{
         calendar{"Calendar"}
+        cf{"Currency Format"}
         colAlternate{"Ignore Symbols Sorting"}
         colBackwards{"Reversed Accent Sorting"}
         colCaseFirst{"Uppercase/Lowercase Ordering"}
@@ -24,8 +25,10 @@ en{
         hc{"Hour Cycle (12 vs 24)"}
         kv{"Highest Ignored"}
         lb{"Line Break Style"}
+        lw{"Line Breaks In Words Setting"}
         ms{"Measurement System"}
         numbers{"Numbers"}
+        ss{"Sentence Break Suppressions Type"}
         timezone{"Time Zone"}
         va{"Locale Variant"}
         variableTop{"Sort As Symbols"}
@@ -73,7 +76,6 @@ en{
         awa{"Awadhi"}
         ay{"Aymara"}
         az{"Azerbaijani"}
-        azb{"South Azerbaijani"}
         ba{"Bashkir"}
         bal{"Baluchi"}
         ban{"Balinese"}
@@ -253,7 +255,7 @@ en{
         hr{"Croatian"}
         hsb{"Upper Sorbian"}
         hsn{"Xiang Chinese"}
-        ht{"Haitian"}
+        ht{"Haitian Creole"}
         hu{"Hungarian"}
         hup{"Hupa"}
         hy{"Armenian"}
@@ -429,7 +431,7 @@ en{
         nog{"Nogai"}
         non{"Old Norse"}
         nov{"Novial"}
-        nqo{"NʼKo"}
+        nqo{"N’Ko"}
         nr{"South Ndebele"}
         nso{"Northern Sotho"}
         nus{"Nuer"}
@@ -859,6 +861,10 @@ en{
             persian{"Persian Calendar"}
             roc{"Minguo Calendar"}
         }
+        cf{
+            account{"Accounting Currency Format"}
+            standard{"Standard Currency Format"}
+        }
         colAlternate{
             non-ignorable{"Sort Symbols"}
             shifted{"Sort Ignoring Symbols"}
@@ -916,15 +922,20 @@ en{
             zhuyin{"Zhuyin Sort Order"}
         }
         hc{
-            h11{"12 Hour System (0-11)"}
-            h12{"12 Hour System (1-12)"}
-            h23{"24 Hour System (0-23)"}
-            h24{"24 Hour System (1-24)"}
+            h11{"12 Hour System (0–11)"}
+            h12{"12 Hour System (1–12)"}
+            h23{"24 Hour System (0–23)"}
+            h24{"24 Hour System (1–24)"}
         }
         lb{
             loose{"Loose Line Break Style"}
             normal{"Normal Line Break Style"}
             strict{"Strict Line Break Style"}
+        }
+        lw{
+            breakall{"Allow Line Breaks In All Words"}
+            keepall{"Prevent Line Breaks In All Words"}
+            normal{"Normal Line Breaks For Words"}
         }
         ms{
             metric{"Metric System"}
@@ -932,6 +943,7 @@ en{
             ussystem{"US Measurement System"}
         }
         numbers{
+            ahom{"Ahom Digits"}
             arab{"Arabic-Indic Digits"}
             arabext{"Extended Arabic-Indic Digits"}
             armn{"Armenian Numerals"}
@@ -941,6 +953,7 @@ en{
             brah{"Brahmi Digits"}
             cakm{"Chakma Digits"}
             cham{"Cham Digits"}
+            cyrl{"Cyrillic Numerals"}
             deva{"Devanagari Digits"}
             ethi{"Ethiopic Numerals"}
             finance{"Financial Numerals"}
@@ -957,6 +970,7 @@ en{
             hant{"Traditional Chinese Numerals"}
             hantfin{"Traditional Chinese Financial Numerals"}
             hebr{"Hebrew Numerals"}
+            hmng{"Pahawh Hmong Digits"}
             java{"Javanese Digits"}
             jpan{"Japanese Numerals"}
             jpanfin{"Japanese Financial Numerals"}
@@ -969,11 +983,19 @@ en{
             latn{"Western Digits"}
             lepc{"Lepcha Digits"}
             limb{"Limbu Digits"}
+            mathbold{"Mathematical Bold Digits"}
+            mathdbl{"Mathematical Double-Struck Digits"}
+            mathmono{"Mathematical Monospace Digits"}
+            mathsanb{"Mathematical Sans-Serif Bold Digits"}
+            mathsans{"Mathematical Sans-Serif Digits"}
             mlym{"Malayalam Digits"}
+            modi{"Modi Digits"}
             mong{"Mongolian Digits"}
+            mroo{"Mro Digits"}
             mtei{"Meetei Mayek Digits"}
             mymr{"Myanmar Digits"}
             mymrshan{"Myanmar Shan Digits"}
+            mymrtlng{"Myanmar Tai Laing Digits"}
             native{"Native Digits"}
             nkoo{"N’Ko Digits"}
             olck{"Ol Chiki Digits"}
@@ -983,6 +1005,8 @@ en{
             romanlow{"Roman Lowercase Numerals"}
             saur{"Saurashtra Digits"}
             shrd{"Sharada Digits"}
+            sind{"Khudawadi Digits"}
+            sinh{"Sinhala Lith Digits"}
             sora{"Sora Sompeng Digits"}
             sund{"Sundanese Digits"}
             takr{"Takri Digits"}
@@ -992,8 +1016,14 @@ en{
             telu{"Telugu Digits"}
             thai{"Thai Digits"}
             tibt{"Tibetan Digits"}
+            tirh{"Tirhuta Digits"}
             traditional{"Traditional Numerals"}
             vaii{"Vai Digits"}
+            wara{"Warang Citi Digits"}
+        }
+        ss{
+            none{"Sentence Breaks Without Abbreviation Handling"}
+            standard{"Suppress Sentence Breaks After Standard Abbreviations"}
         }
         va{
             posix{"POSIX Compliant Locale"}
@@ -1011,8 +1041,10 @@ en{
         1959ACAD{"Academic"}
         1994{"Standardized Resian orthography"}
         1996{"German orthography of 1996"}
+        ABL1943{"Orthographic formulation of 1943"}
         ALALC97{"ALA-LC Romanization, 1997 edition"}
         ALUKU{"Aluku dialect"}
+        AO1990{"Portuguese Language Orthographic Agreement of 1990"}
         AREVELA{"Eastern Armenian"}
         AREVMDA{"Western Armenian"}
         BAKU1926{"Unified Turkic Latin Alphabet"}
@@ -1021,6 +1053,7 @@ en{
         BISKE{"San Giorgio/Bila dialect"}
         BOHORIC{"Bohorič alphabet"}
         BOONT{"Boontling"}
+        COLB1945{"Portuguese-Brazilian Orthographic Convention of 1945"}
         DAJNKO{"Dajnko alphabet"}
         EKAVSK{"Serbian with Ekavian pronunciation"}
         EMODENG{"Early Modern English"}
@@ -1038,6 +1071,7 @@ en{
         NJIVA{"Gniva/Njiva dialect"}
         NULIK{"Modern Volapük"}
         OSOJS{"Oseacco/Osojane dialect"}
+        OXENDICT{"Oxford English Dictionary spelling"}
         PAMAKA{"Pamaka dialect"}
         PINYIN{"Pinyin Romanization"}
         POLYTON{"Polytonic"}
@@ -1057,7 +1091,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.16.69"}
+    Version{"2.1.19.72"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}
