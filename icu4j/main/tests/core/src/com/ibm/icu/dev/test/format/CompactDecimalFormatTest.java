@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, Google, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, Google, International Business Machines Corporation and
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -111,7 +111,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
     };
 
     Object[][] JapaneseTestData = {
-            {1234f, "1.2千"},
+            {1234f, "1200"},
             {12345f, "1.2万"},
             {123456f, "12万"},
             {1234567f, "120万"},
@@ -159,8 +159,8 @@ public class CompactDecimalFormatTest extends TestFmwk {
 
     Object[][] SkTestDataLong = {
             {1000, "1 tis\u00edc"},
-            {1572, "1,6 tis\u00edc"},
-            {5184, "5,2 tis\u00edc"},
+            {1572, "1,6 tis\u00edca"},
+            {5184, "5,2 tis\u00edca"},
     };
 
     Object[][] SwahiliTestDataNegative = {

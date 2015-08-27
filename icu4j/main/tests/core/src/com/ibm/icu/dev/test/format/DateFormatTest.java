@@ -1257,8 +1257,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", GMT_BG+"+01:00", "+1:00" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "z", GMT_BG+"+1", "+1:00" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "\u0411\u0440\u0438\u0442\u0430\u043d\u0441\u043a\u043e \u043b\u044f\u0442\u043d\u043e \u0447\u0430\u0441\u043e\u0432\u043e \u0432\u0440\u0435\u043c\u0435", "+1:00" },
-        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "v", "\u0412\u0435\u043b\u0438\u043a\u043e\u0431\u0440\u0438\u0442\u0430\u043d\u0438\u044f", "Europe/London" },
-        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\u0412\u0435\u043b\u0438\u043a\u043e\u0431\u0440\u0438\u0442\u0430\u043d\u0438\u044f", "Europe/London" },
+        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "v", "\u041e\u0431\u0435\u0434\u0438\u043d\u0435\u043d\u043e\u0442\u043e \u043a\u0440\u0430\u043b\u0441\u0442\u0432\u043e", "Europe/London" },
+        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\u041e\u0431\u0435\u0434\u0438\u043d\u0435\u043d\u043e\u0442\u043e \u043a\u0440\u0430\u043b\u0441\u0442\u0432\u043e", "Europe/London" },
 
         { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", GMT_BG+"-03:00", "-3:00" },
@@ -1981,7 +1981,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         TimeZone tz = TimeZone.getTimeZone("PST");
         dfFrench.setTimeZone(tz);
         dfUS.setTimeZone(tz);
-        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00:00:00 heure d\u2019\u00E9t\u00E9 du Pacifique";
+        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 \u00E0 00:00:00 heure d\u2019\u00E9t\u00E9 du Pacifique";
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
         String expectedUS = "Monday, September 15, 1997 at 12:00:00 AM Pacific Daylight Time";
         logln("Date set to : " + testDate);
@@ -2835,8 +2835,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "EEEEEE d MMM y",  "fp", "2013 01 13 0:00:00", "s\u00F6 13 jan. 2013", "2013 01 13 0:00:00",
             "EEEEEE d MMM y",  "fp", "2013 01 16 0:00:00", "on 16 jan. 2013",      "2013 01 16 0:00:00",
             "EEEEEE d",        "fp", "1970 01 17 0:00:00", "l\u00F6 17",          "1970 01 17 0:00:00",
-            "cccccc d",        "fp", "1970 01 17 0:00:00", "L\u00F6 17",          "1970 01 17 0:00:00",
-            "cccccc",          "fp", "1970 01 03 0:00:00", "L\u00F6",             "1970 01 03 0:00:00",
+            "cccccc d",        "fp", "1970 01 17 0:00:00", "l\u00F6 17",          "1970 01 17 0:00:00",
+            "cccccc",          "fp", "1970 01 03 0:00:00", "l\u00F6",             "1970 01 03 0:00:00",
         };
         
         expect(EN_DATA, new Locale("en", "", ""));
@@ -2947,8 +2947,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "ccccc", "1970 01 02 0:00:00", "P",
                 "ccccc", "1970 01 03 0:00:00", "S",
             
-                "h:mm a",     "2015 01 01 10:00:00", "10:00 dopoledne",
-                "h:mm a",     "2015 01 01 22:00:00", "10:00 odpoledne",
+                "h:mm a",     "2015 01 01 10:00:00", "10:00 dop.",
+                "h:mm a",     "2015 01 01 22:00:00", "10:00 odp.",
                 "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 dop.",
                 "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 odp.",
             };
@@ -2958,8 +2958,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 "h:mm a",     "2015 01 01 10:00:00", "10:00 a. m.",
                 "h:mm a",     "2015 01 01 22:00:00", "10:00 p. m.",
-                "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a.m.",
-                "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p.m.",
+                "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a. m.",
+                "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p. m.",
             };
 
             expectFormat(EN_DATA, new Locale("en", "", ""));

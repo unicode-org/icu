@@ -689,7 +689,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
             if(!hasLocalizedCountryFor(locales[i], locales[i]) &&
                     !(locales[i].getLanguage().equals("ti") || // TODO: restore test for ti_* when cldrbug 3058 is fixed
-                    ((locales[i].getBaseName().equals("sah_RU") || locales[i].getBaseName().equals("smn_FI")) && logKnownIssue("cldrbug:7872", "No localized region name for sah_RU, smn_FI")))) {
+                    ((locales[i].getBaseName().equals("lrc_IQ") || locales[i].getBaseName().equals("lrc_IR") || locales[i].getBaseName().equals("nus_SS")) && logKnownIssue("cldrbug:8903", "No localized region name for lrc_IQ, lrc_IR, nus_SS")))) {
                 errln("Could not get native localized country for " + locales[i]);
                 hasLocalizedCountryFor(locales[i], locales[i]);
             }
