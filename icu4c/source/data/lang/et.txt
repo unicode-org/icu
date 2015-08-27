@@ -1005,7 +1005,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade’i-Gilesi latinisatsioon"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.20.4"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Kiri: {0}"}

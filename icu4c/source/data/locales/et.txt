@@ -149,13 +149,13 @@ et{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
-                timeSeparator{"."}
+                timeSeparator{":"}
             }
         }
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.20.4"}
     calendar{
         generic{
             DateTimePatterns{
@@ -214,12 +214,12 @@ et{
                     H{"HH–HH"}
                 }
                 Hm{
-                    H{"HH.mm–HH.mm"}
-                    m{"HH.mm–HH.mm"}
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
-                    H{"HH.mm–HH.mm v"}
-                    m{"HH.mm–HH.mm v"}
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
                 Hv{
                     H{"HH–HH v"}
@@ -339,10 +339,10 @@ et{
             availableFormats{
                 E{"ccc"}
                 EHm{"E HH:mm"}
-                EHms{"E HH:mm:ss"}
+                EHms{"E HH:mm.ss"}
                 Ed{"E, d"}
                 Ehm{"E h:mm a"}
-                Ehms{"E h:mm:ss a"}
+                Ehms{"E h:mm.ss a"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d. MMMM y G"}
@@ -350,7 +350,7 @@ et{
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"H:mm.ss"}
-                Hmsv{"HH:mm:ss v"}
+                Hmsv{"HH:mm.ss v"}
                 Hmv{"HH:mm v"}
                 M{"M"}
                 MEd{"E, d.M"}
@@ -364,7 +364,7 @@ et{
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm.ss a"}
-                hmsv{"h:mm:ss a v"}
+                hmsv{"h:mm.ss a v"}
                 hmv{"h:mm a v"}
                 mmss{"mm.ss"}
                 ms{"mm.ss"}
@@ -518,11 +518,11 @@ et{
                     H{"HH–HH"}
                 }
                 Hm{
-                    H{"HH.mm–HH.mm"}
-                    m{"HH.mm–HH.mm"}
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
-                    H{"HH.mm–HH.mm v"}
+                    H{"HH:mm–HH:mm v"}
                     m{"HH:mm–HH:mm v"}
                 }
                 Hv{

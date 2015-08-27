@@ -181,7 +181,7 @@ sr_Latn{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.19.80"}
+    Version{"2.1.20.4"}
     calendar{
         buddhist{
             eras{
@@ -417,7 +417,7 @@ sr_Latn{
             availableFormats{
                 E{"E"}
                 EHm{"E, HH.mm"}
-                EHms{"E, HH:mm:ss"}
+                EHms{"E, HH.mm.ss"}
                 Ed{"E d."}
                 Ehm{"E, h.mm a"}
                 Ehms{"E, h.mm.ss a"}

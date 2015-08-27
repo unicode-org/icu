@@ -12,11 +12,10 @@ en_AU{
         latn{
             symbols{
                 exponential{"e"}
-                timeSeparator{"."}
             }
         }
     }
-    Version{"2.1.19.79"}
+    Version{"2.1.20.4"}
     calendar{
         generic{
             availableFormats{

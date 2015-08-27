@@ -375,7 +375,7 @@ si{
             tibt{"ටිබෙට ඉලක්කම්"}
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.20.4"}
     codePatterns{
         language{"{0} භාෂාව: සිංහල"}
         script{"{0} අක්ෂර මාලාව: සිංහල"}

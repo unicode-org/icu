@@ -209,7 +209,7 @@ fr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.19.72"}
+    Version{"2.1.20.4"}
     calendar{
         buddhist{
             DateTimePatterns{

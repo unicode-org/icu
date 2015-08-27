@@ -279,14 +279,14 @@ be{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.20.4"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
                 "EEEE, d MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
@@ -322,10 +322,10 @@ be{
         }
         generic{
             DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
                 "EEEE, d MMMM y G",
                 "d MMMM y G",
                 "d.M.y G",
@@ -446,10 +446,10 @@ be{
                 "веч.",
             }
             DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
                 "EEEE, d MMMM y",
                 "d MMMM y",
                 "d.M.y",
@@ -465,20 +465,20 @@ be{
             }
             availableFormats{
                 E{"ccc"}
-                EHm{"E HH:mm"}
-                EHms{"E HH:mm:ss"}
+                EHm{"E HH.mm"}
+                EHms{"E HH.mm.ss"}
                 Ed{"d, E"}
-                Ehm{"E hh:mm a"}
-                Ehms{"E hh:mm:ss a"}
+                Ehm{"E hh.mm a"}
+                Ehms{"E hh.mm.ss a"}
                 Gy{"y G"}
                 GyMMM{"LLL y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 H{"HH"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                Hmsv{"HH:mm:ss v"}
-                Hmv{"HH:mm v"}
+                Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
+                Hmsv{"HH.mm.ss v"}
+                Hmv{"HH.mm v"}
                 M{"L"}
                 MEd{"E, d.M"}
                 MMM{"LLL"}
@@ -489,11 +489,11 @@ be{
                 Md{"d.M"}
                 d{"d"}
                 h{"hh a"}
-                hm{"hh:mm a"}
-                hms{"hh:mm:ss a"}
-                hmsv{"hh:mm:ss a v"}
-                hmv{"hh:mm a v"}
-                ms{"mm:ss"}
+                hm{"hh.mm a"}
+                hms{"hh.mm.ss a"}
+                hmsv{"hh.mm.ss a v"}
+                hmv{"hh.mm a v"}
+                ms{"mm.ss"}
                 y{"y"}
                 yM{"M.y"}
                 yMEd{"E, d.M.y"}
@@ -618,12 +618,12 @@ be{
                     H{"HH–HH"}
                 }
                 Hm{
-                    H{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    H{"HH.mm–HH.mm"}
+                    m{"HH.mm–HH.mm"}
                 }
                 Hmv{
-                    H{"HH:mm–HH:mm v"}
-                    m{"HH:mm–HH:mm v"}
+                    H{"HH.mm–HH.mm v"}
+                    m{"HH.mm–HH.mm v"}
                 }
                 Hv{
                     H{"HH–HH v"}
@@ -659,14 +659,14 @@ be{
                     h{"h–h a"}
                 }
                 hm{
-                    a{"hh:mm a – hh:mm a"}
-                    h{"hh:mm–hh:mm a"}
-                    m{"hh:mm–hh:mm a"}
+                    a{"hh.mm a – hh.mm a"}
+                    h{"hh.mm–hh.mm a"}
+                    m{"hh.mm–hh.mm a"}
                 }
                 hmv{
-                    a{"hh:mm a – hh:mm a v"}
-                    h{"hh:mm–hh:mm a v"}
-                    m{"hh:mm–hh:mm a v"}
+                    a{"hh.mm a – hh.mm a v"}
+                    h{"hh.mm–hh.mm a v"}
+                    m{"hh.mm–hh.mm a v"}
                 }
                 hv{
                     a{"h a – h a v"}

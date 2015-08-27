@@ -29,11 +29,6 @@ cs{
                 timeSeparator{":"}
             }
         }
-        arabext{
-            symbols{
-                timeSeparator{"٫"}
-            }
-        }
         default{"latn"}
         latn{
             miscPatterns{
@@ -291,7 +286,7 @@ cs{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.20.4"}
     calendar{
         buddhist{
             availableFormats{

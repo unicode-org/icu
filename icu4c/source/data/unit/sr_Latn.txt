@@ -8,9 +8,9 @@
 // ***************************************************************************
 sr_Latn{
     %%Parent{"root"}
-    Version{"2.1.19.80"}
+    Version{"2.1.20.4"}
     durationUnits{
-        hm{"h:mm"}
+        hm{"h.mm"}
         hms{"h.mm.ss"}
         ms{"m.ss"}
     }

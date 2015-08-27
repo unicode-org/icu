@@ -205,5 +205,5 @@ en_AU{
             other{"Samoan talas"}
         }
     }
-    Version{"2.1.19.79"}
+    Version{"2.1.20.4"}
 }
