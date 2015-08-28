@@ -209,7 +209,7 @@ es{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.20.15"}
     calendar{
         buddhist{
             eras{
@@ -987,7 +987,10 @@ es{
         day-narrow{
             dn{"d"}
             relative{
+                "-1"{"ayer"}
                 "-2"{"anteayer"}
+                "0"{"hoy"}
+                "1"{"mañana"}
                 "2"{"pasado mañana"}
             }
             relativeTime{
@@ -1004,7 +1007,10 @@ es{
         day-short{
             dn{"d"}
             relative{
+                "-1"{"ayer"}
                 "-2"{"anteayer"}
+                "0"{"hoy"}
+                "1"{"mañana"}
                 "2"{"pasado mañana"}
             }
             relativeTime{
