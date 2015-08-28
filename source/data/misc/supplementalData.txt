@@ -15315,6 +15315,12 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "az_Latn",
+                "ru_Cyrl",
+                "90",
+                "1",
+            }
+            {
                 "az",
                 "ru",
                 "90",
@@ -15335,6 +15341,12 @@ supplementalData:table(nofallback){
             {
                 "bh",
                 "hi",
+                "90",
+                "1",
+            }
+            {
+                "bn_Beng",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -15549,6 +15561,12 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "hy_Armn",
+                "ru_Cyrl",
+                "90",
+                "1",
+            }
+            {
                 "hy",
                 "ru",
                 "90",
@@ -15579,6 +15597,12 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "ka_Geor",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "ka",
                 "en",
                 "90",
@@ -15597,8 +15621,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "km_Khmr",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "km",
                 "en",
+                "90",
+                "1",
+            }
+            {
+                "kn_Knda",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -15657,6 +15693,12 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "lo_Laoo",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "lo",
                 "en",
                 "90",
@@ -15699,6 +15741,12 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "ml_Mlym",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "ml",
                 "en",
                 "90",
@@ -15729,8 +15777,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "my_Mymr",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "my",
                 "en",
+                "90",
+                "1",
+            }
+            {
+                "ne_Deva",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -15789,8 +15849,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "or_Orya",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "or",
                 "en",
+                "90",
+                "1",
+            }
+            {
+                "pa_Guru",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -15803,6 +15875,12 @@ supplementalData:table(nofallback){
             {
                 "pcm",
                 "en",
+                "90",
+                "1",
+            }
+            {
+                "ps_Arab",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -15855,6 +15933,12 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "sd_Arab",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "sd",
                 "en",
                 "90",
@@ -15877,6 +15961,12 @@ supplementalData:table(nofallback){
                 "sr",
                 "96",
                 "0",
+            }
+            {
+                "si_Sinh",
+                "en_Latn",
+                "90",
+                "1",
             }
             {
                 "si",
@@ -15945,8 +16035,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "ta_Taml",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "ta",
                 "en",
+                "90",
+                "1",
+            }
+            {
+                "te_Telu",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -15963,8 +16065,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "ti_Ethi",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "ti",
                 "en",
+                "90",
+                "1",
+            }
+            {
+                "tk_Latn",
+                "ru_Cyrl",
                 "90",
                 "1",
             }
@@ -16011,8 +16125,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "ur_Arab",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "ur",
                 "en",
+                "90",
+                "1",
+            }
+            {
+                "uz_Latn",
+                "ru_Cyrl",
                 "90",
                 "1",
             }
@@ -16031,6 +16157,12 @@ supplementalData:table(nofallback){
             {
                 "xh",
                 "en",
+                "90",
+                "1",
+            }
+            {
+                "yi_Hebr",
+                "en_Latn",
                 "90",
                 "1",
             }
