@@ -1929,7 +1929,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // for formatting
         StringBuffer result = new StringBuffer();
         if (getRoundingMode() != BigDecimal.ROUND_UNNECESSARY) {
-            number = new BigDecimal(number).setScale(getMaximumFractionDigits(), roundingMode).doubleValue();
+            // We convert to a string because BigDecimal insists on excessive precision.
+            number = new BigDecimal(Double.toString(number)).setScale(getMaximumFractionDigits(), roundingMode).doubleValue();
         }
         ruleSet.format(number, result, 0, 0);
         postProcess(result, ruleSet);
