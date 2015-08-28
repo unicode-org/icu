@@ -1579,6 +1579,8 @@ public class RbnfTest extends TestFmwk {
                 {"1.49", "one point four nine"},
                 {"1.5", "one point five"},
                 {"1.51", "one point five one"},
+                {"450359962737049.6", "four hundred fifty trillion three hundred fifty-nine billion nine hundred sixty-two million seven hundred thirty-seven thousand forty-nine point six"}, // 2^52 / 10
+                {"450359962737049.7", "four hundred fifty trillion three hundred fifty-nine billion nine hundred sixty-two million seven hundred thirty-seven thousand forty-nine point seven"}, // 2^52 + 1 / 10
         };
         doTest(enFormatter, enTestFullData, false);
 
@@ -1599,22 +1601,27 @@ public class RbnfTest extends TestFmwk {
         };
         doTest(enFormatter, enTestIntegerData, false);
 
-        // This is BigDecimal behavior
-        enFormatter.setMaximumFractionDigits(2);
+        enFormatter.setMaximumFractionDigits(1);
         enFormatter.setRoundingMode(BigDecimal.ROUND_HALF_EVEN);
-        String[][] enTestCommaData = {
+        String[][] enTestTwoDigitsData = {
                 {"0", "zero"},
-                {"0.004", "zero"},
-                {"0.0049", "zero"},
-                {"0.005", "zero point zero one"},
-                {"0.0051", "zero point zero one"},
-                {"0.0099", "zero point zero one"},
-                {"1", "one"},
-                {"1.0001", "one"},
-                {"1.0049", "one"},
-                {"1.005", "one"},
-                {"1.0051", "one point zero one"},
+                {"0.04", "zero"},
+                {"0.049", "zero"},
+                {"0.05", "zero"},
+                {"0.051", "zero point one"},
+                {"0.099", "zero point one"},
+                {"10.11", "ten point one"},
+                {"10.149", "ten point one"},
+                {"10.15", "ten point two"},
+                {"10.151", "ten point two"},
         };
-        doTest(enFormatter, enTestCommaData, false);
+        doTest(enFormatter, enTestTwoDigitsData, false);
+
+        enFormatter.setMaximumFractionDigits(3);
+        enFormatter.setRoundingMode(BigDecimal.ROUND_DOWN);
+        String[][] enTestThreeDigitsDownData = {
+                {"4.3", "four point three"}, // Not 4.299!
+        };
+        doTest(enFormatter, enTestThreeDigitsDownData, false);
     }
 }
