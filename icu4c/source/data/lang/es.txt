@@ -830,7 +830,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.20.15"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Sistema de escritura: {0}"}

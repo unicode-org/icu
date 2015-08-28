@@ -312,5 +312,5 @@ es{
         FK{"Islas Malvinas (Islas Falkland)"}
         MK{"Macedonia (ERYM)"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.20.15"}
 }
