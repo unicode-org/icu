@@ -1097,5 +1097,12 @@ US Dollar(53.45)	fail	USD
 US Dollat(53.45)	fail	USD
 (53.45)US Dollar	fail	USD
 
-
+test ticket 10436
+set locale en
+set roundingMode ceiling
+set minFractionDigits 0
+set maxFractionDigits 0
+begin
+format	output
+-0.99	-0
 

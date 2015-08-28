@@ -573,6 +573,11 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFractionalDigitsForCurrency);
   TESTCASE_AUTO(TestFormatCurrencyPlural);
   TESTCASE_AUTO(Test11868);
+  TESTCASE_AUTO(Test10727_RoundingZero);
+  TESTCASE_AUTO(Test11376_getAndSetPositivePrefix);
+  TESTCASE_AUTO(Test11475_signRecognition);
+  TESTCASE_AUTO(Test11640_getAffixes);
+  TESTCASE_AUTO(Test11649_toPatternWithMultiCurrency);
   TESTCASE_AUTO_END;
 }
 
@@ -8507,6 +8512,166 @@ void NumberFormatTest::Test11868() {
     }
 }
 
+void NumberFormatTest::Test10727_RoundingZero() {
+   DigitList d;
+   d.set(-0.0);
+   assertFalse("", d.isPositive());
+   d.round(3); 
+   assertFalse("", d.isPositive());
+}
+
+void NumberFormatTest::Test11376_getAndSetPositivePrefix() {
+    {
+        const UChar USD[] = {0x55, 0x53, 0x44, 0x0};
+        UErrorCode status = U_ZERO_ERROR;
+        LocalPointer<NumberFormat> fmt(
+                NumberFormat::createCurrencyInstance("en", status));
+        if (!assertSuccess("", status)) {
+            return;
+        }
+        DecimalFormat *dfmt = (DecimalFormat *) fmt.getAlias();
+        dfmt->setCurrency(USD);
+        UnicodeString result;
+    
+        // This line should be a no-op. I am setting the positive prefix
+        // to be the same thing it was before.
+        dfmt->setPositivePrefix(dfmt->getPositivePrefix(result));
+
+        UnicodeString appendTo;
+        assertEquals("", "$3.78", dfmt->format(3.78, appendTo, status));
+        assertSuccess("", status);
+    }
+    {
+        const UChar USD[] = {0x55, 0x53, 0x44, 0x0};
+        UErrorCode status = U_ZERO_ERROR;
+        LocalPointer<NumberFormat> fmt(
+                NumberFormat::createInstance("en", UNUM_CURRENCY_PLURAL, status));
+        if (!assertSuccess("", status)) {
+            return;
+        }
+        DecimalFormat *dfmt = (DecimalFormat *) fmt.getAlias();
+        UnicodeString result;
+        UnicodeString tripleIntlCurrency(" \\u00a4\\u00a4\\u00a4");
+        tripleIntlCurrency = tripleIntlCurrency.unescape();
+        assertEquals("", tripleIntlCurrency, dfmt->getPositiveSuffix(result));
+        dfmt->setCurrency(USD);
+
+        // getPositiveSuffix() always returns the suffix for the
+        // "other" plural category
+        assertEquals("", " US dollars", dfmt->getPositiveSuffix(result));
+        UnicodeString appendTo;
+        assertEquals("", "3.78 US dollars", dfmt->format(3.78, appendTo, status));
+        assertEquals("", " US dollars", dfmt->getPositiveSuffix(result));
+        dfmt->setPositiveSuffix("booya");
+        appendTo.remove();
+        assertEquals("", "3.78booya", dfmt->format(3.78, appendTo, status));
+        assertEquals("", "booya", dfmt->getPositiveSuffix(result));
+    }
+}
+
+void NumberFormatTest::Test11475_signRecognition() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols sym("en", status);
+    UnicodeString result;
+    {
+        DecimalFormat fmt("+0.00", sym, status);
+        if (!assertSuccess("", status)) {
+            return;
+        }
+        NumberFormatTest_Attributes attributes[] = {
+                {UNUM_SIGN_FIELD, 0, 1},
+                {UNUM_INTEGER_FIELD, 1, 2},
+                {UNUM_DECIMAL_SEPARATOR_FIELD, 2, 3},
+                {UNUM_FRACTION_FIELD, 3, 5},
+                {0, -1, 0}};
+        UnicodeString result;
+        FieldPositionIterator iter;
+        fmt.format(2.3, result, &iter, status);
+        assertEquals("", "+2.30", result);
+        verifyFieldPositionIterator(attributes, iter);
+    }
+    {
+        DecimalFormat fmt("++0.00+;-(#)--", sym, status);
+        if (!assertSuccess("", status)) {
+            return;
+        }
+        {
+            NumberFormatTest_Attributes attributes[] = {
+                    {UNUM_SIGN_FIELD, 0, 2},
+                    {UNUM_INTEGER_FIELD, 2, 3},
+                    {UNUM_DECIMAL_SEPARATOR_FIELD, 3, 4},
+                    {UNUM_FRACTION_FIELD, 4, 6},
+                    {UNUM_SIGN_FIELD, 6, 7},
+                    {0, -1, 0}};
+            UnicodeString result;
+            FieldPositionIterator iter;
+            fmt.format(2.3, result, &iter, status);
+            assertEquals("", "++2.30+", result);
+            verifyFieldPositionIterator(attributes, iter);
+        }
+        {
+            NumberFormatTest_Attributes attributes[] = {
+                    {UNUM_SIGN_FIELD, 0, 1},
+                    {UNUM_INTEGER_FIELD, 2, 3},
+                    {UNUM_DECIMAL_SEPARATOR_FIELD, 3, 4},
+                    {UNUM_FRACTION_FIELD, 4, 6},
+                    {UNUM_SIGN_FIELD, 7, 9},
+                    {0, -1, 0}};
+            UnicodeString result;
+            FieldPositionIterator iter;
+            fmt.format(-2.3, result, &iter, status);
+            assertEquals("", "-(2.30)--", result);
+            verifyFieldPositionIterator(attributes, iter);
+        }
+    }
+}
+
+void NumberFormatTest::Test11640_getAffixes() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols symbols("en_US", status);
+    if (!assertSuccess("", status)) {
+        return;
+    }
+    UnicodeString pattern("\\u00a4\\u00a4\\u00a4 0.00 %\\u00a4\\u00a4");
+    pattern = pattern.unescape();
+    DecimalFormat fmt(pattern, symbols, status);
+    if (!assertSuccess("", status)) {
+        return;
+    }
+    UnicodeString affixStr;
+    assertEquals("", "US dollars ", fmt.getPositivePrefix(affixStr));
+    assertEquals("", " %USD", fmt.getPositiveSuffix(affixStr));
+    assertEquals("", "-US dollars ", fmt.getNegativePrefix(affixStr));
+    assertEquals("", " %USD", fmt.getNegativeSuffix(affixStr));
+}
+
+void NumberFormatTest::Test11649_toPatternWithMultiCurrency() {
+    UnicodeString pattern("\\u00a4\\u00a4\\u00a4 0.00");
+    pattern = pattern.unescape();
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat fmt(pattern, status);
+    if (!assertSuccess("", status)) {
+        return;
+    }
+    static UChar USD[] = {0x55, 0x53, 0x44, 0x0};
+    fmt.setCurrency(USD);
+    UnicodeString appendTo;
+    
+    assertEquals("", "US dollars 12.34", fmt.format(12.34, appendTo));
+
+    UnicodeString topattern;
+    fmt.toPattern(topattern);
+    DecimalFormat fmt2(topattern, status);
+    if (!assertSuccess("", status)) {
+        return;
+    }
+    fmt2.setCurrency(USD);
+    
+    appendTo.remove();
+    assertEquals("", "US dollars 12.34", fmt2.format(12.34, appendTo));
+}
+
+
 void NumberFormatTest::verifyFieldPositionIterator(
         NumberFormatTest_Attributes *expected, FieldPositionIterator &iter) {
     int32_t idx = 0;
@@ -8525,6 +8690,7 @@ void NumberFormatTest::verifyFieldPositionIterator(
         errln("Premature end of iterator. expected %d", expected[idx].id);
     }
 }
+
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

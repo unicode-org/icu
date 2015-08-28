@@ -208,6 +208,11 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestFractionalDigitsForCurrency();
     void TestFormatCurrencyPlural();
     void Test11868();
+    void Test10727_RoundingZero();
+    void Test11376_getAndSetPositivePrefix();
+    void Test11475_signRecognition();
+    void Test11640_getAffixes();
+    void Test11649_toPatternWithMultiCurrency();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
