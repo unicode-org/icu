@@ -329,15 +329,17 @@ int32_t udbg_enumByName(UDebugEnumType type, const char *value) {
         return -1; // type out of range
     }
 	const Field *fields = _udbg_enumFields(type);
-    for(int32_t field = 0;field<_udbg_enumCount(type, FALSE);field++) {
-        if(!strcmp(value, fields[field].str + fields[field].prefix)) {
-            return fields[field].num;
+    if (fields != NULL) {
+        for(int32_t field = 0;field<_udbg_enumCount(type, FALSE);field++) {
+            if(!strcmp(value, fields[field].str + fields[field].prefix)) {
+                return fields[field].num;
+            }
         }
-    }
-    // try with the prefix
-    for(int32_t field = 0;field<_udbg_enumCount(type, FALSE);field++) {
-        if(!strcmp(value, fields[field].str)) {
-            return fields[field].num;
+        // try with the prefix
+        for(int32_t field = 0;field<_udbg_enumCount(type, FALSE);field++) {
+            if(!strcmp(value, fields[field].str)) {
+                return fields[field].num;
+            }
         }
     }
     // fail
