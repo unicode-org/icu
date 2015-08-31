@@ -1833,8 +1833,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 tagBuf = (char*)uprv_malloc(newTagLength + 1);
                 if (tagBuf == NULL) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
-                    uprv_free(t->buf);
-                    uprv_free(t);
+                    ultag_close(t);
                     return NULL;
                 }
                 t->buf = tagBuf;
@@ -2131,7 +2130,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     return t;
 
 error:
-    uprv_free(t);
+    ultag_close(t);
     return NULL;
 }
 
