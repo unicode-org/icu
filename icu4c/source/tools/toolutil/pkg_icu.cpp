@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008-2014, International Business Machines
+ *   Copyright (C) 2008-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -163,6 +163,7 @@ writePackageDatFile(const char *outFilename, const char *outComment, const char 
         if(addListPkg != NULL) {
             pkg->addItems(*addListPkg);
         } else {
+            delete pkg;
             return U_ILLEGAL_ARGUMENT_ERROR;
         }
 
