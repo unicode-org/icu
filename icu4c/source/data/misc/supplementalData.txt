@@ -15437,7 +15437,7 @@ supplementalData:table(nofallback){
             {
                 "en_*_US",
                 "en_*_*",
-                "92",
+                "94",
                 "0",
             }
             {
@@ -15892,6 +15892,18 @@ supplementalData:table(nofallback){
             }
             {
                 "pt_*_BR",
+                "pt_*_US",
+                "96",
+                "0",
+            }
+            {
+                "pt_*_BR",
+                "pt_*_*",
+                "92",
+                "0",
+            }
+            {
+                "pt_*_US",
                 "pt_*_*",
                 "92",
                 "0",
@@ -16181,7 +16193,7 @@ supplementalData:table(nofallback){
             {
                 "zh_Hant_HK",
                 "zh_Hant_MO",
-                "96",
+                "97",
                 "0",
             }
             {
@@ -16205,7 +16217,7 @@ supplementalData:table(nofallback){
             {
                 "*_*_*",
                 "*_*_*",
-                "92",
+                "96",
                 "0",
             }
             {
