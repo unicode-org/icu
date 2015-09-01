@@ -443,17 +443,21 @@ public abstract class TimeZoneNames implements Serializable {
     /**
      * @author Markus
      * @internal For specific users only until proposed publicly.
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public void loadAllDisplayNames() {}
 
     /**
      * @author Markus
      * @internal For specific users only until proposed publicly.
+     * @deprecated This API is ICU internal only.
      */
-    public String[] getDisplayNames(String tzID, long date, NameType... types) {
-        String[] names = new String[types.length];
+    @Deprecated
+    public void getDisplayNames(String tzID, NameType[] types, long date,
+            String[] dest, int destOffset) {
         if (tzID == null || tzID.length() == 0) {
-            return names;
+            return;
         }
         String mzID = null;
         for (int i = 0; i < types.length; ++i) {
@@ -465,9 +469,8 @@ public abstract class TimeZoneNames implements Serializable {
                 }
                 name = getMetaZoneDisplayName(mzID, type);
             }
-            names[i] = name;
+            dest[destOffset + i] = name;
         }
-        return names;
     }
 
     /**
