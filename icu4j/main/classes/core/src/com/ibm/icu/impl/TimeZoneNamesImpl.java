@@ -236,10 +236,10 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
     }
 
     @Override
-    public String[] getDisplayNames(String tzID, long date, NameType... types) {
-        String[] names = new String[types.length];
+    public void getDisplayNames(String tzID, NameType[] types, long date,
+            String[] dest, int destOffset) {
         if (tzID == null || tzID.length() == 0) {
-            return names;
+            return;
         }
         ZNames tzNames = loadTimeZoneNames(null, tzID);
         ZNames mzNames = null;
@@ -257,9 +257,8 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
                 }
                 name = mzNames.getName(type);
             }
-            names[i] = name;
+            dest[destOffset + i] = name;
         }
-        return names;
     }
 
     /** Caller must synchronize. */
