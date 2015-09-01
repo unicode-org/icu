@@ -23,6 +23,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import com.ibm.icu.impl.ICUResourceBundleReader.ReaderValue;
 import com.ibm.icu.impl.URLHandler.URLVisitor;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -99,6 +100,9 @@ public  class ICUResourceBundle extends UResourceBundle {
     @Deprecated
     public static final String ICU_ZONE_BASE_NAME = ICUData.ICU_ZONE_BASE_NAME;
 
+    /**
+     * CLDR string value "∅∅∅" prevents fallback to the parent bundle.
+     */
     private static final String NO_INHERITANCE_MARKER = "\u2205\u2205\u2205";
 
     /**
@@ -441,6 +445,87 @@ public  class ICUResourceBundle extends UResourceBundle {
             throw new MissingResourceException("Encountered NO_INHERITANCE_MARKER", path, getKey());
         }
         return result;
+    }
+
+    public void getAllArrayItemsWithFallback(String path, ICUResource.ArraySink sink)
+            throws MissingResourceException {
+        getAllContainerItemsWithFallback(path, sink, null);
+    }
+
+    public void getAllTableItemsWithFallback(String path, ICUResource.TableSink sink)
+            throws MissingResourceException {
+        getAllContainerItemsWithFallback(path, null, sink);
+    }
+
+    private void getAllContainerItemsWithFallback(
+            String path, ICUResource.ArraySink arraySink, ICUResource.TableSink tableSink)
+            throws MissingResourceException {
+        // Collect existing and parsed key objects into an array of keys,
+        // rather than assembling and parsing paths.
+        int numPathKeys = countPathKeys(path);  // How much deeper does the path go?
+        ICUResourceBundle rb;
+        if (numPathKeys == 0) {
+            rb = this;
+        } else {
+            // Get the keys for finding the target.
+            int depth = getResDepth();  // How deep are we in this bundle?
+            String[] pathKeys = new String[depth + numPathKeys];
+            getResPathKeys(path, numPathKeys, pathKeys, depth);
+            rb = findResourceWithFallback(pathKeys, depth, this, null);
+            if (rb == null) {
+                throw new MissingResourceException(
+                    "Can't find resource for bundle "
+                    + this.getClass().getName() + ", key " + getType(),
+                    path, getKey());
+            }
+        }
+        int expectedType = arraySink != null ? ARRAY : TABLE;
+        if (rb.getType() != expectedType) {
+            throw new UResourceTypeMismatchException("");
+        }
+        // Get all table items with fallback.
+        ICUResource.Key key = new ICUResource.Key();
+        ReaderValue readerValue = new ReaderValue();
+        rb.getAllContainerItemsWithFallback(key, readerValue, arraySink, tableSink);
+    }
+
+    private void getAllContainerItemsWithFallback(
+            ICUResource.Key key, ReaderValue readerValue,
+            ICUResource.ArraySink arraySink, ICUResource.TableSink tableSink) {
+        // We recursively enumerate parent-first,
+        // overriding parent items with child items.
+        // When we see the no-inheritance marker, then we remove the parent's item.
+        //
+        // It would be possible to recursively enumerate child-first,
+        // only storing parent items in the absence of child items,
+        // but then we would need to store the no-inheritance marker
+        // (or some placeholder for it)
+        // to prevent a parent item from being stored.
+        int expectedType = arraySink != null ? ARRAY : TABLE;
+        if (parent != null) {
+            ICUResourceBundle parentBundle = (ICUResourceBundle)parent;
+            ICUResourceBundle rb;
+            int depth = getResDepth();
+            if (depth == 0) {
+                rb = parentBundle;
+            } else {
+                // Re-fetch the path keys: They may differ from the original ones
+                // if we had followed an alias.
+                String[] pathKeys = new String[depth];
+                getResPathKeys(pathKeys, depth);
+                rb = findResourceWithFallback(pathKeys, 0, parentBundle, null);
+            }
+            if (rb != null && rb.getType() == expectedType) {
+                rb.getAllContainerItemsWithFallback(key, readerValue, arraySink, tableSink);
+            }
+        }
+        if (getType() == expectedType) {
+            if (arraySink != null) {
+                ((ICUResourceBundleImpl.ResourceArray)this).getAllItems(key, readerValue, arraySink);
+            } else if (tableSink != null) {
+                ((ICUResourceBundleImpl.ResourceTable)this).getAllItems(key, readerValue, tableSink);
+            }
+        }
     }
 
     /**
@@ -807,11 +892,6 @@ public  class ICUResourceBundle extends UResourceBundle {
         if (path.length() == 0) {
             return null;
         }
-        ICUResourceBundle sub = null;
-        if (requested == null) {
-            requested = actualBundle;
-        }
-
         ICUResourceBundle base = (ICUResourceBundle) actualBundle;
         // Collect existing and parsed key objects into an array of keys,
         // rather than assembling and parsing paths.
@@ -820,11 +900,20 @@ public  class ICUResourceBundle extends UResourceBundle {
         assert numPathKeys > 0;
         String[] keys = new String[depth + numPathKeys];
         getResPathKeys(path, numPathKeys, keys, depth);
+        return findResourceWithFallback(keys, depth, base, requested);
+    }
+
+    private static final ICUResourceBundle findResourceWithFallback(
+            String[] keys, int depth,
+            ICUResourceBundle base, UResourceBundle requested) {
+        if (requested == null) {
+            requested = base;
+        }
 
         for (;;) {  // Iterate over the parent bundles.
             for (;;) {  // Iterate over the keys on the requested path, within a bundle.
                 String subKey = keys[depth++];
-                sub = (ICUResourceBundle) base.handleGet(subKey, null, requested);
+                ICUResourceBundle sub = (ICUResourceBundle) base.handleGet(subKey, null, requested);
                 if (sub == null) {
                     --depth;
                     break;
