@@ -3816,6 +3816,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/ICUDebug.java svneol=native#text/pl
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICULocaleService.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICUNotifier.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICURWLock.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/ICUResource.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICUResourceBundle.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICUResourceBundleImpl.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICUResourceBundleReader.java svneol=native#text/plain%3Bcharset%3Dutf-8
