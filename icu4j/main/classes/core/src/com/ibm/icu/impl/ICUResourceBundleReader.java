@@ -1051,7 +1051,7 @@ public final class ICUResourceBundleReader {
                     throw new UnsupportedOperationException(
                             "aliases not handled in resource enumeration");
                 } else if (reader.isNoInheritanceMarker(res)) {
-                    sink.remove(key);
+                    sink.putNoFallback(key);
                 } else {
                     value.res = res;
                     sink.put(key, value);

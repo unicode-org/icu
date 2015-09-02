@@ -357,15 +357,15 @@ public final class ICUResource {
         public void put(Key key, Value value) {}
 
         /**
-         * Removes any value for this key.
-         * Typically used for CLDR no-fallback data values of "∅∅∅"
-         * when enumerating tables with fallback from root to the specific resource bundle.
+         * Adds a no-fallback/no-inheritance marker for this key.
+         * Used for CLDR no-fallback data values of "∅∅∅"
+         * when enumerating tables with fallback from the specific resource bundle to root.
          *
          * <p>The default implementation does nothing.
          *
          * @param key to be removed
          */
-        public void remove(Key key) {}
+        public void putNoFallback(Key key) {}
 
         /**
          * Returns a nested resource array for the key as another sink.

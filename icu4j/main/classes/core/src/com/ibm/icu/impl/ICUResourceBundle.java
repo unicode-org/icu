@@ -492,17 +492,27 @@ public  class ICUResourceBundle extends UResourceBundle {
     private void getAllContainerItemsWithFallback(
             ICUResource.Key key, ReaderValue readerValue,
             ICUResource.ArraySink arraySink, ICUResource.TableSink tableSink) {
-        // We recursively enumerate parent-first,
-        // overriding parent items with child items.
-        // When we see the no-inheritance marker, then we remove the parent's item.
-        //
-        // It would be possible to recursively enumerate child-first,
-        // only storing parent items in the absence of child items,
-        // but then we would need to store the no-inheritance marker
-        // (or some placeholder for it)
+        // We recursively enumerate child-first,
+        // only storing parent items in the absence of child items.
+        // We store a placeholder value for the no-fallback/no-inheritance marker
         // to prevent a parent item from being stored.
+        //
+        // It would be possible to recursively enumerate parent-first,
+        // overriding parent items with child items.
+        // When we see the no-fallback/no-inheritance marker,
+        // then we would remove the parent's item.
+        // We would deserialize parent values even though they are overridden in a child bundle.
         int expectedType = arraySink != null ? ARRAY : TABLE;
+        if (getType() == expectedType) {
+            if (arraySink != null) {
+                ((ICUResourceBundleImpl.ResourceArray)this).getAllItems(key, readerValue, arraySink);
+            } else if (tableSink != null) {
+                ((ICUResourceBundleImpl.ResourceTable)this).getAllItems(key, readerValue, tableSink);
+            }
+        }
         if (parent != null) {
+            // We might try to query the sink whether
+            // any fallback from the parent bundle is still possible.
             ICUResourceBundle parentBundle = (ICUResourceBundle)parent;
             ICUResourceBundle rb;
             int depth = getResDepth();
@@ -517,13 +527,6 @@ public  class ICUResourceBundle extends UResourceBundle {
             }
             if (rb != null && rb.getType() == expectedType) {
                 rb.getAllContainerItemsWithFallback(key, readerValue, arraySink, tableSink);
-            }
-        }
-        if (getType() == expectedType) {
-            if (arraySink != null) {
-                ((ICUResourceBundleImpl.ResourceArray)this).getAllItems(key, readerValue, arraySink);
-            } else if (tableSink != null) {
-                ((ICUResourceBundleImpl.ResourceTable)this).getAllItems(key, readerValue, tableSink);
             }
         }
     }
