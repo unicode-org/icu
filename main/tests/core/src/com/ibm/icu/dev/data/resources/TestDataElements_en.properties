@@ -1,0 +1,10 @@
+# *
+# *******************************************************************************
+# * Copyright (C) 2005-2006, International Business Machines Corporation and         *
+# * others. All Rights Reserved.                                                *
+# *******************************************************************************
+# *
+# TestDataElements_en.properties
+from_en=This data comes from en
+from_en_Latn=In en should be overridden
+from_en_Latn_US=In en should be overridden
