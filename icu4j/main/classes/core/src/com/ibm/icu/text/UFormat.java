@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2003-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -18,16 +18,16 @@ import com.ibm.icu.util.ULocale;
  * @see com.ibm.icu.util.ULocale
  * @author weiv
  * @author Alan Liu
- * @draft ICU 2.8 (retain)
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 2.8
  */
 public abstract class UFormat extends Format {
     // jdk1.4.2 serialver
     private static final long serialVersionUID = -4964390515840164416L;
 
     /**
-     * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
+     * Default constructor.
+     *
+     * @stable ICU 2.8
      */
     public UFormat() {}
 
