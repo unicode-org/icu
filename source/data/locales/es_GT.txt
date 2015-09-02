@@ -11,7 +11,7 @@ es_GT{
     NumberElements{
         latn{
             miscPatterns{
-                range{"{0} 'al' {1}"}
+                range{"{0} al {1}"}
             }
             patternsShort{
                 currencyFormat{
@@ -67,7 +67,7 @@ es_GT{
             }
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.20.32"}
     calendar{
         generic{
             DateTimePatterns{

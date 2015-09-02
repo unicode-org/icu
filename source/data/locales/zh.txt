@@ -233,7 +233,7 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.1.19.89"}
+    Version{"2.1.20.31"}
     calendar{
         buddhist{
             DateTimePatterns{

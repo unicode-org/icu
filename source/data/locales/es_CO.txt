@@ -11,7 +11,7 @@ es_CO{
     NumberElements{
         latn{
             miscPatterns{
-                range{"'de' {0} 'a' {1}"}
+                range{"de {0} a {1}"}
             }
             patterns{
                 currencyFormat{"¤ #,##0.00"}
@@ -23,7 +23,7 @@ es_CO{
             }
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.20.32"}
     calendar{
         generic{
             DateTimePatterns{
