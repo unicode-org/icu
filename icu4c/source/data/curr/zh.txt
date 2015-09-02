@@ -2108,5 +2108,5 @@ zh{
     CurrencyUnitPatterns{
         other{"{0}{1}"}
     }
-    Version{"2.1.19.89"}
+    Version{"2.1.20.31"}
 }

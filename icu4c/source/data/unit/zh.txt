@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh{
-    Version{"2.1.19.89"}
+    Version{"2.1.20.31"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -97,11 +97,11 @@ zh{
             }
             liter-per-kilometer{
                 dnam{"升每公里"}
-                other{"{0}升每公里"}
+                other{"每公里{0}升"}
             }
             mile-per-gallon{
                 dnam{"英里每加仑"}
-                other{"{0}英里每加仑"}
+                other{"每加仑{0}英里"}
             }
         }
         coordinate{
@@ -439,7 +439,7 @@ zh{
             }
             pound-per-square-inch{
                 dnam{"磅/平方英寸"}
-                other{"{0}磅每平方英寸"}
+                other{"每平方英寸{0}磅"}
             }
         }
         proportion{
@@ -451,7 +451,7 @@ zh{
         speed{
             kilometer-per-hour{
                 dnam{"千米每小时"}
-                other{"{0}千米每小时"}
+                other{"每小时{0}公里"}
             }
             knot{
                 dnam{"海里/小时"}
@@ -459,11 +459,11 @@ zh{
             }
             meter-per-second{
                 dnam{"米每秒"}
-                other{"{0}米每秒"}
+                other{"每秒{0}米"}
             }
             mile-per-hour{
                 dnam{"英里每小时"}
-                other{"{0}英里每小时"}
+                other{"每小时{0}英里"}
             }
         }
         temperature{
@@ -742,7 +742,7 @@ zh{
         speed{
             kilometer-per-hour{
                 dnam{"千米/小时"}
-                other{"{0}千米/小时"}
+                other{"每小时{0}公里"}
             }
             meter-per-second{
                 other{"{0}m/s"}
@@ -857,11 +857,11 @@ zh{
             }
             liter-per-kilometer{
                 dnam{"升/公里"}
-                other{"{0}升/公里"}
+                other{"每公里{0}升"}
             }
             mile-per-gallon{
                 dnam{"英里/加仑"}
-                other{"{0}英里/加仑"}
+                other{"每加仑{0}英里"}
             }
         }
         coordinate{
@@ -1199,7 +1199,7 @@ zh{
             }
             pound-per-square-inch{
                 dnam{"磅/平方英寸"}
-                other{"{0}磅/平方英寸"}
+                other{"每平方英寸{0}磅"}
             }
         }
         proportion{
@@ -1211,7 +1211,7 @@ zh{
         speed{
             kilometer-per-hour{
                 dnam{"千米/小时"}
-                other{"{0}千米/小时"}
+                other{"每小时{0}公里"}
             }
             knot{
                 dnam{"海里/小时"}
@@ -1219,11 +1219,11 @@ zh{
             }
             meter-per-second{
                 dnam{"米/秒"}
-                other{"{0}米/秒"}
+                other{"每秒{0}米"}
             }
             mile-per-hour{
                 dnam{"英里/小时"}
-                other{"{0}英里/小时"}
+                other{"每小时{0}英里"}
             }
         }
         temperature{
