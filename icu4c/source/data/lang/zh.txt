@@ -927,7 +927,7 @@ zh{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.1.19.89"}
+    Version{"2.1.20.31"}
     codePatterns{
         language{"语言：{0}"}
         script{"文字：{0}"}
