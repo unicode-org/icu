@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-2011, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2002-2011, 2015 International Business Machines Corporation   *
+* and others. All Rights Reserved.                                            *
 *******************************************************************************
 */
 
@@ -11,13 +11,10 @@ import java.text.BreakIterator;
 import java.util.Locale;
 import java.util.Map;
 
-import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet; 
 
-public abstract class ICUTaglet implements Taglet {
+public abstract class ICUTaglet extends ICUTagletAdapter implements Taglet {
     protected final String name;
     protected final int mask;
 
@@ -99,26 +96,6 @@ public abstract class ICUTaglet implements Taglet {
             }
         }
         return null;
-    }
-
-    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer)
-        throws IllegalArgumentException {
-
-        TagletOutput out = writer.getTagletOutputInstance();
-        out.setOutput(toString(tag));
-        return out;
-    }
-
-    public TagletOutput getTagletOutput(Doc holder, TagletWriter writer)
-        throws IllegalArgumentException {
-
-        TagletOutput out = writer.getTagletOutputInstance();
-        Tag[] tags = holder.tags(getName());
-        if (tags.length == 0) {
-            return null;
-        }
-        out.setOutput(toString(tags[0]));
-        return out;
     }
 
     protected static final String STATUS = "<dt><b>Status:</b></dt>";
