@@ -650,7 +650,9 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
 
             if (errMsg != null) {
-                errln("Fail: " + errMsg + " [text=" + text + ", pos=" + inPos + ", style=" + style + "]");
+                errln("Fail: " + errMsg +
+                        " [text=" + text + ", pos=" + inPos +
+                        ", locale=" + loc + ", style=" + style + "]");
             }
         }
     }
