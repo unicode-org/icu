@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1996-2014, International Business Machines
+*   Copyright (C) 1996-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -207,10 +207,7 @@ public final class CollationLoader {
 
         // Try to fetch the optional rules string.
         try {
-            String s = data.getString("Sequence");
-            if (s != null) {
-                t.rules = s;
-            }
+            t.setRulesResource(data.get("Sequence"));
         } catch(MissingResourceException ignored) {
         }
 

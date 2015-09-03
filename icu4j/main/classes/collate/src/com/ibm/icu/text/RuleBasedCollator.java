@@ -967,7 +967,7 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public String getRules() {
-        return tailoring.rules;
+        return tailoring.getRules();
     }
 
     /**
@@ -990,9 +990,9 @@ public final class RuleBasedCollator extends Collator {
      */
     public String getRules(boolean fullrules) {
         if (!fullrules) {
-            return tailoring.rules;
+            return tailoring.getRules();
         }
-        return CollationLoader.getRootRules() + tailoring.rules;
+        return CollationLoader.getRootRules() + tailoring.getRules();
     }
 
     /**
@@ -1429,10 +1429,12 @@ public final class RuleBasedCollator extends Collator {
         boolean otherIsRoot = o.data.base == null;
         assert(!thisIsRoot || !otherIsRoot);  // otherwise their data pointers should be ==
         if(thisIsRoot != otherIsRoot) { return false; }
-        if((thisIsRoot || tailoring.rules.length() != 0) &&
-                (otherIsRoot || o.tailoring.rules.length() != 0)) {
+        String theseRules = tailoring.getRules();
+        String otherRules = o.tailoring.getRules();
+        if((thisIsRoot || theseRules.length() != 0) &&
+                (otherIsRoot || otherRules.length() != 0)) {
             // Shortcut: If both collators have valid rule strings, then compare those.
-            if(tailoring.rules.equals(o.tailoring.rules)) { return true; }
+            if(theseRules.equals(otherRules)) { return true; }
         }
         // Different rule strings can result in the same or equivalent tailoring.
         // The rule strings are optional in ICU resource bundles, although included by default.

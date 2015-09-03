@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2013-2014, International Business Machines
+* Copyright (C) 2013-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * CollationBuilder.java, ported from collationbuilder.h/.cpp
@@ -92,7 +92,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
         ownedSettings.fastLatinOptions = CollationFastLatin.getOptions(
                 tailoring.data, ownedSettings,
                 ownedSettings.fastLatinPrimaries);
-        tailoring.rules = ruleString;
+        tailoring.setRules(ruleString);
         // In Java, we do not have a rules version.
         // In C++, the genrb build tool reads and supplies one,
         // and the rulesVersion is a parameter for this method.
