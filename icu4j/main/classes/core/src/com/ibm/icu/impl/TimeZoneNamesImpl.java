@@ -203,11 +203,23 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
         NameSearchHandler handler = new NameSearchHandler(nameTypes);
         _namesTrie.find(text, start, handler);
         if (handler.getMaxMatchLen() == (text.length() - start) || _namesTrieFullyLoaded) {
+            // perfect match, or no more names available
+            return handler.getMatches();
+        }
+
+        // All names are not yet loaded into the trie.
+        // We may have loaded names for formatting several time zones,
+        // and might be parsing one of those.
+        // Populate the parsing trie from all of the already-loaded names.
+        addAllNamesIntoTrie();
+        handler.resetResults();
+        _namesTrie.find(text, start, handler);
+        if (handler.getMaxMatchLen() == (text.length() - start)) {
             // perfect match
             return handler.getMatches();
         }
 
-        // All names are not yet loaded into the trie
+        // Still no match, load all names.
         internalLoadAllDisplayNames();
         addAllNamesIntoTrie();
 
@@ -692,9 +704,11 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
         private static final int EX_LOC_INDEX = NameType.EXEMPLAR_LOCATION.ordinal();
 
         private String[] _names;
+        private boolean didAddIntoTrie;
 
         protected ZNames(String[] names) {
             _names = names;
+            didAddIntoTrie = names == null;
         }
 
         public static ZNames getInstance(String[] names, String tzID) {
@@ -728,7 +742,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
         }
 
         public void addNamesIntoTrie(String mzID, String tzID, TextTrieMap<NameInfo> trie) {
-            if (_names == null) {
+            if (_names == null || didAddIntoTrie) {
                 return;
             }
             for (int i = 0; i < _names.length; ++ i) {
@@ -741,6 +755,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
                     trie.put(name, info);
                 }
             }
+            didAddIntoTrie = true;
         }
     }
 
