@@ -1,7 +1,7 @@
 /*
  ************************************************************************************
- * Copyright (C) 2007-2010, Google Inc, International Business Machines Corporation *
- * and others. All Rights Reserved.                                                 *
+ * Copyright (C) 2007-2015, Google Inc, International Business Machines Corporation
+ * and others. All Rights Reserved.
  ************************************************************************************
  */
 package com.ibm.icu.impl;
@@ -9,6 +9,10 @@ package com.ibm.icu.impl;
 import java.util.Comparator;
 import java.util.Iterator;
 
+/**
+ * TODO: Move to com.ibm.icu.dev.somewhere.
+ * 2015-sep-03: Not used in ICU but used in CLDR and in UnicodeTools.
+ */
 public class IterableComparator<T> implements Comparator<Iterable<T>> {
     private final Comparator<T> comparator;
     private final int shorterFirst; // = 1 for shorter first, -1 otherwise

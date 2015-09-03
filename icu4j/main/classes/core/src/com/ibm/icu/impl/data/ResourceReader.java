@@ -27,6 +27,8 @@ import com.ibm.icu.impl.PatternProps;
  * resource is opened by constructing a <code>ResourceReader</code>
  * object the encoding is specified.
  *
+ * <p>2015-sep-03 TODO: Only used in com.ibm.icu.dev.test.format, move there.
+ *
  * @author Alan Liu
  */
 public class ResourceReader implements Closeable {
