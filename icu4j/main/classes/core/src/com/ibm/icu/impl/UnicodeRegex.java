@@ -31,7 +31,10 @@ import com.ibm.icu.util.Freezable;
 /**
  * Contains utilities to supplement the JDK Regex, since it doesn't handle
  * Unicode well.
- * 
+ *
+ * <p>TODO: Move to com.ibm.icu.dev.somewhere.
+ * 2015-sep-03: This is used there, and also in CLDR and in UnicodeTools.
+ *
  * @author markdavis
  */
 public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringTransform {

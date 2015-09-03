@@ -15,6 +15,9 @@ import com.ibm.icu.text.UTF16;
 
 /**
  * Trie implementation which stores data in int, 32 bits.
+ * 2015-sep-03: Used only in CharsetSelector which could be switched to {@link Trie2_32}
+ * as long as that does not load ICU4C selector data.
+ *
  * @author synwee
  * @see com.ibm.icu.impl.Trie
  * @since release 2.1, Jan 01 2002
