@@ -16,10 +16,11 @@ import com.ibm.icu.util.ICUCloneNotSupportedException;
 
 /**
  * Old Unicode normalization API.
- * This class has been replaced almost entirely by {@link Normalizer2}
- * and {@link FilteredNormalizer2},
- * except for <code>QuickCheckResult</code> and <code>compare()</code>,
- * and this old class is now implemented by calling the new one.
+ *
+ * <p>This API has been replaced by the {@link Normalizer2} class and is only available
+ * for backward compatibility. This class simply delegates to the Normalizer2 class.
+ * There are two exceptions: The new API does not provide a replacement for
+ * <code>QuickCheckResult</code> and <code>compare()</code>.
  *
  * <p><code>normalize</code> transforms Unicode text into an equivalent composed or
  * decomposed form, allowing for easier sorting and searching of text.
