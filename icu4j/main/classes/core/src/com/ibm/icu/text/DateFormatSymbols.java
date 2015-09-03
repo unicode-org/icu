@@ -1309,6 +1309,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         String[] tzIDs = TimeZone.getAvailableIDs();
         TimeZoneNames tznames = TimeZoneNames.getInstance(validLocale);
+        tznames.loadAllDisplayNames();
+        NameType types[] = {
+            NameType.LONG_STANDARD, NameType.SHORT_STANDARD,
+            NameType.LONG_DAYLIGHT, NameType.SHORT_DAYLIGHT
+        };
         long now = System.currentTimeMillis();
         String[][] array = new String[tzIDs.length][5];
         for (int i = 0; i < tzIDs.length; i++) {
@@ -1318,10 +1323,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             }
 
             array[i][0] = tzIDs[i];
-            array[i][1] = tznames.getDisplayName(canonicalID, NameType.LONG_STANDARD, now);
-            array[i][2] = tznames.getDisplayName(canonicalID, NameType.SHORT_STANDARD, now);
-            array[i][3] = tznames.getDisplayName(canonicalID, NameType.LONG_DAYLIGHT, now);
-            array[i][4] = tznames.getDisplayName(canonicalID, NameType.SHORT_DAYLIGHT, now);
+            tznames.getDisplayNames(canonicalID, types, now, array[i], 1);
         }
 
         zoneStrings = array;
