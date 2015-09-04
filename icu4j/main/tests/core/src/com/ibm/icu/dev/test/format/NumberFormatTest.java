@@ -2340,6 +2340,113 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("fp end", 8, fp.getEndIndex());
     }
 
+    public void TestFieldPositionCurrency() {
+        DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(Locale.US);
+        double amount = 35.47;
+        double negAmount = -34.567;
+        FieldPosition cp = new FieldPosition(NumberFormat.Field.CURRENCY);
+        
+        StringBuffer buffer0 = new StringBuffer();
+        nf.format(amount, buffer0, cp);
+        assertEquals("$35.47", "$35.47", buffer0.toString());
+        assertEquals("cp begin", 0, cp.getBeginIndex());
+        assertEquals("cp end", 1, cp.getEndIndex());
+        
+        StringBuffer buffer01 = new StringBuffer();
+        nf.format(negAmount, buffer01, cp);
+        assertEquals("-$34.57", "-$34.57", buffer01.toString());
+        assertEquals("cp begin", 1, cp.getBeginIndex());
+        assertEquals("cp end", 2, cp.getEndIndex());     
+        
+        nf.setCurrency(Currency.getInstance(Locale.FRANCE));
+        StringBuffer buffer1 = new StringBuffer();
+        nf.format(amount, buffer1, cp);
+        assertEquals("€35.47", "€35.47", buffer1.toString());
+        assertEquals("cp begin", 0, cp.getBeginIndex());
+        assertEquals("cp end", 1, cp.getEndIndex());
+
+        nf.setCurrency(Currency.getInstance(new Locale("fr", "ch", "")));
+        StringBuffer buffer2 = new StringBuffer();
+        nf.format(amount, buffer2, cp);
+        assertEquals("CHF35.47", "CHF35.47", buffer2.toString());
+        assertEquals("cp begin", 0, cp.getBeginIndex());
+        assertEquals("cp end", 3, cp.getEndIndex());
+
+        StringBuffer buffer20 = new StringBuffer();
+        nf.format(negAmount, buffer20, cp);
+        assertEquals("-CHF34.57", "-CHF34.57", buffer20.toString());
+        assertEquals("cp begin", 1, cp.getBeginIndex());
+        assertEquals("cp end", 4, cp.getEndIndex());
+        
+        nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(Locale.FRANCE);
+        StringBuffer buffer3 = new StringBuffer();
+        nf.format(amount, buffer3, cp);
+        assertEquals("35,47 €", "35,47 €", buffer3.toString());
+        assertEquals("cp begin", 6, cp.getBeginIndex());
+        assertEquals("cp end", 7, cp.getEndIndex());
+
+        StringBuffer buffer4 = new StringBuffer();
+        nf.format(negAmount, buffer4, cp);
+        assertEquals("-34,57 €", "-34,57 €", buffer4.toString());
+        assertEquals("cp begin", 7, cp.getBeginIndex());
+        assertEquals("cp end", 8, cp.getEndIndex());
+        
+        nf.setCurrency(Currency.getInstance(new Locale("fr", "ch")));
+        StringBuffer buffer5 = new StringBuffer();
+        nf.format(negAmount, buffer5, cp);
+        assertEquals("-34,57 CHF", "-34,57 CHF", buffer5.toString());
+        assertEquals("cp begin", 7, cp.getBeginIndex());
+        assertEquals("cp end", 10, cp.getEndIndex());
+        
+        NumberFormat plCurrencyFmt = NumberFormat.getInstance(new Locale("fr", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
+        StringBuffer buffer6 = new StringBuffer();
+        plCurrencyFmt.format(negAmount, buffer6, cp);
+        assertEquals("-34.57 francs suisses", "-34.57 francs suisses", buffer6.toString());
+        assertEquals("cp begin", 7, cp.getBeginIndex());
+        assertEquals("cp end", 21, cp.getEndIndex());        
+        
+        // Positive value with PLURALCURRENCYSTYLE.
+        plCurrencyFmt = NumberFormat.getInstance(new Locale("ja", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
+        StringBuffer buffer7 = new StringBuffer();
+        plCurrencyFmt.format(amount, buffer7, cp);
+        assertEquals("35.47スイス フラン", "35.47スイス フラン", buffer7.toString());
+        assertEquals("cp begin", 5, cp.getBeginIndex());
+        assertEquals("cp end", 12, cp.getEndIndex());
+        
+        // PLURALCURRENCYSTYLE for non-ASCII.
+        plCurrencyFmt = NumberFormat.getInstance(new Locale("ja", "de"), NumberFormat.PLURALCURRENCYSTYLE);
+        StringBuffer buffer8 = new StringBuffer();
+        plCurrencyFmt.format(negAmount, buffer8, cp);
+        assertEquals("-34.57ユーロ", "-34.57ユーロ", buffer8.toString());
+        assertEquals("cp begin", 6, cp.getBeginIndex());
+        assertEquals("cp end", 9, cp.getEndIndex());
+        
+        nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(Locale.JAPAN);
+        nf.setCurrency(Currency.getInstance(new Locale("ja", "jp")));
+        StringBuffer buffer9 = new StringBuffer();
+        nf.format(negAmount, buffer9, cp);
+        assertEquals("-￥35", "-￥35", buffer9.toString());
+        assertEquals("cp begin", 1, cp.getBeginIndex());
+        assertEquals("cp end", 2, cp.getEndIndex());
+        
+        // Negative value with PLURALCURRENCYSTYLE.
+        plCurrencyFmt = NumberFormat.getInstance(new Locale("ja", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
+        StringBuffer buffer10 = new StringBuffer();
+        plCurrencyFmt.format(negAmount, buffer10, cp);
+        assertEquals("-34.57スイス フラン", "-34.57スイス フラン", buffer10.toString());
+        assertEquals("cp begin", 6, cp.getBeginIndex());
+        assertEquals("cp end", 13, cp.getEndIndex());
+        
+        // Nagative value with PLURALCURRENCYSTYLE, Arabic digits.
+        nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("ar", "eg"));
+        plCurrencyFmt = NumberFormat.getInstance(new Locale("ar", "eg"), NumberFormat.PLURALCURRENCYSTYLE);
+        StringBuffer buffer11 = new StringBuffer();
+        plCurrencyFmt.format(negAmount, buffer11, cp);
+        assertEquals("‏-٣٤٫٥٧ جنيه مصري", "‏-٣٤٫٥٧ جنيه مصري", buffer11.toString());
+        assertEquals("cp begin", 8, cp.getBeginIndex());
+        assertEquals("cp end", 17, cp.getEndIndex());
+    }
+    
     public void TestRounding() {
         DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         if (false) { // for debugging specific value

@@ -27,6 +27,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
@@ -866,7 +867,7 @@ public class DecimalFormat extends NumberFormat {
         number = round(number);
 
         if (Double.isInfinite(number)) {
-            int prefixLen = appendAffix(result, isNegative, true, parseAttr);
+            int prefixLen = appendAffix(result, isNegative, true, fieldPosition, parseAttr);
 
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
@@ -886,7 +887,7 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setEndIndex(result.length());
             }
 
-            int suffixLen = appendAffix(result, isNegative, false, parseAttr);
+            int suffixLen = appendAffix(result, isNegative, false, fieldPosition, parseAttr);
 
             addPadding(result, fieldPosition, prefixLen, suffixLen);
             return result;
@@ -1383,7 +1384,7 @@ public class DecimalFormat extends NumberFormat {
             digitList.decimalAt = 0; // Normalize
         }
 
-        int prefixLen = appendAffix(result, isNegative, true, parseAttr);
+        int prefixLen = appendAffix(result, isNegative, true, fieldPosition, parseAttr);
 
         if (useExponentialNotation) {
             subformatExponential(result, fieldPosition, parseAttr);
@@ -1391,8 +1392,7 @@ public class DecimalFormat extends NumberFormat {
             subformatFixed(result, fieldPosition, isInteger, parseAttr);
         }
 
-        int suffixLen = appendAffix(result, isNegative, false, parseAttr);
-
+        int suffixLen = appendAffix(result, isNegative, false, fieldPosition, parseAttr);
         addPadding(result, fieldPosition, prefixLen, suffixLen);
         return result;
     }
@@ -4192,8 +4192,11 @@ public class DecimalFormat extends NumberFormat {
      *            buffer to append to
      * @param isNegative
      * @param isPrefix
+     * @param fieldPosition
+     * @param parseAttr
      */
     private int appendAffix(StringBuffer buf, boolean isNegative, boolean isPrefix,
+                            FieldPosition fieldPosition,
                             boolean parseAttr) {
         if (currencyChoice != null) {
             String affixPat = null;
@@ -4209,10 +4212,13 @@ public class DecimalFormat extends NumberFormat {
         }
 
         String affix = null;
+        String pattern;
         if (isPrefix) {
             affix = isNegative ? negativePrefix : positivePrefix;
+            pattern = isNegative ? negPrefixPattern : posPrefixPattern;
         } else {
             affix = isNegative ? negativeSuffix : positiveSuffix;
+            pattern = isNegative ? negSuffixPattern : posSuffixPattern;
         }
         // [Spark/CDL] Invoke formatAffix2Attribute to add attributes for affix
         if (parseAttr) {
@@ -4225,6 +4231,34 @@ public class DecimalFormat extends NumberFormat {
             }
             formatAffix2Attribute(affix, buf.length() + offset, buf.length() + affix.length());
         }
+
+        // If kCurrencySymbol or kIntlCurrencySymbol is in the affix, check for currency symbol.
+        // Get spelled out name if "¤¤¤" is in the pattern.
+        if (fieldPosition.getFieldAttribute() == NumberFormat.Field.CURRENCY) {
+            if (affix.indexOf(symbols.getCurrencySymbol()) > -1) {
+                String aff = symbols.getCurrencySymbol();
+                int firstPos = affix.indexOf(aff);
+                int start = buf.length() + firstPos;
+                int end = start + aff.length();
+                fieldPosition.setBeginIndex(start);
+                fieldPosition.setEndIndex(end);
+            } else if (affix.indexOf(symbols.getInternationalCurrencySymbol()) > -1) {
+                String aff = symbols.getInternationalCurrencySymbol(); 
+                int firstPos = affix.indexOf(aff);
+                int start = buf.length() + firstPos;
+                int end = start + aff.length();
+                fieldPosition.setBeginIndex(start);
+                fieldPosition.setEndIndex(end);
+            } else if (pattern.indexOf("¤¤¤") > -1) {
+                // It's a plural, and we know where it is in the pattern.
+                int firstPos = pattern.indexOf("¤¤¤");
+                int start = buf.length() + firstPos;
+                int end = buf.length() + affix.length(); // This seems clunky and wrong.
+                fieldPosition.setBeginIndex(start);
+                fieldPosition.setEndIndex(end);
+            }
+        }
+
         buf.append(affix);
         return affix.length();
     }
