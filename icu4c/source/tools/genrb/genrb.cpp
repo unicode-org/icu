@@ -131,26 +131,36 @@ main(int argc,
     /* error handling, printing usage message */
     if(argc<0) {
         fprintf(stderr, "%s: error in command line argument \"%s\"\n", argv[0], argv[-argc]);
+        illegalArg = TRUE;
     } else if(argc<2) {
-        argc = -1;
+        illegalArg = TRUE;
     }
     if(options[WRITE_POOL_BUNDLE].doesOccur && options[USE_POOL_BUNDLE].doesOccur) {
         fprintf(stderr, "%s: cannot combine --writePoolBundle and --usePoolBundle\n", argv[0]);
-        argc = -1;
+        illegalArg = TRUE;
     }
     if(options[FORMAT_VERSION].doesOccur) {
         const char *s = options[FORMAT_VERSION].value;
         if(uprv_strlen(s) != 1 || (s[0] < '1' && '3' < s[0])) {
             fprintf(stderr, "%s: unsupported --formatVersion %s\n", argv[0], s);
-            argc = -1;
+            illegalArg = TRUE;
         } else if(s[0] == '1' &&
                   (options[WRITE_POOL_BUNDLE].doesOccur || options[USE_POOL_BUNDLE].doesOccur)
         ) {
             fprintf(stderr, "%s: cannot combine --formatVersion 1 with --writePoolBundle or --usePoolBundle\n", argv[0]);
-            argc = -1;
+            illegalArg = TRUE;
         } else {
             setFormatVersion(s[0] - '0');
         }
+    }
+
+    if((options[JAVA_PACKAGE].doesOccur || options[BUNDLE_NAME].doesOccur) &&
+            !options[WRITE_JAVA].doesOccur) {
+        fprintf(stderr,
+                "%s error: command line argument --java-package or --bundle-name "
+                "without --write-java\n",
+                argv[0]);
+        illegalArg = TRUE;
     }
 
     if(options[VERSION].doesOccur) {
@@ -158,18 +168,9 @@ main(int argc,
                 "%s version %s (ICU version %s).\n"
                 "%s\n",
                 argv[0], GENRB_VERSION, U_ICU_VERSION, U_COPYRIGHT_STRING);
-        return U_ZERO_ERROR;
-    }
-
-    if(argc<0) {
-        illegalArg = TRUE;
-    } else if((options[JAVA_PACKAGE].doesOccur || options[BUNDLE_NAME].doesOccur) &&
-              !options[WRITE_JAVA].doesOccur) {
-        fprintf(stderr,
-                "%s error: command line argument --java-package or --bundle-name "
-                "without --write-java\n",
-                argv[0]);
-        illegalArg = TRUE;
+        if(!illegalArg) {
+            return U_ZERO_ERROR;
+        }
     }
 
     if(illegalArg || options[HELP1].doesOccur || options[HELP2].doesOccur) {
