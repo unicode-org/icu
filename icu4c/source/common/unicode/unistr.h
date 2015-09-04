@@ -34,7 +34,6 @@
 #include "unicode/ucasemap.h"
 
 struct UConverter;          // unicode/ucnv.h
-class  StringThreadTest;
 
 #ifndef U_COMPARE_CODE_POINT_ORDER
 /* see also ustring.h and unorm.h */
@@ -3641,7 +3640,6 @@ private:
     kWritableAlias=0
   };
 
-  friend class StringThreadTest;
   friend class UnicodeStringAppendable;
 
   union StackBufferOrFields;        // forward declaration necessary before friend declaration
