@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2014, International Business Machines
+*   Copyright (C) 2002-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1160,7 +1160,7 @@ TestCountChar32() {
         buffer[length]=0;
         for(i=0; i<=length; ++i) {
             for(number=-1; number<=((length-i)+2); ++number) {
-                _testStrHasMoreChar32Than(string+i, i, -1, number);
+                _testStrHasMoreChar32Than(buffer+i, i, -1, number);
             }
         }
         --length;
