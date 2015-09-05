@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2012, International Business Machines
+*   Copyright (C) 2002-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -429,7 +429,7 @@ static void TestCharStringsEnumeration(void)  {
 static void TestUCharStringsEnumeration(void)  {
   UErrorCode status = U_ZERO_ERROR;
   /* //! [uenum_openUCharStringsEnumeration] */
-  static const UChar nko_1[] = {0x07c1,0}, nko_2[] = {0x07c2}, nko_3[] = {0x07c3,0}, nko_4[] = {0x07c4,0};
+  static const UChar nko_1[] = {0x07c1,0}, nko_2[] = {0x07c2,0}, nko_3[] = {0x07c3,0}, nko_4[] = {0x07c4,0};
   static const UChar* ustrings[] = {  nko_1, nko_2, nko_3, nko_4  };
   UEnumeration *u = uenum_openUCharStringsEnumeration(ustrings, 4, &status);
   /* //! [uenum_openUCharStringsEnumeration] */
