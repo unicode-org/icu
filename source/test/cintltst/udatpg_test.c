@@ -217,10 +217,10 @@ static void TestUsage() {
     }
     
     /* set append name to hr */
-    udatpg_setAppendItemName( dtpg, UDATPG_HOUR_FIELD, appendItemName, 7 );
+    udatpg_setAppendItemName(dtpg, UDATPG_HOUR_FIELD, appendItemName, 2);
     r = udatpg_getAppendItemName(dtpg, UDATPG_HOUR_FIELD, &length);
     
-    if(length!=7 || 0!=u_memcmp(r, appendItemName, length) || r[length]!=0) { 
+    if(length!=2 || 0!=u_memcmp(r, appendItemName, length) || r[length]!=0) { 
         log_err("udatpg_setAppendItemName did not return the expected string\n");
         return;
     }
