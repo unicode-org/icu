@@ -42,7 +42,7 @@
 U_NAMESPACE_USE
 
 // Defined in uspoof.cpp, initializes file-static variables.
-U_CFUNC void uspoof_internalInit(UErrorCode *status);
+U_CFUNC void uspoof_internalInitStatics(UErrorCode *status);
 
 // The main data building function
 
@@ -50,7 +50,7 @@ U_CAPI USpoofChecker * U_EXPORT2
 uspoof_openFromSource(const char *confusables,  int32_t confusablesLen,
                       const char *confusablesWholeScript, int32_t confusablesWholeScriptLen,
                       int32_t *errorType, UParseError *pe, UErrorCode *status) {
-    uspoof_internalInit(status);
+    uspoof_internalInitStatics(status);
     if (U_FAILURE(*status)) {
         return NULL;
     }
