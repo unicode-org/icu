@@ -21,9 +21,9 @@
         milestone - if the release note is a milestone release
 -->
  
-   <body>
-  <!-- <body class="rc"> -->
-  <body class="milestone">
+  <!-- <body class="milestone"> -->
+  <body class="rc">
+  <!-- <body> -->
     <p class="only-draft"><b>Note:</b> This is a draft readme.</p>
 
     <h1>
@@ -31,7 +31,7 @@
       International Components for Unicode<br/>
       <span class="only-rc">Release Candidate</span>
       <span class="only-milestone">(Milestone Release)</span>
-      <abbr title="International Components for Unicode">ICU</abbr> 56m1 ReadMe
+      <abbr title="International Components for Unicode">ICU</abbr> 56 ReadMe
     </h1>
 
     <!-- Shouldn't need to comment/uncomment this paragraph, just change the body class -->
@@ -43,7 +43,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2015-Jul-16<br />
+    <p>Last updated: 2015-Sep-07<br />
       Copyright &copy; 1997-2015 International Business Machines Corporation and
       others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -237,14 +237,26 @@
       list of APIs added, removed, or changed in this release.</p>
 
     <!-- ICU 56 items -->
+    <h3>COLON withdrawn as date/time pattern character</h3>
+    <p>In ICU 55, COLON was introduced as a date/time pattern character
+      to be replaced by the value of the timeSeparator for the number
+      system being used; a corresponding new UDateFormatField
+      UDAT_TIME_SEPARATOR_FIELD was added. Use of COLON caused some
+      backwards compatibility problems, so it is being withdrawn as a
+      pattern character. However, UDAT_TIME_SEPARATOR_FIELD remains
+      as does the mechanism for replacing a pattern character with the
+      value of the timeSeparator; a new pattern character may be
+      assigned in the future.</p>
+
     <h3>ICU Plugins: disabled by default</h3>
     <p>ICU Plugins are now disabled by default. They may be enabled
       with the configure option
       <tt>--enable-plugins</tt> or by means of
       <tt>#define UCONFIG_ENABLE_PLUGINS</tt>.
+	</p>
 
     <!-- ICU 55 items -->
-    <h3>Layout Engine: breaking API change</h3>
+    <h3>ICU 55: Layout Engine breaking API change</h3>
     <p>The LayoutEngine (already deprecated) has had the function
       <tt>LEFontInstance::getFontTable(LETag, size_t &amp;length)</tt>
       since ICU 52. Its implementation was optional. In ICU 55, this
@@ -258,7 +270,7 @@
       made secure. See <tt>LEFontInstance</tt> api docs for more detail.
     </p>
 
-    <h3>Deprecations in PluralRules (plurrule.h)</h3>
+    <h3>ICU 55: Deprecations in PluralRules (plurrule.h)</h3>
     <p>The following PluralRules methods never had an implementation
       but were inadvertently marked @stable; they have now been
       deprecated. [#<a href="http://bugs.icu-project.org/trac/ticket/10759">10759</a>]</p>
@@ -267,9 +279,9 @@
       <li><tt>int32_t icu::PluralRules::getAllKeywordValues(const UnicodeString&amp;, double*, int32_t, UErrorCode&amp;)</tt></li>
     </ul>
 
-    <h3>Deprecate uidna.h functions for IDNA2003 support</h3>
+    <h3>ICU 55: Deprecate uidna.h functions for IDNA2003 support</h3>
     <p>The IDNA2003 API has been deprecated; use the API for IDNA2008 / UTS #46 instead via
-      uidna_openUTS46() or class IDNA [#<a href="http://bugs.icu-project.org/trac/ticket/v">8477</a>].
+      uidna_openUTS46() or class IDNA [#<a href="http://bugs.icu-project.org/trac/ticket/8477">8477</a>].
       This applies to the following:</p>
     <ul>
       <li><tt>enum  value UIDNA_ALLOW_UNASSIGNED</tt></li>
@@ -281,7 +293,7 @@
     </ul>
 
     <!-- ICU 54 items -->
-    <h3>Deprecation (in ICU 54): Layout Engine</h3>
+    <h3>ICU 54: Deprecation of Layout Engine</h3>
     <p>The LayoutEngine is now deprecated. Please
     see <a href='http://userguide.icu-project.org/layoutengine'>the
     User's Guide</a> for more details and migration recommendations.
@@ -295,17 +307,18 @@
       instead of ICU as the layout engine. See <a href="http://userguide.icu-project.org/layoutengine">
         the users' guide</a> for more information about how to build.
     </p>
-    <h3>Deprecation (in ICU 54): Collation Short Strings</h3>
+    <h3>ICU 54: Deprecation of Collation Short Strings</h3>
     <p>The collation short naming scheme and its API functions are deprecated. 
     Use ucol_open() with language tag collation keywords instead (see <a href="http://userguide.icu-project.org/collation/api">Collation API Details</a>). For example, <code>ucol_open("de-u-co-phonebk-ka-shifted", &amp;errorCode)</code>
      for German Phonebook order with "ignore punctuation" mode.</p>
 
-    <h3>Deprecation (in ICU 54): UCOL_TAILORINGS_VERSION</h3>
+    <h3>ICU 54: Deprecation of UCOL_TAILORINGS_VERSION</h3>
     <p>This was originally intended to be the version of collation tailorings,
     but that information is actually in the tailorings data and this
     constant has always been (and now will continue to be) 1.</p>
 
-    <h3>Deprecation (in ICU 53): TimeUnitFormat</h3>
+    <!-- ICU 53 items -->
+    <h3>ICU 53: Deprecation of TimeUnitFormat</h3>
     <p>The TimeUnitFormat and its methods were actually deprecated in ICU 53 and the
     class as a whole was tagged as deprecated in that release, but the status tags for
     the individual methods did not correctly indicate the deprecated status; they
@@ -318,7 +331,7 @@
     For more news about this release, as well as late-breaking news, see the
     <a href="http://site.icu-project.org/download/54">ICU download page</a>.</p>
 
-    <!-- end ICU 54 items -->
+    <!-- end of What's New items -->
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>

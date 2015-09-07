@@ -763,8 +763,9 @@ typedef enum UDateFormatField {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * FieldPosition and UFieldPosition selector for ':' time separator,
-     * no corresponding UCAL_ field.
+     * FieldPosition and UFieldPosition selector for time separator,
+     * no corresponding UCAL_ field. No pattern character is currently
+     * defined for this.
      * @draft ICU 55
      */
     UDAT_TIME_SEPARATOR_FIELD = 35,
@@ -781,6 +782,16 @@ typedef enum UDateFormatField {
     UDAT_FIELD_COUNT = 36
 
 } UDateFormatField;
+
+
+#ifndef U_HIDE_INTERNAL_API
+/**
+ * Is a pattern character defined for UDAT_TIME_SEPARATOR_FIELD?
+ * In ICU 55 it was COLON, but that was withdrawn in ICU 56.
+ * @internal ICU 56
+ */
+#define UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR 0
+#endif /* U_HIDE_INTERNAL_API */
 
 
 /**
