@@ -678,7 +678,11 @@ static void TestSymbols()
     VerifygetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_NARROW, 59, "\\u7678\\u4EA5");
     VerifygetSymbols(zhChiCal, UDAT_ZODIAC_NAMES_ABBREVIATED, 0, "\\u9F20");
     VerifygetSymbols(zhChiCal, UDAT_ZODIAC_NAMES_WIDE, 11, "\\u732A");
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
     VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr:");
+#else
+    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr");
+#endif
 
 
     if(result != NULL) {
@@ -1756,9 +1760,13 @@ static const FieldsData expectedFields[] = {
     { UDAT_DATE_FIELD /* 3*/,            20, 22 },
     { UDAT_YEAR_FIELD /* 1*/,            24, 28 },
     { UDAT_HOUR1_FIELD /*15*/,           32, 33 },
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
     { UDAT_TIME_SEPARATOR_FIELD /*35*/,  33, 34 },
+#endif
     { UDAT_MINUTE_FIELD /* 6*/,          34, 36 },
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
     { UDAT_TIME_SEPARATOR_FIELD /*35*/,  36, 37 },
+#endif
     { UDAT_SECOND_FIELD /* 7*/,          37, 39 },
     { UDAT_AM_PM_FIELD /*14*/,           40, 42 },
     { UDAT_TIMEZONE_FIELD /*17*/,        43, 46 },
