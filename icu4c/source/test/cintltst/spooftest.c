@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2009-2014, International Business Machines Corporation and
+ * Copyright (c) 2009-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -62,7 +62,7 @@ log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE
     uspoof_close(sc);  \
 }
 
-
+static void TestOpenFromSource(void);
 static void TestUSpoofCAPI(void);
 
 void addUSpoofTest(TestNode** root);
@@ -70,8 +70,9 @@ void addUSpoofTest(TestNode** root);
 void addUSpoofTest(TestNode** root)
 {
 #if !UCONFIG_NO_FILE_IO
-    addTest(root, &TestUSpoofCAPI, "uspoof/TestUSpoofCAPI");
+    addTest(root, &TestOpenFromSource, "uspoof/TestOpenFromSource");
 #endif
+    addTest(root, &TestUSpoofCAPI, "uspoof/TestUSpoofCAPI");
 }
 
 /*
@@ -102,33 +103,12 @@ const UChar han_Hiragana[] = {(UChar)0x3086, (UChar)0x308A, (UChar)0x0020, (UCha
 
 /* Provide better code coverage */
 const char goodLatinUTF8[]    = {0x75, 0x77, 0};
-/*
- *   Spoof Detction C API Tests
- */
-static void TestUSpoofCAPI(void) {
 
-    /*
-     *  basic uspoof_open().
-     */
-    {
-        USpoofChecker *sc;
-        UErrorCode  status = U_ZERO_ERROR;
-        sc = uspoof_open(&status);
-        TEST_ASSERT_SUCCESS(status);
-        if (U_FAILURE(status)) {
-            /* If things are so broken that we can't even open a default spoof checker,  */
-            /*   don't even try the rest of the tests.  They would all fail.             */
-            return;
-        }
-        uspoof_close(sc);
-    }
-
-    
-        
-    /*
-     *  Test Open from source rules.
-    */
-    TEST_SETUP
+// Test open from source rules.
+// Run this in isolation to verify initialization.
+static void TestOpenFromSource() {
+    // No TEST_SETUP because that calls uspoof_open().
+    UErrorCode status = U_ZERO_ERROR;
     const char *dataSrcDir;
     char       *fileName;
     char       *confusables;
@@ -138,8 +118,9 @@ static void TestUSpoofCAPI(void) {
     FILE       *f;
     UParseError pe;
     int32_t     errType;
+    int32_t     checkResults;
     USpoofChecker *rsc;
-    
+
     dataSrcDir = ctest_dataSrcDir();
     fileName = malloc(strlen(dataSrcDir) + 100);
     strcpy(fileName, dataSrcDir);
@@ -163,17 +144,43 @@ static void TestUSpoofCAPI(void) {
     }
 
     rsc = uspoof_openFromSource(confusables, confusablesLength,
-                                              confusablesWholeScript, confusablesWholeScriptLength,
-                                              &errType, &pe, &status);
+                                confusablesWholeScript, confusablesWholeScriptLength,
+                                &errType, &pe, &status);
     TEST_ASSERT_SUCCESS(status);
+
+    // Ticket #11860: uspoof_openFromSource() did not initialize for use.
+    // Verify that the spoof checker does not crash.
+    checkResults = uspoof_check(rsc, goodLatin, -1, NULL, &status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT_EQ(0, checkResults);
 
     free(confusablesWholeScript);
     free(confusables);
     free(fileName);
     uspoof_close(rsc);
     /*  printf("ParseError Line is %d\n", pe.line);  */
-    TEST_TEARDOWN;
+}
 
+/*
+ *   Spoof Detection C API Tests
+ */
+static void TestUSpoofCAPI(void) {
+
+    /*
+     *  basic uspoof_open().
+     */
+    {
+        USpoofChecker *sc;
+        UErrorCode  status = U_ZERO_ERROR;
+        sc = uspoof_open(&status);
+        TEST_ASSERT_SUCCESS(status);
+        if (U_FAILURE(status)) {
+            /* If things are so broken that we can't even open a default spoof checker,  */
+            /*   don't even try the rest of the tests.  They would all fail.             */
+            return;
+        }
+        uspoof_close(sc);
+    }
 
     /*
      * openFromSerialized and serialize

@@ -133,6 +133,9 @@ static void U_CALLCONV initializeStatics(UErrorCode &status) {
     ucln_i18n_registerCleanup(UCLN_I18N_SPOOF, uspoof_cleanup);
 }
 
+U_CFUNC void uspoof_internalInit(UErrorCode *status) {
+    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
+}
 
 U_CAPI USpoofChecker * U_EXPORT2
 uspoof_open(UErrorCode *status) {
