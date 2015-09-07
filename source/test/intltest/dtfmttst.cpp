@@ -433,7 +433,11 @@ DateFormatTest::escape(UnicodeString& s)
 /**
  * This MUST be kept in sync with DateFormatSymbols.gPatternChars.
  */
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
 static const char* PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr:";
+#else
+static const char* PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr";
+#endif
 
 /**
  * A list of the names of all the fields in DateFormat.
@@ -501,7 +505,11 @@ void DateFormatTest::TestFieldPosition() {
     assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars(buf));
     assertEquals("patternChars", PATTERN_CHARS, DateFormatSymbols::getPatternUChars());
     assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES_LENGTH == UDAT_FIELD_COUNT);
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
     assertTrue("Data", UDAT_FIELD_COUNT == uprv_strlen(PATTERN_CHARS));
+#else
+    // assertTrue("Data", UDAT_FIELD_COUNT == uprv_strlen(PATTERN_CHARS)); // test invalid if no pattern char for UDAT_TIME_SEPARATOR_FIELD
+#endif
 
     // Create test formatters
     const int32_t COUNT = 4;
@@ -531,22 +539,38 @@ void DateFormatTest::TestFieldPosition() {
         "", "1997", "August", "13", "", "", "34", "12", "", "Wednesday",
         "", "", "", "", "PM", "2", "", "Pacific Daylight Time", "", "",
         "", "", "", "", "", "", "", "", "", "",
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
         "", "", "", "", "", ":",
+#else
+        "", "", "", "", "", "",
+#endif
 
         "", "1997", "ao\\u00FBt", "13", "", "14", "34", "12", "", "mercredi",
         "", "", "", "", "", "", "", "heure d\\u2019\\u00E9t\\u00E9 du Pacifique", "", "",
         "", "", "", "", "",  "", "", "", "", "",
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
         "", "", "", "", "", ":",
+#else
+        "", "", "", "", "", "",
+#endif
 
         "AD", "1997", "8", "13", "14", "14", "34", "12", "5", "Wed",
         "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4",
         "1997", "2450674", "52452513", "-0700", "PT",  "4", "8", "3", "3", "uslax",
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
         "1997", "GMT-7", "-07", "-07", "1997", ":",
+#else
+        "1997", "GMT-7", "-07", "-07", "1997", "",
+#endif
 
         "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130", "Wednesday",
         "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "Wednesday",
         "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time",  "Wednesday", "August", "3rd quarter", "3rd quarter", "Los Angeles Time",
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
         "1997", "GMT-07:00", "-0700", "-0700", "1997", ":",
+#else
+        "1997", "GMT-07:00", "-0700", "-0700", "1997", "",
+#endif
     };
 
     const int32_t EXPECTED_LENGTH = sizeof(EXPECTED)/sizeof(EXPECTED[0]);
