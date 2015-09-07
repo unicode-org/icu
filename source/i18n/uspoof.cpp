@@ -41,7 +41,9 @@ static UnicodeSet *gInclusionSet = NULL;
 static UnicodeSet *gRecommendedSet = NULL;
 static const Normalizer2 *gNfdNormalizer = NULL;
 static SpoofData *gDefaultSpoofData = NULL;
-static UInitOnce gSpoofInitOnce = U_INITONCE_INITIALIZER;
+static UInitOnce gSpoofInitStaticsOnce = U_INITONCE_INITIALIZER;
+static UInitOnce gSpoofInitDefaultOnce = U_INITONCE_INITIALIZER;
+
 static UBool U_CALLCONV
 uspoof_cleanup(void) {
     delete gInclusionSet;
@@ -53,7 +55,8 @@ uspoof_cleanup(void) {
         gDefaultSpoofData->removeReference();   // Will delete, assuming all user-level spoof checkers were closed.
     }
     gDefaultSpoofData = NULL;
-    gSpoofInitOnce.reset();
+    gSpoofInitStaticsOnce.reset();
+    gSpoofInitDefaultOnce.reset();
     return TRUE;
 }
 
@@ -129,17 +132,22 @@ static void U_CALLCONV initializeStatics(UErrorCode &status) {
     gRecommendedSet = new UnicodeSet(UnicodeString(recommendedPat, -1, US_INV), status);
     gRecommendedSet->freeze();
     gNfdNormalizer = Normalizer2::getNFDInstance(status);
+    ucln_i18n_registerCleanup(UCLN_I18N_SPOOF, uspoof_cleanup);
+}
+
+static void U_CALLCONV initializeDefaultData(UErrorCode &status) {
     gDefaultSpoofData = SpoofData::getDefault(status);
     ucln_i18n_registerCleanup(UCLN_I18N_SPOOF, uspoof_cleanup);
 }
 
-U_CFUNC void uspoof_internalInit(UErrorCode *status) {
-    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
+U_CFUNC void uspoof_internalInitStatics(UErrorCode *status) {
+    umtx_initOnce(gSpoofInitStaticsOnce, &initializeStatics, *status);
 }
 
 U_CAPI USpoofChecker * U_EXPORT2
 uspoof_open(UErrorCode *status) {
-    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
+    umtx_initOnce(gSpoofInitStaticsOnce, &initializeStatics, *status);
+    umtx_initOnce(gSpoofInitDefaultOnce, &initializeDefaultData, *status);
     if (U_FAILURE(*status)) {
         return NULL;
     }
@@ -164,7 +172,7 @@ uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLeng
     if (U_FAILURE(*status)) {
         return NULL;
     }
-    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
+    umtx_initOnce(gSpoofInitStaticsOnce, &initializeStatics, *status);
     SpoofData *sd = new SpoofData(data, length, *status);
     SpoofImpl *si = new SpoofImpl(sd, *status);
     if (U_FAILURE(*status)) {
@@ -764,25 +772,25 @@ uspoof_serialize(USpoofChecker *sc,void *buf, int32_t capacity, UErrorCode *stat
 
 U_CAPI const USet * U_EXPORT2
 uspoof_getInclusionSet(UErrorCode *status) {
-    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
+    umtx_initOnce(gSpoofInitStaticsOnce, &initializeStatics, *status);
     return gInclusionSet->toUSet();
 }
 
 U_CAPI const USet * U_EXPORT2
 uspoof_getRecommendedSet(UErrorCode *status) {
-    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
+    umtx_initOnce(gSpoofInitStaticsOnce, &initializeStatics, *status);
     return gRecommendedSet->toUSet();
 }
 
 U_I18N_API const UnicodeSet * U_EXPORT2
 uspoof_getInclusionUnicodeSet(UErrorCode *status) {
-    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
+    umtx_initOnce(gSpoofInitStaticsOnce, &initializeStatics, *status);
     return gInclusionSet;
 }
 
 U_I18N_API const UnicodeSet * U_EXPORT2
 uspoof_getRecommendedUnicodeSet(UErrorCode *status) {
-    umtx_initOnce(gSpoofInitOnce, &initializeStatics, *status);
+    umtx_initOnce(gSpoofInitStaticsOnce, &initializeStatics, *status);
     return gRecommendedSet;
 }
 
