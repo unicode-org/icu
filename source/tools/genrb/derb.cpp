@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2013, International Business Machines
+*   Copyright (C) 1999-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  derb.c
+*   file name:  derb.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -15,11 +15,14 @@
 *   maintained by: Yves Arrouye <yves@realnames.com>
 */
 
+#include "unicode/stringpiece.h"
 #include "unicode/ucnv.h"
+#include "unicode/unistr.h"
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
 #include "unicode/ustdio.h"
 
+#include "charstr.h"
 #include "uresimp.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -40,11 +43,11 @@ static UBool opt_truncate = FALSE;
 static const char *getEncodingName(const char *encoding);
 static void reportError(const char *pname, UErrorCode *status, const char *when);
 static UChar *quotedString(const UChar *string);
-static void printOutBundle(UFILE *out, UConverter *converter, UResourceBundle *resource, int32_t indent, const char *pname, UErrorCode *status);
-static void printString(UFILE *out, UConverter *converter, const UChar *str, int32_t len);
-static void printCString(UFILE *out, UConverter *converter, const char *str, int32_t len);
-static void printIndent(UFILE *out, UConverter *converter, int32_t indent);
-static void printHex(UFILE *out, UConverter *converter, uint8_t what);
+static void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, const char *pname, UErrorCode *status);
+static void printString(UFILE *out, const UChar *str, int32_t len);
+static void printCString(UFILE *out, const char *str, int32_t len);
+static void printIndent(UFILE *out, int32_t indent);
+static void printHex(UFILE *out, uint8_t what);
 
 static UOption options[]={
     UOPTION_HELP_H,
@@ -76,10 +79,7 @@ main(int argc, char* argv[]) {
     const char *pname;
 
     UResourceBundle *bundle = NULL;
-    UErrorCode status = U_ZERO_ERROR;
     int32_t i = 0;
-
-    UConverter *converter = NULL; // not used
 
     const char* arg;
 
@@ -97,7 +97,7 @@ main(int argc, char* argv[]) {
     }
 
     /* error handling, printing usage message */
-    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+    argc=u_parseArgs(argc, argv, UPRV_LENGTHOF(options), options);
 
     /* error handling, printing usage message */
     if(argc<0) {
@@ -177,10 +177,6 @@ main(int argc, char* argv[]) {
 
     for (i = 1; i < argc; ++i) {
         static const UChar sp[] = { 0x0020 }; /* " " */
-        char infile[4096]; /* XXX Sloppy. */
-        char locale[64];
-        const char *thename = 0, *p, *q;
-        UBool fromICUData = FALSE;
 
         arg = getLongPathname(argv[i]);
 
@@ -188,26 +184,25 @@ main(int argc, char* argv[]) {
           u_fprintf(ustderr, "processing bundle \"%s\"\n", argv[i]);
         }
 
-        p = uprv_strrchr(arg, U_FILE_SEP_CHAR);
-#if U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR
-        if (p == NULL) {
-            p = uprv_strrchr(arg, U_FILE_ALT_SEP_CHAR);
+        icu::CharString locale;
+        UErrorCode status = U_ZERO_ERROR;
+        {
+            const char *p = findBasename(arg);
+            const char *q = uprv_strrchr(p, '.');
+            if (q == NULL) {
+                locale.append(p, status);
+            } else {
+                locale.append(p, (int32_t)(q - p), status);
+            }
         }
-#endif
-        if (!p) {
-            p = arg;
-        } else {
-            p++;
+        if (U_FAILURE(status)) {
+            return status;
         }
-        q = uprv_strrchr(p, '.');
-        if (!q) {
-            for (q = p; *q; ++q)
-                ;
-        }
-        uprv_strncpy(locale, p, q - p);
-        locale[q - p] = 0;
 
-        if (!(fromICUData = !uprv_strcmp(inputDir, "-"))) {
+        icu::CharString infile;
+        const char *thename = NULL;
+        UBool fromICUData = !uprv_strcmp(inputDir, "-");
+        if (!fromICUData) {
             UBool absfilename = *arg == U_FILE_SEP_CHAR;
 #if U_PLATFORM_HAS_WIN32_API
             if (!absfilename) {
@@ -218,76 +213,60 @@ main(int argc, char* argv[]) {
             if (absfilename) {
                 thename = arg;
             } else {
-                q = uprv_strrchr(arg, U_FILE_SEP_CHAR);
+                const char *q = uprv_strrchr(arg, U_FILE_SEP_CHAR);
 #if U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR
                 if (q == NULL) {
                     q = uprv_strrchr(arg, U_FILE_ALT_SEP_CHAR);
                 }
 #endif
-                uprv_strcpy(infile, inputDir);
+                infile.append(inputDir, status);
                 if(q != NULL) {
-                    uprv_strcat(infile, U_FILE_SEP_STRING);
-                    strncat(infile, arg, q-arg);
+                    infile.appendPathPart(icu::StringPiece(arg, (int32_t)(q - arg)), status);
                 }
-                thename = infile;
+                if (U_FAILURE(status)) {
+                    return status;
+                }
+                thename = infile.data();
             }
         }
-        status = U_ZERO_ERROR;
         if (thename) {
-            bundle = ures_openDirect(thename, locale, &status);
+            bundle = ures_openDirect(thename, locale.data(), &status);
         } else {
-            bundle = ures_open(fromICUData ? 0 : inputDir, locale, &status);
+            bundle = ures_open(fromICUData ? 0 : inputDir, locale.data(), &status);
         }
-        if (status == U_ZERO_ERROR) {
+        if (U_SUCCESS(status)) {
             UFILE *out = NULL;
 
             const char *filename = 0;
             const char *ext = 0;
 
-            if (!locale[0] || !tostdout) {
-                filename = uprv_strrchr(arg, U_FILE_SEP_CHAR);
-
-#if U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR
-                if (!filename) {
-                    filename = uprv_strrchr(arg, U_FILE_ALT_SEP_CHAR);
-                }
-#endif
-                if (!filename) {
-                    filename = arg;
-                } else {
-                    ++filename;
-                }
-                ext = uprv_strrchr(arg, '.');
+            if (locale.isEmpty() || !tostdout) {
+                filename = findBasename(arg);
+                ext = uprv_strrchr(filename, '.');
                 if (!ext) {
-                    ext = filename + uprv_strlen(filename);
+                    ext = uprv_strchr(filename, 0);
                 }
             }
 
             if (tostdout) {
                 out = u_get_stdout();
             } else {
-                char thefile[4096], *tp;
-                int32_t len;
-
+                icu::CharString thefile;
                 if (outputDir) {
-                    uprv_strcpy(thefile, outputDir);
-                    uprv_strcat(thefile, U_FILE_SEP_STRING);
-                } else {
-                    *thefile = 0;
+                    thefile.append(outputDir, status);
                 }
-                uprv_strcat(thefile, filename);
-                tp = thefile + uprv_strlen(thefile);
-                len = (int32_t)uprv_strlen(ext);
-                if (len) {
-                    tp -= len - 1;
-                } else {
-                    *tp++ = '.';
+                thefile.appendPathPart(filename, status);
+                if (*ext) {
+                    thefile.truncate(thefile.length() - (int32_t)uprv_strlen(ext));
                 }
-                uprv_strcpy(tp, "txt");
+                thefile.append(".txt", status);
+                if (U_FAILURE(status)) {
+                    return status;
+                }
 
-                out = u_fopen(thefile, "w", NULL, encoding);
+                out = u_fopen(thefile.data(), "w", NULL, encoding);
                 if (!out) {
-                  u_fprintf(ustderr, "%s: couldn't create %s\n", pname, thefile);
+                  u_fprintf(ustderr, "%s: couldn't create %s\n", pname, thefile.data());
                   u_fclose(ustderr);
                   return 4;
                 }
@@ -312,17 +291,17 @@ main(int argc, char* argv[]) {
             if (thename) {
               u_fprintf(out, "%s", thename);
             } else if (fromICUData) {
-              u_fprintf(out, "the ICU internal %s locale", locale);
+              u_fprintf(out, "the ICU internal %s locale", locale.data());
             }
 
             u_fprintf(out, "\n// derb(8) by Vladimir Weinstein and Yves Arrouye\n\n");
 
-            if (locale[0]) {
-              u_fprintf(out, "%s", locale);
+            if (!locale.isEmpty()) {
+              u_fprintf(out, "%s", locale.data());
             } else {
-              u_fprintf(out, "%.*s%.*S", (int32_t)(ext - filename),  filename, (int32_t)(sizeof(sp)/sizeof(*sp)), sp);
+              u_fprintf(out, "%.*s%.*S", (int32_t)(ext - filename),  filename, UPRV_LENGTHOF(sp), sp);
             }
-            printOutBundle(out, converter, bundle, 0, pname, &status);
+            printOutBundle(out, bundle, 0, pname, &status);
 
             if (!tostdout) {
                 u_fclose(out);
@@ -334,8 +313,6 @@ main(int argc, char* argv[]) {
 
         ures_close(bundle);
     }
-
-    ucnv_close(converter);
 
     return 0;
 }
@@ -355,7 +332,7 @@ static UChar *quotedString(const UChar *string) {
         }
     }
 
-    newstr = (UChar *) uprv_malloc((1 + alen) * sizeof(*newstr));
+    newstr = (UChar *) uprv_malloc((1 + alen) * U_SIZEOF_UCHAR);
     for (sp = string, np = newstr; *sp; ++sp) {
         switch (*sp) {
             case '\n':
@@ -377,11 +354,11 @@ static UChar *quotedString(const UChar *string) {
 }
 
 
-static void printString(UFILE *out, UConverter *converter, const UChar *str, int32_t len) {
+static void printString(UFILE *out, const UChar *str, int32_t len) {
   u_file_write(str, len, out);
 }
 
-static void printCString(UFILE *out, UConverter *converter, const char *str, int32_t len) {
+static void printCString(UFILE *out, const char *str, int32_t len) {
   if(len==-1) {
     u_fprintf(out, "%s", str);
   } else {
@@ -389,63 +366,57 @@ static void printCString(UFILE *out, UConverter *converter, const char *str, int
   }
 }
 
-static void printIndent(UFILE *out, UConverter *converter, int32_t indent) {
-    UChar inchar[256];
-    int32_t i = 0;
-    for(i = 0; i<indent; i++) {
-        inchar[i] = 0x0020;
-    }
-    inchar[indent] = 0;
-
-    printString(out, converter, inchar, indent);
+static void printIndent(UFILE *out, int32_t indent) {
+    icu::UnicodeString inchar(indent, 0x20, indent);
+    printString(out, inchar.getBuffer(), indent);
 }
 
-static void printHex(UFILE *out, UConverter *converter, uint8_t what) {
+static void printHex(UFILE *out, uint8_t what) {
     static const char map[] = "0123456789ABCDEF";
     UChar hex[2];
 
     hex[0] = map[what >> 4];
     hex[1] = map[what & 0xf];
 
-    printString(out, converter, hex, (int32_t)(sizeof(hex)/sizeof(*hex)));
+    printString(out, hex, 2);
 }
 
-static void printOutAlias(UFILE *out,  UConverter *converter, UResourceBundle *parent, Resource r, const char *key, int32_t indent, const char *pname, UErrorCode *status) {
-    static const UChar cr[] = { '\n' };
+static void printOutAlias(UFILE *out,  UResourceBundle *parent, Resource r, const char *key, int32_t indent, const char *pname, UErrorCode *status) {
+    static const UChar cr[] = { 0xA };  // LF
     int32_t len = 0;
     const UChar* thestr = res_getAlias(&(parent->fResData), r, &len);
     UChar *string = quotedString(thestr);
     if(opt_truncate && len > truncsize) {
         char msg[128];
-        printIndent(out, converter, indent);
+        printIndent(out, indent);
         sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
             (long)len, (long)truncsize/2);
-        printCString(out, converter, msg, -1);
+        printCString(out, msg, -1);
         len = truncsize;
     }
     if(U_SUCCESS(*status)) {
         static const UChar openStr[] = { 0x003A, 0x0061, 0x006C, 0x0069, 0x0061, 0x0073, 0x0020, 0x007B, 0x0020, 0x0022 }; /* ":alias { \"" */
         static const UChar closeStr[] = { 0x0022, 0x0020, 0x007D, 0x0020 }; /* "\" } " */
-        printIndent(out, converter, indent);
+        printIndent(out, indent);
         if(key != NULL) {
-            printCString(out, converter, key, -1);
+            printCString(out, key, -1);
         }
-        printString(out, converter, openStr, (int32_t)(sizeof(openStr) / sizeof(*openStr)));
-        printString(out, converter, string, len);
-        printString(out, converter, closeStr, (int32_t)(sizeof(closeStr) / sizeof(*closeStr)));
+        printString(out, openStr, UPRV_LENGTHOF(openStr));
+        printString(out, string, len);
+        printString(out, closeStr, UPRV_LENGTHOF(closeStr));
         if(verbose) {
-            printCString(out, converter, " // ALIAS", -1);
+            printCString(out, " // ALIAS", -1);
         }
-        printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
+        printString(out, cr, UPRV_LENGTHOF(cr));
     } else {
         reportError(pname, status, "getting binary value");
     }
     uprv_free(string);
 }
 
-static void printOutBundle(UFILE *out, UConverter *converter, UResourceBundle *resource, int32_t indent, const char *pname, UErrorCode *status)
+static void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, const char *pname, UErrorCode *status)
 {
-    static const UChar cr[] = { '\n' };
+    static const UChar cr[] = { 0xA };  // LF
 
 /*    int32_t noOfElements = ures_getSize(resource);*/
     int32_t i = 0;
@@ -461,33 +432,33 @@ static void printOutBundle(UFILE *out, UConverter *converter, UResourceBundle *r
             /* TODO: String truncation */
             if(opt_truncate && len > truncsize) {
                 char msg[128];
-                printIndent(out, converter, indent);
+                printIndent(out, indent);
                 sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
                         (long)len, (long)(truncsize/2));
-                printCString(out, converter, msg, -1);
+                printCString(out, msg, -1);
                 len = truncsize/2;
             }
-            printIndent(out, converter, indent);
+            printIndent(out, indent);
             if(key != NULL) {
                 static const UChar openStr[] = { 0x0020, 0x007B, 0x0020, 0x0022 }; /* " { \"" */
                 static const UChar closeStr[] = { 0x0022, 0x0020, 0x007D }; /* "\" }" */
-                printCString(out, converter, key, (int32_t)uprv_strlen(key));
-                printString(out, converter, openStr, (int32_t)(sizeof(openStr)/sizeof(*openStr)));
-                printString(out, converter, string, len);
-                printString(out, converter, closeStr, (int32_t)(sizeof(closeStr) / sizeof(*closeStr)));
+                printCString(out, key, (int32_t)uprv_strlen(key));
+                printString(out, openStr, UPRV_LENGTHOF(openStr));
+                printString(out, string, len);
+                printString(out, closeStr, UPRV_LENGTHOF(closeStr));
             } else {
                 static const UChar openStr[] = { 0x0022 }; /* "\"" */
                 static const UChar closeStr[] = { 0x0022, 0x002C }; /* "\"," */
 
-                printString(out, converter, openStr, (int32_t)(sizeof(openStr) / sizeof(*openStr)));
-                printString(out, converter, string, (int32_t)(u_strlen(string)));
-                printString(out, converter, closeStr, (int32_t)(sizeof(closeStr) / sizeof(*closeStr)));
+                printString(out, openStr, UPRV_LENGTHOF(openStr));
+                printString(out, string, (int32_t)(u_strlen(string)));
+                printString(out, closeStr, UPRV_LENGTHOF(closeStr));
             }
 
             if(verbose) {
-                printCString(out, converter, "// STRING", -1);
+                printCString(out, "// STRING", -1);
             }
-            printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
+            printString(out, cr, UPRV_LENGTHOF(cr));
 
             uprv_free(string);
         }
@@ -499,19 +470,19 @@ static void printOutBundle(UFILE *out, UConverter *converter, UResourceBundle *r
             static const UChar closeStr[] = { 0x0020, 0x007D }; /* " }" */
             UChar num[20];
 
-            printIndent(out, converter, indent);
+            printIndent(out, indent);
             if(key != NULL) {
-                printCString(out, converter, key, -1);
+                printCString(out, key, -1);
             }
-            printString(out, converter, openStr, (int32_t)(sizeof(openStr) / sizeof(*openStr)));
+            printString(out, openStr, UPRV_LENGTHOF(openStr));
             uprv_itou(num, 20, ures_getInt(resource, status), 10, 0);
-            printString(out, converter, num, u_strlen(num));
-            printString(out, converter, closeStr, (int32_t)(sizeof(closeStr) / sizeof(*closeStr)));
+            printString(out, num, u_strlen(num));
+            printString(out, closeStr, UPRV_LENGTHOF(closeStr));
 
             if(verbose) {
-                printCString(out, converter, "// INT", -1);
+                printCString(out, "// INT", -1);
             }
-            printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
+            printString(out, cr, UPRV_LENGTHOF(cr));
             break;
         }
     case URES_BINARY :
@@ -520,28 +491,28 @@ static void printOutBundle(UFILE *out, UConverter *converter, UResourceBundle *r
             const int8_t *data = (const int8_t *)ures_getBinary(resource, &len, status);
             if(opt_truncate && len > truncsize) {
                 char msg[128];
-                printIndent(out, converter, indent);
+                printIndent(out, indent);
                 sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
                         (long)len, (long)(truncsize/2));
-                printCString(out, converter, msg, -1);
+                printCString(out, msg, -1);
                 len = truncsize;
             }
             if(U_SUCCESS(*status)) {
                 static const UChar openStr[] = { 0x003A, 0x0062, 0x0069, 0x006E, 0x0061, 0x0072, 0x0079, 0x0020, 0x007B, 0x0020 }; /* ":binary { " */
                 static const UChar closeStr[] = { 0x0020, 0x007D, 0x0020 }; /* " } " */
-                printIndent(out, converter, indent);
+                printIndent(out, indent);
                 if(key != NULL) {
-                    printCString(out, converter, key, -1);
+                    printCString(out, key, -1);
                 }
-                printString(out, converter, openStr, (int32_t)(sizeof(openStr) / sizeof(*openStr)));
+                printString(out, openStr, UPRV_LENGTHOF(openStr));
                 for(i = 0; i<len; i++) {
-                    printHex(out, converter, *data++);
+                    printHex(out, *data++);
                 }
-                printString(out, converter, closeStr, (int32_t)(sizeof(closeStr) / sizeof(*closeStr)));
+                printString(out, closeStr, UPRV_LENGTHOF(closeStr));
                 if(verbose) {
-                    printCString(out, converter, " // BINARY", -1);
+                    printCString(out, " // BINARY", -1);
                 }
-                printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
+                printString(out, cr, UPRV_LENGTHOF(cr));
             } else {
                 reportError(pname, status, "getting binary value");
             }
@@ -556,27 +527,27 @@ static void printOutBundle(UFILE *out, UConverter *converter, UResourceBundle *r
                 static const UChar closeStr[] = { 0x0020, 0x007D, 0x0020 }; /* " } " */
                 UChar num[20];
 
-                printIndent(out, converter, indent);
+                printIndent(out, indent);
                 if(key != NULL) {
-                    printCString(out, converter, key, -1);
+                    printCString(out, key, -1);
                 }
-                printString(out, converter, openStr, (int32_t)(sizeof(openStr) / sizeof(*openStr)));
+                printString(out, openStr, UPRV_LENGTHOF(openStr));
                 for(i = 0; i < len - 1; i++) {
                     int32_t numLen =  uprv_itou(num, 20, data[i], 10, 0);
                     num[numLen++] = 0x002C; /* ',' */
                     num[numLen++] = 0x0020; /* ' ' */
                     num[numLen] = 0;
-                    printString(out, converter, num, u_strlen(num));
+                    printString(out, num, u_strlen(num));
                 }
                 if(len > 0) {
                     uprv_itou(num, 20, data[len - 1], 10, 0);
-                    printString(out, converter, num, u_strlen(num));
+                    printString(out, num, u_strlen(num));
                 }
-                printString(out, converter, closeStr, (int32_t)(sizeof(closeStr) / sizeof(*closeStr)));
+                printString(out, closeStr, UPRV_LENGTHOF(closeStr));
                 if(verbose) {
-                    printCString(out, converter, "// INTVECTOR", -1);
+                    printCString(out, "// INTVECTOR", -1);
                 }
-                printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
+                printString(out, cr, UPRV_LENGTHOF(cr));
             } else {
                 reportError(pname, status, "getting int vector");
             }
@@ -590,25 +561,25 @@ static void printOutBundle(UFILE *out, UConverter *converter, UResourceBundle *r
 
             UResourceBundle *t = NULL;
             ures_resetIterator(resource);
-            printIndent(out, converter, indent);
+            printIndent(out, indent);
             if(key != NULL) {
-                printCString(out, converter, key, -1);
+                printCString(out, key, -1);
             }
-            printString(out, converter, openStr, (int32_t)(sizeof(openStr) / sizeof(*openStr)));
+            printString(out, openStr, UPRV_LENGTHOF(openStr));
             if(verbose) {
                 if(ures_getType(resource) == URES_TABLE) {
-                    printCString(out, converter, "// TABLE", -1);
+                    printCString(out, "// TABLE", -1);
                 } else {
-                    printCString(out, converter, "// ARRAY", -1);
+                    printCString(out, "// ARRAY", -1);
                 }
             }
-            printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
+            printString(out, cr, UPRV_LENGTHOF(cr));
 
             if(suppressAliases == FALSE) {
               while(U_SUCCESS(*status) && ures_hasNext(resource)) {
                   t = ures_getNextResource(resource, t, status);
                   if(U_SUCCESS(*status)) {
-                    printOutBundle(out, converter, t, indent+indentsize, pname, status);
+                    printOutBundle(out, t, indent+indentsize, pname, status);
                   } else {
                     reportError(pname, status, "While processing table");
                     *status = U_ZERO_ERROR;
@@ -627,10 +598,10 @@ static void printOutBundle(UFILE *out, UConverter *converter, UResourceBundle *r
                 }
                 if(U_SUCCESS(*status)) {
                   if(res_getPublicType(r) == URES_ALIAS) {
-                    printOutAlias(out, converter, resource, r, key, indent+indentsize, pname, status);
+                    printOutAlias(out, resource, r, key, indent+indentsize, pname, status);
                   } else {
                     t = ures_getByIndex(resource, i, t, status);
-                    printOutBundle(out, converter, t, indent+indentsize, pname, status);
+                    printOutBundle(out, t, indent+indentsize, pname, status);
                   }
                 } else {
                   reportError(pname, status, "While processing table");
@@ -639,8 +610,8 @@ static void printOutBundle(UFILE *out, UConverter *converter, UResourceBundle *r
               }
             }
 
-            printIndent(out, converter, indent);
-            printString(out, converter, closeStr, (int32_t)(sizeof(closeStr) / sizeof(*closeStr)));
+            printIndent(out, indent);
+            printString(out, closeStr, UPRV_LENGTHOF(closeStr));
             ures_close(t);
         }
         break;
