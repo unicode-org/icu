@@ -4256,4 +4256,46 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         new NumberFormatTestTuple().toString();
     }
 
+    // Testing for Issue 11808.
+    public void TestRoundUnnecessarytIssue11808 () {
+        DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance();
+        StringBuffer result = new StringBuffer("");
+        df.setRoundingMode(BigDecimal.ROUND_UNNECESSARY);
+        df.applyPattern("00.0#E0");
+        
+        try {
+            df.format(99999.0, result, new FieldPosition(0));
+            fail("Missing ArithmeticException for double: " + result);
+        } catch (ArithmeticException expected) {
+            // The exception should be thrown, since rounding is needed.
+        }
+
+        try {
+            result = df.format(99999, result, new FieldPosition(0));
+            fail("Missing ArithmeticException for int: " + result);
+       } catch (ArithmeticException expected) {
+           // The exception should be thrown, since rounding is needed.
+        }
+
+        try {
+            result = df.format(new BigInteger("999999"), result, new FieldPosition(0));
+            fail("Missing ArithmeticException for BigInteger: " + result);
+        } catch (ArithmeticException expected) {
+            // The exception should be thrown, since rounding is needed.
+        }
+
+        try {
+            result = df.format(new BigDecimal("99999"), result, new FieldPosition(0));
+            fail("Missing ArithmeticException for BigDecimal: " + result);
+        } catch (ArithmeticException expected) {
+            // The exception should be thrown, since rounding is needed.
+        }
+        
+        try {
+            result = df.format(new BigDecimal("-99999"), result, new FieldPosition(0));
+            fail("Missing ArithmeticException for BigDecimal: " + result);
+        } catch (ArithmeticException expected) {
+            // The exception should be thrown, since rounding is needed.
+        }
+    }
 }
