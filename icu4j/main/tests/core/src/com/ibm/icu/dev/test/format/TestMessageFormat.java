@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2014, International Business Machines
+* Copyright (c) 2004-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -1602,9 +1602,9 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         expectedAttributedStrings[0].addAttribute(NumberFormat.Field.INTEGER, NumberFormat.Field.INTEGER, 30, 32);
         expectedAttributedStrings[0].addAttribute(MessageFormat.Field.ARGUMENT, new Integer(1), 53, 63);
         expectedAttributedStrings[0].addAttribute(DateFormat.Field.HOUR1, DateFormat.Field.HOUR1, 53, 54);
-        expectedAttributedStrings[0].addAttribute(DateFormat.Field.TIME_SEPARATOR, DateFormat.Field.TIME_SEPARATOR, 54, 55);
+        //expectedAttributedStrings[0].addAttribute(DateFormat.Field.TIME_SEPARATOR, DateFormat.Field.TIME_SEPARATOR, 54, 55);
         expectedAttributedStrings[0].addAttribute(DateFormat.Field.MINUTE, DateFormat.Field.MINUTE, 55, 57);
-        expectedAttributedStrings[0].addAttribute(DateFormat.Field.TIME_SEPARATOR, DateFormat.Field.TIME_SEPARATOR, 57, 58);
+        //expectedAttributedStrings[0].addAttribute(DateFormat.Field.TIME_SEPARATOR, DateFormat.Field.TIME_SEPARATOR, 57, 58);
         expectedAttributedStrings[0].addAttribute(DateFormat.Field.SECOND, DateFormat.Field.SECOND, 58, 60);
         expectedAttributedStrings[0].addAttribute(DateFormat.Field.AM_PM, DateFormat.Field.AM_PM, 61, 63);
         expectedAttributedStrings[0].addAttribute(MessageFormat.Field.ARGUMENT, new Integer(1), 67, 79);
@@ -1619,9 +1619,9 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         expectedAttributedStrings[1].addAttribute(NumberFormat.Field.INTEGER, NumberFormat.Field.INTEGER, 30, 32);
         expectedAttributedStrings[1].addAttribute(MessageFormat.Field.ARGUMENT, "arg1", 53, 63);
         expectedAttributedStrings[1].addAttribute(DateFormat.Field.HOUR1, DateFormat.Field.HOUR1, 53, 54);
-        expectedAttributedStrings[1].addAttribute(DateFormat.Field.TIME_SEPARATOR, DateFormat.Field.TIME_SEPARATOR, 54, 55);
+        //expectedAttributedStrings[1].addAttribute(DateFormat.Field.TIME_SEPARATOR, DateFormat.Field.TIME_SEPARATOR, 54, 55);
         expectedAttributedStrings[1].addAttribute(DateFormat.Field.MINUTE, DateFormat.Field.MINUTE, 55, 57);
-        expectedAttributedStrings[1].addAttribute(DateFormat.Field.TIME_SEPARATOR, DateFormat.Field.TIME_SEPARATOR, 57, 58);
+        //expectedAttributedStrings[1].addAttribute(DateFormat.Field.TIME_SEPARATOR, DateFormat.Field.TIME_SEPARATOR, 57, 58);
         expectedAttributedStrings[1].addAttribute(DateFormat.Field.SECOND, DateFormat.Field.SECOND, 58, 60);
         expectedAttributedStrings[1].addAttribute(DateFormat.Field.AM_PM, DateFormat.Field.AM_PM, 61, 63);
         expectedAttributedStrings[1].addAttribute(MessageFormat.Field.ARGUMENT, "arg1", 67, 79);
