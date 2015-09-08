@@ -319,8 +319,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         
         assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES.length == DateFormat.FIELD_COUNT);
-        if(DateFormat.FIELD_COUNT != PATTERN_CHARS.length()){
-            errln("Did not get the correct value for DateFormat.FIELD_COUNT. Expected:  "+ PATTERN_CHARS.length());
+        if(DateFormat.FIELD_COUNT != PATTERN_CHARS.length() + 1){ // +1 for missing TIME_SEPARATOR pattern char
+            errln("Did not get the correct value for DateFormat.FIELD_COUNT. Expected:  "+ PATTERN_CHARS.length() + 1);
         }
 
         // Create test formatters
@@ -348,22 +348,22 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "", "1997", "August", "13", "", "", "34", "12", "", "Wednesday",
              "", "", "", "", "PM", "2", "", "Pacific Daylight Time", "", "",
              "", "", "", "", "", "", "", "", "", "",
-             "", "", "", "", "", ":",
+             "", "", "", "", "", "",
 
              "", "1997", "ao\u00FBt", "13", "", "14", "34", "12", "", "mercredi",
              "", "", "", "", "", "", "", "heure d\u2019\u00E9t\u00E9 du Pacifique", "", "",
              "", "", "", "", "", "", "", "", "", "",
-             "", "", "", "", "", ":",
+             "", "", "", "", "", "",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5", "Wed",
             "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4",
             "1997", "2450674", "52452513", "-0700", "PT", "4", "8", "3", "3", "uslax",
-            "1997", "GMT-7", "-07", "-07", "1997", ":",
+            "1997", "GMT-7", "-07", "-07", "1997", "",
 
             "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130", "Wednesday",
             "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "Wednesday",
             "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time", "Wednesday", "August", "3rd quarter", "3rd quarter", "Los Angeles Time",
-            "1997", "GMT-07:00", "-0700", "-0700", "1997", ":",
+            "1997", "GMT-07:00", "-0700", "-0700", "1997", "",
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -466,7 +466,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * This MUST be kept in sync with DateFormatSymbols.patternChars.
      */
-    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr:";
+    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr";
 
     /**
      * A list of the DateFormat.Field.
@@ -508,7 +508,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateFormat.Field.TIME_ZONE,     // X
         DateFormat.Field.TIME_ZONE,     // x
         DateFormat.Field.RELATED_YEAR,  // r
-        DateFormat.Field.TIME_SEPARATOR,// :
+        DateFormat.Field.TIME_SEPARATOR,// (no pattern character currently specified for this)
     };
 
     /**
@@ -2138,8 +2138,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             "hh:mm:ss a", "12:34:56 PM", "1970 01 01 12:34:56",
             null,         "12:34:56PM",  "1970 01 01 12:34:56",
-            null,         "12.34.56PM",  "1970 01 01 12:34:56",
-            null,         "12 : 34 : 56  PM", "1970 01 01 12:34:56",
+            // parsing the following comes with using a TIME_SEPARATOR
+            // pattern character, which has been withdrawn.
+            //null,         "12.34.56PM",  "1970 01 01 12:34:56",
+            //null,         "12 : 34 : 56  PM", "1970 01 01 12:34:56",
         };
 
         expectParse(DATA, new Locale("en", "", ""));

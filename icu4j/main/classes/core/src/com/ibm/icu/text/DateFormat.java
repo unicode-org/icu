@@ -448,8 +448,9 @@ public abstract class DateFormat extends UFormat {
     final static int RELATED_YEAR = 34;
 
     /**
-     * {@icu} FieldPosition selector for ':' field alignment,
-     * no related Calendar field.
+     * {@icu} FieldPosition selector time separator,
+     * no related Calendar field. No pattern character is currently
+     * defined for this.
      * @draft ICU 55
      * @provisional This API might change or be removed in a future release.
      */
@@ -461,7 +462,13 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 3.0
      */
 
-    public final static int FIELD_COUNT = 36; // must == DateFormatSymbols.patternChars.length()
+    public final static int FIELD_COUNT = 36;
+    // A previous comment for the above stated that we must have
+    // DateFormat.FIELD_COUNT == DateFormatSymbols.patternChars.length()
+    // but that does not seem to be the case, and in fact since there is
+    // no pattern character currently defined for TIME_SEPARATOR it is
+    // currently the case that
+    // DateFormat.FIELD_COUNT == DateFormatSymbols.patternChars.length() + 1
 
     
     /**
