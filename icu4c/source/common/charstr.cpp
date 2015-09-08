@@ -28,6 +28,15 @@ CharString &CharString::copyFrom(const CharString &s, UErrorCode &errorCode) {
     return *this;
 }
 
+int32_t CharString::lastIndexOf(char c) const {
+    for(int32_t i=len; i>0;) {
+        if(buffer[--i]==c) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 CharString &CharString::truncate(int32_t newLength) {
     if(newLength<0) {
         newLength=0;
@@ -147,6 +156,15 @@ CharString &CharString::appendPathPart(const StringPiece &s, UErrorCode &errorCo
         append(U_FILE_SEP_CHAR, errorCode);
     }
     append(s, errorCode);
+    return *this;
+}
+
+CharString &CharString::ensureEndsWithFileSeparator(UErrorCode &errorCode) {
+    char c;
+    if(U_SUCCESS(errorCode) && len>0 &&
+            (c=buffer[len-1])!=U_FILE_SEP_CHAR && c!=U_FILE_ALT_SEP_CHAR) {
+        append(U_FILE_SEP_CHAR, errorCode);
+    }
     return *this;
 }
 
