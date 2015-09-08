@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -411,6 +411,8 @@ final class DigitList {
         // DDDDDE+/-DDDDD.
         String rep = Double.toString(source);
 
+        didRound = false;
+
         set(rep, MAX_LONG_DIGITS);
 
         if (fixedPoint) {
@@ -552,10 +554,12 @@ final class DigitList {
                         digits[0] = (byte) '1';
                         ++decimalAt;
                         maximumDigits = 0; // Adjust the count
+                        didRound = true;
                         break;
                     }
 
                     ++digits[maximumDigits];
+                    didRound = true;
                     if (digits[maximumDigits] <= '9') break;
                     // digits[maximumDigits] = '0'; // Unnecessary since we'll truncate this
                 }
@@ -571,6 +575,18 @@ final class DigitList {
         }
     }
 
+    // Value to indicate that rounding was done. 
+    private boolean didRound = false;
+    
+    /**
+     * Indicates if last digit set was rounded or not.
+     * true indicates it was rounded.
+     * false indicates rounding has not been done.
+     */
+    public boolean wasRounded() {
+        return didRound;
+    }
+    
     /**
      * Utility routine to set the value of the digit list from a long
      */
@@ -596,6 +612,8 @@ final class DigitList {
         // which is outside the legal range of a long, but which can
         // be represented by DigitList.
         // [NEW] Faster implementation
+        didRound = false;
+        
         if (source <= 0) {
             if (source == Long.MIN_VALUE) {
                 decimalAt = count = MAX_LONG_DIGITS;
@@ -634,7 +652,8 @@ final class DigitList {
         String stringDigits = source.toString();
 
         count = decimalAt = stringDigits.length();
-
+        didRound = false;
+        
         // Don't copy trailing zeros
         while (count > 1 && stringDigits.charAt(count - 1) == '0') --count;
 
@@ -714,6 +733,8 @@ final class DigitList {
 //|                ++first;
 //|            }
 //|        }
+
+        didRound = false;
 
         // The maxDigits here could also be Integer.MAX_VALUE
         set(stringDigits, stringDigits.length());
