@@ -1,6 +1,6 @@
 //*******************************************************************************
 //
-//   Copyright (C) 2003-2013, International Business Machines
+//   Copyright (C) 2003-2015, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
 //   file name:  conversion.txt
@@ -1364,6 +1364,13 @@ conversion:table(nofallback) {
           "\uFF81\uFF82\u30EC\u30ED\u30EE\u30EF\uFF93\uFF94\uFF95\uFF96\uFF97\uFF98",
           :bin{       C1C21b2442256c256d256e256F1b284AD3D4D5D6D7D81b2842 },
           :intvector{ 0,1,2,2,2,2,2,3,3,4,4,5,5,6,6,6,6,7,8,9,10,11,11,11,11 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "JIS8",
+          "\u2019Aaa10\u4ED5\u5165\u5148\u30B3",
+          :bin{      1b244221471b284241616131301b24423b45467e406825331b2842 },
+          :intvector{ 0,0,0,0,0,1,1,1,1,2,3,4,5,6,6,6,6,6,7,7,8,8,9,9,9,9,9 },
           :int{1}, :int{1}, "", "?", ""
         }
 
