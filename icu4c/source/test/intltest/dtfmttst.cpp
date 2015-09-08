@@ -508,7 +508,7 @@ void DateFormatTest::TestFieldPosition() {
 #if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
     assertTrue("Data", UDAT_FIELD_COUNT == uprv_strlen(PATTERN_CHARS));
 #else
-    // assertTrue("Data", UDAT_FIELD_COUNT == uprv_strlen(PATTERN_CHARS)); // test invalid if no pattern char for UDAT_TIME_SEPARATOR_FIELD
+    assertTrue("Data", UDAT_FIELD_COUNT == uprv_strlen(PATTERN_CHARS) + 1); // +1 for missing TIME_SEPARATOR pattern char
 #endif
 
     // Create test formatters

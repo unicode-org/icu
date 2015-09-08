@@ -3264,7 +3264,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             return -start;
         }
     // currently no pattern character is defined for UDAT_TIME_SEPARATOR_FIELD
-    // so we shoul dnot get here. Leave support in for future definition.
+    // so we should not get here. Leave support in for future definition.
     case UDAT_TIME_SEPARATOR_FIELD: //
         {
             static const UChar def_sep = DateFormatSymbols::DEFAULT_TIME_SEPARATOR;
