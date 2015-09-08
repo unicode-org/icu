@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2014, International Business Machines Corporation and
+ * Copyright (C) 2008-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1543,6 +1543,18 @@ class CharsetISO2022 extends CharsetICU {
         KSC5601,
         HWKANA_7BIT
     };
+    /* preference order of JP charsets for version 4*/
+    private final static byte []jpCharsetPref_ver4 = {
+        ASCII,
+        JISX201,
+        ISO8859_1,
+        JISX208,
+        ISO8859_7,
+        JISX212,
+        GB2312,
+        KSC5601,
+        HWKANA_7BIT
+    };
     /*
      * The escape sequences must be in order of the enum constants like JISX201 = 3,
      * not in order of jpCharsetPref[]!
@@ -1826,12 +1838,25 @@ class CharsetISO2022 extends CharsetICU {
                             csm &= ~CSM(cs);
                         }
                         
+                        /*
+                        * version 4 of JP iso 2022 requires a different preference order for the possible charsets.
+                        */
+                        if (myConverterData.version == 4) {
+                            for (int i = 0; i < jpCharsetPref_ver4.length; i++) {
+                                cs = jpCharsetPref_ver4[i];
+                                if ((CSM(cs) & csm) != 0) {
+                                    choices[choiceCount++] = cs;
+                                    csm &= ~CSM(cs);
+                                }
+                            }
+                        } else {
                         /* try all the other charsets */
-                        for (int i = 0; i < jpCharsetPref.length; i++) {
-                            cs = jpCharsetPref[i];
-                            if ((CSM(cs) & csm) != 0) {
-                                choices[choiceCount++] = cs;
-                                csm &= ~CSM(cs);
+                            for (int i = 0; i < jpCharsetPref.length; i++) {
+                                cs = jpCharsetPref[i];
+                                if ((CSM(cs) & csm) != 0) {
+                                    choices[choiceCount++] = cs;
+                                    csm &= ~CSM(cs);
+                                }
                             }
                         }
                     }
