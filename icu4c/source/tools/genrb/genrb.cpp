@@ -21,6 +21,7 @@
 #include "unicode/localpointer.h"
 #include "unicode/uclean.h"
 #include "unicode/utf16.h"
+#include "charstr.h"
 #include "reslist.h"
 #include "ucmndata.h"  /* TODO: for reading the pool bundle */
 
@@ -28,16 +29,16 @@ U_NAMESPACE_USE
 
 /* Protos */
 void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir,
-    const char *packageName, UBool omitBinaryCollation, UErrorCode *status);
+                  const char *packageName,
+                  SRBRoot *newPoolBundle, UBool omitBinaryCollation, UErrorCode &status);
 static char *make_res_filename(const char *filename, const char *outputDir,
-                               const char *packageName, UErrorCode *status);
+                               const char *packageName, UErrorCode &status);
 
 /* File suffixes */
 #define RES_SUFFIX ".res"
 #define COL_SUFFIX ".col"
 
-static char theCurrentFileName[2048];
-const char *gCurrentFileName = theCurrentFileName;
+const char *gCurrentFileName = NULL;
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
 #endif
@@ -103,7 +104,6 @@ UOption options[]={
 static     UBool       write_java = FALSE;
 static     UBool       write_xliff = FALSE;
 static     const char* outputEnc ="";
-static     struct SRBRoot *newPoolBundle = NULL;
 
 static ResFile poolBundle;
 
@@ -289,11 +289,11 @@ main(int argc,
         language = options[LANGUAGE].value;
     }
 
+    LocalPointer<SRBRoot> newPoolBundle;
     if(options[WRITE_POOL_BUNDLE].doesOccur) {
-        newPoolBundle = new SRBRoot(NULL, TRUE, status);
-        if(newPoolBundle == NULL || U_FAILURE(status)) {
+        newPoolBundle.adoptInsteadAndCheckErrorCode(new SRBRoot(NULL, TRUE, status), status);
+        if(U_FAILURE(status)) {
             fprintf(stderr, "unable to create an empty bundle for the pool keys: %s\n", u_errorName(status));
-            delete newPoolBundle;
             return status;
         } else {
             const char *poolResName = "pool.res";
@@ -321,29 +321,29 @@ main(int argc,
          * Share code with icupkg?
          * Also, make_res_filename() seems to be unused. Review and remove.
          */
+        CharString poolFileName;
         if (options[USE_POOL_BUNDLE].value!=NULL) {
-            uprv_strcpy(theCurrentFileName, options[USE_POOL_BUNDLE].value);
-            uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
+            poolFileName.append(options[USE_POOL_BUNDLE].value, status);
         } else if (inputDir) {
-            uprv_strcpy(theCurrentFileName, inputDir);
-            uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
-        } else {
-            *theCurrentFileName = 0;
+            poolFileName.append(inputDir, status);
         }
-        uprv_strcat(theCurrentFileName, poolResName);
-        poolFile = T_FileStream_open(theCurrentFileName, "rb");
+        poolFileName.appendPathPart(poolResName, status);
+        if (U_FAILURE(status)) {
+            return status;
+        }
+        poolFile = T_FileStream_open(poolFileName.data(), "rb");
         if (poolFile == NULL) {
-            fprintf(stderr, "unable to open pool bundle file %s\n", theCurrentFileName);
+            fprintf(stderr, "unable to open pool bundle file %s\n", poolFileName.data());
             return 1;
         }
         poolFileSize = T_FileStream_size(poolFile);
         if (poolFileSize < 32) {
-            fprintf(stderr, "the pool bundle file %s is too small\n", theCurrentFileName);
+            fprintf(stderr, "the pool bundle file %s is too small\n", poolFileName.data());
             return 1;
         }
         poolBundle.fBytes = new uint8_t[(poolFileSize + 15) & ~15];
         if (poolFileSize > 0 && poolBundle.fBytes == NULL) {
-            fprintf(stderr, "unable to allocate memory for the pool bundle file %s\n", theCurrentFileName);
+            fprintf(stderr, "unable to allocate memory for the pool bundle file %s\n", poolFileName.data());
             return U_MEMORY_ALLOCATION_ERROR;
         }
 
@@ -351,7 +351,7 @@ main(int argc,
         const DataHeader *header;
         int32_t bytesRead = T_FileStream_read(poolFile, poolBundle.fBytes, poolFileSize);
         if (bytesRead != poolFileSize) {
-            fprintf(stderr, "unable to read the pool bundle file %s\n", theCurrentFileName);
+            fprintf(stderr, "unable to read the pool bundle file %s\n", poolFileName.data());
             return 1;
         }
         /*
@@ -363,19 +363,19 @@ main(int argc,
                                            U_IS_BIG_ENDIAN, U_CHARSET_FAMILY, &status);
         if (U_FAILURE(status)) {
             fprintf(stderr, "udata_openSwapperForInputData(pool bundle %s) failed: %s\n",
-                    theCurrentFileName, u_errorName(status));
+                    poolFileName.data(), u_errorName(status));
             return status;
         }
         ures_swap(ds, poolBundle.fBytes, bytesRead, poolBundle.fBytes, &status);
         udata_closeSwapper(ds);
         if (U_FAILURE(status)) {
             fprintf(stderr, "ures_swap(pool bundle %s) failed: %s\n",
-                    theCurrentFileName, u_errorName(status));
+                    poolFileName.data(), u_errorName(status));
             return status;
         }
         header = (const DataHeader *)poolBundle.fBytes;
         if (header->info.formatVersion[0] < 2) {
-            fprintf(stderr, "invalid format of pool bundle file %s\n", theCurrentFileName);
+            fprintf(stderr, "invalid format of pool bundle file %s\n", poolFileName.data());
             return U_INVALID_FORMAT_ERROR;
         }
         const int32_t *pRoot = (const int32_t *)(
@@ -383,7 +383,7 @@ main(int argc,
         poolBundle.fIndexes = pRoot + 1;
         indexLength = poolBundle.fIndexes[URES_INDEX_LENGTH] & 0xff;
         if (indexLength <= URES_INDEX_POOL_CHECKSUM) {
-            fprintf(stderr, "insufficient indexes[] in pool bundle file %s\n", theCurrentFileName);
+            fprintf(stderr, "insufficient indexes[] in pool bundle file %s\n", poolFileName.data());
             return U_INVALID_FORMAT_ERROR;
         }
         int32_t keysBottom = 1 + indexLength;
@@ -405,7 +405,8 @@ main(int argc,
         if (stringUnitsLength >= 2 && getFormatVersion() >= 3) {
             poolBundle.fStrings = new PseudoListResource(NULL, status);
             if (poolBundle.fStrings == NULL) {
-                fprintf(stderr, "unable to allocate memory for the pool bundle strings %s\n", theCurrentFileName);
+                fprintf(stderr, "unable to allocate memory for the pool bundle strings %s\n",
+                        poolFileName.data());
                 return U_MEMORY_ALLOCATION_ERROR;
             }
             // The PseudoListResource constructor call did not allocate further memory.
@@ -455,7 +456,7 @@ main(int argc,
                                                p, length, status);
                     if (sr == NULL) {
                         fprintf(stderr, "unable to allocate memory for a pool bundle string %s\n",
-                                theCurrentFileName);
+                                poolFileName.data());
                         return U_MEMORY_ALLOCATION_ERROR;
                     }
                     poolBundle.fStrings->add(sr);
@@ -507,28 +508,29 @@ main(int argc,
         status = U_ZERO_ERROR;
         arg    = getLongPathname(argv[i]);
 
+        CharString theCurrentFileName;
         if (inputDir) {
-            uprv_strcpy(theCurrentFileName, inputDir);
-            uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
-        } else {
-            *theCurrentFileName = 0;
+            theCurrentFileName.append(inputDir, status);
         }
-        uprv_strcat(theCurrentFileName, arg);
+        theCurrentFileName.appendPathPart(arg, status);
+        if (U_FAILURE(status)) {
+            break;
+        }
 
+        gCurrentFileName = theCurrentFileName.data();
         if (isVerbose()) {
-            printf("Processing file \"%s\"\n", theCurrentFileName);
+            printf("Processing file \"%s\"\n", theCurrentFileName.data());
         }
         processFile(arg, encoding, inputDir, outputDir, NULL,
-                    options[NO_BINARY_COLLATION].doesOccur,
-                    &status);
+                    newPoolBundle.getAlias(),
+                    options[NO_BINARY_COLLATION].doesOccur, status);
     }
 
     poolBundle.close();
 
-    if(options[WRITE_POOL_BUNDLE].doesOccur) {
+    if(U_SUCCESS(status) && options[WRITE_POOL_BUNDLE].doesOccur) {
         char outputFileName[256];
         newPoolBundle->write(outputDir, NULL, outputFileName, sizeof(outputFileName), status);
-        delete newPoolBundle;
         if(U_FAILURE(status)) {
             fprintf(stderr, "unable to write the pool bundle: %s\n", u_errorName(status));
         }
@@ -548,7 +550,8 @@ main(int argc,
 void
 processFile(const char *filename, const char *cp,
             const char *inputDir, const char *outputDir, const char *packageName,
-            UBool omitBinaryCollation, UErrorCode *status) {
+            SRBRoot *newPoolBundle,
+            UBool omitBinaryCollation, UErrorCode &status) {
     LocalPointer<SRBRoot> data;
     UCHARBUF       *ucbuf        = NULL;
     char           *rbname       = NULL;
@@ -560,12 +563,11 @@ processFile(const char *filename, const char *cp,
     int32_t dirlen  = 0;
     int32_t filelen = 0;
 
-
-    if (status==NULL || U_FAILURE(*status)) {
+    if (U_FAILURE(status)) {
         return;
     }
     if(filename==NULL){
-        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        status=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }else{
         filelen = (int32_t)uprv_strlen(filename);
@@ -587,7 +589,7 @@ processFile(const char *filename, const char *cp,
 
             /* test for NULL */
             if(inputDirBuf == NULL) {
-                *status = U_MEMORY_ALLOCATION_ERROR;
+                status = U_MEMORY_ALLOCATION_ERROR;
                 goto finish;
             }
 
@@ -603,7 +605,7 @@ processFile(const char *filename, const char *cp,
 
             /* test for NULL */
             if(openFileName == NULL) {
-                *status = U_MEMORY_ALLOCATION_ERROR;
+                status = U_MEMORY_ALLOCATION_ERROR;
                 goto finish;
             }
 
@@ -629,7 +631,7 @@ processFile(const char *filename, const char *cp,
 
             /* test for NULL */
             if(openFileName == NULL) {
-                *status = U_MEMORY_ALLOCATION_ERROR;
+                status = U_MEMORY_ALLOCATION_ERROR;
                 goto finish;
             }
 
@@ -640,14 +642,15 @@ processFile(const char *filename, const char *cp,
 
     uprv_strcat(openFileName, filename);
 
-    ucbuf = ucbuf_open(openFileName, &cp,getShowWarning(),TRUE, status);
-    if(*status == U_FILE_ACCESS_ERROR) {
+    ucbuf = ucbuf_open(openFileName, &cp,getShowWarning(),TRUE, &status);
+    if(status == U_FILE_ACCESS_ERROR) {
 
         fprintf(stderr, "couldn't open file %s\n", openFileName == NULL ? filename : openFileName);
         goto finish;
     }
-    if (ucbuf == NULL || U_FAILURE(*status)) {
-        fprintf(stderr, "An error occured processing file %s. Error: %s\n", openFileName == NULL ? filename : openFileName,u_errorName(*status));
+    if (ucbuf == NULL || U_FAILURE(status)) {
+        fprintf(stderr, "An error occured processing file %s. Error: %s\n",
+                openFileName == NULL ? filename : openFileName, u_errorName(status));
         goto finish;
     }
     /* auto detected popular encodings? */
@@ -656,21 +659,21 @@ processFile(const char *filename, const char *cp,
     }
     /* Parse the data into an SRBRoot */
     data.adoptInstead(parse(ucbuf, inputDir, outputDir, filename,
-            !omitBinaryCollation, options[NO_COLLATION_RULES].doesOccur, status));
+            !omitBinaryCollation, options[NO_COLLATION_RULES].doesOccur, &status));
 
-    if (data.isNull() || U_FAILURE(*status)) {
-        fprintf(stderr, "couldn't parse the file %s. Error:%s\n", filename,u_errorName(*status));
+    if (data.isNull() || U_FAILURE(status)) {
+        fprintf(stderr, "couldn't parse the file %s. Error:%s\n", filename, u_errorName(status));
         goto finish;
     }
     if(options[WRITE_POOL_BUNDLE].doesOccur) {
         data->fWritePoolBundle = newPoolBundle;
-        data->compactKeys(*status);
+        data->compactKeys(status);
         int32_t newKeysLength;
         const char *newKeys = data->getKeyBytes(&newKeysLength);
-        newPoolBundle->addKeyBytes(newKeys, newKeysLength, *status);
-        if(U_FAILURE(*status)) {
+        newPoolBundle->addKeyBytes(newKeys, newKeysLength, status);
+        if(U_FAILURE(status)) {
             fprintf(stderr, "bundle_compactKeys(%s) or bundle_getKeyBytes() failed: %s\n",
-                    filename, u_errorName(*status));
+                    filename, u_errorName(status));
             goto finish;
         }
         /* count the number of just-added key strings */
@@ -687,24 +690,25 @@ processFile(const char *filename, const char *cp,
 
     /* Determine the target rb filename */
     rbname = make_res_filename(filename, outputDir, packageName, status);
-    if(U_FAILURE(*status)) {
-        fprintf(stderr, "couldn't make the res fileName for  bundle %s. Error:%s\n", filename,u_errorName(*status));
+    if(U_FAILURE(status)) {
+        fprintf(stderr, "couldn't make the res fileName for  bundle %s. Error:%s\n",
+                filename, u_errorName(status));
         goto finish;
     }
     if(write_java== TRUE){
         bundle_write_java(data.getAlias(), outputDir, outputEnc,
                           outputFileName, sizeof(outputFileName),
-                          options[JAVA_PACKAGE].value, options[BUNDLE_NAME].value, status);
+                          options[JAVA_PACKAGE].value, options[BUNDLE_NAME].value, &status);
     }else if(write_xliff ==TRUE){
         bundle_write_xml(data.getAlias(), outputDir, outputEnc,
                          filename, outputFileName, sizeof(outputFileName),
-                         language, xliffOutputFileName, status);
+                         language, xliffOutputFileName, &status);
     }else{
         /* Write the data to the file */
-        data->write(outputDir, packageName, outputFileName, sizeof(outputFileName), *status);
+        data->write(outputDir, packageName, outputFileName, sizeof(outputFileName), status);
     }
-    if (U_FAILURE(*status)) {
-        fprintf(stderr, "couldn't write bundle %s. Error:%s\n", outputFileName,u_errorName(*status));
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "couldn't write bundle %s. Error:%s\n", outputFileName, u_errorName(status));
     }
 
 finish:
@@ -731,7 +735,7 @@ static char*
 make_res_filename(const char *filename,
                   const char *outputDir,
                   const char *packageName,
-                  UErrorCode *status) {
+                  UErrorCode &status) {
     char *basename;
     char *dirname;
     char *resName;
@@ -739,7 +743,7 @@ make_res_filename(const char *filename,
     int32_t pkgLen = 0; /* length of package prefix */
 
 
-    if (U_FAILURE(*status)) {
+    if (U_FAILURE(status)) {
         return 0;
     }
 
@@ -754,7 +758,7 @@ make_res_filename(const char *filename,
     /* determine basename, and compiled file names */
     basename = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(filename) + 1));
     if(basename == 0) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
+        status = U_MEMORY_ALLOCATION_ERROR;
         goto finish;
     }
 
@@ -762,7 +766,7 @@ make_res_filename(const char *filename,
 
     dirname = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(filename) + 1));
     if(dirname == 0) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
+        status = U_MEMORY_ALLOCATION_ERROR;
         goto finish;
     }
 
@@ -775,7 +779,7 @@ make_res_filename(const char *filename,
                                       + uprv_strlen(basename)
                                       + uprv_strlen(RES_SUFFIX) + 8));
         if(resName == 0) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
+            status = U_MEMORY_ALLOCATION_ERROR;
             goto finish;
         }
 
@@ -796,7 +800,7 @@ make_res_filename(const char *filename,
         resName = (char*) uprv_malloc(sizeof(char) * (dirlen + pkgLen + basenamelen + 8));
 
         if (resName == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
+            status = U_MEMORY_ALLOCATION_ERROR;
             goto finish;
         }
 
