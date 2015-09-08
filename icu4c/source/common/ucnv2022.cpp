@@ -1429,6 +1429,19 @@ static const StateEnum jpCharsetPref[]={
     HWKANA_7BIT
 };
 
+/* preference order of JP charsets for version 4*/
+static const StateEnum jpCharsetPref_ver4[]={
+    ASCII,
+    JISX201,
+    ISO8859_1,
+    JISX208,
+    ISO8859_7,
+    JISX212,
+    GB2312,
+    KSC5601,
+    HWKANA_7BIT
+};
+
 /*
  * The escape sequences must be in order of the enum constants like JISX201  = 3,
  * not in order of jpCharsetPref[]!
@@ -1756,13 +1769,26 @@ getTrail:
                     choices[choiceCount++] = cs;
                     csm &= ~CSM(cs);
                 }
-
-                /* try all the other possible charsets */
-                for(i = 0; i < UPRV_LENGTHOF(jpCharsetPref); ++i) {
-                    cs = (int8_t)jpCharsetPref[i];
-                    if(CSM(cs) & csm) {
-                        choices[choiceCount++] = cs;
-                        csm &= ~CSM(cs);
+                
+                /*
+                 * version 4 of JP iso 2022 requires a different preference order for the possible charsets.
+                 */
+                if (converterData->version == 4) {
+                    for(i = 0; i < UPRV_LENGTHOF(jpCharsetPref_ver4); ++i) {
+                        cs = (int8_t)jpCharsetPref_ver4[i];
+                        if(CSM(cs) & csm) {
+                            choices[choiceCount++] = cs;
+                            csm &= ~CSM(cs);
+                        }
+                    }
+                } else {
+                    /* try all the other possible charsets */
+                    for(i = 0; i < UPRV_LENGTHOF(jpCharsetPref); ++i) {
+                        cs = (int8_t)jpCharsetPref[i];
+                        if(CSM(cs) & csm) {
+                            choices[choiceCount++] = cs;
+                            csm &= ~CSM(cs);
+                        }
                     }
                 }
             }
