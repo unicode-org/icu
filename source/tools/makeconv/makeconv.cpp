@@ -7,7 +7,7 @@
  ********************************************************************************
  *
  *
- *  makeconv.c:
+ *  makeconv.cpp:
  *  tool creating a binary (compressed) representation of the conversion mapping
  *  table (IBM NLTC ucmap format).
  *
@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include "unicode/putil.h"
 #include "unicode/ucnv_err.h"
+#include "charstr.h"
 #include "ucnv_bld.h"
 #include "ucnv_imp.h"
 #include "ucnv_cnv.h"
@@ -195,21 +196,12 @@ static UOption options[]={
 int main(int argc, char* argv[])
 {
     ConvData data;
-    UErrorCode err = U_ZERO_ERROR, localError;
-    char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-    const char* destdir, *arg;
-    size_t destdirlen;
-    char* dot = NULL, *outBasename;
     char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-    char cnvNameWithPkg[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-    UVersionInfo icuVersion;
-    UBool printFilename;
-
-    err = U_ZERO_ERROR;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* Set up the ICU version number */
+    UVersionInfo icuVersion;
     u_getVersion(icuVersion);
     uprv_memcpy(&dataInfo.dataVersion, &icuVersion, sizeof(UVersionInfo));
 
@@ -256,7 +248,7 @@ int main(int argc, char* argv[])
 
     /* get the options values */
     haveCopyright = options[OPT_COPYRIGHT].doesOccur;
-    destdir = options[OPT_DESTDIR].value;
+    const char *destdir = options[OPT_DESTDIR].value;
     VERBOSE = options[OPT_VERBOSE].doesOccur;
     QUIET = options[OPT_QUIET].doesOccur;
     SMALL = options[OPT_SMALL].doesOccur;
@@ -265,18 +257,15 @@ int main(int argc, char* argv[])
         IGNORE_SISO_CHECK = TRUE;
     }
 
+    icu::CharString outFileName;
+    UErrorCode err = U_ZERO_ERROR;
     if (destdir != NULL && *destdir != 0) {
-        uprv_strcpy(outFileName, destdir);
-        destdirlen = uprv_strlen(destdir);
-        outBasename = outFileName + destdirlen;
-        if (*(outBasename - 1) != U_FILE_SEP_CHAR) {
-            *outBasename++ = U_FILE_SEP_CHAR;
-            ++destdirlen;
+        outFileName.append(destdir, err).ensureEndsWithFileSeparator(err);
+        if (U_FAILURE(err)) {
+            return err;
         }
-    } else {
-        destdirlen = 0;
-        outBasename = outFileName;
     }
+    int32_t outBasenameStart = outFileName.length();
 
 #if DEBUG
     {
@@ -290,59 +279,59 @@ int main(int argc, char* argv[])
     }
 #endif
 
-    err = U_ZERO_ERROR;
-    printFilename = (UBool) (argc > 2 || VERBOSE);
+    UBool printFilename = (UBool) (argc > 2 || VERBOSE);
     for (++argv; --argc; ++argv)
     {
-        arg = getLongPathname(*argv);
-
-        /* Check for potential buffer overflow */
-        if(strlen(arg) >= UCNV_MAX_FULL_FILE_NAME_LENGTH)
-        {
-            fprintf(stderr, "%s\n", u_errorName(U_BUFFER_OVERFLOW_ERROR));
-            return U_BUFFER_OVERFLOW_ERROR;
-        }
+        UErrorCode localError = U_ZERO_ERROR;
+        const char *arg = getLongPathname(*argv);
 
         /*produces the right destination path for display*/
-        if (destdirlen != 0)
+        outFileName.truncate(outBasenameStart);
+        if (outBasenameStart != 0)
         {
-            const char *basename;
-
             /* find the last file sepator */
-            basename = findBasename(arg);
-            uprv_strcpy(outBasename, basename);
+            const char *basename = findBasename(arg);
+            outFileName.append(basename, localError);
         }
         else
         {
-            uprv_strcpy(outFileName, arg);
+            outFileName.append(arg, localError);
+        }
+        if (U_FAILURE(localError)) {
+            return localError;
         }
 
         /*removes the extension if any is found*/
-        dot = uprv_strrchr(outBasename, '.');
-        if (dot)
-        {
-            *dot = '\0';
+        int32_t lastDotIndex = outFileName.lastIndexOf('.');
+        if (lastDotIndex >= outBasenameStart) {
+            outFileName.truncate(lastDotIndex);
         }
 
         /* the basename without extension is the converter name */
-        uprv_strcpy(cnvName, outBasename);
+        if ((outFileName.length() - outBasenameStart) >= UPRV_LENGTHOF(cnvName)) {
+            fprintf(stderr, "converter name %s too long\n", outFileName.data() + outBasenameStart);
+            return U_BUFFER_OVERFLOW_ERROR;
+        }
+        uprv_strcpy(cnvName, outFileName.data() + outBasenameStart);
 
         /*Adds the target extension*/
-        uprv_strcat(outBasename, CONVERTER_FILE_EXTENSION);
+        outFileName.append(CONVERTER_FILE_EXTENSION, localError);
+        if (U_FAILURE(localError)) {
+            return localError;
+        }
 
 #if DEBUG
         printf("makeconv: processing %s  ...\n", arg);
         fflush(stdout);
 #endif
-        localError = U_ZERO_ERROR;
         initConvData(&data);
         createConverter(&data, arg, &localError);
 
         if (U_FAILURE(localError))
         {
             /* if an error is found, print out an error msg and keep going */
-            fprintf(stderr, "Error creating converter for \"%s\" file for \"%s\" (%s)\n", outFileName, arg,
-                u_errorName(localError));
+            fprintf(stderr, "Error creating converter for \"%s\" file for \"%s\" (%s)\n",
+                    outFileName.data(), arg, u_errorName(localError));
             if(U_SUCCESS(err)) {
                 err = localError;
             }
@@ -365,7 +354,7 @@ int main(int argc, char* argv[])
             }
             else
             {
-                p++;   /* If found separtor, don't include it in compare */
+                p++;   /* If found separator, don't include it in compare */
             }
             if(uprv_stricmp(p,data.staticData.name) && !QUIET)
             {
@@ -386,15 +375,13 @@ int main(int argc, char* argv[])
                 }
             }
 
-            uprv_strcpy(cnvNameWithPkg, cnvName);
-
             localError = U_ZERO_ERROR;
-            writeConverterData(&data, cnvNameWithPkg, destdir, &localError);
+            writeConverterData(&data, cnvName, destdir, &localError);
 
             if(U_FAILURE(localError))
             {
                 /* if an error is found, print out an error msg and keep going*/
-                fprintf(stderr, "Error writing \"%s\" file for \"%s\" (%s)\n", outFileName, arg,
+                fprintf(stderr, "Error writing \"%s\" file for \"%s\" (%s)\n", outFileName.data(), arg,
                     u_errorName(localError));
                 if(U_SUCCESS(err)) {
                     err = localError;
@@ -402,7 +389,7 @@ int main(int argc, char* argv[])
             }
             else if (printFilename)
             {
-                puts(outBasename);
+                puts(outFileName.data() + outBasenameStart);
             }
         }
         fflush(stdout);
@@ -435,7 +422,6 @@ getPlatformAndCCSIDFromName(const char *name, int8_t *pPlatform, int32_t *pCCSID
 static void
 readHeader(ConvData *data,
            FileStream* convFile,
-           const char* converterName,
            UErrorCode *pErrorCode) {
     char line[1024];
     char *s, *key, *value;
@@ -583,7 +569,7 @@ readFile(ConvData *data, const char* converterName,
         return FALSE;
     }
 
-    readHeader(data, convFile, converterName, pErrorCode);
+    readHeader(data, convFile, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         return FALSE;
     }
