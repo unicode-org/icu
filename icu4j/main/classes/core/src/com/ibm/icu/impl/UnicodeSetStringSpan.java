@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 2009-2014, International Business Machines
+ *   Copyright (C) 2009-2015, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -970,7 +970,7 @@ public class UnicodeSetStringSpan {
         if (c >= 0xd800 && c <= 0xdbff && length >= 2) {
             char c2 = s.charAt(start + 1);
             if (com.ibm.icu.text.UTF16.isTrailSurrogate(c2)) {
-                int supplementary = UCharacterProperty.getRawSupplementary(c, c2);
+                int supplementary = Character.toCodePoint(c, c2);
                 return set.contains(supplementary) ? 2 : -2;
             }
         }
@@ -982,7 +982,7 @@ public class UnicodeSetStringSpan {
         if (c >= 0xdc00 && c <= 0xdfff && length >= 2) {
             char c2 = s.charAt(length - 2);
             if (com.ibm.icu.text.UTF16.isLeadSurrogate(c2)) {
-                int supplementary = UCharacterProperty.getRawSupplementary(c2, c);
+                int supplementary = Character.toCodePoint(c2, c);
                 return set.contains(supplementary) ? 2 : -2;
             }
         }

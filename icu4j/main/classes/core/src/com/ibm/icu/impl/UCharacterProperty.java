@@ -646,19 +646,6 @@ public final class UCharacterProperty
     }
 
     /**
-    * Forms a supplementary code point from the argument character<br>
-    * Note this is for internal use hence no checks for the validity of the
-    * surrogate characters are done
-    * @param lead lead surrogate character
-    * @param trail trailing surrogate character
-    * @return code point of the supplementary character
-    */
-    public static int getRawSupplementary(char lead, char trail)
-    {
-        return (lead << LEAD_SURROGATE_SHIFT_) + trail + SURROGATE_OFFSET_;
-    }
-
-    /**
      * <p>
      * Unicode property names and property value names are compared
      * "loosely". Property[Value]Aliases.txt say:
@@ -971,20 +958,6 @@ public final class UCharacterProperty
     * Default name of the datafile
     */
     private static final String DATA_FILE_NAME_ = "uprops.icu";
-
-    /**
-    * Shift value for lead surrogate to form a supplementary character.
-    */
-    private static final int LEAD_SURROGATE_SHIFT_ = 10;
-    /**
-    * Offset to add to combined surrogate pair to avoid masking.
-    */
-    private static final int SURROGATE_OFFSET_ =
-                           UTF16.SUPPLEMENTARY_MIN_VALUE -
-                           (UTF16.SURROGATE_MIN_VALUE <<
-                           LEAD_SURROGATE_SHIFT_) -
-                           UTF16.TRAIL_SURROGATE_MIN_VALUE;
-
 
     // property data constants -------------------------------------------------
 

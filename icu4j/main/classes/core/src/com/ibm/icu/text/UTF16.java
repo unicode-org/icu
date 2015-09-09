@@ -1,13 +1,11 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
 
 package com.ibm.icu.text;
-
-import com.ibm.icu.impl.UCharacterProperty;
 
 /**
  * <p>
@@ -237,7 +235,7 @@ public final class UTF16 {
             if (source.length() != offset16) {
                 char trail = source.charAt(offset16);
                 if (trail >= TRAIL_SURROGATE_MIN_VALUE && trail <= TRAIL_SURROGATE_MAX_VALUE) {
-                    return UCharacterProperty.getRawSupplementary(single, trail);
+                    return Character.toCodePoint(single, trail);
                 }
             }
         } else {
@@ -246,7 +244,7 @@ public final class UTF16 {
                 // single is a trail surrogate so
                 char lead = source.charAt(offset16);
                 if (lead >= LEAD_SURROGATE_MIN_VALUE && lead <= LEAD_SURROGATE_MAX_VALUE) {
-                    return UCharacterProperty.getRawSupplementary(lead, single);
+                    return Character.toCodePoint(lead, single);
                 }
             }
         }
@@ -292,7 +290,7 @@ public final class UTF16 {
                 char trail = source.charAt(offset16);
                 if (trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE
                         && trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
-                    return UCharacterProperty.getRawSupplementary(single, trail);
+                    return Character.toCodePoint(single, trail);
                 }
             }
         } else {
@@ -302,7 +300,7 @@ public final class UTF16 {
                 char lead = source.charAt(offset16);
                 if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE
                         && lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-                    return UCharacterProperty.getRawSupplementary(lead, single);
+                    return Character.toCodePoint(lead, single);
                 }
             }
         }
@@ -344,7 +342,7 @@ public final class UTF16 {
             if (source.length() != offset16) {
                 char trail = source.charAt(offset16);
                 if (isTrailSurrogate(trail))
-                    return UCharacterProperty.getRawSupplementary(single, trail);
+                    return Character.toCodePoint(single, trail);
             }
         } else {
             --offset16;
@@ -352,7 +350,7 @@ public final class UTF16 {
                 // single is a trail surrogate so
                 char lead = source.charAt(offset16);
                 if (isLeadSurrogate(lead)) {
-                    return UCharacterProperty.getRawSupplementary(lead, single);
+                    return Character.toCodePoint(lead, single);
                 }
             }
         }
@@ -398,7 +396,7 @@ public final class UTF16 {
             }
             char trail = source[offset16];
             if (isTrailSurrogate(trail)) {
-                return UCharacterProperty.getRawSupplementary(single, trail);
+                return Character.toCodePoint(single, trail);
             }
         } else { // isTrailSurrogate(single), so
             if (offset16 == start) {
@@ -407,7 +405,7 @@ public final class UTF16 {
             offset16--;
             char lead = source[offset16];
             if (isLeadSurrogate(lead))
-                return UCharacterProperty.getRawSupplementary(lead, single);
+                return Character.toCodePoint(lead, single);
         }
         return single; // return unmatched surrogate
     }
@@ -447,7 +445,7 @@ public final class UTF16 {
             if (source.length() != offset16) {
                 char trail = source.charAt(offset16);
                 if (isTrailSurrogate(trail))
-                    return UCharacterProperty.getRawSupplementary(single, trail);
+                    return Character.toCodePoint(single, trail);
             }
         } else {
             --offset16;
@@ -455,7 +453,7 @@ public final class UTF16 {
                 // single is a trail surrogate so
                 char lead = source.charAt(offset16);
                 if (isLeadSurrogate(lead)) {
-                    return UCharacterProperty.getRawSupplementary(lead, single);
+                    return Character.toCodePoint(lead, single);
                 }
             }
         }
