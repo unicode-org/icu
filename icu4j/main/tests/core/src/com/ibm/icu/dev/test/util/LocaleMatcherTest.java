@@ -595,4 +595,10 @@ public class LocaleMatcherTest extends TestFmwk {
             + (comparisonTime > 0 ? (delta * 100 / comparisonTime - 100) + "% longer" : ""));
         return delta;
     }
+    
+    public void Test8288() {
+        final LocaleMatcher matcher = newLocaleMatcher("it, en");
+        assertEquals("it", matcher.getBestMatch("und").toString());
+        assertEquals("en", matcher.getBestMatch("und, en").toString());
+    }
 }
