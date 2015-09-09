@@ -4251,9 +4251,66 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("decfmt.toPattern results wrong, expected \u200B$100.00, got " + currFmtResult);
         }
     }
-    
+
     public void TestNumberFormatTestTupleToString() {
         new NumberFormatTestTuple().toString();
+    }
+
+   // Testing for Issue 11805.
+    public void TestFormatToCharacterIteratorIssue11805 () {
+        final double number = -350.76;
+        DecimalFormat dfUS = (DecimalFormat) DecimalFormat.getCurrencyInstance(Locale.US);
+        String strUS = dfUS.format(number);
+        Set<AttributedCharacterIterator.Attribute> resultUS  = dfUS.formatToCharacterIterator(number).getAllAttributeKeys();
+        assertEquals("Negative US Results: " + strUS, 5, resultUS.size());
+
+        // For each test, add assert that all the fields are present and in the right spot.
+        // TODO: Add tests for identify and position of each field, as in IntlTestDecimalFormatAPIC.
+        
+        DecimalFormat dfDE = (DecimalFormat) DecimalFormat.getCurrencyInstance(Locale.GERMANY);
+        String strDE = dfDE.format(number);
+        Set<AttributedCharacterIterator.Attribute> resultDE  = dfDE.formatToCharacterIterator(number).getAllAttributeKeys();
+        assertEquals("Negative DE Results: " + strDE, 5, resultDE.size());
+
+        DecimalFormat dfIN = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("hi", "in"));
+        String strIN = dfIN.format(number);
+        Set<AttributedCharacterIterator.Attribute> resultIN  = dfIN.formatToCharacterIterator(number).getAllAttributeKeys();
+        assertEquals("Negative IN Results: " + strIN, 5, resultIN.size());
+
+        DecimalFormat dfJP = (DecimalFormat) DecimalFormat.getCurrencyInstance(Locale.JAPAN);
+        String strJP = dfJP.format(number);
+        Set<AttributedCharacterIterator.Attribute> resultJP  = dfJP.formatToCharacterIterator(number).getAllAttributeKeys();
+        assertEquals("Negative JA Results: " + strJP, 3, resultJP.size());
+
+        DecimalFormat dfGB = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("en", "gb"));
+        String strGB = dfGB.format(number);
+        Set<AttributedCharacterIterator.Attribute> resultGB  = dfGB.formatToCharacterIterator(number).getAllAttributeKeys();
+        assertEquals("Negative GB Results: " + strGB , 5, resultGB.size());
+
+        DecimalFormat dfPlural = (DecimalFormat) NumberFormat.getInstance(new Locale("en", "gb"),
+            NumberFormat.PLURALCURRENCYSTYLE);
+        strGB = dfPlural.format(number);
+        resultGB = dfPlural.formatToCharacterIterator(number).getAllAttributeKeys();
+        assertEquals("Negative GB Results: " + strGB , 5, resultGB.size());
+
+        strGB = dfPlural.format(1);
+        resultGB = dfPlural.formatToCharacterIterator(1).getAllAttributeKeys();
+        assertEquals("Negative GB Results: " + strGB , 4, resultGB.size());
+
+        // Test output with unit value.
+        DecimalFormat auPlural = (DecimalFormat) NumberFormat.getInstance(new Locale("en", "au"),
+                NumberFormat.PLURALCURRENCYSTYLE);
+        String strAU = auPlural.format(1L);
+        Set<AttributedCharacterIterator.Attribute> resultAU  =
+                auPlural.formatToCharacterIterator(1L).getAllAttributeKeys();
+        assertEquals("Unit AU Result: " + strAU , 4, resultAU.size());
+
+        // Verify Permille fields.
+        DecimalFormatSymbols sym = new DecimalFormatSymbols(new Locale("en", "gb"));
+        DecimalFormat dfPermille = new DecimalFormat("####0.##\u2030", sym);
+        strGB = dfPermille.format(number);
+        resultGB = dfPermille.formatToCharacterIterator(number).getAllAttributeKeys();
+        assertEquals("Negative GB Permille Results: " + strGB , 3, resultGB.size());
     }
 
     // Testing for Issue 11808.
