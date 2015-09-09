@@ -1,12 +1,12 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2014, International Business Machines
+ * Copyright (c) 2002-2015, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
  **********************************************************************
  */
-package com.ibm.icu.dev.util;
+package com.ibm.icu.impl;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ import com.ibm.icu.util.Freezable;
  * @author medavis
 
  */
-public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collection<V>>, but requires API changes
+public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add , Map<K, Collection<V>>, but requires API changes
     private Map<K, Set<V>> data;
 
     Constructor<Set<V>> setCreator;
@@ -275,7 +275,7 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
         return frozen;
     }
 
-    public Object freeze() {
+    public Relation<K, V> freeze() {
         if (!frozen) {
             // does not handle one level down, so we do that on a case-by-case basis
             for (K key : data.keySet()) {
@@ -288,7 +288,7 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
         return this;
     }
 
-    public Object cloneAsThawed() {
+    public Relation<K, V> cloneAsThawed() {
         // TODO do later
         throw new UnsupportedOperationException();
     }
