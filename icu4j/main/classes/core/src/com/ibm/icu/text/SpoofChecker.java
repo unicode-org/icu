@@ -1569,6 +1569,33 @@ public class SpoofChecker {
             checks = 0;
             position = 0;
         }
+        
+        private static final String[] NAMES = {
+            "SINGLE_SCRIPT_CONFUSABLE", 
+            "MIXED_SCRIPT_CONFUSABLE", 
+            "WHOLE_SCRIPT_CONFUSABLE",
+            "ANY_CASE", 
+            "RESTRICTION_LEVEL", 
+            "INVISIBLE", 
+            "CHAR_LIMIT", 
+            "MIXED_NUMBERS"
+        };
+        
+        /* (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
+        @Override
+        public String toString() {
+            return "checks: " + getCheckNames(checks)
+                    + ", numerics: " + numerics.toPattern(false)
+                    + ", position: " + position
+                    + ", restrictionLevel: " + restrictionLevel
+                    ;
+        }
+        
+        static String getCheckNames(int check) {
+            return check >= 1 && check < (1 << NAMES.length) ? NAMES[(int)Math.round(Math.log10(check)/Math.log10(2))] : null;
+        } // might be better way to do this, but just threw it together quickly.
     }
 
     /**
