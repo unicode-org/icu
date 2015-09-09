@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2007-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -14,19 +14,26 @@ import com.ibm.icu.impl.duration.BasicDurationFormat;
 import com.ibm.icu.util.ULocale;
 
 /**
- * This class implements a formatter over a duration in time
+ * This <b>deprecated</b> class implements a formatter over a duration in time
  * such as "2 days from now" or "3 hours ago".
- * 
- * @stable ICU 3.8
+ *
+ * <p>Use MeasureFormat to format periods like "5 days, 3 hours";
+ * use RelativeDateTimeFormatter to format relative dates like "5 days ago".
+ *
+ * @see MeasureFormat
+ * @see RelativeDateTimeFormatter
+ * @deprecated ICU 56 Use MeasureFormat or RelativeDateTimeFormatter instead.
  */
+@Deprecated
 public abstract class DurationFormat extends UFormat {
 
     private static final long serialVersionUID = -2076961954727774282L;
 
     /**
      * Construct a duration format for the specified locale
-     * @stable ICU 3.8
+     * @deprecated ICU 56
      */
+    @Deprecated
     public static DurationFormat getInstance(ULocale locale) {
         return BasicDurationFormat.getInstance(locale);
     }
@@ -58,15 +65,17 @@ public abstract class DurationFormat extends UFormat {
      * @param toAppend the buffer to append to
      * @param pos the field position, may contain additional error messages.
      * @return the toAppend buffer
-     * @stable ICU 3.8
+     * @deprecated ICU 56
      */
+    @Deprecated
     public abstract StringBuffer format(Object object, StringBuffer toAppend,
             FieldPosition pos);
 
     /**
      * DurationFormat cannot parse, by default. This method will throw an UnsupportedOperationException.
-     * @stable ICU 3.8
+     * @deprecated ICU 56
      */
+    @Deprecated
     public Object parseObject(String source, ParsePosition pos) {
        throw new UnsupportedOperationException();
     }
@@ -81,8 +90,9 @@ public abstract class DurationFormat extends UFormat {
      * 
      * @param targetDate the ending date
      * @return the formatted time
-     * @stable ICU 3.8
+     * @deprecated ICU 56
      */
+    @Deprecated
     public abstract String formatDurationFromNowTo(Date targetDate);
 
     /**
@@ -93,8 +103,9 @@ public abstract class DurationFormat extends UFormat {
      * 
      * @param duration the duration in milliseconds
      * @return the formatted time
-     * @stable ICU 3.8
+     * @deprecated ICU 56
      */
+    @Deprecated
     public abstract String formatDurationFromNow(long duration);
 
     /**
@@ -110,7 +121,8 @@ public abstract class DurationFormat extends UFormat {
      * @param duration the duration in milliseconds
      * @param referenceDate the date from which to compute the duration
      * @return the formatted time
-     * @stable ICU 3.8
+     * @deprecated ICU 56
      */
+    @Deprecated
     public abstract String formatDurationFrom(long duration, long referenceDate);
 }
