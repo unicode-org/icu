@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -311,7 +311,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         t_Format(8, negativeNumber, NumberFormat.getCurrencyInstance(us),
                 getNegativeCurrencyVectorUS());
 
-        // test multiple grouping seperators
+        // test multiple grouping separators
         number = new Long(100300400);
         t_Format(11, number, NumberFormat.getNumberInstance(us),
                 getNumberVector2US());
@@ -356,6 +356,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
 
     private static List<FieldContainer> getNegativeCurrencyVectorUS() {
         List<FieldContainer> v = new ArrayList<FieldContainer>(4);
+        // SIGN added with fix for issue 11805.
+        v.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
         v.add(new FieldContainer(1, 2, NumberFormat.Field.CURRENCY));
         v.add(new FieldContainer(2, 5, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(5, 6, NumberFormat.Field.DECIMAL_SEPARATOR));

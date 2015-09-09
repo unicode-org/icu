@@ -4184,6 +4184,7 @@ public class DecimalFormat extends NumberFormat {
                     s = intl ? symbols.getInternationalCurrencySymbol() :
                         symbols.getCurrencySymbol();
                 }
+                // Here is where FieldPosition could be set for CURRENCY PLURAL.
                 buffer.append(s);
                 continue;
             case PATTERN_PERCENT:
@@ -4238,14 +4239,33 @@ public class DecimalFormat extends NumberFormat {
         }
         // [Spark/CDL] Invoke formatAffix2Attribute to add attributes for affix
         if (parseAttr) {
+            // Updates for Ticket 11805.
             int offset = affix.indexOf(symbols.getCurrencySymbol());
-            if (-1 == offset) {
-                offset = affix.indexOf(symbols.getPercent());
-                if (-1 == offset) {
-                    offset = 0;
-                }
+            if (offset > -1) {
+                formatAffix2Attribute(isPrefix, Field.CURRENCY, buf, offset,
+                    symbols.getCurrencySymbol().length());
             }
-            formatAffix2Attribute(affix, buf.length() + offset, buf.length() + affix.length());
+            offset = affix.indexOf(symbols.getMinusString());
+            if (offset > -1) {
+              formatAffix2Attribute(isPrefix, Field.SIGN, buf, offset,
+                  symbols.getMinusString().length());
+            }
+            // TODO: Consider if Percent and Permille can be more than one character.
+            offset = affix.indexOf(symbols.getPercent());
+            if (offset > -1) {
+              formatAffix2Attribute(isPrefix, Field.PERCENT, buf, offset,
+                  1);
+            }
+            offset = affix.indexOf(symbols.getPerMill());
+            if (offset > -1) {
+              formatAffix2Attribute(isPrefix, Field.PERMILLE, buf, offset,
+                  1);
+            }
+            offset = pattern.indexOf("¤¤¤");
+            if (offset > -1) {
+                formatAffix2Attribute(isPrefix, Field.CURRENCY, buf, offset,
+                        affix.length() - offset);
+            }
         }
 
         // If kCurrencySymbol or kIntlCurrencySymbol is in the affix, check for currency symbol.
@@ -4279,23 +4299,16 @@ public class DecimalFormat extends NumberFormat {
         return affix.length();
     }
 
-    /**
-     * [Spark/CDL] This is a newly added method, used to add attributes for prefix and
-     * suffix.
-     */
-    private void formatAffix2Attribute(String affix, int begin, int end) {
-        // [Spark/CDL] It is the invoker's responsibility to ensure that, before the
-        // invocation of this method, attributes is not null.  if( attributes == null )
-        // return;
-        if (affix.indexOf(symbols.getCurrencySymbol()) > -1) {
-            addAttribute(Field.CURRENCY, begin, end);
-        } else if (affix.indexOf(symbols.getMinusSign()) > -1) {
-            addAttribute(Field.SIGN, begin, end);
-        } else if (affix.indexOf(symbols.getPercent()) > -1) {
-            addAttribute(Field.PERCENT, begin, end);
-        } else if (affix.indexOf(symbols.getPerMill()) > -1) {
-            addAttribute(Field.PERMILLE, begin, end);
+    // Fix for prefix and suffix in Ticket 11805.
+    private void formatAffix2Attribute(boolean isPrefix, Field fieldType,
+        StringBuffer buf, int offset, int symbolSize) {
+        int begin;
+        begin = offset;
+        if (!isPrefix) {
+            begin += buf.length();
         }
+
+        addAttribute(fieldType, begin, begin + symbolSize);
     }
 
     /**
