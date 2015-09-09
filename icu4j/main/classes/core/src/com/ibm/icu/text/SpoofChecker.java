@@ -293,10 +293,10 @@ public class SpoofChecker {
     /**
      * Mixed script confusable test.
      *
-     * When checking a single identifier, report a problem if the identifier contains multiple scripts, and is also
+     * <p>When checking a single identifier, report a problem if the identifier contains multiple scripts, and is also
      * confusable with some other identifier in a single script.
      *
-     * When testing whether two identifiers are confusable, report that they are if the two IDs are visually confusable,
+     * <p>When testing whether two identifiers are confusable, report that they are if the two IDs are visually confusable,
      * and and at least one contains characters from more than one script.
      *
      * @stable ICU 4.6
@@ -306,10 +306,10 @@ public class SpoofChecker {
     /**
      * Whole script confusable test.
      *
-     * When checking a single identifier, report a problem if The identifier is of a single script, and there exists a
+     * <p>When checking a single identifier, report a problem if The identifier is of a single script, and there exists a
      * confusable identifier in another script.
      *
-     * When testing whether two Identifiers are confusable, report that they are if each is of a single script, the
+     * <p>When testing whether two Identifiers are confusable, report that they are if each is of a single script, the
      * scripts of the two identifiers are different, and the identifiers are visually confusable.
      *
      * @stable ICU 4.6
@@ -319,7 +319,7 @@ public class SpoofChecker {
     /**
      * Any Case Modifier for confusable identifier tests.
      *
-     * When specified, consider all characters, of any case, when looking for confusables. If ANY_CASE is not specified,
+     * <p>When specified, consider all characters, of any case, when looking for confusables. If ANY_CASE is not specified,
      * identifiers being checked are assumed to have been case folded, and upper case conusable characters will not be
      * checked.
      *
@@ -371,6 +371,8 @@ public class SpoofChecker {
      */
     @Deprecated
     public static final int MIXED_NUMBERS = 128;
+
+    // Update CheckResult.toString() when a new check is added.
 
     /**
      * Enable all spoof checks.
@@ -1569,33 +1571,50 @@ public class SpoofChecker {
             checks = 0;
             position = 0;
         }
-        
-        private static final String[] NAMES = {
-            "SINGLE_SCRIPT_CONFUSABLE", 
-            "MIXED_SCRIPT_CONFUSABLE", 
-            "WHOLE_SCRIPT_CONFUSABLE",
-            "ANY_CASE", 
-            "RESTRICTION_LEVEL", 
-            "INVISIBLE", 
-            "CHAR_LIMIT", 
-            "MIXED_NUMBERS"
-        };
-        
-        /* (non-Javadoc)
-         * @see java.lang.Object#toString()
+
+        /**
+         * {@inheritDoc}
+         * @stable ICU 4.6
          */
         @Override
         public String toString() {
-            return "checks: " + getCheckNames(checks)
-                    + ", numerics: " + numerics.toPattern(false)
-                    + ", position: " + position
-                    + ", restrictionLevel: " + restrictionLevel
-                    ;
+            StringBuilder sb = new StringBuilder();
+            sb.append("checks:");
+            if (checks == 0) {
+                sb.append(" none");
+            } else if (checks == ALL_CHECKS) {
+                sb.append(" all");
+            } else {
+                if ((checks & SINGLE_SCRIPT_CONFUSABLE) != 0) {
+                    sb.append(" SINGLE_SCRIPT_CONFUSABLE");
+                }
+                if ((checks & MIXED_SCRIPT_CONFUSABLE) != 0) {
+                    sb.append(" MIXED_SCRIPT_CONFUSABLE");
+                }
+                if ((checks & WHOLE_SCRIPT_CONFUSABLE) != 0) {
+                    sb.append(" WHOLE_SCRIPT_CONFUSABLE");
+                }
+                if ((checks & ANY_CASE) != 0) {
+                    sb.append(" ANY_CASE");
+                }
+                if ((checks & RESTRICTION_LEVEL) != 0) {
+                    sb.append(" RESTRICTION_LEVEL");
+                }
+                if ((checks & INVISIBLE) != 0) {
+                    sb.append(" INVISIBLE");
+                }
+                if ((checks & CHAR_LIMIT) != 0) {
+                    sb.append(" CHAR_LIMIT");
+                }
+                if ((checks & MIXED_NUMBERS) != 0) {
+                    sb.append(" MIXED_NUMBERS");
+                }
+            }
+            sb.append(", numerics: ").append(numerics.toPattern(false));
+            sb.append(", position: ").append(position);
+            sb.append(", restrictionLevel: ").append(restrictionLevel);
+            return sb.toString();
         }
-        
-        static String getCheckNames(int check) {
-            return check >= 1 && check < (1 << NAMES.length) ? NAMES[(int)Math.round(Math.log10(check)/Math.log10(2))] : null;
-        } // might be better way to do this, but just threw it together quickly.
     }
 
     /**
