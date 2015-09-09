@@ -146,59 +146,56 @@ public final class ICUResourceBundleReader {
     private static ReaderCache CACHE = new ReaderCache();
     private static final ICUResourceBundleReader NULL_READER = new ICUResourceBundleReader();
 
-    private static class ReaderInfo {
+    private static class ReaderCacheKey {
         final String baseName;
         final String localeID;
-        final ClassLoader loader;
 
-        ReaderInfo(String baseName, String localeID, ClassLoader loader) {
+        ReaderCacheKey(String baseName, String localeID) {
             this.baseName = (baseName == null) ? "" : baseName;
             this.localeID = (localeID == null) ? "" : localeID;
-            this.loader = loader;
         }
 
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;
             }
-            if (!(obj instanceof ReaderInfo)) {
+            if (!(obj instanceof ReaderCacheKey)) {
                 return false;
             }
-            ReaderInfo info = (ReaderInfo)obj;
+            ReaderCacheKey info = (ReaderCacheKey)obj;
             return this.baseName.equals(info.baseName)
-                    && this.localeID.equals(info.localeID)
-                    && this.loader.equals(info.loader);
+                    && this.localeID.equals(info.localeID);
         }
 
         public int hashCode() {
-            return baseName.hashCode() ^ localeID.hashCode() ^ loader.hashCode();
+            return baseName.hashCode() ^ localeID.hashCode();
         }
     }
 
-    private static class ReaderCache extends SoftCache<ReaderInfo, ICUResourceBundleReader, ReaderInfo> {
+    private static class ReaderCache extends SoftCache<ReaderCacheKey, ICUResourceBundleReader, ClassLoader> {
         /* (non-Javadoc)
          * @see com.ibm.icu.impl.CacheBase#createInstance(java.lang.Object, java.lang.Object)
          */
         @Override
-        protected ICUResourceBundleReader createInstance(ReaderInfo key, ReaderInfo data) {
-            String fullName = ICUResourceBundleReader.getFullName(data.baseName, data.localeID);
+        protected ICUResourceBundleReader createInstance(ReaderCacheKey key, ClassLoader loader) {
+            String fullName = ICUResourceBundleReader.getFullName(key.baseName, key.localeID);
             try {
                 ByteBuffer inBytes;
-                if (data.baseName != null && data.baseName.startsWith(ICUData.ICU_BASE_NAME)) {
+                if (key.baseName != null && key.baseName.startsWith(ICUData.ICU_BASE_NAME)) {
                     String itemPath = fullName.substring(ICUData.ICU_BASE_NAME.length() + 1);
-                    inBytes = ICUBinary.getData(data.loader, fullName, itemPath);
+                    inBytes = ICUBinary.getData(loader, fullName, itemPath);
                     if (inBytes == null) {
                         return NULL_READER;
                     }
                 } else {
                     @SuppressWarnings("resource")  // Closed by getByteBufferFromInputStreamAndCloseStream().
-                    InputStream stream = ICUData.getStream(data.loader, fullName);
+                    InputStream stream = ICUData.getStream(loader, fullName);
                     if (stream == null) {
                         return NULL_READER;
                     }
                     inBytes = ICUBinary.getByteBufferFromInputStreamAndCloseStream(stream);
                 }
-                return new ICUResourceBundleReader(inBytes, data.baseName, data.localeID, data.loader);
+                return new ICUResourceBundleReader(inBytes, key.baseName, key.localeID, loader);
             } catch (IOException ex) {
                 throw new ICUUncheckedIOException("Data file " + fullName + " is corrupt - " + ex.getMessage(), ex);
             }
@@ -229,8 +226,8 @@ public final class ICUResourceBundleReader {
     }
 
     static ICUResourceBundleReader getReader(String baseName, String localeID, ClassLoader root) {
-        ReaderInfo info = new ReaderInfo(baseName, localeID, root);
-        ICUResourceBundleReader reader = CACHE.getInstance(info, info);
+        ReaderCacheKey info = new ReaderCacheKey(baseName, localeID);
+        ICUResourceBundleReader reader = CACHE.getInstance(info, root);
         if (reader == NULL_READER) {
             return null;
         }
