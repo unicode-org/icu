@@ -56,6 +56,13 @@ U_CDECL_BEGIN
 #include "pkgtypes.h"
 U_CDECL_END
 
+#if U_HAVE_POPEN
+
+using icu::LocalPointerBase;
+
+U_DEFINE_LOCAL_OPEN_POINTER(LocalPipeFilePointer, FILE, pclose);
+
+#endif
 
 static void loadLists(UPKGOptions *o, UErrorCode *status);
 
@@ -2095,7 +2102,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 /* Try calling icu-config directly to get the option file. */
  static int32_t pkg_getOptionsFromICUConfig(UBool verbose, UOption *option) {
 #if U_HAVE_POPEN
-    FILE *p = NULL;
+    LocalPipeFilePointer p;
     size_t n;
     static char buf[512] = "";
     icu::CharString cmdBuf;
@@ -2114,23 +2121,20 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
       if(verbose) {
         fprintf(stdout, "# Calling icu-config: %s\n", cmdBuf.data());
       }
-      p = popen(cmdBuf.data(), "r");
+      p.adoptInstead(popen(cmdBuf.data(), "r"));
     }
 
-      if(p == NULL || (n = fread(buf, 1, UPRV_LENGTHOF(buf)-1, p)) <= 0) {
-      if(verbose) {
-        fprintf(stdout, "# Calling icu-config: %s\n", cmd);
-      }
-      pclose(p);
+    if(p.isNull() || (n = fread(buf, 1, UPRV_LENGTHOF(buf)-1, p.getAlias())) <= 0) {
+        if(verbose) {
+            fprintf(stdout, "# Calling icu-config: %s\n", cmd);
+        }
 
-      p = popen(cmd, "r");
-      if(p == NULL || (n = fread(buf, 1, UPRV_LENGTHOF(buf)-1, p)) <= 0) {
-          fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
-          return -1;
-      }
+        p.adoptInstead(popen(cmd, "r"));
+        if(p.isNull() || (n = fread(buf, 1, UPRV_LENGTHOF(buf)-1, p.getAlias())) <= 0) {
+            fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
+            return -1;
+        }
     }
-
-    pclose(p);
 
     for (int32_t length = strlen(buf) - 1; length >= 0; length--) {
         if (buf[length] == '\n' || buf[length] == ' ') {
