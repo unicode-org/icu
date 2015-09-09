@@ -342,9 +342,10 @@ SimpleFilteredSentenceBreakIterator::internalNext(int32_t n) {
   // refresh text
   resetState(status);
   if(U_FAILURE(status)) return UBRK_DONE; // bail out
+  int64_t utextLen = utext_nativeLength(fText.getAlias());
 
   //if(debug2) u_printf("str, native len=%d\n", utext_nativeLength(fText.getAlias()));
-  while (n != UBRK_DONE) { // outer loop runs once per underlying break (from fDelegate).
+  while (n != UBRK_DONE && n != utextLen) { // outer loop runs once per underlying break (from fDelegate).
     SimpleFilteredSentenceBreakIterator::EFBMatchResult m = breakExceptionAt(n);
 
     switch(m) {
@@ -373,7 +374,7 @@ SimpleFilteredSentenceBreakIterator::internalPrev(int32_t n) {
   if(U_FAILURE(status)) return UBRK_DONE; // bail out
 
   //if(debug2) u_printf("str, native len=%d\n", utext_nativeLength(fText.getAlias()));
-  while (n != UBRK_DONE) { // outer loop runs once per underlying break (from fDelegate).
+  while (n != UBRK_DONE && n != 0) { // outer loop runs once per underlying break (from fDelegate).
     SimpleFilteredSentenceBreakIterator::EFBMatchResult m = breakExceptionAt(n);
 
     switch(m) {
