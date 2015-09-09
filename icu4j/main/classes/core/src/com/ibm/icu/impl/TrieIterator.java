@@ -303,9 +303,7 @@ public class TrieIterator implements RangeValueIterator
                 // this is not a simple addition of 
                 // DATA_BLOCK_SUPPLEMENTARY_LENGTH since we need to consider
                 // that we might have moved some of the codepoints
-                m_nextCodepoint_ = UCharacterProperty.getRawSupplementary(
-                                     (char)nextLead, 
-                                     (char)UTF16.TRAIL_SURROGATE_MIN_VALUE);
+                m_nextCodepoint_ = Character.toCodePoint((char)nextLead, (char)UTF16.TRAIL_SURROGATE_MIN_VALUE);
                 continue;
             }
             if (m_trie_.m_dataManipulate_ == null) {

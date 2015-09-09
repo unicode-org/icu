@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -108,9 +108,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
             
             if(UTF16.isTrailSurrogate((char)ch2)){
                 // we found a surrogate pair
-                return UCharacterProperty.getRawSupplementary(
-                                                         (char)ch,(char)ch2
-                                                             );
+                return Character.toCodePoint((char)ch, (char)ch2);
             }
         }
         return ch;

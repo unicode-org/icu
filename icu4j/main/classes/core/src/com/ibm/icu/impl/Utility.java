@@ -866,8 +866,7 @@ public final class Utility {
                 }
                 if (UTF16.isTrailSurrogate((char) c)) {
                     offset = ahead;
-                    result = UCharacterProperty.getRawSupplementary(
-                            (char) result, (char) c);
+                    result = Character.toCodePoint((char) result, (char) c);
                 }
             }
             offset16[0] = offset;
