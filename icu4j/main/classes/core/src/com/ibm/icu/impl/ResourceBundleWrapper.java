@@ -123,7 +123,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
             name = name + "_" + localeID;
         }
 
-        ResourceBundleWrapper b = (ResourceBundleWrapper)loadFromCache(cl, name, defaultLocale);
+        ResourceBundleWrapper b = (ResourceBundleWrapper)loadFromCache(name, defaultLocale);
         if(b==null){
             ResourceBundleWrapper parent = null;
             int i = localeID.lastIndexOf('_');
@@ -131,12 +131,12 @@ public class ResourceBundleWrapper extends UResourceBundle {
             boolean loadFromProperties = false;
             if (i != -1) {
                 String locName = localeID.substring(0, i);
-                parent = (ResourceBundleWrapper)loadFromCache(cl, baseName+"_"+locName,defaultLocale);
+                parent = (ResourceBundleWrapper)loadFromCache(baseName+"_"+locName,defaultLocale);
                 if(parent == null){
                     parent = (ResourceBundleWrapper)instantiateBundle(baseName, locName , cl, disableFallback);
                 }
             }else if(localeID.length()>0){
-                parent = (ResourceBundleWrapper)loadFromCache(cl, baseName,defaultLocale);
+                parent = (ResourceBundleWrapper)loadFromCache(baseName,defaultLocale);
                 if(parent==null){
                     parent = (ResourceBundleWrapper)instantiateBundle(baseName, "", cl, disableFallback);
                 }
@@ -202,7 +202,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
                     if (b==null) {
                         String defaultName = defaultLocale.toString();
                         if (localeID.length()>0 && localeID.indexOf('_')< 0 && defaultName.indexOf(localeID) == -1) {
-                            b = (ResourceBundleWrapper)loadFromCache(cl,baseName+"_"+defaultName, defaultLocale);
+                            b = (ResourceBundleWrapper)loadFromCache(baseName+"_"+defaultName, defaultLocale);
                             if(b==null){
                                 b = (ResourceBundleWrapper)instantiateBundle(baseName , defaultName, cl, disableFallback);
                             }
@@ -219,7 +219,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
                         System.out.println(e);
                 }
             }
-            b = (ResourceBundleWrapper)addToCache(cl, name, defaultLocale, b);
+            b = (ResourceBundleWrapper)addToCache(name, defaultLocale, b);
         }
 
         if(b!=null){

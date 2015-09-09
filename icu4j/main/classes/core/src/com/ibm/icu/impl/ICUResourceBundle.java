@@ -1217,7 +1217,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             localeName = ULocale.getBaseName(localeID);
         }
         String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
-        ICUResourceBundle b = (ICUResourceBundle)loadFromCache(root, fullName, defaultLocale);
+        ICUResourceBundle b = (ICUResourceBundle)loadFromCache(fullName, defaultLocale);
 
         // here we assume that java type resource bundle organization
         // is required then the base name contains '.' else
@@ -1249,7 +1249,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 // for a bundle that does not have nofallback.
                 // Are the relevant test cases just disabled?
                 // Do item aliases not get followed via "direct" loading?
-                return addToCache(root, fullName, defaultLocale, b);
+                return addToCache(fullName, defaultLocale, b);
             }
 
             // fallback to locale ID parent
@@ -1280,7 +1280,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 localeName = b.getLocaleID();
                 int i = localeName.lastIndexOf('_');
 
-                b = (ICUResourceBundle)addToCache(root, fullName, defaultLocale, b);
+                b = (ICUResourceBundle)addToCache(fullName, defaultLocale, b);
 
                 // TODO: C++ uresbund.cpp also checks for %%ParentIsRoot. Why not Java?
                 String parentLocaleName = ((ICUResourceBundleImpl.ResourceTable)b).findString("%%Parent");
