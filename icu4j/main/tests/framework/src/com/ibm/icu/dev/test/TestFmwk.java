@@ -1547,14 +1547,14 @@ public class TestFmwk extends AbstractTestLog {
         private void msg(String message, int level, boolean incCount,
                 boolean newln) {
             int oldLevel = level;
-//            if (level == WARN && (!warnings && !nodata)){
-//                level = ERR;
-//            }
+            //            if (level == WARN && (!warnings && !nodata)){
+            //                level = ERR;
+            //            }
 
             if (incCount) {
                 if (level == WARN) {
                     warnCount++;
-//                    invalidCount++;
+                    //                    invalidCount++;
                 } else if (level == ERR) {
                     errorCount++;
                 }
@@ -1683,8 +1683,8 @@ public class TestFmwk extends AbstractTestLog {
                         + " failure(s)"
                         + ((warnDelta != 0) ? ", " + warnDelta
                                 + " warning(s)" : "")
-                        + ((invalidDelta != 0) ? ", " + invalidDelta
-                                + " test(s) skipped)" : ")"));
+                                + ((invalidDelta != 0) ? ", " + invalidDelta
+                                        + " test(s) skipped)" : ")"));
             } else if (warnDelta != 0) {
                 log.println(" ALERT ("
                         + warnDelta
@@ -1976,7 +1976,10 @@ public class TestFmwk extends AbstractTestLog {
         for (int i = 0; i < st.length; ++i) {
             String source = st[i].getFileName();
             if (!source.equals("TestFmwk.java") && !source.equals("AbstractTestLog.java")) {
-                return "(" + st[i].getFileName() + ":" + st[i].getLineNumber() + ") ";
+                String methodName = st[i].getMethodName();
+                if (methodName.startsWith("Test") || methodName.startsWith("test")) {
+                    return "(" + source + ":" + st[i].getLineNumber() + ") ";
+                }
             }
         }
         throw new InternalError();

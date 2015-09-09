@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2009, International Business Machines
+* Copyright (c) 2003-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -226,5 +226,16 @@ public class UtilityTest extends TestFmwk {
         {
             errln("FAIL: str1("+str1+") != str2("+str2+")");
         }
+    }
+    
+    public void TestSourceLocation() {
+        String here = TestFmwk.sourceLocation();
+        String there = CheckSourceLocale();
+        String hereAgain = TestFmwk.sourceLocation();
+        assertTrue("here < there < hereAgain", here.compareTo(there) < 0 && there.compareTo(hereAgain) < 0);
+    }
+    
+    public String CheckSourceLocale() {
+        return TestFmwk.sourceLocation();
     }
 }
