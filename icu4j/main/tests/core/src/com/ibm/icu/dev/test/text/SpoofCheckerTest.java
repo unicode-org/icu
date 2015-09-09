@@ -795,4 +795,20 @@ public class SpoofCheckerTest extends TestFmwk {
             errln(e.toString());
         }
     }
+    
+    public void TestCheckResultToString11447() {
+        Object[][] tests = {
+                {"1", "[0]"},
+                {"१", "[०]"},
+                {"1१", "[0०]"},
+                {"١۱", "[٠۰]"},
+        };
+        CheckResult checkResult = new CheckResult();
+        SpoofChecker sc = new SpoofChecker.Builder()
+        .setChecks(-1)
+        .build();
+        sc.failsChecks("1१", checkResult);
+        assertTrue("CheckResult: ", checkResult.toString().contains("MIXED_NUMBERS"));
+    }
+
 }
