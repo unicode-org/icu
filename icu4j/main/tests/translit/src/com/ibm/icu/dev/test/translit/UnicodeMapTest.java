@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -284,5 +284,14 @@ public class UnicodeMapTest extends TestFmwk {
             }
         }
         return true;
+    }
+    
+    public void TestCloneAsThawed11721 () {
+        UnicodeMap<Integer> test = new UnicodeMap().put("abc", 3).freeze();
+        UnicodeMap<Integer> copy = test.cloneAsThawed();
+        copy.put("def", 4);
+        assertEquals("original-abc", (Integer) 3, test.get("abc"));
+        assertNull("original-def", test.get("def"));
+        assertEquals("copy-def", (Integer) 4, copy.get("def"));
     }
 }

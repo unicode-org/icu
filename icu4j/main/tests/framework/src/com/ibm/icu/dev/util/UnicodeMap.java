@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -37,7 +37,7 @@ import com.ibm.icu.util.Freezable;
  * @author markdavis
  */
 
-public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransform, Iterable<String> {
+public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>, StringTransform, Iterable<String> {
     /**
      * For serialization
      */
@@ -57,7 +57,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
     private transient boolean errorOnReset;
     private volatile transient boolean locked;
     private int lastIndex;
-    private Map<String,T> stringMap;
+    private TreeMap<String,T> stringMap;
 
     { clear(); }
 
@@ -120,6 +120,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
         that.values = (T[]) values.clone();
         that.availableValues = new LinkedHashSet<T>(availableValues);
         that.locked = false;
+        that.stringMap = stringMap == null ? null : (TreeMap<String, T>) stringMap.clone();
         return that;
     }
 
