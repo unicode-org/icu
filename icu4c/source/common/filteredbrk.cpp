@@ -652,14 +652,14 @@ FilteredBreakIteratorBuilder *
 FilteredBreakIteratorBuilder::createInstance(const Locale& where, UErrorCode& status) {
   if(U_FAILURE(status)) return NULL;
   LocalPointer<FilteredBreakIteratorBuilder> ret(new SimpleFilteredBreakIteratorBuilder(where, status), status);
-  return ret.orphan();
+  return (U_SUCCESS(status))? ret.orphan(): NULL;
 }
 
 FilteredBreakIteratorBuilder *
 FilteredBreakIteratorBuilder::createInstance(UErrorCode& status) {
   if(U_FAILURE(status)) return NULL;
   LocalPointer<FilteredBreakIteratorBuilder> ret(new SimpleFilteredBreakIteratorBuilder(status), status);
-  return ret.orphan();
+  return (U_SUCCESS(status))? ret.orphan(): NULL;
 }
 
 U_NAMESPACE_END
