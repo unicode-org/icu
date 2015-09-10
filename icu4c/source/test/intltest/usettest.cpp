@@ -3859,13 +3859,23 @@ void UnicodeSetTest::TestStringSpan() {
     }
 }
 
-#if !UCONFIG_NO_COLLATION
+/**
+ * Including collationroot.h fails here with
+1>c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\include\driverspecs.h(142): error C2008: '$' : unexpected in macro definition
+ *  .. so, we skip this test on Windows.
+ * 
+ * the cause is that  intltest builds with /Za which disables language extensions - which means
+ *  windows header files can't be used.
+ */
+#if !UCONFIG_NO_COLLATION && !U_PLATFORM_HAS_WIN32_API
 #include "collationroot.h"
 #include "collationtailoring.h"
 #endif
 
 void UnicodeSetTest::TestUCAUnsafeBackwards() {
-#if !UCONFIG_NO_COLLATION
+#if U_PLATFORM_HAS_WIN32_API
+    infoln("Skipping TestUCAUnsafeBackwards() - can't include collationroot.h on Windows without language extensions!");
+#elif !UCONFIG_NO_COLLATION
     UErrorCode errorCode = U_ZERO_ERROR;
 
     // Get the unsafeBackwardsSet
