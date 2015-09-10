@@ -936,6 +936,11 @@ static void TestBug11665(void) {
     ubrk_close(bi);
 }
 
+/*
+ * expOffset is the set of expected offsets, ending with '-1'.
+ * "Expected expOffset -1" means "expected the end of the offsets"
+ */
+
 static const char testSentenceSuppressionsEn[]  = "Mr. Jones comes home. Dr. Smith Ph.D. is out. In the U.S.A. it is hot.";
 static const int32_t testSentSuppFwdOffsetsEn[] = { 22, 26, 46, 70, -1 };     /* With suppressions, currently not handling Dr. */
 static const int32_t testSentFwdOffsetsEn[]     = {  4, 22, 26, 46, 70, -1 }; /* Without suppressions */
@@ -987,11 +992,13 @@ static void TestBreakIteratorSuppressions(void) {
         int32_t textULen = u_unescape(itemPtr->text, textU, kTextULenMax);
         UErrorCode status = U_ZERO_ERROR;
         UBreakIterator *bi = ubrk_open(UBRK_SENTENCE, itemPtr->locale, textU, textULen, &status);
+        log_verbose("#%d: %s\n", (itemPtr-testBISuppressionsItems), itemPtr->locale);
         if (U_SUCCESS(status)) {
             int32_t offset, start;
             const int32_t * expOffsetPtr;
+            const int32_t * expOffsetStart;
 
-            expOffsetPtr = itemPtr->expFwdOffsets;
+            expOffsetStart = expOffsetPtr = itemPtr->expFwdOffsets;
             ubrk_first(bi);
             for (; (offset = ubrk_next(bi)) != UBRK_DONE && *expOffsetPtr >= 0; expOffsetPtr++) {
                 if (offset != *expOffsetPtr) {
@@ -1002,7 +1009,7 @@ static void TestBreakIteratorSuppressions(void) {
                 log_err("FAIL: ubrk_next loc \"%s\", expected UBRK_DONE & expOffset -1, got %d and %d\n", itemPtr->locale, offset, *expOffsetPtr);
             }
 
-            expOffsetPtr = itemPtr->expFwdOffsets;
+            expOffsetStart = expOffsetPtr = itemPtr->expFwdOffsets;
             start = ubrk_first(bi) + 1;
             for (; (offset = ubrk_following(bi, start)) != UBRK_DONE && *expOffsetPtr >= 0; expOffsetPtr++) {
                 if (offset != *expOffsetPtr) {
@@ -1014,22 +1021,26 @@ static void TestBreakIteratorSuppressions(void) {
                 log_err("FAIL: ubrk_following(%d) loc \"%s\", expected UBRK_DONE & expOffset -1, got %d and %d\n", start, itemPtr->locale, offset, *expOffsetPtr);
             }
 
-            expOffsetPtr = itemPtr->expRevOffsets;
-            ubrk_last(bi);
+            expOffsetStart = expOffsetPtr = itemPtr->expRevOffsets;
+            offset = ubrk_last(bi);
+            log_verbose("___ @%d ubrk_last\n", offset);
+            if(offset == 0) {
+              log_err("FAIL: ubrk_last loc \"%s\" unexpected %d\n", itemPtr->locale, offset);
+            }
             for (; (offset = ubrk_previous(bi)) != UBRK_DONE && *expOffsetPtr >= 0; expOffsetPtr++) {
                 if (offset != *expOffsetPtr) {
                     log_err("FAIL: ubrk_previous loc \"%s\", expected %d, got %d\n", itemPtr->locale, *expOffsetPtr, offset);
+                } else {
+                    log_verbose("[%d] @%d ubrk_previous()\n", (expOffsetPtr - expOffsetStart), offset);
                 }
             }
-            if (offset == UBRK_DONE && expOffsetPtr == itemPtr->expRevOffsets &&
-                    log_knownIssue("11786", "Filtered break iterator issues at beginning/end of text")) {
-                // skip this test for problem cases until the fix for #11786 is complete
-            } else
             if (offset != UBRK_DONE || *expOffsetPtr >= 0) {
-                log_err("FAIL: ubrk_previous loc \"%s\", expected UBRK_DONE & expOffset -1, got %d and %d\n", itemPtr->locale, offset, *expOffsetPtr);
+                log_err("FAIL: ubrk_previous loc \"%s\", expected UBRK_DONE & expOffset[%d] -1, got %d and %d\n", itemPtr->locale,
+                        expOffsetPtr - expOffsetStart,
+                        offset, *expOffsetPtr);
             }
 
-            expOffsetPtr = itemPtr->expRevOffsets;
+            expOffsetStart = expOffsetPtr = itemPtr->expRevOffsets;
             start = ubrk_last(bi) - 1;
             for (; (offset = ubrk_preceding(bi, start)) != UBRK_DONE && *expOffsetPtr >= 0; expOffsetPtr++) {
                 if (offset != *expOffsetPtr) {
