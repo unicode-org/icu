@@ -71,7 +71,7 @@ cleanupConvData(ConvData *data) {
 /*
  * from ucnvstat.c - static prototypes of data-based converters
  */
-U_CAPI extern const UConverterStaticData * ucnv_converterStaticData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES];
+U_CAPI const UConverterStaticData * ucnv_converterStaticData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES];
 
 /*
  * Global - verbosity
