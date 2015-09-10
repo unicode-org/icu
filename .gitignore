@@ -715,6 +715,9 @@ icu4c/source/tools/gencnval/gencnval.vcproj.*.*.user
 icu4c/source/tools/gencnval/release
 icu4c/source/tools/gencnval/x64
 icu4c/source/tools/gencnval/x86
+icu4c/source/tools/gencolusb/Makefile.local
+icu4c/source/tools/gencolusb/extract_unsafe_backwards
+icu4c/source/tools/gencolusb/verify_uset
 icu4c/source/tools/gendict/*.1
 icu4c/source/tools/gendict/*.d
 icu4c/source/tools/gendict/*.o
