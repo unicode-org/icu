@@ -30,6 +30,13 @@
 #include "ucmndata.h"
 #include "utrie2.h"
 
+// #if U_HAVE_COLLUNSAFE
+#if 1
+#include "collunsafe.h"
+
+#endif
+// #end
+
 U_NAMESPACE_BEGIN
 
 namespace {
@@ -262,6 +269,28 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
             return;
         }
         if(baseData == NULL) {
+#if defined( COLLUNSAFE_COLL_VERSION )
+#if defined(COLLUNSAFE_RANGES)  /* slower but still an improvement*/
+          tailoring.unsafeBackwardSet = new UnicodeSet();
+
+          for(int32_t i=0;i<unsafe_rangeCount*2;i+=2) {
+            tailoring.unsafeBackwardSet->add(unsafe_ranges[i+0],unsafe_ranges[i+1]);
+          }
+          tailoring.unsafeBackwardSet->freeze();
+#elif defined (COLLUNSAFE_SERIALIZE)
+          /* faster */
+          tailoring.unsafeBackwardSet = new UnicodeSet(unsafe_serializedData, unsafe_serializedCount, UnicodeSet::kSerialized, errorCode);
+          if(tailoring.unsafeBackwardSet == NULL) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return;
+          } else if (U_FAILURE(errorCode)) {
+            return;
+          }
+#else
+#error no unsafe-backwards strategy chosen
+#endif
+
+#else
             // Create the unsafe-backward set for the root collator.
             // Include all non-zero combining marks and trail surrogates.
             // We do this at load time, rather than at build time,
@@ -279,6 +308,7 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
                 return;
             }
             data->nfcImpl.addLcccChars(*tailoring.unsafeBackwardSet);
+#endif
         } else {
             // Clone the root collator's set contents.
             tailoring.unsafeBackwardSet = static_cast<UnicodeSet *>(
