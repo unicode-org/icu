@@ -252,7 +252,7 @@ StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
     }
 
     if ( availableNames == NULL ) {
-        UVector *fNumsysNames = new UVector(uprv_deleteUObject, NULL, status);
+        LocalPointer<UVector> numsysNames(new UVector(uprv_deleteUObject, NULL, status), status);
         if (U_FAILURE(status)) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
@@ -270,21 +270,21 @@ StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
         while ( ures_hasNext(numberingSystemsInfo) ) {
             UResourceBundle *nsCurrent = ures_getNextResource(numberingSystemsInfo,NULL,&rbstatus);
             const char *nsName = ures_getKey(nsCurrent);
-            fNumsysNames->addElement(new UnicodeString(nsName, -1, US_INV),status);
+            numsysNames->addElement(new UnicodeString(nsName, -1, US_INV),status);
             ures_close(nsCurrent);
         }
 
         ures_close(numberingSystemsInfo);
-        availableNames = new NumsysNameEnumeration(fNumsysNames,status);
+        availableNames = new NumsysNameEnumeration(numsysNames.orphan(),status);
 
     }
 
     return availableNames;
 }
 
-NumsysNameEnumeration::NumsysNameEnumeration(UVector *fNameList, UErrorCode& /*status*/) {
+NumsysNameEnumeration::NumsysNameEnumeration(UVector *numsysNames, UErrorCode& /*status*/) {
     pos=0;
-    fNumsysNames = fNameList;
+    fNumsysNames = numsysNames;
 }
 
 const UnicodeString*
