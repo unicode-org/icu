@@ -57,7 +57,7 @@ x86_64-*-cygwin)
 		*-*-cygwin) icu_cv_host_frag=mh-cygwin-msvc ;;
 		esac
 	fi ;;
-*-*-*bsd*|*-*-dragonfly*) 	icu_cv_host_frag=mh-bsd-gcc ;;
+*-*-*bsd*|*-*-dragonfly*|*-*-bitrig*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
 	if test "$GCC" = yes; then
 		icu_cv_host_frag=mh-aix-gcc
