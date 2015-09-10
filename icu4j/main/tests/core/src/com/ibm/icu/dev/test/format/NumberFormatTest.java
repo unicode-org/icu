@@ -3245,7 +3245,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void TestGetInstance() {
         // Tests "public final static NumberFormat getInstance(int style)"
-        int maxStyle = NumberFormat.CASHCURRENCYSTYLE;
+        int maxStyle = NumberFormat.STANDARDCURRENCYSTYLE;
 
         int[] invalid_cases = { NumberFormat.NUMBERSTYLE - 1, NumberFormat.NUMBERSTYLE - 2,
                 maxStyle + 1, maxStyle + 2 };
@@ -4099,22 +4099,37 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public void TestAccountingCurrency() {
         String[][] tests = {
-                {"en_US", "1234.5", "$1,234.50", "true"},
-                {"en_US", "-1234.5", "($1,234.50)", "true"},
-                {"en_US", "0", "$0.00", "true"},
-                {"en_US", "-0.2", "($0.20)", "true"},
-                {"ja_JP", "10000", "￥10,000", "true"},
-                {"ja_JP", "-1000.5", "(￥1,000)", "false"},
-                {"de_DE", "-23456.7", "-23.456,70\u00A0€", "true"},
+                //locale              num         curr fmt per loc     curr std fmt         curr acct fmt        rt
+                {"en_US",             "1234.5",   "$1,234.50",         "$1,234.50",         "$1,234.50",         "true"},
+                {"en_US@cf=account",  "1234.5",   "$1,234.50",         "$1,234.50",         "$1,234.50",         "true"},
+                {"en_US",             "-1234.5",  "-$1,234.50",        "-$1,234.50",        "($1,234.50)",       "true"},
+                {"en_US@cf=standard", "-1234.5",  "-$1,234.50",        "-$1,234.50",        "($1,234.50)",       "true"},
+                {"en_US@cf=account",  "-1234.5",  "($1,234.50)",       "-$1,234.50",        "($1,234.50)",       "true"},
+                {"en_US",             "0",        "$0.00",             "$0.00",             "$0.00",             "true"},
+                {"en_US",             "-0.2",     "-$0.20",            "-$0.20",            "($0.20)",           "true"},
+                {"en_US@cf=standard", "-0.2",     "-$0.20",            "-$0.20",            "($0.20)",           "true"},
+                {"en_US@cf=account",  "-0.2",     "($0.20)",           "-$0.20",            "($0.20)",           "true"},
+                {"ja_JP",             "10000",    "￥10,000",          "￥10,000",          "￥10,000",          "true" },
+                {"ja_JP",             "-1000.5",  "-￥1,000",          "-￥1,000",          "(￥1,000)",         "false"},
+                {"ja_JP@cf=account",  "-1000.5",  "(￥1,000)",         "-￥1,000",          "(￥1,000)",         "false"},
+                {"de_DE",             "-23456.7", "-23.456,70\u00A0€", "-23.456,70\u00A0€", "-23.456,70\u00A0€", "true" },
         };
         for (String[] data : tests) {
             ULocale loc = new ULocale(data[0]);
             double num = Double.parseDouble(data[1]);
-            String fmt = data[2];
-            boolean rt = Boolean.parseBoolean(data[3]);
+            String fmtPerLocExpected   = data[2];
+            String fmtStandardExpected = data[3];
+            String fmtAccountExpected  = data[4];
+            boolean rt = Boolean.parseBoolean(data[5]);
 
-            NumberFormat acfmt = NumberFormat.getInstance(loc, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
-            expect(acfmt, num, fmt, rt);
+            NumberFormat fmtPerLoc = NumberFormat.getInstance(loc, NumberFormat.CURRENCYSTYLE);
+            expect(fmtPerLoc, num, fmtPerLocExpected, rt);
+
+            NumberFormat fmtStandard = NumberFormat.getInstance(loc, NumberFormat.STANDARDCURRENCYSTYLE);
+            expect(fmtStandard, num, fmtStandardExpected, rt);
+
+            NumberFormat fmtAccount = NumberFormat.getInstance(loc, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
+            expect(fmtAccount, num, fmtAccountExpected, rt);
         }
     }
     
