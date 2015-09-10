@@ -175,8 +175,10 @@ public abstract class NumberFormat extends UFormat {
      */
     public static final int NUMBERSTYLE = 0;
     /**
-     * {@icu} Constant to specify currency style of format which uses currency symbol
-     * to represent currency, for example: "$3.00".
+     * {@icu} Constant to specify general currency style of format. Defaults to
+     * STANDARDCURRENCYSTYLE, using currency symbol, for example "$3.00", with
+     * non-accounting style for negative values (e.g. minus sign).
+     * The specific style may be specified using the -cf- locale key.
      * @stable ICU 4.2
      */
     public static final int CURRENCYSTYLE = 1;
@@ -212,6 +214,7 @@ public abstract class NumberFormat extends UFormat {
      * {@icu} Constant to specify currency style of format which uses currency symbol
      * to represent currency for accounting, for example: "($3.00), instead of
      * "-$3.00" ({@link #CURRENCYSTYLE}).
+     * Overrides any style specified using -cf- key in locale.
      * @stable ICU 53
      */
     public static final int ACCOUNTINGCURRENCYSTYLE = 7;
@@ -223,6 +226,14 @@ public abstract class NumberFormat extends UFormat {
      */
     public static final int CASHCURRENCYSTYLE = 8;
     /**
+     * {@icu} Constant to specify currency style of format which uses currency symbol
+     * to represent currency, for example "$3.00", using non-accounting style for
+     * negative values (e.g. minus sign).
+     * Overrides any style specified using -cf- key in locale.
+     * @draft ICU 56
+     * @provisional This API might change or be removed in a future release. 
+     */
+    public static final int STANDARDCURRENCYSTYLE = 9;
 
     /**
      * Field constant used to construct a FieldPosition object. Signifies that
@@ -1304,13 +1315,14 @@ public abstract class NumberFormat extends UFormat {
      *                                   NUMBERSTYLE, CURRENCYSTYLE,
      *                                   PERCENTSTYLE, SCIENTIFICSTYLE,
      *                                   INTEGERSTYLE, ISOCURRENCYSTYLE,
-     *                                   PLURALCURRENCYSTYLE and ACCOUNTSTYLE.
+     *                                   PLURALCURRENCYSTYLE, ACCOUNTINGCURRENCYSTYLE.
+     *                                   CASHCURRENCYSTYLE, STANDARDCURRENCYSTYLE.
      * @stable ICU 4.2
      */
     public static NumberFormat getInstance(ULocale desiredLocale, int choice) {
-        if (choice < NUMBERSTYLE || choice > CASHCURRENCYSTYLE) {
+        if (choice < NUMBERSTYLE || choice > STANDARDCURRENCYSTYLE) {
             throw new IllegalArgumentException(
-                "choice should be from NUMBERSTYLE to PLURALCURRENCYSTYLE");
+                "choice should be from NUMBERSTYLE to STANDARDCURRENCYSTYLE");
         }
 //          if (shim == null) {
 //              return createInstance(desiredLocale, choice);
@@ -1338,7 +1350,7 @@ public abstract class NumberFormat extends UFormat {
         // For currency plural format, the pattern is get from
         // the locale (from CurrencyUnitPatterns) without override.
         if (choice == CURRENCYSTYLE || choice == ISOCURRENCYSTYLE || choice == ACCOUNTINGCURRENCYSTYLE
-                || choice == CASHCURRENCYSTYLE) {
+                || choice == CASHCURRENCYSTYLE || choice == STANDARDCURRENCYSTYLE) {
             String temp = symbols.getCurrencyPattern();
             if(temp!=null){
                 pattern = temp;
@@ -1488,9 +1500,13 @@ public abstract class NumberFormat extends UFormat {
             patternKey = "decimalFormat";
             break;
         case CURRENCYSTYLE:
+            String cfKeyValue = forLocale.getKeywordValue("cf");
+            patternKey = (cfKeyValue != null && cfKeyValue.equals("account"))? "accountingFormat": "currencyFormat";
+            break;
         case CASHCURRENCYSTYLE:
         case ISOCURRENCYSTYLE:
         case PLURALCURRENCYSTYLE:
+        case STANDARDCURRENCYSTYLE:
             patternKey = "currencyFormat";
             break;
         case PERCENTSTYLE:
