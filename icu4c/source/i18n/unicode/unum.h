@@ -148,7 +148,11 @@ typedef enum UNumberFormatStyle {
      */
     UNUM_DECIMAL=1,
     /**
-     * Currency format with a currency symbol, e.g., "$1.00".
+     * Currency format (generic).
+     * Defaults to UNUM_CURRENCY_STANDARD style
+     * (using currency symbol, e.g., "$1.00", with non-accounting
+     * style for negative values e.g. using minus sign).
+     * The specific style may be specified using the -cf- locale key.
      * @stable ICU 2.0
      */
     UNUM_CURRENCY=2,
@@ -205,6 +209,7 @@ typedef enum UNumberFormatStyle {
     /**
      * Currency format for accounting, e.g., "($3.00)" for
      * negative currency amount instead of "-$3.00" ({@link #UNUM_CURRENCY}).
+     * Overrides any style specified using -cf- key in locale.
      * @stable ICU 53
      */
     UNUM_CURRENCY_ACCOUNTING=12,
@@ -231,13 +236,20 @@ typedef enum UNumberFormatStyle {
      * @draft ICU 56
      */
     UNUM_DECIMAL_COMPACT_LONG=15,
+    /**
+     * Currency format with a currency symbol, e.g., "$1.00",
+     * using non-accounting style for negative values (e.g. minus sign).
+     * Overrides any style specified using -cf- key in locale.
+     * @draft ICU 56
+     */
+    UNUM_CURRENCY_STANDARD=16,
 #endif /* U_HIDE_DRAFT_API */
 
     /**
      * One more than the highest number format style constant.
      * @stable ICU 4.8
      */
-    UNUM_FORMAT_STYLE_COUNT=16,
+    UNUM_FORMAT_STYLE_COUNT=17,
 
     /**
      * Default format
