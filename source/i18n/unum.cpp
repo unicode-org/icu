@@ -57,6 +57,7 @@ unum_open(  UNumberFormatStyle    style,
     case UNUM_CURRENCY_PLURAL:
     case UNUM_CURRENCY_ACCOUNTING:
     case UNUM_CASH_CURRENCY:
+    case UNUM_CURRENCY_STANDARD:
         retVal = NumberFormat::createInstance(Locale(locale), style, *status);
         break;
 
