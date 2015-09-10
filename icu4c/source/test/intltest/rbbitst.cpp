@@ -1294,25 +1294,6 @@ void RBBITest::TestExtended() {
                 delete tp.bi;
                 tp.bi = BreakIterator::createSentenceInstance(locale,  status);
                 skipTest = false;
-
-                // Interim hack - remove once http://bugs.icu-project.org/trac/ticket/11770 implemented
-                {
-                    UErrorCode subStatus = status;
-                    char buf[100];
-                    int32_t len = locale.getKeywordValue("x-uli",buf,100,subStatus);
-                    if(U_SUCCESS(subStatus) && len > 0) {
-                        logKnownIssue("11770", "Remove 'x-uli' locale ID hack from rbbitst.cpp and rbbitst.txt, replace with ss=standard");
-#if !UCONFIG_NO_FILTERED_BREAK_ITERATION
-                        LocalPointer<FilteredBreakIteratorBuilder> builder(FilteredBreakIteratorBuilder::createInstance(locale, status), status);
-                        if(U_SUCCESS(status)) {
-                            tp.bi = builder->build(tp.bi, status);
-                        }
-#else
-                        infoln("Skipping subtest due to UCONFIG_NO_FILTERED_BREAK_ITERATION");
-                        skipTest = true;
-#endif //!UCONFIG_NO_FILTERED_BREAK_ITERATION
-                    }
-                }
                 charIdx += 5;
                 break;
             }

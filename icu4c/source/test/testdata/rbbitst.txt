@@ -40,9 +40,7 @@
 <data>\
 •In the meantime Mr. •Weston arrived with his small ship, which he had now recovered. •Capt. •Gorges, who informed the Sgt. here that one purpose of his going east was to meet with Mr. •Weston, took this opportunity to call him to account for some abuses he had to lay to his charge.•</data>
 
-# Remove 'x-uli=true' when http://bugs.icu-project.org/trac/ticket/11770 fixed - replace wiht ss=standard
-# also fix rbbitest.cpp
-<locale en@x-uli=true&ss=standard>
+<locale en@ss=standard>
 <sent>
 <data>\
 •In the meantime Mr. Weston arrived with his small ship, which he had now recovered. •Capt. Gorges, who informed the Sgt. here that one purpose of his going east was to meet with Mr. Weston, took this opportunity to call him to account for some abuses he had to lay to his charge.•</data>
