@@ -3610,6 +3610,7 @@ icu4c/source/tools/genccode/genccode.vcxproj -text
 icu4c/source/tools/gencfu/gencfu.vcxproj -text
 icu4c/source/tools/gencmn/gencmn.vcxproj -text
 icu4c/source/tools/gencnval/gencnval.vcxproj -text
+icu4c/source/tools/gencolusb/README.md -text
 icu4c/source/tools/gendict/gendict.vcxproj -text
 icu4c/source/tools/gennorm2/gennorm2.vcxproj -text
 icu4c/source/tools/genrb/derb.vcxproj -text
