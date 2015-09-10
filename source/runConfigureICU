@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 1999-2014, International Business Machines Corporation and
+# Copyright (c) 1999-2015, International Business Machines Corporation and
 # others. All Rights Reserved.
 
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
@@ -327,7 +327,7 @@ case $platform in
         DEBUG_CXXFLAGS='-Zi -MDd'
         DEBUG_LDFLAGS='-DEBUG'
         ;;
-    *BSD)
+    *BSD | DragonFly | Bitrig)
         THE_OS="BSD"
         THE_COMP="the GNU C++"
         DEBUG_CFLAGS='-g -O0'
