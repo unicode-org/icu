@@ -594,6 +594,9 @@ void UnicodeString::swap(UnicodeString &other) U_NOEXCEPT {
 
 UnicodeString UnicodeString::unescape() const {
     UnicodeString result(length(), (UChar32)0, (int32_t)0); // construct with capacity
+    if (result.isBogus()) {
+        return result;
+    }
     const UChar *array = getBuffer();
     int32_t len = length();
     int32_t prev = 0;
