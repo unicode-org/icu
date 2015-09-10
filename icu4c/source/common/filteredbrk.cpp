@@ -440,7 +440,8 @@ SimpleFilteredSentenceBreakIterator::following(int32_t offset) {
 
 int32_t
 SimpleFilteredSentenceBreakIterator::last(void) {
-  return internalPrev(fDelegate->last());
+  // Don't suppress a break opportunity at the end of text.
+  return fDelegate->last();
 }
 
 
