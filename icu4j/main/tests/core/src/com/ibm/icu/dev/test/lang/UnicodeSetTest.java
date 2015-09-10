@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -2611,7 +2611,7 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("CharSequence remove", new UnicodeSet("[Aa-c{qr}]"), new UnicodeSet("[a-cA{abc}{qr}]").remove(new StringBuilder("abc")) );
         assertEquals("CharSequence complement", new UnicodeSet("[Aa-c{qr}]"), new UnicodeSet("[a-cA{abc}{qr}]").complement(new StringBuilder("abc")) );
         assertEquals("CharSequence complement", new UnicodeSet("[Aa-c{abc}{qr}]"), new UnicodeSet("[a-cA{qr}]").complement(new StringBuilder("abc")) );
-        
+
         assertEquals("CharSequence addAll", new UnicodeSet("[a-cABC]"), new UnicodeSet("[a-cA]").addAll(new StringBuilder("ABC")) );
         assertEquals("CharSequence retainAll", new UnicodeSet("[a-c]"), new UnicodeSet("[a-cA]").retainAll(new StringBuilder("abcB")) );
         assertEquals("CharSequence removeAll", new UnicodeSet("[Aab]"), new UnicodeSet("[a-cA]").removeAll(new StringBuilder("cC")) );
@@ -2621,7 +2621,7 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("CharSequence contains", true, new UnicodeSet("[a-cA{ab}]"). contains(new StringBuilder("ab")) ); 
         assertEquals("CharSequence containsNone", false, new UnicodeSet("[a-cA]"). containsNone(new StringBuilder("ab"))  );
         assertEquals("CharSequence containsSome", true, new UnicodeSet("[a-cA{ab}]"). containsSome(new StringBuilder("ab"))  );
-        
+
         // spanning
         assertEquals("CharSequence span", 3, new UnicodeSet("[a-cA]"). span(new StringBuilder("abc"), SpanCondition.SIMPLE) );
         assertEquals("CharSequence span", 3, new UnicodeSet("[a-cA]"). span(new StringBuilder("abc"), 1, SpanCondition.SIMPLE) );
@@ -2635,5 +2635,35 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("CharSequence findIn", 3, new UnicodeSet("[a-cA]"). findIn(new StringBuilder("abc"), 1, true) );
         assertEquals("CharSequence findLastIn", -1, new UnicodeSet("[a-cA]"). findLastIn(new StringBuilder("abc"), 1, true) );
         assertEquals("CharSequence add", "c", new UnicodeSet("[abA]"). stripFrom(new StringBuilder("abc"), true));
+    }
+
+    public void TestAStringRange() {
+        String[][] tests = {
+                {"[{ax}-{bz}]", "[{ax}{ay}{az}{bx}{by}{bz}]"},
+                {"[{a}-{c}]", "[a-c]"},
+                //{"[a-{c}]", "[a-c]"}, // don't handle these yet: enable once we do
+                //{"[{a}-c]", "[a-c]"}, // don't handle these yet: enable once we do
+                {"[{ax}-{by}-{cz}]", "Error: '-' not after char, string, or set at \"[{ax}-{by}-{|cz}]\""},
+                {"[{a}-{bz}]", "Error: Range must have equal-length strings at \"[{a}-{bz}|]\""},
+                {"[{ax}-{b}]", "Error: Range must have equal-length strings at \"[{ax}-{b}|]\""},
+                {"[{ax}-bz]", "Error: Invalid range at \"[{ax}-b|z]\""},
+                {"[ax-{bz}]", "Error: Range must have 2 valid strings at \"[ax-{bz}|]\""},
+                {"[{bx}-{az}]", "Error: Range must have xᵢ ≤ yᵢ for each index i at \"[{bx}-{az}|]\""},
+        };
+        int i = 0;
+        for (String[] test : tests) {
+            String expected = test[1];
+            if (test[1].startsWith("[")) {
+                expected = new UnicodeSet(expected).toPattern(false);
+            }
+            String actual;
+            try {
+                actual = new UnicodeSet(test[0]).toPattern(false);
+            } catch (Exception e) {
+                actual = e.getMessage();
+            }
+            assertEquals("StringRange " + i, expected, actual);
+            ++i;
+        }
     }
 }

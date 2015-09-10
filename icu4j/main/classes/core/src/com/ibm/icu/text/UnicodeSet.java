@@ -20,6 +20,7 @@ import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.RuleCharacterIterator;
 import com.ibm.icu.impl.SortedSetRelation;
+import com.ibm.icu.impl.StringRange;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -772,19 +773,19 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             T result, boolean escapeUnprintable, boolean includeStrings) {
         try {
             result.append('[');
-    
+
             int count = getRangeCount();
-    
+
             // If the set contains at least 2 intervals and includes both
             // MIN_VALUE and MAX_VALUE, then the inverse representation will
             // be more economical.
             if (count > 1 &&
                     getRangeStart(0) == MIN_VALUE &&
                     getRangeEnd(count-1) == MAX_VALUE) {
-    
+
                 // Emit the inverse
                 result.append('^');
-    
+
                 for (int i = 1; i < count; ++i) {
                     int start = getRangeEnd(i-1)+1;
                     int end = getRangeStart(i)-1;
@@ -797,7 +798,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     }
                 }
             }
-    
+
             // Default; emit the ranges as pairs
             else {
                 for (int i = 0; i < count; ++i) {
@@ -812,7 +813,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     }
                 }
             }
-    
+
             if (includeStrings && strings.size() > 0) {
                 for (String s : strings) {
                     result.append('{');
@@ -2431,6 +2432,21 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         return this;
     }
 
+    // Add constants to make the code easier to follow
+
+    static final int LAST0_START = 0, 
+            LAST1_RANGE = 1, 
+            LAST2_SET = 2;
+
+    static final int MODE0_NONE = 0, 
+            MODE1_INBRACKET = 1, 
+            MODE2_OUTBRACKET = 2;
+
+    static final int SETMODE0_NONE = 0, 
+            SETMODE1_UNICODESET = 1, 
+            SETMODE2_PROPERTYPAT = 2, 
+            SETMODE3_PREPARSED = 3;
+
     /**
      * Parse the pattern from the given RuleCharacterIterator.  The
      * iterator is advanced over the parsed pattern.
@@ -2465,14 +2481,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
         // mode: 0=before [, 1=between [...], 2=after ]
         // lastItem: 0=none, 1=char, 2=set
-        int lastItem = 0, lastChar = 0, mode = 0;
+        int lastItem = LAST0_START, lastChar = 0, mode = MODE0_NONE;
         char op = 0;
 
         boolean invert = false;
 
         clear();
+        String lastString = null;
 
-        while (mode != 2 && !chars.atEnd()) {
+        while (mode != MODE2_OUTBRACKET && !chars.atEnd()) {
             //Eclipse stated the following is "dead code"
             /*
             if (false) {
@@ -2491,9 +2508,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             // -------- Check for property pattern
 
             // setMode: 0=none, 1=unicodeset, 2=propertypat, 3=preparsed
-            int setMode = 0;
+            int setMode = SETMODE0_NONE;
             if (resemblesPropertyPattern(chars, opts)) {
-                setMode = 2;
+                setMode = SETMODE2_PROPERTYPAT;
             }
 
             // -------- Parse '[' of opening delimiter OR nested set.
@@ -2511,12 +2528,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 literal = chars.isEscaped();
 
                 if (c == '[' && !literal) {
-                    if (mode == 1) {
+                    if (mode == MODE1_INBRACKET) {
                         chars.setPos(backup); // backup
-                        setMode = 1;
+                        setMode = SETMODE1_UNICODESET;
                     } else {
                         // Handle opening '[' delimiter
-                        mode = 1;
+                        mode = MODE1_INBRACKET;
                         patBuf.append('[');
                         backup = chars.getPos(backup); // prepare to backup
                         c = chars.next(opts);
@@ -2543,7 +2560,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     if (m != null) {
                         try {
                             nested = (UnicodeSet) m;
-                            setMode = 3;
+                            setMode = SETMODE3_PREPARSED;
                         } catch (ClassCastException e) {
                             syntaxError(chars, "Syntax error");
                         }
@@ -2556,14 +2573,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             // previously been parsed and was looked up in the symbol
             // table.
 
-            if (setMode != 0) {
-                if (lastItem == 1) {
+            if (setMode != SETMODE0_NONE) {
+                if (lastItem == LAST1_RANGE) {
                     if (op != 0) {
                         syntaxError(chars, "Char expected after operator");
                     }
                     add_unchecked(lastChar, lastChar);
                     _appendToPat(patBuf, lastChar, false);
-                    lastItem = op = 0;
+                    lastItem = LAST0_START;
+                    op = 0;
                 }
 
                 if (op == '-' || op == '&') {
@@ -2575,24 +2593,24 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     nested = scratch;
                 }
                 switch (setMode) {
-                case 1:
+                case SETMODE1_UNICODESET:
                     nested.applyPattern(chars, symbols, patBuf, options);
                     break;
-                case 2:
+                case SETMODE2_PROPERTYPAT:
                     chars.skipIgnored(opts);
                     nested.applyPropertyPattern(chars, patBuf, symbols);
                     break;
-                case 3: // `nested' already parsed
+                case SETMODE3_PREPARSED: // `nested' already parsed
                     nested._toPattern(patBuf, false);
                     break;
                 }
 
                 usePat = true;
 
-                if (mode == 0) {
+                if (mode == MODE0_NONE) {
                     // Entire pattern is a category; leave parse loop
                     set(nested);
-                    mode = 2;
+                    mode = MODE2_OUTBRACKET;
                     break;
                 }
 
@@ -2609,12 +2627,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 }
 
                 op = 0;
-                lastItem = 2;
+                lastItem = LAST2_SET;
 
                 continue;
             }
 
-            if (mode == 0) {
+            if (mode == MODE0_NONE) {
                 syntaxError(chars, "Missing '['");
             }
 
@@ -2625,7 +2643,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             if (!literal) {
                 switch (c) {
                 case ']':
-                    if (lastItem == 1) {
+                    if (lastItem == LAST1_RANGE) {
                         add_unchecked(lastChar, lastChar);
                         _appendToPat(patBuf, lastChar, false);
                     }
@@ -2637,11 +2655,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                         syntaxError(chars, "Trailing '&'");
                     }
                     patBuf.append(']');
-                    mode = 2;
+                    mode = MODE2_OUTBRACKET;
                     continue;
                 case '-':
                     if (op == 0) {
-                        if (lastItem != 0) {
+                        if (lastItem != LAST0_START) {
+                            op = (char) c;
+                            continue;
+                        } else if (lastString != null) {
                             op = (char) c;
                             continue;
                         } else {
@@ -2651,15 +2672,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                             literal = chars.isEscaped();
                             if (c == ']' && !literal) {
                                 patBuf.append("-]");
-                                mode = 2;
+                                mode = MODE2_OUTBRACKET;
                                 continue;
                             }
                         }
                     }
-                    syntaxError(chars, "'-' not after char or set");
+                    syntaxError(chars, "'-' not after char, string, or set");
                     break;
                 case '&':
-                    if (lastItem == 2 && op == 0) {
+                    if (lastItem == LAST2_SET && op == 0) {
                         op = (char) c;
                         continue;
                     }
@@ -2669,14 +2690,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     syntaxError(chars, "'^' not after '['");
                     break;
                 case '{':
-                    if (op != 0) {
+                    if (op != 0 && op != '-') {
                         syntaxError(chars, "Missing operand after operator");
                     }
-                    if (lastItem == 1) {
+                    if (lastItem == LAST1_RANGE) {
                         add_unchecked(lastChar, lastChar);
                         _appendToPat(patBuf, lastChar, false);
                     }
-                    lastItem = 0;
+                    lastItem = LAST0_START;
                     if (buf == null) {
                         buf = new StringBuilder();
                     } else {
@@ -2698,9 +2719,27 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     // We have new string. Add it to set and continue;
                     // we don't need to drop through to the further
                     // processing
-                    add(buf.toString());
+                    String curString = buf.toString();
+                    if (op == '-') {
+                        int lastSingle = CharSequences.getSingleCodePoint(lastString == null ? "" : lastString);
+                        int curSingle = CharSequences.getSingleCodePoint(curString);
+                        if (lastSingle != Integer.MAX_VALUE && curSingle != Integer.MAX_VALUE) {
+                            add(lastSingle,curSingle);
+                        } else {
+                            try {
+                                StringRange.expand(lastString, curString, true, strings);
+                            } catch (Exception e) {
+                                syntaxError(chars, e.getMessage());
+                            }
+                        }
+                        lastString = null;
+                        op = 0;
+                    } else {
+                        add(curString);
+                        lastString = curString;
+                    }
                     patBuf.append('{');
-                    _appendToPat(patBuf, buf.toString(), false);
+                    _appendToPat(patBuf, curString, false);
                     patBuf.append('}');
                     continue;
                 case SymbolTable.SYMBOL_REF:
@@ -2720,14 +2759,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                         break; // literal '$'
                     }
                     if (anchor && op == 0) {
-                        if (lastItem == 1) {
+                        if (lastItem == LAST1_RANGE) {
                             add_unchecked(lastChar, lastChar);
                             _appendToPat(patBuf, lastChar, false);
                         }
                         add_unchecked(UnicodeMatcher.ETHER);
                         usePat = true;
                         patBuf.append(SymbolTable.SYMBOL_REF).append(']');
-                        mode = 2;
+                        mode = MODE2_OUTBRACKET;
                         continue;
                     }
                     syntaxError(chars, "Unquoted '$'");
@@ -2742,12 +2781,19 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             // ("a").
 
             switch (lastItem) {
-            case 0:
-                lastItem = 1;
+            case LAST0_START:
+                if (op == '-' && lastString != null) {
+                    syntaxError(chars, "Invalid range");
+                }
+                lastItem = LAST1_RANGE;
                 lastChar = c;
+                lastString = null;
                 break;
-            case 1:
+            case LAST1_RANGE:
                 if (op == '-') {
+                    if (lastString != null) {
+                        syntaxError(chars, "Invalid range");
+                    }
                     if (lastChar >= c) {
                         // Don't allow redundant (a-a) or empty (b-a) ranges;
                         // these are most likely typos.
@@ -2757,24 +2803,25 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     _appendToPat(patBuf, lastChar, false);
                     patBuf.append(op);
                     _appendToPat(patBuf, c, false);
-                    lastItem = op = 0;
+                    lastItem = LAST0_START;
+                    op = 0;
                 } else {
                     add_unchecked(lastChar, lastChar);
                     _appendToPat(patBuf, lastChar, false);
                     lastChar = c;
                 }
                 break;
-            case 2:
+            case LAST2_SET:
                 if (op != 0) {
                     syntaxError(chars, "Set expected after operator");
                 }
                 lastChar = c;
-                lastItem = 1;
+                lastItem = LAST1_RANGE;
                 break;
             }
         }
 
-        if (mode != 2) {
+        if (mode != MODE2_OUTBRACKET) {
             syntaxError(chars, "Missing ']'");
         }
 
