@@ -202,7 +202,7 @@ begin
 format	output	breaks
 // min grouping digits not supported in any existing implementation
 // but could be easily added to the new DecimalFormat C code.
-1000	1000	CJK
+1000	1000	JK
 10000	10,000
 100000	100,000
 1000000	1,000,000
@@ -359,7 +359,7 @@ output	grouping	breaks	grouping2	minGroupingDigits
 1,23,45,6789	4	K	2
 1,23,45,6789	4	K	2	2
 123,456789	6	K	6	3
-123456789	6	CJK	6	4
+123456789	6	JK	6	4
 
 test multiplier setters
 set locale en_US
