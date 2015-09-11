@@ -132,7 +132,7 @@ static void adjustDecimalFormat(
         }
     }
     if (tuple.minGroupingDigitsFlag) {
-        // Oops, not supported
+        fmt.setMinimumGroupingDigits(tuple.minGroupingDigits);
     }
     if (tuple.useSigDigitsFlag) {
         fmt.setSignificantDigitsUsed(tuple.useSigDigits != 0);

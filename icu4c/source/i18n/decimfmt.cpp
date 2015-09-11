@@ -2739,6 +2739,22 @@ DecimalFormat::setSecondaryGroupingSize(int32_t newValue)
 }
 
 //------------------------------------------------------------------------------
+
+int32_t
+DecimalFormat::getMinimumGroupingDigits() const
+{
+    return fImpl->getMinimumGroupingDigits();
+}
+
+//------------------------------------------------------------------------------
+
+void
+DecimalFormat::setMinimumGroupingDigits(int32_t newValue)
+{
+    fImpl->setMinimumGroupingDigits(newValue);
+}
+
+//------------------------------------------------------------------------------
 // Checks if to show the decimal separator.
 
 UBool
@@ -3138,6 +3154,11 @@ DecimalFormat& DecimalFormat::setAttribute( UNumberFormatAttribute attr,
 
     case UNUM_CURRENCY_USAGE:
         setCurrencyUsage((UCurrencyUsage)newValue, &status);
+        break;
+
+    case UNUM_MINIMUM_GROUPING_DIGITS:
+        setMinimumGroupingDigits(newValue);
+        break;
 
     default:
       status = U_UNSUPPORTED_ERROR;
@@ -3220,6 +3241,9 @@ int32_t DecimalFormat::getAttribute( UNumberFormatAttribute attr,
 
     case UNUM_CURRENCY_USAGE:
         return fImpl->getCurrencyUsage();
+
+    case UNUM_MINIMUM_GROUPING_DIGITS:
+        return getMinimumGroupingDigits();
 
     default:
         status = U_UNSUPPORTED_ERROR;

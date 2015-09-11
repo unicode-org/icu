@@ -1647,6 +1647,43 @@ public:
      */
     virtual void setSecondaryGroupingSize(int32_t newValue);
 
+#ifndef U_HIDE_INTERNAL_API
+
+    /**
+     * Returns the minimum number of grouping digits.
+     * Grouping separators are output if there are at least this many
+     * digits to the left of the first (rightmost) grouping separator,
+     * that is, there are at least (minimum grouping + grouping size) integer digits.
+     * (Subject to isGroupingUsed().)
+     *
+     * For example, if this value is 2, and the grouping size is 3, then
+     * 9999 -> "9999" and 10000 -> "10,000"
+     *
+     * This is a technology preview. This API may change behavior or may be removed.
+     *
+     * The default value for this attribute is 0.
+     * A value of 1, 0, or lower, means that the use of grouping separators
+     * only depends on the grouping size (and on isGroupingUsed()).
+     * Currently, the corresponding CLDR data is not used; this is likely to change.
+     *
+     * @see setMinimumGroupingDigits
+     * @see getGroupingSize
+     * @internal technology preview
+     */
+    int32_t getMinimumGroupingDigits() const;
+
+    /**
+     * Sets the minimum grouping digits. Setting to a value less than or
+     * equal to 1 turns off minimum grouping digits.
+     *
+     * @param newValue the new value of minimum grouping digits.
+     * @see getMinimumGroupingDigits
+     * @internal technology preview
+     */
+    virtual void setMinimumGroupingDigits(int32_t newValue);
+
+#endif
+
     /**
      * Allows you to get the behavior of the decimal separator with integers.
      * (The decimal separator will always appear with decimals.)
