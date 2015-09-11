@@ -932,7 +932,7 @@ typedef enum UNumberFormatAttribute {
    * This is an internal ICU API. Do not use.
    * @internal
    */
-  UNUM_PARSE_ALL_INPUT = UNUM_LENIENT_PARSE + 1,
+  UNUM_PARSE_ALL_INPUT = 20,
 #endif
   /** 
     * Scale, which adjusts the position of the
@@ -943,12 +943,16 @@ typedef enum UNumberFormatAttribute {
     * <p>Example: setting the scale to -4, 123 formats as "0.0123"
     *
    * @stable ICU 51 */
-  UNUM_SCALE = UNUM_LENIENT_PARSE + 2,
-
+  UNUM_SCALE = 21,
 #ifndef U_HIDE_INTERNAL_API
-  /** Count of "regular" numeric attributes.
-   * @internal */
-  UNUM_NUMERIC_ATTRIBUTE_COUNT = UNUM_LENIENT_PARSE + 3,
+  /**
+   * Minimum grouping digits, technology preview.
+   * See DecimalFormat::getMinimumGroupingDigits().
+   *
+   * @internal technology preview
+   */
+  UNUM_MINIMUM_GROUPING_DIGITS = 22,
+  /* TODO: test C API when it becomes @draft */
 #endif  /* U_HIDE_INTERNAL_API */
 
 #ifndef U_HIDE_DRAFT_API
@@ -958,7 +962,7 @@ typedef enum UNumberFormatAttribute {
    * Default: 0 (UNUM_CURRENCY_STANDARD purpose)
    * @draft ICU 54
    */
-  UNUM_CURRENCY_USAGE = UNUM_LENIENT_PARSE + 4,
+  UNUM_CURRENCY_USAGE = 23,
 #endif  /* U_HIDE_DRAFT_API */
 
   /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
@@ -990,13 +994,13 @@ typedef enum UNumberFormatAttribute {
    * Default: 0 (unset)
    * @draft ICU 54
    */
-  UNUM_PARSE_DECIMAL_MARK_REQUIRED = UNUM_PARSE_NO_EXPONENT+1,
+  UNUM_PARSE_DECIMAL_MARK_REQUIRED = 0x1002,
 #endif  /* U_HIDE_DRAFT_API */
 
   /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
   /** Limit of boolean attributes.
    * @internal */
-  UNUM_LIMIT_BOOLEAN_ATTRIBUTE = UNUM_PARSE_NO_EXPONENT+2
+  UNUM_LIMIT_BOOLEAN_ATTRIBUTE = 0x1003
 } UNumberFormatAttribute;
 
 /**
@@ -1007,7 +1011,7 @@ typedef enum UNumberFormatAttribute {
 * UNUM_DECIMAL_ALWAYS_SHOWN, UNUM_MAX_INTEGER_DIGITS, UNUM_MIN_INTEGER_DIGITS, UNUM_INTEGER_DIGITS,
 * UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER,
 * UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION, UNUM_SECONDARY_GROUPING_SIZE,
-* UNUM_SCALE.
+* UNUM_SCALE, UNUM_MINIMUM_GROUPING_DIGITS.
 * @return The value of attr.
 * @see unum_setAttribute
 * @see unum_getDoubleAttribute
@@ -1030,7 +1034,7 @@ unum_getAttribute(const UNumberFormat*          fmt,
 * UNUM_DECIMAL_ALWAYS_SHOWN, UNUM_MAX_INTEGER_DIGITS, UNUM_MIN_INTEGER_DIGITS, UNUM_INTEGER_DIGITS,
 * UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER,
 * UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION, UNUM_SECONDARY_GROUPING_SIZE,
-* UNUM_LENIENT_PARSE, or UNUM_SCALE.
+* UNUM_LENIENT_PARSE, UNUM_SCALE, UNUM_MINIMUM_GROUPING_DIGITS.
 * @param newValue The new value of attr.
 * @see unum_getAttribute
 * @see unum_getDoubleAttribute
