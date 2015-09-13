@@ -4009,7 +4009,10 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         // * the next collation element beloging to this combining sequence
         //   - has non-zero primary weight
         //   - corresponds to a separate character following the one at end of the current match
-        // * the match end is a normalization boundary
+        //   (the second of these conditions, and perhaps both, may be redundant given the
+        //   subsequent check for normalization boundary; however they are likely much faster
+        //   tests in any case)
+        // * the match limit is a normalization boundary
         UChar32 nextChar = 0;
         U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
         UBool allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
@@ -4017,9 +4020,12 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
                     maxLimit >= lastCEI->highIndex && nextCEI->highIndex > maxLimit &&
                     strsrch->nfd->hasBoundaryBefore(nextChar));
         // If those conditions are met, then:
-        // * do NOT advance the match position to a break boundary
+        // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
+        //   the match limit may be backed off to a previous break boundary. This handles
+        //   cases in which mLimit includes target characters that are ignorable with current
+        //   settings (such as space) and which extend beyond the pattern match.
         // * do NOT require that end of the combining sequence not extend beyond the match in CE space
-        // * do NOT require that match end position be on a breakIter boundary
+        // * do NOT require that match limit be on a breakIter boundary
 
         //  Advance the match end position to the first acceptable match boundary.
         //    This advances the index over any combining charcters.
@@ -4035,8 +4041,9 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
                 mLimit = minLimit;
             } else {
                 int32_t nba = nextBoundaryAfter(strsrch, minLimit);
-                // Note that we can have nba < maxLimit, in which case we want
-                // to set mLimit to nba regardless of allowMidclusterMatch
+                // Note that we can have nba < maxLimit, in which case we want to set
+                // mLimit to nba regardless of allowMidclusterMatch (i.e. we back off
+                // mLimit to the previous breakIterator boundary).
                 if (nba >= lastCEI->highIndex && (!allowMidclusterMatch || nba < maxLimit)) {
                     mLimit = nba;
                 }
@@ -4282,7 +4289,10 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
             // * the next collation element beloging to this combining sequence
             //   - has non-zero primary weight
             //   - corresponds to a separate character following the one at end of the current match
-            // * the match end is a normalization boundary
+            //   (the second of these conditions, and perhaps both, may be redundant given the
+            //   subsequent check for normalization boundary; however they are likely much faster
+            //   tests in any case)
+            // * the match limit is a normalization boundary
             UChar32 nextChar = 0;
             U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
             UBool allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
@@ -4290,16 +4300,20 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
                         maxLimit >= lastCEI->highIndex && nextCEI->highIndex > maxLimit &&
                         strsrch->nfd->hasBoundaryBefore(nextChar));
             // If those conditions are met, then:
-            // * do NOT advance the match position to a break boundary
+            // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
+            //   the match limit may be backed off to a previous break boundary. This handles
+            //   cases in which mLimit includes target characters that are ignorable with current
+            //   settings (such as space) and which extend beyond the pattern match.
             // * do NOT require that end of the combining sequence not extend beyond the match in CE space
-            // * do NOT require that match end position be on a breakIter boundary
+            // * do NOT require that match limit be on a breakIter boundary
 
             //  Advance the match end position to the first acceptable match boundary.
             //    This advances the index over any combining characters.
             if (minLimit < maxLimit) {
                 int32_t nba = nextBoundaryAfter(strsrch, minLimit);
-                // Note that we can have nba < maxLimit, in which case we want
-                // to set mLimit to nba regardless of allowMidclusterMatch
+                // Note that we can have nba < maxLimit, in which case we want to set
+                // mLimit to nba regardless of allowMidclusterMatch (i.e. we back off
+                // mLimit to the previous breakIterator boundary).
                 if (nba >= lastCEI->highIndex && (!allowMidclusterMatch || nba < maxLimit)) {
                     mLimit = nba;
                 }
