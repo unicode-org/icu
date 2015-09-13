@@ -4002,6 +4002,25 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
             found = FALSE;
         }
 
+        // Allow matches to end in the middle of a grapheme cluster if the following
+        // conditions are met; this is needed to make prefix search work properly in
+        // Indic, see #11750
+        // * the default breakIter is being used
+        // * the next collation element beloging to this combining sequence
+        //   - has non-zero primary weight
+        //   - corresponds to a separate character following the one at end of the current match
+        // * the match end is a normalization boundary
+        UChar32 nextChar = 0;
+        U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
+        UBool allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
+                    nextCEI != NULL && (((nextCEI->ce) >> 32) & 0xFFFF0000UL) != 0 &&
+                    maxLimit >= lastCEI->highIndex && nextCEI->highIndex > maxLimit &&
+                    strsrch->nfd->hasBoundaryBefore(nextChar));
+        // If those conditions are met, then:
+        // * do NOT advance the match position to a break boundary
+        // * do NOT require that end of the combining sequence not extend beyond the match in CE space
+        // * do NOT require that match end position be on a breakIter boundary
+
         //  Advance the match end position to the first acceptable match boundary.
         //    This advances the index over any combining charcters.
         mLimit = maxLimit;
@@ -4016,7 +4035,9 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
                 mLimit = minLimit;
             } else {
                 int32_t nba = nextBoundaryAfter(strsrch, minLimit);
-                if (nba >= lastCEI->highIndex) {
+                // Note that we can have nba < maxLimit, in which case we want
+                // to set mLimit to nba regardless of allowMidclusterMatch
+                if (nba >= lastCEI->highIndex && (!allowMidclusterMatch || nba < maxLimit)) {
                     mLimit = nba;
                 }
             }
@@ -4028,14 +4049,16 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         }
     #endif
 
-        // If advancing to the end of a combining sequence in character indexing space
-        //   advanced us beyond the end of the match in CE space, reject this match.
-        if (mLimit > maxLimit) {
-            found = FALSE;
-        }
+        if (!allowMidclusterMatch) {
+            // If advancing to the end of a combining sequence in character indexing space
+            //   advanced us beyond the end of the match in CE space, reject this match.
+            if (mLimit > maxLimit) {
+                found = FALSE;
+            }
 
-        if (!isBreakBoundary(strsrch, mLimit)) {
-            found = FALSE;
+            if (!isBreakBoundary(strsrch, mLimit)) {
+                found = FALSE;
+            }
         }
 
         if (! checkIdentical(strsrch, mStart, mLimit)) {
@@ -4252,25 +4275,47 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
 
             mLimit = maxLimit = nextCEI->lowIndex;
 
+            // Allow matches to end in the middle of a grapheme cluster if the following
+            // conditions are met; this is needed to make prefix search work properly in
+            // Indic, see #11750
+            // * the default breakIter is being used
+            // * the next collation element beloging to this combining sequence
+            //   - has non-zero primary weight
+            //   - corresponds to a separate character following the one at end of the current match
+            // * the match end is a normalization boundary
+            UChar32 nextChar = 0;
+            U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
+            UBool allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
+                        nextCEI != NULL && (((nextCEI->ce) >> 32) & 0xFFFF0000UL) != 0 &&
+                        maxLimit >= lastCEI->highIndex && nextCEI->highIndex > maxLimit &&
+                        strsrch->nfd->hasBoundaryBefore(nextChar));
+            // If those conditions are met, then:
+            // * do NOT advance the match position to a break boundary
+            // * do NOT require that end of the combining sequence not extend beyond the match in CE space
+            // * do NOT require that match end position be on a breakIter boundary
+
             //  Advance the match end position to the first acceptable match boundary.
-            //    This advances the index over any combining charcters.
+            //    This advances the index over any combining characters.
             if (minLimit < maxLimit) {
                 int32_t nba = nextBoundaryAfter(strsrch, minLimit);
-
-                if (nba >= lastCEI->highIndex) {
+                // Note that we can have nba < maxLimit, in which case we want
+                // to set mLimit to nba regardless of allowMidclusterMatch
+                if (nba >= lastCEI->highIndex && (!allowMidclusterMatch || nba < maxLimit)) {
                     mLimit = nba;
                 }
             }
 
-            // If advancing to the end of a combining sequence in character indexing space
-            //   advanced us beyond the end of the match in CE space, reject this match.
-            if (mLimit > maxLimit) {
-                found = FALSE;
-            }
+            if (!allowMidclusterMatch) {
+                // If advancing to the end of a combining sequence in character indexing space
+                //   advanced us beyond the end of the match in CE space, reject this match.
+                if (mLimit > maxLimit) {
+                    found = FALSE;
+                }
 
-            // Make sure the end of the match is on a break boundary
-            if (!isBreakBoundary(strsrch, mLimit)) {
-                found = FALSE;
+                // Make sure the end of the match is on a break boundary
+                if (!isBreakBoundary(strsrch, mLimit)) {
+                    found = FALSE;
+                }
             }
 
         } else {

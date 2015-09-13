@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2011 International Business Machines 
+ * Copyright (c) 2001-2011,2015 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File usrchtst.c
@@ -2987,6 +2987,24 @@ static void TestMatchFollowedByIgnorables(void) {
     ucol_close(coll);
 }
 
+static void TestIndicPrefixMatch(void) // <rdar://problem/18063262>
+{
+    int count = 0;
+    UErrorCode status = U_ZERO_ERROR;
+    open(&status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
+        return;
+    }
+    while (INDICPREFIXMATCH[count].text != NULL) {
+        if (!assertEqual(INDICPREFIXMATCH[count])) {
+            log_err("Error at test number %d\n", count);
+        }
+        count ++;
+    }
+    close();
+}
+
 /**
 * addSearchTest
 */
@@ -3049,6 +3067,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestPCEBuffer_100df, "tscoll/usrchtst/TestPCEBuffer/1_00df");
     addTest(root, &TestPCEBuffer_2surr, "tscoll/usrchtst/TestPCEBuffer/2_dfff");
     addTest(root, &TestMatchFollowedByIgnorables, "tscoll/usrchtst/TestMatchFollowedByIgnorables");
+    addTest(root, &TestIndicPrefixMatch, "tscoll/usrchtst/TestIndicPrefixMatch");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
