@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2011 International Business Machines 
+ * Copyright (c) 2001-2011,2015 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File USRCHDAT.H
@@ -751,6 +751,16 @@ static const SearchData DIACRITICMATCH[] = {
     {"\\u0061\\u0061\\u00E1", "\\u0061\\u00E1", NULL, UCOL_SECONDARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {1, -1}, {2}},
     {"\\u0020\\u00C2\\u0303\\u0020\\u0041\\u0061\\u1EAA\\u0041\\u0302\\u0303\\u00C2\\u0303\\u1EAB\\u0061\\u0302\\u0303\\u00E2\\u0303\\uD806\\uDC01\\u0300\\u0020",
      "\\u00C2\\u0303", "LDE_AN_CX_EX_FX_HX_NX_S1", UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {1, 4, 5, 6, 7, 10, 12, 13, 16,-1}, {2, 1, 1, 1, 3, 2, 1, 3, 2}},
+    {NULL, NULL, NULL, UCOL_TERTIARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {-1}, {0}}
+};
+
+static const SearchData INDICPREFIXMATCH[] = { // <rdar://problem/18063262>
+    {"\\u0915\\u0020\\u0915\\u0901\\u0020\\u0915\\u0902\\u0020\\u0915\\u0903\\u0020\\u0915\\u0940\\u0020\\u0915\\u093F\\u0020\\u0915\\u0943\\u0020\\u0915\\u093C\\u0020\\u0958",
+     "\\u0915",               NULL, UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {0, 2, 5, 8, 11, 14, 17, 20, 23,-1}, {1, 2, 2, 2, 1, 1, 1, 2, 1}},
+    {"\\u0915\\u0924\\u0020\\u0915\\u0924\\u0940\\u0020\\u0915\\u0924\\u093F\\u0020\\u0915\\u0924\\u0947\\u0020\\u0915\\u0943\\u0924\\u0020\\u0915\\u0943\\u0924\\u0947",
+     "\\u0915\\u0924",        NULL, UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {0, 3, 7, 11, -1}, {2, 2, 2, 2}},
+    {"\\u0915\\u0924\\u0020\\u0915\\u0924\\u0940\\u0020\\u0915\\u0924\\u093F\\u0020\\u0915\\u0924\\u0947\\u0020\\u0915\\u0943\\u0924\\u0020\\u0915\\u0943\\u0924\\u0947",
+     "\\u0915\\u0943\\u0924", NULL, UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {15, 19, -1}, {3, 3}},
     {NULL, NULL, NULL, UCOL_TERTIARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {-1}, {0}}
 };
 
