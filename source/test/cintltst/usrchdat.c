@@ -754,7 +754,7 @@ static const SearchData DIACRITICMATCH[] = {
     {NULL, NULL, NULL, UCOL_TERTIARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {-1}, {0}}
 };
 
-static const SearchData INDICPREFIXMATCH[] = { // <rdar://problem/18063262>
+static const SearchData INDICPREFIXMATCH[] = {
     {"\\u0915\\u0020\\u0915\\u0901\\u0020\\u0915\\u0902\\u0020\\u0915\\u0903\\u0020\\u0915\\u0940\\u0020\\u0915\\u093F\\u0020\\u0915\\u0943\\u0020\\u0915\\u093C\\u0020\\u0958",
      "\\u0915",               NULL, UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {0, 2, 5, 8, 11, 14, 17, 20, 23,-1}, {1, 2, 2, 2, 1, 1, 1, 2, 1}},
     {"\\u0915\\u0924\\u0020\\u0915\\u0924\\u0940\\u0020\\u0915\\u0924\\u093F\\u0020\\u0915\\u0924\\u0947\\u0020\\u0915\\u0943\\u0924\\u0020\\u0915\\u0943\\u0924\\u0947",

@@ -4041,9 +4041,9 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
                 mLimit = minLimit;
             } else {
                 int32_t nba = nextBoundaryAfter(strsrch, minLimit);
-                // Note that we can have nba < maxLimit, in which case we want to set
-                // mLimit to nba regardless of allowMidclusterMatch (i.e. we back off
-                // mLimit to the previous breakIterator boundary).
+                // Note that we can have nba < maxLimit && nba >= minLImit, in which
+                // case we want to set mLimit to nba regardless of allowMidclusterMatch
+                // (i.e. we back off mLimit to the previous breakIterator boundary).
                 if (nba >= lastCEI->highIndex && (!allowMidclusterMatch || nba < maxLimit)) {
                     mLimit = nba;
                 }
@@ -4311,9 +4311,9 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
             //    This advances the index over any combining characters.
             if (minLimit < maxLimit) {
                 int32_t nba = nextBoundaryAfter(strsrch, minLimit);
-                // Note that we can have nba < maxLimit, in which case we want to set
-                // mLimit to nba regardless of allowMidclusterMatch (i.e. we back off
-                // mLimit to the previous breakIterator boundary).
+                // Note that we can have nba < maxLimit && nba >= minLImit, in which
+                // case we want to set mLimit to nba regardless of allowMidclusterMatch
+                // (i.e. we back off mLimit to the previous breakIterator boundary).
                 if (nba >= lastCEI->highIndex && (!allowMidclusterMatch || nba < maxLimit)) {
                     mLimit = nba;
                 }
