@@ -2987,7 +2987,7 @@ static void TestMatchFollowedByIgnorables(void) {
     ucol_close(coll);
 }
 
-static void TestIndicPrefixMatch(void) // <rdar://problem/18063262>
+static void TestIndicPrefixMatch(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
