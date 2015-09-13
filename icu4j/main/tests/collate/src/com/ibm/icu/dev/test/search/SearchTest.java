@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -512,6 +512,15 @@ public class SearchTest extends TestFmwk {
     static SearchData TEXTCANONICAL[] = {
         SD("the foxy brown fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(4, 15, -1), IA(3, 3)),
         SD("the quick brown fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(16, -1), IA(3)),
+    };
+
+    static SearchData INDICPREFIXMATCH[] = {
+        SD("\u0915\u0020\u0915\u0901\u0020\u0915\u0902\u0020\u0915\u0903\u0020\u0915\u0940\u0020\u0915\u093F\u0020\u0915\u0943\u0020\u0915\u093C\u0020\u0958",
+                "\u0915", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 2, 5, 8, 11, 14, 17, 20, 23,-1), IA(1, 2, 2, 2, 1, 1, 1, 2, 1)),
+        SD("\u0915\u0924\u0020\u0915\u0924\u0940\u0020\u0915\u0924\u093F\u0020\u0915\u0924\u0947\u0020\u0915\u0943\u0924\u0020\u0915\u0943\u0924\u0947",
+                "\u0915\u0924", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 3, 7, 11, -1), IA(2, 2, 2, 2)),
+        SD("\u0915\u0924\u0020\u0915\u0924\u0940\u0020\u0915\u0924\u093F\u0020\u0915\u0924\u0947\u0020\u0915\u0943\u0924\u0020\u0915\u0943\u0924\u0947",
+                "\u0915\u0943\u0924", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(15, 19, -1), IA(3, 3)),
     };
 
     /**
@@ -2161,6 +2170,14 @@ public class SearchTest extends TestFmwk {
                 if ( ioff > 0 ) {
                     errln("Error: in locale " + localeString + ", expected SearchIterator.previous() returned fewer matches than expected");
                 }
+            }
+        }
+    }
+
+    public void TestIndicPrefixMatch() {
+        for (int count = 0; count < INDICPREFIXMATCH.length; count++) {
+            if (!assertEqual(INDICPREFIXMATCH[count])) {
+                errln("Error at test number" + count);
             }
         }
     }
