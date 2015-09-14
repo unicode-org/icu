@@ -1901,36 +1901,55 @@ UnicodeString UnicodeSetTest::getPairs(const UnicodeSet& set) {
  * get the same thing back
  */
 void UnicodeSetTest::checkRoundTrip(const UnicodeSet& s) {
-    UErrorCode ec = U_ZERO_ERROR;
-
-    UnicodeSet t(s);
-    checkEqual(s, t, "copy ct");
-
-    t = s;
-    checkEqual(s, t, "operator=");
-
-    copyWithIterator(t, s, FALSE);
-    checkEqual(s, t, "iterator roundtrip");
-
-    copyWithIterator(t, s, TRUE); // try range
-    checkEqual(s, t, "iterator roundtrip");
-        
-    UnicodeString pat; s.toPattern(pat, FALSE);
-    t.applyPattern(pat, ec);
-    if (U_FAILURE(ec)) {
-        errln("FAIL: applyPattern");
-        return;
-    } else {
-        checkEqual(s, t, "toPattern(false)");
+    {
+        UnicodeSet t(s);
+        checkEqual(s, t, "copy ct");
     }
-        
-    s.toPattern(pat, TRUE);
-    t.applyPattern(pat, ec);
-    if (U_FAILURE(ec)) {
-        errln("FAIL: applyPattern");
-        return;
-    } else {
-        checkEqual(s, t, "toPattern(true)");
+
+    {
+        UnicodeSet t(0xabcd, 0xdef0);  // dummy contents should be overwritten
+        t = s;
+        checkEqual(s, t, "operator=");
+    }
+
+    {
+        UnicodeSet t;
+        copyWithIterator(t, s, FALSE);
+        checkEqual(s, t, "iterator roundtrip");
+    }
+
+    {
+        UnicodeSet t;
+        copyWithIterator(t, s, TRUE); // try range
+        checkEqual(s, t, "iterator roundtrip");
+    }
+
+    {
+        UnicodeSet t;
+        UnicodeString pat;
+        UErrorCode ec = U_ZERO_ERROR;
+        s.toPattern(pat, FALSE);
+        t.applyPattern(pat, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: toPattern(escapeUnprintable=FALSE), applyPattern - %s", u_errorName(ec));
+            return;
+        } else {
+            checkEqual(s, t, "toPattern(false)");
+        }
+    }
+
+    {
+        UnicodeSet t;
+        UnicodeString pat;
+        UErrorCode ec = U_ZERO_ERROR;
+        s.toPattern(pat, TRUE);
+        t.applyPattern(pat, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: toPattern(escapeUnprintable=TRUE), applyPattern - %s", u_errorName(ec));
+            return;
+        } else {
+            checkEqual(s, t, "toPattern(true)");
+        }
     }
 }
 
@@ -3890,7 +3909,27 @@ void UnicodeSetTest::TestUCAUnsafeBackwards() {
     checkSerializeRoundTrip(*unsafeBackwardSet, errorCode);
 
     if(!logKnownIssue("11891","UnicodeSet fails to round trip on CollationRoot...unsafeBackwards set")) {
-      checkRoundTrip(*unsafeBackwardSet);
+        // simple test case
+        // TODO(ticket #11891): Simplify this test function to this simple case. Rename it appropriately.
+        // TODO(ticket #11891): Port test to Java. Is this a bug there, too?
+        UnicodeSet surrogates;
+        surrogates.add(0xd83a);  // a lead surrogate
+        surrogates.add(0xdc00, 0xdfff);  // a range of trail surrogates
+        UnicodeString pat;
+        surrogates.toPattern(pat, FALSE);  // bad: [ 0xd83a, 0xdc00, 0x2d, 0xdfff ]
+        // TODO: Probably fix either UnicodeSet::_generatePattern() or _appendToPat()
+        // so that at least one type of surrogate code points are escaped,
+        // or (minimally) so that adjacent lead+trail surrogate code points are escaped.
+        errorCode = U_ZERO_ERROR;
+        UnicodeSet s2;
+        s2.applyPattern(pat, errorCode);  // looks like invalid range [ 0x1e800, 0x2d, 0xdfff ]
+        if(U_FAILURE(errorCode)) {
+            errln("FAIL: surrogates to/from pattern - %s", u_errorName(errorCode));
+        } else {
+            checkEqual(surrogates, s2, "surrogates to/from pattern");
+        }
+        // This occurs in the UCA unsafe-backwards set.
+        checkRoundTrip(*unsafeBackwardSet);
     }
 #endif
 }
