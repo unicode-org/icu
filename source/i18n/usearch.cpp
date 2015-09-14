@@ -4013,12 +4013,15 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         //   subsequent check for normalization boundary; however they are likely much faster
         //   tests in any case)
         // * the match limit is a normalization boundary
-        UChar32 nextChar = 0;
-        U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
-        UBool allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
+        UBool allowMidclusterMatch = FALSE;
+        if (strsrch->search->text != NULL && strsrch->search->textLength > maxLimit) {
+            UChar32 nextChar = 0;
+            U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
+            allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
                     nextCEI != NULL && (((nextCEI->ce) >> 32) & 0xFFFF0000UL) != 0 &&
                     maxLimit >= lastCEI->highIndex && nextCEI->highIndex > maxLimit &&
                     strsrch->nfd->hasBoundaryBefore(nextChar));
+        }
         // If those conditions are met, then:
         // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
         //   the match limit may be backed off to a previous break boundary. This handles
@@ -4293,12 +4296,15 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
             //   subsequent check for normalization boundary; however they are likely much faster
             //   tests in any case)
             // * the match limit is a normalization boundary
-            UChar32 nextChar = 0;
-            U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
-            UBool allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
+            UBool allowMidclusterMatch = FALSE;
+            if (strsrch->search->text != NULL && strsrch->search->textLength > maxLimit) {
+                UChar32 nextChar = 0;
+                U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
+                allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
                         nextCEI != NULL && (((nextCEI->ce) >> 32) & 0xFFFF0000UL) != 0 &&
                         maxLimit >= lastCEI->highIndex && nextCEI->highIndex > maxLimit &&
                         strsrch->nfd->hasBoundaryBefore(nextChar));
+            }
             // If those conditions are met, then:
             // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
             //   the match limit may be backed off to a previous break boundary. This handles
