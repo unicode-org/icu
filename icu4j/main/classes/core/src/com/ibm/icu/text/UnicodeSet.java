@@ -2432,17 +2432,17 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         return this;
     }
 
-    // Add constants to make the code easier to follow
+    // Add constants to make the applyPattern() code easier to follow.
 
-    static final int LAST0_START = 0, 
+    private static final int LAST0_START = 0, 
             LAST1_RANGE = 1, 
             LAST2_SET = 2;
 
-    static final int MODE0_NONE = 0, 
+    private static final int MODE0_NONE = 0, 
             MODE1_INBRACKET = 1, 
             MODE2_OUTBRACKET = 2;
 
-    static final int SETMODE0_NONE = 0, 
+    private static final int SETMODE0_NONE = 0, 
             SETMODE1_UNICODESET = 1, 
             SETMODE2_PROPERTYPAT = 2, 
             SETMODE3_PREPARSED = 3;
