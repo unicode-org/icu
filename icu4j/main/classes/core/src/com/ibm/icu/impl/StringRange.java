@@ -45,7 +45,7 @@ public class StringRange {
 
     /**
      * Compact the set of strings.
-     * @param source
+     * @param source set of strings
      * @param adder adds each pair to the output. See the {@link Adder} interface.
      * @param shorterPairs use abc-d instead of abc-abd
      * @param moreCompact use a more compact form, at the expense of more processing. If false, source must be sorted.
@@ -101,9 +101,9 @@ public class StringRange {
     
     /**
      * Faster but not as good compaction. Only looks at final codepoint.
-     * @param source
-     * @param adder
-     * @param shorterPairs
+     * @param source set of strings
+     * @param adder adds each pair to the output. See the {@link Adder} interface.
+     * @param shorterPairs use abc-d instead of abc-abd
      */
     public static void compact(Set<String> source, Adder adder, boolean shorterPairs) {
         compact(source,adder,shorterPairs,false);
@@ -166,10 +166,7 @@ public class StringRange {
             }
         }
         public boolean merge(int pivot, Ranges other) {
-//            if (this.toString().equals("afz")) {
-//                int debug = 0;
-//            }
-           // we will merge items if the pivot is adjacent, and all other ranges are equal
+           // We merge items if the pivot is adjacent, and all later ranges are equal.
            for (int i = ranges.length-1; i >= 0; --i) {
                if (i == pivot) {
                    if (ranges[i].max != other.ranges[i].min-1) { // not adjacent
