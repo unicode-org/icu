@@ -3809,6 +3809,28 @@ static UCompareCEsResult compareCE64s(int64_t targCE, int64_t patCE, int16_t com
 // TODO: #if BOYER_MOORE, need 32-bit version of compareCE64s
 #endif
 
+namespace {
+
+UChar32 codePointAt(const USearch &search, int32_t index) {
+    if (index < search.textLength) {
+        UChar32 c;
+        U16_NEXT(search.text, index, search.textLength, c);
+        return c;
+    }
+    return U_SENTINEL;
+}
+
+UChar32 codePointBefore(const USearch &search, int32_t index) {
+    if (0 < index) {
+        UChar32 c;
+        U16_PREV(search.text, 0, index, c);
+        return c;
+    }
+    return U_SENTINEL;
+}
+
+}  // namespace
+
 U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
                                        int32_t        startIdx,
                                        int32_t        *matchStart,
@@ -4006,7 +4028,7 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         // conditions are met; this is needed to make prefix search work properly in
         // Indic, see #11750
         // * the default breakIter is being used
-        // * the next collation element beloging to this combining sequence
+        // * the next collation element after this combining sequence
         //   - has non-zero primary weight
         //   - corresponds to a separate character following the one at end of the current match
         //   (the second of these conditions, and perhaps both, may be redundant given the
@@ -4015,12 +4037,12 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         // * the match limit is a normalization boundary
         UBool allowMidclusterMatch = FALSE;
         if (strsrch->search->text != NULL && strsrch->search->textLength > maxLimit) {
-            UChar32 nextChar = 0;
-            U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
-            allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
+            allowMidclusterMatch =
+                    strsrch->search->breakIter == NULL &&
                     nextCEI != NULL && (((nextCEI->ce) >> 32) & 0xFFFF0000UL) != 0 &&
                     maxLimit >= lastCEI->highIndex && nextCEI->highIndex > maxLimit &&
-                    strsrch->nfd->hasBoundaryBefore(nextChar));
+                    (strsrch->nfd->hasBoundaryBefore(codePointAt(*strsrch->search, maxLimit)) ||
+                        strsrch->nfd->hasBoundaryAfter(codePointBefore(*strsrch->search, maxLimit)));
         }
         // If those conditions are met, then:
         // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
@@ -4289,7 +4311,7 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
             // conditions are met; this is needed to make prefix search work properly in
             // Indic, see #11750
             // * the default breakIter is being used
-            // * the next collation element beloging to this combining sequence
+            // * the next collation element after this combining sequence
             //   - has non-zero primary weight
             //   - corresponds to a separate character following the one at end of the current match
             //   (the second of these conditions, and perhaps both, may be redundant given the
@@ -4298,12 +4320,12 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
             // * the match limit is a normalization boundary
             UBool allowMidclusterMatch = FALSE;
             if (strsrch->search->text != NULL && strsrch->search->textLength > maxLimit) {
-                UChar32 nextChar = 0;
-                U16_GET(strsrch->search->text, 0, maxLimit, strsrch->search->textLength, nextChar);
-                allowMidclusterMatch = (strsrch->search->breakIter == NULL &&
+                allowMidclusterMatch =
+                        strsrch->search->breakIter == NULL &&
                         nextCEI != NULL && (((nextCEI->ce) >> 32) & 0xFFFF0000UL) != 0 &&
                         maxLimit >= lastCEI->highIndex && nextCEI->highIndex > maxLimit &&
-                        strsrch->nfd->hasBoundaryBefore(nextChar));
+                        (strsrch->nfd->hasBoundaryBefore(codePointAt(*strsrch->search, maxLimit)) ||
+                            strsrch->nfd->hasBoundaryAfter(codePointBefore(*strsrch->search, maxLimit)));
             }
             // If those conditions are met, then:
             // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
