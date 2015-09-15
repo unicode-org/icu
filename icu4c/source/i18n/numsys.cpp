@@ -244,7 +244,7 @@ UBool NumberingSystem::isAlgorithmic() const {
 }
 
 StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
-
+    // TODO(ticket #11908): Init-once static cache, with u_cleanup() callback.
     static StringEnumeration* availableNames = NULL;
 
     if (U_FAILURE(status)) {
@@ -252,9 +252,9 @@ StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
     }
 
     if ( availableNames == NULL ) {
+        // TODO: Simple array of UnicodeString objects, based on length of table resource?
         LocalPointer<UVector> numsysNames(new UVector(uprv_deleteUObject, NULL, status), status);
         if (U_FAILURE(status)) {
-            status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
         
@@ -275,8 +275,15 @@ StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
         }
 
         ures_close(numberingSystemsInfo);
-        availableNames = new NumsysNameEnumeration(numsysNames.orphan(),status);
-
+        if (U_FAILURE(status)) {
+            return NULL;
+        }
+        availableNames = new NumsysNameEnumeration(numsysNames.getAlias(), status);
+        if (availableNames == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        numsysNames.orphan();  // The names got adopted.
     }
 
     return availableNames;
