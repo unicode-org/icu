@@ -1966,17 +1966,6 @@ void UnicodeSetTest::checkSerializeRoundTrip(const UnicodeSet& t, UErrorCode &st
     errln("checkSerializeRoundTrip: error %s serializing buffer\n", u_errorName(status));
     return;
   }
-
-#if 0
-  UnicodeString pat; t.toPattern(pat, FALSE);
-  infoln(pat);
-  printf(" %d: ", len);
-  for(int i=0;i<len;i++) {
-    printf( " %04X ", serializeBuffer.getAlias()[i]);
-  }
-  printf("\n");
-#endif
-  
   UnicodeSet deserialized(serializeBuffer.getAlias(), len, UnicodeSet::kSerialized, status);
   if(U_FAILURE(status)) {
     errln("checkSerializeRoundTrip: error %s deserializing buffer: buf %p len %d, original %d\n", u_errorName(status), serializeBuffer.getAlias(), len, t.getRangeCount());

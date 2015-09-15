@@ -379,7 +379,6 @@ public:
 
     /**
      * Constructs a set from the output of serialize().
-     * The resulting set will be frozen.
      *
      * @param buffer the 16 bit array
      * @param bufferLen the original length returned from serialize()
@@ -391,7 +390,7 @@ public:
     UnicodeSet(const uint16_t buffer[], int32_t bufferLen,
                ESerialization serialization, UErrorCode &status);
 #endif
-    
+
     /**
      * Constructs a set from the given pattern.  See the class
      * description for the syntax of the pattern language.
