@@ -10,7 +10,6 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 
@@ -1165,28 +1164,19 @@ public final class StringSearch extends SearchIterator {
             // conditions are met; this is needed to make prefix search work properly in
             // Indic, see #11750
             // * the default breakIter is being used
-            // * the next collation element beloging to this combining sequence
+            // * the next collation element after this combining sequence
             //   - has non-zero primary weight
             //   - corresponds to a separate character following the one at end of the current match
             //   (the second of these conditions, and perhaps both, may be redundant given the
             //   subsequent check for normalization boundary; however they are likely much faster
             //   tests in any case)
             // * the match limit is a normalization boundary
-            
-            // Getting nextChar is a bit complicated since our representation of target text
-            // is a CharacterIterator.
-            int currentIterIndex = targetText.getIndex();
-            targetText.setIndex(maxLimit);
-            char[] codeUnits = new char[2];
-            codeUnits[0] = targetText.current();
-            codeUnits[1] = targetText.next();
-            targetText.setIndex(currentIterIndex); // restore targetText iter position
-            int nextChar = (codeUnits[1] == CharacterIterator.DONE || !UTF16.isLeadSurrogate(codeUnits[0]) || !UTF16.isTrailSurrogate(codeUnits[1]))?
-                                codeUnits[0]: UTF16.charAt(codeUnits, 0, 2, 0);
-            boolean allowMidclusterMatch = (breakIterator == null &&
+            boolean allowMidclusterMatch =
+                            breakIterator == null &&
                             nextCEI != null && (((nextCEI.ce_) >>> 32) & 0xFFFF0000L) != 0 &&
                             maxLimit >= lastCEI.highIndex_ && nextCEI.highIndex_ > maxLimit &&
-                            nfd_.hasBoundaryBefore(nextChar));
+                            (nfd_.hasBoundaryBefore(codePointAt(targetText, maxLimit)) ||
+                                    nfd_.hasBoundaryAfter(codePointBefore(targetText, maxLimit)));
 
             // If those conditions are met, then:
             // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
@@ -1253,6 +1243,35 @@ public final class StringSearch extends SearchIterator {
         }
 
         return found;
+    }
+
+    private static int codePointAt(CharacterIterator iter, int index) {
+        int currentIterIndex = iter.getIndex();
+        char codeUnit = iter.setIndex(index);
+        int cp = codeUnit;
+        if (Character.isHighSurrogate(codeUnit)) {
+            char nextUnit = iter.next();
+            if (Character.isLowSurrogate(nextUnit)) {
+                cp = Character.toCodePoint(codeUnit, nextUnit);
+            }
+        }
+        iter.setIndex(currentIterIndex);  // restore iter position
+        return cp;
+    }
+
+    private static int codePointBefore(CharacterIterator iter, int index) {
+        int currentIterIndex = iter.getIndex();
+        iter.setIndex(index);
+        char codeUnit = iter.previous();
+        int cp = codeUnit;
+        if (Character.isLowSurrogate(codeUnit)) {
+            char prevUnit = iter.previous();
+            if (Character.isHighSurrogate(prevUnit)) {
+                cp = Character.toCodePoint(prevUnit, codeUnit);
+            }
+        }
+        iter.setIndex(currentIterIndex);  // restore iter position
+        return cp;
     }
 
     private boolean searchBackwards(int startIdx, Match m) {
@@ -1405,28 +1424,19 @@ public final class StringSearch extends SearchIterator {
                 // conditions are met; this is needed to make prefix search work properly in
                 // Indic, see #11750
                 // * the default breakIter is being used
-                // * the next collation element beloging to this combining sequence
+                // * the next collation element after this combining sequence
                 //   - has non-zero primary weight
                 //   - corresponds to a separate character following the one at end of the current match
                 //   (the second of these conditions, and perhaps both, may be redundant given the
                 //   subsequent check for normalization boundary; however they are likely much faster
                 //   tests in any case)
                 // * the match limit is a normalization boundary
-            
-                // Getting nextChar is a bit complicated since our representation of target text
-                // is a CharacterIterator.
-                int currentIterIndex = targetText.getIndex();
-                targetText.setIndex(maxLimit);
-                char[] codeUnits = new char[2];
-                codeUnits[0] = targetText.current();
-                codeUnits[1] = targetText.next();
-                targetText.setIndex(currentIterIndex); // restore targetText iter position
-                int nextChar = (codeUnits[1] == CharacterIterator.DONE || !UTF16.isLeadSurrogate(codeUnits[0]) || !UTF16.isTrailSurrogate(codeUnits[1]))?
-                                    codeUnits[0]: UTF16.charAt(codeUnits, 0, 2, 0);
-                boolean allowMidclusterMatch = (breakIterator == null &&
+                boolean allowMidclusterMatch =
+                                breakIterator == null &&
                                 nextCEI != null && (((nextCEI.ce_) >>> 32) & 0xFFFF0000L) != 0 &&
                                 maxLimit >= lastCEI.highIndex_ && nextCEI.highIndex_ > maxLimit &&
-                                nfd_.hasBoundaryBefore(nextChar));
+                                (nfd_.hasBoundaryBefore(codePointAt(targetText, maxLimit)) ||
+                                        nfd_.hasBoundaryAfter(codePointBefore(targetText, maxLimit)));
 
                 // If those conditions are met, then:
                 // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
