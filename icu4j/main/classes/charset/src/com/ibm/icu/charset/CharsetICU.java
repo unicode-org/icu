@@ -19,13 +19,46 @@ import com.ibm.icu.text.UnicodeSet;
 /**
  * <p>A subclass of java.nio.Charset for providing implementation of ICU's charset converters.
  * This API is used to convert codepage or character encoded data to and
- * from UTF-16. You can open a converter with {@link Charset#forName } and {@link #forNameICU }. With that
+ * from UTF-16. You can open a converter with {@link Charset#forName} and {@link #forNameICU}. With that
  * converter, you can get its properties, set options, convert your data.</p>
  *
- * <p>Since many software programs recogize different converter names for
+ * <p>Since many software programs recognize different converter names for
  * different types of converters, there are other functions in this API to
- * iterate over the converter aliases. 
- * 
+ * iterate over the converter aliases.
+ *
+ * <p>Note that {@link #name()} cannot always return a unique charset name.
+ * {@link Charset} documents that,
+ * for charsets listed in the IANA Charset Registry,
+ * the {@link #name()} must be listed there,
+ * and it “must be the MIME-preferred name” if there are multiple names.
+ *
+ * <p>However, there are different implementations of many if not most charsets,
+ * ICU provides multiple variants for some of them,
+ * ICU provides variants of some java.nio-system-supported charsets,
+ * and ICU users are free to add more variants.
+ * This is so that applications can be compatible with multiple implementations at the same time.
+ *
+ * <p>This is in conflict with the {@link Charset#name()} requirements.
+ * It is not possible to offer variants of an IANA charset and
+ * always use the MIME-preferred name and also have those names be unique.
+ *
+ * <p>{@link #name()} returns the MIME-preferred name, or IANA name,
+ * so that it can always be used for the charset field in internet protocols.
+ *
+ * <p>Same-name charsets are accessible via {@link Charset#forName} or {@link #forNameICU}
+ * by using unique aliases (e.g., the ICU-canonical names).
+ *
+ * <p>{@link Charset} also documents that
+ * “Two charsets are equal if, and only if, they have the same canonical names.”
+ * This is not possible.
+ *
+ * <p>Unfortunately, {@link Charset#equals} is final, and
+ * {@link Charset#availableCharsets} returns
+ * “a sorted map from canonical charset names to charset objects”.
+ * Since {@link #name()} cannot be unique,
+ * {@link #equals} cannot work properly in such cases, and
+ * {@link Charset#availableCharsets} can only include one variant for a name.
+ *
  * @stable ICU 3.6
  */
 public abstract class CharsetICU extends Charset{
