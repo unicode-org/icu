@@ -1474,7 +1474,6 @@ UnicodeSet& UnicodeSet::compact() {
 
 /**
  * Deserialize constructor.
- * Result will be frozen.
  */
 UnicodeSet::UnicodeSet(const uint16_t data[], int32_t dataLen, ESerialization serialization, UErrorCode &ec)
   : len(1), capacity(1+START_EXTRA), list(0), bmpSet(0), buffer(0),
@@ -1499,7 +1498,7 @@ UnicodeSet::UnicodeSet(const uint16_t data[], int32_t dataLen, ESerialization se
     setToBogus();
     return;
   }
-  
+
   // bmp?
   int32_t headerSize = ((data[0]&0x8000)) ?2:1;
   int32_t bmpLength = (headerSize==1)?data[0]:data[1];
@@ -1522,15 +1521,6 @@ UnicodeSet::UnicodeSet(const uint16_t data[], int32_t dataLen, ESerialization se
     printf("<<16@%d[%d] %X\n", i+headerSize, i, list[i]);
 #endif
   }
-  /*
-  if(bmpLength>0) {
-    bmpSet= new BMPSet(list, bmpLength);
-    if(bmpSet == NULL) {
-      ec = U_MEMORY_ALLOCATION_ERROR;
-      setToBogus();
-      return;
-    }
-    }*/
   // copy smp
   for(i=bmpLength;i<len;i++) {
     list[i] = ((UChar32)data[headerSize+bmpLength+(i-bmpLength)*2+0] << 16) +

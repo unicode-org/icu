@@ -15,9 +15,9 @@
 /**
  * Define the type of generator to use. Choose one.
  */
-#define SERIALIZE 1   //< Default: use UnicodeSet.serialize() (best, fast, requires new UnicodeSet c'tor)
-#define RANGES 0      //< Enumerate ranges (works, not as fast)
-#define PATTERN 0     //< Generate a UnicodeSet pattern (broken AND probably slow)
+#define SERIALIZE 1   //< Default: use UnicodeSet.serialize() and a new internal c'tor
+#define RANGES 0      //< Enumerate ranges (works, not as fast. No support in collationdatareader.cpp)
+#define PATTERN 0     //< Generate a UnicodeSet pattern (depends on #11891 AND probably slower. No support in collationdatareader.cpp)
 
 int main(int argc, const char *argv[]) {
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -57,7 +57,7 @@ int main(int argc, const char *argv[]) {
 #endif
     
 #if PATTERN
-    fprintf(stderr,".. pattern\n");
+    fprintf(stderr,".. pattern. (Note: collationdatareader.cpp does not support this form also see #11891)\n");
     // attempt to use pattern
     
     UnicodeString pattern;
@@ -128,6 +128,7 @@ int main(int argc, const char *argv[]) {
 #endif
 
 #if RANGE
+    fprintf(stderr, "COLLUNSAFE_RANGE - no code support in collationdatareader.cpp for this\n");
     printf("#define COLLUNSAFE_RANGE 1\n");
     printf("static const int32_t unsafe_rangeCount = %d;\n", rangeCount);
     printf("static const UChar32 unsafe_ranges[%d] = { \n", rangeCount*2);
