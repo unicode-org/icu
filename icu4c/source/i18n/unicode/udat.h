@@ -875,13 +875,14 @@ typedef enum UDateFormatBooleanAttribute {
 #ifndef U_HIDE_DRAFT_API
     /**
      * indicates tolerance of a partial literal match
-     * @draft ICU 53
+     * e.g. accepting "--mon-02-march-2011" for a pattern of "'--: 'EEE-WW-MMMM-yyyy"
+     * @draft ICU 56
      */
-    UDAT_PARSE_PARTIAL_MATCH = 2,
+    UDAT_PARSE_PARTIAL_LITERAL_MATCH = 2,
     /**  
      * indicates tolerance of pattern mismatch between input data and specified format pattern. 
      * e.g. accepting "September" for a month pattern of MMM ("Sep")   
-     * @draft ICU 53
+     * @draft ICU 56
      */ 
     UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH = 3,
 #endif /* U_HIDE_DRAFT_API */

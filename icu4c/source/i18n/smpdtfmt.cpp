@@ -934,7 +934,7 @@ void SimpleDateFormat::initializeBooleanAttributes()
 
     setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status);
     setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
-    setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
+    setBooleanAttribute(UDAT_PARSE_PARTIAL_LITERAL_MATCH, true, status);
     setBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, true, status);
 }
 
@@ -2125,7 +2125,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
             abutPat = -1; // End of any abutting fields
             
-            if (! matchLiterals(fPattern, i, text, pos, getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status), getBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, status), isLenient())) {
+            if (! matchLiterals(fPattern, i, text, pos, getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status), getBooleanAttribute(UDAT_PARSE_PARTIAL_LITERAL_MATCH, status), isLenient())) {
                 status = U_PARSE_ERROR;
                 goto ExitParse;
             }
