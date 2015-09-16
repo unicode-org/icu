@@ -501,7 +501,9 @@ public abstract class DateFormat extends UFormat {
          * @draft ICU 56
          * @provisional This API might change or be removed in a future release.
          */
-        PARSE_PARTIAL_LITERAL_MATCH
+        PARSE_PARTIAL_LITERAL_MATCH,
+        // old name left in for previous serialization checks
+        PARSE_PARTIAL_MATCH
     };
     
     /**
