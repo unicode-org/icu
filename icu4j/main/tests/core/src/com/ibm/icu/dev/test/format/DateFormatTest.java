@@ -4581,7 +4581,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             SimpleDateFormat sdfmt = new SimpleDateFormat(item.pattern, item.locale);
             sdfmt.setBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE, item.leniency)
                     .setBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC, item.leniency)
-                    .setBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_MATCH, item.leniency);
+                    .setBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH, item.leniency);
 
             ParsePosition p = new ParsePosition(0);
             Date d = sdfmt.parse(item.parseString, p);
@@ -4745,7 +4745,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         assertTrue("isCalendarLenient default", fmt.isCalendarLenient());
         assertTrue("ALLOW_WHITESPACE default", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
         assertTrue("ALLOW_NUMERIC default", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
-        assertTrue("PARTIAL_MATCH default", fmt.getBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_MATCH));
+        assertTrue("PARTIAL_MATCH default", fmt.getBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH));
         assertTrue("MULTIPLE_PATTERNS default", fmt.getBooleanAttribute(BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH));
 
         // Set calendar to strict
@@ -4764,7 +4764,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         assertFalse("ALLOW_WHITESPACE after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
         assertFalse("ALLOW_NUMERIC  after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
         // These two boolean attributes are NOT affected according to the API specification
-        assertTrue("PARTIAL_MATCH after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_MATCH));
+        assertTrue("PARTIAL_MATCH after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH));
         assertTrue("MULTIPLE_PATTERNS after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH));
 
         // Allow white space leniency
