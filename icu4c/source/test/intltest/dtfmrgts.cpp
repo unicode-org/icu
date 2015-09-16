@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1542,14 +1542,14 @@ void DateFormatRegressionTest::TestT10334(void) {
         return;
     }
 
-    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, FALSE, status);
+    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_LITERAL_MATCH, FALSE, status);
     format.parse(text, status);
     if (!U_FAILURE(status)) {
         errln("parse partial match did NOT fail in strict mode - %s", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
-    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, TRUE, status);
+    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_LITERAL_MATCH, TRUE, status);
     format.parse(text, status);
     if (U_FAILURE(status)) {
         errln("parse partial match failure in lenient mode - %s", u_errorName(status));
@@ -1636,7 +1636,7 @@ void DateFormatRegressionTest::TestT10619(void) {
             sdmft->setLenient(itemPtr->leniency);
             sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status);
             sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
-            sdmft->setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, itemPtr->leniency, status);
+            sdmft->setBooleanAttribute(UDAT_PARSE_PARTIAL_LITERAL_MATCH, itemPtr->leniency, status);
             sdmft->parse(itemPtr->parseString, pos);
 
             delete sdmft;
