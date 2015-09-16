@@ -2572,7 +2572,7 @@ public class SimpleDateFormat extends DateFormat {
                 } else if ((pch == ' ' || pch == '.') && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)) {
                     ++idx;
                     continue;
-                } else if (pos != originalPos && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH)) {
+                } else if (pos != originalPos && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH)) {
                     ++idx;
                     continue;
                 }
@@ -3341,7 +3341,7 @@ public class SimpleDateFormat extends DateFormat {
                 }
 
                 // If lenient, add also the alternate, if different from the locale.
-                if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH) &&
+                if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH) &&
                         !formatData.getTimeSeparatorString().equals(DateFormatSymbols.ALTERNATE_TIME_SEPARATOR)) {
                     data.add(DateFormatSymbols.ALTERNATE_TIME_SEPARATOR);
                 }

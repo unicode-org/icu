@@ -1282,7 +1282,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         String text = new String("--mon-02-march-2011");
         SimpleDateFormat format = new SimpleDateFormat(pattern);
 
-        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH, false);      
+        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH, false);      
         try {
             format.parse(text);
             errln("parse partial match did NOT fail in strict mode!");
@@ -1290,7 +1290,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             // expected
         }
 
-        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH, true);
+        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH, true);
         try {
             format.parse(text);
         } catch (ParseException pe) {
