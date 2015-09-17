@@ -1704,15 +1704,13 @@ public:
      */
     virtual void setDecimalSeparatorAlwaysShown(UBool newValue);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Allows you to get the parse behavior of the pattern decimal mark.
      *
      * @return    TRUE if input must contain a match to decimal mark in pattern
-     * @draft ICU 54
+     * @stable ICU 54
      */
     UBool isDecimalPatternMatchRequired(void) const;
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Allows you to set the behavior of the pattern decimal mark.
@@ -1721,7 +1719,7 @@ public:
      * FALSE the decimal mark may be omitted from the input.
      *
      * @param newValue    set TRUE if input must contain a match to decimal mark in pattern
-     * @draft ICU 54
+     * @stable ICU 54
      */
     virtual void setDecimalPatternMatchRequired(UBool newValue);
 
@@ -1967,22 +1965,20 @@ public:
      */
     virtual void setCurrency(const UChar* theCurrency);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Sets the <tt>Currency Context</tt> object used to display currency.
      * This takes effect immediately, if this format is a
      * currency format.  
      * @param currencyContext new currency context object to use.  
-     * @draft ICU 54
+     * @stable ICU 54
      */
     void setCurrencyUsage(UCurrencyUsage newUsage, UErrorCode* ec);
 
     /**
      * Returns the <tt>Currency Context</tt> object used to display currency
-     * @draft ICU 54
+     * @stable ICU 54
      */
     UCurrencyUsage getCurrencyUsage() const;
-#endif  /* U_HIDE_DRAFT_API */
 
 
 #ifndef U_HIDE_DEPRECATED_API
