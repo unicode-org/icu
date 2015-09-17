@@ -213,14 +213,12 @@ typedef enum UNumberFormatStyle {
      * @stable ICU 53
      */
     UNUM_CURRENCY_ACCOUNTING=12,
-#ifndef U_HIDE_DRAFT_API
     /**
      * Currency format with a currency symbol given CASH usage, e.g., 
      * "NT$3" instead of "NT$3.23".
-     * @draft ICU 54
+     * @stable ICU 54
      */
     UNUM_CASH_CURRENCY=13,
-#endif /* U_HIDE_DRAFT_API */
 #ifndef U_HIDE_DRAFT_API
     /**
      * Decimal format expressed using compact notation
@@ -955,15 +953,13 @@ typedef enum UNumberFormatAttribute {
   /* TODO: test C API when it becomes @draft */
 #endif  /* U_HIDE_INTERNAL_API */
 
-#ifndef U_HIDE_DRAFT_API
   /** 
    * if this attribute is set to 0, it is set to UNUM_CURRENCY_STANDARD purpose,
    * otherwise it is UNUM_CURRENCY_CASH purpose
    * Default: 0 (UNUM_CURRENCY_STANDARD purpose)
-   * @draft ICU 54
+   * @stable ICU 54
    */
   UNUM_CURRENCY_USAGE = 23,
-#endif  /* U_HIDE_DRAFT_API */
 
   /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
   /** One below the first bitfield-boolean item.
@@ -985,17 +981,15 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_PARSE_NO_EXPONENT,
 
-#ifndef U_HIDE_DRAFT_API
   /** 
    * if this attribute is set to 1, specifies that, if the pattern contains a 
    * decimal mark the input is required to have one. If this attribute is set to 0,
    * specifies that input does not have to contain a decimal mark.
    * Has no effect on formatting.
    * Default: 0 (unset)
-   * @draft ICU 54
+   * @stable ICU 54
    */
   UNUM_PARSE_DECIMAL_MARK_REQUIRED = 0x1002,
-#endif  /* U_HIDE_DRAFT_API */
 
   /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
   /** Limit of boolean attributes.
@@ -1273,12 +1267,10 @@ typedef enum UNumberFormatSymbol {
    */
   UNUM_NINE_DIGIT_SYMBOL = 26,
 
-#ifndef U_HIDE_DRAFT_API
   /** Multiplication sign
-   * @draft ICU 54
+   * @stable ICU 54
    */
   UNUM_EXPONENT_MULTIPLICATION_SYMBOL = 27,
-#endif  /* U_HIDE_DRAFT_API */
 
   /** count symbol constants */
   UNUM_FORMAT_SYMBOL_COUNT = 28
