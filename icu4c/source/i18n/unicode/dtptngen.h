@@ -116,6 +116,7 @@ public:
      */
     UBool operator!=(const DateTimePatternGenerator& other) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Utility to return a unique skeleton from a given pattern. For example,
      * both "MMM-dd" and "dd/MMM" produce the skeleton "MMMdd".
@@ -127,6 +128,7 @@ public:
      * @draft ICU 56
      */
     static UnicodeString staticGetSkeleton(const UnicodeString& pattern, UErrorCode& status);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Utility to return a unique skeleton from a given pattern. For example,
@@ -144,6 +146,7 @@ public:
         return staticGetSkeleton(pattern, status);
     }
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Utility to return a unique base skeleton from a given pattern. This is
      * the same as the skeleton, except that differences in length are minimized
@@ -158,6 +161,7 @@ public:
      * @draft ICU 56
      */
     static UnicodeString staticGetBaseSkeleton(const UnicodeString& pattern, UErrorCode& status);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Utility to return a unique base skeleton from a given pattern. This is

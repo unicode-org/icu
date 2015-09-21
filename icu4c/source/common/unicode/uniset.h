@@ -389,7 +389,7 @@ public:
      */
     UnicodeSet(const uint16_t buffer[], int32_t bufferLen,
                ESerialization serialization, UErrorCode &status);
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Constructs a set from the given pattern.  See the class
