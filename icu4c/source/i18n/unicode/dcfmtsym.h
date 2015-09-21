@@ -355,6 +355,7 @@ private:
 
 public:
 
+#ifndef U_HIDE_INTERNAL_API
     /** 
      * @internal For ICU use only 
      */ 
@@ -368,6 +369,7 @@ public:
     inline UBool isCustomIntlCurrencySymbol() const {
         return fIsCustomIntlCurrencySymbol;
     }
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * _Internal_ function - more efficient version of getSymbol,
