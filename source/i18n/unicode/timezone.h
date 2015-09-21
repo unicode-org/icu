@@ -288,7 +288,7 @@ public:
      * @draft ICU 55
      */
     static TimeZone* U_EXPORT2 detectHostTimeZone();
-#endif
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Creates a new copy of the default TimeZone for this host. Unless the default time

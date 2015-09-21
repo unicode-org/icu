@@ -571,8 +571,6 @@ public:
                                               EStyle timeStyle = kDefault,
                                               const Locale& aLocale = Locale::getDefault());
 
-#ifndef U_HIDE_DRAFT_API
-
 #ifndef U_HIDE_INTERNAL_API
     /**
      * Returns the best pattern given a skeleton and locale.
@@ -586,8 +584,9 @@ public:
             const Locale &locale,
             const UnicodeString &skeleton,
             UErrorCode &status);
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a date/time formatter for the given skeleton and 
      * default locale.

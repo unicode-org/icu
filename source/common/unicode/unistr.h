@@ -172,6 +172,8 @@ class UnicodeStringAppendable;  // unicode/appendable.h
 # endif
 #endif
 
+/* Cannot make the following #ifndef U_HIDE_INTERNAL_API,
+   it is used to construct other non-internal constants */
 /**
  * \def UNISTR_OBJECT_SIZE
  * Desired sizeof(UnicodeString) in bytes.
