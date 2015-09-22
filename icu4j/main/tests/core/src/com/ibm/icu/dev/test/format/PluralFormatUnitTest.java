@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2014, International Business Machines Corporation and
+ * Copyright (C) 2007-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -367,5 +367,11 @@ public class PluralFormatUnitTest extends TestFmwk {
         assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format(1));
         assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format(2));
         assertEquals("offset-decimals format(2.5)", "another 1.5 meters", pf2.format(2.5));
+    }
+    
+    public void TestNegative() {
+        PluralFormat pluralFormat = new PluralFormat(ULocale.ENGLISH, "one{# foot}other{# feet}");
+        String actual = pluralFormat.format(-3);
+        assertEquals(pluralFormat.toString(), "-3 feet", actual);
     }
 }

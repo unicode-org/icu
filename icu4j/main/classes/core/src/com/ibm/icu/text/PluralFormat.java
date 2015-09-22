@@ -557,7 +557,7 @@ public class PluralFormat extends UFormat {
     private final class PluralSelectorAdapter implements PluralSelector {
         public String select(Object context, double number) {
             FixedDecimal dec = (FixedDecimal) context;
-            assert dec.source == number;
+            assert dec.source == (dec.isNegative ? -number : number);
             return pluralRules.select(dec);
         }
     }
