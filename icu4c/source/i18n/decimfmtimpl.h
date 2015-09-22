@@ -11,9 +11,12 @@
 #ifndef DECIMFMTIMPL_H
 #define DECIMFMTIMPL_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/decimfmt.h"
 #include "unicode/uobject.h"
-#include "unicode/utypes.h"
 #include "affixpatternparser.h"
 #include "digitaffixesandpadding.h"
 #include "digitformatter.h"
@@ -539,6 +542,6 @@ friend class DecimalFormat;
 
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */
 #endif // DECIMFMTIMPL_H
 //eof

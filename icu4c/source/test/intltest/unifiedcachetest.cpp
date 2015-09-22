@@ -89,6 +89,7 @@ void UnifiedCacheTest::runIndexedTest(int32_t index, UBool exec, const char* &na
 }
 
 void UnifiedCacheTest::TestEvictionUnderStress() {
+#if !UCONFIG_NO_FORMATTING
     int32_t localeCount;
     const Locale *locales = DateFormat::getAvailableLocales(localeCount);
     UErrorCode status = U_ZERO_ERROR;
@@ -102,6 +103,7 @@ void UnifiedCacheTest::TestEvictionUnderStress() {
         dataerrln("%s:%d Items should have been evicted from cache",
                __FILE__, __LINE__);
     }
+#endif /* #if !UCONFIG_NO_FORMATTING */
 }
 
 void UnifiedCacheTest::TestEvictionPolicy() {
