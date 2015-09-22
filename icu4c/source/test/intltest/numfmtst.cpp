@@ -960,6 +960,10 @@ void
 NumberFormatTest::TestInt64() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat fmt("#.#E0",status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        return;
+    }
     fmt.setMaximumFractionDigits(20);
     if (U_SUCCESS(status)) {
         expect(fmt, (Formattable)(int64_t)0, "0E0");
@@ -7165,86 +7169,106 @@ void NumberFormatTest::TestFormatFastpaths() {
     {
         UErrorCode status=U_ZERO_ERROR;
         DecimalFormat df(UnicodeString("0000",""),status);
-        int64_t long_number = 1;
-        UnicodeString expect = "0001";
-        UnicodeString result;
-        FieldPosition pos;
-        df.format(long_number, result, pos);
-        if(U_FAILURE(status)||expect!=result) {
-            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),""));
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
         } else {
-            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),""));
+            int64_t long_number = 1;
+            UnicodeString expect = "0001";
+            UnicodeString result;
+            FieldPosition pos;
+            df.format(long_number, result, pos);
+            if(U_FAILURE(status)||expect!=result) {
+                errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),""));
+            } else {
+                logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),""));
+            }
         }
     }
     {
         UErrorCode status=U_ZERO_ERROR;
         DecimalFormat df(UnicodeString("0000000000000000000",""),status);
-        int64_t long_number = U_INT64_MIN; // -9223372036854775808L;
-        // uint8_t bits[8];
-        // memcpy(bits,&long_number,8);
-        // for(int i=0;i<8;i++) {
-        //   logln("bits: %02X", (unsigned int)bits[i]);
-        // }
-        UnicodeString expect = "-9223372036854775808";
-        UnicodeString result;
-        FieldPosition pos;
-        df.format(long_number, result, pos);
-        if(U_FAILURE(status)||expect!=result) {
-            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
         } else {
-            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
+            int64_t long_number = U_INT64_MIN; // -9223372036854775808L;
+            // uint8_t bits[8];
+            // memcpy(bits,&long_number,8);
+            // for(int i=0;i<8;i++) {
+            //   logln("bits: %02X", (unsigned int)bits[i]);
+            // }
+            UnicodeString expect = "-9223372036854775808";
+            UnicodeString result;
+            FieldPosition pos;
+            df.format(long_number, result, pos);
+            if(U_FAILURE(status)||expect!=result) {
+                errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
+            } else {
+                logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
+            }
         }
     }
     {
         UErrorCode status=U_ZERO_ERROR;
         DecimalFormat df(UnicodeString("0000000000000000000",""),status);
-        int64_t long_number = U_INT64_MAX; // -9223372036854775808L;
-        // uint8_t bits[8];
-        // memcpy(bits,&long_number,8);
-        // for(int i=0;i<8;i++) {
-        //   logln("bits: %02X", (unsigned int)bits[i]);
-        // }
-        UnicodeString expect = "9223372036854775807";
-        UnicodeString result;
-        FieldPosition pos;
-        df.format(long_number, result, pos);
-        if(U_FAILURE(status)||expect!=result) {
-            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
         } else {
-            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
+            int64_t long_number = U_INT64_MAX; // -9223372036854775808L;
+            // uint8_t bits[8];
+            // memcpy(bits,&long_number,8);
+            // for(int i=0;i<8;i++) {
+            //   logln("bits: %02X", (unsigned int)bits[i]);
+            // }
+            UnicodeString expect = "9223372036854775807";
+            UnicodeString result;
+            FieldPosition pos;
+            df.format(long_number, result, pos);
+            if(U_FAILURE(status)||expect!=result) {
+                errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
+            } else {
+                logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
+            }
         }
     }
     {
         UErrorCode status=U_ZERO_ERROR;
         DecimalFormat df(UnicodeString("0000000000000000000",""),status);
-        int64_t long_number = 0;
-        // uint8_t bits[8];
-        // memcpy(bits,&long_number,8);
-        // for(int i=0;i<8;i++) {
-        //   logln("bits: %02X", (unsigned int)bits[i]);
-        // }
-        UnicodeString expect = "0000000000000000000";
-        UnicodeString result;
-        FieldPosition pos;
-        df.format(long_number, result, pos);
-        if(U_FAILURE(status)||expect!=result) {
-            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
         } else {
-            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
+            int64_t long_number = 0;
+            // uint8_t bits[8];
+            // memcpy(bits,&long_number,8);
+            // for(int i=0;i<8;i++) {
+            //   logln("bits: %02X", (unsigned int)bits[i]);
+            // }
+            UnicodeString expect = "0000000000000000000";
+            UnicodeString result;
+            FieldPosition pos;
+            df.format(long_number, result, pos);
+            if(U_FAILURE(status)||expect!=result) {
+                errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
+            } else {
+                logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
+            }
         }
     }
     {
         UErrorCode status=U_ZERO_ERROR;
         DecimalFormat df(UnicodeString("0000000000000000000",""),status);
-        int64_t long_number = U_INT64_MIN + 1;
-        UnicodeString expect = "-9223372036854775807";
-        UnicodeString result;
-        FieldPosition pos;
-        df.format(long_number, result, pos);
-        if(U_FAILURE(status)||expect!=result) {
-            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
         } else {
-            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
+            int64_t long_number = U_INT64_MIN + 1;
+            UnicodeString expect = "-9223372036854775807";
+            UnicodeString result;
+            FieldPosition pos;
+            df.format(long_number, result, pos);
+            if(U_FAILURE(status)||expect!=result) {
+                errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
+            } else {
+                logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
+            }
         }
     }
 }
@@ -8300,7 +8324,10 @@ void NumberFormatTest::TestGetAffixes() {
     UnicodeString pattern("\\u00a4\\u00a4\\u00a4 0.00 %\\u00a4\\u00a4");
     pattern = pattern.unescape();
     DecimalFormat fmt(pattern, sym, status);
-    assertSuccess("", status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        return;
+    }
     UnicodeString affixStr;
     assertEquals("", "US dollars ", fmt.getPositivePrefix(affixStr));
     assertEquals("", " %USD", fmt.getPositiveSuffix(affixStr));
@@ -8354,6 +8381,10 @@ void NumberFormatTest::TestToPatternScientific11648() {
     Locale en("en");
     DecimalFormatSymbols sym(en, status);
     DecimalFormat fmt("0.00", sym, status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        return;
+    }
     fmt.setScientificNotation(TRUE);
     UnicodeString pattern;
     assertEquals("", "0.00E0", fmt.toPattern(pattern));
@@ -8416,6 +8447,10 @@ void NumberFormatTest::TestBenchmark() {
 void NumberFormatTest::TestFractionalDigitsForCurrency() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<NumberFormat> fmt(NumberFormat::createCurrencyInstance("en", status));
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating NumberFormat - %s", u_errorName(status));
+        return;
+    }
     UChar JPY[] = {0x4A, 0x50, 0x59, 0x0};
     fmt->setCurrency(JPY, status);
     if (!assertSuccess("", status)) {
@@ -8429,6 +8464,10 @@ void NumberFormatTest::TestFormatCurrencyPlural() {
     UErrorCode status = U_ZERO_ERROR;
     Locale locale = Locale::createCanonical("en_US");
     NumberFormat *fmt = NumberFormat::createInstance(locale, UNUM_CURRENCY_PLURAL, status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating NumberFormat - %s", u_errorName(status));
+        return;
+    }
    UnicodeString formattedNum;
    fmt->format(11234.567, formattedNum, NULL, status);
    assertEquals("", "11,234.57 US dollars", formattedNum);
@@ -8440,6 +8479,10 @@ void NumberFormatTest::TestCtorApplyPatternDifference() {
     DecimalFormatSymbols sym("en_US", status);
     UnicodeString pattern("\\u00a40");
     DecimalFormat fmt(pattern.unescape(), sym, status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        return;
+    }
     UnicodeString result;
     assertEquals(
             "ctor favors precision of currency",

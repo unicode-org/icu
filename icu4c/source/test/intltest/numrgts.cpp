@@ -346,7 +346,10 @@ void NumberFormatRegressionTest::Test4087535 (void)
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
-    failure(status, "new DecimalFormat", "");
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        return;
+    }
     df->setMinimumIntegerDigits(0);
 
     double n = 0;
@@ -371,7 +374,10 @@ void NumberFormatRegressionTest::Test4088503 (void)
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
-    failure(status, "new DecimalFormat", "");
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        return;
+    }
     df->setGroupingSize(0);
     UnicodeString sBuf;
     FieldPosition fp(FieldPosition::DONT_CARE);
@@ -1344,7 +1350,10 @@ void NumberFormatRegressionTest::Test4061302(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *fmt = new DecimalFormatSymbols(status);
-    failure(status, "new DecimalFormatSymbols");
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormatSymbols - %s", u_errorName(status));
+        return;
+    }
     UnicodeString currency(fmt->getSymbol(DecimalFormatSymbols::kCurrencySymbol));
     UnicodeString intlCurrency(fmt->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol));
     UnicodeString monDecSeparator(fmt->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol));
@@ -1382,7 +1391,10 @@ void NumberFormatRegressionTest::Test4062486(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *fmt = new DecimalFormat(UnicodeString("#,##0.00"), status);
-    failure(status, "new DecimalFormat");
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        return;
+    }
     UnicodeString formatted;
     FieldPosition field(0);
     double num = 1234.5;
@@ -2849,12 +2861,12 @@ void NumberFormatRegressionTest::Test9109(void) {
     Formattable val;
     ParsePosition pos;
     DecimalFormat fmt("+##", status);
-    fmt.setLenient(TRUE);
-
     if (U_FAILURE(status)) {
         dataerrln("Failed to create DecimalFormat with pattern '+##' - %s", u_errorName(status));
+        return;
     }
 
+    fmt.setLenient(TRUE);
     UnicodeString text("123");
     int32_t expected = 123;
     int32_t expos = 3;

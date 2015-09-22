@@ -447,6 +447,7 @@ void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
     DecimalFormat *df = new DecimalFormat(status);
     if(U_FAILURE(status)) {
         errcheckln(status, "ERROR: Could not create DecimalFormat - %s", u_errorName(status));
+        return;
     }
 
     df->adoptCurrencyPluralInfo(cpi);
@@ -607,6 +608,9 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
 
     LocalPointer<DecimalFormat> df(new DecimalFormat("###", status), status);
     TEST_ASSERT_STATUS(status);
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        return;
+    }
     FixedDecimal fd = df->getFixedDecimal(44, status);
     TEST_ASSERT_STATUS(status);
     ASSERT_EQUAL(44, fd.source);
