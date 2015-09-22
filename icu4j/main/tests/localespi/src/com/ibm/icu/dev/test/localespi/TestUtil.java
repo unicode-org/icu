@@ -1,12 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.localespi;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Builder;
@@ -93,6 +95,23 @@ public class TestUtil {
     }
     public static boolean isIBMJRE() {
         return IBMJRE;
+    }
+
+    private static final Set<Locale> EXCLUDED_LOCALES = new HashSet<Locale>();
+    static {
+        EXCLUDED_LOCALES.add(Locale.ROOT);
+        // de-GR is supported by Java 8, but not supported by CLDR / ICU
+        EXCLUDED_LOCALES.add(new Locale("de", "GR"));
+    }
+
+    /*
+     * Checks if the given locale is excluded from locale SPI test
+     */
+    public static boolean isExcluded(Locale loc) {
+        if (EXCLUDED_LOCALES.contains(loc)) {
+            return true;
+        }
+        return isProblematicIBMLocale(loc);
     }
 
     /*

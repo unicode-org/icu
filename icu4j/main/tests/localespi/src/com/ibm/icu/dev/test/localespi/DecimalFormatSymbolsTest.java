@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -23,7 +23,7 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : DecimalFormatSymbols.getAvailableLocales()) {
-            if (TestUtil.isProblematicIBMLocale(loc)) {
+            if (TestUtil.isExcluded(loc)) {
                 logln("Skipped " + loc);
                 continue;
             }

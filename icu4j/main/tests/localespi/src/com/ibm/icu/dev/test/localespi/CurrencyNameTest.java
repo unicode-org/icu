@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -61,7 +61,7 @@ public class CurrencyNameTest extends TestFmwk {
             String currencyCode = currency.getCurrencyCode();
             com.ibm.icu.util.Currency currencyIcu = com.ibm.icu.util.Currency.getInstance(currencyCode);
             for (Locale loc : Locale.getAvailableLocales()) {
-                if (TestUtil.isProblematicIBMLocale(loc)) {
+                if (TestUtil.isExcluded(loc)) {
                     logln("Skipped " + loc);
                     continue;
                 }
@@ -110,7 +110,7 @@ public class CurrencyNameTest extends TestFmwk {
             String currencyCode = currency.getCurrencyCode();
             com.ibm.icu.util.Currency currencyIcu = com.ibm.icu.util.Currency.getInstance(currencyCode);
             for (Locale loc : Locale.getAvailableLocales()) {
-                if (TestUtil.isProblematicIBMLocale(loc)) {
+                if (TestUtil.isExcluded(loc)) {
                     logln("Skipped " + loc);
                     continue;
                 }

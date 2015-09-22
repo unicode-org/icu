@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -35,7 +35,7 @@ public class LocaleNameTest extends TestFmwk {
         Locale[] locales = Locale.getAvailableLocales();
         StringBuffer icuid = new StringBuffer();
         for (Locale inLocale : locales) {
-            if (TestUtil.isProblematicIBMLocale(inLocale)) {
+            if (TestUtil.isExcluded(inLocale)) {
                 logln("Skipped " + inLocale);
                 continue;
             }
@@ -99,7 +99,7 @@ public class LocaleNameTest extends TestFmwk {
 
         Locale[] locales = Locale.getAvailableLocales();
         for (Locale inLocale : locales) {
-            if (TestUtil.isProblematicIBMLocale(inLocale)) {
+            if (TestUtil.isExcluded(inLocale)) {
                 logln("Skipped " + inLocale);
                 continue;
             }
@@ -155,7 +155,7 @@ public class LocaleNameTest extends TestFmwk {
     public void TestCountryNames() {
         Locale[] locales = Locale.getAvailableLocales();
         for (Locale inLocale : locales) {
-            if (TestUtil.isProblematicIBMLocale(inLocale)) {
+            if (TestUtil.isExcluded(inLocale)) {
                 logln("Skipped " + inLocale);
                 continue;
             }
@@ -214,7 +214,7 @@ public class LocaleNameTest extends TestFmwk {
         }
 
         for (Locale inLocale : locales) {
-            if (TestUtil.isProblematicIBMLocale(inLocale)) {
+            if (TestUtil.isExcluded(inLocale)) {
                 logln("Skipped " + inLocale);
                 continue;
             }
