@@ -132,6 +132,7 @@ library: common
     # All files in the common library are listed in its dependencies.
   deps
     # Libraries and groups that the common library depends on.
+    pluralmap
     date_interval
     breakiterator
     uts46 filterednormalizer2 normalizer2 loadednormalizer2 canonical_iterator
@@ -161,6 +162,12 @@ library: common
     icuplug
     platform
 
+group: pluralmap
+    # TODO: Move to i18n library, ticket #11926.
+    pluralmap.o
+  deps
+    platform
+
 group: date_interval  # class DateInterval
     dtintrv.o
   deps
@@ -175,16 +182,15 @@ group: breakiterator
     rbbi.o rbbinode.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o
     rbbidata.o rbbirb.o
     dictionarydata.o dictbe.o
-
-    # Folded 'filteredbrk' in to this group.
-    # it depends on global new/delete and STL. Not recording these here.
-    # http://bugs.icu-project.org/trac/ticket/10990
+    # BreakIterator::makeInstance() factory implementation makes for circular dependency
+    # between BreakIterator base and FilteredBreakIteratorBuilder.
     filteredbrk.o
   deps
     resourcebundle service_registration
     schriter utext uniset_core uniset_props
     uhash ustack utrie
     ucharstrie bytestrie
+    ucharstriebuilder  # for filteredbrk.o
     normlzr  # for dictbe.o, should switch to Normalizer2
     uvector32 # for dictbe.o
 
@@ -823,8 +829,13 @@ group: formatting
     # currencyformat
     curramt.o currfmt.o currpinf.o currunit.o
     # decimalformat
-    dcfmtsym.o decfmtst.o decimfmt.o decimalformatpattern.o compactdecimalformat.o
-    numfmt.o numsys.o unumsys.o unum.o winnmfmt.o
+    dcfmtsym.o numsys.o unumsys.o
+    affixpatternparser.o decimfmtimpl.o digitaffix.o digitaffixesandpadding.o
+    digitformatter.o digitgrouping.o digitinterval.o
+    pluralaffix.o precision.o smallintformatter.o valueformatter.o
+    decfmtst.o decimfmt.o decimalformatpattern.o compactdecimalformat.o
+    numfmt.o unum.o
+    winnmfmt.o
     # scientificnumberformatter - would depend on dcfmtsym, so would be circular.
     scientificnumberformatter.o
     # rbnf
@@ -861,7 +872,7 @@ group: sharedbreakiterator
     breakiterator
 
 group: digitlist
-    digitlst.o decContext.o decNumber.o
+    digitlst.o decContext.o decNumber.o visibledigits.o
   deps
     platform
 
