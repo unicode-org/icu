@@ -313,7 +313,7 @@ static void uplug_queryPlug(UPlugData *plug, UErrorCode *status) {
 
 static void uplug_loadPlug(UPlugData *plug, UErrorCode *status) {
   if(U_FAILURE(*status)) {
-    return NULL;
+    return;
   }
   if(!plug->awaitingLoad || (plug->level < UPLUG_LEVEL_LOW) ) {  /* shouldn't happen. Plugin hasn'tbeen loaded yet.*/
     *status = U_INTERNAL_PROGRAM_ERROR;
