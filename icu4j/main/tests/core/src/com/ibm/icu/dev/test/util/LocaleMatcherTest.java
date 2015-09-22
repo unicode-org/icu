@@ -579,7 +579,9 @@ public class LocaleMatcherTest extends TestFmwk {
             int iterations = i == 0 ? 1000 : 100000;
             boolean showMessage = i != 0;
             long timeShort = timeLocaleMatcher("Duration (few  supported):\t", desired, matcherShort, showMessage, iterations, 0);
+            @SuppressWarnings("unused")
             long timeMedium = timeLocaleMatcher("Duration (med. supported):\t", desired, matcherLong, showMessage, iterations, timeShort);
+            @SuppressWarnings("unused")
             long timeLong = timeLocaleMatcher("Duration (many supported):\t", desired, matcherVeryLong, showMessage, iterations, timeShort);
         }
     }

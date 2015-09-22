@@ -13,7 +13,6 @@ import com.ibm.icu.impl.CharacterIteratorWrapper;
 import com.ibm.icu.impl.ReplaceableUCharacterIterator;
 import com.ibm.icu.impl.UCharArrayIterator;
 import com.ibm.icu.impl.UCharacterIteratorWrapper;
-import com.ibm.icu.impl.UCharacterProperty;
 
 
 /**
