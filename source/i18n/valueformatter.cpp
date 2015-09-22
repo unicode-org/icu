@@ -24,6 +24,8 @@
 
 U_NAMESPACE_BEGIN
 
+ValueFormatter::~ValueFormatter() {}
+
 VisibleDigitsWithExponent &
 ValueFormatter::toVisibleDigitsWithExponent(
         int64_t value,
