@@ -4054,8 +4054,7 @@ public class SimpleDateFormat extends DateFormat {
      * @param fields the fields to override
      * @param overrideNF the NumbeferFormat used 
      * @exception IllegalArgumentException when the fields contain invalid field
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public void setNumberFormat(String fields, NumberFormat overrideNF) {
         overrideNF.setGroupingUsed(false);
@@ -4089,8 +4088,7 @@ public class SimpleDateFormat extends DateFormat {
      *
      * @param field the field the user wants
      * @return override NumberFormat used for the field
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public NumberFormat getNumberFormat(char field) {
         Character ovrField;

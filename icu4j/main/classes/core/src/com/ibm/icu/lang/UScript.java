@@ -1071,8 +1071,7 @@ public final class UScript {
      *
      * @param nameOrAbbr name of the script or ISO 15924 code
      * @return The script code value, or INVALID_CODE if the code cannot be found.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static final int getCodeFromName(String nameOrAbbr) {
         int propNum = UCharacter.getPropertyValueEnumNoThrow(UProperty.SCRIPT, nameOrAbbr);

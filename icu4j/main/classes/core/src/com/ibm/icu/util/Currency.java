@@ -91,23 +91,20 @@ public class Currency extends MeasureUnit {
 
     /**
      * Currency Usage used for Decimal Format
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release. 
+     * @stable ICU 54
      */
     public enum CurrencyUsage{
         /**
          * a setting to specify currency usage which determines currency digit and rounding
          * for standard usage, for example: "50.00 NT$"
-         * @draft ICU 54
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         STANDARD,
         
         /**
          * a setting to specify currency usage which determines currency digit and rounding
          * for cash usage, for example: "50 NT$"
-         * @draft ICU 54
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         CASH
     }
@@ -202,8 +199,7 @@ public class Currency extends MeasureUnit {
      * @param loc the JDK locale for which to retrieve currency codes.
      * @param d the date for which to retrieve currency codes for the given locale.
      * @return The array of ISO currency codes.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static String[] getAvailableCurrencyCodes(Locale loc, Date d) {
         return getAvailableCurrencyCodes(ULocale.forLocale(loc), d);
@@ -782,8 +778,7 @@ public class Currency extends MeasureUnit {
      * @param Usage the usage of currency(Standard or Cash)
      * @return a non-negative number of fraction digits to be
      * displayed
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release. 
+     * @stable ICU 54
      */
     public int getDefaultFractionDigits(CurrencyUsage Usage) {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
@@ -807,8 +802,7 @@ public class Currency extends MeasureUnit {
      * rounding is done by this currency with the Usage.
      * @param Usage the usage of currency(Standard or Cash)
      * @return the non-negative rounding increment, or 0.0 if none
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release. 
+     * @stable ICU 54
      */
     public double getRoundingIncrement(CurrencyUsage Usage) {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();

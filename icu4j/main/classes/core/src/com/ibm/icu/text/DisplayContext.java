@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2012-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -77,16 +77,14 @@ public enum DisplayContext {
      * A possible setting for DISPLAY_LENGTH:
      * use full names when generating a locale name,
      * e.g. "United States" for US.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     LENGTH_FULL(Type.DISPLAY_LENGTH, 0),
     /**
      * A possible setting for DISPLAY_LENGTH:
      * use short names when generating a locale name,
      * e.g. "U.S." for US.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     LENGTH_SHORT(Type.DISPLAY_LENGTH, 1);
 
@@ -108,8 +106,7 @@ public enum DisplayContext {
         CAPITALIZATION,
         /**
          * DISPLAY_LENGTH can be set to LENGTH_FULL or LENGTH_SHORT.
-         * @draft ICU 54
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         DISPLAY_LENGTH
     }

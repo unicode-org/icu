@@ -67,30 +67,26 @@ public final class RelativeDateTimeFormatter {
     
     /**
      * The formatting style
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      *
      */
     public static enum Style {
         
         /**
          * Everything spelled out.
-         * @draft ICU 54
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         LONG,
         
         /**
          * Abbreviations used when possible.
-         * @draft ICU 54
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         SHORT,
         
         /**
          * Use single letters when possible.
-         * @draft ICU 54
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         NARROW,
     }
@@ -292,8 +288,7 @@ public final class RelativeDateTimeFormatter {
      * 
      * @param locale the JDK locale.
      * @return An instance of RelativeDateTimeFormatter.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static RelativeDateTimeFormatter getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale));
@@ -322,8 +317,7 @@ public final class RelativeDateTimeFormatter {
      * and immutability of this class. May be null.
      * @param style the style.
      * @param capitalizationContext the capitalization context.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static RelativeDateTimeFormatter getInstance(
             ULocale locale,
@@ -358,8 +352,7 @@ public final class RelativeDateTimeFormatter {
      * @param nf the number format object. It is defensively copied to ensure thread-safety
      * and immutability of this class. 
      * @return An instance of RelativeDateTimeFormatter.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static RelativeDateTimeFormatter getInstance(Locale locale, NumberFormat nf) {
         return getInstance(ULocale.forLocale(locale), nf);
@@ -444,8 +437,7 @@ public final class RelativeDateTimeFormatter {
     /**
      * Return capitalization context.
      *
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public DisplayContext getCapitalizationContext() {
         return capitalizationContext;
@@ -454,8 +446,7 @@ public final class RelativeDateTimeFormatter {
     /**
      * Return style
      *
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public Style getFormatStyle() {
         return style;

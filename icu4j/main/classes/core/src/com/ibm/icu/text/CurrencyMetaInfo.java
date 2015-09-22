@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -547,8 +547,7 @@ public class CurrencyMetaInfo {
      * @param isoCode the currency code
      * @param currencyUsage the currency usage
      * @return the CurrencyDigits
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release. 
+     * @stable ICU 54
      */
     public CurrencyDigits currencyDigits(String isoCode, CurrencyUsage currencyUsage) {
         return defaultDigits;
