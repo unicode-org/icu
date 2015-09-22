@@ -135,7 +135,7 @@
 #endif
 
 /**
- * \def U_ENABLE_PLUGINS
+ * \def UCONFIG_ENABLE_PLUGINS
  * Determines whether to enable ICU plugins.
  * @internal
  */
