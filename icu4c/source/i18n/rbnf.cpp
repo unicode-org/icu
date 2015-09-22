@@ -1748,6 +1748,9 @@ RuleBasedNumberFormat::getDecimalFormatSymbols() const
 NFRule*
 RuleBasedNumberFormat::initializeDefaultInfinityRule(UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     if (defaultInfinityRule == NULL) {
         UnicodeString rule(UNICODE_STRING_SIMPLE("Inf: "));
         rule.append(getDecimalFormatSymbols()->getSymbol(DecimalFormatSymbols::kInfinitySymbol));
@@ -1771,6 +1774,9 @@ RuleBasedNumberFormat::getDefaultInfinityRule() const
 NFRule*
 RuleBasedNumberFormat::initializeDefaultNaNRule(UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     if (defaultNaNRule == NULL) {
         UnicodeString rule(UNICODE_STRING_SIMPLE("NaN: "));
         rule.append(getDecimalFormatSymbols()->getSymbol(DecimalFormatSymbols::kNaNSymbol));

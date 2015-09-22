@@ -3889,7 +3889,7 @@ void UnicodeSetTest::TestUCAUnsafeBackwards() {
     // Get the unsafeBackwardsSet
     const CollationCacheEntry *rootEntry = CollationRoot::getRootCacheEntry(errorCode);
     if(U_FAILURE(errorCode)) {
-      errln("FAIL: %s getting root cache entry", u_errorName(errorCode));
+      dataerrln("FAIL: %s getting root cache entry", u_errorName(errorCode));
       return;
     }
     //const UVersionInfo &version = rootEntry->tailoring->version;

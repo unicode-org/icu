@@ -852,6 +852,9 @@ static void TestBreakIteratorRefresh(void) {
     
     bi = ubrk_open(UBRK_LINE, "en_US", NULL, 0, &status);
     TEST_ASSERT_SUCCESS(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     utext_openUChars(&ut1, testStr, -1, &status);
     TEST_ASSERT_SUCCESS(status);

@@ -99,7 +99,7 @@ void UnifiedCacheTest::TestEvictionUnderStress() {
     }
     int64_t evictedCountAfter = cache->autoEvictedCount();
     if (evictedCountBefore == evictedCountAfter) {
-        errln("%s:%d Items should have been evicted from cache",
+        dataerrln("%s:%d Items should have been evicted from cache",
                __FILE__, __LINE__);
     }
 }

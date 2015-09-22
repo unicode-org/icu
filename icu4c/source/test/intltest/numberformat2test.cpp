@@ -1409,11 +1409,11 @@ void NumberFormat2Test::TestCurrencyAffixInfo() {
         return;
     }
     info.set("en", rules.getAlias(), USD, status);
-    assertEquals("", "$", info.getSymbol());
-    assertEquals("", "USD", info.getISO());
-    assertEquals("", "US dollar", info.getLong().getByCategory("one").toString());
-    assertEquals("", "US dollars", info.getLong().getByCategory("other").toString());
-    assertEquals("", "US dollars", info.getLong().getByCategory("two").toString());
+    assertEquals("", "$", info.getSymbol(), TRUE);
+    assertEquals("", "USD", info.getISO(), TRUE);
+    assertEquals("", "US dollar", info.getLong().getByCategory("one").toString(), TRUE);
+    assertEquals("", "US dollars", info.getLong().getByCategory("other").toString(), TRUE);
+    assertEquals("", "US dollars", info.getLong().getByCategory("two").toString(), TRUE);
     assertFalse("", info.isDefault());
     info.set(NULL, NULL, NULL, status);
     assertTrue("", info.isDefault());
@@ -1491,6 +1491,10 @@ void NumberFormat2Test::TestAffixPatternParser() {
     static UChar USD[] = {0x55, 0x53, 0x44, 0x0};
     LocalPointer<PluralRules> rules(PluralRules::forLocale("en", status));
     DecimalFormatSymbols symbols("en", status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormatSymbols - %s", u_errorName(status));
+        return;
+    }
     AffixPatternParser parser(symbols);
     CurrencyAffixInfo currencyAffixInfo;
     currencyAffixInfo.set("en", rules.getAlias(), USD, status);
@@ -2679,6 +2683,10 @@ void NumberFormat2Test::TestPluralsAndRoundingScientific() {
 void NumberFormat2Test::TestRoundingIncrement() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols symbols("en", status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormatSymbols - %s", u_errorName(status));
+        return;
+    }
     DigitFormatter formatter(symbols);
     ScientificPrecision precision;
     SciFormatterOptions options;
