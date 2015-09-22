@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -76,27 +77,32 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {DateFormat.YEAR_QUARTER, "yQQQQ", "en", "QQQQ y"}, 
                 {DateFormat.YEAR_ABBR_QUARTER, "yQQQ", "en", "QQQ y"},
                 
-                {DateFormat.NUM_MONTH, "M", "en", "L"},
-                {DateFormat.ABBR_MONTH, "MMM", "en", "LLL"},
                 {DateFormat.MONTH, "MMMM", "en", "LLLL"},
-                {DateFormat.YEAR_NUM_MONTH, "yM","en","M/y"}, 
-                {DateFormat.YEAR_ABBR_MONTH, "yMMM","en","MMM y"},
+                {DateFormat.ABBR_MONTH, "MMM", "en", "LLL"},
+                {DateFormat.NUM_MONTH, "M", "en", "L"},
                 {DateFormat.YEAR_MONTH, "yMMMM","en","MMMM y"},
+                {DateFormat.YEAR_ABBR_MONTH, "yMMM","en","MMM y"},
+                {DateFormat.YEAR_NUM_MONTH, "yM","en","M/y"}, 
                 
                 {DateFormat.DAY, "d","en","d"},
-                {DateFormat.YEAR_NUM_MONTH_DAY, "yMd", "en", "M/d/y"}, 
-                {DateFormat.YEAR_ABBR_MONTH_DAY, "yMMMd", "en", "MMM d, y"},
                 {DateFormat.YEAR_MONTH_DAY, "yMMMMd", "en", "MMMM d, y"},
-                {DateFormat.YEAR_NUM_MONTH_WEEKDAY_DAY, "yMEd", "en", "EEE, M/d/y"}, 
-                {DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY, "yMMMEd", "en", "EEE, MMM d, y"},
-                {DateFormat.YEAR_MONTH_WEEKDAY_DAY, "yMMMMEEEEd", "en", "EEEE, MMMM d, y"},
+                {DateFormat.YEAR_ABBR_MONTH_DAY, "yMMMd", "en", "MMM d, y"},
+                {DateFormat.YEAR_NUM_MONTH_DAY, "yMd", "en", "M/d/y"}, 
                 
-                {DateFormat.NUM_MONTH_DAY, "Md","en","M/d"},
-                {DateFormat.ABBR_MONTH_DAY, "MMMd","en","MMM d"},
+                {DateFormat.WEEKDAY, "EEEE", "en", "cccc"},
+                {DateFormat.ABBR_WEEKDAY, "E", "en", "ccc"}, 
+
+                {DateFormat.YEAR_MONTH_WEEKDAY_DAY, "yMMMMEEEEd", "en", "EEEE, MMMM d, y"},
+                {DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY, "yMMMEd", "en", "EEE, MMM d, y"},
+                {DateFormat.YEAR_NUM_MONTH_WEEKDAY_DAY, "yMEd", "en", "EEE, M/d/y"}, 
+                
                 {DateFormat.MONTH_DAY, "MMMMd","en","MMMM d"},
-                {DateFormat.NUM_MONTH_WEEKDAY_DAY, "MEd","en","EEE, M/d"},
-                {DateFormat.ABBR_MONTH_WEEKDAY_DAY, "MMMEd","en","EEE, MMM d"},
+                {DateFormat.ABBR_MONTH_DAY, "MMMd","en","MMM d"},
+                {DateFormat.NUM_MONTH_DAY, "Md","en","M/d"},
+                
                 {DateFormat.MONTH_WEEKDAY_DAY, "MMMMEEEEd","en","EEEE, MMMM d"},
+                {DateFormat.ABBR_MONTH_WEEKDAY_DAY, "MMMEd","en","EEE, MMM d"},
+                {DateFormat.NUM_MONTH_WEEKDAY_DAY, "MEd","en","EEE, M/d"},
 
                 {DateFormat.HOUR, "j", "en", "h a"}, // (fixed expected result per ticket 6872<-6626)
                 {DateFormat.HOUR24, "H", "en", "HH"}, // (fixed expected result per ticket 6872<-6626
@@ -117,15 +123,31 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {DateFormat.ABBR_SPECIFIC_TZ, "z", "en", "z"},
                 {DateFormat.ABBR_UTC_TZ, "ZZZZ", "en", "ZZZZ"},
 
+                {}, // marker for starting combinations
+                
                 {DateFormat.YEAR_NUM_MONTH_DAY + DateFormat.ABBR_UTC_TZ, "yMdZZZZ", "en", "M/d/y, ZZZZ"},
                 {DateFormat.MONTH_DAY + DateFormat.LOCATION_TZ, "MMMMdVVVV", "en", "MMMM d, VVVV"},
         };
         Date testDate = new Date(2012-1900, 6, 1, 14, 58, 59); // just for verbose log
-
+        
+        List<String> expectedSkeletons = new ArrayList<String>(DateFormat.DATE_SKELETONS);
+        expectedSkeletons.addAll(DateFormat.TIME_SKELETONS);
+        expectedSkeletons.addAll(DateFormat.ZONE_SKELETONS);
+        boolean combinations = false;
+        
+        List<String> testedSkeletons = new ArrayList<String>();
+        
         for (int i = 0; i < EXPECTED.length; i++) {
+            if (EXPECTED[i].length == 0) {
+                combinations = true;
+                continue;
+            }
             boolean ok = true;
             // Verify that patterns have the correct values
             String actualPattern = EXPECTED[i][0];
+            if (!combinations) {
+                testedSkeletons.add(actualPattern);
+            }
             String expectedPattern = EXPECTED[i][1];
             ULocale locale = new ULocale(EXPECTED[i][2], "", "");
             if (!actualPattern.equals(expectedPattern)) {
@@ -158,6 +180,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 logln(date1.format(testDate) + "\t\t" + Arrays.asList(EXPECTED[i]));
             }
         }
+        assertEquals("All skeletons are tested (and in an iterable list)", 
+                new HashSet<String>(expectedSkeletons), new HashSet<String>(testedSkeletons));
+        assertEquals("All skeletons are tested (and in an iterable list), and in the right order.", expectedSkeletons, testedSkeletons);
     }
 
     // Test written by Wally Wedel and emailed to me.

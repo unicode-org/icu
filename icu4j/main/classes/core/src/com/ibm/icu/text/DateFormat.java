@@ -12,9 +12,13 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -1052,6 +1056,41 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 4.0
      */
     public static final String NUM_MONTH_WEEKDAY_DAY = "MEd";
+    
+    /**
+     * List of all of the date skeleton constants for iteration.
+     * Note that this is fragile; be sure to add any values that are added above.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final List<String> DATE_SKELETONS = Arrays.asList(
+            YEAR,
+            QUARTER,
+            ABBR_QUARTER,
+            YEAR_QUARTER,
+            YEAR_ABBR_QUARTER,
+            MONTH,
+            ABBR_MONTH,
+            NUM_MONTH,
+            YEAR_MONTH,
+            YEAR_ABBR_MONTH,
+            YEAR_NUM_MONTH,
+            DAY,
+            YEAR_MONTH_DAY,
+            YEAR_ABBR_MONTH_DAY,
+            YEAR_NUM_MONTH_DAY,
+            WEEKDAY,
+            ABBR_WEEKDAY,
+            YEAR_MONTH_WEEKDAY_DAY,
+            YEAR_ABBR_MONTH_WEEKDAY_DAY,
+            YEAR_NUM_MONTH_WEEKDAY_DAY,
+            MONTH_DAY,
+            ABBR_MONTH_DAY,
+            NUM_MONTH_DAY,
+            MONTH_WEEKDAY_DAY,
+            ABBR_MONTH_WEEKDAY_DAY,
+            NUM_MONTH_WEEKDAY_DAY);
 
     /*
      * TIMES
@@ -1117,7 +1156,25 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 4.0
      */
     public static final String MINUTE_SECOND = "ms";
-
+    
+    /**
+     * List of all of the time skeleton constants for iteration.
+     * Note that this is fragile; be sure to add any values that are added above.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final List<String> TIME_SKELETONS = Arrays.asList(
+            HOUR,
+            HOUR24,
+            MINUTE,
+            HOUR_MINUTE,
+            HOUR24_MINUTE,
+            SECOND,
+            HOUR_MINUTE_SECOND,
+            HOUR24_MINUTE_SECOND,
+            MINUTE_SECOND);
+    
     /*
      * TIMEZONES
      */
@@ -1175,6 +1232,21 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 50
      */
     public static final String ABBR_UTC_TZ = "ZZZZ";
+
+    /**
+     * List of all of the zone skeleton constants for iteration.
+     * Note that this is fragile; be sure to add any values that are added above.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final List<String> ZONE_SKELETONS = Arrays.asList(
+            LOCATION_TZ,
+            GENERIC_TZ,
+            ABBR_GENERIC_TZ,
+            SPECIFIC_TZ,
+            ABBR_SPECIFIC_TZ,
+            ABBR_UTC_TZ);
 
     /*
      * deprecated skeleton constants
