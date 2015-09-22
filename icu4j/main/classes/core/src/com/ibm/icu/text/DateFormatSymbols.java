@@ -1072,8 +1072,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width     The requested name width: WIDE, ABBREVIATED, SHORT, NARROW.
      * @return          The year name strings, or null if they are not
      *                  available for this calendar.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public String[] getYearNames(int context, int width) {
         // context & width ignored for now, one set of names for all uses
@@ -1088,8 +1087,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param yearNames The new cyclic year name strings.
      * @param context   The usage context: FORMAT, STANDALONE (currently only FORMAT is supported).
      * @param width     The name width: WIDE, ABBREVIATED, NARROW (currently only ABBREVIATED is supported).
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public void setYearNames(String[] yearNames, int context, int width) {
         if (context == FORMAT && width == ABBREVIATED) {
@@ -1104,8 +1102,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width     The requested name width: WIDE, ABBREVIATED, SHORT, NARROW.
      * @return          The zodiac name strings, or null if they are not
      *                  available for this calendar.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public String[] getZodiacNames(int context, int width) {
         // context & width ignored for now, one set of names for all uses
@@ -1120,8 +1117,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param zodiacNames   The new zodiac name strings.
      * @param context   The usage context: FORMAT, STANDALONE (currently only FORMAT is supported).
      * @param width     The name width: WIDE, ABBREVIATED, NARROW (currently only ABBREVIATED is supported).
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public void setZodiacNames(String[] zodiacNames, int context, int width) {
         if (context == FORMAT && width == ABBREVIATED) {

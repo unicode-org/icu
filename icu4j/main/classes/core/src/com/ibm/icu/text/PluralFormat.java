@@ -205,8 +205,7 @@ public class PluralFormat extends UFormat {
      * @param locale the <code>PluralFormat</code> will be configured with
      *        rules for this locale. This locale will also be used for standard
      *        number formatting.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public PluralFormat(Locale locale) {
         this(ULocale.forLocale(locale));
@@ -244,8 +243,7 @@ public class PluralFormat extends UFormat {
      *        locale.
      * @param rules defines the behavior of the <code>PluralFormat</code>
      *        object.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public PluralFormat(Locale locale, PluralRules rules) {
         this(ULocale.forLocale(locale), rules);
@@ -269,8 +267,7 @@ public class PluralFormat extends UFormat {
      * @param locale the default number formatting will be done using this
      *        locale.
      * @param type The plural type (e.g., cardinal or ordinal).
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public PluralFormat(Locale locale, PluralType type) {
         this(ULocale.forLocale(locale), type);

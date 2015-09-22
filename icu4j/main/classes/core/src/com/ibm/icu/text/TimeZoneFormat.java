@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2011-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -316,8 +316,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
          * look for the IANA tz database compatible zone abbreviations in addition
          * to the localized names coming from the {@link TimeZoneNames} currently
          * used by the {@link TimeZoneFormat}. 
-         * @draft ICU 54
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         TZ_DATABASE_ABBREVIATIONS;
     }
@@ -498,8 +497,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * 
      * @param locale the JDK locale.
      * @return a frozen instance of <code>TimeZoneFormat</code> for the given locale.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static TimeZoneFormat getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale));

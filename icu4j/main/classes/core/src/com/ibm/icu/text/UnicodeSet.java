@@ -4209,22 +4209,19 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * A struct-like class used for iteration through ranges, for faster iteration than by String.
      * Read about the restrictions on usage in {@link UnicodeSet#ranges()}.
      * 
-     * @draft ICU 54
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 54
      */
     public static class EntryRange {
         /**
          * The starting code point of the range.
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         public int codepoint;
         /**
          * The ending code point of the range
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         public int codepointEnd;
 
@@ -4234,8 +4231,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /**
          * {@inheritDoc}
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         @Override
         public String toString() {
@@ -4267,8 +4263,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * }
      * </pre>
      * 
-     * @draft ICU 54
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 54
      */
     public Iterable<EntryRange> ranges() {
         return new EntryRangeIterable();

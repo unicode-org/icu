@@ -355,8 +355,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @param locale  the interval patterns are loaded from the appropriate 
      *                calendar data (specified calendar or default calendar)
      *                in this locale.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public DateIntervalInfo(Locale locale) 
     {

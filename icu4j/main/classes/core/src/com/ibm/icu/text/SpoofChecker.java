@@ -584,8 +584,7 @@ public class SpoofChecker {
          *            is null, no restrictions will be placed on the allowed characters.
          *
          * @return self
-         * @draft ICU 54
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 54
          */
         public Builder setAllowedJavaLocales(Set<Locale> locales) {
             HashSet<ULocale> ulocales = new HashSet<ULocale>(locales.size());
@@ -1499,8 +1498,7 @@ public class SpoofChecker {
      * have been specified, an empty set will be returned.
      *
      * @return A set of locales corresponding to the acceptable scripts.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public Set<Locale> getAllowedJavaLocales() {
         HashSet<Locale> locales = new HashSet<Locale>(fAllowedLocales.size());

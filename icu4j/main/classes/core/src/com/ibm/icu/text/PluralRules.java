@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2014, International Business Machines Corporation and
+ * Copyright (C) 2007-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1905,8 +1905,7 @@ public class PluralRules implements Serializable {
      *   for the closest parent in the locale hierarchy that has one will
      *   be returned.  The final fallback always returns the default
      *   rules.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static PluralRules forLocale(Locale locale) {
         return forLocale(ULocale.forLocale(locale));
@@ -1950,8 +1949,7 @@ public class PluralRules implements Serializable {
      *   for the closest parent in the locale hierarchy that has one will
      *   be returned.  The final fallback always returns the default
      *   rules.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static PluralRules forLocale(Locale locale, PluralType type) {
         return forLocale(ULocale.forLocale(locale), type);

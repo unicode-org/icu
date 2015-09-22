@@ -2089,8 +2089,7 @@ public abstract class DateFormat extends UFormat {
      *              {@link DateTimePatternGenerator}.) This can be {@link DateFormat#ABBR_MONTH},
      *              {@link DateFormat#MONTH_WEEKDAY_DAY}, etc.
      *
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public final static DateFormat getInstanceForSkeleton(String skeleton) {
         return getPatternInstance(skeleton, ULocale.getDefault(Category.FORMAT));
@@ -2106,8 +2105,7 @@ public abstract class DateFormat extends UFormat {
      *
      * @param locale The locale for which the date/time format is desired.
      *
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public final static DateFormat getInstanceForSkeleton(String skeleton, Locale locale) {
         return getPatternInstance(skeleton, ULocale.forLocale(locale));
@@ -2123,8 +2121,7 @@ public abstract class DateFormat extends UFormat {
      *
      * @param locale The locale for which the date/time format is desired.
      *
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public final static DateFormat getInstanceForSkeleton(String skeleton, ULocale locale) {
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
@@ -2145,8 +2142,7 @@ public abstract class DateFormat extends UFormat {
      *
      * @param locale The locale for which the date/time format is desired.
      *
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public final static DateFormat getInstanceForSkeleton(Calendar cal, String skeleton, Locale locale) {
         return getPatternInstance(cal, skeleton, ULocale.forLocale(locale));
@@ -2165,8 +2161,7 @@ public abstract class DateFormat extends UFormat {
      *
      * @param locale The locale for which the date/time format is desired.
      *
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public final static DateFormat getInstanceForSkeleton(
         Calendar cal, String skeleton, ULocale locale) {

@@ -3803,8 +3803,7 @@ public class DecimalFormat extends NumberFormat {
      * pattern. 
      * @param value true if input must contain a match to decimal mark in pattern  
      * Default is false.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
      public void setDecimalPatternMatchRequired(boolean value) {
          parseRequireDecimalPoint = value;
@@ -3814,8 +3813,7 @@ public class DecimalFormat extends NumberFormat {
      * {@icu} Returns whether the input to parsing must contain a decimal mark if there
      * is a decimal mark in the pattern.
      * @return true if input must contain a match to decimal mark in pattern
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public boolean isDecimalPatternMatchRequired() {
         return parseRequireDecimalPoint;
@@ -5317,8 +5315,7 @@ public class DecimalFormat extends NumberFormat {
      * This takes effect immediately, if this format is a
      * currency format.  
      * @param newUsage new currency context object to use.  
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release. 
+     * @stable ICU 54
      */
     public void setCurrencyUsage(CurrencyUsage newUsage) {
         if (newUsage == null) {
@@ -5338,8 +5335,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the <tt>Currency Usage</tt> object used to display currency
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release. 
+     * @stable ICU 54
      */
     public CurrencyUsage getCurrencyUsage() {
         return currencyUsage;

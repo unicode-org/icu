@@ -4659,51 +4659,44 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Simple, immutable struct-like class for access to the CLDR weekend data.
      * 
-     * @draft ICU 54
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 54
      */
     public static final class WeekData {
         /**
          * the first day of the week, where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         public final int firstDayOfWeek;
         /**
          * the minimal number of days in the first week
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         public final int minimalDaysInFirstWeek;
         /**
          * the onset day, where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         public final int weekendOnset;
         /**
          * the onset time in millis during the onset day
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         public final int weekendOnsetMillis;
         /**
          * the cease day, where 1 = {@link #SUNDAY} and 7 = {@link #SATURDAY}
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         public final int weekendCease;
         /**
          * the cease time in millis during the cease day. Exclusive, so the max is 24:00:00.000.
          * Note that this will format as 00:00 the next day.
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         public final int weekendCeaseMillis;
 
@@ -4717,8 +4710,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @param weekendCease the cease day, where 1 = Sunday and 7 = Saturday
          * @param weekendCeaseMillis the cease time in millis during the cease day.
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         public WeekData(int fdow, int mdifw,
                 int weekendOnset, int weekendOnsetMillis,
@@ -4734,8 +4726,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         /**
          * {@inheritDoc}
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         @Override
         public int hashCode() {
@@ -4746,8 +4737,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         /**
          * {@inheritDoc}
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         @Override
         public boolean equals(Object other) {
@@ -4769,8 +4759,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         /**
          * {@inheritDoc}
          * 
-         * @draft ICU 54
-         * @provisional This is a draft API and might change in a future release of ICU.
+         * @stable ICU 54
          */
         @Override
         public String toString() {
@@ -4789,8 +4778,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @param region The input region. The results are undefined if the region code is not valid.
      * @return the WeekData for the input region. It is never null.
      * 
-     * @draft ICU 54
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 54
      */
     public static WeekData getWeekDataForRegion(String region) {
         return WEEK_DATA_CACHE.createInstance(region, region);
@@ -4800,8 +4788,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * {@icu} Return simple, immutable struct-like class for access to the weekend data in this calendar.
      * @return the WeekData for this calendar.
      * 
-     * @draft ICU 54
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 54
      */
     public WeekData getWeekData() {
         return new WeekData(firstDayOfWeek, minimalDaysInFirstWeek, weekendOnset, weekendOnsetMillis, weekendCease, weekendCeaseMillis);
@@ -4812,8 +4799,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @param wdata The week data to use
      * @return this, for chaining
      * 
-     * @draft ICU 54
-     * @provisional This is a draft API and might change in a future release of ICU.
+     * @stable ICU 54
      */
     public Calendar setWeekData(WeekData wdata) {
         setFirstDayOfWeek(wdata.firstDayOfWeek);

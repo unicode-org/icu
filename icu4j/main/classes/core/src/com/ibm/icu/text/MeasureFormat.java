@@ -232,8 +232,7 @@ public class MeasureFormat extends UFormat {
      * @param locale the JDK locale.
      * @param formatWidth hints how long formatted strings should be.
      * @return The new MeasureFormat object.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static MeasureFormat getInstance(Locale locale, FormatWidth formatWidth) {
         return getInstance(ULocale.forLocale(locale), formatWidth);
@@ -287,8 +286,7 @@ public class MeasureFormat extends UFormat {
      * @param formatWidth hints how long formatted strings should be.
      * @param format This is defensively copied.
      * @return The new MeasureFormat object.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static MeasureFormat getInstance(Locale locale, FormatWidth formatWidth, NumberFormat format) {
         return getInstance(ULocale.forLocale(locale), formatWidth, format);
@@ -645,8 +643,7 @@ public class MeasureFormat extends UFormat {
      * JDK locale.
      * @param locale desired JDK locale
      * @return a formatter object
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static MeasureFormat getCurrencyFormat(Locale locale) {
         return getCurrencyFormat(ULocale.forLocale(locale));

@@ -90,8 +90,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * Construct a flexible generator according to data for a given locale.
      * @param locale The JDK locale to pass.
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static DateTimePatternGenerator getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale));

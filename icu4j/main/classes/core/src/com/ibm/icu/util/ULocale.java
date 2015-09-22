@@ -1374,8 +1374,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * <p>Returns true for "ar" and "en-Hebr", false for "zh" and "fa-Cyrl".
      *
      * @return true if the locale's script is written right-to-left
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public boolean isRightToLeft() {
         String script = getScript();
@@ -3408,8 +3407,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      *                      or null if the specified locale keyword cannot be mapped
      *                      to a well-formed BCP 47 Unicode locale extension key. 
      * @see #toLegacyKey(String)
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static String toUnicodeLocaleKey(String keyword) {
         String bcpKey = KeyTypeData.toBcpKey(keyword);
@@ -3445,8 +3443,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      *                      or null if the locale keyword value cannot be mapped to
      *                      a well-formed BCP 47 Unicode locale extension type.
      * @see #toLegacyType(String, String)
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static String toUnicodeLocaleType(String keyword, String value) {
         String bcpType = KeyTypeData.toBcpType(keyword, value, null, null);
@@ -3467,8 +3464,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @return              the well-formed legacy key, or null if the specified
      *                      keyword cannot be mapped to a well-formed legacy key.
      * @see #toUnicodeLocaleKey(String)
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static String toLegacyKey(String keyword) {
         String legacyKey = KeyTypeData.toLegacyKey(keyword);
@@ -3512,8 +3508,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      *                      keyword value cannot be mapped to a well-formed legacy
      *                      type.
      * @see #toUnicodeLocaleType(String, String)
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static String toLegacyType(String keyword, String value) {
         String legacyType = KeyTypeData.toLegacyType(keyword, value, null, null);

@@ -5286,8 +5286,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return lowercase version of the argument string
      * @see #TITLECASE_NO_LOWERCASE
      * @see #TITLECASE_NO_BREAK_ADJUSTMENT
-     * @draft ICU 54
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 54
      */
     public static String toTitleCase(Locale locale, String str,
             BreakIterator titleIter,
