@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2014, International Business Machines Corporation and    *
+* Copyright (C) 2004-2015, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -65,10 +65,11 @@ public final class APIData {
 
     public static APIData read(File file, boolean internal) {
         String fileName = file.getName();
+        ZipFile zf = null;
         try {
             InputStream is;
             if (fileName.endsWith(".zip")) {
-                ZipFile zf = new ZipFile(file);
+                zf = new ZipFile(file);
                 Enumeration entryEnum = zf.entries();
                 if (entryEnum.hasMoreElements()) {
                     ZipEntry entry = (ZipEntry)entryEnum.nextElement();
@@ -85,11 +86,20 @@ public final class APIData {
             }
             InputStreamReader isr = new InputStreamReader(is);
             return read(new BufferedReader(isr), internal);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             RuntimeException re = new RuntimeException("error getting info stream: " + fileName);
             re.initCause(e);
             throw re;
+        } finally {
+            if (zf != null) {
+                try {
+                    zf.close();
+                } catch (IOException e) {
+                    RuntimeException re = new RuntimeException("failed to close the zip file: " + fileName);
+                    re.initCause(e);
+                    throw re;
+                }
+            }
         }
     }
 
