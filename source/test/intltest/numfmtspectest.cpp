@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2014, International Business Machines Corporation and         *
+* Copyright (C) 2014-2015, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -36,7 +36,10 @@ static NumberFormat *nfWithPattern(const char *pattern) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *result = new DecimalFormat(
             upattern, new DecimalFormatSymbols("fr", status), status);
-    U_ASSERT(status == U_ZERO_ERROR);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+
     return result;
 }
 
@@ -96,6 +99,10 @@ void NumberFormatSpecificationTest::TestBasicPatterns() {
 
 void NumberFormatSpecificationTest::TestNfSetters() {
     LocalPointer<NumberFormat> nf(nfWithPattern("#,##0.##"));
+    if (nf == NULL) {
+        dataerrln("Error creating NumberFormat");
+        return;
+    }
     nf->setMaximumIntegerDigits(5);
     nf->setMinimumIntegerDigits(4);
     assertEquals("", "34 567,89", format(1234567.89, *nf), TRUE);
@@ -187,10 +194,14 @@ void NumberFormatSpecificationTest::TestPadding() {
         UnicodeString result;
         DecimalFormat fmt(
                 upattern, new DecimalFormatSymbols("fr", status), status);
-        fmt.setCurrency(kJPY);
-        fmt.format(433.22, result);
-        assertSuccess("", status);
-        assertEquals("", "JPY ****433", result, TRUE);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        } else {
+            fmt.setCurrency(kJPY);
+            fmt.format(433.22, result);
+            assertSuccess("", status);
+            assertEquals("", "JPY ****433", result, TRUE);
+        }
     }
     {
         UnicodeString upattern(
@@ -202,9 +213,13 @@ void NumberFormatSpecificationTest::TestPadding() {
                 upattern,
                 new DecimalFormatSymbols("en_US", status),
                 status);
-        fmt.format(-433.22, result);
-        assertSuccess("", status);
-        assertEquals("", "USD (433.22)", result, TRUE);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        } else {
+            fmt.format(-433.22, result);
+            assertSuccess("", status);
+            assertEquals("", "USD (433.22)", result, TRUE);
+        }
     }
     const char *paddedSciPattern = "QU**00.#####E0";
     assertPatternFr("QU***43,3E-1", 4.33, paddedSciPattern, TRUE);
@@ -216,10 +231,14 @@ void NumberFormatSpecificationTest::TestPadding() {
                 paddedSciPattern,
                 sym,
                 status);
-        UnicodeString result;
-        fmt.format(4.33, result);
-        assertSuccess("", status);
-        assertEquals("", "QU**43,3EE-1", result, TRUE);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating DecimalFormat - %s", u_errorName(status));
+        } else {
+            UnicodeString result;
+            fmt.format(4.33, result);
+            assertSuccess("", status);
+            assertEquals("", "QU**43,3EE-1", result, TRUE);
+        }
     }
     // padding cannot work as intended with scientific notation.
     assertPatternFr("QU**43,32E-1", 4.332, paddedSciPattern, TRUE);
@@ -238,6 +257,10 @@ void NumberFormatSpecificationTest::assertPatternFr(
     UnicodeString result;
     DecimalFormat fmt(
             upattern, new DecimalFormatSymbols("fr_FR", status), status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating DecimalFormatSymbols - %s", u_errorName(status));
+        return;
+    }
     fmt.format(x, result);
     fixNonBreakingSpace(result);
     assertSuccess("", status);

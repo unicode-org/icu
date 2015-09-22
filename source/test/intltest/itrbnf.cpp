@@ -2147,7 +2147,7 @@ void IntlTestRBNF::TestInfinityNaN() {
             { NULL, NULL }
     };
     if (U_FAILURE(status)) {
-        errln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
+        dataerrln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
         return;
     }
 
@@ -2200,7 +2200,7 @@ void IntlTestRBNF::TestVariableDecimalPoint() {
             { NULL, NULL }
     };
     if (U_FAILURE(status)) {
-        errln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
+        dataerrln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
         return;
     }
     doTest(&enFormatter, enTestPointData, true);
