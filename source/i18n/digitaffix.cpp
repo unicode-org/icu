@@ -7,6 +7,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "digitaffix.h"
 #include "fphdlimp.h"
 #include "uassert.h"
@@ -102,3 +104,4 @@ DigitAffix::format(FieldPositionHandler &handler, UnicodeString &appendTo) const
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_FORMATTING */

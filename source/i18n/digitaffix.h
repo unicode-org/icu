@@ -12,9 +12,12 @@
 #ifndef __DIGITAFFIX_H__
 #define __DIGITAFFIX_H__
 
+#include "unicode/uobject.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
-#include "unicode/uobject.h"
 #include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN
@@ -95,5 +98,5 @@ private:
 
 
 U_NAMESPACE_END
-
+#endif // #if !UCONFIG_NO_FORMATTING
 #endif  // __DIGITAFFIX_H__

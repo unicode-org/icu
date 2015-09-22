@@ -5,6 +5,9 @@
  * file name: digitaffixesandpadding.cpp
  */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 #include "unicode/plurrule.h"
 #include "charstr.h"
@@ -167,4 +170,4 @@ DigitAffixesAndPadding::appendPadding(int32_t paddingCount, UnicodeString &appen
 
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */

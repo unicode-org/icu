@@ -11,8 +11,11 @@
 #ifndef __VISIBLEDIGITS_H__
 #define __VISIBLEDIGITS_H__
 
-#include "unicode/uobject.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/uobject.h"
 
 #include "charstr.h"
 #include "digitinterval.h"
@@ -153,5 +156,5 @@ private:
 
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */
 #endif  // __VISIBLEDIGITS_H__

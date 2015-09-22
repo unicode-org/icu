@@ -9,6 +9,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "cstring.h"
 #include "decNumber.h"
 #include "digitlst.h"
@@ -182,4 +184,4 @@ void VisibleDigits::getFixedDecimal(
 }
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */

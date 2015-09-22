@@ -12,8 +12,11 @@
 #ifndef __DIGITAFFIXESANDPADDING_H__
 #define __DIGITAFFIXESANDPADDING_H__
 
-#include "unicode/uobject.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/uobject.h"
 #include "pluralaffix.h"
 
 U_NAMESPACE_BEGIN
@@ -170,5 +173,5 @@ UnicodeString &appendPadding(int32_t paddingCount, UnicodeString &appendTo) cons
 
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */
 #endif  // __DIGITAFFIXANDPADDING_H__

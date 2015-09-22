@@ -5,6 +5,10 @@
  * file name: decimfmtimpl.cpp
  */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include <math.h>
 #include "unicode/numfmt.h"
 #include "unicode/plurrule.h"
@@ -1586,5 +1590,5 @@ DecimalFormatImpl::isParseFastpath() const {
 
 U_NAMESPACE_END
 
-
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
