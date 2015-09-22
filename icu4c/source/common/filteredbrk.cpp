@@ -135,15 +135,18 @@ static const UChar   kFULLSTOP = 0x002E; // '.'
  */
 class SimpleFilteredSentenceBreakData : public UMemory {
 public:
+  SimpleFilteredSentenceBreakData(UCharsTrie *forwards, UCharsTrie *backwards ) 
+      : fForwardsPartialTrie(forwards), fBackwardsTrie(backwards), refcount(1) { }
+  SimpleFilteredSentenceBreakData *incr() { refcount++;  return this; }
+  SimpleFilteredSentenceBreakData *decr() { if((--refcount) <= 0) delete this; return 0; }
+  virtual ~SimpleFilteredSentenceBreakData();
+
   LocalPointer<UCharsTrie>    fForwardsPartialTrie; //  Has ".a" for "a.M."
   LocalPointer<UCharsTrie>    fBackwardsTrie; //  i.e. ".srM" for Mrs.
   int32_t                     refcount;
-  SimpleFilteredSentenceBreakData(UCharsTrie *forwards, UCharsTrie *backwards ) 
-      : fForwardsPartialTrie(forwards), fBackwardsTrie(backwards), refcount(1) { }
-  virtual ~SimpleFilteredSentenceBreakData() {}
-  SimpleFilteredSentenceBreakData *incr() { refcount++;  return this; }
-  SimpleFilteredSentenceBreakData *decr() { if((--refcount) <= 0) delete this; return 0; }
 };
+
+SimpleFilteredSentenceBreakData::~SimpleFilteredSentenceBreakData() {}
 
 /**
  * Concrete implementation

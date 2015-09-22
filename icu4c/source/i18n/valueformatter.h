@@ -45,6 +45,8 @@ public:
     ValueFormatter() : fType(kFormatTypeCount) {
     }
 
+    virtual ~ValueFormatter();
+
     /**
      * This function is here only to support the protected round() method
      * in DecimalFormat. It serves no ther purpose than that.
