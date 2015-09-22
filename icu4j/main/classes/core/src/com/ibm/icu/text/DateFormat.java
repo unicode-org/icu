@@ -502,7 +502,12 @@ public abstract class DateFormat extends UFormat {
          * @provisional This API might change or be removed in a future release.
          */
         PARSE_PARTIAL_LITERAL_MATCH,
-        // old name left in for previous serialization checks
+        /**
+         * alias of PARSE_PARTIAL_LITERAL_MATCH
+         * @internal
+         * @deprecated
+         */
+        @Deprecated
         PARSE_PARTIAL_MATCH
     };
     
@@ -1589,6 +1594,9 @@ public abstract class DateFormat extends UFormat {
      */
     public DateFormat setBooleanAttribute(BooleanAttribute key, boolean value) 
     {
+        if(key.equals(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH)) {
+            key = DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH;
+        }
         if(value)
         {
             booleanAttributes.add(key);
@@ -1611,6 +1619,9 @@ public abstract class DateFormat extends UFormat {
      */
     public boolean getBooleanAttribute(BooleanAttribute key) 
     {
+        if(key == DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH) {
+            key = DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH;
+        }
         return booleanAttributes.contains(key);
     }
     
@@ -1740,6 +1751,12 @@ public abstract class DateFormat extends UFormat {
             // Didn't have capitalizationSetting, set it to default
             capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
         }
+        
+        // if deserialized from a release that didn't have booleanAttributes, add them all
+        if(booleanAttributes == null) {
+            booleanAttributes = EnumSet.allOf(BooleanAttribute.class);
+        }
+
         serialVersionOnStream = currentSerialVersion;
     }
 

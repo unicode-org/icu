@@ -3681,6 +3681,11 @@ public class SimpleDateFormat extends DateFormat {
                 }
             }
         }
+        
+        // if serialized pre-56 update & turned off partial match switch to new enum value
+        if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH) == false) {
+            setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH, false);
+        }
     }
 
     /**
