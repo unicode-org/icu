@@ -12,7 +12,6 @@
 package com.ibm.icu.impl.coll;
 
 import java.util.Map;
-import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;

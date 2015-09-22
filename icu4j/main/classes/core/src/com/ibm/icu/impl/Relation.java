@@ -31,32 +31,33 @@ import com.ibm.icu.util.Freezable;
 public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add , Map<K, Collection<V>>, but requires API changes
     private Map<K, Set<V>> data;
 
-    Constructor<Set<V>> setCreator;
+    Constructor<? extends Set<V>> setCreator;
     Object[] setComparatorParam;
 
-    public static <K,V> Relation<K, V> of(Map<K, Set<V>> map, Class<?> setCreator) {
-        return new Relation(map, setCreator);
+    public static <K, V> Relation<K, V> of(Map<K, Set<V>> map, Class<?> setCreator) {
+        return new Relation<K, V>(map, setCreator);
     }
 
-    public static <K,V> Relation<K, V> of(Map<K, Set<V>> map, Class setCreator, Comparator<V> setComparator) {
-        return new Relation(map, setCreator, setComparator);
+    public static <K,V> Relation<K, V> of(Map<K, Set<V>> map, Class<?> setCreator, Comparator<V> setComparator) {
+        return new Relation<K, V>(map, setCreator, setComparator);
     }
 
-    public Relation(Map<K, Set<V>> map, Class<Set<V>> setCreator) {
+    public Relation(Map<K, Set<V>> map, Class<?> setCreator) {
         this(map, setCreator, null);
     }
 
-    public Relation(Map<K, Set<V>> map, Class<Set<V>> setCreator, Comparator<V> setComparator) {
+    @SuppressWarnings("unchecked")
+    public Relation(Map<K, Set<V>> map, Class<?> setCreator, Comparator<V> setComparator) {
         try {
             setComparatorParam = setComparator == null ? null : new Object[]{setComparator};
             if (setComparator == null) {
-                this.setCreator = setCreator.getConstructor();
+                this.setCreator = ((Class<? extends Set<V>>)setCreator).getConstructor();
                 this.setCreator.newInstance(setComparatorParam); // check to make sure compiles
             } else {
-                this.setCreator = setCreator.getConstructor(Comparator.class);
+                this.setCreator = ((Class<? extends Set<V>>)setCreator).getConstructor(Comparator.class);
                 this.setCreator.newInstance(setComparatorParam); // check to make sure compiles        
             }
-            data = map == null ? new HashMap() : map;     
+            data = map == null ? new HashMap<K, Set<V>>() : map;
         } catch (Exception e) {
             throw (RuntimeException) new IllegalArgumentException("Can't create new set").initCause(e);
         }
@@ -88,10 +89,10 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     }
     
     public Set<Entry<K, V>> keyValueSet() {
-        Set<Entry<K, V>> result = new LinkedHashSet();
+        Set<Entry<K, V>> result = new LinkedHashSet<Entry<K, V>>();
         for (K key : data.keySet()) {
             for (V value : data.get(key)) {
-                result.add(new SimpleEntry(key, value));
+                result.add(new SimpleEntry<K, V>(key, value));
             }
         }
         return result;
@@ -102,7 +103,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
             return false;
         if (o.getClass() != this.getClass())
             return false;
-        return data.equals(((Relation) o).data);
+        return data.equals(((Relation<?, ?>) o).data);
     }
 
     //  public V get(Object key) {
@@ -209,7 +210,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     }
 
     public Set<V> values() {
-        return values(new LinkedHashSet());
+        return values(new LinkedHashSet<V>());
     }
 
     public <C extends Collection<V>> C values(C result) {
@@ -321,7 +322,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     }
 
     public Set<V> removeAll(Collection<K> toBeRemoved) {
-        Set<V> result = new LinkedHashSet();
+        Set<V> result = new LinkedHashSet<V>();
         for (K key : toBeRemoved) {
             try {
                 final Set<V> removals = data.remove(key);
