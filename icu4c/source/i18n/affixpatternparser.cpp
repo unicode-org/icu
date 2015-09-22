@@ -5,6 +5,9 @@
  * file name: affixpatternparser.cpp
  */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 #include "unicode/dcfmtsym.h"
 #include "unicode/plurrule.h"
@@ -686,4 +689,4 @@ AffixPatternParser::parse(
 
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */

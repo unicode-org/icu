@@ -12,9 +12,12 @@
 #ifndef __PLURALAFFIX_H__
 #define __PLURALAFFIX_H__
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unum.h"
 #include "unicode/uobject.h"
-#include "unicode/utypes.h"
 
 #include "digitaffix.h"
 #include "pluralmap.h"
@@ -168,5 +171,5 @@ private:
 
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */
 #endif  // __PLURALAFFIX_H__

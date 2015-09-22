@@ -12,9 +12,12 @@
 #ifndef __DIGITFORMATTER_H__
 #define __DIGITFORMATTER_H__
 
-#include "unicode/unistr.h"
 #include "unicode/uobject.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/utypes.h"
+#include "unicode/unistr.h"
 #include "digitaffix.h"
 
 U_NAMESPACE_BEGIN
@@ -279,5 +282,5 @@ int32_t countChar32ForExponent(
 
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */
 #endif  // __DIGITFORMATTER_H__

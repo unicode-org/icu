@@ -12,9 +12,12 @@
 #ifndef __AFFIX_PATTERN_PARSER_H__
 #define __AFFIX_PATTERN_PARSER_H__
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 #include "unicode/uobject.h"
-#include "unicode/utypes.h"
 #include "pluralaffix.h"
 
 U_NAMESPACE_BEGIN
@@ -393,5 +396,5 @@ UnicodeString fPositive;
 
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */
 #endif  // __AFFIX_PATTERN_PARSER_H__

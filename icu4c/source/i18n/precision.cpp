@@ -9,6 +9,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "digitlst.h"
 #include "fmtableimp.h"
 #include "precision.h"
@@ -437,4 +439,4 @@ ScientificPrecision::initVisibleDigitsWithExponent(
 
 
 U_NAMESPACE_END
-
+#endif /* #if !UCONFIG_NO_FORMATTING */

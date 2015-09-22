@@ -7,6 +7,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "cstring.h"
 #include "digitaffix.h"
 #include "pluralaffix.h"
@@ -97,3 +99,4 @@ PluralAffix::hasMultipleVariants() const {
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_FORMATTING */

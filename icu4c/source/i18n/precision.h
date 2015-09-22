@@ -13,6 +13,8 @@
 #define __PRECISION_H__
 
 #include "unicode/uobject.h"
+
+#if !UCONFIG_NO_FORMATTING
 #include "unicode/utypes.h"
 
 #include "digitinterval.h"
@@ -315,5 +317,5 @@ private:
 
 
 U_NAMESPACE_END
-
+#endif // #if !UCONFIG_NO_FORMATTING
 #endif  // __PRECISION_H__

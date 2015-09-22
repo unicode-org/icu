@@ -5,9 +5,12 @@
  * file name: digitformatter.cpp
  */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/dcfmtsym.h"
 #include "unicode/unum.h"
-#include "unicode/utypes.h"
 
 #include "digitformatter.h"
 #include "digitgrouping.h"
@@ -409,3 +412,4 @@ DigitFormatter::equals(const DigitFormatter &rhs) const {
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
