@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -31,7 +31,7 @@ public class NumberFormatTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : NumberFormat.getAvailableLocales()) {
-            if (TestUtil.isProblematicIBMLocale(loc)) {
+            if (TestUtil.isExcluded(loc)) {
                 logln("Skipped " + loc);
                 continue;
             }

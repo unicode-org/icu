@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -43,7 +43,7 @@ public class TimeZoneNameTest extends TestFmwk {
 
         for (Locale loc : locales) {
             boolean warningOnly = false;
-            if (TestUtil.isProblematicIBMLocale(loc)) {
+            if (TestUtil.isExcluded(loc)) {
                 warningOnly = true;
             }
 

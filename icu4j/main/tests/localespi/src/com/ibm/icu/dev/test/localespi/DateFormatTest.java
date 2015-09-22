@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -27,7 +27,7 @@ public class DateFormatTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : DateFormat.getAvailableLocales()) {
-            if (TestUtil.isProblematicIBMLocale(loc)) {
+            if (TestUtil.isExcluded(loc)) {
                 logln("Skipped " + loc);
                 continue;
             }

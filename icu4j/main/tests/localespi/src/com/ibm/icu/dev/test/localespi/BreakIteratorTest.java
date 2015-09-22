@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -26,7 +26,7 @@ public class BreakIteratorTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : BreakIterator.getAvailableLocales()) {
-            if (TestUtil.isProblematicIBMLocale(loc)) {
+            if (TestUtil.isExcluded(loc)) {
                 logln("Skipped " + loc);
                 continue;
             }
