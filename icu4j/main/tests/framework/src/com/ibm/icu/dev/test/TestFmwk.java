@@ -1974,9 +1974,10 @@ public class TestFmwk extends AbstractTestLog {
         // Walk up the stack to the first call site outside this file
         for (StackTraceElement st : new Throwable().getStackTrace()) {
             String source = st.getFileName();
-            if (!source.equals("TestFmwk.java") && !source.equals("AbstractTestLog.java")) {
+            if (source != null && !source.equals("TestFmwk.java") && !source.equals("AbstractTestLog.java")) {
                 String methodName = st.getMethodName();
-                if (methodName.startsWith("Test") || methodName.startsWith("test") || methodName.equals("main")) {
+                if (methodName != null && 
+                       (methodName.startsWith("Test") || methodName.startsWith("test") || methodName.equals("main"))) {
                     return "(" + source + ":" + st.getLineNumber() + ") ";
                 }
             }
