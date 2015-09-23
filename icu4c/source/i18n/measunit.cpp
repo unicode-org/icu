@@ -527,7 +527,7 @@ MeasureUnit *MeasureUnit::createRadian(UErrorCode &status) {
     return MeasureUnit::create(1, 3, status);
 }
 
-MeasureUnit *MeasureUnit::createRevolution(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createRevolutionAngle(UErrorCode &status) {
     return MeasureUnit::create(1, 4, status);
 }
 
@@ -915,7 +915,7 @@ MeasureUnit *MeasureUnit::createFahrenheit(UErrorCode &status) {
     return MeasureUnit::create(17, 1, status);
 }
 
-MeasureUnit *MeasureUnit::createGeneric(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createGenericTemperature(UErrorCode &status) {
     return MeasureUnit::create(17, 2, status);
 }
 

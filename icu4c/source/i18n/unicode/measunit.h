@@ -254,7 +254,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param status ICU error code.
      * @draft ICU 56
      */
-    static MeasureUnit *createRevolution(UErrorCode &status);
+    static MeasureUnit *createRevolutionAngle(UErrorCode &status);
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
@@ -1038,9 +1038,9 @@ class U_I18N_API MeasureUnit: public UObject {
      * Returns unit of temperature: generic.
      * Caller owns returned value and must free it.
      * @param status ICU error code.
-     * @draft ICU 55
+     * @draft ICU 56
      */
-    static MeasureUnit *createGeneric(UErrorCode &status);
+    static MeasureUnit *createGenericTemperature(UErrorCode &status);
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
