@@ -1678,6 +1678,9 @@
         <copy file="${icu4j.core-tests.dir}/src/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
                 todir="${module.tests.dir}/com/ibm/icu/dev/test/format"/>
 
+        <copy file="${icu4j.core-tests.dir}/src/com/ibm/icu/dev/data/numberformattestspecification.txt"
+                todir="${module.tests.dir}/com/ibm/icu/dev/data"/>
+
     </target>
 
     <!-- Normalizer -->
