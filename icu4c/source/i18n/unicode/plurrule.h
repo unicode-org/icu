@@ -347,6 +347,9 @@ public:
       * @internal
       */
     UnicodeString select(const FixedDecimal &number) const;
+    /**
+      * @internal
+      */
     UnicodeString select(const VisibleDigitsWithExponent &number) const;
 #endif  /* U_HIDE_INTERNAL_API */
 
