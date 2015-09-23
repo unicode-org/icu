@@ -489,7 +489,6 @@ icu4j/tools/build/icu4j52.api3.gz -text
 icu4j/tools/build/icu4j53.api3.gz -text
 icu4j/tools/build/icu4j54.api3.gz -text
 icu4j/tools/build/icu4j55.api3.gz -text
-icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/ICUTagletAdapter.java7 -text
 tools/currency/.classpath -text
 tools/currency/.project -text
 tools/currency/.settings/org.eclipse.core.resources.prefs -text
