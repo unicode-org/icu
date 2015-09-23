@@ -364,7 +364,7 @@ public class MeasureUnit implements Serializable {
      * @draft ICU 56
      * @provisional This API might change or be removed in a future release.
      */
-    public static final MeasureUnit REVOLUTION = MeasureUnit.internalGetInstance("angle", "revolution");
+    public static final MeasureUnit REVOLUTION_ANGLE = MeasureUnit.internalGetInstance("angle", "revolution");
 
     /**
      * Constant for unit of area: acre
@@ -948,10 +948,10 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of temperature: generic
-     * @draft ICU 55
+     * @draft ICU 56
      * @provisional This API might change or be removed in a future release.
      */
-    public static final MeasureUnit GENERIC = MeasureUnit.internalGetInstance("temperature", "generic");
+    public static final MeasureUnit GENERIC_TEMPERATURE = MeasureUnit.internalGetInstance("temperature", "generic");
 
     /**
      * Constant for unit of temperature: kelvin
