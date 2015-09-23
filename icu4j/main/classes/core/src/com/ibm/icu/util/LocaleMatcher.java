@@ -51,7 +51,9 @@ public class LocaleMatcher {
 
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static final boolean DEBUG = false;
 
     private static final ULocale UNKNOWN_LOCALE = new ULocale("und");
@@ -288,9 +290,11 @@ public class LocaleMatcher {
     }
     
     /**
-     * @internal
+     * @internal 
+     * @deprecated This API is ICU internal only.
      */
-    public static class OutputDouble { // TODO, move to where OutputInt is
+    @Deprecated
+    private static class OutputDouble { // TODO, move to where OutputInt is
         double value;
     }
 
