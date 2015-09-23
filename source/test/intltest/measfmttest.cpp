@@ -424,7 +424,7 @@ void MeasureFormatTest::TestCompatible55_1() {
     measureUnit.adoptInstead(MeasureUnit::createMilePerHour(status));
     measureUnit.adoptInstead(MeasureUnit::createCelsius(status));
     measureUnit.adoptInstead(MeasureUnit::createFahrenheit(status));
-    measureUnit.adoptInstead(MeasureUnit::createGeneric(status));
+    measureUnit.adoptInstead(MeasureUnit::createGenericTemperature(status));
     measureUnit.adoptInstead(MeasureUnit::createKelvin(status));
     measureUnit.adoptInstead(MeasureUnit::createAcreFoot(status));
     measureUnit.adoptInstead(MeasureUnit::createBushel(status));
@@ -460,7 +460,7 @@ void MeasureFormatTest::TestCompatible56_1() {
     measureUnit.adoptInstead(MeasureUnit::createArcSecond(status));
     measureUnit.adoptInstead(MeasureUnit::createDegree(status));
     measureUnit.adoptInstead(MeasureUnit::createRadian(status));
-    measureUnit.adoptInstead(MeasureUnit::createRevolution(status));
+    measureUnit.adoptInstead(MeasureUnit::createRevolutionAngle(status));
     measureUnit.adoptInstead(MeasureUnit::createAcre(status));
     measureUnit.adoptInstead(MeasureUnit::createHectare(status));
     measureUnit.adoptInstead(MeasureUnit::createSquareCentimeter(status));
@@ -557,7 +557,7 @@ void MeasureFormatTest::TestCompatible56_1() {
     measureUnit.adoptInstead(MeasureUnit::createMilePerHour(status));
     measureUnit.adoptInstead(MeasureUnit::createCelsius(status));
     measureUnit.adoptInstead(MeasureUnit::createFahrenheit(status));
-    measureUnit.adoptInstead(MeasureUnit::createGeneric(status));
+    measureUnit.adoptInstead(MeasureUnit::createGenericTemperature(status));
     measureUnit.adoptInstead(MeasureUnit::createKelvin(status));
     measureUnit.adoptInstead(MeasureUnit::createAcreFoot(status));
     measureUnit.adoptInstead(MeasureUnit::createBushel(status));
