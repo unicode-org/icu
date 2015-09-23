@@ -25,6 +25,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
@@ -434,6 +436,12 @@ public class TestCharsetDetector extends TestFmwk
         }
 
         if (!checkRoundtrip) {
+            return;
+        }
+
+        // TODO temporary workaround for IBM Java 8 ISO-2022-KR problem
+        if (encoding.equals("ISO-2022-KR") && TestUtil.getJavaVendor() == JavaVendor.IBM && TestUtil.getJavaVersion() == 8) {
+            logln("Skipping roundtrip check on IBM Java 8: " + id + ", " + encoding);
             return;
         }
         
