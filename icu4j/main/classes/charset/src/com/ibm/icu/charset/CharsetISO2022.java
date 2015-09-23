@@ -1536,18 +1536,6 @@ class CharsetISO2022 extends CharsetICU {
         ASCII,
         JISX201,
         ISO8859_1,
-        ISO8859_7,
-        JISX208,
-        JISX212,
-        GB2312,
-        KSC5601,
-        HWKANA_7BIT
-    };
-    /* preference order of JP charsets for version 2,3,4*/
-    private final static byte []jpCharsetPref_alt = {
-        ASCII,
-        JISX201,
-        ISO8859_1,
         JISX208,
         ISO8859_7,
         JISX212,
@@ -1837,26 +1825,13 @@ class CharsetISO2022 extends CharsetICU {
                             choices[choiceCount++] = cs;
                             csm &= ~CSM(cs);
                         }
-                        
-                        /*
-                        * version 2,3,4 of JP iso 2022 requires a different preference order for the possible charsets.
-                        */
-                        if (cs == 0 && myConverterData.version >= 2) {
-                            for (int i = 0; i < jpCharsetPref_alt.length; i++) {
-                                cs = jpCharsetPref_alt[i];
-                                if ((CSM(cs) & csm) != 0) {
-                                    choices[choiceCount++] = cs;
-                                    csm &= ~CSM(cs);
-                                }
-                            }
-                        } else {
+
                         /* try all the other charsets */
-                            for (int i = 0; i < jpCharsetPref.length; i++) {
-                                cs = jpCharsetPref[i];
-                                if ((CSM(cs) & csm) != 0) {
-                                    choices[choiceCount++] = cs;
-                                    csm &= ~CSM(cs);
-                                }
+                        for (int i = 0; i < jpCharsetPref.length; i++) {
+                            cs = jpCharsetPref[i];
+                            if ((CSM(cs) & csm) != 0) {
+                                choices[choiceCount++] = cs;
+                                csm &= ~CSM(cs);
                             }
                         }
                     }
