@@ -1421,19 +1421,6 @@ static const StateEnum jpCharsetPref[]={
     ASCII,
     JISX201,
     ISO8859_1,
-    ISO8859_7,
-    JISX208,
-    JISX212,
-    GB2312,
-    KSC5601,
-    HWKANA_7BIT
-};
-
-/* alternate preference order of JP charsets for version 2,3,4*/
-static const StateEnum jpCharsetPref_alt[]={
-    ASCII,
-    JISX201,
-    ISO8859_1,
     JISX208,
     ISO8859_7,
     JISX212,
@@ -1769,26 +1756,13 @@ getTrail:
                     choices[choiceCount++] = cs;
                     csm &= ~CSM(cs);
                 }
-                
-                /*
-                 * version 2,3,4 of JP iso 2022 requires a different preference order for the possible charsets is there is no previous state set
-                 */
-                if (cs == 0 && converterData->version >= 2) {
-                    for(i = 0; i < UPRV_LENGTHOF(jpCharsetPref_alt); ++i) {
-                        cs = (int8_t)jpCharsetPref_alt[i];
-                        if(CSM(cs) & csm) {
-                            choices[choiceCount++] = cs;
-                            csm &= ~CSM(cs);
-                        }
-                    }
-                } else {
-                    /* try all the other possible charsets */
-                    for(i = 0; i < UPRV_LENGTHOF(jpCharsetPref); ++i) {
-                        cs = (int8_t)jpCharsetPref[i];
-                        if(CSM(cs) & csm) {
-                            choices[choiceCount++] = cs;
-                            csm &= ~CSM(cs);
-                        }
+
+                /* try all the other possible charsets */
+                for(i = 0; i < UPRV_LENGTHOF(jpCharsetPref); ++i) {
+                    cs = (int8_t)jpCharsetPref[i];
+                    if(CSM(cs) & csm) {
+                        choices[choiceCount++] = cs;
+                        csm &= ~CSM(cs);
                     }
                 }
             }
