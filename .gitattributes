@@ -5025,10 +5025,10 @@ icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/GatherAPIDataOld.java svneol=nat
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/ICUJDKCompare.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/ICUTaglet.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/ICUTagletAdapter.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/ICUTagletAdapter.java7 -text
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/ReportAPI.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/SwatDeprecated.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/index/IndexGenerator.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/tools/build/src8/com/ibm/icu/dev/tool/docs/ICUTagletAdapter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/UOption.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/charsetdet/mbcs/BIG5Tool.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/charsetdet/mbcs/EUCTool.java svneol=native#text/plain%3Bcharset%3Dutf-8

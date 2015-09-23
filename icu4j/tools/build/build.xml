@@ -1,12 +1,22 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009-2011, 2015 International Business Machines Corporation   *
-* and others. All Rights Reserved.                                            *
+* Copyright (C) 2009-2015, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
 <project name="build-tools" default="build" basedir=".">
     <property file="build-local.properties"/>
     <property file="build.properties"/>
+
+    <!-- before importing common-targets.xml -->
+    <condition property="alt.src.dir" value="out/tmp-src8">
+        <equals arg1="${ant.java.version}" arg2="1.8"/>
+    </condition>
+
+    <condition property="src.dir" value="${alt.src.dir}">
+        <isset property="alt.src.dir"/>
+    </condition>
+
     <import file="${shared.dir}/build/common-targets.xml"/>
 
     <path id="javac.classpathref">
@@ -14,55 +24,32 @@
     </path>
     <property name="jar.name" value="icu4j-${ant.project.name}.jar"/>
     <property name="src.jar.name" value="icu4j-${ant.project.name}-src.jar"/>
-	<property name="icutaglet.adapter" value="./src/com/ibm/icu/dev/tool/docs/ICUTagletAdapter.java"/>
-	<property name="v7.icutaglet.adapter" value="${icutaglet.adapter}7"/>
 
-    <target name="info" description="Display the build environment information">
-        <echo message="----- Build Environment Information -------------------"/>
-        <echo message="Java Home:    ${java.home}"/>
-        <echo message="Java Version: ${java.version}"/>
-        <echo message="Ant Home:     ${ant.home}"/>
-        <echo message="Ant Version:  ${ant.version}"/>
-        <echo message="OS:           ${os.name}"/>
-        <echo message="OS Version:   ${os.version}"/>
-        <echo message="OS Arch:      ${os.arch}"/>
-        <echo message="Host:         ${env.COMPUTERNAME}"/>
-        <echo message="-------------------------------------------------------"/>
-    </target>
-	
-    <target name="build" depends="info, compile, copy, jar, adapter-notify" description="Build the project"/>
+    <target name="build" depends="compile, copy, jar" description="Build the project"/>
 
     <target name="build-all" depends="@build-all" description="Build the project including all dependencies"/>
 
     <target name="clean" depends="@clean" description="Clean up the build outputs"/>
 
-    <target name="compile" depends="set-javadoc-adapter, @compile" description="Compile java source files"/>
+    <target name="compile" depends="copy-src-jdk8, @compile" description="Compile java source files"/>
 
     <target name="copy" depends="@copy" description="Copy non-java runtime files to the project's binary directory"/>
 
     <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
 
-    <target name="src-jar" depends="@src-jar" description="Create the project's source jar file"/>
-	
-	<target name="java-version" depends="info">
-		<condition property="java.version.pre8">
-	        <or>
-	          <equals arg1="${ant.java.version}" arg2="1.5"/>
-	          <equals arg1="${ant.java.version}" arg2="1.6"/>
-	          <equals arg1="${ant.java.version}" arg2="1.7"/>
-	        </or>
-	    </condition>
-	</target>
+    <target name="src-jar" depends="copy-src-jdk8, @src-jar" description="Create the project's source jar file"/>
 
-	<target name="set-javadoc-adapter" depends="java-version" if="java.version.pre8">
-		<echo message="pre v8 Java build detected...setting taglet adapter to older API adapter"/>
-		<copy file="${v7.icutaglet.adapter}" tofile="${icutaglet.adapter}" overwrite="true" />
-	</target>
-
-	<target name="adapter-notify" depends="java-version" if="java.version.pre8">
-		<echo message="pre v8 Java build detected and the adapter was set to the older API adapter"/>
-		<echo message="NOTE: revert this change once the docs are built with this older Javadoc version "/>
-		<echo message="file to revert is: ${icutaglet.adapter}"/>
-	</target>
-
+    <!-- Override a source file for supporting JDK 8 JavaDoc -->
+    <target name="copy-src-jdk8" if="alt.src.dir">
+        <echo message="Building ICU4J build tools with JDK8 tools..."/>
+        <mkdir dir="${alt.src.dir}"/>
+        <!-- copy all files under 'src' -->
+        <copy todir="${alt.src.dir}">
+            <fileset dir="src"/>
+        </copy>
+        <!-- overwrite jdk8 specific source file -->
+        <copy todir="${alt.src.dir}" overwrite="yes">
+            <fileset dir="src8"/>
+        </copy>
+    </target>
 </project>
