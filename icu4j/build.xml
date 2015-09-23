@@ -93,6 +93,14 @@
             <contains string="${java.version}" substring="1.8."/>
         </or>
     </condition>
+    <condition property="is.pre.java8">
+        <or>
+            <contains string="${java.version}" substring="1.5."/>
+            <contains string="${java.version}" substring="1.6."/>
+            <contains string="${java.version}" substring="1.7."/>
+        </or>
+    </condition>
+    
 
     <!-- Build environment info -->
     <property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
@@ -789,7 +797,15 @@
         </condition>
     </target>
 
-    <target name="_docsWithJCite" depends="_docsStyleSheet" if="jcite.libs">
+    <!-- doclint in V8 is too strict to handle existing html in javadoc -->
+    <target name="_setLintV8" unless="is.pre.java8">
+        <property name="lintParam" value="-Xdoclint:-html"/>
+    </target>
+    <target name="_setLintPreV8" if="is.pre.java8">
+        <property name="lintParam" value=""/>
+    </target>
+    
+    <target name="_docsWithJCite" depends="_docsStyleSheet, _setLintV8, _setLintPreV8" if="jcite.libs">
         <echo message="JCite library path:             ${jcite.libs}"/>
         <echo message="JCite additional source path:   ${jcite.addl.src}"/>
         <echo message="Custom stylesheet:              ${docs.style.sheet}"/>
@@ -803,7 +819,7 @@
                 docencoding="UTF-8"
                 charset="UTF-8"
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
-                additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src} -J-Dfile.encoding=UTF-8"
+                additionalparam="${lintParam} -breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src} -J-Dfile.encoding=UTF-8"
                 link="${icu4j.api.doc.jdk.link}"
                 source="1.5"
                 stylesheetfile="${docs.style.sheet}">

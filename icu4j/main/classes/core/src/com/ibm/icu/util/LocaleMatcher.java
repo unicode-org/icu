@@ -49,7 +49,7 @@ import com.ibm.icu.impl.Utility;
  */
 public class LocaleMatcher {
 
-    public static final boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     private static final ULocale UNKNOWN_LOCALE = new ULocale("und");
 
@@ -284,7 +284,7 @@ public class LocaleMatcher {
         return bestTableMatch;
     }
     
-    public static class OutputDouble { // TODO, move to where OutputInt is
+    private static class OutputDouble { // TODO, move to where OutputInt is
         double value;
     }
 
