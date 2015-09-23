@@ -439,7 +439,6 @@ public abstract class TimeZoneNames implements Serializable {
     }
 
     /**
-     * @author Markus
      * @internal For specific users only until proposed publicly.
      * @deprecated This API is ICU internal only.
      */
@@ -447,7 +446,6 @@ public abstract class TimeZoneNames implements Serializable {
     public void loadAllDisplayNames() {}
 
     /**
-     * @author Markus
      * @internal For specific users only until proposed publicly.
      * @deprecated This API is ICU internal only.
      */
