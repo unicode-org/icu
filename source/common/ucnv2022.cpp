@@ -1429,8 +1429,8 @@ static const StateEnum jpCharsetPref[]={
     HWKANA_7BIT
 };
 
-/* preference order of JP charsets for version 4*/
-static const StateEnum jpCharsetPref_ver4[]={
+/* alternate preference order of JP charsets for version 2,3,4*/
+static const StateEnum jpCharsetPref_alt[]={
     ASCII,
     JISX201,
     ISO8859_1,
@@ -1771,11 +1771,11 @@ getTrail:
                 }
                 
                 /*
-                 * version 4 of JP iso 2022 requires a different preference order for the possible charsets.
+                 * version 2,3,4 of JP iso 2022 requires a different preference order for the possible charsets is there is no previous state set
                  */
-                if (converterData->version == 4) {
-                    for(i = 0; i < UPRV_LENGTHOF(jpCharsetPref_ver4); ++i) {
-                        cs = (int8_t)jpCharsetPref_ver4[i];
+                if (cs == 0 && converterData->version >= 2) {
+                    for(i = 0; i < UPRV_LENGTHOF(jpCharsetPref_alt); ++i) {
+                        cs = (int8_t)jpCharsetPref_alt[i];
                         if(CSM(cs) & csm) {
                             choices[choiceCount++] = cs;
                             csm &= ~CSM(cs);
