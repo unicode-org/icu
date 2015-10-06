@@ -5232,6 +5232,12 @@ GC_Done:
                         break;
                     }
                 }
+                if (success && groupStartIdx < groupEndIdx && U16_IS_LEAD(inputBuf[groupEndIdx-1]) &&
+                        inputIndex < fActiveLimit && U16_IS_TRAIL(inputBuf[inputIndex])) {
+                    // Capture group ended with an unpaired lead surrogate.
+                    // Back reference is not permitted to match lead only of a surrogatge pair.
+                    success = FALSE;
+                }
                 if (success) {
                     fp->fInputIdx = inputIndex;
                 } else {
