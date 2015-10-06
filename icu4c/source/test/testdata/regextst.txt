@@ -1313,7 +1313,13 @@
 
 "(?<=((0123456789){100000}){3000})abc"  E  "abc"
 
-
+# Bug 11507  Capture of an unpaired surrogate shouldn't allow a back reference to 
+#            match half of a surrogate pair, but only another unpaired surrogate.
+# 
+"pre(.)post\1"                  "pre\ud800post\ud800\udc00"
+"pre(.)post\1"                  "<0>pre<1>\ud800</1>post\ud800</0> fin"
+"pre(.)post\1"          i       "pre\ud800post\ud800\udc00"         # case insensiteve backrefs take a different code path
+"pre(.)post\1"          i       "<0>pre<1>\ud800</1>post\ud800</0> fin"
 
 #  Random debugging, Temporary
 #
