@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2014 International Business Machines
+* Copyright (c) 2003-2015 International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -571,7 +571,7 @@ public final class ZoneMeta {
      * Returns a frozen OlsonTimeZone instance for the given ID.
      * This method returns null when the given ID is unknown.
      */
-    public static TimeZone getSystemTimeZone(String id) {
+    public static OlsonTimeZone getSystemTimeZone(String id) {
         return SYSTEM_ZONE_CACHE.getInstance(id, id);
     }
 
@@ -612,7 +612,7 @@ public final class ZoneMeta {
      * @return a frozen SimpleTimeZone with the given offset and
      * no Daylight Savings Time, or null if the id cannot be parsed.
     */
-    public static TimeZone getCustomTimeZone(String id){
+    public static SimpleTimeZone getCustomTimeZone(String id){
         int[] fields = new int[4];
         if (parseCustomID(id, fields)) {
             // fields[0] - sign
@@ -769,7 +769,7 @@ public final class ZoneMeta {
      * @param offset GMT offset in milliseconds
      * @return A custom TimeZone for the offset with normalized time zone id
      */
-    public static TimeZone getCustomTimeZone(int offset) {
+    public static SimpleTimeZone getCustomTimeZone(int offset) {
         boolean negative = false;
         int tmp = offset;
         if (offset < 0) {

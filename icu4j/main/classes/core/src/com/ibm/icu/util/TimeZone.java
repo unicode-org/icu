@@ -740,44 +740,46 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * Gets the <code>TimeZone</code> for the given ID and the timezone type.
-     * @param ID time zone ID
+     * @param id time zone ID
      * @param type time zone implementation type, TIMEZONE_JDK or TIMEZONE_ICU 
      * @param frozen specify if the returned object can be frozen
      * @return the specified <code>TimeZone</code> or UNKNOWN_ZONE if the given ID
      * cannot be understood.
      */
-    private static TimeZone getTimeZone(String ID, int type, boolean frozen) {
+    private static TimeZone getTimeZone(String id, int type, boolean frozen) {
         TimeZone result;
         if (type == TIMEZONE_JDK) {
-            result = JavaTimeZone.createTimeZone(ID);
+            result = JavaTimeZone.createTimeZone(id);
             if (result != null) {
                 return frozen ? result.freeze() : result;
-            }
+            } 
+            result = getFrozenICUTimeZone(id, false);
         } else {
-            /* We first try to lookup the zone ID in our system list.  If this
-             * fails, we try to parse it as a custom string GMT[+-]HH:mm.  If
-             * all else fails, we return GMT, which is probably not what the
-             * user wants, but at least is a functioning TimeZone object.
-             *
-             * We cannot return NULL, because that would break compatibility
-             * with the JDK.
-             */
-            if(ID==null){
-                throw new NullPointerException();
-            }
-            result = ZoneMeta.getSystemTimeZone(ID);
+            result = getFrozenICUTimeZone(id, true);
         }
-
         if (result == null) {
-            result = ZoneMeta.getCustomTimeZone(ID);
-        }
-
-        if (result == null) {
-            LOGGER.fine("\"" +ID + "\" is a bogus id so timezone is falling back to Etc/Unknown(GMT).");
+            LOGGER.fine("\"" +id + "\" is a bogus id so timezone is falling back to Etc/Unknown(GMT).");
             result = UNKNOWN_ZONE;
         }
-
         return frozen ? result : result.cloneAsThawed();
+    }
+    
+    /**
+     * Returns a frozen ICU type TimeZone object given a time zone ID.
+     * @param id the time zone ID
+     * @param trySystem if true tries the system time zones first otherwise skip to the
+     *   custom time zones.
+     * @return the frozen ICU TimeZone or null if one could not be created.
+     */
+    static BasicTimeZone getFrozenICUTimeZone(String id, boolean trySystem) {
+        BasicTimeZone result = null;
+        if (trySystem) {
+            result = ZoneMeta.getSystemTimeZone(id);
+        }
+        if (result == null) {
+            result = ZoneMeta.getCustomTimeZone(id);
+        }
+        return result;
     }
 
     /**
