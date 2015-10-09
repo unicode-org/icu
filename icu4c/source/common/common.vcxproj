@@ -439,6 +439,7 @@
     <ClCompile Include="chariter.cpp" />
     <ClCompile Include="charstr.cpp" />
     <ClCompile Include="cstring.c" />
+    <ClCompile Include="cstr.cpp" />
     <ClCompile Include="cwchar.c" />
     <ClCompile Include="messagepattern.cpp" />
     <ClCompile Include="schriter.cpp" />
@@ -1449,6 +1450,7 @@
     </CustomBuild>
     <ClInclude Include="charstr.h" />
     <ClInclude Include="cstring.h" />
+    <ClInclude Include="cstr.h" />
     <ClInclude Include="cwchar.h" />
     <CustomBuild Include="unicode\messagepattern.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode

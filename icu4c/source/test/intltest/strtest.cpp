@@ -21,6 +21,7 @@
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
 #include "charstr.h"
+#include "cstr.h"
 #include "intltest.h"
 #include "strtest.h"
 
@@ -168,6 +169,7 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestCheckedArrayByteSink);
     TESTCASE_AUTO(TestStringByteSink);
     TESTCASE_AUTO(TestCharString);
+    TESTCASE_AUTO(TestCStr);
     TESTCASE_AUTO_END;
 }
 
@@ -530,5 +532,14 @@ StringTest::TestCharString() {
     }
     if (chStr.length() != 0) {
         errln("%s:%d expected length() = 0, got %d", __FILE__, __LINE__, chStr.length());
+    }
+}
+
+void
+StringTest::TestCStr() {
+    const char *cs = "This is a test string.";
+    UnicodeString us(cs);
+    if (0 != strcmp(CStr(us)(), cs)) {
+        errln("%s:%d CStr(s)() failed. Expected \"%s\", got \"%s\"", __FILE__, __LINE__, cs, CStr(us)());
     }
 }

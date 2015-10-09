@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  strtest.h
@@ -45,6 +45,7 @@ private:
     void TestStringByteSink();
     void TestSTLCompatibility();
     void TestCharString();
+    void TestCStr();
 };
 
 #endif

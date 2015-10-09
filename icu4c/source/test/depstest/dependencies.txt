@@ -140,6 +140,7 @@ library: common
     idna2003 stringprep
     stringenumeration
     unistr_props unistr_case unistr_case_locale unistr_titlecase_brkiter unistr_cnv
+    cstr
     uniset_core uniset_props uniset_closure usetiter uset uset_props
     uiter
     ucasemap ucasemap_titlecase_brkiter script_runs
@@ -349,6 +350,11 @@ group: unistr_cnv
     unistr_cnv.o
   deps
     conversion
+
+group: cstr
+    cstr.o
+  deps
+    unistr_cnv
 
 group: uscript
     uscript.o  # uscript_getCode() accepts a locale ID and loads its script code data
