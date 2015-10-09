@@ -935,7 +935,7 @@ void IntlTest::log(const char *fmt, ...)
     vsprintf(buffer, fmt, ap);
     va_end(ap);
     if( verbose ) {
-        log(UnicodeString(buffer, ""));
+        log(UnicodeString(buffer, (const char *)NULL));
     }
 }
 
@@ -949,8 +949,7 @@ void IntlTest::logln(const char *fmt, ...)
     vsprintf(buffer, fmt, ap);
     va_end(ap);
     if( verbose ) {
-        // TODO: change to default conversion in UnicodeString constructor.
-        logln(UnicodeString(buffer, ""));
+        logln(UnicodeString(buffer, (const char *)NULL));
     }
 }
 
@@ -963,7 +962,7 @@ UBool IntlTest::logKnownIssue(const char *ticket, const char *fmt, ...)
     /* sprintf it just to make sure that the information is valid */
     vsprintf(buffer, fmt, ap);
     va_end(ap);
-    return logKnownIssue(ticket, UnicodeString(buffer, ""));
+    return logKnownIssue(ticket, UnicodeString(buffer, (const char *)NULL));
 }
 
 UBool IntlTest::logKnownIssue(const char *ticket) {
@@ -1001,7 +1000,7 @@ void IntlTest::info(const char *fmt, ...)
     /* sprintf it just to make sure that the information is valid */
     vsprintf(buffer, fmt, ap);
     va_end(ap);
-    info(UnicodeString(buffer, ""));
+    info(UnicodeString(buffer, (const char *)NULL));
 }
 
 void IntlTest::infoln(const char *fmt, ...)
@@ -1013,7 +1012,7 @@ void IntlTest::infoln(const char *fmt, ...)
     /* sprintf it just to make sure that the information is valid */
     vsprintf(buffer, fmt, ap);
     va_end(ap);
-    infoln(UnicodeString(buffer, ""));
+    infoln(UnicodeString(buffer, (const char *)NULL));
 }
 
 void IntlTest::err(const char *fmt, ...)
@@ -1024,7 +1023,7 @@ void IntlTest::err(const char *fmt, ...)
     va_start(ap, fmt);
     vsprintf(buffer, fmt, ap);
     va_end(ap);
-    err(UnicodeString(buffer, ""));
+    err(UnicodeString(buffer, (const char *)NULL));
 }
 
 void IntlTest::errln(const char *fmt, ...)
@@ -1035,7 +1034,7 @@ void IntlTest::errln(const char *fmt, ...)
     va_start(ap, fmt);
     vsprintf(buffer, fmt, ap);
     va_end(ap);
-    errln(UnicodeString(buffer, ""));
+    errln(UnicodeString(buffer, (const char *)NULL));
 }
 
 void IntlTest::dataerrln(const char *fmt, ...)
@@ -1046,7 +1045,7 @@ void IntlTest::dataerrln(const char *fmt, ...)
     va_start(ap, fmt);
     vsprintf(buffer, fmt, ap);
     va_end(ap);
-    dataerrln(UnicodeString(buffer, ""));
+    dataerrln(UnicodeString(buffer, (const char *)NULL));
 }
 
 void IntlTest::errcheckln(UErrorCode status, const char *fmt, ...)
@@ -1059,9 +1058,9 @@ void IntlTest::errcheckln(UErrorCode status, const char *fmt, ...)
     va_end(ap);
     
     if (status == U_FILE_ACCESS_ERROR || status == U_MISSING_RESOURCE_ERROR) {
-        dataerrln(UnicodeString(buffer, ""));
+        dataerrln(UnicodeString(buffer, (const char *)NULL));
     } else {
-        errln(UnicodeString(buffer, ""));
+        errln(UnicodeString(buffer, (const char *)NULL));
     }
 }
 
