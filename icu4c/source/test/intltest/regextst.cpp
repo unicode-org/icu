@@ -3583,7 +3583,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
 
         if (UTF8Matcher == NULL) {
             // UTF-8 does not allow unpaired surrogates, so this could actually happen without being a failure of the engine
-          logln("Unable to create UTF-8 matcher, skipping UTF-8 tests for %s:%d", srcPath, line);
+            logln("Unable to create UTF-8 matcher, skipping UTF-8 tests for %s:%d", srcPath, line);
             status = U_ZERO_ERROR;
         }
     }
@@ -3592,6 +3592,9 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     //  Generate native indices for UTF8 versions of region and capture group info
     //
     if (UTF8Matcher != NULL) {
+        if (flags.indexOf((UChar)0x74) >= 0) {   //  't' trace flag
+            UTF8Matcher->setTrace(TRUE);
+        }
         if (regionStart>=0)    (void) utextOffsetToNative(&inputText, regionStart, regionStartUTF8);
         if (regionEnd>=0)      (void) utextOffsetToNative(&inputText, regionEnd, regionEndUTF8);
 
@@ -3671,6 +3674,9 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         }
     }
     matcher->setTrace(FALSE);
+    if (UTF8Matcher) {
+        UTF8Matcher->setTrace(FALSE);
+    }
     if (U_FAILURE(status)) {
         errln("Error at line %d. ICU ErrorCode is %s", u_errorName(status));
     }
@@ -3692,16 +3698,17 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         failed = TRUE;
         goto cleanupAndReturn;
     }
+    if (isMatch && groupStarts.size() == 0) {
+        errln("Error at line %d: No match expected, but one found at position %d.", line, matcher->start(status));
+        failed = TRUE;
+    }
+    if (UTF8Matcher && isUTF8Match && groupStarts.size() == 0) {
+        errln("Error at line %d: No match expected, but one found at position %d (UTF-8).", line, UTF8Matcher->start(status));
+        failed = TRUE;
+    }
 
     if (flags.indexOf((UChar)0x47 /*G*/) >= 0) {
         // Only check for match / no match.  Don't check capture groups.
-        if (isMatch && groupStarts.size() == 0) {
-            errln("Error at line %d:  No match expected, but one found.", line);
-            failed = TRUE;
-        } else if (UTF8Matcher != NULL && isUTF8Match && groupStarts.size() == 0) {
-            errln("Error at line %d:  No match expected, but one found. (UTF8)", line);
-            failed = TRUE;
-        }
         goto cleanupAndReturn;
     }
 
