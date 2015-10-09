@@ -1321,6 +1321,29 @@
 "pre(.)post\1"          i       "pre\ud800post\ud800\udc00"         # case insensiteve backrefs take a different code path
 "pre(.)post\1"          i       "<0>pre<1>\ud800</1>post\ud800</0> fin"
 
+# Bug 11554
+#
+#    Maximum match length computation was assuming UTF-16.
+#    Used in look-behind matches to constrain how far back to look.
+
+"(?<=a\x{100000})spam"          "***a\x{100000}<0>spam</0>**"
+"(?<=aą)spam"                   "**aą<0>spam</0>**"
+"(?<=ąabc)spam"                 "**ąabc<0>spam</0>**"
+
+"(?<=a\x{100000})spam"          "***a\x{100001}spam**"
+"(?<=aą)spam"                   "**bąspam**"
+"(?<=ąabc)spam"                 "**ąabxspam**"
+
+# with negative look-behind
+
+"(?<!a\x{100000})spam"          "***a\x{100000}spam**"
+"(?<!aą)spam"                   "**aąspam**"
+"(?<!ąabc)spam"                 "**ąabcspam**"
+
+"(?<!a\x{100000})spam"          "***a\x{100001}<0>spam</0>**"
+"(?<!aą)spam"                   "**bą<0>spam</0>**"
+"(?<!ąabc)spam"                 "**ąabx<0>spam</0>**"
+
 #  Random debugging, Temporary
 #
 
