@@ -145,6 +145,7 @@ windowsZones:table(nofallback){
             AU{"Antarctica/Macquarie"}
             FM{"Pacific/Ponape Pacific/Kosrae"}
             NC{"Pacific/Noumea"}
+            NF{"Pacific/Norfolk"}
             PG{"Pacific/Bougainville"}
             SB{"Pacific/Guadalcanal"}
             VU{"Pacific/Efate"}
@@ -587,7 +588,7 @@ windowsZones:table(nofallback){
         }
         "US Mountain Standard Time"{
             001{"America/Phoenix"}
-            CA{"America/Dawson_Creek America/Creston"}
+            CA{"America/Dawson_Creek America/Creston America/Fort_Nelson"}
             MX{"America/Hermosillo"}
             US{"America/Phoenix"}
             ZZ{"Etc/GMT+7"}
