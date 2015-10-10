@@ -252,6 +252,7 @@ timezoneTypes:table(nofallback){
             "America:Edmonton"{"caedm"}
             "America:Eirunepe"{"brern"}
             "America:El_Salvador"{"svsal"}
+            "America:Fort_Nelson"{"cafne"}
             "America:Fortaleza"{"brfor"}
             "America:Glace_Bay"{"caglb"}
             "America:Godthab"{"glgoh"}
