@@ -2132,13 +2132,13 @@ uloc_getLCID(const char* localeID)
             len = uloc_getBaseName(localeID, tmpLocaleID,
                 sizeof(tmpLocaleID)/sizeof(tmpLocaleID[0]) - 1, &status);
 
-            if (U_SUCCESS(status)) {
+            if (U_SUCCESS(status) && len > 0) {
                 tmpLocaleID[len] = 0;
 
                 len = uloc_setKeywordValue("collation", collVal, tmpLocaleID,
                     sizeof(tmpLocaleID)/sizeof(tmpLocaleID[0]) - len - 1, &status);
 
-                if (U_SUCCESS(status)) {
+                if (U_SUCCESS(status) && len > 0) {
                     tmpLocaleID[len] = 0;
                     return uprv_convertToLCID(langID, tmpLocaleID, &status);
                 }
