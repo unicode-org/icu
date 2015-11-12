@@ -53,7 +53,6 @@
 #include "plurfmts.h"       // PluralFormatTest
 #include "selfmts.h"       // PluralFormatTest
 #include "dtifmtts.h"       // DateIntervalFormatTest
-#include "tufmtts.h"        // TimeUnitTest
 #include "locnmtst.h"       // LocaleDisplayNamesTest
 #include "dcfmtest.h"       // DecimalFormatTest
 #include "listformattertest.h"  // ListFormatterTest
@@ -64,6 +63,7 @@ extern IntlTest *createGenderInfoTest();
 #if !UCONFIG_NO_BREAK_ITERATION
 extern IntlTest *createRelativeDateTimeFormatterTest();
 #endif
+extern IntlTest *createTimeUnitTest();
 extern IntlTest *createMeasureFormatTest();
 extern IntlTest *createNumberFormatSpecificationTest();
 extern IntlTest *createScientificNumberFormatterTest();
@@ -139,7 +139,15 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(35,PluralRulesTest);
         TESTCLASS(36,PluralFormatTest);
         TESTCLASS(37,DateIntervalFormatTest);
-        TESTCLASS(38,TimeUnitTest);
+        case 38:
+          name = "TimeUnitTest";
+          if (exec) {
+            logln("TimeUnitTest test---");
+            logln((UnicodeString)"");
+            LocalPointer<IntlTest> test(createTimeUnitTest());
+            callTest(*test, par);
+          }
+          break;
         TESTCLASS(39,SelectFormatTest);
         TESTCLASS(40,LocaleDisplayNamesTest);
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
