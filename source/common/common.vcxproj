@@ -379,7 +379,8 @@
     <ClCompile Include="uloc_tag.c" />
     <ClCompile Include="ures_cnv.c" />
     <ClCompile Include="uresbund.cpp" />
-    <ClCompile Include="uresdata.c" />
+    <ClCompile Include="uresdata.cpp" />
+    <ClCompile Include="uresource.cpp" />
     <ClCompile Include="caniter.cpp">
     </ClCompile>
     <ClCompile Include="filterednormalizer2.cpp" />
@@ -1136,6 +1137,7 @@
     <ClInclude Include="uresdata.h" />
     <ClInclude Include="uresimp.h" />
     <ClInclude Include="ureslocs.h" />
+    <ClInclude Include="uresource.h" />
     <CustomBuild Include="unicode\caniter.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
