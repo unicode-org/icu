@@ -185,6 +185,14 @@ class U_I18N_API MeasureUnit: public UObject {
 
     /**
      * ICU use only.
+     * @return the unit.getIndex() of the unit which has this unit.getType() and unit.getSubtype(),
+     *         or a negative value if there is no such unit
+     * @internal
+     */
+    static int32_t internalGetIndexForTypeAndSubtype(const char *type, const char *subtype);
+
+    /**
+     * ICU use only.
      * @internal
      */
     static MeasureUnit *resolveUnitPerUnit(
