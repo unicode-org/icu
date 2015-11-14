@@ -35,6 +35,9 @@ class UResourceTableSink;
  * Represents a resource bundle item's value.
  * Avoids object creations as much as possible.
  * Mutable, not thread-safe.
+ *
+ * If we add public API like this, we should use the UResource prefix for C types
+ * and just a Resource prefix for the C++ versions, as usual.
  */
 class U_COMMON_API UResourceValue : public UObject {
 public:
