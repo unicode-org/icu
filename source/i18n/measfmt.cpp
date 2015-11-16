@@ -203,46 +203,6 @@ static UBool getString(
 
 namespace {
 
-struct UnitDataSink;
-
-/**
- * Common base class for other on-the-path sinks.
- * Holds the reference to the outer sink.
- * Not necessary in Java where we can just use non-static inner sink classes.
- */
-struct UnitPathSink : public UResourceTableSink {
-    UnitPathSink(UnitDataSink &sink) : dataSink(sink) {}
-    ~UnitPathSink();
-
-    UnitDataSink &dataSink;
-};
-
-struct UnitPatternSink : public UnitPathSink {
-    UnitPatternSink(UnitDataSink &sink) : UnitPathSink(sink) {}
-    ~UnitPatternSink();
-    virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode);
-};
-
-struct UnitSubtypeSink : public UnitPathSink {
-    UnitSubtypeSink(UnitDataSink &sink) : UnitPathSink(sink) {}
-    ~UnitSubtypeSink();
-    virtual UResourceTableSink *getOrCreateTableSink(
-            const char *key, int32_t initialSize, UErrorCode &errorCode);
-};
-
-struct UnitCompoundSink : public UnitPathSink {
-    UnitCompoundSink(UnitDataSink &sink) : UnitPathSink(sink) {}
-    ~UnitCompoundSink();
-    virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode);
-};
-
-struct UnitTypeSink : public UnitPathSink {
-    UnitTypeSink(UnitDataSink &sink) : UnitPathSink(sink) {}
-    ~UnitTypeSink();
-    virtual UResourceTableSink *getOrCreateTableSink(
-            const char *key, int32_t initialSize, UErrorCode &errorCode);
-};
-
 static const UChar g_LOCALE_units[] = {
     0x2F, 0x4C, 0x4F, 0x43, 0x41, 0x4C, 0x45, 0x2F,
     0x75, 0x6E, 0x69, 0x74, 0x73
@@ -250,12 +210,144 @@ static const UChar g_LOCALE_units[] = {
 static const UChar gShort[] = { 0x53, 0x68, 0x6F, 0x72, 0x74 };
 static const UChar gNarrow[] = { 0x4E, 0x61, 0x72, 0x72, 0x6F, 0x77 };
 
+/**
+ * Sink for enumerating all of the measurement unit display names.
+ * Contains inner sink classes, each one corresponding to a type of resource table.
+ * The outer sink handles the top-level units, unitsNarrow, and unitsShort tables.
+ *
+ * More specific bundles (en_GB) are enumerated before their parents (en_001, en, root):
+ * Only store a value if it is still missing, that is, it has not been overridden.
+ *
+ * C++: Each inner sink class has a reference to the main outer sink.
+ * Java: Use non-static inner classes instead.
+ */
 struct UnitDataSink : public UResourceTableSink {
-    UnitDataSink(MeasureFormatCacheData &outputData);
+    /**
+     * Sink for a table of display patterns. For example,
+     * unitsShort/duration/hour contains other{"{0} hrs"}.
+     */
+    struct UnitPatternSink : public UResourceTableSink {
+        UnitPatternSink(UnitDataSink &sink) : outer(sink) {}
+        ~UnitPatternSink();
+        virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode) {
+            if (U_FAILURE(errorCode)) { return; }
+            if (uprv_strcmp(key, "dnam") == 0) {
+                // Skip the unit display name for now.
+            } else if (uprv_strcmp(key, "per") == 0) {
+                // For example, "{0}/h".
+                outer.cacheData.
+                    setPerUnitFormatterIfAbsent(outer.unitIndex, outer.width, value, errorCode);
+            } else {
+                // The key must be one of the plural form strings. For example:
+                // one{"{0} hr"}
+                // other{"{0} hrs"}
+                if (!outer.hasPatterns) {
+                    outer.cacheData.formatters[outer.unitIndex][outer.width].add(
+                            key, value.getUnicodeString(errorCode), errorCode);
+                }
+            }
+        }
+        UnitDataSink &outer;
+    } patternSink;
+
+    /**
+     * Sink for a table of per-unit tables. For example,
+     * unitsShort/duration contains tables for duration-unit subtypes day & hour.
+     */
+    struct UnitSubtypeSink : public UResourceTableSink {
+        UnitSubtypeSink(UnitDataSink &sink) : outer(sink) {}
+        ~UnitSubtypeSink();
+        virtual UResourceTableSink *getOrCreateTableSink(
+                const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
+            if (U_FAILURE(errorCode)) { return NULL; }
+            outer.unitIndex = MeasureUnit::internalGetIndexForTypeAndSubtype(outer.type, key);
+            if (outer.unitIndex >= 0) {
+                outer.hasPatterns =
+                    outer.cacheData.formatters[outer.unitIndex][outer.width].isValid();
+                return &outer.patternSink;
+            }
+            return NULL;
+        }
+        UnitDataSink &outer;
+    } subtypeSink;
+
+    /**
+     * Sink for compound x-per-y display pattern. For example,
+     * unitsShort/compound/per may be "{0}/{1}".
+     */
+    struct UnitCompoundSink : public UResourceTableSink {
+        UnitCompoundSink(UnitDataSink &sink) : outer(sink) {}
+        ~UnitCompoundSink();
+        virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode) {
+            if (U_SUCCESS(errorCode) && uprv_strcmp(key, "per") == 0) {
+                outer.cacheData.perFormatters[outer.width].
+                        compile(value.getUnicodeString(errorCode), errorCode);
+            }
+        }
+        UnitDataSink &outer;
+    } compoundSink;
+
+    /**
+     * Sink for a table of unit type tables. For example,
+     * unitsShort contains tables for area & duration.
+     * It also contains a table for the compound/per pattern.
+     */
+    struct UnitTypeSink : public UResourceTableSink {
+        UnitTypeSink(UnitDataSink &sink) : outer(sink) {}
+        ~UnitTypeSink();
+        virtual UResourceTableSink *getOrCreateTableSink(
+                const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
+            if (U_FAILURE(errorCode)) { return NULL; }
+            if (uprv_strcmp(key, "currency") == 0) {
+                // Skip.
+            } else if (uprv_strcmp(key, "compound") == 0) {
+                if (!outer.cacheData.hasPerFormatter(outer.width)) {
+                    return &outer.compoundSink;
+                }
+            } else {
+                outer.type = key;
+                return &outer.subtypeSink;
+            }
+            return NULL;
+        }
+        UnitDataSink &outer;
+    } typeSink;
+
+    UnitDataSink(MeasureFormatCacheData &outputData)
+            : patternSink(*this), subtypeSink(*this), compoundSink(*this), typeSink(*this),
+              cacheData(outputData),
+              width(UMEASFMT_WIDTH_COUNT), type(NULL), unitIndex(0), hasPatterns(FALSE) {}
     ~UnitDataSink();
-    virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode);
+    virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode) {
+        // Handle aliases like
+        // units:alias{"/LOCALE/unitsShort"}
+        // which should only occur in the root bundle.
+        if (U_FAILURE(errorCode) || value.getType() != URES_ALIAS) { return; }
+        UMeasureFormatWidth sourceWidth = widthFromKey(key);
+        if (sourceWidth == UMEASFMT_WIDTH_COUNT) {
+            // Alias from something we don't care about.
+            return;
+        }
+        UMeasureFormatWidth targetWidth = widthFromAlias(value, errorCode);
+        if (targetWidth == UMEASFMT_WIDTH_COUNT) {
+            // We do not recognize what to fall back to.
+            errorCode = U_INVALID_FORMAT_ERROR;
+            return;
+        }
+        // Check that we do not fall back to another fallback.
+        if (cacheData.widthFallback[targetWidth] != UMEASFMT_WIDTH_COUNT) {
+            errorCode = U_INVALID_FORMAT_ERROR;
+            return;
+        }
+        cacheData.widthFallback[sourceWidth] = targetWidth;
+    }
     virtual UResourceTableSink *getOrCreateTableSink(
-            const char *key, int32_t initialSize, UErrorCode &errorCode);
+            const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
+        if (U_SUCCESS(errorCode) && (width = widthFromKey(key)) != UMEASFMT_WIDTH_COUNT) {
+            return &typeSink;
+        }
+        return NULL;
+    }
 
     static UMeasureFormatWidth widthFromKey(const char *key) {
         if (uprv_strncmp(key, "units", 5) == 0) {
@@ -296,113 +388,17 @@ struct UnitDataSink : public UResourceTableSink {
     UMeasureFormatWidth width;
     const char *type;
     int32_t unitIndex;
-    UBool hasPatterns;
 
-    UnitTypeSink typeSink;
-    UnitSubtypeSink subtypeSink;
-    UnitCompoundSink compoundSink;
-    UnitPatternSink patternSink;
+    /** True if we already have plural-form display patterns for width/type/unitIndex. */
+    UBool hasPatterns;
 };
 
-UnitPathSink::~UnitPathSink() {}
-
-UnitPatternSink::~UnitPatternSink() {}
-
-void UnitPatternSink::put(const char *key, UResourceValue &value, UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return; }
-    if (uprv_strcmp(key, "dnam") == 0) {
-        // Skip display name for now.
-    } else if (uprv_strcmp(key, "per") == 0) {
-        dataSink.cacheData.
-            setPerUnitFormatterIfAbsent(dataSink.unitIndex, dataSink.width, value, errorCode);
-    } else {
-        // The key must be one of the plural form strings.
-        if (!dataSink.hasPatterns) {
-            dataSink.cacheData.formatters[dataSink.unitIndex][dataSink.width].add(
-                    key, value.getUnicodeString(errorCode), errorCode);
-        }
-    }
-}
-
-UnitSubtypeSink::~UnitSubtypeSink() {}
-
-UResourceTableSink *UnitSubtypeSink::getOrCreateTableSink(
-        const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return NULL; }
-    dataSink.unitIndex = MeasureUnit::internalGetIndexForTypeAndSubtype(dataSink.type, key);
-    if (dataSink.unitIndex >= 0) {
-        dataSink.hasPatterns =
-            dataSink.cacheData.formatters[dataSink.unitIndex][dataSink.width].isValid();
-        return &dataSink.patternSink;
-    }
-    return NULL;
-}
-
-UnitCompoundSink::~UnitCompoundSink() {}
-
-void UnitCompoundSink::put(const char *key, UResourceValue &value, UErrorCode &errorCode) {
-    if (U_SUCCESS(errorCode) && uprv_strcmp(key, "per") == 0) {
-        dataSink.cacheData.perFormatters[dataSink.width].
-                compile(value.getUnicodeString(errorCode), errorCode);
-    }
-}
-
-UnitTypeSink::~UnitTypeSink() {}
-
-UResourceTableSink *UnitTypeSink::getOrCreateTableSink(
-        const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return NULL; }
-    if (uprv_strcmp(key, "currency") == 0) {
-    } else if (uprv_strcmp(key, "compound") == 0) {
-        if (!dataSink.cacheData.hasPerFormatter(dataSink.width)) {
-            return &dataSink.compoundSink;
-        }
-    } else {
-        dataSink.type = key;
-        return &dataSink.subtypeSink;
-    }
-    return NULL;
-}
-
-UnitDataSink::UnitDataSink(MeasureFormatCacheData &outputData)
-        : cacheData(outputData),
-          width(UMEASFMT_WIDTH_COUNT), type(NULL), unitIndex(0), hasPatterns(FALSE),
-          typeSink(*this), subtypeSink(*this), compoundSink(*this), patternSink(*this) {}
-
+// Virtual destructors must be defined out of line.
+UnitDataSink::UnitPatternSink::~UnitPatternSink() {}
+UnitDataSink::UnitSubtypeSink::~UnitSubtypeSink() {}
+UnitDataSink::UnitCompoundSink::~UnitCompoundSink() {}
+UnitDataSink::UnitTypeSink::~UnitTypeSink() {}
 UnitDataSink::~UnitDataSink() {}
-
-void UnitDataSink::put(const char *key, UResourceValue &value, UErrorCode &errorCode) {
-    // Handle aliases like
-    // units:alias{"/LOCALE/unitsShort"}
-    // which should only occur in the root bundle.
-    if (U_FAILURE(errorCode) || value.getType() != URES_ALIAS) { return; }
-    UMeasureFormatWidth sourceWidth = widthFromKey(key);
-    if (sourceWidth == UMEASFMT_WIDTH_COUNT) {
-        // Alias from something we don't care about.
-        return;
-    }
-    UMeasureFormatWidth targetWidth = widthFromAlias(value, errorCode);
-    if (targetWidth == UMEASFMT_WIDTH_COUNT) {
-        // We do not recognize what to fall back to.
-        errorCode = U_INVALID_FORMAT_ERROR;
-        return;
-    }
-    // Check that we do not fall back to another fallback.
-    if (cacheData.widthFallback[targetWidth] != UMEASFMT_WIDTH_COUNT) {
-        errorCode = U_INVALID_FORMAT_ERROR;
-        return;
-    }
-    cacheData.widthFallback[sourceWidth] = targetWidth;
-}
-
-UResourceTableSink *UnitDataSink::getOrCreateTableSink(
-        const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
-    if (U_SUCCESS(errorCode) &&
-            (width = widthFromKey(key)) != UMEASFMT_WIDTH_COUNT) {
-        return &typeSink;
-    }
-    return NULL;
-}
 
 }  // namespace
 
