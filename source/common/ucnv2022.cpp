@@ -3893,7 +3893,7 @@ static const UConverterStaticData _ISO2022KRStaticData={
     UCNV_IBM,
     UCNV_ISO_2022,
     1,
-    3, /* max 3 bytes per UChar: SO+DBCS */
+    8, /* max 8 bytes per UChar */
     { 0x1a, 0, 0, 0 },
     1,
     FALSE,
