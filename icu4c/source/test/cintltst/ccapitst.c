@@ -2898,7 +2898,7 @@ static void TestLMBCSMaxChar(void) {
         { 4, "HZ"},
 
         { 3, "ISO-2022"},
-        { 3, "ISO-2022-KR"},
+        { 8, "ISO-2022-KR"},
         { 6, "ISO-2022-JP"},
         { 8, "ISO-2022-CN"},
 
