@@ -159,7 +159,7 @@ class CharsetISO2022 extends CharsetICU {
     private void ISO2022InitKR(int version) {
         variant = ISO_2022_KR;
         
-        maxBytesPerChar = 3;
+        maxBytesPerChar = 8;
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
         

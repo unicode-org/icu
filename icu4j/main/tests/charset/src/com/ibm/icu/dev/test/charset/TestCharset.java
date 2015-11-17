@@ -5663,7 +5663,7 @@ public class TestCharset extends TestFmwk {
                 20,
                 80, /* changed from 60 to 80 to reflect the updates by #9205 */
                 80,
-                60
+                160
         };
         
         int stringLength = 10;
