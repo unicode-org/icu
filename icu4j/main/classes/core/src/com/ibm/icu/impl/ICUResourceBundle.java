@@ -447,18 +447,18 @@ public  class ICUResourceBundle extends UResourceBundle {
         return result;
     }
 
-    public void getAllArrayItemsWithFallback(String path, ICUResource.ArraySink sink)
+    public void getAllArrayItemsWithFallback(String path, UResource.ArraySink sink)
             throws MissingResourceException {
         getAllContainerItemsWithFallback(path, sink, null);
     }
 
-    public void getAllTableItemsWithFallback(String path, ICUResource.TableSink sink)
+    public void getAllTableItemsWithFallback(String path, UResource.TableSink sink)
             throws MissingResourceException {
         getAllContainerItemsWithFallback(path, null, sink);
     }
 
     private void getAllContainerItemsWithFallback(
-            String path, ICUResource.ArraySink arraySink, ICUResource.TableSink tableSink)
+            String path, UResource.ArraySink arraySink, UResource.TableSink tableSink)
             throws MissingResourceException {
         // Collect existing and parsed key objects into an array of keys,
         // rather than assembling and parsing paths.
@@ -484,14 +484,14 @@ public  class ICUResourceBundle extends UResourceBundle {
             throw new UResourceTypeMismatchException("");
         }
         // Get all table items with fallback.
-        ICUResource.Key key = new ICUResource.Key();
+        UResource.Key key = new UResource.Key();
         ReaderValue readerValue = new ReaderValue();
         rb.getAllContainerItemsWithFallback(key, readerValue, arraySink, tableSink);
     }
 
     private void getAllContainerItemsWithFallback(
-            ICUResource.Key key, ReaderValue readerValue,
-            ICUResource.ArraySink arraySink, ICUResource.TableSink tableSink) {
+            UResource.Key key, ReaderValue readerValue,
+            UResource.ArraySink arraySink, UResource.TableSink tableSink) {
         // We recursively enumerate child-first,
         // only storing parent items in the absence of child items.
         // We store a placeholder value for the no-fallback/no-inheritance marker
@@ -506,7 +506,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         if (getType() == expectedType) {
             if (arraySink != null) {
                 ((ICUResourceBundleImpl.ResourceArray)this).getAllItems(key, readerValue, arraySink);
-            } else if (tableSink != null) {
+            } else /* tableSink != null */ {
                 ((ICUResourceBundleImpl.ResourceTable)this).getAllItems(key, readerValue, tableSink);
             }
         }

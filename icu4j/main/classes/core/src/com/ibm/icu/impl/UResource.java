@@ -11,10 +11,13 @@ import java.nio.ByteBuffer;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
+// Class UResource is named consistently with the public class UResourceBundle,
+// in case we want to make it public at some point.
+
 /**
  * ICU resource bundle key and value types.
  */
-public final class ICUResource {
+public final class UResource {
     /**
      * Represents a resource bundle item's key string.
      * Avoids object creations as much as possible.

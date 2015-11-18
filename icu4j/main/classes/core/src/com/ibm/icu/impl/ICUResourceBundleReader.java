@@ -13,8 +13,8 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 
-import com.ibm.icu.impl.ICUResource.ArraySink;
-import com.ibm.icu.impl.ICUResource.TableSink;
+import com.ibm.icu.impl.UResource.ArraySink;
+import com.ibm.icu.impl.UResource.TableSink;
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
@@ -463,14 +463,14 @@ public final class ICUResourceBundleReader {
             return makeKeyStringFromBytes(poolBundleReader.keyBytes, keyOffset & 0x7fffffff);
         }
     }
-    private void setKeyFromKey16(int keyOffset, ICUResource.Key key) {
+    private void setKeyFromKey16(int keyOffset, UResource.Key key) {
         if(keyOffset < localKeyLimit) {
             key.setBytes(keyBytes, keyOffset);
         } else {
             key.setBytes(poolBundleReader.keyBytes, keyOffset - localKeyLimit);
         }
     }
-    private void setKeyFromKey32(int keyOffset, ICUResource.Key key) {
+    private void setKeyFromKey32(int keyOffset, UResource.Key key) {
         if(keyOffset >= 0) {
             key.setBytes(keyBytes, keyOffset);
         } else {
@@ -831,7 +831,7 @@ public final class ICUResourceBundleReader {
         UResourceBundle.NONE
     };
 
-    static class ReaderValue extends ICUResource.Value {
+    static class ReaderValue extends UResource.Value {
         ICUResourceBundleReader reader;
         private int res;
 
@@ -890,7 +890,7 @@ public final class ICUResourceBundleReader {
         protected int size;
         protected int itemsOffset;
 
-        int getSize() {
+        final int getSize() {
             return size;
         }
         int getContainerResource(ICUResourceBundleReader reader, int index) {
@@ -925,7 +925,7 @@ public final class ICUResourceBundleReader {
     static class Array extends Container {
         Array() {}
         void getAllItems(ICUResourceBundleReader reader,
-                ICUResource.Key key, ReaderValue value, ArraySink sink) {
+                UResource.Key key, ReaderValue value, ArraySink sink) {
             for (int i = 0; i < size; ++i) {
                 int res = getContainerResource(reader, i);
                 int type = RES_GET_TYPE(res);
@@ -1019,7 +1019,7 @@ public final class ICUResourceBundleReader {
             return getContainerResource(reader, findTableItem(reader, resKey));
         }
         void getAllItems(ICUResourceBundleReader reader,
-                ICUResource.Key key, ReaderValue value, TableSink sink) {
+                UResource.Key key, ReaderValue value, TableSink sink) {
             for (int i = 0; i < size; ++i) {
                 if (keyOffsets != null) {
                     reader.setKeyFromKey16(keyOffsets[i], key);

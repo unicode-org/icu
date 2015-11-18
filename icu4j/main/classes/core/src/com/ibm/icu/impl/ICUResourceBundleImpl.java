@@ -195,7 +195,7 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
          * @param readerValue will be set during enumeration; input contents is ignored
          * @param sink receives all array item values
          */
-        void getAllItems(ICUResource.Key key, ReaderValue readerValue, ICUResource.ArraySink sink) {
+        void getAllItems(UResource.Key key, ReaderValue readerValue, UResource.ArraySink sink) {
             ICUResourceBundleReader reader = wholeBundle.reader;
             readerValue.reader = reader;
             ((ICUResourceBundleReader.Array)value).getAllItems(reader, key, readerValue, sink);
@@ -292,7 +292,7 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
          * @param readerValue will be set during enumeration; input contents is ignored
          * @param sink receives all table item key-value pairs
          */
-        void getAllItems(ICUResource.Key key, ReaderValue readerValue, ICUResource.TableSink sink) {
+        void getAllItems(UResource.Key key, ReaderValue readerValue, UResource.TableSink sink) {
             ICUResourceBundleReader reader = wholeBundle.reader;
             readerValue.reader = reader;
             ((ICUResourceBundleReader.Table)value).getAllItems(reader, key, readerValue, sink);
