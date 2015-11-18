@@ -3,13 +3,13 @@
 * Copyright (C) 2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
-* uresource.cpp
+* resource.cpp
 *
 * created on: 2015nov04
 * created by: Markus W. Scherer
 */
 
-#include "uresource.h"
+#include "resource.h"
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
@@ -17,38 +17,38 @@
 
 U_NAMESPACE_BEGIN
 
-UResourceValue::~UResourceValue() {}
+ResourceValue::~ResourceValue() {}
 
 
-UResourceArraySink::~UResourceArraySink() {}
+ResourceArraySink::~ResourceArraySink() {}
 
-void UResourceArraySink::put(
-        int32_t /*index*/, UResourceValue & /*value*/, UErrorCode & /*errorCode*/) {}
+void ResourceArraySink::put(
+        int32_t /*index*/, ResourceValue & /*value*/, UErrorCode & /*errorCode*/) {}
 
-UResourceArraySink *UResourceArraySink::getOrCreateArraySink(
+ResourceArraySink *ResourceArraySink::getOrCreateArraySink(
         int32_t /*index*/, int32_t /*size*/, UErrorCode & /*errorCode*/) {
     return NULL;
 }
 
-UResourceTableSink *UResourceArraySink::getOrCreateTableSink(
+ResourceTableSink *ResourceArraySink::getOrCreateTableSink(
         int32_t /*index*/, int32_t /*initialSize*/, UErrorCode & /*errorCode*/) {
     return NULL;
 }
 
 
-UResourceTableSink::~UResourceTableSink() {}
+ResourceTableSink::~ResourceTableSink() {}
 
-void UResourceTableSink::put(
-        const char * /*key*/, UResourceValue & /*value*/, UErrorCode & /*errorCode*/) {}
+void ResourceTableSink::put(
+        const char * /*key*/, ResourceValue & /*value*/, UErrorCode & /*errorCode*/) {}
 
-void UResourceTableSink::putNoFallback(const char * /*key*/, UErrorCode & /*errorCode*/) {}
+void ResourceTableSink::putNoFallback(const char * /*key*/, UErrorCode & /*errorCode*/) {}
 
-UResourceArraySink *UResourceTableSink::getOrCreateArraySink(
+ResourceArraySink *ResourceTableSink::getOrCreateArraySink(
         const char * /*key*/, int32_t /*size*/, UErrorCode & /*errorCode*/) {
     return NULL;
 }
 
-UResourceTableSink *UResourceTableSink::getOrCreateTableSink(
+ResourceTableSink *ResourceTableSink::getOrCreateTableSink(
         const char * /*key*/, int32_t /*initialSize*/, UErrorCode & /*errorCode*/) {
     return NULL;
 }

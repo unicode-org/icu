@@ -346,7 +346,7 @@
     <ClCompile Include="uresdata.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
-    <ClCompile Include="uresource.cpp">
+    <ClCompile Include="resource.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
     <ClCompile Include="caniter.cpp">
@@ -775,7 +775,7 @@
     <ClInclude Include="uresdata.h">
       <Filter>locales &amp; resources</Filter>
     </ClInclude>
-    <ClInclude Include="uresource.h">
+    <ClInclude Include="resource.h">
       <Filter>locales &amp; resources</Filter>
     </ClInclude>
     <ClInclude Include="uresimp.h">

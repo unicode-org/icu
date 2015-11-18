@@ -226,11 +226,11 @@ ures_getStringByKeyWithFallback(const UResourceBundle *resB,
 
 U_CAPI void U_EXPORT2
 ures_getAllArrayItemsWithFallback(const UResourceBundle *bundle, const char *path,
-                                  icu::UResourceArraySink &sink, UErrorCode &errorCode);
+                                  icu::ResourceArraySink &sink, UErrorCode &errorCode);
 
 U_CAPI void U_EXPORT2
 ures_getAllTableItemsWithFallback(const UResourceBundle *bundle, const char *path,
-                                  icu::UResourceTableSink &sink, UErrorCode &errorCode);
+                                  icu::ResourceTableSink &sink, UErrorCode &errorCode);
 
 #endif  /* __cplusplus */
 

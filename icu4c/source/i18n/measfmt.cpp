@@ -17,6 +17,7 @@
 #include "unicode/numfmt.h"
 #include "currfmt.h"
 #include "unicode/localpointer.h"
+#include "resource.h"
 #include "simplepatternformatter.h"
 #include "quantityformatter.h"
 #include "unicode/plurrule.h"
@@ -32,7 +33,6 @@
 #include "unicode/putil.h"
 #include "unicode/smpdtfmt.h"
 #include "uassert.h"
-#include "uresource.h"
 
 #include "sharednumberformat.h"
 #include "sharedpluralrules.h"
@@ -128,7 +128,7 @@ public:
     const NumericDateFormatters *getNumericDateFormatters() const {
         return numericDateFormatters;
     }
-    void setPerUnitFormatterIfAbsent(int32_t unitIndex, int32_t width, UResourceValue &value,
+    void setPerUnitFormatterIfAbsent(int32_t unitIndex, int32_t width, ResourceValue &value,
                                      UErrorCode &errorCode) {
         if (perUnitFormatters[unitIndex][width] == NULL) {
             perUnitFormatters[unitIndex][width] =
@@ -221,15 +221,15 @@ static const UChar gNarrow[] = { 0x4E, 0x61, 0x72, 0x72, 0x6F, 0x77 };
  * C++: Each inner sink class has a reference to the main outer sink.
  * Java: Use non-static inner classes instead.
  */
-struct UnitDataSink : public UResourceTableSink {
+struct UnitDataSink : public ResourceTableSink {
     /**
      * Sink for a table of display patterns. For example,
      * unitsShort/duration/hour contains other{"{0} hrs"}.
      */
-    struct UnitPatternSink : public UResourceTableSink {
+    struct UnitPatternSink : public ResourceTableSink {
         UnitPatternSink(UnitDataSink &sink) : outer(sink) {}
         ~UnitPatternSink();
-        virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode) {
+        virtual void put(const char *key, ResourceValue &value, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return; }
             if (uprv_strcmp(key, "dnam") == 0) {
                 // Skip the unit display name for now.
@@ -254,10 +254,10 @@ struct UnitDataSink : public UResourceTableSink {
      * Sink for a table of per-unit tables. For example,
      * unitsShort/duration contains tables for duration-unit subtypes day & hour.
      */
-    struct UnitSubtypeSink : public UResourceTableSink {
+    struct UnitSubtypeSink : public ResourceTableSink {
         UnitSubtypeSink(UnitDataSink &sink) : outer(sink) {}
         ~UnitSubtypeSink();
-        virtual UResourceTableSink *getOrCreateTableSink(
+        virtual ResourceTableSink *getOrCreateTableSink(
                 const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return NULL; }
             outer.unitIndex = MeasureUnit::internalGetIndexForTypeAndSubtype(outer.type, key);
@@ -275,10 +275,10 @@ struct UnitDataSink : public UResourceTableSink {
      * Sink for compound x-per-y display pattern. For example,
      * unitsShort/compound/per may be "{0}/{1}".
      */
-    struct UnitCompoundSink : public UResourceTableSink {
+    struct UnitCompoundSink : public ResourceTableSink {
         UnitCompoundSink(UnitDataSink &sink) : outer(sink) {}
         ~UnitCompoundSink();
-        virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode) {
+        virtual void put(const char *key, ResourceValue &value, UErrorCode &errorCode) {
             if (U_SUCCESS(errorCode) && uprv_strcmp(key, "per") == 0) {
                 outer.cacheData.perFormatters[outer.width].
                         compile(value.getUnicodeString(errorCode), errorCode);
@@ -292,10 +292,10 @@ struct UnitDataSink : public UResourceTableSink {
      * unitsShort contains tables for area & duration.
      * It also contains a table for the compound/per pattern.
      */
-    struct UnitTypeSink : public UResourceTableSink {
+    struct UnitTypeSink : public ResourceTableSink {
         UnitTypeSink(UnitDataSink &sink) : outer(sink) {}
         ~UnitTypeSink();
-        virtual UResourceTableSink *getOrCreateTableSink(
+        virtual ResourceTableSink *getOrCreateTableSink(
                 const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return NULL; }
             if (uprv_strcmp(key, "currency") == 0) {
@@ -318,7 +318,7 @@ struct UnitDataSink : public UResourceTableSink {
               cacheData(outputData),
               width(UMEASFMT_WIDTH_COUNT), type(NULL), unitIndex(0), hasPatterns(FALSE) {}
     ~UnitDataSink();
-    virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode) {
+    virtual void put(const char *key, ResourceValue &value, UErrorCode &errorCode) {
         // Handle aliases like
         // units:alias{"/LOCALE/unitsShort"}
         // which should only occur in the root bundle.
@@ -341,7 +341,7 @@ struct UnitDataSink : public UResourceTableSink {
         }
         cacheData.widthFallback[sourceWidth] = targetWidth;
     }
-    virtual UResourceTableSink *getOrCreateTableSink(
+    virtual ResourceTableSink *getOrCreateTableSink(
             const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
         if (U_SUCCESS(errorCode) && (width = widthFromKey(key)) != UMEASFMT_WIDTH_COUNT) {
             return &typeSink;
@@ -363,7 +363,7 @@ struct UnitDataSink : public UResourceTableSink {
         return UMEASFMT_WIDTH_COUNT;
     }
 
-    static UMeasureFormatWidth widthFromAlias(const UResourceValue &value, UErrorCode &errorCode) {
+    static UMeasureFormatWidth widthFromAlias(const ResourceValue &value, UErrorCode &errorCode) {
         int32_t length;
         const UChar *s = value.getAliasString(length, errorCode);
         // For example: "/LOCALE/unitsShort"
