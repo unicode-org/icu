@@ -23,6 +23,7 @@
 #include "unicode/utf16.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "resource.h"
 #include "uarrsort.h"
 #include "uassert.h"
 #include "ucol_swp.h"
@@ -30,7 +31,6 @@
 #include "uinvchar.h"
 #include "uresdata.h"
 #include "uresimp.h"
-#include "uresource.h"
 
 /*
  * Resource access helpers
@@ -699,7 +699,7 @@ res_getResource(const ResourceData *pResData, const char *key) {
 // and doing the enumeration in the higher-level code on top of those accessors.
 U_CFUNC void
 ures_getAllTableItems(const ResourceData *pResData, Resource table,
-                      icu::ResourceDataValue &value, icu::UResourceTableSink &sink,
+                      icu::ResourceDataValue &value, icu::ResourceTableSink &sink,
                       UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
     const uint16_t *keys16 = NULL;
@@ -752,13 +752,13 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
         int32_t type = RES_GET_TYPE(res);
         if (URES_IS_ARRAY(type)) {
             int32_t numItems = getArrayLength(pResData, res);
-            icu::UResourceArraySink *subSink = sink.getOrCreateArraySink(key, numItems, errorCode);
+            icu::ResourceArraySink *subSink = sink.getOrCreateArraySink(key, numItems, errorCode);
             if (subSink != NULL) {
                 ures_getAllArrayItems(pResData, res, value, *subSink, errorCode);
             }
         } else if (URES_IS_TABLE(type)) {
             int32_t numItems = getTableLength(pResData, res);
-            icu::UResourceTableSink *subSink = sink.getOrCreateTableSink(key, numItems, errorCode);
+            icu::ResourceTableSink *subSink = sink.getOrCreateTableSink(key, numItems, errorCode);
             if (subSink != NULL) {
                 ures_getAllTableItems(pResData, res, value, *subSink, errorCode);
             }
@@ -806,7 +806,7 @@ res_getArrayItem(const ResourceData *pResData, Resource array, int32_t indexR) {
 
 U_CFUNC void
 ures_getAllArrayItems(const ResourceData *pResData, Resource array,
-                      icu::ResourceDataValue &value, icu::UResourceArraySink &sink,
+                      icu::ResourceDataValue &value, icu::ResourceArraySink &sink,
                       UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
     const uint16_t *items16 = NULL;
@@ -841,13 +841,13 @@ ures_getAllArrayItems(const ResourceData *pResData, Resource array,
         int32_t type = RES_GET_TYPE(res);
         if (URES_IS_ARRAY(type)) {
             int32_t numItems = getArrayLength(pResData, res);
-            icu::UResourceArraySink *subSink = sink.getOrCreateArraySink(i, numItems, errorCode);
+            icu::ResourceArraySink *subSink = sink.getOrCreateArraySink(i, numItems, errorCode);
             if (subSink != NULL) {
                 ures_getAllArrayItems(pResData, res, value, *subSink, errorCode);
             }
         } else if (URES_IS_TABLE(type)) {
             int32_t numItems = getTableLength(pResData, res);
-            icu::UResourceTableSink *subSink = sink.getOrCreateTableSink(i, numItems, errorCode);
+            icu::ResourceTableSink *subSink = sink.getOrCreateTableSink(i, numItems, errorCode);
             if (subSink != NULL) {
                 ures_getAllTableItems(pResData, res, value, *subSink, errorCode);
             }

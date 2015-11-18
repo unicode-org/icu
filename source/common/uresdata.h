@@ -467,11 +467,11 @@ U_CFUNC Resource res_findResource(const ResourceData *pResData, Resource r,
 
 #ifdef __cplusplus
 
-#include "uresource.h"
+#include "resource.h"
 
 U_NAMESPACE_BEGIN
 
-class ResourceDataValue : public UResourceValue {
+class ResourceDataValue : public ResourceValue {
 public:
     ResourceDataValue() : pResData(NULL), res(URES_NONE) {}
     virtual ~ResourceDataValue();
@@ -501,7 +501,7 @@ U_NAMESPACE_END
  */
 U_CFUNC void
 ures_getAllTableItems(const ResourceData *pResData, Resource table,
-                      icu::ResourceDataValue &value, icu::UResourceTableSink &sink,
+                      icu::ResourceDataValue &value, icu::ResourceTableSink &sink,
                       UErrorCode &errorCode);
 
 /**
@@ -510,7 +510,7 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
  */
 U_CFUNC void
 ures_getAllArrayItems(const ResourceData *pResData, Resource array,
-                      icu::ResourceDataValue &value, icu::UResourceArraySink &sink,
+                      icu::ResourceDataValue &value, icu::ResourceArraySink &sink,
                       UErrorCode &errorCode);
 
 #endif  /* __cplusplus */

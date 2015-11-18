@@ -1886,7 +1886,7 @@ namespace {
 
 void getAllContainerItemsWithFallback(
         const UResourceBundle *bundle, ResourceDataValue &value,
-        UResourceArraySink *arraySink, UResourceTableSink *tableSink,
+        ResourceArraySink *arraySink, ResourceTableSink *tableSink,
         UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return; }
     // We recursively enumerate child-first,
@@ -1952,7 +1952,7 @@ void getAllContainerItemsWithFallback(
 
 void getAllContainerItemsWithFallback(
         const UResourceBundle *bundle, const char *path,
-        UResourceArraySink *arraySink, UResourceTableSink *tableSink,
+        ResourceArraySink *arraySink, ResourceTableSink *tableSink,
         UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return; }
     if (path == NULL) {
@@ -1988,13 +1988,13 @@ void getAllContainerItemsWithFallback(
 
 U_CAPI void U_EXPORT2
 ures_getAllArrayItemsWithFallback(const UResourceBundle *bundle, const char *path,
-                                  UResourceArraySink &sink, UErrorCode &errorCode) {
+                                  ResourceArraySink &sink, UErrorCode &errorCode) {
     getAllContainerItemsWithFallback(bundle, path, &sink, NULL, errorCode);
 }
 
 U_CAPI void U_EXPORT2
 ures_getAllTableItemsWithFallback(const UResourceBundle *bundle, const char *path,
-                                  UResourceTableSink &sink, UErrorCode &errorCode) {
+                                  ResourceTableSink &sink, UErrorCode &errorCode) {
     getAllContainerItemsWithFallback(bundle, path, NULL, &sink, errorCode);
 }
 
