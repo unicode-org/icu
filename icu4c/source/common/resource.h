@@ -3,7 +3,7 @@
 * Copyright (C) 2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
-* uresource.h
+* resource.h
 *
 * created on: 2015nov04
 * created by: Markus W. Scherer
@@ -17,8 +17,11 @@
  * \brief ICU resource bundle key and value types.
  */
 
-// Note: Ported from ICU4J class ICUResource and its nested classes,
+// Note: Ported from ICU4J class UResource and its nested classes,
 // but the C++ classes are separate, not nested.
+
+// We use the Resource prefix for C++ classes, as usual.
+// The UResource prefix would be used for C types.
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
@@ -26,22 +29,19 @@
 
 U_NAMESPACE_BEGIN
 
-class UResourceTableSink;
+class ResourceTableSink;
 
 // Note: In C++, we use const char * pointers for keys,
-// rather than an abstraction like Java ICUResource.Key.
+// rather than an abstraction like Java UResource.Key.
 
 /**
  * Represents a resource bundle item's value.
  * Avoids object creations as much as possible.
  * Mutable, not thread-safe.
- *
- * If we add public API like this, we should use the UResource prefix for C types
- * and just a Resource prefix for the C++ versions, as usual.
  */
-class U_COMMON_API UResourceValue : public UObject {
+class U_COMMON_API ResourceValue : public UObject {
 public:
-    virtual ~UResourceValue();
+    virtual ~ResourceValue();
 
     /**
      * @return ICU resource type, for example, URES_STRING
@@ -101,11 +101,11 @@ public:
     virtual const uint8_t *getBinary(int32_t &length, UErrorCode &errorCode) const = 0;
 
 protected:
-    UResourceValue() {}
+    ResourceValue() {}
 
 private:
-    UResourceValue(const UResourceValue &);  // no copy constructor
-    UResourceValue &operator=(const UResourceValue &);  // no assignment operator
+    ResourceValue(const ResourceValue &);  // no copy constructor
+    ResourceValue &operator=(const ResourceValue &);  // no assignment operator
 };
 
 /**
@@ -113,12 +113,12 @@ private:
  * The base class does nothing.
  *
  * Nested arrays and tables are stored as nested sinks,
- * never put() as UResourceValue items.
+ * never put() as ResourceValue items.
  */
-class U_COMMON_API UResourceArraySink : public UObject {
+class U_COMMON_API ResourceArraySink : public UObject {
 public:
-    UResourceArraySink() {}
-    virtual ~UResourceArraySink();
+    ResourceArraySink() {}
+    virtual ~ResourceArraySink();
 
     /**
      * Adds a value from a resource array.
@@ -126,7 +126,7 @@ public:
      * @param index of the resource array item
      * @param value resource value
      */
-    virtual void put(int32_t index, UResourceValue &value, UErrorCode &errorCode);
+    virtual void put(int32_t index, ResourceValue &value, UErrorCode &errorCode);
 
     /**
      * Returns a nested resource array at the array index as another sink.
@@ -140,7 +140,7 @@ public:
      * @param size number of array items
      * @return nested-array sink, or NULL
      */
-    virtual UResourceArraySink *getOrCreateArraySink(
+    virtual ResourceArraySink *getOrCreateArraySink(
             int32_t index, int32_t size, UErrorCode &errorCode);
 
     /**
@@ -155,12 +155,12 @@ public:
      * @param initialSize size hint for creating the sink if necessary
      * @return nested-table sink, or NULL
      */
-    virtual UResourceTableSink *getOrCreateTableSink(
+    virtual ResourceTableSink *getOrCreateTableSink(
             int32_t index, int32_t initialSize, UErrorCode &errorCode);
 
 private:
-    UResourceArraySink(const UResourceArraySink &);  // no copy constructor
-    UResourceArraySink &operator=(const UResourceArraySink &);  // no assignment operator
+    ResourceArraySink(const ResourceArraySink &);  // no copy constructor
+    ResourceArraySink &operator=(const ResourceArraySink &);  // no assignment operator
 };
 
 /**
@@ -168,12 +168,12 @@ private:
  * The base class does nothing.
  *
  * Nested arrays and tables are stored as nested sinks,
- * never put() as UResourceValue items.
+ * never put() as ResourceValue items.
  */
-class U_COMMON_API UResourceTableSink : public UObject {
+class U_COMMON_API ResourceTableSink : public UObject {
 public:
-    UResourceTableSink() {}
-    virtual ~UResourceTableSink();
+    ResourceTableSink() {}
+    virtual ~ResourceTableSink();
 
     /**
      * Adds a key-value pair from a resource table.
@@ -181,7 +181,7 @@ public:
      * @param key resource key string
      * @param value resource value
      */
-    virtual void put(const char *key, UResourceValue &value, UErrorCode &errorCode);
+    virtual void put(const char *key, ResourceValue &value, UErrorCode &errorCode);
 
     /**
      * Adds a no-fallback/no-inheritance marker for this key.
@@ -206,7 +206,7 @@ public:
      * @param size number of array items
      * @return nested-array sink, or NULL
      */
-    virtual UResourceArraySink *getOrCreateArraySink(
+    virtual ResourceArraySink *getOrCreateArraySink(
             const char *key, int32_t size, UErrorCode &errorCode);
 
     /**
@@ -221,12 +221,12 @@ public:
      * @param initialSize size hint for creating the sink if necessary
      * @return nested-table sink, or NULL
      */
-    virtual UResourceTableSink *getOrCreateTableSink(
+    virtual ResourceTableSink *getOrCreateTableSink(
             const char *key, int32_t initialSize, UErrorCode &errorCode);
 
 private:
-    UResourceTableSink(const UResourceTableSink &);  // no copy constructor
-    UResourceTableSink &operator=(const UResourceTableSink &);  // no assignment operator
+    ResourceTableSink(const ResourceTableSink &);  // no copy constructor
+    ResourceTableSink &operator=(const ResourceTableSink &);  // no assignment operator
 };
 
 U_NAMESPACE_END
