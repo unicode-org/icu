@@ -202,6 +202,8 @@ static const dtTypeElem dtTypes[] = {
     {LOW_X, UDATPG_ZONE_FIELD, DT_NARROW - DT_DELTA, 1, 0},
     {LOW_X, UDATPG_ZONE_FIELD, DT_SHORT - DT_DELTA, 2, 0},
     {LOW_X, UDATPG_ZONE_FIELD, DT_LONG - DT_DELTA, 4, 0},
+    {LOW_J, UDATPG_HOUR_FIELD, DT_NUMERIC, 1, 2}, // 12/24 hour
+    {CAP_J, UDATPG_HOUR_FIELD, DT_NUMERIC, 1, 2}, // 12/24 hour no AM/PM
     {0, UDATPG_FIELD_COUNT, 0, 0, 0} , // last row of dtTypes[]
  };
 

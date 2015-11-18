@@ -30,6 +30,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(0, testAPI);
         TESTCASE(1, testOptions);
         TESTCASE(2, testAllFieldPatterns);
+        TESTCASE(3, testStaticGetSkeleton);
         default: name = ""; break;
     }
 }
@@ -1055,6 +1056,26 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
             dataerrln("Create DateTimePatternGenerator instance for locale(%s) fails: %s",
                       locale.getName(), u_errorName(status));
         }
+    }
+}
+
+void IntlTestDateTimePatternGeneratorAPI::testStaticGetSkeleton(/*char *par*/)
+{
+    // Verify that staticGetSkeleton() doesn't mangle skeletons. (Ticket #11985)
+    static const char* const testData[] = {
+        "jmm",
+        "jjmm",
+        "Jmm",
+        "JJmm"
+    };
+
+    for (size_t i = 0; i < sizeof testData / sizeof *testData; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString skeleton = DateTimePatternGenerator::staticGetSkeleton(testData[i], status);
+        if (!assertSuccess("staticGetSkeleton", status)) {
+            return;
+        }
+        assertEquals("Skeleton", testData[i], skeleton);
     }
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */

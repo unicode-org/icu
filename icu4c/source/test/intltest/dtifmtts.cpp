@@ -50,6 +50,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(4, testYearFormats);
         TESTCASE(5, testStress);
         TESTCASE(6, testTicket11583_2);
+        TESTCASE(7, testTicket11985);
         default: name = ""; break;
     }
 }
@@ -1528,6 +1529,19 @@ void DateIntervalFormatTest::testTicket11583_2() {
     if (!assertSuccess("Error formatting", status)) {
         return;
     }
+}
+
+
+void DateIntervalFormatTest::testTicket11985() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DateIntervalFormat> fmt(
+            DateIntervalFormat::createInstance(UDAT_HOUR_MINUTE, Locale::getEnglish(), status));
+    if (!assertSuccess("createInstance", status)) {
+        return;
+    }
+    UnicodeString pattern;
+    static_cast<const SimpleDateFormat*>(fmt->getDateFormat())->toPattern(pattern);
+    assertEquals("Format pattern", "h:mm a", pattern);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
