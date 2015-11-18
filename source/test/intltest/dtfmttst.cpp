@@ -113,6 +113,8 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestDFSCreateForLocaleWithCalendarInLocale);
     TESTCASE_AUTO(TestChangeCalendar);
 
+    TESTCASE_AUTO(TestPatternFromSkeleton);
+
     TESTCASE_AUTO_END;
 }
 
@@ -4833,6 +4835,33 @@ void DateFormatTest::TestChangeCalendar() {
     FieldPosition pos(0);
     fmt->format(date(98, 5-1, 25), result, pos);
     assertEquals("format yMMMd", "Iyar 29, 5758", result);
+}
+
+void DateFormatTest::TestPatternFromSkeleton() {
+    static const struct {
+        const Locale& locale;
+        const char* const skeleton;
+        const char* const pattern;
+    } TESTDATA[] = {
+        // Ticket #11985
+        {Locale::getEnglish(), "jjmm", "h:mm a"},
+        {Locale::getEnglish(), "JJmm", "hh:mm"},
+        {Locale::getGerman(), "jjmm", "HH:mm"},
+        {Locale::getGerman(), "JJmm", "HH:mm"}
+    };
+
+    for (size_t i = 0; i < sizeof TESTDATA / sizeof *TESTDATA; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        LocalPointer<DateFormat> fmt(
+                DateFormat::createInstanceForSkeleton(
+                        TESTDATA[i].skeleton, TESTDATA[i].locale, status));
+        if (!assertSuccess("createInstanceForSkeleton", status)) {
+            return;
+        }
+        UnicodeString pattern;
+        static_cast<const SimpleDateFormat*>(fmt.getAlias())->toPattern(pattern);
+        assertEquals("Format pattern", TESTDATA[i].pattern, pattern);
+    }
 }
 
 

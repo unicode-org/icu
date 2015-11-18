@@ -54,6 +54,8 @@ public:
 
     void testTicket11583_2();
 
+    void testTicket11985();
+
 private:
     /**
      * Test formatting against expected result
