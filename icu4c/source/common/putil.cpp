@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2014, International Business Machines
+*   Copyright (C) 1997-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1383,9 +1383,18 @@ static const char *uprv_getPOSIXIDForCategory(int category)
         {
             /* Maybe we got some garbage.  Try something more reasonable */
             posixID = getenv("LC_ALL");
+            /* Solaris speaks POSIX -  See IEEE Std 1003.1-2008 
+             * This is needed to properly handle empty env. variables
+             */
+#if U_PLATFORM == U_PF_SOLARIS
+            if ((posixID == 0) || (posixID[0] == '\0')) {
+                posixID = getenv(category == LC_MESSAGES ? "LC_MESSAGES" : "LC_CTYPE");
+                if ((posixID == 0) || (posixID[0] == '\0')) {
+#else
             if (posixID == 0) {
                 posixID = getenv(category == LC_MESSAGES ? "LC_MESSAGES" : "LC_CTYPE");
                 if (posixID == 0) {
+#endif                    
                     posixID = getenv("LANG");
                 }
             }
@@ -1877,7 +1886,10 @@ int_getDefaultCodepage()
 
     localeName = uprv_getPOSIXIDForDefaultCodepage();
     uprv_memset(codesetName, 0, sizeof(codesetName));
-#if U_HAVE_NL_LANGINFO_CODESET
+    /* On Solaris nl_langinfo returns C locale values unless setlocale
+     * was called earlier.
+     */
+#if (U_HAVE_NL_LANGINFO_CODESET && U_PLATFORM != U_PF_SOLARIS)
     /* When available, check nl_langinfo first because it usually gives more
        useful names. It depends on LC_CTYPE.
        nl_langinfo may use the same buffer as setlocale. */
