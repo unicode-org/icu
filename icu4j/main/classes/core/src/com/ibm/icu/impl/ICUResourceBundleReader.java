@@ -850,6 +850,15 @@ public final class ICUResourceBundleReader {
         }
 
         @Override
+        public String getAliasString() {
+            String s = reader.getAlias(res);
+            if (s == null) {
+                throw new UResourceTypeMismatchException("");
+            }
+            return s;
+        }
+
+        @Override
         public int getInt() {
             if (RES_GET_TYPE(res) != UResourceBundle.INT) {
                 throw new UResourceTypeMismatchException("");
@@ -945,14 +954,16 @@ public final class ICUResourceBundleReader {
                         assert(table.size == numItems);
                         table.getAllItems(reader, key, value, subSink);
                     }
+                /* TODO: settle on how to deal with aliases, port to C++
                 } else if (type == ICUResourceBundle.ALIAS) {
                     throw new UnsupportedOperationException(
-                            "aliases not handled in resource enumeration");
+                            "aliases not handled in resource enumeration"); */
                 } else {
                     value.res = res;
                     sink.put(i, value);
                 }
             }
+            sink.leave();
         }
     }
     private static final class Array32 extends Array {
@@ -1044,9 +1055,10 @@ public final class ICUResourceBundleReader {
                         assert(table.size == numItems);
                         table.getAllItems(reader, key, value, subSink);
                     }
+                /* TODO: settle on how to deal with aliases, port to C++
                 } else if (type == ICUResourceBundle.ALIAS) {
                     throw new UnsupportedOperationException(
-                            "aliases not handled in resource enumeration");
+                            "aliases not handled in resource enumeration"); */
                 } else if (reader.isNoInheritanceMarker(res)) {
                     sink.putNoFallback(key);
                 } else {
@@ -1054,6 +1066,7 @@ public final class ICUResourceBundleReader {
                     sink.put(key, value);
                 }
             }
+            sink.leave();
         }
         Table() {
         }

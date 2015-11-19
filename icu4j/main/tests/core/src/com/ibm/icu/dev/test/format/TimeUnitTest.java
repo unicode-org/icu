@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -271,6 +271,14 @@ public class TimeUnitTest extends TestFmwk {
         tuf.setNumberFormat(numfmt);        
     }
 
+    public void TestBritishShortHourFallback() {
+        // See ticket #11986 "incomplete fallback in MeasureFormat".
+        Object oneHour = new TimeUnitAmount(1, TimeUnit.HOUR);
+        ULocale en_GB = new ULocale("en_GB");
+        TimeUnitFormat formatter = new TimeUnitFormat(en_GB, TimeUnitFormat.ABBREVIATED_NAME);
+        String result = formatter.format(oneHour);
+        assertEquals("TestBritishShortHourFallback()", "1 hr", result);
+    }
 
     private void formatParsing(TimeUnitFormat format) {
         final TimeUnit[] values = TimeUnit.values();
