@@ -1222,6 +1222,7 @@ void MeasureUnit::initCurrency(const char *isoCurrency) {
         fSubTypeId = result - gOffsets[fTypeId];
     } else {
         uprv_strncpy(fCurrency, isoCurrency, UPRV_LENGTHOF(fCurrency));
+        fCurrency[3] = 0;
     }
 }
 
