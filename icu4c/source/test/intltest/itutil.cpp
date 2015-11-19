@@ -316,31 +316,31 @@ void LocalPointerTest::TestLocalPointer() {
 
     // LocalPointer(p, errorCode) sets U_MEMORY_ALLOCATION_ERROR if p==NULL.
     UErrorCode errorCode = U_ZERO_ERROR;
-    LocalPointer<CharString> cs(new CharString("some chars", errorCode), errorCode);
-    if(cs.isNull() && U_SUCCESS(errorCode)) {
+    LocalPointer<CharString> csx(new CharString("some chars", errorCode), errorCode);
+    if(csx.isNull() && U_SUCCESS(errorCode)) {
         errln("LocalPointer(p, errorCode) failure");
         return;
     }
     errorCode = U_ZERO_ERROR;
-    cs.adoptInsteadAndCheckErrorCode(new CharString("different chars", errorCode), errorCode);
-    if(cs.isNull() && U_SUCCESS(errorCode)) {
+    csx.adoptInsteadAndCheckErrorCode(new CharString("different chars", errorCode), errorCode);
+    if(csx.isNull() && U_SUCCESS(errorCode)) {
         errln("adoptInsteadAndCheckErrorCode(p, errorCode) failure");
         return;
     }
     // Incoming failure: Keep the current object and delete the input object.
     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-    cs.adoptInsteadAndCheckErrorCode(new CharString("unused", errorCode), errorCode);
-    if(cs.isValid() && strcmp(cs->data(), "different chars") != 0) {
+    csx.adoptInsteadAndCheckErrorCode(new CharString("unused", errorCode), errorCode);
+    if(csx.isValid() && strcmp(csx->data(), "different chars") != 0) {
         errln("adoptInsteadAndCheckErrorCode(p, U_FAILURE) did not retain the old object");
         return;
     }
     errorCode = U_ZERO_ERROR;
-    cs.adoptInsteadAndCheckErrorCode(NULL, errorCode);
+    csx.adoptInsteadAndCheckErrorCode(NULL, errorCode);
     if(errorCode != U_MEMORY_ALLOCATION_ERROR) {
         errln("adoptInsteadAndCheckErrorCode(NULL, errorCode) did not set U_MEMORY_ALLOCATION_ERROR");
         return;
     }
-    if(cs.isValid()) {
+    if(csx.isValid()) {
         errln("adoptInsteadAndCheckErrorCode(NULL, errorCode) kept the object");
         return;
     }
