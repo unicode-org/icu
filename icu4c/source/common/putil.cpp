@@ -1000,6 +1000,10 @@ uprv_tzname(int n)
         && uprv_strcmp(tzid, TZ_ENV_CHECK) != 0
 #endif
     ) {
+        /* The colon forces tzset() to treat the remainder as zoneinfo path */ 
+        if (tzid[0] == ':') { 
+            tzid++; 
+        } 
         /* This might be a good Olson ID. */
         skipZoneIDPrefix(&tzid);
         return tzid;
