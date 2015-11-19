@@ -21,16 +21,37 @@
 
 U_NAMESPACE_BEGIN
 
-// other must always be first.
-static const char * const gPluralForms[] = {
-        "other", "zero", "one", "two", "few", "many"};
-
+/**
+ * Plural forms in index order: "other", "zero", "one", "two", "few", "many"
+ * "other" must be first.
+ */
 static int32_t getPluralIndex(const char *pluralForm) {
-    int32_t len = UPRV_LENGTHOF(gPluralForms);
-    for (int32_t i = 0; i < len; ++i) {
-        if (uprv_strcmp(pluralForm, gPluralForms[i]) == 0) {
-            return i;
+    switch (*pluralForm++) {
+    case 'f':
+        if (uprv_strcmp(pluralForm, "ew") == 0) {
+            return 4;
         }
+    case 'm':
+        if (uprv_strcmp(pluralForm, "any") == 0) {
+            return 5;
+        }
+    case 'o':
+        if (uprv_strcmp(pluralForm, "ther") == 0) {
+            return 0;
+        } else if (uprv_strcmp(pluralForm, "ne") == 0) {
+            return 2;
+        }
+        break;
+    case 't':
+        if (uprv_strcmp(pluralForm, "wo") == 0) {
+            return 3;
+        }
+    case 'z':
+        if (uprv_strcmp(pluralForm, "ero") == 0) {
+            return 1;
+        }
+    default:
+        break;
     }
     return -1;
 }

@@ -77,6 +77,13 @@ private:
     NumericDateFormatters &operator=(const NumericDateFormatters &other);
 };
 
+static UMeasureFormatWidth getRegularWidth(UMeasureFormatWidth width) {
+    if (width >= WIDTH_INDEX_COUNT) {
+        return UMEASFMT_WIDTH_NARROW;
+    }
+    return width;
+}
+
 /**
  * Instances contain all MeasureFormat specific data for a particular locale.
  * This data is cached. It is never copied, but is shared via shared pointers.
@@ -111,8 +118,8 @@ public:
         delete currencyFormats[widthIndex];
         currencyFormats[widthIndex] = nfToAdopt;
     }
-    const NumberFormat *getCurrencyFormat(int32_t widthIndex) const {
-        return currencyFormats[widthIndex];
+    const NumberFormat *getCurrencyFormat(UMeasureFormatWidth width) const {
+        return currencyFormats[getRegularWidth(width)];
     }
     void adoptIntegerFormat(NumberFormat *nfToAdopt) {
         delete integerFormat;
@@ -128,7 +135,7 @@ public:
     const NumericDateFormatters *getNumericDateFormatters() const {
         return numericDateFormatters;
     }
-    void setPerUnitFormatterIfAbsent(int32_t unitIndex, int32_t width, ResourceValue &value,
+    void setPerUnitFormatterIfAbsent(int32_t unitIndex, int32_t width, const ResourceValue &value,
                                      UErrorCode &errorCode) {
         if (perUnitFormatters[unitIndex][width] == NULL) {
             perUnitFormatters[unitIndex][width] =
@@ -177,13 +184,6 @@ MeasureFormatCacheData::~MeasureFormatCacheData() {
     delete numericDateFormatters;
 }
 
-static int32_t widthToIndex(UMeasureFormatWidth width) {
-    if (width >= WIDTH_INDEX_COUNT) {
-        return WIDTH_INDEX_COUNT - 1;
-    }
-    return width;
-}
-
 static UBool isCurrency(const MeasureUnit &unit) {
     return (uprv_strcmp(unit.getType(), "currency") == 0);
 }
@@ -229,7 +229,7 @@ struct UnitDataSink : public ResourceTableSink {
     struct UnitPatternSink : public ResourceTableSink {
         UnitPatternSink(UnitDataSink &sink) : outer(sink) {}
         ~UnitPatternSink();
-        virtual void put(const char *key, ResourceValue &value, UErrorCode &errorCode) {
+        virtual void put(const char *key, const ResourceValue &value, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return; }
             if (uprv_strcmp(key, "dnam") == 0) {
                 // Skip the unit display name for now.
@@ -278,7 +278,7 @@ struct UnitDataSink : public ResourceTableSink {
     struct UnitCompoundSink : public ResourceTableSink {
         UnitCompoundSink(UnitDataSink &sink) : outer(sink) {}
         ~UnitCompoundSink();
-        virtual void put(const char *key, ResourceValue &value, UErrorCode &errorCode) {
+        virtual void put(const char *key, const ResourceValue &value, UErrorCode &errorCode) {
             if (U_SUCCESS(errorCode) && uprv_strcmp(key, "per") == 0) {
                 outer.cacheData.perFormatters[outer.width].
                         compile(value.getUnicodeString(errorCode), errorCode);
@@ -318,7 +318,7 @@ struct UnitDataSink : public ResourceTableSink {
               cacheData(outputData),
               width(UMEASFMT_WIDTH_COUNT), type(NULL), unitIndex(0), hasPatterns(FALSE) {}
     ~UnitDataSink();
-    virtual void put(const char *key, ResourceValue &value, UErrorCode &errorCode) {
+    virtual void put(const char *key, const ResourceValue &value, UErrorCode &errorCode) {
         // Handle aliases like
         // units:alias{"/LOCALE/unitsShort"}
         // which should only occur in the root bundle.
@@ -834,7 +834,7 @@ void MeasureFormat::initMeasureFormat(
     delete listFormatter;
     listFormatter = ListFormatter::createInstance(
             locale,
-            listStyles[widthToIndex(width)],
+            listStyles[getRegularWidth(width)],
             status);
 }
 
@@ -891,14 +891,13 @@ UnicodeString &MeasureFormat::formatMeasure(
     if (isCurrency(amtUnit)) {
         UChar isoCode[4];
         u_charsToUChars(amtUnit.getSubtype(), isoCode, 4);
-        return cache->getCurrencyFormat(widthToIndex(width))->format(
+        return cache->getCurrencyFormat(width)->format(
                 new CurrencyAmount(amtNumber, isoCode, status),
                 appendTo,
                 pos,
                 status);
     }
-    const QuantityFormatter *quantityFormatter = getQuantityFormatter(
-            amtUnit.getIndex(), widthToIndex(width), status);
+    const QuantityFormatter *quantityFormatter = getQuantityFormatter(amtUnit, width, status);
     if (U_FAILURE(status)) {
         return appendTo;
     }
@@ -1041,18 +1040,18 @@ UnicodeString &MeasureFormat::formatNumeric(
 }
 
 const QuantityFormatter *MeasureFormat::getQuantityFormatter(
-        int32_t index,
-        int32_t widthIndex,
+        const MeasureUnit &unit,
+        UMeasureFormatWidth width,
         UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return NULL;
     }
-    const QuantityFormatter *formatters =
-            cache->formatters[index];
-    if (formatters[widthIndex].isValid()) {
-        return &formatters[widthIndex];
+    width = getRegularWidth(width);
+    const QuantityFormatter *formatters = cache->formatters[unit.getIndex()];
+    if (formatters[width].isValid()) {
+        return &formatters[width];
     }
-    int32_t fallbackWidth = cache->widthFallback[widthIndex];
+    int32_t fallbackWidth = cache->widthFallback[width];
     if (fallbackWidth != UMEASFMT_WIDTH_COUNT && formatters[fallbackWidth].isValid()) {
         return &formatters[fallbackWidth];
     }
@@ -1061,14 +1060,15 @@ const QuantityFormatter *MeasureFormat::getQuantityFormatter(
 }
 
 const SimplePatternFormatter *MeasureFormat::getPerUnitFormatter(
-        int32_t index,
-        int32_t widthIndex) const {
+        const MeasureUnit &unit,
+        UMeasureFormatWidth width) const {
+    width = getRegularWidth(width);
     const SimplePatternFormatter * const * perUnitFormatters =
-            cache->getPerUnitFormattersByIndex(index);
-    if (perUnitFormatters[widthIndex] != NULL) {
-        return perUnitFormatters[widthIndex];
+            cache->getPerUnitFormattersByIndex(unit.getIndex());
+    if (perUnitFormatters[width] != NULL) {
+        return perUnitFormatters[width];
     }
-    int32_t fallbackWidth = cache->widthFallback[widthIndex];
+    int32_t fallbackWidth = cache->widthFallback[width];
     if (fallbackWidth != UMEASFMT_WIDTH_COUNT && perUnitFormatters[fallbackWidth] != NULL) {
         return perUnitFormatters[fallbackWidth];
     }
@@ -1076,16 +1076,17 @@ const SimplePatternFormatter *MeasureFormat::getPerUnitFormatter(
 }
 
 const SimplePatternFormatter *MeasureFormat::getPerFormatter(
-        int32_t widthIndex,
+        UMeasureFormatWidth width,
         UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return NULL;
     }
+    width = getRegularWidth(width);
     const SimplePatternFormatter * perFormatters = cache->perFormatters;
-    if (perFormatters[widthIndex].getPlaceholderCount() == 2) {
-        return &perFormatters[widthIndex];
+    if (perFormatters[width].getPlaceholderCount() == 2) {
+        return &perFormatters[width];
     }
-    int32_t fallbackWidth = cache->widthFallback[widthIndex];
+    int32_t fallbackWidth = cache->widthFallback[width];
     if (fallbackWidth != UMEASFMT_WIDTH_COUNT &&
             perFormatters[fallbackWidth].getPlaceholderCount() == 2) {
         return &perFormatters[fallbackWidth];
@@ -1110,8 +1111,7 @@ int32_t MeasureFormat::withPerUnitAndAppend(
     if (U_FAILURE(status)) {
         return offset;
     }
-    const SimplePatternFormatter *perUnitFormatter = getPerUnitFormatter(
-            perUnit.getIndex(), widthToIndex(width));
+    const SimplePatternFormatter *perUnitFormatter = getPerUnitFormatter(perUnit, width);
     if (perUnitFormatter != NULL) {
         const UnicodeString *params[] = {&formatted};
         perUnitFormatter->formatAndAppend(
@@ -1123,10 +1123,8 @@ int32_t MeasureFormat::withPerUnitAndAppend(
                 status);
         return offset;
     }
-    const SimplePatternFormatter *perFormatter = getPerFormatter(
-            widthToIndex(width), status);
-    const QuantityFormatter *qf = getQuantityFormatter(
-            perUnit.getIndex(), widthToIndex(width), status);
+    const SimplePatternFormatter *perFormatter = getPerFormatter(width, status);
+    const QuantityFormatter *qf = getQuantityFormatter(perUnit, width, status);
     if (U_FAILURE(status)) {
         return offset;
     }

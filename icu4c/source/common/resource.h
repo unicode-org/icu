@@ -126,7 +126,7 @@ public:
      * @param index of the resource array item
      * @param value resource value
      */
-    virtual void put(int32_t index, ResourceValue &value, UErrorCode &errorCode);
+    virtual void put(int32_t index, const ResourceValue &value, UErrorCode &errorCode);
 
     /**
      * Returns a nested resource array at the array index as another sink.
@@ -158,6 +158,13 @@ public:
     virtual ResourceTableSink *getOrCreateTableSink(
             int32_t index, int32_t initialSize, UErrorCode &errorCode);
 
+    /**
+     * "Leaves" the array.
+     * Indicates that all of the resources and sub-resources of the current array
+     * have been enumerated.
+     */
+    virtual void leave(UErrorCode &errorCode);
+
 private:
     ResourceArraySink(const ResourceArraySink &);  // no copy constructor
     ResourceArraySink &operator=(const ResourceArraySink &);  // no assignment operator
@@ -181,7 +188,7 @@ public:
      * @param key resource key string
      * @param value resource value
      */
-    virtual void put(const char *key, ResourceValue &value, UErrorCode &errorCode);
+    virtual void put(const char *key, const ResourceValue &value, UErrorCode &errorCode);
 
     /**
      * Adds a no-fallback/no-inheritance marker for this key.
@@ -223,6 +230,13 @@ public:
      */
     virtual ResourceTableSink *getOrCreateTableSink(
             const char *key, int32_t initialSize, UErrorCode &errorCode);
+
+    /**
+     * "Leaves" the table.
+     * Indicates that all of the resources and sub-resources of the current table
+     * have been enumerated.
+     */
+    virtual void leave(UErrorCode &errorCode);
 
 private:
     ResourceTableSink(const ResourceTableSink &);  // no copy constructor
