@@ -23,7 +23,7 @@ ResourceValue::~ResourceValue() {}
 ResourceArraySink::~ResourceArraySink() {}
 
 void ResourceArraySink::put(
-        int32_t /*index*/, ResourceValue & /*value*/, UErrorCode & /*errorCode*/) {}
+        int32_t /*index*/, const ResourceValue & /*value*/, UErrorCode & /*errorCode*/) {}
 
 ResourceArraySink *ResourceArraySink::getOrCreateArraySink(
         int32_t /*index*/, int32_t /*size*/, UErrorCode & /*errorCode*/) {
@@ -35,11 +35,13 @@ ResourceTableSink *ResourceArraySink::getOrCreateTableSink(
     return NULL;
 }
 
+void ResourceArraySink::leave(UErrorCode & /*errorCode*/) {}
+
 
 ResourceTableSink::~ResourceTableSink() {}
 
 void ResourceTableSink::put(
-        const char * /*key*/, ResourceValue & /*value*/, UErrorCode & /*errorCode*/) {}
+        const char * /*key*/, const ResourceValue & /*value*/, UErrorCode & /*errorCode*/) {}
 
 void ResourceTableSink::putNoFallback(const char * /*key*/, UErrorCode & /*errorCode*/) {}
 
@@ -52,5 +54,7 @@ ResourceTableSink *ResourceTableSink::getOrCreateTableSink(
         const char * /*key*/, int32_t /*initialSize*/, UErrorCode & /*errorCode*/) {
     return NULL;
 }
+
+void ResourceTableSink::leave(UErrorCode & /*errorCode*/) {}
 
 U_NAMESPACE_END

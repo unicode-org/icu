@@ -775,6 +775,7 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
         }
         if(U_FAILURE(errorCode)) { return; }
     }
+    sink.leave(errorCode);
 }
 
 U_CAPI Resource U_EXPORT2
@@ -862,6 +863,7 @@ ures_getAllArrayItems(const ResourceData *pResData, Resource array,
         }
         if(U_FAILURE(errorCode)) { return; }
     }
+    sink.leave(errorCode);
 }
 
 U_CFUNC Resource

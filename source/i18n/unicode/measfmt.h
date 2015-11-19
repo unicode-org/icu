@@ -328,16 +328,16 @@ class U_I18N_API MeasureFormat : public Format {
     ListFormatter *listFormatter;
 
     const QuantityFormatter *getQuantityFormatter(
-            int32_t index,
-            int32_t widthIndex,
+            const MeasureUnit &unit,
+            UMeasureFormatWidth width,
             UErrorCode &status) const;
 
     const SimplePatternFormatter *getPerUnitFormatter(
-            int32_t index,
-            int32_t widthIndex) const;
+            const MeasureUnit &unit,
+            UMeasureFormatWidth width) const;
 
     const SimplePatternFormatter *getPerFormatter(
-            int32_t widthIndex,
+            UMeasureFormatWidth width,
             UErrorCode &status) const;
 
     int32_t withPerUnitAndAppend(
