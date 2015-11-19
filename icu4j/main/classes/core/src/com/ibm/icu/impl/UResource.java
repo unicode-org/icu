@@ -188,6 +188,15 @@ public final class UResource {
             return csLength <= length && regionMatches(length - csLength, cs, csLength);
         }
 
+        /**
+         * @return true if the substring of this key starting from the offset
+         *         contains the same characters as the other sequence.
+         */
+        public boolean regionMatches(int start, CharSequence cs) {
+            int csLength = cs.length();
+            return csLength == (length - start) && regionMatches(start, cs, csLength);
+        }
+
         @Override
         public int hashCode() {
             // Never return s.hashCode(), so that
@@ -240,6 +249,11 @@ public final class UResource {
          * @throws UResourceTypeMismatchException if this is not a string resource
          */
         public abstract String getString();
+
+        /**
+         * @throws UResourceTypeMismatchException if this is not an alias resource
+         */
+        public abstract String getAliasString();
 
         /**
          * @see UResourceBundle#getInt()
@@ -341,6 +355,13 @@ public final class UResource {
         public TableSink getOrCreateTableSink(int index, int initialSize) {
             return null;
         }
+
+        /**
+         * "Leaves" the array.
+         * Indicates that all of the resources and sub-resources of the current array
+         * have been enumerated.
+         */
+        public void leave() {}
     }
 
     /**
@@ -397,5 +418,12 @@ public final class UResource {
         public TableSink getOrCreateTableSink(Key key, int initialSize) {
             return null;
         }
+
+        /**
+         * "Leaves" the table.
+         * Indicates that all of the resources and sub-resources of the current table
+         * have been enumerated.
+         */
+        public void leave() {}
     }
 }
