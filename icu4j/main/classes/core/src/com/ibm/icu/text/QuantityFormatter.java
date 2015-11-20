@@ -21,28 +21,31 @@ class QuantityFormatter {
      * Plural forms in index order: "other", "zero", "one", "two", "few", "many"
      * "other" must be first.
      */
-    private static final int getPluralIndex(String pluralForm) {
-        if (pluralForm.equals("other")) {
-            return 0;
-        }
-        if (pluralForm.length() == 3) {
-            if (pluralForm.equals("one")) {
+    private static final int getPluralIndex(CharSequence pluralForm) {
+        switch (pluralForm.length()) {
+        case 3:
+            if ("one".contentEquals(pluralForm)) {
                 return 2;
-            }
-            if (pluralForm.equals("two")) {
+            } else if ("two".contentEquals(pluralForm)) {
                 return 3;
-            }
-            if (pluralForm.equals("few")) {
+            } else if ("few".contentEquals(pluralForm)) {
                 return 4;
             }
-        }
-        if (pluralForm.length() == 4) {
-            if (pluralForm.equals("many")) {
+            break;
+        case 4:
+            if ("many".contentEquals(pluralForm)) {
                 return 5;
-            }
-            if (pluralForm.equals("zero")) {
+            } else if ("zero".contentEquals(pluralForm)) {
                 return 1;
             }
+            break;
+        case 5:
+            if ("other".contentEquals(pluralForm)) {
+                return 0;
+            }
+            break;
+        default:
+            break;
         }
         return -1;
     }
@@ -70,10 +73,10 @@ class QuantityFormatter {
          * @throws IllegalArgumentException if variant is not recognized or
          *  if template has more than just the {0} placeholder.
          */
-        public Builder add(String variant, String template) {
+        public Builder add(CharSequence variant, String template) {
             int idx = getPluralIndex(variant);
             if (idx < 0) {
-                throw new IllegalArgumentException(variant);
+                throw new IllegalArgumentException(variant.toString());
             }
             SimplePatternFormatter newT = SimplePatternFormatter.compile(template);
             if (newT.getPlaceholderCount() > 1) {
@@ -142,7 +145,7 @@ class QuantityFormatter {
      * @param variant "zero", "one", "two", "few", "many", "other"
      * @return the SimplePatternFormatter
      */
-    public SimplePatternFormatter getByVariant(String variant) {
+    public SimplePatternFormatter getByVariant(CharSequence variant) {
         int idx = getPluralIndex(variant);
         SimplePatternFormatter template = templates[idx < 0 ? 0 : idx];
         return template == null ? templates[0] : template;

@@ -760,7 +760,7 @@ public class MeasureFormat extends UFormat {
                     // one{"{0} hr"}
                     // other{"{0} hrs"}
                     if (!hasPatterns) {
-                        builder.add(key.toString(), value.getString());
+                        builder.add(key, value.getString());
                     }
                 }
             }
