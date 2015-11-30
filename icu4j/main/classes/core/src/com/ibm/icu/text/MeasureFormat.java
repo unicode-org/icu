@@ -746,8 +746,6 @@ public class MeasureFormat extends UFormat {
          * unitsShort/duration/hour contains other{"{0} hrs"}.
          */
         class UnitPatternSink extends UResource.TableSink {
-            QuantityFormatter.Builder builder = new QuantityFormatter.Builder();
-
             @Override
             public void put(UResource.Key key, UResource.Value value) {
                 if (key.contentEquals("dnam")) {
@@ -759,22 +757,22 @@ public class MeasureFormat extends UFormat {
                     // The key must be one of the plural form strings. For example:
                     // one{"{0} hr"}
                     // other{"{0} hrs"}
-                    if (!hasPatterns) {
-                        builder.add(key, value.getString());
-                    }
-                }
-            }
-            @Override
-            public void leave() {
-                if (builder.hasPatterns()) {
+                    QuantityFormatter countToFormat;
                     EnumMap<FormatWidth, QuantityFormatter> styleToCountToFormat =
                             cacheData.unitToStyleToCountToFormat.get(unit);
                     if (styleToCountToFormat == null) {
                         styleToCountToFormat =
                                 new EnumMap<FormatWidth, QuantityFormatter>(FormatWidth.class);
                         cacheData.unitToStyleToCountToFormat.put(unit, styleToCountToFormat);
+                        countToFormat = null;
+                    } else {
+                        countToFormat = styleToCountToFormat.get(width);
                     }
-                    styleToCountToFormat.put(width, builder.build());
+                    if (countToFormat == null) {
+                        countToFormat = new QuantityFormatter();
+                        styleToCountToFormat.put(width, countToFormat);
+                    }
+                    countToFormat.addIfAbsent(key, value);
                 }
             }
         }
@@ -789,9 +787,6 @@ public class MeasureFormat extends UFormat {
             public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
                 // Should we ignore or reject unknown units?
                 unit = MeasureUnit.internalGetInstance(type, key.toString());  // never null
-                Map<FormatWidth, QuantityFormatter> styleToCountToFormat =
-                        cacheData.unitToStyleToCountToFormat.get(unit);
-                hasPatterns = styleToCountToFormat != null && styleToCountToFormat.containsKey(width);
                 return patternSink;
             }
         }
@@ -905,9 +900,6 @@ public class MeasureFormat extends UFormat {
         FormatWidth width;
         String type;
         MeasureUnit unit;
-
-        /** True if we already have plural-form display patterns for width/type/subtype. */
-        boolean hasPatterns;
     }
 
     /**

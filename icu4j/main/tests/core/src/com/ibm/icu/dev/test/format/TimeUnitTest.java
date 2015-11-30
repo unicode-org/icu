@@ -278,6 +278,15 @@ public class TimeUnitTest extends TestFmwk {
         TimeUnitFormat formatter = new TimeUnitFormat(en_GB, TimeUnitFormat.ABBREVIATED_NAME);
         String result = formatter.format(oneHour);
         assertEquals("TestBritishShortHourFallback()", "1 hr", result);
+
+        // Check that we can load the time unit formatting data for all locales.
+        for (ULocale locale : ULocale.getAvailableLocales()) {
+            try {
+                new TimeUnitFormat(locale, TimeUnitFormat.ABBREVIATED_NAME);
+            } catch (RuntimeException e) {
+                errln("failed to load TimeUnitFormat data for " + locale);
+            }
+        }
     }
 
     private void formatParsing(TimeUnitFormat format) {
