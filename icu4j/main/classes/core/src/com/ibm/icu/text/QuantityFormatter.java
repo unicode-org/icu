@@ -7,6 +7,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.SimplePatternFormatter;
+import com.ibm.icu.impl.UResource;
 
 /**
  * QuantityFormatter represents an unknown quantity of something and formats a known quantity
@@ -51,79 +52,64 @@ class QuantityFormatter {
     }
     private static final int INDEX_COUNT = 6;
 
+    private final SimplePatternFormatter[] templates = new SimplePatternFormatter[INDEX_COUNT];
+
+    public QuantityFormatter() {}
+
     /**
-     * Builder builds a QuantityFormatter.
-     * 
-     * @author rocketman
+     * Adds a template if there is none yet for the plural form.
+     *
+     * @param variant the plural variant, e.g "zero", "one", "two", "few", "many", "other"
+     * @param template the text for that plural variant with "{0}" as the quantity. For
+     * example, in English, the template for the "one" variant may be "{0} apple" while the
+     * template for the "other" variant may be "{0} apples"
+     * @throws IllegalArgumentException if variant is not recognized or
+     *  if template has more than just the {0} placeholder.
      */
-    static class Builder {
-        private SimplePatternFormatter[] templates;
-
-        boolean hasPatterns() {
-            return templates != null;
-        }
-
-        /**
-         * Adds a template.
-         * @param variant the plural variant, e.g "zero", "one", "two", "few", "many", "other"
-         * @param template the text for that plural variant with "{0}" as the quantity. For
-         * example, in English, the template for the "one" variant may be "{0} apple" while the
-         * template for the "other" variant may be "{0} apples"
-         * @return a reference to this Builder for chaining.
-         * @throws IllegalArgumentException if variant is not recognized or
-         *  if template has more than just the {0} placeholder.
-         */
-        public Builder add(CharSequence variant, String template) {
-            int idx = getPluralIndex(variant);
-            if (idx < 0) {
-                throw new IllegalArgumentException(variant.toString());
-            }
-            SimplePatternFormatter newT = SimplePatternFormatter.compile(template);
-            if (newT.getPlaceholderCount() > 1) {
-                throw new IllegalArgumentException(
-                        "Extra placeholders: " + template);
-            }
-            // Keep templates == null until we add one.
-            ensureCapacity();
-            templates[idx] = newT;
-            return this;
-        }
-
-        /**
-         * Builds the new QuantityFormatter and resets this Builder to its initial state.
-         * @return the new QuantityFormatter object.
-         * @throws IllegalStateException if no template is specified for the "other" variant.
-         *  When throwing this exception, build leaves this builder in its current state.
-         */
-        public QuantityFormatter build() {
-            if (templates == null || templates[0] == null) {
-                throw new IllegalStateException("At least other variant must be set.");
-            }
-            QuantityFormatter result = new QuantityFormatter(templates);
-            templates = null;
-            return result;          
-        }
-
-        /**
-         * Resets this builder to its initial state.
-         */
-        public Builder reset() {
-            templates = null;
-            return this;
-        }
-        
-        private void ensureCapacity() {
-            if (templates == null) {
-                templates = new SimplePatternFormatter[INDEX_COUNT];
-            }
-        }
-
+    public void addIfAbsent(CharSequence variant, String template) {
+        addIfAbsent(variant, template, null);
     }
 
-    private final SimplePatternFormatter[] templates;
+    /**
+     * Adds a template if there is none yet for the plural form.
+     * This version only calls UResource.Value.getString()
+     * if there is no template yet for the plural form.
+     *
+     * @param variant the plural variant, e.g "zero", "one", "two", "few", "many", "other"
+     * @param template the text for that plural variant with "{0}" as the quantity. For
+     * example, in English, the template for the "one" variant may be "{0} apple" while the
+     * template for the "other" variant may be "{0} apples"
+     * @throws IllegalArgumentException if variant is not recognized or
+     *  if template has more than just the {0} placeholder.
+     */
+    public void addIfAbsent(CharSequence variant, UResource.Value template) {
+        addIfAbsent(variant, null, template);
+    }
 
-    private QuantityFormatter(SimplePatternFormatter[] templates) {
-        this.templates = templates;
+    private void addIfAbsent(CharSequence variant, String template, UResource.Value templateValue) {
+        int idx = getPluralIndex(variant);
+        if (idx < 0) {
+            throw new IllegalArgumentException(variant.toString());
+        }
+        if (templates[idx] != null) {
+            return;
+        }
+        if (template == null) {
+            template = templateValue.getString();
+        }
+        SimplePatternFormatter newT = SimplePatternFormatter.compile(template);
+        if (newT.getPlaceholderCount() > 1) {
+            throw new IllegalArgumentException(
+                    "Extra placeholders: " + template);
+        }
+        templates[idx] = newT;
+    }
+
+    /**
+     * @return true if this object has at least the "other" variant
+     */
+    public boolean isValid() {
+        return templates[0] != null;
     }
 
     /**
@@ -146,6 +132,7 @@ class QuantityFormatter {
      * @return the SimplePatternFormatter
      */
     public SimplePatternFormatter getByVariant(CharSequence variant) {
+        assert isValid();
         int idx = getPluralIndex(variant);
         SimplePatternFormatter template = templates[idx < 0 ? 0 : idx];
         return template == null ? templates[0] : template;
