@@ -1052,7 +1052,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-     * Boilerplate for Freezable
+     * {@inheritDoc}
      * @stable ICU 3.6
      */
     public boolean isFrozen() {
@@ -1060,7 +1060,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-     * Boilerplate for Freezable
+     * {@inheritDoc}
      * @stable ICU 4.4
      */
     public DateTimePatternGenerator freeze() {
@@ -1069,7 +1069,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-     * Boilerplate for Freezable
+     * {@inheritDoc}
      * @stable ICU 4.4
      */
     public DateTimePatternGenerator cloneAsThawed() {
@@ -1079,7 +1079,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-     * Boilerplate
+     * Returns a copy of this <code>DateTimePatternGenerator</code> object.
+     * @return A copy of this <code>DateTimePatternGenerator</code> object.
      * @stable ICU 3.6
      */
     @SuppressWarnings("unchecked")

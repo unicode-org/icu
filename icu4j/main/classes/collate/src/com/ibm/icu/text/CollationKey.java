@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2014, International Business Machines Corporation and
+* Copyright (C) 1996-2015, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -23,7 +23,7 @@ import com.ibm.icu.impl.coll.Collation;
  * <p>Both the method
  * <code>CollationKey.compareTo(CollationKey)</code> and the method
  * <code>Collator.compare(String, String)</code> compare two strings
- * and returns their relative order.  The performance characterictics
+ * and returns their relative order.  The performance characteristics
  * of these two approaches can differ.
  * Note that collation keys are often less efficient than simply doing comparison. 
  * For more details, see the ICU User Guide.
@@ -46,7 +46,7 @@ import com.ibm.icu.impl.coll.Collation;
  * compared only once.</p>
  * 
  * <p>More information about the composition of the bit sequence can
- * be found in the 
+ * be found in the
  * <a href="http://www.icu-project.org/userguide/Collate_ServiceArchitecture.html">
  * user guide</a>.</p>
  *
