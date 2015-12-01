@@ -24,6 +24,6 @@ Export-Package: com.ibm.icu.lang;base=true;full=true;version="@IMPL_VERSION@",
  com.ibm.icu.impl.duration;x-internal:=true,
  com.ibm.icu.impl.locale;x-internal:=true
 Eclipse-LazyStart: true
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: icu-data.jar,.
 Eclipse-ExtensibleAPI: true

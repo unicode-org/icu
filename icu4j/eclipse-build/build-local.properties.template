@@ -1,9 +1,8 @@
-#*******************************************************************************
-#* Copyright (C) 2014, International Business Machines Corporation and         *
-#* others. All Rights Reserved.                                                *
-#*******************************************************************************
+################################################################################
+# Copyright (C) 2014-2015, International Business Machines Corporation and
+# others. All Rights Reserved.
+################################################################################
 
-#
 # Eclipse installation location
 # Specify the folder that contains eclipse.exe, for example: eclipse.home=C:/eclipse
 #
@@ -14,26 +13,29 @@
 #eclipse.home=
 
 #
-# Java 5 runtime jar location
-# Specify jar file path(es) including J2SE runtime classes
+# Java 6 runtime jar location
+# Specify jar file path(es) including Java runtime classes.
 #
 # Note: 
+#   Java runtime classes are stored in multiple jar files in modern JREs.
+#   To get the full list of jar files included in JRE, you can write a simple
+#   code printing system property "sun.boot.class.path".
 #
-#   [Oracle JDK]   All of J2SE runtime classes are in <JRE dir>/lib/rt.jar
+# For example:
 #
-#   [IBM JDK]      J2SE runtime classes are in multiple jar files. To build ICU4J
-#                  plug-in, you need followings:
-#                      - <JRE dir>/lib/vm.jar
-#                      - <JRE dir>/lib/core.jar
-#                      - <JRE dir>/lib/graphics.jar
-#                      - <JRE dir>/lib/xml.jar
+# java.rt=C:/ibmjre6/bin/default/jclSC160/vm.jar;C:/ibmjre6/lib/annotation.jar;C:/ibmjre6/lib/beans.jar;\
+#   C:/ibmjre6/lib/java.util.jar;C:/ibmjre6/lib/jndi.jar;C:/ibmjre6/lib/logging.jar;C:/ibmjre6/lib/security.jar;\
+#   C:/ibmjre6/lib/sql.jar;C:/ibmjre6/lib/ibmorb.jar;C:/ibmjre6/lib/ibmorbapi.jar;C:/ibmjre6/lib/ibmcfw.jar;\
+#   C:/ibmjre6/lib/rt.jar;C:/ibmjre6/lib/charsets.jar;C:/ibmjre6/lib/resources.jar;C:/ibmjre6/lib/ibmpkcs.jar;\
+#   C:/ibmjre6/lib/ibmcertpathfw.jar;C:/ibmjre6/lib/ibmjgssfw.jar;C:/ibmjre6/lib/ibmjssefw.jar;\
+#   C:/ibmjre6/lib/ibmsaslfw.jar;C:/ibmjre6/lib/ibmjcefw.jar;C:/ibmjre6/lib/ibmjgssprovider.jar;\
+#   C:/ibmjre6/lib/ibmjsseprovider2.jar;C:/ibmjre6/lib/ibmcertpathprovider.jar;C:/ibmjre6/lib/management-agent.jar;\
+#   C:/ibmjre6/lib/xml.jar;C:/ibmjre6/lib/jlm.jar;C:/ibmjre6/lib/javascript.jar
 #
-# For example: java.rt=C:/ibmjava5/jre/lib/vm.jar;C:/ibmjava5/jre/lib/core.jar;C:/ibmjava5/jre/lib/graphics.jar;C:/ibmjava5/jre/lib/xml.jar
+# NOTE: slashes must be forward slashes. Backslashes will NOT work as path separator.
 #
-# NOTE:    slashes must be forward slashes. Backslashes will NOT work.
-#
-#			IF java.rt variable has embedded space(s)...
-#          ...each element containing an embedded space java.rt must indivudually quoated and the elements separated by a semi-colon.
-#                 ex. "C:/Program Files/IBM/Java50JDK/jre/lib/vm.jar";"C:/Program Files/IBM/Java50JDK/jre/lib/core.jar"
-#                                                                   ^^^
-java.rt=
+# IF java.rt variable has embedded space(s)...
+#   ...each element containing an embedded space java.rt must individually quoted and the elements separated by a semi-colon.
+#   ex. "C:/Program Files/IBM/Java50JDK/jre/lib/vm.jar";"C:/Program Files/IBM/Java50JDK/jre/lib/core.jar"
+#                                                     ^^^
+#java.rt=
