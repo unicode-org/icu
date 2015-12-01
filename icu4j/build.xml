@@ -53,7 +53,7 @@
     <property name="icu4j.api.doc.title" value="ICU4J ${api.doc.version} API Specification"/>
     <property name="icu4j.api.doc.window.title" value="ICU4J ${api.doc.version}"/>
     <property name="icu4j.api.doc.header" value="ICU4J ${api.doc.version}"/>
-    <property name="icu4j.api.doc.jdk.link" value="http://docs.oracle.com/javase/7/docs/api/"/>
+    <property name="icu4j.api.doc.jdk.link" value="http://docs.oracle.com/javase/8/docs/api/"/>
 
     <!-- directories -->
     <property name="release.dir" value="release"/>
@@ -67,19 +67,14 @@
             <contains string="${java.version}" substring="1.6."/>
             <contains string="${java.version}" substring="1.7."/>
             <contains string="${java.version}" substring="1.8."/>
+            <contains string="${java.version}" substring="1.9."/>
         </or>
-    </condition>
-    <condition property="is.java5">
-        <contains string="${java.version}" substring="1.5."/>
     </condition>
     <fail message="The JDK version is too old or unknown.">
         <condition>
             <not>
-                <or>
-                    <isset property="is.java6.plus"/>
-                    <isset property="is.java5"/>
-                </or>
-             </not>
+                <isset property="is.java6.plus"/>
+            </not>
         </condition>
     </fail>
 
@@ -436,7 +431,6 @@
         <condition property="release.build.config.ok">
             <and>
                 <isset property="is.java7"/>
-                <isset property="java5.bootclasspath"/>
                 <isset property="java6.bootclasspath"/>
                 <isset property="jcite.libs"/>
             </and>
@@ -447,10 +441,7 @@
         <condition property="disp.is.java7" value="${java.version}" else="${java.version} - Must be 1.7!">
             <isset property="is.java7"/>
         </condition>
-        <condition property="disp.java5.bootclasspath" value="${java5.bootclasspath}" else="Not Defined!">
-            <isset property="java5.bootclasspath"/>
-        </condition>
-        <condition property="disp.java6.bootclasspath" value="${java5.bootclasspath}" else="Not Defined!">
+        <condition property="disp.java6.bootclasspath" value="${java6.bootclasspath}" else="Not Defined!">
             <isset property="java6.bootclasspath"/>
         </condition>
         <condition property="disp.jcite.libs" value="${jcite.libs}" else="Not Defined!">
@@ -460,7 +451,6 @@
         <echo message="################################################################"/>
         <echo message="[WARNING] Insufficient Build Configuration for ICU4J Release"/>
         <echo message="JDK Tools Version:              ${disp.is.java7}"/>
-        <echo message="JRE 5 System Library Path:      ${disp.java5.bootclasspath}"/>
         <echo message="JRE 6 System Library Path:      ${disp.java6.bootclasspath}"/>
         <echo message="JCite Library Path:             ${disp.jcite.libs}"/>
         <echo message="################################################################"/>
