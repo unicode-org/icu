@@ -238,7 +238,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         /**
          * Compares the specified object with this <code>PatternInfo</code> for equality.
          * @param a The object to be compared.
-         * @returns <code>true</code> if the specified object is equal to this <code>PatternInfo</code>.
+         * @return <code>true</code> if the specified object is equal to this <code>PatternInfo</code>.
          * @stable ICU 4.0
          */
         public boolean equals(Object a) {
