@@ -241,10 +241,8 @@ struct UnitDataSink : public ResourceTableSink {
                 // The key must be one of the plural form strings. For example:
                 // one{"{0} hr"}
                 // other{"{0} hrs"}
-                if (!outer.hasPatterns) {
-                    outer.cacheData.formatters[outer.unitIndex][outer.width].add(
-                            key, value.getUnicodeString(errorCode), errorCode);
-                }
+                outer.cacheData.formatters[outer.unitIndex][outer.width].
+                        addIfAbsent(key, value, errorCode);
             }
         }
         UnitDataSink &outer;
@@ -262,8 +260,6 @@ struct UnitDataSink : public ResourceTableSink {
             if (U_FAILURE(errorCode)) { return NULL; }
             outer.unitIndex = MeasureUnit::internalGetIndexForTypeAndSubtype(outer.type, key);
             if (outer.unitIndex >= 0) {
-                outer.hasPatterns =
-                    outer.cacheData.formatters[outer.unitIndex][outer.width].isValid();
                 return &outer.patternSink;
             }
             return NULL;
@@ -316,7 +312,7 @@ struct UnitDataSink : public ResourceTableSink {
     UnitDataSink(MeasureFormatCacheData &outputData)
             : patternSink(*this), subtypeSink(*this), compoundSink(*this), typeSink(*this),
               cacheData(outputData),
-              width(UMEASFMT_WIDTH_COUNT), type(NULL), unitIndex(0), hasPatterns(FALSE) {}
+              width(UMEASFMT_WIDTH_COUNT), type(NULL), unitIndex(0) {}
     ~UnitDataSink();
     virtual void put(const char *key, const ResourceValue &value, UErrorCode &errorCode) {
         // Handle aliases like
@@ -388,9 +384,6 @@ struct UnitDataSink : public ResourceTableSink {
     UMeasureFormatWidth width;
     const char *type;
     int32_t unitIndex;
-
-    /** True if we already have plural-form display patterns for width/type/unitIndex. */
-    UBool hasPatterns;
 };
 
 // Virtual destructors must be defined out of line.
