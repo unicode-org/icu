@@ -284,7 +284,7 @@ public class TimeUnitTest extends TestFmwk {
             try {
                 new TimeUnitFormat(locale, TimeUnitFormat.ABBREVIATED_NAME);
             } catch (RuntimeException e) {
-                errln("failed to load TimeUnitFormat data for " + locale);
+                errln("failed to load TimeUnitFormat data for " + locale + ": " + e);
             }
         }
     }

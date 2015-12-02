@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013-2015, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2013-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -1364,7 +1364,16 @@ public class MeasureUnitTest extends TestFmwk {
                         new Measure(16, MeasureUnit.SECOND)));
         
     }
-    
+
+    public void testIndividualPluralFallback() {
+        // See ticket #11986 "incomplete fallback in MeasureFormat".
+        // In CLDR 28, fr_CA temperature-generic/short has only the "one" form,
+        // and falls back to fr for the "other" form.
+        MeasureFormat mf = MeasureFormat.getInstance(new ULocale("fr_CA"), FormatWidth.SHORT);
+        Measure twoDeg = new Measure(2, MeasureUnit.GENERIC_TEMPERATURE);
+        assertEquals("2 deg temp in fr_CA", "2°", mf.format(twoDeg));
+    }
+
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
     // for MeasureFormat during the release process.
     static Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> getUnitsToPerParts() {
