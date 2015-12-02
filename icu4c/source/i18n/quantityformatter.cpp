@@ -5,6 +5,11 @@
 ******************************************************************************
 * quantityformatter.cpp
 */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "quantityformatter.h"
 #include "simplepatternformatter.h"
 #include "uassert.h"
@@ -15,9 +20,9 @@
 #include "charstr.h"
 #include "unicode/fmtable.h"
 #include "unicode/fieldpos.h"
+#include "resource.h"
 #include "visibledigits.h"
-
-#if !UCONFIG_NO_FORMATTING
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
@@ -101,20 +106,25 @@ void QuantityFormatter::reset() {
     }
 }
 
-UBool QuantityFormatter::add(
+UBool QuantityFormatter::addIfAbsent(
         const char *variant,
-        const UnicodeString &rawPattern,
+        const UnicodeString *rawPattern,
+        const ResourceValue *patternValue,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
     int32_t pluralIndex = getPluralIndex(variant);
-    if (pluralIndex == -1) {
+    if (pluralIndex < 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
-    SimplePatternFormatter *newFmt =
-            new SimplePatternFormatter(rawPattern);
+    if (formatters[pluralIndex] != NULL) {
+        return TRUE;
+    }
+    const UnicodeString &pattern =
+            rawPattern != NULL ? *rawPattern : patternValue->getUnicodeString(status);
+    SimplePatternFormatter *newFmt = new SimplePatternFormatter(pattern);
     if (newFmt == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FALSE;
@@ -124,7 +134,6 @@ UBool QuantityFormatter::add(
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
-    delete formatters[pluralIndex];
     formatters[pluralIndex] = newFmt;
     return TRUE;
 }
@@ -135,6 +144,7 @@ UBool QuantityFormatter::isValid() const {
 
 const SimplePatternFormatter *QuantityFormatter::getByVariant(
         const char *variant) const {
+    U_ASSERT(isValid());
     int32_t pluralIndex = getPluralIndex(variant);
     if (pluralIndex == -1) {
         pluralIndex = 0;
