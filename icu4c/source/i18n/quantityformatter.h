@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2014, International Business Machines
+* Copyright (C) 2014-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
 * quantityformatter.h
@@ -13,6 +13,8 @@
 #include "unicode/uobject.h"
 
 #if !UCONFIG_NO_FORMATTING
+
+#include "resource.h"
 
 U_NAMESPACE_BEGIN
 
@@ -64,17 +66,30 @@ public:
     void reset();
 
     /**
-      * Adds a plural variant.
-      *
-      * @param variant "zero", "one", "two", "few", "many", "other"
-      * @param rawPattern the pattern for the variant e.g "{0} meters"
-      * @param status any error returned here.
-      * @return TRUE on success; FALSE if status was set to a non zero error.
-      */
-    UBool add(
-            const char *variant,
-            const UnicodeString &rawPattern,
-            UErrorCode &status);
+     * Adds a plural variant if there is none yet for the plural form.
+     *
+     * @param variant "zero", "one", "two", "few", "many", "other"
+     * @param rawPattern the pattern for the variant e.g "{0} meters"
+     * @param status any error returned here.
+     * @return TRUE on success; FALSE if status was set to a non zero error.
+     */
+    UBool addIfAbsent(const char *variant, const UnicodeString &rawPattern, UErrorCode &status) {
+        return addIfAbsent(variant, &rawPattern, NULL, status);
+    }
+
+    /**
+     * Adds a plural variant if there is none yet for the plural form.
+     * This version only calls ResourceValue::getString()
+     * if there is no template yet for the plural form.
+     *
+     * @param variant "zero", "one", "two", "few", "many", "other"
+     * @param rawPattern the pattern for the variant e.g "{0} meters"
+     * @param status any error returned here.
+     * @return TRUE on success; FALSE if status was set to a non zero error.
+     */
+    UBool addIfAbsent(const char *variant, const ResourceValue &rawPattern, UErrorCode &status) {
+        return addIfAbsent(variant, NULL, &rawPattern, status);
+    }
 
     /**
      * returns TRUE if this object has at least the "other" variant.
@@ -109,6 +124,12 @@ public:
             UErrorCode &status) const;
 
 private:
+    UBool addIfAbsent(
+            const char *variant,
+            const UnicodeString *rawPattern,
+            const ResourceValue *patternValue,
+            UErrorCode &status);
+
     SimplePatternFormatter *formatters[6];
 };
 

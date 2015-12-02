@@ -124,6 +124,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
                 LocalPointer<IntlTest> test(createQuantityFormatterTest());
                 callTest(*test, par);
             }
+            break;
         case 23: 
             name = "PluralMapTest"; 
             if (exec) { 

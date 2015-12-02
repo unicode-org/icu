@@ -61,6 +61,7 @@ private:
     void TestGroupingSeparator();
     void TestDoubleZero();
     void TestUnitPerUnitResolution();
+    void TestIndividualPluralFallback();
     void verifyFormat(
         const char *description,
         const MeasureFormat &fmt,
@@ -141,6 +142,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestGroupingSeparator);
     TESTCASE_AUTO(TestDoubleZero);
     TESTCASE_AUTO(TestUnitPerUnitResolution);
+    TESTCASE_AUTO(TestIndividualPluralFallback);
     TESTCASE_AUTO_END;
 }
 
@@ -1586,6 +1588,19 @@ void MeasureFormatTest::TestUnitPerUnitResolution() {
             pos,
             status);
     assertEquals("", "50 psi", actual);
+}
+
+void MeasureFormatTest::TestIndividualPluralFallback() {
+    // See ticket #11986 "incomplete fallback in MeasureFormat".
+    // In CLDR 28, fr_CA temperature-generic/short has only the "one" form,
+    // and falls back to fr for the "other" form.
+    IcuTestErrorCode errorCode(*this, "TestIndividualPluralFallback");
+    MeasureFormat mf("fr_CA", UMEASFMT_WIDTH_SHORT, errorCode);
+    LocalPointer<Measure> twoDeg(
+        new Measure(2, MeasureUnit::createGenericTemperature(errorCode), errorCode), errorCode);
+    UnicodeString expected = UNICODE_STRING_SIMPLE("2\\u00B0").unescape();
+    UnicodeString actual;
+    assertEquals("2 deg temp in fr_CA", expected, mf.format(twoDeg.orphan(), actual, errorCode));
 }
 
 void MeasureFormatTest::verifyFieldPosition(
