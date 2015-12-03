@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation
+ * Copyright (c) 1997-2015, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -14,8 +14,10 @@
 #include "unicode/gregocal.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
-#include "putilimp.h"
 #include "cstring.h"
+#include "mutex.h"
+#include "putilimp.h"
+#include "simplethread.h"
 
 U_NAMESPACE_USE
 void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
@@ -139,58 +141,90 @@ CalendarLimitTest::TestCalendarExtremeLimit()
     delete fmt;
 }
 
-void
-CalendarLimitTest::TestLimits(void) {
-    static const UDate DEFAULT_START = 944006400000.0; // 1999-12-01T00:00Z
-    static const int32_t DEFAULT_END = -120; // Default for non-quick is run 2 minutes
+namespace {
 
-    static const struct {
-        const char *type;
-        UBool hasLeapMonth;
-        UDate actualTestStart;
-        int32_t actualTestEnd;
-    } TestCases[] = {
+struct TestCase {
+    const char *type;
+    UBool hasLeapMonth;
+    UDate actualTestStart;
+    int32_t actualTestEnd;
+};
+    
+const UDate DEFAULT_START = 944006400000.0; // 1999-12-01T00:00Z
+const int32_t DEFAULT_END = -120; // Default for non-quick is run 2 minutes
+
+TestCase TestCases[] = {
         {"gregorian",       FALSE,      DEFAULT_START, DEFAULT_END},
         {"japanese",        FALSE,      596937600000.0, DEFAULT_END}, // 1988-12-01T00:00Z, Showa 63
         {"buddhist",        FALSE,      DEFAULT_START, DEFAULT_END},
         {"roc",             FALSE,      DEFAULT_START, DEFAULT_END},
         {"persian",         FALSE,      DEFAULT_START, DEFAULT_END},
         {"islamic-civil",   FALSE,      DEFAULT_START, DEFAULT_END},
-        {"islamic",         FALSE,      DEFAULT_START, 800000}, // Approx. 2250 years from now, after which some rounding errors occur in Islamic calendar
+        {"islamic",         FALSE,      DEFAULT_START, 800000}, // Approx. 2250 years from now, after which 
+                                                                // some rounding errors occur in Islamic calendar
         {"hebrew",          TRUE,       DEFAULT_START, DEFAULT_END},
         {"chinese",         TRUE,       DEFAULT_START, DEFAULT_END},
         {"dangi",           TRUE,       DEFAULT_START, DEFAULT_END},
         {"indian",          FALSE,      DEFAULT_START, DEFAULT_END},
         {"coptic",          FALSE,      DEFAULT_START, DEFAULT_END},
         {"ethiopic",        FALSE,      DEFAULT_START, DEFAULT_END},
-        {"ethiopic-amete-alem", FALSE,  DEFAULT_START, DEFAULT_END},
-        {NULL,              FALSE,      0, 0}
-    };
+        {"ethiopic-amete-alem", FALSE,  DEFAULT_START, DEFAULT_END}
+};
+    
+struct {
+    int32_t fIndex;
+    UBool next (int32_t &rIndex) {
+        Mutex lock;
+        if (fIndex >= UPRV_LENGTHOF(TestCases)) {
+            return FALSE;
+        }
+        rIndex = fIndex++;
+        return TRUE;
+    }
+    void reset() {
+        fIndex = 0;
+    }
+} gTestCaseIterator;
 
-    int16_t i = 0;
-    char buf[64];
+}  // anonymous name space
 
-    for (i = 0; TestCases[i].type; i++) {
+void
+CalendarLimitTest::TestLimits(void) {
+    gTestCaseIterator.reset();
+
+    ThreadPool<CalendarLimitTest> threads(this, threadCount, &CalendarLimitTest::TestLimitsThread);
+    threads.start();
+    threads.join();
+}
+
+
+void CalendarLimitTest::TestLimitsThread(int32_t threadNum) {
+    logln("thread %d starting", threadNum);
+    int32_t testIndex = 0;
+    LocalPointer<Calendar> cal;
+    while (gTestCaseIterator.next(testIndex)) {
+        TestCase &testCase = TestCases[testIndex];
+        logln("begin test of %s calendar.", testCase.type);
         UErrorCode status = U_ZERO_ERROR;
+        char buf[64];
         uprv_strcpy(buf, "root@calendar=");
-        strcat(buf, TestCases[i].type);
-        Calendar *cal = Calendar::createInstance(buf, status);
+        strcat(buf, testCase.type);
+        cal.adoptInstead(Calendar::createInstance(buf, status));
         if (failure(status, "Calendar::createInstance", TRUE)) {
             continue;
         }
-        if (uprv_strcmp(cal->getType(), TestCases[i].type) != 0) {
+        if (uprv_strcmp(cal->getType(), testCase.type) != 0) {
             errln((UnicodeString)"FAIL: Wrong calendar type: " + cal->getType()
-                + " Requested: " + TestCases[i].type);
-            delete cal;
+                + " Requested: " + testCase.type);
             continue;
         }
-        // Do the test
-        doTheoreticalLimitsTest(*cal, TestCases[i].hasLeapMonth);
-        doLimitsTest(*cal, TestCases[i].actualTestStart,TestCases[i].actualTestEnd);
-        delete cal;
+        doTheoreticalLimitsTest(*(cal.getAlias()), testCase.hasLeapMonth);
+        doLimitsTest(*(cal.getAlias()), testCase.actualTestStart, testCase.actualTestEnd);
+        logln("end test of %s calendar.", testCase.type);
     }
 }
 
+    
 void
 CalendarLimitTest::doTheoreticalLimitsTest(Calendar& cal, UBool leapMonth) {
     const char* calType = cal.getType();

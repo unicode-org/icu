@@ -546,7 +546,7 @@ IntlTest::IntlTest()
     warn_on_missing_data = FALSE;
     quick = FALSE;
     leaks = FALSE;
-    threadCount = 1;
+    threadCount = 12;
     testoutfp = stdout;
     LL_indentlevel = indentLevel_offset;
     numProps = 0;
@@ -1196,7 +1196,7 @@ main(int argc, char* argv[])
     const char *summary_file = NULL;
     UBool warnOnMissingData = FALSE;
     UBool defaultDataFound = FALSE;
-    int32_t threadCount = 1;
+    int32_t threadCount = 12;
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = NULL;
     const char *warnOrErr = "Failure";
@@ -1281,9 +1281,8 @@ main(int argc, char* argv[])
                 "### Options are: verbose (v), all (a), noerrormsg (n), \n"
                 "### exhaustive (e), leaks (l), -x xmlfile.xml, prop:<propery>=<value>, \n"
                 "### notime (T), \n"
-                "### threads:<threadCount> (Mulithreading must first be \n"
-                "###     enabled otherwise this will be ignored. \n"
-                "###     The default thread count is 1.),\n"
+                "### threads:<threadCount>\n"
+                "###     (The default thread count is 12.),\n"
                 "### (Specify either -all (shortcut -a) or a test name). \n"
                 "### -all will run all of the tests.\n"
                 "### \n"
