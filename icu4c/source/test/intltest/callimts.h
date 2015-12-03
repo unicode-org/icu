@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -36,6 +36,7 @@ public:
     virtual void TestCalendarExtremeLimit(void);
 
     void TestLimits(void);
+    void TestLimitsThread(int threadNumber);
 
 private:
     /*
