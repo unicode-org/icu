@@ -331,7 +331,7 @@ ThreadPoolBase::~ThreadPoolBase() {
             delete fThreads[i];
             fThreads[i] = NULL;
         }
-        delete fThreads;
+        delete[] fThreads;
         fThreads = NULL;
     }
 }
