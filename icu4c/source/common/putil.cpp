@@ -2204,6 +2204,7 @@ uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
 
 U_INTERNAL void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
+    (void)libName;
     if(U_FAILURE(*status)) return NULL;
     *status = U_UNSUPPORTED_ERROR;
     return NULL;
@@ -2211,6 +2212,7 @@ uprv_dl_open(const char *libName, UErrorCode *status) {
 
 U_INTERNAL void U_EXPORT2
 uprv_dl_close(void *lib, UErrorCode *status) {
+    (void)lib;
     if(U_FAILURE(*status)) return;
     *status = U_UNSUPPORTED_ERROR;
     return;
@@ -2219,6 +2221,8 @@ uprv_dl_close(void *lib, UErrorCode *status) {
 
 U_INTERNAL UVoidFunction* U_EXPORT2
 uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
+  (void)lib;
+  (void)sym;
   if(U_SUCCESS(*status)) {
     *status = U_UNSUPPORTED_ERROR;
   }
