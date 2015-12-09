@@ -2729,6 +2729,7 @@ void NumberFormatRegressionTest::TestJ691(void) {
     {                                                                     \
       char _msg[1000]; \
       int32_t len = sprintf (_msg,"File %s, line %d: Assertion Failed: " #x "==" #y "\n", __FILE__, __LINE__); \
+      (void)len;                                                         \
       U_ASSERT(len < (int32_t) sizeof(_msg));                            \
       assertEquals((const char*) _msg, x,y);                             \
     }
