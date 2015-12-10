@@ -126,7 +126,7 @@ static const struct AssemblyType {
         "\t.type %s,%%object\n"
         "%s:\n\n",
 
-        ".long ","",HEX_0X
+        ".long ",".size %s, .-%s\n",HEX_0X
     },
     {"gcc-darwin",
         /*"\t.section __TEXT,__text,regular,pure_instructions\n"
