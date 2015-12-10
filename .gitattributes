@@ -3884,6 +3884,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/UTS46.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/impl/UnicodeRegex.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/UnicodeSetStringSpan.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Utility.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/ValidIdentifiers.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/impl/ZoneMeta.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/data/HolidayBundle.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/data/HolidayBundle_da.java svneol=native#text/plain%3Bcharset%3Dutf-8
