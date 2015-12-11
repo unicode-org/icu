@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2014, Google, International Business Machines Corporation and
+ * Copyright (C) 2012-2015, Google, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -9,10 +9,8 @@ package com.ibm.icu.text;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Map;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -109,20 +107,23 @@ final public class ListFormatter {
     @Deprecated
     public ListFormatter(String two, String start, String middle, String end) {
         this(
-                SimplePatternFormatter.compile(two),
-                SimplePatternFormatter.compile(start),
-                SimplePatternFormatter.compile(middle),
-                SimplePatternFormatter.compile(end),
+                compilePattern(two),
+                compilePattern(start),
+                compilePattern(middle),
+                compilePattern(end),
                 null);
-        
     }
-    
+
     private ListFormatter(SimplePatternFormatter two, SimplePatternFormatter start, SimplePatternFormatter middle, SimplePatternFormatter end, ULocale locale) {
         this.two = two;
         this.start = start;
         this.middle = middle;
         this.end = end;
         this.locale = locale;
+    }
+
+    private static SimplePatternFormatter compilePattern(String pattern) {
+        return SimplePatternFormatter.compileMinMaxPlaceholders(pattern, 2, 2);
     }
 
     /**
@@ -301,16 +302,6 @@ final public class ListFormatter {
         }
     }
 
-    /** JUST FOR DEVELOPMENT */
-    // For use with the hard-coded data
-    // TODO Replace by use of RB
-    // Verify in building that all of the patterns contain {0}, {1}.
-
-    static Map<ULocale, ListFormatter> localeToData = new HashMap<ULocale, ListFormatter>();
-    static void add(String locale, String...data) {
-        localeToData.put(new ULocale(locale), new ListFormatter(data[0], data[1], data[2], data[3]));
-    }
-
     private static class Cache {
         private final ICUCache<String, ListFormatter> cache =
             new SimpleCache<String, ListFormatter>();
@@ -330,10 +321,10 @@ final public class ListFormatter {
                     getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
            
             return new ListFormatter(
-                SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/2").getString()),
-                SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/start").getString()),
-                SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/middle").getString()),
-                SimplePatternFormatter.compile(r.getWithFallback("listPattern/" + style + "/end").getString()),
+                compilePattern(r.getWithFallback("listPattern/" + style + "/2").getString()),
+                compilePattern(r.getWithFallback("listPattern/" + style + "/start").getString()),
+                compilePattern(r.getWithFallback("listPattern/" + style + "/middle").getString()),
+                compilePattern(r.getWithFallback("listPattern/" + style + "/end").getString()),
                 ulocale);
         }
     }

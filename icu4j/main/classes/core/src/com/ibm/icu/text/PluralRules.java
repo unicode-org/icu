@@ -1787,6 +1787,14 @@ public class PluralRules implements Serializable {
      */
     @Deprecated
     public enum StandardPluralCategories {
+        // TODO: An enum name is more commonly singular, e.g., StandardPluralCategory.
+        // TODO: Consider changing it to StandardPluralForm(s) which is shorter, and easier to say.
+        // We use "plural category" and "plural form" interchangeably in
+        // http://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
+        //   Maybe even just StandardPlural?!
+        // TODO: Make the constants uppercase, and change code that relies on lowercase names,
+        // such as by calling .valueOf(String).
+        // TODO: Move this into its own file, in impl package?
         /**
          * @internal
          * @deprecated This API is ICU internal only.
@@ -1823,28 +1831,119 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         other;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public static final List<StandardPluralCategories> VALUES 
-        = Collections.unmodifiableList(Arrays.asList(values()));
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public static final int COUNT = values().length;
 
-        static StandardPluralCategories forString(String s) {
-            StandardPluralCategories a;
-            try {
-                a = valueOf(s);
-            } catch (Exception e) {
-                return null;
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final int OTHER_INDEX = other.ordinal();
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final List<StandardPluralCategories> VALUES =
+                Collections.unmodifiableList(Arrays.asList(values()));
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final int COUNT = VALUES.size();
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final StandardPluralCategories getCategoryOrNull(CharSequence keyword) {
+            switch (keyword.length()) {
+            case 3:
+                if ("one".contentEquals(keyword)) {
+                    return one;
+                } else if ("two".contentEquals(keyword)) {
+                    return two;
+                } else if ("few".contentEquals(keyword)) {
+                    return few;
+                }
+                break;
+            case 4:
+                if ("many".contentEquals(keyword)) {
+                    return many;
+                } else if ("zero".contentEquals(keyword)) {
+                    return zero;
+                }
+                break;
+            case 5:
+                if ("other".contentEquals(keyword)) {
+                    return other;
+                }
+                break;
+            default:
+                break;
             }
-            return a;
+            return null;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final StandardPluralCategories getCategoryOrOther(CharSequence keyword) {
+            StandardPluralCategories cat = getCategoryOrNull(keyword);
+            return cat != null ? cat : other;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final StandardPluralCategories getCategory(CharSequence keyword) {
+            StandardPluralCategories cat = getCategoryOrNull(keyword);
+            if (cat != null) {
+                return cat;
+            } else {
+                throw new IllegalArgumentException(keyword.toString());
+            }
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final int getIndexOrNegative(CharSequence keyword) {
+            StandardPluralCategories cat = getCategoryOrNull(keyword);
+            return cat != null ? cat.ordinal() : -1;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final int getIndexOrOtherIndex(CharSequence keyword) {
+            StandardPluralCategories cat = getCategoryOrNull(keyword);
+            return cat != null ? cat.ordinal() : other.ordinal();
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static final int getIndex(CharSequence keyword) {
+            StandardPluralCategories cat = getCategoryOrNull(keyword);
+            if (cat != null) {
+                return cat.ordinal();
+            } else {
+                throw new IllegalArgumentException(keyword.toString());
+            }
         }
     }
 
@@ -2012,16 +2111,27 @@ public class PluralRules implements Serializable {
      * Given a number information, returns the keyword of the first rule that applies to
      * the number.
      *
-     * @param sample The number information for which the rule has to be determined.
+     * @param number The number information for which the rule has to be determined.
      * @return The keyword of the selected rule.
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public String select(FixedDecimal sample) {
-        return rules.select(sample);
+    public String select(FixedDecimal number) {
+        return rules.select(number);
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public String select(double number, NumberFormat numberFormat) {
+        if (numberFormat instanceof DecimalFormat) {
+            return select(((DecimalFormat) numberFormat).getFixedDecimal(number));
+        }
+        return select(number);
+    }
 
     /**
      * Given a number information, and keyword, return whether the keyword would match the number.

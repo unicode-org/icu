@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2014-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -55,6 +55,17 @@ public class SimplePatternFormatter {
      * @return the new SimplePatternFormatter object.
      */
     public static SimplePatternFormatter compile(String pattern) {
+        return compileMinMaxPlaceholders(pattern, 0, Integer.MAX_VALUE);
+    }
+
+    /**
+     * Compiles a string.
+     * @param pattern The string.
+     * @param min The pattern must have at least this many placeholders.
+     * @param max The pattern must have at most this many placeholders.
+     * @return the new SimplePatternFormatter object.
+     */
+    public static SimplePatternFormatter compileMinMaxPlaceholders(String pattern, int min, int max) {
         PlaceholdersBuilder placeholdersBuilder = new PlaceholdersBuilder();
         PlaceholderIdBuilder idBuilder =  new PlaceholderIdBuilder();
         StringBuilder newPattern = new StringBuilder();
@@ -113,8 +124,15 @@ public class SimplePatternFormatter {
         default:
             throw new IllegalStateException();
         }
+        if (placeholdersBuilder.getPlaceholderCount() < min) {
+            throw new IllegalArgumentException(
+                    "Fewer than minimum " + min + " placeholders in pattern \"" + pattern + "\"");
+        }
+        if (placeholdersBuilder.getPlaceholderCount() > max) {
+            throw new IllegalArgumentException(
+                    "More than maximum " + max + " placeholders in pattern \"" + pattern + "\"");
+        }
         return new SimplePatternFormatter(newPattern.toString(), placeholdersBuilder);
-        
     }
       
     /**
