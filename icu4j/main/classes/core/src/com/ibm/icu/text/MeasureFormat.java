@@ -448,8 +448,8 @@ public class MeasureFormat extends UFormat {
             //            FieldPosition pos2 = new FieldPosition(0);
             //            currencyFormat.format(currencyHigh, buffer2, pos2);
         } else {
-            QuantityFormatter countToFormat = getQuantityFormatter(lowValue.getUnit(), formatWidth);
-            SimplePatternFormatter formatter = countToFormat.getByVariant(resolvedCategory.toString());
+            SimplePatternFormatter formatter =
+                    getPluralFormatter(lowValue.getUnit(), formatWidth, resolvedCategory.ordinal());
             return formatter.format(formattedNumber);
         }
     }
@@ -746,7 +746,29 @@ public class MeasureFormat extends UFormat {
          * unitsShort/duration/hour contains other{"{0} hrs"}.
          */
         class UnitPatternSink extends UResource.TableSink {
-            QuantityFormatter countToFormat;
+            SimplePatternFormatter[] patterns;
+
+            void setFormatterIfAbsent(int index, UResource.Value value, int minPlaceholders) {
+                if (patterns == null) {
+                    EnumMap<FormatWidth, SimplePatternFormatter[]> styleToPatterns =
+                            cacheData.unitToStyleToPatterns.get(unit);
+                    if (styleToPatterns == null) {
+                        styleToPatterns =
+                                new EnumMap<FormatWidth, SimplePatternFormatter[]>(FormatWidth.class);
+                        cacheData.unitToStyleToPatterns.put(unit, styleToPatterns);
+                    } else {
+                        patterns = styleToPatterns.get(width);
+                    }
+                    if (patterns == null) {
+                        patterns = new SimplePatternFormatter[MeasureFormatData.PATTERN_COUNT];
+                        styleToPatterns.put(width, patterns);
+                    }
+                }
+                if (patterns[index] == null) {
+                    patterns[index] = SimplePatternFormatter.
+                            compileMinMaxPlaceholders(value.getString(), minPlaceholders, 1);
+                }
+            }
 
             @Override
             public void put(UResource.Key key, UResource.Value value) {
@@ -754,27 +776,14 @@ public class MeasureFormat extends UFormat {
                     // Skip the unit display name for now.
                 } else if (key.contentEquals("per")) {
                     // For example, "{0}/h".
-                    cacheData.setPerUnitFormatterIfAbsent(unit, width, value);
+                    // TODO: Set minPlaceholders=1
+                    // after http://unicode.org/cldr/trac/ticket/9129 is fixed.
+                    setFormatterIfAbsent(MeasureFormatData.PER_UNIT_INDEX, value, 0);
                 } else {
                     // The key must be one of the plural form strings. For example:
                     // one{"{0} hr"}
                     // other{"{0} hrs"}
-                    if (countToFormat == null) {
-                        EnumMap<FormatWidth, QuantityFormatter> styleToCountToFormat =
-                                cacheData.unitToStyleToCountToFormat.get(unit);
-                        if (styleToCountToFormat == null) {
-                            styleToCountToFormat =
-                                    new EnumMap<FormatWidth, QuantityFormatter>(FormatWidth.class);
-                            cacheData.unitToStyleToCountToFormat.put(unit, styleToCountToFormat);
-                        } else {
-                            countToFormat = styleToCountToFormat.get(width);
-                        }
-                        if (countToFormat == null) {
-                            countToFormat = new QuantityFormatter();
-                            styleToCountToFormat.put(width, countToFormat);
-                        }
-                    }
-                    countToFormat.addIfAbsent(key, value);
+                    setFormatterIfAbsent(StandardPluralCategories.getIndex(key), value, 0);
                 }
             }
         }
@@ -789,8 +798,8 @@ public class MeasureFormat extends UFormat {
             public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
                 // Should we ignore or reject unknown units?
                 unit = MeasureUnit.internalGetInstance(type, key.toString());  // never null
-                // Trigger a fresh lookup of the QuantityFormatter for this unit+width.
-                patternSink.countToFormat = null;
+                // Trigger a fresh lookup of the patterns for this unit+width.
+                patternSink.patterns = null;
                 return patternSink;
             }
         }
@@ -805,7 +814,7 @@ public class MeasureFormat extends UFormat {
             public void put(UResource.Key key, UResource.Value value) {
                 if (key.contentEquals("per")) {
                     cacheData.styleToPerPattern.put(width,
-                            SimplePatternFormatter.compile(value.getString()));
+                            SimplePatternFormatter.compileMinMaxPlaceholders(value.getString(), 2, 2));
                 }
             }
         }
@@ -925,43 +934,42 @@ public class MeasureFormat extends UFormat {
         return width;
     }
 
-    private QuantityFormatter getQuantityFormatter(MeasureUnit unit, FormatWidth width) {
+    private SimplePatternFormatter getFormatterOrNull(MeasureUnit unit, FormatWidth width, int index) {
         width = getRegularWidth(width);
-        Map<FormatWidth, QuantityFormatter> styleToCountToFormat =
-                cache.unitToStyleToCountToFormat.get(unit);
-        QuantityFormatter countToFormat = styleToCountToFormat.get(width);
-        if (countToFormat != null) {
-            return countToFormat;
+        Map<FormatWidth, SimplePatternFormatter[]> styleToPatterns =
+                cache.unitToStyleToPatterns.get(unit);
+        SimplePatternFormatter[] patterns = styleToPatterns.get(width);
+        if (patterns != null && patterns[index] != null) {
+            return patterns[index];
         }
         FormatWidth fallbackWidth = cache.widthFallback[width.ordinal()];
         if (fallbackWidth != null) {
-            countToFormat = styleToCountToFormat.get(fallbackWidth);
-            if (countToFormat != null) {
-                return countToFormat;
-            }
-        }
-        throw new MissingResourceException("no formatting patterns for " + unit + " and width " + width, null, null);
-    }
-
-    private SimplePatternFormatter getPerUnitFormatter(MeasureUnit unit, FormatWidth width) {
-        width = getRegularWidth(width);
-        Map<FormatWidth, SimplePatternFormatter> styleToPerUnitPattern =
-                cache.unitToStyleToPerUnitPattern.get(unit);
-        if (styleToPerUnitPattern == null) {
-            return null;
-        }
-        SimplePatternFormatter perUnitPattern = styleToPerUnitPattern.get(width);
-        if (perUnitPattern != null) {
-            return perUnitPattern;
-        }
-        FormatWidth fallbackWidth = cache.widthFallback[width.ordinal()];
-        if (fallbackWidth != null) {
-            perUnitPattern = styleToPerUnitPattern.get(fallbackWidth);
-            if (perUnitPattern != null) {
-                return perUnitPattern;
+            patterns = styleToPatterns.get(fallbackWidth);
+            if (patterns != null && patterns[index] != null) {
+                return patterns[index];
             }
         }
         return null;
+    }
+
+    private SimplePatternFormatter getFormatter(MeasureUnit unit, FormatWidth width, int index) {
+        SimplePatternFormatter pattern = getFormatterOrNull(unit, width, index);
+        if (pattern == null) {
+            throw new MissingResourceException(
+                    "no formatting pattern for " + unit + ", width " + width + ", index " + index,
+                    null, null);
+        }
+        return pattern;
+    }
+
+    private SimplePatternFormatter getPluralFormatter(MeasureUnit unit, FormatWidth width, int index) {
+        if (index != StandardPluralCategories.OTHER_INDEX) {
+            SimplePatternFormatter pattern = getFormatterOrNull(unit, width, index);
+            if (pattern != null) {
+                return pattern;
+            }
+        }
+        return getFormatter(unit, width, StandardPluralCategories.OTHER_INDEX);
     }
 
     private SimplePatternFormatter getPerFormatter(FormatWidth width) {
@@ -983,14 +991,16 @@ public class MeasureFormat extends UFormat {
     private int withPerUnitAndAppend(
             CharSequence formatted, MeasureUnit perUnit, StringBuilder appendTo) {
         int[] offsets = new int[1];
-        SimplePatternFormatter perUnitPattern = getPerUnitFormatter(perUnit, formatWidth);
+        SimplePatternFormatter perUnitPattern =
+                getFormatterOrNull(perUnit, formatWidth, MeasureFormatData.PER_UNIT_INDEX);
         if (perUnitPattern != null) {
             perUnitPattern.formatAndAppend(appendTo, offsets, formatted);
             return offsets[0];
         }
         SimplePatternFormatter perPattern = getPerFormatter(formatWidth);
-        QuantityFormatter countToFormat = getQuantityFormatter(perUnit, formatWidth);
-        String perUnitString = countToFormat.getByVariant("one").getPatternWithNoPlaceholders().trim();
+        SimplePatternFormatter pattern =
+                getPluralFormatter(perUnit, formatWidth, StandardPluralCategories.one.ordinal());
+        String perUnitString = pattern.getPatternWithNoPlaceholders().trim();
         perPattern.formatAndAppend(appendTo, offsets, formatted, perUnitString);
         return offsets[0];
     }
@@ -1020,8 +1030,8 @@ public class MeasureFormat extends UFormat {
         StringBuffer formattedNumber = nf.format(n, new StringBuffer(), fpos);
         String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
 
-        QuantityFormatter countToFormat = getQuantityFormatter(unit, formatWidth);
-        SimplePatternFormatter formatter = countToFormat.getByVariant(keyword);
+        int pluralForm = StandardPluralCategories.getIndexOrOtherIndex(keyword);
+        SimplePatternFormatter formatter = getPluralFormatter(unit, formatWidth, pluralForm);
         int[] offsets = new int[1];
         formatter.formatAndAppend(appendTo, offsets, formattedNumber);
         if (offsets[0] != -1) { // there is a number (may not happen with, say, Arabic dual)
@@ -1046,21 +1056,11 @@ public class MeasureFormat extends UFormat {
      * TODO: Maybe store more sparsely in general, with pointers rather than potentially-empty objects.
      */
     private static final class MeasureFormatData {
+        static final int PER_UNIT_INDEX = StandardPluralCategories.COUNT;
+        static final int PATTERN_COUNT = PER_UNIT_INDEX + 1;
+
         boolean hasPerFormatter(FormatWidth width) {
             return styleToPerPattern.containsKey(width);
-        }
-
-        void setPerUnitFormatterIfAbsent(MeasureUnit unit, FormatWidth width, UResource.Value value) {
-            EnumMap<FormatWidth, SimplePatternFormatter> styleToPerUnitPattern =
-                    unitToStyleToPerUnitPattern.get(unit);
-            if (styleToPerUnitPattern == null) {
-                styleToPerUnitPattern =
-                        new EnumMap<FormatWidth, SimplePatternFormatter>(FormatWidth.class);
-                unitToStyleToPerUnitPattern.put(unit, styleToPerUnitPattern);
-            }
-            if (!styleToPerUnitPattern.containsKey(width)) {
-                styleToPerUnitPattern.put(width, SimplePatternFormatter.compile(value.getString()));
-            }
         }
 
         /**
@@ -1069,11 +1069,9 @@ public class MeasureFormat extends UFormat {
          * - FormatWidth.WIDE/SHORT/NARROW: sideways alias for missing data
          */
         final FormatWidth widthFallback[] = new FormatWidth[FormatWidth.INDEX_COUNT];
-        /** Measure unit -> format width -> plural form -> pattern ("{0} meters") */
-        final Map<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>> unitToStyleToCountToFormat =
-                new HashMap<MeasureUnit, EnumMap<FormatWidth, QuantityFormatter>>();
-        final Map<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter>> unitToStyleToPerUnitPattern =
-                new HashMap<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter>>();
+        /** Measure unit -> format width -> array of patterns ("{0} meters") (plurals + PER_UNIT_INDEX) */
+        final Map<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter[]>> unitToStyleToPatterns =
+                new HashMap<MeasureUnit, EnumMap<FormatWidth, SimplePatternFormatter[]>>();
         final EnumMap<FormatWidth, SimplePatternFormatter> styleToPerPattern =
                 new EnumMap<FormatWidth, SimplePatternFormatter>(FormatWidth.class);;
     }
@@ -1463,7 +1461,7 @@ public class MeasureFormat extends UFormat {
             } catch ( MissingResourceException ex ) {
                 resultString = rb.getStringWithFallback("NumberElements/latn/patterns/range");
             }
-            result = SimplePatternFormatter.compile(resultString);
+            result = SimplePatternFormatter.compileMinMaxPlaceholders(resultString, 2, 2);
             localeIdToRangeFormat.put(forLocale, result);
             if (!forLocale.equals(realLocale)) {
                 localeIdToRangeFormat.put(realLocale, result);
