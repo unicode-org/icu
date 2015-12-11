@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -18,7 +18,6 @@ import java.util.TreeMap;
 import com.ibm.icu.text.PluralRanges;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
-import com.ibm.icu.text.PluralRules.StandardPluralCategories;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -486,9 +485,9 @@ public class PluralRulesLoader extends PluralRules.Factory {
                 pr = new PluralRanges();
             } else {
                 pr.add(
-                        StandardPluralCategories.valueOf(row[0]),
-                        StandardPluralCategories.valueOf(row[1]),
-                        StandardPluralCategories.valueOf(row[2]));
+                        StandardPlural.fromString(row[0]),
+                        StandardPlural.fromString(row[1]),
+                        StandardPlural.fromString(row[2]));
             }
         }
         // do last one

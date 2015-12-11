@@ -7,7 +7,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.SimplePatternFormatter;
-import com.ibm.icu.text.PluralRules.StandardPluralCategories;
+import com.ibm.icu.impl.StandardPlural;
 
 /**
  * QuantityFormatter represents an unknown quantity of something and formats a known quantity
@@ -19,7 +19,7 @@ import com.ibm.icu.text.PluralRules.StandardPluralCategories;
  */
 class QuantityFormatter {
     private final SimplePatternFormatter[] templates =
-            new SimplePatternFormatter[StandardPluralCategories.COUNT];
+            new SimplePatternFormatter[StandardPlural.COUNT];
 
     public QuantityFormatter() {}
 
@@ -34,7 +34,7 @@ class QuantityFormatter {
      *  if template has more than just the {0} placeholder.
      */
     public void addIfAbsent(CharSequence variant, String template) {
-        int idx = StandardPluralCategories.getIndex(variant);
+        int idx = StandardPlural.indexFromString(variant);
         if (templates[idx] != null) {
             return;
         }
@@ -45,7 +45,7 @@ class QuantityFormatter {
      * @return true if this object has at least the "other" variant
      */
     public boolean isValid() {
-        return templates[StandardPluralCategories.OTHER_INDEX] != null;
+        return templates[StandardPlural.OTHER_INDEX] != null;
     }
 
     /**
@@ -69,9 +69,9 @@ class QuantityFormatter {
      */
     public SimplePatternFormatter getByVariant(CharSequence variant) {
         assert isValid();
-        int idx = StandardPluralCategories.getIndexOrOtherIndex(variant);
+        int idx = StandardPlural.indexOrOtherIndexFromString(variant);
         SimplePatternFormatter template = templates[idx];
-        return (template == null && idx != StandardPluralCategories.OTHER_INDEX) ?
-                templates[StandardPluralCategories.OTHER_INDEX] : template;
+        return (template == null && idx != StandardPlural.OTHER_INDEX) ?
+                templates[StandardPlural.OTHER_INDEX] : template;
     }
 }
