@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2014, Google, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2015, Google, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -9,7 +9,7 @@ package com.ibm.icu.text;
 import java.util.Arrays;
 import java.util.EnumSet;
 
-import com.ibm.icu.text.PluralRules.StandardPluralCategories;
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.Output;
 
@@ -26,7 +26,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
 
     private volatile boolean isFrozen;
     private Matrix matrix = new Matrix();
-    private boolean[] explicit = new boolean[StandardPluralCategories.COUNT];
+    private boolean[] explicit = new boolean[StandardPlural.COUNT];
 
     /**
      * Constructor
@@ -42,7 +42,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
      * Internal class for mapping from two StandardPluralCategories values to another.
      */
     private static final class Matrix implements Comparable<Matrix>, Cloneable {
-        private byte[] data = new byte[StandardPluralCategories.COUNT * StandardPluralCategories.COUNT];
+        private byte[] data = new byte[StandardPlural.COUNT * StandardPlural.COUNT];
         {
             for (int i = 0; i < data.length; ++i) {
                 data[i] = -1;
@@ -56,41 +56,41 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
          * Internal method for setting.
          */
         @SuppressWarnings("unused")
-        void set(StandardPluralCategories start, StandardPluralCategories end, StandardPluralCategories result) {
-            data[start.ordinal() * StandardPluralCategories.COUNT + end.ordinal()] = result == null ? (byte) -1
+        void set(StandardPlural start, StandardPlural end, StandardPlural result) {
+            data[start.ordinal() * StandardPlural.COUNT + end.ordinal()] = result == null ? (byte) -1
                     : (byte) result.ordinal();
         }
 
         /**
          * Internal method for setting; throws exception if already set.
          */
-        void setIfNew(StandardPluralCategories start, StandardPluralCategories end,
-                StandardPluralCategories result) {
-            byte old = data[start.ordinal() * StandardPluralCategories.COUNT + end.ordinal()];
+        void setIfNew(StandardPlural start, StandardPlural end,
+                StandardPlural result) {
+            byte old = data[start.ordinal() * StandardPlural.COUNT + end.ordinal()];
             if (old >= 0) {
                 throw new IllegalArgumentException("Previously set value for <" + start + ", " + end + ", "
-                        + StandardPluralCategories.VALUES.get(old) + ">");
+                        + StandardPlural.VALUES.get(old) + ">");
             }
-            data[start.ordinal() * StandardPluralCategories.COUNT + end.ordinal()] = result == null ? (byte) -1
+            data[start.ordinal() * StandardPlural.COUNT + end.ordinal()] = result == null ? (byte) -1
                     : (byte) result.ordinal();
         }
 
         /**
          * Internal method for getting.
          */
-        StandardPluralCategories get(StandardPluralCategories start, StandardPluralCategories end) {
-            byte result = data[start.ordinal() * StandardPluralCategories.COUNT + end.ordinal()];
-            return result < 0 ? null : StandardPluralCategories.VALUES.get(result);
+        StandardPlural get(StandardPlural start, StandardPlural end) {
+            byte result = data[start.ordinal() * StandardPlural.COUNT + end.ordinal()];
+            return result < 0 ? null : StandardPlural.VALUES.get(result);
         }
 
         /**
          * Internal method to see if <*,end> values are all the same.
          */
         @SuppressWarnings("unused")
-        StandardPluralCategories endSame(StandardPluralCategories end) {
-            StandardPluralCategories first = null;
-            for (StandardPluralCategories start : StandardPluralCategories.VALUES) {
-                StandardPluralCategories item = get(start, end);
+        StandardPlural endSame(StandardPlural end) {
+            StandardPlural first = null;
+            for (StandardPlural start : StandardPlural.VALUES) {
+                StandardPlural item = get(start, end);
                 if (item == null) {
                     continue;
                 }
@@ -109,12 +109,12 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
          * Internal method to see if <start,*> values are all the same.
          */
         @SuppressWarnings("unused")
-        StandardPluralCategories startSame(StandardPluralCategories start,
-                EnumSet<StandardPluralCategories> endDone, Output<Boolean> emit) {
+        StandardPlural startSame(StandardPlural start,
+                EnumSet<StandardPlural> endDone, Output<Boolean> emit) {
             emit.value = false;
-            StandardPluralCategories first = null;
-            for (StandardPluralCategories end : StandardPluralCategories.VALUES) {
-                StandardPluralCategories item = get(start, end);
+            StandardPlural first = null;
+            for (StandardPlural end : StandardPlural.VALUES) {
+                StandardPlural item = get(start, end);
                 if (item == null) {
                     continue;
                 }
@@ -170,9 +170,9 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
         @Override
         public String toString() {
             StringBuilder result = new StringBuilder();
-            for (StandardPluralCategories i : StandardPluralCategories.values()) {
-                for (StandardPluralCategories j : StandardPluralCategories.values()) {
-                    StandardPluralCategories x = get(i, j);
+            for (StandardPlural i : StandardPlural.values()) {
+                for (StandardPlural j : StandardPlural.values()) {
+                    StandardPlural x = get(i, j);
                     if (x != null) {
                         result.append(i + " & " + j + " → " + x + ";\n");
                     }
@@ -195,16 +195,16 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public void add(StandardPluralCategories rangeStart, StandardPluralCategories rangeEnd,
-            StandardPluralCategories result) {
+    public void add(StandardPlural rangeStart, StandardPlural rangeEnd,
+            StandardPlural result) {
         if (isFrozen) {
             throw new UnsupportedOperationException();
         }
         explicit[result.ordinal()] = true;
         if (rangeStart == null) {
-            for (StandardPluralCategories rs : StandardPluralCategories.values()) {
+            for (StandardPlural rs : StandardPlural.values()) {
                 if (rangeEnd == null) {
-                    for (StandardPluralCategories re : StandardPluralCategories.values()) {
+                    for (StandardPlural re : StandardPlural.values()) {
                         matrix.setIfNew(rs, re, result);
                     }
                 } else {
@@ -214,7 +214,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
             }
         } else if (rangeEnd == null) {
             explicit[rangeStart.ordinal()] = true;
-            for (StandardPluralCategories re : StandardPluralCategories.values()) {
+            for (StandardPlural re : StandardPlural.values()) {
                 matrix.setIfNew(rangeStart, re, result);
             }
         } else {
@@ -237,8 +237,8 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public StandardPluralCategories get(StandardPluralCategories start, StandardPluralCategories end) {
-        StandardPluralCategories result = matrix.get(start, end);
+    public StandardPlural get(StandardPlural start, StandardPlural end) {
+        StandardPlural result = matrix.get(start, end);
         return result == null ? end : result;
     }
 
@@ -255,7 +255,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public boolean isExplicit(StandardPluralCategories start, StandardPluralCategories end) {
+    public boolean isExplicit(StandardPlural start, StandardPlural end) {
         return matrix.get(start, end) != null;
     }
 
@@ -269,7 +269,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public boolean isExplicitlySet(StandardPluralCategories count) {
+    public boolean isExplicitlySet(StandardPlural count) {
         return explicit[count.ordinal()];
     }
 

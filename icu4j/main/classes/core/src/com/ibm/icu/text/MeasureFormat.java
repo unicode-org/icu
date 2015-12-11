@@ -33,10 +33,10 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimplePatternFormatter;
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.PluralRules.Factory;
-import com.ibm.icu.text.PluralRules.StandardPluralCategories;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ICUException;
@@ -422,8 +422,9 @@ public class MeasureFormat extends UFormat {
                 highFpos.getCountVisibleFractionDigits(), highFpos.getFractionDigits()));
 
         final PluralRanges pluralRanges = Factory.getDefaultFactory().getPluralRanges(getLocale());
-        StandardPluralCategories resolvedCategory = pluralRanges.get(
-                StandardPluralCategories.valueOf(keywordLow), StandardPluralCategories.valueOf(keywordHigh));
+        StandardPlural resolvedPlural = pluralRanges.get(
+                StandardPlural.fromString(keywordLow),
+                StandardPlural.fromString(keywordHigh));
 
         SimplePatternFormatter rangeFormatter = getRangeFormat(getLocale(), formatWidth);
         String formattedNumber = rangeFormatter.format(lowFormatted, highFormatted);
@@ -434,9 +435,9 @@ public class MeasureFormat extends UFormat {
 
             Currency currencyUnit = (Currency) unit;
             StringBuilder result = new StringBuilder();
-            appendReplacingCurrency(currencyFormat.getPrefix(lowDouble >= 0), currencyUnit, resolvedCategory, result);
+            appendReplacingCurrency(currencyFormat.getPrefix(lowDouble >= 0), currencyUnit, resolvedPlural, result);
             result.append(formattedNumber);
-            appendReplacingCurrency(currencyFormat.getSuffix(highDouble >= 0), currencyUnit, resolvedCategory, result);
+            appendReplacingCurrency(currencyFormat.getSuffix(highDouble >= 0), currencyUnit, resolvedPlural, result);
             return result.toString();
             //            StringBuffer buffer = new StringBuffer();
             //            CurrencyAmount currencyLow = (CurrencyAmount) lowValue;
@@ -449,12 +450,12 @@ public class MeasureFormat extends UFormat {
             //            currencyFormat.format(currencyHigh, buffer2, pos2);
         } else {
             SimplePatternFormatter formatter =
-                    getPluralFormatter(lowValue.getUnit(), formatWidth, resolvedCategory.ordinal());
+                    getPluralFormatter(lowValue.getUnit(), formatWidth, resolvedPlural.ordinal());
             return formatter.format(formattedNumber);
         }
     }
 
-    private void appendReplacingCurrency(String affix, Currency unit, StandardPluralCategories resolvedCategory, StringBuilder result) {
+    private void appendReplacingCurrency(String affix, Currency unit, StandardPlural resolvedPlural, StringBuilder result) {
         String replacement = "¤";
         int pos = affix.indexOf(replacement);
         if (pos < 0) {
@@ -473,7 +474,7 @@ public class MeasureFormat extends UFormat {
             } else {
                 result.append(unit.getName(currencyFormat.nf.getLocale(ULocale.ACTUAL_LOCALE),
                         currentStyle == NumberFormat.CURRENCYSTYLE ? Currency.SYMBOL_NAME :  Currency.PLURAL_LONG_NAME,
-                                resolvedCategory.toString(), null));
+                                resolvedPlural.getKeyword(), null));
             }
             result.append(affix.substring(pos+replacement.length()));
         }
@@ -783,7 +784,7 @@ public class MeasureFormat extends UFormat {
                     // The key must be one of the plural form strings. For example:
                     // one{"{0} hr"}
                     // other{"{0} hrs"}
-                    setFormatterIfAbsent(StandardPluralCategories.getIndex(key), value, 0);
+                    setFormatterIfAbsent(StandardPlural.indexFromString(key), value, 0);
                 }
             }
         }
@@ -963,13 +964,13 @@ public class MeasureFormat extends UFormat {
     }
 
     private SimplePatternFormatter getPluralFormatter(MeasureUnit unit, FormatWidth width, int index) {
-        if (index != StandardPluralCategories.OTHER_INDEX) {
+        if (index != StandardPlural.OTHER_INDEX) {
             SimplePatternFormatter pattern = getFormatterOrNull(unit, width, index);
             if (pattern != null) {
                 return pattern;
             }
         }
-        return getFormatter(unit, width, StandardPluralCategories.OTHER_INDEX);
+        return getFormatter(unit, width, StandardPlural.OTHER_INDEX);
     }
 
     private SimplePatternFormatter getPerFormatter(FormatWidth width) {
@@ -999,7 +1000,7 @@ public class MeasureFormat extends UFormat {
         }
         SimplePatternFormatter perPattern = getPerFormatter(formatWidth);
         SimplePatternFormatter pattern =
-                getPluralFormatter(perUnit, formatWidth, StandardPluralCategories.one.ordinal());
+                getPluralFormatter(perUnit, formatWidth, StandardPlural.ONE.ordinal());
         String perUnitString = pattern.getPatternWithNoPlaceholders().trim();
         perPattern.formatAndAppend(appendTo, offsets, formatted, perUnitString);
         return offsets[0];
@@ -1030,7 +1031,7 @@ public class MeasureFormat extends UFormat {
         StringBuffer formattedNumber = nf.format(n, new StringBuffer(), fpos);
         String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
 
-        int pluralForm = StandardPluralCategories.getIndexOrOtherIndex(keyword);
+        int pluralForm = StandardPlural.indexOrOtherIndexFromString(keyword);
         SimplePatternFormatter formatter = getPluralFormatter(unit, formatWidth, pluralForm);
         int[] offsets = new int[1];
         formatter.formatAndAppend(appendTo, offsets, formattedNumber);
@@ -1056,7 +1057,7 @@ public class MeasureFormat extends UFormat {
      * TODO: Maybe store more sparsely in general, with pointers rather than potentially-empty objects.
      */
     private static final class MeasureFormatData {
-        static final int PER_UNIT_INDEX = StandardPluralCategories.COUNT;
+        static final int PER_UNIT_INDEX = StandardPlural.COUNT;
         static final int PATTERN_COUNT = PER_UNIT_INDEX + 1;
 
         boolean hasPerFormatter(FormatWidth width) {
