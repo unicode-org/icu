@@ -1,11 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014, International Business Machines Corporation and
+ * Copyright (C) 2014-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl.locale;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -87,6 +89,15 @@ public class KeyTypeData {
         }
         return null;
     }
+
+//    public static boolean isValid(String key, String type) {
+//        key = AsciiUtil.toLowerString(key);
+//        KeyData keyData = KEYMAP.get(key);
+//        if (keyData != null) {
+//            return keyData.bcpId;
+//        }
+//        return false;
+//    }
 
     public static String toLegacyKey(String key) {
         key = AsciiUtil.toLowerString(key);
@@ -539,4 +550,22 @@ public class KeyTypeData {
         initFromResourceBundle();
     }
 
+    public static boolean isDeprecated(String key) {
+        return DEPRECATED_HACK_SET.contains(key);
+    }
+    
+    public static boolean isDeprecated(String key, String type) {
+        Set<String> set = DEPRECATED_HACK.get(key);
+        return set != null && set.contains(type);
+    }
+
+    // Until LDML2ICU is updated
+    static Map<String,Set<String>> DEPRECATED_HACK = new HashMap<String,Set<String>>();
+    static Set<String> DEPRECATED_HACK_SET = new HashSet<String>();
+    static {
+        DEPRECATED_HACK.put("ca", Collections.singleton("islamicc"));
+        DEPRECATED_HACK.put("co", Collections.singleton("direct"));
+        DEPRECATED_HACK.put("tz", new HashSet<String>(Arrays.asList("aqams", "camtr", "cnckg", "cnhrb", "cnkhg", "usnavajo")));
+        DEPRECATED_HACK_SET.addAll(Arrays.asList("kh", "vt"));
+    };
 }

@@ -8,13 +8,13 @@ package com.ibm.icu.impl;
 
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.ibm.icu.impl.locale.AsciiUtil;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
 
@@ -32,6 +32,10 @@ public class ValidIdentifiers {
         subdivision,
         unit,
         variant,
+        u,
+        t,
+        x,
+        illegal
     }
 
     public enum Datasubtype {
@@ -43,7 +47,7 @@ public class ValidIdentifiers {
         macroregion,
     }
 
-    static class ValiditySet {
+    public static class ValiditySet {
         public final Set<String> regularData;
         public final Map<String,Set<String>> subdivisionData;
         public ValiditySet(Set<String> plainData, boolean makeMap) {
@@ -105,7 +109,7 @@ public class ValidIdentifiers {
         }
     }
 
-    static class ValidityData {
+    private static class ValidityData {
         static final Map<Datatype,Map<Datasubtype,ValiditySet>> data;
         static {
             Map<Datatype, Map<Datasubtype, ValiditySet>> _data = new EnumMap<Datatype,Map<Datasubtype,ValiditySet>>(Datatype.class);
@@ -141,6 +145,7 @@ public class ValidIdentifiers {
             data = Collections.unmodifiableMap(_data);
         }
         private static void addRange(String string, Set<String> subvalues) {
+            string = AsciiUtil.toLowerString(string);
             int pos = string.indexOf('~');
             if (pos < 0) {
                 subvalues.add(string);
@@ -148,84 +153,44 @@ public class ValidIdentifiers {
                 StringRange.expand(string.substring(0,pos), string.substring(pos+1), false, subvalues);
             }
         }
-        static Map<Datatype, Map<Datasubtype, ValiditySet>> getData() {
-            return data;
-        }
-
-        /**
-         * Returns the Datasubtype containing the code, or null if there is none.
-         * @param datatype
-         * @param datasubtypes
-         * @param code
-         * @return
-         */
-        static Datasubtype isValid(Datatype datatype, Set<Datasubtype> datasubtypes, String code) {
-            Map<Datasubtype, ValiditySet> subtable = data.get(datatype);
-            if (subtable != null) {
-                for (Datasubtype datasubtype : datasubtypes) {
-                    ValiditySet validitySet = subtable.get(datasubtype);
-                    if (validitySet != null) {
-                        if (validitySet.contains(code)) {
-                            return datasubtype;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-        
-        static Datasubtype isValid(Datatype datatype, Set<Datasubtype> datasubtypes, String code, String value) {
-            Map<Datasubtype, ValiditySet> subtable = data.get(datatype);
-            if (subtable != null) {
-                for (Datasubtype datasubtype : datasubtypes) {
-                    ValiditySet validitySet = subtable.get(datasubtype);
-                    if (validitySet != null) {
-                        if (validitySet.contains(code, value)) {
-                            return datasubtype;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
     }
-
-    // Quick testing for now
     
-    public static void main(String[] args) {
-        showValid(Datatype.script, EnumSet.of(Datasubtype.regular, Datasubtype.unknown), "Zzzz");
-        showValid(Datatype.script, EnumSet.of(Datasubtype.regular), "Zzzz");
-        showValid(Datatype.subdivision, EnumSet.of(Datasubtype.regular), "US-CA");
-        showValid(Datatype.subdivision, EnumSet.of(Datasubtype.regular), "US", "CA");
-        showValid(Datatype.subdivision, EnumSet.of(Datasubtype.regular), "US-?");
-        showValid(Datatype.subdivision, EnumSet.of(Datasubtype.regular), "US", "?");
-        showAll();
-    }
-
-    private static void showAll() {
-        Map<Datatype, Map<Datasubtype, ValiditySet>> data = ValidityData.getData();
-        for (Entry<Datatype, Map<Datasubtype, ValiditySet>> e1 : data.entrySet()) {
-            System.out.println(e1.getKey());
-            for (Entry<Datasubtype, ValiditySet> e2 : e1.getValue().entrySet()) {
-                System.out.println("\t" + e2.getKey());
-                System.out.println("\t\t" + e2.getValue());
-            }
-        }
+    public static Map<Datatype, Map<Datasubtype, ValiditySet>> getData() {
+        return ValidityData.data;
     }
 
     /**
-     * @param script
-     * @param of
-     * @param string
+     * Returns the Datasubtype containing the code, or null if there is none.
      */
-    private static void showValid(Datatype datatype, Set<Datasubtype> datasubtypes, String code) {
-        Datasubtype value = ValidityData.isValid(datatype, datasubtypes, code);   
-        System.out.println(datatype + ", " + datasubtypes + ", " + code + " => " + value);
+    public static Datasubtype isValid(Datatype datatype, Set<Datasubtype> datasubtypes, String code) {
+        Map<Datasubtype, ValiditySet> subtable = ValidityData.data.get(datatype);
+        if (subtable != null) {
+            for (Datasubtype datasubtype : datasubtypes) {
+                ValiditySet validitySet = subtable.get(datasubtype);
+                if (validitySet != null) {
+                    if (validitySet.contains(AsciiUtil.toLowerString(code))) {
+                        return datasubtype;
+                    }
+                }
+            }
+        }
+        return null;
     }
-    private static void showValid(Datatype datatype, Set<Datasubtype> datasubtypes, String code, String value2) {
-        Datasubtype value = ValidityData.isValid(datatype, datasubtypes, code, value2);   
-        System.out.println(datatype + ", " + datasubtypes + ", " + code + ", " + value + " => " + value);
+    
+    public static Datasubtype isValid(Datatype datatype, Set<Datasubtype> datasubtypes, String code, String value) {
+        Map<Datasubtype, ValiditySet> subtable = ValidityData.data.get(datatype);
+        if (subtable != null) {
+            code = AsciiUtil.toLowerString(code);
+            value = AsciiUtil.toLowerString(value);
+            for (Datasubtype datasubtype : datasubtypes) {
+                ValiditySet validitySet = subtable.get(datasubtype);
+                if (validitySet != null) {
+                    if (validitySet.contains(code, value)) {
+                        return datasubtype;
+                    }
+                }
+            }
+        }
+        return null;
     }
-
 }
