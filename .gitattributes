@@ -3950,6 +3950,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LanguageTag.java svneol=nati
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LocaleExtensions.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LocaleObjectCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LocaleSyntaxException.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LocaleValidityChecker.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/ParseStatus.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/StringTokenIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/UnicodeLocaleExtension.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4848,6 +4849,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/RegionTest.java svneol=nativ
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/SimplePatternFormatterTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/StringTokenizerTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TestLocaleValidity.java svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TextTrieMapTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.16.tri2 -text
