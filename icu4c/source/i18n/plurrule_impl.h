@@ -10,10 +10,12 @@
 */
 
 
-#ifndef PLURRULE_IMPLE
-#define PLURRULE_IMPLE
+#ifndef PLURRULE_IMPL
+#define PLURRULE_IMPL
 
 // Internal definitions for the PluralRules implementation.
+
+#include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -21,7 +23,6 @@
 #include "unicode/locid.h"
 #include "unicode/parseerr.h"
 #include "unicode/ures.h"
-#include "unicode/utypes.h"
 #include "uvector.h"
 #include "hash.h"
 

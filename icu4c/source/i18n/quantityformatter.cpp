@@ -21,45 +21,11 @@
 #include "unicode/fmtable.h"
 #include "unicode/fieldpos.h"
 #include "resource.h"
+#include "standardplural.h"
 #include "visibledigits.h"
 #include "uassert.h"
 
 U_NAMESPACE_BEGIN
-
-/**
- * Plural forms in index order: "other", "zero", "one", "two", "few", "many"
- * "other" must be first.
- */
-static int32_t getPluralIndex(const char *pluralForm) {
-    switch (*pluralForm++) {
-    case 'f':
-        if (uprv_strcmp(pluralForm, "ew") == 0) {
-            return 4;
-        }
-    case 'm':
-        if (uprv_strcmp(pluralForm, "any") == 0) {
-            return 5;
-        }
-    case 'o':
-        if (uprv_strcmp(pluralForm, "ther") == 0) {
-            return 0;
-        } else if (uprv_strcmp(pluralForm, "ne") == 0) {
-            return 2;
-        }
-        break;
-    case 't':
-        if (uprv_strcmp(pluralForm, "wo") == 0) {
-            return 3;
-        }
-    case 'z':
-        if (uprv_strcmp(pluralForm, "ero") == 0) {
-            return 1;
-        }
-    default:
-        break;
-    }
-    return -1;
-}
 
 QuantityFormatter::QuantityFormatter() {
     for (int32_t i = 0; i < UPRV_LENGTHOF(formatters); ++i) {
@@ -111,12 +77,8 @@ UBool QuantityFormatter::addIfAbsent(
         const UnicodeString *rawPattern,
         const ResourceValue *patternValue,
         UErrorCode &status) {
+    int32_t pluralIndex = StandardPlural::indexFromString(variant, status);
     if (U_FAILURE(status)) {
-        return FALSE;
-    }
-    int32_t pluralIndex = getPluralIndex(variant);
-    if (pluralIndex < 0) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
     if (formatters[pluralIndex] != NULL) {
@@ -139,19 +101,16 @@ UBool QuantityFormatter::addIfAbsent(
 }
 
 UBool QuantityFormatter::isValid() const {
-    return formatters[0] != NULL;
+    return formatters[StandardPlural::OTHER] != NULL;
 }
 
 const SimplePatternFormatter *QuantityFormatter::getByVariant(
         const char *variant) const {
     U_ASSERT(isValid());
-    int32_t pluralIndex = getPluralIndex(variant);
-    if (pluralIndex == -1) {
-        pluralIndex = 0;
-    }
+    int32_t pluralIndex = StandardPlural::indexOrOtherIndexFromString(variant);
     const SimplePatternFormatter *pattern = formatters[pluralIndex];
     if (pattern == NULL) {
-        pattern = formatters[0];
+        pattern = formatters[StandardPlural::OTHER];
     }
     return pattern;
 }

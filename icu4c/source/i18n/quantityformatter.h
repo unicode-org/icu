@@ -15,6 +15,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "resource.h"
+#include "standardplural.h"
 
 U_NAMESPACE_BEGIN
 
@@ -130,7 +131,7 @@ private:
             const ResourceValue *patternValue,
             UErrorCode &status);
 
-    SimplePatternFormatter *formatters[6];
+    SimplePatternFormatter *formatters[StandardPlural::COUNT];
 };
 
 U_NAMESPACE_END
