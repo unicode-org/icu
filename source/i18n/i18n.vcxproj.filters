@@ -282,6 +282,9 @@
     <ClCompile Include="smpdtfst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="standardplural.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="taiwncal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -785,6 +788,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="smpdtfst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="standardplural.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="taiwncal.h">

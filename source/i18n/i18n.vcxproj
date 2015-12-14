@@ -364,6 +364,7 @@
     <ClCompile Include="scriptset.cpp" />
     <ClCompile Include="smpdtfmt.cpp" />
     <ClCompile Include="smpdtfst.cpp" />
+    <ClCompile Include="standardplural.cpp" />
     <ClCompile Include="taiwncal.cpp" />
     <ClCompile Include="timezone.cpp" />
     <ClCompile Include="tmunit.cpp" />
@@ -1278,6 +1279,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="smpdtfst.h" />
+    <ClInclude Include="standardplural.h" />
     <ClInclude Include="taiwncal.h" />
     <CustomBuild Include="unicode\timezone.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
