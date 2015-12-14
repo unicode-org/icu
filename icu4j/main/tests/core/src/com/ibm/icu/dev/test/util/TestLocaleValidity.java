@@ -34,15 +34,11 @@ public class TestLocaleValidity extends TestFmwk {
 
     public void testBasic() {
         String[][] tests = {
-                {"OK", "en-u-kr-latn-digit"},
-                {"Incomplete extension 'u' [at index 3]", "en-u"},
-                {"Incomplete extension 't' [at index 3]", "en-t"},
                 {"OK", "en-u-ca-chinese"},
                 {"OK", "en-x-abcdefg"},
                 {"OK", "x-abcdefg"},
                 {"OK", "en-u-sd-usca"},
                 {"OK", "en-US-u-sd-usca"},
-                {"OK", "en-AQ-u-sd-usca"},
                 {"OK", "en-t-it"},
                 {"OK", "und-Cyrl-t-und-latn"},
                 {"OK", "root"},
@@ -53,22 +49,9 @@ public class TestLocaleValidity extends TestFmwk {
                 {"OK", "zh-Hant"},
                 {"OK", "zh-Hant-AQ"},
                 {"OK", "x-abcdefg-g-foobar"},
-                {"Empty subtag [at index 0]", ""},
-                {"{u, ca-chinesx}", "en-u-ca-chinesx"},
-                {"{illegal, q}", "en-q-abcdefg"},
-                {"Incomplete privateuse [at index 0]", "x-abc$defg"},
-                {"{script, Latx}", "und-Cyrl-t-und-latx"},
-                {"{variant, FOOBAR}", "zh-Hant-1606nict-1694acad-foobar"},
-                {"{region, AB}", "zh-Hant-AB"},
-                {"{language, ex}", "ex"},
-                {"{script, Hanx}", "zh-Hanx"},
-                {"{language, qaa}", "qaa"},
-                {"Invalid subtag: $ [at index 3]", "EN-$"},
-                {"Invalid subtag: $ [at index 0]", "$"},
-                // too many items
-                {"{u, cu-usd}", "en-u-cu-adp-usd"},
 
                 {"OK", "en-u-ca-buddhist"},
+                {"OK", "en-u-ca-islamic-umalqura"}, // additive
                 {"OK", "en-u-cf-account"},
                 {"OK", "en-u-co-big5han"},
                 {"OK", "en-u-cu-adp"},
@@ -80,17 +63,80 @@ public class TestLocaleValidity extends TestFmwk {
                 {"OK", "en-u-kf-false"},
                 {"OK", "en-u-kk-false"},
                 {"OK", "en-u-kn-false"},
-                {"OK", "en-u-kr-latn-digit-symbol"},
+                {"OK", "en-u-kr-latn-digit-symbol"}, // reorder codes, multiple
                 {"OK", "en-u-ks-identic"},
                 {"OK", "en-u-kv-currency"},
                 {"OK", "en-u-nu-ahom"},
                 {"OK", "en-u-sd-usny"},
                 {"OK", "en-u-tz-adalv"},
                 {"OK", "en-u-va-posix"},
-                {"{u, ca-civil}", "en-u-ca-islamicc"}, // deprecated
+                
+                // really long case
+                
+                {"OK", "en-u-ca-buddhist-ca-islamic-umalqura-cf-account-co-big5han-cu-adp-fw-fri-hc-h11-ka-noignore-kb-false-kc-false-kf-false-kk-false-kn-false-kr-latn-digit-symbol-ks-identic-kv-currency-nu-ahom-sd-usny-tz-adalv-va-posix"},
+                
+                // deprecated, but turned into valid by ULocale.Builder()
+                {"OK", "en-u-ca-islamicc"}, // deprecated
+                {"OK", "en-u-tz-aqams"}, // deprecated
+
+                // Bad syntax (caught by ULocale.Builder())
+                
+                {"Incomplete extension 'u' [at index 3]", "en-u"},
+                {"Incomplete extension 't' [at index 3]", "en-t"},
+                {"Empty subtag [at index 0]", ""},
+                {"Incomplete privateuse [at index 0]", "x-abc$defg"},
+                {"Invalid subtag: $ [at index 3]", "EN-$"},
+                {"Invalid subtag: $ [at index 0]", "$"},
+                
+                // bad extension
+                
+                {"{illegal, q}", "en-q-abcdefg"},
+
+                // bad subtags
+                
+                {"{variant, FOOBAR}", "zh-Hant-1606nict-1694acad-foobar"},
+                {"{region, AB}", "zh-Hant-AB"},
+                {"{language, ex}", "ex"},
+                {"{script, Hanx}", "zh-Hanx"},
+                {"{language, qaa}", "qaa"},
+
+                // bad types for keys
+                
+                {"{u, ca-chinesx}", "en-u-ca-chinesx"},
+                {"{script, Latx}", "und-Cyrl-t-und-latx"},
+                {"{u, sd-usca}", "en-AQ-u-sd-usca"},
+                
+                {"{u, ca-buddhisx}", "en-u-ca-buddhisx"},
+                {"{u, ca-islamic-umalqurx}", "en-u-ca-islamic-umalqurx"}, // additive
+                {"{u, cf-accounx}", "en-u-cf-accounx"},
+                {"{u, co-big5hax}", "en-u-co-big5hax"},
+                {"{u, cu-adx}", "en-u-cu-adx"},
+                {"{u, fw-frx}", "en-u-fw-frx"},
+                {"{u, hc-h1x}", "en-u-hc-h1x"},
+                {"{u, ka-noignorx}", "en-u-ka-noignorx"},
+                {"{u, kb-falsx}", "en-u-kb-falsx"},
+                {"{u, kc-falsx}", "en-u-kc-falsx"},
+                {"{u, kf-falsx}", "en-u-kf-falsx"},
+                {"{u, kk-falsx}", "en-u-kk-falsx"},
+                {"{u, kn-falsx}", "en-u-kn-falsx"},
+                {"{u, kr-symbox}", "en-u-kr-latn-digit-symbox"}, // reorder codes, multiple
+                {"{u, ks-identix}", "en-u-ks-identix"},
+                {"{u, kv-currencx}", "en-u-kv-currencx"},
+                {"{u, nu-ahox}", "en-u-nu-ahox"},
+                {"{u, sd-usnx}", "en-u-sd-usnx"},
+                {"{u, tz-adalx}", "en-u-tz-adalx"},
+                {"{u, va-posit}", "en-u-va-posit"},
+
+                
+                // too many items
+                
+                {"{u, cu-usd}", "en-u-cu-adp-usd"},
+
+                // use deprecated subtags. testDeprecated checks if they work when Datasubtype.deprecated is added
+                //{"{u, ca-civil}", "en-u-ca-islamicc"}, // deprecated, but turns into valid
                 {"{u, co-direct}", "en-u-co-direct"}, // deprecated
                 {"{u, kh}", "en-u-kh-false"}, // deprecated
-                {"{u, tz-aqams}", "en-u-tz-aqams"}, // deprecated
+                {"{u, tz-camtr}", "en-u-tz-camtr"}, // deprecated
                 {"{u, vt}", "en-u-vt-0020-0041"}, // deprecated
         };
         check(tests, Datasubtype.regular, Datasubtype.unknown);
@@ -120,12 +166,10 @@ public class TestLocaleValidity extends TestFmwk {
     }
 
     public void testDeprecated() {
-        LocaleValidityChecker regularAndDeprecated = new LocaleValidityChecker(EnumSet.of(Datasubtype.regular, Datasubtype.deprecated));
         String[][] tests = {
-                {"OK", "en-u-ca-islamicc"}, // deprecated
                 {"OK", "en-u-co-direct"}, // deprecated
                 {"OK", "en-u-kh-false"}, // deprecated
-                {"OK", "en-u-tz-aqams"}, // deprecated
+                {"OK", "en-u-tz-camtr"}, // deprecated
                 {"OK", "en-u-vt-0020"}, // deprecated
         };
         check(tests, Datasubtype.regular, Datasubtype.unknown, Datasubtype.deprecated);
@@ -133,9 +177,9 @@ public class TestLocaleValidity extends TestFmwk {
 
     private void check(String[][] tests, Datasubtype... datasubtypes) {
         int count = 0;
-        LocaleValidityChecker regularAndUnknown = new LocaleValidityChecker(datasubtypes);
+        LocaleValidityChecker localeValidityChecker = new LocaleValidityChecker(datasubtypes);
         for (String[] test : tests) {
-            check(++count, regularAndUnknown, test[0], test[1]);
+            check(++count, localeValidityChecker, test[0], test[1]);
         }
     }
 

@@ -93,7 +93,7 @@ public class LocaleValidityChecker {
                     if (!isValidT(locale.getExtension(c), where)) return false;
                     break;
                 case u:
-                    if (!isValidU(locale.getExtension(c), where)) return false;
+                    if (!isValidU(locale, locale.getExtension(c), where)) return false;
                     break;
                 }
             } catch (Exception e) {
@@ -104,12 +104,14 @@ public class LocaleValidityChecker {
     }
 
     enum SpecialCase {
-        normal, anything, reorder, codepoints;
+        normal, anything, reorder, codepoints, subdivision;
         static SpecialCase get(String key) {
             if (key.equals("kr")) {
                 return SpecialCase.reorder;
             } else if (key.equals("vt")) {
                 return SpecialCase.codepoints;
+            } else if (key.equals("sd")) {
+                return subdivision;
             } else if (key.equals("x0")) {
                 return anything;
             } else {
@@ -118,15 +120,17 @@ public class LocaleValidityChecker {
         }
     }
     /**
+     * @param locale 
      * @param extension
      * @param where
      * @return
      */
-    private boolean isValidU(String extensionString, Where where) {
+    private boolean isValidU(ULocale locale, String extensionString, Where where) {
         String key = "";
         int typeCount = 0;
         ValueType valueType = null;
         SpecialCase specialCase = null;
+        StringBuilder prefix = new StringBuilder();
         // TODO: is empty -u- valid?
         for (String subtag : SEPARATOR.split(extensionString)) {
             if (subtag.length() == 2) {
@@ -142,8 +146,20 @@ public class LocaleValidityChecker {
                 typeCount = 0;
             } else {
                 ++typeCount;
-                if (valueType == ValueType.single && typeCount > 1) {
-                    return where.set(Datatype.u, key+"-"+subtag);
+                switch (valueType) {
+                case single: 
+                    if (typeCount > 1) {
+                        return where.set(Datatype.u, key+"-"+subtag);
+                    }
+                    break;
+                case incremental:
+                    if (typeCount == 1) {
+                        prefix.setLength(0);
+                        prefix.append(subtag);
+                    } else {
+                        prefix.append('-').append(subtag);
+                        subtag = prefix.toString();
+                    }
                 }
                 switch (specialCase) {
                 case anything: 
@@ -162,8 +178,13 @@ public class LocaleValidityChecker {
                         return where.set(Datatype.u, key+"-"+subtag);
                     }
                     continue;
+                case subdivision:
+                    if (!isSubdivision(locale, subtag)) {
+                        return where.set(Datatype.u, key+"-"+subtag);
+                    }
+                    continue;
                 }
-                
+
                 // en-u-sd-usca
                 // en-US-u-sd-usca
                 Output<Boolean> isKnownKey = new Output<Boolean>();
@@ -176,6 +197,33 @@ public class LocaleValidityChecker {
                     return where.set(Datatype.u, key+"-"+subtag);
                 }
             }
+        }
+        return true;
+    }
+
+    /**
+     * @param locale
+     * @param subtag
+     * @return
+     */
+    private boolean isSubdivision(ULocale locale, String subtag) {
+        // First check if the subtag is valid
+        if (subtag.length() < 3) {
+            return false;
+        }
+        String region = subtag.substring(0, subtag.charAt(0) <= '9' ? 3 : 2);
+        String subdivision = subtag.substring(region.length());
+        if (ValidIdentifiers.isValid(Datatype.subdivision, datasubtypes, region, subdivision) == null) {
+            return false;
+        }
+        // Then check for consistency with the locale's region
+        String localeRegion = locale.getCountry();
+        if (localeRegion.isEmpty()) {
+            ULocale max = ULocale.addLikelySubtags(locale);
+            localeRegion = max.getCountry();
+        }
+        if (!region.equalsIgnoreCase(localeRegion)) {
+            return false;
         }
         return true;
     }
@@ -194,12 +242,12 @@ public class LocaleValidityChecker {
             return false;
         }
         return ValidIdentifiers.isValid(Datatype.script, datasubtypes, subtag) != null;
-//        space, punct, symbol, currency, digit - core groups of characters below 'a'
-//        any script code except Common and Inherited.
-//      sc ; Zinh                             ; Inherited                        ; Qaai
-//      sc ; Zyyy                             ; Common
-//        Some pairs of scripts sort primary-equal and always reorder together. For example, Katakana characters are are always reordered with Hiragana.
-//        others - where all codes not explicitly mentioned should be ordered. The script code Zzzz (Unknown Script) is a synonym for others.        return false;
+        //        space, punct, symbol, currency, digit - core groups of characters below 'a'
+        //        any script code except Common and Inherited.
+        //      sc ; Zinh                             ; Inherited                        ; Qaai
+        //      sc ; Zyyy                             ; Common
+        //        Some pairs of scripts sort primary-equal and always reorder together. For example, Katakana characters are are always reordered with Hiragana.
+        //        others - where all codes not explicitly mentioned should be ordered. The script code Zzzz (Unknown Script) is a synonym for others.        return false;
     }
 
     /**
@@ -235,14 +283,14 @@ public class LocaleValidityChecker {
     }
 
     public enum ValueType {
-        single, multiple, specific;
+        single, multiple, incremental;
         private static Set<String> multipleValueTypes = new HashSet<String>(Arrays.asList("x0", "kr", "vt"));
         private static Set<String> specificValueTypes = new HashSet<String>(Arrays.asList("ca"));
         static ValueType get(String key) {
             if (multipleValueTypes.contains(key)) {
                 return multiple;
             } else if (specificValueTypes.contains(key)) {
-                return specific;
+                return incremental;
             } else {
                 return single;
             }
