@@ -367,7 +367,7 @@ TimeUnitFormat::readFromCurrentLocale(UTimeUnitFormatStyle style, const char* ke
     }
     int32_t size = ures_getSize(unitsRes.getAlias());
     for ( int32_t index = 0; index < size; ++index) {
-        status = U_ZERO_ERROR;   // TODO: review note - differs from original code, which didn't reset status.
+        status = U_ZERO_ERROR;
         // resource of one time unit
         LocalUResourceBundlePointer oneTimeUnit(
                 ures_getByIndex(unitsRes.getAlias(), index, NULL, &status));
