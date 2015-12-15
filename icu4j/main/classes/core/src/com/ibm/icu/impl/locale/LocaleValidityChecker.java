@@ -131,6 +131,7 @@ public class LocaleValidityChecker {
         ValueType valueType = null;
         SpecialCase specialCase = null;
         StringBuilder prefix = new StringBuilder();
+        Set<String> seen = new HashSet<String>();
         // TODO: is empty -u- valid?
         for (String subtag : SEPARATOR.split(extensionString)) {
             if (subtag.length() == 2) {
@@ -160,6 +161,12 @@ public class LocaleValidityChecker {
                         prefix.append('-').append(subtag);
                         subtag = prefix.toString();
                     }
+                    break;
+                case multiple:
+                    if (typeCount == 1) {
+                        seen.clear();
+                    }
+                    break;
                 }
                 switch (specialCase) {
                 case anything: 
@@ -174,7 +181,8 @@ public class LocaleValidityChecker {
                     }
                     continue;
                 case reorder:
-                    if (!isScriptReorder(subtag)) {
+                    boolean newlyAdded = seen.add(subtag);
+                    if (!newlyAdded || !isScriptReorder(subtag)) {
                         return where.set(Datatype.u, key+"-"+subtag);
                     }
                     continue;

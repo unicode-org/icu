@@ -120,6 +120,7 @@ public class TestLocaleValidity extends TestFmwk {
                 {"{u, kk-falsx}", "en-u-kk-falsx"},
                 {"{u, kn-falsx}", "en-u-kn-falsx"},
                 {"{u, kr-symbox}", "en-u-kr-latn-digit-symbox"}, // reorder codes, multiple
+                {"{u, kr-latn}", "en-u-kr-latn-digit-latn"}, // reorder codes, duplicat
                 {"{u, ks-identix}", "en-u-ks-identix"},
                 {"{u, kv-currencx}", "en-u-kv-currencx"},
                 {"{u, nu-ahox}", "en-u-nu-ahox"},
