@@ -64,6 +64,7 @@ public class TestLocaleValidity extends TestFmwk {
                 {"OK", "en-u-kk-false"},
                 {"OK", "en-u-kn-false"},
                 {"OK", "en-u-kr-latn-digit-symbol"}, // reorder codes, multiple
+                {"OK", "en-u-kr-latn-digit-others-Cyrl"}, // reorder codes, duplicat
                 {"OK", "en-u-ks-identic"},
                 {"OK", "en-u-kv-currency"},
                 {"OK", "en-u-nu-ahom"},
@@ -121,6 +122,9 @@ public class TestLocaleValidity extends TestFmwk {
                 {"{u, kn-falsx}", "en-u-kn-falsx"},
                 {"{u, kr-symbox}", "en-u-kr-latn-digit-symbox"}, // reorder codes, multiple
                 {"{u, kr-latn}", "en-u-kr-latn-digit-latn"}, // reorder codes, duplicat
+                {"{u, kr-zzzz}", "en-u-kr-latn-others-digit-Zzzz"}, // reorder codes, duplicat
+                {"{u, kr-zsym}", "en-u-kr-Zsym"}, // reorder codes, duplicat
+                {"{u, kr-qaai}", "en-u-kr-Qaai"}, // reorder codes, duplicat                
                 {"{u, ks-identix}", "en-u-ks-identix"},
                 {"{u, kv-currencx}", "en-u-kv-currencx"},
                 {"{u, nu-ahox}", "en-u-nu-ahox"},
