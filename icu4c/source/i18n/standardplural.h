@@ -18,6 +18,8 @@
 
 U_NAMESPACE_BEGIN
 
+class UnicodeString;
+
 /**
  * Standard CLDR plural form/category constants.
  * See http://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
@@ -48,12 +50,30 @@ public:
     }
 
     /**
+     * @param keyword for example "few" or "other"
+     * @return the plural form corresponding to the keyword, or OTHER
+     */
+    static Form orOtherFromString(const UnicodeString &keyword) {
+        return static_cast<Form>(indexOrOtherIndexFromString(keyword));
+    }
+
+    /**
      * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
      *
      * @param keyword for example "few" or "other"
      * @return the plural form corresponding to the keyword
      */
     static Form fromString(const char *keyword, UErrorCode &errorCode) {
+        return static_cast<Form>(indexFromString(keyword, errorCode));
+    }
+
+    /**
+     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     *
+     * @param keyword for example "few" or "other"
+     * @return the plural form corresponding to the keyword
+     */
+    static Form fromString(const UnicodeString &keyword, UErrorCode &errorCode) {
         return static_cast<Form>(indexFromString(keyword, errorCode));
     }
 
@@ -65,9 +85,24 @@ public:
 
     /**
      * @param keyword for example "few" or "other"
-     * @return the index of the plural form corresponding to the keyword, or OTHER_INDEX
+     * @return the index of the plural form corresponding to the keyword, or a negative value
+     */
+    static int32_t indexOrNegativeFromString(const UnicodeString &keyword);
+
+    /**
+     * @param keyword for example "few" or "other"
+     * @return the index of the plural form corresponding to the keyword, or OTHER
      */
     static int32_t indexOrOtherIndexFromString(const char *keyword) {
+        int32_t i = indexOrNegativeFromString(keyword);
+        return i >= 0 ? i : OTHER;
+    }
+
+    /**
+     * @param keyword for example "few" or "other"
+     * @return the index of the plural form corresponding to the keyword, or OTHER
+     */
+    static int32_t indexOrOtherIndexFromString(const UnicodeString &keyword) {
         int32_t i = indexOrNegativeFromString(keyword);
         return i >= 0 ? i : OTHER;
     }
@@ -79,6 +114,14 @@ public:
      * @return the index of the plural form corresponding to the keyword
      */
     static int32_t indexFromString(const char *keyword, UErrorCode &errorCode);
+
+    /**
+     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     *
+     * @param keyword for example "few" or "other"
+     * @return the index of the plural form corresponding to the keyword
+     */
+    static int32_t indexFromString(const UnicodeString &keyword, UErrorCode &errorCode);
 };
 
 U_NAMESPACE_END
