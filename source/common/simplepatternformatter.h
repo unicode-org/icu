@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2014, International Business Machines
+* Copyright (C) 2014-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
 * simplepatternformatter.h
@@ -52,10 +52,20 @@ public:
     SimplePatternFormatter();
 
     /**
-     * Construct from a pattern. Will never fail if pattern has three or
+     * Constructs from a pattern. Will never fail if pattern has three or
      * fewer placeholders in it.
      */
     explicit SimplePatternFormatter(const UnicodeString& pattern);
+
+    /**
+     * Constructs from a pattern. Will never fail if pattern has three or
+     * fewer placeholders in it.
+     *
+     * @param min The pattern must have at least this many placeholders.
+     * @param max The pattern must have at most this many placeholders.
+     */
+    SimplePatternFormatter(const UnicodeString& pattern, int32_t min, int32_t max,
+                           UErrorCode &errorCode);
 
     /**
      * Copy constructor.
@@ -79,7 +89,22 @@ public:
      * there are three or fewer placeholders in pattern. May fail with
      * U_MEMORY_ALLOCATION_ERROR if there are more than three placeholders.
      */
-    UBool compile(const UnicodeString &pattern, UErrorCode &status);
+    UBool compile(const UnicodeString &pattern, UErrorCode &status) {
+        return compileMinMaxPlaceholders(pattern, 0, INT32_MAX, status);
+    }
+
+    /**
+     * Compiles pattern and makes this object represent pattern.
+     *
+     * Returns TRUE on success; FALSE on failure. Will not fail if
+     * there are three or fewer placeholders in pattern. May fail with
+     * U_MEMORY_ALLOCATION_ERROR if there are more than three placeholders.
+     *
+     * @param min The pattern must have at least this many placeholders.
+     * @param max The pattern must have at most this many placeholders.
+     */
+    UBool compileMinMaxPlaceholders(const UnicodeString &pattern,
+                                    int32_t min, int32_t max, UErrorCode &status);
 
     /**
      * Returns (maxPlaceholderId + 1). For example

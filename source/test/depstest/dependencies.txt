@@ -565,7 +565,7 @@ group: ures_cnv  # ures_openU, path is a Unicode string
     conversion resourcebundle
 
 group: resourcebundle
-    resbund.o uresbund.o uresdata.o
+    resource.o resbund.o uresbund.o uresdata.o
     locavailable.o
     # uloc_tag.c and uloc_keytype.cpp convert between
     # old ICU/LDML/CLDR locale IDs and newer BCP 47 IDs.
@@ -899,7 +899,7 @@ group: format
     resourcebundle parsepos uvector32
 
 group: pluralrules
-    plurrule.o upluralrules.o
+    standardplural.o plurrule.o upluralrules.o
   deps
     digitlist  # plurals depend on decimals
     patternprops resourcebundle uvector uvector32 unifiedcache

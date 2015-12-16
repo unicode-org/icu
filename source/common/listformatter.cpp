@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2013-2014, International Business Machines
+*   Copyright (C) 2013-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -36,11 +36,12 @@ ListFormatInternal(
         const UnicodeString& two,
         const UnicodeString& start,
         const UnicodeString& middle,
-        const UnicodeString& end) :
-        twoPattern(two),
-        startPattern(start),
-        middlePattern(middle),
-        endPattern(end) {}
+        const UnicodeString& end,
+        UErrorCode &errorCode) :
+        twoPattern(two, 2, 2, errorCode),
+        startPattern(start, 2, 2, errorCode),
+        middlePattern(middle, 2, 2, errorCode),
+        endPattern(end, 2, 2, errorCode) {}
 
 ListFormatInternal(const ListFormatData &data) :
         twoPattern(data.twoPattern),
@@ -191,9 +192,13 @@ static ListFormatInternal* loadListFormatInternal(
     if (U_FAILURE(errorCode)) {
         return NULL;
     }
-    ListFormatInternal* result = new ListFormatInternal(two, start, middle, end);
+    ListFormatInternal* result = new ListFormatInternal(two, start, middle, end, errorCode);
     if (result == NULL) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    if (U_FAILURE(errorCode)) {
+        delete result;
         return NULL;
     }
     return result;
