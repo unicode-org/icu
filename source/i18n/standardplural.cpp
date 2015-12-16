@@ -111,6 +111,17 @@ int32_t StandardPlural::indexFromString(const char *keyword, UErrorCode &errorCo
     }
 }
 
+int32_t StandardPlural::indexFromString(const UnicodeString &keyword, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return OTHER; }
+    int32_t i = indexOrNegativeFromString(keyword);
+    if (i >= 0) {
+        return i;
+    } else {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return OTHER;
+    }
+}
+
 U_NAMESPACE_END
 
 #endif  // !UCONFIG_NO_FORMATTING
