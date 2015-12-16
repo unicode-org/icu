@@ -20,7 +20,6 @@
 #include "charstr.h"
 #include "unicode/fmtable.h"
 #include "unicode/fieldpos.h"
-#include "resource.h"
 #include "standardplural.h"
 #include "visibledigits.h"
 #include "uassert.h"
@@ -74,8 +73,7 @@ void QuantityFormatter::reset() {
 
 UBool QuantityFormatter::addIfAbsent(
         const char *variant,
-        const UnicodeString *rawPattern,
-        const ResourceValue *patternValue,
+        const UnicodeString &rawPattern,
         UErrorCode &status) {
     int32_t pluralIndex = StandardPlural::indexFromString(variant, status);
     if (U_FAILURE(status)) {
@@ -84,16 +82,13 @@ UBool QuantityFormatter::addIfAbsent(
     if (formatters[pluralIndex] != NULL) {
         return TRUE;
     }
-    const UnicodeString &pattern =
-            rawPattern != NULL ? *rawPattern : patternValue->getUnicodeString(status);
-    SimplePatternFormatter *newFmt = new SimplePatternFormatter(pattern);
+    SimplePatternFormatter *newFmt = new SimplePatternFormatter(rawPattern, 0, 1, status);
     if (newFmt == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FALSE;
     }
-    if (newFmt->getPlaceholderCount() > 1) {
+    if (U_FAILURE(status)) {
         delete newFmt;
-        status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
     formatters[pluralIndex] = newFmt;
@@ -116,66 +111,86 @@ const SimplePatternFormatter *QuantityFormatter::getByVariant(
 }
 
 UnicodeString &QuantityFormatter::format(
-            const Formattable& quantity,
+            const Formattable &number,
             const NumberFormat &fmt,
             const PluralRules &rules,
             UnicodeString &appendTo,
             FieldPosition &pos,
             UErrorCode &status) const {
+    UnicodeString formattedNumber;
+    StandardPlural::Form p = selectPlural(number, fmt, rules, formattedNumber, pos, status);
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    UnicodeString count;
+    const SimplePatternFormatter *pattern = formatters[p];
+    if (pattern == NULL) {
+        pattern = formatters[StandardPlural::OTHER];
+        if (pattern == NULL) {
+            status = U_INVALID_STATE_ERROR;
+            return appendTo;
+        }
+    }
+    return format(*pattern, formattedNumber, appendTo, pos, status);
+}
+
+// The following methods live here so that class PluralRules does not depend on number formatting,
+// and the SimplePatternFormatter does not depend on FieldPosition.
+
+StandardPlural::Form QuantityFormatter::selectPlural(
+            const Formattable &number,
+            const NumberFormat &fmt,
+            const PluralRules &rules,
+            UnicodeString &formattedNumber,
+            FieldPosition &pos,
+            UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return StandardPlural::OTHER;
+    }
+    UnicodeString pluralKeyword;
     VisibleDigitsWithExponent digits;
     const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
     if (decFmt != NULL) {
-        decFmt->initVisibleDigitsWithExponent(quantity, digits, status);
+        decFmt->initVisibleDigitsWithExponent(number, digits, status);
         if (U_FAILURE(status)) {
-            return appendTo;
+            return StandardPlural::OTHER;
         }
-        count = rules.select(digits);
+        pluralKeyword = rules.select(digits);
+        decFmt->format(digits, formattedNumber, pos, status);
     } else {
-        if (quantity.getType() == Formattable::kDouble) {
-            count = rules.select(quantity.getDouble());
-        } else if (quantity.getType() == Formattable::kLong) {
-            count = rules.select(quantity.getLong());
-        } else if (quantity.getType() == Formattable::kInt64) {
-            count = rules.select((double) quantity.getInt64());
+        if (number.getType() == Formattable::kDouble) {
+            pluralKeyword = rules.select(number.getDouble());
+        } else if (number.getType() == Formattable::kLong) {
+            pluralKeyword = rules.select(number.getLong());
+        } else if (number.getType() == Formattable::kInt64) {
+            pluralKeyword = rules.select((double) number.getInt64());
         } else {
             status = U_ILLEGAL_ARGUMENT_ERROR;
-            return appendTo;
+            return StandardPlural::OTHER;
         }
+        fmt.format(number, formattedNumber, pos, status);
     }
-    CharString buffer;
-    buffer.appendInvariantChars(count, status);
+    return StandardPlural::orOtherFromString(pluralKeyword);
+}
+
+UnicodeString &QuantityFormatter::format(
+            const SimplePatternFormatter &pattern,
+            const UnicodeString &value,
+            UnicodeString &appendTo,
+            FieldPosition &pos,
+            UErrorCode &status) {
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    const SimplePatternFormatter *pattern = getByVariant(buffer.data());
-    if (pattern == NULL) {
-        status = U_INVALID_STATE_ERROR;
-        return appendTo;
-    }
-    UnicodeString formattedNumber;
-    FieldPosition fpos(pos.getField());
-    if (decFmt != NULL) {
-        decFmt->format(digits, formattedNumber, fpos, status);
-    } else {
-        fmt.format(quantity, formattedNumber, fpos, status);
-    }
-    const UnicodeString *params[1] = {&formattedNumber};
-    int32_t offsets[1];
-    pattern->formatAndAppend(
-            params,
-            UPRV_LENGTHOF(params),
-            appendTo,
-            offsets,
-            UPRV_LENGTHOF(offsets),
-            status);
-    if (offsets[0] != -1) {
-        if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
-            pos.setBeginIndex(fpos.getBeginIndex() + offsets[0]);
-            pos.setEndIndex(fpos.getEndIndex() + offsets[0]);
+    const UnicodeString *param = &value;
+    int32_t offset;
+    pattern.formatAndAppend(&param, 1, appendTo, &offset, 1, status);
+    if (pos.getBeginIndex() != 0 || pos.getEndIndex() != 0) {
+        if (offset >= 0) {
+            pos.setBeginIndex(pos.getBeginIndex() + offset);
+            pos.setEndIndex(pos.getEndIndex() + offset);
+        } else {
+            pos.setBeginIndex(0);
+            pos.setEndIndex(0);
         }
     }
     return appendTo;
