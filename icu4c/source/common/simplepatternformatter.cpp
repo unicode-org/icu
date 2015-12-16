@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2014, International Business Machines
+* Copyright (C) 2014-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
 * simplepatternformatter.cpp
@@ -149,6 +149,17 @@ SimplePatternFormatter::SimplePatternFormatter(const UnicodeString &pattern) :
     compile(pattern, status);
 }
 
+SimplePatternFormatter::SimplePatternFormatter(const UnicodeString &pattern,
+        int32_t min, int32_t max,
+        UErrorCode &errorCode)
+        : noPlaceholders(),
+          placeholders(),
+          placeholderSize(0),
+          placeholderCount(0),
+          firstPlaceholderReused(FALSE) {
+    compileMinMaxPlaceholders(pattern, min, max, errorCode);
+}
+
 SimplePatternFormatter::SimplePatternFormatter(
         const SimplePatternFormatter &other) :
         noPlaceholders(other.noPlaceholders),
@@ -182,8 +193,10 @@ SimplePatternFormatter &SimplePatternFormatter::operator=(
 SimplePatternFormatter::~SimplePatternFormatter() {
 }
 
-UBool SimplePatternFormatter::compile(
-        const UnicodeString &pattern, UErrorCode &status) {
+UBool SimplePatternFormatter::compileMinMaxPlaceholders(
+        const UnicodeString &pattern,
+        int32_t min, int32_t max,
+        UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -224,6 +237,7 @@ UBool SimplePatternFormatter::compile(
                 idBuilder.add(ch);
             } else if (ch == 0x7D && idBuilder.isValid()) {
                 if (!addPlaceholder(idBuilder.getId(), len)) {
+                    noPlaceholders.releaseBuffer(0);
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return FALSE;
                 }
@@ -255,6 +269,10 @@ UBool SimplePatternFormatter::compile(
         break;
     }
     noPlaceholders.releaseBuffer(len);
+    if (placeholderCount < min || max < placeholderCount) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+    }
     return TRUE;
 }
 
