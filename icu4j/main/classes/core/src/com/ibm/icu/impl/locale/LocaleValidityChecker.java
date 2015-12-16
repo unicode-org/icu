@@ -181,7 +181,7 @@ public class LocaleValidityChecker {
                     }
                     continue;
                 case reorder:
-                    boolean newlyAdded = seen.add(subtag);
+                    boolean newlyAdded = seen.add(subtag.equals("zzzz") ? "others" : subtag);
                     if (!newlyAdded || !isScriptReorder(subtag)) {
                         return where.set(Datatype.u, key+"-"+subtag);
                     }
@@ -236,8 +236,9 @@ public class LocaleValidityChecker {
         return true;
     }
 
-    static final Set<String> REORDERING_INCLUDE = new HashSet<String>(Arrays.asList("space", "punct", "symbol", "currency", "digit", "others"));
+    static final Set<String> REORDERING_INCLUDE = new HashSet<String>(Arrays.asList("space", "punct", "symbol", "currency", "digit", "others", "zzzz"));
     static final Set<String> REORDERING_EXCLUDE = new HashSet<String>(Arrays.asList("zinh", "zyyy"));
+    static final Set<Datasubtype> REGULAR_ONLY = EnumSet.of(Datasubtype.regular);
     /**
      * @param subtag
      * @return
@@ -249,7 +250,7 @@ public class LocaleValidityChecker {
         } else if (REORDERING_EXCLUDE.contains(subtag)) {
             return false;
         }
-        return ValidIdentifiers.isValid(Datatype.script, datasubtypes, subtag) != null;
+        return ValidIdentifiers.isValid(Datatype.script, REGULAR_ONLY, subtag) != null;
         //        space, punct, symbol, currency, digit - core groups of characters below 'a'
         //        any script code except Common and Inherited.
         //      sc ; Zinh                             ; Inherited                        ; Qaai
