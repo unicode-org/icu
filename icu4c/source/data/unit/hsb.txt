@@ -226,7 +226,7 @@ hsb{
                 few{"{0} hodźiny"}
                 one{"{0} hodźina"}
                 other{"{0} hodźinow"}
-                per{"na hodźinu"}
+                per{"{0} na hodźinu"}
                 two{"{0} hodźinje"}
             }
             microsecond{
@@ -269,7 +269,7 @@ hsb{
                 few{"{0} sekundy"}
                 one{"{0} sekunda"}
                 other{"{0} sekundow"}
-                per{"na sekundu"}
+                per{"{0} na sekundu"}
                 two{"{0} sekundźe"}
             }
             week{

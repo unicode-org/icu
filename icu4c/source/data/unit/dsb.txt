@@ -226,7 +226,7 @@ dsb{
                 few{"{0} góźiny"}
                 one{"{0} góźina"}
                 other{"{0} góźinow"}
-                per{"na góźinu"}
+                per{"{0} na góźinu"}
                 two{"{0} góźinje"}
             }
             microsecond{
@@ -269,7 +269,7 @@ dsb{
                 few{"{0} sekundy"}
                 one{"{0} sekunda"}
                 other{"{0} sekundow"}
-                per{"na sekundu"}
+                per{"{0} na sekundu"}
                 two{"{0} sekunźe"}
             }
             week{

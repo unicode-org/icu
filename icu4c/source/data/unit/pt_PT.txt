@@ -110,7 +110,7 @@ pt_PT{
         }
         volume{
             cubic-centimeter{
-                per{"por centímetro cúbico"}
+                per{"{0} por centímetro cúbico"}
             }
             cubic-kilometer{
                 dnam{"quilómetros cúbicos"}

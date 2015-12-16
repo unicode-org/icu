@@ -504,7 +504,7 @@ ro{
                 few{"{0} grame"}
                 one{"{0} gram"}
                 other{"{0} de grame"}
-                per{"per gram"}
+                per{"{0} per gram"}
             }
             kilogram{
                 dnam{"kilograme"}
