@@ -1955,18 +1955,6 @@ public class PluralRules implements Serializable {
     }
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public String select(double number, NumberFormat numberFormat) {
-        if (numberFormat instanceof DecimalFormat) {
-            return select(((DecimalFormat) numberFormat).getFixedDecimal(number));
-        }
-        return select(number);
-    }
-
-    /**
      * Given a number information, and keyword, return whether the keyword would match the number.
      *
      * @param sample The number information for which the rule has to be determined.
