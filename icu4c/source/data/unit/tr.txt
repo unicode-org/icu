@@ -68,7 +68,7 @@ tr{
                 dnam{"santimetrekare"}
                 one{"{0} santimetrekare"}
                 other{"{0} santimetrekare"}
-                per{"/santimetrekare"}
+                per{"{0}/santimetrekare"}
             }
             square-foot{
                 dnam{"fit kare"}
@@ -90,7 +90,7 @@ tr{
                 dnam{"metrekare"}
                 one{"{0} metrekare"}
                 other{"{0} metrekare"}
-                per{"/metrekare"}
+                per{"{0}/metrekare"}
             }
             square-mile{
                 dnam{"mil kare"}
@@ -642,7 +642,7 @@ tr{
                 dnam{"metreküp"}
                 one{"{0} metreküp"}
                 other{"{0} metreküp"}
-                per{"/metreküp"}
+                per{"{0}/metreküp"}
             }
             cubic-mile{
                 dnam{"mil küp"}

@@ -773,7 +773,7 @@ sr_Latn{
                 few{"{0} litra"}
                 one{"{0} litar"}
                 other{"{0} litara"}
-                per{"po litri"}
+                per{"{0} po litri"}
             }
             megaliter{
                 dnam{"megalitri"}

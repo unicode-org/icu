@@ -77,7 +77,7 @@ lv{
                 dnam{"kvadrātcentimetri"}
                 one{"{0} kvadrātcentimetrs"}
                 other{"{0} kvadrātcentimetri"}
-                per{"uz kvadrātcentimetru"}
+                per{"{0} uz kvadrātcentimetru"}
                 zero{"{0} kvadrātcentimetri"}
             }
             square-foot{
@@ -103,7 +103,7 @@ lv{
                 dnam{"kvadrātmetri"}
                 one{"{0} kvadrātmetrs"}
                 other{"{0} kvadrātmetri"}
-                per{"uz kvadrātmetru"}
+                per{"{0} uz kvadrātmetru"}
                 zero{"{0} kvadrātmetri"}
             }
             square-mile{
@@ -704,7 +704,7 @@ lv{
                 dnam{"kubikcentimetri"}
                 one{"{0} kubikcentimetrs"}
                 other{"{0} kubikcentimetri"}
-                per{"uz kubikcentimetru"}
+                per{"{0} uz kubikcentimetru"}
                 zero{"{0} kubikcentimetri"}
             }
             cubic-foot{
@@ -729,7 +729,7 @@ lv{
                 dnam{"kubikmetri"}
                 one{"{0} kubikmetrs"}
                 other{"{0} kubikmetri"}
-                per{"uz kubikmetru"}
+                per{"{0} uz kubikmetru"}
                 zero{"{0} kubikmetri"}
             }
             cubic-mile{
@@ -779,7 +779,7 @@ lv{
                 dnam{"litri"}
                 one{"{0} litrs"}
                 other{"{0} litri"}
-                per{"uz litru"}
+                per{"{0} uz litru"}
                 zero{"{0} litri"}
             }
             megaliter{
