@@ -777,9 +777,7 @@ public class MeasureFormat extends UFormat {
                     // Skip the unit display name for now.
                 } else if (key.contentEquals("per")) {
                     // For example, "{0}/h".
-                    // TODO: Set minPlaceholders=1
-                    // after http://unicode.org/cldr/trac/ticket/9129 is fixed.
-                    setFormatterIfAbsent(MeasureFormatData.PER_UNIT_INDEX, value, 0);
+                    setFormatterIfAbsent(MeasureFormatData.PER_UNIT_INDEX, value, 1);
                 } else {
                     // The key must be one of the plural form strings. For example:
                     // one{"{0} hr"}
