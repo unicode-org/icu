@@ -1017,34 +1017,23 @@ public class MeasureFormat extends UFormat {
             ImmutableNumberFormat nf,
             StringBuilder appendTo,
             FieldPosition fieldPosition) {
-        if (measure.getUnit() instanceof Currency) {
+        Number n = measure.getNumber();
+        MeasureUnit unit = measure.getUnit();
+        if (unit instanceof Currency) {
             return appendTo.append(
                     currencyFormat.format(
-                            new CurrencyAmount(measure.getNumber(), (Currency) measure.getUnit()),
+                            new CurrencyAmount(n, (Currency) unit),
                             new StringBuffer(),
                             fieldPosition));
 
         }
-        Number n = measure.getNumber();
-        MeasureUnit unit = measure.getUnit(); 
-        UFieldPosition fpos = new UFieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
-        StringBuffer formattedNumber = nf.format(n, new StringBuffer(), fpos);
-        String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
-
-        int pluralForm = StandardPlural.indexOrOtherIndexFromString(keyword);
-        SimplePatternFormatter formatter = getPluralFormatter(unit, formatWidth, pluralForm);
-        int[] offsets = new int[1];
-        formatter.formatAndAppend(appendTo, offsets, formattedNumber);
-        if (offsets[0] != -1) { // there is a number (may not happen with, say, Arabic dual)
-            // Fix field position
-            if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
-                fieldPosition.setBeginIndex(fpos.getBeginIndex() + offsets[0]);
-                fieldPosition.setEndIndex(fpos.getEndIndex() + offsets[0]);
-            }
-        }
-        return appendTo;
+        StringBuffer formattedNumber = new StringBuffer();
+        StandardPlural pluralForm = QuantityFormatter.selectPlural(
+                n, nf.nf, rules, formattedNumber, fieldPosition);
+        SimplePatternFormatter formatter = getPluralFormatter(unit, formatWidth, pluralForm.ordinal());
+        return QuantityFormatter.format(formatter, formattedNumber, appendTo, fieldPosition);
     }
-    
+
     /**
      * Instances contain all MeasureFormat specific data for a particular locale.
      * This data is cached. It is never copied, but is shared via shared pointers.
