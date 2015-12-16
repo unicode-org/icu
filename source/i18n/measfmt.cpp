@@ -241,9 +241,7 @@ struct UnitDataSink : public ResourceTableSink {
                 // Skip the unit display name for now.
             } else if (uprv_strcmp(key, "per") == 0) {
                 // For example, "{0}/h".
-                // TODO: Set minPlaceholders=1
-                // after http://unicode.org/cldr/trac/ticket/9129 is fixed.
-                setFormatterIfAbsent(MeasureFormatCacheData::PER_UNIT_INDEX, value, 0, errorCode);
+                setFormatterIfAbsent(MeasureFormatCacheData::PER_UNIT_INDEX, value, 1, errorCode);
             } else {
                 // The key must be one of the plural form strings. For example:
                 // one{"{0} hr"}
@@ -606,7 +604,9 @@ MeasureFormat::MeasureFormat(const MeasureFormat &other) :
     cache->addRef();
     numberFormat->addRef();
     pluralRules->addRef();
-    listFormatter = new ListFormatter(*other.listFormatter);
+    if (other.listFormatter != NULL) {
+        listFormatter = new ListFormatter(*other.listFormatter);
+    }
 }
 
 MeasureFormat &MeasureFormat::operator=(const MeasureFormat &other) {
@@ -619,7 +619,11 @@ MeasureFormat &MeasureFormat::operator=(const MeasureFormat &other) {
     SharedObject::copyPtr(other.pluralRules, pluralRules);
     width = other.width;
     delete listFormatter;
-    listFormatter = new ListFormatter(*other.listFormatter);
+    if (other.listFormatter != NULL) {
+        listFormatter = new ListFormatter(*other.listFormatter);
+    } else {
+        listFormatter = NULL;
+    }
     return *this;
 }
 

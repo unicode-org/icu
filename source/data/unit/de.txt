@@ -467,7 +467,7 @@ de{
                 dnam{"Unzen"}
                 one{"{0} Unze"}
                 other{"{0} Unzen"}
-                per{"pro Unze"}
+                per{"{0} pro Unze"}
             }
             ounce-troy{
                 dnam{"Feinunzen"}
