@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2015 - All Rights Reserved
  *
  */
 
@@ -37,6 +37,8 @@ void SegmentArrayProcessor::process(LEGlyphStorage &glyphStorage, LEErrorCode &s
     const LookupSegment *segments = segmentArrayLookupTable->segments;
     le_int32 glyphCount = glyphStorage.getGlyphCount();
     le_int32 glyph;
+
+    if (LE_FAILURE(success)) return;
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
         LEGlyphID thisGlyph = glyphStorage[glyph];

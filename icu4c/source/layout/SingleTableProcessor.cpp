@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2015 - All Rights Reserved
  *
  */
 
@@ -37,6 +37,8 @@ void SingleTableProcessor::process(LEGlyphStorage &glyphStorage, LEErrorCode &su
     const LookupSingle *entries = singleTableLookupTable->entries;
     le_int32 glyph;
     le_int32 glyphCount = glyphStorage.getGlyphCount();
+
+    if (LE_FAILURE(success)) return;
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
       const LookupSingle *lookupSingle = singleTableLookupTable->lookupSingle(singleTableLookupTable, entries, glyphStorage[glyph], success);
