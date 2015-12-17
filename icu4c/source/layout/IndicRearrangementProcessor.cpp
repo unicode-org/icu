@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2015 - All Rights Reserved
  *
  */
 
@@ -46,14 +46,14 @@ ByteOffset IndicRearrangementProcessor::processStateEntry(LEGlyphStorage &glyphS
     IndicRearrangementFlags flags = (IndicRearrangementFlags) SWAPW(entry->flags);
 
     if (flags & irfMarkFirst) {
-        firstGlyph = currGlyph;
+        firstGlyph = (le_uint32)currGlyph;
     }
 
     if (flags & irfMarkLast) {
-        lastGlyph = currGlyph;
+        lastGlyph = (le_uint32)currGlyph;
     }
 
-    doRearrangementAction(glyphStorage, (IndicRearrangementVerb) (flags & irfVerbMask));
+    doRearrangementAction(glyphStorage, (IndicRearrangementVerb) (flags & irfVerbMask), success);
 
     if (!(flags & irfDontAdvance)) {
         // XXX: Should handle reverse too...
@@ -67,18 +67,29 @@ void IndicRearrangementProcessor::endStateTable()
 {
 }
 
-void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphStorage, IndicRearrangementVerb verb) const
+void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphStorage, IndicRearrangementVerb verb, LEErrorCode &success) const
 {
     LEGlyphID a, b, c, d;
     le_int32 ia, ib, ic, id, ix, x;
-    LEErrorCode success = LE_NO_ERROR;
+
+    if (LE_FAILURE(success)) return;
+
+    if (verb == irvNoAction) {
+        return;
+    }
+    if (firstGlyph > lastGlyph) {
+        success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+        return;
+    }
 
     switch(verb)
     {
-    case irvNoAction:
-        break;
-
     case irvxA:
+        if (firstGlyph == lastGlyph) break;
+        if (firstGlyph + 1 < firstGlyph) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+        break;
+        }
         a = glyphStorage[firstGlyph];
         ia = glyphStorage.getCharIndex(firstGlyph, success);
         x = firstGlyph + 1;
@@ -95,6 +106,11 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break;
 
     case irvDx:
+        if (firstGlyph == lastGlyph) break;
+        if (lastGlyph - 1 > lastGlyph) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         d = glyphStorage[lastGlyph];
         id = glyphStorage.getCharIndex(lastGlyph, success);
         x = lastGlyph - 1;
@@ -123,6 +139,11 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break;
         
     case irvxAB:
+        if ((firstGlyph + 2 < firstGlyph) ||
+            (lastGlyph - firstGlyph < 1)) { // difference == 1 is a no-op, < 1 is an error.
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         b = glyphStorage[firstGlyph + 1];
         ia = glyphStorage.getCharIndex(firstGlyph, success);
@@ -144,6 +165,11 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break;
 
     case irvxBA:
+        if ((firstGlyph + 2 < firstGlyph) ||
+            (lastGlyph - firstGlyph < 1)) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         b = glyphStorage[firstGlyph + 1];
         ia = glyphStorage.getCharIndex(firstGlyph, success);
@@ -165,6 +191,11 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break;
 
     case irvCDx:
+        if ((lastGlyph - 2 > lastGlyph) ||
+            (lastGlyph - firstGlyph < 1)) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         c = glyphStorage[lastGlyph - 1];
         d = glyphStorage[lastGlyph];
         ic = glyphStorage.getCharIndex(lastGlyph - 1, success);
@@ -186,6 +217,11 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break; 
 
     case irvDCx:
+        if ((lastGlyph - 2 > lastGlyph) ||
+            (lastGlyph - firstGlyph < 1)) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         c = glyphStorage[lastGlyph - 1];
         d = glyphStorage[lastGlyph];
         ic = glyphStorage.getCharIndex(lastGlyph - 1, success);
@@ -207,6 +243,11 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break; 
 
     case irvCDxA:
+        if ((lastGlyph - 2 > lastGlyph) ||
+            (lastGlyph - firstGlyph < 2)) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         c = glyphStorage[lastGlyph - 1];
         d = glyphStorage[lastGlyph];
@@ -232,6 +273,11 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break; 
 
     case irvDCxA:
+        if ((lastGlyph - 2 > lastGlyph) ||
+            (lastGlyph - firstGlyph < 2)) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         c = glyphStorage[lastGlyph - 1];
         d = glyphStorage[lastGlyph];
@@ -257,6 +303,11 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break; 
 
     case irvDxAB:
+        if ((firstGlyph + 2 < firstGlyph) ||
+            (lastGlyph - firstGlyph < 2)) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         b = glyphStorage[firstGlyph + 1];
         d = glyphStorage[lastGlyph];
@@ -282,6 +333,11 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break;
 
     case irvDxBA:
+        if ((firstGlyph + 2 < firstGlyph) ||
+            (lastGlyph - firstGlyph < 2)) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         b = glyphStorage[firstGlyph + 1];
         d = glyphStorage[lastGlyph];
@@ -307,6 +363,10 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break;
 
     case irvCDxAB:
+        if (lastGlyph - firstGlyph < 3) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         b = glyphStorage[firstGlyph + 1];
 
@@ -329,6 +389,10 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break;
 
     case irvCDxBA:
+        if (lastGlyph - firstGlyph < 3) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         b = glyphStorage[firstGlyph + 1];
 
@@ -351,6 +415,10 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break;
 
     case irvDCxAB:
+        if (lastGlyph - firstGlyph < 3) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         b = glyphStorage[firstGlyph + 1];
 
@@ -373,6 +441,10 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphStorage &glyphSto
         break;
 
     case irvDCxBA:
+        if (lastGlyph - firstGlyph < 3) {
+            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+            break;
+        }
         a = glyphStorage[firstGlyph];
         b = glyphStorage[firstGlyph + 1];
 

@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp.  and others 1998-2014 - All Rights Reserved
+ * (C) Copyright IBM Corp.  and others 1998-2015 - All Rights Reserved
  *
  */
 
@@ -31,7 +31,7 @@ public:
 
     virtual void endStateTable();
 
-    void doRearrangementAction(LEGlyphStorage &glyphStorage, IndicRearrangementVerb verb) const;
+    void doRearrangementAction(LEGlyphStorage &glyphStorage, IndicRearrangementVerb verb, LEErrorCode &success) const;
 
     IndicRearrangementProcessor2(const LEReferenceTo<MorphSubtableHeader2> &morphSubtableHeader, LEErrorCode &success);
     virtual ~IndicRearrangementProcessor2();
@@ -51,8 +51,8 @@ public:
     static UClassID getStaticClassID();
 
 protected:
-    le_int32 firstGlyph;
-    le_int32 lastGlyph;
+    le_uint32 firstGlyph;
+    le_uint32 lastGlyph;
 
     LEReferenceToArrayOf<IndicRearrangementStateEntry2> entryTable;
     LEReferenceTo<IndicRearrangementSubtableHeader2> indicRearrangementSubtableHeader;

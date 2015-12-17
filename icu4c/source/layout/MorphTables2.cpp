@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. and others 1998 - 2013 - All Rights Reserved
+ * (C) Copyright IBM Corp. and others 1998 - 2015 - All Rights Reserved
  *
  */
 
@@ -164,6 +164,7 @@ void MorphTableHeader2::process(const LEReferenceTo<MorphTableHeader2> &base, LE
             if(subtable>0)  {
               le_uint32 length = SWAPL(subtableHeader->length);
               subtableHeader.addOffset(length, success); // Don't addOffset for the last entry.
+              if (LE_FAILURE(success)) break;
             }
             le_uint32 coverage = SWAPL(subtableHeader->coverage);
             FeatureFlags subtableFeatures = SWAPL(subtableHeader->subtableFeatures);
@@ -178,6 +179,8 @@ void MorphTableHeader2::process(const LEReferenceTo<MorphTableHeader2> &base, LE
 void MorphSubtableHeader2::process(const LEReferenceTo<MorphSubtableHeader2> &base, LEGlyphStorage &glyphStorage, LEErrorCode &success) const
 {
     SubtableProcessor2 *processor = NULL;
+
+    if (LE_FAILURE(success)) return;
 
     switch (SWAPL(coverage) & scfTypeMask2)
     {
