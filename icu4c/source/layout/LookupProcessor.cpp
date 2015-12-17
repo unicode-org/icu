@@ -113,7 +113,7 @@ le_uint32 LookupProcessor::applySingleLookup(le_uint16 lookupTableIndex, GlyphIt
 le_int32 LookupProcessor::selectLookups(const LEReferenceTo<FeatureTable> &featureTable, FeatureMask featureMask, le_int32 order, LEErrorCode &success)
 {
   le_uint16 lookupCount = featureTable.isValid()? SWAPW(featureTable->lookupCount) : 0;
-  le_int32  store = (le_uint32)order;
+  le_uint32  store = (le_uint32)order;
     
     LEReferenceToArrayOf<le_uint16> lookupListIndexArray(featureTable, success, featureTable->lookupListIndexArray, lookupCount);
 
