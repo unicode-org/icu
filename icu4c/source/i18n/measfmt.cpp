@@ -167,7 +167,7 @@ MeasureFormatCacheData::~MeasureFormatCacheData() {
     }
     for (int32_t i = 0; i < MEAS_UNIT_COUNT; ++i) {
         for (int32_t j = 0; j < WIDTH_INDEX_COUNT; ++j) {
-            for (int32_t k = 0; k < StandardPlural::COUNT; ++k) {
+            for (int32_t k = 0; k < PATTERN_COUNT; ++k) {
                 delete patterns[i][j][k];
             }
         }
