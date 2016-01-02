@@ -1,441 +1,416 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014-2015, International Business Machines Corporation and
+ * Copyright (C) 2014-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Compiled version of a pattern such as "{1} was born in {0}".
- * <p>
- * Using SimplePatternFormatter objects is both faster and safer than adhoc replacement 
- * such as <code>pattern.replace("{0}", "Colorado").replace("{1} "Fred");</code>.
- * They are faster because they are precompiled; they are safer because they
- * account for curly braces escaped by apostrophe (').
- * 
- * Placeholders are of the form \{[0-9]+\}. If a curly brace is preceded
- * by a single quote, it becomes a curly brace instead of the start of a
- * placeholder. Two single quotes resolve to one single quote. 
- * <p>
- * SimplePatternFormatter objects are immutable and can be safely cached like strings.
- * <p>
- * Example:
+ * Formats simple patterns like "{1} was born in {0}".
+ * Minimal subset of MessageFormat; fast, simple, minimal dependencies.
+ * Supports only numbered arguments with no type nor style parameters,
+ * and formats only string values.
+ * Quoting via ASCII apostrophe compatible with ICU MessageFormat default behavior.
+ *
+ * <p>Factory methods throw exceptions for syntax errors
+ * and for too few or too many arguments/placeholders.
+ *
+ * <p>SimplePatternFormatter objects are immutable and can be safely cached like strings.
+ *
+ * <p>Example:
  * <pre>
- * SimplePatternFormatter fmt = SimplePatternFormatter.compile("{1} '{born} in {0}");
- * 
+ * SimplePatternFormatter fmt = SimplePatternFormatter.compile("{1} '{born}' in {0}");
+ *
  * // Output: "paul {born} in england"
  * System.out.println(fmt.format("england", "paul"));
  * </pre>
+ *
+ * @see com.ibm.icu.text.MessageFormat
+ * @see com.ibm.icu.text.MessagePattern.ApostropheMode
  */
-public class SimplePatternFormatter {
-    private final String patternWithoutPlaceholders;
-    private final int placeholderCount;
-    
-    // [0] first offset; [1] first placeholderId; [2] second offset;
-    // [3] second placeholderId etc.
-    private final int[] placeholderIdsOrderedByOffset;
-    
-    private final boolean firstPlaceholderReused;
+public final class SimplePatternFormatter {
+    /**
+     * Argument numbers must be smaller than this limit.
+     * Text segment lengths are offset by this much.
+     * This is currently the only unused char value in compiled patterns,
+     * except it is the maximum value of the first unit (max arg +1).
+     */
+    private static final int ARG_NUM_LIMIT = 0x100;
+    /**
+     * Initial and maximum char/UChar value set for a text segment.
+     * Segment length char values are from ARG_NUM_LIMIT+1 to this value here.
+     * Normally 0xffff, but can be as small as ARG_NUM_LIMIT+1 for testing.
+     */
+    private static final char SEGMENT_LENGTH_PLACEHOLDER_CHAR = (char)0xffff;
+    /**
+     * Maximum length of a text segment. Longer segments are split into shorter ones.
+     */
+    private static final int MAX_SEGMENT_LENGTH = SEGMENT_LENGTH_PLACEHOLDER_CHAR - ARG_NUM_LIMIT;
 
-    private SimplePatternFormatter(String pattern, PlaceholdersBuilder builder) {
-        this.patternWithoutPlaceholders = pattern;
-        this.placeholderIdsOrderedByOffset =
-                builder.getPlaceholderIdsOrderedByOffset();
-        this.placeholderCount = builder.getPlaceholderCount();
-        this.firstPlaceholderReused = builder.getFirstPlaceholderReused();
+    /**
+     * Binary representation of the compiled pattern.
+     * Index 0: One more than the highest argument number.
+     * Followed by zero or more arguments or literal-text segments.
+     *
+     * <p>An argument is stored as its number, less than ARG_NUM_LIMIT.
+     * A literal-text segment is stored as its length (at least 1) offset by ARG_NUM_LIMIT,
+     * followed by that many chars.
+     */
+    private final String compiledPattern;
+
+    private SimplePatternFormatter(String compiledPattern) {
+        this.compiledPattern = compiledPattern;
     }
 
     /**
-     * Compiles a string.
-     * @param pattern The string.
-     * @return the new SimplePatternFormatter object.
+     * Creates a formatter from the pattern string.
+     *
+     * @param pattern The pattern string.
+     * @return The new SimplePatternFormatter object.
      */
-    public static SimplePatternFormatter compile(String pattern) {
+    public static SimplePatternFormatter compile(CharSequence pattern) {
         return compileMinMaxPlaceholders(pattern, 0, Integer.MAX_VALUE);
     }
 
     /**
-     * Compiles a string.
-     * @param pattern The string.
+     * Creates a formatter from the pattern string.
+     *
+     * @param pattern The pattern string.
      * @param min The pattern must have at least this many placeholders.
      * @param max The pattern must have at most this many placeholders.
-     * @return the new SimplePatternFormatter object.
+     * @return The new SimplePatternFormatter object.
      */
-    public static SimplePatternFormatter compileMinMaxPlaceholders(String pattern, int min, int max) {
-        PlaceholdersBuilder placeholdersBuilder = new PlaceholdersBuilder();
-        PlaceholderIdBuilder idBuilder =  new PlaceholderIdBuilder();
-        StringBuilder newPattern = new StringBuilder();
-        State state = State.INIT;
-        for (int i = 0; i < pattern.length(); i++) {
-            char ch = pattern.charAt(i);
-            switch (state) {
-            case INIT:
-                if (ch == 0x27) {
-                    state = State.APOSTROPHE;
-                } else if (ch == '{') {
-                    state = State.PLACEHOLDER;
-                    idBuilder.reset();
+    public static SimplePatternFormatter compileMinMaxPlaceholders(CharSequence pattern, int min, int max) {
+        StringBuilder sb = new StringBuilder();
+        String compiledPattern = compileToStringMinMaxPlaceholders(pattern, sb, min, max);
+        return new SimplePatternFormatter(compiledPattern);
+    }
+
+    /**
+     * Creates a compiled form of the pattern string, for use with appropriate static methods.
+     *
+     * @param pattern The pattern string.
+     * @param min The pattern must have at least this many placeholders.
+     * @param max The pattern must have at most this many placeholders.
+     * @return The compiled-pattern string.
+     */
+    public static String compileToStringMinMaxPlaceholders(
+            CharSequence pattern, StringBuilder sb, int min, int max) {
+        // Parse consistent with MessagePattern, but
+        // - support only simple numbered arguments
+        // - build a simple binary structure into the result string
+        int length = pattern.length();
+        sb.ensureCapacity(length);
+        // Reserve the first char for the number of arguments.
+        sb.setLength(1);
+        int textLength = 0;
+        int maxArg = -1;
+        boolean inQuote = false;
+        for (int i = 0; i < length;) {
+            char c = pattern.charAt(i++);
+            if (c == '\'') {
+                if (i < length && (c = pattern.charAt(i)) == '\'') {
+                    // double apostrophe, skip the second one
+                    ++i;
+                } else if (inQuote) {
+                    // skip the quote-ending apostrophe
+                    inQuote = false;
+                    continue;
+                } else if (c == '{' || c == '}') {
+                    // Skip the quote-starting apostrophe, find the end of the quoted literal text.
+                    ++i;
+                    inQuote = true;
                 } else {
-                    newPattern.append(ch);
+                    // The apostrophe is part of literal text.
+                    c = '\'';
                 }
-                break;
-            case APOSTROPHE:
-                if (ch == 0x27) {
-                    newPattern.append("'");
-                } else if (ch == '{') {
-                    newPattern.append("{");
+            } else if (!inQuote && c == '{') {
+                if (textLength > 0) {
+                    sb.setCharAt(sb.length() - textLength - 1, (char)(ARG_NUM_LIMIT + textLength));
+                    textLength = 0;
+                }
+                int argNumber;
+                if ((i + 1) < length &&
+                        0 <= (argNumber = pattern.charAt(i) - '0') && argNumber <= 9 &&
+                        pattern.charAt(i + 1) == '}') {
+                    i += 2;
                 } else {
-                    newPattern.append("'");
-                    newPattern.append(ch);
+                    // Multi-digit argument number (no leading zero) or syntax error.
+                    // MessagePattern permits PatternProps.skipWhiteSpace(pattern, index)
+                    // around the number, but this class does not.
+                    int argStart = i - 1;
+                    argNumber = -1;
+                    if (i < length && '1' <= (c = pattern.charAt(i++)) && c <= '9') {
+                        argNumber = c - '0';
+                        while (i < length && '0' <= (c = pattern.charAt(i++)) && c <= '9') {
+                            argNumber = argNumber * 10 + (c - '0');
+                            if (argNumber >= ARG_NUM_LIMIT) {
+                                break;
+                            }
+                        }
+                    }
+                    if (argNumber < 0 || c != '}') {
+                        throw new IllegalArgumentException(
+                                "Argument syntax error in pattern \"" + pattern +
+                                "\" at index " + argStart +
+                                ": " + pattern.subSequence(argStart, i));
+                    }
                 }
-                state = State.INIT;
-                break;
-            case PLACEHOLDER:
-                if (ch >= '0' && ch <= '9') {
-                    idBuilder.add(ch);
-                } else if (ch == '}' && idBuilder.isValid()) {
-                    placeholdersBuilder.add(idBuilder.getId(), newPattern.length());
-                    state = State.INIT;
-                } else {
-                    newPattern.append('{');
-                    idBuilder.appendTo(newPattern);
-                    newPattern.append(ch);
-                    state = State.INIT;
+                if (argNumber > maxArg) {
+                    maxArg = argNumber;
                 }
-                break;
-            default:
-                throw new IllegalStateException();
+                sb.append((char)argNumber);
+                continue;
+            }  // else: c is part of literal text
+            // Append c and track the literal-text segment length.
+            if (textLength == 0) {
+                // Reserve a char for the length of a new text segment, preset the maximum length.
+                sb.append(SEGMENT_LENGTH_PLACEHOLDER_CHAR);
+            }
+            sb.append(c);
+            if (++textLength == MAX_SEGMENT_LENGTH) {
+                textLength = 0;
             }
         }
-        switch (state) {
-        case INIT:
-            break;
-        case APOSTROPHE:
-            newPattern.append("'");
-            break;
-        case PLACEHOLDER:
-            newPattern.append('{');
-            idBuilder.appendTo(newPattern);
-            break;
-        default:
-            throw new IllegalStateException();
+        if (textLength > 0) {
+            sb.setCharAt(sb.length() - textLength - 1, (char)(ARG_NUM_LIMIT + textLength));
         }
-        if (placeholdersBuilder.getPlaceholderCount() < min) {
+        int argCount = maxArg + 1;
+        if (argCount < min) {
             throw new IllegalArgumentException(
                     "Fewer than minimum " + min + " placeholders in pattern \"" + pattern + "\"");
         }
-        if (placeholdersBuilder.getPlaceholderCount() > max) {
+        if (argCount > max) {
             throw new IllegalArgumentException(
                     "More than maximum " + max + " placeholders in pattern \"" + pattern + "\"");
         }
-        return new SimplePatternFormatter(newPattern.toString(), placeholdersBuilder);
+        sb.setCharAt(0, (char)argCount);
+        return sb.toString();
     }
-      
+
     /**
-     * Returns the max placeholder ID + 1.
+     * @return The max argument number/placeholder ID + 1.
      */
     public int getPlaceholderCount() {
-        return placeholderCount;
+        return getPlaceholderCount(compiledPattern);
     }
-    
+
     /**
-     * Formats the given values.
+     * @param compiledPattern Compiled form of a pattern string.
+     * @return The max argument number/placeholder ID + 1.
      */
-    public String format(CharSequence... values) {
-        return formatAndAppend(new StringBuilder(), null, values).toString();
+    public static int getPlaceholderCount(String compiledPattern) {
+        return compiledPattern.charAt(0);
     }
 
     /**
      * Formats the given values.
-     * 
-     * @param appendTo the result appended here. 
-     * @param offsets position of first value in appendTo stored in offsets[0];
-     *   second in offsets[1]; third in offsets[2] etc. An offset of -1 means that the
-     *   corresponding value is not in appendTo. offsets.length and values.length may
-     *   differ. If offsets.length < values.length then only the first offsets are written out;
-     *   If offsets.length > values.length then the extra offsets get -1.
-     *   If caller is not interested in offsets, caller may pass null here.
-     * @param values the placeholder values. A placeholder value may not be the same object as
-     *   appendTo.
+     */
+    public String format(CharSequence... values) {
+        return formatCompiledPattern(compiledPattern, values);
+    }
+
+    /**
+     * Formats the given values.
+     *
+     * @param compiledPattern Compiled form of a pattern string.
+     */
+    public static String formatCompiledPattern(String compiledPattern, CharSequence... values) {
+        return formatAndAppend(compiledPattern, new StringBuilder(), null, values).toString();
+    }
+
+    /**
+     * Formats the given values, appending to the appendTo builder.
+     *
+     * @param appendTo Gets the formatted pattern and values appended.
+     * @param offsets offsets[i] receives the offset of where
+     *                values[i] replaced pattern argument {i}.
+     *                Can be null, or can be shorter or longer than values.
+     *                If there is no {i} in the pattern, then offsets[i] is set to -1.
+     * @param values The placeholder values.
+     *               A placeholder value may not be the same object as appendTo.
      * @return appendTo
      */
     public StringBuilder formatAndAppend(
             StringBuilder appendTo, int[] offsets, CharSequence... values) {
-        if (values.length < placeholderCount) {
+        return formatAndAppend(compiledPattern, appendTo, offsets, values);
+    }
+
+    /**
+     * Formats the given values, appending to the appendTo builder.
+     *
+     * @param compiledPattern Compiled form of a pattern string.
+     * @param appendTo Gets the formatted pattern and values appended.
+     * @param offsets offsets[i] receives the offset of where
+     *                values[i] replaced pattern argument {i}.
+     *                Can be null, or can be shorter or longer than values.
+     *                If there is no {i} in the pattern, then offsets[i] is set to -1.
+     * @param values The placeholder values.
+     *               A placeholder value may not be the same object as appendTo.
+     * @return appendTo
+     */
+    public static StringBuilder formatAndAppend(
+            String compiledPattern, StringBuilder appendTo, int[] offsets, CharSequence... values) {
+        if (values.length < getPlaceholderCount(compiledPattern)) {
             throw new IllegalArgumentException("Too few values.");
         }
-        PlaceholderValues placeholderValues = new PlaceholderValues(values);
-        if (placeholderValues.isAppendToInAnyIndexExcept(appendTo, -1)) {
-            throw new IllegalArgumentException("Parameter values cannot be the same as appendTo.");
-        }
-        formatReturningOffsetLength(appendTo, offsets, placeholderValues);
-        return appendTo;
+        return format(compiledPattern, appendTo, null, true, offsets, values);
     }
-    
+
     /**
-     * Formats the given values.
-     * 
-     * @param result The result is stored here overwriting any previously stored value. 
-     * @param offsets position of first value in result stored in offsets[0];
-     *   second in offsets[1]; third in offsets[2] etc. An offset of -1 means that the
-     *   corresponding value is not in result. offsets.length and values.length may
-     *   differ. If offsets.length < values.length then only the first offsets are written out;
-     *   If offsets.length > values.length then the extra offsets get -1.
-     *   If caller is not interested in offsets, caller may pass null here.
-     * @param values the placeholder values. A placeholder value may be result itself in which case
-     *   The previous value of result is used.
+     * Formats the given values, replacing the contents of the result builder.
+     * May optimize by actually appending to the result if it is the same object
+     * as the initial argument's corresponding value.
+     *
+     * @param result Gets the formatted pattern and values appended.
+     * @param offsets offsets[i] receives the offset of where
+     *                values[i] replaced pattern argument {i}.
+     *                Can be null, or can be shorter or longer than values.
+     *                If there is no {i} in the pattern, then offsets[i] is set to -1.
+     * @param values The placeholder values.
+     *               A placeholder value may be the same object as result.
      * @return result
      */
     public StringBuilder formatAndReplace(
             StringBuilder result, int[] offsets, CharSequence... values) {
-        if (values.length < placeholderCount) {
+        return formatAndReplace(compiledPattern, result, offsets, values);
+    }
+
+    /**
+     * Formats the given values, replacing the contents of the result builder.
+     * May optimize by actually appending to the result if it is the same object
+     * as the initial argument's corresponding value.
+     *
+     * @param compiledPattern Compiled form of a pattern string.
+     * @param result Gets the formatted pattern and values appended.
+     * @param offsets offsets[i] receives the offset of where
+     *                values[i] replaced pattern argument {i}.
+     *                Can be null, or can be shorter or longer than values.
+     *                If there is no {i} in the pattern, then offsets[i] is set to -1.
+     * @param values The placeholder values.
+     *               A placeholder value may be the same object as result.
+     * @return result
+     */
+    public static StringBuilder formatAndReplace(
+            String compiledPattern, StringBuilder result, int[] offsets, CharSequence... values) {
+        if (values.length < getPlaceholderCount(compiledPattern)) {
             throw new IllegalArgumentException("Too few values.");
         }
-        PlaceholderValues placeholderValues = new PlaceholderValues(values);
-        int placeholderAtStart = getUniquePlaceholderAtStart();
-        
-        // If patterns starts with a placeholder and the value for that placeholder
-        // is result, then we can may be able optimize by just appending to result.
-        if (placeholderAtStart >= 0 && values[placeholderAtStart] == result) {
-            
-            // If result is the value for other placeholders, call off optimization.
-            if (placeholderValues.isAppendToInAnyIndexExcept(result, placeholderAtStart)) {
-                placeholderValues.snapshotAppendTo(result);
-                result.setLength(0);
-                formatReturningOffsetLength(result, offsets, placeholderValues);
-                return result;
+
+        // If the pattern starts with an argument whose value is the same object
+        // as the result, then we keep the result contents and append to it.
+        // Otherwise we replace its contents.
+        int firstArg = -1;
+        // If any non-initial argument value is the same object as the result,
+        // then we first copy its contents and use that instead while formatting.
+        String resultCopy = null;
+        if (getPlaceholderCount(compiledPattern) > 0) {
+            for (int i = 1; i < compiledPattern.length();) {
+                int n = compiledPattern.charAt(i++);
+                if (n < ARG_NUM_LIMIT) {
+                    if (values[n] == result) {
+                        if (i == 2) {
+                            firstArg = n;
+                        } else if (resultCopy == null) {
+                            resultCopy = result.toString();
+                        }
+                    }
+                } else {
+                    i += n - ARG_NUM_LIMIT;
+                }
             }
-            
-            // Otherwise we can optimize
-            int offsetLength = formatReturningOffsetLength(result, offsets, placeholderValues);
-            
-            // We have to make the offset for the placeholderAtStart placeholder be 0.
-            // Otherwise it would be the length of the previous value of result.
-            if (offsetLength > placeholderAtStart) {
-                offsets[placeholderAtStart] = 0;
-            }
-            return result;
         }
-        if (placeholderValues.isAppendToInAnyIndexExcept(result, -1)) {
-            placeholderValues.snapshotAppendTo(result);
+        if (firstArg < 0) {
+            result.setLength(0);
         }
-        result.setLength(0);
-        formatReturningOffsetLength(result, offsets, placeholderValues);
-        return result;
+        return format(compiledPattern, result, resultCopy, false, offsets, values);
     }
-    
+
     /**
-     * Formats this object using values {0}, {1} etc. Note that this is
-     * not the same as the original pattern string used to build this object.
+     * Returns a string similar to the original pattern, only for debugging.
      */
     @Override
     public String toString() {
-        String[] values = new String[this.getPlaceholderCount()];
+        String[] values = new String[getPlaceholderCount()];
         for (int i = 0; i < values.length; i++) {
             values[i] = String.format("{%d}", i);
         }
         return formatAndAppend(new StringBuilder(), null, values).toString();
     }
-    
+
     /**
-     * Returns this pattern with none of the placeholders.
+     * Returns the pattern text with none of the placeholders.
+     * Like formatting with all-empty string values.
      */
-    public String getPatternWithNoPlaceholders() {
-        return patternWithoutPlaceholders;
+    public String getTextWithNoPlaceholders() {
+        return getTextWithNoPlaceholders(compiledPattern);
     }
-    
+
     /**
-     * Just like format, but uses placeholder values exactly as they are.
-     * A placeholder value that is the same object as appendTo is treated
-     * as the empty string. In addition, returns the length of the offsets
-     * array. Returns 0 if offsets is null.
+     * Returns the pattern text with none of the placeholders.
+     * Like formatting with all-empty string values.
+     *
+     * @param compiledPattern Compiled form of a pattern string.
      */
-    private int formatReturningOffsetLength(
-            StringBuilder appendTo,
-            int[] offsets,
-            PlaceholderValues values) {
-        int offsetLen = offsets == null ? 0 : offsets.length;
-        for (int i = 0; i < offsetLen; i++) {
-            offsets[i] = -1;
-        }
-        if (placeholderIdsOrderedByOffset.length == 0) {
-            appendTo.append(patternWithoutPlaceholders);
-            return offsetLen;
-        }
-        appendTo.append(
-                patternWithoutPlaceholders,
-                0,
-                placeholderIdsOrderedByOffset[0]);
-        setPlaceholderOffset(
-                placeholderIdsOrderedByOffset[1],
-                appendTo.length(),
-                offsets,
-                offsetLen);
-        CharSequence placeholderValue = values.get(placeholderIdsOrderedByOffset[1]);
-        if (placeholderValue != appendTo) {
-            appendTo.append(placeholderValue);
-        }
-        for (int i = 2; i < placeholderIdsOrderedByOffset.length; i += 2) {
-            appendTo.append(
-                    patternWithoutPlaceholders,
-                    placeholderIdsOrderedByOffset[i - 2],
-                    placeholderIdsOrderedByOffset[i]);
-            setPlaceholderOffset(
-                    placeholderIdsOrderedByOffset[i + 1],
-                    appendTo.length(),
-                    offsets,
-                    offsetLen);
-            placeholderValue = values.get(placeholderIdsOrderedByOffset[i + 1]);
-            if (placeholderValue != appendTo) {
-                appendTo.append(placeholderValue);
+    public static String getTextWithNoPlaceholders(String compiledPattern) {
+        int capacity = compiledPattern.length() - 1 - getPlaceholderCount(compiledPattern);
+        StringBuilder sb = new StringBuilder(capacity);
+        for (int i = 1; i < compiledPattern.length();) {
+            int segmentLength = compiledPattern.charAt(i++) - ARG_NUM_LIMIT;
+            if (segmentLength > 0) {
+                int limit = i + segmentLength;
+                sb.append(compiledPattern, i, limit);
+                i = limit;
             }
         }
-        appendTo.append(
-                patternWithoutPlaceholders,
-                placeholderIdsOrderedByOffset[placeholderIdsOrderedByOffset.length - 2],
-                patternWithoutPlaceholders.length());
-        return offsetLen;
-    }
-    
-    
-    /**
-     * Returns the placeholder at the beginning of this pattern (e.g 3 for placeholder {3}).
-     * Returns -1 if the beginning of pattern is text or if the placeholder at beginning
-     * of this pattern is used again elsewhere in pattern.
-     */
-    private int getUniquePlaceholderAtStart() {
-        if (placeholderIdsOrderedByOffset.length == 0
-                || firstPlaceholderReused || placeholderIdsOrderedByOffset[0] != 0) {
-            return -1;
-        }
-        return placeholderIdsOrderedByOffset[1];
-    }
-    
-    private static void setPlaceholderOffset(
-            int placeholderId, int offset, int[] offsets, int offsetLen) {
-        if (placeholderId < offsetLen) {
-            offsets[placeholderId] = offset;
-        }
+        return sb.toString();
     }
 
-    private static enum State {
-        INIT,
-        APOSTROPHE,
-        PLACEHOLDER,
-    }
-    
-    private static class PlaceholderIdBuilder {
-        private int id = 0;
-        private int idLen = 0;
-        
-        public void reset() {
-            id = 0;
-            idLen = 0;
-        }
-
-        public int getId() {
-           return id;
-        }
-
-        public void appendTo(StringBuilder appendTo) {
-            if (idLen > 0) {
-                appendTo.append(id);
+    private static StringBuilder format(
+            String compiledPattern,
+            StringBuilder result, String resultCopy, boolean forbidResultAsValue,
+            int[] offsets, CharSequence[] values) {
+        int offsetsLength;
+        if (offsets == null) {
+            offsetsLength = 0;
+        } else {
+            offsetsLength = offsets.length;
+            for (int i = 0; i < offsetsLength; i++) {
+                offsets[i] = -1;
             }
         }
-
-        public boolean isValid() {
-           return idLen > 0;
-        }
-
-        public void add(char ch) {
-            id = id * 10 + ch - '0';
-            idLen++;
-        }     
-    }
-    
-    private static class PlaceholdersBuilder {
-        private List<Integer> placeholderIdsOrderedByOffset = new ArrayList<Integer>();
-        private int placeholderCount = 0;
-        private boolean firstPlaceholderReused = false;
-        
-        public void add(int placeholderId, int offset) {
-            placeholderIdsOrderedByOffset.add(offset);
-            placeholderIdsOrderedByOffset.add(placeholderId);
-            if (placeholderId >= placeholderCount) {
-                placeholderCount = placeholderId + 1;
-            }
-            int len = placeholderIdsOrderedByOffset.size();
-            if (len > 2
-                    && placeholderIdsOrderedByOffset.get(len - 1)
-                            .equals(placeholderIdsOrderedByOffset.get(1))) {
-                firstPlaceholderReused = true;
-            }
-        }
-        
-        public int getPlaceholderCount() {
-            return placeholderCount;
-        }
-        
-        public int[] getPlaceholderIdsOrderedByOffset() {
-            int[] result = new int[placeholderIdsOrderedByOffset.size()];
-            for (int i = 0; i < result.length; i++) {
-                result[i] = placeholderIdsOrderedByOffset.get(i).intValue();
-            }
-            return result;
-        }
-        
-        public boolean getFirstPlaceholderReused() {
-            return firstPlaceholderReused;
-        }
-    }
-    
-    /**
-     * Represents placeholder values.
-     */
-    private static class PlaceholderValues {
-        private final CharSequence[] values;
-        private CharSequence appendTo;
-        private String appendToCopy;
-        
-        public PlaceholderValues(CharSequence ...values) {
-            this.values = values;
-            this.appendTo = null;
-            this.appendToCopy = null;
-        }
-        
-        /**
-         * Returns true if appendTo value is at any index besides exceptIndex.
-         */
-        public boolean isAppendToInAnyIndexExcept(CharSequence appendTo, int exceptIndex) {
-            for (int i = 0; i < values.length; ++i) {
-                if (i != exceptIndex && values[i] == appendTo) {
-                    return true;
+        for (int i = 1; i < compiledPattern.length();) {
+            int n = compiledPattern.charAt(i++);
+            if (n < ARG_NUM_LIMIT) {
+                CharSequence placeholderValue = values[n];
+                if (placeholderValue == result) {
+                    if (forbidResultAsValue) {
+                        throw new IllegalArgumentException("Value must not be same object as result");
+                    }
+                    if (i == 2) {
+                        // We are appending to result which is also the first value object.
+                        if (n < offsetsLength) {
+                            offsets[n] = 0;
+                        }
+                    } else {
+                        if (n < offsetsLength) {
+                            offsets[n] = result.length();
+                        }
+                        result.append(resultCopy);
+                    }
+                } else {
+                    if (n < offsetsLength) {
+                        offsets[n] = result.length();
+                    }
+                    result.append(placeholderValue);
                 }
+            } else {
+                int limit = i + (n - ARG_NUM_LIMIT);
+                result.append(compiledPattern, i, limit);
+                i = limit;
             }
-            return false;
         }
-        
-        /**
-         * For each appendTo value, stores the snapshot of it in its place.
-         */
-        public void snapshotAppendTo(CharSequence appendTo) {
-            this.appendTo = appendTo;
-            this.appendToCopy = appendTo.toString();
-        }
-        
-        /**
-         *  Return placeholder at given index.
-         */
-        public CharSequence get(int index) {
-            if (appendTo == null || appendTo != values[index]) {
-                return values[index];
-            }
-            return appendToCopy;
-        }       
+        return result;
     }
-   
 }

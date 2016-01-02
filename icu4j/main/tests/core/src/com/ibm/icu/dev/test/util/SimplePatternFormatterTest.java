@@ -1,13 +1,15 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2014-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.SimplePatternFormatter;
+import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.util.ULocale;
 
 public class SimplePatternFormatterTest extends TestFmwk {
 
@@ -53,29 +55,41 @@ public class SimplePatternFormatterTest extends TestFmwk {
                  "offsets[0]",
                  -1,
                  offsets[0]);
-         fmt = SimplePatternFormatter.compile("Some {} messed {12d up stuff.");
-         assertEquals(
-                 "getPlaceholderCount",
-                 0,
-                 fmt.getPlaceholderCount());
-         assertEquals(
-                 "format",
-                 "Some {} messed {12d up stuff.",
-                 fmt.format("to"));
      }
-     
+
+     public void TestSyntaxErrors() {
+         try {
+             SimplePatternFormatter.compile("{}");
+             fail("Syntax error did not yield an exception.");
+         } catch (IllegalArgumentException expected) {
+         }
+         try {
+             SimplePatternFormatter.compile("{12d");
+             fail("Syntax error did not yield an exception.");
+         } catch (IllegalArgumentException expected) {
+         }
+     }
+
      public void TestOnePlaceholder() {
         assertEquals("TestOnePlaceholder",
                 "1 meter",
                 SimplePatternFormatter.compile("{0} meter").format("1"));
      }
-     
+
+     public void TestBigPlaceholder() {
+         SimplePatternFormatter fmt = SimplePatternFormatter.compile("a{20}c");
+         assertEquals("{20} count", 21, fmt.getPlaceholderCount());
+         CharSequence[] values = new CharSequence[21];
+         values[20] = "b";
+         assertEquals("{20}=b", "abc", fmt.format(values));
+      }
+
      public void TestGetPatternWithNoPlaceholders() {
          assertEquals(
                  "",
                  "Templates  and  are here.",
                  SimplePatternFormatter.compile(
-                         "Templates {1}{2} and {3} are here.").getPatternWithNoPlaceholders());
+                         "Templates {1}{2} and {3} are here.").getTextWithNoPlaceholders());
      }
      
      public void TestTooFewPlaceholderValues() {
@@ -226,7 +240,16 @@ public class SimplePatternFormatterTest extends TestFmwk {
          int[] expectedOffsets = {10, 18, 30, 27};
          verifyOffsets(expectedOffsets, offsets);
      }
-     
+
+     public void TestQuotingLikeMessageFormat() {
+         String pattern = "{0} don't can''t '{5}''}{a' again '}'{1} to the '{end";
+         SimplePatternFormatter spf = SimplePatternFormatter.compile(pattern);
+         MessageFormat mf = new MessageFormat(pattern, ULocale.ROOT);
+         String expected = "X don't can't {5}'}{a again }Y to the {end";
+         assertEquals("MessageFormat", expected, mf.format(new Object[] { "X", "Y" }));
+         assertEquals("SimplePatternFormatter", expected, spf.format("X", "Y"));
+     }
+
      void verifyOffsets(int[] expected, int[] actual) {
          for (int i = 0; i < expected.length; ++i) {
              if (expected[i] != actual[i]) {

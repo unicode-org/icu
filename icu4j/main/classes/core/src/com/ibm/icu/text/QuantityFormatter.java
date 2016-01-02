@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013-2015, International Business Machines Corporation and
+ * Copyright (C) 2013-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -120,10 +120,10 @@ class QuantityFormatter {
     /**
      * Formats the pattern with the value and adjusts the FieldPosition.
      */
-    public static StringBuilder format(SimplePatternFormatter pattern, CharSequence value,
+    public static StringBuilder format(String compiledPattern, CharSequence value,
             StringBuilder appendTo, FieldPosition pos) {
         int[] offsets = new int[1];
-        pattern.formatAndAppend(appendTo, offsets, value);
+        SimplePatternFormatter.formatAndAppend(compiledPattern, appendTo, offsets, value);
         if (pos.getBeginIndex() != 0 || pos.getEndIndex() != 0) {
             if (offsets[0] >= 0) {
                 pos.setBeginIndex(pos.getBeginIndex() + offsets[0]);
