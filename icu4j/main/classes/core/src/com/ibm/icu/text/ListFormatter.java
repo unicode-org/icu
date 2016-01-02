@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2015, Google, International Business Machines Corporation and
+ * Copyright (C) 2012-2016, Google, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -27,10 +27,11 @@ import com.ibm.icu.util.UResourceBundle;
  * @stable ICU 50
  */
 final public class ListFormatter {
-    private final SimplePatternFormatter two;
-    private final SimplePatternFormatter start;
-    private final SimplePatternFormatter middle;
-    private final SimplePatternFormatter end;
+    // Compiled SimplePatternFormatter patterns.
+    private final String two;
+    private final String start;
+    private final String middle;
+    private final String end;
     private final ULocale locale;
     
     /**
@@ -107,14 +108,14 @@ final public class ListFormatter {
     @Deprecated
     public ListFormatter(String two, String start, String middle, String end) {
         this(
-                compilePattern(two),
-                compilePattern(start),
-                compilePattern(middle),
-                compilePattern(end),
+                compilePattern(two, new StringBuilder()),
+                compilePattern(start, new StringBuilder()),
+                compilePattern(middle, new StringBuilder()),
+                compilePattern(end, new StringBuilder()),
                 null);
     }
 
-    private ListFormatter(SimplePatternFormatter two, SimplePatternFormatter start, SimplePatternFormatter middle, SimplePatternFormatter end, ULocale locale) {
+    private ListFormatter(String two, String start, String middle, String end, ULocale locale) {
         this.two = two;
         this.start = start;
         this.middle = middle;
@@ -122,8 +123,8 @@ final public class ListFormatter {
         this.locale = locale;
     }
 
-    private static SimplePatternFormatter compilePattern(String pattern) {
-        return SimplePatternFormatter.compileMinMaxPlaceholders(pattern, 2, 2);
+    private static String compilePattern(String pattern, StringBuilder sb) {
+        return SimplePatternFormatter.compileToStringMinMaxPlaceholders(pattern, sb, 2, 2);
     }
 
     /**
@@ -266,25 +267,22 @@ final public class ListFormatter {
         // added in relation to the rest of the list. {0} represents the rest of the list; {1}
         // represents the new object in pattern. next is the object to be added. If recordOffset
         // is true, records the offset of next in the formatted string.
-        public FormattedListBuilder append(SimplePatternFormatter pattern, Object next, boolean recordOffset) {
-            if (pattern.getPlaceholderCount() != 2) {
-                throw new IllegalArgumentException("Need {0} and {1} only in pattern " + pattern);
+        public FormattedListBuilder append(String pattern, Object next, boolean recordOffset) {
+            int[] offsets = (recordOffset || offsetRecorded()) ? new int[2] : null;
+            SimplePatternFormatter.formatAndReplace(
+                    pattern, current, offsets, current, next.toString());
+            if (offsets != null) {
+                if (offsets[0] == -1 || offsets[1] == -1) {
+                    throw new IllegalArgumentException(
+                            "{0} or {1} missing from pattern " + pattern);
+                }
+                if (recordOffset) {
+                    offset = offsets[1];
+                } else {
+                    offset += offsets[0];
+                }
             }
-           int[] offsets = (recordOffset || offsetRecorded()) ? new int[2] : null;
-           pattern.formatAndReplace(
-                   current, offsets, current, next.toString());
-           if (offsets != null) {
-               if (offsets[0] == -1 || offsets[1] == -1) {
-                   throw new IllegalArgumentException(
-                           "{0} or {1} missing from pattern " + pattern);
-               }
-               if (recordOffset) {
-                   offset = offsets[1];
-               } else {
-                   offset += offsets[0];
-               }
-           }
-           return this;
+            return this;
         }
 
         @Override
@@ -319,12 +317,12 @@ final public class ListFormatter {
         private static ListFormatter load(ULocale ulocale, String style) {
             ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
                     getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
-           
+            StringBuilder sb = new StringBuilder();
             return new ListFormatter(
-                compilePattern(r.getWithFallback("listPattern/" + style + "/2").getString()),
-                compilePattern(r.getWithFallback("listPattern/" + style + "/start").getString()),
-                compilePattern(r.getWithFallback("listPattern/" + style + "/middle").getString()),
-                compilePattern(r.getWithFallback("listPattern/" + style + "/end").getString()),
+                compilePattern(r.getWithFallback("listPattern/" + style + "/2").getString(), sb),
+                compilePattern(r.getWithFallback("listPattern/" + style + "/start").getString(), sb),
+                compilePattern(r.getWithFallback("listPattern/" + style + "/middle").getString(), sb),
+                compilePattern(r.getWithFallback("listPattern/" + style + "/end").getString(), sb),
                 ulocale);
         }
     }
