@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2015, Google Inc, International Business Machines        *
+ * Copyright (C) 2004-2016, Google Inc, International Business Machines        *
  * Corporation and others. All Rights Reserved.                                *
  *******************************************************************************
  */
@@ -40,8 +40,12 @@ public class MeasureUnit implements Serializable {
     // Used to pre-fill the cache. These same constants appear in MeasureFormat too.
     private static final String[] unitKeys = new String[]{"units", "unitsShort", "unitsNarrow"};
     
+    // Cache of MeasureUnits.
+    // All access to the cache or cacheIsPopulated flag must be synchronized on class MeasureUnit,
+    // i.e. from synchronized static methods. Beware of non-static methods.
     private static final Map<String, Map<String,MeasureUnit>> cache 
-    = new HashMap<String, Map<String,MeasureUnit>>();
+        = new HashMap<String, Map<String,MeasureUnit>>();
+    private static boolean cacheIsPopulated = false;
 
     /**
      * @internal
@@ -131,6 +135,7 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 53
      */
     public synchronized static Set<String> getAvailableTypes() {
+        populateCache();            
         return Collections.unmodifiableSet(cache.keySet());
     }
 
@@ -141,6 +146,7 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 53
      */
     public synchronized static Set<MeasureUnit> getAvailable(String type) {
+        populateCache();            
         Map<String, MeasureUnit> units = cache.get(type);
         // Train users not to modify returned set from the start giving us more
         // flexibility for implementation.
@@ -241,7 +247,21 @@ public class MeasureUnit implements Serializable {
         }
     };
 
-    static {
+    /**
+     * Populate the MeasureUnit cache with all types from the data.
+     * Population is done lazily, in response to MeasureUnit.getAvailable()
+     * or other API that expects to see all of the MeasureUnits.
+     *
+     * <p>At static initialization time the MeasureUnits cache is populated
+     * with public static instances (G_FORCE, METER_PER_SECOND_SQUARED, etc.) only. 
+     * Adding of others is deferred until later to avoid circular static init 
+     * dependencies with classes Currency and TimeUnit.
+     *
+     * <p>Synchronization: this function must be called from static synchronized methods only.
+     * 
+     * @internal
+     */
+    static private void populateCache() {
         // load all of the units for English, since we know that that is a superset.
         /**
          *     units{
@@ -251,6 +271,9 @@ public class MeasureUnit implements Serializable {
          *                    other{"{0} дена"}
          *                }
          */
+        if (cacheIsPopulated) {
+            return;
+        }
         ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "en");
         for (String key : unitKeys) {
             try {
@@ -287,9 +310,9 @@ public class MeasureUnit implements Serializable {
         } catch (MissingResourceException e) {
             // fall through
         }
+        cacheIsPopulated = true;
     }
 
-    // Must only be called at static initialization, or inside synchronized block.
     /**
      * @internal
      * @deprecated This API is ICU internal only.

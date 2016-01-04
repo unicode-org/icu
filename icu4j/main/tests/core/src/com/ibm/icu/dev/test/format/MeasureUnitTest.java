@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013-2015, International Business Machines Corporation and
+ * Copyright (C) 2013-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -229,6 +230,22 @@ public class MeasureUnitTest extends TestFmwk {
      */
     public static void main(String[] args) {
         //generateConstants(); if (true) return;
+        
+        // Ticket #12034 deadlock on multi-threaded static init of MeasureUnit.
+        // The code below reliably deadlocks with ICU 56.
+        // The test is here in main() rather than in a test function so it can be made to run
+        // before anything else.
+        Thread thread = new Thread()  {
+            @Override
+            public void run() {
+                Set<String> measureUnitTypes = MeasureUnit.getAvailableTypes();
+            }
+        };
+        thread.start();
+        Currency cur = Currency.getInstance(ULocale.ENGLISH);
+        try {thread.join();} catch(InterruptedException e) {};
+        // System.out.println("Done with MeasureUnit thread test.");
+        
         new MeasureUnitTest().run(args);
     }
     
@@ -1372,6 +1389,11 @@ public class MeasureUnitTest extends TestFmwk {
         MeasureFormat mf = MeasureFormat.getInstance(new ULocale("fr_CA"), FormatWidth.SHORT);
         Measure twoDeg = new Measure(2, MeasureUnit.GENERIC_TEMPERATURE);
         assertEquals("2 deg temp in fr_CA", "2°", mf.format(twoDeg));
+    }
+    
+    public void testPopulateCache() {
+        // Quick check that the lazily added additions to the MeasureUnit cache are present.
+        assertTrue("MeasureUnit: unexpectedly few currencies defined", MeasureUnit.getAvailable("currency").size() > 50);
     }
 
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
