@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -18,9 +18,11 @@
 #include <iostream>
 #endif
 
-
-#include "cstring.h"
 #include "dtifmtts.h"
+
+#include "cstr.h"
+#include "cstring.h"
+#include "simplethread.h"
 #include "unicode/gregocal.h"
 #include "unicode/dtintrv.h"
 #include "unicode/dtitvinf.h"
@@ -51,6 +53,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(5, testStress);
         TESTCASE(6, testTicket11583_2);
         TESTCASE(7, testTicket11985);
+        TESTCASE(8, testTicket11669);
         default: name = ""; break;
     }
 }
@@ -128,7 +131,7 @@ void DateIntervalFormatTest::testAPI() {
 
     DateIntervalFormat* another = (DateIntervalFormat*)dtitvfmt->clone();
     if ( (*another) != (*dtitvfmt) ) {
-        dataerrln("ERROR: clone failed");
+        dataerrln("%s:%d ERROR: clone failed", __FILE__, __LINE__);
     }
 
 
@@ -1543,5 +1546,66 @@ void DateIntervalFormatTest::testTicket11985() {
     static_cast<const SimpleDateFormat*>(fmt->getDateFormat())->toPattern(pattern);
     assertEquals("Format pattern", "h:mm a", pattern);
 }
+
+// Ticket 11669 - thread safety of DateIntervalFormat::format(). This test failed before 
+//                the implementation was fixed.
+
+static const DateIntervalFormat *gIntervalFormatter = NULL;      // The Formatter to be used concurrently by test threads.
+static const DateInterval *gInterval = NULL;                     // The date interval to be formatted concurrently.
+static const UnicodeString *gExpectedResult = NULL;
+
+void DateIntervalFormatTest::threadFunc11669(int32_t threadNum) {
+    (void)threadNum;
+    for (int loop=0; loop<1000; ++loop) {
+        UErrorCode status = U_ZERO_ERROR;
+        FieldPosition pos(0);
+        UnicodeString result;
+        gIntervalFormatter->format(gInterval, result, pos, status);
+        if (U_FAILURE(status)) {
+            errln("%s:%d %s", __FILE__, __LINE__, u_errorName(status));
+            return;
+        }
+        if (result != *gExpectedResult) {
+            errln("%s:%d Expected \"%s\", got \"%s\"", __FILE__, __LINE__, CStr(*gExpectedResult)(), CStr(result)());
+            return;
+        }
+    }
+}
+    
+void DateIntervalFormatTest::testTicket11669() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DateIntervalFormat> formatter(DateIntervalFormat::createInstance(UDAT_YEAR_MONTH_DAY, Locale::getEnglish(), status), status);
+    LocalPointer<TimeZone> tz(TimeZone::createTimeZone("America/Los_Angleles"), status);
+    LocalPointer<Calendar> intervalStart(Calendar::createInstance(*tz, Locale::getEnglish(), status), status);
+    LocalPointer<Calendar> intervalEnd(Calendar::createInstance(*tz, Locale::getEnglish(), status), status);
+    if (U_FAILURE(status)) {
+        errln("%s:%d %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+
+    intervalStart->set(2009, 6, 1, 14, 0);
+    intervalEnd->set(2009, 6, 2, 14, 0);
+    DateInterval interval(intervalStart->getTime(status), intervalEnd->getTime(status));
+    FieldPosition pos(0);
+    UnicodeString expectedResult;
+    formatter->format(&interval, expectedResult, pos, status);
+    if (U_FAILURE(status)) {
+        errln("%s:%d %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+
+    gInterval = &interval;
+    gIntervalFormatter = formatter.getAlias();
+    gExpectedResult = &expectedResult;
+
+    ThreadPool<DateIntervalFormatTest> threads(this, 4, &DateIntervalFormatTest::threadFunc11669);
+    threads.start();
+    threads.join();
+
+    gInterval = NULL;             // Don't leave dangling pointers lying around. Not strictly necessary.
+    gIntervalFormatter = NULL;
+    gExpectedResult = NULL;
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
