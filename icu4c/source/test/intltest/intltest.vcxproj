@@ -296,7 +296,7 @@
     <ClCompile Include="dtfmrgts.cpp" />
     <ClCompile Include="dtfmtrtts.cpp" />
     <ClCompile Include="dtfmttst.cpp" />
-    <ClCompile Include="dtifmtts.cpp”>
+    <ClCompile Include="dtifmtts.cpp">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="dtptngts.cpp" />
