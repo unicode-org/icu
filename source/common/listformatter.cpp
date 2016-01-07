@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2013-2015, International Business Machines
+*   Copyright (C) 2013-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -43,11 +43,11 @@ ListFormatInternal(
         middlePattern(middle, 2, 2, errorCode),
         endPattern(end, 2, 2, errorCode) {}
 
-ListFormatInternal(const ListFormatData &data) :
-        twoPattern(data.twoPattern),
-        startPattern(data.startPattern),
-        middlePattern(data.middlePattern),
-        endPattern(data.endPattern) { }
+ListFormatInternal(const ListFormatData &data, UErrorCode &errorCode) :
+        twoPattern(data.twoPattern, errorCode),
+        startPattern(data.startPattern, errorCode),
+        middlePattern(data.middlePattern, errorCode),
+        endPattern(data.endPattern, errorCode) { }
 
 ListFormatInternal(const ListFormatInternal &other) :
     twoPattern(other.twoPattern),
@@ -236,8 +236,8 @@ ListFormatter* ListFormatter::createInstance(const Locale& locale, const char *s
     return p;
 }
 
-ListFormatter::ListFormatter(const ListFormatData& listFormatData) {
-    owned = new ListFormatInternal(listFormatData);
+ListFormatter::ListFormatter(const ListFormatData& listFormatData, UErrorCode &errorCode) {
+    owned = new ListFormatInternal(listFormatData, errorCode);
     data = owned;
 }
 
