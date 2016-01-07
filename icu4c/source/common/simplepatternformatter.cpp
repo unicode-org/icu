@@ -1,538 +1,313 @@
 /*
 ******************************************************************************
-* Copyright (C) 2014-2015, International Business Machines
+* Copyright (C) 2014-2016, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
 * simplepatternformatter.cpp
 */
+
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
 #include "simplepatternformatter.h"
-#include "cstring.h"
 #include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
-static UBool isInvalidArray(const void *array, int32_t size) {
-   return (size < 0 || (size > 0 && array == NULL));
-}
+namespace {
 
-typedef enum SimplePatternFormatterCompileState {
-    INIT,
-    APOSTROPHE,
-    PLACEHOLDER
-} SimplePatternFormatterCompileState;
+/**
+ * Argument numbers must be smaller than this limit.
+ * Text segment lengths are offset by this much.
+ * This is currently the only unused char value in compiled patterns,
+ * except it is the maximum value of the first unit (max arg +1).
+ */
+const int32_t ARG_NUM_LIMIT = 0x100;
+/**
+ * Initial and maximum char/UChar value set for a text segment.
+ * Segment length char values are from ARG_NUM_LIMIT+1 to this value here.
+ * Normally 0xffff, but can be as small as ARG_NUM_LIMIT+1 for testing.
+ */
+const UChar SEGMENT_LENGTH_PLACEHOLDER_CHAR = 0xffff;
+/**
+ * Maximum length of a text segment. Longer segments are split into shorter ones.
+ */
+const int32_t MAX_SEGMENT_LENGTH = SEGMENT_LENGTH_PLACEHOLDER_CHAR - ARG_NUM_LIMIT;
 
-// Handles parsing placeholders in the pattern string, e.g {4} or {35}
-class SimplePatternFormatterIdBuilder {
-public:
-    SimplePatternFormatterIdBuilder() : id(0), idLen(0) { }
-    ~SimplePatternFormatterIdBuilder() { }
-
-    // Resets so that this object has seen no placeholder ID.
-    void reset() { id = 0; idLen = 0; }
-
-    // Returns the numeric placeholder ID parsed so far
-    int32_t getId() const { return id; }
-
-    // Appends the numeric placeholder ID parsed so far back to a
-    // UChar buffer. Used to recover if parser using this object finds
-    // no closing curly brace.
-    void appendTo(UChar *buffer, int32_t *len) const;
-
-    // Returns true if this object has seen a placeholder ID.
-    UBool isValid() const { return (idLen > 0); }
-
-    // Processes a single digit character. Pattern string parser calls this
-    // as it processes digits after an opening curly brace.
-    void add(UChar ch);
-private:
-    int32_t id;
-    int32_t idLen;
-    SimplePatternFormatterIdBuilder(
-            const SimplePatternFormatterIdBuilder &other);
-    SimplePatternFormatterIdBuilder &operator=(
-            const SimplePatternFormatterIdBuilder &other);
+enum {
+    APOS = 0x27,
+    DIGIT_ZERO = 0x30,
+    DIGIT_ONE = 0x31,
+    DIGIT_NINE = 0x39,
+    OPEN_BRACE = 0x7b,
+    CLOSE_BRACE = 0x7d
 };
 
-void SimplePatternFormatterIdBuilder::appendTo(
-        UChar *buffer, int32_t *len) const {
-    int32_t origLen = *len;
-    int32_t kId = id;
-    for (int32_t i = origLen + idLen - 1; i >= origLen; i--) {
-        int32_t digit = kId % 10;
-        buffer[i] = digit + 0x30;
-        kId /= 10;
-    }
-    *len = origLen + idLen;
+inline UBool isInvalidArray(const void *array, int32_t length) {
+   return (length < 0 || (array == NULL && length != 0));
 }
 
-void SimplePatternFormatterIdBuilder::add(UChar ch) {
-    id = id * 10 + (ch - 0x30);
-    idLen++;
-}
-
-// Represents placeholder values.
-class SimplePatternFormatterPlaceholderValues : public UMemory {
-public:
-    SimplePatternFormatterPlaceholderValues(
-            const UnicodeString * const *values,
-            int32_t valuesCount);
-
-    // Returns TRUE if appendTo value is at any index besides exceptIndex.
-    UBool isAppendToInAnyIndexExcept(
-            const UnicodeString &appendTo, int32_t exceptIndex) const;
-
-    // For each appendTo value, stores the snapshot of it in its place.
-    void snapshotAppendTo(const UnicodeString &appendTo);
-
-    // Returns the placeholder value at index. No range checking performed.
-    // Returned reference is valid for as long as this object exists.
-    const UnicodeString &get(int32_t index) const;
-private:
-    const UnicodeString * const *fValues;
-    int32_t fValuesCount;
-    const UnicodeString *fAppendTo;
-    UnicodeString fAppendToCopy;
-    SimplePatternFormatterPlaceholderValues(
-            const SimplePatternFormatterPlaceholderValues &);
-    SimplePatternFormatterPlaceholderValues &operator=(
-            const SimplePatternFormatterPlaceholderValues &);
-};
-
-SimplePatternFormatterPlaceholderValues::SimplePatternFormatterPlaceholderValues(
-        const UnicodeString * const *values,
-        int32_t valuesCount) 
-        : fValues(values),
-          fValuesCount(valuesCount),
-          fAppendTo(NULL),
-          fAppendToCopy() {
-}
-
-UBool SimplePatternFormatterPlaceholderValues::isAppendToInAnyIndexExcept(
-        const UnicodeString &appendTo, int32_t exceptIndex) const {
-    for (int32_t i = 0; i < fValuesCount; ++i) {
-        if (i != exceptIndex && fValues[i] == &appendTo) {
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
-void SimplePatternFormatterPlaceholderValues::snapshotAppendTo(
-        const UnicodeString &appendTo) {
-    fAppendTo = &appendTo;
-    fAppendToCopy = appendTo;
-}
-
-const UnicodeString &SimplePatternFormatterPlaceholderValues::get(
-        int32_t index) const {
-    if (fAppendTo == NULL || fAppendTo != fValues[index]) {
-        return *fValues[index];
-    }
-    return fAppendToCopy;
-}
-
-SimplePatternFormatter::SimplePatternFormatter() :
-        noPlaceholders(),
-        placeholders(),
-        placeholderSize(0),
-        placeholderCount(0),
-        firstPlaceholderReused(FALSE) {
-}
-
-SimplePatternFormatter::SimplePatternFormatter(const UnicodeString &pattern) :
-        noPlaceholders(),
-        placeholders(),
-        placeholderSize(0),
-        placeholderCount(0),
-        firstPlaceholderReused(FALSE) {
-    UErrorCode status = U_ZERO_ERROR;
-    compile(pattern, status);
-}
-
-SimplePatternFormatter::SimplePatternFormatter(const UnicodeString &pattern,
-        int32_t min, int32_t max,
-        UErrorCode &errorCode)
-        : noPlaceholders(),
-          placeholders(),
-          placeholderSize(0),
-          placeholderCount(0),
-          firstPlaceholderReused(FALSE) {
-    compileMinMaxPlaceholders(pattern, min, max, errorCode);
-}
-
-SimplePatternFormatter::SimplePatternFormatter(
-        const SimplePatternFormatter &other) :
-        noPlaceholders(other.noPlaceholders),
-        placeholders(),
-        placeholderSize(0),
-        placeholderCount(other.placeholderCount),
-        firstPlaceholderReused(other.firstPlaceholderReused) {
-    placeholderSize = ensureCapacity(other.placeholderSize);
-    uprv_memcpy(
-            placeholders.getAlias(),
-            other.placeholders.getAlias(),
-            placeholderSize * sizeof(PlaceholderInfo));
-}
+}  // namespace
 
 SimplePatternFormatter &SimplePatternFormatter::operator=(
         const SimplePatternFormatter& other) {
     if (this == &other) {
         return *this;
     }
-    noPlaceholders = other.noPlaceholders;
-    placeholderSize = ensureCapacity(other.placeholderSize);
-    placeholderCount = other.placeholderCount;
-    firstPlaceholderReused = other.firstPlaceholderReused;
-    uprv_memcpy(
-            placeholders.getAlias(),
-            other.placeholders.getAlias(),
-            placeholderSize * sizeof(PlaceholderInfo));
+    compiledPattern = other.compiledPattern;
     return *this;
 }
 
-SimplePatternFormatter::~SimplePatternFormatter() {
-}
+SimplePatternFormatter::~SimplePatternFormatter() {}
 
 UBool SimplePatternFormatter::compileMinMaxPlaceholders(
         const UnicodeString &pattern,
         int32_t min, int32_t max,
-        UErrorCode &status) {
-    if (U_FAILURE(status)) {
+        UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) {
         return FALSE;
     }
+    // Parse consistent with MessagePattern, but
+    // - support only simple numbered arguments
+    // - build a simple binary structure into the result string
     const UChar *patternBuffer = pattern.getBuffer();
     int32_t patternLength = pattern.length();
-    UChar *buffer = noPlaceholders.getBuffer(patternLength);
-    int32_t len = 0;
-    placeholderSize = 0;
-    placeholderCount = 0;
-    SimplePatternFormatterCompileState state = INIT;
-    SimplePatternFormatterIdBuilder idBuilder;
-    for (int32_t i = 0; i < patternLength; ++i) {
-        UChar ch = patternBuffer[i];
-        switch (state) {
-        case INIT:
-            if (ch == 0x27) {
-                state = APOSTROPHE;
-            } else if (ch == 0x7B) {
-                state = PLACEHOLDER;
-                idBuilder.reset();
+    // Reserve the first char for the number of arguments.
+    compiledPattern.setTo((UChar)0);
+    int32_t textLength = 0;
+    int32_t maxArg = -1;
+    UBool inQuote = FALSE;
+    for (int32_t i = 0; i < patternLength;) {
+        UChar c = patternBuffer[i++];
+        if (c == APOS) {
+            if (i < patternLength && (c = patternBuffer[i]) == APOS) {
+                // double apostrophe, skip the second one
+                ++i;
+            } else if (inQuote) {
+                // skip the quote-ending apostrophe
+                inQuote = FALSE;
+                continue;
+            } else if (c == OPEN_BRACE || c == CLOSE_BRACE) {
+                // Skip the quote-starting apostrophe, find the end of the quoted literal text.
+                ++i;
+                inQuote = TRUE;
             } else {
-               buffer[len++] = ch;
+                // The apostrophe is part of literal text.
+                c = APOS;
             }
-            break;
-        case APOSTROPHE:
-            if (ch == 0x27) {
-                buffer[len++] = 0x27;
-            } else if (ch == 0x7B) {
-                buffer[len++] = 0x7B;
+        } else if (!inQuote && c == OPEN_BRACE) {
+            if (textLength > 0) {
+                compiledPattern.setCharAt(compiledPattern.length() - textLength - 1,
+                                          (UChar)(ARG_NUM_LIMIT + textLength));
+                textLength = 0;
+            }
+            int32_t argNumber;
+            if ((i + 1) < patternLength &&
+                    0 <= (argNumber = patternBuffer[i] - DIGIT_ZERO) && argNumber <= 9 &&
+                    patternBuffer[i + 1] == CLOSE_BRACE) {
+                i += 2;
             } else {
-                buffer[len++] = 0x27;
-                buffer[len++] = ch;
-            }
-            state = INIT;
-            break;
-        case PLACEHOLDER:
-            if (ch >= 0x30 && ch <= 0x39) {
-                idBuilder.add(ch);
-            } else if (ch == 0x7D && idBuilder.isValid()) {
-                if (!addPlaceholder(idBuilder.getId(), len)) {
-                    noPlaceholders.releaseBuffer(0);
-                    status = U_MEMORY_ALLOCATION_ERROR;
+                // Multi-digit argument number (no leading zero) or syntax error.
+                // MessagePattern permits PatternProps.skipWhiteSpace(pattern, index)
+                // around the number, but this class does not.
+                argNumber = -1;
+                if (i < patternLength && DIGIT_ONE <= (c = patternBuffer[i++]) && c <= DIGIT_NINE) {
+                    argNumber = c - DIGIT_ZERO;
+                    while (i < patternLength &&
+                            DIGIT_ZERO <= (c = patternBuffer[i++]) && c <= DIGIT_NINE) {
+                        argNumber = argNumber * 10 + (c - DIGIT_ZERO);
+                        if (argNumber >= ARG_NUM_LIMIT) {
+                            break;
+                        }
+                    }
+                }
+                if (argNumber < 0 || c != CLOSE_BRACE) {
+                    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                     return FALSE;
                 }
-                state = INIT;
-            } else {
-                buffer[len++] = 0x7B;
-                idBuilder.appendTo(buffer, &len);
-                buffer[len++] = ch;
-                state = INIT;
             }
-            break;
-        default:
-            U_ASSERT(FALSE);
-            break;
+            if (argNumber > maxArg) {
+                maxArg = argNumber;
+            }
+            compiledPattern.append((UChar)argNumber);
+            continue;
+        }  // else: c is part of literal text
+        // Append c and track the literal-text segment length.
+        if (textLength == 0) {
+            // Reserve a char for the length of a new text segment, preset the maximum length.
+            compiledPattern.append(SEGMENT_LENGTH_PLACEHOLDER_CHAR);
+        }
+        compiledPattern.append(c);
+        if (++textLength == MAX_SEGMENT_LENGTH) {
+            textLength = 0;
         }
     }
-    switch (state) {
-    case INIT:
-        break;
-    case APOSTROPHE:
-        buffer[len++] = 0x27;
-        break;
-    case PLACEHOLDER:
-        buffer[len++] = 0X7B;
-        idBuilder.appendTo(buffer, &len);
-        break;
-    default:
-        U_ASSERT(false);
-        break;
+    if (textLength > 0) {
+        compiledPattern.setCharAt(compiledPattern.length() - textLength - 1,
+                                  (UChar)(ARG_NUM_LIMIT + textLength));
     }
-    noPlaceholders.releaseBuffer(len);
-    if (placeholderCount < min || max < placeholderCount) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+    int32_t argCount = maxArg + 1;
+    if (argCount < min || max < argCount) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
+    compiledPattern.setCharAt(0, (UChar)argCount);
     return TRUE;
 }
 
 UnicodeString& SimplePatternFormatter::format(
-        const UnicodeString &arg0,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    const UnicodeString *params[] = {&arg0};
-    return formatAndAppend(
-            params,
-            UPRV_LENGTHOF(params),
-            appendTo,
-            NULL,
-            0,
-            status);
+        const UnicodeString &value0,
+        UnicodeString &appendTo, UErrorCode &errorCode) const {
+    const UnicodeString *values[] = { &value0 };
+    return formatAndAppend(values, 1, appendTo, NULL, 0, errorCode);
 }
 
 UnicodeString& SimplePatternFormatter::format(
-        const UnicodeString &arg0,
-        const UnicodeString &arg1,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    const UnicodeString *params[] = {&arg0, &arg1};
-    return formatAndAppend(
-            params,
-            UPRV_LENGTHOF(params),
-            appendTo,
-            NULL,
-            0,
-            status);
+        const UnicodeString &value0,
+        const UnicodeString &value1,
+        UnicodeString &appendTo, UErrorCode &errorCode) const {
+    const UnicodeString *values[] = { &value0, &value1 };
+    return formatAndAppend(values, 2, appendTo, NULL, 0, errorCode);
 }
 
 UnicodeString& SimplePatternFormatter::format(
-        const UnicodeString &arg0,
-        const UnicodeString &arg1,
-        const UnicodeString &arg2,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    const UnicodeString *params[] = {&arg0, &arg1, &arg2};
-    return formatAndAppend(
-            params,
-            UPRV_LENGTHOF(params),
-            appendTo,
-            NULL,
-            0,
-            status);
-}
-
-static void updatePlaceholderOffset(
-        int32_t placeholderId,
-        int32_t placeholderOffset,
-        int32_t *offsetArray,
-        int32_t offsetArrayLength) {
-    if (placeholderId < offsetArrayLength) {
-        offsetArray[placeholderId] = placeholderOffset;
-    }
-}
-
-static void appendRange(
-        const UnicodeString &src,
-        int32_t start,
-        int32_t end,
-        UnicodeString &dest) {
-    // This check improves performance significantly.
-    if (start == end) {
-        return;
-    }
-    dest.append(src, start, end - start);
+        const UnicodeString &value0,
+        const UnicodeString &value1,
+        const UnicodeString &value2,
+        UnicodeString &appendTo, UErrorCode &errorCode) const {
+    const UnicodeString *values[] = { &value0, &value1, &value2 };
+    return formatAndAppend(values, 3, appendTo, NULL, 0, errorCode);
 }
 
 UnicodeString& SimplePatternFormatter::formatAndAppend(
-        const UnicodeString * const *placeholderValues,
-        int32_t placeholderValueCount,
+        const UnicodeString *const *values, int32_t valuesLength,
         UnicodeString &appendTo,
-        int32_t *offsetArray,
-        int32_t offsetArrayLength,
-        UErrorCode &status) const {
-    if (U_FAILURE(status)) {
+        int32_t *offsets, int32_t offsetsLength, UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) {
         return appendTo;
     }
-    if (isInvalidArray(placeholderValues, placeholderValueCount)
-            || isInvalidArray(offsetArray, offsetArrayLength)) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+    if (isInvalidArray(values, valuesLength) || isInvalidArray(offsets, offsetsLength) ||
+            valuesLength < getPlaceholderCount()) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return appendTo;
     }
-    if (placeholderValueCount < placeholderCount) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return appendTo;
-    }
-    
-    // Since we are disallowing parameter values that are the same as
-    // appendTo, we have to check all placeholderValues as opposed to
-    // the first placeholderCount placeholder values.
-    SimplePatternFormatterPlaceholderValues values(
-            placeholderValues, placeholderValueCount);
-    if (values.isAppendToInAnyIndexExcept(appendTo, -1)) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return appendTo;
-    }
-    return formatAndAppend(
-            values,
-            appendTo,
-            offsetArray,
-            offsetArrayLength);
+    return format(compiledPattern.getBuffer(), compiledPattern.length(), values,
+                  appendTo, NULL, TRUE,
+                  offsets, offsetsLength, errorCode);
 }
 
-UnicodeString& SimplePatternFormatter::formatAndReplace(
-        const UnicodeString * const *placeholderValues,
-        int32_t placeholderValueCount,
+UnicodeString &SimplePatternFormatter::formatAndReplace(
+        const UnicodeString *const *values, int32_t valuesLength,
         UnicodeString &result,
-        int32_t *offsetArray,
-        int32_t offsetArrayLength,
-        UErrorCode &status) const {
-    if (U_FAILURE(status)) {
+        int32_t *offsets, int32_t offsetsLength, UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) {
         return result;
     }
-    if (isInvalidArray(placeholderValues, placeholderValueCount)
-            || isInvalidArray(offsetArray, offsetArrayLength)) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+    if (isInvalidArray(values, valuesLength) || isInvalidArray(offsets, offsetsLength)) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return result;
     }
-    if (placeholderValueCount < placeholderCount) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+    const UChar *cp = compiledPattern.getBuffer();
+    int32_t cpLength = compiledPattern.length();
+    if (valuesLength < getPlaceholderCount(cp, cpLength)) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return result;
     }
-    SimplePatternFormatterPlaceholderValues values(
-            placeholderValues, placeholderCount);
-    int32_t placeholderAtStart = getUniquePlaceholderAtStart();
 
-    // If pattern starts with a unique placeholder and that placeholder
-    // value is result, we may be able to optimize by just appending to result.
-    if (placeholderAtStart >= 0
-            && placeholderValues[placeholderAtStart] == &result) {
-
-        // If result is the value for other placeholders, call off optimization.
-        if (values.isAppendToInAnyIndexExcept(result, placeholderAtStart)) {
-            values.snapshotAppendTo(result);
-            result.remove();
-            return formatAndAppend(
-                    values,
-                    result,
-                    offsetArray,
-                    offsetArrayLength);
-        }
-
-        // Otherwise we can optimize
-        formatAndAppend(
-                values,
-                result,
-                offsetArray,
-                offsetArrayLength);
-        
-        // We have to make the offset for the placeholderAtStart
-        // placeholder be 0. Otherwise it would be the length of the
-        // previous value of result.
-        if (offsetArrayLength > placeholderAtStart) {
-            offsetArray[placeholderAtStart] = 0;
-        }
-        return result;
-    }
-    if (values.isAppendToInAnyIndexExcept(result, -1)) {
-        values.snapshotAppendTo(result);
-    }
-    result.remove();
-    return formatAndAppend(
-            values,
-            result,
-            offsetArray,
-            offsetArrayLength);
-}
-
-UnicodeString& SimplePatternFormatter::formatAndAppend(
-        const SimplePatternFormatterPlaceholderValues &values,
-        UnicodeString &appendTo,
-        int32_t *offsetArray,
-        int32_t offsetArrayLength) const {
-    for (int32_t i = 0; i < offsetArrayLength; ++i) {
-        offsetArray[i] = -1;
-    }
-    if (placeholderSize == 0) {
-        appendTo.append(noPlaceholders);
-        return appendTo;
-    }
-    appendRange(
-            noPlaceholders,
-            0,
-            placeholders[0].offset,
-            appendTo);
-    updatePlaceholderOffset(
-            placeholders[0].id,
-            appendTo.length(),
-            offsetArray,
-            offsetArrayLength);
-    const UnicodeString *placeholderValue = &values.get(placeholders[0].id);
-    if (placeholderValue != &appendTo) {
-        appendTo.append(*placeholderValue);
-    }
-    for (int32_t i = 1; i < placeholderSize; ++i) {
-        appendRange(
-                noPlaceholders,
-                placeholders[i - 1].offset,
-                placeholders[i].offset,
-                appendTo);
-        updatePlaceholderOffset(
-                placeholders[i].id,
-                appendTo.length(),
-                offsetArray,
-                offsetArrayLength);
-        placeholderValue = &values.get(placeholders[i].id);
-        if (placeholderValue != &appendTo) {
-            appendTo.append(*placeholderValue);
+    // If the pattern starts with an argument whose value is the same object
+    // as the result, then we keep the result contents and append to it.
+    // Otherwise we replace its contents.
+    int32_t firstArg = -1;
+    // If any non-initial argument value is the same object as the result,
+    // then we first copy its contents and use that instead while formatting.
+    UnicodeString resultCopy;
+    if (getPlaceholderCount(cp, cpLength) > 0) {
+        for (int32_t i = 1; i < cpLength;) {
+            int32_t n = cp[i++];
+            if (n < ARG_NUM_LIMIT) {
+                if (values[n] == &result) {
+                    if (i == 2) {
+                        firstArg = n;
+                    } else if (resultCopy.isEmpty() && !result.isEmpty()) {
+                        resultCopy = result;
+                    }
+                }
+            } else {
+                i += n - ARG_NUM_LIMIT;
+            }
         }
     }
-    appendRange(
-            noPlaceholders,
-            placeholders[placeholderSize - 1].offset,
-            noPlaceholders.length(),
-            appendTo);
-    return appendTo;
+    if (firstArg < 0) {
+        result.remove();
+    }
+    return format(cp, cpLength, values,
+                  result, &resultCopy, FALSE,
+                  offsets, offsetsLength, errorCode);
 }
 
-int32_t SimplePatternFormatter::getUniquePlaceholderAtStart() const {
-    if (placeholderSize == 0
-            || firstPlaceholderReused || placeholders[0].offset != 0) {
-        return -1;
+UnicodeString SimplePatternFormatter::getTextWithNoPlaceholders(
+        const UChar *compiledPattern, int32_t compiledPatternLength) {
+    int32_t capacity = compiledPatternLength - 1 -
+            getPlaceholderCount(compiledPattern, compiledPatternLength);
+    UnicodeString sb(capacity, 0, 0);  // Java: StringBuilder
+    for (int32_t i = 1; i < compiledPatternLength;) {
+        int32_t segmentLength = compiledPattern[i++] - ARG_NUM_LIMIT;
+        if (segmentLength > 0) {
+            sb.append(compiledPattern + i, segmentLength);
+            i += segmentLength;
+        }
     }
-    return placeholders[0].id;
+    return sb;
 }
 
-int32_t SimplePatternFormatter::ensureCapacity(
-        int32_t desiredCapacity, int32_t allocationSize) {
-    if (allocationSize < desiredCapacity) {
-        allocationSize = desiredCapacity;
+UnicodeString &SimplePatternFormatter::format(
+        const UChar *compiledPattern, int32_t compiledPatternLength,
+        const UnicodeString *const *values,
+        UnicodeString &result, const UnicodeString *resultCopy, UBool forbidResultAsValue,
+        int32_t *offsets, int32_t offsetsLength,
+        UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return result;
     }
-    if (desiredCapacity <= placeholders.getCapacity()) {
-        return desiredCapacity;
+    for (int32_t i = 0; i < offsetsLength; i++) {
+        offsets[i] = -1;
     }
-    // allocate new buffer
-    if (placeholders.resize(allocationSize, placeholderSize) == NULL) {
-        return placeholders.getCapacity();
+    for (int32_t i = 1; i < compiledPatternLength;) {
+        int32_t n = compiledPattern[i++];
+        if (n < ARG_NUM_LIMIT) {
+            const UnicodeString *value = values[n];
+            if (value == NULL) {
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+                return result;
+            }
+            if (value == &result) {
+                if (forbidResultAsValue) {
+                    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+                    return result;
+                }
+                if (i == 2) {
+                    // We are appending to result which is also the first value object.
+                    if (n < offsetsLength) {
+                        offsets[n] = 0;
+                    }
+                } else {
+                    if (n < offsetsLength) {
+                        offsets[n] = result.length();
+                    }
+                    result.append(*resultCopy);
+                }
+            } else {
+                if (n < offsetsLength) {
+                    offsets[n] = result.length();
+                }
+                result.append(*value);
+            }
+        } else {
+            int32_t length = n - ARG_NUM_LIMIT;
+            result.append(compiledPattern + i, length);
+            i += length;
+        }
     }
-    return desiredCapacity;
+    return result;
 }
 
-UBool SimplePatternFormatter::addPlaceholder(int32_t id, int32_t offset) {
-    if (ensureCapacity(placeholderSize + 1, 2 * placeholderSize) < placeholderSize + 1) {
-        return FALSE;
-    }
-    ++placeholderSize;
-    PlaceholderInfo *placeholderEnd = &placeholders[placeholderSize - 1];
-    placeholderEnd->offset = offset;
-    placeholderEnd->id = id;
-    if (id >= placeholderCount) {
-        placeholderCount = id + 1;
-    }
-    if (placeholderSize > 1
-            && placeholders[placeholderSize - 1].id == placeholders[0].id) {
-        firstPlaceholderReused = TRUE;
-    }
-    return TRUE;
-}
-    
 U_NAMESPACE_END
