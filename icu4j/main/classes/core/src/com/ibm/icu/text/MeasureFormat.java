@@ -426,8 +426,8 @@ public class MeasureFormat extends UFormat {
                 StandardPlural.fromString(keywordLow),
                 StandardPlural.fromString(keywordHigh));
 
-        SimplePatternFormatter rangeFormatter = getRangeFormat(getLocale(), formatWidth);
-        String formattedNumber = rangeFormatter.format(lowFormatted, highFormatted);
+        String rangeFormatter = getRangeFormat(getLocale(), formatWidth);
+        String formattedNumber = SimplePatternFormatter.formatCompiledPattern(rangeFormatter, lowFormatted, highFormatted);
 
         if (isCurrency) {
             // Nasty hack
@@ -1410,11 +1410,11 @@ public class MeasureFormat extends UFormat {
         return values[ordinal];
     }
 
-    static final Map<ULocale, SimplePatternFormatter> localeIdToRangeFormat 
-    = new ConcurrentHashMap<ULocale, SimplePatternFormatter>();
+    private static final Map<ULocale, String> localeIdToRangeFormat =
+            new ConcurrentHashMap<ULocale, String>();
 
     /**
-     * Return a simple pattern formatter for a range, such as "{0}–{1}".
+     * Return a formatter (compiled SimplePatternFormatter pattern) for a range, such as "{0}–{1}".
      * @param forLocale locale to get the format for
      * @param width the format width
      * @return range formatter, such as "{0}–{1}"
@@ -1422,13 +1422,12 @@ public class MeasureFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-
-    public static SimplePatternFormatter getRangeFormat(ULocale forLocale, FormatWidth width) {
+    public static String getRangeFormat(ULocale forLocale, FormatWidth width) {
         // TODO fix Hack for French
         if (forLocale.getLanguage().equals("fr")) {
             return getRangeFormat(ULocale.ROOT, width);
         }
-        SimplePatternFormatter result = localeIdToRangeFormat.get(forLocale);
+        String result = localeIdToRangeFormat.get(forLocale);
         if (result == null) {
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
                     getBundleInstance(ICUData.ICU_BASE_NAME, forLocale);
@@ -1450,25 +1449,12 @@ public class MeasureFormat extends UFormat {
             } catch ( MissingResourceException ex ) {
                 resultString = rb.getStringWithFallback("NumberElements/latn/patterns/range");
             }
-            result = SimplePatternFormatter.compileMinMaxPlaceholders(resultString, 2, 2);
+            result = SimplePatternFormatter.compileToStringMinMaxPlaceholders(resultString, new StringBuilder(), 2, 2);
             localeIdToRangeFormat.put(forLocale, result);
             if (!forLocale.equals(realLocale)) {
                 localeIdToRangeFormat.put(realLocale, result);
             }
         }
         return result;
-    }
-    
-    /**
-     * Return a simple pattern pattern for a range, such as "{0}–{1}" or "{0}～{1}".
-     * @param forLocale locale to get the range pattern for
-     * @param width the format width.
-     * @return range pattern
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static String getRangePattern(ULocale forLocale, FormatWidth width) {
-        return getRangeFormat(forLocale, width).toString();
     }
 }
