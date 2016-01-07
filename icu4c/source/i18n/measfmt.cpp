@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2015, International Business Machines
+* Copyright (c) 2004-2016, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -1128,7 +1128,7 @@ int32_t MeasureFormat::withPerUnitAndAppend(
     if (U_FAILURE(status)) {
         return offset;
     }
-    UnicodeString perUnitString = pattern->getPatternWithNoPlaceholders();
+    UnicodeString perUnitString = pattern->getTextWithNoPlaceholders();
     perUnitString.trim();
     const UnicodeString *params[] = {&formatted, &perUnitString};
     perFormatter->formatAndAppend(

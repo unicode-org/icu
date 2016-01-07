@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2014-2015, International Business Machines Corporation and
+* Copyright (C) 2014-2016, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -59,19 +59,19 @@ void QuantityFormatterTest::TestBasic() {
 
     assertEquals(
             "getByVariant",
-            fmt.getByVariant("bad variant")->getPatternWithNoPlaceholders(),
+            fmt.getByVariant("bad variant")->getTextWithNoPlaceholders(),
             " pounds");
     assertEquals(
             "getByVariant",
-            fmt.getByVariant("other")->getPatternWithNoPlaceholders(),
+            fmt.getByVariant("other")->getTextWithNoPlaceholders(),
             " pounds");
     assertEquals(
             "getByVariant",
-            fmt.getByVariant("one")->getPatternWithNoPlaceholders(),
+            fmt.getByVariant("one")->getTextWithNoPlaceholders(),
             " pound");
     assertEquals(
             "getByVariant",
-            fmt.getByVariant("few")->getPatternWithNoPlaceholders(),
+            fmt.getByVariant("few")->getTextWithNoPlaceholders(),
             " pounds");
 
     // Test copy constructor
@@ -79,15 +79,15 @@ void QuantityFormatterTest::TestBasic() {
         QuantityFormatter copied(fmt);
         assertEquals(
                 "copied getByVariant",
-                copied.getByVariant("other")->getPatternWithNoPlaceholders(),
+                copied.getByVariant("other")->getTextWithNoPlaceholders(),
                 " pounds");
         assertEquals(
                 "copied getByVariant",
-                copied.getByVariant("one")->getPatternWithNoPlaceholders(),
+                copied.getByVariant("one")->getTextWithNoPlaceholders(),
                 " pound");
         assertEquals(
                 "copied getByVariant",
-                copied.getByVariant("few")->getPatternWithNoPlaceholders(),
+                copied.getByVariant("few")->getTextWithNoPlaceholders(),
                 " pounds");
     }
         
@@ -97,15 +97,15 @@ void QuantityFormatterTest::TestBasic() {
         assigned = fmt;
         assertEquals(
                 "assigned getByVariant",
-                assigned.getByVariant("other")->getPatternWithNoPlaceholders(),
+                assigned.getByVariant("other")->getTextWithNoPlaceholders(),
                 " pounds");
         assertEquals(
                 "assigned getByVariant",
-                assigned.getByVariant("one")->getPatternWithNoPlaceholders(),
+                assigned.getByVariant("one")->getTextWithNoPlaceholders(),
                 " pound");
         assertEquals(
                 "assigned getByVariant",
-                assigned.getByVariant("few")->getPatternWithNoPlaceholders(),
+                assigned.getByVariant("few")->getTextWithNoPlaceholders(),
                 " pounds");
     }
 
