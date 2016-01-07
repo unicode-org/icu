@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2008-2015, International Business Machines
+*   Copyright (C) 2008-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -247,6 +247,12 @@ import com.ibm.icu.util.ULocale.Category;
  * 
  *
  * </pre>
+ * <h4>Synchronization</h4>
+ * 
+ * The format methods of DateIntervalFormat may be used concurrently from multiple threads.
+ * Functions that alter the state of a DateIntervalFormat object (setters) 
+ * may not be used concurrently with any other functions.
+ * 
  * @stable ICU 4.0
  */
 
@@ -296,7 +302,9 @@ public class DateIntervalFormat extends UFormat {
     private DateIntervalInfo     fInfo;
 
     /*
-     * The DateFormat object used to format single pattern
+     * The DateFormat object used to format single pattern.
+     * Because fDateFormat is modified during format operations, all
+     * access to it from logically const, thread safe functions must be synchronized.
      */
     private SimpleDateFormat     fDateFormat;
 
@@ -304,6 +312,8 @@ public class DateIntervalFormat extends UFormat {
      * The 2 calendars with the from and to date.
      * could re-use the calendar in fDateFormat,
      * but keeping 2 calendars make it clear and clean.
+     * Because these Calendars are modified during format operations, all
+     * access to them from logically const, thread safe functions must be synchronized.
      */
     private Calendar fFromCalendar;
     private Calendar fToCalendar;
@@ -559,7 +569,7 @@ public class DateIntervalFormat extends UFormat {
      * @return    A copy of the object.
      * @stable ICU 4.0
      */
-    public Object clone()
+    public synchronized Object clone()
     {
         DateIntervalFormat other = (DateIntervalFormat) super.clone();
         other.fDateFormat = (SimpleDateFormat) fDateFormat.clone();
@@ -618,7 +628,7 @@ public class DateIntervalFormat extends UFormat {
      * @return                  Reference to 'appendTo' parameter.
      * @stable ICU 4.0
      */
-    public final StringBuffer format(DateInterval dtInterval,
+    public final synchronized StringBuffer format(DateInterval dtInterval,
                                      StringBuffer appendTo,
                                      FieldPosition fieldPosition)
     {
@@ -686,7 +696,7 @@ public class DateIntervalFormat extends UFormat {
      * @throws    IllegalArgumentException  if the two calendars are not equivalent.
      * @stable ICU 4.0
      */
-    public final StringBuffer format(Calendar fromCalendar,
+    public final synchronized StringBuffer format(Calendar fromCalendar,
                                      Calendar toCalendar,
                                      StringBuffer appendTo,
                                      FieldPosition pos)
@@ -1008,7 +1018,7 @@ public class DateIntervalFormat extends UFormat {
      * this date interval formatter.
      * @stable ICU 4.0
      */
-    public DateFormat getDateFormat()
+    public synchronized DateFormat getDateFormat()
     {
         return (DateFormat)fDateFormat.clone();
     }
