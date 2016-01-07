@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2004-2014, International Business Machines
+ * Copyright (c) 2004-2016, International Business Machines
  * Corporation and others.  All Rights Reserved.
  * Copyright (C) 2010 , Yahoo! Inc.                                            
  *******************************************************************************
@@ -64,7 +64,6 @@ public class TestAll extends TestGroup {
                 "IntlTestDecimalFormatAPIC",
                 "IntlTestDecimalFormatSymbols",
                 "IntlTestDecimalFormatSymbolsC",
-                "PluralRangesTest",
             });
         }
     }
