@@ -30,6 +30,17 @@ package com.ibm.icu.impl;
  * @see com.ibm.icu.text.MessagePattern.ApostropheMode
  */
 public final class SimplePatternFormatter {
+    // For internal use in Java,
+    // it is most efficient to compile patterns to compiled-pattern strings
+    // and use them with static methods.
+    //
+    // If and when we make this public API,
+    // we should probably make only the non-static methods public
+    // and keep the static ones in an impl class.
+    //
+    // TODO: Consider changing methods & docs to use "argument" not "placeholder",
+    // consistent with MessageFormat.
+
     /**
      * Argument numbers must be smaller than this limit.
      * Text segment lengths are offset by this much.
@@ -100,17 +111,17 @@ public final class SimplePatternFormatter {
         // Parse consistent with MessagePattern, but
         // - support only simple numbered arguments
         // - build a simple binary structure into the result string
-        int length = pattern.length();
-        sb.ensureCapacity(length);
+        int patternLength = pattern.length();
+        sb.ensureCapacity(patternLength);
         // Reserve the first char for the number of arguments.
         sb.setLength(1);
         int textLength = 0;
         int maxArg = -1;
         boolean inQuote = false;
-        for (int i = 0; i < length;) {
+        for (int i = 0; i < patternLength;) {
             char c = pattern.charAt(i++);
             if (c == '\'') {
-                if (i < length && (c = pattern.charAt(i)) == '\'') {
+                if (i < patternLength && (c = pattern.charAt(i)) == '\'') {
                     // double apostrophe, skip the second one
                     ++i;
                 } else if (inQuote) {
@@ -131,7 +142,7 @@ public final class SimplePatternFormatter {
                     textLength = 0;
                 }
                 int argNumber;
-                if ((i + 1) < length &&
+                if ((i + 1) < patternLength &&
                         0 <= (argNumber = pattern.charAt(i) - '0') && argNumber <= 9 &&
                         pattern.charAt(i + 1) == '}') {
                     i += 2;
@@ -141,9 +152,9 @@ public final class SimplePatternFormatter {
                     // around the number, but this class does not.
                     int argStart = i - 1;
                     argNumber = -1;
-                    if (i < length && '1' <= (c = pattern.charAt(i++)) && c <= '9') {
+                    if (i < patternLength && '1' <= (c = pattern.charAt(i++)) && c <= '9') {
                         argNumber = c - '0';
-                        while (i < length && '0' <= (c = pattern.charAt(i++)) && c <= '9') {
+                        while (i < patternLength && '0' <= (c = pattern.charAt(i++)) && c <= '9') {
                             argNumber = argNumber * 10 + (c - '0');
                             if (argNumber >= ARG_NUM_LIMIT) {
                                 break;
@@ -229,7 +240,9 @@ public final class SimplePatternFormatter {
      *                Can be null, or can be shorter or longer than values.
      *                If there is no {i} in the pattern, then offsets[i] is set to -1.
      * @param values The placeholder values.
-     *               A placeholder value may not be the same object as appendTo.
+     *               A placeholder value must not be the same object as appendTo.
+     *               values.length must be at least getPlaceholderCount().
+     *               Can be null if getPlaceholderCount()==0.
      * @return appendTo
      */
     public StringBuilder formatAndAppend(
@@ -247,15 +260,18 @@ public final class SimplePatternFormatter {
      *                Can be null, or can be shorter or longer than values.
      *                If there is no {i} in the pattern, then offsets[i] is set to -1.
      * @param values The placeholder values.
-     *               A placeholder value may not be the same object as appendTo.
+     *               A placeholder value must not be the same object as appendTo.
+     *               values.length must be at least getPlaceholderCount().
+     *               Can be null if getPlaceholderCount()==0.
      * @return appendTo
      */
     public static StringBuilder formatAndAppend(
             String compiledPattern, StringBuilder appendTo, int[] offsets, CharSequence... values) {
-        if (values.length < getPlaceholderCount(compiledPattern)) {
+        int valuesLength = values != null ? values.length : 0;
+        if (valuesLength < getPlaceholderCount(compiledPattern)) {
             throw new IllegalArgumentException("Too few values.");
         }
-        return format(compiledPattern, appendTo, null, true, offsets, values);
+        return format(compiledPattern, values, appendTo, null, true, offsets);
     }
 
     /**
@@ -263,13 +279,14 @@ public final class SimplePatternFormatter {
      * May optimize by actually appending to the result if it is the same object
      * as the initial argument's corresponding value.
      *
-     * @param result Gets the formatted pattern and values appended.
+     * @param result Gets its contents replaced by the formatted pattern and values.
      * @param offsets offsets[i] receives the offset of where
      *                values[i] replaced pattern argument {i}.
      *                Can be null, or can be shorter or longer than values.
      *                If there is no {i} in the pattern, then offsets[i] is set to -1.
      * @param values The placeholder values.
      *               A placeholder value may be the same object as result.
+     *               values.length must be at least getPlaceholderCount().
      * @return result
      */
     public StringBuilder formatAndReplace(
@@ -283,18 +300,20 @@ public final class SimplePatternFormatter {
      * as the initial argument's corresponding value.
      *
      * @param compiledPattern Compiled form of a pattern string.
-     * @param result Gets the formatted pattern and values appended.
+     * @param result Gets its contents replaced by the formatted pattern and values.
      * @param offsets offsets[i] receives the offset of where
      *                values[i] replaced pattern argument {i}.
      *                Can be null, or can be shorter or longer than values.
      *                If there is no {i} in the pattern, then offsets[i] is set to -1.
      * @param values The placeholder values.
      *               A placeholder value may be the same object as result.
+     *               values.length must be at least getPlaceholderCount().
      * @return result
      */
     public static StringBuilder formatAndReplace(
             String compiledPattern, StringBuilder result, int[] offsets, CharSequence... values) {
-        if (values.length < getPlaceholderCount(compiledPattern)) {
+        int valuesLength = values != null ? values.length : 0;
+        if (valuesLength < getPlaceholderCount(compiledPattern)) {
             throw new IllegalArgumentException("Too few values.");
         }
 
@@ -324,7 +343,7 @@ public final class SimplePatternFormatter {
         if (firstArg < 0) {
             result.setLength(0);
         }
-        return format(compiledPattern, result, resultCopy, false, offsets, values);
+        return format(compiledPattern, values, result, resultCopy, false, offsets);
     }
 
     /**
@@ -368,9 +387,9 @@ public final class SimplePatternFormatter {
     }
 
     private static StringBuilder format(
-            String compiledPattern,
+            String compiledPattern, CharSequence[] values,
             StringBuilder result, String resultCopy, boolean forbidResultAsValue,
-            int[] offsets, CharSequence[] values) {
+            int[] offsets) {
         int offsetsLength;
         if (offsets == null) {
             offsetsLength = 0;
@@ -383,8 +402,8 @@ public final class SimplePatternFormatter {
         for (int i = 1; i < compiledPattern.length();) {
             int n = compiledPattern.charAt(i++);
             if (n < ARG_NUM_LIMIT) {
-                CharSequence placeholderValue = values[n];
-                if (placeholderValue == result) {
+                CharSequence value = values[n];
+                if (value == result) {
                     if (forbidResultAsValue) {
                         throw new IllegalArgumentException("Value must not be same object as result");
                     }
@@ -403,7 +422,7 @@ public final class SimplePatternFormatter {
                     if (n < offsetsLength) {
                         offsets[n] = result.length();
                     }
-                    result.append(placeholderValue);
+                    result.append(value);
                 }
             } else {
                 int limit = i + (n - ARG_NUM_LIMIT);

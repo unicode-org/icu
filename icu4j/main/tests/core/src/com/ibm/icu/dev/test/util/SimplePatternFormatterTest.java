@@ -43,18 +43,30 @@ public class SimplePatternFormatterTest extends TestFmwk {
                  "This doesn't have templates {0}",
                  fmt.format("unused"));
          assertEquals(
+                 "format with values=null",
+                 "This doesn't have templates {0}",
+                 fmt.format((CharSequence[])null));
+         assertEquals(
                  "toString",
                  "This doesn't have templates {0}",
                  fmt.toString());
          int[] offsets = new int[1];
          assertEquals(
-                 "toString2",
+                 "formatAndAppend",
                  "This doesn't have templates {0}",
                  fmt.formatAndAppend(new StringBuilder(), offsets).toString());
          assertEquals(
                  "offsets[0]",
                  -1,
                  offsets[0]);
+         assertEquals(
+                 "formatAndAppend with values=null",
+                 "This doesn't have templates {0}",
+                 fmt.formatAndAppend(new StringBuilder(), null, (CharSequence[])null).toString());
+         assertEquals(
+                 "formatAndReplace with values=null",
+                 "This doesn't have templates {0}",
+                 fmt.formatAndReplace(new StringBuilder(), null, (CharSequence[])null).toString());
      }
 
      public void TestSyntaxErrors() {
@@ -84,7 +96,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
          assertEquals("{20}=b", "abc", fmt.format(values));
       }
 
-     public void TestGetPatternWithNoPlaceholders() {
+     public void TestGetTextWithNoPlaceholders() {
          assertEquals(
                  "",
                  "Templates  and  are here.",
