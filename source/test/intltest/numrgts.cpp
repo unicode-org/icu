@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2015, International Business Machines Corporation
+ * Copyright (c) 1997-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -921,7 +921,7 @@ void NumberFormatRegressionTest::Test4070798 (void)
       delete formatter;
       return;
     }
-    failure(status, "NumberFormat::createNumberInstance", loc);
+    failure(status, "NumberFormat::createInstance", loc);
     tempString = formatter->format (-5789.9876, tempString);
 
     if (tempString == expectedDefault) {
@@ -990,7 +990,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
 
     UErrorCode status = U_ZERO_ERROR;
     formatter = NumberFormat::createInstance(Locale::getCanadaFrench(), status);
-    if (failure(status, "NumberFormat::createNumberInstance", Locale::getCanadaFrench(), TRUE)){
+    if (failure(status, "NumberFormat::createInstance", Locale::getCanadaFrench(), TRUE)){
         delete formatter;
         return;
     };
@@ -1058,7 +1058,7 @@ void NumberFormatRegressionTest::Test4071014 (void)
     char loc[256]={0};
     uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
     formatter = NumberFormat::createInstance(Locale(loc), status);
-    if (failure(status, "NumberFormat::createNumberInstance", loc, TRUE)){
+    if (failure(status, "NumberFormat::createInstance", loc, TRUE)){
         delete formatter;
         return;
     }
