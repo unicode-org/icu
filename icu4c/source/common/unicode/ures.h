@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2012,2014, International Business Machines
+*   Copyright (C) 1997-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -799,13 +799,17 @@ U_NAMESPACE_BEGIN
  * @return        a UnicodeString object. If there is an error, string is bogus
  * @stable ICU 2.0
  */
-inline UnicodeString 
-ures_getUnicodeString(const UResourceBundle *resB, 
-                      UErrorCode* status) 
-{
+inline UnicodeString
+ures_getUnicodeString(const UResourceBundle *resB, UErrorCode* status) {
+    UnicodeString result;
     int32_t len = 0;
     const UChar *r = ures_getString(resB, &len, status);
-    return UnicodeString(TRUE, r, len);
+    if(U_SUCCESS(*status)) {
+        result.setTo(TRUE, r, len);
+    } else {
+        result.setToBogus();
+    }
+    return result;
 }
 
 /**
@@ -818,14 +822,17 @@ ures_getUnicodeString(const UResourceBundle *resB,
  * @return an UnicodeString object.
  * @stable ICU 2.0
  */
-inline UnicodeString 
-ures_getNextUnicodeString(UResourceBundle *resB, 
-                          const char ** key, 
-                          UErrorCode* status) 
-{
+inline UnicodeString
+ures_getNextUnicodeString(UResourceBundle *resB, const char ** key, UErrorCode* status) {
+    UnicodeString result;
     int32_t len = 0;
     const UChar* r = ures_getNextString(resB, &len, key, status);
-    return UnicodeString(TRUE, r, len);
+    if(U_SUCCESS(*status)) {
+        result.setTo(TRUE, r, len);
+    } else {
+        result.setToBogus();
+    }
+    return result;
 }
 
 /**
@@ -837,14 +844,17 @@ ures_getNextUnicodeString(UResourceBundle *resB,
  * @return                  an UnicodeString object. If there is an error, string is bogus
  * @stable ICU 2.0
  */
-inline UnicodeString 
-ures_getUnicodeStringByIndex(const UResourceBundle *resB, 
-                             int32_t indexS, 
-                             UErrorCode* status) 
-{
+inline UnicodeString
+ures_getUnicodeStringByIndex(const UResourceBundle *resB, int32_t indexS, UErrorCode* status) {
+    UnicodeString result;
     int32_t len = 0;
     const UChar* r = ures_getStringByIndex(resB, indexS, &len, status);
-    return UnicodeString(TRUE, r, len);
+    if(U_SUCCESS(*status)) {
+        result.setTo(TRUE, r, len);
+    } else {
+        result.setToBogus();
+    }
+    return result;
 }
 
 /**
@@ -857,14 +867,17 @@ ures_getUnicodeStringByIndex(const UResourceBundle *resB,
  * @return                  an UnicodeString object. If there is an error, string is bogus
  * @stable ICU 2.0
  */
-inline UnicodeString 
-ures_getUnicodeStringByKey(const UResourceBundle *resB, 
-                           const char* key, 
-                           UErrorCode* status) 
-{
+inline UnicodeString
+ures_getUnicodeStringByKey(const UResourceBundle *resB, const char* key, UErrorCode* status) {
+    UnicodeString result;
     int32_t len = 0;
     const UChar* r = ures_getStringByKey(resB, key, &len, status);
-    return UnicodeString(TRUE, r, len);
+    if(U_SUCCESS(*status)) {
+        result.setTo(TRUE, r, len);
+    } else {
+        result.setToBogus();
+    }
+    return result;
 }
 
 U_NAMESPACE_END
