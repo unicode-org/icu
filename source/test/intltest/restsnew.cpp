@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2014, International Business Machines
+ * Copyright (c) 1997-2016, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -597,6 +597,20 @@ NewResourceBundleTest::TestOtherAPI(){
                 }
             }
         }
+
+        // Check that ures_getUnicodeString() & variants return a bogus string if failure.
+        // Same relevant code path whether the failure code is passed in
+        // or comes from a lookup error.
+        UErrorCode failure = U_INTERNAL_PROGRAM_ERROR;
+        assertTrue("ures_getUnicodeString(failure).isBogus()",
+                   ures_getUnicodeString(testCAPI, &failure).isBogus());
+        assertTrue("ures_getNextUnicodeString(failure).isBogus()",
+                   ures_getNextUnicodeString(testCAPI, NULL, &failure).isBogus());
+        assertTrue("ures_getUnicodeStringByIndex(failure).isBogus()",
+                   ures_getUnicodeStringByIndex(testCAPI, 999, &failure).isBogus());
+        assertTrue("ures_getUnicodeStringByKey(failure).isBogus()",
+                   ures_getUnicodeStringByKey(testCAPI, "bogus key", &failure).isBogus());
+
         ures_close(temp);
         ures_close(rowbundle);
         ures_close(bundle);
