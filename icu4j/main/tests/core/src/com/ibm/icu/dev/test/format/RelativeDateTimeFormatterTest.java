@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013-2015, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2013-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -749,5 +749,24 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
         } catch (IllegalArgumentException expected) {
         }
     }
-    
+
+    public void TestSidewaysDataLoading() {
+        RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(
+                new ULocale("en_GB"),
+                null,
+                RelativeDateTimeFormatter.Style.NARROW,
+                DisplayContext.CAPITALIZATION_NONE);
+        String s = fmt.format(3.0, Direction.NEXT, RelativeUnit.MONTHS);
+        assertEquals("narrow: in 3 months", "in 3 mo", s);
+        String t = fmt.format(1.0, Direction.LAST, RelativeUnit.QUARTERS);
+        assertEquals("narrow: 1 qtr ago", "1 qtr ago", t);
+        // Check for fallback to SHORT
+        String u = fmt.format(3.0, Direction.LAST, RelativeUnit.QUARTERS);
+        assertEquals("narrow: 3 qtr ago", "3 qtr ago", u);
+        // Do not expect fall back to SHORT
+        String v = fmt.format(1.0, Direction.LAST, RelativeUnit.QUARTERS);
+        assertEquals("narrow: 1 qtr ago", "1 qtr ago", v);
+        String w = fmt.format(6.0, Direction.NEXT, RelativeUnit.QUARTERS);
+        assertEquals("narrow: in 6 qtr", "in 6 qtr", w);
+    }
 }
