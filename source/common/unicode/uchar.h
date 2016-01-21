@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2015, International Business Machines
+*   Copyright (C) 1997-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -397,8 +397,36 @@ typedef enum UProperty {
     UCHAR_CHANGES_WHEN_CASEMAPPED=55,
     /** Binary property Changes_When_NFKC_Casefolded. @stable ICU 4.4 */
     UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED=56,
+    /**
+     * Binary property Emoji.
+     * See http://www.unicode.org/reports/tr51/#Emoji_Properties
+     *
+     * @draft ICU 57
+     */
+    UCHAR_EMOJI=57,
+    /**
+     * Binary property Emoji_Presentation.
+     * See http://www.unicode.org/reports/tr51/#Emoji_Properties
+     *
+     * @draft ICU 57
+     */
+    UCHAR_EMOJI_PRESENTATION=58,
+    /**
+     * Binary property Emoji_Modifier.
+     * See http://www.unicode.org/reports/tr51/#Emoji_Properties
+     *
+     * @draft ICU 57
+     */
+    UCHAR_EMOJI_MODIFIER=59,
+    /**
+     * Binary property Emoji_Modifier_Base.
+     * See http://www.unicode.org/reports/tr51/#Emoji_Properties
+     *
+     * @draft ICU 57
+     */
+    UCHAR_EMOJI_MODIFIER_BASE=60,
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
-    UCHAR_BINARY_LIMIT=57,
+    UCHAR_BINARY_LIMIT=61,
 
     /** Enumerated property Bidi_Class.
         Same as u_charDirection, returns UCharDirection values. @stable ICU 2.2 */
