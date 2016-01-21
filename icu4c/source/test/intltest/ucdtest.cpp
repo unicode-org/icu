@@ -1,6 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -60,6 +59,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestPatternProperties);
     TESTCASE_AUTO(TestScriptMetadata);
     TESTCASE_AUTO(TestBidiPairedBracketType);
+    TESTCASE_AUTO(TestEmojiProperties);
     TESTCASE_AUTO_END;
 }
 
@@ -506,4 +506,19 @@ void UnicodeTest::TestBidiPairedBracketType() {
     UnicodeSet pe("[:Pe:]", errorCode);
     assertTrue("bpt=Open is a subset of Ps", ps.containsAll(bpt_open));
     assertTrue("bpt=Close is a subset of Pe", pe.containsAll(bpt_close));
+}
+
+void UnicodeTest::TestEmojiProperties() {
+    assertFalse("space is not Emoji", u_hasBinaryProperty(0x20, UCHAR_EMOJI));
+    assertTrue("shooting star is Emoji", u_hasBinaryProperty(0x1F320, UCHAR_EMOJI));
+    IcuTestErrorCode errorCode(*this, "TestEmojiProperties()");
+    UnicodeSet emoji("[:Emoji:]", errorCode);
+    assertTrue("lots of Emoji", emoji.size() > 700);
+
+    assertTrue("shooting star is Emoji_Presentation",
+               u_hasBinaryProperty(0x1F320, UCHAR_EMOJI_PRESENTATION));
+    assertTrue("Fitzpatrick 6 is Emoji_Modifier",
+               u_hasBinaryProperty(0x1F3FF, UCHAR_EMOJI_MODIFIER));
+    assertTrue("happy person is Emoji_Modifier_Base",
+               u_hasBinaryProperty(0x1F64B, UCHAR_EMOJI_MODIFIER_BASE));
 }
