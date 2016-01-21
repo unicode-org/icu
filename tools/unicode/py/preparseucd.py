@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2009-2015 International Business Machines
+# Copyright (c) 2009-2016 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #   file name:  preparseucd.py
@@ -516,6 +516,11 @@ def ParsePropertyAliases(in_file):
   AddBinaryProperty("nfcinert", "NFC_Inert")
   AddBinaryProperty("nfkcinert", "NFKC_Inert")
   AddBinaryProperty("segstart", "Segment_Starter")
+  # http://www.unicode.org/reports/tr51/#Emoji_Properties
+  AddBinaryProperty("Emoji", "Emoji")
+  AddBinaryProperty("Emoji_Presentation", "Emoji_Presentation")
+  AddBinaryProperty("Emoji_Modifier", "Emoji_Modifier")
+  AddBinaryProperty("Emoji_Modifier_Base", "Emoji_Modifier_Base")
   # C/POSIX character classes that do not have Unicode property [value] aliases.
   # See uchar.h.
   AddPOSIXBinaryProperty("alnum")
@@ -1535,6 +1540,7 @@ _files = {
   "DerivedNormalizationProps.txt": (CopyAndStrip, ParseNamedProperties),
   "DerivedNumericValues.txt": (DontCopy, ParseDerivedNumericValues),
   "EastAsianWidth.txt": (DontCopy, ParseEastAsianWidth),
+  "emoji-data.txt": (DontCopy, ParseNamedProperties),
   "GraphemeBreakProperty.txt": (DontCopy, ParseGraphemeBreakProperty),
   "GraphemeBreakTest.txt": (PrependBOM, "testdata"),
   "IndicPositionalCategory.txt": (DontCopy, ParseIndicPositionalCategory),
