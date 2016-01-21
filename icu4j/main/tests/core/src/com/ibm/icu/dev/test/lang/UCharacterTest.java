@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -2479,6 +2479,20 @@ public final class UCharacterTest extends TestFmwk
         UnicodeSet pe = new UnicodeSet("[:Pe:]");
         assertTrue("bpt=Open is a subset of Ps", ps.containsAll(bpt_open));
         assertTrue("bpt=Close is a subset of Pe", pe.containsAll(bpt_close));
+    }
+
+    public void TestEmojiProperties() {
+        assertFalse("space is not Emoji", UCharacter.hasBinaryProperty(0x20, UProperty.EMOJI));
+        assertTrue("shooting star is Emoji", UCharacter.hasBinaryProperty(0x1F320, UProperty.EMOJI));
+        UnicodeSet emoji = new UnicodeSet("[:Emoji:]");
+        assertTrue("lots of Emoji", emoji.size() > 700);
+
+        assertTrue("shooting star is Emoji_Presentation",
+                UCharacter.hasBinaryProperty(0x1F320, UProperty.EMOJI_PRESENTATION));
+        assertTrue("Fitzpatrick 6 is Emoji_Modifier",
+                UCharacter.hasBinaryProperty(0x1F3FF, UProperty.EMOJI_MODIFIER));
+        assertTrue("happy person is Emoji_Modifier_Base",
+                UCharacter.hasBinaryProperty(0x1F64B, UProperty.EMOJI_MODIFIER_BASE));
     }
 
     public void TestIsBMP()
