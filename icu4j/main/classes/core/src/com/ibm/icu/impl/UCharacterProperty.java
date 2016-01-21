@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -384,6 +384,10 @@ public final class UCharacterProperty
                 return !Normalizer2Impl.UTF16Plus.equal(dest, src);
             }
         },
+        new BinaryProperty(2, 1<<PROPS_2_EMOJI),
+        new BinaryProperty(2, 1<<PROPS_2_EMOJI_PRESENTATION),
+        new BinaryProperty(2, 1<<PROPS_2_EMOJI_MODIFIER),
+        new BinaryProperty(2, 1<<PROPS_2_EMOJI_MODIFIER_BASE),
     };
 
     public boolean hasBinaryProperty(int c, int which) {
@@ -1101,13 +1105,19 @@ public final class UCharacterProperty
     /*
      * Properties in vector word 2
      * Bits
-     * 31..26   reserved
+     * 31..28   http://www.unicode.org/reports/tr51/#Emoji_Properties
+     * 27..26   reserved
      * 25..20   Line Break
      * 19..15   Sentence Break
      * 14..10   Word Break
      *  9.. 5   Grapheme Cluster Break
      *  4.. 0   Decomposition Type
      */
+    private static final int PROPS_2_EMOJI = 28;
+    private static final int PROPS_2_EMOJI_PRESENTATION = 29;
+    private static final int PROPS_2_EMOJI_MODIFIER = 30;
+    private static final int PROPS_2_EMOJI_MODIFIER_BASE = 31;
+
     private static final int LB_MASK          = 0x03f00000;
     private static final int LB_SHIFT         = 20;
 
