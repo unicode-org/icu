@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2015, International Business Machines
+*   Copyright (C) 1999-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -45,7 +45,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 7.1 .
+The following is a description of format version 7.2 .
 
 Data contents:
 
@@ -244,6 +244,12 @@ Unicode 6.2 adds sexagesimal (base-60) numeric values:
 
 The encoding of numeric values was extended to handle such values.
 
+--- Changes in format version 7.2 ---
+
+ICU 57 adds 4 Emoji properties to vector word 2.
+http://bugs.icu-project.org/trac/ticket/11802
+http://www.unicode.org/reports/tr51/#Emoji_Properties
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -259,8 +265,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 7, 1, 0, 0 },                             /* formatVersion */
-    { 6, 2, 0, 0 }                              /* dataVersion */
+    { 7, 2, 0, 0 },                             /* formatVersion */
+    { 8, 0, 0, 0 }                              /* dataVersion */
 };
 
 class CorePropsBuilder : public PropsBuilder {
@@ -528,6 +534,11 @@ propToBinaries[]={
     { UCHAR_ID_START,                       1, UPROPS_ID_START },
     { UCHAR_ID_CONTINUE,                    1, UPROPS_ID_CONTINUE },
     { UCHAR_GRAPHEME_BASE,                  1, UPROPS_GRAPHEME_BASE },
+
+    { UCHAR_EMOJI,                          2, UPROPS_2_EMOJI },
+    { UCHAR_EMOJI_PRESENTATION,             2, UPROPS_2_EMOJI_PRESENTATION },
+    { UCHAR_EMOJI_MODIFIER,                 2, UPROPS_2_EMOJI_MODIFIER },
+    { UCHAR_EMOJI_MODIFIER_BASE,            2, UPROPS_2_EMOJI_MODIFIER_BASE },
 };
 
 struct PropToEnum {
