@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2014 International Business Machines Corporation
+*   Copyright (C) 1999-2016 International Business Machines Corporation
 *   and others. All rights reserved.
 ***************************************************************************
 */
@@ -715,7 +715,7 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
     // Move requested offset to a code point start. It might be on a trail surrogate,
     // or on a trail byte if the input is UTF-8.
     utext_setNativeIndex(fText, offset);
-    offset = utext_getNativeIndex(fText);
+    offset = (int32_t)utext_getNativeIndex(fText);
 
     // if we have cached break positions and offset is in the range
     // covered by them, use them
@@ -826,7 +826,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
     // Move requested offset to a code point start. It might be on a trail surrogate,
     // or on a trail byte if the input is UTF-8.
     utext_setNativeIndex(fText, offset);
-    offset = utext_getNativeIndex(fText);
+    offset = (int32_t)utext_getNativeIndex(fText);
 
     // if we have cached break positions and offset is in the range
     // covered by them, use them
