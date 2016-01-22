@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/supplementalData.xml
@@ -31407,6 +31407,401 @@ supplementalData:table(nofallback){
                 "h",
             }
             preferred{"h"}
+        }
+    }
+    unitPreferenceData{
+        001{
+            area-land-agricult{"hectare"}
+            area-land-commercl{"hectare"}
+            area-land-residntl{"hectare"}
+            concentr-blood-glucose{"milligram-per-deciliter"}
+            consumption-vehicle-fuel{"liter-per-100kilometers"}
+            duration-music-track{"minute second"}
+            duration-person-age{"year-person month-person"}
+            duration-tv-program{"minute second"}
+            energy-food{"foodcalorie"}
+            energy-person-usage{"kilocalorie"}
+            length-person{"centimeter"}
+            length-person-small{"centimeter"}
+            length-rainfall{"millimeter"}
+            length-road{"kilometer"}
+            length-road-small{"meter"}
+            length-snowfall{"centimeter"}
+            length-vehicle{"meter"}
+            length-visiblty{"kilometer"}
+            length-visiblty-small{"meter"}
+            mass-person{"kilogram"}
+            mass-person-small{"gram"}
+            pressure-baromtrc{"hectopascal"}
+            speed-road-travel{"kilometer-per-hour"}
+            speed-wind{"kilometer-per-hour"}
+            temperature-person{"celsius"}
+            temperature-weather{"celsius"}
+            volume-vehicle-fuel{"liter"}
+        }
+        AG{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        AI{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        AO{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        AT{
+            length-person{"meter centimeter"}
+        }
+        AU{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        BA{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        BE{
+            length-person{"meter centimeter"}
+        }
+        BG{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        BH{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        BM{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        BN{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        BR{
+            consumption-vehicle-fuel{"liter-per-kilometer"}
+            length-person-informal{"meter centimeter"}
+            length-rainfall{"centimeter"}
+            pressure-baromtrc{"millibar"}
+        }
+        BS{
+            temperature-weather{"fahrenheit"}
+        }
+        BW{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        BY{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        BZ{
+            temperature-weather{"fahrenheit"}
+        }
+        CA{
+            concentr-blood-glucose{"millimole-per-liter"}
+            consumption-vehicle-fuel-informal{"mile-per-gallon-imperial"}
+            length-person-informal{"foot inch"}
+            length-person-small-informal{"inch"}
+        }
+        CH{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        CM{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        CN{
+            concentr-blood-glucose{"millimole-per-liter"}
+            length-person-informal{"meter centimeter"}
+        }
+        CZ{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        DE{
+            length-person-informal{"meter centimeter"}
+            length-visiblty{"meter"}
+        }
+        DK{
+            concentr-blood-glucose{"millimole-per-liter"}
+            length-person-informal{"meter centimeter"}
+        }
+        DM{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        DZ{
+            length-person{"meter centimeter"}
+            mass-person-small{"kilogram gram"}
+        }
+        EE{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        EG{
+            length-person{"meter centimeter"}
+            mass-person-small{"kilogram gram"}
+            pressure-baromtrc{"millibar"}
+        }
+        ES{
+            length-person{"meter centimeter"}
+            mass-person-small{"kilogram gram"}
+        }
+        FI{
+            concentr-blood-glucose{"millimole-per-liter"}
+            speed-wind{"meter-per-second"}
+        }
+        FJ{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        FR{
+            length-person{"meter centimeter"}
+        }
+        GB{
+            area-land-agricult{"acre"}
+            area-land-commercl{"acre"}
+            area-land-residntl{"acre"}
+            concentr-blood-glucose{"millimole-per-liter"}
+            consumption-vehicle-fuel-informal{"mile-per-gallon-imperial"}
+            length-person-informal{"foot inch"}
+            length-person-small-informal{"inch"}
+            length-road{"mile"}
+            length-road-small{"yard"}
+            length-vehicle{"foot inch"}
+            length-visiblty{"mile"}
+            length-visiblty-small{"foot"}
+            mass-person{"stone pound"}
+            mass-person-small{"pound ounce"}
+            pressure-baromtrc{"millibar"}
+            speed-road-travel{"mile-per-hour"}
+        }
+        GD{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        HK{
+            concentr-blood-glucose{"millimole-per-liter"}
+            length-person{"meter centimeter"}
+            mass-person-small{"pound ounce"}
+        }
+        HR{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        HU{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        ID{
+            length-person{"meter centimeter"}
+        }
+        IE{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        IL{
+            length-person{"meter centimeter"}
+            pressure-baromtrc{"millibar"}
+        }
+        IM{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        IN{
+            length-person-informal{"foot inch"}
+            length-person-small-informal{"inch"}
+            pressure-baromtrc{"inch-hg"}
+        }
+        IS{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        IT{
+            consumption-vehicle-fuel{"liter-per-kilometer"}
+            length-person{"meter centimeter"}
+        }
+        JO{
+            length-person{"meter centimeter"}
+            mass-person-small{"kilogram gram"}
+        }
+        JP{
+            consumption-vehicle-fuel{"liter-per-kilometer"}
+        }
+        KE{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        KN{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        KR{
+            consumption-vehicle-fuel{"liter-per-kilometer"}
+            speed-wind{"meter-per-second"}
+        }
+        KW{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        KY{
+            temperature-weather{"fahrenheit"}
+        }
+        KZ{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        LC{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        LI{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        LT{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        LU{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        LV{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        ME{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        MG{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        MK{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        MO{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        MS{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        MT{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        MU{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        MX{
+            consumption-vehicle-fuel{"liter-per-kilometer"}
+            length-person-informal{"meter centimeter"}
+            length-vehicle{"meter centimeter"}
+            pressure-baromtrc{"millimeter-of-mercury"}
+        }
+        MY{
+            concentr-blood-glucose{"millimole-per-liter"}
+            consumption-vehicle-fuel{"liter-per-kilometer"}
+            length-person{"meter centimeter"}
+        }
+        MZ{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        NA{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        NL{
+            concentr-blood-glucose{"millimole-per-liter"}
+            consumption-vehicle-fuel-informal{"liter-per-kilometer"}
+            length-person-informal{"meter centimeter"}
+            length-visiblty{"meter"}
+        }
+        NO{
+            concentr-blood-glucose{"millimole-per-liter"}
+            length-person-informal{"meter centimeter"}
+            speed-wind{"meter-per-second"}
+        }
+        NZ{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        OM{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        PG{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        PL{
+            length-person-informal{"meter centimeter"}
+            speed-wind{"meter-per-second"}
+        }
+        PR{
+            temperature-weather{"fahrenheit"}
+        }
+        PT{
+            length-person-informal{"meter centimeter"}
+        }
+        PW{
+            temperature-weather{"fahrenheit"}
+        }
+        RS{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        RU{
+            concentr-blood-glucose{"millimole-per-liter"}
+            length-person-informal{"meter centimeter"}
+            pressure-baromtrc{"millimeter-of-mercury"}
+            speed-wind{"meter-per-second"}
+        }
+        SA{
+            length-person{"meter centimeter"}
+            mass-person-small{"kilogram gram"}
+        }
+        SE{
+            concentr-blood-glucose{"millimole-per-liter"}
+            length-person{"meter centimeter"}
+            length-road-informal{"mile-scandinavian"}
+            speed-wind{"meter-per-second"}
+        }
+        SG{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        SI{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        SK{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        TC{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        TH{
+            consumption-vehicle-fuel{"liter-per-kilometer"}
+            pressure-baromtrc{"millibar"}
+        }
+        TO{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        TR{
+            consumption-vehicle-fuel{"liter-per-kilometer"}
+            length-person{"meter centimeter"}
+        }
+        UA{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        UG{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        US{
+            area-land-agricult{"acre"}
+            area-land-commercl{"acre"}
+            area-land-residntl{"acre"}
+            consumption-vehicle-fuel{"mile-per-gallon"}
+            length-person{"inch"}
+            length-person-informal{"foot inch"}
+            length-person-small{"inch"}
+            length-rainfall{"inch"}
+            length-road{"mile"}
+            length-road-small{"foot"}
+            length-snowfall{"inch"}
+            length-vehicle{"foot inch"}
+            length-visiblty{"mile"}
+            length-visiblty-small{"foot"}
+            mass-person{"pound"}
+            mass-person-small{"pound ounce"}
+            pressure-baromtrc{"inch-hg"}
+            speed-road-travel{"mile-per-hour"}
+            speed-wind{"mile-per-hour"}
+            temperature-person{"fahrenheit"}
+            temperature-weather{"fahrenheit"}
+            volume-vehicle-fuel{"gallon"}
+        }
+        VC{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        VG{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        VN{
+            concentr-blood-glucose{"millimole-per-liter"}
+            length-person{"meter centimeter"}
+        }
+        VU{
+            concentr-blood-glucose{"millimole-per-liter"}
+        }
+        ZA{
+            concentr-blood-glucose{"millimole-per-liter"}
         }
     }
     weekData{
