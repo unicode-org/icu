@@ -1238,6 +1238,9 @@
     <CustomBuild Include="unicode\upluralrules.h">
       <Filter>formatting</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\ureldatefmt.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\utmscale.h">
       <Filter>formatting</Filter>
     </CustomBuild>
