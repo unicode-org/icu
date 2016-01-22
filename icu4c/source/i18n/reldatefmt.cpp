@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2014-2015, International Business Machines Corporation and
+* Copyright (C) 2014-2016, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 *
@@ -12,6 +12,9 @@
 
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_BREAK_ITERATION
 
+#include "unicode/ureldatefmt.h"
+#include "unicode/udisplaycontext.h"
+#include "unicode/unum.h"
 #include "unicode/localpointer.h"
 #include "quantityformatter.h"
 #include "unicode/plurrule.h"
@@ -805,6 +808,37 @@ UnicodeString& RelativeDateTimeFormatter::format(
     return appendTo.append(result);
 }
 
+UnicodeString& RelativeDateTimeFormatter::formatNumeric(
+        double offset, URelativeDateTimeUnit unit,
+        UnicodeString& appendTo, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    // For a quick bringup just call the above method; this leaves some
+    // holes (e.g. for handling quarter). Need to redo the data structure
+    // to support all necessary data items, and to be indexed by the
+    // newer enum.
+    UDateRelativeUnit relunit = UDAT_RELATIVE_UNIT_COUNT;
+    switch (unit) {
+        case UDAT_REL_UNIT_YEAR:    relunit = UDAT_RELATIVE_YEARS; break;
+        case UDAT_REL_UNIT_MONTH:   relunit = UDAT_RELATIVE_MONTHS; break;
+        case UDAT_REL_UNIT_WEEK:    relunit = UDAT_RELATIVE_WEEKS; break;
+        case UDAT_REL_UNIT_DAY:     relunit = UDAT_RELATIVE_DAYS; break;
+        case UDAT_REL_UNIT_HOUR:    relunit = UDAT_RELATIVE_HOURS; break;
+        case UDAT_REL_UNIT_MINUTE:  relunit = UDAT_RELATIVE_MINUTES; break;
+        case UDAT_REL_UNIT_SECOND:  relunit = UDAT_RELATIVE_SECONDS; break;
+        default: // a unit that the above method does not handle
+            status = U_MISSING_RESOURCE_ERROR;
+            return appendTo;
+    }
+    UDateDirection direction = UDAT_DIRECTION_NEXT;
+    if (offset < 0) {
+        direction = UDAT_DIRECTION_LAST;
+        offset = -offset;
+    }
+    return format(offset, direction, relunit, appendTo, status);
+}
+
 UnicodeString& RelativeDateTimeFormatter::format(
         UDateDirection direction, UDateAbsoluteUnit unit,
         UnicodeString& appendTo, UErrorCode& status) const {
@@ -821,6 +855,61 @@ UnicodeString& RelativeDateTimeFormatter::format(
     UnicodeString result(fCache->absoluteUnits[fStyle][unit][direction]);
     adjustForContext(result);
     return appendTo.append(result);
+}
+
+UnicodeString& RelativeDateTimeFormatter::format(
+        double offset, URelativeDateTimeUnit unit,
+        UnicodeString& appendTo, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    // For a quick bringup just use the existing data structure; this leaves
+    // some holes (e.g. for handling quarter). Need to redo the data structure
+    // to support all necessary data items, and to be indexed by the
+    // newer enum.
+    UDateDirection direction = UDAT_DIRECTION_COUNT;
+    int32_t intoffset = (offset < 0)? (int32_t)(offset-0.5) : (int32_t)(offset+0.5);
+    switch (intoffset) {
+        case -2: direction = UDAT_DIRECTION_LAST_2; break;
+        case -1: direction = UDAT_DIRECTION_LAST; break;
+        case  0: direction = UDAT_DIRECTION_THIS; break;
+        case  1: direction = UDAT_DIRECTION_NEXT; break;
+        case  2: direction = UDAT_DIRECTION_NEXT_2; break;
+        default: break;
+    }
+    UDateAbsoluteUnit absunit = UDAT_ABSOLUTE_UNIT_COUNT;
+    switch (unit) {
+        case UDAT_REL_UNIT_YEAR:    absunit = UDAT_ABSOLUTE_YEAR; break;
+        case UDAT_REL_UNIT_MONTH:   absunit = UDAT_ABSOLUTE_MONTH; break;
+        case UDAT_REL_UNIT_WEEK:    absunit = UDAT_ABSOLUTE_WEEK; break;
+        case UDAT_REL_UNIT_DAY:     absunit = UDAT_ABSOLUTE_DAY; break;
+        case UDAT_REL_UNIT_MINUTE:
+        case UDAT_REL_UNIT_SECOND:
+            if (direction == UDAT_DIRECTION_THIS) {
+                absunit = UDAT_ABSOLUTE_NOW;
+                direction = UDAT_DIRECTION_PLAIN;
+            }
+            break;
+        case UDAT_REL_UNIT_SUNDAY:  absunit = UDAT_ABSOLUTE_SUNDAY; break;
+        case UDAT_REL_UNIT_MONDAY:  absunit = UDAT_ABSOLUTE_MONDAY; break;
+        case UDAT_REL_UNIT_TUESDAY:  absunit = UDAT_ABSOLUTE_TUESDAY; break;
+        case UDAT_REL_UNIT_WEDNESDAY:  absunit = UDAT_ABSOLUTE_WEDNESDAY; break;
+        case UDAT_REL_UNIT_THURSDAY:  absunit = UDAT_ABSOLUTE_THURSDAY; break;
+        case UDAT_REL_UNIT_FRIDAY:  absunit = UDAT_ABSOLUTE_FRIDAY; break;
+        case UDAT_REL_UNIT_SATURDAY:  absunit = UDAT_ABSOLUTE_SATURDAY; break;
+        default: break;
+    }
+    if (direction != UDAT_DIRECTION_COUNT && absunit != UDAT_ABSOLUTE_UNIT_COUNT) {
+        UnicodeString result(fCache->absoluteUnits[fStyle][absunit][direction]);
+        if (result.length() > 0) {
+            if (fOptBreakIterator != NULL) {
+                adjustForContext(result);
+            }
+            return appendTo.append(result);
+        }
+    }
+    // otherwise fallback to formatNumeric
+    return formatNumeric(offset, unit, appendTo, status);
 }
 
 UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
@@ -894,8 +983,126 @@ void RelativeDateTimeFormatter::init(
     }
 }
 
-
 U_NAMESPACE_END
+
+// Plain C API
+
+U_NAMESPACE_USE
+
+U_CAPI URelativeDateTimeFormatter* U_EXPORT2
+ureldatefmt_open( const char*          locale,
+                  UNumberFormat*       nfToAdopt,
+                  UDateRelativeDateTimeFormatterStyle width,
+                  UDisplayContext      capitalizationContext,
+                  UErrorCode*          status )
+{
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+    LocalPointer<RelativeDateTimeFormatter> formatter(new RelativeDateTimeFormatter(Locale(locale),
+                                                              (NumberFormat*)nfToAdopt, width,
+                                                              capitalizationContext, *status));
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+    return (URelativeDateTimeFormatter*)formatter.orphan();
+}
+
+U_CAPI void U_EXPORT2
+ureldatefmt_close(URelativeDateTimeFormatter *reldatefmt)
+{
+    delete (RelativeDateTimeFormatter*)reldatefmt;
+}
+
+U_CAPI int32_t U_EXPORT2
+ureldatefmt_formatNumeric( const URelativeDateTimeFormatter* reldatefmt,
+                    double                offset,
+                    URelativeDateTimeUnit unit,
+                    UChar*                result,
+                    int32_t               resultCapacity,
+                    UErrorCode*           status)
+{
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    if (result == NULL ? resultCapacity != 0 : resultCapacity < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    UnicodeString res;
+    if (result != NULL) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer (copied from udat_format)
+        res.setTo(result, 0, resultCapacity);
+    }
+    ((RelativeDateTimeFormatter*)reldatefmt)->formatNumeric(offset, unit, res, *status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    return res.extract(result, resultCapacity, *status);
+}
+
+U_CAPI int32_t U_EXPORT2
+ureldatefmt_format( const URelativeDateTimeFormatter* reldatefmt,
+                    double                offset,
+                    URelativeDateTimeUnit unit,
+                    UChar*                result,
+                    int32_t               resultCapacity,
+                    UErrorCode*           status)
+{
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    if (result == NULL ? resultCapacity != 0 : resultCapacity < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    UnicodeString res;
+    if (result != NULL) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer (copied from udat_format)
+        res.setTo(result, 0, resultCapacity);
+    }
+    ((RelativeDateTimeFormatter*)reldatefmt)->format(offset, unit, res, *status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    return res.extract(result, resultCapacity, *status);
+}
+
+U_CAPI int32_t U_EXPORT2
+ureldatefmt_combineDateAndTime( const URelativeDateTimeFormatter* reldatefmt,
+                    const UChar *     relativeDateString,
+                    int32_t           relativeDateStringLen,
+                    const UChar *     timeString,
+                    int32_t           timeStringLen,
+                    UChar*            result,
+                    int32_t           resultCapacity,
+                    UErrorCode*       status )
+{
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    if (result == NULL ? resultCapacity != 0 : resultCapacity < 0 ||
+            relativeDateString == NULL || relativeDateStringLen < 1 ||
+            timeString == NULL || timeStringLen < -1) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    UnicodeString relDateStr((UBool)(relativeDateStringLen == -1), relativeDateString, relativeDateStringLen);
+    UnicodeString timeStr((UBool)(timeStringLen == -1), timeString, timeStringLen);
+    UnicodeString res;
+    if (result != NULL) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer (copied from udat_format)
+        res.setTo(result, 0, resultCapacity);
+    }
+    ((RelativeDateTimeFormatter*)reldatefmt)->combineDateAndTime(relDateStr, timeStr, res, *status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    return res.extract(result, resultCapacity, *status);
+}
 
 #endif /* !UCONFIG_NO_FORMATTING */
 

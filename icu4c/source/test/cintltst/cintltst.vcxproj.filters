@@ -198,6 +198,9 @@
     <ClCompile Include="cpluralrulestest.c">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="crelativedateformattest.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="currtest.c">
       <Filter>formatting</Filter>
     </ClCompile>
