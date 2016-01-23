@@ -1,5 +1,5 @@
 # -*- icu-dependencies -*-
-# Copyright (C) 2011-2015, International Business Machines
+# Copyright (C) 2011-2016, International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # file name: dependencies.txt
@@ -150,7 +150,7 @@ library: common
     resourcebundle service_registration resbund_cnv ures_cnv icudataver ucat
     loclikely
     conversion converter_selector ucnv_set ucnvdisp
-    messagepattern simplepatternformatter
+    messagepattern simpleformatter
     icu_utility icu_utility_with_props
     ustr_wcs
     unifiedcache
@@ -400,8 +400,8 @@ group: messagepattern  # for MessageFormat and tools
   deps
     patternprops platform
 
-group: simplepatternformatter
-    simplepatternformatter.o
+group: simpleformatter
+    simpleformatter.o
   deps
     platform
 
@@ -525,7 +525,7 @@ group: service_registration
 group: listformatter
     listformatter.o ulistformatter.o
   deps
-    resourcebundle simplepatternformatter
+    resourcebundle simpleformatter
 
 group: ucat  # message-catalog-like API
     ucat.o

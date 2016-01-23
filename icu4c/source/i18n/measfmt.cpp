@@ -18,7 +18,7 @@
 #include "currfmt.h"
 #include "unicode/localpointer.h"
 #include "resource.h"
-#include "simplepatternformatter.h"
+#include "unicode/simpleformatter.h"
 #include "quantityformatter.h"
 #include "unicode/plurrule.h"
 #include "unicode/decimfmt.h"
@@ -107,8 +107,8 @@ public:
      */
     UMeasureFormatWidth widthFallback[WIDTH_INDEX_COUNT];
     /** Measure unit -> format width -> array of patterns ("{0} meters") (plurals + PER_UNIT_INDEX) */
-    SimplePatternFormatter *patterns[MEAS_UNIT_COUNT][WIDTH_INDEX_COUNT][PATTERN_COUNT];
-    SimplePatternFormatter perFormatters[WIDTH_INDEX_COUNT];
+    SimpleFormatter *patterns[MEAS_UNIT_COUNT][WIDTH_INDEX_COUNT][PATTERN_COUNT];
+    SimpleFormatter perFormatters[WIDTH_INDEX_COUNT];
 
     MeasureFormatCacheData();
     virtual ~MeasureFormatCacheData();
@@ -116,7 +116,7 @@ public:
     UBool hasPerFormatter(int32_t width) const {
         // TODO: Create a more obvious way to test if the per-formatter has been set?
         // Use pointers, check for NULL? Or add an isValid() method?
-        return perFormatters[width].getPlaceholderCount() == 2;
+        return perFormatters[width].getArgumentLimit() == 2;
     }
 
     void adoptCurrencyFormat(int32_t widthIndex, NumberFormat *nfToAdopt) {
@@ -224,10 +224,10 @@ struct UnitDataSink : public ResourceTableSink {
 
         void setFormatterIfAbsent(int32_t index, const ResourceValue &value,
                                   int32_t minPlaceholders, UErrorCode &errorCode) {
-            SimplePatternFormatter **patterns =
+            SimpleFormatter **patterns =
                 &outer.cacheData.patterns[outer.unitIndex][outer.width][0];
             if (U_SUCCESS(errorCode) && patterns[index] == NULL) {
-                patterns[index] = new SimplePatternFormatter(
+                patterns[index] = new SimpleFormatter(
                        value.getUnicodeString(errorCode), minPlaceholders, 1, errorCode);
                 if (U_SUCCESS(errorCode) && patterns[index] == NULL) {
                     errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -282,7 +282,7 @@ struct UnitDataSink : public ResourceTableSink {
         virtual void put(const char *key, const ResourceValue &value, UErrorCode &errorCode) {
             if (U_SUCCESS(errorCode) && uprv_strcmp(key, "per") == 0) {
                 outer.cacheData.perFormatters[outer.width].
-                        compileMinMaxPlaceholders(value.getUnicodeString(errorCode), 2, 2, errorCode);
+                        applyPatternMinMaxArguments(value.getUnicodeString(errorCode), 2, 2, errorCode);
             }
         }
         UnitDataSink &outer;
@@ -904,7 +904,7 @@ UnicodeString &MeasureFormat::formatMeasure(
     UnicodeString formattedNumber;
     StandardPlural::Form pluralForm = QuantityFormatter::selectPlural(
             amtNumber, nf, **pluralRules, formattedNumber, pos, status);
-    const SimplePatternFormatter *formatter = getPluralFormatter(amtUnit, width, pluralForm, status);
+    const SimpleFormatter *formatter = getPluralFormatter(amtUnit, width, pluralForm, status);
     return QuantityFormatter::format(*formatter, formattedNumber, appendTo, pos, status);
 }
 
@@ -1037,10 +1037,10 @@ UnicodeString &MeasureFormat::formatNumeric(
     return appendTo;
 }
 
-const SimplePatternFormatter *MeasureFormat::getFormatterOrNull(
+const SimpleFormatter *MeasureFormat::getFormatterOrNull(
         const MeasureUnit &unit, UMeasureFormatWidth width, int32_t index) const {
     width = getRegularWidth(width);
-    SimplePatternFormatter *const (*unitPatterns)[MeasureFormatCacheData::PATTERN_COUNT] =
+    SimpleFormatter *const (*unitPatterns)[MeasureFormatCacheData::PATTERN_COUNT] =
             &cache->patterns[unit.getIndex()][0];
     if (unitPatterns[width][index] != NULL) {
         return unitPatterns[width][index];
@@ -1052,27 +1052,27 @@ const SimplePatternFormatter *MeasureFormat::getFormatterOrNull(
     return NULL;
 }
 
-const SimplePatternFormatter *MeasureFormat::getFormatter(
+const SimpleFormatter *MeasureFormat::getFormatter(
         const MeasureUnit &unit, UMeasureFormatWidth width, int32_t index,
         UErrorCode &errorCode) const {
     if (U_FAILURE(errorCode)) {
         return NULL;
     }
-    const SimplePatternFormatter *pattern = getFormatterOrNull(unit, width, index);
+    const SimpleFormatter *pattern = getFormatterOrNull(unit, width, index);
     if (pattern == NULL) {
         errorCode = U_MISSING_RESOURCE_ERROR;
     }
     return pattern;
 }
 
-const SimplePatternFormatter *MeasureFormat::getPluralFormatter(
+const SimpleFormatter *MeasureFormat::getPluralFormatter(
         const MeasureUnit &unit, UMeasureFormatWidth width, int32_t index,
         UErrorCode &errorCode) const {
     if (U_FAILURE(errorCode)) {
         return NULL;
     }
     if (index != StandardPlural::OTHER) {
-        const SimplePatternFormatter *pattern = getFormatterOrNull(unit, width, index);
+        const SimpleFormatter *pattern = getFormatterOrNull(unit, width, index);
         if (pattern != NULL) {
             return pattern;
         }
@@ -1080,20 +1080,20 @@ const SimplePatternFormatter *MeasureFormat::getPluralFormatter(
     return getFormatter(unit, width, StandardPlural::OTHER, errorCode);
 }
 
-const SimplePatternFormatter *MeasureFormat::getPerFormatter(
+const SimpleFormatter *MeasureFormat::getPerFormatter(
         UMeasureFormatWidth width,
         UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return NULL;
     }
     width = getRegularWidth(width);
-    const SimplePatternFormatter * perFormatters = cache->perFormatters;
-    if (perFormatters[width].getPlaceholderCount() == 2) {
+    const SimpleFormatter * perFormatters = cache->perFormatters;
+    if (perFormatters[width].getArgumentLimit() == 2) {
         return &perFormatters[width];
     }
     int32_t fallbackWidth = cache->widthFallback[width];
     if (fallbackWidth != UMEASFMT_WIDTH_COUNT &&
-            perFormatters[fallbackWidth].getPlaceholderCount() == 2) {
+            perFormatters[fallbackWidth].getArgumentLimit() == 2) {
         return &perFormatters[fallbackWidth];
     }
     status = U_MISSING_RESOURCE_ERROR;
@@ -1109,7 +1109,7 @@ int32_t MeasureFormat::withPerUnitAndAppend(
     if (U_FAILURE(status)) {
         return offset;
     }
-    const SimplePatternFormatter *perUnitFormatter =
+    const SimpleFormatter *perUnitFormatter =
             getFormatterOrNull(perUnit, width, MeasureFormatCacheData::PER_UNIT_INDEX);
     if (perUnitFormatter != NULL) {
         const UnicodeString *params[] = {&formatted};
@@ -1122,13 +1122,13 @@ int32_t MeasureFormat::withPerUnitAndAppend(
                 status);
         return offset;
     }
-    const SimplePatternFormatter *perFormatter = getPerFormatter(width, status);
-    const SimplePatternFormatter *pattern =
+    const SimpleFormatter *perFormatter = getPerFormatter(width, status);
+    const SimpleFormatter *pattern =
             getPluralFormatter(perUnit, width, StandardPlural::ONE, status);
     if (U_FAILURE(status)) {
         return offset;
     }
-    UnicodeString perUnitString = pattern->getTextWithNoPlaceholders();
+    UnicodeString perUnitString = pattern->getTextWithNoArguments();
     perUnitString.trim();
     const UnicodeString *params[] = {&formatted, &perUnitString};
     perFormatter->formatAndAppend(

@@ -280,7 +280,7 @@
     <ClCompile Include="parsepos.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="simplepatternformatter.cpp">
+    <ClCompile Include="simpleformatter.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="ustrfmt.c">
@@ -751,9 +751,9 @@
     <ClInclude Include="umapfile.h">
       <Filter>data &amp; memory</Filter>
     </ClInclude>
-    <ClInclude Include="simplepatternformatter.h">
+    <CustomBuild Include="unicode\simpleformatter.h">
       <Filter>formatting</Filter>
-    </ClInclude>
+    </CustomBuild>
     <ClInclude Include="ustrfmt.h">
       <Filter>formatting</Filter>
     </ClInclude>

@@ -3,11 +3,16 @@
 * Copyright (C) 2014-2016, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
-* simplepatternformatter.h
+* simpleformatter.h
 */
 
-#ifndef __SIMPLEPATTERNFORMATTER_H__
-#define __SIMPLEPATTERNFORMATTER_H__ 
+#ifndef __SIMPLEFORMATTER_H__
+#define __SIMPLEFORMATTER_H__
+
+/**
+ * \file
+ * \brief C++ API: Simple formatter, minimal subset of MessageFormat.
+ */
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
@@ -21,106 +26,136 @@ U_NAMESPACE_BEGIN
  * and formats only string values.
  * Quoting via ASCII apostrophe compatible with ICU MessageFormat default behavior.
  *
- * Factory methods throw exceptions for syntax errors
+ * Factory methods set error codes for syntax errors
  * and for too few or too many arguments/placeholders.
  *
- * SimplePatternFormatter objects are immutable and can be safely cached like strings.
+ * SimpleFormatter objects are thread-safe except for assignment and applying new patterns.
  *
  * Example:
  * <pre>
  * UErrorCode errorCode = U_ZERO_ERROR;
- * SimplePatternFormatter fmt("{1} '{born}' in {0}", errorCode);
+ * SimpleFormatter fmt("{1} '{born}' in {0}", errorCode);
  * UnicodeString result;
  *
  * // Output: "paul {born} in england"
  * fmt.format("england", "paul", result, errorCode);
  * </pre>
  *
+ * This class is not intended for public subclassing.
+ *
  * @see MessageFormat
  * @see UMessagePatternApostropheMode
+ * @draft ICU 57
  */
-class U_COMMON_API SimplePatternFormatter : public UMemory {
+class U_COMMON_API SimpleFormatter U_FINAL : public UMemory {
 public:
     /**
      * Default constructor.
      */
-    SimplePatternFormatter() : compiledPattern((UChar)0) {}
+    SimpleFormatter() : compiledPattern((UChar)0) {}
 
     /**
      * Constructs a formatter from the pattern string.
      *
      * @param pattern The pattern string.
+     * @param errorCode ICU error code in/out parameter.
+     *                  Must fulfill U_SUCCESS before the function call.
+     *                  Set to U_ILLEGAL_ARGUMENT_ERROR for bad argument syntax.
+     * @draft ICU 57
      */
-    explicit SimplePatternFormatter(const UnicodeString& pattern, UErrorCode &errorCode) {
-        compile(pattern, errorCode);
+    SimpleFormatter(const UnicodeString& pattern, UErrorCode &errorCode) {
+        applyPattern(pattern, errorCode);
     }
 
     /**
      * Constructs a formatter from the pattern string.
+     * The number of arguments checked against the given limits is the
+     * highest argument number plus one, not the number of occurrences of arguments.
      *
      * @param pattern The pattern string.
-     * @param min The pattern must have at least this many placeholders.
-     * @param max The pattern must have at most this many placeholders.
+     * @param min The pattern must have at least this many arguments.
+     * @param max The pattern must have at most this many arguments.
+     * @param errorCode ICU error code in/out parameter.
+     *                  Must fulfill U_SUCCESS before the function call.
+     *                  Set to U_ILLEGAL_ARGUMENT_ERROR for bad argument syntax and
+     *                  too few or too many arguments.
+     * @draft ICU 57
      */
-    SimplePatternFormatter(const UnicodeString& pattern, int32_t min, int32_t max,
-                           UErrorCode &errorCode) {
-        compileMinMaxPlaceholders(pattern, min, max, errorCode);
+    SimpleFormatter(const UnicodeString& pattern, int32_t min, int32_t max,
+                    UErrorCode &errorCode) {
+        applyPatternMinMaxArguments(pattern, min, max, errorCode);
     }
 
     /**
      * Copy constructor.
+     * @draft ICU 57
      */
-    SimplePatternFormatter(const SimplePatternFormatter& other)
+    SimpleFormatter(const SimpleFormatter& other)
             : compiledPattern(other.compiledPattern) {}
 
     /**
      * Assignment operator.
+     * @draft ICU 57
      */
-    SimplePatternFormatter &operator=(const SimplePatternFormatter& other);
+    SimpleFormatter &operator=(const SimpleFormatter& other);
 
     /**
      * Destructor.
+     * @draft ICU 57
      */
-    ~SimplePatternFormatter();
+    ~SimpleFormatter();
 
     /**
      * Changes this object according to the new pattern.
      *
      * @param pattern The pattern string.
+     * @param errorCode ICU error code in/out parameter.
+     *                  Must fulfill U_SUCCESS before the function call.
+     *                  Set to U_ILLEGAL_ARGUMENT_ERROR for bad argument syntax.
      * @return TRUE if U_SUCCESS(errorCode).
+     * @draft ICU 57
      */
-    UBool compile(const UnicodeString &pattern, UErrorCode &errorCode) {
-        return compileMinMaxPlaceholders(pattern, 0, INT32_MAX, errorCode);
+    UBool applyPattern(const UnicodeString &pattern, UErrorCode &errorCode) {
+        return applyPatternMinMaxArguments(pattern, 0, INT32_MAX, errorCode);
     }
 
     /**
      * Changes this object according to the new pattern.
+     * The number of arguments checked against the given limits is the
+     * highest argument number plus one, not the number of occurrences of arguments.
      *
      * @param pattern The pattern string.
-     * @param min The pattern must have at least this many placeholders.
-     * @param max The pattern must have at most this many placeholders.
+     * @param min The pattern must have at least this many arguments.
+     * @param max The pattern must have at most this many arguments.
+     * @param errorCode ICU error code in/out parameter.
+     *                  Must fulfill U_SUCCESS before the function call.
+     *                  Set to U_ILLEGAL_ARGUMENT_ERROR for bad argument syntax and
+     *                  too few or too many arguments.
      * @return TRUE if U_SUCCESS(errorCode).
+     * @draft ICU 57
      */
-    UBool compileMinMaxPlaceholders(const UnicodeString &pattern,
-                                    int32_t min, int32_t max, UErrorCode &errorCode);
+    UBool applyPatternMinMaxArguments(const UnicodeString &pattern,
+                                      int32_t min, int32_t max, UErrorCode &errorCode);
 
     /**
-     * @return The max argument number/placeholder ID + 1.
+     * @return The max argument number + 1.
+     * @draft ICU 57
      */
-    int32_t getPlaceholderCount() const {
-        return getPlaceholderCount(compiledPattern.getBuffer(), compiledPattern.length());
+    int32_t getArgumentLimit() const {
+        return getArgumentLimit(compiledPattern.getBuffer(), compiledPattern.length());
     }
 
     /**
      * Formats the given value, appending to the appendTo builder.
-     * The placeholder value must not be the same object as appendTo.
-     * getPlaceholderCount() must be at most 1.
+     * The argument value must not be the same object as appendTo.
+     * getArgumentLimit() must be at most 1.
      *
      * @param value0 Value for argument {0}.
      * @param appendTo Gets the formatted pattern and value appended.
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return appendTo
+     * @draft ICU 57
      */
     UnicodeString &format(
             const UnicodeString &value0,
@@ -128,8 +163,8 @@ public:
 
     /**
      * Formats the given values, appending to the appendTo builder.
-     * A placeholder value must not be the same object as appendTo.
-     * getPlaceholderCount() must be at most 2.
+     * An argument value must not be the same object as appendTo.
+     * getArgumentLimit() must be at most 2.
      *
      * @param value0 Value for argument {0}.
      * @param value1 Value for argument {1}.
@@ -137,6 +172,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return appendTo
+     * @draft ICU 57
      */
     UnicodeString &format(
             const UnicodeString &value0,
@@ -145,8 +181,8 @@ public:
 
     /**
      * Formats the given values, appending to the appendTo builder.
-     * A placeholder value must not be the same object as appendTo.
-     * getPlaceholderCount() must be at most 3.
+     * An argument value must not be the same object as appendTo.
+     * getArgumentLimit() must be at most 3.
      *
      * @param value0 Value for argument {0}.
      * @param value1 Value for argument {1}.
@@ -155,6 +191,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return appendTo
+     * @draft ICU 57
      */
     UnicodeString &format(
             const UnicodeString &value0,
@@ -165,11 +202,11 @@ public:
     /**
      * Formats the given values, appending to the appendTo string.
      *
-     * @param values The placeholder values.
-     *               A placeholder value must not be the same object as appendTo.
-     *               Can be NULL if valuesLength==getPlaceholderCount()==0.
+     * @param values The argument values.
+     *               An argument value must not be the same object as appendTo.
+     *               Can be NULL if valuesLength==getArgumentLimit()==0.
      * @param valuesLength The length of the values array.
-     *                     Must be at least getPlaceholderCount().
+     *                     Must be at least getArgumentLimit().
      * @param appendTo Gets the formatted pattern and values appended.
      * @param offsets offsets[i] receives the offset of where
      *                values[i] replaced pattern argument {i}.
@@ -179,6 +216,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return appendTo
+     * @draft ICU 57
      */
     UnicodeString &formatAndAppend(
             const UnicodeString *const *values, int32_t valuesLength,
@@ -188,13 +226,13 @@ public:
     /**
      * Formats the given values, replacing the contents of the result string.
      * May optimize by actually appending to the result if it is the same object
-     * as the initial argument's corresponding value.
+     * as the value corresponding to the initial argument in the pattern.
      *
-     * @param values The placeholder values.
-     *               A placeholder value may be the same object as result.
-     *               Can be NULL if valuesLength==getPlaceholderCount()==0.
+     * @param values The argument values.
+     *               An argument value may be the same object as result.
+     *               Can be NULL if valuesLength==getArgumentLimit()==0.
      * @param valuesLength The length of the values array.
-     *                     Must be at least getPlaceholderCount().
+     *                     Must be at least getArgumentLimit().
      * @param result Gets its contents replaced by the formatted pattern and values.
      * @param offsets offsets[i] receives the offset of where
      *                values[i] replaced pattern argument {i}.
@@ -204,6 +242,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return result
+     * @draft ICU 57
      */
     UnicodeString &formatAndReplace(
             const UnicodeString *const *values, int32_t valuesLength,
@@ -211,11 +250,12 @@ public:
             int32_t *offsets, int32_t offsetsLength, UErrorCode &errorCode) const;
 
     /**
-     * Returns the pattern text with none of the placeholders.
+     * Returns the pattern text with none of the arguments.
      * Like formatting with all-empty string values.
+     * @draft ICU 57
      */
-    UnicodeString getTextWithNoPlaceholders() const {
-        return getTextWithNoPlaceholders(compiledPattern.getBuffer(), compiledPattern.length());
+    UnicodeString getTextWithNoArguments() const {
+        return getTextWithNoArguments(compiledPattern.getBuffer(), compiledPattern.length());
     }
 
 private:
@@ -230,12 +270,12 @@ private:
      */
     UnicodeString compiledPattern;
 
-    static inline int32_t getPlaceholderCount(const UChar *compiledPattern,
+    static inline int32_t getArgumentLimit(const UChar *compiledPattern,
                                               int32_t compiledPatternLength) {
         return compiledPatternLength == 0 ? 0 : compiledPattern[0];
     }
 
-    static UnicodeString getTextWithNoPlaceholders(const UChar *compiledPattern, int32_t compiledPatternLength);
+    static UnicodeString getTextWithNoArguments(const UChar *compiledPattern, int32_t compiledPatternLength);
 
     static UnicodeString &format(
             const UChar *compiledPattern, int32_t compiledPatternLength,
@@ -247,4 +287,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif
+#endif  // __SIMPLEFORMATTER_H__
