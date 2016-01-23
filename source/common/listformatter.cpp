@@ -15,7 +15,7 @@
 */
 
 #include "unicode/listformatter.h"
-#include "simplepatternformatter.h"
+#include "unicode/simpleformatter.h"
 #include "mutex.h"
 #include "hash.h"
 #include "cstring.h"
@@ -27,10 +27,10 @@
 U_NAMESPACE_BEGIN
 
 struct ListFormatInternal : public UMemory {
-    SimplePatternFormatter twoPattern;
-    SimplePatternFormatter startPattern;
-    SimplePatternFormatter middlePattern;
-    SimplePatternFormatter endPattern;
+    SimpleFormatter twoPattern;
+    SimpleFormatter startPattern;
+    SimpleFormatter middlePattern;
+    SimpleFormatter endPattern;
 
 ListFormatInternal(
         const UnicodeString& two,
@@ -257,7 +257,7 @@ ListFormatter::~ListFormatter() {
  * according to pat. Any previous value of result gets replaced.
  */
 static void joinStringsAndReplace(
-        const SimplePatternFormatter& pat,
+        const SimpleFormatter& pat,
         const UnicodeString& first,
         const UnicodeString& second,
         UnicodeString &result,

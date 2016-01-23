@@ -11,7 +11,7 @@
 #include "cstring.h"
 #include "intltest.h"
 #include "quantityformatter.h"
-#include "simplepatternformatter.h"
+#include "unicode/simpleformatter.h"
 #include "unicode/numfmt.h"
 #include "unicode/plurrule.h"
 
@@ -59,19 +59,19 @@ void QuantityFormatterTest::TestBasic() {
 
     assertEquals(
             "getByVariant",
-            fmt.getByVariant("bad variant")->getTextWithNoPlaceholders(),
+            fmt.getByVariant("bad variant")->getTextWithNoArguments(),
             " pounds");
     assertEquals(
             "getByVariant",
-            fmt.getByVariant("other")->getTextWithNoPlaceholders(),
+            fmt.getByVariant("other")->getTextWithNoArguments(),
             " pounds");
     assertEquals(
             "getByVariant",
-            fmt.getByVariant("one")->getTextWithNoPlaceholders(),
+            fmt.getByVariant("one")->getTextWithNoArguments(),
             " pound");
     assertEquals(
             "getByVariant",
-            fmt.getByVariant("few")->getTextWithNoPlaceholders(),
+            fmt.getByVariant("few")->getTextWithNoArguments(),
             " pounds");
 
     // Test copy constructor
@@ -79,15 +79,15 @@ void QuantityFormatterTest::TestBasic() {
         QuantityFormatter copied(fmt);
         assertEquals(
                 "copied getByVariant",
-                copied.getByVariant("other")->getTextWithNoPlaceholders(),
+                copied.getByVariant("other")->getTextWithNoArguments(),
                 " pounds");
         assertEquals(
                 "copied getByVariant",
-                copied.getByVariant("one")->getTextWithNoPlaceholders(),
+                copied.getByVariant("one")->getTextWithNoArguments(),
                 " pound");
         assertEquals(
                 "copied getByVariant",
-                copied.getByVariant("few")->getTextWithNoPlaceholders(),
+                copied.getByVariant("few")->getTextWithNoArguments(),
                 " pounds");
     }
         
@@ -97,15 +97,15 @@ void QuantityFormatterTest::TestBasic() {
         assigned = fmt;
         assertEquals(
                 "assigned getByVariant",
-                assigned.getByVariant("other")->getTextWithNoPlaceholders(),
+                assigned.getByVariant("other")->getTextWithNoArguments(),
                 " pounds");
         assertEquals(
                 "assigned getByVariant",
-                assigned.getByVariant("one")->getTextWithNoPlaceholders(),
+                assigned.getByVariant("one")->getTextWithNoArguments(),
                 " pound");
         assertEquals(
                 "assigned getByVariant",
-                assigned.getByVariant("few")->getTextWithNoPlaceholders(),
+                assigned.getByVariant("few")->getTextWithNoArguments(),
                 " pounds");
     }
 

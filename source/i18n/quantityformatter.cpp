@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2014-2015, International Business Machines
+* Copyright (C) 2014-2016, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
 * quantityformatter.cpp
@@ -10,8 +10,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/simpleformatter.h"
 #include "quantityformatter.h"
-#include "simplepatternformatter.h"
 #include "uassert.h"
 #include "unicode/unistr.h"
 #include "unicode/decimfmt.h"
@@ -37,7 +37,7 @@ QuantityFormatter::QuantityFormatter(const QuantityFormatter &other) {
         if (other.formatters[i] == NULL) {
             formatters[i] = NULL;
         } else {
-            formatters[i] = new SimplePatternFormatter(*other.formatters[i]);
+            formatters[i] = new SimpleFormatter(*other.formatters[i]);
         }
     }
 }
@@ -52,7 +52,7 @@ QuantityFormatter &QuantityFormatter::operator=(
         if (other.formatters[i] == NULL) {
             formatters[i] = NULL;
         } else {
-            formatters[i] = new SimplePatternFormatter(*other.formatters[i]);
+            formatters[i] = new SimpleFormatter(*other.formatters[i]);
         }
     }
     return *this;
@@ -82,7 +82,7 @@ UBool QuantityFormatter::addIfAbsent(
     if (formatters[pluralIndex] != NULL) {
         return TRUE;
     }
-    SimplePatternFormatter *newFmt = new SimplePatternFormatter(rawPattern, 0, 1, status);
+    SimpleFormatter *newFmt = new SimpleFormatter(rawPattern, 0, 1, status);
     if (newFmt == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FALSE;
@@ -99,11 +99,11 @@ UBool QuantityFormatter::isValid() const {
     return formatters[StandardPlural::OTHER] != NULL;
 }
 
-const SimplePatternFormatter *QuantityFormatter::getByVariant(
+const SimpleFormatter *QuantityFormatter::getByVariant(
         const char *variant) const {
     U_ASSERT(isValid());
     int32_t pluralIndex = StandardPlural::indexOrOtherIndexFromString(variant);
-    const SimplePatternFormatter *pattern = formatters[pluralIndex];
+    const SimpleFormatter *pattern = formatters[pluralIndex];
     if (pattern == NULL) {
         pattern = formatters[StandardPlural::OTHER];
     }
@@ -122,7 +122,7 @@ UnicodeString &QuantityFormatter::format(
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    const SimplePatternFormatter *pattern = formatters[p];
+    const SimpleFormatter *pattern = formatters[p];
     if (pattern == NULL) {
         pattern = formatters[StandardPlural::OTHER];
         if (pattern == NULL) {
@@ -134,7 +134,7 @@ UnicodeString &QuantityFormatter::format(
 }
 
 // The following methods live here so that class PluralRules does not depend on number formatting,
-// and the SimplePatternFormatter does not depend on FieldPosition.
+// and the SimpleFormatter does not depend on FieldPosition.
 
 StandardPlural::Form QuantityFormatter::selectPlural(
             const Formattable &number,
@@ -173,7 +173,7 @@ StandardPlural::Form QuantityFormatter::selectPlural(
 }
 
 UnicodeString &QuantityFormatter::format(
-            const SimplePatternFormatter &pattern,
+            const SimpleFormatter &pattern,
             const UnicodeString &value,
             UnicodeString &appendTo,
             FieldPosition &pos,
