@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.impl;
@@ -22,7 +22,7 @@ public class TestAll extends TestGroup {
                   "ICUServiceTest",
                   "ICUServiceThreadTest",
                   "ICUBinaryTest",
-                  "SimplePatternFormatterTest",
+                  "SimpleFormatterTest",
                   "TextTrieMapTest"
               },
               "Test miscellaneous implementation utilities");
