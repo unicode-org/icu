@@ -7,16 +7,16 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.SimplePatternFormatter;
 import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.text.SimpleFormatter;
 import com.ibm.icu.util.ULocale;
 
-public class SimplePatternFormatterTest extends TestFmwk {
+public class SimpleFormatterTest extends TestFmwk {
 
     /**
      * Constructor
      */
-     public SimplePatternFormatterTest()
+     public SimpleFormatterTest()
      {
      }
        
@@ -24,20 +24,20 @@ public class SimplePatternFormatterTest extends TestFmwk {
      
      public static void main(String arg[]) 
      {
-         SimplePatternFormatterTest test = new SimplePatternFormatterTest();
+         SimpleFormatterTest test = new SimpleFormatterTest();
          try {
              test.run(arg);
          } catch (Exception e) {
-             test.errln("Error testing SimplePatternFormatterTest");
+             test.errln("Error testing SimpleFormatterTest");
          }
      }
      
-     public void TestWithNoPlaceholders() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile("This doesn''t have templates '{0}");
+     public void TestWithNoArguments() {
+         SimpleFormatter fmt = SimpleFormatter.compile("This doesn''t have templates '{0}");
          assertEquals(
-                 "getPlaceholderCount",
+                 "getArgumentLimit",
                  0,
-                 fmt.getPlaceholderCount());
+                 fmt.getArgumentLimit());
          assertEquals(
                  "format",
                  "This doesn't have templates {0}",
@@ -71,41 +71,41 @@ public class SimplePatternFormatterTest extends TestFmwk {
 
      public void TestSyntaxErrors() {
          try {
-             SimplePatternFormatter.compile("{}");
+             SimpleFormatter.compile("{}");
              fail("Syntax error did not yield an exception.");
          } catch (IllegalArgumentException expected) {
          }
          try {
-             SimplePatternFormatter.compile("{12d");
+             SimpleFormatter.compile("{12d");
              fail("Syntax error did not yield an exception.");
          } catch (IllegalArgumentException expected) {
          }
      }
 
-     public void TestOnePlaceholder() {
-        assertEquals("TestOnePlaceholder",
+     public void TestOneArgument() {
+        assertEquals("TestOneArgument",
                 "1 meter",
-                SimplePatternFormatter.compile("{0} meter").format("1"));
+                SimpleFormatter.compile("{0} meter").format("1"));
      }
 
-     public void TestBigPlaceholder() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile("a{20}c");
-         assertEquals("{20} count", 21, fmt.getPlaceholderCount());
+     public void TestBigArgument() {
+         SimpleFormatter fmt = SimpleFormatter.compile("a{20}c");
+         assertEquals("{20} count", 21, fmt.getArgumentLimit());
          CharSequence[] values = new CharSequence[21];
          values[20] = "b";
          assertEquals("{20}=b", "abc", fmt.format(values));
       }
 
-     public void TestGetTextWithNoPlaceholders() {
+     public void TestGetTextWithNoArguments() {
          assertEquals(
                  "",
                  "Templates  and  are here.",
-                 SimplePatternFormatter.compile(
-                         "Templates {1}{2} and {3} are here.").getTextWithNoPlaceholders());
+                 SimpleFormatter.compile(
+                         "Templates {1}{2} and {3} are here.").getTextWithNoArguments());
      }
      
-     public void TestTooFewPlaceholderValues() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile(
+     public void TestTooFewArgumentValues() {
+         SimpleFormatter fmt = SimpleFormatter.compile(
                  "Templates {2}{1} and {4} are out of order.");
          try {
              fmt.format("freddy", "tommy", "frog", "leg");
@@ -129,13 +129,13 @@ public class SimplePatternFormatterTest extends TestFmwk {
          }
      }
      
-     public void TestWithPlaceholders() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile(
+     public void TestWithArguments() {
+         SimpleFormatter fmt = SimpleFormatter.compile(
                  "Templates {2}{1} and {4} are out of order.");
          assertEquals(
-                 "getPlaceholderCount",
+                 "getArgumentLimit",
                  5,
-                 fmt.getPlaceholderCount()); 
+                 fmt.getArgumentLimit()); 
          assertEquals(
                  "toString",
                  "Templates {2}{1} and {4} are out of order.",
@@ -153,9 +153,9 @@ public class SimplePatternFormatterTest extends TestFmwk {
          verifyOffsets(expectedOffsets, offsets);
      }
      
-     public void TestFormatUseAppendToAsPlaceholder() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile(
-                 "Placeholders {0} and {1}");
+     public void TestFormatUseAppendToAsArgument() {
+         SimpleFormatter fmt = SimpleFormatter.compile(
+                 "Arguments {0} and {1}");
          StringBuilder appendTo = new StringBuilder("previous:");
          try {
              fmt.formatAndAppend(appendTo, null, appendTo, "frog");
@@ -166,7 +166,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
      }
      
      public void TestFormatReplaceNoOptimization() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile("{2}, {0}, {1} and {3}");
+         SimpleFormatter fmt = SimpleFormatter.compile("{2}, {0}, {1} and {3}");
          int[] offsets = new int[4];
          StringBuilder result = new StringBuilder("original");
         assertEquals(
@@ -183,7 +183,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
      
      
      public void TestFormatReplaceNoOptimizationLeadingText() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile("boo {2}, {0}, {1} and {3}");
+         SimpleFormatter fmt = SimpleFormatter.compile("boo {2}, {0}, {1} and {3}");
          int[] offsets = new int[4];
          StringBuilder result = new StringBuilder("original");
         assertEquals(
@@ -199,7 +199,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
      }
      
      public void TestFormatReplaceOptimization() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile("{2}, {0}, {1} and {3}");
+         SimpleFormatter fmt = SimpleFormatter.compile("{2}, {0}, {1} and {3}");
          int[] offsets = new int[4];
          StringBuilder result = new StringBuilder("original");
         assertEquals(
@@ -215,7 +215,7 @@ public class SimplePatternFormatterTest extends TestFmwk {
      }
      
      public void TestFormatReplaceOptimizationNoOffsets() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile("{2}, {0}, {1} and {3}");
+         SimpleFormatter fmt = SimpleFormatter.compile("{2}, {0}, {1} and {3}");
          StringBuilder result = new StringBuilder("original");
         assertEquals(
                  "format",
@@ -228,17 +228,17 @@ public class SimplePatternFormatterTest extends TestFmwk {
      }
      
      public void TestFormatReplaceNoOptimizationNoOffsets() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile(
-                 "Placeholders {0} and {1}");
+         SimpleFormatter fmt = SimpleFormatter.compile(
+                 "Arguments {0} and {1}");
          StringBuilder result = new StringBuilder("previous:");
          assertEquals(
                  "",
-                 "Placeholders previous: and frog",
+                 "Arguments previous: and frog",
                  fmt.formatAndReplace(result, null, result, "frog").toString());
      }
      
-     public void TestFormatReplaceNoOptimizationLeadingPlaceholderUsedTwice() {
-         SimplePatternFormatter fmt = SimplePatternFormatter.compile(
+     public void TestFormatReplaceNoOptimizationLeadingArgumentUsedTwice() {
+         SimpleFormatter fmt = SimpleFormatter.compile(
                  "{2}, {0}, {1} and {3} {2}");
          StringBuilder result = new StringBuilder("original");
          int[] offsets = new int[4];
@@ -255,11 +255,11 @@ public class SimplePatternFormatterTest extends TestFmwk {
 
      public void TestQuotingLikeMessageFormat() {
          String pattern = "{0} don't can''t '{5}''}{a' again '}'{1} to the '{end";
-         SimplePatternFormatter spf = SimplePatternFormatter.compile(pattern);
+         SimpleFormatter spf = SimpleFormatter.compile(pattern);
          MessageFormat mf = new MessageFormat(pattern, ULocale.ROOT);
          String expected = "X don't can't {5}'}{a again }Y to the {end";
          assertEquals("MessageFormat", expected, mf.format(new Object[] { "X", "Y" }));
-         assertEquals("SimplePatternFormatter", expected, spf.format("X", "Y"));
+         assertEquals("SimpleFormatter", expected, spf.format("X", "Y"));
      }
 
      void verifyOffsets(int[] expected, int[] actual) {

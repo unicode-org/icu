@@ -14,7 +14,7 @@ import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
-import com.ibm.icu.impl.SimplePatternFormatter;
+import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.Calendar;
@@ -409,7 +409,7 @@ public final class RelativeDateTimeFormatter {
                     numberFormat, pluralRules, formatStr, fieldPosition);
 
             String formatter = getRelativeUnitPluralPattern(style, unit, pastFutureIndex, pluralForm);
-            result = SimplePatternFormatter.formatCompiledPattern(formatter, formatStr);
+            result = SimpleFormatterImpl.formatCompiledPattern(formatter, formatStr);
         }
         return adjustForContext(result);
 
@@ -852,7 +852,7 @@ public final class RelativeDateTimeFormatter {
             @Override
             public void put(UResource.Key key, UResource.Value value) {
                 /* Make two lists of simplePatternFmtList, one for past and one for future.
-                 *  Set a SimplePatternFormatter for the <style, relative unit, plurality>
+                 *  Set a SimpleFormatter pattern for the <style, relative unit, plurality>
                  *
                  * Fill in values for the particular plural given, e.g., ONE, FEW, OTHER, etc.
                  */
@@ -869,9 +869,9 @@ public final class RelativeDateTimeFormatter {
                 }
                 int pluralIndex = StandardPlural.indexFromString(key.toString());
                 if (patterns[pastFutureIndex][pluralIndex] == null) {
-                    patterns[pastFutureIndex][pluralIndex] = 
-                            SimplePatternFormatter.compileToStringMinMaxPlaceholders(value.getString(),
-                                    sb, 0, 1); 
+                    patterns[pastFutureIndex][pluralIndex] =
+                            SimpleFormatterImpl.compileToStringMinMaxArguments(
+                                    value.getString(), sb, 0, 1);
                 }
             }
         }
