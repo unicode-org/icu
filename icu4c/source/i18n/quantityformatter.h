@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2014-2015, International Business Machines
+* Copyright (C) 2014-2016, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
 * quantityformatter.h
@@ -18,7 +18,7 @@
 
 U_NAMESPACE_BEGIN
 
-class SimplePatternFormatter;
+class SimpleFormatter;
 class UnicodeString;
 class PluralRules;
 class NumberFormat;
@@ -85,7 +85,7 @@ public:
      * If isValid() returns TRUE, this method is guaranteed to return a
      * non-NULL value.
      */
-    const SimplePatternFormatter *getByVariant(const char *variant) const;
+    const SimpleFormatter *getByVariant(const char *variant) const;
 
     /**
      * Formats a number with this object appending the result to appendTo.
@@ -122,14 +122,14 @@ public:
      * Formats the pattern with the value and adjusts the FieldPosition.
      */
     static UnicodeString &format(
-            const SimplePatternFormatter &pattern,
+            const SimpleFormatter &pattern,
             const UnicodeString &value,
             UnicodeString &appendTo,
             FieldPosition &pos,
             UErrorCode &status);
 
 private:
-    SimplePatternFormatter *formatters[StandardPlural::COUNT];
+    SimpleFormatter *formatters[StandardPlural::COUNT];
 };
 
 U_NAMESPACE_END

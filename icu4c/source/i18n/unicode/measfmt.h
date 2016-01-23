@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2015, International Business Machines
+* Copyright (c) 2004-2016, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -78,7 +78,7 @@ class MeasureFormatCacheData;
 class SharedNumberFormat;
 class SharedPluralRules;
 class QuantityFormatter;
-class SimplePatternFormatter;
+class SimpleFormatter;
 class ListFormatter;
 class DateFormat;
 
@@ -327,18 +327,18 @@ class U_I18N_API MeasureFormat : public Format {
     // shared across instances.
     ListFormatter *listFormatter;
 
-    const SimplePatternFormatter *getFormatterOrNull(
+    const SimpleFormatter *getFormatterOrNull(
             const MeasureUnit &unit, UMeasureFormatWidth width, int32_t index) const;
 
-    const SimplePatternFormatter *getFormatter(
+    const SimpleFormatter *getFormatter(
             const MeasureUnit &unit, UMeasureFormatWidth width, int32_t index,
             UErrorCode &errorCode) const;
 
-    const SimplePatternFormatter *getPluralFormatter(
+    const SimpleFormatter *getPluralFormatter(
             const MeasureUnit &unit, UMeasureFormatWidth width, int32_t index,
             UErrorCode &errorCode) const;
 
-    const SimplePatternFormatter *getPerFormatter(
+    const SimpleFormatter *getPerFormatter(
             UMeasureFormatWidth width,
             UErrorCode &status) const;
 

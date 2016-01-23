@@ -3,12 +3,12 @@
 * Copyright (C) 2014-2016, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ******************************************************************************
-* simplepatternformatter.cpp
+* simpleformatter.cpp
 */
 
 #include "unicode/utypes.h"
+#include "unicode/simpleformatter.h"
 #include "unicode/unistr.h"
-#include "simplepatternformatter.h"
 #include "uassert.h"
 
 U_NAMESPACE_BEGIN
@@ -48,8 +48,7 @@ inline UBool isInvalidArray(const void *array, int32_t length) {
 
 }  // namespace
 
-SimplePatternFormatter &SimplePatternFormatter::operator=(
-        const SimplePatternFormatter& other) {
+SimpleFormatter &SimpleFormatter::operator=(const SimpleFormatter& other) {
     if (this == &other) {
         return *this;
     }
@@ -57,9 +56,9 @@ SimplePatternFormatter &SimplePatternFormatter::operator=(
     return *this;
 }
 
-SimplePatternFormatter::~SimplePatternFormatter() {}
+SimpleFormatter::~SimpleFormatter() {}
 
-UBool SimplePatternFormatter::compileMinMaxPlaceholders(
+UBool SimpleFormatter::applyPatternMinMaxArguments(
         const UnicodeString &pattern,
         int32_t min, int32_t max,
         UErrorCode &errorCode) {
@@ -154,14 +153,14 @@ UBool SimplePatternFormatter::compileMinMaxPlaceholders(
     return TRUE;
 }
 
-UnicodeString& SimplePatternFormatter::format(
+UnicodeString& SimpleFormatter::format(
         const UnicodeString &value0,
         UnicodeString &appendTo, UErrorCode &errorCode) const {
     const UnicodeString *values[] = { &value0 };
     return formatAndAppend(values, 1, appendTo, NULL, 0, errorCode);
 }
 
-UnicodeString& SimplePatternFormatter::format(
+UnicodeString& SimpleFormatter::format(
         const UnicodeString &value0,
         const UnicodeString &value1,
         UnicodeString &appendTo, UErrorCode &errorCode) const {
@@ -169,7 +168,7 @@ UnicodeString& SimplePatternFormatter::format(
     return formatAndAppend(values, 2, appendTo, NULL, 0, errorCode);
 }
 
-UnicodeString& SimplePatternFormatter::format(
+UnicodeString& SimpleFormatter::format(
         const UnicodeString &value0,
         const UnicodeString &value1,
         const UnicodeString &value2,
@@ -178,7 +177,7 @@ UnicodeString& SimplePatternFormatter::format(
     return formatAndAppend(values, 3, appendTo, NULL, 0, errorCode);
 }
 
-UnicodeString& SimplePatternFormatter::formatAndAppend(
+UnicodeString& SimpleFormatter::formatAndAppend(
         const UnicodeString *const *values, int32_t valuesLength,
         UnicodeString &appendTo,
         int32_t *offsets, int32_t offsetsLength, UErrorCode &errorCode) const {
@@ -186,7 +185,7 @@ UnicodeString& SimplePatternFormatter::formatAndAppend(
         return appendTo;
     }
     if (isInvalidArray(values, valuesLength) || isInvalidArray(offsets, offsetsLength) ||
-            valuesLength < getPlaceholderCount()) {
+            valuesLength < getArgumentLimit()) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return appendTo;
     }
@@ -195,7 +194,7 @@ UnicodeString& SimplePatternFormatter::formatAndAppend(
                   offsets, offsetsLength, errorCode);
 }
 
-UnicodeString &SimplePatternFormatter::formatAndReplace(
+UnicodeString &SimpleFormatter::formatAndReplace(
         const UnicodeString *const *values, int32_t valuesLength,
         UnicodeString &result,
         int32_t *offsets, int32_t offsetsLength, UErrorCode &errorCode) const {
@@ -208,7 +207,7 @@ UnicodeString &SimplePatternFormatter::formatAndReplace(
     }
     const UChar *cp = compiledPattern.getBuffer();
     int32_t cpLength = compiledPattern.length();
-    if (valuesLength < getPlaceholderCount(cp, cpLength)) {
+    if (valuesLength < getArgumentLimit(cp, cpLength)) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return result;
     }
@@ -220,7 +219,7 @@ UnicodeString &SimplePatternFormatter::formatAndReplace(
     // If any non-initial argument value is the same object as the result,
     // then we first copy its contents and use that instead while formatting.
     UnicodeString resultCopy;
-    if (getPlaceholderCount(cp, cpLength) > 0) {
+    if (getArgumentLimit(cp, cpLength) > 0) {
         for (int32_t i = 1; i < cpLength;) {
             int32_t n = cp[i++];
             if (n < ARG_NUM_LIMIT) {
@@ -244,10 +243,10 @@ UnicodeString &SimplePatternFormatter::formatAndReplace(
                   offsets, offsetsLength, errorCode);
 }
 
-UnicodeString SimplePatternFormatter::getTextWithNoPlaceholders(
+UnicodeString SimpleFormatter::getTextWithNoArguments(
         const UChar *compiledPattern, int32_t compiledPatternLength) {
     int32_t capacity = compiledPatternLength - 1 -
-            getPlaceholderCount(compiledPattern, compiledPatternLength);
+            getArgumentLimit(compiledPattern, compiledPatternLength);
     UnicodeString sb(capacity, 0, 0);  // Java: StringBuilder
     for (int32_t i = 1; i < compiledPatternLength;) {
         int32_t segmentLength = compiledPattern[i++] - ARG_NUM_LIMIT;
@@ -259,7 +258,7 @@ UnicodeString SimplePatternFormatter::getTextWithNoPlaceholders(
     return sb;
 }
 
-UnicodeString &SimplePatternFormatter::format(
+UnicodeString &SimpleFormatter::format(
         const UChar *compiledPattern, int32_t compiledPatternLength,
         const UnicodeString *const *values,
         UnicodeString &result, const UnicodeString *resultCopy, UBool forbidResultAsValue,

@@ -4,7 +4,7 @@
 * others. All Rights Reserved.
 *******************************************************************************
 *
-* File SIMPLEPATTERNFORMATTERTEST.CPP
+* simpleformattertest.cpp
 *
 ********************************************************************************
 */
@@ -13,24 +13,24 @@
 #include "unicode/unistr.h"
 #include "cstring.h"
 #include "intltest.h"
-#include "simplepatternformatter.h"
+#include "unicode/simpleformatter.h"
 
-class SimplePatternFormatterTest : public IntlTest {
+class SimpleFormatterTest : public IntlTest {
 public:
-    SimplePatternFormatterTest() {
+    SimpleFormatterTest() {
     }
-    void TestNoPlaceholders();
+    void TestNoArguments();
     void TestSyntaxErrors();
-    void TestOnePlaceholder();
-    void TestBigPlaceholder();
-    void TestManyPlaceholders();
-    void TestTooFewPlaceholderValues();
+    void TestOneArgument();
+    void TestBigArgument();
+    void TestManyArguments();
+    void TestTooFewArgumentValues();
     void TestBadArguments();
-    void TestTextWithNoPlaceholders();
+    void TestTextWithNoArguments();
     void TestFormatReplaceNoOptimization();
     void TestFormatReplaceNoOptimizationLeadingText();
     void TestFormatReplaceOptimization();
-    void TestFormatReplaceNoOptimizationLeadingPlaceholderUsedTwice();
+    void TestFormatReplaceNoOptimizationLeadingArgumentUsedTwice();
     void TestFormatReplaceOptimizationNoOffsets();
     void TestFormatReplaceNoOptimizationNoOffsets();
     void TestQuotingLikeMessageFormat();
@@ -42,30 +42,30 @@ private:
             int32_t count);
 };
 
-void SimplePatternFormatterTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par*/) {
+void SimpleFormatterTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par*/) {
   TESTCASE_AUTO_BEGIN;
-  TESTCASE_AUTO(TestNoPlaceholders);
+  TESTCASE_AUTO(TestNoArguments);
   TESTCASE_AUTO(TestSyntaxErrors);
-  TESTCASE_AUTO(TestOnePlaceholder);
-  TESTCASE_AUTO(TestBigPlaceholder);
-  TESTCASE_AUTO(TestManyPlaceholders);
-  TESTCASE_AUTO(TestTooFewPlaceholderValues);
+  TESTCASE_AUTO(TestOneArgument);
+  TESTCASE_AUTO(TestBigArgument);
+  TESTCASE_AUTO(TestManyArguments);
+  TESTCASE_AUTO(TestTooFewArgumentValues);
   TESTCASE_AUTO(TestBadArguments);
-  TESTCASE_AUTO(TestTextWithNoPlaceholders);
+  TESTCASE_AUTO(TestTextWithNoArguments);
   TESTCASE_AUTO(TestFormatReplaceNoOptimization);
   TESTCASE_AUTO(TestFormatReplaceNoOptimizationLeadingText);
   TESTCASE_AUTO(TestFormatReplaceOptimization);
-  TESTCASE_AUTO(TestFormatReplaceNoOptimizationLeadingPlaceholderUsedTwice);
+  TESTCASE_AUTO(TestFormatReplaceNoOptimizationLeadingArgumentUsedTwice);
   TESTCASE_AUTO(TestFormatReplaceOptimizationNoOffsets);
   TESTCASE_AUTO(TestFormatReplaceNoOptimizationNoOffsets);
   TESTCASE_AUTO(TestQuotingLikeMessageFormat);
   TESTCASE_AUTO_END;
 }
 
-void SimplePatternFormatterTest::TestNoPlaceholders() {
+void SimpleFormatterTest::TestNoArguments() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt("This doesn''t have templates '{0}", status);
-    assertEquals("getPlaceholderCount", 0, fmt.getPlaceholderCount());
+    SimpleFormatter fmt("This doesn''t have templates '{0}", status);
+    assertEquals("getArgumentLimit", 0, fmt.getArgumentLimit());
     UnicodeString appendTo;
     assertEquals(
             "format",
@@ -85,23 +85,23 @@ void SimplePatternFormatterTest::TestNoPlaceholders() {
     assertSuccess("Status", status);
 }
 
-void SimplePatternFormatterTest::TestSyntaxErrors() {
+void SimpleFormatterTest::TestSyntaxErrors() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt("{}", status);
+    SimpleFormatter fmt("{}", status);
     assertEquals("syntax error {}", U_ILLEGAL_ARGUMENT_ERROR, status);
     status = U_ZERO_ERROR;
-    fmt.compile("{12d", status);
+    fmt.applyPattern("{12d", status);
     assertEquals("syntax error {12d", U_ILLEGAL_ARGUMENT_ERROR, status);
 }
 
-void SimplePatternFormatterTest::TestOnePlaceholder() {
+void SimpleFormatterTest::TestOneArgument() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt;
-    fmt.compile("{0} meter", status);
+    SimpleFormatter fmt;
+    fmt.applyPattern("{0} meter", status);
     if (!assertSuccess("Status", status)) {
         return;
     }
-    assertEquals("PlaceholderCount", 1, fmt.getPlaceholderCount());
+    assertEquals("getArgumentLimit", 1, fmt.getArgumentLimit());
     UnicodeString appendTo;
     assertEquals(
             "format",
@@ -109,7 +109,7 @@ void SimplePatternFormatterTest::TestOnePlaceholder() {
             fmt.format("1", appendTo, status));
 
     // assignment
-    SimplePatternFormatter s;
+    SimpleFormatter s;
     s = fmt;
     appendTo.remove();
     assertEquals(
@@ -118,7 +118,7 @@ void SimplePatternFormatterTest::TestOnePlaceholder() {
             s.format("1", appendTo, status));
 
     // Copy constructor
-    SimplePatternFormatter r(fmt);
+    SimpleFormatter r(fmt);
     appendTo.remove();
     assertEquals(
             "Copy constructor",
@@ -127,13 +127,13 @@ void SimplePatternFormatterTest::TestOnePlaceholder() {
     assertSuccess("Status", status);
 }
 
-void SimplePatternFormatterTest::TestBigPlaceholder() {
+void SimpleFormatterTest::TestBigArgument() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt("a{20}c", status);
+    SimpleFormatter fmt("a{20}c", status);
     if (!assertSuccess("Status", status)) {
         return;
     }
-    assertEquals("{20} count", 21, fmt.getPlaceholderCount());
+    assertEquals("{20} count", 21, fmt.getArgumentLimit());
     UnicodeString b("b");
     UnicodeString *values[] = {
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -145,15 +145,15 @@ void SimplePatternFormatterTest::TestBigPlaceholder() {
     assertSuccess("Status", status);
 }
 
-void SimplePatternFormatterTest::TestManyPlaceholders() {
+void SimpleFormatterTest::TestManyArguments() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt;
-    fmt.compile(
+    SimpleFormatter fmt;
+    fmt.applyPattern(
             "Templates {2}{1}{5} and {4} are out of order.", status);
     if (!assertSuccess("Status", status)) {
         return;
     }
-    assertEquals("PlaceholderCount", 6, fmt.getPlaceholderCount());
+    assertEquals("getArgumentLimit", 6, fmt.getArgumentLimit());
     UnicodeString values[] = {
             "freddy", "tommy", "frog", "billy", "leg", "{0}"};
     UnicodeString *params[] = {
@@ -191,7 +191,7 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
     assertEquals("Offsets buffer length", 289, offsets[UPRV_LENGTHOF(offsets) - 1]);
 
     // Test assignment
-    SimplePatternFormatter s;
+    SimpleFormatter s;
     s = fmt;
     appendTo.remove();
     assertEquals(
@@ -206,7 +206,7 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
                     status));
 
     // Copy constructor
-    SimplePatternFormatter r(fmt);
+    SimpleFormatter r(fmt);
     appendTo.remove();
     assertEquals(
             "Copy constructor",
@@ -218,22 +218,22 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
                     NULL,
                     0,
                     status));
-    r.compile("{0} meter", status);
-    assertEquals("PlaceholderCount", 1, r.getPlaceholderCount());
+    r.applyPattern("{0} meter", status);
+    assertEquals("getArgumentLimit", 1, r.getArgumentLimit());
     appendTo.remove();
     assertEquals(
-            "Replace with new compile",
+            "Replace with new applyPattern",
             "freddy meter",
             r.format("freddy", appendTo, status));
-    r.compile("{0}, {1}", status);
-    assertEquals("PlaceholderCount", 2, r.getPlaceholderCount());
+    r.applyPattern("{0}, {1}", status);
+    assertEquals("getArgumentLimit", 2, r.getArgumentLimit());
     appendTo.remove();
     assertEquals(
             "2 arg",
             "foo, bar",
             r.format("foo", "bar", appendTo, status));
-    r.compile("{0}, {1} and {2}", status);
-    assertEquals("PlaceholderCount", 3, r.getPlaceholderCount());
+    r.applyPattern("{0}, {1} and {2}", status);
+    assertEquals("getArgumentLimit", 3, r.getArgumentLimit());
     appendTo.remove();
     assertEquals(
             "3 arg",
@@ -242,9 +242,9 @@ void SimplePatternFormatterTest::TestManyPlaceholders() {
     assertSuccess("Status", status);
 }
 
-void SimplePatternFormatterTest::TestTooFewPlaceholderValues() {
+void SimpleFormatterTest::TestTooFewArgumentValues() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt("{0} and {1}", status);
+    SimpleFormatter fmt("{0} and {1}", status);
     UnicodeString appendTo;
     UnicodeString firstValue;
     UnicodeString *params[] = {&firstValue};
@@ -270,9 +270,9 @@ void SimplePatternFormatterTest::TestTooFewPlaceholderValues() {
     }
 }
 
-void SimplePatternFormatterTest::TestBadArguments() {
+void SimpleFormatterTest::TestBadArguments() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt("pickle", status);
+    SimpleFormatter fmt("pickle", status);
     UnicodeString appendTo;
 
     // These succeed
@@ -300,7 +300,7 @@ void SimplePatternFormatterTest::TestBadArguments() {
     status = U_ZERO_ERROR;
 
     // fails because appendTo used as a parameter value
-    SimplePatternFormatter fmt2("Placeholders {0} and {1}", status);
+    SimpleFormatter fmt2("Arguments {0} and {1}", status);
     UnicodeString frog("frog");
     const UnicodeString *params[] = { &appendTo, &frog };
     fmt2.formatAndAppend(params, 2, appendTo, NULL, 0, status);
@@ -326,17 +326,17 @@ void SimplePatternFormatterTest::TestBadArguments() {
     }
 }
 
-void SimplePatternFormatterTest::TestTextWithNoPlaceholders() {
+void SimpleFormatterTest::TestTextWithNoArguments() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt("{0} has no {1} placeholders.", status);
+    SimpleFormatter fmt("{0} has no {1} arguments.", status);
     assertEquals(
-            "", " has no  placeholders.", fmt.getTextWithNoPlaceholders());
+            "", " has no  arguments.", fmt.getTextWithNoArguments());
 }
 
-void SimplePatternFormatterTest::TestFormatReplaceNoOptimization() {
+void SimpleFormatterTest::TestFormatReplaceNoOptimization() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt;
-    fmt.compile("{2}, {0}, {1} and {3}", status);
+    SimpleFormatter fmt;
+    fmt.applyPattern("{2}, {0}, {1} and {3}", status);
     if (!assertSuccess("Status", status)) {
         return;
     }
@@ -363,10 +363,10 @@ void SimplePatternFormatterTest::TestFormatReplaceNoOptimization() {
     verifyOffsets(expectedOffsets, offsets, UPRV_LENGTHOF(expectedOffsets));
 }
 
-void SimplePatternFormatterTest::TestFormatReplaceNoOptimizationLeadingText() {
+void SimpleFormatterTest::TestFormatReplaceNoOptimizationLeadingText() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt;
-    fmt.compile("boo {2}, {0}, {1} and {3}", status);
+    SimpleFormatter fmt;
+    fmt.applyPattern("boo {2}, {0}, {1} and {3}", status);
     if (!assertSuccess("Status", status)) {
         return;
     }
@@ -393,10 +393,10 @@ void SimplePatternFormatterTest::TestFormatReplaceNoOptimizationLeadingText() {
     verifyOffsets(expectedOffsets, offsets, UPRV_LENGTHOF(expectedOffsets));
 }
 
-void SimplePatternFormatterTest::TestFormatReplaceOptimization() {
+void SimpleFormatterTest::TestFormatReplaceOptimization() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt;
-    fmt.compile("{2}, {0}, {1} and {3}", status);
+    SimpleFormatter fmt;
+    fmt.applyPattern("{2}, {0}, {1} and {3}", status);
     if (!assertSuccess("Status", status)) {
         return;
     }
@@ -423,10 +423,10 @@ void SimplePatternFormatterTest::TestFormatReplaceOptimization() {
     verifyOffsets(expectedOffsets, offsets, UPRV_LENGTHOF(expectedOffsets));
 }
 
-void SimplePatternFormatterTest::TestFormatReplaceNoOptimizationLeadingPlaceholderUsedTwice() {
+void SimpleFormatterTest::TestFormatReplaceNoOptimizationLeadingArgumentUsedTwice() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt;
-    fmt.compile("{2}, {0}, {1} and {3} {2}", status);
+    SimpleFormatter fmt;
+    fmt.applyPattern("{2}, {0}, {1} and {3} {2}", status);
     if (!assertSuccess("Status", status)) {
         return;
     }
@@ -453,10 +453,10 @@ void SimplePatternFormatterTest::TestFormatReplaceNoOptimizationLeadingPlacehold
     verifyOffsets(expectedOffsets, offsets, UPRV_LENGTHOF(expectedOffsets));
 }
 
-void SimplePatternFormatterTest::TestFormatReplaceOptimizationNoOffsets() {
+void SimpleFormatterTest::TestFormatReplaceOptimizationNoOffsets() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt;
-    fmt.compile("{2}, {0}, {1} and {3}", status);
+    SimpleFormatter fmt;
+    fmt.applyPattern("{2}, {0}, {1} and {3}", status);
     if (!assertSuccess("Status", status)) {
         return;
     }
@@ -478,15 +478,15 @@ void SimplePatternFormatterTest::TestFormatReplaceOptimizationNoOffsets() {
     assertSuccess("Status", status);
 }
 
-void SimplePatternFormatterTest::TestFormatReplaceNoOptimizationNoOffsets() {
+void SimpleFormatterTest::TestFormatReplaceNoOptimizationNoOffsets() {
     UErrorCode status = U_ZERO_ERROR;
-    SimplePatternFormatter fmt("Placeholders {0} and {1}", status);
+    SimpleFormatter fmt("Arguments {0} and {1}", status);
     UnicodeString result("previous:");
     UnicodeString frog("frog");
     const UnicodeString *params[] = {&result, &frog};
     assertEquals(
             "",
-            "Placeholders previous: and frog",
+            "Arguments previous: and frog",
             fmt.formatAndReplace(
                     params,
                     UPRV_LENGTHOF(params),
@@ -497,10 +497,10 @@ void SimplePatternFormatterTest::TestFormatReplaceNoOptimizationNoOffsets() {
     assertSuccess("Status", status);
 }
 
-void SimplePatternFormatterTest::TestQuotingLikeMessageFormat() {
+void SimpleFormatterTest::TestQuotingLikeMessageFormat() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern = "{0} don't can''t '{5}''}{a' again '}'{1} to the '{end";
-    SimplePatternFormatter spf(pattern, status);
+    SimpleFormatter spf(pattern, status);
     MessageFormat mf(pattern, Locale::getRoot(), status);
     UnicodeString expected = "X don't can't {5}'}{a again }Y to the {end";
     UnicodeString x("X"), y("Y");
@@ -508,10 +508,10 @@ void SimplePatternFormatterTest::TestQuotingLikeMessageFormat() {
     UnicodeString result;
     FieldPosition ignore(FieldPosition::DONT_CARE);
     assertEquals("MessageFormat", expected, mf.format(values, 2, result, ignore, status));
-    assertEquals("SimplePatternFormatter", expected, spf.format(x, y, result.remove(), status));
+    assertEquals("SimpleFormatter", expected, spf.format(x, y, result.remove(), status));
 }
 
-void SimplePatternFormatterTest::verifyOffsets(
+void SimpleFormatterTest::verifyOffsets(
         const int32_t *expected, const int32_t *actual, int32_t count) {
     for (int32_t i = 0; i < count; ++i) {
         if (expected[i] != actual[i]) {
@@ -520,6 +520,6 @@ void SimplePatternFormatterTest::verifyOffsets(
     }
 }
 
-extern IntlTest *createSimplePatternFormatterTest() {
-    return new SimplePatternFormatterTest();
+extern IntlTest *createSimpleFormatterTest() {
+    return new SimpleFormatterTest();
 }

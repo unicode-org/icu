@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -34,7 +34,7 @@ extern IntlTest *createBytesTrieTest();
 static IntlTest *createLocalPointerTest();
 extern IntlTest *createUCharsTrieTest();
 static IntlTest *createEnumSetTest();
-extern IntlTest *createSimplePatternFormatterTest();
+extern IntlTest *createSimpleFormatterTest();
 extern IntlTest *createUnifiedCacheTest();
 extern IntlTest *createQuantityFormatterTest();
 extern IntlTest *createPluralMapTest(); 
@@ -102,10 +102,10 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
         case 20:
-            name = "SimplePatternFormatterTest";
+            name = "SimpleFormatterTest";
             if (exec) {
-                logln("TestSuite SimplePatternFormatterTest---"); logln();
-                LocalPointer<IntlTest> test(createSimplePatternFormatterTest());
+                logln("TestSuite SimpleFormatterTest---"); logln();
+                LocalPointer<IntlTest> test(createSimpleFormatterTest());
                 callTest(*test, par);
             }
             break;
