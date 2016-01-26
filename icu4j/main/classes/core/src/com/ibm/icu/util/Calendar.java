@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 1996-2015, International Business Machines
+ *   Copyright (C) 1996-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -20,10 +20,10 @@ import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
-import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -3555,9 +3555,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         // Resolve a pattern for the date/time style
         String pattern = null;
         if ((timeStyle >= 0) && (dateStyle >= 0)) {
-            pattern = MessageFormat.format(patternData.getDateTimePattern(dateStyle),
-                    new Object[] {patternData.patterns[timeStyle],
-                patternData.patterns[dateStyle + 4]});
+            pattern = SimpleFormatterImpl.formatRawPattern(
+                    patternData.getDateTimePattern(dateStyle), 2, 2,
+                    patternData.patterns[timeStyle],
+                    patternData.patterns[dateStyle + 4]);
             // Might need to merge the overrides from the date and time into a single
             // override string TODO: Right now we are forcing the date's override into the
             // time style.

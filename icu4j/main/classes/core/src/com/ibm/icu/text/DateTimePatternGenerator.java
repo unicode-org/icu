@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
- * Copyright (C) 2006-2015, Google, International Business Machines Corporation *
- * and others. All Rights Reserved.                                             *
+ * Copyright (C) 2006-2016, Google, International Business Machines Corporation
+ * and others. All Rights Reserved.
  ********************************************************************************
  */
 package com.ibm.icu.text;
@@ -27,6 +27,7 @@ import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternTokenizer;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
@@ -434,7 +435,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         if (datePattern == null) return timePattern == null ? "" : timePattern;
         if (timePattern == null) return datePattern;
-        return MessageFormat.format(getDateTimeFormat(), new Object[]{timePattern, datePattern});
+        return SimpleFormatterImpl.formatRawPattern(
+                getDateTimeFormat(), 2, 2, timePattern, datePattern);
     }
 
     /**
@@ -1646,7 +1648,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 String temp = adjustFieldTypes(tempWithMatcher, source, flags, options);
                 int foundMask = startingMask & ~distInfo.missingFieldMask;
                 int topField = getTopBitNumber(foundMask);
-                resultPattern = MessageFormat.format(getAppendFormat(topField), new Object[]{resultPattern, temp, getAppendName(topField)});
+                resultPattern = SimpleFormatterImpl.formatRawPattern(
+                        getAppendFormat(topField), 2, 3, resultPattern, temp, getAppendName(topField));
             }
         }
         return resultPattern;

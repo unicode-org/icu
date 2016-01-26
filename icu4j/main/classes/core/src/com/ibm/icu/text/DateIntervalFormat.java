@@ -17,6 +17,7 @@ import java.util.Map;
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
@@ -858,8 +859,8 @@ public class DateIntervalFormat extends UFormat {
             laterDate = fDateFormat.format(toCalendar, laterDate, otherPos);
             String fallbackPattern = fInfo.getFallbackIntervalPattern();
             adjustPosition(fallbackPattern, earlierDate.toString(), pos, laterDate.toString(), otherPos, pos);
-            String fallbackRange = MessageFormat.format(fallbackPattern, new Object[]
-                            {earlierDate.toString(), laterDate.toString()});
+            String fallbackRange = SimpleFormatterImpl.formatRawPattern(
+                    fallbackPattern, 2, 2, earlierDate, laterDate);
             if (formatDatePlusTimeRange) {
                 // fallbackRange has just the time range, need to format the date part and combine that
                 fDateFormat.applyPattern(fDatePattern);
@@ -868,8 +869,8 @@ public class DateIntervalFormat extends UFormat {
                 otherPos.setEndIndex(0);
                 datePortion = fDateFormat.format(fromCalendar, datePortion, otherPos);
                 adjustPosition(fDateTimeFormat, fallbackRange, pos, datePortion.toString(), otherPos, pos);
-                fallbackRange = MessageFormat.format(fDateTimeFormat, new Object[]
-                            {fallbackRange, datePortion.toString()});
+                fallbackRange = SimpleFormatterImpl.formatRawPattern(
+                        fDateTimeFormat, 2, 2, fallbackRange, datePortion);
             }
             appendTo.append(fallbackRange);
             if (formatDatePlusTimeRange) {
@@ -1813,8 +1814,8 @@ public class DateIntervalFormat extends UFormat {
         if ( timeItvPtnInfo != null ) {
             String timeIntervalPattern = timeItvPtnInfo.getFirstPart() + 
                                          timeItvPtnInfo.getSecondPart();
-            String pattern = MessageFormat.format(dtfmt, new Object[] 
-                                         {timeIntervalPattern, datePattern});
+            String pattern = SimpleFormatterImpl.formatRawPattern(
+                    dtfmt, 2, 2, timeIntervalPattern, datePattern);
             timeItvPtnInfo = DateIntervalInfo.genPatternInfo(pattern,
                                 timeItvPtnInfo.firstDateInPtnIsLaterDate());
             intervalPatterns.put(

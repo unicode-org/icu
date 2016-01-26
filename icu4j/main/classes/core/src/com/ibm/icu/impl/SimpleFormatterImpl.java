@@ -187,6 +187,25 @@ public final class SimpleFormatterImpl {
     }
 
     /**
+     * Formats the not-compiled pattern with the given values.
+     * Equivalent to compileToStringMinMaxArguments() followed by formatCompiledPattern().
+     * The number of arguments checked against the given limits is the
+     * highest argument number plus one, not the number of occurrences of arguments.
+     *
+     * @param pattern Not-compiled form of a pattern string.
+     * @param min The pattern must have at least this many arguments.
+     * @param max The pattern must have at most this many arguments.
+     * @return The compiled-pattern string.
+     * @throws IllegalArgumentException for bad argument syntax and too few or too many arguments.
+     */
+    public static String formatRawPattern(String pattern, int min, int max, CharSequence... values) {
+        StringBuilder sb = new StringBuilder();
+        String compiledPattern = compileToStringMinMaxArguments(pattern, sb, min, max);
+        sb.setLength(0);
+        return formatAndAppend(compiledPattern, sb, null, values).toString();
+    }
+
+    /**
      * Formats the given values, appending to the appendTo builder.
      *
      * @param compiledPattern Compiled form of a pattern string.

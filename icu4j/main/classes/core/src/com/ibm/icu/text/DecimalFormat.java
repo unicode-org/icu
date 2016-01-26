@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -4040,19 +4040,19 @@ public class DecimalFormat extends NumberFormat {
         // Reuse one StringBuffer for better performance
         StringBuffer buffer = new StringBuffer();
         if (posPrefixPattern != null) {
-            expandAffix(posPrefixPattern, pluralCount, buffer, false);
+            expandAffix(posPrefixPattern, pluralCount, buffer);
             positivePrefix = buffer.toString();
         }
         if (posSuffixPattern != null) {
-            expandAffix(posSuffixPattern, pluralCount, buffer, false);
+            expandAffix(posSuffixPattern, pluralCount, buffer);
             positiveSuffix = buffer.toString();
         }
         if (negPrefixPattern != null) {
-            expandAffix(negPrefixPattern, pluralCount, buffer, false);
+            expandAffix(negPrefixPattern, pluralCount, buffer);
             negativePrefix = buffer.toString();
         }
         if (negSuffixPattern != null) {
-            expandAffix(negSuffixPattern, pluralCount, buffer, false);
+            expandAffix(negSuffixPattern, pluralCount, buffer);
             negativeSuffix = buffer.toString();
         }
     }
@@ -4071,6 +4071,7 @@ public class DecimalFormat extends NumberFormat {
      * it is used to expand the stored affix patterns given a specific number (doFormat ==
      * true), for those rare cases in which a currency format references a ChoiceFormat
      * (e.g., en_IN display name for INR). The number itself is taken from digitList.
+     * TODO: There are no currency ChoiceFormat patterns, figure out what is still relevant here.
      *
      * When used in the first way, this method has a side effect: It sets currencyChoice
      * to a ChoiceFormat object, if the currency's display name in this locale is a
@@ -4083,15 +4084,9 @@ public class DecimalFormat extends NumberFormat {
      * it is the singular "one", or the plural "other". For all other cases, it is null,
      * and is not being used.
      * @param buffer a scratch StringBuffer; its contents will be lost
-     * @param doFormat if false, then the pattern will be expanded, and if a currency
-     * symbol is encountered that expands to a ChoiceFormat, the currencyChoice member
-     * variable will be initialized if it is null. If doFormat is true, then it is assumed
-     * that the currencyChoice has been created, and it will be used to format the value
-     * in digitList.
      */
     // Bug 4212072 [Richard/GCL]
-    private void expandAffix(String pattern, String pluralCount, StringBuffer buffer,
-                             boolean doFormat) {
+    private void expandAffix(String pattern, String pluralCount, StringBuffer buffer) {
         buffer.setLength(0);
         for (int i = 0; i < pattern.length();) {
             char c = pattern.charAt(i++);
@@ -4143,37 +4138,10 @@ public class DecimalFormat extends NumberFormat {
                     // when formatting currency plural names.  For other cases,
                     // pluralCount == null, and plural names are not needed.
                     if (plural && pluralCount != null) {
-                        boolean isChoiceFormat[] = new boolean[1];
                         s = currency.getName(symbols.getULocale(), Currency.PLURAL_LONG_NAME,
-                                             pluralCount, isChoiceFormat);
+                                             pluralCount, null);
                     } else if (!intl) {
-                        boolean isChoiceFormat[] = new boolean[1];
-                        s = currency.getName(symbols.getULocale(), Currency.SYMBOL_NAME,
-                                             isChoiceFormat);
-                        if (isChoiceFormat[0]) {
-                            // Two modes here: If doFormat is false, we set up
-                            // currencyChoice. If doFormat is true, we use the previously
-                            // created currencyChoice to format the value in digitList.
-                            if (!doFormat) {
-                                // If the currency is handled by a ChoiceFormat, then
-                                // we're not going to use the expanded
-                                // patterns. Instantiate the ChoiceFormat and return.
-                                if (currencyChoice == null) {
-                                    currencyChoice = new ChoiceFormat(s);
-                                }
-                                // We could almost return null or "" here, since the
-                                // expanded affixes are almost not used at all in this
-                                // situation. However, one method -- toPattern() -- still
-                                // does use the expanded affixes, in order to set up a
-                                // padding pattern. We use the CURRENCY_SIGN as a
-                                // placeholder.
-                                s = String.valueOf(CURRENCY_SIGN);
-                            } else {
-                                FieldPosition pos = new FieldPosition(0); // ignored
-                                currencyChoice.format(digitList.getDouble(), buffer, pos);
-                                continue;
-                            }
-                        }
+                        s = currency.getName(symbols.getULocale(), Currency.SYMBOL_NAME, null);
                     } else {
                         s = currency.getCurrencyCode();
                     }
@@ -4220,7 +4188,7 @@ public class DecimalFormat extends NumberFormat {
                 affixPat = isNegative ? negSuffixPattern : posSuffixPattern;
             }
             StringBuffer affixBuf = new StringBuffer();
-            expandAffix(affixPat, null, affixBuf, true);
+            expandAffix(affixPat, null, affixBuf);
             buf.append(affixBuf);
             return affixBuf.length();
         }
@@ -5287,9 +5255,7 @@ public class DecimalFormat extends NumberFormat {
 
         super.setCurrency(theCurrency);
         if (theCurrency != null) {
-            boolean[] isChoiceFormat = new boolean[1];
-            String s = theCurrency.getName(symbols.getULocale(),
-                                           Currency.SYMBOL_NAME, isChoiceFormat);
+            String s = theCurrency.getName(symbols.getULocale(), Currency.SYMBOL_NAME, null);
             symbols.setCurrency(theCurrency);
             symbols.setCurrencySymbol(s);
         }
@@ -5602,6 +5568,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Formatter for ChoiceFormat-based currency names. If this field is not null, then
      * delegate to it to format currency symbols.
+     * TODO: This is obsolete: Remove, and design extensible serialization. ICU ticket #12090.
      *
      * @since ICU 2.6
      */

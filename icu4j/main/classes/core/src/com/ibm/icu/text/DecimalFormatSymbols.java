@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -9,7 +9,6 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.text.ChoiceFormat;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -966,17 +965,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         // Obtain currency data from the currency API.  This is strictly
         // for backward compatibility; we don't use DecimalFormatSymbols
         // for currency data anymore.
-        String currname = null;
         currency = Currency.getInstance(locale);
         if (currency != null) {
             intlCurrencySymbol = currency.getCurrencyCode();
-            boolean[] isChoiceFormat = new boolean[1];
-            currname = currency.getName(locale, Currency.SYMBOL_NAME, isChoiceFormat);
-            // If this is a ChoiceFormat currency, then format an
-            // arbitrary value; pick something != 1; more common.
-            currencySymbol = isChoiceFormat[0]
-                ? new ChoiceFormat(currname).format(2.0)
-                : currname;
+            currencySymbol = currency.getName(locale, Currency.SYMBOL_NAME, null);
             CurrencyFormatInfo fmtInfo = info.getFormatInfo(intlCurrencySymbol);
             if (fmtInfo != null) {
                 currencyPattern = fmtInfo.currencyPattern;

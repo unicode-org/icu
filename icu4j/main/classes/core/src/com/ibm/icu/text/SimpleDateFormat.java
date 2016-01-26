@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -28,6 +28,7 @@ import com.ibm.icu.impl.DateNumberFormat;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
@@ -1181,8 +1182,9 @@ public class SimpleDateFormat extends DateFormat {
                 {
                     glueIndex += (SHORT + 1);
                 }
-                cachedDefaultPattern = MessageFormat.format(dateTimePatterns[glueIndex],
-                        new Object[] {dateTimePatterns[SHORT], dateTimePatterns[SHORT + 4]});
+                cachedDefaultPattern = SimpleFormatterImpl.formatRawPattern(
+                        dateTimePatterns[glueIndex], 2, 2,
+                        dateTimePatterns[SHORT], dateTimePatterns[SHORT + 4]);
             } catch (MissingResourceException e) {
                 cachedDefaultPattern = FALLBACKPATTERN;
             }
@@ -1919,7 +1921,8 @@ public class SimpleDateFormat extends DateFormat {
             if (monthPattern == null) {
                 appendTo.append(array[value]);
             } else {
-                appendTo.append(MessageFormat.format(monthPattern, array[value]));
+                String s = SimpleFormatterImpl.formatRawPattern(monthPattern, 1, 1, array[value]);
+                appendTo.append(s);
             }
         }
     }
@@ -2684,7 +2687,8 @@ public class SimpleDateFormat extends DateFormat {
                         isLeapMonth = 0;
                     }
                 if (monthPattern != null) {
-                    String leapMonthName = MessageFormat.format(monthPattern, data[i]);
+                    String leapMonthName = SimpleFormatterImpl.formatRawPattern(
+                            monthPattern, 1, 1, data[i]);
                     length = leapMonthName.length();
                     if (length > bestMatchLength &&
                         (matchLength = regionMatchesWithOptionalDot(text, start, leapMonthName, length)) >= 0)

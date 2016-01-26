@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2015, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -27,7 +27,6 @@ import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.DisplayContext.Type;
 import com.ibm.icu.text.LocaleDisplayNames;
-import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
@@ -39,9 +38,10 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final DisplayContext nameLength;
     private final DataTable langData;
     private final DataTable regionData;
-    private final MessageFormat separatorFormat;
-    private final MessageFormat format;
-    private final MessageFormat keyTypeFormat;
+    // Compiled SimpleFormatter patterns.
+    private final String separatorFormat;
+    private final String format;
+    private final String keyTypeFormat;
     private final char formatOpenParen;
     private final char formatReplaceOpenParen;
     private final char formatCloseParen;
@@ -139,13 +139,14 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         if ("separator".equals(sep)) {
             sep = "{0}, {1}";
         }
-        this.separatorFormat = new MessageFormat(sep);
+        StringBuilder sb = new StringBuilder();
+        this.separatorFormat = SimpleFormatterImpl.compileToStringMinMaxArguments(sep, sb, 2, 2);
 
         String pattern = langData.get("localeDisplayPattern", "pattern");
         if ("pattern".equals(pattern)) {
             pattern = "{0} ({1})";
         }
-        this.format = new MessageFormat(pattern);
+        this.format = SimpleFormatterImpl.compileToStringMinMaxArguments(pattern, sb, 2, 2);
         if (pattern.contains("（")) {
             formatOpenParen = '（';
             formatCloseParen = '）';
@@ -162,7 +163,8 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         if ("keyTypePattern".equals(keyTypePattern)) {
             keyTypePattern = "{0}={1}";
         }
-        this.keyTypeFormat = new MessageFormat(keyTypePattern);
+        this.keyTypeFormat = SimpleFormatterImpl.compileToStringMinMaxArguments(
+                keyTypePattern, sb, 2, 2);
 
         // Get values from the contextTransforms data if we need them
         // Also check whether we will need a break iterator (depends on the data)
@@ -365,8 +367,8 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                 if (!valueDisplayName.equals(value)) {
                     appendWithSep(valueDisplayName, buf);
                 } else if (!key.equals(keyDisplayName)) {
-                    String keyValue = keyTypeFormat.format(
-                            new String[] { keyDisplayName, valueDisplayName });
+                    String keyValue = SimpleFormatterImpl.formatCompiledPattern(
+                            keyTypeFormat, keyDisplayName, valueDisplayName);
                     appendWithSep(keyValue, buf);
                 } else {
                     appendWithSep(keyDisplayName, buf)
@@ -382,7 +384,8 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         }
 
         if (resultRemainder != null) {
-            resultName =  format.format(new Object[] {resultName, resultRemainder});
+            resultName = SimpleFormatterImpl.formatCompiledPattern(
+                    format, resultName, resultRemainder);
         }
 
         return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, resultName);
@@ -639,8 +642,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         if (b.length() == 0) {
             b.append(s); 
         } else {
-            String combined = separatorFormat.format(new String[] { b.toString(), s });
-            b.replace(0, b.length(), combined);
+            SimpleFormatterImpl.formatAndReplace(separatorFormat, b, null, b, s);
         }
         return b;
     }
