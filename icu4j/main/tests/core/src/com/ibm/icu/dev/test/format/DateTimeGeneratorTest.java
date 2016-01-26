@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006-2015, Google, International Business Machines Corporation *
- * and others. All Rights Reserved.                                            *
+ * Copyright (C) 2006-2016, Google, International Business Machines Corporation
+ * and others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -866,24 +866,23 @@ public class DateTimeGeneratorTest extends TestFmwk {
        */
       public void TestGetRedundants(){
           DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
-          
+
           // Tests when "if (output == null)" is true
           try{
               dtpg.getRedundants(null);
           } catch(Exception e){
-              errln("DateTimeGenerator.getRedundants was not suppose to return " +
-                      "an exception when passing a null parameter.");
+              errln("DateTimeGenerator.getRedundants was not supposed to return " +
+                      "an exception when passing a null parameter: " + e);
           }
-          
+
           // Tests when "if (output == null)" is false
           try{
               Collection<String> out = new LinkedHashSet<String>();
               dtpg.getRedundants(out);
           } catch(Exception e){
-              errln("DateTimeGenerator.getRedundants was not suppose to return " +
-                  "an exception when passing a new LinkedHashSet<String>() parameter.");
+              errln("DateTimeGenerator.getRedundants was not supposed to return " +
+                  "an exception when passing a new LinkedHashSet<String>() parameter: " + e);
           }
-          
       }
       
       /* Tests the method

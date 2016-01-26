@@ -356,7 +356,8 @@ public final class RelativeDateTimeFormatter {
         return new RelativeDateTimeFormatter(
                 data.qualitativeUnitMap,
                 data.relUnitPatternMap,
-                new MessageFormat(data.dateTimePattern),
+                SimpleFormatterImpl.compileToStringMinMaxArguments(
+                        data.dateTimePattern, new StringBuilder(), 2, 2),
                 PluralRules.forLocale(locale),
                 nf,
                 style,
@@ -492,8 +493,8 @@ public final class RelativeDateTimeFormatter {
      * @stable ICU 53
      */
     public String combineDateAndTime(String relativeDateString, String timeString) {
-        return this.combinedDateAndTime.format(
-            new Object[]{timeString, relativeDateString}, new StringBuffer(), null).toString();
+        return SimpleFormatterImpl.formatCompiledPattern(
+                combinedDateAndTime, timeString, relativeDateString);
     }
 
     /**
@@ -544,7 +545,7 @@ public final class RelativeDateTimeFormatter {
     private RelativeDateTimeFormatter(
             EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>> qualitativeUnitMap,
             EnumMap<Style, EnumMap<RelativeUnit, String[][]>> patternMap, 
-            MessageFormat combinedDateAndTime,
+            String combinedDateAndTime,
             PluralRules pluralRules,
             NumberFormat numberFormat,
             Style style,
@@ -601,7 +602,7 @@ public final class RelativeDateTimeFormatter {
     private final EnumMap<Style, EnumMap<AbsoluteUnit, EnumMap<Direction, String>>> qualitativeUnitMap;
     private final EnumMap<Style, EnumMap<RelativeUnit, String[][]>> patternMap;
 
-    private final MessageFormat combinedDateAndTime;
+    private final String combinedDateAndTime;  // compiled SimpleFormatter pattern
     private final PluralRules pluralRules;
     private final NumberFormat numberFormat;
 
