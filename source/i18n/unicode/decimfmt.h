@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2015, International Business Machines
+*   Copyright (C) 1997-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -54,7 +54,6 @@
 U_NAMESPACE_BEGIN
 
 class DigitList;
-class ChoiceFormat;
 class CurrencyPluralInfo;
 class Hashtable;
 class UnicodeSet;

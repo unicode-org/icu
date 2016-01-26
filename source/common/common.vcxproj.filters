@@ -277,10 +277,16 @@
     <ClCompile Include="dtintrv.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="locdspnm.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="parsepos.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="simpleformatter.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="ucurr.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="ustrfmt.c">
@@ -751,6 +757,9 @@
     <ClInclude Include="umapfile.h">
       <Filter>data &amp; memory</Filter>
     </ClInclude>
+    <CustomBuild Include="unicode\locdspnm.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\simpleformatter.h">
       <Filter>formatting</Filter>
     </CustomBuild>
@@ -760,6 +769,18 @@
     <ClInclude Include="util.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <CustomBuild Include="unicode\ucurr.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <ClInclude Include="ucurrimp.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <CustomBuild Include="unicode\udisplaycontext.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\uldnames.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
     <ClInclude Include="punycode.h">
       <Filter>idna</Filter>
     </ClInclude>

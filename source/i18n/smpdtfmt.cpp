@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2015, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1997-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 *
 * File SMPDTFMT.CPP
@@ -42,6 +42,7 @@
 #include "unicode/uniset.h"
 #include "unicode/ustring.h"
 #include "unicode/basictz.h"
+#include "unicode/simpleformatter.h"
 #include "unicode/simpletz.h"
 #include "unicode/rbtz.h"
 #include "unicode/tzfmt.h"
@@ -726,16 +727,9 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 
     // if the pattern should include both date and time information, use the date/time
     // pattern string as a guide to tell use how to glue together the appropriate date
-    // and time pattern strings.  The actual gluing-together is handled by a convenience
-    // method on MessageFormat.
+    // and time pattern strings.
     if ((timeStyle != kNone) && (dateStyle != kNone))
     {
-        Formattable timeDateArray[2];
-
-        // use Formattable::adoptString() so that we can use fastCopyFrom()
-        // instead of Formattable::setString()'s unaware, safe, deep string clone
-        // see Jitterbug 2296
-
         currentBundle = ures_getByIndex(dateTimePatterns, (int32_t)timeStyle, NULL, &status);
         if (U_FAILURE(status)) {
            status = U_INVALID_FORMAT_ERROR;
@@ -760,13 +754,7 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         }
         ures_close(currentBundle);
 
-        UnicodeString *tempus1 = new UnicodeString(TRUE, resStr, resStrLen);
-        // NULL pointer check
-        if (tempus1 == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        timeDateArray[0].adoptString(tempus1);
+        UnicodeString tempus1(TRUE, resStr, resStrLen);
 
         currentBundle = ures_getByIndex(dateTimePatterns, (int32_t)dateStyle, NULL, &status);
         if (U_FAILURE(status)) {
@@ -792,13 +780,7 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         }
         ures_close(currentBundle);
 
-        UnicodeString *tempus2 = new UnicodeString(TRUE, resStr, resStrLen);
-        // Null pointer check
-        if (tempus2 == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        timeDateArray[1].adoptString(tempus2);
+        UnicodeString tempus2(TRUE, resStr, resStrLen);
 
         int32_t glueIndex = kDateTime;
         int32_t patternsSize = ures_getSize(dateTimePatterns);
@@ -808,7 +790,8 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         }
 
         resStr = ures_getStringByIndex(dateTimePatterns, glueIndex, &resStrLen, &status);
-        MessageFormat::format(UnicodeString(TRUE, resStr, resStrLen), timeDateArray, 2, fPattern, status);
+        SimpleFormatter(UnicodeString(TRUE, resStr, resStrLen), 2, 2, status).
+                format(tempus1, tempus2, fPattern, status);
     }
     // if the pattern includes just time data or just date date, load the appropriate
     // pattern string from the resources
@@ -1238,8 +1221,7 @@ _appendSymbolWithMonthPattern(UnicodeString& dst, int32_t value, const UnicodeSt
         if (monthPattern == NULL) {
             dst += symbols[value];
         } else {
-            Formattable monthName((const UnicodeString&)(symbols[value]));
-            MessageFormat::format(*monthPattern, &monthName, 1, dst, status);
+            SimpleFormatter(*monthPattern, 1, 1, status).format(symbols[value], dst, status);
         }
     }
 }
@@ -2542,8 +2524,7 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
         if (monthPattern != NULL) {
             UErrorCode status = U_ZERO_ERROR;
             UnicodeString leapMonthName;
-            Formattable monthName((const UnicodeString&)(data[i]));
-            MessageFormat::format(*monthPattern, &monthName, 1, leapMonthName, status);
+            SimpleFormatter(*monthPattern, 1, 1, status).format(data[i], leapMonthName, status);
             if (U_SUCCESS(status)) {
                 if ((matchLen = matchStringWithOptionalDot(text, start, leapMonthName)) > bestMatchLength) {
                     bestMatch = i;

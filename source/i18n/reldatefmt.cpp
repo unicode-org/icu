@@ -18,7 +18,7 @@
 #include "unicode/localpointer.h"
 #include "quantityformatter.h"
 #include "unicode/plurrule.h"
-#include "unicode/msgfmt.h"
+#include "unicode/simpleformatter.h"
 #include "unicode/decimfmt.h"
 #include "unicode/numfmt.h"
 #include "unicode/brkiter.h"
@@ -54,15 +54,15 @@ public:
     // means past e.g 5 days ago; 1 means future e.g in 5 days.
     QuantityFormatter relativeUnits[UDAT_STYLE_COUNT][UDAT_RELATIVE_UNIT_COUNT][2];
 
-    void adoptCombinedDateAndTime(MessageFormat *mfToAdopt) {
+    void adoptCombinedDateAndTime(SimpleFormatter *fmtToAdopt) {
         delete combinedDateAndTime;
-        combinedDateAndTime = mfToAdopt;
+        combinedDateAndTime = fmtToAdopt;
     }
-    const MessageFormat *getCombinedDateAndTime() const {
+    const SimpleFormatter *getCombinedDateAndTime() const {
         return combinedDateAndTime;
     }
 private:
-    MessageFormat *combinedDateAndTime;
+    SimpleFormatter *combinedDateAndTime;
     RelativeDateTimeCacheData(const RelativeDateTimeCacheData &other);
     RelativeDateTimeCacheData& operator=(
             const RelativeDateTimeCacheData &other);
@@ -643,7 +643,7 @@ const RelativeDateTimeCacheData *LocaleCacheKey<RelativeDateTimeCacheData>::crea
         return NULL;
     }
     result->adoptCombinedDateAndTime(
-            new MessageFormat(dateTimePattern, localeId, status));
+            new SimpleFormatter(dateTimePattern, 2, 2, status));
     if (U_FAILURE(status)) {
         return NULL;
     }
@@ -913,12 +913,10 @@ UnicodeString& RelativeDateTimeFormatter::format(
 }
 
 UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
-    const UnicodeString& relativeDateString, const UnicodeString& timeString,
-    UnicodeString& appendTo, UErrorCode& status) const {
-    Formattable args[2] = {timeString, relativeDateString};
-    FieldPosition fpos(0);
+        const UnicodeString& relativeDateString, const UnicodeString& timeString,
+        UnicodeString& appendTo, UErrorCode& status) const {
     return fCache->getCombinedDateAndTime()->format(
-            args, 2, appendTo, fpos, status);
+            timeString, relativeDateString, appendTo, status);
 }
 
 void RelativeDateTimeFormatter::adjustForContext(UnicodeString &str) const {
