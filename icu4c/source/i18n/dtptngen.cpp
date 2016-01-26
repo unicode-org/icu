@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2015, International Business Machines Corporation and
+* Copyright (C) 2007-2016, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -16,7 +16,7 @@
 #include "unicode/decimfmt.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/dtptngen.h"
-#include "unicode/msgfmt.h"
+#include "unicode/simpleformatter.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/udat.h"
 #include "unicode/udatpg.h"
@@ -830,8 +830,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
     resultPattern.remove();
     status = U_ZERO_ERROR;
     dtFormat=getDateTimeFormat();
-    Formattable dateTimeObject[] = { timePattern, datePattern };
-    resultPattern = MessageFormat::format(dtFormat, dateTimeObject, 2, resultPattern, status );
+    SimpleFormatter(dtFormat, 2, 2, status).format(timePattern, datePattern, resultPattern, status);
     return resultPattern;
 }
 
@@ -1171,13 +1170,13 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields, int32_t flags,
             int32_t topField=getTopBitNumber(foundMask);
             UnicodeString appendName;
             getAppendName((UDateTimePatternField)topField, appendName);
-            const Formattable formatPattern[] = {
-                resultPattern,
-                tempPattern,
-                appendName
+            const UnicodeString *values[3] = {
+                &resultPattern,
+                &tempPattern,
+                &appendName
             };
-            UnicodeString emptyStr;
-            resultPattern = MessageFormat::format(appendItemFormats[topField], formatPattern, 3, emptyStr, err);
+            SimpleFormatter(appendItemFormats[topField], 2, 3, err).
+                    formatAndReplace(values, 3, resultPattern, NULL, 0, err);
             lastMissingFieldMask = distanceInfo->missingFieldMask;
         }
     }

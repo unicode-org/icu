@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010-2014, International Business Machines Corporation and
+* Copyright (C) 2010-2016, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -10,11 +10,11 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/locdspnm.h"
-#include "unicode/msgfmt.h"
+#include "unicode/simpleformatter.h"
 #include "unicode/ures.h"
 #include "unicode/udisplaycontext.h" 
 #include "unicode/brkiter.h"
-
+#include "unicode/ucurr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "mutex.h"
@@ -274,9 +274,9 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
     UDialectHandling dialectHandling;
     ICUDataTable langData;
     ICUDataTable regionData;
-    MessageFormat *separatorFormat;
-    MessageFormat *format;
-    MessageFormat *keyTypeFormat;
+    SimpleFormatter separatorFormat;
+    SimpleFormatter format;
+    SimpleFormatter keyTypeFormat;
     UDisplayContext capitalizationContext;
     BreakIterator* capitalizationBrkIter; 
     static UMutex  capitalizationBrkIterLock;
@@ -344,9 +344,6 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
     : dialectHandling(dialectHandling)
     , langData(U_ICUDATA_LANG, locale)
     , regionData(U_ICUDATA_REGION, locale)
-    , separatorFormat(NULL)
-    , format(NULL)
-    , keyTypeFormat(NULL)
     , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
     , capitalizationBrkIter(NULL)
     , nameLength(UDISPCTX_LENGTH_FULL)
@@ -359,9 +356,6 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
     : dialectHandling(ULDN_STANDARD_NAMES)
     , langData(U_ICUDATA_LANG, locale)
     , regionData(U_ICUDATA_REGION, locale)
-    , separatorFormat(NULL)
-    , format(NULL)
-    , keyTypeFormat(NULL)
     , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
     , capitalizationBrkIter(NULL)
     , nameLength(UDISPCTX_LENGTH_FULL)
@@ -399,14 +393,14 @@ LocaleDisplayNamesImpl::initialize(void) {
         sep = UnicodeString("{0}, {1}", -1, US_INV);
     }
     UErrorCode status = U_ZERO_ERROR;
-    separatorFormat = new MessageFormat(sep, status);
+    separatorFormat.applyPatternMinMaxArguments(sep, 2, 2, status);
 
     UnicodeString pattern;
     langData.getNoFallback("localeDisplayPattern", "pattern", pattern);
     if (pattern.isBogus()) {
         pattern = UnicodeString("{0} ({1})", -1, US_INV);
     }
-    format = new MessageFormat(pattern, status);
+    format.applyPatternMinMaxArguments(pattern, 2, 2, status);
     if (pattern.indexOf((UChar)0xFF08) >= 0) {
         formatOpenParen.setTo((UChar)0xFF08);         // fullwidth (
         formatReplaceOpenParen.setTo((UChar)0xFF3B);  // fullwidth [
@@ -424,7 +418,7 @@ LocaleDisplayNamesImpl::initialize(void) {
     if (ktPattern.isBogus()) {
         ktPattern = UnicodeString("{0}={1}", -1, US_INV);
     }
-    keyTypeFormat = new MessageFormat(ktPattern, status);
+    keyTypeFormat.applyPatternMinMaxArguments(ktPattern, 2, 2, status);
 
     uprv_memset(fCapitalization, 0, sizeof(fCapitalization));
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -494,9 +488,6 @@ LocaleDisplayNamesImpl::initialize(void) {
 }
 
 LocaleDisplayNamesImpl::~LocaleDisplayNamesImpl() {
-    delete separatorFormat;
-    delete format;
-    delete keyTypeFormat;
     delete capitalizationBrkIter;
  }
 
@@ -593,7 +584,6 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
 
   UnicodeString resultRemainder;
   UnicodeString temp;
-  StringEnumeration *e = NULL;
   UErrorCode status = U_ZERO_ERROR;
 
   if (hasScript) {
@@ -608,13 +598,16 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
   resultRemainder.findAndReplace(formatOpenParen, formatReplaceOpenParen);
   resultRemainder.findAndReplace(formatCloseParen, formatReplaceCloseParen);
 
-  e = locale.createKeywords(status);
-  if (e && U_SUCCESS(status)) {
+  LocalPointer<StringEnumeration> e(locale.createKeywords(status));
+  if (e.isValid() && U_SUCCESS(status)) {
     UnicodeString temp2;
     char value[ULOC_KEYWORD_AND_VALUES_CAPACITY]; // sigh, no ULOC_VALUE_CAPACITY
     const char* key;
     while ((key = e->next((int32_t *)0, status)) != NULL) {
       locale.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
+      if (U_FAILURE(status)) {
+        return result;
+      }
       keyDisplayName(key, temp);
       temp.findAndReplace(formatOpenParen, formatReplaceOpenParen);
       temp.findAndReplace(formatCloseParen, formatReplaceCloseParen);
@@ -625,13 +618,7 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
         appendWithSep(resultRemainder, temp2);
       } else if (temp != UnicodeString(key, -1, US_INV)) {
         UnicodeString temp3;
-        Formattable data[] = {
-          temp,
-          temp2
-        };
-        FieldPosition fpos;
-        status = U_ZERO_ERROR;
-        keyTypeFormat->format(data, 2, temp3, fpos, status);
+        keyTypeFormat.format(temp, temp2, temp3, status);
         appendWithSep(resultRemainder, temp3);
       } else {
         appendWithSep(resultRemainder, temp)
@@ -639,17 +626,10 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
           .append(temp2);
       }
     }
-    delete e;
   }
 
   if (!resultRemainder.isEmpty()) {
-    Formattable data[] = {
-      resultName,
-      resultRemainder
-    };
-    FieldPosition fpos;
-    status = U_ZERO_ERROR;
-    format->format(data, 2, result, fpos, status);
+    format.format(resultName, resultRemainder, result.remove(), status);
     return adjustForUsageAndContext(kCapContextUsageLanguage, result);
   }
 
@@ -662,17 +642,9 @@ LocaleDisplayNamesImpl::appendWithSep(UnicodeString& buffer, const UnicodeString
     if (buffer.isEmpty()) {
         buffer.setTo(src);
     } else {
-        UnicodeString combined;
-        Formattable data[] = {
-          buffer,
-          src
-        };
-        FieldPosition fpos;
+        const UnicodeString *values[2] = { &buffer, &src };
         UErrorCode status = U_ZERO_ERROR;
-        separatorFormat->format(data, 2, combined, fpos, status);
-        if (U_SUCCESS(status)) {
-            buffer.setTo(combined);
-        }
+        separatorFormat.formatAndReplace(values, 2, buffer, NULL, 0, status);
     }
     return buffer;
 }

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2001-2014, International Business Machines
+* Copyright (C) 2001-2016, International Business Machines
 *                Corporation and others. All Rights Reserved.
 ******************************************************************************
 *   file name:  ucln_cmn.h
@@ -40,7 +40,6 @@ typedef enum ECleanupI18NType {
     UCLN_I18N_TIMEZONENAMES,
     UCLN_I18N_ZONEMETA,
     UCLN_I18N_TIMEZONE,
-    UCLN_I18N_CURRENCY,
     UCLN_I18N_DECFMT,
     UCLN_I18N_NUMFMT,
     UCLN_I18N_SMPDTFMT,

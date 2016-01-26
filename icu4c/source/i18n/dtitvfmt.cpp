@@ -17,11 +17,10 @@
 //TODO: put in compilation
 //#define DTITVFMT_DEBUG 1
 
-#include "unicode/msgfmt.h"
+#include "unicode/calendar.h"
 #include "unicode/dtptngen.h"
 #include "unicode/dtitvinf.h"
-#include "unicode/calendar.h"
-
+#include "unicode/simpleformatter.h"
 #include "cstring.h"
 #include "dtitv_impl.h"
 #include "gregoimp.h"
@@ -1353,38 +1352,36 @@ DateIntervalFormat::fallbackFormat(Calendar& fromCalendar,
     UnicodeString fullPattern; // for saving the pattern in fDateFormat
     UBool formatDatePlusTimeRange = (fromToOnSameDay && fDatePattern && fTimePattern);
     // the fall back
-    // no need delete earlierDate and laterDate since they are adopted
     if (formatDatePlusTimeRange) {
         fDateFormat->toPattern(fullPattern); // save current pattern, restore later
         fDateFormat->applyPattern(*fTimePattern);
     }
     FieldPosition otherPos;
     otherPos.setField(pos.getField());
-    UnicodeString* earlierDate = new UnicodeString();
-    fDateFormat->format(fromCalendar, *earlierDate, pos);
-    UnicodeString* laterDate = new UnicodeString();
-    fDateFormat->format(toCalendar, *laterDate, otherPos);
+    UnicodeString earlierDate;
+    fDateFormat->format(fromCalendar, earlierDate, pos);
+    UnicodeString laterDate;
+    fDateFormat->format(toCalendar, laterDate, otherPos);
     UnicodeString fallbackPattern;
     fInfo->getFallbackIntervalPattern(fallbackPattern);
-    adjustPosition(fallbackPattern, *earlierDate, pos, *laterDate, otherPos, pos);
-    Formattable fmtArray[2];
-    fmtArray[0].adoptString(earlierDate);
-    fmtArray[1].adoptString(laterDate);
-    
+    adjustPosition(fallbackPattern, earlierDate, pos, laterDate, otherPos, pos);
     UnicodeString fallbackRange;
-    MessageFormat::format(fallbackPattern, fmtArray, 2, fallbackRange, status);
+    SimpleFormatter(fallbackPattern, 2, 2, status).
+            format(earlierDate, laterDate, fallbackRange, status);
     if ( U_SUCCESS(status) && formatDatePlusTimeRange ) {
         // fallbackRange has just the time range, need to format the date part and combine that
         fDateFormat->applyPattern(*fDatePattern);
-        UnicodeString* datePortion = new UnicodeString();
+        UnicodeString datePortion;
         otherPos.setBeginIndex(0);
         otherPos.setEndIndex(0);
-        fDateFormat->format(fromCalendar, *datePortion, otherPos);
-        adjustPosition(*fDateTimeFormat, fallbackRange, pos, *datePortion, otherPos, pos);
-        fmtArray[0].setString(fallbackRange); // {0} is time range
-        fmtArray[1].adoptString(datePortion); // {1} is single date portion
-        fallbackRange.remove();
-        MessageFormat::format(*fDateTimeFormat, fmtArray, 2, fallbackRange, status);
+        fDateFormat->format(fromCalendar, datePortion, otherPos);
+        adjustPosition(*fDateTimeFormat, fallbackRange, pos, datePortion, otherPos, pos);
+        const UnicodeString *values[2] = {
+            &fallbackRange,  // {0} is time range
+            &datePortion,  // {1} is single date portion
+        };
+        SimpleFormatter(*fDateTimeFormat, 2, 2, status).
+                formatAndReplace(values, 2, fallbackRange, NULL, 0, status);
     }
     if ( U_SUCCESS(status) ) {
         appendTo.append(fallbackRange);
@@ -1533,15 +1530,11 @@ DateIntervalFormat::concatSingleDate2TimeInterval(UnicodeString& format,
     }
     PatternInfo&  timeItvPtnInfo = fIntervalPatterns[itvPtnIndex];
     if ( !timeItvPtnInfo.firstPart.isEmpty() ) {
-        // UnicodeString allocated here is adopted, so no need to delete
-        UnicodeString* timeIntervalPattern = new UnicodeString(timeItvPtnInfo.firstPart);
-        timeIntervalPattern->append(timeItvPtnInfo.secondPart);
-        UnicodeString* dateStr = new UnicodeString(datePattern);
-        Formattable fmtArray[2];
-        fmtArray[0].adoptString(timeIntervalPattern);
-        fmtArray[1].adoptString(dateStr);
+        UnicodeString timeIntervalPattern(timeItvPtnInfo.firstPart);
+        timeIntervalPattern.append(timeItvPtnInfo.secondPart);
         UnicodeString combinedPattern;
-        MessageFormat::format(format, fmtArray, 2, combinedPattern, status);
+        SimpleFormatter(format, 2, 2, status).
+                format(timeIntervalPattern, datePattern, combinedPattern, status);
         if ( U_FAILURE(status) ) {
             return;
         }
