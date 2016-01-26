@@ -149,6 +149,8 @@ library: common
     listformatter
     resourcebundle service_registration resbund_cnv ures_cnv icudataver ucat
     loclikely
+    currency
+    locale_display_names2
     conversion converter_selector ucnv_set ucnvdisp
     messagepattern simpleformatter
     icu_utility icu_utility_with_props
@@ -533,9 +535,20 @@ group: ucat  # message-catalog-like API
     resourcebundle
 
 group: locale_display_names
-    locdispnames.o
+    locdispnames.o  # Locale.getDisplayName()
   deps
     locresdata
+
+group: locale_display_names2
+    locdspnm.o  # class LocaleDisplayNames
+  deps
+    resourcebundle currency simpleformatter unistr_titlecase_brkiter uchar
+
+group: currency
+    ucurr.o
+  deps
+    loclikely resourcebundle ulist ustring_case_locale
+    stdlib_qsort  # for ucurr.o (which does not use ICU's uarrsort.o)
 
 group: icudataver  # u_getDataVersion()
     icudataver.o
@@ -828,10 +841,6 @@ group: string_search
 
 group: formatting
     # TODO: Try to subdivide this ball of wax.
-    # locale_display_names2
-    locdspnm.o
-    # currency
-    ucurr.o
     # currencyformat
     curramt.o currfmt.o currpinf.o currunit.o
     # decimalformat
@@ -868,7 +877,6 @@ group: formatting
     common
     floating_point  # sqrt() for astro.o
     trigonometry  # for astro.o
-    stdlib_qsort  # for ucurr.o (which does not use ICU's uarrsort.o)
     sharedbreakiterator # for reldatefmt.o
     uclean_i18n
 

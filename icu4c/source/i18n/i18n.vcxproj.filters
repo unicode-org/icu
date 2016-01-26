@@ -207,9 +207,6 @@
     <ClCompile Include="japancal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="locdspnm.cpp">
-      <Filter>formatting</Filter>
-    </ClCompile>
     <ClCompile Include="measfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -307,9 +304,6 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="ucal.cpp">
-      <Filter>formatting</Filter>
-    </ClCompile>
-    <ClCompile Include="ucurr.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="udat.cpp">
@@ -796,9 +790,6 @@
     <ClInclude Include="taiwncal.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="ucurrimp.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
     <ClInclude Include="umsg_imp.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -1133,9 +1124,6 @@
     <CustomBuild Include="unicode\gregocal.h">
       <Filter>formatting</Filter>
     </CustomBuild>
-    <CustomBuild Include="unicode\locdspnm.h">
-      <Filter>formatting</Filter>
-    </CustomBuild>
     <CustomBuild Include="unicode\measfmt.h">
       <Filter>formatting</Filter>
     </CustomBuild>
@@ -1199,9 +1187,6 @@
     <CustomBuild Include="unicode\ucal.h">
       <Filter>formatting</Filter>
     </CustomBuild>
-    <CustomBuild Include="unicode\ucurr.h">
-      <Filter>formatting</Filter>
-    </CustomBuild>
     <CustomBuild Include="unicode\udat.h">
       <Filter>formatting</Filter>
     </CustomBuild>
@@ -1211,16 +1196,10 @@
     <CustomBuild Include="unicode\udatpg.h">
       <Filter>formatting</Filter>
     </CustomBuild>
-    <CustomBuild Include="unicode\udisplaycontext.h">
-      <Filter>formatting</Filter>
-    </CustomBuild>
     <CustomBuild Include="unicode\ugender.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\ufieldpositer.h">
-      <Filter>formatting</Filter>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uldnames.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\ulocdata.h">

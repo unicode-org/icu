@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2014, International Business Machines
+*   Copyright (C) 2005-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -19,7 +19,7 @@
 #include "unicode/format.h"
 #include "unicode/fmtable.h"
 #include "unicode/datefmt.h"
-#include "unicode/msgfmt.h"
+#include "unicode/simpleformatter.h"
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
 #include "unicode/locid.h"
@@ -167,22 +167,18 @@ UnicodeString &Win32DateFormat::format(Calendar &cal, UnicodeString &appendTo, F
 
 
     if (fDateStyle != DateFormat::kNone && fTimeStyle != DateFormat::kNone) {
-        UnicodeString *date = new UnicodeString();
-        UnicodeString *time = new UnicodeString();
+        UnicodeString date;
+        UnicodeString time;
         UnicodeString *pattern = fDateTimeMsg;
-        Formattable timeDateArray[2];
 
-        formatDate(&st_local, *date);
-        formatTime(&st_local, *time);
-
-        timeDateArray[0].adoptString(time);
-        timeDateArray[1].adoptString(date);
+        formatDate(&st_local, date);
+        formatTime(&st_local, time);
 
         if (strcmp(fCalendar->getType(), cal.getType()) != 0) {
             pattern = getTimeDateFormat(&cal, &fLocale, status);
         }
 
-        MessageFormat::format(*pattern, timeDateArray, 2, appendTo, status);
+        SimpleFormatter(*pattern, 2, 2, status).format(time, date, appendTo, status);
     } else if (fDateStyle != DateFormat::kNone) {
         formatDate(&st_local, appendTo);
     } else if (fTimeStyle != DateFormat::kNone) {
