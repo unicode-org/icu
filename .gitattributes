@@ -71,7 +71,6 @@ icu4c/source/data/region/pool.res -text
 icu4c/source/data/unit/pool.res -text
 icu4c/source/data/zone/pool.res -text
 icu4c/source/extra/uconv/uconv.vcxproj -text
-icu4c/source/i18n/unicode/ureldatefmt.h -text
 icu4c/source/samples/break/break.vcxproj -text
 icu4c/source/samples/case/case.vcxproj -text
 icu4c/source/samples/citer/citer.vcxproj -text
@@ -99,7 +98,6 @@ icu4c/source/samples/ugrep/ugrep.vcxproj -text
 icu4c/source/samples/uresb/resources.vcxproj -text
 icu4c/source/samples/uresb/uresb.vcxproj -text
 icu4c/source/samples/ustring/ustring.vcxproj -text
-icu4c/source/test/cintltst/crelativedateformattest.c -text
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/letest/cletest.vcxproj -text
