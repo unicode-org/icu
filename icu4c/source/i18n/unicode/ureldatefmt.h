@@ -225,7 +225,7 @@ ureldatefmt_formatNumeric( const URelativeDateTimeFormatter* reldatefmt,
  * using a text style if possible, e.g. "last week", "this week",
  * "next week", "yesterday", "tomorrow". Falls back to numeric
  * style if no appropriate text term is available for the specified
- * offset in the object’s locale.
+ * offset in the object's locale.
  *
  * @param reldatefmt
  *          The URelativeDateTimeFormatter object specifying the
