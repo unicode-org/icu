@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2015, International Business Machines
+ * Copyright (C) 1996-2016, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -164,7 +164,7 @@ import com.ibm.icu.util.ULocale.Category;
 
  * @see          Calendar
  * @see          TimeZone
- * @author David Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
+ * @author Deborah Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
  * @stable ICU 2.0
  */
 public class GregorianCalendar extends Calendar {
