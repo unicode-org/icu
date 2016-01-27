@@ -634,7 +634,7 @@ import com.ibm.icu.util.ULocale.Category;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
+ * @author Mark Davis, Deborah Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @stable ICU 2.0
  */
 public abstract class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
