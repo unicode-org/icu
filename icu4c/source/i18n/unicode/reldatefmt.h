@@ -434,7 +434,7 @@ public:
      * using a text style if possible, e.g. "last week", "this week",
      * "next week", "yesterday", "tomorrow". Falls back to numeric
      * style if no appropriate text term is available for the specified
-     * offset in the object’s locale.
+     * offset in the object's locale.
      *
      * @param offset    The signed offset for the specified unit.
      * @param unit      The unit to use when formatting the relative
