@@ -1394,7 +1394,7 @@ currency_cache_cleanup(void) {
 }
 
 
-U_CFUNC void
+U_CAPI void
 uprv_parseCurrency(const char* locale,
                    const icu::UnicodeString& text,
                    icu::ParsePosition& pos,
@@ -1549,7 +1549,7 @@ uprv_parseCurrency(const char* locale,
  * This is used for backward compatibility with old currency logic in
  * DecimalFormat and DecimalFormatSymbols.
  */
-U_CFUNC void
+U_CAPI void
 uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
                            icu::UnicodeString& result, UErrorCode& ec)
 {
