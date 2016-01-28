@@ -235,7 +235,7 @@ public final class RelativeDateTimeFormatter {
          */
         NOW,
 
-        /*
+        /**
          * Quarter
          * @internal TODO: propose for addition in ICU 57
          * @deprecated This API is ICU internal only.
