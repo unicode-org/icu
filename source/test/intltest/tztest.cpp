@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation
+ * Copyright (c) 1997-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -2025,6 +2025,7 @@ void TimeZoneTest::TestCanonicalID() {
         {"America/Marigot", "America/Port_of_Spain"},
         {"America/Montserrat", "America/Port_of_Spain"},
         {"America/Panama", "America/Cayman"},
+        {"America/Santa_Isabel", "America/Tijuana"},
         {"America/Shiprock", "America/Denver"},
         {"America/St_Barthelemy", "America/Port_of_Spain"},
         {"America/St_Kitts", "America/Port_of_Spain"},
