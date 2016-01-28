@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2014, International Business Machines
+*   Copyright (C) 2001-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -149,11 +149,6 @@ import com.ibm.icu.lang.UProperty;
  * <li>{@link #OPTION_REMOVE_CONTROLS}
  * <li>{@link #OPTION_STREAMING}
  * </ul>
- *
- *
- * @author Simon Montagu, Matitiahu Allouche (ported from C code written by Markus W. Scherer)
- * @stable ICU 3.8
- *
  *
  * <h4> Sample code for the ICU Bidi API </h4>
  *
@@ -428,6 +423,9 @@ import com.ibm.icu.lang.UProperty;
  *  }
  *
  * </pre>
+ *
+ * @author Simon Montagu, Matitiahu Allouche (ported from C code written by Markus W. Scherer)
+ * @stable ICU 3.8
  */
 
 /*
