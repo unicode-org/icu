@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/bcp47/*.xml
@@ -27,11 +27,16 @@ keyTypeData:table(nofallback){
         colreorder{"kr"}
         colstrength{"ks"}
         currency{"cu"}
+        em{""}
         fw{""}
         hours{"hc"}
         kv{""}
+        lb{""}
+        lw{""}
         numbers{"nu"}
+        rg{""}
         sd{""}
+        ss{""}
         timezone{"tz"}
         va{""}
         variabletop{"vt"}
@@ -426,6 +431,11 @@ keyTypeData:table(nofallback){
             zwl{""}
             zwr{""}
         }
+        em{
+            default{""}
+            emoji{""}
+            text{""}
+        }
         fw{
             fri{""}
             mon{""}
@@ -446,6 +456,16 @@ keyTypeData:table(nofallback){
             punct{""}
             space{""}
             symbol{""}
+        }
+        lb{
+            loose{""}
+            normal{""}
+            strict{""}
+        }
+        lw{
+            breakall{""}
+            keepall{""}
+            normal{""}
         }
         numbers{
             ahom{""}
@@ -526,8 +546,15 @@ keyTypeData:table(nofallback){
             vaii{""}
             wara{""}
         }
+        rg{
+            RG_KEY_VALUE{""}
+        }
         sd{
             SUBDIVISION_CODE{""}
+        }
+        ss{
+            none{""}
+            standard{""}
         }
         timezone:alias{"/ICUDATA/timezoneTypes/typeMap/timezone"}
         va{
