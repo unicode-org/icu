@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/en_AU.xml
@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_AU{
     %%Parent{"en_001"}
-    Version{"2.1.20.4"}
+    Version{"2.1.22.91"}
     units{
         coordinate{
             east{"{0} east"}
@@ -64,6 +64,18 @@ en_AU{
         }
     }
     unitsNarrow{
+        concentr{
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0}mg/dL"}
+                other{"{0}mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                one{"{0}mmol/L"}
+                other{"{0}mmol/L"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -170,6 +182,17 @@ en_AU{
                 dnam{"metres²"}
             }
         }
+        concentr{
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100 km"}
@@ -181,6 +204,11 @@ en_AU{
                 other{"{0} L/km"}
             }
             mile-per-gallon{
+                dnam{"miles/gal. US"}
+                one{"{0} m.p.g. US"}
+                other{"{0} m.p.g. US"}
+            }
+            mile-per-gallon-imperial{
                 dnam{"miles/gal."}
                 one{"{0} m.p.g."}
                 other{"{0} m.p.g."}
