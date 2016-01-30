@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 1997-2015, International Business Machines Corporation and    *
+* Copyright (C) 1997-2016, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -811,7 +811,8 @@
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
                 additionalparam="${lintParam} -breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src} -J-Dfile.encoding=UTF-8"
                 link="${icu4j.api.doc.jdk.link}"
-                source="1.5"
+                source="1.6"
+                bootclasspath="${java6.bootclasspath}"
                 stylesheetfile="${docs.style.sheet}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
@@ -844,7 +845,8 @@
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
                 additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
                 link="${icu4j.api.doc.jdk.link}"
-                source="1.5">
+                source="1.6"
+                bootclasspath="${java6.bootclasspath}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
@@ -1011,7 +1013,8 @@
 
     <!-- Release management targets -->
     <target name="checktags" depends="info, build-tools" description="Check API tags before release">
-        <javadoc source="1.5"
+        <javadoc source="1.6"
+                 bootclasspath="${java6.bootclasspath}"
                  encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
@@ -1031,7 +1034,8 @@
 
     <target name="gatherapi" depends="info, build-tools" description="Run API database generator tool">
         <mkdir dir="${out.dir}"/>
-        <javadoc source="1.5"
+        <javadoc source="1.6"
+                 bootclasspath="${java6.bootclasspath}"
                  encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
@@ -1075,7 +1079,8 @@
 
     <target name="gatherapiOld" depends="info, build-tools" description="Run API database generator tool (Pre Java 5 style)">
         <mkdir dir="${out.dir}"/>
-        <javadoc source="1.5"
+        <javadoc source="1.6"
+                 bootclasspath="${java6.bootclasspath}"
                  encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>

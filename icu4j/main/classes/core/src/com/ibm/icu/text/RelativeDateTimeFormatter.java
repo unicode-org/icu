@@ -454,10 +454,6 @@ public final class RelativeDateTimeFormatter {
 
     /**
      * Gets the string value from qualitativeUnitMap with fallback based on style.
-     * @param style
-     * @param unit
-     * @param direction
-     * @return
      */
     private String getAbsoluteUnitString(Style style, AbsoluteUnit unit, Direction direction) {
         EnumMap<AbsoluteUnit, EnumMap<Direction, String>> unitMap;
@@ -512,7 +508,7 @@ public final class RelativeDateTimeFormatter {
 
     /**
      * Return capitalization context.
-     *
+     * @return The capitalization context.
      * @stable ICU 54
      */
     public DisplayContext getCapitalizationContext() {
@@ -521,7 +517,7 @@ public final class RelativeDateTimeFormatter {
 
     /**
      * Return style
-     *
+     * @return The formatting style. 
      * @stable ICU 54
      */
     public Style getFormatStyle() {
