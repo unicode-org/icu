@@ -238,10 +238,12 @@ public class MeasureUnitTest extends TestFmwk {
         Thread thread = new Thread()  {
             @Override
             public void run() {
+                @SuppressWarnings("unused")
                 Set<String> measureUnitTypes = MeasureUnit.getAvailableTypes();
             }
         };
         thread.start();
+        @SuppressWarnings("unused")
         Currency cur = Currency.getInstance(ULocale.ENGLISH);
         try {thread.join();} catch(InterruptedException e) {};
         // System.out.println("Done with MeasureUnit thread test.");

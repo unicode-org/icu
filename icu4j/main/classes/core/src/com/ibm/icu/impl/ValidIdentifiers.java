@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2015, International Business Machines Corporation and
+ * Copyright (C) 2015-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -79,10 +79,7 @@ public class ValidIdentifiers {
                 this.subdivisionData = null;
             }
         }
-        /**
-         * @param code
-         * @return
-         */
+
         public boolean contains(String code) {
             if (regularData != null) {
                 return regularData.contains(code);
