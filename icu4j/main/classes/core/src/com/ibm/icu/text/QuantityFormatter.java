@@ -11,7 +11,6 @@ import java.text.FieldPosition;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
-import com.ibm.icu.text.SimpleFormatter;
 
 /**
  * QuantityFormatter represents an unknown quantity of something and formats a known quantity

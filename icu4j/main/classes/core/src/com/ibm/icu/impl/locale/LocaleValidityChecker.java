@@ -1,17 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 2015, International Business Machines Corporation and
+ * Copyright (C) 2015-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl.locale;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
