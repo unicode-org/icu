@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/root.xml
@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/root.xml
  */
 root{
-    Version{"2.1.19.19"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -95,6 +95,20 @@ root{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                other{"{0} ppm"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -105,8 +119,12 @@ root{
                 other{"{0} L/km"}
             }
             mile-per-gallon{
-                dnam{"mpg"}
-                other{"{0} mpg"}
+                dnam{"mpg US"}
+                other{"{0} mpg US"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp."}
+                other{"{0} mpg Imp."}
             }
         }
         coordinate{
@@ -561,9 +579,14 @@ root{
                 other{"{0} fl oz"}
             }
             gallon{
-                dnam{"gal"}
-                other{"{0} gal"}
-                per{"{0}/gal"}
+                dnam{"US gal"}
+                other{"{0} gal US"}
+                per{"{0}/gal US"}
+            }
+            gallon-imperial{
+                dnam{"Imp. gal"}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hL"}
