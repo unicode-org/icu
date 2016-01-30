@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009-2014, International Business Machines Corporation and    *
+* Copyright (C) 2009-2016, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -23,14 +23,9 @@
 
     <target name="@compile">
         <echo message="build-local:     ${global.build-local.properties}"/>
-        <echo message="${java5.bootclasspath}"/>
-        <!-- set java5/6 bootclasspath to empty if not set -->
-        <property name="java5.bootclasspath" value=""/>
+        <!-- set java 6 bootclasspath to empty if not set -->
         <property name="java6.bootclasspath" value=""/>
 
-        <condition property="javac.bootclasspath" value="${java5.bootclasspath}">
-            <equals arg1="${javac.target}" arg2="1.5"/>
-        </condition>
         <condition property="javac.bootclasspath" value="${java6.bootclasspath}" else="">
             <equals arg1="${javac.target}" arg2="1.6"/>
         </condition>
