@@ -16,11 +16,11 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.UResource;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.UResourceBundle;
 
 

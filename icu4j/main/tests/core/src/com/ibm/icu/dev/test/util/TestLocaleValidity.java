@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2015, International Business Machines Corporation and         *
+ * Copyright (C) 2015-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,8 +8,8 @@ package com.ibm.icu.dev.test.util;
 
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ValidIdentifiers;
