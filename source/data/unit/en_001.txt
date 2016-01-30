@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/en_001.xml
@@ -35,6 +35,18 @@ en_001{
                 per{"{0} per square metre"}
             }
         }
+        concentr{
+            milligram-per-deciliter{
+                dnam{"milligrams per decilitre"}
+                one{"{0} milligram per decilitre"}
+                other{"{0} milligrams per decilitre"}
+            }
+            millimole-per-liter{
+                dnam{"millimoles per litre"}
+                one{"{0} millimole per litre"}
+                other{"{0} millimoles per litre"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"litres per 100 kilometres"}
@@ -45,6 +57,16 @@ en_001{
                 dnam{"litres per kilometre"}
                 one{"{0} litre per kilometre"}
                 other{"{0} litres per kilometre"}
+            }
+            mile-per-gallon{
+                dnam{"miles per US gallon"}
+                one{"{0} mile per US gallon"}
+                other{"{0} miles per US gallon"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"miles per gallon"}
+                one{"{0} mile per gallon"}
+                other{"{0} miles per gallon"}
             }
         }
         length{
@@ -139,6 +161,18 @@ en_001{
                 one{"{0} decilitre"}
                 other{"{0} decilitres"}
             }
+            gallon{
+                dnam{"US gallons"}
+                one{"{0} US gallon"}
+                other{"{0} US gallons"}
+                per{"{0} per US gallon"}
+            }
+            gallon-imperial{
+                dnam{"gallons"}
+                one{"{0} gallon"}
+                other{"{0} gallons"}
+                per{"{0} per gallon"}
+            }
             hectoliter{
                 dnam{"hectolitres"}
                 one{"{0} hectolitre"}
@@ -163,6 +197,18 @@ en_001{
         }
     }
     unitsNarrow{
+        concentr{
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0}mg/dl"}
+                other{"{0}mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                one{"{0}mmol/l"}
+                other{"{0}mmol/l"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100km"}
@@ -173,6 +219,16 @@ en_001{
                 dnam{"l/km"}
                 one{"{0}l/km"}
                 other{"{0}l/km"}
+            }
+            mile-per-gallon{
+                dnam{"mpg US"}
+                one{"{0}mpgUS"}
+                other{"{0}mpgUS"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg"}
+                one{"{0}mpg"}
+                other{"{0}mpg"}
             }
         }
         mass{
@@ -201,6 +257,18 @@ en_001{
                 dnam{"dl"}
                 one{"{0}dl"}
                 other{"{0}dl"}
+            }
+            gallon{
+                dnam{"US gal"}
+                one{"{0}galUS"}
+                other{"{0}galUS"}
+                per{"{0}/galUS"}
+            }
+            gallon-imperial{
+                dnam{"gal"}
+                one{"{0}gal"}
+                other{"{0}gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hl"}
@@ -231,6 +299,18 @@ en_001{
                 dnam{"metres/sec²"}
             }
         }
+        concentr{
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"millimol/litre"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -241,6 +321,16 @@ en_001{
                 dnam{"litres/km"}
                 one{"{0} l/km"}
                 other{"{0} l/km"}
+            }
+            mile-per-gallon{
+                dnam{"miles/gal US"}
+                one{"{0} mpg US"}
+                other{"{0} mpg US"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"miles/gal"}
+                one{"{0} mpg"}
+                other{"{0} mpg"}
             }
         }
         duration{
@@ -280,6 +370,16 @@ en_001{
                 dnam{"dl"}
                 one{"{0} dl"}
                 other{"{0} dl"}
+            }
+            gallon{
+                dnam{"US gal"}
+                one{"{0} gal US"}
+                other{"{0} gal US"}
+            }
+            gallon-imperial{
+                dnam{"gal"}
+                one{"{0} gal"}
+                other{"{0} gal"}
             }
             hectoliter{
                 dnam{"hl"}
