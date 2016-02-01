@@ -1,4 +1,4 @@
-// Copyright (C) 2015, International Business Machines
+﻿// Copyright (C) 2015-2016, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //
 // This file is divided into test suites separated by whitespace. Each test
