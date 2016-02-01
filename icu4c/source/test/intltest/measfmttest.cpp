@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2014-2015, International Business Machines Corporation and    *
+* Copyright (C) 2014-2016, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1600,7 +1600,7 @@ void MeasureFormatTest::TestIndividualPluralFallback() {
         new Measure(2, MeasureUnit::createGenericTemperature(errorCode), errorCode), errorCode);
     UnicodeString expected = UNICODE_STRING_SIMPLE("2\\u00B0").unescape();
     UnicodeString actual;
-    assertEquals("2 deg temp in fr_CA", expected, mf.format(twoDeg.orphan(), actual, errorCode));
+    assertEquals("2 deg temp in fr_CA", expected, mf.format(twoDeg.orphan(), actual, errorCode), TRUE);
 }
 
 void MeasureFormatTest::verifyFieldPosition(

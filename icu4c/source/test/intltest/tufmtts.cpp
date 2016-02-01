@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2008-2015, International Business Machines Corporation and
+ * Copyright (c) 2008-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -522,7 +522,7 @@ void TimeUnitTest::TestBritishShortHourFallback() {
     UnicodeString result;
     formatter.format(oneHour, result, status);
     assertSuccess("TestBritishShortHourFallback()", status);
-    assertEquals("TestBritishShortHourFallback()", UNICODE_STRING_SIMPLE("1 hr"), result);
+    assertEquals("TestBritishShortHourFallback()", UNICODE_STRING_SIMPLE("1 hr"), result, TRUE);
 }
 
 #endif

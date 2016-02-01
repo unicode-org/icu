@@ -1579,7 +1579,7 @@ void DateIntervalFormatTest::testTicket11669() {
     LocalPointer<Calendar> intervalStart(Calendar::createInstance(*tz, Locale::getEnglish(), status), status);
     LocalPointer<Calendar> intervalEnd(Calendar::createInstance(*tz, Locale::getEnglish(), status), status);
     if (U_FAILURE(status)) {
-        errln("%s:%d %s", __FILE__, __LINE__, u_errorName(status));
+        errcheckln(status, "%s:%d %s", __FILE__, __LINE__, u_errorName(status));
         return;
     }
 
