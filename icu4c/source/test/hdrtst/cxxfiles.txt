@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2015 International Business Machines
+# Copyright (c) 2001-2016 International Business Machines
 # Corporation and others. All Rights Reserved.
 # Begin temporary addition.
 # These are very bad "C" APIs that do not work with a C compiler and
@@ -78,6 +78,7 @@ scientificformathelper.h
 scientificnumberformatter.h
 search.h
 selfmt.h
+simpleformatter.h
 simpletz.h
 smpdtfmt.h
 sortkey.h
