@@ -51,6 +51,7 @@ class U_COMMON_API SimpleFormatter U_FINAL : public UMemory {
 public:
     /**
      * Default constructor.
+     * @draft ICU 57
      */
     SimpleFormatter() : compiledPattern((UChar)0) {}
 

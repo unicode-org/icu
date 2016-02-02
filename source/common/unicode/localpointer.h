@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2015, International Business Machines
+*   Copyright (C) 2009-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -191,7 +191,6 @@ public:
      * @stable ICU 4.4
      */
     explicit LocalPointer(T *p=NULL) : LocalPointerBase<T>(p) {}
-#ifndef U_HIDE_DRAFT_API
     /**
      * Constructor takes ownership and reports an error if NULL.
      *
@@ -203,13 +202,14 @@ public:
      * @param p simple pointer to an object that is adopted
      * @param errorCode in/out UErrorCode, set to U_MEMORY_ALLOCATION_ERROR
      *     if p==NULL and no other failure code had been set
-     * @draft ICU 55
+     * @stable ICU 55
      */
     LocalPointer(T *p, UErrorCode &errorCode) : LocalPointerBase<T>(p) {
         if(p==NULL && U_SUCCESS(errorCode)) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
         }
     }
+#ifndef U_HIDE_DRAFT_API
 #if U_HAVE_RVALUE_REFERENCES
     /**
      * Move constructor, leaves src with isNull().
@@ -286,7 +286,6 @@ public:
         delete LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=p;
     }
-#ifndef U_HIDE_DRAFT_API
     /**
      * Deletes the object it owns,
      * and adopts (takes ownership of) the one passed in.
@@ -300,7 +299,7 @@ public:
      * @param p simple pointer to an object that is adopted
      * @param errorCode in/out UErrorCode, set to U_MEMORY_ALLOCATION_ERROR
      *     if p==NULL and no other failure code had been set
-     * @draft ICU 55
+     * @stable ICU 55
      */
     void adoptInsteadAndCheckErrorCode(T *p, UErrorCode &errorCode) {
         if(U_SUCCESS(errorCode)) {
@@ -313,7 +312,6 @@ public:
             delete p;
         }
     }
-#endif  /* U_HIDE_DRAFT_API */
 };
 
 /**
