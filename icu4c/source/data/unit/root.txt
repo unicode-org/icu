@@ -96,6 +96,10 @@ root{
             per{"{0}/{1}"}
         }
         concentr{
+            karat{
+                dnam{"kt"}
+                other{"{0} kt"}
+            }
             milligram-per-deciliter{
                 dnam{"mg/dL"}
                 other{"{0} mg/dL"}
@@ -475,12 +479,6 @@ root{
             pound-per-square-inch{
                 dnam{"psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                other{"{0} kt"}
             }
         }
         speed{

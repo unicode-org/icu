@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/tr.xml
 // *
 // ***************************************************************************
 tr{
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ tr{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"ayar"}
+                one{"{0} ayar"}
+                other{"{0} ayar"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -550,13 +557,6 @@ tr{
                 other{"{0} libre/inç kare"}
             }
         }
-        proportion{
-            karat{
-                dnam{"ayar"}
-                one{"{0} ayar"}
-                other{"{0} ayar"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"kilometre/saat"}
@@ -797,6 +797,12 @@ tr{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                one{"{0} ayar"}
+                other{"{0} ayar"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1156,12 +1162,6 @@ tr{
                 other{"{0} lb/in²"}
             }
         }
-        proportion{
-            karat{
-                one{"{0} ayar"}
-                other{"{0} ayar"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"km/sa"}
@@ -1377,6 +1377,13 @@ tr{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"ayar"}
+                one{"{0} ayar"}
+                other{"{0} ayar"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1820,13 +1827,6 @@ tr{
                 dnam{"lb/in²"}
                 one{"{0} lb/in²"}
                 other{"{0} lb/in²"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ayar"}
-                one{"{0} ayar"}
-                other{"{0} ayar"}
             }
         }
         speed{

@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ca.xml
 // *
 // ***************************************************************************
 ca{
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ ca{
         }
         compound{
             per{"{0} per {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"quirats"}
+                one{"{0} quirat"}
+                other{"{0} quirats"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ ca{
                 dnam{"lliures per polzada quadrada"}
                 one{"{0} lliura per polzada quadrada"}
                 other{"{0} lliures per polzada quadrada"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"quirats"}
-                one{"{0} quirat"}
-                other{"{0} quirats"}
             }
         }
         speed{
@@ -1078,6 +1078,13 @@ ca{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"ct"}
+                one{"{0} ct"}
+                other{"{0} ct"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -1505,13 +1512,6 @@ ca{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ct"}
-                one{"{0} ct"}
-                other{"{0} ct"}
             }
         }
         speed{

@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/el.xml
 // *
 // ***************************************************************************
 el{
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ el{
         }
         compound{
             per{"{0} ανά {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"καράτια"}
+                one{"{0} καράτι"}
+                other{"{0} καράτια"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ el{
                 dnam{"λίβρα ανά τετραγωνική ίντσα"}
                 one{"{0} λίβρα ανά τετραγωνική ίντσα"}
                 other{"{0} λίβρες ανά τετραγωνική ίντσα"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"καράτια"}
-                one{"{0} καράτι"}
-                other{"{0} καράτια"}
             }
         }
         speed{
@@ -1044,6 +1044,13 @@ el{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"καράτια"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"λ./100 χλμ."}
@@ -1471,13 +1478,6 @@ el{
                 dnam{"λίβρα ανά τετραγωνική ίντσα"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"καράτια"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{

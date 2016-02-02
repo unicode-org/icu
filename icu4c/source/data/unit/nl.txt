@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nl.xml
 // *
 // ***************************************************************************
 nl{
-    Version{"2.1.19.96"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ nl{
         }
         compound{
             per{"{0} per {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"karaat"}
+                one{"{0} karaat"}
+                other{"{0} karaat"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -550,13 +557,6 @@ nl{
                 other{"{0} psi"}
             }
         }
-        proportion{
-            karat{
-                dnam{"karaat"}
-                one{"{0} karaat"}
-                other{"{0} karaat"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"kilometer per uur"}
@@ -802,6 +802,12 @@ nl{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                one{"{0} K"}
+                other{"{0} K"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1161,12 +1167,6 @@ nl{
                 other{"{0} psi"}
             }
         }
-        proportion{
-            karat{
-                one{"{0} K"}
-                other{"{0} K"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"km/h"}
@@ -1387,6 +1387,13 @@ nl{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"K"}
+                one{"{0} K"}
+                other{"{0} K"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1830,13 +1837,6 @@ nl{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"K"}
-                one{"{0} K"}
-                other{"{0} K"}
             }
         }
         speed{
