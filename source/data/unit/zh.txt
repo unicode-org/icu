@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh.xml
 // *
 // ***************************************************************************
 zh{
-    Version{"2.1.20.31"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -89,6 +89,12 @@ zh{
         }
         compound{
             per{"{0}每{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"克拉"}
+                other{"{0}克拉"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -440,12 +446,6 @@ zh{
             pound-per-square-inch{
                 dnam{"磅/平方英寸"}
                 other{"每平方英寸{0}磅"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"克拉"}
-                other{"{0}克拉"}
             }
         }
         speed{
@@ -850,6 +850,12 @@ zh{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"克拉"}
+                other{"{0}克拉"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"升/100千米"}
@@ -1200,12 +1206,6 @@ zh{
             pound-per-square-inch{
                 dnam{"磅/平方英寸"}
                 other{"每平方英寸{0}磅"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"克拉"}
-                other{"{0}克拉"}
             }
         }
         speed{

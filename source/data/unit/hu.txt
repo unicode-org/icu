@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hu.xml
 // *
 // ***************************************************************************
 hu{
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ hu{
         }
         compound{
             per{"{0} per {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"karát"}
+                one{"{0} karát"}
+                other{"{0} karát"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ hu{
                 dnam{"font per négyzethüvelyk"}
                 one{"{0} font per négyzethüvelyk"}
                 other{"{0} font per négyzethüvelyk"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"karát"}
-                one{"{0} karát"}
-                other{"{0} karát"}
             }
         }
         speed{
@@ -1042,6 +1042,13 @@ hu{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -1469,13 +1476,6 @@ hu{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{

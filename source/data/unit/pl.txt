@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pl.xml
 // *
 // ***************************************************************************
 pl{
-    Version{"2.1.19.14"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -137,6 +137,15 @@ pl{
         }
         compound{
             per{"{0} na {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"karaty"}
+                few{"{0} karaty"}
+                many{"{0} karatów"}
+                one{"{0} karat"}
+                other{"{0} karata"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -719,15 +728,6 @@ pl{
                 many{"{0} funtów na cal kwadratowy"}
                 one{"{0} funt na cal kwadratowy"}
                 other{"{0} funta na cal kwadratowy"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"karaty"}
-                few{"{0} karaty"}
-                many{"{0} karatów"}
-                one{"{0} karat"}
-                other{"{0} karata"}
             }
         }
         speed{
@@ -1418,6 +1418,15 @@ pl{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -1999,15 +2008,6 @@ pl{
                 many{"{0} psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                few{"{0} kt"}
-                many{"{0} kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{

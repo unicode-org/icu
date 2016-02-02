@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh_Hant.xml
@@ -8,7 +8,7 @@
 // ***************************************************************************
 zh_Hant{
     %%Parent{"root"}
-    Version{"2.1.19.89"}
+    Version{"2.1.23.7"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -90,6 +90,12 @@ zh_Hant{
         }
         compound{
             per{"每{1} {0}"}
+        }
+        concentr{
+            karat{
+                dnam{"克拉"}
+                other{"{0} 克拉"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -455,12 +461,6 @@ zh_Hant{
                 other{"每平方英寸 {0} 磅力"}
             }
         }
-        proportion{
-            karat{
-                dnam{"克拉"}
-                other{"{0} 克拉"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"每小時公里"}
@@ -653,6 +653,11 @@ zh_Hant{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                other{"{0}kt"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -934,11 +939,6 @@ zh_Hant{
                 other{"{0}psi"}
             }
         }
-        proportion{
-            karat{
-                other{"{0}kt"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"公里/小時"}
@@ -1111,6 +1111,12 @@ zh_Hant{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"克拉"}
+                other{"{0} 克拉"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1474,12 +1480,6 @@ zh_Hant{
             pound-per-square-inch{
                 dnam{"磅力/平方英寸"}
                 other{"{0} 磅力/平方英寸"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"克拉"}
-                other{"{0} 克拉"}
             }
         }
         speed{

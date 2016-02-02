@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ar.xml
 // *
 // ***************************************************************************
 ar{
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -169,6 +169,17 @@ ar{
         }
         compound{
             per{"{0} لكل {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"قيراط"}
+                few{"{0} قيراط"}
+                many{"{0} قيراط"}
+                one{"{0} قيراط"}
+                other{"{0} قيراط"}
+                two{"{0} قيراط"}
+                zero{"{0} قيراط"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -905,17 +916,6 @@ ar{
                 other{"{0} رطل لكل بوصة مربعة"}
                 two{"{0} رطل لكل بوصة مربعة"}
                 zero{"{0} رطل لكل بوصة مربعة"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"قيراط"}
-                few{"{0} قيراط"}
-                many{"{0} قيراط"}
-                one{"{0} قيراط"}
-                other{"{0} قيراط"}
-                two{"{0} قيراط"}
-                zero{"{0} قيراط"}
             }
         }
         speed{
@@ -1794,6 +1794,17 @@ ar{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"قيراط"}
+                few{"{0} قيراط"}
+                many{"{0} قيراط"}
+                one{"{0} قيراط"}
+                other{"{0} قيراط"}
+                two{"{0} قيراط"}
+                zero{"{0} قيراط"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"لتر/‏١٠٠ كم"}
@@ -2529,17 +2540,6 @@ ar{
                 other{"{0} رطل/بوصة مربعة"}
                 two{"{0} رطل/بوصة مربعة"}
                 zero{"{0} رطل/بوصة مربعة"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"قيراط"}
-                few{"{0} قيراط"}
-                many{"{0} قيراط"}
-                one{"{0} قيراط"}
-                other{"{0} قيراط"}
-                two{"{0} قيراط"}
-                zero{"{0} قيراط"}
             }
         }
         speed{

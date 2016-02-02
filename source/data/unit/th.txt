@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/th.xml
 // *
 // ***************************************************************************
 th{
-    Version{"2.1.19.77"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -89,6 +89,12 @@ th{
         }
         compound{
             per{"{0}ต่อ{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"กะรัต"}
+                other{"{0} กะรัต"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -440,12 +446,6 @@ th{
             pound-per-square-inch{
                 dnam{"ปอนด์ต่อตารางนิ้ว"}
                 other{"{0} ปอนด์ต่อตารางนิ้ว"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"กะรัต"}
-                other{"{0} กะรัต"}
             }
         }
         speed{
@@ -855,6 +855,12 @@ th{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"กะรัต"}
+                other{"{0} กะรัต"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ลิตร/100 กิโลเมตร"}
@@ -1205,12 +1211,6 @@ th{
             pound-per-square-inch{
                 dnam{"ปอนด์/ตร.นิ้ว"}
                 other{"{0} ปอนด์/ตร.นิ้ว"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"กะรัต"}
-                other{"{0} กะรัต"}
             }
         }
         speed{
