@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/uk.xml
 // *
 // ***************************************************************************
 uk{
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -135,6 +135,15 @@ uk{
         }
         compound{
             per{"{0} на {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"карати"}
+                few{"{0} карати"}
+                many{"{0} каратів"}
+                one{"{0} карат"}
+                other{"{0} карата"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -713,15 +722,6 @@ uk{
                 many{"{0} фунтів на квадратний дюйм"}
                 one{"{0} фунт на квадратний дюйм"}
                 other{"{0} фунта на квадратний дюйм"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"карати"}
-                few{"{0} карати"}
-                many{"{0} каратів"}
-                one{"{0} карат"}
-                other{"{0} карата"}
             }
         }
         speed{
@@ -1425,6 +1425,15 @@ uk{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"карати"}
+                few{"{0} кар."}
+                many{"{0} кар."}
+                one{"{0} кар."}
+                other{"{0} кар."}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"л/100 км"}
@@ -2006,15 +2015,6 @@ uk{
                 many{"{0} фунтів/дюйм²"}
                 one{"{0} фунт/дюйм²"}
                 other{"{0} фунта/дюйм²"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"карати"}
-                few{"{0} кар."}
-                many{"{0} кар."}
-                one{"{0} кар."}
-                other{"{0} кар."}
             }
         }
         speed{

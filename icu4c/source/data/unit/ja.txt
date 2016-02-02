@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ja.xml
 // *
 // ***************************************************************************
 ja{
-    Version{"2.1.19.89"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -89,6 +89,12 @@ ja{
         }
         compound{
             per{"{0}毎{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"金"}
+                other{"{0} 金"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -454,12 +460,6 @@ ja{
                 other{"{0} 重量ポンド毎平方インチ"}
             }
         }
-        proportion{
-            karat{
-                dnam{"金"}
-                other{"{0} 金"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"キロメートル毎時"}
@@ -653,6 +653,11 @@ ja{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                other{"{0}K"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -931,11 +936,6 @@ ja{
                 other{"{0}psi"}
             }
         }
-        proportion{
-            karat{
-                other{"{0}K"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"km/h"}
@@ -1107,6 +1107,12 @@ ja{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"金"}
+                other{"{0} 金"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1460,12 +1466,6 @@ ja{
             pound-per-square-inch{
                 dnam{"重量ポンド毎平方インチ"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"金"}
-                other{"{0} 金"}
             }
         }
         speed{

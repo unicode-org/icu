@@ -102,6 +102,11 @@ en{
             per{"{0} per {1}"}
         }
         concentr{
+            karat{
+                dnam{"karats"}
+                one{"{0} karat"}
+                other{"{0} karats"}
+            }
             milligram-per-deciliter{
                 dnam{"milligrams per deciliter"}
                 one{"{0} milligram per deciliter"}
@@ -561,13 +566,6 @@ en{
                 other{"{0} pounds per square inch"}
             }
         }
-        proportion{
-            karat{
-                dnam{"karats"}
-                one{"{0} karat"}
-                other{"{0} karats"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"kilometers per hour"}
@@ -818,6 +816,11 @@ en{
             }
         }
         concentr{
+            karat{
+                dnam{"karat"}
+                one{"{0}kt"}
+                other{"{0}kt"}
+            }
             milligram-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0}mg/dL"}
@@ -1256,13 +1259,6 @@ en{
                 other{"{0}psi"}
             }
         }
-        proportion{
-            karat{
-                dnam{"karat"}
-                one{"{0}kt"}
-                other{"{0}kt"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"km/hr"}
@@ -1529,6 +1525,11 @@ en{
             per{"{0}/{1}"}
         }
         concentr{
+            karat{
+                dnam{"karats"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
             milligram-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
@@ -1986,13 +1987,6 @@ en{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"karats"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{
