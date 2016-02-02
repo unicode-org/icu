@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines
+ * Copyright (C) 1996-2016, International Business Machines
  * Corporation and others. All Rights Reserved.
  *******************************************************************************
 */
@@ -761,15 +761,13 @@ typedef enum UDateFormatField {
     UDAT_RELATED_YEAR_FIELD = 34,
 #endif /* U_HIDE_INTERNAL_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * FieldPosition and UFieldPosition selector for time separator,
      * no corresponding UCAL_ field. No pattern character is currently
      * defined for this.
-     * @draft ICU 55
+     * @stable ICU 55
      */
     UDAT_TIME_SEPARATOR_FIELD = 35,
-#endif  /* U_HIDE_DRAFT_API */
 
    /**
      * Number of FieldPosition and UFieldPosition selectors for
@@ -978,7 +976,6 @@ udat_format(    const    UDateFormat*    format,
                         UFieldPosition* position,
                         UErrorCode*     status);
 
-#ifndef U_HIDE_DRAFT_API
 /**
 * Format a date using an UDateFormat.
 * The date will be formatted using the conventions specified in {@link #udat_open }
@@ -999,9 +996,9 @@ udat_format(    const    UDateFormat*    format,
 * @see udat_format
 * @see udat_parseCalendar
 * @see UFieldPosition
-* @draft ICU 55
+* @stable ICU 55
 */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 udat_formatCalendar(    const UDateFormat*  format,
                         UCalendar*      calendar,
                         UChar*          result,
@@ -1034,9 +1031,9 @@ udat_formatCalendar(    const UDateFormat*  format,
 *          The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_parse
 * @see UFieldPositionIterator
-* @draft ICU 55
+* @stable ICU 55
 */
-U_DRAFT int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 udat_formatForFields(   const UDateFormat* format,
                         UDate           dateToFormat,
                         UChar*          result,
@@ -1072,9 +1069,9 @@ udat_formatForFields(   const UDateFormat* format,
 * @see udat_format
 * @see udat_parseCalendar
 * @see UFieldPositionIterator
-* @draft ICU 55
+* @stable ICU 55
 */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 udat_formatCalendarForFields( const UDateFormat* format,
                         UCalendar*      calendar,
                         UChar*          result,
@@ -1082,7 +1079,6 @@ udat_formatCalendarForFields( const UDateFormat* format,
                         UFieldPositionIterator* fpositer,
                         UErrorCode*     status);
 
-#endif  /* U_HIDE_DRAFT_API */
 
 /**
 * Parse a string into an date/time using a UDateFormat.
