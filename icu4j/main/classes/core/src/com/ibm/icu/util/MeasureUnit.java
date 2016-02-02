@@ -444,6 +444,33 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit SQUARE_YARD = MeasureUnit.internalGetInstance("area", "square-yard");
 
     /**
+     * Constant for unit of concentr: karat
+     * @stable ICU 54
+     */
+    public static final MeasureUnit KARAT = MeasureUnit.internalGetInstance("concentr", "karat");
+
+    /**
+     * Constant for unit of concentr: milligram-per-deciliter
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-per-deciliter");
+
+    /**
+     * Constant for unit of concentr: millimole-per-liter
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILLIMOLE_PER_LITER = MeasureUnit.internalGetInstance("concentr", "millimole-per-liter");
+
+    /**
+     * Constant for unit of concentr: part-per-million
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance("concentr", "part-per-million");
+
+    /**
      * Constant for unit of consumption: liter-per-100kilometers
      * @draft ICU 56
      * @provisional This API might change or be removed in a future release.
@@ -461,6 +488,13 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 54
      */
     public static final MeasureUnit MILE_PER_GALLON = MeasureUnit.internalGetInstance("consumption", "mile-per-gallon");
+
+    /**
+     * Constant for unit of consumption: mile-per-gallon-imperial
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILE_PER_GALLON_IMPERIAL = MeasureUnit.internalGetInstance("consumption", "mile-per-gallon-imperial");
 
     /**
      * Constant for unit of digital: bit
@@ -927,12 +961,6 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit POUND_PER_SQUARE_INCH = MeasureUnit.internalGetInstance("pressure", "pound-per-square-inch");
 
     /**
-     * Constant for unit of proportion: karat
-     * @stable ICU 54
-     */
-    public static final MeasureUnit KARAT = MeasureUnit.internalGetInstance("proportion", "karat");
-
-    /**
      * Constant for unit of speed: kilometer-per-hour
      * @stable ICU 53
      */
@@ -1074,6 +1102,13 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit GALLON = MeasureUnit.internalGetInstance("volume", "gallon");
 
     /**
+     * Constant for unit of volume: gallon-imperial
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit GALLON_IMPERIAL = MeasureUnit.internalGetInstance("volume", "gallon-imperial");
+
+    /**
      * Constant for unit of volume: hectoliter
      * @stable ICU 54
      */
@@ -1132,12 +1167,14 @@ public class MeasureUnit implements Serializable {
             new HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>();
 
     static {
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.KILOMETER, MeasureUnit.HOUR), MeasureUnit.KILOMETER_PER_HOUR);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.GALLON), MeasureUnit.MILE_PER_GALLON);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.HOUR), MeasureUnit.MILE_PER_HOUR);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.METER, MeasureUnit.SECOND), MeasureUnit.METER_PER_SECOND);
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.LITER, MeasureUnit.KILOMETER), MeasureUnit.LITER_PER_KILOMETER);
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.POUND, MeasureUnit.SQUARE_INCH), MeasureUnit.POUND_PER_SQUARE_INCH);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.HOUR), MeasureUnit.MILE_PER_HOUR);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILLIGRAM, MeasureUnit.DECILITER), MeasureUnit.MILLIGRAM_PER_DECILITER);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.GALLON_IMPERIAL), MeasureUnit.MILE_PER_GALLON_IMPERIAL);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.KILOMETER, MeasureUnit.HOUR), MeasureUnit.KILOMETER_PER_HOUR);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.GALLON), MeasureUnit.MILE_PER_GALLON);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.METER, MeasureUnit.SECOND), MeasureUnit.METER_PER_SECOND);
     }
 
     // End generated MeasureUnit constants
