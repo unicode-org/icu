@@ -186,7 +186,6 @@ class U_I18N_API MeasureFormat : public Format {
             FieldPosition &pos,
             UErrorCode &status) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Formats a single measure per unit. An example of such a
      * formatted string is 3.5 meters per second.
@@ -198,7 +197,7 @@ class U_I18N_API MeasureFormat : public Format {
      * @param status the error.
      * @return appendTo reference
      *
-     * @draft ICU 55
+     * @stable ICU 55
      */
     UnicodeString &formatMeasurePerUnit(
             const Measure &measure,
@@ -207,7 +206,6 @@ class U_I18N_API MeasureFormat : public Format {
             FieldPosition &pos,
             UErrorCode &status) const;
 
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Return a formatter for CurrencyAmount objects in the given
