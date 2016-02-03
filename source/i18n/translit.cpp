@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2014, International Business Machines
+ *   Copyright (C) 1999-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -1509,6 +1509,9 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
             colBund = ures_getByIndex(transIDs, row, 0, &status);
             if (U_SUCCESS(status)) {
                 UnicodeString id(ures_getKey(colBund), -1, US_INV);
+                if(id.indexOf(UnicodeString("-t-")) != -1) {
+                    continue;
+                }
                 UResourceBundle* res = ures_getNextResource(colBund, NULL, &status);
                 const char* typeStr = ures_getKey(res);
                 UChar type;
