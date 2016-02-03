@@ -1501,6 +1501,7 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
     UResourceBundle *bundle, *transIDs, *colBund;
     bundle = ures_open(U_ICUDATA_TRANSLIT, NULL/*open default locale*/, &status);
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
+    const UnicodeString T_PART = UNICODE_STRING_SIMPLE("-t-");
 
     int32_t row, maxRows;
     if (U_SUCCESS(status)) {
@@ -1509,7 +1510,7 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
             colBund = ures_getByIndex(transIDs, row, 0, &status);
             if (U_SUCCESS(status)) {
                 UnicodeString id(ures_getKey(colBund), -1, US_INV);
-                if(id.indexOf(UnicodeString("-t-")) != -1) {
+                if(id.indexOf(T_PART) != -1) {
                     continue;
                 }
                 UResourceBundle* res = ures_getNextResource(colBund, NULL, &status);
