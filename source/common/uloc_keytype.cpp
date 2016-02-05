@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2014, International Business Machines
+*   Copyright (C) 2014-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -194,8 +194,10 @@ initFromResourceBundle(UErrorCode& sts) {
         tmpSts = U_ZERO_ERROR;
         LocalUResourceBundlePointer typeMapResByKey(ures_getByKey(typeMapRes.getAlias(), legacyKeyId, NULL, &tmpSts));
         if (U_FAILURE(tmpSts)) {
-            // type map for each key must exist
-            U_ASSERT(FALSE);
+            // type map for each key must exist except private use
+            if (uprv_strcmp(legacyKeyId, "x0") != 0) {
+                U_ASSERT(FALSE);
+            }
         } else {
             LocalUResourceBundlePointer typeMapEntry;
 
