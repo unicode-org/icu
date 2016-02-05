@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/eu.xml
 // *
 // ***************************************************************************
 eu{
-    Version{"2.1.19.14"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -97,6 +97,13 @@ eu{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"kilate"}
+                one{"{0} kilate"}
+                other{"{0} kilate"}
+            }
         }
         consumption{
             liter-per-kilometer{
@@ -490,13 +497,6 @@ eu{
                 dnam{"libra hazbete karratuko"}
                 one{"{0} libra hazbete karratuko"}
                 other{"{0} libra hazbete karratuko"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kilate"}
-                one{"{0} kilate"}
-                other{"{0} kilate"}
             }
         }
         speed{
@@ -954,6 +954,13 @@ eu{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-kilometer{
                 dnam{"l/km"}
@@ -1346,13 +1353,6 @@ eu{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{

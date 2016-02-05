@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ur.xml
 // *
 // ***************************************************************************
 ur{
-    Version{"2.1.19.17"}
+    Version{"2.1.23.11"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ ur{
         }
         compound{
             per{"{0} فی {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"قیراط"}
+                one{"{0} قیراط"}
+                other{"{0} قیراط"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -535,13 +542,6 @@ ur{
                 other{"{0} psi"}
             }
         }
-        proportion{
-            karat{
-                dnam{"قیراط"}
-                one{"{0} قیراط"}
-                other{"{0} قیراط"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"کلومیٹر فی گھنٹہ"}
@@ -820,7 +820,7 @@ ur{
                 other{"{0}cm"}
             }
             foot{
-                one{"'{0}"}
+                one{"{0}′"}
                 other{"{0}′"}
             }
             inch{
@@ -1043,6 +1043,13 @@ ur{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"قیراط"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1469,13 +1476,6 @@ ur{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"قیراط"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{

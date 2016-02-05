@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ga.xml
 // *
 // ***************************************************************************
 ga{
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -153,6 +153,16 @@ ga{
         }
         compound{
             per{"{0} sa {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"carait óir"}
+                few{"{0} charat óir"}
+                many{"{0} gcarat óir"}
+                one{"{0} charat óir"}
+                other{"{0} carat óir"}
+                two{"{0} charat óir"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -838,16 +848,6 @@ ga{
                 two{"{0} phunt san orlach cearnach"}
             }
         }
-        proportion{
-            karat{
-                dnam{"carait óir"}
-                few{"{0} charat óir"}
-                many{"{0} gcarat óir"}
-                one{"{0} charat óir"}
-                other{"{0} carat óir"}
-                two{"{0} charat óir"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"ciliméadair san uair"}
@@ -1179,6 +1179,16 @@ ga{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"kt"}
+                few{"{0}kt"}
+                many{"{0}kt"}
+                one{"{0}kt"}
+                other{"{0}kt"}
+                two{"{0}kt"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1779,16 +1789,6 @@ ga{
                 two{"{0}psoc"}
             }
         }
-        proportion{
-            karat{
-                dnam{"kt"}
-                few{"{0}kt"}
-                many{"{0}kt"}
-                one{"{0}kt"}
-                other{"{0}kt"}
-                two{"{0}kt"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"km/u"}
@@ -2062,6 +2062,16 @@ ga{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+                two{"{0} kt"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -2740,16 +2750,6 @@ ga{
                 one{"{0} psoc"}
                 other{"{0} psoc"}
                 two{"{0} psoc"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                few{"{0} kt"}
-                many{"{0} kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
-                two{"{0} kt"}
             }
         }
         speed{

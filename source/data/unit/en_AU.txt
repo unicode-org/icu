@@ -17,16 +17,6 @@ en_AU{
             west{"{0} west"}
         }
         energy{
-            foodcalorie{
-                dnam{"calories"}
-                one{"{0} calorie"}
-                other{"{0} calories"}
-            }
-            kilocalorie{
-                dnam{"kilogram calories"}
-                one{"{0} kilogram calorie"}
-                other{"{0} kilogram calories"}
-            }
             kilowatt-hour{
                 dnam{"kilowatt hours"}
                 one{"{0} kilowatt hour"}
@@ -250,15 +240,6 @@ en_AU{
             }
         }
         energy{
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-            }
-            kilocalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             kilowatt-hour{
                 dnam{"kWh"}
             }
@@ -284,6 +265,7 @@ en_AU{
                 other{"{0} CM"}
             }
             pound{
+                one{"{0} lb"}
                 other{"{0} lb"}
             }
         }

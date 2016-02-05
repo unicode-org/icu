@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/uz.xml
 // *
 // ***************************************************************************
 uz{
-    Version{"2.1.20.4"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ uz{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"karat"}
+                one{"{0} karat"}
+                other{"{0} karat"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -532,13 +539,6 @@ uz{
                 dnam{"funt/kvadrat duym"}
                 one{"{0} funt/kvadrat duym"}
                 other{"{0} funt/kvadrat duym"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"karat"}
-                one{"{0} karat"}
-                other{"{0} karat"}
             }
         }
         speed{
@@ -1041,6 +1041,13 @@ uz{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"karat"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100 km"}
@@ -1468,13 +1475,6 @@ uz{
                 dnam{"funt/kv.dy"}
                 one{"{0} funt/kv.dy"}
                 other{"{0} funt/kv.dy"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"karat"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{

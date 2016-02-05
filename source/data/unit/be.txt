@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/be.xml
 // *
 // ***************************************************************************
 be{
-    Version{"2.1.20.4"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"hh.mm"}
         hms{"hh.mm.ss"}
@@ -137,6 +137,15 @@ be{
         }
         compound{
             per{"{0} у {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"караты золата"}
+                few{"{0} караты золата"}
+                many{"{0} карат золата"}
+                one{"{0} карат золата"}
+                other{"{0} карата золата"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -721,15 +730,6 @@ be{
                 other{"{0} фунта на квадратную цалю"}
             }
         }
-        proportion{
-            karat{
-                dnam{"караты золата"}
-                few{"{0} караты золата"}
-                many{"{0} карат золата"}
-                one{"{0} карат золата"}
-                other{"{0} карата золата"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"кіламетраў у гадзіну"}
@@ -1233,6 +1233,15 @@ be{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"кар золата"}
+                few{"{0} кар зол"}
+                many{"{0} кар зол"}
+                one{"{0} кар зол"}
+                other{"{0} кар зол"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1815,15 +1824,6 @@ be{
                 many{"{0} фунтаў на кв. цалю"}
                 one{"{0} фунт на кв. цалю"}
                 other{"{0} фунта на кв. цалю"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"кар золата"}
-                few{"{0} кар зол"}
-                many{"{0} кар зол"}
-                one{"{0} кар зол"}
-                other{"{0} кар зол"}
             }
         }
         speed{

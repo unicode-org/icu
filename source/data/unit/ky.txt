@@ -1,17 +1,17 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ky.xml
 // *
 // ***************************************************************************
 ky{
-    Version{"2.1.19.19"}
+    Version{"2.1.22.93"}
     durationUnits{
-        hm{"ст:мүн"}
-        hms{"ст:мүн:сек"}
-        ms{"мүн:сек"}
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
     }
     units{
         acceleration{
@@ -105,6 +105,13 @@ ky{
         }
         compound{
             per{"{1}/{0}"}
+        }
+        concentr{
+            karat{
+                dnam{"карат"}
+                one{"{0} карат"}
+                other{"{0} карат"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ ky{
                 dnam{"чарчы дюймга фунт"}
                 one{"чарчы дюймга {0} фунт"}
                 other{"чарчы дюймга {0} фунт"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"карат"}
-                one{"{0} карат"}
-                other{"{0} карат"}
             }
         }
         speed{
@@ -1042,6 +1042,13 @@ ky{
         compound{
             per{"{1}/{0}"}
         }
+        concentr{
+            karat{
+                dnam{"карат"}
+                one{"{0} кт"}
+                other{"{0} кт"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"100 км/л"}
@@ -1469,13 +1476,6 @@ ky{
                 dnam{"фчд"}
                 one{"{0} фчд"}
                 other{"{0} фчд"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"карат"}
-                one{"{0} кт"}
-                other{"{0} кт"}
             }
         }
         speed{

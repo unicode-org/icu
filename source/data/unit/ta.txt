@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ta.xml
 // *
 // ***************************************************************************
 ta{
-    Version{"2.1.19.55"}
+    Version{"2.1.23.16"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ ta{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"காரட்கள்"}
+                one{"{0} காரட்"}
+                other{"{0} காரட்கள்"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ ta{
                 dnam{"பவுண்டுகள்/சதுர அங்குலம்"}
                 one{"{0} பவுண்டு/சதுர அங்குலம்"}
                 other{"{0} பவுண்டுகள்/சதுர அங்குலம்"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"காரட்கள்"}
-                one{"{0} காரட்"}
-                other{"{0} காரட்கள்"}
             }
         }
         speed{
@@ -1042,6 +1042,13 @@ ta{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"காரட்கள்"}
+                one{"{0} கார."}
+                other{"{0} கார."}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"லி./100கி.மீ"}
@@ -1469,13 +1476,6 @@ ta{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"காரட்கள்"}
-                one{"{0} கார."}
-                other{"{0} கார."}
             }
         }
         speed{

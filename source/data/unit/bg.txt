@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bg.xml
 // *
 // ***************************************************************************
 bg{
-    Version{"2.1.19.94"}
+    Version{"2.1.23.7"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ bg{
         }
         compound{
             per{"{0} в {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"карати"}
+                one{"{0} карат"}
+                other{"{0} карата"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -531,13 +538,6 @@ bg{
                 dnam{"фунтове на квадратен инч"}
                 one{"{0} фунт на квадратен инч"}
                 other{"{0} фунта на квадратен инч"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"карати"}
-                one{"{0} карат"}
-                other{"{0} карата"}
             }
         }
         speed{
@@ -1040,6 +1040,13 @@ bg{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"К"}
+                one{"{0} карат"}
+                other{"{0} карата"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -1467,13 +1474,6 @@ bg{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"К"}
-                one{"{0} карат"}
-                other{"{0} карата"}
             }
         }
         speed{

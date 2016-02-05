@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fa.xml
 // *
 // ***************************************************************************
 fa{
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ fa{
         }
         compound{
             per{"{0} در {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"عیار"}
+                one{"{0} عیار"}
+                other{"{0} عیار"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ fa{
                 dnam{"پوند در اینچ مربع"}
                 one{"{0} پوند در اینچ مربع"}
                 other{"{0} پوند در اینچ مربع"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"عیار"}
-                one{"{0} عیار"}
-                other{"{0} عیار"}
             }
         }
         speed{
@@ -1102,6 +1102,13 @@ fa{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"عیار"}
+                one{"{0} عیار"}
+                other{"{0} عیار"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"لیتر/۱۰۰ کیلومتر"}
@@ -1529,13 +1536,6 @@ fa{
                 dnam{"پوند در اینچ مربع"}
                 one{"{0}‎ psi"}
                 other{"{0}‎ psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"عیار"}
-                one{"{0} عیار"}
-                other{"{0} عیار"}
             }
         }
         speed{
