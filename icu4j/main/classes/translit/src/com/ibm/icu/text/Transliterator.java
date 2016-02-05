@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1922,6 +1922,9 @@ public abstract class Transliterator implements StringTransform  {
         for (row = 0; row < maxRows; row++) {
             colBund = transIDs.get(row);
             String ID = colBund.getKey();
+            if (ID.indexOf("-t-") >= 0) {
+                continue;
+            }
             UResourceBundle res = colBund.get(0);
             String type = res.getKey();
             if (type.equals("file") || type.equals("internal")) {
