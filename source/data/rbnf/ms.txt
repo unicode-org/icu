@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/rbnf/ms.xml
@@ -20,7 +20,7 @@ ms{
             "%spellout-numbering:",
             "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
-            "-x: minus >>;",
+            "-x: negatif >>;",
             "x.x: << titik >>;",
             "0: kosong;",
             "1: satu;",
@@ -46,12 +46,12 @@ ms{
             "1000000000000000: << bilyar[ >>];",
             "1000000000000000000: =#,##0=;",
             "%spellout-ordinal:",
-            "-x: minus >>;",
+            "-x: negatif >>;",
             "x.x: =#,##0.#=;",
             "0: kekosong;",
             "1: pertama;",
             "2: ke=%spellout-cardinal=;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.21.63"}
 }
