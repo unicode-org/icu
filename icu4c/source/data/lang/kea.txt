@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/kea.xml
@@ -170,7 +170,7 @@ kea{
         su{"sundanes"}
         sv{"sueku"}
         sw{"suaíli"}
-        swc{"suaíli kongoles"}
+        sw_CD{"suaíli kongoles"}
         ta{"tamil"}
         te{"telugu"}
         tg{"tajik"}
@@ -254,7 +254,7 @@ kea{
             latn{"Númerus Arábikus"}
         }
     }
-    Version{"2.1.19.74"}
+    Version{"2.1.23.7"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Skrita: {0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/gl.xml
@@ -253,7 +253,7 @@ gl{
         su{"sondanés"}
         sv{"sueco"}
         sw{"swahili"}
-        swc{"swc"}
+        sw_CD{"swc"}
         ta{"tamil"}
         te{"telugu"}
         teo{"teso"}
@@ -480,7 +480,7 @@ gl{
             vaii{"Díxitos Vai"}
         }
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.23.76"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

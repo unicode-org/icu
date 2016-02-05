@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fil.xml
@@ -248,8 +248,8 @@ fil{
         su{"Sundanese"}
         sv{"Swedish"}
         sw{"Swahili"}
+        sw_CD{"Swahili (Congo)"}
         swb{"Comorian"}
-        swc{"Swahili (Congo)"}
         ta{"Tamil"}
         te{"Telugu"}
         teo{"Teso"}
@@ -481,7 +481,7 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Wika: {0}"}
         script{"Script: {0}"}

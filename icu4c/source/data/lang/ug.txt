@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ug.xml
@@ -443,8 +443,8 @@ ug{
         sux{"سۈمەرچە"}
         sv{"شۋېدچە"}
         sw{"سىۋالىچە"}
+        sw_CD{"كونگو سىۋالىچە"}
         swb{"كومورىچە"}
-        swc{"كونگو سىۋالىچە"}
         syc{"كلاسسىك سۈرىيەچە"}
         syr{"سۈرىيەچە"}
         ta{"تامىلچە"}
@@ -836,7 +836,7 @@ ug{
         VALENCIA{"ۋالېنسىيە"}
         WADEGILE{"ۋېي ئائىلىسى پىنيىن لاتىنلاشتۇرۇش"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.23.13"}
     codePatterns{
         language{"تىل: {0}"}
         script{"يېزىق: {0}"}

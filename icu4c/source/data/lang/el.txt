@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/el.xml
@@ -470,8 +470,8 @@ el{
         sux{"Σουμερικά"}
         sv{"Σουηδικά"}
         sw{"Σουαχίλι"}
+        sw_CD{"Κονγκό Σουαχίλι"}
         swb{"Κομόρρια"}
-        swc{"Κονγκό Σουαχίλι"}
         syc{"Κλασικά Συριακά"}
         syr{"Συριακά"}
         ta{"Ταμίλ"}
@@ -867,7 +867,7 @@ el{
         VALENCIA{"Βαλενθιανά"}
         WADEGILE{"Εκλατινισμένα Γουάντ-Γκιλς"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Γλώσσα: {0}"}
         script{"Σύστημα γραφής: {0}"}

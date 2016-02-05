@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/uk.xml
@@ -474,8 +474,8 @@ uk{
         sux{"шумерська"}
         sv{"шведська"}
         sw{"суахілі"}
+        sw_CD{"конгійське суахілі"}
         swb{"коморська"}
-        swc{"конгійське суахілі"}
         syc{"сирійська класична"}
         syr{"сирійська"}
         ta{"тамільська"}
@@ -868,7 +868,7 @@ uk{
         VALENCIA{"Валенсійська"}
         WADEGILE{"Романізація Вейда-Джайлза"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Мова: {0}"}
         script{"Система письма: {0}"}

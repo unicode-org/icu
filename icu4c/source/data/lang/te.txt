@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/te.xml
@@ -449,8 +449,8 @@ te{
         sux{"సుమేరియాన్"}
         sv{"స్వీడిష్"}
         sw{"స్వాహిలి"}
+        sw_CD{"కాంగో స్వాహిలి"}
         swb{"కొమొరియన్"}
-        swc{"కాంగో స్వాహిలి"}
         syc{"సాంప్రదాయ సిరియాక్"}
         syr{"సిరియాక్"}
         ta{"తమిళము"}
@@ -809,7 +809,7 @@ te{
         REVISED{"సవరించబడిన వర్ణక్రమం"}
         WADEGILE{"వేడ్-గైల్స్ రోమనైజేషన్"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"భాష: {0}"}
         script{"లిపి: {0}"}

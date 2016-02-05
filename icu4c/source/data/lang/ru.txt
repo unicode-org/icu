@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ru.xml
@@ -470,8 +470,8 @@ ru{
         sux{"шумерский"}
         sv{"шведский"}
         sw{"суахили"}
+        sw_CD{"конголезский суахили"}
         swb{"коморский"}
-        swc{"конголезский суахили"}
         syc{"классический сирийский"}
         syr{"сирийский"}
         ta{"тамильский"}
@@ -898,7 +898,7 @@ ru{
         VALENCIA{"Валенсийский"}
         WADEGILE{"Система Уэйда – Джайлза"}
     }
-    Version{"2.1.19.74"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Язык: {0}"}
         script{"Письменность: {0}"}

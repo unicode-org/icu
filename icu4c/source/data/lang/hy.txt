@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hy.xml
@@ -284,7 +284,7 @@ hy{
         su{"սունդաներեն"}
         sv{"շվեդերեն"}
         sw{"սուահիլի"}
-        swc{"կոնգոյի սուահիլի"}
+        sw_CD{"կոնգոյի սուահիլի"}
         ta{"թամիլերեն"}
         tcy{"տուլու"}
         te{"թելուգու"}
@@ -494,7 +494,7 @@ hy{
         AREVELA{"արևելահայերեն"}
         AREVMDA{"արեւմտահայերէն"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Լեզու՝ {0}"}
         script{"Գիր՝ {0}"}

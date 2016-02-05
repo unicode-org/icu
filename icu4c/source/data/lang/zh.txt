@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh.xml
@@ -470,8 +470,8 @@ zh{
         sux{"苏马文"}
         sv{"瑞典文"}
         sw{"斯瓦希里文"}
+        sw_CD{"刚果斯瓦希里文"}
         swb{"科摩罗文"}
-        swc{"刚果斯瓦希里文"}
         syc{"经典叙利亚文"}
         syr{"叙利亚文"}
         ta{"泰米尔文"}
@@ -927,7 +927,7 @@ zh{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.1.20.31"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"语言：{0}"}
         script{"文字：{0}"}

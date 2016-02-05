@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/et.xml
@@ -537,8 +537,8 @@ et{
         sux{"sumeri"}
         sv{"rootsi"}
         sw{"suahiili"}
+        sw_CD{"Kongo suahiili"}
         swb{"komoori"}
-        swc{"Kongo suahiili"}
         syc{"vanasüüria"}
         syr{"süüria"}
         szl{"sileesia"}
@@ -1005,7 +1005,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade’i-Gilesi latinisatsioon"}
     }
-    Version{"2.1.20.4"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Kiri: {0}"}

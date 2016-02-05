@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/am.xml
@@ -335,8 +335,8 @@ am{
         su{"ሱዳንኛ"}
         sv{"ስዊድንኛ"}
         sw{"ስዋሂሊኛ"}
+        sw_CD{"ኮንጎ ስዋሂሊ"}
         swb{"ኮሞሪያን"}
-        swc{"ኮንጎ ስዋሂሊ"}
         syc{"ክላሲክ ኔይራ"}
         ta{"ታሚልኛ"}
         te{"ተሉጉኛ"}
@@ -572,7 +572,7 @@ am{
             vaii{"የቫይ አሃዞች"}
         }
     }
-    Version{"2.1.19.96"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

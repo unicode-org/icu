@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ja.xml
@@ -538,8 +538,8 @@ ja{
         sux{"シュメール語"}
         sv{"スウェーデン語"}
         sw{"スワヒリ語"}
+        sw_CD{"コンゴ・スワヒリ語"}
         swb{"コモロ語"}
-        swc{"コンゴ・スワヒリ語"}
         syc{"古典シリア語"}
         syr{"シリア語"}
         szl{"シレジア語"}
@@ -1037,7 +1037,7 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.1.19.89"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}

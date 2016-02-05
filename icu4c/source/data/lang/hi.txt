@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hi.xml
@@ -449,7 +449,7 @@ hi{
         sux{"सुमेरियन"}
         sv{"स्वीडिश"}
         sw{"स्वाहिली"}
-        swc{"कांगो स्वाहिली"}
+        sw_CD{"कांगो स्वाहिली"}
         syc{"क्लासिकल सिरिएक"}
         syr{"सिरिएक"}
         ta{"तमिल"}
@@ -812,7 +812,7 @@ hi{
         POSIX{"कम्प्यूटर"}
         REVISED{"संशोधित वर्तनी"}
     }
-    Version{"2.1.19.47"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपि: {0}"}

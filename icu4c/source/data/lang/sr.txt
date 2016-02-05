@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sr.xml
@@ -437,8 +437,8 @@ sr{
         sux{"Сумерски"}
         sv{"шведски"}
         sw{"свахили"}
+        sw_CD{"конго свахили"}
         swb{"Коморски"}
-        swc{"конго свахили"}
         syc{"Класични сиријски"}
         syr{"Сиријски"}
         ta{"тамилски"}
@@ -801,7 +801,7 @@ sr{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"2.1.20.4"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Језик: {0}"}
         script{"писмо: {0}"}

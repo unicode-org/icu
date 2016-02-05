@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ce.xml
@@ -210,7 +210,7 @@ ce{
         su{"сунданхойн"}
         sv{"шведийн"}
         sw{"суахили"}
-        swc{"суахили (Конго)"}
+        sw_CD{"суахили (Конго)"}
         ta{"тамилхойн"}
         te{"телугу"}
         teo{"тесо"}
@@ -301,7 +301,7 @@ ce{
             persian{"гӀажарийн"}
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.21.97"}
     codePatterns{
         language{"Мотт: {0}"}
         script{"Скрипт: {0}"}

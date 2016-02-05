@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zu.xml
@@ -245,7 +245,7 @@ zu{
         su{"isi-Sundanese"}
         sv{"isi-Swedish"}
         sw{"isiSwahili"}
-        swc{"isi-Congo Swahili"}
+        sw_CD{"isi-Congo Swahili"}
         ta{"isi-Tamil"}
         te{"isi-Telugu"}
         teo{"isi-Teso"}
@@ -471,7 +471,7 @@ zu{
             vaii{"Izinhlazu Zezinombolo ze-Vai"}
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}
