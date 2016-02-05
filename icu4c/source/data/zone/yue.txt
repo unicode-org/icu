@@ -3,68 +3,68 @@
 // * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zh.xml
+// * Source File: <path>/common/main/yue.xml
 // *
 // ***************************************************************************
-zh{
-    Version{"2.1.22.93"}
+yue{
+    Version{"2.1.23.47"}
     zoneStrings{
         "Africa:Abidjan"{
-            ec{"阿比让"}
+            ec{"阿比讓"}
         }
         "Africa:Accra"{
             ec{"阿克拉"}
         }
         "Africa:Addis_Ababa"{
-            ec{"亚的斯亚贝巴"}
+            ec{"阿迪斯阿貝巴"}
         }
         "Africa:Algiers"{
-            ec{"阿尔及尔"}
+            ec{"阿爾及爾"}
         }
         "Africa:Asmera"{
-            ec{"阿斯马拉"}
+            ec{"阿斯瑪拉"}
         }
         "Africa:Bamako"{
-            ec{"巴马科"}
+            ec{"巴馬科"}
         }
         "Africa:Bangui"{
             ec{"班吉"}
         }
         "Africa:Banjul"{
-            ec{"班珠尔"}
+            ec{"班竹"}
         }
         "Africa:Bissau"{
-            ec{"比绍"}
+            ec{"比紹"}
         }
         "Africa:Blantyre"{
-            ec{"布兰太尔"}
+            ec{"布蘭太爾"}
         }
         "Africa:Brazzaville"{
-            ec{"布拉柴维尔"}
+            ec{"布拉柴維爾"}
         }
         "Africa:Bujumbura"{
-            ec{"布琼布拉"}
+            ec{"布松布拉"}
         }
         "Africa:Cairo"{
-            ec{"开罗"}
+            ec{"開羅"}
         }
         "Africa:Casablanca"{
-            ec{"卡萨布兰卡"}
+            ec{"卡薩布蘭卡"}
         }
         "Africa:Ceuta"{
-            ec{"休达"}
+            ec{"休達"}
         }
         "Africa:Conakry"{
-            ec{"科纳克里"}
+            ec{"柯那克里"}
         }
         "Africa:Dakar"{
-            ec{"达喀尔"}
+            ec{"達喀爾"}
         }
         "Africa:Dar_es_Salaam"{
-            ec{"达累斯萨拉姆"}
+            ec{"沙蘭港"}
         }
         "Africa:Djibouti"{
-            ec{"吉布提"}
+            ec{"吉布地"}
         }
         "Africa:Douala"{
             ec{"杜阿拉"}
@@ -73,16 +73,16 @@ zh{
             ec{"阿尤恩"}
         }
         "Africa:Freetown"{
-            ec{"弗里敦"}
+            ec{"自由城"}
         }
         "Africa:Gaborone"{
-            ec{"哈博罗内"}
+            ec{"嘉柏隆里"}
         }
         "Africa:Harare"{
             ec{"哈拉雷"}
         }
         "Africa:Johannesburg"{
-            ec{"约翰内斯堡"}
+            ec{"約翰尼斯堡"}
         }
         "Africa:Juba"{
             ec{"朱巴"}
@@ -97,64 +97,64 @@ zh{
             ec{"基加利"}
         }
         "Africa:Kinshasa"{
-            ec{"金沙萨"}
+            ec{"金夏沙"}
         }
         "Africa:Lagos"{
-            ec{"拉各斯"}
+            ec{"拉哥斯"}
         }
         "Africa:Libreville"{
-            ec{"利伯维尔"}
+            ec{"自由市"}
         }
         "Africa:Lome"{
             ec{"洛美"}
         }
         "Africa:Luanda"{
-            ec{"罗安达"}
+            ec{"羅安達"}
         }
         "Africa:Lubumbashi"{
-            ec{"卢本巴希"}
+            ec{"盧本巴希"}
         }
         "Africa:Lusaka"{
-            ec{"卢萨卡"}
+            ec{"路沙卡"}
         }
         "Africa:Malabo"{
-            ec{"马拉博"}
+            ec{"馬拉博"}
         }
         "Africa:Maputo"{
-            ec{"马普托"}
+            ec{"馬普托"}
         }
         "Africa:Maseru"{
-            ec{"马塞卢"}
+            ec{"馬賽魯"}
         }
         "Africa:Mbabane"{
-            ec{"姆巴巴纳"}
+            ec{"墨巴本"}
         }
         "Africa:Mogadishu"{
-            ec{"摩加迪沙"}
+            ec{"摩加迪休"}
         }
         "Africa:Monrovia"{
-            ec{"蒙罗维亚"}
+            ec{"蒙羅維亞"}
         }
         "Africa:Nairobi"{
-            ec{"内罗毕"}
+            ec{"奈洛比"}
         }
         "Africa:Ndjamena"{
-            ec{"恩贾梅纳"}
+            ec{"恩賈梅納"}
         }
         "Africa:Niamey"{
-            ec{"尼亚美"}
+            ec{"尼亞美"}
         }
         "Africa:Nouakchott"{
-            ec{"努瓦克肖特"}
+            ec{"諾克少"}
         }
         "Africa:Ouagadougou"{
             ec{"瓦加杜古"}
         }
         "Africa:Porto-Novo"{
-            ec{"波多诺伏"}
+            ec{"波多諾佛"}
         }
         "Africa:Sao_Tome"{
-            ec{"圣多美"}
+            ec{"聖多美"}
         }
         "Africa:Tripoli"{
             ec{"的黎波里"}
@@ -163,127 +163,127 @@ zh{
             ec{"突尼斯"}
         }
         "Africa:Windhoek"{
-            ec{"温得和克"}
+            ec{"溫得和克"}
         }
         "America:Adak"{
-            ec{"埃达克"}
+            ec{"艾達克"}
         }
         "America:Anchorage"{
-            ec{"安克雷奇"}
+            ec{"安克拉治"}
         }
         "America:Anguilla"{
-            ec{"安圭拉"}
+            ec{"安吉拉"}
         }
         "America:Antigua"{
-            ec{"安提瓜"}
+            ec{"安地卡"}
         }
         "America:Araguaina"{
-            ec{"阿拉瓜伊纳"}
+            ec{"阿拉圭那"}
         }
         "America:Argentina:La_Rioja"{
-            ec{"拉里奥哈"}
+            ec{"拉略哈"}
         }
         "America:Argentina:Rio_Gallegos"{
-            ec{"里奥加耶戈斯"}
+            ec{"里奧加耶戈斯"}
         }
         "America:Argentina:Salta"{
-            ec{"萨尔塔"}
+            ec{"薩爾塔"}
         }
         "America:Argentina:San_Juan"{
-            ec{"圣胡安"}
+            ec{"聖胡安"}
         }
         "America:Argentina:San_Luis"{
-            ec{"圣路易斯"}
+            ec{"聖路易"}
         }
         "America:Argentina:Tucuman"{
-            ec{"图库曼"}
+            ec{"吐庫曼"}
         }
         "America:Argentina:Ushuaia"{
-            ec{"乌斯怀亚"}
+            ec{"烏斯懷亞"}
         }
         "America:Aruba"{
-            ec{"阿鲁巴"}
+            ec{"阿路巴"}
         }
         "America:Asuncion"{
-            ec{"亚松森"}
+            ec{"亞松森"}
         }
         "America:Bahia"{
-            ec{"巴伊亚"}
+            ec{"巴伊阿"}
         }
         "America:Bahia_Banderas"{
-            ec{"巴伊亚班德拉斯"}
+            ec{"巴伊亞班德拉斯"}
         }
         "America:Barbados"{
-            ec{"巴巴多斯"}
+            ec{"巴貝多"}
         }
         "America:Belem"{
-            ec{"贝伦"}
+            ec{"貝倫"}
         }
         "America:Belize"{
-            ec{"伯利兹"}
+            ec{"貝里斯"}
         }
         "America:Blanc-Sablon"{
-            ec{"布兰克萨布隆"}
+            ec{"白朗薩布隆"}
         }
         "America:Boa_Vista"{
-            ec{"博阿维斯塔"}
+            ec{"保維斯塔"}
         }
         "America:Bogota"{
             ec{"波哥大"}
         }
         "America:Boise"{
-            ec{"博伊西"}
+            ec{"波夕"}
         }
         "America:Buenos_Aires"{
-            ec{"布宜诺斯艾利斯"}
+            ec{"布宜諾斯艾利斯"}
         }
         "America:Cambridge_Bay"{
-            ec{"剑桥湾"}
+            ec{"劍橋灣"}
         }
         "America:Campo_Grande"{
-            ec{"大坎普"}
+            ec{"格蘭場"}
         }
         "America:Cancun"{
             ec{"坎昆"}
         }
         "America:Caracas"{
-            ec{"加拉加斯"}
+            ec{"卡拉卡斯"}
         }
         "America:Catamarca"{
-            ec{"卡塔马卡"}
+            ec{"卡塔馬卡"}
         }
         "America:Cayenne"{
-            ec{"卡宴"}
+            ec{"開雲"}
         }
         "America:Cayman"{
-            ec{"开曼"}
+            ec{"開曼群島"}
         }
         "America:Chicago"{
             ec{"芝加哥"}
         }
         "America:Chihuahua"{
-            ec{"奇瓦瓦"}
+            ec{"奇華華"}
         }
         "America:Coral_Harbour"{
             ec{"阿蒂科肯"}
         }
         "America:Cordoba"{
-            ec{"科尔多瓦"}
+            ec{"哥多華"}
         }
         "America:Costa_Rica"{
-            ec{"哥斯达黎加"}
+            ec{"哥斯大黎加"}
         }
         "America:Creston"{
-            ec{"克雷斯顿"}
+            ec{"克雷斯頓"}
         }
         "America:Cuiaba"{
-            ec{"库亚巴"}
+            ec{"古雅巴"}
         }
         "America:Curacao"{
-            ec{"库拉索"}
+            ec{"庫拉索"}
         }
         "America:Danmarkshavn"{
-            ec{"丹马沙文"}
+            ec{"丹馬沙文"}
         }
         "America:Dawson"{
             ec{"道森"}
@@ -298,205 +298,205 @@ zh{
             ec{"底特律"}
         }
         "America:Dominica"{
-            ec{"多米尼加"}
+            ec{"多明尼加"}
         }
         "America:Edmonton"{
-            ec{"埃德蒙顿"}
+            ec{"艾德蒙吞"}
         }
         "America:Eirunepe"{
-            ec{"依伦尼贝"}
+            ec{"艾魯內佩"}
         }
         "America:El_Salvador"{
-            ec{"萨尔瓦多"}
+            ec{"薩爾瓦多"}
         }
         "America:Fortaleza"{
-            ec{"福塔雷萨"}
+            ec{"福塔力莎"}
         }
         "America:Glace_Bay"{
-            ec{"格莱斯贝"}
+            ec{"格雷斯貝"}
         }
         "America:Godthab"{
-            ec{"戈特霍布"}
+            ec{"努克"}
         }
         "America:Goose_Bay"{
-            ec{"古斯湾"}
+            ec{"鵝灣"}
         }
         "America:Grand_Turk"{
-            ec{"大特克"}
+            ec{"大特克島"}
         }
         "America:Grenada"{
-            ec{"格林纳达"}
+            ec{"格瑞納達"}
         }
         "America:Guadeloupe"{
-            ec{"瓜德罗普"}
+            ec{"瓜地洛普"}
         }
         "America:Guatemala"{
-            ec{"危地马拉"}
+            ec{"瓜地馬拉"}
         }
         "America:Guayaquil"{
-            ec{"瓜亚基尔"}
+            ec{"瓜亞基爾"}
         }
         "America:Guyana"{
-            ec{"圭亚那"}
+            ec{"蓋亞那"}
         }
         "America:Halifax"{
-            ec{"哈利法克斯"}
+            ec{"哈里法克斯"}
         }
         "America:Havana"{
             ec{"哈瓦那"}
         }
         "America:Hermosillo"{
-            ec{"埃莫西约"}
+            ec{"埃莫西約"}
         }
         "America:Indiana:Knox"{
-            ec{"印第安纳州诺克斯"}
+            ec{"印第安那州諾克斯"}
         }
         "America:Indiana:Marengo"{
-            ec{"印第安纳州马伦戈"}
+            ec{"印第安那州馬倫哥"}
         }
         "America:Indiana:Petersburg"{
-            ec{"印第安纳州彼得斯堡"}
+            ec{"印第安那州彼得堡"}
         }
         "America:Indiana:Tell_City"{
-            ec{"印第安纳州特尔城"}
+            ec{"印第安那州泰爾城"}
         }
         "America:Indiana:Vevay"{
-            ec{"印第安纳州维维市"}
+            ec{"印第安那州維威"}
         }
         "America:Indiana:Vincennes"{
-            ec{"印第安纳州温森斯"}
+            ec{"印第安那州溫森斯"}
         }
         "America:Indiana:Winamac"{
-            ec{"印第安纳州威纳马克"}
+            ec{"印第安那州威納馬克"}
         }
         "America:Indianapolis"{
-            ec{"印第安纳波利斯"}
+            ec{"印第安那波里斯"}
         }
         "America:Inuvik"{
-            ec{"伊努维克"}
+            ec{"伊奴維克"}
         }
         "America:Iqaluit"{
             ec{"伊魁特"}
         }
         "America:Jamaica"{
-            ec{"牙买加"}
+            ec{"牙買加"}
         }
         "America:Jujuy"{
             ec{"胡胡伊"}
         }
         "America:Juneau"{
-            ec{"朱诺"}
+            ec{"朱諾"}
         }
         "America:Kentucky:Monticello"{
-            ec{"肯塔基州蒙蒂塞洛"}
+            ec{"肯塔基州蒙地卻羅"}
         }
         "America:Kralendijk"{
-            ec{"克拉伦代克"}
+            ec{"克拉倫代克"}
         }
         "America:La_Paz"{
             ec{"拉巴斯"}
         }
         "America:Lima"{
-            ec{"利马"}
+            ec{"利馬"}
         }
         "America:Los_Angeles"{
-            ec{"洛杉矶"}
+            ec{"洛杉磯"}
         }
         "America:Louisville"{
-            ec{"路易斯维尔"}
+            ec{"路易斯維爾"}
         }
         "America:Lower_Princes"{
-            ec{"下太子区"}
+            ec{"下太子區"}
         }
         "America:Maceio"{
-            ec{"马塞约"}
+            ec{"馬瑟歐"}
         }
         "America:Managua"{
-            ec{"马那瓜"}
+            ec{"馬拿瓜"}
         }
         "America:Manaus"{
-            ec{"马瑙斯"}
+            ec{"瑪瑙斯"}
         }
         "America:Marigot"{
-            ec{"马里戈特"}
+            ec{"馬里戈特"}
         }
         "America:Martinique"{
-            ec{"马提尼克"}
+            ec{"馬丁尼克"}
         }
         "America:Matamoros"{
-            ec{"马塔莫罗斯"}
+            ec{"馬塔莫羅斯"}
         }
         "America:Mazatlan"{
-            ec{"马萨特兰"}
+            ec{"馬薩特蘭"}
         }
         "America:Mendoza"{
-            ec{"门多萨"}
+            ec{"門多薩"}
         }
         "America:Menominee"{
-            ec{"梅诺米尼"}
+            ec{"美諾米尼"}
         }
         "America:Merida"{
-            ec{"梅里达"}
+            ec{"梅里達"}
         }
         "America:Metlakatla"{
             ec{"梅特拉卡特拉"}
         }
         "America:Mexico_City"{
-            ec{"墨西哥城"}
+            ec{"墨西哥市"}
         }
         "America:Miquelon"{
-            ec{"密克隆"}
+            ec{"密啟崙"}
         }
         "America:Moncton"{
-            ec{"蒙克顿"}
+            ec{"蒙克頓"}
         }
         "America:Monterrey"{
-            ec{"蒙特雷"}
+            ec{"蒙特瑞"}
         }
         "America:Montevideo"{
-            ec{"蒙得维的亚"}
+            ec{"蒙特維多"}
         }
         "America:Montserrat"{
-            ec{"蒙特塞拉特"}
+            ec{"蒙哲臘"}
         }
         "America:Nassau"{
-            ec{"拿骚"}
+            ec{"拿索"}
         }
         "America:New_York"{
-            ec{"纽约"}
+            ec{"紐約"}
         }
         "America:Nipigon"{
-            ec{"尼皮贡"}
+            ec{"尼皮岡"}
         }
         "America:Nome"{
-            ec{"诺姆"}
+            ec{"諾姆"}
         }
         "America:Noronha"{
-            ec{"洛罗尼亚"}
+            ec{"諾倫哈"}
         }
         "America:North_Dakota:Beulah"{
-            ec{"北达科他州比尤拉"}
+            ec{"北達科他州布由拉"}
         }
         "America:North_Dakota:Center"{
-            ec{"北达科他州申特"}
+            ec{"北達科他州中心"}
         }
         "America:North_Dakota:New_Salem"{
-            ec{"北达科他州新塞勒姆"}
+            ec{"北達科他州紐沙倫"}
         }
         "America:Ojinaga"{
-            ec{"奥希纳加"}
+            ec{"奧希納加"}
         }
         "America:Panama"{
-            ec{"巴拿马"}
+            ec{"巴拿馬"}
         }
         "America:Pangnirtung"{
-            ec{"旁涅唐"}
+            ec{"潘尼爾東"}
         }
         "America:Paramaribo"{
-            ec{"帕拉马里博"}
+            ec{"巴拉馬利波"}
         }
         "America:Phoenix"{
-            ec{"凤凰城"}
+            ec{"鳳凰城"}
         }
         "America:Port-au-Prince"{
             ec{"太子港"}
@@ -505,292 +505,292 @@ zh{
             ec{"西班牙港"}
         }
         "America:Porto_Velho"{
-            ec{"波多韦柳"}
+            ec{"維留港"}
         }
         "America:Puerto_Rico"{
             ec{"波多黎各"}
         }
         "America:Rainy_River"{
-            ec{"雷尼河"}
+            ec{"雨河鎮"}
         }
         "America:Rankin_Inlet"{
-            ec{"兰今湾"}
+            ec{"蘭今灣"}
         }
         "America:Recife"{
-            ec{"累西腓"}
+            ec{"雷西非"}
         }
         "America:Regina"{
-            ec{"里贾纳"}
+            ec{"里賈納"}
         }
         "America:Resolute"{
-            ec{"雷索卢特"}
+            ec{"羅斯魯特"}
         }
         "America:Rio_Branco"{
-            ec{"里奥布郎库"}
+            ec{"里約布蘭"}
         }
         "America:Santa_Isabel"{
-            ec{"圣伊萨贝尔"}
+            ec{"聖伊薩貝爾"}
         }
         "America:Santarem"{
-            ec{"圣塔伦"}
+            ec{"聖塔倫"}
         }
         "America:Santiago"{
-            ec{"圣地亚哥"}
+            ec{"聖地牙哥"}
         }
         "America:Santo_Domingo"{
-            ec{"圣多明各"}
+            ec{"聖多明哥"}
         }
         "America:Sao_Paulo"{
-            ec{"圣保罗"}
+            ec{"聖保羅"}
         }
         "America:Scoresbysund"{
-            ec{"斯科列斯比桑德"}
+            ec{"伊托科爾托米特"}
         }
         "America:Sitka"{
-            ec{"锡特卡"}
+            ec{"錫特卡"}
         }
         "America:St_Barthelemy"{
-            ec{"圣巴泰勒米岛"}
+            ec{"聖巴托洛繆島"}
         }
         "America:St_Johns"{
-            ec{"圣约翰斯"}
+            ec{"聖約翰"}
         }
         "America:St_Kitts"{
-            ec{"圣基茨"}
+            ec{"聖基茨"}
         }
         "America:St_Lucia"{
-            ec{"圣卢西亚"}
+            ec{"聖露西亞"}
         }
         "America:St_Thomas"{
-            ec{"圣托马斯"}
+            ec{"聖托馬斯"}
         }
         "America:St_Vincent"{
-            ec{"圣文森特"}
+            ec{"聖文森"}
         }
         "America:Swift_Current"{
-            ec{"斯威夫特卡伦特"}
+            ec{"斯威夫特卡倫特"}
         }
         "America:Tegucigalpa"{
-            ec{"特古西加尔巴"}
+            ec{"德古斯加巴"}
         }
         "America:Thule"{
-            ec{"图勒"}
+            ec{"杜里"}
         }
         "America:Thunder_Bay"{
-            ec{"桑德贝"}
+            ec{"珊德灣"}
         }
         "America:Tijuana"{
-            ec{"蒂华纳"}
+            ec{"提華納"}
         }
         "America:Toronto"{
-            ec{"多伦多"}
+            ec{"多倫多"}
         }
         "America:Tortola"{
-            ec{"托尔托拉"}
+            ec{"托爾托拉"}
         }
         "America:Vancouver"{
-            ec{"温哥华"}
+            ec{"溫哥華"}
         }
         "America:Whitehorse"{
-            ec{"怀特霍斯"}
+            ec{"懷特霍斯"}
         }
         "America:Winnipeg"{
-            ec{"温尼伯"}
+            ec{"溫尼伯"}
         }
         "America:Yakutat"{
-            ec{"亚库塔特"}
+            ec{"雅庫塔"}
         }
         "America:Yellowknife"{
             ec{"耶洛奈夫"}
         }
         "Antarctica:Casey"{
-            ec{"卡塞"}
+            ec{"凱西"}
         }
         "Antarctica:Davis"{
-            ec{"戴维斯"}
+            ec{"戴維斯"}
         }
         "Antarctica:DumontDUrville"{
-            ec{"迪蒙迪尔维尔"}
+            ec{"杜蒙杜比爾"}
         }
         "Antarctica:Macquarie"{
-            ec{"麦格理"}
+            ec{"麥覺理"}
         }
         "Antarctica:Mawson"{
             ec{"莫森"}
         }
         "Antarctica:McMurdo"{
-            ec{"麦克默多"}
+            ec{"麥克默多"}
         }
         "Antarctica:Palmer"{
-            ec{"帕默尔"}
+            ec{"帕麥"}
         }
         "Antarctica:Rothera"{
-            ec{"罗瑟拉"}
+            ec{"羅瑟拉"}
         }
         "Antarctica:Syowa"{
-            ec{"昭和"}
+            ec{"昭和基地"}
         }
         "Antarctica:Troll"{
-            ec{"特罗尔"}
+            ec{"綽爾"}
         }
         "Antarctica:Vostok"{
             ec{"沃斯托克"}
         }
         "Arctic:Longyearbyen"{
-            ec{"朗伊尔城"}
+            ec{"隆意耳拜恩"}
         }
         "Asia:Aden"{
-            ec{"亚丁"}
+            ec{"亞丁"}
         }
         "Asia:Almaty"{
-            ec{"阿拉木图"}
+            ec{"阿拉木圖"}
         }
         "Asia:Amman"{
             ec{"安曼"}
         }
         "Asia:Anadyr"{
-            ec{"阿纳德尔"}
+            ec{"阿那底"}
         }
         "Asia:Aqtau"{
             ec{"阿克套"}
         }
         "Asia:Aqtobe"{
-            ec{"阿克托别"}
+            ec{"阿克托比"}
         }
         "Asia:Ashgabat"{
-            ec{"阿什哈巴德"}
+            ec{"阿什哈巴特"}
         }
         "Asia:Baghdad"{
-            ec{"巴格达"}
+            ec{"巴格達"}
         }
         "Asia:Bahrain"{
             ec{"巴林"}
         }
         "Asia:Baku"{
-            ec{"巴库"}
+            ec{"巴庫"}
         }
         "Asia:Bangkok"{
             ec{"曼谷"}
         }
         "Asia:Beirut"{
-            ec{"贝鲁特"}
+            ec{"貝魯特"}
         }
         "Asia:Bishkek"{
-            ec{"比什凯克"}
+            ec{"比什凱克"}
         }
         "Asia:Brunei"{
-            ec{"文莱"}
+            ec{"汶萊"}
         }
         "Asia:Calcutta"{
-            ec{"加尔各答"}
+            ec{"加爾各答"}
         }
         "Asia:Chita"{
             ec{"赤塔"}
         }
         "Asia:Choibalsan"{
-            ec{"乔巴山"}
+            ec{"喬巴山"}
         }
         "Asia:Colombo"{
-            ec{"科伦坡"}
+            ec{"可倫坡"}
         }
         "Asia:Damascus"{
-            ec{"大马士革"}
+            ec{"大馬士革"}
         }
         "Asia:Dhaka"{
-            ec{"达卡"}
+            ec{"達卡"}
         }
         "Asia:Dili"{
             ec{"帝力"}
         }
         "Asia:Dubai"{
-            ec{"迪拜"}
+            ec{"杜拜"}
         }
         "Asia:Dushanbe"{
-            ec{"杜尚别"}
+            ec{"杜桑貝"}
         }
         "Asia:Gaza"{
-            ec{"加沙"}
+            ec{"加薩"}
         }
         "Asia:Hebron"{
-            ec{"希伯伦"}
+            ec{"赫布隆"}
         }
         "Asia:Hong_Kong"{
-            ec{"香港"}
+            ec{"中華人民共和國香港特別行政區"}
         }
         "Asia:Hovd"{
             ec{"科布多"}
         }
         "Asia:Irkutsk"{
-            ec{"伊尔库茨克"}
+            ec{"伊爾庫次克"}
         }
         "Asia:Jakarta"{
-            ec{"雅加达"}
+            ec{"雅加達"}
         }
         "Asia:Jayapura"{
-            ec{"查亚普拉"}
+            ec{"加亞布拉"}
         }
         "Asia:Jerusalem"{
             ec{"耶路撒冷"}
         }
         "Asia:Kabul"{
-            ec{"喀布尔"}
+            ec{"喀布爾"}
         }
         "Asia:Kamchatka"{
             ec{"堪察加"}
         }
         "Asia:Karachi"{
-            ec{"卡拉奇"}
+            ec{"喀拉蚩"}
         }
         "Asia:Katmandu"{
-            ec{"加德满都"}
+            ec{"加德滿都"}
         }
         "Asia:Khandyga"{
-            ec{"汉德加"}
+            ec{"堪地加"}
         }
         "Asia:Krasnoyarsk"{
-            ec{"克拉斯诺亚尔斯克"}
+            ec{"克拉斯諾亞爾斯克"}
         }
         "Asia:Kuala_Lumpur"{
             ec{"吉隆坡"}
         }
         "Asia:Kuching"{
-            ec{"古晋"}
+            ec{"古晉"}
         }
         "Asia:Kuwait"{
             ec{"科威特"}
         }
         "Asia:Macau"{
-            ec{"澳门"}
+            ec{"中華人民共和國澳門特別行政區"}
         }
         "Asia:Magadan"{
-            ec{"马加丹"}
+            ec{"馬加丹"}
         }
         "Asia:Makassar"{
-            ec{"望加锡"}
+            ec{"馬卡沙爾"}
         }
         "Asia:Manila"{
-            ec{"马尼拉"}
+            ec{"馬尼拉"}
         }
         "Asia:Muscat"{
-            ec{"马斯喀特"}
+            ec{"馬斯開特"}
         }
         "Asia:Nicosia"{
-            ec{"尼科西亚"}
+            ec{"尼古西亞"}
         }
         "Asia:Novokuznetsk"{
-            ec{"新库兹涅茨克"}
+            ec{"新庫茲涅茨克"}
         }
         "Asia:Novosibirsk"{
-            ec{"诺沃西比尔斯克"}
+            ec{"新西伯利亞"}
         }
         "Asia:Omsk"{
             ec{"鄂木斯克"}
         }
         "Asia:Oral"{
-            ec{"乌拉尔"}
+            ec{"烏拉爾"}
         }
         "Asia:Phnom_Penh"{
-            ec{"金边"}
+            ec{"金邊"}
         }
         "Asia:Pontianak"{
             ec{"坤甸"}
@@ -799,28 +799,28 @@ zh{
             ec{"平壤"}
         }
         "Asia:Qatar"{
-            ec{"卡塔尔"}
+            ec{"卡達"}
         }
         "Asia:Qyzylorda"{
-            ec{"克孜洛尔达"}
+            ec{"克孜勒奧爾達"}
         }
         "Asia:Rangoon"{
             ec{"仰光"}
         }
         "Asia:Riyadh"{
-            ec{"利雅得"}
+            ec{"利雅德"}
         }
         "Asia:Saigon"{
             ec{"胡志明市"}
         }
         "Asia:Sakhalin"{
-            ec{"萨哈林"}
+            ec{"庫頁島"}
         }
         "Asia:Samarkand"{
-            ec{"撒马尔罕"}
+            ec{"撒馬爾罕"}
         }
         "Asia:Seoul"{
-            ec{"首尔"}
+            ec{"首爾"}
         }
         "Asia:Shanghai"{
             ec{"上海"}
@@ -841,103 +841,103 @@ zh{
             ec{"第比利斯"}
         }
         "Asia:Tehran"{
-            ec{"德黑兰"}
+            ec{"德黑蘭"}
         }
         "Asia:Thimphu"{
             ec{"廷布"}
         }
         "Asia:Tokyo"{
-            ec{"东京"}
+            ec{"東京"}
         }
         "Asia:Ulaanbaatar"{
-            ec{"乌兰巴托"}
+            ec{"烏蘭巴托"}
         }
         "Asia:Urumqi"{
-            ec{"乌鲁木齐"}
+            ec{"烏魯木齊"}
         }
         "Asia:Ust-Nera"{
-            ec{"乌斯内拉"}
+            ec{"烏斯內拉"}
         }
         "Asia:Vientiane"{
-            ec{"万象"}
+            ec{"永珍"}
         }
         "Asia:Vladivostok"{
-            ec{"符拉迪沃斯托克"}
+            ec{"海參崴"}
         }
         "Asia:Yakutsk"{
-            ec{"雅库茨克"}
+            ec{"雅庫次克"}
         }
         "Asia:Yekaterinburg"{
-            ec{"叶卡捷琳堡"}
+            ec{"葉卡捷林堡"}
         }
         "Asia:Yerevan"{
-            ec{"埃里温"}
+            ec{"葉里溫"}
         }
         "Atlantic:Azores"{
-            ec{"亚速尔群岛"}
+            ec{"亞速爾群島"}
         }
         "Atlantic:Bermuda"{
-            ec{"百慕大"}
+            ec{"百慕達"}
         }
         "Atlantic:Canary"{
-            ec{"加那利"}
+            ec{"加納利"}
         }
         "Atlantic:Cape_Verde"{
-            ec{"佛得角"}
+            ec{"維德角"}
         }
         "Atlantic:Faeroe"{
-            ec{"法罗"}
+            ec{"法羅群島"}
         }
         "Atlantic:Madeira"{
-            ec{"马德拉"}
+            ec{"馬得拉群島"}
         }
         "Atlantic:Reykjavik"{
-            ec{"雷克雅未克"}
+            ec{"雷克雅維克"}
         }
         "Atlantic:South_Georgia"{
-            ec{"南乔治亚"}
+            ec{"南喬治亞"}
         }
         "Atlantic:St_Helena"{
-            ec{"圣赫勒拿"}
+            ec{"聖赫勒拿島"}
         }
         "Atlantic:Stanley"{
-            ec{"斯坦利"}
+            ec{"史坦利"}
         }
         "Australia:Adelaide"{
-            ec{"阿德莱德"}
+            ec{"阿得雷德"}
         }
         "Australia:Brisbane"{
-            ec{"布里斯班"}
+            ec{"布利斯班"}
         }
         "Australia:Broken_Hill"{
-            ec{"布罗肯希尔"}
+            ec{"布羅肯希爾"}
         }
         "Australia:Currie"{
-            ec{"库利"}
+            ec{"克黎"}
         }
         "Australia:Darwin"{
-            ec{"达尔文"}
+            ec{"達爾文"}
         }
         "Australia:Eucla"{
             ec{"尤克拉"}
         }
         "Australia:Hobart"{
-            ec{"霍巴特"}
+            ec{"荷巴特"}
         }
         "Australia:Lindeman"{
             ec{"林德曼"}
         }
         "Australia:Lord_Howe"{
-            ec{"豪勋爵"}
+            ec{"豪勳爵島"}
         }
         "Australia:Melbourne"{
-            ec{"墨尔本"}
+            ec{"墨爾本"}
         }
         "Australia:Perth"{
-            ec{"珀斯"}
+            ec{"伯斯"}
         }
         "Australia:Sydney"{
-            ec{"悉尼"}
+            ec{"雪梨"}
         }
         "Etc:Unknown"{
             ec{"未知城市"}
@@ -946,105 +946,105 @@ zh{
             ec{"阿姆斯特丹"}
         }
         "Europe:Andorra"{
-            ec{"安道尔"}
+            ec{"安道爾"}
         }
         "Europe:Athens"{
             ec{"雅典"}
         }
         "Europe:Belgrade"{
-            ec{"贝尔格莱德"}
+            ec{"貝爾格勒"}
         }
         "Europe:Berlin"{
             ec{"柏林"}
         }
         "Europe:Bratislava"{
-            ec{"布拉迪斯拉发"}
+            ec{"布拉提斯拉瓦"}
         }
         "Europe:Brussels"{
-            ec{"布鲁塞尔"}
+            ec{"布魯塞爾"}
         }
         "Europe:Bucharest"{
             ec{"布加勒斯特"}
         }
         "Europe:Budapest"{
-            ec{"布达佩斯"}
+            ec{"布達佩斯"}
         }
         "Europe:Busingen"{
             ec{"布辛根"}
         }
         "Europe:Chisinau"{
-            ec{"基希讷乌"}
+            ec{"奇西瑙"}
         }
         "Europe:Copenhagen"{
             ec{"哥本哈根"}
         }
         "Europe:Dublin"{
             ec{"都柏林"}
-            ld{"爱尔兰标准时间"}
+            ld{"愛爾蘭標準時間"}
         }
         "Europe:Gibraltar"{
-            ec{"直布罗陀"}
+            ec{"直布羅陀"}
         }
         "Europe:Guernsey"{
-            ec{"根西岛"}
+            ec{"根息島"}
         }
         "Europe:Helsinki"{
-            ec{"赫尔辛基"}
+            ec{"赫爾辛基"}
         }
         "Europe:Isle_of_Man"{
-            ec{"曼岛"}
+            ec{"曼島"}
         }
         "Europe:Istanbul"{
-            ec{"伊斯坦布尔"}
+            ec{"伊斯坦堡"}
         }
         "Europe:Jersey"{
-            ec{"泽西岛"}
+            ec{"澤西島"}
         }
         "Europe:Kaliningrad"{
-            ec{"加里宁格勒"}
+            ec{"加里寧格勒"}
         }
         "Europe:Kiev"{
-            ec{"基辅"}
+            ec{"基輔"}
         }
         "Europe:Lisbon"{
             ec{"里斯本"}
         }
         "Europe:Ljubljana"{
-            ec{"卢布尔雅那"}
+            ec{"盧比安納"}
         }
         "Europe:London"{
-            ec{"伦敦"}
-            ld{"英国夏令时间"}
+            ec{"倫敦"}
+            ld{"英國夏令時間"}
         }
         "Europe:Luxembourg"{
-            ec{"卢森堡"}
+            ec{"盧森堡"}
         }
         "Europe:Madrid"{
-            ec{"马德里"}
+            ec{"馬德里"}
         }
         "Europe:Malta"{
-            ec{"马耳他"}
+            ec{"馬爾他"}
         }
         "Europe:Mariehamn"{
-            ec{"玛丽港"}
+            ec{"瑪麗港"}
         }
         "Europe:Minsk"{
             ec{"明斯克"}
         }
         "Europe:Monaco"{
-            ec{"摩纳哥"}
+            ec{"摩納哥"}
         }
         "Europe:Moscow"{
             ec{"莫斯科"}
         }
         "Europe:Oslo"{
-            ec{"奥斯陆"}
+            ec{"奧斯陸"}
         }
         "Europe:Paris"{
             ec{"巴黎"}
         }
         "Europe:Podgorica"{
-            ec{"波德戈里察"}
+            ec{"波多里察"}
         }
         "Europe:Prague"{
             ec{"布拉格"}
@@ -1053,28 +1053,28 @@ zh{
             ec{"里加"}
         }
         "Europe:Rome"{
-            ec{"罗马"}
+            ec{"羅馬"}
         }
         "Europe:Samara"{
-            ec{"萨马拉"}
+            ec{"沙馬拉"}
         }
         "Europe:San_Marino"{
-            ec{"圣马力诺"}
+            ec{"聖馬利諾"}
         }
         "Europe:Sarajevo"{
-            ec{"萨拉热窝"}
+            ec{"塞拉耶佛"}
         }
         "Europe:Simferopol"{
-            ec{"辛菲罗波尔"}
+            ec{"辛非洛浦"}
         }
         "Europe:Skopje"{
-            ec{"斯科普里"}
+            ec{"史高比耶"}
         }
         "Europe:Sofia"{
-            ec{"索非亚"}
+            ec{"索菲亞"}
         }
         "Europe:Stockholm"{
-            ec{"斯德哥尔摩"}
+            ec{"斯德哥爾摩"}
         }
         "Europe:Tallinn"{
             ec{"塔林"}
@@ -1083,34 +1083,34 @@ zh{
             ec{"地拉那"}
         }
         "Europe:Uzhgorod"{
-            ec{"乌日哥罗德"}
+            ec{"烏茲哥洛"}
         }
         "Europe:Vaduz"{
-            ec{"瓦杜兹"}
+            ec{"瓦都茲"}
         }
         "Europe:Vatican"{
-            ec{"梵蒂冈"}
+            ec{"梵蒂岡"}
         }
         "Europe:Vienna"{
-            ec{"维也纳"}
+            ec{"維也納"}
         }
         "Europe:Vilnius"{
-            ec{"维尔纽斯"}
+            ec{"維爾紐斯"}
         }
         "Europe:Volgograd"{
-            ec{"伏尔加格勒"}
+            ec{"伏爾加格勒"}
         }
         "Europe:Warsaw"{
-            ec{"华沙"}
+            ec{"華沙"}
         }
         "Europe:Zagreb"{
-            ec{"萨格勒布"}
+            ec{"札格瑞布"}
         }
         "Europe:Zaporozhye"{
-            ec{"扎波罗热"}
+            ec{"札波羅結"}
         }
         "Europe:Zurich"{
-            ec{"苏黎世"}
+            ec{"蘇黎世"}
         }
         "Indian:Antananarivo"{
             ec{"安塔那那利佛"}
@@ -1119,142 +1119,142 @@ zh{
             ec{"查戈斯"}
         }
         "Indian:Christmas"{
-            ec{"圣诞岛"}
+            ec{"聖誕島"}
         }
         "Indian:Cocos"{
-            ec{"可可斯"}
+            ec{"科科斯群島"}
         }
         "Indian:Comoro"{
-            ec{"科摩罗"}
+            ec{"科摩羅群島"}
         }
         "Indian:Kerguelen"{
-            ec{"凯尔盖朗"}
+            ec{"凱爾蓋朗島"}
         }
         "Indian:Mahe"{
-            ec{"马埃岛"}
+            ec{"馬埃島"}
         }
         "Indian:Maldives"{
-            ec{"马尔代夫"}
+            ec{"馬爾地夫"}
         }
         "Indian:Mauritius"{
-            ec{"毛里求斯"}
+            ec{"模里西斯"}
         }
         "Indian:Mayotte"{
-            ec{"马约特"}
+            ec{"馬約特島"}
         }
         "Indian:Reunion"{
-            ec{"留尼汪"}
+            ec{"留尼旺島"}
         }
         "Pacific:Apia"{
-            ec{"阿皮亚"}
+            ec{"阿皮亞"}
         }
         "Pacific:Auckland"{
-            ec{"奥克兰"}
+            ec{"奧克蘭"}
         }
         "Pacific:Bougainville"{
-            ec{"布干维尔"}
+            ec{"布干維爾"}
         }
         "Pacific:Chatham"{
-            ec{"查塔姆"}
+            ec{"查坦"}
         }
         "Pacific:Easter"{
-            ec{"复活节岛"}
+            ec{"復活島"}
         }
         "Pacific:Efate"{
             ec{"埃法特"}
         }
         "Pacific:Enderbury"{
-            ec{"恩德伯里"}
+            ec{"恩得伯理島"}
         }
         "Pacific:Fakaofo"{
             ec{"法考福"}
         }
         "Pacific:Fiji"{
-            ec{"斐济"}
+            ec{"斐濟"}
         }
         "Pacific:Funafuti"{
-            ec{"富纳富提"}
+            ec{"富那富提"}
         }
         "Pacific:Galapagos"{
-            ec{"加拉帕戈斯"}
+            ec{"加拉巴哥群島"}
         }
         "Pacific:Gambier"{
-            ec{"甘比尔"}
+            ec{"甘比爾群島"}
         }
         "Pacific:Guadalcanal"{
-            ec{"瓜达尔卡纳尔"}
+            ec{"瓜達康納爾島"}
         }
         "Pacific:Guam"{
-            ec{"关岛"}
+            ec{"關島"}
         }
         "Pacific:Honolulu"{
             ec{"檀香山"}
         }
         "Pacific:Johnston"{
-            ec{"约翰斯顿"}
+            ec{"強斯頓"}
         }
         "Pacific:Kiritimati"{
-            ec{"基里地马地岛"}
+            ec{"基里地馬地島"}
         }
         "Pacific:Kosrae"{
-            ec{"库赛埃"}
+            ec{"科斯瑞"}
         }
         "Pacific:Kwajalein"{
-            ec{"夸贾林"}
+            ec{"瓜加林島"}
         }
         "Pacific:Majuro"{
-            ec{"马朱罗"}
+            ec{"馬朱諾"}
         }
         "Pacific:Marquesas"{
-            ec{"马克萨斯"}
+            ec{"馬可薩斯島"}
         }
         "Pacific:Midway"{
-            ec{"中途岛"}
+            ec{"中途島"}
         }
         "Pacific:Nauru"{
-            ec{"瑙鲁"}
+            ec{"諾魯"}
         }
         "Pacific:Niue"{
-            ec{"纽埃"}
+            ec{"紐埃島"}
         }
         "Pacific:Norfolk"{
-            ec{"诺福克"}
+            ec{"諾福克"}
         }
         "Pacific:Noumea"{
-            ec{"努美阿"}
+            ec{"諾美亞"}
         }
         "Pacific:Pago_Pago"{
-            ec{"帕果帕果"}
+            ec{"巴哥巴哥"}
         }
         "Pacific:Palau"{
-            ec{"帕劳"}
+            ec{"帛琉"}
         }
         "Pacific:Pitcairn"{
-            ec{"皮特凯恩"}
+            ec{"皮特肯群島"}
         }
         "Pacific:Ponape"{
-            ec{"波纳佩岛"}
+            ec{"波納佩"}
         }
         "Pacific:Port_Moresby"{
-            ec{"莫尔兹比港"}
+            ec{"莫士比港"}
         }
         "Pacific:Rarotonga"{
-            ec{"拉罗汤加"}
+            ec{"拉羅湯加"}
         }
         "Pacific:Saipan"{
             ec{"塞班"}
         }
         "Pacific:Tahiti"{
-            ec{"塔希提"}
+            ec{"大溪地"}
         }
         "Pacific:Tarawa"{
             ec{"塔拉瓦"}
         }
         "Pacific:Tongatapu"{
-            ec{"东加塔布"}
+            ec{"東加塔布島"}
         }
         "Pacific:Truk"{
-            ec{"特鲁克群岛"}
+            ec{"楚克"}
         }
         "Pacific:Wake"{
             ec{"威克"}
@@ -1263,654 +1263,654 @@ zh{
             ec{"瓦利斯"}
         }
         "meta:Acre"{
-            ld{"阿克里夏令时间"}
-            lg{"阿克里时间"}
-            ls{"阿克里标准时间"}
+            ld{"艾克夏令時間"}
+            lg{"艾克時間"}
+            ls{"艾克標準時間"}
         }
         "meta:Afghanistan"{
-            ls{"阿富汗时间"}
+            ls{"阿富汗時間"}
         }
         "meta:Africa_Central"{
-            ls{"中部非洲时间"}
+            ls{"中非時間"}
         }
         "meta:Africa_Eastern"{
-            ls{"东部非洲时间"}
+            ls{"東非時間"}
         }
         "meta:Africa_Southern"{
-            ls{"南部非洲时间"}
+            ls{"南非標準時間"}
         }
         "meta:Africa_Western"{
-            ld{"西部非洲夏令时间"}
-            lg{"西部非洲时间"}
-            ls{"西部非洲标准时间"}
+            ld{"西非夏令時間"}
+            lg{"西非時間"}
+            ls{"西非標準時間"}
         }
         "meta:Alaska"{
-            ld{"阿拉斯加夏令时间"}
-            lg{"阿拉斯加时间"}
-            ls{"阿拉斯加标准时间"}
+            ld{"阿拉斯加夏令時間"}
+            lg{"阿拉斯加時間"}
+            ls{"阿拉斯加標準時間"}
         }
         "meta:Almaty"{
-            ld{"阿拉木图夏令时间"}
-            lg{"阿拉木图时间"}
-            ls{"阿拉木图标准时间"}
+            ld{"阿拉木圖夏令時間"}
+            lg{"阿拉木圖時間"}
+            ls{"阿拉木圖標準時間"}
         }
         "meta:Amazon"{
-            ld{"亚马逊夏令时间"}
-            lg{"亚马逊时间"}
-            ls{"亚马逊标准时间"}
+            ld{"亞馬遜夏令時間"}
+            lg{"亞馬遜時間"}
+            ls{"亞馬遜標準時間"}
         }
         "meta:America_Central"{
-            ld{"北美中部夏令时间"}
-            lg{"北美中部时间"}
-            ls{"北美中部标准时间"}
+            ld{"中部夏令時間"}
+            lg{"中部時間"}
+            ls{"中部標準時間"}
         }
         "meta:America_Eastern"{
-            ld{"北美东部夏令时间"}
-            lg{"北美东部时间"}
-            ls{"北美东部标准时间"}
+            ld{"東部夏令時間"}
+            lg{"東部時間"}
+            ls{"東部標準時間"}
         }
         "meta:America_Mountain"{
-            ld{"北美山区夏令时间"}
-            lg{"北美山区时间"}
-            ls{"北美山区标准时间"}
+            ld{"山區夏令時間"}
+            lg{"山區時間"}
+            ls{"山區標準時間"}
         }
         "meta:America_Pacific"{
-            ld{"北美太平洋夏令时间"}
-            lg{"北美太平洋时间"}
-            ls{"北美太平洋标准时间"}
+            ld{"太平洋夏令時間"}
+            lg{"太平洋時間"}
+            ls{"太平洋標準時間"}
         }
         "meta:Anadyr"{
-            ld{"阿纳德尔夏令时间"}
-            lg{"阿纳德尔时间"}
-            ls{"阿纳德尔标准时间"}
+            ld{"阿那底河夏令時間"}
+            lg{"阿納德爾時間"}
+            ls{"阿那底河標準時間"}
         }
         "meta:Apia"{
-            ld{"阿皮亚夏令时间"}
-            lg{"阿皮亚时间"}
-            ls{"阿皮亚标准时间"}
+            ld{"阿皮亞夏令時間"}
+            lg{"阿皮亞時間"}
+            ls{"阿皮亞標準時間"}
         }
         "meta:Aqtau"{
-            ld{"阿克套夏令时间"}
-            lg{"阿克套时间"}
-            ls{"阿克套标准时间"}
+            ld{"阿克陶夏令時間"}
+            lg{"阿克陶時間"}
+            ls{"阿克陶標準時間"}
         }
         "meta:Aqtobe"{
-            ld{"阿克托别夏令时间"}
-            lg{"阿克托别时间"}
-            ls{"阿克托别标准时间"}
+            ld{"阿克托比夏令時間"}
+            lg{"阿克托比時間"}
+            ls{"阿克托比標準時間"}
         }
         "meta:Arabian"{
-            ld{"阿拉伯夏令时间"}
-            lg{"阿拉伯时间"}
-            ls{"阿拉伯标准时间"}
+            ld{"阿拉伯夏令時間"}
+            lg{"阿拉伯時間"}
+            ls{"阿拉伯標準時間"}
         }
         "meta:Argentina"{
-            ld{"阿根廷夏令时间"}
-            lg{"阿根廷时间"}
-            ls{"阿根廷标准时间"}
+            ld{"阿根廷夏令時間"}
+            lg{"阿根廷時間"}
+            ls{"阿根廷標準時間"}
         }
         "meta:Argentina_Western"{
-            ld{"阿根廷西部夏令时间"}
-            lg{"阿根廷西部时间"}
-            ls{"阿根廷西部标准时间"}
+            ld{"阿根廷西部夏令時間"}
+            lg{"阿根廷西部時間"}
+            ls{"阿根廷西部標準時間"}
         }
         "meta:Armenia"{
-            ld{"亚美尼亚夏令时间"}
-            lg{"亚美尼亚时间"}
-            ls{"亚美尼亚标准时间"}
+            ld{"亞美尼亞夏令時間"}
+            lg{"亞美尼亞時間"}
+            ls{"亞美尼亞標準時間"}
         }
         "meta:Atlantic"{
-            ld{"大西洋夏令时间"}
-            lg{"大西洋时间"}
-            ls{"大西洋标准时间"}
+            ld{"大西洋夏令時間"}
+            lg{"大西洋時間"}
+            ls{"大西洋標準時間"}
         }
         "meta:Australia_Central"{
-            ld{"澳大利亚中部夏令时间"}
-            lg{"澳大利亚中部时间"}
-            ls{"澳大利亚中部标准时间"}
+            ld{"澳洲中部夏令時間"}
+            lg{"澳洲中部時間"}
+            ls{"澳洲中部標準時間"}
         }
         "meta:Australia_CentralWestern"{
-            ld{"澳大利亚中西部夏令时间"}
-            lg{"澳大利亚中西部时间"}
-            ls{"澳大利亚中西部标准时间"}
+            ld{"澳洲中西部夏令時間"}
+            lg{"澳洲中西部時間"}
+            ls{"澳洲中西部標準時間"}
         }
         "meta:Australia_Eastern"{
-            ld{"澳大利亚东部夏令时间"}
-            lg{"澳大利亚东部时间"}
-            ls{"澳大利亚东部标准时间"}
+            ld{"澳洲東部夏令時間"}
+            lg{"澳洲東部時間"}
+            ls{"澳洲東部標準時間"}
         }
         "meta:Australia_Western"{
-            ld{"澳大利亚西部夏令时间"}
-            lg{"澳大利亚西部时间"}
-            ls{"澳大利亚西部标准时间"}
+            ld{"澳洲西部夏令時間"}
+            lg{"澳洲西部時間"}
+            ls{"澳洲西部標準時間"}
         }
         "meta:Azerbaijan"{
-            ld{"阿塞拜疆夏令时间"}
-            lg{"阿塞拜疆时间"}
-            ls{"阿塞拜疆标准时间"}
+            ld{"亞塞拜然夏令時間"}
+            lg{"亞塞拜然時間"}
+            ls{"亞塞拜然標準時間"}
         }
         "meta:Azores"{
-            ld{"亚速尔群岛夏令时间"}
-            lg{"亚速尔群岛时间"}
-            ls{"亚速尔群岛标准时间"}
+            ld{"亞速爾群島夏令時間"}
+            lg{"亞速爾群島時間"}
+            ls{"亞速爾群島標準時間"}
         }
         "meta:Bangladesh"{
-            ld{"孟加拉夏令时间"}
-            lg{"孟加拉时间"}
-            ls{"孟加拉标准时间"}
+            ld{"孟加拉夏令時間"}
+            lg{"孟加拉時間"}
+            ls{"孟加拉標準時間"}
         }
         "meta:Bhutan"{
-            ls{"不丹时间"}
+            ls{"不丹時間"}
         }
         "meta:Bolivia"{
-            ls{"玻利维亚时间"}
+            ls{"玻利維亞時間"}
         }
         "meta:Brasilia"{
-            ld{"巴西利亚夏令时间"}
-            lg{"巴西利亚时间"}
-            ls{"巴西利亚标准时间"}
+            ld{"巴西利亞夏令時間"}
+            lg{"巴西利亞時間"}
+            ls{"巴西利亞標準時間"}
         }
         "meta:Brunei"{
-            ls{"文莱达鲁萨兰时间"}
+            ls{"汶萊時間"}
         }
         "meta:Cape_Verde"{
-            ld{"佛得角夏令时间"}
-            lg{"佛得角时间"}
-            ls{"佛得角标准时间"}
+            ld{"維德角夏令時間"}
+            lg{"維德角時間"}
+            ls{"維德角標準時間"}
         }
         "meta:Casey"{
-            ls{"凯西时间"}
+            ls{"凱西站時間"}
         }
         "meta:Chamorro"{
-            ls{"查莫罗时间"}
+            ls{"查莫洛時間"}
         }
         "meta:Chatham"{
-            ld{"查坦夏令时间"}
-            lg{"查坦时间"}
-            ls{"查坦标准时间"}
+            ld{"查坦群島夏令時間"}
+            lg{"查坦群島時間"}
+            ls{"查坦群島標準時間"}
         }
         "meta:Chile"{
-            ld{"智利夏令时间"}
-            lg{"智利时间"}
-            ls{"智利标准时间"}
+            ld{"智利夏令時間"}
+            lg{"智利時間"}
+            ls{"智利標準時間"}
         }
         "meta:China"{
-            ld{"中国夏令时间"}
-            lg{"中国时间"}
-            ls{"中国标准时间"}
+            ld{"中國夏令時間"}
+            lg{"中國時間"}
+            ls{"中國標準時間"}
         }
         "meta:Choibalsan"{
-            ld{"乔巴山夏令时间"}
-            lg{"乔巴山时间"}
-            ls{"乔巴山标准时间"}
+            ld{"喬巴山夏令時間"}
+            lg{"喬巴山時間"}
+            ls{"喬巴山標準時間"}
         }
         "meta:Christmas"{
-            ls{"圣诞岛时间"}
+            ls{"聖誕島時間"}
         }
         "meta:Cocos"{
-            ls{"科科斯群岛时间"}
+            ls{"科科斯群島時間"}
         }
         "meta:Colombia"{
-            ld{"哥伦比亚夏令时间"}
-            lg{"哥伦比亚时间"}
-            ls{"哥伦比亚标准时间"}
+            ld{"哥倫比亞夏令時間"}
+            lg{"哥倫比亞時間"}
+            ls{"哥倫比亞標準時間"}
         }
         "meta:Cook"{
-            ld{"库克群岛仲夏时间"}
-            lg{"库克群岛时间"}
-            ls{"库克群岛标准时间"}
+            ld{"庫克群島半夏令時間"}
+            lg{"庫克群島時間"}
+            ls{"庫克群島標準時間"}
         }
         "meta:Cuba"{
-            ld{"古巴夏令时间"}
-            lg{"古巴时间"}
-            ls{"古巴标准时间"}
+            ld{"古巴夏令時間"}
+            lg{"古巴時間"}
+            ls{"古巴標準時間"}
         }
         "meta:Davis"{
-            ls{"戴维斯时间"}
+            ls{"戴維斯時間"}
         }
         "meta:DumontDUrville"{
-            ls{"迪蒙迪尔维尔时间"}
+            ls{"杜蒙杜比爾時間"}
         }
         "meta:East_Timor"{
-            ls{"东帝汶时间"}
+            ls{"東帝汶時間"}
         }
         "meta:Easter"{
-            ld{"复活节岛夏令时间"}
-            lg{"复活节岛时间"}
-            ls{"复活节岛标准时间"}
+            ld{"復活節島夏令時間"}
+            lg{"復活節島時間"}
+            ls{"復活節島標準時間"}
         }
         "meta:Ecuador"{
-            ls{"厄瓜多尔时间"}
+            ls{"厄瓜多時間"}
         }
         "meta:Europe_Central"{
-            ld{"中欧夏令时间"}
-            lg{"中欧时间"}
-            ls{"中欧标准时间"}
+            ld{"中歐夏令時間"}
+            lg{"中歐時間"}
+            ls{"中歐標準時間"}
         }
         "meta:Europe_Eastern"{
-            ld{"东欧夏令时间"}
-            lg{"东欧时间"}
-            ls{"东欧标准时间"}
+            ld{"東歐夏令時間"}
+            lg{"東歐時間"}
+            ls{"東歐標準時間"}
         }
         "meta:Europe_Further_Eastern"{
-            ls{"远东标准时间"}
+            ls{"歐洲遠東時間"}
         }
         "meta:Europe_Western"{
-            ld{"西欧夏令时间"}
-            lg{"西欧时间"}
-            ls{"西欧标准时间"}
+            ld{"西歐夏令時間"}
+            lg{"西歐時間"}
+            ls{"西歐標準時間"}
         }
         "meta:Falkland"{
-            ld{"福克兰群岛夏令时间"}
-            lg{"福克兰群岛时间"}
-            ls{"福克兰群岛标准时间"}
+            ld{"福克蘭群島夏令時間"}
+            lg{"福克蘭群島時間"}
+            ls{"福克蘭群島標準時間"}
         }
         "meta:Fiji"{
-            ld{"斐济夏令时间"}
-            lg{"斐济时间"}
-            ls{"斐济标准时间"}
+            ld{"斐濟夏令時間"}
+            lg{"斐濟時間"}
+            ls{"斐濟標準時間"}
         }
         "meta:French_Guiana"{
-            ls{"法属圭亚那时间"}
+            ls{"法屬圭亞那時間"}
         }
         "meta:French_Southern"{
-            ls{"法属南方和南极领地时间"}
+            ls{"法國南方及南極時間"}
         }
         "meta:GMT"{
-            ls{"格林尼治标准时间"}
+            ls{"格林威治標準時間"}
         }
         "meta:Galapagos"{
-            ls{"加拉帕戈斯时间"}
+            ls{"加拉巴哥群島時間"}
         }
         "meta:Gambier"{
-            ls{"甘比尔时间"}
+            ls{"甘比爾群島時間"}
         }
         "meta:Georgia"{
-            ld{"格鲁吉亚夏令时间"}
-            lg{"格鲁吉亚时间"}
-            ls{"格鲁吉亚标准时间"}
+            ld{"喬治亞夏令時間"}
+            lg{"喬治亞時間"}
+            ls{"喬治亞標準時間"}
         }
         "meta:Gilbert_Islands"{
-            ls{"吉尔伯特群岛时间"}
+            ls{"吉爾伯特群島時間"}
         }
         "meta:Greenland_Eastern"{
-            ld{"格陵兰岛东部夏令时间"}
-            lg{"格陵兰岛东部时间"}
-            ls{"格陵兰岛东部标准时间"}
+            ld{"格陵蘭東部夏令時間"}
+            lg{"格陵蘭東部時間"}
+            ls{"格陵蘭東部標準時間"}
         }
         "meta:Greenland_Western"{
-            ld{"格陵兰岛西部夏令时间"}
-            lg{"格陵兰岛西部时间"}
-            ls{"格陵兰岛西部标准时间"}
+            ld{"格陵蘭西部夏令時間"}
+            lg{"格陵蘭西部時間"}
+            ls{"格陵蘭西部標準時間"}
         }
         "meta:Guam"{
-            ls{"关岛时间"}
+            ls{"關島標準時間"}
         }
         "meta:Gulf"{
-            ls{"海湾标准时间"}
+            ls{"波斯灣海域標準時間"}
         }
         "meta:Guyana"{
-            ls{"圭亚那时间"}
+            ls{"蓋亞那時間"}
         }
         "meta:Hawaii_Aleutian"{
-            ld{"夏威夷-阿留申夏令时间"}
-            lg{"夏威夷-阿留申时间"}
-            ls{"夏威夷-阿留申标准时间"}
+            ld{"夏威夷-阿留申夏令時間"}
+            lg{"夏威夷-阿留申時間"}
+            ls{"夏威夷-阿留申標準時間"}
         }
         "meta:Hong_Kong"{
-            ld{"香港夏令时间"}
-            lg{"香港时间"}
-            ls{"香港标准时间"}
+            ld{"香港夏令時間"}
+            lg{"香港時間"}
+            ls{"香港標準時間"}
         }
         "meta:Hovd"{
-            ld{"科布多夏令时间"}
-            lg{"科布多时间"}
-            ls{"科布多标准时间"}
+            ld{"科布多夏令時間"}
+            lg{"科布多時間"}
+            ls{"科布多標準時間"}
         }
         "meta:India"{
-            ls{"印度时间"}
+            ls{"印度標準時間"}
         }
         "meta:Indian_Ocean"{
-            ls{"印度洋时间"}
+            ls{"印度洋時間"}
         }
         "meta:Indochina"{
-            ls{"印度支那时间"}
+            ls{"印度支那時間"}
         }
         "meta:Indonesia_Central"{
-            ls{"印度尼西亚中部时间"}
+            ls{"印尼中部時間"}
         }
         "meta:Indonesia_Eastern"{
-            ls{"印度尼西亚东部时间"}
+            ls{"印尼東部時間"}
         }
         "meta:Indonesia_Western"{
-            ls{"印度尼西亚西部时间"}
+            ls{"印尼西部時間"}
         }
         "meta:Iran"{
-            ld{"伊朗夏令时间"}
-            lg{"伊朗时间"}
-            ls{"伊朗标准时间"}
+            ld{"伊朗夏令時間"}
+            lg{"伊朗時間"}
+            ls{"伊朗標準時間"}
         }
         "meta:Irkutsk"{
-            ld{"伊尔库茨克夏令时间"}
-            lg{"伊尔库茨克时间"}
-            ls{"伊尔库茨克标准时间"}
+            ld{"伊爾庫次克夏令時間"}
+            lg{"伊爾庫次克時間"}
+            ls{"伊爾庫次克標準時間"}
         }
         "meta:Israel"{
-            ld{"以色列夏令时间"}
-            lg{"以色列时间"}
-            ls{"以色列标准时间"}
+            ld{"以色列夏令時間"}
+            lg{"以色列時間"}
+            ls{"以色列標準時間"}
         }
         "meta:Japan"{
-            ld{"日本夏令时间"}
-            lg{"日本时间"}
-            ls{"日本标准时间"}
+            ld{"日本夏令時間"}
+            lg{"日本時間"}
+            ls{"日本標準時間"}
         }
         "meta:Kamchatka"{
-            ld{"彼得罗巴甫洛夫斯克-堪察加夏令时间"}
-            lg{"彼得罗巴甫洛夫斯克-堪察加时间"}
-            ls{"彼得罗巴甫洛夫斯克-堪察加标准时间"}
+            ld{"彼得羅巴甫洛夫斯克日光節約時間"}
+            lg{"彼得羅巴甫洛夫斯克時間"}
+            ls{"彼得羅巴甫洛夫斯克標準時間"}
         }
         "meta:Kazakhstan_Eastern"{
-            ls{"哈萨克斯坦东部时间"}
+            ls{"東哈薩克時間"}
         }
         "meta:Kazakhstan_Western"{
-            ls{"哈萨克斯坦西部时间"}
+            ls{"西哈薩克時間"}
         }
         "meta:Korea"{
-            ld{"韩国夏令时间"}
-            lg{"韩国时间"}
-            ls{"韩国标准时间"}
+            ld{"韓國夏令時間"}
+            lg{"韓國時間"}
+            ls{"韓國標準時間"}
         }
         "meta:Kosrae"{
-            ls{"科斯雷时间"}
+            ls{"科斯瑞時間"}
         }
         "meta:Krasnoyarsk"{
-            ld{"克拉斯诺亚尔斯克夏令时间"}
-            lg{"克拉斯诺亚尔斯克时间"}
-            ls{"克拉斯诺亚尔斯克标准时间"}
+            ld{"克拉斯諾亞爾斯克夏令時間"}
+            lg{"克拉斯諾亞爾斯克時間"}
+            ls{"克拉斯諾亞爾斯克標準時間"}
         }
         "meta:Kyrgystan"{
-            ls{"吉尔吉斯斯坦时间"}
+            ls{"吉爾吉斯時間"}
         }
         "meta:Lanka"{
-            ls{"兰卡时间"}
+            ls{"蘭卡時間"}
         }
         "meta:Line_Islands"{
-            ls{"莱恩群岛时间"}
+            ls{"萊恩群島時間"}
         }
         "meta:Lord_Howe"{
-            ld{"豪勋爵岛夏令时间"}
-            lg{"豪勋爵岛时间"}
-            ls{"豪勋爵岛标准时间"}
+            ld{"豪勳爵島夏令時間"}
+            lg{"豪勳爵島時間"}
+            ls{"豪勳爵島標準時間"}
         }
         "meta:Macau"{
-            ld{"澳门夏令时间"}
-            lg{"澳门时间"}
-            ls{"澳门标准时间"}
+            ld{"澳門夏令時間"}
+            lg{"澳門時間"}
+            ls{"澳門標準時間"}
         }
         "meta:Macquarie"{
-            ls{"麦夸里岛时间"}
+            ls{"麥覺理時間"}
         }
         "meta:Magadan"{
-            ld{"马加丹夏令时间"}
-            lg{"马加丹时间"}
-            ls{"马加丹标准时间"}
+            ld{"馬加丹夏令時間"}
+            lg{"馬加丹時間"}
+            ls{"馬加丹標準時間"}
         }
         "meta:Malaysia"{
-            ls{"马来西亚时间"}
+            ls{"馬來西亞時間"}
         }
         "meta:Maldives"{
-            ls{"马尔代夫时间"}
+            ls{"馬爾地夫時間"}
         }
         "meta:Marquesas"{
-            ls{"马克萨斯群岛时间"}
+            ls{"馬可薩斯時間"}
         }
         "meta:Marshall_Islands"{
-            ls{"马绍尔群岛时间"}
+            ls{"馬紹爾群島時間"}
         }
         "meta:Mauritius"{
-            ld{"毛里求斯夏令时间"}
-            lg{"毛里求斯时间"}
-            ls{"毛里求斯标准时间"}
+            ld{"模里西斯夏令時間"}
+            lg{"模里西斯時間"}
+            ls{"模里西斯標準時間"}
         }
         "meta:Mawson"{
-            ls{"莫森时间"}
+            ls{"莫森時間"}
         }
         "meta:Mexico_Northwest"{
-            ld{"墨西哥西北部夏令时间"}
-            lg{"墨西哥西北部时间"}
-            ls{"墨西哥西北部标准时间"}
+            ld{"墨西哥西北部夏令時間"}
+            lg{"墨西哥西北部時間"}
+            ls{"墨西哥西北部標準時間"}
         }
         "meta:Mexico_Pacific"{
-            ld{"墨西哥太平洋夏令时间"}
-            lg{"墨西哥太平洋时间"}
-            ls{"墨西哥太平洋标准时间"}
+            ld{"墨西哥太平洋夏令時間"}
+            lg{"墨西哥太平洋時間"}
+            ls{"墨西哥太平洋標準時間"}
         }
         "meta:Mongolia"{
-            ld{"乌兰巴托夏令时间"}
-            lg{"乌兰巴托时间"}
-            ls{"乌兰巴托标准时间"}
+            ld{"烏蘭巴托夏令時間"}
+            lg{"烏蘭巴托時間"}
+            ls{"烏蘭巴托標準時間"}
         }
         "meta:Moscow"{
-            ld{"莫斯科夏令时间"}
-            lg{"莫斯科时间"}
-            ls{"莫斯科标准时间"}
+            ld{"莫斯科夏令時間"}
+            lg{"莫斯科時間"}
+            ls{"莫斯科標準時間"}
         }
         "meta:Myanmar"{
-            ls{"缅甸时间"}
+            ls{"緬甸時間"}
         }
         "meta:Nauru"{
-            ls{"瑙鲁时间"}
+            ls{"諾魯時間"}
         }
         "meta:Nepal"{
-            ls{"尼泊尔时间"}
+            ls{"尼泊爾時間"}
         }
         "meta:New_Caledonia"{
-            ld{"新喀里多尼亚夏令时间"}
-            lg{"新喀里多尼亚时间"}
-            ls{"新喀里多尼亚标准时间"}
+            ld{"新喀里多尼亞群島夏令時間"}
+            lg{"新喀里多尼亞時間"}
+            ls{"新喀里多尼亞標準時間"}
         }
         "meta:New_Zealand"{
-            ld{"新西兰夏令时间"}
-            lg{"新西兰时间"}
-            ls{"新西兰标准时间"}
+            ld{"紐西蘭夏令時間"}
+            lg{"紐西蘭時間"}
+            ls{"紐西蘭標準時間"}
         }
         "meta:Newfoundland"{
-            ld{"纽芬兰夏令时间"}
-            lg{"纽芬兰时间"}
-            ls{"纽芬兰标准时间"}
+            ld{"紐芬蘭夏令時間"}
+            lg{"紐芬蘭時間"}
+            ls{"紐芬蘭標準時間"}
         }
         "meta:Niue"{
-            ls{"纽埃时间"}
+            ls{"紐埃島時間"}
         }
         "meta:Norfolk"{
-            ls{"诺福克岛时间"}
+            ls{"諾福克島時間"}
         }
         "meta:Noronha"{
-            ld{"费尔南多-迪诺罗尼亚岛夏令时间"}
-            lg{"费尔南多-迪诺罗尼亚岛时间"}
-            ls{"费尔南多-迪诺罗尼亚岛标准时间"}
+            ld{"費爾南多 - 迪諾羅尼亞夏令時間"}
+            lg{"費爾南多 - 迪諾羅尼亞時間"}
+            ls{"費爾南多 - 迪諾羅尼亞標準時間"}
         }
         "meta:North_Mariana"{
-            ls{"北马里亚纳群岛时间"}
+            ls{"北馬里亞納群島時間"}
         }
         "meta:Novosibirsk"{
-            ld{"新西伯利亚夏令时间"}
-            lg{"新西伯利亚时间"}
-            ls{"新西伯利亚标准时间"}
+            ld{"新西伯利亞夏令時間"}
+            lg{"新西伯利亞時間"}
+            ls{"新西伯利亞標準時間"}
         }
         "meta:Omsk"{
-            ld{"鄂木斯克夏令时间"}
-            lg{"鄂木斯克时间"}
-            ls{"鄂木斯克标准时间"}
+            ld{"鄂木斯克夏令時間"}
+            lg{"鄂木斯克時間"}
+            ls{"鄂木斯克標準時間"}
         }
         "meta:Pakistan"{
-            ld{"巴基斯坦夏令时间"}
-            lg{"巴基斯坦时间"}
-            ls{"巴基斯坦标准时间"}
+            ld{"巴基斯坦夏令時間"}
+            lg{"巴基斯坦時間"}
+            ls{"巴基斯坦標準時間"}
         }
         "meta:Palau"{
-            ls{"帕劳时间"}
+            ls{"帛琉時間"}
         }
         "meta:Papua_New_Guinea"{
-            ls{"巴布亚新几内亚时间"}
+            ls{"巴布亞紐幾內亞時間"}
         }
         "meta:Paraguay"{
-            ld{"巴拉圭夏令时间"}
-            lg{"巴拉圭时间"}
-            ls{"巴拉圭标准时间"}
+            ld{"巴拉圭夏令時間"}
+            lg{"巴拉圭時間"}
+            ls{"巴拉圭標準時間"}
         }
         "meta:Peru"{
-            ld{"秘鲁夏令时间"}
-            lg{"秘鲁时间"}
-            ls{"秘鲁标准时间"}
+            ld{"秘魯夏令時間"}
+            lg{"秘魯時間"}
+            ls{"秘魯標準時間"}
         }
         "meta:Philippines"{
-            ld{"菲律宾夏令时间"}
-            lg{"菲律宾时间"}
-            ls{"菲律宾标准时间"}
+            ld{"菲律賓夏令時間"}
+            lg{"菲律賓時間"}
+            ls{"菲律賓標準時間"}
         }
         "meta:Phoenix_Islands"{
-            ls{"菲尼克斯群岛时间"}
+            ls{"鳳凰群島時間"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"圣皮埃尔和密克隆群岛夏令时间"}
-            lg{"圣皮埃尔和密克隆群岛时间"}
-            ls{"圣皮埃尔和密克隆群岛标准时间"}
+            ld{"聖皮埃爾和密克隆群島夏令時間"}
+            lg{"聖皮埃爾和密克隆群島時間"}
+            ls{"聖皮埃爾和密克隆群島標準時間"}
         }
         "meta:Pitcairn"{
-            ls{"皮特凯恩时间"}
+            ls{"皮特肯時間"}
         }
         "meta:Ponape"{
-            ls{"波纳佩时间"}
+            ls{"波納佩時間"}
         }
         "meta:Qyzylorda"{
-            ld{"克孜洛尔达夏令时间"}
-            lg{"克孜洛尔达时间"}
-            ls{"克孜洛尔达标准时间"}
+            ld{"克孜勒奧爾達夏令時間"}
+            lg{"克孜勒奧爾達時間"}
+            ls{"克孜勒奧爾達標準時間"}
         }
         "meta:Reunion"{
-            ls{"留尼汪时间"}
+            ls{"留尼旺時間"}
         }
         "meta:Rothera"{
-            ls{"罗瑟拉时间"}
+            ls{"羅瑟拉時間"}
         }
         "meta:Sakhalin"{
-            ld{"库页岛夏令时间"}
-            lg{"库页岛时间"}
-            ls{"库页岛标准时间"}
+            ld{"庫頁島夏令時間"}
+            lg{"庫頁島時間"}
+            ls{"庫頁島標準時間"}
         }
         "meta:Samara"{
-            ld{"萨马拉夏令时间"}
-            lg{"萨马拉时间"}
-            ls{"萨马拉标准时间"}
+            ld{"薩馬拉夏令時間"}
+            lg{"薩馬拉時間"}
+            ls{"薩馬拉標準時間"}
         }
         "meta:Samoa"{
-            ld{"萨摩亚夏令时间"}
-            lg{"萨摩亚时间"}
-            ls{"萨摩亚标准时间"}
+            ld{"薩摩亞夏令時間"}
+            lg{"薩摩亞時間"}
+            ls{"薩摩亞標準時間"}
         }
         "meta:Seychelles"{
-            ls{"塞舌尔时间"}
+            ls{"塞席爾時間"}
         }
         "meta:Singapore"{
-            ls{"新加坡标准时间"}
+            ls{"新加坡標準時間"}
         }
         "meta:Solomon"{
-            ls{"所罗门群岛时间"}
+            ls{"索羅門群島時間"}
         }
         "meta:South_Georgia"{
-            ls{"南乔治亚岛时间"}
+            ls{"南喬治亞時間"}
         }
         "meta:Suriname"{
-            ls{"苏里南时间"}
+            ls{"蘇利南時間"}
         }
         "meta:Syowa"{
-            ls{"昭和时间"}
+            ls{"昭和基地時間"}
         }
         "meta:Tahiti"{
-            ls{"塔希提岛时间"}
+            ls{"大溪地時間"}
         }
         "meta:Taipei"{
-            ld{"台北夏令时间"}
-            lg{"台北时间"}
-            ls{"台北标准时间"}
+            ld{"台北夏令時間"}
+            lg{"台北時間"}
+            ls{"台北標準時間"}
         }
         "meta:Tajikistan"{
-            ls{"塔吉克斯坦时间"}
+            ls{"塔吉克時間"}
         }
         "meta:Tokelau"{
-            ls{"托克劳时间"}
+            ls{"托克勞群島時間"}
         }
         "meta:Tonga"{
-            ld{"汤加夏令时间"}
-            lg{"汤加时间"}
-            ls{"汤加标准时间"}
+            ld{"東加夏令時間"}
+            lg{"東加時間"}
+            ls{"東加標準時間"}
         }
         "meta:Truk"{
-            ls{"楚克时间"}
+            ls{"楚克島時間"}
         }
         "meta:Turkmenistan"{
-            ld{"土库曼斯坦夏令时间"}
-            lg{"土库曼斯坦时间"}
-            ls{"土库曼斯坦标准时间"}
+            ld{"土庫曼夏令時間"}
+            lg{"土庫曼時間"}
+            ls{"土庫曼標準時間"}
         }
         "meta:Tuvalu"{
-            ls{"图瓦卢时间"}
+            ls{"吐瓦魯時間"}
         }
         "meta:Uruguay"{
-            ld{"乌拉圭夏令时间"}
-            lg{"乌拉圭时间"}
-            ls{"乌拉圭标准时间"}
+            ld{"烏拉圭夏令時間"}
+            lg{"烏拉圭時間"}
+            ls{"烏拉圭標準時間"}
         }
         "meta:Uzbekistan"{
-            ld{"乌兹别克斯坦夏令时间"}
-            lg{"乌兹别克斯坦时间"}
-            ls{"乌兹别克斯坦标准时间"}
+            ld{"烏茲別克夏令時間"}
+            lg{"烏茲別克時間"}
+            ls{"烏茲別克標準時間"}
         }
         "meta:Vanuatu"{
-            ld{"瓦努阿图夏令时间"}
-            lg{"瓦努阿图时间"}
-            ls{"瓦努阿图标准时间"}
+            ld{"萬那杜夏令時間"}
+            lg{"萬那杜時間"}
+            ls{"萬那杜標準時間"}
         }
         "meta:Venezuela"{
-            ls{"委内瑞拉时间"}
+            ls{"委內瑞拉時間"}
         }
         "meta:Vladivostok"{
-            ld{"海参崴夏令时间"}
-            lg{"海参崴时间"}
-            ls{"海参崴标准时间"}
+            ld{"海參崴夏令時間"}
+            lg{"海參崴時間"}
+            ls{"海參崴標準時間"}
         }
         "meta:Volgograd"{
-            ld{"伏尔加格勒夏令时间"}
-            lg{"伏尔加格勒时间"}
-            ls{"伏尔加格勒标准时间"}
+            ld{"伏爾加格勒夏令時間"}
+            lg{"伏爾加格勒時間"}
+            ls{"伏爾加格勒標準時間"}
         }
         "meta:Vostok"{
-            ls{"沃斯托克时间"}
+            ls{"沃斯托克時間"}
         }
         "meta:Wake"{
-            ls{"威克岛时间"}
+            ls{"威克島時間"}
         }
         "meta:Wallis"{
-            ls{"瓦利斯和富图纳时间"}
+            ls{"瓦利斯和富圖納群島時間"}
         }
         "meta:Yakutsk"{
-            ld{"雅库茨克夏令时间"}
-            lg{"雅库茨克时间"}
-            ls{"雅库茨克标准时间"}
+            ld{"雅庫次克夏令時間"}
+            lg{"雅庫次克時間"}
+            ls{"雅庫次克標準時間"}
         }
         "meta:Yekaterinburg"{
-            ld{"叶卡捷琳堡夏令时间"}
-            lg{"叶卡捷琳堡时间"}
-            ls{"叶卡捷琳堡标准时间"}
+            ld{"葉卡捷琳堡夏令時間"}
+            lg{"葉卡捷琳堡時間"}
+            ls{"葉卡捷琳堡標準時間"}
         }
-        fallbackFormat{"{1}（{0}）"}
+        fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}时间"}
-        regionFormatDaylight{"{0}夏令时间"}
-        regionFormatStandard{"{0}标准时间"}
+        regionFormat{"{0}時間"}
+        regionFormatDaylight{"{0} (+1)"}
+        regionFormatStandard{"{0} (+0)"}
     }
 }
