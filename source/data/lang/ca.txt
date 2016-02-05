@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ca.xml
@@ -505,8 +505,8 @@ ca{
         sux{"sumeri"}
         sv{"suec"}
         sw{"suahili"}
+        sw_CD{"suahili del Congo"}
         swb{"comorià"}
-        swc{"suahili del Congo"}
         syc{"siríac clàssic"}
         syr{"siríac"}
         szl{"silesià"}
@@ -974,7 +974,7 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ne.xml
@@ -484,8 +484,8 @@ ne{
         sux{"सुमेरियाली"}
         sv{"स्विडिस"}
         sw{"स्वाहिली"}
+        sw_CD{"कङ्गो स्वाहिली"}
         swb{"कोमोरी"}
-        swc{"कङ्गो स्वाहिली"}
         syc{"परम्परागत सिरियाक"}
         syr{"सिरियाक"}
         ta{"तामिल"}
@@ -750,7 +750,7 @@ ne{
         AREVELA{"पूर्वी आर्मेनियाली"}
         POSIX{"कम्प्युटर"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.23.7"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपि: {0}"}

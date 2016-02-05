@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sl.xml
@@ -437,8 +437,8 @@ sl{
         sux{"sumerščina"}
         sv{"švedščina"}
         sw{"svahili"}
+        sw_CD{"svahili (Kongo)"}
         swb{"šikomor"}
-        swc{"svahili (Kongo)"}
         syc{"klasična sirščina"}
         syr{"sirščina"}
         ta{"tamilščina"}
@@ -805,7 +805,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"{0}"}

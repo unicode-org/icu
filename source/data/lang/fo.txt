@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fo.xml
@@ -221,8 +221,8 @@ fo{
         su{"sundanesiskt"}
         sv{"svenskt"}
         sw{"swahili"}
+        sw_CD{"kongo svahili"}
         swb{"shimaoré"}
-        swc{"kongo svahili"}
         ta{"tamilskt"}
         te{"telugu"}
         teo{"teso"}
@@ -396,7 +396,7 @@ fo{
         POLYTON{"polytonísk"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Mál: {0}"}
         script{"Skrift: {0}"}

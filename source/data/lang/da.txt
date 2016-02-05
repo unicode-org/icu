@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/da.xml
@@ -339,7 +339,7 @@ da{
         moh{"mohawk"}
         mos{"mossi"}
         mr{"marathisk"}
-        ms{"malay"}
+        ms{"malajisk"}
         mt{"maltesisk"}
         mua{"mundang"}
         mul{"flere sprog"}
@@ -470,8 +470,8 @@ da{
         sux{"sumerisk"}
         sv{"svensk"}
         sw{"swahili"}
+        sw_CD{"congolesisk swahili"}
         swb{"shimaore"}
-        swc{"congolesisk swahili"}
         syc{"klassisk syrisk"}
         syr{"syrisk"}
         ta{"tamilsk"}
@@ -941,7 +941,7 @@ da{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.19.44"}
+    Version{"2.1.23.87"}
     codePatterns{
         language{"Sprog: {0}"}
         script{"Skrift: {0}"}

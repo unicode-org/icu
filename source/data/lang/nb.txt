@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nb.xml
@@ -545,8 +545,8 @@ nb{
         sux{"sumerisk"}
         sv{"svensk"}
         sw{"swahili"}
+        sw_CD{"kongolesisk swahili"}
         swb{"komorisk"}
-        swc{"kongolesisk swahili"}
         syc{"klassisk syrisk"}
         syr{"syrisk"}
         szl{"schlesisk"}
@@ -777,7 +777,6 @@ nb{
         Qaaf{"qaaf"}
         Qaag{"qaag"}
         Qaah{"qaah"}
-        Qaaj{"qaaj"}
         Qaak{"qaak"}
         Qaal{"qaal"}
         Qaam{"qaam"}
@@ -1104,7 +1103,7 @@ nb{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.19.96"}
+    Version{"2.1.23.79"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/km.xml
@@ -212,7 +212,7 @@ km{
         su{"ស៊ូដង់"}
         sv{"ស៊ុយអែដ"}
         sw{"ស្វាហ៊ីលី"}
-        swc{"កុងហ្គោស្វាហ៊ីលី"}
+        sw_CD{"កុងហ្គោស្វាហ៊ីលី"}
         ta{"តាមីល"}
         te{"តេលុគុ"}
         teo{"តេសូ"}
@@ -370,7 +370,7 @@ km{
             tibt{"លេខទីបេ"}
         }
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"ភាសា៖ {0}"}
         script{"អក្សរ៖ {0}"}

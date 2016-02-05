@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lo.xml
@@ -455,8 +455,8 @@ lo{
         sux{"ຊູເມີເລຍ"}
         sv{"ສະວີດິຊ"}
         sw{"ຊວາຮີລິ"}
+        sw_CD{"ຄອງໂກ ຊວາຮີລິ"}
         swb{"ໂຄໂນຣຽນ"}
-        swc{"ຄອງໂກ ຊວາຮີລິ"}
         syc{"ຊີເລຍແບບດັ້ງເດີມ"}
         syr{"ຊີເລຍ"}
         ta{"ທາມິລ"}
@@ -869,7 +869,7 @@ lo{
         VALLADER{"ວັລລາເດີ"}
         WADEGILE{"ການຖອດອັກສອນແບບເວດ-ໄຈລ໌"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

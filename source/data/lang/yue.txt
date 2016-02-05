@@ -3,11 +3,10 @@
 // * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zh_Hant.xml
+// * Source File: <path>/common/main/yue.xml
 // *
 // ***************************************************************************
-zh_Hant{
-    %%Parent{"root"}
+yue{
     Keys{
         calendar{"曆法"}
         colAlternate{"略過符號排序"}
@@ -27,7 +26,7 @@ zh_Hant{
         timezone{"時區"}
         va{"區域變異"}
         variableTop{"以符號排序"}
-        x{"私人使用"}
+        x{"專用區"}
     }
     Languages{
         aa{"阿法文"}
@@ -379,7 +378,7 @@ zh_Hant{
         moh{"莫霍克文"}
         mos{"莫西文"}
         mr{"馬拉地文"}
-        mrj{"馬里"}
+        mrj{"西馬裏文"}
         ms{"馬來文"}
         mt{"馬爾他文"}
         mua{"蒙當文"}
@@ -516,7 +515,7 @@ zh_Hant{
         smj{"魯勒薩米文"}
         smn{"伊納裡薩米文"}
         sms{"斯科特薩米文"}
-        sn{"紹納文"}
+        sn{"塞內加爾文"}
         snk{"索尼基文"}
         so{"索馬利文"}
         sog{"索格底亞納文"}
@@ -559,7 +558,7 @@ zh_Hant{
         tli{"特林基特文"}
         tly{"塔里什文"}
         tmh{"塔馬奇克文"}
-        tn{"札那文"}
+        tn{"突尼西亞文"}
         to{"東加文"}
         tog{"東加文（尼亞薩）"}
         tpi{"托比辛文"}
@@ -973,7 +972,7 @@ zh_Hant{
         BAKU1926{"統一土耳其拉丁字母"}
         BAUDDHA{"佛教混合梵文"}
         BISCAYAN{"比斯開方言"}
-        BISKE{"聖喬治/比拉方言"}
+        BISKE{"San Giorgio/Bila 方言"}
         BOONT{"布恩特林方言"}
         EMODENG{"早期現代英語"}
         FONIPA{"IPA 拼音"}
@@ -1003,7 +1002,7 @@ zh_Hant{
         ROZAJ{"雷西亞方言"}
         RUMGR{"羅曼什文"}
         SAAHO{"薩霍文"}
-        SCOTLAND{"英文（蘇格蘭）"}
+        SCOTLAND{"蘇格蘭標準英語"}
         SCOUSE{"利物浦方言"}
         SOLBA{"雷西亞史托維薩方言"}
         SURMIRAN{"瑞士蘇邁拉方言"}
@@ -1018,7 +1017,7 @@ zh_Hant{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.1.23.90"}
+    Version{"2.1.23.47"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}
@@ -1026,7 +1025,7 @@ zh_Hant{
     }
     localeDisplayPattern{
         keyTypePattern{"{0}：{1}"}
-        pattern{"{0}（{1}）"}
+        pattern{"{0} ({1})"}
         separator{"{0}，{1}"}
     }
 }

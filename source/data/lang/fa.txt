@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fa.xml
@@ -463,8 +463,8 @@ fa{
         sux{"سومری"}
         sv{"سوئدی"}
         sw{"سواحلی"}
+        sw_CD{"سواحلی کنگویی"}
         swb{"کوموری"}
-        swc{"سواحلی کنگویی"}
         syc{"سریانی کلاسیک"}
         syr{"سریانی"}
         szl{"سیلزیایی"}
@@ -828,7 +828,7 @@ fa{
         SAAHO{"ساهویی"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"زبان: {0}"}
         script{"خط: {0}"}

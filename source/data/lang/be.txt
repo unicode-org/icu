@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/be.xml
@@ -236,7 +236,7 @@ be{
         su{"сундская"}
         sv{"шведская"}
         sw{"суахілі"}
-        swc{"суахілі Конга"}
+        sw_CD{"суахілі Конга"}
         ta{"тамільская"}
         te{"тэлугу"}
         teo{"тэсо"}
@@ -395,7 +395,7 @@ be{
             tibt{"тыбецкія лічбы"}
         }
     }
-    Version{"2.1.20.4"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Мова: {0}"}
         script{"Пісьмо: {0}"}

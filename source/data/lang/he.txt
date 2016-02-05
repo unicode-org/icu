@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/he.xml
@@ -468,7 +468,7 @@ he{
         sux{"שומרית"}
         sv{"שוודית"}
         sw{"סווהילית"}
-        swc{"סווהילי קונגולטזית"}
+        sw_CD{"סווהילי קונגולטזית"}
         syc{"סירית קלאסית"}
         syr{"סורית"}
         ta{"טמילית"}
@@ -762,7 +762,7 @@ he{
         POSIX{"מחשב"}
         SCOTLAND{"אנגלית סקוטית סטנדרטית"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.23.7"}
     codePatterns{
         language{"שפה:‏ {0}"}
         script{"כתב: {0}"}

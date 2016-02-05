@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bn.xml
@@ -446,7 +446,7 @@ bn{
         sux{"সুমেরীয়"}
         sv{"সুইডিশ"}
         sw{"সোয়াহিলি"}
-        swc{"কঙ্গো সোয়াহিলি"}
+        sw_CD{"কঙ্গো সোয়াহিলি"}
         syc{"প্রাচীন সিরিও"}
         syr{"সিরিয়াক"}
         ta{"তামিল"}
@@ -781,7 +781,7 @@ bn{
             vaii{"ভাই সংখ্যা"}
         }
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.23.6"}
     codePatterns{
         language{"ভাষা: {0}"}
         script{"লিপি: {0}"}

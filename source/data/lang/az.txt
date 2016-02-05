@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/az.xml
@@ -435,7 +435,7 @@ az{
         sux{"sumeryan"}
         sv{"isveç"}
         sw{"suahili"}
-        swc{"Konqo suahilicəsi"}
+        sw_CD{"Konqo suahilicəsi"}
         syr{"siryak"}
         ta{"tamil"}
         te{"teluqu"}
@@ -721,7 +721,7 @@ az{
             tibt{"Tibet Rəqəmləri"}
         }
     }
-    Version{"2.1.19.83"}
+    Version{"2.1.23.7"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Skript: {0}"}
