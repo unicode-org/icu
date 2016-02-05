@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sw.xml
@@ -46,7 +46,6 @@ sw{
         AI{"Anguilla"}
         AL{"Albania"}
         AM{"Armenia"}
-        AN{"Antili za Uholanzi"}
         AO{"Angola"}
         AQ{"Antaktika"}
         AR{"Ajentina"}
@@ -314,5 +313,5 @@ sw{
         MK{"Masedonia (FYROM)"}
         TL{"Timor ya Mashariki"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.22.93"}
 }

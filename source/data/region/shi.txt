@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/shi.xml
@@ -15,7 +15,6 @@ shi{
         AI{"ⴰⵏⴳⵉⵍⴰ"}
         AL{"ⴰⵍⴱⴰⵏⵢⴰ"}
         AM{"ⴰⵔⵎⵉⵏⵢⴰ"}
-        AN{"ⴰⵏⵜⵉⵢ ⵏ ⵀⵓⵍⴰⵏⴷⴰ"}
         AO{"ⴰⵏⴳⵓⵍⴰ"}
         AR{"ⴰⵔⵊⴰⵏⵜⵉⵏ"}
         AS{"ⵙⴰⵎⵡⴰ ⵜⴰⵎⵉⵔⵉⴽⴰⵏⵉⵜ"}
@@ -234,5 +233,5 @@ shi{
         ZM{"ⵣⴰⵎⴱⵢⴰ"}
         ZW{"ⵣⵉⵎⴱⴰⴱⵡⵉ"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.23.7"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/he.xml
@@ -46,7 +46,6 @@ he{
         AI{"אנגילה"}
         AL{"אלבניה"}
         AM{"ארמניה"}
-        AN{"אנטילים הולנדיים"}
         AO{"אנגולה"}
         AQ{"אנטארקטיקה"}
         AR{"ארגנטינה"}
@@ -313,5 +312,5 @@ he{
         MK{"מקדוניה (הרפובליקה היוגוסלבית לשעבר מקדוניה)"}
         TL{"מזרח טימור"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.23.7"}
 }

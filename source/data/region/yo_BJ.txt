@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/yo_BJ.xml
@@ -15,7 +15,6 @@ yo_BJ{
         AI{"Orílɛ́ède Ààngúlílà"}
         AL{"Orílɛ́ède Àlùbàníánì"}
         AM{"Orílɛ́ède Améníà"}
-        AN{"Orílɛ́ède Nedalandi ti Antelisi"}
         AO{"Orílɛ́ède Ààngólà"}
         AR{"Orílɛ́ède Agentínà"}
         AS{"Sámóánì ti Orílɛ́ède Àméríkà"}
@@ -234,5 +233,5 @@ yo_BJ{
         ZM{"Orílɛ́ède shamibia"}
         ZW{"Orílɛ́ède shimibabe"}
     }
-    Version{"2.1.19.80"}
+    Version{"2.1.21.28"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bs_Cyrl.xml
@@ -47,7 +47,6 @@ bs_Cyrl{
         AI{"Ангвила"}
         AL{"Албанија"}
         AM{"Арменија"}
-        AN{"Холандски Антили"}
         AO{"Ангола"}
         AQ{"Антарктик"}
         AR{"Аргентина"}
@@ -304,5 +303,5 @@ bs_Cyrl{
         CG{"Конго (Република)"}
         FK{"Фокландска (Малвинска) острва"}
     }
-    Version{"2.1.19.90"}
+    Version{"2.1.23.7"}
 }

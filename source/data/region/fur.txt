@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fur.xml
@@ -45,7 +45,6 @@ fur{
         AI{"Anguilla"}
         AL{"Albanie"}
         AM{"Armenie"}
-        AN{"Antilis olandesis"}
         AO{"Angola"}
         AQ{"Antartic"}
         AR{"Argjentine"}
@@ -303,5 +302,5 @@ fur{
         FK{"Isulis Falkland (Isulis Malvinas)"}
         MK{"Macedonie (FYROM)"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.23.7"}
 }

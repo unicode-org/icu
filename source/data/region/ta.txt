@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ta.xml
@@ -46,7 +46,6 @@ ta{
         AI{"அங்குய்லா"}
         AL{"அல்பேனியா"}
         AM{"அர்மேனியா"}
-        AN{"நெதர்லாந்து ஆண்டில்லெஸ்"}
         AO{"அங்கோலா"}
         AQ{"அண்டார்டிகா"}
         AR{"அர்ஜென்டினா"}
@@ -145,7 +144,7 @@ ta{
         HT{"ஹைட்டி"}
         HU{"ஹங்கேரி"}
         IC{"கேனரி தீவுகள்"}
-        ID{"இந்தோனேஷியா"}
+        ID{"இந்தோனேசியா"}
         IE{"அயர்லாந்து"}
         IL{"இஸ்ரேல்"}
         IM{"ஐல் ஆஃப் மேன்"}
@@ -314,5 +313,5 @@ ta{
         MK{"மாசிடோனியா (ஃபைரோம்)"}
         TL{"கிழக்கு தைமூர்"}
     }
-    Version{"2.1.19.55"}
+    Version{"2.1.23.16"}
 }

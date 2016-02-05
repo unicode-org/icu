@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/rn.xml
@@ -15,7 +15,6 @@ rn{
         AI{"Angwila"}
         AL{"Alubaniya"}
         AM{"Arumeniya"}
-        AN{"Antiye y’Abaholandi"}
         AO{"Angola"}
         AR{"Arijantine"}
         AS{"Samowa nyamerika"}
@@ -234,5 +233,5 @@ rn{
         ZM{"Zambiya"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.23.7"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/te.xml
@@ -46,7 +46,6 @@ te{
         AI{"ఆంగవిల్లా"}
         AL{"అల్బేనియా"}
         AM{"ఆర్మేనియా"}
-        AN{"నేదేర్లేండ్స్ అంటిల్లిస్"}
         AO{"అంగోలా"}
         AQ{"అంటార్కటికా"}
         AR{"అర్జెంటీనా"}
@@ -313,5 +312,5 @@ te{
         MK{"మేసిడోనియా (FYROM)"}
         TL{"తూర్పు తైమూర్"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
 }
