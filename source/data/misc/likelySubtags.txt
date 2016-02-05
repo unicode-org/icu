@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/likelySubtags.xml
@@ -1155,6 +1155,9 @@ likelySubtags:table(nofallback){
     yo{"yo_Latn_NG"}
     yrl{"yrl_Latn_BR"}
     yua{"yua_Latn_MX"}
+    yue{"yue_Hant_HK"}
+    yue_CN{"yue_Hans_CN"}
+    yue_Hans{"yue_Hans_CN"}
     za{"za_Latn_CN"}
     zag{"zag_Latn_SD"}
     zdj{"zdj_Arab_KM"}

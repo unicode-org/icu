@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2015, International Business Machines
+ * Copyright (c) 1997-2016, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -4059,7 +4059,7 @@ void DateFormatTest::TestMonthPatterns()
         { "root@calendar=chinese",    -3,                 { UnicodeString("ren-chen-4-2"),  UnicodeString("ren-chen-4bis-2"),       UnicodeString("ren-chen-5-2") } },
         { "root@calendar=chinese",    -4,                 { UnicodeString("ren-chen M04 2"),  UnicodeString("ren-chen M04bis 2"),   UnicodeString("ren-chen M05 2") } },
         { "en@calendar=gregorian",    -3,                 { UnicodeString("2012-4-22"),     UnicodeString("2012-5-22"),             UnicodeString("2012-6-20") } },
-        { "en@calendar=chinese",      DateFormat::kLong,  { UnicodeString("Month4 2, 2012(ren-chen)"), UnicodeString("Month4bis 2, 2012(ren-chen)"), UnicodeString("Month5 2, 2012(ren-chen)") } },
+        { "en@calendar=chinese",      DateFormat::kLong,  { UnicodeString("Fourth Month 2, 2012(ren-chen)"), UnicodeString("Fourth Monthbis 2, 2012(ren-chen)"), UnicodeString("Fifth Month 2, 2012(ren-chen)") } },
         { "en@calendar=chinese",      DateFormat::kShort, { UnicodeString("4/2/2012"),      UnicodeString("4bis/2/2012"),           UnicodeString("5/2/2012") } },
         { "zh@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("2012\\u58EC\\u8FB0\\u5E74\\u56DB\\u6708\\u521D\\u4E8C"),
                                                             CharsToUnicodeString("2012\\u58EC\\u8FB0\\u5E74\\u95F0\\u56DB\\u6708\\u521D\\u4E8C"),
@@ -4083,7 +4083,7 @@ void DateFormatTest::TestMonthPatterns()
                                                             CharsToUnicodeString("2 s\\u00ECyu\\u00E8bis ren-chen"),
                                                             CharsToUnicodeString("2 w\\u01D4yu\\u00E8 ren-chen") } },
         { "fr@calendar=chinese",      DateFormat::kShort, { UnicodeString("2/4/29"),        UnicodeString("2/4bis/29"),             UnicodeString("2/5/29") } },
-        { "en@calendar=dangi",        DateFormat::kLong,  { UnicodeString("Month3bis 2, 2012(29)"),  UnicodeString("Month4 2, 2012(29)"),       UnicodeString("Month5 1, 2012(29)") } },
+        { "en@calendar=dangi",        DateFormat::kLong,  { UnicodeString("Third Monthbis 2, 2012(29)"),  UnicodeString("Fourth Month 2, 2012(29)"),       UnicodeString("Fifth Month 1, 2012(29)") } },
         { "en@calendar=dangi",        DateFormat::kShort, { UnicodeString("3bis/2/2012"),   UnicodeString("4/2/2012"),              UnicodeString("5/1/2012") } },
         { "en@calendar=dangi",        -2,                 { UnicodeString("78x29-3bis-2"),  UnicodeString("78x29-4-2"),             UnicodeString("78x29-5-1") } },
         { "ko@calendar=dangi",        DateFormat::kLong,  { CharsToUnicodeString("\\uC784\\uC9C4\\uB144 \\uC7243\\uC6D4 2\\uC77C"),
