@@ -1,15 +1,19 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: es_FONIPA_zh.txt
 # Generated from CLDR 
 #
+
+# Tranforms Spanish to Mandarin Chinese. The input Spanish string must be in
+# phonemic IPA transcription (es_FONIPA); the output is in Simplified Chinese.
 $word_boundary = [-\ $];
 $vowel = [aeijouw];       # Vowels and glides
 $not_vowel = [^$vowel];
+# First pass: Collapse phonetic distinctions not preserved in Mandarin.
 ð → | d;
 ɣ → | g;
 ŋ → | n;
@@ -35,13 +39,20 @@ s[θs] → s;               # GB/T 17693.5-2009, 5.3.4
 [^ʧ] { jo → io;          # GB/T 17693.5-2009 表 1, 注 7
 ::Null;
 j } an $not_vowel → i ;  # GB/T 17693.5-2009 表 1, 注 8
+# GB/T 17693.5-2009 表 1, 注 8 also says that <uai> should be treated as if
+# it was <u> plus <ai>.  This is not borne out by the observed data, which
+# suggests that <ua> plus <i> is the more appropriate choice in some
+# situations.
 [g.$] { wai\u032F → wai ;
 wai\u032F → uai\u032F ;
 [g.$] { wau\u032F → wau ;
 wau\u032F → uau\u032F ;
 jau\u032F → iau\u032F ;
+# Even though "ao" is not a diphthong in Spanish, Mandarin treats it as one.
 [^jw] { ao } [^n]     → au\u032F ;
 [^jw] { ao } n $vowel → au\u032F ;
+# Main pass: Phoneme to Hanzi conversion.
+# This generally follows GB/T 17693.5-2009 表 1, unless otherwise noted.
 ::Null;
 '.' → ;
 ai\u032F → 艾 ;
@@ -145,6 +156,11 @@ fwen } $not_vowel → 丰 ;
 fwe → 富埃 ;
 fwi → 富伊 ;
 fwo → 福 ;
+# The choice of 弗 vs. 夫 sounds simple according to the GB/T standard, but the
+# data suggest otherwise.  Ideally, 弗 should occur at the beginning of a
+# morpheme (e.g. in "villafranca" 比利亚弗兰卡) and 夫 everywhere else.  Since
+# we don't have morpheme boundaries, we'll fudge it by writing 夫 at the end of
+# a word and 弗 everywhere else.
 f } $word_boundary → 夫 ;
 f → 弗 ;
 gai\u032F → 盖 ;
@@ -410,6 +426,9 @@ tje → 铁 ;
 tju → 蒂乌 ;
 ton } $not_vowel → 通 ;
 to → 托 ;
+# The rules for /ts/ (tz in the orthography) are nonstandard and derived
+# entirely from the observed data.  They apply mostly to native toponyms
+# in Mexico.
 tsa → 察 ;
 tsen } $not_vowel → 岑 ;
 tse → 采 ;
@@ -487,12 +506,26 @@ xwe → 胡埃 ;
 xwi → 惠 ;
 xwo → 霍 ;
 x → 赫 ;
+# 尔 simplification pass.  The idea is to drop most occurences of 尔
+# corresponding to <r> (not to <l> or <ll>) from a word if there is another /l/
+# sound nearby.  There is a vague pattern like this in the data, but the details
+# remain to be determined.  At the moment, this does nothing, it just puts 尔 in
+# for every <r> in a syllable coda.
 ::Null;
 $r = [R利拉];
+#
+#
+# R } . $r → ;
+# R } .. $r → ;
+# R } ... $r → ;
+# R } .... $r → ;
 R → 尔 ;
+# Dong-nan-xi-hai pass.  Per GB/T 17693.5-2009 表 1, 注 4, replace confusing
+# characters at the beginning and end of a word.
 ::Null;
 $word_boundary { 东 → 栋 ;
 $word_boundary { 南 → 楠 ;
 $word_boundary { 西 → 锡 ;
 海 } $word_boundary → 亥 ;
 ::NFC;
+

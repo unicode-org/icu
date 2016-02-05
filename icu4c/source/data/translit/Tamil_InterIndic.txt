@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Tamil_InterIndic.txt
 # Generated from CLDR 
 #
+
+# Tamil-InterIndic
+#:: NFD (NFC) ;
 ொ→\uE04A;# VOWEL SIGN O
 ோ→\uE04B;# VOWEL SIGN OO
 ௌ→\uE04C;# VOWEL SIGN AU
@@ -71,3 +74,6 @@
 ௱→\uE067\uE066\uE066;     # UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
 ௲→\uE067\uE066\uE066\uE066;# UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
 \u0BE6→\uE066;
+#    :: NFC (NFD) ;
+# eof
+

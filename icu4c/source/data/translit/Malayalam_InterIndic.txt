@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Malayalam_InterIndic.txt
 # Generated from CLDR 
 #
+
+# Malayalam-InterIndic
+#:: NFD (NFC) ;
 ം→\uE002;      # SIGN ANUSVARA
 ഃ→\uE003;      # SIGN VISARGA
 അ→\uE005;      # LETTER A
@@ -82,3 +85,6 @@
 ൭→\uE06D;      # DIGIT SEVEN
 ൮→\uE06E;      # DIGIT EIGHT
 ൯→\uE06F;      # DIGIT NINE
+#    :: NFC (NFD) ;
+# eof
+

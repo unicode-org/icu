@@ -1,19 +1,39 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: ja_Latn_ko.txt
 # Generated from CLDR 
 #
+
+# Japanese (Rōmaji) to Korean (Hangul) transliteration table for ICU.
+# Can be run in sequence after e.g. Katakana-Latin.
+#
+# Based on 문교부 고시 제85-11호 (1986. 1. 7.) 외래어 표기법
+# For background info, see http://ko.wikisource.org/wiki/문교부_고시_제85-11호
+# and http://ko.wikipedia.org/wiki/외래어_표기법 (外來語表記法)
 ::NFD(NFC);
 ::[:Latin:] Lower();
 $consonant = [ᄀᄁᄂᄃᄄᄅᄆᄇᄈᄉᄊᄋᄌᄍᄎᄏᄐᄑᄒ];
 $lengthMarker = [\u0302\u0304];
+#
+#
+# Drop hyphens and apostrophes.
 [\-\'] → ;
+#
+#
+# Turn long /e:/ into diphthong /ei/.
 e $lengthMarker → | e i ;
+#
+#
+# Ignore vowel length everywhere else.
 $lengthMarker → ;
+#
+#
+# Vowels.
+#
 [^$consonant] { ( [aiueoyw] ) → ᄋ | $1 ;  # Supply a required null initial.
 a → ᅡ ;
 i\~e → | ie ;  # イェ
@@ -25,6 +45,10 @@ u\~o → ᅯ ;     # ウォ
 u → ᅮ ;
 e → ᅦ ;
 o → ᅩ ;
+#
+#
+# Geminates.
+#
 kk → ᆺ | k ;
 ss → ᆺ | s ;
 tt → ᆺ | t ;
@@ -40,12 +64,20 @@ dd → ᆺ | d ;
 bb → ᆺ | b ;
 vv → ᆺ | v ;
 pp → ᆺ | p ;
+#
+#
+# Consonants.
+#
 ' ' { k → | g ;   # Beginning of a word (after space).
 ^k      → | g ;   # Beginning of the string.
 k → ᄏ ;
+#
+#
 sh → | sy ;
 su → 스 ;
 s → ᄉ ;
+#
+#
 te\~     → | t ;   # テュ
 to\~     → | t ;   # トゥ
 tsu\~    → | ch ;  # ツァ, ツィ, etc.
@@ -57,27 +89,45 @@ t → ᄐ ;
 ' ' { ch → | j ;
 ^ch      → | j ;
 ch → ᄎ ;
+#
+#
 n } [\ \'bcdfghjkmnprstwz] → ᆫ ;
 n$ → ᆫ ;
 n → ᄂ ;
+#
+#
 h → ᄒ ;
 fu\~ → | p ;   # フュ
 fu   → | hu ;
 f    → | p ;
+#
+#
 m } [bmp] → ᆫ ;
 m → ᄆ ;
+#
+#
 ya → ᅣ ;
 yi → ᅵ ;  # Added for convenience, after shi.
 yu → ᅲ ;
 ye → ᅨ ;
 yo → ᅭ ;
+#
+#
 r → ᄅ ;
+#
+#
 wa → ᅪ ;
 w → ;
+#
+#
 g → ᄀ ;
+#
+#
 zu → 즈 ;
 z → | j ;
 j → ᄌ ;
+#
+#
 de\~  → | d ;   # デュ
 dji\~ → | j ;   # ヂァ, ヂゥ, etc.
 dji   → | ji ;  # ヂ
@@ -86,8 +136,15 @@ dzu\~ → | j ;   # ヅァ, ヅィ, etc.
 dzu   → | zu ;  # ヅ
 dz    → | j ;
 d → ᄃ ;
+#
+#
 b → ᄇ ;
 vu\~ → | b ;  # ヴァ, etc.
 v    → | b ;
+#
+#
 p → ᄑ ;
+#
+#
 ::NFC(NFD);
+

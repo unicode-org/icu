@@ -1,0 +1,13 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2016, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: am_fa.txt
+# Generated from CLDR 
+#
+
+::am-am_FONIPA;
+::und_FONIPA-fa;
+

@@ -1,15 +1,22 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Latin_InterIndic.txt
 # Generated from CLDR 
 #
+
+# Latin-InterIndic
+#:: NFD;
+#\u0E00 reserved
+#consonants
 $chandrabindu=\uE001;
 $anusvara=\uE002;
 $visarga=\uE003;
+#\u0E004 reserved
+# w←vowel→ represents the stand-alone form
 $wa=\uE005;
 $waa=\uE006;
 $wi=\uE007;
@@ -64,8 +71,11 @@ $sha=\uE036;
 $ssa=\uE037;
 $sa=\uE038;
 $ha=\uE039;
+#\u093A Reserved
+#\u093B Reserved
 $nukta=\uE03C;
 $avagraha=\uE03D; # SIGN AVAGRAHA
+# ←vowel→ represents the dependent form
 $aa=\uE03E;
 $i=\uE03F;
 $ii=\uE040;
@@ -82,10 +92,17 @@ $so=\uE04A; # VOWEL SIGN SHORT O
 $o=\uE04B;  # ो
 $au=\uE04C;
 $virama=\uE04D;
+# \u094E Reserved
+# \u094F Reserved
 $om = \uE050; # OM
+# \u0951→;        # UNMAPPED STRESS SIGN UDATTA
+# \u0952→;        # UNMAPPED STRESS SIGN ANUDATTA
+# \u0953→;        # UNMAPPED GRAVE ACCENT
+# \u0954→;        # UNMAPPED ACUTE ACCENT
 $lm = \uE055;#  Telugu Length Mark
 $ailm=\uE056;#  AI Length Mark
 $aulm=\uE057;#  AU Length Mark
+#urdu compatibity forms
 $uka=\uE058;
 $ukha=\uE059;
 $ugha=\uE05A;
@@ -111,6 +128,7 @@ $seven=\uE06D;    # DIGIT SEVEN
 $eight=\uE06E;    # DIGIT EIGHT
 $nine=\uE06F;     # DIGIT NINE
 $dgs=\uE082;
+# For all other scripts
 $ecp0=\uE070;
 $ecp1=\uE071;
 $ecp2=\uE072;
@@ -127,10 +145,13 @@ $ecpC=\uE07C;
 $ecpD=\uE07D;
 $ecpE=\uE07E;
 $ecpF=\uE07F;
+# Khanda-ta
 $kta=\uE083;
+# ॰→; # nothing in Latin maps to InterIndic ABBREVIATION SIGN
 $depVowelAbove=[\uE03E-\uE040\uE045-\uE04C];
 $depVowelBelow=[\uE041-\uE044];
 $endThing=[$danda$doubleDanda];
+# $x was originally called '§'; $z was '%'
 $x=[$virama$aa$ai$au$ii$i$uu$u$rrh$rh$lh$e$o$se$ce$so$co];
 $z=[bcdfghjklmnpqrstvwxyz];
 $consonants=[[$ka-$ha]$z[क-ह][ক-হ][ਕ-ਹ][ક-હ][କ-ହ][க-ஹ][క-హ][ಕ-ಹ][ക-ഹ]];
@@ -139,6 +160,8 @@ $consonants=[[$ka-$ha]$z[क-ह][ক-হ][ਕ-ਹ][ક-હ][କ-ହ][க-ஹ][�
 m\u0310→$chandrabindu;
 h\u0323→$visarga;
 x→$ka$virama$sa;
+# convert to independent forms at start of word or syllable:
+# dependent forms for roundtrip
 \u0314a\u0304→$aa;
 \u0314ai→$ai;
 \u0314au→$au;
@@ -159,6 +182,7 @@ x→$ka$virama$sa;
 \u0314o\u0306→$co;
 \u0314e→$se;
 \u0314o→$so;
+# preceeded by consonants
 $consonants{ a\u0304→$aa;
 $consonants{ ai→$ai;
 $consonants{ au→$au;
@@ -179,6 +203,7 @@ $consonants{ e\u0306→$ce;
 $consonants{ o\u0306→$co;
 $consonants{ e→$se;
 $consonants{ o→$so;
+# e.g. keai -→ {ka}{e}{wai}; k'ai -→ {ka}{wai}; (ai) -→ ({wai})
 a\u0304→$waa;
 ai→$wai;
 au→$wau;
@@ -199,6 +224,7 @@ o\u0306→$wco;
 e→$wse;
 ''om→$om;
 o→$wso;
+# rules for anusvara
 n}r\u0325           → $na|$virama;
 n}l\u0325           → $na|$virama;
 n}na                → $na|$virama;
@@ -211,12 +237,14 @@ n}[tdn]             → $anusvara;
 m}[pbm]             → $anusvara;
 n}[ylvshr]          → $anusvara;
 m\u0307             → $anusvara;
+#urdu compatibility
 q→$uka|$virama;
 k\u0331h\u0331→$ukha |$virama;
 g\u0307→ $ugha | $virama;
 z → $ujha |$virama;
 f → $ufa|$virama;
 t\u0331→$kta;
+# dev
 y\u0307→$uya|$virama;
 l\u0331→$ela|$virama;
 n\u0331→$ena|$virama;
@@ -268,15 +296,21 @@ h→$ha|$virama;
 $danda'.'→$doubleDanda;
 $depVowelAbove{'~'→$anusvara;
 $depVowelBelow{'~'→$chandrabindu;
+# convert to dependent forms after consonant with no vowel:
+# e.g. kai -→ {ka}{virama}ai -→ {ka}{ai}
+#$virama aa→$aa;
 $virama a\u0304→$aa;
 $virama ai→$ai;
 $virama au→$au;
 $virama ii→$ii;
 $virama i\u0304→$ii;
 $virama i→$i;
+#$virama uu→$uu;
 $virama u\u0304→$uu;
 $virama u→$u;
+#$virama rrh→$rrh;
 $virama r\u0325\u0304→$rrh;
+#$virama rh→$rh;
 $virama r\u0325a→$rh;
 $virama r\u0325→$rh;
 $virama l\u0325\u0304→$llh;
@@ -289,16 +323,23 @@ $virama e\u0306→$ce;
 $virama o\u0306→$co;
 $virama e→$se;
 $virama o→$so;
+# otherwise convert independent forms when separated by ': k'ai -→ {ka}{virama}{wai}
+#$virama''aa→$waa;
 $virama''a\u0304→$waa;
 $virama''ai→$wai;
 $virama''au→$wau;
+#$virama''ii→$wii;
 $virama''i\u0304→$wii;
 $virama''i→$wi;
+#$virama''uu→$wuu;
 $virama''u\u0304→$wuu;
 $virama''u→$wu;
+#$virama''rrh→$wrr;
 $virama''r\u0325\u0304→$wrr;
+#$virama''rh→$wr;
 $virama''r\u0325→$wr;
 $virama''l\u0325\u0304→$wll;
+#$virama''lh→$wl;
 $virama''l\u0325→$wl;
 $virama''e\u0304→$we;
 $virama''o\u0304→$wo;
@@ -307,6 +348,7 @@ $virama''e\u0306→$wce;
 $virama''o\u0306→$wco;
 $virama''e→$wse;
 $virama''o→$wso;
+# no virama
 ''a\u0304→$waa;
 ''ai→$wai;
 ''au→$wau;
@@ -340,3 +382,5 @@ $virama}$endThing→;
 8→$eight;
 9→$nine;
 ''→;
+#:: NFC (NFD) ;
+

@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Gujarati_InterIndic.txt
 # Generated from CLDR 
 #
+
+# Gujarati-InterIndic
+#:: NFD (NFC) ;
 \u0A81→\uE001; # SIGN CANDRABINDU
 \u0A82→\uE002; # SIGN ANUSVARA
 ઃ→\uE003; # SIGN VISARGA
@@ -90,3 +93,6 @@
 ।→\uE064; # DANDA
 ॥→\uE065; # DOUBLE DANDA
 ૰→\uE070; # ABBREVIATION SIGN
+#    :: NFC (NFD) ;
+# eof
+

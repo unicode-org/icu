@@ -1,11 +1,17 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: tr_Upper.txt
 # Generated from CLDR 
 #
+
+# Copyright (C) 2011-2013, Apple Inc.; Unicode, Inc.; and others. All Rights Reserved.
+# I and i-dotless; I-dot and i are case pairs in Turkish and Azeri
+# When uppercasing, i turns into a dotted capital I
+# 0069; 0069; 0130; 0130; tr; # LATIN SMALL LETTER I
 i→İ;
 ::Any-Upper();
+

@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: InterIndic_Kannada.txt
 # Generated from CLDR 
 #
+
+# InterIndic-Kannada
+#:: NFD (NFC) ;
 \uE033\uE03C→ೞ; # LETTER FA
 \uE001→ಂ; # REMAP (indicExceptions.txt): \u0C81→ಂ = SIGN CANDRABINDU→SIGN ANUSVARA
 \uE002→ಂ; # SIGN ANUSVARA
@@ -138,3 +141,6 @@
 \uE083→ತ\u0CCD;  # Bengali Khanda-ta
 0 → ೦;    # FALLBACK FOR TAMIL
 1 → ೧;
+#    :: NFC (NFD) ;
+# eof
+

@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: InterIndic_Malayalam.txt
 # Generated from CLDR 
 #
+
+# InterIndic-Malayalam
+#:: NFD (NFC) ;
 \uE001→ം; # REMAP (indicExceptions.txt): \u0D01→ം = SIGN CANDRABINDU→SIGN ANUSVARA
 \uE002→ം; # SIGN ANUSVARA
 \uE003→ഃ; # SIGN VISARGA
@@ -138,3 +141,6 @@
 \uE083→ത\u0D4D;  # Bengali Khanda-ta
 0 → ൦;    # FALLBACK FOR TAMIL
 1 → ൧;
+#    :: NFC (NFD) ;
+# eof
+

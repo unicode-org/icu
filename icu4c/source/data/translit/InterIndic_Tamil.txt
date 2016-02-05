@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: InterIndic_Tamil.txt
 # Generated from CLDR 
 #
+
+# InterIndic-Tamil
+#:: NFD (NFC) ;
 \uE001→\u0B82; # FALLBACK SIGN CANDRABINDU
 \uE002→\u0B82; # SIGN ANUSVARA
 \uE003→ஃ; # SIGN VISARGA
@@ -137,3 +140,6 @@
 \uE081→வ; # FALLBACK FOR ORIYA LETTER WA
 \uE082→;       # Devanagari Glottal Stop
 \uE083→த\u0BCD;  # Bengali Khanda-ta
+#    :: NFC (NFD) ;
+# eof
+

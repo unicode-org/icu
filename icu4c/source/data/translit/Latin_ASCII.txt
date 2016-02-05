@@ -1,16 +1,32 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Latin_ASCII.txt
 # Generated from CLDR 
 #
+
+# This handles only Latin, Common, and IDEOGRAPHIC NUMBER ZERO (Han).
+#
 :: [[:Latin:][:Common:][:Inherited:][〇]] ;
+#
+# Don't want NFKD, because that would convert things like superscripts and
+# subscripts, which we do not want. So the individual transforms below
+# include an appropriate subset of the NFKD ones.
+# Here we remove accents from Latin characters. We then recompose to permit rules
+# such as mapping NOT EQUAL TO to an ASCII equivalent e.g. "!=" if we choose to.
+#
 :: NFD() ;
 [:Latin:] { [:Mn:]+ → ; # maps to nothing; remove all Mn following Latin letter
 :: NFC() ;
+#
+# Some of the following mappings (noted) are from CLDR ‹character-fallback› data.
+# (Note, here "‹character-fallback›" uses U+2039/U+203A to avoid XML issues)
+#
+# Latin letters and IPA
+#
 Æ → AE ; # 00C6;LATIN CAPITAL LETTER AE (from ‹character-fallback›)
 Ð → D ; # 00D0;LATIN CAPITAL LETTER ETH
 Ø → O ; # 00D8;LATIN CAPITAL LETTER O WITH STROKE
@@ -222,6 +238,7 @@
 ỽ → v ; # 1EFD;LATIN SMALL LETTER MIDDLE-WELSH V
 Ỿ → Y ; # 1EFE;LATIN CAPITAL LETTER Y WITH LOOP
 ỿ → y ; # 1EFF;LATIN SMALL LETTER Y WITH LOOP
+# Presentation forms
 ﬀ → ff ; # FB00;LATIN SMALL LIGATURE FF (compat)
 ﬁ → fi ; # FB01;LATIN SMALL LIGATURE FI (compat)
 ﬂ → fl ; # FB02;LATIN SMALL LIGATURE FL (compat)
@@ -229,6 +246,7 @@
 ﬄ → ffl ; # FB04;LATIN SMALL LIGATURE FFL (compat)
 ﬅ → st ; # FB05;LATIN SMALL LIGATURE LONG S T (compat)
 ﬆ → st ; # FB06;LATIN SMALL LIGATURE ST (compat)
+# Fullwidth
 Ａ → A ; # FF21;FULLWIDTH LATIN CAPITAL LETTER A (compat)
 Ｂ → B ; # FF22;FULLWIDTH LATIN CAPITAL LETTER B (compat)
 Ｃ → C ; # FF23;FULLWIDTH LATIN CAPITAL LETTER C (compat)
@@ -281,6 +299,9 @@
 ｘ → x ; # FF58;FULLWIDTH LATIN SMALL LETTER X (compat)
 ｙ → y ; # FF59;FULLWIDTH LATIN SMALL LETTER Y (compat)
 ｚ → z ; # FF5A;FULLWIDTH LATIN SMALL LETTER Z (compat)
+#
+# Currency and letterlike
+#
 © → '(C)' ; # 00A9;COPYRIGHT SIGN (from ‹character-fallback›)
 ® → '(R)' ; # 00AE;REGISTERED SIGN (from ‹character-fallback›)
 ₠ → CE ; # 20A0;EURO-CURRENCY SIGN (from ‹character-fallback›)
@@ -329,6 +350,9 @@
 ⅇ → e ; # 2147;DOUBLE-STRUCK ITALIC SMALL E (compat)
 ⅈ → i ; # 2148;DOUBLE-STRUCK ITALIC SMALL I (compat)
 ⅉ → j ; # 2149;DOUBLE-STRUCK ITALIC SMALL J (compat)
+#
+# Squared Latin
+#
 ㍱ → hPa ; # 3371;SQUARE HPA (compat)
 ㍲ → da ; # 3372;SQUARE DA (compat)
 ㍳ → AU ; # 3373;SQUARE AU (compat)
@@ -410,6 +434,9 @@
 ㏝ → Wb ; # 33DD;SQUARE WB (compat)
 ㏞ → 'V/m' ; # 33DE;SQUARE V OVER M (compat) (from ‹character-fallback›)
 ㏟ → 'A/m' ; # 33DF;SQUARE A OVER M (compat) (from ‹character-fallback›)
+#
+# Enclosed Latin
+#
 ⒜ → '(a)' ; # 249C;PARENTHESIZED LATIN SMALL LETTER A (compat)
 ⒝ → '(b)' ; # 249D;PARENTHESIZED LATIN SMALL LETTER B (compat)
 ⒞ → '(c)' ; # 249E;PARENTHESIZED LATIN SMALL LETTER C (compat)
@@ -436,6 +463,9 @@
 ⒳ → '(x)' ; # 24B3;PARENTHESIZED LATIN SMALL LETTER X (compat)
 ⒴ → '(y)' ; # 24B4;PARENTHESIZED LATIN SMALL LETTER Y (compat)
 ⒵ → '(z)' ; # 24B5;PARENTHESIZED LATIN SMALL LETTER Z (compat)
+#
+# Roman numerals
+#
 Ⅰ → I ; # 2160;ROMAN NUMERAL ONE (compat)
 Ⅱ → II ; # 2161;ROMAN NUMERAL TWO (compat)
 Ⅲ → III ; # 2162;ROMAN NUMERAL THREE (compat)
@@ -468,6 +498,9 @@
 ⅽ → c ; # 217D;SMALL ROMAN NUMERAL ONE HUNDRED (compat)
 ⅾ → d ; # 217E;SMALL ROMAN NUMERAL FIVE HUNDRED (compat)
 ⅿ → m ; # 217F;SMALL ROMAN NUMERAL ONE THOUSAND (compat)
+#
+# Fractions
+#
 ¼ → ' 1/4' ; # 00BC;VULGAR FRACTION ONE QUARTER (from ‹character-fallback›)
 ½ → ' 1/2' ; # 00BD;VULGAR FRACTION ONE HALF (from ‹character-fallback›)
 ¾ → ' 3/4' ; # 00BE;VULGAR FRACTION THREE QUARTERS (from ‹character-fallback›)
@@ -484,6 +517,9 @@
 ⅝ → ' 5/8' ; # 215D;VULGAR FRACTION FIVE EIGHTHS (from ‹character-fallback›)
 ⅞ → ' 7/8' ; # 215E;VULGAR FRACTION SEVEN EIGHTHS (from ‹character-fallback›)
 ⅟ → ' 1/' ; # 215F;FRACTION NUMERATOR ONE (from ‹character-fallback›)
+#
+# Enclosed numeric
+#
 ⑴ → '(1)' ; # 2474;PARENTHESIZED DIGIT ONE (compat)
 ⑵ → '(2)' ; # 2475;PARENTHESIZED DIGIT TWO (compat)
 ⑶ → '(3)' ; # 2476;PARENTHESIZED DIGIT THREE (compat)
@@ -524,6 +560,9 @@
 ⒙ → '18.' ; # 2499;NUMBER EIGHTEEN FULL STOP (compat)
 ⒚ → '19.' ; # 249A;NUMBER NINETEEN FULL STOP (compat)
 ⒛ → '20.' ; # 249B;NUMBER TWENTY FULL STOP (compat)
+#
+# Other numeric (ideographic and fullwidth)
+#
 〇 → 0 ; # 3007;IDEOGRAPHIC NUMBER ZERO
 ０ → 0 ; # FF10;FULLWIDTH DIGIT ZERO (compat)
 １ → 1 ; # FF11;FULLWIDTH DIGIT ONE (compat)
@@ -535,6 +574,9 @@
 ７ → 7 ; # FF17;FULLWIDTH DIGIT SEVEN (compat)
 ８ → 8 ; # FF18;FULLWIDTH DIGIT EIGHT (compat)
 ９ → 9 ; # FF19;FULLWIDTH DIGIT NINE (compat)
+#
+# Spaces
+#
 \u00A0 → ' ' ; # 00A0;NO-BREAK SPACE
 \u2002 → ' ' ; # 2002;EN SPACE (compat)
 \u2003 → ' ' ; # 2003;EM SPACE (compat)
@@ -547,6 +589,16 @@
 \u200A → ' ' ; # 200A;HAIR SPACE (compat)
 \u205F → ' ' ; # 205F;MEDIUM MATHEMATICAL SPACE (compat)
 \u3000 → ' ' ; # 3000;IDEOGRAPHIC SPACE (from ‹character-fallback›)
+#
+# Quotes, apostrophes
+#
+ʹ → \' ; # 02B9;MODIFIER LETTER PRIME
+ʺ → \" ; # 02BA;MODIFIER LETTER DOUBLE PRIME
+ʻ → \' ; # 02BB;MODIFIER LETTER TURNED COMMA
+ʼ → \' ; # 02BC;MODIFIER LETTER APOSTROPHE
+ʽ → \' ; # 02BD;MODIFIER LETTER REVERSED COMMA
+ˈ → \' ; # 02C8;MODIFIER LETTER VERTICAL LINE
+ˋ → '`' ; # 02CB;MODIFIER LETTER GRAVE ACCENT
 ‘ → \' ; # 2018;LEFT SINGLE QUOTATION MARK (from ‹character-fallback›)
 ’ → \' ; # 2019;RIGHT SINGLE QUOTATION MARK (from ‹character-fallback›)
 ‚ → ',' ; # 201A;SINGLE LOW-9 QUOTATION MARK (from ‹character-fallback›)
@@ -565,6 +617,9 @@
 » → '>>' ; # 00BB;RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK (from ‹character-fallback›)
 ‹ → '<' ; # 2039;SINGLE LEFT-POINTING ANGLE QUOTATION MARK
 › → '>' ; # 203A;SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+#
+# Dashes, hyphens...
+#
 \u00AD → '-' ; # 00AD;SOFT HYPHEN (from ‹character-fallback›)
 ‐ → '-' ; # 2010;HYPHEN (from ‹character-fallback›)
 ‑ → '-' ; # 2011;NON-BREAKING HYPHEN (from ‹character-fallback›)
@@ -577,6 +632,15 @@
 ﹘ → '-' ; # FE58;SMALL EM DASH (compat)
 ﹣ → '-' ; # FE63;SMALL HYPHEN-MINUS (compat)
 － → '-' ; # FF0D;FULLWIDTH HYPHEN-MINUS (compat)
+#
+# Other misc punctuation and symbols
+#
+˂ → '<' ; # 02C2;MODIFIER LETTER LEFT ARROWHEAD
+˃ → '>' ; # 02C3;MODIFIER LETTER RIGHT ARROWHEAD
+˄ → '^' ; # 02C4;MODIFIER LETTER UP ARROWHEAD
+ˆ → '^' ; # 02C6;MODIFIER LETTER CIRCUMFLEX ACCENT
+ː → ':' ; # 02D0;MODIFIER LETTER TRIANGULAR COLON
+˜ → '~' ; # 02DC;SMALL TILDE
 ‖ → '||' ; # 2016;DOUBLE VERTICAL LINE
 ․ → '.' ; # 2024;ONE DOT LEADER (compat)
 ‥ → '..' ; # 2025;TWO DOT LEADER (compat)
@@ -589,6 +653,7 @@
 ⁈ → '?!' ; # 2048;QUESTION EXCLAMATION MARK (compat)
 ⁉ → '!?' ; # 2049;EXCLAMATION QUESTION MARK (compat)
 ⁎ → '*' ; # 204E;LOW ASTERISK
+# CJK
 、 → ',' ; # 3001;IDEOGRAPHIC COMMA
 。 → '.' ; # 3002;IDEOGRAPHIC FULL STOP
 〈 → '<' ; # 3008;LEFT ANGLE BRACKET
@@ -601,6 +666,7 @@
 〙 → ']' ; # 3019;RIGHT WHITE TORTOISE SHELL BRACKET
 〚 → '[' ; # 301A;LEFT WHITE SQUARE BRACKET
 〛 → ']' ; # 301B;RIGHT WHITE SQUARE BRACKET
+# Vertical and small forms
 ︐ → ',' ; # FE10;PRESENTATION FORM FOR VERTICAL COMMA (compat)
 ︑ → ',' ; # FE11;PRESENTATION FORM FOR VERTICAL IDEOGRAPHIC COMMA (compat)
 ︒ → '.' ; # FE12;PRESENTATION FORM FOR VERTICAL IDEOGRAPHIC FULL STOP (compat)
@@ -646,6 +712,7 @@
 ﹩ → '$' ; # FE69;SMALL DOLLAR SIGN (compat)
 ﹪ → '%' ; # FE6A;SMALL PERCENT SIGN (compat)
 ﹫ → '@' ; # FE6B;SMALL COMMERCIAL AT (compat)
+# Fullwidth and halfwidth
 ！ → '!' ; # FF01;FULLWIDTH EXCLAMATION MARK (compat)
 ＃ → '#' ; # FF03;FULLWIDTH NUMBER SIGN (compat)
 ＄ → '$' ; # FF04;FULLWIDTH DOLLAR SIGN (compat)
@@ -679,8 +746,13 @@
 ｠ → '))' ; # FF60;FULLWIDTH RIGHT WHITE PARENTHESIS (compat)(from ‹character-fallback›)
 ｡ → '.' ; # FF61;HALFWIDTH IDEOGRAPHIC FULL STOP (compat)
 ､ → ',' ; # FF64;HALFWIDTH IDEOGRAPHIC COMMA (compat)
+#
+# Other math operators (non-ASCII-range)
+#
 × → '*' ; # 00D7;MULTIPLICATION SIGN
 ÷ → '/' ; # 00F7;DIVISION SIGN
+˖ → '+' ; # 02D6;MODIFIER LETTER PLUS SIGN
+˗ → '-' ; # 02D7;MODIFIER LETTER MINUS SIGN
 − → '-' ; # 2212;MINUS SIGN (from ‹character-fallback›)
 ∕ → '/' ; # 2215;DIVISION SLASH (from ‹character-fallback›)
 ∖ → '\' ; # 2216;SET MINUS (from ‹character-fallback›)
@@ -693,3 +765,4 @@
 ⩴ → '::=' ; # 2A74;DOUBLE COLON EQUAL (compat)
 ⩵ → '==' ; # 2A75;TWO CONSECUTIVE EQUALS SIGNS (compat)
 ⩶ → '===' ; # 2A76;THREE CONSECUTIVE EQUALS SIGNS (compat)
+

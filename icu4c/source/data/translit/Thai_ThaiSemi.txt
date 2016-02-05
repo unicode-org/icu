@@ -1,11 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Thai_ThaiSemi.txt
 # Generated from CLDR 
 #
+
+# The rules that convert space into semicolon are in this file;
+# since they have to come BEFORE the break iterator.
 $thai = [[:thai:] ก-\u0E3Aเ-๛] ;
 $thai { ' ' } $thai → '; ' ;
+

@@ -1,15 +1,20 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: cs_FONIPA_ja.txt
 # Generated from CLDR 
 #
+
+# Transforms a Phonemic IPA transcription of Czech (cs_FONIPA) to Katakana.
 $word_boundary = [-\ $] ;
 $vowel = [aeiouw] ;       # Vowels and glides
 $not_vowel = [^$vowel] ;
+#
+#
+# First pass: Collapse phonetic distinctions not preserved in Katakana.
 d\u0361ʒ → | ʒ ;
 d\u0361z → | z ;
 ɛ → | e;
@@ -22,8 +27,15 @@ t \u0361 ʃ → | ʧ;
 t \u0361 → t;
 [i{i\u032F}ɪ]+ → i;
 [uw{u\u032F}]+ → u;
+#
+#
 nn → n ;
+#
+#
 ::Null;
+#
+#
+# Main pass: Phoneme to Katakana conversion.
 '.' → ;
 a → ア;
 ba → バ;
@@ -78,12 +90,16 @@ i → イ ;
 ɟo → ジョ; # not backed by data
 ɟe → ジェ;
 ɟu → ジュ; # not backed by data
+#
+#
 ja → ヤ;
 ji → イ;
 jo → ヨ;
 je → イェ;
 ju → ユ; # not backed by data
 j → イ;
+#
+#
 ka → カ;
 ke → ケ;
 ki → キ;
@@ -100,6 +116,8 @@ lu → ル ;
 l → ル ;
 ma → マ ;
 me → メ ;
+#
+#mɲe → ミェ;
 mi → ミ ;
 mo → モ ;
 mu → ム ;
@@ -125,12 +143,16 @@ po → ポ ;
 pp → ッ | p;
 pu → プ ;
 p → プ ;
+#
+#
 r\u031Da → ジャ;
 r\u031De → ジェ;
 r\u031Di → ジ;
 r\u031Do → ジョ; # not backed by data
 r\u031Du → ジュ; # not backed by data
 r\u031D → ルシ;
+#
+#
 ra → ラ ;
 re → レ ;
 ri → リ ;
@@ -162,6 +184,8 @@ tsu → ツ ;
 ts → ツ ;
 tt → ッ | t;
 t → ト ;
+#
+#
 ʧa → チャ ;
 ʧe → チェ ;
 ʧi → チ ;
@@ -170,6 +194,8 @@ t → ト ;
 ʧ } k → チ ;
 ʧ → チュ ;
 u → ウ ;
+#
+#
 va → ヴァ;
 ve → ヴェ;
 vi → ヴィ;
@@ -178,12 +204,16 @@ vu → ヴ;
 vje → ヴィエ ;
 v } $word_boundary → フ;
 v → ヴ;
+#
+#
 xa → ハ ;
 xe → ヘ ;
 xi → ヒ ;
 xo → ホ ;
 xu → フ ;
 x → フ ;
+#
+#
 za → ザ;
 ze → ゼ;
 zi → ジ;
@@ -198,5 +228,10 @@ z → ズ;
 ʒu → ジュ; # not backed by data
 ʒ } k → シュ;
 ʒ → ジュ;
+#
+#
 ː → ー; # Long vowel
 ' ' → ・;
+#
+#
+

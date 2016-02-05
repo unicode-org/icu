@@ -1,12 +1,16 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: cs_FONIPA_ko.txt
 # Generated from CLDR 
 #
+
+# Transliteration of Phonemic Czech (cs_FONIPA) to Korean (ko).
+#
+# First pass: Phonemic Czech (cs_FONIPA) to Latinized Korean (ko_Latn).
 $vowel = [aeɛiɪoux];
 $start = [\u0020$];
 $end = [\u0020$];
@@ -86,4 +90,8 @@ z          → jeu ;  # pozdniː → pojeudeuni
 ɟ          → ti ;
 ː          → ;
 \u0020     → ;  # space
+#
+#
+# Second pass.
 :: Latin-Hangul ();
+
