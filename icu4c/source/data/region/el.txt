@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/el.xml
@@ -46,7 +46,6 @@ el{
         AI{"Ανγκουίλα"}
         AL{"Αλβανία"}
         AM{"Αρμενία"}
-        AN{"Ολλανδικές Αντίλλες"}
         AO{"Ανγκόλα"}
         AQ{"Ανταρκτική"}
         AR{"Αργεντινή"}
@@ -313,5 +312,5 @@ el{
         MK{"Πρώην Γιουγκοσλαβική Δημοκρατία της Μακεδονίας (ΠΓΔΜ)"}
         TL{"Ανατολικό Τιμόρ"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/brx.xml
@@ -45,7 +45,6 @@ brx{
         AI{"एंगीला"}
         AL{"अल्बानिया"}
         AM{"आर्मेनिया"}
-        AN{"नीदरलैंड्स एंटिलीज़"}
         AO{"अंगोला"}
         AQ{"अंटार्कटिका"}
         AR{"अर्जेण्टिना"}
@@ -288,5 +287,5 @@ brx{
         ZW{"ज़ीम्बाब्वे"}
         ZZ{"अज्ञात या अवैध प्रदेश"}
     }
-    Version{"2.1.19.74"}
+    Version{"2.1.23.7"}
 }

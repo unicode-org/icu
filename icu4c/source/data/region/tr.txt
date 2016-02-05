@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/tr.xml
@@ -46,7 +46,6 @@ tr{
         AI{"Anguilla"}
         AL{"Arnavutluk"}
         AM{"Ermenistan"}
-        AN{"Hollanda Antilleri"}
         AO{"Angola"}
         AQ{"Antarktika"}
         AR{"Arjantin"}
@@ -95,7 +94,7 @@ tr{
         CV{"Cape Verde"}
         CW{"Curaçao"}
         CX{"Christmas Adası"}
-        CY{"Güney Kıbrıs Rum Kesimi"}
+        CY{"Kıbrıs"}
         CZ{"Çek Cumhuriyeti"}
         DE{"Almanya"}
         DG{"Diego Garcia"}
@@ -313,5 +312,5 @@ tr{
         MK{"Makedonya (EYMC)"}
         TL{"Doğu Timor"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.23.73"}
 }

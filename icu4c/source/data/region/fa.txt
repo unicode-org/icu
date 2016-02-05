@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fa.xml
@@ -46,7 +46,6 @@ fa{
         AI{"آنگویلا"}
         AL{"آلبانی"}
         AM{"ارمنستان"}
-        AN{"آنتیل هلند"}
         AO{"آنگولا"}
         AQ{"جنوبگان"}
         AR{"آرژانتین"}
@@ -314,5 +313,5 @@ fa{
         MK{"مقدونیه (جمهوری سابقاً یوگسلاو)"}
         TL{"تیمور شرقی"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
 }

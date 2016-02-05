@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/tzm.xml
@@ -15,7 +15,6 @@ tzm{
         AI{"Angwilla"}
         AL{"Albanya"}
         AM{"Arminya"}
-        AN{"Antil Tihulanḍiyyin"}
         AO{"Angula"}
         AR{"Arjuntin"}
         AS{"Samwa Imirikaniyyin"}
@@ -234,5 +233,5 @@ tzm{
         ZM{"Zambya"}
         ZW{"Zimbabwi"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.23.7"}
 }

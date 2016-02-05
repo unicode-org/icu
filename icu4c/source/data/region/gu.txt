@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/gu.xml
@@ -46,7 +46,6 @@ gu{
         AI{"ઍંગ્વિલા"}
         AL{"અલ્બેનિયા"}
         AM{"આર્મેનિયા"}
-        AN{"નેધરલેંડ્સ એંટિલેસ"}
         AO{"અંગોલા"}
         AQ{"એન્ટાર્કટિકા"}
         AR{"આર્જેન્ટીના"}
@@ -314,5 +313,5 @@ gu{
         MK{"મેસેડોનિયા (FYROM)"}
         TL{"પૂર્વ તિમોર"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
 }

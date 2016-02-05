@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/az.xml
@@ -46,7 +46,6 @@ az{
         AI{"Angila"}
         AL{"Albaniya"}
         AM{"Ermənistan"}
-        AN{"Hollandiya antilleri"}
         AO{"Anqola"}
         AQ{"Antarktika"}
         AR{"Argentina"}
@@ -313,5 +312,5 @@ az{
         MK{"Makedoniya (FYROM)"}
         TL{"Doğu Timor"}
     }
-    Version{"2.1.19.83"}
+    Version{"2.1.23.7"}
 }

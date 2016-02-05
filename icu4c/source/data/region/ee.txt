@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ee.xml
@@ -46,7 +46,6 @@ ee{
         AI{"Anguilla nutome"}
         AL{"Albania nutome"}
         AM{"Armenia nutome"}
-        AN{"Nedalands Antilis nutome"}
         AO{"Angola nutome"}
         AQ{"Antartica nutome"}
         AR{"Argentina nutome"}
@@ -305,5 +304,5 @@ ee{
         MK{"Makedonia (FYROM) nutome"}
         TL{"Ɣedzeƒe Timɔ nutome"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.23.7"}
 }

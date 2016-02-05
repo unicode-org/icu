@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ko.xml
@@ -46,7 +46,6 @@ ko{
         AI{"앵귈라"}
         AL{"알바니아"}
         AM{"아르메니아"}
-        AN{"네덜란드령 안틸레스"}
         AO{"앙골라"}
         AQ{"남극 대륙"}
         AR{"아르헨티나"}
@@ -313,5 +312,5 @@ ko{
         FK{"포클랜드 제도(말비나스 군도)"}
         MK{"마케도니아(FYROM)"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
 }

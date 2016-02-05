@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ks.xml
@@ -45,7 +45,6 @@ ks{
         AI{"انگوئیلا"}
         AL{"اٮ۪لبانِیا"}
         AM{"اَرمانِیا"}
-        AN{"نَیدَرلینٛڑٕس اٮ۪نٹَیلٕس"}
         AO{"انگولا"}
         AQ{"اینٹارٹِکا"}
         AR{"أرجَنٹینا"}
@@ -285,5 +284,5 @@ ks{
         ZW{"زِمبابے"}
         ZZ{"نامعلوٗم تہٕ نالَگہار عَلاقہٕ"}
     }
-    Version{"2.1.19.74"}
+    Version{"2.1.21.28"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/yav.xml
@@ -15,7 +15,6 @@ yav{
         AI{"Aŋkíla"}
         AL{"Alpaní"}
         AM{"Almanía"}
-        AN{"andíiy u nitililáand"}
         AO{"Aŋkúla"}
         AR{"Alsaŋtín"}
         AS{"Sámua u Amelíka"}
@@ -233,5 +232,5 @@ yav{
         ZM{"saambíi"}
         ZW{"simbapuwé"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.23.7"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/th.xml
@@ -46,7 +46,6 @@ th{
         AI{"แองกวิลลา"}
         AL{"แอลเบเนีย"}
         AM{"อาร์เมเนีย"}
-        AN{"เนเธอร์แลนด์แอนทิลลิส"}
         AO{"แองโกลา"}
         AQ{"แอนตาร์กติกา"}
         AR{"อาร์เจนตินา"}
@@ -313,5 +312,5 @@ th{
         MK{"มาซิโดเนีย (FYROM)"}
         TL{"ติมอร์ตะวันออก"}
     }
-    Version{"2.1.19.77"}
+    Version{"2.1.22.93"}
 }
