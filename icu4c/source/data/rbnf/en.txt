@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/rbnf/en.xml
@@ -48,7 +48,7 @@ en{
             "10: =%spellout-numbering=;",
             "%spellout-numbering-year:",
             "-x: minus >>;",
-            "x.x: =#,###0.#=;",
+            "x.x: =#,##0.#=;",
             "0: =%spellout-numbering=;",
             "1010/100: << >%%2d-year>;",
             "1100/100: << >%%2d-year>;",
@@ -78,12 +78,20 @@ en{
             "9100/100: << >%%2d-year>;",
             "10000: =%spellout-numbering=;",
             "%spellout-numbering:",
+            "-x: minus >>;",
+            "Inf: infinity;",
+            "NaN: not a number;",
             "0: =%spellout-cardinal=;",
             "%spellout-numbering-verbose:",
+            "-x: minus >>;",
+            "Inf: infinity;",
+            "NaN: not a number;",
             "0: =%spellout-cardinal-verbose=;",
             "%spellout-cardinal:",
             "-x: minus >>;",
             "x.x: << point >>;",
+            "Inf: infinite;",
+            "NaN: not a number;",
             "0: zero;",
             "1: one;",
             "2: two;",
@@ -130,6 +138,8 @@ en{
             "%spellout-cardinal-verbose:",
             "-x: minus >>;",
             "x.x: << point >>;",
+            "Inf: infinite;",
+            "NaN: not a number;",
             "0: =%spellout-numbering=;",
             "100: << hundred[>%%and>];",
             "1000: << thousand[>%%and>];",
@@ -148,6 +158,7 @@ en{
             "%spellout-ordinal:",
             "-x: minus >>;",
             "x.x: =#,##0.#=;",
+            "Inf: infinitieth;",
             "0: zeroth;",
             "1: first;",
             "2: second;",
@@ -190,6 +201,7 @@ en{
             "%spellout-ordinal-verbose:",
             "-x: minus >>;",
             "x.x: =#,##0.#=;",
+            "Inf: infinitieth;",
             "0: =%spellout-ordinal=;",
             "100: <%spellout-numbering-verbose< hundred>%%and-o>;",
             "1000: <%spellout-numbering-verbose< thousand>%%and-o>;",
@@ -201,5 +213,5 @@ en{
             "1000000000000000000: =#,##0=.;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.21.55"}
 }
