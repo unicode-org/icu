@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/te.xml
 // *
 // ***************************************************************************
 te{
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ te{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"కేరట్లు"}
+                one{"{0} కేరట్"}
+                other{"{0} కేరట్లు"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ te{
                 dnam{"పౌండ్లు/చదరపు అంగుళం"}
                 one{"{0} పౌండు/చదరపు అంగుళం"}
                 other{"{0} పౌండ్లు/చదరపు అంగుళం"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"కేరట్లు"}
-                one{"{0} కేరట్"}
-                other{"{0} కేరట్లు"}
             }
         }
         speed{
@@ -1042,6 +1042,13 @@ te{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"కేరట్లు"}
+                one{"{0} కేర."}
+                other{"{0} కేర."}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"లీ/100 కి.మీ."}
@@ -1469,13 +1476,6 @@ te{
                 dnam{"పౌ/చ.అం"}
                 one{"{0} పౌ/చ.అం"}
                 other{"{0} పౌ/చ.అం"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"కేరట్లు"}
-                one{"{0} కేర."}
-                other{"{0} కేర."}
             }
         }
         speed{

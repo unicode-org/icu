@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sl.xml
 // *
 // ***************************************************************************
 sl{
-    Version{"2.1.19.14"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -137,6 +137,15 @@ sl{
         }
         compound{
             per{"{0} na {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"karat"}
+                few{"{0} karati"}
+                one{"{0} karat"}
+                other{"{0} karatov"}
+                two{"{0} karata"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -719,15 +728,6 @@ sl{
                 one{"{0} psi"}
                 other{"{0} psi"}
                 two{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"karat"}
-                few{"{0} karati"}
-                one{"{0} karat"}
-                other{"{0} karatov"}
-                two{"{0} karata"}
             }
         }
         speed{
@@ -1418,6 +1418,15 @@ sl{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+                two{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -1999,15 +2008,6 @@ sl{
                 one{"{0} psi"}
                 other{"{0} psi"}
                 two{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                few{"{0} kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
-                two{"{0} kt"}
             }
         }
         speed{

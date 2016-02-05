@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bs.xml
 // *
 // ***************************************************************************
 bs{
-    Version{"2.1.19.77"}
+    Version{"2.1.23.7"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -117,6 +117,14 @@ bs{
                 few{"{0} kvadratna jarda"}
                 one{"{0} kvadratni jard"}
                 other{"{0} kvadratnih jarda"}
+            }
+        }
+        concentr{
+            karat{
+                dnam{"karati"}
+                few{"{0} karata"}
+                one{"{0} karat"}
+                other{"{0} karata"}
             }
         }
         consumption{
@@ -622,14 +630,6 @@ bs{
                 other{"{0} funti po kvadratnom inču"}
             }
         }
-        proportion{
-            karat{
-                dnam{"karati"}
-                few{"{0} karata"}
-                one{"{0} karat"}
-                other{"{0} karata"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"kilometara na sat"}
@@ -1061,6 +1061,14 @@ bs{
                 few{"{0} yd²"}
                 one{"{0} yd²"}
                 other{"{0} yd²"}
+            }
+        }
+        concentr{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
             }
         }
         consumption{
@@ -1567,14 +1575,6 @@ bs{
                 few{"{0} psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                few{"{0} kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{

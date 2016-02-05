@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/kn.xml
 // *
 // ***************************************************************************
 kn{
-    Version{"2.1.19.77"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ kn{
         }
         compound{
             per{"{0} ಪ್ರತಿ {1} ಗೆ"}
+        }
+        concentr{
+            karat{
+                dnam{"ಕಾರಟ್‌ಗಳು"}
+                one{"{0} ಕಾರಟ್‌"}
+                other{"{0} ಕಾರಟ್‌ಗಳು"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ kn{
                 dnam{"ಪ್ರತಿ ಚದರ ಇಂಚಿಗೆ ಪೌಂಡ್‌ಗಳು"}
                 one{"{0} ಪ್ರತಿ ಚದರ ಇಂಚಿಗೆ ಪೌಂಡ್‌"}
                 other{"{0} ಪ್ರತಿ ಚದರ ಇಂಚಿಗೆ ಪೌಂಡ್‌ಗಳು"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ಕಾರಟ್‌ಗಳು"}
-                one{"{0} ಕಾರಟ್‌"}
-                other{"{0} ಕಾರಟ್‌ಗಳು"}
             }
         }
         speed{
@@ -1042,6 +1042,13 @@ kn{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"ಕಾರ."}
+                one{"{0} ಕಾರ."}
+                other{"{0} ಕಾರ."}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -1469,13 +1476,6 @@ kn{
                 dnam{"ಪ್ರ.ಚ.ಇಂ.ಪೌಂ."}
                 one{"{0} ಪ್ರ.ಚ.ಇಂ.ಪೌಂ."}
                 other{"{0} ಪ್ರ.ಚ.ಇಂ.ಪೌಂ."}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ಕಾರ."}
-                one{"{0} ಕಾರ."}
-                other{"{0} ಕಾರ."}
             }
         }
         speed{

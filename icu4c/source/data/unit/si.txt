@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/si.xml
 // *
 // ***************************************************************************
 si{
-    Version{"2.1.20.4"}
+    Version{"2.1.23.84"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -105,6 +105,13 @@ si{
         }
         compound{
             per{"{1} ට {0} බැගින්"}
+        }
+        concentr{
+            karat{
+                dnam{"ක්‍රාත්"}
+                one{"ක්‍රාත් {0}"}
+                other{"ක්‍රාත් {0}"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ si{
                 dnam{"වර්ග අලඟකට රාත්තල්"}
                 one{"වර්ග අලඟකට රාත්තල් {0}"}
                 other{"වර්ග අලඟකට රාත්තල් {0}"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ක්‍රාත්"}
-                one{"ක්‍රාත් {0}"}
-                other{"ක්‍රාත් {0}"}
             }
         }
         speed{
@@ -1042,6 +1042,13 @@ si{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"ක්‍රාත්"}
+                one{"ක්‍රාත් {0}"}
+                other{"ක්‍රාත් {0}"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ලී/කිමී100"}
@@ -1469,13 +1476,6 @@ si{
                 dnam{"වඅ රා"}
                 one{"වඅ රා {0}"}
                 other{"වඅ රා {0}"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ක්‍රාත්"}
-                one{"ක්‍රාත් {0}"}
-                other{"ක්‍රාත් {0}"}
             }
         }
         speed{

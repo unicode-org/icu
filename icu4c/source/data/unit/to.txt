@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/to.xml
 // *
 // ***************************************************************************
 to{
-    Version{"2.1.19.14"}
+    Version{"2.1.23.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -86,6 +86,12 @@ to{
         }
         compound{
             per{"{0} ʻi he {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"kalati"}
+                other{"kalati ʻe {0}"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -423,12 +429,6 @@ to{
                 other{"pāuni he ʻinisi sikuea ʻe {0}"}
             }
         }
-        proportion{
-            karat{
-                dnam{"kalati"}
-                other{"kalati ʻe {0}"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"kilomita he houa"}
@@ -621,6 +621,12 @@ to{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"kt"}
+                other{"{0} kt"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -958,12 +964,6 @@ to{
                 other{"{0} pā/in²"}
             }
         }
-        proportion{
-            karat{
-                dnam{"kt"}
-                other{"{0} kt"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"km/h"}
@@ -1156,6 +1156,12 @@ to{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"kt"}
+                other{"kt ʻe {0}"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1491,12 +1497,6 @@ to{
             pound-per-square-inch{
                 dnam{"pā/in²"}
                 other{"pā/in² ʻe {0}"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                other{"kt ʻe {0}"}
             }
         }
         speed{

@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/am.xml
 // *
 // ***************************************************************************
 am{
-    Version{"2.1.19.96"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ am{
         }
         compound{
             per{"{0} በ{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"ካራት"}
+                one{"{0} ካራት"}
+                other{"{0} ካራት"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -533,13 +540,6 @@ am{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ካራት"}
-                one{"{0} ካራት"}
-                other{"{0} ካራት"}
             }
         }
         speed{
@@ -1047,6 +1047,13 @@ am{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"ካራት"}
+                one{"{0} ካራት"}
+                other{"{0} ካራት"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ሊትር በ100 ኪሎሜትሮች"}
@@ -1474,13 +1481,6 @@ am{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ካራት"}
-                one{"{0} ካራት"}
-                other{"{0} ካራት"}
             }
         }
         speed{

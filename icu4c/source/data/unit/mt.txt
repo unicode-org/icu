@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mt.xml
 // *
 // ***************************************************************************
 mt{
-    Version{"2.1.19.94"}
+    Version{"2.1.23.7"}
     units{
         angle{
             arc-minute{
@@ -15,6 +15,15 @@ mt{
                 many{"{0}′"}
                 one{"{0}′"}
                 other{"{0}′"}
+            }
+        }
+        concentr{
+            karat{
+                dnam{"karati"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
             }
         }
         consumption{
@@ -67,15 +76,6 @@ mt{
                 other{"{0} lx"}
             }
         }
-        proportion{
-            karat{
-                dnam{"karati"}
-                few{"{0} kt"}
-                many{"{0} kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
-            }
-        }
     }
     unitsNarrow{
         duration{
@@ -89,6 +89,15 @@ mt{
         }
     }
     unitsShort{
+        concentr{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-kilometer{
                 dnam{"L/km"}
@@ -143,15 +152,6 @@ mt{
                 many{"{0} lx"}
                 one{"{0} lx"}
                 other{"{0} lx"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                few{"{0} kt"}
-                many{"{0} kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
     }
