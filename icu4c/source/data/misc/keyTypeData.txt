@@ -13,6 +13,18 @@ keyTypeData:table(nofallback){
         }
         tz:alias{"/ICUDATA/timezoneTypes/bcpTypeAlias/tz"}
     }
+    keyInfo{
+        deprecated{
+            kh{"true"}
+            vt{"true"}
+        }
+        valueType{
+            ca{"incremental"}
+            kr{"multiple"}
+            vt{"multiple"}
+            x0{"any"}
+        }
+    }
     keyMap{
         calendar{"ca"}
         cf{""}
@@ -27,25 +39,43 @@ keyTypeData:table(nofallback){
         colreorder{"kr"}
         colstrength{"ks"}
         currency{"cu"}
+        d0{""}
         em{""}
         fw{""}
         hours{"hc"}
+        i0{""}
+        k0{""}
         kv{""}
         lb{""}
         lw{""}
+        m0{""}
+        measure{"ms"}
         numbers{"nu"}
         rg{""}
+        s0{""}
         sd{""}
         ss{""}
+        t0{""}
         timezone{"tz"}
         va{""}
         variabletop{"vt"}
+        x0{""}
     }
     typeAlias{
         colstrength{
             quarternary{"quaternary"}
         }
         timezone:alias{"/ICUDATA/timezoneTypes/typeAlias/timezone"}
+    }
+    typeInfo{
+        deprecated{
+            co{
+                direct{"true"}
+            }
+            tz{
+                camtr{"true"}
+            }
+        }
     }
     typeMap{
         calendar{
@@ -431,6 +461,29 @@ keyTypeData:table(nofallback){
             zwl{""}
             zwr{""}
         }
+        d0{
+            accents{""}
+            ascii{""}
+            casefold{""}
+            digit{""}
+            fcc{""}
+            fcd{""}
+            fullwidth{"fwidth"}
+            halfwidth{"hwidth"}
+            hex{""}
+            lower{""}
+            name{"charname"}
+            nfc{""}
+            nfd{""}
+            nfkc{""}
+            nfkd{""}
+            null{""}
+            numericPinyin{"npinyin"}
+            publishing{"publish"}
+            remove{""}
+            title{""}
+            upper{""}
+        }
         em{
             default{""}
             emoji{""}
@@ -451,6 +504,43 @@ keyTypeData:table(nofallback){
             h23{""}
             h24{""}
         }
+        i0{
+            handwrit{""}
+            pinyin{""}
+            und{""}
+            wubi{""}
+        }
+        k0{
+            101key{""}
+            102key{""}
+            600dpi{""}
+            768dpi{""}
+            android{""}
+            azerty{""}
+            chromeos{""}
+            colemak{""}
+            dvorak{""}
+            dvorakl{""}
+            dvorakr{""}
+            el220{""}
+            el319{""}
+            extended{""}
+            googlevk{""}
+            isiri{""}
+            legacy{""}
+            lt1205{""}
+            lt1582{""}
+            nutaaq{""}
+            osx{""}
+            patta{""}
+            qwerty{""}
+            qwertz{""}
+            ta99{""}
+            und{""}
+            var{""}
+            viqr{""}
+            windows{""}
+        }
         kv{
             currency{""}
             punct{""}
@@ -466,6 +556,33 @@ keyTypeData:table(nofallback){
             breakall{""}
             keepall{""}
             normal{""}
+        }
+        m0{
+            alaloc{""}
+            bgn{""}
+            buckwalt{""}
+            c{"c11"}
+            css{""}
+            din{""}
+            gost{""}
+            iso{""}
+            java{""}
+            mcst{""}
+            mns{""}
+            names{"prprname"}
+            percent{""}
+            perl{""}
+            plain{""}
+            satts{""}
+            ungegn{""}
+            unicode{""}
+            xml{""}
+            xml10{""}
+        }
+        measure{
+            imperial{"uksystem"}
+            metric{""}
+            ussystem{""}
         }
         numbers{
             ahom{""}
@@ -549,12 +666,22 @@ keyTypeData:table(nofallback){
         rg{
             RG_KEY_VALUE{""}
         }
+        s0{
+            accents{""}
+            ascii{""}
+            hex{""}
+            numericPinyin{"npinyin"}
+            publishing{"publish"}
+        }
         sd{
             SUBDIVISION_CODE{""}
         }
         ss{
             none{""}
             standard{""}
+        }
+        t0{
+            und{""}
         }
         timezone:alias{"/ICUDATA/timezoneTypes/typeMap/timezone"}
         va{
