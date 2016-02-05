@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/si.xml
@@ -218,7 +218,7 @@ si{
         su{"සන්ඩනීසියානු"}
         sv{"ස්වීඩන්"}
         sw{"ස්වාහිලි"}
-        swc{"කොන්ගෝ ස්වාහිලි"}
+        sw_CD{"කොන්ගෝ ස්වාහිලි"}
         ta{"දෙමළ"}
         te{"තෙළිඟු"}
         teo{"ටෙසෝ"}
@@ -375,7 +375,7 @@ si{
             tibt{"ටිබෙට ඉලක්කම්"}
         }
     }
-    Version{"2.1.20.4"}
+    Version{"2.1.23.84"}
     codePatterns{
         language{"{0} භාෂාව: සිංහල"}
         script{"{0} අක්ෂර මාලාව: සිංහල"}

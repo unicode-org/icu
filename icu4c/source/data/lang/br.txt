@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/br.xml
@@ -408,8 +408,8 @@ br{
         sux{"sumereg"}
         sv{"svedeg"}
         sw{"swahili"}
+        sw_CD{"swahili Kongo"}
         swb{"komoreg"}
-        swc{"swahili Kongo"}
         syc{"sirieg klasel"}
         syr{"sirieg"}
         szl{"silezieg"}
@@ -738,7 +738,7 @@ br{
         VALLADER{"rannyezh romañchek Vallader"}
         WADEGILE{"romanekadur Wade-Giles"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pa.xml
@@ -232,7 +232,7 @@ pa{
         su{"ਸੂੰਡਾਨੀ"}
         sv{"ਸਵੀਡਿਸ਼"}
         sw{"ਸਵਾਹਿਲੀ"}
-        swc{"ਕਾਂਗੋ ਸਵਾਹਿਲੀ"}
+        sw_CD{"ਕਾਂਗੋ ਸਵਾਹਿਲੀ"}
         ta{"ਤਮਿਲ"}
         te{"ਤੇਲਗੂ"}
         teo{"ਟੇਸੋ"}
@@ -395,7 +395,7 @@ pa{
             tibt{"ਤਿੱਬਤੀ ਅੰਕ"}
         }
     }
-    Version{"2.1.20.4"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"ਭਾਸ਼ਾ: {0}"}
         script{"ਲਿਪੀ: {0}"}

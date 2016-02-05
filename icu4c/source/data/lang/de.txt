@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/de.xml
@@ -545,8 +545,8 @@ de{
         sux{"Sumerisch"}
         sv{"Schwedisch"}
         sw{"Suaheli"}
+        sw_CD{"Kongo-Suaheli"}
         swb{"Komorisch"}
-        swc{"Kongo-Suaheli"}
         syc{"Altsyrisch"}
         syr{"Syrisch"}
         szl{"Schlesisch (Polen)"}
@@ -1009,7 +1009,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.19.72"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Sprache: {0}"}
         script{"Schrift: {0}"}

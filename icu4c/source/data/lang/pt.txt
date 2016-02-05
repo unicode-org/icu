@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pt.xml
@@ -470,8 +470,8 @@ pt{
         sux{"sumério"}
         sv{"sueco"}
         sw{"suaíli"}
+        sw_CD{"suaíli do Congo"}
         swb{"comoriano"}
-        swc{"suaíli do Congo"}
         syc{"siríaco clássico"}
         syr{"siríaco"}
         ta{"tâmil"}
@@ -870,7 +870,7 @@ pt{
         VALENCIA{"valenciano"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

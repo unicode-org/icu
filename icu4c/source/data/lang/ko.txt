@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ko.xml
@@ -472,8 +472,8 @@ ko{
         sux{"수메르어"}
         sv{"스웨덴어"}
         sw{"스와힐리어"}
+        sw_CD{"콩고 스와힐리어"}
         swb{"코모로어"}
-        swc{"콩고 스와힐리어"}
         syc{"시리아어 (고전)"}
         syr{"시리아어"}
         ta{"타밀어"}
@@ -898,7 +898,7 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"언어: {0}"}
         script{"스크립트: {0}"}

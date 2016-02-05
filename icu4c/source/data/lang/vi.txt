@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/vi.xml
@@ -495,8 +495,8 @@ vi{
         sux{"Tiếng Sumeria"}
         sv{"Tiếng Thụy Điển"}
         sw{"Tiếng Swahili"}
+        sw_CD{"Tiếng Swahili Congo"}
         swb{"Tiếng Cômo"}
-        swc{"Tiếng Swahili Congo"}
         syc{"Tiếng Syria Cổ điển"}
         syr{"Tiếng Syriac"}
         ta{"Tiếng Tamil"}
@@ -968,7 +968,7 @@ vi{
         VALLADER{"VALLADER"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.23.12"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}

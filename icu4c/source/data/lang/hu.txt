@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hu.xml
@@ -470,8 +470,8 @@ hu{
         sux{"sumér"}
         sv{"svéd"}
         sw{"szuahéli"}
+        sw_CD{"kongói szuahéli"}
         swb{"comorei"}
-        swc{"kongói szuahéli"}
         syc{"klasszikus szír"}
         syr{"szíriai"}
         ta{"tamil"}
@@ -881,7 +881,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ta.xml
@@ -453,8 +453,8 @@ ta{
         sux{"சுமேரியன்"}
         sv{"ஸ்வீடிஷ்"}
         sw{"சுவாஹிலி"}
+        sw_CD{"காங்கோ சுவாஹிலி"}
         swb{"கொமோரியன்"}
-        swc{"காங்கோ சுவாஹிலி"}
         syc{"பாரம்பரிய சிரியாக்"}
         syr{"சிரியாக்"}
         ta{"தமிழ்"}
@@ -809,7 +809,7 @@ ta{
         PINYIN{"பின்யின் ரோமானைசெஷன்"}
         WADEGILE{"வேட்-கைல்ஸ் ரோமனைஷேசன்"}
     }
-    Version{"2.1.19.55"}
+    Version{"2.1.23.16"}
     codePatterns{
         language{"மொழி: {0}"}
         script{"எழுத்து: {0}"}

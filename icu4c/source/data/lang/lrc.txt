@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lrc.xml
@@ -207,7 +207,7 @@ lrc{
         su{"سوٙدانی"}
         sv{"سوٙئدی"}
         sw{"سأڤاحیلی"}
-        swc{"سأڤاحیلی کونگو"}
+        sw_CD{"سأڤاحیلی کونگو"}
         ta{"تامیل"}
         te{"تئلئگو"}
         teo{"تئسو"}
@@ -302,7 +302,7 @@ lrc{
             latn{"عأدأدیا لاتین"}
         }
     }
-    Version{"2.1.19.97"}
+    Version{"2.1.23.7"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fi.xml
@@ -545,8 +545,8 @@ fi{
         sux{"sumeri"}
         sv{"ruotsi"}
         sw{"swahili"}
+        sw_CD{"kingwana"}
         swb{"komori"}
-        swc{"kingwana"}
         syc{"muinaissyyria"}
         syr{"syyria"}
         szl{"sleesia"}
@@ -1071,7 +1071,7 @@ fi{
     Variants%secondary{
         FONUPA{"suomalais-ugrilainen tarkekirjoitus"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"kieli: {0}"}
         script{"kirjoitusjärjestelmä: {0}"}

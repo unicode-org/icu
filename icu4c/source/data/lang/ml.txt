@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ml.xml
@@ -470,8 +470,8 @@ ml{
         sux{"സുമേരിയൻ"}
         sv{"സ്വീഡിഷ്"}
         sw{"സ്വാഹിലി"}
+        sw_CD{"കോംഗോ സ്വാഹിലി"}
         swb{"കൊമോറിയൻ"}
-        swc{"കോംഗോ സ്വാഹിലി"}
         syc{"പുരാതന സുറിയാനിഭാഷ"}
         syr{"സുറിയാനി"}
         ta{"തമിഴ്"}
@@ -838,7 +838,7 @@ ml{
         POSIX{"കമ്പ്യൂട്ടർ"}
         REVISED{"പരിഷ്ക്കരിച്ച ലിപി"}
     }
-    Version{"2.1.19.77"}
+    Version{"2.1.22.93"}
     codePatterns{
         language{"ഭാഷ: {0}"}
         script{"ലിപി: {0}"}
