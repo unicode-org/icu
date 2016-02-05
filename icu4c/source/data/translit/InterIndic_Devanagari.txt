@@ -1,12 +1,16 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: InterIndic_Devanagari.txt
 # Generated from CLDR 
 #
+
+# InterIndic-Devanagari
+#:: NFD (NFC) ;
+#Rules for Decomposed characters
 \uE028\uE03C → ऩ;  #\uE029
 \uE030\uE03C → ऱ;  #\uE031
 \uE033\uE03C → ऴ;  #\uE034
@@ -18,6 +22,7 @@
 \uE022\uE03C → ढ़;  #\uE05D LETTER RHA   (pronounced RRHA)
 \uE02B\uE03C → फ़;  #\uE05E LETTER FA
 \uE02F\uE03C → य़;  #\uE05F LETTER YYA
+#Decomposed compatibility transliterations
 \uE012\uE057→औ;   # FALLBACK FOR TAMIL AU
 0 → ०;       # FALLBACK FOR TAMIL
 1 → १;
@@ -73,9 +78,11 @@
 \uE02F →  य;  # LETTER YA
 \uE030 →  र;  # LETTER RA
 \uE031 →  ऱ;  # LETTER RRA (Eyelash RA for Southern scripts)
+#\uE031 →  र;
 \uE032 →  ल;  # LETTER LA
 \uE033 →  ळ;  # LETTER LLA
 \uE034 →  ऴ;  # LETTER LLLA (LLLA for Southern scripts)
+#\uE034 →  ळ;
 \uE035 →  व;  # LETTER VA
 \uE036 →  श;  # LETTER SHA
 \uE037 →  ष;  # LETTER SSA
@@ -148,3 +155,6 @@
 \uE081→व;  # FALLBACK FOR ORIYA LETTER WA
 \uE082→ॽ;     # Devanagari Glottal Sign
 \uE083→त\u094D;  # Bengali Khanda-ta
+#    :: NFC;
+# eof
+

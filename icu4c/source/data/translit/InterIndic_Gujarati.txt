@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: InterIndic_Gujarati.txt
 # Generated from CLDR 
 #
+
+# InterIndic-Gujarati
+#:: NFD (NFC) ;
 \uE001→\u0A81; # SIGN CANDRABINDU
 \uE002→\u0A82; # SIGN ANUSVARA
 \uE003→ઃ; # SIGN VISARGA
@@ -136,3 +139,7 @@
 \uE083→ત\u0ACD;  # Bengali Khanda-ta
 0 → ૦;        # FALLBACK FOR TAMIL
 1 → ૧;
+#\uE080→; # UNMAPPED InterIndic-Gujarati: ISSHAR
+#    :: NFC (NFD) ;
+# eof
+

@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: InterIndic_Oriya.txt
 # Generated from CLDR 
 #
+
+# InterIndic-Oriya
+#:: NFD (NFC) ;
 \uE001→\u0B01; # SIGN CANDRABINDU
 \uE002→ଂ; # SIGN ANUSVARA
 \uE003→ଃ; # SIGN VISARGA
@@ -136,3 +139,6 @@
 \uE083→ତ\u0B4D;  # Bengali Khanda-ta
 0 → ୦;    # FALLBACK FOR TAMIL
 1 → ୧;
+#    :: NFC (NFD) ;
+# eof
+

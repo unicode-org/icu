@@ -1,12 +1,18 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Fullwidth_Halfwidth.txt
 # Generated from CLDR 
 #
+
+# Fullwidth-Halfwidth
+# Mechanically generated from Unicode Character Database
+# IDEOGRAPHIC SPACE then added, and
+# FULLWIDTH MACRON changed to map to MACRON, not SPACE + COMBINING MACRON
+# multicharacter
 ガ↔ｶﾞ; # to KATAKANA LETTER GA
 ギ↔ｷﾞ; # to KATAKANA LETTER GI
 グ↔ｸﾞ; # to KATAKANA LETTER GU
@@ -35,6 +41,7 @@
 ヴ↔ｳﾞ; # to KATAKANA LETTER VU
 ヷ↔ﾜﾞ; # to KATAKANA LETTER VA
 ヺ↔ｦﾞ; # to KATAKANA LETTER VO
+# single character
 ！↔'!'; # from FULLWIDTH EXCLAMATION MARK
 ＂↔'"'; # from FULLWIDTH QUOTATION MARK
 ＃↔'#'; # from FULLWIDTH NUMBER SIGN
@@ -259,3 +266,5 @@
 ↓↔￬; # to HALFWIDTH DOWNWARDS ARROW
 ■↔￭; # to HALFWIDTH BLACK SQUARE
 ○↔￮; # to HALFWIDTH WHITE CIRCLE
+# eof
+

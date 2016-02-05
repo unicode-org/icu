@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Telugu_InterIndic.txt
 # Generated from CLDR 
 #
+
+# Telugu-InterIndic
+#:: NFD (NFC) ;
 \u0C46\u0C4D\u0C56→\uE048\uE04D;
 \u0C46\u0C56→\uE048;# VOWEL SIGN AI
 ఁ→\uE001;      # SIGN CANDRABINDU
@@ -88,3 +91,6 @@
 ౭→\uE06D;      # DIGIT SEVEN
 ౮→\uE06E;      # DIGIT EIGHT
 ౯→\uE06F;      # DIGIT NINE
+#    :: NFC (NFD) ;
+# eof
+

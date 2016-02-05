@@ -1,21 +1,44 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: zh_Latn_PINYIN_ru.txt
 # Generated from CLDR 
 #
+
+# Cyrillization of Mandarin Chinese from Pinyin into Russian (Palladius system).
+#
+# References:
+#   http://ru.wikipedia.org/wiki/Транскрипционная_система_Палладия
+#   http://www.omniglot.com/writing/mandarin_pts.htm
+#   http://www.pinyin.info/romanization/russian/index.html
+# These differ in the treatment of some syllables (e.g. <jue>) from the rules
+# below.
+#
+# Further commentary:
+#   http://languagelog.ldc.upenn.edu/nll/?p=604
+#
+# Remove tone marks.
 :: NFD (NFC);
 [\u0304\u0301\u030C\u0300\u0306] → ;
 :: NFC (NFD);
+#
+#
+# Syllabify. Add apostrophes to disambiguate whether <n> and <g> belong to the
+# coda or onset of a syllable.
 :: Null ();
 ng } [aeou] → n\'g;
 ng → ng\';
 n } [aeiouü] → \'n;
 n → n\';
+#
+#
+# Main pass.
 :: Null ();
+#
+#
 Ai → Ай;
 A  → А;
 B  → Б;
@@ -57,9 +80,13 @@ Yu → Ю | v;
 Zh → Чж;
 Zi → Цзы;
 Z  → Цз;
+#
+#
 [$] { n → н;
 \'n → н;
 \'  → ;
+#
+#
 ai → ай;
 a  → а;
 b  → б;
@@ -100,7 +127,12 @@ ui → уй;
 uo → о;
 u  → у;
 ü  → ю | v;
+#
+# We use the dummy symbol <v> to signal that an <ü> or equivalent character has
+# just been processed.
 ve → э;
+#
+#alternative: ve → е;
 v } [an] → ;
 v  → й;
 wu → у;
@@ -118,4 +150,8 @@ yu → ю | v;
 zh → чж;
 zi → цзы;
 z  → цз;
+#
+#
+# Final pass: Make sure that the output consists entirely of Cyrillic letters.
 :: NFC ();
+

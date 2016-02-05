@@ -1,12 +1,21 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Gurmukhi_InterIndic.txt
 # Generated from CLDR 
 #
+
+# Gurmukhi-InterIndic
+#:: NFD (NFC) ;
+#ਖ\u0A3C→\uE059; # LETTER KHHA
+#ਗ\u0A3C→\uE05A; # LETTER GHHA
+#ਜ\u0A3C→\uE05B; # LETTER ZA
+#ਸ\u0A3C→\uE036; # LETTER SHA
+#ਲ\u0A3C→\uE033; # LETTER LLA
+#ਫ\u0A3C→\uE05E; # LETTER FA
 \u0A01→\uE001;  # SIGN CHANDRABINDU
 \u0A02→\uE002;  # SIGN BINDI
 ਅ→\uE005;  # LETTER A
@@ -83,3 +92,6 @@
 ੴ→\uE080;  # EK ONKAR
 ।→\uE064;        # DANDA
 ॥→\uE065;        # DOUBLE DANDA
+#    :: NFC (NFD) ;
+# eof
+

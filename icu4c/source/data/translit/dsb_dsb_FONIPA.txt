@@ -1,6 +1,6 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -8,9 +8,11 @@
 # Generated from CLDR 
 #
 
+# Transforms Lower Sorbian (dsb) to its IPA transcription (dsb_FONIPA).
+# http://en.wikipedia.org/wiki/Sorbian_alphabet
+# Transform input to normalized form NFC, and to lowercase.
 ::NFC;
 ::Lower;
-
 a → a ;
 b\u0301 → bʲ ; # old spelling
 bj → bʲ ; # modern spelling
@@ -56,13 +58,12 @@ y → ɨ ;
 ž → ʒ ;
 ź → ʑ ;
 z → z ;
-
 ::NFC;
-
+# Assimilation.
 b } [k] → p ;
 d } [k] → t ;
 ʃt\u0361ɕ → ɕt\u0361ɕ ;
-
+# Final de-voicing.
 b } [$] → p ;
 d \u0361 z } [$] → t \u0361 s ;
 d } [$] → t ;
@@ -72,3 +73,4 @@ w } [$] → f ;
 ʑ } [$] → ɕ ;
 z } [$] → s ;
 ʒ } [$] → ʃ ;
+

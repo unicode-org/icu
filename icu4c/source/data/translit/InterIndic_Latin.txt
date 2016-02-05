@@ -1,15 +1,21 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: InterIndic_Latin.txt
 # Generated from CLDR 
 #
+
+# InterIndic-Latin
+#\u0E00 reserved
+#consonants
 $chandrabindu=\uE001;
 $anusvara=\uE002;
 $visarga=\uE003;
+#\u0E004 reserved
+# w←vowel→ represents the stand-alone form
 $wa=\uE005;
 $waa=\uE006;
 $wi=\uE007;
@@ -64,8 +70,11 @@ $sha=\uE036;
 $ssa=\uE037;
 $sa=\uE038;
 $ha=\uE039;
+#\u093A Reserved
+#\u093B Reserved
 $nukta=\uE03C;
 $avagraha=\uE03D; # SIGN AVAGRAHA
+# ←vowel→ represents the dependent form
 $aa=\uE03E;
 $i=\uE03F;
 $ii=\uE040;
@@ -82,6 +91,8 @@ $so=\uE04A; # VOWEL SIGN SHORT O
 $o=\uE04B;  # ो
 $au=\uE04C;
 $virama=\uE04D;
+# \u094E Reserved
+# \u094F Reserved
 $om=\uE050; # OM
 \uE051→;        # UNMAPPED STRESS SIGN UDATTA
 \uE052→;        # UNMAPPED STRESS SIGN ANUDATTA
@@ -90,6 +101,7 @@ $om=\uE050; # OM
 $lm = \uE055;#  Telugu Length Mark
 $ailm=\uE056;#  AI Length Mark
 $aulm=\uE057;#  AU Length Mark
+#urdu compatibity forms
 $uka=\uE058;
 $ukha=\uE059;
 $ugha=\uE05A;
@@ -114,14 +126,21 @@ $six=\uE06C;      # DIGIT SIX
 $seven=\uE06D;    # DIGIT SEVEN
 $eight=\uE06E;    # DIGIT EIGHT
 $nine=\uE06F;     # DIGIT NINE
+# Glottal stop
 $dgs=\uE082;
+#Khanda-ta
 $kta=\uE083;
 $depVowelAbove=[\uE03E-\uE040\uE045-\uE04C];
 $depVowelBelow=[\uE041-\uE044];
+# $x was originally called '§'; $z was '%'
 $x=[$aa$ai$au$ii$i$uu$u$rrh$rh$lh$llh$e$o$se$ce$so$co];
 $z=[bcdfghjklmnpqrstvwxyz];
 $vowels=[aeiour\u0304\u0325\u0306];
 $forceIndependentMatra = [^[[:L:][\u0300-\u034C]]];
+######################################################################
+# convert from Native letters to Latin letters
+######################################################################
+#transliterations for anusvara
 $anusvara} [$ka$kha$ga$gha$nga]             → n\u0307;
 $anusvara} [$ca$cha$ja$jha$nya]             → n\u0304;
 $anusvara} [$tta$ttha$dda$ddha$nna]         → n\u0323;
@@ -129,6 +148,7 @@ $anusvara} [$ta$tha$da$dha$na]              → n;
 $anusvara} [$pa$pha$ba$bha$ma]              → m;
 $anusvara} [$ya$ra$lla$la$va$ssa$sha$sa$ha] → n;
 $anusvara→ m\u0307;
+# Urdu compatibility
 $ya$nukta}$x        → y\u0307;
 $ya$nukta$virama    → y\u0307;
 $ya$nukta           → y\u0307a;
@@ -186,6 +206,7 @@ $ela                → l\u0331a;
 $uya}$x             → y\u0307;
 $uya$virama         → y\u0307;
 $uya                → y\u0307a;
+# normal consonants
 $ka$virama}$ha→k'';
 $ka}$x→k;
 $ka$virama→k;
@@ -312,6 +333,7 @@ $sa$virama}$ssa→s'';
 $sa$virama}$sa→s'';
 $sa}$x→s;
 $sa$virama→s;
+#for gurmukhi
 $sa$nukta}$x→s\u0301;
 $sa$nukta$virama→s\u0301;
 $sa$nukta→s\u0301a;
@@ -325,6 +347,7 @@ $ssa→s\u0323a;
 $ha}$x→h;
 $ha$virama→h;
 $ha→ha;
+# dependent vowels (should never occur except following consonants)
 $forceIndependentMatra{$aa  → \u0314a\u0304;
 $forceIndependentMatra{$ai  → \u0314ai;
 $forceIndependentMatra{$au  → \u0314au;
@@ -338,6 +361,7 @@ $forceIndependentMatra{$llh → \u0314l\u0325\u0304;
 $forceIndependentMatra{$lh  → \u0314l\u0325;
 $forceIndependentMatra{$e   → \u0314e\u0304;
 $forceIndependentMatra{$o   → \u0314o\u0304;
+#extra vowels
 $forceIndependentMatra{$ce  → \u0314e\u0306;
 $forceIndependentMatra{$co  → \u0314o\u0306;
 $forceIndependentMatra{$se  → \u0314e;
@@ -357,10 +381,12 @@ $llh → l\u0325\u0304;
 $lh  → l\u0325;
 $e   → e\u0304;
 $o   → o\u0304;
+#extra vowels
 $ce  → e\u0306;
 $co  → o\u0306;
 $se  → e;
 $so  → o;
+#dependent vowels when following independent vowels. Generally Illegal only for roundtripping
 $waa} $x → a\u0304\u0314;
 $wai} $x → ai\u0314;
 $wau} $x → au\u0314;
@@ -375,11 +401,13 @@ $wl } $x → l\u0325\u0314;
 $we } $x → e\u0304\u0314;
 $wo } $x → o\u0304\u0314;
 $wa } $x → a\u0314;
+#extra vowels
 $wce} $x → e\u0306\u0314;
 $wco} $x → o\u0306\u0314;
 $wse} $x → e\u0314;
 $wso} $x → o\u0314;
 $om} $x → ''om\u0314;
+# independent vowels when preceeded by vowels
 $vowels{$waa  → ''a\u0304;
 $vowels{$wai  → ''ai;
 $vowels{$wau  → ''au;
@@ -394,10 +422,12 @@ $vowels{$wl   → ''l\u0325;
 $vowels{$we   → ''e\u0304;
 $vowels{$wo   → ''o\u0304;
 $vowels{$wa   → ''a;
+#extra vowels
 $vowels{$wce  → ''e\u0306;
 $vowels{$wco  → ''o\u0306;
 $vowels{$wse  → ''e;
 $vowels{$wso  → ''o;
+# independent vowels (otherwise)
 $waa → a\u0304;
 $wai → ai;
 $wau → au;
@@ -412,15 +442,18 @@ $wl  → l\u0325;
 $we  → e\u0304;
 $wo  → o\u0304;
 $wa  → a;
+#extra vowels
 $wce → e\u0306;
 $wco → o\u0306;
 $wse → e;
 $wso → o;
 $om → ''om;
+#stress marks
 $avagraha → \u0315;
 $chandrabindu$anusvara→\u0303;
 $chandrabindu → m\u0310;
 $visarga→h\u0323;
+#numbers
 $zero  → 0;
 $one   → 1;
 $two   → 2;
@@ -439,9 +472,11 @@ $kta→t\u0331;
 $danda→'.';
 $doubleDanda→'.';
 \uE070→;       # ABBREVIATION SIGN
+# LETTER RA WITH MIDDLE DIAGONAL
 \uE071}$x→ra;
 \uE071$virama→r;
 \uE071→ra;
+# LETTER RA WITH LOWER DIAGONAL
 \uE072}$x→ra;
 \uE072$virama→r;
 \uE072→ra;
@@ -460,3 +495,4 @@ $doubleDanda→'.';
 \uE07F→;       # URA
 \uE080→;       # EK ONKAR
 \uE004→;       # DEVANAGARI VOWEL SIGN SHORT A
+
