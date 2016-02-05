@@ -1,19 +1,33 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Han_Latin_Names.txt
 # Generated from CLDR 
 #
+
+# This transform is primarily intended to produce readings for Chinese surnames, or for full
+# Chinese personal names - surname first - that occur at the beginning of a contiguous Han substring
+# (i.e. at the beginning of text, or immediately preceded by space or other non-Han characters).
+# Several Han characters have different readings in surnames, than the readings found in Han-Latin.
+# ----
+# Insert marker at start of each Han sequence (including Han after space).
+# Do this before ::Han-Spacedhan() to catch Han after space in original text,
+# and to apply before all other rules.
 $startOfHanMarker = \uFDD1;
 [:^script=Han:] { ([:script=Han:]) → $startOfHanMarker $1;
+# Need Spacedhan so the name transliterations get spaced properly
 ::Han-Spacedhan();
+# Convert special name readings that depend on next character
 令 } \u0020? 狐 →líng;
 万 } \u0020? 俟 →mò;
 澹 } \u0020? 台 →tán;
+# The following maps 长 to the standard Han-Latin reading zhǎng for this case,
+# to override the normal Han-Latin/Names reading 长→cháng further below
 $startOfHanMarker{ 长 } \u0020? 孙 →zhǎng;
+# Convert single characters with special name readings
 $startOfHanMarker{ 秘→bì;
 $startOfHanMarker{ 卜→bǔ;
 长→cháng;
@@ -48,7 +62,11 @@ $startOfHanMarker{ 员→yùn;
 $startOfHanMarker{ 查→zhā;
 翟→zhái;
 曾→zēng;
+# Convert $startOfHanMarkers to space, or to nothing if they are at the beginning of text.
+# Need to do this as a separate pass to get the spacing right.
 ::Null();
 [^$]{ $startOfHanMarker →\u0020;
 $startOfHanMarker →;
+# Then run the normal Han-Latin transform for the rest
 ::Han-Latin();
+

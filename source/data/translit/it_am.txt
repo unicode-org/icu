@@ -1,19 +1,29 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: it_am.txt
 # Generated from CLDR 
 #
+
+# Italian to Amharic Transliteration
 ::NFD(NFC);
 ::Lower();
 ::[:Latin:] fullwidth-halfwidth();
+#
+#
+# Variables.
 $vowel = [aeiou];
 $consonant = [bcdfghjklmnpqrstvwxyz];
+#
+#
+# Ignore apostrophe.
 ($consonant) \' → | $1;
 \' → ;
+#
+#
 cqu → ኩ ;
 cc → | c;
 ca → ካ;
@@ -30,6 +40,8 @@ chu → ኩ;
 che → ኬ;
 cho → ኮ;
 c } $consonant → ክ;
+#
+#
 gg → | g;
 ghi → ጊ;
 ghe → ጌ;
@@ -41,6 +53,8 @@ gnu → ኙ;
 gne → ኜ;
 gno → ኞ;
 gn } $consonant → ኝ;
+#
+#
 ga → ጋ;
 gia → ጂያ;
 giu → ጂዩ;
@@ -50,6 +64,8 @@ gu → ጉ;
 ge → ጄ;
 go → ጎ;
 g } $consonant → ግ;
+#
+#
 rr → | r;
 ra → ራ;
 ri → ሪ;
@@ -57,6 +73,8 @@ ru → ሩ;
 re → ሬ;
 ro → ሮ;
 r } $consonant → ር;
+#
+#
 ll → | l;
 la → ላ;
 li → ሊ;
@@ -64,6 +82,8 @@ lu → ሉ;
 le → ሌ;
 lo → ሎ;
 l } $consonant → ል;
+#
+#
 tt → | t;
 ta → ታ;
 ti → ቲ;
@@ -77,6 +97,8 @@ tho → ቶ;
 tzu → ፁ;
 tz → | zz;
 t } $consonant → ት;
+#
+#
 dd → | d;
 da → ዳ;
 di → ዲ;
@@ -84,6 +106,8 @@ du → ዱ;
 de → ዴ;
 do → ዶ;
 d } $consonant → ድ;
+#
+#
 mm → | m;
 ma → ማ;
 mi → ሚ;
@@ -91,6 +115,8 @@ mu → ሙ;
 me → ሜ;
 mo → ሞ;
 m } $consonant → ም;
+#
+#
 nn → | n;
 na → ና;
 ni → ኒ;
@@ -98,6 +124,8 @@ nu → ኑ;
 ne → ኔ;
 no → ኖ;
 n } $consonant → ን;
+#
+#
 ff → | f;
 fa → ፋ;
 fi → ፊ;
@@ -105,6 +133,8 @@ fu → ፉ;
 fe → ፌ;
 fo → ፎ;
 f } $consonant → ፍ;
+#
+#
 bb → | b;
 ba → ባ;
 bi → ቢ;
@@ -112,6 +142,8 @@ bu → ቡ;
 be → ቤ;
 bo → ቦ;
 b } $consonant → ብ;
+#
+#
 pp → | p;
 pa → ፓ;
 pi → ፒ;
@@ -119,6 +151,8 @@ pu → ፑ;
 pe → ፔ;
 po → ፖ;
 p } $consonant → ፕ;
+#
+#
 vv → | v;
 va → ቫ;
 vi → ቪ;
@@ -126,8 +160,13 @@ vu → ቩ;
 ve → ቬ;
 vo → ቮ;
 v } $consonant → ቩ;
+#
+#
 sa } nt[ao] → ሣ;
 ss → | \~s;
+#
+#
+# 's' is voiced before [bdglmnrv].
 sb → ዝ | b;
 sd → ዝ | d;
 sg → ዝ | g;
@@ -136,46 +175,71 @@ sm → ዝ | m;
 sn → ዝ | n;
 sr → ዝ | r;
 sv → ዝ | v;
+#
+#
+# Force 's' after a consonat to be unvoiced.
 ($consonant) s } $vowel → | $1 \~ s;
 \~sa → ሣ;
 \~si → ሢ;
 \~su → ሡ;
 \~se → ሤ;
 \~so → ሦ;
+#
+#
+# 's' at the beginning is usually unvoiced.
 [:^Letter:] { sa → ሣ;
 [:^Letter:] { si → ሢ;
 [:^Letter:] { su → ሡ;
 [:^Letter:] { se → ሤ;
 [:^Letter:] { so → ሦ;
+#
+#
+# Otherwise voiced 's' are common.
 sa → ዛ;
 si → ዚ;
 su → ዙ;
 se → ዜ;
 so → ዞ;
+#
+#
 scia → ሺያ;
 sci → ሺ;
 sce → ሼ;
+#
+#
 zz → | \~z;
+#
+# Force 'z' after a consonat to be unvoiced.
 ($consonant) z → | $1 \~z;
 \~za → ጻ;
 \~zi → ጺ;
 \~zu → ጹ;
 \~ze → ጼ;
 \~zo → ጾ;
+#
+#
+# Otherwise voiced 'z' are common except for 'zi'.
 za → ዛ;
 [:^Letter:] { zi → ዚ;
 zi → ዚ;
 zu → ዙ;
 ze → ዜ;
 zo → ዞ;
+#
+#
 ja → ያ;
 je → ዬ;
 j → | i;
+#
+#
+# Standalone vowels and consonants.
 a → አ;
 i → ዒ;
 u → ዑ;
 e → ዔ;
 o → ዖ;
+#
+#
 b → ብ;
 c → ክ;
 d → ድ;
@@ -195,5 +259,8 @@ v → ው;
 x → | cs;
 y → | i;
 z → ዝ;
+#
+#
 [:nonspacing mark:] → ;
 ::NFC(NFD);
+

@@ -1,12 +1,14 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: lt_Title.txt
 # Generated from CLDR 
 #
+
+# Make any string of letters after a cased letter be lower
 ::NFD();
 [:cased:] [:case-ignorable:]* {I } [^[:ccc=Not_Reordered:][:ccc=Above:]]* [:ccc=Above:] → i \u0307;
 [:cased:] [:case-ignorable:]* {J } [^[:ccc=Not_Reordered:][:ccc=Above:]]* [:ccc=Above:] → j \u0307;
@@ -15,6 +17,8 @@
 [:cased:] [:case-ignorable:]* {I \u0301 → i \u0307 \u0301;
 [:cased:] [:case-ignorable:]* {I \u0303 → i \u0307 \u0303;
 [:cased:] [:case-ignorable:]* { (.) → &Any-Lower($1) ;
+# Otherwise all lowercase go to upper (titlecase stay as is)
 [:Soft_Dotted:] [^[:ccc=Not_Reordered:][:ccc=Above:]]* { \u0307 → ;
 ([:Lowercase:]) → &Any-Upper($1) ;
 ::NFC();
+

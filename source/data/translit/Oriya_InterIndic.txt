@@ -1,12 +1,17 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Oriya_InterIndic.txt
 # Generated from CLDR 
 #
+
+# Oriya-InterIndic
+#:: NFD (NFC) ;
+#ଡ\u0B3C→\uE05C;# LETTER RRA
+#ଢ\u0B3C→\uE05D;# LETTER RHA
 େ\u0B56→\uE048;# VOWEL SIGN AI
 ୋ→\uE04B;# VOWEL SIGN O
 ୌ→\uE04C;# VOWEL SIGN AU
@@ -68,11 +73,13 @@
 \u0B42→\uE042;      # VOWEL SIGN UU
 \u0B43→\uE043;      # VOWEL SIGN VOCALIC R
 େ→\uE047;      # VOWEL SIGN E
+#
 \u0B4D→\uE04D;      # SIGN VIRAMA
 \u0B56→\uE056;      # AI LENGTH MARK
 ୗ→\uE057;      # AU LENGTH MARK
 ।→\uE064;      # DANDA
 ॥→\uE065;      # DOUBLE DANDA
+#
 ୟ→\uE05F;      # LETTER YYA
 ୠ→\uE060;      # LETTER VOCALIC RR
 ୡ→\uE061;      # LETTER VOCALIC LL
@@ -88,3 +95,6 @@
 ୯→\uE06F;      # DIGIT NINE
 ୰→\uE07B;      # ISSHAR
 ୱ→\uE081;      # LETTER WA
+#    :: NFC (NFD) ;
+# eof
+

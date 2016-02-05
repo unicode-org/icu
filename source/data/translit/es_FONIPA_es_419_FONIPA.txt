@@ -1,11 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: es_FONIPA_es_419_FONIPA.txt
 # Generated from CLDR 
 #
+
+# Conflate sounds of Castilian Spanish to produce Latin American Spanish.
+# This operates on a phonemic IPA transcription of Spanish (es_FONIPA).
 ʎ → ʝ;
 [sθ]+ → s;
+

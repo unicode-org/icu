@@ -1,12 +1,14 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: Bengali_InterIndic.txt
 # Generated from CLDR 
 #
+
+# Bengali-InterIndic
 ো→\uE04B; # VOWEL SIGN O
 ৌ→\uE04C; # VOWEL SIGN AU
 \u0981→\uE001; # SIGN CANDRABINDU
@@ -69,9 +71,11 @@
 ৈ→\uE048; # VOWEL SIGN AI
 ো→\uE04B;
 ৌ→\uE04C;
+#
 \u09CD→\uE04D; # SIGN VIRAMA
 ৎ→\uE083; # Khanda-ta
 ৗ→\uE057; # AU LENGTH MARK
+#
 ৠ→\uE060; # LETTER VOCALIC RR
 ৡ→\uE061; # LETTER VOCALIC LL
 \u09E2→\uE062; # VOWEL SIGN VOCALIC L
@@ -99,3 +103,6 @@
 ৺→\uE07B; # ISSHAR
 ।→\uE064;        # DANDA
 ॥→\uE065;        # DOUBLE DANDA
+#    :: NFC (NFD) ;
+# eof
+

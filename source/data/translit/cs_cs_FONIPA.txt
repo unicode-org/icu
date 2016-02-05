@@ -1,14 +1,30 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: cs_cs_FONIPA.txt
 # Generated from CLDR 
 #
+
+# Tranformation from Czech to Czech in IPA transcription (cs_FONIPA).
+# The transcription is not fully phonemic since we mark allophonic variations
+# of /m/, /n/, /x/ and /ɦ/.
+#
+# http://en.wikipedia.org/wiki/Czech_alphabet
+# http://en.wikipedia.org/wiki/Czech_language#Phonology
+# http://en.wikipedia.org/wiki/Czech_orthography
+#
+# Transform input to normalized form NFC, and to lowercase.
 ::NFC;
 ::Lower;
+#
+#
+#
+#
+# Digraphs.
+#
 ch } [ bdďjlmnňrřvwzž ] → ɣ ;
 ch → x ;
 dě → ɟɛ ;
@@ -17,6 +33,9 @@ tě → cɛ ;
 ně → ɲɛ ;
 dž → d \u0361 ʒ;  # affricate indicated by ligature tie
 dz → d \u0361 z;  # affricate indicated by ligature tie
+#
+#
+#
 a → a ;
 á → aː ;
 b → b ;
@@ -61,3 +80,4 @@ y → ɪ ;
 ý → iː ;
 z → z ;
 ž → ʒ ;
+

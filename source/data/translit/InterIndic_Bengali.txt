@@ -1,12 +1,15 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: InterIndic_Bengali.txt
 # Generated from CLDR 
 #
+
+# InterIndic-Bengali
+#:: NFD (NFC) ;
 \uE001→\u0981;          # SIGN CANDRABINDU
 \uE002→ং;          # SIGN ANUSVARA
 \uE003→ঃ;          # SIGN VISARGA
@@ -136,3 +139,6 @@
 \uE083→ৎ;          # Khanda-ta
 0 → ০;             # FALLBACK FOR TAMIL
 1 → ১;
+#    :: NFC (NFD) ;
+# eof
+

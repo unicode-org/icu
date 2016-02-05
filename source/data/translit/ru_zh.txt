@@ -1,17 +1,26 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: ru_zh.txt
 # Generated from CLDR 
 #
+
+# Transliteration of Russian into Mandarin written in simplified Chinese.
+#
+# TODO(mjansche): Implement exception rules from GB/T 17693.4-2009 section 5.3.
+# TODO(anyone): Simplify.
 $bow = [-\ $];  # Word boundary.
 $vowel = [аеийоуыьэюяё];
 $not_vowel = [^$vowel];
+#
+#
 ::NFC;
 ::Lower;
+#
+#
 аа → а;
 бб → б;
 вв → в;
@@ -36,11 +45,20 @@ $vowel { нь → н;
 чч → ч;
 шш → ш;
 щщ → щ;
+#
+#
+## иа → я;  ## TODO: Figure out if/when this applies.
+#
 ::Null;
+#
+#
+# Special exceptions, per GB/T 17693.4-2009 表 1, 注 8:
 бург } $bow       → 堡 ;
 град } $bow       → 格勒 ;
 город } $bow     → 哥罗德 ;
 цов } $bow        → 佐夫 ;
+#
+#
 аи                 → 艾 ;
 ай                 → 艾 ;
 ан } $not_vowel    → 安 ;
@@ -448,6 +466,8 @@ $vowel { нь → н;
 лян } $not_vowel   → 良 ;
 ля                 → 利亚 ;
 лё                 → 廖 ;
+#
+## $not_vowel { л     → 勒 ;  ## FIXME: Figure out if/when this applies.
 л                  → 尔 ;
 маи                → 迈 ;
 май                → 迈 ;
@@ -574,6 +594,8 @@ $vowel { нь → н;
 рян } $not_vowel   → 良 ;
 ря                 → 里亚 ;
 рё                 → 廖 ;
+#
+## $not_vowel { р     → 勒 ;  ## FIXME: Figure out if/when this applies.
 р                  → 尔 ;
 саи                → 赛 ;
 сай                → 赛 ;
@@ -965,6 +987,10 @@ $vowel { нь → н;
 ян } $not_vowel    → 扬 ;
 я                  → 亚 ;
 ё                  → 约 ;
+#
+#
+# Dong-nan-xi-hai pass.  Per GB/T 17693.4-2009 表 1, 注 4, replace confusing
+# characters at the beginning and end of a word.
 :: Null ();
 $bow { 耶 → 叶 ;
 $bow { 夫 → 弗 ;
@@ -973,4 +999,7 @@ $bow { 南 → 楠 ;
 $bow { 西 → 锡 ;
 江 } $bow → 姜 ;
 海 } $bow → 亥 ;
+#
+#
 ::NFC;
+

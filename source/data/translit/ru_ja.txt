@@ -1,19 +1,27 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: ru_ja.txt
 # Generated from CLDR 
 #
+
+# Transliteration from Russian into Japanese (Katakana).
 $word_boundary = [-\ $];
 $vowel = [аеийоуыьэюяёъ];
 $not_vowel = [^$vowel];
+#
+#
 ::NFC;
 ::Lower;
+#
+#
 $vowel { го } $word_boundary → во;
 ::Null;
+#
+#
 а → ア ;
 ба → バ ;
 бе → ベ ;
@@ -439,4 +447,7 @@ $vowel { го } $word_boundary → во;
 ю → ユ ;
 я → ヤ ;
 ё → ョ ;
+#
+#
 ::NFC;
+

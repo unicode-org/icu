@@ -1,16 +1,22 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2015, International Business Machines
+# *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 # File: InterIndic_Gurmukhi.txt
 # Generated from CLDR 
 #
+
+# InterIndic-Gurmukhi
+#:: NFD (NFC) ;
 $vowel = [ਅ-ਔ ਾ-\u0A4D];
 $consonant = [ਕ-ਹ];
 \uE001→\u0A01;       # SIGN CHANDRABINDU
+#rules for BINDI
+# Anusvara is equivalent to BINDI when preceeded by a vowel
 $vowel{\uE002→\u0A02; # SIGN ANUSVARA (\u0A02 = SIGN BINDI)
+# else is equivalent to TIPPI
 $consonant{\uE002→\u0A70; # SIGN TIPPI
 \uE002→\u0A02;
 \uE003→;       # FALLBACK BLOW AWAY SIGN VISARGA
@@ -140,3 +146,6 @@ $consonant{\uE002→\u0A70; # SIGN TIPPI
 \uE083→ਤ\u0A4D;  # Bengali Khanda-ta
 0 → ੦;       # FALLBACK FOR TAMIL
 1 → ੧;
+#    :: NFC (NFD) ;
+# eof
+
