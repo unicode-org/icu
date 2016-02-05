@@ -1511,6 +1511,7 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
             if (U_SUCCESS(status)) {
                 UnicodeString id(ures_getKey(colBund), -1, US_INV);
                 if(id.indexOf(T_PART) != -1) {
+                    ures_close(colBund);
                     continue;
                 }
                 UResourceBundle* res = ures_getNextResource(colBund, NULL, &status);
