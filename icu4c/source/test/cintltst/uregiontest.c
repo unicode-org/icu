@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2014, International Business Machines Corporation
+ * Copyright (c) 2014-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /* C API TEST FOR UREGION */
@@ -304,7 +304,7 @@ static KnownRegion knownRegions[] = {
     { "SN" , 686, "011", URGN_TERRITORY, "002" },
     { "SO" , 706, "014", URGN_TERRITORY, "002" },
     { "SR" , 740, "005", URGN_TERRITORY, "019" },
-    { "SS" , 728, "015", URGN_TERRITORY, "002" },
+    { "SS" , 728, "014", URGN_TERRITORY, "002" },
     { "ST" , 678, "017", URGN_TERRITORY, "002" },
     { "SU" , 810, NULL , URGN_DEPRECATED , NULL},
     { "SV" , 222, "013", URGN_TERRITORY, "019" },
