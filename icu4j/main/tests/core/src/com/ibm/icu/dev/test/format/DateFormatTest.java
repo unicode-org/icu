@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2015, International Business Machines Corporation and
+ * Copyright (C) 2001-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -4146,7 +4146,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new MonthPatternItem( "root@calendar=chinese",    -3,               "ren-chen-4-2",          "ren-chen-4bis-2",          "ren-chen-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -4,               "ren-chen M04 2",        "ren-chen M04bis 2",        "ren-chen M05 2" ),
             new MonthPatternItem( "en@calendar=gregorian",    -3,               "2012-4-22",             "2012-5-22",                "2012-6-20" ),
-            new MonthPatternItem( "en@calendar=chinese",      DateFormat.LONG,  "Month4 2, 2012(ren-chen)", "Month4bis 2, 2012(ren-chen)", "Month5 2, 2012(ren-chen)" ),
+            new MonthPatternItem( "en@calendar=chinese",      DateFormat.LONG,  "Fourth Month 2, 2012(ren-chen)", "Fourth Monthbis 2, 2012(ren-chen)", "Fifth Month 2, 2012(ren-chen)" ),
             new MonthPatternItem( "en@calendar=chinese",      DateFormat.SHORT, "4/2/2012",              "4bis/2/2012",              "5/2/2012" ),
             new MonthPatternItem( "zh@calendar=chinese",      DateFormat.LONG,  "2012\u58EC\u8FB0\u5E74\u56DB\u6708\u521D\u4E8C",
                                                                                 "2012\u58EC\u8FB0\u5E74\u95F0\u56DB\u6708\u521D\u4E8C",
@@ -4164,7 +4164,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.SHORT, "2012/4/2",              "2012/\u958F4/2",           "2012/5/2" ),
             new MonthPatternItem( "fr@calendar=chinese",      DateFormat.LONG,  "2 s\u00ECyu\u00E8 ren-chen",  "2 s\u00ECyu\u00E8bis ren-chen",  "2 w\u01D4yu\u00E8 ren-chen" ),
             new MonthPatternItem( "fr@calendar=chinese",      DateFormat.SHORT, "2/4/29",                      "2/4bis/29",                      "2/5/29" ),
-            new MonthPatternItem( "en@calendar=dangi",        DateFormat.LONG,  "Month3bis 2, 2012(ren-chen)", "Month4 2, 2012(ren-chen)",       "Month5 1, 2012(ren-chen)" ),
+            new MonthPatternItem( "en@calendar=dangi",        DateFormat.LONG,  "Third Monthbis 2, 2012(ren-chen)", "Fourth Month 2, 2012(ren-chen)",       "Fifth Month 1, 2012(ren-chen)" ),
             new MonthPatternItem( "en@calendar=dangi",        DateFormat.SHORT, "3bis/2/2012",                 "4/2/2012",                       "5/1/2012" ),
             new MonthPatternItem( "en@calendar=dangi",        -2,               "78x29-3bis-2",                "78x29-4-2",                      "78x29-5-1" ),
             new MonthPatternItem( "ko@calendar=dangi",        DateFormat.LONG,  "\uC784\uC9C4\uB144 \uC7243\uC6D4 2\uC77C",

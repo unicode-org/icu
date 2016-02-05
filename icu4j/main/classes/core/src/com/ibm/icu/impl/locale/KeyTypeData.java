@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014-2015, International Business Machines Corporation and
+ * Copyright (C) 2014-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -285,8 +285,8 @@ public class KeyTypeData {
             try {
                 typeMapResByKey = typeMapRes.get(legacyKeyId);
             } catch (MissingResourceException e) {
-                // type map for each key must exist
-                assert false;
+                // type map for each key must exist except private use
+                assert legacyKeyId.equals("x0");
             }
             if (typeMapResByKey != null) {
                 UResourceBundleIterator typeMapResByKeyItr = typeMapResByKey.getIterator();
