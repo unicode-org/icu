@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ko.xml
 // *
 // ***************************************************************************
 ko{
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -89,6 +89,12 @@ ko{
         }
         compound{
             per{"{1}당 {0}"}
+        }
+        concentr{
+            karat{
+                dnam{"캐럿"}
+                other{"{0}캐럿"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -440,12 +446,6 @@ ko{
             pound-per-square-inch{
                 dnam{"제곱인치당 파운드"}
                 other{"{0}제곱인치당 파운드"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"캐럿"}
-                other{"{0}캐럿"}
             }
         }
         speed{
@@ -854,6 +854,12 @@ ko{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"kt"}
+                other{"{0}kt"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -1204,12 +1210,6 @@ ko{
             pound-per-square-inch{
                 dnam{"psi"}
                 other{"{0}psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                other{"{0}kt"}
             }
         }
         speed{

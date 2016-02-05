@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hy.xml
 // *
 // ***************************************************************************
 hy{
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -102,6 +102,13 @@ hy{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"կարատ"}
+                one{"{0} կարատ"}
+                other{"{0} կարատ"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -516,13 +523,6 @@ hy{
                 dnam{"ֆունտ ըստ քառակուսի դյույմի"}
                 one{"{0} ֆունտ ըստ քառակուսի դյույմի"}
                 other{"{0} ֆունտ ըստ քառակուսի դյույմի"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"կարատ"}
-                one{"{0} կարատ"}
-                other{"{0} կարատ"}
             }
         }
         speed{
@@ -1013,6 +1013,13 @@ hy{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"կար"}
+                one{"{0} կար"}
+                other{"{0} կար"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"լ/100 կմ"}
@@ -1432,13 +1439,6 @@ hy{
                 dnam{"ֆտ. քռ. դյմ."}
                 one{"{0} ֆ.ք.դյմ"}
                 other{"{0} ֆ.ք.դյմ"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"կար"}
-                one{"{0} կար"}
-                other{"{0} կար"}
             }
         }
         speed{

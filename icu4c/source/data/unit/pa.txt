@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pa.xml
 // *
 // ***************************************************************************
 pa{
-    Version{"2.1.20.4"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ pa{
         }
         compound{
             per{"{0} ਪ੍ਰਤੀ {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"ਕੇਰਟ"}
+                one{"{0} ਕੇਰਟ"}
+                other{"{0} ਕੇਰਟ"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -550,13 +557,6 @@ pa{
                 other{"{0} ਪੌਂਡ ਪ੍ਰਤੀ ਵਰਗ ਇੰਚ"}
             }
         }
-        proportion{
-            karat{
-                dnam{"ਕੇਰਟ"}
-                one{"{0} ਕੇਰਟ"}
-                other{"{0} ਕੇਰਟ"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"ਕਿਲੋਮੀਟਰ ਪ੍ਰਤੀ ਘੰਟਾ"}
@@ -797,6 +797,12 @@ pa{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                one{"{0} ਕੇਰਟ"}
+                other{"{0} ਕੇਰਟ"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1140,12 +1146,6 @@ pa{
                 other{"{0} ਪੌਂ.ਵ.ਇੰਚ"}
             }
         }
-        proportion{
-            karat{
-                one{"{0} ਕੇਰਟ"}
-                other{"{0} ਕੇਰਟ"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"ਕਿ.ਮੀ./ਘੰਟਾ"}
@@ -1353,6 +1353,13 @@ pa{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"ਕੇਰਟ"}
+                one{"{0} ਕੇਰਟ"}
+                other{"{0} ਕੇਰਟ"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1796,13 +1803,6 @@ pa{
                 dnam{"ਪੌਂ.ਵ.ਇੰਚ"}
                 one{"{0} ਪੌਂ.ਵ.ਇੰਚ"}
                 other{"{0} ਪੌਂ.ਵ.ਇੰਚ"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ਕੇਰਟ"}
-                one{"{0} ਕੇਰਟ"}
-                other{"{0} ਕੇਰਟ"}
             }
         }
         speed{

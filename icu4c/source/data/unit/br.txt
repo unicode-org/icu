@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/br.xml
 // *
 // ***************************************************************************
 br{
-    Version{"2.1.19.94"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -113,6 +113,16 @@ br{
         }
         compound{
             per{"{0} dre {1}"}
+        }
+        concentr{
+            karat{
+                dnam{"karatoù"}
+                few{"{0} c'harat"}
+                many{"{0} a garatoù"}
+                one{"{0} c'harat"}
+                other{"{0} karat"}
+                two{"{0} garat"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -726,16 +736,6 @@ br{
                 two{"{0} lur dre veutad karrez"}
             }
         }
-        proportion{
-            karat{
-                dnam{"karatoù"}
-                few{"{0} c'harat"}
-                many{"{0} a garatoù"}
-                one{"{0} c'harat"}
-                other{"{0} karat"}
-                two{"{0} garat"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"kilometroù dre eur"}
@@ -1047,6 +1047,16 @@ br{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+                two{"{0} kt"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1452,16 +1462,6 @@ br{
                 two{"{0} lb/in²"}
             }
         }
-        proportion{
-            karat{
-                dnam{"kt"}
-                few{"{0} kt"}
-                many{"{0} kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
-                two{"{0} kt"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"km/h"}
@@ -1759,6 +1759,16 @@ br{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+                two{"{0} kt"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -2387,16 +2397,6 @@ br{
                 one{"{0} lb/in²"}
                 other{"{0} lb/in²"}
                 two{"{0} lb/in²"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                few{"{0} kt"}
-                many{"{0} kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
-                two{"{0} kt"}
             }
         }
         speed{

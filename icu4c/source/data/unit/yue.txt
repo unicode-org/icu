@@ -3,12 +3,11 @@
 // * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zh_Hant.xml
+// * Source File: <path>/common/main/yue.xml
 // *
 // ***************************************************************************
-zh_Hant{
-    %%Parent{"root"}
-    Version{"2.1.23.90"}
+yue{
+    Version{"2.1.23.47"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -22,7 +21,7 @@ zh_Hant{
             }
             meter-per-second-squared{
                 dnam{"每平方秒公尺"}
-                other{"每平方秒 {0} 公尺"}
+                other{"每平方秒 {0} 米"}
             }
         }
         angle{
@@ -59,7 +58,7 @@ zh_Hant{
             square-centimeter{
                 dnam{"平方公分"}
                 other{"{0} 平方公分"}
-                per{"每平方公分 {0}"}
+                per{"每平方厘米 {0}"}
             }
             square-foot{
                 dnam{"平方英尺"}
@@ -68,7 +67,7 @@ zh_Hant{
             square-inch{
                 dnam{"平方英寸"}
                 other{"{0} 平方英寸"}
-                per{"每平方英寸 {0}"}
+                per{"每平方吋 {0}"}
             }
             square-kilometer{
                 dnam{"平方公里"}
@@ -77,7 +76,7 @@ zh_Hant{
             square-meter{
                 dnam{"平方公尺"}
                 other{"{0} 平方公尺"}
-                per{"每平方公尺 {0}"}
+                per{"每平方米 {0}"}
             }
             square-mile{
                 dnam{"平方英里"}
@@ -89,7 +88,7 @@ zh_Hant{
             }
         }
         compound{
-            per{"每{1} {0}"}
+            per{"每 {1} {0}"}
         }
         concentr{
             karat{
@@ -167,7 +166,7 @@ zh_Hant{
             day{
                 dnam{"天"}
                 other{"{0} 天"}
-                per{"每天 {0}"}
+                per{"每日 {0}"}
             }
             hour{
                 dnam{"小時"}
@@ -204,7 +203,7 @@ zh_Hant{
             week{
                 dnam{"週"}
                 other{"{0} 週"}
-                per{"每週 {0}"}
+                per{"每星期 {0}"}
             }
             year{
                 dnam{"年"}
@@ -282,7 +281,7 @@ zh_Hant{
             centimeter{
                 dnam{"公分"}
                 other{"{0} 公分"}
-                per{"每公分 {0}"}
+                per{"每厘米 {0}"}
             }
             decimeter{
                 dnam{"公寸"}
@@ -295,7 +294,7 @@ zh_Hant{
             foot{
                 dnam{"英尺"}
                 other{"{0} 英尺"}
-                per{"每英尺 {0}"}
+                per{"每呎 {0}"}
             }
             furlong{
                 dnam{"化朗"}
@@ -304,7 +303,7 @@ zh_Hant{
             inch{
                 dnam{"英寸"}
                 other{"{0} 英寸"}
-                per{"每英寸 {0}"}
+                per{"每吋 {0}"}
             }
             kilometer{
                 dnam{"公里"}
@@ -318,7 +317,7 @@ zh_Hant{
             meter{
                 dnam{"公尺"}
                 other{"{0} 公尺"}
-                per{"每公尺 {0}"}
+                per{"每米 {0}"}
             }
             micrometer{
                 dnam{"微米"}
@@ -393,7 +392,7 @@ zh_Hant{
             ounce{
                 dnam{"盎司"}
                 other{"{0} 盎司"}
-                per{"每盎司 {0}"}
+                per{"每安士 {0}"}
             }
             ounce-troy{
                 dnam{"金衡盎司"}
@@ -458,7 +457,7 @@ zh_Hant{
             }
             pound-per-square-inch{
                 dnam{"每平方英寸磅力"}
-                other{"每平方英寸 {0} 磅力"}
+                other{"每平方吋 {0} 磅"}
             }
         }
         speed{
@@ -472,7 +471,7 @@ zh_Hant{
             }
             meter-per-second{
                 dnam{"每秒公尺"}
-                other{"每秒 {0} 公尺"}
+                other{"每秒 {0} 米"}
             }
             mile-per-hour{
                 dnam{"每小時英里"}
@@ -513,7 +512,7 @@ zh_Hant{
             cubic-centimeter{
                 dnam{"立方公分"}
                 other{"{0} 立方公分"}
-                per{"每立方公分 {0}"}
+                per{"每立方厘米 {0}"}
             }
             cubic-foot{
                 dnam{"立方英尺"}
@@ -530,7 +529,7 @@ zh_Hant{
             cubic-meter{
                 dnam{"立方公尺"}
                 other{"{0} 立方公尺"}
-                per{"每立方公尺 {0}"}
+                per{"每立方米 {0}"}
             }
             cubic-mile{
                 dnam{"立方英里"}
@@ -662,7 +661,7 @@ zh_Hant{
         consumption{
             liter-per-100kilometers{
                 dnam{"升/100公里"}
-                other{"{0}升/100公里"}
+                other{"每100公里{0}升"}
             }
             liter-per-kilometer{
                 other{"{0}L/km"}
@@ -927,7 +926,7 @@ zh_Hant{
                 other{"{0}百帕"}
             }
             inch-hg{
-                other{"{0}英吋汞柱"}
+                other{"{0}″ Hg"}
             }
             millibar{
                 other{"{0}毫巴"}
@@ -945,7 +944,7 @@ zh_Hant{
                 other{"{0}公里/小時"}
             }
             meter-per-second{
-                other{"{0}公尺/秒"}
+                other{"{0}m/s"}
             }
             mile-per-hour{
                 other{"{0}英里/小時"}
@@ -1043,7 +1042,7 @@ zh_Hant{
             }
             meter-per-second-squared{
                 dnam{"公尺/平方秒"}
-                other{"{0} 公尺/平方秒"}
+                other{"每平方秒{0}米"}
             }
         }
         angle{
@@ -1080,7 +1079,7 @@ zh_Hant{
             square-centimeter{
                 dnam{"平方公分"}
                 other{"{0} 平方公分"}
-                per{"{0}/平分公分"}
+                per{"每平方厘米{0}"}
             }
             square-foot{
                 dnam{"平方英尺"}
@@ -1089,7 +1088,7 @@ zh_Hant{
             square-inch{
                 dnam{"平方英寸"}
                 other{"{0} 平方英寸"}
-                per{"{0}/平方英寸"}
+                per{"每平方吋{0}"}
             }
             square-kilometer{
                 dnam{"平方公里"}
@@ -1098,7 +1097,7 @@ zh_Hant{
             square-meter{
                 dnam{"平方公尺"}
                 other{"{0} 平方公尺"}
-                per{"{0}/平方公尺"}
+                per{"每平方米{0}"}
             }
             square-mile{
                 dnam{"平方英里"}
@@ -1121,15 +1120,15 @@ zh_Hant{
         consumption{
             liter-per-100kilometers{
                 dnam{"升/100 公里"}
-                other{"{0} 升/100 公里"}
+                other{"每100公里 {0} 升"}
             }
             liter-per-kilometer{
                 dnam{"公升/公里"}
-                other{"{0} 升/公里"}
+                other{"每公里{0}公升"}
             }
             mile-per-gallon{
                 dnam{"英里/加侖"}
-                other{"{0} 英里/加侖"}
+                other{"每加侖{0}英里"}
             }
         }
         coordinate{
@@ -1188,12 +1187,12 @@ zh_Hant{
             day{
                 dnam{"天"}
                 other{"{0} 天"}
-                per{"{0}/天"}
+                per{"每日{0}"}
             }
             hour{
                 dnam{"小時"}
                 other{"{0} 小時"}
-                per{"{0}/小時"}
+                per{"每小時{0}"}
             }
             microsecond{
                 dnam{"微秒"}
@@ -1206,12 +1205,12 @@ zh_Hant{
             minute{
                 dnam{"分鐘"}
                 other{"{0} 分鐘"}
-                per{"{0}/分鐘"}
+                per{"每分鐘{0}"}
             }
             month{
                 dnam{"月"}
                 other{"{0} 個月"}
-                per{"{0}/月"}
+                per{"每月{0}"}
             }
             nanosecond{
                 dnam{"奈秒"}
@@ -1220,17 +1219,17 @@ zh_Hant{
             second{
                 dnam{"秒"}
                 other{"{0} 秒"}
-                per{"{0}/秒"}
+                per{"每秒{0}"}
             }
             week{
                 dnam{"週"}
                 other{"{0} 週"}
-                per{"{0}/週"}
+                per{"每週{0}"}
             }
             year{
                 dnam{"年"}
                 other{"{0} 年"}
-                per{"{0}/年"}
+                per{"每年{0}"}
             }
         }
         electric{
@@ -1303,7 +1302,7 @@ zh_Hant{
             centimeter{
                 dnam{"公分"}
                 other{"{0} 公分"}
-                per{"{0}/公分"}
+                per{"每厘米{0}"}
             }
             decimeter{
                 dnam{"公寸"}
@@ -1316,7 +1315,7 @@ zh_Hant{
             foot{
                 dnam{"英尺"}
                 other{"{0} 呎"}
-                per{"{0}/呎"}
+                per{"每呎{0}"}
             }
             furlong{
                 dnam{"化朗"}
@@ -1325,12 +1324,12 @@ zh_Hant{
             inch{
                 dnam{"英寸"}
                 other{"{0} 吋"}
-                per{"{0}/吋"}
+                per{"每吋{0}"}
             }
             kilometer{
                 dnam{"公里"}
                 other{"{0} 公里"}
-                per{"{0}/公里"}
+                per{"每公里{0}"}
             }
             light-year{
                 dnam{"光年"}
@@ -1339,7 +1338,7 @@ zh_Hant{
             meter{
                 dnam{"公尺"}
                 other{"{0} 公尺"}
-                per{"{0}/公尺"}
+                per{"每米{0}"}
             }
             micrometer{
                 dnam{"微米"}
@@ -1392,12 +1391,12 @@ zh_Hant{
             gram{
                 dnam{"克"}
                 other{"{0} 克"}
-                per{"{0}/克"}
+                per{"每克{0}"}
             }
             kilogram{
                 dnam{"公斤"}
                 other{"{0} 公斤"}
-                per{"{0}/公斤"}
+                per{"每公斤{0}"}
             }
             metric-ton{
                 dnam{"公噸"}
@@ -1414,7 +1413,7 @@ zh_Hant{
             ounce{
                 dnam{"盎司"}
                 other{"{0} 盎司"}
-                per{"{0}/盎司"}
+                per{"每安士{0}"}
             }
             ounce-troy{
                 dnam{"金衡盎司"}
@@ -1423,7 +1422,7 @@ zh_Hant{
             pound{
                 dnam{"磅"}
                 other{"{0} 磅"}
-                per{"{0}/磅"}
+                per{"每磅{0}"}
             }
             stone{
                 dnam{"st"}
@@ -1479,13 +1478,13 @@ zh_Hant{
             }
             pound-per-square-inch{
                 dnam{"磅力/平方英寸"}
-                other{"{0} 磅力/平方英寸"}
+                other{"每平方吋{0}磅"}
             }
         }
         speed{
             kilometer-per-hour{
                 dnam{"公里/小時"}
-                other{"{0} 公里/小時"}
+                other{"每小時{0}公里"}
             }
             knot{
                 dnam{"節"}
@@ -1493,11 +1492,11 @@ zh_Hant{
             }
             meter-per-second{
                 dnam{"公尺/秒"}
-                other{"{0} 公尺/秒"}
+                other{"每秒{0}米"}
             }
             mile-per-hour{
                 dnam{"英里/小時"}
-                other{"{0} 英里/小時"}
+                other{"每小時{0}英里"}
             }
         }
         temperature{
@@ -1534,7 +1533,7 @@ zh_Hant{
             cubic-centimeter{
                 dnam{"立方公分"}
                 other{"{0} 立方公分"}
-                per{"{0}/立方公分"}
+                per{"每立方厘米{0}"}
             }
             cubic-foot{
                 dnam{"立方英尺"}
@@ -1551,7 +1550,7 @@ zh_Hant{
             cubic-meter{
                 dnam{"立方公尺"}
                 other{"{0} 立方公尺"}
-                per{"{0}/立方公尺"}
+                per{"每立方米{0}"}
             }
             cubic-mile{
                 dnam{"立方英里"}
@@ -1580,7 +1579,7 @@ zh_Hant{
             gallon{
                 dnam{"加侖"}
                 other{"{0} 加侖"}
-                per{"{0}/加侖"}
+                per{"每加侖{0}"}
             }
             hectoliter{
                 dnam{"公石"}
@@ -1589,7 +1588,7 @@ zh_Hant{
             liter{
                 dnam{"公升"}
                 other{"{0} 升"}
-                per{"{0}/升"}
+                per{"每升{0}"}
             }
             megaliter{
                 dnam{"兆升"}

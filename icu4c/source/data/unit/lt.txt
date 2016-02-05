@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lt.xml
 // *
 // ***************************************************************************
 lt{
-    Version{"2.1.19.14"}
+    Version{"2.1.22.93"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -137,6 +137,15 @@ lt{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            karat{
+                dnam{"karatai"}
+                few{"{0} karatai"}
+                many{"{0} karato"}
+                one{"{0} karatas"}
+                other{"{0} karatų"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -740,15 +749,6 @@ lt{
                 many{"{0} svaro kv. colyje"}
                 one{"{0} svaras kv. colyje"}
                 other{"{0} svarų kv. colyje"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"karatai"}
-                few{"{0} karatai"}
-                many{"{0} karato"}
-                one{"{0} karatas"}
-                other{"{0} karatų"}
             }
         }
         speed{
@@ -1512,6 +1512,15 @@ lt{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"kt"}
+                few{"{0} kt"}
+                many{"{0} kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -2114,15 +2123,6 @@ lt{
                 many{"{0} lb in²"}
                 one{"{0} lb in²"}
                 other{"{0} lb in²"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                few{"{0} kt"}
-                many{"{0} kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{

@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bn.xml
 // *
 // ***************************************************************************
 bn{
-    Version{"2.1.19.17"}
+    Version{"2.1.23.6"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,13 @@ bn{
         }
         compound{
             per{"{1} প্রতি {0}"}
+        }
+        concentr{
+            karat{
+                dnam{"ক্যারেট"}
+                one{"{0} ক্যারেট"}
+                other{"{0} kt"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -530,13 +537,6 @@ bn{
                 dnam{"বর্গইঞ্চি প্রতি পাউন্ড"}
                 one{"{0} বর্গইঞ্চি প্রতি পাউন্ড"}
                 other{"{0} বর্গইঞ্চি প্রতি পাউন্ড"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"ক্যারেট"}
-                one{"{0} ক্যারেট"}
-                other{"{0} kt"}
             }
         }
         speed{
@@ -1036,6 +1036,13 @@ bn{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                dnam{"kt"}
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -1459,13 +1466,6 @@ bn{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
         }
         speed{

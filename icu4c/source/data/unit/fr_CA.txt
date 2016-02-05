@@ -181,11 +181,6 @@ fr_CA{
                 other{"{0} psi"}
             }
         }
-        temperature{
-            generic{
-                one{"{0}°"}
-            }
-        }
         volume{
             centiliter{
                 dnam{"cL"}

@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/kea.xml
 // *
 // ***************************************************************************
 kea{
-    Version{"2.1.19.74"}
+    Version{"2.1.23.7"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -70,6 +70,12 @@ kea{
             square-yard{
                 dnam{"jarda kuadradu"}
                 other{"{0} jarda kuadradu"}
+            }
+        }
+        concentr{
+            karat{
+                dnam{"kilati"}
+                other{"{0} kilati"}
             }
         }
         consumption{
@@ -243,12 +249,6 @@ kea{
         power{
             watt{
                 dnam{"watt"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kilati"}
-                other{"{0} kilati"}
             }
         }
         speed{
@@ -491,6 +491,12 @@ kea{
             square-yard{
                 dnam{"yd²"}
                 other{"{0} yd²"}
+            }
+        }
+        concentr{
+            karat{
+                dnam{"kt"}
+                other{"{0} kt"}
             }
         }
         consumption{
@@ -797,12 +803,6 @@ kea{
             pound-per-square-inch{
                 dnam{"psi"}
                 other{"{0} psi"}
-            }
-        }
-        proportion{
-            karat{
-                dnam{"kt"}
-                other{"{0} kt"}
             }
         }
         speed{
