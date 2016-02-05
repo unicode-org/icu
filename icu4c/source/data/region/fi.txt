@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fi.xml
@@ -46,7 +46,6 @@ fi{
         AI{"Anguilla"}
         AL{"Albania"}
         AM{"Armenia"}
-        AN{"Alankomaiden Antillit"}
         AO{"Angola"}
         AQ{"Antarktis"}
         AR{"Argentiina"}
@@ -314,5 +313,5 @@ fi{
         MK{"EJT Makedonia"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.22.93"}
 }

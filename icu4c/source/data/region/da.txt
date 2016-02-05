@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/da.xml
@@ -46,7 +46,6 @@ da{
         AI{"Anguilla"}
         AL{"Albanien"}
         AM{"Armenien"}
-        AN{"Hollandske Antiller"}
         AO{"Angola"}
         AQ{"Antarktis"}
         AR{"Argentina"}
@@ -210,7 +209,7 @@ da{
         NF{"Norfolk Island"}
         NG{"Nigeria"}
         NI{"Nicaragua"}
-        NL{"Nederlandene"}
+        NL{"Holland"}
         NO{"Norge"}
         NP{"Nepal"}
         NR{"Nauru"}
@@ -313,5 +312,5 @@ da{
         MK{"Den tidligere jugoslaviske republik Makedonien"}
         TL{"Østtimor"}
     }
-    Version{"2.1.19.44"}
+    Version{"2.1.23.87"}
 }

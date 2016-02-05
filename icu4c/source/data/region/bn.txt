@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bn.xml
@@ -46,7 +46,6 @@ bn{
         AI{"এ্যাঙ্গুইলা"}
         AL{"আলব্যানিয়া"}
         AM{"আর্মেনিয়া"}
-        AN{"নেদারল্যান্ডস এ্যান্টিলিস"}
         AO{"অ্যাঙ্গোলা"}
         AQ{"অ্যান্টার্কটিকা"}
         AR{"আর্জেন্টিনা"}
@@ -313,5 +312,5 @@ bn{
         MK{"মেসিডোনিয়া(FYROM)"}
         TL{"পূর্ব তিমুর"}
     }
-    Version{"2.1.19.17"}
+    Version{"2.1.23.6"}
 }

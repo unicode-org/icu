@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hi.xml
@@ -46,7 +46,6 @@ hi{
         AI{"एंग्विला"}
         AL{"अल्बानिया"}
         AM{"आर्मेनिया"}
-        AN{"नीदरलैंडी ऐंटील"}
         AO{"अंगोला"}
         AQ{"अंटार्कटिका"}
         AR{"अर्जेंटीना"}
@@ -314,5 +313,5 @@ hi{
         MK{"मैसिडोनिया (FYROM)"}
         TL{"पूर्वी तिमोर"}
     }
-    Version{"2.1.19.47"}
+    Version{"2.1.22.93"}
 }

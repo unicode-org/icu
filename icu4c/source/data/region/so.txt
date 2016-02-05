@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/so.xml
@@ -15,7 +15,6 @@ so{
         AI{"Anguilla"}
         AL{"Albaaniya"}
         AM{"Armeeniya"}
-        AN{"Netherlands Antilles"}
         AO{"Angoola"}
         AR{"Arjantiin"}
         AS{"Samowa Ameerika"}
@@ -235,5 +234,5 @@ so{
         ZW{"Simbaabwe"}
         ZZ{"Far aan la aqoon amase aan saxnayn"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.23.7"}
 }

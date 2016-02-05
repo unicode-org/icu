@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/vai_Latn.xml
@@ -16,7 +16,6 @@ vai_Latn{
         AI{"Aŋgíla"}
         AL{"Abhaniya"}
         AM{"Améniya"}
-        AN{"Nidɔlɛŋ Aŋtili"}
         AO{"Aŋgóla"}
         AR{"Ajɛŋtína"}
         AS{"Poo Sambowa"}
@@ -234,5 +233,5 @@ vai_Latn{
         ZM{"Zambiya"}
         ZW{"Zimbabhuwe"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.21.28"}
 }

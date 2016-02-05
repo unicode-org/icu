@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/cs.xml
@@ -46,7 +46,6 @@ cs{
         AI{"Anguilla"}
         AL{"Albánie"}
         AM{"Arménie"}
-        AN{"Nizozemské Antily"}
         AO{"Angola"}
         AQ{"Antarktida"}
         AR{"Argentina"}
@@ -313,5 +312,5 @@ cs{
         FK{"Falklandské ostrovy (Malvíny)"}
         MK{"Makedonie (FYROM)"}
     }
-    Version{"2.1.20.4"}
+    Version{"2.1.22.93"}
 }

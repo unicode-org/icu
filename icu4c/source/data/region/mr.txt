@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mr.xml
@@ -46,7 +46,6 @@ mr{
         AI{"अँग्विला"}
         AL{"अल्बानिया"}
         AM{"अर्मेनिया"}
-        AN{"नेदरलँड्‍स अँ‍टिल्स"}
         AO{"अंगोला"}
         AQ{"अंटार्क्टिका"}
         AR{"अर्जेंटिना"}
@@ -312,5 +311,5 @@ mr{
         FK{"फॉकलंड बेटे (इस्लास मालविनास)"}
         MK{"मॅसेडोनिया (FYROM)"}
     }
-    Version{"2.1.19.53"}
+    Version{"2.1.22.93"}
 }
