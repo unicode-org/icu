@@ -3,11 +3,10 @@
 // * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zh_Hant.xml
+// * Source File: <path>/common/main/yue.xml
 // *
 // ***************************************************************************
-zh_Hant{
-    %%Parent{"root"}
+yue{
     Currencies{
         ADP{
             "ADP",
@@ -2140,7 +2139,7 @@ zh_Hant{
             other{"亞洲開發銀行計價單位"}
         }
         XXX{
-            other{"（未知貨幣）"}
+            other{"(未知貨幣)"}
         }
         YDD{
             other{"葉門第納爾"}
@@ -2191,5 +2190,5 @@ zh_Hant{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.1.23.90"}
+    Version{"2.1.23.47"}
 }
