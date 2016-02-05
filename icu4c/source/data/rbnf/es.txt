@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2015 International Business Machines
+// * Copyright (C) 2016 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/rbnf/es.xml
@@ -37,7 +37,8 @@ es{
             "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "-x: menos >>;",
-            "x.x: << coma >>;",
+            "x.x: << punto >>;",
+            "x,x: << coma >>;",
             "0: cero;",
             "1: uno;",
             "2: dos;",
@@ -90,7 +91,8 @@ es{
             "1000000000000000000: =#,##0=;",
             "%spellout-cardinal-masculine:",
             "-x: menos >>;",
-            "x.x: << coma >>;",
+            "x.x: << punto >>;",
+            "x,x: << coma >>;",
             "0: cero;",
             "1: un;",
             "2: =%spellout-numbering=;",
@@ -122,7 +124,8 @@ es{
             "1000000000000000000: =#,##0=;",
             "%spellout-cardinal-feminine:",
             "-x: menos >>;",
-            "x.x: << coma >>;",
+            "x.x: << punto >>;",
+            "x,x: << coma >>;",
             "0: cero;",
             "1: una;",
             "2: =%spellout-numbering=;",
@@ -169,6 +172,8 @@ es{
             "11: und\u00E9cimo;",
             "12: duod\u00E9cimo;",
             "13: decimo>>;",
+            "18: decim>>;",
+            "19: decimo>>;",
             "20: vig\u00E9simo[ >>];",
             "30: trig\u00E9simo[ >>];",
             "40: cuadrag\u00E9simo[ >>];",
@@ -214,6 +219,8 @@ es{
             "9: noveno;",
             "10: d\u00E9cimo;",
             "11: decimo>>;",
+            "18: decim>>;",
+            "19: decimo>>;",
             "20: vig\u00E9simo[ >>];",
             "30: trig\u00E9simo[ >>];",
             "40: cuadrag\u00E9simo[ >>];",
@@ -259,6 +266,8 @@ es{
             "9: novena;",
             "10: d\u00E9cima;",
             "11: decimo>>;",
+            "18: decim>>;",
+            "19: decimo>>;",
             "20: vig\u00E9sima[ >>];",
             "30: trig\u00E9sima[ >>];",
             "40: cuadrag\u00E9sima[ >>];",
@@ -285,5 +294,5 @@ es{
             "1000000000000000000: =#,##0=\u00AA;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.21.54"}
 }
