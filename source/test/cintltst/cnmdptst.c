@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2014, International Business Machines Corporation
+ * Copyright (c) 1997-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -25,6 +25,7 @@
 #include "unicode/uloc.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
+#include "unicode/putil.h"
 #include "cintltst.h"
 #include "cnmdptst.h"
 #include "cmemory.h"
@@ -868,7 +869,7 @@ static void TestCurrencyKeywords(void)
 }
 
 static void TestGetKeywordValuesForLocale(void) {
-#define PREFERRED_SIZE 12
+#define PREFERRED_SIZE 15
 #define MAX_NUMBER_OF_KEYWORDS 4
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS] = {
             { "root",               "USD", "USN", NULL },
@@ -884,9 +885,19 @@ static void TestGetKeywordValuesForLocale(void) {
             { "en@currency=CAD",    "USD", "USN", NULL },
             { "fr@currency=zzz",    "EUR", NULL, NULL },
             { "de_DE@currency=DEM", "EUR", NULL, NULL },
+            { "en_US@rg=THZZZZ",    "THB", NULL, NULL },
+            { "de@rg=USZZZZ",       "USD", "USN", NULL },
+            { "en_US@currency=CAD;rg=THZZZZ", "THB", NULL, NULL },
     };
     const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = {
-            2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1
+            2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1
+    };
+    /* ucurr_forLocale results for same locales; "" if no result expected */
+    const char *FORLOCALE[PREFERRED_SIZE] = {
+            "",    "",    "USD", "",
+            "THB", "",    "EUR", "",
+            "ILS", "CAD", "ZZZ", "DEM",
+            "THB", "USD", "CAD"
     };
     UErrorCode status = U_ZERO_ERROR;
     int32_t i, j, size;
@@ -905,6 +916,10 @@ static void TestGetKeywordValuesForLocale(void) {
     }
     
     for (i = 0; i < PREFERRED_SIZE; i++) {
+        UChar getCurrU[4];
+        int32_t getCurrLen;
+
+        status = U_ZERO_ERROR;
         pref = NULL;
         all = NULL;
         loc = PREFERRED[i][0];
@@ -972,6 +987,24 @@ static void TestGetKeywordValuesForLocale(void) {
         }
         
         uenum_close(all);
+        
+        status = U_ZERO_ERROR;
+        getCurrLen = ucurr_forLocale(loc, getCurrU, 4, &status);
+        if(U_FAILURE(status)) {
+            if (FORLOCALE[i][0] != 0) {
+                log_err("ERROR: ucurr_forLocale %s, status %s\n", loc, u_errorName(status));
+            }
+        } else if (getCurrLen != 3) {
+            if (FORLOCALE[i][0] != 0 || getCurrLen != -1) {
+                log_err("ERROR: ucurr_forLocale %s, returned len %d\n", loc, getCurrLen);
+            }
+        } else {
+            char getCurrB[4];
+            u_UCharsToChars(getCurrU, getCurrB, 4);
+            if ( uprv_strncmp(getCurrB, FORLOCALE[i], 4) != 0 ) {
+                log_err("ERROR: ucurr_forLocale %s, expected %s, got %s\n", loc, FORLOCALE[i], getCurrB);
+            }
+        }
     }
     
     uenum_close(ALL);

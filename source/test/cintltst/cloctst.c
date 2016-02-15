@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -40,6 +40,7 @@
 static void TestNullDefault(void);
 static void TestNonexistentLanguageExemplars(void);
 static void TestLocDataErrorCodeChaining(void);
+static void TestLocDataWithRgTag(void);
 static void TestLanguageExemplarsFallbacks(void);
 static void TestDisplayNameBrackets(void);
 
@@ -232,6 +233,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestDisplayNameWarning);
     TESTCASE(TestNonexistentLanguageExemplars);
     TESTCASE(TestLocDataErrorCodeChaining);
+    TESTCASE(TestLocDataWithRgTag);
     TESTCASE(TestLanguageExemplarsFallbacks);
     TESTCASE(TestCalendar);
     TESTCASE(TestDateFormat);
@@ -2702,6 +2704,36 @@ static void TestLocDataErrorCodeChaining(void) {
     ulocdata_getPaperSize(NULL, NULL, NULL, &ec);
     if (ec != U_USELESS_COLLATOR_ERROR) {
         log_err("ulocdata API changed the error code to %s\n", u_errorName(ec));
+    }
+}
+
+typedef struct {
+    const char*        locale;
+    UMeasurementSystem measureSys;
+} LocToMeasureSys;
+
+static const LocToMeasureSys locToMeasures[] = {
+    { "fr_FR",            UMS_SI },
+    { "en",               UMS_US },
+    { "en_GB",            UMS_UK },
+    { "fr_FR@rg=GBZZZZ",  UMS_UK },
+    { "en@rg=frzzzz",     UMS_SI },
+    { "en_GB@rg=USZZZZ",  UMS_US },
+    { NULL, (UMeasurementSystem)0 } /* terminator */
+};
+
+static void TestLocDataWithRgTag(void) {
+    const  LocToMeasureSys* locToMeasurePtr = locToMeasures;
+    for (; locToMeasurePtr->locale != NULL; locToMeasurePtr++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UMeasurementSystem measureSys = ulocdata_getMeasurementSystem(locToMeasurePtr->locale, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("ulocdata_getMeasurementSystem(\"%s\", ...) failed: %s - Are you missing data?\n",
+                        locToMeasurePtr->locale, u_errorName(status));
+        } else if (measureSys != locToMeasurePtr->measureSys) {
+            log_err("ulocdata_getMeasurementSystem(\"%s\", ...), expected %d, got %d\n",
+                        locToMeasurePtr->locale, (int) locToMeasurePtr->measureSys, (int)measureSys);
+        }
     }
 }
 
