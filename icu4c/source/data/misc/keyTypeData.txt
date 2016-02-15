@@ -690,5 +690,8 @@ keyTypeData:table(nofallback){
         variabletop{
             CODEPOINTS{""}
         }
+        x0{
+            PRIVATE_USE{""}
+        }
     }
 }
