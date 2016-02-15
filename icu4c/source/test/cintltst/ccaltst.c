@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2014, International Business Machines
+ * Copyright (c) 1997-2016, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *
@@ -85,6 +85,12 @@ static const UCalGetTypeTest ucalGetTypeTests[] = {
     { "th_TH",                   UCAL_DEFAULT,   "buddhist"  },
     { "th-TH-u-ca-gregory",      UCAL_DEFAULT,   "gregorian" },
     { "ja_JP@calendar=japanese", UCAL_GREGORIAN, "gregorian" },
+    { "fr_CH",                   UCAL_DEFAULT,   "gregorian" },
+    { "fr_SA",                   UCAL_DEFAULT,   "islamic-umalqura" },
+    { "fr_CH@rg=sazzzz",         UCAL_DEFAULT,   "islamic-umalqura" },
+    { "fr_CH@calendar=japanese;rg=sazzzz", UCAL_DEFAULT, "japanese" },
+    { "fr_TH@rg=SA",             UCAL_DEFAULT,   "buddhist"  }, /* ignore malformed rg tag */
+    { "th@rg=SA",                UCAL_DEFAULT,   "buddhist"  }, /* ignore malformed rg tag */
     { "",                        UCAL_GREGORIAN, "gregorian" },
     { NULL,                      UCAL_GREGORIAN, "gregorian" },
     { NULL, 0, NULL } /* terminator */
@@ -1546,7 +1552,7 @@ void TestGregorianChange() {
 }
 
 static void TestGetKeywordValuesForLocale() {
-#define PREFERRED_SIZE 15
+#define PREFERRED_SIZE 16
 #define MAX_NUMBER_OF_KEYWORDS 5
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
             { "root",        "gregorian", NULL, NULL, NULL, NULL },
@@ -1564,8 +1570,9 @@ static void TestGetKeywordValuesForLocale() {
             { "en@calendar=islamic",   "gregorian", NULL, NULL, NULL, NULL },
             { "zh_TW",       "gregorian", "roc", "chinese", NULL, NULL },
             { "ar_IR",       "persian", "gregorian", "islamic", "islamic-civil", "islamic-tbla" },
+            { "th@rg=SAZZZZ", "islamic-umalqura", "gregorian", "islamic", "islamic-rgsa", NULL },
     };
-    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 5, 5, 2, 2, 2, 1, 3, 5 };
+    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 5, 5, 2, 2, 2, 1, 3, 5, 4 };
     UErrorCode status = U_ZERO_ERROR;
     int32_t i, size, j;
     UEnumeration *all, *pref;
@@ -1724,6 +1731,8 @@ static const TestDaysOfWeekList testDays[] = {
     { "en_US", daysOfWeek_en_US, sizeof(daysOfWeek_en_US)/sizeof(daysOfWeek_en_US[0]) },
     { "ar_OM", daysOfWeek_ar_OM, sizeof(daysOfWeek_ar_OM)/sizeof(daysOfWeek_ar_OM[0]) },
     { "hi_IN", daysOfWeek_hi_IN, sizeof(daysOfWeek_hi_IN)/sizeof(daysOfWeek_hi_IN[0]) },
+    { "en_US@rg=OMZZZZ", daysOfWeek_ar_OM, sizeof(daysOfWeek_ar_OM)/sizeof(daysOfWeek_ar_OM[0]) },
+    { "hi@rg=USZZZZ",    daysOfWeek_en_US, sizeof(daysOfWeek_en_US)/sizeof(daysOfWeek_en_US[0]) },
 };
 
 static const UChar logDateFormat[] = { 0x0045,0x0045,0x0045,0x0020,0x004D,0x004D,0x004D,0x0020,0x0064,0x0064,0x0020,0x0079,

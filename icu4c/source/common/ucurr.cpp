@@ -26,6 +26,7 @@
 #include "uresimp.h"
 #include "ulist.h"
 #include "ureslocs.h"
+#include "ulocimp.h"
 
 //#define UCURR_DEBUG_EQUIV 1
 #ifdef UCURR_DEBUG_EQUIV
@@ -367,7 +368,7 @@ idForLocale(const char* locale, char* countryAndVariant, int capacity, UErrorCod
     // Extract the country name and variant name.  We only
     // recognize two variant names, EURO and PREEURO.
     char variant[ULOC_FULLNAME_CAPACITY];
-    uloc_getCountry(locale, countryAndVariant, capacity, ec);
+    ulocimp_getRegionForSupplementalData(locale, FALSE, countryAndVariant, capacity, ec);
     uloc_getVariant(locale, variant, sizeof(variant), ec);
     if (variant[0] != 0) {
         variantType = (uint32_t)(0 == uprv_strcmp(variant, VAR_EURO))
@@ -2472,15 +2473,8 @@ static const UEnumeration defaultKeywordValues = {
 
 U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, const char *locale, UBool commonlyUsed, UErrorCode* status) {
     // Resolve region
-    char prefRegion[ULOC_FULLNAME_CAPACITY] = "";
-    int32_t prefRegionLength = 0;
-    prefRegionLength = uloc_getCountry(locale, prefRegion, sizeof(prefRegion), status);
-    if (prefRegionLength == 0) {
-        char loc[ULOC_FULLNAME_CAPACITY] = "";
-        uloc_addLikelySubtags(locale, loc, sizeof(loc), status);
-        
-        /*prefRegionLength = */ uloc_getCountry(loc, prefRegion, sizeof(prefRegion), status);
-    }
+    char prefRegion[ULOC_COUNTRY_CAPACITY];
+    ulocimp_getRegionForSupplementalData(locale, TRUE, prefRegion, sizeof(prefRegion), status);
     
     // Read value from supplementalData
     UList *values = ulist_createEmptyList(status);
