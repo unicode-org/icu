@@ -285,8 +285,8 @@ public class KeyTypeData {
             try {
                 typeMapResByKey = typeMapRes.get(legacyKeyId);
             } catch (MissingResourceException e) {
-                // type map for each key must exist except private use
-                assert legacyKeyId.equals("x0");
+                // type map for each key must exist
+                assert false;
             }
             if (typeMapResByKey != null) {
                 UResourceBundleIterator typeMapResByKeyItr = typeMapResByKey.getIterator();
