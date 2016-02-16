@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2015, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -102,6 +102,31 @@ public class LocaleDataTest extends TestFmwk{
                 }else{
                     errln("Did not get the expected measurement system for locale: "+ locale);
                 } 
+            }
+        }
+    }
+
+    public void TestMeasurementSysForSpecificLocales(){
+        class TestMeasurementSysItem {
+            public String localeID;
+            public LocaleData.MeasurementSystem measureSys;
+            public TestMeasurementSysItem(String locID, LocaleData.MeasurementSystem ms) {
+                localeID = locID;
+                measureSys = ms;
+            }
+        };
+        final TestMeasurementSysItem[] items = {
+            new TestMeasurementSysItem("fr_FR",             LocaleData.MeasurementSystem.SI),
+            new TestMeasurementSysItem("en",                LocaleData.MeasurementSystem.US),
+            new TestMeasurementSysItem("en_GB",             LocaleData.MeasurementSystem.UK),
+            new TestMeasurementSysItem("fr_FR@rg=GBZZZZ",   LocaleData.MeasurementSystem.UK),
+            new TestMeasurementSysItem("en@rg=frzzzz",      LocaleData.MeasurementSystem.SI),
+            new TestMeasurementSysItem("en_GB@rg=USZZZZ",   LocaleData.MeasurementSystem.US),
+        };
+        for (TestMeasurementSysItem item: items) {
+            LocaleData.MeasurementSystem ms = LocaleData.getMeasurementSystem(new ULocale(item.localeID));
+            if (ms != item.measureSys) {
+                errln("For locale " + item.localeID + ", expected " + item.measureSys + ", got " + ms);
             }
         }
     }

@@ -1,7 +1,7 @@
 /*
  **************************************************************************************
- * Copyright (C) 2009-2014, Google, Inc.; International Business Machines Corporation *
- * and others. All Rights Reserved.                                                   *
+ * Copyright (C) 2009-2016, International Business Machines Corporation,              *
+ * Google, Inc. and others. All Rights Reserved.                                      *
  **************************************************************************************
  */
 package com.ibm.icu.util;
@@ -290,8 +290,7 @@ public final class LocaleData {
     private static UResourceBundle measurementTypeBundleForLocale(ULocale locale, String measurementType){
         // Much of this is taken from getCalendarType in impl/CalendarUtil.java
         UResourceBundle measTypeBundle = null;
-        ULocale fullLoc = ULocale.addLikelySubtags(locale);
-        String region = fullLoc.getCountry();
+        String region = ULocale.getRegionForSupplementalData(locale, true);
         try {
             UResourceBundle rb = UResourceBundle.getBundleInstance(
                     ICUResourceBundle.ICU_BASE_NAME,

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2117,6 +2117,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             {"en@calendar=islamic",     "gregorian"},
             {"zh_TW",       "gregorian", "roc", "chinese"},
             {"ar_IR",       "persian", "gregorian", "islamic", "islamic-civil", "islamic-tbla"},
+            {"th@rg=SAZZZZ", "islamic-umalqura", "gregorian", "islamic", "islamic-rgsa"},
         };
 
         String[] ALL = Calendar.getKeywordValuesForLocale("calendar", ULocale.getDefault(), false);
@@ -2372,6 +2373,8 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         
         Calendar aCalendar = Calendar.getInstance(Locale.US);
         assertEquals("US", usWeekData, aCalendar.getWeekData());
+        Calendar rgusCalendar = Calendar.getInstance(new ULocale("hi_IN@rg=USzzzz"));
+        assertEquals("IN@rg=US", usWeekData, rgusCalendar.getWeekData());
         
         aCalendar.setWeekData(testWeekData);
         assertEquals("Custom", testWeekData, aCalendar.getWeekData());
