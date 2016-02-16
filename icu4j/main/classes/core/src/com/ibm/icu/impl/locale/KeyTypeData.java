@@ -46,9 +46,17 @@ public class KeyTypeData {
         }
     }
 
+    private static class RgKeyValueTypeHandler extends SpecialTypeHandler {
+        private static final Pattern pat = Pattern.compile("[a-zA-Z]{2}[zZ]{4}");
+        boolean isValid(String value) {
+            return pat.matcher(value).matches();
+        }
+    }
+
     private enum SpecialType {
         CODEPOINTS(new CodepointsTypeHandler()),
-        REORDER_CODE(new ReorderCodeTypeHandler());
+        REORDER_CODE(new ReorderCodeTypeHandler()),
+        RG_KEY_VALUE(new RgKeyValueTypeHandler());
 
         SpecialTypeHandler handler;
         SpecialType(SpecialTypeHandler handler) {

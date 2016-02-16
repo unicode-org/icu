@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009,2016 International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -44,56 +44,51 @@ public class CalendarUtil {
             return calType;
         }
 
-        String baseLoc = loc.getBaseName();
-
-        // Check the cache
-        calType = CALTYPE_CACHE.get(baseLoc);
+        // Canonicalize, so grandfathered variant will be transformed to keywords
+        ULocale canonical = ULocale.createCanonical(loc.toString());
+        calType = canonical.getKeywordValue(CALKEY);
         if (calType != null) {
             return calType;
         }
 
-        // Canonicalize, so grandfathered variant will be transformed to keywords
-        ULocale canonical = ULocale.createCanonical(loc.toString());
-        calType = canonical.getKeywordValue("calendar");
+        // When calendar keyword is not available, use the locale's
+        // region to get the default calendar type
+        String region = ULocale.getRegionForSupplementalData(canonical, true);
+
+        // Check the cache (now we cache by region, not base locale)
+        calType = CALTYPE_CACHE.get(region);
+        if (calType != null) {
+            return calType;
+        }
+
+        // Read supplementalData to get the default calendar type for
+        // the locale's region
+        try {
+            UResourceBundle rb = UResourceBundle.getBundleInstance(
+                                    ICUResourceBundle.ICU_BASE_NAME,
+                                    "supplementalData",
+                                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle calPref = rb.get("calendarPreferenceData");
+            UResourceBundle order = null;
+            try {
+                order = calPref.get(region);
+            } catch (MissingResourceException mre) {
+                // use "001" as fallback
+                order = calPref.get("001");
+            }
+            // the first calendar type is the default for the region
+            calType = order.getString(0);
+        } catch (MissingResourceException mre) {
+            // fall through
+        }
 
         if (calType == null) {
-            // When calendar keyword is not available, use the locale's
-            // region to get the default calendar type
-            String region = canonical.getCountry();
-            if (region.length() == 0) {
-                ULocale fullLoc = ULocale.addLikelySubtags(canonical);
-                region = fullLoc.getCountry();
-            }
-
-            // Read supplementalData to get the default calendar type for
-            // the locale's region
-            try {
-                UResourceBundle rb = UResourceBundle.getBundleInstance(
-                                        ICUResourceBundle.ICU_BASE_NAME,
-                                        "supplementalData",
-                                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                UResourceBundle calPref = rb.get("calendarPreferenceData");
-                UResourceBundle order = null;
-                try {
-                    order = calPref.get(region);
-                } catch (MissingResourceException mre) {
-                    // use "001" as fallback
-                    order = calPref.get("001");
-                }
-                // the first calendar type is the default for the region
-                calType = order.getString(0);
-            } catch (MissingResourceException mre) {
-                // fall through
-            }
-
-            if (calType == null) {
-                // Use "gregorian" as the last resort fallback.
-                calType = DEFCAL;
-            }
+            // Use "gregorian" as the last resort fallback.
+            calType = DEFCAL;
         }
 
         // Cache the resolved value for the next time
-        CALTYPE_CACHE.put(baseLoc, calType);
+        CALTYPE_CACHE.put(region, calType);
 
         return calType;
     }

@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2003-2015, International Business Machines Corporation and
+ * Copyright (C) 2003-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ******************************************************************************
  */
@@ -974,6 +974,44 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      */
     public static String getCountry(String localeID) {
         return new LocaleIDParser(localeID).getCountry();
+    }
+
+    /**
+     * {@icu} Get the region to use for supplemental data lookup.
+     * Uses
+     * (1) any region specified by locale tag "rg"; if none then
+     * (2) any unicode_region_tag in the locale ID; if none then
+     * (3) if inferRegion is TRUE, the region suggested by
+     *     getLikelySubtags on the localeID.
+     * If no region is found, returns empty string ""
+     *
+     * @param locale
+     *     The locale (includes any keywords) from which
+     *     to get the region to use for supplemental data.
+     * @param inferRegion
+     *     If TRUE, will try to infer region from other
+     *     locale elements if not found any other way.
+     * @return
+     *     String with region to use ("" if none found).
+     * @internal ICU 57
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static String getRegionForSupplementalData(
+                            ULocale locale, boolean inferRegion) {
+        String region = locale.getKeywordValue("rg");
+        if (region != null && region.length() == 6) {
+            String regionUpper = AsciiUtil.toUpperString(region);
+            if (regionUpper.endsWith("ZZZZ")) {
+            	return regionUpper.substring(0,2);
+            }
+        }
+        region = locale.getCountry();
+        if (region.length() == 0 && inferRegion) {
+            ULocale maximized = addLikelySubtags(locale);
+            region = maximized.getCountry();
+        }
+        return region;
     }
 
     /**

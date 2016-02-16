@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2015, International Business Machines
+ * Copyright (c) 2002-2016, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -636,6 +636,9 @@ public class CurrencyTest extends TestFmwk {
             {"en@currency=CAD",     "USD", "USN"},
             {"fr@currency=ZZZ",     "EUR"},
             {"de_DE@currency=DEM",  "EUR"},
+            {"en_US@rg=THZZZZ",     "THB"},
+            {"de@rg=USZZZZ",        "USD", "USN"},
+            {"en_US@currency=CAD;rg=THZZZZ",  "THB"},
         };
 
         String[] ALL = Currency.getKeywordValuesForLocale("currency", ULocale.getDefault(), false);

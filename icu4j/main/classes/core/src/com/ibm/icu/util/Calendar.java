@@ -1764,13 +1764,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     private static String getRegionForCalendar(ULocale loc) {
-        String region = loc.getCountry();
+        String region = ULocale.getRegionForSupplementalData(loc, true);
         if (region.length() == 0) {
-            ULocale maxLocale = ULocale.addLikelySubtags(loc);
-            region = maxLocale.getCountry();
-            if (region.length() == 0) {
-                region = "001";
-            }
+            region = "001";
         }
         return region;
     }
@@ -1930,11 +1926,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final String[] getKeywordValuesForLocale(String key, ULocale locale,
             boolean commonlyUsed) {
         // Resolve region
-        String prefRegion = locale.getCountry();
-        if (prefRegion.length() == 0){
-            ULocale loc = ULocale.addLikelySubtags(locale);
-            prefRegion = loc.getCountry();
-        }
+        String prefRegion = ULocale.getRegionForSupplementalData(locale, true);
 
         // Read preferred calendar values from supplementalData calendarPreferences
         ArrayList<String> values = new ArrayList<String>();

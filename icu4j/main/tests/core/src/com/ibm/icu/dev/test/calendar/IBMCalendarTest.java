@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2014, International Business Machines Corporation and
+ * Copyright (C) 2000-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1021,6 +1021,12 @@ public class IBMCalendarTest extends CalendarTest {
                 "th",       // th's default region is TH and buddhist is used as default for TH
                 "en_TH",    // Default calendar for any locales with region TH is buddhist
                 "th_TH@calendar=iso8601",   // iso8601 calendar type
+                "fr_CH",
+                "fr_SA",
+                "fr_CH@rg=sazzzz",
+                "fr_CH@calendar=japanese;rg=sazzzz",
+                "fr_TH@rg=SA",  // ignore malformed rg tag, use buddhist
+                "th@rg=SA",		// ignore malformed rg tag, use buddhist
         };
 
         String[] types = {
@@ -1037,7 +1043,13 @@ public class IBMCalendarTest extends CalendarTest {
                 "buddhist",
                 "buddhist",
                 "buddhist",
-                "gregorian",    // iso8601 is a gregiran sub type
+                "gregorian",    // iso8601 is a gregorian sub type
+                "gregorian",
+                "islamic-umalqura",
+                "islamic-umalqura",
+                "japanese",
+                "buddhist",
+                "buddhist",
         };
 
         for (int i = 0; i < locs.length; i++) {
