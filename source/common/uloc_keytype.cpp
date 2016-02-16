@@ -460,12 +460,7 @@ isSpecialTypeRgKeyValue(const char* val) {
     int32_t subtagLen = 0;
     const char* p = val;
     while (*p) {
-        if (*p == '-') {
-            if (subtagLen != 6) {
-                return FALSE;
-            }
-            subtagLen = 0;
-        } else if ( (subtagLen < 2 && uprv_isASCIILetter(*p)) ||
+        if ( (subtagLen < 2 && uprv_isASCIILetter(*p)) ||
                     (subtagLen >= 2 && (*p == 'Z' || *p == 'z')) ) {
             subtagLen++;
         } else {

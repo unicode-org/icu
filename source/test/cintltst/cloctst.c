@@ -6030,6 +6030,7 @@ static void TestToUnicodeLocaleType(void)
         {"calendar",        "islamicc",         "islamic-civil"},   /* bcp type alias */
         {"colalternate",    "NON-IGNORABLE",    "noignore"},
         {"colcaselevel",    "yes",              "true"},
+        {"rg",              "GBzzzz",           "$IN"},
         {"tz",              "america/new_york", "usnyc"},
         {"tz",              "Asia/Kolkata",     "inccu"},
         {"timezone",        "navajo",           "usden"},
@@ -6081,6 +6082,7 @@ static void TestToLegacyType(void)
         {"calendar",        "islamicc",         "islamic-civil"},   /* bcp type alias */
         {"colalternate",    "noignore",         "non-ignorable"},
         {"colcaselevel",    "true",             "yes"},
+        {"rg",              "gbzzzz",           "gbzzzz"},
         {"tz",              "usnyc",            "America/New_York"},
         {"tz",              "inccu",            "Asia/Calcutta"},
         {"timezone",        "usden",            "America/Denver"},
