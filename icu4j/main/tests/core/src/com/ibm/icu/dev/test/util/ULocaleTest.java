@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2004-2015, International Business Machines
+ * Copyright (c) 2004-2016, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -4556,6 +4556,7 @@ public class ULocaleTest extends TestFmwk {
                 {"calendar",        "islamicc",         "islamic-civil"},   // bcp type alias
                 {"colalternate",    "NON-IGNORABLE",    "noignore"},
                 {"colcaselevel",    "yes",              "true"},
+                {"rg",              "GBzzzz",           "gbzzzz"},
                 {"tz",              "america/new_york", "usnyc"},
                 {"tz",              "Asia/Kolkata",     "inccu"},
                 {"timezone",        "navajo",           "usden"},
@@ -4591,6 +4592,7 @@ public class ULocaleTest extends TestFmwk {
                 {"calendar",        "islamicc",         "islamic-civil"},   // bcp type alias
                 {"colalternate",    "noignore",         "non-ignorable"},
                 {"colcaselevel",    "true",             "yes"},
+                {"rg",              "gbzzzz",           "gbzzzz"},
                 {"tz",              "usnyc",            "America/New_York"},
                 {"tz",              "inccu",            "Asia/Calcutta"},
                 {"timezone",        "usden",            "America/Denver"},
