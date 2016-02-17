@@ -9,12 +9,15 @@ package com.ibm.icu.dev.test.format;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RelativeDateTimeFormatter;
 import com.ibm.icu.text.RelativeDateTimeFormatter.AbsoluteUnit;
 import com.ibm.icu.text.RelativeDateTimeFormatter.Direction;
+import com.ibm.icu.text.RelativeDateTimeFormatter.RelativeDateTimeUnit;
 import com.ibm.icu.text.RelativeDateTimeFormatter.RelativeUnit;
+import com.ibm.icu.text.RelativeDateTimeFormatter.Style;
 import com.ibm.icu.util.ULocale;
 
 public class RelativeDateTimeFormatterTest extends TestFmwk {
@@ -622,6 +625,147 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
         for (Object[] row : data) {
             String actual = fmt.format((Direction) row[0], (AbsoluteUnit) row[1]);
             assertEquals("Relative date without quantity narrow", row[2], actual);
+        }
+    }
+
+    public void TestRelativeDateTimeUnitFormatters() {
+        double[] offsets = { -5.0, -2.2, -1.0, -0.7, 0.0, 0.7, 1.0, 2.2, 5.0 };
+
+        String[] en_decDef_long_midSent_week = {
+        /*  text                    numeric */
+            "5 weeks ago",          "5 weeks ago",        /* -5   */
+            "2.2 weeks ago",        "2.2 weeks ago",      /* -2.2 */
+            "last week",            "1 week ago",         /* -1   */
+            "last week",            "0.7 weeks ago",      /* -0.7 */
+            "this week",            "in 0 weeks",         /*  0   */
+            "next week",            "in 0.7 weeks",       /*  0.7 */
+            "next week",            "in 1 week",          /*  1   */
+            "in 2.2 weeks",         "in 2.2 weeks",       /*  2.2 */
+            "in 5 weeks",           "in 5 weeks"          /*  5   */
+        };
+
+        String[] en_dec0_long_midSent_week = {
+        /*  text                    numeric */
+            "5 weeks ago",          "5 weeks ago",        /* -5   */
+            "2 weeks ago",          "2 weeks ago",        /* -2.2 */
+            "last week",            "1 week ago",         /* -1   */
+            "last week",            "0 weeks ago",        /* -0.7 */
+            "this week",            "in 0 weeks",         /*  0   */
+            "next week",            "in 0 weeks",         /*  0.7 */
+            "next week",            "in 1 week",          /*  1   */
+            "in 2 weeks",           "in 2 weeks",         /*  2.2 */
+            "in 5 weeks",           "in 5 weeks"          /*  5   */
+        };
+
+        String[] en_decDef_short_midSent_week = {
+        /*  text                    numeric */
+            "5 wk. ago",            "5 wk. ago",          /* -5   */
+            "2.2 wk. ago",          "2.2 wk. ago",        /* -2.2 */
+            "last wk.",             "1 wk. ago",          /* -1   */
+            "last wk.",             "0.7 wk. ago",        /* -0.7 */
+            "this wk.",             "in 0 wk.",           /*  0   */
+            "next wk.",             "in 0.7 wk.",         /*  0.7 */
+            "next wk.",             "in 1 wk.",           /*  1   */
+            "in 2.2 wk.",           "in 2.2 wk.",         /*  2.2 */
+            "in 5 wk.",             "in 5 wk."            /*  5   */
+        };
+
+        String[] en_decDef_long_midSent_min = {
+        /*  text                    numeric */
+            "5 minutes ago",        "5 minutes ago",      /* -5   */
+            "2.2 minutes ago",      "2.2 minutes ago",    /* -2.2 */
+            "1 minute ago",         "1 minute ago",       /* -1   */
+            "0.7 minutes ago",      "0.7 minutes ago",    /* -0.7 */
+            "now",                  "in 0 minutes",       /*  0   */
+            "in 0.7 minutes",       "in 0.7 minutes",     /*  0.7 */
+            "in 1 minute",          "in 1 minute",        /*  1   */
+            "in 2.2 minutes",       "in 2.2 minutes",     /*  2.2 */
+            "in 5 minutes",         "in 5 minutes"        /*  5   */
+        };
+
+        String[] en_dec0_long_midSent_tues = {
+        /*  text                    numeric */
+            ""/*no data */,         ""/*no data */,       /* -5   */
+            ""/*no data */,         ""/*no data */,       /* -2.2 */
+            "last Tuesday",         ""/*no data */,       /* -1   */
+            "last Tuesday",         ""/*no data */,       /* -0.7 */
+            "this Tuesday",         ""/*no data */,       /*  0   */
+            "next Tuesday",         ""/*no data */,       /*  0.7 */
+            "next Tuesday",         ""/*no data */,       /*  1   */
+            ""/*no data */,         ""/*no data */,       /*  2.2 */
+            ""/*no data */,         ""/*no data */,       /*  5   */
+        };
+
+        String[] fr_decDef_long_midSent_day = {
+        /*  text                    numeric */
+            "il y a 5 jours",       "il y a 5 jours",     /* -5   */
+            "avant-hier",           "il y a 2,2 jours",   /* -2.2 */
+            "hier",                 "il y a 1 jour",      /* -1   */
+            "hier",                 "il y a 0,7 jour",    /* -0.7 */
+            "aujourd\u2019hui",     "dans 0 jour",        /*  0   */
+            "demain",               "dans 0,7 jour",      /*  0.7 */
+            "demain",               "dans 1 jour",        /*  1   */
+            "apr\u00E8s-demain",    "dans 2,2 jours",     /*  2.2 */
+            "dans 5 jours",         "dans 5 jours"        /*  5   */
+        };
+
+        class TestRelativeDateTimeUnitItem {
+            public String               localeID;
+            public int                  decPlaces; /* fixed decimal places; -1 to use default num formatter */
+            public Style                width;
+            public DisplayContext       capContext;
+            public RelativeDateTimeUnit unit;
+            public String[]             expectedResults; /* for the various offsets */
+            public TestRelativeDateTimeUnitItem(String locID, int decP, RelativeDateTimeFormatter.Style wid,
+                                                DisplayContext capC, RelativeDateTimeUnit ut, String[] expR) {
+                localeID    = locID;
+                decPlaces   = decP;
+                width       = wid;
+                capContext  = capC;
+                unit        = ut;
+                expectedResults = expR;
+            }
+        };
+        final TestRelativeDateTimeUnitItem[] items = {
+            new TestRelativeDateTimeUnitItem("en", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                                                                    RelativeDateTimeUnit.WEEK, en_decDef_long_midSent_week),
+            new TestRelativeDateTimeUnitItem("en",  0, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                                                                    RelativeDateTimeUnit.WEEK, en_dec0_long_midSent_week),
+            new TestRelativeDateTimeUnitItem("en", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                                                                    RelativeDateTimeUnit.WEEK, en_decDef_short_midSent_week),
+            new TestRelativeDateTimeUnitItem("en", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                                                                    RelativeDateTimeUnit.MINUTE, en_decDef_long_midSent_min),
+            new TestRelativeDateTimeUnitItem("en", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                                                                    RelativeDateTimeUnit.TUESDAY, en_dec0_long_midSent_tues),
+            new TestRelativeDateTimeUnitItem("fr", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                                                                    RelativeDateTimeUnit.DAY, fr_decDef_long_midSent_day),
+        };
+        for (TestRelativeDateTimeUnitItem item: items) {
+            ULocale uloc = new ULocale(item.localeID);
+            NumberFormat nf = null;
+            if (item.decPlaces >= 0) {
+                nf = NumberFormat.getInstance(uloc, NumberFormat.NUMBERSTYLE);
+                nf.setMinimumFractionDigits(item.decPlaces);
+                nf.setMaximumFractionDigits(item.decPlaces);
+                nf.setRoundingMode(BigDecimal.ROUND_DOWN);
+            }
+            RelativeDateTimeFormatter reldatefmt = RelativeDateTimeFormatter.getInstance(uloc, nf, item.width, item.capContext);
+            for (int iOffset = 0; iOffset < offsets.length; iOffset++) {
+                double offset = offsets[iOffset];
+                if (item.unit == RelativeDateTimeUnit.TUESDAY && (offset < -1.0 || offset > 1.0)) {
+                    continue; /* we do not currently have data for this */
+                }
+                String result = reldatefmt.format(offset, item.unit);
+                assertEquals("RelativeDateTimeUnit format locale "+item.localeID +", dec "+item.decPlaces +", width "+item.width + ", unit "+item.unit,
+                             item.expectedResults[iOffset*2], result);
+
+                if (item.unit == RelativeDateTimeUnit.TUESDAY) {
+                    continue; /* we do not currently have numeric-style data for this */
+                }
+                result = reldatefmt.formatNumeric(offset, item.unit);
+                assertEquals("RelativeDateTimeUnit formatNum locale "+item.localeID +", dec "+item.decPlaces +", width "+item.width + ", unit "+item.unit,
+                             item.expectedResults[iOffset*2 + 1], result);
+            }
         }
     }
     

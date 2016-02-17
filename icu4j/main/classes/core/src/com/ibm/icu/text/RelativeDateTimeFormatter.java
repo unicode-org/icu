@@ -242,14 +242,14 @@ public final class RelativeDateTimeFormatter {
          */
         @Deprecated
         QUARTER,
-      }
+    }
 
-      /**
-       * Represents a direction for an absolute unit e.g "Next Tuesday"
-       * or "Last Tuesday"
-       * @stable ICU 53
-       */
-      public static enum Direction {
+    /**
+     * Represents a direction for an absolute unit e.g "Next Tuesday"
+     * or "Last Tuesday"
+     * @stable ICU 53
+     */
+    public static enum Direction {
           /**
            * Two before. Not fully supported in every locale
            * @stable ICU 53
@@ -284,8 +284,122 @@ public final class RelativeDateTimeFormatter {
            * Plain, which means the absence of a qualifier
            * @stable ICU 53
            */
-          PLAIN;
-      }
+          PLAIN,
+    }
+
+    /**
+     * Represents the unit for formatting a relative date. e.g "in 5 days"
+     * or "next year"
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static enum RelativeDateTimeUnit {
+        /** 
+         * Specifies that relative unit is year, e.g. "last year",
+         * "in 5 years".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        YEAR,
+        /** 
+         * Specifies that relative unit is quarter, e.g. "last quarter",
+         * "in 5 quarters".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        QUARTER,
+        /** 
+         * Specifies that relative unit is month, e.g. "last month",
+         * "in 5 months".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        MONTH,
+        /** 
+         * Specifies that relative unit is week, e.g. "last week",
+         * "in 5 weeks".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        WEEK,
+        /** 
+         * Specifies that relative unit is day, e.g. "yesterday",
+         * "in 5 days".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        DAY,
+        /** 
+         * Specifies that relative unit is hour, e.g. "1 hour ago",
+         * "in 5 hours".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        HOUR,
+        /** 
+         * Specifies that relative unit is minute, e.g. "1 minute ago",
+         * "in 5 minutes".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        MINUTE,
+        /** 
+         * Specifies that relative unit is second, e.g. "1 second ago",
+         * "in 5 seconds".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        SECOND,
+        /** 
+         * Specifies that relative unit is Sunday, e.g. "last Sunday",
+         * "this Sunday", "next Sunday", "in 5 Sundays".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        SUNDAY,
+        /** 
+         * Specifies that relative unit is Monday, e.g. "last Monday",
+         * "this Monday", "next Monday", "in 5 Mondays".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        MONDAY,
+        /** 
+         * Specifies that relative unit is Tuesday, e.g. "last Tuesday",
+         * "this Tuesday", "next Tuesday", "in 5 Tuesdays".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        TUESDAY,
+        /** 
+         * Specifies that relative unit is Wednesday, e.g. "last Wednesday",
+         * "this Wednesday", "next Wednesday", "in 5 Wednesdays".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        WEDNESDAY,
+        /** 
+         * Specifies that relative unit is Thursday, e.g. "last Thursday",
+         * "this Thursday", "next Thursday", "in 5 Thursdays".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        THURSDAY,
+        /** 
+         * Specifies that relative unit is Friday, e.g. "last Friday",
+         * "this Friday", "next Friday", "in 5 Fridays".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        FRIDAY,
+        /** 
+         * Specifies that relative unit is Saturday, e.g. "last Saturday",
+         * "this Saturday", "next Saturday", "in 5 Saturdays".  
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        SATURDAY,
+    }
 
     /**
      * Returns a RelativeDateTimeFormatter for the default locale.
@@ -416,6 +530,51 @@ public final class RelativeDateTimeFormatter {
 
     }
 
+    /**
+     * Format a combination of RelativeDateTimeUnit and numeric offset
+     * using a numeric style, e.g. "1 week ago", "in 1 week",
+     * "5 weeks ago", "in 5 weeks".
+     * 
+     * @param offset    The signed offset for the specified unit. This
+     *                  will be formatted according to this object's
+     *                  NumberFormat object.
+     * @param unit      The unit to use when formatting the relative
+     *                  date, e.g. RelativeDateTimeUnit.WEEK,
+     *                  RelativeDateTimeUnit.FRIDAY.
+     * @return          The formatted string (may be empty in case of error)
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String formatNumeric(double offset, RelativeDateTimeUnit unit) {
+        // TODO:
+        // The full implementation of this depends on CLDR data that is not yet available,
+        // see: http://unicode.org/cldr/trac/ticket/9165 Add more relative field data.
+        // In the meantime do a quick bring-up by calling the old format method. When the
+        // new CLDR data is available, update the data storage accordingly, rewrite this
+        // to use it directly, and rewrite the old format method to call this new one;
+        // that is covered by http://bugs.icu-project.org/trac/ticket/12171.
+        RelativeUnit relunit = RelativeUnit.SECONDS;
+        switch (unit) {
+            case YEAR:      relunit = RelativeUnit.YEARS; break;
+            case QUARTER:   relunit = RelativeUnit.QUARTERS; break;
+            case MONTH:     relunit = RelativeUnit.MONTHS; break;
+            case WEEK:      relunit = RelativeUnit.WEEKS; break;
+            case DAY:       relunit = RelativeUnit.DAYS; break;
+            case HOUR:      relunit = RelativeUnit.HOURS; break;
+            case MINUTE:    relunit = RelativeUnit.MINUTES; break;
+            case SECOND:    break; // set above
+            default: // SUNDAY..SATURDAY
+                return "";
+        }
+        Direction direction = Direction.NEXT;
+        if (offset < 0) {
+            direction = Direction.LAST;
+            offset = -offset;
+        }
+        String result = format(offset, direction, relunit);
+        return (result != null)? result: "";
+    }
+   
     private int[] styleToDateFormatSymbolsWidth = {
                 DateFormatSymbols.WIDE, DateFormatSymbols.SHORT, DateFormatSymbols.NARROW
     };
@@ -450,6 +609,81 @@ public final class RelativeDateTimeFormatter {
             result = getAbsoluteUnitString(style, unit, direction);
         }
         return result != null ? adjustForContext(result) : null;
+    }
+
+    /**
+     * Format a combination of RelativeDateTimeUnit and numeric offset
+     * using a text style if possible, e.g. "last week", "this week",
+     * "next week", "yesterday", "tomorrow". Falls back to numeric
+     * style if no appropriate text term is available for the specified
+     * offset in the object’s locale.
+     * 
+     * @param offset    The signed offset for the specified field.
+     * @param unit      The unit to use when formatting the relative
+     *                  date, e.g. RelativeDateTimeUnit.WEEK,
+     *                  RelativeDateTimeUnit.FRIDAY.
+     * @return          The formatted string (may be empty in case of error)
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String format(double offset, RelativeDateTimeUnit unit) {
+        // TODO:
+        // The full implementation of this depends on CLDR data that is not yet available,
+        // see: http://unicode.org/cldr/trac/ticket/9165 Add more relative field data.
+        // In the meantime do a quick bring-up by calling the old format method. When the
+        // new CLDR data is available, update the data storage accordingly, rewrite this
+        // to use it directly, and rewrite the old format method to call this new one;
+        // that is covered by http://bugs.icu-project.org/trac/ticket/12171.
+        boolean useNumeric = false;
+        Direction direction = Direction.THIS;
+        int intoffset = (offset < 0)? (int)(offset-0.5) : (int)(offset+0.5);
+        switch (intoffset) {
+            case -2: direction = Direction.LAST_2; break;
+            case -1: direction = Direction.LAST;   break;
+            case  0: break; // direction = Direction.THIS was set above
+            case  1: direction = Direction.NEXT;   break;
+            case  2: direction = Direction.NEXT_2; break;
+            default:
+                useNumeric = true;
+                break;
+        }
+        AbsoluteUnit absunit = AbsoluteUnit.NOW;
+        switch (unit) {
+            case YEAR:      absunit = AbsoluteUnit.YEAR;    break;
+            case QUARTER:   absunit = AbsoluteUnit.QUARTER; break;
+            case MONTH:     absunit = AbsoluteUnit.MONTH;   break;
+            case WEEK:      absunit = AbsoluteUnit.WEEK;    break;
+            case DAY:       absunit = AbsoluteUnit.DAY;     break;
+            case SUNDAY:    absunit = AbsoluteUnit.SUNDAY;  break;
+            case MONDAY:    absunit = AbsoluteUnit.MONDAY;  break;
+            case TUESDAY:   absunit = AbsoluteUnit.TUESDAY; break;
+            case WEDNESDAY: absunit = AbsoluteUnit.WEDNESDAY; break;
+            case THURSDAY:  absunit = AbsoluteUnit.THURSDAY; break;
+            case FRIDAY:    absunit = AbsoluteUnit.FRIDAY;  break;
+            case SATURDAY:  absunit = AbsoluteUnit.SATURDAY; break;
+            case MINUTE:
+            case SECOND:
+                if (direction == Direction.THIS) {
+                    // absunit = AbsoluteUnit.NOW was set above
+                    direction = Direction.PLAIN;
+                    break;
+                }
+                // could just fall through here but that produces warnings
+                useNumeric = true;
+                break;
+            case HOUR:
+            default:
+                useNumeric = true;
+                break;
+        }
+        if (!useNumeric) {
+            String result = format(direction, absunit);
+            if (result != null && result.length() > 0) {
+                return result;
+            }
+        }
+        // otherwise fallback to formatNumeric
+        return formatNumeric(offset, unit);
     }
 
     /**
