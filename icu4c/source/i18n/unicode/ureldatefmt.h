@@ -72,37 +72,100 @@ typedef enum UDateRelativeDateTimeFormatterStyle {
  * @draft ICU 57
  */
 typedef enum URelativeDateTimeUnit {
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is year, e.g. "last year",
+     * "in 5 years". 
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_YEAR,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is quarter, e.g. "last quarter",
+     * "in 5 quarters".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_QUARTER,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is month, e.g. "last month",
+     * "in 5 months".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_MONTH,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is week, e.g. "last week",
+     * "in 5 weeks".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_WEEK,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is day, e.g. "yesterday",
+     * "in 5 days".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_DAY,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is hour, e.g. "1 hour ago",
+     * "in 5 hours".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_HOUR,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is minute, e.g. "1 minute ago",
+     * "in 5 minutes".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_MINUTE,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is second, e.g. "1 second ago",
+     * "in 5 seconds".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_SECOND,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is Sunday, e.g. "last Sunday",
+     * "this Sunday", "next Sunday", "in 5 Sundays".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_SUNDAY,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is Monday, e.g. "last Monday",
+     * "this Monday", "next Monday", "in 5 Mondays".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_MONDAY,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is Tuesday, e.g. "last Tuesday",
+     * "this Tuesday", "next Tuesday", "in 5 Tuesdays".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_TUESDAY,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is Wednesday, e.g. "last Wednesday",
+     * "this Wednesday", "next Wednesday", "in 5 Wednesdays".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_WEDNESDAY,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is Thursday, e.g. "last Thursday",
+     * "this Thursday", "next Thursday", "in 5 Thursdays". 
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_THURSDAY,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is Friday, e.g. "last Friday",
+     * "this Friday", "next Friday", "in 5 Fridays".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_FRIDAY,
-    /** @draft ICU 57 */
+    /**
+     * Specifies that relative unit is Saturday, e.g. "last Saturday",
+     * "this Saturday", "next Saturday", "in 5 Saturdays".
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_SATURDAY,
-    /** @draft ICU 57 */
+    /**
+     * Count of URelativeDateTimeUnit values	 
+     * @draft ICU 57
+     */
     UDAT_REL_UNIT_COUNT
 } URelativeDateTimeUnit;
 #endif  /* U_HIDE_DRAFT_API */
