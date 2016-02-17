@@ -814,10 +814,14 @@ UnicodeString& RelativeDateTimeFormatter::formatNumeric(
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    // For a quick bringup just call the above method; this leaves some
-    // holes (e.g. for handling quarter). Need to redo the data structure
-    // to support all necessary data items, and to be indexed by the
-    // newer enum.
+    // TODO:
+    // The full implementation of this depends on CLDR data that is not yet available,
+    // see: http://unicode.org/cldr/trac/ticket/9165 Add more relative field data.
+    // In the meantime do a quick bring-up by calling the old format method; this
+    // leaves some holes (even for data that is currently available, such as quarter).
+    // When the new CLDR data is available, update the data storage accordingly,
+    // rewrite this to use it directly, and rewrite the old format method to call this
+    // new one; that is covered by http://bugs.icu-project.org/trac/ticket/12171.
     UDateRelativeUnit relunit = UDAT_RELATIVE_UNIT_COUNT;
     switch (unit) {
         case UDAT_REL_UNIT_YEAR:    relunit = UDAT_RELATIVE_YEARS; break;
@@ -863,10 +867,14 @@ UnicodeString& RelativeDateTimeFormatter::format(
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    // For a quick bringup just use the existing data structure; this leaves
-    // some holes (e.g. for handling quarter). Need to redo the data structure
-    // to support all necessary data items, and to be indexed by the
-    // newer enum.
+    // TODO:
+    // The full implementation of this depends on CLDR data that is not yet available,
+    // see: http://unicode.org/cldr/trac/ticket/9165 Add more relative field data.
+    // In the meantime do a quick bring-up by calling the old format method; this
+    // leaves some holes (even for data that is currently available, such as quarter).
+    // When the new CLDR data is available, update the data storage accordingly,
+    // rewrite this to use it directly, and rewrite the old format method to call this
+    // new one; that is covered by http://bugs.icu-project.org/trac/ticket/12171.
     UDateDirection direction = UDAT_DIRECTION_COUNT;
     int32_t intoffset = (offset < 0)? (int32_t)(offset-0.5) : (int32_t)(offset+0.5);
     switch (intoffset) {
