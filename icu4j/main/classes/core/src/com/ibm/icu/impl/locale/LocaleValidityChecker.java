@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import com.ibm.icu.impl.ValidIdentifiers;
 import com.ibm.icu.impl.ValidIdentifiers.Datasubtype;
 import com.ibm.icu.impl.ValidIdentifiers.Datatype;
+import com.ibm.icu.impl.locale.KeyTypeData.ValueType;
 import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
@@ -60,37 +61,47 @@ public class LocaleValidityChecker {
 
     static Pattern SEPARATOR = Pattern.compile("[-_]");
 
+    private static final Pattern VALID_X = Pattern.compile("[a-zA-Z0-9]{2,8}(-[a-zA-Z0-9]{2,8})*");
+
     public boolean isValid(ULocale locale, Where where) {
         where.set(null, null);
-        if (!isValid(Datatype.language, locale.getLanguage(), where)) {
+        final String language = locale.getLanguage();
+        final String script = locale.getScript();
+        final String region = locale.getCountry();
+        final String variantString = locale.getVariant();
+        final Set<Character> extensionKeys = locale.getExtensionKeys();
+        //        if (language.isEmpty()) {
+        //            // the only case where this is valid is if there is only an 'x' extension string
+        //            if (!script.isEmpty() || !region.isEmpty() || variantString.isEmpty() 
+        //                    || extensionKeys.size() != 1 || !extensionKeys.contains('x')) {
+        //                return where.set(Datatype.x, "Null language only with x-...");
+        //            }
+        //            return true; // for x string, wellformedness = valid
+        //        }
+        if (!isValid(Datatype.language, language, where)) {
             // special case x
-            if (locale.getLanguage().equals("x")) {
-                where.set(null, null);
-                // TODO check syntax is ok, only alphanum{1,8}
+            if (language.equals("x")) {
+                where.set(null, null); // for x, well-formed == valid
                 return true;
             }
             return false;
         }
-        if (!isValid(Datatype.script, locale.getScript(), where)) return false;
-        if (!isValid(Datatype.region, locale.getCountry(), where)) return false;
-        String variantString = locale.getVariant();
+        if (!isValid(Datatype.script, script, where)) return false;
+        if (!isValid(Datatype.region, region, where)) return false;
         if (!variantString.isEmpty()) {
             for (String variant : SEPARATOR.split(variantString)) {
                 if (!isValid(Datatype.variant, variant, where)) return false;
             }
         }
-        for (Character c : locale.getExtensionKeys()) {
+        for (Character c : extensionKeys) {
             try {
                 Datatype datatype = Datatype.valueOf(c+"");
                 switch (datatype) {
                 case x:
-                    // TODO : check that the rest is syntactic
-                    return true;
+                    return true; // if it is syntactic (checked by ULocale) it is valid
                 case t:
-                    if (!isValidT(locale.getExtension(c), where)) return false;
-                    break;
                 case u:
-                    if (!isValidU(locale, locale.getExtension(c), where)) return false;
+                    if (!isValidU(locale, datatype, locale.getExtension(c), where)) return false;
                     break;
                 }
             } catch (Exception e) {
@@ -100,15 +111,18 @@ public class LocaleValidityChecker {
         return true;
     }
 
+    // TODO combine this with the KeyTypeData.SpecialType, and get it from the type, not the key
     enum SpecialCase {
-        normal, anything, reorder, codepoints, subdivision;
+        normal, anything, reorder, codepoints, subdivision, rgKey;
         static SpecialCase get(String key) {
             if (key.equals("kr")) {
-                return SpecialCase.reorder;
+                return reorder;
             } else if (key.equals("vt")) {
-                return SpecialCase.codepoints;
+                return codepoints;
             } else if (key.equals("sd")) {
                 return subdivision;
+            } else if (key.equals("rg")) {
+                return rgKey;
             } else if (key.equals("x0")) {
                 return anything;
             } else {
@@ -116,38 +130,58 @@ public class LocaleValidityChecker {
             }
         }
     }
+
     /**
      * @param locale 
+     * @param datatype 
      * @param extension
      * @param where
      * @return
      */
-    private boolean isValidU(ULocale locale, String extensionString, Where where) {
+    private boolean isValidU(ULocale locale, Datatype datatype, String extensionString, Where where) {
         String key = "";
         int typeCount = 0;
         ValueType valueType = null;
         SpecialCase specialCase = null;
         StringBuilder prefix = new StringBuilder();
         Set<String> seen = new HashSet<String>();
+
+        StringBuilder tBuffer = datatype == Datatype.t ? new StringBuilder() : null;
+
         // TODO: is empty -u- valid?
+
         for (String subtag : SEPARATOR.split(extensionString)) {
-            if (subtag.length() == 2) {
+            if (subtag.length() == 2 
+                    && (tBuffer == null || subtag.charAt(1) <= '9')) {
+                // if we have accumulated a t buffer, check that first
+                if (tBuffer != null) {
+                    // Check t buffer. Empty after 't' is ok.
+                    if (tBuffer.length() != 0 && !isValidLocale(tBuffer.toString(),where)) {
+                        return false;
+                    }
+                    tBuffer = null;
+                }
                 key = KeyTypeData.toBcpKey(subtag);
                 if (key == null) {
-                    return where.set(Datatype.u, subtag);
+                    return where.set(datatype, subtag);
                 }
                 if (!allowsDeprecated && KeyTypeData.isDeprecated(key)) {
-                    return where.set(Datatype.u, key);
+                    return where.set(datatype, key);
                 }
-                valueType = ValueType.get(key);
+                valueType = KeyTypeData.getValueType(key);
                 specialCase = SpecialCase.get(key);
                 typeCount = 0;
+            } else if (tBuffer != null) {
+                if (tBuffer.length() != 0) {
+                    tBuffer.append('-');
+                }
+                tBuffer.append(subtag);
             } else {
                 ++typeCount;
                 switch (valueType) {
                 case single: 
                     if (typeCount > 1) {
-                        return where.set(Datatype.u, key+"-"+subtag);
+                        return where.set(datatype, key+"-"+subtag);
                     }
                     break;
                 case incremental:
@@ -171,21 +205,29 @@ public class LocaleValidityChecker {
                 case codepoints: 
                     try {
                         if (Integer.parseInt(subtag,16) > 0x10FFFF) {
-                            return where.set(Datatype.u, key+"-"+subtag);
+                            return where.set(datatype, key+"-"+subtag);
                         }
                     } catch (NumberFormatException e) {
-                        return where.set(Datatype.u, key+"-"+subtag);
+                        return where.set(datatype, key+"-"+subtag);
                     }
                     continue;
                 case reorder:
                     boolean newlyAdded = seen.add(subtag.equals("zzzz") ? "others" : subtag);
                     if (!newlyAdded || !isScriptReorder(subtag)) {
-                        return where.set(Datatype.u, key+"-"+subtag);
+                        return where.set(datatype, key+"-"+subtag);
                     }
                     continue;
                 case subdivision:
                     if (!isSubdivision(locale, subtag)) {
-                        return where.set(Datatype.u, key+"-"+subtag);
+                        return where.set(datatype, key+"-"+subtag);
+                    }
+                    continue;
+                case rgKey:
+                    if (subtag.length() < 6 || !subtag.endsWith("zzzz")) {
+                        return where.set(datatype, subtag);
+                    }
+                    if (!isValid(Datatype.region, subtag.substring(0,subtag.length()-4), where)) {
+                        return false;
                     }
                     continue;
                 }
@@ -196,12 +238,16 @@ public class LocaleValidityChecker {
                 Output<Boolean> isSpecialType = new Output<Boolean>();
                 String type = KeyTypeData.toBcpType(key, subtag, isKnownKey, isSpecialType);
                 if (type == null) {
-                    return where.set(Datatype.u, key+"-"+subtag);
+                    return where.set(datatype, key+"-"+subtag);
                 }
                 if (!allowsDeprecated && KeyTypeData.isDeprecated(key, subtag)) {
-                    return where.set(Datatype.u, key+"-"+subtag);
+                    return where.set(datatype, key+"-"+subtag);
                 }
             }
+        }
+        // Check t buffer. Empty after 't' is ok.
+        if (tBuffer != null && tBuffer.length() != 0 && !isValidLocale(tBuffer.toString(),where)) {
+            return false;
         }
         return true;
     }
@@ -261,9 +307,7 @@ public class LocaleValidityChecker {
      * @param where
      * @return
      */
-    private boolean isValidT(String extensionString, Where where) {
-        // TODO: is empty -t- valid?
-        // TODO stop at first tag ([a-z][0-9]) and check their validity separately
+    private boolean isValidLocale(String extensionString, Where where) {
         try {
             ULocale locale = new ULocale.Builder().setLanguageTag(extensionString).build();
             return isValid(locale, where);
@@ -282,34 +326,9 @@ public class LocaleValidityChecker {
      * @return
      */
     private boolean isValid(Datatype datatype, String code, Where where) {
-        return datatype == Datatype.language && code.equalsIgnoreCase("root") ? true
-                : code.isEmpty() ? true
-                        : ValidIdentifiers.isValid(datatype, datasubtypes, code) != null ? true 
-                                : where == null ? false : where.set(datatype, code);
+        return code.isEmpty() ? true :
+            ValidIdentifiers.isValid(datatype, datasubtypes, code) != null ? true : 
+                where == null ? false 
+                        : where.set(datatype, code);
     }
-
-    public enum ValueType {
-        single, multiple, incremental;
-        private static Set<String> multipleValueTypes = new HashSet<String>(Arrays.asList("x0", "kr", "vt"));
-        private static Set<String> specificValueTypes = new HashSet<String>(Arrays.asList("ca"));
-        static ValueType get(String key) {
-            if (multipleValueTypes.contains(key)) {
-                return multiple;
-            } else if (specificValueTypes.contains(key)) {
-                return incremental;
-            } else {
-                return single;
-            }
-        }
-    }
-    /*
-Type: any multiple
-{"OK", "en-t-x0-SPECIAL"}
-{"OK", "en-u-kr-REORDER_CODE"}, // Collation reorder codes; One or more collation reorder codes, see LDML Part 5: Collation
-{"OK", "en-u-vt-CODEPOINTS"}, // deprecated Collation parameter key for variable top; The variable top (one or more Unicode code points: LDML Appendix Q)
-
-Multiple-values, specific sequences
-<type name="islamic-umalqura" description="Islamic calendar, Umm al-Qura" since="24"/>
-     */
-
 }
