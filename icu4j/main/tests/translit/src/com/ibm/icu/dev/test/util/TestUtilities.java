@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
@@ -42,17 +43,16 @@ public class TestUtilities extends TestFmwk {
         new TestUtilities().run(args);
     }
     
-    UnicodeMap map1 = new UnicodeMap();
-    Map map2 = new HashMap();
-    Map map3 = new TreeMap();
-    SortedSet log = new TreeSet();
-    static String[] TEST_VALUES = {null, "A", "B", "C", "D", "E", "F"};
+    SortedSet<String> log = new TreeSet<String>();
+    static String[] TEST_VALUES = {"A", "B", "C", "D", "E", "F"};
     static Random random = new Random(12345);
     
-    public void TestUnicodeMap() {
-        random.setSeed(12345);
+    public void TestUnicodeMapRandom() {
         // do random change to both, then compare
+        random.setSeed(12345); // reproducable results
         logln("Comparing against HashMap");
+        UnicodeMap<String> map1 = new UnicodeMap();
+        Map<Integer, String> map2 = new HashMap<Integer, String>();
         for (int counter = 0; counter < ITERATIONS; ++counter) {
             int start = random.nextInt(LIMIT);
             String value = TEST_VALUES[random.nextInt(TEST_VALUES.length)];
@@ -63,36 +63,40 @@ public class TestUtilities extends TestFmwk {
                 System.out.println(" debug");
             }
             map1.put(start, value);
-            map2.put(new Integer(start), value);
-            check(counter);
+            map2.put(start, value);
+            check(map1, map2, counter);
         }
-        checkNext(LIMIT);
-        
+        checkNext(map1, map2, LIMIT);
+    }
+
+    public void TestUnicodeMapGeneralCategory() {
         logln("Setting General Category");
-        map1 = new UnicodeMap();
-        map2 = new TreeMap();
+        UnicodeMap<String> map1 = new UnicodeMap();
+        Map<Integer, String> map2 = new HashMap<Integer, String>();
+        //Map<Integer, String> map3 = new TreeMap<Integer, String>();
+        map1 = new UnicodeMap<String>();
+        map2 = new TreeMap<Integer,String>();
         for (int cp = 0; cp <= SET_LIMIT; ++cp) {
               int enumValue = UCharacter.getIntPropertyValue(cp, propEnum);
               //if (enumValue <= 0) continue; // for smaller set
               String value = UCharacter.getPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
               map1.put(cp, value);
-              map2.put(new Integer(cp), value);
+              map2.put(cp, value);
         }       
-        checkNext(Integer.MAX_VALUE);
-
-
+        checkNext(map1, map2, Integer.MAX_VALUE);
+        
         logln("Comparing General Category");
-        check(-1);
+        check(map1, map2, -1);
         logln("Comparing Values");
-        Set values1 = (Set) map1.getAvailableValues(new TreeSet());
-        Set values2 = new TreeSet(map2.values());
+        Set<String> values1 = map1.getAvailableValues(new TreeSet<String>());
+        Set<String> values2 = new TreeSet<String>(map2.values());
         if (!TestBoilerplate.verifySetsIdentical(this, values1, values2)) {
             throw new IllegalArgumentException("Halting");
         }
         logln("Comparing Sets");
-        for (Iterator it = values1.iterator(); it.hasNext();) {
-            Object value = it.next();
-            logln(value == null ? "null" : value.toString());
+        for (Iterator<String> it = values1.iterator(); it.hasNext();) {
+            String value = it.next();
+            logln(value == null ? "null" : value);
             UnicodeSet set1 = map1.keySet(value);
             UnicodeSet set2 = TestBoilerplate.getSet(map2, value);
             if (!TestBoilerplate.verifySetsIdentical(this, set1, set2)) {
@@ -100,30 +104,46 @@ public class TestUtilities extends TestFmwk {
             }
         } 
         
+    }
+
+    static final UnicodeMap<String> SCRIPTS = ICUPropertyFactory.make().getProperty("script").getUnicodeMap_internal();
+    static final UnicodeMap<String> GC = ICUPropertyFactory.make().getProperty("general_category").getUnicodeMap_internal();
+
+    public void TestUnicodeMapCompose() {
         logln("Getting Scripts");
-        UnicodeMap scripts = ICUPropertyFactory.make().getProperty("script").getUnicodeMap_internal();
-        UnicodeMap.Composer composer = new UnicodeMap.Composer() {
-            public Object compose(int codepoint, String string, Object a, Object b) {
+        
+        UnicodeMap.Composer<String> composer = new UnicodeMap.Composer<String>() {
+            @Override
+            public String compose(int codepoint, String string, String a, String b) {
                 return a.toString() + "_" + b.toString();
             }
         };
         
         logln("Trying Compose");
-        UnicodeMap composed = ((UnicodeMap)scripts.cloneAsThawed()).composeWith(map1, composer);
-        Object last = "";
+
+//        Map<Integer, String> map2 = new HashMap<Integer, String>();
+//        Map<Integer, String> map3 = new TreeMap<Integer, String>();
+        UnicodeMap<String> composed = ((UnicodeMap)SCRIPTS.cloneAsThawed()).composeWith(GC, composer);
+        String last = "";
         for (int i = 0; i < 0x10FFFF; ++i) {
-            Object comp = composed.getValue(i);
-            Object gc = map1.getValue(i);
-            Object sc = scripts.getValue(i);
-            if (!comp.equals(composer.compose(i, null, gc, sc))) {
+//            if (i == 888) {
+//                int debug = 0;
+//            }
+            String comp = composed.getValue(i);
+            String gc = GC.getValue(i);
+            String sc = SCRIPTS.getValue(i);
+            if (!comp.equals(composer.compose(i, null, sc, gc))) {
                 errln("Failed compose at: " + i);
+                break;
             }
             if (!last.equals(comp)) {
                 logln(Utility.hex(i) + "\t" + comp);
                 last = comp;
             }
         }
+    }
 
+    public void testBoilerplate() {
         // check boilerplate
         List argList = new ArrayList();
         argList.add("TestMain");
@@ -132,7 +152,28 @@ public class TestUtilities extends TestFmwk {
         argList.toArray(args);
         new UnicodeMapBoilerplate().run(args);
          // TODO: the following is not being reached
-        new UnicodeSetBoilerplate().run(args);       
+        new UnicodeSetBoilerplate().run(args);
+    }
+    
+    public void TestAUnicodeMap2() {
+        UnicodeMap foo = new UnicodeMap();
+        @SuppressWarnings("unused")
+        int hash = foo.hashCode(); // make sure doesn't NPE
+        @SuppressWarnings("unused")
+        Set fii = foo.stringKeys(); // make sure doesn't NPE
+    }
+    
+    public void TestAUnicodeMapInverse() {
+        UnicodeMap<Character> foo1 = new UnicodeMap<Character>()
+                .putAll('a', 'z', 'b')
+                .put("ab", 'c')
+                .put('x', 'b')
+                .put("xy", 'c')
+                ;
+        Map<Character, UnicodeSet> target = new HashMap<Character, UnicodeSet>();
+        foo1.addInverseTo(target);
+        UnicodeMap<Character> reverse = new UnicodeMap().putAllInverse(target);
+        assertEquals("", foo1, reverse);
     }
     
     public void TestCollectionUtilitySpeed() {
@@ -272,15 +313,15 @@ public class TestUtilities extends TestFmwk {
         }
     }
 
-    private void checkNext(int limit) {
+    private void checkNext(UnicodeMap<String> map1, Map<Integer,String> map2, int limit) {
         logln("Comparing nextRange");
-        UnicodeMapIterator mi = new UnicodeMapIterator(map1);
         Map localMap = new TreeMap();
+        UnicodeMapIterator<String> mi = new UnicodeMapIterator<String>(map1);
         while (mi.nextRange()) {
             logln(Utility.hex(mi.codepoint) + ".." + Utility.hex(mi.codepointEnd) + " => " + mi.value);
             for (int i = mi.codepoint; i <= mi.codepointEnd; ++i) {
-                if (i >= limit) continue;
-                localMap.put(new Integer(i), mi.value);
+                //if (i >= limit) continue;
+                localMap.put(i, mi.value);
             }
         }
         checkMap(map2, localMap);
@@ -288,22 +329,22 @@ public class TestUtilities extends TestFmwk {
         logln("Comparing next");
         mi.reset();
         localMap = new TreeMap();
-        Object lastValue = new Object();
+        String lastValue = null;
         while (mi.next()) {
-            if (!UnicodeMap.areEqual(lastValue, mi.value)) {
-                // System.out.println("Change: " + Utility.hex(mi.codepoint) + " => " + mi.value);
-                lastValue = mi.value;
-            }
-            if (mi.codepoint >= limit) continue;
-            localMap.put(new Integer(mi.codepoint), mi.value);
+//            if (!UnicodeMap.areEqual(lastValue, mi.value)) {
+//                // System.out.println("Change: " + Utility.hex(mi.codepoint) + " => " + mi.value);
+//                lastValue = mi.value;
+//            }
+            //if (mi.codepoint >= limit) continue;
+            localMap.put(mi.codepoint, mi.value);
         }
         checkMap(map2, localMap);
     }
     
-    public void check(int counter) {
+    public void check(UnicodeMap<String> map1, Map<Integer,String> map2, int counter) {
         for (int i = 0; i < LIMIT; ++i) {
-            Object value1 = map1.getValue(i);
-            Object value2 = map2.get(new Integer(i));
+            String value1 = map1.getValue(i);
+            String value2 = map2.get(i);
             if (!UnicodeMap.areEqual(value1, value2)) {
                 errln(counter + " Difference at " + Utility.hex(i)
                      + "\t UnicodeMap: " + value1
@@ -317,7 +358,7 @@ public class TestUtilities extends TestFmwk {
     
     void checkMap(Map m1, Map m2) {
         if (m1.equals(m2)) return;
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         Set m1entries = m1.entrySet();
         Set m2entries = m2.entrySet();
         getEntries("\r\nIn First, and not Second", m1entries, m2entries, buffer, 20);
@@ -325,33 +366,32 @@ public class TestUtilities extends TestFmwk {
         errln(buffer.toString());
     }
     
-    static Comparator ENTRY_COMPARATOR = new Comparator() {
-        public int compare(Object o1, Object o2) {
+    static Comparator<Map.Entry<Integer, String>> ENTRY_COMPARATOR = new Comparator<Map.Entry<Integer, String>>() {
+        public int compare(Map.Entry<Integer, String> o1, Map.Entry<Integer, String> o2) {
             if (o1 == o2) return 0;
             if (o1 == null) return -1;
             if (o2 == null) return 1;
-            Map.Entry a = (Map.Entry) o1;
-            Map.Entry b = (Map.Entry) o2;
+            Map.Entry<Integer, String> a = o1;
+            Map.Entry<Integer, String> b = o2;
             int result = compare2(a.getKey(), b.getKey());
             if (result != 0) return result;
             return compare2(a.getValue(), b.getValue());
         }
-        private int compare2(Object o1, Object o2) {
+        private <T extends Comparable> int compare2(T o1, T o2) {
             if (o1 == o2) return 0;
             if (o1 == null) return -1;
             if (o2 == null) return 1;
-            return ((Comparable)o1).compareTo(o2);
+            return o1.compareTo(o2);
         }
     };
 
-    private void getEntries(String title, Set m1entries, Set m2entries, StringBuffer buffer, int limit) {
-        Set m1_m2 = new TreeSet(ENTRY_COMPARATOR);
+    private void getEntries(String title, Set<Map.Entry<Integer,String>> m1entries, Set<Map.Entry<Integer, String>> m2entries, StringBuilder buffer, int limit) {
+        Set<Map.Entry<Integer, String>> m1_m2 = new TreeSet<Map.Entry<Integer, String>>(ENTRY_COMPARATOR);
         m1_m2.addAll(m1entries);
         m1_m2.removeAll(m2entries);
         buffer.append(title + ": " + m1_m2.size() + "\r\n");
-        for (Iterator it = m1_m2.iterator(); it.hasNext();) {
+        for (Entry<Integer, String> entry : m1_m2) {
             if (limit-- < 0) return;
-            Map.Entry entry = (Map.Entry) it.next();
             buffer.append(entry.getKey()).append(" => ")
              .append(entry.getValue()).append("\r\n");
         }
@@ -363,13 +403,19 @@ public class TestUtilities extends TestFmwk {
     static final NumberFormat nf = NumberFormat.getInstance();
     
     public void TestTime() {
+        boolean shortTest = getInclusion() < 10;
         double hashTime, umTime, icuTime, treeTime;
-        umTime = checkSetTime(20, 0);
-        hashTime = checkSetTime(20, 1);
+        int warmup = shortTest ? 1 : 20;
+        umTime = checkSetTime(warmup, 0);
+        hashTime = checkSetTime(warmup, 1);
         logln("Percentage: " + pf.format(hashTime/umTime));
-        treeTime = checkSetTime(20, 3);
+        treeTime = checkSetTime(warmup, 3);
         logln("Percentage: " + pf.format(treeTime/umTime));
         //logln(map1.toString());
+        
+        if (shortTest) {
+            return;
+        }
         
         umTime = checkGetTime(1000, 0);
         hashTime = checkGetTime(1000, 1);
@@ -388,9 +434,11 @@ public class TestUtilities extends TestFmwk {
         logln((type == 0 ? "UnicodeMap" : type == 1 ? "HashMap" : type == 2 ? "ICU" : "TreeMap") + "\t" + nf.format(result));
         return result;
     }
+    
     double _checkSetTime(int iterations, int type) {
-        map1 = new UnicodeMap();
-        map2 = new HashMap();
+        UnicodeMap<String> map1 = SCRIPTS;
+        Map<Integer,String> map2 = map1.putAllCodepointsInto(new HashMap<Integer,String>());
+        Map<Integer, String> map3 = new TreeMap<Integer, String>(map2);
         System.gc();
         double start = System.currentTimeMillis();
         for (int j = 0; j < iterations; ++j)
@@ -400,8 +448,8 @@ public class TestUtilities extends TestFmwk {
             String value = UCharacter.getPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
             switch(type) {
             case 0: map1.put(cp, value); break;
-            case 1: map2.put(new Integer(cp), value); break;
-            case 3: map3.put(new Integer(cp), value); break;
+            case 1: map2.put(cp, value); break;
+            case 3: map3.put(cp, value); break;
             }
         }
         double end = System.currentTimeMillis();
@@ -409,25 +457,29 @@ public class TestUtilities extends TestFmwk {
     }
     
     double checkGetTime(int iterations, int type) {
-        _checkGetTime(1,type);
-        double result = _checkGetTime(iterations, type);
+        UnicodeMap<String> map1 = new UnicodeMap<String>();
+        Map<Integer,String> map2 = map1.putAllCodepointsInto(new HashMap<Integer,String>());
+        Map<Integer, String> map3 = new TreeMap<Integer, String>();
+        _checkGetTime(map1, map2, map3, 1,type); // warmup
+        double result = _checkGetTime(map1, map2, map3, iterations, type);
         logln((type == 0 ? "UnicodeMap" : type == 1 ? "HashMap" : type == 2 ? "ICU" : "TreeMap") + "\t" + nf.format(result));
         return result;
     }
-    double _checkGetTime(int iterations, int type) {
+    
+    double _checkGetTime(UnicodeMap<String> map1, Map<Integer,String> map2, Map<Integer,String> map3, int iterations, int type) {
         System.gc();
         double start = System.currentTimeMillis();
         for (int j = 0; j < iterations; ++j)
           for (int cp = 0; cp < CHECK_LIMIT; ++cp) {
             switch (type) {
             case 0: map1.getValue(cp); break;
-            case 1: map2.get(new Integer(cp)); break;
+            case 1: map2.get(cp); break;
             case 2:
                 int enumValue = UCharacter.getIntPropertyValue(cp, propEnum);
                 //if (enumValue <= 0) continue;
                 UCharacter.getPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
                 break;                
-            case 3: map3.get(new Integer(cp)); break;
+            case 3: map3.get(cp); break;
             }
         }
         double end = System.currentTimeMillis();
@@ -475,7 +527,7 @@ public class TestUtilities extends TestFmwk {
          */
         protected boolean _addTestObject(List list) {
             if (list.size() > 31) return false;
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             for (int i = 0; i < 10; ++i) {
                 result.append((char)random.nextInt(0xFF));
             }
