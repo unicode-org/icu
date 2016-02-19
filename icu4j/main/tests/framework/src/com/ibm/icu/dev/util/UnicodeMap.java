@@ -1,12 +1,11 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -60,7 +59,14 @@ public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>,
     private TreeMap<String,T> stringMap;
 
     { clear(); }
+    
+    public UnicodeMap() {
+    }
 
+    public UnicodeMap(UnicodeMap other) {
+        this.putAll(other);
+    }
+    
     public UnicodeMap<T> clear() {
         if (locked) {
             throw new UnsupportedOperationException("Attempt to modify locked object");
@@ -105,7 +111,13 @@ public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>,
         // TODO might want to abbreviate this for speed.
         for (int i = 0; i < length-1; ++i) {
             result = 37*result + transitions[i];
-            result = 37*result + values[i].hashCode();
+            result = 37*result;
+            if (values[i] != null) {
+                 result += values[i].hashCode();
+            }
+        }
+        if (stringMap != null) {
+            result = 37*result + stringMap.hashCode();
         }
         return result;
     }
@@ -577,7 +589,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>,
             staleAvailableValues = false;
         }
         if (result == null) {
-            result = (U) new ArrayList<T>(availableValues.size());
+            result = (U) new LinkedHashSet<T>(availableValues.size());
         }
         result.addAll(availableValues);
         return result;
@@ -586,7 +598,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>,
     /**
      * Convenience method
      */
-    public Collection<T> values() {
+    public Set<T> values() {
         return getAvailableValues(null);
     }
     /**
@@ -840,12 +852,44 @@ public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>,
 
     /**
      * Utility for extracting map
+     * @deprecated
      */
     public UnicodeMap<T> putAllIn(Map<? super String, ? super T> map) {
         for (String key : keySet()) {
             map.put(key, get(key));
         }
         return this;
+    }
+
+    /**
+     * Utility for extracting map
+     */
+    public <U extends Map<String, T>> U putAllInto(U map) {
+        for (EntryRange<T> entry : entryRanges()) {
+            if (entry.string != null) {
+                break;
+            }
+            for (int cp = entry.codepoint; cp <= entry.codepointEnd; ++cp) {
+                map.put(UTF16.valueOf(cp), entry.value);
+            }
+        }
+        map.putAll(stringMap);
+        return map;
+    }
+
+    /**
+     * Utility for extracting map
+     */
+    public <U extends Map<Integer, T>> U putAllCodepointsInto(U map) {
+        for (EntryRange<T> entry : entryRanges()) {
+            if (entry.string != null) {
+                break;
+            }
+            for (int cp = entry.codepoint; cp <= entry.codepointEnd; ++cp) {
+                map.put(cp, entry.value);
+            }
+        }
+        return map;
     }
 
     /* (non-Javadoc)
@@ -944,7 +988,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>,
     /**
      * Returns an Iterable over EntryRange, designed for efficient for loops over UnicodeMaps. 
      * Caution: For efficiency, the EntryRange may be reused, so the EntryRange may change on each iteration!
-     * The value is guaranteed never to be null.
+     * The value is guaranteed never to be null. The entryRange.string values (non-null) are after all the ranges. 
      * @return entry range, for for loops
      */
     public Iterable<EntryRange<T>> entryRanges() {
@@ -1180,7 +1224,42 @@ public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>,
      * Returns the keys that consist of multiple code points.
      * @return
      */
-    public Set<String> stringKeys() {
-        return stringMap.keySet();
+    public final Set<String> stringKeys() {
+        return getNonRangeStrings();
+    }
+    
+    /**
+     * Gets the inverse of this map, adding to the target. Like putAllIn
+     * @return
+     */
+    public <U extends Map<T,UnicodeSet>> U addInverseTo(U target) {
+        for (T value : values()) {
+            UnicodeSet uset = getSet(value);
+            target.put(value, uset);
+        }
+        return target;
+    }
+
+    /**
+     * Freeze an inverse map.
+     * @param target
+     * @return
+     */
+    public static <T> Map<T,UnicodeSet> freeze(Map<T,UnicodeSet> target) {
+        for (UnicodeSet entry : target.values()) {
+            entry.freeze();
+        }
+        return Collections.unmodifiableMap(target);
+    }
+
+    /**
+     * @param target
+     * @return
+     */
+    public UnicodeMap<T> putAllInverse(Map<T, UnicodeSet> source) {
+        for (Entry<T, UnicodeSet> entry : source.entrySet()) {
+            putAll(entry.getValue(), entry.getKey());
+        }
+        return this;
     }
 }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2016, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -32,16 +32,16 @@ import com.ibm.icu.text.UnicodeSet;
  * <br>(2) if mutable(a), then a.clone() != a // note: the reverse is not necessarily true.
  * @author Davis
  */
-public abstract class TestBoilerplate extends TestFmwk {
+public abstract class TestBoilerplate<T> extends TestFmwk {
 
     public final void TestMain() throws Exception {
-        List list = new LinkedList();
+        List<T> list = new LinkedList<T>();
         while (_addTestObject(list)) {
         }
-        Object[] testArray = list.toArray();
+        T[] testArray = (T[]) list.toArray();
         for (int i = 0; i < testArray.length; ++i) {
             //logln("Testing " + i);
-            Object a = testArray[i];
+            T a = testArray[i];
             int aHash = a.hashCode();
             if (a.equals(null)) {
                 errln("Equality/Null invariant fails: " + i);
@@ -49,7 +49,7 @@ public abstract class TestBoilerplate extends TestFmwk {
             if (!a.equals(a)) {
                 errln("Self-Equality invariant fails: " + i);
             }
-            Object b;                
+            T b;                
             if (_canClone(a)) {
                 b = _clone(a);
                 if (b == a) {
@@ -70,7 +70,7 @@ public abstract class TestBoilerplate extends TestFmwk {
         }
     }
 
-    private void _checkEquals(int i, int j, Object a, int aHash, Object b) {
+    private void _checkEquals(int i, int j, T a, int aHash, T b) {
         int bHash = b.hashCode();
         if (!b.equals(a)) errln("Equality/Symmetry",i, j);
         if (aHash != bHash) errln("Equality/Hash",i, j);
@@ -87,7 +87,7 @@ public abstract class TestBoilerplate extends TestFmwk {
     /**
      * Must be overridden to check whether a and be behave the same
      */
-    protected abstract boolean _hasSameBehavior(Object a, Object b);
+    protected abstract boolean _hasSameBehavior(T a, T b);
 
     /**
      * This method will be called multiple times until false is returned.
@@ -99,19 +99,19 @@ public abstract class TestBoilerplate extends TestFmwk {
      * count.
      * NOTE: this method will only be called if the objects test as equal.
      */
-    protected abstract boolean _addTestObject(List c);
+    protected abstract boolean _addTestObject(List<T> c);
     /**
      * Override if the tested objects are mutable.
      * <br>Since Java doesn't tell us, we need a function to tell if so.
      * The default is true, so must be overridden if not.
      */
-    protected boolean _isMutable(Object a) {
+    protected boolean _isMutable(T a) {
         return true;
     }
     /**
      * Override if the tested objects can be cloned.
      */
-    protected boolean _canClone(Object a) {
+    protected boolean _canClone(T a) {
         return true;
     }
     /**
@@ -123,14 +123,14 @@ public abstract class TestBoilerplate extends TestFmwk {
      * @param a
      * @return clone
      */
-    protected Object _clone(Object a) throws Exception {
+    protected T _clone(T a) throws Exception {
         Class aClass = a.getClass();
         try {
             Method cloner = aClass.getMethod("clone", (Class[])null);
-            return cloner.invoke(a,(Object[])null);
+            return (T) cloner.invoke(a,(Object[])null);
         } catch (NoSuchMethodException e) {
             Constructor constructor = aClass.getConstructor(new Class[] {aClass});
-            return constructor.newInstance(new Object[]{a});
+            return (T) constructor.newInstance(new Object[]{a});
         }
     }
     
@@ -161,7 +161,7 @@ public abstract class TestBoilerplate extends TestFmwk {
     }
     
     public static String show(Map m) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (Iterator it = m.keySet().iterator(); it.hasNext();) {
             Object key = it.next();
             buffer.append(key + "=>" + m.get(key) + "\r\n");
@@ -169,24 +169,22 @@ public abstract class TestBoilerplate extends TestFmwk {
         return buffer.toString();
     }
     
-    public static UnicodeSet getSet(Map m, Object value) {
+    public static <T> UnicodeSet getSet(Map<Integer, T> m, T value) {
         UnicodeSet result = new UnicodeSet();
-        for (Iterator it = m.keySet().iterator(); it.hasNext();) {
-            Object key = it.next();
-            Object val = m.get(key);
+        for (Iterator<Integer> it = m.keySet().iterator(); it.hasNext();) {
+            Integer key = it.next();
+            T val = m.get(key);
             if (!val.equals(value)) continue;
-            result.add(((Integer)key).intValue());
+            result.add(key.intValue());
         }
         return result;
     }
     
     public static String show(Collection c) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (Iterator it = c.iterator(); it.hasNext();) {
             buffer.append(it.next() + "\r\n");
         }
         return buffer.toString();
     }
-    
-
 }
