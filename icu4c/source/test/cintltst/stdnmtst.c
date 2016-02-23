@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2000-2009, International Business Machines Corporation and
+ * Copyright (c) 2000-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -15,10 +15,9 @@
 
 #include "unicode/ucnv.h"
 #include "unicode/ustring.h"
+#include "cmemory.h"
 #include "cstring.h"
 #include "cintltst.h"
-
-#define ARRAY_SIZE(array) (int32_t)(sizeof array  / sizeof array[0])
 
 static void TestStandardName(void);
 static void TestStandardNames(void);
@@ -244,7 +243,7 @@ static UBool doTestUCharNames(const char *name, const char *standard, const char
             UChar testName[256];
             int32_t len;
             const UChar *enumName = uenum_unext(myEnum, &len, &err);
-            u_uastrncpy(testName, expected[idx], sizeof(testName)/sizeof(testName[0]));
+            u_uastrncpy(testName, expected[idx], UPRV_LENGTHOF(testName));
             if (u_strcmp(enumName, testName) != 0 || U_FAILURE(err)
                 || len != (int32_t)uprv_strlen(expected[idx]))
             {
@@ -289,20 +288,20 @@ static void TestStandardNames()
         "ISO-2022-KR",
     };
 
-    doTestNames("ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
-    doTestNames("US-ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
-    doTestNames("ASCII", "MIME", asciiMIME, ARRAY_SIZE(asciiMIME));
-    doTestNames("ascii", "mime", asciiMIME, ARRAY_SIZE(asciiMIME));
+    doTestNames("ASCII", "IANA", asciiIANA, UPRV_LENGTHOF(asciiIANA));
+    doTestNames("US-ASCII", "IANA", asciiIANA, UPRV_LENGTHOF(asciiIANA));
+    doTestNames("ASCII", "MIME", asciiMIME, UPRV_LENGTHOF(asciiMIME));
+    doTestNames("ascii", "mime", asciiMIME, UPRV_LENGTHOF(asciiMIME));
 
     doTestNames("ASCII", "crazy", asciiMIME, -1);
     doTestNames("crazy", "MIME", asciiMIME, -1);
 
     doTestNames("LMBCS-1", "MIME", asciiMIME, 0);
 
-    doTestNames("ISO_2022,locale=ko,version=0", "MIME", iso2022MIME, ARRAY_SIZE(iso2022MIME));
-    doTestNames("csiso2022kr", "MIME", iso2022MIME, ARRAY_SIZE(iso2022MIME));
+    doTestNames("ISO_2022,locale=ko,version=0", "MIME", iso2022MIME, UPRV_LENGTHOF(iso2022MIME));
+    doTestNames("csiso2022kr", "MIME", iso2022MIME, UPRV_LENGTHOF(iso2022MIME));
 
     log_verbose(" Testing unext()\n");
-    doTestUCharNames("ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
+    doTestUCharNames("ASCII", "IANA", asciiIANA, UPRV_LENGTHOF(asciiIANA));
 
 }

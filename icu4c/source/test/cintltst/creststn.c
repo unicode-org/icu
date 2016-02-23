@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -22,6 +22,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "string.h"
+#include "cmemory.h"
 #include "cstring.h"
 #include "unicode/uchar.h"
 #include "ucol_imp.h"  /* for U_ICUDATA_COLL */
@@ -170,7 +171,7 @@ param[] =
   { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
-static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
+static int32_t bundles_count = UPRV_LENGTHOF(param);
 
 
 
@@ -353,7 +354,7 @@ static void TestAliasConflict(void) {
     }
     ures_close(he);
 
-    size = sizeof(norwayNames)/sizeof(norwayNames[0]);
+    size = UPRV_LENGTHOF(norwayNames);
     for(i = 0; i < size; i++) {
         status = U_ZERO_ERROR;
         norway = ures_open(NULL, norwayNames[i], &status);
@@ -1011,8 +1012,8 @@ static void TestAPI() {
     }
 #endif
 
-    u_memset(largeBuffer, 0x0030, sizeof(largeBuffer)/sizeof(largeBuffer[0]));
-    largeBuffer[sizeof(largeBuffer)/sizeof(largeBuffer[0])-1] = 0;
+    u_memset(largeBuffer, 0x0030, UPRV_LENGTHOF(largeBuffer));
+    largeBuffer[UPRV_LENGTHOF(largeBuffer)-1] = 0;
 
     /*Test ures_openU */
 
@@ -2294,7 +2295,7 @@ static void TestResourceLevelAliasing(void) {
         if(U_FAILURE(status)) {
           log_err("FAIL: Couldn't get testGetStringByKeyAliasing resource: %s\n", u_errorName(status));
         } else {
-            for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+            for(i = 0; i < UPRV_LENGTHOF(strings); i++) {
                 result = tres_getString(tb, -1, keys[i], &resultLen, &status);
                 if(U_FAILURE(status)){
                     log_err("(1) Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
@@ -2305,7 +2306,7 @@ static void TestResourceLevelAliasing(void) {
                   log_err("(1) Didn't get correct string while accessing alias table by key (%s)\n", keys[i]);
                 }
             }
-            for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+            for(i = 0; i < UPRV_LENGTHOF(strings); i++) {
                 result = tres_getString(tb, i, NULL, &resultLen, &status); 
                 if(U_FAILURE(status)){
                     log_err("(2) Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
@@ -2316,7 +2317,7 @@ static void TestResourceLevelAliasing(void) {
                   log_err("(2) Didn't get correct string while accesing alias table by index (%s)\n", strings[i]);
                 }
             }
-            for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+            for(i = 0; i < UPRV_LENGTHOF(strings); i++) {
                 result = ures_getNextString(tb, &resultLen, &key, &status);
                 if(U_FAILURE(status)){
                     log_err("(3) Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
@@ -2332,7 +2333,7 @@ static void TestResourceLevelAliasing(void) {
         if(U_FAILURE(status)) {
           log_err("FAIL: Couldn't get testGetStringByIndexAliasing resource: %s\n", u_errorName(status));
         } else {
-            for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+            for(i = 0; i < UPRV_LENGTHOF(strings); i++) {
                 result = tres_getString(tb, i, NULL, &resultLen, &status);
                 if(U_FAILURE(status)){
                     log_err("Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
@@ -2343,7 +2344,7 @@ static void TestResourceLevelAliasing(void) {
                   log_err("Didn't get correct string while accesing alias by index in an array (%s)\n", strings[i]);
                 }
             }
-            for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+            for(i = 0; i < UPRV_LENGTHOF(strings); i++) {
                 result = ures_getNextString(tb, &resultLen, &key, &status);
                 if(U_FAILURE(status)){
                     log_err("Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));

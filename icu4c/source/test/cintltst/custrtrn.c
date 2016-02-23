@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2014, International Business Machines Corporation and
+ * Copyright (c) 2001-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1390,15 +1390,15 @@ static void Test_widestrs()
 #if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
         wchar_t ws[100];
         UChar rts[100];
-        int32_t wcap = sizeof(ws) / sizeof(*ws);
+        int32_t wcap = UPRV_LENGTHOF(ws);
         int32_t wl;
-        int32_t rtcap = sizeof(rts) / sizeof(*rts);
+        int32_t rtcap = UPRV_LENGTHOF(rts);
         int32_t rtl;
         wchar_t *wcs;
         UChar *cp;
         const char *errname;
         UChar ustr[] = {'h', 'e', 'l', 'l', 'o', 0};
-        int32_t ul = sizeof(ustr)/sizeof(*ustr) -1;
+        int32_t ul = UPRV_LENGTHOF(ustr) -1;
         char astr[100];
 
         UErrorCode err;

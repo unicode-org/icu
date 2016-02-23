@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2015, International Business Machines
+*   Copyright (C) 2002-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -362,7 +362,7 @@ static void TestStringFunctions()
             currToken++;
         }
 
-        if (currToken != sizeof(tokens)/sizeof(tokens[0])) {
+        if (currToken != UPRV_LENGTHOF(tokens)) {
             log_err("Didn't get correct number of tokens\n");
         }
         state = delimBuf;       /* Give it an "invalid" saveState */
@@ -426,7 +426,7 @@ static void TestStringFunctions()
         UCharIterator iter1, iter2;
         int32_t len1, len2, r1, r2;
 
-        for(i=0; i<(sizeof(strings)/sizeof(strings[0])-1); ++i) {
+        for(i=0; i<(UPRV_LENGTHOF(strings)-1); ++i) {
             if(u_strcmpCodePointOrder(strings[i], strings[i+1])>=0) {
                 log_err("error: u_strcmpCodePointOrder() fails for string %d and the following one\n", i);
             }
@@ -1093,18 +1093,18 @@ TestUnescape() {
         0x50, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x73, 0x20,
         0x5a, 0x65, 0x69, 0x63, 0x68, 0x65, 0x6e, 0x3a, 0x20, 0xdbc8, 0xdf45, 0x1b, 0x03, 0x0a, 0x20, 0x1b, 0x263A, 0
     };
-    static const int32_t explength = sizeof(expect)/sizeof(expect[0])-1;
+    static const int32_t explength = UPRV_LENGTHOF(expect)-1;
     int32_t length;
 
     /* test u_unescape() */
-    length=u_unescape(input, buffer, sizeof(buffer)/sizeof(buffer[0]));
+    length=u_unescape(input, buffer, UPRV_LENGTHOF(buffer));
     if(length!=explength || u_strcmp(buffer, expect)!=0) {
         log_err("failure in u_unescape(): length %d!=%d and/or incorrect result string\n", length,
                 explength);
     }
 
     /* try preflighting */
-    length=u_unescape(input, NULL, sizeof(buffer)/sizeof(buffer[0]));
+    length=u_unescape(input, NULL, UPRV_LENGTHOF(buffer));
     if(length!=explength || u_strcmp(buffer, expect)!=0) {
         log_err("failure in u_unescape(preflighting): length %d!=%d\n", length, explength);
     }

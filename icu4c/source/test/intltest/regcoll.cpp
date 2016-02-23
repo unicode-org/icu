@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -17,8 +17,6 @@
 #include "sfwdchit.h"
 #include "testutil.h"
 #include "cmemory.h"
-
-#define ARRAY_LENGTH(array) ((int32_t)(sizeof array / sizeof array[0]))
 
 CollationRegressionTest::CollationRegressionTest()
 {
@@ -189,7 +187,7 @@ void CollationRegressionTest::Test4054734(/* char* par */)
     c->setStrength(Collator::IDENTICAL);
 
     c->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
-    compareArray(*c, decomp, ARRAY_LENGTH(decomp));
+    compareArray(*c, decomp, UPRV_LENGTHOF(decomp));
 
     delete c;
 }
@@ -211,7 +209,7 @@ void CollationRegressionTest::Test4054736(/* char* par */)
         {0xFB4F, 0}, {0x3d, 0}, {0x05D0, 0x05DC}  // Alef-Lamed vs. Alef, Lamed
     };
 
-    compareArray(*c, tests, ARRAY_LENGTH(tests));
+    compareArray(*c, tests, UPRV_LENGTHOF(tests));
 
     delete c;
 }
@@ -340,7 +338,7 @@ void CollationRegressionTest::Test4060154(/* char* par */)
     };
 
     c->setStrength(Collator::TERTIARY);
-    compareArray(*c, tertiary, ARRAY_LENGTH(tertiary));
+    compareArray(*c, tertiary, UPRV_LENGTHOF(tertiary));
 
     /*
     String[] secondary = {
@@ -355,7 +353,7 @@ void CollationRegressionTest::Test4060154(/* char* par */)
     };
 
     c->setStrength(Collator::PRIMARY);
-    compareArray(*c, secondary, ARRAY_LENGTH(secondary));
+    compareArray(*c, secondary, UPRV_LENGTHOF(secondary));
 
     delete c;
 }
@@ -391,7 +389,7 @@ void CollationRegressionTest::Test4062418(/* char* par */)
         {0x70, 0x00EA, 0x63, 0x68, 0x65, 0}, {0x3c, 0}, {0x70, 0x00E9, 0x63, 0x68, 0x00E9, 0}
     };
 
-    compareArray(*c, tests, ARRAY_LENGTH(tests));
+    compareArray(*c, tests, UPRV_LENGTHOF(tests));
 
     delete c;
 }
@@ -479,7 +477,7 @@ void CollationRegressionTest::Test4066696(/* char* par */)
         {0x00E0, 0}, {0x3e, 0}, {0x01FA, 0}
     };
 
-    compareArray(*c, tests, ARRAY_LENGTH(tests));
+    compareArray(*c, tests, UPRV_LENGTHOF(tests));
 
     delete c;
 }
@@ -617,7 +615,7 @@ void CollationRegressionTest::Test4087241(/* char* par */)
         {0x59, 0},          {0x3c, 0}, {0x75, 0x0308, 0},      // Y        < u-umlaut
     };
 
-    compareArray(*c, tests, ARRAY_LENGTH(tests));
+    compareArray(*c, tests, UPRV_LENGTHOF(tests));
 
     delete c;
 }
@@ -636,7 +634,7 @@ void CollationRegressionTest::Test4087243(/* char* par */)
         {0x31, 0x32, 0x33, 0}, {0x3d, 0}, {0x31, 0x32, 0x33, 0x0001, 0}    // 1 2 3  =  1 2 3 ctrl-A
     };
 
-    compareArray(*c, tests, ARRAY_LENGTH(tests));
+    compareArray(*c, tests, UPRV_LENGTHOF(tests));
 
     delete c;
 }
@@ -669,7 +667,7 @@ void CollationRegressionTest::Test4092260(/* char* par */)
         {0x00B5, 0}, {0x3d, 0}, {0x03BC, 0}
     };
 
-    compareArray(*c, tests, ARRAY_LENGTH(tests));
+    compareArray(*c, tests, UPRV_LENGTHOF(tests));
 
     delete c;
 }
@@ -697,7 +695,7 @@ void CollationRegressionTest::Test4095316(/* char* par */)
         {0x03D4, 0}, {0x3d, 0}, {0x03AB, 0}
     };
 
-    compareArray(*c, tests, ARRAY_LENGTH(tests));
+    compareArray(*c, tests, UPRV_LENGTHOF(tests));
 
     delete c;
 }
@@ -747,7 +745,7 @@ void CollationRegressionTest::Test4103436(/* char* par */)
         {0x66, 0x69, 0x6c, 0x65, 0}, {0x3c, 0}, {0x66, 0x69, 0x6c, 0x65, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0}
     };
 
-    compareArray(*c, tests, ARRAY_LENGTH(tests));
+    compareArray(*c, tests, UPRV_LENGTHOF(tests));
 
     delete c;
 }
@@ -773,7 +771,7 @@ void CollationRegressionTest::Test4114076(/* char* par */)
     };
 
     c->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
-    compareArray(*c, test1, ARRAY_LENGTH(test1));
+    compareArray(*c, test1, UPRV_LENGTHOF(test1));
 
     // From UTR #15:
     // *In earlier versions of Unicode, jamo characters like ksf
@@ -790,7 +788,7 @@ void CollationRegressionTest::Test4114076(/* char* par */)
 //obsolete-    };
 //obsolete-
 //obsolete-    c->setDecomposition(Normalizer::DECOMP_COMPAT);
-//obsolete-    compareArray(*c, test2, ARRAY_LENGTH(test2));
+//obsolete-    compareArray(*c, test2, UPRV_LENGTHOF(test2));
 
     delete c;
 }
@@ -853,7 +851,7 @@ void CollationRegressionTest::Test4132736(/* char* par */)
         {0x65, 0x0300, 0x0301, 0},       {0x3c, 0}, {0x65, 0x0301, 0x0300, 0}
     };
 
-    compareArray(*c, test1, ARRAY_LENGTH(test1));
+    compareArray(*c, test1, UPRV_LENGTHOF(test1));
 
     delete c;
 }
@@ -871,7 +869,7 @@ void CollationRegressionTest::Test4133509(/* char* par */)
         {0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0},                  {0x3c, 0}, {0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x42, 0x75, 0x66, 0x66, 0x65, 0x72, 0}
     };
 
-    compareArray(*en_us, test1, ARRAY_LENGTH(test1));
+    compareArray(*en_us, test1, UPRV_LENGTHOF(test1));
 }
 
 // @bug 4114077
@@ -898,7 +896,7 @@ void CollationRegressionTest::Test4114077(/* char* par */)
     };
 
     c->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_OFF, status);
-    compareArray(*c, test1, ARRAY_LENGTH(test1));
+    compareArray(*c, test1, UPRV_LENGTHOF(test1));
 
     static const UChar test2[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
@@ -906,7 +904,7 @@ void CollationRegressionTest::Test4114077(/* char* par */)
     };
 
     c->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
-    compareArray(*c, test2, ARRAY_LENGTH(test2));
+    compareArray(*c, test2, UPRV_LENGTHOF(test2));
 
     delete c;
 }

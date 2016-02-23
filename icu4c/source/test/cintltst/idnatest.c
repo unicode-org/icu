@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2014, International Business Machines
+ *   Copyright (C) 2003-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -430,7 +430,7 @@ TestToASCII(){
     UChar buf[MAX_DEST_SIZE];
     const char* testName = "uidna_toASCII";
     TestFunc func = uidna_toASCII;
-    for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
+    for(i=0;i< UPRV_LENGTHOF(unicodeIn); i++){
         u_charsToUChars(asciiIn[i],buf, (int32_t)strlen(asciiIn[i])+1);
         testAPI(unicodeIn[i], buf,testName, FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
 
@@ -444,7 +444,7 @@ TestToUnicode(){
     UChar buf[MAX_DEST_SIZE];
     const char* testName = "uidna_toUnicode";
     TestFunc func = uidna_toUnicode;
-    for(i=0;i< (int32_t)(sizeof(asciiIn)/sizeof(asciiIn[0])); i++){
+    for(i=0;i< UPRV_LENGTHOF(asciiIn); i++){
         u_charsToUChars(asciiIn[i],buf, (int32_t)strlen(asciiIn[i])+1);
         testAPI(buf,unicodeIn[i],testName,FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
     }
@@ -461,7 +461,7 @@ TestIDNToUnicode(){
     UParseError parseError;
     const char* testName="uidna_IDNToUnicode";
     TestFunc func = uidna_IDNToUnicode;
-    for(i=0;i< (int32_t)(sizeof(domainNames)/sizeof(domainNames[0])); i++){
+    for(i=0;i< UPRV_LENGTHOF(domainNames); i++){
         bufLen = (int32_t)strlen(domainNames[i]);
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
@@ -491,7 +491,7 @@ TestIDNToASCII(){
     const char* testName="udina_IDNToASCII";
     TestFunc func=uidna_IDNToASCII;
 
-    for(i=0;i< (int32_t)(sizeof(domainNames)/sizeof(domainNames[0])); i++){
+    for(i=0;i< UPRV_LENGTHOF(domainNames); i++){
         bufLen = (int32_t)strlen(domainNames[i]);
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
@@ -597,7 +597,7 @@ TestCompare(){
     /* prepend www. */
     u_strcat(source, www);
 
-    for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
+    for(i=0;i< UPRV_LENGTHOF(unicodeIn); i++){
         UChar* src;
         int32_t srcLen;
 
@@ -646,7 +646,7 @@ static void TestJB4490(){
     UChar output1[40] = {0};
     UChar output2[40] = {0};
     int32_t i;
-    for(i=0; i< sizeof(data)/sizeof(data[0]); i++){
+    for(i=0; i< UPRV_LENGTHOF(data); i++){
         const UChar* src1 = data[i];
         int32_t src1Len = u_strlen(src1);
         UChar* dest1 = output1;
@@ -678,7 +678,7 @@ static void TestJB4475(){
     };
     int i;
     UChar output[40] = {0};
-    for(i=0; i< sizeof(input)/sizeof(input[0]); i++){
+    for(i=0; i< UPRV_LENGTHOF(input); i++){
         const UChar* src = input[i];
         int32_t srcLen = u_strlen(src);
         UChar* dest = output;

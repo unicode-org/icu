@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2008-2015, International Business Machines Corporation and
+ * Copyright (c) 2008-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -16,6 +16,7 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/dtptngen.h"
+#include "cmemory.h"
 #include "loctest.h"
 
 
@@ -888,7 +889,7 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
         { "zh@calendar=chinese",  "GUMMM", "rU\\u5E74MMM", UDATPG_MATCH_NO_OPTIONS },
     };
     
-    int count = sizeof(testData) / sizeof(testData[0]);
+    int count = UPRV_LENGTHOF(testData);
     const DTPtnGenOptionsData * testDataPtr = testData;
     
     for (; count-- > 0; ++testDataPtr) {
@@ -1003,7 +1004,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
         DateTimePatternGenerator * dtpg = DateTimePatternGenerator::createInstance(locale, status);
         if (U_SUCCESS(status)) {
             const AllFieldsTestItem * testDataPtr = testData;
-            int itemCount = sizeof(testData) / sizeof(testData[0]);
+            int itemCount = UPRV_LENGTHOF(testData);
             for (; itemCount-- > 0; ++testDataPtr) {
                 char skelBuf[FIELD_LENGTH_MAX];
                 int32_t chrIndx, lenIndx;
@@ -1069,7 +1070,7 @@ void IntlTestDateTimePatternGeneratorAPI::testStaticGetSkeleton(/*char *par*/)
         "JJmm"
     };
 
-    for (size_t i = 0; i < sizeof testData / sizeof *testData; i++) {
+    for (size_t i = 0; i < UPRV_LENGTHOF(testData); i++) {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString skeleton = DateTimePatternGenerator::staticGetSkeleton(testData[i], status);
         if (!assertSuccess("staticGetSkeleton", status)) {

@@ -1,11 +1,12 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 #include "unicode/utypes.h"
 
+#include "cmemory.h"
 #include "cstring.h"
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
@@ -107,7 +108,7 @@ param[] =
     { "ne",         NULL,   U_USING_DEFAULT_WARNING,  e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
-static const int32_t bundles_count = sizeof(param) / sizeof(param[0]);
+static const int32_t bundles_count = UPRV_LENGTHOF(param);
 
 //***************************************************************************************
 
@@ -171,7 +172,7 @@ ResourceBundleTest::~ResourceBundleTest()
 {
     if (param[5].locale) {
         int idx;
-        for (idx = 0; idx < (int)(sizeof(param)/sizeof(param[0])); idx++) {
+        for (idx = 0; idx < UPRV_LENGTHOF(param); idx++) {
             delete param[idx].locale;
             param[idx].locale = NULL;
         }
@@ -549,7 +550,7 @@ ResourceBundleTest::TestGetSize(void)
         return;
     }
     
-    for(i = 0; i < (int32_t)(sizeof(test)/sizeof(test[0])); i++) {
+    for(i = 0; i < UPRV_LENGTHOF(test); i++) {
         ResourceBundle res = rb.get(test[i].key, status);
         if(U_FAILURE(status))
         {
@@ -596,7 +597,7 @@ ResourceBundleTest::TestGetLocaleByType(void)
         return;
     }
     
-    for(i = 0; i < (int32_t)(sizeof(test)/sizeof(test[0])); i++) {
+    for(i = 0; i < UPRV_LENGTHOF(test); i++) {
         ResourceBundle rb(testdatapath, test[i].requestedLocale, status);
         if(U_FAILURE(status))
         {

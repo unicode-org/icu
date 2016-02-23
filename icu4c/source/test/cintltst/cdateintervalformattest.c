@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2011-2015, International Business Machines Corporation
+ * Copyright (c) 2011-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /* C API TEST FOR DATE INTERVAL FORMAT */
@@ -17,8 +17,6 @@
 
 static void TestDateIntervalFormat(void);
 static void TestFPos_SkelWithSeconds(void);
-
-#define LEN(a) (sizeof(a)/sizeof(a[0]))
 
 void addDateIntervalFormatTest(TestNode** root);
 
@@ -136,7 +134,7 @@ static const double deltas[] = {
 	8640000000.0, // 100 days
 	-1.0
 };
-enum { kNumDeltas = sizeof(deltas)/sizeof(deltas[0]) - 1 };
+enum { kNumDeltas = UPRV_LENGTHOF(deltas) - 1 };
 
 typedef struct {
     int32_t posBegin;

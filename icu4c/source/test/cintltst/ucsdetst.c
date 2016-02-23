@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (c) 2005-2009, International Business Machines Corporation and *
+ * Copyright (c) 2005-2016, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ****************************************************************************
  */
@@ -12,11 +12,10 @@
 #include "unicode/ustring.h"
 
 #include "cintltst.h"
+#include "cmemory.h"
 
 #include <stdlib.h>
 #include <string.h>
-
-#define ARRAY_SIZE(array) (sizeof(array)/sizeof(array[0]))
 
 #define NEW_ARRAY(type,count) (type *) malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) free(array)
@@ -166,7 +165,7 @@ static void TestUTF16(void)
         0x0020, 0x0627, 0x0644, 0x062d, 0x0627, 0x0633, 0x0648, 0x0628,
         0x0020, 0x002b, 0x0020, 0x0627, 0x0646, 0x062a, 0x0631, 0x0646,
         0x064a, 0x062a, 0x0000};
-    int32_t beLength = 0, leLength = 0, cLength = ARRAY_SIZE(chars);
+    int32_t beLength = 0, leLength = 0, cLength = UPRV_LENGTHOF(chars);
     char *beBytes = extractBytes(chars, cLength, "UTF-16BE", &beLength);
     char *leBytes = extractBytes(chars, cLength, "UTF-16LE", &leLength);
     UCharsetDetector *csd = ucsdet_open(&status);
@@ -400,7 +399,7 @@ static void TestBufferOverflow(void) {
         goto bail;
     }
 
-    for (idx = 0; idx < ARRAY_SIZE(testStrings); idx++) {
+    for (idx = 0; idx < UPRV_LENGTHOF(testStrings); idx++) {
         ucsdet_setText(csd, testStrings[idx], -1, &status);
         match = ucsdet_detect(csd, &status);
 
@@ -470,7 +469,7 @@ static void TestIBM424(void)
             0x0000
     };
 
-    int32_t bLength = 0, brLength = 0, cLength = ARRAY_SIZE(chars), crLength = ARRAY_SIZE(chars_reverse);
+    int32_t bLength = 0, brLength = 0, cLength = UPRV_LENGTHOF(chars), crLength = UPRV_LENGTHOF(chars_reverse);
     
     char *bytes = extractBytes(chars, cLength, "IBM424", &bLength);
     char *bytes_r = extractBytes(chars_reverse, crLength, "IBM424", &brLength);
@@ -548,7 +547,7 @@ static void TestIBM420(void)
         0x0000,
     };
     
-    int32_t bLength = 0, brLength = 0, cLength = ARRAY_SIZE(chars), crLength = ARRAY_SIZE(chars_reverse);
+    int32_t bLength = 0, brLength = 0, cLength = UPRV_LENGTHOF(chars), crLength = UPRV_LENGTHOF(chars_reverse);
     
     char *bytes = extractBytes(chars, cLength, "IBM420", &bLength);
     char *bytes_r = extractBytes(chars_reverse, crLength, "IBM420", &brLength);

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -412,7 +412,7 @@ static void TestConvert()
         const uint8_t source[]={ 0x00, 0x04, 0x05, 0x06, 0xa2, 0xb4, 0x00};
         const uint8_t expectedTarget[]={ 0x00, 0x37, 0x2d, 0x2e, 0x0e, 0x49, 0x62, 0x0f, 0x00};
         char *target=0;
-        sourceLimit=sizeof(source)/sizeof(source[0]);
+        sourceLimit=UPRV_LENGTHOF(source);
         err=U_ZERO_ERROR;
         targetLimit=0;
             
@@ -447,14 +447,14 @@ static void TestConvert()
             }
 
             err=U_ILLEGAL_ARGUMENT_ERROR;
-            sourceLimit=sizeof(source)/sizeof(source[0]);
+            sourceLimit=UPRV_LENGTHOF(source);
             i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
             if(i !=0 ){
                 log_err("FAILURE! ucnv_convert() with err=U_ILLEGAL_ARGUMENT_ERROR is expected to return 0\n");
             }
 
             err=U_ZERO_ERROR;
-            sourceLimit=sizeof(source)/sizeof(source[0]);
+            sourceLimit=UPRV_LENGTHOF(source);
             targetLimit=0;
             i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
             if(!(U_FAILURE(err) && err==U_BUFFER_OVERFLOW_ERROR)){
@@ -1165,7 +1165,7 @@ static void TestAlias() {
         { "UTF32_PlatformEndian", "UTF32_PlatformEndian" },
         { "UTF-32",   "ucs-4" }
     };
-    int32_t CONVERTERS_NAMES_LENGTH = sizeof(CONVERTERS_NAMES) / sizeof(*CONVERTERS_NAMES);
+    int32_t CONVERTERS_NAMES_LENGTH = UPRV_LENGTHOF(CONVERTERS_NAMES);
 
     /* When there are bugs in gencnval or in ucnv_io, converters can
        appear to have no aliases. */
@@ -1693,16 +1693,16 @@ static void TestConvertSafeClone()
 
     char *pCharBuffer;
     const char *pConstCharBuffer;
-    const char *charBufferLimit = charBuffer + sizeof(charBuffer)/sizeof(*charBuffer);
+    const char *charBufferLimit = charBuffer + UPRV_LENGTHOF(charBuffer);
     UChar uniBuffer[] = {0x0058, 0x0059, 0x005A}; /* "XYZ" */
     UChar uniCharBuffer[20];
     char  charSourceBuffer[] = { 0x1b, 0x24, 0x42 };
     const char *pCharSource = charSourceBuffer;
     const char *pCharSourceLimit = charSourceBuffer + sizeof(charSourceBuffer);
     UChar *pUCharTarget = uniCharBuffer;
-    UChar *pUCharTargetLimit = uniCharBuffer + sizeof(uniCharBuffer)/sizeof(*uniCharBuffer);
+    UChar *pUCharTargetLimit = uniCharBuffer + UPRV_LENGTHOF(uniCharBuffer);
     const UChar * pUniBuffer;
-    const UChar *uniBufferLimit = uniBuffer + sizeof(uniBuffer)/sizeof(*uniBuffer);
+    const UChar *uniBufferLimit = uniBuffer + UPRV_LENGTHOF(uniBuffer);
     int32_t idx, j;
 
     err = U_ZERO_ERROR;

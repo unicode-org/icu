@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
 ************************************************************************
@@ -16,6 +16,7 @@
 #include "jamotest.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"
+#include "cmemory.h"
 #include "cpdtrans.h"
 
 // SEP is the disambiguation separator used by Latin-Jamo and Jamo-Latin
@@ -128,7 +129,7 @@ JamoTest::TestJamo() {
         "karka", "(Ki)(A)(L)(Ki)(A)", "kalka",
     };
 
-    enum { CASE_length = sizeof(CASE) / sizeof(CASE[0]) };
+    enum { CASE_length = UPRV_LENGTHOF(CASE) };
     
     int32_t i;
     for (i=0; i<CASE_length; i+=3) {
@@ -367,7 +368,7 @@ JamoTest::TestRealText() {
       "\\ucc38\\uc870\\ud558\\uc2ed\\uc2dc\\uc624."
     };
 
-    enum { WHAT_IS_UNICODE_length = sizeof(WHAT_IS_UNICODE) / sizeof(WHAT_IS_UNICODE[0]) };
+    enum { WHAT_IS_UNICODE_length = UPRV_LENGTHOF(WHAT_IS_UNICODE) };
 
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;

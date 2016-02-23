@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -1031,7 +1031,7 @@ static void OpenMessageFormatTest(void)
     int32_t length=0;
     UErrorCode status = U_ZERO_ERROR;
 
-    u_uastrncpy(pattern, PAT, sizeof(pattern)/sizeof(pattern[0]));
+    u_uastrncpy(pattern, PAT, UPRV_LENGTHOF(pattern));
 
     /* Test umsg_open                   */
     f1 = umsg_open(pattern,length,NULL,NULL,&status);
@@ -1104,10 +1104,10 @@ static void MessageLength(void)
     UChar result[128] = {0};
     UChar expected[sizeof(expectedChars)];
 
-    u_uastrncpy(pattern, patChars, sizeof(pattern)/sizeof(pattern[0]));
-    u_uastrncpy(expected, expectedChars, sizeof(expected)/sizeof(expected[0]));
+    u_uastrncpy(pattern, patChars, UPRV_LENGTHOF(pattern));
+    u_uastrncpy(expected, expectedChars, UPRV_LENGTHOF(expected));
 
-    u_formatMessage("en_US", pattern, 6, result, sizeof(result)/sizeof(result[0]), &status, arg);
+    u_formatMessage("en_US", pattern, 6, result, UPRV_LENGTHOF(result), &status, arg);
     if (U_FAILURE(status)) {
         log_err("u_formatMessage method failed. Error: %s \n",u_errorName(status));
     }

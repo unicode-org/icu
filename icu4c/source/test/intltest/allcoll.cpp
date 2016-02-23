@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -13,6 +13,7 @@
 #include "unicode/unistr.h"
 #include "unicode/sortkey.h"
 #include "allcoll.h"
+#include "cmemory.h"
 #include "sfwdchit.h"
 #include "../cintltst/calldata.h"
 
@@ -21,7 +22,7 @@ CollationDummyTest::CollationDummyTest()
 : myCollation(0)
 {
     /*UErrorCode status = U_ZERO_ERROR;
-    UnicodeString rules(TRUE, DEFAULTRULEARRAY, sizeof(DEFAULTRULEARRAY)/sizeof(DEFAULTRULEARRAY[0]));
+    UnicodeString rules(TRUE, DEFAULTRULEARRAY, UPRV_LENGTHOF(DEFAULTRULEARRAY));
     UnicodeString newRules("& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ");
     rules += newRules;
     myCollation = new RuleBasedCollator(rules, status);

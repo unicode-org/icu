@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2014, International Business Machines Corporation and
+ * Copyright (C) 2003-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -12,6 +12,7 @@
 #include "svccoll.h"
 #include "unicode/coll.h"
 #include "unicode/strenum.h"
+#include "cmemory.h"
 #include "hash.h"
 #include "uassert.h"
 
@@ -553,13 +554,13 @@ int32_t CollationServiceTest::checkAvailable(const char* msg) {
 static const char* KW[] = {
     "collation"
 };
-static const int32_t KW_COUNT = sizeof(KW)/sizeof(KW[0]);
+static const int32_t KW_COUNT = UPRV_LENGTHOF(KW);
 
 static const char* KWVAL[] = {
     "phonebook",
     "stroke"
 };
-static const int32_t KWVAL_COUNT = sizeof(KWVAL)/sizeof(KWVAL[0]);
+static const int32_t KWVAL_COUNT = UPRV_LENGTHOF(KWVAL);
 
 void CollationServiceTest::TestSeparateTree() {
     UErrorCode ec = U_ZERO_ERROR;

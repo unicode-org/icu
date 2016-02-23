@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -18,6 +18,7 @@
 #include "unicode/utypes.h"
 #include "cintltst.h"
 #include "unicode/ustring.h"
+#include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
 #include <stdlib.h>
@@ -77,7 +78,7 @@ static struct
   { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
-static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
+static int32_t bundles_count = UPRV_LENGTHOF(param);
 
 
 
@@ -926,7 +927,7 @@ static void TestGetSize(void) {
         return;
     }
     
-    for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
+    for(i = 0; i < UPRV_LENGTHOF(test); i++) {
         res = ures_getByKey(rb, test[i].key, res, &status);
         if(U_FAILURE(status))
         {
@@ -977,7 +978,7 @@ static void TestGetLocaleByType(void) {
         return;
     }
     
-    for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
+    for(i = 0; i < UPRV_LENGTHOF(test); i++) {
         rb = ures_open(testdatapath, test[i].requestedLocale, &status);
         if(U_FAILURE(status))
         {

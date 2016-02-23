@@ -1,4 +1,3 @@
-
 /********************************************************************
  * COPYRIGHT: 
  * Copyright (c) 1997-2016, International Business Machines Corporation and
@@ -20,6 +19,7 @@
 
 #include "dtifmtts.h"
 
+#include "cmemory.h"
 #include "cstr.h"
 #include "cstring.h"
 #include "simplethread.h"
@@ -36,8 +36,6 @@
 //#define PRINTMESG(msg) { std::cout << "(" << __FILE__ << ":" << __LINE__ << ") " << msg << "\n"; }
 #define PRINTMESG(msg) { std::cout << msg; }
 #endif
-
-#define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
 #include <stdio.h>
 
@@ -1039,7 +1037,7 @@ void DateIntervalFormatTest::testFormat() {
         "th", "2550 10 10 10:10:10", "2550 11 10 10:10:10", "MMM", "\\u0E15.\\u0E04.\\u2013\\u0E1E.\\u0E22.", 
 
     };
-    expect(DATA, ARRAY_SIZE(DATA));
+    expect(DATA, UPRV_LENGTHOF(DATA));
 }
 
 
@@ -1159,7 +1157,7 @@ void DateIntervalFormatTest::testFormatUserDII() {
        
         "es", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "10 ene. 2007", 
     };
-    expectUserDII(DATA, ARRAY_SIZE(DATA));
+    expectUserDII(DATA, UPRV_LENGTHOF(DATA));
 }
 
 
@@ -1373,11 +1371,11 @@ void DateIntervalFormatTest::testStress() {
     };
 
     uint32_t localeIndex;
-    for ( localeIndex = 0; localeIndex < ARRAY_SIZE(testLocale); ++localeIndex ) {
+    for ( localeIndex = 0; localeIndex < UPRV_LENGTHOF(testLocale); ++localeIndex ) {
         char locName[32];
         uprv_strcpy(locName, testLocale[localeIndex][0]);
         uprv_strcat(locName, testLocale[localeIndex][1]);
-        stress(DATA, ARRAY_SIZE(DATA), Locale(testLocale[localeIndex][0], testLocale[localeIndex][1], testLocale[localeIndex][2]), locName);
+        stress(DATA, UPRV_LENGTHOF(DATA), Locale(testLocale[localeIndex][0], testLocale[localeIndex][1], testLocale[localeIndex][2]), locName);
     }
 }
 
@@ -1450,7 +1448,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
         DateInterval dtitv(date, date_2);
 
         for ( uint32_t skeletonIndex = 0; 
-              skeletonIndex < ARRAY_SIZE(skeleton); 
+              skeletonIndex < UPRV_LENGTHOF(skeleton); 
               ++skeletonIndex ) {
             const UnicodeString& oneSkeleton = skeleton[skeletonIndex];
             DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(oneSkeleton, loc, ec);

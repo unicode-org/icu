@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2014, International Business Machines
+*   Copyright (C) 1998-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -143,7 +143,7 @@ u_printf_set_sign(UNumberFormat        *format,
             symbolLen = unum_getSymbol(format,
                 UNUM_PLUS_SIGN_SYMBOL,
                 plusSymbol,
-                sizeof(plusSymbol)/sizeof(*plusSymbol),
+                UPRV_LENGTHOF(plusSymbol),
                 status);
             unum_setTextAttribute(format,
                 UNUM_POSITIVE_PREFIX,

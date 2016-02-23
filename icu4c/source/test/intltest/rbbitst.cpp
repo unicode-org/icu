@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2015, International Business Machines Corporation and
+ * Copyright (c) 1999-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -3967,7 +3967,7 @@ void RBBITest::TestSentBreaks(void)
         return;
     }
     for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
-        u_unescape(strlist[loop], str, (int32_t)(sizeof(str) / sizeof(str[0])));
+        u_unescape(strlist[loop], str, UPRV_LENGTHOF(str));
         UnicodeString ustr(str);
 
         RBBISentMonkey monkey;

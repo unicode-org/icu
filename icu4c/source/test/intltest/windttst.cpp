@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2011, International Business Machines
+*   Copyright (C) 2005-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -38,8 +38,6 @@
 #   define NOIME
 #   define NOMCX
 #   include <windows.h>
-
-#define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
 static const char *getCalendarType(int32_t type)
 {
@@ -131,8 +129,8 @@ void Win32DateTimeTest::testLocales(TestLog *log)
         Locale ulocale(localeID);
         int32_t wdLength, wtLength;
 
-        wdLength = GetDateFormatW(lcidRecords[i].lcid, DATE_LONGDATE, &winNow, NULL, wdBuffer, ARRAY_SIZE(wdBuffer));
-        wtLength = GetTimeFormatW(lcidRecords[i].lcid, 0, &winNow, NULL, wtBuffer, ARRAY_SIZE(wtBuffer));
+        wdLength = GetDateFormatW(lcidRecords[i].lcid, DATE_LONGDATE, &winNow, NULL, wdBuffer, UPRV_LENGTHOF(wdBuffer));
+        wtLength = GetTimeFormatW(lcidRecords[i].lcid, 0, &winNow, NULL, wtBuffer, UPRV_LENGTHOF(wtBuffer));
 
         if (uprv_strchr(localeID, '@') > 0) {
             uprv_strcat(localeID, ";");

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2015, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1997-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 *
 * File DTFMTSYM.CPP
@@ -76,9 +76,6 @@ static const UChar gPatternChars[] = {
     0x55, 0x4F, 0x58, 0x78, 0x72, 0
 #endif
 };
-
-/* length of an array */
-#define ARRAY_LENGTH(array) (sizeof(array)/sizeof(array[0]))
 
 //------------------------------------------------------
 // Strings of last resort.  These are only used if we have no resource

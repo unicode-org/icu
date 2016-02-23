@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2012, International Business Machines Corporation and
+ * Copyright (c) 1998-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -565,7 +565,7 @@ static void toolutil_findBasename(void)
       ""
     },
   };
-  int32_t count=(sizeof(testCases)/sizeof(testCases[0]));
+  int32_t count=UPRV_LENGTHOF(testCases);
   int32_t i;
 
 
@@ -661,7 +661,7 @@ static void toolutil_findDirname(void)
       ""
     }
   };
-  int32_t count=(sizeof(testCases)/sizeof(testCases[0]));
+  int32_t count=UPRV_LENGTHOF(testCases);
 
   log_verbose("Testing findDirname()\n");
   for(i=0;i<count;i++) {
