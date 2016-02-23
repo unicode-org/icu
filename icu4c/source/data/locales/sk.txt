@@ -281,7 +281,7 @@ sk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.24.11"}
     calendar{
         generic{
             DateTimePatterns{

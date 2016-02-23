@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 pt_PT{
-    Version{"2.1.22.93"}
+    Version{"2.1.24.13"}
     units{
         acceleration{
             g-force{
@@ -104,16 +104,7 @@ pt_PT{
                 other{"{0} quilómetros por hora"}
             }
         }
-        temperature{
-            generic{
-                one{"{0}°"}
-                other{"{0}°"}
-            }
-        }
         volume{
-            cubic-centimeter{
-                per{"{0} por centímetro cúbico"}
-            }
             cubic-kilometer{
                 dnam{"quilómetros cúbicos"}
                 one{"{0} quilómetro cúbico"}
@@ -231,10 +222,6 @@ pt_PT{
             mile{
                 one{"{0} milha"}
                 other{"{0} milhas"}
-            }
-            mile-scandinavian{
-                one{"{0} smi"}
-                other{"{0} smi"}
             }
             nautical-mile{
                 dnam{"nmi"}

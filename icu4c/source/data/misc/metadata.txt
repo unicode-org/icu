@@ -4347,7 +4347,6 @@ metadata:table(nofallback){
         "yi_001",
         "yo_NG",
         "yue_HK",
-        "yue_Hans_CN",
         "zgh_MA",
         "zh_Hans",
         "zh_Hans_CN",

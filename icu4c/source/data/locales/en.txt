@@ -198,7 +198,7 @@ en{
             }
         }
     }
-    Version{"2.1.23.80"}
+    Version{"2.1.24.18"}
     calendar{
         buddhist{
             eras{
