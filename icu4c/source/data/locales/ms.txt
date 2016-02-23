@@ -172,7 +172,7 @@ ms{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.24.16"}
     calendar{
         buddhist{
             eras{
@@ -313,7 +313,6 @@ ms{
                 GyMMMd{"d MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
-                Hmm{"H:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E, d/M"}
@@ -479,7 +478,6 @@ ms{
                 GyMMMd{"G y MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
-                Hmm{"H:mm"}
                 Hms{"HH:mm:ss"}
                 Hmsv{"HH:mm:ss v"}
                 Hmv{"HH:mm v"}

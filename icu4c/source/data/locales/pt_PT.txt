@@ -147,7 +147,7 @@ pt_PT{
         }
         minimumGroupingDigits{"2"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.24.13"}
     calendar{
         buddhist{
             DateTimePatterns{
