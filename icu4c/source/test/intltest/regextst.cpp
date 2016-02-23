@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2015, International Business Machines Corporation and
+ * Copyright (c) 2002-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -235,7 +235,7 @@ const char* RegexTest::extractToAssertBuf(const UnicodeString& message) {
   return ASSERT_BUF;
 }
 
-#define REGEX_VERBOSE_TEXT(text) {char buf[200];utextToPrintable(buf,sizeof(buf)/sizeof(buf[0]),text);logln("%s:%d: UText %s=\"%s\"", __FILE__, __LINE__, #text, buf);}
+#define REGEX_VERBOSE_TEXT(text) {char buf[200];utextToPrintable(buf,UPRV_LENGTHOF(buf),text);logln("%s:%d: UText %s=\"%s\"", __FILE__, __LINE__, #text, buf);}
 
 #define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {dataerrln("%s:%d: RegexTest failure.  status=%s", \
                                                               __FILE__, __LINE__, u_errorName(status)); return;}}
@@ -295,8 +295,8 @@ void RegexTest::assertUText(const char *expected, UText *actual, const char *fil
     if (!testUTextEqual(&expectedText, actual)) {
         char buf[201 /*21*/];
         char expectedBuf[201];
-        utextToPrintable(buf, sizeof(buf)/sizeof(buf[0]), actual);
-        utextToPrintable(expectedBuf, sizeof(expectedBuf)/sizeof(expectedBuf[0]), &expectedText);
+        utextToPrintable(buf, UPRV_LENGTHOF(buf), actual);
+        utextToPrintable(expectedBuf, UPRV_LENGTHOF(expectedBuf), &expectedText);
         errln("%s:%d: assertUText: Failure: expected \"%s\" (%d chars), got \"%s\" (%d chars)", file, line, expectedBuf, (int)utext_nativeLength(&expectedText), buf, (int)utext_nativeLength(actual));
     }
     utext_close(&expectedText);
@@ -317,8 +317,8 @@ void RegexTest::assertUTextInvariant(const char *expected, UText *actual, const 
     if (!testUTextEqual(&expectedText, actual)) {
         char buf[201 /*21*/];
         char expectedBuf[201];
-        utextToPrintable(buf, sizeof(buf)/sizeof(buf[0]), actual);
-        utextToPrintable(expectedBuf, sizeof(expectedBuf)/sizeof(expectedBuf[0]), &expectedText);
+        utextToPrintable(buf, UPRV_LENGTHOF(buf), actual);
+        utextToPrintable(expectedBuf, UPRV_LENGTHOF(expectedBuf), &expectedText);
         errln("%s:%d: assertUTextInvariant: Failure: expected \"%s\" (%d uchars), got \"%s\" (%d chars)", file, line, expectedBuf, (int)utext_nativeLength(&expectedText), buf, (int)utext_nativeLength(actual));
     }
     utext_close(&expectedText);

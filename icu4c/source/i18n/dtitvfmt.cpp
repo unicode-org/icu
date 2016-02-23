@@ -21,6 +21,7 @@
 #include "unicode/dtptngen.h"
 #include "unicode/dtitvinf.h"
 #include "unicode/simpleformatter.h"
+#include "cmemory.h"
 #include "cstring.h"
 #include "dtitv_impl.h"
 #include "gregoimp.h"
@@ -1099,8 +1100,8 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
     const UnicodeString* pattern = &intervalPattern;
     UBool order = laterDateFirst;
     // check for "latestFirst:" or "earliestFirst:" prefix
-    int8_t prefixLength = sizeof(gLaterFirstPrefix)/sizeof(gLaterFirstPrefix[0]);
-    int8_t earliestFirstLength = sizeof(gEarlierFirstPrefix)/sizeof(gEarlierFirstPrefix[0]);
+    int8_t prefixLength = UPRV_LENGTHOF(gLaterFirstPrefix);
+    int8_t earliestFirstLength = UPRV_LENGTHOF(gEarlierFirstPrefix);
     UnicodeString realPattern;
     if ( intervalPattern.startsWith(gLaterFirstPrefix, prefixLength) ) {
         order = true;

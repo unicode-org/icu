@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation
+ * Copyright (c) 1997-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
  
@@ -1997,7 +1997,7 @@ void CalendarRegressionTest::Test4197699() {
         2000,  UCAL_JANUARY,   1,   52,
         2001,  UCAL_DECEMBER,  31,  1,
     };
-    int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
+    int32_t DATA_length = UPRV_LENGTHOF(DATA);
 
     UnicodeString str;
     DateFormat& dfmt = *(DateFormat*)&fmt;
@@ -2100,7 +2100,7 @@ void CalendarRegressionTest::TestJ81() {
         30, 42, 293, UCAL_SATURDAY,
         31, 43, 294, UCAL_SUNDAY
     };
-    int32_t DOY_DATA_length = (int32_t)(sizeof(DOY_DATA) / sizeof(DOY_DATA[0]));
+    int32_t DOY_DATA_length = UPRV_LENGTHOF(DOY_DATA);
 
     for (i=0; i<DOY_DATA_length; i+=4) {
         // Test time->fields
@@ -2190,7 +2190,7 @@ void CalendarRegressionTest::TestJ81() {
         // { Calendar::YEAR_WOY, ADD|ROLL, 1, -ONE_DAY, +6*ONE_DAY },
         // { Calendar::DOW_LOCAL, ADD|ROLL, 2, -ONE_DAY, +1*ONE_DAY }
     };
-    int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
+    int32_t DATA_length = UPRV_LENGTHOF(DATA);
 
     // Now run the tests
     for (i=0; i<DATA_length; ++i) {
@@ -2264,7 +2264,7 @@ void CalendarRegressionTest::TestJ438(void) {
         1964, UCAL_SEPTEMBER, 7,  1999, UCAL_JUNE, 4,
         1999, UCAL_JUNE, 4,       1964, UCAL_SEPTEMBER, 7,
     };
-    int32_t DATA_length = (int32_t)(sizeof(DATA)/sizeof(DATA[0]));
+    int32_t DATA_length = UPRV_LENGTHOF(DATA);
     Calendar* pcal = Calendar::createInstance(Locale::getUS(), ec);
     if(U_FAILURE(ec)) {
       dataerrln("Error creating calendar %s", u_errorName(ec));

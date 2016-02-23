@@ -18,8 +18,6 @@
 static void TestRelDateFmt(void);
 static void TestCombineDateTime(void);
 
-#define LEN(a) (sizeof(a)/sizeof(a[0]))
-
 void addRelativeDateFormatTest(TestNode** root);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/crelativedateformattest/" #x)

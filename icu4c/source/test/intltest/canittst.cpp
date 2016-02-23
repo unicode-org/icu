@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2014, International Business Machines Corporation and
+ * Copyright (c) 2002-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -13,14 +13,13 @@
 #if !UCONFIG_NO_NORMALIZATION
 
 #include "intltest.h"
+#include "cmemory.h"
 #include "cstring.h"
 #include "canittst.h"
 #include "unicode/caniter.h"
 #include "unicode/normlzr.h"
 #include "unicode/uchar.h"
 #include "hash.h"
-
-#define ARRAY_LENGTH(array) ((int32_t)(sizeof (array) / sizeof (*array)))
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \
@@ -148,7 +147,7 @@ void CanonicalIteratorTest::TestBasic() {
     int32_t i = 0;
     CanonicalIterator it("", status);
     if(U_SUCCESS(status)) {
-      for (i = 0; i < ARRAY_LENGTH(testArray); ++i) {
+      for (i = 0; i < UPRV_LENGTHOF(testArray); ++i) {
           //logln("Results for: " + name.transliterate(testArray[i]));
           UnicodeString testStr = CharsToUnicodeString(testArray[i][0]);
           it.setSource(testStr, status);

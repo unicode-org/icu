@@ -45,8 +45,6 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Win32DateFormat)
 
-#define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
-
 #define NEW_ARRAY(type,count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
@@ -70,7 +68,7 @@ UnicodeString* Win32DateFormat::getTimeDateFormat(const Calendar *cal, const Loc
 
     if (U_FAILURE(status)) {
         static const UChar defaultPattern[] = {0x007B, 0x0031, 0x007D, 0x0020, 0x007B, 0x0030, 0x007D, 0x0000}; // "{1} {0}"
-        return new UnicodeString(defaultPattern, ARRAY_SIZE(defaultPattern));
+        return new UnicodeString(defaultPattern, UPRV_LENGTHOF(defaultPattern));
     }
 
     int32_t resStrLen = 0;

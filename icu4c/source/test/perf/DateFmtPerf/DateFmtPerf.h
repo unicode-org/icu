@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2014,International Business Machines
+* Copyright (c) 2002-2016,International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -9,7 +9,7 @@
 #ifndef _DATEFMTPERF_H
 #define _DATEFMTPERF_H
 
-
+#include "cmemory.h"
 #include "unicode/stringpiece.h"
 #include "unicode/unistr.h"
 #include "unicode/uperf.h"
@@ -752,7 +752,7 @@ private:
 	 * Unescape the strings
 	 */
 	void init() {
-        uint32_t listSize = sizeof(collation_strings_escaped)/sizeof(collation_strings_escaped[0]);
+        uint32_t listSize = UPRV_LENGTHOF(collation_strings_escaped);
 		collation_strings = new UnicodeString[listSize];
 		for(uint32_t k=0;k<listSize;k++) {
 			collation_strings[k] = collation_strings_escaped[k].unescape();
@@ -781,7 +781,7 @@ public:
 
 	virtual void call(UErrorCode* status2)
 	{
-        uint32_t listSize = sizeof(collation_strings_escaped)/sizeof(collation_strings_escaped[0]);
+        uint32_t listSize = UPRV_LENGTHOF(collation_strings_escaped);
         UErrorCode status = U_ZERO_ERROR; 
         Collator *coll = Collator::createInstance(Locale(locale), status);
         

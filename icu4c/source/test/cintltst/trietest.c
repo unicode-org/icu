@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2011, International Business Machines
+*   Copyright (C) 2001-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -31,8 +31,6 @@
 #undef u_errorName
 #define u_errorName(errorCode) "some error code"
 #endif
-
-#define ARRAY_LENGTH(array) (sizeof(array)/sizeof(array[0]))
 
 /* Values for setting possibly overlapping, out-of-order ranges of values */
 typedef struct SetRange {
@@ -801,14 +799,14 @@ checkRanges3[]={
 static void
 TrieTest(void) {
     testTrieRanges4("set1",
-        setRanges1, ARRAY_LENGTH(setRanges1),
-        checkRanges1, ARRAY_LENGTH(checkRanges1));
+        setRanges1, UPRV_LENGTHOF(setRanges1),
+        checkRanges1, UPRV_LENGTHOF(checkRanges1));
     testTrieRanges4("set2-overlap",
-        setRanges2, ARRAY_LENGTH(setRanges2),
-        checkRanges2, ARRAY_LENGTH(checkRanges2));
+        setRanges2, UPRV_LENGTHOF(setRanges2),
+        checkRanges2, UPRV_LENGTHOF(checkRanges2));
     testTrieRanges4("set3-initial-9",
-        setRanges3, ARRAY_LENGTH(setRanges3),
-        checkRanges3, ARRAY_LENGTH(checkRanges3));
+        setRanges3, UPRV_LENGTHOF(setRanges3),
+        checkRanges3, UPRV_LENGTHOF(checkRanges3));
 }
 
 /* test utrie_unserializeDummy() -------------------------------------------- */

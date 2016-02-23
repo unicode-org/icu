@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -323,7 +323,7 @@ Checks LetterLike Symbols which were previously a source of confusion
             0x1FFC,
             0x1FFC,
         };
-        int32_t num = sizeof(expected)/sizeof(expected[0]);
+        int32_t num = UPRV_LENGTHOF(expected);
         for(i=0; i<num; i++){
             if(!u_istitle(expected[i])){
                 log_err("u_istitle failed for 0x%4X. Expected TRUE, got FALSE\n",expected[i]);
@@ -1396,7 +1396,7 @@ static void TestCodeUnit(){
 
     int32_t i;
 
-    for(i=0; i<(int32_t)(sizeof(codeunit)/sizeof(codeunit[0])); i++){
+    for(i=0; i<UPRV_LENGTHOF(codeunit); i++){
         UChar c=codeunit[i];
         if(i<4){
             if(!(UTF_IS_SINGLE(c)) || (UTF_IS_LEAD(c)) || (UTF_IS_TRAIL(c)) ||(UTF_IS_SURROGATE(c))){
@@ -1448,7 +1448,7 @@ static void TestCodePoint(){
         0xfffe,
     };
     int32_t i;
-    for(i=0; i<(int32_t)(sizeof(codePoint)/sizeof(codePoint[0])); i++){
+    for(i=0; i<UPRV_LENGTHOF(codePoint); i++){
         UChar32 c=codePoint[i];
         if(i<6){
             if(!UTF_IS_SURROGATE(c) || !U_IS_SURROGATE(c) || !U16_IS_SURROGATE(c)){
@@ -1490,7 +1490,7 @@ static void TestCodePoint(){
                 log_err("ERROR: isError() failed for U+%04x\n", c);
             }
         }
-        else if(i >=18 && i<(int32_t)(sizeof(codePoint)/sizeof(codePoint[0]))){
+        else if(i >=18 && i<UPRV_LENGTHOF(codePoint)){
             if(UTF_IS_SURROGATE(c) || U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)){
                 log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
             }
@@ -1542,7 +1542,7 @@ static void TestCharLength()
 
     int32_t i;
     UBool multiple;
-    for(i=0; i<(int32_t)(sizeof(codepoint)/sizeof(codepoint[0])); i=(int16_t)(i+2)){
+    for(i=0; i<UPRV_LENGTHOF(codepoint); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
         if(UTF_CHAR_LENGTH(c) != codepoint[i] || U16_LENGTH(c) != codepoint[i]){
             log_err("The no: of code units for U+%04x:- Expected: %d Got: %d\n", c, codepoint[i], U16_LENGTH(c));
@@ -1627,7 +1627,7 @@ enumCharNamesFn(void *context,
     }
 
     ++*pCount;
-    for(i=0; i<sizeof(names)/sizeof(names[0]); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(names); ++i) {
         if(code==(UChar32)names[i].code) {
             switch (nameChoice) {
                 case U_EXTENDED_CHAR_NAME:
@@ -1722,7 +1722,7 @@ TestCharNames() {
     /* ### TODO same tests for max ISO comment length as for max name length */
 
     log_verbose("Testing u_charName()\n");
-    for(i=0; i<(int32_t)(sizeof(names)/sizeof(names[0])); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(names); ++i) {
         /* modern Unicode character name */
         length=u_charName(names[i].code, U_UNICODE_CHAR_NAME, name, sizeof(name), &errorCode);
         if(U_FAILURE(errorCode)) {
@@ -2707,7 +2707,7 @@ TestAdditionalProperties() {
     }
 
     /* test u_charAge() */
-    for(i=0; i<sizeof(charAges)/sizeof(charAges[0]); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(charAges); ++i) {
         u_charAge(charAges[i].c, version);
         if(0!=memcmp(version, charAges[i].version, sizeof(UVersionInfo))) {
             log_err("error: u_charAge(U+%04lx)={ %u, %u, %u, %u } instead of { %u, %u, %u, %u }\n",
@@ -2785,7 +2785,7 @@ TestAdditionalProperties() {
     }
 
     /* test u_hasBinaryProperty() and u_getIntPropertyValue() */
-    for(i=0; i<sizeof(props)/sizeof(props[0]); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(props); ++i) {
         const char *whichName;
 
         if(props[i][0]<0) {

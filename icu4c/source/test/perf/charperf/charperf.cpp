@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2002-2006 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2002-2016 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 /*****************************************************************************
@@ -20,6 +20,7 @@
  */
 
 #include "charperf.h"
+#include "cmemory.h"
 #include "uoptions.h"
 
 UOption options[] = {
@@ -65,7 +66,7 @@ CharPerformanceTest::CharPerformanceTest(int32_t argc, const char *argv[],
         argv += argc - size;
         argc = size;
         _remainingArgc = u_parseArgs(argc, (char**)argv, 
-            (int32_t)(sizeof(options)/sizeof(options[0])), options);
+            UPRV_LENGTHOF(options), options);
     }
     MIN_ = 0;
     if (sizeof(wchar_t) > 2)  {

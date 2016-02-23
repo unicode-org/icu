@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2014, International Business Machines
+ *   Copyright (C) 1996-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ******************************************************************************
  */
@@ -32,7 +32,6 @@
 
 #include "colldata.h"
 
-#define ARRAY_SIZE(array) (sizeof(array)/sizeof(array[0]))
 #define NEW_ARRAY(type, count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 #define ARRAY_COPY(dst, src, count) uprv_memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
@@ -428,7 +427,7 @@ bail:
     // Maybe use [:HST=T:] and look for the end of the last range?
     // Maybe use script boundary mappings instead of this code??
     UChar  jamoRanges[] = {Hangul::JAMO_L_BASE, Hangul::JAMO_V_BASE, Hangul::JAMO_T_BASE + 1, 0x11FF};
-     UnicodeString jamoString(FALSE, jamoRanges, ARRAY_SIZE(jamoRanges));
+     UnicodeString jamoString(FALSE, jamoRanges, UPRV_LENGTHOF(jamoRanges));
      CEList hanList(coll, hanString, status);
      CEList jamoList(coll, jamoString, status);
      int32_t j = 0;

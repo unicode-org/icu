@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2014, International Business Machines Corporation and
+ * Copyright (c) 1998-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -168,7 +168,7 @@ static void TestUDataOpen(){
       {
           int i;
           log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
-          for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
+          for(i=0; i<UPRV_LENGTHOF(memMap); i++){
             /* lots_of_mallocs(); */
             status=U_ZERO_ERROR;
             result=udata_open(path, memMap[i][1], memMap[i][0], &status);
@@ -208,7 +208,7 @@ static void TestUDataOpen(){
 	{
 	  int i;
 	  log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
-	  for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
+	  for(i=0; i<UPRV_LENGTHOF(memMap); i++){
             /* lots_of_mallocs(); */
             status=U_ZERO_ERROR;
             result=udata_open(path, memMap[i][1], memMap[i][0], &status);
@@ -259,7 +259,7 @@ static void TestUDataOpen(){
         strcat(icuDataFilePath, dirSepString);
         strcat(icuDataFilePath, U_ICUDATA_NAME);
         log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
-        for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
+        for(i=0; i<UPRV_LENGTHOF(memMap); i++){
             status=U_ZERO_ERROR;
             result=udata_open(icuDataFilePath, memMap[i][1], memMap[i][0], &status);
             if(U_FAILURE(status)) {

@@ -1,12 +1,13 @@
 /*
  **********************************************************************
- * Copyright (c) 2011-2014,International Business Machines
+ * Copyright (c) 2011-2016,International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
 #include <stdio.h>
 #include <string.h>
 
+#include "cmemory.h"
 #include "sieve.h"
 #include "unicode/utimer.h"
 #include "udbgutil.h"
@@ -698,7 +699,7 @@ QuickTest(NumParseTestbeng,{    static UChar pattern[] = { 0x23 };    NumParseTe
 UDateFormat *DateFormatTest_fmt = NULL;
 UDate sometime = 100000000.0;
 UChar onekbuf[1024];
-const int32_t onekbuf_len = sizeof(onekbuf)/sizeof(onekbuf[0]);
+const int32_t onekbuf_len = UPRV_LENGTHOF(onekbuf);
 
 
 QuickTest(DateFormatTestBasic, \

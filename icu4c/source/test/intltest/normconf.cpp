@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 1997-2010, International Business Machines
+* Copyright (c) 1997-2016, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -13,12 +13,11 @@
 #include "unicode/normlzr.h"
 #include "unicode/uniset.h"
 #include "unicode/putil.h"
+#include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
 #include "normconf.h"
 #include <stdio.h>
-
-#define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
 
 #define CASE(id,test,exec) case id:                          \
                           name = #test;                 \
@@ -174,7 +173,7 @@ void NormalizerConformanceTest::TestConformance(FileStream *input, int32_t optio
     // UnicodeSet for all code points that are not mentioned in NormalizationTest.txt
     UnicodeSet other(0, 0x10ffff);
 
-    int32_t count, countMoreCases = sizeof(moreCases)/sizeof(moreCases[0]);
+    int32_t count, countMoreCases = UPRV_LENGTHOF(moreCases);
     for (count = 1;;++count) {
         if (!T_FileStream_eof(input)) {
             T_FileStream_readLine(input, lineBuf, (int32_t)sizeof(lineBuf));

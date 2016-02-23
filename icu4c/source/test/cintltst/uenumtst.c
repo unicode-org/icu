@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2015, International Business Machines
+*   Copyright (C) 2002-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -206,7 +206,7 @@ static UEnumeration *getchArrayEnum(const char** source, int32_t size) {
 static void EnumerationTest(void) {
     UErrorCode status = U_ZERO_ERROR;
     int32_t len = 0;
-    UEnumeration *en = getchArrayEnum(test1, sizeof(test1)/sizeof(test1[0]));
+    UEnumeration *en = getchArrayEnum(test1, UPRV_LENGTHOF(test1));
     const char *string = NULL;
     const UChar *uString = NULL;
     while ((string = uenum_next(en, &len, &status))) {
@@ -277,7 +277,7 @@ static UEnumeration *getuchArrayEnum(const UChar** source, int32_t size) {
 static void DefaultNextTest(void) {
     UErrorCode status = U_ZERO_ERROR;
     int32_t len = 0;
-    UEnumeration *en = getuchArrayEnum(test2, sizeof(test2)/sizeof(test2[0]));
+    UEnumeration *en = getuchArrayEnum(test2, UPRV_LENGTHOF(test2));
     const char *string = NULL;
     const UChar *uString = NULL;
     while ((uString = uenum_unext(en, &len, &status))) {

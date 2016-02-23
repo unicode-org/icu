@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2012-2015, International Business Machines Corporation
+ * Copyright (c) 2012-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 //
@@ -429,7 +429,7 @@ void AlphabeticIndexTest::HackPinyinTest() {
     AlphabeticIndex aindex(Locale::createFromName("zh"), status);
     TEST_CHECK_STATUS; 
 
-    UnicodeString names[sizeof(pinyinTestData) / sizeof(pinyinTestData[0])];
+    UnicodeString names[UPRV_LENGTHOF(pinyinTestData)];
     int32_t  nameCount;
     for (nameCount=0; pinyinTestData[nameCount] != NULL; nameCount++) {
         names[nameCount] = UnicodeString(pinyinTestData[nameCount], -1, UnicodeString::kInvariant).unescape();

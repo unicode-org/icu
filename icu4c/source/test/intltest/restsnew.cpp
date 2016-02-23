@@ -5,6 +5,7 @@
 
 #include "unicode/utypes.h"
 
+#include "cmemory.h"
 #include "cstring.h"
 #include "unicode/unistr.h"
 #include "unicode/resbund.h"
@@ -106,7 +107,7 @@ param[] =
     { "ne",         0,   U_USING_DEFAULT_WARNING,  e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
-static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
+static int32_t bundles_count = UPRV_LENGTHOF(param);
 
 //***************************************************************************************
 
@@ -170,7 +171,7 @@ NewResourceBundleTest::~NewResourceBundleTest()
 {
     if (param[5].locale) {
         int idx;
-        for (idx = 0; idx < (int)(sizeof(param)/sizeof(param[0])); idx++) {
+        for (idx = 0; idx < UPRV_LENGTHOF(param); idx++) {
             delete param[idx].locale;
             param[idx].locale = NULL;
         }
@@ -330,7 +331,7 @@ NewResourceBundleTest::TestIteration()
     UnicodeString action;
 
 
-    for(i=0; i<sizeof(data)/sizeof(data[0]); i=i+2){
+    for(i=0; i<UPRV_LENGTHOF(data); i=i+2){
         action = "te_IN";
         action +=".get(";
         action += data[i];
@@ -541,7 +542,7 @@ NewResourceBundleTest::TestOtherAPI(){
         UnicodeString action;
 
 
-        for(i=0; i<sizeof(data)/sizeof(data[0]); i=i+2){
+        for(i=0; i<UPRV_LENGTHOF(data); i=i+2){
             action = "te_IN";
             action +=".get(";
             action += data[i];

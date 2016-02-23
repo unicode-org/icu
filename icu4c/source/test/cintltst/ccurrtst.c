@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -26,8 +26,6 @@
 #include "ccolltst.h"
 #include "unicode/ustring.h"
 #include "cmemory.h"
-
-#define ARRAY_LENGTH(array) (sizeof array / sizeof array[0]) 
 
 void addCurrencyCollTest(TestNode** root)
 {
@@ -117,9 +115,9 @@ void currTest()
 
     /*Compare each currency symbol against all the
      currency symbols, including itself*/
-    for (i = 0; i < ARRAY_LENGTH(currency); i += 1)
+    for (i = 0; i < UPRV_LENGTHOF(currency); i += 1)
     {
-        for (j = 0; j < ARRAY_LENGTH(currency); j += 1)
+        for (j = 0; j < UPRV_LENGTHOF(currency); j += 1)
         {
              u_strcpy(source, currency[i]);
              u_strcpy(target, currency[j]);

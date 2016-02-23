@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  * File TMSGFMT.CPP
@@ -1486,7 +1486,7 @@ void TestMessageFormat::TestUnlimitedArgsAndSubformats() {
         Formattable("of course"),
         Formattable("Horace"),
     };
-    const int32_t ARGS_LENGTH = sizeof(ARGS) / sizeof(ARGS[0]);
+    const int32_t ARGS_LENGTH = UPRV_LENGTHOF(ARGS);
     Formattable ARGS_OBJ(ARGS, ARGS_LENGTH);
 
     UnicodeString expected =
@@ -1519,7 +1519,7 @@ void TestMessageFormat::TestRBNF(void) {
         // do not always parse, so do not include them
         "0", "1", "12", "100", "123", "1001", "123,456", "-17",
     };
-    int32_t values_count = sizeof(values)/sizeof(values[0]);
+    int32_t values_count = UPRV_LENGTHOF(values);
 
     UnicodeString formats[] = {
         "There are {0,spellout} files to search.",
@@ -1529,7 +1529,7 @@ void TestMessageFormat::TestRBNF(void) {
         "Searching this file will take {0,duration} to complete.",
         "Searching this file will take {0,duration,%with-words} to complete.",
     };
-    int32_t formats_count = sizeof(formats)/sizeof(formats[0]);
+    int32_t formats_count = UPRV_LENGTHOF(formats);
 
     Formattable args[1];
 
@@ -1700,7 +1700,7 @@ void TestMessageFormat::testAutoQuoteApostrophe(void) {
         "'} '{'}'", "'} '{'}''",
         "'} {{{''", "'} {{{'''",
     };
-    int32_t pattern_count = sizeof(patterns)/sizeof(patterns[0]);
+    int32_t pattern_count = UPRV_LENGTHOF(patterns);
 
     for (int i = 0; i < pattern_count; i += 2) {
         UErrorCode status = U_ZERO_ERROR;

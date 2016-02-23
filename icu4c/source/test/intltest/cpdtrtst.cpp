@@ -1,6 +1,6 @@
 /***************************************************************************
 *
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ************************************************************************
@@ -385,7 +385,7 @@ void CompoundTransliteratorTest::TestTransliterate(){
                                                                  CharsToUnicodeString("vavivuvevohuzizuzonyinyunyasesuzezu"),  
     };
     uint32_t i;
-    for(i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+3){
+    for(i=0; i<UPRV_LENGTHOF(Data); i=i+3){
         UErrorCode status = U_ZERO_ERROR;
 
         CompoundTransliterator *ct2=new CompoundTransliterator(Data[i+0], parseError, status);

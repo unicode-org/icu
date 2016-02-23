@@ -19,6 +19,7 @@
 #include "unicode/calendar.h"
 #include "unicode/datefmt.h"
 #include "unicode/ucurr.h"
+#include "cmemory.h"
 #include "putilimp.h"
 #include "uassert.h"
 
@@ -2240,7 +2241,7 @@ void NumberFormatRegressionTest::Test4176114(void) {
         "000,000", "#,000,000",
         "0,000,000,000,000.0000", "#0,000,000,000,000.0000", // Reported
     };
-    int DATA_length = (int)(sizeof(DATA) / sizeof(DATA[0]));
+    int DATA_length = UPRV_LENGTHOF(DATA);
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString s;
     for (int i=0; i<DATA_length; i+=2) {
@@ -2268,7 +2269,7 @@ void NumberFormatRegressionTest::Test4179818(void) {
         "1.2501", "#.#",   "1.3",
         "0.9999", "#",     "1",
     };
-    int DATA_length = (int)(sizeof(DATA) / sizeof(DATA[0])); 
+    int DATA_length = UPRV_LENGTHOF(DATA); 
     double DOUBLE[] = {
         1.2511,
         1.2501,
@@ -2498,7 +2499,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
         return;
     };
     int32_t DATA[] = { INT32_MIN, INT32_MAX, -100000000, 100000000 };
-    int DATA_length = (int)(sizeof(DATA) / sizeof(DATA[0]));
+    int DATA_length = UPRV_LENGTHOF(DATA);
     for (int i=0; i<DATA_length; ++i) {
         UnicodeString str((UnicodeString)"" + DATA[i]);
         for (int m = 1; m <= 100; m++) {
@@ -2532,7 +2533,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
 void NumberFormatRegressionTest::Test4217661(void) {
     const double D[] = {  0.001, 1.001, 0.006,  1.006 };
     const char*  S[] = { "0",   "1",   "0.01", "1.01" };
-    int D_length = (int)(sizeof(D) / sizeof(D[0]));
+    int D_length = UPRV_LENGTHOF(D);
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createInstance(Locale::getUS(), status);
     if (failure(status, "createInstance", Locale::getUS(), TRUE)){
@@ -2587,7 +2588,7 @@ void NumberFormatRegressionTest::Test4243011(void) {
     if (!failure(status, "DecimalFormat ct", Locale::getUS())) {
         const double NUM[] = {  -2.5,  -1.5,  -0.5,  0.5,  1.5,  2.5,  3.5,  4.5 };
         const char*  STR[] = { "-2.", "-2.", "-0.", "0.", "2.", "2.", "4.", "4." };
-        int32_t N = (int32_t)(sizeof(NUM) / sizeof(NUM[0]));
+        int32_t N = UPRV_LENGTHOF(NUM);
 
         for (int32_t i=0; i<N; ++i) {
             UnicodeString str;

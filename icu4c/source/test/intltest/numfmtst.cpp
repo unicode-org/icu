@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /* Modification History:
@@ -29,6 +29,7 @@
 #include <float.h>
 #include <string.h>
 #include <stdlib.h>
+#include "cmemory.h"
 #include "cstring.h"
 #include "unicode/numsys.h"
 #include "fmtableimp.h"
@@ -676,7 +677,7 @@ NumberFormatTest::TestPatterns(void)
     if (U_FAILURE(status)) { errcheckln(status, "FAIL: Could not construct DecimalFormatSymbols - %s", u_errorName(status)); return; }
 
     const char* pat[]    = { "#.#", "#.", ".#", "#" };
-    int32_t pat_length = (int32_t)(sizeof(pat) / sizeof(pat[0]));
+    int32_t pat_length = UPRV_LENGTHOF(pat);
     const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
     const char* num[]    = { "0",   "0.", ".0", "0" };
     for (int32_t i=0; i<pat_length; ++i)
@@ -733,7 +734,7 @@ NumberFormatTest::TestExponential(void)
     DecimalFormatSymbols sym(Locale::getUS(), status);
     if (U_FAILURE(status)) { errcheckln(status, "FAIL: Bad status returned by DecimalFormatSymbols ct - %s", u_errorName(status)); return; }
     const char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"  };
-    int32_t pat_length = (int32_t)(sizeof(pat) / sizeof(pat[0]));
+    int32_t pat_length = UPRV_LENGTHOF(pat);
 
 // The following #if statements allow this test to be built and run on
 // platforms that do not have standard IEEE numerics.  For example,
@@ -745,7 +746,7 @@ NumberFormatTest::TestExponential(void)
 
 #if DBL_MAX_10_EXP > 300
     double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
-    int32_t val_length = (int32_t)(sizeof(val) / sizeof(val[0]));
+    int32_t val_length = UPRV_LENGTHOF(val);
     const char* valFormat[] =
     {
         // 0.####E0
@@ -766,7 +767,7 @@ NumberFormatTest::TestExponential(void)
     };
 #elif DBL_MAX_10_EXP > 70
     double val[] = { 0.01234, 123456789, 1.23e70, -3.141592653e-71 };
-    int32_t val_length = sizeof(val) / sizeof(val[0]);
+    int32_t val_length = UPRV_LENGTHOF(val);
     char* valFormat[] =
     {
         // 0.####E0
@@ -795,7 +796,7 @@ NumberFormatTest::TestExponential(void)
 #endif
 
     int32_t lval[] = { 0, -1, 1, 123456789 };
-    int32_t lval_length = (int32_t)(sizeof(lval) / sizeof(lval[0]));
+    int32_t lval_length = UPRV_LENGTHOF(lval);
     const char* lvalFormat[] =
     {
         // 0.####E0
@@ -1382,8 +1383,6 @@ static const char *strictFailureTestCases[] = {
 		"1,000,.0"
 };
 
-#define ARRAY_SIZE(array) ((int32_t) (sizeof (array) / sizeof(array[0])))
-
 /**
  * Test lenient parsing.
  */
@@ -1398,7 +1397,7 @@ NumberFormatTest::TestLenientParse(void)
         dataerrln("Unable to create DecimalFormat (#,##0) - %s", u_errorName(status));
     } else {
         format->setLenient(TRUE);
-        for (int32_t t = 0; t < ARRAY_SIZE (lenientAffixTestCases); t += 1) {
+        for (int32_t t = 0; t < UPRV_LENGTHOF (lenientAffixTestCases); t += 1) {
         	UnicodeString testCase = ctou(lenientAffixTestCases[t]);
 
             format->parse(testCase, n, status);
@@ -1422,7 +1421,7 @@ NumberFormatTest::TestLenientParse(void)
         dataerrln("Unable to create NumberFormat (sv_SE, UNUM_DECIMAL) - %s", u_errorName(status));
     } else {
         mFormat->setLenient(TRUE);
-        for (int32_t t = 0; t < ARRAY_SIZE(lenientMinusTestCases); t += 1) {
+        for (int32_t t = 0; t < UPRV_LENGTHOF(lenientMinusTestCases); t += 1) {
             UnicodeString testCase = ctou(lenientMinusTestCases[t]);
             
             mFormat->parse(testCase, n, status);
@@ -1442,7 +1441,7 @@ NumberFormatTest::TestLenientParse(void)
         dataerrln("Unable to create NumberFormat (en_US, UNUM_DECIMAL) - %s", u_errorName(status));
     } else {
         mFormat->setLenient(TRUE);
-        for (int32_t t = 0; t < ARRAY_SIZE(lenientMinusTestCases); t += 1) {
+        for (int32_t t = 0; t < UPRV_LENGTHOF(lenientMinusTestCases); t += 1) {
             UnicodeString testCase = ctou(lenientMinusTestCases[t]);
             
             mFormat->parse(testCase, n, status);
@@ -1462,7 +1461,7 @@ NumberFormatTest::TestLenientParse(void)
         dataerrln("Unable to create NumberFormat (en_US, UNUM_CURRENCY) - %s", u_errorName(status));
     } else {
         cFormat->setLenient(TRUE);
-        for (int32_t t = 0; t < ARRAY_SIZE (lenientCurrencyTestCases); t += 1) {
+        for (int32_t t = 0; t < UPRV_LENGTHOF (lenientCurrencyTestCases); t += 1) {
         	UnicodeString testCase = ctou(lenientCurrencyTestCases[t]);
 
             cFormat->parse(testCase, n, status);
@@ -1475,7 +1474,7 @@ NumberFormatTest::TestLenientParse(void)
             }
         }
 
-        for (int32_t t = 0; t < ARRAY_SIZE (lenientNegativeCurrencyTestCases); t += 1) {
+        for (int32_t t = 0; t < UPRV_LENGTHOF (lenientNegativeCurrencyTestCases); t += 1) {
         	UnicodeString testCase = ctou(lenientNegativeCurrencyTestCases[t]);
 
             cFormat->parse(testCase, n, status);
@@ -1497,7 +1496,7 @@ NumberFormatTest::TestLenientParse(void)
         dataerrln("Unable to create NumberFormat::createPercentInstance (en_US) - %s", u_errorName(status));
     } else {
         pFormat->setLenient(TRUE);
-        for (int32_t t = 0; t < ARRAY_SIZE (lenientPercentTestCases); t += 1) {
+        for (int32_t t = 0; t < UPRV_LENGTHOF (lenientPercentTestCases); t += 1) {
         	UnicodeString testCase = ctou(lenientPercentTestCases[t]);
 
         	pFormat->parse(testCase, n, status);
@@ -1510,7 +1509,7 @@ NumberFormatTest::TestLenientParse(void)
             }
         }
 
-        for (int32_t t = 0; t < ARRAY_SIZE (lenientNegativePercentTestCases); t += 1) {
+        for (int32_t t = 0; t < UPRV_LENGTHOF (lenientNegativePercentTestCases); t += 1) {
         	UnicodeString testCase = ctou(lenientNegativePercentTestCases[t]);
 
         	pFormat->parse(testCase, n, status);
@@ -1534,7 +1533,7 @@ NumberFormatTest::TestLenientParse(void)
        dataerrln("Unable to create NumberFormat (en_US) - %s", u_errorName(status));
    } else { 
        // first, make sure that they fail with a strict parse
-       for (int32_t t = 0; t < ARRAY_SIZE(strictFailureTestCases); t += 1) {
+       for (int32_t t = 0; t < UPRV_LENGTHOF(strictFailureTestCases); t += 1) {
 	       UnicodeString testCase = ctou(strictFailureTestCases[t]);
 
 	       nFormat->parse(testCase, n, status);
@@ -1549,7 +1548,7 @@ NumberFormatTest::TestLenientParse(void)
 
        // then, make sure that they pass with a lenient parse
        nFormat->setLenient(TRUE);
-       for (int32_t t = 0; t < ARRAY_SIZE(strictFailureTestCases); t += 1) {
+       for (int32_t t = 0; t < UPRV_LENGTHOF(strictFailureTestCases); t += 1) {
 	       UnicodeString testCase = ctou(strictFailureTestCases[t]);
 
 	       nFormat->parse(testCase, n, status);
@@ -1729,7 +1728,7 @@ void NumberFormatTest::TestScientific(void) {
     // Test pattern round-trip
     const char* PAT[] = { "#E0", "0.####E0", "00.000E00", "##0.####E000",
                           "0.###E0;[0.###E0]" };
-    int32_t PAT_length = (int32_t)(sizeof(PAT) / sizeof(PAT[0]));
+    int32_t PAT_length = UPRV_LENGTHOF(PAT);
     int32_t DIGITS[] = {
         // min int, max int, min frac, max frac
         0, 1, 0, 0, // "#E0"
@@ -3358,7 +3357,7 @@ void NumberFormatTest::TestRoundingPattern() {
             { (UnicodeString)"##0.65", 1.234, (UnicodeString)"1.30" },
             { (UnicodeString)"#50",    1230,  (UnicodeString)"1250" }
     };
-    int32_t numOfTests = (sizeof(tests)/sizeof(tests[0]));
+    int32_t numOfTests = UPRV_LENGTHOF(tests);
     UnicodeString result;
 
     DecimalFormat *df = (DecimalFormat*)NumberFormat::createCurrencyInstance(Locale::getEnglish(), status);
@@ -3534,7 +3533,7 @@ NumberFormatTest::TestSpaceParsing() {
         delete foo;
         return;
     }
-    for (uint32_t i = 0; i < sizeof(DATA)/sizeof(DATA[0]); ++i) {
+    for (uint32_t i = 0; i < UPRV_LENGTHOF(DATA); ++i) {
         ParsePosition parsePosition(0);
         UnicodeString stringToBeParsed = ctou(DATA[i].stringToParse);
         int parsedPosition = DATA[i].parsedPos;
@@ -3668,7 +3667,7 @@ NumberFormatTest::TestMultiCurrencySign() {
     const UChar tripleCurrencySign[] = {0xA4, 0xA4, 0xA4, 0};
     UnicodeString tripleCurrencyStr(tripleCurrencySign);
 
-    for (uint32_t i=0; i<sizeof(DATA)/sizeof(DATA[0]); ++i) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(DATA); ++i) {
         const char* locale = DATA[i][0];
         UnicodeString pat = ctou(DATA[i][1]);
         double numberToBeFormat = atof(DATA[i][2]);
@@ -3749,7 +3748,7 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
         "1,234.56 US dollars"
     };
     const CurrencyAmount* curramt = NULL;
-    for (uint32_t i = 0; i < sizeof(formats)/sizeof(formats[0]); ++i) {
+    for (uint32_t i = 0; i < UPRV_LENGTHOF(formats); ++i) {
         UnicodeString stringToBeParsed = ctou(formats[i]);
         logln(UnicodeString("stringToBeParsed: ") + stringToBeParsed);
         Formattable result;
@@ -3804,7 +3803,7 @@ NumberFormatTest::TestDecimalFormatCurrencyParse() {
         {"USD1,234.56", "1234.56"},
         {"1,234.56 US dollar", "1234.56"},
     };
-    for (uint32_t i = 0; i < sizeof(DATA)/sizeof(DATA[0]); ++i) {
+    for (uint32_t i = 0; i < UPRV_LENGTHOF(DATA); ++i) {
         UnicodeString stringToBeParsed = ctou(DATA[i][0]);
         double parsedResult = atof(DATA[i][1]);
         UErrorCode status = U_ZERO_ERROR;
@@ -3962,7 +3961,7 @@ int deadloop = 0;
 for (;;) {
     printf("loop: %d\n", deadloop++);
 #endif
-    for (uint32_t i=0; i< sizeof(DATA)/sizeof(DATA[0]); ++i) {  /* i = test case #  - should be i=0*/
+    for (uint32_t i=0; i< UPRV_LENGTHOF(DATA); ++i) {  /* i = test case #  - should be i=0*/
       for (int32_t kIndex = 2; kIndex < UPRV_LENGTHOF(currencyStyles); ++kIndex) {
         UNumberFormatStyle k = currencyStyles[kIndex]; /* k = style */
         const char* localeString = DATA[i][0];
@@ -6583,7 +6582,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
     };
 
     Locale locale("en_US");
-    for (uint32_t i=0; i<sizeof(DATA)/sizeof(DATA[0]); ++i) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(DATA); ++i) {
       UnicodeString formatted = ctou(DATA[i]);
       UErrorCode status = U_ZERO_ERROR;
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
@@ -6606,7 +6605,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       delete numFmt;
     }
 
-    for (uint32_t i=0; i<sizeof(WRONG_DATA)/sizeof(WRONG_DATA[0]); ++i) {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(WRONG_DATA); ++i) {
       UnicodeString formatted = ctou(WRONG_DATA[i]);
       UErrorCode status = U_ZERO_ERROR;
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
@@ -7807,7 +7806,7 @@ void NumberFormatTest::Test10419RoundingWith0FractionDigits() {
         dataerrln("Failure creating DecimalFormat %s", u_errorName(status));
         return;
     }
-    for (int32_t i = 0; i < (int32_t) (sizeof(items) / sizeof(items[0])); ++i) {
+    for (int32_t i = 0; i < UPRV_LENGTHOF(items); ++i) {
         decfmt->setRoundingMode(items[i].mode);
         decfmt->setMaximumFractionDigits(0);
         UnicodeString actual;
@@ -7884,8 +7883,8 @@ void NumberFormatTest::TestRoundingScientific10542() {
                 expected,
                 roundingModes,
                 descriptions,
-                (int32_t) (sizeof(values) / sizeof(values[0])),
-                (int32_t) (sizeof(roundingModes) / sizeof(roundingModes[0])));
+                UPRV_LENGTHOF(values),
+                UPRV_LENGTHOF(roundingModes));
     }
     {
         double values[] = {-3006.0, -3005, -3004, 3014, 3015, 3016};
@@ -7904,8 +7903,8 @@ void NumberFormatTest::TestRoundingScientific10542() {
                 expected,
                 roundingModes,
                 descriptions,
-                (int32_t) (sizeof(values) / sizeof(values[0])),
-                (int32_t) (sizeof(roundingModes) / sizeof(roundingModes[0])));
+                UPRV_LENGTHOF(values),
+                UPRV_LENGTHOF(roundingModes));
     }
 /* Commented out for now until we decide how rounding to zero should work, +0 vs. -0
     {
@@ -7925,8 +7924,8 @@ void NumberFormatTest::TestRoundingScientific10542() {
                 expected,
                 roundingModes,
                 descriptions,
-                (int32_t) (sizeof(values) / sizeof(values[0])),
-                (int32_t) (sizeof(roundingModes) / sizeof(roundingModes[0])));
+                UPRV_LENGTHOF(values),
+                UPRV_LENGTHOF(roundingModes));
     }
 */
     {
@@ -7947,8 +7946,8 @@ void NumberFormatTest::TestRoundingScientific10542() {
                 expected,
                 roundingModes,
                 descriptions,
-                (int32_t) (sizeof(values) / sizeof(values[0])),
-                (int32_t) (sizeof(roundingModes) / sizeof(roundingModes[0])));
+                UPRV_LENGTHOF(values),
+                UPRV_LENGTHOF(roundingModes));
         }
     {
         double values[] = {-1e25, -1e25 + 1e15, -1e25 - 1e15};
@@ -7967,8 +7966,8 @@ void NumberFormatTest::TestRoundingScientific10542() {
                 expected,
                 roundingModes,
                 descriptions,
-                (int32_t) (sizeof(values) / sizeof(values[0])),
-                (int32_t) (sizeof(roundingModes) / sizeof(roundingModes[0])));
+                UPRV_LENGTHOF(values),
+                UPRV_LENGTHOF(roundingModes));
         }
     {
         double values[] = {1e-25, 1e-25 + 1e-35, 1e-25 - 1e-35};
@@ -7987,8 +7986,8 @@ void NumberFormatTest::TestRoundingScientific10542() {
                 expected,
                 roundingModes,
                 descriptions,
-                (int32_t) (sizeof(values) / sizeof(values[0])),
-                (int32_t) (sizeof(roundingModes) / sizeof(roundingModes[0])));
+                UPRV_LENGTHOF(values),
+                UPRV_LENGTHOF(roundingModes));
         }
     {
         double values[] = {-1e-25, -1e-25 + 1e-35, -1e-25 - 1e-35};
@@ -8007,8 +8006,8 @@ void NumberFormatTest::TestRoundingScientific10542() {
                 expected,
                 roundingModes,
                 descriptions,
-                (int32_t) (sizeof(values) / sizeof(values[0])),
-                (int32_t) (sizeof(roundingModes) / sizeof(roundingModes[0])));
+                UPRV_LENGTHOF(values),
+                UPRV_LENGTHOF(roundingModes));
     }
 }
 

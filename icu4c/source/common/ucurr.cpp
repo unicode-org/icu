@@ -56,7 +56,7 @@ static const int32_t LAST_RESORT_DATA[] = { 2, 0, 2, 0 };
 static const int32_t POW10[] = { 1, 10, 100, 1000, 10000, 100000,
                                  1000000, 10000000, 100000000, 1000000000 };
 
-static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
+static const int32_t MAX_POW10 = UPRV_LENGTHOF(POW10) - 1;
 
 // Defines equivalent currency symbols.
 static const char *EQUIV_CURRENCY_SYMBOLS[][2] = {
@@ -1976,7 +1976,7 @@ ucurr_nextCurrencyList(UEnumeration *enumerator,
     UCurrencyContext *myContext = (UCurrencyContext *)(enumerator->context);
 
     /* Find the next in the list that matches the type we are looking for. */
-    while (myContext->listIdx < (sizeof(gCurrencyList)/sizeof(gCurrencyList[0]))-1) {
+    while (myContext->listIdx < UPRV_LENGTHOF(gCurrencyList)-1) {
         const struct CurrencyList *currItem = &gCurrencyList[myContext->listIdx++];
         if (UCURR_MATCHES_BITMASK(currItem->currType, myContext->currType))
         {
@@ -2120,7 +2120,7 @@ static void populateCurrSymbolsEquiv(icu::Hashtable *hash, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    int32_t length = sizeof(EQUIV_CURRENCY_SYMBOLS) / sizeof(EQUIV_CURRENCY_SYMBOLS[0]);
+    int32_t length = UPRV_LENGTHOF(EQUIV_CURRENCY_SYMBOLS);
     for (int32_t i = 0; i < length; ++i) {
         icu::UnicodeString lhs(EQUIV_CURRENCY_SYMBOLS[i][0], -1, US_INV);
         icu::UnicodeString rhs(EQUIV_CURRENCY_SYMBOLS[i][1], -1, US_INV);

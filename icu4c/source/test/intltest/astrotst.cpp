@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2014, International Business Machines Corporation and
+ * Copyright (c) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -14,6 +14,7 @@
 
 #include "astro.h"
 #include "astrotst.h"
+#include "cmemory.h"
 #include "gregoimp.h" // for Math
 #include "unicode/simpletz.h"
 
@@ -85,7 +86,7 @@ void AstroTest::TestSolarLongitude(void) {
   };
 
   logln("");
-  for (uint32_t i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+  for (uint32_t i = 0; i < UPRV_LENGTHOF(tests); i++) {
     gc->clear();
     gc->set(tests[i].d[0], tests[i].d[1]-1, tests[i].d[2], tests[i].d[3], tests[i].d[4]);
 
@@ -113,7 +114,7 @@ void AstroTest::TestLunarPosition(void) {
   };
   logln("");
 
-  for (int32_t i = 0; i < (int32_t)(sizeof(tests)/sizeof(tests[0])); i++) {
+  for (int32_t i = 0; i < UPRV_LENGTHOF(tests); i++) {
     gc->clear();
     gc->set((int32_t)tests[i][0], (int32_t)tests[i][1]-1, (int32_t)tests[i][2], (int32_t)tests[i][3], (int32_t)tests[i][4]);
     astro->setDate(gc->getTime(status));
@@ -171,7 +172,7 @@ void AstroTest::TestCoverage(void) {
     myastro, myastro2, myastro3, myastro2 // check cache
   };
 
-  for (uint32_t i = 0; i < sizeof(astronomers)/sizeof(astronomers[0]); ++i) {
+  for (uint32_t i = 0; i < UPRV_LENGTHOF(astronomers); ++i) {
     CalendarAstronomer *anAstro = astronomers[i];
 
     //logln("astro: " + astro);
@@ -450,7 +451,7 @@ void AstroTest::TestMoonAge(void){
 	static const double angle[] = {356.8493418421329, 356.8386760059673, 0.09625415252237701, 355.9986960782416, 3.5714026601303317, 124.26906744384183, 59.80247650195558,
 									357.54163205513123, 268.41779281511094, 4.82340276581624};
 	static const double precision = CalendarAstronomer::PI/32;
-	for (int32_t i = 0; i < (int32_t)(sizeof(testcase)/sizeof(testcase[0])); i++) {
+	for (int32_t i = 0; i < UPRV_LENGTHOF(testcase); i++) {
 		gc->clear();
 		logln((UnicodeString)"CASE["+i+"]: Year "+(int32_t)testcase[i][0]+" Month "+(int32_t)testcase[i][1]+" Day "+
 		                                    (int32_t)testcase[i][2]+" Hour "+(int32_t)testcase[i][3]+" Minutes "+(int32_t)testcase[i][4]+

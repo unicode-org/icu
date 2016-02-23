@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //===============================================================================
@@ -1650,7 +1650,7 @@ void CollationAPITest::TestGetLocale() {
   u_unescape(rules, rlz, 256);
 
   /* test opening collators for different locales */
-  for(i = 0; i<(int32_t)UPRV_LENGTHOF(testStruct); i++) {
+  for(i = 0; i<UPRV_LENGTHOF(testStruct); i++) {
     status = U_ZERO_ERROR;
     coll = Collator::createInstance(testStruct[i].requestedLocale, status);
     if(U_FAILURE(status)) {
@@ -1838,7 +1838,7 @@ void CollationAPITest::TestBounds(void) {
 
 
     int32_t i = 0, j = 0, k = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
-    int32_t arraySize = sizeof(tests)/sizeof(tests[0]);
+    int32_t arraySize = UPRV_LENGTHOF(tests);
 
     (void)lowerSize;  // Suppress unused variable warnings.
     (void)upperSize;
@@ -1866,12 +1866,12 @@ void CollationAPITest::TestBounds(void) {
     }
 
 
-    for(i = 0; i<(int32_t)(sizeof(test)/sizeof(test[0])); i++) {
+    for(i = 0; i<UPRV_LENGTHOF(test); i++) {
         buffSize = u_unescape(test[i], buffer, 512);
         skSize = coll->getSortKey(buffer, buffSize, sortkey, 512);
         lowerSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_LOWER, 1, lower, 512, &status);
         upperSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_UPPER_LONG, 1, upper, 512, &status);
-        for(j = i+1; j<(int32_t)(sizeof(test)/sizeof(test[0])); j++) {
+        for(j = i+1; j<UPRV_LENGTHOF(test); j++) {
             buffSize = u_unescape(test[j], buffer, 512);
             skSize = coll->getSortKey(buffer, buffSize, sortkey, 512);
             if(strcmp((const char *)lower, (const char *)sortkey) > 0) {

@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2013, International Business Machines
+ * Copyright (c) 1997-2016, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
  
@@ -17,8 +17,6 @@
 // *****************************************************************************
 // class TimeZoneRegressionTest
 // *****************************************************************************
-/* length of an array */
-#define ARRAY_LENGTH(array) (sizeof(array)/sizeof(array[0]))
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 
 void 
@@ -799,7 +797,7 @@ TimeZoneRegressionTest::Test4154650()
         BAD,  GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, GOOD_DOW, 24*3600000,
     };
 
-    int32_t dataLen = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
+    int32_t dataLen = UPRV_LENGTHOF(DATA);
 
     UErrorCode status = U_ZERO_ERROR;
     TimeZone *tz = TimeZone::createDefault();
@@ -971,7 +969,7 @@ void TimeZoneRegressionTest::Test4176686() {
         "DateFormat.format(dst)/dst zone", fmt2->format(dst, l), "GMT+2:15",
     };
 
-    for (int32_t idx=0; idx<(int32_t)ARRAY_LENGTH(DATA); idx+=3) {
+    for (int32_t idx=0; idx<UPRV_LENGTHOF(DATA); idx+=3) {
         if (DATA[idx+1]!=(DATA[idx+2])) {
             errln("FAIL: " + DATA[idx] + " -> " + DATA[idx+1] + ", exp " + DATA[idx+2]);
         }

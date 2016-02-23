@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2013, International Business Machines
+*   Copyright (C) 2005-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -15,6 +15,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "cmemory.h"
 #include "winutil.h"
 #include "locmap.h"
 #include "unicode/uloc.h"
@@ -53,7 +54,7 @@ BOOL CALLBACK EnumLocalesProc(LPSTR lpLocaleString)
 
     sscanf(lpLocaleString, "%8x", &lcidRecords[lcidCount].lcid);
 
-    localeIDLen = uprv_convertToPosix(lcidRecords[lcidCount].lcid, localeID, sizeof(localeID)/sizeof(localeID[0]), &status);
+    localeIDLen = uprv_convertToPosix(lcidRecords[lcidCount].lcid, localeID, UPRV_LENGTHOF(localeID), &status);
     if (U_SUCCESS(status)) {
         lcidRecords[lcidCount].localeID = new char[localeIDLen + 1];
         memcpy(lcidRecords[lcidCount].localeID, localeID, localeIDLen);

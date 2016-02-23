@@ -1,7 +1,7 @@
 /*
 **************************************************************************
-*   Copyright (C) 2002-2015 International Business Machines Corporation  *
-*   and others. All rights reserved.                                     *
+*   Copyright (C) 2002-2016 International Business Machines Corporation
+*   and others. All rights reserved.
 **************************************************************************
 */
 //
@@ -239,7 +239,7 @@ void RegexMatcher::init2(UText *input, UErrorCode &status) {
         return;
     }
 
-    if (fPattern->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(fSmallData[0]))) {
+    if (fPattern->fDataSize > UPRV_LENGTHOF(fSmallData)) {
         fData = (int64_t *)uprv_malloc(fPattern->fDataSize * sizeof(int64_t));
         if (fData == NULL) {
             status = fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
