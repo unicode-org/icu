@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2011, International Business Machines
+*   Copyright (C) 2002-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -18,6 +18,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ustring.h"
 #include "ustr_cnv.h"
+#include "cmemory.h"
 #include "iotest.h"
 
 #if U_IOSTREAM_SOURCE >= 199711
@@ -74,7 +75,7 @@ static void U_CALLCONV TestStream(void)
         return;
     }
     ucnv_close(defConv);
-    strncpy(defConvName, ucnv_getDefaultName(), sizeof(defConvName)/sizeof(defConvName[0]));
+    strncpy(defConvName, ucnv_getDefaultName(), UPRV_LENGTHOF(defConvName));
     ucnv_setDefaultName("UTF-8");
 
     static const char * const TESTSTRING = "\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64";

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2014, International Business Machines
+*   Copyright (C) 1998-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -350,7 +350,7 @@ u_scanf_skip_leading_positive_sign(UFILE   *input,
         symbolLen = unum_getSymbol(format,
             UNUM_PLUS_SIGN_SYMBOL,
             plusSymbol,
-            sizeof(plusSymbol)/sizeof(*plusSymbol),
+            UPRV_LENGTHOF(plusSymbol),
             &localStatus);
 
         if (U_SUCCESS(localStatus)) {

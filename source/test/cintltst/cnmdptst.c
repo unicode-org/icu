@@ -71,7 +71,7 @@ static void TestPatterns(void)
     const char* num[]    = { "0",   "0.", ".0", "0" };
 
     log_verbose("\nTesting different format patterns\n");
-    pat_length = sizeof(pat) / sizeof(pat[0]);
+    pat_length = UPRV_LENGTHOF(pat);
     for (i=0; i < pat_length; ++i)
     {
         status = U_ZERO_ERROR;
@@ -244,9 +244,9 @@ static void TestExponential(void)
     };
 
 
-    pat_length = sizeof(pat) / sizeof(pat[0]);
-    val_length = sizeof(val) / sizeof(val[0]);
-    lval_length = sizeof(lval) / sizeof(lval[0]);
+    pat_length = UPRV_LENGTHOF(pat);
+    val_length = UPRV_LENGTHOF(val);
+    lval_length = UPRV_LENGTHOF(lval);
     ival = 0;
     ilval = 0;
     for (p=0; p < pat_length; ++p)
@@ -853,7 +853,7 @@ static void TestCurrencyKeywords(void)
 
     for(i = 0; i < noLocales; i++) {
         strcpy(currLoc, uloc_getAvailable(i));
-        for(j = 0; j < sizeof(currencies)/sizeof(currencies[0]); j++) {
+        for(j = 0; j < UPRV_LENGTHOF(currencies); j++) {
             strcpy(locale, currLoc);
             strcat(locale, "@currency=");
             strcat(locale, currencies[j]);

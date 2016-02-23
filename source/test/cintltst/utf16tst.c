@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2014, International Business Machines Corporation and
+ * Copyright (c) 1998-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -56,7 +56,7 @@ static void TestCodeUnitValues()
     static uint16_t codeunit[]={0x0000,0xe065,0x20ac,0xd7ff,0xd800,0xd841,0xd905,0xdbff,0xdc00,0xdc02,0xddee,0xdfff,0};
     
     int16_t i;
-    for(i=0; i<sizeof(codeunit)/sizeof(codeunit[0]); i++){
+    for(i=0; i<UPRV_LENGTHOF(codeunit); i++){
         UChar c=codeunit[i];
         log_verbose("Testing code unit value of %x\n", c);
         if(i<4){
@@ -94,7 +94,7 @@ static void TestCharLength()
     
     int16_t i;
     UBool multiple;
-    for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=(int16_t)(i+2)){
+    for(i=0; i<UPRV_LENGTHOF(codepoint); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
         if(UTF16_CHAR_LENGTH(c) != (uint16_t)codepoint[i] || U16_LENGTH(c) != (uint16_t)codepoint[i]){
               log_err("The no: of code units for %lx:- Expected: %d Got: %d\n", c, codepoint[i], UTF16_CHAR_LENGTH(c));
@@ -486,7 +486,7 @@ static void TestFwdBack(){
 
     offunsafe=0;
     offsafe=0;
-    for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0])-2; i++){  /*didn't want it to fail(we assume 0<i<length)*/
+    for(i=0; i<UPRV_LENGTHOF(Nvalue)-2; i++){  /*didn't want it to fail(we assume 0<i<length)*/
         UTF16_FWD_N_UNSAFE(input, offunsafe, Nvalue[i]);
         if(offunsafe != fwd_N_unsafe[i]){
             log_err("ERROR: Forward_N_unsafe offset expected:%d, Got:%d\n", fwd_N_unsafe[i], offunsafe);
@@ -494,7 +494,7 @@ static void TestFwdBack(){
     }
 
     offunsafe=0;
-    for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0])-2; i++){  /*didn't want it to fail(we assume 0<i<length)*/
+    for(i=0; i<UPRV_LENGTHOF(Nvalue)-2; i++){  /*didn't want it to fail(we assume 0<i<length)*/
         U16_FWD_N_UNSAFE(input, offunsafe, Nvalue[i]);
         if(offunsafe != fwd_N_unsafe[i]){
             log_err("ERROR: U16_FWD_N_UNSAFE offset expected:%d, Got:%d\n", fwd_N_unsafe[i], offunsafe);
@@ -502,7 +502,7 @@ static void TestFwdBack(){
     }
 
     offsafe=0;
-    for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0]); i++){
+    for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         UTF16_FWD_N_SAFE(input, offsafe, sizeof(input)/U_SIZEOF_UCHAR, Nvalue[i]);
         if(offsafe != fwd_N_safe[i]){
             log_err("ERROR: Forward_N_safe offset expected:%d, Got:%d\n", fwd_N_safe[i], offsafe);
@@ -511,7 +511,7 @@ static void TestFwdBack(){
     }
 
     offsafe=0;
-    for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0]); i++){
+    for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         U16_FWD_N(input, offsafe, sizeof(input)/U_SIZEOF_UCHAR, Nvalue[i]);
         if(offsafe != fwd_N_safe[i]){
             log_err("ERROR: U16_FWD_N offset expected:%d, Got:%d\n", fwd_N_safe[i], offsafe);
@@ -520,7 +520,7 @@ static void TestFwdBack(){
     }
 
     offunsafe=sizeof(input)/U_SIZEOF_UCHAR;
-    for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0])-2; i++){
+    for(i=0; i<UPRV_LENGTHOF(Nvalue)-2; i++){
         UTF16_BACK_N_UNSAFE(input, offunsafe, Nvalue[i]);
         if(offunsafe != back_N_unsafe[i]){
             log_err("ERROR: backward_N_unsafe offset expected:%d, Got:%d\n", back_N_unsafe[i], offunsafe);
@@ -528,7 +528,7 @@ static void TestFwdBack(){
     }
 
     offunsafe=sizeof(input)/U_SIZEOF_UCHAR;
-    for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0])-2; i++){
+    for(i=0; i<UPRV_LENGTHOF(Nvalue)-2; i++){
         U16_BACK_N_UNSAFE(input, offunsafe, Nvalue[i]);
         if(offunsafe != back_N_unsafe[i]){
             log_err("ERROR: U16_BACK_N_UNSAFE offset expected:%d, Got:%d\n", back_N_unsafe[i], offunsafe);
@@ -536,7 +536,7 @@ static void TestFwdBack(){
     }
 
     offsafe=sizeof(input)/U_SIZEOF_UCHAR;
-    for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0]); i++){
+    for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         UTF16_BACK_N_SAFE(input, 0, offsafe, Nvalue[i]);
         if(offsafe != back_N_safe[i]){
             log_err("ERROR: backward_N_safe offset expected:%d, Got:%d\n", back_N_safe[i], offsafe);
@@ -544,7 +544,7 @@ static void TestFwdBack(){
     }
 
     offsafe=sizeof(input)/U_SIZEOF_UCHAR;
-    for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0]); i++){
+    for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         U16_BACK_N(input, 0, offsafe, Nvalue[i]);
         if(offsafe != back_N_safe[i]){
             log_err("ERROR: U16_BACK_N offset expected:%d, Got:%d\n", back_N_safe[i], offsafe);
@@ -669,7 +669,7 @@ static void TestAppendChar(){
     uint16_t i, count=0;
     UChar *str=(UChar*)malloc(sizeof(UChar) * (u_strlen(s)+1));
     uint16_t offset;
-    for(i=0; i<sizeof(test)/sizeof(test[0]); i=(uint16_t)(i+2)){
+    for(i=0; i<UPRV_LENGTHOF(test); i=(uint16_t)(i+2)){
         if(count<5){
             u_strcpy(str, s);
             offset=(uint16_t)test[i];

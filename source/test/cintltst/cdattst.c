@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -40,8 +40,6 @@ static void TestContext(void);
 static void TestCalendarDateParse(void);
 static void TestParseErrorReturnValue(void);
 static void TestFormatForFields(void);
-
-#define LEN(a) (sizeof(a)/sizeof(a[0]))
 
 void addDateForTest(TestNode** root);
 
@@ -1288,7 +1286,7 @@ static void TestExtremeDates() {
         return;
     }
 
-    _aux2ExtremeDates(fmt, small, large, buf, LEN(buf), cbuf, 0, &ec);
+    _aux2ExtremeDates(fmt, small, large, buf, UPRV_LENGTHOF(buf), cbuf, 0, &ec);
 
     udat_close(fmt);
 }
@@ -1300,8 +1298,8 @@ static void TestAllLocales(void) {
     };
     localeCount = uloc_countAvailable();
     for (idx = 0; idx < localeCount; idx++) {
-        for (dateIdx = 0; dateIdx < (int32_t)(sizeof(style)/sizeof(style[0])); dateIdx++) {
-            for (timeIdx = 0; timeIdx < (int32_t)(sizeof(style)/sizeof(style[0])); timeIdx++) {
+        for (dateIdx = 0; dateIdx < UPRV_LENGTHOF(style); dateIdx++) {
+            for (timeIdx = 0; timeIdx < UPRV_LENGTHOF(style); timeIdx++) {
                 UErrorCode status = U_ZERO_ERROR;
                 udat_close(udat_open(style[dateIdx], style[timeIdx],
                     uloc_getAvailable(idx), NULL, 0, NULL, 0, &status));
@@ -1390,7 +1388,7 @@ static void TestRelativeCrash(void) {
             UErrorCode subStatus = U_ZERO_ERROR;
             what = "udat_getSymbols";
             log_verbose("Trying %s on a relative date..\n", what);
-            udat_getSymbols(icudf, UDAT_ERAS,0,erabuf,sizeof(erabuf)/sizeof(erabuf[0]), &subStatus);
+            udat_getSymbols(icudf, UDAT_ERAS,0,erabuf,UPRV_LENGTHOF(erabuf), &subStatus);
             if(subStatus == U_ZERO_ERROR) {
                 log_verbose("Success: %s returned %s.\n", what, u_errorName(subStatus));
             } else {

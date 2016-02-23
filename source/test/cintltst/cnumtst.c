@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -37,8 +37,6 @@
 #include "putilimp.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-#define LENGTH(arr) (sizeof(arr)/sizeof(arr[0]))
 
 static const char *tagAssert(const char *f, int32_t l, const char *msg) {
     static char _fileline[1000];
@@ -780,18 +778,18 @@ free(result);
     if (spellout_def)
     {
         static const int32_t values[] = { 0, -5, 105, 1005, 105050 };
-        for (i = 0; i < LENGTH(values); ++i) {
+        for (i = 0; i < UPRV_LENGTHOF(values); ++i) {
             UChar buffer[128];
             int32_t len;
             int32_t value = values[i];
             status = U_ZERO_ERROR;
-            len = unum_format(spellout_def, value, buffer, LENGTH(buffer), NULL, &status);
+            len = unum_format(spellout_def, value, buffer, UPRV_LENGTHOF(buffer), NULL, &status);
             if(U_FAILURE(status)) {
                 log_err("Error in formatting using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
             } else {
                 int32_t pp = 0;
                 int32_t parseResult;
-                /*ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));*/
+                /*ustrToAstr(buffer, len, logbuf, UPRV_LENGTHOF(logbuf));*/
                 log_verbose("formatted %d as '%s', length: %d\n", value, aescstrdup(buffer, len), len);
 
                 parseResult = unum_parse(spellout_def, buffer, len, &pp, &status);
@@ -1241,7 +1239,7 @@ static void TestSigDigRounding()
     unum_setAttribute(fmt, UNUM_ROUNDING_MODE, UNUM_ROUND_UP);
     unum_setDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT, 20.0);
 
-    (void)unum_formatDouble(fmt, d, result, sizeof(result) / sizeof(result[0]), NULL, &status);
+    (void)unum_formatDouble(fmt, d, result, UPRV_LENGTHOF(result), NULL, &status);
     if(U_FAILURE(status))
     {
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status));
@@ -1504,13 +1502,13 @@ static void TestInt64Format() {
 static void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
     char temp[512];
     UChar buffer[512];
-    int32_t BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
+    int32_t BUFSIZE = UPRV_LENGTHOF(buffer);
     double vals[] = {
         -.2, 0, .2, 5.5, 15.2, 250, 123456789
     };
     int i;
 
-    for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i) {
+    for (i = 0; i < UPRV_LENGTHOF(vals); ++i) {
         UErrorCode status = U_ZERO_ERROR;
         unum_formatDouble(fmt, vals[i], buffer, BUFSIZE, NULL, &status);
         if (U_FAILURE(status)) {
@@ -1600,7 +1598,7 @@ static void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
                             u_austrcpy(temp, buffer);
                             log_err("unexpected ruleset len: %d ex: %d val: %s\n", len2, i, temp);
                         } else {
-                            for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i) {
+                            for (i = 0; i < UPRV_LENGTHOF(vals); ++i) {
                                 status = U_ZERO_ERROR;
                                 unum_formatDouble(fmt, vals[i], buffer, BUFSIZE, NULL, &status);
                                 if (U_FAILURE(status)) {
@@ -1659,7 +1657,7 @@ static void TestNonExistentCurrency() {
         unum_getSymbol(format,
                 UNUM_CURRENCY_SYMBOL,
                 currencySymbol,
-                sizeof(currencySymbol)/sizeof(currencySymbol[0]),
+                UPRV_LENGTHOF(currencySymbol),
                 &status);
         if (u_strcmp(currencySymbol, QQQ) != 0) {
             log_err("unum_open set the currency to QQQ\n");
@@ -1674,7 +1672,7 @@ static void TestRBNFFormat() {
     UChar pat[1024];
     UChar tempUChars[512];
     UNumberFormat *formats[5];
-    int COUNT = sizeof(formats)/sizeof(formats[0]);
+    int COUNT = UPRV_LENGTHOF(formats);
     int i;
 
     for (i = 0; i < COUNT; ++i) {
@@ -1930,7 +1928,7 @@ static void TestNBSPInPattern(void) {
 #define SPECIAL_PATTERN "\\u00A4\\u00A4'\\u062f.\\u0625.\\u200f\\u00a0'###0.00"
         UChar pat[200];
         testcase = "ar_AE special pattern: " SPECIAL_PATTERN;
-        u_unescape(SPECIAL_PATTERN, pat, sizeof(pat)/sizeof(pat[0]));
+        u_unescape(SPECIAL_PATTERN, pat, UPRV_LENGTHOF(pat));
         unum_applyPattern(nf, FALSE, pat, -1, NULL, &status);
         if(U_FAILURE(status)) {
             log_err("%s: unum_applyPattern failed with %s\n", testcase, u_errorName(status));
@@ -2440,11 +2438,11 @@ static void TestCurrencyIsoPluralFormat(void) {
 
     int32_t i, sIndex;
     
-    for (i=0; i<LENGTH(DATA); ++i) {  
+    for (i=0; i<UPRV_LENGTHOF(DATA); ++i) {  
       const char* localeString = DATA[i][0];
       double numberToBeFormat = atof(DATA[i][1]);
       const char* currencyISOCode = DATA[i][2];
-      for (sIndex = 0; sIndex < LENGTH(currencyStyles); ++sIndex) {
+      for (sIndex = 0; sIndex < UPRV_LENGTHOF(currencyStyles); ++sIndex) {
         UNumberFormatStyle style = currencyStyles[sIndex];
         UErrorCode status = U_ZERO_ERROR;
         UChar currencyCode[4];
@@ -2598,7 +2596,7 @@ static void TestCurrencyUsage(void) {
             log_err("FAIL: currency usage attribute is not UNUM_CURRENCY_CASH\n");
         }
 
-        for (j=0; j<LENGTH(DATA); ++j) { 
+        for (j=0; j<UPRV_LENGTHOF(DATA); ++j) { 
             UChar expect[64];
             int32_t expectLen;
             UChar currencyCode[4];
@@ -2607,12 +2605,12 @@ static void TestCurrencyUsage(void) {
             UFieldPosition pos = {0};
 
             u_charsToUChars(DATA[j][0], currencyCode, 3);
-            expectLen = u_unescape(DATA[j][1], expect, LENGTH(expect));
+            expectLen = u_unescape(DATA[j][1], expect, UPRV_LENGTHOF(expect));
 
             unum_setTextAttribute(unumFmt, UNUM_CURRENCY_CODE, currencyCode, 3, &status);
             assertSuccess("num_setTextAttribute()", &status);
 
-            resultLen = unum_formatDouble(unumFmt, numberToBeFormat, result, LENGTH(result),
+            resultLen = unum_formatDouble(unumFmt, numberToBeFormat, result, UPRV_LENGTHOF(result),
                                         &pos, &status);
             assertSuccess("num_formatDouble()", &status);
 

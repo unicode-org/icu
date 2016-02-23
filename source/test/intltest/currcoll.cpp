@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -28,9 +28,8 @@
 #include "currcoll.h"
 #endif
 
+#include "cmemory.h"
 #include "sfwdchit.h"
-
-#define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 CollationCurrencyTest::CollationCurrencyTest()
 {
@@ -91,9 +90,9 @@ void CollationCurrencyTest::currencyTest(/*char *par*/)
 
     // Compare each currency symbol against all the
     // currency symbols, including itself
-    for (i = 0; i < ARRAY_LENGTH(currency); i += 1)
+    for (i = 0; i < UPRV_LENGTHOF(currency); i += 1)
     {
-        for (j = 0; j < ARRAY_LENGTH(currency); j += 1)
+        for (j = 0; j < UPRV_LENGTHOF(currency); j += 1)
         {
             UnicodeString source(currency[i], 1);
             UnicodeString target(currency[j], 1);

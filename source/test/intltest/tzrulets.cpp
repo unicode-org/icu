@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2014, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2007-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -84,7 +84,7 @@ TestZIDEnumeration::TestZIDEnumeration(UBool all)
         len = tzenum->count(status);
     } else {
         tzenum = NULL;
-        len = (int32_t)sizeof(TESTZIDS)/sizeof(TESTZIDS[0]);
+        len = UPRV_LENGTHOF(TESTZIDS);
     }
 }
 

@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2011,2015 International Business Machines 
+ * Copyright (c) 2001-2011,2015,2016 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File usrchtst.c
@@ -2604,8 +2604,8 @@ static void TestStrengthIdentical(void)
     
     UChar pattern[] = {0x05E9, 0x0591, 0x05E9};
     UChar text[]    = {0x05E9, 0x0592, 0x05E9};
-    int32_t pLen = sizeof (pattern) / sizeof(pattern[0]);
-    int32_t tLen = sizeof(text) / sizeof (text[0]);
+    int32_t pLen = UPRV_LENGTHOF(pattern);
+    int32_t tLen = UPRV_LENGTHOF(text);
     int32_t expectedPos = 0;
     int32_t expectedLen = 3;
 
@@ -2656,8 +2656,6 @@ static void TestStrengthIdentical(void)
 * TestUsingSearchCollator
 */
 
-#define ARRAY_LENGTH(array) (sizeof(array)/sizeof(array[0]))
-
 typedef struct {
     const UChar *   pattern;
     const int32_t * offsets;
@@ -2693,12 +2691,12 @@ static const int32_t scKoSrchOff23[] = { 5, 21, 25 };
 static const int32_t scKoSrchOff45[] = { 7, 30     };
 
 static const PatternAndOffsets scKoSrchPatternsOffsets[] = {
-    { scKoPat0, scKoSrchOff01, ARRAY_LENGTH(scKoSrchOff01) },
-    { scKoPat1, scKoSrchOff01, ARRAY_LENGTH(scKoSrchOff01) },
-    { scKoPat2, scKoSrchOff23, ARRAY_LENGTH(scKoSrchOff23) },
-    { scKoPat3, scKoSrchOff23, ARRAY_LENGTH(scKoSrchOff23) },
-    { scKoPat4, scKoSrchOff45, ARRAY_LENGTH(scKoSrchOff45) },
-    { scKoPat5, scKoSrchOff45, ARRAY_LENGTH(scKoSrchOff45) },
+    { scKoPat0, scKoSrchOff01, UPRV_LENGTHOF(scKoSrchOff01) },
+    { scKoPat1, scKoSrchOff01, UPRV_LENGTHOF(scKoSrchOff01) },
+    { scKoPat2, scKoSrchOff23, UPRV_LENGTHOF(scKoSrchOff23) },
+    { scKoPat3, scKoSrchOff23, UPRV_LENGTHOF(scKoSrchOff23) },
+    { scKoPat4, scKoSrchOff45, UPRV_LENGTHOF(scKoSrchOff45) },
+    { scKoPat5, scKoSrchOff45, UPRV_LENGTHOF(scKoSrchOff45) },
     { NULL,     NULL,          0                           }
 };
 
@@ -2708,12 +2706,12 @@ static const int32_t scKoStndOff3[]  = { 25    };
 static const int32_t scKoStndOff45[] = { 7, 30 };
 
 static const PatternAndOffsets scKoStndPatternsOffsets[] = {
-    { scKoPat0, scKoStndOff01, ARRAY_LENGTH(scKoStndOff01) },
-    { scKoPat1, scKoStndOff01, ARRAY_LENGTH(scKoStndOff01) },
-    { scKoPat2, scKoStndOff2,  ARRAY_LENGTH(scKoStndOff2)  },
-    { scKoPat3, scKoStndOff3,  ARRAY_LENGTH(scKoStndOff3)  },
-    { scKoPat4, scKoStndOff45, ARRAY_LENGTH(scKoStndOff45) },
-    { scKoPat5, scKoStndOff45, ARRAY_LENGTH(scKoStndOff45) },
+    { scKoPat0, scKoStndOff01, UPRV_LENGTHOF(scKoStndOff01) },
+    { scKoPat1, scKoStndOff01, UPRV_LENGTHOF(scKoStndOff01) },
+    { scKoPat2, scKoStndOff2,  UPRV_LENGTHOF(scKoStndOff2)  },
+    { scKoPat3, scKoStndOff3,  UPRV_LENGTHOF(scKoStndOff3)  },
+    { scKoPat4, scKoStndOff45, UPRV_LENGTHOF(scKoStndOff45) },
+    { scKoPat5, scKoStndOff45, UPRV_LENGTHOF(scKoStndOff45) },
     { NULL,     NULL,          0                           }
 };
 

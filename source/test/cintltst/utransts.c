@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 1997-2009,2014 International Business Machines
+ *   Copyright (C) 1997-2016 International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   Date        Name        Description
@@ -18,6 +18,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uset.h"
 #include "cintltst.h"
+#include "cmemory.h"
 
 #define TEST(x) addTest(root, &x, "utrans/" # x)
 
@@ -270,7 +271,7 @@ static void TestOpenInverse(){
            "Hex-Any"
          };
      
-    for(i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
+    for(i=0; i<UPRV_LENGTHOF(TransID); i=i+2){
         status = U_ZERO_ERROR;
         t1=utrans_open(TransID[i], UTRANS_FORWARD,NULL,0,NULL, &status);
         if(t1 == NULL || U_FAILURE(status)){
@@ -502,7 +503,7 @@ static void TestFilter() {
         "abcde",
         "\\u0061\\u0062\\u0063\\u0064\\u0065"
     };
-    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int32_t DATA_length = UPRV_LENGTHOF(DATA);
     int32_t i;
 
     UTransliterator* hex = utrans_open("Any-Hex", UTRANS_FORWARD, NULL,0,NULL,&status);

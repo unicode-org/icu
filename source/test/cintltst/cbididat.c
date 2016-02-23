@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbididat.c
@@ -16,6 +16,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ubidi.h"
 #include "cbiditst.h"
+#include "cmemory.h"
 
 const char * const
 dirPropNames[U_CHAR_DIRECTION_COUNT]={
@@ -374,75 +375,75 @@ testVisualMapXX[]={
 
 const BiDiTestData
 tests[]={
-    {testText1,  ARRAY_LENGTH(testText1),  UBIDI_DEFAULT_LTR, -1, -1,
+    {testText1,  UPRV_LENGTHOF(testText1),  UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_LTR, 0,
         testLevels1, testVisualMap1},
-    {testText2,  ARRAY_LENGTH(testText2),  UBIDI_DEFAULT_LTR, -1, -1,
+    {testText2,  UPRV_LENGTHOF(testText2),  UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_RTL, 1,
         testLevels2, testVisualMap2},
-    {testText3,  ARRAY_LENGTH(testText3),  UBIDI_DEFAULT_LTR, -1, -1,
+    {testText3,  UPRV_LENGTHOF(testText3),  UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_LTR, 0,
         testLevels3, testVisualMap3},
-    {testText4,  ARRAY_LENGTH(testText4),  UBIDI_DEFAULT_LTR, -1, -1,
+    {testText4,  UPRV_LENGTHOF(testText4),  UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_MIXED, 0,
         testLevels4, testVisualMap4},
-    {testText5,  ARRAY_LENGTH(testText5),  UBIDI_DEFAULT_LTR, -1, -1,
+    {testText5,  UPRV_LENGTHOF(testText5),  UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_MIXED, 1,
         testLevels5, testVisualMap5},
-    {testText6,  ARRAY_LENGTH(testText6),  UBIDI_DEFAULT_LTR, -1, -1,
+    {testText6,  UPRV_LENGTHOF(testText6),  UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_MIXED, 1,
         testLevels6, testVisualMap6},
     {NULL,       0,                        UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_LTR, 0,
         NULL, NULL},
-    {testText8,  ARRAY_LENGTH(testText8),  UBIDI_DEFAULT_LTR, -1, -1,
+    {testText8,  UPRV_LENGTHOF(testText8),  UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_RTL, 1,
         testLevels8, testVisualMap8},
-    {testText9,  ARRAY_LENGTH(testText9),  64, -1, -1,
+    {testText9,  UPRV_LENGTHOF(testText9),  64, -1, -1,
         UBIDI_MIXED, 64,
         testLevels9, testVisualMap9},
-    {testText10, ARRAY_LENGTH(testText10), 64, -1, -1,
+    {testText10, UPRV_LENGTHOF(testText10), 64, -1, -1,
         UBIDI_MIXED, 64,
         testLevels10, testVisualMap10},
-    {testText11, ARRAY_LENGTH(testText11), UBIDI_DEFAULT_LTR, -1, -1,
+    {testText11, UPRV_LENGTHOF(testText11), UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_MIXED, 0,
         testLevels11, testVisualMap11},
-    {testText12, ARRAY_LENGTH(testText12), UBIDI_DEFAULT_LTR, -1, -1,
+    {testText12, UPRV_LENGTHOF(testText12), UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_MIXED, 0,
         testLevels12, testVisualMap12},
-    {testText12, ARRAY_LENGTH(testText12), UBIDI_DEFAULT_RTL, -1, -1,
+    {testText12, UPRV_LENGTHOF(testText12), UBIDI_DEFAULT_RTL, -1, -1,
         UBIDI_MIXED, 0,
         testLevels13, testVisualMap13},
-    {testText12, ARRAY_LENGTH(testText12), 2, -1, -1,
+    {testText12, UPRV_LENGTHOF(testText12), 2, -1, -1,
         UBIDI_MIXED, 2,
         testLevels14, testVisualMap14},
-    {testText12, ARRAY_LENGTH(testText12), 5, -1, -1,
+    {testText12, UPRV_LENGTHOF(testText12), 5, -1, -1,
         UBIDI_MIXED, 5,
         testLevels15, testVisualMap15},
-    {testText12, ARRAY_LENGTH(testText12), UBIDI_DEFAULT_LTR, -1, -1,
+    {testText12, UPRV_LENGTHOF(testText12), UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_MIXED, 0,
         testLevels16, testVisualMap16},
-    {testText13, ARRAY_LENGTH(testText13), UBIDI_DEFAULT_LTR, -1, -1,
+    {testText13, UPRV_LENGTHOF(testText13), UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_MIXED, 0,
         testLevels17, testVisualMap17},
-    {testText13, ARRAY_LENGTH(testText13), UBIDI_DEFAULT_LTR, 0, 6,
+    {testText13, UPRV_LENGTHOF(testText13), UBIDI_DEFAULT_LTR, 0, 6,
         UBIDI_MIXED, 0,
         testLevels18, testVisualMap18},
-    {testText14, ARRAY_LENGTH(testText14), UBIDI_DEFAULT_LTR, 13, 14,
+    {testText14, UPRV_LENGTHOF(testText14), UBIDI_DEFAULT_LTR, 13, 14,
         UBIDI_RTL, 1,
         testLevels19, testVisualMap19},
-    {testText15, ARRAY_LENGTH(testText15), UBIDI_DEFAULT_LTR, 2, 3,
+    {testText15, UPRV_LENGTHOF(testText15), UBIDI_DEFAULT_LTR, 2, 3,
         UBIDI_LTR, 2,
         testLevels20, testVisualMap19},
-    {testText16, ARRAY_LENGTH(testText16), UBIDI_RTL, 0, 8,
+    {testText16, UPRV_LENGTHOF(testText16), UBIDI_RTL, 0, 8,
         UBIDI_MIXED, 1,
         testLevels21, testVisualMap20},
-    {testText17, ARRAY_LENGTH(testText17), UBIDI_LTR, 0, 8,
+    {testText17, UPRV_LENGTHOF(testText17), UBIDI_LTR, 0, 8,
         UBIDI_MIXED, 0,
         testLevels22, testVisualMap21},
-    {testTextXX, ARRAY_LENGTH(testTextXX), UBIDI_RTL, -1, -1,
+    {testTextXX, UPRV_LENGTHOF(testTextXX), UBIDI_RTL, -1, -1,
         UBIDI_MIXED, 1, testLevelsXX, testVisualMapXX}
 };
 
 const int
-bidiTestCount=ARRAY_LENGTH(tests);
+bidiTestCount=UPRV_LENGTHOF(tests);

@@ -1022,7 +1022,7 @@ uprv_convertToPosix(uint32_t hostid, char *posixID, int32_t posixIDCapacity, UEr
     int32_t tmpLen = 0;
     char locName[157];  /* ULOC_FULLNAME_CAPACITY */
 
-    tmpLen = GetLocaleInfoA(hostid, LOCALE_SNAME, (LPSTR)locName, sizeof(locName)/sizeof(locName[0]));
+    tmpLen = GetLocaleInfoA(hostid, LOCALE_SNAME, (LPSTR)locName, UPRV_LENGTHOF(locName));
     if (tmpLen > 1) {
         /* Windows locale name may contain sorting variant, such as "es-ES_tradnl".
            In such case, we need special mapping data found in the hardcoded table

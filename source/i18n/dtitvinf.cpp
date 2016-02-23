@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2008-2015, International Business Machines Corporation and
+* Copyright (C) 2008-2016, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -21,6 +21,7 @@
 #include <iostream>
 #endif
 
+#include "cmemory.h"
 #include "cstring.h"
 #include "unicode/msgfmt.h"
 #include "unicode/uloc.h"
@@ -104,9 +105,9 @@ DateIntervalInfo::setFallbackIntervalPattern(
         return;
     }
     int32_t firstPatternIndex = fallbackPattern.indexOf(gFirstPattern, 
-                        sizeof(gFirstPattern)/sizeof(gFirstPattern[0]), 0);
+                        UPRV_LENGTHOF(gFirstPattern), 0);
     int32_t secondPatternIndex = fallbackPattern.indexOf(gSecondPattern, 
-                        sizeof(gSecondPattern)/sizeof(gSecondPattern[0]), 0);
+                        UPRV_LENGTHOF(gSecondPattern), 0);
     if ( firstPatternIndex == -1 || secondPatternIndex == -1 ) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -481,7 +482,7 @@ DateIntervalInfo::getBestSkeleton(const UnicodeString& skeleton,
     // 2 means only z/v differs
     // -1 means having different field.
     bestMatchDistanceInfo = 0;
-    int8_t fieldLength = sizeof(skeletonFieldWidth)/sizeof(skeletonFieldWidth[0]);
+    int8_t fieldLength = UPRV_LENGTHOF(skeletonFieldWidth);
 
     int32_t pos = UHASH_FIRST;
     const UHashElement* elem = NULL;

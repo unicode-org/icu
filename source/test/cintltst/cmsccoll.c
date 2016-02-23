@@ -1,7 +1,6 @@
-
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2015, International Business Machines Corporation and
+ * Copyright (c) 2001-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -40,8 +39,6 @@
 #include "uparse.h"
 #include "putilimp.h"
 
-
-#define LEN(a) (sizeof(a)/sizeof(a[0]))
 
 #define MAX_TOKEN_LEN 16
 
@@ -94,7 +91,7 @@ static void IncompleteCntTest(void)
   coll = ucol_openRules(temp, u_strlen(temp), UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL,&status);
 
   if(U_SUCCESS(status)) {
-    size = sizeof(cnt1)/sizeof(cnt1[0]);
+    size = UPRV_LENGTHOF(cnt1);
     for(i = 0; i < size-1; i++) {
       for(j = i+1; j < size; j++) {
         UCollationElements *iter;
@@ -120,7 +117,7 @@ static void IncompleteCntTest(void)
   coll = ucol_openRules(temp, u_strlen(temp), UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
 
   if(U_SUCCESS(status)) {
-    size = sizeof(cnt2)/sizeof(cnt2[0]);
+    size = UPRV_LENGTHOF(cnt2);
     for(i = 0; i < size-1; i++) {
       for(j = i+1; j < size; j++) {
         UCollationElements *iter;
@@ -194,7 +191,7 @@ static void BlackBirdTest(void) {
   ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
 
   if(U_SUCCESS(status)) {
-    size = sizeof(nonignorable)/sizeof(nonignorable[0]);
+    size = UPRV_LENGTHOF(nonignorable);
     for(i = 0; i < size-1; i++) {
       for(j = i+1; j < size; j++) {
         u_uastrcpy(t1, nonignorable[i]);
@@ -208,7 +205,7 @@ static void BlackBirdTest(void) {
   ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
 
   if(U_SUCCESS(status)) {
-    size = sizeof(shifted)/sizeof(shifted[0]);
+    size = UPRV_LENGTHOF(shifted);
     for(i = 0; i < size-1; i++) {
       for(j = i+1; j < size; j++) {
         u_uastrcpy(t1, shifted[i]);
@@ -220,7 +217,7 @@ static void BlackBirdTest(void) {
 
   ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &status);
   if(U_SUCCESS(status)) {
-    size = sizeof(shifted)/sizeof(shifted[0]);
+    size = UPRV_LENGTHOF(shifted);
     for(i = 1; i < size; i++) {
       u_uastrcpy(t1, shifted[i-1]);
       u_uastrcpy(t2, shifted[i]);
@@ -354,19 +351,19 @@ static void PrintMarkDavis(void)
   }
   fprintf(stderr, "\n");
 
-  for(h = 0; h<sizeof(caseFirst)/sizeof(caseFirst[0]); h++) {
+  for(h = 0; h<UPRV_LENGTHOF(caseFirst); h++) {
     ucol_setAttribute(coll, UCOL_CASE_FIRST, caseFirst[i], &status);
     fprintf(stderr, "caseFirst: %s\n", caseFirstC[h]);
 
-    for(i = 0; i<sizeof(alternateHandling)/sizeof(alternateHandling[0]); i++) {
+    for(i = 0; i<UPRV_LENGTHOF(alternateHandling); i++) {
       ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, alternateHandling[i], &status);
       fprintf(stderr, "  AltHandling: %s\n", alternateHandlingC[i]);
 
-      for(j = 0; j<sizeof(caseLevel)/sizeof(caseLevel[0]); j++) {
+      for(j = 0; j<UPRV_LENGTHOF(caseLevel); j++) {
         ucol_setAttribute(coll, UCOL_CASE_LEVEL, caseLevel[j], &status);
         fprintf(stderr, "    caseLevel: %s\n", caseLevelC[j]);
 
-        for(k = 0; k<sizeof(strengths)/sizeof(strengths[0]); k++) {
+        for(k = 0; k<UPRV_LENGTHOF(strengths); k++) {
           ucol_setAttribute(coll, UCOL_STRENGTH, strengths[k], &status);
           sortkeysize = ucol_getSortKey(coll, m, sizem, sortkey, 256);
           fprintf(stderr, "      strength: %s\n      Sortkey: ", strengthsC[k]);
@@ -443,7 +440,7 @@ static void TestChMove(void) {
     UCollator *coll = ucol_open("cs", &status);
 
     if(U_SUCCESS(status)) {
-        size = sizeof(chTest)/sizeof(chTest[0]);
+        size = UPRV_LENGTHOF(chTest);
         for(i = 0; i < size-1; i++) {
             for(j = i+1; j < size; j++) {
                 u_unescape(chTest[i], t1, 256);
@@ -492,7 +489,7 @@ static void TestImplicitTailoring(void) {
 
   int32_t i = 0;
 
-  for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+  for(i = 0; i < UPRV_LENGTHOF(tests); i++) {
       genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
   }
 
@@ -512,7 +509,7 @@ static void TestImplicitTailoring(void) {
   coll = ucol_openRules(t1, ruleLen, UCOL_OFF, UCOL_TERTIARY,NULL, &status);
 
   if(U_SUCCESS(status)) {
-    size = sizeof(impTest)/sizeof(impTest[0]);
+    size = UPRV_LENGTHOF(impTest);
     for(i = 0; i < size-1; i++) {
       for(j = i+1; j < size; j++) {
         u_unescape(impTest[i], t1, 256);
@@ -775,7 +772,7 @@ static void TestBefore(void) {
     "&[before 1]o<\\u014d<\\u00f3<\\u01d2<\\u00f2"
     "&[before 1]u<\\u016b<\\u00fa<\\u01d4<\\u00f9"
     "&u<\\u01d6<\\u01d8<\\u01da<\\u01dc<\\u00fc",
-    data, sizeof(data)/sizeof(data[0]));
+    data, UPRV_LENGTHOF(data));
 }
 
 #if 0
@@ -790,7 +787,7 @@ static void TestJ784(void) {
       "\\u00fc",
            "\\u01d6", "\\u01d8", "\\u01da", "\\u01dc"
   };
-  genericLocaleStarter("zh", data, sizeof(data)/sizeof(data[0]));
+  genericLocaleStarter("zh", data, UPRV_LENGTHOF(data));
 }
 #endif
 
@@ -803,7 +800,7 @@ static void TestJ831(void) {
       "Y",
       "y"
   };
-  genericLocaleStarter("lv", data, sizeof(data)/sizeof(data[0]));
+  genericLocaleStarter("lv", data, UPRV_LENGTHOF(data));
 }
 #endif
 
@@ -824,8 +821,8 @@ static void TestJ815(void) {
       "b",
       "B"
   };
-  genericLocaleStarter("fr", data, sizeof(data)/sizeof(data[0]));
-  genericRulesStarter("[backwards 2]&A<<\\u00e6/e<<<\\u00c6/E", data, sizeof(data)/sizeof(data[0]));
+  genericLocaleStarter("fr", data, UPRV_LENGTHOF(data));
+  genericRulesStarter("[backwards 2]&A<<\\u00e6/e<<<\\u00c6/E", data, UPRV_LENGTHOF(data));
 }
 
 
@@ -942,13 +939,13 @@ static void TestCase(void)
       };
       log_verbose("mixed case test\n");
       log_verbose("lower first, case level off\n");
-      genericRulesStarter("[caseFirst lower]&H<ch<<<Ch<<<CH", lowerFirst, sizeof(lowerFirst)/sizeof(lowerFirst[0]));
+      genericRulesStarter("[caseFirst lower]&H<ch<<<Ch<<<CH", lowerFirst, UPRV_LENGTHOF(lowerFirst));
       log_verbose("upper first, case level off\n");
-      genericRulesStarter("[caseFirst upper]&H<ch<<<Ch<<<CH", upperFirst, sizeof(upperFirst)/sizeof(upperFirst[0]));
+      genericRulesStarter("[caseFirst upper]&H<ch<<<Ch<<<CH", upperFirst, UPRV_LENGTHOF(upperFirst));
       log_verbose("lower first, case level on\n");
-      genericRulesStarter("[caseFirst lower][caseLevel on]&H<ch<<<Ch<<<CH", lowerFirst, sizeof(lowerFirst)/sizeof(lowerFirst[0]));
+      genericRulesStarter("[caseFirst lower][caseLevel on]&H<ch<<<Ch<<<CH", lowerFirst, UPRV_LENGTHOF(lowerFirst));
       log_verbose("upper first, case level on\n");
-      genericRulesStarter("[caseFirst upper][caseLevel on]&H<ch<<<Ch<<<CH", upperFirst, sizeof(upperFirst)/sizeof(upperFirst[0]));
+      genericRulesStarter("[caseFirst upper][caseLevel on]&H<ch<<<Ch<<<CH", upperFirst, UPRV_LENGTHOF(upperFirst));
     }
 
 }
@@ -1206,7 +1203,7 @@ static void TestGetCaseBit(void) {
   UCollator *UCA = ucol_open("", &status);
   uint8_t res = 0;
 
-  for(i = 0; i<sizeof(results)/sizeof(results[0]); i++) {
+  for(i = 0; i<UPRV_LENGTHOF(results); i++) {
     blen = u_unescape(caseBitData[i], b, 256);
     res = ucol_uprv_getCaseBits(UCA, b, blen, &status);
     if(results[i] != res) {
@@ -1251,7 +1248,7 @@ static void TestHangulTailoring(void) {
   log_verbose("Using start of korean rules\n");
 
   if(U_SUCCESS(status)) {
-    genericOrderingTest(coll, koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
+    genericOrderingTest(coll, koreanData, UPRV_LENGTHOF(koreanData));
   } else {
     log_err("Unable to open collator with rules %s\n", rules);
   }
@@ -1259,7 +1256,7 @@ static void TestHangulTailoring(void) {
   ucol_close(coll);
 
   log_verbose("Using ko__LOTUS locale\n");
-  genericLocaleStarter("ko__LOTUS", koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
+  genericLocaleStarter("ko__LOTUS", koreanData, UPRV_LENGTHOF(koreanData));
 }
 
 /*
@@ -1303,7 +1300,7 @@ static void TestCompressOverlap(void) {
     have 150 tertiary bytes.
     with correct compression, secstr should have 6 secondary
     bytes (149/33 rounded up + accent), tertstr should have > 2 tertiary bytes */
-    resultlen = ucol_getSortKey(coll, secstr, 150, result, LEN(result));
+    resultlen = ucol_getSortKey(coll, secstr, 150, result, UPRV_LENGTHOF(result));
     (void)resultlen;    /* Suppress set but not used warning. */
     tempptr = (uint8_t *)uprv_strchr((char *)result, 1) + 1;
     while (*(tempptr + 1) != 1) {
@@ -1317,7 +1314,7 @@ static void TestCompressOverlap(void) {
 
     /* tertiary top/bottom/common for en_US is similar to the secondary
     top/bottom/common */
-    resultlen = ucol_getSortKey(coll, tertstr, 150, result, LEN(result));
+    resultlen = ucol_getSortKey(coll, tertstr, 150, result, UPRV_LENGTHOF(result));
     tempptr = (uint8_t *)uprv_strrchr((char *)result, 1) + 1;
     while (*(tempptr + 1) != 0) {
         /* the last secondary collation element is not checked since it is not
@@ -1331,7 +1328,7 @@ static void TestCompressOverlap(void) {
     /* bottom up compression ------------------------------------- */
     secstr[count] = 0;
     tertstr[count] = 0;
-    resultlen = ucol_getSortKey(coll, secstr, 150, result, LEN(result));
+    resultlen = ucol_getSortKey(coll, secstr, 150, result, UPRV_LENGTHOF(result));
     tempptr = (uint8_t *)uprv_strchr((char *)result, 1) + 1;
     while (*(tempptr + 1) != 1) {
         /* the last secondary collation element is not checked since it is not
@@ -1344,7 +1341,7 @@ static void TestCompressOverlap(void) {
 
     /* tertiary top/bottom/common for en_US is similar to the secondary
     top/bottom/common */
-    resultlen = ucol_getSortKey(coll, tertstr, 150, result, LEN(result));
+    resultlen = ucol_getSortKey(coll, tertstr, 150, result, UPRV_LENGTHOF(result));
     tempptr = (uint8_t *)uprv_strrchr((char *)result, 1) + 1;
     while (*(tempptr + 1) != 0) {
         /* the last secondary collation element is not checked since it is not
@@ -1439,7 +1436,7 @@ static void TestContraction(void) {
     uint32_t    rlen     = 0;
     int         i;
 
-    for (i = 0; i < sizeof(testrules) / sizeof(testrules[0]); i ++) {
+    for (i = 0; i < UPRV_LENGTHOF(testrules); i ++) {
         UCollationElements *iter1;
         int j = 0;
         log_verbose("Rule %s for testing\n", testrules[i]);
@@ -1498,7 +1495,7 @@ static void TestContraction(void) {
     }
     ucol_close(coll);
 #if 0  /* see above */
-    for (i = 0; i < sizeof(testrules3) / sizeof(testrules3[0]); i += 2) {
+    for (i = 0; i < UPRV_LENGTHOF(testrules3); i += 2) {
         log_verbose("testrules3 i==%d  \"%s\" vs. \"%s\"\n", i, testrules3[i], testrules3[i + 1]);
         UCollator          *coll1,
                            *coll2;
@@ -1582,7 +1579,7 @@ static void TestExpansion(void) {
     uint32_t    rlen     = 0;
     int         i;
 
-    for (i = 0; i < sizeof(testrules) / sizeof(testrules[0]); i ++) {
+    for (i = 0; i < UPRV_LENGTHOF(testrules); i ++) {
         int j = 0;
         log_verbose("Rule %s for testing\n", testrules[i]);
         rlen = u_unescape(testrules[i], rule, 32);
@@ -1609,8 +1606,8 @@ static void TestLimitations(void) {
     static const char *tlimit01[] = {"add","b","adf"};
     static const char *tlimit02[] = {"aa","b","af"};
     log_verbose("recursive expansions\n");
-    genericRulesStarter(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]));
-    genericRulesStarter(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]));
+    genericRulesStarter(rule, tlimit01, UPRV_LENGTHOF(tlimit01));
+    genericRulesStarter(rule, tlimit02, UPRV_LENGTHOF(tlimit02));
   }
   /* contractions spanning expansions */
   {
@@ -1618,8 +1615,8 @@ static void TestLimitations(void) {
     static const char *tlimit01[] = {"ad","c","af","f","ch","h"};
     static const char *tlimit02[] = {"ad","c","ch","af","f","h"};
     log_verbose("contractions spanning expansions\n");
-    genericRulesStarter(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]));
-    genericRulesStarter(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]));
+    genericRulesStarter(rule, tlimit01, UPRV_LENGTHOF(tlimit01));
+    genericRulesStarter(rule, tlimit02, UPRV_LENGTHOF(tlimit02));
   }
   /* normalization: nulls in contractions */
   {
@@ -1666,11 +1663,11 @@ static void TestLimitations(void) {
     static const UColAttributeValue valOff[] = { UCOL_NON_IGNORABLE, UCOL_TERTIARY };
 
     log_verbose("variable top\n");
-    genericRulesStarterWithOptions(rule, tlimit03, sizeof(tlimit03)/sizeof(tlimit03[0]), att, valOn, sizeof(att)/sizeof(att[0]));
-    genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOn, sizeof(att)/sizeof(att[0]));
-    genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOn, sizeof(att)/sizeof(att[0]));
-    genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOff, sizeof(att)/sizeof(att[0]));
-    genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOff, sizeof(att)/sizeof(att[0]));
+    genericRulesStarterWithOptions(rule, tlimit03, UPRV_LENGTHOF(tlimit03), att, valOn, UPRV_LENGTHOF(att));
+    genericRulesStarterWithOptions(rule, tlimit01, UPRV_LENGTHOF(tlimit01), att, valOn, UPRV_LENGTHOF(att));
+    genericRulesStarterWithOptions(rule, tlimit02, UPRV_LENGTHOF(tlimit02), att, valOn, UPRV_LENGTHOF(att));
+    genericRulesStarterWithOptions(rule, tlimit01, UPRV_LENGTHOF(tlimit01), att, valOff, UPRV_LENGTHOF(att));
+    genericRulesStarterWithOptions(rule, tlimit02, UPRV_LENGTHOF(tlimit02), att, valOff, UPRV_LENGTHOF(att));
 
   }
   /* case level */
@@ -1682,10 +1679,10 @@ static void TestLimitations(void) {
     static const UColAttributeValue valOn[] = { UCOL_UPPER_FIRST};
     /*static const UColAttributeValue valOff[] = { UCOL_OFF};*/
     log_verbose("case level\n");
-    genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOn, sizeof(att)/sizeof(att[0]));
-    genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOn, sizeof(att)/sizeof(att[0]));
-    /*genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOff, sizeof(att)/sizeof(att[0]));*/
-    /*genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOff, sizeof(att)/sizeof(att[0]));*/
+    genericRulesStarterWithOptions(rule, tlimit01, UPRV_LENGTHOF(tlimit01), att, valOn, UPRV_LENGTHOF(att));
+    genericRulesStarterWithOptions(rule, tlimit02, UPRV_LENGTHOF(tlimit02), att, valOn, UPRV_LENGTHOF(att));
+    /*genericRulesStarterWithOptions(rule, tlimit01, UPRV_LENGTHOF(tlimit01), att, valOff, UPRV_LENGTHOF(att));*/
+    /*genericRulesStarterWithOptions(rule, tlimit02, UPRV_LENGTHOF(tlimit02), att, valOff, UPRV_LENGTHOF(att));*/
   }
 
 }
@@ -2046,7 +2043,7 @@ static void TestPrefix(void) {
   };
 
 
-  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+  for(i = 0; i<UPRV_LENGTHOF(tests); i++) {
     genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
   }
 }
@@ -2206,11 +2203,11 @@ static void TestNewJapanese(void) {
   static const UColAttribute attShifted[] = { UCOL_STRENGTH, UCOL_ALTERNATE_HANDLING};
   static const UColAttributeValue valShifted[] = { UCOL_QUATERNARY, UCOL_SHIFTED };
 
-  genericLocaleStarterWithOptions("ja", test1, sizeof(test1)/sizeof(test1[0]), att, val, 1);
-  genericLocaleStarterWithOptions("ja", test2, sizeof(test2)/sizeof(test2[0]), att, val, 1);
-  /*genericLocaleStarter("ja", test3, sizeof(test3)/sizeof(test3[0]));*/
-  genericLocaleStarterWithOptions("ja", test1, sizeof(test1)/sizeof(test1[0]), attShifted, valShifted, 2);
-  genericLocaleStarterWithOptions("ja", test2, sizeof(test2)/sizeof(test2[0]), attShifted, valShifted, 2);
+  genericLocaleStarterWithOptions("ja", test1, UPRV_LENGTHOF(test1), att, val, 1);
+  genericLocaleStarterWithOptions("ja", test2, UPRV_LENGTHOF(test2), att, val, 1);
+  /*genericLocaleStarter("ja", test3, UPRV_LENGTHOF(test3));*/
+  genericLocaleStarterWithOptions("ja", test1, UPRV_LENGTHOF(test1), attShifted, valShifted, 2);
+  genericLocaleStarterWithOptions("ja", test2, UPRV_LENGTHOF(test2), attShifted, valShifted, 2);
 }
 
 static void TestStrCollIdenticalPrefix(void) {
@@ -2219,7 +2216,7 @@ static void TestStrCollIdenticalPrefix(void) {
     "ab\\ud9b0\\udc70",
     "ab\\ud9b0\\udc71"
   };
-  genericRulesStarterWithResult(rule, test, sizeof(test)/sizeof(test[0]), UCOL_EQUAL);
+  genericRulesStarterWithResult(rule, test, UPRV_LENGTHOF(test), UCOL_EQUAL);
 }
 /* Contractions should have all their canonically equivalent */
 /* strings included */
@@ -2237,7 +2234,7 @@ static void TestContractionClosure(void) {
   uint32_t i;
 
 
-  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+  for(i = 0; i<UPRV_LENGTHOF(tests); i++) {
     genericRulesStarterWithResult(tests[i].rules, tests[i].data, tests[i].len, UCOL_EQUAL);
   }
 }
@@ -2264,7 +2261,7 @@ static void TestBeforePrefixFailure(void) {
   uint32_t i;
 
 
-  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+  for(i = 0; i<UPRV_LENGTHOF(tests); i++) {
     genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
   }
 
@@ -2281,8 +2278,8 @@ static void TestBeforePrefixFailure(void) {
       "\\u30c6\\u30fc\\u30bf",
       "\\u30c6\\u30a7\\u30bf",
   };
-  genericRulesStarter(rule1, test, sizeof(test)/sizeof(test[0]));
-  genericRulesStarter(rule2, test, sizeof(test)/sizeof(test[0]));
+  genericRulesStarter(rule1, test, UPRV_LENGTHOF(test));
+  genericRulesStarter(rule2, test, UPRV_LENGTHOF(test));
 /* this piece of code should be in some sort of verbose mode     */
 /* it gets the collation elements for elements and prints them   */
 /* This is useful when trying to see whether the problem is      */
@@ -2302,7 +2299,7 @@ static void TestBeforePrefixFailure(void) {
     /*coll = ucol_open("ja_JP_JIS", &status);*/
     it = ucol_openElements(coll, string, 0, &status);
 
-    for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
+    for(i = 0; i < UPRV_LENGTHOF(test); i++) {
       log_verbose("%s\n", test[i]);
       uStringLen = u_unescape(test[i], string, 256);
       ucol_setText(it, string, uStringLen, &status);
@@ -2477,7 +2474,7 @@ static void TestRuleOptions(void) {
   };
   uint32_t i;
 
-  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+  for(i = 0; i<UPRV_LENGTHOF(tests); i++) {
     genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
   }
 }
@@ -2500,7 +2497,7 @@ static void TestOptimize(void) {
   };
   uint32_t i;
 
-  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+  for(i = 0; i<UPRV_LENGTHOF(tests); i++) {
     genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
   }
 }
@@ -2622,7 +2619,7 @@ static void Alexis2(void) {
   }
   ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
   conv = ucnv_open("UTF16BE", &status);
-  for(i = 0; i < sizeof(pairs)/sizeof(pairs[0]); i++) {
+  for(i = 0; i < UPRV_LENGTHOF(pairs); i++) {
     U16LenS = u_unescape(pairs[i][0], U16Source, CMSCOLL_ALEXIS2_BUFFER_SIZE);
     U16LenT = u_unescape(pairs[i][1], U16Target, CMSCOLL_ALEXIS2_BUFFER_SIZE);
 
@@ -2687,7 +2684,7 @@ static void TestHebrewUCA(void) {
   }
   /*ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);*/
 
-  for(i = 0; i < sizeof(first)/sizeof(first[0]); i++) {
+  for(i = 0; i < UPRV_LENGTHOF(first); i++) {
     sizeUTF8[i] = u_parseUTF8(first[i], -1, utf8String[i], 256, &status);
     u_strFromUTF8(utf16String[i], 256, &sizeUTF16[i], utf8String[i], sizeUTF8[i], &status);
     log_verbose("%i: ");
@@ -2697,8 +2694,8 @@ static void TestHebrewUCA(void) {
     }
     log_verbose("\n");
   }
-  for(i = 0; i < sizeof(first)/sizeof(first[0])-1; i++) {
-    for(j = i + 1; j < sizeof(first)/sizeof(first[0]); j++) {
+  for(i = 0; i < UPRV_LENGTHOF(first)-1; i++) {
+    for(j = i + 1; j < UPRV_LENGTHOF(first); j++) {
       doTest(coll, utf16String[i], utf16String[j], UCOL_LESS);
     }
   }
@@ -2727,7 +2724,7 @@ static void TestPartialSortKeyTermination(void) {
 
   uint8_t key[256];
 
-  for(i = 0; i < sizeof(cases)/sizeof(cases[0]); i++) {
+  for(i = 0; i < UPRV_LENGTHOF(cases); i++) {
     uint32_t state[2] = {0, 0};
     length = u_unescape(cases[i], currCase, 256);
     uiter_setString(&iter, currCase, length);
@@ -2759,11 +2756,11 @@ static void TestSettings(void) {
   int32_t sLen = 0, tLen = 0;
 
   UCollator *collateObject = NULL;
-  for(i = 0; i < sizeof(locales)/sizeof(locales[0]); i++) {
+  for(i = 0; i < UPRV_LENGTHOF(locales); i++) {
     collateObject = ucol_open(locales[i], &status);
     ucol_setStrength(collateObject, UCOL_PRIMARY);
     ucol_setAttribute(collateObject, UCOL_CASE_LEVEL , UCOL_OFF, &status);
-    for(j = 1; j < sizeof(cases)/sizeof(cases[0]); j++) {
+    for(j = 1; j < UPRV_LENGTHOF(cases); j++) {
       sLen = u_unescape(cases[j-1], source, 256);
       source[sLen] = 0;
       tLen = u_unescape(cases[j], target, 256);
@@ -2862,7 +2859,7 @@ static void TestEquals(void) {
 
     UChar sourceRules[1024], targetRules[1024];
     int32_t sourceRulesSize = 0, targetRulesSize = 0;
-    int32_t rulesSize = sizeof(rules)/sizeof(rules[0]);
+    int32_t rulesSize = UPRV_LENGTHOF(rules);
 
     for(i = 0; i < rulesSize; i++) {
         sourceRulesSize += u_unescape(rules[i], sourceRules+sourceRulesSize, 1024 - sourceRulesSize);
@@ -3049,12 +3046,12 @@ static void TestNumericCollation(void)
               myErrorName(status));
         return;
     }
-    genericLocaleStarterWithOptions("root", basicTestStrings, sizeof(basicTestStrings)/sizeof(basicTestStrings[0]), &att, &val, 1);
-    genericLocaleStarterWithOptions("root", thirtyTwoBitNumericStrings, sizeof(thirtyTwoBitNumericStrings)/sizeof(thirtyTwoBitNumericStrings[0]), &att, &val, 1);
-    genericLocaleStarterWithOptions("root", longNumericStrings, sizeof(longNumericStrings)/sizeof(longNumericStrings[0]), &att, &val, 1);
-    genericLocaleStarterWithOptions("en_US", foreignDigits, sizeof(foreignDigits)/sizeof(foreignDigits[0]), &att, &val, 1);
-    genericLocaleStarterWithOptions("root", supplementaryDigits, sizeof(supplementaryDigits)/sizeof(supplementaryDigits[0]), &att, &val, 1);
-    genericLocaleStarterWithOptions("root", evenZeroes, sizeof(evenZeroes)/sizeof(evenZeroes[0]), &att, &val, 1);
+    genericLocaleStarterWithOptions("root", basicTestStrings, UPRV_LENGTHOF(basicTestStrings), &att, &val, 1);
+    genericLocaleStarterWithOptions("root", thirtyTwoBitNumericStrings, UPRV_LENGTHOF(thirtyTwoBitNumericStrings), &att, &val, 1);
+    genericLocaleStarterWithOptions("root", longNumericStrings, UPRV_LENGTHOF(longNumericStrings), &att, &val, 1);
+    genericLocaleStarterWithOptions("en_US", foreignDigits, UPRV_LENGTHOF(foreignDigits), &att, &val, 1);
+    genericLocaleStarterWithOptions("root", supplementaryDigits, UPRV_LENGTHOF(supplementaryDigits), &att, &val, 1);
+    genericLocaleStarterWithOptions("root", evenZeroes, UPRV_LENGTHOF(evenZeroes), &att, &val, 1);
 
     /* Setting up our collator to do digits. */
     ucol_setAttribute(coll, UCOL_NUMERIC_COLLATION, UCOL_ON, &status);
@@ -3068,7 +3065,7 @@ static void TestNumericCollation(void)
        Testing that prepended zeroes still yield the correct collation behavior.
        We expect that every element in our strings array will be equal.
     */
-    genericOrderingTestWithResult(coll, preZeroTestStrings, sizeof(preZeroTestStrings)/sizeof(preZeroTestStrings[0]), UCOL_EQUAL);
+    genericOrderingTestWithResult(coll, preZeroTestStrings, UPRV_LENGTHOF(preZeroTestStrings), UCOL_EQUAL);
 
     ucol_close(coll);
 }
@@ -3103,7 +3100,7 @@ static void TestTibetanConformance(void)
 
 static void TestPinyinProblem(void) {
     static const char *test[] = { "\\u4E56\\u4E56\\u7761", "\\u4E56\\u5B69\\u5B50" };
-    genericLocaleStarter("zh__PINYIN", test, sizeof(test)/sizeof(test[0]));
+    genericLocaleStarter("zh__PINYIN", test, UPRV_LENGTHOF(test));
 }
 
 /**
@@ -3172,7 +3169,7 @@ static void TestSeparateTrees(void) {
     if (e != NULL) {
         assertSuccess("ucol_openAvailableLocales", &ec);
         assertTrue("ucol_openAvailableLocales!=0", e!=0);
-        n = checkUEnumeration("ucol_openAvailableLocales", e, AVAIL, LEN(AVAIL));
+        n = checkUEnumeration("ucol_openAvailableLocales", e, AVAIL, UPRV_LENGTHOF(AVAIL));
         (void)n;    /* Suppress set but not used warnings. */
         /* Don't need to check n because we check list */
         uenum_close(e);
@@ -3185,7 +3182,7 @@ static void TestSeparateTrees(void) {
     if (e != NULL) {
         assertSuccess("ucol_getKeywords", &ec);
         assertTrue("ucol_getKeywords!=0", e!=0);
-        n = checkUEnumeration("ucol_getKeywords", e, KW, LEN(KW));
+        n = checkUEnumeration("ucol_getKeywords", e, KW, UPRV_LENGTHOF(KW));
         /* Don't need to check n because we check list */
         uenum_close(e);
     } else {
@@ -3196,7 +3193,7 @@ static void TestSeparateTrees(void) {
     if (e != NULL) {
         assertSuccess("ucol_getKeywordValues", &ec);
         assertTrue("ucol_getKeywordValues!=0", e!=0);
-        n = checkUEnumeration("ucol_getKeywordValues", e, KWVAL, LEN(KWVAL));
+        n = checkUEnumeration("ucol_getKeywordValues", e, KWVAL, UPRV_LENGTHOF(KWVAL));
         /* Don't need to check n because we check list */
         uenum_close(e);
     } else {
@@ -3208,7 +3205,7 @@ static void TestSeparateTrees(void) {
     e = ucol_getKeywordValues(KW[0], &ec);
     if (assertSuccess("ucol_getKeywordValues [with warning code set]", &ec)) {
         assertTrue("ucol_getKeywordValues!=0 [with warning code set]", e!=0);
-        n = checkUEnumeration("ucol_getKeywordValues [with warning code set]", e, KWVAL, LEN(KWVAL));
+        n = checkUEnumeration("ucol_getKeywordValues [with warning code set]", e, KWVAL, UPRV_LENGTHOF(KWVAL));
         /* Don't need to check n because we check list */
         uenum_close(e);
     }
@@ -3292,10 +3289,10 @@ static void TestBeforePinyin(void) {
         "xAx"
     };
 
-    genericRulesStarter(rules, test, sizeof(test)/sizeof(test[0]));
-    genericLocaleStarter("zh", test, sizeof(test)/sizeof(test[0]));
-    genericRulesStarter(rules, test2, sizeof(test2)/sizeof(test2[0]));
-    genericLocaleStarter("zh", test2, sizeof(test2)/sizeof(test2[0]));
+    genericRulesStarter(rules, test, UPRV_LENGTHOF(test));
+    genericLocaleStarter("zh", test, UPRV_LENGTHOF(test));
+    genericRulesStarter(rules, test2, UPRV_LENGTHOF(test2));
+    genericLocaleStarter("zh", test2, UPRV_LENGTHOF(test2));
 }
 
 static void TestBeforeTightening(void) {
@@ -3327,7 +3324,7 @@ static void TestBeforeTightening(void) {
     UCollator *coll = NULL;
 
 
-    for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+    for(i = 0; i < UPRV_LENGTHOF(tests); i++) {
         rlen = u_unescape(tests[i].rules, rlz, RULE_BUFFER_LEN);
         coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
         if(status != tests[i].expectedStatus) {
@@ -3443,7 +3440,7 @@ static void TestMoreBefore(void) {
 
     int32_t i = 0;
 
-    for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+    for(i = 0; i < UPRV_LENGTHOF(tests); i++) {
         genericRulesStarter(tests[i].rules, tests[i].order, tests[i].size);
     }
 }
@@ -3482,7 +3479,7 @@ TestUpperFirstQuaternary(void)
   const char* tests[] = { "B", "b", "Bb", "bB" };
   UColAttribute att[] = { UCOL_STRENGTH, UCOL_CASE_FIRST };
   UColAttributeValue attVals[] = { UCOL_QUATERNARY, UCOL_UPPER_FIRST };
-  genericLocaleStarterWithOptions("root", tests, sizeof(tests)/sizeof(tests[0]), att, attVals, sizeof(att)/sizeof(att[0]));
+  genericLocaleStarterWithOptions("root", tests, UPRV_LENGTHOF(tests), att, attVals, UPRV_LENGTHOF(att));
 }
 
 static void
@@ -3497,12 +3494,12 @@ TestJ4960(void)
   UColAttributeValue attVals2[] = { UCOL_ON };
   /* Test whether we correctly ignore primary ignorables on case level when */
   /* we have only primary & case level */
-  genericLocaleStarterWithOptionsAndResult("root", tests, sizeof(tests)/sizeof(tests[0]), att, attVals, sizeof(att)/sizeof(att[0]), UCOL_EQUAL);
+  genericLocaleStarterWithOptionsAndResult("root", tests, UPRV_LENGTHOF(tests), att, attVals, UPRV_LENGTHOF(att), UCOL_EQUAL);
   /* Test whether ICU4J will make case level for sortkeys that have primary strength */
   /* and case level */
-  genericLocaleStarterWithOptions("root", tests2, sizeof(tests2)/sizeof(tests2[0]), att, attVals, sizeof(att)/sizeof(att[0]));
+  genericLocaleStarterWithOptions("root", tests2, UPRV_LENGTHOF(tests2), att, attVals, UPRV_LENGTHOF(att));
   /* Test whether completely ignorable letters have case level info (they shouldn't) */
-  genericRulesStarterWithOptionsAndResult(rule, tests2, sizeof(tests2)/sizeof(tests2[0]), att2, attVals2, sizeof(att2)/sizeof(att2[0]), UCOL_EQUAL);
+  genericRulesStarterWithOptionsAndResult(rule, tests2, UPRV_LENGTHOF(tests2), att2, attVals2, UPRV_LENGTHOF(att2), UCOL_EQUAL);
 }
 
 static void
@@ -3566,7 +3563,7 @@ TestJ5232(void)
         "\\u0e40\\u0e01\\u0e47\\u0e1a\\u0e40\\u0e25\\u0e48\\u0e21"
     };
 
-    genericLocaleStarter("th", test, sizeof(test)/sizeof(test[0]));
+    genericLocaleStarter("th", test, UPRV_LENGTHOF(test));
 }
 
 static void
@@ -3574,7 +3571,7 @@ TestJ5367(void)
 {
     const static char *test[] = { "a", "y" };
     const char* rules = "&Ny << Y &[first secondary ignorable] <<< a";
-    genericRulesStarter(rules, test, sizeof(test)/sizeof(test[0]));
+    genericRulesStarter(rules, test, UPRV_LENGTHOF(test));
 }
 
 static void
@@ -3819,7 +3816,7 @@ TestTailor6179(void)
     }
     tLen = u_strlen(tData1[0]);
     rLen = ucol_getSortKey(coll, tData1[0], tLen, resColl, 100);
-    if (rLen != LEN(lastPrimaryIgnCE) || uprv_memcmp(resColl, lastPrimaryIgnCE, rLen) != 0) {
+    if (rLen != UPRV_LENGTHOF(lastPrimaryIgnCE) || uprv_memcmp(resColl, lastPrimaryIgnCE, rLen) != 0) {
         log_err("Bad result for &[lpi]<<a...: Data[%d] :%s  \tlen: %d key: ", 0, tData1[0], rLen);
         for(i = 0; i<rLen; i++) {
             log_err(" %02X", resColl[i]);
@@ -3828,7 +3825,7 @@ TestTailor6179(void)
     }
     tLen = u_strlen(tData1[1]);
     rLen = ucol_getSortKey(coll, tData1[1], tLen, resColl, 100);
-    if (rLen != LEN(firstPrimaryIgnCE) || uprv_memcmp(resColl, firstPrimaryIgnCE, rLen) != 0) {
+    if (rLen != UPRV_LENGTHOF(firstPrimaryIgnCE) || uprv_memcmp(resColl, firstPrimaryIgnCE, rLen) != 0) {
         log_err("Bad result for &[lpi]<<a...: Data[%d] :%s  \tlen: %d key: ", 1, tData1[1], rLen);
         for(i = 0; i<rLen; i++) {
             log_err(" %02X", resColl[i]);
@@ -3850,7 +3847,7 @@ TestTailor6179(void)
     }
     tLen = u_strlen(tData2[0]);
     rLen = ucol_getSortKey(coll, tData2[0], tLen, resColl, 100);
-    if (rLen != LEN(lastSecondaryIgnCE) || uprv_memcmp(resColl, lastSecondaryIgnCE, rLen) != 0) {
+    if (rLen != UPRV_LENGTHOF(lastSecondaryIgnCE) || uprv_memcmp(resColl, lastSecondaryIgnCE, rLen) != 0) {
         log_err("Bad result for &[lsi]<<<a...: Data[%d] :%s  \tlen: %d key: ", 0, tData2[0], rLen);
         for(i = 0; i<rLen; i++) {
             log_err(" %02X", resColl[i]);
@@ -3859,7 +3856,7 @@ TestTailor6179(void)
     }
     tLen = u_strlen(tData2[1]);
     rLen = ucol_getSortKey(coll, tData2[1], tLen, resColl, 100);
-    if (rLen != LEN(firstSecondaryIgnCE) || uprv_memcmp(resColl, firstSecondaryIgnCE, rLen) != 0) {
+    if (rLen != UPRV_LENGTHOF(firstSecondaryIgnCE) || uprv_memcmp(resColl, firstSecondaryIgnCE, rLen) != 0) {
       log_err("Bad result for &[lsi]<<<a...: Data[%d] :%s  \tlen: %d key: ", 1, tData2[1], rLen);
       for(i = 0; i<rLen; i++) {
         log_err(" %02X", resColl[i]);
@@ -4093,7 +4090,7 @@ static void TestCroatianSortKey(void) {
 
     static const UChar text[] = { 0x0044, 0xD81A };
 
-    size_t length = sizeof(text)/sizeof(*text);
+    size_t length = UPRV_LENGTHOF(text);
 
     uint8_t textSortKey[32];
     size_t lenSortKey = 32;
@@ -4131,8 +4128,8 @@ static void TestHiragana(void) {
     UCollationResult strcollresult;
     UChar data1[] = { 0x3058, 0x30B8 }; /* Hiragana and Katakana letter Zi */
     UChar data2[] = { 0x3057, 0x3099, 0x30B7, 0x3099 };
-    int32_t data1Len = sizeof(data1)/sizeof(*data1);
-    int32_t data2Len = sizeof(data2)/sizeof(*data2);
+    int32_t data1Len = UPRV_LENGTHOF(data1);
+    int32_t data2Len = UPRV_LENGTHOF(data2);
     int32_t i, j;
     uint8_t sortKey1[SORTKEYLEN];
     uint8_t sortKey2[SORTKEYLEN];
@@ -4277,7 +4274,7 @@ const static OneTestCase rangeTestcases[] = {
   { {0x0061, 0x007a, 0x0062},            {0x0032, 0x0079, 0x006d},          UCOL_LESS }, /* "azm" = "2yc" */
 };
 
-static int nRangeTestcases = LEN(rangeTestcases);
+static int nRangeTestcases = UPRV_LENGTHOF(rangeTestcases);
 
 const static OneTestCase rangeTestcasesSupplemental[] = {
   { {0x4e00},                            {0xfffb},                          UCOL_LESS }, /* U+4E00 < U+FFFB */
@@ -4289,7 +4286,7 @@ const static OneTestCase rangeTestcasesSupplemental[] = {
   { {0x4e00},                            {0xd800, 0xdc02},                  UCOL_LESS }, /* U+4E00 < U+10001 */
 };
 
-static int nRangeTestcasesSupplemental = LEN(rangeTestcasesSupplemental);
+static int nRangeTestcasesSupplemental = UPRV_LENGTHOF(rangeTestcasesSupplemental);
 
 const static OneTestCase rangeTestcasesQwerty[] = {
   { {0x0071},                            {0x0077},                          UCOL_LESS }, /* "q" < "w" */
@@ -4310,7 +4307,7 @@ const static OneTestCase rangeTestcasesQwerty[] = {
     {0x0071, 0x0075, 0x0065, 0x0073, 0x0074},                               UCOL_LESS }, /* "quack" < "quest" */
 };
 
-static int nRangeTestcasesQwerty = LEN(rangeTestcasesQwerty);
+static int nRangeTestcasesQwerty = UPRV_LENGTHOF(rangeTestcasesQwerty);
 
 static void TestSameStrengthList(void)
 {
@@ -4321,7 +4318,7 @@ static void TestSameStrengthList(void)
     /* Lists */
     "&a<*bcd &b<<*klm &k<<<*xyz &y<*fghe &a=*123", 
   };
-  doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, LEN(strRules));
+  doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestSameStrengthListQuoted(void)
@@ -4337,7 +4334,7 @@ static void TestSameStrengthListQuoted(void)
     "&\\u0061<*\\u0062c\\u0064 &b<<*klm &k<<<*xyz  &y<*fghe &a=*\\u0031\\u0032\\u0033", 
     "&'\\u0061'<*'\\u0062'c'\\u0064' &b<<*klm &k<<<*xyz  &y<*fghe &a=*'\\u0031\\u0032\\u0033'", 
   };
-  doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, LEN(strRules));
+  doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestSameStrengthListSupplemental(void)
@@ -4348,7 +4345,7 @@ static void TestSameStrengthListSupplemental(void)
     "&\\u4e00<*\\ufffb\\U00010000\\U00010001\\U00010002",
     "&\\u4e00<*\\ufffb\\ud800\\udc00\\ud800\\udc01\\ud800\\udc02",
   };
-  doTestOneTestCase(rangeTestcasesSupplemental, nRangeTestcasesSupplemental, strRules, LEN(strRules));
+  doTestOneTestCase(rangeTestcasesSupplemental, nRangeTestcasesSupplemental, strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestSameStrengthListQwerty(void)
@@ -4367,7 +4364,7 @@ static void TestSameStrengthListQwerty(void)
     /* "&\\u0071<*'\\u0077''\\u0065''\\u0072' &\\u0077<<*'\\u0074''\\u0079''\\u0075' &\\u0074<<<*'\\u0069''\\u006f''\\u0070' &'\\u006f'=*\\u0061\\u0073\\u0064",*/
 
  };
-  doTestOneTestCase(rangeTestcasesQwerty, nRangeTestcasesQwerty, strRules, LEN(strRules));
+  doTestOneTestCase(rangeTestcasesQwerty, nRangeTestcasesQwerty, strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestSameStrengthListQuotedQwerty(void)
@@ -4380,7 +4377,7 @@ static void TestSameStrengthListQuotedQwerty(void)
     /* Lists with continuous quotes may not work, because '' will be treated as a quote character. */
     /* "&q<*'w''e''r' &w<<*'t''y''u' &t<<<*'i''o''p' &o=*'a''s''d'", */
    };
-  doTestOneTestCase(rangeTestcasesQwerty, nRangeTestcasesQwerty, strRules, LEN(strRules));
+  doTestOneTestCase(rangeTestcasesQwerty, nRangeTestcasesQwerty, strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestSameStrengthListRanges(void)
@@ -4388,7 +4385,7 @@ static void TestSameStrengthListRanges(void)
   const char* strRules[] = {
     "&a<*b-d &b<<*k-m &k<<<*x-z &y<*f-he &a=*1-3",
   };
-  doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, LEN(strRules));
+  doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestSameStrengthListSupplementalRanges(void)
@@ -4397,7 +4394,7 @@ static void TestSameStrengthListSupplementalRanges(void)
     /* Note: U+FFFD..U+FFFF are not tailorable, so a range cannot include them. */
     "&\\u4e00<*\\ufffb\\U00010000-\\U00010002",
   };
-  doTestOneTestCase(rangeTestcasesSupplemental, nRangeTestcasesSupplemental, strRules, LEN(strRules));
+  doTestOneTestCase(rangeTestcasesSupplemental, nRangeTestcasesSupplemental, strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestSpecialCharacters(void)
@@ -4419,7 +4416,7 @@ static void TestSpecialCharacters(void)
     { {0x002c}, {0x002d}, UCOL_LESS },  /* , < - */
     { {0x002d}, {0x0026}, UCOL_LESS },  /* - < & */
   };
-  doTestOneTestCase(specialCharacterStrings, LEN(specialCharacterStrings), strRules, LEN(strRules));
+  doTestOneTestCase(specialCharacterStrings, UPRV_LENGTHOF(specialCharacterStrings), strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestPrivateUseCharacters(void)
@@ -4438,7 +4435,7 @@ static void TestPrivateUseCharacters(void)
     { {0xe2db}, {0xe2dc}, UCOL_LESS },
     { {0xe2dc}, {0x4e8d}, UCOL_LESS },
   };
-  doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+  doTestOneTestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestPrivateUseCharactersInList(void)
@@ -4458,7 +4455,7 @@ static void TestPrivateUseCharactersInList(void)
     { {0xe2db}, {0xe2dc}, UCOL_LESS },
     { {0xe2dc}, {0x4e8d}, UCOL_LESS },
   };
-  doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+  doTestOneTestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestPrivateUseCharactersInRange(void)
@@ -4478,7 +4475,7 @@ static void TestPrivateUseCharactersInRange(void)
     { {0xe2db}, {0xe2dc}, UCOL_LESS },
     { {0xe2dc}, {0x4e8d}, UCOL_LESS },
   };
-  doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+  doTestOneTestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestInvalidListsAndRanges(void)
@@ -4504,7 +4501,7 @@ static void TestInvalidListsAndRanges(void)
   UChar rule[500];
   UErrorCode status = U_ZERO_ERROR;
   UParseError parse_error;
-  int n_rules = LEN(invalidRules);
+  int n_rules = UPRV_LENGTHOF(invalidRules);
   int rule_no;
   int length;
   UCollator  *myCollation;
@@ -4546,10 +4543,10 @@ static void TestBeforeRuleWithScriptReordering(void)
     uint32_t beforeKeyLength;
 
     UChar base[] = { 0x03b1 }; /* base */
-    int32_t baseLen = sizeof(base)/sizeof(*base);
+    int32_t baseLen = UPRV_LENGTHOF(base);
 
     UChar before[] = { 0x0e01 }; /* ko kai */
-    int32_t beforeLen = sizeof(before)/sizeof(*before);
+    int32_t beforeLen = UPRV_LENGTHOF(before);
 
     /*UChar *data[] = { before, base };
     genericRulesStarter(srules, data, 2);*/
@@ -4562,7 +4559,7 @@ static void TestBeforeRuleWithScriptReordering(void)
     /* build collator */
     log_verbose("Testing the &[before 1] rule with [scriptReorder grek]\n");
 
-    rulesLength = u_unescape(srules, rules, LEN(rules));
+    rulesLength = u_unescape(srules, rules, UPRV_LENGTHOF(rules));
     myCollation = ucol_openRules(rules, rulesLength, UCOL_ON, UCOL_TERTIARY, &error, &status);
     if(U_FAILURE(status)) {
         log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
@@ -4633,14 +4630,14 @@ static void TestNonLeadBytesDuringCollationReordering(void)
         log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
         return;
     }
-    baseKeyLength = ucol_getSortKey(myCollation, testString, LEN(testString), baseKey, 256);
+    baseKeyLength = ucol_getSortKey(myCollation, testString, UPRV_LENGTHOF(testString), baseKey, 256);
 
-    ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
+    ucol_setReorderCodes(myCollation, reorderCodes, UPRV_LENGTHOF(reorderCodes), &status);
     if(U_FAILURE(status)) {
         log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
         return;
     }
-    reorderKeyLength = ucol_getSortKey(myCollation, testString, LEN(testString), reorderKey, 256);
+    reorderKeyLength = ucol_getSortKey(myCollation, testString, UPRV_LENGTHOF(testString), reorderKey, 256);
     
     if (baseKeyLength != reorderKeyLength) {
         log_err("Key lengths not the same during reordering.\n");
@@ -4662,14 +4659,14 @@ static void TestNonLeadBytesDuringCollationReordering(void)
         log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
         return;
     }
-    baseKeyLength = ucol_getSortKey(myCollation, testString, LEN(testString), baseKey, 256);
+    baseKeyLength = ucol_getSortKey(myCollation, testString, UPRV_LENGTHOF(testString), baseKey, 256);
 
-    ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
+    ucol_setReorderCodes(myCollation, reorderCodes, UPRV_LENGTHOF(reorderCodes), &status);
     if(U_FAILURE(status)) {
         log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
         return;
     }
-    reorderKeyLength = ucol_getSortKey(myCollation, testString, LEN(testString), reorderKey, 256);
+    reorderKeyLength = ucol_getSortKey(myCollation, testString, UPRV_LENGTHOF(testString), reorderKey, 256);
     
     if (baseKeyLength != reorderKeyLength) {
         log_err("Key lengths not the same during reordering.\n");
@@ -4714,7 +4711,7 @@ static void TestReorderingAPI(void)
     }
 
     /* set the reorderding */
-    ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
+    ucol_setReorderCodes(myCollation, reorderCodes, UPRV_LENGTHOF(reorderCodes), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
         return;
@@ -4727,18 +4724,18 @@ static void TestReorderingAPI(void)
         return;
     }
     status = U_ZERO_ERROR;
-    if (retrievedReorderCodesLength != LEN(reorderCodes)) {
-        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(reorderCodes));
+    if (retrievedReorderCodesLength != UPRV_LENGTHOF(reorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, UPRV_LENGTHOF(reorderCodes));
         return;
     }
     /* now let's really get it */
-    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, LEN(retrievedReorderCodes), &status);
+    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, UPRV_LENGTHOF(retrievedReorderCodes), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: getting reorder codes: %s\n", myErrorName(status));
         return;
     }
-    if (retrievedReorderCodesLength != LEN(reorderCodes)) {
-        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(reorderCodes));
+    if (retrievedReorderCodesLength != UPRV_LENGTHOF(reorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, UPRV_LENGTHOF(reorderCodes));
         return;
     }
     for (loopIndex = 0; loopIndex < retrievedReorderCodesLength; loopIndex++) {
@@ -4747,7 +4744,7 @@ static void TestReorderingAPI(void)
             return;
         }
     }
-    collResult = ucol_strcoll(myCollation, greekString, LEN(greekString), punctuationString, LEN(punctuationString));
+    collResult = ucol_strcoll(myCollation, greekString, UPRV_LENGTHOF(greekString), punctuationString, UPRV_LENGTHOF(punctuationString));
     if (collResult != UCOL_LESS) {
         log_err_status(status, "ERROR: collation result should have been UCOL_LESS\n");
         return;
@@ -4767,7 +4764,7 @@ static void TestReorderingAPI(void)
         return;
     }
 
-    collResult = ucol_strcoll(myCollation, greekString, LEN(greekString), punctuationString, LEN(punctuationString));
+    collResult = ucol_strcoll(myCollation, greekString, UPRV_LENGTHOF(greekString), punctuationString, UPRV_LENGTHOF(punctuationString));
     if (collResult != UCOL_GREATER) {
         log_err_status(status, "ERROR: collation result should have been UCOL_GREATER\n");
         return;
@@ -4790,7 +4787,7 @@ static void TestReorderingAPI(void)
     }
 
     /* test for error condition on duplicate reorder codes */
-    ucol_setReorderCodes(myCollation, duplicateReorderCodes, LEN(duplicateReorderCodes), &status);
+    ucol_setReorderCodes(myCollation, duplicateReorderCodes, UPRV_LENGTHOF(duplicateReorderCodes), &status);
     if (!U_FAILURE(status)) {
         log_err_status(status, "ERROR: setting duplicate reorder codes did not generate a failure\n");
         return;
@@ -4798,7 +4795,7 @@ static void TestReorderingAPI(void)
     
     status = U_ZERO_ERROR;
     /* test for reorder codes after a reset code */
-    ucol_setReorderCodes(myCollation, reorderCodesStartingWithDefault, LEN(reorderCodesStartingWithDefault), &status);
+    ucol_setReorderCodes(myCollation, reorderCodesStartingWithDefault, UPRV_LENGTHOF(reorderCodesStartingWithDefault), &status);
     if (!U_FAILURE(status)) {
         log_err_status(status, "ERROR: reorderd code sequence starting with default and having following codes didn't cause an error\n");
         return;
@@ -4837,13 +4834,13 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
     }
 
     /* get the reordering */
-    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, LEN(retrievedReorderCodes), &status);
+    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, UPRV_LENGTHOF(retrievedReorderCodes), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: getting reorder codes: %s\n", myErrorName(status));
         return;
     }
-    if (retrievedReorderCodesLength != LEN(rulesReorderCodes)) {
-        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(rulesReorderCodes));
+    if (retrievedReorderCodesLength != UPRV_LENGTHOF(rulesReorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, UPRV_LENGTHOF(rulesReorderCodes));
         return;
     }
     for (loopIndex = 0; loopIndex < retrievedReorderCodesLength; loopIndex++) {
@@ -4852,14 +4849,14 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
             return;
         }
     }
-    collResult = ucol_strcoll(myCollation, greekString, LEN(greekString), hanString, LEN(hanString));
+    collResult = ucol_strcoll(myCollation, greekString, UPRV_LENGTHOF(greekString), hanString, UPRV_LENGTHOF(hanString));
     if (collResult != UCOL_GREATER) {
         log_err_status(status, "ERROR: collation result should have been UCOL_GREATER\n");
         return;
     }
 
     /* set the reordering */
-    ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
+    ucol_setReorderCodes(myCollation, reorderCodes, UPRV_LENGTHOF(reorderCodes), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
         return;
@@ -4872,18 +4869,18 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
         return;
     }
     status = U_ZERO_ERROR;
-    if (retrievedReorderCodesLength != LEN(reorderCodes)) {
-        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(reorderCodes));
+    if (retrievedReorderCodesLength != UPRV_LENGTHOF(reorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, UPRV_LENGTHOF(reorderCodes));
         return;
     }
     /* now let's really get it */
-    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, LEN(retrievedReorderCodes), &status);
+    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, UPRV_LENGTHOF(retrievedReorderCodes), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: getting reorder codes: %s\n", myErrorName(status));
         return;
     }
-    if (retrievedReorderCodesLength != LEN(reorderCodes)) {
-        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(reorderCodes));
+    if (retrievedReorderCodesLength != UPRV_LENGTHOF(reorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, UPRV_LENGTHOF(reorderCodes));
         return;
     }
     for (loopIndex = 0; loopIndex < retrievedReorderCodesLength; loopIndex++) {
@@ -4892,7 +4889,7 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
             return;
         }
     }
-    collResult = ucol_strcoll(myCollation, greekString, LEN(greekString), punctuationString, LEN(punctuationString));
+    collResult = ucol_strcoll(myCollation, greekString, UPRV_LENGTHOF(greekString), punctuationString, UPRV_LENGTHOF(punctuationString));
     if (collResult != UCOL_LESS) {
         log_err_status(status, "ERROR: collation result should have been UCOL_LESS\n");
         return;
@@ -4912,7 +4909,7 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
         return;
     }
 
-    collResult = ucol_strcoll(myCollation, greekString, LEN(greekString), punctuationString, LEN(punctuationString));
+    collResult = ucol_strcoll(myCollation, greekString, UPRV_LENGTHOF(greekString), punctuationString, UPRV_LENGTHOF(punctuationString));
     if (collResult != UCOL_GREATER) {
         log_err_status(status, "ERROR: collation result should have been UCOL_GREATER\n");
         return;
@@ -4924,13 +4921,13 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
         log_err_status(status, "ERROR: setting reorder codes to {default}: %s\n", myErrorName(status));
         return;
     }
-    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, LEN(retrievedReorderCodes), &status);
+    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, UPRV_LENGTHOF(retrievedReorderCodes), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: getting reorder codes: %s\n", myErrorName(status));
         return;
     }
-    if (retrievedReorderCodesLength != LEN(rulesReorderCodes)) {
-        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(rulesReorderCodes));
+    if (retrievedReorderCodesLength != UPRV_LENGTHOF(rulesReorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, UPRV_LENGTHOF(rulesReorderCodes));
         return;
     }
     for (loopIndex = 0; loopIndex < retrievedReorderCodesLength; loopIndex++) {
@@ -4969,7 +4966,7 @@ static void TestEquivalentReorderingScripts(void) {
 
     equivalentScripts[0] = 0;
     length = ucol_getEquivalentReorderCodes(
-            USCRIPT_GOTHIC, equivalentScripts, LEN(equivalentScripts), &status);
+            USCRIPT_GOTHIC, equivalentScripts, UPRV_LENGTHOF(equivalentScripts), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR/Gothic: retrieving equivalent reorder codes: %s\n", myErrorName(status));
         return;
@@ -4981,15 +4978,15 @@ static void TestEquivalentReorderingScripts(void) {
     }
 
     length = ucol_getEquivalentReorderCodes(
-            USCRIPT_HIRAGANA, equivalentScripts, LEN(equivalentScripts), &status);
+            USCRIPT_HIRAGANA, equivalentScripts, UPRV_LENGTHOF(equivalentScripts), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR/Hiragana: retrieving equivalent reorder codes: %s\n", myErrorName(status));
         return;
     }
-    if (length != LEN(expectedScripts)) {
+    if (length != UPRV_LENGTHOF(expectedScripts)) {
         log_err("ERROR/Hiragana: retrieved equivalent script length wrong: "
                 "expected %d, was = %d\n",
-                LEN(expectedScripts), length);
+                UPRV_LENGTHOF(expectedScripts), length);
     }
     prevScript = -1;
     for (i = 0; i < length; ++i) {
@@ -4999,7 +4996,7 @@ static void TestEquivalentReorderingScripts(void) {
         }
         prevScript = script;
     }
-    for (i = 0; i < LEN(expectedScripts); i++) {
+    for (i = 0; i < UPRV_LENGTHOF(expectedScripts); i++) {
         if (!containsExpectedScript(equivalentScripts, length, expectedScripts[i])) {
             log_err("ERROR/Hiragana: equivalent scripts do not contain %d\n",
                     expectedScripts[i]);
@@ -5007,17 +5004,17 @@ static void TestEquivalentReorderingScripts(void) {
     }
 
     length = ucol_getEquivalentReorderCodes(
-            USCRIPT_KATAKANA, equivalentScripts, LEN(equivalentScripts), &status);
+            USCRIPT_KATAKANA, equivalentScripts, UPRV_LENGTHOF(equivalentScripts), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR/Katakana: retrieving equivalent reorder codes: %s\n", myErrorName(status));
         return;
     }
-    if (length != LEN(expectedScripts)) {
+    if (length != UPRV_LENGTHOF(expectedScripts)) {
         log_err("ERROR/Katakana: retrieved equivalent script length wrong: "
                 "expected %d, was = %d\n",
-                LEN(expectedScripts), length);
+                UPRV_LENGTHOF(expectedScripts), length);
     }
-    for (i = 0; i < LEN(expectedScripts); i++) {
+    for (i = 0; i < UPRV_LENGTHOF(expectedScripts); i++) {
         if (!containsExpectedScript(equivalentScripts, length, expectedScripts[i])) {
             log_err("ERROR/Katakana: equivalent scripts do not contain %d\n",
                     expectedScripts[i]);
@@ -5025,40 +5022,40 @@ static void TestEquivalentReorderingScripts(void) {
     }
 
     length = ucol_getEquivalentReorderCodes(
-            USCRIPT_KATAKANA_OR_HIRAGANA, equivalentScripts, LEN(equivalentScripts), &status);
-    if (U_FAILURE(status) || length != LEN(expectedScripts)) {
+            USCRIPT_KATAKANA_OR_HIRAGANA, equivalentScripts, UPRV_LENGTHOF(equivalentScripts), &status);
+    if (U_FAILURE(status) || length != UPRV_LENGTHOF(expectedScripts)) {
         log_err("ERROR/Hrkt: retrieved equivalent script length wrong: "
                 "expected %d, was = %d\n",
-                LEN(expectedScripts), length);
+                UPRV_LENGTHOF(expectedScripts), length);
     }
 
     length = ucol_getEquivalentReorderCodes(
-            USCRIPT_HAN, equivalentScripts, LEN(equivalentScripts), &status);
+            USCRIPT_HAN, equivalentScripts, UPRV_LENGTHOF(equivalentScripts), &status);
     if (U_FAILURE(status) || length != 3) {
         log_err("ERROR/Hani: retrieved equivalent script length wrong: "
                 "expected 3, was = %d\n", length);
     }
     length = ucol_getEquivalentReorderCodes(
-            USCRIPT_SIMPLIFIED_HAN, equivalentScripts, LEN(equivalentScripts), &status);
+            USCRIPT_SIMPLIFIED_HAN, equivalentScripts, UPRV_LENGTHOF(equivalentScripts), &status);
     if (U_FAILURE(status) || length != 3) {
         log_err("ERROR/Hans: retrieved equivalent script length wrong: "
                 "expected 3, was = %d\n", length);
     }
     length = ucol_getEquivalentReorderCodes(
-            USCRIPT_TRADITIONAL_HAN, equivalentScripts, LEN(equivalentScripts), &status);
+            USCRIPT_TRADITIONAL_HAN, equivalentScripts, UPRV_LENGTHOF(equivalentScripts), &status);
     if (U_FAILURE(status) || length != 3) {
         log_err("ERROR/Hant: retrieved equivalent script length wrong: "
                 "expected 3, was = %d\n", length);
     }
 
     length = ucol_getEquivalentReorderCodes(
-            USCRIPT_MEROITIC_CURSIVE, equivalentScripts, LEN(equivalentScripts), &status);
+            USCRIPT_MEROITIC_CURSIVE, equivalentScripts, UPRV_LENGTHOF(equivalentScripts), &status);
     if (U_FAILURE(status) || length != 2) {
         log_err("ERROR/Merc: retrieved equivalent script length wrong: "
                 "expected 2, was = %d\n", length);
     }
     length = ucol_getEquivalentReorderCodes(
-            USCRIPT_MEROITIC_HIEROGLYPHS, equivalentScripts, LEN(equivalentScripts), &status);
+            USCRIPT_MEROITIC_HIEROGLYPHS, equivalentScripts, UPRV_LENGTHOF(equivalentScripts), &status);
     if (U_FAILURE(status) || length != 2) {
         log_err("ERROR/Mero: retrieved equivalent script length wrong: "
                 "expected 2, was = %d\n", length);
@@ -5086,7 +5083,7 @@ static void TestReorderingAcrossCloning(void)
     }
 
     /* set the reorderding */
-    ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
+    ucol_setReorderCodes(myCollation, reorderCodes, UPRV_LENGTHOF(reorderCodes), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
         return;
@@ -5100,13 +5097,13 @@ static void TestReorderingAcrossCloning(void)
     }
     
     /* get the reordering */
-    retrievedReorderCodesLength = ucol_getReorderCodes(clonedCollation, retrievedReorderCodes, LEN(retrievedReorderCodes), &status);
+    retrievedReorderCodesLength = ucol_getReorderCodes(clonedCollation, retrievedReorderCodes, UPRV_LENGTHOF(retrievedReorderCodes), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: getting reorder codes: %s\n", myErrorName(status));
         return;
     }
-    if (retrievedReorderCodesLength != LEN(reorderCodes)) {
-        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(reorderCodes));
+    if (retrievedReorderCodesLength != UPRV_LENGTHOF(reorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, UPRV_LENGTHOF(reorderCodes));
         return;
     }
     for (loopIndex = 0; loopIndex < retrievedReorderCodesLength; loopIndex++) {
@@ -5175,10 +5172,10 @@ static void TestGreekFirstReorder(void)
     };
 
     /* Test rules creation */
-    doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+    doTestOneTestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), strRules, UPRV_LENGTHOF(strRules));
 
     /* Test collation reordering API */
-    doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
+    doTestOneReorderingAPITestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), apiRules, UPRV_LENGTHOF(apiRules));
 }
 
 static void TestGreekLastReorder(void)
@@ -5200,10 +5197,10 @@ static void TestGreekLastReorder(void)
     };
     
     /* Test rules creation */
-    doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+    doTestOneTestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), strRules, UPRV_LENGTHOF(strRules));
 
     /* Test collation reordering API */
-    doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
+    doTestOneReorderingAPITestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), apiRules, UPRV_LENGTHOF(apiRules));
 }
 
 static void TestNonScriptReorder(void)
@@ -5227,10 +5224,10 @@ static void TestNonScriptReorder(void)
     };
     
     /* Test rules creation */
-    doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+    doTestOneTestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), strRules, UPRV_LENGTHOF(strRules));
 
     /* Test collation reordering API */
-    doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
+    doTestOneReorderingAPITestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), apiRules, UPRV_LENGTHOF(apiRules));
 }
 
 static void TestHaniReorder(void)
@@ -5253,10 +5250,10 @@ static void TestHaniReorder(void)
     };
     
     /* Test rules creation */
-    doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+    doTestOneTestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), strRules, UPRV_LENGTHOF(strRules));
 
     /* Test collation reordering API */
-    doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
+    doTestOneReorderingAPITestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), apiRules, UPRV_LENGTHOF(apiRules));
 }
 
 static void TestHaniReorderWithOtherRules(void)
@@ -5280,7 +5277,7 @@ static void TestHaniReorderWithOtherRules(void)
     };
     
     /* Test rules creation */
-    doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+    doTestOneTestCase(privateUseCharacterStrings, UPRV_LENGTHOF(privateUseCharacterStrings), strRules, UPRV_LENGTHOF(strRules));
 }
 
 static void TestMultipleReorder(void)
@@ -5300,10 +5297,10 @@ static void TestMultipleReorder(void)
     };
 
     /* Test rules creation */
-    doTestOneTestCase(collationTestCases, LEN(collationTestCases), strRules, LEN(strRules));
+    doTestOneTestCase(collationTestCases, UPRV_LENGTHOF(collationTestCases), strRules, UPRV_LENGTHOF(strRules));
 
     /* Test collation reordering API */
-    doTestOneReorderingAPITestCase(collationTestCases, LEN(collationTestCases), apiRules, LEN(apiRules));
+    doTestOneReorderingAPITestCase(collationTestCases, UPRV_LENGTHOF(collationTestCases), apiRules, UPRV_LENGTHOF(apiRules));
 }
 
 /*
@@ -5349,23 +5346,23 @@ static void TestReorderWithNumericCollation(void)
     ucol_setStrength(myReorderCollation, UCOL_TERTIARY);
     */
     ucol_setAttribute(myReorderCollation, UCOL_NUMERIC_COLLATION, UCOL_ON, &status);
-    ucol_setReorderCodes(myReorderCollation, reorderCodes, LEN(reorderCodes), &status);
+    ucol_setReorderCodes(myReorderCollation, reorderCodes, UPRV_LENGTHOF(reorderCodes), &status);
     if(U_FAILURE(status)) {
         log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
         return;
     }
     
-    fortyS_sortKey_Length = ucol_getSortKey(myCollation, fortyS, LEN(fortyS), fortyS_sortKey, 128);
-    fortyThreeP_sortKey_Length = ucol_getSortKey(myCollation, fortyThreeP, LEN(fortyThreeP), fortyThreeP_sortKey, 128);
-    fortyS_sortKey_reorder_Length = ucol_getSortKey(myReorderCollation, fortyS, LEN(fortyS), fortyS_sortKey_reorder, 128);
-    fortyThreeP_sortKey_reorder_Length = ucol_getSortKey(myReorderCollation, fortyThreeP, LEN(fortyThreeP), fortyThreeP_sortKey_reorder, 128);
+    fortyS_sortKey_Length = ucol_getSortKey(myCollation, fortyS, UPRV_LENGTHOF(fortyS), fortyS_sortKey, 128);
+    fortyThreeP_sortKey_Length = ucol_getSortKey(myCollation, fortyThreeP, UPRV_LENGTHOF(fortyThreeP), fortyThreeP_sortKey, 128);
+    fortyS_sortKey_reorder_Length = ucol_getSortKey(myReorderCollation, fortyS, UPRV_LENGTHOF(fortyS), fortyS_sortKey_reorder, 128);
+    fortyThreeP_sortKey_reorder_Length = ucol_getSortKey(myReorderCollation, fortyThreeP, UPRV_LENGTHOF(fortyThreeP), fortyThreeP_sortKey_reorder, 128);
 
     if (fortyS_sortKey_Length < 0 || fortyThreeP_sortKey_Length < 0 || fortyS_sortKey_reorder_Length < 0 || fortyThreeP_sortKey_reorder_Length < 0) {
         log_err_status(status, "ERROR: couldn't generate sort keys\n");
         return;
     }
-    collResult = ucol_strcoll(myCollation, fortyS, LEN(fortyS), fortyThreeP, LEN(fortyThreeP));
-    collResultReorder = ucol_strcoll(myReorderCollation, fortyS, LEN(fortyS), fortyThreeP, LEN(fortyThreeP));
+    collResult = ucol_strcoll(myCollation, fortyS, UPRV_LENGTHOF(fortyS), fortyThreeP, UPRV_LENGTHOF(fortyThreeP));
+    collResultReorder = ucol_strcoll(myReorderCollation, fortyS, UPRV_LENGTHOF(fortyS), fortyThreeP, UPRV_LENGTHOF(fortyThreeP));
     /*
     fprintf(stderr, "\tcollResult = %x\n", collResult);
     fprintf(stderr, "\tcollResultReorder = %x\n", collResultReorder);
@@ -5419,8 +5416,8 @@ static void TestImportRulesDeWithPhonebook(void)
     { {0x00fc}, {0x00dc}, UCOL_LESS},
   };
 
-  doTestOneTestCase(normalTests, LEN(normalTests), normalRules, LEN(normalRules));
-  doTestOneTestCase(importTests, LEN(importTests), importRules, LEN(importRules));
+  doTestOneTestCase(normalTests, UPRV_LENGTHOF(normalTests), normalRules, UPRV_LENGTHOF(normalRules));
+  doTestOneTestCase(importTests, UPRV_LENGTHOF(importTests), importRules, UPRV_LENGTHOF(importRules));
 }
 
 #if 0
@@ -5474,10 +5471,10 @@ static void TestImportRulesFiWithEor(void)
     { {0x0061}, {0x0061, 0x00a3}, UCOL_EQUAL},
   };
 
-  doTestOneTestCase(defaultTests, LEN(defaultTests), defaultRules, LEN(defaultRules));
-  doTestOneTestCase(eorTests, LEN(eorTests), eorRules, LEN(eorRules));
-  doTestOneTestCase(fiStdTests, LEN(fiStdTests), fiStdRules, LEN(fiStdRules));
-  doTestOneTestCase(fiEorTests, LEN(fiEorTests), eorFiStdRules, LEN(eorFiStdRules));
+  doTestOneTestCase(defaultTests, UPRV_LENGTHOF(defaultTests), defaultRules, UPRV_LENGTHOF(defaultRules));
+  doTestOneTestCase(eorTests, UPRV_LENGTHOF(eorTests), eorRules, UPRV_LENGTHOF(eorRules));
+  doTestOneTestCase(fiStdTests, UPRV_LENGTHOF(fiStdTests), fiStdRules, UPRV_LENGTHOF(fiStdRules));
+  doTestOneTestCase(fiEorTests, UPRV_LENGTHOF(fiEorTests), eorFiStdRules, UPRV_LENGTHOF(eorFiStdRules));
 
   log_knownIssue("8962", NULL);
   /* TODO: Fix ICU ticket #8962 by uncommenting the following test after fi.txt is updated with the following rule:
@@ -5488,7 +5485,7 @@ static void TestImportRulesFiWithEor(void)
             Version{"21.0"}
         }
   */
-  /* doTestOneTestCase(fiEorTests, LEN(fiEorTests), fiEorRules, LEN(fiEorRules)); */
+  /* doTestOneTestCase(fiEorTests, UPRV_LENGTHOF(fiEorTests), fiEorRules, UPRV_LENGTHOF(fiEorRules)); */
 
 }
 #endif
@@ -5519,8 +5516,8 @@ static void TestImportRulesCJKWithUnihan(void)
     { {0x3402}, {0x4e1e}, UCOL_LESS},
   };
 
-  doTestOneTestCase(defaultTests, LEN(defaultTests), defaultRules, LEN(defaultRules));
-  doTestOneTestCase(unihanTests, LEN(unihanTests), unihanRules, LEN(unihanRules));
+  doTestOneTestCase(defaultTests, UPRV_LENGTHOF(defaultTests), defaultRules, UPRV_LENGTHOF(defaultRules));
+  doTestOneTestCase(unihanTests, UPRV_LENGTHOF(unihanTests), unihanRules, UPRV_LENGTHOF(unihanRules));
 
 }
 #endif
@@ -5781,8 +5778,6 @@ static const UChar longUpperStr3[]= { /* 324 chars */
     0x41,0x42,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4A,0x4B,0x4C,0x4D,0x4E,0x4F,0x50,0x51,0x52,0x53,0x54,0x55,0x56,0x57,0x58,0x59,0x5A,0x20
 };
 
-#define MY_ARRAY_LEN(array) (sizeof(array)/sizeof(array[0]))
-
 typedef struct {
     const UChar * longUpperStrPtr;
     int32_t       longUpperStrLen;
@@ -5790,9 +5785,9 @@ typedef struct {
 
 /* String pointers must be in reverse collation order of the corresponding strings */
 static const LongUpperStrItem longUpperStrItems[] = {
-    { longUpperStr1, MY_ARRAY_LEN(longUpperStr1) },
-    { longUpperStr2, MY_ARRAY_LEN(longUpperStr2) },
-    { longUpperStr3, MY_ARRAY_LEN(longUpperStr3) },
+    { longUpperStr1, UPRV_LENGTHOF(longUpperStr1) },
+    { longUpperStr2, UPRV_LENGTHOF(longUpperStr2) },
+    { longUpperStr3, UPRV_LENGTHOF(longUpperStr3) },
     { NULL,          0                           }
 };
 
