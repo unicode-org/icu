@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_AU{
     %%Parent{"en_001"}
-    Version{"2.1.22.91"}
+    Version{"2.1.24.13"}
     zoneStrings{
         "meta:Africa_Eastern"{
             ls{"Eastern Africa Time"}

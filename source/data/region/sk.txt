@@ -311,5 +311,5 @@ sk{
         FK{"Falklandy (Malvíny)"}
         MK{"Macedónsko (BJRM)"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.24.11"}
 }

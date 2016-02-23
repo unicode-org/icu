@@ -21,6 +21,7 @@ en{
         colStrength{"Sorting Strength"}
         collation{"Sort Order"}
         currency{"Currency"}
+        em{"Emoji Presentation Style"}
         fw{"First day of week"}
         hc{"Hour Cycle (12 vs 24)"}
         kv{"Highest Ignored"}
@@ -28,6 +29,8 @@ en{
         lw{"Line Breaks In Words Setting"}
         ms{"Measurement System"}
         numbers{"Numbers"}
+        rg{"Region For Supplemental Data"}
+        sd{"Region Subdivision"}
         ss{"Sentence Break Suppressions Type"}
         timezone{"Time Zone"}
         va{"Locale Variant"}
@@ -922,6 +925,20 @@ en{
             unihan{"Radical-Stroke Sort Order"}
             zhuyin{"Zhuyin Sort Order"}
         }
+        em{
+            default{"Use Default Presentation For Emoji Characters"}
+            emoji{"Prefer Emoji Presentation For Emoji Characters"}
+            text{"Prefer Text Presentation For Emoji Characters"}
+        }
+        fw{
+            fri{"First Day of Week Is Friday"}
+            mon{"First Day of Week Is Monday"}
+            sat{"First Day of Week Is Saturday"}
+            sun{"First Day of Week Is Sunday"}
+            thu{"First Day of Week Is Thursday"}
+            tue{"First Day of Week Is Tuesday"}
+            wed{"First Day of Week Is Wednesday"}
+        }
         hc{
             h11{"12 Hour System (0–11)"}
             h12{"12 Hour System (1–12)"}
@@ -1092,7 +1109,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.23.80"}
+    Version{"2.1.24.18"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

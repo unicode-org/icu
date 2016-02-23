@@ -15,7 +15,7 @@ en_AU{
             }
         }
     }
-    Version{"2.1.22.91"}
+    Version{"2.1.24.13"}
     calendar{
         generic{
             availableFormats{
@@ -66,7 +66,6 @@ en_AU{
             }
             availableFormats{
                 M{"LL"}
-                yMMMEd{"E, d MMM y"}
             }
             dayNames{
                 format{
@@ -198,10 +197,7 @@ en_AU{
     }
     listPattern{
         standard{
-            2{"{0} and {1}"}
             end{"{0} and {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
     }
 }
