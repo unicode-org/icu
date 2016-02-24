@@ -1111,7 +1111,7 @@ TimeZoneRuleTest::TestGetSimpleRules(void) {
         getUTCMillis(2005, UCAL_JULY, 1),
         getUTCMillis(2010, UCAL_NOVEMBER, 1),        
     };
-    int32_t numTimes = sizeof(testTimes)/sizeof(UDate);
+    int32_t numTimes = UPRV_LENGTHOF(testTimes);
     UErrorCode status = U_ZERO_ERROR;
     TestZIDEnumeration tzenum(!quick);
     InitialTimeZoneRule *initial;

@@ -1058,7 +1058,7 @@ void TestMessageFormat::testFormat()
     {
         Formattable( UDate(8.71068e+011), Formattable::kIsDate )
     };
-    const int32_t ft_cnt = sizeof(ftarray) / sizeof(Formattable);
+    const int32_t ft_cnt = UPRV_LENGTHOF(ftarray);
     Formattable ft_arr( ftarray, ft_cnt );
 
     Formattable* fmt = new Formattable(UDate(8.71068e+011), Formattable::kIsDate);

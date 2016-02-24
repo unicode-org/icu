@@ -230,7 +230,7 @@ static void TestStringFunctions()
         if(temp[k] != 0xa4)
             log_err("something threw an error in u_strncpy()\n");
 
-        u_memset(temp, 0x3F, (sizeof(temp) / sizeof(UChar)) - 1);
+        u_memset(temp, 0x3F, UPRV_LENGTHOF(temp) - 1);
         u_uastrncpy(temp, raw[i][j], k-1);
         if(u_strncmp(temp, dataTable[i][j],k-1)!=0)
             log_err("something threw an error in u_uastrncpy(k-1)\n");
@@ -238,7 +238,7 @@ static void TestStringFunctions()
         if(temp[k-1] != 0x3F)
             log_err("something threw an error in u_uastrncpy(k-1)\n");
 
-        u_memset(temp, 0x3F, (sizeof(temp) / sizeof(UChar)) - 1);
+        u_memset(temp, 0x3F, UPRV_LENGTHOF(temp) - 1);
         u_uastrncpy(temp, raw[i][j], k+1);
         if(u_strcmp(temp, dataTable[i][j])!=0)
             log_err("something threw an error in u_uastrncpy(k+1)\n");
@@ -246,7 +246,7 @@ static void TestStringFunctions()
         if(temp[k] != 0)
             log_err("something threw an error in u_uastrncpy(k+1)\n");
 
-        u_memset(temp, 0x3F, (sizeof(temp) / sizeof(UChar)) - 1);
+        u_memset(temp, 0x3F, UPRV_LENGTHOF(temp) - 1);
         u_uastrncpy(temp, raw[i][j], k);
         if(u_strncmp(temp, dataTable[i][j], k)!=0)
             log_err("something threw an error in u_uastrncpy(k)\n");

@@ -264,7 +264,7 @@ static void TestCalendar()
     /*Testing ucal_getCanonicalTimeZoneID*/
     status = U_ZERO_ERROR;
     resultlength = ucal_getCanonicalTimeZoneID(PST, -1,
-        canonicalID, sizeof(canonicalID)/sizeof(UChar), &isSystemID, &status);
+        canonicalID, UPRV_LENGTHOF(canonicalID), &isSystemID, &status);
     if (U_FAILURE(status)) {
         log_data_err("FAIL: error in ucal_getCanonicalTimeZoneID : %s\n", u_errorName(status));
     } else {

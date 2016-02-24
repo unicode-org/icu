@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2015, International Business Machines
+ * Copyright (c) 1997-2016, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -125,11 +125,11 @@ void TestUScriptCodeAPI(){
             err = U_ZERO_ERROR;
             capacity = 10;
             num = uscript_getCode("ja",script,capacity, &err);
-            if(num!=(sizeof(jaCode)/sizeof(UScriptCode))){
+            if(num!=UPRV_LENGTHOF(jaCode)){
                 log_err("Errors uscript_getScriptCode() for Japanese locale: num=%d, expected %d \n",
-                        num, (sizeof(jaCode)/sizeof(UScriptCode)));
+                        num, UPRV_LENGTHOF(jaCode));
             }
-            for(j=0;j<sizeof(jaCode)/sizeof(UScriptCode);j++) {
+            for(j=0;j<UPRV_LENGTHOF(jaCode);j++) {
                 if(script[j]!=jaCode[j]) {
                     log_err("Japanese locale: code #%d was %d (%s) but expected %d (%s)\n", j,
                             script[j], uscript_getName(script[j]),
@@ -204,7 +204,7 @@ void TestUScriptCodeAPI(){
              NULL
         };
         i=0;
-        while(i<sizeof(testAbbr)/sizeof(UScriptCode)){
+        while(i<UPRV_LENGTHOF(testAbbr)){
             const char* name = uscript_getName(testAbbr[i]);
              if(name == NULL) {
                log_data_err("Couldn't get script name\n");
@@ -243,7 +243,7 @@ void TestUScriptCodeAPI(){
              NULL
         };
         i=0;
-        while(i<sizeof(testAbbr)/sizeof(UScriptCode)){
+        while(i<UPRV_LENGTHOF(testAbbr)){
             const char* name = uscript_getShortName(testAbbr[i]);
             numErrors=0;
             if(strcmp(expectedAbbr[i],name)!=0){

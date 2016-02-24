@@ -1015,7 +1015,7 @@ void UTextTest::ErrorTest()
 
         // Check setIndex
         int32_t i;
-        int32_t startMapLimit = sizeof(startMap) / sizeof(int32_t);
+        int32_t startMapLimit = UPRV_LENGTHOF(startMap);
         for (i=0; i<startMapLimit; i++) {
             utext_setNativeIndex(ut, i);
             int64_t cpIndex = utext_getNativeIndex(ut);
@@ -1086,7 +1086,7 @@ void UTextTest::ErrorTest()
         UText *ut = utext_openUnicodeString(NULL, &u16str, &status);
         TEST_SUCCESS(status);
 
-        int32_t startMapLimit = sizeof(startMap) / sizeof(int32_t);
+        int32_t startMapLimit = UPRV_LENGTHOF(startMap);
         int i;
         for (i=0; i<startMapLimit; i++) {
             utext_setNativeIndex(ut, i);
@@ -1154,7 +1154,7 @@ void UTextTest::ErrorTest()
         UText *ut = utext_openReplaceable(NULL, &u16str, &status);
         TEST_SUCCESS(status);
 
-        int32_t startMapLimit = sizeof(startMap) / sizeof(int32_t);
+        int32_t startMapLimit = UPRV_LENGTHOF(startMap);
         int i;
         for (i=0; i<startMapLimit; i++) {
             utext_setNativeIndex(ut, i);
