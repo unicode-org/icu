@@ -1663,7 +1663,7 @@ TestSignatureDetection(){
         int32_t signatureLength = -1;
         const char* source = NULL;
         const char* enc = NULL;
-        for( ; i<sizeof(data)/sizeof(char*); i++){
+        for( ; i<UPRV_LENGTHOF(data); i++){
             err = U_ZERO_ERROR;
             source = data[i];
             enc = ucnv_detectUnicodeSignature(source, -1 , &signatureLength, &err);
@@ -1776,7 +1776,7 @@ TestSignatureDetection(){
         int32_t sourceLength=-1;
         const char* source = NULL;
         const char* enc = NULL;
-        for( ; i<sizeof(data)/sizeof(char*); i++){
+        for( ; i<UPRV_LENGTHOF(data); i++){
             err = U_ZERO_ERROR;
             source = data[i];
             sourceLength = len[i];
@@ -4908,7 +4908,7 @@ TestLMBCS() {
 
        UChar Out [sizeof(pszUnicode) + 1];
        UChar * pOut = Out;
-       UChar * OutLimit = Out + sizeof(pszUnicode)/sizeof(UChar);
+       UChar * OutLimit = Out + UPRV_LENGTHOF(pszUnicode);
 
        int32_t off [sizeof(offsets)];
 
@@ -5078,7 +5078,7 @@ TestLMBCS() {
 
        UChar Out [sizeof(pszUnicode) + 1];
        UChar * pOut = Out;
-       UChar * OutLimit = Out + sizeof(pszUnicode)/sizeof(UChar);
+       UChar * OutLimit = Out + UPRV_LENGTHOF(pszUnicode);
 
 
        cnv = ucnv_open(NAME_LMBCS_1, &errorCode);
@@ -5187,7 +5187,7 @@ TestLMBCS() {
          /* running out of target room : U_BUFFER_OVERFLOW_ERROR */
 
          pUIn = pszUnicode;
-         ucnv_fromUnicode(cnv, &pLOut,pLOut+offsets[4],&pUIn,pUIn+sizeof(pszUnicode)/sizeof(UChar),off,FALSE, &errorCode);
+         ucnv_fromUnicode(cnv, &pLOut,pLOut+offsets[4],&pUIn,pUIn+UPRV_LENGTHOF(pszUnicode),off,FALSE, &errorCode);
          if (errorCode != U_BUFFER_OVERFLOW_ERROR || pLOut != LOut + offsets[4] || pUIn != pszUnicode+4 )
          {
             log_err("Unexpected results on out of target room to ucnv_fromUnicode\n");
@@ -5215,7 +5215,7 @@ TestLMBCS() {
          pUOut = UOut;
 
          ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &errorCode);
-         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut)/sizeof(UChar),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
          if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 5)
          {
             log_err("Unexpected results on chopped low surrogate\n");
@@ -5229,7 +5229,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut)/sizeof(UChar),(const char **)&pLIn,(const char *)(pLIn+3),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+3),off,TRUE, &errorCode);
          if (UOut[0] != 0xD801 || U_FAILURE(errorCode) || pUOut != UOut + 1 || pLIn != LIn + 3)
          {
             log_err("Unexpected results on chopped at surrogate boundary \n");
@@ -5246,7 +5246,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut)/sizeof(UChar),(const char **)&pLIn,(const char *)(pLIn+6),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+6),off,TRUE, &errorCode);
          if (UOut[0] != 0xD801 || UOut[1] != 0xC9D0 || U_FAILURE(errorCode) || pUOut != UOut + 2 || pLIn != LIn + 6)
          {
             log_err("Unexpected results after unpaired surrogate plus valid Unichar \n");
@@ -5263,7 +5263,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut)/sizeof(UChar),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
          if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 5)
          {
             log_err("Unexpected results after unpaired surrogate plus chopped Unichar \n");
@@ -5280,7 +5280,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut)/sizeof(UChar),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
          if (UOut[0] != 0xD801 || UOut[1] != 0x1B || U_FAILURE(errorCode) || pUOut != UOut + 2 || pLIn != LIn + 5)
          {
             log_err("Unexpected results after unpaired surrogate plus valid non-Unichar\n");
@@ -5296,7 +5296,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut)/sizeof(UChar),(const char **)&pLIn,(const char *)(pLIn+4),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+4),off,TRUE, &errorCode);
 
          if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 4)
          {

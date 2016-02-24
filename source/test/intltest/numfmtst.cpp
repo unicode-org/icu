@@ -2417,7 +2417,7 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
     }; // expect U_USING_DEFAULT_WARNING for both
 
     unsigned int i;
-    for (i = 0; i < sizeof(badLocales) / sizeof(char*); i++) {
+    for (i = 0; i < UPRV_LENGTHOF(badLocales); i++) {
         const char *localeName = badLocales[i];
         Locale locBad(localeName);
         UErrorCode status = U_ZERO_ERROR;
@@ -7555,7 +7555,7 @@ void NumberFormatTest::TestSignificantDigits(void) {
     
     UnicodeString result;
     UnicodeString expectedResult;
-    for (unsigned int i = 0; i < sizeof(input)/sizeof(double); ++i) {
+    for (unsigned int i = 0; i < UPRV_LENGTHOF(input); ++i) {
         numberFormat->format(input[i], result);
         UnicodeString expectedResult(expected[i]);
         if (result != expectedResult) {

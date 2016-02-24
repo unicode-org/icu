@@ -215,7 +215,7 @@ u_printf_string_handler(const u_printf_stream_handler  *handler,
         }
         else {
             s = ufmt_defaultCPToUnicode(arg, argSize, buffer,
-                    sizeof(buffer)/sizeof(UChar));
+                    UPRV_LENGTHOF(buffer));
         }
     }
     else {
@@ -251,7 +251,7 @@ u_printf_char_handler(const u_printf_stream_handler  *handler,
     unsigned char arg = (unsigned char)(args[0].int64Value);
 
     /* convert from default codepage to Unicode */
-    ufmt_defaultCPToUnicode((const char *)&arg, 2, s, sizeof(s)/sizeof(UChar));
+    ufmt_defaultCPToUnicode((const char *)&arg, 2, s, UPRV_LENGTHOF(s));
 
     /* Remember that this may be an MBCS character */
     if (arg != 0) {

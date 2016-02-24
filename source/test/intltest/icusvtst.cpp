@@ -672,7 +672,7 @@ ICUServiceTest::testAPI_Two()
             "en_US_SURFER_GAL",
             "en_US_SURFER_DUDE"
         };
-        int32_t count = sizeof(xids)/sizeof(UnicodeString);
+        int32_t count = UPRV_LENGTHOF(xids);
 
         ICUServiceFactory* f = new TestMultipleKeyStringFactory(xids, count, "Later");
         service.registerFactory(f, status);
@@ -730,7 +730,7 @@ ICUServiceTest::testAPI_Two()
             "en_US_SILICON", 
             "en_US_SILICON_GEEK",
         };
-        int32_t count = sizeof(xids)/sizeof(UnicodeString);
+        int32_t count = UPRV_LENGTHOF(xids);
 
         ICUServiceFactory* f = new TestMultipleKeyStringFactory(xids, count, "Rad dude");
         service.registerFactory(f, status);

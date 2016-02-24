@@ -373,7 +373,7 @@ void TimeUnitTest::testGreekWithFallback() {
         Locale l = Locale::createFromName(locales[locIndex]);
 
         for ( unsigned int numberIndex = 0;
-            numberIndex < sizeof(numbers)/sizeof(int);
+            numberIndex < UPRV_LENGTHOF(numbers);
             ++numberIndex ) {
 
             for ( unsigned int styleIndex = 0;
