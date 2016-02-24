@@ -617,7 +617,7 @@ free(result);
         }
     }
     for(i = 0; i < UNUM_FORMAT_SYMBOL_COUNT; ++i) {
-        resultlength = unum_getSymbol(cur_frpattern, (UNumberFormatSymbol)i, symbol, sizeof(symbol)/U_SIZEOF_UCHAR, &status);
+        resultlength = unum_getSymbol(cur_frpattern, (UNumberFormatSymbol)i, symbol, UPRV_LENGTHOF(symbol), &status);
         if(U_FAILURE(status)) {
             log_err("Error from unum_getSymbol(%d): %s\n", i, myErrorName(status));
             return;
@@ -627,7 +627,7 @@ free(result);
         }
     }
     /*try getting from a bogus symbol*/
-    unum_getSymbol(cur_frpattern, (UNumberFormatSymbol)i, symbol, sizeof(symbol)/U_SIZEOF_UCHAR, &status);
+    unum_getSymbol(cur_frpattern, (UNumberFormatSymbol)i, symbol, UPRV_LENGTHOF(symbol), &status);
     if(U_SUCCESS(status)){
         log_err("Error : Expected U_ILLEGAL_ARGUMENT_ERROR for bogus symbol");
     }
