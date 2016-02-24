@@ -223,9 +223,9 @@ public class MeasureFormat extends UFormat {
     }
 
     /**
-     * Create a format from the JDK locale, formatWidth, and format.
+     * Create a format from the {@link java.util.Locale} and formatWidth.
      *
-     * @param locale the JDK locale.
+     * @param locale the {@link java.util.Locale}.
      * @param formatWidth hints how long formatted strings should be.
      * @return The new MeasureFormat object.
      * @stable ICU 54
@@ -274,9 +274,9 @@ public class MeasureFormat extends UFormat {
     }
 
     /**
-     * Create a format from the JDK locale, formatWidth, and format.
+     * Create a format from the {@link java.util.Locale}, formatWidth, and format.
      *
-     * @param locale the JDK locale.
+     * @param locale the {@link java.util.Locale}.
      * @param formatWidth hints how long formatted strings should be.
      * @param format This is defensively copied.
      * @return The new MeasureFormat object.
@@ -635,8 +635,8 @@ public class MeasureFormat extends UFormat {
 
     /**
      * Return a formatter for CurrencyAmount objects in the given
-     * JDK locale.
-     * @param locale desired JDK locale
+     * {@link java.util.Locale}.
+     * @param locale desired {@link java.util.Locale}
      * @return a formatter object
      * @stable ICU 54
      */

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2013, International Business Machines Corporation and
+ * Copyright (C) 2004-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -20,7 +20,7 @@ public class UCharacterEnums {
     /**
      * 'Enum' for the CharacterCategory constants.  These constants are 
      * compatible in name <b>but not in value</b> with those defined in
-     * <code>java.lang.Character</code>.
+     * {@link java.lang.Character}.
      * @see UCharacterCategory
      * @stable ICU 3.0
      */
@@ -239,10 +239,9 @@ public class UCharacterEnums {
     }
 
     /**
-     * 'Enum' for the CharacterDirection constants.  There are two sets
-     * of names, those used in ICU, and those used in the JDK.  The
-     * JDK constants are compatible in name <b>but not in value</b> 
-     * with those defined in <code>java.lang.Character</code>.
+     * 'Enum' for the CharacterDirection constants. Some constants are
+     * compatible in name <b>but not in value</b> with those defined in
+     * {@link java.lang.Character}.
      * @see UCharacterDirection
      * @stable ICU 3.0
      */
@@ -254,7 +253,9 @@ public class UCharacterEnums {
         public static final int LEFT_TO_RIGHT              = 0;
 
         /**
-         * JDK-compatible synonym for LEFT_TO_RIGHT.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_LEFT_TO_RIGHT}.
+         * Synonym of {@link #LEFT_TO_RIGHT}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_LEFT_TO_RIGHT = (byte)LEFT_TO_RIGHT;
@@ -266,7 +267,9 @@ public class UCharacterEnums {
         public static final int RIGHT_TO_LEFT              = 1;
 
         /**
-         * JDK-compatible synonym for RIGHT_TO_LEFT.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_RIGHT_TO_LEFT}.
+         * Synonym of {@link #RIGHT_TO_LEFT}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_RIGHT_TO_LEFT = (byte)RIGHT_TO_LEFT;
@@ -278,7 +281,9 @@ public class UCharacterEnums {
         public static final int EUROPEAN_NUMBER            = 2;
 
         /**
-         * JDK-compatible synonym for EUROPEAN_NUMBER.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_EUROPEAN_NUMBER}.
+         * Synonym of {@link #EUROPEAN_NUMBER}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_EUROPEAN_NUMBER = (byte)EUROPEAN_NUMBER;
@@ -290,7 +295,9 @@ public class UCharacterEnums {
         public static final int EUROPEAN_NUMBER_SEPARATOR  = 3;
 
         /**
-         * JDK-compatible synonym for EUROPEAN_NUMBER_SEPARATOR.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_EUROPEAN_NUMBER_SEPARATOR}.
+         * Synonym of {@link #EUROPEAN_NUMBER_SEPARATOR}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_EUROPEAN_NUMBER_SEPARATOR = (byte)EUROPEAN_NUMBER_SEPARATOR;
@@ -302,7 +309,9 @@ public class UCharacterEnums {
         public static final int EUROPEAN_NUMBER_TERMINATOR = 4;
 
         /**
-         * JDK-compatible synonym for EUROPEAN_NUMBER_TERMINATOR.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_EUROPEAN_NUMBER_TERMINATOR}.
+         * Synonym of {@link #EUROPEAN_NUMBER_TERMINATOR}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_EUROPEAN_NUMBER_TERMINATOR = (byte)EUROPEAN_NUMBER_TERMINATOR;
@@ -314,7 +323,9 @@ public class UCharacterEnums {
         public static final int ARABIC_NUMBER              = 5;
 
         /**
-         * JDK-compatible synonym for ARABIC_NUMBER.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_ARABIC_NUMBER}.
+         * Synonym of {@link #ARABIC_NUMBER}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_ARABIC_NUMBER = (byte)ARABIC_NUMBER;
@@ -326,7 +337,9 @@ public class UCharacterEnums {
         public static final int COMMON_NUMBER_SEPARATOR    = 6;
 
         /**
-         * JDK-compatible synonym for COMMON_NUMBER_SEPARATOR.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_COMMON_NUMBER_SEPARATOR}.
+         * Synonym of {@link #COMMON_NUMBER_SEPARATOR}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_COMMON_NUMBER_SEPARATOR = (byte)COMMON_NUMBER_SEPARATOR;
@@ -338,7 +351,9 @@ public class UCharacterEnums {
         public static final int BLOCK_SEPARATOR            = 7;
 
         /**
-         * JDK-compatible synonym for BLOCK_SEPARATOR.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_PARAGRAPH_SEPARATOR}.
+         * Synonym of {@link #BLOCK_SEPARATOR}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_PARAGRAPH_SEPARATOR = (byte)BLOCK_SEPARATOR;
@@ -350,7 +365,9 @@ public class UCharacterEnums {
         public static final int SEGMENT_SEPARATOR          = 8;
 
         /**
-         * JDK-compatible synonym for SEGMENT_SEPARATOR.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_SEGMENT_SEPARATOR}.
+         * Synonym of {@link #SEGMENT_SEPARATOR}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_SEGMENT_SEPARATOR = (byte)SEGMENT_SEPARATOR;
@@ -362,7 +379,8 @@ public class UCharacterEnums {
         public static final int WHITE_SPACE_NEUTRAL        = 9;
 
         /**
-         * JDK-compatible synonym for WHITE_SPACE_NEUTRAL.
+         * Equivalent to {@link java.lang.Character#DIRECTIONALITY_WHITESPACE}.
+         * Synonym of {@link #WHITE_SPACE_NEUTRAL}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_WHITESPACE = (byte)WHITE_SPACE_NEUTRAL;
@@ -374,7 +392,8 @@ public class UCharacterEnums {
         public static final int OTHER_NEUTRAL              = 10;
 
         /**
-         * JDK-compatible synonym for OTHER_NEUTRAL.
+         * Equivalent to {@link java.lang.Character#DIRECTIONALITY_OTHER_NEUTRALS}.
+         * Synonym of {@link #OTHER_NEUTRAL}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_OTHER_NEUTRALS = (byte)OTHER_NEUTRAL;
@@ -386,7 +405,9 @@ public class UCharacterEnums {
         public static final int LEFT_TO_RIGHT_EMBEDDING    = 11;
 
         /**
-         * JDK-compatible synonym for LEFT_TO_RIGHT_EMBEDDING.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING}.
+         * Synonym of {@link #LEFT_TO_RIGHT_EMBEDDING}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING = (byte)LEFT_TO_RIGHT_EMBEDDING;
@@ -398,7 +419,9 @@ public class UCharacterEnums {
         public static final int LEFT_TO_RIGHT_OVERRIDE     = 12;  
 
         /**
-         * JDK-compatible synonym for LEFT_TO_RIGHT_OVERRIDE.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE}.
+         * Synonym of {@link #LEFT_TO_RIGHT_OVERRIDE}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE = (byte)LEFT_TO_RIGHT_OVERRIDE;
@@ -410,7 +433,9 @@ public class UCharacterEnums {
         public static final int RIGHT_TO_LEFT_ARABIC       = 13;
 
         /**
-         * JDK-compatible synonym for RIGHT_TO_LEFT_ARABIC.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC}.
+         * Synonym of {@link #RIGHT_TO_LEFT_ARABIC}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC = (byte)RIGHT_TO_LEFT_ARABIC;
@@ -422,7 +447,9 @@ public class UCharacterEnums {
         public static final int RIGHT_TO_LEFT_EMBEDDING    = 14;
 
         /**
-         * JDK-compatible synonym for RIGHT_TO_LEFT_EMBEDDING.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING}.
+         * Synonym of {@link #RIGHT_TO_LEFT_EMBEDDING}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING = (byte)RIGHT_TO_LEFT_EMBEDDING;
@@ -434,7 +461,9 @@ public class UCharacterEnums {
         public static final int RIGHT_TO_LEFT_OVERRIDE     = 15;
 
         /**
-         * JDK-compatible synonym for RIGHT_TO_LEFT_OVERRIDE.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE}.
+         * Synonym of {@link #RIGHT_TO_LEFT_OVERRIDE}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE = (byte)RIGHT_TO_LEFT_OVERRIDE;
@@ -446,7 +475,9 @@ public class UCharacterEnums {
         public static final int POP_DIRECTIONAL_FORMAT     = 16;
 
         /**
-         * JDK-compatible synonym for POP_DIRECTIONAL_FORMAT.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_POP_DIRECTIONAL_FORMAT}.
+         * Synonym of {@link #POP_DIRECTIONAL_FORMAT}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_POP_DIRECTIONAL_FORMAT = (byte)POP_DIRECTIONAL_FORMAT;
@@ -458,7 +489,9 @@ public class UCharacterEnums {
         public static final int DIR_NON_SPACING_MARK       = 17;
 
         /**
-         * JDK-compatible synonym for DIR_NON_SPACING_MARK.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_NONSPACING_MARK}.
+         * Synonym of {@link #DIR_NON_SPACING_MARK}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_NONSPACING_MARK = (byte)DIR_NON_SPACING_MARK;
@@ -470,7 +503,9 @@ public class UCharacterEnums {
         public static final int BOUNDARY_NEUTRAL           = 18;
 
         /**
-         * JDK-compatible synonym for BOUNDARY_NEUTRAL.
+         * Equivalent to {@link
+         * java.lang.Character#DIRECTIONALITY_BOUNDARY_NEUTRAL}.
+         * Synonym of {@link #BOUNDARY_NEUTRAL}.
          * @stable ICU 3.0
          */
         public static final byte DIRECTIONALITY_BOUNDARY_NEUTRAL = (byte)BOUNDARY_NEUTRAL;

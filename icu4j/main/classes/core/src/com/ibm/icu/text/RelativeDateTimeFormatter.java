@@ -421,9 +421,9 @@ public final class RelativeDateTimeFormatter {
     }
 
     /**
-     * Returns a RelativeDateTimeFormatter for a particular JDK locale.
+     * Returns a RelativeDateTimeFormatter for a particular {@link java.util.Locale}.
      * 
-     * @param locale the JDK locale.
+     * @param locale the {@link java.util.Locale}.
      * @return An instance of RelativeDateTimeFormatter.
      * @stable ICU 54
      */
@@ -482,10 +482,10 @@ public final class RelativeDateTimeFormatter {
     }
 
     /**
-     * Returns a RelativeDateTimeFormatter for a particular JDK locale that uses a particular
-     * NumberFormat object.
+     * Returns a RelativeDateTimeFormatter for a particular {@link java.util.Locale} that uses a
+     * particular NumberFormat object.
      * 
-     * @param locale the JDK locale
+     * @param locale the {@link java.util.Locale}
      * @param nf the number format object. It is defensively copied to ensure thread-safety
      * and immutability of this class. 
      * @return An instance of RelativeDateTimeFormatter.

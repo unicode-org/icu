@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2015, International Business Machines Corporation and    *
+ * Copyright (C) 2011-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -490,12 +490,13 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     }
 
     /**
-     * Returns a frozen instance of <code>TimeZoneFormat</code> for the given JDK locale.
+     * Returns a frozen instance of <code>TimeZoneFormat</code> for the given
+     * {@link java.text.Locale}.
      * <p><b>Note</b>: The instance returned by this method is frozen. If you want to
      * customize a TimeZoneFormat, you must use {@link #cloneAsThawed()} to get a
      * thawed copy first.
      * 
-     * @param locale the JDK locale.
+     * @param locale the {@link Locale}.
      * @return a frozen instance of <code>TimeZoneFormat</code> for the given locale.
      * @stable ICU 54
      */

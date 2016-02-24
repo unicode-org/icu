@@ -1,6 +1,6 @@
 /*
  ***************************************************************************
- * Copyright (C) 2008-2015 International Business Machines Corporation
+ * Copyright (C) 2008-2016 International Business Machines Corporation
  * and others. All Rights Reserved.
  ***************************************************************************
  *
@@ -1494,8 +1494,8 @@ public class SpoofChecker {
     }
 
     /**
-     * Get a set of JDK locales for the scripts that are acceptable in strings to be checked. If no limitations on scripts
-     * have been specified, an empty set will be returned.
+     * Get a set of {@link java.util.Locale} instances for the scripts that are acceptable in strings to be checked. If no
+     * limitations on scripts have been specified, an empty set will be returned.
      *
      * @return A set of locales corresponding to the acceptable scripts.
      * @stable ICU 54

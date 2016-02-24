@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1782,8 +1782,8 @@ public abstract class NumberFormat extends UFormat {
     private static final long serialVersionUID = -2308460125733713944L;
 
     /**
-     * Empty constructor.  Public for compatibility with JDK which lets the
-     * compiler generate a default public constructor even though this is
+     * Empty constructor.  Public for API compatibility with historic versions of
+     * {@link java.text.NumberFormat} which had public constructor even though this is
      * an abstract class.
      * @stable ICU 2.6
      */

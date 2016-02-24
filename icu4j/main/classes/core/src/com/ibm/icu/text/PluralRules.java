@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2015, International Business Machines Corporation and
+ * Copyright (C) 2007-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1823,14 +1823,14 @@ public class PluralRules implements Serializable {
 
     /**
      * Provides access to the predefined cardinal-number <code>PluralRules</code> for a given
-     * JDK locale.
+     * {@link java.util.Locale}.
      * Same as forLocale(locale, PluralType.CARDINAL).
      *
      * <p>ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
      * For these predefined rules, see CLDR page at
      * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
      *
-     * @param locale The JDK locale for which a <code>PluralRules</code> object is
+     * @param locale The locale for which a <code>PluralRules</code> object is
      *   returned.
      * @return The predefined <code>PluralRules</code> object for this locale.
      *   If there's no predefined rules for this locale, the rules
@@ -1867,13 +1867,13 @@ public class PluralRules implements Serializable {
 
     /**
      * Provides access to the predefined <code>PluralRules</code> for a given
-     * JDK locale and the plural type.
+     * {@link java.util.Locale} and the plural type.
      *
      * <p>ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
      * For these predefined rules, see CLDR page at
      * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
      *
-     * @param locale The JDK locale for which a <code>PluralRules</code> object is
+     * @param locale The locale for which a <code>PluralRules</code> object is
      *   returned.
      * @param type The plural type (e.g., cardinal or ordinal).
      * @return The predefined <code>PluralRules</code> object for this locale.

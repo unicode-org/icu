@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2014, International Business Machines
+*   Copyright (C) 2010-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2010aug21
@@ -130,7 +130,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
          * a double apostrophe pattern character.
          * A single apostrophe always starts quoted literal text.
          * <p>
-         * This is the behavior of ICU 4.6 and earlier, and of the JDK.
+         * This is the behavior of ICU 4.6 and earlier, and of {@link java.text.MessageFormat}.
          * @stable ICU 4.8
          */
         DOUBLE_REQUIRED
