@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2006, International Business Machines Corporation and
+ * Copyright (c) 2001-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -8,6 +8,7 @@
 #define RBBINODE_H
 
 #include "unicode/utypes.h"
+#include "unicode/unistr.h"
 #include "unicode/uobject.h"
 
 //
