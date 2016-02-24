@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 1996-2015, International Business Machines
+ *   Copyright (C) 1996-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -1882,10 +1882,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object that can be used to format times in
      * the calendar system specified by <code>cal</code>.
-     * <p>
-     * <b>Note:</b> When this functionality is moved into the core JDK, this method
-     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
-     * <p>
      * @param cal   The calendar system for which a time format is desired.
      *
      * @param timeStyle The type of time format desired.  This can be
@@ -1905,10 +1901,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object that can be used to format times in
      * the calendar system specified by <code>cal</code>.
-     * <p>
-     * <b>Note:</b> When this functionality is moved into the core JDK, this method
-     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
-     * <p>
      * @param cal   The calendar system for which a time format is desired.
      *
      * @param timeStyle The type of time format desired.  This can be
@@ -1928,10 +1920,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object that can be used to format dates and times in
      * the calendar system specified by <code>cal</code>.
-     * <p>
-     * <b>Note:</b> When this functionality is moved into the core JDK, this method
-     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
-     * <p>
      * @param cal   The calendar system for which a date/time format is desired.
      *
      * @param dateStyle The type of date format desired.  This can be
@@ -1956,10 +1944,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object that can be used to format dates and times in
      * the calendar system specified by <code>cal</code>.
-     * <p>
-     * <b>Note:</b> When this functionality is moved into the core JDK, this method
-     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
-     * <p>
      * @param cal   The calendar system for which a date/time format is desired.
      *
      * @param dateStyle The type of date format desired.  This can be
@@ -2038,10 +2022,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object that can be used to format times in
      * the calendar system specified by <code>cal</code>.
-     * <p>
-     * <b>Note:</b> When this functionality is moved into the core JDK, this method
-     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
-     * <p>
      * @param cal   The calendar system for which a time format is desired.
      *
      * @param timeStyle The type of time format desired.  This can be
@@ -2058,10 +2038,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object for the default locale that can be used to format
      * dates and times in the calendar system specified by <code>cal</code>.
-     * <p>
-     * <b>Note:</b> When this functionality is moved into the core JDK, this method
-     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
-     * <p>
      * @param cal   The calendar system for which a date/time format is desired.
      *
      * @param dateStyle The type of date format desired.  This can be

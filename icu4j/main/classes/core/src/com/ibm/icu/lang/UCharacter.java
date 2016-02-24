@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -2424,8 +2424,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
 
         /**
-         * Cover the JDK 1.5 API.  Return the Unicode block with the
-         * given name. {@icunote} Unlike JDK 1.5, this only matches
+         * Alternative to the {@link java.lang.Character.UnicodeBlock#forName(String)} method.
+         * Returns the Unicode block with the given name. {@icunote} Unlike
+         * {@link java.lang.Character.UnicodeBlock#forName(String)}, this only matches
          * against the official UCD name and the Java block name
          * (ignoring case).
          * @param blockName the name of the block to match
@@ -5936,7 +5937,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static final int MIN_CODE_POINT = Character.MIN_CODE_POINT;
 
     /**
-     * Cover the JDK 1.5 API, for convenience.
+     * Equivalent to {@link Character#isValidCodePoint}.
+     *
      * @param cp the code point to check
      * @return true if cp is a valid code point
      * @stable ICU 3.0
@@ -6193,11 +6195,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Cover the JDK API, for convenience.  Return a byte representing the directionality of
-     * the character.
+     * Equivalent to the {@link Character#getDirectionality(char)} method, for
+     * convenience. Returns a byte representing the directionality of the
+     * character.
      *
-     * {@icunote} Unlike the JDK, this returns DIRECTIONALITY_LEFT_TO_RIGHT for undefined
-     * or out-of-bounds characters.
+     * {@icunote} Unlike {@link Character#getDirectionality(char)}, this returns
+     * DIRECTIONALITY_LEFT_TO_RIGHT for undefined or out-of-bounds characters.
      *
      * {@icunote} The return value must be tested using the constants defined in {@link
      * UCharacterDirection} and its interface {@link
@@ -6214,7 +6217,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Cover the JDK API, for convenience.  Count the number of code points in the range of text.
+     * Equivalent to the {@link Character#codePointCount(CharSequence, int, int)}
+     * method, for convenience.  Counts the number of code points in the range
+     * of text.
      * @param text the characters to check
      * @param start the start of the range
      * @param limit the limit of the range
@@ -6243,7 +6248,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Cover the JDK API, for convenience.  Count the number of code points in the range of text.
+     * Equivalent to the {@link Character#codePointCount(char[], int, int)} method, for
+     * convenience. Counts the number of code points in the range of text.
      * @param text the characters to check
      * @param start the start of the range
      * @param limit the limit of the range
@@ -6272,7 +6278,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Cover the JDK API, for convenience.  Adjust the char index by a code point offset.
+     * Equivalent to the {@link Character#offsetByCodePoints(CharSequence, int, int)}
+     * method, for convenience.  Adjusts the char index by a code point offset.
      * @param text the characters to check
      * @param index the index to adjust
      * @param codePointOffset the number of code points by which to offset the index
@@ -6316,7 +6323,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Cover the JDK API, for convenience.  Adjust the char index by a code point offset.
+     * Equivalent to the
+     * {@link Character#offsetByCodePoints(char[], int, int, int, int)}
+     * method, for convenience.  Adjusts the char index by a code point offset.
      * @param text the characters to check
      * @param start the start of the range to check
      * @param count the length of the range to check

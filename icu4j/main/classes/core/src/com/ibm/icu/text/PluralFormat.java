@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2015, International Business Machines Corporation and
+ * Copyright (C) 2007-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -201,7 +201,8 @@ public class PluralFormat extends UFormat {
     }
 
     /**
-     * Creates a new cardinal-number <code>PluralFormat</code> for a given JDK locale.
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given
+     * {@link java.util.Locale}.
      * @param locale the <code>PluralFormat</code> will be configured with
      *        rules for this locale. This locale will also be used for standard
      *        number formatting.
@@ -263,7 +264,7 @@ public class PluralFormat extends UFormat {
 
     /**
      * Creates a new <code>PluralFormat</code> for the plural type.
-     * The standard number formatting will be done using the given JDK locale.
+     * The standard number formatting will be done using the given {@link java.util.Locale}.
      * @param locale the default number formatting will be done using this
      *        locale.
      * @param type The plural type (e.g., cardinal or ordinal).

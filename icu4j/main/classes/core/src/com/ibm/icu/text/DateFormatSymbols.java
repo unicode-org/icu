@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1288,12 +1288,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * When a localized display name is not available, the corresponding
      * array element will be <code>null</code>.
      * <p>
-     * <b>Note</b>: ICU implements time zone display name formatting algorithm
+     * <b>Note</b>: ICU implements the time zone display name formatting algorithm
      * specified by <a href="http://www.unicode.org/reports/tr35/">UTS#35 Unicode
      * Locale Data Markup Language(LDML)</a>. The algorithm supports historic
-     * display name changes and various different type of names not available in
-     * JDK. For accessing the full set of time zone string data used by ICU implementation,
-     * you should use {@link TimeZoneNames} APIs instead.
+     * display name changes and various different types of names not available in
+     * {@link java.text.DateFormatSymbols#getZoneStrings()}. For accessing the full
+     * set of time zone string data used by ICU implementation, you should use
+     * {@link TimeZoneNames} APIs instead.
      * 
      * @return the time zone strings.
      * @stable ICU 2.0

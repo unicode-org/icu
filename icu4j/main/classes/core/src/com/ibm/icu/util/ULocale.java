@@ -423,7 +423,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * Construct a ULocale object from a {@link java.util.Locale}.
-     * @param loc a JDK locale
+     * @param loc a {@link java.util.Locale}
      */
     private ULocale(Locale loc) {
         this.localeID = getName(forLocale(loc).toString());
@@ -433,7 +433,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /**
      * {@icu} Returns a ULocale object for a {@link java.util.Locale}.
      * The ULocale is canonicalized.
-     * @param loc a JDK locale
+     * @param loc a {@link java.util.Locale}
      * @stable ICU 3.2
      */
     public static ULocale forLocale(Locale loc) {
@@ -542,7 +542,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * {@icu} Converts this ULocale object to a {@link java.util.Locale}.
-     * @return a JDK locale that either exactly represents this object
+     * @return a {@link java.util.Locale} that either exactly represents this object
      * or is the closest approximation.
      * @stable ICU 2.8
      */
@@ -613,15 +613,16 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * The default ULocale is synchronized to the default Java Locale. This method checks
      * the current default Java Locale and returns an equivalent ULocale.
      * <p>
-     * <b>Note:</b> Before Java 7, the JDK Locale was not able to represent a locale's script.
-     * Therefore, the script field in the default ULocale is always empty unless
+     * <b>Note:</b> Before Java 7, the {@link java.util.Locale} was not able to represent a
+     * locale's script. Therefore, the script field in the default ULocale is always empty unless
      * a ULocale with non-empty script is explicitly set by {@link #setDefault(ULocale)}
      * on Java 6 or older systems.
      * <p>
      * <b>Note for ICU 49 or later:</b> Some JRE implementations allow users to override the default
-     * JDK Locale using system properties - <code>user.language</code>, <code>user.country</code>
-     * and <code>user.variant</code>. In addition to these system properties, some Java 7
-     * implementations support <code>user.script</code> for overriding the default Locale's script.
+     * {@link java.util.Locale} using system properties - <code>user.language</code>,
+     * <code>user.country</code> and <code>user.variant</code>. In addition to these system
+     * properties, some Java 7 implementations support <code>user.script</code> for overriding the
+     * default Locale's script.
      * ICU 49 and later versions use the <code>user.script</code> system property on Java 6
      * or older systems supporting other <code>user.*</code> system properties to initialize
      * the default ULocale. The <code>user.script</code> override for default ULocale is not

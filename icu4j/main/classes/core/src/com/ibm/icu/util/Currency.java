@@ -194,10 +194,10 @@ public class Currency extends MeasureUnit {
 
     /**
      * Returns an array of Strings which contain the currency
-     * identifiers that are valid for the given JDK locale on the 
+     * identifiers that are valid for the given {@link java.util.Locale} on the
      * given date.  If there are no such identifiers, returns null.
      * Returned identifiers are in preference order.
-     * @param loc the JDK locale for which to retrieve currency codes.
+     * @param loc the {@link java.util.Locale} for which to retrieve currency codes.
      * @param d the date for which to retrieve currency codes for the given locale.
      * @return The array of ISO currency codes.
      * @stable ICU 54
@@ -596,7 +596,8 @@ public class Currency extends MeasureUnit {
      * If the resource data for the default locale contains no entry for this currency,
      * then the ISO 4217 code is returned.
      * <p>
-     * Note: This method was added for JDK compatibility support and equivalent to
+     * Note: This method is a convenience equivalent for
+     * {@link java.util.Currency#getDisplayName()} and is equivalent to
      * <code>getName(Locale.getDefault(), LONG_NAME, null)</code>.
      * 
      * @return The display name of this currency
@@ -613,8 +614,9 @@ public class Currency extends MeasureUnit {
      * If the resource data for the given locale contains no entry for this currency,
      * then the ISO 4217 code is returned.
      * <p>
-     * Note: This method was added for JDK compatibility support and equivalent to
-     * <code>getName(locale, LONG_NAME, null)</code>.
+     * Note: This method is a convenience equivalent for
+     * {@link java.util.Currency#getDisplayName(java.util.Locale)} and is equivalent
+     * to <code>getName(locale, LONG_NAME, null)</code>.
      * 
      * @param locale locale in which to display currency
      * @return The display name of this currency for the specified locale
