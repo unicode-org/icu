@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2015, International Business Machines Corporation and
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2007-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 *
 * File DTPTNGEN.H
@@ -9,10 +9,11 @@
 *******************************************************************************
 */
 
-#include "uvector.h"
-
 #ifndef __DTPTNGEN_IMPL_H__
 #define __DTPTNGEN_IMPL_H__
+
+#include "unicode/udatpg.h"
+#include "uvector.h"
 
 // TODO(claireho): Split off Builder class.
 // TODO(claireho): If splitting off Builder class: As subclass or independent?

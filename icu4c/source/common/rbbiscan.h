@@ -1,7 +1,7 @@
 //
 //  rbbiscan.h
 //
-//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2016, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for class RBBIRuleScanner
@@ -21,9 +21,7 @@
 #include "unicode/symtable.h"// For UnicodeSet parsing, is the interface that
                           //    looks up references to $variables within a set.
 #include "rbbinode.h"
-//#include "rbbitblb.h"
-
-
+#include "rbbirpt.h"
 
 U_NAMESPACE_BEGIN
 

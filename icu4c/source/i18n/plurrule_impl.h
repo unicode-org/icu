@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2015, International Business Machines Corporation and
+* Copyright (C) 2007-2016, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -33,6 +33,7 @@ U_NAMESPACE_BEGIN
 class AndConstraint;
 class RuleChain;
 class DigitInterval;
+class PluralRules;
 class VisibleDigits;
 
 static const UChar DOT             = ((UChar)0x002E);
