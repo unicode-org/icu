@@ -3211,7 +3211,7 @@ static void TestGetLocaleForLCID() {
         status = U_ZERO_ERROR;
     }
     
-    length = uloc_getLocaleForLCID(lcid, temp2, sizeof(temp2)/sizeof(char), &status);
+    length = uloc_getLocaleForLCID(lcid, temp2, UPRV_LENGTHOF(temp2), &status);
     if (U_FAILURE(status)) {
         log_err("  unexpected result from uloc_getLocaleForLCID(0x0409): %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
@@ -3221,7 +3221,7 @@ static void TestGetLocaleForLCID() {
         log_err("  uloc_getLocaleForLCID(0x0409): returned length %d does not match preflight length %d\n", length, lengthPre);
     }
     
-    length = uloc_getLocaleForLCID(0x12345, temp2, sizeof(temp2)/sizeof(char), &status);
+    length = uloc_getLocaleForLCID(0x12345, temp2, UPRV_LENGTHOF(temp2), &status);
     if (U_SUCCESS(status)) {
         log_err("  unexpected result from uloc_getLocaleForLCID(0x12345): %s, status %s\n", temp2, u_errorName(status));
     }
@@ -3235,7 +3235,7 @@ static void TestGetLocaleForLCID() {
         log_verbose("Testing   %s ......\n", testLocale);
         
         sscanf(rawData2[LCID][i], "%x", &lcid);
-        length = uloc_getLocaleForLCID(lcid, temp2, sizeof(temp2)/sizeof(char), &status);
+        length = uloc_getLocaleForLCID(lcid, temp2, UPRV_LENGTHOF(temp2), &status);
         if (U_FAILURE(status)) {
             log_err("  unexpected failure of uloc_getLocaleForLCID(%#04x), status %s\n", lcid, u_errorName(status));
             status = U_ZERO_ERROR;
@@ -3247,7 +3247,7 @@ static void TestGetLocaleForLCID() {
         }
         
         /* Compare language, country, script */
-        length = uloc_getLanguage(temp2, temp3, sizeof(temp3)/sizeof(char), &status);
+        length = uloc_getLanguage(temp2, temp3, UPRV_LENGTHOF(temp3), &status);
         if (U_FAILURE(status)) {
             log_err("  couldn't get language in uloc_getLocaleForLCID(%#04x) = %s, status %s\n", lcid, temp2, u_errorName(status));
             status = U_ZERO_ERROR;
@@ -3256,7 +3256,7 @@ static void TestGetLocaleForLCID() {
             log_err("  language doesn't match expected %s in in uloc_getLocaleForLCID(%#04x) = %s\n", rawData2[LANG][i], lcid, temp2);
         }
         
-        length = uloc_getScript(temp2, temp3, sizeof(temp3)/sizeof(char), &status);
+        length = uloc_getScript(temp2, temp3, UPRV_LENGTHOF(temp3), &status);
         if (U_FAILURE(status)) {
             log_err("  couldn't get script in uloc_getLocaleForLCID(%#04x) = %s, status %s\n", lcid, temp2, u_errorName(status));
             status = U_ZERO_ERROR;
@@ -3265,7 +3265,7 @@ static void TestGetLocaleForLCID() {
             log_err("  script doesn't match expected %s in in uloc_getLocaleForLCID(%#04x) = %s\n", rawData2[SCRIPT][i], lcid, temp2);
         }
         
-        length = uloc_getCountry(temp2, temp3, sizeof(temp3)/sizeof(char), &status);
+        length = uloc_getCountry(temp2, temp3, UPRV_LENGTHOF(temp3), &status);
         if (U_FAILURE(status)) {
             log_err("  couldn't get country in uloc_getLocaleForLCID(%#04x) = %s, status %s\n", lcid, temp2, u_errorName(status));
             status = U_ZERO_ERROR;

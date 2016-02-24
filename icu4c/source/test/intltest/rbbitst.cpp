@@ -3732,7 +3732,7 @@ void RBBITest::TestWordBreaks(void)
         errcheckln(status, "Creation of break iterator failed %s", u_errorName(status));
         return;
     }
-    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
+    for (loop = 0; loop < UPRV_LENGTHOF(strlist); loop ++) {
         // printf("looping %d\n", loop);
         UnicodeString ustr = CharsToUnicodeString(strlist[loop]);
         // RBBICharMonkey monkey;
@@ -3798,7 +3798,7 @@ void RBBITest::TestWordBoundary(void)
         errcheckln(status, "Creation of break iterator failed %s", u_errorName(status));
         return;
     }
-    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
+    for (loop = 0; loop < UPRV_LENGTHOF(strlist); loop ++) {
         // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
         UnicodeString ustr(str);
@@ -3896,7 +3896,7 @@ void RBBITest::TestLineBreaks(void)
     if (U_FAILURE(status)) {
         return;
     }
-    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
+    for (loop = 0; loop < UPRV_LENGTHOF(strlist); loop ++) {
         // printf("looping %d\n", loop);
         int32_t t = u_unescape(strlist[loop], str, STRSIZE);
         if (t >= STRSIZE) {
@@ -3966,7 +3966,7 @@ void RBBITest::TestSentBreaks(void)
         errcheckln(status, "Creation of break iterator failed %s", u_errorName(status));
         return;
     }
-    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
+    for (loop = 0; loop < UPRV_LENGTHOF(strlist); loop ++) {
         u_unescape(strlist[loop], str, UPRV_LENGTHOF(str));
         UnicodeString ustr(str);
 

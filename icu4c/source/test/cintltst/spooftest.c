@@ -1,6 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 2009-2015, International Business Machines Corporation and
+ * COPYRIGHT:
+ * Copyright (c) 2009-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -27,6 +27,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uset.h"
 #include "cintltst.h"
+#include "cmemory.h"
 
 #define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
     log_err_status(status, "Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));}}
@@ -521,13 +522,13 @@ static void TestUSpoofCAPI(void) {
         UChar dest[100];
         int32_t   skelLength;
 
-        skelLength = uspoof_getSkeleton(sc, USPOOF_ANY_CASE, lll_Latin_a, -1, dest, sizeof(dest)/sizeof(UChar), &status);
+        skelLength = uspoof_getSkeleton(sc, USPOOF_ANY_CASE, lll_Latin_a, -1, dest, UPRV_LENGTHOF(dest), &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, u_strcmp(lll_Skel, dest));
         TEST_ASSERT_EQ(u_strlen(lll_Skel), skelLength);
 
         skelLength = uspoof_getSkeletonUTF8(sc, USPOOF_ANY_CASE, goodLatinUTF8, -1, (char*)dest, 
-                                            sizeof(dest)/sizeof(UChar), &status);
+                                            UPRV_LENGTHOF(dest), &status);
         TEST_ASSERT_SUCCESS(status);
 
         skelLength = uspoof_getSkeleton(sc, USPOOF_ANY_CASE, lll_Latin_a, -1, NULL, 0, &status);

@@ -152,7 +152,7 @@ static void U_CALLCONV TestStream(void)
     ostrstream outLargeStream(testLargeStreamBuf, sizeof(testLargeStreamBuf));
 #endif
     UChar large_array[200];
-    int32_t large_array_length = sizeof(large_array)/sizeof(UChar);
+    int32_t large_array_length = UPRV_LENGTHOF(large_array);
     for (int32_t i = 0; i < large_array_length; i++) {
         large_array[i] = 0x41;
     }

@@ -1,7 +1,6 @@
-
 /***********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation
+ * COPYRIGHT:
+ * Copyright (c) 1997-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -83,7 +82,7 @@ void test_FieldPosition_example( void )
     //***** this test is for compiler checks and visual verification only.
     double doubleNum[] = { 123456789.0, -12345678.9, 1234567.89, -123456.789,
         12345.6789, -1234.56789, 123.456789, -12.3456789, 1.23456789};
-    int32_t dNumSize = (int32_t)(sizeof(doubleNum)/sizeof(double));
+    int32_t dNumSize = UPRV_LENGTHOF(doubleNum);
 
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat* fmt = (DecimalFormat*) NumberFormat::createInstance(status);
@@ -315,8 +314,8 @@ void test_Formattable( void )
     const Formattable ftarr1[] = { Formattable( (int32_t)1 ), Formattable( (int32_t)2 ) };
     const Formattable ftarr2[] = { Formattable( (int32_t)3 ), Formattable( (int32_t)4 ) };
 
-    const int32_t ftarr1_cnt = (int32_t)(sizeof(ftarr1) / sizeof(Formattable));
-    const int32_t ftarr2_cnt = (int32_t)(sizeof(ftarr2) / sizeof(Formattable));
+    const int32_t ftarr1_cnt = UPRV_LENGTHOF(ftarr1);
+    const int32_t ftarr2_cnt = UPRV_LENGTHOF(ftarr2);
 
     ft_arr.setArray( ftarr1, ftarr1_cnt );
     if ((ft_arr[0].getType() == Formattable::kLong) && (ft_arr[0].getLong() == (int32_t)1)) {

@@ -1896,7 +1896,7 @@ IntlTestRBNF::TestAllLocales()
                 continue;
             }
 #if !UCONFIG_NO_COLLATION
-            for (unsigned int numidx = 0; numidx < sizeof(numbers)/sizeof(double); numidx++) {
+            for (unsigned int numidx = 0; numidx < UPRV_LENGTHOF(numbers); numidx++) {
                 double n = numbers[numidx];
                 UnicodeString str;
                 f->format(n, str);

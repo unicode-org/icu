@@ -908,7 +908,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(zu),    /*  zu  Zulu                      0x35 */
 };
 
-static const uint32_t gLocaleCount = sizeof(gPosixIDmap)/sizeof(ILcidPosixMap);
+static const uint32_t gLocaleCount = UPRV_LENGTHOF(gPosixIDmap);
 
 /**
  * Do not call this function. It is called by hostID.

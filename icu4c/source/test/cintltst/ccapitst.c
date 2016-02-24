@@ -1893,7 +1893,7 @@ static void TestCCSID() {
     int32_t ccsids[]={ 37, 850, 943, 949, 950, 1047, 1252, 1392, 33722 };
     int32_t i, ccsid;
 
-    for(i=0; i<(int32_t)(sizeof(ccsids)/sizeof(int32_t)); ++i) {
+    for(i=0; i<UPRV_LENGTHOF(ccsids); ++i) {
         ccsid=ccsids[i];
 
         errorCode=U_ZERO_ERROR;
