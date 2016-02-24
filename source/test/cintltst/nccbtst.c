@@ -199,7 +199,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         static const int32_t fromUOffsets[] = { 0, 2, 3, 3, 3, 5, 5, 6, 6, 8, 8, 8, 8 };
 
         /* test ibm-930 (EBCDIC_STATEFUL) with fallbacks that are not taken to check correct state transitions */
-        if(!testConvertFromUnicode(fromU, sizeof(fromU)/U_SIZEOF_UCHAR,
+        if(!testConvertFromUnicode(fromU, UPRV_LENGTHOF(fromU),
                                    fromUBytes, sizeof(fromUBytes),
                                    "ibm-930",
                                    UCNV_FROM_U_CALLBACK_SKIP, fromUOffsets,
@@ -220,7 +220,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         static const int32_t latin1FromUOffsets[] = { 0, 1, 3, 6 };
 
         /* US-ASCII */
-        if(!testConvertFromUnicode(usasciiFromU, sizeof(usasciiFromU)/U_SIZEOF_UCHAR,
+        if(!testConvertFromUnicode(usasciiFromU, UPRV_LENGTHOF(usasciiFromU),
                                    usasciiFromUBytes, sizeof(usasciiFromUBytes),
                                    "US-ASCII",
                                    UCNV_FROM_U_CALLBACK_SKIP, usasciiFromUOffsets,
@@ -231,7 +231,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
         /* SBCS NLTC codepage 367 for US-ASCII */
-        if(!testConvertFromUnicode(usasciiFromU, sizeof(usasciiFromU)/U_SIZEOF_UCHAR,
+        if(!testConvertFromUnicode(usasciiFromU, UPRV_LENGTHOF(usasciiFromU),
                                    usasciiFromUBytes, sizeof(usasciiFromUBytes),
                                    "ibm-367",
                                    UCNV_FROM_U_CALLBACK_SKIP, usasciiFromUOffsets,
@@ -242,7 +242,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 #endif
 
         /* ISO-Latin-1 */
-        if(!testConvertFromUnicode(latin1FromU, sizeof(latin1FromU)/U_SIZEOF_UCHAR,
+        if(!testConvertFromUnicode(latin1FromU, UPRV_LENGTHOF(latin1FromU),
                                    latin1FromUBytes, sizeof(latin1FromUBytes),
                                    "LATIN_1",
                                    UCNV_FROM_U_CALLBACK_SKIP, latin1FromUOffsets,
@@ -253,7 +253,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
         /* windows-1252 */
-        if(!testConvertFromUnicode(latin1FromU, sizeof(latin1FromU)/U_SIZEOF_UCHAR,
+        if(!testConvertFromUnicode(latin1FromU, UPRV_LENGTHOF(latin1FromU),
                                    latin1FromUBytes, sizeof(latin1FromUBytes),
                                    "windows-1252",
                                    UCNV_FROM_U_CALLBACK_SKIP, latin1FromUOffsets,
@@ -694,7 +694,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
         /* US-ASCII */
         if(!testConvertToUnicode(usasciiToUBytes, sizeof(usasciiToUBytes),
-                                 usasciiToU, sizeof(usasciiToU)/U_SIZEOF_UCHAR,
+                                 usasciiToU, UPRV_LENGTHOF(usasciiToU),
                                  "US-ASCII",
                                  UCNV_TO_U_CALLBACK_SKIP, usasciiToUOffsets,
                                  NULL, 0)
@@ -705,7 +705,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 #if !UCONFIG_NO_LEGACY_CONVERSION
         /* SBCS NLTC codepage 367 for US-ASCII */
         if(!testConvertToUnicode(usasciiToUBytes, sizeof(usasciiToUBytes),
-                                 usasciiToU, sizeof(usasciiToU)/U_SIZEOF_UCHAR,
+                                 usasciiToU, UPRV_LENGTHOF(usasciiToU),
                                  "ibm-367",
                                  UCNV_TO_U_CALLBACK_SKIP, usasciiToUOffsets,
                                  NULL, 0)
@@ -716,7 +716,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
         /* ISO-Latin-1 */
         if(!testConvertToUnicode(latin1ToUBytes, sizeof(latin1ToUBytes),
-                                 latin1ToU, sizeof(latin1ToU)/U_SIZEOF_UCHAR,
+                                 latin1ToU, UPRV_LENGTHOF(latin1ToU),
                                  "LATIN_1",
                                  UCNV_TO_U_CALLBACK_SKIP, latin1ToUOffsets,
                                  NULL, 0)
@@ -727,7 +727,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 #if !UCONFIG_NO_LEGACY_CONVERSION
         /* windows-1252 */
         if(!testConvertToUnicode(latin1ToUBytes, sizeof(latin1ToUBytes),
-                                 latin1ToU, sizeof(latin1ToU)/U_SIZEOF_UCHAR,
+                                 latin1ToU, UPRV_LENGTHOF(latin1ToU),
                                  "windows-1252",
                                  UCNV_TO_U_CALLBACK_SKIP, latin1ToUOffsets,
                                  NULL, 0)

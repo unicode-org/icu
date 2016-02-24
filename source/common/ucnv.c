@@ -1817,7 +1817,7 @@ ucnv_toUChars(UConverter *cnv,
         {
             UChar buffer[1024];
 
-            destLimit=buffer+sizeof(buffer)/U_SIZEOF_UCHAR;
+            destLimit=buffer+UPRV_LENGTHOF(buffer);
             do {
                 dest=buffer;
                 *pErrorCode=U_ZERO_ERROR;

@@ -1014,13 +1014,13 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             16, 16, 16, 17, 17, 17, 18, 18, 18, 18
         };
 
-        testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets,FALSE);
+        testConvertFromU(unicode, UPRV_LENGTHOF(unicode), utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets,FALSE);
 
-        testConvertToU(utf7, sizeof(utf7), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7", toUnicodeOffsets,FALSE);
+        testConvertToU(utf7, sizeof(utf7), unicode, UPRV_LENGTHOF(unicode), "UTF-7", toUnicodeOffsets,FALSE);
 
-        testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7Restricted, sizeof(utf7Restricted), "UTF-7,version=1", fromUnicodeOffsetsR,FALSE);
+        testConvertFromU(unicode, UPRV_LENGTHOF(unicode), utf7Restricted, sizeof(utf7Restricted), "UTF-7,version=1", fromUnicodeOffsetsR,FALSE);
 
-        testConvertToU(utf7Restricted, sizeof(utf7Restricted), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7,version=1", toUnicodeOffsetsR,FALSE);
+        testConvertToU(utf7Restricted, sizeof(utf7Restricted), unicode, UPRV_LENGTHOF(unicode), "UTF-7,version=1", toUnicodeOffsetsR,FALSE);
     }
 
     /*
@@ -1094,9 +1094,9 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             35, 36, 36, 36, 37, 37, 37, 37, 37
         };
 
-        testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, imap, sizeof(imap), "IMAP-mailbox-name", fromUnicodeOffsets,FALSE);
+        testConvertFromU(unicode, UPRV_LENGTHOF(unicode), imap, sizeof(imap), "IMAP-mailbox-name", fromUnicodeOffsets,FALSE);
 
-        testConvertToU(imap, sizeof(imap), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "IMAP-mailbox-name", toUnicodeOffsets,FALSE);
+        testConvertToU(imap, sizeof(imap), unicode, UPRV_LENGTHOF(unicode), "IMAP-mailbox-name", toUnicodeOffsets,FALSE);
     }
 
     /* Test UTF-8 bad data handling*/
@@ -1546,7 +1546,7 @@ static void TestAmbiguous()
         return;
     }
     /* convert target from SJIS to Unicode */
-    sjisLength = ucnv_toUChars(sjis_cnv, sjisResult, sizeof(sjisResult)/U_SIZEOF_UCHAR, target, (int32_t)strlen(target), &status);
+    sjisLength = ucnv_toUChars(sjis_cnv, sjisResult, UPRV_LENGTHOF(sjisResult), target, (int32_t)strlen(target), &status);
     if (U_FAILURE(status))
     {
         log_err("Failed to convert the SJIS string.\n");
@@ -1555,7 +1555,7 @@ static void TestAmbiguous()
         return;
     }
     /* convert target from Latin-1 to Unicode */
-    /*asciiLength =*/ ucnv_toUChars(ascii_cnv, asciiResult, sizeof(asciiResult)/U_SIZEOF_UCHAR, target, (int32_t)strlen(target), &status);
+    /*asciiLength =*/ ucnv_toUChars(ascii_cnv, asciiResult, UPRV_LENGTHOF(asciiResult), target, (int32_t)strlen(target), &status);
     if (U_FAILURE(status))
     {
         log_err("Failed to convert the Latin-1 string.\n");
@@ -3276,7 +3276,7 @@ TestISCII(){
         0xEF, 0x30,
 
     };
-    testConvertToU(byteArr,(sizeof(byteArr)),in,(sizeof(in)/U_SIZEOF_UCHAR),"x-iscii-de",NULL,TRUE);
+    testConvertToU(byteArr,(sizeof(byteArr)),in,UPRV_LENGTHOF(in),"x-iscii-de",NULL,TRUE);
     TestConv(in,(sizeof(in)/2),"ISCII,version=0","hindi", (char *)byteArr,sizeof(byteArr));    
 
 }
