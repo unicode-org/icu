@@ -39,7 +39,9 @@ public:
         DAYPERIOD_MORNING2,
         DAYPERIOD_AFTERNOON2,
         DAYPERIOD_EVENING2,
-        DAYPERIOD_NIGHT2
+        DAYPERIOD_NIGHT2,
+        DAYPERIOD_AM,
+        DAYPERIOD_PM
     };
 
     static const DayPeriodRules *getInstance(const Locale &locale, UErrorCode &errorCode);
