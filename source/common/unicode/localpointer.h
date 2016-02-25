@@ -18,7 +18,7 @@
 #define __LOCALPOINTER_H__
 
 /**
- * \file 
+ * \file
  * \brief C++ API: "Smart pointers" for use with and in ICU4C C++ code.
  *
  * These classes are inspired by
@@ -52,7 +52,7 @@ U_NAMESPACE_BEGIN
  * Destructor and adoptInstead().
  *
  * There is no operator T *() provided because the programmer must decide
- * whether to use getAlias() (without transfer of ownership) or orpan()
+ * whether to use getAlias() (without transfer of ownership) or orphan()
  * (with transfer of ownership and NULLing of the pointer).
  *
  * @see LocalPointer
