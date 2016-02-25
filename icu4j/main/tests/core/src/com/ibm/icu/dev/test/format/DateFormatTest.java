@@ -5,7 +5,7 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v1.8.1 : format : DateFormatTest
  * Source File: $ICU4CRoot/source/test/intltest/dtfmttst.cpp
  **/
@@ -59,58 +59,60 @@ import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
 public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
-    
+
     public static void main(String[] args) throws Exception {
         new DateFormatTest().run(args);
     }
 
+
+
     /**
-     * Verify that patterns have the correct values and could produce the 
+     * Verify that patterns have the correct values and could produce the
      * the DateFormat instances that contain the correct localized patterns.
      */
     public void TestPatterns() {
         final String[][] EXPECTED = {
                 {DateFormat.YEAR, "y","en","y"},
-                
+
                 {DateFormat.QUARTER, "QQQQ", "en", "QQQQ"},
                 {DateFormat.ABBR_QUARTER, "QQQ", "en", "QQQ"},
-                {DateFormat.YEAR_QUARTER, "yQQQQ", "en", "QQQQ y"}, 
+                {DateFormat.YEAR_QUARTER, "yQQQQ", "en", "QQQQ y"},
                 {DateFormat.YEAR_ABBR_QUARTER, "yQQQ", "en", "QQQ y"},
-                
+
                 {DateFormat.MONTH, "MMMM", "en", "LLLL"},
                 {DateFormat.ABBR_MONTH, "MMM", "en", "LLL"},
                 {DateFormat.NUM_MONTH, "M", "en", "L"},
                 {DateFormat.YEAR_MONTH, "yMMMM","en","MMMM y"},
                 {DateFormat.YEAR_ABBR_MONTH, "yMMM","en","MMM y"},
-                {DateFormat.YEAR_NUM_MONTH, "yM","en","M/y"}, 
-                
+                {DateFormat.YEAR_NUM_MONTH, "yM","en","M/y"},
+
                 {DateFormat.DAY, "d","en","d"},
                 {DateFormat.YEAR_MONTH_DAY, "yMMMMd", "en", "MMMM d, y"},
                 {DateFormat.YEAR_ABBR_MONTH_DAY, "yMMMd", "en", "MMM d, y"},
-                {DateFormat.YEAR_NUM_MONTH_DAY, "yMd", "en", "M/d/y"}, 
-                
+                {DateFormat.YEAR_NUM_MONTH_DAY, "yMd", "en", "M/d/y"},
+
                 {DateFormat.WEEKDAY, "EEEE", "en", "cccc"},
-                {DateFormat.ABBR_WEEKDAY, "E", "en", "ccc"}, 
+                {DateFormat.ABBR_WEEKDAY, "E", "en", "ccc"},
 
                 {DateFormat.YEAR_MONTH_WEEKDAY_DAY, "yMMMMEEEEd", "en", "EEEE, MMMM d, y"},
                 {DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY, "yMMMEd", "en", "EEE, MMM d, y"},
-                {DateFormat.YEAR_NUM_MONTH_WEEKDAY_DAY, "yMEd", "en", "EEE, M/d/y"}, 
-                
+                {DateFormat.YEAR_NUM_MONTH_WEEKDAY_DAY, "yMEd", "en", "EEE, M/d/y"},
+
                 {DateFormat.MONTH_DAY, "MMMMd","en","MMMM d"},
                 {DateFormat.ABBR_MONTH_DAY, "MMMd","en","MMM d"},
                 {DateFormat.NUM_MONTH_DAY, "Md","en","M/d"},
-                
+
                 {DateFormat.MONTH_WEEKDAY_DAY, "MMMMEEEEd","en","EEEE, MMMM d"},
                 {DateFormat.ABBR_MONTH_WEEKDAY_DAY, "MMMEd","en","EEE, MMM d"},
                 {DateFormat.NUM_MONTH_WEEKDAY_DAY, "MEd","en","EEE, M/d"},
 
                 {DateFormat.HOUR, "j", "en", "h a"}, // (fixed expected result per ticket 6872<-6626)
                 {DateFormat.HOUR24, "H", "en", "HH"}, // (fixed expected result per ticket 6872<-6626
-                
+
                 {DateFormat.MINUTE, "m", "en", "m"},
                 {DateFormat.HOUR_MINUTE, "jm","en","h:mm a"}, // (fixed expected result per ticket 6872<-7180)
                 {DateFormat.HOUR24_MINUTE, "Hm", "en", "HH:mm"}, // (fixed expected result per ticket 6872<-6626)
-                
+
                 {DateFormat.SECOND, "s", "en", "s"},
                 {DateFormat.HOUR_MINUTE_SECOND, "jms","en","h:mm:ss a"}, // (fixed expected result per ticket 6872<-7180)
                 {DateFormat.HOUR24_MINUTE_SECOND, "Hms","en","HH:mm:ss"}, // (fixed expected result per ticket 6872<-6626)
@@ -124,19 +126,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {DateFormat.ABBR_UTC_TZ, "ZZZZ", "en", "ZZZZ"},
 
                 {}, // marker for starting combinations
-                
+
                 {DateFormat.YEAR_NUM_MONTH_DAY + DateFormat.ABBR_UTC_TZ, "yMdZZZZ", "en", "M/d/y, ZZZZ"},
                 {DateFormat.MONTH_DAY + DateFormat.LOCATION_TZ, "MMMMdVVVV", "en", "MMMM d, VVVV"},
         };
         Date testDate = new Date(2012-1900, 6, 1, 14, 58, 59); // just for verbose log
-        
+
         List<String> expectedSkeletons = new ArrayList<String>(DateFormat.DATE_SKELETONS);
         expectedSkeletons.addAll(DateFormat.TIME_SKELETONS);
         expectedSkeletons.addAll(DateFormat.ZONE_SKELETONS);
         boolean combinations = false;
-        
+
         List<String> testedSkeletons = new ArrayList<String>();
-        
+
         for (int i = 0; i < EXPECTED.length; i++) {
             if (EXPECTED[i].length == 0) {
                 combinations = true;
@@ -151,28 +153,28 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             String expectedPattern = EXPECTED[i][1];
             ULocale locale = new ULocale(EXPECTED[i][2], "", "");
             if (!actualPattern.equals(expectedPattern)) {
-                errln("FAILURE! Expected pattern: " + expectedPattern + 
+                errln("FAILURE! Expected pattern: " + expectedPattern +
                         " but was: " + actualPattern);
                 ok=false;
             }
-            
-            // Verify that DataFormat instances produced contain the correct 
+
+            // Verify that DataFormat instances produced contain the correct
             // localized patterns
-            DateFormat date1 = DateFormat.getPatternInstance(actualPattern, 
+            DateFormat date1 = DateFormat.getPatternInstance(actualPattern,
                     locale);
             DateFormat date2 = DateFormat.getPatternInstance(Calendar.getInstance(locale),
                     actualPattern, locale);
-            
+
             String expectedLocalPattern = EXPECTED[i][3];
             String actualLocalPattern1 = ((SimpleDateFormat)date1).toLocalizedPattern();
             String actualLocalPattern2 = ((SimpleDateFormat)date2).toLocalizedPattern();
             if (!actualLocalPattern1.equals(expectedLocalPattern)) {
-                errln("FAILURE! Expected local pattern: " + expectedLocalPattern 
+                errln("FAILURE! Expected local pattern: " + expectedLocalPattern
                         + " but was: " + actualLocalPattern1);
                 ok=false;
-            }       
+            }
             if (!actualLocalPattern2.equals(expectedLocalPattern)) {
-                errln("FAILURE! Expected local pattern: " + expectedLocalPattern 
+                errln("FAILURE! Expected local pattern: " + expectedLocalPattern
                         + " but was: " + actualLocalPattern2);
                 ok=false;
             }
@@ -180,7 +182,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 logln(date1.format(testDate) + "\t\t" + Arrays.asList(EXPECTED[i]));
             }
         }
-        assertEquals("All skeletons are tested (and in an iterable list)", 
+        assertEquals("All skeletons are tested (and in an iterable list)",
                 new HashSet<String>(expectedSkeletons), new HashSet<String>(testedSkeletons));
         assertEquals("All skeletons are tested (and in an iterable list), and in the right order.", expectedSkeletons, testedSkeletons);
     }
@@ -203,10 +205,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         /*
          * A String array for the time zone ids.
          */
-    
+
         final String[] ids = TimeZone.getAvailableIDs();
         int ids_length = ids.length; //when fixed the bug should comment it out
-    
+
         /*
          * How many ids do we have?
          */
@@ -237,7 +239,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             minutes = (offset % 3600000) / 60000;
             seconds = (offset % 60000) / 1000;
             String dstOffset = sign + (hours < 10 ? "0" : "") + hours
-                    + ":" + (minutes < 10 ? "0" : "") + minutes; 
+                    + ":" + (minutes < 10 ? "0" : "") + minutes;
             if (seconds != 0) {
                 dstOffset += ":" + (seconds < 10 ? "0" : "") + seconds;
             }
@@ -250,10 +252,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              */
             StringBuffer fmtOffset = new StringBuffer("");
             FieldPosition pos = new FieldPosition(0);
-            
+
             try {
                 fmtOffset = sdf.format(today, fmtOffset, pos);
-            } catch (Exception e) {            
+            } catch (Exception e) {
                 logln("Exception:" + e);
                 continue;
             }
@@ -266,42 +268,42 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             /*
              * Show our result.
              */
-    
+
             boolean ok = fmtDstOffset == null || fmtDstOffset.equals("") || fmtDstOffset.equals(dstOffset);
             if (ok) {
                 logln(i + " " + ids[i] + " " + dstOffset + " "
-                      + fmtOffset + (fmtDstOffset != null ? " ok" : " ?")); 
+                      + fmtOffset + (fmtDstOffset != null ? " ok" : " ?"));
             } else {
                 errln(i + " " + ids[i] + " " + dstOffset + " " + fmtOffset + " *** FAIL ***");
             }
-        
+
         }
     }
-    
+
     public void TestEquals() {
-        DateFormat fmtA = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.FULL); 
-        DateFormat fmtB = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.FULL); 
+        DateFormat fmtA = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.FULL);
+        DateFormat fmtB = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.FULL);
         if (!fmtA.equals(fmtB))
-            errln("FAIL");    
+            errln("FAIL");
     }
-    
+
     /**
      * Test the parsing of 2-digit years.
      */
     public void TestTwoDigitYearDSTParse() {
-    
-        SimpleDateFormat fullFmt = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G"); 
-        SimpleDateFormat fmt = new SimpleDateFormat("dd-MMM-yy h:mm:ss 'o''clock' a z", Locale.ENGLISH); 
+
+        SimpleDateFormat fullFmt = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
+        SimpleDateFormat fmt = new SimpleDateFormat("dd-MMM-yy h:mm:ss 'o''clock' a z", Locale.ENGLISH);
         String s = "03-Apr-04 2:20:47 o'clock AM PST";
-    
+
         /*
          * SimpleDateFormat(pattern, locale) Construct a SimpleDateDateFormat using
          * the given pattern, the locale and using the TimeZone.getDefault();
-         * So it need to add the timezone offset on hour field. 
-         * ps. the Method Calendar.getTime() used by SimpleDateFormat.parse() always 
+         * So it need to add the timezone offset on hour field.
+         * ps. the Method Calendar.getTime() used by SimpleDateFormat.parse() always
          * return Date value with TimeZone.getDefault() [Richard/GCL]
          */
-        
+
         TimeZone defaultTZ = TimeZone.getDefault();
         TimeZone PST = TimeZone.getTimeZone("PST");
         int defaultOffset = defaultTZ.getRawOffset();
@@ -315,7 +317,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             cal.setTime(d);
             //DSTOffset
             hour += defaultTZ.inDaylightTime(d) ? 1 : 0;
-            
+
             logln(s + " P> " + ((DateFormat) fullFmt).format(d));
             // hr is the actual hour of day, in units of seconds
             // adjust for DST
@@ -327,9 +329,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (ParseException e) {
             errln("Parse Error:" + e.getMessage());
         }
-    
+
     }
-    
+
     /**
      * Verify that returned field position indices are correct.
      */
@@ -342,7 +344,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             DateFormatSymbols rootSyms = new DateFormatSymbols(new Locale("", "", ""));
             assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars());
         }
-        
+
         assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES.length == DateFormat.FIELD_COUNT);
         if(DateFormat.FIELD_COUNT != PATTERN_CHARS.length() + 1){ // +1 for missing TIME_SEPARATOR pattern char
             errln("Did not get the correct value for DateFormat.FIELD_COUNT. Expected:  "+ PATTERN_CHARS.length() + 1);
@@ -373,22 +375,22 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "", "1997", "August", "13", "", "", "34", "12", "", "Wednesday",
              "", "", "", "", "PM", "2", "", "Pacific Daylight Time", "", "",
              "", "", "", "", "", "", "", "", "", "",
-             "", "", "", "", "", "",
+             "", "", "", "", "", "", "", "",
 
              "", "1997", "ao\u00FBt", "13", "", "14", "34", "12", "", "mercredi",
              "", "", "", "", "", "", "", "heure d\u2019\u00E9t\u00E9 du Pacifique", "", "",
              "", "", "", "", "", "", "", "", "", "",
-             "", "", "", "", "", "",
+             "", "", "", "", "", "", "", "",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5", "Wed",
             "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4",
             "1997", "2450674", "52452513", "-0700", "PT", "4", "8", "3", "3", "uslax",
-            "1997", "GMT-7", "-07", "-07", "1997", "",
+            "1997", "GMT-7", "-07", "-07", "1997", "PM", "in the afternoon", "",
 
             "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130", "Wednesday",
             "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "Wednesday",
             "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time", "Wednesday", "August", "3rd quarter", "3rd quarter", "Los Angeles Time",
-            "1997", "GMT-07:00", "-0700", "-0700", "1997", "",
+            "1997", "GMT-07:00", "-0700", "-0700", "1997", "PM", "in the afternoon", "",
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -470,7 +472,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             for (i = 0; i < DateFormat.FIELD_COUNT; ++i, ++exp) {
                 pos = new FieldPosition(i);
                 buf.setLength(0);
-                df.format(aug13, buf, pos);    
+                df.format(aug13, buf, pos);
                 field = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
                 assertEquals("pattern#" + j + " field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
                              EXPECTED[exp], field);
@@ -491,7 +493,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * This MUST be kept in sync with DateFormatSymbols.patternChars.
      */
-    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr";
+    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxrbB";
 
     /**
      * A list of the DateFormat.Field.
@@ -533,6 +535,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateFormat.Field.TIME_ZONE,     // X
         DateFormat.Field.TIME_ZONE,     // x
         DateFormat.Field.RELATED_YEAR,  // r
+        DateFormat.Field.AM_PM_MIDNIGHT_NOON,  // b
+        DateFormat.Field.FLEXIBLE_DAY_PERIOD,  // B
         DateFormat.Field.TIME_SEPARATOR,// (no pattern character currently specified for this)
     };
 
@@ -576,6 +580,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         "TIMEZONE_ISO_FIELD",
         "TIMEZONE_ISO_LOCAL_FIELD",
         "RELATED_YEAR",
+        "AM_PM_MIDNIGHT_NOON_FIELD",
+        "FLEXIBLE_DAY_PERIOD_FIELD",
         "TIME_SEPARATOR",
     };
 
@@ -583,7 +589,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * General parse/format tests.  Add test cases as needed.
      */
     public void TestGeneral() {
-        
+
         String DATA[] = {
             "yyyy MM dd HH:mm:ss.SSS",
 
@@ -648,7 +654,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         logln("cross format/parse tests");
         final String basepat = "yy/MM/dd H:mm ";
-        final SimpleDateFormat[] formats = { 
+        final SimpleDateFormat[] formats = {
             new SimpleDateFormat(basepat + "v", en),
             new SimpleDateFormat(basepat + "vvvv", en),
             new SimpleDateFormat(basepat + "zzz", en),
@@ -678,8 +684,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         try {
                             Date t = formats[k].parse(test);
                             if (!d.equals(t)) {
-                                errln("format " + k + 
-                                      " incorrectly parsed output of format " + j + 
+                                errln("format " + k +
+                                      " incorrectly parsed output of format " + j +
                                       " (" + test + "), returned " +
                                       t + " instead of " + d);
                             } else {
@@ -687,8 +693,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             }
                         }
                         catch (ParseException e) {
-                            errln("format " + k + 
-                                  " could not parse output of format " + j + 
+                            errln("format " + k +
+                                  " could not parse output of format " + j +
                                   " (" + test + ")");
                         }
                     }
@@ -755,7 +761,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             cal.setTimeZone(tz);
             String result = fmt.format(cal);
             if (!result.equals(info[4])) {
-                errln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3] + " expected: '" + 
+                errln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3] + " expected: '" +
                       info[4] + "' but got: '" + result + "'");
             }
         }
@@ -1543,7 +1549,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * returning an appropriate error.
      */
     public void TestPartialParse994() {
-    
+
         SimpleDateFormat f = new SimpleDateFormat();
         Calendar cal = Calendar.getInstance();
         cal.clear();
@@ -1555,14 +1561,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 ", date);
         tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17", date);
     }
-    
+
     // internal test subroutine, used by TestPartialParse994
     public void tryPat994(SimpleDateFormat format, String pat, String str, Date expected) {
         Date Null = null;
         logln("Pattern \"" + pat + "\"   String \"" + str + "\"");
         try {
             format.applyPattern(pat);
-            Date date = format.parse(str);    
+            Date date = format.parse(str);
             String f = ((DateFormat) format).format(date);
             logln(" parse(" + str + ") -> " + date);
             logln(" format -> " + f);
@@ -1579,7 +1585,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Verify the behavior of patterns in which digits for different fields run together
      * without intervening separators.
@@ -1621,9 +1627,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         cal.clear();
         cal.set(1997, 3 - 1, 4);
         _testIt917(fmt, myDate, cal.getTime());
-    
+
     }
-    
+
     // internal test subroutine, used by TestRunTogetherPattern917
     public void _testIt917(SimpleDateFormat fmt, String str, Date expected) {
         logln("pattern=" + fmt.toPattern() + "   string=" + str);
@@ -1637,13 +1643,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!formatted.equals(str))
             errln( "FAIL: Expected " + str);
     }
-    
+
     /**
      * Verify the handling of Czech June and July, which have the unique attribute that
      * one is a proper prefix substring of the other.
      */
     public void TestCzechMonths459() {
-        DateFormat fmt = DateFormat.getDateInstance(DateFormat.FULL, new Locale("cs", "", "")); 
+        DateFormat fmt = DateFormat.getDateInstance(DateFormat.FULL, new Locale("cs", "", ""));
         logln("Pattern " + ((SimpleDateFormat) fmt).toPattern());
         Calendar cal = Calendar.getInstance();
         cal.clear();
@@ -1684,7 +1690,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln(e.getMessage());
         }
     }
-    
+
     /**
      * Test the handling of 'D' in patterns.
      */
@@ -1712,14 +1718,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!myDate.equals(expLittleD))
             errln("FAIL: Expected " + expLittleD);
     }
-    
+
     /**
      * Test the day of year pattern.
      */
     public void TestDayOfYearPattern195() {
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
-        int year,month,day; 
+        int year,month,day;
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         day = cal.get(Calendar.DAY_OF_MONTH);
@@ -1731,7 +1737,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         tryPattern(sdf, today, null, expected);
         tryPattern(sdf, today, "G yyyy DDD", expected);
     }
-    
+
     // interl test subroutine, used by TestDayOfYearPattern195
     public void tryPattern(SimpleDateFormat sdf, Date d, String pattern, Date expected) {
         if (pattern != null)
@@ -1752,12 +1758,12 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln(e.getMessage());
         }
     }
-    
+
     /**
      * Test the handling of single quotes in patterns.
      */
     public void TestQuotePattern161() {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss a zzz", Locale.US); 
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss a zzz", Locale.US);
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.set(1997, Calendar.AUGUST, 13, 10, 42, 28);
@@ -1767,18 +1773,18 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         logln("format(" + currentTime_1 + ") = " + dateString);
         if (!dateString.substring(0, exp.length()).equals(exp))
             errln("FAIL: Expected " + exp);
-    
+
     }
-        
+
     /**
      * Verify the correct behavior when handling invalid input strings.
      */
     public void TestBadInput135() {
-        int looks[] = {DateFormat.SHORT, DateFormat.MEDIUM, DateFormat.LONG, DateFormat.FULL}; 
+        int looks[] = {DateFormat.SHORT, DateFormat.MEDIUM, DateFormat.LONG, DateFormat.FULL};
         int looks_length = looks.length;
-        final String[] strings = {"Mar 15", "Mar 15 1997", "asdf", "3/1/97 1:23:", "3/1/00 1:23:45 AM"}; 
+        final String[] strings = {"Mar 15", "Mar 15 1997", "asdf", "3/1/97 1:23:", "3/1/00 1:23:45 AM"};
         int strings_length = strings.length;
-        DateFormat full = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.US); 
+        DateFormat full = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.US);
         String expected = "March 1, 2000 at 1:23:45 AM ";
         for (int i = 0; i < strings_length; ++i) {
             final String text = strings[i];
@@ -1786,14 +1792,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 int dateLook = looks[j];
                 for (int k = 0; k < looks_length; ++k) {
                     int timeLook = looks[k];
-                    DateFormat df = DateFormat.getDateTimeInstance(dateLook, timeLook, Locale.US); 
-                    String prefix = text + ", " + dateLook + "/" + timeLook + ": "; 
+                    DateFormat df = DateFormat.getDateTimeInstance(dateLook, timeLook, Locale.US);
+                    String prefix = text + ", " + dateLook + "/" + timeLook + ": ";
                     try {
                         Date when = df.parse(text);
                         if (when == null) {
                             errln(prefix + "SHOULD NOT HAPPEN: parse returned null.");
                             continue;
-                        }  
+                        }
                         if (when != null) {
                             String format;
                             format = full.format(when);
@@ -1810,14 +1816,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     /**
      * Verify the correct behavior when parsing an array of inputs against an
      * array of patterns, with known results.  The results are encoded after
      * the input strings in each row.
      */
     public void TestBadInput135a() {
-    
+
         SimpleDateFormat dateParse = new SimpleDateFormat("", Locale.US);
         final String ss;
         Date date;
@@ -1839,7 +1845,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 };
         final int PF_LENGTH = parseFormats.length;
         final int INPUT_LENGTH = inputStrings.length;
-    
+
         dateParse.applyPattern("d MMMM, yyyy");
         dateParse.setTimeZone(TimeZone.getDefault());
         ss = "not parseable";
@@ -1887,9 +1893,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 }
             }
         }
-    
+
     }
-    
+
     /**
      * Test the parsing of two-digit years.
      */
@@ -1903,20 +1909,20 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         cal.set(50 + 1900, Calendar.JUNE, 4);
         parse2DigitYear(fmt, "6/4/50", cal.getTime());
     }
-    
+
     // internal test subroutine, used by TestTwoDigitYear
     public void parse2DigitYear(DateFormat fmt, String str, Date expected) {
         try {
             Date d = fmt.parse(str);
             logln("Parsing \""+ str+ "\" with "+ ((SimpleDateFormat) fmt).toPattern()
-                    + "  => "+ d); 
+                    + "  => "+ d);
             if (!d.equals(expected))
                 errln( "FAIL: Expected " + expected);
         } catch (ParseException e) {
             errln(e.getMessage());
         }
     }
-    
+
     /**
      * Test the formatting of time zones.
      */
@@ -1937,20 +1943,20 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (Throwable t) {
             System.out.println(t);
         }
-    
+
     }
-    
+
     /**
      * Test the formatting of time zones.
      */
     public void TestDateFormatZone146() {
         TimeZone saveDefault = TimeZone.getDefault();
-    
+
         //try {
         TimeZone thedefault = TimeZone.getTimeZone("GMT");
         TimeZone.setDefault(thedefault);
         // java.util.Locale.setDefault(new java.util.Locale("ar", "", ""));
-    
+
         // check to be sure... its GMT all right
         TimeZone testdefault = TimeZone.getDefault();
         String testtimezone = testdefault.getID();
@@ -1958,7 +1964,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             logln("Test timezone = " + testtimezone);
         else
             errln("Test timezone should be GMT, not " + testtimezone);
-    
+
         // now try to use the default GMT time zone
         GregorianCalendar greenwichcalendar = new GregorianCalendar(1997, 3, 4, 23, 0);
         //*****************************greenwichcalendar.setTimeZone(TimeZone.getDefault());
@@ -1969,17 +1975,17 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Date greenwichdate = greenwichcalendar.getTime();
         // format every way
         String DATA[] = {
-                "simple format:  ", "04/04/97 23:00 GMT", 
-                "MM/dd/yy HH:mm zzz", "full format:    ", 
-                "Friday, April 4, 1997 11:00:00 o'clock PM GMT", 
-                "EEEE, MMMM d, yyyy h:mm:ss 'o''clock' a zzz", 
-                "long format:    ", "April 4, 1997 11:00:00 PM GMT", 
-                "MMMM d, yyyy h:mm:ss a z", "default format: ", 
-                "04-Apr-97 11:00:00 PM", "dd-MMM-yy h:mm:ss a", 
-                "short format:   ", "4/4/97 11:00 PM", 
-                "M/d/yy h:mm a"}; 
+                "simple format:  ", "04/04/97 23:00 GMT",
+                "MM/dd/yy HH:mm zzz", "full format:    ",
+                "Friday, April 4, 1997 11:00:00 o'clock PM GMT",
+                "EEEE, MMMM d, yyyy h:mm:ss 'o''clock' a zzz",
+                "long format:    ", "April 4, 1997 11:00:00 PM GMT",
+                "MMMM d, yyyy h:mm:ss a z", "default format: ",
+                "04-Apr-97 11:00:00 PM", "dd-MMM-yy h:mm:ss a",
+                "short format:   ", "4/4/97 11:00 PM",
+                "M/d/yy h:mm a"};
         int DATA_length = DATA.length;
-    
+
         for (int i = 0; i < DATA_length; i += 3) {
             DateFormat fmt = new SimpleDateFormat(DATA[i + 2], Locale.ENGLISH);
             fmt.setCalendar(greenwichcalendar);
@@ -1992,9 +1998,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         //finally {
         TimeZone.setDefault(saveDefault);
         //}
-    
+
     }
-    
+
     /**
      * Test the formatting of dates in different locales.
      */
@@ -2133,7 +2139,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                   pos.getIndex());
             return;
         }
-    
+
         /* Check result */
         when = cal.getTime();
         str = full.format(when);
@@ -2250,9 +2256,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         catch(Exception e) {
             warnln("Expected IllegalArgumentException, got: " + e);
         }
-        
+
         try {
-            DateFormat df = new SimpleDateFormat("aabbccc");
+            DateFormat df = new SimpleDateFormat("aaNNccc");
             df.format(new Date());
             errln("Expected exception for format with bad pattern");
         }
@@ -2262,7 +2268,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         catch(Exception e) {
             warnln("Expected IllegalArgumentException, got: " + e);
         }
-        
+
         {
             SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yy"); // opposite of text
             fmt.set2DigitYearStart(getDate(2003, Calendar.DECEMBER, 25));
@@ -2285,7 +2291,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // chinese date format patterns
         Calendar chineseCalendar = new ChineseCalendar();
         chineseCalendar.setTimeInMillis((new Date()).getTime());
-        SimpleDateFormat longChineseDateFormat = 
+        SimpleDateFormat longChineseDateFormat =
             (SimpleDateFormat)chineseCalendar.getDateTimeFormat(DateFormat.LONG, DateFormat.LONG, Locale.CHINA );
         DateFormatSymbols dfs = new ChineseDateFormatSymbols( chineseCalendar, Locale.CHINA );
         longChineseDateFormat.setDateFormatSymbols( dfs );
@@ -2305,7 +2311,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         logln("time: " + f.format(now));
 
         int hash = f.hashCode(); // sigh, everyone overrides this
-        
+
         f = DateFormat.getInstance(cal);
         if(hash == f.hashCode()){
             errln("FAIL: hashCode equal for inequal objects");
@@ -2327,12 +2333,12 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!sym.equals(sym2)) {
             errln("fail, date format symbols not equal");
         }
-        
+
         Locale foo = new Locale("fu", "FU", "BAR");
         rb = null;
         sym = new DateFormatSymbols(GregorianCalendar.class, foo);
         sym.equals(null);
-        
+
         sym = new ChineseDateFormatSymbols();
         sym = new ChineseDateFormatSymbols(new Locale("en_US"));
         try{
@@ -2350,10 +2356,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // cover new ChineseDateFormatSymbols(Calendar, ULocale)
         ChineseCalendar ccal = new ChineseCalendar();
         sym = new ChineseDateFormatSymbols(ccal, ULocale.CHINA); //gclsh1 add
-        
+
         StringBuffer buf = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
-        
+
         f.format((Object)cal, buf, pos);
         f.format((Object)now, buf, pos);
         f.format((Object)new Long(now.getTime()), buf, pos);
@@ -2365,14 +2371,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         NumberFormat nf = f.getNumberFormat();
         f.setNumberFormat(nf);
-        
+
         boolean lenient = f.isLenient();
         f.setLenient(lenient);
-        
+
         ULocale uloc = f.getLocale(ULocale.ACTUAL_LOCALE);
-        
+
         DateFormat sdfmt = new SimpleDateFormat();
-        
+
         if (f.hashCode() != f.hashCode()) {
             errln("hashCode is not stable");
         }
@@ -2385,7 +2391,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (f.equals(sdfmt)) {
             errln("A time instance shouldn't equal a default date format");
         }
-        
+
         Date d;
         {
             ChineseDateFormat fmt = new ChineseDateFormat("yymm", Locale.US);
@@ -2423,7 +2429,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             try {
                 fmt.parse(xbuf.toString());
                 logln("ok");
-                
+
                 xbuf.setLength(0);
                 xcal.set(Calendar.HOUR_OF_DAY, 25);
                 fmt.format(xcal, xbuf, fpos);
@@ -2434,7 +2440,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("whoops");
             }
         }
-        
+
         {
             // cover gmt+hh:mm
             DateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
@@ -2445,7 +2451,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 errln("Parse of 07/10/53 GMT+10:00 for pattern MM/dd/yy z");
             }
-            
+
             // cover invalid separator after GMT
             {
                 ParsePosition pp = new ParsePosition(0);
@@ -2456,7 +2462,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 }
                 logln("Parsing of the text stopped at pos: " + pp.getIndex() + " as expected and length is "+text.length());
             }
-            
+
             // cover bad text after GMT+.
             try {
                 fmt.parse("07/10/53 GMT+blecch");
@@ -2465,7 +2471,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 errln("whoops GMT+blecch");
             }
-            
+
             // cover bad text after GMT+hh:.
             try {
                 fmt.parse("07/10/53 GMT+07:blecch");
@@ -2474,7 +2480,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 errln("whoops GMT+xx:blecch");
             }
-            
+
             // cover no ':' GMT+#, # < 24 (hh)
             try {
                 d = fmt.parse("07/10/53 GMT+07");
@@ -2483,7 +2489,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 errln("Parse of 07/10/53 GMT+07 for pattern MM/dd/yy z");
             }
-            
+
             // cover no ':' GMT+#, # > 24 (hhmm)
             try {
                 d = fmt.parse("07/10/53 GMT+0730");
@@ -2492,7 +2498,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 errln("Parse of 07/10/53 GMT+0730 for pattern MM/dd/yy z");
             }
-            
+
             // cover GMT+#, # with second field
             try {
                 d = fmt.parse("07/10/53 GMT+07:30:15");
@@ -2519,8 +2525,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 errln("Parse of 07/10/53 GMT+07300 for pattern MM/dd/yy z");
             }
-            
-            // cover raw digits with no leading sign (bad RFC822) 
+
+            // cover raw digits with no leading sign (bad RFC822)
             try {
                 d = fmt.parse("07/10/53 07");
                 errln("Parse of 07/10/53 07 for pattern MM/dd/yy z passed!");
@@ -2528,8 +2534,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 logln("ok");
             }
-            
-            // cover raw digits (RFC822) 
+
+            // cover raw digits (RFC822)
             try {
                 d = fmt.parse("07/10/53 +07");
                 logln("ok");
@@ -2537,8 +2543,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 errln("Parse of 07/10/53 +07 for pattern MM/dd/yy z failed");
             }
-            
-            // cover raw digits (RFC822) 
+
+            // cover raw digits (RFC822)
             try {
                 d = fmt.parse("07/10/53 -0730");
                 logln("ok");
@@ -2546,7 +2552,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 errln("Parse of 07/10/53 -00730 for pattern MM/dd/yy z failed");
             }
-            
+
             // cover raw digits (RFC822) in DST
             try {
                 fmt.setTimeZone(TimeZone.getTimeZone("PDT"));
@@ -2557,7 +2563,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("Parse of 07/10/53 -0730 for pattern MM/dd/yy z failed");
             }
         }
-        
+
         // TODO: revisit toLocalizedPattern
         if (false) {
             SimpleDateFormat fmt = new SimpleDateFormat("aabbcc");
@@ -2591,9 +2597,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 logln("time zone ex ok");
             }
         }
-        
+
         {
-            // force fallback to default timezone when fmt timezone 
+            // force fallback to default timezone when fmt timezone
             // is not named
             SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
             // force fallback to default time zone, still fails
@@ -2606,7 +2612,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             catch (ParseException e) {
                 logln("time zone ex2 ok");
             }
-            
+
             // force success on fallback
             text = "08/15/58 " + TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT);
             try {
@@ -2617,9 +2623,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("whoops, got parse exception");
             }
         }
-        
+
         {
-            // force fallback to symbols list of timezones when neither 
+            // force fallback to symbols list of timezones when neither
             // fmt and default timezone is named
             SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
             TimeZone oldtz = TimeZone.getDefault();
@@ -2651,18 +2657,18 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             if (count==0) {
                 errln(" got a empty list for getAvailableULocales");
             }else{
-                logln("" + count + " available ulocales");            
+                logln("" + count + " available ulocales");
             }
         }
-        
+
         {
             //cover DateFormatSymbols.getDateFormatBundle
             cal = new GregorianCalendar();
             Locale loc = Locale.getDefault();
             DateFormatSymbols mysym = new DateFormatSymbols(cal, loc);
-            if (mysym == null) 
+            if (mysym == null)
                 errln("FAIL: constructs DateFormatSymbols with calendar and locale failed");
-            
+
             uloc = ULocale.getDefault();
             // These APIs are obsolete and return null
             ResourceBundle resb = DateFormatSymbols.getDateFormatBundle(cal, loc);
@@ -2706,7 +2712,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("FAIL: Got a empty list for DateFormatSymbols.getAvailableLocales");
             } else {
                 logln("PASS: " + allLocales.length +
-                        " available locales returned by DateFormatSymbols.getAvailableLocales");            
+                        " available locales returned by DateFormatSymbols.getAvailableLocales");
             }
 
             ULocale[] allULocales = DateFormatSymbols.getAvailableULocales();
@@ -2714,7 +2720,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("FAIL: Got a empty list for DateFormatSymbols.getAvailableLocales");
             } else {
                 logln("PASS: " + allULocales.length +
-                        " available locales returned by DateFormatSymbols.getAvailableULocales");            
+                        " available locales returned by DateFormatSymbols.getAvailableULocales");
             }
         }
     }
@@ -2728,7 +2734,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "yyyy LLL dd H:mm:ss",  "fp", "2004 03 10 16:36:31", "2004 Mar 10 16:36:31",   "2004 03 10 16:36:31",
             "yyyy LLLL dd H:mm:ss", "F",  "2004 03 10 16:36:31", "2004 March 10 16:36:31",
             "yyyy LLL dd H:mm:ss",  "pf", "2004 Mar 10 16:36:31", "2004 03 10 16:36:31", "2004 Mar 10 16:36:31",
-            
+
             "LLLL", "fp", "1970 01 01 0:00:00", "January",   "1970 01 01 0:00:00",
             "LLLL", "fp", "1970 02 01 0:00:00", "February",  "1970 02 01 0:00:00",
             "LLLL", "fp", "1970 03 01 0:00:00", "March",     "1970 03 01 0:00:00",
@@ -2741,7 +2747,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "LLLL", "fp", "1970 10 01 0:00:00", "October",   "1970 10 01 0:00:00",
             "LLLL", "fp", "1970 11 01 0:00:00", "November",  "1970 11 01 0:00:00",
             "LLLL", "fp", "1970 12 01 0:00:00", "December",  "1970 12 01 0:00:00",
-            
+
             "LLL", "fp", "1970 01 01 0:00:00", "Jan", "1970 01 01 0:00:00",
             "LLL", "fp", "1970 02 01 0:00:00", "Feb", "1970 02 01 0:00:00",
             "LLL", "fp", "1970 03 01 0:00:00", "Mar", "1970 03 01 0:00:00",
@@ -2755,7 +2761,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "LLL", "fp", "1970 11 01 0:00:00", "Nov", "1970 11 01 0:00:00",
             "LLL", "fp", "1970 12 01 0:00:00", "Dec", "1970 12 01 0:00:00",
         };
-        
+
         String CS_DATA[] = {
             "yyyy MM dd HH:mm:ss",
 
@@ -2766,7 +2772,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "yyyy MMMM dd H:mm:ss", "F",  "2004 04 10 16:36:31", "2004 dubna 10 16:36:31",
             "yyyy LLLL dd H:mm:ss", "pf", "2004 duben 10 16:36:31", "2004 04 10 16:36:31", "2004 duben 10 16:36:31",
             "yyyy MMMM dd H:mm:ss", "pf", "2004 dubna 10 16:36:31", "2004 04 10 16:36:31", "2004 dubna 10 16:36:31",
-            
+
             "LLLL", "fp", "1970 01 01 0:00:00", "leden",               "1970 01 01 0:00:00",
             "LLLL", "fp", "1970 02 01 0:00:00", "\u00FAnor",           "1970 02 01 0:00:00",
             "LLLL", "fp", "1970 03 01 0:00:00", "b\u0159ezen",         "1970 03 01 0:00:00",
@@ -2793,11 +2799,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "LLL", "fp", "1970 11 01 0:00:00", "lis",                  "1970 11 01 0:00:00",
             "LLL", "fp", "1970 12 01 0:00:00", "pro",                  "1970 12 01 0:00:00",
         };
-        
+
         expect(EN_DATA, new Locale("en", "", ""));
         expect(CS_DATA, new Locale("cs", "", ""));
     }
-    
+
     public void TestStandAloneDays()
     {
         String EN_DATA[] = {
@@ -2810,7 +2816,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "cccc", "fp", "1970 01 01 0:00:00", "Thursday",  "1970 01 01 0:00:00",
             "cccc", "fp", "1970 01 02 0:00:00", "Friday",    "1970 01 02 0:00:00",
             "cccc", "fp", "1970 01 03 0:00:00", "Saturday",  "1970 01 03 0:00:00",
-            
+
             "ccc", "fp", "1970 01 04 0:00:00", "Sun", "1970 01 04 0:00:00",
             "ccc", "fp", "1970 01 05 0:00:00", "Mon", "1970 01 05 0:00:00",
             "ccc", "fp", "1970 01 06 0:00:00", "Tue", "1970 01 06 0:00:00",
@@ -2819,7 +2825,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "ccc", "fp", "1970 01 02 0:00:00", "Fri", "1970 01 02 0:00:00",
             "ccc", "fp", "1970 01 03 0:00:00", "Sat", "1970 01 03 0:00:00",
         };
-            
+
         String CS_DATA[] = {
             "yyyy MM dd HH:mm:ss",
 
@@ -2830,7 +2836,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "cccc", "fp", "1970 01 01 0:00:00", "\u010Dtvrtek",      "1970 01 01 0:00:00",
             "cccc", "fp", "1970 01 02 0:00:00", "p\u00E1tek",        "1970 01 02 0:00:00",
             "cccc", "fp", "1970 01 03 0:00:00", "sobota",            "1970 01 03 0:00:00",
-            
+
             "ccc", "fp", "1970 01 04 0:00:00", "ne",      "1970 01 04 0:00:00",
             "ccc", "fp", "1970 01 05 0:00:00", "po",      "1970 01 05 0:00:00",
             "ccc", "fp", "1970 01 06 0:00:00", "\u00FAt", "1970 01 06 0:00:00",
@@ -2839,11 +2845,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "ccc", "fp", "1970 01 02 0:00:00", "p\u00E1", "1970 01 02 0:00:00",
             "ccc", "fp", "1970 01 03 0:00:00", "so",      "1970 01 03 0:00:00",
         };
-        
+
         expect(EN_DATA, new Locale("en", "", ""));
         expect(CS_DATA, new Locale("cs", "", ""));
     }
-    
+
     public void TestShortDays()
     {
         String EN_DATA[] = {
@@ -2855,7 +2861,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "cccccc d",        "fp", "1970 01 17 0:00:00", "Sa 17",           "1970 01 17 0:00:00",
             "cccccc",          "fp", "1970 01 03 0:00:00", "Sa",              "1970 01 03 0:00:00",
         };
-            
+
         String SV_DATA[] = {
             "yyyy MM dd HH:mm:ss",
 
@@ -2865,11 +2871,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "cccccc d",        "fp", "1970 01 17 0:00:00", "l\u00F6 17",          "1970 01 17 0:00:00",
             "cccccc",          "fp", "1970 01 03 0:00:00", "l\u00F6",             "1970 01 03 0:00:00",
         };
-        
+
         expect(EN_DATA, new Locale("en", "", ""));
         expect(SV_DATA, new Locale("sv", "", ""));
     }
-    
+
     public void TestNarrowNames()
     {
         String EN_DATA[] = {
@@ -2877,7 +2883,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 "yyyy MMMMM dd H:mm:ss", "2004 03 10 16:36:31", "2004 M 10 16:36:31",
                 "yyyy LLLLL dd H:mm:ss",  "2004 03 10 16:36:31", "2004 M 10 16:36:31",
-                
+
                 "MMMMM", "1970 01 01 0:00:00", "J",
                 "MMMMM", "1970 02 01 0:00:00", "F",
                 "MMMMM", "1970 03 01 0:00:00", "M",
@@ -2890,7 +2896,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "MMMMM", "1970 10 01 0:00:00", "O",
                 "MMMMM", "1970 11 01 0:00:00", "N",
                 "MMMMM", "1970 12 01 0:00:00", "D",
-                
+
                 "LLLLL", "1970 01 01 0:00:00", "J",
                 "LLLLL", "1970 02 01 0:00:00", "F",
                 "LLLLL", "1970 03 01 0:00:00", "M",
@@ -2911,7 +2917,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "EEEEE", "1970 01 01 0:00:00", "T",
                 "EEEEE", "1970 01 02 0:00:00", "F",
                 "EEEEE", "1970 01 03 0:00:00", "S",
-                
+
                 "ccccc", "1970 01 04 0:00:00", "S",
                 "ccccc", "1970 01 05 0:00:00", "M",
                 "ccccc", "1970 01 06 0:00:00", "T",
@@ -2919,19 +2925,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "ccccc", "1970 01 01 0:00:00", "T",
                 "ccccc", "1970 01 02 0:00:00", "F",
                 "ccccc", "1970 01 03 0:00:00", "S",
-            
+
                 "h:mm a",     "2015 01 01 10:00:00", "10:00 AM",
                 "h:mm a",     "2015 01 01 22:00:00", "10:00 PM",
                 "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a",
                 "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p",
             };
-            
+
             String CS_DATA[] = {
                 "yyyy MM dd HH:mm:ss",
 
                 "yyyy LLLLL dd H:mm:ss", "2004 04 10 16:36:31", "2004 4 10 16:36:31",
                 "yyyy MMMMM dd H:mm:ss", "2004 04 10 16:36:31", "2004 4 10 16:36:31",
-                
+
                 "MMMMM", "1970 01 01 0:00:00", "1",
                 "MMMMM", "1970 02 01 0:00:00", "2",
                 "MMMMM", "1970 03 01 0:00:00", "3",
@@ -2944,7 +2950,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "MMMMM", "1970 10 01 0:00:00", "10",
                 "MMMMM", "1970 11 01 0:00:00", "11",
                 "MMMMM", "1970 12 01 0:00:00", "12",
-                
+
                 "LLLLL", "1970 01 01 0:00:00", "1",
                 "LLLLL", "1970 02 01 0:00:00", "2",
                 "LLLLL", "1970 03 01 0:00:00", "3",
@@ -2973,13 +2979,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 "ccccc", "1970 01 01 0:00:00", "\u010C",
                 "ccccc", "1970 01 02 0:00:00", "P",
                 "ccccc", "1970 01 03 0:00:00", "S",
-            
+
                 "h:mm a",     "2015 01 01 10:00:00", "10:00 dop.",
                 "h:mm a",     "2015 01 01 22:00:00", "10:00 odp.",
                 "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 dop.",
                 "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 odp.",
             };
-            
+
             String CA_DATA[] = {
                 "yyyy MM dd HH:mm:ss",
 
@@ -2993,7 +2999,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             expectFormat(CS_DATA, new Locale("cs", "", ""));
             expectFormat(CA_DATA, new Locale("ca", "", ""));
     }
-    
+
     public void TestEras()
     {
         String EN_DATA[] = {
@@ -3009,7 +3015,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "MMMM dd yyyy GGG",  "fp", "-438 07 17", "July 17 0439 BC",            "-438 07 17",
             "MMMM dd yyyy GGGG", "fp", "-438 07 17", "July 17 0439 Before Christ", "-438 07 17",
        };
-        
+
         expect(EN_DATA, new Locale("en", "", ""));
     }
 
@@ -3031,7 +3037,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "Qyy",  "fp", "2015 04 01", "215",         "2015 04 01",
             "QQyy", "fp", "2015 07 01", "0315",        "2015 07 01",
         };
-        
+
         expect(EN_DATA, new Locale("en", "", ""));
     }
 
@@ -3119,15 +3125,15 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             if (got == exp || (got != null && got.equals(exp))) {
                 logln("Ok: " + input + " x " +
-                      currentPat + " => " + gotstr);                
+                      currentPat + " => " + gotstr);
             } else {
                 errln("FAIL: " + input + " x " +
                       currentPat + " => " + gotstr + ", expected " +
                       expstr);
             }
-        }    
+        }
     }
-    
+
     /**
      * Test formatting.  Input is an array of String that starts
      * with a single 'header' element
@@ -3165,14 +3171,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             String datestr = data[i++];
             String string = data[i++];
             Date date = null;
-            
+
             try {
                 date = ref.parse(datestr);
             } catch (ParseException e) {
                 errln("FAIL: Internal test error; can't parse " + datestr);
                 continue;
             }
-            
+
             assertEquals("\"" + currentPat + "\".format(" + datestr + ")",
                          string,
                          fmt.format(date));
@@ -3591,7 +3597,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             // SimpleDateFormat constructor
             formatters[3] = new SimpleDateFormat(testPattern, testLocales[i]);
- 
+
             // SimpleDateFormat with DateFormatSymbols
             DateFormatSymbols dfs = new DateFormatSymbols(testLocales[i]);
             formatters[4] = new SimpleDateFormat(testPattern, dfs, testLocales[i]);
@@ -3815,7 +3821,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: Parse failure");
         }
     }
-    
+
     /*
      * Tests the constructor public SimpleDateFormat(String pattern, String override, ULocale loc)
      */
@@ -3843,7 +3849,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     /* Tests the method public final static DateFormat getPatternInstance */
     public void TestGetPatternInstance(){
         //public final static DateFormat getPatternInstance(String pattern)
@@ -3904,26 +3910,26 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestISOEra()
     {
 
-        String data[] = { 
-        // input, output 
-        "BC 4004-10-23T07:00:00Z", "BC 4004-10-23T07:00:00Z", 
-        "AD 4004-10-23T07:00:00Z", "AD 4004-10-23T07:00:00Z", 
-        "-4004-10-23T07:00:00Z"  , "BC 4005-10-23T07:00:00Z", 
-        "4004-10-23T07:00:00Z"   , "AD 4004-10-23T07:00:00Z", 
+        String data[] = {
+        // input, output
+        "BC 4004-10-23T07:00:00Z", "BC 4004-10-23T07:00:00Z",
+        "AD 4004-10-23T07:00:00Z", "AD 4004-10-23T07:00:00Z",
+        "-4004-10-23T07:00:00Z"  , "BC 4005-10-23T07:00:00Z",
+        "4004-10-23T07:00:00Z"   , "AD 4004-10-23T07:00:00Z",
         };
 
         int numData = 8;
 
-        // create formatter 
+        // create formatter
         SimpleDateFormat fmt1 = new SimpleDateFormat("GGG yyyy-MM-dd'T'HH:mm:ss'Z");
 
         for (int i = 0; i < numData; i += 2)
         {
 
-            // create input string 
+            // create input string
             String in = data[i];
 
-            // parse string to date 
+            // parse string to date
             Date dt1;
             try
             {
@@ -3934,11 +3940,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("DateFormat.parse is not suppose to return an exception.");
                 break;
             }
-            // format date back to string 
+            // format date back to string
             String out;
             out = fmt1.format(dt1);
 
-            // check that roundtrip worked as expected 
+            // check that roundtrip worked as expected
             String expected = data[i + 1];
             if (!out.equals(expected))
             {
@@ -3947,12 +3953,12 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-    public void TestFormalChineseDate() { 
-        
+    public void TestFormalChineseDate() {
+
         String pattern = "y\u5e74M\u6708d\u65e5";
         String override = "y=hanidec;M=hans;d=hans";
-        
-        // create formatter 
+
+        // create formatter
         SimpleDateFormat sdf = new SimpleDateFormat(pattern,override,ULocale.CHINA);
 
         Calendar cal = Calendar.getInstance(ULocale.ENGLISH);
@@ -3962,19 +3968,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         StringBuffer result = new StringBuffer();
         sdf.format(cal,result,pos);
         String res1 = result.toString();
-        String expected = "\u4e8c\u3007\u3007\u4e5d\u5e74\u4e03\u6708\u4e8c\u5341\u516b\u65e5"; 
-        if (! res1.equals(expected)) { 
-            errln((String)"FAIL: -> " + result.toString() + " expected -> " + expected); 
-        } 
+        String expected = "\u4e8c\u3007\u3007\u4e5d\u5e74\u4e03\u6708\u4e8c\u5341\u516b\u65e5";
+        if (! res1.equals(expected)) {
+            errln((String)"FAIL: -> " + result.toString() + " expected -> " + expected);
+        }
         ParsePosition pp = new ParsePosition(0);
         Date parsedate = sdf.parse(expected, pp);
         long time1 = parsedate.getTime();
         long time2 = cal.getTimeInMillis();
-        if ( time1 != time2 ) {            
-            errln("FAIL: parsed -> " + parsedate.toString() + " expected -> " + cal.toString()); 
+        if ( time1 != time2 ) {
+            errln("FAIL: parsed -> " + parsedate.toString() + " expected -> " + cal.toString());
         }
-    } 
-    
+    }
+
     public void TestOverrideNumberForamt() {
         SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
 
@@ -3992,24 +3998,24 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         fmt.setNumberFormat(reused_nf); // test the same override NF will not crash
 
         // DATA[i][0] is to tell which field to set, DATA[i][1] is the expected result
-        String[][] DATA = { 
-                { "", "\u521D\u516D \u5341\u4E94" }, 
+        String[][] DATA = {
+                { "", "\u521D\u516D \u5341\u4E94" },
                 { "M", "\u521D\u516D 15" },
-                { "Mo", "\u521D\u516D \u5341\u4E94" }, 
-                { "Md", "\u521D\u516D \u5341\u4E94" }, 
-                { "MdMMd", "\u521D\u516D \u5341\u4E94" }, 
-                { "mixed", "\u521D\u516D \u5341\u4E94" }, 
+                { "Mo", "\u521D\u516D \u5341\u4E94" },
+                { "Md", "\u521D\u516D \u5341\u4E94" },
+                { "MdMMd", "\u521D\u516D \u5341\u4E94" },
+                { "mixed", "\u521D\u516D \u5341\u4E94" },
         };
 
         NumberFormat override = NumberFormat.getInstance(new ULocale("en@numbers=hanidays"));
         Calendar cal = Calendar.getInstance();
         cal.set(1997, Calendar.JUNE, 15);
         Date test_date = cal.getTime();
-        
+
         for (int i = 0; i < DATA.length; i++) {
             fmt = new SimpleDateFormat("MM d", new ULocale("en_US"));
             String field = DATA[i][0];
-            
+
             if (field == "") { // use the one w/o field
                 fmt.setNumberFormat(override);
             } else if (field == "mixed") { // set 1 field at first but then full override, both(M & d) should be override
@@ -4217,7 +4223,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     public void TestNonGregoFmtParse() {
         class CalAndFmtTestItem {
             public int era;
@@ -4334,17 +4340,17 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public void TestTwoDigitWOY() { // See ICU Ticket #8514
         String dateText = new String("98MON01");
-        
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYEEEww");
         simpleDateFormat.set2DigitYearStart(new GregorianCalendar(1999,0,1).getTime());
-        
+
         Calendar cal = new GregorianCalendar();
         cal.clear();
         cal.setFirstDayOfWeek(Calendar.SUNDAY);
         cal.setMinimalDaysInFirstWeek(4);
-        
+
         ParsePosition pp = new ParsePosition(0);
-        
+
         simpleDateFormat.parse(dateText, cal, pp);
 
         if (pp.getErrorIndex() >= 0) {
@@ -4423,7 +4429,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("FAIL: for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
                         ", sdfmt.clone() != sdfmt (for SimpleDateFormat)");
             }
-            
+
             StringBuffer result2 = new StringBuffer();
             FieldPosition fpos2 = new FieldPosition(0);
             sdfmt.format(cal, result2, fpos2);
@@ -4522,7 +4528,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     static Date TEST_DATE = new Date(2012-1900, 1-1, 15); // January 15, 2012
 
     public void TestDotAndAtLeniency() {
@@ -4559,7 +4565,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
 
     }
-    
+
     private boolean showParse(DateFormat format, String formattedString) {
         ParsePosition parsePosition = new ParsePosition(0);
         parsePosition.setIndex(0);
@@ -4575,7 +4581,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public void TestDateFormatLeniency() {
         // For details see http://bugs.icu-project.org/trac/ticket/10261
-        
+
         class TestDateFormatLeniencyItem {
             public ULocale locale;
             public boolean leniency;
@@ -4677,10 +4683,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     public void TestParseMultiPatternMatch() {
         // For details see http://bugs.icu-project.org/trac/ticket/10336
-        
+
         class TestMultiPatternMatchItem {
             public boolean leniency;
             public String parseString;
@@ -4729,7 +4735,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         StringBuffer result = new StringBuffer();
         Date d = new Date();
-        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"), Locale.US); 
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"), Locale.US);
         SimpleDateFormat sdfmt = new SimpleDateFormat();
         ParsePosition p = new ParsePosition(0);
         for (TestMultiPatternMatchItem item: items) {
@@ -4757,10 +4763,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             if(!result.toString().equalsIgnoreCase(item.expectedResult)) {
                 errln("error: unexpected format result. expected - " + item.expectedResult + "  but result was - " + result);
             } else {
-                logln("formatted results match! - " + result.toString()); 
+                logln("formatted results match! - " + result.toString());
             }
         }
-        
+
     }
 
     public void TestParseLeniencyAPIs() {
@@ -4808,5 +4814,407 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         assertTrue("ALLOW_WHITESPACE after setLenient(TRUE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
         assertTrue("ALLOW_NUMERIC after setLenient(TRUE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
 
+    }
+
+    public void TestAmPmMidnightNoon() {
+        // Some times on 2015-11-13.
+        long k000000 = 1447372800000L;
+        long k000030 = 1447372830000L;
+        long k003000 = 1447374600000L;
+        long k060000 = 1447394400000L;
+        long k120000 = 1447416000000L;
+        long k180000 = 1447437600000L;
+
+        // Short.
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss bbb");
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        assertEquals("hh:mm:ss bbbb | 00:00:00", "12:00:00 midnight", sdf.format(k000000));
+        assertEquals("hh:mm:ss bbbb | 00:00:30", "12:00:30 AM", sdf.format(k000030));
+        assertEquals("hh:mm:ss bbbb | 00:30:00", "12:30:00 AM", sdf.format(k003000));
+        assertEquals("hh:mm:ss bbbb | 06:00:00", "06:00:00 AM", sdf.format(k060000));
+        assertEquals("hh:mm:ss bbbb | 12:00:00", "12:00:00 noon", sdf.format(k120000));
+        assertEquals("hh:mm:ss bbbb | 18:00:00", "06:00:00 PM", sdf.format(k180000));
+
+        sdf.applyPattern("hh:mm bbb");
+
+        assertEquals("hh:mm bbb | 00:00:00", "12:00 midnight", sdf.format(k000000));
+        assertEquals("hh:mm bbb | 00:00:30", "12:00 midnight", sdf.format(k000030));
+        assertEquals("hh:mm bbb | 00:30:00", "12:30 AM", sdf.format(k003000));
+
+        sdf.applyPattern("hh bbb");
+
+        assertEquals("hh bbb | 00:00:00", "12 midnight", sdf.format(k000000));
+        assertEquals("hh bbb | 00:00:30", "12 midnight", sdf.format(k000030));
+        assertEquals("hh bbb | 00:30:00", "12 midnight", sdf.format(k003000));
+
+        // Wide.
+        sdf.applyPattern("hh:mm:ss bbbb");
+
+        assertEquals("hh:mm:ss bbbb | 00:00:00", "12:00:00 midnight", sdf.format(k000000));
+        assertEquals("hh:mm:ss bbbb | 00:00:30", "12:00:30 AM", sdf.format(k000030));
+        assertEquals("hh:mm:ss bbbb | 00:30:00", "12:30:00 AM", sdf.format(k003000));
+        assertEquals("hh:mm:ss bbbb | 06:00:00", "06:00:00 AM", sdf.format(k060000));
+        assertEquals("hh:mm:ss bbbb | 12:00:00", "12:00:00 noon", sdf.format(k120000));
+        assertEquals("hh:mm:ss bbbb | 18:00:00", "06:00:00 PM", sdf.format(k180000));
+
+        sdf.applyPattern("hh:mm bbbb");
+
+        assertEquals("hh:mm bbbb | 00:00:00", "12:00 midnight", sdf.format(k000000));
+        assertEquals("hh:mm bbbb | 00:00:30", "12:00 midnight", sdf.format(k000030));
+        assertEquals("hh:mm bbbb | 00:30:00", "12:30 AM", sdf.format(k003000));
+
+        sdf.applyPattern("hh bbbb");
+        assertEquals("hh bbbb | 00:00:00", "12 midnight", sdf.format(k000000));
+        assertEquals("hh bbbb | 00:00:30", "12 midnight", sdf.format(k000030));
+        assertEquals("hh bbbb | 00:30:00", "12 midnight", sdf.format(k003000));
+
+        // Narrow.
+        sdf.applyPattern("hh:mm:ss bbbbb");
+
+        assertEquals("hh:mm:ss bbbbb | 00:00:00", "12:00:00 mi", sdf.format(k000000));
+        assertEquals("hh:mm:ss bbbbb | 00:00:30", "12:00:30 a", sdf.format(k000030));
+        assertEquals("hh:mm:ss bbbbb | 00:30:00", "12:30:00 a", sdf.format(k003000));
+        assertEquals("hh:mm:ss bbbbb | 06:00:00", "06:00:00 a", sdf.format(k060000));
+        assertEquals("hh:mm:ss bbbbb | 12:00:00", "12:00:00 n", sdf.format(k120000));
+        assertEquals("hh:mm:ss bbbbb | 18:00:00", "06:00:00 p", sdf.format(k180000));
+
+        sdf.applyPattern("hh:mm bbbbb");
+
+        assertEquals("hh:mm bbbbb | 00:00:00", "12:00 mi", sdf.format(k000000));
+        assertEquals("hh:mm bbbbb | 00:00:30", "12:00 mi", sdf.format(k000030));
+        assertEquals("hh:mm bbbbb | 00:30:00", "12:30 a", sdf.format(k003000));
+
+        sdf.applyPattern("hh bbbbb");
+
+        assertEquals("hh bbbbb | 00:00:00", "12 mi", sdf.format(k000000));
+        assertEquals("hh bbbbb | 00:00:30", "12 mi", sdf.format(k000030));
+        assertEquals("hh bbbbb | 00:30:00", "12 mi", sdf.format(k003000));
+    }
+
+    public void TestFlexibleDayPeriod() {
+        // Some times on 2015-11-13.
+        long k000000 = 1447372800000L;
+        long k000030 = 1447372830000L;
+        long k003000 = 1447374600000L;
+        long k060000 = 1447394400000L;
+        long k120000 = 1447416000000L;
+        long k180000 = 1447437600000L;
+
+        // Short.
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss BBB");
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        assertEquals("hh:mm:ss BBB | 00:00:00", "12:00:00 midnight", sdf.format(k000000));
+        assertEquals("hh:mm:ss BBB | 00:00:30", "12:00:30 at night", sdf.format(k000030));
+        assertEquals("hh:mm:ss BBB | 00:30:00", "12:30:00 at night", sdf.format(k003000));
+        assertEquals("hh:mm:ss BBB | 06:00:00", "06:00:00 in the morning", sdf.format(k060000));
+        assertEquals("hh:mm:ss BBB | 12:00:00", "12:00:00 noon", sdf.format(k120000));
+        assertEquals("hh:mm:ss BBB | 18:00:00", "06:00:00 in the evening", sdf.format(k180000));
+
+        sdf.applyPattern("hh:mm BBB");
+
+        assertEquals("hh:mm BBB | 00:00:00", "12:00 midnight", sdf.format(k000000));
+        assertEquals("hh:mm BBB | 00:00:30", "12:00 midnight", sdf.format(k000030));
+        assertEquals("hh:mm BBB | 00:30:00", "12:30 at night", sdf.format(k003000));
+
+        sdf.applyPattern("hh BBB");
+
+        assertEquals("hh BBB | 00:00:00", "12 midnight", sdf.format(k000000));
+        assertEquals("hh BBB | 00:00:30", "12 midnight", sdf.format(k000030));
+        assertEquals("hh BBB | 00:30:00", "12 midnight", sdf.format(k003000));
+
+        // Wide
+        sdf.applyPattern("hh:mm:ss BBBB");
+
+        assertEquals("hh:mm:ss BBBB | 00:00:00", "12:00:00 midnight", sdf.format(k000000));
+        assertEquals("hh:mm:ss BBBB | 00:00:30", "12:00:30 at night", sdf.format(k000030));
+        assertEquals("hh:mm:ss BBBB | 00:30:00", "12:30:00 at night", sdf.format(k003000));
+        assertEquals("hh:mm:ss BBBB | 06:00:00", "06:00:00 in the morning", sdf.format(k060000));
+        assertEquals("hh:mm:ss BBBB | 12:00:00", "12:00:00 noon", sdf.format(k120000));
+        assertEquals("hh:mm:ss BBBB | 18:00:00", "06:00:00 in the evening", sdf.format(k180000));
+
+        sdf.applyPattern("hh:mm BBBB");
+
+        assertEquals("hh:mm BBBB | 00:00:00", "12:00 midnight", sdf.format(k000000));
+        assertEquals("hh:mm BBBB | 00:00:30", "12:00 midnight", sdf.format(k000030));
+        assertEquals("hh:mm BBBB | 00:30:00", "12:30 at night", sdf.format(k003000));
+
+        sdf.applyPattern("hh BBBB");
+
+        assertEquals("hh BBBB | 00:00:00", "12 midnight", sdf.format(k000000));
+        assertEquals("hh BBBB | 00:00:30", "12 midnight", sdf.format(k000030));
+        assertEquals("hh BBBB | 00:30:00", "12 midnight", sdf.format(k003000));
+
+        // Narrow
+        sdf.applyPattern("hh:mm:ss BBBBB");
+
+        assertEquals("hh:mm:ss BBBBB | 00:00:00", "12:00:00 mi", sdf.format(k000000));
+        assertEquals("hh:mm:ss BBBBB | 00:00:30", "12:00:30 at night", sdf.format(k000030));
+        assertEquals("hh:mm:ss BBBBB | 00:30:00", "12:30:00 at night", sdf.format(k003000));
+        assertEquals("hh:mm:ss BBBBB | 06:00:00", "06:00:00 in the morning", sdf.format(k060000));
+        assertEquals("hh:mm:ss BBBBB | 12:00:00", "12:00:00 n", sdf.format(k120000));
+        assertEquals("hh:mm:ss BBBBB | 18:00:00", "06:00:00 in the evening", sdf.format(k180000));
+
+        sdf.applyPattern("hh:mm BBBBB");
+
+        assertEquals("hh:mm BBBBB | 00:00:00", "12:00 mi", sdf.format(k000000));
+        assertEquals("hh:mm BBBBB | 00:00:30", "12:00 mi", sdf.format(k000030));
+        assertEquals("hh:mm BBBBB | 00:30:00", "12:30 at night", sdf.format(k003000));
+
+        sdf.applyPattern("hh BBBBB");
+
+        assertEquals("hh BBBBB | 00:00:00", "12 mi", sdf.format(k000000));
+        assertEquals("hh BBBBB | 00:00:30", "12 mi", sdf.format(k000030));
+        assertEquals("hh BBBBB | 00:30:00", "12 mi", sdf.format(k003000));
+    }
+
+    public void TestDayPeriodWithLocales() {
+        // Some times on 2015-11-13 (UTC+0).
+        long k000000 = 1447372800000L;
+        long k010000 = 1447376400000L;
+        long k120000 = 1447416000000L;
+        long k220000 = 1447452000000L;
+
+        // Locale de has a word for midnight, but not noon.
+        SimpleDateFormat sdf = new SimpleDateFormat("", ULocale.GERMANY);
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        sdf.applyPattern("hh:mm:ss bbbb");
+
+        assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 Mitternacht", sdf.format(k000000));
+        assertEquals("hh:mm:ss bbbb | 12:00:00 | de", "12:00:00 nachm.", sdf.format(k120000));
+
+        // Locale ee has a rule that wraps around midnight (21h - 4h).
+        sdf = new SimpleDateFormat("", new ULocale("ee"));
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        sdf.applyPattern("hh:mm:ss BBBB");
+
+        assertEquals("hh:mm:ss BBBB | 22:00:00 | ee", "10:00:00 zã", sdf.format(k220000));
+        assertEquals("hh:mm:ss BBBB | 00:00:00 | ee", "12:00:00 zã", sdf.format(k000000));
+        assertEquals("hh:mm:ss BBBB | 01:00:00 | ee", "01:00:00 zã", sdf.format(k010000));
+
+        // Locale root has rules for AM/PM only.
+        sdf = new SimpleDateFormat("", new ULocale("root"));
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        sdf.applyPattern("hh:mm:ss BBBB");
+
+        assertEquals("hh:mm:ss BBBB | 00:00:00 | root", "12:00:00 AM", sdf.format(k000000));
+        assertEquals("hh:mm:ss BBBB | 12:00:00 | root", "12:00:00 PM", sdf.format(k120000));
+
+        // Empty string should behave exactly as root.
+        sdf = new SimpleDateFormat("", new ULocale(""));
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        sdf.applyPattern("hh:mm:ss BBBB");
+
+        assertEquals("hh:mm:ss BBBB | 00:00:00 | \"\" (root)", "12:00:00 AM", sdf.format(k000000));
+        assertEquals("hh:mm:ss BBBB | 12:00:00 | \"\" (root)", "12:00:00 PM", sdf.format(k120000));
+
+        // Locale en_US should fall back to en.
+        sdf = new SimpleDateFormat("", new ULocale("en_US"));
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        sdf.applyPattern("hh:mm:ss BBBB");
+
+        assertEquals("hh:mm:ss BBBB | 00:00:00 | en_US", "12:00:00 midnight", sdf.format(k000000));
+        assertEquals("hh:mm:ss BBBB | 01:00:00 | en_US", "01:00:00 at night", sdf.format(k010000));
+        assertEquals("hh:mm:ss BBBB | 12:00:00 | en_US", "12:00:00 noon", sdf.format(k120000));
+
+        // Locale es_CO should not fall back to es and should have a
+        // different string for 1 in the morning.
+        // (es_CO: "de la mañana" vs. es: "de la madrugada")
+        sdf = new SimpleDateFormat("", new ULocale("es_CO"));
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        sdf.applyPattern("hh:mm:ss BBBB");
+        assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", "01:00:00 de la mañana", sdf.format(k010000));
+
+        sdf = new SimpleDateFormat("", new ULocale("es"));
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        sdf.applyPattern("hh:mm:ss BBBB");
+        assertEquals("hh:mm:ss BBBB | 01:00:00 | es", "01:00:00 de la madrugada", sdf.format(k010000));
+    }
+
+    public void TestMinuteSecondFieldsInOddPlaces() {
+        // Some times on 2015-11-13 (UTC+0).
+        long k000000 = 1447372800000L;
+        long k000030 = 1447372830000L;
+        long k003000 = 1447374600000L;
+        long k060030 = 1447394430000L;
+        long k063000 = 1447396200000L;
+
+        // Apply pattern through constructor to make sure parsePattern() is called during initialization.
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm 'ss' bbbb");
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        // Seconds field is not present.
+        assertEquals("hh:mm 'ss' bbbb | 00:00:30", "12:00 ss midnight", sdf.format(k000030));
+        assertEquals("hh:mm 'ss' bbbb | 06:00:30", "06:00 ss AM", sdf.format(k060030));
+
+        sdf.applyPattern("hh:mm 'ss' BBBB");
+
+        assertEquals("hh:mm 'ss' BBBB | 00:00:30", "12:00 ss midnight", sdf.format(k000030));
+        assertEquals("hh:mm 'ss' BBBB | 06:00:30", "06:00 ss in the morning", sdf.format(k060030));
+
+        // Minutes field is not present.
+        sdf.applyPattern("hh 'mm ss' bbbb");
+
+        assertEquals("hh 'mm ss' bbbb | 00:30:00", "12 mm ss midnight", sdf.format(k003000));
+        assertEquals("hh 'mm ss' bbbb | 06:30:00", "06 mm ss AM", sdf.format(k063000));
+
+        sdf.applyPattern("hh 'mm ss' BBBB");
+
+        assertEquals("hh 'mm ss' BBBB | 00:30:00", "12 mm ss midnight", sdf.format(k003000));
+        assertEquals("hh 'mm ss' BBBB | 06:30:00", "06 mm ss in the morning", sdf.format(k063000));
+
+        // Minutes and seconds fields appear after day periods.
+        sdf.applyPattern("bbbb hh:mm:ss");
+
+        assertEquals("bbbb hh:mm:ss | 00:00:00", "midnight 12:00:00", sdf.format(k000000));
+        assertEquals("bbbb hh:mm:ss | 00:00:30", "AM 12:00:30", sdf.format(k000030));
+        assertEquals("bbbb hh:mm:ss | 00:30:00", "AM 12:30:00", sdf.format(k003000));
+
+        sdf.applyPattern("BBBB hh:mm:ss");
+
+        assertEquals("BBBB hh:mm:ss | 00:00:00", "midnight 12:00:00", sdf.format(k000000));
+        assertEquals("BBBB hh:mm:ss | 00:00:30", "at night 12:00:30", sdf.format(k000030));
+        assertEquals("BBBB hh:mm:ss | 00:30:00", "at night 12:30:00", sdf.format(k003000));
+
+        // Confirm applyPattern() reparses the pattern string.
+        sdf.applyPattern("BBBB hh");
+        assertEquals("BBBB hh | 00:00:30", "midnight 12", sdf.format(k000030));
+
+        sdf.applyPattern("BBBB hh:mm:'ss'");
+        assertEquals("BBBB hh:mm:'ss' | 00:00:30", "midnight 12:00:ss", sdf.format(k000030));
+
+        sdf.applyPattern("BBBB hh:mm:ss");
+        assertEquals("BBBB hh:mm:ss | 00:00:30", "at night 12:00:30", sdf.format(k000030));
+    }
+
+    public void TestDayPeriodParsing() throws ParseException {
+        // Some times on 2015-11-13 (UTC+0).
+        Date k000000 = new Date(1447372800000L);
+        Date k003700 = new Date(1447375020000L);
+        Date k010000 = new Date(1447376400000L);
+        Date k013000 = new Date(1447378200000L);
+        Date k030000 = new Date(1447383600000L);
+        Date k090000 = new Date(1447405200000L);
+        Date k120000 = new Date(1447416000000L);
+        Date k130000 = new Date(1447419600000L);
+        Date k133700 = new Date(1447421820000L);
+        Date k150000 = new Date(1447426800000L);
+        Date k190000 = new Date(1447441200000L);
+        Date k193000 = new Date(1447443000000L);
+        Date k200000 = new Date(1447444800000L);
+        Date k210000 = new Date(1447448400000L);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("");
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        // 'B' -- flexible day periods
+        // A day period on its own parses to the center of that period.
+        sdf.applyPattern("yyyy-MM-dd B");
+        assertEquals("yyyy-MM-dd B | 2015-11-13 midnight", k000000, sdf.parse("2015-11-13 midnight"));
+        assertEquals("yyyy-MM-dd B | 2015-11-13 noon", k120000, sdf.parse("2015-11-13 noon"));
+        assertEquals("yyyy-MM-dd B | 2015-11-13 in the afternoon", k150000, sdf.parse("2015-11-13 in the afternoon"));
+        assertEquals("yyyy-MM-dd B | 2015-11-13 in the evening", k193000, sdf.parse("2015-11-13 in the evening"));
+        assertEquals("yyyy-MM-dd B | 2015-11-13 at night", k013000, sdf.parse("2015-11-13 at night"));
+
+        // If time and day period are consistent with each other then time is parsed accordingly.
+        sdf.applyPattern("yyyy-MM-dd hh:mm B");
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 12:00 midnight", k000000, sdf.parse("2015-11-13 12:00 midnight"));
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 12:00 noon", k120000, sdf.parse("2015-11-13 12:00 noon"));
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 01:00 at night", k010000, sdf.parse("2015-11-13 01:00 at night"));
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 01:00 in the afternoon", k130000, sdf.parse("2015-11-13 01:00 in the afternoon"));
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 09:00 in the morning", k090000, sdf.parse("2015-11-13 09:00 in the morning"));
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 09:00 at night", k210000, sdf.parse("2015-11-13 09:00 at night"));
+
+        // If the hour is 13 thru 23 then day period has no effect on time (since time is assumed
+        // to be in 24-hour format).
+        // TODO: failing!
+        sdf.applyPattern("yyyy-MM-dd HH:mm B");
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 13:37 midnight", k133700, sdf.parse("2015-11-13 13:37 midnight"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 13:37 noon", k133700, sdf.parse("2015-11-13 13:37 noon"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 13:37 at night", k133700, sdf.parse("2015-11-13 13:37 at night"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 13:37 in the afternoon", k133700, sdf.parse("2015-11-13 13:37 in the afternoon"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 13:37 in the morning", k133700, sdf.parse("2015-11-13 13:37 in the morning"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 13:37 at night", k133700, sdf.parse("2015-11-13 13:37 at night"));
+
+        // Hour 0 is synonymous with hour 12 when parsed with 'h'.
+        // This unfortunately means we have to tolerate "0 noon" as it's synonymous with "12 noon".
+        sdf.applyPattern("yyyy-MM-dd hh:mm B");
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 00:00 midnight", k000000, sdf.parse("2015-11-13 00:00 midnight"));
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 00:00 noon", k120000, sdf.parse("2015-11-13 00:00 noon"));
+
+        // But when parsed with 'H', 0 indicates a 24-hour time, therefore we disregard the day period.
+        sdf.applyPattern("yyyy-MM-dd HH:mm B");
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 00:37 midnight", k003700, sdf.parse("2015-11-13 00:37 midnight"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 00:37 noon", k003700, sdf.parse("2015-11-13 00:37 noon"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 00:37 at night", k003700, sdf.parse("2015-11-13 00:37 at night"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 00:37 in the afternoon", k003700, sdf.parse("2015-11-13 00:37 in the afternoon"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 00:37 in the morning", k003700, sdf.parse("2015-11-13 00:37 in the morning"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 00:37 at night", k003700, sdf.parse("2015-11-13 00:37 at night"));
+
+        // Even when parsed with 'H', hours 1 thru 12 are considered 12-hour time and takes
+        // day period into account in parsing.
+        sdf.applyPattern("yyyy-MM-dd HH:mm B");
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 12:00 midnight", k000000, sdf.parse("2015-11-13 12:00 midnight"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 12:00 noon", k120000, sdf.parse("2015-11-13 12:00 noon"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 01:00 at night", k010000, sdf.parse("2015-11-13 01:00 at night"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 01:00 in the afternoon", k130000, sdf.parse("2015-11-13 01:00 in the afternoon"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 09:00 in the morning", k090000, sdf.parse("2015-11-13 09:00 in the morning"));
+        assertEquals("yyyy-MM-dd HH:mm B | 2015-11-13 09:00 at night", k210000, sdf.parse("2015-11-13 09:00 at night"));
+
+        // If a 12-hour time and the day period don't agree with each other, time is parsed as close
+        // to the given day period as possible.
+        sdf.applyPattern("yyyy-MM-dd hh:mm B");
+
+        // AFTERNOON1 is [12, 18), but "7 in the afternoon" parses to 19:00.
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 07:00 in the afternoon", k190000, sdf.parse("2015-11-13 07:00 in the afternoon"));
+        // NIGHT1 is [21, 6), but "8 at night" parses to 20:00.
+        assertEquals("yyyy-MM-dd hh:mm B | 2015-11-13 08:00 at night", k200000, sdf.parse("2015-11-13 08:00 at night"));
+
+        // 'b' -- fixed day periods (AM, PM, midnight, noon)
+        // On their own, "midnight" parses to 00:00 and "noon" parses to 12:00.
+        // AM and PM are handled by the 'a' parser (which doesn't handle this case well).
+        sdf.applyPattern("yyyy-MM-dd b");
+        assertEquals("yyyy-MM-dd b | 2015-11-13 midnight", k000000, sdf.parse("2015-11-13 midnight"));
+        assertEquals("yyyy-MM-dd b | 2015-11-13 noon", k120000, sdf.parse("2015-11-13 noon"));
+
+        // For 12-hour times, AM and PM should be parsed as if with pattern character 'a'.
+        sdf.applyPattern("yyyy-MM-dd hh:mm b");
+        assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 01:00 AM", k010000, sdf.parse("2015-11-13 01:00 AM"));
+        assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 01:00 PM", k130000, sdf.parse("2015-11-13 01:00 PM"));
+
+        // 12 midnight parses to 00:00, and 12 noon parses to 12:00.
+        assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 12:00 midnight", k000000, sdf.parse("2015-11-13 12:00 midnight"));
+        assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 12:00 noon", k120000, sdf.parse("2015-11-13 12:00 noon"));
+
+        // Hours 13-23 indicate 24-hour time so we disregard "midnight" or "noon".
+        // Again, AM and PM are handled by the 'a' parser which doesn't handle this case well.
+        sdf.applyPattern("yyyy-MM-dd HH:mm b");
+        assertEquals("yyyy-MM-dd HH:mm b | 2015-11-13 13:37 midnight", k133700, sdf.parse("2015-11-13 13:37 midnight"));
+        assertEquals("yyyy-MM-dd HH:mm b | 2015-11-13 13:37 noon", k133700, sdf.parse("2015-11-13 13:37 noon"));
+
+        // Hour 0 is synonymous with hour 12 when parsed with 'h'.
+        // Again, this means we have to tolerate "0 noon" as it's synonymous with "12 noon".
+        sdf.applyPattern("yyyy-MM-dd hh:mm b");
+        assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 00:00 midnight", k000000, sdf.parse("2015-11-13 00:00 midnight"));
+        assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 00:00 noon", k120000, sdf.parse("2015-11-13 00:00 noon"));
+
+        // With 'H' though 0 indicates a 24-hour time, therefore we disregard the day period.
+        sdf.applyPattern("yyyy-MM-dd HH:mm b");
+        assertEquals("yyyy-MM-dd HH:mm b | 2015-11-13 00:37 midnight", k003700, sdf.parse("2015-11-13 00:37 midnight"));
+        assertEquals("yyyy-MM-dd HH:mm b | 2015-11-13 00:37 noon", k003700, sdf.parse("2015-11-13 00:37 noon"));
+
+        // If "midnight" or "noon" is parsed with a 12-hour time other than 12:00, choose
+        // the version that's closer to the period given.
+        sdf.applyPattern("yyyy-MM-dd hh:mm b");
+        assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 03:00 midnight", k030000, sdf.parse("2015-11-13 03:00 midnight"));
+        assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 03:00 noon", k150000, sdf.parse("2015-11-13 03:00 noon"));
     }
 }
