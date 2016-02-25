@@ -166,7 +166,7 @@ SharedDateFormatSymbols::~SharedDateFormatSymbols() {
 template<> U_I18N_API
 const SharedDateFormatSymbols *
         LocaleCacheKey<SharedDateFormatSymbols>::createObject(
-                const void */*unusedContext*/, UErrorCode &status) const {
+                const void * /*unusedContext*/, UErrorCode &status) const {
     char type[256];
     Calendar::getCalendarTypeFromLocale(fLoc, type, UPRV_LENGTHOF(type), status);
     if (U_FAILURE(status)) {
