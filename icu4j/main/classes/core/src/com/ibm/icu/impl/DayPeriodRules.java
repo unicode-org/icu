@@ -23,7 +23,9 @@ public final class DayPeriodRules {
         MORNING2,
         AFTERNOON2,
         EVENING2,
-        NIGHT2;
+        NIGHT2,
+        AM,
+        PM;
 
         public static DayPeriod[] VALUES = DayPeriod.values();
 
@@ -38,6 +40,8 @@ public final class DayPeriodRules {
             if ("afternoon2".contentEquals(str)) { return AFTERNOON2; }
             if ("evening2".contentEquals(str)) { return EVENING2; }
             if ("night2".contentEquals(str)) { return NIGHT2; }
+            if ("am".contentEquals(str)) { return AM; }
+            if ("pm".contentEquals(str)) { return PM; }
             return null;
         }
     }
