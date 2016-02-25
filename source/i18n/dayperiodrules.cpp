@@ -522,6 +522,10 @@ DayPeriodRules::DayPeriod DayPeriodRules::getDayPeriodFromString(const char *typ
         return DAYPERIOD_EVENING2;
     } else if (uprv_strcmp(type_str, "night2") == 0) {
         return DAYPERIOD_NIGHT2;
+    } else if (uprv_strcmp(type_str, "am") == 0) {
+        return DAYPERIOD_AM;
+    } else if (uprv_strcmp(type_str, "pm") == 0) {
+        return DAYPERIOD_PM;
     } else {
         return DAYPERIOD_UNKNOWN;
     }
