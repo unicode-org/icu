@@ -1894,7 +1894,8 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
 
         // Midnight/Noon -> General Periods.
         if (toAppend->isBogus() &&
-                (periodType == DayPeriodRules::DAYPERIOD_MIDNIGHT || periodType == DayPeriodRules::DAYPERIOD_NOON)) {
+                (periodType == DayPeriodRules::DAYPERIOD_MIDNIGHT ||
+                 periodType == DayPeriodRules::DAYPERIOD_NOON)) {
             periodType = ruleSet->getDayPeriodForHour(hour);
             index = (int32_t)periodType;
 
@@ -1908,7 +1909,9 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         }
 
         // General Periods -> AM/PM.
-        if (toAppend->isBogus()) {
+        if (periodType == DayPeriodRules::DAYPERIOD_AM ||
+            periodType == DayPeriodRules::DAYPERIOD_PM ||
+            toAppend->isBogus()) {
             subFormat(appendTo, 0x61, count, capitalizationContext, fieldNum,
                       handler, cal, mutableNFs, status);
         }
@@ -2287,7 +2290,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 // so 0 unambiguously means a 24-hour time from above.
                 if (hourOfDay == 0) { hourOfDay = 12; }
             }
-            assert(0 <= hourOfDay && hourOfDay <= 23);
+            U_ASSERT(0 <= hourOfDay && hourOfDay <= 23);
 
 
             // If hour-of-day is 0 or 13 thru 23 then input time in unambiguously in 24-hour format.
