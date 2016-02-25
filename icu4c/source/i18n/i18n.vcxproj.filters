@@ -57,6 +57,9 @@
     <ClCompile Include="affixpatternparser.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="dayperiodrules.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="decimfmtimpl.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -689,6 +692,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="dangical.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="dayperiodrules.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="decContext.h">

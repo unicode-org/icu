@@ -1,4 +1,4 @@
-/*  
+/*
 ********************************************************************************
 *   Copyright (C) 1997-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
@@ -14,10 +14,10 @@
 *                            Changed to match C++ conventions
 ********************************************************************************
 */
-     
+
 #ifndef DTFMTSYM_H
 #define DTFMTSYM_H
- 
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -29,7 +29,7 @@
 #include "unicode/ures.h"
 
 /**
- * \file 
+ * \file
  * \brief C++ API: Symbols for formatting dates.
  */
 
@@ -115,7 +115,7 @@ public:
      * data for the default locale, it will return a last-resort object
      * based on hard-coded strings.
      *
-     * @param type      Type of calendar (as returned by Calendar::getType). 
+     * @param type      Type of calendar (as returned by Calendar::getType).
      *                  Will be used to access the correct set of strings.
      *                  (NULL or empty string defaults to "gregorian".)
      * @param status    Status code.  Failure
@@ -130,7 +130,7 @@ public:
      * resources for the given locale, in the default calendar (Gregorian).
      *
      * @param locale    Locale to load format data from.
-     * @param type      Type of calendar (as returned by Calendar::getType). 
+     * @param type      Type of calendar (as returned by Calendar::getType).
      *                  Will be used to access the correct set of strings.
      *                  (NULL or empty string defaults to "gregorian".)
      * @param status    Status code.  Failure
@@ -849,6 +849,42 @@ private:
      * titlecase for stand-alone context.
      */
      UBool fCapitalization[kCapContextUsageTypeCount][2];
+
+    /**
+     * Abbreviated (== short) day period strings.
+     */
+    UnicodeString  *fAbbreviatedDayPeriods;
+    int32_t         fAbbreviatedDayPeriodsCount;
+
+    /**
+     * Wide day period strings.
+     */
+    UnicodeString  *fWideDayPeriods;
+    int32_t         fWideDayPeriodsCount;
+
+    /**
+     * Narrow day period strings.
+     */
+    UnicodeString  *fNarrowDayPeriods;
+    int32_t         fNarrowDayPeriodsCount;
+
+    /**
+     * Stand-alone abbreviated (== short) day period strings.
+     */
+    UnicodeString  *fStandaloneAbbreviatedDayPeriods;
+    int32_t         fStandaloneAbbreviatedDayPeriodsCount;
+
+    /**
+     * Stand-alone wide day period strings.
+     */
+    UnicodeString  *fStandaloneWideDayPeriods;
+    int32_t         fStandaloneWideDayPeriodsCount;
+
+    /**
+     * Stand-alone narrow day period strings.
+     */
+    UnicodeString  *fStandaloneNarrowDayPeriods;
+    int32_t         fStandaloneNarrowDayPeriodsCount;
 
 private:
     /** valid/actual locale information 

@@ -310,6 +310,7 @@
     <ClCompile Include="currunit.cpp" />
     <ClCompile Include="dangical.cpp" />
     <ClCompile Include="datefmt.cpp" />
+    <ClCompile Include="dayperiodrules.cpp" />
     <ClCompile Include="dcfmtsym.cpp" />
     <ClCompile Include="decContext.c" />
     <ClCompile Include="decfmtst.cpp" />
@@ -608,6 +609,7 @@
     <ClInclude Include="collationsettings.h" />
     <ClInclude Include="collationtailoring.h" />
     <ClInclude Include="collationweights.h" />
+    <ClInclude Include="dayperiodrules.h" />
     <ClInclude Include="dcfmtimp.h" />
     <ClInclude Include="numsys_impl.h" />
     <ClInclude Include="region_impl.h" />
