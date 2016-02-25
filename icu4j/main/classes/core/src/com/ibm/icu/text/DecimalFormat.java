@@ -1953,6 +1953,8 @@ public class DecimalFormat extends NumberFormat {
             if (!parseForCurrency(text, parsePosition, currency, status)) {
                 return null;
             }
+        } else if (currency != null) {
+            return null;
         } else {
             if (!subparse(text, parsePosition, digitList, status, currency, negPrefixPattern,
                           negSuffixPattern, posPrefixPattern, posSuffixPattern,

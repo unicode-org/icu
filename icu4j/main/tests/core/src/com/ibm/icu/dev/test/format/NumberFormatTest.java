@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2015, International Business Machines Corporation and
+ * Copyright (C) 2001-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -4370,4 +4370,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // The exception should be thrown, since rounding is needed.
         }
     }
+
+    // Testing for Issue 11735.
+    public void TestNPEIssue11735() {
+        DecimalFormat fmt = new DecimalFormat("0", new DecimalFormatSymbols(new ULocale("en")));
+        ParsePosition ppos = new ParsePosition(0);
+        assertEquals("Currency symbol missing in parse. Expect null result.",
+                fmt.parseCurrency("53.45", ppos), null);
+  }
 }
